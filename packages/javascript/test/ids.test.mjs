@@ -142,7 +142,7 @@ describe("id-addressed paths", () => {
   test("resolveIdPointer maps ids to indexes at any depth and leaves other pointers alone", () => {
     const document = deck();
     assert.equal(resolveIdPointer(document, "/slides/@kpis/blocks/@kpi-row/blocks/@kpi-a/text"), "/slides/1/blocks/0/blocks/0/text");
-    assert.equal(resolveIdPointer(document, "/slides/@close/right"), "/slides/2/end");
+    assert.equal(resolveIdPointer(document, "/slides/@close/end"), "/slides/2/end");
     assert.equal(resolveIdPointer(document, "/slides/2/title"), "/slides/2/title");
     assert.equal(resolveIdPointer(document, ""), "");
   });
@@ -190,7 +190,7 @@ describe("id-addressed paths", () => {
     const document = deck();
     assert.equal(getAtPointer(document, "/slides/@kpis/blocks/@note/text"), "Note");
     assert.equal(hasPointer(document, "/slides/@kpis/blocks/@missing"), false);
-    assert.deepEqual(readPointer(document, ["slides", "@close", "left"]), { found: true, value: { id: "left-text", text: "L" } });
+    assert.deepEqual(readPointer(document, ["slides", "@close", "start"]), { found: true, value: { id: "left-text", text: "L" } });
   });
 
   test("applyPatch addresses every operation by id", () => {
@@ -199,13 +199,13 @@ describe("id-addressed paths", () => {
       { op: "replace", path: "/slides/@intro/title", value: "Welcome" },
       { op: "add", path: "/slides/@kpis/blocks/-", value: { id: "extra", text: "X" } },
       { op: "add", path: "/slides/@kpis/blocks/@note", value: { id: "before-note", text: "BN" } },
-      { op: "remove", path: "/slides/@close/left" },
+      { op: "remove", path: "/slides/@close/start" },
       { op: "test", path: "/slides/@kpis/blocks/@kpi-row/blocks/@kpi-a/text", value: "A" },
       { op: "copy", from: "/slides/@intro/title", path: "/slides/@close/subtitle" },
     ]);
     assert.equal(patched.slides[0].title, "Welcome");
     assert.deepEqual(patched.slides[1].blocks.map((block) => block.id), ["kpi-row", "before-note", "note", "extra"]);
-    assert.equal(patched.slides[2].left, undefined);
+    assert.equal(patched.slides[2].start, undefined);
     assert.equal(patched.slides[2].subtitle, "Welcome");
     assert.equal(document.slides[0].title, "Intro", "the input is not changed");
   });
@@ -281,7 +281,7 @@ describe("id-addressed paths", () => {
       "/slides/0",
       "/slides/@intro/blocks/-",
       "/slides/@kpis/blocks/@kpi-row/blocks/1",
-      "/slides/@intro/left",
+      "/slides/@intro/start",
       "/slides/@intro/title",
     ]);
     assert.deepEqual(applyPatch(document, withIds), applyPatch(document, patch));
@@ -415,13 +415,13 @@ describe("touches", () => {
       { op: "replace", path: "/slides/@intro/title", value: "x" },
       { op: "add", path: "/slides/@kpis/blocks/-", value: { id: "new", text: "n" } },
       { op: "test", path: "/name", value: "Deck" },
-      { op: "remove", path: "/slides/@close/left" },
+      { op: "remove", path: "/slides/@close/start" },
     ]);
     assert.deepEqual(scope.reads.map((touch) => [touch.pointer, touch.kind]), [["/name", "metadata"]]);
     assert.deepEqual(writesOf(scope), [
       ["replace", "/slides/@intro/title", "/slides/@intro/title", "slide"],
       ["add", "/slides/@kpis/blocks/-", "/slides/@kpis/blocks/-", "block"],
-      ["remove", "/slides/@close/left", "/slides/@close/left", "block"],
+      ["remove", "/slides/@close/start", "/slides/@close/start", "block"],
     ]);
     assert.deepEqual(scope.ids, ["intro", "kpis", "new", "close"]);
     assert.deepEqual(scope.slideIds, ["intro", "kpis", "close"]);

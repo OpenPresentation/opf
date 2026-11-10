@@ -301,13 +301,13 @@ try {
   await field(design, 'Zone').selectOption('left');
   assert.equal(await design.getByLabel('Show the logo').count(), 0, 'the logo toggle is gone');
   const insertLogo = design.getByRole('button', { name: 'Insert logo', exact: true });
-  await step('header zone: Insert logo', () => insertLogo.click(), current => current.design.header?.left?.image === 'var:organization.logo.icon');
-  await step('header zone: Insert logo, wordmark', async () => { await field(design, 'Logo shape').selectOption('wordmark'); await insertLogo.click(); }, current => current.design.header?.left?.image === 'var:organization.logo.wordmark');
+  await step('header zone: Insert logo', () => insertLogo.click(), current => current.design.header?.start?.image === 'var:organization.logo.icon');
+  await step('header zone: Insert logo, wordmark', async () => { await field(design, 'Logo shape').selectOption('wordmark'); await insertLogo.click(); }, current => current.design.header?.start?.image === 'var:organization.logo.wordmark');
   await field(design, 'Logo shape').selectOption('icon');
   assert.equal(await field(design, 'Logo of').isVisible(), false, 'one organization: no organization choice');
   await field(design, 'Edit').selectOption('footer');
   await field(design, 'Zone').selectOption('right');
-  await step('footer slide number', () => field(design, 'Insert value').selectOption('slide.number'), current => current.design.footer?.right?.text === '{{slide.number}}');
+  await step('footer slide number', () => field(design, 'Insert value').selectOption('slide.number'), current => current.design.footer?.end?.text === '{{slide.number}}');
 
   // FA-23: the catalog section checks for catalog updates on request (nothing embedded here, so nothing to update).
   await design.getByRole('button', { name: 'Check for catalog updates', exact: true }).click();
@@ -639,10 +639,10 @@ try {
     assert.equal(await whose.isVisible(), true, 'several organizations: Insert logo takes an organization');
     assert.deepEqual(await whose.locator('option').evaluateAll(nodes => nodes.map(node => [node.value, node.textContent])), [['', 'Primary organization'], ['acme', 'Acme Corp (acme)'], ['beta', 'Beta Ltd (beta)']]);
     const insertLogo = design.getByRole('button', { name: 'Insert logo', exact: true });
-    await step('Insert logo of another organization', async () => { await whose.selectOption('beta'); await insertLogo.click(); }, current => current.design.footer?.right?.image === 'var:organization.beta.logo.icon');
+    await step('Insert logo of another organization', async () => { await whose.selectOption('beta'); await insertLogo.click(); }, current => current.design.footer?.end?.image === 'var:organization.beta.logo.icon');
     await whose.selectOption('');
     await insertLogo.click();
-    await waitDoc(current => current.design.footer?.right?.image === 'var:organization.logo.icon', 'the primary organization logo in the footer');
+    await waitDoc(current => current.design.footer?.end?.image === 'var:organization.logo.icon', 'the primary organization logo in the footer');
     await settle();
     const light = await preview();
     assert.ok(light.includes(LIGHT) && !light.includes(DARK), 'the light slide draws the onLight artwork');

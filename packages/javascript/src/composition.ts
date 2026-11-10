@@ -4481,7 +4481,7 @@ export interface LayoutAreasOptions extends Omit<ComposeSlideOptions, 'layout' |
   /** A bled region reaches the slide edge, as on a composed slide. Default true; false gives its cell inside the content box. */
   bleed?: boolean;
   /** Placed-image bands the slide layout reserves, as image blocks with these placements would. */
-  placements?: readonly { edge: ImageEdge; size?: number; inset?: boolean }[];
+  placements?: readonly { edge: 'start' | 'end' | 'top' | 'bottom'; size?: number; inset?: boolean }[];
 }
 /** One area of a template on the empty layout. */
 export interface ComposedLayoutArea {

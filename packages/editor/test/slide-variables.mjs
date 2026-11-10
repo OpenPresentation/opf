@@ -61,7 +61,7 @@ const furniture = (composed) => JSON.stringify(composed.furniture);
 
 // Edits keep working on a slide that uses tokens: a footer change and a replace leave them alone.
 {
-  setHeaderFooterZone(editor, "footer", "left", { text: "Review" });
+  setHeaderFooterZone(editor, "footer", "start", { text: "Review" });
   assert.equal(editor.presentation.design.footer.end.text, "{{slide.number}} / {{deck.slideCount}}");
   replaceAll(editor, "Slide", "Page");
   assert.equal(editor.presentation.slides[1].text, "Page {{slide.number}} of {{deck.slideCount}}");

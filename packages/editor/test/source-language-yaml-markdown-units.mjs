@@ -167,7 +167,7 @@ for (const snippet of SNIPPETS.filter((entry) => entry.where === 'slide')) {
   const slide = read.presentation.slides[0];
   const expected = JSON.parse(JSON.stringify(value));
   if (expected.metric) expected.metric.value = Number(expected.metric.value);
-  if (expected.left || expected.right) { for (const side of ['left', 'right']) if (expected[side]) expected[side] = slide[side]; }
+  if (expected.start || expected.end) { for (const side of ['start', 'end']) if (expected[side]) expected[side] = slide[side]; }
   assert.deepEqual(slide, expected, `${snippet.prefix}: the Markdown reads back as the fragment`);
 }
 assert.equal(renderYaml(SNIPPETS.find((entry) => entry.prefix === 'deck').fragment).text, 'name: ${1:Deck name}\nslides:\n  - title: ${2:Title}${0}');
@@ -243,7 +243,7 @@ assert.deepEqual(tokenFor('md', 'sli', 3), { quoted: false, closed: false, start
   assert.equal(hover('pillars', 2).model.type, 'layout');
   assert.equal(hover('Hello', 1), null, 'free text');
   assert.equal(hover('design:', 2).model.title, 'design');
-  assert.equal(hover('left', 1).model.title, 'titleAlignment', 'an enum value shows its field');
+  assert.equal(hover('start', 1).model.title, 'titleAlignment', 'an enum value shows its field');
 }
 {
   const text = '---\nname: Deck\ndesign:\n  titleAlignment: start\n---\n# A\n<!-- slide: layout=pillars -->\n';

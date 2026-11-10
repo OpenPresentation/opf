@@ -336,7 +336,7 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
   test('the boxes a slide composes to: header, footer, placed-image bands and bleed (RR-81 review)', async () => {
     const { composeLayoutAreas } = await import('../dist/composition.js');
     const furniture = { header: { start: { text: 'Acme' }, end: { text: 'Confidential' } }, footer: { end: { text: '{{slide.number}}' } } };
-    const placements = [{ edge: 'left', size: 0.25 }];
+    const placements = [{ edge: 'start', size: 0.25 }];
     // Without cards and with cards on the deck (the card insets live in the auto rows too).
     for (const presentation of [{ design: furniture }, { design: { ...furniture, contentBox: true } }]) for (const [id, record] of Object.entries(layouts)) {
       // Wave 7 (LH-09 with LH-155): a record with a primary or secondary region (the statement) is laid out as its filled slides draw it, which

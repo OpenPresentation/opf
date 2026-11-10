@@ -240,7 +240,7 @@ try {
   assert.ok(Math.abs(frameShape.width / frameShape.height - 0.45 * 1280 / 720) < 0.05, `the frame shape of the placed image: ${JSON.stringify(frameShape)}`);
   await page.getByRole('button', { name: 'Apply crop' }).click();
   const placedCrop = await app.waitDoc((deck) => deck.slides[2].blocks[0].image === 'asset:photo-crop', 'a placed image is cropped');
-  assert.deepEqual(placedCrop.slides[2].blocks[0].placement, { edge: 'right', size: 0.45 });
+  assert.deepEqual(placedCrop.slides[2].blocks[0].placement, { edge: 'end', size: 0.45 });
   await app.settle();
   mark('a string picture and a placed image block crop the same way and keep their placement');
 

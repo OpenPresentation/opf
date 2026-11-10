@@ -99,7 +99,7 @@ const SITES = [
   ['asset', ['slides', 0, 'quote', 'photo'], { slides: [{ quote: { text: 'a', photo: '' } }] }],
   ['asset', ['design', 'watermark'], { design: { watermark: '' } }],
   ['asset', ['design', 'watermark', 'src'], { design: { watermark: { src: '' } } }],
-  ['asset', ['design', 'header', 'left', 'image'], { design: { header: { start: { image: '' } } } }],
+  ['asset', ['design', 'header', 'start', 'image'], { design: { header: { start: { image: '' } } } }],
   ['asset', ['organization', 'logo'], { organization: { id: 'a', name: 'A', logo: '' } }],
   ['asset', ['assets', 'logo', 'src'], { assets: { logo: { src: '' } } }],
   ['asset', ['speaker', 'photo'], { speaker: { name: 'A', photo: '' } }],

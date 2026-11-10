@@ -317,7 +317,7 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
   // An `auto` row is as tall as its content; on the empty layout it holds two body lines, so the text blocks here are two lines.
   // Cards on: each template's own design (comparison draws cards), then cards on every template; a carded auto row holds the card's
   // insets on the slide and on the empty layout alike.
-  const band = {edge: 'left', size: 0.2}, twoLines = block => block.text !== undefined ? {text: 'First line.\nSecond line.', emphasis: false} : block;
+  const band = {edge: 'start', size: 0.2}, twoLines = block => block.text !== undefined ? {text: 'First line.\nSecond line.', emphasis: false} : block;
   for (const contentBox of [undefined, true]) {
   const deck = {name: 'Bands', catalogs: {custom: {layouts: templates}}, design: {...(contentBox !== undefined ? {contentBox} : {}), footer: {start: {text: 'Board review'}, end: {text: '{{slide.number}}'}}},
     slides: contentSlides().map(slide => ({...slide, subtitle: 'Subtitle', blocks: [{image: {src: square}, placement: band}, ...(slide.blocks ?? []).map(twoLines)]}))};

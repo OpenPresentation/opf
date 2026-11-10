@@ -61,7 +61,7 @@ assert.equal(variableToken("organization.logo.icon"), "{{organization.logo.icon}
 assert.equal(variableToken("organization.acme.logo.wordmark"), "{{organization.acme.logo.wordmark}}");
 // Using a logo as a whole image field records the use; availability follows the logo.
 const withLogo = createEditorSession({ ...document(), organization: { id: "acme", name: "Acme Corp", logo: { icon: "asset:mark" } }, assets: { mark: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jP0cAAAAASUVORK5CYII=" } }, { rejectInvalid: true });
-setHeaderFooterZone(withLogo, "footer", "right", { image: "var:organization.logo.icon" });
+setHeaderFooterZone(withLogo, "footer", "end", { image: "var:organization.logo.icon" });
 const used = listBuiltins(withLogo.presentation).find((entry) => entry.name === "organization.logo.icon");
 assert.equal(used.available, true);
 assert.deepEqual(used.uses.map((use) => use.path), ["/design/footer/end/image"]);
@@ -82,9 +82,9 @@ assert.equal(withNumber.presentation.slides[0].subtitle, "By {{slide.number}}{{s
 
 // Header and footer values are variables in a zone's text; the 0.16 flags are gone.
 for (const removed of ["organization", "speaker", "section", "slideNumber", "slideNumberFormat", "logo"]) assert.ok(!ZONE_FIELDS.includes(removed), `${removed} is not a zone field`);
-setHeaderFooterZone(editor, "footer", "left", { text: "{{organization.name}}\n{{speaker.name}}, {{speaker.title}}" });
-assert.deepEqual(readHeaderFooterZone(editor.presentation, "footer", "left"), { text: "{{organization.name}}\n{{speaker.name}}, {{speaker.title}}" });
-assert.throws(() => prepareHeaderFooterZone(editor.presentation, "footer", "left", { speaker: true }), /Unknown header\/footer field: speaker\. Write \{\{speaker\.name\}\} in the text\./);
+setHeaderFooterZone(editor, "footer", "start", { text: "{{organization.name}}\n{{speaker.name}}, {{speaker.title}}" });
+assert.deepEqual(readHeaderFooterZone(editor.presentation, "footer", "start"), { text: "{{organization.name}}\n{{speaker.name}}, {{speaker.title}}" });
+assert.throws(() => prepareHeaderFooterZone(editor.presentation, "footer", "start", { speaker: true }), /Unknown header\/footer field: speaker\. Write \{\{speaker\.name\}\} in the text\./);
 assert.equal(editor.presentation.design.footer.start.speaker, undefined);
 assert.equal(listBuiltins(editor.presentation).find((entry) => entry.name === "speaker.title").uses.map((use) => use.path).join(), "/design/footer/start/text", "the footer text is a use of the built-in");
 assert.deepEqual(designWarnings(editor.presentation, 0), []);

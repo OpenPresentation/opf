@@ -10,7 +10,7 @@ describe('the Markdown dialect', () => {
     const { presentation } = fromMarkdown(source, { validate: false });
     assert.deepEqual(presentation.slides[0].blocks, [{ text: 'First' }, { region: 'metrics', text: 'Targets agreed with finance.' }]);
     assert.equal(presentation.slides[1].layout, 'auto');
-    assert.deepEqual(presentation.slides[1].left, { text: 'Left side' });
+    assert.deepEqual(presentation.slides[1].start, { text: 'Left side' });
     const back = fromMarkdown(toMarkdown(presentation).markdown, { validate: false }).presentation;
     assert.deepEqual(back.slides[0].blocks, presentation.slides[0].blocks);
   });

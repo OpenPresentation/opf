@@ -135,7 +135,7 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   ),
   "opf/furniture-wraps": ex(
     "Shorten the header or footer text, or move part of it to another zone. Headers and footers should fit on two lines.",
-    { design: { footer: { start: { text: "A footer that keeps going and going and going and going and going and going and going and going and going and going and going and going" }, center: { text: "Confidential" }, right: { text: "{{slide.number}}" } } }, slides: [{ title: "Welcome" }] },
+    { design: { footer: { start: { text: "A footer that keeps going and going and going and going and going and going and going and going and going and going and going and going" }, center: { text: "Confidential" }, end: { text: "{{slide.number}}" } } }, slides: [{ title: "Welcome" }] },
     { design: { footer: { start: { text: "Acme, confidential" }, end: { text: "{{slide.number}}" } } }, slides: [{ title: "Welcome" }] },
   ),
   "opf/font-outside-scheme": ex(

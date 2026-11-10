@@ -26,7 +26,7 @@ const ids = new Set(["kpi-adoption"]);
 const incoming = structuredClone(payloadSlide);
 incoming.id = "guest";
 remapSlideTreeIds(incoming, ids);
-assert.equal(incoming.left.id, "kpi-adoption-2");
+assert.equal(incoming.start.id, "kpi-adoption-2");
 assert.ok(ids.has("kpi-adoption-2"));
 
 if (validate(fixture, { only: ["format"] }).valid) {
