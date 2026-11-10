@@ -2282,5 +2282,15 @@
   "officeInvoked": false,
   "validateOnlyInvoked": false,
   "nativeAcceptance": false,
-  "registryAcceptance": false
+  "registryAcceptance": false,
+  "metadataChecks": {
+    "records": 20,
+    "bytes": 17418,
+    "sha256": "b86be048b4f127b10563b1f176ae8251fa2a87d204c86e71fb13af4675814fc7",
+    "rawBytes": 38642,
+    "testedHead": "390a1cc62d4a8e85d75b1aebf2e26c3330ca6232",
+    "originalStatus": 1,
+    "recoveredTextStatus": 0,
+    "aggregateRerun": false
+  }
 }
