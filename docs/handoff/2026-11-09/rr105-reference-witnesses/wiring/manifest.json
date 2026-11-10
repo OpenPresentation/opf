@@ -1,0 +1,1697 @@
+{
+  "format": "reference-witness-source-wiring-v1",
+  "status": "SOURCE_PURE_CHECKPOINT; REVIEW_AND_REQUIRED_GATE_PENDING",
+  "source": "6bdd823a9ee2d6120c187f17df7ac023717b11ed",
+  "tree": "644acf3d21cfc3ec8990fabc16544280760b8de2",
+  "base": "276f339a68069dc11970d649092d6181c9feba38",
+  "runSourceWasClean": true,
+  "node": {
+    "version": "v24.20.0",
+    "path": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+    "sha256": "5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5"
+  },
+  "sourceFiles": [
+    {
+      "file": "scripts/native-acceptance/derive-reference-controller.mjs",
+      "bytes": 2953,
+      "sha256": "e6d3692b053ed6362cdf29d58b6a1438d0bffe402ff6d5ab3b8a84d5e886c312",
+      "blob": "4dbe4a3899e177e82b1cff6225026f166b53044c"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-archive.mjs",
+      "bytes": 20948,
+      "sha256": "29b07942c3d82ab2dfce24a3cc8cef4e33a79602b70cd4d696420e5dbae8e89d",
+      "blob": "4ef4a03dfb618306ba88637b358d3ff3f2c5e292"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-envelope.test.mjs",
+      "bytes": 10347,
+      "sha256": "84814d433b785e03a929f369749f066a0ad5beda95348d1b4e5d5c813c70061d",
+      "blob": "ff6baef67ff7334c0969aa312a8bc00da492f00c"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-fixtures.mjs",
+      "bytes": 6332,
+      "sha256": "930ead1cee7ca404c6a896944be5aaeab05916d304247ad48667be13acae55b3",
+      "blob": "a77ab5cc655f563363608bb4475ee4dcb0e4d31c"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-fixtures.test.mjs",
+      "bytes": 3885,
+      "sha256": "8f5cfd0407bf37bef3a8849dabc800c2fe7505184848c93634c0e063c762ea58",
+      "blob": "16ce8ab448930bdce324fd05b7850cdf0b5b64ab"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-generate.mjs",
+      "bytes": 10902,
+      "sha256": "e6f43c7812245ea2cc404c0d9ddf81bcb2498bb93ae30a47d51c9f977858e57f",
+      "blob": "2fd2328fc038dd92b1a42cafae90d41b43abd8a7"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-generate.test.mjs",
+      "bytes": 2680,
+      "sha256": "7d5e16b0f9960eb3f95775b58e33f2a09a5449feb5742b9c8b03684a315b3208",
+      "blob": "d9a3294c07b9e5d2b6f82aec767537bc2a0189b7"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-profile.mjs",
+      "bytes": 44135,
+      "sha256": "969ce9d26c9481fb0e68103804831cefaa6c12c63ebff20810f3a3d287586d29",
+      "blob": "e95f02fa42ca9b74945ff6675c45f595fea687a1"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-profile.test.mjs",
+      "bytes": 9453,
+      "sha256": "02ceb52c772fcdc5082e33aa5004bb44a6853a603ee118eed9ceb943de4f8e75",
+      "blob": "a8a63a03ddd3aa77dce1eb0e687217b9aa4d1b35"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-worker-self-test.ps1",
+      "bytes": 16733,
+      "sha256": "93df6be95310271ca1b9dfde824309f259b6f908db147c67e81d6170dbba6038",
+      "blob": "eff934c819528ae88e4bc815a0deb14c93cedf33"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-worker-source.test.mjs",
+      "bytes": 4462,
+      "sha256": "5a5abf4df8ad76f420fdac54aea1ebeaa7c20a9fa48d772945dccc2c5aae9415",
+      "blob": "d34d041a2d63727d004def76a360322a236ca0e7"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-worker.ps1",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda",
+      "blob": "2d998abcbb21965037dda8b677c50978ef7485f2"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-witnesses/reference-native-axes.opf.json",
+      "bytes": 3111,
+      "sha256": "ec455bebf5e5460fcaac18d8247a4d22b67d02568914c8936a7a3b1d5eb44db4",
+      "blob": "d0edcfa1f71b33601b2fa47dc1d453dbacf4d5b2"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-witnesses/reference-native-lines.opf.json",
+      "bytes": 2418,
+      "sha256": "87a3a6c20edcc4cb05d821019f3abc2b9bbaa5b0a73911853563665ae7b5a02e",
+      "blob": "ac242b9c4534a436630d15931205e377ae4cff72"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-witnesses/reference-overlays-markers.opf.json",
+      "bytes": 2464,
+      "sha256": "2c9855331e99bd5bebfce326f056e9c990e1b7d55f41f7a772ec850af97950a1",
+      "blob": "e73006882ac3d2a57da4efea7954c1683cce41d9"
+    },
+    {
+      "file": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+      "bytes": 11293,
+      "sha256": "93612081c9b7bc8517c6fa3079c017ae21905b91eb05bb355228fff3150456c6",
+      "blob": "4e080e3a5f9ee0694817f757d8b0047092db90ec"
+    },
+    {
+      "file": "scripts/native-acceptance/test-fixtures/reference-chart-synthetic.mjs",
+      "bytes": 10395,
+      "sha256": "4a8d0e66aaeb768256cde43b93e77cde76146d6d4e01e30fd8effe02ec1008b2",
+      "blob": "12728f4506ac7ca3c46fcbb0e323e275806e0094"
+    },
+    {
+      "file": "scripts/native-acceptance/test-fixtures/reference-chart/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027",
+      "blob": "e7baec2618b005f0532c272fba718ee198c008cc"
+    },
+    {
+      "file": "scripts/native-acceptance/test-fixtures/reference-chart/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "blob": "3d8754b1d15baa944b1dabe42b71ec01b823afc1"
+    }
+  ],
+  "protectedTrees": [
+    {
+      "file": "packages",
+      "blob": "ddd2d5acbad4e66369b53ce60d624c1efbbceb84"
+    },
+    {
+      "file": "spec",
+      "blob": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274"
+    },
+    {
+      "file": ".github",
+      "blob": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "blob": "2e45923e6a027db20e2593a5befef39473259f2a"
+    },
+    {
+      "file": "pnpm-workspace.yaml",
+      "blob": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    },
+    {
+      "file": "package.json",
+      "blob": "846e509ef00827a8efe72c059ca3238f88be6fbb"
+    }
+  ],
+  "protectedFiles": [
+    {
+      "file": "scripts/native-acceptance/fixtures.mjs",
+      "blob": "9138bb90f00177df4fd5c1c56832dd49afa8bcb3"
+    },
+    {
+      "file": "scripts/native-acceptance/chart-modes.mjs",
+      "blob": "9acf3f2e0af9e2555a4b057e33fed5c7aaf16e41"
+    },
+    {
+      "file": "scripts/native-acceptance/generate.mjs",
+      "blob": "a06cd1a2c67db8a66d51ccd13f203d0c2289cc04"
+    },
+    {
+      "file": "scripts/native-acceptance/prepare.mjs",
+      "blob": "229293545cd77e002143e45b2d92170920fe7e18"
+    },
+    {
+      "file": "scripts/native-acceptance/seven-chart-profile.mjs",
+      "blob": "141158f99bdeba1f9c414515029234e494217272"
+    },
+    {
+      "file": "scripts/native-acceptance/seven-chart-archive.mjs",
+      "blob": "cfd4f4bca84efd88daf9aa953ac16cc39fdb895e"
+    },
+    {
+      "file": "scripts/native-acceptance/seven-chart-worker.ps1",
+      "blob": "9c0e986a4777a22424e41bb53d43ec69d312a7a3"
+    },
+    {
+      "file": "scripts/native-acceptance/run-seven-chart-profile.ps1",
+      "blob": "aa88bd32163b9b8fd625a6fadd3bf34a0b6a732f"
+    }
+  ],
+  "originalSuite": {
+    "sha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+    "readOnlyVerification": true
+  },
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 305484,
+    "sha256": "1b6a8149b87f990eb00c7b38e9db97238e1a0a9a2c65d35c7134b0665609ee09",
+    "expandedBytes": 2994849,
+    "members": 293,
+    "decodedBytes": 2210456
+  },
+  "entries": [
+    {
+      "name": "checks/biome01.exit.json",
+      "bytes": 14,
+      "sha256": "6041df3e9b345d68be886f995c452395674ea950cd3ca9992c13b64f3aa9cbd0"
+    },
+    {
+      "name": "checks/biome01.log",
+      "bytes": 54752,
+      "sha256": "60b4c2c211ab3a5e38ad8b948022839a43892ba73e1cfc50f0f446685a6c112b"
+    },
+    {
+      "name": "checks/biome02.log",
+      "bytes": 132049,
+      "sha256": "10fe52fe1dc3dde11d48b9a21de622c47932fa466f762d6b2c65dbc16b5a8568"
+    },
+    {
+      "name": "checks/contracts03.exit.json",
+      "bytes": 14,
+      "sha256": "6041df3e9b345d68be886f995c452395674ea950cd3ca9992c13b64f3aa9cbd0"
+    },
+    {
+      "name": "checks/contracts03.log",
+      "bytes": 1161,
+      "sha256": "1f9d3f54bc96d0b33c12a65a4a8e2f64ab1a8f8547cfdb4010ba9314ad08c907"
+    },
+    {
+      "name": "checks/envelope01.exit.json",
+      "bytes": 14,
+      "sha256": "6041df3e9b345d68be886f995c452395674ea950cd3ca9992c13b64f3aa9cbd0"
+    },
+    {
+      "name": "checks/envelope01.log",
+      "bytes": 350,
+      "sha256": "7cf4e4ea60a7c6cf9b27753fe71b9d125459c6eea62f293396f6c0bc49740b90"
+    },
+    {
+      "name": "checks/focused-final.exit.json",
+      "bytes": 349,
+      "sha256": "9fecf89c5abf93c250908fa5b6f671da337b91fefb2ba9a450ee15e700e53b3a"
+    },
+    {
+      "name": "checks/focused-final.log",
+      "bytes": 2504,
+      "sha256": "e7ba8cf1f85cfe3d86e537565d171320bc18adc82266f970d12c8e55cc204e62"
+    },
+    {
+      "name": "checks/format01.log",
+      "bytes": 84,
+      "sha256": "b67b834c5f3646562365d637806d58a972d3cff7a1af24b7e73af12ba852f847"
+    },
+    {
+      "name": "checks/format02.log",
+      "bytes": 711,
+      "sha256": "8143284ad5a13de65be69c28746ab835fa3e1eb60df2eda54db3d2df33e41acb"
+    },
+    {
+      "name": "checks/pure01-original-failure.json",
+      "bytes": 557,
+      "sha256": "879d9d372a93588d919982fafa685754d6a3605d99b2cd08955f3d53053b5cce"
+    },
+    {
+      "name": "checks/pure02.exit.json",
+      "bytes": 14,
+      "sha256": "6041df3e9b345d68be886f995c452395674ea950cd3ca9992c13b64f3aa9cbd0"
+    },
+    {
+      "name": "checks/pure02.log",
+      "bytes": 756,
+      "sha256": "adff43a140cebd8d3e9f9fcd5b7752060a1d9104829a1168fdf0dc178b8af946"
+    },
+    {
+      "name": "checks/supervisor-source-path-correction.json",
+      "bytes": 849,
+      "sha256": "d43183ca0b8b85a7b19c3f364bdd515ff1e9fc6b6954de91a7ce31339b8f78ec"
+    },
+    {
+      "name": "managed-final/fault-app-path/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-app-path/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-app-path/report.json",
+      "bytes": 955,
+      "sha256": "d1094907874880ef31658ea36016edd490403b448e606938f8f8cc29031cce72"
+    },
+    {
+      "name": "managed-final/fault-app-path/stages.jsonl",
+      "bytes": 2097,
+      "sha256": "dd0177215183adc7ef4e360bad4e4873ebebfb38888850fb53f8b93c608277de"
+    },
+    {
+      "name": "managed-final/fault-app-presentations/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-app-presentations/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-app-presentations/report.json",
+      "bytes": 498,
+      "sha256": "3a7dac72800640587618a0a2bdd946218cd221454d4bddb9c0fb8208c955d448"
+    },
+    {
+      "name": "managed-final/fault-app-presentations/stages.jsonl",
+      "bytes": 942,
+      "sha256": "9730e5e3743f8de81b7760bc97f343c6705b1fb06d9e0b7ec13ded3058fc946e"
+    },
+    {
+      "name": "managed-final/fault-app-quit/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-app-quit/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-app-quit/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-app-quit/original-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-app-quit/original-03.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-app-quit/report.json",
+      "bytes": 72686,
+      "sha256": "4d0f5757d5d8485b0e1fb1ade6db20035736b19c19f4431fa398cfddc2bd0e7e"
+    },
+    {
+      "name": "managed-final/fault-app-quit/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-app-quit/saved-reopened-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-app-quit/saved-reopened-03.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-app-quit/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-app-quit/stages.jsonl",
+      "bytes": 89444,
+      "sha256": "5ac367336dd2319d129920d261b19b40d4182cb9eda84e23b49689c2dae2bcba"
+    },
+    {
+      "name": "managed-final/fault-app-version/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-app-version/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-app-version/report.json",
+      "bytes": 708,
+      "sha256": "8cce3d81d3bf966db8590627008dbee9288833e1e54aa9c4573fdc26f693f750"
+    },
+    {
+      "name": "managed-final/fault-app-version/stages.jsonl",
+      "bytes": 1722,
+      "sha256": "f902242497b94d61611dbd92372ce0ba270fcdf1600a04dbc08be05e757fa41f"
+    },
+    {
+      "name": "managed-final/fault-application-factory/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-application-factory/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-application-factory/report.json",
+      "bytes": 483,
+      "sha256": "4a9ba9d4b98f536598011eca20d392c2498e22b4d5938f3c466b43463b6d2643"
+    },
+    {
+      "name": "managed-final/fault-application-factory/stages.jsonl",
+      "bytes": 462,
+      "sha256": "ff1e9f3c0b70285108a87516440beba6af3cbd755c8d844c5a89adfc5de660af"
+    },
+    {
+      "name": "managed-final/fault-global-preflight/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-global-preflight/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-open-original/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-open-original/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-open-original/report.json",
+      "bytes": 2623,
+      "sha256": "67eaa9a28b3e120be457168893b69d14b399c3d4008f80065c4dab6236d6664f"
+    },
+    {
+      "name": "managed-final/fault-open-original/stages.jsonl",
+      "bytes": 3317,
+      "sha256": "62a02f5ea32355f56c66605b7a9078f1609f2f4b70b6067c01ae6994e372bcbd"
+    },
+    {
+      "name": "managed-final/fault-open-saved/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-open-saved/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-open-saved/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-open-saved/original-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-open-saved/original-03.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-open-saved/report.json",
+      "bytes": 37608,
+      "sha256": "e075bc0a5a239b86f086586b8bc577b3d5660fc1f5579d0d23f59358bec97b1c"
+    },
+    {
+      "name": "managed-final/fault-open-saved/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-open-saved/stages.jsonl",
+      "bytes": 46389,
+      "sha256": "0a4ed5f093b0ad29fb3b183f07310e3dc1f0a376e6ed243d10fc62182c4fd2a0"
+    },
+    {
+      "name": "managed-final/fault-original-close/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-close/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-close/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-original-close/original-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-original-close/original-03.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-original-close/report.json",
+      "bytes": 36798,
+      "sha256": "6c9cc4198ba4ff9a13234459edb562dbf718a1d8004f21bee98179227b0669f7"
+    },
+    {
+      "name": "managed-final/fault-original-close/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-close/stages.jsonl",
+      "bytes": 45186,
+      "sha256": "2263fad245c70658f5db503cfd576d98fa63339c2e3a6a851c457ab41a9021e6"
+    },
+    {
+      "name": "managed-final/fault-original-discard/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-discard/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-discard/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-original-discard/original-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-original-discard/original-03.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-original-discard/report.json",
+      "bytes": 36836,
+      "sha256": "f60d525b489aa1e80c05c4e78a17c9bf2f92467c425e510027450243605495bd"
+    },
+    {
+      "name": "managed-final/fault-original-discard/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-discard/stages.jsonl",
+      "bytes": 44805,
+      "sha256": "14956a57f7814616083e79d1e9697bf791aa1ec7dc7a0f43d99de21b17d86221"
+    },
+    {
+      "name": "managed-final/fault-original-fullName/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-fullName/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-fullName/report.json",
+      "bytes": 2635,
+      "sha256": "6e68c4010f962ee2468c65e68e3a0b164df7e7d5029ee6ccc6df3919173497f0"
+    },
+    {
+      "name": "managed-final/fault-original-fullName/stages.jsonl",
+      "bytes": 3771,
+      "sha256": "7a36f4b4de36307b8c6d212f3a16cf40c21d1204f57bef6cfb828ed6b33b03ef"
+    },
+    {
+      "name": "managed-final/fault-original-readOnly/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-readOnly/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-readOnly/report.json",
+      "bytes": 3022,
+      "sha256": "c2bbf7cef458deb33a05f68a2de2da5677bce8d239ec906190a182ba15fd0224"
+    },
+    {
+      "name": "managed-final/fault-original-readOnly/stages.jsonl",
+      "bytes": 4226,
+      "sha256": "5c3bc61b904414644bc6dd226ba3d7a670fcd58ddefea2568fca4f2f8296779a"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1/report.json",
+      "bytes": 4425,
+      "sha256": "60aff9992c7889e0c07123b952ef1aeaf1d9d8110dd277eb266003013475d7cd"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1/stages.jsonl",
+      "bytes": 5340,
+      "sha256": "66465a3ac1089bf79fa9c4991ec282d87c78fcaa914eca2958fbdb50b7f2f50a"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-export/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-export/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-export/report.json",
+      "bytes": 14083,
+      "sha256": "3fae99b51fe4e8aeed9cf14afc77c096e127330335ba5dcc401308c8ceba94ff"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-export/stages.jsonl",
+      "bytes": 17527,
+      "sha256": "60239515f8be9d69a9f67f73a90b2e2fcda80cc9a8cd350af0608515ccb7fd62"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-id/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-id/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-id/report.json",
+      "bytes": 4976,
+      "sha256": "7a5060a3981e86fefe7b09b7204767c05797f927f2c6ef515c2824f6f85d8f03"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-id/stages.jsonl",
+      "bytes": 5798,
+      "sha256": "d6cb2e07c72de262e2234dd43a75f71897cf578ebe0e69003737edcabf352693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-name/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-name/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-name/report.json",
+      "bytes": 5227,
+      "sha256": "6c490aaf619287b845dd8d974dc271a9fdbf564bcaf3ef37a9d9997d3810007e"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-name/stages.jsonl",
+      "bytes": 6182,
+      "sha256": "8a958c9d640a3d23f684adc502b597c763957dd8b32939c094e2fc2a6b626997"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1/report.json",
+      "bytes": 5994,
+      "sha256": "0f077a68d4e049e831a5098f54e056f90732743571c0d811875d71fb91aae610"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1/stages.jsonl",
+      "bytes": 7367,
+      "sha256": "31178ac8e759be2f71b63d9065cf28dfa4ac37ad95efef94ba449b875ae0aa5b"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-alternativeText/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-alternativeText/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-alternativeText/report.json",
+      "bytes": 9438,
+      "sha256": "078afdda7c9713ac48b0cad4ccb7179dbd0c28a804b01d62b6b8eba7eb29edfb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-alternativeText/stages.jsonl",
+      "bytes": 11507,
+      "sha256": "466077f1c602093a5c137d7bcdde77333bea9a0f46f8eaa4b212ebb64d1efcf9"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-hasTextFrame/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-hasTextFrame/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-hasTextFrame/report.json",
+      "bytes": 9076,
+      "sha256": "a6c1ef81b7ff38ae19d07043252da0d631209c840af62dcef6a9f712ecd91eeb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-hasTextFrame/stages.jsonl",
+      "bytes": 11077,
+      "sha256": "a9e474f2a8f8dbb2ae774e7c0b9fa4206433e6331019267c937a81d04af02611"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-height/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-height/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-height/report.json",
+      "bytes": 8336,
+      "sha256": "d3674108a023d7f3502cb0a56cf388146fa2f9f76d175a21a444c76ac5b403d7"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-height/stages.jsonl",
+      "bytes": 10237,
+      "sha256": "c4c4302a9fa0b1ea186840cf181141800396dddbfae69d7fb26aa5fd6edae5de"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-id/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-id/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-id/report.json",
+      "bytes": 6239,
+      "sha256": "4ce2f664e321ffe2952784dc10af5c7a0f3f735cc61e4b9dac00c7d702a0000d"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-id/stages.jsonl",
+      "bytes": 7836,
+      "sha256": "f19e2e427feb6102d9fec035dc39d4c004a3d2a630240df4022c3267fa7c8a07"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-left/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-left/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-left/report.json",
+      "bytes": 7284,
+      "sha256": "b64b91edfcc6fda2fee03e28ccdbfd7208bfec1d96a087bddcb116f4dcdacdee"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-left/stages.jsonl",
+      "bytes": 9036,
+      "sha256": "3c0ba7d22bdcbc4c1cdb85bb7d198f6df5e94e8a93eb9c5496a6bbc30cc843b0"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-name/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-name/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-name/report.json",
+      "bytes": 6596,
+      "sha256": "4c579012c6836b2dcc4dd805de3f8a2367281bbeb44a4d685b006e0cf93fa553"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-name/stages.jsonl",
+      "bytes": 8239,
+      "sha256": "24d1187919ccc0d7eadd7781429345d94ab4fe08c174f87d8e83f755e2803c6d"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-rotation/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-rotation/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-rotation/report.json",
+      "bytes": 8700,
+      "sha256": "e28c4b7c3e0717ad94cd8229dbb77b34f76cd7bdca077a655fe37303527883e0"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-rotation/stages.jsonl",
+      "bytes": 10650,
+      "sha256": "39195008f525a6fd77842b1954beac6d3b0b528303e25b7e3bcfa16add5a610a"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-text/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-text/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-text/report.json",
+      "bytes": 9811,
+      "sha256": "75e17b8793a6e7c5ec8365dba79122c206ec8191505781efd20ad64d11537020"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-text/stages.jsonl",
+      "bytes": 12737,
+      "sha256": "f0d2191191449d43079024322d4ee8cc9d4be611c8892e4ef9835b6177f2796e"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-textFrame/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-textFrame/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-textFrame/report.json",
+      "bytes": 9841,
+      "sha256": "abd6857c064e789cc174299b90caea60ea6858be5f69e64afd9234b9c722cc3d"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-textFrame/stages.jsonl",
+      "bytes": 11889,
+      "sha256": "4397b94877b6adae45d4d4818f52c54343b665f17309fd861680c6bf2c972081"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-textRange/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-textRange/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-textRange/report.json",
+      "bytes": 9841,
+      "sha256": "89c04b32e67d9f08b6325d677d91a1bb6194fef3cb32f37b44c6d584f613990a"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-textRange/stages.jsonl",
+      "bytes": 12328,
+      "sha256": "6a36cf0f1d38587af65e9cd63c209443b0a2d3ae36de7a1900e64f49811bb440"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-top/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-top/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-top/report.json",
+      "bytes": 7624,
+      "sha256": "db0961dc8dce4a2cd7aa2a20c3ed064dd9cb5cc50b8dc51b7aa0e8d77fe3df21"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-top/stages.jsonl",
+      "bytes": 9426,
+      "sha256": "c0324da07a5eb7330b61e2acd369b5fe7a29f0a4274c178aaf3b3e151aa72c52"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-type/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-type/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-type/report.json",
+      "bytes": 6933,
+      "sha256": "55981a96065b8d871c55c7327b3ef7d655a5fa66f219e8076834efd33bc2a7b3"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-type/stages.jsonl",
+      "bytes": 8640,
+      "sha256": "a762b64b8df1f8c09216d8121388eb105d5319a9be8823e234acf512a5335649"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-width/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-width/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-width/report.json",
+      "bytes": 7980,
+      "sha256": "badb80d72dec21622c669a2ca1131cf5fb261a33cccd18bb5ea4c5f29990330d"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shape-1-width/stages.jsonl",
+      "bytes": 9832,
+      "sha256": "09e2468a276d010394de225dc5fd9633cfc311630a87eb17f38f92406362b339"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shapes/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shapes/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shapes/report.json",
+      "bytes": 5482,
+      "sha256": "036f9424e976376a285bba14dc868203543d4fa31b8f978f1046443da7bb6420"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shapes/stages.jsonl",
+      "bytes": 6581,
+      "sha256": "927b558fc91359bbfcb86253f1cf8388c02069669408b5183b70c626e04b64f3"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shapes-count/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shapes-count/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shapes-count/report.json",
+      "bytes": 5518,
+      "sha256": "538148f6fe5f5ce0b353bbc8a68f990393ff910adaa75742381c5326f441d1c6"
+    },
+    {
+      "name": "managed-final/fault-original-slide-1-shapes-count/stages.jsonl",
+      "bytes": 7027,
+      "sha256": "ceb08ff9a1d83c28d33164fa3e40785b79d3068580138c5280686ccf350b1140"
+    },
+    {
+      "name": "managed-final/fault-original-slides/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slides/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slides/report.json",
+      "bytes": 4195,
+      "sha256": "7fe396a6baf999db55b7085a90e310130396cad6585c06588f8fb0a7ef6330de"
+    },
+    {
+      "name": "managed-final/fault-original-slides/stages.jsonl",
+      "bytes": 4586,
+      "sha256": "f1ea82235890e44512fc877cce8b6118205f291be1bbbe8103b6a60ac6b5239d"
+    },
+    {
+      "name": "managed-final/fault-original-slides-count/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-original-slides-count/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-original-slides-count/report.json",
+      "bytes": 4231,
+      "sha256": "b9825293c88f7caa042f5dad9f350480054f18dd8a125531b12561dfbe71db51"
+    },
+    {
+      "name": "managed-final/fault-original-slides-count/stages.jsonl",
+      "bytes": 5016,
+      "sha256": "6797c3500792bf1bd26f653e09f65e53cb87e9f573fd0e8fac1bbe8b2db610a5"
+    },
+    {
+      "name": "managed-final/fault-presentations-count/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-presentations-count/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-presentations-count/report.json",
+      "bytes": 490,
+      "sha256": "3bb5e8834308868ed33bbdbb953a6672bca311fd8c9c77a9d256a26180c95f9d"
+    },
+    {
+      "name": "managed-final/fault-presentations-count/stages.jsonl",
+      "bytes": 1355,
+      "sha256": "c825cec7d60f290f0b4db4ca82bb739d3522fa8df705907e1afd6ce88b0dbc60"
+    },
+    {
+      "name": "managed-final/fault-saveCopyAs/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-saveCopyAs/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-saveCopyAs/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saveCopyAs/original-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saveCopyAs/original-03.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saveCopyAs/report.json",
+      "bytes": 35633,
+      "sha256": "3972c91104bdae8bb82bda4391f33aca70e23b03dd16a486949d573967e0d3b5"
+    },
+    {
+      "name": "managed-final/fault-saveCopyAs/stages.jsonl",
+      "bytes": 43505,
+      "sha256": "9d339b3be6a3aecce3325e6ce5ef281725c49d15df67f07f6ff9ffff233058ba"
+    },
+    {
+      "name": "managed-final/fault-saved-close/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-saved-close/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-saved-close/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saved-close/original-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saved-close/original-03.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saved-close/report.json",
+      "bytes": 71678,
+      "sha256": "28dfb5692406263f62ab0151ed6f94816d47744fee3de50908b3eec5afb25ad6"
+    },
+    {
+      "name": "managed-final/fault-saved-close/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saved-close/saved-reopened-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saved-close/saved-reopened-03.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saved-close/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-saved-close/stages.jsonl",
+      "bytes": 88275,
+      "sha256": "4be2355d5d10c717acc921b130fe6ba3422eae2537bbc999e81b43359c8fa1f9"
+    },
+    {
+      "name": "managed-final/fault-saved-slide-3-export/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/fault-saved-slide-3-export/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-saved-slide-3-export/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saved-slide-3-export/original-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saved-slide-3-export/original-03.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saved-slide-3-export/report.json",
+      "bytes": 70667,
+      "sha256": "31438ecd04344a35181c829c11f0b6d42ab1cfc8a934400712b5f239288cc1c4"
+    },
+    {
+      "name": "managed-final/fault-saved-slide-3-export/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saved-slide-3-export/saved-reopened-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/fault-saved-slide-3-export/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/fault-saved-slide-3-export/stages.jsonl",
+      "bytes": 87083,
+      "sha256": "0a5dc88f0cc1a6571fdd35f7cb30ff8b30ddc1360b83bc95da4bceba09e827a4"
+    },
+    {
+      "name": "managed-final/forbidden-getter/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/forbidden-getter/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/global-busy/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/global-busy/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/mock-results.json",
+      "bytes": 29382,
+      "sha256": "c3cf46fd8bb0ca5552ebcf25d11efc881481a1aacbb2cd4791a043c33eeaa139"
+    },
+    {
+      "name": "managed-final/mutant-badTriState/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/mutant-badTriState/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/mutant-badTriState/report.json",
+      "bytes": 9297,
+      "sha256": "528d099390920d2e5c85a233f4a8bcfe21a9ca4e3dc1baa6fa33427954f3b00a"
+    },
+    {
+      "name": "managed-final/mutant-badTriState/stages.jsonl",
+      "bytes": 10875,
+      "sha256": "00111171c1957c1f4e95738aa88996ad9800f42bd5bad22c049507c895e68bcc"
+    },
+    {
+      "name": "managed-final/mutant-busyApplication/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/mutant-busyApplication/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/mutant-busyApplication/report.json",
+      "bytes": 718,
+      "sha256": "a483db0e4f89a2dca4c550aad84e9b4c0eca0facd7aae4ae9ef4bd58341272f1"
+    },
+    {
+      "name": "managed-final/mutant-busyApplication/stages.jsonl",
+      "bytes": 1228,
+      "sha256": "7f14421065b84e69faf9adb0a76d5f0d722da43c0314d93b9284d6d7c2b1ec7a"
+    },
+    {
+      "name": "managed-final/mutant-countObject/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/mutant-countObject/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/mutant-countObject/report.json",
+      "bytes": 4478,
+      "sha256": "cc26d525756dec5d2195a25f404748fd9249d8dac1694766cdc8d1a8a199d086"
+    },
+    {
+      "name": "managed-final/mutant-countObject/stages.jsonl",
+      "bytes": 4903,
+      "sha256": "baf8a68594fe655aac8d25192ad2585f830f93f84c2607be62d180aa9f80fdea"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeOpen/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeOpen/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeOpen/report.json",
+      "bytes": 2298,
+      "sha256": "df6b41e6c60894955ccbdbeaacc3b7636ce6902328f9a94697fde4d595fb5935"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeOpen/stages.jsonl",
+      "bytes": 2876,
+      "sha256": "7825b276eec88190793f5a0d553af2e017926242804e58a49ac77495a481c39b"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeQuit/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeQuit/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeQuit/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeQuit/original-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeQuit/original-03.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeQuit/report.json",
+      "bytes": 72927,
+      "sha256": "937b1a2ec8d94f0814de3ff2a91916ce3b0d7d00783c24e8218c0eaa8a3eddc9"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeQuit/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeQuit/saved-reopened-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeQuit/saved-reopened-03.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeQuit/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/mutant-foreignBeforeQuit/stages.jsonl",
+      "bytes": 89065,
+      "sha256": "8397dae1b0a3477073a0d9d9a7688c602b6f38381bdd52af1bc359570eacc100"
+    },
+    {
+      "name": "managed-final/mutant-foreignFullName/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/mutant-foreignFullName/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/mutant-foreignFullName/report.json",
+      "bytes": 3030,
+      "sha256": "2e99ef782476228f0de2eb1d2afc764ebbc229d77af2b1800d4a3c629b2622ec"
+    },
+    {
+      "name": "managed-final/mutant-foreignFullName/stages.jsonl",
+      "bytes": 3733,
+      "sha256": "521942c4f2e175394a372213fbe5f27c778fe00cf40ddacb31e9dae24161bdc4"
+    },
+    {
+      "name": "managed-final/mutant-nonfinite/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/mutant-nonfinite/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/mutant-nonfinite/report.json",
+      "bytes": 8288,
+      "sha256": "875976a24cf86f13c19ee31d695f533ae1074798772b23b28c5261d3900c47ee"
+    },
+    {
+      "name": "managed-final/mutant-nonfinite/stages.jsonl",
+      "bytes": 9683,
+      "sha256": "5e06c99bcf9a65bbd38fcd7dde8b64f763c6613b0d54ffb65956f0c025fa6ff6"
+    },
+    {
+      "name": "managed-final/mutant-shapeCount/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/mutant-shapeCount/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/mutant-shapeCount/report.json",
+      "bytes": 5703,
+      "sha256": "05d41e1131054b0ba140e1013502e0b1912609b52b0cbe6f8fa6090f561a93fe"
+    },
+    {
+      "name": "managed-final/mutant-shapeCount/stages.jsonl",
+      "bytes": 6854,
+      "sha256": "64fc32bef7dab46d3eb52c1977dcf3abe8fde5280ff957ed34d9bfb98ca60a18"
+    },
+    {
+      "name": "managed-final/mutant-slideCount/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/mutant-slideCount/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/mutant-slideCount/report.json",
+      "bytes": 4405,
+      "sha256": "09247cbf06d13198a184e33cb44c0ea24dc3decb01308214c091711739d95527"
+    },
+    {
+      "name": "managed-final/mutant-slideCount/stages.jsonl",
+      "bytes": 4867,
+      "sha256": "aa348a0fe712e4ae775fe1514836f12e036f636175e5c7fb7267715ae136ca0a"
+    },
+    {
+      "name": "managed-final/mutant-writable/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/mutant-writable/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/mutant-writable/report.json",
+      "bytes": 3216,
+      "sha256": "3aea691b2c466f904415ef479e481d73baffb75e17e4393420b73dcf6352c464"
+    },
+    {
+      "name": "managed-final/mutant-writable/stages.jsonl",
+      "bytes": 4082,
+      "sha256": "1aea276862226f0ec9564fe3699db394bac4cba7102f8ff0be53b770ea817a14"
+    },
+    {
+      "name": "managed-final/ownership-Close-ReferenceWitnessOwned/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/ownership-Close-ReferenceWitnessOwned/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/ownership-Close-ReferenceWitnessOwned/report.json",
+      "bytes": 757,
+      "sha256": "dcc9fd315869856abf6c903a40e82b55aed8b23e71f562c3de27485cc3817f67"
+    },
+    {
+      "name": "managed-final/ownership-Quit-ReferenceWitnessOwned/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/ownership-Quit-ReferenceWitnessOwned/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/ownership-Quit-ReferenceWitnessOwned/report.json",
+      "bytes": 708,
+      "sha256": "bb77e004b71096faa7482f590d13fcab72b3af5330732aa77b23d3c22623c315"
+    },
+    {
+      "name": "managed-final/ownership-Read-ReferenceWitnessPhase/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/ownership-Read-ReferenceWitnessPhase/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/ownership-Read-ReferenceWitnessPhase/report.json",
+      "bytes": 747,
+      "sha256": "b5babdd3c810e11cb4ad248f2d46ff92642e42fb8a5de164023834abd64f1b72"
+    },
+    {
+      "name": "managed-final/ownership-Save-ReferenceWitnessCopy/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/ownership-Save-ReferenceWitnessCopy/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/ownership-Save-ReferenceWitnessCopy/report.json",
+      "bytes": 747,
+      "sha256": "847a4d78cf3de4e57e484aed2efdf4cbae36b5570135d1f6f094f57b1c6adfe6"
+    },
+    {
+      "name": "managed-final/success/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-final/success/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/success/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/success/original-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/success/original-03.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/success/report.json",
+      "bytes": 72526,
+      "sha256": "994eba4e6ee46ddfbc3cf2e94cac1d861a6255a1c7c236c127e02fb08be29148"
+    },
+    {
+      "name": "managed-final/success/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/success/saved-reopened-02.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/success/saved-reopened-03.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-final/success/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-final/success/stages.jsonl",
+      "bytes": 89694,
+      "sha256": "b357c75d1729fcee08c1ebc4ea7ce06f5574e15303007e5269b87fd0369d20df"
+    },
+    {
+      "name": "envelope-first/child-results.json",
+      "bytes": 35281,
+      "sha256": "ff93148efae354c0a93b4858dfc9a65de9d42e9496beb45d8bcec38464c40127"
+    },
+    {
+      "name": "envelope-first/envelope.json",
+      "bytes": 36271,
+      "sha256": "2bc673cf3188eeb5ad9e50ca2b43c78d9591b9ee36e5fc7cd6a23f1f7fdabab0"
+    },
+    {
+      "name": "envelope-first/suite/suite.json",
+      "bytes": 9035,
+      "sha256": "39941d3d81f6d7a12ca65415bb8195891adebbc0418be4a70bc4c2cfd7197973"
+    },
+    {
+      "name": "envelope-first/default-pure/execution-envelope.json",
+      "bytes": 36271,
+      "sha256": "2bc673cf3188eeb5ad9e50ca2b43c78d9591b9ee36e5fc7cd6a23f1f7fdabab0"
+    },
+    {
+      "name": "envelope-first/default-pure/inputs/action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "name": "envelope-first/default-pure/inputs/case.pptx",
+      "bytes": 7383,
+      "sha256": "83431e40d40a79ed658ae7eea108af86986641e33af62d539b03f494d2aaa6ca"
+    },
+    {
+      "name": "envelope-first/default-pure/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "name": "envelope-first/default-pure/inputs/reference-chart-worker.ps1",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+    },
+    {
+      "name": "envelope-first/default-pure/runner.json",
+      "bytes": 25703,
+      "sha256": "52c4791fd89f9437ef00572dcdd94136c52e908edf78d3d8fccfc3bc2eb9b9d4"
+    },
+    {
+      "name": "envelope-final/child-results.json",
+      "bytes": 49560,
+      "sha256": "da7d92d9bee42bd69d93a177f55e83b68b0febfc159fccef810f6fa1ec827ef4"
+    },
+    {
+      "name": "envelope-final/envelope.json",
+      "bytes": 36330,
+      "sha256": "1f9fe3a4f87b8ac56aa3febfce0504e6b668a501d722c23f4275be0a74f64aa6"
+    },
+    {
+      "name": "envelope-final/suite/suite.json",
+      "bytes": 9035,
+      "sha256": "4a4735861beec600a23b46983f31c7b8f316ff3f32450aa7dc60e4108f1bbf33"
+    },
+    {
+      "name": "envelope-final/default-pure/execution-envelope.json",
+      "bytes": 36330,
+      "sha256": "1f9fe3a4f87b8ac56aa3febfce0504e6b668a501d722c23f4275be0a74f64aa6"
+    },
+    {
+      "name": "envelope-final/default-pure/inputs/action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "name": "envelope-final/default-pure/inputs/case.pptx",
+      "bytes": 7383,
+      "sha256": "5e2f11757138967eddc1172a5604c562508c2260cc4fdbbb33c2a0e564fae9e8"
+    },
+    {
+      "name": "envelope-final/default-pure/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "name": "envelope-final/default-pure/inputs/reference-chart-worker.ps1",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+    },
+    {
+      "name": "envelope-final/default-pure/runner.json",
+      "bytes": 25703,
+      "sha256": "a31422fba2a6a6e9f1039fad481f40c71e1892299cc8fa83752cf5583b424f48"
+    }
+  ],
+  "outcomes": {
+    "finalFocused": {
+      "pass": 18,
+      "fail": 0,
+      "skip": 0,
+      "managedCases": 55,
+      "durationMs": 12183.7168
+    },
+    "firstSyntheticSourceRun": {
+      "pass": 4,
+      "fail": 1,
+      "error": "ReferenceError: list is not defined; original outcome receipt retained"
+    },
+    "firstSupervisorPathLookup": {
+      "status": "ENOENT",
+      "correction": "Read only the exact immutable suite03 workerRepository directory; both fixture copies verified against its SHA"
+    },
+    "firstFormatterFlag": {
+      "exitCode": 1,
+      "error": "unsupported --formatter-enabled flag; preserved"
+    },
+    "currentConsumerGeneration": false,
+    "exportedShapeCounts": "UNMEASURED",
+    "officeInvoked": false,
+    "nativeAcceptance": false,
+    "registryAcceptance": false,
+    "requiredChangedGate": "PARENT_SCHEDULED; UNRUN"
+  },
+  "scope": "Only synthetic XML/packages/default-pure child route and managed fake worker functions. No actual consumer build, export, render, Office or native acceptance. Initial WIP packet unchanged."
+}

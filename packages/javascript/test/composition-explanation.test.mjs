@@ -53,12 +53,12 @@ test('candidate penalties account for the score and report the selected flow', (
 });
 
 test('fixed modes and promoted regions retain placement with no invented search', () => {
-  const slide={left:{composition:{mode:'column',weights:[2,1]},blocks:blocks(2)},right:{blocks:blocks(3)}};
+  const slide={start:{composition:{mode:'column',weights:[2,1]},blocks:blocks(2)},end:{blocks:blocks(3)}};
   const result=composeSlide(slide,{explain:true});
   assert.deepEqual(result.explanation.decisions.map(({path,mode,reason})=>({path,mode,reason})),[
     {path:'slides.0',mode:'regions',reason:'promoted-regions'},
-    {path:'slides.0.left',mode:'column',reason:'configured-mode'},
-    {path:'slides.0.right',mode:'auto',reason:'lowest-score'},
+    {path:'slides.0.start',mode:'column',reason:'configured-mode'},
+    {path:'slides.0.end',mode:'auto',reason:'lowest-score'},
   ]);
   assert.deepEqual(result.explanation.decisions[0].candidates,[]);
   assert.equal(result.explanation.decisions[0].selectedColumns,undefined);

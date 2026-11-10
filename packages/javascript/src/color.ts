@@ -1258,16 +1258,6 @@ export function chartWaterfallColors(surface: string, accent: string, text: stri
   return { total, increase, decrease };
 }
 
-/** LH-110: how far the shaded band of a period the title names is mixed from the backdrop towards the text color. */
-export const CHART_BAND_MIX = 0.06;
-
-/** LH-110: the fill of a period band: the backdrop mixed {@link CHART_BAND_MIX} towards the text color, a faint neutral under the marks. */
-export function chartBandColor(surface: string, text: string): string {
-  const fill = normalizeHexColor(surface)?.slice(0, 7) ?? '#FFFFFF';
-  const ink = normalizeHexColor(text)?.slice(0, 7) ?? textColorForFill(fill, '#000000');
-  return mixChannels(opaqueChannels(fill)!, opaqueChannels(ink)!, CHART_BAND_MIX);
-}
-
 function chartContextFloor(from: readonly number[], to: readonly number[], fill: string, floor: number): string {
   let amount = CHART_HIGHLIGHT_MUTED_MIX, muted = mixChannels(from, to, amount);
   while ((colorContrast(muted, fill) ?? Infinity) < floor && amount < 1) {

@@ -15,7 +15,7 @@ const source = {
   name: 'Q4 Review',
   speaker: [{id: 'ada', name: 'Ada Lovelace', title: 'CTO'}, {id: 'grace', name: 'Grace Hopper'}],
   organization: {id: 'acme', name: 'Acme Corp', tagline: 'Build the future'},
-  design: {footer: {left: {text: '{{organization.name}}\n{{speaker.name}}, {{speaker.title}}'}, right: {text: '{{organization.tagline}}'}}},
+  design: {footer: {start: {text: '{{organization.name}}\n{{speaker.name}}, {{speaker.title}}'}, end: {text: '{{organization.tagline}}'}}},
   slides: [{id: 'cover', title: '{{deck.name}}', subtitle: '{{speaker.name}}, {{speaker.title}} · {{organization.name}}'}, {id: 'next', title: 'By {{speakers}}', text: 'Body'}]
 };
 const before = structuredClone(source);
@@ -35,8 +35,8 @@ assert.ok(!xml.includes('type="slidenum"'));
 // Import returns the authored tokens: the stored text is drawn from the stored organization and speakers (which the document
 // record also returns), and it is restored while it draws the words now on the slide.
 const {deck} = await read(bytes);
-assert.equal(deck.design.footer.left.text, source.design.footer.left.text, 'The authored tokens return, drawn from the stored organization and speakers.');
-assert.deepEqual(Object.keys(deck.design.footer.left), ['text'], 'no organization or speaker flag exists any more');
+assert.equal(deck.design.footer.start.text, source.design.footer.start.text, 'The authored tokens return, drawn from the stored organization and speakers.');
+assert.deepEqual(Object.keys(deck.design.footer.start), ['text'], 'no organization or speaker flag exists any more');
 assert.deepEqual(deck.speaker, source.speaker, 'Stored speakers return from the document record.');
 assert.deepEqual(deck.organization, source.organization, 'The stored organization returns.');
 assert.ok(!(await read(bytes)).issues.some(issue => issue.code === 'invalid-furniture-provenance'));
@@ -46,16 +46,16 @@ assert.ok(!(await read(bytes)).issues.some(issue => issue.code === 'invalid-furn
 const plain = await read(await toPptx(source, {provenance: false}));
 assert.equal(plain.deck.speaker, undefined);
 assert.equal(plain.deck.organization, undefined);
-assert.equal(plain.deck.design.footer.left.text, 'Acme Corp\nAda Lovelace, CTO');
+assert.equal(plain.deck.design.footer.start.text, 'Acme Corp\nAda Lovelace, CTO');
 // A speaker with no title is the name alone.
 const noTitle = structuredClone(source);
 noTitle.speaker = {id: 'solo', name: 'Solo, Jr.'};
-noTitle.design.footer.left.text = '{{organization.name}}\n{{speaker.name}}';
-assert.equal((await read(await toPptx(noTitle, {provenance: false}))).deck.design.footer.left.text, 'Acme Corp\nSolo, Jr.');
+noTitle.design.footer.start.text = '{{organization.name}}\n{{speaker.name}}';
+assert.equal((await read(await toPptx(noTitle, {provenance: false}))).deck.design.footer.start.text, 'Acme Corp\nSolo, Jr.');
 
 // Current native words win: an edited line no longer matches the drawn text, so it is the footer's new text.
 const retitled = await read(modify(bytes, entries => editEverywhere(entries, xml => xml.replace('<a:t>Ada Lovelace, CTO</a:t>', '<a:t>Ada Lovelace, CEO</a:t>'))));
-assert.equal(retitled.deck.design.footer.left.text, 'Acme Corp\nAda Lovelace, CEO');
+assert.equal(retitled.deck.design.footer.start.text, 'Acme Corp\nAda Lovelace, CEO');
 assert.deepEqual(retitled.deck.speaker, source.speaker, 'The footer no longer names the speaker, so the stored speakers are unchanged.');
 
 // Built-ins and user variables. A text whose tokens are all built-ins is stored as authored; a text that also uses a declared user
@@ -63,10 +63,10 @@ assert.deepEqual(retitled.deck.speaker, source.speaker, 'The footer no longer na
 // such a text still returns as a token (the filled text is stored for it).
 {
   const user = {name: 'Q4 Review', organization: source.organization, variables: {customer: {type: 'text', example: 'Northstar'}},
-    design: {footer: {left: {text: 'For {{customer}} by {{organization.name}}'}, center: {text: 'Page {{slide.number}} for {{customer}}'}, right: {text: '{{organization.name}} {{slide.number}}'}}},
+    design: {footer: {start: {text: 'For {{customer}} by {{organization.name}}'}, center: {text: 'Page {{slide.number}} for {{customer}}'}, end: {text: '{{organization.name}} {{slide.number}}'}}},
     slides: [{title: 'One', text: 'Body'}, {title: 'Two', text: 'Body'}]};
   const mixed = await read(await toPptx(user, {variables: {customer: 'Northstar'}}));
-  assert.deepEqual(mixed.deck.design.footer, {left: {text: 'For Northstar by Acme Corp'}, center: {text: 'Page {{slide.number}} for Northstar'}, right: {text: '{{organization.name}} {{slide.number}}'}});
+  assert.deepEqual(mixed.deck.design.footer, {start: {text: 'For Northstar by Acme Corp'}, center: {text: 'Page {{slide.number}} for Northstar'}, end: {text: '{{organization.name}} {{slide.number}}'}});
   assert.deepEqual(mixed.deck.organization, source.organization);
   assert.ok(!mixed.issues.some(issue => issue.code === 'invalid-furniture-provenance'));
 }

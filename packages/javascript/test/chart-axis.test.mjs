@@ -142,7 +142,7 @@ describe('chartValueAxis', () => {
 	});
 
 	test('other types, unresolved data and bad geometry give no axis', () => {
-		for (const type of ['pie', 'scatter', 'radar', 'combo', 'waterfall', 'funnel', 'treemap', 'nonsense'])
+		for (const type of ['pie', 'scatter', 'radar', 'waterfall', 'funnel', 'treemap', 'nonsense'])
 			assert.equal(axisOf(chartOf([[1, 2, 3]], type)), undefined, type);
 		assert.equal(axisOf({ type: 'column', data: { dataset: 'missing' } }), undefined);
 		assert.equal(axisOf(chartOf([[1, 2]]), { width: 0, height: 450, scale: 1 }), undefined);

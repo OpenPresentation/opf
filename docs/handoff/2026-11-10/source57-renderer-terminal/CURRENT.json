@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "source": "57acc14a61c19cceab26d5bce7b3ce6c6aa745c2",
+  "actualOwnedHandle": 4376,
+  "actualToolExitCode": 1,
+  "selectiveRecovery": {
+    "commands": 3,
+    "allExit0": true,
+    "sourceClean": true,
+    "indexRawAndStageUnchanged": true,
+    "restoredFiles": 1860,
+    "restoredBytes": 46939567
+  },
+  "rendererPartialTail": {
+    "toolExitCode": 1,
+    "executed": 76,
+    "passed": 75,
+    "failed": 1,
+    "laterUnrun": 51,
+    "explicitlyUnrun": [
+      {
+        "ordinal": 61,
+        "name": "golden.mjs",
+        "args": [
+          "test/golden.mjs"
+        ],
+        "sha256": "269a00154cf44166949436e45c355f7095ab1fe8a8560d534dcbafa42ec9efaf"
+      }
+    ],
+    "firstFailure": "script-family-hosts.mjs",
+    "firstFailureOrdinal": 136,
+    "error": "Noto Color Emoji: the Noto Emoji stand-in is among the registry’s font files (actual undefined)",
+    "terminal": "renderer-tail01/terminal.json",
+    "allAuthoritativeBaselineFilesUnchanged": 3023,
+    "sourceClean": true,
+    "indexRawAndStageUnchanged": true
+  },
+  "originalFullAndDeltaRedsRetained": true,
+  "aggregateRelabelled": false,
+  "noOffice": true,
+  "noRetry": true,
+  "notes": "recovery-summary.json is the earlier recovery/plan-only snapshot; this CURRENT record adds actual partial-tail terminal. No full-suite green claim."
+}

@@ -81,8 +81,8 @@
             "block": "photo",
             "edge": "end",
             "offset": -96,
-            "width": 72,
-            "height": 72
+            "widthPx": 72,
+            "heightPx": 72
           },
           "fill": "accent2",
           "stroke": {
@@ -98,7 +98,7 @@
             "edge": "bottom",
             "offset": -56,
             "width": 0.4,
-            "height": 40
+            "heightPx": 40
           },
           "style": "subtle"
         },
@@ -108,8 +108,8 @@
             "block": "notes",
             "edge": "start",
             "offset": 8,
-            "width": 36,
-            "height": 24
+            "widthPx": 36,
+            "heightPx": 24
           },
           "fill": "accent1"
         },
@@ -738,8 +738,8 @@
             "block": "growth",
             "edge": "top",
             "offset": -20,
-            "width": 80,
-            "height": 80
+            "widthPx": 80,
+            "heightPx": 80
           },
           "fill": "light1",
           "stroke": "none"

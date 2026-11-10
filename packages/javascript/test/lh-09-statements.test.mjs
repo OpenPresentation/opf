@@ -114,7 +114,7 @@ for (const [direction, text] of [['ltr', words.en], ['rtl', words.ar]]) {
     assert.ok(Math.abs((start === 'left' ? rule.x : rule.x + rule.width) - (start === 'left' ? list.box.x : list.box.x + list.box.width)) < 1, 'at the start edge');
     const word = list.text.listEntries[0].text.fontSize, description = list.text.fontSize;
     assert.ok(word >= 1.25 * description - 1e-6, 'the word is larger than its heading size would be');
-    const placed = composeSlide({ title: text.label, 'top:left': { text: text.three }, 'top:center+right': { text: text.label }, 'middle+bottom:left+center+right': { items: ['Queue', 'Route', 'Resolve'] } }, { direction });
+    const placed = composeSlide({ title: text.label, 'top:start': { text: text.three }, 'top:center+end': { text: text.label }, 'middle+bottom:start+center+end': { items: ['Queue', 'Route', 'Resolve'] } }, { direction });
     const heads = placed.items.filter((entry) => entry.field === 'text');
     assert.equal(heads.length, 2);
     assert.ok(heads.every((entry) => entry.textStyle.fontWeight === 700), 'each placed short text is a heading');

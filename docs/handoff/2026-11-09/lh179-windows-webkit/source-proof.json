@@ -1,0 +1,31 @@
+{
+  "base": "1ef0e17a58198defa34cd515ad7078d56a7d97d0",
+  "source": "83ea32fb115f533d0fc105eac8e4764b3736dafd",
+  "sourceTree": "2d52a073a8a70de390a5bffb4ccf7f71f8cd8f2c",
+  "sourcePaths": [
+    ".github/workflows/nightly.yml",
+    "changes/lh-179-windows-webkit.md",
+    "docs/handoff/2026-11-09/lh179-windows-webkit/README.md",
+    "docs/programs/layout-harvest/burndown.md",
+    "docs/programs/release-readiness/burndown.md",
+    "scripts/ci-workflows.test.mjs"
+  ],
+  "sourceObjects": {
+    ".github/workflows/nightly.yml": "847e163a796496e7b0ec98524325422c10cd0177",
+    "scripts/ci-workflows.test.mjs": "f7781f254a97286095bf8213a42d6f0ea87cabc3"
+  },
+  "protectedObjects": {
+    "packages": "15c540efe20c5eab8fc02e5f7bc847ab4786e061",
+    "spec": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5",
+    "pnpm-lock.yaml": "3432ab613e493c84d6eea74cb68d30be08720102",
+    "pnpm-workspace.yaml": "c84e4ff16c7f717d30d69498f565b2b519d13e19",
+    "package.json": "0d5eec02984fea0ef0b564a4b83658cc35a1bbf0",
+    ".github/workflows/ci.yml": "3a1f5aecd99691dc18b39822b139e10d99def255",
+    ".github/workflows/full-ci.yml": "f0df9e726703221fe5633c9566b913f396570033",
+    "packages/editor/test/source-worker-perf-browser.mjs": "dc06423a8680a088877750eaa03043cb247611b9",
+    "packages/editor/test/studio-perf-browser.mjs": "f773a1367c4b6039d430837efec4ab27792d3879",
+    "packages/editor/test/mobile-touch-browser.mjs": "3a0b85b1a549b7c4b55999bf77adb048be0256a2",
+    "packages/editor/test/browser-suites.json": "30bd68689cf0e6f264e858d8649758e133df7f60",
+    "packages/editor/test/support/block-budget.mjs": "3192c67567e39ba0c152bd1587c6ea1288ab31be"
+  }
+}

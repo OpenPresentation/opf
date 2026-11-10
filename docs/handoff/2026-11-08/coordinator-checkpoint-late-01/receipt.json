@@ -1,0 +1,249 @@
+{
+  "recordedAt": "2026-11-08T19:01:37.377Z",
+  "integrationSourceHead": "96dde3cd3e6a513eabce936e8cb4fcbb22f1eedb",
+  "baselineHead": "787bccd52defaef82fb5c91320ed0e0cfb58bc20",
+  "baseline": {
+    "exit": 1,
+    "failed": 9,
+    "total": 44,
+    "rootChecksRecovered": [
+      "font-tracker",
+      "gallery-tracker",
+      "native-acceptance",
+      "text"
+    ],
+    "unresolvedAtCheckpoint": [
+      "render layout alignment 108 vs120",
+      "PPTX Arabic timeline status words0 vs4",
+      "editor current-gallery suggestion fixture",
+      "core/CLI focused reruns after exact sparse input restoration still pending"
+    ]
+  },
+  "sites": {
+    "org": {
+      "head": "47361c352f9f526c1d8ea6a15f64a61b900a6205",
+      "pr": 202,
+      "branch": "bot/opf-v0.33.0",
+      "localTests": 232,
+      "nextPages": 1076,
+      "typecheck": "passed",
+      "nextBuild": "passed",
+      "cloudflareBuild": "failed: Windows OpenNext symlink EPERM; preserved, real Linux packaging/Preview remains owed",
+      "pushed": true
+    },
+    "gallery": {
+      "head": "17ed8ed660a4c61291f6ee58444671162a25399f",
+      "pr": 172,
+      "branch": "bot/opf-v0.33.0",
+      "localTests": 720,
+      "nextPages": 997,
+      "typecheck": "passed",
+      "nextBuild": "passed",
+      "cloudflareBuild": "not rerun locally after exact pinned OpenNext Windows symlink failure; Linux source-bound packaging/Preview remains owed",
+      "pushed": true
+    }
+  },
+  "scope": "Lossless first failure and local qualification logs; no assertion waivers, generated substitutes, tracker regeneration, golden/lock edits, deployment, native acceptance or release claim",
+  "files": [
+    {
+      "file": "gal172-17ed8ed6-build.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\gal172-17ed8ed6-build.log",
+      "bytes": 7212,
+      "sha256": "33c2216ee1ddd009dc16363578a2f5e3b58045ec1dafc1d06fe3c13e67b7e259",
+      "compressedBytes": 2246,
+      "compressedSha256": "04a29f337fda3cf82eea1e78bdda5cba2c2eef814e862ed8900388b0b489d9b7"
+    },
+    {
+      "file": "gal172-17ed8ed6-install-ci.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\gal172-17ed8ed6-install-ci.log",
+      "bytes": 6130,
+      "sha256": "2418b4374f4c384a667ca8417c2f111627fc31df5d585054674282518c04ef5d",
+      "compressedBytes": 1314,
+      "compressedSha256": "5ba305eaa1c5164af971b7c7d8c3acf1375afcaf1241c46a72fe5b06c1c1ae03"
+    },
+    {
+      "file": "gal172-17ed8ed6-lint.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\gal172-17ed8ed6-lint.log",
+      "bytes": 68,
+      "sha256": "060738a156b077127a3b20847ac1f92c7b0146e9144375f2c612c878346414ae",
+      "compressedBytes": 86,
+      "compressedSha256": "57d152a35b984a9ab68dc4652ecfeeaefaa679d71b9ee16cb41db173b56c3d0b"
+    },
+    {
+      "file": "gal172-17ed8ed6-test.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\gal172-17ed8ed6-test.log",
+      "bytes": 453,
+      "sha256": "fda6803f6280147fd092e84d4b7620a61ae46ffa997e833cc137eb9f0e446a33",
+      "compressedBytes": 319,
+      "compressedSha256": "f66172d4d0a9250bd380a4f226a4934e84ca2826be13d687458f4669098381a0"
+    },
+    {
+      "file": "integration-034-mapped-787bccd52.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\integration-034-mapped-787bccd52.log",
+      "bytes": 36389,
+      "sha256": "994abb119ed1992ee7a70fcdd87ba7f5487999590e78b04cdc7f7b7f06691326",
+      "compressedBytes": 9137,
+      "compressedSha256": "7819f2f749cf4adb3cf75ecce12c554c08355189d93d606795825f6367055842"
+    },
+    {
+      "file": "integration-787bccd52-exact-inputs-restored-01.json.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\integration-787bccd52-exact-inputs-restored-01.json",
+      "bytes": 819498,
+      "sha256": "d7a2cd1b22f6bb14d5378f4f5a5e3e8930794f27535e3755dfe6ba61b894894e",
+      "compressedBytes": 139883,
+      "compressedSha256": "5667dc1028a9f2fad60badbb4c81e3ba2ecda49f0747e26b1979b3deecb64744"
+    },
+    {
+      "file": "integration-787bccd52-restored-check-font-tracker-01.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\integration-787bccd52-restored-check-font-tracker-01.log",
+      "bytes": 4650,
+      "sha256": "d5c2fd8c152965957e655b699746b2284283cfeab80bbc8759ff2220bae0efaa",
+      "compressedBytes": 1932,
+      "compressedSha256": "c5c7bb797172b8bfc10d1df0d3976b53c5b28ca87a1cf1768d7cc4d1f24f5878"
+    },
+    {
+      "file": "integration-787bccd52-restored-check-gallery-tracker-01.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\integration-787bccd52-restored-check-gallery-tracker-01.log",
+      "bytes": 2023,
+      "sha256": "0834798f2ea898d8ca070f087a9a172358f8f7d4e7c4160d8fbe606b7fcae361",
+      "compressedBytes": 1068,
+      "compressedSha256": "5add5f804647592deac7cdfef9aa29aac5c5034e2d036847d68e8a33cc43e74b"
+    },
+    {
+      "file": "integration-787bccd52-restored-check-native-acceptance-01.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\integration-787bccd52-restored-check-native-acceptance-01.log",
+      "bytes": 5772,
+      "sha256": "6163c89eb08d13ac83a3fa6ec9098b12b37027c102858f1777f0b4824dfd9054",
+      "compressedBytes": 2453,
+      "compressedSha256": "6315d37b9485c9e5d78d66ad40b1218677b1724d05778605d936cd2b810384e9"
+    },
+    {
+      "file": "integration-787bccd52-restored-check-text-01.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\integration-787bccd52-restored-check-text-01.log",
+      "bytes": 1099,
+      "sha256": "9148dab2951c6d040fe6cdfb7a1588aceafba0a4670fbd7b14e3c00712c397fc",
+      "compressedBytes": 604,
+      "compressedSha256": "e5ec0c91aaa0cb8d96eedb27e95d1f6a9514a6b41f0f98d05831fcf28429fefe"
+    },
+    {
+      "file": "integration-96dde3-exact-cli-xml-restored-01.json.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\integration-96dde3-exact-cli-xml-restored-01.json",
+      "bytes": 394,
+      "sha256": "739e46d3507db32dac32ea0bcf27821754811cea99205c1bb3f5f65c2b94276a",
+      "compressedBytes": 298,
+      "compressedSha256": "70c851e95c25798f02af9f0bbc974aee8809a9c516e2449cc1e163730100ac44"
+    },
+    {
+      "file": "org202-47361c35-build.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\org202-47361c35-build.log",
+      "bytes": 29060,
+      "sha256": "4ad5d49116d0b8e97b0284603861221788f10777f63c6d6c8c0fb6a3da47aaf2",
+      "compressedBytes": 7442,
+      "compressedSha256": "89e7f604c9d22a4ed2149f4176c58711b837b1613ad4f8242194c60a9c2450ba"
+    },
+    {
+      "file": "org202-47361c35-cf-build.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\org202-47361c35-cf-build.log",
+      "bytes": 32338,
+      "sha256": "77efb7ef3b6a16e3ef118d0a303d25bc59316b0ed5192881c652a56c4c5e62e2",
+      "compressedBytes": 8227,
+      "compressedSha256": "c7b6b639eba7aa7e4280384ba2166773b0c5d102b73e4adcc818ce50768c3609"
+    },
+    {
+      "file": "org202-47361c35-install-ci.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\org202-47361c35-install-ci.log",
+      "bytes": 4424,
+      "sha256": "5afa146650380099f6a6ec89b3da801bfe08939fd436a9a0cc48e3124c2e5b80",
+      "compressedBytes": 1173,
+      "compressedSha256": "a5cdb3628426c95a8497d1660cb8fa7e59bba3d5eb11c8156a3486271aef7e13"
+    },
+    {
+      "file": "org202-47361c35-install.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\org202-47361c35-install.log",
+      "bytes": 219,
+      "sha256": "351b9fc5ae6f5453f58f40c40595b1412d9155af6594a6459e76dcd7ee0fc82e",
+      "compressedBytes": 200,
+      "compressedSha256": "a7f880d9ebb62656b63948df51fcd8357bd8a42ca27f0d80174020f2f9525096"
+    },
+    {
+      "file": "org202-47361c35-test.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\org202-47361c35-test.log",
+      "bytes": 36612,
+      "sha256": "87f96dc0f73e0b5540c50b2dc3791c1835ce9bece0e4a48ba7f4116204686f49",
+      "compressedBytes": 13122,
+      "compressedSha256": "b01366b4b13b75cc2c8f9193041077108f6a3b2d066ea39d8d4bda1b56893ed5"
+    },
+    {
+      "file": "org202-47361c35-typecheck.log.gz",
+      "input": "C:\\opf-work\\release-033-artifacts\\org202-47361c35-typecheck.log",
+      "bytes": 82,
+      "sha256": "cee6d9568e9d1c158c5fcd9554ab79a3addf16c223f01fb70d1c6c736ff80b8f",
+      "compressedBytes": 100,
+      "compressedSha256": "39a209f27599f6cb7926edae61b9d03e9df0421e41394fb3a8052f10bcddce23"
+    },
+    {
+      "file": "tests_opf.log.gz",
+      "input": "C:\\opf-work\\integration-034\\artifacts\\check-changed\\tests_opf.log",
+      "bytes": 393156,
+      "sha256": "7ce5bafff54dfdf35c39cf301a39410d6c930011bda9e8bdbcbc3473549cba0a",
+      "compressedBytes": 121032,
+      "compressedSha256": "118cf859f5b2d3644087930f2b1f13765b578c6a02bf11cba2273c5a38b45a97"
+    },
+    {
+      "file": "tests_cli.log.gz",
+      "input": "C:\\opf-work\\integration-034\\artifacts\\check-changed\\tests_cli.log",
+      "bytes": 26393,
+      "sha256": "09d047ecadd18db3940de75044687574deb8f345f0430696ebdd8e7ad93b0498",
+      "compressedBytes": 9516,
+      "compressedSha256": "97a1482d7c738f3811fddbba4fd897dfb1a96624a500d10d9cfdcbb82c5d9eb9"
+    },
+    {
+      "file": "tests_mcp.log.gz",
+      "input": "C:\\opf-work\\integration-034\\artifacts\\check-changed\\tests_mcp.log",
+      "bytes": 8055,
+      "sha256": "be7ae7ebac18929b2f83c488ea146c68af1d5f025f4e07111a2f6e5958ec28e5",
+      "compressedBytes": 3152,
+      "compressedSha256": "59bd9a6e68e7b2850c5caa1234e4ad00f8e06fdbbfd3b6b6726c60fe4e2a0ad0"
+    },
+    {
+      "file": "tests_render.log.gz",
+      "input": "C:\\opf-work\\integration-034\\artifacts\\check-changed\\tests_render.log",
+      "bytes": 15602,
+      "sha256": "d1e932be10ea9e46d32fbc93173ff811771b8e9a0f7b1e4352e5b1ed344edf41",
+      "compressedBytes": 6354,
+      "compressedSha256": "c59d613f1455b3259f9fab420a90f454af4e21737abcf6473dc1774d430c5b6c"
+    },
+    {
+      "file": "tests_pptx.log.gz",
+      "input": "C:\\opf-work\\integration-034\\artifacts\\check-changed\\tests_pptx.log",
+      "bytes": 26571,
+      "sha256": "7b971b70dc4b361141df7c828462d65df3755382aefafcc187e16953b230d756",
+      "compressedBytes": 9121,
+      "compressedSha256": "4e50f4103696b9767af1de12c90ec86525d1d8182e9b408abae7e4d888f56546"
+    },
+    {
+      "file": "tests_editor.log.gz",
+      "input": "C:\\opf-work\\integration-034\\artifacts\\check-changed\\tests_editor.log",
+      "bytes": 24440,
+      "sha256": "cde66286c13b81901e36979a3ad1677e137597860a8c048b0cc156db9f52edb4",
+      "compressedBytes": 7941,
+      "compressedSha256": "b8f6749f68e239be8975c20712bbfa79f9a72d5790b10e003b44d641927436c3"
+    },
+    {
+      "file": "tests_gallery.log.gz",
+      "input": "C:\\opf-work\\integration-034\\artifacts\\check-changed\\tests_gallery.log",
+      "bytes": 28086,
+      "sha256": "e4d7f82df2d16f64e97b6db74fa57af8df1ca7c220c289544d3db16e7463ceb2",
+      "compressedBytes": 5433,
+      "compressedSha256": "55a3f9b9a8d87a6405c30f8f8773a1f5cb7314378b8af9d07fdc24a994b10992"
+    },
+    {
+      "file": "tests_integration.log.gz",
+      "input": "C:\\opf-work\\integration-034\\artifacts\\check-changed\\tests_integration.log",
+      "bytes": 5154,
+      "sha256": "5ec8e1173a9a2620c7c09d95c7726c3ba00c2f8266b0af4d6d3cf2e20e5fd012",
+      "compressedBytes": 2283,
+      "compressedSha256": "a38343615488127b394a80923f759f58747b209012ab02177d7bf677117020a8"
+    }
+  ]
+}

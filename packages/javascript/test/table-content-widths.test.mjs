@@ -101,7 +101,7 @@ describe('widths follow content', () => {
 	});
 
 	test('explicit cell padding and alignment still win', () => {
-		const table = { columns: [{ value: 'Name', style: { align: 'right', padding: { left: 40, right: 40 } } }, 'Value'], rows: [['Alpha', 1]] };
+		const table = { columns: [{ value: 'Name', style: { align: 'end', padding: { left: 40, right: 40 } } }, 'Value'], rows: [['Alpha', 1]] };
 		const layout = layoutTable(table, { x: 0, y: 0, width: 500, height: 300 }, { textMeasurement: measurement });
 		const header = layout.rows[0].cells[0];
 		assert.equal(header.alignment, 'right');

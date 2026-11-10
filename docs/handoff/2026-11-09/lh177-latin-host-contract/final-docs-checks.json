@@ -1,0 +1,51 @@
+{
+  "format": 1,
+  "source": "cc526969c134a728ec6b40b6946a579c0d46c693",
+  "sourceTree": "2650f369e195516ec7e28b19710ce2199b099e27",
+  "scope": "five own-handoff files only, no package suites",
+  "exitCode": 0,
+  "tableSeconds": 29.9,
+  "passedSteps": 5,
+  "skippedTypecheck": 1,
+  "rawFiles": 7,
+  "rawBytes": 21245,
+  "archiveBytes": 7171,
+  "archiveSha256": "5df44beeff3180d7e76765148d75acc898364e6725c691ef1c3b85828db3e021",
+  "files": [
+    {
+      "name": "run.exit.json",
+      "bytes": 328,
+      "sha256": "bcf786863ed670731d8f45efb85c6e890d63b9c8dca2f9f9ea68b49f8a731dc8"
+    },
+    {
+      "name": "run.log",
+      "bytes": 919,
+      "sha256": "b33462d1fb52c1d98986bc5343e04a4d9e071fd11cf31bc00cb8bf1c13da0fbb"
+    },
+    {
+      "name": "steps/biome.log",
+      "bytes": 691,
+      "sha256": "1a87dbfe3ca93db541ef65c69cba81e74a63a61fb46a2391484865c3e6c14d3b"
+    },
+    {
+      "name": "steps/build.log",
+      "bytes": 14569,
+      "sha256": "5147975700f429e6550afdbc51c06338f99cdc930cd4ff906a1ba91d46f5bc1a"
+    },
+    {
+      "name": "steps/pnpm_run_check_changes.log",
+      "bytes": 2633,
+      "sha256": "cce3bf1129c2b34a1578e620f41af6f8f33260354fe1f620a64c4b5e0a73fe1b"
+    },
+    {
+      "name": "steps/pnpm_run_check_skill-commands.log",
+      "bytes": 1036,
+      "sha256": "8c1650283689b3495a2ea25a433797278ce8eafd03f218f8b8a139c003aa5826"
+    },
+    {
+      "name": "steps/pnpm_run_check_text.log",
+      "bytes": 1069,
+      "sha256": "ad2b27589dc8dc41008efc531e97dc04c7311b7899f01ea5b22e739fd3c57b9c"
+    }
+  ]
+}

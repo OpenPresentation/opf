@@ -141,10 +141,10 @@ test('a text watermark is centered, diagonal and inside every preset', () => {
   assert.equal(layoutWatermark('A\nB', { width: 1000, height: 500 }).text, 'A B');
 });
 
-// --- TextRun.code and TextRun.lang -------------------------------------------------------------------------------
+// --- TextRun.code and TextRun.language -------------------------------------------------------------------------------
 
 test('a code run takes the code family; its own fontFamily wins; lang reaches the fragment style', () => {
-  const runs = ['See ', { text: 'npm i', code: true }, ' and ', { text: 'x', code: true, fontFamily: 'Courier New' }, { text: ' bonjour', lang: 'fr-FR' }];
+  const runs = ['See ', { text: 'npm i', code: true }, ' and ', { text: 'x', code: true, fontFamily: 'Courier New' }, { text: ' bonjour', language: 'fr-FR' }];
   const fit = fitRichText(runs, { x: 0, y: 0, width: 900, height: 200 }, 24, 12, { style: { fontFamily: 'Aptos', fontWeight: 400 }, codeFontFamily: 'Consolas' });
   const families = fit.richLines.flatMap((line) => line.fragments).map((fragment) => [fragment.text, fragment.style.fontFamily, fragment.style.lang]);
   assert.deepEqual(families, [['See ', 'Aptos', undefined], ['npm i', 'Consolas', undefined], [' and ', 'Aptos', undefined], ['x', 'Courier New', undefined], [' bonjour', 'Aptos', 'fr-FR']]);
@@ -166,10 +166,10 @@ test('TextRun schema: code is boolean, lang is a BCP-47 tag', () => {
   const valid = (run) => check(deck([{ title: 'T', text: [run] }])).valid;
   assert.equal(valid({ text: 'x', code: true }), true);
   assert.equal(valid({ text: 'x', code: 'yes' }), false);
-  assert.equal(valid({ text: 'x', lang: 'fr-FR' }), true);
-  assert.equal(valid({ text: 'x', lang: 'zh-Hant-TW' }), true);
-  assert.equal(valid({ text: 'x', lang: 'not a tag' }), false);
-  assert.equal(valid({ text: 'x', lang: '' }), false);
+  assert.equal(valid({ text: 'x', language: 'fr-FR' }), true);
+  assert.equal(valid({ text: 'x', language: 'zh-Hant-TW' }), true);
+  assert.equal(valid({ text: 'x', language: 'not a tag' }), false);
+  assert.equal(valid({ text: 'x', language: '' }), false);
 });
 
 test('markdown reads and writes inline code in both directions', () => {
@@ -201,7 +201,7 @@ test('markdown: a code span in a title is a code run (titles keep inline formatt
 
 test('markdown: lang is a span attribute and round-trips', () => {
   const doc = deckOf('# T\n\nHello [bonjour]{lang=fr-FR} you.\n');
-  assert.deepEqual(doc.slides[0].text, ['Hello ', { text: 'bonjour', lang: 'fr-FR' }, ' you.']);
+  assert.deepEqual(doc.slides[0].text, ['Hello ', { text: 'bonjour', language: 'fr-FR' }, ' you.']);
   assert.deepEqual(deckOf(markdownOf(doc)).slides[0].text, doc.slides[0].text);
 });
 

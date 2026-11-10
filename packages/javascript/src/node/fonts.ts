@@ -42,7 +42,7 @@ export async function listFontDirectories(directories: string[], label = "--font
  * routes to, with lazy faces loaded on demand), visual substitution, and Noto script packages for the scripts the
  * deck's text draws when they are installed. `faces` are the --fonts files, loaded first.
  */
-export async function prepareFonts(renderer: Renderer, presentation: unknown, userFonts: string[], reporter: Reporter, embedScriptFonts = false): Promise<PreparedFonts> {
+export async function prepareFonts(renderer: Renderer, presentation: unknown, userFonts: string[], reporter: Reporter, embedScriptFonts = false, renderOptions?: Record<string, unknown>): Promise<PreparedFonts> {
 	try {
 		const handle = await renderer.fonts.loadFonts({
 			pack: "office",
@@ -50,6 +50,7 @@ export async function prepareFonts(renderer: Renderer, presentation: unknown, us
 			scripts: "auto",
 			embedScriptFonts,
 			presentation,
+			...(renderOptions ? { renderOptions } : {}),
 			faces: userFonts.map((file) => ({ path: file })),
 			onDiagnostic: (diagnostic: Diagnostic) => reporter.add("fonts", scriptDiagnostic(diagnostic)),
 		});
@@ -88,10 +89,10 @@ const shared = new Map<string, SharedEntry>();
  * a handle prepared for it and the shared one hold the same faces, so the bytes are the same. Any other deck, or a
  * renderer without `autoScriptSelection`, gets undefined and the caller prepares a handle of its own (`prepareFonts`).
  */
-export async function leaseSharedFonts(renderer: Renderer, presentation: unknown, userFonts: string[], reporter: Reporter, embedScriptFonts = false): Promise<FontsLease | undefined> {
-	const select = (renderer.fonts as { autoScriptSelection?: (presentation: unknown) => { detected?: unknown[]; scripts?: unknown[]; unavailable?: unknown[] } }).autoScriptSelection;
+export async function leaseSharedFonts(renderer: Renderer, presentation: unknown, userFonts: string[], reporter: Reporter, embedScriptFonts = false, renderOptions?: Record<string, unknown>): Promise<FontsLease | undefined> {
+	const select = (renderer.fonts as { autoScriptSelection?: (presentation: unknown, options?: Record<string, unknown>) => { detected?: unknown[]; scripts?: unknown[]; unavailable?: unknown[] } }).autoScriptSelection;
 	if (typeof select !== "function") return undefined;
-	const selection = select(presentation);
+	const selection = select(presentation, renderOptions);
 	if (selection.detected?.length || selection.scripts?.length || selection.unavailable?.length) return undefined;
 	const key = JSON.stringify([userFonts, embedScriptFonts]);
 	let entry = shared.get(key);
@@ -115,14 +116,16 @@ export async function leaseSharedFonts(renderer: Renderer, presentation: unknown
 		release = resolve;
 	});
 	await previous;
-	const pending = (handle as { pending?: (presentation: unknown) => string[] }).pending;
-	if (typeof pending === "function" && pending.call(handle, presentation).length) {
-		release();
-		return undefined;
-	}
-	(handle.registry as { clearSubstitutions?: () => void } | undefined)?.clearSubstitutions?.();
-	for (const diagnostic of diagnostics) reporter.add("fonts", diagnostic);
-	return { handle, release };
+	try {
+		const prepared = handle as FontsHandle & { pending?: (presentation: unknown, renderOptions?: Record<string, unknown>) => string[]; ensure?: (presentation: unknown, options?: Record<string, unknown>) => Promise<unknown> };
+		if (typeof prepared.pending === "function" && prepared.pending(presentation, renderOptions).length) {
+			if (typeof prepared.ensure !== "function") { release(); return undefined; }
+			await prepared.ensure(presentation, { renderOptions, onDiagnostic: (diagnostic: Diagnostic) => reporter.add("fonts", diagnostic) });
+		}
+		(handle.registry as { clearSubstitutions?: () => void } | undefined)?.clearSubstitutions?.();
+		for (const diagnostic of diagnostics) reporter.add("fonts", diagnostic);
+		return { handle, release };
+	} catch (error) { release(); throw error; }
 }
 
 function scriptDiagnostic(diagnostic: Diagnostic): Diagnostic {

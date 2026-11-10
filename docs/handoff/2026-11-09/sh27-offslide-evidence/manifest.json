@@ -1,0 +1,65 @@
+{
+  "archive": {
+    "path": "raw.zip",
+    "bytes": 181493,
+    "sha256": "872cd4066881ed96b894debb869d0a7674632844cf44d2eccb8e4bca209dcad4"
+  },
+  "members": [
+    {
+      "path": "source.opf.json",
+      "bytes": 1353,
+      "sha256": "c8839af24fe0d2f7b3e6c6a20a3ef39ab4e2902cc7983af2aa4bf3adbcc856ae"
+    },
+    {
+      "path": "slide.svg",
+      "bytes": 53021,
+      "sha256": "071e2b75b3af72e38f632a035eb822ca461577651be6b267788934af4899b64f"
+    },
+    {
+      "path": "slide.png",
+      "bytes": 92682,
+      "sha256": "52abe91246bdc8d0cd0ef06457e5f33f8730f001dbaef20b67e5c57bbd4a7fd7"
+    },
+    {
+      "path": "slide.pptx",
+      "bytes": 92456,
+      "sha256": "6ba16bfda2fa9fdfa7a86b95c4dd8d8a3c96f6efc7357ee4f7a8a504f381826a"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 772,
+      "sha256": "968d168d3e6859d01c707c84d64bb3e838f27a3196d5278f417a60d5b5593629"
+    },
+    {
+      "path": "focused02.json",
+      "bytes": 1082,
+      "sha256": "d20775c5c7f4b349166cb84aef06e03f5c50e4245eb34630d7bc0459a67c5313"
+    },
+    {
+      "path": "build01.log",
+      "bytes": 14697,
+      "sha256": "3ff9419fbcd0f1f92b4b5a507ee2330e85df5e7977c68a8fe281bade1b515b3e"
+    },
+    {
+      "path": "browser01.log",
+      "bytes": 1793,
+      "sha256": "3b79a1c37c5fb5e633b1852a24303f3b31931f4d02a209d945dac5f05cf60608"
+    },
+    {
+      "path": "browser02.log",
+      "bytes": 1793,
+      "sha256": "3b79a1c37c5fb5e633b1852a24303f3b31931f4d02a209d945dac5f05cf60608"
+    },
+    {
+      "path": "playground-build01.log",
+      "bytes": 112454,
+      "sha256": "4400fde11a8a9ff1239aab698967e0bc3f143f34bf0e277a733fcfc00cc87b08"
+    },
+    {
+      "path": "initial-test-corrections.md",
+      "bytes": 511,
+      "sha256": "72ded7908f1a77063821f9b5d8e3c1212033f2d1b330c9d9328f4660b9dd7cbf"
+    }
+  ],
+  "qualification": "Focused and browser checks pass; mapped check and actual PowerPoint visual qualification are owed."
+}

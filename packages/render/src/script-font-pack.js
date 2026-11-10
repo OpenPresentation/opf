@@ -4,7 +4,7 @@
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { OPFFontError } from "./font-registry.js";
 import { SCRIPT_FONT_REPLACEMENTS, glyphFallbackFamilies, scriptOfCharacter, scriptsOfText } from "./script-fonts.js";
-import { resolveScriptFonts } from "@openpresentation/opf/composition";
+import { MAX_COMPOSITION_DEPTH, quoteLanguage, resolveScriptFonts, timelineStatusWordsFor } from "@openpresentation/opf/composition";
 import { createFontAnalysis } from "./lazy-fonts.js";
 import { SYMBOL_SCRIPT, isSymbolEncodedFamily } from "./symbol-fonts.js";
 
@@ -96,13 +96,36 @@ export function* drawnStrings(presentation) {
   yield* walkStrings(presentation, undrawn, undrawnRoot, undrawnSlide);
 }
 
+// Generated words are measured before the guarded status rule decides whether they draw. Source enum values alone do not cover them.
+// Only content payloads count: arbitrary variables, metadata, notes, catalogs and extensions never synthesize timeline labels.
+const PROMOTED_REGION = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/;
+function* generatedTimelineWords(presentation) {
+  if (!Array.isArray(presentation?.slides)) return;
+  for (const [slideIndex, slide] of presentation.slides.entries()) {
+    if (!slide || typeof slide !== "object" || Array.isArray(slide)) continue;
+    const statuses = new Set();
+    const visit = (payload, depth = -1, ancestors = []) => {
+      if (!payload || typeof payload !== "object" || Array.isArray(payload) || depth > MAX_COMPOSITION_DEPTH || ancestors.includes(payload)) return;
+      const timeline = payload.timeline, events = Array.isArray(timeline) ? timeline : timeline?.events;
+      if (Array.isArray(events)) for (const event of events) if (typeof event?.status === "string") statuses.add(event.status);
+      if (Array.isArray(payload.blocks)) for (const block of payload.blocks) visit(block, depth + 1, [...ancestors, payload]);
+    };
+    visit(slide);
+    for (const [key, payload] of Object.entries(slide)) if (PROMOTED_REGION.test(key)) visit(payload);
+    if (!statuses.size) continue;
+    const words = timelineStatusWordsFor(quoteLanguage(presentation, slideIndex));
+    if (!words) continue;
+    for (const status of statuses) if (typeof words[status] === "string") yield {text: words[status], slideIndex};
+  }
+}
+
 /**
  * The script profile of a presentation: core `resolveScriptFonts` output, exactly what the renderer plans
  * with. When it throws, the renderer ignores the document language, so the profile is empty and Han text is
  * Simplified Chinese, as drawn. `renderOptions.catalogs` (the host's registered catalogs) resolve as they do for the renderer.
  */
-export function presentationScriptProfile(presentation, renderOptions) {
-  try { return resolveScriptFonts(presentation, renderOptions?.catalogs !== undefined ? { catalogs: renderOptions.catalogs } : {}); } catch { /* the renderer falls back the same way */ }
+export function presentationScriptProfile(presentation, renderOptions, slideIndex) {
+  try { return resolveScriptFonts(presentation, { ...(renderOptions?.catalogs !== undefined ? { catalogs: renderOptions.catalogs } : {}), ...(slideIndex !== undefined ? {slideIndex} : {}) }); } catch { /* the renderer falls back the same way */ }
   return {};
 }
 
@@ -188,6 +211,14 @@ export function analyzePresentationScripts(presentation, profile, renderOptions,
   const scan = memory.scanner(itemizing);
   for (const text of drawnStrings(presentation)) {
     const found = scan(text);
+    for (const script of found.scripts) scripts.add(script);
+    for (const character of found.cjk) cjk.add(character);
+  }
+  const generatedProfiles = new Map();
+  for (const {text, slideIndex} of generatedTimelineWords(presentation)) {
+    // A generated Han label follows its own slide locale (for example zh-TW on an English deck), not the deck's default script.
+    if (!generatedProfiles.has(slideIndex)) generatedProfiles.set(slideIndex, presentationScriptProfile(presentation, renderOptions, slideIndex));
+    const found = memory.scanner(generatedProfiles.get(slideIndex))(text);
     for (const script of found.scripts) scripts.add(script);
     for (const character of found.cjk) cjk.add(character);
   }

@@ -408,11 +408,11 @@ function designFor(spec, index, catalogs, density) {
       ? { preset: "16:10", widthInches: 13.333, heightInches: 8.333 }
       : pick(["widescreen", "16:9", "4:3", "16:10", "letter", "a4"], index),
     background,
-    titleAlignment: pick(["left", "center", "right"], index),
+    titleAlignment: pick(["start", "center", "end"], index),
     // LH-88: no deck-level contentAlignment. A deck value overrides every layout record, so a cycled "center" (a third of the decks) centred list and paragraph bodies (opf/centered-body); unset, the layout records decide: start-aligned bodies, centred cover, section, closing, statement and metrics.
     contentBox: index % 3 === 0,
     contentDirection: pick(["horizontal", "vertical"], index),
-    chartPrimary: pick(["none", "left", "right", "top", "bottom"], index),
+    chartPrimary: pick(["none", "start", "end", "top", "bottom"], index),
     imageFit: pick(["cover", "contain"], index),
     listBullet: pick(["character", "image"], index),
   };
@@ -427,13 +427,13 @@ function designFor(spec, index, catalogs, density) {
     header: index % 5 === 0
       ? false
       : {
-          left: { text: "{{slide.section}}" },
-          right: { image: "asset:brand-icon" },
+          start: { text: "{{slide.section}}" },
+          end: { image: "asset:brand-icon" },
         },
     footer: {
-      left: { text: "{{organization.name}}" },
+      start: { text: "{{organization.name}}" },
       center: { text: index % 2 === 0 ? "Internal planning draft" : "Decision review" },
-      right: { text: "{{slide.number}}" },
+      end: { text: "{{slide.number}}" },
     },
   };
 }
@@ -560,7 +560,7 @@ function promotedRegionSlide(spec, index, catalogs) {
     id: `s${index + 1}-regions`,
     section: "Operating model",
     title: "Operating Model",
-    "top:left": {
+    "top:start": {
       metric: {
         value: metricValue(index),
         label: "Primary signal",
@@ -568,17 +568,17 @@ function promotedRegionSlide(spec, index, catalogs) {
         trend: trend(index),
       },
     },
-    "top:center+right": {
+    "top:center+end": {
       text: richText(spec, index),
     },
-    "middle+bottom:left": {
+    "middle+bottom:start": {
       quote: {
         text: `The path is workable if we keep the metric simple and the decision owner visible.`,
         attribution: `${spec.area} working group`,
         source: "Stakeholder interview",
       },
     },
-    "middle+bottom:center+right": {
+    "middle+bottom:center+end": {
       table: tablePayload(spec, index),
     },
     notes: "Use this slide to slow the conversation down around ownership and operating rhythm.",

@@ -1,0 +1,64 @@
+[
+  {
+    "id": "venn-1-1",
+    "kind": "venn",
+    "count": 1,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": [],
+    "live": true,
+    "drew": "SmartArt (built-in)",
+    "layout": "Basic Venn",
+    "turn": 0,
+    "nodes": 1,
+    "rect": 0,
+    "sizes": "36",
+    "pptSizes": "36",
+    "sizeEqual": true,
+    "itemsMatch": true,
+    "preview": {
+      "mad": 0.35,
+      "hot": 0,
+      "mad1280": 0.35,
+      "hot1280": 0.08,
+      "geometry": 0.28,
+      "geometryHot": 0,
+      "text": 4.56,
+      "textMax": 4.56,
+      "dx": -1,
+      "dy": -4.45
+    },
+    "native": {
+      "mad": 0.01,
+      "hot": 0,
+      "mad1280": 0.01,
+      "hot1280": 0,
+      "geometry": 0.01,
+      "geometryHot": 0,
+      "text": 0.27,
+      "textMax": 0.27,
+      "dx": 0.1,
+      "dy": -0.25
+    },
+    "nativePreview": {
+      "mad": 0.35,
+      "hot": 0,
+      "mad1280": 0.34,
+      "hot1280": 0.08,
+      "geometry": 0.28,
+      "geometryHot": 0,
+      "text": 4.34,
+      "textMax": 4.34,
+      "dx": -1.1,
+      "dy": -4.2
+    },
+    "checks": {
+      "layout": true,
+      "size": true,
+      "geometry": true,
+      "native": true
+    },
+    "result": "pass"
+  }
+]

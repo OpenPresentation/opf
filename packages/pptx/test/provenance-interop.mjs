@@ -77,7 +77,7 @@ try {
     const p2 = {name: 'Interop P2', narrative: 'problem-solution', audience: 'Executives',
       organization: {id: 'acme', name: 'Acme', role: 'primary', logo: square},
       design: {fontScheme: {id: 'aptos'}, listBullet: 'image', background: {type: 'solid', color: '#FFFFFF'},
-        header: {right: {image: 'var:organization.logo.icon'}}, footer: {left: {image: 'var:organization.logo.icon'}, center: {text: 'Confidential'}, right: {text: '{{slide.number}}'}}},
+        header: {end: {image: 'var:organization.logo.icon'}}, footer: {start: {image: 'var:organization.logo.icon'}, center: {text: 'Confidential'}, end: {text: '{{slide.number}}'}}},
       slides: [{tag: 'Eyebrow', title: 'Cover', subtitle: 'Subtitle', layout: 'cover'},
         {title: 'Section', layout: 'section', section: 'Part one'},
         {title: 'Items', items: ['Alpha', 'Beta', 'Gamma']},
@@ -104,9 +104,9 @@ try {
     assert.deepEqual(newer.design.fontScheme, {id: 'aptos'});
     assert.equal(newer.design.listBullet, 'image');
     assert.equal(newer.organization.logo, square);
-    assert.deepEqual(newer.design.footer?.right, {text: '{{slide.number}}'}); assert.deepEqual(newer.design.footer?.center, {text: 'Confidential'});
+    assert.deepEqual(newer.design.footer?.end, {text: '{{slide.number}}'}); assert.deepEqual(newer.design.footer?.center, {text: 'Confidential'});
     if (rich) {
-      assert.deepEqual(newer.design.footer?.left, {image: 'var:organization.logo.icon'}); assert.deepEqual(newer.design.header?.right, {image: 'var:organization.logo.icon'});
+      assert.deepEqual(newer.design.footer?.start, {image: 'var:organization.logo.icon'}); assert.deepEqual(newer.design.header?.end, {image: 'var:organization.logo.icon'});
       // RR-72: the logos are the same on every slide, so they are drawn once, on the slide master. The published importer reads slide
       // shapes only and ignores the manifest's `shared` entries: it reads the rest of the footer and no logo, without a complaint.
       assert.ok(!JSON.stringify(older.slides[0].design.footer ?? {}).includes('data:image/png'), 'an older importer does not see the master logo');
@@ -118,7 +118,7 @@ try {
   // RR-11: footer text, date and slide number are native placeholders that keep their furniture tags and the manifest's
   // part list, so the published importer reads the same footer and no placeholder text becomes slide content.
   {
-    const nativeFooter = {design: {fontScheme: 'arial', footer: {left: {date: true}, center: {text: 'Native footer'}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}]};
+    const nativeFooter = {design: {fontScheme: 'arial', footer: {start: {date: true}, center: {text: 'Native footer'}, end: {text: '{{slide.number}}'}}}, slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}]};
     const exported = await toPptx(nativeFooter, {timestamp: '2026-01-01T00:00:00Z', seed: 1, date: '2026-09-10'});
     assert.ok(/<p:ph type="ftr"/.test(dec.decode(unzipSync(exported)['ppt/slides/slide1.xml'])), 'the footer text is a native placeholder');
     const reports = [];

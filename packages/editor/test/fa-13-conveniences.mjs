@@ -59,11 +59,11 @@ for (const preset of ["1:1", "4:5", "9:16"]) {
   const runs = ["Run npm install now"];
   const code = formatRichTextRange(runs, 4, 15, { code: true });
   assert.deepEqual(code, ["Run ", { text: "npm install", code: true }, " now"]);
-  const lang = formatRichTextRange(code, 0, 3, { lang: "fr-FR" });
-  assert.deepEqual(lang, [{ text: "Run", lang: "fr-FR" }, " ", { text: "npm install", code: true }, " now"]);
-  const reset = formatRichTextRange(lang, 0, 19, { code: null, lang: null });
+  const lang = formatRichTextRange(code, 0, 3, { language: "fr-FR" });
+  assert.deepEqual(lang, [{ text: "Run", language: "fr-FR" }, " ", { text: "npm install", code: true }, " now"]);
+  const reset = formatRichTextRange(lang, 0, 19, { code: null, language: null });
   assert.ok(reset.every((run) => typeof run === "string" || Object.keys(run).join() === "text"), "Reset removes code and lang");
-  assert.throws(() => formatRichTextRange(runs, 0, 3, { lang: "not a tag" }), /BCP-47/);
+  assert.throws(() => formatRichTextRange(runs, 0, 3, { language: "not a tag" }), /BCP-47/);
   assert.throws(() => formatRichTextRange(runs, 0, 3, { code: "yes" }), /Invalid run style: code/);
   const editor = session();
   editor.set("slides.0.text", lang, { rejectInvalid: true });

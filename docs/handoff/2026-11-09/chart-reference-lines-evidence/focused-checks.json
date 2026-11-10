@@ -1,0 +1,21 @@
+{
+  "state": "in-progress; not aggregate green",
+  "coreRenderSource": "line-aware label and contract repairs after mapped-check-01",
+  "focused": {
+    "command": "node --test chart-reference-lines, chart-axis, finding-text, finding-text-rules, validate-rules, examples, source-docs-currency and render chart-reference-lines",
+    "passed": 377,
+    "failed": 0
+  },
+  "typecheck": {
+    "command": "pnpm typecheck",
+    "exit": 0,
+    "renderSyntaxFiles": 327,
+    "pptxSyntaxFiles": 463,
+    "editorSyntaxFiles": 488
+  },
+  "pinnedFontVisualSlides": 5,
+  "pptxContribution": "pending",
+  "coherentMappedGate": "owed",
+  "office": "not run by this agent",
+  "goldens": "not regenerated locally"
+}

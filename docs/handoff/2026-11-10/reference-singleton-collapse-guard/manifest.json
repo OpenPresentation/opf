@@ -1,0 +1,106 @@
+{
+  "sourceCheckpoint": "2e67f7648390258ad2e9ee158ee88f01e77edee5",
+  "base": "65973082a3a8b8b5dc89a21dc3bfcd7abf660cf2",
+  "archive": {
+    "path": "raw.json.gz",
+    "bytes": 8242,
+    "sha256": "c4dbd857d6a6a207caa2d15384a2b1be37319ec0e9aff39a6604e69ea73f537a"
+  },
+  "records": [
+    {
+      "path": "collapse-before.log",
+      "bytes": 3238,
+      "sha256": "c323218847129a9f47db43042fa4fa329d8a172a995fc06865f354f63dae6dca"
+    },
+    {
+      "path": "collapse-before.exit.json",
+      "bytes": 561,
+      "sha256": "924b2ac5b5229c22bab108747360fde8306804eb3fa53b616da4ac01b01b1bdd"
+    },
+    {
+      "path": "collapse-after.log",
+      "bytes": 490,
+      "sha256": "c056099dee27b0cc5093eb7b2ee83109239206b3d39f0824c0c65550994fac85"
+    },
+    {
+      "path": "collapse-after.exit.json",
+      "bytes": 560,
+      "sha256": "a4293602efc8fecd74aa9694da79f27692c34c49da8e4d7e89d37d6fb96e68ef"
+    },
+    {
+      "path": "affected-pure-controls.log",
+      "bytes": 2879,
+      "sha256": "dda6ea5e569bbeb670f88b8b84b62901e317f11e67e55d8fb41b0c1e72243d22"
+    },
+    {
+      "path": "affected-pure-controls.exit.json",
+      "bytes": 711,
+      "sha256": "de9c27463c264329c1c21732d0d228f321f4dcd48c2ebfbb20c62fd74529b8de"
+    },
+    {
+      "path": "add-regressions.mjs",
+      "bytes": 1857,
+      "sha256": "f875eabde81e639bfe9d8e3dde8216319ceba4f982ab8d8441cecbefb1dfee62"
+    },
+    {
+      "path": "fix.mjs",
+      "bytes": 3131,
+      "sha256": "b9f5945de5168c6bad8cb071faf3de78b642a2c362d12038865238e1baf82c5b"
+    },
+    {
+      "path": "run-command.mjs",
+      "bytes": 959,
+      "sha256": "b91d2b6ae7a0941c25ce515d321a04d35aa468bf545b885d08b1a3a5c42f8205"
+    }
+  ],
+  "source": [
+    {
+      "path": "changes/rr105-singleton-secondary-native-witness.md",
+      "gitSha256": "cbeaa6210be7d6b0ab9e883d3847ddeb14371b45706af745f11629d4dc9cb958",
+      "worktreeSha256": "cbeaa6210be7d6b0ab9e883d3847ddeb14371b45706af745f11629d4dc9cb958"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/reference-singleton-collapse-guard/README.md",
+      "gitSha256": "f6e4697834d884f22b2b39f3a445e74e781da505a3515927b3850067d9af022a",
+      "worktreeSha256": "f6e4697834d884f22b2b39f3a445e74e781da505a3515927b3850067d9af022a"
+    },
+    {
+      "path": "docs/programs/layout-harvest/burndown.md",
+      "gitSha256": "96b9a8f19d3a6c7a44d6fb3096f449e61e428943896b1951903801a4ee1d984d",
+      "worktreeSha256": "96b9a8f19d3a6c7a44d6fb3096f449e61e428943896b1951903801a4ee1d984d"
+    },
+    {
+      "path": "docs/programs/release-readiness/burndown.md",
+      "gitSha256": "2eb02c8959ea51326993258db6677efa7849a1b85d1939fceb422573d7afe948",
+      "worktreeSha256": "2eb02c8959ea51326993258db6677efa7849a1b85d1939fceb422573d7afe948"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-chart-profile.mjs",
+      "gitSha256": "6c22785dfdae2de622977c96cef598a043f3297f94d99f560af0a35c670f51d3",
+      "worktreeSha256": "6c22785dfdae2de622977c96cef598a043f3297f94d99f560af0a35c670f51d3"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-chart-profile.test.mjs",
+      "gitSha256": "23f5945899d3b8c550d349a5cf716c3970156c3aca07393ff6f4d55d2af5d1bd",
+      "worktreeSha256": "23f5945899d3b8c550d349a5cf716c3970156c3aca07393ff6f4d55d2af5d1bd"
+    }
+  ],
+  "priorArchive": {
+    "path": "docs/handoff/2026-11-10/reference-singleton-qualification/raw.json.gz",
+    "sha256": "b1a138a88498c7853886533a84d142edc8c7ef4ffd54111085c3f9aaf2eff78c"
+  },
+  "before": {
+    "pass": 0,
+    "fail": 3
+  },
+  "after": {
+    "pass": 3,
+    "fail": 0
+  },
+  "affectedPure": {
+    "pass": 22,
+    "fail": 0
+  },
+  "nativeAcceptance": false,
+  "officeInvoked": false
+}

@@ -165,7 +165,7 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
 
 // Placement: the picture fills its band edge to edge, the copy composes beside it, and the trace names the edge.
 {
-  const deck = deckWith({ image: split, placement: { edge: 'left', size: 0.45 } });
+  const deck = deckWith({ image: split, placement: { edge: 'start', size: 0.45 } });
   const item = imageOf(deck), svg = toSvg(deck, 1, { trace: true });
   assert.deepEqual(item.image.region, { x: 0, y: 0, width: 576, height: 720 });
   assert.deepEqual(item.image.box, item.image.region);
@@ -173,7 +173,7 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
   const title = composeSlide(deck.slides[0], resolveSlideContext(deck, 0, {}).options).items.find(entry => entry.field === 'title');
   assert.ok(title.box.x >= 576, `the title composes in the remaining 55%: ${JSON.stringify(title.box)}`);
   // Inset: the band minus the slide padding.
-  const inset = imageOf(deckWith({ placement: { edge: 'right', size: 0.5, inset: true } }));
+  const inset = imageOf(deckWith({ placement: { edge: 'end', size: 0.5, inset: true } }));
   assert.ok(inset.image.box.x > inset.image.region.x && inset.image.box.width < inset.image.region.width);
   checked += 2;
 }

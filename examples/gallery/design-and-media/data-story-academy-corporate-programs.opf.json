@@ -34,14 +34,14 @@
     },
     "variant": "light1",
     "footer": {
-      "left": {
+      "start": {
         "text": "{{organization.name}}"
       },
-      "right": {
+      "end": {
         "text": "{{slide.number}} / {{deck.slideCount}}"
       }
     },
-    "titleAlignment": "left",
+    "titleAlignment": "start",
     "contentBox": false
   },
   "slides": [
@@ -64,7 +64,7 @@
         },
         "footer": false
       },
-      "bottom:center+right": {
+      "bottom:center+end": {
         "blocks": [
           {
             "text": [
@@ -82,7 +82,7 @@
           "maxFontSize": 19
         }
       },
-      "top+middle:left+center+right": {
+      "top+middle:start+center+end": {
         "text": [
           {
             "text": "Data Storytelling\nfor Leaders",
@@ -206,16 +206,16 @@
           "overlay": false
         },
         "footer": {
-          "left": {
+          "start": {
             "text": "Source: Accenture & Qlik, 2020 (n = 9,000)"
           },
-          "right": {
+          "end": {
             "text": "{{slide.number}} / {{deck.slideCount}}"
           }
         },
         "titleAlignment": "center"
       },
-      "middle+bottom:left": {
+      "middle+bottom:start": {
         "blocks": [
           {
             "text": [
@@ -263,7 +263,7 @@
           "maxFontSize": 72
         }
       },
-      "middle+bottom:right": {
+      "middle+bottom:end": {
         "blocks": [
           {
             "text": [
@@ -395,15 +395,15 @@
           "overlay": false
         },
         "footer": {
-          "left": {
+          "start": {
             "text": "Source: Accenture & Qlik, 2020 (n = 9,000)"
           },
-          "right": {
+          "end": {
             "text": "{{slide.number}} / {{deck.slideCount}}"
           }
         }
       },
-      "top:right": {
+      "top:end": {
         "blocks": [
           {
             "text": [
@@ -433,7 +433,7 @@
           "maxFontSize": 20
         }
       },
-      "middle:right": {
+      "middle:end": {
         "blocks": [
           {
             "text": [
@@ -463,7 +463,7 @@
           "maxFontSize": 20
         }
       },
-      "bottom:right": {
+      "bottom:end": {
         "blocks": [
           {
             "text": [
@@ -493,7 +493,7 @@
           "maxFontSize": 20
         }
       },
-      "top+middle+bottom:left+center": {
+      "top+middle+bottom:start+center": {
         "blocks": [
           {
             "chart": {
@@ -551,7 +551,8 @@
                   "United States"
                 ]
               }
-            }
+            },
+            "id": "annual-productivity-costs"
           }
         ],
         "composition": {
@@ -642,7 +643,26 @@
             }
           ]
         }
-      }
+      },
+      "shapes": [
+        {
+          "shape": "ellipse",
+          "fill": "none",
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "at": {
+            "block": "annual-productivity-costs",
+            "point": "United States",
+            "series": "Annual lost productivity ($B)",
+            "edge": "end",
+            "widthPx": 80,
+            "heightPx": 80
+          },
+          "alt": "United States bar end: $109.4 billion in annual lost productivity"
+        }
+      ]
     },
     {
       "id": "gap",
@@ -657,15 +677,15 @@
           "overlay": false
         },
         "footer": {
-          "left": {
+          "start": {
             "text": "Source: Accenture & Qlik, 2020 (n = 9,000)"
           },
-          "right": {
+          "end": {
             "text": "{{slide.number}} / {{deck.slideCount}}"
           }
         }
       },
-      "top:right": {
+      "top:end": {
         "blocks": [
           {
             "text": [
@@ -695,7 +715,7 @@
           "maxFontSize": 20
         }
       },
-      "middle:right": {
+      "middle:end": {
         "blocks": [
           {
             "text": [
@@ -725,7 +745,7 @@
           "maxFontSize": 20
         }
       },
-      "bottom:right": {
+      "bottom:end": {
         "blocks": [
           {
             "text": [
@@ -755,7 +775,7 @@
           "maxFontSize": 20
         }
       },
-      "top+middle+bottom:left+center": {
+      "top+middle+bottom:start+center": {
         "blocks": [
           {
             "chart": {
@@ -901,7 +921,7 @@
         },
         "footer": false
       },
-      "middle:left+center+right": {
+      "middle:start+center+end": {
         "text": [
           {
             "text": "AI will draft the stories. ",
@@ -917,7 +937,7 @@
           }
         ]
       },
-      "bottom:right": {
+      "bottom:end": {
         "blocks": [
           {
             "text": [
@@ -938,7 +958,7 @@
           "maxFontSize": 20
         }
       },
-      "bottom:left+center": {
+      "bottom:start+center": {
         "blocks": [
           {
             "text": [
@@ -1032,7 +1052,7 @@
           "overlay": false
         }
       },
-      "middle:left+center+right": {
+      "middle:start+center+end": {
         "text": [
           {
             "text": "Our job is done when your leaders ",
@@ -1047,7 +1067,7 @@
           }
         ]
       },
-      "bottom:right": {
+      "bottom:end": {
         "blocks": [
           {
             "text": [
@@ -1068,7 +1088,7 @@
           "maxFontSize": 20
         }
       },
-      "bottom:left+center": {
+      "bottom:start+center": {
         "blocks": [
           {
             "text": [
@@ -1167,7 +1187,7 @@
           "overlay": false
         }
       },
-      "top+middle+bottom:left": {
+      "top+middle+bottom:start": {
         "blocks": [
           {
             "text": [
@@ -1249,7 +1269,7 @@
           "padding": 0.0752
         }
       },
-      "top+middle+bottom:right": {
+      "top+middle+bottom:end": {
         "blocks": [
           {
             "text": [
@@ -1429,7 +1449,7 @@
           "overlay": false
         }
       },
-      "top+middle+bottom:left": {
+      "top+middle+bottom:start": {
         "blocks": [
           {
             "text": [
@@ -1487,7 +1507,7 @@
           "padding": 0.0752
         }
       },
-      "top+middle+bottom:right": {
+      "top+middle+bottom:end": {
         "blocks": [
           {
             "text": [
@@ -1783,7 +1803,7 @@
           "overlay": false
         }
       },
-      "top+middle+bottom:left": {
+      "top+middle+bottom:start": {
         "blocks": [
           {
             "text": [
@@ -2818,7 +2838,7 @@
         },
         "footer": false
       },
-      "middle:left": {
+      "middle:start": {
         "blocks": [
           {
             "text": [
@@ -2864,7 +2884,7 @@
           "maxFontSize": 80
         }
       },
-      "middle:right": {
+      "middle:end": {
         "blocks": [
           {
             "text": [
@@ -2887,7 +2907,7 @@
           "maxFontSize": 80
         }
       },
-      "bottom:center+right": {
+      "bottom:center+end": {
         "blocks": [
           {
             "text": [
@@ -3375,7 +3395,7 @@
           "overlay": false
         }
       },
-      "middle+bottom:left+center+right": {
+      "middle+bottom:start+center+end": {
         "blocks": [
           {
             "blocks": [
@@ -3671,7 +3691,7 @@
           "overlay": false
         }
       },
-      "middle:left": {
+      "middle:start": {
         "blocks": [
           {
             "text": [
@@ -3729,7 +3749,7 @@
           "maxFontSize": 32
         }
       },
-      "middle:right": {
+      "middle:end": {
         "blocks": [
           {
             "text": [
@@ -3758,7 +3778,7 @@
           "maxFontSize": 32
         }
       },
-      "bottom:left+center+right": {
+      "bottom:start+center+end": {
         "blocks": [
           {
             "text": [
@@ -3941,7 +3961,7 @@
         },
         "footer": false
       },
-      "bottom:center+right": {
+      "bottom:center+end": {
         "blocks": [
           {
             "text": [
@@ -3959,7 +3979,7 @@
           "maxFontSize": 19
         }
       },
-      "top+middle:left+center+right": {
+      "top+middle:start+center+end": {
         "text": [
           {
             "text": "What's your\nstory?",

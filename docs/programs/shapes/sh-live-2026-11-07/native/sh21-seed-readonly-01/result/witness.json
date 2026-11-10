@@ -1,0 +1,15 @@
+{
+  "sha256": "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+  "sha256After": "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+  "stages": [
+    "create-app:ok",
+    "empty-visible-minimized:ok",
+    "open-owned-seed-copy:ok",
+    "orgChart1-read-existing:failed"
+  ],
+  "failure": "orgChart1-read-existing: Seed SmartArt not materialized after Export.",
+  "source": "C:\\opf-work\\_supervisor\\com-jobs\\sh-08\\smartart-seeds.pptx",
+  "cases": [],
+  "passed": false,
+  "copySha256After": "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a"
+}

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import * as core from '@openpresentation/opf/composition';
 // FA-23: the documents name the gallery's `roboto` font scheme, so the host catalog is registered.
 import {resolvePresentation, toSvg} from './catalog-harness.mjs';
@@ -40,7 +41,7 @@ const plainDocuments = {
   'column-no-options': chartDoc({ type: 'column', data: { columns: ['Quarter', 'North', 'South', 'West'], rows: plainRows } }),
   'line-string-numbers': chartDoc({ type: 'line', data: { columns: ['Quarter', 'North', 'South'], rows: [['Q1', '12.5', 3], ['Q2', 18, '5'], ['Q3', 21, 2]] } }),
   'histogram-lone-column': chartDoc({ type: 'histogram', data: { columns: ['Values'], rows: [[1], [2], [2], [3], [3], [3], [4], [8]] } }),
-  'table-styled': doc({ title: 'T', table: { columns: ['Region', { value: 'Growth', style: { align: 'right' } }], rows: [['EMEA', 8.2], [{ value: ['rich ', { text: 'run', bold: true }] }, { value: 0.4, style: { color: '#ff0000' } }], ['APAC', 'n/a']] } })
+  'table-styled': doc({ title: 'T', table: { columns: ['Region', { value: 'Growth', style: { align: 'end' } }], rows: [['EMEA', 8.2], [{ value: ['rich ', { text: 'run', bold: true }] }, { value: 0.4, style: { color: '#ff0000' } }], ['APAC', 'n/a']] } })
 };
 const digestOf = (svg) => createHash('sha256').update(svg).digest('hex').slice(0, 24);
 const digests = Object.fromEntries(Object.entries(plainDocuments).map(([name, document]) => [name, digestOf(render(document, { trace: true }))]));
@@ -69,39 +70,8 @@ if (process.env.RR54_PRINT_DIGESTS) {
 // column (was 9e0ac4ac...), bar (was 092e12de...), world (a map drawn as columns, was 01127948...) and column-no-options (was c74a507b...).
 // v0.33.0 integration: LH-175 draws a Pareto chart of several series as clustered columns and LH-176 sets those columns at the 150% gap,
 // which together move pareto (was a2bde742... with LH-175 alone); every other digest is unchanged.
-const REVIEWED_SVG_DIGESTS = {
-  'column': '38c8d2000c4ef86d4398bb71',
-  'stacked-column': '22c1bb68ee1f45037f081ace',
-  '100pct-stacked-column': 'c5e8ca6415e870028d442c77',
-  'bar': 'faa1e94becd692615e194823',
-  'stacked-bar': '0b7adf7f2cd425d491e5e091',
-  '100pct-stacked-bar': '358d352b2c3b612865011a67',
-  'line': '6cabc1b834046cb5a5f16eb6',
-  'line-with-markers': '1f050e93e0a69fb6a6abe219',
-  'stacked-line': '71155a83f1a403d5689b7ca3',
-  'stacked-line-with-markers': '73562248ec6d015789863aac',
-  'area': '391947ba99026266aba0363f',
-  'stacked-area': 'ee70e43245edd39049546328',
-  '100pct-stacked-area': '390a1812bfeac2b5c53de0e1',
-  'pie': '2dd37f8451ec0eb2f9813714',
-  'doughnut': 'f11809c870197d9502bf6e62',
-  'scatter': '34cec85e0c78ae9fa4d1459e',
-  'radar': '876dbceb52d191c557e36b3c',
-  'radar-with-markers': '75e47461799584b0ba652d69',
-  'filled-radar': '3f929717f9aaa20fc2a10060',
-  'treemap': 'd73891c0d6e3f31848317ce8',
-  'histogram': 'd53e45060a24e75965e468ea',
-  'pareto': 'ec94e9ddac1e8e23da47c54d',
-  'box-and-whisker': '8a6324792766fc047f85cd59',
-  'waterfall': '1634735baf70cec035c76edb',
-  'funnel': '3f6d700694a038d2172c254a',
-  'world': '308020cd9011dd44b81b41d3',
-  'sketch': '412f5a537d5291557428c038',
-  'column-no-options': '04189898df40ba484c0b6f7c',
-  'line-string-numbers': '892f93f3d8fc81ad13662b4a',
-  'histogram-lone-column': 'e605e1ca2ab256e6940e7ed9',
-  'table-styled': '8685c7ee57a5e3143c31d132',
-};
+// RR-108: the pinned golden workflow regenerates this exact fixture with the existing print-only branch above.
+const REVIEWED_SVG_DIGESTS = JSON.parse(readFileSync(new URL('./golden/chart-table-data/reviewed-svg-digests.json', import.meta.url), 'utf8'));
 assert.deepEqual(digests, REVIEWED_SVG_DIGESTS, 'documents without the new fields retain the reviewed traced SVG output');
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -247,7 +217,7 @@ for (const type of ['column', 'line', 'pie', 'scatter', 'treemap', 'sketch']) {
 
 {
   const table = {
-    columns: ['Region', { name: 'Revenue', format: '$#,##0.0' }, { value: 'Growth', style: { align: 'right' }, format: '0%' }],
+    columns: ['Region', { name: 'Revenue', format: '$#,##0.0' }, { value: 'Growth', style: { align: 'end' }, format: '0%' }],
     rows: [['EMEA', 8.2, 0.4], ['APAC', 6.1, { value: 0.52, format: '0.0%' }], ['AMER', 'n/a', null]]
   };
   const svg = render(doc({ title: 'T', table }), { trace: true });
@@ -257,7 +227,7 @@ for (const type of ['column', 'line', 'pie', 'scatter', 'treemap', 'sketch']) {
   assert.ok(paths(svg).some((path) => path.startsWith('slides.0.table.rows.0.1')), 'cells keep their authored paths');
   // The same table with the formatted text written out by hand draws the same. LH-117: a column aligns by how its cells read, so the
   // written text aligns as the formatted numbers do (Revenue, two numbers in three cells, reads as text; Growth's header aligns it right).
-  const written = { columns: ['Region', 'Revenue', { value: 'Growth', style: { align: 'right' } }], rows: [['EMEA', '$8.2', '40%'], ['APAC', '$6.1', '52.0%'], ['AMER', 'n/a', null]] };
+  const written = { columns: ['Region', 'Revenue', { value: 'Growth', style: { align: 'end' } }], rows: [['EMEA', '$8.2', '40%'], ['APAC', '$6.1', '52.0%'], ['AMER', 'n/a', null]] };
   const strip = (markup) => markup.replace(/ data-opf-path="[^"]*"/g, '');
   assert.equal(strip(render(doc({ title: 'T', table: written }), { trace: true })), strip(svg), 'formatting a cell draws what its text would draw');
 

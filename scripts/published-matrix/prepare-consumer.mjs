@@ -90,9 +90,11 @@ const installed = {};
 for (const name of Object.keys(consumerPlan)) {
   const installedManifest = JSON.parse(await readFile(path.join(target, 'node_modules', ...name.split('/'), 'package.json'), 'utf8'));
   assertInstalledConsumerPackage(name, installedManifest, consumerPlan);
-  installed[name] = {version: installedManifest.version, integrity: lock.packages[`node_modules/${name}`].integrity, resolved: lock.packages[`node_modules/${name}`].resolved};
+  assert.match(installedManifest.gitHead ?? '', /^[a-f0-9]{40}$/u, `${name}: published gitHead required`);
+  assert.equal(installedManifest.gitHead, plan.verificationRefs[name.split('/')[1]], `${name}: installed gitHead differs from registry plan`);
+  installed[name] = {gitHead: installedManifest.gitHead, version: installedManifest.version, integrity: lock.packages[`node_modules/${name}`].integrity, resolved: lock.packages[`node_modules/${name}`].resolved};
 }
-await writeFile(path.join(target, 'installed.json'), `${JSON.stringify({node: process.version, platform: process.platform, arch: process.arch, packages: installed}, null, 2)}\n`);
+await writeFile(path.join(target, 'installed.json'), `${JSON.stringify({registryTag: plan.tag, node: process.version, platform: process.platform, arch: process.arch, packages: installed}, null, 2)}\n`);
 
 // The same entry points as engines-source.mjs, resolved from this consumer's node_modules. The matrix uses the 0.18 names of the
 // renderer (RR-74: toSvg of a whole deck, toPng of one SVG); a published renderer older than 0.18 has them as renderSvg and svgToPng, which the harness of the plan core's release tag still calls, so both names are exported then.
@@ -111,8 +113,8 @@ export {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPoli
 export {toSvg, toPng} from '@openpresentation/opf-render';
 export {checkTypefaces, fromPptx, toPptx} from '@openpresentation/opf-pptx';
 export {createEditorSession} from '@openpresentation/opf-editor';
-// The harness of the published core's release commit (slow-checks.yml runs it as released) reads the deck of an editor session through
-// this accessor; the current harness uses editor.presentation. Drop it when the plan's core tag has a harness without it.
+// Older released harnesses use this compatibility accessor; the reviewed current driver uses editor.presentation.
+// Keep the adapter for explicit historical consumers without changing the installed graph.
 export const presentationOf = (editor) => editor.presentation;
 ${catalogEngines}
 export {resolveFontFamilies, resolveScriptFonts} from '@openpresentation/opf/composition';

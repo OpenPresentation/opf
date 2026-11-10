@@ -7,6 +7,32 @@ OPF 0.15 has two places for a picture, with one fit vocabulary:
 
 opf-render draws both as SVG and opf-pptx exports them as native PowerPoint DrawingML, from the same core geometry. This page also maps each of the 15 [pptx.gallery image treatments](https://www.pptx.gallery/image-treatments) to OPF, with its support status and the reason. The reference deck [`fixtures/image-treatments.opf.json`](fixtures/image-treatments.opf.json) has one slide per gallery treatment. Core's `test/image-blocks.test.mjs` checks it against core 0.14's frozen picture geometry, and `pnpm test:image-treatments` checks it across core, SVG and PPTX.
 
+## Editable labels on an image
+
+An image payload accepts `callouts`, plain text panels over its visible frame. This is supported on a root `image` or a block's `image` object, not on logos, videos, reusable asset records or backgrounds. For example:
+
+```json
+{
+  "slides": [{
+    "image": {
+      "src": "./images/pump.png",
+      "alt": "Pump housing with the inlet at the left.",
+      "callouts": [{"text": "Inlet", "x": -0.08, "y": 0.1, "width": 0.4, "height": 0.25}]
+    }
+  }]
+}
+```
+
+Coordinates are fractions of the displayed image frame, from its physical top-left, including in RTL. `x` and `y` are finite signed origins and may be negative or greater than 1; `width` and `height` are greater than 0 and at most 1. All four and a plain string `text` are required. Empty text is retained. Nonfinite origins, nonpositive or oversized dimensions, unknown fields and rich text are invalid. A panel may intentionally straddle or sit outside the image frame: it keeps its authored position without clipping to the image, shrinking or moving content. The fixed slide viewport crops any off-slide portion. Crossing an image or slide edge alone is not text overflow; unrepresentable derived coordinates are refused.
+
+The frame follows `cover`, focus, aspect ratio and placement. With `contain` and known source dimensions it is the visible contained picture, excluding letterbox padding. When composition cannot read the source dimensions, it uses the available composed frame; resolve external/local assets to embedded bytes before composition to anchor inside the contained pixels. Labels refer to the visible frame, not original source pixels: changing a crop changes the pixels under them. A mask, pixel recolor, opacity or overlay affects the picture beneath the labels. Callout panels and text are above those effects, including outside a nonrectangular mask. An unavailable image keeps its labels over the placeholder.
+
+Panels use the theme background and text colors. Text starts at the body's role size (or a larger inherited minimum), grows up to twice that size within the authored maximum, and centers in its panel. It never shrinks below that role; a small panel reports overflow. The text measure is capped at 32 em, about 70 ordinary Latin characters, and text is not clipped to its panel or image mask. Slide canvas bounds still apply to the visible output. Enlarge the panel or shorten the label when it overflows.
+
+SVG keeps real text. PPTX writes native panel rectangles and editable measured line boxes: editing a line does not reflow into the next line. An unchanged picture owner and panel geometry import with fractional coordinates and **current** native text, including cleared lines. Missing or changed panel/picture geometry falls back to ordinary current native content with a finding rather than resurrecting old labels. Text edits and measured size/position changes report reflow; other native styling is not reconstructed. With unavailable pixels, labels import as ordinary text because there is no trustworthy picture owner. Markdown preserves callouts losslessly in an embedded block; promoting an image to a background/watermark reports the dropped callouts.
+
+Runnable deck: [image callouts](../examples/technical/image-callouts.opf.json).
+
 ## Backgrounds
 
 ```json
@@ -87,19 +113,19 @@ The picture keeps its `fit` and `focus`; without them it covers its frame around
 
 ### Placement
 
-`placement: { edge: "left" | "right" | "top" | "bottom", size: 0.1–0.9 (default 0.5), inset: false }` gives the image a band along that edge of the slide, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. `size` is the band's share of the slide width (left, right) or height (top, bottom). `inset: true` puts the frame inside the slide padding of the band, like a card. Header and footer bands keep their full-width placement.
+`placement: { edge: "start" | "end" | "top" | "bottom", size: 0.1–0.9 (default 0.5), inset: false }` gives the image a band along that edge of the slide, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. `size` is the band's share of the slide width (start, end) or height (top, bottom). `inset: true` puts the frame inside the slide padding of the band, like a card. Header and footer bands keep their full-width placement.
 
 - Only a top-level block (`slides.N.blocks.I`) can be placed, and each slide edge takes at most one placed image. A placed block inside a group or a promoted region, or a second block on the same edge, is an `opf/image-placement-invalid` error.
 - Bands are taken in block order. Each spans the free area left by the earlier ones.
 - Placement belongs to a top-level image block. Current v2 layout records do not have image-placeholder placement; write a block in `blocks` to place a picture rather than using the root `Slide.image` shorthand.
 - A slide whose only body is placed images is composed like a cover: its headings center in the free area beside the image.
-- In a right-to-left deck `left` is the start side, drawn at the right. Edge overlays mirror the same way.
+- `start` and `end` follow the deck's direction: `start` is the left edge in a left-to-right deck and the right edge in a right-to-left deck. Edge overlays follow the same rule.
 
 Placement is the only mechanism that moves content aside. A background never does.
 
 ## Overlay
 
-`{ color, opacity, edge?, size? }` is shared by backgrounds and image blocks. Without `edge` it covers the whole frame in the frame's shape. With `edge` (`top`, `bottom`, `left` or `right`) it covers a band of `size` (default 0.3) of the frame along that edge, for example a caption strip. An edge overlay on a non-rectangle image frame reports `unsupported-image-treatment` at `...overlay.edge`, and neither engine draws it. That diagnostic never fails strict layout. Text over a picture background is certified readable (`opf/text-on-image`) through a full-frame overlay strong enough for every possible pixel, or core's [automatic scrim](#automatic-scrim) when there is no overlay; an edge band does not count.
+`{ color, opacity, edge?, size? }` is shared by backgrounds and image blocks. Without `edge` it covers the whole frame in the frame's shape. With `edge` (`top`, `bottom`, `start` or `end`) it covers a band of `size` (default 0.3) of the frame along that edge, for example a caption strip. An edge overlay on a non-rectangle image frame reports `unsupported-image-treatment` at `...overlay.edge`, and neither engine draws it. That diagnostic never fails strict layout. Text over a picture background is certified readable (`opf/text-on-image`) through a full-frame overlay strong enough for every possible pixel, or core's [automatic scrim](#automatic-scrim) when there is no overlay; an edge band does not count.
 
 An unchanged export imports back as the same OPF: the background and the image blocks with their treatments, plus a data URI of each embedded picture. The `OPF_IMAGE_V1` and `OPF_IMAGE_OVERLAY_V1` shape tags record the native geometry of an image block. A picture that was moved, re-cropped or recolored stays an ordinary image and reports its provenance diagnostic. An edited overlay drops only the overlay.
 
@@ -125,17 +151,17 @@ A cover's or section's heading group over a picture (LH-158) may sit at the top,
 |---|---|---|---|
 | full-bleed | background `{type: image, src, overlay: {color: dark1, opacity: 0.2}}` | supported | |
 | text-overlay | background with `overlay: {color: dark1, opacity: 0.55}` | supported | Heading color still follows the theme background. Use a dark theme or background for light text over photos. |
-| side-by-side | image block, `placement: {edge: left, size: 0.46}` | supported | |
+| side-by-side | image block, `placement: {edge: start, size: 0.46}` | supported | |
 | caption-overlay | image block, `overlay: {color: dark1, opacity: 0.75, edge: bottom, size: 0.25}` | supported | Square corners. An edge band cannot follow a rounded mask as one native shape. The gallery's card sits inside the slide padding, which a background cannot do, so the picture is content below the headings. Without the inset it is a background with the same edge-band overlay. |
-| masked-shape | image block, `shape: hexagon, aspectRatio: 1.1547, placement: {edge: right, inset: true}` | supported | Any of the 187 presets is a mask (0.33). A custom-geometry mask is not in the vocabulary. |
-| circular-crop | image block, `shape: ellipse, placement: {edge: left, size: 0.4, inset: true}` | supported | The gallery's small shadow is not drawn (see shadows). |
+| masked-shape | image block, `shape: hexagon, aspectRatio: 1.1547, placement: {edge: end, inset: true}` | supported | Any of the 187 presets is a mask (0.33). A custom-geometry mask is not in the vocabulary. |
+| circular-crop | image block, `shape: ellipse, placement: {edge: start, size: 0.4, inset: true}` | supported | The gallery's small shadow is not drawn (see shadows). |
 | rounded-card | image block, `shape: roundRect, adjust: {adj: 0.05}, stroke: {color: accent5, width: 1}` | supported, without shadow | The optional card shadow is unsupported (see shadows). |
 | duotone | background with `recolor: {dark: accent1, light: light1}` | supported | Native raster parity of PowerPoint's luminance weights is unverified (see fidelity). |
 | background-blur | background with `overlay: {color: light1, opacity: 0.4}`, plus `contentBox: true` | **unsupported: blur** | Blur is not expressible. The mapping keeps the light scrim and the sharp card, without the blur. |
 | image-strip | image block, `placement: {edge: bottom, size: 0.3}` | partial | A placed block is one picture. A strip of several images is content: image blocks in a row composition. |
 | collage-grid | 4 image blocks, `composition: {mode: grid, columns: 2}`, `imageFit: cover` | supported via content blocks | A collage is content composition, not a single-image treatment. |
-| device-frame | image block, `aspectRatio: 0.5, shape: roundRect, adjust: {adj: 0.12}, stroke: {color: dark1, width: 12}, placement: {edge: right, inset: true}` | partial | The bezel is a thick line on a rounded portrait frame. Device artwork (notch, buttons, device-specific screens) is not expressible. |
-| cutout-subject | image block, `fit: contain, placement: {edge: right}`, with a transparent PNG | partial | **Background removal is unsupported.** PowerPoint's Remove Background produces an edited bitmap, not a declarative effect. Supply a pre-cut transparent PNG, and both engines keep its alpha. The grounding shadow is unsupported (see shadows). |
+| device-frame | image block, `aspectRatio: 0.5, shape: roundRect, adjust: {adj: 0.12}, stroke: {color: dark1, width: 12}, placement: {edge: end, inset: true}` | partial | The bezel is a thick line on a rounded portrait frame. Device artwork (notch, buttons, device-specific screens) is not expressible. |
+| cutout-subject | image block, `fit: contain, placement: {edge: end}`, with a transparent PNG | partial | **Background removal is unsupported.** PowerPoint's Remove Background produces an edited bitmap, not a declarative effect. Supply a pre-cut transparent PNG, and both engines keep its alpha. The grounding shadow is unsupported (see shadows). |
 | watermark | image block, `fit: contain, opacity: 0.1, recolor: grayscale` | supported | `design.watermark` remains a separate, preview-only feature. |
 | cinematic-crop | image block, `aspectRatio: 2.39`, with `design.background: dark1` | supported | |
 

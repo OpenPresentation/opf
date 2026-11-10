@@ -1,0 +1,66 @@
+{
+  "archive": {
+    "path": "reports-and-first-logs.zip",
+    "size": 215269,
+    "sha256": "1e01b3f15d6d33962e58f493d8345ff5458e09215de35afd51f02ffb7eaf0d96"
+  },
+  "files": [
+    {
+      "path": "gate.json",
+      "size": 614659,
+      "sha256": "150ee0416a18e6491a349fdbee44c6bd5b5c7a8feab4f3388e33a5b008337df1"
+    },
+    {
+      "path": "gate.md",
+      "size": 89469,
+      "sha256": "98dbeb6cc5e6ed82297e4c51a898fef5e475c21461a77d78cdb3ae0e4ef81d06"
+    },
+    {
+      "path": "inputs.json",
+      "size": 82313,
+      "sha256": "d1d47fc81ca0a67e2bf126dff136aa31e65352cbd6d06da343b5c82f37859316"
+    },
+    {
+      "path": "report.json",
+      "size": 1322621,
+      "sha256": "2374acbf438dc48c992799732dbe0d5dd5272933cd80f5ed83d74ee86427e021"
+    },
+    {
+      "path": "logs/sh20-final-build.log",
+      "size": 12016,
+      "sha256": "1fce7a5f71460bd6d6c233c4e6e144d11244a48a2531dcbeab0183be9cb8dd83"
+    },
+    {
+      "path": "logs/sh20-final-domain-first.log",
+      "size": 1878,
+      "sha256": "a3cc877883e636fcc4c3c024969c8cfe133fd625c962ed50dae3f79a140fea7e"
+    },
+    {
+      "path": "logs/sh20-final-domain-canonical.log",
+      "size": 666,
+      "sha256": "7ddc497b093b53dcc737753298768b6061a65d4ec9b343b7dae60c7a09cd7ab5"
+    },
+    {
+      "path": "logs/sh20-final-gate.log",
+      "size": 218304,
+      "sha256": "b8e7b3f17572f6bba66d9e14c2b65aa4a1d0a827e851bf934d5dff5f7ef59bd4"
+    },
+    {
+      "path": "logs/sh20-final-report.log",
+      "size": 161,
+      "sha256": "ed0b0f6cbec4e3fa46554a6a85fbe34f7328644be751ffdf05bf4120e0efc12d"
+    },
+    {
+      "path": "logs/sh20-final-boundary-controls.log",
+      "size": 152,
+      "sha256": "3dea5ae699d7e259b2e6e68536e42e16cf1fe2543617b2a2c4979026ae9a8c09"
+    }
+  ],
+  "gatePolicy": {
+    "base": "af2fd88e70dccd5a444bea976d3feee908720081",
+    "normalizedOriginalSha256": "8d41df934eb6971a5f1cfafea5e1999b8e828d0756b0aa159d2387671901f4ba",
+    "normalizedRestoredSha256": "8d41df934eb6971a5f1cfafea5e1999b8e828d0756b0aa159d2387671901f4ba",
+    "onlyMachineImportPathsChanged": true,
+    "all516RecordsDeepEqual": true
+  }
+}

@@ -1,14 +1,14 @@
 import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js";
 
 export type CaptionPosition = "below" | "above";
-export type CaptionAlignment = "left" | "center" | "right";
+export type CaptionAlignment = "start" | "center" | "end";
 export type RichText = string | ReadonlyArray<string | Record<string, unknown>>;
 export interface CaptionSettings { text: RichText; position: CaptionPosition; align: CaptionAlignment }
 export type CaptionInput = RichText | { text: RichText; position?: CaptionPosition; align?: CaptionAlignment };
 export interface Reference { id: string; text: RichText; url?: string }
 
 export declare const CAPTION_POSITIONS: readonly ["below", "above"];
-export declare const CAPTION_ALIGNMENTS: readonly ["left", "center", "right"];
+export declare const CAPTION_ALIGNMENTS: readonly ["start", "center", "end"];
 export declare const CAPTIONABLE_FIELDS: readonly ["image", "chart", "table", "video"];
 
 export interface PreparedAnnotationChange {

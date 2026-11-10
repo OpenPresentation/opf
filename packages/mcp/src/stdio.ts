@@ -22,7 +22,7 @@ export async function checkDeckText(raw: string, format: DeckFormat, options: Va
 	const read = readDeckReport(raw, { format, validate: false }).presentation;
 	// LH-14: the icon sets the deck names load first (the gallery loads each on first use), so an unknown icon name is reported.
 	await ensureIcons(read, { catalogs: options.catalogs });
-	const measuring = await measuringFonts(read, { reporter: new Reporter(), flags: true });
+	const measuring = await measuringFonts(read, { reporter: new Reporter(), flags: true, catalogs: options.catalogs, reportInvalidDocument: true });
 	try {
 		const { presentation: _deck, format: _format, ...report } = readDeckReport(raw, { format, validate: measuring.fonts ? { ...options, fonts: measuring.fonts } : options });
 		if (measuring.estimated && report.checks.layout === "estimated") {

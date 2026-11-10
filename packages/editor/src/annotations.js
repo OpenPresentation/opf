@@ -12,7 +12,7 @@ import { captionSettings, collectCitations, referencesSlide, walkCitationRuns } 
 import { checkFormat } from "./checks.js";
 
 export const CAPTION_POSITIONS = Object.freeze(["below", "above"]);
-export const CAPTION_ALIGNMENTS = Object.freeze(["left", "center", "right"]);
+export const CAPTION_ALIGNMENTS = Object.freeze(["start", "center", "end"]);
 export const CAPTIONABLE_FIELDS = Object.freeze(["image", "chart", "table", "video"]);
 // Fields whose runs can carry a marker: the slide heading group (FA-10) plus text, quote text, bullets and items.
 const TEXT_FIELDS = ["title", "subtitle", "tag", "text", "bullets", "items"];
@@ -71,7 +71,7 @@ export function captionTargets(presentation) {
   };
   (presentation?.slides ?? []).forEach((slide, index) => {
     if (!isObject(slide)) return;
-    const regions = Object.keys(slide).filter((key) => /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key) && isObject(slide[key])).sort();
+    const regions = Object.keys(slide).filter((key) => /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key) && isObject(slide[key])).sort();
     if (regions.length) for (const key of regions) visit(slide[key], `slides.${index}.${key}`);
     else visit(slide, `slides.${index}`);
   });
@@ -96,8 +96,8 @@ export function prepareCaption(presentation, blockPath, caption) {
     const settings = normalizeCaption(caption);
     const objectForm = isObject(caption);
     if (!settings || !isRichText(settings.text) || (objectForm && caption.position !== undefined && !CAPTION_POSITIONS.includes(caption.position)) || (objectForm && caption.align !== undefined && !CAPTION_ALIGNMENTS.includes(caption.align)))
-      throw fail("invalid-caption", "A caption is a string, TextRun[] or { text, position: below|above, align: left|center|right }.");
-    next.caption = settings.position === "below" && settings.align === "left" ? clone(settings.text) : { text: clone(settings.text), position: settings.position, align: settings.align };
+      throw fail("invalid-caption", "A caption is a string, TextRun[] or { text, position: below|above, align: start|center|end }.");
+    next.caption = settings.position === "below" && settings.align === "start" ? clone(settings.text) : { text: clone(settings.text), position: settings.position, align: settings.align };
   }
   return transaction(presentation, parts, next, { action: "caption", field });
 }

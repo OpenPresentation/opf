@@ -1,0 +1,53 @@
+✔ the baseline is rewritten only in GitHub Actions on Linux in the Playwright image (1.1729ms)
+✔ --local writes the review candidate only, anywhere (0.7136ms)
+✔ the steps are scripts of the renderer package, and the workflow runs this script in the pinned image (3.6437ms)
+✖ the pinned read-only job regenerates core and renderer templates with their review artifacts (1.0865ms)
+✖ the actual write-job allowlist accepts generated baselines and refuses source, sibling and traversing patches (0.4452ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 121.8759
+
+✖ failing tests:
+
+test at scripts\golden-update.test.mjs:47:1
+✖ the pinned read-only job regenerates core and renderer templates with their review artifacts (1.0865ms)
+  AssertionError [ERR_ASSERTION]: the write job must enforce its explicit patch allowlist
+      at workflowPatchRules (file:///C:/opf-work/rr108-goldens/scripts/golden-update.test.mjs:42:10)
+      at TestContext.<anonymous> (file:///C:/opf-work/rr108-goldens/scripts/golden-update.test.mjs:48:28)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts\golden-update.test.mjs:60:1
+✖ the actual write-job allowlist accepts generated baselines and refuses source, sibling and traversing patches (0.4452ms)
+  AssertionError [ERR_ASSERTION]: the write job must enforce its explicit patch allowlist
+      at workflowPatchRules (file:///C:/opf-work/rr108-goldens/scripts/golden-update.test.mjs:42:10)
+      at TestContext.<anonymous> (file:///C:/opf-work/rr108-goldens/scripts/golden-update.test.mjs:61:32)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

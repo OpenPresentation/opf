@@ -142,7 +142,7 @@ for (const [label, alt, kind] of [['label', 'Sales by region & <quarter>', 'text
   const logo = slideXml(await toPptx({organization: {id: 'acme', name: 'Acme', role: 'primary', logo: src}, slides: [{title: 'Cover', layout: 'cover'}]}));
   assert.equal(groups(logo).length, 0, 'the logo placeholder keeps its tagged panel ungrouped');
   assert.match(logo, /name="OPF image placeholder 1" descr="Image unavailable: /);
-  const footer = slideXml(await toPptx({design: {footer: {left: {image: src}}}, slides: [{title: 'Footer', text: 'Body'}, {title: 'Two', text: 'Body'}]}));
+  const footer = slideXml(await toPptx({design: {footer: {start: {image: src}}}, slides: [{title: 'Footer', text: 'Body'}, {title: 'Two', text: 'Body'}]}));
   assert.equal(groups(footer).length, 0, 'generated furniture is never grouped');
   const quote = slideXml(await toPptx({slides: [{quote: {text: 'Ship it.', attribution: 'Priya Raman', photo: {src, alt: 'Priya Raman'}}}]}));
   assert.deepEqual(groups(quote).map(group => attr(group.match(/<p:cNvPr\b[^>]*>/)[0], 'name')), ['OPF image placeholder 1 group']);

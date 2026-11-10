@@ -1,0 +1,22 @@
+{
+  "base": "e5de880999235872f4c44fe646e78fec49c16baa",
+  "branch": "codex/rr-105-seven-chart-profile",
+  "status": "UNQUALIFIED WIP; do not execute or fold",
+  "sourceFiles": {
+    "scripts/native-acceptance/seven-chart-archive.mjs": {
+      "bytes": 17168,
+      "sha256": "0247fb4bd438543850593dc2e38b6550ff6056f48668f6220548c1a1c6ddb38a"
+    },
+    "scripts/native-acceptance/seven-chart-profile.mjs": {
+      "bytes": 20192,
+      "sha256": "391cf9179c6232da2adfb95f63ff2fa67df740ea53dd5b3c6f111ba1e4c6d69d"
+    },
+    "scripts/native-acceptance/seven-chart-worker.ps1": {
+      "bytes": 12526,
+      "sha256": "d3703c9f4585e303b5e788460639af74a486df3c947ec0084a84fb6f55b64630"
+    }
+  },
+  "OfficeCalls": 0,
+  "requiredCheckChanged": "NOT RUN: coordinator ordered checkpoint before a long check; owed on complete coherent source",
+  "tests": "No maintained tests added or executed. A diagnostic parser read the four immutable originals; initial setup and three draft parser refusals retained."
+}

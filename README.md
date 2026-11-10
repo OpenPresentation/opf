@@ -17,7 +17,7 @@ Public npm package: [`@openpresentation/opf`](https://www.npmjs.com/package/@ope
 
 Open Presentation Format is the portable, human-readable JSON document format for slide decks.
 
-This repository is the canonical home for the OPF **spec**, **JSON Schemas**, **catalog presets**, examples, generated developer types, local validation tooling, and integration docs for the render/edit/convert toolkit. OpenPresentation publishes open-source code and documentation only; it does not provide hosted APIs, hosted rendering functions, queues, storage, authentication, jobs, previews, SLAs, telemetry, or managed infrastructure.
+This repository is the canonical home for the OPF **spec**, **JSON Schemas**, **catalog presets**, examples, generated developer types, local validation tooling, and integration docs for the render/edit/convert toolkit. OpenPresentation publishes open-source code and documentation. The engine runs in the caller’s environment; hosts choose their own rendering, storage and application infrastructure. The [MCP server](docs/mcp.md) has local stdio and hosted transport options, with viewer availability determined separately by the client and deployment.
 
 For AI agents, use the [OPF skill set](docs/agent-skills.md) for authoring, layout, presets, editing, export, and schema inspection.
 
@@ -51,7 +51,7 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 
 ## Start in three steps
 
-1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the currently recorded registry pin set: the six packages used by the local workflow (core, renderer, PPTX, editor, CLI and Gallery), all at the shared version 0.33.0. The optional seventh package, `@openpresentation/mcp@0.33.0`, supplies the [MCP server and viewer](docs/mcp.md). The default catalog is supplied by `@openpresentation/gallery@0.33.0`; see the [compatibility matrix](docs/compatibility-matrix.md) for feature and native limits.
+1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the registry-derived pin set: core, renderer, PPTX, editor, CLI and Gallery use one completed shared release, retained with `--save-exact` and the lockfile. The optional seventh package, `@openpresentation/mcp`, supplies the [MCP server and viewer](docs/mcp.md). The default catalog is supplied by the matching `@openpresentation/gallery` release; see the [compatibility matrix](docs/compatibility-matrix.md) for feature and native limits.
 2. **Author, validate, paginate, preview and export.** New to OPF? Run the [first deck](docs/first-deck/README.md) end to end first. Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. From code, `convert("deck.opf.md", "deck.pdf")` of `@openpresentation/opf` is the simple path to a PDF, PNG, SVG or PPTX file. `validate` / `opf validate` is one local checker for format, references, accessibility, layout and content ([guide](docs/validate.md)), not visual verification.
 3. **Know the limits.** PPTX export writes one text box per wrapped line, so text edited in PowerPoint or Keynote does not reflow (see [rich text](docs/rich-text.md)) unless you opt in to `--body-text native` (opf-pptx and CLI 0.22.0 or later), and fonts are named, not embedded. The [compatibility matrix](docs/compatibility-matrix.md) lists shipped APIs versus renderer issue 24, native PowerPoint issue 87, and other deferred work. Browse presets at [pptx.gallery](https://pptx.gallery).
 
@@ -178,7 +178,7 @@ See [Templates and variables](./docs/templates-and-variables.md) for fillable OP
 | [`docs/slide-sizes.md`](./docs/slide-sizes.md) | OPF's slide-size presets in inches, points and EMU, how they compare with PowerPoint's presets, and what PPTX export and import do with them. |
 | [`docs/catalog-schema-reference.md`](./docs/catalog-schema-reference.md) | Author-facing reference for every companion catalog schema. |
 | [`docs/content-payloads.md`](./docs/content-payloads.md) | Author-facing notes for slide and region content payloads, including chart and table object shapes. |
-| [`docs/diagrams.md`](./docs/diagrams.md) | Mermaid diagrams as a content kind: when to use one, the supported families, how the deck styles and sizes them, accessibility, export (native PowerPoint shapes by default) and limits. |
+| [`docs/diagrams.md`](./docs/diagrams.md) | Mermaid, Graphviz DOT and PlantUML diagrams as a content kind: when to use one, the supported families, how the deck styles and sizes them, accessibility, export (native PowerPoint shapes by default) and limits. |
 | [`docs/shapes.md`](./docs/shapes.md) | Shapes: the 187 DrawingML presets as blocks, custom outlines, slide overlays and connectors, and how PowerPoint export and import carry them. |
 | [`docs/shape-effects.md`](./docs/shape-effects.md) | The six shape effects (shadow, glow, reflection, soft edge, blur, 3-D) and how each engine draws them. |
 | [`docs/smartart.md`](./docs/smartart.md) | The pyramid, matrix, cycle, chevrons, flow and vertical-flow layouts: live SmartArt in PowerPoint where it holds the text, native shapes elsewhere. |

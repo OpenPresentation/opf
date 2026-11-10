@@ -1,6 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {checkFormat, isValidFormat} from './format-check.js';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
+import {currentTag, upgradeTag} from './legacy-tags.js';
 import {chartUsesDataFields, isDatasetRef, fromExcelNumberFormat, resolveTableData, tableCellDisplayValue} from './chart-data.js';
 
 // RR-54: chart and table data survive a PPTX round trip (core docs/chart-table-data.md).
@@ -106,8 +107,11 @@ function hash(text) {
 
 /** The hash of a chart part's cached data: series names, categories, values and number format codes, in order. */
 export function chartEvidence(xml) {
+  // RR-105: Office rewrites display captions from cx:rich to cx:txData/cx:v on save. A title is not cached data.
+  // Exclude only ChartEx title subtrees; actual data points, series names and number formats keep their legacy evidence.
+  const cached = String(xml).replace(/<cx:title\b[\s\S]*?<\/cx:title>/g, '');
   const parts = [];
-  for (const match of String(xml).matchAll(/<(c:v|c:formatCode|cx:pt|cx:v)\b[^>]*>([^<]*)<\/\1>|<cx:lvl\b[^>]*?\bformatCode="([^"]*)"/g)) {
+  for (const match of cached.matchAll(/<(c:v|c:formatCode|cx:pt|cx:v)\b[^>]*>([^<]*)<\/\1>|<cx:lvl\b[^>]*?\bformatCode="([^"]*)"/g)) {
     const code = match[3] !== undefined ? decodeEntities(match[3]) : match[1] === 'c:formatCode' ? decodeEntities(match[2]) : undefined;
     if (code === undefined) parts.push(`${match[1]}:${canonicalValue(decodeEntities(match[2]))}`);
     else if (!generalCode(code)) parts.push(formatEvidence(code));
@@ -252,14 +256,14 @@ function relationshipsXml(entries, path) {
   return `${path.slice(0, slash + 1)}_rels/${path.slice(slash + 1)}.rels`;
 }
 const freeId = (rels, base) => { let id = base, index = 1; while (rels.includes(`Id="${id}"`)) id = `${base}${++index}`; return id; };
-const tagPart = (name, value) => enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${name}" val="${encodeTextTag(value)}"/></p:tagLst>`);
+const tagPart = (name, value) => enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${name}" val="${encodeTextTag(name === DATA_TAG ? currentTag(value) : value)}"/></p:tagLst>`);
 
 /**
  * Attach the data records to the finished package (`entries`: part path -> bytes, changed in place): one OPF_DATA_V1 tag
  * per recorded chart or table frame (both frames of a chartex chart share it) and OPF_DATASETS_V1 beside the document
  * tag. `records` maps generated frame names to records; `datasets` is the document's datasets map.
  */
-export function attachDataProvenance(entries, {records, paths = new Map(), datasets, parseRelationships, report}) {
+export function attachDataProvenance(entries, {records, paths = new Map(), datasets, parseRelationships, report, chartXml=xml=>xml}) {
   // A record the importer would refuse (MAX_TAG_CHARS) is not written; the native values still export and import. `paths`
   // maps a frame name to the document path of its chart or table, which the diagnostic names.
   const fits = (value, path) => {
@@ -267,7 +271,7 @@ export function attachDataProvenance(entries, {records, paths = new Map(), datas
     report?.({code: 'data-provenance-omitted', path, message: `The recorded ${path === 'datasets' ? 'datasets map' : 'chart or table data'} exceeds the ${MAX_TAG_CHARS / (1024 * 1024)} MiB tag limit, so it is not stored; the native values export and re-import, without the dataset references, mapping and formats.`});
     return false;
   };
-  for (const [name, record] of [...records]) if (!fits(record, paths.get(name) ?? name)) records.delete(name);
+  for (const [name, record] of [...records]) if (!fits(currentTag(record), paths.get(name) ?? name)) records.delete(name);
   const storedDatasets = object(datasets) && Object.keys(datasets).length && fits(datasets, 'datasets') ? datasets : undefined;
   if (!records.size && !storedDatasets) return;
   const types = [];
@@ -289,7 +293,7 @@ export function attachDataProvenance(entries, {records, paths = new Map(), datas
       const id = frame.match(/<(?:c|cx):chart\b[^>]*\br:id="([^"]+)"/)?.[1];
       const part = relationships.get(id)?.path;
       if (!part || !entries[part]) throw Error('Generated chart frame has no chart part.');
-      evidence.set(name, [...(evidence.get(name) ?? []), chartEvidence(dec.decode(entries[part]))]);
+      evidence.set(name, [...(evidence.get(name) ?? []), chartEvidence(chartXml(dec.decode(entries[part])))]);
     }
     const relsPath = relationshipsXml(entries, path);
     let rels = dec.decode(entries[relsPath]);
@@ -300,7 +304,7 @@ export function attachDataProvenance(entries, {records, paths = new Map(), datas
       const record = records.get(name);
       const native = record.kind === 'table' ? parser.parse(frames.find(frame => frame.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1] === name))?.['p:graphicFrame']?.['a:graphic']?.['a:graphicData']?.['a:tbl'] : undefined;
       const value = record.kind === 'chart' ? {...record, evidence: evidence.get(name) ?? []} : {...record, evidence: tableCellEvidence(native, relationships), environment: tableEnvironmentEvidence(entries)};
-      if (!fits(value, paths.get(name) ?? name)) {records.delete(name); seen.delete(name); continue;}
+      if (!fits(currentTag(value), paths.get(name) ?? name)) {records.delete(name); seen.delete(name); continue;}
       const part = `ppt/tags/opfData${++count}.xml`;
       if (entries[part]) throw Error('Colliding data tag part.');
       entries[part] = tagPart(DATA_TAG, value);
@@ -367,7 +371,7 @@ function readTags(entries, container, relationships, name) {
   if (found.length > 1) throw Error(`Multiple ${name} tags.`);
   const value = found[0].val;
   if (typeof value !== 'string' || value.length > MAX_TAG_CHARS) throw Error(`Oversized or empty ${name} tag.`);
-  const decoded = decodeTextTag(value);
+  const decoded = upgradeTag(decodeTextTag(value), name === DATASETS_TAG ? 'datasets' : 'data');
   if (tooDeep(decoded)) throw Error(`The ${name} tag nests deeper than ${MAX_DEPTH} levels.`);
   return decoded;
 }

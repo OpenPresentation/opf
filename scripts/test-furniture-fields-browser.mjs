@@ -85,7 +85,7 @@ window.snapshot = async () => {
     })};
 };
 window.refusalControls = () => {
-  const deck = {design: {footer: {left: {date: true}}}, slides: [{text: 'Body', composition: {overflow: 'error'}}]};
+  const deck = {design: {footer: {start: {date: true}}}, slides: [{text: 'Body', composition: {overflow: 'error'}}]};
   const before = JSON.stringify(deck), capture = fn => {try { fn(); return null; } catch (error) {return {name: error.name, code: error.code, diagnostics: error.diagnostics};}};
   const missing = capture(() => toSvg(deck));
   const invalid = capture(() => toSvg(deck, {date: '22/09/2026'}));
@@ -244,11 +244,11 @@ try {
   await page.route(/^https?:/, route => {requests.push(route.request().url()); return route.abort();});
   await page.setContent('<button id="previous">Previous</button><button id="next">Next</button><button id="undo">Undo</button><button id="redo">Redo</button><button id="date">Next host date</button><button id="export">Export</button><div id="canvas" style="width:900px"></div>');
   await page.addScriptTag({content: bundle});
-  const footer = {left: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {date: true, dateFormat: 'MMMM d, yyyy'}, right:{text:'{{slide.number}} / {{deck.slideCount}}'}};
+  const footer = {start: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {date: true, dateFormat: 'MMMM d, yyyy'}, end:{text:'{{slide.number}} / {{deck.slideCount}}'}};
   for (const [name, width, height, paginate, wrapped] of [['wide', 1280, 720, false, false], ['portrait', 720, 1280, false, false],
     ['paginated', 1280, 720, true, false], ['portrait-wrapped', 720, 1280, false, true]]) {
     activeCase = name;
-    const deck = {design: {fontScheme: 'roboto', dimensions: {widthInches: width / 96, heightInches: height / 96}, header: {left: {text: '  Review\tcopy  \r\n'}}, footer},
+    const deck = {design: {fontScheme: 'roboto', dimensions: {widthInches: width / 96, heightInches: height / 96}, header: {start: {text: '  Review\tcopy  \r\n'}}, footer},
       slides: paginate ? [{title: 'Paginated fields', text: 'First sentence with enough detail. '.repeat(160)}, {title: 'Last slide', text: 'Last source body.'}]
         : [{title: 'Hidden title footer', text: 'The title still counts.', design: {footer: false}}, {title: 'Second slide', text: 'Authored second body.'}, {title: 'Third slide', text: 'Authored third body.'}]};
     if (wrapped) for (const slide of deck.slides.slice(1)) slide.composition = {minFontSize: 32, overflow: 'error'};
@@ -265,11 +265,11 @@ try {
       assert.deepEqual(state.geometry.furniture.parts.find(part => part.field === 'date' && part.zone === 'center').fit.lines, ['September ', '22, 2026']);
     }
     // Real canvas edit and ordinary undo/redo must preserve generated field settings.
-    const target = page.locator('[data-canvas-target][data-opf-path="design.header.left.text"]');
+    const target = page.locator('[data-canvas-target][data-opf-path="design.header.start.text"]');
     await target.dblclick(); const input = page.getByRole('textbox', {name: 'Edit text inline', exact: true});
     await input.fill('  Reviewed\tcopy  \r\n'); await input.press('Control+Enter');
     const edited = await page.evaluate(() => editor.presentation);
-    assert.equal(edited.design.header.left.text, '  Reviewed\tcopy  \r\n'); assert.deepEqual(edited.design.footer, footer);
+    assert.equal(edited.design.header.start.text, '  Reviewed\tcopy  \r\n'); assert.deepEqual(edited.design.footer, footer);
     await page.getByRole('button', {name: 'Undo', exact: true}).click(); assert.deepEqual(await page.evaluate(() => editor.presentation), mounted.source);
     await page.getByRole('button', {name: 'Redo', exact: true}).click(); assert.deepEqual(await page.evaluate(() => editor.presentation), edited);
     const exported = await exportAndCheck(`${name}-first-date`, '2026-09-22', !paginate, edited, wrapped);
@@ -298,7 +298,7 @@ try {
   }
   const refused = await page.evaluate(() => refusalControls());
   assert.equal(refused.unchanged, true); assert.equal(refused.missing?.code, 'layout-overflow');
-  assert.ok(refused.missing.diagnostics.some(issue => issue.code === 'unresolved-content' && issue.path === 'design.footer.left.date'));
+  assert.ok(refused.missing.diagnostics.some(issue => issue.code === 'unresolved-content' && issue.path === 'design.footer.start.date'));
   assert.equal(refused.invalid?.name, 'RangeError'); controls.push({refused});
   assert.deepEqual(errors, []); assert.deepEqual(requests, []); assert.deepEqual(await page.evaluate(() => failures), []);
   await writeFile(path.join(output, 'report.json'), JSON.stringify({...binding, results, controls, errors, requests,

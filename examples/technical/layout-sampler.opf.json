@@ -2,14 +2,14 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Layout sampler",
   "language": "en",
-  "description": "One slide for each of the 36 default layouts, then 13 dynamic compositions (no layout record), all on one fictional six-week pilot story. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
+  "description": "All 40 default layouts and 13 dynamic compositions (no layout record), on one fictional six-week pilot story. Existing slide identities and order are preserved; newly added layouts append. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
   "design": {
     "background": "light1",
     "footer": {
-      "left": {
+      "start": {
         "text": "Illustrative example • fictional data"
       },
-      "right": {
+      "end": {
         "text": "{{slide.number}}"
       }
     }
@@ -1224,10 +1224,10 @@
     {
       "id": "dynamic-promoted-columns",
       "title": "What the pilot asks of us",
-      "left": {
+      "start": {
         "text": "The pilot shows a clear gain in completion with modest effort."
       },
-      "center+right": {
+      "center+end": {
         "items": [
           "Two teams must release a lead at 20%",
           "Weekly reviews need a fixed slot",
@@ -1238,7 +1238,7 @@
     {
       "id": "dynamic-promoted-grid",
       "title": "From baseline to decision in six weeks",
-      "top:left": {
+      "top:start": {
         "metric": {
           "value": 52,
           "label": "Participants"
@@ -1250,14 +1250,14 @@
           "label": "Completion"
         }
       },
-      "top:right": {
+      "top:end": {
         "metric": {
           "value": "6.2",
           "unit": "min",
           "label": "Median time"
         }
       },
-      "middle+bottom:left+center+right": {
+      "middle+bottom:start+center+end": {
         "timeline": {
           "events": [
             {
@@ -1390,7 +1390,7 @@
     {
       "id": "dynamic-chart-quote",
       "title": "The numbers and the voice agree",
-      "left+center": {
+      "start+center": {
         "chart": {
           "type": "column",
           "axisTitles": {
@@ -1426,13 +1426,100 @@
           }
         }
       },
-      "right": {
+      "end": {
         "quote": {
           "text": "The weekly review keeps the next step clear.",
           "attribution": "Product lead",
           "source": "Illustrative quotation"
         }
       }
+    },
+    {
+      "layout": "inverted-pyramid",
+      "title": "From possibilities to a decision",
+      "blocks": [
+        {
+          "region": "levels",
+          "items": [
+            "Possibilities",
+            "Qualified options",
+            "Shortlist",
+            "Decision"
+          ]
+        }
+      ],
+      "id": "layout-inverted-pyramid"
+    },
+    {
+      "layout": "org-chart",
+      "title": "Give the pilot a clear reporting structure",
+      "blocks": [
+        {
+          "region": "people",
+          "items": [
+            {
+              "text": "Pilot lead",
+              "level": 0
+            },
+            {
+              "text": "Delivery",
+              "level": 1
+            },
+            {
+              "text": "Evidence",
+              "level": 1
+            }
+          ]
+        }
+      ],
+      "id": "layout-org-chart"
+    },
+    {
+      "layout": "hierarchy",
+      "title": "Break the pilot into focused workstreams",
+      "blocks": [
+        {
+          "region": "nodes",
+          "items": [
+            {
+              "text": "Pilot",
+              "level": 0
+            },
+            {
+              "text": "Delivery",
+              "level": 1
+            },
+            {
+              "text": "Design",
+              "level": 2
+            },
+            {
+              "text": "Build",
+              "level": 2
+            },
+            {
+              "text": "Evidence",
+              "level": 1
+            }
+          ]
+        }
+      ],
+      "id": "layout-hierarchy"
+    },
+    {
+      "layout": "venn",
+      "title": "Three conditions for a useful pilot",
+      "blocks": [
+        {
+          "region": "sets",
+          "items": [
+            "Clear scope",
+            "Evidence",
+            "Shared goal"
+          ]
+        }
+      ],
+      "id": "layout-venn"
     }
   ],
   "catalogs": {
@@ -1446,13 +1533,15 @@
             "Openers and closers"
           ],
           "design": {
-            "titleAlignment": "center",
-            "contentAlignment": "center"
+            "titleAlignment": "start",
+            "contentAlignment": "start"
           },
           "direction": "row",
           "regions": [
             {
-              "name": "title"
+              "name": "title",
+              "anchor": "bottom",
+              "rule": true
             },
             {
               "name": "media",
@@ -1477,15 +1566,17 @@
             "Openers and closers"
           ],
           "design": {
-            "titleAlignment": "center",
-            "contentAlignment": "center",
+            "titleAlignment": "start",
+            "contentAlignment": "start",
             "variant": "accent1"
           },
           "direction": "column",
           "regions": [
             {
               "name": "title",
-              "size": 1
+              "size": 1,
+              "anchor": "bottom",
+              "rule": true
             }
           ],
           "description": "Introduce the next part of a presentation. Use the subtitle to connect the new section to the overall argument.",
@@ -1512,7 +1603,8 @@
               ],
               "role": "primary",
               "flow": "column",
-              "listColumns": "auto"
+              "listColumns": "auto",
+              "sequence": "numbered"
             }
           ],
           "description": "Set expectations by listing the parts of a talk. Longer agendas flow across columns while preserving their order.",
@@ -1540,6 +1632,7 @@
               "role": "primary",
               "flow": "column",
               "listColumns": "auto",
+              "sequence": "numbered",
               "anchor": "middle"
             }
           ],
@@ -1555,15 +1648,16 @@
             "Openers and closers"
           ],
           "design": {
-            "titleAlignment": "center",
-            "contentAlignment": "center",
+            "titleAlignment": "start",
+            "contentAlignment": "start",
             "variant": "surface"
           },
           "direction": "column",
           "anchor": "middle",
           "regions": [
             {
-              "name": "title"
+              "name": "title",
+              "rule": true
             },
             {
               "name": "message",
@@ -1589,16 +1683,17 @@
             "Openers and closers"
           ],
           "design": {
-            "titleAlignment": "center",
-            "contentAlignment": "center",
+            "titleAlignment": "start",
+            "contentAlignment": "start",
             "imageFit": "contain",
             "variant": "brand"
           },
           "direction": "column",
-          "anchor": "middle",
+          "anchor": "bottom",
           "regions": [
             {
-              "name": "title"
+              "name": "title",
+              "rule": true
             },
             {
               "name": "details",
@@ -1732,12 +1827,14 @@
                     "quote",
                     "code",
                     "image",
+                    "shape",
                     "video",
                     "chart",
                     "table",
                     "metric",
                     "timeline",
-                    "group"
+                    "group",
+                    "diagram"
                   ],
                   "role": "primary",
                   "flow": "none"
@@ -1750,12 +1847,14 @@
                     "quote",
                     "code",
                     "image",
+                    "shape",
                     "video",
                     "chart",
                     "table",
                     "metric",
                     "timeline",
-                    "group"
+                    "group",
+                    "diagram"
                   ],
                   "role": "primary",
                   "flow": "none"
@@ -1795,12 +1894,14 @@
                     "quote",
                     "code",
                     "image",
+                    "shape",
                     "video",
                     "chart",
                     "table",
                     "metric",
                     "timeline",
-                    "group"
+                    "group",
+                    "diagram"
                   ],
                   "role": "primary",
                   "flow": "none"
@@ -1813,12 +1914,14 @@
                     "quote",
                     "code",
                     "image",
+                    "shape",
                     "video",
                     "chart",
                     "table",
                     "metric",
                     "timeline",
-                    "group"
+                    "group",
+                    "diagram"
                   ],
                   "role": "primary",
                   "flow": "none"
@@ -1831,12 +1934,14 @@
                     "quote",
                     "code",
                     "image",
+                    "shape",
                     "video",
                     "chart",
                     "table",
                     "metric",
                     "timeline",
-                    "group"
+                    "group",
+                    "diagram"
                   ],
                   "role": "primary",
                   "flow": "none"
@@ -1910,7 +2015,8 @@
                     "image",
                     "chart",
                     "table",
-                    "group"
+                    "group",
+                    "diagram"
                   ],
                   "role": "primary",
                   "flow": "none"
@@ -1924,7 +2030,8 @@
                     "image",
                     "chart",
                     "table",
-                    "group"
+                    "group",
+                    "diagram"
                   ],
                   "role": "primary",
                   "flow": "none"
@@ -1968,10 +2075,12 @@
                 "list",
                 "text",
                 "metric",
-                "group"
+                "group",
+                "diagram"
               ],
               "role": "primary",
-              "flow": "grid"
+              "flow": "grid",
+              "sequence": "steps"
             }
           ],
           "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition.",
@@ -1991,12 +2100,22 @@
               "name": "title"
             },
             {
+              "name": "lead",
+              "size": "auto",
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            },
+            {
               "name": "timeline",
               "accepts": [
-                "timeline"
+                "timeline",
+                "diagram"
               ],
               "role": "primary",
-              "flow": "none"
+              "flow": "column"
             },
             {
               "name": "notes",
@@ -2111,7 +2230,8 @@
                 "group"
               ],
               "role": "primary",
-              "flow": "grid"
+              "flow": "grid",
+              "metrics": "tile"
             }
           ],
           "description": "Summarize performance across comparable measures. State the criteria consistently so the audience can assess the result.",
@@ -2121,7 +2241,7 @@
         },
         "image": {
           "name": "Image",
-          "summary": "One picture, shown whole, under an optional title.",
+          "summary": "One picture, filling the slide or shown whole, under an optional title.",
           "tags": [
             "Visuals"
           ],
@@ -2134,19 +2254,20 @@
               "name": "media",
               "accepts": [
                 "image",
-                "video"
+                "video",
+                "diagram"
               ],
               "role": "media",
               "flow": "none",
               "bleed": true
             }
           ],
-          "description": "Let one picture carry the message, shown whole at its own proportions rather than cropped. Add a short title or caption to explain what the audience should notice. For a full-bleed crop, set the image block's fit to cover.",
+          "description": "Let one picture carry the message. A photo close to the frame's shape fills it with a light crop (at most 7.5% off each edge); any other picture, a diagram or an SVG is shown whole at its own proportions (fit auto). Add a short title or caption to explain what the audience should notice. For a full-bleed crop of any picture, set the image block's fit to cover; to never crop, contain.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/image.svg"
           },
           "design": {
-            "imageFit": "contain"
+            "imageFit": "auto"
           }
         },
         "image-beside": {
@@ -2167,7 +2288,8 @@
                   "name": "media",
                   "accepts": [
                     "image",
-                    "video"
+                    "video",
+                    "diagram"
                   ],
                   "role": "media",
                   "flow": "none",
@@ -2239,7 +2361,8 @@
               "name": "charts",
               "accepts": [
                 "chart",
-                "group"
+                "group",
+                "diagram"
               ],
               "role": "primary",
               "flow": "grid"
@@ -2277,7 +2400,8 @@
                   "name": "chart",
                   "size": 3,
                   "accepts": [
-                    "chart"
+                    "chart",
+                    "diagram"
                   ],
                   "role": "primary",
                   "flow": "none"
@@ -2465,7 +2589,8 @@
               "size": 2,
               "accepts": [
                 "image",
-                "video"
+                "video",
+                "diagram"
               ],
               "role": "media",
               "flow": "none",
@@ -2742,6 +2867,111 @@
           "description": "Show 1 to 8 steps that follow one another from top to bottom, each a box with an arrow to the next, beside the title. Write one short list entry per step, in order.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/vertical-flow.svg"
+          }
+        },
+        "inverted-pyramid": {
+          "name": "Inverted pyramid",
+          "summary": "Levels that narrow to a point, with the widest first.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "levels",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "pyramid",
+              "pyramidDirection": "down"
+            }
+          ],
+          "description": "Show 1 to 8 levels narrowing from the broad top (the many, the starting pool) to the tip below (the selected few, the result). Write one short list entry per level in top-to-bottom order. Export uses editable native shapes; live Inverted Pyramid SmartArt is not yet qualified.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/inverted-pyramid.svg"
+          }
+        },
+        "org-chart": {
+          "name": "Organization chart",
+          "summary": "A single-root team structure, with reporting lines and child depths.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "people",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "org-chart"
+            }
+          ],
+          "description": "Show one organization or reporting tree with 1 to 8 short entries. Use one list: the first entry is the level-zero root and each child sets its zero-based level. Keep parents before their children, without skipping a depth. Assistants and separate roots need a diagram instead; unsupported trees retain the complete list with a finding.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/org-chart.svg"
+          }
+        },
+        "hierarchy": {
+          "name": "Hierarchy",
+          "summary": "A single-root hierarchy drawn as connected pairs of rounded cards.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "nodes",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "hierarchy"
+            }
+          ],
+          "description": "Show a classification or work breakdown with 1 to 8 short entries. Use one list: the first entry is the level-zero root and each child sets its zero-based level. Keep parents before children and do not skip a depth. Unsupported forests, jumps, descriptions or long labels retain the complete list with a finding instead of changing relationships or shrinking text.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/hierarchy.svg"
+          }
+        },
+        "venn": {
+          "name": "Venn",
+          "summary": "One to seven overlapping sets, with one short label per set.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "sets",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "venn"
+            }
+          ],
+          "description": "Show overlap among 1 to 7 sets using one flat list of short labels. The list order identifies the sets; no overlap values are implied. One to four sets have labels inside the circles, and five to seven beside them. Long labels, nested entries or unsupported counts retain the complete list with a finding instead of shrinking the text.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/venn.svg"
           }
         }
       }

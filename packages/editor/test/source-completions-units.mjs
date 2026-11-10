@@ -80,15 +80,26 @@ for (const { owner, key, node } of properties) {
   if (key === 'dataset' && !refName(node)) assert.fail(`${owner}.dataset is a dataset id written inline: give it the DatasetId definition`);
 }
 
+// Resource payload wrappers still offer asset references when their schema gains new object fields.
+// Derive these from the actual scalar asset examples and object src form, not their description wording.
+for (const [name, definition] of Object.entries(defs)) {
+  const variants = definition.oneOf ?? definition.anyOf ?? [definition];
+  const scalarAsset = variants.some(variant => variant.type === 'string' && variant.examples?.some(example => typeof example === 'string' && example.startsWith('asset:')));
+  const sourceObject = variants.some(variant => variant.type === 'object' && variant.properties?.src);
+  if (scalarAsset && sourceObject) assert.ok(REFERENCE_RULES.find(rule => rule.kind === 'asset').definitions.includes(name), `${name}: resource payload wrapper remains an asset reference`);
+}
+
 // ---- which fields are references -------------------------------------------------------------------------------------------------------
 const SITES = [
   ['asset', ['slides', 0, 'image'], { slides: [{ image: '' }] }],
   ['asset', ['slides', 0, 'image', 'src'], { slides: [{ image: { src: '' } }] }],
+  ['asset', ['slides', 0, 'blocks', 0, 'image'], { slides: [{ blocks: [{ image: '' }] }] }],
+  ['asset', ['slides', 0, 'blocks', 0, 'image', 'src'], { slides: [{ blocks: [{ image: { src: '', callouts: [{text: 'Authored panel'}] } }] }] }],
   ['asset', ['slides', 0, 'video'], { slides: [{ video: '' }] }],
   ['asset', ['slides', 0, 'quote', 'photo'], { slides: [{ quote: { text: 'a', photo: '' } }] }],
   ['asset', ['design', 'watermark'], { design: { watermark: '' } }],
   ['asset', ['design', 'watermark', 'src'], { design: { watermark: { src: '' } } }],
-  ['asset', ['design', 'header', 'left', 'image'], { design: { header: { left: { image: '' } } } }],
+  ['asset', ['design', 'header', 'start', 'image'], { design: { header: { start: { image: '' } } } }],
   ['asset', ['organization', 'logo'], { organization: { id: 'a', name: 'A', logo: '' } }],
   ['asset', ['assets', 'logo', 'src'], { assets: { logo: { src: '' } } }],
   ['asset', ['speaker', 'photo'], { speaker: { name: 'A', photo: '' } }],
@@ -115,6 +126,8 @@ const SITES = [
   // Not references: free text, other ids, lists as a whole.
   [null, ['slides', 0, 'title'], { slides: [{ title: '' }] }],
   [null, ['slides', 0, 'notes'], { slides: [{ notes: '' }] }],
+  [null, ['slides', 0, 'image', 'callouts', 0, 'text'], { slides: [{ image: {src: 'asset:logo', callouts: [{text: ''}]} }] }],
+  [null, ['slides', 0, 'image', 'alt'], { slides: [{ image: {src: 'asset:logo', alt: ''} }] }],
   [null, ['slides', 0, 'id'], { slides: [{ id: '' }] }],
   [null, ['slides', 0, 'tag'], { slides: [{ tag: '' }] }],
   [null, ['slides', 0, 'chart', 'type'], { slides: [{ chart: { type: '' } }] }],
@@ -212,6 +225,28 @@ for (const [doc, has] of MD_LISTS) {
   assert.ok(got, doc);
   for (const label of has) assert.ok(got.includes(label), `${doc}: ${label} in ${got.slice(0, 10)}`);
 }
+// Current image payload wrappers: shorthand and object src complete real assets/image variables in every format.
+{
+  const jsonHead = '"assets":{"logo":"a.png"},"variables":{"hero":{"type":"image","value":"a.png"},"plain":{"type":"text","value":"words"}}';
+  const yamlHead = 'assets:\n  logo: a.png\nvariables:\n  hero: {type: image, value: a.png}\n  plain: {type: text, value: words}\n';
+  const cases = [
+    ['json', `{${jsonHead},"slides":[{"blocks":[{"image":"|"}]}]}`],
+    ['json', `{${jsonHead},"slides":[{"image":{"src":"|","callouts":[{"text":"Keep me"}]}}]}`],
+    ['yaml', yamlHead + 'slides:\n  - blocks:\n      - image: |'],
+    ['yaml', yamlHead + 'slides:\n  - image:\n      src: |\n      callouts: [{text: Keep me}]'],
+    ['md', '---\n' + yamlHead + '---\n\n# Image\n\n\x60\x60\x60opf-block\nimage: |\n\x60\x60\x60\n'],
+    ['md', '---\n' + yamlHead + '---\n\n# Image\n\n\x60\x60\x60opf-slide\nimage:\n  src: |\n  callouts: [{text: Keep me}]\n\x60\x60\x60\n'],
+  ];
+  for (const [format, doc] of cases) {
+    const got = labels(doc, format);
+    assert.ok(got?.includes('asset:logo'), `${format}: image payload offers a real asset`);
+    assert.ok(got.includes('var:hero'), `${format}: image payload offers an image variable`);
+    assert.ok(!got.includes('var:plain'), `${format}: image payload excludes a text variable`);
+  }
+  assert.equal(labels(`{${jsonHead},"slides":[{"image":{"src":"asset:logo","callouts":[{"text":"|"}]}}]}`), null, 'callout text remains ordinary authored text');
+  assert.equal(labels(yamlHead + 'slides:\n  - image:\n      src: asset:logo\n      alt: |', 'yaml'), null, 'image alt text remains ordinary authored text');
+}
+
 // {{ completes the name of a variable and replaces only what was typed after the braces.
 {
   const { text, at } = caret('{"variables":{"brand":{"type":"text","value":"A"},"year":{"type":"number","value":1}},"slides":[{"title":"Hi {{br|"}]}');
@@ -258,7 +293,7 @@ assert.equal(unloadedFooter({ catalogs: { b: { source: 'x' }, a: { source: 'y' }
   const result = completionResult(EditorState.create({ doc: text }), at, { explicit: true, catalogs, format: 'json' });
   assert.ok(result.options.some((option) => option.label === 'acme:bespoke'), 'the embedded record is still offered');
   assert.ok(result.options.every((option) => option.opfFooter === 'Records from catalog acme are not loaded'), 'every option carries the line');
-  const other = completionResult(EditorState.create({ doc: '{"slides":[{"layout":"x"}],"design":{"titleAlignment":"left"}}' }), 58, { explicit: true, catalogs, format: 'json' });
+  const other = completionResult(EditorState.create({ doc: '{"slides":[{"layout":"x"}],"design":{"titleAlignment":"start"}}' }), 58, { explicit: true, catalogs, format: 'json' });
   assert.ok(!other || other.options.every((option) => !option.opfFooter), 'no line for a field that is not a catalog reference');
 }
 

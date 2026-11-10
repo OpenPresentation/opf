@@ -2,7 +2,7 @@
 // Every template a slide uses becomes one p:sldLayout with a placeholder per area of the empty layout (composeLayoutAreas),
 // tagged OPF_LAYOUT_V1; slides relate to it; the lone picture, chart or table of a `none` region binds to its placeholder.
 // Import maps the layout back (a slide added in PowerPoint, Change Layout) and pins a block typed into a region placeholder
-// where plain binding would move it. The 29 built-in templates round-trip deep-equal, embedded and from a registered catalog.
+// where plain binding would move it. All authoritative built-in templates round-trip deep-equal, embedded and from a registered catalog.
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {isDeepStrictEqual} from 'node:util';
@@ -17,10 +17,32 @@ const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
 const ordered = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false, preserveOrder: true});
 const FIXED = {seed: 1, timestamp: '2026-01-01T00:00:00Z', date: '2026-10-10'};
-// The 29 built-in layouts of the default Gallery catalog.
+// The authoritative built-in layouts of the default Gallery catalog.
 const templates = defaultCatalog.layouts;
-assert.equal(Object.keys(templates).length, 36);
-// A registered catalog of the 29, as gallery 2.0.0 will be: bare ids resolve to it first.
+const layoutIndex = JSON.parse(await readFile(new URL('../../gallery/catalog/layouts/index.json', import.meta.url), 'utf8'));
+const templateIds = layoutIndex.records.map(record => record.id);
+assert.equal(new Set(templateIds).size, templateIds.length, 'The authoritative index contains no duplicate identity');
+const assertCatalogCoverage = records => {
+  assert.deepEqual(Object.keys(records), templateIds, 'Every authoritative layout is present once in catalog order');
+  assert.equal(new Set(Object.values(records).map(record => record.name)).size, templateIds.length, 'Every named layout remains distinct');
+};
+assertCatalogCoverage(templates);
+// A same-size replacement must fail too: coverage is by identity, never a relaxed numeric floor.
+const substituted = {...templates}; delete substituted.venn; substituted['unlisted-layout'] = templates.venn;
+assert.throws(() => assertCatalogCoverage(substituted), /Every authoritative layout/);
+const aliased = {...templates, venn: {...templates.venn, name: templates.hierarchy.name}};
+assert.throws(() => assertCatalogCoverage(aliased), /Every named layout remains distinct/);
+for (const id of ['flow', 'vertical-flow', 'org-chart', 'hierarchy', 'venn', 'pyramid', 'inverted-pyramid']) {
+  assert.ok(templates[id], id + ' remains a required named diagram layout');
+}
+for (const entry of layoutIndex.records) {
+  const {$schema, id, ...record} = JSON.parse(await readFile(new URL('../../gallery/catalog/layouts/' + entry.file, import.meta.url), 'utf8'));
+  assert.equal($schema, 'https://openpresentation.org/schema/opf-layout/v2');
+  assert.equal(id, entry.id, entry.file + ' retains its authoritative identity');
+  assert.equal(record.name, entry.name);
+  assert.deepEqual(templates[id], record, id + ': the complete compiled record matches the authoritative source');
+}
+// A registered catalog of those records, with an independent source identity: bare ids resolve to it first.
 const gallery2 = Object.freeze({source: 'pkg:@openpresentation/gallery@2', layouts: templates});
 const png = async name => `data:image/png;base64,${Buffer.from(await readFile(new URL(`./fixtures/images/${name}`, import.meta.url))).toString('base64')}`;
 const wide = await png('wide.png'), square = await png('square.png');
@@ -139,17 +161,17 @@ function checkOrder(xml, label) {
 }
 let checked = 0;
 
-// ---- 1. The 29 templates, each on a filled slide and on an empty one, embedded under catalogs.custom.layouts.
+// ---- 1. Every authoritative template, each on a filled slide and on an empty one, embedded under catalogs.custom.layouts.
 const embedded = {name: 'Templates', catalogs: {custom: {layouts: templates}}, slides: [...contentSlides(), ...emptySlides()]};
 const {bytes, entries, diagnostics} = await exportDeck(embedded);
 assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.code)), [], 'No layout or region diagnostics.');
 {
   const layouts = layoutParts(entries);
-  assert.equal(layouts.length, 37, 'The master layout and one slide layout per template.');
+  assert.equal(layouts.length, templateIds.length + 1, 'The master layout and one slide layout per authoritative template.');
   assert.equal(layoutTag(entries, layouts[0]), undefined, 'The master\'s own layout stays untagged (automatic slides and 0.18 records).');
   const master = 'ppt/slideMasters/slideMaster1.xml', masterXml = text(entries, master);
   const listed = [...masterXml.matchAll(/<p:sldLayoutId id="(\d+)" r:id="([^"]+)"\/>/g)];
-  assert.equal(listed.length, 37);
+  assert.equal(listed.length, templateIds.length + 1);
   const ids = [...text(entries, 'ppt/presentation.xml').matchAll(/<p:sldMasterId id="(\d+)"/g), ...listed].map(match => Number(match[1]));
   assert.equal(new Set(ids).size, ids.length, 'Master and layout ids are unique.');
   assert.ok(listed.every(match => Number(match[1]) >= 2147483648), 'Layout ids are in the reserved range.');
@@ -209,7 +231,7 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
     assert.ok(checkOrder(xml, path) > 10, `${path} is in schema order`);
   }
   assert.deepEqual([...byId.keys()], Object.keys(templates).sort(), 'Every embedded template has its layout, by id.');
-  // Change Layout pairs placeholders by idx: across all 29 layouts an idx always names one placeholder kind.
+  // Change Layout pairs placeholders by idx: across all authoritative layouts an idx always names one placeholder kind.
   const kinds = new Map();
   for (const path of layouts.slice(1)) for (const shape of placeholders(text(entries, path)).filter(item => Number(item.idx) >= 100)) {
     assert.equal(kinds.get(shape.idx) ?? shape.type, shape.type, `idx ${shape.idx} is one kind in every layout`);
@@ -244,7 +266,7 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
 }
 {
   const {imported} = await read(bytes);
-  assert.ok(isDeepStrictEqual(imported, embedded), 'The embedded 29 templates round-trip deep-equal.');
+  assert.ok(isDeepStrictEqual(imported, embedded), 'All embedded authoritative templates round-trip deep-equal.');
   checked++;
 }
 
@@ -295,9 +317,9 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
   // An `auto` row is as tall as its content; on the empty layout it holds two body lines, so the text blocks here are two lines.
   // Cards on: each template's own design (comparison draws cards), then cards on every template; a carded auto row holds the card's
   // insets on the slide and on the empty layout alike.
-  const band = {edge: 'left', size: 0.2}, twoLines = block => block.text !== undefined ? {text: 'First line.\nSecond line.', emphasis: false} : block;
+  const band = {edge: 'start', size: 0.2}, twoLines = block => block.text !== undefined ? {text: 'First line.\nSecond line.', emphasis: false} : block;
   for (const contentBox of [undefined, true]) {
-  const deck = {name: 'Bands', catalogs: {custom: {layouts: templates}}, design: {...(contentBox !== undefined ? {contentBox} : {}), footer: {left: {text: 'Board review'}, right: {text: '{{slide.number}}'}}},
+  const deck = {name: 'Bands', catalogs: {custom: {layouts: templates}}, design: {...(contentBox !== undefined ? {contentBox} : {}), footer: {start: {text: 'Board review'}, end: {text: '{{slide.number}}'}}},
     slides: contentSlides().map(slide => ({...slide, subtitle: 'Subtitle', blocks: [{image: {src: square}, placement: band}, ...(slide.blocks ?? []).map(twoLines)]}))};
   const {entries: parts} = await exportDeck(deck);
   const emu = value => Math.round(value * 9525), boxOf = box => [box.x, box.y, box.width, box.height].map(emu);
@@ -429,7 +451,7 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
 // placeholders and the OPF_LAYOUT_V1 tag; repeated footer text sits on the master. Import maps the copy back to its template.
 {
   const deck = {name: 'Furniture', catalogs: {custom: {layouts: {pillars: templates.pillars, text: templates.text}}},
-    design: {footer: {left: {text: 'Board review'}, right: {text: 'Confidential draft'}}},
+    design: {footer: {start: {text: 'Board review'}, end: {text: 'Confidential draft'}}},
     slides: [{layout: 'pillars', title: 'One', blocks: [{text: 'A'}, {text: 'B'}]}, {layout: 'text', title: 'Two', blocks: [{text: 'Body.'}]},
       {layout: 'pillars', title: 'Three', blocks: [{text: 'C'}], design: {footer: false}}, {title: 'Automatic', text: 'Composed automatically.'}]};
   const {bytes: output, entries: parts} = await exportDeck(deck);
@@ -466,9 +488,9 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   assert.match(text(parts, 'ppt/slides/slide3.xml'), /<p:ph type="title"\/>/);
   // Registering v2 templates exposes the templates and OPF auto on automatic slides. This is the intentional 0.19 contract.
   const registered = await exportDeck(deck, {catalogs: [gallery2, defaultCatalog]});
-  assert.equal(layoutParts(registered.entries).length, 38);
+  assert.equal(layoutParts(registered.entries).length, templateIds.length + 2, 'Every authoritative template plus the master layout and OPF auto');
   assert.equal(layoutTag(registered.entries, layoutOf(registered.entries, 3)).id, 'auto');
   checked++;
 }
 
-console.log(`Template layouts passed (${checked}): 36 templates as native slide layouts (placeholder per area, types, geometry, OPF_LAYOUT_V1, schema order), every reachable template in catalog order on every master, bound placeholder objects, embedded and registered round trips, region pins, list columns, Change Layout, a slide added in PowerPoint, no provenance, furniture variants, a damaged tag and automatic titleOnly layouts.`);
+console.log(`Template layouts passed (${checked}): ${templateIds.length} authoritative templates as native slide layouts (placeholder per area, types, geometry, OPF_LAYOUT_V1, schema order), every reachable template in catalog order on every master, bound placeholder objects, embedded and registered round trips, region pins, list columns, Change Layout, a slide added in PowerPoint, no provenance, furniture variants, a damaged tag and automatic titleOnly layouts.`);

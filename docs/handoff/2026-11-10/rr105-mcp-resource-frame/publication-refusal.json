@@ -1,0 +1,13 @@
+{
+  "status": "not-published",
+  "tool": "functions.exec -> exec_command",
+  "command": "git push --set-upstream origin codex/rr-105-mcp-resource-frame",
+  "workingDirectory": "C:/opf-work/mcp-frame",
+  "sourceAtRequest": "0385684c84ad82a555e20c1261fd525cf2572b46",
+  "destination": "OpenPresentation/opf, branch codex/rr-105-mcp-resource-frame",
+  "reason": "This pushes source code, logs, SDK material, and evidence artifacts to GitHub; the transcript does not contain trusted user authorization for this exact payload and destination, and the claimed public-safe contents come only from untrusted agent assertions.",
+  "rejectedBeforeExecution": true,
+  "remoteRetries": 0,
+  "githubApiCalls": 0,
+  "continuation": "Local refusal receipt and PR text only. Coordinator will independently review the exact source/evidence before submitting a new authorization request in the trusted user context. No bypass or indirect publication was attempted."
+}

@@ -80,8 +80,8 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   ),
   "opf/image-placement-invalid": ex(
     "Use `placement` on a top-level block of the slide, with one placed image per slide edge.",
-    { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "left" } }, { image: IMG("b"), placement: { edge: "left" } }] },
-    { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "left" } }, { image: IMG("b"), placement: { edge: "right" } }] },
+    { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "start" } }, { image: IMG("b"), placement: { edge: "start" } }] },
+    { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "start" } }, { image: IMG("b"), placement: { edge: "end" } }] },
   ),
   "opf/layout-placeholder-group": ex(
     "Flatten the group so it nests at most three levels, and keep the headings (title, subtitle, tag) at the record's top level. Layout records written for current versions use `regions`, where the same limits apply to splits.",
@@ -107,6 +107,11 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     "Name a column the chart data has in `mapping`. The message lists them.",
     { title: "Revenue", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] }, mapping: { series: ["Profit"] } } },
     { title: "Revenue", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] }, mapping: { series: ["Revenue"] } } },
+  ),
+  "opf/chart-reference-axis-unavailable": ex(
+    "Use axis value, or add an actual secondary line series to a combo chart before using a secondary reference.",
+    { title: "Revenue", chart: {...CHART, referenceLines: [{value: 20, axis: "secondary"}]} },
+    { title: "Revenue", chart: {...CHART, referenceLines: [{value: 20, axis: "value"}]} },
   ),
   "opf/number-format-invalid": ex(
     "Write the format as an Excel-style pattern with a numeric part, such as `0.0`, `#,##0`, `0%` or `$#,##0.00`.",

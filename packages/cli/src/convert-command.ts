@@ -5,7 +5,7 @@
 // format is involved; any other use is a usage error (exit 2). Drawing and PowerPoint run core's export engine
 // (`@openpresentation/opf/internal/engine`, the engine of `convert` of `@openpresentation/opf`) through the optional peers.
 import path from "node:path";
-import { type ConvertOptions, type ConvertedFile, type Finding, type FindingSeverity, type Presentation } from "@openpresentation/opf";
+import type { ConvertOptions, ConvertedFile, Finding, FindingSeverity, Presentation } from "@openpresentation/opf";
 import { fromYaml } from "@openpresentation/opf/yaml";
 import { type ConversionPlan, OPFApiError, exportFormatOf, importPresentation, loadPptx, planConversion, writePlanned } from "@openpresentation/opf/internal/engine";
 import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
@@ -343,7 +343,7 @@ async function exportDeck(
 	const wanted = MEDIA[target.zip ? "zip" : target.format];
 	for (const file of plan.files) if (file.type !== wanted) throw new CliError(`Internal error: ${file.path ?? file.name} would be written as ${file.type}, not ${wanted}. Nothing was written.`, "format-mismatch", 2);
 	// The located findings of the check replace the engine's unlocated copy of them; the engines' own findings follow.
-	const findings = located ? [...located, ...plan.findings.filter((found) => !/^(opf|yaml|markdown)\//.test(found.ruleId))] : plan.findings;
+	const findings = located ? [...located, ...plan.findings.filter((found) => !located.some((original) => original.ruleId === found.ruleId && original.path === found.path && original.message === found.message))] : plan.findings;
 	const factsOf = (file: ConvertedFile) => ({
 		...(file.slide === undefined ? {} : { slide: file.slide, id: file.id }),
 		...(file.width === undefined || file.height === undefined ? {} : { width: file.width, height: file.height }),

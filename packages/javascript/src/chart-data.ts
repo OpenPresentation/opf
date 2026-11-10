@@ -43,6 +43,7 @@ export type DataDiagnosticCode =
   | 'chart-highlight-unknown-name'
   | 'chart-highlight-adapted'
   | 'chart-series-dropped'
+  | 'chart-reference-axis-unavailable'
   | 'table-highlight-unknown-name'
   | 'number-format-invalid';
 
@@ -416,7 +417,7 @@ function visitDataPayloads(document: Record<string, any>, visit: (payload: Recor
   for (const slide of document.slides) {
     if (!record(slide)) continue;
     walk(slide, 0, []);
-    for (const [key, value] of Object.entries(slide)) if (record(value) && /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key)) walk(value, 1, [slide]);
+    for (const [key, value] of Object.entries(slide)) if (record(value) && /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key)) walk(value, 1, [slide]);
   }
 }
 
@@ -592,6 +593,9 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
       ...secondaryLines.map(() => ({ role: 'line' as const, axis: 'secondary' as const })),
     ];
   }
+  if (record(chart) && Array.isArray(chart.referenceLines)) chart.referenceLines.forEach((entry, index) => {
+    if (record(entry) && entry.axis === 'secondary' && !combo?.some(series => series.axis === 'secondary')) diagnostics.push({code:'chart-reference-axis-unavailable',severity:'error',path:at(base,'referenceLines',index,'axis'),message:'A secondary reference requires a combo chart with a plotted line series on its secondary value axis.'});
+  });
   const order = [category, ...(x === undefined ? [] : [x]), ...series];
   if (!rows.length) return fail('no-rows', 'The chart data has no rows.');
   // A lone column (no category column) is the chart's values, plotted against row numbers or binned: it is read as numbers too.

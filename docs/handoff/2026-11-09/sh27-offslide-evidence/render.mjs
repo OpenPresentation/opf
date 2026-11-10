@@ -1,0 +1,18 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {toSvg,toPng} from '../../../../packages/render/dist/index.js';
+import {loadFonts} from '../../../../packages/render/dist/fonts-node.js';
+import {toPptx} from '../../../../packages/pptx/dist/index.js';
+import {gallery} from '../../../../packages/gallery/dist/index.js';
+const target=new URL('.',import.meta.url);
+const source={name:'Intentional slide-edge bleed',language:'en-US',design:{theme:'classic',fontScheme:'roboto',colorScheme:'cool-horizon',background:'#080808'},slides:[{title:'Shapes can cross the slide edge',text:'The ellipse begins 10% of the slide height above the top edge.',shapes:[{id:'glow',shape:'ellipse',x:0.2692,y:-0.1,width:0.42,height:0.75,fill:{color:'accent2',darken:0.2},stroke:'none',layer:'back',decorative:true,opacity:0.45,softEdge:60},{id:'left-bleed',shape:'ellipse',x:-0.15,y:0.6,width:0.3,height:0.5,fill:'accent1',stroke:'none',layer:'back',decorative:true},{id:'bottom-bleed',shape:'rect',x:0.8,y:0.9,width:0.3,height:0.2,fill:'accent2',stroke:'none',layer:'back',decorative:true}]}]};
+const fonts=await loadFonts({pack:'base'}),diagnostics=[],options={catalogs:[gallery],fonts,onDiagnostic:d=>diagnostics.push(d)};
+const svg=toSvg(source,1,options),png=await toPng(svg,{fonts}),pptx=await toPptx(source,options);
+writeFileSync(new URL('source.opf.json',target),JSON.stringify(source,null,2)+'\n');
+writeFileSync(new URL('slide.svg',target),svg);
+writeFileSync(new URL('slide.png',target),png);
+writeFileSync(new URL('slide.pptx',target),pptx);
+const files=['source.opf.json','slide.svg','slide.png','slide.pptx'];
+const manifest={createdAt:new Date().toISOString(),scope:'Local SVG/PNG and byte-level PPTX only; actual PowerPoint visual qualification is owed.',diagnostics,files:files.map(path=>{const bytes=readFileSync(new URL(path,target));return{path,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};})};
+writeFileSync(new URL('manifest.json',target),JSON.stringify(manifest,null,2)+'\n');
+console.log(JSON.stringify({status:'rendered',files:manifest.files,diagnostics}));

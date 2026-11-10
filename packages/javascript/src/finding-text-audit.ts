@@ -403,7 +403,7 @@ const centeredBody: RuleText = (finding) => {
   const blocks = measuredNumber(finding, "blocks") ?? 1;
   return {
     message: `A centered ${what}${onSlide(finding)} runs ${lines} line${lines === 1 ? "" : "s"} (${characters} characters)${blocks > 1 ? `, with ${blocks - 1} more like it` : ""}; each line starts at a different place, which is harder to read.`,
-    next: `set ${code('contentAlignment: "left"')} in the slide's design, or cut it to a line or two.`,
+    next: `set ${code('contentAlignment: "start"')} in the slide's design, or cut it to a line or two.`,
   };
 };
 
@@ -515,6 +515,18 @@ const codeHighlightRangeReversed: RuleText = (finding) => {
   return {
     message: `Highlight ${found[1]}–${found[2]} ends before it starts, so it marks no line.`,
     next: `write [${found[3]}, ${found[4]}].`,
+  };
+};
+
+const variableGroupOmitted: RuleText = (finding) => {
+  const ids = [...finding.message.matchAll(/'([a-z][a-z0-9-]*)'/g)].map((found) => found[1] as string);
+  const idParam = isRecord(finding.validation?.params) ? finding.validation.params.id : undefined;
+  const names = [...new Set(ids.length ? ids : typeof idParam === "string" ? [idParam] : [])];
+  if (!names.length) return undefined;
+  const list = names.length === 1 ? code(names[0] as string) : `${names.slice(0, -1).map((id) => code(id)).join(", ")} and ${code(names.at(-1) as string)}`;
+  return {
+    message: `A group${onSlide(finding)} is left out when ${list} ${names.length === 1 ? "has" : "have"} no value, with its pictures, cards and other text.`,
+    next: `give ${names.length === 1 ? "it" : "one of them"} a value to draw the group, or move what should always show out of the group.`,
   };
 };
 
@@ -644,6 +656,7 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/code-highlight-out-of-range": codeHighlightOutOfRange,
   "opf/code-highlight-range-reversed": codeHighlightRangeReversed,
   "opf/variable-builtin-missing": variableBuiltinMissing,
+  "opf/variable-group-omitted": variableGroupOmitted,
   "opf/duration-outside-narrative": durationOutsideNarrative,
   "opf/narrative-duration-range": narrativeDurationRange,
   "opf/placeholder-text": placeholderText,
