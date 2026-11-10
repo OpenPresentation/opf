@@ -3474,5 +3474,16 @@
   "nativeAcceptance": false,
   "registryAcceptance": false,
   "priorNativeFindingsImmutable": true,
-  "payloadReuseScope": "373 unchanged files reuse exact immutable eb362 archive member/blob/SHA identities. Thirteen new/changed files (including10fourth-case payloads) are stored alongside every new raw generation, identity and four pure admission result."
+  "payloadReuseScope": "373 unchanged files reuse exact immutable eb362 archive member/blob/SHA identities. Thirteen new/changed files (including10fourth-case payloads) are stored alongside every new raw generation, identity and four pure admission result.",
+  "metadataChecks": {
+    "records": 15,
+    "bytes": 15549,
+    "sha256": "f70d0c58434416ceaf633bbc570dd81749a9f9990e0ad42af8104fc51ef7ca51",
+    "rawBytes": 35061,
+    "testedHead": "6a0848cb0d41a563e69d6639c418054272fa562b",
+    "base": "db64054523051cf4da676cbbb874c728fd3ebf81",
+    "originalStatus": 1,
+    "recoveredTextStatus": 0,
+    "aggregateRerun": false
+  }
 }
