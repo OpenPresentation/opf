@@ -80,7 +80,7 @@ test("nonunit source canvas uses exporter multiplication order at an observable 
   wanted.slides[0].chart.referenceLines[0].stroke.width=width;
   for(const [index,slide] of wanted.slides.entries()){
     const actual=current.document.slides[index].chart??current.document.slides[index].blocks.find(b=>b.chart).chart;
-    for(const [reference,line] of slide.chart.referenceLines.entries())
+    for(const [reference,line] of (slide.chart.referenceLines??[]).entries())
       actual.referenceLines[reference].stroke.width=Math.min(64,Math.round(((line.stroke?.width??4/3)*scale)*9525)/(9525*scale));
   }
   assert.equal(charts(current.document).referenceLines[0].stroke.width,3578/(9525*scale));
