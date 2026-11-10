@@ -1,0 +1,9 @@
+{
+  "kind": "EVIDENCE_PACKAGING_PATH_REFUSAL",
+  "initial": "seal attempted root01-stdout.log; actual coordinator names root01.stdout.log",
+  "dependent": "verifier refused missing not-yet-created receipt",
+  "sourceOrDriverChanged": false,
+  "formalChildrenRerun": 0,
+  "recovery": "Use the exact existing coordinator log paths; preserve the genuine completed trial unchanged.",
+  "rawLogCaptured": false
+}

@@ -1,0 +1,821 @@
+{
+  "kind": "DESCRIPTIVE_TWO_REPETITION_SCREEN",
+  "children": 12,
+  "svgChecks": 1200,
+  "performanceResult": true,
+  "universalImprovement": false,
+  "candidateFolded": false,
+  "stressReplayEligibility": "UNKNOWN_NOT_OBSERVED",
+  "sizes": [
+    {
+      "size": 16,
+      "repetitionsPerVariant": 2,
+      "values": {
+        "preparationMs": {
+          "control": [
+            1087.039,
+            1084.6311
+          ],
+          "candidate": [
+            1053.7382,
+            1051.4787000000001
+          ],
+          "controlMean": 1085.8350500000001,
+          "candidateMean": 1052.6084500000002,
+          "candidateChangePercent": -3.0600043717505687
+        },
+        "firstMs": {
+          "control": [
+            1015.1918000000001,
+            974.6931
+          ],
+          "candidate": [
+            1002.6420000000003,
+            977.4634999999998
+          ],
+          "controlMean": 994.94245,
+          "candidateMean": 990.0527500000001,
+          "candidateChangePercent": -0.49145556107289545
+        },
+        "continuousStartupMs": {
+          "control": [
+            2102.3745,
+            2059.4557999999997
+          ],
+          "candidate": [
+            2056.5240000000003,
+            2029.0976999999998
+          ],
+          "controlMean": 2080.91515,
+          "candidateMean": 2042.81085,
+          "candidateChangePercent": -1.8311318460053405
+        },
+        "prepPlusFirstMs": {
+          "control": [
+            2102.2308000000003,
+            2059.3242
+          ],
+          "candidate": [
+            2056.3802000000005,
+            2028.9422
+          ],
+          "controlMean": 2080.7775,
+          "candidateMean": 2042.6612000000002,
+          "candidateChangePercent": -1.8318296886620455
+        },
+        "preparationCpuMs": {
+          "control": [
+            1563,
+            1563
+          ],
+          "candidate": [
+            1625,
+            1640
+          ],
+          "controlMean": 1563,
+          "candidateMean": 1632.5,
+          "candidateChangePercent": 4.446577095329496
+        },
+        "firstCpuMs": {
+          "control": [
+            1344,
+            1312
+          ],
+          "candidate": [
+            1297,
+            1298
+          ],
+          "controlMean": 1328,
+          "candidateMean": 1297.5,
+          "candidateChangePercent": -2.2966867469879526
+        },
+        "startupCpuMs": {
+          "control": [
+            2907,
+            2875
+          ],
+          "candidate": [
+            2922,
+            2938
+          ],
+          "controlMean": 2891,
+          "candidateMean": 2930,
+          "candidateChangePercent": 1.349014181943975
+        },
+        "warmMs": {
+          "control": [
+            858.0636999999999,
+            838.5973000000001
+          ],
+          "candidate": [
+            843.7180000000003,
+            833.6748499999999
+          ],
+          "controlMean": 848.3305,
+          "candidateMean": 838.6964250000001,
+          "candidateChangePercent": -1.1356511406816039
+        },
+        "warmCpuMs": {
+          "control": [
+            968.5,
+            961
+          ],
+          "candidate": [
+            1039,
+            976.5
+          ],
+          "controlMean": 964.75,
+          "candidateMean": 1007.75,
+          "candidateChangePercent": 4.45711324177247
+        },
+        "firstHwmMiB": {
+          "control": [
+            295.92578125,
+            300.82421875
+          ],
+          "candidate": [
+            295.26953125,
+            297.4921875
+          ],
+          "controlMean": 298.375,
+          "candidateMean": 296.380859375,
+          "candidateChangePercent": -0.6683336824465869
+        },
+        "finalHwmMiB": {
+          "control": [
+            305.19921875,
+            311.48046875
+          ],
+          "candidate": [
+            305.33984375,
+            308.25390625
+          ],
+          "controlMean": 308.33984375,
+          "candidateMean": 306.796875,
+          "candidateChangePercent": -0.5004117311712131
+        },
+        "postDropHeapMiB": {
+          "control": [
+            54.103981018066406,
+            53.995765686035156
+          ],
+          "candidate": [
+            54.015716552734375,
+            54.04374694824219
+          ],
+          "controlMean": 54.04987335205078,
+          "candidateMean": 54.02973175048828,
+          "candidateChangePercent": -0.037264845065054786
+        }
+      },
+      "controlRaw": [
+        {
+          "order": 1,
+          "size": 16,
+          "variant": "control",
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "hashesEquivalent": true,
+          "preparationMs": 1087.039,
+          "preparationCpuMs": 1563,
+          "firstMs": 1015.1918000000001,
+          "warmMs": [
+            844.0920000000001,
+            872.0353999999998
+          ],
+          "warmCpuMs": [
+            1000,
+            937
+          ],
+          "prepPlusFirstMs": 2102.2308000000003,
+          "continuousPreparationToFirstMs": 2102.3745,
+          "prepPlusFirstCpuMs": 2907,
+          "firstMaxRssBytes": 310300672,
+          "finalRenderMaxRssBytes": 320024576,
+          "postDropHeapUsed": 56732136
+        },
+        {
+          "order": 12,
+          "size": 16,
+          "variant": "control",
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "hashesEquivalent": true,
+          "preparationMs": 1084.6311,
+          "preparationCpuMs": 1563,
+          "firstMs": 974.6931,
+          "warmMs": [
+            814.9733000000001,
+            862.2213000000002
+          ],
+          "warmCpuMs": [
+            1000,
+            922
+          ],
+          "prepPlusFirstMs": 2059.3242,
+          "continuousPreparationToFirstMs": 2059.4557999999997,
+          "prepPlusFirstCpuMs": 2875,
+          "firstMaxRssBytes": 315437056,
+          "finalRenderMaxRssBytes": 326610944,
+          "postDropHeapUsed": 56618664
+        }
+      ],
+      "candidateRaw": [
+        {
+          "order": 2,
+          "size": 16,
+          "variant": "candidate",
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "hashesEquivalent": true,
+          "preparationMs": 1053.7382,
+          "preparationCpuMs": 1625,
+          "firstMs": 1002.6420000000003,
+          "warmMs": [
+            820.8967000000002,
+            866.5393000000004
+          ],
+          "warmCpuMs": [
+            1031,
+            1047
+          ],
+          "prepPlusFirstMs": 2056.3802000000005,
+          "continuousPreparationToFirstMs": 2056.5240000000003,
+          "prepPlusFirstCpuMs": 2922,
+          "firstMaxRssBytes": 309612544,
+          "finalRenderMaxRssBytes": 320172032,
+          "postDropHeapUsed": 56639584
+        },
+        {
+          "order": 11,
+          "size": 16,
+          "variant": "candidate",
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "hashesEquivalent": true,
+          "preparationMs": 1051.4787000000001,
+          "preparationCpuMs": 1640,
+          "firstMs": 977.4634999999998,
+          "warmMs": [
+            810.1687999999999,
+            857.1808999999998
+          ],
+          "warmCpuMs": [
+            1031,
+            922
+          ],
+          "prepPlusFirstMs": 2028.9422,
+          "continuousPreparationToFirstMs": 2029.0976999999998,
+          "prepPlusFirstCpuMs": 2938,
+          "firstMaxRssBytes": 311943168,
+          "finalRenderMaxRssBytes": 323227648,
+          "postDropHeapUsed": 56668976
+        }
+      ]
+    },
+    {
+      "size": 36,
+      "repetitionsPerVariant": 2,
+      "values": {
+        "preparationMs": {
+          "control": [
+            1953.9651000000001,
+            1924.7676
+          ],
+          "candidate": [
+            1672.8918,
+            1644.9887
+          ],
+          "controlMean": 1939.36635,
+          "candidateMean": 1658.94025,
+          "candidateChangePercent": -14.45967648144456
+        },
+        "firstMs": {
+          "control": [
+            1999.2836000000002,
+            1964.2957000000001
+          ],
+          "candidate": [
+            1921.7390999999998,
+            1975.3458999999998
+          ],
+          "controlMean": 1981.7896500000002,
+          "candidateMean": 1948.5424999999998,
+          "candidateChangePercent": -1.6776326387616503
+        },
+        "continuousStartupMs": {
+          "control": [
+            3953.4019000000003,
+            3889.2265
+          ],
+          "candidate": [
+            3594.8349,
+            3620.4937
+          ],
+          "controlMean": 3921.3142000000003,
+          "candidateMean": 3607.6643,
+          "candidateChangePercent": -7.998591390610843
+        },
+        "prepPlusFirstMs": {
+          "control": [
+            3953.2487,
+            3889.0633
+          ],
+          "candidate": [
+            3594.6309,
+            3620.3346
+          ],
+          "controlMean": 3921.156,
+          "candidateMean": 3607.48275,
+          "candidateChangePercent": -7.999509583398357
+        },
+        "preparationCpuMs": {
+          "control": [
+            2827,
+            2923
+          ],
+          "candidate": [
+            2422,
+            2375
+          ],
+          "controlMean": 2875,
+          "candidateMean": 2398.5,
+          "candidateChangePercent": -16.57391304347826
+        },
+        "firstCpuMs": {
+          "control": [
+            2391,
+            2421
+          ],
+          "candidate": [
+            2469,
+            2454
+          ],
+          "controlMean": 2406,
+          "candidateMean": 2461.5,
+          "candidateChangePercent": 2.3067331670822977
+        },
+        "startupCpuMs": {
+          "control": [
+            5218,
+            5344
+          ],
+          "candidate": [
+            4891,
+            4829
+          ],
+          "controlMean": 5281,
+          "candidateMean": 4860,
+          "candidateChangePercent": -7.971975004733956
+        },
+        "warmMs": {
+          "control": [
+            1781.15855,
+            1803.7974
+          ],
+          "candidate": [
+            1797.56045,
+            1778.5531500000002
+          ],
+          "controlMean": 1792.477975,
+          "candidateMean": 1788.0568,
+          "candidateChangePercent": -0.2466515662486679
+        },
+        "warmCpuMs": {
+          "control": [
+            1937.5,
+            2102
+          ],
+          "candidate": [
+            1945.5,
+            2101.5
+          ],
+          "controlMean": 2019.75,
+          "candidateMean": 2023.5,
+          "candidateChangePercent": 0.18566654288896256
+        },
+        "firstHwmMiB": {
+          "control": [
+            315.734375,
+            313.65234375
+          ],
+          "candidate": [
+            314.296875,
+            314.19140625
+          ],
+          "controlMean": 314.693359375,
+          "candidateMean": 314.244140625,
+          "candidateChangePercent": -0.1427480868653186
+        },
+        "finalHwmMiB": {
+          "control": [
+            317.2890625,
+            315.59765625
+          ],
+          "candidate": [
+            315.1171875,
+            314.37890625
+          ],
+          "controlMean": 316.443359375,
+          "candidateMean": 314.748046875,
+          "candidateChangePercent": -0.5357396354748523
+        },
+        "postDropHeapMiB": {
+          "control": [
+            56.016944885253906,
+            55.975181579589844
+          ],
+          "candidate": [
+            55.905723571777344,
+            55.911964416503906
+          ],
+          "controlMean": 55.996063232421875,
+          "candidateMean": 55.908843994140625,
+          "candidateChangePercent": -0.1557595895969155
+        }
+      },
+      "controlRaw": [
+        {
+          "order": 3,
+          "size": 36,
+          "variant": "control",
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "hashesEquivalent": true,
+          "preparationMs": 1953.9651000000001,
+          "preparationCpuMs": 2827,
+          "firstMs": 1999.2836000000002,
+          "warmMs": [
+            1766.112,
+            1796.2051000000001
+          ],
+          "warmCpuMs": [
+            1953,
+            1922
+          ],
+          "prepPlusFirstMs": 3953.2487,
+          "continuousPreparationToFirstMs": 3953.4019000000003,
+          "prepPlusFirstCpuMs": 5218,
+          "firstMaxRssBytes": 331071488,
+          "finalRenderMaxRssBytes": 332701696,
+          "postDropHeapUsed": 58738024
+        },
+        {
+          "order": 10,
+          "size": 36,
+          "variant": "control",
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "hashesEquivalent": true,
+          "preparationMs": 1924.7676,
+          "preparationCpuMs": 2923,
+          "firstMs": 1964.2957000000001,
+          "warmMs": [
+            1796.6395000000002,
+            1810.9552999999996
+          ],
+          "warmCpuMs": [
+            2141,
+            2063
+          ],
+          "prepPlusFirstMs": 3889.0633,
+          "continuousPreparationToFirstMs": 3889.2265,
+          "prepPlusFirstCpuMs": 5344,
+          "firstMaxRssBytes": 328888320,
+          "finalRenderMaxRssBytes": 330928128,
+          "postDropHeapUsed": 58694232
+        }
+      ],
+      "candidateRaw": [
+        {
+          "order": 4,
+          "size": 36,
+          "variant": "candidate",
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "hashesEquivalent": true,
+          "preparationMs": 1672.8918,
+          "preparationCpuMs": 2422,
+          "firstMs": 1921.7390999999998,
+          "warmMs": [
+            1807.8068999999996,
+            1787.3140000000003
+          ],
+          "warmCpuMs": [
+            2016,
+            1875
+          ],
+          "prepPlusFirstMs": 3594.6309,
+          "continuousPreparationToFirstMs": 3594.8349,
+          "prepPlusFirstCpuMs": 4891,
+          "firstMaxRssBytes": 329564160,
+          "finalRenderMaxRssBytes": 330424320,
+          "postDropHeapUsed": 58621400
+        },
+        {
+          "order": 9,
+          "size": 36,
+          "variant": "candidate",
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "hashesEquivalent": true,
+          "preparationMs": 1644.9887,
+          "preparationCpuMs": 2375,
+          "firstMs": 1975.3458999999998,
+          "warmMs": [
+            1816.5815000000002,
+            1740.5248000000001
+          ],
+          "warmCpuMs": [
+            2218,
+            1985
+          ],
+          "prepPlusFirstMs": 3620.3346,
+          "continuousPreparationToFirstMs": 3620.4937,
+          "prepPlusFirstCpuMs": 4829,
+          "firstMaxRssBytes": 329453568,
+          "finalRenderMaxRssBytes": 329650176,
+          "postDropHeapUsed": 58627944
+        }
+      ]
+    },
+    {
+      "size": 48,
+      "repetitionsPerVariant": 2,
+      "values": {
+        "preparationMs": {
+          "control": [
+            2426.1283,
+            2457.6868
+          ],
+          "candidate": [
+            2657.9275,
+            2679.6706
+          ],
+          "controlMean": 2441.90755,
+          "candidateMean": 2668.7990499999996,
+          "candidateChangePercent": 9.291567979303705
+        },
+        "firstMs": {
+          "control": [
+            2155.3025000000002,
+            2213.1045
+          ],
+          "candidate": [
+            2215.285,
+            2215.4269000000004
+          ],
+          "controlMean": 2184.2035,
+          "candidateMean": 2215.35595,
+          "candidateChangePercent": 1.4262613350816356
+        },
+        "continuousStartupMs": {
+          "control": [
+            4581.5733,
+            4670.9432
+          ],
+          "candidate": [
+            4873.3613,
+            4895.2459
+          ],
+          "controlMean": 4626.25825,
+          "candidateMean": 4884.303599999999,
+          "candidateChangePercent": 5.577841444541054
+        },
+        "prepPlusFirstMs": {
+          "control": [
+            4581.4308,
+            4670.7913
+          ],
+          "candidate": [
+            4873.2125,
+            4895.0975
+          ],
+          "controlMean": 4626.1110499999995,
+          "candidateMean": 4884.155,
+          "candidateChangePercent": 5.577988665014866
+        },
+        "preparationCpuMs": {
+          "control": [
+            3438,
+            3453
+          ],
+          "candidate": [
+            3578,
+            3766
+          ],
+          "controlMean": 3445.5,
+          "candidateMean": 3672,
+          "candidateChangePercent": 6.573791902481507
+        },
+        "firstCpuMs": {
+          "control": [
+            2687,
+            2703
+          ],
+          "candidate": [
+            2845,
+            2812
+          ],
+          "controlMean": 2695,
+          "candidateMean": 2828.5,
+          "candidateChangePercent": 4.953617810760669
+        },
+        "startupCpuMs": {
+          "control": [
+            6125,
+            6156
+          ],
+          "candidate": [
+            6423,
+            6578
+          ],
+          "controlMean": 6140.5,
+          "candidateMean": 6500.5,
+          "candidateChangePercent": 5.8627147626414855
+        },
+        "warmMs": {
+          "control": [
+            2000.84895,
+            1945.8045499999994
+          ],
+          "candidate": [
+            1947.4792499999999,
+            1966.39415
+          ],
+          "controlMean": 1973.3267499999997,
+          "candidateMean": 1956.9367,
+          "candidateChangePercent": -0.8305796290452028
+        },
+        "warmCpuMs": {
+          "control": [
+            2234.5,
+            2125
+          ],
+          "candidate": [
+            2211,
+            2164
+          ],
+          "controlMean": 2179.75,
+          "candidateMean": 2187.5,
+          "candidateChangePercent": 0.35554536070649956
+        },
+        "firstHwmMiB": {
+          "control": [
+            329.96875,
+            330.62890625
+          ],
+          "candidate": [
+            322.79296875,
+            326.27734375
+          ],
+          "controlMean": 330.298828125,
+          "candidateMean": 324.53515625,
+          "candidateChangePercent": -1.7449870796449662
+        },
+        "finalHwmMiB": {
+          "control": [
+            330.84765625,
+            330.62890625
+          ],
+          "candidate": [
+            324.70703125,
+            327.734375
+          ],
+          "controlMean": 330.73828125,
+          "candidateMean": 326.220703125,
+          "candidateChangePercent": -1.3659072387768867
+        },
+        "postDropHeapMiB": {
+          "control": [
+            56.781455993652344,
+            56.77410125732422
+          ],
+          "candidate": [
+            57.03350067138672,
+            57.025245666503906
+          ],
+          "controlMean": 56.77777862548828,
+          "candidateMean": 57.02937316894531,
+          "candidateChangePercent": 0.44312149849428106
+        }
+      },
+      "controlRaw": [
+        {
+          "order": 5,
+          "size": 48,
+          "variant": "control",
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "hashesEquivalent": true,
+          "preparationMs": 2426.1283,
+          "preparationCpuMs": 3438,
+          "firstMs": 2155.3025000000002,
+          "warmMs": [
+            2027.679,
+            1974.0189
+          ],
+          "warmCpuMs": [
+            2313,
+            2156
+          ],
+          "prepPlusFirstMs": 4581.4308,
+          "continuousPreparationToFirstMs": 4581.5733,
+          "prepPlusFirstCpuMs": 6125,
+          "firstMaxRssBytes": 345997312,
+          "finalRenderMaxRssBytes": 346918912,
+          "postDropHeapUsed": 59539672
+        },
+        {
+          "order": 8,
+          "size": 48,
+          "variant": "control",
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "hashesEquivalent": true,
+          "preparationMs": 2457.6868,
+          "preparationCpuMs": 3453,
+          "firstMs": 2213.1045,
+          "warmMs": [
+            1945.0915999999997,
+            1946.517499999999
+          ],
+          "warmCpuMs": [
+            2156,
+            2094
+          ],
+          "prepPlusFirstMs": 4670.7913,
+          "continuousPreparationToFirstMs": 4670.9432,
+          "prepPlusFirstCpuMs": 6156,
+          "firstMaxRssBytes": 346689536,
+          "finalRenderMaxRssBytes": 346689536,
+          "postDropHeapUsed": 59531960
+        }
+      ],
+      "candidateRaw": [
+        {
+          "order": 6,
+          "size": 48,
+          "variant": "candidate",
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "hashesEquivalent": true,
+          "preparationMs": 2657.9275,
+          "preparationCpuMs": 3578,
+          "firstMs": 2215.285,
+          "warmMs": [
+            1939.8364000000001,
+            1955.1220999999996
+          ],
+          "warmCpuMs": [
+            2219,
+            2203
+          ],
+          "prepPlusFirstMs": 4873.2125,
+          "continuousPreparationToFirstMs": 4873.3613,
+          "prepPlusFirstCpuMs": 6423,
+          "firstMaxRssBytes": 338472960,
+          "finalRenderMaxRssBytes": 340480000,
+          "postDropHeapUsed": 59803960
+        },
+        {
+          "order": 7,
+          "size": 48,
+          "variant": "candidate",
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "hashesEquivalent": true,
+          "preparationMs": 2679.6706,
+          "preparationCpuMs": 3766,
+          "firstMs": 2215.4269000000004,
+          "warmMs": [
+            1923.3853,
+            2009.4030000000002
+          ],
+          "warmCpuMs": [
+            2172,
+            2156
+          ],
+          "prepPlusFirstMs": 4895.0975,
+          "continuousPreparationToFirstMs": 4895.2459,
+          "prepPlusFirstCpuMs": 6578,
+          "firstMaxRssBytes": 342126592,
+          "finalRenderMaxRssBytes": 343654400,
+          "postDropHeapUsed": 59795304
+        }
+      ]
+    }
+  ]
+}

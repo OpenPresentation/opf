@@ -13,3 +13,8 @@ Pure input proof validates format+references only against BOTH frozen normal-bui
 Preparation history is retained: strict existing-working-versus-Git byte refusal before any copy (one final CR); the dependent missing-script invocation; initial proof wrongly required zero inherited warnings; initial48reused four nested IDs; a conservative string guard then mistook layout:cover for a local reference and was corrected only for the typed catalog field. All original inputs/logs available at those phases remain losslessly archived. The first byte-refusal and later guard were tool outputs without raw files; their factual receipts explicitly say rawLogCaptured:false. No measurement failed or retried.
 
 After source freeze, run only source preflight with --out=<fresh file> and input-proof with --out=<fresh file>. After root GO only: run.mjs --measure --expect-driver-head=<exactSHA> --preflight=<exactpreflight> --out=<freshformaloutput>. No other product build/install, font preparation, rendering, benchmark or Office is authorized by preparing this packet.
+
+
+## Completed formal04
+
+Root33356 actually terminated0:12children/1,200SVG checks and three exact faces. Continuous startup16−1.83%,36−8.00%,48+5.58%; the48regression occurs in both repetitions. Candidate remains UNFOLDED and48replay eligibility is unobserved. [RESULTS.md](RESULTS.md) retains complete wall/CPU/memory vectors and limits; receipt/raw/summary and offline verify preserve setup failures and actual completed results. Original protocol above stays as executed history. No new experiment is authorized.
