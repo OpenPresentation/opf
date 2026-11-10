@@ -2905,7 +2905,7 @@
         },
         "language": {
           "oneOf": [{ "$ref": "#/$defs/LanguageTag" }, { "$ref": "#/$defs/Language" }],
-          "description": "Language of this slide, overriding the presentation language. Accepts the same BCP-47 tag or inline Language object as the presentation. Omission inherits the deck language. Direction, script fonts, quotation marks, line breaking and number formatting follow the effective slide language; TextRun.lang still overrides an individual run.",
+          "description": "Language of this slide, overriding the presentation language. Accepts the same BCP-47 tag or inline Language object as the presentation. Omission inherits the deck language. Direction, script fonts, quotation marks, line breaking and number formatting follow the effective slide language; TextRun.language still overrides an individual run.",
           "examples": ["ar-SA", "ja", "fr-FR"]
         },
         "type": {
