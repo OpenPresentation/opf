@@ -1,10 +1,19 @@
 import {XMLParser} from 'fast-xml-parser';
 import {resolveScriptFonts} from '@openpresentation/opf/composition';
-import {attachTextTags,decodeTextTag} from './code-provenance.js';
+import {attachTextTags,decodeTextTag,nativeTextHash} from './code-provenance.js';
 
 export const NATIVE_LANGUAGE_TAG='OPF_NATIVE_LANGUAGE_V1';
 const REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
+const ordered=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false,preserveOrder:true});
+const canonical=value=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'?Object.fromEntries(Object.entries(value).map(([key,item])=>[key,key===':@'?Object.fromEntries(Object.entries(item).sort(([a],[b])=>a<b?-1:a>b?1:0)):canonical(item)])):value;
+export const nativeLatinParagraphFingerprint=(value,binding)=>nativeTextHash(JSON.stringify([canonical(ordered.parse(value)),binding]));
+// Full ordered run properties, with only the direct CS font slot removed.
+// Attribute order is syntax; child/operator order and all other properties remain significant.
+export const nativeLatinMemberProperties=value=>JSON.stringify(canonical(ordered.parse(value).map(node=>Array.isArray(node['a:rPr'])?{...node,'a:rPr':node['a:rPr'].filter(child=>!Object.hasOwn(child,'a:cs'))}:node)));
+const slotOwnedName=value=>/^OPF (?:list|text|heading|native body) /.test(value);
+const runPattern=/<a:r>([\s\S]*?)<a:t>([\s\S]*?)<\/a:t><\/a:r>/g;
+const escapeXml=text=>String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));
 const decoder=new TextDecoder('utf-8',{fatal:true}),encoder=new TextEncoder();
 const array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
 const attribute=(value,name)=>new RegExp('\\s'+name+'="([^"]*)"').exec(value)?.[1];
@@ -37,20 +46,22 @@ export function protectNativeLatinText(xml,base){
  });
 }
 
-export function attachNativeLanguageTags(entries){
+export function attachNativeLanguageTags(entries,slotGroups=new Map()){
  const records=new Map();
  for(const path of Object.keys(entries).filter(p=>/^ppt\/slides\/slide\d+\.xml$/.test(p))){
   const xml=decoder.decode(entries[path]);
   for(const [shape]of xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)){
    const name=attribute(shape.match(/<p:cNvPr\b[^>]*>/)?.[0]??'','name');
-   if(!ownedName(name??''))continue;
+   const slots=slotGroups.get(decode(name??'')),slideIndex=Number(/slide(\d+)\.xml$/.exec(path)?.[1])-1;
+   const validSlots=slots?.slideIndex===slideIndex&&slotOwnedName(decode(name??''))?slots.paragraphs:undefined;
+   if(!ownedName(name??'')&&!validSlots?.length)continue;
    const paragraphs=[];
    for(const [index,match]of [...shape.matchAll(/<a:p>[\s\S]*?<\/a:p>/g)].entries()){
     const text=paragraphText(match[0]);
     const bases=[...new Set([...match[0].matchAll(/<a:rPr\b[^>]*>/g)].map(([p])=>pairBase(p)).filter(Boolean))];
     if(bases.length===1&&latinNumericText(text))paragraphs.push({index,text,base:bases[0]});
    }
-   if(paragraphs.length)records.set(name,{v:1,name:decode(name),paragraphs});
+   if(paragraphs.length||validSlots?.length)records.set(name,{v:1,name:decode(name),paragraphs,...(validSlots?.length?{latinSlots:validSlots}:{})});
   }
  }
  attachTextTags(entries,records,NATIVE_LANGUAGE_TAG,'opfNativeLanguage','automatic native language');
@@ -74,8 +85,28 @@ export function nativeLanguageReadView(entries,parseRelationships,report=()=>{})
    try{
     if(tags.length!==1)throw Error('Duplicate automatic-language records.');
     const record=decodeTextTag(tags[0].val),name=parsed?.['p:nvSpPr']?.['p:cNvPr']?.name;
-    if(record?.v!==1||record.name!==name||!ownedName(name??'')||!Array.isArray(record.paragraphs)||!record.paragraphs.length||record.paragraphs.length>1000)throw Error('Invalid automatic-language identity.');
+    if(record?.v!==1||record.name!==name||!Array.isArray(record.paragraphs)||record.paragraphs.length>1000||(!record.paragraphs.length&&!record.latinSlots?.length)||(record.paragraphs.length&&!ownedName(name??''))||(record.latinSlots!==undefined&&(!slotOwnedName(name??'')||!Array.isArray(record.latinSlots)||!record.latinSlots.length||record.latinSlots.length>1000)))throw Error('Invalid automatic-language identity.');
     const paragraphs=[...shape.matchAll(/<a:p>[\s\S]*?<\/a:p>/g)].map(m=>m[0]),seen=new Set();
+    let generatedSpans=0;
+    for(const group of record.latinSlots??[]){
+     generatedSpans+=Array.isArray(group?.spans)?group.spans.length:1001;
+     if(generatedSpans>1000)throw Error('Native Latin source span budget exceeded.');
+    }
+    for(const group of record.latinSlots??[]){
+     if(!group||typeof group!=='object'||Object.keys(group).some(key=>!['index','count','hash','spans'].includes(key))||!Number.isSafeInteger(group.index)||group.index<0||group.index>=paragraphs.length||seen.has(group.index)||!Number.isSafeInteger(group.count)||group.count<2||group.count>10000||typeof group.hash!=='string'||!/^[0-9a-f]{14}$/.test(group.hash)||!Array.isArray(group.spans)||!group.spans.length||group.spans.length>1000)throw Error('Invalid native Latin source spans.');
+     seen.add(group.index);
+     const current=paragraphs[group.index],runs=[...current.matchAll(runPattern)];
+     if(runs.length!==group.count||nativeLatinParagraphFingerprint(current,{name,index:group.index,count:group.count,spans:group.spans})!==group.hash)throw Error('Current native Latin span text, properties or structure changed.');
+     const replacements=new Map();let lastEnd=0;
+     for(const span of group.spans){
+      if(!span||typeof span!=='object'||Object.keys(span).some(key=>!['start','count'].includes(key))||!Number.isSafeInteger(span.start)||!Number.isSafeInteger(span.count)||span.start<lastEnd||span.count<2||span.start+span.count>runs.length)throw Error('Invalid native Latin span boundary.');
+      const members=runs.slice(span.start,span.start+span.count),style=nativeLatinMemberProperties(members[0][1]);
+      if(members.some(run=>nativeLatinMemberProperties(run[1])!==style))throw Error('Current native Latin span styles differ.');
+      replacements.set(span.start,{count:span.count,xml:'<a:r>'+members[0][1]+'<a:t>'+escapeXml(members.map(run=>decode(run[2])).join(''))+'</a:t></a:r>'});lastEnd=span.start+span.count;
+     }
+     let index=0,skipUntil=0;paragraphs[group.index]=current.replace(runPattern,whole=>{const position=index++;if(position<skipUntil)return '';const replacement=replacements.get(position);if(!replacement)return whole;skipUntil=position+replacement.count;return replacement.xml;});
+    }
+    seen.clear();
     for(const p of record.paragraphs){
      if(!Number.isSafeInteger(p.index)||p.index<0||p.index>=paragraphs.length||seen.has(p.index)||typeof p.text!=='string'||p.text.length>16000||!latinNumericText(p.text)||!rtlLanguage(p.base))throw Error('Invalid automatic-language paragraph.');
      seen.add(p.index);
