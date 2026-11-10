@@ -1,0 +1,1199 @@
+{
+  "schema": 1,
+  "kind": "historical-actual-native-evidence-only",
+  "neverMerge": true,
+  "createdAt": "2026-11-10T12:24:14.546Z",
+  "sourceRevision": "08976a2f12544d92f1135d9fe827c39b438373ee",
+  "producerRevision": "08976a2f12544d92f1135d9fe827c39b438373ee",
+  "controllerRevision": "08976a2f12544d92f1135d9fe827c39b438373ee",
+  "consumerIdentitySha256": "0663f619edf784067ecd8152704d2400507cf507efeb27ae20bea38e8ca49ff8",
+  "envelopeSha256": "f2631c0f195674f43f1942d63a730d5f5d6927d5f973cb19fe5be740970425ef",
+  "workerSha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda",
+  "supervisorSha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+  "node": {
+    "path": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+    "version": "v24.20.0",
+    "identity": {
+      "bytes": 93381448,
+      "sha256": "5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5"
+    }
+  },
+  "inputSha256": "77305632e835d3fbf4e5348ec29eaddf916f0894896ac06988e431e7f575f748",
+  "savedSha256": "850f10044211acaed135951c6730a5a63e178091f2cd5389833b837273aa56c0",
+  "sourceSha256": "87a3a6c20edcc4cb05d821019f3abc2b9bbaa5b0a73911853563665ae7b5a02e",
+  "caseId": "reference-native-lines",
+  "sourceCase": {
+    "id": "reference-native-lines",
+    "input": "inputs/reference-native-lines.pptx",
+    "source": "sources/reference-native-lines.opf.json",
+    "sourceSha256": "87a3a6c20edcc4cb05d821019f3abc2b9bbaa5b0a73911853563665ae7b5a02e",
+    "actionPlan": "actions/reference-native-lines.json",
+    "archiveSha256": "77305632e835d3fbf4e5348ec29eaddf916f0894896ac06988e431e7f575f748",
+    "slideCount": 3,
+    "worker": "furniture",
+    "automaticControlEligible": false,
+    "rawShapes": [
+      1,
+      1,
+      3
+    ],
+    "roundTripAcceptance": "original-explicit-data-references-preserved; native-unrun",
+    "previews": {
+      "svg": [
+        "previews/reference-native-lines-01.svg",
+        "previews/reference-native-lines-02.svg",
+        "previews/reference-native-lines-03.svg"
+      ],
+      "png": [
+        "previews/reference-native-lines-01.png",
+        "previews/reference-native-lines-02.png",
+        "previews/reference-native-lines-03.png"
+      ]
+    }
+  },
+  "limits": {
+    "slides": 3,
+    "maxShapesPerSlide": 3,
+    "maxTotalShapes": 9,
+    "maxActions": 0,
+    "maxArchiveBytes": 16777216,
+    "maxZipEntries": 4096,
+    "maxTimeoutSeconds": 60
+  },
+  "timeoutSeconds": 45,
+  "outerTimeoutMilliseconds": 90000,
+  "sourceObjectIdentities": {
+    "packages": "d30b19abc690a4712a70c9e501aea5ff753ee434",
+    "spec": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274",
+    "pnpm-lock.yaml": "2e45923e6a027db20e2593a5befef39473259f2a",
+    "pnpm-workspace.yaml": "c84e4ff16c7f717d30d69498f565b2b519d13e19",
+    "package.json": "846e509ef00827a8efe72c059ca3238f88be6fbb",
+    ".github": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4",
+    "scripts": "6e0623013e66566f2c589948a30b11afce6efb3c"
+  },
+  "raw": {
+    "path": "raw.json.gz",
+    "bytes": 2890006,
+    "sha256": "c25ec17c73d3613665ed9346835345efdb7fab44975b1fad5cc53e9070a46957",
+    "expandedBytes": 11496365,
+    "records": 121,
+    "totalRecordBytes": 8597446
+  },
+  "direct": [
+    {
+      "path": "images/native-01.png",
+      "bytes": 6244,
+      "sha256": "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/original-01.png"
+    },
+    {
+      "path": "images/preview-01.png",
+      "bytes": 18130,
+      "sha256": "9152be2643713df7e5778d17a3ad32312385d8bee7b1123773fb49e86b6f4a52",
+      "source": "C:/opf-work/n034-cmap-reference-suite01/previews/reference-native-lines-01.png"
+    },
+    {
+      "path": "images/native-02.png",
+      "bytes": 5571,
+      "sha256": "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/original-02.png"
+    },
+    {
+      "path": "images/preview-02.png",
+      "bytes": 17301,
+      "sha256": "f1010fc34b0853d391b97b47a55de633cc784ea69c8c64058e24e09896b50bc1",
+      "source": "C:/opf-work/n034-cmap-reference-suite01/previews/reference-native-lines-02.png"
+    },
+    {
+      "path": "images/native-03.png",
+      "bytes": 10537,
+      "sha256": "080d4d0297913e3ad87ab20590c2a02489ac8991fbe80a6d3f78d5ee59ecd212",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/original-03.png"
+    },
+    {
+      "path": "images/preview-03.png",
+      "bytes": 24053,
+      "sha256": "47352e0eeeae20afd2b8b5805b94432aac0b6493b3a107dff92045c944fbe3ae",
+      "source": "C:/opf-work/n034-cmap-reference-suite01/previews/reference-native-lines-03.png"
+    }
+  ],
+  "files": [
+    {
+      "key": "native-run/execution-envelope.json",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/execution-envelope.json",
+      "kind": "actual-root-native",
+      "bytes": 247161,
+      "sha256": "f2631c0f195674f43f1942d63a730d5f5d6927d5f973cb19fe5be740970425ef"
+    },
+    {
+      "key": "native-run/inputs/action-plan.json",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/inputs/action-plan.json",
+      "kind": "actual-root-native",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "key": "native-run/inputs/case.pptx",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/inputs/case.pptx",
+      "kind": "actual-root-native",
+      "bytes": 128805,
+      "sha256": "77305632e835d3fbf4e5348ec29eaddf916f0894896ac06988e431e7f575f748"
+    },
+    {
+      "key": "native-run/inputs/native-process.ps1",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/inputs/native-process.ps1",
+      "kind": "actual-root-native",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "key": "native-run/inputs/reference-chart-worker.ps1",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/inputs/reference-chart-worker.ps1",
+      "kind": "actual-root-native",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+    },
+    {
+      "key": "native-run/native/original-01.png",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/original-01.png",
+      "kind": "actual-root-native",
+      "bytes": 6244,
+      "sha256": "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
+    },
+    {
+      "key": "native-run/native/original-02.png",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/original-02.png",
+      "kind": "actual-root-native",
+      "bytes": 5571,
+      "sha256": "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
+    },
+    {
+      "key": "native-run/native/original-03.png",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/original-03.png",
+      "kind": "actual-root-native",
+      "bytes": 10537,
+      "sha256": "080d4d0297913e3ad87ab20590c2a02489ac8991fbe80a6d3f78d5ee59ecd212"
+    },
+    {
+      "key": "native-run/native/postflight.jsonl",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/postflight.jsonl",
+      "kind": "actual-root-native",
+      "bytes": 161,
+      "sha256": "b8e994159c78b7468a6e613c8f5b843bebcef0fa38f016a0703a4ff37eeabee9"
+    },
+    {
+      "key": "native-run/native/report.json",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/report.json",
+      "kind": "actual-root-native",
+      "bytes": 587915,
+      "sha256": "41134bb2e19594c3d8a2eb0a791347963866e8ade5ea75a6903e943119e0514a"
+    },
+    {
+      "key": "native-run/native/saved-reopened-01.png",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/saved-reopened-01.png",
+      "kind": "actual-root-native",
+      "bytes": 6244,
+      "sha256": "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
+    },
+    {
+      "key": "native-run/native/saved-reopened-02.png",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/saved-reopened-02.png",
+      "kind": "actual-root-native",
+      "bytes": 5571,
+      "sha256": "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
+    },
+    {
+      "key": "native-run/native/saved-reopened-03.png",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/saved-reopened-03.png",
+      "kind": "actual-root-native",
+      "bytes": 10537,
+      "sha256": "080d4d0297913e3ad87ab20590c2a02489ac8991fbe80a6d3f78d5ee59ecd212"
+    },
+    {
+      "key": "native-run/native/saved.pptx",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/saved.pptx",
+      "kind": "actual-root-native",
+      "bytes": 134053,
+      "sha256": "850f10044211acaed135951c6730a5a63e178091f2cd5389833b837273aa56c0"
+    },
+    {
+      "key": "native-run/native/stages.jsonl",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/stages.jsonl",
+      "kind": "actual-root-native",
+      "bytes": 78183,
+      "sha256": "b3f011329c25a6bdbb243fd3d7a731f6ede9242f3eb42015c4717de3e4bffb7a"
+    },
+    {
+      "key": "native-run/native/supervisor.json",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/supervisor.json",
+      "kind": "actual-root-native",
+      "bytes": 1659,
+      "sha256": "d14a4d4f2468da6474a58a4f6781f4e55eb6a8a9fa20639e6adf71469ccac68e"
+    },
+    {
+      "key": "native-run/native/worker.json",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/worker.json",
+      "kind": "actual-root-native",
+      "bytes": 341,
+      "sha256": "4df7f980177b642508bc76cf529969e4848db9f62ffec9c5010c613879885342"
+    },
+    {
+      "key": "native-run/native/worker.stderr.log",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/worker.stderr.log",
+      "kind": "actual-root-native",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "key": "native-run/native/worker.stdout.log",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/native/worker.stdout.log",
+      "kind": "actual-root-native",
+      "bytes": 123585,
+      "sha256": "37e3b7345119bf5648b3661482d8a8133425aabab0d21dc8e8d32619263940a4"
+    },
+    {
+      "key": "native-run/reference-chart-observation.json",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/reference-chart-observation.json",
+      "kind": "actual-root-native",
+      "bytes": 421591,
+      "sha256": "1971bb2344baa8c88b76cd67c711044201aa1bccc3f51bb2cb38fbbdcfaea6fa"
+    },
+    {
+      "key": "native-run/runner.json",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01/runner.json",
+      "kind": "actual-root-native",
+      "bytes": 524557,
+      "sha256": "b239e3dba46d8ca4dad3cd92abb1aa25be6e26e62cc8a9297d6ba348da6804e8"
+    },
+    {
+      "key": "native-external/n034-cmap-ref-native-lines01-launch.mjs",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01-launch.mjs",
+      "kind": "actual-root-native-launch",
+      "bytes": 3219,
+      "sha256": "b5a80a958f9cc831d6dac77428312f36bdcc1e2d32b391aa65ab6981939927fd"
+    },
+    {
+      "key": "native-external/n034-cmap-ref-native-lines01-exit.json",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01-exit.json",
+      "kind": "actual-root-native-launch",
+      "bytes": 991,
+      "sha256": "e23033e841af890aa7751ebce547e61087dcacee8596dc89d9540c06af2b854f"
+    },
+    {
+      "key": "native-external/n034-cmap-ref-native-lines01-office-before.json",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01-office-before.json",
+      "kind": "actual-root-native-launch",
+      "bytes": 115,
+      "sha256": "31be190f97d30800fca251cd69cf061c12d2cb8876ddfac3f17ac2ba401fa9de"
+    },
+    {
+      "key": "native-external/n034-cmap-ref-native-lines01-office-immediate-after.json",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01-office-immediate-after.json",
+      "kind": "actual-root-native-launch",
+      "bytes": 115,
+      "sha256": "435c14f03b1153af1deb9b99f17172f7ac9719ec06587a94b08e313be1765a0c"
+    },
+    {
+      "key": "native-external/n034-cmap-ref-native-lines01.stdout.log",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01.stdout.log",
+      "kind": "actual-root-native-launch",
+      "bytes": 247365,
+      "sha256": "2d6c7e0de0c0aa339b39d1c3e68b897dcbf2dbbb2b5498c070f53ef658153550"
+    },
+    {
+      "key": "native-external/n034-cmap-ref-native-lines01.stderr.log",
+      "source": "C:/opf-work/n034-cmap-ref-native-lines01.stderr.log",
+      "kind": "actual-root-native-launch",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "key": "admission-qa/admission-installed-after.exit.json",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/admission-installed-after.exit.json",
+      "kind": "office-free-root-admission",
+      "bytes": 492,
+      "sha256": "52255436ea5c441dd0e4af46a13a4b2372faebd7defab19e7d0355b0c09c0fce"
+    },
+    {
+      "key": "admission-qa/admission-installed-after.log",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/admission-installed-after.log",
+      "kind": "office-free-root-admission",
+      "bytes": 245,
+      "sha256": "0175dd7b851795cb853fb4182ab654b7f0a4dc51965cdb39769e147d58c8be67"
+    },
+    {
+      "key": "admission-qa/admission-installed-before.exit.json",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/admission-installed-before.exit.json",
+      "kind": "office-free-root-admission",
+      "bytes": 484,
+      "sha256": "13a782724f89780e0cb9eee6f3c1f4ed516ed9d4a7e46efe81890f04f77f2755"
+    },
+    {
+      "key": "admission-qa/admission-installed-before.log",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/admission-installed-before.log",
+      "kind": "office-free-root-admission",
+      "bytes": 237,
+      "sha256": "a766f423ec88f47aa732774763035fa7ae8d69aa221c2fdae4dd385f8c9d2878"
+    },
+    {
+      "key": "admission-qa/admissions.exit.json",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/admissions.exit.json",
+      "kind": "office-free-root-admission",
+      "bytes": 474,
+      "sha256": "e2ac0f66bbd8ff893a83efa2bfc01c11e37640a161e5882be7bdd8053710f936"
+    },
+    {
+      "key": "admission-qa/admissions.log",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/admissions.log",
+      "kind": "office-free-root-admission",
+      "bytes": 773,
+      "sha256": "e388aa59edcf0ade6ff4e0a88ba45194c280edfd1625cbddce1444c713debcbd"
+    },
+    {
+      "key": "admission-qa/admissions.mjs",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/admissions.mjs",
+      "kind": "office-free-root-admission",
+      "bytes": 5077,
+      "sha256": "f9c6b489e1c0818ff83311b0b5220d147b18bb54f6f22f5a0ad629fce2f35111"
+    },
+    {
+      "key": "admission-qa/audit.mjs",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/audit.mjs",
+      "kind": "office-free-root-admission",
+      "bytes": 5095,
+      "sha256": "7988e18a11d38420171091d4ff6f6d9438201b5a1d7f962ad87d47033eb3796f"
+    },
+    {
+      "key": "admission-qa/controller-install.exit.json",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/controller-install.exit.json",
+      "kind": "office-free-root-admission",
+      "bytes": 609,
+      "sha256": "5bc413c199991814fd8322405aed7e7140cb53868717c334e85f4ccf32c55185"
+    },
+    {
+      "key": "admission-qa/controller-install.log",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/controller-install.log",
+      "kind": "office-free-root-admission",
+      "bytes": 4599,
+      "sha256": "54d7409c5ccb784e28a3e2bf7dc48f4c862544e246c4252ab2526581985dbdf8"
+    },
+    {
+      "key": "admission-qa/envelopes.json",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/envelopes.json",
+      "kind": "office-free-root-admission",
+      "bytes": 630,
+      "sha256": "08ae50f60609d3735f368ebdc58c039f3b5e3043bdf3d94ea38e44b56624e8b5"
+    },
+    {
+      "key": "admission-qa/installed-after-reference.json",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/installed-after-reference.json",
+      "kind": "office-free-root-admission",
+      "bytes": 262521,
+      "sha256": "a90e2abe41d3b0562302acd48de68a41416233c2c834f481dfe6ab709e228a5e"
+    },
+    {
+      "key": "admission-qa/installed-before.json",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/installed-before.json",
+      "kind": "office-free-root-admission",
+      "bytes": 262512,
+      "sha256": "5732f09fb7c631318da16ff0296edc819b1fb226602725e794908dd444d1ff9a"
+    },
+    {
+      "key": "admission-qa/old-before.json",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/old-before.json",
+      "kind": "office-free-root-admission",
+      "bytes": 191918,
+      "sha256": "d49ed5bfd192e73c9bc94b425752b954d3d54aa2421c6f07a3c92e379e5a58e0"
+    },
+    {
+      "key": "admission-qa/run-command.mjs",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/run-command.mjs",
+      "kind": "office-free-root-admission",
+      "bytes": 950,
+      "sha256": "ea9d9c6ac28c9140db11a4f0d6d7883bb00df4a5cffb508cbf8d61677cc08d5e"
+    },
+    {
+      "key": "admission-qa/sources-after.json",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/sources-after.json",
+      "kind": "office-free-root-admission",
+      "bytes": 3260,
+      "sha256": "47a4a108d44a878c43d656b45b2617236fad0bc9418ad423523a23cd1ed82bbc"
+    },
+    {
+      "key": "admission-qa/sources-before.json",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/sources-before.json",
+      "kind": "office-free-root-admission",
+      "bytes": 3260,
+      "sha256": "47a4a108d44a878c43d656b45b2617236fad0bc9418ad423523a23cd1ed82bbc"
+    },
+    {
+      "key": "admission-qa/summary.json",
+      "source": "C:/opf-work/n034-cmap-ref-qa01/summary.json",
+      "kind": "office-free-root-admission",
+      "bytes": 1209,
+      "sha256": "188cd21e9a4b1b11e79d30d2c110b313dd0403f0a5d843b4201ed517267aae90"
+    },
+    {
+      "key": "admission-envelopes/reference-native-axes-exit.json",
+      "source": "C:/opf-work/n034-cmap-ref-admission01/reference-native-axes-exit.json",
+      "kind": "office-free-root-admission",
+      "bytes": 1663,
+      "sha256": "ee51a390e51efb3d25e9adce730708995ce16a7e5b4e92a06e647a2e40094d93"
+    },
+    {
+      "key": "admission-envelopes/reference-native-axes.json",
+      "source": "C:/opf-work/n034-cmap-ref-admission01/reference-native-axes.json",
+      "kind": "office-free-root-admission",
+      "bytes": 263317,
+      "sha256": "90263a9b63aff5f884710ec0e5875d2a3491a55d3689ab3d436b474cc2a06776"
+    },
+    {
+      "key": "admission-envelopes/reference-native-axes.stderr.log",
+      "source": "C:/opf-work/n034-cmap-ref-admission01/reference-native-axes.stderr.log",
+      "kind": "office-free-root-admission",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "key": "admission-envelopes/reference-native-axes.stdout.log",
+      "source": "C:/opf-work/n034-cmap-ref-admission01/reference-native-axes.stdout.log",
+      "kind": "office-free-root-admission",
+      "bytes": 218,
+      "sha256": "e569b9bb2ae3df40e87674a36ae675a2047605d807c05605fc172510bb898dc6"
+    },
+    {
+      "key": "admission-envelopes/reference-native-lines-exit.json",
+      "source": "C:/opf-work/n034-cmap-ref-admission01/reference-native-lines-exit.json",
+      "kind": "office-free-root-admission",
+      "bytes": 1665,
+      "sha256": "f1ea94b6247911cfd9413ffe59c29d5d64cc2a651f1617b8f334099fb7cc1092"
+    },
+    {
+      "key": "admission-envelopes/reference-native-lines.json",
+      "source": "C:/opf-work/n034-cmap-ref-admission01/reference-native-lines.json",
+      "kind": "office-free-root-admission",
+      "bytes": 247161,
+      "sha256": "f2631c0f195674f43f1942d63a730d5f5d6927d5f973cb19fe5be740970425ef"
+    },
+    {
+      "key": "admission-envelopes/reference-native-lines.stderr.log",
+      "source": "C:/opf-work/n034-cmap-ref-admission01/reference-native-lines.stderr.log",
+      "kind": "office-free-root-admission",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "key": "admission-envelopes/reference-native-lines.stdout.log",
+      "source": "C:/opf-work/n034-cmap-ref-admission01/reference-native-lines.stdout.log",
+      "kind": "office-free-root-admission",
+      "bytes": 218,
+      "sha256": "4bfeff8662d167eddd8680dfaa932a0145728399fb0e4592664cda9f13f618ed"
+    },
+    {
+      "key": "admission-envelopes/reference-overlays-markers-exit.json",
+      "source": "C:/opf-work/n034-cmap-ref-admission01/reference-overlays-markers-exit.json",
+      "kind": "office-free-root-admission",
+      "bytes": 1673,
+      "sha256": "a9e065c3836b2e7e1e11e622fb75a22761c320860ad4261e05020bfbc0f6c80f"
+    },
+    {
+      "key": "admission-envelopes/reference-overlays-markers.json",
+      "source": "C:/opf-work/n034-cmap-ref-admission01/reference-overlays-markers.json",
+      "kind": "office-free-root-admission",
+      "bytes": 240917,
+      "sha256": "0654cfb7afcd6400792fabbaca9b41856ecf7dace4a1b14a9883b91eebfc83f7"
+    },
+    {
+      "key": "admission-envelopes/reference-overlays-markers.stderr.log",
+      "source": "C:/opf-work/n034-cmap-ref-admission01/reference-overlays-markers.stderr.log",
+      "kind": "office-free-root-admission",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "key": "admission-envelopes/reference-overlays-markers.stdout.log",
+      "source": "C:/opf-work/n034-cmap-ref-admission01/reference-overlays-markers.stdout.log",
+      "kind": "office-free-root-admission",
+      "bytes": 218,
+      "sha256": "2333ec0f5e4edb9e862b2c47257fffa4cbd84a62598fff693215a61cadd06dcc"
+    },
+    {
+      "key": "pure-external/n034-cmap-ref-pure01-reference-native-lines-exit.json",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-lines-exit.json",
+      "kind": "office-free-root-validation",
+      "bytes": 1655,
+      "sha256": "69c32fc0211cf7a2007d80b1d5be0fc2fab7e21edfd38f561f7843c5ddc0c851"
+    },
+    {
+      "key": "pure-external/n034-cmap-ref-pure01-reference-native-lines.stdout.log",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-lines.stdout.log",
+      "kind": "office-free-root-validation",
+      "bytes": 123631,
+      "sha256": "76890e5fcd11ceb418f9b4e0d77cd8f20a6449d8501abd13561f0ef12fcd40db"
+    },
+    {
+      "key": "pure-external/n034-cmap-ref-pure01-reference-native-lines.stderr.log",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-lines.stderr.log",
+      "kind": "office-free-root-validation",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "key": "pure/reference-native-lines/execution-envelope.json",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-lines/execution-envelope.json",
+      "kind": "office-free-root-validation",
+      "bytes": 247161,
+      "sha256": "f2631c0f195674f43f1942d63a730d5f5d6927d5f973cb19fe5be740970425ef"
+    },
+    {
+      "key": "pure/reference-native-lines/inputs/action-plan.json",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-lines/inputs/action-plan.json",
+      "kind": "office-free-root-validation",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "key": "pure/reference-native-lines/inputs/case.pptx",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-lines/inputs/case.pptx",
+      "kind": "office-free-root-validation",
+      "bytes": 128805,
+      "sha256": "77305632e835d3fbf4e5348ec29eaddf916f0894896ac06988e431e7f575f748"
+    },
+    {
+      "key": "pure/reference-native-lines/inputs/native-process.ps1",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-lines/inputs/native-process.ps1",
+      "kind": "office-free-root-validation",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "key": "pure/reference-native-lines/inputs/reference-chart-worker.ps1",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-lines/inputs/reference-chart-worker.ps1",
+      "kind": "office-free-root-validation",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+    },
+    {
+      "key": "pure/reference-native-lines/runner.json",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-lines/runner.json",
+      "kind": "office-free-root-validation",
+      "bytes": 524539,
+      "sha256": "fe7656ab3d41a708b5fe7207bc1ffd74bb76b6df797330628ce9934897e787da"
+    },
+    {
+      "key": "pure-external/n034-cmap-ref-pure01-reference-native-axes-exit.json",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-axes-exit.json",
+      "kind": "office-free-root-validation",
+      "bytes": 1653,
+      "sha256": "6ab6bc67974d9f74684fa38cb4845b0d0acf831ceb443f5da9a9a32eadffcee9"
+    },
+    {
+      "key": "pure-external/n034-cmap-ref-pure01-reference-native-axes.stdout.log",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-axes.stdout.log",
+      "kind": "office-free-root-validation",
+      "bytes": 127852,
+      "sha256": "bd8f7ba245d99046757ec75516040ce29a17f8174d44f6c6093708f2c7120253"
+    },
+    {
+      "key": "pure-external/n034-cmap-ref-pure01-reference-native-axes.stderr.log",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-axes.stderr.log",
+      "kind": "office-free-root-validation",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "key": "pure/reference-native-axes/execution-envelope.json",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-axes/execution-envelope.json",
+      "kind": "office-free-root-validation",
+      "bytes": 263317,
+      "sha256": "90263a9b63aff5f884710ec0e5875d2a3491a55d3689ab3d436b474cc2a06776"
+    },
+    {
+      "key": "pure/reference-native-axes/inputs/action-plan.json",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-axes/inputs/action-plan.json",
+      "kind": "office-free-root-validation",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "key": "pure/reference-native-axes/inputs/case.pptx",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-axes/inputs/case.pptx",
+      "kind": "office-free-root-validation",
+      "bytes": 129466,
+      "sha256": "d0878373b71b01930fb92d626faa484d157d9f5064a4d5d144f59f957e8aec82"
+    },
+    {
+      "key": "pure/reference-native-axes/inputs/native-process.ps1",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-axes/inputs/native-process.ps1",
+      "kind": "office-free-root-validation",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "key": "pure/reference-native-axes/inputs/reference-chart-worker.ps1",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-axes/inputs/reference-chart-worker.ps1",
+      "kind": "office-free-root-validation",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+    },
+    {
+      "key": "pure/reference-native-axes/runner.json",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-native-axes/runner.json",
+      "kind": "office-free-root-validation",
+      "bytes": 524528,
+      "sha256": "fa5b4cd60cb07dab8a26a2f6d2be1e5de908974e72325f6bc6fd21bb613ab8da"
+    },
+    {
+      "key": "pure-external/n034-cmap-ref-pure01-reference-overlays-markers-exit.json",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-overlays-markers-exit.json",
+      "kind": "office-free-root-validation",
+      "bytes": 1663,
+      "sha256": "75211133da5830d34aab4fc8505f33f1b32965144a17253d1609acba133352de"
+    },
+    {
+      "key": "pure-external/n034-cmap-ref-pure01-reference-overlays-markers.stdout.log",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-overlays-markers.stdout.log",
+      "kind": "office-free-root-validation",
+      "bytes": 122356,
+      "sha256": "66e96a83b6afe5770493935a6f19a744aa55808e335962cdb7f34615a2628836"
+    },
+    {
+      "key": "pure-external/n034-cmap-ref-pure01-reference-overlays-markers.stderr.log",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-overlays-markers.stderr.log",
+      "kind": "office-free-root-validation",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "key": "pure/reference-overlays-markers/execution-envelope.json",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-overlays-markers/execution-envelope.json",
+      "kind": "office-free-root-validation",
+      "bytes": 240917,
+      "sha256": "0654cfb7afcd6400792fabbaca9b41856ecf7dace4a1b14a9883b91eebfc83f7"
+    },
+    {
+      "key": "pure/reference-overlays-markers/inputs/action-plan.json",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-overlays-markers/inputs/action-plan.json",
+      "kind": "office-free-root-validation",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "key": "pure/reference-overlays-markers/inputs/case.pptx",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-overlays-markers/inputs/case.pptx",
+      "kind": "office-free-root-validation",
+      "bytes": 129754,
+      "sha256": "a5877f9d3ccc6127c1c954d8b9eca1e6ce94b1442e13ec1995221c30d20521c7"
+    },
+    {
+      "key": "pure/reference-overlays-markers/inputs/native-process.ps1",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-overlays-markers/inputs/native-process.ps1",
+      "kind": "office-free-root-validation",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "key": "pure/reference-overlays-markers/inputs/reference-chart-worker.ps1",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-overlays-markers/inputs/reference-chart-worker.ps1",
+      "kind": "office-free-root-validation",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+    },
+    {
+      "key": "pure/reference-overlays-markers/runner.json",
+      "source": "C:/opf-work/n034-cmap-ref-pure01-reference-overlays-markers/runner.json",
+      "kind": "office-free-root-validation",
+      "bytes": 524583,
+      "sha256": "4a27efd136fea4abe9c8e77219e2b39630758002617ef2c3b65224e4e8f63d01"
+    },
+    {
+      "key": "generation/suite.json",
+      "source": "C:/opf-work/n034-cmap-reference-suite01/suite.json",
+      "kind": "existing-public-synthetic-generation",
+      "bytes": 169426,
+      "sha256": "dfd8643a29e981c73ead88411c4c5002ddffee70e9621ce73230b97e75dd6a80"
+    },
+    {
+      "key": "generation/sources/reference-native-lines.opf.json",
+      "source": "C:/opf-work/n034-cmap-reference-suite01/sources/reference-native-lines.opf.json",
+      "kind": "existing-public-synthetic-generation",
+      "bytes": 2418,
+      "sha256": "87a3a6c20edcc4cb05d821019f3abc2b9bbaa5b0a73911853563665ae7b5a02e"
+    },
+    {
+      "key": "generation/inspection/reference-native-lines.json",
+      "source": "C:/opf-work/n034-cmap-reference-suite01/inspection/reference-native-lines.json",
+      "kind": "existing-public-synthetic-generation",
+      "bytes": 78072,
+      "sha256": "cc3da42c6ab7f7384b961f755e75451323f3fa0f1cb4eb4bf939b3d6f1d30d89"
+    },
+    {
+      "key": "generation/previews/reference-native-lines-01.svg",
+      "source": "C:/opf-work/n034-cmap-reference-suite01/previews/reference-native-lines-01.svg",
+      "kind": "existing-public-synthetic-generation",
+      "bytes": 220968,
+      "sha256": "128d504bff9139575ad84605b4356396690ec01373910421a720ab0a890f96da"
+    },
+    {
+      "key": "generation/previews/reference-native-lines-02.svg",
+      "source": "C:/opf-work/n034-cmap-reference-suite01/previews/reference-native-lines-02.svg",
+      "kind": "existing-public-synthetic-generation",
+      "bytes": 219392,
+      "sha256": "b5697fb77f1f501bf7dae6a1ea6a5be0585bfd16e5366d35451ba56846c7b335"
+    },
+    {
+      "key": "generation/previews/reference-native-lines-03.svg",
+      "source": "C:/opf-work/n034-cmap-reference-suite01/previews/reference-native-lines-03.svg",
+      "kind": "existing-public-synthetic-generation",
+      "bytes": 433202,
+      "sha256": "b9e97a7aa9f698290d128a96842b28e7aca84bfb5608b3b66de1e83b94274d70"
+    },
+    {
+      "key": "generation/previews/reference-native-lines-01.png",
+      "source": "C:/opf-work/n034-cmap-reference-suite01/previews/reference-native-lines-01.png",
+      "kind": "existing-public-synthetic-generation",
+      "bytes": 18130,
+      "sha256": "9152be2643713df7e5778d17a3ad32312385d8bee7b1123773fb49e86b6f4a52"
+    },
+    {
+      "key": "generation/previews/reference-native-lines-02.png",
+      "source": "C:/opf-work/n034-cmap-reference-suite01/previews/reference-native-lines-02.png",
+      "kind": "existing-public-synthetic-generation",
+      "bytes": 17301,
+      "sha256": "f1010fc34b0853d391b97b47a55de633cc784ea69c8c64058e24e09896b50bc1"
+    },
+    {
+      "key": "generation/previews/reference-native-lines-03.png",
+      "source": "C:/opf-work/n034-cmap-reference-suite01/previews/reference-native-lines-03.png",
+      "kind": "existing-public-synthetic-generation",
+      "bytes": 24053,
+      "sha256": "47352e0eeeae20afd2b8b5805b94432aac0b6493b3a107dff92045c944fbe3ae"
+    },
+    {
+      "key": "code/scripts/native-acceptance/reference-chart-profile.mjs",
+      "source": "08976a2f12544d92f1135d9fe827c39b438373ee:scripts/native-acceptance/reference-chart-profile.mjs",
+      "kind": "historical-source-code-not-native-result",
+      "bytes": 48782,
+      "sha256": "c69a4f8579dd02d0e34eb5d79e002a1009a934cc3fa4bf0cfd3ecb2878b876ea"
+    },
+    {
+      "key": "code/scripts/native-acceptance/reference-chart-archive.mjs",
+      "source": "08976a2f12544d92f1135d9fe827c39b438373ee:scripts/native-acceptance/reference-chart-archive.mjs",
+      "kind": "historical-source-code-not-native-result",
+      "bytes": 21341,
+      "sha256": "94fa1b751f2840fe901c07d8ef41a5b10e92bd48fcb5d4af20d86f20a800588f"
+    },
+    {
+      "key": "code/scripts/native-acceptance/reference-runtime-routes.mjs",
+      "source": "08976a2f12544d92f1135d9fe827c39b438373ee:scripts/native-acceptance/reference-runtime-routes.mjs",
+      "kind": "historical-source-code-not-native-result",
+      "bytes": 3993,
+      "sha256": "9568f30aedbc6920861f9174d40f250566467b002dc1064b05bf23c1a7a94585"
+    },
+    {
+      "key": "code/scripts/native-acceptance/run-reference-chart-profile.ps1",
+      "source": "08976a2f12544d92f1135d9fe827c39b438373ee:scripts/native-acceptance/run-reference-chart-profile.ps1",
+      "kind": "historical-source-code-not-native-result",
+      "bytes": 19206,
+      "sha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3"
+    },
+    {
+      "key": "code/scripts/native-acceptance/reference-chart-worker.ps1",
+      "source": "08976a2f12544d92f1135d9fe827c39b438373ee:scripts/native-acceptance/reference-chart-worker.ps1",
+      "kind": "historical-source-code-not-native-result",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+    },
+    {
+      "key": "code/scripts/native-acceptance/identity.mjs",
+      "source": "08976a2f12544d92f1135d9fe827c39b438373ee:scripts/native-acceptance/identity.mjs",
+      "kind": "historical-source-code-not-native-result",
+      "bytes": 3090,
+      "sha256": "7cf2fcc8951860353269f3a026e3d7a19a6251ba242f0cce1e37b118da6a3912"
+    },
+    {
+      "key": "code/scripts/native-acceptance/run-windows.ps1",
+      "source": "08976a2f12544d92f1135d9fe827c39b438373ee:scripts/native-acceptance/run-windows.ps1",
+      "kind": "historical-source-code-not-native-result",
+      "bytes": 15359,
+      "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+    },
+    {
+      "key": "code/scripts/native-acceptance/test-fixtures/reference-chart/native-process.ps1",
+      "source": "08976a2f12544d92f1135d9fe827c39b438373ee:scripts/native-acceptance/test-fixtures/reference-chart/native-process.ps1",
+      "kind": "historical-source-code-not-native-result",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "key": "qualification/before.json",
+      "source": "C:/opf-work/ref-native-proof-check01/before.json",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 226,
+      "sha256": "fb9b15f159c01d2f21335677f4372ef43256b474b615b1702f9a65c65980510a"
+    },
+    {
+      "key": "qualification/check-changed-exit.json",
+      "source": "C:/opf-work/ref-native-proof-check01/check-changed-exit.json",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 669,
+      "sha256": "f28248093703b5bd824a2fb37a8efbd48ed074ab92552d3f5e4e3c30806d944d"
+    },
+    {
+      "key": "qualification/check-changed.log",
+      "source": "C:/opf-work/ref-native-proof-check01/check-changed.log",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 874,
+      "sha256": "0d907a11d6950dd3792c8228597a0b52a8d4ff2a6f4020d161970333db07224f"
+    },
+    {
+      "key": "qualification/check-changed.stderr.log",
+      "source": "C:/opf-work/ref-native-proof-check01/check-changed.stderr.log",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 2008,
+      "sha256": "df4450d4087e2c8fd024a61ed0acf09f00f430b7e2c57d9964697b0d5329241a"
+    },
+    {
+      "key": "qualification/format-exit.json",
+      "source": "C:/opf-work/ref-native-proof-check01/format-exit.json",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 600,
+      "sha256": "6f64b03cfe30760a16271d69297a4befb5e3ef67a3db4d4a5573e165547a129f"
+    },
+    {
+      "key": "qualification/format.log",
+      "source": "C:/opf-work/ref-native-proof-check01/format.log",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "key": "qualification/format.stderr.log",
+      "source": "C:/opf-work/ref-native-proof-check01/format.stderr.log",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 1317,
+      "sha256": "c40fb9d5d0510ffacd08c084cb619f4cd473de790bda30cdc81419ccf82bf6a5"
+    },
+    {
+      "key": "qualification/install-exit.json",
+      "source": "C:/opf-work/ref-native-proof-check01/install-exit.json",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 512,
+      "sha256": "c62ce3fcd8934b36f42520be969cd56a4006ce030e864ec586b1fe46b7c7fda8"
+    },
+    {
+      "key": "qualification/install.log",
+      "source": "C:/opf-work/ref-native-proof-check01/install.log",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 4375,
+      "sha256": "a9c73bf75edf0256858660a2aaa2304215b9ce53174b7d57b621d879e547cede"
+    },
+    {
+      "key": "qualification/install.stderr.log",
+      "source": "C:/opf-work/ref-native-proof-check01/install.stderr.log",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "key": "qualification/launch.json",
+      "source": "C:/opf-work/ref-native-proof-check01/launch.json",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 684,
+      "sha256": "11375d0bd6b545d2837b98f3719cdfe3e0a76c0b10db6647a85fee33250b4fbc"
+    },
+    {
+      "key": "qualification/text-prerequisite-restoration.json",
+      "source": "C:/opf-work/ref-native-proof-check01/text-prerequisite-restoration.json",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 476,
+      "sha256": "3a600b5390d6144f51703d48e536bff547c0e51863ede11306a7a6580c6e4b77"
+    },
+    {
+      "key": "qualification/text-recovery-exit.json",
+      "source": "C:/opf-work/ref-native-proof-check01/text-recovery-exit.json",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 567,
+      "sha256": "0a500b7d1c95e47b385702426050522b729245b499e4c27299e0f3c32d766f48"
+    },
+    {
+      "key": "qualification/text-recovery.log",
+      "source": "C:/opf-work/ref-native-proof-check01/text-recovery.log",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 1072,
+      "sha256": "06ea05f527251d2e75c4098b14cff339868593812042ccd52a6cca66db78cd69"
+    },
+    {
+      "key": "qualification/text-recovery.stderr.log",
+      "source": "C:/opf-work/ref-native-proof-check01/text-recovery.stderr.log",
+      "kind": "actual-proof-metadata-check",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "key": "qualification/step-logs/biome.log",
+      "source": "C:/opf-work/ref-native-proof/artifacts/check-changed/biome.log",
+      "kind": "actual-proof-metadata-step",
+      "bytes": 683,
+      "sha256": "c98c9a979db61ab4fe1ba8842871faf03895e147a327bcc79fe6efb83c02700b"
+    },
+    {
+      "key": "qualification/step-logs/build.log",
+      "source": "C:/opf-work/ref-native-proof/artifacts/check-changed/build.log",
+      "kind": "actual-proof-metadata-step",
+      "bytes": 14709,
+      "sha256": "4dcac32c2cead42d97e62e5c0903959b1a5a8b101b7630c5ab880c4e98d7bacc"
+    },
+    {
+      "key": "qualification/step-logs/pnpm_run_check_changes.log",
+      "source": "C:/opf-work/ref-native-proof/artifacts/check-changed/pnpm_run_check_changes.log",
+      "kind": "actual-proof-metadata-step",
+      "bytes": 2634,
+      "sha256": "b80346abb74d659534d2655ae934d58357d57ebd2dc76da38ffd1a65590f45c8"
+    },
+    {
+      "key": "qualification/step-logs/pnpm_run_check_skill-commands.log",
+      "source": "C:/opf-work/ref-native-proof/artifacts/check-changed/pnpm_run_check_skill-commands.log",
+      "kind": "actual-proof-metadata-step",
+      "bytes": 1037,
+      "sha256": "df0b5a437a14978502c9dbf59c90a98f60868d3d7c1c4c2683396ee6e5d9fd0f"
+    },
+    {
+      "key": "qualification/step-logs/pnpm_run_check_text.log",
+      "source": "C:/opf-work/ref-native-proof/artifacts/check-changed/pnpm_run_check_text.log",
+      "kind": "actual-proof-metadata-step",
+      "bytes": 1843,
+      "sha256": "10f67298905138c2e261917c92526b330b5c01c8a277819311ab149951d2662d"
+    }
+  ],
+  "facts": {
+    "opens": 2,
+    "closes": 2,
+    "saveCopies": 1,
+    "quits": 1,
+    "actions": 0,
+    "cleanupConfirmed": true,
+    "workerError": null,
+    "lastStage": "worker.complete",
+    "supervisor": {
+      "schemaVersion": 1,
+      "profile": "reference-chart-original-readonly-v1",
+      "timedOut": false,
+      "exitCode": 0,
+      "workerCleanupConfirmed": true,
+      "cleanupConfirmed": true,
+      "powerPointPostflightInitialCount": 0,
+      "powerPointPostflightCount": 0,
+      "postflight": {
+        "schemaVersion": 1,
+        "policy": "global-zero-after-completed-owned-quit-v1",
+        "budgetMilliseconds": 5000,
+        "intervalMilliseconds": 100,
+        "maximumQueries": 51,
+        "sampleCount": 1,
+        "initialProcessIds": [],
+        "initialCount": 0,
+        "finalProcessIds": [],
+        "finalCount": 0,
+        "elapsedMilliseconds": 22.680700000000005,
+        "finishedElapsedMilliseconds": 48.20100000000001,
+        "observedZero": true,
+        "officeActions": 0
+      },
+      "postflightIdentity": {
+        "path": "native/postflight.jsonl",
+        "bytes": 161,
+        "sha256": "b8e994159c78b7468a6e613c8f5b843bebcef0fa38f016a0703a4ff37eeabee9"
+      },
+      "postflightError": null,
+      "originalSupervisorSha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "nativeAcceptance": false,
+      "registryAcceptance": false
+    },
+    "findings": [
+      {
+        "code": "exposed-cache-or-workbook-changed",
+        "slide": 1
+      },
+      {
+        "code": "exposed-cache-or-workbook-changed",
+        "slide": 2
+      },
+      {
+        "code": "exposed-cache-or-workbook-changed",
+        "slide": 3
+      },
+      {
+        "code": "import-authored-data-differs",
+        "slide": 1,
+        "phase": "saved-reopened"
+      },
+      {
+        "code": "import-reference-count-differs",
+        "slide": 1,
+        "phase": "saved-reopened"
+      },
+      {
+        "code": "saved-public-import-differs"
+      },
+      {
+        "code": "saved-public-import-diagnostics-differ"
+      }
+    ],
+    "pngs": [
+      {
+        "phase": "original",
+        "slide": 1,
+        "sha256": "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
+      },
+      {
+        "phase": "original",
+        "slide": 2,
+        "sha256": "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
+      },
+      {
+        "phase": "original",
+        "slide": 3,
+        "sha256": "080d4d0297913e3ad87ab20590c2a02489ac8991fbe80a6d3f78d5ee59ecd212"
+      },
+      {
+        "phase": "saved-reopened",
+        "slide": 1,
+        "sha256": "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
+      },
+      {
+        "phase": "saved-reopened",
+        "slide": 2,
+        "sha256": "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
+      },
+      {
+        "phase": "saved-reopened",
+        "slide": 3,
+        "sha256": "080d4d0297913e3ad87ab20590c2a02489ac8991fbe80a6d3f78d5ee59ecd212"
+      }
+    ],
+    "originalImportDiagnostics": [
+      {
+        "code": "chart-option-adapted",
+        "option": "series.0.line.color",
+        "message": "Line series 'Actual' has explicit native solid paint that is not retained as per-series formatting in OPF; imported chart colors follow its design and semantic highlight.",
+        "path": "slides.0.charts.0.series.0.line.color"
+      },
+      {
+        "code": "chart-option-adapted",
+        "option": "series.0.line.color",
+        "message": "Line series 'Actual' has explicit native solid paint that is not retained as per-series formatting in OPF; imported chart colors follow its design and semantic highlight.",
+        "path": "slides.1.charts.0.series.0.line.color"
+      }
+    ],
+    "savedImportDiagnostics": [
+      {
+        "code": "chart-reference-ownership-uncertain",
+        "option": "referenceLines",
+        "message": "A structurally identified reference helper was edited into unsupported or nonconstant data, or its native grouping/ownership/axes/categories are ambiguous; all of its current data remains ordinary chart data. Current auto-label, leader-line or manual label-placement constructs cannot be represented by a plain reference label.",
+        "path": "slides.0.charts.0.referenceLines"
+      },
+      {
+        "code": "chart-reference-ownership-uncertain",
+        "option": "referenceLines",
+        "message": "A structurally identified reference helper was edited into unsupported or nonconstant data, or its native grouping/ownership/axes/categories are ambiguous; all of its current data remains ordinary chart data. Current auto-label, leader-line or manual label-placement constructs cannot be represented by a plain reference label.",
+        "path": "slides.0.charts.0.referenceLines"
+      },
+      {
+        "code": "chart-option-adapted",
+        "option": "dataLabels",
+        "message": "Data labels that show BubbleSize cannot be expressed; only category, value and percent import.",
+        "path": "slides.0.charts.0.dataLabels"
+      },
+      {
+        "code": "chart-option-adapted",
+        "option": "series.0.line.color",
+        "message": "Line series 'Actual' has explicit native solid paint that is not retained as per-series formatting in OPF; imported chart colors follow its design and semantic highlight.",
+        "path": "slides.1.charts.0.series.0.line.color"
+      }
+    ]
+  },
+  "acceptance": {
+    "rootVisualFacetReviewed": true,
+    "nativeAcceptance": false,
+    "registryAcceptance": false,
+    "importAcceptance": false,
+    "nativeEditAcceptance": false,
+    "physicalGlyphAcceptance": false,
+    "releaseAcceptance": false
+  },
+  "review": {
+    "reviewer": "root coordinator",
+    "basis": "Root individually viewed all three unique native rasters and source preview; recorded to delegated agent before capture.",
+    "scope": "Negative Floor label and Jan gutter fixed; authored dash/dot/labels visible; unlabeled 55 retained; title Target 92% / subtitle Threshold 30 without explicit references does not create reference lines.",
+    "limitations": "No authored native edits performed. All seven original findings remain. Later importer fix is separate and does not retrospectively certify old0897."
+  },
+  "consumerPacket": {
+    "revision": "eb3621c7c9b4b04f542ab3ff917823d9a830e6d6",
+    "url": "https://github.com/OpenPresentation/opf/tree/eb3621c7c9b4b04f542ab3ff917823d9a830e6d6/docs/handoff/2026-11-10/current-consumer-0897",
+    "scope": "Already-public installed-consumer packet; identity manifests retained here,53MB payload referenced without duplication."
+  },
+  "noExecution": "This capture only reads existing files/Git blobs. No Office, import, export, render, generation or native replay.",
+  "captureSetupNotes": [
+    "First read-only JSON inspection encountered an existing UTF8 BOM; decoding strips the BOM only for JSON parsing. Raw bytes remain unchanged.",
+    "Initial verifier used JavaScript true for recorded COM ReadOnly. Corrected to exact MsoTriState -1 after inspecting the raw report.",
+    "Initial derived finding summary compared absent JSON fields with JavaScript undefined properties. Corrected the summary comparison to compare only the original present fields; full raw findings are unchanged."
+  ],
+  "qualification": {
+    "nativeAndAdmissionRecordCount": 101,
+    "initialCapture": {
+      "path": "raw.json.gz",
+      "bytes": 2876634,
+      "sha256": "e07c516d18c2cc5044fee929cad38a8e6a1cd490c5e6aec084fe061591147a9f",
+      "expandedBytes": 11445535,
+      "records": 101,
+      "totalRecordBytes": 8563160
+    },
+    "addedMetadataRecords": 20,
+    "offlineInstall": {
+      "exitCode": 0
+    },
+    "preliminaryBiome": {
+      "exitCode": 1,
+      "reason": "Handoff files ignored by maintained Biome configuration;0 files processed, no fixes. Not a mapped-check result."
+    },
+    "originalMapped": {
+      "exitCode": 1,
+      "elapsedSeconds": 32.1,
+      "passed": [
+        "build",
+        "biome",
+        "check:changes",
+        "check:skill-commands"
+      ],
+      "failed": [
+        "check:text"
+      ],
+      "typecheck": "SKIPPED: no TypeScript changes",
+      "reason": "One absent exactHEAD painting-Linux.json.gz test fixture in sparse evidence checkout."
+    },
+    "exactRecovery": {
+      "head": "08976a2f12544d92f1135d9fe827c39b438373ee",
+      "path": "docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz",
+      "oid": "2bb264bd47d1382c5cf50c9b7c4f75e2750be7f6",
+      "bytes": 16102,
+      "sha256": "0b7ef1b73bbd4f31c5ac67716bea08f22a64df066f4ad343765c0d3d74511e56",
+      "contained": true,
+      "absentOnly": true,
+      "exclusiveWrite": true,
+      "indexUnchanged": true,
+      "source": "Exact HEAD Git blob required by scripts/check-text-integrity.test.mjs:18"
+    },
+    "onlyFailedTextRecovery": {
+      "exitCode": 0,
+      "tests": 7,
+      "passed": 7,
+      "scan": {
+        "valid": true,
+        "files": 9464
+      }
+    },
+    "aggregateRelabelled": false,
+    "noFullMapperOrBuildRepeat": true
+  }
+}
