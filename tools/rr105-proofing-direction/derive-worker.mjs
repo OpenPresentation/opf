@@ -19,7 +19,7 @@ export function derive(baseline){
 # Diagnostic getter only. Expected XML direction is context, never an acceptance assertion.
 function Read-FurnitureParagraphDirection($Range,[string]$Text,[string]$Phase,[int]$SlideIndex,[string]$ShapeName,[string]$Prefix) {
     $names=@('OPF heading slides.0.title line 0','OPF list slides.0.items line 0','OPF list slides.0.items line 1')
-    $words=@('نص لاتيني بلغة عربية صريحة','Item 1: Customers told us onboarding took too long, so we rebuilt it ','around the customer journey.')
+    $words=@(([Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('RgY1BiAARAYnBioGSgZGBkoGIAAoBkQGOgYpBiAAOQYxBigGSgYpBiAANQYxBkoGLQYpBg=='))),'Item 1: Customers told us onboarding took too long, so we rebuilt it ','around the customer journey.')
     $index=[Array]::IndexOf($names,$ShapeName)
     if($Phase -cnotin @('original','edited','reopened') -or $SlideIndex -ne 1 -or $index -lt 0 -or $names[$index] -cne $ShapeName -or $Prefix -cne ($Phase+'.slide-1.shape-'+($index+1))) { Stop-FurnitureLifecycle 'Direction diagnostic requires the exact phase/slide/name/prefix binding' }
     if(-not [string]::Equals($Text,$words[$index],[StringComparison]::Ordinal) -or $Text -match '[\\r\\n\\v]') { Stop-FurnitureLifecycle 'Direction diagnostic requires the exact original09 single-paragraph UTF16 text' }
