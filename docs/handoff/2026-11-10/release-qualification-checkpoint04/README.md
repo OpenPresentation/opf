@@ -21,3 +21,5 @@ Normal source/evidence publication refusals for fonts/MCP were resolved by root 
 Replay: node docs/handoff/2026-11-10/release-qualification-checkpoint04/verify.mjs. These closed receipts do not contain the live coherent gate's eventual result.
 
 Metadata-only check at f360ec852 actually finished1:5PASS/2sparseRED/29s; typeSKIP. Exact-current-HEAD restoration of1848declared files/45,517,291B preserved full index identity and existing-source bytes. ONLY failed gallery/text were rerun:18galleryPASS/current863records and7textPASS/11,460files. Original aggregate remains RED. A manual single ignored-doc-file Biome invocation exited1 because that path is excluded; the maintained metadata mapper actually processed2files and passed Biome. These results do not qualify all combined-source tests.
+
+Final normal metadata delta check at a31af7184 actually passed5steps/29.4s; typeSKIP/no package tests. Its three lossless raw records are metadata-final.json.gz (archive SHA256 849a911109a4480d9c9a3458d96a9d8b2d36e8a6077f1294402b722d09409da6). This validates the checkpoint delta only. The original default-main full check remains separate and live.
