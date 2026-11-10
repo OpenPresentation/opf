@@ -1,0 +1,425 @@
+{
+  "authority": "/tmp/opf-schema-package-tails/results.json",
+  "authoritySha256": "8863721b7a3b7bdefc37064f5b19fc184923f6e5cb92534bf86566f96cab67b4",
+  "head": "ed51a7e8a6636bb2e08c9a446a7d22c21ad81066",
+  "diffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "scope": "Sequential diagnostic continuation after literal mapper refusals; maintained selectTests/nodeArgs, no test changes/skips/new lists; all failures retained; not a green original aggregate.",
+  "selection": {
+    "editor": 10,
+    "render": 17,
+    "excluded": [
+      "golden-gate.mjs",
+      "golden.mjs",
+      "layout-template-goldens.mjs"
+    ]
+  },
+  "sourceBase": "c8f104df121f856c7a213288a4a4627b3018c52b",
+  "records": [
+    {
+      "package": "render",
+      "file": "gallery-layout-alignment.mjs",
+      "args": [
+        "test/gallery-layout-alignment.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 12540,
+      "seconds": 0.659,
+      "testSha256": "61232bee8fb01f863d6c681cd47e1e4a5fc92ca2eb716a45f69504b01fec385c",
+      "log": "render-gallery-layout-alignment.mjs.log",
+      "logSha256": "198ce5b04ee5fe87045d980a8ad0d80b951dc71c14e70431d83d86504c112550",
+      "logBytes": 6779
+    },
+    {
+      "package": "render",
+      "file": "image-treatments.mjs",
+      "args": [
+        "test/image-treatments.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 13099,
+      "seconds": 0.394,
+      "testSha256": "93f7834db8cde5bdb648b29dbef186b0a40c3c9d5b5a568879916a2935a26002",
+      "log": "render-image-treatments.mjs.log",
+      "logSha256": "8a0631e3dee4ee1ea8e83cd09a78437312b46ca68ebf2841520bd6c7eb6c0af6",
+      "logBytes": 404
+    },
+    {
+      "package": "render",
+      "file": "item-alignment.mjs",
+      "args": [
+        "test/item-alignment.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 13100,
+      "seconds": 0.289,
+      "testSha256": "2308be202313366052581dbbfb65187862023b8ccc333e724ddb6ff81c8dda7e",
+      "log": "render-item-alignment.mjs.log",
+      "logSha256": "e9711e180aa2992b24362b0ffb23517ef223d25feaa0cfd8c3f8de593173351f",
+      "logBytes": 613
+    },
+    {
+      "package": "render",
+      "file": "layout-templates.mjs",
+      "args": [
+        "test/layout-templates.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 13566,
+      "seconds": 92.996,
+      "testSha256": "69e1910670fc2cb77ee9dfd9b9e5df193ab162e213a2a8c26495b256dfa8d111",
+      "log": "render-layout-templates.mjs.log",
+      "logSha256": "3081fa4af57cc3232a4d9d77cb42312bb82287d76835fd5da2db6332f7179908",
+      "logBytes": 12023
+    },
+    {
+      "package": "render",
+      "file": "script-family-hosts.mjs",
+      "args": [
+        "test/script-family-hosts.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 14861,
+      "seconds": 0.289,
+      "testSha256": "bbddd9f3c2ace46e72d64cafb31e15f2fe1c847d5327e22d148996c3fb9ccb9c",
+      "log": "render-script-family-hosts.mjs.log",
+      "logSha256": "421a4a9da7e229e7d2a20466e28a5e1120ac605799b62d805a77d3c4e5173d58",
+      "logBytes": 4584
+    },
+    {
+      "package": "render",
+      "file": "script-fonts.mjs",
+      "args": [
+        "test/script-fonts.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 14892,
+      "seconds": 0.535,
+      "testSha256": "61b3d9521c8d889fb6adb3e6a90c1b256214afd34e163a39cb9f58a306c79e0a",
+      "log": "render-script-fonts.mjs.log",
+      "logSha256": "56dee3d12aebefbe3c8a6c5331c942f295cd0d7e59a23d2cf3deae8ec8f52853",
+      "logBytes": 10399
+    },
+    {
+      "package": "render",
+      "file": "script-name-hosts.mjs",
+      "args": [
+        "test/script-name-hosts.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 14898,
+      "seconds": 0.301,
+      "testSha256": "0eae739b2d4c98ab13693ab86a3f3782c31c6859bc15853f36af0fe29981fe94",
+      "log": "render-script-name-hosts.mjs.log",
+      "logSha256": "9b9009caa406a4fd7694f370920de868d3caa400c338cbc7649d7a4a9d8e3c97",
+      "logBytes": 4583
+    },
+    {
+      "package": "render",
+      "file": "sh-02-shapes.mjs",
+      "args": [
+        "test/sh-02-shapes.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 14899,
+      "seconds": 0.263,
+      "testSha256": "d9315158048d7f9c2de22c74089aa00534d8046578bcc9e86a95496dbdb71720",
+      "log": "render-sh-02-shapes.mjs.log",
+      "logSha256": "da20df390045c7d2c57c713c590a33fe4bcef83d606a2a5a64b2bfb2f1427610",
+      "logBytes": 4350
+    },
+    {
+      "package": "render",
+      "file": "sh-04-overlays.mjs",
+      "args": [
+        "test/sh-04-overlays.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 14902,
+      "seconds": 0.269,
+      "testSha256": "cae0667ce84ab1fdb3aa2fa83de8f6d3169664ea4b7eb248294e2736289b7ef8",
+      "log": "render-sh-04-overlays.mjs.log",
+      "logSha256": "2f59d082e166e82e49c295bd3f8bdae4cff879872fe5e9562b55c98768dbbbcf",
+      "logBytes": 4354
+    },
+    {
+      "package": "render",
+      "file": "sh-09-arrangements.mjs",
+      "args": [
+        "test/sh-09-arrangements.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 14904,
+      "seconds": 0.224,
+      "testSha256": "5e7e4715a286f7e2728ee5d3f0b8a9ec7762d50ace3013d1fe69199ce1cff65c",
+      "log": "render-sh-09-arrangements.mjs.log",
+      "logSha256": "928cff7bf839cf7033e3e2db5d91d54d76dea3daa9ee15b6ff24d094d3873181",
+      "logBytes": 4269
+    },
+    {
+      "package": "render",
+      "file": "sh-17-arrangements.mjs",
+      "args": [
+        "test/sh-17-arrangements.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 14916,
+      "seconds": 0.23,
+      "testSha256": "3801641ad18d8a38e9a3329744061e22a0285b6d84b15444d84aa0ebc691c07a",
+      "log": "render-sh-17-arrangements.mjs.log",
+      "logSha256": "99535cfbc239a2bc12e457347c28da7ba6ea363469ab62eee9cfed09e292b6a4",
+      "logBytes": 4269
+    },
+    {
+      "package": "render",
+      "file": "sh-18-cycle.mjs",
+      "args": [
+        "test/sh-18-cycle.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 14917,
+      "seconds": 0.226,
+      "testSha256": "39dc13eabc4ef62a754cee3fd710447ffcf8ca7e9cd153a48330aa74d6845216",
+      "log": "render-sh-18-cycle.mjs.log",
+      "logSha256": "55f61e89561b7ba71449cd1a11e04349fd8a1d6588463ff6aaf592c78d0b2ab5",
+      "logBytes": 4262
+    },
+    {
+      "package": "render",
+      "file": "shape-block-effects.mjs",
+      "args": [
+        "test/shape-block-effects.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 14946,
+      "seconds": 0.25,
+      "testSha256": "26cb1563cedac6b0a89131337d24fbb9358c2760d298d00642d27c9bac27bff7",
+      "log": "render-shape-block-effects.mjs.log",
+      "logSha256": "8a5220e295e4b18aface810907c1071c135602436d73874cdae535702a86ec58",
+      "logBytes": 4260
+    },
+    {
+      "package": "render",
+      "file": "slide-variables.mjs",
+      "args": [
+        "test/slide-variables.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 14984,
+      "seconds": 0.286,
+      "testSha256": "e14ef2dad8690fc6e02ca1eb9f9c022b4397042aa90d144fb3afef35f7661ec0",
+      "log": "render-slide-variables.mjs.log",
+      "logSha256": "e66bde4d00ece36d0c1d1179f8f1a4189631c6d3a60c6abe7fdf1e3cb6d6b7da",
+      "logBytes": 896
+    },
+    {
+      "package": "render",
+      "file": "socials.mjs",
+      "args": [
+        "test/socials.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 15024,
+      "seconds": 0.295,
+      "testSha256": "37082aa9e7f0f2f69b3fb2d012d81c7c1f6f2e022689707458a684f5b5d0161d",
+      "log": "render-socials.mjs.log",
+      "logSha256": "912a487d9eca71be1d0114a18903cfc8efdcd00ee110a8a8992b0d8cd4b7439d",
+      "logBytes": 1353
+    },
+    {
+      "package": "render",
+      "file": "timeline.mjs",
+      "args": [
+        "test/timeline.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 15734,
+      "seconds": 0.261,
+      "testSha256": "aeb46ba8aaa64953458b9d312d3104811eb2fc976641e948140560b51d1cad2d",
+      "log": "render-timeline.mjs.log",
+      "logSha256": "c933b00508e472950af7fec734bd2bfe84a7fc172cfeb45c68d968447b726cae",
+      "logBytes": 8322
+    },
+    {
+      "package": "render",
+      "file": "v2-binding-metadata.mjs",
+      "args": [
+        "test/v2-binding-metadata.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 15737,
+      "seconds": 0.243,
+      "testSha256": "9d23adef81ee0f0640e0c025070e500236274f299a21679af59d321f04aba28f",
+      "log": "render-v2-binding-metadata.mjs.log",
+      "logSha256": "b5f6ce906fa46bc2828c1534e236cc162f6f4b779dcf5e6bb7813269d2c8c8de",
+      "logBytes": 1513
+    },
+    {
+      "package": "editor",
+      "file": "builtin-variables.mjs",
+      "args": [
+        "test/builtin-variables.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 36960,
+      "seconds": 0.248,
+      "testSha256": "32004f9c9f98b6128103eb03114f2e8c41ed826ca11a22ebedb5c4507903568f",
+      "log": "editor-builtin-variables.mjs.log",
+      "logSha256": "fa869139a7d6d2808d6bedc1ff833ed28d38fa38b839a9b4cf2912a5adf90212",
+      "logBytes": 1025
+    },
+    {
+      "package": "editor",
+      "file": "content-actions.mjs",
+      "args": [
+        "test/content-actions.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 37005,
+      "seconds": 0.329,
+      "testSha256": "ab35fdf15c745c8b4f3ef115313046207d0477234320befd96463e4809f3ccc2",
+      "log": "editor-content-actions.mjs.log",
+      "logSha256": "40713f5621d2925100914d3c2e82414f84c95ad33cc86ea0c6198e963ea68486",
+      "logBytes": 1224
+    },
+    {
+      "package": "editor",
+      "file": "fa-13-conveniences.mjs",
+      "args": [
+        "test/fa-13-conveniences.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 37067,
+      "seconds": 0.3,
+      "testSha256": "e4fa699dea31bcf05f604140f63036af02d8aeb5ae5069e11f013eca94e71770",
+      "log": "editor-fa-13-conveniences.mjs.log",
+      "logSha256": "b0e00f83512fff31b3b2217e671d073c4de2e75104145ed79441f1f20041ab18",
+      "logBytes": 581
+    },
+    {
+      "package": "editor",
+      "file": "find-replace.mjs",
+      "args": [
+        "test/find-replace.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 37078,
+      "seconds": 0.123,
+      "testSha256": "7cbc222320dc5b4d961bc3893de2dab06af30d3254011bf81fa6b2c7adb68385",
+      "log": "editor-find-replace.mjs.log",
+      "logSha256": "eb8c03e9ffbb3323370b3a10c4ce1fe6d36fdf9007c67576fa81e1d6fe20f7c7",
+      "logBytes": 1360
+    },
+    {
+      "package": "editor",
+      "file": "font-gate-script-families.mjs",
+      "args": [
+        "test/font-gate-script-families.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 37084,
+      "seconds": 0.512,
+      "testSha256": "86e7eba24125e137719d1cb1b1c07105ef94b02950b2264fb640bb9de44408f6",
+      "log": "editor-font-gate-script-families.mjs.log",
+      "logSha256": "732d11ffcc67b104acb5600352b94a2fd3936e12112e0d0fe69958876b00ad18",
+      "logBytes": 494
+    },
+    {
+      "package": "editor",
+      "file": "font-gate-script-names.mjs",
+      "args": [
+        "test/font-gate-script-names.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 37085,
+      "seconds": 0.51,
+      "testSha256": "87d821341d549e6ee98b583fbaeba0120bd4754aa308fcbce9a9c223cc4cbf9d",
+      "log": "editor-font-gate-script-names.mjs.log",
+      "logSha256": "3700bd437e244345d425ef7190b4528122cd3f3ad07abbe1172871711b3cae17",
+      "logBytes": 410
+    },
+    {
+      "package": "editor",
+      "file": "source-completions-units.mjs",
+      "args": [
+        "test/source-completions-units.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 37361,
+      "seconds": 0.156,
+      "testSha256": "1535b196d4db98a0a00c319528af580b5422664cb2f5229044ce923098629349",
+      "log": "editor-source-completions-units.mjs.log",
+      "logSha256": "33ee769f61ed47d3d092128de55609fbcabaf0aab19b8c4673a819d83844f92f",
+      "logBytes": 674
+    },
+    {
+      "package": "editor",
+      "file": "source-language-units.mjs",
+      "args": [
+        "test/source-language-units.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 37372,
+      "seconds": 0.148,
+      "testSha256": "123a5e7fb3bf79b49e99ef1731fb2371076c42a6f484c34fb5336e750d160c8e",
+      "log": "editor-source-language-units.mjs.log",
+      "logSha256": "10c3a4e3faa9ba468cc2a7246e4d34051df7cbc3ac184ef2797433551a4b7cdd",
+      "logBytes": 743
+    },
+    {
+      "package": "editor",
+      "file": "source-language-yaml-markdown-units.mjs",
+      "args": [
+        "test/source-language-yaml-markdown-units.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 37373,
+      "seconds": 0.19,
+      "testSha256": "3ae019a2083d6ef4c1f6b30c8bd68cf37cbc5a02d5f09c120b2f3093e8fb942d",
+      "log": "editor-source-language-yaml-markdown-units.mjs.log",
+      "logSha256": "82e03a051b191184519acc5f446fd6ac6172127138878bc1be4735345d6979ac",
+      "logBytes": 758
+    },
+    {
+      "package": "editor",
+      "file": "source-lines.mjs",
+      "args": [
+        "test/source-lines.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "pid": 37374,
+      "seconds": 0.234,
+      "testSha256": "dc6043a2d3eb9943c68e730eed386109946cc72fc1f32305b8f35717e1b8b2f6",
+      "log": "editor-source-lines.mjs.log",
+      "logSha256": "3c61537f74af60954d1680c5a8a5c4cde4b705b9ed408f711f1942db65edafc5",
+      "logBytes": 1807
+    }
+  ],
+  "qualification": false
+}

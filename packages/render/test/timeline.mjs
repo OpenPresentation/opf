@@ -4,7 +4,7 @@ import { loadFonts } from '../dist/fonts-node.js';
 const fonts = (await loadFonts({pack: 'base'})).registry;
 for (const count of [1, 2, 4, 8]) {
   for (const dimensions of [{ width: 1280, height: 720 }, { width: 540, height: 960 }]) {
-    const deck = { design: { dimensions, fontScheme: 'roboto' }, slides: [{
+    const deck = { design: { dimensions: {widthInches: dimensions.width / 96, heightInches: dimensions.height / 96}, fontScheme: 'roboto' }, slides: [{
       title: 'A timeline with bounded labels',
       blocks: [{ timeline: { events: Array.from({ length: count }, (_, i) => ({ when: `Q${i + 1}`, what: `Milestone ${i + 1}`, description: 'Keep every label inside its allocated space.' })) } }],
     }] };

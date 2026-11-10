@@ -230,11 +230,12 @@ console.log(`Layout templates: ${regionItems} region items, ${cards} cards, ${bl
 
 // Host-registered gallery2 layouts preserve all three alignment choices in traced text.
 const anchors = {left: 'start', center: 'middle', right: 'end'};
+const authoredAlignment = {left: 'start', center: 'center', right: 'end'};
 const alignedCases = [];
 assert.deepEqual(Object.keys(layouts).sort(), Object.keys(gallery.layouts).sort(), 'the alignment fixture covers every current gallery layout');
 for (const id of Object.keys(layouts)) for (const alignment of Object.keys(anchors)) {
   const deck = {slides: [{layout: id, title: 'Alignment probe', blocks: [{text: 'Region alignment probe'}],
-    design: {titleAlignment: alignment, contentAlignment: alignment}}]};
+    design: {titleAlignment: authoredAlignment[alignment], contentAlignment: authoredAlignment[alignment]}}]};
   const bound = harness.resolvePresentation(deck).slides[0];
   assert.deepEqual(bound.layout, layouts[id], `${id}: the host resolves the actual gallery2 record`);
   for (const [path, value] of [['slides.0.title', 'Alignment probe'], ['slides.0.blocks.0.text', 'Region alignment probe']]) {

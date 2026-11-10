@@ -111,17 +111,17 @@ const svgFamilies=svg=>[...new Set([...svg.matchAll(/font-family="([^"]*)"/g)].m
 const scriptRuns=svg=>[...svg.matchAll(/<tspan font-family="([^",]*)[^"]*"[^>]*>([^<]*)<\/tspan>/g)].map(match=>[match[1],match[2]]);
 const deck=(language,fontScheme,title,text)=>({$schema:'https://openpresentation.org/schema/opf/v1',name:`FF-19 ${language}`,language,design:{fontScheme},slides:[{title,text}]});
 const classes=[
-  {id:'latin',language:'en',scheme:'roboto',title:'Quarterly review',text:'Revenue grew 12% year over year.',family:'Roboto',language:'en',rtl:false},
-  {id:'cyrillic',language:'ru',scheme:'roboto',title:'Квартальный обзор',text:'Выручка выросла на 12%.',family:'Roboto',language:'ru',rtl:false},
-  {id:'greek',language:'el',scheme:'roboto',title:'Τριμηνιαία ανασκόπηση',text:'Τα έσοδα αυξήθηκαν 12%.',family:'Roboto',language:'el',rtl:false},
-  {id:'ja',language:'ja',scheme:'meiryo',title:'四半期レビュー',text:'売上は前年比12%増加しました。',family:'Noto Sans JP',language:'ja',rtl:false,substitution:'Meiryo'},
-  {id:'zh-Hans',language:'zh-Hans',scheme:'microsoft-yahei',title:'季度回顾',text:'收入同比增长12%。',family:'Noto Sans SC',language:'zh-Hans',rtl:false,substitution:'Microsoft YaHei'},
-  {id:'zh-Hant',language:'zh-Hant',scheme:'microsoft-jhenghei',title:'季度回顧',text:'營收年增12%。',family:'Noto Sans TC',language:'zh-Hant',rtl:false,substitution:'Microsoft JhengHei'},
-  {id:'ko',language:'ko',scheme:'malgun-gothic',title:'분기별 검토',text:'매출이 전년 대비 12% 증가했습니다.',family:'Noto Sans KR',language:'ko',rtl:false,substitution:'Malgun Gothic'},
-  {id:'ar',language:'ar',scheme:'arabic-typesetting',title:'مراجعة ربع سنوية',text:'نمت الإيرادات بنسبة 12% على أساس سنوي.',family:'Noto Naskh Arabic',language:'ar',rtl:true,substitution:'Arabic Typesetting'},
-  {id:'he',language:'he',scheme:'david',title:'סקירה רבעונית',text:'ההכנסות גדלו ב-12% משנה לשנה.',family:'Noto Serif Hebrew',language:'he',rtl:true,substitution:'David'},
-  {id:'hi',language:'hi',scheme:'mangal',title:'तिमाही समीक्षा',text:'राजस्व में साल-दर-साल 12% की वृद्धि हुई।',family:'Noto Sans Devanagari',language:'hi',rtl:false,substitution:'Mangal'},
-  {id:'th',language:'th',scheme:'angsana-new',title:'การทบทวนรายไตรมาส',text:'รายได้เติบโตขึ้น 12% เมื่อเทียบกับปีก่อน',family:'Noto Sans Thai',language:'th',rtl:false,substitution:'Angsana New'},
+  {id:'latin',language:'en',scheme:'roboto',title:'Quarterly review',text:'Revenue grew 12% year over year.',family:'Roboto',lang:'en',rtl:false},
+  {id:'cyrillic',language:'ru',scheme:'roboto',title:'Квартальный обзор',text:'Выручка выросла на 12%.',family:'Roboto',lang:'ru',rtl:false},
+  {id:'greek',language:'el',scheme:'roboto',title:'Τριμηνιαία ανασκόπηση',text:'Τα έσοδα αυξήθηκαν 12%.',family:'Roboto',lang:'el',rtl:false},
+  {id:'ja',language:'ja',scheme:'meiryo',title:'四半期レビュー',text:'売上は前年比12%増加しました。',family:'Noto Sans JP',lang:'ja',rtl:false,substitution:'Meiryo'},
+  {id:'zh-Hans',language:'zh-Hans',scheme:'microsoft-yahei',title:'季度回顾',text:'收入同比增长12%。',family:'Noto Sans SC',lang:'zh-Hans',rtl:false,substitution:'Microsoft YaHei'},
+  {id:'zh-Hant',language:'zh-Hant',scheme:'microsoft-jhenghei',title:'季度回顧',text:'營收年增12%。',family:'Noto Sans TC',lang:'zh-Hant',rtl:false,substitution:'Microsoft JhengHei'},
+  {id:'ko',language:'ko',scheme:'malgun-gothic',title:'분기별 검토',text:'매출이 전년 대비 12% 증가했습니다.',family:'Noto Sans KR',lang:'ko',rtl:false,substitution:'Malgun Gothic'},
+  {id:'ar',language:'ar',scheme:'arabic-typesetting',title:'مراجعة ربع سنوية',text:'نمت الإيرادات بنسبة 12% على أساس سنوي.',family:'Noto Naskh Arabic',lang:'ar',rtl:true,substitution:'Arabic Typesetting'},
+  {id:'he',language:'he',scheme:'david',title:'סקירה רבעונית',text:'ההכנסות גדלו ב-12% משנה לשנה.',family:'Noto Serif Hebrew',lang:'he',rtl:true,substitution:'David'},
+  {id:'hi',language:'hi',scheme:'mangal',title:'तिमाही समीक्षा',text:'राजस्व में साल-दर-साल 12% की वृद्धि हुई।',family:'Noto Sans Devanagari',lang:'hi',rtl:false,substitution:'Mangal'},
+  {id:'th',language:'th',scheme:'angsana-new',title:'การทบทวนรายไตรมาส',text:'รายได้เติบโตขึ้น 12% เมื่อเทียบกับปีก่อน',family:'Noto Sans Thai',lang:'th',rtl:false,substitution:'Angsana New'},
 ];
 const report=[];
 for(const value of classes){

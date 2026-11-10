@@ -112,7 +112,7 @@ for (const doc of ['name: x # ¦', '# ¦', 'slides:\n  - notes: |\n      ¦', 's
 
 // ---- the lists -----------------------------------------------------------------------------------------------------------------------------------
 assert.ok(labels('yaml', 'name: x\n¦').includes('slides') && !labels('yaml', 'name: x\n¦').includes('name'));
-assert.deepEqual(labels('yaml', 'design:\n  titleAlignment: ¦').slice(0, 3).sort(), ['center', 'left', 'right']);
+assert.deepEqual(labels('yaml', 'design:\n  titleAlignment: ¦').slice(0, 3).sort(), ['center', 'end', 'start']);
 assert.ok(labels('yaml', 'slides:\n  - layout: ¦').includes('pillars'));
 assert.deepEqual(labels('yaml', 'slides:\n  - hidden: ¦').sort(), ['false', 'true']);
 assert.equal(labels('yaml', 'slides:\n  - title: ¦'), null, 'free text');
