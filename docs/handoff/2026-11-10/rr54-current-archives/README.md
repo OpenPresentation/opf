@@ -33,3 +33,9 @@ node docs/handoff/2026-11-10/rr54-current-archives/verify-packet.mjs
 ```
 
 An optional `--extract=<fresh-directory>` materializes original data bytes without executing archived scripts. The original audit ran actual exports; the independent review, constructor generation, permanent tests and packet verification here use no exporter or product dist. The coordinator still owns exact fixture promotion, postpromotion constructor/RR54 checks, coherent package/platform/consumer gates and native/release acceptance. No mapper or product build was repeated in this lane.
+
+## Reviewed fixture adoption
+
+The coordinator copied the exact repository-helper candidate SHA256 `6ac461500703cde99ae7a2293a9a1e7b45d5aad5055fa8789a6418b8a1365208` into the maintained fixture after inspecting all21 current/historical archives, the independent552-part/49-event review and generated metadata diff. This is a generated fixture adoption; no raw archive lock was edited by hand. Every previous archive lock and the one changed historical styled-table deck remain in appended history.
+
+Post-adoption maintained discovery/Node arguments execute both `rr54-archive-candidate.mjs` (including all8 projection refusals) and complete `rr-54-chart-table-data.mjs`: **2/2 PASS**, on the unchanged actual284 product runtime. The original partial-table regression and first strict-lock refusal remain in earlier receipts. This targeted result is not a complete current package/native/registry/release gate.
