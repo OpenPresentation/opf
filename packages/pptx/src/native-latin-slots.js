@@ -11,6 +11,21 @@ const ascii = /^[\x20-\x7e]*$/;
 const runPattern = /<a:r>([\s\S]*?)<a:t>([\s\S]*?)<\/a:t><\/a:r>/g;
 const withoutCs = nativeLatinMemberProperties;
 
+export function nativeLatinRanges(source,style,profile) {
+  // Repair Arabic proofing only. Other scripts, non-ASCII characters, symbol
+  // encodings and emoji faces keep their existing script slots.
+  if (profile?.script !== 'Arab' || style.symbolEncoding != null || isSymbolEncodedFamily(style.fontFamily) || emojiFamily.test(style.fontFamily ?? '')) return [];
+  // Preserve the renderer's whole-run ASCII fast path. Otherwise itemize the
+  // ORIGINAL source, so digits following Arabic do not become Latin after wrapping.
+  const runs = ascii.test(source) ? [{text:source,role:'latin'}] : itemizeScripts(source,profile);
+  const ranges = []; let offset = 0;
+  for (const run of runs) {
+    if (run.role === 'latin') for (const match of run.text.matchAll(/[\x20-\x7e]+/g)) ranges.push([offset + match.index, offset + match.index + match[0].length]);
+    offset += run.text.length;
+  }
+  return ranges;
+}
+
 export function createNativeLatinSlots(plan, resolveProfile, report) {
   const records = new Map(), profiles = new Map(), warned = new Set(), groups = new Map();
   const unavailable = (path, reason) => {
@@ -22,18 +37,7 @@ export function createNativeLatinSlots(plan, resolveProfile, report) {
     const profileKey = JSON.stringify([slideIndex,style.lang]);
     if (!profiles.has(profileKey)) profiles.set(profileKey,resolveProfile(style.lang,slideIndex));
     const profile = profiles.get(profileKey);
-    // Repair Arabic proofing only. Other scripts, non-ASCII characters, symbol
-    // encodings and emoji faces keep their existing script slots.
-    if (profile?.script !== 'Arab' || style.symbolEncoding != null || isSymbolEncodedFamily(style.fontFamily) || emojiFamily.test(style.fontFamily ?? '')) return [];
-    // Preserve the renderer's whole-run ASCII fast path. Otherwise itemize the
-    // ORIGINAL source, so digits following Arabic do not become Latin after wrapping.
-    const runs = ascii.test(source) ? [{text:source,role:'latin'}] : itemizeScripts(source,profile);
-    const ranges = []; let offset = 0;
-    for (const run of runs) {
-      if (run.role === 'latin') for (const match of run.text.matchAll(/[\x20-\x7e]+/g)) ranges.push([offset + match.index, offset + match.index + match[0].length]);
-      offset += run.text.length;
-    }
-    return ranges;
+    return nativeLatinRanges(source,style,profile);
   }
   const api = {
     groups,

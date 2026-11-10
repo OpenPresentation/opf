@@ -1,0 +1,117 @@
+{
+  "base": "43ff26fbacbab09c70322ba0dc191e126a2a32f3",
+  "node": "v24.21.0",
+  "pnpm": "10.33.2",
+  "store": "/tmp/.pnpm-store",
+  "sourceAtFocus04": {
+    "packages/pptx/src/native-text-fragments.js": "dcc5deb51711c19479ef3f3346bc4e64879829dea6c7f0a16773a388fe75ce01",
+    "packages/pptx/src/index.js": "973267442e9803c9fc51cb4d0b09fc74560ea0c82dcf24026a25c9b95330d4eb",
+    "packages/pptx/src/native-latin-slots.js": "b2a65f9522c572019d2ae90271344825f07a7f11f2ef6da69e7d9fc5140929c7",
+    "packages/pptx/test/native-text-fragments.mjs": "abe0c1643105dc31d8d3c375e734044a0e3abbacb639537011bd8a384cbcf927",
+    "packages/pptx/scripts/build.mjs": "aa7042adfa5af43553cd92c8fc5d54209af2dc29ccd514eaec8a6870ee8c511e"
+  },
+  "discovery": {
+    "script": "scripts/run-tests.mjs",
+    "suite": "contract",
+    "cwd": "packages/pptx",
+    "nodeArgs": [
+      "test/native-text-fragments.mjs"
+    ]
+  },
+  "outcomes": {
+    "install": "PASS",
+    "build": "PASS",
+    "focus01": {
+      "pass": 2,
+      "fail": 7,
+      "nativeFragmentsExported": false
+    },
+    "focus02": {
+      "pass": 8,
+      "fail": 1,
+      "nativeFragmentsExported": true
+    },
+    "focus03": {
+      "pass": 10,
+      "fail": 1
+    },
+    "focus04": {
+      "pass": 11,
+      "fail": 0,
+      "durationMs": 901.000209
+    }
+  },
+  "logs": [
+    {
+      "name": "install",
+      "path": "checks/install.log.gz",
+      "bytes": 4218,
+      "sha256": "62565d984ff9cc68f523c633adde22de11afc8048f2843698d9789455e399f1e",
+      "gzipSha256": "5f15da7df1469723544c876542cd9b6c330412e25908117d6d9beec14981cd93"
+    },
+    {
+      "name": "build",
+      "path": "checks/build.log.gz",
+      "bytes": 14732,
+      "sha256": "593d77d2cde47f3607372af16af7ccc32cf9306f97f617916598e8a8ad7fb670",
+      "gzipSha256": "a7e053ddafcf83d25c43309006938dd3a78fac3dad5ef0fcacb8e4e27066cc49"
+    },
+    {
+      "name": "copybuild02",
+      "path": "checks/copybuild02.log.gz",
+      "bytes": 66,
+      "sha256": "9390e93eddb3bcbe5c3d7cc31ae738117d07847d06cfc2fccb6bffae91206eab",
+      "gzipSha256": "7338c7198cac8f1574416ef3704d4befd6b459c569114e94a2c415515df04041"
+    },
+    {
+      "name": "copybuild03",
+      "path": "checks/copybuild03.log.gz",
+      "bytes": 66,
+      "sha256": "9390e93eddb3bcbe5c3d7cc31ae738117d07847d06cfc2fccb6bffae91206eab",
+      "gzipSha256": "7338c7198cac8f1574416ef3704d4befd6b459c569114e94a2c415515df04041"
+    },
+    {
+      "name": "copybuild04",
+      "path": "checks/copybuild04.log.gz",
+      "bytes": 66,
+      "sha256": "9390e93eddb3bcbe5c3d7cc31ae738117d07847d06cfc2fccb6bffae91206eab",
+      "gzipSha256": "7338c7198cac8f1574416ef3704d4befd6b459c569114e94a2c415515df04041"
+    },
+    {
+      "name": "focus01",
+      "path": "checks/focus01.log.gz",
+      "bytes": 6544,
+      "sha256": "b9ad4fbf615444668bb33f941d05d208cc85594e022240afc56381484fd837ac",
+      "gzipSha256": "dc61dfdda83db18ec5a73b0f1fa1735543f7d575a66efcda5701bcdacf6cf4a6"
+    },
+    {
+      "name": "focus02",
+      "path": "checks/focus02.log.gz",
+      "bytes": 2344,
+      "sha256": "a0fc3f3f03d7affe2709720229b80f1f3fced2d28e5dc4b4d38ec0c9ae83c0d8",
+      "gzipSha256": "e69768a470329f3b50f199c5b39a74882668834c6949512826e47bbf5a32958d"
+    },
+    {
+      "name": "focus03",
+      "path": "checks/focus03.log.gz",
+      "bytes": 1998,
+      "sha256": "56ae403a32ab0125fc58a7dce3749b8852e5a60e081d2d0d8e232591da50a327",
+      "gzipSha256": "d8b29c27f0009b17fde6919caaa881b5185626f40f276cbffb5ef89ab7a50537"
+    },
+    {
+      "name": "focus04",
+      "path": "checks/focus04.log.gz",
+      "bytes": 1375,
+      "sha256": "7527163a530b2188cfb3948480d59d295083ad13e0cae56469536b8a1a80c455",
+      "gzipSha256": "49de7887f6e86469d8d84347f95099b35ca8a61fa24ba2e80101c3c34e40efe9"
+    }
+  ],
+  "nativeAcceptance": false,
+  "remaining": [
+    "Painted PowerPoint word order/digit size/carrier and marker baseline",
+    "Native Save/reopen",
+    "Whole Latin LTR paragraphs/remaining original06/09/10 topology",
+    "Native body paragraphs",
+    "Mapped aggregate and combined qualification"
+  ]
+}

@@ -5,6 +5,7 @@ import {isFaceStyleSuffix} from './font-weights.js';
 import {importTableFrames} from './table-import.js';
 import {applyChartFonts, applyPitchFamilies, finalizeFontsUsed, fontPitchFamilies} from './package-fonts.js';
 import {createNativeLatinSlots} from './native-latin-slots.js';
+import {createNativeTextFragments,planNativeTextFragments,importNativeTextFragments,adoptNativeFragmentGroups} from './native-text-fragments.js';
 import {officeSafeTypeface, safeMeasurement, sameMetrics, typefaceClasses, unsafeTypefacesIn, writeSafeTypefaces} from './safe-typefaces.js';
 import {PICTURE_SCALE, defaultSlideRasterizer, pictureDeck} from './picture-slides.js';
 import {giveNotesMastersOwnThemes, giveSlidesScriptMasters} from './master-themes.js';
@@ -448,6 +449,8 @@ export async function toPptx(input, options = {}) {
   });
   context.scriptFonts = planScriptFonts(presentation, options.onDiagnostic, {catalogs: options.catalogs});
   context.nativeLatinSlots = createNativeLatinSlots(context.scriptFonts, (language, slideIndex) => resolveScriptFonts(presentation, {slideIndex, ...(language ? {language} : {}), ...(options.catalogs !== undefined ? {catalogs:options.catalogs} : {})}), options.onDiagnostic);
+  context.nativeTextFragments = createNativeTextFragments(options.onDiagnostic);
+  context.nativeFragmentProfile = (language,slideIndex) => resolveScriptFonts(presentation,{slideIndex,...(language?{language}:{}),...(options.catalogs!==undefined?{catalogs:options.catalogs}:{})});
   // RR-102: the deck language every run is written in (lang); a date field that shows English words says en-US instead.
   context.deckLang = context.scriptFonts?.lang ?? 'en-US';
   // Slide section labels become PowerPoint's native section list (src/sections.js).
@@ -1223,6 +1226,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const readBody = nativeBodyReader(slidePath, {
     part: (path, parser) => options.nativeLanguages?.has(path) ? parser.parse(decodeText(options.nativeLanguages.get(path))) : parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
   }, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.${diagnostic.path}`}), {deckLang: options.deckLang, codeFamily: options.codeFamily, rtlDeck: options.rtlDeck === true});
+  const fragments=importNativeTextFragments(shapes,paragraphs,relationships,entries,readBody,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}),decodeText(entries[slidePath]));
   const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
   const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
   const cards = importCardFrames(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
@@ -1303,10 +1307,16 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     for (const member of members) { diagramMembers.add(member); roles.set(shapeKeys.get(member), 'diagram'); }
     items.push({kind: 'diagram', bounds: shapeBounds(group['p:grpSpPr']?.['a:xfrm']), payload, sources: sourcesOf(members)});
   }
+  const adoptedFragments=adoptNativeFragmentGroups(fragments.items,group=>{
+    const item=importShape(group.carrier,dimensions,group.paragraphs,true);
+    return item?{...item,sources:sourcesOf(group.shapes)}:undefined;
+  },diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  items.push(...adoptedFragments.items);
   for (const [index,shape] of shapes.entries()) {
     const role = furniture.text.has(index) ? 'furniture' : nativeContext.imageShapes?.has(index) ? 'image-overlay' : nativeContext.watermarkShapes?.has(index) ? 'watermark' : nativeContext.logoPlaceholderShapes?.has(index) ? 'logo' : cards.has(shape) ? 'card-frame'
       : code.consumed.has(shape) ? 'code' : metric.consumed.has(shape) ? 'metric' : media.consumed.has(shape) ? 'media' : timelines.consumed.has(shape) ? 'timeline' : quotes.consumed.has(shape) ? 'quote' : undefined;
     if (role) roles.set(shapeKeys.get(shape), role);
+    if(adoptedFragments.consumed.has(shape)){roles.set(shapeKeys.get(shape),'native-fragment');continue;}
     if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index) || diagrams.shapes.has(index) || diagramMembers.has(shape)) continue;
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (referenceOverlays.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
@@ -1330,7 +1340,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
       if (imported) items.push({...imported, sources: [`sp:${index}`]});
       continue;
     }
-    const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && (!shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'] || onlyNativeLanguageTags(shape, relationships, entries));
+    const ordinaryBody = fragments.tagged.has(shape) || Object.hasOwn(shape, 'p:txBody') && (!shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'] || onlyNativeLanguageTags(shape, relationships, entries));
     const item = importShape(shape, dimensions, paragraphs[index], ordinaryBody || furniture.taggedText.has(index) || media.captionShapes.has(shape));
     if (item && ordinaryBody) {
       const currentBody = readBody(index, {onlyScaled: true});
@@ -3139,6 +3149,8 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
         const region=centered?{x:(box.x+offset)/96,y:(box.y+line.y)/96,w:Math.max(1,line.width)/96,h:line.height/96}:{x:(entryRtl?box.x:box.x-inset)/96,y:(box.y+line.y)/96,w:(box.width+inset)/96,h:line.height/96};
         const lineAlign=physicalAlignment('left',lineDirection);
         const objectName=`OPF list ${path} line ${lineNumber++}`;
+        const fragmentPlan=planNativeTextFragments(line,{rtl:lineDirection==='rtl',originX:box.x+(lineAlign==='right'?box.width-line.width:lineAlign==='center'?(box.width-line.width)/2:0),measurement:options.textMeasurement,profile:language=>context.nativeFragmentProfile(language,context.slideIndex)});
+        context.nativeTextFragments.remember(context.slideIndex,objectName,fragmentPlan);
         const number=first?entry.marker.number:undefined;
         context.nativeLatinSlots.remember(context.slideIndex,objectName,line.fragments.map(fragment=>({text:fragment.text,source:fragment.run.text,start:fragment.start,end:fragment.end,style:fragment.style,sourceRun:fragment.runIndex,marker:fragment.kind==='marker'})),path);
         if(first&&!markerless)context.listMarkers.set(objectName,{fontFamily:entry.marker.style.fontFamily,fontSize:entry.marker.fontSize*.75,color:pptxColor(context.textColor),picture:number?false:picture});
@@ -5853,13 +5865,14 @@ async function normalizePptxZip(raw, context) {
   for (const path of Object.keys(output)) {
     const match = /^ppt\/slides\/slide(\d+)\.xml$/.exec(path);
     if (!match) continue;
-    const xml = decodeText(output[path][0]), next = context.nativeLatinSlots.write(xml, Number(match[1])-1);
+    const xml = decodeText(output[path][0]), slots = context.nativeLatinSlots.write(xml, Number(match[1])-1), next = context.nativeTextFragments.write(slots,Number(match[1])-1,context.nativeLatinSlots.groups);
     if (next !== xml) output[path] = [encodeText(next), output[path][1]];
   }
   finalizeFontsUsed(output);
   // Structural proofing records are needed even without full source provenance.
   const languageParts = Object.fromEntries(Object.entries(output).map(([path, [bytes]]) => [path, bytes]));
   attachNativeLanguageTags(languageParts,context.nativeLatinSlots.groups);
+  context.nativeTextFragments.attach(languageParts);
   sealReferenceBindings(languageParts,context.chartHeadings,parseRelationships);
   for (const [path, bytes] of Object.entries(languageParts)) output[path] = [bytes, {level: context.compressionLevel, mtime: context.zipDate}];
   // Document references record evidence from the final normalized parts.
