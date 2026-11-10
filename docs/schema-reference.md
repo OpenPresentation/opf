@@ -58,6 +58,29 @@ _No named properties._
 _No named properties._
 
 
+### ImagePayload
+
+- Type: `oneOf:string / object`
+- Required fields: none
+- Purpose: An image source and optional image-local text callouts. Other resource kinds use Asset and do not accept callouts.
+
+_No named properties._
+
+
+### ImageCallout
+
+- Type: `object`
+- Required fields: `text`, `x`, `y`, `width`, `height`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `text` | yes | `string` | Plain editable text. Native edits preserve current words; an empty string is retained. |
+| `x` | yes | `number` | Signed fraction of the visible image frame width from its physical left edge. Negative values or values greater than 1 position the panel outside the image; its text is not clipped to the image. Slide viewport bounds... |
+| `y` | yes | `number` | Signed fraction of the visible image frame height from its physical top edge. Negative values or values greater than 1 position the panel outside the image; its text is not clipped to the image. Slide viewport bounds... |
+| `width` | yes | `number` | Positive fraction of the visible image frame width, at most 1. The signed x origin controls placement outside the frame. |
+| `height` | yes | `number` | Positive fraction of the visible image frame height, at most 1. The signed y origin controls placement outside the frame. |
+
+
 ### Audience
 
 - Type: `anyOf:schema / schema`
@@ -860,8 +883,8 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `id` | no | `string` | Optional stable identifier, unique among slide, payload and overlay ids in the document. A connector names it in 'from' or 'to'. |
-| `x` | no | `number` | Left edge as a fraction of the slide width, from the left edge; in a right-to-left deck from the right edge, mirrored as OPF mirrors start and end. With 'y', 'width' and 'height'. |
-| `y` | no | `number` | Top edge as a fraction of the slide height, from the top edge. |
+| `x` | no | `number` | Left edge as a signed fraction of the slide width, from the left edge; in a right-to-left deck from the right edge, mirrored as OPF mirrors start and end. Negative values or values greater than 1 place the shape outsi... |
+| `y` | no | `number` | Top edge as a signed fraction of the slide height, from the top edge. Negative values or values greater than 1 place the shape outside the slide. |
 | `width` | no | `number` | Width as a fraction of the slide width. |
 | `height` | no | `number` | Height as a fraction of the slide height. |
 | `at` | no | `ref:OverlayAnchor` |  |
@@ -897,7 +920,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `block`, `edge`
-- Purpose: Places an overlay shape against a composed block's box, so the shape follows the block wherever composition puts it. 'edge' puts the shape outside that edge, centered along it ('start' and 'end' follow the deck's direction: left and right in a left-to-right deck, right and left in a right-to-left one); 'center' puts it on the block's center. A block id that is not on the slide is a finding (opf/shape-anchor-missing) and the shape is not drawn.
+- Purpose: Places an overlay shape against a composed block's box, so the shape follows the block wherever composition puts it. 'edge' puts the shape outside that edge, centered along it ('start' and 'end' follow the deck's direction: left and right in a left-to-right deck, right and left in a right-to-left one); 'center' puts it on the block's center. A block id that is not on the slide is a finding (opf/shape-anchor-missing) and the shape is not drawn. With point, block must carry a supported classic...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -906,6 +929,8 @@ _No named properties._
 | `offset` | no | `number` | The gap between the block's edge and the shape, in reference pixels at a 720-pixel short edge; a negative offset overlaps the block. Default 0. Ignored for 'center'. |
 | `width` | no | `number` | The shape's width: up to 1 a fraction of the block's width, above 1 reference pixels at a 720-pixel short edge. Default the preset's natural proportions with the shape's shorter side at 15% of the block's shorter side. |
 | `height` | no | `number` | The shape's height: up to 1 a fraction of the block's height, above 1 reference pixels at a 720-pixel short edge. Default as for width. |
+| `point` | no | `oneOf:string / integer` | Exact unique category label or zero-based data row index of the chart. Numeric strings name labels; numbers index rows. Empty/duplicate labels can be selected by index. Requires a supported classic chart block. |
+| `series` | no | `oneOf:string / integer` | Exact unique plotted value-column name or zero-based plotted-series index; omission selects the first plotted series. Requires point. Scatter X is not a value series. |
 
 
 ### Connector
@@ -932,6 +957,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `id` | no | `string` | Optional stable identifier for the slide within the document. Use when another system needs to reference a slide across edits, comments, generation state, exports, or narrative tooling. Slide order is defined by the s... |
+| `language` | no | `oneOf:ref:LanguageTag / ref:Language` | Language of this slide, overriding the presentation language. Accepts the same BCP-47 tag or inline Language object as the presentation. Omission inherits the deck language. Direction, script fonts, quotation marks, l... |
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| diagram` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
 | `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an arr... |
 | `layout` | no | `ref:CatalogReference` | Optional layout: a layouts reference, a bare id ('pillars') or 'name:id' ('acme:hero'), or 'auto'. When omitted or 'auto', the slide is composed with no layout record: engines arrange title, subtitle, tag and content... |
@@ -942,7 +968,7 @@ _No named properties._
 | `items` | no | `array<ref:ListItem>` | Full-slide structured list payload. Presence of this field infers type 'list'. Entries are strings, TextRun[] or objects with `text`, optional `description` (supporting detail under the entry), `level` and `start`. Us... |
 | `bullets` | no | `array<ref:BulletItem>` | Full-slide prose bullet payload: short talking points, each standing alone. Presence of this field infers type 'text', so it may sit beside `text` in one payload. Entries are strings, TextRun[] or objects with `text`,... |
 | `numbering` | no | `ref:NumberingSpec` | Number the full-slide `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one ent... |
-| `image` | no | `ref:Asset` | Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A v2 layout binds it to a compatible body region; a region's bleed setting... |
+| `image` | no | `ref:ImagePayload` | Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A v2 layout binds it to a compatible body region; a region's bleed setting... |
 | `video` | no | `ref:Asset` | Full-slide video source. Presence of this field infers type 'video'. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the... |
 | `chart` | no | `ref:Chart` | Full-slide chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Full-slide table payload. Presence of this field infers type 'table'. |
@@ -1027,7 +1053,7 @@ _No named properties._
 | `bullets` | no | `array<ref:BulletItem>` | Prose bullet payload: short talking points, each standing alone. Presence of this field infers type 'text', so it may sit beside `text` in one payload. Entries have no `description`; use `items` for entries with suppo... |
 | `numbering` | no | `ref:NumberingSpec` | Number the payload's `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one entr... |
 | `columns` | no | `oneOf:const:"auto" / integer` | Lay the payload's `items` or `bullets` out in columns (OPF 0.19). 'auto' tries 1, 2 then 3 equal columns at the starting text size and uses the first count at which the list fits, as long as a column stays at least a... |
-| `image` | no | `ref:Asset` | Source for an image item. |
+| `image` | no | `ref:ImagePayload` | Source for an image item. |
 | `fit` | no | `enum:cover \| contain \| stretch \| auto` | Image payloads only. How the picture fills its frame: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture, in a frame of its own proportions placed at the region's anchor (top by... |
 | `focus` | no | `ref:ImageFocus` | Image payloads only. Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. Without a focus a portrait picture (taller than wide) cropped into a wider frame keeps y 0.3 so heads stay in... |
 | `aspectRatio` | no | `number` | Image payloads only. Width-to-height ratio of the frame: the frame becomes the largest centered box with this ratio inside the block's region, for example 2.39 for a cinematic letterbox or 0.5 for a phone-shaped frame... |
@@ -1124,13 +1150,13 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `source`
-- Purpose: A diagram written as text. Engines parse the source, lay it out with the deck's measured fonts at the largest type size that fits the block, and draw it in the slide's resolved colors (color scheme, variant, color map and background); the PPTX export writes it as a native SVG picture with a PNG fallback. A string value in a diagram field is shorthand for { "source": value }.
+- Purpose: A diagram written as text (Mermaid, Graphviz DOT or PlantUML), laid out with the deck's measured fonts and resolved colors at the largest type size that fits. PPTX export defaults to editable native shapes, connectors and text in one group for qualified families; unsupported families or drawing constructs use an SVG picture with a PNG fallback. The diagrams: "picture" option always uses that picture form. A string diagram is shorthand for { "source": value }.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `source` | yes | `string` | The diagram source. With syntax 'mermaid' (the default) it is Mermaid 12.1 text whose first line names the diagram type (flowchart, sequenceDiagram, classDiagram, stateDiagram-v2, erDiagram, gantt, pie, mindmap, timel... |
-| `syntax` | no | `enum:mermaid` | The language of 'source'. Mermaid is the only syntax today. |
-| `alt` | no | `string` | Text alternative that says what the diagram shows. Exported as the picture's description. Without it, engines derive one from the diagram's labels. |
+| `syntax` | no | `enum:mermaid \| dot \| plantuml` | The language of 'source': 'mermaid' (Mermaid 12.1, the default), 'dot' (Graphviz DOT, drawn with the layered layout) or 'plantuml' (PlantUML, drawn as the Mermaid family of the same kind). OPF reads all three itself;... |
+| `alt` | no | `string` | Text alternative that says what the diagram shows. Exported as the description of the native shape group or picture. Without it, engines derive one from the diagram's labels. |
 
 
 ### Timeline
@@ -1151,6 +1177,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `when` | no | `string` | Event time, date, or sequence label. Use ISO-like values when possible, but human labels are allowed for quarters, eras, and relative milestones. |
+| `duration` | no | `number` | Relative length of this consecutive event period. Use the same unit for every event (for example 1 for Week 1 and 4 for Weeks 2 5). Omitted means one unit. When any event supplies duration, both engines draw proportio... |
 | `what` | yes | `string` | Short event label. |
 | `description` | no | `string` | Optional event detail. |
 | `status` | no | `enum:done \| current \| planned` | Progress of the event, drawn from the deck's own colors by both the SVG renderer and the PPTX exporter. Absent means no status and the event is drawn as a plain filled marker with normal text, which is also how 'done'... |
@@ -1236,9 +1263,37 @@ _No named properties._
 | `url` | no | `string` | Optional link for the reference; a references slide links its entry to it. |
 
 
-### Chart
+### ChartReferenceStroke
 
 - Type: `object`
+- Required fields: none
+- Purpose: Independent reference-line styling. Width uses reference pixels at a 720px short edge, as Stroke; unsupported arrows, gradients and compound strokes are not exposed.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `color` | no | `ref:ColorRef` | Defaults to the chart-text neutral. |
+| `width` | no | `number` | Reference pixels at a 720px short edge. Zero hides only the stroke; the value still affects bounds and its optional label remains. |
+| `dash` | no | `enum:solid \| dash \| dot` |  |
+
+
+### ChartReferenceLine
+
+- Type: `object`
+- Required fields: `value`
+- Purpose: One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `value` | yes | `number` | Finite value in the associated data-axis units. With format 0%, 0.25 means 25%; 25 means 2500%. Every reference expands automatic bounds when needed. |
+| `axis` | no | `enum:value \| secondary` | Secondary requires a combo chart with an actual secondary line series. |
+| `label` | no | `string` | Optional nonblank plain text, shown verbatim. Omission draws no label. |
+| `labelPosition` | no | `enum:start \| end` | Logical endpoint. Horizontal start/end mirror in RTL; on bars they mean top/bottom. Requires label. |
+| `stroke` | no | `ref:ChartReferenceStroke` |  |
+
+
+### Chart
+
+- Type: `allOf:schema`
 - Required fields: `type`, `data`
 - Purpose: Chart content. The chart object keeps chart-specific fields together so slides and regions do not expose loose chart fields. OPF charts are `{ type, data }` where `data` is `{ columns, rows }`: the first column holds the category labels and every further column is one series. There are no `categories`, `series`, `labels` or `datasets` keys (the Chart.js and ECharts shape); write them as columns and rows. Example: `{ "type": "column", "data": { "columns": ["Quarter", "Decks"], "rows": [["Q1",...
 
@@ -1249,6 +1304,7 @@ _No named properties._
 | `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name: which column is the category, which is the X column of a scatter chart, and which columns are plotted, in order. Absent keeps the positional rule (first column the category, the... |
 | `line` | no | `array<string>` | Combo charts only (type 'combo'): the plotted series, by column name, that are drawn as lines with markers; every other plotted series is drawn as clustered columns. Absent: the last plotted series is the line. A comb... |
 | `secondaryAxis` | no | `array<string>` | Combo charts only: line series, by column name, plotted against a secondary value axis at the right of the plot. That axis has its own scale, and its tick labels use the number format of the first secondary series' co... |
+| `referenceLines` | no | `array<ref:ChartReferenceLine>` | Explicit numeric references, supported on column, bar, line, line-with-markers, area and combo. Absent or [] means none. Authored order, duplicates and values equal to data are preserved. Vertical charts with two or m... |
 | `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-... |
 | `legend` | no | `enum:none \| top \| bottom \| left \| right` | Optional legend position. 'none' hides the legend. Absent keeps today's behaviour exactly (a legend at the right of multi-series charts and of pie and doughnut charts, none for single-series charts). A named position... |
 | `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels. true shows value labels at each type's default position, false (or absent) shows none, which is today's behaviour. Use the object form for the label content, position and separator. |

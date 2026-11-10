@@ -210,7 +210,8 @@ const cappedDiagnostics=[];
   const registry=(await loadFonts({pack: 'base', scripts:'auto',presentation:japaneseText})).registry;
   assert.deepEqual(registry.scriptSelection.packages.map(short),['noto-sans-jp','noto-sans-sc']);
   assert.ok(registry.scriptFacesCover('啰'));
-  assert.equal(registry.fontFiles.filter(file=>/noto-sans-sc/.test(file)).length,2,'the raster font files include the fallback face');
+  assert.equal(registry.fontFiles.filter(file=>/noto-sans-sc/.test(file)).length,1,'only the drawn fallback title weight is prepared');
+  assert.deepEqual(registry.describeFaces().filter(face=>face.family==='Noto Sans SC').map(face=>face.weight),[700]);
   // Only characters the loaded faces lack trigger more faces: plain Japanese needs only Noto Sans JP.
   assert.deepEqual(((await loadFonts({pack: 'base', scripts:'auto',presentation:deck('これは日本語です','Body',{language:'ja'})})).registry).scriptSelection.packages.map(short),['noto-sans-jp']);
   // The fallback is capped: a Han character no CJK face covers loads the language's face plus ONE fallback, not all four, and is reported.

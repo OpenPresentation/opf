@@ -1,0 +1,38 @@
+{
+  "base": "fef5d76e06bae126d6cdda0e3f7658e42c49db03",
+  "node": "v24.20.0",
+  "platform": "win32",
+  "source": {
+    "path": "scripts/native-acceptance/font-routes.test.mjs",
+    "beforeNormalizedSha256": "e24563285321e3c591c98438897827784820702e744cc97fc543b676102cc3f4",
+    "afterNormalizedSha256": "94c88c1a3cf276d46deae197f701194bca1fb3116625513a26cd75872f3b64c7",
+    "exactlyOneTypeArgumentChange": true,
+    "allOtherAssertionsAndCleanupIdentical": true,
+    "productionTreesUnchanged": true
+  },
+  "focused": {
+    "before": {
+      "pass": 3,
+      "fail": 1,
+      "reason": "Windows EPERM at default file-type symlink creation to directory"
+    },
+    "after": {
+      "pass": 4,
+      "fail": 0
+    },
+    "nativeAcceptance": {
+      "pass": 44,
+      "fail": 0
+    }
+  },
+  "mapped": {
+    "seconds": 77.6,
+    "pass": 8,
+    "skip": 1,
+    "failed": "Only missing historical tracker inputs in sparse checkout; exact1817Git blobs/45,984,638bytes restored, strict18tests and freshness rerunPASS. No regeneration."
+  },
+  "officeConstructed": false,
+  "adminFallback": false,
+  "nativeQualificationClaimed": false,
+  "vetoableDecision": "Use explicit junction on Windows and dir elsewhere for this directory-link refusal fixture, retaining existing strict refusal and cleanup."
+}

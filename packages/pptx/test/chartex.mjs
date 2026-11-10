@@ -26,9 +26,11 @@ const chartexIds = Object.keys(CHART_TYPES).filter((id) => CHART_TYPES[id].famil
 assert.deepEqual(chartexIds, ['treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world']);
 // LH-60: a map plots places; over other categories (North, South) it is drawn as clustered columns.
 const mapData = {columns: ['Country', 'Value'], rows: [['Germany', 42], ['France', 31], ['Spain', -8], ['Italy', 19]]};
-const dataFor = (id) => (id === 'box-and-whisker' ? boxData : id === 'world' ? mapData : categoryData);
+// RR-105: valid native aggregation control; the exact negative case is retained in histogram-negative-category.mjs.
+const histogramData = {...categoryData, rows: categoryData.rows.map(([label, value]) => [label, Math.abs(value)])};
+const dataFor = (id) => (id === 'box-and-whisker' ? boxData : id === 'world' ? mapData : id === 'histogram' ? histogramData : categoryData);
 
-// Native chartex export is opt-in (`chartex: 'native'`) until the native PowerPoint check passes; the default keeps main's bytes (checked below).
+// Exercise eligible native constructs explicitly; the auto default and data-domain fallbacks are checked below.
 async function exportDeck(slides, options = {}) {
   const diagnostics = [];
   const bytes = await toPptx({slides}, {chartex: 'native', ...options, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
@@ -171,7 +173,7 @@ for (const id of chartexIds) {
     assert.deepEqual(axes.map(([, axisId]) => axisId), ['0', '1', '2'].slice(0, want.axes));
     // CT_Axis order: scaling, gridlines, tickLabels, then the axis's own txPr (PowerPoint does not inherit the chartSpace txPr for axis labels).
     assert.match(axes[0][2], /^<cx:catScaling gapWidth="[0-9.]+"\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: category axis`);
-    const scaling = id === 'histogram' || id === 'pareto' ? '<cx:valScaling max="50" min="-20" majorUnit="20"/>' : id === 'box-and-whisker' ? '<cx:valScaling max="15" min="0" majorUnit="5"/>' : id === 'waterfall' ? '<cx:valScaling max="100" min="0" majorUnit="20"/>' : '<cx:valScaling/>';
+    const scaling = id === 'histogram' ? '<cx:valScaling max="50" min="0" majorUnit="10"/>' : id === 'pareto' ? '<cx:valScaling max="50" min="-20" majorUnit="20"/>' : id === 'box-and-whisker' ? '<cx:valScaling max="15" min="0" majorUnit="5"/>' : id === 'waterfall' ? '<cx:valScaling max="100" min="0" majorUnit="20"/>' : '<cx:valScaling/>';
     assert.ok(axes[1][2].startsWith(scaling), `${id}: exact value scale`);
     const axisContent = axes[1][2].slice(scaling.length);
     assert.match(axisContent, id === 'funnel' || id === 'waterfall' ? /^<cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/ : /^<cx:majorGridlines><cx:spPr>[\s\S]*<\/cx:spPr><\/cx:majorGridlines><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: value axis`);
@@ -442,18 +444,20 @@ const classicNumbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\
     const mapColumns = deck.slides.filter((slide) => slide.chart.type === 'world').length - maps;
     // LH-175: a Pareto chart of several series is core's pareto-as-columns fallback, clustered columns in every mode.
     const multiPareto = deck.slides.filter(slide => slide.chart.type === 'pareto' && slide.chart.data.columns.length > 2).length;
+    // RR-105: these fixture rows remain unchanged; negative categorical histograms now keep their reviewed classic bytes in every mode.
+    const negativeHistograms = deck.slides.filter(({chart}) => chart.type === 'histogram' && chart.data.columns.length > 1 && chart.data.rows.some(row => row.slice(1).some(value => typeof value === 'number' && value < 0))).length;
     const auto = await run(deck, undefined), explicit = await run(deck, 'auto');
     const native = await run(deck, 'native');
     assert.deepEqual(digest(auto.bytes), digest(explicit.bytes), `${name}: the default is 'auto'`);
-    assert.equal(auto.chartexParts, deck.slides.length - maps - mapColumns - multiPareto, `${name} (auto): chartex parts for every confirmed construct`);
-    assert.equal(native.chartexParts, deck.slides.length - mapColumns - multiPareto, `${name} (native): chartex parts for every construct`);
+    assert.equal(auto.chartexParts, deck.slides.length - maps - mapColumns - multiPareto - negativeHistograms, `${name} (auto): chartex parts for every confirmed construct`);
+    assert.equal(native.chartexParts, deck.slides.length - mapColumns - multiPareto - negativeHistograms, `${name} (native): chartex parts for every construct`);
     if (maps === 0) assert.deepEqual(digest(auto.bytes), digest(native.bytes), `${name}: auto equals native without a map`);
     else {
       assert.notEqual(digest(auto.bytes), digest(native.bytes), `${name}: the map differs between auto and native`);
-      assert.deepEqual(auto.diagnostics.filter((d) => d.endsWith('/chartex-fallback')).length, maps, `${name} (auto): the map reports its fallback`);
+      assert.deepEqual(auto.diagnostics.filter((d) => d.endsWith('/chartex-fallback')).length, maps + negativeHistograms, `${name} (auto): map and negative histogram report fallback`);
       assert.ok(!auto.diagnostics.includes('chart-map-geodata') && native.diagnostics.includes('chart-map-geodata'), `${name}: geodata notice only when the map is native`);
     }
-    assert.equal(auto.diagnostics.filter(d => d.endsWith('/chartex-fallback')).length, maps, `${name}: every unsupported construct reports fallback`);
+    assert.equal(auto.diagnostics.filter(d => d.endsWith('/chartex-fallback')).length, maps + negativeHistograms, `${name}: every unsupported construct or data domain reports fallback`);
     assert.equal(native.diagnostics.filter(d => d.endsWith('/chart-fallback')).length >= multiPareto, true, `${name}: a Pareto chart of several series reports its column fallback`);
     assert.ok(!auto.diagnostics.includes('chart-data-adapted/series-dropped'), `${name}: no Pareto series are dropped`);
     if (maps === deck.slides.length) assert.deepEqual(digest(auto.bytes), fixture.entries[name].sha256, `${name} (auto): a map-only deck keeps the reviewed fallback bytes`);
@@ -513,4 +517,4 @@ assert.deepEqual(chartexPointColors('waterfall', [1, -2, 0, null], ['UP', 'DOWN'
 assert.deepEqual(chartexPointColors('funnel', [1, 2], ['A']), [null, null]);
 assert.equal(resolveChartType('treemap-3x').id, null, 'a retired alias is outside the catalog');
 
-console.log(`Chartex passed: ${checks} checks; ${chartexIds.length} chartex ids export native cx:chartSpace parts with style parts, content types, relationships and alternate-content frames, agree with core chartTypeRecords, round-trip and are deterministic; the default writes them for the six confirmed constructs and keeps the map on the fallback (chartex: 'fallback' retains strict reviewed archive hashes).`);
+console.log(`Chartex passed: ${checks} checks; ${chartexIds.length} chartex ids export native cx:chartSpace parts with style parts, content types, relationships and alternate-content frames, agree with core chartTypeRecords, round-trip and are deterministic; the default writes eligible confirmed constructs and keeps the map and negative categorical histograms on the fallback (chartex: 'fallback' retains strict reviewed archive hashes).`);

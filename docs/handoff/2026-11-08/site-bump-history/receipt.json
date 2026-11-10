@@ -1,0 +1,67 @@
+{
+  "scope": "No-force history-preserving site-bump correction; offline realGit; no GitHub/deploy/login/Office operation",
+  "base": "fef5d76e06bae126d6cdda0e3f7658e42c49db03",
+  "node": "v24.20.0",
+  "tests": {
+    "focused": "23/23, including seven real-Git history/race cases",
+    "changed": "130.8s; eight passing steps/typecheck skip, two sparse omitted-fixture failures retained",
+    "affectedReruns": "text6/6+stricttextscan PASS; tracker18/18+strictfreshness PASS after exact Git blob restoration; generated tracker unchanged"
+  },
+  "vetoableDecision": "Never rewrite existing site bump history. Trusted generation runs before normal merging of latest default and open bump branches; two closed-head checks, fast-forward-only push, conflict/concurrent writer refusal. Preserve D17 advisory failure plus issue.",
+  "files": [
+    {
+      "path": "bump-history-first.log.gz",
+      "originalBytes": 2810,
+      "originalSha256": "046ed259e8683b0ae64ddbf7721b7c259833a49084a6fe60bb87d6b9fbcfe213",
+      "gzipSha256": "0f24080d22ed47085ecdb9c13b0de75bd8e518cfc94b9d67963f763fdd052fc8"
+    },
+    {
+      "path": "bump-history-check-changed.log.gz",
+      "originalBytes": 7207,
+      "originalSha256": "95af010036d3711913313c0bf46ac6198db73cc310e39b6308724ee16c336cad",
+      "gzipSha256": "ee2b3ca6b75e324c342c7b87db64193749356c3c936f8529060b518e919f12c3"
+    },
+    {
+      "path": "bump-history-tracker-restored.log.gz",
+      "originalBytes": 13201,
+      "originalSha256": "e833b1d79fc29902b292458d564df25c492f890ffc36c4f47e224a9d11aaa698",
+      "gzipSha256": "e4c674b9d945e11bfeca6fd32d6e163eb7a3bcc388a1167ed4c2308df5998b9f"
+    },
+    {
+      "path": "bump-history-text-restored.log.gz",
+      "originalBytes": 1003,
+      "originalSha256": "f711110d8a651297857caa493207e2d38d092b830785fa461e4f7356efe65098",
+      "gzipSha256": "9c2f9b394945d5df014b8763b5e3d39a7d2dd77daa026575f3a334acdbaa41a4"
+    },
+    {
+      "path": "bump-history-tracker-final.log.gz",
+      "originalBytes": 3041,
+      "originalSha256": "505b42aa2f876756cd2392442192db980cbbb87307b862f053f7ff29ec965e23",
+      "gzipSha256": "07876b69fb414f073b3203a371e4bffcc552dcfa0f11352562bf6c1763bc209f"
+    },
+    {
+      "path": "bump-history-tracker-complete.log.gz",
+      "originalBytes": 2032,
+      "originalSha256": "575e61925b0b55230f6b8fad022d918e7e0e64002dc975c959b5f89580cb4fc4",
+      "gzipSha256": "5fddca1b426a530d62cba7fadbcbaf8a3a875e083dafeb6abf03e38fd0bd72fa"
+    },
+    {
+      "path": "bump-history-sparse-recovery.json.gz",
+      "originalBytes": 451,
+      "originalSha256": "b2ee4b3d73899226901a0dc4a3422c10d93a50c3098ee2a7dcbfd8cf7d5a2f49",
+      "gzipSha256": "6e4e62e659285955afb5363e9ffc309a6a024d2154ef0fed47549aa77125135c"
+    },
+    {
+      "path": "bump-history-tracker-exact-inputs.json.gz",
+      "originalBytes": 936,
+      "originalSha256": "99f15ad73e1b5a9c83cabf9e9d7051acea1e38b21cfa9089bef240755889b2e8",
+      "gzipSha256": "b756c57af9c415e2b49606059249718c1f806ac61306f091cf1b705821ec4c36"
+    },
+    {
+      "path": "bump-history-native-index-recovery.json.gz",
+      "originalBytes": 510695,
+      "originalSha256": "114ac6aff50095e6ec941e1e35d6bbfe770905447d6ce8d2d13d719786086dc3",
+      "gzipSha256": "4acadfbe4e3c54b9c9369c74c4888af301107880aeea6a0178940c91fd542859"
+    }
+  ]
+}

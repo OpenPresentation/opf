@@ -1,0 +1,91 @@
+
+> openpresentation-workspace@ check:changed C:\opf-work\lh-93-negative-labels
+> node scripts/check-changed.mjs "--base" "960ab42bfc1aa9418af8b306a03a36e8d515bc5c"
+
+check-changed: 63 changed files since 960ab42bf (plus uncommitted and untracked)
+ok  build (12.4 s)
+ok  biome (0.1 s)
+ok  pnpm run check:changes (0.9 s)
+ok  pnpm run check:font-hotlinks (7.9 s)
+ok  pnpm run check:skill-commands (24.6 s)
+ok  pnpm run check:text (2.4 s)
+ok  pnpm run check:stability (71.6 s)
+-  typecheck
+FAILED  tests pptx (65.7 s)
+
+--- tests pptx failed (exit 1); last 60 lines of artifacts\check-changed\tests_pptx.log:
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2381.2281
+[8/252] node test/chart-colors.mjs
+Native chart colors passed: 38 charts, no chart panel, axis/legend colors legible on the background and exact data reimport.
+[9/252] node test/chart-correctness.mjs
+Chart correctness (PPTX) passed: 7 checks; bar categories top to bottom, axis max within 1.25 x the data, waterfall total as a subtotal.
+[10/252] node test/chart-fallbacks.mjs
+pptx chart fallbacks ok
+[11/252] node test/chart-followups.mjs
+Chart follow-ups export passed: 14 checks (ring names, one plot height).
+[12/252] node test/chart-highlight.mjs
+Chart highlight passed: series and point fills, accent1 scheme colour, muted literal, schema order, label contrast, unsupported constructs, preview parity, provenance round trip.
+[13/252] node test/chart-layer.mjs
+Chart layer export passed: 37 checks (small charts, explicit options, emphasis parity, header row, legend option).
+[14/252] node test/chart-options.mjs
+Chart options: native c:title, c:legendPos and c:dLbls (and the chartex equivalents) in schema order, read back by fromPptx, unchanged without the fields, and in agreement with the preview.
+[15/252] node test/chart-palette-axis.mjs
+Chart palette and value axis passed: 15 checks (scheme-following series, theme colours, chart.colors, pinned slides, core value axis).
+[16/252] node test/chart-series-order.mjs
+Chart series schema order passed: 131 checks (every classic type in dml-chart.xsd sequence, the line, radar and scatter repairs, the stable rewrite, native import).
+[17/252] node test/chart-series-paint-import.mjs
+Chart-series solid paint import: current scheme/direct first/second series paths, no/empty/non-solid controls, unchanged data/design/highlight/provenance and unrelated slide. No native or pixel claim.
+[18/252] node test/chart-text-size.mjs
+Chart text size passed: 627 checks; axis, data label and legend text at the preview's size for 22 chart types on 8 slide and font-size settings, classic and chartex parts and the chartex style part.
+[19/252] node test/chart-types.mjs
+Chart types passed: 56 exports (19 classic chart types, rejected retired ids) with exact constructs and same-id reimport.
+[20/252] node test/chart-workbook-ranges.mjs
+Chart workbook ranges: 56 workbooks checked (PptxGenJS 10 families incl. bubble, every OPF chart type, anchored-table rule).
+[21/252] node test/chart-workbook-values.mjs
+Chart workbook values: 9 checks passed (8 OPF chart types and the engine's category, scatter and bubble workbooks keep 0; gaps are blank cells).
+[22/252] node test/chart-workbook.mjs
+Chart workbook checks passed: 37 bounded heading/preservation cases, Unicode/whitespace, rich shared strings, unsupported/external/corrupt metadata and deterministic actual export/reimport.
+[23/252] node test/chartex.mjs
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: treemap-category (fallback): bytes identical to the reviewed archive fixture
++ actual - expected
+
++ '54a212bf70b3bd8cdd20454315fbdf42fa021344d49c91ce3631727ebc61c3b1'
+- '8434325bbaf1c97c4efc4fe2977a679b72023a986e807f8e5b02f63998c0b125'
+
+    at file:///C:/opf-work/lh-93-negative-labels/packages/pptx/test/chartex.mjs:433:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '54a212bf70b3bd8cdd20454315fbdf42fa021344d49c91ce3631727ebc61c3b1',
+  expected: '8434325bbaf1c97c4efc4fe2977a679b72023a986e807f8e5b02f63998c0b125',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.20.0
+run-tests: test/chartex.mjs failed (exit 1); 229 test(s) not run
+C:\opf-work\lh-93-negative-labels\packages\pptx:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @openpresentation/opf-pptx@0.32.1 test:contract: `pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs --suite contract && pnpm run build:browser-check`
+Exit status 1
+
+step                           status     time
+build                          passed   12.4 s
+biome                          passed    0.1 s  13 files
+pnpm run check:changes         passed    0.9 s
+pnpm run check:font-hotlinks   passed    7.9 s
+pnpm run check:skill-commands  passed   24.6 s
+pnpm run check:stability       passed   71.6 s
+pnpm run check:text            passed    2.4 s
+typecheck                      skipped       -  no .ts, .mts or tsconfig change
+tests pptx                     FAILED   65.7 s
+total                                   157.7 s
+
+check-changed: 1 of 9 steps failed: tests pptx
+ ELIFECYCLE  Command failed with exit code 1.

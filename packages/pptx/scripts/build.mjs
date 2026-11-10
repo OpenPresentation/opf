@@ -41,9 +41,11 @@ await copyFile(new URL('src/chart-highlight.js', root), new URL('chart-highlight
 await copyFile(new URL('src/chart-layer.js', root), new URL('chart-layer.js', dist));
 await copyFile(new URL('src/chart-direct-labels.js', root), new URL('chart-direct-labels.js', dist));
 await copyFile(new URL('src/chart-marks.js', root), new URL('chart-marks.js', dist));
+await copyFile(new URL('src/chart-references.js', root), new URL('chart-references.js', dist));
 await copyFile(new URL('src/step-badges.js', root), new URL('step-badges.js', dist));
 await copyFile(new URL('src/smart-art.js', root), new URL('smart-art.js', dist));
 await copyFile(new URL('src/smart-art-layouts.js', root), new URL('smart-art-layouts.js', dist));
+await copyFile(new URL('src/smart-art-import.js', root), new URL('smart-art-import.js', dist));
 await copyFile(new URL('src/icons.js', root), new URL('icons.js', dist));
 await copyFile(new URL('src/title-rule.js', root), new URL('title-rule.js', dist));
 await copyFile(new URL('src/shape-blocks.js', root), new URL('shape-blocks.js', dist));
@@ -57,6 +59,7 @@ await copyFile(new URL('src/data-provenance.js', root), new URL('data-provenance
 await copyFile(new URL("src/index.d.ts", root), new URL("index.d.ts", dist));
 await copyFile(new URL("src/image-geometry.js", root), new URL("image-geometry.js", dist));
 await copyFile(new URL('src/image-provenance.js', root), new URL('image-provenance.js', dist));
+await copyFile(new URL('src/image-callout-provenance.js', root), new URL('image-callout-provenance.js', dist));
 await copyFile(new URL('src/media-dedupe.js', root), new URL('media-dedupe.js', dist));
 await copyFile(new URL('src/watermark-provenance.js', root), new URL('watermark-provenance.js', dist));
 await copyFile(new URL('src/logo-provenance.js', root), new URL('logo-provenance.js', dist));
@@ -75,7 +78,7 @@ await copyFile(new URL('src/image-import.js', root), new URL('image-import.js', 
 await copyFile(new URL('src/import-signals.js', root), new URL('import-signals.js', dist));
 
 await copyFile(new URL('src/table-import.js', root), new URL('table-import.js', dist));
-for (const name of ['native-text-style.js', 'body-text-import.js', 'font-weights.js']) await copyFile(new URL(`src/${name}`, root), new URL(name, dist));
+for (const name of ['native-text-style.js', 'native-autofit.js', 'body-text-import.js', 'font-weights.js']) await copyFile(new URL(`src/${name}`, root), new URL(name, dist));
 await copyFile(new URL('src/table-cell-import.js', root), new URL('table-cell-import.js', dist));
 await copyFile(new URL('src/table-border-import.js', root), new URL('table-border-import.js', dist));
 await copyFile(new URL('src/color-ref.js', root), new URL('color-ref.js', dist));
@@ -86,6 +89,7 @@ await copyFile(new URL('src/package-fonts.js', root), new URL('package-fonts.js'
 await copyFile(new URL('src/safe-typefaces.js', root), new URL('safe-typefaces.js', dist));
 await copyFile(new URL('src/picture-slides.js', root), new URL('picture-slides.js', dist));
 await copyFile(new URL('src/script-fonts.js', root), new URL('script-fonts.js', dist));
+await copyFile(new URL('src/native-language-provenance.js', root), new URL('native-language-provenance.js', dist));
 await copyFile(new URL('src/numbered-list.js', root), new URL('numbered-list.js', dist));
 
 // SH-03: the shape effects (a:effectLst), kept on their own line so other work on the list above does not collide.

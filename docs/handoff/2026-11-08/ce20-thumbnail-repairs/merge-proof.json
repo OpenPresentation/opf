@@ -1,0 +1,52 @@
+{
+  "base": "e99e6607336c9294685a7f491be3d66490eebc05",
+  "source": "8de2e635159da9c4805d3e2ef1df1646c8d2e2c8",
+  "tree": "d8f5ba2280ec7597bcad867d0e9707e396e96b2c",
+  "cacheEvidence": "7e8ef4f12f1d40ad7b3d7cd4416a89a853011de7",
+  "fitEvidence": "efe28780948ea9d33aa49834a37c3eca445f0fd0",
+  "bindings": [
+    {
+      "file": "packages/editor/src/workspace.js",
+      "ref": "49da7ea85e6bf70bcba62ee8c3a43ef7aa6646a8",
+      "gitBlob": "ae9e4dbf4c3b484e2e34a3eb1a34a2cf9f3b3465"
+    },
+    {
+      "file": "packages/editor/src/styles/panels.css",
+      "ref": "1ef603961af054e1071a031349de19963eb8fd25",
+      "gitBlob": "d74abbde74edef8dec2e3445849504eada2f8d96"
+    },
+    {
+      "file": "packages/editor/test/support/counted-svg.mjs",
+      "ref": "49da7ea85e6bf70bcba62ee8c3a43ef7aa6646a8",
+      "gitBlob": "3f4dbc91f3ae2809d53279ceb934691cd37bb0a1"
+    },
+    {
+      "file": "packages/editor/test/support/unused-thumbnail-cache.mjs",
+      "ref": "49da7ea85e6bf70bcba62ee8c3a43ef7aa6646a8",
+      "gitBlob": "f8dc219ac025b4bbb712a734f0eb2f8e0f91a26e"
+    },
+    {
+      "file": "packages/editor/test/support/thumbnail-painted-fit.mjs",
+      "ref": "1ef603961af054e1071a031349de19963eb8fd25",
+      "gitBlob": "3af9e7a4cac8a75b2f65d3482d1afe0acd8c78f8"
+    },
+    {
+      "file": "packages/editor/test/workspace-browser.mjs",
+      "ref": "1ef603961af054e1071a031349de19963eb8fd25",
+      "gitBlob": "02c30f2c99298a5bd10fd535119801b5eb1c746c"
+    }
+  ],
+  "changedPackageFiles": [
+    "packages/editor/src/styles/panels.css",
+    "packages/editor/src/workspace.js",
+    "packages/editor/test/support/counted-svg.mjs",
+    "packages/editor/test/support/thumbnail-painted-fit.mjs",
+    "packages/editor/test/support/unused-thumbnail-cache.mjs",
+    "packages/editor/test/workspace-browser.mjs"
+  ],
+  "onlyPackageEditorChanged": true,
+  "codeMergeConflicts": 0,
+  "trackingConflictsResolved": 2,
+  "allTrackingRowsAndLogsPreserved": true,
+  "chartChanged": false
+}

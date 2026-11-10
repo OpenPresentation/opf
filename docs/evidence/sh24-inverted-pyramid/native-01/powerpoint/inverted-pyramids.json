@@ -1,0 +1,962 @@
+﻿{
+    "deck":  "inverted-pyramids",
+    "variant":  "default",
+    "name":  "inverted-pyramids",
+    "sha256":  "ee7061bf5b72efd9508554d9652a9b4561707dcfc46a0e90108bccb23b3904e9",
+    "opened":  true,
+    "previewSlides":  3,
+    "openSeconds":  0.3,
+    "slideCount":  3,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "Inverted pyramid",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF arrangement slides.0.items node 0",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      349.44,
+                                                      89.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF arrangement slides.0.items node 1",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      86.88,
+                                                      209.41,
+                                                      262.08,
+                                                      89.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF arrangement slides.0.items node 2",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      130.56,
+                                                      308.2,
+                                                      174.72,
+                                                      89.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF arrangement slides.0.items node 3",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      174.24,
+                                                      407,
+                                                      87.36,
+                                                      89.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "From possibilities to a decision",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     538.23,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        530.49
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.0.items line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      133.55,
+                                                      506.16,
+                                                      43.92
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Possibilities",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  36,
+                                                       "maxSize":  36,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     410.64,
+                                                                     133.55,
+                                                                     193.9,
+                                                                     43.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        410.64,
+                                                                        186.53
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.0.items line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      232.35,
+                                                      506.16,
+                                                      43.92
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Qualified options",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  36,
+                                                       "maxSize":  36,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     410.64,
+                                                                     232.35,
+                                                                     274.63,
+                                                                     43.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        410.64,
+                                                                        267.26
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.0.items line 2",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      331.14,
+                                                      506.16,
+                                                      43.92
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Shortlist",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  36,
+                                                       "maxSize":  36,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     410.64,
+                                                                     331.14,
+                                                                     138.04,
+                                                                     43.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        410.64,
+                                                                        130.67
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.0.items line 3",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      429.94,
+                                                      506.16,
+                                                      43.92
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Decision",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  36,
+                                                       "maxSize":  36,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     410.64,
+                                                                     429.94,
+                                                                     144.5,
+                                                                     43.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        410.64,
+                                                                        137.13
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  2,
+                       "hidden":  false,
+                       "layout":  "Inverted pyramid",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF arrangement slides.1.items node 0",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      349.44,
+                                                      89.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF arrangement slides.1.items node 1",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      86.88,
+                                                      209.41,
+                                                      262.08,
+                                                      89.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF arrangement slides.1.items node 2",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      130.56,
+                                                      308.2,
+                                                      174.72,
+                                                      89.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF arrangement slides.1.items node 3",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      174.24,
+                                                      407,
+                                                      87.36,
+                                                      89.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF heading slides.1.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Narrow the next investment",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     483.37,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        475.63
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.items line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      111.59,
+                                                      506.16,
+                                                      43.92
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Gather proposals from every ",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  36,
+                                                       "maxSize":  36,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     410.64,
+                                                                     111.59,
+                                                                     454.62,
+                                                                     43.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        410.64,
+                                                                        439.87
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.items line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      155.51,
+                                                      506.16,
+                                                      43.92
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "team",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  36,
+                                                       "maxSize":  36,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     410.64,
+                                                                     155.51,
+                                                                     87.7,
+                                                                     43.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        410.64,
+                                                                        80.33
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.items line 2",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      210.39,
+                                                      506.16,
+                                                      43.92
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Check the evidence and delivery ",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  36,
+                                                       "maxSize":  36,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     410.64,
+                                                                     210.39,
+                                                                     515.54,
+                                                                     43.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        410.64,
+                                                                        500.79
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.items line 3",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      254.31,
+                                                      506.16,
+                                                      43.92
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "capacity",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  36,
+                                                       "maxSize":  36,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     410.64,
+                                                                     254.31,
+                                                                     139.92,
+                                                                     43.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        410.64,
+                                                                        132.55
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.items line 4",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      331.14,
+                                                      506.16,
+                                                      43.92
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Compare the qualified options",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  36,
+                                                       "maxSize":  36,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     410.64,
+                                                                     331.14,
+                                                                     479.01,
+                                                                     43.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        410.64,
+                                                                        471.64
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.items line 5",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      429.94,
+                                                      506.16,
+                                                      43.92
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Choose the next pilot",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  36,
+                                                       "maxSize":  36,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     410.64,
+                                                                     429.94,
+                                                                     336.58,
+                                                                     43.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        410.64,
+                                                                        329.21
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  3,
+                       "hidden":  false,
+                       "layout":  "Inverted pyramid",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF arrangement slides.2.blocks.0.items node 0",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      349.44,
+                                                      89.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF arrangement slides.2.blocks.0.items node 1",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      86.88,
+                                                      209.41,
+                                                      262.08,
+                                                      89.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF arrangement slides.2.blocks.0.items node 2",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      130.56,
+                                                      308.2,
+                                                      174.72,
+                                                      89.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF arrangement slides.2.blocks.0.items node 3",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      174.24,
+                                                      407,
+                                                      87.36,
+                                                      89.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF heading slides.2.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Keep the work behind each decision",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     622.06,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        614.31
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.2.blocks.0.items line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      114.71,
+                                                      506.16,
+                                                      36.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Gather proposals",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  30,
+                                                       "maxSize":  30,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     443.64,
+                                                                     114.71,
+                                                                     230.58,
+                                                                     36
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        443.64,
+                                                                        224.46
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.2.blocks.0.items line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      159.71,
+                                                      506.16,
+                                                      36.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Keep every team in the starting pool",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  30,
+                                                       "maxSize":  30,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     443.64,
+                                                                     159.71,
+                                                                     464.77,
+                                                                     36
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        443.64,
+                                                                        458.65
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.2.blocks.1.items line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      213.51,
+                                                      506.16,
+                                                      36.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Test the assumptions",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  30,
+                                                       "maxSize":  30,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     443.64,
+                                                                     213.51,
+                                                                     281.3,
+                                                                     36
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        443.64,
+                                                                        275.18
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.2.blocks.1.items line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      258.51,
+                                                      506.16,
+                                                      36.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Check delivery capacity",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  30,
+                                                       "maxSize":  30,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     443.64,
+                                                                     258.51,
+                                                                     313.11,
+                                                                     36
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        443.64,
+                                                                        306.99
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.2.blocks.2.items line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      312.3,
+                                                      506.16,
+                                                      36.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Compare the shortlist",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  30,
+                                                       "maxSize":  30,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     443.64,
+                                                                     312.3,
+                                                                     287.92,
+                                                                     36
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        443.64,
+                                                                        281.8
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.2.blocks.2.items line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      357.3,
+                                                      506.16,
+                                                      36.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Record the tradeoffs",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  30,
+                                                       "maxSize":  30,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     443.64,
+                                                                     357.3,
+                                                                     269.19,
+                                                                     36
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        443.64,
+                                                                        263.07
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.2.blocks.3.items line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      411.1,
+                                                      506.16,
+                                                      36.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Choose the pilot",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  30,
+                                                       "maxSize":  30,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     443.64,
+                                                                     411.1,
+                                                                     219,
+                                                                     36
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        443.64,
+                                                                        212.88
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.2.blocks.3.items line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      410.64,
+                                                      456.1,
+                                                      506.16,
+                                                      36.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Name the owner",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  30,
+                                                       "maxSize":  30,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     443.64,
+                                                                     456.1,
+                                                                     218.96,
+                                                                     36
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        443.64,
+                                                                        212.84
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "renumber":  {
+                     "before":  [
+                                    {
+                                        "slideId":  256,
+                                        "position":  1,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  257,
+                                        "position":  2,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  258,
+                                        "position":  3,
+                                        "numbers":  [
+
+                                                    ]
+                                    }
+                                ],
+                     "moved":  [
+                                   {
+                                       "slideId":  257,
+                                       "position":  1,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  258,
+                                       "position":  2,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  256,
+                                       "position":  3,
+                                       "numbers":  [
+
+                                                   ]
+                                   }
+                               ]
+                 },
+    "seconds":  1.5
+}

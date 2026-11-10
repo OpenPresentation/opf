@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "source": "863b83b902eaad7a2c614b353c0379f269146441",
+  "records": 113,
+  "rawBytes": 1147366,
+  "archive": {
+    "bytes": 468751,
+    "sha256": "8e642a3b15e8f08ab7801ec364950efc3bf3e5f853aa6183653d9d3f93fc0c98"
+  },
+  "followup": {
+    "exit": 0,
+    "passed": 15,
+    "failed": 0,
+    "skipped": 1,
+    "seconds": 138.2,
+    "rows": [
+      {
+        "name": "build",
+        "status": "passed",
+        "detail": "9.3 s"
+      },
+      {
+        "name": "biome",
+        "status": "passed",
+        "detail": "0.2 s  7 files"
+      },
+      {
+        "name": "pnpm run check:changes",
+        "status": "passed",
+        "detail": "0.7 s"
+      },
+      {
+        "name": "pnpm run check:examples",
+        "status": "passed",
+        "detail": "40.2 s"
+      },
+      {
+        "name": "pnpm run check:examples-convert",
+        "status": "passed",
+        "detail": "42.6 s"
+      },
+      {
+        "name": "pnpm run check:font-hotlinks",
+        "status": "passed",
+        "detail": "11.0 s"
+      },
+      {
+        "name": "pnpm run check:gallery-tracker",
+        "status": "passed",
+        "detail": "2.5 s"
+      },
+      {
+        "name": "pnpm run check:libreoffice",
+        "status": "passed",
+        "detail": "0.4 s"
+      },
+      {
+        "name": "pnpm run check:native-acceptance",
+        "status": "passed",
+        "detail": "33.5 s"
+      },
+      {
+        "name": "pnpm run check:registry-golden",
+        "status": "passed",
+        "detail": "3.1 s"
+      },
+      {
+        "name": "pnpm run check:release-report",
+        "status": "passed",
+        "detail": "0.5 s"
+      },
+      {
+        "name": "pnpm run check:skill-commands",
+        "status": "passed",
+        "detail": "19.4 s"
+      },
+      {
+        "name": "pnpm run check:stability",
+        "status": "passed",
+        "detail": "47.0 s"
+      },
+      {
+        "name": "pnpm run check:text",
+        "status": "passed",
+        "detail": "4.9 s"
+      },
+      {
+        "name": "typecheck",
+        "status": "skipped",
+        "detail": "-  no .ts, .mts or tsconfig change"
+      },
+      {
+        "name": "tests pptx",
+        "status": "passed",
+        "detail": "7.4 s"
+      }
+    ]
+  },
+  "portable": {
+    "decks": 149,
+    "slides": 966,
+    "exit": 0
+  },
+  "tailProof": "b077396b070bcf712b21de132370e735e1a9fa63",
+  "csPrep": "eb0d8c61c67a5adc99442f1ac6c778d04e109038",
+  "csActual": "8883646a191c724c35ffef6bdc9b9d9589d41251",
+  "lre": {
+    "source": "643e40e30cd198f3204ed98037f31cab319f6d74",
+    "actualExit": 0,
+    "addedFormattingCodepoints": 2,
+    "oldNativeUTF16Equality": false,
+    "currentInputEqualityStrict": true,
+    "imagesUnchangedVsCS": true,
+    "rejectedAsOrderingFix": true,
+    "blankViewerClaim": false
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "file": "docs/programs/release-readiness/burndown.md",
+  "base": "e7dc37096a7332a65ae2af8c37e2283790408650",
+  "prior": "9a52c201b60daa4aeb0003051ddc4cca5b3946f8",
+  "incoming": "2d7654836094bcfe087eb1bfad7a69e3a2154eef",
+  "priorSha256": "b0f41489355dcbddbb5f97d089a83ed39df5feaad8189417a423de31ab72db0d",
+  "incomingSha256": "7f97def04b6e6186c4fd8c35e543b66f0341dd40e24634db57a0c71552be928d",
+  "resolvedSha256": "ab1f8f857c6bda2efaa537a7d0cffd6f0abc40dda67acb732df246b129014e85",
+  "oldRow": "| RR-114 | Prepare only actual Node font faces while preserving styles, coverage/fallback, edits and exact export | render, opf, pptx | RR-20 | review | [DraftPR1252](https://github.com/OpenPresentation/opf/pull/1252) frozen cc0 normally folded7e12 with exact tree. Root source review/final69-record verifier and paired8-child208SVG trial pass:131→3faces, whole-process peak~478–488→305–324MiB; warm~21%lower,36-slide preparation+first~13.6%slower. Combined/native/CI gates remain owed. [Measured tradeoff](https://github.com/OpenPresentation/opf/blob/4d1ffa78440c47d955d9883575d347996325bf40/docs/handoff/2026-11-09/svg-performance/DEMAND-FONT-RESULTS.md). |",
+  "newRow": "| RR-114 | Prepare only actual Node font faces while preserving styles, coverage/fallback, edits and exact export | render, opf, pptx | RR-20 | review | [DraftPR1252](https://github.com/OpenPresentation/opf/pull/1252) frozen cc0 normally folded7e12 with exact tree. Root source review/final69-record verifier and paired8-child208SVG trial pass:131→3faces, whole-process peak~478–488→305–324MiB; warm~21%lower,36-slide preparation+first~13.6%slower. Combined/native/CI gates remain owed. [Measured tradeoff](https://github.com/OpenPresentation/opf/blob/4d1ffa78440c47d955d9883575d347996325bf40/docs/handoff/2026-11-09/svg-performance/DEMAND-FONT-RESULTS.md). Validation-only CLI/MCP demand-boundary repair is root-reviewed with8new groups,14CLI and4selected stdio neighbors passing; original baseline errors retained and combined mapped/CI gates still owed. [Follow-up](../../handoff/2026-11-09/rr114-validation-reports/README.md). |",
+  "insertedSuffix": " Validation-only CLI/MCP demand-boundary repair is root-reviewed with8new groups,14CLI and4selected stdio neighbors passing; original baseline errors retained and combined mapped/CI gates still owed. [Follow-up](../../handoff/2026-11-09/rr114-validation-reports/README.md).",
+  "appendedTail": "\n- 2026-11-09 RR-114: reproduced demand-planning invalid-source CLI exit2/internal-error and stdio exception on exact reviewed e7. A separate validation-only opt-in now recognizes only the loaded renderer's real structured format exception (or known typed preparation wrapper), then preserves canonical raw-source reporting and host catalogs. Other failures and generic font/export/pagination callers remain strict; focused review and the one combined gate are still owed. Original RED probes retained; no release or native acceptance.\n\n- 2026-11-09 RR-114: validation-report leaf3ef passed root critical source review, package/DTS build,8new constructor/report/canonical-source/catalog/stdio groups and14+4 existing CLI/selected MCP neighbors. Genuine schema/JSON-syntax/YAML-syntax baseline internal-error/exit2 and raw renderer exceptions now return canonical located CLIexit1/stdio reports; every original failure is retained. The coordinator owns the one coherent mapped/CI batch; no full-suite/native/release acceptance is inferred.\n",
+  "priorBytesPreserved": true,
+  "fold": "64c2795729b84f8409beb13cdb0016002eeb6213",
+  "exactRuntimeTestBlobs": [
+    {
+      "file": "packages/cli/src/validate.ts",
+      "blob": "6d86790fee958c60f7311cbb7ff52cb7e0bb6a96"
+    },
+    {
+      "file": "packages/cli/test/validation-fonts.test.mjs",
+      "blob": "f6577cf3ca8b43e3e9d4dfe795579ab1041b22a5"
+    },
+    {
+      "file": "packages/javascript/src/node/paginate.ts",
+      "blob": "d6e607b05fead139222a408c22dd2b1ad76bb000"
+    },
+    {
+      "file": "packages/javascript/src/node/peers.ts",
+      "blob": "2122934d048d13ed2b3f6e33f8b027b106fabdaf"
+    },
+    {
+      "file": "packages/javascript/src/node/validation-fonts.ts",
+      "blob": "97adc772dc30f96503160f49b2e819e3764ef317"
+    },
+    {
+      "file": "packages/javascript/test/node-validation-fonts.test.mjs",
+      "blob": "62f96cf4db83cac32c4862250afdd814952b7697"
+    },
+    {
+      "file": "packages/mcp/src/stdio.ts",
+      "blob": "44efafe19f9b16a69289073dc6d00cc38a3abc0a"
+    },
+    {
+      "file": "packages/mcp/test/validation-fonts.test.mjs",
+      "blob": "bdde4f0c1861a05b7a4db5e6fc2b42c47e143d2b"
+    }
+  ]
+}

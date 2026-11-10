@@ -66,10 +66,19 @@ export function compareUniformTextFonts({expected,report,actions=[],captureTextF
   const current=report.phases[phase];assert.equal(current.slideCount,expected.length);assert.equal(current.slides.length,expected.length);
   for(const [index,slide] of expected.entries()){
    const actual=current.slides[index];assert.equal(actual.index,index+1);assert.equal(actual.shapeCount,actual.shapes.length);
-   assert.equal(actual.shapes.filter(shape=>shape.hasTextFrame!==0&&shape.text!==null).length,slide.shapes.length,'Unexpected native text shape count');
+   const expectedNames=slide.shapes.map(shape=>shape.name),emptyTextFrameNames=slide.emptyTextFrameNames??[];
+   assert.equal(new Set(expectedNames.map(name=>name.toLowerCase())).size,expectedNames.length,'Duplicate expected font shape');
+   assert.ok(Array.isArray(emptyTextFrameNames)&&emptyTextFrameNames.every(name=>typeof name==='string'&&name.length>0),'Invalid expected nontext shape identities');
+   assert.equal(new Set(emptyTextFrameNames.map(name=>name.toLowerCase())).size,emptyTextFrameNames.length,'Duplicate expected nontext shape');
+   assert.ok(emptyTextFrameNames.every(name=>!expectedNames.some(textName=>textName.toLowerCase()===name.toLowerCase())),'Nontext shape overlaps text shape');
+   // Match compare-text's source-bound rule: an empty native TextFrame is
+   // nontext only when its exact source shape had no txBody. Never ignore an
+   // unbound/renamed frame, or one that has acquired text.
+   const textShapes=actual.shapes.filter(shape=>shape.hasTextFrame!==0&&shape.text!==null&&!(shape.text===''&&emptyTextFrameNames.includes(shape.name)));
+   assert.equal(textShapes.length,slide.shapes.length,'Unexpected native text shape count');
    const names=actual.shapes.map(shape=>shape.name);assert.equal(new Set(names.map(name=>name.toLowerCase())).size,names.length,'Duplicate native shape');
    for(const shape of slide.shapes){
-    const matching=actual.shapes.filter(item=>item.name===shape.name);assert.equal(matching.length,1,'Missing exact font shape');const record=matching[0],font=record.textFont;assert.ok(record.hasTextFrame!==0&&record.text!==null);assert.equal(font?.status,'uniform','Unsupported missing/mixed native font descriptor');assert.deepEqual(font.unavailableFields,[]);
+    const matching=textShapes.filter(item=>item.name===shape.name);assert.equal(matching.length,1,'Missing exact font shape');const record=matching[0],font=record.textFont;assert.ok(record.hasTextFrame!==0&&record.text!==null);assert.equal(font?.status,'uniform','Unsupported missing/mixed native font descriptor');assert.deepEqual(font.unavailableFields,[]);
     assert.equal(typeof font.name,'string');assert.ok(Number.isFinite(font.sizePoints)&&typeof font.sizePoints==='number');assert.ok([-1,0].includes(font.bold)&&[-1,0].includes(font.italic));
     const expectedFont=shape.font;for(const [field,value] of [['name',expectedFont.name],['bold',expectedFont.bold?-1:0],['italic',expectedFont.italic?-1:0]])if(font[field]!==value)findings.push({phase,slide:index+1,name:shape.name,field,expected:value,actual:font[field]});
     const sizeDifferencePoints=font.sizePoints-expectedFont.sizePoints;if(Math.abs(sizeDifferencePoints)>TEXT_GEOMETRY_TOLERANCE_POINTS)findings.push({phase,slide:index+1,name:shape.name,field:'sizePoints',expected:expectedFont.sizePoints,actual:font.sizePoints,sizeDifferencePoints});

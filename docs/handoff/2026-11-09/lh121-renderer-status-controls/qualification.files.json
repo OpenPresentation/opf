@@ -1,0 +1,192 @@
+{
+  "file": "qualification.zip",
+  "bytes": 49765,
+  "sha256": "e7595ba4022b36734358f68cd994bdc03ee87ca1a28c52ca92b12b5f02d8a09f",
+  "files": [
+    {
+      "file": "ci/original-renderer3.log",
+      "bytes": 93545,
+      "sha256": "73dc2390f8a0b8c808409d080482550cdfe997f8e34bb09cd5348e9ec79b4ae1"
+    },
+    {
+      "file": "local/build-before.exit.json",
+      "bytes": 152,
+      "sha256": "53052167d5bed1e5368c40a8619d56843fe846ca688f839bf91410c54440a94c"
+    },
+    {
+      "file": "local/build-before.log",
+      "bytes": 11842,
+      "sha256": "8559e24eaf85d14e77f421f785f3b57eb1bec668703cddd73988630f96b6d07f"
+    },
+    {
+      "file": "local/docs-final.exit.json",
+      "bytes": 219,
+      "sha256": "0c69f9b4872a7494462a869b40cce2d5af463d70834b9e56d95e817854a73c4f"
+    },
+    {
+      "file": "local/docs-final.log",
+      "bytes": 918,
+      "sha256": "2becb9530cbbe07586701fbc35bdb9dac9f34c20acb1ce639010f7dfe5a3e69c"
+    },
+    {
+      "file": "local/focused-after.exit.json",
+      "bytes": 161,
+      "sha256": "793908ae78210d486877fa6280c1f58b97ec59372a0d5f545bef3a78539ef067"
+    },
+    {
+      "file": "local/focused-after.log",
+      "bytes": 164,
+      "sha256": "273972db024c3f65bd741485d8ac13151e511e9ac7ef8f79f6e0a11fe4fa2557"
+    },
+    {
+      "file": "local/focused-before.exit.json",
+      "bytes": 193,
+      "sha256": "3338b2262e47f05dd3dce4d7847aafab61a88f78c12faddce0d080c362f58ebc"
+    },
+    {
+      "file": "local/focused-before.log",
+      "bytes": 2244,
+      "sha256": "7de3cc64d11fb4e7dfd746f4deac9c367e853e6263b045bde5d3d8fa09cc8a12"
+    },
+    {
+      "file": "local/focused-final.exit.json",
+      "bytes": 146,
+      "sha256": "e8ae50c33635d6f23dd43b5a98a0e3f86e9bf3d1b7b4b79daf60186e2267b3ca"
+    },
+    {
+      "file": "local/focused-final.log",
+      "bytes": 164,
+      "sha256": "273972db024c3f65bd741485d8ac13151e511e9ac7ef8f79f6e0a11fe4fa2557"
+    },
+    {
+      "file": "local/install.exit.json",
+      "bytes": 126,
+      "sha256": "64be435e9a9c111dd7f2b79771dd122a5441cc349521364b37d982e47ed91faf"
+    },
+    {
+      "file": "local/install.log",
+      "bytes": 2539,
+      "sha256": "78138d20c7c2b6216377968b314de6618bcc532a6e6f1f0b4420d3ca250acec8"
+    },
+    {
+      "file": "local/mapped-01.exit.json",
+      "bytes": 219,
+      "sha256": "0dc4f97868c05a7bed4dafffd073fb61d4cf7c47e0ce6404832bb230c2e1b1ac"
+    },
+    {
+      "file": "local/mapped-01.log",
+      "bytes": 3315,
+      "sha256": "ae796e22bc00bf309c7af1f3dd99409ccba3be8dabcaafb346b5a5de0a4211c7"
+    },
+    {
+      "file": "local/mapped-02.exit.json",
+      "bytes": 289,
+      "sha256": "4fb3aa6ecd08283e7d8b765ed35f8323ce0c3ccf407997fdf6e31cee3f02ffe6"
+    },
+    {
+      "file": "local/mapped-02.log",
+      "bytes": 1312,
+      "sha256": "29da13e03df221759d54ada95b321dacdf42bcf475a7bc1c1d499e4bcee41adf"
+    },
+    {
+      "file": "local/seal-setup.json",
+      "bytes": 291,
+      "sha256": "28fa8019d036ee0e6907dad964570efb4673b47c4ec881b9aa1c88af66620229"
+    },
+    {
+      "file": "local/text-input-recovery.json",
+      "bytes": 490,
+      "sha256": "14ba34dd0d943fe4c67daebd4fee3e6adb535098f54f0977a41960524ea64302"
+    },
+    {
+      "file": "mapped-01-steps/biome.log",
+      "bytes": 697,
+      "sha256": "f85e9d3c552a6f884a8119d439c3a4d82028524febb01f6f4a668d6cba143434"
+    },
+    {
+      "file": "mapped-01-steps/build.log",
+      "bytes": 14564,
+      "sha256": "94ad89cc239d3b03c6f3e5cf6be8fe79bee31c381f8b08e5a9bce86378feaee0"
+    },
+    {
+      "file": "mapped-01-steps/pnpm_run_check_changes.log",
+      "bytes": 2631,
+      "sha256": "6b64d4aaa2553b3da0422d0a98bb9868f8125860316920f88a87dbc962edd4ca"
+    },
+    {
+      "file": "mapped-01-steps/pnpm_run_check_diagram-doc-images.log",
+      "bytes": 167,
+      "sha256": "d8e7fd22d04be9c082601c3f88304303b4c2f7cd99790cb34a6eda02da91257f"
+    },
+    {
+      "file": "mapped-01-steps/pnpm_run_check_font-hotlinks.log",
+      "bytes": 881,
+      "sha256": "457ad4c92c3459375b843803b069c477a8761f548c44ddce813e59109072fd3c"
+    },
+    {
+      "file": "mapped-01-steps/pnpm_run_check_skill-commands.log",
+      "bytes": 1035,
+      "sha256": "47647731bfd4850c4bf62691dde85a31a53b7d66f623e4c168aa37df6b4ec31c"
+    },
+    {
+      "file": "mapped-01-steps/pnpm_run_check_stability.log",
+      "bytes": 3960,
+      "sha256": "db2439b114e02cabce40f366b887cc9b3823b404963ac604162ffa77ba8f30ad"
+    },
+    {
+      "file": "mapped-01-steps/pnpm_run_check_text.log",
+      "bytes": 1826,
+      "sha256": "de2e2aa8ba9d59e392493386b2c5df47e086bf4e53663b18ab1d16f560f022b2"
+    },
+    {
+      "file": "mapped-01-steps/tests_render.log",
+      "bytes": 163,
+      "sha256": "fa97adef0ce04810ed3def5a4398eaf531ab1c34c55ea95b59bcb9ad2c2fec0b"
+    },
+    {
+      "file": "mapped-02-steps/biome.log",
+      "bytes": 697,
+      "sha256": "1fda6165c9e91d9f287d71e5cd38a7ed9da9bc1816c084a079ba7ea6ace56043"
+    },
+    {
+      "file": "mapped-02-steps/build.log",
+      "bytes": 14564,
+      "sha256": "6027abeceb4dd14538d1b3583842ce37fda8ea032028a7f8739dbadaeed6336c"
+    },
+    {
+      "file": "mapped-02-steps/pnpm_run_check_changes.log",
+      "bytes": 2634,
+      "sha256": "2eef47b4bb61a23b113ef30d22aad70eb74d78fbd32535d790d414db58ac6197"
+    },
+    {
+      "file": "mapped-02-steps/pnpm_run_check_diagram-doc-images.log",
+      "bytes": 167,
+      "sha256": "d8e7fd22d04be9c082601c3f88304303b4c2f7cd99790cb34a6eda02da91257f"
+    },
+    {
+      "file": "mapped-02-steps/pnpm_run_check_font-hotlinks.log",
+      "bytes": 881,
+      "sha256": "536ad86917441fafa9a6aefa423fd34ab64fab6a297c81f9058d981995caba8d"
+    },
+    {
+      "file": "mapped-02-steps/pnpm_run_check_skill-commands.log",
+      "bytes": 1035,
+      "sha256": "909568f88ae4466e8c9cc0ab4282780fc84b1c534d034df8d24bacb9604955e7"
+    },
+    {
+      "file": "mapped-02-steps/pnpm_run_check_stability.log",
+      "bytes": 3964,
+      "sha256": "1f4165949906337a55e4eeaadfe5ecfdcbd27c0d33d831dc33f8862a79fd08bc"
+    },
+    {
+      "file": "mapped-02-steps/pnpm_run_check_text.log",
+      "bytes": 1066,
+      "sha256": "312c254e57e4c509b4b9d2adb818a6c1ccdf19726e295e4e9f320692319899a4"
+    },
+    {
+      "file": "mapped-02-steps/tests_render.log",
+      "bytes": 163,
+      "sha256": "fa97adef0ce04810ed3def5a4398eaf531ab1c34c55ea95b59bcb9ad2c2fec0b"
+    }
+  ]
+}

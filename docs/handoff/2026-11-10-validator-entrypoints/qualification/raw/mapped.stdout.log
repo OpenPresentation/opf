@@ -1,0 +1,37 @@
+
+> openpresentation-workspace@ check:changed C:\opf-work\runtime519
+> node scripts/check-changed.mjs "--base" "519dd89a80904907a3d0120f90b732065d99a0b1"
+
+check-changed: 32 changed files since 519dd89a8 (plus uncommitted and untracked)
+ok  build (9.3 s)
+ok  biome (0.2 s)
+ok  pnpm run check:catalog-free (2.7 s)
+ok  pnpm run check:changes (0.8 s)
+ok  pnpm run check:browser-safe (3.9 s)
+ok  pnpm run check:diagram-doc-images (2.0 s)
+FAILED  pnpm run check:gallery-tracker (0.5 s)
+ok  pnpm run check:release-report (0.4 s)
+ok  pnpm run check:font-hotlinks (6.2 s)
+ok  pnpm run check:skill-commands (18.8 s)
+FAILED  pnpm run check:text (0.4 s)
+ok  pnpm run check:stability (47.3 s)
+ok  typecheck (22.9 s)
+ok  tests opf (89.1 s)
+
+step                               status    time
+build                              passed   9.3 s
+biome                              passed   0.2 s  15 files
+pnpm run check:browser-safe        passed   3.9 s
+pnpm run check:catalog-free        passed   2.7 s
+pnpm run check:changes             passed   0.8 s
+pnpm run check:diagram-doc-images  passed   2.0 s
+pnpm run check:font-hotlinks       passed   6.2 s
+pnpm run check:gallery-tracker     FAILED   0.5 s
+pnpm run check:release-report      passed   0.4 s
+pnpm run check:skill-commands      passed  18.8 s
+pnpm run check:stability           passed  47.3 s
+pnpm run check:text                FAILED   0.4 s
+typecheck                          passed  22.9 s
+tests opf                          passed  89.1 s
+total                                      178.7 s
+ ELIFECYCLE  Command failed with exit code 1.

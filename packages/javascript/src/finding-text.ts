@@ -60,6 +60,7 @@ const LANGUAGE = "a language tag like `en-US` or `de`";
  * its phrase in the same change. The catalog reference pattern is written per catalog kind by `describeFinding` and is listed for completeness.
  */
 export const PATTERN_PHRASES: Readonly<Record<string, PatternPhrase>> = Object.freeze({
+  "\\S": {what: "a label with at least one non-whitespace character", next: "write a nonblank label, or omit it."},
   "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$": { what: "a hex color like `#1F4E79` (3, 6 or 8 hex digits)", next: "write the color as #RRGGBB." },
   "^[a-z][a-z0-9-]*$": { what: ID, next: ID_NEXT },
   "^[a-z0-9][a-z0-9-]*$": { what: "an id of lowercase letters, digits and hyphens, like `my-chart`", next: ID_NEXT },

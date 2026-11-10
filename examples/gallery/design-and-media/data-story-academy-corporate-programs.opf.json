@@ -551,7 +551,8 @@
                   "United States"
                 ]
               }
-            }
+            },
+            "id": "annual-productivity-costs"
           }
         ],
         "composition": {
@@ -642,7 +643,26 @@
             }
           ]
         }
-      }
+      },
+      "shapes": [
+        {
+          "shape": "ellipse",
+          "fill": "none",
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "at": {
+            "block": "annual-productivity-costs",
+            "point": "United States",
+            "series": "Annual lost productivity ($B)",
+            "edge": "end",
+            "width": 80,
+            "height": 80
+          },
+          "alt": "United States bar end: $109.4 billion in annual lost productivity"
+        }
+      ]
     },
     {
       "id": "gap",

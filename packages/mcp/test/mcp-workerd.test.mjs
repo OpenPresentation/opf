@@ -37,15 +37,15 @@ test("lean Worker preserves data exclusions and production size budgets", async 
 	for (const source of ["src/generated/docs.ts", "src/generated/examples.ts", "src/data.ts", "app-dist/deck-app.html"]) {
 		assert.ok(fullSources.some(name => name === source || name.endsWith("/" + source)), source + " is a positive audit control in the full entry");
 	}
-	// Reviewed v0.33 refresh: SH-19 8,075,721; d260 8,110,959; with the waterfall fix 8,116,787, no retained data.
-	// The added composition features explain the growth. See docs/handoff/2026-11-07/mcp-size-budget-033.md.
-	assert.ok(lean.bytes < 8_150_000, `${lean.bytes} unminified bytes`);
+	// Reviewed v0.34 source076725b5b:8,273,467 lean unminified bytes, no retained data.
+	// Exact source measurements and3% rounded headroom: docs/handoff/2026-11-07/mcp-size-budget-034.md.
+	assert.ok(lean.bytes < 8_522_000, `${lean.bytes} unminified bytes`);
 	const production = await bundleWorker("mcp-worker-lean.mjs", { minify: true });
 	assert.deepEqual(retainedData(production), [], "production also excludes every data source");
 	const compressed = gzipSync(production.text, { level: 9 }).length;
-	// Combined waterfall candidate: 5,300,992 minified / 1,199,308 gzip bytes; ceilings leave under 1% headroom.
-	assert.ok(production.bytes < 5_350_000, `${production.bytes} minified bytes`);
-	assert.ok(compressed < 1_210_000, `${compressed} gzip bytes`);
+	// Production5,397,634 minified /1,232,153 gzip bytes; same3% headroom policy.
+	assert.ok(production.bytes < 5_560_000, `${production.bytes} minified bytes`);
+	assert.ok(compressed < 1_270_000, `${compressed} gzip bytes`);
 });
 
 describe("the MCP server in workerd", { skip: !available && "the workerd package has no binary for this platform" }, () => {

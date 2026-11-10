@@ -11,6 +11,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
+import { assertAppResourceFrame } from "./app-resource-frame.mjs";
 
 const require = createRequire(import.meta.url);
 const here = new URL("../", import.meta.url);
@@ -68,8 +69,12 @@ const template = await readFile(new URL("app/index.html", here), "utf8");
 // Inline text must not close its element early.
 const html = template.replace("/*OPF_CSS*/", () => styles.replaceAll("</style", "<\\/style")).replace("/*OPF_JS*/", () => script.replaceAll("</script", "<\\/script"));
 
+// Guard the actual escaped protocol response, not just HTML bytes, before publishing the app resource.
+const frame = assertAppResourceFrame(html);
 await mkdir(out, { recursive: true });
 await writeFile(new URL("deck-app.html", out), html);
 await writeFile(new URL("deck-fonts.json", out), `${JSON.stringify({ extra: fonts.extra.map(({ license: _license, ...face }) => face) }, null, 2)}\n`);
 const kib = (bytes) => `${Math.round(bytes / 1024)} KiB`;
 console.log(`build-app: app-dist/deck-app.html ${kib(Buffer.byteLength(html))} (script ${kib(Buffer.byteLength(script))}, styles ${kib(Buffer.byteLength(styles))}, ${fonts.extra.length} faces on request)`);
+
+console.log(`build-app: JSON-RPC resource ${frame.bytes} bytes / ${frame.limit} default stdio bytes (${frame.headroom} bytes headroom)`);

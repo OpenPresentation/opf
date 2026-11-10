@@ -306,17 +306,33 @@ export function createPersistence(editor, options = {}) {
     hasEarlier = false;
     try { await adapter.delete(earlierKey); } catch { /* the stale copy stays; the next load ignores it */ }
   }
-  /** Decline the offered copy and delete it. */
+  /** Decline the offered copy. Resolves false on storage failure, retaining the recovery offer for restore or retry. */
   async function discard() {
     if (!pending && !hasEarlier) return false;
-    pending = undefined;
-    try { if (adapter) await adapter.delete(storeKey); } catch { /* reported by the next write */ }
-    await dropEarlier();
-    // The stored copy is gone; the next change writes the current document.
-    lastWritten = "";
-    if (touched) schedule();
-    setStatus({ state: touched ? status.state : "idle", message: "", offer: undefined });
-    return true;
+    const discardStored = async () => {
+      if (!pending && !hasEarlier) return false;
+      try {
+        if (adapter) {
+          await adapter.delete(storeKey);
+          if (hasEarlier) await adapter.delete(earlierKey);
+        }
+      } catch (error) {
+        setStatus({ state: "error", error: "write", message: `The saved copy could not be discarded (${String(error?.message ?? error)}). Restore it or try again.` });
+        return false;
+      }
+      // Two adapter deletions are not atomic. Keep the in-memory recovery offer until both required deletions succeed.
+      pending = undefined;
+      stashed = false;
+      hasEarlier = false;
+      earlierRecord = undefined;
+      lastWritten = "";
+      if (touched) schedule();
+      setStatus({ state: "idle", message: "", error: undefined, offer: undefined });
+      return true;
+    };
+    // A prior write must finish first; a newer edit/flush queues after the deletions instead of being erased by them.
+    chain = chain.then(discardStored, discardStored);
+    return chain;
   }
   /** Bring back the copy that was moved aside when the user kept editing while an offer was open, as one undoable change. */
   async function restoreEarlier() {

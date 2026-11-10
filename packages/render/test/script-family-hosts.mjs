@@ -37,7 +37,14 @@ let styleChecks = 0, runChecks = 0, paintChecks = 0;
 
 for (const entry of families) {
   const decks = entry.samples.map(sample => ({sample, deck: scriptDeck(entry, sample)}));
-  const prepared = await loadFonts({pack: 'office', substitutionPolicy: 'visual', fallbackFamily: 'Roboto', scripts: 'auto', presentation: decks[0].deck}), {registry} = prepared;
+  // This host qualifies every pinned face, including italic faces absent from the regular/bold render samples.
+  // Author each supported style explicitly so demand preparation loads exactly the faces this test later checks.
+  const presentation = {...decks[0].deck, slides: entry.faces.map((face, index) => {
+    assert.ok([400, 700].includes(face.weight), `${entry.family}: pinned weight must map exactly to OPF regular/bold`);
+    assert.equal(typeof face.italic, 'boolean', `${entry.family}: pinned italic is explicit`);
+    return {...decks[0].deck.slides[0], id: `prepare-${index}`, text: [{text: decks[0].sample.text, bold: face.weight === 700, italic: face.italic}]};
+  })};
+  const prepared = await loadFonts({pack: 'office', substitutionPolicy: 'visual', fallbackFamily: 'Roboto', scripts: 'auto', presentation}), {registry} = prepared;
   const where = entry.family;
   // Loading: the family's package is among the selected script packages (Noto Sans is the office pack's own fallback face).
   const held = registry.describeFaces().filter(face => face.family === entry.family);

@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "records": 12,
+  "rawBytes": 142378,
+  "compressedBytes": 46027,
+  "archiveSha256": "832d19001df67311a8cc63764f06e0f772ce3308f1e6ca13f8432cc2703e325d",
+  "source": "4008a7510f5f15e1cb9a7bbf9ad6019dc048f755",
+  "priorArchiveSha256": "4e549b6bc631d1b8a2f0beba1688ce94a1dd350a66a26accd6f5c533f4f6f6db",
+  "recoveredFiles": 4,
+  "recoveredBytes": 98398,
+  "failedNativeControlsReplayed": 4,
+  "fullMapperRepeated": false,
+  "nativeAcceptance": false
+}

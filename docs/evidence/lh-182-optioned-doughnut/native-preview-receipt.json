@@ -1,0 +1,115 @@
+{
+  "sourceCommit": "e44c91d9612dbe1b89ec5497becb0bf141a449b6",
+  "correctedPackagingOnly": true,
+  "reason": "Initial nesting preview/doughnut/default was not read by the generic evaluator; flat files are exact copies of the same renderer outputs.",
+  "pptxSha256": "811ea93536f0c764a70cd17165501d277164315d860978871dc07d4387d13292",
+  "previewCount": 13,
+  "buildSha256": "f64b47dfb5fc488ed7e5359095f5d6dfd8407758c03ce1cb8f8a39db1efc63d3",
+  "files": [
+    {
+      "slide": 1,
+      "path": "preview/doughnut/slide-1.png",
+      "source": "artifacts/lh-182-options/after-1.png",
+      "sha256": "2f64f809ec2f9ed62454de8053134d2e23b26a57377a06d95e9f2959d6e689a0",
+      "width": 786,
+      "height": 556
+    },
+    {
+      "slide": 2,
+      "path": "preview/doughnut/slide-2.png",
+      "source": "artifacts/lh-182-options/after-2.png",
+      "sha256": "687467a856a7f3bf08a7a3ec473b185d7a7ba7e1d5e0e8a60a2aa537ef2e50bb",
+      "width": 786,
+      "height": 556
+    },
+    {
+      "slide": 3,
+      "path": "preview/doughnut/slide-3.png",
+      "source": "artifacts/lh-182-options/after-3.png",
+      "sha256": "3894581d443b0d3a84c14b718af3d30865c0dc406f09f084f09b24f4ff5abbc2",
+      "width": 786,
+      "height": 556
+    },
+    {
+      "slide": 4,
+      "path": "preview/doughnut/slide-4.png",
+      "source": "artifacts/lh-182-options/after-4.png",
+      "sha256": "b4afd475f616d03d6a05ba16932965cbfbb59bce0a3879f9a1b83845f4aa03a0",
+      "width": 786,
+      "height": 556
+    },
+    {
+      "slide": 5,
+      "path": "preview/doughnut/slide-5.png",
+      "source": "artifacts/lh-182-options/after-5.png",
+      "sha256": "13445c59a825523edd6b15dfd5e75639751082fd682987ee66391e76eb4810a7",
+      "width": 786,
+      "height": 556
+    },
+    {
+      "slide": 6,
+      "path": "preview/doughnut/slide-6.png",
+      "source": "artifacts/lh-182-options/after-6.png",
+      "sha256": "84491012e5738d7613c93249396daf051e3652e9816d3fd9122ac8a572e1e79b",
+      "width": 786,
+      "height": 556
+    },
+    {
+      "slide": 7,
+      "path": "preview/doughnut/slide-7.png",
+      "source": "artifacts/lh-182-options/after-7.png",
+      "sha256": "452209ca337c8a4f645e9e9e67e9cee40b637a7536d16e9311549cf05c187b71",
+      "width": 786,
+      "height": 556
+    },
+    {
+      "slide": 8,
+      "path": "preview/doughnut/slide-8.png",
+      "source": "artifacts/lh-182-options/after-8.png",
+      "sha256": "08c89272263560d72f3d5d8c6b640781c8f1b2bb156eba941ffc3224b999a497",
+      "width": 786,
+      "height": 556
+    },
+    {
+      "slide": 9,
+      "path": "preview/doughnut/slide-9.png",
+      "source": "artifacts/lh-182-options/after-9.png",
+      "sha256": "8a516b19bbf27c598794814ab188e8aff7f59e879aaca4e015508f285e833350",
+      "width": 786,
+      "height": 556
+    },
+    {
+      "slide": 10,
+      "path": "preview/doughnut/slide-10.png",
+      "source": "artifacts/lh-182-options/after-10.png",
+      "sha256": "64752217803308a0b153bad0ac5a5911c3048842bed6a43a5eb0ddb37c6a7b1b",
+      "width": 786,
+      "height": 556
+    },
+    {
+      "slide": 11,
+      "path": "preview/doughnut/slide-11.png",
+      "source": "artifacts/lh-182-options/after-11.png",
+      "sha256": "103f6d46174aa19ac93cf1b7d0d218af9dfb6a122a115b8fa9a295da5ce56746",
+      "width": 786,
+      "height": 556
+    },
+    {
+      "slide": 12,
+      "path": "preview/doughnut/slide-12.png",
+      "source": "artifacts/lh-182-options/after-12.png",
+      "sha256": "f8df4a152802ba7b07f195521850ace75ec59f8fabc81ff74f046f72d776f380",
+      "width": 786,
+      "height": 556
+    },
+    {
+      "slide": 13,
+      "path": "preview/doughnut/slide-13.png",
+      "source": "artifacts/lh-182-options/after-13.png",
+      "sha256": "2c796b953e477d3ee872327d6f8adf9302c6ad8cdec31654488f4e4eec61de97",
+      "width": 786,
+      "height": 556
+    }
+  ],
+  "previewArchiveSha256": "71f113df5046c687cb2eadce4e93621ab0bb1e37e2dc297b582e4b2270cc7c88"
+}
