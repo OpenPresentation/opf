@@ -1,0 +1,18 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: navigation reuses complete current findings
+
+3 !== 2
+
+    at file:///private/tmp/opf-navigation-review/packages/editor/test/workspace-review-navigation-browser.mjs:67:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 3,
+  expected: 2,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,4 +1,5 @@
 import {nativeTreeGeometry,type NativeTreeConnector} from './native-tree-arrangement.js';
+import {HALF_STEPPED} from './composition-metadata.js';
 import {arrangementTree} from './tree-arrangement.js';
 import {vennNodes} from './venn-arrangement.js';
 import {fitVennShapes} from './venn-editable.js';
@@ -5615,8 +5616,6 @@ function halfStepFloors(result: SlideComposition): Map<string, number> {
   }
   return half;
 }
-/** LH-149: the paths of a composition's paragraphs and lists that shrank onto a half step of the type scale (an own symbol, so copies keep it). */
-const HALF_STEPPED = Symbol('opf.halfStepped');
 /** LH-149: a composition's smallest body size, a half step counted at the step under it (halfStepFloors). */
 function wholeStepSmallest(result: SlideComposition, options: ComposeSlideOptions): number {
   const half = halfStepFloors(result), sizes = [...bodyReadability(result, options).byPath].map(([path, size]) => Math.min(size, half.get(path) ?? Infinity));
