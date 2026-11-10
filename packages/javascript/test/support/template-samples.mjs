@@ -30,6 +30,10 @@ export const sampleKinds = (record) => {
 /** The sample slide of a template: `count` blocks of short or long content and a short or long title. */
 export const sampleSlide = (record, count, size) => {
   const kinds = sampleKinds(record);
-  const blocks = Array.from({ length: count }, (_, index) => payload(kinds.length ? kinds[index % kinds.length] : "text", index, size));
+  const blocks = Array.from({ length: count }, (_, index) => {
+    const value = payload(kinds.length ? kinds[index % kinds.length] : "text", index, size);
+    return ["org-chart", "hierarchy"].some(kind => record.regions?.some(region => region.arrangement === kind)) && value.items
+      ? {...value, items: value.items.map((text, at) => ({text,level:at ? 1 : 0}))} : value;
+  });
   return { title: size === "long" ? `${record.name}: a longer title that may need a second line on the slide` : record.name, blocks };
 };

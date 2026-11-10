@@ -1,0 +1,835 @@
+{
+  "format": 1,
+  "program": "CE-20",
+  "base": "9545016583ccfa151077cda4d51043ac6505a140",
+  "source": "49da7ea85e6bf70bcba62ee8c3a43ef7aa6646a8",
+  "sourceTree": "a5ed5be5076bf71154a34600b75f92b4506fd756",
+  "sourceBindings": [
+    {
+      "file": "packages/editor/src/workspace.js",
+      "gitBlob": "ae9e4dbf4c3b484e2e34a3eb1a34a2cf9f3b3465",
+      "sha256": "19e7931b69ecc94bf273028878a2b05f22be2d17f3ce136437f14def2c72164f"
+    },
+    {
+      "file": "packages/editor/test/workspace-browser.mjs",
+      "gitBlob": "b3a645e66a7a7301a2812ae74b652df885ef4f2b",
+      "sha256": "62b21ac5f6748d5a5c9a727d6d878353567dbdbb90d328d02969e45baeb9a7e3"
+    },
+    {
+      "file": "packages/editor/test/support/counted-svg.mjs",
+      "gitBlob": "3f4dbc91f3ae2809d53279ceb934691cd37bb0a1",
+      "sha256": "05813259ae86f6138eb632df3dfd6ac6ae661cb846f66a220af8fc0274a8a814"
+    },
+    {
+      "file": "packages/editor/test/support/unused-thumbnail-cache.mjs",
+      "gitBlob": "f8dc219ac025b4bbb712a734f0eb2f8e0f91a26e",
+      "sha256": "a846b905007140740cb252a180a8cb49ca33012fe183977d80337b2057b02796"
+    },
+    {
+      "file": "changes/ce-20-unused-thumbnail-cache.md",
+      "gitBlob": "48525b08291ca27cd2511ec9672efd12214aac6c",
+      "sha256": "4e77e0d084ffe0581a8e3b12c33f88d183d2ecbf434cb6b51164f4a9ecc1b232"
+    },
+    {
+      "file": "docs/programs/cloud-editor/burndown.md",
+      "gitBlob": "c43253cfaff530b8226ee807872b25bb352c60be",
+      "sha256": "e7e8d64477855109e5a65c9cd4fef31e4deed04f1a2c21b0dd52aa1b677236d8"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/ce20-unused-thumbnail-cache.md",
+      "gitBlob": "fd703e0c6328d7a3c4fe8ca0639287ee3df8bb10",
+      "sha256": "82724c8cb4150aff2b65a80f0412e3b75e446c2859bcae46351386a3220a3969"
+    }
+  ],
+  "runtimeInputs": [
+    {
+      "file": "packages/editor/src/workspace.js",
+      "gitBlob": "ae9e4dbf4c3b484e2e34a3eb1a34a2cf9f3b3465",
+      "rawSha256": "19e7931b69ecc94bf273028878a2b05f22be2d17f3ce136437f14def2c72164f"
+    },
+    {
+      "file": "packages/editor/test/workspace-browser.mjs",
+      "gitBlob": "b3a645e66a7a7301a2812ae74b652df885ef4f2b",
+      "rawSha256": "62b21ac5f6748d5a5c9a727d6d878353567dbdbb90d328d02969e45baeb9a7e3"
+    },
+    {
+      "file": "packages/editor/test/support/counted-svg.mjs",
+      "gitBlob": "3f4dbc91f3ae2809d53279ceb934691cd37bb0a1",
+      "rawSha256": "05813259ae86f6138eb632df3dfd6ac6ae661cb846f66a220af8fc0274a8a814"
+    },
+    {
+      "file": "packages/editor/test/support/unused-thumbnail-cache.mjs",
+      "gitBlob": "f8dc219ac025b4bbb712a734f0eb2f8e0f91a26e",
+      "rawSha256": "a846b905007140740cb252a180a8cb49ca33012fe183977d80337b2057b02796"
+    }
+  ],
+  "protectedFiles": [
+    "packages/editor/src/thumbnail-cache.js",
+    "packages/editor/src/thumbnail-strip.js",
+    "packages/editor/src/source-pane.js",
+    "packages/editor/src/source-checker.js",
+    "packages/editor/src/workspace-source.js",
+    "packages/editor/src/font-gate.js",
+    "packages/editor/src/workspace-measure.js",
+    "packages/editor/test/support/workspace-page.mjs",
+    "packages/editor/test/codemirror-guard.mjs",
+    "packages/editor/test/native-playground-controls.mjs",
+    "packages/editor/package.json",
+    "pnpm-lock.yaml",
+    "spec/schemas/opf.schema.json",
+    "packages/render/src/svg.js"
+  ],
+  "scope": {
+    "runtimeChange": "actual consumer guard only",
+    "cacheConstructionUnchanged": true,
+    "publicApiUnchanged": true,
+    "stripLazyCacheUnchanged": true,
+    "fontAndSourceReadinessUnchanged": true,
+    "siteChanges": false,
+    "chartChanges": false,
+    "apiOrProviderCalls": 0,
+    "pushes": 0,
+    "officeCalls": 0,
+    "releases": 0,
+    "globalSettingsChanged": false
+  },
+  "results": {
+    "before": "Actual unused20-slide batch assertion fails against main runtime; newly authored fixture was pre-freeze",
+    "fixtureFailures": "After01/02 attempted to mutate immutable getDocument snapshot; preserved and fixed with structuredClone only",
+    "preFreezeFocusedForwardPhases": 12,
+    "focusedForwardPhases": 12,
+    "finalSourceRegressionRerun": "Included in exact49da workspace-browser control",
+    "orgVisibleSlides": 9,
+    "defaultVisibleSlides": 4,
+    "managerAndSorterSlides": 20,
+    "realRenderer": true,
+    "timingAssertions": false,
+    "mapped": {
+      "started": "2026-11-09T04:17:04.7705325Z",
+      "tree": "a5ed5be5076bf71154a34600b75f92b4506fd756",
+      "source": "49da7ea85e6bf70bcba62ee8c3a43ef7aa6646a8",
+      "finished": "2026-11-09T04:18:30.0520236Z",
+      "nodeVersion": "v24.20.0",
+      "pnpmVersion": "10.33.2",
+      "exitCode": 1
+    },
+    "mappedFailure": {
+      "test": "codemirror-guard.mjs",
+      "code": "EPERM",
+      "operation": "symlinkSync dir",
+      "line": 40,
+      "unchangedTest": true,
+      "earlierPassed": 18,
+      "notReachedInitially": 125
+    },
+    "remainingContract": {
+      "kind": "bounded one-pass continuation of exact maintained contract selection after retained Windows symlink failure",
+      "source": "49da7ea85e6bf70bcba62ee8c3a43ef7aa6646a8",
+      "sourceTree": "a5ed5be5076bf71154a34600b75f92b4506fd756",
+      "originalFailure": "codemirror-guard.mjs",
+      "originalMappedStatus": "RED",
+      "originalFailurePreserved": true,
+      "selectionUsesMaintainedExports": true,
+      "totalScripts": 144,
+      "earlierPassed": 18,
+      "remainingSelected": 125,
+      "remainingPassed": 124,
+      "remainingFailed": [
+        {
+          "name": "native-playground-controls.mjs",
+          "exitCode": 1,
+          "error": null
+        }
+      ],
+      "skipped": 0,
+      "aggregateMappedGreen": false,
+      "sourceOrTestChanges": false,
+      "nodeVersion": "v24.20.0",
+      "started": "2026-11-09T04:21:15.437Z",
+      "finished": "2026-11-09T04:23:45.100Z",
+      "results": [
+        {
+          "name": "combo-charts.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "component-smoke.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "compose-slide-date.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "content-actions.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "convert-contract.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "core-features.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "data-grid.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "deck-stats.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "deck-title.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "declared-options.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "default-font-scheme.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "design-options.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "design-variants.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "diagram.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "editor-expand.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "element-units.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "exact-source-entry.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "exact-source.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "export-subset.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "export.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "fa-13-conveniences.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "find-replace-empty-unicode.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "find-replace.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "font-gate-latin-families.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "font-gate-registry.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "font-gate-script-families.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "font-gate-script-names.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "font-gate.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "gallery-font-roles.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "gallery-layout-records.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "hang-cap.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "host-continuation.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "icon-options.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "icons.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "id-paths.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "image-crop-async.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "image-crop.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "image-options.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "json-options.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "json-source.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "layout-design-applied.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "layout-groups.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "layout-model.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "layout-templates.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "layout-tree.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "layout.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "lh-100-chart-label-default.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "lh-97-variant-trend-fit.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "metric-sentiment.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "narrative-switch.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "native-playground-controls.mjs",
+          "exitCode": 1,
+          "error": null
+        },
+        {
+          "name": "numbering.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "outline.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "patch.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "persistence.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "picture-luminance.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "placeholder-groups.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "placeholder-selection.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "playground-thumbnail-cache.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "presentation-ids.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "presenter.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "quote-role-photo.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "read-deck-file.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "replace-document.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "review-logo-alt.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "review-pill.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "review.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "rich-headings.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "rich-text.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "schema.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "session-boundaries.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "shape-handle-math.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "shape-options.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "shape-overlays.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "shortcuts-sheet.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "slide-adapter.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "slide-context.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "slide-edits-corpus.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "slide-navigator.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "slide-scene.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "slide-variables.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "slides-declarations.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "slides.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "smoke.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-block-budget.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-check-units.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-checker-icon-sets.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-completions-phase4-units.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-completions-units.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-findings.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-fixes-markdown-units.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-fixes-syntax-units.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-format.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-hints-units.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-keymap-units.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-language-units.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-language-yaml-markdown-units.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-lines.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-navigation-units.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-symbols-units.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "source-worker-bundle.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "studio-commands.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "studio-kit-commands.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "studio-kit-drag.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "studio-kit-gesture.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "studio-kit-overlay.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "studio-kit-selection.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "studio-kit-tree.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "studio-kit-viewport.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "studio-tracks.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "styled-table.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "styles.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "styling-contract.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "switches-export.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "switches-ui.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "switches.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "table-alt.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "table-options.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "task-budget.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "templates.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "toolbar-actions.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "transfer.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "workspace-bundle.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "workspace-ssr.mjs",
+          "exitCode": 0,
+          "error": null
+        },
+        {
+          "name": "workspace-units.mjs",
+          "exitCode": 0,
+          "error": null
+        }
+      ]
+    },
+    "browserControls": {
+      "started": "2026-11-09T04:20:19.3369767Z",
+      "nodeVersion": "v24.20.0",
+      "results": [
+        {
+          "test": "workspace-browser.mjs",
+          "exitCode": 0
+        },
+        {
+          "test": "embed-host-browser.mjs",
+          "exitCode": 0
+        },
+        {
+          "test": "thumbnail-strip-actions-browser.mjs",
+          "exitCode": 0
+        },
+        {
+          "test": "studio-browser.mjs",
+          "exitCode": 0
+        }
+      ],
+      "source": "49da7ea85e6bf70bcba62ee8c3a43ef7aa6646a8",
+      "tree": "a5ed5be5076bf71154a34600b75f92b4506fd756",
+      "exitCode": 0,
+      "finished": "2026-11-09T04:20:49.9799771Z"
+    },
+    "hostedLatencyAttribution": false,
+    "hostedQualification": false,
+    "evidenceOnlyMapped": {
+      "finished": "2026-11-09T04:27:08.3813078Z",
+      "sourcePackageMappedStatus": "RED",
+      "base": "49da7ea85e6bf70bcba62ee8c3a43ef7aa6646a8",
+      "exitCode": 0,
+      "scope": "evidence/docs only after frozen package qualification",
+      "nodeVersion": "v24.20.0",
+      "pnpmVersion": "10.33.2",
+      "filesAtRun": 44,
+      "seconds": 29.4,
+      "sourcePackageGateGreen": false
+    },
+    "selectedNodeScripts": {
+      "selected": 144,
+      "exercised": 144,
+      "passed": 142,
+      "environmentFailures": 2,
+      "unrun": 0,
+      "aggregateMappedGreen": false
+    },
+    "localPaintedPortraitFit": false,
+    "preExistingSorterPortraitCrop": {
+      "independentReview": true,
+      "fixIncluded": false,
+      "owner": "Coordinator separate branch"
+    }
+  },
+  "files": "files.json",
+  "createdUtc": "2026-11-09T04:25:24.379Z"
+}

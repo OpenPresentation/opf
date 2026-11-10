@@ -1,0 +1,71 @@
+{
+  "base": "ccb43034eb5e17204821985db51ed8ca05e8efe6",
+  "source": "ff07398829aaa5a892be934e18373111bcc5b728",
+  "tree": "654974104e8f4928e51fc56644111f0c12690f51",
+  "before": {
+    "tests": 2,
+    "pass": 0,
+    "fail": 2
+  },
+  "after": {
+    "tests": 41,
+    "pass": 41,
+    "fail": 0
+  },
+  "requiredGate": "HELD",
+  "nativeAcceptance": false,
+  "files": [
+    {
+      "path": "after-build.log",
+      "bytes": 179,
+      "sha256": "1c1c8c58de05c152a7913fa1a1126dde7ca8e14af2e3e5037698844701dc1f00"
+    },
+    {
+      "path": "after.log",
+      "bytes": 4304,
+      "sha256": "09815b84065c362225bcde2e4e70c47c24007a024b207dbcb7b6b49eac7a87ec"
+    },
+    {
+      "path": "align.log",
+      "bytes": 1809,
+      "sha256": "465e38533014e3c9af712a82af65d71e45d594500e74d866665cd58590ea522c"
+    },
+    {
+      "path": "baseline-deps-build.log",
+      "bytes": 11222,
+      "sha256": "ceb036320a7e97068f15963b363c132306f35d34907393e1da543efd6a299e67"
+    },
+    {
+      "path": "baseline-pptx-build.log",
+      "bytes": 179,
+      "sha256": "1c1c8c58de05c152a7913fa1a1126dde7ca8e14af2e3e5037698844701dc1f00"
+    },
+    {
+      "path": "before.log",
+      "bytes": 3057,
+      "sha256": "1564279a02bca283dc8683458522e950b30ad6845b7f848d8a91c1105723286c"
+    },
+    {
+      "path": "final-build.log",
+      "bytes": 179,
+      "sha256": "1c1c8c58de05c152a7913fa1a1126dde7ca8e14af2e3e5037698844701dc1f00"
+    },
+    {
+      "path": "final.log",
+      "bytes": 4397,
+      "sha256": "1c587e0daee0216c3b39653718791a3d9188a824cc67fda0a42f8a802b86086a"
+    },
+    {
+      "path": "install.log",
+      "bytes": 4359,
+      "sha256": "de321d6e811ddd67042a5aeaf3cfbb0b0ed40fce702fbc310e28cbba6f869ec5"
+    }
+  ],
+  "archive": {
+    "path": "raw.zip",
+    "bytes": 9206,
+    "sha256": "72c1dd10f855466dad4c52b53be5c270e4d0d331993d5b4b344782045f90eaa3",
+    "members": 9,
+    "expandedBytes": 29685
+  }
+}

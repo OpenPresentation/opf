@@ -1,0 +1,148 @@
+{
+  "scope": "Test-only Windows directory-link fixture correction. No production, dependency, guard assertion or cleanup change.",
+  "baseline": {
+    "main": "9545016583ccfa151077cda4d51043ac6505a140",
+    "fixtureSha256": "82dd8377fec7c11739b1eac46424d761c8bcbcf7e93767b2b11ab2c2642e6412",
+    "integrationFixtureByteEqual": true,
+    "actualWindowsRun": "FAIL: EPERM at symlinkSync line40 before any source edit"
+  },
+  "fixed": {
+    "node": "v24.20.0",
+    "platform": "win32",
+    "actualFocusedRun": "PASS: real second view copy, shared dependencies, foreign plugin and once-per-page/isolation checks",
+    "directoryLinks": 4,
+    "primitive": "junction on win32; existing dir symlink elsewhere",
+    "newAssertions": "Every target is an actual directory; every link resolves to that exact dependency directory",
+    "skipsOrPrivilegeFallbacks": 0,
+    "sourceSha256": "d5c6bb4bd4742c5672d9a4431bf6a8ee88baa4ca40877719618c74a098bbee41"
+  },
+  "mapped": {
+    "seconds": 79.2,
+    "steps": 11,
+    "passed": 8,
+    "skippedTypecheck": "No TypeScript/config change",
+    "initialFailures": [
+      "gallery tracker omitted sparse inputs",
+      "text check omitted sparse painting-Linux input"
+    ],
+    "sparseInputBlobsRestored": 7,
+    "textRecheck": "PASS",
+    "galleryRecheck": "17/18; unchanged strict freshness assertion fails",
+    "baselineControl": {
+      "scope": "Strict read-only generated tracker computation, no generated file written and no stale-policy override. Temporarily selected exact main burndown, restored exact uncommitted bytes in finally.",
+      "ownNotesExpected": {
+        "docs/programs/release-readiness/gallery-tracker.json": "373ac24187ed320faafdd8ae140ab20dc874e3a606b02a6e959d65eaec7b343c",
+        "docs/programs/release-readiness/gallery-tracker.md": "aa550bc5de250c3a40c4baa590d108792227a0fa3c93e55814edee3b9e30517c"
+      },
+      "mainNotesExpected": {
+        "docs/programs/release-readiness/gallery-tracker.json": "373ac24187ed320faafdd8ae140ab20dc874e3a606b02a6e959d65eaec7b343c",
+        "docs/programs/release-readiness/gallery-tracker.md": "aa550bc5de250c3a40c4baa590d108792227a0fa3c93e55814edee3b9e30517c"
+      },
+      "ownDrift": [
+        "docs/programs/release-readiness/gallery-tracker.json"
+      ],
+      "unchangedMainDrift": [
+        "docs/programs/release-readiness/gallery-tracker.json"
+      ],
+      "conclusion": "Same strict failure and byte-identical expected output with unchanged main metadata in this sparse checkout; the fixture/notes change does not cause tracker drift."
+    },
+    "editorTests": "PASS"
+  },
+  "productionPinLockChanges": [],
+  "remaining": [
+    "Independent review and fold into the final 0.34 wave",
+    "Final integration full-ci for OS/Node coverage; no duplicate source watcher"
+  ],
+  "logs": [
+    {
+      "file": "rr20-codemirror-baseline-failure.log.gz",
+      "bytes": 967,
+      "sha256": "56d394540306146053bc36b955ef8e132819eb89b5650950c451a6def3628888"
+    },
+    {
+      "file": "rr20-codemirror-focused-after.log.gz",
+      "bytes": 135,
+      "sha256": "efcefd145e5df477c3c375fb214e4fd8382f559780549c17a02c19fea57a627a"
+    },
+    {
+      "file": "rr20-codemirror-check-changed.log.gz",
+      "bytes": 7284,
+      "sha256": "b793fb67f94a41c64ca10344300683334444102dded1feb92d5efa41c52da410"
+    },
+    {
+      "file": "rr20-codemirror-sparse-inputs.json.gz",
+      "bytes": 1896,
+      "sha256": "19365dc45107b98a401f96c000767f30a749b251b0c5d339a0bf40786ad94638"
+    },
+    {
+      "file": "rr20-codemirror-text-after.log.gz",
+      "bytes": 1005,
+      "sha256": "f53fa2411f0dbc5686488e8df074024ab4ab14b6565e6fe573c8aaa4ca9e2c24"
+    },
+    {
+      "file": "rr20-codemirror-gallery-after.log.gz",
+      "bytes": 3042,
+      "sha256": "c0a65fcdc918be0d83f668d9d0280afb6adf31b39191bbec676cd57b8cc24c3c"
+    },
+    {
+      "file": "rr20-codemirror-tracker-baseline-control.json.gz",
+      "bytes": 1126,
+      "sha256": "c7a37d94c875d5f447bce38f26343aca72efe87cbcb452c9dd48421f0da108f2"
+    },
+    {
+      "file": "rr20-codemirror-install.log.gz",
+      "bytes": 4784,
+      "sha256": "e2966e4f4505818e9b88422bdb7826a5924b9908e6fd96fdc8f9ec05bbac882d"
+    },
+    {
+      "file": "checks/biome.log.gz",
+      "bytes": 669,
+      "sha256": "509e461c3bf78f272ea3f842e995b776c2693b2c10424a49255a1fbeb020954e"
+    },
+    {
+      "file": "checks/build.log.gz",
+      "bytes": 14481,
+      "sha256": "7a45520d51ff644810ca357369071048267c4587d32a802758e37354ce6717ae"
+    },
+    {
+      "file": "checks/pnpm_run_check_changes.log.gz",
+      "bytes": 2643,
+      "sha256": "8cc7433aae5acb34ea155bf7161d359a5f7e6fd516d5fd71c5f40bdc5ebe84c3"
+    },
+    {
+      "file": "checks/pnpm_run_check_font-hotlinks.log.gz",
+      "bytes": 896,
+      "sha256": "8d268fa4493cdf00f126e5cdcab08bc95addcd797344dafed1436ff7361a98b6"
+    },
+    {
+      "file": "checks/pnpm_run_check_gallery-tracker.log.gz",
+      "bytes": 12807,
+      "sha256": "4c1839178aa308591fb4ad655c6f0170e3b0a6677a17e0114a44a6edbecfa429"
+    },
+    {
+      "file": "checks/pnpm_run_check_release-report.log.gz",
+      "bytes": 823,
+      "sha256": "fd7116eed4cf65d54457f2ae810c0d33fec9d1ed45cf3b2a31ad2f1e44b166a8"
+    },
+    {
+      "file": "checks/pnpm_run_check_skill-commands.log.gz",
+      "bytes": 1049,
+      "sha256": "6e3251064ef9b1c46afed212fbb6a7fc6f60d6f62c97f44cf15b835def479e93"
+    },
+    {
+      "file": "checks/pnpm_run_check_stability.log.gz",
+      "bytes": 3970,
+      "sha256": "d781d599e443c65df4ba70773c18b3b59dd0512c64c74961dcc8f3d490f0a3d9"
+    },
+    {
+      "file": "checks/pnpm_run_check_text.log.gz",
+      "bytes": 1782,
+      "sha256": "fc5ca3cb23a1f60312aea13936b5e1cfadec0c1a41c8794f2c2dabe97a57862e"
+    },
+    {
+      "file": "checks/tests_editor.log.gz",
+      "bytes": 1007,
+      "sha256": "ad2b829c02455c34f722c9e9cd4dbda9a3138fbeafa527a0b176cfbb1a7aa147"
+    }
+  ]
+}

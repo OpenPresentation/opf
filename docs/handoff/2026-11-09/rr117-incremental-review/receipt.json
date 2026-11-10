@@ -1,0 +1,351 @@
+{
+  "schema": 1,
+  "scope": "Focused source qualification only; no paired performance/heap/native/combined acceptance",
+  "base": "766f1be19366924fd164040ada299910d4f9a637",
+  "source": "d7641239794906ef87df2e2b4ebd4b3ea17b5574",
+  "sourceTree": "c30d2da48f214ab4c11ebbba0ac869b77fdc36b8",
+  "tooling": {
+    "node": "v24.20.0",
+    "pnpm": "10.33.2",
+    "install": {
+      "offline": true,
+      "frozenLockfile": true,
+      "ignoreScripts": true,
+      "reused": 296,
+      "downloaded": 0
+    }
+  },
+  "protectedObjects": [
+    {
+      "path": "spec",
+      "base": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274",
+      "source": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274"
+    },
+    {
+      "path": "packages/render",
+      "base": "8b41008127466aec629912ebf30c8d4689b42b1e",
+      "source": "8b41008127466aec629912ebf30c8d4689b42b1e"
+    },
+    {
+      "path": "packages/pptx",
+      "base": "f5d3cc3e98bc918c67a28cbd25f25c09f3e31db8",
+      "source": "f5d3cc3e98bc918c67a28cbd25f25c09f3e31db8"
+    },
+    {
+      "path": "packages/gallery",
+      "base": "609eb292785d0103295a7a2d9eb2fd09c6fbf835",
+      "source": "609eb292785d0103295a7a2d9eb2fd09c6fbf835"
+    },
+    {
+      "path": "packages/cli",
+      "base": "80693fbb3f29304337506d564654c552b1dd201e",
+      "source": "80693fbb3f29304337506d564654c552b1dd201e"
+    },
+    {
+      "path": "packages/mcp",
+      "base": "ad1f23d229af3d70adc272f109a4b059d85d11d4",
+      "source": "ad1f23d229af3d70adc272f109a4b059d85d11d4"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "base": "3432ab613e493c84d6eea74cb68d30be08720102",
+      "source": "3432ab613e493c84d6eea74cb68d30be08720102"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "base": "c84e4ff16c7f717d30d69498f565b2b519d13e19",
+      "source": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    },
+    {
+      "path": "package.json",
+      "base": "846e509ef00827a8efe72c059ca3238f88be6fbb",
+      "source": "846e509ef00827a8efe72c059ca3238f88be6fbb"
+    },
+    {
+      "path": ".github",
+      "base": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4",
+      "source": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4"
+    }
+  ],
+  "files": [
+    {
+      "path": "changes/rr117-incremental-review.md",
+      "blob": "974c6a14461f6bc0332506f554c8e1d65026fa4c"
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr117-incremental-review/README.md",
+      "blob": "f7760b984c34d74b2968f55b11b2b3e179ead16e"
+    },
+    {
+      "path": "docs/programs/release-readiness/burndown.md",
+      "blob": "e758cf2797a003f69d7f3a62ee17beb913ec4d78"
+    },
+    {
+      "path": "docs/validate.md",
+      "blob": "75f4dc2cbe1f3b0cf4a8d06ff2d19630aef56bb3"
+    },
+    {
+      "path": "packages/editor/README.md",
+      "blob": "563b6257399f941a39cced20d187bbd9aff065db"
+    },
+    {
+      "path": "packages/editor/src/review-panel.d.ts",
+      "blob": "9662ffd13988bd4d93fa182b7708b269be7d0b8e"
+    },
+    {
+      "path": "packages/editor/src/review-panel.js",
+      "blob": "0dbf3b7db09f638c1b3a525357245cdb46ad9039"
+    },
+    {
+      "path": "packages/editor/src/workspace.js",
+      "blob": "3d4dc51b905ccfd70d869c589fb8c069c2cf2143"
+    },
+    {
+      "path": "packages/editor/test/review-hook-browser.mjs",
+      "blob": "c6ba3b03b080c3c0fc6c679ba5049267d8569faa"
+    },
+    {
+      "path": "packages/javascript/src/core.ts",
+      "blob": "01d84c6fa6b109e5479bd6590134a323861b7b28"
+    },
+    {
+      "path": "packages/javascript/src/index.ts",
+      "blob": "69bd5bf9af0495758eeb6641ff0d5b1f0dabc8ca"
+    },
+    {
+      "path": "packages/javascript/src/rule-slides.ts",
+      "blob": "fa1ba0cb80e3757cce6e5685031662dcda03de7f"
+    },
+    {
+      "path": "packages/javascript/src/validation-cache.ts",
+      "blob": "0f9c2c91e75ec5e3d5e0f86300a95d301b55d1e4"
+    },
+    {
+      "path": "packages/javascript/src/validator.ts",
+      "blob": "2748819674c421e6a65bd83c4ff81ab3cb72dd82"
+    },
+    {
+      "path": "packages/javascript/test/incremental-validation.test.mjs",
+      "blob": "836c5966c8dc86088cc901c6be98efd3aad3cb53"
+    }
+  ],
+  "raw": {
+    "file": "raw.json.gz",
+    "size": 18795,
+    "sha256": "b7008719842517f3ac811709876e5456228dd7fd08dba72fb4e75e412ad2560a",
+    "members": 35,
+    "decodedBytes": 67734,
+    "entries": [
+      {
+        "name": "build-core-01.exit.json",
+        "size": 67,
+        "sha256": "f2de3052df58d0aa5c105d1e401d22c2e7e5a5d5377a824fe72b139c08299cda"
+      },
+      {
+        "name": "build-core-01.log",
+        "size": 11768,
+        "sha256": "8f6514e18dd328c20571ecd19670448157d102c846975fec7b1223a447e4c828"
+      },
+      {
+        "name": "build-core-02.exit.json",
+        "size": 67,
+        "sha256": "d462ae8bb4b94bc19a17ab7198c16ce9b645c1a0aada8bcfaf763d6a98cf3169"
+      },
+      {
+        "name": "build-core-02.log",
+        "size": 8215,
+        "sha256": "291b32e7c4481d0803ae6edeb2f4122697726c987a04af9c5c3680428ec7c705"
+      },
+      {
+        "name": "build-core-03.exit.json",
+        "size": 67,
+        "sha256": "8dba1cbfb2c205ef35eecdb829743d36bb02798cccb574dba27d5416a40681ba"
+      },
+      {
+        "name": "build-core-03.log",
+        "size": 8215,
+        "sha256": "a29e9f701963c024b34b8df92bbdc4368e93a388491682e8bdef5cb3135bc95c"
+      },
+      {
+        "name": "build-core-04.exit.json",
+        "size": 67,
+        "sha256": "3084856516df176877527018395c5783fb23d1da478d988d6bb6ef46e016bf75"
+      },
+      {
+        "name": "build-core-04.log",
+        "size": 8215,
+        "sha256": "3bab906cc1fd3ce4acadc0d230cee63cacf905af6554c81f41ce1537e9ad32c1"
+      },
+      {
+        "name": "build-core-05.exit.json",
+        "size": 67,
+        "sha256": "827fbe8e6a8c36129b93d79201d2d2e18ffce551ce10d389321dfcedf43d5b8c"
+      },
+      {
+        "name": "build-core-05.log",
+        "size": 8215,
+        "sha256": "617c4878e77203caa00e422d0071476eb2d5e44540e0d2d4758dc2fa855cf308"
+      },
+      {
+        "name": "build-render-01.exit.json",
+        "size": 67,
+        "sha256": "668f622292e31def07b7c2b1930ca87ccd1f98a6517b6e9d94d94182de83f371"
+      },
+      {
+        "name": "build-render-01.log",
+        "size": 116,
+        "sha256": "8b8c388a1a194011daa7171a4e34d871398ef9a9d9efdeceb0455d442515421b"
+      },
+      {
+        "name": "core-focused-01.exit.json",
+        "size": 67,
+        "sha256": "55a457202242c2da8a6c1e2bdf3ace2e44c7c6c1b51528a2d40b40491ebfbb71"
+      },
+      {
+        "name": "core-focused-01.log",
+        "size": 1939,
+        "sha256": "0af09e07383da38d870bd4fa8c2b88e6ba703b205f78c511a14ff9f3e2e80acd"
+      },
+      {
+        "name": "core-focused-02.exit.json",
+        "size": 67,
+        "sha256": "d3ab0f910fe16aade547610f37eb6ce712b97f4bcee9bb404d25aaff831db4be"
+      },
+      {
+        "name": "core-focused-02.log",
+        "size": 1911,
+        "sha256": "ec98c743ff7a16cb9e3d947c47db6ccae0f1e09caf0dee19333a351e6126859a"
+      },
+      {
+        "name": "core-focused-03.exit.json",
+        "size": 67,
+        "sha256": "f43df67e5abfc4df0f633d8d4a32a10bba1b2be13dfbf22ee167c1a6c1ae260a"
+      },
+      {
+        "name": "core-focused-03.log",
+        "size": 1910,
+        "sha256": "d689ef7fad8cd70134efb8c1b5373a5ef220774059d7d20b9d4b0341992240e1"
+      },
+      {
+        "name": "core-focused-04.exit.json",
+        "size": 67,
+        "sha256": "98e727092e85ed6be06a79537ef1d37c6af2821c10bd6f016e4e1ae97701eee4"
+      },
+      {
+        "name": "core-focused-04.log",
+        "size": 927,
+        "sha256": "a7f4a4a32e16de9edd1bbedabc821ff9a63a523e626557cf01b6ca6c090a426f"
+      },
+      {
+        "name": "core-focused-05.exit.json",
+        "size": 67,
+        "sha256": "d7ec8e01fd3e7b449e636c600ff0a89d1d6b237772752670fa8ad5d270027bbb"
+      },
+      {
+        "name": "core-focused-05.log",
+        "size": 927,
+        "sha256": "0e6285860e85b1d3d8e3164ae53703989da3abb37fbc6f0773e31a8cf677abe3"
+      },
+      {
+        "name": "core-focused-06.exit.json",
+        "size": 67,
+        "sha256": "1017c5abfcccc68f05c5bd807e33c233091b9b0fb6b44e41ff1093dc1ac6d05e"
+      },
+      {
+        "name": "core-focused-06.log",
+        "size": 1113,
+        "sha256": "5ea539a74197142375361ae773b7272ab377698c3c5dab65778c7d06194d6c7e"
+      },
+      {
+        "name": "core-lazy-existing-01.exit.json",
+        "size": 67,
+        "sha256": "073d4403ecd2021e747acc3d9d2dcdcf2c97120795184eceec54cb2198c698cc"
+      },
+      {
+        "name": "core-lazy-existing-01.log",
+        "size": 920,
+        "sha256": "0f53fa6de8c505046d8b651826e6656113c9bba315b5c6e4d528f2178bb22c6c"
+      },
+      {
+        "name": "lint-01.log",
+        "size": 9044,
+        "sha256": "c58e53a3a2501df2268297fc64faca87f95a84c6259078787661b25da72ca755"
+      },
+      {
+        "name": "lint-final-01.exit.json",
+        "size": 67,
+        "sha256": "1dbdc834a59891821770c32541ebbb1ab688424be35fd082950d67a3a9914e97"
+      },
+      {
+        "name": "lint-final-01.log",
+        "size": 709,
+        "sha256": "f09353c0ed2ddcdd5ac3c38a4d4da951504bad892673fdaac4549b9c20bdec98"
+      },
+      {
+        "name": "review-browser-01.exit.json",
+        "size": 67,
+        "sha256": "d53c54749f47548b26b4d341dd6d1f8f48be3a041b0223560d1287a32342efe7"
+      },
+      {
+        "name": "review-browser-01.log",
+        "size": 552,
+        "sha256": "0e3152f7d1471c1ffdfc760c656f0c5d71b6ef90566c229689074006fbb1617d"
+      },
+      {
+        "name": "review-browser-02.exit.json",
+        "size": 67,
+        "sha256": "cf5969cba57f7b40f5f679ce2eea17fc74589a967bf848610673a4908c4ac82b"
+      },
+      {
+        "name": "review-browser-02.log",
+        "size": 656,
+        "sha256": "26f8395c77a41ed012e2863f1fefa5778d0d392d754fdc6566c1f2075efd553a"
+      },
+      {
+        "name": "strict-fixture-probe.log",
+        "size": 941,
+        "sha256": "b443e4d406235b4e74d3ee7f6f7de71d311411ae4551eb1ab634fb5f89e7b8e9"
+      },
+      {
+        "name": "strict-fixture-probe.mjs",
+        "size": 369,
+        "sha256": "9e4048ee385866e6dd12d89eea1a4f1e90f08df172795370b0a4e5533e8c546d"
+      }
+    ]
+  },
+  "checks": {
+    "coreFocused": {
+      "file": "core-focused-06.log",
+      "pass": 10,
+      "fail": 0
+    },
+    "browser": {
+      "file": "review-browser-02.log",
+      "pass": 10,
+      "fail": 0
+    },
+    "existingLazy": {
+      "file": "core-lazy-existing-01.log",
+      "pass": 7,
+      "fail": 0
+    },
+    "coreBuild": {
+      "file": "build-core-05.log",
+      "exit": 0
+    },
+    "rendererBuild": {
+      "file": "build-render-01.log",
+      "exit": 0
+    },
+    "lint": {
+      "file": "lint-final-01.log",
+      "exit": 0,
+      "inheritedNotice": "Biome config schema2.5.12 versus CLI2.6.4; editor files excluded by root config"
+    }
+  },
+  "pending": [
+    "Coordinator coherent check:changed/CI batch",
+    "Paired settled-review CPU benchmark on same16/36 inputs",
+    "Measured retained-heap/edit/destroy soak"
+  ]
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "path": "biome.log",
+    "bytes": 699,
+    "sha256": "dc356772c854eabd4f976a9057b5a74e8621c18f49f73ae461f4d198d8914d3d"
+  },
+  {
+    "path": "build.log",
+    "bytes": 14550,
+    "sha256": "ea3308978ed7a9967a3a37f2d1bdef8758e3a84287f80ac36e98516af48076e8"
+  },
+  {
+    "path": "mapped.exit.json",
+    "bytes": 378,
+    "sha256": "f03519abea61f1b45b5743562b1fcb5e295d417ca2afa5e5cc62ce59cfc010d6"
+  },
+  {
+    "path": "mapped.log",
+    "bytes": 1082,
+    "sha256": "5a959e7a0e8354c289c2395a68528f0268a9ba699a8f681a31b3ebc0bc1be494"
+  },
+  {
+    "path": "pnpm_run_check_changes.log",
+    "bytes": 2633,
+    "sha256": "fdcac3f44cb93bef796b8f9df699db33d9dd0c4a99837bc776bebcc92dfa6cdb"
+  },
+  {
+    "path": "pnpm_run_check_gallery-tracker.log",
+    "bytes": 1985,
+    "sha256": "3832718872a1617fec00d897a595e9bd43c58a8629cb950ce03c0065d05769bd"
+  },
+  {
+    "path": "pnpm_run_check_release-report.log",
+    "bytes": 806,
+    "sha256": "fa2bcc358dfa8f489c3885411b9d30c087bdf84794d2f6ae22d8552ee2be44cf"
+  },
+  {
+    "path": "pnpm_run_check_skill-commands.log",
+    "bytes": 1031,
+    "sha256": "2977f6f319983dd9f7debe98b90a59e87c2edaa0c8d7f38f85a3f7f9437e510e"
+  },
+  {
+    "path": "pnpm_run_check_text.log",
+    "bytes": 1066,
+    "sha256": "55869b0174d9e656e8bfa6e65c2e9bf384b8f3316dcdf362eb65a2c2ba652376"
+  }
+]

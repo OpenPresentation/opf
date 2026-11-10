@@ -1,0 +1,40 @@
+{
+  "source": "ad00d5cad0b80b63237dc1bd377cf773e4060186",
+  "focused": {
+    "tests": 19,
+    "passed": 19,
+    "exit": 0,
+    "seconds": 23.2
+  },
+  "peer": {
+    "reviewer": "/root/chart_reference_schema_proposal_new",
+    "source": "ad00d5cad0b80b63237dc1bd377cf773e4060186",
+    "decision": "APPROVE, no actionable source findings",
+    "scope": "Read-only code/test review only; no tests, Office, native or release acceptance"
+  },
+  "mapped": {
+    "exit": 1,
+    "seconds": 88.9,
+    "passedSteps": 7,
+    "failedSteps": 3,
+    "typesSkipped": true,
+    "native": {
+      "passed": 80,
+      "total": 84,
+      "failed": 4,
+      "reason": "Missing historical rr-68 comparison.json and script-corpora.json in three existing tests; all19 new dense controls pass"
+    },
+    "gallery": {
+      "passed": 9,
+      "total": 18,
+      "reason": "Missing historical sparse inputs; no strict freshness verdict"
+    },
+    "text": {
+      "passed": 6,
+      "total": 7,
+      "reason": "Missing exact tracked painting-Linux.json.gz; later scan unrun"
+    }
+  },
+  "restoration": "No hydration/restoration, generator, warning override or failed-check recovery attempted in this dense leaf.",
+  "native": "No real controller create/verify/RunOffice or Office call. Pure tests invoke only AST-selected definitions and synthetic modeled output binders."
+}

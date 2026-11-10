@@ -1,0 +1,9 @@
+{
+  "attempt": "01",
+  "status": 1,
+  "classification": "Authored evidence-helper regex syntax error; no checks executed, no product failure",
+  "message": "Invalid regular expression: invalid escape in access_token character class",
+  "sourceRuntime": "129aaec396ca7869e0baf240e2e88a9d9125be37",
+  "recordOrigin": "Exact diagnostic class/message transcribed from tool output; original helper was not part of runtime code",
+  "officeInvoked": false
+}

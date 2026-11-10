@@ -44,6 +44,10 @@ export interface ReviewPanel {
   readonly validation: import("@openpresentation/opf").ValidationReport | undefined;
   /** Run core's full check again now and redraw. */
   refresh(): void;
+  /** Drop retained geometry after host font/icon/diagram resources change; the next schedule/refresh still runs every check. */
+  invalidate(): void;
+  /** Settles after the pending debounced core audit and DOM list update (not the optional hosted review hook). */
+  whenIdle(): Promise<void>;
   /** Check after `delay` milliseconds without another call (a burst of calls checks once). With `autoRefresh: false` the host calls this after each redraw. */
   schedule(): void;
   /** Run the `review` hook now; resolves once its findings are listed (or its error is shown). */

@@ -1,0 +1,17 @@
+{
+  "deck": "technical/trees-and-sets.opf.json",
+  "entries": {
+    "technical/trees-and-sets.opf.json#0": {
+      "sha256": "b824da5df5a722cf01281b8a6b12168fdc5694e3bd84fb26804d49f2523c2ff5",
+      "bytes": 7133
+    },
+    "technical/trees-and-sets.opf.json#1": {
+      "sha256": "d21329758d19054f313e3834fca3fd1f7370d65bccdf7d6713671efd917296ab",
+      "bytes": 9933
+    },
+    "technical/trees-and-sets.opf.json#2": {
+      "sha256": "f38a7e7fb9fc492b229558034727d09425641a2799620fd71056da18928a9a92",
+      "bytes": 10994
+    }
+  }
+}

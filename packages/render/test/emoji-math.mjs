@@ -85,9 +85,15 @@ assert.deepEqual(detectPresentationScripts(deck('Review', 'Body', scheme('Segoe 
 // 3. Loading: scripts 'auto' loads the packs a deck needs, by text or by its font scheme; every face resolves under the metric policy.
 {
   const emoji = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck(`Hello ${EMOJI.family}`)});
-  assert.deepEqual(emoji.registry.scriptSelection.packages, ['@expo-google-fonts/noto-color-emoji', '@expo-google-fonts/noto-emoji']);
+  assert.deepEqual(emoji.registry.scriptSelection.packages, ['@expo-google-fonts/noto-color-emoji', '@expo-google-fonts/noto-emoji'], 'the selected color face retains its required monochrome raster companion');
+  const demandSvg = toSvg(deck(`Hello ${EMOJI.family}`), 1, {fonts: emoji});
+  const reference = await loadFonts({pack: 'office', scripts: ['Zsye']});
+  assert.equal(demandSvg, toSvg(deck(`Hello ${EMOJI.family}`), 1, {fonts: reference}));
+  assert.deepEqual(await toPng(demandSvg, {fonts: emoji}), await toPng(demandSvg, {fonts: reference}), 'this actual demand handle, not the later eager fixture, paints the emoji');
+  assert.ok(strictCovers(emoji.registry, 'Noto Color Emoji', EMOJI.family), 'the selected file covers the actual sequence');
   const math = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck('Theorem', 'Proof', scheme('Cambria Math'))});
-  assert.deepEqual(math.registry.scriptSelection.packages, ['@expo-google-fonts/stix-two-math', '@expo-google-fonts/noto-sans-math'], 'a Cambria Math scheme loads the math pack');
+  assert.deepEqual(math.registry.scriptSelection.packages, ['@expo-google-fonts/stix-two-math'], 'a covered Cambria Math scheme does not load the unused secondary math face');
+  assert.ok(strictCovers(math.registry, 'STIX Two Math', 'Theorem'), 'the selected scheme face covers the actual drawn title');
   assert.equal(math.registry.resolveFont({fontFamily: 'Cambria Math', fontWeight: 700}).resolvedFamily, 'STIX Two Math');
   const latin = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck('Quarterly review', 'Plain text, x \u2264 y')});
   assert.deepEqual(latin.registry.scriptSelection.packages, [], 'Latin text with plain operators loads nothing');

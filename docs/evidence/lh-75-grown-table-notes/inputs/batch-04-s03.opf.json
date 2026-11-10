@@ -1,0 +1,49 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "batch-04-s03",
+  "language": "en",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "title": "Evidence Pack",
+      "blocks": [
+        {
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Product",
+                "Program lead",
+                "On track",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "Watch",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "At risk",
+                "Add weekly office hours"
+              ]
+            ]
+          }
+        },
+        {
+          "text": "LatticeLane should focus the next cycle on decide which roadmap bets move into the second half build window while making the operating tradeoffs clear to product stakeholders."
+        }
+      ],
+      "id": "s03"
+    }
+  ]
+}

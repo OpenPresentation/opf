@@ -1,0 +1,81 @@
+{
+  "sourceProducer": "d900bf080114a559d8d708869478e1fceb76ba48",
+  "earlierSyntheticProducer": "1ef093019dfcefde90a554df4a101605e31822ee",
+  "node": "v24.20.0",
+  "controls": {
+    "foreignExactStringAndRefusals": 18,
+    "existingNativeCache": 58,
+    "cacheAndLiteralCurrentSelectorContracts": true,
+    "actualSavedFixture": true
+  },
+  "actualSaved": {
+    "bytes": 113630,
+    "sha256": "eaa03f837aad1e13e53d9fc7afe5d5f9c4098b8992dff200b35798253ffbc2e3",
+    "chartXmlSha256": "1e733e9485aab63ffdc03a1a731e7fb33d502c82ed105e5c88bd6f9314e967d3",
+    "beforeName": "Series 1",
+    "afterName": "Native renamed",
+    "rowsExact": true,
+    "numericSelectorRetained": true,
+    "staleNamedSelectorExplicitFinding": true,
+    "phaseNames": [
+      "Current",
+      "Native renamed",
+      "Native renamed"
+    ],
+    "nativePointPixels": [
+      0.0541,
+      0.0754
+    ],
+    "nativeLifecycle": "Coordinator-only actual setter/SaveCopyAs/read-only reopen exit0/no timeout/cleanuptrue"
+  },
+  "visualLimit": "Original native legend shows Current+Expansion; actual longer rename omits Expansion from fixed authored box while data/bars remain. Not whole-slide native edit parity.",
+  "reflow": {
+    "root": "C:/opf-work/sh25-name-reflow-02",
+    "shippedCLI": true,
+    "names": [
+      "Native renamed",
+      "Expansion"
+    ],
+    "svgFontPixels": [
+      20,
+      20
+    ],
+    "originalAndReexportLegendSizes": [
+      1500
+    ],
+    "pptxSha256": "d010b036893230022a87f6e21fb3aab42ed0b6579e70d4d2f468d8305d24ac76",
+    "importCounts": {
+      "error": 0,
+      "warning": 1
+    },
+    "warning": "import/shape-property-dropped, stale Current point selector; retained without suppression",
+    "nativeReexportPixels": "Not run by agent; coordinator owns actual qualification"
+  },
+  "firstReflowFailure": "CLI correctly refuses --date for JSON output; failed01preserved. Fresh02uses date only for rendering, source unchanged.",
+  "mapped": {
+    "source": {
+      "seconds": 193,
+      "passed": 6,
+      "skip": 1,
+      "archiveUnrun": 246
+    },
+    "actualReview": {
+      "seconds": 85.5,
+      "passed": 5,
+      "skip": 1,
+      "archiveUnrun": 247
+    },
+    "failures": "Exact omitted painting gzip restored after normal dependency merge; text rerun PASS. Inherited nine-deck fallback digest remains unchanged in both runs."
+  },
+  "archive": {
+    "path": "raw.zip",
+    "bytes": 1159012,
+    "sha256": "094c42ac9fe093acaad448e3fe42f2290214333640d316bfc3532860a6a61c06",
+    "files": 215
+  },
+  "manifest": {
+    "path": "files.json.gz",
+    "bytes": 9623,
+    "sha256": "e50220c5c6e99a10cf83b296f8e750fd0f637d49af25d7d381f333f519e41be6"
+  }
+}
