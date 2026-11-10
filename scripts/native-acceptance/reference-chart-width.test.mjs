@@ -19,7 +19,8 @@ const source=readReferenceSources().find(s=>s.id==="reference-native-lines").doc
 const archive=inspectReferenceArchive(bytes,archiveDependencies());
 assertReferenceWitnessSource(archive,source);
 assert.deepEqual(archive.canvas,{cx:12192000,cy:6858000});
-const original=()=>fromPptx(bytes,{catalogs:[gallery]});
+const read=async(input)=>{const diagnostics=[];const document=await fromPptx(input,{catalogs:[gallery],onDiagnostic:d=>diagnostics.push(d)});return {document,diagnostics};};
+const original=()=>read(bytes);
 const charts=doc=>doc.slides[0].chart??doc.slides[0].blocks.find(b=>b.chart).chart;
 test("real fractional1.5 reference import compares exact current14288EMU projection",async()=>{
   const imported=await original(),floor=charts(imported.document).referenceLines[1];
@@ -37,7 +38,7 @@ test("actual plus1EMU reference style edit stays current and refuses the source-
     return ser.replace('<a:ln w="14288"','<a:ln w="14289"');
   });
   assert.equal(edits,1);assert.notEqual(changed,xml);parts[file]=strToU8(changed);
-  const mutated=zipSync(parts),current=await fromPptx(mutated,{catalogs:[gallery]}),unchanged=await original();
+  const mutated=zipSync(parts),current=await read(mutated),unchanged=await original();
   assert.equal(charts(current.document).referenceLines[1].stroke.width,14289/9525);
   assert.deepEqual(charts(current.document).data,source.slides[0].chart.data);
   assert.equal(charts(current.document).referenceLines[1].value,-10);
