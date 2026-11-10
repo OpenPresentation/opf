@@ -23,7 +23,7 @@ import {
 import { resolveChartData } from "../../packages/javascript/dist/index.js";
 const compareImports = (source, imported, canvas) => compareReferenceWitnessImports(source, imported, canvas, resolveChartData);
 const clone = structuredClone;
-test("synthetic direct classic archives preserve all nine source charts, helpers, workbooks, raw caps and exact source contracts", () => {
+test("synthetic direct classic archives preserve all twelve source charts, helpers, workbooks, raw caps and exact source contracts", () => {
   assert.equal(REFERENCE_LIMITS.maxShapesPerSlide, 3);
   assert.equal(REFERENCE_LIMITS.maxTotalShapes, 9);
   assert.equal(REFERENCE_LIMITS.maxTimeoutSeconds, 60);
@@ -277,4 +277,20 @@ test('postflight receipt preserves initial nonzero samples and requires a fresh 
   ]) {
     const t=clone(terminal),r=clone(samples);mutate(t,r);assert.throws(()=>assertReferenceWitnessPostflight(t,r));
   }
+});
+
+test('fourth singleton case stays whole and binds both IDs to the current own-axis group without a shape-cap increase',()=>{const source=sources[3],archive=inspectReferenceArchive(syntheticCase(source),deps);assert.equal(source.id,'reference-singleton-axes');assert.deepEqual(archive.slides.map(s=>s.shapes.length),[3,3,1]);assert.equal(archive.rawShapes,7);assertReferenceWitnessSource(archive,source.document);for(const mode of['missing','wrong','duplicate','overflow','swapped-group','nonreciprocal','own-bounds']){const changed=clone(archive),chart=changed.slides[0].shapes.find(s=>s.kind==='chart').chart,owner=chart.ownership.overlays[0];if(mode==='missing')delete owner.axisIds;else if(mode==='wrong')owner.axisIds.value=40;else if(mode==='duplicate')owner.axisIds.category=owner.axisIds.value;else if(mode==='overflow')owner.axisIds.value=4294967296;else if(mode==='swapped-group')chart.groups[0].axes=['30','40'];else if(mode==='nonreciprocal')chart.axes.find(a=>a.id==='10').cross='40';else chart.axes.find(a=>a.id==='20').scaling['c:max'].val='100';assert.throws(()=>assertReferenceWitnessSource(changed,source.document),undefined,mode);}const five=structuredClone(source);five.document.slides[0].chart.referenceLines.forEach((r,i)=>r.label='extra'+i);assert.throws(()=>inspectReferenceArchive(syntheticCase(five),deps),/shape cap/);});
+
+for (const [index, name] of ['both-axis','secondary-only','no-reference-control'].entries()) test('coherently collapsed singleton '+name+' group and ownership refuse even with a valid unused second pair',()=>{
+  const source=sources[3], original=syntheticCase(source);
+  const mutant=rewrite(original,'ppt/charts/chart'+(index+1)+'.xml',xml=>{
+    let changed=xml.replace(/<c:lineChart>[\s\S]*?<\/c:lineChart>/,group=>{assert.match(group,/<c:axId val="30"\/><c:axId val="40"\/>/);return group.replace('<c:axId val="30"/><c:axId val="40"/>','<c:axId val="10"/><c:axId val="20"/>');});
+    changed=changed.replace(/(<opf:references data=")([A-F0-9]+)(")/,(_m,a,h,b)=>{const record=JSON.parse(Buffer.from(h,'hex').toString());for(const owned of record.overlays)if(owned.axis==='secondary')owned.axisIds={category:10,value:20};return a+Buffer.from(JSON.stringify(record)).toString('hex').toUpperCase()+b;});
+    return changed;
+  });
+  const archive=inspectReferenceArchive(mutant,deps),chart=archive.slides[index].shapes.find(s=>s.kind==='chart').chart;
+  assert.deepEqual(chart.axes.map(a=>a.id).sort(),['10','20','30','40']);
+  assert.ok(chart.groups.every(g=>JSON.stringify(g.axes)===JSON.stringify(['10','20'])));
+  for(const owned of chart.ownership?.overlays??[])if(owned.axis==='secondary')assert.deepEqual(owned.axisIds,{category:10,value:20});
+  assert.throws(()=>assertReferenceWitnessSource(archive,source.document),/distinct/);
 });

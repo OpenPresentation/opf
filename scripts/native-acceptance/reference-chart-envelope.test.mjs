@@ -83,7 +83,7 @@ function child(executable, args, options = {}) {
   return result;
 }
 
-test("actual create/verify/default-pure child route binds three whole cases, six packages, clean separate repos and unchanged supervisor without Office", {
+test("actual create/verify/default-pure child route binds four whole cases, six packages, clean separate repos and unchanged supervisor without Office", {
   timeout: 30000,
 }, async () => {
   const folder = fs.mkdtempSync(

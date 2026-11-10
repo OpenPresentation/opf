@@ -19,6 +19,7 @@ export const REFERENCE_CASES = [
   "reference-native-lines",
   "reference-native-axes",
   "reference-overlays-markers",
+  "reference-singleton-axes",
 ];
 export const REFERENCE_CONTROLLER_FILES = [
   "scripts/native-acceptance/reference-chart-profile.mjs",
@@ -146,7 +147,7 @@ export const REFERENCE_LIMITS = {
 export function assertReferenceWitnessSelection(suite, caseId, input, plan, deps) {
   assert.ok(
     REFERENCE_CASES.includes(caseId),
-    "Select one of the three whole reference witness cases",
+    "Select one of the four whole reference witness cases",
   );
   assert.equal(suite.schemaVersion, 1);
   assert.equal(suite.nativeAcceptance, false);
@@ -156,7 +157,7 @@ export function assertReferenceWitnessSelection(suite, caseId, input, plan, deps
   assert.deepEqual(
     suite.cases.map((c) => c.id),
     REFERENCE_CASES,
-    "Exactly the three separate witness cases in authored order",
+    "Exactly the four separate witness cases in authored order",
   );
   assert.equal(suite.fullSuite, false);
   assert.equal(suite.scope?.profile, REFERENCE_PROFILE);
@@ -685,6 +686,31 @@ const richText = (node) =>
         )
         .join("")
     : "";
+function singletonComboAxisPairs(chart, wanted, names, ordinary) {
+  if (wanted.type !== 'combo' || wanted.data.rows.length !== 1 || !wanted.secondaryAxis?.length) return;
+  assert.equal(chart.axes.length, 4, 'Singleton combo requires its complete two category/value pairs');
+  assert.equal(new Set(chart.axes.map(axis => axis.id)).size, 4, 'Singleton native axis IDs must be unique');
+  const pairs = {};
+  ordinary.forEach(({group}, index) => {
+    assert.equal(group.axes.length, 2, 'Singleton ordinary group needs one category/value pair');
+    assert.equal(new Set(group.axes).size, 2, 'Singleton ordinary axis IDs must be distinct');
+    const axes = group.axes.map(id => chart.axes.find(axis => axis.id === id)),
+      category = axes.find(axis => axis?.kind === 'c:catAx'), value = axes.find(axis => axis?.kind === 'c:valAx');
+    assert.ok(category && value, 'Singleton ordinary category/value pair missing');
+    for (const axis of [category,value]) assert.ok(/^\d+$/.test(axis.id) && Number.isInteger(Number(axis.id)) && Number(axis.id) <= 4294967295, 'Singleton native axis ID must be uint32');
+    assert.equal(category.cross, value.id, 'Singleton category/value pair is not reciprocal');
+    assert.equal(value.cross, category.id, 'Singleton value/category pair is not reciprocal');
+    const logical = wanted.secondaryAxis.includes(names[index]) ? 'secondary' : 'value';
+    if (pairs[logical]) {
+      assert.equal(pairs[logical].category.id, category.id, 'Singleton ordinary groups disagree on their logical category axis');
+      assert.equal(pairs[logical].value.id, value.id, 'Singleton ordinary groups disagree on their logical value axis');
+    } else pairs[logical] = {category,value};
+  });
+  assert.ok(pairs.value && pairs.secondary, 'Singleton authored primary/secondary groups must both be present');
+  assert.notEqual(pairs.value.category.id, pairs.secondary.category.id, 'Primary and secondary singleton axes must use distinct category IDs');
+  assert.notEqual(pairs.value.value.id, pairs.secondary.value.id, 'Primary and secondary singleton axes must use distinct value IDs');
+  return pairs;
+}
 export function assertReferenceWitnessSource(archive, source) {
   assertReferenceWitnessTitles(archive, source);
   archive.slides.forEach((slide, i) => {
@@ -733,6 +759,7 @@ export function assertReferenceWitnessSource(archive, source) {
           "Ordinary data line must stay solid independently of helpers",
         );
     });
+    const singletonPairs = singletonComboAxisPairs(chart, wanted, names, ordinary);
     const native = wanted.type !== "bar" && wanted.data.rows.length >= 2;
     assert.equal(
       chart.ownership?.helpers.length ?? 0,
@@ -813,6 +840,15 @@ export function assertReferenceWitnessSource(archive, source) {
         assert.equal(owned.value, ref.value, "Bound overlay authored value differs");
         assert.equal(owned.axis, ref.axis ?? "value");
         assert.equal(owned.labelPosition, ref.labelPosition ?? "end");
+        if (singletonPairs) {
+          const {category,value} = singletonPairs[ref.axis === 'secondary' ? 'secondary' : 'value'];
+          assert.deepEqual(Object.keys(owned.axisIds ?? {}).sort(), ['category','value'], 'Explicit singleton axis IDs missing');
+          for (const [key, axis] of [['category',category],['value',value]]) {
+            assert.ok(Number.isInteger(owned.axisIds[key]) && owned.axisIds[key] >= 0 && owned.axisIds[key] <= 4294967295, 'Singleton axis ID must be uint32');
+            assert.equal(String(owned.axisIds[key]), axis.id, 'Singleton overlay selected the wrong current native axis');
+          }
+          assert.ok(Number(value.scaling?.['c:min']?.val) <= ref.value && Number(value.scaling?.['c:max']?.val) >= ref.value, 'Singleton explicit value is outside its own written bounds');
+        }
         assert.equal(
           slide.shapes.filter((x) => x.name === owned.id + " line").length,
           1,
