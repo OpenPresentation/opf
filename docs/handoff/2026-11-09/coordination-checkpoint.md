@@ -1,3 +1,42 @@
+# Current checkpoint: first cold-start repair measured and held
+
+v0.33.0 is published; **v0.34.0 is unpublished**. All 31 original issue1139 checkbox lines remain intact (21 checked/10 open). Runtime staging remains d2edd18ced67ea8370ae2d03f5f954d91ff9cb6e; prior metadata2755628e3da5c338ac223dc9e400b8f80b77dbc6. Canonical PR1225 stays e5de880999235872f4c44fe646e78fec49c16baa. No new performance source is folded. Frozen leaves stay frozen; evidence-only branches NEVER MERGE.
+
+## Owner cold-start question: measured follow-up, no accepted speed gain
+
+The original36-slide whole131 versus demand3 trial measured3487→3960ms preparation+first SVG (~13.6%slower). Diagnostic697100785 proved two full recording/composition contexts dominate preparation; verified reads/hashing were about3ms. This established the repeated work, not a promise that any replay implementation would be faster.
+
+Root's exclusive formal02 process16602 ACTUALLY exited0:8 fresh Node24 children, same3faces on both sides, original16/extended36 inputs,624 exact SVG checks and exact face/file/license/shared-module/twoWASM identities. Same fixed mirrored order,60s child cap, no in-run retry/source/deadline change. Root independently replayed the pushed [6da89c4a evidence](https://github.com/OpenPresentation/opf/blob/6da89c4a69d9374f68c12f6cdb73c44a9fc645b4/docs/handoff/2026-11-09/rr114-replay-performance/RESULTS.md):86 records/1592558 raw bytes/432378 gzip bytes,104 additional functional/formal SVG matches, currentDriverMatches=true at replay.
+
+| Slides | Control3-face startup | Replay startup | Result |
+| --- | --- | --- | --- |
+|16|2035ms|2124ms|about4.4%slower|
+|36|3763ms|3761ms|essentially unchanged|
+
+These are component-sum means from two replicates per cell; continuous totals differ by less than0.2ms. Warm36 was slightly slower too; post-drop JS heap remains about54/56MiB. First-render peak is only a fewMiB lower. **3360 is held/unfolded; no latency improvement is accepted.** Recording overhead is a source-level suspect, not a measured CPU attribution. Source/config parity confirms the exact same preparation options and SVG reexport, four built replay-module hashes, input/face/file identities and104 cross-check output hashes.
+
+Formal01 is preserved as an evidence-collector setup failure after its first control. Its incorrect inference of filesystem WASMs from JS imports was corrected to the two exact engine-bound specifiers before a separately reviewed fresh formal02. Both failures and fixes remain lossless. Root also found/stopped one exact historical read-only Node normalizer fromNov6: unbounded equal-string comparison,267kCPU seconds/~654MB working set; exact command/parent/source and before/after proofs are archived. No Office process or other process was targeted. New absolute times/RSS must not be compared directly with the historical whole131 run; background conditions and retained-output workload differ.
+
+The next narrow candidate23e579ac18d6a12506eefde0a5caa7cf0c50a4dd is in isolated C:/opf-work/replay-fast/codex/rr-114-replay-validation. Root and A reviewed its17-line runtime delta: remove only a twice-discarded validation-key serialization. Every rejection branch/order, before/after-callback validation, full snapshot/presence signature, event/path/size/selection/context/callback/pool guards and caps remain. No mutable-object memoizer. Lead runs normal build/existing33behavioral controls/neighbors, then pushes qualified source. A fresh sibling benchmark folder must preserve every6da packet/source byte; root must review source/preflight and authorize an explicit quiet window before another trial. **No timing for this smaller candidate has run.**
+
+## Recovery P0: new main-aligned head has its own observer
+
+6fa's sole observer71287 ACTUALLY exited0 at01:08:14UTC. Native workflow42730544207 completed SUCCESS; small receipt13724921981 SHAe9f84c03662a3b4d695437ce2afe2ffc4f0b52dc04e482c0d6c17863a2e43773 and qualification13724678984 SHA8ff7b3494ee9b1b1ad550ba546971943d554b8d8cae9a87f60a4a620ff35f76c are verified historical source6fa/tree66b evidence. Actual inventory count is16,518. No360MBbundle was downloaded.
+
+Fresh main1c6bc45b7e69627803deaacd91886340c219fe2e (externalPR215, MCP shared-egress limit/privacy disclosure) is green for its actual push checks. It was normally merged as d172099296f561d68a7a8594a8a430a2a867deda, preserving all64 recovery/evidence blobs and all5 incoming main blobs. SitePR214 is now PUSHED/FROZEN at19f3d1dbdc81f3c0a72b890c17a32ad0701c2de8/tree08c189e70ad3a5de9b9c623a3fb92c088efd3826. One ordinary build,304site tests+5font controls and types PASS. Root independently replayed the append-only25record/5524183byte main-alignment verifier. Pins/runtime remain033.
+
+Sole LIVE observer is root77144: exact19f3, scripts/pr-gate.mjs --required all --interval180; log C:/opf-work/site214-gate06.log and eventual-exit JSON. No merge yet. This new head requires its OWN maintained NativePreview receipt and actual deployed recovery/MCP/privacy acceptance; old421/6fa previews are not promoted. All earlier29distinct deployed recovery/workspace/handoff flows and4root-viewed captures remain historical valid evidence. No duplicate observer/upload.
+
+## Original native and memory lanes
+
+- Explicit-reference witness source790b23d3/PR1257 remains reviewed source/pure only:18tests/55managed faults,293record root replay. Genuine current six-package generation, actual exported shape counts/frame proof, native/import/render acceptance and final combined gate remain owed.
+- B07 direction source2b825aa72e16dfa6593a8171011f7fcb6138255b is pushed NEVERMERGE. Root42record/378097byte replay and A source review PASS;30managed+7input controls,41protected functions/4support files exact. Original09SHA4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2 is oneRTL title plus twoLTR body paragraphs. New getters are diagnostic only. A new separate one-case preparation adapter and exact-source mapped checks are authorized; suite preparation/ValidateOnly/Office remain HELD for root review. No new Office run occurred. All original glyph05/06/09/10 remain OPEN; previousA/B/C proofing inheritance alternatives remain rejected in fb37046f.
+- Source-only shared-HarfBuzz audit identifies process-lifetime content-key retention with no eviction/release of distinct cached font allocations. Same-content reuse already works; a finite pinned catalog has a finite content set. Caller-provided diverse fonts make a bounded cache worth investigating. This is NOT a measured leak or attribution of earlier400–470MiB peaks. Cache caps/destruction/failure controls and real measurements require separate review; freeing WASM allocations will not shrink its arena. No cache change is authorized yet.
+
+Original scope is unchanged: current59+newrefs/table/histogram/seven/glyph/SH21liveSmartArt/E1/E3; G2orgPR216/H3galleryPR180 future034 adoption; one coherent mapped/default-main/Full/Slow/cross-platform/packed/registry/npm12/native gate; ONEmanagedgolden refresh/all moved sheets/causal archive review; strict trackers/catalog-free/bundles; Release dryrun/trusted034publish and ALL THREE actual034sites/docs/examples/gallery/MCP/production. DEV033 exact secret transfer remains held, with no value retrieval/copy/workaround. Login/DNS/account visibility, D2, LibreOffice promotion, connector setup and local extension removal remain owner-only. Later explicit deploy/Preview permission remains effective.
+
+## Prior checkpoint retained verbatim
+
 # Current checkpoint: cold-start repair ready for paired measurement
 
 v0.33.0 is published. **v0.34.0 is unpublished.** All 31 original issue1139 checkbox lines remain intact (21 checked, 10 open). No original item is waived by the work below. Canonical PR1225 remains e5de880999235872f4c44fe646e78fec49c16baa; reviewed staging runtime is d2edd18ced67ea8370ae2d03f5f954d91ff9cb6e, with prior metadata276f339a68069dc11970d649092d6181c9feba38. Evidence-only branches must never be merged, and folded feature leaves must never receive another push.
