@@ -13,7 +13,7 @@ import {readB07PackedProof} from './b07-current-generate.mjs';
 import {readB07Sources,b07SourceSummary} from './b07-current-source.mjs';
 
 export const B07_PROFILE='b07-current-one-case-readonly-v1';
-export const B07_REVIEWED_WORKER='3deb9cfbf3ab7a9fae8acabc2f139fd58dacc1c5';
+export const B07_REVIEWED_WORKER='6831f30a6ecec7ffec870e9aaf80dda27f2bab9a';
 export const B07_WORKER_FILES=['native-furniture-control.ps1','native-process.ps1','native-process-check.ps1','native-furniture-harness-check.ps1','native-text-probes-check.ps1'].map(name=>'packages/pptx/test/'+name);
 export const B07_LIMITS={slides:1,topLevelShapes:16,targets:3,ranges:8,sampledUtf16:32,textUtf16:4096,archiveBytes:16777216,zipParts:4096,phases:3,pngs:3,timeoutSecondsMax:60};
 const root=fileURLToPath(new URL('../../',import.meta.url));
