@@ -135,7 +135,7 @@ test("public import comparison exposes helper data, dropped references, current 
       ref.stroke = {
         color: "#123456",
         ...ref.stroke,
-        width: Math.min(64, Math.round((ref.stroke?.width ?? 4 / 3) * 9525 * scale) / (9525 * scale)),
+        width: Math.min(64, Math.round(((ref.stroke?.width ?? 4 / 3) * scale) * 9525) / (9525 * scale)),
         dash: ref.stroke?.dash ?? "dash",
       };
   const imported = {

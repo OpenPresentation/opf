@@ -831,7 +831,7 @@ export function compareReferenceWitnessImports(source, imported, sourceCanvas) {
           w = expected[j],
           width = w.stroke?.width ?? 4 / 3,
           canonicalWidth = Number.isFinite(width) && width >= 0 && width <= 64
-            ? Math.min(64, Math.round(width * 9525 * scale) / (9525 * scale))
+            ? Math.min(64, Math.round((width * scale) * 9525) / (9525 * scale))
             : Number.NaN,
           mismatch =
             a.value !== w.value ||
