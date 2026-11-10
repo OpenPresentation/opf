@@ -1,0 +1,711 @@
+{
+  "sourceSha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb",
+  "originalArchiveSha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2",
+  "variantSha256": "56d6442f0fe7441304a6f551062ee058cce884d33f7f8822d1a62b5d4f7144bb",
+  "slideCount": 1,
+  "shapeCount": 20,
+  "shapes": [
+    {
+      "index": 1,
+      "id": 2,
+      "name": "OPF heading slides.0.title line 0",
+      "text": "أرقام عربية وفارسية",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 40.5,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos Display"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "548640",
+        "y": "548640",
+        "cx": "11094720",
+        "cy": "627507"
+      },
+      "framePoints": {
+        "left": 43.20000076293945,
+        "top": 43.20000076293945,
+        "width": 873.5999755859375,
+        "height": 49.40999984741211
+      },
+      "runPropertiesSha256": "2eb15f4024468498f9c28dd87cad020706a5c671c99da2a6ae69b8e21d766c59"
+    },
+    {
+      "index": 2,
+      "id": 3,
+      "name": "OPF text slides.0.blocks.0.text line 0",
+      "text": "Item ",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "8097520",
+        "y": "3414884",
+        "cx": "3545840",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 637.5999755859375,
+        "top": 268.88848876953125,
+        "width": 279.20001220703125,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "7e332537bf3e16f1db64f3d92fbfd9d5ed91aa815b7d91b0cd621f3119261896"
+    },
+    {
+      "index": 3,
+      "id": 11,
+      "name": "RR105 independent native segment OPF text slides.0.blocks.0.text line 0 5:6",
+      "text": "١",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "8905620",
+        "y": "3414884",
+        "cx": "110395",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 701.2299194335938,
+        "top": 268.88848876953125,
+        "width": 8.692520141601562,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "7e332537bf3e16f1db64f3d92fbfd9d5ed91aa815b7d91b0cd621f3119261896"
+    },
+    {
+      "index": 4,
+      "id": 12,
+      "name": "RR105 independent native segment OPF text slides.0.blocks.0.text line 0 6:7",
+      "text": ":",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "9016014",
+        "y": "3414884",
+        "cx": "61984",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 709.92236328125,
+        "top": 268.88848876953125,
+        "width": 4.880630016326904,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "7e332537bf3e16f1db64f3d92fbfd9d5ed91aa815b7d91b0cd621f3119261896"
+    },
+    {
+      "index": 5,
+      "id": 13,
+      "name": "RR105 independent native segment OPF text slides.0.blocks.0.text line 0 7:21",
+      "text": " Arabic-Indic ",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "9077998",
+        "y": "3414884",
+        "cx": "1987037",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 714.802978515625,
+        "top": 268.88848876953125,
+        "width": 156.45960998535156,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    },
+    {
+      "index": 6,
+      "id": 4,
+      "name": "OPF text slides.0.blocks.0.text line 1",
+      "text": "number",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "8097520",
+        "y": "3844842",
+        "cx": "3545840",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 637.5999755859375,
+        "top": 302.74346923828125,
+        "width": 279.20001220703125,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    },
+    {
+      "index": 7,
+      "id": 5,
+      "name": "OPF text slides.0.blocks.1.text line 0",
+      "text": "Item ",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "4323080",
+        "y": "3629863",
+        "cx": "3545840",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 340.3999938964844,
+        "top": 285.81597900390625,
+        "width": 279.20001220703125,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "7e332537bf3e16f1db64f3d92fbfd9d5ed91aa815b7d91b0cd621f3119261896"
+    },
+    {
+      "index": 8,
+      "id": 15,
+      "name": "RR105 independent native segment OPF text slides.0.blocks.1.text line 0 5:6",
+      "text": "۱",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "5131180",
+        "y": "3629863",
+        "cx": "110395",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 404.0299072265625,
+        "top": 285.81597900390625,
+        "width": 8.692520141601562,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "7e332537bf3e16f1db64f3d92fbfd9d5ed91aa815b7d91b0cd621f3119261896"
+    },
+    {
+      "index": 9,
+      "id": 16,
+      "name": "RR105 independent native segment OPF text slides.0.blocks.1.text line 0 6:7",
+      "text": ":",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "5241574",
+        "y": "3629863",
+        "cx": "61984",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 412.72235107421875,
+        "top": 285.81597900390625,
+        "width": 4.880630016326904,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "7e332537bf3e16f1db64f3d92fbfd9d5ed91aa815b7d91b0cd621f3119261896"
+    },
+    {
+      "index": 10,
+      "id": 17,
+      "name": "RR105 independent native segment OPF text slides.0.blocks.1.text line 0 7:22",
+      "text": " Persian number",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "5303558",
+        "y": "3629863",
+        "cx": "2461640",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 417.6029968261719,
+        "top": 285.81597900390625,
+        "width": 193.82992553710938,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    },
+    {
+      "index": 11,
+      "id": 6,
+      "name": "OPF list slides.0.blocks.2.items line 0",
+      "text": "Item ",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "548640",
+        "y": "2935586",
+        "cx": "3545840",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 43.20000076293945,
+        "top": 231.14849853515625,
+        "width": 279.20001220703125,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    },
+    {
+      "index": 12,
+      "id": 19,
+      "name": "RR105 independent native segment OPF list slides.0.blocks.2.items line 0 5:6",
+      "text": "١",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "1705103",
+        "y": "2935586",
+        "cx": "101572",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 134.2600860595703,
+        "top": 231.14849853515625,
+        "width": 7.997795104980469,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    },
+    {
+      "index": 13,
+      "id": 20,
+      "name": "RR105 independent native segment OPF list slides.0.blocks.2.items line 0 6:8",
+      "text": ": ",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "1806676",
+        "y": "2935586",
+        "cx": "96595",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 142.25794982910156,
+        "top": 231.14849853515625,
+        "width": 7.605905532836914,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    },
+    {
+      "index": 14,
+      "id": 21,
+      "name": "RR105 independent native segment OPF list slides.0.blocks.2.items line 0 8:21",
+      "text": "Arabic-Indic ",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "1903271",
+        "y": "2935586",
+        "cx": "1915451",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 149.86386108398438,
+        "top": 231.14849853515625,
+        "width": 150.82290649414062,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    },
+    {
+      "index": 15,
+      "id": 7,
+      "name": "OPF list slides.0.blocks.2.items line 1",
+      "text": "number",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "943294",
+        "y": "3365544",
+        "cx": "3151186",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 74.27511596679688,
+        "top": 265.00347900390625,
+        "width": 248.1248779296875,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    },
+    {
+      "index": 16,
+      "id": 8,
+      "name": "OPF list slides.0.blocks.2.items line 2",
+      "text": "Item ",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "548640",
+        "y": "3894182",
+        "cx": "3545840",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 43.20000076293945,
+        "top": 306.6285095214844,
+        "width": 279.20001220703125,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    },
+    {
+      "index": 17,
+      "id": 23,
+      "name": "RR105 independent native segment OPF list slides.0.blocks.2.items line 2 5:6",
+      "text": "۱",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "1705103",
+        "y": "3894182",
+        "cx": "101572",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 134.2600860595703,
+        "top": 306.6285095214844,
+        "width": 7.997795104980469,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    },
+    {
+      "index": 18,
+      "id": 24,
+      "name": "RR105 independent native segment OPF list slides.0.blocks.2.items line 2 6:8",
+      "text": ": ",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "1806676",
+        "y": "3894182",
+        "cx": "96595",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 142.25794982910156,
+        "top": 306.6285095214844,
+        "width": 7.605905532836914,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    },
+    {
+      "index": 19,
+      "id": 25,
+      "name": "RR105 independent native segment OPF list slides.0.blocks.2.items line 2 8:16",
+      "text": "Persian ",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "1903271",
+        "y": "3894182",
+        "cx": "1197006",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 149.86386108398438,
+        "top": 306.6285095214844,
+        "width": 94.25244140625,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    },
+    {
+      "index": 20,
+      "id": 9,
+      "name": "OPF list slides.0.blocks.2.items line 3",
+      "text": "number",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "943294",
+        "y": "4324140",
+        "cx": "3151186",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 74.27511596679688,
+        "top": 340.48345947265625,
+        "width": 248.1248779296875,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    }
+  ],
+  "physicalFontIdentity": false,
+  "nativeAcceptance": false
+}

@@ -1,0 +1,422 @@
+{
+  "schema": 1,
+  "neverMerge": true,
+  "diagnosticOnly": true,
+  "base": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+  "parentController": "643e40e30cd198f3204ed98037f31cab319f6d74",
+  "parentTree": "c38575ae017f7940d8a8252df367dbcef6af6e4d",
+  "variant": {
+    "bytes": 100900,
+    "sha256": "d862f43ed87e008815a5828ca62c62610ed50359ecc4dcf283e58cb3bef0a858"
+  },
+  "proof": {
+    "parts": 147,
+    "changedParts": [
+      "ppt/slides/slide1.xml"
+    ],
+    "untouchedLocalRecords": 146,
+    "nativeUtf16UnitsChanged": 1,
+    "nativeUtf16LengthDelta": 0,
+    "slideUtf8LengthDelta": 0,
+    "fromCodepoint": "U+202A",
+    "toCodepoint": "U+202D",
+    "closingCodepoint": "U+202C",
+    "positiveAsciiText": "Bonjour 1",
+    "currentNativeBodyUtf16Length": 18,
+    "originalSemanticNativeUtf16Length": 16,
+    "oldSemanticNativeUtf16Equality": false,
+    "currentInputExactTextRequired": true,
+    "rPrLanguageSizeShapeFramesThemeArabicTextSourceOpfUnchanged": true,
+    "notUnicodeNormalization": true
+  },
+  "scope": {
+    "currentNativeUtf16": 18,
+    "oldSemantic16Equality": false,
+    "oneCodepointRelativeLre": true,
+    "controllerActivation": false,
+    "office": false,
+    "nativeAcceptance": false
+  },
+  "unchangedParentFiles": [
+    {
+      "path": "tools/rr105-native-segment-observer/.gitattributes",
+      "bytes": 59,
+      "sha256": "a17b1665a27d015ddde4540b75485c16c6bf992302f00e5fcf16cf0a95edc43b"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/README.md",
+      "bytes": 532,
+      "sha256": "115f5b9b35163696aef695dcdd0248834bf35b9ba5100ad3a91a90f754eadd52"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/data-tools.mjs",
+      "bytes": 7315,
+      "sha256": "884f1ecf570877791286f5009eb7790db418a5d6ec19dde4f004292a292cc3b8"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/managed.ps1",
+      "bytes": 20475,
+      "sha256": "ac77b6635d3c37d06e1124ce370d7f37b4a3acab50bbb56df3aaf787415749fa"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/base-managed.ps1",
+      "bytes": 16733,
+      "sha256": "93df6be95310271ca1b9dfde824309f259b6f908db147c67e81d6170dbba6038"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/base-worker.ps1",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/base-wrapper.ps1",
+      "bytes": 11352,
+      "sha256": "26f964e141cebe1f63ff39c18b6bda79364e134fa6436973bb2b5a603b21110d"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/original.pptx",
+      "bytes": 100906,
+      "sha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/source.opf.json",
+      "bytes": 289,
+      "sha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/expectation.json",
+      "bytes": 4208,
+      "sha256": "b3a484b739f756a2121d4f6b1c0cd389fcfec51c7f43ff6285d3ef7d63ae0ab2"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/input.pptx",
+      "bytes": 101005,
+      "sha256": "742538697bcb0b962cf80f330136a5f5e9b2640a8107e5ff1b6d0c56d84c73ad"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/original.pptx",
+      "bytes": 100900,
+      "sha256": "f9e5031acd60439a34a08744b853a822c098493d071c7a2c2f8f4b0882c0e331"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/source.opf.json",
+      "bytes": 269,
+      "sha256": "c91b4632baf1f35fbe3e5e9c28ecb4e22588ed6d52c3d35b92d0b6abe5ff6923"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/expectation.json",
+      "bytes": 5248,
+      "sha256": "febc22a7a4ea534ed68bac19818c70925b9121ee2c9d4e77063ae1d63441f46d"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/input.pptx",
+      "bytes": 101121,
+      "sha256": "540b63316b78162f4aa051b43e4e4af04719be1773ec5ad3123bca5df1f8920c"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/original.pptx",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/expectation.json",
+      "bytes": 18335,
+      "sha256": "383cf18a052d3c98df0b52d8302dbbf23cd2d64bdcca90b65fa950d6de6b6778"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/input.pptx",
+      "bytes": 102841,
+      "sha256": "56d6442f0fe7441304a6f551062ee058cce884d33f7f8822d1a62b5d4f7144bb"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/original.pptx",
+      "bytes": 102481,
+      "sha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/source.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/expectation.json",
+      "bytes": 3116,
+      "sha256": "52b79e6a85ea16c86386525d23ae43d308f032ef5418943849f44779c053be4c"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/input.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/original.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/source.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/run-managed.mjs",
+      "bytes": 1870,
+      "sha256": "6be08c0b96e8788cc9653540a3dc28e98c21f6ee08e644bb168c37ff77c210b6"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/run-segment-observer.ps1",
+      "bytes": 18838,
+      "sha256": "f0f0ae0a50366db9649da47b0c0f8133364e60c11fa2f1738a05b08adfecb84c"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/segment-worker.ps1",
+      "bytes": 24934,
+      "sha256": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/test.mjs",
+      "bytes": 7805,
+      "sha256": "4e4e116ceedf58d4a87ed2569983e790ea278d48e1e1d8dee5db0230708094b7"
+    }
+  ],
+  "raw": {
+    "path": "raw.json.gz",
+    "bytes": 16855,
+    "sha256": "8b788ce60dcc4e3700c65b4f7bab090124c8efc7d9b5097af176b1cb794942d3",
+    "expandedBytes": 49446,
+    "records": 9,
+    "logicalBytes": 36152
+  },
+  "files": [
+    {
+      "path": "docs/handoff/2026-11-10/b07-lro-pdf-diagnostic/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/b07-lro-pdf-diagnostic/inputs/prior05-lre-pdf.pptx",
+      "bytes": 100900,
+      "sha256": "faa5324ec7371f9802119d618089bf27f68816c19370e5b892272fd228700dc9"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/b07-lro-pdf-diagnostic/parent-source.json",
+      "bytes": 11063,
+      "sha256": "d2fe52486fbfff823ce0bd5082cdf8f1604ee059702b1b9be217f03a42b4e97f"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/b07-lro-pdf-diagnostic/prepare-variant.mjs",
+      "bytes": 2768,
+      "sha256": "9bb52f177fdad997bfadbc4f7eb98a02fd8857187fa392784232eedf46e9c0bc"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/b07-lro-pdf-diagnostic/prepared-report.json",
+      "bytes": 1400,
+      "sha256": "fbec629ab1366845014771ba7aa27b081ad51d59b8f5241bb5eaf7c48da240eb"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/b07-lro-pdf-diagnostic/raw.json.gz",
+      "bytes": 16855,
+      "sha256": "8b788ce60dcc4e3700c65b4f7bab090124c8efc7d9b5097af176b1cb794942d3"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/b07-lro-pdf-diagnostic/README.md",
+      "bytes": 3355,
+      "sha256": "54c75c1c711640bf52a3eab38bc93e30775780d287a29337c373a01d968813b7"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/b07-lro-pdf-diagnostic/variant.mjs",
+      "bytes": 3396,
+      "sha256": "4dbbe94c17431bcb97272a5c16431044e733e61222986bd64daadfdea61fd2df"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/b07-lro-pdf-diagnostic/verify.mjs",
+      "bytes": 5484,
+      "sha256": "18084a650882188cdbcbec5853336ad2f2dce2c85886f236b1aa198829881f5b"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/b07-lro-pdf-diagnostic/zip-tools.mjs",
+      "bytes": 6991,
+      "sha256": "b8196b349751751df8c7f0dff63268433ae1ccd7c4de73655abc8121a043792b"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/.gitattributes",
+      "bytes": 59,
+      "sha256": "a17b1665a27d015ddde4540b75485c16c6bf992302f00e5fcf16cf0a95edc43b"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/data-tools.mjs",
+      "bytes": 7315,
+      "sha256": "884f1ecf570877791286f5009eb7790db418a5d6ec19dde4f004292a292cc3b8"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/managed.ps1",
+      "bytes": 20475,
+      "sha256": "ac77b6635d3c37d06e1124ce370d7f37b4a3acab50bbb56df3aaf787415749fa"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/profile.mjs",
+      "bytes": 17128,
+      "sha256": "1a4d6725e89e67b66d267024a12a080c6aecb5869fae28a1765816486d0dcded"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/README.md",
+      "bytes": 532,
+      "sha256": "115f5b9b35163696aef695dcdd0248834bf35b9ba5100ad3a91a90f754eadd52"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/base-managed.ps1",
+      "bytes": 16733,
+      "sha256": "93df6be95310271ca1b9dfde824309f259b6f908db147c67e81d6170dbba6038"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/base-worker.ps1",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/base-wrapper.ps1",
+      "bytes": 11352,
+      "sha256": "26f964e141cebe1f63ff39c18b6bda79364e134fa6436973bb2b5a603b21110d"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/expectation.json",
+      "bytes": 2487,
+      "sha256": "3c1714c03700627d6b2aec4185fcca1b9339ffd53b4dfb343e700d00d3a58188"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/input.pptx",
+      "bytes": 100900,
+      "sha256": "d862f43ed87e008815a5828ca62c62610ed50359ecc4dcf283e58cb3bef0a858"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/original.pptx",
+      "bytes": 100906,
+      "sha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/source.opf.json",
+      "bytes": 289,
+      "sha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/expectation.json",
+      "bytes": 4208,
+      "sha256": "b3a484b739f756a2121d4f6b1c0cd389fcfec51c7f43ff6285d3ef7d63ae0ab2"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/input.pptx",
+      "bytes": 101005,
+      "sha256": "742538697bcb0b962cf80f330136a5f5e9b2640a8107e5ff1b6d0c56d84c73ad"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/original.pptx",
+      "bytes": 100900,
+      "sha256": "f9e5031acd60439a34a08744b853a822c098493d071c7a2c2f8f4b0882c0e331"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/source.opf.json",
+      "bytes": 269,
+      "sha256": "c91b4632baf1f35fbe3e5e9c28ecb4e22588ed6d52c3d35b92d0b6abe5ff6923"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/expectation.json",
+      "bytes": 5248,
+      "sha256": "febc22a7a4ea534ed68bac19818c70925b9121ee2c9d4e77063ae1d63441f46d"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/input.pptx",
+      "bytes": 101121,
+      "sha256": "540b63316b78162f4aa051b43e4e4af04719be1773ec5ad3123bca5df1f8920c"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/original.pptx",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/expectation.json",
+      "bytes": 18335,
+      "sha256": "383cf18a052d3c98df0b52d8302dbbf23cd2d64bdcca90b65fa950d6de6b6778"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/input.pptx",
+      "bytes": 102841,
+      "sha256": "56d6442f0fe7441304a6f551062ee058cce884d33f7f8822d1a62b5d4f7144bb"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/original.pptx",
+      "bytes": 102481,
+      "sha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/source.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/expectation.json",
+      "bytes": 3116,
+      "sha256": "52b79e6a85ea16c86386525d23ae43d308f032ef5418943849f44779c053be4c"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/input.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/original.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/source.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/run-managed.mjs",
+      "bytes": 1870,
+      "sha256": "6be08c0b96e8788cc9653540a3dc28e98c21f6ee08e644bb168c37ff77c210b6"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/run-segment-observer.ps1",
+      "bytes": 18838,
+      "sha256": "f0f0ae0a50366db9649da47b0c0f8133364e60c11fa2f1738a05b08adfecb84c"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/segment-worker.ps1",
+      "bytes": 24934,
+      "sha256": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/SOURCE.json",
+      "bytes": 12125,
+      "sha256": "44a0751f5713f5ea364930d00e08804c511974de072fad991cf7acb7017cb94d"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/test.mjs",
+      "bytes": 7805,
+      "sha256": "4e4e116ceedf58d4a87ed2569983e790ea278d48e1e1d8dee5db0230708094b7"
+    }
+  ]
+}

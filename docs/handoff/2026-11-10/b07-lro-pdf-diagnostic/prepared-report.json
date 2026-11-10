@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "diagnosticOnly": true,
+  "parentController": "643e40e30cd198f3204ed98037f31cab319f6d74",
+  "baseline": {
+    "bytes": 100900,
+    "sha256": "faa5324ec7371f9802119d618089bf27f68816c19370e5b892272fd228700dc9"
+  },
+  "variant": {
+    "bytes": 100900,
+    "sha256": "d862f43ed87e008815a5828ca62c62610ed50359ecc4dcf283e58cb3bef0a858"
+  },
+  "proof": {
+    "parts": 147,
+    "changedParts": [
+      "ppt/slides/slide1.xml"
+    ],
+    "untouchedLocalRecords": 146,
+    "nativeUtf16UnitsChanged": 1,
+    "nativeUtf16LengthDelta": 0,
+    "slideUtf8LengthDelta": 0,
+    "fromCodepoint": "U+202A",
+    "toCodepoint": "U+202D",
+    "closingCodepoint": "U+202C",
+    "positiveAsciiText": "Bonjour 1",
+    "currentNativeBodyUtf16Length": 18,
+    "originalSemanticNativeUtf16Length": 16,
+    "oldSemanticNativeUtf16Equality": false,
+    "currentInputExactTextRequired": true,
+    "rPrLanguageSizeShapeFramesThemeArabicTextSourceOpfUnchanged": true,
+    "notUnicodeNormalization": true
+  },
+  "refusals": [
+    "non-ASCII/missing positive span",
+    "duplicate bounded span",
+    "wrong authored language",
+    "wrong size",
+    "additional formatting point",
+    "unrelated property change",
+    "theme mutation",
+    "old LRE native text cannot satisfy new input"
+  ],
+  "controllerCreateVerifyValidateOnly": false,
+  "office": false,
+  "nativeAcceptance": false,
+  "sourceOpfChanged": false
+}

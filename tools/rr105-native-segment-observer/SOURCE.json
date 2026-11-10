@@ -1,0 +1,292 @@
+{
+  "profile": "b07-independent-segments-readonly-v1",
+  "scope": "Diagnostic ONLY: case05 changes ONLY LRE U+202A to LRO U+202D around positive ASCII Bonjour 1, retaining PDF U+202C. Current native body18UTF16 units stays18; original semantic native16 equality remains false. No source normalization/product adoption. Historical profile/generation identities remain routing/evidence. Other four controls, worker/wrapper/supervisor/caps exact. No activation/native acceptance.",
+  "artifactEvidenceHead": "07406627197535f77fb98fed27e601fb1a71832a",
+  "artifactEvidenceTree": "b8090b31536bfeefd93c69f794b821934fe25c74",
+  "diagnosticConstructorHead": "f87050703f79876dc078ecdaa971ff501f8b65a3",
+  "originalExporterHead": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+  "baseLifecycleRevision": "e430ca4039016666426d138c94ca50dcfaf7fac3",
+  "baseLifecyclePaths": [
+    "scripts/native-acceptance/reference-chart-worker.ps1",
+    "scripts/native-acceptance/run-reference-chart-profile.ps1"
+  ],
+  "supervisorRevision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+  "limits": {
+    "cases": 5,
+    "slides": 1,
+    "maxShapesPerSlide": 30,
+    "exactShapeCounts": [
+      2,
+      4,
+      5,
+      20,
+      3
+    ],
+    "actions": 0,
+    "maxArchiveBytes": 16777216,
+    "maxZipEntries": 4096,
+    "timeoutSeconds": 45,
+    "supervisorHardMaximum": 60,
+    "phases": [
+      "original",
+      "saved-reopened"
+    ]
+  },
+  "files": [
+    {
+      "path": "references/rtl-contrast-05-mixed-explicit-arabic/source.opf.json",
+      "bytes": 289,
+      "sha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc"
+    },
+    {
+      "path": "references/rtl-contrast-05-mixed-explicit-arabic/input.pptx",
+      "bytes": 100900,
+      "sha256": "d862f43ed87e008815a5828ca62c62610ed50359ecc4dcf283e58cb3bef0a858"
+    },
+    {
+      "path": "references/rtl-contrast-05-mixed-explicit-arabic/original.pptx",
+      "bytes": 100906,
+      "sha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197"
+    },
+    {
+      "path": "references/rtl-contrast-05-mixed-explicit-arabic/expectation.json",
+      "bytes": 2487,
+      "sha256": "3c1714c03700627d6b2aec4185fcca1b9339ffd53b4dfb343e700d00d3a58188"
+    },
+    {
+      "path": "references/rtl-contrast-06-whole-explicit-arabic/source.opf.json",
+      "bytes": 269,
+      "sha256": "c91b4632baf1f35fbe3e5e9c28ecb4e22588ed6d52c3d35b92d0b6abe5ff6923"
+    },
+    {
+      "path": "references/rtl-contrast-06-whole-explicit-arabic/input.pptx",
+      "bytes": 101005,
+      "sha256": "742538697bcb0b962cf80f330136a5f5e9b2640a8107e5ff1b6d0c56d84c73ad"
+    },
+    {
+      "path": "references/rtl-contrast-06-whole-explicit-arabic/original.pptx",
+      "bytes": 100900,
+      "sha256": "f9e5031acd60439a34a08744b853a822c098493d071c7a2c2f8f4b0882c0e331"
+    },
+    {
+      "path": "references/rtl-contrast-06-whole-explicit-arabic/expectation.json",
+      "bytes": 4208,
+      "sha256": "b3a484b739f756a2121d4f6b1c0cd389fcfec51c7f43ff6285d3ef7d63ae0ab2"
+    },
+    {
+      "path": "references/rtl-contrast-09-long-explicit-arabic/source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "references/rtl-contrast-09-long-explicit-arabic/input.pptx",
+      "bytes": 101121,
+      "sha256": "540b63316b78162f4aa051b43e4e4af04719be1773ec5ad3123bca5df1f8920c"
+    },
+    {
+      "path": "references/rtl-contrast-09-long-explicit-arabic/original.pptx",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "path": "references/rtl-contrast-09-long-explicit-arabic/expectation.json",
+      "bytes": 5248,
+      "sha256": "febc22a7a4ea534ed68bac19818c70925b9121ee2c9d4e77063ae1d63441f46d"
+    },
+    {
+      "path": "references/rtl-contrast-10-non-ascii-digits/source.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+    },
+    {
+      "path": "references/rtl-contrast-10-non-ascii-digits/input.pptx",
+      "bytes": 102841,
+      "sha256": "56d6442f0fe7441304a6f551062ee058cce884d33f7f8822d1a62b5d4f7144bb"
+    },
+    {
+      "path": "references/rtl-contrast-10-non-ascii-digits/original.pptx",
+      "bytes": 102481,
+      "sha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2"
+    },
+    {
+      "path": "references/rtl-contrast-10-non-ascii-digits/expectation.json",
+      "bytes": 18335,
+      "sha256": "383cf18a052d3c98df0b52d8302dbbf23cd2d64bdcca90b65fa950d6de6b6778"
+    },
+    {
+      "path": "references/rtl-contrast-11-long-explicit-french/source.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303"
+    },
+    {
+      "path": "references/rtl-contrast-11-long-explicit-french/input.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990"
+    },
+    {
+      "path": "references/rtl-contrast-11-long-explicit-french/original.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990"
+    },
+    {
+      "path": "references/rtl-contrast-11-long-explicit-french/expectation.json",
+      "bytes": 3116,
+      "sha256": "52b79e6a85ea16c86386525d23ae43d308f032ef5418943849f44779c053be4c"
+    },
+    {
+      "path": "references/base-worker.ps1",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+    },
+    {
+      "path": "references/base-wrapper.ps1",
+      "bytes": 11352,
+      "sha256": "26f964e141cebe1f63ff39c18b6bda79364e134fa6436973bb2b5a603b21110d"
+    },
+    {
+      "path": "references/base-managed.ps1",
+      "bytes": 16733,
+      "sha256": "93df6be95310271ca1b9dfde824309f259b6f908db147c67e81d6170dbba6038"
+    },
+    {
+      "path": "native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "data-tools.mjs",
+      "bytes": 7315,
+      "sha256": "884f1ecf570877791286f5009eb7790db418a5d6ec19dde4f004292a292cc3b8"
+    }
+  ],
+  "cases": [
+    {
+      "id": "rtl-contrast-05-mixed-explicit-arabic",
+      "input": "references/rtl-contrast-05-mixed-explicit-arabic/input.pptx",
+      "original": "references/rtl-contrast-05-mixed-explicit-arabic/original.pptx",
+      "source": "references/rtl-contrast-05-mixed-explicit-arabic/source.opf.json",
+      "expectation": "references/rtl-contrast-05-mixed-explicit-arabic/expectation.json",
+      "archiveSha256": "d862f43ed87e008815a5828ca62c62610ed50359ecc4dcf283e58cb3bef0a858",
+      "archiveBytes": 100900,
+      "shapeCount": 2,
+      "slideCount": 1,
+      "automaticControlEligible": false,
+      "actions": []
+    },
+    {
+      "id": "rtl-contrast-06-whole-explicit-arabic",
+      "input": "references/rtl-contrast-06-whole-explicit-arabic/input.pptx",
+      "original": "references/rtl-contrast-06-whole-explicit-arabic/original.pptx",
+      "source": "references/rtl-contrast-06-whole-explicit-arabic/source.opf.json",
+      "expectation": "references/rtl-contrast-06-whole-explicit-arabic/expectation.json",
+      "archiveSha256": "742538697bcb0b962cf80f330136a5f5e9b2640a8107e5ff1b6d0c56d84c73ad",
+      "archiveBytes": 101005,
+      "shapeCount": 4,
+      "slideCount": 1,
+      "automaticControlEligible": false,
+      "actions": []
+    },
+    {
+      "id": "rtl-contrast-09-long-explicit-arabic",
+      "input": "references/rtl-contrast-09-long-explicit-arabic/input.pptx",
+      "original": "references/rtl-contrast-09-long-explicit-arabic/original.pptx",
+      "source": "references/rtl-contrast-09-long-explicit-arabic/source.opf.json",
+      "expectation": "references/rtl-contrast-09-long-explicit-arabic/expectation.json",
+      "archiveSha256": "540b63316b78162f4aa051b43e4e4af04719be1773ec5ad3123bca5df1f8920c",
+      "archiveBytes": 101121,
+      "shapeCount": 5,
+      "slideCount": 1,
+      "automaticControlEligible": false,
+      "actions": []
+    },
+    {
+      "id": "rtl-contrast-10-non-ascii-digits",
+      "input": "references/rtl-contrast-10-non-ascii-digits/input.pptx",
+      "original": "references/rtl-contrast-10-non-ascii-digits/original.pptx",
+      "source": "references/rtl-contrast-10-non-ascii-digits/source.opf.json",
+      "expectation": "references/rtl-contrast-10-non-ascii-digits/expectation.json",
+      "archiveSha256": "56d6442f0fe7441304a6f551062ee058cce884d33f7f8822d1a62b5d4f7144bb",
+      "archiveBytes": 102841,
+      "shapeCount": 20,
+      "slideCount": 1,
+      "automaticControlEligible": false,
+      "actions": []
+    },
+    {
+      "id": "rtl-contrast-11-long-explicit-french",
+      "input": "references/rtl-contrast-11-long-explicit-french/input.pptx",
+      "original": "references/rtl-contrast-11-long-explicit-french/original.pptx",
+      "source": "references/rtl-contrast-11-long-explicit-french/source.opf.json",
+      "expectation": "references/rtl-contrast-11-long-explicit-french/expectation.json",
+      "archiveSha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+      "archiveBytes": 101016,
+      "shapeCount": 3,
+      "slideCount": 1,
+      "automaticControlEligible": false,
+      "actions": []
+    }
+  ],
+  "nativeAuthorized": false,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "publicImportAcceptance": false,
+  "registeredFonts": false,
+  "caseOverrides": [
+    {
+      "id": "rtl-contrast-05-mixed-explicit-arabic",
+      "purpose": "Original05 CS-slot-only discriminator: ONLY Bonjour 1 cs Arabic Typesetting -> declared latin Aptos",
+      "artifactEvidenceHead": "140fc4275bf9726eafff6fceb9a5836e8b9ec8b3",
+      "artifactEvidenceTree": "23e4a8b92880b5e89c57659b7f120f358fa57ee4",
+      "pureConstructorHead": "875945608a214307b527f3cf847524e16a5bb3d2",
+      "originalArchiveSha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197",
+      "archiveSha256": "4bde59d9a5e6e08e365d0a92c111081efea6efb9dfc9e7807ad83f7262166bf7",
+      "archiveBytes": 100889,
+      "shapeCount": 2,
+      "languageUnchanged": true,
+      "allOtherRprTextGeometryUnchanged": true,
+      "notSegmented": true
+    },
+    {
+      "id": "rtl-contrast-05-mixed-explicit-arabic",
+      "purpose": "LRE/PDF legacy-embedding discriminator only; never a source-text/Unicode/product contract change",
+      "parentController": "eb0d8c61c67a5adc99442f1ac6c778d04e109038",
+      "parentCsOnlyArchiveSha256": "4bde59d9a5e6e08e365d0a92c111081efea6efb9dfc9e7807ad83f7262166bf7",
+      "archiveSha256": "faa5324ec7371f9802119d618089bf27f68816c19370e5b892272fd228700dc9",
+      "archiveBytes": 100900,
+      "shapeCount": 2,
+      "insertedCodepoints": [
+        "U+202A",
+        "U+202C"
+      ],
+      "nativeUtf16UnitsAdded": 2,
+      "oldNativeUtf16EqualitySatisfied": false,
+      "currentInputExactTextEqualityMandatory": true,
+      "sourceOpfUnchanged": true,
+      "rPrLanguageSizeFramesThemeArabicTextUnchanged": true,
+      "nativeAcceptance": false,
+      "activation": false
+    },
+    {
+      "id": "rtl-contrast-05-mixed-explicit-arabic",
+      "purpose": "Legacy strong-L class override discriminator, exactly one U+202A to U+202D substitution; no inferred native support",
+      "parentController": "643e40e30cd198f3204ed98037f31cab319f6d74",
+      "parentLreArchiveSha256": "faa5324ec7371f9802119d618089bf27f68816c19370e5b892272fd228700dc9",
+      "archiveSha256": "d862f43ed87e008815a5828ca62c62610ed50359ecc4dcf283e58cb3bef0a858",
+      "archiveBytes": 100900,
+      "shapeCount": 2,
+      "codepointBefore": "U+202A",
+      "codepointAfter": "U+202D",
+      "closingCodepointUnchanged": "U+202C",
+      "positiveAsciiText": "Bonjour 1",
+      "nativeBodyUtf16Before": 18,
+      "nativeBodyUtf16After": 18,
+      "originalSemanticNativeUtf16": 16,
+      "oldSemanticNativeUtf16Equality": false,
+      "currentInputExactTextRequired": true,
+      "sourceOpfUnchanged": true,
+      "allOtherRprLanguageSizeFramesThemeArabicUnchanged": true,
+      "nativeAcceptance": false,
+      "activation": false
+    }
+  ]
+}
