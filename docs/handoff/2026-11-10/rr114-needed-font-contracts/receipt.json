@@ -1,0 +1,184 @@
+{
+  "schema": 1,
+  "source": "7c7ccda85b57904d8ebead8ae52eb1f843d19737",
+  "tree": "770d311e0dfdd6708611af6b752b472c441e8678",
+  "base": "519dd89a80904907a3d0120f90b732065d99a0b1",
+  "archive": {
+    "file": "raw.json.gz",
+    "bytes": 643386,
+    "sha256": "3694fd8f5a2f09e62b619d1f929748537a44d38100b9725d230c9dbf4826a57f"
+  },
+  "records": 93,
+  "rawBytes": 1196323,
+  "exits": {
+    "build-01": 0,
+    "changed-01": 1,
+    "edit-setup-refusal": 1,
+    "encoded-weight-cause-02": 0,
+    "encoded-weight-cause-519": 1,
+    "encoded-weight-regression-after": 0,
+    "encoded-weight-regression-before": 1,
+    "glyph-after-01": 0,
+    "glyph-before-519": 1,
+    "inspect-needed-519": 0,
+    "inspect-pptx-context-519": 0,
+    "install-01": 0,
+    "localized-cli-after": 0,
+    "localized-cli-before-519": 1,
+    "localized-example-before-519": 0,
+    "localized-native-style-519": 0,
+    "localized-public-after": 0,
+    "localized-public-before-519": 1,
+    "pptx-after-01": 0,
+    "pptx-async-context-01": 1,
+    "pptx-async-context-02": 0,
+    "pptx-before-519": 1,
+    "render-build-after-01": 0
+  },
+  "protectedObjects": [
+    {
+      "path": "packages/javascript",
+      "base": "565ae965fe79042c1c081cd72c48afd4a4e76248",
+      "source": "565ae965fe79042c1c081cd72c48afd4a4e76248"
+    },
+    {
+      "path": "packages/cli",
+      "base": "74c6c57b2d099d88eb4e85f969a3f52ee8267908",
+      "source": "74c6c57b2d099d88eb4e85f969a3f52ee8267908"
+    },
+    {
+      "path": "packages/mcp",
+      "base": "4615620db7103deb684d39d8582bf28ceb23912f",
+      "source": "4615620db7103deb684d39d8582bf28ceb23912f"
+    },
+    {
+      "path": "packages/editor",
+      "base": "1b1362e5d8f9813135a5426b167397afe5d16a79",
+      "source": "1b1362e5d8f9813135a5426b167397afe5d16a79"
+    },
+    {
+      "path": "packages/gallery",
+      "base": "609eb292785d0103295a7a2d9eb2fd09c6fbf835",
+      "source": "609eb292785d0103295a7a2d9eb2fd09c6fbf835"
+    },
+    {
+      "path": "packages/pptx/src",
+      "base": "45cd2f12ba290ab51787b65f2637ce9cb088f945",
+      "source": "45cd2f12ba290ab51787b65f2637ce9cb088f945"
+    },
+    {
+      "path": "packages/pptx/vendor",
+      "base": "7ea25333b0de29b0aba2b180c7080fe3fa789ff2",
+      "source": "7ea25333b0de29b0aba2b180c7080fe3fa789ff2"
+    },
+    {
+      "path": "spec",
+      "base": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274",
+      "source": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274"
+    },
+    {
+      "path": ".github",
+      "base": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4",
+      "source": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "base": "2e45923e6a027db20e2593a5befef39473259f2a",
+      "source": "2e45923e6a027db20e2593a5befef39473259f2a"
+    },
+    {
+      "path": "package.json",
+      "base": "846e509ef00827a8efe72c059ca3238f88be6fbb",
+      "source": "846e509ef00827a8efe72c059ca3238f88be6fbb"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "base": "c84e4ff16c7f717d30d69498f565b2b519d13e19",
+      "source": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    },
+    {
+      "path": "packages/render/src/font-demand.js",
+      "base": "f8cc40728f6906a40edaa57eab3475e83b624852",
+      "source": "f8cc40728f6906a40edaa57eab3475e83b624852"
+    },
+    {
+      "path": "packages/render/src/fonts-node.js",
+      "base": "cfb775a76938b163730a3e79bf5d4491cc13a258",
+      "source": "cfb775a76938b163730a3e79bf5d4491cc13a258"
+    },
+    {
+      "path": "packages/render/src/lazy-fonts.js",
+      "base": "09a5a9b8a56170551ac2ffc67e130290f21323b7",
+      "source": "09a5a9b8a56170551ac2ffc67e130290f21323b7"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "packages/pptx/test/lh-63-run-in-quote-marks.mjs",
+      "blob": "52a097353cfc67aa1cc03146b411b2277b47f4cc"
+    },
+    {
+      "path": "packages/pptx/test/node-demand-encoded-weight.mjs",
+      "blob": "d3a5858e745425df9c7315a69ee9551abbf90aa6"
+    },
+    {
+      "path": "packages/pptx/test/node-demand-font-context.mjs",
+      "blob": "e989a03b5464f353877f7079a99225ccadbfa87d"
+    },
+    {
+      "path": "packages/render/src/script-fonts.js",
+      "blob": "e78de2a1ec98710698aa16225097f536d86b02be"
+    },
+    {
+      "path": "packages/render/test/glyph-fallback.mjs",
+      "blob": "bc595e2e218295216922a514a14e3aad6a9747f3"
+    },
+    {
+      "path": "packages/render/test/script-font-encoded-weight.mjs",
+      "blob": "b4c10fc70773d4f7d6071eb2a9a2e245a3cba63c"
+    }
+  ],
+  "required": {
+    "source": "7c7ccda85b57904d8ebead8ae52eb1f843d19737",
+    "status": "RED",
+    "exit": 1,
+    "seconds": 241.6,
+    "passed": 10,
+    "failed": 2,
+    "skipped": 1,
+    "failures": [
+      {
+        "step": "check:gallery-tracker",
+        "reason": "nine test failures from missing historical sparse-evidence inputs; no assertion waiver"
+      },
+      {
+        "step": "tests render",
+        "script": "golden-gate.mjs",
+        "index": 58,
+        "total": 184,
+        "rasterDifferences": 7,
+        "cause": "UNATTRIBUTED; temporary diff deleted by maintained cleanup",
+        "unrun": 126
+      }
+    ],
+    "selectedPptxFiles": 3,
+    "selectedPptx": "PASS",
+    "glyphScript57": "PASS",
+    "newRenderFocused": "PASS outside original aggregate",
+    "typecheck": "SKIP no TypeScript change"
+  },
+  "excludedFontBearingDiagnostic": {
+    "path": "artifacts/font-needed/localized-demand-preview.svg",
+    "bytes": 47933,
+    "sha256": "4ab7901d18b27e197a7e559ef27aa61e0a14562d4167ce4bef5d7e154513a94c",
+    "reason": "contains embedded font programs; no font program uploaded, seven actual path-SVG parity checks are retained in the test result"
+  },
+  "setupFailures": [
+    "edit helper template syntax before source edit",
+    "root-only diagnostic fflate import before package-owned route",
+    "new async test optional quoteLayout lookup before corrected control"
+  ],
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "performanceClaim": false
+}
