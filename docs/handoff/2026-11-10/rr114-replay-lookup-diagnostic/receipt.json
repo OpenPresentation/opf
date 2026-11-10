@@ -1,0 +1,261 @@
+{
+  "schema": 1,
+  "kind": "NON_TIMED_LOOKUP_DIAGNOSTIC",
+  "performanceResult": false,
+  "source": "43ddfc42c9ba3d3ef93d0f57b1f8e443b213c1f7",
+  "tree": "5dea8ba91d43a87f26a06f6ce934b49af06defec",
+  "base": "bcc7d76d7eeeca8cd6102ef6a54a27fd9d4cce38",
+  "sourceFiles": [
+    {
+      "file": "docs/handoff/2026-11-10/rr114-replay-lookup-diagnostic/config.json",
+      "bytes": 35474,
+      "sha256": "f1128a685813c7bd3007394296b02cb9847d0fa4d47044b5a548b8105b4c205a",
+      "blob": "24b3d8e4f6d2a8cc033c4f11328807eed67c3071"
+    },
+    {
+      "file": "docs/handoff/2026-11-10/rr114-replay-lookup-diagnostic/instrument.mjs",
+      "bytes": 3005,
+      "sha256": "1c518eed243179ad7ba36f029eab2a9db51d7d983bd1c13464e9adde757d3d0e",
+      "blob": "d41a32a34684f2565cc3e6b5d4566b27657922cb"
+    },
+    {
+      "file": "docs/handoff/2026-11-10/rr114-replay-lookup-diagnostic/case.mjs",
+      "bytes": 7489,
+      "sha256": "603320b88af3f76989562216c67d5bafe449c932d18eca13e7d9d91f3d280304",
+      "blob": "e11d4ab05c13e2ba76d6d1f077fedb27eb00683e"
+    },
+    {
+      "file": "docs/handoff/2026-11-10/rr114-replay-lookup-diagnostic/run.mjs",
+      "bytes": 5355,
+      "sha256": "b707da3965224b6c9d5f679f0f0434b7888ce510761c95877ff74fc54c48adba",
+      "blob": "6a738f112d216e7d83f2a7d6e61e1410adca9734"
+    },
+    {
+      "file": "docs/handoff/2026-11-10/rr114-replay-lookup-diagnostic/oracle-16.json",
+      "bytes": 63956,
+      "sha256": "776ced0e262366ed8c11299391ebd04f9aa2c87bf916a3c2fc41e60a828218b8",
+      "blob": "22de7e8b4fd23094248924357190ccde0eca3c49"
+    },
+    {
+      "file": "docs/handoff/2026-11-10/rr114-replay-lookup-diagnostic/oracle-36.json",
+      "bytes": 65396,
+      "sha256": "033949e9d2913d500c07ce3ea49c6885f5ae6440f0893832a9c1c18016b9cbd7",
+      "blob": "2b4d3585c55da6d903ba5d872615368772e2dd17"
+    }
+  ],
+  "protectedTrees": [
+    {
+      "file": "packages",
+      "blob": "61b20f3a936c65f7b73480e2e0ec8e22aef221fd"
+    },
+    {
+      "file": "spec",
+      "blob": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274"
+    },
+    {
+      "file": "scripts",
+      "blob": "c75be32ff561d9ee5e6e4a15b78b356ec2eaa7de"
+    },
+    {
+      "file": ".github",
+      "blob": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "blob": "2e45923e6a027db20e2593a5befef39473259f2a"
+    },
+    {
+      "file": "pnpm-workspace.yaml",
+      "blob": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    },
+    {
+      "file": "package.json",
+      "blob": "846e509ef00827a8efe72c059ca3238f88be6fbb"
+    }
+  ],
+  "formal03Evidence": "d2c2bbd41d92e647c7f1bf48103ab0f66153e734",
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 63287,
+    "sha256": "7cac5fd329502ba8846c84e02a46a34b7d31002c7f86861caa38f57c3774e35d",
+    "expandedBytes": 217230,
+    "records": 15,
+    "decodedBytes": 161347
+  },
+  "records": [
+    {
+      "name": "actual/16.json",
+      "bytes": 68194,
+      "sha256": "499a90b5d711a8e377a7e5fe593fa47c863df67c3f81c5dd272f8179edaf47a5"
+    },
+    {
+      "name": "actual/16.json.module.json",
+      "bytes": 569,
+      "sha256": "8872b9dd660cc2276875d7359defd3c1646acdd450950cccb8dfb4361e145170"
+    },
+    {
+      "name": "actual/16.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "actual/16.stdout.log",
+      "bytes": 806,
+      "sha256": "4d89f710ebe03d38ca2ff79f7dfab7ca35303cd07bb793e915446e6ce46c325c"
+    },
+    {
+      "name": "actual/36.json",
+      "bytes": 69672,
+      "sha256": "bffdca47295a1567fffec63996af92559a9eb7bc7f4cb608b3b31855408bc356"
+    },
+    {
+      "name": "actual/36.json.module.json",
+      "bytes": 569,
+      "sha256": "8872b9dd660cc2276875d7359defd3c1646acdd450950cccb8dfb4361e145170"
+    },
+    {
+      "name": "actual/36.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "actual/36.stdout.log",
+      "bytes": 825,
+      "sha256": "4611c8cb24680d23ab5a1f875011496747f2dded3027b79376f7477780f0696e"
+    },
+    {
+      "name": "actual/receipt.json",
+      "bytes": 3014,
+      "sha256": "1664105bc7a01c65241824011ac46500a81f9067e431f1f2bd4b0b53e1c55007"
+    },
+    {
+      "name": "actual/transformed-replay.txt",
+      "bytes": 13567,
+      "sha256": "8eeb9f8fc1e3916803d72b5bd8aecf410ad0f12eec8452a99b981b2f2730d21c"
+    },
+    {
+      "name": "launch/replay-lookup-run01.log",
+      "bytes": 1338,
+      "sha256": "9d1aab15bb287217a0c004177bdca240bc9fd8c2d55d2b57dd82181967766ba5"
+    },
+    {
+      "name": "launch/replay-lookup-run01.exit.json",
+      "bytes": 354,
+      "sha256": "4e650bf58515d8211a45fcf396599522025584806819380000964398bda006e9"
+    },
+    {
+      "name": "launch/replay-lookup-preflight02.log",
+      "bytes": 367,
+      "sha256": "dbe5da04cc6d5f8db499fe5ae59fc5b3de35be42ae869230bb8663001df34c3e"
+    },
+    {
+      "name": "launch/replay-lookup-run02.log",
+      "bytes": 1706,
+      "sha256": "5c2d77b1754b2389f2630957846fcda9c686d285241a676ab77b27821426094f"
+    },
+    {
+      "name": "launch/replay-lookup-run02.exit.json",
+      "bytes": 366,
+      "sha256": "4ea66915f0a4ac180af092e1adb5bd49e97a659771e6014bf7a50ac26c7ab9cd"
+    }
+  ],
+  "summary": [
+    {
+      "size": 16,
+      "internStyleCalls": 141172,
+      "fullKeyLookups": 141172,
+      "rows": {
+        "selection": {
+          "calls": 73512,
+          "fullKeyLookups": 73512,
+          "samePreviousOfKind": 60980,
+          "differentPreviousOfKind": 12531,
+          "firstOfKind": 1,
+          "samePreviousOverall": 60980,
+          "sameSecondPreviousOverall": 60632,
+          "sameEitherLastTwoOverall": 61657,
+          "maxKeyUtf16": 133
+        },
+        "measure": {
+          "calls": 67157,
+          "fullKeyLookups": 67157,
+          "samePreviousOfKind": 62044,
+          "differentPreviousOfKind": 5112,
+          "firstOfKind": 1,
+          "samePreviousOverall": 67157,
+          "sameSecondPreviousOverall": 59930,
+          "sameEitherLastTwoOverall": 67157,
+          "maxKeyUtf16": 133
+        },
+        "probe": {
+          "calls": 503,
+          "fullKeyLookups": 503,
+          "samePreviousOfKind": 499,
+          "differentPreviousOfKind": 3,
+          "firstOfKind": 1,
+          "samePreviousOverall": 503,
+          "sameSecondPreviousOverall": 0,
+          "sameEitherLastTwoOverall": 503,
+          "maxKeyUtf16": 112
+        }
+      },
+      "svgChecks": 16,
+      "physicalFaces": 3,
+      "renderAddedNoCaptureCalls": true
+    },
+    {
+      "size": 36,
+      "internStyleCalls": 339058,
+      "fullKeyLookups": 339058,
+      "rows": {
+        "selection": {
+          "calls": 176008,
+          "fullKeyLookups": 176008,
+          "samePreviousOfKind": 149135,
+          "differentPreviousOfKind": 26872,
+          "firstOfKind": 1,
+          "samePreviousOverall": 149135,
+          "sameSecondPreviousOverall": 148297,
+          "sameEitherLastTwoOverall": 150637,
+          "maxKeyUtf16": 133
+        },
+        "measure": {
+          "calls": 161942,
+          "fullKeyLookups": 161942,
+          "samePreviousOfKind": 151403,
+          "differentPreviousOfKind": 10538,
+          "firstOfKind": 1,
+          "samePreviousOverall": 161942,
+          "sameSecondPreviousOverall": 146738,
+          "sameEitherLastTwoOverall": 161942,
+          "maxKeyUtf16": 133
+        },
+        "probe": {
+          "calls": 1108,
+          "fullKeyLookups": 1108,
+          "samePreviousOfKind": 1097,
+          "differentPreviousOfKind": 10,
+          "firstOfKind": 1,
+          "samePreviousOverall": 1108,
+          "sameSecondPreviousOverall": 0,
+          "sameEitherLastTwoOverall": 1108,
+          "maxKeyUtf16": 112
+        }
+      },
+      "svgChecks": 36,
+      "physicalFaces": 3,
+      "renderAddedNoCaptureCalls": true
+    }
+  ],
+  "actualChildren": 2,
+  "actualSvgChecks": 52,
+  "retries": 0,
+  "initialSetup": {
+    "source": "d0c4e38ee84949b9e5f00e8f66ac5e954c1ccaf2",
+    "status": "RED",
+    "childrenLaunched": 0,
+    "cause": "One excess parent directory in harness root; no output or renderer child existed. Corrected source-only preflight passed before original two-child budget."
+  },
+  "requiredChangedGate": "UNRUN; no install/build/product change in this evidence-only task",
+  "scope": "Counts only. No timing/RSS claim, no cache implementation, no product source/dist change, no native/registry/release acceptance."
+}

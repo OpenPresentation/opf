@@ -8,3 +8,13 @@ Counters are split by existing selection/measure/probe caller. Consecutive-per-k
 
 The runner requires a frozen clean source head and an external fresh output path. No install, package build, Office, CI or benchmark is part of this packet. Original failed trials/formal03 and every product branch stay frozen. Source-only syntax/preflight precedes the once-only diagnostic; executed outcome and offline evidence verification will be appended after terminal.
 Initial driver source d0c4e38 refused before every child/output because the repository root was resolved one parent too high (C:/opf-work); original run01 log/exit are preserved,0/2diagnostic children ran. Corrected only that root and added a source-only preflight route before actual children. This is a harness setup correction, not a product or performance result. No actual diagnostic child is retried.
+
+Executed outcome: two childrenPASS,52exact SVG hashes/3physical face+file/license identities per child, no actual-child retries or product changes. Original pre-child setup RED is preserved. [Results and interpretation](RESULTS.md) distinguish high full-key repeat rates from performance claims.
+
+Offline replay (no renderer, test or product import):
+
+```sh
+node docs/handoff/2026-11-10/rr114-replay-lookup-diagnostic/verify.mjs
+```
+
+The source-only predicate-review and prior formal03 screening remain separate. This packet does not accept an optimization or add a release claim. Full changed checks are UNRUN in this no-install/no-build evidence-only task.
