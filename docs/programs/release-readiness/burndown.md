@@ -1182,3 +1182,5 @@ package, close RR-68 or claim a new release result; normal source integration ga
 
 
 - 2026-11-10 — RR-105: preserved actual failed/unsealed reference suite03 at evidence bb90c7207; shared active-option bar plot repair now retains explicit references. Legacy helper guard and no-reference output remain unchanged; source/mapped/native qualification scopes stay separate. See the active-bar handoff for vetoable decisions and original setup/refusal history.
+
+- 2026-11-10 — RR-105 active bar reference source044fc7d6a:8 focused controls PASS and16 actual no-reference SVG/PPTX byte pairs unchanged;3 prepared-font PNGs inspected and public imports retain1/2/2 references without ordinary duplicates. Required mapper remains13PASS/3RED178.2s, core4246/4248; exact-HEAD sparse replay35corpus+1text+8gallery PASS,1gallery freshness RED retained. Node-validator identity mismatch separately reproduced on immutable069 and assigned independently. No tracker/golden waiver or physical/current-consumer acceptance.
