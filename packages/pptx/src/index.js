@@ -302,7 +302,7 @@ export async function toPptx(input, options = {}) {
   if (options.as === 'images') { if(options.fonts?.registry?.fontNames)await options.fonts?.ensure?.(presentation,{catalogs:options.catalogs,...(options.date?{date:options.date}:{}),renderOptions:{catalogs:options.catalogs,...(options.date?{date:options.date}:{})}}); return pictureSlidesPptx(presentation, options); }
   // `options.fonts` is the fonts handle (the renderer's loadFonts()); the exporter reads its measurement, wrapped so the package names the
   // chosen family (FF-31). Internally `options.textMeasurement` is that wrapped measurement; it is not a public option.
-  options = {...options, textMeasurement: chosenFamilyMeasurement(options.fonts?.textMeasurement), svgRasters: new Map()};
+  options = {...options, textMeasurement: chosenFamilyMeasurement(options.fonts?.textMeasurement), svgRasters: new Map(), nativeMeasurementRequests: new Set()};
   // LH-28: safe mode measures each Latin text family as the Office-safe family it is written as, so composition lays out the
   // text PowerPoint draws on any machine. The design class of a family (sans-serif, serif, monospace) comes from the font
   // scheme records the slides resolve.
@@ -2636,6 +2636,15 @@ function configurePresentation(pptx, presentation, context) {
   };
 }
 
+// Requests are already resolved through the chosen/safe measurement wrappers. One export never prepares the same request twice.
+async function prepareNativeMeasurements(presentation, options, requests) {
+  const key = ({text, style}) => JSON.stringify([text, style.fontFamily, style.fontWeight ?? 400, !!style.italic]);
+  const pending = requests.filter(request => !options.nativeMeasurementRequests.has(key(request)));
+  if (!pending.length) return;
+  await options.fonts.ensure(presentation, {renderOptions: {catalogs: options.catalogs, ...(options.date ? {date: options.date} : {})}, preserveChosenFamilies: true, ...(options.safeTypeface ? {mapFamily: options.safeTypeface} : {}), measurementRequests: pending});
+  for (const request of pending) options.nativeMeasurementRequests.add(key(request));
+}
+
 async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, options) {
   options = {...options, textMeasurement: slideTextMeasurement(presentation, slideIndex, options)};
   const slide = pptx.addSlide();
@@ -2669,6 +2678,13 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // what import reads the slide's layout from), in a variant whose Body placeholder sits at the recomposed body's box.
   const recomposed = template !== undefined && geometry.recomposed !== undefined;
   const automatic = opfSlide.layout === undefined || opfSlide.layout === 'auto' || recomposed;
+  // Native wrap measures an undrawn base alphabet after the ordinary SVG demand analysis.
+  // Collect at the planner's actual request boundary; prepare asynchronously before its unchanged synchronous plan.
+  if (options.bodyText === 'native' && options.fonts?.registry?.fontNames && options.fonts?.ensure) {
+    const measurementRequests = [];
+    planNativeBody(opfSlide, geometry, {automatic, textMeasurement: options.textMeasurement, collectMeasurement: request => measurementRequests.push(request)});
+    await prepareNativeMeasurements(presentation, options, measurementRequests);
+  }
   const nativeBody = options.bodyText === 'native' ? planNativeBody(opfSlide, geometry, {automatic, report: options.onDiagnostic, textMeasurement: options.textMeasurement}) : undefined;
   if (template && nativeBody) template = recomposed
     ? {...template, key: `${template.key}\u0000recomposed-native-body`, recomposedBody: {box: nativeBody.box, anchor: nativeBody.anchor, style: {...nativeBody.item.textStyle, fontSize: nativeBody.item.text.fontSize, alignment: nativeBody.item.alignment}}}
@@ -2737,6 +2753,11 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     // block, so it can bind to the Title placeholder like a one-line title (Keynote reports `title showing` only for a bound title).
     const wantsNativeTitle = options.bodyText === 'native' && (template || context.automaticSlides[slideIndex]) && isNativeTitle(item);
     const titleFace = wantsNativeTitle ? nativeFontOptions(item.textStyle) : undefined;
+    if (wantsNativeTitle && options.fonts?.registry?.fontNames && options.fonts?.ensure) {
+      const measurementRequests = [];
+      nativeTitleWrapBox(item, geometry, options.textMeasurement, {nativeStyle: {fontFamily: options.safeTypeface ? options.safeTypeface(titleFace.fontFace) : titleFace.fontFace, fontWeight: titleFace.bold ? 700 : 400, italic: titleFace.italic === true}, collectMeasurement: request => measurementRequests.push(request)});
+      await prepareNativeMeasurements(presentation, options, measurementRequests);
+    }
     const nativeTitle = wantsNativeTitle ? nativeTitleWrapBox(item, geometry, options.textMeasurement, {
       nativeStyle: {fontFamily: options.safeTypeface ? options.safeTypeface(titleFace.fontFace) : titleFace.fontFace, fontWeight: titleFace.bold ? 700 : 400, italic: titleFace.italic === true},
       report: reason => options.onDiagnostic?.({

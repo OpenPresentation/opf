@@ -1,0 +1,11 @@
+# RR-114 native measurement dependencies — Mac successor
+
+This successor starts from fresh main `a52dc9441f7eec9dc6f72debb174339758e1761e`, normally merges canonical integration `7618e916dacc166463cddf5f2ea029f523bbe51d`, then the analysis-only PR1270. It does not modify the frozen font-slot lane or assert native PowerPoint acceptance.
+
+The untouched build reproduces the public-API failure in [baseline-probe.log](baseline-probe.log): `loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation})` prepares three drawn faces, but `toPptx(..., {fonts, bodyText: 'native'})` then measures the undrawn Aptos400 role in `nativeWrapBox` and throws `font-unavailable`.
+
+Vetoable decision **RR114-NATIVE-MEASUREMENTS** adds explicit `{text, size, style}` dependencies to the serialized Node `ensure` channel. Additional requests are removed from SVG options before analysis/cache identity is computed. The existing native planner collects its actual alphabet measurement only after its current body eligibility and line checks. The async slide exporter prepares it before running the unchanged synchronous wrap calculation. Requests already use the exporter's chosen/safe measurement wrapper; loader selection applies its existing aliases and substitution policy once. Native chosen-family names remain unchanged. A per-export set avoids preparing duplicate requests. Unsupported bodies do not cause default-role loading. No whole-pack loading or heuristic changes are used.
+
+Focused regressions cover public native selected/safe exports against exact eager slide/theme XML, actual native body shape presence, imported text/style equality, preserved outlined SVG, bounded incremental faces, repeat export, in-place style/text edits, aliases, custom and no-font providers, missing/malformed requests and queue recovery, and rejected-body behavior. Their execution status is pending until recorded below. Existing native wrap, demand, fault and optional-renderer controls must also run. Required `check:changed` remains pending.
+
+Node24.21.0 and pinned pnpm10.33.2 are used. The first build attempt hit the unrelated global pnpm executable; only its exact owned parent/child PIDs were stopped, and the pinned task-local shim build passed. No Office, browser, golden regeneration, release or merge ran.
