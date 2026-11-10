@@ -1,0 +1,1916 @@
+{
+  "scope": "Complete source/XML/report read-only comparison; no mutant or COM action",
+  "source": {
+    "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c",
+    "document": {
+      "language": "ar-SA",
+      "slides": [
+        {
+          "title": "نص لاتيني بلغة عربية صريحة",
+          "items": [
+            [
+              {
+                "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it around the customer journey.",
+                "lang": "ar-SA"
+              }
+            ]
+          ],
+          "numbering": "arabic"
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "id": "original",
+      "input": {
+        "path": "C:/opf-work/b07-direction-suite01/inputs/original09.pptx",
+        "bytes": 101027,
+        "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+      },
+      "xmlSha256": "6ee08c297717d3dfab6c1ca34b8e4480db07325de1689641a0f7806804f1e9ca",
+      "bad": {
+        "shape": {
+          "p:nvSpPr": {
+            "p:cNvPr": {
+              "id": "3",
+              "name": "OPF list slides.0.items line 0"
+            },
+            "p:cNvSpPr": {
+              "txBox": "1"
+            },
+            "p:nvPr": ""
+          },
+          "p:spPr": {
+            "a:xfrm": {
+              "a:off": {
+                "x": "548640",
+                "y": "3430822"
+              },
+              "a:ext": {
+                "cx": "11094720",
+                "cy": "429959"
+              }
+            },
+            "a:prstGeom": {
+              "a:avLst": "",
+              "prst": "rect"
+            },
+            "a:noFill": "",
+            "a:ln": ""
+          },
+          "p:txBody": {
+            "a:bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "a:lstStyle": "",
+            "a:p": {
+              "a:pPr": {
+                "a:lnSpc": {
+                  "a:spcPct": {
+                    "val": "100000"
+                  }
+                },
+                "a:buClr": {
+                  "a:schemeClr": {
+                    "val": "tx1"
+                  }
+                },
+                "a:buSzPts": {
+                  "val": "2775"
+                },
+                "a:buFont": {
+                  "typeface": "Aptos"
+                },
+                "a:buAutoNum": {
+                  "type": "arabicPeriod"
+                },
+                "algn": "l",
+                "marL": "394654",
+                "indent": "-394654",
+                "rtl": "0"
+              },
+              "a:r": {
+                "a:rPr": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "typeface": "Aptos",
+                    "pitchFamily": "34",
+                    "charset": "0"
+                  },
+                  "a:cs": {
+                    "typeface": "Arabic Typesetting"
+                  },
+                  "lang": "ar-SA",
+                  "altLang": "en-US",
+                  "sz": "2775",
+                  "dirty": "0"
+                },
+                "a:t": "Item 1: Customers told us onboarding took too long, so we rebuilt it "
+              },
+              "a:endParaRPr": {
+                "lang": "ar-SA",
+                "sz": "2775",
+                "dirty": "0"
+              }
+            }
+          }
+        },
+        "rawFragmentSha256": "b84275a79f12dc84180f1aaa210cd67fe1eecbf6a4d2b4b8824d40aa5ac95a89",
+        "bodyPr": {
+          "wrap": "none",
+          "lIns": "0",
+          "tIns": "0",
+          "rIns": "0",
+          "bIns": "0",
+          "rtlCol": "0",
+          "anchor": "t"
+        },
+        "pPr": {
+          "a:lnSpc": {
+            "a:spcPct": {
+              "val": "100000"
+            }
+          },
+          "a:buClr": {
+            "a:schemeClr": {
+              "val": "tx1"
+            }
+          },
+          "a:buSzPts": {
+            "val": "2775"
+          },
+          "a:buFont": {
+            "typeface": "Aptos"
+          },
+          "a:buAutoNum": {
+            "type": "arabicPeriod"
+          },
+          "algn": "l",
+          "marL": "394654",
+          "indent": "-394654",
+          "rtl": "0"
+        },
+        "pPrChildOrder": [
+          "a:lnSpc",
+          "a:buClr",
+          "a:buSzPts",
+          "a:buFont",
+          "a:buAutoNum"
+        ],
+        "rPr": [
+          {
+            "a:solidFill": {
+              "a:schemeClr": {
+                "val": "tx1"
+              }
+            },
+            "a:latin": {
+              "typeface": "Aptos",
+              "pitchFamily": "34",
+              "charset": "0"
+            },
+            "a:cs": {
+              "typeface": "Arabic Typesetting"
+            },
+            "lang": "ar-SA",
+            "altLang": "en-US",
+            "sz": "2775",
+            "dirty": "0"
+          }
+        ],
+        "endParaRPr": {
+          "lang": "ar-SA",
+          "sz": "2775",
+          "dirty": "0"
+        },
+        "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+        "textUtf16": [
+          73,
+          116,
+          101,
+          109,
+          32,
+          49,
+          58,
+          32,
+          67,
+          117,
+          115,
+          116,
+          111,
+          109,
+          101,
+          114,
+          115,
+          32,
+          116,
+          111,
+          108,
+          100,
+          32,
+          117,
+          115,
+          32,
+          111,
+          110,
+          98,
+          111,
+          97,
+          114,
+          100,
+          105,
+          110,
+          103,
+          32,
+          116,
+          111,
+          111,
+          107,
+          32,
+          116,
+          111,
+          111,
+          32,
+          108,
+          111,
+          110,
+          103,
+          44,
+          32,
+          115,
+          111,
+          32,
+          119,
+          101,
+          32,
+          114,
+          101,
+          98,
+          117,
+          105,
+          108,
+          116,
+          32,
+          105,
+          116,
+          32
+        ],
+        "asciiOnly": true,
+        "trailingSpace": true,
+        "digitMatches": [
+          {
+            "text": "1",
+            "index": 5
+          }
+        ],
+        "punctuation": [
+          {
+            "text": ":",
+            "index": 6
+          },
+          {
+            "text": ",",
+            "index": 50
+          }
+        ]
+      },
+      "good": {
+        "shape": {
+          "p:nvSpPr": {
+            "p:cNvPr": {
+              "id": "4",
+              "name": "OPF list slides.0.items line 1"
+            },
+            "p:cNvSpPr": {
+              "txBox": "1"
+            },
+            "p:nvPr": ""
+          },
+          "p:spPr": {
+            "a:xfrm": {
+              "a:off": {
+                "x": "943294",
+                "y": "3860780"
+              },
+              "a:ext": {
+                "cx": "10700066",
+                "cy": "429959"
+              }
+            },
+            "a:prstGeom": {
+              "a:avLst": "",
+              "prst": "rect"
+            },
+            "a:noFill": "",
+            "a:ln": ""
+          },
+          "p:txBody": {
+            "a:bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "a:lstStyle": "",
+            "a:p": {
+              "a:pPr": {
+                "a:lnSpc": {
+                  "a:spcPct": {
+                    "val": "100000"
+                  }
+                },
+                "a:buNone": "",
+                "algn": "l",
+                "indent": "0",
+                "marL": "0",
+                "rtl": "0"
+              },
+              "a:r": {
+                "a:rPr": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "typeface": "Aptos",
+                    "pitchFamily": "34",
+                    "charset": "0"
+                  },
+                  "a:cs": {
+                    "typeface": "Arabic Typesetting"
+                  },
+                  "lang": "ar-SA",
+                  "altLang": "en-US",
+                  "sz": "2775",
+                  "dirty": "0"
+                },
+                "a:t": "around the customer journey."
+              },
+              "a:endParaRPr": {
+                "lang": "ar-SA",
+                "sz": "2775",
+                "dirty": "0"
+              }
+            }
+          }
+        },
+        "rawFragmentSha256": "7aec818aa5c3647b05171c09e15b3f39071d8dfd20b862b7dd24ac9550d753d9",
+        "bodyPr": {
+          "wrap": "none",
+          "lIns": "0",
+          "tIns": "0",
+          "rIns": "0",
+          "bIns": "0",
+          "rtlCol": "0",
+          "anchor": "t"
+        },
+        "pPr": {
+          "a:lnSpc": {
+            "a:spcPct": {
+              "val": "100000"
+            }
+          },
+          "a:buNone": "",
+          "algn": "l",
+          "indent": "0",
+          "marL": "0",
+          "rtl": "0"
+        },
+        "pPrChildOrder": [
+          "a:lnSpc",
+          "a:buNone"
+        ],
+        "rPr": [
+          {
+            "a:solidFill": {
+              "a:schemeClr": {
+                "val": "tx1"
+              }
+            },
+            "a:latin": {
+              "typeface": "Aptos",
+              "pitchFamily": "34",
+              "charset": "0"
+            },
+            "a:cs": {
+              "typeface": "Arabic Typesetting"
+            },
+            "lang": "ar-SA",
+            "altLang": "en-US",
+            "sz": "2775",
+            "dirty": "0"
+          }
+        ],
+        "endParaRPr": {
+          "lang": "ar-SA",
+          "sz": "2775",
+          "dirty": "0"
+        },
+        "text": "around the customer journey.",
+        "textUtf16": [
+          97,
+          114,
+          111,
+          117,
+          110,
+          100,
+          32,
+          116,
+          104,
+          101,
+          32,
+          99,
+          117,
+          115,
+          116,
+          111,
+          109,
+          101,
+          114,
+          32,
+          106,
+          111,
+          117,
+          114,
+          110,
+          101,
+          121,
+          46
+        ],
+        "asciiOnly": true,
+        "trailingSpace": false,
+        "digitMatches": [],
+        "punctuation": [
+          {
+            "text": ".",
+            "index": 27
+          }
+        ]
+      },
+      "completeShapeDiff": [
+        {
+          "path": "/p:nvSpPr/p:cNvPr/id",
+          "before": "3",
+          "after": "4"
+        },
+        {
+          "path": "/p:nvSpPr/p:cNvPr/name",
+          "before": "OPF list slides.0.items line 0",
+          "after": "OPF list slides.0.items line 1"
+        },
+        {
+          "path": "/p:spPr/a:xfrm/a:off/x",
+          "before": "548640",
+          "after": "943294"
+        },
+        {
+          "path": "/p:spPr/a:xfrm/a:off/y",
+          "before": "3430822",
+          "after": "3860780"
+        },
+        {
+          "path": "/p:spPr/a:xfrm/a:ext/cx",
+          "before": "11094720",
+          "after": "10700066"
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/a:buClr",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "a:schemeClr": {
+              "val": "tx1"
+            }
+          }
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/a:buSzPts",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "val": "2775"
+          }
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/a:buFont",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "typeface": "Aptos"
+          }
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/a:buAutoNum",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "type": "arabicPeriod"
+          }
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/marL",
+          "before": "394654",
+          "after": "0"
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/indent",
+          "before": "-394654",
+          "after": "0"
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/a:buNone",
+          "beforePresent": false,
+          "afterPresent": true,
+          "after": ""
+        },
+        {
+          "path": "/p:txBody/a:p/a:r/a:t",
+          "before": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+          "after": "around the customer journey."
+        }
+      ],
+      "completePPrDiff": [
+        {
+          "path": "/a:buClr",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "a:schemeClr": {
+              "val": "tx1"
+            }
+          }
+        },
+        {
+          "path": "/a:buSzPts",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "val": "2775"
+          }
+        },
+        {
+          "path": "/a:buFont",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "typeface": "Aptos"
+          }
+        },
+        {
+          "path": "/a:buAutoNum",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "type": "arabicPeriod"
+          }
+        },
+        {
+          "path": "/marL",
+          "before": "394654",
+          "after": "0"
+        },
+        {
+          "path": "/indent",
+          "before": "-394654",
+          "after": "0"
+        },
+        {
+          "path": "/a:buNone",
+          "beforePresent": false,
+          "afterPresent": true,
+          "after": ""
+        }
+      ],
+      "completeRPrEqual": true,
+      "completeBodyPrEqual": true,
+      "completeEndParaRPrEqual": true
+    },
+    {
+      "id": "bullet-none",
+      "input": {
+        "path": "C:/opf-work/b07-bullet-suite01/inputs/bullet-none.pptx",
+        "bytes": 101009,
+        "sha256": "c01016d8214ff7b60ea3ea6f29b11563cd7fa958de9184130733b14cc739f29c"
+      },
+      "xmlSha256": "25e824547321a35bb19c625515a79eacc4b6196da12f0a5e9911a5ff19c15380",
+      "bad": {
+        "shape": {
+          "p:nvSpPr": {
+            "p:cNvPr": {
+              "id": "3",
+              "name": "OPF list slides.0.items line 0"
+            },
+            "p:cNvSpPr": {
+              "txBox": "1"
+            },
+            "p:nvPr": ""
+          },
+          "p:spPr": {
+            "a:xfrm": {
+              "a:off": {
+                "x": "548640",
+                "y": "3430822"
+              },
+              "a:ext": {
+                "cx": "11094720",
+                "cy": "429959"
+              }
+            },
+            "a:prstGeom": {
+              "a:avLst": "",
+              "prst": "rect"
+            },
+            "a:noFill": "",
+            "a:ln": ""
+          },
+          "p:txBody": {
+            "a:bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "a:lstStyle": "",
+            "a:p": {
+              "a:pPr": {
+                "a:lnSpc": {
+                  "a:spcPct": {
+                    "val": "100000"
+                  }
+                },
+                "a:buClr": {
+                  "a:schemeClr": {
+                    "val": "tx1"
+                  }
+                },
+                "a:buSzPts": {
+                  "val": "2775"
+                },
+                "a:buFont": {
+                  "typeface": "Aptos"
+                },
+                "a:buNone": "",
+                "algn": "l",
+                "marL": "394654",
+                "indent": "-394654",
+                "rtl": "0"
+              },
+              "a:r": {
+                "a:rPr": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "typeface": "Aptos",
+                    "pitchFamily": "34",
+                    "charset": "0"
+                  },
+                  "a:cs": {
+                    "typeface": "Arabic Typesetting"
+                  },
+                  "lang": "ar-SA",
+                  "altLang": "en-US",
+                  "sz": "2775",
+                  "dirty": "0"
+                },
+                "a:t": "Item 1: Customers told us onboarding took too long, so we rebuilt it "
+              },
+              "a:endParaRPr": {
+                "lang": "ar-SA",
+                "sz": "2775",
+                "dirty": "0"
+              }
+            }
+          }
+        },
+        "rawFragmentSha256": "86542c250874db81b8c419585427ff0df501fc1b09a6ac605cc528439577a6fb",
+        "bodyPr": {
+          "wrap": "none",
+          "lIns": "0",
+          "tIns": "0",
+          "rIns": "0",
+          "bIns": "0",
+          "rtlCol": "0",
+          "anchor": "t"
+        },
+        "pPr": {
+          "a:lnSpc": {
+            "a:spcPct": {
+              "val": "100000"
+            }
+          },
+          "a:buClr": {
+            "a:schemeClr": {
+              "val": "tx1"
+            }
+          },
+          "a:buSzPts": {
+            "val": "2775"
+          },
+          "a:buFont": {
+            "typeface": "Aptos"
+          },
+          "a:buNone": "",
+          "algn": "l",
+          "marL": "394654",
+          "indent": "-394654",
+          "rtl": "0"
+        },
+        "pPrChildOrder": [
+          "a:lnSpc",
+          "a:buClr",
+          "a:buSzPts",
+          "a:buFont",
+          "a:buNone"
+        ],
+        "rPr": [
+          {
+            "a:solidFill": {
+              "a:schemeClr": {
+                "val": "tx1"
+              }
+            },
+            "a:latin": {
+              "typeface": "Aptos",
+              "pitchFamily": "34",
+              "charset": "0"
+            },
+            "a:cs": {
+              "typeface": "Arabic Typesetting"
+            },
+            "lang": "ar-SA",
+            "altLang": "en-US",
+            "sz": "2775",
+            "dirty": "0"
+          }
+        ],
+        "endParaRPr": {
+          "lang": "ar-SA",
+          "sz": "2775",
+          "dirty": "0"
+        },
+        "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+        "textUtf16": [
+          73,
+          116,
+          101,
+          109,
+          32,
+          49,
+          58,
+          32,
+          67,
+          117,
+          115,
+          116,
+          111,
+          109,
+          101,
+          114,
+          115,
+          32,
+          116,
+          111,
+          108,
+          100,
+          32,
+          117,
+          115,
+          32,
+          111,
+          110,
+          98,
+          111,
+          97,
+          114,
+          100,
+          105,
+          110,
+          103,
+          32,
+          116,
+          111,
+          111,
+          107,
+          32,
+          116,
+          111,
+          111,
+          32,
+          108,
+          111,
+          110,
+          103,
+          44,
+          32,
+          115,
+          111,
+          32,
+          119,
+          101,
+          32,
+          114,
+          101,
+          98,
+          117,
+          105,
+          108,
+          116,
+          32,
+          105,
+          116,
+          32
+        ],
+        "asciiOnly": true,
+        "trailingSpace": true,
+        "digitMatches": [
+          {
+            "text": "1",
+            "index": 5
+          }
+        ],
+        "punctuation": [
+          {
+            "text": ":",
+            "index": 6
+          },
+          {
+            "text": ",",
+            "index": 50
+          }
+        ]
+      },
+      "good": {
+        "shape": {
+          "p:nvSpPr": {
+            "p:cNvPr": {
+              "id": "4",
+              "name": "OPF list slides.0.items line 1"
+            },
+            "p:cNvSpPr": {
+              "txBox": "1"
+            },
+            "p:nvPr": ""
+          },
+          "p:spPr": {
+            "a:xfrm": {
+              "a:off": {
+                "x": "943294",
+                "y": "3860780"
+              },
+              "a:ext": {
+                "cx": "10700066",
+                "cy": "429959"
+              }
+            },
+            "a:prstGeom": {
+              "a:avLst": "",
+              "prst": "rect"
+            },
+            "a:noFill": "",
+            "a:ln": ""
+          },
+          "p:txBody": {
+            "a:bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "a:lstStyle": "",
+            "a:p": {
+              "a:pPr": {
+                "a:lnSpc": {
+                  "a:spcPct": {
+                    "val": "100000"
+                  }
+                },
+                "a:buNone": "",
+                "algn": "l",
+                "indent": "0",
+                "marL": "0",
+                "rtl": "0"
+              },
+              "a:r": {
+                "a:rPr": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "typeface": "Aptos",
+                    "pitchFamily": "34",
+                    "charset": "0"
+                  },
+                  "a:cs": {
+                    "typeface": "Arabic Typesetting"
+                  },
+                  "lang": "ar-SA",
+                  "altLang": "en-US",
+                  "sz": "2775",
+                  "dirty": "0"
+                },
+                "a:t": "around the customer journey."
+              },
+              "a:endParaRPr": {
+                "lang": "ar-SA",
+                "sz": "2775",
+                "dirty": "0"
+              }
+            }
+          }
+        },
+        "rawFragmentSha256": "7aec818aa5c3647b05171c09e15b3f39071d8dfd20b862b7dd24ac9550d753d9",
+        "bodyPr": {
+          "wrap": "none",
+          "lIns": "0",
+          "tIns": "0",
+          "rIns": "0",
+          "bIns": "0",
+          "rtlCol": "0",
+          "anchor": "t"
+        },
+        "pPr": {
+          "a:lnSpc": {
+            "a:spcPct": {
+              "val": "100000"
+            }
+          },
+          "a:buNone": "",
+          "algn": "l",
+          "indent": "0",
+          "marL": "0",
+          "rtl": "0"
+        },
+        "pPrChildOrder": [
+          "a:lnSpc",
+          "a:buNone"
+        ],
+        "rPr": [
+          {
+            "a:solidFill": {
+              "a:schemeClr": {
+                "val": "tx1"
+              }
+            },
+            "a:latin": {
+              "typeface": "Aptos",
+              "pitchFamily": "34",
+              "charset": "0"
+            },
+            "a:cs": {
+              "typeface": "Arabic Typesetting"
+            },
+            "lang": "ar-SA",
+            "altLang": "en-US",
+            "sz": "2775",
+            "dirty": "0"
+          }
+        ],
+        "endParaRPr": {
+          "lang": "ar-SA",
+          "sz": "2775",
+          "dirty": "0"
+        },
+        "text": "around the customer journey.",
+        "textUtf16": [
+          97,
+          114,
+          111,
+          117,
+          110,
+          100,
+          32,
+          116,
+          104,
+          101,
+          32,
+          99,
+          117,
+          115,
+          116,
+          111,
+          109,
+          101,
+          114,
+          32,
+          106,
+          111,
+          117,
+          114,
+          110,
+          101,
+          121,
+          46
+        ],
+        "asciiOnly": true,
+        "trailingSpace": false,
+        "digitMatches": [],
+        "punctuation": [
+          {
+            "text": ".",
+            "index": 27
+          }
+        ]
+      },
+      "completeShapeDiff": [
+        {
+          "path": "/p:nvSpPr/p:cNvPr/id",
+          "before": "3",
+          "after": "4"
+        },
+        {
+          "path": "/p:nvSpPr/p:cNvPr/name",
+          "before": "OPF list slides.0.items line 0",
+          "after": "OPF list slides.0.items line 1"
+        },
+        {
+          "path": "/p:spPr/a:xfrm/a:off/x",
+          "before": "548640",
+          "after": "943294"
+        },
+        {
+          "path": "/p:spPr/a:xfrm/a:off/y",
+          "before": "3430822",
+          "after": "3860780"
+        },
+        {
+          "path": "/p:spPr/a:xfrm/a:ext/cx",
+          "before": "11094720",
+          "after": "10700066"
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/a:buClr",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "a:schemeClr": {
+              "val": "tx1"
+            }
+          }
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/a:buSzPts",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "val": "2775"
+          }
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/a:buFont",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "typeface": "Aptos"
+          }
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/marL",
+          "before": "394654",
+          "after": "0"
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/indent",
+          "before": "-394654",
+          "after": "0"
+        },
+        {
+          "path": "/p:txBody/a:p/a:r/a:t",
+          "before": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+          "after": "around the customer journey."
+        }
+      ],
+      "completePPrDiff": [
+        {
+          "path": "/a:buClr",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "a:schemeClr": {
+              "val": "tx1"
+            }
+          }
+        },
+        {
+          "path": "/a:buSzPts",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "val": "2775"
+          }
+        },
+        {
+          "path": "/a:buFont",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "typeface": "Aptos"
+          }
+        },
+        {
+          "path": "/marL",
+          "before": "394654",
+          "after": "0"
+        },
+        {
+          "path": "/indent",
+          "before": "-394654",
+          "after": "0"
+        }
+      ],
+      "completeRPrEqual": true,
+      "completeBodyPrEqual": true,
+      "completeEndParaRPrEqual": true
+    },
+    {
+      "id": "saved",
+      "input": {
+        "path": "C:/opf-work/b07-bullet-native01/native/native-furniture-control.pptx",
+        "bytes": 104189,
+        "sha256": "d646fe2a36fb9541b0bb95da21fa806a550cf9249ba9e009bda1931a2b7b7f1a"
+      },
+      "xmlSha256": "9ef53fddd2d89b0ba772f41861d4e78e59f3c2162da36a3fa10e41a9a6dc655b",
+      "bad": {
+        "shape": {
+          "p:nvSpPr": {
+            "p:cNvPr": {
+              "id": "3",
+              "name": "OPF list slides.0.items line 0"
+            },
+            "p:cNvSpPr": {
+              "txBox": "1"
+            },
+            "p:nvPr": ""
+          },
+          "p:spPr": {
+            "a:xfrm": {
+              "a:off": {
+                "x": "548640",
+                "y": "3430822"
+              },
+              "a:ext": {
+                "cx": "11094720",
+                "cy": "429959"
+              }
+            },
+            "a:prstGeom": {
+              "a:avLst": "",
+              "prst": "rect"
+            },
+            "a:noFill": "",
+            "a:ln": ""
+          },
+          "p:txBody": {
+            "a:bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "a:lstStyle": "",
+            "a:p": {
+              "a:pPr": {
+                "a:lnSpc": {
+                  "a:spcPct": {
+                    "val": "100000"
+                  }
+                },
+                "a:buClr": {
+                  "a:schemeClr": {
+                    "val": "tx1"
+                  }
+                },
+                "a:buSzPts": {
+                  "val": "2775"
+                },
+                "a:buFont": {
+                  "typeface": "Aptos"
+                },
+                "a:buNone": "",
+                "marL": "394654",
+                "indent": "-394654",
+                "algn": "l",
+                "rtl": "0"
+              },
+              "a:r": {
+                "a:rPr": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "typeface": "Aptos",
+                    "pitchFamily": "34",
+                    "charset": "0"
+                  },
+                  "a:cs": {
+                    "typeface": "Arabic Typesetting"
+                  },
+                  "lang": "ar-SA",
+                  "altLang": "en-US",
+                  "sz": "2775",
+                  "dirty": "0"
+                },
+                "a:t": "Item 1: Customers told us onboarding took too long, so we rebuilt it "
+              },
+              "a:endParaRPr": {
+                "lang": "ar-SA",
+                "sz": "2775",
+                "dirty": "0"
+              }
+            }
+          }
+        },
+        "rawFragmentSha256": "c63d361016d2a9a0ebfc4405cc9df7d5c471b76e81dd87cc8e5171063da13b23",
+        "bodyPr": {
+          "wrap": "none",
+          "lIns": "0",
+          "tIns": "0",
+          "rIns": "0",
+          "bIns": "0",
+          "rtlCol": "0",
+          "anchor": "t"
+        },
+        "pPr": {
+          "a:lnSpc": {
+            "a:spcPct": {
+              "val": "100000"
+            }
+          },
+          "a:buClr": {
+            "a:schemeClr": {
+              "val": "tx1"
+            }
+          },
+          "a:buSzPts": {
+            "val": "2775"
+          },
+          "a:buFont": {
+            "typeface": "Aptos"
+          },
+          "a:buNone": "",
+          "marL": "394654",
+          "indent": "-394654",
+          "algn": "l",
+          "rtl": "0"
+        },
+        "pPrChildOrder": [
+          "a:lnSpc",
+          "a:buClr",
+          "a:buSzPts",
+          "a:buFont",
+          "a:buNone"
+        ],
+        "rPr": [
+          {
+            "a:solidFill": {
+              "a:schemeClr": {
+                "val": "tx1"
+              }
+            },
+            "a:latin": {
+              "typeface": "Aptos",
+              "pitchFamily": "34",
+              "charset": "0"
+            },
+            "a:cs": {
+              "typeface": "Arabic Typesetting"
+            },
+            "lang": "ar-SA",
+            "altLang": "en-US",
+            "sz": "2775",
+            "dirty": "0"
+          }
+        ],
+        "endParaRPr": {
+          "lang": "ar-SA",
+          "sz": "2775",
+          "dirty": "0"
+        },
+        "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+        "textUtf16": [
+          73,
+          116,
+          101,
+          109,
+          32,
+          49,
+          58,
+          32,
+          67,
+          117,
+          115,
+          116,
+          111,
+          109,
+          101,
+          114,
+          115,
+          32,
+          116,
+          111,
+          108,
+          100,
+          32,
+          117,
+          115,
+          32,
+          111,
+          110,
+          98,
+          111,
+          97,
+          114,
+          100,
+          105,
+          110,
+          103,
+          32,
+          116,
+          111,
+          111,
+          107,
+          32,
+          116,
+          111,
+          111,
+          32,
+          108,
+          111,
+          110,
+          103,
+          44,
+          32,
+          115,
+          111,
+          32,
+          119,
+          101,
+          32,
+          114,
+          101,
+          98,
+          117,
+          105,
+          108,
+          116,
+          32,
+          105,
+          116,
+          32
+        ],
+        "asciiOnly": true,
+        "trailingSpace": true,
+        "digitMatches": [
+          {
+            "text": "1",
+            "index": 5
+          }
+        ],
+        "punctuation": [
+          {
+            "text": ":",
+            "index": 6
+          },
+          {
+            "text": ",",
+            "index": 50
+          }
+        ]
+      },
+      "good": {
+        "shape": {
+          "p:nvSpPr": {
+            "p:cNvPr": {
+              "id": "4",
+              "name": "OPF list slides.0.items line 1"
+            },
+            "p:cNvSpPr": {
+              "txBox": "1"
+            },
+            "p:nvPr": ""
+          },
+          "p:spPr": {
+            "a:xfrm": {
+              "a:off": {
+                "x": "943294",
+                "y": "3860780"
+              },
+              "a:ext": {
+                "cx": "10700066",
+                "cy": "429959"
+              }
+            },
+            "a:prstGeom": {
+              "a:avLst": "",
+              "prst": "rect"
+            },
+            "a:noFill": "",
+            "a:ln": ""
+          },
+          "p:txBody": {
+            "a:bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "a:lstStyle": "",
+            "a:p": {
+              "a:pPr": {
+                "a:lnSpc": {
+                  "a:spcPct": {
+                    "val": "100000"
+                  }
+                },
+                "a:buNone": "",
+                "marL": "0",
+                "indent": "0",
+                "algn": "l",
+                "rtl": "0"
+              },
+              "a:r": {
+                "a:rPr": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "typeface": "Aptos",
+                    "pitchFamily": "34",
+                    "charset": "0"
+                  },
+                  "a:cs": {
+                    "typeface": "Arabic Typesetting"
+                  },
+                  "lang": "ar-SA",
+                  "altLang": "en-US",
+                  "sz": "2775",
+                  "dirty": "0"
+                },
+                "a:t": "around the customer journey."
+              },
+              "a:endParaRPr": {
+                "lang": "ar-SA",
+                "sz": "2775",
+                "dirty": "0"
+              }
+            }
+          }
+        },
+        "rawFragmentSha256": "9e8290d9f2d691709000497a6c4755359335c0645e58a027cd1e6ccd2028c762",
+        "bodyPr": {
+          "wrap": "none",
+          "lIns": "0",
+          "tIns": "0",
+          "rIns": "0",
+          "bIns": "0",
+          "rtlCol": "0",
+          "anchor": "t"
+        },
+        "pPr": {
+          "a:lnSpc": {
+            "a:spcPct": {
+              "val": "100000"
+            }
+          },
+          "a:buNone": "",
+          "marL": "0",
+          "indent": "0",
+          "algn": "l",
+          "rtl": "0"
+        },
+        "pPrChildOrder": [
+          "a:lnSpc",
+          "a:buNone"
+        ],
+        "rPr": [
+          {
+            "a:solidFill": {
+              "a:schemeClr": {
+                "val": "tx1"
+              }
+            },
+            "a:latin": {
+              "typeface": "Aptos",
+              "pitchFamily": "34",
+              "charset": "0"
+            },
+            "a:cs": {
+              "typeface": "Arabic Typesetting"
+            },
+            "lang": "ar-SA",
+            "altLang": "en-US",
+            "sz": "2775",
+            "dirty": "0"
+          }
+        ],
+        "endParaRPr": {
+          "lang": "ar-SA",
+          "sz": "2775",
+          "dirty": "0"
+        },
+        "text": "around the customer journey.",
+        "textUtf16": [
+          97,
+          114,
+          111,
+          117,
+          110,
+          100,
+          32,
+          116,
+          104,
+          101,
+          32,
+          99,
+          117,
+          115,
+          116,
+          111,
+          109,
+          101,
+          114,
+          32,
+          106,
+          111,
+          117,
+          114,
+          110,
+          101,
+          121,
+          46
+        ],
+        "asciiOnly": true,
+        "trailingSpace": false,
+        "digitMatches": [],
+        "punctuation": [
+          {
+            "text": ".",
+            "index": 27
+          }
+        ]
+      },
+      "completeShapeDiff": [
+        {
+          "path": "/p:nvSpPr/p:cNvPr/id",
+          "before": "3",
+          "after": "4"
+        },
+        {
+          "path": "/p:nvSpPr/p:cNvPr/name",
+          "before": "OPF list slides.0.items line 0",
+          "after": "OPF list slides.0.items line 1"
+        },
+        {
+          "path": "/p:spPr/a:xfrm/a:off/x",
+          "before": "548640",
+          "after": "943294"
+        },
+        {
+          "path": "/p:spPr/a:xfrm/a:off/y",
+          "before": "3430822",
+          "after": "3860780"
+        },
+        {
+          "path": "/p:spPr/a:xfrm/a:ext/cx",
+          "before": "11094720",
+          "after": "10700066"
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/a:buClr",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "a:schemeClr": {
+              "val": "tx1"
+            }
+          }
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/a:buSzPts",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "val": "2775"
+          }
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/a:buFont",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "typeface": "Aptos"
+          }
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/marL",
+          "before": "394654",
+          "after": "0"
+        },
+        {
+          "path": "/p:txBody/a:p/a:pPr/indent",
+          "before": "-394654",
+          "after": "0"
+        },
+        {
+          "path": "/p:txBody/a:p/a:r/a:t",
+          "before": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+          "after": "around the customer journey."
+        }
+      ],
+      "completePPrDiff": [
+        {
+          "path": "/a:buClr",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "a:schemeClr": {
+              "val": "tx1"
+            }
+          }
+        },
+        {
+          "path": "/a:buSzPts",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "val": "2775"
+          }
+        },
+        {
+          "path": "/a:buFont",
+          "beforePresent": true,
+          "afterPresent": false,
+          "before": {
+            "typeface": "Aptos"
+          }
+        },
+        {
+          "path": "/marL",
+          "before": "394654",
+          "after": "0"
+        },
+        {
+          "path": "/indent",
+          "before": "-394654",
+          "after": "0"
+        }
+      ],
+      "completeRPrEqual": true,
+      "completeBodyPrEqual": true,
+      "completeEndParaRPrEqual": true
+    }
+  ],
+  "mutantVsSaved": {
+    "badShapeSemanticallyEqual": true,
+    "goodShapeSemanticallyEqual": true,
+    "badDiff": [],
+    "goodDiff": []
+  },
+  "capturedNativeFacts": {
+    "original": [
+      {
+        "name": "OPF list slides.0.items line 0",
+        "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+        "textProofingLanguage": {
+          "languageId": 1025,
+          "status": "uniform-exact",
+          "api": "PowerPoint.TextFrame.TextRange.LanguageID"
+        },
+        "paragraphDirection": {
+          "value": 1,
+          "expectedXmlDirection": 1,
+          "classification": "matches-xml",
+          "diagnosticOnly": true
+        },
+        "textFont": {
+          "status": "uniform",
+          "name": "Aptos",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0,
+          "unavailableFields": [],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        },
+        "geometry": {
+          "left": 43.2,
+          "top": 270.143463,
+          "width": 873.6,
+          "height": 33.8550377,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "OPF list slides.0.items line 1",
+        "text": "around the customer journey.",
+        "textProofingLanguage": {
+          "languageId": 1025,
+          "status": "uniform-exact",
+          "api": "PowerPoint.TextFrame.TextRange.LanguageID"
+        },
+        "paragraphDirection": {
+          "value": 1,
+          "expectedXmlDirection": 1,
+          "classification": "matches-xml",
+          "diagnosticOnly": true
+        },
+        "textFont": {
+          "status": "uniform",
+          "name": "Aptos",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0,
+          "unavailableFields": [],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        },
+        "geometry": {
+          "left": 74.275116,
+          "top": 303.9984,
+          "width": 842.5249,
+          "height": 33.8550377,
+          "rotation": 0
+        }
+      }
+    ],
+    "edited": [
+      {
+        "name": "OPF list slides.0.items line 0",
+        "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+        "textProofingLanguage": {
+          "languageId": 1025,
+          "status": "uniform-exact",
+          "api": "PowerPoint.TextFrame.TextRange.LanguageID"
+        },
+        "paragraphDirection": {
+          "value": 1,
+          "expectedXmlDirection": 1,
+          "classification": "matches-xml",
+          "diagnosticOnly": true
+        },
+        "textFont": {
+          "status": "uniform",
+          "name": "Aptos",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0,
+          "unavailableFields": [],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        },
+        "geometry": {
+          "left": 43.2,
+          "top": 270.143463,
+          "width": 873.6,
+          "height": 33.8550377,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "OPF list slides.0.items line 1",
+        "text": "around the customer journey.",
+        "textProofingLanguage": {
+          "languageId": 1025,
+          "status": "uniform-exact",
+          "api": "PowerPoint.TextFrame.TextRange.LanguageID"
+        },
+        "paragraphDirection": {
+          "value": 1,
+          "expectedXmlDirection": 1,
+          "classification": "matches-xml",
+          "diagnosticOnly": true
+        },
+        "textFont": {
+          "status": "uniform",
+          "name": "Aptos",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0,
+          "unavailableFields": [],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        },
+        "geometry": {
+          "left": 74.275116,
+          "top": 303.9984,
+          "width": 842.5249,
+          "height": 33.8550377,
+          "rotation": 0
+        }
+      }
+    ],
+    "reopened": [
+      {
+        "name": "OPF list slides.0.items line 0",
+        "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+        "textProofingLanguage": {
+          "languageId": 1025,
+          "status": "uniform-exact",
+          "api": "PowerPoint.TextFrame.TextRange.LanguageID"
+        },
+        "paragraphDirection": {
+          "value": 1,
+          "expectedXmlDirection": 1,
+          "classification": "matches-xml",
+          "diagnosticOnly": true
+        },
+        "textFont": {
+          "status": "uniform",
+          "name": "Aptos",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0,
+          "unavailableFields": [],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        },
+        "geometry": {
+          "left": 43.2,
+          "top": 270.143463,
+          "width": 873.6,
+          "height": 33.8550377,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "OPF list slides.0.items line 1",
+        "text": "around the customer journey.",
+        "textProofingLanguage": {
+          "languageId": 1025,
+          "status": "uniform-exact",
+          "api": "PowerPoint.TextFrame.TextRange.LanguageID"
+        },
+        "paragraphDirection": {
+          "value": 1,
+          "expectedXmlDirection": 1,
+          "classification": "matches-xml",
+          "diagnosticOnly": true
+        },
+        "textFont": {
+          "status": "uniform",
+          "name": "Aptos",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0,
+          "unavailableFields": [],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        },
+        "geometry": {
+          "left": 74.275116,
+          "top": 303.9984,
+          "width": 842.5249,
+          "height": 33.8550377,
+          "rotation": 0
+        }
+      }
+    ]
+  },
+  "conclusions": {
+    "runAndBodySettingsEqual": true,
+    "remainingParagraphDifferences": [
+      "marL394654vs0",
+      "indent-394654vs0",
+      "bad-onlybuClr/schemeClrtx1",
+      "bad-onlybuSzPts2775",
+      "bad-onlybuFontAptos"
+    ],
+    "remainingTextConfounds": [
+      "bad has digit1+colon+comma and trailingU0020; continuation has no digits/colon/comma and endsperiod",
+      "Both strings are ASCII with no bidi formatting/control characters"
+    ],
+    "candidateOnly": "Remaining paragraph-format group interacting with ar-SA rich text is a concrete unresolved candidate; text composition/geometry differ too, so no cause is proved.",
+    "nextPossibleDiscriminator": "If separately authorized, replace the bad pPr with good pPr as one group while retaining bad text/rPr/body/shape transform. Corrected glyph order would implicate that paragraph group; unchanged output would shift attention to text/run shaping. No such mutation was created.",
+    "glyphFix": false,
+    "currentRuntimeAcceptance": false
+  }
+}

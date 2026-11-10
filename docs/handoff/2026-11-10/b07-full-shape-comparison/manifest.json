@@ -1,0 +1,75 @@
+{
+  "kind": "READONLY-complete-shape-analysis",
+  "files": [
+    {
+      "name": "bullet-none-bad-shape.fragment.xml",
+      "bytes": 1001,
+      "sha256": "86542c250874db81b8c419585427ff0df501fc1b09a6ac605cc528439577a6fb"
+    },
+    {
+      "name": "bullet-none-good-shape.fragment.xml",
+      "bytes": 855,
+      "sha256": "7aec818aa5c3647b05171c09e15b3f39071d8dfd20b862b7dd24ac9550d753d9"
+    },
+    {
+      "name": "bullet-none-slide1.xml",
+      "bytes": 3788,
+      "sha256": "25e824547321a35bb19c625515a79eacc4b6196da12f0a5e9911a5ff19c15380"
+    },
+    {
+      "name": "compare.mjs",
+      "bytes": 6372,
+      "sha256": "eb0f4bbf5639cb6bd254f1e4dfd4f0b3bd3a8498f53df1781d5483e533e8cee1"
+    },
+    {
+      "name": "comparison.json",
+      "bytes": 47441,
+      "sha256": "5fd3b7a83009e6c057782b6c21bb8f45ff26994443f82709262893aa29cf3aa7"
+    },
+    {
+      "name": "original-bad-shape.fragment.xml",
+      "bytes": 1024,
+      "sha256": "b84275a79f12dc84180f1aaa210cd67fe1eecbf6a4d2b4b8824d40aa5ac95a89"
+    },
+    {
+      "name": "original-good-shape.fragment.xml",
+      "bytes": 855,
+      "sha256": "7aec818aa5c3647b05171c09e15b3f39071d8dfd20b862b7dd24ac9550d753d9"
+    },
+    {
+      "name": "original-slide1.xml",
+      "bytes": 3811,
+      "sha256": "6ee08c297717d3dfab6c1ca34b8e4480db07325de1689641a0f7806804f1e9ca"
+    },
+    {
+      "name": "saved-bad-shape.fragment.xml",
+      "bytes": 968,
+      "sha256": "c63d361016d2a9a0ebfc4405cc9df7d5c471b76e81dd87cc8e5171063da13b23"
+    },
+    {
+      "name": "saved-good-shape.fragment.xml",
+      "bytes": 822,
+      "sha256": "9e8290d9f2d691709000497a6c4755359335c0645e58a027cd1e6ccd2028c762"
+    },
+    {
+      "name": "saved-slide1.xml",
+      "bytes": 3444,
+      "sha256": "9ef53fddd2d89b0ba772f41861d4e78e59f3c2162da36a3fa10e41a9a6dc655b"
+    },
+    {
+      "name": "source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "name": "run.log",
+      "bytes": 1516,
+      "sha256": "6e508a7bad40c5241f8c23dc0485ab2b9d6c063534ad92ad64d877d62a8fae71"
+    }
+  ],
+  "noMutantCreated": true,
+  "noComCalls": true,
+  "noProductChanges": true,
+  "glyphFix": false,
+  "currentRuntimeAcceptance": false
+}
