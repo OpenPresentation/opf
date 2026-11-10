@@ -3333,5 +3333,15 @@
   "nativeAcceptance": false,
   "registryAcceptance": false,
   "originalFindingsRetained": 7,
-  "payloadReuseScope": "373 new exact files are represented by immutable eb362 archive member/blob/SHA identities. Only three changed new metadata files are stored again; all new raw generation, pure admission and public import results remain complete."
+  "payloadReuseScope": "373 new exact files are represented by immutable eb362 archive member/blob/SHA identities. Only three changed new metadata files are stored again; all new raw generation, pure admission and public import results remain complete.",
+  "metadataChecks": {
+    "records": 19,
+    "bytes": 17312,
+    "sha256": "dbad2ee77a29117b031852be745f71035ae257d4b1f6d10587f45430ba07d976",
+    "rawBytes": 38405,
+    "testedHead": "cd56d4a181790050b079365de45d61e88363cb6a",
+    "originalStatus": 1,
+    "recoveredTextStatus": 0,
+    "aggregateRerun": false
+  }
 }
