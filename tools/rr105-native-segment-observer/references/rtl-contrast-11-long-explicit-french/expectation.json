@@ -1,0 +1,116 @@
+{
+  "sourceSha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303",
+  "originalArchiveSha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+  "variantSha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+  "slideCount": 1,
+  "shapeCount": 3,
+  "shapes": [
+    {
+      "index": 1,
+      "id": 2,
+      "name": "OPF heading slides.0.title line 0",
+      "text": "نص لاتيني بلغة فرنسية صريحة",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 40.5,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos Display"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "548640",
+        "y": "548640",
+        "cx": "11094720",
+        "cy": "627507"
+      },
+      "framePoints": {
+        "left": 43.20000076293945,
+        "top": 43.20000076293945,
+        "width": 873.5999755859375,
+        "height": 49.40999984741211
+      },
+      "runPropertiesSha256": "2eb15f4024468498f9c28dd87cad020706a5c671c99da2a6ae69b8e21d766c59"
+    },
+    {
+      "index": 2,
+      "id": 3,
+      "name": "OPF list slides.0.items line 0",
+      "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+      "language": "fr-FR",
+      "languageId": 1036,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "548640",
+        "y": "3430822",
+        "cx": "11094720",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 43.20000076293945,
+        "top": 270.1434631347656,
+        "width": 873.5999755859375,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "a15a2d284529fda89594c6547f6618450bebc22e3653a427203a67b37b92b253"
+    },
+    {
+      "index": 3,
+      "id": 4,
+      "name": "OPF list slides.0.items line 1",
+      "text": "around the customer journey.",
+      "language": "fr-FR",
+      "languageId": 1036,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "943294",
+        "y": "3860780",
+        "cx": "10700066",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 74.27511596679688,
+        "top": 303.9984130859375,
+        "width": 842.52490234375,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "a15a2d284529fda89594c6547f6618450bebc22e3653a427203a67b37b92b253"
+    }
+  ],
+  "physicalFontIdentity": false,
+  "nativeAcceptance": false
+}

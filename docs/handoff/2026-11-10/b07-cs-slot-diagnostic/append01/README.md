@@ -1,0 +1,11 @@
+# Minimal copied-controller preparation
+
+Preparation only, not an activation. The original pure packet at140fc remains immutable.
+
+The historical protocol routing ID/path `b07-independent-segments-readonly-v1` / `tools/rr105-native-segment-observer` is retained so the qualified3f worker, wrapper, supervisor, ASCII wire and environment code remain byte-exact. It is NOT a claim that case05 is segmented. SOURCE.scope and its hash-bound caseOverrides explicitly identify original05's unsplit two-shape CS-slot-only discriminator and the140fc/8759 archive/constructor provenance. Existing074/f870 identities remain historical provenance for the other four cases, not the new05 archive.
+
+Compared with qualified3f, profile runtime changes only the05 CATALOG hash/size/count and the corresponding exact-shape vector4→2. The SOURCE05 input/expectation facts match the new archive; expectation is derived from that full archive and original intact source. Only the admission test's expected vector changes. No worker/wrapper/supervisor/data-tools/managed-control function, cap, action, getter, lifecycle, deadline, wire serialization or environment code changes. Other four case source/original/input/expectation files are byte-identical. Selected05 is EXACT2 (therefore within the historical3-shape request); the inherited whole catalog still has its unchanged30 maximum because another unchanged case has20.
+
+Existing source-only admission/default-false snapshots and AST-managed fake-object controls will qualify the copied source. They do not invoke Office or authorize root's later observation. Root will separately create a fresh selected05 admission at the final clean head, explicitly decide native authorization, then run the unchanged wrapper FIRST with RunOffice absent and a new fresh output. No digest is fabricated here. Root alone may decide actual activation after source/pure/metadata review and fresh global0. One root attempt45s, no retry/cleanup/next variant by this agent.
+
+Known immutable baseline pins: worker24934B/fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7; wrapper18838B/f0f0ae0a50366db9649da47b0c0f8133364e60c11fa2f1738a05b08adfecb84c; supervisor2341B/b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c. No font binary is copied or registered.
