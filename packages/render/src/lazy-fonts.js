@@ -1,4 +1,5 @@
 import { fontCoverageProbe } from './script-fonts.js';
+import {createPreparationReplay,selectionIdentity} from './font-preparation-replay.js';
 import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { pickFace } from "./font-registry.js";
 import { toSvg } from "./svg.js";
@@ -45,7 +46,7 @@ export function presentationFamilies(presentation, options = {}) {
 const RECORDED_EM = 0.01;
 
 /** The registry's view with faces added: what a registry holding `faces` resolves families to (`pickFace`, its own selection). */
-function registryView({ faces, policy = "none", aliases = new Map(), fallbackFamily, mapFamily }) {
+function registryView({ faces, policy = "none", aliases = new Map(), fallbackFamily, mapFamily }, replay, observe) {
   const pool = [...faces].map(face => ({ ...face, familyGroup: face.familyGroup ?? face.family }));
   // Fitting asks about the same styles many times. This view owns one fixed pool
   // and selection policy: keep only successful choices, never full styles or
@@ -68,10 +69,15 @@ function registryView({ faces, policy = "none", aliases = new Map(), fallbackFam
     if (preserveChosen && choice.via !== "family") {
       const chosen = { ...style };
       delete chosen.fontFace;
+      replay?.selection(style,preserveChosen,choice,chosen);
+      observe?.(choice,chosen);
       return chosen;
     }
     const { face } = choice;
-    return { ...style, fontFamily: face.family, fontWeight: face.weight, italic: face.italic };
+    const resolved = { ...style, fontFamily: face.family, fontWeight: face.weight, italic: face.italic };
+    replay?.selection(style,preserveChosen,choice,resolved);
+    observe?.(choice,resolved);
+    return resolved;
   };
 }
 
@@ -111,7 +117,7 @@ const byFace = (a, b) => a.family < b.family ? -1 : a.family > b.family ? 1 : Nu
  * The measurement `presentationFaces` draws with: it records every style it is asked to measure (resolved through `settle`) into
  * the map `record.into` holds (switch it to file what follows elsewhere).
  */
-function recordingMeasurement(settle, into, coverage) {
+function recordingMeasurement(settle, into, coverage, replay) {
   const record = { into };
   record.textMeasurement = {
     measure(text, size, style) {
@@ -123,7 +129,13 @@ function recordingMeasurement(settle, into, coverage) {
           if (!record.into.has(key)) record.into.set(key, { family, weight, italic });
         }
         // Demand loaders know coverage only after selected bytes are verified. Unknown faces are optimistic for one round.
-        try { coverage?.(String(text), size, settled); }
+        try {
+          if (coverage) {
+            const content = String(text);
+            if (replay) replay.coverage("measure", content, size, settled, () => coverage(content, size, settled));
+            else coverage(content, size, settled);
+          }
+        }
         catch(error) { if(!['missing-glyph','font-unavailable','font-style-unavailable'].includes(error?.code))throw error; }
         // Recording must finish on unresolved styles or uncovered glyphs: ensure still runs its bounded optional fallback chain.
         // Actual rendering has no recording hook and retains its original missing-glyph refusal.
@@ -131,7 +143,10 @@ function recordingMeasurement(settle, into, coverage) {
       return String(text).length * size * RECORDED_EM;
     },
     resolveStyle: settle,
-    ...(coverage ? { [fontCoverageProbe](text,size,style) { coverage(String(text),size,settle(style)); } } : {}),
+    ...(coverage ? { [fontCoverageProbe](text,size,style) {
+      const content = String(text), settled = settle(style);
+      return replay ? replay.coverage("probe", content, size, settled, () => coverage(content, size, settled)) : coverage(content, size, settled);
+    } } : {}),
   };
   return record;
 }
@@ -213,7 +228,13 @@ function slideMemory(contexts = 8) {
  * `designs` (slide designs resolved for families).
  */
 export function createFontAnalysis() {
-  const memory = slideMemory(), stats = { decks: 0, slides: 0, designs: 0 }, checked = new Set();
+  const memory = slideMemory(), stats = { decks: 0, slides: 0, designs: 0 }, checked = new Set(), replayScopes = new WeakMap();
+  async function withPreparationReplay(run) {
+    const token = Object.freeze({}), state = createPreparationReplay();
+    replayScopes.set(token, state);
+    try { return await run(token, () => state.invalidate()); }
+    finally { state.release(); replayScopes.delete(token); }
+  }
   // The deck behind `keys`, opened (resolved and checked as `toSvg` does) when work is needed or this exact deck was never checked.
   const opener = (presentation, resolveOptions, keys, optionsToken) => {
     const whole = `${optionsToken}\u0001${keys.context}\u0001${keys.slides.join("\u0001")}`;
@@ -232,20 +253,26 @@ export function createFontAnalysis() {
   };
 
   function faces(presentation, options = {}, registry) {
+    const replay = replayScopes.get(registry?.preparationReplay);
+    try { return analyzeFaces(presentation, options, registry, replay); }
+    catch (error) { replay?.invalidate(); throw error; }
+  }
+  function analyzeFaces(presentation, options = {}, registry, replay) {
     const resolveOptions = resolveOptionsOf(options);
     if (registry) registry = { ...registry, faces: [...registry.faces] };
-    const view = registry ? registryView(registry.preserveChosenFamilies ? {...registry, mapFamily: undefined} : registry) : undefined;
+    const view = registry ? registryView(registry.preserveChosenFamilies ? {...registry, mapFamily: undefined} : registry, replay) : undefined;
     const settle = style => {
       if (!view) return { ...style };
-      try { return view(style); } catch { return { ...style }; }
+      try { return view(style); } catch { replay?.invalidate(); return { ...style }; }
     };
     // Native keeps chosen roles outside its raw script planner. Its inner resolver must still expose physical Emoji/script faces.
     const inputBinding = registry?.preserveChosenFamilies && view ? {
       mapInputFamily: registry.mapFamily,
-      resolveInputStyle: style => { try { return view(style, true); } catch { return { ...style }; } },
+      resolveInputStyle: style => { try { return view(style, true); } catch { replay?.invalidate(); return { ...style }; } },
     } : undefined;
     const keys = deckKeys(presentation);
     if (!keys) {
+      replay?.invalidate();
       // Not a deck object: one whole-deck pass, kept nowhere.
       const seen = new Map();
       const measurement = recordingMeasurement(settle, seen, registry?.coverage).textMeasurement;
@@ -263,10 +290,25 @@ export function createFontAnalysis() {
     const entries = keys.slides.map(slides.get);
     const missing = entries.flatMap((entry, index) => entry === undefined ? [index] : []);
     if (missing.length) {
+      if (replay) {
+        let selected;
+        const currentView = registryView(registry.preserveChosenFamilies ? {...registry, mapFamily: undefined} : registry, undefined,
+          (choice, resolved) => { selected = selectionIdentity(choice, resolved); });
+        const promoted = replay.replay(keys, optionsToken, registry, (style, preserve) => { currentView(style, preserve); return selected; });
+        if (promoted) {
+          for (let index = 0; index < promoted.length; index++) {
+            slides.set(keys.slides[index], promoted[index]);
+            entries[index] = promoted[index];
+          }
+          deck.check();
+          return mergeEntries(entries);
+        }
+        replay.begin(keys, optionsToken, registry, missing.length === entries.length);
+      }
       // Composition of the slides, then their drawing, as `toSvg` runs them.
       const opened = deck.open();
       const made = new Map(missing.map(index => [index, { composed: new Map(), drawn: new Map() }]));
-      const recorders = new Map(missing.map(index => [index, recordingMeasurement(settle, made.get(index).composed, registry?.coverage)]));
+      const recorders = new Map(missing.map(index => [index, recordingMeasurement(settle, made.get(index).composed, registry?.coverage, replay)]));
       for (const index of missing) opened.bind(index, recorders.get(index).textMeasurement, inputBinding);
       // A slide is drawn with the measurement it was composed with; what it measures from here on is its drawing. `skipHidden`
       // leaves hidden slides undrawn (they are still composed), as in `toSvg`.
@@ -277,7 +319,11 @@ export function createFontAnalysis() {
       }
       for (const [index, entry] of made) { slides.set(keys.slides[index], entry); entries[index] = entry; }
       stats.slides += missing.length;
-    } else deck.check();
+      replay?.finish(entries);
+    } else { replay?.invalidate(); deck.check(); }
+    return mergeEntries(entries);
+  }
+  function mergeEntries(entries) {
     // In the order one `toSvg` records them: every slide's composition, then every slide's drawing.
     const seen = new Map();
     for (const phase of ["composed", "drawn"]) for (const entry of entries) for (const [key, face] of entry[phase]) if (!seen.has(key)) seen.set(key, face);
@@ -311,7 +357,7 @@ export function createFontAnalysis() {
     return new Set(entries.flat());
   }
 
-  return { faces, families, stats };
+  return { faces, families, stats, withPreparationReplay };
 }
 
 function registryKey({ faces, policy = "none", aliases = new Map(), fallbackFamily, coverageKey, mapFamily, preserveChosenFamilies }) {

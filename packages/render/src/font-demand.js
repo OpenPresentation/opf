@@ -1,5 +1,6 @@
 // RR-114: Node face-level preparation. The complete allowed metadata decides selection; only selected bytes are read.
 import { BUNDLED_FONT_MANIFEST } from './font-manifest.js';
+import {preparationContext} from './font-preparation-context.js';
 import { FONT_SELECTION_METADATA } from './font-selection-metadata.js';
 import { createFontRegistry, pickFace, OPFFontError } from './font-registry.js';
 import { createFontAnalysis } from './lazy-fonts.js';
@@ -197,7 +198,7 @@ export async function createNodeDemand(
       },
     },
   });
-  function context(presentation, renderOptions, initial = false, mapFamily, preserveChosenFamilies = false) {
+  function context(presentation, renderOptions, initial = false, mapFamily, preserveChosenFamilies = false, preparationReplay) {
     const empty =
       Array.isArray(presentation.slides) && presentation.slides.length === 0;
     const scriptAnalysis = empty
@@ -292,6 +293,8 @@ export async function createNodeDemand(
             coverageKey: generation,
             mapFamily,
             preserveChosenFamilies,
+            preparationReplay,
+            preparationContext: preparationReplay&&mapFamily===undefined?preparationContext(presentation,renderOptions):undefined,
             coverage(text, size, style) {
               if (
                 heldKeys.has(
@@ -359,10 +362,11 @@ export async function createNodeDemand(
         'invalid-font-scripts',
         'ensure needs the presentation whose text decides its fonts.',
       );
+    return analysis.withPreparationReplay(async (preparationReplay,invalidateReplay) => {
     const added = [],
       addedPackages = new Set();
     for (;;) {
-      const plan = context(presentation, renderOptions, initial, mapFamily, preserveChosenFamilies);
+      const plan = context(presentation, renderOptions, initial, mapFamily, preserveChosenFamilies, preparationReplay);
       // Preserve the historical whole-pack CSS order, independently of which styles an edit happens to add first.
       for (const pkg of plan.orderedPackages) remember(pkg.faces);
       if (plan.mode === 'auto') {
@@ -394,6 +398,7 @@ export async function createNodeDemand(
             .map((face) => face.family),
         )
       ) {
+        invalidateReplay();
         generation++;
         continue;
       }
@@ -477,6 +482,7 @@ export async function createNodeDemand(
         });
         if (next) {
           fallbacks.add(next.name);
+          invalidateReplay();
           generation++;
           continue;
         }
@@ -506,6 +512,7 @@ export async function createNodeDemand(
         uncovered: [...(loaded.selection?.uncovered ?? [])],
       };
     }
+    });
   }
   function pending(presentation, renderOptions = options.renderOptions) {
     const plan = context(presentation, renderOptions);
