@@ -2,7 +2,19 @@
 
 **v0.33.0 is published. v0.34.0 is unpublished.** The original31 checkbox lines in [issue1139](https://github.com/OpenPresentation/opf/issues/1139) remain intact:21checked/10open. The current-state table below supersedes historical descriptions inside those preserved lines. Every original item remains in scope. [Previous detailed checkpoint](../2026-11-09/coordination-checkpoint.md) and [binding working rules](../2026-11-07/working-rules.md) remain available.
 
-## Latest coordinator checkpoint — November 10, 08:05 UTC
+## Latest coordinator checkpoint — November 10, 09:45 UTC
+
+[Current reviewed six-repair integration, actual consumer/native observations and closed receipts](release-qualification-checkpoint04/README.md). Working source dc2e94f77faeb5789421a3cf7d4cadf2536b1834; package bytes exact1b603. Canonical1225 is unchanged. All31 original checkbox lines remain21checked/10open; v0.34 is unpublished.
+
+- All six reviewed leaves1260–1265 are normally folded; never push those leaves again. MCP actual escaped resource is now10,342,417B under its existing10MiB transport limit, with real stdio/browser exports passing. Windows registry9 focused tests pass; coherent and platform acceptance remain separate.
+- Genuine current six-package consumer/full59/reference04 pass and root419member/756installed-file audit passes. Full59 archives exactly match069; no native passes inferred. Reference04 pure envelopes/wrapper admissions pass; Office remains owed.
+- Exactdc2 default-main coherent check is ACTUALLY LIVE in integration-qual04/session10576. Font tracker19PASS/19sparseRED from12additional declared paths; corePASS, later tails pending. No silent repair/retry or all-green claim.
+- Site217 is mergedb68 with exact-main gateGREEN and current production runtime narrowly accepted after root receipt/provider/visual review plus explicitly composite coverage. Original canonical19/20 J3timeout remains. PR218 exact689 preserves all62requests/assertions/120s and passes correctedJ3; sole observer58895 awaits own NativePreview, without merge.
+- Root wrongly called buffered main03 observer output a hang; the original wrong record and correction are retained. Main04 actually exited0; no CI/deploy job stopped.
+- B07 actual diagnostic completed0, global0→0,30fixed-character readings/0actions. Native/API ordering after Item remains wrong, while continuation is ordered; glyph05/06/09/10 stayOPEN. Validation01 preOffice environment RED,02purePASS,03exactflagPASS retained. Diagnostic proof is being sealed on a new NEVERMERGE branch.
+- Owner cold-start source audit confirms duplicate full analysis after font selection. Original+473ms/13.6percent, peakmemory~488→324MiB and warm gain stay distinct. Replay candidate remainsUNFOLDED because48slides regress without explanatory counters.
+
+## Historical coordinator checkpoint — November 10, 08:05 UTC
 
 [Current repair batch, complete original combined-gate logs and source guards](release-qualification-checkpoint03/README.md). Reviewed repair source cba166d72e6a306733ac747af65e8cf0d7a57a14; checkpoint-only descendants carry the same package code; canonical PR1225 remains e5de880999235872f4c44fe646e78fec49c16baa. v0.34 is unpublished; all31original issue checkbox lines remain21checked/10open.
 
@@ -61,13 +73,13 @@ Never push a folded leaf. Never force-push. Normally merge origin/main. Evidence
 
 | Original open item | Current truth and next action |
 | --- | --- |
-|B05 final integration|Working staging cba166d7 includes reviewed1258/1259/1260/1261/1262/1263 and all17original wave2 heads. Canonical1225 is not advanced. Finish MCP/Windows/remaining fixes, then coherent source gates and one final assembly.|
-|B07 native glyphs|05/06/09/10 remainOPEN. Actual current24 exports preserve41PNGs and26provenance-only changes, with2import findings retained. No glyph hypothesis or later-source native acceptance is promoted.|
-|B17 all033sites|Org033/Gallery033 prior acceptance remains. Recovery P0 merged625; test correction217 mergedb68 after its own preview/J2. Exactb68 production checks live, not accepted. DEV033 credential transfer remains held.|
+|B05 final integration|Working source dc2 includes all17original wave2 heads plus reviewed1258–1265; package bytes exact1b603. Canonical1225 remains unchanged. Finish coherent source gates and one final assembly.|
+|B07 native glyphs|05/06/09/10 remainOPEN. Current24 exports preserve41PNGs/26tag-only changes. Actual original09 character diagnostic completed0/global0→0/30samples; API reorders laterLatin across the digit while continuation staysordered. No physical-font/BiDi cause or fix accepted.|
+|B17 all033sites|Org033/Gallery033 prior acceptance remains. Recovery217 mergedb68; exact-mainGREEN, production narrowly accepted with original19/20RED and correctedJ3 composite coverage explicit. PR218 own689Preview pending. DEV033 credential transfer staysheld.|
 |B20 exact credential transfer|Automatic review still holds striped-fox-33 CONVEX_SERVICE_SECRET and AI_GATEWAY_API_KEY to Data-Advantage/pptx-dev preview. No values read/copied/workaround; build CONVEX_DEPLOY_KEY is not runtime.|
 |B24 final images/goldens|ONE final pinned workflow refresh after final source plus moved-slide/example/sheet and native archive/XML review. Seven current font-leaf raster differences remain unattributed; no local hashes/tolerance changes.|
-|B25 trackers/bundles|Committed trackers117/863 remain current from prior guarded refresh. Final current-head catalog-free/browser/MCP bundles remain owed; serialized MCP resource exceeds10MiB and needs a real payload fix, without capability/budget waiver.|
-|B26 combined gate|Original519 is41PASS/10RED. Reviewed repairs and focused passes do not close it. Need final changed/default-main/FullCI/Slow/Windows/macOS/Node22/26/packed/registry/npm12 and coherent current59/reference/seven/native/SH21/E1/E3 proof.|
+|B25 trackers/bundles|Committed117/863 tracker statuses retained. MCP actual serialized frame nowunder10MiB with functionality preserved; final coherent bundles remainowed. Current fullcheck fonttracker19/38 fails on12missing source-declared sparse inputs; no live-gate repair/waiver.|
+|B26 combined gate|Original519 stays41PASS/10RED. Actualdc2/default-main fullgate10576 LIVE; font sparseRED/corePASS/tails pending. Genuine1b603consumer/full59/reference04 nowpass; referenceNative, seven/native/SH21/E1/E3, goldens and platform/registry/release gates remainowed.|
 |B27 release034|Accepted main/exact-head managed merge/mainverify, Release dryrun then real trusted tag; all7registry identities/provenance/changelogs/release/mcpb/checksum. No release occurred.|
 |B28 all034delivery|Actual034 registry bumps and all3site assets/docs/examples/gallery/MCP/E3 plus builds/NativePreview/service/public/production. Org216/Gallery180 remain future-adoption leaves; no third release assumed.|
 |B31 owner remainders|Chart design and deployment/Preview authority received. Exact held credentials, D2, LibreOffice promotion, Claudeconnector/local.mcpb removal, new logins/DNS/account-plan/visibility changes remain owner-only.|
@@ -104,4 +116,4 @@ Source-only future memory opportunity: the process-shared HarfBuzz cache retains
 
 ## Resume ownership
 
-Root coordinates current625production-smoke repair, source decisions/folds, original native/golden/coherent release gates and this checklist. Lead seals actual runRTL observations; A fixes reference qualification EMU projection on a new leaf; B prepares the minimal genuine-worker readiness smoke correction and seals production evidence. Do not launch another performance trial, Office attempt, golden refresh, release or merge without its concrete source-bound prerequisites. Continue independent authorized work; no goal completion/pause/block is declared here.
+Root coordinates currentdc2/source decisions, reference native/golden/coherent release gates and this checklist. A owns the frozen default-main fullcheck10576; B owns PR218 own-preview acceptance without a second watcher; lead seals the actual B07 character-bounds observations after completing the read-only cold-start audit. Do not launch another performance trial, Office attempt, golden refresh, release or merge without its concrete source-bound prerequisites. Continue independent authorized work; no goal completion/pause/block is declared here.
