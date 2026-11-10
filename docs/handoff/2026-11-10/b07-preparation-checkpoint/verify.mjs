@@ -1,0 +1,32 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { gunzipSync } from 'node:zlib';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+const folder=path.dirname(fileURLToPath(import.meta.url));
+const root=path.resolve(folder,'../../../..');
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const manifest=JSON.parse(fs.readFileSync(path.join(folder,'manifest.json'),'utf8'));
+assert.equal(manifest.format,'b07-preparation-checkpoint-v1');
+const transport=fs.readFileSync(path.join(folder,manifest.transport.path));
+assert.equal(transport.length,manifest.transport.bytes);assert.equal(sha(transport),manifest.transport.sha256);
+const payload=JSON.parse(gunzipSync(transport,{maxOutputLength:1024*1024}));
+assert.equal(payload.format,manifest.format);assert.equal(payload.entries.length,17);assert.equal(manifest.entries.length,17);
+const entries=new Map();let bytes=0;
+for(let i=0;i<payload.entries.length;i++){const e=payload.entries[i];assert.ok(e.path.split('/').every(p=>p&&p!=='.'&&p!=='..'));assert.ok(!e.path.includes('\\')&&!path.isAbsolute(e.path));assert.equal(entries.has(e.path),false);const b=Buffer.from(e.base64,'base64');assert.equal(b.toString('base64'),e.base64);assert.equal(b.length,e.bytes);assert.equal(sha(b),e.sha256);assert.deepEqual(manifest.entries[i],{path:e.path,bytes:e.bytes,sha256:e.sha256});entries.set(e.path,b);bytes+=b.length;}
+assert.equal(bytes,54616);
+const text=p=>{assert.ok(entries.has(p));return entries.get(p).toString('utf8').replace(/^\uFEFF/,'');};
+const json=p=>JSON.parse(text(p));
+assert.equal(json('adapter/pure01.exit.json').exitCode,0);
+assert.match(text('adapter/pure01.log'),/pass 15/);
+assert.equal(json('adapter/actual-inspect01.exit.json').source,manifest.sourceHead);
+assert.equal(json('adapter/actual-inspect01.exit.json').exitCode,0);
+const inspected=json('adapter/actual-inspect01.json');assert.equal(inspected.mode,'inspect');assert.equal(inspected.files.length,4);assert.equal(inspected.nativeRun,false);assert.equal(inspected.nativeAcceptance,false);assert.equal(inspected.identities.driver.revision,manifest.sourceHead);assert.equal(inspected.identities.worker.revision,'2b825aa72e16dfa6593a8171011f7fcb6138255b');
+assert.equal(json('exact-source/install.exit.json').exitCode,0);assert.equal(json('exact-source/mapped01.exit.json').exitCode,1);assert.equal(json('exact-source/mapped01.exit.json').source,'2b825aa72e16dfa6593a8171011f7fcb6138255b');
+assert.match(text('exact-source/steps/pnpm_run_check_gallery-tracker.log'),/ENOENT/);assert.match(text('exact-source/steps/pnpm_run_check_gallery-tracker.log'),/limitations\.json/);assert.match(text('exact-source/steps/pnpm_run_check_gallery-tracker.log'),/values\.json/);assert.match(text('exact-source/steps/pnpm_run_check_text.log'),/ENOENT/);assert.match(text('exact-source/steps/pnpm_run_check_text.log'),/painting-Linux\.json\.gz/);
+for(const r of manifest.source){const b=execFileSync('git',['--no-optional-locks','-C',root,'show',manifest.sourceHead+':'+r.path],{maxBuffer:8*1024*1024});assert.equal(b.length,r.bytes,r.path);assert.equal(sha(b),r.sha256,r.path);}
+const tree=execFileSync('git',['--no-optional-locks','-C',root,'rev-parse',manifest.sourceHead+'^{tree}'],{encoding:'utf8'}).trim();assert.equal(tree,manifest.sourceTree);
+assert.equal(manifest.outcome.exactSourceMapped.exitCode,1);for(const key of['actualSuitePrepared','controllerValidateOnly','OfficeRun','nativeAcceptance','registryAcceptance'])assert.equal(manifest.outcome[key],false);
+console.log(JSON.stringify({verified:true,entries:entries.size,bytes,adapterSource:manifest.sourceHead,exactSourceMapped:'RED: sparse missing evidence',actualSuitePrepared:false,OfficeRun:false}));

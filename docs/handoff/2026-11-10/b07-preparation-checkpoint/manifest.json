@@ -1,0 +1,197 @@
+{
+  "format": "b07-preparation-checkpoint-v1",
+  "sourceHead": "c5637924390acd287f95409bd541f76d5c13af1a",
+  "sourceTree": "63d6d5a712c7edaa03c0e82e7d6d0d05ec027f37",
+  "base": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+  "identities": [
+    {
+      "role": "driver",
+      "path": "C:/opf-work/b07-prep",
+      "head": "c5637924390acd287f95409bd541f76d5c13af1a",
+      "status": "evidence directory being added; source clean immediately before assembly"
+    },
+    {
+      "role": "worker",
+      "path": "C:/opf-work/b07-dir",
+      "head": "2b825aa72e16dfa6593a8171011f7fcb6138255b",
+      "status": ""
+    },
+    {
+      "role": "exactSourceCheck",
+      "path": "C:/opf-work/b07-check",
+      "head": "2b825aa72e16dfa6593a8171011f7fcb6138255b",
+      "status": ""
+    },
+    {
+      "role": "controller",
+      "path": "C:/opf-work/rr105-readonly-survey",
+      "head": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+      "status": ""
+    },
+    {
+      "role": "historical",
+      "path": "C:/opf-work/proofing-observed",
+      "head": "fb37046f043f860c8887e0574620ef3c507e3fa4",
+      "status": ""
+    }
+  ],
+  "source": [
+    {
+      "path": "changes/rr105-separate-preparation-adapter.md",
+      "bytes": 245,
+      "sha256": "86a5f98fa0cda87053364d92290d7a3e59b84c1e1ccf13a7e414ba03b7de5aa7"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/b07-separate-preparation.md",
+      "bytes": 1605,
+      "sha256": "34946b656aaeaf536722aee591082bf7085cdc7886ae6d93bdcb71d80dc84a05"
+    },
+    {
+      "path": "docs/programs/release-readiness/burndown.md",
+      "bytes": 345254,
+      "sha256": "bf7a0ef8af47ff89671fdf6b90afdeee764d5b46b4420529951c5dc16c9f3ea1"
+    },
+    {
+      "path": "tools/rr105-proofing-prepare/README.md",
+      "bytes": 4029,
+      "sha256": "cb4fc71f8c33bc744f5d0a8cb258ecffa9628d79fe7816580906958085ea654a"
+    },
+    {
+      "path": "tools/rr105-proofing-prepare/prepare-core.mjs",
+      "bytes": 11229,
+      "sha256": "c40eff97390711890960168bc806a529cf0322d00b2e7a2e2aae9283aad376ad"
+    },
+    {
+      "path": "tools/rr105-proofing-prepare/prepare-suite.mjs",
+      "bytes": 1829,
+      "sha256": "55a59d0e1fe0b6b8d714c7cebd62e810882edc85c2688fba494599233cca1080"
+    },
+    {
+      "path": "tools/rr105-proofing-prepare/prepare.test.mjs",
+      "bytes": 9998,
+      "sha256": "6eea54b52b1d9559d853ec447d15c35c1fce425492ac7859b87e01bf397e3aa0"
+    },
+    {
+      "path": "tools/rr105-proofing-prepare/test-fixture.json.gz",
+      "bytes": 1489178,
+      "sha256": "e3584e2e77bd39ea59bf95834e592257b90c1f78ac5f1cbe2787c26106187641"
+    }
+  ],
+  "transport": {
+    "path": "raw.json.gz",
+    "bytes": 21180,
+    "sha256": "30980ef745029287dbb61a68812f0199d9dd1bcfd6abbe0c4fb7410cb388c8de"
+  },
+  "entries": [
+    {
+      "path": "adapter/actual-inspect01.exit.json",
+      "bytes": 258,
+      "sha256": "592cd8c6c847646652a730bcb44924ad250decd61ae8c2b97420a3c1bac2f6b3"
+    },
+    {
+      "path": "adapter/actual-inspect01.json",
+      "bytes": 3777,
+      "sha256": "4d497ffc1ee64b43fd3d442d8168e9d32571adace96c122394e2548e2d681530"
+    },
+    {
+      "path": "adapter/actual-inspect01.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "adapter/pure01.exit.json",
+      "bytes": 257,
+      "sha256": "8ab0a166b55bc90b72f832c616ef496cbfeef17b007012a503e90dac73d4d926"
+    },
+    {
+      "path": "adapter/pure01.log",
+      "bytes": 1404,
+      "sha256": "c603b1cc1a40fe5a162993abde3dd94aa1b4a53121f35b28c5fbaaaefe6979c1"
+    },
+    {
+      "path": "exact-source/install.exit.json",
+      "bytes": 192,
+      "sha256": "830af9b7ec5d3f2dbd0a8cbd936e529e0a8be85e03768d9944a7f06709ecbe7d"
+    },
+    {
+      "path": "exact-source/install.log",
+      "bytes": 4215,
+      "sha256": "79f44d78929e5290bc7a0f356ee8340f78317038e965b498ef8cbd78aacc9e63"
+    },
+    {
+      "path": "exact-source/mapped01.exit.json",
+      "bytes": 252,
+      "sha256": "524d05ef23329bb91ccd50ec4b6c2534e58b6a2f17d703d545c0ace0ffe68530"
+    },
+    {
+      "path": "exact-source/mapped01.log",
+      "bytes": 6867,
+      "sha256": "916dac5ba31dd53deab941058aaf8331a62744cb4f1ae03b7f4f69109158c0e7"
+    },
+    {
+      "path": "exact-source/steps/biome.log",
+      "bytes": 697,
+      "sha256": "72928d90231b89d3e3a48f821ea25cfffad666d6d6452920781bb09fd3810f46"
+    },
+    {
+      "path": "exact-source/steps/build.log",
+      "bytes": 14401,
+      "sha256": "851225ca7709f0acc0090c1b1739a4ab57fda5a7ab0cf48be216182834584ed0"
+    },
+    {
+      "path": "exact-source/steps/pnpm_run_check_changes.log",
+      "bytes": 2629,
+      "sha256": "aa49e082f576f54f6d832b7843b9f83b70523bd4d1386cf30275e8014e6a7ccc"
+    },
+    {
+      "path": "exact-source/steps/pnpm_run_check_gallery-tracker.log",
+      "bytes": 12153,
+      "sha256": "888148ad67660538b5c6a9733eeb2de22aeb48b0d957a5bea51864b8567fb591"
+    },
+    {
+      "path": "exact-source/steps/pnpm_run_check_release-report.log",
+      "bytes": 807,
+      "sha256": "5c2ddc18d7f806a967388619cab2acbeb4d701a1406749480dab2c4be611c572"
+    },
+    {
+      "path": "exact-source/steps/pnpm_run_check_skill-commands.log",
+      "bytes": 1033,
+      "sha256": "6dcfd350e8a32209843e4709944b9dcc8b2d8a25662e1fb1ce254d1c9906999d"
+    },
+    {
+      "path": "exact-source/steps/pnpm_run_check_stability.log",
+      "bytes": 3954,
+      "sha256": "6ab5fa9c45232bcc57c31f8a17738123c7158fa9f96d6c09e66bb3899d6ab934"
+    },
+    {
+      "path": "exact-source/steps/pnpm_run_check_text.log",
+      "bytes": 1720,
+      "sha256": "aa35fd2159ba5092e3a83af29570fbb69896a2fe5786295ee81f3d3ee1d8fbdb"
+    }
+  ],
+  "outcome": {
+    "pure": {
+      "pass": 15,
+      "fail": 0,
+      "skip": 0,
+      "executedUncommittedDraft": true
+    },
+    "actualInspect": {
+      "exitCode": 0,
+      "prepared": false
+    },
+    "exactSourceMapped": {
+      "exitCode": 1,
+      "pass": 6,
+      "fail": 2,
+      "typecheckSkipped": true,
+      "buildPassed": true,
+      "missingEvidence": true
+    },
+    "actualSuitePrepared": false,
+    "controllerValidateOnly": false,
+    "OfficeRun": false,
+    "nativeAcceptance": false,
+    "registryAcceptance": false
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "format": "b07-check-recovery-v1",
+  "transport": {
+    "path": "raw.json.gz",
+    "bytes": 92101,
+    "sha256": "b4b045238dad9a613e0971a62491ae72fedffe32bd961765aa2b1d7578e23a1e"
+  },
+  "entries": [
+    {
+      "path": "hydration01.json",
+      "bytes": 1068,
+      "sha256": "14bd15e8bbb0487243a8e8dc49a0ed4a5410e3aea518d3a4d70a721357b7ba44"
+    },
+    {
+      "path": "recovery01-gallery-tracker.log",
+      "bytes": 11464,
+      "sha256": "b97571f231b8afd89555de958a62cbe212711e699563cad998e78926c0df4894"
+    },
+    {
+      "path": "recovery01-gallery-tracker.exit.json",
+      "bytes": 302,
+      "sha256": "d45837db2de56685b29f58c3c6e476a22dc9774bcccca46167c86d7337d940be"
+    },
+    {
+      "path": "recovery01-text.log",
+      "bytes": 961,
+      "sha256": "451f5c54dd820fcf6748688e03dfdff44b73dc17ee74c2922eacb42dfe046df2"
+    },
+    {
+      "path": "recovery01-text.exit.json",
+      "bytes": 291,
+      "sha256": "4cc8b15e935662746b1be263f01d04002aed0f8126eb224920ec5519c438af76"
+    },
+    {
+      "path": "tracker-input-closure.json",
+      "bytes": 396355,
+      "sha256": "2ce2b6cf35e45a4ec114704428e5d7d4aca9d9410db31ec2c877d106d85f2ff0"
+    }
+  ],
+  "firstPacketSha256": "30980ef745029287dbb61a68812f0199d9dd1bcfd6abbe0c4fb7410cb388c8de",
+  "outcome": {
+    "onlyNamedThreeRestored": true,
+    "unchangedIndex": true,
+    "textRecoveryExit": 0,
+    "galleryRecoveryExit": 1,
+    "originalAggregate": "RED unchanged",
+    "furtherHydration": false,
+    "furtherRetry": false,
+    "OfficeRun": false
+  }
+}
