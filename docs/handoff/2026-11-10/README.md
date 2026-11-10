@@ -4,12 +4,14 @@
 
 ## Active takeover — current acceptance state
 
-The owner resumed the complete goal with the Mac coordinator. This supersedes the stopped-team assignments below; the goal is active and incomplete. Use [the active workstream board](workstreams.md) for current owners and next gates. Reviewed successor `43ff26fbacbab09c70322ba0dc191e126a2a32f3` is pushed; canonical draft1225 remains a distinct frozen head. v0.34 is unpublished and no third release is planned.
+The owner resumed the complete goal with the Mac coordinator. This supersedes the stopped-team assignments below; the goal is active and incomplete. Use [the active workstream board](workstreams.md) for current owners and next gates. Reviewed source union `084ff94867f538290418d7fb546468aa591fcad3` normally folds the tested navigation/cache repair, measured-list native fragment candidate and prospective bounded postflight policy. One coherent required gate follows; canonical draft1225 stays distinct. v0.34 is unpublished and no third release is planned.
 
 - Fresh full regression run: all310PPTX and147editor scripts PASS; original overall44PASS/9RED retained. Exact Git-input restoration and two causal test/metadata corrections are followed by selected maintained17step PASS. Eight raster differences and final coherent/native/platform/release gates remain.
 - Actual current case05 PowerPoint completes original/save/reopen and exact public source round-trips, but identical images visibly retain `1Bonjour` instead of `Bonjour 1`. Immediate nonzero global postflight leaves the attempt FAILED; Office/process actions are stopped. Raw evidence remains local pending exact transfer approval. Font metadata is not visual acceptance.
 - Current owner browser smoke and formal02 PASS at frozen89a9a74a: six cells/168cold-oracle checks/200edits/10destroy cycles. The36-slide desktop4× median edits take5.0–7.6seconds, and destroyed heap rises across cycles despite cleared caches/DOM; performance and memory acceptance remain open. The Mac quiet window is released. Two reviewed private site repairs are ready in one normal all-check merge gate; production and0.34adoption remain separate.
 - Existing rejected diagnostics remain rejected, including the historical explicit `a:rtl val="0"` attempt documented below. A standards-valid property is not itself proof of a native fix.
+
+Current source qualifications are narrow and explicit: native fragment13groups+5neighbor files PASS, performance/cache35core controls+actual navigation/report browser+5neighbors PASS, and postflight all7mapped checks PASS with actual WindowsPS5 still pending. The actual stage-writer serialization check separately passes3/3 on Windows without Office. The owner-approved exact two-file private evidence transfer is complete and hash-verified on Mac; all60entries are verified, and the old wrong native images were independently viewed. The old run stays failed, including nonzero postflight and font/marker/word-order findings. Main-site repair222 passed all preview checks and merged; production and DEV qualification remain separate.
 
 ## Historical owner stop and final takeover
 
