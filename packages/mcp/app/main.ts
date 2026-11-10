@@ -362,7 +362,7 @@ async function exportPptx(deck: unknown, request: { signal: AbortSignal; onProgr
 	await fonts?.ensure(whole as never, { signal: request.signal, catalogs } as never);
 	check();
 	request.onProgress({ stage: "convert", done: 0, total: 1, message: "Building the PowerPoint file…" });
-	const [{ toPptx }, { toPng }] = await Promise.all([import("@openpresentation/opf-pptx"), import("@openpresentation/opf-render/export-browser")]);
+	const [{ toPptx }, { toPng }] = await Promise.all([import("./pptx-export.js"), import("@openpresentation/opf-render/export-browser")]);
 	const notes = new Set<string>();
 	const png = (svg: string, options: { scale?: number; background?: string }) => toPng(svg as `<${string}`, { ...options, svgSource: "data" });
 	const bytes = await toPptx(whole as never, {
