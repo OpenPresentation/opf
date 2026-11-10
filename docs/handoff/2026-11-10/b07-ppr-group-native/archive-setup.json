@@ -1,0 +1,8 @@
+{
+  "kind": "offline-verifier adaptation only",
+  "firstObservedRefusal": "AssertionError: root/b07-bullet-native01-exit.json",
+  "cause": "One dynamic root filename prefix retained from the previously reviewed bullet archive verifier.",
+  "correction": "Change only root/b07-bullet- to root/b07-ppr-.",
+  "nativeRunChanged": false,
+  "archiveBytesChanged": false
+}
