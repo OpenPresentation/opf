@@ -86,11 +86,11 @@ function child(executable, args, options = {}) {
 test("actual create/verify/default-pure child route binds four whole cases, six packages, clean separate repos and unchanged supervisor without Office", {
   timeout: 30000,
 }, async () => {
-  const folder = fs.mkdtempSync(
+  const folder = fs.realpathSync(fs.mkdtempSync(
       process.platform === "win32"
         ? "C:/opf-work/ref-envelope-"
         : path.join(os.tmpdir(), "ref-envelope-"),
-    ),
+    )),
     controller = path.join(folder, "controller"),
     preparation = path.join(folder, "preparation"),
     worker = path.join(folder, "worker"),
