@@ -615,7 +615,7 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
       // (Cyrillic or Greek beyond a Latin replacement): then it is planned per character below.
       if (!fallbackEnabled || !nonAscii.test(text)) return [{text, family: style.fontFamily, own: true}];
       if (!measured) return cyrillicOrGreek.test(text) ? [{text, family: style.fontFamily, own: false, stack: [style.fontFamily, ...designatedFamilies("Latn", serif)]}] : [{text, family: style.fontFamily, own: true}];
-      if (ownFace === null || covers(ownFace, text, style)) return [{text, family: style.fontFamily, own: true}];
+      if (ownFace === null || covers(style.fontFamily, text, style)) return [{text, family: style.fontFamily, own: true}];
     }
     const cacheKey = `${style.fontFamily}\u0000${style.fontWeight ?? 400}\u0000${!!style.italic}\u0000${textRole(style) ?? ""}\u0000${style.path ?? ""}\u0000${text}`;
     const cached = plans.get(cacheKey);
