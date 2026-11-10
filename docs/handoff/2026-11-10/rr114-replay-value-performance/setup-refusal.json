@@ -1,0 +1,16 @@
+{
+  "kind": "SOURCE_ONLY_SETUP_REFUSAL",
+  "actualCommand": "strict working driver bytes versus immutable d2c driver bytes",
+  "firstFile": "config.mjs",
+  "expectedBytes": 1337,
+  "actualBytes": 1338,
+  "expectedSha256": "95b55cdacc92ee7e738b67eea90eb6bc25ca28b4c55423cbddf6baa7282b194c",
+  "actualSha256": "e2d24ad13cbb778fa571c747bf5a515f173cf2566bf5a65ce2c30ab2eeafedcd",
+  "cause": "Existing frozen working config has CR before final LF; byte guard refused before copying the first file.",
+  "secondDependentCommand": "derive-input.mjs was not created and its dependent invocation returned MODULE_NOT_FOUND.",
+  "childrenLaunched": 0,
+  "fixturesCreated": 0,
+  "performanceResult": false,
+  "rawLogCaptured": false,
+  "recovery": "Read immutable Git authority bytes; assert all existing working differences are CRLF only and preserve both hashes."
+}

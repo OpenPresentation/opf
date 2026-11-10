@@ -1,0 +1,47 @@
+{
+  "head": "d2c2bbd41d92e647c7f1bf48103ab0f66153e734",
+  "folder": "docs/handoff/2026-11-09/rr114-replay-validation-performance",
+  "copiedAuthority": "immutable Git objects; existing working CRLF differences are recorded, never changed",
+  "files": [
+    {
+      "name": "config.mjs",
+      "bytes": 1337,
+      "sha256": "95b55cdacc92ee7e738b67eea90eb6bc25ca28b4c55423cbddf6baa7282b194c",
+      "existingWorkingBytes": 1338,
+      "existingWorkingSha256": "e2d24ad13cbb778fa571c747bf5a515f173cf2566bf5a65ce2c30ab2eeafedcd",
+      "workingDifference": "CRLF_ONLY"
+    },
+    {
+      "name": "shared.mjs",
+      "bytes": 5747,
+      "sha256": "38416c8c8aee72cbef7e0f572c976171c9296ac00534671bce329622c6245584",
+      "existingWorkingBytes": 5748,
+      "existingWorkingSha256": "0545f2c931ec774be4a9e98f8b255380b0cc0ab4761d7fa2f1f5da9b0060275c",
+      "workingDifference": "CRLF_ONLY"
+    },
+    {
+      "name": "preflight.mjs",
+      "bytes": 834,
+      "sha256": "79a952f3cd21e97dd51514f97d5fdbfa931654ca071b3977a5bfdaacb5fb1302",
+      "existingWorkingBytes": 835,
+      "existingWorkingSha256": "0833b7f54b6c57aacb7e4e3e450a4c3aed4c26f50c5d339d0a3f1af3bd52277a",
+      "workingDifference": "CRLF_ONLY"
+    },
+    {
+      "name": "case.mjs",
+      "bytes": 8169,
+      "sha256": "a217cf57490d7c91ec0dc155c6675a5ca0dacc254b7c142af207b7d487c0828c",
+      "existingWorkingBytes": 8170,
+      "existingWorkingSha256": "d61f738cb78debcafd9c3f78029729e8a576c0f37a8bef5d6da5d4de8241bbd9",
+      "workingDifference": "CRLF_ONLY"
+    },
+    {
+      "name": "run.mjs",
+      "bytes": 5220,
+      "sha256": "ae30bf23bb05ca65f90e4202feb3ff269f508ef87ed1e5572d626f499d97eae6",
+      "existingWorkingBytes": 5221,
+      "existingWorkingSha256": "2477e0756f6fc3183865f67d02dc13ebd2c924e2c11719362e8524ddc8001520",
+      "workingDifference": "CRLF_ONLY"
+    }
+  ]
+}

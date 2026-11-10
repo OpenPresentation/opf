@@ -1,0 +1,285 @@
+{
+  "kind": "RR114_VALUE_STRESS_INPUTS",
+  "sourcePins": {
+    "files": [
+      {
+        "size": 16,
+        "name": "original-16.opf.json",
+        "bytes": 48696,
+        "sha256": "e14be44e63a8bbe4e64c5bdd2b6d95194ed39dc5e67c09c5a6a1225d13396a29",
+        "sourceHead": "6b522ccf547f60dafd3621910e7c032de7764e64",
+        "sourcePath": "docs/handoff/2026-11-09/svg-performance/inputs/original-16.opf.json"
+      },
+      {
+        "size": 36,
+        "name": "extended-36.opf.json",
+        "bytes": 98976,
+        "sha256": "249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599",
+        "sourceHead": "6b522ccf547f60dafd3621910e7c032de7764e64",
+        "sourcePath": "docs/handoff/2026-11-09/svg-performance/inputs/extended-36.opf.json"
+      }
+    ]
+  },
+  "original": {
+    "size": 16,
+    "name": "original-16.opf.json",
+    "bytes": 48696,
+    "sha256": "e14be44e63a8bbe4e64c5bdd2b6d95194ed39dc5e67c09c5a6a1225d13396a29",
+    "sourceHead": "6b522ccf547f60dafd3621910e7c032de7764e64",
+    "sourcePath": "docs/handoff/2026-11-09/svg-performance/inputs/original-16.opf.json"
+  },
+  "extended": {
+    "size": 36,
+    "name": "extended-36.opf.json",
+    "bytes": 98976,
+    "sha256": "249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599",
+    "sourceHead": "6b522ccf547f60dafd3621910e7c032de7764e64",
+    "sourcePath": "docs/handoff/2026-11-09/svg-performance/inputs/extended-36.opf.json"
+  },
+  "stress": {
+    "size": 48,
+    "name": "stress-48.opf.json",
+    "bytes": 136065,
+    "sha256": "31a4e04cadf81664db4c2883eb5004a7796ec72c18d6f5d5bdce4f85bdda1fec"
+  },
+  "derivation": {
+    "sourceName": "extended-36.opf.json",
+    "sourceSha256": "249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599",
+    "sourceBytes": 98976,
+    "originalSlideTokensSha256": [
+      "2ee3d2896c9a7b5e116bac3f7ee9563eda7f66f0bebd22679519c770638eec4c",
+      "7ef42ea9702387608b5781f3c37387a3f50d52d14e3893ccedea00fbe4b8ce3d",
+      "e6bf36cb73eb70c3785b3b3f8900b28cc72921b640ea06d7bfb8e42d897be034",
+      "f4b796c7386c645ea311a383633060d724091140f53c0627a0ab3438545a21a1",
+      "bb65eaec628f6c5315fa0ef6bf2389b248d9292fdd07d43642a51590b65e3fc5",
+      "5b18cb2eb5804915845e803cb44333db4e7c956529b39b1d0bf557001e2d1113",
+      "5f9c65439144fdd430b6d6671abe1d832e343ab2efd3bfb74fd45c127066d1f9",
+      "261a6c7db14b42870d17b9b90f5e060af4de0580935d9d0d6d0ea982b1c37618",
+      "e2659d94cb15e32f241f9deabd994753a352042b15ab9b6e50d0e0bbf8181f0c",
+      "ace70aea4a44847b5f99d9a2cdc1712d89dea886ce5c652da3aece2764038414",
+      "9e3fd384e884cd053d661a6003b75f96f6fb8493a9518a6f94ddd69a6fbc5d29",
+      "42f443332dd1edc537ce9d5d0c13839c7e2352e80399013c8862ffae3cadf98f",
+      "f7d49bf3da1ba90918f96ceb2a0fae8b576c5aa62aae1245b4dabc8e2b3a664d",
+      "3302933150f9d1daeebe341c8edee4cbcad8a10ae45ff02d14f5d2a47dbcb983",
+      "6a6ad51eb7a72e82022047cdaeded6e4131d765549160ff067561a38d8d6983c",
+      "0459550bda20242127365375c125bbc70f8ffef9105691f283daa62421b3fb21",
+      "2c3ae91bd27016380ecb263da9065c224e330c26c7b62d20fa797814e1cf5957",
+      "88b58ec5c999deb0654bbe6e8bc52c86809c20e6f2d4d7cc3f73ae572ac2ecd1",
+      "a142fd5c42bd08367b2b77679d241a0759e72e6df77591570c1f665227a8dc7d",
+      "a698a25ea7fe4ada50575115c4a54968903a0352b51a19ba8f816f82099e60ef",
+      "29e9161e63d15945615a6ab172545828f9e1d60733926884506da8457a350bfb",
+      "bd33f8228001239bcf48bc53b3d3f8f03b9eccb2a4eb061a2b098f84db8522aa",
+      "063c36a90fbde005a94cd720931032dd3bb637b28fba5049577f1b1046315505",
+      "1e3c5607cbfbfccec3b35125f2c727262cdef735fd2cb9ca1e614268a64fbce8",
+      "d46ca757a1746feabaa1bdcf8fb4722c94cc81ee4149f4c08062587d8965d32e",
+      "fbaa21b367eac4884edfd5af1a55aba84be69f4bd3bcda10f36c043d5a1b084b",
+      "40b261cedfa364d02649eba86358a42db157386fd879d6d7b146194e395d9b5c",
+      "bd4955896ec6434e2cd09b69b4f7fdfa9fbd4017dcb95a2deb30b77c9be38f58",
+      "7359238b78df80d62ebe36166330ba122e6e2e035970199be16dfae58c097695",
+      "b3026fb25441e84c37644c8f66ece6a3b6cc624c39dab3a1c4779c5ec70e574f",
+      "c22d855c83ca85b560c6e5a556eb635110ceaaae0f6d518b037eea69a38e8a5a",
+      "269163fdb78d07bc80ab1be3bb6e819f355462f7757ad39a51a0d185d4b6fc55",
+      "868b99f87f8a9ffed77bbbb0de115b36185255afa4057c1d66faf0faf1507321",
+      "99dcf1cb44aaf91a0626d0ec3278cd9c1e8bdbf1bd953ce5fd0085b0270b99e7",
+      "7f56ec319b3048bfe10c3193aa6f7e9d34f4d5f7e3ecaf8c77d6c4e2e1d5db5f",
+      "4fc57b81b2c0681d5d9027340680ac63c719cb648de124e68911b6154c836ae9"
+    ],
+    "preservedPrefixBytes": 98969,
+    "preservedPrefixSha256": "84d30aefbc951aadb45f2bd18525988e720752a2ee9602e406751ef9b41ffa12",
+    "clones": [
+      {
+        "sourceIndex": 0,
+        "appendedIndex": 36,
+        "originalId": "cover",
+        "id": "cover--value-stress-37",
+        "titleUnchanged": true,
+        "renamedIds": [
+          {
+            "path": "/id",
+            "from": "cover",
+            "to": "cover--value-stress-37"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 1,
+        "appendedIndex": 37,
+        "originalId": "lineup",
+        "id": "lineup--value-stress-38",
+        "titleUnchanged": true,
+        "renamedIds": [
+          {
+            "path": "/id",
+            "from": "lineup",
+            "to": "lineup--value-stress-38"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 2,
+        "appendedIndex": 38,
+        "originalId": "headlines",
+        "id": "headlines--value-stress-39",
+        "titleUnchanged": true,
+        "renamedIds": [
+          {
+            "path": "/id",
+            "from": "headlines",
+            "to": "headlines--value-stress-39"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 3,
+        "appendedIndex": 39,
+        "originalId": "a20-numbers",
+        "id": "a20-numbers--value-stress-40",
+        "titleUnchanged": true,
+        "renamedIds": [
+          {
+            "path": "/id",
+            "from": "a20-numbers",
+            "to": "a20-numbers--value-stress-40"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 4,
+        "appendedIndex": 40,
+        "originalId": "a20-inside",
+        "id": "a20-inside--value-stress-41",
+        "titleUnchanged": true,
+        "renamedIds": [
+          {
+            "path": "/id",
+            "from": "a20-inside",
+            "to": "a20-inside--value-stress-41"
+          },
+          {
+            "path": "/top+middle:left+center+right/blocks/0/id",
+            "from": "cpu",
+            "to": "cpu--value-stress-41"
+          },
+          {
+            "path": "/top+middle:left+center+right/blocks/1/id",
+            "from": "gpu",
+            "to": "gpu--value-stress-41"
+          },
+          {
+            "path": "/top+middle:left+center+right/blocks/2/id",
+            "from": "npu",
+            "to": "npu--value-stress-41"
+          },
+          {
+            "path": "/bottom:left+center+right/id",
+            "from": "vapor",
+            "to": "vapor--value-stress-41"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 5,
+        "appendedIndex": 41,
+        "originalId": "camera",
+        "id": "camera--value-stress-42",
+        "titleUnchanged": true,
+        "renamedIds": [
+          {
+            "path": "/id",
+            "from": "camera",
+            "to": "camera--value-stress-42"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 6,
+        "appendedIndex": 42,
+        "originalId": "island",
+        "id": "island--value-stress-43",
+        "titleUnchanged": true,
+        "renamedIds": [
+          {
+            "path": "/id",
+            "from": "island",
+            "to": "island--value-stress-43"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 7,
+        "appendedIndex": 43,
+        "originalId": "battery",
+        "id": "battery--value-stress-44",
+        "titleUnchanged": true,
+        "renamedIds": [
+          {
+            "path": "/id",
+            "from": "battery",
+            "to": "battery--value-stress-44"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 8,
+        "appendedIndex": 44,
+        "originalId": "changes",
+        "id": "changes--value-stress-45",
+        "titleUnchanged": true,
+        "renamedIds": [
+          {
+            "path": "/id",
+            "from": "changes",
+            "to": "changes--value-stress-45"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 9,
+        "appendedIndex": 45,
+        "originalId": "finishes",
+        "id": "finishes--value-stress-46",
+        "titleUnchanged": true,
+        "renamedIds": [
+          {
+            "path": "/id",
+            "from": "finishes",
+            "to": "finishes--value-stress-46"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 10,
+        "appendedIndex": 46,
+        "originalId": "pro-vs-max",
+        "id": "pro-vs-max--value-stress-47",
+        "titleUnchanged": true,
+        "renamedIds": [
+          {
+            "path": "/id",
+            "from": "pro-vs-max",
+            "to": "pro-vs-max--value-stress-47"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 11,
+        "appendedIndex": 47,
+        "originalId": "siri",
+        "id": "siri--value-stress-48",
+        "titleUnchanged": true,
+        "renamedIds": [
+          {
+            "path": "/id",
+            "from": "siri",
+            "to": "siri--value-stress-48"
+          }
+        ]
+      }
+    ],
+    "changesPerClone": [
+      "id properties only"
+    ],
+    "rootMetadataUnchanged": true,
+    "first36SlideObjectsAndTokenBytesUnchanged": true
+  }
+}

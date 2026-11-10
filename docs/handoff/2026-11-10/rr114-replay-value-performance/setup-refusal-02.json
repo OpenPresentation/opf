@@ -1,0 +1,17 @@
+{
+  "kind": "SOURCE_ONLY_DERIVATION_REFUSAL",
+  "sourceSha256": "3da638e9ee321792306436bff5b968632da62147736cb970601102f63f246c66",
+  "message": "local reference requires explicit remapping",
+  "cause": "Overbroad value match saw slide0 layout:cover equal its slide id; this is an unchanged catalog reference, not a local payload reference.",
+  "actualMatches": [
+    {
+      "slide": 0,
+      "path": "/layout",
+      "value": "cover"
+    }
+  ],
+  "fixturesReplaced": false,
+  "childrenLaunched": 0,
+  "rawLogCaptured": false,
+  "recovery": "Exempt only the typed layout catalog field; all other matching local-reference strings still refuse."
+}

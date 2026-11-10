@@ -1,0 +1,20 @@
+{
+  "files": [
+    {
+      "size": 16,
+      "name": "original-16.opf.json",
+      "bytes": 48696,
+      "sha256": "e14be44e63a8bbe4e64c5bdd2b6d95194ed39dc5e67c09c5a6a1225d13396a29",
+      "sourceHead": "6b522ccf547f60dafd3621910e7c032de7764e64",
+      "sourcePath": "docs/handoff/2026-11-09/svg-performance/inputs/original-16.opf.json"
+    },
+    {
+      "size": 36,
+      "name": "extended-36.opf.json",
+      "bytes": 98976,
+      "sha256": "249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599",
+      "sourceHead": "6b522ccf547f60dafd3621910e7c032de7764e64",
+      "sourcePath": "docs/handoff/2026-11-09/svg-performance/inputs/extended-36.opf.json"
+    }
+  ]
+}

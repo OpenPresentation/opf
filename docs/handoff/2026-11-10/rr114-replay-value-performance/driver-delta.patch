@@ -1,0 +1,68 @@
+diff --git "a/C:\\opf-work\\replay-value-perf-preparation-02\\authority\\config.mjs" "b/C:\\opf-work\\replay-value-perf\\docs\\handoff\\2026-11-10\\rr114-replay-value-performance\\config.mjs"
+index d54e0e40c..311966e9b 100644
+--- "a/C:\\opf-work\\replay-value-perf-preparation-02\\authority\\config.mjs"
++++ "b/C:\\opf-work\\replay-value-perf\\docs\\handoff\\2026-11-10\\rr114-replay-value-performance\\config.mjs"
+@@ -1,9 +1,10 @@
++import {fileURLToPath} from 'node:url';
+ export const RUNTIMES = Object.freeze({
+   control: {root:'C:/opf-work/replay-control',head:'276f339a68069dc11970d649092d6181c9feba38',runtime:'d2edd18ced67ea8370ae2d03f5f954d91ff9cb6e'},
+-  candidate: {root:'C:/opf-work/replay-fast',head:'bcc7d76d7eeeca8cd6102ef6a54a27fd9d4cce38',runtime:'23e579ac18d6a12506eefde0a5caa7cf0c50a4dd'},
++  candidate: {root:'C:/opf-work/replay-values',head:'b7bd3e8fe070f50160823479c2182d6d99fba1cc',runtime:'de1015ba743dae7561652c9329bfd001c3bdc0d0'},
+ });
+-export const INPUT_ROOT='C:/opf-work/perf-svg/docs/handoff/2026-11-09/svg-performance/inputs';
+-export const ORDER=Object.freeze([[16,'control'],[16,'candidate'],[36,'control'],[36,'candidate'],[36,'candidate'],[36,'control'],[16,'candidate'],[16,'control']]);
++export const INPUT_ROOT=fileURLToPath(new URL('./inputs/',import.meta.url));
++export const ORDER=Object.freeze([[16,'control'],[16,'candidate'],[36,'control'],[36,'candidate'],[48,'control'],[48,'candidate'],[48,'candidate'],[48,'control'],[36,'candidate'],[36,'control'],[16,'candidate'],[16,'control']]);
+ export const CHILD_TIMEOUT_MS=60000;
+ export const FACE_KEYS=Object.freeze(['Intos/400/false','Intos/700/false','Intos Display/700/false'].sort());
+ export const COPY_NAMES=['fonts-node.js','font-demand.js','font-registry.js','font-selection.js','font-selection-metadata.js','font-manifest.js','script-fonts.js','script-font-pack.js','lazy-font-list.js','lazy-fonts.js','svg.js','index.js','hb-shape.js','font-subset.js'];
+
+diff --git "a/C:\\opf-work\\replay-value-perf-preparation-02\\authority\\shared.mjs" "b/C:\\opf-work\\replay-value-perf\\docs\\handoff\\2026-11-10\\rr114-replay-value-performance\\shared.mjs"
+index 84161276b..fa55fe2b1 100644
+--- "a/C:\\opf-work\\replay-value-perf-preparation-02\\authority\\shared.mjs"
++++ "b/C:\\opf-work\\replay-value-perf\\docs\\handoff\\2026-11-10\\rr114-replay-value-performance\\shared.mjs"
+@@ -21,7 +21,7 @@ export function describeRuntime(name){
+  const built=[];for(const packageName of ['javascript','gallery','render'])for(const file of walk(join(runtime.root,'packages',packageName,'dist')).filter(file=>/\.(?:js|mjs|cjs|json|wasm)$/.test(file))){const data=readFileSync(file);built.push({file:normalized(runtime.root,file),bytes:data.length,sha256:sha(data)});}
+  return {...runtime,tree:git(runtime.root,'rev-parse','HEAD^{tree}'),runtimeTree:git(runtime.root,'rev-parse',runtime.runtime+'^{tree}'),lockSha256:sha(readFileSync(join(runtime.root,'pnpm-lock.yaml'))),workspaceSha256:sha(readFileSync(join(runtime.root,'pnpm-workspace.yaml'))),backendAssets:describeBackendAssets(runtime.root),copies,built};
+ }
+-export function describeInputs(){const manifestBytes=readFileSync(join(INPUT_ROOT,'manifest.json')),manifest=JSON.parse(manifestBytes);return{manifestSha256:sha(manifestBytes),files:[['original',16,'original-16.opf.json'],['extended',36,'extended-36.opf.json']].map(([key,size,name])=>{const data=readFileSync(join(INPUT_ROOT,name));assert.equal(sha(data),manifest[key].sha256,name);assert.equal(data.length,manifest[key].bytes);assert.equal(JSON.parse(data).slides.length,size);return{size,name,bytes:data.length,sha256:sha(data)};})};}
++export function describeInputs(){const manifestBytes=readFileSync(join(INPUT_ROOT,'manifest.json')),manifest=JSON.parse(manifestBytes);return{manifestSha256:sha(manifestBytes),files:[['original',16,'original-16.opf.json'],['extended',36,'extended-36.opf.json'],['stress',48,'stress-48.opf.json']].map(([key,size,name])=>{const data=readFileSync(join(INPUT_ROOT,name));assert.equal(sha(data),manifest[key].sha256,name);assert.equal(data.length,manifest[key].bytes);assert.equal(JSON.parse(data).slides.length,size);return{size,name,bytes:data.length,sha256:sha(data)};})};}
+ export function preflight(){
+  assert.match(process.version,/^v24\./,'pinned Node24');const control=describeRuntime('control'),candidate=describeRuntime('candidate');
+  assert.equal(control.lockSha256,candidate.lockSha256);assert.equal(control.workspaceSha256,candidate.workspaceSha256);assert.deepEqual(control.backendAssets,candidate.backendAssets,'same source-bound WASM assets');
+@@ -30,7 +30,7 @@ export function preflight(){
+  const allowed=new Set(REPLAY_DELTA.map(file=>file.replace('/src/','/dist/'))),left=new Map(control.built.map(row=>[row.file,row]));
+  for(const row of candidate.built){const old=left.get(row.file);if(allowed.has(row.file)){if(old)assert.notEqual(row.sha256,old.sha256,'changed approved module');}else{assert.ok(old,'unexpected added built module '+row.file);assert.equal(row.sha256,old.sha256,'shared built identity '+row.file);}left.delete(row.file);}
+  assert.equal(left.size,0,'no removed built modules');
+- const root=fileURLToPath(new URL('../../../../',import.meta.url));assert.equal(git(root,'status','--porcelain','--untracked-files=normal'),'','clean entire driver worktree');const driverFiles=['config.mjs','shared.mjs','preflight.mjs','case.mjs','run.mjs'].map(name=>({name,sha256:sha(readFileSync(new URL(name,import.meta.url)))}));
++ const root=fileURLToPath(new URL('../../../../',import.meta.url));assert.equal(git(root,'status','--porcelain','--untracked-files=normal'),'','clean entire driver worktree');const driverFiles=['config.mjs','shared.mjs','preflight.mjs','case.mjs','run.mjs','derive-input.mjs','input-proof.mjs','driver-authority.json'].map(name=>({name,sha256:sha(readFileSync(new URL(name,import.meta.url)))}));
+  return{schema:1,kind:'source-only-preflight',node:process.version,nodeExecutable:realpathSync(process.execPath),nodeExecutableSha256:sha(readFileSync(process.execPath)),driverSourceHead:git(root,'rev-parse','HEAD'),driverSourceTree:git(root,'rev-parse','HEAD^{tree}'),driverFiles,runtimes:{control,candidate},inputs:describeInputs()};
+ }
+ export function assertRuntimeStable(expected){const actual=describeRuntime(expected===undefined?'control':expected.name);assert.deepEqual(actual,expected.runtime);}
+
+
+diff --git "a/C:\\opf-work\\replay-value-perf-preparation-02\\authority\\case.mjs" "b/C:\\opf-work\\replay-value-perf\\docs\\handoff\\2026-11-10\\rr114-replay-value-performance\\case.mjs"
+index e1cbbfd38..076a6ba94 100644
+--- "a/C:\\opf-work\\replay-value-perf-preparation-02\\authority\\case.mjs"
++++ "b/C:\\opf-work\\replay-value-perf\\docs\\handoff\\2026-11-10\\rr114-replay-value-performance\\case.mjs"
+@@ -12,7 +12,7 @@ const arg=name=>process.argv.find(value=>value.startsWith('--'+name+'='))?.slice
+ assert.ok(process.argv.includes('--measure'),'explicit --measure required');
+ assert.match(process.version,/^v24\./);assert.equal(typeof globalThis.gc,'function','--expose-gc required');
+ const variant=arg('runtime'),size=Number(arg('size')),output=resolve(arg('out'));
+-assert.ok(RUNTIMES[variant]);assert.ok([16,36].includes(size));
++assert.ok(RUNTIMES[variant]);assert.ok([16,36,48].includes(size));
+ const preflightBytes=readFileSync(resolve(arg('preflight'))),preflightSha256=sha(preflightBytes);
+ assert.match(arg('expected-preflight-sha256')??'',/^[a-f0-9]{64}$/);assert.equal(preflightSha256,arg('expected-preflight-sha256'),'exact runner preflight bytes');
+ const preflight=JSON.parse(preflightBytes),runtime=preflight.runtimes[variant];
+
+diff --git "a/C:\\opf-work\\replay-value-perf-preparation-02\\authority\\run.mjs" "b/C:\\opf-work\\replay-value-perf\\docs\\handoff\\2026-11-10\\rr114-replay-value-performance\\run.mjs"
+index 06fdfe8cc..2a7f73f9d 100644
+--- "a/C:\\opf-work\\replay-value-perf-preparation-02\\authority\\run.mjs"
++++ "b/C:\\opf-work\\replay-value-perf\\docs\\handoff\\2026-11-10\\rr114-replay-value-performance\\run.mjs"
+@@ -20,5 +20,5 @@ try{
+   if(!assetOracle.has(size))assetOracle.set(size,data.dependencyAssets);assert.deepEqual(data.dependencyAssets,assetOracle.get(size),'exact HarfBuzz binary identities');
+   Object.assign(row,{hashesEquivalent:true,preparationMs:data.preparationMs,preparationCpuMs:data.preparationCpu.totalMs,firstMs:data.samples[0].elapsedMs,warmMs:data.samples.slice(1).map(sample=>sample.elapsedMs),warmCpuMs:data.samples.slice(1).map(sample=>sample.cpu.totalMs),prepPlusFirstMs:data.prepPlusFirstMs,continuousPreparationToFirstMs:data.continuousPreparationToFirstMs,prepPlusFirstCpuMs:data.prepPlusFirstCpuMs,firstMaxRssBytes:data.firstRenderMemory.maxRssBytes,finalRenderMaxRssBytes:data.finalRenderMemory.maxRssBytes,postDropHeapUsed:data.postDropGc.heapUsed});save();console.log(result.stdout.trim());
+  }
+- const final=preflight();for(const key of ['node','nodeExecutable','nodeExecutableSha256','driverSourceHead','driverSourceTree','driverFiles','runtimes','inputs'])assert.deepEqual(final[key],prepared[key],'unchanged postflight '+key);checkDriver();receipt.status='PASS';receipt.exactSvgChecks=ORDER.reduce((sum,[size])=>sum+size*3,0);save();console.log(JSON.stringify({status:'PASS',children:8,exactSvgChecks:receipt.exactSvgChecks}));
++ const final=preflight();for(const key of ['node','nodeExecutable','nodeExecutableSha256','driverSourceHead','driverSourceTree','driverFiles','runtimes','inputs'])assert.deepEqual(final[key],prepared[key],'unchanged postflight '+key);checkDriver();receipt.status='PASS';receipt.exactSvgChecks=ORDER.reduce((sum,[size])=>sum+size*3,0);assert.equal(receipt.exactSvgChecks,1200);save();console.log(JSON.stringify({status:'PASS',children:ORDER.length,exactSvgChecks:receipt.exactSvgChecks}));
+ }catch(error){receipt.status='FAIL';receipt.failure=error.stack??String(error);save();throw error;}
