@@ -19,7 +19,8 @@ for (const file of [
 }
 const source = readFileSync(worker, "utf8");
 assert.doesNotMatch(source, /\.SaveAs\(|\.Save\(/, "Read-only inputs are never saved in place");
-assert.match(source, /\.Open\(\$Path,-1,0,-1\)/);
+assert.match(source, /\.Open\(\$Path,-1,0,0\)/, 'Owned source/reopen must be read-only and windowless');
+assert.doesNotMatch(source, /\.Open\(\$Path,-1,0,-1\)/, 'Visible owned opens are forbidden');
 assert.match(source, /\.SaveCopyAs\(\$CopyPath,24\)/);
 assert.match(source, /\[switch\]\$CaptureTextFonts/);
 assert.match(
