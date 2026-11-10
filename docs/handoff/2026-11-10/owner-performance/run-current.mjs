@@ -4,8 +4,8 @@ import path from 'node:path';
 import {createServer} from 'node:http';
 import {createRequire} from 'node:module';
 import {createHash} from 'node:crypto';
-import {execFileSync} from 'node:child_process';
 import {gzipSync,brotliCompressSync,constants} from 'node:zlib';
+import {verifyBinding,verifyFiles,measuredInputs,assetAdmission,fileRecord} from './bindings.mjs';
 
 const root=process.cwd(),req=createRequire(path.join(root,'packages/editor/package.json')),{chromium}=req('playwright');
 const smoke=process.argv.includes('--smoke'),measured=process.argv.includes('--measure');
@@ -15,24 +15,27 @@ const site=path.resolve(root,option('--build','artifacts/owner-current-build-01'
 const output=path.resolve(root,option('--out',`artifacts/owner-current-${smoke?'smoke':'formal'}-01`));
 const relative=path.relative(root,output);assert.ok(relative&&!relative.startsWith('..')&&!path.isAbsolute(relative)&&!fs.existsSync(output),'Fresh owned output directory required');fs.mkdirSync(output,{recursive:true});
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
-const git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim();
-const build=JSON.parse(fs.readFileSync(path.join(site,'build-receipt.json'))),scope=smoke?'FUNCTIONAL_NOT_TIMING':'MEASURED_CURRENT_CANDIDATE_NOT_VERSION_COMPARISON';
+const buildReceiptFile=path.join(site,'build-receipt.json'),buildReceiptRecord=fileRecord(root,buildReceiptFile);
+const build=JSON.parse(fs.readFileSync(buildReceiptFile)),scope=smoke?'FUNCTIONAL_NOT_TIMING':'MEASURED_CURRENT_CANDIDATE_NOT_VERSION_COMPARISON';
 // Explicit roots replace the archived driver's machine-private Windows paths.
 const inputDir=path.resolve(root,option('--inputs','artifacts/owner-performance-inputs'));
-const assetSite=path.resolve(root,option('--assets','packages/editor/artifacts/playground'));
+const assetSite=path.resolve(root,option('--assets','artifacts/owner-current-assets-01'));
 assert.ok(fs.statSync(inputDir).isDirectory(),'Exact owner inputs are required');
 assert.ok(fs.statSync(assetSite).isDirectory(),'Current maintained split-font assets are required');
-const expected={16:'e14be44e63a8bbe4e64c5bdd2b6d95194ed39dc5e67c09c5a6a1225d13396a29',36:'249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599'};
-const inputs=Object.fromEntries([16,36].map(size=>{const file=path.join(inputDir,size===16?'original-16.opf.json':'extended-36.opf.json'),bytes=fs.readFileSync(file);assert.equal(hash(bytes),expected[size]);const deck=JSON.parse(bytes);assert.equal(deck.slides.length,size);return[size,{file,bytes,sha256:hash(bytes),deck}];}));
-assert.deepEqual(inputs[36].deck.slides.slice(0,16),inputs[16].deck.slides,'first16 original slide objects unchanged');
-function verifyBuild(){assert.equal(git('rev-parse','HEAD'),build.source,'source revision stays fixed');assert.equal(hash(fs.readFileSync(path.join(site,'app.js'))),build.bundleSha256);for(const item of build.inputs)assert.equal(hash(fs.readFileSync(path.resolve(root,item.path))),item.sha256,item.path);}
+const projectionArg=option('--projection',undefined),projectionFile=projectionArg?path.resolve(root,projectionArg):undefined;
+const inputSelection=measuredInputs(root,inputDir,projectionFile),inputs=inputSelection.inputs;
+assert.deepEqual(inputSelection.admission,build.projection,'Explicit raw/projection admission must equal the frozen build');
+assert.deepEqual(inputSelection.inputFiles,build.inputFiles);
+const prepared=assetAdmission(root,assetSite);assert.deepEqual(prepared.record,build.assets,'Prepared assets must be the frozen build inputs');
+function verifyBuild(){verifyFiles(root,[buildReceiptRecord]);verifyBinding(root,build.binding);verifyFiles(root,[build.buildDriver,...build.inputFiles,...build.outputs,...build.inputs,...build.compiler]);assert.deepEqual(measuredInputs(root,inputDir,projectionFile).admission,build.projection);assert.deepEqual(assetAdmission(root,assetSite).record,build.assets);}
 verifyBuild();
+const allowedResources=new Map([...build.outputs,...prepared.receipt.outputs].map(record=>[path.resolve(root,record.path),record]));
 const requests=[],blocked=[],errors=[],assets=new Map(),cases=[],renderedVectors=new Map();let activeCase='setup';
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.ttf':'font/ttf','.woff2':'font/woff2','.wasm':'application/wasm'};
 const server=createServer((request,response)=>{try{
  const url=new URL(request.url,'http://127.0.0.1');if(url.pathname==='/favicon.ico'){response.writeHead(204).end();return;}
  const decoded=decodeURIComponent(url.pathname==='/'?'/index.html':url.pathname);assert.ok(!decoded.includes('\\'));let file=path.resolve(site,'.'+decoded),rel=path.relative(site,file);assert.ok(!rel.startsWith('..')&&!path.isAbsolute(rel));
- if(!fs.existsSync(file))file=path.resolve(assetSite,rel);const bytes=fs.readFileSync(file),sha256=hash(bytes);
+ if(!fs.existsSync(file))file=path.resolve(assetSite,rel);const declared=allowedResources.get(file);assert.ok(declared,'Resource is absent from the initial bound output inventory');const bytes=fs.readFileSync(file),sha256=hash(bytes);assert.equal(sha256,declared.sha256,'Resource differs from its initial provenance');assert.equal(bytes.length,declared.bytes);
  if(assets.has(file))assert.equal(assets.get(file),sha256,'served resource changed');else assets.set(file,sha256);
  requests.push({case:activeCase,path:url.pathname,method:request.method,bytes:bytes.length,sha256,hasCookie:!!request.headers.cookie,hasAuthorization:!!request.headers.authorization});
  response.writeHead(200,{'Content-Type':mime[path.extname(file)]??'application/octet-stream','Cache-Control':'no-cache'}).end(bytes);
@@ -132,7 +135,7 @@ try{
  for(const cell of cells)await measuredCase({...cell,name:`${cell.label}-cpu${cell.cpu}-${cell.size}-cached`,mode:'cached'});
  const retained=[await soak('cached')];
  assert.equal(errors.length,0,JSON.stringify(errors));assert.deepEqual(blocked,[]);verifyBuild();for(const[file,sha256]of assets)assert.equal(hash(fs.readFileSync(file)),sha256,'served asset remains byte exact: '+file);for(const input of Object.values(inputs))assert.equal(hash(fs.readFileSync(input.file)),input.sha256);
- const receipt={status:'PASS',scope,source:build.source,tree:build.tree,bundleSha256:build.bundleSha256,node:process.version,inputFiles:Object.fromEntries(Object.entries(inputs).map(([size,input])=>[size,{bytes:input.bytes.length,sha256:input.sha256}])),cases:cases.map(item=>({configuration:item.configuration,rows:item.rows.length})),completeColdOracleChecks:cases.reduce((n,item)=>n+item.rows.length,0),retained:retained.map(item=>({configuration:item.configuration,edits:item.edits,mountDestroyCycles:item.mountDestroyCycles})),requests,blocked,errors,limits:{setupMs:90000,phaseMs:30000,traceEndMs:15000},disclosure:['One current candidate with public cold-oracle equality outside intervals; no historical/version speed comparison.','One fresh browser process per case;390px viewport and4xCPU are desktop proxies; no physical-mobile/low-power-device claim.','Debounce stays inside settled elapsed time; report/SVG equality, hashing, GC and storage are outside primary intervals. Sorter direct-oracle work primes caches outside intervals.','Trace/forwarder/observer overhead is present symmetrically; no unperturbed-production claim.','Cache policy bounds are logical; short post-GC heap/DOM soak is not leak acceptance.','Original root smoke is functional evidence only and is preserved separately; no invented root stdout.']};
+ const receipt={status:'PASS',scope,source:build.source,tree:build.tree,bundleSha256:build.bundleSha256,node:process.version,buildReceipt:buildReceiptRecord,binding:build.binding,projection:build.projection,assetProvenance:build.assets,assetsObserved:[...assets].map(([file,sha256])=>({path:path.relative(root,file),sha256})),assetCoverage:'Only observed served resources are browser-used; prepared unused outputs are bound, not qualified',inputFiles:Object.fromEntries(Object.entries(inputs).map(([size,input])=>[size,{rawBytes:input.bytes.length,rawSha256:input.sha256,measuredBytes:input.measuredBytes.length,measuredSha256:input.measuredSha256}])),cases:cases.map(item=>({configuration:item.configuration,rows:item.rows.length})),completeColdOracleChecks:cases.reduce((n,item)=>n+item.rows.length,0),retained:retained.map(item=>({configuration:item.configuration,edits:item.edits,mountDestroyCycles:item.mountDestroyCycles})),requests,blocked,errors,limits:{setupMs:90000,phaseMs:30000,traceEndMs:15000},disclosure:['One current candidate with public cold-oracle equality outside intervals; no historical/version speed comparison.','One fresh browser process per case;390px viewport and4xCPU are desktop proxies; no physical-mobile/low-power-device claim.','Debounce stays inside settled elapsed time; report/SVG equality, hashing, GC and storage are outside primary intervals. Sorter direct-oracle work primes caches outside intervals.','Trace/forwarder/observer overhead is present symmetrically; no unperturbed-production claim.','Cache policy bounds are logical; short post-GC heap/DOM soak is not leak acceptance.','Original root smoke is functional evidence only and is preserved separately; no invented root stdout.']};
  fs.writeFileSync(path.join(output,'receipt.json'),JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({status:'PASS',scope,cases:receipt.cases.length,completeColdOracleChecks:receipt.completeColdOracleChecks,output}));
 }catch(error){fs.writeFileSync(path.join(output,'first-failure.json'),JSON.stringify({status:'FAILED',scope,message:error.stack??String(error),requests,blocked,errors},null,2)+'\n');console.error(error);process.exitCode=1;}
 finally{await new Promise(resolve=>server.close(resolve));}

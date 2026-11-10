@@ -65,11 +65,38 @@ Before any execution, freeze/push the exact drivers and final product source. Th
 # Exact input recovery only; already verified in this preparation lane.
 node docs/handoff/2026-11-10/owner-performance/materialize-inputs.mjs --out=artifacts/owner-performance-inputs-01
 # Build the final source through ordinary pinned Node/pnpm first, then maintained assets into a fresh directory.
-OPF_PLAYGROUND_OUT=artifacts/owner-current-assets-01 OPF_PLAYGROUND_SPLIT_FONTS=1 node packages/editor/scripts/build-playground.mjs
-node docs/handoff/2026-11-10/owner-performance/build-current.mjs --inputs=artifacts/owner-performance-inputs-01 --out=artifacts/owner-current-build-01
-node docs/handoff/2026-11-10/owner-performance/run-current.mjs --smoke --inputs=artifacts/owner-performance-inputs-01 --assets=artifacts/owner-current-assets-01 --build=artifacts/owner-current-build-01 --out=artifacts/owner-current-smoke-01
+node docs/handoff/2026-11-10/owner-performance/propose-projection.mjs --inputs=artifacts/owner-performance-inputs-01 --out=artifacts/owner-current-projection-01
+node docs/handoff/2026-11-10/owner-performance/prepare-assets.mjs --out=artifacts/owner-current-assets-01
+node docs/handoff/2026-11-10/owner-performance/build-current.mjs --inputs=artifacts/owner-performance-inputs-01 --projection=artifacts/owner-current-projection-01/proposal.json --assets=artifacts/owner-current-assets-01 --out=artifacts/owner-current-build-01
+node docs/handoff/2026-11-10/owner-performance/run-current.mjs --smoke --inputs=artifacts/owner-performance-inputs-01 --projection=artifacts/owner-current-projection-01/proposal.json --assets=artifacts/owner-current-assets-01 --build=artifacts/owner-current-build-01 --out=artifacts/owner-current-smoke-01
 # Only after genuine functional smoke/source review and coordinator quiet-window approval:
-node docs/handoff/2026-11-10/owner-performance/run-current.mjs --measure --inputs=artifacts/owner-performance-inputs-01 --assets=artifacts/owner-current-assets-01 --build=artifacts/owner-current-build-01 --out=artifacts/owner-current-formal-01
+node docs/handoff/2026-11-10/owner-performance/run-current.mjs --measure --inputs=artifacts/owner-performance-inputs-01 --projection=artifacts/owner-current-projection-01/proposal.json --assets=artifacts/owner-current-assets-01 --build=artifacts/owner-current-build-01 --out=artifacts/owner-current-formal-01
 ```
 
 Fresh-directory refusals, exact source/bundle/input hashes, actual failure JSON and original90s setup/30s phase/15s trace deadlines remain. Do not change a deadline or retry a failed formal case in place. The source-only checks in `preparation-checks.json` establish syntax and exact input recovery only; they are not functional/browser qualification. No install, product build, browser process or benchmark has run in this preparation lane.
+
+
+## Actual immutable-schema refusal and reviewed typed admission
+
+A source-only AJV check compiled all17 schema Git blobs at exact `ed51a7e8a6636bb2e08c9a446a7d22c21ad81066`, using AJV8.18.0/ajv-formats3.0.1 from the already installed dependency checkout. It never imported mutable product dist. [The complete refusal receipt](raw-ed51-schema.json) retains202/398 branch diagnostics for raw16/36. Union alternatives produce additional noise; notably, styled table columns already accept value/style and must **not** become DataColumn.name objects.
+
+Root reviewed and approved precisely [the typed projection receipt](reviewed-projection.json):31changes for16 and59for36, only `Design.titleAlignment`, `HeaderFooter` logical zone keys, promoted `Slide` region keys and `StyledTableCell.style.align`. The raw deck is explicitly en-US/LTR. Physical cell padding/borders, all authored text, dataset names/columns/values, chart data and styled column value/style objects stay exact. The proposed outputs validate against immutable ed51 and have these separately pinned identities:
+
+| Measured current document | Bytes | SHA-256 |
+| --- | ---: | --- |
+| projected16 | 47,066 | 6309daf437296c2bc1161334dbea93d3b8b291105e3d6b30d436684ff3a55d2f |
+| projected36 | 99,024 | a4a786065f187a556fb14f540ada02f6624f49fbf531685e79b3aad845e45e55 |
+
+The shared `measuredInputs` admission requires explicit `--projection`; `--inputs` always names the immutable raw directory. It verifies recipe/receipt/output pins,31/59 exact path operations, the complete parsed inverse, datasets, projected first16 equality and raw hashes. There is no fallback, broad migration or literal rewriting. Source formatting and logical vocabulary make the projected file bytes different; the receipt does not claim byte identity with the raw source. Build and run bind both raw and projected files, the path/recipe receipt and the actual measured identities. Future source changes must not be measured through an unreviewed projection.
+
+## Strengthened build and asset binding
+
+`bindings.mjs` captures HEAD/tree plus the Git source-manifest identity over root lock/workspace/package metadata, spec, packages and scripts. It hashes the exact root lock/workspace and workspace manifests, nearest installed package manifests for actual graph/asset inputs, current build/runner/entry/helper/projection drivers, Node version/executable and actual esbuild package/JS/launcher/native executable. Build snapshots also bind every real esbuild input, served build output, build-driver record, input/projection recipe and initial asset receipt. Before each case and after the final case the runner rechecks these values and the build-receipt file itself. An unchanged Git HEAD alone is no longer sufficient.
+
+`prepare-assets.mjs` is the mandatory owned preparation wrapper around the maintained split-font builder. Its child uses a forwarding readonly tracer for actual Node module resolution, sync/async reads and copied source files. The helper rechecks all observed source bytes, captures exact compiler identities, inventories initial prepared output bytes, and records maintained-builder/tracer/trace/source provenance. The runtime server admits only files in this initial build/asset inventory and checks their bytes before serving. Inputs and inventory are rechecked before/after measurement. No actual maintained asset preparation has run yet.
+
+Scope is explicit: esbuild's native child internally reads the unused playground/demo JavaScript graphs outside the Node filesystem tracer. Those unserved generated JS outputs are inventoried for immutability, **not qualified**. The separately built current browser harness has a full actual esbuild input graph. Later request records distinguish the subset actually served from all prepared but unseen assets; unseen fonts/scripts receive no browser-use claim.
+
+[Thirteen actual pure controls](binding-pure-results.json) pass: authentic source/manifest/driver/Node binding, bad build/runner/entry/helper/lock/manifest/source identity refusals, changed asset input/output refusals, approved projection/inverse/raw preservation and an altered inverse refusal. An actual owned Node tracing fixture preserves Unicode read/copied bytes and binds its imported module/data input. This is builtins-only testing, with no product import/build/browser or benchmark. The first capture glob accidentally included sparse historical evidence package.json files and failed ENOENT; that setup failure is retained in `source-preparation-results.json`. The corrected binding covers workspace manifests and actual resolved input manifests, rather than claiming archived packages are current dependencies.
+
+The direct already-installed compiler-path probe also passes without running esbuild. All new scripts pass syntax checking. No product/runtime optimization, package install, product build, browser process, timing trial, source projection fallback, CI observer or native action has run. The required changed-scope metadata gate remains held with the shared heavy slot; later full-source/chart-reference repairs and exact functional smoke must precede a formal quiet window.

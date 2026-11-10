@@ -1,6 +1,6 @@
 --- build.mjs
 +++ build-current.mjs
-@@ -1,6 +1,6 @@
+@@ -1,17 +1,21 @@
  import fs from 'node:fs';
  import path from 'node:path';
 -import {fileURLToPath} from 'node:url';
@@ -8,7 +8,9 @@
  import {createRequire} from 'node:module';
  import {createHash} from 'node:crypto';
  import {execFileSync} from 'node:child_process';
-@@ -9,7 +9,7 @@
++import {captureBinding,verifyBinding,verifyFiles,measuredInputs,assetAdmission,fileRecord,compilerRecords} from './bindings.mjs';
+ const root=process.cwd(),folder=path.dirname(fileURLToPath(import.meta.url));
+ const req=createRequire(path.join(root,'packages/editor/package.json')),{build}=req('esbuild');
  const git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim();
  const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
  const abs=file=>path.resolve(root,file).split(path.sep).join('/');
@@ -16,23 +18,32 @@
 +const out=path.resolve(root,process.argv.find(arg=>arg.startsWith('--out='))?.slice(6)??'artifacts/owner-current-build-01');
  const relative=path.relative(root,out);if(!relative||relative.startsWith('..')||path.isAbsolute(relative)||fs.existsSync(out))throw Error('Fresh owned output directory required');
  if(git('diff','--name-only','HEAD','--','packages','spec','pnpm-lock.yaml'))throw Error('Production source must be frozen');
++const compiler=compilerRecords(root),beforeBinding=captureBinding(root,compiler);
++const assetDir=path.resolve(root,process.argv.find(arg=>arg.startsWith('--assets='))?.slice(9)??'artifacts/owner-current-assets-01');
++const assets=assetAdmission(root,assetDir);
  fs.mkdirSync(out,{recursive:true});
-@@ -29,10 +29,15 @@
+ const core=abs('packages/javascript/dist/browser.js'),panel=abs('packages/editor/src/review-panel.js'),svg=abs('packages/render/dist/svg.js'),selection=abs('packages/render/dist/slide-sources.js');
+ const virtual=[];
+@@ -29,10 +33,19 @@
    virtual.push({name:args.path,bytes:Buffer.byteLength(contents),sha256:hash(contents),source:contents});return{resolveDir:root,contents};
   });
  }};
 -const result=await build({entryPoints:[path.join(folder,'browser-entry.mjs')],absWorkingDir:root,bundle:true,platform:'browser',format:'esm',minify:true,write:false,metafile:true,plugins:[plugin],define:{'process.env.NODE_ENV':'"production"'},logLevel:'error'});
 +const inputDir=path.resolve(root,process.argv.find(arg=>arg.startsWith('--inputs='))?.slice(9)??'artifacts/owner-performance-inputs');
-+const inputManifest=JSON.parse(fs.readFileSync(path.join(folder,'input-manifest.json')));
++const projectionFile=process.argv.find(arg=>arg.startsWith('--projection='))?.slice(13);
++const measured=measuredInputs(root,inputDir,projectionFile?path.resolve(root,projectionFile):undefined);
 +const [{validate},{gallery}]=await Promise.all([import(pathToFileURL(abs('packages/javascript/dist/index.js')).href),import(pathToFileURL(abs('packages/gallery/dist/index.js')).href)]);
 +const validationInputs=[];
-+for(const[name,key]of [['original-16','original'],['extended-36','extended']]){const bytes=fs.readFileSync(path.join(inputDir,name+'.opf.json')),expected=inputManifest[key];if(hash(bytes)!==expected.sha256||bytes.length!==expected.bytes)throw Error('Owner input bytes differ: '+name);const report=validate(JSON.parse(bytes),{only:['format'],catalogs:[gallery]});if(!report.valid)throw Error('Exact owner input fails current format; no implicit projection: '+JSON.stringify(report.findings));validationInputs.push({name,bytes:bytes.length,sha256:hash(bytes),valid:report.valid});}
++for(const input of Object.values(measured.inputs)){const report=validate(input.deck,{only:['format'],catalogs:[gallery]});if(!report.valid)throw Error('Explicit measured input fails current format: '+JSON.stringify(report.findings));validationInputs.push({rawBytes:input.bytes.length,rawSha256:input.sha256,measuredBytes:input.measuredBytes.length,measuredSha256:input.measuredSha256,valid:report.valid});}
 +const result=await build({entryPoints:[path.join(folder,'current-browser-entry.mjs')],absWorkingDir:root,bundle:true,platform:'browser',format:'esm',minify:true,write:false,metafile:true,plugins:[plugin],define:{'process.env.NODE_ENV':'"production"'},logLevel:'error'});
  const js=result.outputFiles[0].contents;fs.writeFileSync(path.join(out,'app.js'),js);
  fs.writeFileSync(path.join(out,'index.html'),'<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="./styles.css"><style>html,body{margin:0;height:100%;width:100%;overflow:hidden}#host{height:100dvh;width:100vw}</style><div id="host"></div><script type="module" src="./app.js"></script>');
  const inputs=Object.keys(result.metafile.inputs).filter(file=>!file.startsWith('rr117:')).map(file=>{const bytes=fs.readFileSync(path.resolve(root,file));return{path:file,bytes:bytes.length,sha256:hash(bytes)};});
 -const receipt={scope:'BUILT_NOT_MEASURED',source:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),node:process.version,bundleBytes:js.length,bundleSha256:hash(js),inputs,virtual,buildDriver:{path:path.relative(root,fileURLToPath(import.meta.url)),sha256:hash(fs.readFileSync(fileURLToPath(import.meta.url)))},control:'Identical frozen candidate bundle in all cases; public panel.invalidate before cold edits, outside primary interval. Wrapper instrumentation only; no product source/dist rewrite.'};
-+const receipt={scope:'BUILT_NOT_MEASURED',validationInputs,source:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),node:process.version,bundleBytes:js.length,bundleSha256:hash(js),inputs,virtual,buildDriver:{path:path.relative(root,fileURLToPath(import.meta.url)),sha256:hash(fs.readFileSync(fileURLToPath(import.meta.url)))},control:'One frozen current-candidate bundle in six cached cases; complete public cold-oracle reports checked outside intervals. Wrapper instrumentation only; no product source/dist rewrite.'};
++verifyBinding(root,beforeBinding);verifyFiles(root,compiler);verifyFiles(root,measured.inputFiles);verifyFiles(root,[assets.record]);assetAdmission(root,assetDir);
++const binding=captureBinding(root,[...inputs,...compiler]);
++const outputs=['app.js','index.html'].map(file=>fileRecord(root,path.join(out,file)));
++const receipt={scope:'BUILT_NOT_MEASURED',binding,compiler,outputs,projection:measured.admission,inputFiles:measured.inputFiles,assets:assets.record,validationInputs,source:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),node:process.version,bundleBytes:js.length,bundleSha256:hash(js),inputs,virtual,buildDriver:fileRecord(root,fileURLToPath(import.meta.url)),control:'One frozen current-candidate bundle in six cached cases; complete public cold-oracle reports checked outside intervals. Wrapper instrumentation only; no product source/dist rewrite.'};
  fs.writeFileSync(path.join(out,'build-receipt.json'),JSON.stringify(receipt,null,2)+'\n');
  console.log(JSON.stringify({scope:receipt.scope,source:receipt.source,inputs:inputs.length,bundleBytes:js.length,out}));
 --- browser-entry.mjs
@@ -52,12 +63,14 @@
   setMode(mode){if(!['cold','cached'].includes(mode))throw Error('bad mode');window.__reviewTrial.mode=mode;},
 --- run-paired-review.mjs
 +++ run-current.mjs
-@@ -5,18 +5,18 @@
+@@ -4,34 +4,38 @@
+ import {createServer} from 'node:http';
  import {createRequire} from 'node:module';
  import {createHash} from 'node:crypto';
- import {execFileSync} from 'node:child_process';
+-import {execFileSync} from 'node:child_process';
 -import {gzipSync} from 'node:zlib';
 +import {gzipSync,brotliCompressSync,constants} from 'node:zlib';
++import {verifyBinding,verifyFiles,measuredInputs,assetAdmission,fileRecord} from './bindings.mjs';
  
  const root=process.cwd(),req=createRequire(path.join(root,'packages/editor/package.json')),{chromium}=req('playwright');
  const smoke=process.argv.includes('--smoke'),measured=process.argv.includes('--measure');
@@ -69,25 +82,39 @@
 +const output=path.resolve(root,option('--out',`artifacts/owner-current-${smoke?'smoke':'formal'}-01`));
  const relative=path.relative(root,output);assert.ok(relative&&!relative.startsWith('..')&&!path.isAbsolute(relative)&&!fs.existsSync(output),'Fresh owned output directory required');fs.mkdirSync(output,{recursive:true});
  const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
- const git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim();
+-const git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim();
 -const build=JSON.parse(fs.readFileSync(path.join(site,'build-receipt.json'))),scope=smoke?'FUNCTIONAL_NOT_TIMING':'MEASURED_SAME_CANDIDATE';
-+const build=JSON.parse(fs.readFileSync(path.join(site,'build-receipt.json'))),scope=smoke?'FUNCTIONAL_NOT_TIMING':'MEASURED_CURRENT_CANDIDATE_NOT_VERSION_COMPARISON';
++const buildReceiptFile=path.join(site,'build-receipt.json'),buildReceiptRecord=fileRecord(root,buildReceiptFile);
++const build=JSON.parse(fs.readFileSync(buildReceiptFile)),scope=smoke?'FUNCTIONAL_NOT_TIMING':'MEASURED_CURRENT_CANDIDATE_NOT_VERSION_COMPARISON';
  // Explicit roots replace the archived driver's machine-private Windows paths.
  const inputDir=path.resolve(root,option('--inputs','artifacts/owner-performance-inputs'));
- const assetSite=path.resolve(root,option('--assets','packages/editor/artifacts/playground'));
-@@ -24,9 +24,10 @@
+-const assetSite=path.resolve(root,option('--assets','packages/editor/artifacts/playground'));
++const assetSite=path.resolve(root,option('--assets','artifacts/owner-current-assets-01'));
+ assert.ok(fs.statSync(inputDir).isDirectory(),'Exact owner inputs are required');
  assert.ok(fs.statSync(assetSite).isDirectory(),'Current maintained split-font assets are required');
- const expected={16:'e14be44e63a8bbe4e64c5bdd2b6d95194ed39dc5e67c09c5a6a1225d13396a29',36:'249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599'};
- const inputs=Object.fromEntries([16,36].map(size=>{const file=path.join(inputDir,size===16?'original-16.opf.json':'extended-36.opf.json'),bytes=fs.readFileSync(file);assert.equal(hash(bytes),expected[size]);const deck=JSON.parse(bytes);assert.equal(deck.slides.length,size);return[size,{file,bytes,sha256:hash(bytes),deck}];}));
-+assert.deepEqual(inputs[36].deck.slides.slice(0,16),inputs[16].deck.slides,'first16 original slide objects unchanged');
- function verifyBuild(){assert.equal(git('rev-parse','HEAD'),build.source,'source revision stays fixed');assert.equal(hash(fs.readFileSync(path.join(site,'app.js'))),build.bundleSha256);for(const item of build.inputs)assert.equal(hash(fs.readFileSync(path.resolve(root,item.path))),item.sha256,item.path);}
+-const expected={16:'e14be44e63a8bbe4e64c5bdd2b6d95194ed39dc5e67c09c5a6a1225d13396a29',36:'249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599'};
+-const inputs=Object.fromEntries([16,36].map(size=>{const file=path.join(inputDir,size===16?'original-16.opf.json':'extended-36.opf.json'),bytes=fs.readFileSync(file);assert.equal(hash(bytes),expected[size]);const deck=JSON.parse(bytes);assert.equal(deck.slides.length,size);return[size,{file,bytes,sha256:hash(bytes),deck}];}));
+-function verifyBuild(){assert.equal(git('rev-parse','HEAD'),build.source,'source revision stays fixed');assert.equal(hash(fs.readFileSync(path.join(site,'app.js'))),build.bundleSha256);for(const item of build.inputs)assert.equal(hash(fs.readFileSync(path.resolve(root,item.path))),item.sha256,item.path);}
++const projectionArg=option('--projection',undefined),projectionFile=projectionArg?path.resolve(root,projectionArg):undefined;
++const inputSelection=measuredInputs(root,inputDir,projectionFile),inputs=inputSelection.inputs;
++assert.deepEqual(inputSelection.admission,build.projection,'Explicit raw/projection admission must equal the frozen build');
++assert.deepEqual(inputSelection.inputFiles,build.inputFiles);
++const prepared=assetAdmission(root,assetSite);assert.deepEqual(prepared.record,build.assets,'Prepared assets must be the frozen build inputs');
++function verifyBuild(){verifyFiles(root,[buildReceiptRecord]);verifyBinding(root,build.binding);verifyFiles(root,[build.buildDriver,...build.inputFiles,...build.outputs,...build.inputs,...build.compiler]);assert.deepEqual(measuredInputs(root,inputDir,projectionFile).admission,build.projection);assert.deepEqual(assetAdmission(root,assetSite).record,build.assets);}
  verifyBuild();
 -const requests=[],blocked=[],errors=[],assets=new Map(),cases=[],comparisons=new Map();let activeCase='setup';
++const allowedResources=new Map([...build.outputs,...prepared.receipt.outputs].map(record=>[path.resolve(root,record.path),record]));
 +const requests=[],blocked=[],errors=[],assets=new Map(),cases=[],renderedVectors=new Map();let activeCase='setup';
  const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.ttf':'font/ttf','.woff2':'font/woff2','.wasm':'application/wasm'};
  const server=createServer((request,response)=>{try{
   const url=new URL(request.url,'http://127.0.0.1');if(url.pathname==='/favicon.ico'){response.writeHead(204).end();return;}
-@@ -46,7 +47,7 @@
+  const decoded=decodeURIComponent(url.pathname==='/'?'/index.html':url.pathname);assert.ok(!decoded.includes('\\'));let file=path.resolve(site,'.'+decoded),rel=path.relative(site,file);assert.ok(!rel.startsWith('..')&&!path.isAbsolute(rel));
+- if(!fs.existsSync(file))file=path.resolve(assetSite,rel);const bytes=fs.readFileSync(file),sha256=hash(bytes);
++ if(!fs.existsSync(file))file=path.resolve(assetSite,rel);const declared=allowedResources.get(file);assert.ok(declared,'Resource is absent from the initial bound output inventory');const bytes=fs.readFileSync(file),sha256=hash(bytes);assert.equal(sha256,declared.sha256,'Resource differs from its initial provenance');assert.equal(bytes.length,declared.bytes);
+  if(assets.has(file))assert.equal(assets.get(file),sha256,'served resource changed');else assets.set(file,sha256);
+  requests.push({case:activeCase,path:url.pathname,method:request.method,bytes:bytes.length,sha256,hasCookie:!!request.headers.cookie,hasAuthorization:!!request.headers.authorization});
+  response.writeHead(200,{'Content-Type':mime[path.extname(file)]??'application/octet-stream','Cache-Control':'no-cache'}).end(bytes);
+@@ -46,7 +50,7 @@
   activeCase=configuration.name;verifyBuild();
   const browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined,args:['--js-flags=--expose-gc']});
   try {
@@ -96,7 +123,7 @@
   page.setDefaultTimeout(30000);page.on('pageerror',error=>errors.push({case:activeCase,kind:'page',message:error.stack??error.message}));
   await context.route(/^https?:/,route=>new URL(route.request().url()).origin===origin?route.continue():(blocked.push(route.request().url()),route.abort()));
   await cdp.send('Performance.enable');await cdp.send('Emulation.setCPUThrottlingRate',{rate:configuration.cpu});
-@@ -62,14 +63,19 @@
+@@ -62,14 +66,19 @@
   const after=mapMetrics(await cdp.send('Performance.getMetrics')),domAfter=await cdp.send('Memory.getDOMCounters');
   assert.equal(errors.length,errorsBefore);assert.deepEqual(result.errors,[]);assert.ok(result.canvasSvg>0,'real workspace SVG');assert.ok(result.cache.entries>0);assert.ok(result.cache.entries<=64&&result.cache.bytes<=result.cache.maxBytes);
   for(const call of result.calls)assert.equal(call.selected.length,call.outputs,'requested-slide log matches actual output');
@@ -120,7 +147,7 @@
   console.log(JSON.stringify({scope,case:configuration.name,phase:name,primary,ms:row.elapsedMs,coreMs:row.reviewChecks.reduce((sum,item)=>sum+item.ms,0),rendererCalls:row.calls.length,requestedSlides:row.calls.reduce((sum,item)=>sum+item.selected.length,0),cacheEntries:row.cache.entries}));return row;
  }
  async function measuredCase(configuration){
-@@ -78,16 +84,21 @@
+@@ -78,16 +87,21 @@
    if(measured){session.cdp.on('Tracing.dataCollected',event=>traceEvents.push(...event.value));await session.cdp.send('Tracing.start',{categories:'devtools.timeline,blink.user_timing',transferMode:'ReportEvents'});tracing=true;}
    const deck=structuredClone(inputs[configuration.size].deck),cell=chartCell(deck);assert.ok(cell.dataset,'the edit is a real shared document dataset');if(configuration.size===36)assert.equal(cell.dependentChartIndices.length,2);assert.equal(typeof deck.slides[0].title,'string');
    rows.push(await phase(session,configuration,'setup:mount','mount',deck));
@@ -143,7 +170,7 @@
    const record={scope,status:'PASS',configuration,setup:session.setup,browserVersion:session.browserVersion,cell,rows};cases.push(record);fs.writeFileSync(path.join(output,configuration.name+'.json'),JSON.stringify(record,null,2)+'\n');
   }catch(error){fs.writeFileSync(path.join(output,configuration.name+'-failure.json'),JSON.stringify({scope,status:'FAILED',message:error.stack??String(error),rows},null,2));throw error;}
   finally{try{
-@@ -102,26 +113,26 @@
+@@ -102,26 +116,26 @@
    const warmDisposed=await session.page.evaluate(()=>window.reviewTrial.dispose());assert.ok(warmDisposed.infos.length>0&&warmDisposed.infos.every(info=>info.entries===0&&info.bytes===0));
    const baseline=await gc(session.cdp);
    await phase(session,configuration,'soak:mount','mount',deck);
@@ -178,7 +205,7 @@
 + for(const cell of cells)await measuredCase({...cell,name:`${cell.label}-cpu${cell.cpu}-${cell.size}-cached`,mode:'cached'});
 + const retained=[await soak('cached')];
 + assert.equal(errors.length,0,JSON.stringify(errors));assert.deepEqual(blocked,[]);verifyBuild();for(const[file,sha256]of assets)assert.equal(hash(fs.readFileSync(file)),sha256,'served asset remains byte exact: '+file);for(const input of Object.values(inputs))assert.equal(hash(fs.readFileSync(input.file)),input.sha256);
-+ const receipt={status:'PASS',scope,source:build.source,tree:build.tree,bundleSha256:build.bundleSha256,node:process.version,inputFiles:Object.fromEntries(Object.entries(inputs).map(([size,input])=>[size,{bytes:input.bytes.length,sha256:input.sha256}])),cases:cases.map(item=>({configuration:item.configuration,rows:item.rows.length})),completeColdOracleChecks:cases.reduce((n,item)=>n+item.rows.length,0),retained:retained.map(item=>({configuration:item.configuration,edits:item.edits,mountDestroyCycles:item.mountDestroyCycles})),requests,blocked,errors,limits:{setupMs:90000,phaseMs:30000,traceEndMs:15000},disclosure:['One current candidate with public cold-oracle equality outside intervals; no historical/version speed comparison.','One fresh browser process per case;390px viewport and4xCPU are desktop proxies; no physical-mobile/low-power-device claim.','Debounce stays inside settled elapsed time; report/SVG equality, hashing, GC and storage are outside primary intervals. Sorter direct-oracle work primes caches outside intervals.','Trace/forwarder/observer overhead is present symmetrically; no unperturbed-production claim.','Cache policy bounds are logical; short post-GC heap/DOM soak is not leak acceptance.','Original root smoke is functional evidence only and is preserved separately; no invented root stdout.']};
++ const receipt={status:'PASS',scope,source:build.source,tree:build.tree,bundleSha256:build.bundleSha256,node:process.version,buildReceipt:buildReceiptRecord,binding:build.binding,projection:build.projection,assetProvenance:build.assets,assetsObserved:[...assets].map(([file,sha256])=>({path:path.relative(root,file),sha256})),assetCoverage:'Only observed served resources are browser-used; prepared unused outputs are bound, not qualified',inputFiles:Object.fromEntries(Object.entries(inputs).map(([size,input])=>[size,{rawBytes:input.bytes.length,rawSha256:input.sha256,measuredBytes:input.measuredBytes.length,measuredSha256:input.measuredSha256}])),cases:cases.map(item=>({configuration:item.configuration,rows:item.rows.length})),completeColdOracleChecks:cases.reduce((n,item)=>n+item.rows.length,0),retained:retained.map(item=>({configuration:item.configuration,edits:item.edits,mountDestroyCycles:item.mountDestroyCycles})),requests,blocked,errors,limits:{setupMs:90000,phaseMs:30000,traceEndMs:15000},disclosure:['One current candidate with public cold-oracle equality outside intervals; no historical/version speed comparison.','One fresh browser process per case;390px viewport and4xCPU are desktop proxies; no physical-mobile/low-power-device claim.','Debounce stays inside settled elapsed time; report/SVG equality, hashing, GC and storage are outside primary intervals. Sorter direct-oracle work primes caches outside intervals.','Trace/forwarder/observer overhead is present symmetrically; no unperturbed-production claim.','Cache policy bounds are logical; short post-GC heap/DOM soak is not leak acceptance.','Original root smoke is functional evidence only and is preserved separately; no invented root stdout.']};
 + fs.writeFileSync(path.join(output,'receipt.json'),JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({status:'PASS',scope,cases:receipt.cases.length,completeColdOracleChecks:receipt.completeColdOracleChecks,output}));
  }catch(error){fs.writeFileSync(path.join(output,'first-failure.json'),JSON.stringify({status:'FAILED',scope,message:error.stack??String(error),requests,blocked,errors},null,2)+'\n');console.error(error);process.exitCode=1;}
  finally{await new Promise(resolve=>server.close(resolve));}
