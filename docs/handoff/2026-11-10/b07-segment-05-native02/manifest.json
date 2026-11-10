@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "sourceMain": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+  "executedController": "3f7edd0c54717d4bf0630541bafe73d034baad7f",
+  "envelopeSha256": "83af748ef99b3b7913077868742b174a11ca2ffb6eddd4d082c3d3b3d998d28c",
+  "inputSha256": "7c4b61ae2421b1611c9ff4c2b0db6b871e2f5896d502f38a42ca796b44824a70",
+  "savedSha256": "356a5d5f001aa32fe4df4597526ef90fc40af2df33ef600964192b09da4af0b5",
+  "archive": {
+    "bytes": 752919,
+    "sha256": "3b1606c2fc43289200b22b638a6a23ef5f56c58ea04e567892f3f8d4d4715e17",
+    "expandedBytes": 1983422
+  },
+  "records": 102,
+  "rawFileBytes": 1472620,
+  "pngSha256": "e793dfbb8762d67971649604d94231cd7c5b8b2d6aa5d3fab4967d872f85ea79",
+  "scope": "Word order improvement only; digit glyph height, painted baseline and punctuation still unacceptable. No product/native/font/glyph/public-import acceptance. No agent Office/query/retry/cleanup/new variant.",
+  "inkDefinition": {
+    "color": "Every RGB channel >127, alpha255",
+    "coordinates": "Inclusive bounds; half-open fixed ROI. PNGCRC verified; palette/RGBA8 filters decoded with builtin zlib. ROI names identify fixed current-frame rectangles, not OCR labels for every image."
+  },
+  "physicalFontIdentity": "unknown",
+  "allRaw01And02Preserved": true,
+  "observed": {
+    "actualDigit": [
+      8,
+      15
+    ],
+    "coreDigit": [
+      9,
+      24
+    ],
+    "oldDigit": [
+      8,
+      15
+    ],
+    "actualBonjour": [
+      122,
+      31
+    ],
+    "coreBonjour": [
+      121,
+      31
+    ],
+    "headingOldNewChangedPixels": 0,
+    "arabicTopOldNew": [
+      391,
+      388
+    ],
+    "markerTopOldNew": [
+      387,
+      384
+    ],
+    "coreMarkerTop": 394
+  },
+  "nativeAcceptance": false,
+  "publicImportAcceptance": false
+}
