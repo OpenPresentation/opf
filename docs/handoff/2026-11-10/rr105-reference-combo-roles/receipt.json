@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "source": "55f235d9969d3207bf59feb34b93bd9701584c98",
+  "records": 185,
+  "rawBytes": 2846635,
+  "compressedBytes": 851364,
+  "archiveSha256": "4e549b6bc631d1b8a2f0beba1688ce94a1dd350a66a26accd6f5c533f4f6f6db",
+  "sourceProofSha256": "1146104571ff8c10d9ada391b1171d8e34405cd057725ac01d0cee5f466f470e",
+  "mapped": {
+    "exitCode": 1,
+    "passed": 8,
+    "failed": 3,
+    "typecheck": "skipped",
+    "nativePassed": 138,
+    "nativeTotal": 142
+  },
+  "focused": {
+    "final": 21,
+    "finalChangedControls": 5
+  },
+  "nativeAcceptance": false
+}
