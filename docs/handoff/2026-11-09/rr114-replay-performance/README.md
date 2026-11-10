@@ -13,7 +13,7 @@ The original integration checkout at 276 had stale/missing renderer dist modules
 - After imports/input parsing, force GC once. Measure public `loadFonts` wall and process CPU, then render the first batch immediately without forced GC in between. Report preparation, first render, their component sum and continuous preparation-to-first completion. Before each of two warm renders, GC outside that render's interval.
 - Capture current memory and true OS process maxRSS immediately after the first render and after both warm renders, before benchmark output hashing/JSON/storage. The common workload retains all three SVG batches until those observations; its final HWM is not single-render usage. Engine font/license integrity hashing remains part of the real preparation API.
 - After render metrics are fixed, hash/validate all three batches. The timed loop returns from a short activation holding only output arrays and numeric samples. Null every SVG-array/string reference, force GC and record post-drop JS heap/current RSS. Fonts, deck, measurement caches and a small common hash vector remain. Only then read module/font/license/notice/available HarfBuzz binary identities or write JSON. No compression runs in measured children.
-- Exact SVG hashes, face descriptors, font files/licenses/notices and shared dependency identities must match across both runtimes and every repeat. Whole tracked plus normal-untracked worktree cleanliness and exact heads/trees are checked before/after; ignored artifacts may be written.
+- The runner reads the external preflight bytes once, pins their digest in each child before parsing, and checks returned input pins; driver head/tree also match pre/post. Exact SVG hashes, face descriptors, font files/licenses/notices and shared dependency identities must match across both runtimes and every repeat. Whole tracked plus normal-untracked worktree cleanliness and exact heads/trees are checked before/after; ignored artifacts may be written.
 
 This is a bounded local paired screening, not statistical confidence, physical-mobile qualification or an isolated font-allocation measurement. No cross-run absolute comparison with historical whole-pack time/RSS is valid: root found and stopped an unrelated Nov6 infinite Node normalizer before this new experiment, and the retained-output workload also differs. Its exact before/source/after records are preserved under `artifacts/root-background-normalizer-20261110/` and must be included in the final packet.
 
@@ -22,13 +22,13 @@ This is a bounded local paired screening, not statistical confidence, physical-m
 `preflight.mjs` only hashes/checks source, builds and inputs; it never loads fonts or renders. `case.mjs` and `run.mjs` require explicit `--measure`. First run syntax checks, then a fresh source-only receipt:
 
 ```powershell
-node docs/handoff/2026-11-09/rr114-replay-performance/preflight.mjs --out=artifacts/replay-preflight-02.json
+node docs/handoff/2026-11-09/rr114-replay-performance/preflight.mjs --out=artifacts/replay-preflight-04.json
 ```
 
 After the coordinator reviews the frozen driver and explicitly authorizes the all-team quiet window, run once, substituting the actual frozen driver head:
 
 ```powershell
-node docs/handoff/2026-11-09/rr114-replay-performance/run.mjs --measure --expect-driver-head=<full40> --preflight=artifacts/replay-preflight-02.json --out=artifacts/replay-paired-formal-01
+node docs/handoff/2026-11-09/rr114-replay-performance/run.mjs --measure --expect-driver-head=<full40> --preflight=artifacts/replay-preflight-04.json --out=artifacts/replay-paired-formal-01
 ```
 
 Capture actual stdout/stderr/process exit. Do not run, retry, change a deadline or mutate either runtime before that authorization. Root owns interpretation, source integration and the coherent mapped/CI/native gates. No release or Office action belongs to this evidence branch.
