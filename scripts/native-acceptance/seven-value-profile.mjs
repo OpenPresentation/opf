@@ -11,37 +11,47 @@ import {CURRENT_VALUE_PROFILE,CURRENT_SEVEN_FIXTURE,CURRENT_SEVEN_FIXTURE_SHA256
 import {OWNED_SHARED_FILES,OWNED_POSTFLIGHT_POLICY,ownedControllerFiles,canonicalOwnedPath,readOwnedFile,readOwnedJson,assertOwnedKeys,writeOwnedRequest,bindOwnedRequest,REQUEST_HASH_TOKEN,writeOwnedAdmission,makeOwnedAdmission,assertOwnedKernel,assertOwnedStageWire,assertOwnedOperations,ownedSuccess,sourceIdentityFiles,assertOwnedPostflightArtifacts} from './owned-postflight.mjs';
 import {sevenExpectedOperations} from './seven-postflight.mjs';
 import {sevenValueLibraries} from './seven-value-libraries.mjs';
+import {HISTOGRAM_VALUE_PROFILE,HISTOGRAM_SOURCE_ARCHIVE,bindCurrentHistogram,bindHistogramActionFile} from './seven-histogram-classic.mjs';
 
 const ROOT=fs.realpathSync(fileURLToPath(new URL('../../',import.meta.url)));
 export const VALUE_POLICY=Object.freeze({policy:'seven-treemap-value-bounded-global-zero-after-completed-owned-quit-v1',...OWNED_POSTFLIGHT_POLICY});
-const entries=['seven-value-profile.mjs','seven-value-current.mjs','seven-value-raw.mjs','seven-value-archive.mjs','seven-value-actions.ps1','seven-value-worker.ps1','run-seven-value-profile.ps1','seven-value-bootstrap.ps1','seven-value-postflight.ps1','seven-value-archive.test.mjs','seven-value-actions-self-test.ps1','seven-value-current.test.mjs','seven-value-control-fixture.mjs','seven-value-profile.test.mjs','seven-value-postflight-self-test.ps1'].map(name=>'scripts/native-acceptance/'+name);
+const HISTOGRAM_VALUE_POLICY=Object.freeze({policy:'seven-histogram-classic-value-bounded-global-zero-v1',...OWNED_POSTFLIGHT_POLICY});
+const entries=['seven-value-profile.mjs','seven-value-current.mjs','seven-value-raw.mjs','seven-value-archive.mjs','seven-value-actions.ps1','seven-value-worker.ps1','run-seven-value-profile.ps1','seven-value-bootstrap.ps1','seven-value-postflight.ps1','seven-value-archive.test.mjs','seven-value-actions-self-test.ps1','seven-value-current.test.mjs','seven-value-control-fixture.mjs','seven-value-profile.test.mjs','seven-value-postflight-self-test.ps1','seven-histogram-classic.mjs'].map(name=>'scripts/native-acceptance/'+name);
 export const VALUE_FILES=ownedControllerFiles(ROOT,[...entries,...SEVEN_CONTROLLER_FILES,...OWNED_SHARED_FILES,CURRENT_SEVEN_FIXTURE,'scripts/native-acceptance/seven-postflight.ps1']);
 const json=value=>Buffer.from(JSON.stringify(value,null,2)+'\n');
 const at=(root,relative)=>canonicalOwnedPath(path.join(root,relative));
 const write=(file,bytes)=>{fs.writeFileSync(canonicalOwnedPath(file),bytes,{flag:'wx'});return fileIdentity(file);};
 const keys=assertOwnedKeys;
-export function createSevenValueEnvelope(options){
+function createValueSource(options,histogram){
+ const profile=histogram?HISTOGRAM_VALUE_PROFILE:CURRENT_VALUE_PROFILE,policy=histogram?HISTOGRAM_VALUE_POLICY:VALUE_POLICY;
  keys(options,['generation','selection']);
  keys(options.generation,['suiteDirectory','expectedManifestSha256','caseId','preparationRepository','workerRepository','consumer']);
  const archiveContext=currentSevenArchiveContext(ROOT),base=createSevenEnvelope({...options.generation,root:ROOT,archiveContext});base.controllerRepository=repositoryIdentity(ROOT,VALUE_FILES);
- const bound=validateSevenEnvelope(base,{root:ROOT,archiveContext}),target=bindCurrentTreemap(bound.input,bound.source.deck,options.selection,{root:ROOT});
- const actionBytes=json(target.action),wire=bindSevenValueActionFile(actionBytes,target.action);
- return{schemaVersion:1,profile:CURRENT_VALUE_PROFILE,postflightPolicy:VALUE_POLICY,limits:{...base.limits,maxActions:1},libraries:sevenValueLibraries(),base,selection:options.selection,action:wire.action,actionModelSha256:wire.actionModelSha256,actionFileIdentity:wire.actionFileIdentity,census:target.census,classification:target.classification,nativeAcceptance:false,registryAcceptance:false};
+ const bound=validateSevenEnvelope(base,{root:ROOT,archiveContext}),target=(histogram?bindCurrentHistogram:bindCurrentTreemap)(bound.input,bound.source.deck,options.selection,{root:ROOT});
+ if(histogram)assert.deepEqual({bytes:bound.input.length,sha256:digest(bound.input)},HISTOGRAM_SOURCE_ARCHIVE);
+ const actionBytes=json(target.action),wire=(histogram?bindHistogramActionFile:bindSevenValueActionFile)(actionBytes,target.action);
+ return{schemaVersion:1,profile,postflightPolicy:policy,limits:{...base.limits,maxActions:1},libraries:sevenValueLibraries(),base,selection:options.selection,action:wire.action,actionModelSha256:wire.actionModelSha256,actionFileIdentity:wire.actionFileIdentity,census:target.census,classification:target.classification,nativeAcceptance:false,registryAcceptance:false};
 }
-export function validateSevenValueEnvelope(envelope){
+function validateValueSource(envelope,histogram){
+ const profile=histogram?HISTOGRAM_VALUE_PROFILE:CURRENT_VALUE_PROFILE,policy=histogram?HISTOGRAM_VALUE_POLICY:VALUE_POLICY;
  keys(envelope,['schemaVersion','profile','postflightPolicy','limits','libraries','base','selection','action','actionModelSha256','actionFileIdentity','census','classification','nativeAcceptance','registryAcceptance']);
- assert.equal(envelope.schemaVersion,1);assert.equal(envelope.profile,CURRENT_VALUE_PROFILE);assert.deepEqual(envelope.postflightPolicy,VALUE_POLICY);assert.equal(envelope.nativeAcceptance,false);assert.equal(envelope.registryAcceptance,false);
+ assert.equal(envelope.schemaVersion,1);assert.equal(envelope.profile,profile);assert.deepEqual(envelope.postflightPolicy,policy);assert.equal(envelope.nativeAcceptance,false);assert.equal(envelope.registryAcceptance,false);
  keys(envelope.base,['schemaVersion','profile','postflightPolicy','nativeAcceptance','registryAcceptance','generation','controllerRepository','node','limits','phases','archive','source']);
  assert.deepEqual(envelope.libraries,sevenValueLibraries(),'Controller parser/ZIP implementation changed');
  const base=validateSevenEnvelope(envelope.base,{root:ROOT,archiveContext:currentSevenArchiveContext(ROOT)});
  assert.deepEqual(envelope.limits,{...envelope.base.limits,maxActions:1});
  assert.deepEqual(envelope.base.controllerRepository,repositoryIdentity(ROOT,VALUE_FILES));
  assert.equal(envelope.base.generation.provenance.chartBaselines.current.sha256,CURRENT_SEVEN_FIXTURE_SHA256);
- const target=bindCurrentTreemap(base.input,base.source.deck,envelope.selection,{root:ROOT});
+ if(histogram)assert.deepEqual({bytes:base.input.length,sha256:digest(base.input)},HISTOGRAM_SOURCE_ARCHIVE);
+ const target=(histogram?bindCurrentHistogram:bindCurrentTreemap)(base.input,base.source.deck,envelope.selection,{root:ROOT});
  for(const key of ['action','actionModelSha256','census','classification'])assert.deepEqual(envelope[key],target[key]);
  assert.deepEqual(envelope.actionFileIdentity,{bytes:json(target.action).length,sha256:digest(json(target.action))});
  return{...base,envelope,target};
 }
+export function createSevenValueEnvelope(options){return createValueSource(options,false);}
+export function validateSevenValueEnvelope(envelope){return validateValueSource(envelope,false);}
+export function createHistogramValueEnvelope(options){return createValueSource(options,true);}
+export function validateHistogramValueEnvelope(envelope){return validateValueSource(envelope,true);}
 export function readSevenValueEnvelope(file,sha256){
  const bytes=readOwnedFile(file,4*1024*1024);assert.equal(digest(bytes),sha256);
  return{...validateSevenValueEnvelope(JSON.parse(bytes)),envelopeSha256:sha256};

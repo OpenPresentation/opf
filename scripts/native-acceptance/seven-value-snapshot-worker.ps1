@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$ExecutionEnvelope,[Parameter(Mandatory=$true)][string]$ExpectedEnvelopeSha256,[Parameter(Mandatory=$true)][string]$NodeExecutable,[Parameter(Mandatory=$true)][string]$OutputDirectory,[ValidateRange(5,60)][int]$TimeoutSeconds=45,[Parameter(Mandatory=$true)][string]$ExpectedRequestSha256,[switch]$Worker)
+param([Parameter(Mandatory=$true)][string]$ExecutionEnvelope,[Parameter(Mandatory=$true)][string]$ExpectedEnvelopeSha256,[Parameter(Mandatory=$true)][string]$NodeExecutable,[Parameter(Mandatory=$true)][string]$OutputDirectory,[ValidateRange(5,60)][int]$TimeoutSeconds=45,[Parameter(Mandatory=$true)][string]$ExpectedRequestSha256,[switch]$Worker,[switch]$HistogramClassic)
 $ErrorActionPreference='Stop'
 if(-not $Worker){throw 'Snapshot worker requires the reviewed supervisor'}
 # External envelope hash admits only the bound bootstrap, not an Office object.
@@ -12,9 +12,9 @@ $cursor=$bootstrap;while($cursor){$item=Get-Item -LiteralPath $cursor -Force -Er
 $records=@($profile.controller.files | Where-Object {$_.path -ceq 'scripts/native-acceptance/seven-value-snapshot-bootstrap.ps1'})
 if($records.Count -ne 1 -or (Get-Item -LiteralPath $bootstrap).Length -ne $records[0].bytes -or (Get-FileHash -LiteralPath $bootstrap -Algorithm SHA256).Hash.ToLowerInvariant() -cne $records[0].sha256){throw 'Snapshot bootstrap bytes differ'}
 . $bootstrap
-$controller=Assert-SevenSnapshotBootstrap $profile $NodeExecutable;$root=Assert-SnapshotPath $OutputDirectory;$execution=Split-Path -Parent $root
+$controller=Assert-SevenSnapshotBootstrap $profile $NodeExecutable -HistogramClassic:$HistogramClassic;$root=Assert-SnapshotPath $OutputDirectory;$execution=Split-Path -Parent $root
 if($root -cne (Join-Path $execution 'native') -or $ExecutionEnvelope -cne (Join-Path $execution 'execution-envelope.json') -or $PSCommandPath -cne (Join-Path $execution 'inputs/seven-value-snapshot-worker.ps1')){throw 'Exact owned snapshot worker paths required'}
-$validator=Join-Path $controller 'scripts/native-acceptance/seven-value-snapshot-profile.mjs'
+$validator=Join-Path $controller $(if($HistogramClassic){'scripts/native-acceptance/seven-histogram-snapshot.mjs'}else{'scripts/native-acceptance/seven-value-snapshot-profile.mjs'})
 $verified=& $NodeExecutable $validator verify-execution --envelope $ExecutionEnvelope --sha256 $ExpectedEnvelopeSha256 --output $execution --require-office true
 if($LASTEXITCODE -ne 0){throw 'Snapshot source/request refused before Office'};$binding=($verified | Out-String)|ConvertFrom-Json
 if($binding.requestSha256 -cne $ExpectedRequestSha256){throw 'External snapshot request pin differs'}
@@ -25,6 +25,7 @@ Import-SnapshotDefinitions $controller 'scripts/native-acceptance/seven-chart-wo
 Import-SnapshotDefinitions $controller 'scripts/native-acceptance/seven-value-worker.ps1' @('Assert-SevenValueOfficeIdle')
 Import-SnapshotDefinitions $controller 'scripts/native-acceptance/seven-value-actions.ps1' @('Assert-SevenValueAction','Assert-SevenValueActionIdentity','Assert-SevenValueTargetOwnership','Get-SevenValueTarget')
 Import-SnapshotDefinitions $controller 'scripts/native-acceptance/seven-value-snapshot-actions.ps1' @('Save-SevenNativeSnapshot','Set-SevenSnapshotNumericArray')
+if($HistogramClassic){Import-SnapshotDefinitions $controller 'scripts/native-acceptance/seven-histogram-snapshot-actions.ps1' @('Assert-SevenHistogramAction','Set-SevenHistogramSnapshotArray')}
 # One actual immutable wire buffer, never a reconstructed fake getter observation.
 $actionBytes=[IO.File]::ReadAllBytes((Join-Path $execution 'inputs/action.json'));$algorithm=[Security.Cryptography.SHA256]::Create()
 try{$wireHash=([BitConverter]::ToString($algorithm.ComputeHash($actionBytes))).Replace('-','').ToLowerInvariant()}finally{$algorithm.Dispose()}
@@ -34,7 +35,7 @@ $script:root=$root;$script:sourcePath=$binding.inputPath;$script:app=$null;$scri
 $source=$profile.sourceAdmission
 $script:report=[ordered]@{schemaVersion=4;profile=$profile.profile;requestSha256=$ExpectedRequestSha256;envelopeSha256=$ExpectedEnvelopeSha256;generation=$source.base.generation;controllerRepository=$profile.controller;node=$source.base.node;sourcePath=$script:sourcePath;sourceSha256=$script:hashes[$script:sourcePath];workerPath=$PSCommandPath;workerSha256=(Get-SevenHash $PSCommandPath);snapshots=[ordered]@{};beforeAdmission=$null;phases=[ordered]@{};probes=@();actions=@();opens=@();closes=0;saveCopies=0;quits=0;officeOperationsStopped=$false;cleanupConfirmed=$true;error=$null;lastStage=$null;lastStatus=$null}
 try{
- Assert-SevenValueAction $action;Assert-SevenValueActionIdentity $binding.actionModelSha256 $binding.actionFileIdentity
+ if($HistogramClassic){Assert-SevenHistogramAction $action}else{Assert-SevenValueAction $action};Assert-SevenValueActionIdentity $binding.actionModelSha256 $binding.actionFileIdentity
  Write-SevenStage 'worker.initialize' 'success';Assert-SevenValueOfficeIdle;$application=New-SevenApplication;Own-SevenApplication $application
  Open-SevenOwned $script:sourcePath 'original';Read-SevenPhase 'original'
  Save-SevenNativeSnapshot 'before' (Join-Path $root 'before.pptx')
@@ -43,7 +44,7 @@ try{
   if($LASTEXITCODE -ne 0){Stop-SevenLifecycle 'Native-before fidelity refused; zero setters and no later Office operations'}
   $proof=($admitted | Out-String)|ConvertFrom-Json;$script:report.beforeAdmission=[ordered]@{path=$proof.path;bytes=$proof.bytes;sha256=$proof.sha256};Write-SevenReport;return $proof.sha256
  }
- Set-SevenSnapshotNumericArray $action $binding.actionModelSha256 $binding.actionFileIdentity
+ if($HistogramClassic){Set-SevenHistogramSnapshotArray $action $binding.actionModelSha256 $binding.actionFileIdentity}else{Set-SevenSnapshotNumericArray $action $binding.actionModelSha256 $binding.actionFileIdentity}
  Save-SevenNativeSnapshot 'edited' (Join-Path $root 'edited.pptx');Close-SevenOwned $script:sourcePath 'original'
  $edited=Join-Path $root 'edited.pptx';Open-SevenOwned $edited 'saved-reopened';Read-SevenPhase 'saved-reopened'
  Save-SevenNativeSnapshot 'reopened' (Join-Path $root 'reopened.pptx');Close-SevenOwned $edited 'saved-reopened'

@@ -8,14 +8,16 @@ function Assert-SevenValuePath([string]$Path) {
     while($cursor) {$item=Get-Item -LiteralPath $cursor -Force -ErrorAction SilentlyContinue;if($null -ne $item -and ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {throw 'Aliased value path refused'};$parent=Split-Path -Parent $cursor;if($parent -eq $cursor){break};$cursor=$parent}
     return $full
 }
-function Assert-SevenValueBootstrap($Envelope,[string]$NodeExecutable) {
-    if($Envelope.schemaVersion -ne 1 -or $Envelope.profile -cne 'seven-chart-treemap-single-value-edit-v1' -or $Envelope.nativeAcceptance -isnot [bool] -or $Envelope.nativeAcceptance -or $Envelope.registryAcceptance -isnot [bool] -or $Envelope.registryAcceptance) {throw 'Unsupported new value envelope'}
+function Assert-SevenValueBootstrap($Envelope,[string]$NodeExecutable,[switch]$HistogramClassic) {
+    $expectedProfile=if($HistogramClassic){'seven-histogram-classic-single-value-edit-v1'}else{'seven-chart-treemap-single-value-edit-v1'}
+    if($Envelope.schemaVersion -ne 1 -or $Envelope.profile -cne $expectedProfile -or $Envelope.nativeAcceptance -isnot [bool] -or $Envelope.nativeAcceptance -or $Envelope.registryAcceptance -isnot [bool] -or $Envelope.registryAcceptance) {throw 'Unsupported new value envelope'}
     $base=$Envelope.base;$controller=$base.controllerRepository;$root=Assert-SevenValuePath $controller.directory
     if($controller.dirty -isnot [bool] -or $controller.dirty -or $controller.revision -cnotmatch '^[a-f0-9]{40}$') {throw 'Frozen clean value controller required'}
     $required=@('identity.mjs','owned-postflight.mjs','owned-postflight.ps1','reference-chart-archive.mjs','reference-chart-profile.mjs','reference-runtime-routes.mjs','run-reference-chart-profile.ps1','run-seven-chart-profile.ps1','run-windows.ps1','seven-chart-archive.mjs','seven-chart-profile.mjs','seven-chart-worker.ps1','seven-postflight.mjs','seven-postflight.ps1','seven-value-profile.mjs','seven-value-current.mjs','seven-value-raw.mjs','seven-value-archive.mjs','seven-value-actions.ps1','seven-value-worker.ps1','run-seven-value-profile.ps1','seven-value-bootstrap.ps1','seven-value-postflight.ps1','seven-value-archive.test.mjs','seven-value-actions-self-test.ps1','windows-powershell-env.mjs') | ForEach-Object {'scripts/native-acceptance/'+$_}
     $required+=@('scripts/native-acceptance/seven-value-current.test.mjs','scripts/native-acceptance/seven-value-libraries.mjs','scripts/native-acceptance/seven-value-control-fixture.mjs','scripts/native-acceptance/seven-value-profile.test.mjs','scripts/native-acceptance/seven-value-postflight-self-test.ps1','packages/pptx/test/fixtures/chartex-fallback-main.json')
     $required+=@('scripts/native-acceptance/seven-signed-pareto.mjs','scripts/native-acceptance/chart-data-contract.mjs')
     $required+=@('scripts/native-acceptance/test-fixtures/seven-value-old-inspector.mjs')
+    $required+=@('scripts/native-acceptance/seven-histogram-classic.mjs')
     if($controller.files -isnot [array] -or $controller.files.Count -ne $required.Count) {throw 'Exact value controller dependency closure required'}
     foreach($name in $required) {
         $records=@($controller.files | Where-Object {$_.path -ceq $name});if($records.Count -ne 1){throw 'Missing/duplicate value code identity'}
