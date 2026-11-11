@@ -28,7 +28,11 @@ function Persist-ValueSyntheticEvidence($Evidence){
     [IO.File]::WriteAllText((Join-Path $native 'stages.jsonl'),$wire,[Text.UTF8Encoding]::new($false))
     # Keep metadata coherently rebound so semantic mutations reach actual guards.
     $Evidence.admission.ready.stageCount=$Evidence.stages.Count
-    $Evidence.admission.ready.lifecycle=@($Evidence.stages | Where-Object {$_.status -ceq 'success'} | ForEach-Object {[ordered]@{stage=$_.stage;sequence=$_.sequence}})
+    # Model the production ConvertFrom-Json record shape, not a raw dictionary.
+    $Evidence.admission.ready.lifecycle=@($Evidence.stages | Where-Object {$_.status -ceq 'success'} | ForEach-Object {[pscustomobject][ordered]@{stage=$_.stage;sequence=$_.sequence}})
+    foreach($lifecycleRecord in $Evidence.admission.ready.lifecycle){
+        if($lifecycleRecord -isnot [pscustomobject] -or -not (Test-OwnedPostflightKeys $lifecycleRecord @('stage','sequence'))){throw 'Synthetic lifecycle rows must match the parsed stage/sequence wire shape'}
+    }
     foreach($record in $Evidence.admission.files){$record.bytes=(Get-Item -LiteralPath $record.file).Length;$record.sha256=Get-OwnedPostflightHash $record.file}
     Write-ValueSyntheticJson $fixture.admissionFile $Evidence.admission
 }
@@ -86,7 +90,20 @@ try {
         Persist-ValueSyntheticEvidence $e
         $io=@{reads=0;clocks=0;appends=0;rows=[Collections.Generic.List[object]]::new()};$failure=$null;$result=$null
         try{$result=Invoke-SevenValueBoundPostflight -Evidence $e -ControllerRoot $controller -AdmissionFile $fixture.admissionFile -ExpectedAdmissionSha256 (Get-OwnedPostflightHash $fixture.admissionFile) -ReadProcesses {$io.reads++;return @()} -Clock {$io.clocks++;return 0.0} -Utc {return '2000-01-01T00:00:00.000Z'} -Delay {param($ms) throw 'First zero does not delay'} -Append {param($row) $io.appends++;$io.rows.Add($row)}}catch{$failure=$_.Exception.Message}
-        if($mutation -ceq 'valid'){if($null -ne $failure -or $io.reads -ne 1 -or $result.result.observedZero -cne $true){throw 'Valid bound typed bridge failed'}}elseif($null -eq $failure -or $io.reads -ne 0 -or $io.clocks -ne 0 -or $io.appends -ne 0){throw ('Malformed typed evidence reached observer IO: '+$mutation)}
+        if($mutation -ceq 'valid'){
+            if($null -ne $failure -or $io.reads -ne 1 -or $result.result.observedZero -cne $true){
+                # Failure-only local evidence. Never replace the original failure
+                # or rerun admission/observer/IO; raw paths remain in this fixture.
+                try{
+                    $lifecycle=@($e.admission.ready.lifecycle);$firstLifecycle=if($lifecycle.Count -gt 0){$lifecycle[0]}else{$null}
+                    $diagnostic=[ordered]@{schemaVersion=1;synthetic=$true;nativeAcceptance=$false;mutation=$mutation;failure=$failure;reads=$io.reads;clocks=$io.clocks;appends=$io.appends;resultNull=($null -eq $result);resultClrType=$(if($null -eq $result){$null}else{$result.GetType().FullName});resultError=$(if($null -eq $result){$null}else{$result.error});observedZero=$(if($null -eq $result -or $null -eq $result.result){$null}else{$result.result.observedZero});lifecycleCount=$lifecycle.Count;lifecycleClrType=$(if($null -eq $firstLifecycle){$null}else{$firstLifecycle.GetType().FullName});lifecycleParsedObject=($firstLifecycle -is [pscustomobject]);lifecycleKeysMatch=(Test-OwnedPostflightKeys $firstLifecycle @('stage','sequence'))}
+                    $bytes=[Text.Encoding]::UTF8.GetBytes(($diagnostic | ConvertTo-Json -Depth 12)+[Environment]::NewLine)
+                    $stream=[IO.File]::Open((Join-Path $fixture.root 'valid-bridge-failure.json'),[IO.FileMode]::CreateNew,[IO.FileAccess]::Write,[IO.FileShare]::Read)
+                    try{$stream.Write($bytes,0,$bytes.Length);$stream.Flush()}finally{$stream.Dispose()}
+                }catch{[Console]::Error.WriteLine('Could not persist managed valid-bridge diagnostics: '+$_.Exception.Message)}
+                throw 'Valid bound typed bridge failed'
+            }
+        }elseif($null -eq $failure -or $io.reads -ne 0 -or $io.clocks -ne 0 -or $io.appends -ne 0){throw ('Malformed typed evidence reached observer IO: '+$mutation)}
         $controls++
     }
     foreach($scenario in @('first-zero','one-to-zero','new-ID','query-fault','deadline','query-ceiling','append-fault')){
