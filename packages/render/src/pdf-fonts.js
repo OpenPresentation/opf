@@ -37,7 +37,7 @@ export class FontLibrary {
 
   /** Register font bytes once (by content hash). Returns the face, or null when the file cannot be used for embedding. */
   addData(data, origin, declaredFamily) {
-    const bytes = data instanceof Uint8Array ? data : new Uint8Array(data);
+    const bytes = new Uint8Array(data);
     const face = this.adopt(parseFace(bytes, hex(sha256(bytes)), origin), origin);
     // The family a style sheet declares for the data names the face too (the name table may say something else).
     if (face && declaredFamily) face.names.add(declaredFamily.toLowerCase());

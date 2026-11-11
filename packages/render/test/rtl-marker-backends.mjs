@@ -95,8 +95,26 @@ try{
  const base=robotoData;
  function permissions(input,bits){const bytes=Buffer.from(input),view=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);for(let i=0;i<view.getUint16(4);i++){const at=12+i*16;if(bytes.toString('ascii',at,at+4)==='OS/2')view.setUint16(view.getUint32(at+8)+8,bits);}return bytes;}
  function cffFixture(input){const bytes=Buffer.from(input),tables=[];let glyphs=0;for(let i=0;i<bytes.readUInt16BE(4);i++){const at=12+i*16,tag=bytes.toString('ascii',at,at+4),offset=bytes.readUInt32BE(at+8),size=bytes.readUInt32BE(at+12);if(tag==='maxp')glyphs=bytes.readUInt16BE(offset+4);if(!['glyf','loca','maxp'].includes(tag))tables.push([tag,bytes.subarray(offset,offset+size)]);}const index=list=>{if(!list.length)return Buffer.from([0,0]);const total=list.reduce((n,b)=>n+b.length,1),size=total<=255?1:total<=65535?2:4,head=Buffer.alloc(3+(list.length+1)*size);head.writeUInt16BE(list.length);head[2]=size;let offset=1;for(let i=0;i<=list.length;i++){head.writeUIntBE(offset,3+i*size,size);if(i<list.length)offset+=list[i].length;}return Buffer.concat([head,...list]);};const names=index([Buffer.from('MarkerPermission')]),topOffset=4+names.length+index([Buffer.alloc(6)]).length+4,dict=Buffer.alloc(6);dict[0]=29;dict.writeUInt32BE(topOffset,1);dict[5]=17;const charstring=Buffer.from([139,139,21,239,139,139,239,39,139,139,39,5,14]),cff=Buffer.concat([Buffer.from([1,0,4,4]),names,index([dict]),Buffer.from([0,0,0,0]),index(Array.from({length:glyphs},()=>charstring))]),maxp=Buffer.alloc(6);maxp.writeUInt32BE(0x5000);maxp.writeUInt16BE(glyphs,4);tables.push(['CFF ',cff],['maxp',maxp]);tables.sort((a,b)=>a[0].localeCompare(b[0]));const head=Buffer.alloc(12+tables.length*16);head.write('OTTO');head.writeUInt16BE(tables.length,4);let cursor=head.length;const chunks=[head];tables.forEach(([tag,data],i)=>{const at=12+i*16;head.write(tag,at);head.writeUInt32BE(cursor,at+8);head.writeUInt32BE(data.length,at+12);chunks.push(data);const padding=(4-data.length%4)%4;if(padding)chunks.push(Buffer.alloc(padding));cursor+=data.length+padding;});return Buffer.concat(chunks);}
+ const permissionRows=[];
  for(const cff of [false,true])for(const bits of [0,4,8,0x100,2,0x200]){
-  const data=permissions(cff?cffFixture(base):base,bits);assert.equal(fsTypeOf(data),bits);const handle=await loadFonts({pack:'base',faces:[{data,family:'MarkerPermission',weight:400}]});try{const library=outlineLibrary(handle),face=library.faces.find(f=>f.names.has('markerpermission'));assert(face);if(cff){assert(face.font.directory.tables['CFF ']);assert(face.font.getGlyph(0).path.commands.length>0,'real CFF charstring is decoded');}const allowed=![2,0x200].includes(bits);assert.equal(face.embeddable,allowed,`${cff?'CFF':'TTF'} actual fsType`);assert.equal(library.restricted.has('markerpermission'),!allowed);const result=handle.outlines.outlineSlideText(['<text x="20" y="40" font-family="MarkerPermission" font-size="20">1.</text>'],{fail,report:()=>{}});assert.equal(result.content[0].includes('<use '),allowed,'permissive CFF/TTF outlines, restricted stays text');}finally{handle.dispose?.();}
+  const label=`${cff?'CFF':'TTF'} fsType=0x${bits.toString(16)}`,data=permissions(cff?cffFixture(base):base,bits),inputHash=hash(data),row={label,cff,bits,inputHash,rawFsTypeBefore:fsTypeOf(data),state:'before-load'};
+  permissionRows.push(row);await writeFile(new URL('permission-rows.json',folder),JSON.stringify(permissionRows,null,2)+'\n');
+  assert.equal(fsTypeOf(data),bits,label+' input permission');
+  const handle=await loadFonts({pack:'base',faces:[{data,family:'MarkerPermission',weight:400}]});
+  try{
+   const library=outlineLibrary(handle),face=library.faces.find(f=>f.names.has('markerpermission'));assert(face,label+' actual face');
+   const allowed=![2,0x200].includes(bits);Object.assign(row,{allowed,state:'before-outline',inputHashAfterLoad:hash(data),faceHash:face.hash,parsedFsType:face.fsType,embeddable:face.embeddable,restrictedFamilyRecorded:library.restricted.has('markerpermission')});
+   await writeFile(new URL('permission-rows.json',folder),JSON.stringify(permissionRows,null,2)+'\n');
+   if(cff){assert(face.font.directory.tables['CFF '],label+' CFF table');assert(face.font.getGlyph(0).path.commands.length>0,label+' real CFF charstring is decoded');}
+   assert.equal(face.embeddable,allowed,label+' actual fsType');assert.equal(library.restricted.has('markerpermission'),!allowed,label+' restricted family');
+   const issues=[],result=handle.outlines.outlineSlideText(['<text x="20" y="40" font-family="MarkerPermission" font-size="20">1.</text>'],{fail,report:issue=>issues.push(issue)});
+   // Preserve the original unpinned outline/permission expectations; retain the
+   // exact format/bits/current diagnostics BEFORE the first failing assertion.
+   Object.assign(row,{state:'after-outline',inputHashAfter:hash(data),rawFsTypeAfter:fsTypeOf(data),diagnostics:issues,content:result.content,defs:result.defs});
+   await writeFile(new URL('permission-rows.json',folder),JSON.stringify(permissionRows,null,2)+'\n');
+   assert.equal(hash(data),inputHash,label+' caller bytes unchanged');assert.equal(fsTypeOf(data),bits,label+' caller permission unchanged');
+   assert.equal(result.content[0].includes('<use '),allowed,label+' permissive CFF/TTF outlines, restricted stays text');
+  }finally{handle.dispose?.();}
  }
  groups++;
  console.log(JSON.stringify({passed:true,groups,actualPng:{bytes:png.length,sha256:hash(png)},nativePixelsAccepted:false}));
