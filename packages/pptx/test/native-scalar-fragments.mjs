@@ -68,6 +68,25 @@ test('arbitrary text and colon edits retain current rich styles instead of old s
  }
 });
 
+test('separate current digit/colon/space edits preserve every UTF16 unit and CURRENT rich properties',async()=>{
+ const result=await actual();assert.equal(shapes(result.xml).length,22,'Exact current case10 topology is separately bounded, not a generic cap change');
+ let colons=0,spaces=0;
+ for(const group of result.scan.groups){
+  const currentMembers=group.header.members.map(member=>({member,shape:shapes(result.xml).find(shape=>shape.name===member.name)})),colon=currentMembers.find(({shape})=>valueText(shape.runs)===':');assert(colon);colons++;
+  const digit=currentMembers.find(({shape})=>/^[\u0660-\u0669\u06f0-\u06f9]+$/u.test(valueText(shape.runs)));assert(digit);assert.equal(colon.shape.runs[0].properties,digit.shape.runs[0].properties,'No slot/proofing/style changes are introduced by the physical split');
+  const selected=[digit,colon,...currentMembers.filter(({shape})=>/^ +$/.test(valueText(shape.runs)))];
+  const groupValue=document=>{const path=group.header.group.split('.');return group.header.kind==='text'?document.slides[0].blocks[Number(path[3])].text:document.slides[0].blocks[2].items[Number(path.at(-1))];};
+  for(const {member,shape}of selected){const old=valueText(shape.runs);if(/^ +$/.test(old)){spaces++;assert(shape.xml.includes('<a:t xml:space="preserve">'+old+'</a:t>'));}
+   for(const replacement of ['',old+' CURRENT-LONGER',/^ +$/.test(old)?'  spaced  ':';']){
+    const changed=await mutateShape(result,member,shape=>shape.xml.replace(/<a:t(?: xml:space="preserve")?>[^<]*<\/a:t>/,'<a:t xml:space="preserve">'+escape(replacement)+'</a:t>')),expected=group.text.slice(0,member.from)+replacement+group.text.slice(member.to),value=groupValue(changed.document);
+    assert.equal(valueText(value),expected,'No current punctuation/space/digit edit is trimmed, replayed, or sliced by an old interval length');assert.equal(bodyText(changed.document).length,98-group.text.length+expected.length);assert(Array.isArray(value),'Changed text keeps parsed current rich styles rather than reapplying source auto-label defaults');assert(changed.diagnostics.some(issue=>issue.code==='native-scalar-fragment-reflow'));if(group.header.kind==='text')assert(value.some(run=>typeof run==='object'&&run.bold===true),'Current label boldness remains explicit even when its colon disappears');
+   }
+  }
+  const foreign=await mutateShape(result,colon.member,shape=>shape.xml.replace(/(<a:latin\b[^>]*\btypeface=")[^"]*"/,'$1Georgia"')),value=groupValue(foreign.document);assert(Array.isArray(value));assert.equal(valueText(value),group.text);assert(value.some(run=>typeof run==='object'&&run.text===':'&&run.fontFamily==='Georgia'),'A CURRENT neutral-only font edit is not replaced by stored scalar styles');assert(foreign.diagnostics.some(issue=>issue.code==='native-scalar-fragment-reflow'));
+ }
+ assert.equal(colons,4);assert.equal(spaces,2,'Only the two list runs originally attach source U0020 to the Arabic script interval');
+});
+
 test('current font/proofing/size/bold/boundary/end/context edits never restore the old scalar',async()=>{
  const result=await actual(),group=result.scan.groups.find(group=>group.header.kind==='text'),member=group.header.members.find(member=>member.role==='script');
  for(const [name,change,check,requiredDiagnostic]of [

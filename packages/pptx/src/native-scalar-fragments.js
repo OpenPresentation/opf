@@ -93,7 +93,7 @@ function paragraphParts(shape){
  if(matches.length!==runs.length)throw Error('Unsupported native run spelling');return {paragraph,pPr,tail,runs};
 }
 const memberPPr=pPr=>'<a:pPr rtl="0" algn="l" marL="0" indent="0">'+(/<a:lnSpc>[\s\S]*?<\/a:lnSpc>/.exec(pPr)?.[0]??'')+'<a:buNone/></a:pPr>';
-const serializeRuns=runs=>runs.map(run=>'<a:r>'+run.properties+'<a:t>'+escape(run.text)+'</a:t></a:r>').join('');
+const serializeRuns=runs=>runs.map(run=>'<a:r>'+run.properties+'<a:t'+(/^ +$/.test(run.text)?' xml:space="preserve"':'')+'>'+escape(run.text)+'</a:t></a:r>').join('');
 const memberBinding=(header,index)=>({v:2,header:hash(header),member:index,identity:header.members[index]});
 const boundaries=(source,fit)=>{let cursor=0;const rows=[];for(const [index,text]of fit.lines.entries()){if(source.slice(cursor,cursor+text.length)!==text)throw Error('Measured scalar source mismatch');const from=cursor,to=from+text.length,separator=index===fit.lines.length-1?'':/^(\r\n|\r|\n)/.exec(source.slice(to))?.[0]??'';cursor=to+separator.length;rows.push({index,from,to,next:cursor,boundary:index===fit.lines.length-1?'end':separator?'hard':'soft',separator});}if(cursor!==source.length)throw Error('Incomplete scalar source lines');return rows;};
 
