@@ -8,10 +8,12 @@ import {createRequire} from 'node:module';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {isDeepStrictEqual} from 'node:util';
 import {B07_NATIVE_BODY_ID,b07NativeBodyExpectedImport,b07SourceSummary,readB07Sources,readB07HistoricalArchive,b07CurrentShapeBound,assertB07Case10Topology} from './b07-current-source.mjs';
+import {b07NativeShapes} from './b07-native-shapes.mjs';
 import {digest,fileIdentity,installedIdentity,repositoryIdentity,packageNames} from './identity.mjs';
 import {installedEngines,fixtureWriter,prepareFreshOutput} from './generate.mjs';
 import {preparationInputPaths,sealSuite} from './prepare.mjs';
 import {inspectReferenceRuntimeRoutes} from './reference-runtime-routes.mjs';
+import {plainLocalPath} from './reference-chart-profile.mjs';
 
 const repository=fileURLToPath(new URL('../../',import.meta.url));
 const json=value=>Buffer.from(JSON.stringify(value,null,2)+'\n');
@@ -24,6 +26,14 @@ export function assertB07Output(output,consumer,sourceRepository=repository) {
   assert.equal(fs.realpathSync(path.dirname(absolute)),path.dirname(absolute),'Output parent must be canonical');
   for(const root of [sourceRepository,consumer])assert.ok(absolute!==root&&!inside(absolute,root)&&!inside(root,absolute),'Output overlaps protected source/consumer');
   assert.equal(fs.existsSync(absolute),false,'Output must be new; never resume a failed attempt');return absolute;
+}
+
+// This names the retained packed proof's producer root, not this generator's
+// source identity. Never normalize an untrusted alias into a different authority.
+export function assertB07PackedPreparationRepository(directory){
+  assert.ok(typeof directory==='string'&&path.isAbsolute(directory),'Explicit absolute packed-preparation repository required');
+  assert.equal(plainLocalPath(directory),directory,'Canonical packed-preparation repository required');assert.equal(fs.realpathSync(directory),directory,'Canonical packed-preparation repository required');assert.ok(fs.statSync(directory).isDirectory(),'Packed-preparation repository must be a directory');
+  return directory;
 }
 
 /** Recheck the maintained test:packed-ecosystem's installed-code receipt; do not duplicate its stage/archive verification. */
@@ -105,18 +115,20 @@ export function b07FontFacts(fonts,manifest) {
     scope:'Pinned open preview bytes and loader-verified licenses only; native physical face remains unobserved.'};
 }
 export async function generateB07Current(options) {
-  const {consumer:requestedConsumer,output,proof,expectedProofSha256,expectedRevision,expectedRuntimeIdentitySha256,expectedRoutesSha256}=options;
+  const {consumer:requestedConsumer,output,proof,expectedProofSha256,expectedRevision,expectedRuntimeIdentitySha256,expectedRoutesSha256,packedPreparationRepository:requestedPackedPreparationRepository}=options;
   assert.match(expectedRevision??'',/^[a-f0-9]{40}$/u,'Freeze the reviewed new preparation HEAD');
   hex(expectedRuntimeIdentitySha256);hex(expectedRoutesSha256);hex(expectedProofSha256);
   assert.match(process.version,/^v24\./u);assert.equal(process.env.NODE_OPTIONS,undefined);assert.equal(process.env.NODE_PATH,undefined);
   assert.ok(!process.execArgv.some(arg=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/u.test(arg)),'No runtime resolution aliases');
+  const packedPreparationRepository=assertB07PackedPreparationRepository(requestedPackedPreparationRepository);
   const consumer=fs.realpathSync(requestedConsumer),sources=readB07Sources(),sourceSummary=b07SourceSummary();
   const inputs=[...await preparationInputPaths(),'scripts/pack-ecosystem.mjs','scripts/test-packed-ecosystem.mjs','scripts/test-installed-code.mjs','scripts/ecosystem-preview-plan.mjs'];
   const identity=async()=>{
+    assert.equal(assertB07PackedPreparationRepository(requestedPackedPreparationRepository),packedPreparationRepository);
     const packages=installedIdentity(consumer);assert.equal(digest(JSON.stringify(packages)),expectedRuntimeIdentitySha256,'Current consumer identity changed');
     const runtimeRoutes=await inspectReferenceRuntimeRoutes(consumer);assert.equal(digest(JSON.stringify(runtimeRoutes.binding)),expectedRoutesSha256,'Current runtime routes changed');
     const suiteRepository=repositoryIdentity(repository,inputs);assert.equal(suiteRepository.revision,expectedRevision);assert.equal(suiteRepository.dirty,false,'New preparation source must be frozen and clean');
-    return {packages,runtimeRoutes,packedProof:readB07PackedProof({consumer,proof,expectedProofSha256}),suiteRepository};
+    return {packages,runtimeRoutes,packedPreparationRepository,packedProof:readB07PackedProof({consumer,proof,expectedProofSha256,preparationRepository:packedPreparationRepository}),suiteRepository};
   };
   const before=await identity(),engines=await installedEngines(consumer),{core,pptx,render,gallery,fflate}=engines;
   const fontManifest=render.BUNDLED_FONT_MANIFEST;assert.ok(Array.isArray(fontManifest?.packages),'Actual installed font manifest required');
@@ -128,7 +140,7 @@ export async function generateB07Current(options) {
     assertB07Validation(source,current,original);return {id:source.id,current,original};
   });
   const historical=new Map(sources.filter(source=>source.pin).map(source=>[source.id,readB07HistoricalArchive(source.pin,repository)]));
-  assertB07Output(output,consumer);
+  assertB07Output(output,consumer);assertB07Output(output,consumer,packedPreparationRepository);
   const root=await prepareFreshOutput(output,consumer),{put}=fixtureWriter(root),cases=[];
   const provenance={...before,node:{path:process.execPath,version:process.version,...fileIdentity(process.execPath)},sourceSummary,validations,fontManifest,fontManifestSha256:digest(JSON.stringify(fontManifest)),
     fontPolicy:{pack:'office',substitutionPolicy:'visual',scripts:'auto',userFonts:[],extraFaces:[]},sourceVersion:'0.33.0',nativeAcceptance:false,registryAcceptance:false};
@@ -148,7 +160,7 @@ export async function generateB07Current(options) {
         const input=`inputs/${source.id}.pptx`,archive=await put(input,bytes),actual=inspectB07Archive(bytes,{fflate,parser},source);
         if(b07CurrentShapeBound(source)===22){const entries=fflate.unzipSync(bytes);
           // The complete installed V2 reader proves ownership; the shape census below is raw direct text/identity only.
-          const {b07NativeShapes}=await import('./b07-current-profile.mjs');assertB07Case10Topology(source,b07NativeShapes(actual.slides[0].xml,XMLParser,source),readNativeScalarGroups(entries,'ppt/slides/slide1.xml').groups);
+          assertB07Case10Topology(source,b07NativeShapes(actual.slides[0].xml,XMLParser,source),readNativeScalarGroups(entries,'ppt/slides/slide1.xml').groups);
         }
         if(source.id===B07_NATIVE_BODY_ID){
           const bodies=actual.slides[0].shapes.filter(shape=>shape.name?.startsWith('OPF native body'));
@@ -183,7 +195,7 @@ export async function generateB07Current(options) {
 
 export function parseB07Arguments(args) {
   const [command='inspect',...rest]=args;assert.ok(['inspect','generate'].includes(command),'Only inspect or explicit generate');
-  const names={'--consumer':'consumer','--output':'output','--proof':'proof','--expected-proof-sha256':'expectedProofSha256','--expected-revision':'expectedRevision','--expected-runtime-sha256':'expectedRuntimeIdentitySha256','--expected-routes-sha256':'expectedRoutesSha256'},options={};
+  const names={'--packed-preparation-repository':'packedPreparationRepository','--consumer':'consumer','--output':'output','--proof':'proof','--expected-proof-sha256':'expectedProofSha256','--expected-revision':'expectedRevision','--expected-runtime-sha256':'expectedRuntimeIdentitySha256','--expected-routes-sha256':'expectedRoutesSha256'},options={};
   assert.equal(rest.length%2,0,'Every option has one value');for(let i=0;i<rest.length;i+=2){const key=names[rest[i]];assert.ok(key,'Unknown option');assert.equal(options[key],undefined,'Duplicate option');assert.ok(rest[i+1]&&!rest[i+1].startsWith('--'),'Missing option value');options[key]=rest[i+1];}
   if(command==='inspect')assert.deepEqual(options,{});else assert.deepEqual(Object.keys(options).sort(),Object.values(names).sort(),'All explicit source/consumer pins are required');
   return {command,options};
