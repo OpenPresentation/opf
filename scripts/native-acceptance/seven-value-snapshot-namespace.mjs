@@ -34,16 +34,68 @@ export function projectSnapshotNamespacePair(before,after){
  }
  const apply=(xml,changes)=>{for(const change of changes.sort((a,b)=>b.start-a.start))xml=xml.slice(0,change.start)+change.text+xml.slice(change.end);return xml;};return{before:apply(before,edits[0]),after:apply(after,edits[1]),changes};
 }
+// First native Save is a model/role admission, never raw-style acceptance.
+// Keep both archives immutable and enumerate every package difference for review.
+export function snapshotSourceBeforeRawFindings(input,before,deps=archiveDependencies(),archiveContext){
+ inspectSevenArchive(input,deps,archiveContext);inspectSevenArchive(before,deps,archiveContext);
+ const parts=[deps.unzipSync(input),deps.unzipSync(before)],identity=bytes=>bytes?{bytes:bytes.length,sha256:digest(bytes)}:null,changes=[];
+ for(const part of [...new Set([...Object.keys(parts[0]),...Object.keys(parts[1])])].sort()){
+  const a=identity(parts[0][part]),b=identity(parts[1][part]);if(JSON.stringify(a)===JSON.stringify(b))continue;
+  changes.push({part,kind:a===null?'added':b===null?'removed':'changed',source:a,before:b});
+ }
+ return{policy:'first-native-save-raw-findings-open-v1',qualification:'OPEN',sourceSha256:digest(input),beforeSha256:digest(before),sourceParts:Object.keys(parts[0]).length,beforeParts:Object.keys(parts[1]).length,changes};
+}
+
+// Later saves: only these two scalar core-property values may vary. All other
+// properties/attributes/unknown content remain exact parsed XML. Whitespace is
+// ignored solely in the known element-only metadata containers below.
+function metadataView(bytes,file,deps){
+ const xml=deps.strFromU8(bytes);assert.ok(!/<!DOCTYPE|<!ENTITY/u.test(xml));assert.equal(deps.XMLValidator.validate(xml),true);
+ const tree=new deps.XMLParser({preserveOrder:true,ignoreAttributes:false,parseTagValue:false,parseAttributeValue:false,trimValues:false,commentPropName:'#comment',cdataPropName:'#cdata'}).parse(xml),recorded={};
+ const containers=new Set(['cp:coreProperties','Properties','Properties/HeadingPairs','Properties/HeadingPairs/vt:vector','Properties/HeadingPairs/vt:vector/vt:variant','Properties/TitlesOfParts','Properties/TitlesOfParts/vt:vector']);
+ const root=file==='docProps/core.xml'?'cp:coreProperties':'Properties';assert.equal(tree.filter(node=>Object.hasOwn(node,root)).length,1,'Exact metadata root required');
+ function walk(nodes,path='',preserved=false){
+  const out=[];
+  for(const node of nodes){
+   if(Object.hasOwn(node,'#text')&&containers.has(path)&&!preserved&&typeof node['#text']==='string'&&/^[ \t\r\n]*$/u.test(node['#text']))continue;
+   const item={},keep=preserved||node[':@']?.['@_xml:space']==='preserve';
+   for(const [key,value]of Object.entries(node)){
+    if(key===':@'){item[key]=Object.fromEntries(Object.entries(value).sort(([a],[b])=>a.localeCompare(b)));continue;}
+    if(!Array.isArray(value)){item[key]=value;continue;}
+    const child=path?path+'/'+key:key;
+    if(file==='docProps/core.xml'&&(child==='cp:coreProperties/dcterms:modified'||child==='cp:coreProperties/cp:lastModifiedBy')){
+     assert.equal(recorded[key],undefined,'Duplicate volatile metadata field');assert.ok(value.length<=1&&value.every(row=>Object.keys(row).length===1&&typeof row['#text']==='string'),'Scalar core metadata required');
+     const text=value[0]?.['#text']??'';
+     if(key==='dcterms:modified'){
+      assert.deepEqual(node[':@'],{'@_xsi:type':'dcterms:W3CDTF'});assert.match(text,/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/u);
+      const stamp=new Date(text);assert.ok(Number.isFinite(stamp.getTime())&&stamp.toISOString().slice(0,19)===text.slice(0,19),'Valid UTC modified timestamp required');
+     }else assert.ok(node[':@']===undefined||Object.keys(node[':@']).length===0,'Unknown lastModifiedBy attribute');
+     const raw=[...xml.matchAll(new RegExp('<'+key+'(?:\\s[^<>]*?)?(?:\\s*/>|>[\\s\\S]*?</'+key+'\\s*>)','gu'))];assert.equal(raw.length,1,'One raw core metadata field required');
+     recorded[key]={value:text,raw:raw[0][0]};item[key]=[{'#text':'@recorded-native-save-metadata'}];
+    }else item[key]=walk(value,child,keep);
+   }
+   out.push(item);
+  }
+  return out;
+ }
+ const protectedXml=walk(tree);
+ if(file==='docProps/core.xml')assert.deepEqual(Object.keys(recorded).sort(),['cp:lastModifiedBy','dcterms:modified']);
+ return{protectedXml,recorded};
+}
+function assertLaterMetadata(before,after,file,deps){
+ const a=metadataView(before,file,deps),b=metadataView(after,file,deps);assert.deepEqual(b.protectedXml,a.protectedXml,'Unreviewed later-save metadata difference: '+file);
+ return{part:file,beforeSha256:digest(before),afterSha256:digest(after),recorded: Object.fromEntries(Object.keys(a.recorded).map(field=>[field,{before:a.recorded[field],after:b.recorded[field]}]))};
+}
 export function assertSnapshotRawPreservation(options){
  const deps=options.deps??archiveDependencies();
  // Apply the maintained archive's entry/expanded-byte bounds before ANY unzip or XML scan.
  inspectSevenArchive(options.input,deps,options.archiveContext);inspectSevenArchive(options.saved,deps,options.archiveContext);
  const archives=[deps.unzipSync(options.input),deps.unzipSync(options.saved)],projection=[];assert.deepEqual(Object.keys(archives[0]).sort(),Object.keys(archives[1]).sort(),'Snapshot ZIP part inventory changed');
  // The v1 guard owns all reached ppt resources. This route additionally refuses
- // every other package part's changed bytes (including unknown metadata).
- for(const name of Object.keys(archives[0]).filter(name=>!name.startsWith('ppt/')))assert.deepEqual(archives[1][name],archives[0][name],'Unreviewed native package part changed: '+name);
+ // other package parts, with only the closed recorded core-property exception.
+ const metadata=[];for(const name of Object.keys(archives[0]).filter(name=>!name.startsWith('ppt/'))){if(name==='docProps/core.xml'||name==='docProps/app.xml')metadata.push(assertLaterMetadata(archives[0][name],archives[1][name],name,deps));else assert.deepEqual(archives[1][name],archives[0][name],'Unreviewed native package part changed: '+name);}
  for(const name of Object.keys(archives[0]).filter(name=>/^ppt\/slides\/slide[1-9][0-9]*\.xml$/u.test(name))){const pair=projectSnapshotNamespacePair(deps.strFromU8(archives[0][name]),deps.strFromU8(archives[1][name]));if(pair.changes.length){archives[0][name]=deps.strToU8(pair.before);archives[1][name]=deps.strToU8(pair.after);projection.push({part:name,changes:pair.changes});}}
  const projected=projection.length?[deps.zipSync(archives[0]),deps.zipSync(archives[1])]:[options.input,options.saved];
  const evidence={inputSha256:digest(options.input),savedSha256:digest(options.saved),projection};
- try{return{...assertSevenValueRawPreservation({...options,deps,input:projected[0],saved:projected[1]}),namespacePlacement:evidence};}catch(error){error.snapshotNamespacePlacement=evidence;throw error;}
+ try{return{...assertSevenValueRawPreservation({...options,deps,input:projected[0],saved:projected[1]}),namespacePlacement:evidence,metadata};}catch(error){error.snapshotNamespacePlacement=evidence;throw error;}
 }

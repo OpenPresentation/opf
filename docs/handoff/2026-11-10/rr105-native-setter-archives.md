@@ -90,3 +90,102 @@ First sole-file log:1,884bytes SHA-256
 `a1520cc3668a4fa5fe8a51247a4c34233c03d9cd829a0f23ad30d5bea5d74d41`;
 causal replay log:1,165bytes
 `af6db5873ec2d2b79af4f31997d3fce62c1375aec51e5190e8745435534bc154`.
+
+## Prospective native-before baseline policy — SOURCE ONLY / UNRUN
+
+The clean strict-source/test checkpoint is
+`afb413458739b93b2718905a318ddc6c8b6d0e2a`, tree
+`4536ad08e79033b7e23ea0cd9e40e098180aa520`. It remains frozen. Its new successor
+keeps all old v1/raw/kernel/observer and new worker/lifecycle bytes unchanged.
+No new module path or CLI profile, Office operation or time/query cap is added.
+
+The first Office Save is not a byte/style-preservation attestation. Admission
+requires the exact complete public document and diagnostics, whole-seven parsed
+source/data roles and captured native descriptor bindings. First-Save workbook
+sharing changes are explicit OPEN resource findings, not a source data waiver.
+Only actual first-Save chart/workbook resource locators are separately
+rebound for comparison. Original action model/wire identities remain unchanged.
+Every source/before package addition/removal/change has retained part identities
+and immutable archive hashes with qualification explicitly OPEN. No raw source
+style/native acceptance follows from a successful model/role admission.
+
+The exact version2 before proof uses `sourcePublicModelVerified`,
+`nativeRoleBindingVerified` and `sourceRawStyleQualification:'OPEN'`; it rejects the
+old `sourceFidelityVerified` assertion and any native-acceptance claim. Its actual
+hash/request/source/before binding still precedes the one setter. The separately
+named internal `archiveComparisonAction` propagates actual before locators through
+all edited/reopened numeric, workbook and strict raw checks; it is never a new
+setter request or fabricated getter receipt.
+
+The Office-created before archive is the strict edit baseline. Before→edited
+retains the entire public model except exactly one logical value and all its
+cache/workbook aliases; edited→reopened retains that edited state. Later part
+inventory, content types, root relationships, chart/style/resources and workbook
+contents remain strict. Later outer `docProps/core.xml` may change ONLY valid UTC
+`dcterms:modified` and scalar `cp:lastModifiedBy`, with exact raw old/new fields
+recorded. Every other property/attribute, creator/title/company, unknown extension,
+comment, CDATA, xml:space and scalar text remains exact. App statistics,
+PresentationFormat, HeadingPairs and TitlesOfParts are not exempt. Formatting
+whitespace is ignored only in named element-only metadata containers; unknown
+containers and preserved-space content stay strict. Further native resource
+renames or metadata changes remain a retained refusal.
+
+Authored controls cover actual public imports with first-Save findings left OPEN,
+changed full model/roles, first-Save workbook locator propagation and later rename
+refusal, recorded core metadata, invalid timestamp/nested-scalar cases, author/
+title/company/app/unknown/comment/xml:space/package changes and retained indentation
+semantics. Managed proof controls additionally reject missing role/model proof,
+legacy fidelity, false raw-status and native-acceptance assertions. All successor
+syntax/import/portable/PS/native execution is UNRUN pending independent review;
+the earlier8PASS/1host-skip applies only to the frozen strict checkpoint. No raw
+historical Windows archive or private metadata value is copied into this note.
+
+### Policy SOURCE02: first-Save workbook sharing is an OPEN finding
+
+The retained historical Office Save splits formerly shared ChartEx/fallback
+workbooks into separately owned copies. Initial sharing equality would therefore
+predictably refuse an ordinary first Save. Every actual branch's complete parsed
+category/numeric/workbook/source-role model and the complete public document still
+must match independently through its actual relationships. Source and before
+sharing partitions are retained explicitly with qualification OPEN; no source
+style/fallback synchronization acceptance follows from their admission.
+
+After the before archive, the maintained edit comparator still requires identical
+sharing classes, and package inventory/relationships/raw/style checks stay strict.
+A live ChartEx edit can leave a separately owned classic fallback snapshot
+unchanged; that is the strict before-baseline expectation, not a promise that
+another application selecting the fallback sees updated data. A coherent synthetic
+unsharing case, actual public imports, exact unchanged fallback model, independently
+coherent wrong-fallback-data refusal and later coherent re-sharing refusal are
+added as one portable group. SOURCE01 remains frozen; this SOURCE02, including all
+new policy/managed controls, is source-only and UNRUN.
+
+## Actual policy portable focus — Windows/native still pending
+
+Root and independent source review accepted the prospective SOURCE02 policy.
+One bounded batch on the unchanged own217 built JavaScript identities passes all
+four changed-MJS syntax checks. Its first sole-file result is retained:
+12PASS/1text-assertionRED/1actual-WindowsPS5 skip. All five new policy groups and
+the full one-value comparator had passed; only the old observation regex failed
+to match the clarified wording “not setter action or COM getter.” SOURCE03 changes
+that test to exact equality with the complete new observation string.
+
+One causal replay without install/build passes13/13 portable tests plus1actual
+PS5 skip (14total,6.174s wall time). This qualifies the synthetic current public
+producer/import, role/model, resource-locator/unsharing, isolated numeric edit,
+later metadata/raw/caps and namespace controls. It does not qualify COM or real
+PowerShell: the25 actual adapter scenarios and CLR/proof guards still require
+WindowsPS5. No native edit, first-Save raw-style acceptance, cross-app fallback
+update, all-chart native type or release acceptance is claimed.
+
+First literal log:2,684bytes SHA-256
+`99850a3b42c3fad10ce6f7004613beb5dedadfb172aa234bcad1c9f30423f0ab`;
+causal log:1,765bytes
+`50e51817f8606a6973d32250ae2411e8608a1bb1e4003ed5ad73c9434b1d23e3`.
+Receipts remain separately under `/tmp/opf-snapshot-before-policy-focus01/` and
+`focus02/`. The strictafb checkpoint and all earlier SOURCE01/test/policy packets
+remain unchanged. All11 original v1/raw/kernel/observer identities and the4 new
+launcher/bootstrap/worker/postflight identities remain exact. Required root
+integrated native/doc qualification, actual managed Windows controls and fresh
+source/consumer/native evidence remain pending; no mapper/PS/Office/CI was run by
+this focused lane.
