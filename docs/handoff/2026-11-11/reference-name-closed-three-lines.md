@@ -35,3 +35,9 @@ Accepted source leaf `fdb175da1160deb9747a8bccb898d79f4dc273a6` / tree `417e29af
 ## Actual fourth-stage named focus — 2026-11-11
 
 Root-authorized, independently accepted fourth derivation ran only the existing named B07 source-identity test on Node24.21.0: exit0,1PASS/0RED,246.564625ms total (184.823208ms test). All27 frozen source/protected pins remained exact. Raw244B log SHA256 `5cceb1cd9d7582dd90141efe0812c32bab9f47f1b8b53f1be6a909db4f46abb3`; local receipt `/tmp/opf-reference-name-domain-derivation-focus01/receipt.json`. This qualifies the actual four-stage Git derivation/source-binding assertion only. The88 actual Windows managed scenarios,12PS readiness cases, full public-import/comparer focus and root integration gate remain pending; no other tests, install/build, PowerShell, Office or process query ran.
+
+## Integrated public-contract focus and early readiness
+
+The first root two-file focus is retained as35PASS/5RED/2actual-PS skips. Five typed-evidence negatives exposed that the early Node reference readiness checked request/lifecycle facts while the full reference contract ran only in later admission. The PowerShell readiness already checked the extra type facts. A two-line independently reviewed strengthening imports that existing strict contract and calls it only in reference readiness before returning. Ordinary/dense routes, worker, policy and the full later comparison remain unchanged.
+
+Fresh root focus passes40tests, zero failures and2actual-PS skips (0.946seconds), including the real current public imports, archive/style/reference preservation, four-stage worker identity and missing/wrong type-evidence refusals. Actual88Windows managed controls,12PS readiness checks, mapped gate and native Name edit remain pending. The prior read-only diagnostic's1second process-exit failure remains failed despite its complete type observations and later independent OS zero.

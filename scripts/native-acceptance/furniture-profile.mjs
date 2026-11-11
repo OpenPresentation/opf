@@ -11,7 +11,7 @@ import {readB07PackedProof} from './b07-current-generate.mjs';
 import {PRIMARY_CASE_NAMES} from './fixture-source.mjs';
 import {assertReferenceWitnessPostflight} from './reference-chart-profile.mjs';
 import {inspectDenseArchive,assertDenseLifecycle} from './dense-survey-contract.mjs';
-import {REFERENCE_NAME_PROFILE,REFERENCE_NAME_POLICY,REFERENCE_NAME_CASE,referenceNamePlan,createReferenceNameSource,bindReferenceNameSource,assertReferenceNameSelection,assertReferenceNameRequest,compareReferenceNameEdit} from './reference-name-contract.mjs';
+import {REFERENCE_NAME_PROFILE,REFERENCE_NAME_POLICY,REFERENCE_NAME_CASE,referenceNamePlan,createReferenceNameSource,bindReferenceNameSource,assertReferenceNameSelection,assertReferenceNameRequest,assertReferenceNameNative,compareReferenceNameEdit} from './reference-name-contract.mjs';
 
 const ROOT=fs.realpathSync(fileURLToPath(new URL('../../',import.meta.url)));
 export const FURNITURE_PROFILE='full59-ordinary-furniture-lifecycle-v1';
@@ -121,6 +121,7 @@ function assertFurnitureReady(terminal,report,request,stageBytes){
   if(['input.presentation.open','input.presentation.fullName.get','input.presentation.readOnly.get','edited.presentation.saveCopyAs','edited.presentation.close'].includes(name)){assert.equal(row.ownedPresentationPath,original);assert.equal(row.cleanupConfirmed,false);}
   if(['reopen.presentation.open','reopen.presentation.fullName.get','reopen.presentation.readOnly.get','reopened.presentation.close'].includes(name)){assert.equal(row.ownedPresentationPath,saved);assert.equal(row.cleanupConfirmed,false);}
   if(name.endsWith('.cleanup')||['application.cleanup.quit','worker.complete'].includes(name)){assert.equal(row.cleanupConfirmed,true);assert.equal(row.ownedPresentationPath,null);}return {stage:name,sequence:row.sequence};});
+ if(reference)assertReferenceNameNative(report,stageBytes);
  return {workerCleanupConfirmed:true,stageCount:stages.length,lifecycle,caseId:request.caseId,actionCount:request.actionPlan.actions.length};
 }
 function admitFurnitureExecution(b){
