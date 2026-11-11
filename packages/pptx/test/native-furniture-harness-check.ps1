@@ -320,10 +320,29 @@ $fixture=New-LifecycleFixture 'quit-failure' 'quit-failure'
 Assert-LifecycleLatched 'quit-failure' {Quit-OwnedFurnitureApplication $fixture.app}
 $fixture=New-LifecycleFixture 'unowned-quit'; $other=[pscustomobject]@{Presentations=$fixture.app.Presentations}
 Assert-LifecycleLatched 'refuse-unowned-application-quit' {Quit-OwnedFurnitureApplication $other}
-function Get-Process { param($Name,$ErrorAction) if($script:mockPowerPointRunning){return [pscustomobject]@{Name='POWERPNT'}} }
-$script:mockPowerPointRunning=$true; $rejected=$false;try {Assert-FurnitureOfficeIdle} catch {$rejected=$true}
-if(-not $rejected) {throw 'Running Office was not refused'}
-$script:mockPowerPointRunning=$false; Assert-FurnitureOfficeIdle
+# Actual strict preflight function, with no real process enumeration or activation.
+function Get-Process {
+    [CmdletBinding()]param($Name)
+    if($Name -cne 'POWERPNT'){throw 'Unexpected query'};$script:idleQueries++
+    if($script:idleMode -ceq 'zero'){return @()}
+    if($script:idleMode -ceq 'busy'){return [pscustomobject]@{Id=17}}
+    $id=if($script:idleMode -ceq 'absent'){'NoProcessFoundForGivenName'}elseif($script:idleMode -ceq 'prefix'){'NoProcessFoundForGivenNameForeign'}else{'AccessDenied'}
+    $record=[Management.Automation.ErrorRecord]::new([InvalidOperationException]::new('Synthetic process outcome'),$id,[Management.Automation.ErrorCategory]::ObjectNotFound,$Name)
+    $PSCmdlet.ThrowTerminatingError($record)
+}
+foreach($mode in @('zero','absent','busy','prefix','fault')) {
+    $script:idleMode=$mode;$script:idleQueries=0;$script:officeOperationsStopped=$false;$script:cleanupConfirmed=$true
+    $script:report=[ordered]@{};$activated=0;$caught=$false
+    try {Assert-FurnitureOfficeIdle;$activated++}catch{$caught=$true}
+    $refused=$mode -cnotin @('zero','absent')
+    if($script:idleQueries -ne 1 -or $caught -ne $refused -or $activated -ne $(if($refused){0}else{1})){throw 'Strict preflight result/activation differs'}
+    if($refused){
+        if(-not $script:officeOperationsStopped -or $script:cleanupConfirmed){throw 'Query refusal did not latch'}
+        try {Invoke-FurnitureCom 'forbidden.later' {$script:idleQueries++}}catch{}
+        if($script:idleQueries -ne 1){throw 'Later operation after strict preflight failure'}
+    } elseif($report.globalPreflight.policy -cne 'strict-name-query-v1' -or $report.globalPreflight.count -ne 0){throw 'Missing actual zero-count proof'}
+    $cases.Add([ordered]@{name=('strict-global-preflight-'+$mode);passed=$true})
+}
 Remove-Item Function:Get-Process
 $lifecycleCases.Add([ordered]@{name='refuse-running-office';passed=$true})
 

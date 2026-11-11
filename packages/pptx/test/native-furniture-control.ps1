@@ -839,7 +839,14 @@ function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {
     }
 }
 function Assert-FurnitureOfficeIdle {
-    if(Get-Process -Name POWERPNT -ErrorAction SilentlyContinue) { throw 'POWERPNT.EXE is already running; do not attach to another session' }
+    # Forward-only strict query. Never treat enumeration failure as an idle host.
+    $count=Invoke-FurnitureCom 'preflight.globalIdle' {
+        try { $processes=@(Get-Process -Name POWERPNT -ErrorAction Stop) }
+        catch { if($_.FullyQualifiedErrorId.Split(',')[0] -ceq 'NoProcessFoundForGivenName') {$processes=@()} else {throw} }
+        if($processes.Count -ne 0) { throw 'POWERPNT.EXE is already running; do not attach to another session' }
+        return $processes.Count
+    }
+    $report.globalPreflight=[ordered]@{policy='strict-name-query-v1';count=$count}
 }
 function Stop-FurnitureLifecycle([string]$Message) {
     $script:officeOperationsStopped=$true; $script:cleanupConfirmed=$false

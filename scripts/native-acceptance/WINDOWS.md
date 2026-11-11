@@ -249,3 +249,43 @@ failed native call requires preserved evidence and supervisor inspection.
 Run the Office-free actual boundary regression with
 `node packages/pptx/test/native-readonly-survey.mjs`. Passing it does not run Office
 or establish native acceptance.
+
+## Prospective ordinary FULL59 typed route
+
+The current sealed 9a20 FULL59 suite has 28 primary, 30 positive chart-mode and
+one dedicated table case. The historical 58-case arithmetic above is not its
+execution roster. Dispatch only actual sealed eligible entries. Dense-events,
+whole-seven and table-six keep their separate routes; no caps are raised.
+
+`furniture-profile.mjs` introduces an explicitly bound ordinary-case lifecycle
+profile. It binds the unchanged 9a20 producer, exact FULL59 seal and genuine
+six-package proof separately from the current clean controller/forward worker.
+It never relaxes the legacy runner's default producer-provenance check.
+Create an envelope from a reviewed options JSON (`suiteDirectory`,
+`producerRepository`, `consumer`, `packedProof`, `caseId`, `captureTextFonts`),
+then prepare a fresh attempt:
+
+```powershell
+# Preparation and all actual execution require their separately assigned scope.
+node scripts/native-acceptance/furniture-profile.mjs create --options C:\opf-work/options.json --output C:\opf-work/envelope.json
+node scripts/native-acceptance/furniture-profile.mjs prepare --envelope C:\opf-work/envelope.json --sha256 <envelope-sha256> --output C:\opf-work/fresh-attempt --require-office true
+powershell.exe -NoProfile -NonInteractive -File scripts/native-acceptance/run-windows.ps1 -SuiteDirectory <sealed-suite> -PptxRepository <current-controller>/packages/pptx -Case <exact-case> -OutputDirectory C:\opf-work/fresh-attempt -ExecutionEnvelope C:\opf-work/envelope.json -ExpectedEnvelopeSha256 <envelope-sha256> -ExpectedRequestSha256 <prepared-request-sha256> -NodeExecutable <pinned-node> -RunOffice
+```
+
+Bind `-CaptureTextFonts` to the envelope's same boolean when selected. Default
+preparation/typed launch is pure; explicit `-RunOffice` requires a matching
+prepared true request. `-ValidateOnly` and `-RunOffice` are mutually exclusive.
+The worker stays 45 seconds by default/hard maximum 60. Its strict process-name
+query accepts only exact `NoProcessFoundForGivenName` as absence, and records the
+actual zero proof immediately before activation. Query faults/nonzero stop.
+
+Only complete owned read-only open/SaveCopy/reopen/two-close/empty-Quit records,
+18 ordered critical lifecycle facts (including strict preflight before actual
+application creation), continuous raw stages with null or exact bound path strings,
+and the exact completed sealed plan
+can reach a separate unchanged 5-second/100ms/51-query observer. Failed lifecycle
+records cause zero observer IO. No Seven/table fields are fabricated. A lifecycle
+observation still needs the applicable semantic comparator, all native slide
+images and supervisor review; it is not font/glyph, chart-data, native editing,
+full59 or release acceptance. The original worker/source leaves stay immutable;
+this prospective successor requires its own managed Windows qualification.
