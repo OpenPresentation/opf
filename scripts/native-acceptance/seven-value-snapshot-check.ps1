@@ -21,7 +21,7 @@ $results=@()
 function Initialize-SnapshotTest([string]$Name,[string]$Mutant='',[string]$Fault=''){
  Initialize-ValueTest $Name $Fault $Mutant
  $script:report['requestSha256']='a'*64;$script:report['sourceSha256']='b'*64;$script:report['snapshots']=[ordered]@{before=[ordered]@{sha256=('c'*64)}}
- $proof=Join-Path $script:root 'before-check.json';[ordered]@{profile='seven-treemap-setter-native-archives-v1';requestSha256=$script:report.requestSha256;sourceSha256=$script:report.sourceSha256;beforeSha256=$script:report.snapshots.before.sha256;sourceFidelityVerified=$true}|ConvertTo-Json -Depth 10|Set-Content -LiteralPath $proof -Encoding UTF8
+ $proof=Join-Path $script:root 'before-check.json';[ordered]@{schemaVersion=2;profile='seven-treemap-setter-native-archives-v1';requestSha256=$script:report.requestSha256;sourceSha256=$script:report.sourceSha256;beforeSha256=$script:report.snapshots.before.sha256;sourcePublicModelVerified=$true;nativeRoleBindingVerified=$true;sourceRawStyleQualification='OPEN';nativeAcceptance=$false}|ConvertTo-Json -Depth 10|Set-Content -LiteralPath $proof -Encoding UTF8
  $script:report['beforeAdmission']=[ordered]@{path=$proof;sha256=(Get-SevenHash $proof)}
 }
 Initialize-SnapshotTest 'null-getter-success' 'null'
@@ -35,11 +35,11 @@ for($i=0;$i -lt $baseline.Count;$i++){
  if(-not $caught -or -not $script:stopped -or [SevenValueFake]::Calls.Count -ne $count -or $count -ne $i+1 -or [SevenValueFake]::Gets -ne 0){throw 'Setter fault latch allowed later managed work'}
  $results+=@([ordered]@{name=('fault-'+$i);getterCalls=0;setterCalls=[SevenValueFake]::Sets;laterCalls=0})
 }
-foreach($mode in @('foreignPath','writable','slideCount','shapeCount','duplicateTarget','hasChart','wrongType','zeroSeries','extraSeries','seriesName','foreignApplication','foreignPresentation','missingProof','proofHash','proofRequest','proofFalse','stopped','secondSetter','wire')){
+foreach($mode in @('foreignPath','writable','slideCount','shapeCount','duplicateTarget','hasChart','wrongType','zeroSeries','extraSeries','seriesName','foreignApplication','foreignPresentation','missingProof','proofHash','proofRequest','proofFalse','proofRoles','proofRawStatus','proofLegacyFidelity','proofNativeAcceptance','stopped','secondSetter','wire')){
  Initialize-SnapshotTest $mode $mode
  if($mode -ceq 'foreignApplication'){$script:ownedApp=[object]::new()};if($mode -ceq 'foreignPresentation'){$script:ownedPresentation=[object]::new()}
  if($mode -ceq 'missingProof'){$script:report.beforeAdmission=$null};if($mode -ceq 'proofHash'){$script:report.beforeAdmission.sha256='0'*64}
- if($mode -cin @('proofRequest','proofFalse')){$p=$script:report.beforeAdmission.path;$proof=Get-Content -LiteralPath $p -Raw|ConvertFrom-Json;if($mode -ceq 'proofRequest'){$proof.requestSha256='0'*64}else{$proof.sourceFidelityVerified=$false};$proof|ConvertTo-Json -Depth 10|Set-Content -LiteralPath $p -Encoding UTF8;$script:report.beforeAdmission.sha256=Get-SevenHash $p}
+ if($mode -cin @('proofRequest','proofFalse','proofRoles','proofRawStatus','proofLegacyFidelity','proofNativeAcceptance')){$p=$script:report.beforeAdmission.path;$proof=Get-Content -LiteralPath $p -Raw|ConvertFrom-Json;if($mode -ceq 'proofRequest'){$proof.requestSha256='0'*64}elseif($mode -ceq 'proofFalse'){$proof.sourcePublicModelVerified=$false}elseif($mode -ceq 'proofRoles'){$proof.nativeRoleBindingVerified=$false}elseif($mode -ceq 'proofRawStatus'){$proof.sourceRawStyleQualification='verified'}elseif($mode -ceq 'proofNativeAcceptance'){$proof.nativeAcceptance=$true}else{$proof.schemaVersion=1;$proof.PSObject.Properties.Remove('sourcePublicModelVerified');$proof|Add-Member -NotePropertyName sourceFidelityVerified -NotePropertyValue $true};$proof|ConvertTo-Json -Depth 10|Set-Content -LiteralPath $p -Encoding UTF8;$script:report.beforeAdmission.sha256=Get-SevenHash $p}
  if($mode -ceq 'stopped'){$script:stopped=$true};if($mode -ceq 'secondSetter'){Set-SevenSnapshotNumericArray $action $actionModelSha256 $actionFileIdentity}
  $identity=$actionFileIdentity;if($mode -ceq 'wire'){$identity=[pscustomobject]@{bytes=0;sha256=$ActionFileSha256}}
  $sets=[SevenValueFake]::Sets;$caught=$false;try{Set-SevenSnapshotNumericArray $action $actionModelSha256 $identity}catch{$caught=$true};$count=[SevenValueFake]::Calls.Count
