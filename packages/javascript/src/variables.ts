@@ -312,6 +312,8 @@ interface Context {
   /** Validation view: samples fill every unfilled variable; lists do not splice; nothing is omitted. */
   shape: boolean;
   content: boolean;
+  /** Internal dependency walk: follow the same sources/grammar, but never materialize expanded values. */
+  dependencyOnly?: boolean;
   seen: Set<string>;
   /** The document built-ins read from. */
   doc: Record<string, unknown>;
@@ -514,6 +516,7 @@ function interpolate(text: string, path: string, context: Context): { value: str
     // `{{slide.number}}`, `{{slide.section}}`, `{{deck.slideCount}}` resolve per slide (resolveSlideVariables, layoutFurniture).
     if (isSlideScopedBuiltin(id)) return match;
     const effective = lookupVariable(id, path, context);
+    if (context.dependencyOnly) return match;
     if (!effective) {
       if (!isBuiltinName(id)) diag(context, { code: "variable-unknown", severity: "warning", path, id, message: `'{{${id}}}' names no declared variable; declare '${id}' in the top-level variables map, or write '\\{{' for literal braces.` }, `unk:${id}:${path}`);
       return match;
@@ -545,6 +548,11 @@ function reduceString(text: string, path: string, parentIsArray: boolean, contex
   const reference = referencePattern.exec(text);
   if (reference) {
     const id = reference[1] as string;
+    if (context.dependencyOnly) {
+      context.uses.push({ id, path, form: "reference" });
+      lookupVariable(id, path, context);
+      return { kind: "keep" };
+    }
     const logo = id.startsWith("organization.") ? parseLogoName(id, context.doc) : null;
     if (logo) return reduceLogo(id, logo, path, context);
     const effective = lookupVariable(id, path, context);
@@ -872,6 +880,23 @@ export function resolveVariables(presentation: unknown, values: VariableValues =
     return { presentation, diagnostics: [], unfilled: built.unfilled, examplesUsed: [], complete: built.unfilled.length === 0 };
   }
   return finish(presentation, built, options);
+}
+
+/**
+ * Internal cache dependency check, after strict plain-data/key-budget guards. Callers retain conservative fallback
+ * for declarations/templates/explicit values. Use the actual walk/escape/reference/builtin-source rules without
+ * constructing replacements or picker values. builtinEffective's cache/resolving set visits each source once;
+ * dependency interpolation returns the original match, so repeated transitive tokens cannot amplify strings.
+ * No public entry re-exports this helper. An unproven dependency keeps the complete original cache key.
+ */
+export function hasBuiltinDependency(presentation: Record<string, unknown>, name: string): boolean {
+  try {
+    const { context } = plan(presentation, {}, { partial: true, shape: true });
+    context.content = true;
+    context.dependencyOnly = true;
+    walk(presentation, "", false, context);
+    return context.uses.some(use => use.id === name);
+  } catch { return true; }
 }
 
 /**
