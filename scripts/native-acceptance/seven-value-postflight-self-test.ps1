@@ -75,6 +75,24 @@ try {
     $context=Fresh-ValueEvidence;$context.request.selectedCase.action.expectedValues=$expected
     $expectedProof=@(Get-SevenValueCriticalProbes $context.report $context.request.selectedCase.action | Where-Object {$_.stage -cmatch '^value\.original\.expected\.'})
     for($i=0;$i -lt 4;$i++){foreach($field in @('stage','expected','actual','matched')){if(($actualProof[$i].$field | ConvertTo-Json -Compress) -cne ($expectedProof[$i].$field | ConvertTo-Json -Compress)){throw 'Actual numeric reader/writer proof differs from typed recomputation'}}};$controls++
+    # Negative arguments to an untyped function must retain numeric wire values.
+    # Inspect exact construction, its JSON roundtrip and the original proof;
+    # never coerce an input or weaken the production JSON comparison.
+    $negativeContext=Fresh-ValueEvidence
+    $criticalProof=@(Get-SevenValueCriticalProbes $negativeContext.report $negativeContext.request.selectedCase.action)
+    $negativeStages=@('value.original.target.readOnly','value.original.target.hasChart','value.original.read.readOnly','value.setter.readOnly','value.edited.read.readOnly','value.saved-reopened.target.readOnly','value.saved-reopened.target.hasChart','value.saved-reopened.read.readOnly')
+    if($criticalProof.Count -ne 57){throw 'Exact critical proof count changed'}
+    $negativeProof=@($criticalProof | Where-Object {$_.stage -cmatch '^value\..*\.(readOnly|hasChart)$'})
+    $negativeWire=@((ConvertTo-Json -InputObject $criticalProof -Depth 100) | ConvertFrom-Json | Where-Object {$_.stage -cmatch '^value\..*\.(readOnly|hasChart)$'})
+    $negativeOriginal=@($negativeContext.report.probes | Where-Object {$_.stage -cmatch '^value\..*\.(readOnly|hasChart)$'})
+    foreach($view in @([pscustomobject]@{rows=$negativeProof},[pscustomobject]@{rows=$negativeWire},[pscustomobject]@{rows=$negativeOriginal})){
+        $rows=$view.rows
+        if($rows.Count -ne $negativeStages.Count){throw 'Exact negative proof roster changed'}
+        for($i=0;$i -lt $negativeStages.Count;$i++){
+            $row=$rows[$i];if($row.stage -cne $negativeStages[$i] -or $row.matched -cne $true){throw ('Negative proof order/status changed: '+$negativeStages[$i])}
+            foreach($field in @('expected','actual')){if(($row.$field -isnot [int] -and $row.$field -isnot [long]) -or $row.$field -ne (-1)){throw ('Negative proof is not numeric -1: '+$row.stage+'.'+$field)}}
+        }
+    };$controls++
     foreach($mutation in @('valid','missing-proof','duplicate-proof','reordered-proof','false-actual-proof','false-expected-proof','extra-proof-key','wrong-readback-proof','missing-preflight-proof','failed-worker','timed-out','cleanup-false','nonempty-error','sequence-gap','missing-stage','extra-stage','setter-readonly','preflight-nonzero','second-setter','stale-reopened','wrong-wire','foreign-profile','policy-change')){
         $e=Fresh-ValueEvidence;$r=$e.report;$s=$e.stages;$p=@($r.probes | Where-Object {$_.stage -ceq 'value.setter.capturedRefs'})[0];$index=[Array]::IndexOf($r.probes,$p)
         if($mutation -ceq 'missing-proof'){$r.probes=@($r.probes | Where-Object {$_ -ne $p})}
