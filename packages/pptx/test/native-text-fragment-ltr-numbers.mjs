@@ -12,6 +12,7 @@ import {textWidthMeasurer} from '@openpresentation/opf/composition';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {decodeTextTag} from '../dist/code-provenance.js';
+import {nativeFragmentPropertiesHash} from '../dist/native-text-fragments.js';
 
 const oldBytes=readFileSync(new URL('../../../scripts/native-acceptance/test-fixtures/b07-current/original-09.opf.json',import.meta.url));
 const old=JSON.parse(oldBytes),source=structuredClone(old),run=source.slides[0].items[0][0];run.language=run.lang;delete run.lang;
@@ -23,7 +24,7 @@ const shapes=xml=>[...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([xml])=>({xm
 const text=shape=>shape.runs.map(run=>run.text).join('');
 const frame=shape=>{const found=/<a:xfrm><a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/><\/a:xfrm>/.exec(shape.xml);assert(found);return found.slice(1).map(Number);};
 const tags=zip=>Object.entries(zip).filter(([path])=>/^ppt\/tags\//.test(path)).flatMap(([,bytes])=>[...strFromU8(bytes).matchAll(/<p:tag name="OPF_NATIVE_FRAGMENTS_V1" val="([^"]*)"\/>/g)].map(match=>decodeTextTag(match[1])));
-const itemRuns=doc=>{const value=doc.slides[0].items[0];return (Array.isArray(value)?value:[value]).map(run=>typeof run==='string'?{text:run}:run);};
+const itemRuns=doc=>{const value=(doc.slides[0].items??doc.slides[0].blocks?.find(block=>block.type==='list')?.items)[0];return (Array.isArray(value)?value:[value]).map(run=>typeof run==='string'?{text:run}:run);};
 const bodyText=doc=>itemRuns(doc).map(run=>run.text).join('');
 let prepared;
 const actual=()=>prepared??=prepare();
@@ -70,14 +71,46 @@ test('current arbitrary-length suffix and numeric edits remain current without o
 
 test('current suffix style and native-boundary edits are not spread across the old authored run',async()=>{
  const result=await actual(),suffix=shapes(result.xml).find(shape=>shape.name.startsWith('OPF native fragment ')&&text(shape)!=='1');
+ const record=tags(result.zip).find(record=>record.name===suffix.name),binding=Object.fromEntries(['v','group','count','length','source','index','name','id','from','to','role'].map(key=>[key,record[key]]));
+ assert.equal(nativeFragmentPropertiesHash(suffix.xml,binding),record.properties);
  for(const [name,change,check]of [
   ['font',xml=>xml.replace(/(<a:latin\b[^>]*\btypeface=")[^"]*"/,'$1Georgia"'),runs=>{assert(runs.some(run=>run.text.includes('Customers')&&run.fontFamily==='Georgia'));assert(runs.filter(run=>run.text.includes('Item')||run.text.includes('around')).every(run=>run.fontFamily!=='Georgia'));}],
   ['proofing',xml=>xml.replace('lang="ar-SA"','lang="fr-FR"'),runs=>assert(runs.some(run=>run.text.includes('Customers')&&run.language==='fr-FR'))],
   ['boundary',xml=>xml.replace(suffix.runs[0].xml,suffix.runs[0].xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>: </a:t>')+suffix.runs[0].xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>'+run.text.slice(8,69)+'</a:t>')),runs=>assert(runs.some(run=>run.text===': '))],
  ]){
-  const changed=change(suffix.xml);assert.notEqual(changed,suffix.xml,name);const diagnostics=[],zip={...result.zip,[slidePath]:strToU8(result.xml.replace(suffix.xml,changed))},imported=await fromPptx(zipSync(zip),{onDiagnostic:issue=>diagnostics.push(issue)});
+  const changed=change(suffix.xml);assert.notEqual(changed,suffix.xml,name);assert.notEqual(nativeFragmentPropertiesHash(changed,binding),record.properties,name+' must disable old complete-property joining');const diagnostics=[],zip={...result.zip,[slidePath]:strToU8(result.xml.replace(suffix.xml,changed))},imported=await fromPptx(zipSync(zip),{onDiagnostic:issue=>diagnostics.push(issue)});
   assert.equal(bodyText(imported),run.text);check(itemRuns(imported));assert(diagnostics.some(issue=>issue.code==='native-fragment-reflow'));
  }
+});
+
+test('current interior boundaries survive continuation, removed-continuation and new-entry joins',async()=>{
+ const result=await actual(),all=shapes(result.xml),carrier=all.find(shape=>/^OPF list .+ line 0$/.test(shape.name)),continuation=all.find(shape=>/^OPF list .+ line 1$/.test(shape.name)),suffix=all.find(shape=>shape.name.startsWith('OPF native fragment ')&&text(shape)!=='1'),native=suffix.runs[0];
+ const left=native.xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>: </a:t>'),right=native.xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>'+run.text.slice(8,69)+'</a:t>'),changed=result.xml.replace(suffix.xml,suffix.xml.replace(native.xml,left+right)),pPr=/<a:pPr\b[^>]*\/>|<a:pPr\b[^>]*>[\s\S]*?<\/a:pPr>/.exec(carrier.xml)[0];
+ const newEntry=continuation.xml.replace(/<a:pPr\b[^>]*\/>|<a:pPr\b[^>]*>[\s\S]*?<\/a:pPr>/,pPr);
+ for(const [name,xml,expectedTail,bold]of [
+  ['continuation',changed,run.text.slice(8),false],
+  ['removed continuation',changed.replace(continuation.xml,''),run.text.slice(8,69),false],
+  ['new entry',changed.replace(continuation.xml,newEntry),run.text.slice(8,69),false],
+  ['style divergence',changed.replace(left,left.replace('<a:rPr ','<a:rPr b="1" ')),run.text.slice(8),true],
+ ]){
+  const diagnostics=[],zip={...result.zip,[slidePath]:strToU8(xml)},imported=await fromPptx(zipSync(zip),{onDiagnostic:issue=>diagnostics.push(issue)});
+  assert.deepEqual(itemRuns(imported),[{text:'Item 1',language:'ar-SA'},{text:': ',...(bold?{bold:true}:{}),language:'ar-SA'},{text:expectedTail,language:'ar-SA'}],name+' retains every current interior run while only the line seam joins');
+  assert(diagnostics.some(issue=>issue.code==='native-fragment-reflow'),name);
+  if(name==='new entry'){assert.equal(imported.slides[0].items.length,2);assert.deepEqual(imported.slides[0].items[1],{text:[{text:run.text.slice(69),language:'ar-SA'}],start:1});}
+  if(name==='removed continuation')assert(!JSON.stringify(imported).includes(run.text.slice(69)),'Deleted current content is not replayed from provenance');
+ }
+});
+
+test('a continuation retains its own interior boundaries on the right side of the seam',async()=>{
+ const document=structuredClone(source);document.slides[0].items[0][0].text=run.text.replace('around the','around 2 the');
+ const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:document});
+ try{
+  const bytes=await toPptx(document,{fonts}),zip=unzipSync(new Uint8Array(bytes)),xml=strFromU8(zip[slidePath]);assert.deepEqual(await fromPptx(bytes),document,'The intact one-authored-run paragraph still joins only its artificial wraps');
+  const suffix=shapes(xml).find(shape=>shape.name.startsWith('OPF native fragment ')&&text(shape).endsWith('journey.'));assert(suffix);assert.equal(suffix.runs.length,1);assert.equal(text(suffix),' the customer journey.');
+  const native=suffix.runs[0],left=native.xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t> the </a:t>'),right=native.xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>customer journey.</a:t>'),changed=suffix.xml.replace(native.xml,left+right),diagnostics=[];
+  const imported=await fromPptx(zipSync({...zip,[slidePath]:strToU8(xml.replace(suffix.xml,changed))}),{onDiagnostic:issue=>diagnostics.push(issue)});
+  assert.equal(bodyText(imported),document.slides[0].items[0][0].text);assert(itemRuns(imported).some(run=>run.text===' the '));assert(itemRuns(imported).some(run=>run.text==='customer journey.'));assert(diagnostics.some(issue=>issue.code==='native-fragment-reflow'));
+ }finally{fonts.dispose?.();}
 });
 
 test('inherited proofing and non-ASCII digits keep their existing measured routes',async()=>{
@@ -87,7 +120,7 @@ test('inherited proofing and non-ASCII digits keep their existing measured route
   const before=structuredClone(document),fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:document});
   try{
    const bytes=await toPptx(document,{fonts}),zip=unzipSync(new Uint8Array(bytes)),xml=strFromU8(zip[slidePath]);assert.deepEqual(document,before);assert.equal(tags(zip).length,0,name+' cannot acquire numeric fragment ownership');
-   if(name==='inherited'){const body=shapes(xml).filter(shape=>shape.name.startsWith('OPF list '));assert.equal(body.length,2);for(const member of body.flatMap(shape=>shape.runs)){assert.match(member.properties,/lang="en-US" altLang="ar-SA"/);}}
+   if(name==='inherited'){const body=shapes(xml).filter(shape=>shape.name.startsWith('OPF list '));assert.equal(body.length,2);for(const member of body.flatMap(shape=>shape.runs)){assert.match(member.properties,/lang="ar-SA"/);assert(!/\baltLang=/.test(member.properties));}assert.deepEqual(await fromPptx(bytes),{...inherited,slides:[{...inherited.slides[0],items:[run.text]}]},'The existing inherited route returns the exact scalar canonical source without an authored language override');}
    else{assert(xml.includes('١'));assert(xml.includes('۱'));assert(!xml.includes('Item 1:'),'Arabic/Persian source digits cannot be coerced to ASCII');}
   }finally{fonts.dispose?.();}
  }
