@@ -40,6 +40,14 @@ See [the takeover scope and resume record](takeover/README.md). This is active w
 
 The supplied documents are reference material. Their historical release/retry/removal advice does not override later owner decisions or current guarded workflows. Original E3 bundle/checksum delivery is retained.
 
+## Coherent candidate checkpoint — 2026-11-11 UTC
+
+- Clean c6d full mapped gate is terminal52PASS/1RED/53steps,1483.2seconds. All311PPTX and147editor scripts plus one node:test file pass; renderer stops on eight strict raster differences with130selected tests unrun. [Original56logs and receipt](coherent-c6d/README.md) remain intact. No golden or tolerance was edited.
+- Actual new Windows installed consumer passes build, pack and full maintained packed test. Five current exports then pass: case05 now has four shapes and exact source import; the other four archives and all ten previews remain byte-identical to their previous candidate outputs. This is local unpublished qualification; full59/native/release acceptance remains separate. A new three-body-target case05 profile is being prepared within the existing limits.
+- Actual WindowsPS5 postflight controls pass8/8 after the one-file reserved-variable correction; that correction is normally folded after c6d terminal. The previous native03 run remains failed. Its approved private evidence transfer is complete and independently reviewed.
+- All43 historical before/after/Claude associations are visually inspected after133original hashes are verified. This establishes historical raster review only. Editable original source and current0.34images remain owed; the recovered approximate Claude cover omits title/subtitle, so no equivalent-content quality claim follows. Private original images and per-slide observations stay private.
+- A source-reviewed cache-prefix successor passes15first focused controls, including actual downstream message surfaces, complete warm/cold geometry and reports. Existing neighbors are still running; no measured speedup is claimed.
+
 ## Historical stopped-team ownership and acceptance gates
 
 | ID / workstream | Owner | Current state | Next concrete gate / definition of done |
