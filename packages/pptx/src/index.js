@@ -1766,13 +1766,15 @@ function takeSubtitleItem(items, titleItem, dimensions, inferHeadings) {
 const richRuns = value => typeof value === 'string' ? [{text: value}] : value;
 function joinRich(a, b) {
   if (typeof a === 'string' && typeof b === 'string') return a + b;
-  const runs = [...richRuns(a), ...richRuns(b)], joined = [];
-  for (const run of runs) {
-    const last = joined.at(-1);
-    if (last && JSON.stringify({...last, text: ''}) === JSON.stringify({...run, text: ''})) last.text += run.text;
-    else joined.push({...run});
+  const copy = value => richRuns(value).map(run => typeof run === 'string' ? {text: run} : {...run});
+  const left = copy(a), right = copy(b), last = left.at(-1), first = right[0];
+  // Only the line seam can be an artificial wrap boundary. Interior current
+  // run boundaries in either input must survive an unrelated continuation.
+  if (last && first && JSON.stringify({...last, text: ''}) === JSON.stringify({...first, text: ''})) {
+    last.text += first.text;
+    right.shift();
   }
-  return joined;
+  return [...left, ...right];
 }
 // `breaks` (slideListRecord) holds the whitespace of the hard breaks the export recorded, by list path and line number: the
 // continuation line after a break joins with it, so a newline inside an item (or a description) returns. A blank line is a
