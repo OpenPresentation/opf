@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {digest} from './identity.mjs';
 import {inspectSevenArchive,archiveDependencies,bindSevenPhase} from './seven-chart-archive.mjs';
 import {bindCurrentTreemap} from './seven-value-current.mjs';
+import {bindCurrentHistogram,histogramNumericReadback,compareHistogramPersisted} from './seven-histogram-classic.mjs';
 import {comparePersistedSevenValueEdit,sevenWorkbookAliasPartition} from './seven-value-archive.mjs';
 import {assertSnapshotRawPreservation,snapshotSourceBeforeRawFindings} from './seven-value-snapshot-namespace.mjs';
 
@@ -94,9 +95,10 @@ function sourceRoleModel(slides,parts,deps){
   delete chart.axes;delete shape.chartPart;delete chart.workbook.part;
  }return roles;
 }
-export function compareSevenNativeBefore({input,before,source,selection,action,phases,imports,root,deps=archiveDependencies()}){
- const original=bindCurrentTreemap(input,source,selection,{root,deps});assert.deepEqual(original.action,action);
- const actual=bindCurrentTreemap(before,source,selection,{root,deps});
+function compareNativeBefore({input,before,source,selection,action,phases,imports,root,deps=archiveDependencies()},histogram){
+ const bind=histogram?bindCurrentHistogram:bindCurrentTreemap,readback=histogram?histogramNumericReadback:snapshotNumericReadback;
+ const original=bind(input,source,selection,{root,deps});assert.deepEqual(original.action,action);
+ const actual=bind(before,source,selection,{root,deps});
  // These are actual first-Save resource locators, not a rewritten setter wire.
  assert.deepEqual({...actual.action,inputSha256:action.inputSha256,chartPart:action.chartPart,workbookPart:action.workbookPart},action,'Native-before changed the live target or logical data contract');
  // Both archives passed the maintained decompression/XML checks above.
@@ -107,16 +109,22 @@ export function compareSevenNativeBefore({input,before,source,selection,action,p
  assert.deepEqual(sourceRoleModel(bindSevenPhase(actual.archive,phases.original),beforeParts,deps),sourceRoleModel(bindSevenPhase(original.archive,phases.original),sourceParts,deps),'Native-before no longer binds captured source roles');
  assert.deepEqual(imports.before.document,imports.source.document,'Native-before complete public import changed');assert.deepEqual(imports.before.diagnostics,imports.source.diagnostics,'Native-before diagnostics changed');
  const rawFindings=snapshotSourceBeforeRawFindings(input,before,deps,original.archiveContext);
- return {sourceSha256:digest(input),beforeSha256:digest(before),actualNumericValues:snapshotNumericReadback(actual.archive,actual.action).values,archiveComparisonAction:actual.action,rawFindings,workbookSharing,sourcePublicModelVerified:true,nativeRoleBindingVerified:true,sourceRawStyleQualification:'OPEN',observation:'actual-native-before-archive comparison target; not setter action or COM getter',nativeAcceptance:false};
+ return {sourceSha256:digest(input),beforeSha256:digest(before),actualNumericValues:readback(actual.archive,actual.action).values,archiveComparisonAction:actual.action,rawFindings,workbookSharing,sourcePublicModelVerified:true,nativeRoleBindingVerified:true,sourceRawStyleQualification:'OPEN',observation:'actual-native-before-archive comparison target; not setter action or COM getter',nativeAcceptance:false};
 }
-export function compareSevenNativeSnapshots({input,before,edited,reopened,source,selection,action,phases,imports,root,deps=archiveDependencies()}){
- const baseline=compareSevenNativeBefore({input,before,source,selection,action,phases,imports,root,deps});
- const context=bindCurrentTreemap(before,source,selection,{root,deps}).archiveContext;
- const editOptions={input:before,saved:edited,source,action:baseline.archiveComparisonAction,phases,imports:{original:imports.before,'saved-reopened':imports.edited},deps,archiveContext:context};
- const strictEdit={parsed:comparePersistedSevenValueEdit(editOptions),raw:assertSnapshotRawPreservation(editOptions)};
+function compareNativeSnapshots({input,before,edited,reopened,source,selection,action,phases,imports,root,deps=archiveDependencies()},histogram){
+ const bind=histogram?bindCurrentHistogram:bindCurrentTreemap,readback=histogram?histogramNumericReadback:snapshotNumericReadback;
+ const baseline=compareNativeBefore({input,before,source,selection,action,phases,imports,root,deps},histogram);
+ const context=bind(before,source,selection,{root,deps}).archiveContext;
+ const editOptions={input:before,saved:edited,source,action:baseline.archiveComparisonAction,phases,imports:{original:imports.before,'saved-reopened':imports.edited},root,deps,archiveContext:context};
+ const strictEdit={parsed:(histogram?compareHistogramPersisted:comparePersistedSevenValueEdit)(editOptions),raw:assertSnapshotRawPreservation(editOptions)};
  const editedArchive=inspectSevenArchive(edited,deps,context),reopenedArchive=inspectSevenArchive(reopened,deps,context);
  assert.deepEqual(reopenedArchive.slides,editedArchive.slides,'Reopened native archive changed parsed current data/style');
  const rawReopened=unchangedRaw(edited,reopened,baseline.archiveComparisonAction,action.newValues,deps,context);
  assert.deepEqual(imports.reopened.document,imports.edited.document,'Reopened full public import changed');assert.deepEqual(imports.reopened.diagnostics,imports.edited.diagnostics,'Reopened diagnostics changed');
- return {baseline,editContract:strictEdit,rawReopened,archiveReadbacks:{before:{sha256:digest(before),values:baseline.actualNumericValues},edited:{sha256:digest(edited),...snapshotNumericReadback(editedArchive,baseline.archiveComparisonAction)},reopened:{sha256:digest(reopened),...snapshotNumericReadback(reopenedArchive,baseline.archiveComparisonAction)}},allFullImportsRetained:true,nativeAcceptance:false,registryAcceptance:false,scope:'One documented native setter with three native-generated archive numeric readbacks; exact source public-model/native-role admission with source raw-style OPEN findings, then strict isolated edit and reopen preservation (two recorded outer core metadata fields). No getter-array, all-chart-type, pixel or release claim.'};
+ return {baseline,editContract:strictEdit,rawReopened,archiveReadbacks:{before:{sha256:digest(before),values:baseline.actualNumericValues},edited:{sha256:digest(edited),...readback(editedArchive,baseline.archiveComparisonAction)},reopened:{sha256:digest(reopened),...readback(reopenedArchive,baseline.archiveComparisonAction)}},allFullImportsRetained:true,nativeAcceptance:false,registryAcceptance:false,scope:'One documented native setter with three native-generated archive numeric readbacks; exact source public-model/native-role admission with source raw-style OPEN findings, then strict isolated edit and reopen preservation (two recorded outer core metadata fields). No getter-array, all-chart-type, pixel or release claim.'};
 }
+
+export function compareSevenNativeBefore(options){return compareNativeBefore(options,false);}
+export function compareSevenNativeSnapshots(options){return compareNativeSnapshots(options,false);}
+export function compareHistogramNativeBefore(options){return compareNativeBefore(options,true);}
+export function compareHistogramNativeSnapshots(options){return compareNativeSnapshots(options,true);}

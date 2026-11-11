@@ -56,8 +56,8 @@ function Assert-SevenValueTargetOwnership($Target,[string]$Prefix) {
     Assert-SevenProbe (& $sameOwned) "$Prefix.readOnly.refs" 'same captured owned references/path' (& $sameOwned)
     Assert-SevenProbe ((Test-SevenInteger $readOnly) -and $readOnly -eq -1) "$Prefix.readOnly" (-1) (Get-SevenPrimitive $readOnly)
 }
-function Get-SevenValueTarget($Action,[string]$Prefix) {
-    Assert-SevenValueAction $Action;Assert-SevenOwnedPresentation "$Prefix.ownership"
+function Get-SevenValueTarget($Action,[string]$Prefix,[switch]$HistogramClassic) {
+    if($HistogramClassic){Assert-SevenHistogramAction $Action}else{Assert-SevenValueAction $Action};Assert-SevenOwnedPresentation "$Prefix.ownership"
     $capturedApp=$script:app;$capturedPresentation=$script:presentation;$capturedPath=$script:ownedPath
     $actualPath=Read-SevenProperty $script:presentation 'FullName' "$Prefix.fullName"
     Assert-SevenProbe ($actualPath -is [string] -and $actualPath -ieq $script:ownedPath) "$Prefix.fullName" $script:ownedPath (Get-SevenPrimitive $actualPath)
@@ -76,12 +76,13 @@ function Get-SevenValueTarget($Action,[string]$Prefix) {
     }
     Assert-SevenProbe ($matches -eq 1) "$Prefix.exactTarget" 1 $matches
     $hasChart=Invoke-SevenCom "$Prefix.hasChart" {$target.HasChart};Assert-SevenProbe ((Test-SevenInteger $hasChart) -and $hasChart -eq -1) "$Prefix.hasChart" (-1) $hasChart
-    $chart=Invoke-SevenCom "$Prefix.chart" {$target.Chart};$type=Invoke-SevenCom "$Prefix.chart.type" {$chart.ChartType}
+    $chart=Invoke-SevenCom "$Prefix.chart" {$target.Chart};$type=Invoke-SevenCom "$Prefix.chart.type" {if($HistogramClassic){$member=$chart.PSObject.Properties['ChartType'];if($null -eq $member){throw 'Missing histogram ChartType'};return ,$member.get_Value()};return $chart.ChartType}
     Assert-SevenProbe ((Test-SevenInteger $type) -and $type -eq $Action.comChartType) "$Prefix.chart.type" $Action.comChartType $type
     $collection=Invoke-SevenCom "$Prefix.series" {return ,$chart.SeriesCollection()};$seriesCount=Invoke-SevenCom "$Prefix.series.count" {$collection.Count}
     Assert-SevenProbe ((Test-SevenInteger $seriesCount) -and $seriesCount -ge 1 -and $seriesCount -le $Action.maxSeriesCount) "$Prefix.series.count" "1..$($Action.maxSeriesCount)" $seriesCount
     $series=Invoke-SevenCom "$Prefix.series.item" {$collection.Item(1)};$name=Invoke-SevenCom "$Prefix.series.name" {$series.Name}
     Assert-SevenProbe ($name -is [string] -and $name -ceq $Action.seriesName) "$Prefix.series.name" $Action.seriesName (Get-SevenPrimitive $name)
+    if($HistogramClassic){$seriesType=Invoke-SevenCom "$Prefix.series.type" {$member=$series.PSObject.Properties['ChartType'];if($null -eq $member){throw 'Missing histogram series ChartType'};return ,$member.get_Value()};Assert-SevenProbe ((Test-SevenInteger $seriesType) -and $seriesType -eq 51) "$Prefix.series.type" 51 $seriesType}
     return [pscustomobject]@{series=$series;chartType=$type;seriesCount=$seriesCount;ownedApp=$capturedApp;ownedPresentation=$capturedPresentation;ownedPath=$capturedPath}
 }
 function Read-SevenValueArray($Target,[string]$Phase,$Probe) {
