@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {readFileSync} from 'node:fs';
+import {findPackageJSON} from 'node:module';
 import {App} from '@modelcontextprotocol/ext-apps';
 import {Protocol} from '@modelcontextprotocol/client';
 import {McpServer} from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -14,9 +15,19 @@ test('the actual View SDK imports its required split peers while the public serv
   assert.ok(App.prototype instanceof Protocol, 'the installed App really uses the SDK2 client Protocol');
   const manifest = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
   assert.equal(manifest.devDependencies['@modelcontextprotocol/ext-apps'], '2.0.4');
-  assert.equal(manifest.devDependencies['@modelcontextprotocol/client'], '2.0.0');
-  assert.equal(manifest.devDependencies['@modelcontextprotocol/core'], '2.0.0');
+  assert.equal(manifest.devDependencies['@modelcontextprotocol/client'], '2.4.0');
+  assert.equal(manifest.devDependencies['@modelcontextprotocol/core'], '2.4.0');
+  const installed = name => JSON.parse(readFileSync(findPackageJSON(name, import.meta.url), 'utf8'));
+  const clientPackage = installed('@modelcontextprotocol/client');
+  const corePackage = installed('@modelcontextprotocol/core');
+  assert.equal(clientPackage.name, '@modelcontextprotocol/client');
+  assert.equal(corePackage.name, '@modelcontextprotocol/core');
+  assert.equal(clientPackage.version, '2.4.0', 'actual installed client must contain both published security repairs');
+  assert.equal(corePackage.version, '2.4.0', 'the actual fixed SDK peer group must stay coherent');
+  assert.equal(clientPackage.dependencies['@modelcontextprotocol/core'], corePackage.version);
+  assert.equal(installed('@modelcontextprotocol/ext-apps').version, '2.0.4');
   assert.equal(manifest.dependencies['@modelcontextprotocol/sdk'], '1.32.2');
+  assert.equal(installed('@modelcontextprotocol/sdk').version, '1.32.2', 'public server SDK1 remains independently fixed');
   for (const name of ['@modelcontextprotocol/ext-apps', '@modelcontextprotocol/client', '@modelcontextprotocol/core'])
     assert.equal(manifest.dependencies[name], undefined, name + ' is compiled into the View rather than added to the server runtime graph');
   const server = createOpfServer({version: '0.0.0-dependency-test'});
