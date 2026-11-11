@@ -1,0 +1,224 @@
+{
+  "scope": "Two current-source B07 native read-only Save/reopen attempts and scoped independently viewed pixels; no content/style/chart edit acceptance",
+  "provenance": {
+    "source": "9a20aed56f2d1a762c3a88ab24f8cc25d849d61f",
+    "tree": "d3f3d7e5ea7b2e1687683a49a743894f680b42bf",
+    "workerRevision": "6831f30a6ecec7ffec870e9aaf80dda27f2bab9a",
+    "installedSixPackageProof": {
+      "bytes": 224462,
+      "sha256": "0863398537df02b5127bd56ff6e5c6e7cf40963b07aec03e8f292d0680e2c1e0"
+    },
+    "b07ClosedFiveSuite": {
+      "bytes": 732791,
+      "sha256": "b310359c8db7bb786e9c8d6f6b6eedf27e293a4d49d7c491adf1d6b3ce5f9ccb"
+    }
+  },
+  "admission": {
+    "operationalFacts": "Coordinator-provided verified records, retained on Windows; hash references only in this packet",
+    "locallyReverified": "Exact PNG size/SHA256/dimensions/chunk bounds/CRC, absence of text/EXIF chunks and byte-identical copy",
+    "visualReview": "Coordinator independently viewed both exact images; case05 also viewed against current Node focus reference"
+  },
+  "sharedLifecycle": {
+    "attemptsPerCase": 1,
+    "workerDeadlineSeconds": 45,
+    "ownedReadOnlyOpens": 2,
+    "saveCopyOperations": 1,
+    "ownedCloses": 2,
+    "quitOnlyWhenOwnedApplicationEmpty": true,
+    "contentActions": 0,
+    "styleActions": 0,
+    "chartActions": 0,
+    "postflightPolicy": {
+      "separateDeadlineSeconds": 5,
+      "intervalMs": 100,
+      "maximumQueries": 51,
+      "sameObserver": true
+    }
+  },
+  "cases": [
+    {
+      "case": "05",
+      "envelopeSha256": "17e4ebc337ded5a126904d32fa73fad0caad7bc42637303445da2428a5a3811b",
+      "exitCode": 0,
+      "runElapsedSeconds": 23.028,
+      "stageRecords": 1350,
+      "successStages": 677,
+      "beginStages": 673,
+      "observedShapesPerPhase": 4,
+      "observedPhases": 3,
+      "wholeTextUtf16Units": 31,
+      "shapeTextUtf16Partition": [
+        15,
+        7,
+        8,
+        1
+      ],
+      "perPhase": {
+        "probeTargets": 3,
+        "probeRanges": 3,
+        "sampledUtf16Units": 16,
+        "styleMismatches": [],
+        "sourceImportEqual": true,
+        "importDiagnostics": []
+      },
+      "boundedPostflight": {
+        "typedCompleteAdmissionBeforeObserver": true,
+        "samples": 1,
+        "firstSampleCount": 0,
+        "reportedFirstSampleElapsedMs": 29.2334,
+        "reportedObserverEndElapsedMs": 57.4053
+      },
+      "png": {
+        "file": "case05.png",
+        "bytes": 3854,
+        "sha256": "36d4213ce9fd0a75d33c485b3d6fc823fb198c32e50be6377bc30c6bc24472b0",
+        "width": 1280,
+        "height": 720,
+        "allThreeNativePhaseImagesByteIdentical": "Coordinator verified on producing records; only one exact image copied here",
+        "crcValid": true,
+        "chunks": [
+          {
+            "type": "IHDR",
+            "bytes": 13
+          },
+          {
+            "type": "sRGB",
+            "bytes": 1
+          },
+          {
+            "type": "gAMA",
+            "bytes": 4
+          },
+          {
+            "type": "PLTE",
+            "bytes": 99
+          },
+          {
+            "type": "pHYs",
+            "bytes": 9
+          },
+          {
+            "type": "IDAT",
+            "bytes": 3636
+          },
+          {
+            "type": "IEND",
+            "bytes": 0
+          }
+        ],
+        "exifOrTextChunks": false,
+        "localCopyByteIdentical": true
+      },
+      "artifactReferencesOnly": {
+        "observation": {
+          "bytes": 192301,
+          "sha256": "04d71f190a03a7b5d51f93867b07d45fee6a5a02fe59e11b3320e77cc5c5fc10"
+        },
+        "report": {
+          "bytes": 204662,
+          "sha256": "c39d4a47561208aeb5efd9e757c7547790233969850952986e3a0977fa70b4ea"
+        }
+      }
+    },
+    {
+      "case": "06",
+      "envelopeSha256": "563177ca88ff6fb52693ec117fcaa76550e63f1198bf18a72cab117d3e3e0e7d",
+      "exitCode": 0,
+      "runElapsedSeconds": 22.382,
+      "stageRecords": 1350,
+      "successStages": 677,
+      "beginStages": 673,
+      "observedShapesPerPhase": 4,
+      "observedPhases": 3,
+      "wholeTextUtf16Units": 28,
+      "shapeTextUtf16Partition": [
+        12,
+        7,
+        8,
+        1
+      ],
+      "perPhase": {
+        "probeTargets": 3,
+        "probeRanges": 3,
+        "sampledUtf16Units": 16,
+        "styleMismatches": [],
+        "sourceImportEqual": true,
+        "importDiagnostics": [
+          {
+            "code": "unsupported-body-font",
+            "retained": true,
+            "reason": "Script-specific faces cannot fit one OPF run family"
+          }
+        ]
+      },
+      "boundedPostflight": {
+        "typedCompleteAdmissionBeforeObserver": true,
+        "samples": 1,
+        "firstSampleCount": 0,
+        "reportedFirstSampleElapsedMs": 16.6311,
+        "reportedObserverEndElapsedMs": 25.9371
+      },
+      "png": {
+        "file": "case06.png",
+        "bytes": 3913,
+        "sha256": "5dba7146de903e87a9df4d95f42f24b85de4e40b341e1eeb81e78b86207c90d8",
+        "width": 1280,
+        "height": 720,
+        "allThreeNativePhaseImagesByteIdentical": "Coordinator verified on producing records; only one exact image copied here",
+        "crcValid": true,
+        "chunks": [
+          {
+            "type": "IHDR",
+            "bytes": 13
+          },
+          {
+            "type": "sRGB",
+            "bytes": 1
+          },
+          {
+            "type": "gAMA",
+            "bytes": 4
+          },
+          {
+            "type": "PLTE",
+            "bytes": 99
+          },
+          {
+            "type": "pHYs",
+            "bytes": 9
+          },
+          {
+            "type": "IDAT",
+            "bytes": 3695
+          },
+          {
+            "type": "IEND",
+            "bytes": 0
+          }
+        ],
+        "exifOrTextChunks": false,
+        "localCopyByteIdentical": true
+      },
+      "artifactReferencesOnly": {
+        "observation": {
+          "bytes": 194029,
+          "sha256": "7739ea28118407ec04feacf0473e7e13547531f0a65cad1f924fd2870b5530c1"
+        },
+        "report": {
+          "bytes": 204158,
+          "sha256": "ecbc6f4515bfe4d0f3c25b7d037e08d1937f8a143a2e3e93492784b342f6cef5"
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Physical glyph-file identity does not follow from descriptor/range matches",
+    "No exact cross-engine glyph or pixel equivalence claimed",
+    "Case06 unsupported-body-font diagnostic retained in every phase, without waiver",
+    "Unsampled text is whole-case visual evidence, not per-unit physical font proof",
+    "No broad 0.34, all-font or native editability acceptance",
+    "Old native03 failure and its transfer remain separate and unchanged",
+    "Raw Windows operational records and any base64 transcription files are not copied",
+    "No inference about separately running case09"
+  ]
+}
