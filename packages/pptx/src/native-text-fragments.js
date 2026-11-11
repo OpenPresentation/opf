@@ -32,7 +32,7 @@ const propertyTree=shape=>{
 const propertiesHash=(shape,binding)=>{const tree=propertyTree(shape);return tree&&nativeTextHash(JSON.stringify([canonical(tree),binding]));};
 export const nativeFragmentPropertiesHash=propertiesHash;
 
-// Planner-only: not connected to any writer, tag, reader, or scalar restoration.
+// Measured interval planner used by the transactional V2 scalar writer.
 // An original scalar can acquire several measured runs (for example a bold
 // colon label). Their local run offsets are NOT authored source offsets.
 // Native properties are retained as exact ordered slices, including CS fonts;
@@ -68,15 +68,31 @@ export function planNativeUnicodeIntervals(input){
   if(!Number.isFinite(full)||Math.abs(full-width)>1e-7)return refuse('measured-advance-mismatch');
   const scripts=itemizeScripts(fragment.text,profile(style.lang));let local=0,measured=0;
   for(const script of scripts){
-   // Keep attached common punctuation/whitespace in its existing script slot.
-   // This partitions script intervals, never individual glyphs or words.
+   // Retain the original script slot and all internal numeric separators.
+   // Only a trailing ASCII punctuation/space suffix receives distinct physical
+   // members: Office otherwise reorders that neutral suffix around Arabic digits.
    const numeric=script.role==='complexScript'&&script.script==='Arab'&&/\p{Decimal_Number}/u.test(script.text);
    if(!(numeric&&/^[\p{Decimal_Number}\p{Punctuation}\p{Separator}]+$/u.test(script.text))&&!(script.role==='latin'&&/^[\x20-\x7e]+$/.test(script.text)))return refuse('unsupported-script');
    const before=measure(fragment.text.slice(0,local),fontSize),part=measure(script.text,fontSize),right=measure(fragment.text.slice(0,local+script.text.length),fontSize);
    if(![before,part,right].every(Number.isFinite)||part<=0||Math.abs(before-measured)>1e-7||Math.abs(right-before-part)>1e-7)return refuse('nonadditive-script-advance');
-   const start=offset+local,end=start+script.text.length;
-   if(intervals.length>=64)return refuse('unsupported-member-count');
-   intervals.push({from:from+start,to:from+end,text:script.text,script:script.script,role:script.role,numeric,x:originX+x+before,width:part,right:originX+x+right,fontSize,style:{...style},native:nativeSlice(start,end)});
+   const lastDigit=numeric?[...script.text.matchAll(/\p{Decimal_Number}/gu)].at(-1):undefined;
+   const neutralStart=lastDigit?lastDigit.index+lastDigit[0].length:script.text.length;
+   const trailing=script.text.slice(neutralStart),split=numeric&&/^[\x20-\x7e]+$/.test(trailing)&&/\p{Punctuation}/u.test(trailing)&&/^[\p{Punctuation} ]+$/u.test(trailing);
+   const cuts=[0,script.text.length];
+   if(split){let cursor=neutralStart;cuts.push(cursor);for(const match of trailing.matchAll(/ +|[^ ]+/g)){cursor+=match[0].length;cuts.push(cursor);}}
+   const boundaries=[...new Set(cuts)].sort((a,b)=>a-b);let occupied=0;
+   for(let index=0;index<boundaries.length-1;index++){
+    const a=boundaries[index],b=boundaries[index+1],value=script.text.slice(a,b),start=offset+local+a,end=offset+local+b;
+    // Standalone ':' would be reitemized as Latin. Independent ORIGINAL script
+    // prefixes keep the real digit's selected CS face/size while the complete
+    // fragment prefixes prove these same positions against current composition.
+    const prefixA=measure(script.text.slice(0,a),fontSize),prefixB=measure(script.text.slice(0,b),fontSize),left=measure(fragment.text.slice(0,local+a),fontSize),edge=measure(fragment.text.slice(0,local+b),fontSize),width=prefixB-prefixA;
+    if(![prefixA,prefixB,left,edge,width].every(Number.isFinite)||width<=0||Math.abs(prefixA-occupied)>1e-7||Math.abs(left-before-prefixA)>1e-7||Math.abs(edge-before-prefixB)>1e-7||Math.abs(edge-left-width)>1e-7)return refuse('nonadditive-neutral-advance');
+    if(intervals.length>=64)return refuse('unsupported-member-count');
+    intervals.push({from:from+start,to:from+end,text:value,script:script.script,role:script.role,numeric:numeric&&(!split||b<=neutralStart),x:originX+x+left,width,right:originX+x+edge,fontSize,style:{...style},native:nativeSlice(start,end)});
+    occupied+=width;
+   }
+   if(Math.abs(occupied-part)>1e-7)return refuse('nonadditive-neutral-advance');
    local+=script.text.length;measured+=part;
   }
   if(local!==fragment.text.length||Math.abs(measured-width)>1e-7)return refuse('incomplete-fragment');
