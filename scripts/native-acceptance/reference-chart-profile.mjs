@@ -6,7 +6,6 @@ import { createRequire } from "node:module";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { isDeepStrictEqual } from "node:util";
 import { inspectReferenceArchive, inspectCurrentReferenceStrokes, bindReferenceWitnessPhase } from "./reference-chart-archive.mjs";
-import { readReferenceSources } from "./reference-chart-fixtures.mjs";
 import { digest, fileIdentity, installedIdentity, repositoryIdentity } from "./identity.mjs";
 import { assertReferenceRuntimeRoutes } from "./reference-runtime-routes.mjs";
 
@@ -873,7 +872,8 @@ export function compareReferenceWitnessImports(source, imported, sourceCanvas, r
 // expectations. No legacy caller or historical fixture gets this path implicitly.
 export function compareCurrentReferenceWitnessImports(source, imported, inputs, resolveChartData, deps) {
   assert.deepEqual(Object.keys(inputs).sort(), ['original','saved-reopened'].sort());
-  assert.ok(readReferenceSources().some(item => isDeepStrictEqual(item.document, source)), 'Exact current four-case reference source required');
+  const currentSources = REFERENCE_CASES.map(id => JSON.parse(fs.readFileSync(path.join(controllerRoot, 'scripts/native-acceptance/reference-witnesses', id + '.opf.json'), 'utf8')));
+  assert.ok(currentSources.some(document => isDeepStrictEqual(document, source)), 'Exact current four-case reference source required');
   const proof = Object.fromEntries(Object.entries(inputs).map(([phase, bytes]) => [phase, inspectCurrentReferenceStrokes(bytes, source, deps)]));
   for (const current of Object.values(proof)) {
     assertReferenceWitnessSource(current.archive, source);
