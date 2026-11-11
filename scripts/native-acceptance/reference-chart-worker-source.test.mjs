@@ -18,7 +18,7 @@ const windowsOnly = {
       ? "Windows PowerShell managed-only controls; portable source/schema controls run everywhere"
       : false,
 };
-test("separate worker/wrapper/managed-test sources are exact mechanical derivatives; original sources unchanged", () => {
+test("reference worker/wrapper/managed-test sources are exact derivatives of retained historical bases; live Seven shells are separate", () => {
   for (const item of referenceControllerDerivation())
     assert.deepEqual(fs.readFileSync(path.join(folder, item.file)), Buffer.from(item.source), item.file + ": complete approved derivation");
 });
