@@ -19,7 +19,7 @@ try {
   const page=await browser.newPage({viewport:{width:1280,height:720}});page.on('pageerror',error=>errors.push(error.message));
   await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});await page.setContent('<main></main>');
   await page.evaluate(async faces=>{for(const face of faces)document.fonts.add(await new FontFace(face.family,`url(${face.dataUrl})`,{weight:String(face.weight),style:face.italic?'italic':'normal'}).load());await document.fonts.ready;},registry.embeddedFonts);
-  for(const mode of ['estimated','measured'])for(const align of ['left','center','right'])for(const [index,text]of fixtures.entries()) {
+  for(const mode of ['estimated','measured'])for(const align of ['start','center','end'])for(const [index,text]of fixtures.entries()) {
     const document={design:{fontScheme:'roboto',contentAlignment:align},slides:[{text}]},before=structuredClone(document),options={trace:true,...(mode==='measured'?{fonts:{textMeasurement:prepared.textMeasurement}}:{})};
     const bound=resolvePresentation(document,options).slides[0],item=bound.geometry.items.find(item=>item.field==='text'),svg=toSvg(document, 1,options);
     assert.deepEqual(document,before);
@@ -48,7 +48,7 @@ try {
         let alignmentDifference=0;
         if(mode==='estimated'&&line.fragments.length) {
           const element=nodes[cursor-line.fragments.length].closest('text'),width=element.getComputedTextLength(),start=element.getStartPositionOfChar(0).x;
-          const expected=item.box.x+(align==='right'?item.box.width-width:align==='center'?(item.box.width-width)/2:0);alignmentDifference=start-expected;
+          const expected=item.box.x+(align==='end'?item.box.width-width:align==='center'?(item.box.width-width)/2:0);alignmentDifference=start-expected;
         }
         lines.push({fragments,alignmentDifference});
       }
