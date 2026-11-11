@@ -1,0 +1,758 @@
+[
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-1:navigate",
+    "settledMs": 48.899999998509884,
+    "rendererCalls": 3,
+    "selectedSlides": 3
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-1:sorter",
+    "settledMs": 556.6000000014901,
+    "rendererCalls": 1,
+    "selectedSlides": 16
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-1:slide",
+    "settledMs": 33,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-1:local-title0",
+    "settledMs": 413,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-1:shared-datum",
+    "settledMs": 573.3999999985099,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-1:global-name",
+    "settledMs": 564.6000000014901,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-2:navigate",
+    "settledMs": 47.5,
+    "rendererCalls": 3,
+    "selectedSlides": 3
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-2:sorter",
+    "settledMs": 562.5,
+    "rendererCalls": 1,
+    "selectedSlides": 16
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-2:slide",
+    "settledMs": 33.899999998509884,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-2:local-title0",
+    "settledMs": 419.59999999403954,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-2:shared-datum",
+    "settledMs": 569.1000000014901,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-2:global-name",
+    "settledMs": 568.8999999985099,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-3:navigate",
+    "settledMs": 53.899999998509884,
+    "rendererCalls": 3,
+    "selectedSlides": 3
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-3:sorter",
+    "settledMs": 558.5999999940395,
+    "rendererCalls": 1,
+    "selectedSlides": 16
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-3:slide",
+    "settledMs": 32.5,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-3:local-title0",
+    "settledMs": 416.1000000014901,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-3:shared-datum",
+    "settledMs": 569.6000000014901,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu1-16-cached",
+    "phase": "round-3:global-name",
+    "settledMs": 575.5,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-1:navigate",
+    "settledMs": 188.5,
+    "rendererCalls": 3,
+    "selectedSlides": 3
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-1:sorter",
+    "settledMs": 2225.2999999970198,
+    "rendererCalls": 1,
+    "selectedSlides": 16
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-1:slide",
+    "settledMs": 88.70000000298023,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-1:local-title0",
+    "settledMs": 617.1000000014901,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-1:shared-datum",
+    "settledMs": 1216.2999999970198,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-1:global-name",
+    "settledMs": 1261.5999999940395,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-2:navigate",
+    "settledMs": 185.39999999850988,
+    "rendererCalls": 3,
+    "selectedSlides": 3
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-2:sorter",
+    "settledMs": 2212.10000000149,
+    "rendererCalls": 1,
+    "selectedSlides": 16
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-2:slide",
+    "settledMs": 92.30000000447035,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-2:local-title0",
+    "settledMs": 613.6000000014901,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-2:shared-datum",
+    "settledMs": 1207.5,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-2:global-name",
+    "settledMs": 1260.5,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-3:navigate",
+    "settledMs": 184,
+    "rendererCalls": 3,
+    "selectedSlides": 3
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-3:sorter",
+    "settledMs": 2217.60000000149,
+    "rendererCalls": 1,
+    "selectedSlides": 16
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-3:slide",
+    "settledMs": 90.89999999850988,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-3:local-title0",
+    "settledMs": 608.8999999985099,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-3:shared-datum",
+    "settledMs": 1199.8000000044703,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu4-16-cached",
+    "phase": "round-3:global-name",
+    "settledMs": 1267,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-1:navigate",
+    "settledMs": 208.69999999552965,
+    "rendererCalls": 3,
+    "selectedSlides": 4
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-1:sorter",
+    "settledMs": 2264,
+    "rendererCalls": 1,
+    "selectedSlides": 16
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-1:slide",
+    "settledMs": 86.89999999850988,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-1:local-title0",
+    "settledMs": 604.5,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-1:shared-datum",
+    "settledMs": 1199.1000000014901,
+    "rendererCalls": 2,
+    "selectedSlides": 8
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-1:global-name",
+    "settledMs": 1268.4000000059605,
+    "rendererCalls": 2,
+    "selectedSlides": 8
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-2:navigate",
+    "settledMs": 202.60000000149012,
+    "rendererCalls": 3,
+    "selectedSlides": 4
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-2:sorter",
+    "settledMs": 2237.7999999970198,
+    "rendererCalls": 1,
+    "selectedSlides": 16
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-2:slide",
+    "settledMs": 77.39999999850988,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-2:local-title0",
+    "settledMs": 609.1000000014901,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-2:shared-datum",
+    "settledMs": 1222.2000000029802,
+    "rendererCalls": 2,
+    "selectedSlides": 8
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-2:global-name",
+    "settledMs": 1268.6000000014901,
+    "rendererCalls": 2,
+    "selectedSlides": 8
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-3:navigate",
+    "settledMs": 203.10000000149012,
+    "rendererCalls": 3,
+    "selectedSlides": 4
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-3:sorter",
+    "settledMs": 2219.10000000149,
+    "rendererCalls": 1,
+    "selectedSlides": 16
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-3:slide",
+    "settledMs": 76.29999999701977,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-3:local-title0",
+    "settledMs": 612,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-3:shared-datum",
+    "settledMs": 1215.6000000014901,
+    "rendererCalls": 2,
+    "selectedSlides": 8
+  },
+  {
+    "case": "viewport390-cpu4-16-cached",
+    "phase": "round-3:global-name",
+    "settledMs": 1275.8999999985099,
+    "rendererCalls": 2,
+    "selectedSlides": 8
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-1:navigate",
+    "settledMs": 66.10000000149012,
+    "rendererCalls": 3,
+    "selectedSlides": 3
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-1:sorter",
+    "settledMs": 1116.7999999970198,
+    "rendererCalls": 1,
+    "selectedSlides": 36
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-1:slide",
+    "settledMs": 36.600000001490116,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-1:local-title0",
+    "settledMs": 509.6000000014901,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-1:shared-datum",
+    "settledMs": 797.6999999955297,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-1:global-name",
+    "settledMs": 826.7000000029802,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-2:navigate",
+    "settledMs": 53.20000000298023,
+    "rendererCalls": 3,
+    "selectedSlides": 3
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-2:sorter",
+    "settledMs": 1129.6000000014901,
+    "rendererCalls": 1,
+    "selectedSlides": 36
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-2:slide",
+    "settledMs": 40.899999998509884,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-2:local-title0",
+    "settledMs": 508.3999999985099,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-2:shared-datum",
+    "settledMs": 807.8999999985099,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-2:global-name",
+    "settledMs": 831.7000000029802,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-3:navigate",
+    "settledMs": 52.899999998509884,
+    "rendererCalls": 3,
+    "selectedSlides": 3
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-3:sorter",
+    "settledMs": 1133.1000000014901,
+    "rendererCalls": 1,
+    "selectedSlides": 36
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-3:slide",
+    "settledMs": 37.30000000447035,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-3:local-title0",
+    "settledMs": 515,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-3:shared-datum",
+    "settledMs": 812.6000000014901,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu1-36-cached",
+    "phase": "round-3:global-name",
+    "settledMs": 823.2999999970198,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-1:navigate",
+    "settledMs": 212.89999999850988,
+    "rendererCalls": 3,
+    "selectedSlides": 3
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-1:sorter",
+    "settledMs": 4577.80000000447,
+    "rendererCalls": 1,
+    "selectedSlides": 36
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-1:slide",
+    "settledMs": 100.39999999850988,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-1:local-title0",
+    "settledMs": 866.2000000029802,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-1:shared-datum",
+    "settledMs": 2190.60000000149,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-1:global-name",
+    "settledMs": 2201.7999999970198,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-2:navigate",
+    "settledMs": 209.89999999850988,
+    "rendererCalls": 3,
+    "selectedSlides": 3
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-2:sorter",
+    "settledMs": 4413.10000000149,
+    "rendererCalls": 1,
+    "selectedSlides": 36
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-2:slide",
+    "settledMs": 97.10000000149012,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-2:local-title0",
+    "settledMs": 852.1999999955297,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-2:shared-datum",
+    "settledMs": 2157.39999999851,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-2:global-name",
+    "settledMs": 2194.5999999940395,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-3:navigate",
+    "settledMs": 203.80000000447035,
+    "rendererCalls": 3,
+    "selectedSlides": 3
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-3:sorter",
+    "settledMs": 4386.10000000149,
+    "rendererCalls": 1,
+    "selectedSlides": 36
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-3:slide",
+    "settledMs": 100.80000000447035,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-3:local-title0",
+    "settledMs": 859.8000000044703,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-3:shared-datum",
+    "settledMs": 2176.5,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "desktop-cpu4-36-cached",
+    "phase": "round-3:global-name",
+    "settledMs": 2193,
+    "rendererCalls": 2,
+    "selectedSlides": 9
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-1:navigate",
+    "settledMs": 235.30000000447035,
+    "rendererCalls": 3,
+    "selectedSlides": 4
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-1:sorter",
+    "settledMs": 4476.10000000149,
+    "rendererCalls": 1,
+    "selectedSlides": 36
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-1:slide",
+    "settledMs": 89.40000000596046,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-1:local-title0",
+    "settledMs": 876.2000000029802,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-1:shared-datum",
+    "settledMs": 2209.5,
+    "rendererCalls": 2,
+    "selectedSlides": 8
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-1:global-name",
+    "settledMs": 2194,
+    "rendererCalls": 2,
+    "selectedSlides": 8
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-2:navigate",
+    "settledMs": 227.20000000298023,
+    "rendererCalls": 3,
+    "selectedSlides": 4
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-2:sorter",
+    "settledMs": 4381.5,
+    "rendererCalls": 1,
+    "selectedSlides": 36
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-2:slide",
+    "settledMs": 95.10000000149012,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-2:local-title0",
+    "settledMs": 871.9000000059605,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-2:shared-datum",
+    "settledMs": 2212.6999999955297,
+    "rendererCalls": 2,
+    "selectedSlides": 8
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-2:global-name",
+    "settledMs": 2205.39999999851,
+    "rendererCalls": 2,
+    "selectedSlides": 8
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-3:navigate",
+    "settledMs": 223.89999999850988,
+    "rendererCalls": 3,
+    "selectedSlides": 4
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-3:sorter",
+    "settledMs": 4412.20000000298,
+    "rendererCalls": 1,
+    "selectedSlides": 36
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-3:slide",
+    "settledMs": 96.20000000298023,
+    "rendererCalls": 1,
+    "selectedSlides": 1
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-3:local-title0",
+    "settledMs": 857.6000000014901,
+    "rendererCalls": 2,
+    "selectedSlides": 2
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-3:shared-datum",
+    "settledMs": 2196.39999999851,
+    "rendererCalls": 2,
+    "selectedSlides": 8
+  },
+  {
+    "case": "viewport390-cpu4-36-cached",
+    "phase": "round-3:global-name",
+    "settledMs": 2181.2999999970198,
+    "rendererCalls": 2,
+    "selectedSlides": 8
+  }
+]
