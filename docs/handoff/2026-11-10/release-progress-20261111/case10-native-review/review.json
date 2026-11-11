@@ -1,0 +1,114 @@
+{
+  "schema": "opf-case10-native-scoped-review/v1",
+  "sourceSha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb",
+  "inputSha256": "b115f259062e38c07c4c99f94b8261089d94129142737bfb9f11fc631d84950f",
+  "nativeImageSha256": "18c970543dd296c51c22e7b167b0b1db2374239b0bf8147d5886fd3990f43d78",
+  "threeImagesByteEqual": true,
+  "nativeShapes": 22,
+  "utf16": 117,
+  "probeTargets": 3,
+  "probeRanges": 3,
+  "probeUtf16": 3,
+  "reviewers": [
+    "coordinator",
+    "independent reviewer"
+  ],
+  "acceptedScope": "All four digit-before-colon/spacing contexts; complete readable unclipped text",
+  "phaseImports": {
+    "original": {
+      "sourceEqual": true,
+      "modelDigest": "152fd2e2d5acf4cabeab6f81a6b06c5c3c55f2359f27450f004e98b7e096178c",
+      "diagnostics": [],
+      "differencePaths": []
+    },
+    "saved": {
+      "sourceEqual": false,
+      "modelDigest": "eab1040effb57df699f680e25eff7fa5b958242e1bcb418fe6e6012ecfc1f910",
+      "diagnostics": [
+        {
+          "code": "native-scalar-fragment-reflow",
+          "message": "Current native text and full parsed styles retained; original scalar defaults were not restored after edits.",
+          "path": "slides.0"
+        },
+        {
+          "code": "native-scalar-fragment-reflow",
+          "message": "Current native text and full parsed styles retained; original scalar defaults were not restored after edits.",
+          "path": "slides.0"
+        },
+        {
+          "code": "native-scalar-fragment-reflow",
+          "message": "Current native text and full parsed styles retained; original scalar defaults were not restored after edits.",
+          "path": "slides.0"
+        },
+        {
+          "code": "native-scalar-fragment-reflow",
+          "message": "Current native text and full parsed styles retained; original scalar defaults were not restored after edits.",
+          "path": "slides.0"
+        }
+      ],
+      "differencePaths": [
+        "/slides/0/blocks/0/text",
+        "/slides/0/blocks/1/text",
+        "/slides/0/blocks/2/items/0",
+        "/slides/0/blocks/2/items/1"
+      ]
+    },
+    "reopened": {
+      "sourceEqual": false,
+      "modelDigest": "eab1040effb57df699f680e25eff7fa5b958242e1bcb418fe6e6012ecfc1f910",
+      "diagnostics": [
+        {
+          "code": "native-scalar-fragment-reflow",
+          "message": "Current native text and full parsed styles retained; original scalar defaults were not restored after edits.",
+          "path": "slides.0"
+        },
+        {
+          "code": "native-scalar-fragment-reflow",
+          "message": "Current native text and full parsed styles retained; original scalar defaults were not restored after edits.",
+          "path": "slides.0"
+        },
+        {
+          "code": "native-scalar-fragment-reflow",
+          "message": "Current native text and full parsed styles retained; original scalar defaults were not restored after edits.",
+          "path": "slides.0"
+        },
+        {
+          "code": "native-scalar-fragment-reflow",
+          "message": "Current native text and full parsed styles retained; original scalar defaults were not restored after edits.",
+          "path": "slides.0"
+        }
+      ],
+      "differencePaths": [
+        "/slides/0/blocks/0/text",
+        "/slides/0/blocks/1/text",
+        "/slides/0/blocks/2/items/0",
+        "/slides/0/blocks/2/items/1"
+      ]
+    }
+  },
+  "savedEqualsReopened": true,
+  "sourceStringsPreservedEveryPhase": true,
+  "lifecycle": {
+    "readOnlyOpens": 2,
+    "saveCopies": 1,
+    "ownedCloses": 2,
+    "emptyQuit": 1,
+    "actions": 0,
+    "launcherSeconds": 31.549,
+    "workerSeconds": 12.135
+  },
+  "postflight": {
+    "samples": 1,
+    "initialCount": 0,
+    "finalCount": 0,
+    "firstSampleAfterQuitMs": 4160,
+    "observationElapsedMs": 21.9081,
+    "finishedMs": 45.7048
+  },
+  "order": "Typed/raw/lifecycle admission, bounded observer, then offline public imports",
+  "limitations": [
+    "Saved JSON differs by four text-to-current-rich fields with four native-scalar-fragment-reflow findings",
+    "Native heading metrics and wrapped-line spacing differ from Node",
+    "No physical font, pixel, baseline, leak-free, full59 or release acceptance claim"
+  ]
+}

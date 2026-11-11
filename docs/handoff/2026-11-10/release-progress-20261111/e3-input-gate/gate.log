@@ -1,0 +1,28 @@
+
+> openpresentation-workspace@ check:changed /private/tmp/opf-034
+> node scripts/check-changed.mjs --base f99113ca0985a61ec4532b0736eeacc532f4bea7
+
+check-changed: 4 changed files since f99113ca0 (plus uncommitted and untracked)
+ok  build (6.2 s)
+ok  biome (0.1 s)
+ok  pnpm run check:changes (0.4 s)
+ok  pnpm run check:e1-current-after (0.3 s)
+ok  pnpm run check:release-report (0.2 s)
+ok  pnpm run check:gallery-tracker (1.8 s)
+ok  pnpm run check:text (5.0 s)
+ok  pnpm run check:skill-commands (10.3 s)
+-  typecheck
+
+step                             status     time
+build                            passed    6.2 s
+biome                            passed    0.1 s  2 files
+pnpm run check:changes           passed    0.4 s
+pnpm run check:e1-current-after  passed    0.3 s
+pnpm run check:gallery-tracker   passed    1.8 s
+pnpm run check:release-report    passed    0.2 s
+pnpm run check:skill-commands    passed   10.3 s
+pnpm run check:text              passed    5.0 s
+typecheck                        skipped       -  no .ts, .mts or tsconfig change
+total                                     17.1 s
+
+check-changed: passed. Run the full `pnpm test` before opening the pull request.
