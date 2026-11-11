@@ -13,7 +13,7 @@ const escapeXml=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
 const decode=value=>String(parser.parse('<t>'+value+'</t>').t??'');
 const runs=/<a:r>(<a:rPr\b[^>]*\/>|<a:rPr\b[^>]*[^/]>[\s\S]*?<\/a:rPr>)<a:t>([^<]*)<\/a:t><\/a:r>/g;
 // Text edits may change length; current property/boundary edits disable source-run joining.
-const propertiesHash=(shape,binding)=>{
+const propertyTree=shape=>{
  const body=/<p:txBody>[\s\S]*?<\/p:txBody>/.exec(shape)?.[0];
  if(!body)return;
  // Normalize direct editable run text only, never text-like extension metadata.
@@ -27,8 +27,9 @@ const propertiesHash=(shape,binding)=>{
    delete text[':@']['xml:space'];if(!Object.keys(text[':@']).length)delete text[':@'];
   }
  }
- return nativeTextHash(JSON.stringify([canonical(tree),binding]));
+ return tree;
 };
+const propertiesHash=(shape,binding)=>{const tree=propertyTree(shape);return tree&&nativeTextHash(JSON.stringify([canonical(tree),binding]));};
 export const nativeFragmentPropertiesHash=propertiesHash;
 
 const paragraphParts=paragraph=>{
@@ -49,20 +50,39 @@ const propertyBinding=data=>Object.fromEntries(['v','group','count','length','so
 const runKeys=new Set(['text','language','fontFamily','fontSize','bold','italic','underline','strikethrough','color','link']);
 const relType='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 
+// A rich fragment may contain both the Arabic carrier and its Latin suffix.
+// Split only at ORIGINAL source-selected script boundaries. SVG scriptLine
+// places these measured script intervals from the right; no prefix is treated
+// as an LTR advance and no interval is fitted back to the full width.
+const sourceFragments=(fragment,measurement,profile)=>{
+ const {text,run,style,start,end,fontSize}=fragment;
+ const ranges=nativeLatinRanges(run.text,style,profile(style.lang));
+ const selected=ranges.map(([from,to])=>[Math.max(start,from),Math.min(end,to)]).filter(([from,to])=>to>from);
+ if(selected.length!==1||selected[0][0]===start||selected[0][1]!==end||typeof run.language!=='string'||profile(run.language)?.script!=='Arab')return [fragment];
+ const boundary=selected[0][0],prefix=text.slice(0,boundary-start),suffix=text.slice(boundary-start);
+ if(paragraphDirection(prefix,'rtl')!=='rtl'||!/[\p{Script=Arabic}]/u.test(prefix)||!/^[\x20-\x7e]+$/.test(suffix)||!/[A-Za-z]/.test(suffix)||!/[0-9]/.test(suffix))return [fragment];
+ const measure=textWidthMeasurer(style,measurement),full=measure(text,fontSize),before=measure(prefix,fontSize),after=measure(suffix,fontSize);
+ if(![full,before,after].every(value=>Number.isFinite(value)&&value>0)||Math.abs(full-fragment.width)>1e-7||Math.abs(before+after-full)>1e-7)return;
+ return [{...fragment,text:prefix,end:boundary,width:before},{...fragment,text:suffix,start:boundary,x:fragment.x+before,width:after}];
+};
+
 // This is a source partition, never a new bidi shaper. Unsupported layouts keep
 // the existing measured line. The first supported topology is a carrier prefix
 // followed by measured Latin word/number members under Arabic proofing.
 export function planNativeTextFragments(line,{rtl,originX,measurement,profile}) {
  if(rtl!==true||!line||!Array.isArray(line.fragments)||!line.fragments.length||!measurement?.measure||typeof profile!=='function'||!Number.isFinite(originX)||!Number.isFinite(line.width)||!Number.isFinite(line.baseline)||!Number.isFinite(line.height))return;
  const members=[];let offset=0,selected=false,hasWord=false,hasNumber=false,priorRun=-1,priorEnd=0;
- for(const fragment of line.fragments){
-  if(!fragment||typeof fragment!=='object')return;
+ for(const original of line.fragments){
+  if(!original||typeof original!=='object')return;
+  const {text,style,run,start,end}=original;
+  if(typeof text!=='string'||!style||typeof style!=='object'||!run||typeof run!=='object'||!Number.isSafeInteger(original.runIndex)||original.runIndex<0||!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start<0||end<start||!Number.isFinite(original.x)||!Number.isFinite(original.fontSize)||original.fontSize<=0)return;
+  if(original.kind||original.baselineShift||style.tracking||style.caps||Object.keys(run).some(key=>!runKeys.has(key)))return;
+  if(typeof run.text!=='string'||run.text.slice(start,end)!==text||!Number.isFinite(original.width)||original.width<0)return;
+  if(original.runIndex<priorRun||(original.runIndex===priorRun&&start<priorEnd))return;
+  priorRun=original.runIndex;priorEnd=end;
+  const pieces=sourceFragments(original,measurement,profile);if(!pieces)return;
+  for(const fragment of pieces){
   const {text,style,run,start,end}=fragment;
-  if(typeof text!=='string'||!style||typeof style!=='object'||!run||typeof run!=='object'||!Number.isSafeInteger(fragment.runIndex)||fragment.runIndex<0||!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start<0||end<start||!Number.isFinite(fragment.x)||!Number.isFinite(fragment.fontSize)||fragment.fontSize<=0)return;
-  if(fragment.kind||fragment.baselineShift||style.tracking||style.caps||Object.keys(run).some(key=>!runKeys.has(key)))return;
-  if(typeof run.text!=='string'||run.text.slice(start,end)!==text||!Number.isFinite(fragment.width)||fragment.width<0)return;
-  if(fragment.runIndex<priorRun||(fragment.runIndex===priorRun&&start<priorEnd))return;
-  priorRun=fragment.runIndex;priorEnd=end;
   const ranges=nativeLatinRanges(run.text,style,profile(style.lang));
   const chosen=typeof run.language==='string'&&profile(run.language)?.script==='Arab'&&ranges.some(([a,b])=>start>=a&&end<=b)&&/^[\x20-\x7e]+$/.test(text)&&/[A-Za-z]/.test(text)&&/[0-9]/.test(text);
   if(!chosen){if(selected)return;offset+=text.length;continue;}
@@ -88,6 +108,7 @@ export function planNativeTextFragments(line,{rtl,originX,measurement,profile}) 
    members.push({from:offset+from,to:offset+to,x,right,width:right-x,sourceRun:fragment.runIndex,start:start+from,end:start+to,kind:numeric?'number':'word'});
   }
   offset+=text.length;
+  }
  }
  if(!selected||!hasWord||!hasNumber||members.length<2||members.length>63)return;
  const prefix=members[0].from,whole=line.fragments.map(fragment=>fragment.text).join('');
@@ -104,6 +125,38 @@ const sliceRuns=(native,from,to)=>{
   offset+=entry.text.length;
  }
  return result.join('');
+};
+
+const memberParagraphProperties=pPr=>'<a:pPr rtl="0" algn="l" marL="0" indent="0">'+(/<a:lnSpc>[\s\S]*?<\/a:lnSpc>/.exec(pPr)?.[0]??'')+'<a:buNone/></a:pPr>';
+// This comparison is used ONLY beside intact complete property receipts. It
+// reverses the exact generated paragraph/body direction and W03's direct CS
+// slot difference; every run/default/end/extension property remains compared.
+// There is no normalization of current edited native properties or boundaries.
+const ownedJoinProperties=(shape,carrier,isCarrier)=>{
+ const tree=propertyTree(shape),base=propertyTree(carrier);if(!tree||!base)return;
+ const children=tree[0]?.['p:txBody'],original=base[0]?.['p:txBody'];
+ if(!Array.isArray(children)||!Array.isArray(original))return;
+ const one=(nodes,key)=>{const found=nodes.filter(node=>Object.hasOwn(node,key));return found.length===1?found[0]:undefined;};
+ const paragraph=one(children,'a:p')?.['a:p'],baseParagraph=one(original,'a:p')?.['a:p'];
+ if(!Array.isArray(paragraph)||!Array.isArray(baseParagraph))return;
+ const body=one(children,'a:bodyPr'),baseBody=one(original,'a:bodyPr');
+ if(!body||!baseBody)return;
+ if(!isCarrier){
+  const pPr=/<a:pPr\b[^>]*\/>|<a:pPr\b[^>]*>[\s\S]*?<\/a:pPr>/.exec(carrier)?.[0]??'';
+  const expected=ordered.parse(memberParagraphProperties(pPr))[0],actual=one(paragraph,'a:pPr');
+  if(JSON.stringify(canonical(actual))!==JSON.stringify(canonical(expected)))return;
+  if(baseBody[':@']?.rtlCol!==undefined&&body[':@']?.rtlCol!=='0')return;
+  if(baseBody[':@']?.rtlCol===undefined&&body[':@']?.rtlCol!==undefined)return;
+ }
+ if(body[':@']){delete body[':@'].rtlCol;if(!Object.keys(body[':@']).length)delete body[':@'];}
+ const native=paragraph.filter(node=>Object.hasOwn(node,'a:r'));if(native.length!==1)return;
+ const properties=one(native[0]['a:r'],'a:rPr')?.['a:rPr'];if(!Array.isArray(properties))return;
+ const slots=properties.filter(node=>Object.hasOwn(node,'a:cs'));
+ if(slots.length>1||slots.some(node=>node['a:cs'].length||!node[':@']?.typeface||Object.keys(node[':@']).some(key=>key!=='typeface')))return;
+ if(!isCarrier&&slots[0]?.[':@']?.typeface!==one(properties,'a:latin')?.[':@']?.typeface)return;
+ native[0]['a:r'].find(node=>Object.hasOwn(node,'a:rPr'))['a:rPr']=properties.filter(node=>!Object.hasOwn(node,'a:cs'));
+ children.find(node=>Object.hasOwn(node,'a:p'))['a:p']=paragraph.filter(node=>!Object.hasOwn(node,'a:pPr'));
+ return nativeTextHash(JSON.stringify(canonical(tree)));
 };
 
 export function createNativeTextFragments(report){
@@ -131,20 +184,30 @@ export function createNativeTextFragments(report){
     const carrierId=Number(/<p:cNvPr\b[^>]*\bid="(\d+)"/.exec(shape)[1]);
     const shared={v:1,group:name,count:plan.members.length+1,length:plan.length,source:plan.source};
     const carrierRecord={...shared,index:0,name,id:carrierId,from:0,to:plan.prefix,role:'carrier'};
-    carrierRecord.properties=propertiesHash(carrier,propertyBinding(carrierRecord));records.set(escapeXml(name),carrierRecord);
+    carrierRecord.properties=propertiesHash(carrier,propertyBinding(carrierRecord));
+    const pending=[[name,carrierRecord]];
     const children=plan.members.map((member,index)=>{
      const id=++nextId,childName='OPF native fragment '+name+' member '+index;
      let child=shape.replace(/<p:cNvPr\b[^>]*>/,node=>node.replace(/\bid="\d+"/,'id="'+id+'"').replace(/\bname="[^"]*"/,'name="'+escapeXml(childName)+'"'))
       .replace(/<p:custDataLst\b[^>]*>[\s\S]*?<\/p:custDataLst>/g,'');
      child=child.replace(frame[0],'<a:xfrm><a:off x="'+Math.round(member.x*9525)+'" y="'+frame[2]+'"/><a:ext cx="'+Math.max(1,Math.round(member.right*9525)-Math.round(member.x*9525))+'" cy="'+frame[4]+'"/></a:xfrm>');
      // One native LTR paragraph per source word/number; no source character is a direction control.
-     const spacing=/<a:lnSpc>[\s\S]*?<\/a:lnSpc>/.exec(pPr)?.[0]??'';
-     child=child.replace(paragraph,'<a:p><a:pPr rtl="0" algn="l" marL="0" indent="0">'+spacing+'<a:buNone/></a:pPr>'+sliceRuns(native,member.from,member.to)+tail+'</a:p>');
+     child=child.replace(paragraph,'<a:p>'+memberParagraphProperties(pPr)+sliceRuns(native,member.from,member.to)+tail+'</a:p>');
      child=child.replace(/(<a:bodyPr\b[^>]*\brtlCol=")[^"]*"/,(_match,before)=>before+'0"');
      const record={...shared,index:index+1,name:childName,id,from:member.from,to:member.to,role:member.kind};
-     record.properties=propertiesHash(child,propertyBinding(record));records.set(escapeXml(childName),record);
+     record.properties=propertiesHash(child,propertyBinding(record));pending.push([childName,record]);
      return child;
     });
+    let offset=0;const source=plan.source.map(part=>{const from=offset;offset+=part.end-part.start;return {from,to:offset,run:part.run};});
+    const carrierSource=source.find(part=>part.from===0&&plan.prefix<=part.to)?.run;
+    const matching=plan.members.map((member,index)=>({member,index})).filter(({member})=>member.sourceRun===carrierSource);
+    if(matching.length){
+     const expected=ownedJoinProperties(carrier,carrier,true);
+     if(!expected||matching.some(({index})=>ownedJoinProperties(children[index],carrier,false)!==expected)){
+      report?.({code:'native-fragment-unavailable',path:name,message:'Cross-role source properties cannot be represented exactly; original measured line retained.'});return shape;
+     }
+    }
+    for(const [memberName,record]of pending)records.set(escapeXml(memberName),record);
     // The fragment receipt now owns the source partition; the old whole-line
     // CS split fingerprint cannot describe the shortened carrier.
     slotGroups.delete(name);
@@ -189,17 +252,19 @@ export function importNativeTextFragments(shapes,paragraphs,relationships,entrie
   const current=ordered.map(member=>readBody(member.index));
   if(current.some(body=>!Array.isArray(body)||body.length!==1)||ordered.slice(1).some(member=>(paragraphs[member.index]??[]).some(p=>p.bullet)))throw Error('Native fragment paragraphs changed');
   let offset=0;const sourceRanges=first.source.map(source=>{const from=offset;offset+=source.end-source.start;return {from,to:offset,run:source.run};});
-  const richText=[];let previousSource,previousIntact=false,previousProperties,propertiesChanged=false;
+  const carrierRaw=rawShapes.get(ordered[0].data.id)??'',carrierIntact=propertiesHash(carrierRaw,propertyBinding(ordered[0].data))===ordered[0].data.properties;
+  const richText=[];let previousSource,previousIntact=false,previousProperties,previousOwnedProperties,propertiesChanged=false;
   for(const [index,member]of ordered.entries()){
    const source=sourceRanges.find(source=>member.data.from>=source.from&&member.data.to<=source.to)?.run;
    const raw=rawShapes.get(member.data.id)??'',intact=propertiesHash(raw,propertyBinding(member.data))===member.data.properties,currentProperties=propertiesHash(raw,{});
+   const ownedProperties=intact&&carrierIntact?ownedJoinProperties(raw,carrierRaw,index===0):undefined;
    if(!intact)propertiesChanged=true;
    for(const run of array(current[index][0].richText??current[index][0].text)){
     const previous=richText.at(-1),key=value=>typeof value==='string'?'scalar':JSON.stringify(Object.keys(value).filter(key=>key!=='text').sort().map(key=>[key,value[key]]));
-    if(source!==undefined&&source===previousSource&&intact&&previousIntact&&currentProperties===previousProperties&&previous!==undefined&&key(previous)===key(run)){
+    if(source!==undefined&&source===previousSource&&intact&&previousIntact&&(currentProperties===previousProperties||ownedProperties!==undefined&&ownedProperties===previousOwnedProperties)&&previous!==undefined&&key(previous)===key(run)){
      if(typeof previous==='string')richText[richText.length-1]+=run;else previous.text+=run.text;
     }else richText.push(typeof run==='string'?run:{...run});
-    previousSource=source;previousIntact=intact;previousProperties=currentProperties;
+    previousSource=source;previousIntact=intact;previousProperties=currentProperties;previousOwnedProperties=ownedProperties;
    }
   }
   const text=richText.map(run=>typeof run==='string'?run:run.text).join('');

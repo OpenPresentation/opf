@@ -28,6 +28,19 @@ test('source planner partitions word and number advances without changing UTF16 
  assert.equal(planNativeTextFragments(line,{...request,measurement:undefined}),undefined);
 });
 
+test('one original mixed fragment uses source-selected script intervals and refuses incompatible advances',()=>{
+ const original=fragment('البند: Bonjour 1',0,0),mixed={...line,fragments:[original]},input=structuredClone(mixed),plan=planNativeTextFragments(mixed,request);
+ assert(plan);assert.deepEqual(mixed,input);assert.equal(plan.prefix,7);
+ assert.deepEqual(plan.source,[{run:0,start:0,end:16}]);
+ assert.deepEqual(plan.members.map(({sourceRun,start,end,x,width})=>({sourceRun,start,end,x,width})),[{sourceRun:0,start:7,end:15,x:200,width:64},{sourceRun:0,start:15,end:16,x:264,width:8}]);
+ const incompatible={measure:text=>text.length*8+(text==='Bonjour 1'?1:0)};
+ assert.equal(planNativeTextFragments(mixed,{...request,measurement:incompatible}),undefined,'A script sum mismatch must not be fitted or rescaled');
+ for(const mutate of [value=>{delete value.fragments[0].run.language;},value=>{value.fragments[0].width+=0.001;},value=>{value.fragments[0].run.text=value.fragments[0].text='البند: Bonjour ١';},value=>{value.fragments[0].run.text=value.fragments[0].text='البند: Bonjour ۱';}]){
+  const candidate=structuredClone(mixed);mutate(candidate);assert.equal(planNativeTextFragments(candidate,request),undefined);
+ }
+ const whole=fragment('Item 1: Customers',0,0);assert.equal(planNativeTextFragments({...line,fragments:[whole],width:whole.width},{...request,rtl:false}),undefined,'Unobserved whole-ASCII LTR paragraphs remain outside this successor');
+});
+
 test('final native writer preserves full run/paragraph/carrier geometry and applies no Unicode control',()=>{
  const properties='<a:rPr lang="ar-SA" altLang="en-US" sz="2775"><a:solidFill><a:schemeClr val="tx1"/></a:solidFill><a:latin typeface="Aptos"/><a:cs typeface="Aptos"/><a:hlinkClick r:id="rLink"/></a:rPr>';
  const end='<a:endParaRPr lang="ar-SA" altLang="en-US" sz="2775" b="0" i="0"><a:latin typeface="Aptos"/><a:cs typeface="Aptos"/><a:extLst><a:ext uri="test-terminal-metadata"><unit value="retained"/></a:ext></a:extLst></a:endParaRPr>';
