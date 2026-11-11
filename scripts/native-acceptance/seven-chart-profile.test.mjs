@@ -196,6 +196,51 @@ test('real Choice/Fallback identity and cx2 funnel namespaces determine branch, 
   );
   assert.throws(() => inspectSevenArchive(rel, deps), /External/u);
 });
+test('Choice Requires resolves ancestor namespaces and rejects missing, foreign or shadowed bindings', () => {
+  const b = input(SEVEN_CASES[0]), original = inspectSevenArchive(b, deps);
+  const first = 'ppt/slides/slide1.xml';
+  const uri = 'http://schemas.microsoft.com/office/drawing/2015/9/8/chartex';
+  const declaration = 'xmlns:cx1="' + uri + '"';
+  function hoist(target, extra = '') {
+    return rewrite(b, p => xml(p, first, t => {
+      t = replaceOnce(t, ' ' + declaration, '');
+      return replaceOnce(t, '<' + target, '<' + target + ' ' + declaration + extra);
+    }));
+  }
+  // Model the actual saved Office spelling, then the other legal ancestor levels.
+  for (const target of ['mc:AlternateContent', 'p:spTree', 'p:cSld', 'p:sld'])
+    assert.deepEqual(inspectSevenArchive(hoist(target), deps), original, target);
+  const funnel = Object.keys(parts(b)).find(file => /^ppt\/slides\/slide\d+\.xml$/u.test(file)
+    && deps.strFromU8(parts(b)[file]).includes('Requires="cx2"'));
+  assert.ok(funnel);
+  const funnelHoisted = rewrite(b, p => xml(p, funnel, t => {
+    const declaration = / xmlns:cx2="[^"]+"/u.exec(t)?.[0];
+    assert.ok(declaration);
+    return replaceOnce(replaceOnce(t, declaration, ''), '<mc:AlternateContent',
+      '<mc:AlternateContent' + declaration);
+  }));
+  assert.deepEqual(inspectSevenArchive(funnelHoisted, deps), original);
+  for (const change of [
+    t => replaceOnce(t, ' ' + declaration, ''),
+    t => replaceOnce(t, declaration, 'xmlns:cx1="urn:foreign"'),
+    t => replaceOnce(t, declaration, 'xmlns:cx1=""'),
+    t => replaceOnce(t, 'Requires="cx1"', 'Requires="cx1 cx1"'),
+    t => replaceOnce(t, 'Requires="cx1"', 'Requires="cx1 cx2"'),
+    t => replaceOnce(t, declaration, declaration + ' ' + declaration),
+  ]) assert.throws(() => inspectSevenArchive(rewrite(b, p => xml(p, first, change)), deps));
+  const inherited = hoist('mc:AlternateContent');
+  const shadowed = rewrite(inherited, p => xml(p, first, t =>
+    replaceOnce(t, '<mc:Choice ', '<mc:Choice xmlns:cx1="urn:foreign" ')));
+  assert.throws(() => inspectSevenArchive(shadowed, deps));
+  const sibling = rewrite(b, p => xml(p, first, t =>
+    replaceOnce(replaceOnce(t, ' ' + declaration, ''), '<mc:Fallback',
+      '<mc:Fallback ' + declaration)));
+  assert.throws(() => inspectSevenArchive(sibling, deps), 'Fallback declaration is outside Choice scope');
+  const nearerValid = rewrite(b, p => xml(p, first, t =>
+    replaceOnce(t, '<mc:AlternateContent', '<mc:AlternateContent xmlns:cx1="urn:foreign"')));
+  assert.deepEqual(inspectSevenArchive(nearerValid, deps).slides, original.slides,
+    'A correct local binding takes precedence over a foreign ancestor');
+});
 test('actual cache and workbook mutants cannot hide inconsistent values; coherent data changes remain findings', () => {
   const b = input(SEVEN_CASES[1]),
     before = inspectSevenArchive(b, deps),

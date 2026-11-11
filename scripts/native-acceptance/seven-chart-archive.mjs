@@ -17,6 +17,14 @@ const attrs = (node) =>
   );
 const all = (nodes, name) => nodes?.filter((node) => Object.hasOwn(node, name)) ?? [];
 const elements = (nodes) => nodes?.filter((node) => tag(node)) ?? [];
+// Requires names a prefix in the Choice element's namespace scope. Office may
+// hoist its declaration to AlternateContent (or another ancestor) when saving.
+const namespaceScope = (parent, node) => {
+  const scope = new Map(parent);
+  for (const [name, uri] of Object.entries(attrs(node)))
+    if (name.startsWith('xmlns:')) scope.set(name.slice(6), uri);
+  return scope;
+};
 const text = (nodes) =>
   nodes
     .map((node) =>
@@ -347,7 +355,9 @@ export function inspectSevenArchive(input, deps = archiveDependencies()) {
   const slides = slideFiles.map((file, index) => {
     const slide = child(tools.ordered(file), 'p:sld'),
       common = child(slide?.['p:sld'], 'p:cSld'),
-      tree = child(common?.['p:cSld'], 'p:spTree')?.['p:spTree'];
+      shapeTree = child(common?.['p:cSld'], 'p:spTree'),
+      tree = shapeTree?.['p:spTree'],
+      treeScope = [slide, common, shapeTree].reduce(namespaceScope, new Map());
     assert.ok(tree, 'Missing source shape tree');
     const rels = tools.relationships(file),
       shapes = [];
@@ -414,7 +424,7 @@ export function inspectSevenArchive(input, deps = archiveDependencies()) {
         const feature = attrs(choice).Requires;
         assert.ok(['cx1', 'cx2'].includes(feature), 'Unsupported AlternateContent feature');
         assert.equal(
-          attrs(choice)['xmlns:' + feature],
+          namespaceScope(namespaceScope(treeScope, node), choice).get(feature),
           feature === 'cx1'
             ? 'http://schemas.microsoft.com/office/drawing/2015/9/8/chartex'
             : 'http://schemas.microsoft.com/office/drawing/2015/10/21/chartex',
