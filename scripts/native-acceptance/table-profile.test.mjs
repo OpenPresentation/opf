@@ -49,7 +49,7 @@ test('table paths and sealed file records reject aliasing, traversal, duplicate 
 });
 function lifecycleFixture() {
   const profile = {output: path.resolve('table-profile-synthetic'), suiteSha256: 'a'.repeat(64), generationIdentity: {producer: 'original'}, controller: {revision: 'b'.repeat(40)}};
-  const envelopeSha256 = 'c'.repeat(64), common = {schemaVersion: 2, profile: 'table-colors-v2', envelopeSha256, generationIdentity: clone(profile.generationIdentity), executionIdentity: clone(profile.controller), nativeAcceptance: false, registryAcceptance: false};
+  const envelopeSha256 = 'c'.repeat(64), common = {schemaVersion: 3, profile: 'table-colors-v3', envelopeSha256, generationIdentity: clone(profile.generationIdentity), executionIdentity: clone(profile.controller), nativeAcceptance: false, registryAcceptance: false};
   const runner = {...clone(common), sourceSuiteSha256: profile.suiteSha256, runOfficeRequested: true, timeoutSeconds: 45, status: 'native-observation-completed; comparison-and-coordinator-review-required'};
   const terminal = {envelopeSha256, timedOut: false, exitCode: 0, cleanupConfirmed: true, lastDurableStage: 'worker.complete'};
   const report = {...clone(common), cleanupConfirmed: true, officeOperationsStopped: false, edits: Array.from({length: 6}, (_, i) => ({slide: i + 1, row: 2, column: 1, before: 'Body', after: 'Native Body', prefix: 'Native '}))};
@@ -65,9 +65,10 @@ function lifecycleFixture() {
   }
   return {runner, terminal, report, stages, profile, envelopeSha256};
 }
-test('table execution adapter keeps genuine generation and controller identities separate and checks all native phases', () => {
+test('table-v3 execution adapter keeps genuine generation and controller identities separate and checks all native phases', () => {
   assertTableLifecycle(lifecycleFixture());
   for (const [name, mutate] of [
+    ['historical v2 profile refused', f => { f.runner.schemaVersion = 2; f.runner.profile = 'table-colors-v2'; f.report.schemaVersion = 2; f.report.profile = 'table-colors-v2'; }],
     ['generator impersonation', f => { f.report.generationIdentity = clone(f.profile.controller); }],
     ['stale controller', f => { f.runner.executionIdentity.revision = 'd'.repeat(40); }],
     ['writeable open', f => { f.report.opens[1].readOnly = 0; }], ['foreign identical path', f => { f.report.opens[1].path += '-foreign'; }],
@@ -186,11 +187,14 @@ test('full modeled profile binds old generator, worker and installed bytes separ
     const output = path.join(scratch, 'prepared');
     const prepared = await prepareTableProfile({suiteDirectory, producerRepository: producer, legacyWorkerRepository: worker, consumer, output}, {root: controller});
     const bind = sha256 => bindTableProfile({envelopeFile: prepared.envelope, envelopeSha256: sha256 ?? prepared.sha256, root: controller, fresh: true});
-    const bound = await bind(); assert.deepEqual(bound.envelope.generationIdentity, provenance); assert.notEqual(bound.envelope.controller.revision, provenance.suiteRepository.revision);
-    const protectedFiles = [path.join(suiteDirectory, 'table-colors/table-colors.pptx'), path.join(producer, 'source.txt'), path.join(worker, 'test/native-process.ps1'), path.join(controller, TABLE_PROFILE_FILES[0]), path.join(consumer, 'node_modules/@openpresentation/opf/dist/index.js'), path.join(output, 'inputs/native-table-colors-v2.ps1')];
+    const bound = await bind(); assert.equal(bound.envelope.schemaVersion, 2); assert.equal(bound.envelope.profile, 'table-colors-v3');
+    assert(bound.envelope.snapshots.some(record => record.path === 'inputs/native-table-colors-v3.ps1'));
+    assert(!bound.envelope.snapshots.some(record => record.path === 'inputs/native-table-colors-v2.ps1'));
+    assert.deepEqual(bound.envelope.generationIdentity, provenance); assert.notEqual(bound.envelope.controller.revision, provenance.suiteRepository.revision);
+    const protectedFiles = [path.join(suiteDirectory, 'table-colors/table-colors.pptx'), path.join(producer, 'source.txt'), path.join(worker, 'test/native-process.ps1'), path.join(controller, TABLE_PROFILE_FILES[0]), path.join(consumer, 'node_modules/@openpresentation/opf/dist/index.js'), path.join(output, 'inputs/native-table-colors-v3.ps1')];
     for (const file of protectedFiles) { const original = await readFile(file); try { await writeFile(file, Buffer.concat([original, Buffer.from('changed')])); await assert.rejects(bind); } finally { await writeFile(file, original); } }
     const originalEnvelope = await readFile(prepared.envelope);
-    for (const mutate of [e => { e.node.path += '-foreign'; }, e => { e.controllerRepository = producer; }, e => { e.limits.cells = 20; }, e => { e.generationIdentity = clone(e.controller); }, e => { e.snapshots[0].path = '../escape'; }]) {
+    for (const mutate of [e => { e.schemaVersion = 1; e.profile = 'table-colors-v2'; }, e => { e.postflightPolicy.maximumQueries = 52; }, e => { e.node.path += '-foreign'; }, e => { e.controllerRepository = producer; }, e => { e.limits.cells = 20; }, e => { e.generationIdentity = clone(e.controller); }, e => { e.snapshots[0].path = '../escape'; }]) {
       const envelope = JSON.parse(originalEnvelope); mutate(envelope); const bytes = Buffer.from(JSON.stringify(envelope));
       try { await writeFile(prepared.envelope, bytes); await assert.rejects(() => bind(digest(bytes))); } finally { await writeFile(prepared.envelope, originalEnvelope); }
     }

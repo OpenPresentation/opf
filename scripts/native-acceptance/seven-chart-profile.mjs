@@ -480,8 +480,9 @@ export function assertSevenLifecycle(report, terminal, inputSha256, envelopeSha2
   return true;
 }
 export function assertSevenStages(report, stages) {
-  assertOwnedStageWire(Buffer.from(stages.map(stage => JSON.stringify(stage)).join('\n') + '\n'));
+  // Refuse managed object/nonfinite values before JSON serialization can coerce them.
   assertOwnedOperations(stages, sevenExpectedOperations(report));
+  assertOwnedStageWire(Buffer.from(stages.map(stage => JSON.stringify(stage)).join('\n') + '\n'));
   assert.ok(Array.isArray(report.probes) && report.probes.length > 0);
   for (const probe of report.probes) assert.equal(probe.matched, true);
   return true;

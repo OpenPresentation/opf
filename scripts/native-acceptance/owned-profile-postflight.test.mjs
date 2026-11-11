@@ -8,7 +8,7 @@ import {digest, fileIdentity} from './identity.mjs';
 import {tableColorDocument} from './table-colors.mjs';
 import {SEVEN_POSTFLIGHT_POLICY, sevenExpectedOperations, assertSevenPostflightReady} from './seven-postflight.mjs';
 import {TABLE_POSTFLIGHT_POLICY, tableExpectedOperations, assertTablePostflightReady} from './table-postflight.mjs';
-import {assertOwnedStageWire, makeOwnedRequest, writeOwnedRequest, makeOwnedAdmission, writeOwnedAdmission, REQUEST_HASH_TOKEN} from './owned-postflight.mjs';
+import {assertOwnedStagePrimitive, assertOwnedStageWire, makeOwnedRequest, writeOwnedRequest, makeOwnedAdmission, writeOwnedAdmission, REQUEST_HASH_TOKEN} from './owned-postflight.mjs';
 
 const stamp='2000-01-01T00:00:00.000Z', hex='a'.repeat(64);
 export function syntheticOwnedContext(profile, output=path.resolve('synthetic-owned-output')) {
@@ -138,10 +138,39 @@ if(process.argv[2]==='--emit-fixture') {
       ['missing complete',c=>{c.stages.pop()}],['missing close',c=>{c.stages=c.stages.filter(s=>!s.stage.endsWith('.close'))}],
       ['extra operation',c=>{c.stages.splice(1,0,{...c.stages[1]})}],['out of order',c=>{[c.stages[1],c.stages[3]]=[c.stages[3],c.stages[1]]}],
       ['wrong read-only',c=>{c.report.opens[0].readOnly=0}],['foreign owned path',c=>{c.report.opens[0].path=path.join(c.request.output,'foreign.pptx')}],
+      ['object value at unrelated getter',c=>{c.stages.find(s=>s.stage==='application.version'&&s.status==='success').value={unexpected:true}}],
+      ['empty array value at unrelated getter',c=>{c.stages.find(s=>s.stage==='application.version'&&s.status==='success').value=[]}],
+      ['array value at unrelated getter',c=>{c.stages.find(s=>s.stage==='application.version'&&s.status==='success').value=[1,2]}],
+      ['NaN at unrelated getter',c=>{c.stages.find(s=>s.stage==='application.version'&&s.status==='success').value=NaN}],
+      ['Infinity at unrelated getter',c=>{c.stages.find(s=>s.stage==='application.version'&&s.status==='success').value=Infinity}],
+      ['negative Infinity at unrelated getter',c=>{c.stages.find(s=>s.stage==='application.version'&&s.status==='success').value=-Infinity}],
       ['nonempty final application',c=>{c.stages.find(s=>s.stage==='application.final.count'&&s.status==='success').value=1}],
     ];
     for(const [name,mutate] of mutations)test(profile+' refuses '+name,()=>{const c=syntheticOwnedContext(profile);mutate(c);assert.throws(()=>assertSyntheticContext(c))});
   }
+  for(const value of [null,'',false,true,0,1,-2,1.5])test('exact primitive accepted '+String(value),()=>{
+    assert.doesNotThrow(()=>assertOwnedStagePrimitive(value));
+    const c=syntheticOwnedContext('table-colors-v3');c.stages[1].value=value;
+    const bytes=Buffer.from(c.stages.map(s=>JSON.stringify(s)).join('\n')+'\n'),before=digest(bytes);
+    const parsed=assertOwnedStageWire(bytes);assert.equal(parsed[1].value,value);assert.equal(digest(bytes),before);
+  });
+  test('raw negative zero is not normalized',()=>{
+    const c=syntheticOwnedContext('table-colors-v3');c.stages[1].value='NEGATIVE_ZERO_TOKEN';
+    const bytes=Buffer.from(c.stages.map(s=>JSON.stringify(s)).join('\n').replace('"NEGATIVE_ZERO_TOKEN"','-0')+'\n'),before=digest(bytes);
+    const parsed=assertOwnedStageWire(bytes);assert.equal(Object.is(parsed[1].value,-0),true);assert.equal(digest(bytes),before);
+  });
+  for(const value of [{unexpected:true},[],[1,2],NaN,Infinity,-Infinity,undefined,new Number(1)])test('managed nonprimitive/nonfinite rejected '+Object.prototype.toString.call(value),()=>{
+    assert.throws(()=>assertOwnedStagePrimitive(value));
+  });
+  test('primitive guard never coerces object values',()=>{
+    let calls=0;const value={valueOf(){calls++;throw Error('coercion')},toString(){calls++;throw Error('coercion')}};
+    assert.throws(()=>assertOwnedStagePrimitive(value));assert.equal(calls,0);
+  });
+  for(const literal of ['{}','[]','1e999','-1e999'])test('raw value literal refused before normalization '+literal,()=>{
+    const c=syntheticOwnedContext('table-colors-v3');c.stages[1].value='SYNTHETIC_VALUE_TOKEN';
+    const bytes=Buffer.from(c.stages.map(s=>JSON.stringify(s)).join('\n').replace('"SYNTHETIC_VALUE_TOKEN"',literal)+'\n');
+    const before=digest(bytes);assert.throws(()=>assertOwnedStageWire(bytes));assert.equal(digest(bytes),before);
+  });
   for(const error of [null,''])test('lossless successful error '+JSON.stringify(error),()=>{
     const c=syntheticOwnedContext('seven-chart-original-readonly-v2');for(const stage of c.stages)stage.error=error;
     const bytes=Buffer.from(c.stages.map(s=>JSON.stringify(s)).join('\n')+'\n'),before=digest(bytes);assertOwnedStageWire(bytes);assert.equal(digest(bytes),before);

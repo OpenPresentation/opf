@@ -67,6 +67,10 @@ export function assertOwnedKeys(record, keys) {
   assert.ok(record && typeof record === 'object' && !Array.isArray(record));
   assert.deepEqual(Object.keys(record).sort(), [...keys].sort(), 'Unsupported/missing record field');
 }
+export function assertOwnedStagePrimitive(value) {
+  assert.ok(value === null || typeof value === 'string' || typeof value === 'boolean' ||
+    (typeof value === 'number' && Number.isFinite(value)), 'Stage value must be an exact finite primitive');
+}
 export function assertOwnedStageWire(bytes) {
   assert.ok(Buffer.isBuffer(bytes) && bytes.length > 0 && bytes.length <= 4 * 1024 * 1024);
   const text = bytes.toString('utf8').replace(/^\uFEFF/u, '');
@@ -78,6 +82,7 @@ export function assertOwnedStageWire(bytes) {
     const fields = ['sequence', 'timestamp', 'stage', 'status', 'value', 'error', 'officeOperationsStopped', 'cleanupConfirmed'];
     assertOwnedKeys(stage, Object.hasOwn(stage, 'ownedPresentationPath') ? [...fields, 'ownedPresentationPath'] : fields);
     assert.ok(Object.hasOwn(stage, 'value'), 'Actual stage value field required');
+    assertOwnedStagePrimitive(stage.value);
     assert.ok(Object.hasOwn(stage, 'error') && (stage.error === null || stage.error === ''), 'Actual successful error wire required');
     assert.equal(stage.sequence, index + 1);
     assert.ok(Number.isSafeInteger(stage.sequence));
@@ -97,6 +102,8 @@ export function assertOwnedOperations(stages, names) {
     : [{stage, status: 'begin'}, {stage, status: 'success'}]);
   assert.equal(stages.length, expected.length, 'Missing or extra operation');
   for (const [index, stage] of stages.entries()) {
+    assert.ok(Object.hasOwn(stage, 'value'), 'Actual stage value field required');
+    assertOwnedStagePrimitive(stage.value);
     assert.equal(stage.sequence, index + 1);
     assert.equal(stage.stage, expected[index].stage);
     assert.equal(stage.status, expected[index].status);

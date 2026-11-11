@@ -27,11 +27,19 @@ function Invoke-SyntheticAdmission([string]$Profile,[string]$Mutation,[int]$Inde
     if($Mutation -ceq 'sequence-gap') {$stages[0].sequence=2}
     if($Mutation -ceq 'raw-readonly') {($stages | Where-Object {$_.stage -ceq 'original.readOnly' -and $_.status -ceq 'success'}).value=0}
     if($Mutation -ceq 'nonempty-final-count') {($stages | Where-Object {$_.stage -ceq 'application.final.count' -and $_.status -ceq 'success'}).value=1}
+    if($Mutation -ceq 'raw-object-value') {($stages | Where-Object {$_.stage -ceq 'application.version' -and $_.status -ceq 'success'}).value=[pscustomobject]@{unexpected=$true}}
+    if($Mutation -ceq 'raw-array-value') {($stages | Where-Object {$_.stage -ceq 'application.version' -and $_.status -ceq 'success'}).value=@(1,2)}
+    if($Mutation -ceq 'raw-nonfinite-value') {($stages | Where-Object {$_.stage -ceq 'application.version' -and $_.status -ceq 'success'}).value='SYNTHETIC_NONFINITE_TOKEN'}
     if($Mutation -ceq 'cleanup-false') {$report.cleanupConfirmed=$false}
     if($Mutation -ceq 'foreign-profile') {$admission.profile='unsupported'}
     if($Mutation -ceq 'policy-change') {$admission.policy.maximumQueries=52}
     Write-SyntheticJson $reportFile $report
-    [IO.File]::WriteAllText($stageFile,(($stages | ForEach-Object {$_ | ConvertTo-Json -Compress -Depth 12}) -join [Environment]::NewLine)+[Environment]::NewLine,[Text.UTF8Encoding]::new($false))
+    $wire=(($stages | ForEach-Object {$_ | ConvertTo-Json -Compress -Depth 12}) -join [Environment]::NewLine)+[Environment]::NewLine
+    if($Mutation -ceq 'raw-nonfinite-value') {
+        if(-not $wire.Contains('"SYNTHETIC_NONFINITE_TOKEN"')) {throw 'Synthetic nonfinite wire token absent'}
+        $wire=$wire.Replace('"SYNTHETIC_NONFINITE_TOKEN"','1e999')
+    }
+    [IO.File]::WriteAllText($stageFile,$wire,[Text.UTF8Encoding]::new($false))
     foreach($record in $admission.files) {$record.bytes=(Get-Item -LiteralPath $record.file).Length;$record.sha256=Get-OwnedPostflightHash $record.file}
     Write-SyntheticJson $identity.path $admission
     $identity.sha256=Get-OwnedPostflightHash $identity.path
@@ -49,13 +57,26 @@ function Invoke-SyntheticAdmission([string]$Profile,[string]$Mutation,[int]$Inde
 try {
     $index=0
     foreach($profile in @('seven-chart-original-readonly-v2','table-colors-v3')) {
-        foreach($mutation in @('valid','missing-error','nonempty-error','sequence-gap','raw-readonly','nonempty-final-count','cleanup-false','foreign-profile','policy-change')) {$index++;Invoke-SyntheticAdmission $profile $mutation $index}
+        foreach($mutation in @('valid','missing-error','nonempty-error','sequence-gap','raw-readonly','nonempty-final-count','cleanup-false','foreign-profile','policy-change','raw-object-value','raw-array-value','raw-nonfinite-value')) {$index++;Invoke-SyntheticAdmission $profile $mutation $index}
     }
     $index++;Invoke-SyntheticAdmission 'seven-chart-original-readonly-v2' 'valid' $index
-    function Test-SyntheticErrorWire([string]$Message=$null) {return [ordered]@{error=$Message} | ConvertTo-Json -Compress}
-    $wire=(Test-SyntheticErrorWire) | ConvertFrom-Json
-    if($wire.PSObject.Properties.Name -cnotcontains 'error' -or ($null -ne $wire.error -and $wire.error -cne '')) {throw 'Actual PS5 string error wire changed'}
-    [ordered]@{controls=$index+1;failed=0;globalReadyCalls=$script:oldReadyCalls;realProcessQueries=0;officeActions=0} | ConvertTo-Json -Compress
+    $primitiveControls=0
+    $primitiveCases=@(
+        @{value=$null;valid=$true},@{value='';valid=$true},@{value='synthetic';valid=$true},
+        @{value=$false;valid=$true},@{value=$true;valid=$true},@{value=[int]0;valid=$true},
+        @{value=[long]7;valid=$true},@{value=[double]1.5;valid=$true},@{value=[decimal]2.5;valid=$true},
+        @{value=[single]3.5;valid=$true},@{value=[pscustomobject]@{unexpected=$true};valid=$false},
+        @{value=@(1,2);valid=$false},@{value=@();valid=$false},@{value=@($null);valid=$false},@{value=[double]::NaN;valid=$false},
+        @{value=[double]::PositiveInfinity;valid=$false},@{value=[double]::NegativeInfinity;valid=$false},
+        @{value=[single]::NaN;valid=$false}
+    )
+    foreach($case in $primitiveCases) {
+        $primitiveControls++
+        if((Test-OwnedPostflightPrimitive $case.value) -ne $case.valid) {throw 'Shared primitive guard coerced an unsupported value'}
+        $record=[pscustomobject]@{sequence=1;stage='worker.initialize';status='success';timestamp='2000-01-01T00:00:00.000Z';value=$case.value;error='';officeOperationsStopped=$false;cleanupConfirmed=$true}
+        if((Test-OwnedPostflightStageWire @($record)) -ne $case.valid) {throw 'Shared raw stage guard disagrees with exact primitive contract'}
+    }
+    [ordered]@{controls=$index+$primitiveControls;failed=0;primitiveControls=$primitiveControls;globalReadyCalls=$script:oldReadyCalls;realProcessQueries=0;officeActions=0} | ConvertTo-Json -Compress
 } finally {
     if($null -ne $oldReady) {Set-Item -LiteralPath 'Function:\global:Test-ReferenceWitnessPostflightReady' -Value $oldReady.ScriptBlock}
     else {Remove-Item -LiteralPath 'Function:\global:Test-ReferenceWitnessPostflightReady' -ErrorAction SilentlyContinue}

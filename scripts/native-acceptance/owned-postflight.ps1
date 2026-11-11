@@ -17,6 +17,16 @@ function Test-OwnedPostflightKeys($Record,[string[]]$Names) {
     return (($Record.PSObject.Properties.Name | Sort-Object) -join '|') -ceq (($Names | Sort-Object) -join '|')
 }
 function Test-OwnedPostflightInteger($Value) { return ($Value -is [int] -or $Value -is [long]) }
+function Test-OwnedPostflightPrimitive([object]$Value) {
+    if($Value -is [System.Array]) {return $false}
+    if([object]::ReferenceEquals($null,$Value) -or $Value -is [string] -or $Value -is [bool]) {return $true}
+    if($Value -is [double]) {return (-not [double]::IsNaN($Value) -and -not [double]::IsInfinity($Value))}
+    if($Value -is [single]) {return (-not [single]::IsNaN($Value) -and -not [single]::IsInfinity($Value))}
+    # Integral and decimal CLR values are always finite. Never cast strings,
+    # inspect object members, or return a replacement/normalized value.
+    return ($Value -is [sbyte] -or $Value -is [byte] -or $Value -is [int16] -or $Value -is [uint16] -or
+        $Value -is [int] -or $Value -is [uint32] -or $Value -is [long] -or $Value -is [uint64] -or $Value -is [decimal])
+}
 function Test-OwnedPostflightStageWire($Stages) {
     if($Stages -isnot [array] -or $Stages.Count -lt 1 -or $Stages.Count -gt 5000) { return $false }
     $last=[DateTimeOffset]::MinValue
@@ -26,7 +36,7 @@ function Test-OwnedPostflightStageWire($Stages) {
         if($s.PSObject.Properties.Name -ccontains 'ownedPresentationPath') {$fields+=@('ownedPresentationPath')}
         if(-not (Test-OwnedPostflightKeys $s $fields)) {return $false}
         if(-not (Test-OwnedPostflightInteger $s.sequence) -or $s.sequence -ne ($i+1) -or $s.status -cnotin @('begin','success') -or $s.officeOperationsStopped -isnot [bool] -or $s.officeOperationsStopped -or $s.cleanupConfirmed -isnot [bool]) { return $false }
-        if($s.PSObject.Properties.Name -cnotcontains 'value') { return $false }
+        if($s.PSObject.Properties.Name -cnotcontains 'value' -or -not (Test-OwnedPostflightPrimitive $s.value)) { return $false }
         if($s.PSObject.Properties.Name -cnotcontains 'error' -or ($null -ne $s.error -and ($s.error -isnot [string] -or $s.error -cne ''))) { return $false }
         if($s.timestamp -isnot [string] -or $s.timestamp -cnotmatch 'Z$') { return $false }
         try { $stamp=[DateTimeOffset]::Parse($s.timestamp,[Globalization.CultureInfo]::InvariantCulture) } catch { return $false }

@@ -55,7 +55,7 @@ test('actual PS5 pure observer and local dispatcher controls',t=>{
   if(process.platform!=='win32'){t.skip('Actual Windows PowerShell 5.1 control');return}
   const executable=path.join(process.env.SystemRoot,'System32/WindowsPowerShell/v1.0/powershell.exe');
   const env={...process.env};delete env.PSModulePath;
-  for(const file of ['owned-postflight-check.ps1','owned-profile-admission-check.ps1']) {
+  for(const file of ['owned-postflight-check.ps1','owned-profile-admission-check.ps1','table-v3-worker-pure-check.ps1']) {
     const result=spawnSync(executable,['-NoProfile','-NonInteractive','-File',path.join(root,'scripts/native-acceptance',file),'-NodeExecutable',process.execPath],{env,encoding:'utf8',timeout:60000});
     assert.ifError(result.error);assert.equal(result.status,0,result.stdout+'\n'+result.stderr);
   }

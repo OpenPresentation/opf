@@ -275,8 +275,8 @@ test('failed/partial lifecycles never count as successful observations', () => {
     rasters: Array.from({ length: 7 }, () => ({})),
   };
   const report = {
-      schemaVersion: 1,
-      profile: 'seven-chart-original-readonly-v1',
+      schemaVersion: 2,
+      profile: 'seven-chart-original-readonly-v2',
       envelopeSha256: 'b'.repeat(64),
       sourceSha256: 'a'.repeat(64),
       cleanupConfirmed: true,
@@ -297,6 +297,7 @@ test('failed/partial lifecycles never count as successful observations', () => {
     terminal = { timedOut: false, exitCode: 0, cleanupConfirmed: true };
   assertSevenLifecycle(report, terminal, 'a'.repeat(64), 'b'.repeat(64));
   for (const mutate of [
+    (r) => { r.schemaVersion = 1; r.profile = 'seven-chart-original-readonly-v1'; },
     (r) => (r.officeOperationsStopped = true),
     (r) => (r.cleanupConfirmed = false),
     (r) => (r.closes = 1),
