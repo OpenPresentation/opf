@@ -10,6 +10,8 @@ import {
   registryManifest, rendererOptionalPeers, resolveRef, verifiedPackages,
 } from './registry-consumer.mjs';
 import { registryPlan } from './registry-plan.mjs';
+import { developerQuickstartInput, DEVELOPER_QUICKSTART_FILE, QUICKSTART_033 } from './developer-quickstart-input.mjs';
+import {createHash} from 'node:crypto';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const withDirectory = (action) => {
@@ -155,4 +157,24 @@ test('MR-56: pnpm vendor:gallery-editor runs the script, and no registry-mode pr
   const scripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
   assert.equal(scripts['vendor:gallery-editor'], 'node scripts/vendor-gallery-editor.mjs');
   assert.equal(scripts['prepare:gallery:registry'], undefined);
+});
+
+// Input selection follows the real registry plan's core version/ref, not source
+// package.json or a caller-provided schema toggle. No network/product import.
+const quickstartPlan=(version,gitHead=QUICKSTART_033.gitHead)=>registryPlan({tag:version,refs:false,view:()=>({version,gitHead})});
+test('published033 quickstart selects exact immutable release bytes, preserving all authored values and double spaces',()=>{
+ const input=developerQuickstartInput(quickstartPlan('0.33.0'),{cwd:root}),release=Buffer.from(fileAtRef(QUICKSTART_033.gitHead,DEVELOPER_QUICKSTART_FILE,{cwd:root}));assert.deepEqual(input.bytes,release);assert.equal(input.bytes.length,5615);assert.equal(createHash('sha256').update(input.bytes).digest('hex'),QUICKSTART_033.sha256);assert.deepEqual(input.provenance,{kind:'registry-release-input',version:'0.33.0',registryGitHead:QUICKSTART_033.gitHead,sourceRef:QUICKSTART_033.gitHead,path:DEVELOPER_QUICKSTART_FILE,bytes:5615,sha256:QUICKSTART_033.sha256});
+ const original=JSON.parse(input.bytes),current=JSON.parse(readFileSync(path.join(root,DEVELOPER_QUICKSTART_FILE))),projected=structuredClone(original);for(const role of ['header','footer']){const entries=Object.entries(projected.design[role]);projected.design[role]=Object.fromEntries(entries.map(([key,value])=>[key==='left'?'start':key==='right'?'end':key,value]));}assert.deepEqual(projected,current,'Only the four typed furniture slot names differ; every authored value stays exact');assert.equal(original.design.header.left.text,'Developer  quickstart');assert.equal(original.slides[3].title,'Next  steps');
+});
+test('quickstart selector uses release input before034 and exact current input from034, without reading the other channel',()=>{
+ for(const version of ['0.32.1','0.33.1']){let reads=0;const bytes=Buffer.from('{"literal":"slides.0.left and Developer  quickstart"}\n');const selected=developerQuickstartInput(quickstartPlan(version),{readRelease:(ref,file)=>{reads++;assert.equal(ref,QUICKSTART_033.gitHead);assert.equal(file,DEVELOPER_QUICKSTART_FILE);return bytes;},readCurrent:()=>{throw new Error('Wrong current-input channel');}});assert.deepEqual(selected.bytes,bytes);assert.equal(reads,1);assert.equal(selected.provenance.kind,'registry-release-input');}
+ for(const version of ['0.34.0','0.34.2','0.35.0','1.0.0']){let reads=0;const bytes=readFileSync(path.join(root,DEVELOPER_QUICKSTART_FILE)),selected=developerQuickstartInput(quickstartPlan(version),{readCurrent:file=>{reads++;assert.equal(file,DEVELOPER_QUICKSTART_FILE);return bytes;},readRelease:()=>{throw new Error('Wrong historical-input channel');}});assert.deepEqual(selected.bytes,bytes);assert.equal(selected.provenance.kind,'current-034-input');assert.equal(selected.provenance.sourceRef,null);assert.equal(reads,1);assert.equal(JSON.parse(selected.bytes).design.header.start.text,'Developer  quickstart');}
+});
+test('quickstart input rejects missing/ambiguous/malformed version or release authority and changed033 bytes',()=>{
+ const invalid=[()=>({packages:[],verificationRefs:{opf:QUICKSTART_033.gitHead}}),()=>{const p=quickstartPlan('0.33.0');p.packages.push({...p.packages[0]});return p;},...['0.33','0.33.0-next','00.33.0','latest',undefined].map(version=>()=>{const p=quickstartPlan('0.33.0');p.packages[0].version=version;return p;}),()=>{const p=quickstartPlan('0.33.0');delete p.verificationRefs.opf;return p;},()=>quickstartPlan('0.33.0','a'.repeat(40))];
+ for(const make of invalid){let reads=0;assert.throws(()=>developerQuickstartInput(make(),{readRelease:()=>{reads++;return '';},readCurrent:()=>{reads++;return '';}}));assert.equal(reads,0);}
+ const release=Buffer.from(fileAtRef(QUICKSTART_033.gitHead,DEVELOPER_QUICKSTART_FILE,{cwd:root}));for(const bytes of [Buffer.from(release.toString().replace('Developer  quickstart','Developer quickstart')),readFileSync(path.join(root,DEVELOPER_QUICKSTART_FILE))])assert.throws(()=>developerQuickstartInput(quickstartPlan('0.33.0'),{readRelease:()=>bytes}));assert.throws(()=>developerQuickstartInput(quickstartPlan('0.33.0'),{readRelease:()=>{throw new Error('Missing immutable input');}}),/Missing immutable input/);
+});
+test('registry quickstart retains every original workflow/CLI/source assertion verbatim after input selection',()=>{
+ const file='scripts/test-developer-quickstart.mjs',before=fileAtRef('e1480c66ba8df5e47869be63040b5cb1abb4e96f',file,{cwd:root}),after=readFileSync(path.join(root,file),'utf8'),marker='  const originalDeck =';assert.equal(after.slice(after.indexOf(marker)),before.slice(before.indexOf(marker)));assert.ok(after.includes("assert.match(svgs[0], /Developer  quickstart/);"));assert.ok(after.includes('developerQuickstartInput(plan, {cwd: root})'));assert.ok(!after.includes('copyFile(deckSource'));
 });

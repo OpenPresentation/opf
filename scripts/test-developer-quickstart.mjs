@@ -1,13 +1,14 @@
 import assert from 'node:assert/strict';
 import {execFile as execFileCallback} from 'node:child_process';
 import {createHash} from 'node:crypto';
-import {copyFile, mkdir, mkdtemp, readFile, rm, writeFile} from 'node:fs/promises';
+import {mkdir, mkdtemp, readFile, rm, writeFile} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {promisify} from 'node:util';
 import {packageManagerInvocation} from './package-manager.mjs';
 import {registryPlan} from './registry-plan.mjs';
+import {developerQuickstartInput} from './developer-quickstart-input.mjs';
 
 const execFile = promisify(execFileCallback);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -43,6 +44,9 @@ async function run(command, args, options = {}) {
   }
 }
 
+const deckInput = developerQuickstartInput(plan, {cwd: root});
+console.log('developer quickstart input: '+JSON.stringify(deckInput.provenance));
+
 const tmpRoot = await mkdtemp(path.join(os.tmpdir(), 'opf-developer-quickstart-'));
 const projectDir = path.join(tmpRoot, 'project');
 
@@ -52,7 +56,7 @@ try {
     path.join(projectDir, 'package.json'),
     `${JSON.stringify({private: true, type: 'module'}, null, 2)}\n`,
   );
-  await copyFile(deckSource, path.join(projectDir, 'deck.opf.json'));
+  await writeFile(path.join(projectDir, 'deck.opf.json'), deckInput.bytes);
   const originalDeck = await readFile(path.join(projectDir, 'deck.opf.json'));
   const originalSlides = JSON.parse(originalDeck.toString('utf8')).slides.length;
 
