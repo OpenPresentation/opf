@@ -1,4 +1,6 @@
-# Dependency and content disposition — active review
+# Dependency and content disposition — dated initial review
+
+The table below is the retained initial takeover state, superseded by the [active workstream board](../workstreams.md). All nine dependency PRs and both content PRs have since received source review and explicit disposition. OPF1242/1244–46 are integrated into the draft candidate;1243 is closed unmerged with0.4.7 retained. The coordinated Playwright pins, strict parser floor and SDK2 peers/browser checks are included in the recorded final checks. The main-site Actions revert and gallery/default verification are complete. DEV's parser/audit and ordinary CI pass their exact scope, while its strict release-pin Preview gate remains held for genuine0.34 adoption. Finance source/media review and local build/unit/types/browser/visual checks pass; its separately scoped advisory permission and current CI/Preview/production remain owed. These older rows must not restart completed source reviews or imply a merge/release that has not happened.
 
 All nine dependency PRs and both content PRs from the takeover remain accounted for. This record distinguishes source review, checks, merge, and qualification. No runtime upgrade is accepted merely because Dependabot proposed it.
 
