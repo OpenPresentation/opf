@@ -36,6 +36,15 @@ const mutants={
 };
 for(const [name,mutate]of Object.entries(mutants))test('furniture ready refuses '+name,()=>{const e=furnitureFixture();mutate(e);assert.throws(()=>admit(e));});
 test('ordinary selection preserves dedicated refusals and source limits',()=>{const cases=FULL59_CASE_IDS.map(id=>({id,worker:'furniture',automaticControlEligible:true,slideCount:1}));const suite={schemaVersion:1,nativeAcceptance:false,provenance:{nativeAcceptance:false,registryAcceptance:false},cases};assert.equal(assertFurnitureSelection(suite,'feature-metrics',[]),cases.find(c=>c.id==='feature-metrics'));for(const name of ['chart-all-seven','table-colors','feature-dense-events']){const s=structuredClone(suite);assert.throws(()=>assertFurnitureSelection(s,name,[]));}for(const count of [0,4]){const s=structuredClone(suite);s.cases.find(c=>c.id==='feature-metrics').slideCount=count;assert.throws(()=>assertFurnitureSelection(s,'feature-metrics',[]));}assert.throws(()=>assertFurnitureSelection(suite,'feature-metrics',Array(21).fill({})));});
+test('sealed FULL59 Pareto-single order follows its separate generator loop without reordering the suite',()=>{
+ const source=fs.readFileSync(path.join(fileURLToPath(new URL('.',import.meta.url)),'chart-modes.mjs'),'utf8');
+ assert.match(source,/for\(const mode of \['auto','fallback','native'\]\)\{\s*const id=`chart-mode-pareto-single-\$\{mode\}`/u);
+ assert.deepEqual(FULL59_CASE_IDS.slice(-4),['chart-mode-pareto-single-auto','chart-mode-pareto-single-fallback','chart-mode-pareto-single-native','table-colors']);
+ const cases=FULL59_CASE_IDS.map(id=>({id,worker:'furniture',automaticControlEligible:true,slideCount:1})),suite={schemaVersion:1,nativeAcceptance:false,provenance:{nativeAcceptance:false,registryAcceptance:false},cases};
+ assert.equal(assertFurnitureSelection(suite,'layout-title-auto',[]),cases[0]);
+ [suite.cases[55],suite.cases[56]]=[suite.cases[56],suite.cases[55]];
+ assert.throws(()=>assertFurnitureSelection(suite,'layout-title-auto',[]));
+});
 test('production envelope reader rejects file identity drift and unsupported closed keys before source access',()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'opf-furn-wire-')),file=path.join(dir,'envelope.json');
  try{const bytes=Buffer.from(JSON.stringify({schemaVersion:1,profile:'foreign'}));fs.writeFileSync(file,bytes);assert.throws(()=>bindFurnitureEnvelope(file,'0'.repeat(64)));assert.throws(()=>bindFurnitureEnvelope(file,digest(bytes)));fs.appendFileSync(file,' ');assert.throws(()=>bindFurnitureEnvelope(file,digest(bytes)));}finally{fs.rmSync(dir,{recursive:true,force:true});}
