@@ -6,6 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
+import {gallery} from '@openpresentation/gallery';
 import {archiveDependencies,inspectSevenArchive} from './seven-chart-archive.mjs';
 import {currentSevenSource,bindCurrentTreemap} from './seven-value-current.mjs';
 import {assertSevenValueAction} from './seven-value-archive.mjs';
@@ -25,7 +26,7 @@ function phase(archive){return{slideCount:7,rasters:Array.from({length:7},(_,i)=
 async function publicImport(bytes){const diagnostics=[],document=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});return{document,diagnostics};}
 let pending;
 function fixture(){pending??=(async()=>{
- const source=currentSevenSource(),input=Buffer.from(await toPptx(source,{chartex:'native'})),bound=bindCurrentHistogram(input,source,HISTOGRAM_SELECTION),action=bound.action;
+ const source=currentSevenSource(),input=Buffer.from(await toPptx(source,{catalogs:[gallery],chartex:'native'})),bound=bindCurrentHistogram(input,source,HISTOGRAM_SELECTION),action=bound.action;
  assert.deepEqual({bytes:input.length,sha256:digest(input)},HISTOGRAM_SOURCE_ARCHIVE);
  const parts=deps.unzipSync(input);change(parts,action.chartPart,t=>once(t,'<c:pt idx="0"><c:v>42</c:v></c:pt>','<c:pt idx="0"><c:v>43</c:v></c:pt>'));cell(parts,action.workbookPart,'B2',42,43);const edited=zip(parts),imports={source:await publicImport(input),before:await publicImport(input),edited:await publicImport(edited),reopened:await publicImport(edited)};
  return{input,before:input,edited,reopened:edited,source,selection:HISTOGRAM_SELECTION,action,imports,root:ROOT,deps,bound,phases:{original:phase(bound.archive),'saved-reopened':phase(inspectSevenArchive(edited,deps,bound.archiveContext))}};

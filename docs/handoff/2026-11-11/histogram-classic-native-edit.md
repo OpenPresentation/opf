@@ -31,3 +31,9 @@ All project imports, syntax checks, installs/builds, portable tests, PowerShell 
 ## SOURCE02 closure correction — pending final review
 
 SOURCE01 remains frozen externally. Independent review found that putting the new snapshot test in base VALUE_FILES recursively pulled snapshot-profile/comparison/namespace dependencies into the base, then duplicated them in the PowerShell snapshot-extra list. The successor moves only that test into the snapshot layer, leaves only the actual shared histogram production module in the base, and preserves exact hashes/count guards. A maintained control compares the real recursively expanded VALUE_FILES/SNAPSHOT_FILES against both literal PowerShell inventories, verifies base/extra disjointness, duplicate refusal and exact union count. No source inventory is weakened or made optional; all execution remains UNRUN.
+
+## Actual portable focus and retained native-before replay
+
+Independent review accepts SOURCE02. The first root focus is retained as 1 PASS / 6 RED / 1 actual-PS skip: its public producer omitted `catalogs: [gallery]` while asserting the fixed genuine archive hash. A causal export with the maintained chart-modes producer options produces exactly 184,592 bytes / `04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb`. Only the test's gallery import/export option changes; no expected archive, binder or admission guard changes.
+
+The corrected focus passes 7 tests, zero failures and one actual-PS skip (3.697 seconds). Full replay against the actual retained Office before archive also passes source public-model and native-role binding, values `[42,31,-8,19]` and actual workbook `Microsoft_Excel_Worksheet1.xlsx`; first-Save raw/style findings remain OPEN. These are portable/offline results, not a native setter or editability result. Actual 70 managed / 28 adapter controls, default-pure preparation and one separately assigned native attempt remain owed.
