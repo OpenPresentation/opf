@@ -264,6 +264,12 @@
         },
         "slot": {
           "$ref": "#/$defs/ThemeBackgroundSlot"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Background opacity from 0 (fully transparent) to 1 (fully opaque). Default 1; the selected theme slot remains unchanged."
         }
       }
     }
