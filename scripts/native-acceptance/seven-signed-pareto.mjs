@@ -36,7 +36,11 @@ export function inspectCurrentSignedPareto({parts,file,plot,book,deps,readSeries
  assertSignedParetoComboData(parts,3,plotted,{parser,fflate:deps},'bound-current-seven-signed-pareto');
  const list=value=>Array.isArray(value)?value:[value],bar=plot['c:barChart'],line=plot['c:lineChart'];
  for(const group of [bar,line])for(const series of list(group['c:ser']))for(const field of ['c:xVal','c:yVal','c:bubbleSize'])assert.equal(series[field],undefined,'Unknown extra numeric data vector requires review');
- assert.equal(line['c:grouping'].val,'standard');assert.equal(bar['c:overlap'].val,'0');assert.equal(line['c:marker'].val,'1');
+ assert.equal(line['c:grouping'].val,'standard');
+ // Office omits the zero overlap on this exact one-bar-series clustered group.
+ // Retain that raw omission; any present overlap must be exactly zero.
+ if(Object.hasOwn(bar,'c:overlap'))assert.deepEqual(bar['c:overlap'],{val:'0'},'Current signed Pareto overlap must remain zero');
+ assert.equal(line['c:marker'].val,'1');
  const pairIds=[bar,line].map(group=>list(group['c:axId']).map(axis=>axis.val));
  assert.deepEqual(pairIds,[['2094734554','2094734552'],['2094734555','2094734553']],'Unreviewed current axis identity/association change');
  const axes=[...list(plot['c:catAx']).map(node=>({kind:'category',node})),...list(plot['c:valAx']).map(node=>({kind:'value',node}))];

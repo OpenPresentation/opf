@@ -132,3 +132,13 @@ test('signed Pareto cache grammar, completeness and one-ULP coherent tampering s
  const workbook=deps.unzipSync(coherent[combo.workbook.part]);change(workbook,'xl/worksheets/sheet1.xml',text=>once(text,'<c r="C3" s="1"><v>0.7934782608695652</v></c>','<c r="C3" s="1"><v>'+String(next)+'</v></c>'));coherent[combo.workbook.part]=deps.zipSync(workbook);
  assert.throws(()=>inspectSevenArchive(zip(coherent),deps,f.archiveContext),/complete signed\/cumulative cache/,'Coherent workbook/cache change by one ULP still violates the exact source contract');
 });
+
+test('the bound single-series signed Pareto keeps omitted zero overlap as raw evidence and refuses other overlap',async()=>{
+ const f=await fixture(),part='ppt/charts/chart3.xml',omitted=deps.unzipSync(f.input);
+ change(omitted,part,text=>once(text,'<c:overlap val="0"/>',''));
+ const chart=inspectSevenArchive(zip(omitted),deps,f.archiveContext).slides[2].shapes.find(shape=>shape.kind==='chart').chart;
+ assert.equal(Object.hasOwn(chart.groups[0].properties,'c:overlap'),false,'No explicit default is fabricated in raw facts');
+ for(const value of ['<c:overlap val="1"/>','<c:overlap val="-1"/>','<c:overlap/>','<c:overlap val="0" future="x"/>','<c:overlap val="0"/><c:overlap val="0"/>']){
+  const parts=deps.unzipSync(f.input);change(parts,part,text=>once(text,'<c:overlap val="0"/>',value));assert.throws(()=>inspectSevenArchive(zip(parts),deps,f.archiveContext),/overlap must remain zero/);
+ }
+});
