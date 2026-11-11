@@ -59,7 +59,7 @@ function Get-Sh21ExpectedNodes($Plan,[string]$State) {
     return ,$result
 }
 function Read-Sh21Node($Nodes,[int]$Index,[string]$Prefix) {
-    $node=Invoke-SevenCom "$Prefix.get" {$Nodes.Item($Index)};$frame=Invoke-SevenCom "$Prefix.frame" {$node.TextFrame2};$range=Invoke-SevenCom "$Prefix.range" {$frame.TextRange};$text=Invoke-SevenCom "$Prefix.text" {$range.Text};$level=Invoke-SevenCom "$Prefix.level" {$node.Level};$type=Invoke-SevenCom "$Prefix.type" {$node.Type};$children=Invoke-SevenCom "$Prefix.children" {$node.Nodes};$childCount=Invoke-SevenCom "$Prefix.children.count" {$children.Count}
+    $node=Invoke-SevenCom "$Prefix.get" {$Nodes.Item($Index)};$frame=Invoke-SevenCom "$Prefix.frame" {$node.TextFrame2};$range=Invoke-SevenCom "$Prefix.range" {$frame.TextRange};$text=Invoke-SevenCom "$Prefix.text" {$range.Text};$level=Invoke-SevenCom "$Prefix.level" {$node.Level};$type=Invoke-SevenCom "$Prefix.type" {$node.Type};$children=Invoke-SevenCom "$Prefix.children" {return ,$node.Nodes};$childCount=Invoke-SevenCom "$Prefix.children.count" {$children.Count}
     Assert-SevenProbe ($text -is [string] -and (Test-SevenInteger $type) -and $type -eq 1 -and (Test-SevenInteger $childCount) -and $childCount -ge 0 -and $childCount -le 3) "$Prefix.types" 'string text, type1 and bounded integer child count' ($text -is [string] -and $type -eq 1 -and (Test-SevenInteger $childCount) -and $childCount -ge 0 -and $childCount -le 3)
     Assert-SevenProbe ((Test-SevenInteger $level) -and $level -in @(1,2)) "$Prefix.level" 'native level1 or2' (Get-SevenPrimitive $level)
     $parent=$null
@@ -80,7 +80,7 @@ function Set-Sh21NodeMap($Observation,$Expected,[string]$Prefix) {
 }
 function Read-Sh21Nodes($Target,$Plan,[string]$Phase,[string]$State,$Observation) {
     $expected=Get-Sh21ExpectedNodes $Plan $State;Assert-Sh21Owner $Target "$Phase.owner"
-    $nodes=Invoke-SevenCom "$Phase.nodes" {$Target.smartArt.AllNodes};$count=Invoke-SevenCom "$Phase.nodes.count" {$nodes.Count};Assert-SevenProbe ((Test-SevenInteger $count) -and $count -eq $expected.Count) "$Phase.nodes.count" $expected.Count $count
+    $nodes=Invoke-SevenCom "$Phase.nodes" {return ,$Target.smartArt.AllNodes};$count=Invoke-SevenCom "$Phase.nodes.count" {$nodes.Count};Assert-SevenProbe ((Test-SevenInteger $count) -and $count -eq $expected.Count) "$Phase.nodes.count" $expected.Count $count
     $Observation.nodes=@();$Observation.semanticToNativeIndex=@();Write-SevenReport
     for($i=1;$i -le $expected.Count;$i++){$read=Read-Sh21Node $nodes $i "$Phase.node.$i";$Observation.nodes+=@($read.row);Write-SevenReport}
     # Complete raw collection rows are durable BEFORE any semantic-match refusal.
@@ -125,7 +125,7 @@ function Read-Sh21Phase($Target,$Plan,[string]$Phase,[bool]$Edited) {
     $record=[ordered]@{nodes=@();semanticToNativeIndex=@();frame=[ordered]@{};items=@();raster=[ordered]@{path=$png;sha256=(Get-SevenHash $png)}};$script:report.phases[$Phase]=$record;Write-SevenReport
     $state=if($Edited){'after'}else{'before'};[void](Read-Sh21Nodes $Target $Plan $Phase $state $record)
     foreach($property in @('Left','Top','Width','Height')){$value=Read-SevenProperty $Target.shape $property "$Phase.frame.$property";Assert-SevenProbe (Test-SevenFiniteNumber $value) "$Phase.frame.$property.finite" 'finite' (Get-SevenPrimitive $value);$record.frame[$property]=Get-SevenPrimitive $value}
-    $group=Invoke-SevenCom "$Phase.group" {$Target.shape.GroupItems};$count=Invoke-SevenCom "$Phase.group.count" {$group.Count}
+    $group=Invoke-SevenCom "$Phase.group" {return ,$Target.shape.GroupItems};$count=Invoke-SevenCom "$Phase.group.count" {$group.Count}
     # Dedicated bounded descriptor capture, not a legacy worker cap expansion.
     Assert-SevenProbe ((Test-SevenInteger $count) -and $count -ge 1 -and $count -le 32) "$Phase.group.count" '1..32 materialized items' (Get-SevenPrimitive $count)
     for($i=1;$i -le $count;$i++){
