@@ -82,7 +82,7 @@ test('current default requires actual theme, color map and unambiguous relations
   assert.equal(context.length,4);const [slide,layout,master,theme]=context.map(row=>row.path);
   for(const [part,from,to]of [[theme,'<a:dk1><a:srgbClr val="000000"/></a:dk1>','<a:dk1><a:srgbClr val="010101"/></a:dk1>'],[master,'tx1="dk1"','tx1="lt1"'],[layout,'<a:masterClrMapping/>','<a:overrideClrMapping tx1="dk1"/>'],[slide,'<a:masterClrMapping/>','<a:overrideClrMapping tx1="dk1"/>']]){const candidate=mutatePart(f.bytes,part,xml=>replaceOnce(xml,from,to));assert.throws(()=>compare(f,f.imports,candidate));}
   const relationship=slide.replace(/\/([^/]+)$/u,'/_rels/$1.rels');
-  const candidate=mutatePart(f.bytes,relationship,xml=>{const rows=[...xml.matchAll(/<Relationship\s[^>]*Type="[^"]*\/slideLayout"[^>]*\/>gu)];assert.equal(rows.length,1);return xml.replace('</Relationships>',rows[0][0].replace(/Id="[^"]+"/u,'Id="duplicate-layout"')+'</Relationships>');});assert.throws(()=>compare(f,f.imports,candidate));
+  const candidate=mutatePart(f.bytes,relationship,xml=>{const rows=[...xml.matchAll(/<Relationship\s[^>]*Type="[^"]*\/slideLayout"[^>]*\/>/gu)];assert.equal(rows.length,1);return xml.replace('</Relationships>',rows[0][0].replace(/Id="[^"]+"/u,'Id="duplicate-layout"')+'</Relationships>');});assert.throws(()=>compare(f,f.imports,candidate));
 });
 for(const [name,change]of Object.entries({
   width:c=>{c.referenceLines[0].stroke.width=17;},color:c=>{c.referenceLines[0].stroke.color='#123456';},dash:c=>{c.referenceLines[0].stroke.dash='dot';},
