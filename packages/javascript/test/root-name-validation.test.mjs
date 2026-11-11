@@ -42,8 +42,8 @@ for (const language of ['en-US', 'ar-SA']) test(`unreferenced root names reuse a
 
 for (const language of ['en-US', 'ar-SA']) test(`unrelated owner builtin kinds retain their real work reuse (${language})`, () => {
   const document = deck(language);
-  document.organization = { name: 'Organization', tagline: 'A tagline' };
-  document.speaker = { name: 'Speaker' };
+  document.organization = { id: 'organization', name: 'Organization', tagline: 'A tagline' };
+  document.speaker = { id: 'speaker', name: 'Speaker' };
   document.design.footer = { start: { text: '{{organization.name}} · {{organization.tagline}}' }, end: { text: '{{slide.number}} / {{deck.slideCount}}' } };
   document.slides[2].blocks[0].text = 'By {{speaker.name}} · {{organization.tagline}}';
   assert.equal(api.hasContentVariables(document), true, 'these are genuine content-variable uses');
@@ -106,12 +106,12 @@ for (const title of ['{{deck.name}}', 'var:deck.name']) test(`cover built-in ${t
 });
 
 test('recursive built-ins, declarations and every explicit template/value mode keep the full name key', () => {
-  const recursive = deck(); recursive.organization = { name: 'For {{deck.name}}' };
+  const recursive = deck(); recursive.organization = { id: 'organization', name: 'For {{deck.name}}' };
   recursive.slides[1].title = '{{organization.name}}';
   const variants = [
     [recursive, {}],
-    [{ ...deck(), speaker: { name: '{{organization.company.tagline}}' }, organization: [{ id: 'company', name: 'Company', tagline: '{{deck.name}}' }] }, {}],
-    [{ ...deck(), speaker: [{ id: 'guest', name: 'Guest', bio: '{{organization.name}}' }], organization: { name: '{{deck.name}}' } }, {}],
+    [{ ...deck(), speaker: { id: 'speaker', name: '{{organization.company.tagline}}' }, organization: [{ id: 'company', name: 'Company', tagline: '{{deck.name}}' }] }, {}],
+    [{ ...deck(), speaker: [{ id: 'guest', name: 'Guest', bio: '{{organization.name}}' }], organization: { id: 'organization', name: '{{deck.name}}' } }, {}],
     [{ ...deck(), variables: {} }, {}],
     [{ ...deck(), variables: { color: { type: 'color', value: '#123456' } } }, {}],
     [{ ...deck(), variables: { heading: { type: 'text', value: '{{deck.name}}' } } }, {}],
