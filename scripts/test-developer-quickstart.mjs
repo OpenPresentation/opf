@@ -45,7 +45,7 @@ async function run(command, args, options = {}) {
 }
 
 const deckInput = developerQuickstartInput(plan, {cwd: root});
-console.log('developer quickstart input: '+JSON.stringify(deckInput.provenance));
+console.log('developer quickstart input: '+JSON.stringify({plan,input:deckInput.provenance}));
 
 const tmpRoot = await mkdtemp(path.join(os.tmpdir(), 'opf-developer-quickstart-'));
 const projectDir = path.join(tmpRoot, 'project');
