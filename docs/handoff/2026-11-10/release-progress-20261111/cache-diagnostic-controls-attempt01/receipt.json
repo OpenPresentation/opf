@@ -1,0 +1,126 @@
+{
+  "scope": "MATCHED_CONTROL_PARTIAL_PASS_DIAGNOSTIC_BROWSER_UNRUN",
+  "source": "5f2cc26a73db1400b4fe2d9b8d7825aec610e356",
+  "terminalExit": 1,
+  "bundles": {
+    "old-control": {
+      "bytes": 5982220,
+      "sha256": "e32339ce6cde1f1406d2cd0f3cdd6127b0fed0ced4d7d420026509252e51c73d"
+    },
+    "new-off": {
+      "bytes": 5982220,
+      "sha256": "e32339ce6cde1f1406d2cd0f3cdd6127b0fed0ced4d7d420026509252e51c73d"
+    },
+    "new-on": {
+      "bytes": 5985834,
+      "sha256": "79a15323b6c60e7004b65c3f6193f04abf577f4f75a44fd23d1dbd2df8417202"
+    }
+  },
+  "flagOffByteEqual": true,
+  "diagnosticBundleDeltaBytes": 3614,
+  "steps": [
+    {
+      "name": "00-maintained-assets",
+      "exitCode": 0,
+      "startedAt": "2026-11-11T02:46:55.669Z",
+      "finishedAt": "2026-11-11T02:46:57.587Z",
+      "log": {
+        "path": "artifacts/owner-cache-diagnostic-controls-recipe2-01/00-maintained-assets.log",
+        "bytes": 116461,
+        "sha256": "96a634d003982efb6981c8287f2fa155e9576854f35f8d04bfd1a17b54d0b2b6"
+      }
+    },
+    {
+      "name": "01-old-control",
+      "exitCode": 0,
+      "startedAt": "2026-11-11T02:46:58.159Z",
+      "finishedAt": "2026-11-11T02:46:59.471Z",
+      "log": {
+        "path": "artifacts/owner-cache-diagnostic-controls-recipe2-01/01-old-control.log",
+        "bytes": 212,
+        "sha256": "61c3582001a41b72b52161dff10670c6a407fa50635e4e197d69eeded83056dd"
+      }
+    },
+    {
+      "name": "02-new-off",
+      "exitCode": 0,
+      "startedAt": "2026-11-11T02:46:59.727Z",
+      "finishedAt": "2026-11-11T02:47:01.062Z",
+      "log": {
+        "path": "artifacts/owner-cache-diagnostic-controls-recipe2-01/02-new-off.log",
+        "bytes": 208,
+        "sha256": "5e1b3881b5eae7750076af6afeb6fae8f20377da499e56dc549b592792421816"
+      }
+    },
+    {
+      "name": "03-new-on",
+      "exitCode": 0,
+      "startedAt": "2026-11-11T02:47:01.365Z",
+      "finishedAt": "2026-11-11T02:47:02.728Z",
+      "log": {
+        "path": "artifacts/owner-cache-diagnostic-controls-recipe2-01/03-new-on.log",
+        "bytes": 207,
+        "sha256": "a740ad7d9647be167b9284b0d6ce34aa722dc7384b78029589c088b661e26479"
+      }
+    },
+    {
+      "name": "04-overlay-refusals",
+      "exitCode": 0,
+      "startedAt": "2026-11-11T02:47:03.030Z",
+      "finishedAt": "2026-11-11T02:47:03.182Z",
+      "log": {
+        "path": "artifacts/owner-cache-diagnostic-controls-recipe2-01/04-overlay-refusals.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "05-flag-off-build-on-runner-refusal",
+      "exitCode": 1,
+      "startedAt": "2026-11-11T02:47:03.481Z",
+      "finishedAt": "2026-11-11T02:47:03.946Z",
+      "log": {
+        "path": "artifacts/owner-cache-diagnostic-controls-recipe2-01/05-flag-off-build-on-runner-refusal.log",
+        "bytes": 731,
+        "sha256": "7bc4917b9e5353ef06862cd34bd3728a9b1ed5e631e0000c60bacf834aeeb088"
+      }
+    },
+    {
+      "name": "06-flag-on-build-off-runner-refusal",
+      "exitCode": 1,
+      "startedAt": "2026-11-11T02:47:04.249Z",
+      "finishedAt": "2026-11-11T02:47:04.732Z",
+      "log": {
+        "path": "artifacts/owner-cache-diagnostic-controls-recipe2-01/06-flag-on-build-off-runner-refusal.log",
+        "bytes": 731,
+        "sha256": "f67ee7a8e856c6ca9947b25cdbe679e44c10d75e27b1676b4842bb14cff4b16c"
+      }
+    },
+    {
+      "name": "07-current-off-smoke",
+      "exitCode": 0,
+      "startedAt": "2026-11-11T02:47:05.036Z",
+      "finishedAt": "2026-11-11T02:47:37.074Z",
+      "log": {
+        "path": "artifacts/owner-cache-diagnostic-controls-recipe2-01/07-current-off-smoke.log",
+        "bytes": 2843,
+        "sha256": "638c6d28b337c23e7bbaea41c17744c86dc23ca2a117a1a7fa4069d6b826240a"
+      }
+    },
+    {
+      "name": "08-current-on-smoke",
+      "exitCode": 1,
+      "startedAt": "2026-11-11T02:47:37.371Z",
+      "finishedAt": "2026-11-11T02:47:37.831Z",
+      "log": {
+        "path": "artifacts/owner-cache-diagnostic-controls-recipe2-01/08-current-on-smoke.log",
+        "bytes": 1520,
+        "sha256": "0823d47f5024a309f317773b77908e8380cf4178d014c3f529ac948141d114fd"
+      }
+    }
+  ],
+  "failure": "Diagnostic ownershipSource includes sites metadata; strict fileRecord identity comparison rejected its extra fields before browser startup. Actual path, bytes and hash match. No original artifact or receipt edited.",
+  "diagnosticBrowserStarted": false,
+  "formalAcceptance": false,
+  "originalFormalFilesPreserved": 20
+}
