@@ -78,7 +78,14 @@ export function assertSignedParetoComboData(parts,number,data,{parser,fflate},id
     assert.equal(entry['c:val']['c:numRef']['c:f'],range(letter,data.rows.length),id+': combo value formula');
     assert.deepEqual(cache(entry['c:tx'],'string',1,id),[data.columns[index+1]],id+': combo series name');
     assert.deepEqual(cache(entry['c:cat'],'string',data.rows.length,id),data.rows.map(row=>String(row[0])),id+': sorted categories');
-    assert.deepEqual(cache(entry['c:val'],'number',data.rows.length,id),data.rows.map(row=>String(row[index+1])),id+': complete signed/cumulative cache');
+    // Office can spell the same binary64 value with a different decimal. Keep
+    // the raw cache untouched; compare every complete finite value exactly.
+    const values=cache(entry['c:val'],'number',data.rows.length,id).map(value=>{
+      const match=/^-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/u.exec(value);
+      assert.ok(match&&match[0]===value,id+': numeric signed/cumulative cache grammar');
+      const result=Number(value);assert.ok(Number.isFinite(result),id+': finite signed/cumulative cache');return result;
+    });
+    assert.deepEqual(values,data.rows.map(row=>row[index+1]),id+': complete signed/cumulative cache');
   }
   const axes=[...list(plot['c:catAx']).map(node=>({kind:'category',node})),...list(plot['c:valAx']).map(node=>({kind:'value',node}))];
   assert.equal(axes.length,4,id+': two category and two value axes');

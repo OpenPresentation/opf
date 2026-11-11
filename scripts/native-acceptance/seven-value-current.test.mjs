@@ -95,3 +95,40 @@ test('only explicit current context reads the exact static signed Pareto combo; 
  assert.throws(()=>inspectSevenArchive(zip(coherent),deps,f.archiveContext),/complete signed\/cumulative cache|complete sorted\/derived workbook/,'Even coherent derived-cache/workbook edits cannot be waived as recalculation');
  const context=currentSevenArchiveContext();assert.throws(()=>inspectSevenArchive(f.input,deps,{...context,fixture:{...context.fixture,sha256:'0'.repeat(64)}}));assert.throws(()=>inspectSevenArchive(f.input,deps,{...context,source:{slides:[]}}));
 });
+
+test('complete signed Pareto caches accept only exact finite numeric identity and retain raw decimal spellings',async()=>{
+ const f=await fixture(),part='ppt/charts/chart3.xml',original=deps.unzipSync(f.input),before=Buffer.from(original[part]),expected=0.7934782608695652;
+ for(const spelling of ['0.79347826086956519','7.934782608695652e-1','0.793478260869565200']){
+  assert.equal(Number(spelling),expected,'Same IEEE754 value, not a tolerance');
+  const parts=deps.unzipSync(f.input);change(parts,part,text=>once(text,'<c:v>0.7934782608695652</c:v>','<c:v>'+spelling+'</c:v>'));
+  const input=zip(parts),copy=Buffer.from(input),chart=inspectSevenArchive(input,deps,f.archiveContext).slides[2].shapes.find(shape=>shape.kind==='chart').chart;
+  assert.equal(chart.groups[1].properties['c:ser']['c:val']['c:numRef']['c:numCache']['c:pt'][1]['c:v'],spelling,'Actual raw cache evidence is not normalized');
+  assert.equal(chart.series[1]['c:val'].values[1],expected);assert.deepEqual(input,copy,'Inspection does not rewrite ZIP bytes');
+ }
+ assert.deepEqual(Buffer.from(deps.unzipSync(f.input)[part]),before,'Original cache bytes stay unchanged');
+ // Every signed and cumulative value is checked, including unselected slide3.
+ const integers=deps.unzipSync(f.input);change(integers,part,text=>text.replaceAll('<c:v>-8</c:v>','<c:v>-8.000e0</c:v>').replaceAll('<c:v>42</c:v>','<c:v>4.2e1</c:v>'));
+ assert.doesNotThrow(()=>inspectSevenArchive(zip(integers),deps,f.archiveContext));
+});
+
+test('signed Pareto cache grammar, completeness and one-ULP coherent tampering still refuse exactly',async()=>{
+ const f=await fixture(),part='ppt/charts/chart3.xml',leaf='<c:v>0.7934782608695652</c:v>',expected=0.7934782608695652;
+ const bits=new DataView(new ArrayBuffer(8));bits.setFloat64(0,expected);bits.setBigUint64(0,bits.getBigUint64(0)+1n);const next=bits.getFloat64(0);
+ assert.notEqual(next,expected);assert.equal(next,0.7934782608695653,'Exactly the adjacent representable value');
+ for(const value of [String(next),'NaN','Infinity','-Infinity','1e309','0x1','+0.7934782608695652',' 0.7934782608695652','0.7934782608695652\n','0.7934782608695652x','']){
+  const parts=deps.unzipSync(f.input);change(parts,part,text=>once(text,leaf,'<c:v>'+value+'</c:v>'));
+  assert.throws(()=>inspectSevenArchive(zip(parts),deps,f.archiveContext),undefined,'Nonidentical or malformed numeric value '+JSON.stringify(value));
+ }
+ const malformedSigned=deps.unzipSync(f.input);change(malformedSigned,part,text=>text.replaceAll('<c:v>-8</c:v>','<c:v>-8x</c:v>'));assert.throws(()=>inspectSevenArchive(zip(malformedSigned),deps,f.archiveContext),/numeric signed\/cumulative cache grammar/,'Signed values are not skipped either');
+ for(const edit of [
+  text=>once(text,'<c:pt idx="1">'+leaf+'</c:pt>',''),
+  text=>once(text,'<c:pt idx="1">'+leaf+'</c:pt>','<c:pt idx="0">'+leaf+'</c:pt>'),
+  text=>once(text,'<c:pt idx="1">'+leaf+'</c:pt>','<c:pt idx="1">'+leaf+'</c:pt><c:pt idx="1">'+leaf+'</c:pt>'),
+ ]){
+  const parts=deps.unzipSync(f.input);change(parts,part,edit);assert.throws(()=>inspectSevenArchive(zip(parts),deps,f.archiveContext),'Complete ordered cache required');
+ }
+ const coherent=deps.unzipSync(f.input),combo=f.bound.archive.slides[2].shapes.find(shape=>shape.kind==='chart').chart;
+ change(coherent,part,text=>once(text,leaf,'<c:v>'+String(next)+'</c:v>'));
+ const workbook=deps.unzipSync(coherent[combo.workbook.part]);change(workbook,'xl/worksheets/sheet1.xml',text=>once(text,'<c r="C3" s="1"><v>0.7934782608695652</v></c>','<c r="C3" s="1"><v>'+String(next)+'</v></c>'));coherent[combo.workbook.part]=deps.zipSync(workbook);
+ assert.throws(()=>inspectSevenArchive(zip(coherent),deps,f.archiveContext),/complete signed\/cumulative cache/,'Coherent workbook/cache change by one ULP still violates the exact source contract');
+});
