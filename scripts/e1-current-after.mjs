@@ -254,6 +254,13 @@ export function verifySource(repo, authority, examples, gallery) {
     examples: expected,
     layouts: expectedLayouts,
     galleryBuilder: { file: buildFile, sha256: sha(builder) },
+    ...(/^0\.34\.\d+$/.test(authority.release) ? {
+      comparisonSchema: {
+        file: "spec/schemas/opf.schema.json",
+        sha256: sha(blob(repo, authority.commit, "spec/schemas/opf.schema.json")),
+        schema: parse(blob(repo, authority.commit, "spec/schemas/opf.schema.json")),
+      },
+    } : {}),
   };
 }
 
@@ -382,6 +389,77 @@ export function currentGallerySource(raw, gallery) {
     removed,
     authoredSlidesSha256: sha(JSON.stringify(original.slides)),
   };
+}
+// A comparison-input projection for the published 0.34 vocabulary, never a runtime legacy upgrader.
+// Only these typed owners are visited. Strings and nested payload/data/extension trees are opaque.
+export function comparisonInputSource(raw, gallery, release, schema) {
+  assert.match(release, /^0\.(33|34)\.\d+$/, "Comparison projection supports published 0.33/0.34 only");
+  const current = currentGallerySource(raw, gallery);
+  if (release.startsWith("0.33.")) return current;
+  const columns = ["start", "center", "end", "start+center", "center+end", "start+center+end"],
+    rows = ["top", "middle", "bottom", "top+middle", "middle+bottom", "top+middle+bottom"],
+    regions = [...columns, ...rows, ...rows.flatMap(row => columns.map(column => row + ":" + column))],
+    slideSchema = schema?.$defs?.Slide,
+    furnitureSchema = schema?.$defs?.HeaderFooter;
+  assert.equal(schema?.properties?.design?.$ref, "#/$defs/Design");
+  assert.equal(slideSchema?.properties?.design?.$ref, "#/$defs/SlideDesign");
+  assert.ok(schema.$defs.SlideDesign?.allOf?.some(value => value.$ref === "#/$defs/Design"));
+  for (const name of ["header", "footer"]) {
+    assert.ok(schema.$defs.Design?.properties?.[name]?.oneOf?.some(value => value.$ref === "#/$defs/HeaderFooter"));
+    assert.ok(!Object.hasOwn(slideSchema.properties, name), "Unexpected direct Slide furniture schema");
+  }
+  assert.equal(slideSchema?.additionalProperties, false, "Closed release Slide schema required");
+  assert.deepEqual(new Set(Object.entries(slideSchema.properties).filter(([, value]) =>
+    value.$ref === "#/$defs/ContentPayload").map(([key]) => key)), new Set(regions),
+    "Exact 48 release ContentPayload region names required");
+  assert.equal(furnitureSchema?.additionalProperties, false, "Closed release HeaderFooter required");
+  assert.deepEqual(Object.keys(furnitureSchema.properties), ["start", "center", "end"]);
+  const regionNames = new Map(regions.map(key => [key.replaceAll("start", "left").replaceAll("end", "right"), key])),
+    deck = structuredClone(current.deck), changes = [];
+  const pointer = (base, key) => base + "/" + key.replaceAll("~", "~0").replaceAll("/", "~1");
+  function rename(owner, base, names, allowed) {
+    assert.ok(plain(owner), "Typed comparison owner must be an object: " + base);
+    const entries = Object.entries(owner), targets = new Set();
+    for (const [key] of entries) {
+      const target = names.get(key) ?? key;
+      assert.ok(Object.hasOwn(allowed, target), "Unknown comparison key: " + pointer(base, key));
+      assert.ok(!targets.has(target), "Colliding comparison key: " + pointer(base, key));
+      targets.add(target);
+    }
+    for (const [key] of entries) delete owner[key];
+    for (const [key, value] of entries) {
+      const target = names.get(key) ?? key;
+      Object.defineProperty(owner, target, { value, enumerable: true, writable: true, configurable: true });
+      if (target !== key) changes.push({ from: pointer(base, key), to: pointer(base, target) });
+    }
+  }
+  function furniture(design, base) {
+    if (design === undefined) return;
+    assert.ok(plain(design), "Typed comparison design must be an object: " + base);
+    for (const name of ["header", "footer"]) {
+      if (!Object.hasOwn(design, name) || design[name] === false) continue;
+      rename(design[name], pointer(base, name), new Map([["left", "start"], ["right", "end"]]), furnitureSchema.properties);
+    }
+  }
+  furniture(deck.design, "/design");
+  for (const [index, slide] of deck.slides.entries()) {
+    rename(slide, "/slides/" + index, regionNames, slideSchema.properties);
+    furniture(slide.design, "/slides/" + index + "/design");
+  }
+  // Inverting only the recorded property-name changes must recover every original value and boundary.
+  const inverse = structuredClone(deck);
+  for (const change of changes.toReversed()) {
+    const from = change.from.split("/").slice(1), to = change.to.split("/").slice(1),
+      owner = to.slice(0, -1).reduce((value, key) => value[key], inverse), value = owner[to.at(-1)];
+    delete owner[to.at(-1)];
+    Object.defineProperty(owner, from.at(-1), { value, enumerable: true, writable: true, configurable: true });
+  }
+  assert.deepEqual(inverse, current.deck, "Only recorded typed property names may change");
+  const bytes = Buffer.from(encode(deck));
+  return { ...current, deck, bytes, projection: {
+    policy: "opf-e3-comparison-input-034/v1", release,
+    originalSha256: sha(raw), currentGallerySha256: sha(current.bytes), projectedSha256: sha(bytes), changes,
+  } };
 }
 export function makePlan(recovery, currentSource, only) {
   const { record, assets } = recovery,
@@ -542,7 +620,7 @@ export async function run(options, { execute = spawnSync } = {}) {
     plan = makePlan(recovered, source, only);
   const prepared = plan.map((row) => ({
     ...row,
-    current: currentGallerySource(row.raw, galleryModule.gallery),
+    current: comparisonInputSource(row.raw, galleryModule.gallery, authority.release, source.comparisonSchema?.schema),
   }));
   // Validate flags before creating any output, or executing any renderer.
   cliInvocation(installed.cli, "input", "out", options);
@@ -561,6 +639,9 @@ export async function run(options, { execute = spawnSync } = {}) {
       file: path.basename(fileURLToPath(import.meta.url)),
       ...fact(fileURLToPath(import.meta.url)),
       galleryBuilder: source.galleryBuilder,
+      ...(source.comparisonSchema ? { comparisonSchema: {
+        file: source.comparisonSchema.file, sha256: source.comparisonSchema.sha256,
+      } } : {}),
     },
     consumer: {
       packages: installed.packages,
@@ -618,6 +699,7 @@ export async function run(options, { execute = spawnSync } = {}) {
         current: fact(input),
         authoredSlidesSha256: row.current.authoredSlidesSha256,
         removedHistoricalSnapshots: row.current.removed,
+        ...(row.current.projection ? { comparisonInputProjection: row.current.projection } : {}),
         slides: row.slides.map((s) => ({
           ordinal: s.ordinal,
           id: s.id,

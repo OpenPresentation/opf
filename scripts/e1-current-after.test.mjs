@@ -6,6 +6,7 @@ import path from "node:path";
 import {
   child,
   currentGallerySource,
+  comparisonInputSource,
   cliInvocation,
   validateCliOutput,
   captureCliAttempt,
@@ -181,6 +182,184 @@ test("no embedded catalog is a supported unchanged current-gallery deck", () => 
   const d = deck();
   delete d.catalogs;
   assert.deepEqual(currentGallerySource(Buffer.from(JSON.stringify(d)), gallery).deck, d);
+});
+
+// Exact affected objects from the retained pilot033 input bc1f4d001e04450b…; other slots are placeholders,
+// not a claim of a new full43 validation. Historical source JSON and images are never modified.
+const pilotRegionSlides = {
+  "36": {
+    "id": "dynamic-promoted-columns",
+    "title": "What the pilot asks of us",
+    "left": {
+      "text": "The pilot shows a clear gain in completion with modest effort."
+    },
+    "center+right": {
+      "items": [
+        "Two teams must release a lead at 20%",
+        "Weekly reviews need a fixed slot",
+        "Analytics needs read access to both workflows"
+      ]
+    }
+  },
+  "37": {
+    "id": "dynamic-promoted-grid",
+    "title": "From baseline to decision in six weeks",
+    "top:left": {
+      "metric": {
+        "value": 52,
+        "label": "Participants"
+      }
+    },
+    "top:center": {
+      "metric": {
+        "value": "84%",
+        "label": "Completion"
+      }
+    },
+    "top:right": {
+      "metric": {
+        "value": "6.2",
+        "unit": "min",
+        "label": "Median time"
+      }
+    },
+    "middle+bottom:left+center+right": {
+      "timeline": {
+        "events": [
+          {
+            "when": "Week 1",
+            "what": "Baseline"
+          },
+          {
+            "when": "Weeks 2–5",
+            "what": "Pilot"
+          },
+          {
+            "when": "Week 6",
+            "what": "Review and decide"
+          }
+        ]
+      }
+    }
+  },
+  "42": {
+    "id": "dynamic-chart-quote",
+    "title": "The numbers and the voice agree",
+    "left+center": {
+      "chart": {
+        "type": "column",
+        "axisTitles": {
+          "category": "Week",
+          "value": "Task completion"
+        },
+        "data": {
+          "columns": [
+            "Week",
+            {
+              "name": "Task completion",
+              "format": "0%"
+            }
+          ],
+          "rows": [
+            [
+              "1",
+              0.68
+            ],
+            [
+              "2",
+              0.72
+            ],
+            [
+              "3",
+              0.76
+            ],
+            [
+              "4",
+              0.84
+            ]
+          ]
+        }
+      }
+    },
+    "right": {
+      "quote": {
+        "text": "The weekly review keeps the next step clear.",
+        "attribution": "Product lead",
+        "source": "Illustrative quotation"
+      }
+    }
+  }
+};
+const projectionSchema = () => JSON.parse(fs.readFileSync(new URL("../spec/schemas/opf.schema.json", import.meta.url)));
+const pilotShape = () => {
+  const d = deck();
+  d.design.footer = { left: { text: "Illustrative example • fictional data" }, right: { text: "{{slide.number}}" } };
+  d.slides = Array.from({ length: 43 }, (_, i) => ({ id: "control-" + i }));
+  for (const [i, slide] of Object.entries(pilotRegionSlides)) d.slides[Number(i)] = structuredClone(slide);
+  return d;
+};
+test("034 comparison projection changes exactly the nine retained pilot typed keys, not their values", () => {
+  const d = pilotShape(), raw = Buffer.from(JSON.stringify(d)), before = Buffer.from(raw),
+    result = comparisonInputSource(raw, gallery, "0.34.0", projectionSchema());
+  const paths = [
+    ["/design/footer/left", "/design/footer/start"], ["/design/footer/right", "/design/footer/end"],
+    ["/slides/36/left", "/slides/36/start"], ["/slides/36/center+right", "/slides/36/center+end"],
+    ["/slides/37/top:left", "/slides/37/top:start"], ["/slides/37/top:right", "/slides/37/top:end"],
+    ["/slides/37/middle+bottom:left+center+right", "/slides/37/middle+bottom:start+center+end"],
+    ["/slides/42/left+center", "/slides/42/start+center"], ["/slides/42/right", "/slides/42/end"],
+  ];
+  assert.deepEqual(result.projection.changes, paths.map(([from, to]) => ({ from, to })));
+  const at = (v, pointer) => pointer.split("/").slice(1).reduce((value, key) => value[key], v);
+  for (const [from, to] of paths) assert.deepEqual(at(result.deck, to), at(d, from));
+  assert.ok(raw.equals(before));
+  assert.equal(result.projection.originalSha256, sha(raw));
+  assert.equal(result.projection.currentGallerySha256, sha(currentGallerySource(raw, gallery).bytes));
+  assert.equal(result.projection.projectedSha256, sha(result.bytes));
+  assert.equal(result.authoredSlidesSha256, sha(JSON.stringify(d.slides)), "Original authored identity remains explicit");
+  assert.deepEqual(JSON.parse(result.bytes), result.deck);
+});
+test("033 takes the exact existing path, including stale historical keys and bytes", () => {
+  const raw = Buffer.from(JSON.stringify(pilotShape()));
+  assert.deepEqual(comparisonInputSource(raw, gallery, "0.33.0"), currentGallerySource(raw, gallery));
+});
+test("034 only visits schema-owned property names; literals, data, code, extensions and physical coordinates stay exact", () => {
+  const d = deck();
+  d.design.header = false;
+  d.slides[0].design = { header: { left: { text: "slides.0.left" } }, footer: false };
+  d.slides[1].blocks = [{ type: "code", code: "slides.0.left = 'right';" },
+    { chart: { data: { columns: ["left", "right"], rows: [["left", 7]] } } }];
+  d.slides[1].extensions = { left: "right", nested: { lang: "ar-SA", left: { right: 9 } }, text: "slides.0.left" };
+  d.slides[1].shapes = [{ x: 12, y: 24, width: 100, height: 30, padding: { left: 9, right: 4 } }];
+  const r = comparisonInputSource(Buffer.from(JSON.stringify(d)), gallery, "0.34.1", projectionSchema());
+  assert.deepEqual(r.projection.changes, [{ from: "/slides/0/design/header/left", to: "/slides/0/design/header/start" }]);
+  assert.deepEqual(r.deck.slides[1], d.slides[1]);
+  assert.equal(r.deck.slides[0].design.header.start.text, "slides.0.left");
+  assert.equal(r.deck.design.header, false);
+  assert.equal(r.deck.slides[0].design.footer, false);
+});
+for (const [name, mutate] of [
+  ["old/new region collision", d => { d.slides[36].start = d.slides[36].left; }],
+  ["old/new furniture collision", d => { d.design.footer.start = d.design.footer.left; }],
+  ["unknown region", d => { d.slides[36]["left+right"] = { text: "Keep" }; }],
+  ["mixed region spelling", d => { d.slides[36]["left+end"] = { text: "Keep" }; }],
+  ["unknown furniture slot", d => { d.design.footer.middle = { text: "Keep" }; }],
+  ["direct Slide furniture is not a schema owner", d => { d.slides[36].footer = { left: { text: "Keep" } }; }],
+  ["malformed furniture", d => { d.design.footer = "left"; }],
+]) test("034 refuses " + name, () => {
+  const d = pilotShape(); mutate(d);
+  const raw = Buffer.from(JSON.stringify(d)), before = Buffer.from(raw);
+  assert.throws(() => comparisonInputSource(raw, gallery, "0.34.0", projectionSchema()));
+  assert.ok(raw.equals(before));
+});
+test("unbound/future versions and different schema domains cannot authorize the 034 projection", () => {
+  const raw = Buffer.from(JSON.stringify(pilotShape()));
+  for (const release of ["0.34.0-dev", "0.35.0", "0.32.0", "034", undefined])
+    assert.throws(() => comparisonInputSource(raw, gallery, release, projectionSchema()));
+  assert.throws(() => comparisonInputSource(raw, gallery, "0.34.0"));
+  const schema = projectionSchema(); schema.$defs.Slide.properties.left = { $ref: "#/$defs/ContentPayload" };
+  assert.throws(() => comparisonInputSource(raw, gallery, "0.34.0", schema));
+  const furniture = projectionSchema(); furniture.$defs.HeaderFooter.properties.left = furniture.$defs.HeaderFooter.properties.start;
+  assert.throws(() => comparisonInputSource(raw, gallery, "0.34.0", furniture));
 });
 
 test("installed CLI receives exact supported flags with no font override, force or pagination", () => {
