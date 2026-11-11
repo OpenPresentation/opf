@@ -11,6 +11,7 @@ import {readB07PackedProof} from './b07-current-generate.mjs';
 import {PRIMARY_CASE_NAMES} from './fixture-source.mjs';
 import {assertReferenceWitnessPostflight} from './reference-chart-profile.mjs';
 import {inspectDenseArchive,assertDenseLifecycle} from './dense-survey-contract.mjs';
+import {REFERENCE_NAME_PROFILE,REFERENCE_NAME_POLICY,REFERENCE_NAME_CASE,referenceNamePlan,createReferenceNameSource,bindReferenceNameSource,assertReferenceNameSelection,assertReferenceNameRequest,compareReferenceNameEdit} from './reference-name-contract.mjs';
 
 const ROOT=fs.realpathSync(fileURLToPath(new URL('../../',import.meta.url)));
 export const FURNITURE_PROFILE='full59-ordinary-furniture-lifecycle-v1';
@@ -28,7 +29,7 @@ export const DENSE_FURNITURE_PROFILE='full59-dense-events-furniture-lifecycle-v1
 export const DENSE_FURNITURE_POLICY=Object.freeze({...FURNITURE_POLICY,policy:'dense-events-exact50-global-zero-after-completed-owned-quit-v1'});
 const workerFiles=['native-furniture-control.ps1','native-process.ps1','native-process-check.ps1','native-furniture-harness-check.ps1'].map(n=>'packages/pptx/test/'+n);
 const entries=['furniture-profile.mjs','furniture-postflight.ps1','furniture-profile.test.mjs','furniture-control-fixture.mjs','furniture-postflight-self-test.ps1','run-windows.ps1'].map(n=>'scripts/native-acceptance/'+n);
-const files=dense=>ownedControllerFiles(ROOT,[...entries,...(dense?['scripts/native-acceptance/dense-furniture-profile.mjs','scripts/native-acceptance/run-dense-furniture-profile.ps1','scripts/native-acceptance/dense-furniture-profile.test.mjs']:[]),...workerFiles,'scripts/native-acceptance/owned-postflight.ps1',FURNITURE_POLICY.observerSource]);
+const files=(dense,reference=false)=>ownedControllerFiles(ROOT,[...entries,...(reference?['scripts/native-acceptance/reference-name-contract.mjs','scripts/native-acceptance/reference-name-profile.mjs','scripts/native-acceptance/reference-name-profile.test.mjs','scripts/native-acceptance/run-reference-name-profile.ps1']:[]),...(dense?['scripts/native-acceptance/dense-furniture-profile.mjs','scripts/native-acceptance/run-dense-furniture-profile.ps1','scripts/native-acceptance/dense-furniture-profile.test.mjs']:[]),...workerFiles,'scripts/native-acceptance/owned-postflight.ps1',FURNITURE_POLICY.observerSource]);
 const hex=v=>assert.match(v??'',/^[a-f0-9]{64}$/u);
 const json=v=>Buffer.from(JSON.stringify(v,null,2)+'\n');
 const wire=v=>JSON.stringify(v).split('').map(c=>c.charCodeAt(0)>126?'\\u'+c.charCodeAt(0).toString(16).padStart(4,'0'):c).join('');
@@ -46,11 +47,13 @@ function assertFurnitureSelection(suite,caseId,plan){
  assert.ok(!caseId.includes('all-seven')&&!['feature-dense-events','table-colors'].includes(caseId),'Dedicated case refused');
  assert.ok(Array.isArray(plan)&&plan.length<=20);return selected;
 }
-// Two closed internal routes share the same lifecycle/kernel/identity implementation.
+// Three closed internal routes share the same lifecycle/kernel/identity implementation.
 // No caller can provide caps, policy, case allowlists or an alternate observer.
-function furnitureRoute(dense){
- const profile=dense?DENSE_FURNITURE_PROFILE:FURNITURE_PROFILE,policy=dense?DENSE_FURNITURE_POLICY:FURNITURE_POLICY;
+function furnitureRoute(mode){
+ assert.ok(mode===false||mode===true||mode==='reference-name','Only three internal closed furniture routes');const dense=mode===true,reference=mode==='reference-name';
+ const profile=reference?REFERENCE_NAME_PROFILE:dense?DENSE_FURNITURE_PROFILE:FURNITURE_PROFILE,policy=reference?REFERENCE_NAME_POLICY:dense?DENSE_FURNITURE_POLICY:FURNITURE_POLICY;
  function selection(suite,caseId,plan){
+  if(reference){assert.equal(caseId,REFERENCE_NAME_CASE);const selected=suite.cases.find(row=>row.id===caseId);assert.ok(selected);assert.deepEqual(plan,referenceNamePlan());return selected;}
   if(!dense)return assertFurnitureSelection(suite,caseId,plan);
   assert.equal(suite.schemaVersion,1);assert.equal(suite.nativeAcceptance,false);assert.equal(suite.provenance.nativeAcceptance,false);assert.equal(suite.provenance.registryAcceptance,false);assert.deepEqual(suite.cases.map(c=>c.id),FULL59_CASE_IDS);
   assert.equal(caseId,'feature-dense-events');const selected=suite.cases.find(c=>c.id===caseId);assert.ok(selected);assert.equal(selected.worker,'furniture');assert.equal(selected.automaticControlEligible,false);assert.equal(selected.slideCount,1);assert.deepEqual(plan,[]);return selected;
@@ -59,8 +62,11 @@ function bindFurnitureEnvelope(file,sha){
  hex(sha);const bytes=readOwnedFile(file,4194304);assert.equal(digest(bytes),sha);return validateFurnitureEnvelope(JSON.parse(bytes),bytes,sha);
 }
 function validateFurnitureEnvelope(e,bytes=json(e),sha=digest(bytes)){
- keys(e,['schemaVersion','profile','policy','generation','controller','node','selectedCase','plan','captureTextFonts','nativeAcceptance','registryAcceptance']);
+ keys(e,['schemaVersion','profile','policy','generation','controller','node','selectedCase','plan','captureTextFonts','nativeAcceptance','registryAcceptance',...(reference?['sourceAdmission']:[])]);
  assert.equal(e.schemaVersion,1);assert.equal(e.profile,profile);assert.deepEqual(e.policy,policy);assert.equal(e.nativeAcceptance,false);assert.equal(e.registryAcceptance,false);assert.equal(typeof e.captureTextFonts,'boolean');
+ if(reference){
+  const source=bindReferenceNameSource(e.sourceAdmission,ROOT),g=e.sourceAdmission.generation;assert.deepEqual(e.generation,{suiteDirectory:g.suiteDirectory,manifestSha256:g.manifestSha256,producerRepository:g.preparationRepository,consumer:g.consumer,packedProof:null,provenance:g.provenance});assert.deepEqual(e.selectedCase,source.selected);assertReferenceNameSelection(source.source.deck,e.selectedCase,e.plan);assert.equal(e.captureTextFonts,false);assert.deepEqual(e.controller,repositoryIdentity(ROOT,files(false,true)));assert.equal(e.controller.dirty,false);assertNode(e.node);assert.deepEqual(fileIdentity(at(ROOT,workerFiles[1])),PROCESS_HELPER);assert.equal(digest(readOwnedFile(at(ROOT,FURNITURE_POLICY.observerSource))),FURNITURE_POLICY.observerSourceSha256);return{envelope:e,envelopeSha256:sha,envelopeBytes:bytes,suite:source.suite,input:source.input,planBytes:json(referenceNamePlan()),reference:source};
+ }
  keys(e.generation,['suiteDirectory','manifestSha256','producerRepository','consumer','packedProof','provenance']);
  const g=e.generation;assert.equal(g.manifestSha256,FULL59_SHA256);assert.equal(g.provenance.suiteRepository.revision,PRODUCER);assert.equal(g.provenance.suiteRepository.directory,g.producerRepository);
  assert.equal(digest(readOwnedFile(at(g.suiteDirectory,'suite.json'))),FULL59_SHA256);const suite=readOwnedJson(at(g.suiteDirectory,'suite.json'));assert.deepEqual(suite.provenance,g.provenance);
@@ -76,6 +82,7 @@ function validateFurnitureEnvelope(e,bytes=json(e),sha=digest(bytes)){
  if(dense)assert.equal(e.captureTextFonts,false);return {envelope:e,envelopeSha256:sha,envelopeBytes:bytes,suite,input,planBytes,...(dense?{archive}:{})};
 }
 function createFurnitureEnvelope(options){
+ if(reference){const sourceAdmission=createReferenceNameSource(options,ROOT),g=sourceAdmission.generation,e={schemaVersion:1,profile,policy,sourceAdmission,generation:{suiteDirectory:g.suiteDirectory,manifestSha256:g.manifestSha256,producerRepository:g.preparationRepository,consumer:g.consumer,packedProof:null,provenance:g.provenance},controller:repositoryIdentity(ROOT,files(false,true)),node:{path:fs.realpathSync(process.execPath),version:process.version,identity:fileIdentity(process.execPath)},selectedCase:g.selectedCase,plan:referenceNamePlan(),captureTextFonts:false,nativeAcceptance:false,registryAcceptance:false};validateFurnitureEnvelope(e);return e;}
  keys(options,['suiteDirectory','producerRepository','consumer','packedProof','caseId','captureTextFonts']);
  const suite=readOwnedJson(at(options.suiteDirectory,'suite.json'));
  const selected=suite.cases.find(c=>c.id===options.caseId);assert.ok(selected);
@@ -99,9 +106,10 @@ function verifyFurnitureExecution(file,sha,output,office){
  return {...b,output,request:q,requestSha256:digest(readOwnedFile(at(output,'execution-request.json')))};
 }
 function assertFurnitureReady(terminal,report,request,stageBytes){
+ if(reference)assertReferenceNameRequest(request);
  assert.equal(terminal.timedOut,false);assert.equal(terminal.exitCode,0);assert.equal(terminal.cleanupConfirmed,true);assert.equal(terminal.lastDurableStage,'worker.complete');assert.equal(terminal.lastDurableStatus,'success');
  assert.equal(report.cleanupConfirmed,true);assert.equal(report.officeOperationsStopped,false);assert.equal(report.error,null);assert.equal(report.lastStage,'worker.complete');assert.equal(report.lastStatus,'success');
- assert.equal(report.schemaVersion,1);assert.equal(request.profile,profile);assert.deepEqual(request.policy,policy);assert.equal(request.nativeAcceptance,false);assert.equal(request.registryAcceptance,false);assert.ok(Number.isInteger(request.timeoutSeconds)&&request.timeoutSeconds>=5&&request.timeoutSeconds<=60);assert.ok(dense?request.caseId==='feature-dense-events':ORDINARY_CASE_IDS.includes(request.caseId),'Exact closed FULL59 case required');assert.equal(request.runOfficeRequested,true);assert.equal(request.readOnlySurvey,dense);assert.equal(report.readOnlySurvey,dense);if(dense){assert.equal(request.slideCount,1);assert.equal(request.captureTextFonts,false);assert.deepEqual(request.actionPlan.actions,[]);for(const key of ['completed','styleEdits','chartPoints','chartSeriesEdits'])assert.deepEqual(report.actionPlan[key],[]);}assert.equal(report.captureTextFonts,request.captureTextFonts);
+ assert.equal(report.schemaVersion,1);assert.equal(request.profile,profile);assert.deepEqual(request.policy,policy);assert.equal(request.nativeAcceptance,false);assert.equal(request.registryAcceptance,false);assert.ok(Number.isInteger(request.timeoutSeconds)&&request.timeoutSeconds>=5&&request.timeoutSeconds<=60);assert.ok(reference?request.caseId===REFERENCE_NAME_CASE:dense?request.caseId==='feature-dense-events':ORDINARY_CASE_IDS.includes(request.caseId),'Exact closed route case required');assert.equal(request.runOfficeRequested,true);assert.equal(request.readOnlySurvey,dense);assert.equal(report.readOnlySurvey,dense);if(dense){assert.equal(request.slideCount,1);assert.equal(request.captureTextFonts,false);assert.deepEqual(request.actionPlan.actions,[]);for(const key of ['completed','styleEdits','chartPoints','chartSeriesEdits'])assert.deepEqual(report.actionPlan[key],[]);}assert.equal(report.captureTextFonts,request.captureTextFonts);
  assert.deepEqual(report.globalPreflight,{policy:'strict-name-query-v1',count:0});assert.deepEqual(report.actionPlan.actions,request.actionPlan.actions);assert.deepEqual(report.actionPlan.completed,request.actionPlan.actions.map((a,i)=>({index:i+1,op:a.op,status:'success'})));
  for(const phase of ['original','edited','reopened']){const state=report.phases[phase];assert.ok(state&&Array.isArray(state.slides)&&state.slides.length>=1&&state.slides.length<=(dense?1:3));assert.equal(state.slides.length,request.slideCount);for(const slide of state.slides)assert.ok(Array.isArray(slide.shapes)&&(dense?slide.shapes.length===50:slide.shapes.length<=30));assert.equal(state.slideCount,state.slides.length);assert.equal(state.rasters.length,state.slides.length);assert.equal(new Set(state.rasters.map(r=>r.slideIndex)).size,state.slides.length);for(const [i,slide]of state.slides.entries()){assert.equal(slide.index,i+1);assert.equal(slide.shapeCount,slide.shapes.length);}}
  const original=report.source.openedPath,saved=report.saved.path;assert.equal(typeof original,'string');assert.equal(typeof saved,'string');canonicalOwnedPath(original);canonicalOwnedPath(saved);assert.equal(original,at(request.output,'native/inputs/input.pptx'));assert.equal(saved,at(request.output,'native/native-furniture-control.pptx'));
@@ -129,9 +137,12 @@ function admitFurnitureExecution(b){
  const kernel=readOwnedJson(at(native,'worker.json'));assertOwnedKernel(kernel,q.timeoutSeconds);
  if(dense){assertDenseLifecycle({report,request,terminal,shapeNames:b.archive.shapeNames,shapeWords:b.archive.shapeWords,inputSha256:q.input.sha256,planSha256:q.actionPlan.sha256});const savedArchive=inspectDenseArchive(readOwnedFile(saved,16777216));for(const key of ['slideCount','shapeCount','shapeNames','shapeWords'])assert.deepEqual(savedArchive[key],b.archive[key],'Saved dense content changed: '+key);}
  const g=b.envelope.generation;
- const bound=[...sourceIdentityFiles(g.provenance),b.envelope.node.path,g.packedProof.file,g.packedProof.packedManifest.file,at(g.consumer,'package-lock.json'),at(g.suiteDirectory,'suite.json'),...g.packedProof.packages.map(p=>at(path.dirname(g.consumer),p.file)),...b.suite.files.map(p=>at(g.suiteDirectory,p.path)),fileURLToPath(import.meta.url),at(output,'execution-request.json'),at(output,'inputs/execution-envelope.json'),at(output,'inputs/case.pptx'),at(output,'inputs/action-plan.json'),...b.envelope.controller.files.map(r=>at(ROOT,r.path)),...['request.json','report.json','supervisor.json','worker.json','stages.jsonl','inputs/input.pptx','inputs/action-plan.json','inputs/native-furniture-control.ps1','inputs/native-process.ps1','native-furniture-control.pptx'].map(n=>at(native,n))];
+ const packed=reference?[]:[g.packedProof.file,g.packedProof.packedManifest.file,...g.packedProof.packages.map(p=>at(path.dirname(g.consumer),p.file))];
+ const bound=[...sourceIdentityFiles(g.provenance),b.envelope.node.path,...packed,at(g.consumer,'package-lock.json'),at(g.suiteDirectory,'suite.json'),...b.suite.files.map(p=>at(g.suiteDirectory,p.path)),fileURLToPath(import.meta.url),at(output,'execution-request.json'),at(output,'inputs/execution-envelope.json'),at(output,'inputs/case.pptx'),at(output,'inputs/action-plan.json'),...b.envelope.controller.files.map(r=>at(ROOT,r.path)),...['request.json','report.json','supervisor.json','worker.json','stages.jsonl','inputs/input.pptx','inputs/action-plan.json','inputs/native-furniture-control.ps1','inputs/native-process.ps1','native-furniture-control.pptx'].map(n=>at(native,n))];
  for(const phase of ['original','edited','reopened'])for(const raster of report.phases[phase].rasters){const expected=at(native,`${phase}-slide-${String(raster.slideIndex).padStart(2,'0')}.png`);assert.equal(raster.path,expected);assert.ok(Number.isInteger(raster.slideIndex)&&raster.slideIndex>=1&&raster.slideIndex<=b.envelope.selectedCase.slideCount);assert.equal(fileIdentity(expected).sha256,raster.sha256);const png=readOwnedFile(expected);assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');assert.equal(png.readUInt32BE(16),1280);assert.equal(png.readUInt32BE(20),720);bound.push(expected);}
- const admission=makeOwnedAdmission({profile,policy,requestSha256:b.requestSha256,files:bound,ready});return admission;
+ const admission=()=>makeOwnedAdmission({profile,policy,requestSha256:b.requestSha256,files:bound,ready});
+ if(reference)return compareReferenceNameEdit(b,report,readOwnedFile(at(native,'stages.jsonl'),4194304),readOwnedFile(saved,16777216)).then(comparison=>{const proof=at(output,'reference-name-comparison.json');if(fs.existsSync(proof))assert.deepEqual(readOwnedJson(proof),comparison);else fs.writeFileSync(proof,json(comparison),{flag:'wx'});bound.push(proof,b.reference.source.identity.path);return admission();});
+ return admission();
 }
 async function main(argv){
  const [command,...args]=argv,o={};assert.equal(args.length%2,0);for(let i=0;i<args.length;i+=2){assert.ok(args[i].startsWith('--')&&!Object.hasOwn(o,args[i]));o[args[i]]=args[i+1];}
@@ -139,7 +150,8 @@ async function main(argv){
  if(command==='prepare'){keys(o,['--envelope','--sha256','--output','--require-office']);assert.ok(['true','false'].includes(o['--require-office']));console.log(wire(prepareFurnitureExecution(o['--envelope'],o['--sha256'],o['--output'],{runOfficeRequested:o['--require-office']==='true'})));return;}
  keys(o,['--envelope','--sha256','--output','--require-office']);assert.ok(['true','false'].includes(o['--require-office']));const b=verifyFurnitureExecution(o['--envelope'],o['--sha256'],o['--output'],o['--require-office']==='true');
  if(command==='verify-execution'){console.log(wire({verified:true,requestSha256:b.requestSha256}));return;}
- assert.ok(['verify-postflight','observe'].includes(command));const a=admitFurnitureExecution(b);
+ assert.ok(['verify-postflight','observe',...(reference?['verify-admission']:[])].includes(command));const a=await admitFurnitureExecution(b);
+ if(command==='verify-admission'){assert.deepEqual(readOwnedJson(at(b.output,'postflight-admission.json')),a);console.log(wire({profile,verified:true,nativeAcceptance:false}));return;}
  if(command==='verify-postflight'){console.log(wire(writeOwnedAdmission(at(b.output,'postflight-admission.json'),a)));return;}
  assert.deepEqual(readOwnedJson(at(b.output,'postflight-admission.json')),a);
  const postflight=readOwnedJson(at(b.output,'postflight-result.json')),bytes=readOwnedFile(at(b.output,'postflight.jsonl'),65536);assert.deepEqual(postflight.policy,policy);
@@ -153,4 +165,5 @@ const ordinary=furnitureRoute(false);
 export const {bindFurnitureEnvelope,createFurnitureEnvelope,prepareFurnitureExecution,verifyFurnitureExecution,assertFurnitureReady,admitFurnitureExecution}=ordinary;
 export {assertFurnitureSelection};
 export const denseFurnitureRoute=furnitureRoute(true);
+export const referenceNameFurnitureRoute=furnitureRoute('reference-name');
 if(process.argv[1]&&pathToFileURL(path.resolve(process.argv[1])).href===import.meta.url)ordinary.main(process.argv.slice(2)).catch(error=>{console.error(error);process.exitCode=1;});
