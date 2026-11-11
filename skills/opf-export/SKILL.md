@@ -10,7 +10,7 @@ Start with a validated OPF document and the output formats the user requested. P
 
 ## Know the PPTX limits before you promise "editable"
 
-By default, PPTX text is editable line by line. `opf convert deck.opf.json deck.pptx` writes one text box for each wrapped line, so PowerPoint and Keynote keep the preview's line breaks. Added or longer text in one box does not flow into the next line. In this measured mode, a wrapped title is several line boxes; a one-line title binds to the Title placeholder. State the default's per-line behavior wherever you offer "editable PPTX". For heavy text changes, edit the OPF source and export again.
+By default, PPTX text is editable in measured boxes. `opf convert deck.opf.json deck.pptx` normally writes one box per wrapped line; selected proofing-sensitive lines use separate source-bound word, number or script boxes. Editing a box does not reflow into adjacent boxes, so longer text can overlap them. In this measured mode, a wrapped title is several line boxes; a one-line title binds to the Title placeholder. State these editing limits wherever you offer "editable PPTX". For heavy text changes, edit the OPF source and export again.
 
 Published packages also support `--body-text native` (`bodyText: 'native'`) for paragraph editing: eligible wrapped titles use the Title placeholder, and supported text or list regions use a body that the application re-wraps. Content native mode cannot carry remains measured and produces a `native-body-fallback` finding. The application and its installed fonts determine native wrapping; inspect the requested target.
 

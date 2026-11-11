@@ -1,5 +1,5 @@
-import {XMLParser} from 'fast-xml-parser';
-import {numberRanges,textWidthMeasurer,paragraphDirection} from '@openpresentation/opf/composition';
+import {XMLParser,XMLValidator} from 'fast-xml-parser';
+import {numberRanges,textWidthMeasurer,paragraphDirection,itemizeScripts} from '@openpresentation/opf/composition';
 import {nativeLatinRanges} from './native-latin-slots.js';
 import {attachTextTags,decodeTextTag,groupUnchanged,nativeTextHash} from './code-provenance.js';
 
@@ -31,6 +31,78 @@ const propertyTree=shape=>{
 };
 const propertiesHash=(shape,binding)=>{const tree=propertyTree(shape);return tree&&nativeTextHash(JSON.stringify([canonical(tree),binding]));};
 export const nativeFragmentPropertiesHash=propertiesHash;
+
+// Planner-only: not connected to any writer, tag, reader, or scalar restoration.
+// An original scalar can acquire several measured runs (for example a bold
+// colon label). Their local run offsets are NOT authored source offsets.
+// Native properties are retained as exact ordered slices, including CS fonts;
+// no property equivalence or permission to restore a scalar is inferred here.
+export function planNativeUnicodeIntervals(input){
+ const refuse=reason=>({status:'refused',reason});
+ if(!input||typeof input!=='object'||Array.isArray(input))return refuse('unsupported-input');
+ const {source,from,to,line,originX,rtl,nativeRuns,measurement,profile}=input;
+ if(typeof source!=='string'||!Number.isSafeInteger(from)||!Number.isSafeInteger(to)||from<0||to<=from||to>source.length||rtl!==false||!Number.isFinite(originX)||!line||!Array.isArray(line.fragments)||!line.fragments.length||!Number.isFinite(line.width)||line.width<=0||!measurement?.measure||typeof profile!=='function'||!Array.isArray(nativeRuns)||!nativeRuns.length)return refuse('unsupported-input');
+ const atBoundary=index=>index===0||index===source.length||!(/[\uD800-\uDBFF]/.test(source[index-1])&&/[\uDC00-\uDFFF]/.test(source[index]));
+ if(!source.isWellFormed()||!atBoundary(from)||!atBoundary(to))return refuse('source-boundary');
+ const text=source.slice(from,to);
+ if(/[\r\n\u2028\u2029\p{Default_Ignorable_Code_Point}]/u.test(text))return refuse('unsupported-text');
+ if(line.fragments.some(fragment=>!fragment||typeof fragment.text!=='string')||line.fragments.map(fragment=>fragment.text).join('')!==text||nativeRuns.some(run=>!run||typeof run.text!=='string'||!run.text||typeof run.properties!=='string'||!/^<a:rPr\b/.test(run.properties))||nativeRuns.map(run=>run.text).join('')!==text)return refuse('current-text-mismatch');
+ let nativeOffset=from;
+ for(const run of nativeRuns){
+  nativeOffset+=run.text.length;if(!atBoundary(nativeOffset))return refuse('native-boundary');
+  if(XMLValidator.validate(run.properties)!==true)return refuse('native-properties');
+  const tree=ordered.parse(run.properties);if(tree.length!==1||!Object.hasOwn(tree[0],'a:rPr'))return refuse('native-properties');
+ }
+ const nativeSlice=(start,end)=>{
+  let offset=0;const slices=[];
+  for(const run of nativeRuns){const a=Math.max(start,offset),b=Math.min(end,offset+run.text.length);if(b>a)slices.push({from:from+a,to:from+b,text:run.text.slice(a-offset,b-offset),properties:run.properties});offset+=run.text.length;}
+  return slices;
+ };
+ const intervals=[];let offset=0,advance=0;
+ for(const fragment of line.fragments){
+  const {style,fontSize,width,x}=fragment;
+  // Scalar/derived runs do not acquire an authored style.lang: the existing
+  // profile resolver supplies their effective deck/slide language instead.
+  if(fragment.kind!==undefined||fragment.baselineShift||!style||(style.lang!==undefined&&(typeof style.lang!=='string'||!style.lang))||style.tracking||style.caps||profile(style.lang)?.script!=='Arab'||!Number.isFinite(fontSize)||fontSize<=0||!Number.isFinite(width)||width<=0||!Number.isFinite(x)||Math.abs(x-advance)>1e-7)return refuse('unsupported-fragment');
+  const measure=textWidthMeasurer(style,measurement),full=measure(fragment.text,fontSize);
+  if(!Number.isFinite(full)||Math.abs(full-width)>1e-7)return refuse('measured-advance-mismatch');
+  const scripts=itemizeScripts(fragment.text,profile(style.lang));let local=0,measured=0;
+  for(const script of scripts){
+   // Keep attached common punctuation/whitespace in its existing script slot.
+   // This partitions script intervals, never individual glyphs or words.
+   const numeric=script.role==='complexScript'&&script.script==='Arab'&&/\p{Decimal_Number}/u.test(script.text);
+   if(!(numeric&&/^[\p{Decimal_Number}\p{Punctuation}\p{Separator}]+$/u.test(script.text))&&!(script.role==='latin'&&/^[\x20-\x7e]+$/.test(script.text)))return refuse('unsupported-script');
+   const before=measure(fragment.text.slice(0,local),fontSize),part=measure(script.text,fontSize),right=measure(fragment.text.slice(0,local+script.text.length),fontSize);
+   if(![before,part,right].every(Number.isFinite)||part<=0||Math.abs(before-measured)>1e-7||Math.abs(right-before-part)>1e-7)return refuse('nonadditive-script-advance');
+   const start=offset+local,end=start+script.text.length;
+   if(intervals.length>=64)return refuse('unsupported-member-count');
+   intervals.push({from:from+start,to:from+end,text:script.text,script:script.script,role:script.role,numeric,x:originX+x+before,width:part,right:originX+x+right,fontSize,style:{...style},native:nativeSlice(start,end)});
+   local+=script.text.length;measured+=part;
+  }
+  if(local!==fragment.text.length||Math.abs(measured-width)>1e-7)return refuse('incomplete-fragment');
+  offset+=fragment.text.length;advance+=width;
+ }
+ if(offset!==text.length)return refuse('line-advance-mismatch');
+ // Core may exclude hanging U+0020 from the alignment width while retaining
+ // the complete fragment advance. SVG renderRichLines uses placed.x+x and
+ // each FULL fragment.width for LTR lines. Preserve both widths; this is real
+ // source whitespace outside the alignment interval, never extra padding.
+ let hangingSpaceAdvance=0;
+ if(Math.abs(advance-line.width)>1e-7){
+  const spaces=/ +$/.exec(text)?.[0];if(!spaces)return refuse('line-advance-mismatch');
+  const shown=text.length-spaces.length;let cursor=0,visibleAdvance=0;
+  for(const fragment of line.fragments){
+   const keep=Math.max(0,Math.min(fragment.text.length,shown-cursor)),measure=textWidthMeasurer(fragment.style,measurement);
+   const visible=measure(fragment.text.slice(0,keep),fragment.fontSize),trailing=measure(fragment.text.slice(keep),fragment.fontSize);
+   if(![visible,trailing].every(Number.isFinite)||visible<0||trailing<0||Math.abs(visible+trailing-fragment.width)>1e-7)return refuse('nonadditive-hanging-space');
+   visibleAdvance+=visible;hangingSpaceAdvance+=trailing;cursor+=fragment.text.length;
+  }
+  if(hangingSpaceAdvance<=0||Math.abs(visibleAdvance-line.width)>1e-7||Math.abs(advance-line.width-hangingSpaceAdvance)>1e-7)return refuse('line-advance-mismatch');
+ }
+ const numeric=intervals.filter(interval=>interval.numeric);
+ if(!numeric.length||intervals[0]?.role!=='latin'||!/[A-Za-z]/.test(intervals[0].text)||intervals.at(-1)?.role!=='latin'||!/[A-Za-z]/.test(intervals.at(-1).text))return refuse('unsupported-topology');
+ return {status:'planned',from,to,text,originX,alignmentWidth:line.width,fullAdvance:advance,hangingSpaceAdvance,intervals};
+}
 
 const paragraphParts=paragraph=>{
  const content=paragraph.slice('<a:p>'.length,-'</a:p>'.length),properties=/^\s*(<a:pPr\b[^>]*\/>|<a:pPr\b[^>]*>[\s\S]*?<\/a:pPr>)/.exec(content);

@@ -1,0 +1,419 @@
+{
+  "schema": "opf-rr105-local-focused-receipt/v1",
+  "qualification": "local public API/geometry/noncandidate byte preservation only",
+  "base": {
+    "head": "ba0b93859c9018aecd152c58743cf15e13a23b0b",
+    "tree": "b59696b2e937c7b165f31b9b27047ee56fe640df",
+    "branch": "codex/rr-105-unicode-interval-planner"
+  },
+  "executedSourceBeforeDocumentation": {
+    "changedFiles": 17,
+    "aggregateSha256": "5a2eac1240780b415cdbf96a3ce947287263c1ed2f305c84a279195d0a4ee3c2",
+    "files": [
+      {
+        "file": "changes/rr-105-unicode-interval-planner.md",
+        "bytes": 271,
+        "sha256": "3c0531ac8d3a659c1980cf7e36585340d2e4eeca9d98848ff52f50a692f6351e"
+      },
+      {
+        "file": "docs/handoff/2026-11-10/rr105-unicode-interval-planner.md",
+        "bytes": 21836,
+        "sha256": "ce33ee9531b8ba60fbf9778a821b06b8b2eb31daa5352f0e7cc180cdf5851d76"
+      },
+      {
+        "file": "docs/handoff/2026-11-10/rr105-unicode-v2-ownership-design.md",
+        "bytes": 20864,
+        "sha256": "a9718aa7d68208a04bf3aba2e197cb46050288a78932a395e39fa1eaa55a1e42"
+      },
+      {
+        "file": "docs/programs/release-readiness/burndown.md",
+        "bytes": 501454,
+        "sha256": "7b22bf996a6f8b4e17be2775e0fcafede49e1c9fb3056140ed6268b7c9079c9b"
+      },
+      {
+        "file": "packages/pptx/README.md",
+        "bytes": 162155,
+        "sha256": "cf30a4517691c2655c1d32271eb7252f2d4bb9605f545bf9204967fcabc493a8"
+      },
+      {
+        "file": "packages/pptx/scripts/build.mjs",
+        "bytes": 8512,
+        "sha256": "414dd249d6c9032219cc0cf89aa78209154223a723b091dd67a5d20fdd9904a8"
+      },
+      {
+        "file": "packages/pptx/src/content-topology.js",
+        "bytes": 43821,
+        "sha256": "c23e1ec9905c8a1c106c88f198a4ada61d68413adc1a9d3380ed5597f9176d06"
+      },
+      {
+        "file": "packages/pptx/src/document-provenance.js",
+        "bytes": 99778,
+        "sha256": "8664d596e72aa9d663c1879c325170d8125dfb09071e1835d25b195cb618e450"
+      },
+      {
+        "file": "packages/pptx/src/index.js",
+        "bytes": 498823,
+        "sha256": "4ab29eaf0e3148f8604049b5f63aa2c3faf96eba58aba7856d8cf92f6e4ef68b"
+      },
+      {
+        "file": "packages/pptx/src/native-language-provenance.js",
+        "bytes": 11283,
+        "sha256": "563a063e4566aa9fcfcf8b9126f65e3e6d176ddda44b6cf1bca92d090074398d"
+      },
+      {
+        "file": "packages/pptx/src/native-scalar-fragments.js",
+        "bytes": 32251,
+        "sha256": "0c30f73b3ac4fef7641d5b325c56cea5bbb038730831b6b8c7b9364df7ecbbf6"
+      },
+      {
+        "file": "packages/pptx/src/native-text-fragments.js",
+        "bytes": 31313,
+        "sha256": "ba6d544fd3b01cd724d7ddae8f62e8d1d29fd76f0f772228b2193c299809b0af"
+      },
+      {
+        "file": "packages/pptx/src/run-colors.js",
+        "bytes": 12665,
+        "sha256": "206b85397710696bc945646699760f078a52dfa4e66aba086745292be4a074b3"
+      },
+      {
+        "file": "packages/pptx/test/native-scalar-fragments.mjs",
+        "bytes": 52729,
+        "sha256": "16209bbab0efd4e8c86eb1659df066dbb85ec660547c29d0f488df5b646f70a4"
+      },
+      {
+        "file": "packages/pptx/test/native-unicode-interval-planner.mjs",
+        "bytes": 17591,
+        "sha256": "47f6775a469dd4b17d3f5d60604b61a620f8c8502641fe7fbf007ea176e2069a"
+      },
+      {
+        "file": "skills/opf-export/SKILL.md",
+        "bytes": 25452,
+        "sha256": "2e4b35f91a03830436f41512ebab237664ff91258fa617efac788d5f0ae69f5d"
+      },
+      {
+        "file": "skills/opf-export/references/rendering.md",
+        "bytes": 14738,
+        "sha256": "b00dec4ae488f5a5c4c208c9e7a2441b4b55b375250356a1174ee161f5865c73"
+      }
+    ],
+    "note": "Final commit adds only this receipt and handoff/burndown result metadata; tested package/test/skill source hashes remain exact."
+  },
+  "runtime": {
+    "oldOwnFocus03": {
+      "count": 298,
+      "bytes": 25791574,
+      "sha256": "5b7e2bcebb14573f7f75dbb948d2e93082b5992f8e19fcaa3f99002bac39df49"
+    },
+    "qualifiedOwnProduct": {
+      "count": 299,
+      "bytes": 25832781,
+      "sha256": "d2ca377c50d6f66df9ba2dd99af186e6263e052046b1be30a43e48204e6ec306"
+    },
+    "aggregation": "File rows ordered by ASCII relative path; each file binds bytes and SHA256. Original focus03 locale-ordered aggregate7e00f035251386466ec3ee61d8ed7bfdaa031bc490267005a8658b6ec593839b covers the same298 individually verified old files.",
+    "finalReplayRebuilt": false,
+    "currentRuntimeUnchanged": true,
+    "executedSourceUnchanged": true
+  },
+  "passed": {
+    "planner": {
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "execution": "replay03, same exact product reused by replay04",
+      "log": {
+        "local": "opf-unicode-v2-validation03/focus-1-native-unicode-interval-planner.log",
+        "bytes": 435,
+        "sha256": "ccef905f16e64b1d4eb1c3d19b3f70c8356be354f43031839102ae88d834532a",
+        "exit": 0,
+        "elapsedMs": 1096
+      },
+      "obligations": {
+        "genuineSourceBytes": 519,
+        "genuineSourceSha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb",
+        "scalarFields": 4,
+        "numericLines": 4,
+        "bodyLines": 7,
+        "bodyUTF16": 98,
+        "headingUTF16": 19,
+        "totalUTF16": 117,
+        "proof": "Exact source/current-native import, source/RPr/CS intervals, actual core/SVG full origins/advances including hanging spaces; no rescale."
+      }
+    },
+    "scalar": {
+      "pass": 19,
+      "fail": 0,
+      "skip": 0,
+      "log": {
+        "local": "opf-unicode-v2-validation04/focus-1-native-scalar-fragments.log",
+        "bytes": 54268,
+        "sha256": "34923a2c99ac6ed6b5e2f93da8b0160b550215584a064981092535c6c43fbaff",
+        "exit": 0,
+        "elapsedMs": 5247
+      },
+      "scope": "Whole-source atomic ownership, current arbitrary text/style/color/link/boundary edits, known native marker validation, primary conflicts, unrelated group/header protection, lineage/relation/member refusals, last-member conversion/refusal rollback, headerless body fallback, ordinary/mixed role diagnostics and nativebody control."
+    },
+    "baselineComparisons": {
+      "rows": 9,
+      "oldExportExecution": "validation01 only; immutable raw artifacts verified/reused in every later attempt",
+      "finalNewLog": {
+        "local": "opf-unicode-v2-validation04/new-nine-exports.log",
+        "bytes": 2743,
+        "sha256": "ee4879f648e04488656f8bedf22aec8f0caeceea9dc3f361d8fca1caa23d787c",
+        "exit": 0,
+        "elapsedMs": 933
+      },
+      "equalities": [
+        "complete original ZIP bytes",
+        "every uncompressed part byte length/SHA256",
+        "public current import",
+        "export/import diagnostic arrays"
+      ],
+      "rowsExact": [
+        {
+          "name": "rtl-contrast-05-mixed-explicit-arabic",
+          "source": {
+            "bytes": 293,
+            "sha256": "196fb0e0d2e64cafa63612b09805d5b738ecaa1cce8b32fb947f0f59cd9c8653"
+          },
+          "archive": {
+            "bytes": 21029,
+            "sha256": "e88dba19c0a963864d805ad0bdeb3e083d64c3048d3968cf8a3d820e96719f69"
+          },
+          "fullByteEquality": true,
+          "partEquality": true,
+          "importEquality": true,
+          "diagnosticEquality": true
+        },
+        {
+          "name": "rtl-contrast-06-whole-explicit-arabic",
+          "source": {
+            "bytes": 273,
+            "sha256": "1077885b435004706270c8251a8b2d37c6b3d3e3350003625e8cffd0f991f03f"
+          },
+          "archive": {
+            "bytes": 20998,
+            "sha256": "d5e959d998d8b5b34f16097ecb3f76575637f71c3057c57e95b2a251eb67a493"
+          },
+          "fullByteEquality": true,
+          "partEquality": true,
+          "importEquality": true,
+          "diagnosticEquality": true
+        },
+        {
+          "name": "rtl-contrast-09-long-explicit-arabic",
+          "source": {
+            "bytes": 375,
+            "sha256": "06be411c44847acac56f90b67baa318469b2206661de5a76ed315555513bc8c6"
+          },
+          "archive": {
+            "bytes": 21113,
+            "sha256": "ffa0d56a38c1ceb326554ef7ed1ce20cdb0f53ffbb8902361ab7c69de99b9eda"
+          },
+          "fullByteEquality": true,
+          "partEquality": true,
+          "importEquality": true,
+          "diagnosticEquality": true
+        },
+        {
+          "name": "b07-current-native-body-two-paragraphs",
+          "source": {
+            "bytes": 333,
+            "sha256": "8385a562944abb5578b4c0cd6bb15628dcf1dfb82e904c702b58b99e820cf078"
+          },
+          "archive": {
+            "bytes": 19455,
+            "sha256": "3262e23d1b76bcfca54f448862a9513efcc368eaa9a756a362f22ca5ead0a93a"
+          },
+          "fullByteEquality": true,
+          "partEquality": true,
+          "importEquality": true,
+          "diagnosticEquality": true
+        },
+        {
+          "name": "english-scalar",
+          "source": {
+            "bytes": 97,
+            "sha256": "bc04677b97bac213e084c4f5063a2a0be9056ca5909b7281e77d746003b1d272"
+          },
+          "archive": {
+            "bytes": 19372,
+            "sha256": "81bb098db758c2398f512cb1c3a7b8c9adc361dd432e3dfcff92c0220165de71"
+          },
+          "fullByteEquality": true,
+          "partEquality": true,
+          "importEquality": true,
+          "diagnosticEquality": true
+        },
+        {
+          "name": "arabic-only-scalar",
+          "source": {
+            "bytes": 134,
+            "sha256": "984c6f807f5607a25146b3a10a3d891710f5c58378e67a4b9aad80ee87aa0ab0"
+          },
+          "archive": {
+            "bytes": 19529,
+            "sha256": "ca2daa14c983fc35c5e51afb53e802f9bfd7aec6961762c2945f4ebb19c5c70b"
+          },
+          "fullByteEquality": true,
+          "partEquality": true,
+          "importEquality": true,
+          "diagnosticEquality": true
+        },
+        {
+          "name": "inherited-arab-ascii",
+          "source": {
+            "bytes": 120,
+            "sha256": "664533e57be082b44cd1ecf8bd97d61c98b513bd832cbe0fbdf6bd894714af74"
+          },
+          "archive": {
+            "bytes": 19571,
+            "sha256": "1b208da5440cb51f085cb0a3fe9b7443122f0ec6e962583d4b5a8a84019c02f6"
+          },
+          "fullByteEquality": true,
+          "partEquality": true,
+          "importEquality": true,
+          "diagnosticEquality": true
+        },
+        {
+          "name": "rich-authored-unicode",
+          "source": {
+            "bytes": 203,
+            "sha256": "e061b4b2b9f2e003cb0fcc8dbf36607bd66ca29c54171f60ed0b296e2aaa4648"
+          },
+          "archive": {
+            "bytes": 19699,
+            "sha256": "ce4e12ec7a326c5d589206d83a40539d0b1f339134ad44363cd78f4f3230b071"
+          },
+          "fullByteEquality": true,
+          "partEquality": true,
+          "importEquality": true,
+          "diagnosticEquality": true
+        },
+        {
+          "name": "non-arab-profile-unicode",
+          "source": {
+            "bytes": 122,
+            "sha256": "248e0dfa4096c31a4db3a916e80f6e3383c0187fdb9a9674d23c59fbf2bcd299"
+          },
+          "archive": {
+            "bytes": 19427,
+            "sha256": "ef733583681bce607ce84477ef7a131298bdee77d2613a80d2c62a549ea5737e"
+          },
+          "fullByteEquality": true,
+          "partEquality": true,
+          "importEquality": true,
+          "diagnosticEquality": true
+        }
+      ]
+    }
+  },
+  "priorFailuresPreserved": [
+    {
+      "attempt": "pre-hook-planner01",
+      "result": "1PASS/1RED",
+      "cause": "Actual inherited scalar style legitimately omits lang; planner originally required an authored lang.",
+      "local": "opf-unicode-planner-validation01/results.json"
+    },
+    {
+      "attempt": "pre-hook-planner02",
+      "result": "1PASS/1RED",
+      "cause": "Test assumed every measured list fit supplies placement; maintained unplaced textBox/physical-alignment path documented and tested.",
+      "local": "opf-unicode-planner-validation02/results.json"
+    },
+    {
+      "attempt": "hooked-validation01",
+      "result": "old9PASS; buildPASS; planner1PASS/1RED",
+      "cause": "Normal master multiple-layout backlinks were mistaken for ambiguous active inheritance.",
+      "newNine": "UNRUN",
+      "scalarFile": "UNRUN",
+      "receipt": {
+        "local": "opf-unicode-v2-validation01/receipt.json",
+        "bytes": 236458,
+        "sha256": "fba9e2cd7822ddc53e663a8d63cbfe74e4c6e516bcb07b0239f7ee03336016cf"
+      },
+      "firstRedLog": {
+        "local": "opf-unicode-v2-validation01/focus-1-native-unicode-interval-planner.log",
+        "bytes": 1059,
+        "sha256": "fa4abb8e48adba0e936604adc6a683d2d14a29866af83b9d6774d3075a21f4a0",
+        "exit": 1,
+        "elapsedMs": 890
+      }
+    },
+    {
+      "attempt": "one-causal-diagnostic",
+      "result": "0groups; all8 original shapes retained; exact public import",
+      "cause": "All4 writer groups refused Ambiguous native style context.",
+      "receipt": {
+        "local": "opf-unicode-v2-case10-diagnostic01/receipt.json",
+        "bytes": 125487,
+        "sha256": "969f6945f0fcbad830c5d7d5f46ac1d7b88584c280760dedd2476dd0069a3b51"
+      },
+      "rawArchive": {
+        "bytes": 22070,
+        "sha256": "79e9826ee9aff24c68da161841c2a10ec343bc084aeb97260d9c24e7d064a13e"
+      }
+    },
+    {
+      "attempt": "hooked-validation02",
+      "result": "planner2PASS; scalar11PASS/6RED",
+      "cause": "Temporary ordinary schema validation rejected current native _opfScheme before cleanup; stored listRoles identity refusal was silent.",
+      "newNine": "UNRUN",
+      "receipt": {
+        "local": "opf-unicode-v2-validation02/receipt.json",
+        "bytes": 292090,
+        "sha256": "ccb1c650ba80ed726174d3968a2b2dc656d64626fedbcec4efb31875ac366c7c"
+      },
+      "firstRedLog": {
+        "local": "opf-unicode-v2-validation02/focus-2-native-scalar-fragments.log",
+        "bytes": 6520,
+        "sha256": "93d0fe1bcc1d3babe549a6b0659b3f09cd0b84370cc3a17a9a383b7ec8193f28",
+        "exit": 1,
+        "elapsedMs": 3757
+      }
+    },
+    {
+      "attempt": "hooked-validation03",
+      "result": "planner2PASS; scalar17PASS/2RED",
+      "cause": "Test no-op CS replacement when no direct slot exists; test-local slide binding shadowed archive path.",
+      "newNine": "UNRUN",
+      "receipt": {
+        "local": "opf-unicode-v2-validation03/receipt.json",
+        "bytes": 292091,
+        "sha256": "6656dbe1c51e5781c4d383692b46d5dddbc35a4643c7be6ce3e3c2a28fa9004d"
+      },
+      "firstRedLog": {
+        "local": "opf-unicode-v2-validation03/focus-2-native-scalar-fragments.log",
+        "bytes": 43162,
+        "sha256": "884a082f5d797137663d5e333c02b67f2d9e319b27c01222dba94a23987caa49",
+        "exit": 1,
+        "elapsedMs": 4475
+      }
+    }
+  ],
+  "causalContractCorrections": {
+    "production": [
+      "Walk only active slide→layout→master→theme/override inheritance while hashing raw master backlinks and keeping ID/external/active-type/root/cycle guards.",
+      "Use maintained nonmutating checkImportedFormat(candidate,currentNativeValue); retain markers privately for normal role cleanup and final strict public validation.",
+      "Report list-line-role-changed where existing native identity guard refuses stored roles; keep roles=null."
+    ],
+    "test": [
+      "Broken active context must remain ungrouped: preserve exact disjoint current member inventory/multiplicities98bodyUTF16 plus separate19unit title; original scalar order is unsupported after ownership refusal. Valid4group changed-backref case stays strictly ordered.",
+      "Insert a real current CS override when absent (replace if present), keeping current-digit and unsupported-body-font assertions. Rename only the shadowing test-local slide binding."
+    ]
+  },
+  "unrun": [
+    "Full maintained changed/package/type gate on this leaf or combined union",
+    "Fresh genuine installed-consumer/native case10 pixel/save/reopen qualification",
+    "Any Office or native worker action in this lane"
+  ],
+  "scopeLimits": [
+    "No release/merge/push qualification. Prior B07/native failures and case05 residuals are not closed by these local results.",
+    "Current nativebody reflow remains unchanged; nine-row comparisons are noncandidate/V1/nativebody byte controls, not case10 native paint.",
+    "Original full raw receipts/logs/ZIPs/imports/diagnostics remain unchanged locally outside Git; this compact summary does not replace them."
+  ],
+  "finalReceipt": {
+    "local": "opf-unicode-v2-validation04/receipt.json",
+    "bytes": 350418,
+    "sha256": "845b6e3bb26c44430c615497d4f50a99a5a54fa5ca1f2672f718f2452fd8dd21"
+  }
+}
