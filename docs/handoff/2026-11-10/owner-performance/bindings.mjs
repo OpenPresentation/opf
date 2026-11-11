@@ -8,7 +8,7 @@ import {createRequire} from 'node:module';
 
 export const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 export const folder = path.dirname(fileURLToPath(import.meta.url));
-export const currentDrivers = ['bindings.mjs', 'build-current.mjs', 'current-browser-entry.mjs', 'run-current.mjs', 'prepare-assets.mjs', 'trace-asset-inputs.mjs', 'propose-projection.mjs', 'validate-source-inputs.mjs', 'input-manifest.json'];
+export const currentDrivers = ['bindings.mjs', 'font-cache-diagnostics.mjs', 'build-current.mjs', 'current-browser-entry.mjs', 'run-current.mjs', 'prepare-assets.mjs', 'trace-asset-inputs.mjs', 'propose-projection.mjs', 'validate-source-inputs.mjs', 'input-manifest.json'];
 const git = (root, ...args) => execFileSync('git', args, {cwd: root, maxBuffer: 32 * 1024 * 1024});
 const slash = value => value.split(path.sep).join('/');
 export function fileRecord(root, file) {
