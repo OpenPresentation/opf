@@ -1,0 +1,222 @@
+{
+  "head": "1c80183a2288a04f5506a23bb88ece278cde277d",
+  "base": "ba0b93859c9018aecd152c58743cf15e13a23b0b",
+  "exitCode": 1,
+  "sourceUnchanged": true,
+  "seconds": 1356.8,
+  "passed": 20,
+  "failed": 4,
+  "rows": [
+    {
+      "name": "install",
+      "status": "passed",
+      "seconds": 0.3,
+      "file": "install.log",
+      "bytes": 137,
+      "sha256": "049113778bcede5e250e0d009a16e3b02382f28f4f82253f04325598cc570293"
+    },
+    {
+      "name": "build",
+      "status": "passed",
+      "seconds": 6.3,
+      "file": "build.log",
+      "bytes": 14666,
+      "sha256": "c64ab5b6e0e4cf669a78f937a77c2022afa6e1f43a8b9eb95097da7f967d0ef5"
+    },
+    {
+      "name": "biome",
+      "status": "failed",
+      "seconds": 0.6,
+      "file": "biome.log",
+      "bytes": 27866,
+      "sha256": "3c1485d1c82fe6cc6dcf6de854e6608c03ebf6ef879f6c7f526d736b62a12e32"
+    },
+    {
+      "name": "pnpm run check:browser-safe",
+      "status": "passed",
+      "seconds": 2.6,
+      "file": "pnpm_run_check_browser-safe.log",
+      "bytes": 1156,
+      "sha256": "d52bb838d1515acd6b0b086f504996689562fabd117a00a9a17a07f0e493f862"
+    },
+    {
+      "name": "pnpm run check:catalog-free",
+      "status": "passed",
+      "seconds": 2.1,
+      "file": "pnpm_run_check_catalog-free.log",
+      "bytes": 193,
+      "sha256": "2baa08920c40fdaed8c67d78f4cc5ae96f6700487d29e46dfcd0994e155164c6"
+    },
+    {
+      "name": "pnpm run check:changes",
+      "status": "passed",
+      "seconds": 0.4,
+      "file": "pnpm_run_check_changes.log",
+      "bytes": 2668,
+      "sha256": "07dada90dd197b64a7f51e3c81908285bd370d9e3143dc2e13cbea25f83bacc2"
+    },
+    {
+      "name": "pnpm run check:diagram-doc-images",
+      "status": "passed",
+      "seconds": 1.3,
+      "file": "pnpm_run_check_diagram-doc-images.log",
+      "bytes": 164,
+      "sha256": "9a8b5cf3cfcc40818f4a929a162eab4e26a68cf72f915ad32716e6dbfd6f64a8"
+    },
+    {
+      "name": "pnpm run check:engines-range",
+      "status": "passed",
+      "seconds": 0.3,
+      "file": "pnpm_run_check_engines-range.log",
+      "bytes": 851,
+      "sha256": "9bd4ceab057cac510eb62788169ec77765743e075ed2add2e2a450bf10d7635d"
+    },
+    {
+      "name": "pnpm run check:ci-workflows",
+      "status": "passed",
+      "seconds": 4.7,
+      "file": "pnpm_run_check_ci-workflows.log",
+      "bytes": 10507,
+      "sha256": "424aaf110e3377cb8889d2d1106897b63f5fce97a8a35490a9629d8c51333863"
+    },
+    {
+      "name": "pnpm run check:gallery-tracker",
+      "status": "passed",
+      "seconds": 1.6,
+      "file": "pnpm_run_check_gallery-tracker.log",
+      "bytes": 2010,
+      "sha256": "6058139b315d9fbb299447b67e3e1b35f3ca40b4dbb5ce23edb6de9de99e85a9"
+    },
+    {
+      "name": "pnpm run check:libreoffice",
+      "status": "passed",
+      "seconds": 0.2,
+      "file": "pnpm_run_check_libreoffice.log",
+      "bytes": 1429,
+      "sha256": "60ea9fd06644d04eadefc2d22e316023bf2d9ae3219d58784e5f746f906cfec1"
+    },
+    {
+      "name": "pnpm run check:font-hotlinks",
+      "status": "passed",
+      "seconds": 11.0,
+      "file": "pnpm_run_check_font-hotlinks.log",
+      "bytes": 861,
+      "sha256": "6995cdbda98a5a6c69a492978994e913615b3100e8ffe461a18e8f52628eeee8"
+    },
+    {
+      "name": "pnpm run check:release",
+      "status": "passed",
+      "seconds": 0.5,
+      "file": "pnpm_run_check_release.log",
+      "bytes": 5599,
+      "sha256": "279e67838fdbbeaf740d6226339e3b8cb3750e29fcf48be8fb380eee44d28682"
+    },
+    {
+      "name": "pnpm run check:release-report",
+      "status": "passed",
+      "seconds": 0.2,
+      "file": "pnpm_run_check_release-report.log",
+      "bytes": 823,
+      "sha256": "a5357dbca3dbcce2467dae2a48b390b5b4f895f34bb4528d9ea638781191eac7"
+    },
+    {
+      "name": "pnpm run check:runners",
+      "status": "passed",
+      "seconds": 0.6,
+      "file": "pnpm_run_check_runners.log",
+      "bytes": 1762,
+      "sha256": "d97d5f16317e8707414a6e0c5051c16b0f52492d2a5cb2b5e39698f4183f6541"
+    },
+    {
+      "name": "pnpm run check:native-acceptance",
+      "status": "failed",
+      "seconds": 12.9,
+      "file": "pnpm_run_check_native-acceptance.log",
+      "bytes": 46859,
+      "sha256": "cc683310f4f14a2a66287378251f14731c45a381690fed5cdb1762c1e0235a4d"
+    },
+    {
+      "name": "pnpm run check:skill-glossary",
+      "status": "failed",
+      "seconds": 0.2,
+      "file": "pnpm_run_check_skill-glossary.log",
+      "bytes": 1342,
+      "sha256": "4b54713cff4ac7b372700b4950685acab49ae2e0acdd4ab90e481031d58de6a4"
+    },
+    {
+      "name": "pnpm run check:skill-commands",
+      "status": "passed",
+      "seconds": 10.0,
+      "file": "pnpm_run_check_skill-commands.log",
+      "bytes": 1047,
+      "sha256": "3743182dacd962e7f619c9b5df50d447980a01b6fc102837704c9cf8ab4be665"
+    },
+    {
+      "name": "pnpm run check:text",
+      "status": "passed",
+      "seconds": 4.4,
+      "file": "pnpm_run_check_text.log",
+      "bytes": 1083,
+      "sha256": "88db2987e68a68115387a3e07b5c17afa56396c66fd26e8cef974e7d09fb101a"
+    },
+    {
+      "name": "pnpm run check:stability",
+      "status": "passed",
+      "seconds": 38.1,
+      "file": "pnpm_run_check_stability.log",
+      "bytes": 3994,
+      "sha256": "a95ed687297bb18b7afa872d178ac267e75273c27bf66a2420da31029c925650"
+    },
+    {
+      "name": "typecheck",
+      "status": "passed",
+      "seconds": 10.2,
+      "file": "typecheck.log",
+      "bytes": 5148,
+      "sha256": "b3467ebe17721e0bc28ca925f63daef90214bc009fdb0e4f094d7c5ecda04d49"
+    },
+    {
+      "name": "tests opf",
+      "status": "passed",
+      "seconds": 80.9,
+      "file": "tests_opf.log",
+      "bytes": 418945,
+      "sha256": "9e9d060102fbb987b5c5bcbd1ecdaf81366ef9940a4bd7398a18a7d661d6ab1f"
+    },
+    {
+      "name": "tests render",
+      "status": "failed",
+      "seconds": 385.0,
+      "file": "tests_render.log",
+      "bytes": 27733,
+      "sha256": "267bbaca252e51db83c391c3343e72ff9309945fbfa6e99e18549e630998c619"
+    },
+    {
+      "name": "tests pptx",
+      "status": "passed",
+      "seconds": 813.7,
+      "file": "tests_pptx.log",
+      "bytes": 206636,
+      "sha256": "9f8aa0d960dd8383f0a7718862cb95074994eb590f0f453cf4805b73bebf6d06"
+    }
+  ],
+  "core": "338 node:test files and7scripts PASS",
+  "pptx": "317 contract scripts PASS",
+  "native": {
+    "tests": 343,
+    "pass": 319,
+    "fail": 9,
+    "skip": 15
+  },
+  "renderer": {
+    "contractScripts": 192,
+    "passedBeforeFailure": 114,
+    "failed": "pdf-harfbuzz-scripts.mjs",
+    "notRunAfterFailure": 77
+  },
+  "rawZip": {
+    "file": "selected-logs.zip",
+    "bytes": 221195,
+    "sha256": "9b6ee8d4ee0f39b2357dc05ab8b5dd0e88c86c1ab98df5bd0fe94af86423e0f7"
+  }
+}

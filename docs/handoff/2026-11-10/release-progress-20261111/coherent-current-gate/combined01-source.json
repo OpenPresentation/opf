@@ -1,0 +1,6 @@
+{
+  "head": "1c80183a2288a04f5506a23bb88ece278cde277d",
+  "base": "ba0b93859c9018aecd152c58743cf15e13a23b0b",
+  "sourceClean": true,
+  "command": "pnpm check:changed --base ba0b93859c9018aecd152c58743cf15e13a23b0b"
+}
