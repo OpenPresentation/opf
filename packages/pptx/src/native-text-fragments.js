@@ -68,9 +68,13 @@ const sourceFragments=(fragment,measurement,profile)=>{
 
 // This is a source partition, never a new bidi shaper. Unsupported layouts keep
 // the existing measured line. The first supported topology is a carrier prefix
-// followed by measured Latin word/number members under Arabic proofing.
+// followed by measured Latin word/number members under Arabic proofing. An
+// explicitly Arabic-proofed, wholly ASCII LTR line may instead keep its first
+// nonnumeric span as carrier and isolate numeric intervals from the WHOLE
+// numeric-free suffix. This is not word or character layout.
 export function planNativeTextFragments(line,{rtl,originX,measurement,profile}) {
- if(rtl!==true||!line||!Array.isArray(line.fragments)||!line.fragments.length||!measurement?.measure||typeof profile!=='function'||!Number.isFinite(originX)||!Number.isFinite(line.width)||!Number.isFinite(line.baseline)||!Number.isFinite(line.height))return;
+ if(typeof rtl!=='boolean'||!line||!Array.isArray(line.fragments)||!line.fragments.length||!measurement?.measure||typeof profile!=='function'||!Number.isFinite(originX)||!Number.isFinite(line.width)||!Number.isFinite(line.baseline)||!Number.isFinite(line.height))return;
+ if(!rtl&&line.fragments.length!==1)return;
  const members=[];let offset=0,selected=false,hasWord=false,hasNumber=false,priorRun=-1,priorEnd=0;
  for(const original of line.fragments){
   if(!original||typeof original!=='object')return;
@@ -78,6 +82,7 @@ export function planNativeTextFragments(line,{rtl,originX,measurement,profile}) 
   if(typeof text!=='string'||!style||typeof style!=='object'||!run||typeof run!=='object'||!Number.isSafeInteger(original.runIndex)||original.runIndex<0||!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start<0||end<start||!Number.isFinite(original.x)||!Number.isFinite(original.fontSize)||original.fontSize<=0)return;
   if(original.kind||original.baselineShift||style.tracking||style.caps||Object.keys(run).some(key=>!runKeys.has(key)))return;
   if(typeof run.text!=='string'||run.text.slice(start,end)!==text||!Number.isFinite(original.width)||original.width<0)return;
+  if(!rtl&&!/^[\x20-\x7e]+$/.test(run.text))return;
   if(original.runIndex<priorRun||(original.runIndex===priorRun&&start<priorEnd))return;
   priorRun=original.runIndex;priorEnd=end;
   const pieces=sourceFragments(original,measurement,profile);if(!pieces)return;
@@ -111,8 +116,15 @@ export function planNativeTextFragments(line,{rtl,originX,measurement,profile}) 
   }
  }
  if(!selected||!hasWord||!hasNumber||members.length<2||members.length>63)return;
- const prefix=members[0].from,whole=line.fragments.map(fragment=>fragment.text).join('');
- if(prefix===0||paragraphDirection(whole.slice(0,prefix),'rtl')!=='rtl'||!/[\p{Script=Arabic}]/u.test(whole.slice(0,prefix)))return;
+ const whole=line.fragments.map(fragment=>fragment.text).join('');
+ let prefix=members[0].from;
+ if(!rtl){
+  // Retain real nonempty source content in the numbered carrier. A trailing
+  // numeric-free letter span is required by this bounded LTR topology; later
+  // measured lines without a numeric interval stay byte-for-byte unchanged.
+  if(members[0].kind!=='word'||members[0].from!==0||members.at(-1).kind!=='word'||members.length<3)return;
+  prefix=members.shift().to;
+ }else if(prefix===0||paragraphDirection(whole.slice(0,prefix),'rtl')!=='rtl'||!/[\p{Script=Arabic}]/u.test(whole.slice(0,prefix)))return;
  if(members.some((member,index)=>index&&member.from!==members[index-1].to)||members.at(-1).to!==offset)return;
  return {text:whole,length:offset,prefix,members,
   source:line.fragments.map(fragment=>({run:fragment.runIndex,start:fragment.start,end:fragment.end})),baseline:line.baseline,height:line.height};
