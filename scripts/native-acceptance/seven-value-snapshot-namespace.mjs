@@ -49,7 +49,7 @@ export function snapshotSourceBeforeRawFindings(input,before,deps=archiveDepende
 // Later saves: only these two scalar core-property values may vary. All other
 // properties/attributes/unknown content remain exact parsed XML. Whitespace is
 // ignored solely in the known element-only metadata containers below.
-function metadataView(bytes,file,deps){
+export function snapshotMetadataView(bytes,file,deps){
  const xml=deps.strFromU8(bytes);assert.ok(!/<!DOCTYPE|<!ENTITY/u.test(xml));assert.equal(deps.XMLValidator.validate(xml),true);
  const tree=new deps.XMLParser({preserveOrder:true,ignoreAttributes:false,parseTagValue:false,parseAttributeValue:false,trimValues:false,commentPropName:'#comment',cdataPropName:'#cdata'}).parse(xml),recorded={};
  const containers=new Set(['cp:coreProperties','Properties','Properties/HeadingPairs','Properties/HeadingPairs/vt:vector','Properties/HeadingPairs/vt:vector/vt:variant','Properties/TitlesOfParts','Properties/TitlesOfParts/vt:vector']);
@@ -83,7 +83,7 @@ function metadataView(bytes,file,deps){
  return{protectedXml,recorded};
 }
 function assertLaterMetadata(before,after,file,deps){
- const a=metadataView(before,file,deps),b=metadataView(after,file,deps);assert.deepEqual(b.protectedXml,a.protectedXml,'Unreviewed later-save metadata difference: '+file);
+ const a=snapshotMetadataView(before,file,deps),b=snapshotMetadataView(after,file,deps);assert.deepEqual(b.protectedXml,a.protectedXml,'Unreviewed later-save metadata difference: '+file);
  return{part:file,beforeSha256:digest(before),afterSha256:digest(after),recorded: Object.fromEntries(Object.keys(a.recorded).map(field=>[field,{before:a.recorded[field],after:b.recorded[field]}]))};
 }
 export function assertSnapshotRawPreservation(options){

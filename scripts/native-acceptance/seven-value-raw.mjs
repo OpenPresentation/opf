@@ -47,6 +47,16 @@ function protectedParts(parts,deps){
   for(const row of rows){assert.equal(row.TargetMode,undefined,'External style/resource relationships require review');assert.equal(typeof row.Target,'string');assert.ok(!row.Target.startsWith('/')&&!row.Target.includes('\\'));const target=path.posix.normalize(path.posix.join(path.posix.dirname(file),row.Target));assert.ok(!target.startsWith('../')&&!target.includes(':'));assert.ok(parts[target],'Missing reached resource');pending.push(target);}
  }return[...seen].sort();
 }
+// Pure signatures only: no data projection, workbook masking or admission.
+// The new literal contract validates its one branch before supplying part views.
+export function sevenRawPartSignatures(parts,deps){
+ const names=protectedParts(parts,deps),parser=new deps.XMLParser({preserveOrder:true,ignoreAttributes:false,parseTagValue:false,parseAttributeValue:false,trimValues:false});
+ return{names,records:names.map(file=>{
+  if(!/\.xml$|\.rels$/u.test(file))return[file,digest(parts[file])];
+  const xml=deps.strFromU8(parts[file]);assert.ok(!/<!DOCTYPE|<!ENTITY/u.test(xml));assert.equal(deps.XMLValidator.validate(xml),true);
+  return[file,digest(JSON.stringify(normalize(parser.parse(xml))))];
+ })};
+}
 export function assertSevenValueRawPreservation({input,saved,action,deps=archiveDependencies(),archiveContext}){
  const before=inspectSevenArchive(input,deps,archiveContext),after=inspectSevenArchive(saved,deps,archiveContext),archives=[deps.unzipSync(input),deps.unzipSync(saved)],signatures=[],leafCounts=[];
  const parser=new deps.XMLParser({preserveOrder:true,ignoreAttributes:false,parseTagValue:false,parseAttributeValue:false,trimValues:false});

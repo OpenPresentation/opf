@@ -214,11 +214,21 @@ function points(cache, numeric, prefix) {
     return numeric ? number(value) : value;
   });
 }
-function classicSeries(series, book) {
+function classicSeries(series, book, histogramLiteral = false) {
   const output = { index: series['c:idx']?.val, order: series['c:order']?.val };
   for (const field of ['c:tx', 'c:cat', 'c:val', 'c:xVal', 'c:yVal', 'c:bubbleSize'])
     if (series[field]) {
       const item = series[field];
+      if (histogramLiteral && field === 'c:val') {
+        assert.deepEqual(Object.keys(item), ['c:numLit'], 'Only one literal numeric source is admitted');
+        const literal=item['c:numLit'];
+        assert.deepEqual(Object.keys(literal), ['c:formatCode','c:ptCount','c:pt']);
+        assert.equal(literal['c:formatCode'],'General');
+        assert.deepEqual(literal['c:ptCount'],{val:'4'});
+        const expected=[43,31,-8,19], pts=list(literal['c:pt']);assert.equal(pts.length,4);
+        const values=pts.map((point,index)=>{assert.deepEqual(Object.keys(point),['c:v','idx']);assert.equal(point.idx,String(index));assert.equal(point['c:v'],String(expected[index]));return number(point['c:v']);});
+        output[field]={kind:'numeric-literal',formatCode:'General',values};continue;
+      }
       let found = false;
       for (const [kind, numeric] of [
         ['c:strRef', false],
@@ -245,7 +255,7 @@ function classicSeries(series, book) {
   );
   return output;
 }
-function inspectChart(parts, file, uri, deps, tools, archiveContext, slideIndex) {
+function inspectChart(parts, file, uri, deps, tools, archiveContext, slideIndex, histogramLiteral) {
   const parsed = tools.object(file);
   if (uri === 'http://schemas.openxmlformats.org/drawingml/2006/chart') {
     const space = parsed['c:chartSpace'];
@@ -257,11 +267,16 @@ function inspectChart(parts, file, uri, deps, tools, archiveContext, slideIndex)
     assert.equal(constructs.length, 1, 'Mixed classic chart requires separate review');
     const construct = constructs[0],
       series = list(plot[construct]['c:ser']);
+    if(histogramLiteral&&slideIndex===2&&file==='ppt/charts/chart2.xml'){
+      assert.equal(construct,'c:barChart');assert.equal(series.length,1);
+      const values=[43,31,-8,19],literal='<c:val><c:numLit><c:formatCode>General</c:formatCode><c:ptCount val="4"/>'+values.map((value,index)=>'<c:pt idx="'+index+'"><c:v>'+value+'</c:v></c:pt>').join('')+'</c:numLit></c:val>';
+      const branches=[...tools.xml(file).matchAll(/<c:val(?:\s[^<>]*?)?>[\s\S]*?<\/c:val>/gu)];assert.equal(branches.length,1);assert.equal(branches[0][0],literal,'Only the exact closed numeric literal branch is admitted');
+    }
     assert.ok(series.length > 0 && series.length <= 20, 'Bounded nonempty series');
     return {
       family: 'classic',
       construct,
-      series: series.map((s) => classicSeries(s, book)),
+      series: series.map((s) => classicSeries(s, book, histogramLiteral && slideIndex===2 && file==='ppt/charts/chart2.xml')),
       workbook: book,
     };
   }
@@ -332,7 +347,7 @@ function inspectChart(parts, file, uri, deps, tools, archiveContext, slideIndex)
   return { family: 'chartEx', series, caches, workbook: book };
 }
 
-export function inspectSevenArchive(input, deps = archiveDependencies(), archiveContext) {
+function inspectArchive(input, deps, archiveContext, histogramLiteral) {
   const { parts, count, total } = boundedParts(input, deps),
     tools = xmlTools(parts, deps),
     presentation = tools.object('ppt/presentation.xml')['p:presentation'];
@@ -410,7 +425,7 @@ export function inspectSevenArchive(input, deps = archiveDependencies(), archive
         record.kind = 'chart';
         record.uri = uri;
         record.chartPart = rel.target;
-        record.chart = inspectChart(parts, rel.target, uri, deps, tools, archiveContext,index+1);
+        record.chart = inspectChart(parts, rel.target, uri, deps, tools, archiveContext,index+1,histogramLiteral);
       }
       shapes.push(record);
     }
@@ -461,6 +476,16 @@ export function inspectSevenArchive(input, deps = archiveDependencies(), archive
     expandedBytes: total,
     slides,
   };
+}
+
+// The default reader and historical models still refuse numLit. This separate
+// entry admits exactly the reviewed current histogram result, never other literals.
+export function inspectSevenArchive(input,deps=archiveDependencies(),archiveContext){return inspectArchive(input,deps,archiveContext,false);}
+export function inspectHistogramLiteralArchive(input,deps=archiveDependencies(),archiveContext){
+ const archive=inspectArchive(input,deps,archiveContext,true),charts=archive.slides[1].shapes.filter(shape=>shape.kind==='chart');assert.equal(charts.length,1);
+ const shape=charts[0];assert.deepEqual([shape.branch,shape.id,shape.name,shape.chartPart,shape.chart.family,shape.chart.construct],['direct',3,'OPF chart 2','ppt/charts/chart2.xml','classic','c:barChart']);
+ assert.equal(shape.chart.series.length,1);assert.deepEqual(shape.chart.series[0],{index:'0',order:'0','c:tx':{formula:'Sheet1!$B$1',values:['Value']},'c:cat':{formula:'Sheet1!$A$2:$A$5',values:['North','South','East','West']},'c:val':{kind:'numeric-literal',formatCode:'General',values:[43,31,-8,19]}});
+ return archive;
 }
 
 // Native shape IDs identify one source branch; a shared chart name alone never does.
