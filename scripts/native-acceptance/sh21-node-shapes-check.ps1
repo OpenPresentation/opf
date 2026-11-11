@@ -4,7 +4,7 @@ if($PSVersionTable.PSEdition -cne 'Desktop' -or $PSVersionTable.PSVersion.Major 
 . (Join-Path $ControllerRoot 'scripts/native-acceptance/sh21-edit-bootstrap.ps1')
 Import-Sh21Definitions (Join-Path $ControllerRoot 'scripts/native-acceptance/seven-chart-worker.ps1') @('Get-SevenHash','Test-SevenInteger','Test-SevenFiniteNumber','Get-SevenPrimitive','Write-SevenReport','Write-SevenStage','Stop-SevenLifecycle','Assert-SevenProbe','Invoke-SevenCom','Read-SevenProperty','Assert-SevenOwnedPresentation')
 Import-Sh21Definitions (Join-Path $ControllerRoot 'scripts/native-acceptance/sh21-edit-actions.ps1') @('Assert-Sh21Plan','Assert-Sh21Owner','Get-Sh21ExpectedNodes','Read-Sh21Node','Set-Sh21NodeMap','Read-Sh21Nodes')
-Import-Sh21Definitions (Join-Path $ControllerRoot 'scripts/native-acceptance/sh21-node-shapes-actions.ps1') @('Add-Sh21ShapeFinding','Read-Sh21NodeShapesCapability')
+Import-Sh21Definitions (Join-Path $ControllerRoot 'scripts/native-acceptance/sh21-node-shapes-actions.ps1') @('Add-Sh21ShapeFinding','Read-Sh21ShapeProperty','Read-Sh21NodeShapesCapability')
 # Managed enumerable, one-based ranges only; no COM object/factory, process query or real export.
 Add-Type -TypeDefinition @'
 public sealed class Sh21CapabilityRange : System.Collections.IEnumerable {
