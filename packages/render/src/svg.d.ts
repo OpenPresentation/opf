@@ -28,6 +28,12 @@ export declare const engineDefaults: Readonly<{
 }>;
 
 export type RenderDiagnostic = LayoutDiagnostic | {
+  /** A generated RTL numbered marker stayed text; this PNG/raster-PDF marker is not direction-qualified. */
+  code: "raster-marker-unavailable";
+  reason: "unresolved" | "restricted" | "colour-font" | "shaping" | "system-fonts";
+  fontFamily?: string;
+  message: string;
+} | {
   /** LH-145: a picture background could not be read or decoded by `measurePictures`; its scrim is sized for any picture. */
   code: "picture-not-measured";
   path: string;
