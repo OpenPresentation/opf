@@ -1234,7 +1234,7 @@ function listEntriesSvg(item, fit, bound, options) {
   for(const entry of fit.listEntries){
     if(entry.marker.none){/* design.listBullet: none draws no marker */}
     else if(bullet){const box=entry.bulletBox??{x:entry.marker.x,y:entry.marker.y-entry.marker.fontSize*.65,width:entry.marker.fontSize*.65,height:entry.marker.fontSize*.65};children.push(tag('image',{x:stableNumber(box.x),y:stableNumber(box.y),width:stableNumber(box.width),height:stableNumber(box.height),href:bullet,preserveAspectRatio:'xMidYMid meet','aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));}
-    else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(entry.marker.y),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true',...markerDirection(entry)},escapeText(entry.marker.text)));
+    else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(textMarkerBaseline(entry,bound,arranged,options)),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true',...markerDirection(entry)},escapeText(entry.marker.text)));
     // LH-133: a glossary's term (entry.accent) draws in the tag's color on its backdrop, as the export writes it.
     // SH-09: an entry of a pyramid or matrix (geometry.arrangements) is centered on its node, as the export writes it.
     const config={path:entry.textPath,align:arranged?'center':'left',fill:entry.accent?eyebrowFill(bound.design,item):bound.design.colors.text,rich:Array.isArray(entry.value),options};
@@ -1260,11 +1260,21 @@ function numberMarkerStyle(marker) {
   return {'font-weight':marker.style.fontWeight===400?undefined:marker.style.fontWeight,'font-style':marker.style.italic?'italic':undefined};
 }
 
+// Text bullets and numbers share the body's first rendered baseline. Image
+// bullet boxes keep their existing core geometry; no image metric is inferred.
+function textMarkerBaseline(entry, bound, arranged, options) {
+  const value=typeof entry.value==='string'?[entry.value]:entry.value,fit=entry.text,line=fit.richLines[0];
+  if(!line)return entry.marker.y;
+  const context=richLineContext(value,fit,bound,{align:arranged?'center':'left',options});
+  const first=line.fragments[0],rtl=fit.directions?fit.directions[0]==='rtl':context.richRtl(first?context.runOffsets[first.runIndex]+first.start:0);
+  return richLineGeometry(line,0,fit,entry.textBox,bound,context.lineAlignment(0),rtl,options.textMeasurement).baseline;
+}
+
 function markerDirection(entry) {
   // The marker's text is the unchanged logical numbering token. A native RTL
   // auto-number uses its paragraph's base direction; isolate that same token
   // here while keeping core's EXISTING physical anchor, not a new text box.
-  if (entry.marker.number && entry.direction === 'rtl') return {direction:'rtl','unicode-bidi':'isolate','text-anchor':entry.marker.anchor==='end'?'start':'end'};
+  if (entry.marker.number && entry.direction === 'rtl') return {'data-opf-number-marker':'rtl',direction:'rtl','unicode-bidi':'isolate','text-anchor':entry.marker.anchor==='end'?'start':'end'};
   return entry.marker.anchor === 'end' ? {'text-anchor':'end'} : {};
 }
 
@@ -2329,8 +2339,7 @@ function trimRichLineEdges(line,textMeasurement) {
   return {...line,fragments,width:x};
 }
 
-function renderRichLines(value,fit,box,bound,config) {
-  for (const run of value) assertXmlText(typeof run === 'string' ? run : run.text, config.path);
+function richLineContext(value,fit,bound,config) {
   const logicalAlignment=fit.placement?.alignment??config.align??itemAlignment(bound.geometry.design.contentAlignment);
   // Each line takes its paragraph's direction from core (every wrapped line shares it) and its physical edge from that.
   const lineAlignment=index=>fit.placement?.lines[index]?.alignment??physicalAlignment(logicalAlignment,fit.directions?.[index]);
@@ -2342,21 +2351,30 @@ function renderRichLines(value,fit,box,bound,config) {
   // shape adjacent runs naturally inside each estimated line instead of turning
   // those estimates into visible gaps. Supplied measurements keep exact origins.
   const naturalFlow=!config.options.textMeasurement?.measure&&!fit.placement;
+  return {lineAlignment,runOffsets,richRtl,naturalFlow};
+}
+
+function richLineGeometry(sourceLine,lineIndex,fit,box,bound,alignment,rtl,measurement) {
+  const edgeTrim=rtl&&alignment==='right'?trimRichLineEdges(sourceLine,measurement):null;
+  const line=edgeTrim??sourceLine,placed=fit.placement?.lines[lineIndex];
+  const lineShift=bound.scriptFonts?baselineShift(...line.fragments.filter(fragment=>fragment.kind!=='tab'&&fragment.text).map(fragment=>bound.scriptFonts.plan(fragment.text,fragment.style))):0;
+  const shiftPx=lineShift*Math.max(fit.fontSize,...line.fragments.map(fragment=>fragment.fontSize));
+  return {edgeTrim,line,placed,baseline:(placed?.baseline??box.y+line.baseline)-shiftPx};
+}
+
+function renderRichLines(value,fit,box,bound,config) {
+  for (const run of value) assertXmlText(typeof run === 'string' ? run : run.text, config.path);
+  const {lineAlignment,runOffsets,richRtl,naturalFlow}=richLineContext(value,fit,bound,config);
   const hasTabs=fit.richLines.some(line=>line.fragments.some(fragment=>fragment.kind==='tab'));
   const content=fit.richLines.map((sourceLine,lineIndex)=>{
     const alignment=lineAlignment(lineIndex);
     const sourceFirst=sourceLine.fragments[0],rtl=fit.directions?fit.directions[lineIndex]==='rtl':richRtl(sourceFirst?runOffsets[sourceFirst.runIndex]+sourceFirst.start:0);
-    // PowerPoint ignores whitespace at either edge of a right-aligned right-to-left line, so the glyph edge stays on the box edge (RR-05).
-    const edgeTrim=rtl&&alignment==='right'?trimRichLineEdges(sourceLine,config.options.textMeasurement):null;
-    const line=edgeTrim??sourceLine;
+    // Shared with text list markers, including the actual post-trim policy plan.
+    const {edgeTrim,line,placed,baseline}=richLineGeometry(sourceLine,lineIndex,fit,box,bound,alignment,rtl,config.options.textMeasurement);
     const lineHasTab=line.fragments.some(fragment=>fragment.kind==='tab');
     const flow=naturalFlow&&!lineHasTab;
     const offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
-    const placed=fit.placement?.lines[lineIndex];
-    // RR-38: a line with runs in a policy replacement (Arabic Typesetting) takes PowerPoint's baseline of the real font, above core's.
-    const lineShift=bound.scriptFonts?baselineShift(...line.fragments.filter(fragment=>fragment.kind!=='tab'&&fragment.text).map(fragment=>bound.scriptFonts.plan(fragment.text,fragment.style))):0;
-    const shiftPx=lineShift*Math.max(fit.fontSize,...line.fragments.map(fragment=>fragment.fontSize));
-    const originX=placed?placed.x+(edgeTrim?sourceLine.width-line.width:0):box.x+offset,baseline=(placed?.baseline??box.y+line.baseline)-shiftPx;
+    const originX=placed?placed.x+(edgeTrim?sourceLine.width-line.width:0):box.x+offset;
     const firstFragment=line.fragments[0];
     const renderFragment=(fragment,asFlow,edges={})=>{
     const run=fragment.run;
@@ -2417,7 +2435,7 @@ function renderRichLines(value,fit,box,bound,config) {
     if(!flow)return fragments.join('\n');
     const x=alignment==='right'?box.x+box.width:alignment==='center'?box.x+box.width/2:box.x;
     const first=line.fragments[0];
-    return tag('text',{x:stableNumber(x),y:stableNumber(box.y+line.baseline-shiftPx),'text-anchor':alignment==='right'?'end':alignment==='center'?'middle':'start','xml:space':'preserve','font-family':fontStack(first?.style.fontFamily??config.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(first?.fontSize??fit.fontSize),'font-weight':first?.style.fontWeight??config.fontWeight??400,'font-style':first?.style.italic?'italic':undefined,[NO_POLICY_FEATURES]:true},fragments.join(''));
+    return tag('text',{x:stableNumber(x),y:stableNumber(baseline),'text-anchor':alignment==='right'?'end':alignment==='center'?'middle':'start','xml:space':'preserve','font-family':fontStack(first?.style.fontFamily??config.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(first?.fontSize??fit.fontSize),'font-weight':first?.style.fontWeight??config.fontWeight??400,'font-style':first?.style.italic?'italic':undefined,[NO_POLICY_FEATURES]:true},fragments.join(''));
   });
   let cursor=0;
   const whole=value.map(run=>typeof run==='string'?run:run.text).join('');

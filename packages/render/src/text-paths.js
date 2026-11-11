@@ -1,3 +1,4 @@
+import { embeddingAllowed, fsTypeOf } from './font-fstype.js';
 // RR-64: `text: "paths"` draws every <text> of a slide as glyph outlines, so the SVG needs no font. The renderer has
 // already decided every line, position and width (x, y, text-anchor, textLength); the vector PDF export's SVG text layout
 // (layoutText: text chunks, bidirectional runs, per-character fallback, fontkit shaping, textLength) turns that into positioned
@@ -68,7 +69,16 @@ function newLibrary(fonts) {
 // (only the PDF cannot subset it); a face whose fsType restricts embedding is never outlined: its text stays text.
 function addFace(library, data, family, described) {
   const face = library.addData(data, "fonts", family);
-  if (!face || face.outlineStyled) return;
+  prepareOutlineFace(library,face,described);
+}
+
+// Apply actual byte permissions BEFORE permitting a CFF outline face.
+export function prepareOutlineFace(library,face,described) {
+  if (!face) return;
+  library.restricted??=new Set();
+  if(!embeddingAllowed(fsTypeOf(face.data))||!embeddingAllowed(face.fsType)){face.embeddable=false;face.unusable="pdf-font-embedding-restricted";}
+  if(face.unusable==="pdf-font-embedding-restricted")for(const name of face.names)library.restricted.add(name);
+  if(face.outlineStyled)return;
   if (Number.isInteger(described?.weight)) face.weight = described.weight;
   if (typeof described?.italic === "boolean") face.italic = described.italic;
   if (face.unusable === "pdf-font-unsupported-format" && face.font) face.embeddable = true;
@@ -88,7 +98,7 @@ function decodeBase64(text) {
  * `rootStyle` holds what the <svg> element gives its children (lang), `report(diagnostic)` receives what cannot be outlined
  * and `fail(code, message)` builds the error thrown when no face draws a text. Returns the new content and the <defs> markup.
  */
-export function outlineSlideText(content, { library, shaper, rootStyle = {}, report = () => {}, fail }) {
+export function outlineSlideText(content, { library, shaper, shape, selectText, onRefusal, validateFace, rootStyle = {}, report = () => {}, fail }) {
   const defs = new Map();
   const reported = new Set();
   const env = {
@@ -96,11 +106,13 @@ export function outlineSlideText(content, { library, shaper, rootStyle = {}, rep
     defaults: [],
     splitByOwner: true,
     // HarfBuzz, the browser's shaper, when the handle carries one (RR-64 phase 2); fontkit otherwise.
-    ...(shaper ? { shape: harfBuzzShape(shaper) } : {}),
+    ...(shape ? {shape} : shaper ? { shape: harfBuzzShape(shaper) } : {}),
     // The renderer reports its own font substitutions and missing glyphs while it lays the slide out.
-    diagnostic: () => {},
-    missing: () => {},
-    unavailable: (families) => fail("text-as-paths-font-unavailable", `No font face can outline text in ${families.length ? `'${families.join("', '")}'` : "the requested family"}; pass the fonts handle the slide was laid out with.`),
+    diagnostic: onRefusal ? issue => {const family=issue.requestedFamily??issue.fontFamily;throw new OutlineRefusal(library.restricted?.has(family?.toLowerCase())?"restricted":"unresolved",family);} : () => {},
+    missing: onRefusal ? issue => {throw new OutlineRefusal("unresolved",issue.fontFamily);} : () => {},
+    onRefusal,
+    validateFace,
+    unavailable: (families) => onRefusal ? new OutlineRefusal(families.some(family=>library.restricted?.has(family.toLowerCase()))?"restricted":"unresolved",families.join(", ")) : fail("text-as-paths-font-unavailable", `No font face can outline text in ${families.length ? `'${families.join("', '")}'` : "the requested family"}; pass the fonts handle the slide was laid out with.`),
   };
   const base = inheritStyle(ROOT_STYLE, rootStyle);
   const REASONS = {
@@ -111,15 +123,15 @@ export function outlineSlideText(content, { library, shaper, rootStyle = {}, rep
   const keep = (family, reason) => {
     if (reported.has(`${family}|${reason}`)) return;
     reported.add(`${family}|${reason}`);
-    report({ code: "text-as-paths-fallback", reason, fontFamily: family, message: `'${family}' ${REASONS[reason]}; that text stays text and the SVG embeds its face.` });
+    report({ code: "text-as-paths-fallback", reason, fontFamily: family, message: `'${family}' ${REASONS[reason]}; ${reason==='restricted'?'that text stays text and the restricted face is not embedded':'that text stays text and the SVG embeds its face'}.` });
   };
-  const outlined = content.map((markup) => typeof markup === "string" && markup.includes("<text") ? outlineMarkup(markup, base, env, defs, keep) : markup);
+  const outlined = content.map((markup) => typeof markup === "string" && markup.includes("<text") ? outlineMarkup(markup, base, env, defs, keep, selectText) : markup);
   const definitions = [...defs].map(([id, d]) => `<path id="${id}" d="${d}"/>`).join("");
   return { content: outlined, defs: definitions ? `<defs>${definitions}</defs>` : "" };
 }
 
 // Splices each <text> element of `markup`; the style it inherits is folded from its ancestors' attributes.
-function outlineMarkup(markup, base, env, defs, keep) {
+function outlineMarkup(markup, base, env, defs, keep, selectText) {
   const ancestors = [];
   let out = "", from = 0, start = -1, depth = 0, parentStyle = null;
   for (const match of markup.matchAll(TOKENS)) {
@@ -129,7 +141,7 @@ function outlineMarkup(markup, base, env, defs, keep) {
       if (name === "text") depth += close ? -1 : selfClose ? 0 : 1;
       if (depth > 0) continue;
       const end = match.index + token.length;
-      out += markup.slice(from, start) + outlineText(markup.slice(start, end), parentStyle, env, defs, keep);
+      out += markup.slice(from, start) + outlineText(markup.slice(start, end), parentStyle, env, defs, keep, selectText);
       from = end;
       start = -1;
       continue;
@@ -138,7 +150,7 @@ function outlineMarkup(markup, base, env, defs, keep) {
     if (name === "text" && selfClose) {
       // An empty <text/> (an empty table cell) draws nothing: it becomes an empty group with the element's other attributes.
       const end = match.index + token.length;
-      out += markup.slice(from, match.index) + outlineText(token, base, env, defs, keep);
+      out += markup.slice(from, match.index) + outlineText(token, base, env, defs, keep, selectText);
       from = end;
       continue;
     }
@@ -159,10 +171,22 @@ function parseAttributes(text) {
   return attrs;
 }
 
-function outlineText(source, parentStyle, env, defs, keep) {
+class OutlineRefusal extends Error {
+  constructor(reason,fontFamily){super(reason);this.reason=reason;this.fontFamily=fontFamily;}
+}
+
+function outlineText(source, parentStyle, env, defs, keep, selectText) {
   const node = parseXml(`<svg>${source}</svg>`)?.children.find((child) => child.name === "text");
-  if (!node) return source;
-  const { runs } = layoutText(node, env, parentStyle, null);
+  if (!node || (selectText && !selectText(node))) return source;
+  let runs;
+  try{({runs}=layoutText(node,env,parentStyle,null));}
+  catch(error){if(!(error instanceof OutlineRefusal)||!env.onRefusal)throw error;env.onRefusal({reason:error.reason,fontFamily:error.fontFamily});return source;}
+  // Raster compatibility must not partially outline a token and leave the rest
+  // to a backend whose bidi/anchor handling is the reason for the rewrite.
+  if(env.onRefusal){
+    const refusal=runs.map(run=>({run,reason:env.validateFace?.(run.face,run.style)??fallbackReason(run,env)})).find(value=>value.reason);
+    if(refusal){env.onRefusal({reason:refusal.reason,fontFamily:[...refusal.run.face.names][0]});return source;}
+  }
   const attrs = Object.entries(node.attrs).filter(([key]) => !TEXT_ONLY.has(key));
   const hidden = node.attrs["aria-hidden"] === "true";
   const groups = [], outlined = [];

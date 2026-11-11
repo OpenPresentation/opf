@@ -1,3 +1,4 @@
+import { loadFontFiles } from './font-files.js';
 import { FontEmbedder, FontLibrary, nominalAdvance } from "./pdf-fonts.js";
 import { actualTextFor, layoutText, textClusters } from "./pdf-text.js";
 import { IDENTITY, viewBoxTransform, applyPoint, applyStyleSheets, attributesOf, inheritStyle, invert, multiply, parseColor, parseFontWeight, parseLength, parseNumberList, parsePath, parseTransform, pathBounds, ROOT_STYLE, shapeToPath, transformPath } from "./pdf-style.js";
@@ -129,25 +130,7 @@ class Converter {
   // Fonts
 
   async loadFontFiles(files, directories) {
-    // Font files are Node-only. A browser host passes no paths: its faces come from the SVG's @font-face data or `fontData`.
-    if (!files.length && !directories.length) return;
-    const { readdir, readFile, stat: fsStat, path } = await nodeFileSystem();
-    const seen = new Set();
-    const read = async (file) => {
-      const resolved = path.resolve(file);
-      if (seen.has(resolved)) return;
-      seen.add(resolved);
-      try {
-        const stat = await fsStat(resolved);
-        await this.fonts.addFile(resolved, stat, () => readFile(resolved));
-      } catch (error) {
-        this.diagnostic({ code: "pdf-font-unreadable", message: `Font file ${resolved} could not be read: ${error.code ?? error.message}.`, origin: resolved });
-      }
-    };
-    for (const directory of directories) {
-      for (const file of await listFonts(directory, { readdir, path })) await read(file);
-    }
-    for (const file of files) await read(file);
+    await loadFontFiles(this.fonts, files, directories, d => this.diagnostic(d));
   }
 
   addEmbeddedFontFaces(root) {
@@ -1242,18 +1225,6 @@ export function dataUriBytes(header, payload) {
   return bytes;
 }
 
-async function listFonts(directory, { readdir, path }) {
-  const found = [];
-  let entries;
-  try { entries = await readdir(directory, { withFileTypes: true }); } catch { return found; }
-  entries.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
-  for (const entry of entries) {
-    const full = path.join(directory, entry.name);
-    if (entry.isDirectory()) found.push(...await listFonts(full, { readdir, path }));
-    else if (/\.(ttf|otf)$/i.test(entry.name)) found.push(full);
-  }
-  return found;
-}
 
 /**
  * Convert SVG slides to a vector PDF. `options` carries the resolved conversion settings (see toPdf in raster.js).
