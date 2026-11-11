@@ -1,0 +1,109 @@
+{
+  "scope": "Syntax, own offline frozen install, sole maintained SH21 Node file; no build/Office/native acceptance",
+  "before": {
+    "head": "2f345c54be714cbe24b0d15df866201cf396d272",
+    "status": "M docs/programs/release-readiness/burndown.md\n M scripts/native-acceptance/sh21-edit-profile.mjs\n M scripts/native-acceptance/sh21-edit-profile.test.mjs\n?? changes/rr105-sh21-public-parser-entry.md\n?? docs/handoff/2026-11-10/rr105-sh21-public-parser-entry.md",
+    "lockSha256": "11c0b695a44fe5dcbefa76722f78fdd725e9ceb70b29287cf70b042a2b3326fb",
+    "nodeSha256": "e4b5a3af0e05c75de2eae013904145f40fe7fc2a6e6f17510128bf45cca4e79b",
+    "pnpmSha256": "b276da51dc8ca5b0d3ee3371695b50fc8b3244b281b091c63a3f082a88dadeb9"
+  },
+  "steps": [
+    {
+      "name": "node-version",
+      "argv": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "--version"
+      ],
+      "exitCode": 0,
+      "seconds": 0.021,
+      "log": "node-version.log",
+      "bytes": 9,
+      "sha256": "f2ec568164f99546161909b0189b57bb5be3e80f8e2ccd8a51a4aed8c4055a04"
+    },
+    {
+      "name": "pnpm-version",
+      "argv": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+        "--version"
+      ],
+      "exitCode": 0,
+      "seconds": 0.141,
+      "log": "pnpm-version.log",
+      "bytes": 8,
+      "sha256": "abb3ce293b7ae818d9d22051b093e51415a4de46f6dd529189c4feb458037cb5"
+    },
+    {
+      "name": "syntax-profile",
+      "argv": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "--check",
+        "scripts/native-acceptance/sh21-edit-profile.mjs"
+      ],
+      "exitCode": 0,
+      "seconds": 0.024,
+      "log": "syntax-profile.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "syntax-test",
+      "argv": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "--check",
+        "scripts/native-acceptance/sh21-edit-profile.test.mjs"
+      ],
+      "exitCode": 0,
+      "seconds": 0.025,
+      "log": "syntax-test.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "install",
+      "argv": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+        "install",
+        "--offline",
+        "--frozen-lockfile",
+        "--store-dir",
+        "/tmp/.pnpm-store"
+      ],
+      "exitCode": 0,
+      "seconds": 3.054,
+      "log": "install.log",
+      "bytes": 4306,
+      "sha256": "bf6601c6528b17bcbdb245a7d4e8af258b48766c48cc586816383253668ad3a9"
+    },
+    {
+      "name": "sh21-focus",
+      "argv": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "--test",
+        "scripts/native-acceptance/sh21-edit-profile.test.mjs"
+      ],
+      "exitCode": 0,
+      "seconds": 0.304,
+      "log": "sh21-focus.log",
+      "bytes": 4817,
+      "sha256": "e791f3ac2957e2b9f14dd41edfd7a547924ecbf5d7893ede067aeb888c0b00ef"
+    }
+  ],
+  "terminal": "PASS",
+  "sourcePinsUnchanged": true,
+  "after": {
+    "head": "2f345c54be714cbe24b0d15df866201cf396d272",
+    "status": "M docs/programs/release-readiness/burndown.md\n M scripts/native-acceptance/sh21-edit-profile.mjs\n M scripts/native-acceptance/sh21-edit-profile.test.mjs\n?? changes/rr105-sh21-public-parser-entry.md\n?? docs/handoff/2026-11-10/rr105-sh21-public-parser-entry.md",
+    "lockSha256": "11c0b695a44fe5dcbefa76722f78fdd725e9ceb70b29287cf70b042a2b3326fb"
+  },
+  "reviewedSourcePatchSha256": "7f70b1a3d1b443dce0f08b6eefba87a749a809b9d5f24e35659f159f5ed74f34",
+  "reviewedSourceManifestSha256": "66c29d209800351f2c1d4e528d88527c1031bd77058ca1acf4d902fefabec5d6",
+  "focusedTests": {
+    "total": 68,
+    "pass": 67,
+    "fail": 0,
+    "skip": 1,
+    "skipScope": "Actual PowerShell5.1 unavailable on Mac; no actual managed/native qualification"
+  }
+}
