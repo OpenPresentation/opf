@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "status": "focused-pass; native spacing and required changed gate unrun",
+  "sourceCheckpoint": {
+    "base": "d758f1b8e03143904d8c099b1d74a23c1cc24f0e",
+    "manifestPath": "/tmp/opf-neutral-prefix-focus01/source.json",
+    "manifestSha256": "768cf23fba6d8f3226a151eb0cd5d1ea35a9b1dd2855b82c66bddc19cca6a262",
+    "productAndTestPins": [
+      {
+        "file": "packages/pptx/src/native-text-fragments.js",
+        "bytes": 32429,
+        "sha256": "7a16a3099f72735b86b141d1336a9ecae56f8b013aef1390aa1ee3ef565f3299"
+      },
+      {
+        "file": "packages/pptx/test/native-text-fragments.mjs",
+        "bytes": 24533,
+        "sha256": "3cfd06ccbbec10d01aafa7f079c59d7011ca32aa53a2db1cc4e1dd2dec71f10f"
+      },
+      {
+        "file": "packages/pptx/test/native-text-fragment-ltr-numbers.mjs",
+        "bytes": 21674,
+        "sha256": "1761c642bd68b51facb1ec88ad4ecbcaa5023091b1a4a3ec2824e51d29eac641"
+      }
+    ],
+    "sourceIntegrity": "PASS"
+  },
+  "commands": {
+    "count": 12,
+    "allExitZero": true,
+    "summedChildElapsedMs": 18175.028957000006,
+    "receiptPath": "/tmp/opf-neutral-prefix-focus01/receipt.json",
+    "receiptSha256": "6b6e1bc0fabc2c52a0d5c53f8a51b6b83b039fc0a1eee8af8a8f9fd99c1ccddb",
+    "runnerSha256": "d154b51ef64fb01249b9b38986477d9c2a8130a589e5596b70a2ee935fc44076",
+    "exporterSha256": "bea337cab1100d8cbfbb0a1984bc2b5119665d97e5bea48f68b6bb44a6b82697"
+  },
+  "focused": {
+    "groups": 62,
+    "pass": 62,
+    "fail": 0,
+    "skipped": 0,
+    "files": [
+      {
+        "file": "native-text-fragments.mjs",
+        "tests": 15,
+        "pass": 15,
+        "fail": 0,
+        "skipped": 0,
+        "elapsedMs": 1108.5012920000008,
+        "logSha256": "d51b0973d00133bcc77cae9e5ef63f1c2682f2b3cb4a3a0ffa43f3c707a3b1f1"
+      },
+      {
+        "file": "native-text-fragment-ltr-numbers.mjs",
+        "tests": 9,
+        "pass": 9,
+        "fail": 0,
+        "skipped": 0,
+        "elapsedMs": 1305.594416,
+        "logSha256": "e0b22f9cc5af73f255951849084f41d4bfffcade6e091577fabc22e00849e44a"
+      },
+      {
+        "file": "native-text-fragment-mixed-run.mjs",
+        "tests": 4,
+        "pass": 4,
+        "fail": 0,
+        "skipped": 0,
+        "elapsedMs": 647.408958,
+        "logSha256": "d90817d727dff64042f2a48dfc0fe643dfc449785dffc9b20fdf2c445cb9c963"
+      },
+      {
+        "file": "native-latin-slots.mjs",
+        "tests": 15,
+        "pass": 15,
+        "fail": 0,
+        "skipped": 0,
+        "elapsedMs": 1285.7025830000002,
+        "logSha256": "5aa473ac6342c45b59faedd0b36932b9336232c86fd06cb809028e9998ec701f"
+      },
+      {
+        "file": "native-scalar-fragments.mjs",
+        "tests": 19,
+        "pass": 19,
+        "fail": 0,
+        "skipped": 0,
+        "elapsedMs": 5284.0690840000025,
+        "logSha256": "76f0f82e26b29385c9e60e32fae3ba7f574b3585c69d6193ced24d00ffcc0b1f"
+      }
+    ]
+  },
+  "baseline": {
+    "sourceHead": "225b2bba41b0910a85432fd91c75aa4e132841fe",
+    "label": "Actual225b clean source/existing compiled graph; not a raw9a20 archive or installed-consumer claim",
+    "runtimeCount": 609,
+    "runtimeSha256": "c5ab225fc39280e529256b5feb2c424c0a2447580b84a95fdc270d5066f8d289",
+    "runtimeBeforeAfterEqual": true,
+    "receiptSha256": "3872fed1206c680e130eb05395323a9a598276fe0329f5e368bf759e509e3476"
+  },
+  "candidate": {
+    "sourceBase": "d758f1b8e03143904d8c099b1d74a23c1cc24f0e",
+    "runtimeCount": 301,
+    "runtimeSha256": "6e27c114bb672d28502ae9316499fb4c6104431cb81dd2a95582218f5dcee908",
+    "runtimeBeforeAfterEqual": true,
+    "receiptSha256": "e40b6ad2812980acf2809f516a5b6a7f1459445cd11c104daeedf589a6780739"
+  },
+  "exactComparisons": [
+    {
+      "id": "rtl-contrast-05-mixed-explicit-arabic",
+      "source": {
+        "bytes": 293,
+        "sha256": "196fb0e0d2e64cafa63612b09805d5b738ecaa1cce8b32fb947f0f59cd9c8653"
+      },
+      "zip": {
+        "bytes": 21029,
+        "sha256": "3fe5b7b2010cbe4db7baf9c262125fce155f2b15e5b1b105bc5913c24592c8c6"
+      },
+      "parts": 30,
+      "zipBytesEqual": true,
+      "allPartHashesEqual": true,
+      "publicImportEqual": true,
+      "exportDiagnosticsEqual": true,
+      "importDiagnosticsEqual": true
+    },
+    {
+      "id": "rtl-contrast-06-whole-explicit-arabic",
+      "source": {
+        "bytes": 273,
+        "sha256": "1077885b435004706270c8251a8b2d37c6b3d3e3350003625e8cffd0f991f03f"
+      },
+      "zip": {
+        "bytes": 20998,
+        "sha256": "7de8d255eb1497e914fbe478c4b004916dc3c751293af73b646f4cf2df201ff2"
+      },
+      "parts": 30,
+      "zipBytesEqual": true,
+      "allPartHashesEqual": true,
+      "publicImportEqual": true,
+      "exportDiagnosticsEqual": true,
+      "importDiagnosticsEqual": true
+    },
+    {
+      "id": "rtl-contrast-10-non-ascii-digits",
+      "source": {
+        "bytes": 519,
+        "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+      },
+      "zip": {
+        "bytes": 35147,
+        "sha256": "dcaa04bc37aefa87d6337109b3393354a4e9a6e37f6d29c07e85dc5d8a4439a8"
+      },
+      "parts": 42,
+      "zipBytesEqual": true,
+      "allPartHashesEqual": true,
+      "publicImportEqual": true,
+      "exportDiagnosticsEqual": true,
+      "importDiagnosticsEqual": true
+    },
+    {
+      "id": "b07-current-native-body-two-paragraphs",
+      "source": {
+        "bytes": 333,
+        "sha256": "8385a562944abb5578b4c0cd6bb15628dcf1dfb82e904c702b58b99e820cf078"
+      },
+      "zip": {
+        "bytes": 19455,
+        "sha256": "1a9d7c0758b7d8046e031df840a046a3417c11ad3d6914530392ad5d7e18caa5"
+      },
+      "parts": 27,
+      "zipBytesEqual": true,
+      "allPartHashesEqual": true,
+      "publicImportEqual": true,
+      "exportDiagnosticsEqual": true,
+      "importDiagnosticsEqual": true
+    }
+  ],
+  "retainedNativeWrongImage": {
+    "producer": "9a20 frozen prior genuine producer",
+    "path": "/tmp/opf-b07-case09-9a20-review/native.exact.png",
+    "bytes": 10409,
+    "sha256": "83beaf4a5366adc200430ee20a013a2731810326bc81de650f6448501f75453b"
+  },
+  "unrun": [
+    "Required changed check",
+    "Fresh genuine installed-consumer/source-bound case09 suite and profile",
+    "Fresh native original/save/reopen spacing and full facet qualification",
+    "Final full CI/release"
+  ]
+}

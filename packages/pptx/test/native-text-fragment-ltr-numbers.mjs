@@ -20,7 +20,7 @@ const currentBytes=Buffer.from(JSON.stringify(source,null,2)+'\n'),hash=bytes=>c
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const attr=(xml,name)=>new RegExp('\\b'+name+'="([^"]*)"').exec(xml)?.[1];
 const decode=text=>String(parser.parse('<t>'+text+'</t>').t??'');
-const shapes=xml=>[...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([xml])=>({xml,name:attr(/<p:cNvPr\b[^>]*>/.exec(xml)?.[0]??'','name'),runs:[...xml.matchAll(/<a:r>([\s\S]*?)<a:t>([^<]*)<\/a:t><\/a:r>/g)].map(([xml,properties,text])=>({xml,properties,text:decode(text)}))}));
+const shapes=xml=>[...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([xml])=>({xml,name:attr(/<p:cNvPr\b[^>]*>/.exec(xml)?.[0]??'','name'),runs:[...xml.matchAll(/<a:r>([\s\S]*?)<a:t(?: xml:space="preserve")?>([^<]*)<\/a:t><\/a:r>/g)].map(([xml,properties,text])=>({xml,properties,text:decode(text)}))}));
 const text=shape=>shape.runs.map(run=>run.text).join('');
 const frame=shape=>{const found=/<a:xfrm><a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/><\/a:xfrm>/.exec(shape.xml);assert(found);return found.slice(1).map(Number);};
 const tags=zip=>Object.entries(zip).filter(([path])=>/^ppt\/tags\//.test(path)).flatMap(([,bytes])=>[...strFromU8(bytes).matchAll(/<p:tag name="OPF_NATIVE_FRAGMENTS_V1" val="([^"]*)"\/>/g)].map(match=>decodeTextTag(match[1])));
@@ -36,11 +36,11 @@ async function prepare(){
   assert.equal(lines.length,2);assert.equal(lines[0].fragments.length,1);assert.equal(lines[1].fragments.length,1);
   const first=lines[0].fragments[0],next=lines[1].fragments[0],measure=textWidthMeasurer(first.style,fonts.textMeasurement);
   const zip=unzipSync(new Uint8Array(bytes));
-  return {bytes,zip,xml:strFromU8(zip[slidePath]),svg:strFromU8(preview.files[0].bytes),origin:entry.textBox.x,first:{text:first.text,start:first.start,end:first.end,width:first.width},next:{text:next.text,start:next.start,end:next.end,width:next.width},advances:[measure(first.text,first.fontSize),measure(first.text.slice(0,5),first.fontSize),measure(first.text.slice(0,6),first.fontSize)]};
+  return {bytes,zip,xml:strFromU8(zip[slidePath]),svg:strFromU8(preview.files[0].bytes),origin:entry.textBox.x,first:{text:first.text,start:first.start,end:first.end,width:first.width},next:{text:next.text,start:next.start,end:next.end,width:next.width},advances:[0,5,6,7,8,69].map(end=>measure(first.text.slice(0,end),first.fontSize)),independent:[[5,6],[6,7],[7,8],[8,69]].map(([from,to])=>measure(first.text.slice(from,to),first.fontSize))};
  }finally{fonts.dispose?.();}
 }
 
-test('pinned whole-ASCII Arabic-proofed source isolates only the numeric interval at genuine measured origins',async()=>{
+test('pinned whole-ASCII Arabic-proofed source isolates numeric and leading-neutral classes at genuine measured origins',async()=>{
  assert.equal(oldBytes.length,371);assert.equal(hash(oldBytes),'16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c');
  assert.equal(currentBytes.length,375);assert.equal(hash(currentBytes),'06be411c44847acac56f90b67baa318469b2206661de5a76ed315555513bc8c6');
  const inverse=structuredClone(source);inverse.slides[0].items[0][0].lang=inverse.slides[0].items[0][0].language;delete inverse.slides[0].items[0][0].language;assert.deepEqual(Buffer.from(JSON.stringify(inverse,null,2)+'\n'),oldBytes);
@@ -48,53 +48,85 @@ test('pinned whole-ASCII Arabic-proofed source isolates only the numeric interva
  const result=await actual(),all=shapes(result.xml),carrier=all.find(shape=>/^OPF list .+ line 0$/.test(shape.name)),continuation=all.find(shape=>/^OPF list .+ line 1$/.test(shape.name)),members=all.filter(shape=>shape.name.startsWith('OPF native fragment '));
  assert.equal(result.first.text,run.text.slice(0,69));assert.equal(result.first.text.length,69);assert.equal(result.first.text.charCodeAt(68),0x20);
  assert.equal(result.next.text,run.text.slice(69));assert.equal(result.next.text.length,28);assert.equal(result.next.start,69);
- assert.equal(all.length,5,'Actual shape count, not an assumed qualification result');
- assert.equal(text(carrier),'Item ');assert.deepEqual(members.map(text),['1',run.text.slice(6,69)]);assert.equal(text(continuation),run.text.slice(69));
- assert.equal(all.map(text).join('').length,123);assert.equal((result.xml.match(/<a:buAutoNum\b/g)??[]).length,1);assert.equal(tags(result.zip).length,3);
+ assert.equal(all.length,7,'Actual shape count, not an assumed qualification result');
+ assert.equal(text(carrier),'Item ');assert.deepEqual(members.map(text),['1',':',' ',run.text.slice(8,69)]);assert.equal(text(continuation),run.text.slice(69));
+ assert.equal(all.map(text).join('').length,123);assert.equal((result.xml.match(/<a:buAutoNum\b/g)??[]).length,1);assert.equal(tags(result.zip).length,5);
+ assert.deepEqual(tags(result.zip).sort((a,b)=>a.index-b.index).map(({from,to,source})=>({from,to,source})),[[0,5],[5,6],[6,7],[7,8],[8,69]].map(([from,to])=>({from,to,source:[{run:0,start:0,end:69}]})));
+ assert.match(members[2].xml,/<a:t xml:space="preserve"> <\/a:t>/);for(const member of members.filter((_,index)=>index!==2))assert(!member.xml.includes('xml:space="preserve"'),'Only the whitespace-only interval acquires preserved-space spelling');
  const rows=[carrier,...members,continuation];for(const shape of rows){assert.match(shape.xml,/<a:pPr\b[^>]*\brtl="0"/);assert.match(shape.xml,/<a:bodyPr\b[^>]*\brtlCol="0"/);for(const member of shape.runs){assert.match(member.properties,/lang="ar-SA" altLang="en-US"/);assert.equal(attr(/<a:cs\b[^>]*\/>/.exec(member.properties)?.[0]??'','typeface'),attr(/<a:latin\b[^>]*\/>/.exec(member.properties)?.[0]??'','typeface'));assert(!/<a:rtl\b/.test(member.properties));}}
  const tail=/<a:endParaRPr\b[^>]*\/>|<a:endParaRPr\b[^>]*>[\s\S]*?<\/a:endParaRPr>/.exec(carrier.xml)?.[0];assert(tail);for(const member of members){assert.equal(member.runs[0].properties,carrier.runs[0].properties);assert(member.xml.includes(tail));assert(!member.xml.includes('<a:buAutoNum'));}
  const svgLine=[...result.svg.matchAll(/<text\b([^>]*)>([^<]*Item 1:[^<]*)<\/text>/g)][0];assert(svgLine,'Actual unchanged SVG measured line supplies its LTR origin');
- const origin=result.origin;assert(Number.isFinite(origin));assert.equal(Number(origin.toFixed(3)),Number(attr(svgLine[1],'x')),'Current SVG and core agree on the unchanged LTR origin at existing SVG precision');assert(Math.abs(result.advances[0]-result.first.width)<=1e-7);
- const [number,suffix]=members.map(frame),original=frame(carrier);assert.equal(number[0],Math.round((origin+result.advances[1])*9525));assert.equal(suffix[0],Math.round((origin+result.advances[2])*9525));assert.equal(number[0]+number[2],suffix[0]);assert.equal(suffix[0]+suffix[2],Math.round((origin+result.advances[0])*9525));
- for(const member of [number,suffix]){assert.equal(member[1],original[1]);assert.equal(member[3],original[3]);}
+ const origin=result.origin;assert(Number.isFinite(origin));assert.equal(Number(origin.toFixed(3)),Number(attr(svgLine[1],'x')),'Current SVG and core agree on the unchanged LTR origin at existing SVG precision');assert(Math.abs(result.advances.at(-1)-result.first.width)<=1e-7);
+ const projected=members.map(frame),original=frame(carrier);
+ for(const [index,member]of projected.entries()){
+  const left=Math.round((origin+result.advances[index+1])*9525),right=Math.round((origin+result.advances[index+2])*9525);
+  assert.equal(member[0],left);assert.equal(member[2],right-left);assert.equal(member[1],original[1]);assert.equal(member[3],original[3]);
+  assert(Math.abs(result.advances[index+2]-result.advances[index+1]-result.independent[index])<=1e-7,'Independent interval agrees without rescaling');
+  if(index)assert.equal(projected[index-1][0]+projected[index-1][2],member[0]);
+ }
+ assert.equal(projected.at(-1)[0]+projected.at(-1)[2],Math.round((origin+result.advances.at(-1))*9525));
  assert(!/[\u200e\u200f\u202a-\u202e\u2066-\u2069]/u.test(result.xml));
  assert.deepEqual(await fromPptx(result.bytes),source,'One original authored run survives all generated numeric paragraphs and measured wrapping');
 });
 
 test('current arbitrary-length suffix and numeric edits remain current without old-length slicing',async()=>{
- const result=await actual(),all=shapes(result.xml),suffix=all.find(shape=>shape.name.startsWith('OPF native fragment ')&&text(shape)!=='1'),numeric=all.find(shape=>shape.name.startsWith('OPF native fragment ')&&text(shape)==='1');
- for(const [member,replacement,expected]of [[suffix,': Edited current text ',run.text.slice(0,6)+': Edited current text '+run.text.slice(69)],[numeric,'2345',run.text.slice(0,5)+'2345'+run.text.slice(6)]]){
-  const changed=member.xml.replace(member.runs[0].xml,member.runs[0].xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>'+replacement+'</a:t>')),diagnostics=[],zip={...result.zip,[slidePath]:strToU8(result.xml.replace(member.xml,changed))};
+ const result=await actual(),all=shapes(result.xml),members=all.filter(shape=>shape.name.startsWith('OPF native fragment ')),suffix=members.find(shape=>text(shape).includes('Customers')),numeric=members.find(shape=>text(shape)==='1'),punctuation=members.find(shape=>text(shape)===':'),space=members.find(shape=>text(shape)===' ');
+ for(const [member,replacement,expected]of [[suffix,'Edited current text ',run.text.slice(0,8)+'Edited current text '+run.text.slice(69)],[numeric,'2345',run.text.slice(0,5)+'2345'+run.text.slice(6)],[punctuation,'--',run.text.slice(0,6)+'--'+run.text.slice(7)],[space,'   ',run.text.slice(0,7)+'   '+run.text.slice(8)],[space,'',run.text.slice(0,7)+run.text.slice(8)]]){
+  const changed=member.xml.replace(member.runs[0].xml,member.runs[0].xml.replace(/<a:t\b[^>]*>[^<]*<\/a:t>/,'<a:t>'+replacement+'</a:t>')),diagnostics=[],zip={...result.zip,[slidePath]:strToU8(result.xml.replace(member.xml,changed))};
   const imported=await fromPptx(zipSync(zip),{onDiagnostic:issue=>diagnostics.push(issue)});assert.equal(bodyText(imported),expected);assert.equal(bodyText(imported).length,expected.length);assert(diagnostics.some(issue=>issue.code==='native-fragment-reflow'));
  }
 });
 
 test('current suffix style and native-boundary edits are not spread across the old authored run',async()=>{
- const result=await actual(),suffix=shapes(result.xml).find(shape=>shape.name.startsWith('OPF native fragment ')&&text(shape)!=='1');
+ const result=await actual(),suffix=shapes(result.xml).find(shape=>shape.name.startsWith('OPF native fragment ')&&text(shape).includes('Customers'));
  const record=tags(result.zip).find(record=>record.name===suffix.name),binding=Object.fromEntries(['v','group','count','length','source','index','name','id','from','to','role'].map(key=>[key,record[key]]));
  assert.equal(nativeFragmentPropertiesHash(suffix.xml,binding),record.properties);
- for(const [name,change,check]of [
+ for(const [name,change,check,expected=run.text]of [
   ['font',xml=>xml.replace(/(<a:latin\b[^>]*\btypeface=")[^"]*"/,'$1Georgia"'),runs=>{assert(runs.some(run=>run.text.includes('Customers')&&run.fontFamily==='Georgia'));assert(runs.filter(run=>run.text.includes('Item')||run.text.includes('around')).every(run=>run.fontFamily!=='Georgia'));}],
   ['proofing',xml=>xml.replace('lang="ar-SA"','lang="fr-FR"'),runs=>assert(runs.some(run=>run.text.includes('Customers')&&run.language==='fr-FR'))],
-  ['boundary',xml=>xml.replace(suffix.runs[0].xml,suffix.runs[0].xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>: </a:t>')+suffix.runs[0].xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>'+run.text.slice(8,69)+'</a:t>')),runs=>assert(runs.some(run=>run.text===': '))],
+  ['boundary',xml=>xml.replace(suffix.runs[0].xml,suffix.runs[0].xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>Customers </a:t>')+suffix.runs[0].xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>'+run.text.slice(18,69)+'</a:t>')),runs=>assert(runs.some(run=>run.text==='Customers '))],
+  ['current neutral-prefix boundary',xml=>xml.replace(suffix.runs[0].xml,suffix.runs[0].xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>: </a:t>')+suffix.runs[0].xml),runs=>assert(runs.some(run=>run.text===': ')),run.text.slice(0,8)+': '+run.text.slice(8)],
  ]){
   const changed=change(suffix.xml);assert.notEqual(changed,suffix.xml,name);assert.notEqual(nativeFragmentPropertiesHash(changed,binding),record.properties,name+' must disable old complete-property joining');const diagnostics=[],zip={...result.zip,[slidePath]:strToU8(result.xml.replace(suffix.xml,changed))},imported=await fromPptx(zipSync(zip),{onDiagnostic:issue=>diagnostics.push(issue)});
-  assert.equal(bodyText(imported),run.text);check(itemRuns(imported));assert(diagnostics.some(issue=>issue.code==='native-fragment-reflow'));
+  assert.equal(bodyText(imported),expected);check(itemRuns(imported));assert(diagnostics.some(issue=>issue.code==='native-fragment-reflow'));
+ }
+});
+
+test('neutral-only native members retain current styles and do not hide script-font findings',async()=>{
+ const result=await actual(),members=shapes(result.xml).filter(shape=>shape.name.startsWith('OPF native fragment ')),punctuation=members.find(shape=>text(shape)===':'),space=members.find(shape=>text(shape)===' ');
+ for(const [name,member,change,check]of [
+  ['punctuation bold',punctuation,xml=>xml.replace('<a:rPr ','<a:rPr b="1" '),(runs,diagnostics)=>{assert(runs.some(run=>run.text===':'&&run.bold===true));assert(!diagnostics.some(issue=>issue.code==='unsupported-body-font'));}],
+  ['space proofing',space,xml=>xml.replace('lang="ar-SA"','lang="fr-FR"'),runs=>assert(runs.some(run=>run.text===' '&&run.language==='fr-FR'))],
+  ['punctuation complex-script edit',punctuation,xml=>xml.replace(/(<a:cs\b[^>]*\btypeface=")[^"]*"/,'$1Georgia"'),(_runs,diagnostics)=>assert(diagnostics.some(issue=>issue.code==='unsupported-body-font'))],
+ ]){
+  const changed=change(member.xml);assert.notEqual(changed,member.xml,name);const diagnostics=[],imported=await fromPptx(zipSync({...result.zip,[slidePath]:strToU8(result.xml.replace(member.xml,changed))}),{onDiagnostic:issue=>diagnostics.push(issue)});
+  assert.equal(bodyText(imported),run.text,name);check(itemRuns(imported),diagnostics);assert(diagnostics.some(issue=>issue.code==='native-fragment-reflow'),name);
+ }
+});
+
+test('missing neutral members refuse complete ownership and retain current visible content',async()=>{
+ const result=await actual(),members=shapes(result.xml).filter(shape=>shape.name.startsWith('OPF native fragment ')),suffix=members.find(shape=>text(shape).includes('Customers'));
+ const valueText=value=>typeof value==='string'?value:Array.isArray(value)?value.map(valueText).join(''):value&&typeof value==='object'?['text','items','bullets','blocks'].filter(key=>Object.hasOwn(value,key)).map(key=>valueText(value[key])).join(''):'';
+ for(const missing of members.filter(shape=>[':',' '].includes(text(shape)))){
+  const replacement='Current visible replacement ',changedSuffix=suffix.xml.replace(suffix.runs[0].xml,suffix.runs[0].xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>'+replacement+'</a:t>'));
+  const xml=result.xml.replace(suffix.xml,changedSuffix).replace(missing.xml,''),diagnostics=[],imported=await fromPptx(zipSync({...result.zip,[slidePath]:strToU8(xml)}),{onDiagnostic:issue=>diagnostics.push(issue)}),current=valueText(imported.slides[0]);
+  assert(diagnostics.some(issue=>issue.code==='invalid-native-fragments'),'A missing member cannot grant complete source ownership');assert(current.includes(replacement));assert(current.includes('Item'));assert(current.includes('1'));assert(!current.includes('Customers'),'Missing metadata cannot replay the original suffix');
+  if(text(missing)===':')assert(!current.includes(':'),'Deleted punctuation cannot return from stored source');
  }
 });
 
 test('current interior boundaries survive continuation, removed-continuation and new-entry joins',async()=>{
- const result=await actual(),all=shapes(result.xml),carrier=all.find(shape=>/^OPF list .+ line 0$/.test(shape.name)),continuation=all.find(shape=>/^OPF list .+ line 1$/.test(shape.name)),suffix=all.find(shape=>shape.name.startsWith('OPF native fragment ')&&text(shape)!=='1'),native=suffix.runs[0];
- const left=native.xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>: </a:t>'),right=native.xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>'+run.text.slice(8,69)+'</a:t>'),changed=result.xml.replace(suffix.xml,suffix.xml.replace(native.xml,left+right)),pPr=/<a:pPr\b[^>]*\/>|<a:pPr\b[^>]*>[\s\S]*?<\/a:pPr>/.exec(carrier.xml)[0];
+ const result=await actual(),all=shapes(result.xml),carrier=all.find(shape=>/^OPF list .+ line 0$/.test(shape.name)),continuation=all.find(shape=>/^OPF list .+ line 1$/.test(shape.name)),suffix=all.find(shape=>shape.name.startsWith('OPF native fragment ')&&text(shape).includes('Customers')),native=suffix.runs[0];
+ const left=native.xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>Customers </a:t>'),right=native.xml.replace(/<a:t>[^<]*<\/a:t>/,'<a:t>'+run.text.slice(18,69)+'</a:t>'),changed=result.xml.replace(suffix.xml,suffix.xml.replace(native.xml,left+right)),pPr=/<a:pPr\b[^>]*\/>|<a:pPr\b[^>]*>[\s\S]*?<\/a:pPr>/.exec(carrier.xml)[0];
  const newEntry=continuation.xml.replace(/<a:pPr\b[^>]*\/>|<a:pPr\b[^>]*>[\s\S]*?<\/a:pPr>/,pPr);
  for(const [name,xml,expectedTail,bold]of [
-  ['continuation',changed,run.text.slice(8),false],
-  ['removed continuation',changed.replace(continuation.xml,''),run.text.slice(8,69),false],
-  ['new entry',changed.replace(continuation.xml,newEntry),run.text.slice(8,69),false],
-  ['style divergence',changed.replace(left,left.replace('<a:rPr ','<a:rPr b="1" ')),run.text.slice(8),true],
+  ['continuation',changed,run.text.slice(18),false],
+  ['removed continuation',changed.replace(continuation.xml,''),run.text.slice(18,69),false],
+  ['new entry',changed.replace(continuation.xml,newEntry),run.text.slice(18,69),false],
+  ['style divergence',changed.replace(left,left.replace('<a:rPr ','<a:rPr b="1" ')),run.text.slice(18),true],
  ]){
   const diagnostics=[],zip={...result.zip,[slidePath]:strToU8(xml)},imported=await fromPptx(zipSync(zip),{onDiagnostic:issue=>diagnostics.push(issue)});
-  assert.deepEqual(itemRuns(imported),[{text:'Item 1',language:'ar-SA'},{text:': ',...(bold?{bold:true}:{}),language:'ar-SA'},{text:expectedTail,language:'ar-SA'}],name+' retains every current interior run while only the line seam joins');
+  assert.deepEqual(itemRuns(imported),[{text:'Item 1: ',language:'ar-SA'},{text:'Customers ',...(bold?{bold:true}:{}),language:'ar-SA'},{text:expectedTail,language:'ar-SA'}],name+' retains every current interior run while only the line seam joins');
   assert(diagnostics.some(issue=>issue.code==='native-fragment-reflow'),name);
   if(name==='new entry'){assert.equal(imported.slides[0].items.length,2);assert.deepEqual(imported.slides[0].items[1],{text:[{text:run.text.slice(69),language:'ar-SA'}],start:1});}
   if(name==='removed continuation')assert(!JSON.stringify(imported).includes(run.text.slice(69)),'Deleted current content is not replayed from provenance');
