@@ -1,5 +1,15 @@
 # SH-21 prospective windowless node and text edit
 
+## Latest actual prerequisite and public-import repair
+
+The integrated tooling gate passes at b0d86. Actual Windows managed controls all execute in the535-test serial run; SH21's30 scenarios pass. That aggregate remains529PASS/6RED; the six unrelated sparse-input/B07 test-host causes have passing causal replays. No extra SH21 managed run is required for inventory.
+
+First genuine0a SH21 envelope creation passes, then `verify-source` fails before its three-original loop because CommonJS `require.resolve` cannot select the installed core's import-only public `./composition` entry. The public API exists. No profile prepare/default/native operation follows. Original stderr973 bytes SHA `dafd4fb807103a6e7703301165e57eb1493469ee372c5c1bd69940cb6dafd6c9`; execution2,516 bytes SHA `f106838089cab45f8109374b0cc96e91dac678fa8dcfda6980876893757bc8af`. Source, genuine consumer403 files/proof/current09 profile remain unchanged.
+
+The reviewed successor uses one helper at both source-admission and persisted-comparison sites. It verifies the actual admitted public package manifest, selects its declared `./composition.import` target, checks its canonical in-package path and exact runtime-file identity, then imports that file URL. Missing exports, private/require-only fallback, parent/encoded/Windows-separator/node_modules targets and changed manifest/entry bytes refuse. No export-map or consumer changes, hooks or subprocess resolver. Its sole maintained Node file passes66 controls with one actual-Windows skip (67total) in208.443ms, including eleven new public-export/identity controls. Source bytes remain exact; no install/build/Office occurred. Receipt `/tmp/opf-sh21-public-import-focus01/receipt.json`; stdout4,703bytes SHA `5b7c7416ea63753d460b6decc7d001cc79733da4deb46e47369b05b73334f072`. Integrated mapper and fresh genuine-consumer preparation remain pending. All three actual original schema/reference/composition checks remain mandatory before Office.
+
+The source-only checkpoints below retain their dated results.
+
 Source-only successor from `06baf869845aa93679995a649fcd4b6297e3a9c2`.
 SOURCE01 was frozen before any execution. SOURCE02's authorized own offline
 install passed, all three new `.mjs` syntax checks passed and the exact single

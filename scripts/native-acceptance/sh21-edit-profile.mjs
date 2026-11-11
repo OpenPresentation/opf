@@ -122,9 +122,20 @@ export function assertSh21OriginalOutline(document,plan){
   const level=typeof value==='string'?0:(value.level??0);assert.ok(Number.isSafeInteger(level)&&level>=0&&level<=1);assert.ok(level===0||typeof stack[level-1]==='string','Original public outline has no parent');const parent=level?stack[level-1]:null;stack[level]=text(value);stack.length=level+1;return{index:i+1,text:text(value),level:level+1,parent};});
  assert.deepEqual(nodes,plan.before.map(({index,text,level,parent})=>({index,text,level,parent})),'Original public node order/text/parent/level differs');return{path:selected.parts,items:structuredClone(selected.items),nodes};
 }
+/** Select the actual public ESM export; require.resolve cannot select import-only entries. */
+export async function importSh21Composition(consumer,installed){
+ assert.equal(fs.realpathSync(consumer),installed.consumer);
+ const records=installed.packages.filter(record=>record.name==='@openpresentation/opf');assert.equal(records.length,1);const record=records[0];
+ const req=createRequire(path.join(consumer,'package.json')),manifestFile=req.resolve('@openpresentation/opf/package.json');assert.equal(path.dirname(manifestFile),record.directory);
+ const admitted=(file,relative)=>{const entries=record.runtime.files.filter(entry=>entry.path===relative);assert.equal(entries.length,1,'Public composition file is not in the admitted runtime');const bytes=readOwnedFile(file,4194304);assert.deepEqual({bytes:bytes.length,sha256:digest(bytes)},{bytes:entries[0].bytes,sha256:entries[0].sha256},'Public composition runtime identity differs');return bytes;};
+ const manifest=JSON.parse(admitted(manifestFile,'package.json'));assert.equal(manifest.name,record.name);assert.equal(manifest.version,record.version);
+ const target=manifest.exports?.['./composition']?.import;assert.equal(typeof target,'string','The admitted package has no public composition import export');assert.match(target,/^\.\/[A-Za-z0-9._/-]+$/u);const relative=target.slice(2);assert.ok(relative.split('/').every(part=>part&&part!=='.'&&part!=='..'&&part.toLowerCase()!=='node_modules'),'Public composition import must stay inside its admitted package and obey export-target rules');
+ const file=path.join(record.directory,...relative.split('/'));assert.equal(fs.realpathSync(file),file,'Public composition import cannot be an alias');admitted(file,relative);
+ return import(pathToFileURL(file).href);
+}
 export async function verifySh21Source(binding){
  const e=binding.envelope,consumer=e.installed.consumer;assert.deepEqual(e.installed,installedIdentity(consumer));
- const req=createRequire(path.join(consumer,'package.json')),core=await import(pathToFileURL(req.resolve('@openpresentation/opf')).href),{gallery}=await import(pathToFileURL(req.resolve('@openpresentation/gallery')).href),composition=await import(pathToFileURL(req.resolve('@openpresentation/opf/composition')).href);
+ const req=createRequire(path.join(consumer,'package.json')),core=await import(pathToFileURL(req.resolve('@openpresentation/opf')).href),{gallery}=await import(pathToFileURL(req.resolve('@openpresentation/gallery')).href),composition=await importSh21Composition(consumer,e.installed);
  assert.equal(typeof core.validate,'function');assert.equal(typeof gallery.source,'string');for(const name of ['nativeTreeGeometry','vennNodes'])assert.equal(typeof composition[name],'function','Actual selected consumer lacks '+name);
  const originals=[];
  for(const caseId of Object.keys(SH21_CASES)){
@@ -164,7 +175,7 @@ export async function compareSh21Persisted(b,saved,report){
  assert.deepEqual(imports.saved.diagnostics,[...imports.original.diagnostics,editFinding],'Only the explicit stale-SmartArt-tag refusal is admitted; all other findings require review');
  // Numeric geometry and unchanged-font qualification use the exact current
  // public composition helpers; no text/formatting adjustment is made here.
- const req=createRequire(path.join(consumer,'package.json')),composition=await import(pathToFileURL(req.resolve('@openpresentation/opf/composition')).href);
+ const composition=await importSh21Composition(consumer,b.envelope.installed);
  for(const [phase,rows]of [['original',plan.before],['edited',plan.after],['saved-reopened',plan.after]]){const p=report.phases[phase],f=p.frame;const frame={x:f.Left,y:f.Top,width:f.Width,height:f.Height};const nodes=plan.kind==='venn'?composition.vennNodes(frame,rows.length):composition.nativeTreeGeometry(plan.kind,frame,rows.map(r=>({text:r.text,level:r.level-1}))).nodes;assert.equal(nodes.length,rows.length);for(const [i,node]of nodes.entries()){const matches=p.items.filter(item=>item.text===rows[i].text);assert.equal(matches.length,1,'One exact materialized text shape per data node');const item=matches[0];assert.equal(item.fontSize,36,'No shrink/default formatting repair');for(const [actual,expected]of [[item.Left,node.box.x],[item.Top,node.box.y],[item.Width,node.box.width],[item.Height,node.box.height]])assert.ok(Math.abs(actual-expected)<=0.1,'Measured node geometry differs by >0.1pt');}}
  return{imports,rawNodeIdsPreserved:3,newNodes:1,textEdits:1,liveEligibility:false};
 }

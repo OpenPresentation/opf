@@ -5,12 +5,31 @@ import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
+import {createRequire} from 'node:module';
 import {SH21_CASES,SH21_PROFILE,sh21Plan,assertSh21Plan,assertSh21NodeRows,readSh21HistoricalInput} from './sh21-edit-contract.mjs';
-import {SH21_POLICY,sh21Operations,assertSh21Ready,assertSh21OriginalOutline} from './sh21-edit-profile.mjs';
-import {digest} from './identity.mjs';
+import {SH21_POLICY,sh21Operations,assertSh21Ready,assertSh21OriginalOutline,importSh21Composition} from './sh21-edit-profile.mjs';
+import {digest,runtimeIdentity} from './identity.mjs';
 import {assertOwnedStageWire} from './owned-postflight.mjs';
 import {windowsPowerShellEnvironment} from './windows-powershell-env.mjs';
 const ROOT=fs.realpathSync(fileURLToPath(new URL('../../',import.meta.url)));
+async function withCompositionFixture(action){
+ const root=fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(),'sh21-public-import-'))),consumer=path.join(root,'consumer'),directory=path.join(consumer,'node_modules','@openpresentation','opf'),file=path.join(directory,'dist','composition.js');let passed=false;
+ try{fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(path.join(consumer,'package.json'),'{}');const manifest={name:'@openpresentation/opf',version:'0.0.0-fixture',type:'module',exports:{'./package.json':'./package.json','./composition':{import:'./dist/composition.js'}}};const writeManifest=()=>fs.writeFileSync(path.join(directory,'package.json'),JSON.stringify(manifest));writeManifest();fs.writeFileSync(file,'export const marker = "admitted-public-import";\n');const record={name:manifest.name,version:manifest.version,directory,runtime:runtimeIdentity(directory)},installed={consumer,packages:[record]};await action({consumer,directory,file,manifest,writeManifest,record,installed});passed=true;
+ }finally{if(passed)fs.rmSync(root,{recursive:true});else console.error('Preserved failed SH21 public-import fixture: '+root);}
+}
+test('SH21 loads the admitted public import-only export that CommonJS resolution cannot select',async()=>withCompositionFixture(async f=>{assert.throws(()=>createRequire(path.join(f.consumer,'package.json')).resolve('@openpresentation/opf/composition'),{code:'ERR_PACKAGE_PATH_NOT_EXPORTED'});assert.equal((await importSh21Composition(f.consumer,f.installed)).marker,'admitted-public-import');}));
+for(const [name,mutate]of Object.entries({
+ 'changed manifest':f=>{f.manifest.description='Unadmitted metadata change';f.writeManifest();},
+ 'changed entry bytes':f=>{fs.appendFileSync(f.file,'\n// unadmitted entry bytes\n');},
+ 'unrecorded public entry':f=>{f.record.runtime.files=f.record.runtime.files.filter(r=>r.path!=='dist/composition.js');},
+ 'foreign package directory':f=>{f.record.directory=path.join(f.directory,'foreign');},
+ 'missing public import':f=>{delete f.manifest.exports['./composition'];f.writeManifest();f.record.runtime=runtimeIdentity(f.directory);},
+ 'require-only private fallback':f=>{f.manifest.exports['./composition']={require:'./dist/composition.js'};f.writeManifest();f.record.runtime=runtimeIdentity(f.directory);},
+ 'parent escape':f=>{f.manifest.exports['./composition'].import='./dist/../composition.js';f.writeManifest();f.record.runtime=runtimeIdentity(f.directory);},
+ 'forbidden node_modules segment':f=>{const relative='dist/NoDe_MoDuLeS/composition.js';fs.mkdirSync(path.dirname(path.join(f.directory,relative)),{recursive:true});fs.writeFileSync(path.join(f.directory,relative),'export const marker = "invalid-public-target";\n');f.manifest.exports['./composition'].import='./'+relative;f.writeManifest();f.record.runtime=runtimeIdentity(f.directory);},
+ 'encoded target':f=>{f.manifest.exports['./composition'].import='./dist/composition%2ejs';f.writeManifest();f.record.runtime=runtimeIdentity(f.directory);},
+ 'Windows path separators':f=>{f.manifest.exports['./composition'].import='./dist\\composition.js';f.writeManifest();f.record.runtime=runtimeIdentity(f.directory);},
+}))test('SH21 refuses composition import with '+name,async()=>withCompositionFixture(async f=>{mutate(f);await assert.rejects(()=>importSh21Composition(f.consumer,f.installed));}));
 export function sh21ControlFixture(caseId='org-chart-3'){
  const plan=sh21Plan(caseId),output=path.join(fs.realpathSync(os.tmpdir()),'sh21-synthetic-owned-records'),source=path.join(output,'inputs/case.pptx'),saved=path.join(output,'native/saved.pptx');
  const q={schemaVersion:1,profile:SH21_PROFILE,policy:SH21_POLICY,envelopeSha256:'a'.repeat(64),output,timeoutSeconds:45,runOfficeRequested:true,plan,nativeAcceptance:false,registryAcceptance:false};
