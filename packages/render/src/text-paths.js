@@ -14,7 +14,7 @@ import { embeddingAllowed, fsTypeOf } from './font-fstype.js';
 
 import { FontLibrary, shape as fontkitShape } from "./pdf-fonts.js";
 import { featuresOf, layoutText } from "./pdf-text.js";
-import { ROOT_STYLE, attributesOf, inheritStyle, parseFontFamilies, parseLength } from "./pdf-style.js";
+import { ROOT_STYLE, attributesOf, inheritStyle, parseFontFamilies, parseFontWeight, parseLength } from "./pdf-style.js";
 import { openTypeLanguage } from "./script-fonts.js";
 import { decodeEntities, escapeAttribute, escapeText, parseXml } from "./pdf-xml.js";
 
@@ -108,7 +108,15 @@ export function outlineSlideText(content, { library, shaper, shape, selectText, 
     // HarfBuzz, the browser's shaper, when the handle carries one (RR-64 phase 2); fontkit otherwise.
     ...(shape ? {shape} : shaper ? { shape: harfBuzzShape(shaper) } : {}),
     // The renderer reports its own font substitutions and missing glyphs while it lays the slide out.
-    diagnostic: onRefusal ? issue => {const family=issue.requestedFamily??issue.fontFamily;throw new OutlineRefusal(library.restricted?.has(family?.toLowerCase())?"restricted":"unresolved",family);} : () => {},
+    diagnostic: onRefusal ? issue => {
+      const family=issue.requestedFamily??issue.fontFamily,restricted=library.restricted?.has(family?.toLowerCase());
+      // An absent first name can legitimately select a later named/generic
+      // family. Defer ONLY that cosmetic warning to the mandatory full-stack,
+      // weight/style/face validation below; glyph fallback and unknown issues
+      // still refuse immediately, as does a restricted first family.
+      if(issue.code==="pdf-font-substituted"&&!restricted&&typeof validateFace==="function")return;
+      throw new OutlineRefusal(restricted?"restricted":"unresolved",family);
+    } : () => {},
     missing: onRefusal ? issue => {throw new OutlineRefusal("unresolved",issue.fontFamily);} : () => {},
     onRefusal,
     validateFace,
@@ -232,7 +240,7 @@ function fallbackReason(run, env) {
   if (COLOUR_TABLES.some((table) => run.face.font.directory?.tables?.[table])) return "colour-font";
   for (const family of parseFontFamilies(run.style["font-family"])) {
     if (env.fonts.restricted?.has(family.toLowerCase())) return "restricted";
-    if (run.face.names.has(family.toLowerCase())) break;
+    if (run.face.names.has(family.toLowerCase()) || (env.onRefusal && env.validateFace && env.fonts.match([family],parseFontWeight(run.style["font-weight"],400),/italic|oblique/i.test(run.style["font-style"]??""))?.face===run.face)) break;
   }
   if (env.shape && !run.scope) {
     const direction = run.level % 2 === 1 ? "rtl" : "ltr", language = openTypeLanguage(run.style.lang ?? run.style["xml:lang"]);

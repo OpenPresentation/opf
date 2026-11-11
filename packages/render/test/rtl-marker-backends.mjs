@@ -15,7 +15,7 @@ import {fsTypeOf} from '../dist/font-fstype.js';
 import {parseXml,textContent} from '../dist/pdf-xml.js';
 const hash=b=>createHash('sha256').update(b).digest('hex'),elements=node=>[node,...(node.children??[]).filter(n=>n.name).flatMap(elements)],near=(a,b,label)=>assert(Math.abs(a-b)<.001,`${label}: ${a} / ${b}`);
 const original=readB07Sources().find(row=>row.id==='rtl-contrast-05-mixed-explicit-arabic').document,folder=new URL('../artifacts/rtl-marker-backends/',import.meta.url),scratch=await mkdtemp(path.join(tmpdir(),'opf-marker-backends-')),diagnostics=[];
-const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:original});let groups=0;
+const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:original});let groups=0,baseFonts;
 const fail=(code,message)=>Object.assign(new Error(message),{code});
 try{
  await mkdir(folder,{recursive:true});
@@ -23,8 +23,22 @@ try{
  // paint disagreement remains useful. This image is an observation, not golden.
  const before=JSON.stringify(original),svg=toSvg(original,1,{fonts,trace:true}),png=await toPng(original,1,{fonts,onDiagnostic:issue=>diagnostics.push(issue)});
  await writeFile(new URL('case05-node.png',folder),png);await writeFile(new URL('case05.svg',folder),svg);await writeFile(new URL('diagnostics.json',folder),JSON.stringify(diagnostics,null,2)+'\n');
- const tree=parseXml(svg),marker=elements(tree).find(n=>n.name==='text'&&n.attrs['data-opf-number-marker']==='rtl'),entry=resolvePresentation(original,{fonts}).slides[0].geometry.items.find(item=>item.field==='items').text.listEntries[0],group=elements(tree).find(n=>n.name==='g'&&n.attrs['data-opf-path']===entry.textPath),body=group&&elements(group).find(n=>n.name==='text'&&n.attrs.y!==undefined);
- assert(marker&&body);assert.equal(textContent(marker),'1.');assert.equal(JSON.stringify(original),before);near(Number(marker.attrs.y),Number(body.attrs.y),'actual marker/body baseline');assert(Number(marker.attrs.y)<entry.marker.y,'genuine policy-adjusted marker no longer uses unshifted core baseline');assert.deepEqual(diagnostics,[]);
+ const tree=parseXml(svg),marker=elements(tree).find(n=>n.name==='text'&&n.attrs['data-opf-number-marker']==='rtl'),bound=resolvePresentation(original,{fonts}).slides[0],entry=bound.geometry.items.find(item=>item.field==='items').text.listEntries[0],title=bound.geometry.items.find(item=>item.field==='title'),group=elements(tree).find(n=>n.name==='g'&&n.attrs['data-opf-path']===entry.textPath),body=group&&elements(group).find(n=>n.name==='text'&&n.attrs.y!==undefined);
+ assert(marker&&body&&title);
+ // Actual visible title/body ink is mandatory BEFORE marker success. The body
+ // textBox excludes the marker column, so a marker-only image cannot pass.
+ const rasterFonts={loadSystemFonts:false,fontFiles:fonts.fontFiles,fontDirs:[],defaultFontFamily:'Roboto',sansSerifFamily:'Roboto',monospaceFamily:'Roboto Mono'},reference=new Resvg(svg,{fitTo:{mode:'zoom',value:1},background:'#FFFFFF',font:rasterFonts,logLevel:'off'}).render().asPng();
+ await writeFile(new URL('case05-unmodified-svg-reference.png',folder),reference);
+ const visibility=[];
+ for(const [role,box]of [['title',title.box],['body',entry.textBox]]){
+  assert(box&&[box.x,box.y,box.width,box.height].every(Number.isFinite)&&box.width>0&&box.height>0);
+  const region={left:Math.max(0,Math.floor(box.x)),top:Math.max(0,Math.floor(box.y)),width:Math.ceil(box.x+box.width)-Math.max(0,Math.floor(box.x)),height:Math.ceil(box.y+box.height)-Math.max(0,Math.floor(box.y))},actual=await sharp(png).extract(region).ensureAlpha().raw().toBuffer({resolveWithObject:true}),unchanged=await sharp(reference).extract(region).ensureAlpha().raw().toBuffer();let whitePixels=0,transparentWhitePixels=0;
+  for(let index=0;index<actual.data.length;index+=actual.info.channels)if(actual.data[index]>180&&actual.data[index+1]>180&&actual.data[index+2]>180){if(actual.data[index+3]===255)whitePixels++;else transparentWhitePixels++;}
+  visibility.push({role,region,whitePixels,transparentWhitePixels,actualSha256:hash(actual.data),referenceSha256:hash(unchanged)});
+ }
+ await writeFile(new URL('visibility.json',folder),JSON.stringify(visibility,null,2)+'\n');
+ for(const row of visibility){assert(row.whitePixels>0,`actual opaque ${row.role} ink survives marker-only raster compatibility`);assert.equal(row.transparentWhitePixels,0,'transparent RGB cannot qualify visible ink');assert.equal(row.actualSha256,row.referenceSha256,`${row.role} pixels outside the marker column stay exact`);}
+ assert.equal(textContent(marker),'1.');assert.equal(JSON.stringify(original),before);near(Number(marker.attrs.y),Number(body.attrs.y),'actual marker/body baseline');assert(Number(marker.attrs.y)<entry.marker.y,'genuine policy-adjusted marker no longer uses unshifted core baseline');assert.deepEqual(diagnostics,[]);
  // Independently inspect actual raster ink in the marker-only source column.
  // The period is the short connected component and the digit is the tall one;
  // neither source token nor image is reversed or transformed for this check.
@@ -51,18 +65,34 @@ try{
  for(const options of [{fontFiles:files,useBundledFonts:false},[custom]]){
   const candidate=await toPng(svg,{fonts:options,onDiagnostic:d=>limited.push(d)});assert.equal(hash(candidate),hash(png),'same exact caller files/folder raster output');
  }
- assert.deepEqual(limited,[]);const defaultDeck={language:'ar-SA',slides:[{title:'Default',items:['البند: 12'],numbering:'arabic'}]},defaultIssues=[];await toPng(defaultDeck,1,{onDiagnostic:d=>defaultIssues.push(d)});assert(!defaultIssues.some(d=>d.code==='raster-marker-unavailable'),'actual default bundled handle has an eligible marker face');groups++;
+ assert.deepEqual(limited,[]);const defaultDeck={language:'ar-SA',slides:[{title:'Default',items:['البند: 12'],numbering:'arabic'}]},defaultIssues=[],defaultSvg=toSvg(defaultDeck,1),defaultPng=await toPng(defaultDeck,1,{onDiagnostic:d=>defaultIssues.push(d)});await writeFile(new URL('default.svg',folder),defaultSvg);await writeFile(new URL('default-node.png',folder),defaultPng);await writeFile(new URL('default-diagnostics.json',folder),JSON.stringify(defaultIssues,null,2)+'\n');assert(!defaultIssues.some(d=>d.code==='raster-marker-unavailable'),'actual default bundled handle has an eligible marker face');groups++;
  // System-only/unresolved selection stays text with an explicit limitation.
  for(const font of [{...exact,loadSystemFonts:true},{...exact,fontFiles:[],fontDirs:[]}]){const issues=[],kept=await outlineRasterMarkers(svg,{font,report:d=>issues.push(d),fail});assert.match(kept,/<text[^>]*data-opf-number-marker="rtl"/);assert(issues.some(d=>d.code==='raster-marker-unavailable'));assert.equal(await outlineRasterMarkers(plain,{font,report:()=>assert.fail('ordinary input diagnostic'),fail}),plain);}
  // A real Roboto-only library plus generic serif reproduces the silent
  // bestAny branch: Times New Roman is absent, but a different face is usable.
- const described=fonts.registry.describeFaces(),exported=fonts.registry.exportFaces(),roboto=described.findIndex(face=>face.family==='Roboto'&&face.weight===400&&!face.italic);assert(roboto>=0);const robotoFile=path.join(scratch,'Roboto-only.ttf');await writeFile(robotoFile,exported[roboto].data);
+ baseFonts=await loadFonts({pack:'base',scripts:['Arab']});const described=baseFonts.registry.describeFaces(),exported=baseFonts.registry.exportFaces(),roboto=described.findIndex(face=>face.family==='Roboto'&&face.weight===400&&!face.italic);assert(roboto>=0,'explicit real base handle owns the Roboto fixture');const robotoData=exported[roboto].data,robotoFile=path.join(scratch,'Roboto-only.ttf');await writeFile(robotoFile,robotoData);
  const generic='<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><text data-opf-number-marker="rtl" direction="rtl" unicode-bidi="isolate" aria-hidden="true" x="100" y="50" text-anchor="start" font-family="serif" font-size="30">1.</text></svg>',genericIssues=[];
  assert.equal(await outlineRasterMarkers(generic,{font:{...exact,fontFiles:[robotoFile],fontDirs:[]},report:issue=>genericIssues.push(issue),fail}),generic,'missing generic family cannot outline another usable face');assert(genericIssues.some(issue=>issue.code==='raster-marker-unavailable'&&issue.reason==='unresolved'));
+ // Valid SECOND named/generic stack matches are not the bestAny fallback.
+ for(const family of ['Absent first face, Roboto','Absent first face, sans-serif']){
+  const valid=generic.replace('font-family="serif"',`font-family="${family}"`),issues=[],drawn=await outlineRasterMarkers(valid,{font:{...exact,fontFiles:[robotoFile],fontDirs:[]},report:issue=>issues.push(issue),fail});assert.deepEqual(issues,[]);assert.doesNotMatch(drawn,/<text[^>]*data-opf-number-marker="rtl"/);assert.match(drawn,/<use /);
+ }
+ // Missing glyphs still refuse even when another supplied face can draw them.
+ const arabic=described.findIndex(face=>/Arabic/i.test(face.family)&&face.weight===400&&!face.italic);assert(arabic>=0,'explicitly requested real Arabic fallback face');const fixtureLibrary=outlineLibrary(baseFonts),robotoFace=fixtureLibrary.faces.find(face=>face.names.has('roboto')&&face.weight===400&&!face.italic),arabicFace=fixtureLibrary.faces.find(face=>face.names.has(described[arabic].family.toLowerCase())&&face.weight===400&&!face.italic);assert(robotoFace&&arabicFace);assert.equal(robotoFace.font.hasGlyphForCodePoint(0x0628),false);assert.equal(arabicFace.font.hasGlyphForCodePoint(0x0628),true);const arabicFile=path.join(scratch,'Arabic-fallback.ttf');await writeFile(arabicFile,exported[arabic].data);
+ const fallback=generic.replace('font-family="serif"','font-family="Roboto"').replace('>1.</text>','>البند</text>'),fallbackIssues=[];assert.equal(await outlineRasterMarkers(fallback,{font:{...exact,fontFiles:[robotoFile,arabicFile],fontDirs:[]},report:issue=>fallbackIssues.push(issue),fail}),fallback);assert(fallbackIssues.some(issue=>issue.code==='raster-marker-unavailable'&&issue.reason==='unresolved'));
+ // Restricted FIRST family cannot be bypassed by a usable generic second one.
+ const restrictedFile=path.join(scratch,'Restricted-Roboto.ttf');await writeFile(restrictedFile,permissions(robotoData,2));const restricted=generic.replace('font-family="serif"','font-family="Roboto, sans-serif"'),restrictedIssues=[];
+ assert.equal(await outlineRasterMarkers(restricted,{font:{...exact,fontFiles:[restrictedFile,arabicFile],fontDirs:[],sansSerifFamily:described[arabic].family},report:issue=>restrictedIssues.push(issue),fail}),restricted);assert(restrictedIssues.some(issue=>issue.code==='raster-marker-unavailable'&&issue.reason==='restricted'));
+ const restrictedGeneric=generic.replace('font-family="serif"',`font-family="sans-serif, ${described[arabic].family}"`),restrictedGenericIssues=[];
+ assert.equal(await outlineRasterMarkers(restrictedGeneric,{font:{...exact,fontFiles:[restrictedFile,arabicFile],fontDirs:[],sansSerifFamily:'Roboto'},report:issue=>restrictedGenericIssues.push(issue),fail}),restrictedGeneric,'generic first cannot skip its actual restricted family');assert(restrictedGenericIssues.some(issue=>issue.code==='raster-marker-unavailable'&&issue.reason==='restricted'));
+ const validGenericFirst=generic.replace('font-family="serif"','font-family="sans-serif, Roboto"'),validGenericIssues=[],validGenericDrawn=await outlineRasterMarkers(validGenericFirst,{font:{...exact,fontFiles:[restrictedFile,arabicFile],fontDirs:[],sansSerifFamily:described[arabic].family},report:issue=>validGenericIssues.push(issue),fail});
+ assert.deepEqual(validGenericIssues,[],'a later unused restricted family cannot block the valid first generic match');assert.doesNotMatch(validGenericDrawn,/<text[^>]*data-opf-number-marker="rtl"/);assert.match(validGenericDrawn,/<use /);
+
+
  groups++;
  // Actual sfnt tables, not mocked face.unusable values: replace the glyf/loca
  // tables of the bundled open face with a valid simple CFF charstring index.
- const base=fonts.registry.exportFaces()[0].data;
+ const base=robotoData;
  function permissions(input,bits){const bytes=Buffer.from(input),view=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);for(let i=0;i<view.getUint16(4);i++){const at=12+i*16;if(bytes.toString('ascii',at,at+4)==='OS/2')view.setUint16(view.getUint32(at+8)+8,bits);}return bytes;}
  function cffFixture(input){const bytes=Buffer.from(input),tables=[];let glyphs=0;for(let i=0;i<bytes.readUInt16BE(4);i++){const at=12+i*16,tag=bytes.toString('ascii',at,at+4),offset=bytes.readUInt32BE(at+8),size=bytes.readUInt32BE(at+12);if(tag==='maxp')glyphs=bytes.readUInt16BE(offset+4);if(!['glyf','loca','maxp'].includes(tag))tables.push([tag,bytes.subarray(offset,offset+size)]);}const index=list=>{if(!list.length)return Buffer.from([0,0]);const total=list.reduce((n,b)=>n+b.length,1),size=total<=255?1:total<=65535?2:4,head=Buffer.alloc(3+(list.length+1)*size);head.writeUInt16BE(list.length);head[2]=size;let offset=1;for(let i=0;i<=list.length;i++){head.writeUIntBE(offset,3+i*size,size);if(i<list.length)offset+=list[i].length;}return Buffer.concat([head,...list]);};const names=index([Buffer.from('MarkerPermission')]),topOffset=4+names.length+index([Buffer.alloc(6)]).length+4,dict=Buffer.alloc(6);dict[0]=29;dict.writeUInt32BE(topOffset,1);dict[5]=17;const charstring=Buffer.from([139,139,21,239,139,139,239,39,139,139,39,5,14]),cff=Buffer.concat([Buffer.from([1,0,4,4]),names,index([dict]),Buffer.from([0,0,0,0]),index(Array.from({length:glyphs},()=>charstring))]),maxp=Buffer.alloc(6);maxp.writeUInt32BE(0x5000);maxp.writeUInt16BE(glyphs,4);tables.push(['CFF ',cff],['maxp',maxp]);tables.sort((a,b)=>a[0].localeCompare(b[0]));const head=Buffer.alloc(12+tables.length*16);head.write('OTTO');head.writeUInt16BE(tables.length,4);let cursor=head.length;const chunks=[head];tables.forEach(([tag,data],i)=>{const at=12+i*16;head.write(tag,at);head.writeUInt32BE(cursor,at+8);head.writeUInt32BE(data.length,at+12);chunks.push(data);const padding=(4-data.length%4)%4;if(padding)chunks.push(Buffer.alloc(padding));cursor+=data.length+padding;});return Buffer.concat(chunks);}
  for(const cff of [false,true])for(const bits of [0,4,8,0x100,2,0x200]){
@@ -70,4 +100,4 @@ try{
  }
  groups++;
  console.log(JSON.stringify({passed:true,groups,actualPng:{bytes:png.length,sha256:hash(png)},nativePixelsAccepted:false}));
-}catch(error){await writeFile(new URL('failure.json',folder),JSON.stringify({name:error.name,message:error.message,stack:error.stack,diagnostics},null,2)+'\n').catch(()=>{});throw error;}finally{fonts.dispose?.();await rm(scratch,{recursive:true,force:true});}
+}catch(error){await writeFile(new URL('failure.json',folder),JSON.stringify({name:error.name,message:error.message,stack:error.stack,diagnostics},null,2)+'\n').catch(()=>{});throw error;}finally{fonts.dispose?.();baseFonts?.dispose?.();await rm(scratch,{recursive:true,force:true});}
