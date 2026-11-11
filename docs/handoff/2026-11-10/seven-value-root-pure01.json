@@ -1,0 +1,26 @@
+{
+  "head": "79ec3c99b961b9b5eed126351284e54de46c42f9",
+  "node": "v24.21.0",
+  "scope": "JavaScript syntax and synthetic production-owned record/readiness controls only; no package engine rebuild, public PPTX producer/import, actual PowerShell, Office, native pixels or registry acceptance",
+  "syntax": {
+    "pass": 13,
+    "fail": 0,
+    "originalReceipt": "/tmp/opf-native-value-syntax01.json",
+    "sha256": "41f04b20ae2b393adda298ffb42778b2217ab2810f7a094520ec1b86435ebca7"
+  },
+  "productionRecordReadiness": {
+    "command": "node --test scripts/native-acceptance/seven-value-profile.test.mjs",
+    "pass": 44,
+    "fail": 0,
+    "skip": 1,
+    "skipReason": "Actual Windows PowerShell5.1 unavailable on Mac",
+    "sourceUnchanged": true,
+    "originalReceipt": "/tmp/opf-seven-value-root-pure01.json",
+    "sha256": "b421bfdd0f7a7cf5ef4627d9b8e5da39959b1a161005588eb4158b6edf59747d",
+    "log": {
+      "file": "/tmp/opf-seven-value-root-pure01.log",
+      "bytes": 3165,
+      "sha256": "107ea2f4357f80d89e078e43e9f9a5fc191238ea038431f282cd0f04b89bfc42"
+    }
+  }
+}
