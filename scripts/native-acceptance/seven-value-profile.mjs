@@ -166,7 +166,7 @@ export async function sevenValueAdmission(binding){
  return{admission:makeOwnedAdmission({profile:CURRENT_VALUE_PROFILE,policy:VALUE_POLICY,requestSha256:binding.requestBinding.identity.sha256,files,ready}),comparison,imports};
 }
 async function main(argv){
- const [command,...rest]=argv,options={};assert.equal(rest.length%2,0);for(let i=0;i<rest.length;i+=2){assert.match(rest[i],/^--[a-z-]+$/u);assert.ok(!Object.hasOwn(options,rest[i]));options[rest[i]]=rest[i+1];}
+ const [command,...rest]=argv,options={};assert.equal(rest.length%2,0);for(let i=0;i<rest.length;i+=2){assert.match(rest[i],/^--[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/u);assert.ok(!Object.hasOwn(options,rest[i]));options[rest[i]]=rest[i+1];}
  const allowed=command==='create-envelope'?['--options','--output']:['--envelope','--sha256','--output','--require-office','--timeout'];for(const name of Object.keys(options))assert.ok(allowed.includes(name),'Unknown argument');
  if(command==='create-envelope'){const envelope=createSevenValueEnvelope(readOwnedJson(options['--options']));write(options['--output'],json(envelope));console.log(JSON.stringify({path:options['--output'],...fileIdentity(options['--output'])}));return;}
  const file=options['--envelope'],sha=options['--sha256'],output=options['--output'];

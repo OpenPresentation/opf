@@ -1,6 +1,6 @@
 # Native and managed checkpoint — November 11, 2026
 
-The checked source checkpoint is `225b2bba41b0910a85432fd91c75aa4e132841fe`. The reviewed case09 neutral-prefix source is separately integrated at `334f9cf9886224d3157001ccb07d2e05dcec8131`, with its combined changed gate pending. Frozen producers, profiles, first failures and successful cleanup behavior remain unchanged. No release has run.
+The checked and pushed source checkpoint is `d047577c944d7dba4b45c64b8b6ceb93faceaf8d`. It integrates the reviewed case09 neutral-prefix, strict ordinary-corpus controller, exact worker derivation and import-only library-locator changes. Frozen producers, profiles, first failures and successful cleanup behavior remain unchanged. No release has run.
 
 ## Local integrated deltas
 
@@ -8,8 +8,17 @@ The checked source checkpoint is `225b2bba41b0910a85432fd91c75aa4e132841fe`. The
 | --- | --- | --- | --- |
 | d758f1b8e03143904d8c099b1d74a23c1cc24f0e | 10 passed; typecheck unselected | 57.995s | `3dd73d49804d60feddc8ee4b58165f9a7bcc212141e054c0ccd5f8b33e6eae52` |
 | 225b2bba41b0910a85432fd91c75aa4e132841fe | 10 passed; typecheck unselected | 57.536s | `1c5de69e273d9bfa142073ff065ca360963588b3b723b8bd20b5164167eacd2f` |
+| d047577c944d7dba4b45c64b8b6ceb93faceaf8d, base e815f4502c776da38241b82e899887db58b11f4f | 10 passed; typecheck unselected | 57.709s | `0843d3f02bf4fd74d94e3eb15e34a2a94387fcccd1e68e515f34d24d877f22c3` |
 
-Both actual runs retain clean unchanged source and all 609 compiled files unchanged before/after. Each includes strict gallery, native acceptance tooling, skills, text and public-registry stability. These are changed-scope deltas, not final full CI. The original d40 DNS failure and separate successful replay remain in their existing packet.
+All three actual runs retain clean unchanged source and all 609 compiled files unchanged before/after. Each includes strict gallery, native acceptance tooling, skills, text and public-registry stability. The d047 native tool suite is 406 tests: 390 pass, zero fail, 16 actual-Windows skips; its 36,899-byte log SHA is `796d97f0043821ddc757a0d53a5b3333ecf29349c7b70febef7b09f818cb2c21`. Every selected log was copied before another mapper can overwrite it. These are changed-scope deltas, not final full CI. The original d40 DNS failure and separate successful replay remain in their existing packet.
+
+## Final pinned raster generation
+
+[Golden workflow 43026573343](https://github.com/OpenPresentation/opf/actions/runs/43026573343) succeeds at exact d047 in the pinned Playwright image. Example and template source digests match; both changed-slide arrays are empty. Core composition fixtures and chart/table SVG digests produce no patch either. The downloaded `golden.patch` is zero bytes; no baseline commit or changed sheet exists to review. Example diff: 182 bytes, SHA `b771135043cf7f7af3b72ed72cc59f9bbd18b2b582afff6c408519250476a42c`; template diff: 122 bytes, SHA `43b9f027cd2389e0bb6b6818be94dec4a4eac4162cce5c020a3b87e48b8918d6`. This qualifies exact raster generation, not remaining native pixels or final CI.
+
+## Performance graph carry
+
+The final normal e092 measurement's actual build receipt is 167,767 bytes, SHA `f10a60bd92ef5044c7c3602c05b3a0780611280d3177343251f6461744a0b544`. All 574 recorded input files still match individually at d047, with no missing or changed input. None is a PPTX input; `native-text-fragments.js` is absent from that measured graph. Its retained 5,984,668-byte bundle SHA remains `5cdc9940f80a9f4403334a186d7fa901f40be4f4f6fecc6e6e5cf9a15f3a8bd2`. This read-only graph comparison permits carrying the existing measurement through these unrelated changes; no benchmark or build was repeated and no new performance result is claimed.
 
 ## Actual Windows managed qualification
 
@@ -39,3 +48,11 @@ The reviewed assertion successor `49309717911a9d49261109548dbf0cb859fb1867` pres
 The first genuine treemap envelope preparation separately stopped before creating any envelope or activating Office: its identity-only library collector incorrectly required an executable CommonJS entry for import-only `xml-naming`. The reviewed metadata-locator successor `a995a75f66adb9703f18fe731810d3dd297a647e` passes all seven actual-collector fixture groups and one real nine-package/136-file/2,732,897-byte metadata inventory. Existing transitive/full-file/alias/budget checks and all dependency pins remain unchanged. Fresh Windows default preparation remains required.
 
 Case10's one read-only inspector completed without Office or reimport. All four text hashes and all 15 body/frame/member-relationship/native-signature proofs match after Save; only the broader context proof changes. The approved V2 contract deliberately retains current rich text with diagnostics in that situation. The actual `sourceEqual=false` and four findings remain literal. A bounded retained-model/style audit and approved whole-image review are still required before disposition; no unknown context is normalized and no old defaults are replayed.
+
+## Genuine treemap CLI failure and correction
+
+The fresh d047 Windows controller's own frozen install passes in 6.226s and its actual envelope creation passes in 1.596s. The import-only locator now succeeds with nine packages and 136 files. The created 350,302-byte envelope SHA is `76d0bc38d3406f74d9170a1c6d842086fbe130d9522f931353dca67f20e74470`; it preserves the same genuine producer/suite/consumer and the sole treemap edit `[42,31,-8,19]` → `[43,31,-8,19]`.
+
+The next real `verify` CLI fails in 0.067s because its option-token regex accepts only letters/hyphens and rejects the required `--sha256`. Neither pure nor native request preparation, default launch or Office follows. The 311-byte original stderr SHA is `e2f50b0214b64f37a6b7624329fe236857367bfdda3878ed65363893bd53cb8a`; the complete preparation record is 34,486 bytes, SHA `8cb1aa33f4ebf040d5470723ac07446f1d3459f79975c2c85a79db6abab12f0e`. Protected inputs remain exact.
+
+The forward source correction permits digits in conventional option segments while retaining the exact per-command option allowlist, duplicate/arity checks, envelope hash verification and every execution guard. A real CLI subprocess regression first fails against the original parser, then passes after the one-regex change; it reaches the exact digest refusal with `--sha256` and still rejects unknown `--sha257` before file admission. Its single focused run passes with no skips in 124.084ms. Required mapped checks and a fresh genuine Windows preparation remain separate pending gates; the failed d047 attempt is not rewritten or reused.

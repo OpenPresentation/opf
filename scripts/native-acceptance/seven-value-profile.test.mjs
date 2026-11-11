@@ -16,6 +16,15 @@ const ROOT=fs.realpathSync(fileURLToPath(new URL('../../',import.meta.url))),par
 function owned(run){const root=path.join(parent,'opf-seven-value-control-'+randomUUID());let passed=false;try{const f=syntheticValueControl(root);run(f);passed=true;}finally{if(passed){assert.ok(path.basename(root).startsWith('opf-seven-value-control-'));fs.rmSync(root,{recursive:true,force:true});}else console.error('Preserved synthetic Seven-value control: '+root);}}
 const write=(file,value)=>fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n');
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
+test('actual CLI accepts the required sha256 option and reaches the exact envelope digest guard',()=>owned(f=>{
+ const script=path.join(ROOT,'scripts/native-acceptance/seven-value-profile.mjs'),wrong='0'.repeat(64);
+ const run=spawnSync(process.execPath,[script,'verify','--envelope',f.envelopeFile,'--sha256',wrong],{encoding:'utf8',timeout:10000,maxBuffer:1024*1024});
+ assert.ifError(run.error);assert.equal(run.status,1);assert.equal(run.stdout,'');
+ assert.ok(run.stderr.includes(fileIdentity(f.envelopeFile).sha256));assert.ok(run.stderr.includes(wrong));
+ assert.match(run.stderr,/readSevenValueEnvelope/u);
+ const unknown=spawnSync(process.execPath,[script,'verify','--envelope',f.envelopeFile,'--sha257',wrong],{encoding:'utf8',timeout:10000,maxBuffer:1024*1024});
+ assert.ifError(unknown.error);assert.equal(unknown.status,1);assert.match(unknown.stderr,/Unknown argument/u);
+}));
 test('production owned-record verifier accepts exact synthetic files and binds raw request identity',()=>owned(f=>{
  const b=assertSevenValueExecutionRecords(f.binding,f.envelopeFile,f.directory,true);assert.equal(b.requestBinding.identity.sha256,fileIdentity(path.join(f.directory,'execution-request.json')).sha256);
  // Same fake metadata CANNOT traverse the real source/default verifier.
