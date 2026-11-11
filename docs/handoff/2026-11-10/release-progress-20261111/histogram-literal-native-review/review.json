@@ -1,0 +1,74 @@
+{
+  "scope": "One classic column histogram adaptation, prospective numeric-literal edit",
+  "review": "ACCEPTED_BY_COORDINATOR_AND_INDEPENDENT_PEER",
+  "sourceRevision": "8e74f720c5461e7d9a7f36922fdc19b39e025e2e",
+  "profile": "seven-histogram-literal-setter-native-archives-v1",
+  "data": {
+    "before": [
+      42,
+      31,
+      -8,
+      19
+    ],
+    "edited": [
+      43,
+      31,
+      -8,
+      19
+    ],
+    "reopened": [
+      43,
+      31,
+      -8,
+      19
+    ],
+    "numericBinding": "numeric-literal",
+    "all11WorkbooksByteUnchanged": true,
+    "targetWorkbookBytes": 5821,
+    "targetWorkbookSha256": "56d966380d498a0fdecb1292f42d49681b5cacbd862decb547e047181294c980",
+    "targetWorkbookB2": 42,
+    "fullPublicDocuments": "one numeric leaf only; reopened equals edited",
+    "diagnostics": "same2retained"
+  },
+  "lifecycle": {
+    "readOnlyOpens": 2,
+    "nativeSaveCopies": 3,
+    "setterAttempts": 1,
+    "closes": 2,
+    "emptyApplicationQuits": 1,
+    "rasters": 14,
+    "probesMatched": 443,
+    "journalRows": 1008,
+    "launcherSeconds": 42.112
+  },
+  "observer": {
+    "policyBudgetMilliseconds": 5000,
+    "intervalMilliseconds": 100,
+    "maximumQueries": 51,
+    "sampleCount": 1,
+    "initialCount": 0,
+    "finalCount": 0,
+    "elapsedMilliseconds": 24.1765,
+    "finishedMilliseconds": 39.8684,
+    "firstSampleSecondsAfterQuitSuccess": 12.5638839,
+    "note": "Observer-relative duration does not measure exit latency from Quit."
+  },
+  "visual": {
+    "all7OriginalsMatchPriorAccepted": true,
+    "all6NonTargetReopenedByteExact": true,
+    "changedTargetPixels": 1806,
+    "targetDifferenceBounds": [
+      121,
+      211,
+      379,
+      218
+    ]
+  },
+  "retainedLimits": {
+    "nativeTypeQualified": false,
+    "numericWorksheetEditabilityQualified": false,
+    "sourceFirstSaveRawFindings": "OPEN,268rawpartfindings",
+    "oldLinkedQualification": "FAILED_UNCHANGED",
+    "noNativeHistogramBinClaim": true
+  }
+}

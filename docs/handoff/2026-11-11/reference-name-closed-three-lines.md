@@ -57,3 +57,7 @@ A dedicated maintained `native-reference-startup.mjs` / `native-reference-startu
 ## Reviewed startup repair portable focus
 
 Leaf62b5c0d29cbc5bf2d5f9b20d8eaeec32513f827e is independently accepted and normally folded. Sole new startup file passes1portable test with1actual-PSskip in52.369ms; the existing named fifth-derivation test passes1/1 in83.467ms. All8source/15protected pins remain exact. Actual8Windows startup cases, mapped package suite and fresh native Name qualification remain pending. Original351 startup failure is preserved; its202private evidence entries are independently hash-verified and no Office object was opened.
+
+## Current repaired-source qualification
+
+On frozen47c6, dedicated actual Windows startup tests pass2/2 with8PS5 AST cases; all5 maintained Name preparatory steps pass without repeating88managed or12readiness scenarios. One necessary own offline-link install supplies package metadata; all4product dist directories remain absent on that controller. Root full mapped gate passes12selected steps/318PPTX scripts with609 unchanged product files. The fresh9593-byte true request is still only a predicted proposal; actual Name native run and visual/persistent acceptance remain pending separate coordinator assignment.

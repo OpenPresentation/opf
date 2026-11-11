@@ -1,0 +1,154 @@
+[
+  {
+    "slide": 1,
+    "dimensions": [
+      1280,
+      720
+    ],
+    "originalSha256": "55af62b8aa614011fb5f321272efb17041fafc70115597f2ddf5223092c17fbe",
+    "reopenedSha256": "55af62b8aa614011fb5f321272efb17041fafc70115597f2ddf5223092c17fbe",
+    "originalMatchesAcceptedPrior": true,
+    "changedPixelsBounds": null,
+    "pixelAtTitleBefore": [
+      1,
+      24,
+      66
+    ],
+    "pixelAtTitleAfter": [
+      1,
+      24,
+      66
+    ]
+  },
+  {
+    "slide": 2,
+    "dimensions": [
+      1280,
+      720
+    ],
+    "originalSha256": "8c2515d8697b2cabdd292ae8702e30c33db7905d18a3084eea6107fc6ee44c7d",
+    "reopenedSha256": "6f212a1d065b1516b1cf48b8e9d12b8ff6224b74a34e2161842a57b42c4441a0",
+    "originalMatchesAcceptedPrior": true,
+    "changedPixelsBounds": [
+      121,
+      211,
+      379,
+      218
+    ],
+    "pixelAtTitleBefore": [
+      1,
+      24,
+      66
+    ],
+    "pixelAtTitleAfter": [
+      1,
+      24,
+      66
+    ]
+  },
+  {
+    "slide": 3,
+    "dimensions": [
+      1280,
+      720
+    ],
+    "originalSha256": "230e4ca079ea3936f56d83c1ac4d110770aed212d5d011c9e6e7a65f3892175a",
+    "reopenedSha256": "230e4ca079ea3936f56d83c1ac4d110770aed212d5d011c9e6e7a65f3892175a",
+    "originalMatchesAcceptedPrior": true,
+    "changedPixelsBounds": null,
+    "pixelAtTitleBefore": [
+      1,
+      24,
+      66
+    ],
+    "pixelAtTitleAfter": [
+      1,
+      24,
+      66
+    ]
+  },
+  {
+    "slide": 4,
+    "dimensions": [
+      1280,
+      720
+    ],
+    "originalSha256": "e2934b21213167e7de81eed89f2bb8b0e9a6ba0c9908eefcde6c3af07d199b94",
+    "reopenedSha256": "e2934b21213167e7de81eed89f2bb8b0e9a6ba0c9908eefcde6c3af07d199b94",
+    "originalMatchesAcceptedPrior": true,
+    "changedPixelsBounds": null,
+    "pixelAtTitleBefore": [
+      1,
+      24,
+      66
+    ],
+    "pixelAtTitleAfter": [
+      1,
+      24,
+      66
+    ]
+  },
+  {
+    "slide": 5,
+    "dimensions": [
+      1280,
+      720
+    ],
+    "originalSha256": "814e13714436dbbc773515ca96c2839ff2be2cef9dda73466c9b114ac70cc3cf",
+    "reopenedSha256": "814e13714436dbbc773515ca96c2839ff2be2cef9dda73466c9b114ac70cc3cf",
+    "originalMatchesAcceptedPrior": true,
+    "changedPixelsBounds": null,
+    "pixelAtTitleBefore": [
+      255,
+      255,
+      255
+    ],
+    "pixelAtTitleAfter": [
+      255,
+      255,
+      255
+    ]
+  },
+  {
+    "slide": 6,
+    "dimensions": [
+      1280,
+      720
+    ],
+    "originalSha256": "47fdd2fd230620c875c02aa2b6b2fb6361923fd478cf7598391e27dddfd81d20",
+    "reopenedSha256": "47fdd2fd230620c875c02aa2b6b2fb6361923fd478cf7598391e27dddfd81d20",
+    "originalMatchesAcceptedPrior": true,
+    "changedPixelsBounds": null,
+    "pixelAtTitleBefore": [
+      1,
+      24,
+      66
+    ],
+    "pixelAtTitleAfter": [
+      1,
+      24,
+      66
+    ]
+  },
+  {
+    "slide": 7,
+    "dimensions": [
+      1280,
+      720
+    ],
+    "originalSha256": "a108a178c255c01b25c29195bedf5099b5be3d45b26c26e73ee88793f3851643",
+    "reopenedSha256": "a108a178c255c01b25c29195bedf5099b5be3d45b26c26e73ee88793f3851643",
+    "originalMatchesAcceptedPrior": true,
+    "changedPixelsBounds": null,
+    "pixelAtTitleBefore": [
+      255,
+      255,
+      255
+    ],
+    "pixelAtTitleAfter": [
+      255,
+      255,
+      255
+    ]
+  }
+]
