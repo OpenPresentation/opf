@@ -6,7 +6,7 @@ import {mkdtempSync,mkdirSync,readFileSync,writeFileSync,realpathSync,rmSync} fr
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import {verifyB07Postflight,B07_PROFILE} from './b07-current-profile.mjs';
+import {verifyB07Postflight,assertB07Case10Phases,B07_PROFILE} from './b07-current-profile.mjs';
 import {B07_POSTFLIGHT_POLICY,B07_COMPLETED_LIFECYCLE,assertB07PostflightReady} from './b07-postflight.mjs';
 import {digest} from './identity.mjs';
 import {plainLocalPath} from './reference-chart-profile.mjs';
@@ -53,7 +53,7 @@ test('full pre-observer verifier refuses changed source/runtime/snapshots/reques
       await tableFileRecords(worker,workerFiles);
       return {envelope,source:{selected:{id:runner.caseId,archiveSha256:digest(input)}}};
     };
-    const dependencies={bindB07Profile,plainLocalPath,assertTableOutputSeparate,root,tableAsset,digest,nativeJson:bytes=>JSON.parse(bytes.toString('utf8').replace(/^\uFEFF/u,'')),assert,path,B07_PROFILE,B07_POSTFLIGHT_POLICY,integer:(value,min,max)=>assert.ok(Number.isSafeInteger(value)&&value>=min&&value<=max),tableFileRecords,assertB07PostflightReady};
+    const dependencies={bindB07Profile,plainLocalPath,assertTableOutputSeparate,root,tableAsset,digest,nativeJson:bytes=>JSON.parse(bytes.toString('utf8').replace(/^\uFEFF/u,'')),assert,path,B07_PROFILE,B07_POSTFLIGHT_POLICY,integer:(value,min,max)=>assert.ok(Number.isSafeInteger(value)&&value>=min&&value<=max),tableFileRecords,assertB07PostflightReady,assertB07Case10Phases};
     // The production function has no options/test bypass. Evaluate its exact
     // exported body in an isolated authority context; all payload guards below
     // that existing expensive preparation boundary are the production code.
