@@ -21,6 +21,12 @@ const ROOT=fs.realpathSync(path.resolve(import.meta.dirname,'../..')),deps=archi
 const once=(text,from,to)=>{assert.equal(text.split(from).length,2,from);return text.replace(from,to);};
 const zip=parts=>Buffer.from(deps.zipSync(parts));
 function mutate(bytes,file,edit){const parts=deps.unzipSync(bytes);assert.ok(parts[file]);parts[file]=deps.strToU8(edit(deps.strFromU8(parts[file])));return zip(parts);}
+function valueBranch(text,edit){const found=[...text.matchAll(/<c:val(?:\s[^<>]*?)?>[\s\S]*?<\/c:val>/gu)];assert.equal(found.length,1,'One selected synthetic value branch required');return once(text,found[0][0],edit(found[0][0]));}
+function mutateValue(bytes,edit){
+ const changed=mutate(bytes,chart,text=>valueBranch(text,edit)),a=deps.unzipSync(bytes),b=deps.unzipSync(changed);assert.deepEqual(Object.keys(b).sort(),Object.keys(a).sort());
+ for(const name of Object.keys(a))if(name!==chart)assert.deepEqual(b[name],a[name],'Synthetic value mutation changed another part: '+name);
+ assert.equal(valueBranch(deps.strFromU8(b[chart]),()=>'<c:val>@selected-test-branch</c:val>'),valueBranch(deps.strFromU8(a[chart]),()=>'<c:val>@selected-test-branch</c:val>'),'Synthetic value mutation changed bytes outside its selected branch');return changed;
+}
 const literal='<c:numLit><c:formatCode>General</c:formatCode><c:ptCount val="4"/><c:pt idx="0"><c:v>43</c:v></c:pt><c:pt idx="1"><c:v>31</c:v></c:pt><c:pt idx="2"><c:v>-8</c:v></c:pt><c:pt idx="3"><c:v>19</c:v></c:pt></c:numLit>';
 async function publicImport(bytes){const diagnostics=[],document=await fromPptx(bytes,{onDiagnostic:row=>diagnostics.push(row)});return{document,diagnostics};}
 function phase(archive){return{slideCount:7,rasters:Array.from({length:7},(_,i)=>({slideIndex:i+1})),slides:archive.slides.map((slide,i)=>{const shapes=slide.shapes.filter(s=>s.kind==='title'||s.branch==='choice'||s.branch==='direct').map((s,j)=>({index:j+1,id:s.id,name:s.name,type:s.kind==='title'?14:3,...s.geometry,hasTextFrame:s.kind==='title'?-1:0,text:s.kind==='title'?s.text:null,alternativeText:''}));return{index:i+1,slideId:i+256,name:'Synthetic '+i,shapeCount:shapes.length,shapes};})};}
@@ -28,7 +34,10 @@ let pending;
 function fixture(){pending??=(async()=>{
  const source=currentSevenSource(),input=Buffer.from(await toPptx(source,{catalogs:[gallery],chartex:'native'})),bound=bindCurrentHistogram(input,source,HISTOGRAM_SELECTION);
  assert.deepEqual({bytes:input.length,sha256:digest(input)},HISTOGRAM_SOURCE_ARCHIVE);
- const before=input,edited=mutate(mutate(input,chart,text=>{const val=[...text.matchAll(/<c:val>[\s\S]*?<\/c:val>/gu)];assert.equal(val.length,1);return once(text,val[0][0],'<c:val>'+literal+'</c:val>');}),'docProps/core.xml',text=>once(text,'<cp:revision>1</cp:revision>','<cp:revision>2</cp:revision>'));
+ // This is a synthetic Office-before representation, not the unchanged source archive.
+ // Compact only the exact known range branch; every other part/outside byte is proved unchanged.
+ const linked='<c:val><c:numRef><c:f>Sheet1!$B$2:$B$5</c:f><c:numCache><c:formatCode>General</c:formatCode><c:ptCount val="4"/>'+[42,31,-8,19].map((value,index)=>'<c:pt idx="'+index+'"><c:v>'+value+'</c:v></c:pt>').join('')+'</c:numCache></c:numRef></c:val>';
+ const before=mutateValue(input,value=>{const compact=value.replace(/>[ \t\r\n]+</gu,'><');assert.equal(compact,linked);return compact;}),edited=mutate(mutateValue(before,()=>'<c:val>'+literal+'</c:val>'),'docProps/core.xml',text=>once(text,'<cp:revision>1</cp:revision>','<cp:revision>2</cp:revision>'));
  const imports={source:await publicImport(input),before:await publicImport(before),edited:await publicImport(edited),reopened:await publicImport(edited)};
  return{input,before,edited,reopened:edited,source,selection:HISTOGRAM_SELECTION,action:bound.action,bound,imports,root:ROOT,deps,phases:{original:phase(bound.archive),'saved-reopened':phase(inspectHistogramLiteralArchive(edited,deps,bound.archiveContext))}};
 })();return pending;}
@@ -43,7 +52,7 @@ test('separate literal result preserves all7 public documents, exact workbook by
 test('literal reader closes representation, formula, format, count, ordered points, values and attributes',async()=>{
  const f=await fixture();const mutants=[
   [literal,literal+'<c:numRef/>'],[literal,'<c:v>43</c:v>'],['<c:numLit>','<c:numLit unknown="1">'],['<c:numLit>','<c:numLit><c:f>Sheet1!$B$2:$B$5</c:f>'],['General','0.0'],['<c:ptCount val="4"/>','<c:ptCount val="3"/>'],['<c:ptCount val="4"/>','<c:ptCount val="4" unknown="1"/>'],['idx="0"','idx="1"'],['<c:pt idx="0">','<c:pt idx="0" unknown="1">'],['<c:v>43</c:v>','<c:v>NaN</c:v>'],['<c:v>43</c:v>','<c:v>44</c:v>'],['<c:v>31</c:v>','<c:v>32</c:v>'],['</c:numLit>','<c:extLst/></c:numLit>'],['<c:val>','<c:val unknown="1">'],
- ];for(const [from,to]of mutants){const bytes=mutate(f.edited,chart,text=>once(text,from,to));assert.throws(()=>inspectHistogramLiteralArchive(bytes,deps,f.bound.archiveContext),undefined,from);}
+ ];for(const [from,to]of mutants){const bytes=mutateValue(f.edited,value=>once(value,from,to));assert.throws(()=>inspectHistogramLiteralArchive(bytes,deps,f.bound.archiveContext),undefined,from);}
  const moved=mutate(f.edited,f.bound.archive.slides[6].shapes.find(shape=>shape.kind==='chart').chartPart,text=>text.replace(/<c:val>[\s\S]*?<\/c:val>/u,'<c:val>'+literal+'</c:val>'));assert.throws(()=>inspectHistogramLiteralArchive(moved,deps,f.bound.archiveContext));assert.throws(()=>inspectHistogramLiteralArchive(f.before,deps,f.bound.archiveContext));
 });
 test('every workbook byte, name/category reference, other6 data, all raw styles/relationships and public fields stay strict',async()=>{
