@@ -1,0 +1,26 @@
+{
+  "scope": "Exact two public synthetic native PNGs and compact scoped coordinator-provided provenance; raw Windows records excluded",
+  "source": "9a20aed56f2d1a762c3a88ab24f8cc25d849d61f",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3518,
+      "sha256": "98bc2a7f88c8a090a1c0e83479f1122065a1e7582846ab29511459f7c337e562"
+    },
+    {
+      "path": "case05.png",
+      "bytes": 3854,
+      "sha256": "36d4213ce9fd0a75d33c485b3d6fc823fb198c32e50be6377bc30c6bc24472b0"
+    },
+    {
+      "path": "case06.png",
+      "bytes": 3913,
+      "sha256": "5dba7146de903e87a9df4d95f42f24b85de4e40b341e1eeb81e78b86207c90d8"
+    },
+    {
+      "path": "receipt.json",
+      "bytes": 6788,
+      "sha256": "6d4b0484710ec48476654616f3a6fef41610ec5fa5b96227f4605e293479d2f7"
+    }
+  ]
+}
