@@ -1,13 +1,25 @@
+function Test-ReferenceNameTypes($Evidence){
+    try{
+        if(-not(Test-OwnedPostflightKeys $Evidence @('chart','count','series'))){return $false}
+        foreach($entry in @(@($Evidence.chart,'System.Int32','-4111',-4111),@($Evidence.count,$Evidence.count.observedType,'3',3))){$row=$entry[0];if(-not(Test-OwnedPostflightKeys $row @('observedType','observedRawValue','numericValue')) -or $row.observedType -cne $entry[1] -or $row.observedRawValue -isnot [string] -or $row.observedRawValue -cne $entry[2] -or -not(Test-OwnedPostflightInteger $row.numericValue) -or $row.numericValue -ne $entry[3]){return $false}}
+        if($Evidence.count.observedType -cnotin @('System.Int32','System.Int64') -or $Evidence.series -isnot [array] -or $Evidence.series.Count -ne 3){return $false}
+        for($i=0;$i -lt 3;$i++){$entry=$Evidence.series[$i];$row=$entry.typeObservation;if(-not(Test-OwnedPostflightKeys $entry @('index','typeObservation')) -or -not(Test-OwnedPostflightInteger $entry.index) -or $entry.index -ne ($i+1) -or -not(Test-OwnedPostflightKeys $row @('observedType','observedRawValue','numericValue')) -or $row.observedType -cne 'System.Int32' -or $row.observedRawValue -isnot [string] -or $row.observedRawValue -cne '4' -or -not(Test-OwnedPostflightInteger $row.numericValue) -or $row.numericValue -ne 4){return $false}}
+        return $true
+    }catch{return $false}
+}
 # Closed literal-name guard for the one reference-bearing source; no caller target or cap override.
 function Test-ReferenceNameActionReady($Request,$Report){
     try{
+        if($Request.referenceNameEdit -isnot [bool] -or -not $Request.referenceNameEdit -or $Report.referenceNameEdit -isnot [bool] -or -not $Report.referenceNameEdit -or -not(Test-OwnedPostflightKeys $Request.input @('bytes','sha256')) -or -not(Test-OwnedPostflightInteger $Request.input.bytes) -or $Request.input.bytes -ne 129025 -or $Request.input.sha256 -cne '06c82deb1dbe067d4f097aebe760b8f1dbdcc0e2a74e95b8d1f99eeea2302a83'){return $false}
         if($Request.caseId -cne 'reference-native-lines' -or $Request.captureTextFonts -isnot [bool] -or $Request.captureTextFonts -or $Request.readOnlySurvey -isnot [bool] -or $Request.readOnlySurvey -or $Request.slideCount -ne 3 -or $Request.actionPlan.actions.Count -ne 1){return $false}
         $a=$Request.actionPlan.actions[0]
         if(-not(Test-OwnedPostflightKeys $a @('op','slideIndex','chartName','seriesIndex','expectedName','newName')) -or -not(Test-OwnedPostflightInteger $a.slideIndex) -or $a.slideIndex -ne 1 -or -not(Test-OwnedPostflightInteger $a.seriesIndex) -or $a.seriesIndex -ne 1 -or $a.op -cne 'set-chart-series-name' -or $a.chartName -cne 'OPF chart 1' -or $a.expectedName -cne 'Actual' -or $a.newName -cne 'Actual edited'){return $false}
         if($Report.actionPlan.chartSeriesEdits.Count -ne 1){return $false}
+        $edit=$Report.actionPlan.chartSeriesEdits[0];if(-not(Test-ReferenceNameTypes ([pscustomobject]@{chart=$edit.chartTypeObservation;count=$edit.referenceSeriesCount;series=$edit.referenceSeriesTypes}))){return $false}
         foreach($phase in @('original','edited','reopened')){
             $state=$Report.phases.$phase;$expected=if($phase -ceq 'original'){'Actual'}else{'Actual edited'}
             if($state.slideCount -ne 3 -or $state.chartSeriesNames.Count -ne 1){return $false};$n=$state.chartSeriesNames[0]
+            if(-not(Test-ReferenceNameTypes $n.referenceTypeEvidence)){return $false}
             if($n.phase -cne $phase -or $n.slideIndex -ne 1 -or $n.chartName -cne 'OPF chart 1' -or $n.seriesIndex -ne 1 -or $n.expectedName -cne $expected -or $n.observedName -cne $expected -or $n.observedType -cne 'System.String' -or $n.observedRawValue -cne $expected -or $n.status -cne 'success'){return $false}
         }
         return $true
@@ -156,6 +168,7 @@ function Invoke-FurnitureTypedRunner {
         $receipt.status='native-worker-pending';Write-FurnitureTypedReceipt
         $arguments=@('-InputPresentation',$inputFile,'-ActionPlan',$plan,'-OutputDirectory',(Join-Path $Output 'native'),'-TimeoutSeconds',([string]$Seconds)) + @(Get-NativeFontCaptureArguments $Fonts)
         if($DenseEvents){$arguments+='-ReadOnlySurvey'}
+        if($ReferenceNameEdit){$arguments+='-ReferenceNameEdit'}
         Invoke-NativeChild $shell $worker $arguments (Join-Path $Output 'native-worker.log')
         $admissionJson=& $Node $validator verify-postflight --envelope $Envelope --sha256 $Sha256 --output $Output --require-office true
         if($LASTEXITCODE -ne 0){throw 'Furniture lifecycle completion refused; zero observer IO'}

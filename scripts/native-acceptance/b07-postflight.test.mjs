@@ -64,7 +64,8 @@ test('reviewed observer source remains exact and B07 source binds actual worker 
   assert.deepEqual(observer,execFileSync('git',['show','f3f04183c2d38ffe3e5755a23b571b6b9ce8155e:'+B07_POSTFLIGHT_POLICY.observerSource],{cwd:root}));
   // Stage 1 remains the immutable original whole worker. Stage 2 is ONLY the
   // independently reviewed strict idle function. Stage 3 adds ONLY the pinned
-  // reviewed name-type diagnostic region; never derive from current bytes.
+  // reviewed name-type diagnostic region. Stage 4 adds ONLY the pinned closed
+  // reference mode in four exact regions; never derive from current bytes.
   const worker='packages/pptx/test/native-furniture-control.ps1';
   const frozen=execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+worker],{cwd:root});
   const reviewed=execFileSync('git',['show','a06c78686c3d3f59be6e6b9e8de65bac072ea515:'+worker],{cwd:root});
@@ -95,7 +96,26 @@ test('reviewed observer source remains exact and B07 source binds actual worker 
   const originalTypes=nameTypes(reviewed),observedTypes=nameTypes(typeEvidence),derivedTypes=replace(derived,originalTypes,observedTypes.body);
   assert.deepEqual(derivedTypes,typeEvidence,'Only the immutable reviewed type-observation region may change the strict-idle worker');
   assert.deepEqual(replace(typeEvidence,observedTypes,originalTypes.body),reviewed,'Type-evidence inverse must preserve every strict-idle worker byte');
-  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),derivedTypes);
+  const referenceMode=execFileSync('git',['show','fdb175da1160deb9747a8bccb898d79f4dc273a6:'+worker],{cwd:root});
+  assert.equal(referenceMode.length,91218);assert.equal(digest(referenceMode),'641c30e6dc9e3e89bae814c752e4fbc1bea41d8318b4f8a0af7e863434466060');
+  const referenceAnchors=[
+    ['param(\n',"$ErrorActionPreference='Stop'\n"],
+    ['function Read-AndValidateActionPlan([string]$Path) {\n','function Get-FurnitureSurveySlideCount([string]$Path) {\n'],
+    ['if(-not $Worker) {\n','function Write-FurnitureReport {\n'],
+    ['# Bounded current native chart metadata only: no ChartData, Values setter, Excel or UI.\n','function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {\n'],
+  ];
+  const referenceRange=(bytes,[a,b])=>{
+    const begin=Buffer.from(a),end=Buffer.from(b),from=bytes.indexOf(begin),to=bytes.indexOf(end);
+    assert.ok(from>=0&&to>from);assert.equal(bytes.lastIndexOf(begin),from);assert.equal(bytes.lastIndexOf(end),to);
+    const body=bytes.subarray(from,to);assert.equal(bytes.indexOf(body),from);assert.equal(bytes.lastIndexOf(body),from);return{from,to,body};
+  };
+  const priorRanges=referenceAnchors.map(anchor=>referenceRange(typeEvidence,anchor)),closedRanges=referenceAnchors.map(anchor=>referenceRange(referenceMode,anchor));
+  for(let index=1;index<priorRanges.length;index++){assert.ok(priorRanges[index-1].to<=priorRanges[index].from);assert.ok(closedRanges[index-1].to<=closedRanges[index].from);}
+  let derivedReference=derivedTypes,inverseReference=referenceMode;
+  for(let index=referenceAnchors.length-1;index>=0;index--){derivedReference=replace(derivedReference,priorRanges[index],closedRanges[index].body);inverseReference=replace(inverseReference,closedRanges[index],priorRanges[index].body);}
+  assert.deepEqual(derivedReference,referenceMode,'Only the four immutable reviewed closed-reference regions may extend type diagnostics');
+  assert.deepEqual(inverseReference,typeEvidence,'Fourth-stage inverse must preserve every43f type-diagnostic worker byte');
+  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),derivedReference);
   for(const name of ['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
   const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
   assert.ok(runner.indexOf('if(-not $RunOffice)')<runner.indexOf('$checked=& $node $validator verify-postflight'));
