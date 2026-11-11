@@ -10,7 +10,8 @@
 // local Workers preview (http://127.0.0.1:8787/mcp): the same checks, with its own viewer page and fonts. Node's fetch needs
 // NODE_USE_ENV_PROXY=1 behind a proxy.
 import assert from "node:assert/strict";
-import { mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { createServer } from "node:http";
 import path from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
@@ -19,6 +20,13 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { chromium } from "playwright";
 import { createOpfServer } from "../dist/index.js";
 import { installedFontFiles } from "../dist/stdio.js";
+import { minifyAppCss } from "../scripts/app-css.mjs";
+import { canonicalCssomRules } from "./helpers/app-cssom.mjs";
+
+const require = createRequire(import.meta.url);
+const rawViewCss = [readFileSync(require.resolve("@openpresentation/opf-editor/styles.css"), "utf8"), readFileSync(new URL("../app/view.css", import.meta.url), "utf8")].join("\n");
+const cssLiteralSource = '/*! @license preserved browser control */\n.css-literal[data-label=" x  y "]::before { content: "a  b 日本語 </style>"; --literal: " x  y "; margin: calc(1px + 2px); }';
+const cssLiteralMinified = await minifyAppCss(cssLiteralSource);
 
 // SEP-1865, "Restrictive Default": what a host must use when the resource declares no ui.csp (the view declares none).
 const VIEW_CSP = "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'self'";
@@ -182,6 +190,29 @@ try {
 	await run("draws a JSON deck under the restrictive CSP, with fonts from read_font_file", async () => {
 		await open({ document: deck });
 		await view().locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+		// This producer-specific equivalence proof owns the local resource bytes.
+		// A remote server supplies its own versioned View; its existing cases below
+		// continue to qualify that View without claiming it uses this checkout's CSS.
+		if (!remote) {
+			const css = await page.frame({ url: /\/view$/ }).evaluate(({ html, raw, literal, minifiedLiteral }) => {
+				const snapshot = (rules) => [...rules].map((rule) => {
+					if (rule.style) return { type: rule.type, selector: rule.selectorText ?? rule.keyText, declarations: [...rule.style].map((name) => [name, rule.style.getPropertyValue(name), rule.style.getPropertyPriority(name)]), ...(rule.cssRules ? { rules: snapshot(rule.cssRules) } : {}) };
+					if (rule.cssRules) return { type: rule.type, header: rule.cssText.slice(0, rule.cssText.indexOf("{")).trim(), rules: snapshot(rule.cssRules) };
+					return { type: rule.type, text: rule.cssText };
+				});
+				const rules = (text) => { const sheet = new CSSStyleSheet(); sheet.replaceSync(text); return snapshot(sheet.cssRules); };
+				// CodeMirror prepends its own style tag after initialization. Bind the
+				// actual resource's sole static stylesheet, not the first live tag.
+				const sourceStyles = new DOMParser().parseFromString(html, "text/html").head.querySelectorAll("style");
+				if (sourceStyles.length !== 1) throw new Error("Expected one resource stylesheet");
+				const served = [...document.head.querySelectorAll("style")].filter((style) => style.textContent === sourceStyles[0].textContent);
+				if (served.length !== 1 || !served[0].sheet) throw new Error("Missing or ambiguous served resource stylesheet");
+				return { raw: rules(raw), served: snapshot(served[0].sheet.cssRules), literal: rules(literal), minifiedLiteral: rules(minifiedLiteral) };
+			}, { html: resource.text, raw: rawViewCss, literal: cssLiteralSource, minifiedLiteral: cssLiteralMinified });
+			assert.ok(css.raw.length > 0, "the complete real concatenated stylesheet is parsed");
+			assert.deepEqual(canonicalCssomRules(css.served), canonicalCssomRules(css.raw), "served whitespace-minified CSS preserves every parsed selector/declaration/value/cascade rule");
+			assert.deepEqual(canonicalCssomRules(css.minifiedLiteral), canonicalCssomRules(css.literal), "literal/custom-property whitespace and inline-style escapes retain their CSS meaning");
+		}
 		const text = await view().locator("#deck-canvas").innerText();
 		assert.match(text, /Revenue grew 18% in Q3/);
 		const state = await hostState();

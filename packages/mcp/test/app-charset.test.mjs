@@ -6,6 +6,7 @@ import {test} from 'node:test';
 import {runInNewContext} from 'node:vm';
 import {transform} from 'esbuild';
 import {DECK_APP_HTML} from '../dist/index.js';
+import {minifyAppCss} from '../scripts/app-css.mjs';
 
 test('the served View is the built UTF-8 document with a single inline module', async () => {
   assert.equal(DECK_APP_HTML, await readFile(new URL('../app-dist/deck-app.html', import.meta.url), 'utf8'));
@@ -29,4 +30,16 @@ test('supported UTF-8 output preserves Unicode, separators and lone surrogates w
     assert.deepEqual(Array.from(context.values), expected);
     assert.equal(context.regex, true);
   }
+});
+
+test('the actual CSS pass preserves legal notices and whitespace inside selectors and literal values', async () => {
+  const notice = '/*! @license retained test notice */';
+  const css = `${notice}\n.scope[data-label=" x  y "]::before { content: "a  b 日本語 </style>"; --literal: " x  y "; margin: calc(1px + 2px); }`;
+  const code = await minifyAppCss(css);
+  assert.ok(code.includes(notice), 'legal comments survive the maintained producer helper');
+  assert.ok(code.includes('[data-label=" x  y "]'), 'selector literal whitespace is data');
+  assert.ok(code.includes('a  b 日本語 '), 'text literal spacing and Unicode remain data');
+  assert.ok(code.includes('" x  y "'), 'custom-property literal whitespace remains data');
+  assert.ok(code.includes('calc(1px + 2px)'), 'required calc token separators remain');
+  assert.doesNotMatch(code, /<\/style/iu, 'default inline-style protection stays enabled');
 });

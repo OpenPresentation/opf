@@ -12,6 +12,7 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
 import { assertAppResourceFrame } from "./app-resource-frame.mjs";
+import { minifyAppCss } from "./app-css.mjs";
 
 const require = createRequire(import.meta.url);
 const here = new URL("../", import.meta.url);
@@ -69,7 +70,7 @@ for (const pattern of [/\bnew Function\(/, /\beval\(/]) {
 	if (found) console.warn(`build-app: the bundle contains ${found[0]} (at ${found.index}); the deck view's CSP forbids it, so that code path must never run.`);
 }
 
-const styles = [await readFile(require.resolve("@openpresentation/opf-editor/styles.css"), "utf8"), await readFile(new URL("app/view.css", here), "utf8")].join("\n");
+const styles = await minifyAppCss([await readFile(require.resolve("@openpresentation/opf-editor/styles.css"), "utf8"), await readFile(new URL("app/view.css", here), "utf8")].join("\n"));
 const template = await readFile(new URL("app/index.html", here), "utf8");
 // Inline text must not close its element early.
 const html = template.replace("/*OPF_CSS*/", () => styles.replaceAll("</style", "<\\/style")).replace("/*OPF_JS*/", () => script.replaceAll("</script", "<\\/script"));
