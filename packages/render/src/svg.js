@@ -1234,7 +1234,7 @@ function listEntriesSvg(item, fit, bound, options) {
   for(const entry of fit.listEntries){
     if(entry.marker.none){/* design.listBullet: none draws no marker */}
     else if(bullet){const box=entry.bulletBox??{x:entry.marker.x,y:entry.marker.y-entry.marker.fontSize*.65,width:entry.marker.fontSize*.65,height:entry.marker.fontSize*.65};children.push(tag('image',{x:stableNumber(box.x),y:stableNumber(box.y),width:stableNumber(box.width),height:stableNumber(box.height),href:bullet,preserveAspectRatio:'xMidYMid meet','aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));}
-    else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(entry.marker.y),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true',...(entry.marker.anchor==='end'?{'text-anchor':'end'}:{})},escapeText(entry.marker.text)));
+    else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(entry.marker.y),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true',...markerDirection(entry)},escapeText(entry.marker.text)));
     // LH-133: a glossary's term (entry.accent) draws in the tag's color on its backdrop, as the export writes it.
     // SH-09: an entry of a pyramid or matrix (geometry.arrangements) is centered on its node, as the export writes it.
     const config={path:entry.textPath,align:arranged?'center':'left',fill:entry.accent?eyebrowFill(bound.design,item):bound.design.colors.text,rich:Array.isArray(entry.value),options};
@@ -1258,6 +1258,14 @@ function listEntriesSvg(item, fit, bound, options) {
 function numberMarkerStyle(marker) {
   if (!marker.number) return {};
   return {'font-weight':marker.style.fontWeight===400?undefined:marker.style.fontWeight,'font-style':marker.style.italic?'italic':undefined};
+}
+
+function markerDirection(entry) {
+  // The marker's text is the unchanged logical numbering token. A native RTL
+  // auto-number uses its paragraph's base direction; isolate that same token
+  // here while keeping core's EXISTING physical anchor, not a new text box.
+  if (entry.marker.number && entry.direction === 'rtl') return {direction:'rtl','unicode-bidi':'isolate','text-anchor':entry.marker.anchor==='end'?'start':'end'};
+  return entry.marker.anchor === 'end' ? {'text-anchor':'end'} : {};
 }
 
 // Follows asset: references and the host imageResolver to the drawable source of an image value.
