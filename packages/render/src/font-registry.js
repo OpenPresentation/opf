@@ -169,7 +169,7 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
   if (!Array.isArray(entries) || !entries.length && !allowEmpty) throw new OPFFontError("empty-font-registry", "Supply at least one font file.");
   const makeFace = entry => {
     if (!(entry.data instanceof Uint8Array)) throw new OPFFontError("invalid-font-data", "Font data must be a Uint8Array.");
-    const data = entry.data.slice();
+    const data = new Uint8Array(entry.data);
     let font;
     try { font = create(data, entry.postscriptName); } catch (error) { throw new OPFFontError("invalid-font-data", error.message); }
     if (!font?.layout || !font.unitsPerEm) throw new OPFFontError("font-collection", "Select one font from a collection with postscriptName.");
