@@ -16,7 +16,7 @@ export const markdownFrontMatter = [
   ['M-FM-001', 'R-CMP-22', 'Ctrl+Space inside the front matter offers the deck keys', 'md', '---\n|\n---\n\n# A\n', [K('Control+Space')], { popup: { open: 1, has: ['name', 'design', 'language'], not: ['slides'] } }],
   ['M-FM-002', 'R-CMP-22', 'typing a key prefix', 'md', '---\n|\n---\n\n# A\n', [T('des')], { popup: { open: 1, has: ['design', 'description'] } }],
   ['M-FM-003', 'R-CMP-22', 'Tab accepts', 'md', '---\n|\n---\n\n# A\n', [T('descr'), K('Tab')], { text: '---\ndescription: |\n---\n\n# A\n' }],
-  ['M-FM-004', 'R-CMP-22', 'a value list in the front matter', 'md', '---\ndesign:\n  titleAlignment: |\n---\n\n# A\n', [K('Control+Space')], { popup: { open: 1, has: ['left', 'center', 'right'] } }],
+  ['M-FM-004', 'R-CMP-22', 'a value list in the front matter', 'md', '---\ndesign:\n  titleAlignment: |\n---\n\n# A\n', [K('Control+Space')], { popup: { open: 1, has: ['start', 'center', 'end'] } }],
   ['M-FM-005', 'R-KEY-04', 'Enter after "key:" indents inside the front matter', 'md', '---\ndesign:|\n---\n\n# A\n', [K('Enter')], { text: '---\ndesign:\n  |\n---\n\n# A\n' }],
   ['M-FM-006', 'R-CMP-22', 'the closing line is offered nothing', 'md', '---\nname: x\n---|\n\n# A\n', [K('Control+Space')], { popup: { open: 0 } }],
   ['M-FM-007', 'R-CMP-22', 'the opening line is offered nothing', 'md', '---|\nname: x\n---\n\n# A\n', [K('Control+Space')], { popup: { open: 0 } }],
