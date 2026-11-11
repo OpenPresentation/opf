@@ -19,7 +19,7 @@ function phase(archive){return{slideCount:7,rasters:Array.from({length:7},(_,ind
  return{index:index+1,slideId:index+256,name:'Synthetic descriptors only '+index,shapeCount:shapes.length,shapes};
 })};}
 let prepared;
-async function fixture(){return prepared??= (async()=>{
+async function fixture(){prepared??= (async()=>{
  const source=currentSevenSource(),input=Buffer.from(await toPptx(source,{chartex:'native'})),bound=bindCurrentTreemap(input,source,selection),parts=deps.unzipSync(input),action=bound.action;
  for(const slide of bound.archive.slides)for(const shape of slide.shapes){if(shape.kind!=='chart'||shape.chart.workbook.part!==action.workbookPart)continue;
   change(parts,shape.chartPart,text=>shape.chart.family==='chartEx'?once(text,'<cx:pt idx="0">42</cx:pt>','<cx:pt idx="0">43</cx:pt>'):once(text,'<c:pt idx="0"><c:v>42</c:v></c:pt>','<c:pt idx="0"><c:v>43</c:v></c:pt>'));
@@ -30,7 +30,7 @@ async function fixture(){return prepared??= (async()=>{
  // Above documents are actual public imports; below descriptors are explicitly
  // synthetic and prove no COM observation. Actual native phases remain mandatory.
  return{input,saved,source,action,bound,archiveContext:bound.archiveContext,phases:{original:phase(bound.archive),'saved-reopened':phase(inspectSevenArchive(saved,deps,bound.archiveContext))},imports,deps};
-})();}
+})();return prepared;}
 test('current producer classifies two known classic adaptations and admits ONLY treemap',async()=>{
  const f=await fixture();assert.equal(f.bound.census.maximum,4);assert.notEqual(f.bound.census.arrays,46);
  assert.deepEqual(f.bound.classification.filter(item=>item.representation==='classic-column-fallback').map(item=>item.sourceType),['histogram','world']);
@@ -91,7 +91,7 @@ test('only explicit current context reads the exact static signed Pareto combo; 
  ];
  for(const [name,edit]of mutations){const parts=deps.unzipSync(f.input);change(parts,'ppt/charts/chart3.xml',text=>{const next=edit(text);assert.notEqual(next,text,name);return next;});assert.throws(()=>inspectSevenArchive(zip(parts),deps,f.archiveContext),undefined,name);}
  const coherent=deps.unzipSync(f.input),combo=f.bound.archive.slides[2].shapes.find(shape=>shape.kind==='chart').chart;
- change(coherent,'ppt/charts/chart3.xml',text=>once(text,'<c:v>0.7934782608695652</c:v>','<c:v>0.8</c:v>'));const book=deps.unzipSync(coherent[combo.workbook.part]);change(book,'xl/worksheets/sheet1.xml',text=>once(text,'<c r="C3"><v>0.7934782608695652</v></c>','<c r="C3"><v>0.8</v></c>'));coherent[combo.workbook.part]=deps.zipSync(book);
+ change(coherent,'ppt/charts/chart3.xml',text=>once(text,'<c:v>0.7934782608695652</c:v>','<c:v>0.8</c:v>'));const book=deps.unzipSync(coherent[combo.workbook.part]);change(book,'xl/worksheets/sheet1.xml',text=>once(text,'<c r="C3" s="1"><v>0.7934782608695652</v></c>','<c r="C3" s="1"><v>0.8</v></c>'));coherent[combo.workbook.part]=deps.zipSync(book);
  assert.throws(()=>inspectSevenArchive(zip(coherent),deps,f.archiveContext),/complete signed\/cumulative cache|complete sorted\/derived workbook/,'Even coherent derived-cache/workbook edits cannot be waived as recalculation');
  const context=currentSevenArchiveContext();assert.throws(()=>inspectSevenArchive(f.input,deps,{...context,fixture:{...context.fixture,sha256:'0'.repeat(64)}}));assert.throws(()=>inspectSevenArchive(f.input,deps,{...context,source:{slides:[]}}));
 });

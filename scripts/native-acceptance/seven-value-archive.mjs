@@ -85,7 +85,9 @@ export function bindSingleSevenValueTarget(input,source,selection,{deps=archiveD
  const slot=numericSlot(shape);
  if(shape.chart.family==='chartEx'){assert.equal(slot.layoutId,layouts[authored.type],'ChartEx layout differs from the authored type');assert.equal(shape.chart.series.some(series=>series.derived),authored.type==='pareto','Derived Pareto ownership differs');}
  assertSevenNumericArray(slot.values);assert.deepEqual(slot.values,values,'Native cache does not address the authored numeric array');
- assert.equal(slot.name,authored.data.columns[1]);assert.ok(slot.name.length>0&&slot.name.length<=255&&!/[\u0000-\u001f]/u.test(slot.name));
+ assert.equal(slot.name,authored.data.columns[1]);
+ // biome-ignore lint/suspicious/noControlCharactersInRegex: Reject control characters in the exact native series name before admitting its COM target.
+ assert.ok(slot.name.length>0&&slot.name.length<=255&&!/[\u0000-\u001f]/u.test(slot.name));
  const workbookCells=cellsFor(slot.formula,shape.chart.workbook);assert.equal(workbookCells.length,values.length);
  const next=[...values];assert.ok(Number.isInteger(selection.pointIndex)&&selection.pointIndex>=1&&selection.pointIndex<=values.length);next[selection.pointIndex-1]=selection.newValue;assertSevenSingleDelta(values,next,selection.pointIndex);
  const action={op:'set-seven-series-values',slideIndex:selection.slideIndex,shapeId:shape.id,shapeName:shape.name,branch:shape.branch,sourceType:authored.type,comChartType:SEVEN_VALUE_TYPES[authored.type],seriesIndex:1,maxSeriesCount:shape.chart.series.length,seriesName:slot.name,chartPart:shape.chartPart,chartFamily:shape.chart.family,dataId:slot.dataId,dimensionIndex:slot.dimensionIndex,layoutId:slot.layoutId,dataFormula:slot.formula,workbookPart:shape.chart.workbook.part,worksheet:shape.chart.workbook.sheet,workbookCells,pointIndex:selection.pointIndex,expectedValues:[...values],newValues:next,inputSha256:digest(input),sourceModelSha256:jsonDigest(source)};
@@ -102,12 +104,18 @@ export function assertSevenValueAction(action){
  keys(action,['op','slideIndex','shapeId','shapeName','branch','sourceType','comChartType','seriesIndex','maxSeriesCount','seriesName','chartPart','chartFamily','dataId','dimensionIndex','layoutId','dataFormula','workbookPart','worksheet','workbookCells','pointIndex','expectedValues','newValues','inputSha256','sourceModelSha256']);
  assert.equal(action.op,'set-seven-series-values');assert.ok(Number.isInteger(action.slideIndex)&&action.slideIndex>=1&&action.slideIndex<=7);assert.ok(Number.isInteger(action.shapeId)&&action.shapeId>0);assert.equal(action.seriesIndex,1);
  assert.ok(Object.hasOwn(SEVEN_VALUE_TYPES,action.sourceType));assert.equal(action.maxSeriesCount,action.sourceType==='pareto'?2:1);assert.equal(action.comChartType,SEVEN_VALUE_TYPES[action.sourceType]);
- for(const field of ['shapeName','seriesName','chartPart','dataFormula','workbookPart','worksheet'])assert.ok(typeof action[field]==='string'&&action[field].length>0&&!/[\u0000-\u001f]/u.test(action[field]));
+ for(const field of ['shapeName','seriesName','chartPart','dataFormula','workbookPart','worksheet']){
+  // biome-ignore lint/suspicious/noControlCharactersInRegex: Reject control characters in every bound action name, part and formula.
+  assert.ok(typeof action[field]==='string'&&action[field].length>0&&!/[\u0000-\u001f]/u.test(action[field]));
+ }
  assert.ok(action.seriesName.length<=255);
  assertSevenSingleDelta(action.expectedValues,action.newValues,action.pointIndex);assert.ok(Array.isArray(action.workbookCells)&&action.workbookCells.length===action.expectedValues.length&&new Set(action.workbookCells).size===action.workbookCells.length);for(const cell of action.workbookCells)assert.match(cell,/^[A-Z]+[1-9][0-9]*$/u);
  for(const field of ['inputSha256','sourceModelSha256'])assert.match(action[field],/^[a-f0-9]{64}$/u);
  if(action.sourceType==='world'){assert.equal(action.branch,'direct');assert.equal(action.chartFamily,'classic');assert.equal(action.dataId,null);assert.equal(action.dimensionIndex,null);assert.equal(action.layoutId,null);}
- else{assert.equal(action.branch,'choice');assert.equal(action.chartFamily,'chartEx');assert.ok(typeof action.dataId==='string'&&action.dataId.length>0&&!/[\u0000-\u001f]/u.test(action.dataId));assert.ok(Number.isInteger(action.dimensionIndex)&&action.dimensionIndex>=0);assert.equal(action.layoutId,layouts[action.sourceType]);}
+ else{assert.equal(action.branch,'choice');assert.equal(action.chartFamily,'chartEx');
+  // biome-ignore lint/suspicious/noControlCharactersInRegex: Reject control characters in the exact native cache identity.
+  assert.ok(typeof action.dataId==='string'&&action.dataId.length>0&&!/[\u0000-\u001f]/u.test(action.dataId));
+  assert.ok(Number.isInteger(action.dimensionIndex)&&action.dimensionIndex>=0);assert.equal(action.layoutId,layouts[action.sourceType]);}
  return action;
 }
 function applyExpectedChartDelta(chart,action){
@@ -137,7 +145,7 @@ export function sevenWorkbookAliasPartition(archive){
  for(const slide of archive.slides)for(const shape of slide.shapes){
   if(shape.kind!=='chart')continue;const label=`${slide.index}/${shape.branch}`,part=shape.chart.workbook?.part;
   assert.ok(!labels.has(label),'Ambiguous chart branch in alias partition');labels.add(label);assert.ok(typeof part==='string'&&part.length>0);
-  let group=groups.get(part);if(!group)groups.set(part,group=[]);group.push(label);
+  let group=groups.get(part);if(!group){group=[];groups.set(part,group);}group.push(label);
  }
  return[...groups.values()].map(group=>group.sort()).sort((a,b)=>a[0].localeCompare(b[0]));
 }

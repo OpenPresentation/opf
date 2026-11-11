@@ -130,12 +130,36 @@ test('stale cache, stale workbook, another cell, public data/diagnostics and hid
  xml(parts,fallback.chartPart,text=>once(text,'<c:idx val="0"/>','<c:idx val="1"/>'));
  assert.throws(()=>comparePersistedSevenValueEdit({...context,saved:Buffer.from(deps.zipSync(parts))}));
 });
-test('actual maintained public importer sees the one-value ZIP/workbook edit without an injected engine',async()=>{
- for(const slideIndex of [1,2,3,4,5,6,7]){
+test('six historical public imports retain the exact one-value edit without an injected engine',async()=>{
+ for(const slideIndex of [1,2,3,5,6,7]){
   const context=pureContext(slideIndex),consumer=path.resolve(here,'../..');
   context.imports={original:await importSevenPublic(context.input,{consumer}),'saved-reopened':await importSevenPublic(context.saved,{consumer})};
   comparePersistedSevenValueEdit(context);
  }
+});
+test('historical adapted Box cannot qualify after its numeric edit invalidates whole-cache provenance',async()=>{
+ const context=pureContext(4),consumer=path.resolve(here,'../..');
+ context.imports={original:await importSevenPublic(context.input,{consumer}),'saved-reopened':await importSevenPublic(context.saved,{consumer})};
+ assert.equal(digest(context.input),census.archives.find(item=>item.path==='chart-all-seven.pptx').sha256);
+ const archive=inspectSevenArchive(context.input,deps),charts=archive.slides[3].shapes.filter(shape=>shape.kind==='chart');
+ assert.equal(charts.length,2);
+ const native=charts.find(shape=>shape.branch==='choice').chart,classic=charts.find(shape=>shape.branch==='fallback').chart;
+ assert.deepEqual(native.caches[0].dimensions.find(dim=>dim.kind==='cx:strDim').values,['Region','Region','Region','Region']);
+ assert.deepEqual(classic.series[0]['c:cat'].values,['Region','Region','Region','Region']);
+ assert.equal(native.workbook.part,classic.workbook.part);
+ assert.deepEqual(native.workbook.cells.filter(item=>['A2','A3','A4','A5','B2','B3','B4','B5'].includes(item.cell)),[
+  {cell:'A2',value:'Region'},{cell:'B2',value:42},{cell:'A3',value:'Region'},{cell:'B3',value:31},{cell:'A4',value:'Region'},{cell:'B4',value:-8},{cell:'A5',value:'Region'},{cell:'B5',value:19},
+ ]);
+ const parts=deps.unzipSync(context.input),tag=deps.strFromU8(parts['ppt/tags/opfData1.xml']),savedParts=deps.unzipSync(context.saved);assert.equal(deps.strFromU8(savedParts['ppt/tags/opfData1.xml']),tag,'Numeric edit must retain the exact original provenance record');const matches=[...tag.matchAll(/<p:tag name="OPF_DATA_V1" val="([0-9A-F]+)"\/>/gu)];assert.equal(matches.length,1);
+ assert.deepEqual(JSON.parse(Buffer.from(matches[0][1],'hex').toString('utf8')),{v:1,kind:'chart',data:source.slides[3].chart.data,evidence:['b9c0f32ce68326b0','2c6723e21d970fc7']});
+ const before=context.imports.original,after=context.imports['saved-reopened'];
+ assert.deepEqual(before.document.slides[3].chart.data,source.slides[3].chart.data);
+ const expected=structuredClone(before.document);expected.slides[3].chart.data.rows=[['Region',43],['Region',31],['Region',-8],['Region',19]];
+ assert.deepEqual(after.document,expected,'Native category fallback and ONE numeric edit are the entire historical public document delta');
+ const changed=after.diagnostics.filter(issue=>issue.code==='chart-data-provenance-changed');
+ assert.deepEqual(changed,[{code:'chart-data-provenance-changed',path:'slides.3.charts.alt0',message:"The chart's cached data or number formats changed after export (for example in Edit Data), so the authored data form, dataset reference, column mapping, column formats and data source recorded at export were not restored; the chart imports the values and formats it now shows."}]);
+ assert.deepEqual(after.diagnostics.filter(issue=>issue!==changed[0]),before.diagnostics,'No other diagnostic delta is admitted');
+ assert.throws(()=>comparePersistedSevenValueEdit(context),/Public import must retain the native value edit and nothing else/u,'The historical adapted Box archive cannot qualify as an exact one-cell edit');
 });
 test('Windows actual PowerShell5.1 action definitions: one setter, managed faults, primitive/ownership refusals and no later operation',{
  skip:process.platform!=='win32'?'Actual Windows PowerShell5.1 managed controls; a portable skip is not serialization or COM qualification':false,
