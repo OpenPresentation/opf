@@ -118,3 +118,63 @@ The separate Windows language observation is scoped above. Root and independent
 source review and a separately authorized fresh managed attempt remain required.
 The old f332/d231 branches,
 worktrees, source proposals, diagnostic and all failed evidence stay frozen.
+
+## Source-only successful-stage index — 2026-11-11
+
+The actual first selected managed test on frozen b681 reaches the original
+60000 ms child limit (Node command 60.194 seconds, ETIMEDOUT); the second archive
+test is unrun. Retained read-only metadata shows the synthetic request, report,
+worker, stages and admission files were overwritten around 57.4–57.5 seconds,
+with 1038 stages, 520 success rows, 57 matched numeric proofs and correct cleanup
+flags. Those shared files are overwritten between cases, so this establishes
+durable progress but not the exact timed-out case or internal completion.
+Neither an absent valid-bridge failure file nor an absent journal proves a phase
+passed. The original timeout and retained evidence remain immutable.
+
+A source audit finds bounded repeated validation work. A valid bound call runs
+the complete typed readiness check before observer entry, then the unchanged
+observer calls it again. Each successful typed check performs 320 per-name
+lookups over the same 1038-row journal. The original helper collects all matching
+success rows on each lookup to refuse missing/duplicate names. Full completion
+of the intended valid mutation plus seven injected and five default scenarios
+would entail 26 complete readiness evaluations and 8,636,160 lookup predicates,
+before rejected mutations, full wire/lifecycle/proof checks, hashing and JSON
+work. These are static counts, not an observed timing attribution. No obvious
+recursive delegate or unbounded query path was found; all test delays are
+injected, and the observer still caps queries at 51.
+
+This separate fresh-main successor normally bases on frozen
+`b6812a3b895b852c24233127decc164ca1520d68`. After the unchanged common readiness
+and exact operation validation succeed, it builds one local success-stage
+index, then supplies that index to the existing dictionary lookup path. The
+original stage array remains intact for both full wire checks, operation and
+lifecycle order/count/key checks, all 57 critical JSON proofs and final cleanup.
+Every geometry, ownership, numeric/current-value and source comparison remains
+the same. No index is read from evidence, retained across calls or reused across
+mutations. The observer, its source hash, 5s/100ms/51 policy, child timeout,
+default delegates and test workload are unchanged.
+
+The index uses ordinal case-sensitive Hashtable and HashSet comparers. For a
+name with one success row it retains that exact original row object. On the
+second success row it removes the key and records it as duplicated; every later
+success with that name is skipped, so a third duplicate cannot reintroduce a
+first/last winner. A name with no success row remains absent. Begin rows do not
+count. The index itself does not reject an unrelated duplicate name globally;
+only a requested absent/duplicate lookup refuses, as the original scanner does.
+Production still validates the complete raw operation sequence first.
+
+A small new actual-PS5 managed control calls the real index and shared lookup
+functions on deliberately ambiguous small arrays. It compares raw/index refusal
+outcomes for missing, duplicate, third-duplicate, begin-only, begin-plus-success
+and case-distinct names; verifies successful results are ReferenceEquals to the
+original row; and checks raw input JSON remains unchanged. Unique lookups still
+work in the presence of unrelated duplicates. Existing 23 mutations, seven
+injected scenarios, five default-delegate cases, five reader refusals and the
+actual archive report-versus-Node grammar regression remain byte-identical.
+
+This is a prospective source-only optimization, not a measured speedup, managed
+pass or native qualification. No local PowerShell parse/import/execution, tests,
+build, exports, process query, observer, Office or timeout/budget change ran.
+Root and independent source review must precede any separately authorized
+coherent qualification. All prior branches, sources, first failures, trace and
+producer/consumer identities stay frozen.

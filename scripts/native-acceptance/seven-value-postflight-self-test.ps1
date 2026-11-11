@@ -94,6 +94,25 @@ try {
             foreach($field in @('expected','actual')){if(($row.$field -isnot [int] -and $row.$field -isnot [long]) -or $row.$field -ne (-1)){throw ('Negative proof is not numeric -1: '+$row.stage+'.'+$field)}}
         }
     };$controls++
+    # Exercise the real index/lookup functions on deliberately ambiguous small
+    # inputs; production constructs its index only after full journal validation.
+    $lookupUnique=[pscustomobject]@{stage='unique';status='success';value=7}
+    $lookupMixed=[pscustomobject]@{stage='mixed';status='success';value=11}
+    $lookupUpper=[pscustomobject]@{stage='Case';status='success';value=13}
+    $lookupLower=[pscustomobject]@{stage='case';status='success';value=17}
+    $lookupStages=@($lookupUnique,[pscustomobject]@{stage='only-begin';status='begin';value=0},[pscustomobject]@{stage='mixed';status='begin';value=0},$lookupMixed,[pscustomobject]@{stage='duplicate';status='success';value=1},[pscustomobject]@{stage='duplicate';status='success';value=2},[pscustomobject]@{stage='triple';status='success';value=1},[pscustomobject]@{stage='triple';status='success';value=2},[pscustomobject]@{stage='triple';status='success';value=3},$lookupUpper,$lookupLower)
+    $lookupBefore=ConvertTo-Json -InputObject $lookupStages -Compress -Depth 8
+    $lookupIndex=Get-SevenValueSuccessIndex $lookupStages
+    if($lookupIndex -isnot [Collections.IDictionary] -or $lookupIndex.Count -ne 4){throw 'Success index must contain only unique case-sensitive success names'}
+    $lookupQueries=@([pscustomobject]@{name='unique';row=$lookupUnique},[pscustomobject]@{name='mixed';row=$lookupMixed},[pscustomobject]@{name='Case';row=$lookupUpper},[pscustomobject]@{name='case';row=$lookupLower},[pscustomobject]@{name='missing';row=$null},[pscustomobject]@{name='only-begin';row=$null},[pscustomobject]@{name='duplicate';row=$null},[pscustomobject]@{name='triple';row=$null},[pscustomobject]@{name='CASE';row=$null})
+    foreach($query in $lookupQueries){
+        $rawRow=$null;$indexedRow=$null;$rawRefused=$false;$indexedRefused=$false
+        try{$rawRow=Get-OwnedPostflightSuccess $lookupStages $query.name}catch{$rawRefused=$true}
+        try{$indexedRow=Get-OwnedPostflightSuccess $lookupIndex $query.name}catch{$indexedRefused=$true}
+        if($rawRefused -cne $indexedRefused -or $rawRefused -cne ($null -eq $query.row)){throw ('Raw/index lookup refusal differs: '+$query.name)}
+        if(-not $rawRefused -and (-not [object]::ReferenceEquals($rawRow,$query.row) -or -not [object]::ReferenceEquals($indexedRow,$query.row))){throw ('Success index replaced the original row: '+$query.name)}
+    }
+    if((ConvertTo-Json -InputObject $lookupStages -Compress -Depth 8) -cne $lookupBefore){throw 'Success indexing changed the raw stages'};$controls++
     foreach($mutation in @('valid','missing-proof','duplicate-proof','reordered-proof','false-actual-proof','false-expected-proof','extra-proof-key','wrong-readback-proof','missing-preflight-proof','failed-worker','timed-out','cleanup-false','nonempty-error','sequence-gap','missing-stage','extra-stage','setter-readonly','preflight-nonzero','second-setter','stale-reopened','wrong-wire','foreign-profile','policy-change')){
         $e=Fresh-ValueEvidence;$r=$e.report;$s=$e.stages;$p=@($r.probes | Where-Object {$_.stage -ceq 'value.setter.capturedRefs'})[0];$index=[Array]::IndexOf($r.probes,$p)
         if($mutation -ceq 'missing-proof'){$r.probes=@($r.probes | Where-Object {$_ -ne $p})}

@@ -44,6 +44,15 @@ function Get-SevenValueCriticalProbes($Report,$Action) {
     Add-ValueTarget 'value.saved-reopened.target' 'saved-reopened' $Report.savedPath;Add-ValueGuard 'value.saved-reopened.read' $Report.savedPath;Add-ValueReadback 'saved-reopened' $Action.newValues
     return $records.ToArray()
 }
+function Get-SevenValueSuccessIndex($Stages) {
+    $successes=[Collections.Hashtable]::new([StringComparer]::Ordinal)
+    $duplicates=[Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach($stage in $Stages) {
+        if($stage.status -cne 'success' -or $duplicates.Contains($stage.stage)){continue}
+        if($successes.Contains($stage.stage)){$successes.Remove($stage.stage);[void]$duplicates.Add($stage.stage)}else{$successes.Add($stage.stage,$stage)}
+    }
+    return $successes
+}
 function Test-SevenValuePostflightReady($Terminal,$Evidence) {
     try {
         if(-not (Test-OwnedPostflightCommonReady $Terminal $Evidence 'seven-chart-treemap-single-value-edit-v1' 'seven-treemap-value-bounded-global-zero-after-completed-owned-quit-v1' 2 1 2 1)){return $false}
@@ -51,6 +60,9 @@ function Test-SevenValuePostflightReady($Terminal,$Evidence) {
         if($r.schemaVersion -ne 3 -or $r.actions -isnot [array] -or $r.actions.Count -ne 1 -or $r.closes -ne 2 -or $r.saveCopies -ne 1 -or $r.quits -ne 1 -or $r.opens.Count -ne 2){return $false}
         if($action.sourceType -cne 'treemap' -or $action.slideIndex -ne 1 -or $action.branch -cne 'choice' -or $action.comChartType -ne 117 -or $q.selectedCase.representation -cne 'native-treemap-choice'){return $false}
         if(-not (Test-OwnedPostflightOperations $s @(Get-SevenValuePostflightOperations $r $action))){return $false}
+        # Only index this invocation's fully validated raw journal. Duplicate
+        # success names remain absent, preserving per-lookup refusal semantics.
+        $successIndex=Get-SevenValueSuccessIndex $s
         $probe=$r.actions[0]
         if($probe.status -cne 'success' -or -not (Test-OwnedPostflightInteger $probe.setterAttempts) -or $probe.setterAttempts -ne 1 -or $probe.actionModelSha256 -cne $q.selectedCase.actionModelSha256 -or $probe.actionFileIdentity.bytes -ne $q.selectedCase.actionFileIdentity.bytes -or $probe.actionFileIdentity.sha256 -cne $q.selectedCase.actionFileIdentity.sha256 -or $probe.observedKind -cne 'System.Array' -or $probe.observedRank -ne 1 -or $probe.observedLength -ne 4){return $false}
         foreach($pair in @(@('before','expectedValues'),@('after','newValues'),@('reopened','newValues'),@('observedValues','newValues'))) {
@@ -65,27 +77,27 @@ function Test-SevenValuePostflightReady($Terminal,$Evidence) {
             if(-not (Test-OwnedPostflightKeys $critical[$i] @('stage','expected','actual','matched'))){return $false}
             foreach($field in @('stage','expected','actual','matched')){if(($critical[$i].$field | ConvertTo-Json -Compress -Depth 8) -cne ($expected[$i].$field | ConvertTo-Json -Compress -Depth 8)){return $false}}
         }
-        foreach($name in @('preflight.globalIdle','application.initial.count','original.preflight.count','saved-reopened.preflight.count','application.final.count')){if((Get-OwnedPostflightSuccess $s $name).value -ne 0){return $false}}
+        foreach($name in @('preflight.globalIdle','application.initial.count','original.preflight.count','saved-reopened.preflight.count','application.final.count')){if((Get-OwnedPostflightSuccess $successIndex $name).value -ne 0){return $false}}
         $paths=@((Join-Path $q.output 'inputs/case.pptx'),(Join-Path $q.nativeRoot 'saved.pptx'));$phases=@('original','saved-reopened')
         for($p=0;$p -lt 2;$p++) {
             $phase=$phases[$p];$open=$r.opens[$p];$observed=$r.phases.$phase
             if($open.phase -cne $phase -or $open.path -cne $paths[$p] -or $open.readOnly -ne -1 -or $observed.slideCount -ne 7 -or $observed.slides.Count -ne 7 -or $observed.rasters.Count -ne 7){return $false}
-            foreach($suffix in @('fullName','close.fullName')){if((Get-OwnedPostflightSuccess $s "$phase.$suffix").value -cne $paths[$p]){return $false}}
-            if((Get-OwnedPostflightSuccess $s "$phase.readOnly").value -ne -1){return $false}
+            foreach($suffix in @('fullName','close.fullName')){if((Get-OwnedPostflightSuccess $successIndex "$phase.$suffix").value -cne $paths[$p]){return $false}}
+            if((Get-OwnedPostflightSuccess $successIndex "$phase.readOnly").value -ne -1){return $false}
             for($i=1;$i -le 7;$i++) {
                 if($observed.slides[$i-1].shapeCount -ne 2 -or $observed.slides[$i-1].shapes.Count -ne 2){return $false}
                 for($j=1;$j -le 2;$j++) {
                     $shape=$observed.slides[$i-1].shapes[$j-1]
-                    foreach($field in @('id','name','type','left','top','width','height','rotation','hasTextFrame','alternativeText')){if((Get-OwnedPostflightSuccess $s "$phase.slide.$i.shape.$j.$field").value -cne $shape.$field){return $false}}
-                    if($shape.hasTextFrame -eq -1 -and (Get-OwnedPostflightSuccess $s "$phase.slide.$i.shape.$j.text").value -cne $shape.text){return $false}
+                    foreach($field in @('id','name','type','left','top','width','height','rotation','hasTextFrame','alternativeText')){if((Get-OwnedPostflightSuccess $successIndex "$phase.slide.$i.shape.$j.$field").value -cne $shape.$field){return $false}}
+                    if($shape.hasTextFrame -eq -1 -and (Get-OwnedPostflightSuccess $successIndex "$phase.slide.$i.shape.$j.text").value -cne $shape.text){return $false}
                 }
             }
         }
         foreach($prefix in @('value.original.target','value.original.read','value.setter','value.edited.read','value.saved-reopened.target','value.saved-reopened.read')) {
             $expectedPath=if($prefix.Contains('saved-reopened')){$paths[1]}else{$paths[0]}
-            if((Get-OwnedPostflightSuccess $s "$prefix.fullName").value -cne $expectedPath -or (Get-OwnedPostflightSuccess $s "$prefix.readOnly").value -ne -1){return $false}
+            if((Get-OwnedPostflightSuccess $successIndex "$prefix.fullName").value -cne $expectedPath -or (Get-OwnedPostflightSuccess $successIndex "$prefix.readOnly").value -ne -1){return $false}
         }
-        foreach($phase in @('original','edited','saved-reopened')){if((Get-OwnedPostflightSuccess $s "value.$phase.values.get").value -cne '[unsupported non-primitive value]'){return $false}}
+        foreach($phase in @('original','edited','saved-reopened')){if((Get-OwnedPostflightSuccess $successIndex "value.$phase.values.get").value -cne '[unsupported non-primitive value]'){return $false}}
         return $s[-1].cleanupConfirmed -ceq $true
     }catch{return $false}
 }
