@@ -54,7 +54,7 @@ function Assert-SevenValueTargetOwnership($Target,[string]$Prefix) {
     Assert-SevenProbe ($actualPath -is [string] -and $actualPath -ieq $Target.ownedPath) "$Prefix.fullName" $Target.ownedPath (Get-SevenPrimitive $actualPath)
     $readOnly=Read-SevenProperty $Target.ownedPresentation 'ReadOnly' "$Prefix.readOnly"
     Assert-SevenProbe (& $sameOwned) "$Prefix.readOnly.refs" 'same captured owned references/path' (& $sameOwned)
-    Assert-SevenProbe ((Test-SevenInteger $readOnly) -and $readOnly -eq -1) "$Prefix.readOnly" -1 (Get-SevenPrimitive $readOnly)
+    Assert-SevenProbe ((Test-SevenInteger $readOnly) -and $readOnly -eq -1) "$Prefix.readOnly" (-1) (Get-SevenPrimitive $readOnly)
 }
 function Get-SevenValueTarget($Action,[string]$Prefix) {
     Assert-SevenValueAction $Action;Assert-SevenOwnedPresentation "$Prefix.ownership"
@@ -62,7 +62,7 @@ function Get-SevenValueTarget($Action,[string]$Prefix) {
     $actualPath=Read-SevenProperty $script:presentation 'FullName' "$Prefix.fullName"
     Assert-SevenProbe ($actualPath -is [string] -and $actualPath -ieq $script:ownedPath) "$Prefix.fullName" $script:ownedPath (Get-SevenPrimitive $actualPath)
     $readOnly=Read-SevenProperty $script:presentation 'ReadOnly' "$Prefix.readOnly"
-    Assert-SevenProbe ((Test-SevenInteger $readOnly) -and $readOnly -eq -1) "$Prefix.readOnly" -1 (Get-SevenPrimitive $readOnly)
+    Assert-SevenProbe ((Test-SevenInteger $readOnly) -and $readOnly -eq -1) "$Prefix.readOnly" (-1) (Get-SevenPrimitive $readOnly)
     $slides=Read-SevenProperty $script:presentation 'Slides' "$Prefix.slides";$count=Read-SevenProperty $slides 'Count' "$Prefix.slides.count"
     Assert-SevenProbe ((Test-SevenInteger $count) -and $count -eq 7) "$Prefix.slides.count" 7 $count
     $slide=Invoke-SevenCom "$Prefix.slide.get" {$slides.Item([int]$Action.slideIndex)}
@@ -75,7 +75,7 @@ function Get-SevenValueTarget($Action,[string]$Prefix) {
         if((Test-SevenInteger $id) -and $id -eq $Action.shapeId -and $name -is [string] -and $name -ceq $Action.shapeName) {$matches++;$target=$shape}
     }
     Assert-SevenProbe ($matches -eq 1) "$Prefix.exactTarget" 1 $matches
-    $hasChart=Invoke-SevenCom "$Prefix.hasChart" {$target.HasChart};Assert-SevenProbe ((Test-SevenInteger $hasChart) -and $hasChart -eq -1) "$Prefix.hasChart" -1 $hasChart
+    $hasChart=Invoke-SevenCom "$Prefix.hasChart" {$target.HasChart};Assert-SevenProbe ((Test-SevenInteger $hasChart) -and $hasChart -eq -1) "$Prefix.hasChart" (-1) $hasChart
     $chart=Invoke-SevenCom "$Prefix.chart" {$target.Chart};$type=Invoke-SevenCom "$Prefix.chart.type" {$chart.ChartType}
     Assert-SevenProbe ((Test-SevenInteger $type) -and $type -eq $Action.comChartType) "$Prefix.chart.type" $Action.comChartType $type
     $collection=Invoke-SevenCom "$Prefix.series" {return ,$chart.SeriesCollection()};$seriesCount=Invoke-SevenCom "$Prefix.series.count" {$collection.Count}

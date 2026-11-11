@@ -47,3 +47,34 @@ The observer remains
 with the same 5000 ms budget, 100 ms interval and 51-query ceiling. No observer
 source, readiness predicate, public schema, archive identity, native eligibility
 or expected native action count changes in this proposal.
+
+## Source-only writer successor — 2026-11-11
+
+Frozen `f3325fd4b8f7f9009af1690828289d9b3087d132` corrects recomputation;
+its branch, all original guards, trace and failed evidence stay unchanged. A
+separate fresh-main worktree normally based on that exact commit also corrects
+the corresponding capture calls in `seven-value-actions.ps1`. The two read-only
+calls and the chart-presence call pass bare negative expected arguments to
+untyped `Assert-SevenProbe`; its `Get-SevenPrimitive` conversion preserves strings.
+Expected values must therefore be numeric at construction on both sides of the
+strict proof comparison. This is the same argument-mode cause already isolated
+by the reviewed pure trace, not a claim that a writer/native run was reproduced.
+
+The entire writer file differs only by three expected arguments `-1` to `(-1)`.
+Removing precisely those three added pairs of parentheses reproduces every byte
+of the f332 writer. Actual-value variables, `Get-SevenPrimitive`, ownership and
+read-only predicates, target admission, single-setter/fault latch and all
+operation/proof counts remain unchanged. The already-reviewed recomputation,
+managed regression, default bridge and common/observer/worker sources remain
+f332-byte-exact. The existing fragment now covers capture and recomputation as
+one repair; the original f332 fragment remains immutable in its commit.
+
+The maintained actual Windows archive managed test already calls the real action
+helpers and compares the resulting `report.probes` against the exact Node
+critical grammar (with only the preflight proof excluded). Its assertion keeps
+numeric values, order, keys and count strict, then checks one setter, three
+readbacks and the existing managed faults/ownership/primitive refusals. No mirror
+test is added. This source successor has not run PowerShell, parsing/imports,
+tests, builds, exports, process queries or Office. A separately authorized fresh
+controller and both managed controls remain required before any native action;
+frozen 9a20 producer/consumer/evidence identities are not relabeled.
