@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import {inspectCurrentSignedPareto} from './seven-signed-pareto.mjs';
 
 export function archiveDependencies() {
   const local = createRequire(import.meta.url),
@@ -244,7 +245,7 @@ function classicSeries(series, book) {
   );
   return output;
 }
-function inspectChart(parts, file, uri, deps, tools) {
+function inspectChart(parts, file, uri, deps, tools, archiveContext, slideIndex) {
   const parsed = tools.object(file);
   if (uri === 'http://schemas.openxmlformats.org/drawingml/2006/chart') {
     const space = parsed['c:chartSpace'];
@@ -252,6 +253,7 @@ function inspectChart(parts, file, uri, deps, tools) {
     const book = workbook(parts, file, space, space['c:externalData'], deps, tools),
       plot = space['c:chart']['c:plotArea'];
     const constructs = Object.keys(plot).filter((key) => key.endsWith('Chart'));
+    if(archiveContext&&(constructs.length!==1||slideIndex===3))return inspectCurrentSignedPareto({parts,file,plot,book,deps,readSeries:classicSeries,context:archiveContext,slideIndex});
     assert.equal(constructs.length, 1, 'Mixed classic chart requires separate review');
     const construct = constructs[0],
       series = list(plot[construct]['c:ser']);
@@ -330,7 +332,7 @@ function inspectChart(parts, file, uri, deps, tools) {
   return { family: 'chartEx', series, caches, workbook: book };
 }
 
-export function inspectSevenArchive(input, deps = archiveDependencies()) {
+export function inspectSevenArchive(input, deps = archiveDependencies(), archiveContext) {
   const { parts, count, total } = boundedParts(input, deps),
     tools = xmlTools(parts, deps),
     presentation = tools.object('ppt/presentation.xml')['p:presentation'];
@@ -408,7 +410,7 @@ export function inspectSevenArchive(input, deps = archiveDependencies()) {
         record.kind = 'chart';
         record.uri = uri;
         record.chartPart = rel.target;
-        record.chart = inspectChart(parts, rel.target, uri, deps, tools);
+        record.chart = inspectChart(parts, rel.target, uri, deps, tools, archiveContext,index+1);
       }
       shapes.push(record);
     }

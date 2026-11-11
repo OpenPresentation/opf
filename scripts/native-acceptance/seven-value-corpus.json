@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "profile": "seven-chart-single-value-edit-v1",
+  "scope": "Source inspection of maintained historical fixture bytes, not an Office rerun or current prepared-suite hash claim. Each prospective input is independently rebound to its source, cache and workbook.",
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "manifest": "scripts/native-acceptance/test-fixtures/seven-chart/manifest.json",
+  "originalManifestSha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+  "preparationRevision": "2400d38bf549cdb661c31725776df25e497d364c",
+  "workerRevision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+  "archives": [
+    {"path":"chart-all-seven.pptx","bytes":189742,"sha256":"d14f8a9489d4a4f3a99f0a6ff23cd0e5cc0d847d2389a0e96fb3886b5a05649b","classicNumericArrays":7,"chartExNumericArrays":6,"maximumNumericValues":4},
+    {"path":"chart-mode-all-seven-fallback.pptx","bytes":171762,"sha256":"b8d9448f8b8a09aca2d5cc3d19432b1c29d875bd227cd617879467fca9d0afde","classicNumericArrays":7,"chartExNumericArrays":0,"maximumNumericValues":4},
+    {"path":"chart-mode-all-seven-auto.pptx","bytes":189797,"sha256":"e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1","classicNumericArrays":7,"chartExNumericArrays":6,"maximumNumericValues":4},
+    {"path":"chart-mode-all-seven-native.pptx","bytes":189797,"sha256":"e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1","classicNumericArrays":7,"chartExNumericArrays":6,"maximumNumericValues":4}
+  ],
+  "totalNumericArrays": 46,
+  "maximumNumericValues": 4,
+  "plannedControls": "Permanent tests recheck all identities and census through the maintained strict archive inspector; not yet executed. No truncation or fallback for a larger or unsupported input."
+}

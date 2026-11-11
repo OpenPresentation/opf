@@ -15,6 +15,7 @@ export const SEVEN_SUPERVISOR = {
 };
 import {OWNED_SHARED_FILES, ownedControllerFiles, makeOwnedRequest, writeOwnedRequest, bindOwnedRequest, writeOwnedAdmission, assertOwnedPostflightArtifacts, readOwnedFile, readOwnedJson, REQUEST_HASH_TOKEN, assertOwnedOperations, assertOwnedStageWire} from './owned-postflight.mjs';
 import {SEVEN_POSTFLIGHT_POLICY, verifySevenPostflightBinding, sevenExpectedOperations} from './seven-postflight.mjs';
+import {assertCurrentSignedParetoContext} from './seven-signed-pareto.mjs';
 
 export const SEVEN_PROFILE = 'seven-chart-original-readonly-v2';
 export const SEVEN_CASES = [
@@ -149,7 +150,7 @@ export const SEVEN_LIMITS = {
   maxZipEntries: 4096,
   maxTimeoutSeconds: 60,
 };
-export function assertSevenSelection(suite, caseId, input, plan, deps) {
+export function assertSevenSelection(suite, caseId, input, plan, deps, archiveContext) {
   assert.ok(SEVEN_CASES.includes(caseId), 'Select one of the four whole seven cases');
   assert.equal(suite.schemaVersion, 1);
   assert.equal(suite.nativeAcceptance, false);
@@ -171,7 +172,7 @@ export function assertSevenSelection(suite, caseId, input, plan, deps) {
     [],
     'Seven profile permits zero actions',
   );
-  const archive = inspectSevenArchive(input, deps);
+  const archive = inspectSevenArchive(input, deps,archiveContext);
   if (caseId.endsWith('-fallback'))
     assert.ok(
       archive.slides.every((s) => s.shapes.every((x) => x.branch === 'direct')),
@@ -210,7 +211,7 @@ function sourceBinding(generation, suite, selected) {
   }
   return { identity: { path: file, ...fileIdentity(file) }, deck: source };
 }
-function suiteBinding(generation, deps) {
+function suiteBinding(generation, deps, archiveContext) {
   const directory = plainLocalPath(generation.suiteDirectory),
     bytes = fs.readFileSync(asset(directory, 'suite.json'));
   hex(generation.manifestSha256);
@@ -228,15 +229,17 @@ function suiteBinding(generation, deps) {
     );
   const input = fs.readFileSync(asset(directory, selected.input)),
     plan = fs.readFileSync(asset(directory, selected.actionPlan));
-  const checked = assertSevenSelection(suite, generation.caseId, input, plan, deps);
+  let source;
+  if(archiveContext){source=sourceBinding(generation,suite,selected);assertCurrentSignedParetoContext(archiveContext,source.deck);assert.equal(suite.provenance.chartBaselines.current.sha256,archiveContext.fixture.sha256);}
+  const checked = assertSevenSelection(suite, generation.caseId, input, plan, deps,archiveContext);
   assert.deepEqual(selected, generation.selectedCase);
-  const source = sourceBinding(generation, suite, selected);
+  source??=sourceBinding(generation,suite,selected);
   assertSevenTitles(checked.archive, source.deck);
   return { suite, directory, input, plan, source, ...checked };
 }
 export function validateSevenEnvelope(
   envelope,
-  { root = controllerRoot, deps = dependencies() } = {},
+  { root = controllerRoot, deps = dependencies(), archiveContext } = {},
 ) {
   assert.equal(envelope.schemaVersion, 2);
   assert.deepEqual(envelope.postflightPolicy, SEVEN_POSTFLIGHT_POLICY);
@@ -245,7 +248,7 @@ export function validateSevenEnvelope(
   assert.equal(envelope.registryAcceptance, false);
   assert.deepEqual(envelope.limits, SEVEN_LIMITS);
   assert.deepEqual(envelope.phases, ['original', 'saved-reopened']);
-  const binding = suiteBinding(envelope.generation, deps);
+  const binding = suiteBinding(envelope.generation, deps,archiveContext);
   const supervisors = binding.suite.provenance.workerRepository.files.filter(
     (f) => f.path === SEVEN_SUPERVISOR.path,
   );
@@ -292,6 +295,7 @@ export function createSevenEnvelope({
   workerRepository,
   consumer,
   root = controllerRoot,
+  archiveContext,
 }) {
   hex(expectedManifestSha256);
   const bytes = fs.readFileSync(asset(plainLocalPath(suiteDirectory), 'suite.json'));
@@ -309,7 +313,7 @@ export function createSevenEnvelope({
     };
   const controllerRepository = repositoryIdentity(root, SEVEN_CONTROLLER_FILES);
   assert.equal(controllerRepository.dirty, false, 'Freeze controller before envelope creation');
-  const binding = suiteBinding(generation, dependencies()),
+  const binding = suiteBinding(generation, dependencies(),archiveContext),
     envelope = {
       schemaVersion: 2,
       profile: SEVEN_PROFILE,
@@ -328,7 +332,7 @@ export function createSevenEnvelope({
       archive: binding.archive,
       source: binding.source,
     };
-  validateSevenEnvelope(envelope, { root });
+  validateSevenEnvelope(envelope, { root,archiveContext });
   return envelope;
 }
 export function readSevenEnvelope(file, expectedSha256, options) {
