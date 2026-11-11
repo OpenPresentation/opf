@@ -1,0 +1,81 @@
+{
+  "source": "0ad95dc1112c75c97509be17560c58b84b50acb9",
+  "started": "2026-11-11T01:19:55.147Z",
+  "rows": [
+    {
+      "name": "build",
+      "cwd": "/tmp/opf-034",
+      "argv": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+        "run",
+        "build:packages"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 5.661,
+      "log": {
+        "file": "/tmp/opf-mixed06-check01/build.log",
+        "bytes": 14667,
+        "sha256": "1d78cc31e3c050a8271b32f04e62f0110f6ba7bc66384dbf42500eedc8c9b8fa"
+      }
+    },
+    {
+      "name": "mixed06-focus",
+      "cwd": "/tmp/opf-034/packages/pptx",
+      "argv": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "--test",
+        "--test-concurrency=1",
+        "test/native-text-fragments.mjs",
+        "test/native-text-fragment-mixed-run.mjs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 1.73,
+      "log": {
+        "file": "/tmp/opf-mixed06-check01/mixed06-focus.log",
+        "bytes": 2126,
+        "sha256": "2e46673951911b1eb7d35ee9b4f97f8b5be21a2164cbca8cc4654fdb82007cd1"
+      }
+    },
+    {
+      "name": "markdown-browser",
+      "cwd": "/tmp/opf-034/packages/editor",
+      "argv": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "test/source-keyboard-markdown-browser.mjs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 75.33,
+      "log": {
+        "file": "/tmp/opf-mixed06-check01/markdown-browser.log",
+        "bytes": 516,
+        "sha256": "048d113f365e7298b3de4bbf86cec0c2ca086dba367050cb07e69f5889e181a5"
+      }
+    },
+    {
+      "name": "check-changed",
+      "cwd": "/tmp/opf-034",
+      "argv": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+        "run",
+        "check:changed",
+        "--base",
+        "ac837b95b70d3989c357d950d3239992f2b7f987"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 976.703,
+      "log": {
+        "file": "/tmp/opf-mixed06-check01/check-changed.log",
+        "bytes": 1504,
+        "sha256": "329b9b87e17308e20699edc3fa25c5817f0bdf308a1a160a7aa1c84d739871cc"
+      }
+    }
+  ],
+  "finished": "2026-11-11T01:37:34.574Z",
+  "endingSource": "0ad95dc1112c75c97509be17560c58b84b50acb9"
+}
