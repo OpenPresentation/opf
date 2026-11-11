@@ -23,8 +23,8 @@ export function furnitureFixture(output=path.join(root,'synthetic-furniture-neve
  const admission={schemaVersion:1,profile:FURNITURE_PROFILE,policy:FURNITURE_POLICY,requestSha256:digest(json(request)),ready,files:[],nativeAcceptance:false,registryAcceptance:false};
  const kernel={timedOut:false,exitCode:0,timeoutSeconds:45,startedAt:'2026-11-11T12:00:00.000Z',finishedAt:'2026-11-11T12:00:01.000Z'};return {terminal,report,request,stages,admission,kernel};
 }
-export function writeFurnitureFixture(output){
- fs.mkdirSync(output,{recursive:false});fs.mkdirSync(path.join(output,'native'));const e=furnitureFixture(output);
+export function writeFurnitureFixture(output,e=furnitureFixture(output)){
+ fs.mkdirSync(output,{recursive:false});fs.mkdirSync(path.join(output,'native'));
  for(const [name,value]of [['execution-request.json',e.request],['native/report.json',e.report],['native/supervisor.json',e.terminal],['native/worker.json',e.kernel]])fs.writeFileSync(path.join(output,name),json(value),{flag:'wx'});
  fs.writeFileSync(path.join(output,'native/stages.jsonl'),e.stages.map(s=>JSON.stringify(s)).join('\n')+'\n',{flag:'wx'});
  const files=['execution-request.json','native/report.json','native/supervisor.json','native/worker.json','native/stages.jsonl'].map(n=>path.join(output,n));

@@ -12,7 +12,8 @@ param(
     [string]$ExpectedEnvelopeSha256='',
     [string]$ExpectedRequestSha256='',
     [string]$NodeExecutable='',
-    [switch]$RunOffice
+    [switch]$RunOffice,
+    [switch]$DenseEvents
 )
 $ErrorActionPreference='Stop'
 
@@ -159,17 +160,18 @@ if($ExecutionEnvelope -cne '') {
     if($ExpectedEnvelopeSha256 -cnotmatch '^[a-f0-9]{64}$' -or $ExpectedRequestSha256 -cnotmatch '^[a-f0-9]{64}$' -or (Get-Item -LiteralPath $ExecutionEnvelope).Length -gt 4194304 -or (Get-FileHash -LiteralPath $ExecutionEnvelope -Algorithm SHA256).Hash.ToLowerInvariant() -cne $ExpectedEnvelopeSha256){throw 'Exact external furniture envelope/request pins required'}
     $profile=Get-Content -LiteralPath $ExecutionEnvelope -Raw -Encoding UTF8 | ConvertFrom-Json
     $controller=(Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../..')).Path
-    if($profile.profile -cne 'full59-ordinary-furniture-lifecycle-v1' -or $profile.controller.directory -cne $controller -or $profile.controller.dirty -isnot [bool] -or $profile.controller.dirty){throw 'Wrong clean furniture controller'}
+    $expectedProfile=if($DenseEvents){'full59-dense-events-furniture-lifecycle-v1'}else{'full59-ordinary-furniture-lifecycle-v1'}
+    if($profile.profile -cne $expectedProfile -or $profile.controller.directory -cne $controller -or $profile.controller.dirty -isnot [bool] -or $profile.controller.dirty){throw 'Wrong clean furniture controller'}
     $null=Assert-NativeRepositoryIdentity $controller $profile.controller @('scripts/native-acceptance/run-windows.ps1','scripts/native-acceptance/furniture-profile.mjs','scripts/native-acceptance/furniture-postflight.ps1','scripts/native-acceptance/owned-postflight.ps1','scripts/native-acceptance/run-reference-chart-profile.ps1')
     $node=Assert-PlainNativePath $NodeExecutable
     if($node -cne $NodeExecutable -or $node -cne $profile.node.path -or (Get-Item -LiteralPath $node).Length -ne $profile.node.identity.bytes -or (Get-FileHash -LiteralPath $node -Algorithm SHA256).Hash.ToLowerInvariant() -cne $profile.node.identity.sha256 -or (Test-Path Env:NODE_OPTIONS) -or (Test-Path Env:NODE_PATH)){throw 'Exact non-preloaded furniture Node required'}
     if([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT){throw 'Typed furniture launcher requires separate Windows assignment'}
     . (Join-Path $PSScriptRoot 'owned-postflight.ps1')
     . (Join-Path $PSScriptRoot 'furniture-postflight.ps1')
-    Invoke-FurnitureTypedRunner -Envelope $ExecutionEnvelope -Sha256 $ExpectedEnvelopeSha256 -RequestSha256 $ExpectedRequestSha256 -Node $node -Suite $SuiteDirectory -WorkerRoot $PptxRepository -CaseId $Case -Output $OutputDirectory -Seconds $TimeoutSeconds -Office ([bool]$RunOffice) -Fonts ([bool]$CaptureTextFonts)
+    Invoke-FurnitureTypedRunner -Envelope $ExecutionEnvelope -Sha256 $ExpectedEnvelopeSha256 -RequestSha256 $ExpectedRequestSha256 -Node $node -Suite $SuiteDirectory -WorkerRoot $PptxRepository -CaseId $Case -Output $OutputDirectory -Seconds $TimeoutSeconds -Office ([bool]$RunOffice) -Fonts ([bool]$CaptureTextFonts) -DenseEvents:$DenseEvents
     return
 }
-if($RunOffice -or $ExpectedEnvelopeSha256 -cne '' -or $ExpectedRequestSha256 -cne '' -or $NodeExecutable -cne ''){throw 'Typed furniture arguments require an explicit envelope'}
+if($DenseEvents -or $RunOffice -or $ExpectedEnvelopeSha256 -cne '' -or $ExpectedRequestSha256 -cne '' -or $NodeExecutable -cne ''){throw 'Typed furniture arguments require an explicit envelope'}
 
 # All identity, eligibility, path and plan refusals precede output creation and Office.
 $binding=Read-NativeSuite $SuiteDirectory $Case
