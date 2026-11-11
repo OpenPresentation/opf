@@ -95,7 +95,7 @@ test('a slide with no text on the picture, and text on a card, get no scrim', ()
 });
 
 test('header and footer text get scrims of their own at their edges, and the muted color reads too', () => {
-  const { context, result } = composed(deck([{ title: 'The trails are busier than ever', design: { ...picture({ tone: 'dark' }), titleAlignment: 'center', header: { left: { text: 'Parks review' } }, footer: { left: { text: 'Parks department' } } } }]));
+  const { context, result } = composed(deck([{ title: 'The trails are busier than ever', design: { ...picture({ tone: 'dark' }), titleAlignment: 'center', header: { start: { text: 'Parks review' } }, footer: { start: { text: 'Parks department' } } } }]));
   const scrims = result.backgroundImage.scrims;
   assert.equal(scrims.length, 3, 'the body\'s, the header\'s and the footer\'s');
   assert.deepEqual(scrims.map((scrim) => scrim.edge ?? scrim.form), ['band', 'top', 'bottom']);
@@ -103,7 +103,7 @@ test('header and footer text get scrims of their own at their edges, and the mut
   for (const part of result.furniture.parts) if (part.type === 'text') assert.ok(scrims.some((scrim) => inside(part.box, scrim.text)), `the ${part.kind} lies under a scrim`);
   assert.ok(worstOverRamp(context.options.roles.textSecondary, scrims[0]) >= 4.5, 'the muted color reads too');
   // Scrims along one axis whose solid parts meet are one: a title at the top and a header share the top scrim.
-  const top = composed(deck([{ title: 'Results', text: 'Revenue rose.', design: { ...picture(), header: { left: { text: 'Quarterly review' } } } }])).result.backgroundImage.scrims;
+  const top = composed(deck([{ title: 'Results', text: 'Revenue rose.', design: { ...picture(), header: { start: { text: 'Quarterly review' } } } }])).result.backgroundImage.scrims;
   assert.deepEqual(top.map((scrim) => scrim.edge), ['top']);
   // A quote's attribution is drawn in the muted color.
   const quote = composed(deck([{ blocks: [{ quote: { text: 'The trails are busier than ever.', attribution: 'Park ranger' } }], design: picture({ tone: 'dark' }) }]));

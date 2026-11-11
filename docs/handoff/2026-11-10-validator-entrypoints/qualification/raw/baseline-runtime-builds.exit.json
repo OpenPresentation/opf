@@ -1,0 +1,14 @@
+{
+  "executable": "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe",
+  "args": [
+    "--test",
+    "packages/javascript/test/runtime-builds.test.mjs"
+  ],
+  "cwd": "C:/opf-work/runtime519",
+  "sourceHead": "519dd89a80904907a3d0120f90b732065d99a0b1",
+  "startedAt": "2026-11-10T07:27:40.364Z",
+  "endedAt": "2026-11-10T07:27:40.631Z",
+  "exitCode": 1,
+  "signal": null,
+  "error": null
+}

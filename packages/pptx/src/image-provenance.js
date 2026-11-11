@@ -1,6 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {normalizeCrop, withoutSvgBlip} from './svg-image.js';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
+import {currentTags, upgradeTag} from './legacy-tags.js';
 
 // FA-23 (OPF 0.15): image blocks and image backgrounds as native pictures.
 //
@@ -202,8 +203,8 @@ export function placeImages(entries, images, overlays, {metadataFor, fail, fitIm
   }
   if (placed.size !== images.size) throw new Error('Missing generated image picture.');
   if (shaped.size !== overlays.size) throw new Error('Missing generated image overlay.');
-  attachTextTags(entries, manifests, IMAGE_TAG, 'opfImage', 'image', {pictures: true});
-  attachTextTags(entries, overlayManifests, IMAGE_OVERLAY_TAG, 'opfImageOverlay', 'image overlay');
+  attachTextTags(entries, currentTags(manifests), IMAGE_TAG, 'opfImage', 'image', {pictures: true});
+  attachTextTags(entries, currentTags(overlayManifests), IMAGE_OVERLAY_TAG, 'opfImageOverlay', 'image overlay');
 }
 
 // ---------------------------------------------------------------------------
@@ -226,7 +227,7 @@ function ownTag(container, relationships, entries, name) {
   const own = tags.filter(tag => tag.name?.toUpperCase() === name);
   if (!own.length) return null;
   if (unreadable || own.length !== 1 || tags.some(tag => /^OPF_/i.test(tag.name) && tag.name.toUpperCase() !== name)) throw Error('Ambiguous image identity.');
-  return decodeTextTag(own[0].val);
+  return upgradeTag(decodeTextTag(own[0].val), 'image');
 }
 
 const pick = (value, keys) => Object.fromEntries(keys.filter(key => Object.hasOwn(value, key)).map(key => [key, value[key]]));

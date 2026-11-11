@@ -4,6 +4,12 @@
 
 `validate` is read-only, local and deterministic. It fetches nothing (no images, fonts or catalogs), consults no clock and calls no model. The same document, options and fonts give byte-identical findings.
 
+For repeated editing-session reviews, `createValidator()` returns `{ validate, clear, cache }`. Its `validate(input, options)` runs the same complete selected checks and rebuilds every finding, fix and source location. It can reuse only equivalent derived slide geometry. Plain `validate()` always starts cold and remains the comparison oracle. In Node, each session has the same default gallery registration as Node `validate()`; the browser/worker session registers no catalog unless the host passes one. An explicit `catalogs: []` disables the Node fallback for that call, and custom catalogs are passed through unchanged.
+
+The session cache retains detached plain data for at most 64 slide compositions and 8 MiB of logical keys/data, including at most 2 MiB of shared exact keys. These are retention limits, not measured JavaScript heap sizes. Global metadata/catalog/options changes invalidate the cache; slide order, IDs, prior section/citation/message context and each chart/table's referenced data are part of equivalence. An oversized or opaque input and a failed composition are checked cold. Keys share one current-deck snapshot and prefix tokens rather than copying the whole deck into every entry.
+
+Keep host measurement callbacks and lazy catalog loaders deterministic until `checker.clear()` or their identity changes. Clear after their backing fonts, icons or diagram engines load/change. The editor workspace does this for font readiness; custom hosts call `panel.invalidate()` before scheduling a review after other external resource changes. This cache does not certify native output or replace visual review.
+
 ```sh
 opf validate deck.opf.json                                     # everything, JSON report
 opf validate deck.opf.json --format text                       # one line per finding
@@ -237,7 +243,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/shape-adjust-unknown`](#opfshape-adjust-unknown) | Format | warning | structure | An adjust value names a guide the preset does not have. |
 | [`opf/shape-adjust-range`](#opfshape-adjust-range) | Format | warning | structure | An adjust value is outside the range of the preset's handle. |
 | [`opf/shape-link-hidden`](#opfshape-link-hidden) | Format | warning | structure | A hidden shape carries a link. |
-| [`opf/shape-anchor-missing`](#opfshape-anchor-missing) | Format | error | structure | An overlay shape is attached to a block that is not on the slide. |
+| [`opf/shape-anchor-missing`](#opfshape-anchor-missing) | Format | error | structure | An overlay shape has no resolvable block or qualified plotted chart point. |
 | [`opf/connector-end-missing`](#opfconnector-end-missing) | Format | error | structure | A connector end names no block or overlay shape on the slide. |
 | [`opf/image-placement-invalid`](#opfimage-placement-invalid) | Format | error | structure | An image placement cannot be honoured. |
 | [`opf/layout-placeholder-group`](#opflayout-placeholder-group) | Format | error | structure | A layout record's placeholder group breaks a nesting rule. |
@@ -245,6 +251,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/dataset-field-unknown`](#opfdataset-field-unknown) | Format | error | structure | A table asks a dataset for a column it does not have. |
 | [`opf/data-column-duplicate`](#opfdata-column-duplicate) | Format | error | structure | A dataset or table has two columns with the same name. |
 | [`opf/chart-mapping-unknown-column`](#opfchart-mapping-unknown-column) | Format | error | structure | A chart mapping names a column the data does not have. |
+| [`opf/chart-reference-axis-unavailable`](#opfchart-reference-axis-unavailable) | Format | error | structure | A reference names a value axis the chart does not have. |
 | [`opf/number-format-invalid`](#opfnumber-format-invalid) | Format | error | structure | A number format cannot be read. |
 | [`opf/variable-invalid-value`](#opfvariable-invalid-value) | Format | error | structure | A variable value does not match its declared type. |
 | [`opf/variable-unknown-builtin`](#opfvariable-unknown-builtin) | Format | error | structure | A token names a built-in variable that does not exist. |
@@ -311,6 +318,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/code-highlight-out-of-range`](#opfcode-highlight-out-of-range) | Content | warning | structure | A code highlight marks a line the code does not have. |
 | [`opf/code-highlight-range-reversed`](#opfcode-highlight-range-reversed) | Content | warning | structure | A code highlight range ends before it starts. |
 | [`opf/variable-builtin-missing`](#opfvariable-builtin-missing) | Content | warning | structure | A built-in variable has no value in this document. |
+| [`opf/variable-group-omitted`](#opfvariable-group-omitted) | Content | info | structure | A group is drawn only when one of its optional variables has a value. |
 | [`opf/duration-outside-narrative`](#opfduration-outside-narrative) | Content | warning | structure | The target duration is outside the range the narrative suits. |
 | [`opf/narrative-duration-range`](#opfnarrative-duration-range) | Content | warning | structure | An inline narrative duration range has min greater than max. |
 | [`opf/placeholder-text`](#opfplaceholder-text) | Content | warning | structure | Placeholder text was left in the deck. |
@@ -430,9 +438,9 @@ Default severity: **warning**. Cost: structure. A hidden shape carries a link.
 
 ### `opf/shape-anchor-missing`
 
-Default severity: **error**. Cost: structure. An overlay shape is attached to a block that is not on the slide.
+Default severity: **error**. Cost: structure. An overlay shape has no resolvable block or qualified plotted chart point.
 
-**Why.** An overlay shape placed with `at` sits against a composed block of its slide, named by the block's `id`. With no block of that id on the slide there is nowhere to put it, so it is not drawn.
+**Why.** An overlay shape placed with `at` sits against a composed block of its slide, named by the block's `id`. A chart point also requires a unique plotted category and series in a qualified shared plot. When an identity or geometry is missing, the shape is not drawn.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -489,6 +497,14 @@ Default severity: **error**. Cost: structure. A dataset or table has two columns
 Default severity: **error**. Cost: structure. A chart mapping names a column the data does not have.
 
 **Why.** The series cannot be built from a column that is not there.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/chart-reference-axis-unavailable`
+
+Default severity: **error**. Cost: structure. A reference names a value axis the chart does not have.
+
+**Why.** Secondary references require an actual secondary line series on a combo chart.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -625,7 +641,7 @@ Default severity: **error**. Cost: structure. A layout template's region list is
 
 Default severity: **error**. Cost: structure. A layout template's regions are not valid.
 
-**Why.** Region names are unique across the whole record and may not be tag, auto or a promoted-region word (left, center, right, top, middle, bottom), so a Markdown block's region= stays unambiguous; title and subtitle name the heading regions, which take only a size, an anchor and (the title) a rule; a subtitle region needs a title region; a region accepts at least one content kind; a region with flow 'none' holds one block; overflowRegion must name a body region. composeSlide refuses such a record.
+**Why.** Region names are unique across the whole record and may not be tag, auto or a promoted-region word (start, center, end, top, middle, bottom), so a Markdown block's region= stays unambiguous; title and subtitle name the heading regions, which take only a size, an anchor and (the title) a rule; a subtitle region needs a title region; a region accepts at least one content kind; a region with flow 'none' holds one block; overflowRegion must name a body region. composeSlide refuses such a record.
 
 **Basis.** spec/schemas/layout.schema.json and the region rules (docs/layout-templates.md)
 
@@ -873,7 +889,7 @@ Default severity: **info**. Cost: structure. The presentation does not declare i
 
 **Basis.** WCAG 2.2 SC 3.1.1 Language of Page, level A
 
-**Approximations.** Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.lang`; opf/language-tag checks how those tags are written).
+**Approximations.** Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.language`; opf/language-tag checks how those tags are written).
 
 
 ## Layout rules
@@ -1085,6 +1101,16 @@ Default severity: **warning**. Cost: structure. A built-in variable has no value
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
+### `opf/variable-group-omitted`
+
+Default severity: **info**. Cost: structure. A group is drawn only when one of its optional variables has a value.
+
+**Why.** A group (a block or promoted region with `blocks`) whose content variables are all optional (`required: false`) and all unfilled is left out whole when the deck is filled: its pictures, cards and other text go with the fields the variables would fill, so a slide never draws a card around a picture with no text. Validation fills every variable with its example or a sample, so it reports the group here instead.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+**Approximations.** Counts the declared text, number, date, image, url and list variables the group uses as `{{id}}` or `var:id`, at any depth; color variables and built-ins do not count. A group that uses none, or any required or filled one, is kept and not reported.
+
 ### `opf/duration-outside-narrative`
 
 Default severity: **warning**. Cost: structure. The target duration is outside the range the narrative suits.
@@ -1133,11 +1159,11 @@ Default severity: **warning**. Cost: structure. A slide has no content at all.
 
 Default severity: **warning**. Cost: structure. A language tag is malformed, uses an unassigned region or is not in canonical case.
 
-**Why.** Engines read the deck language and each run's `lang` as BCP 47 tags to choose script fonts, text direction, proofing language and the PowerPoint `lang` attribute. A tag such as `en-a`, or a region that does not exist (`en-UK`; the United Kingdom is `GB`), is guessed at or dropped, and a wrong-case tag (`EN-us`) is not what a locale lookup expects.
+**Why.** Engines read the deck and slide language and each run's `language` as BCP 47 tags to choose script fonts, text direction, proofing language and the PowerPoint `lang` attribute. A tag such as `en-a`, or a region that does not exist (`en-UK`; the United Kingdom is `GB`), is guessed at or dropped, and a wrong-case tag (`EN-us`) is not what a locale lookup expects.
 
 **Basis.** BCP 47 (RFC 5646, section 2.1) and the platform locale data (Intl.getCanonicalLocales, Intl.DisplayNames)
 
-**Approximations.** Checks the root `language` (a tag string, or the `bcp47` of an inline Language object) and `lang` on the TextRun objects of titles, subtitles, tags, text, lists, tables, quotes, metrics and timelines. A region is assigned when the runtime's CLDR data names it (ISO 3166-1 codes and UN M.49 areas such as 419); private-use regions (`AA`, `QM`-`QZ`, `XA`-`XZ`) and `ZZ` are accepted, as are private-use (`x-...`) tags. Only the spelling of a tag is checked, not whether the language subtag is assigned or whether the language suits the text. The schema rejects tags with characters other than letters, digits and hyphens (`en_US` is a schema error, with no suggestion), and `en-UK` as the deck language is already an error of the schema rule, so those are not reported twice.
+**Approximations.** Checks the root and slide `language` (a tag string, or the `bcp47` of an inline Language object) and `language` on the TextRun objects of titles, subtitles, tags, text, lists, tables, quotes, metrics and timelines. A region is assigned when the runtime's CLDR data names it (ISO 3166-1 codes and UN M.49 areas such as 419); private-use regions (`AA`, `QM`-`QZ`, `XA`-`XZ`) and `ZZ` are accepted, as are private-use (`x-...`) tags. Only the spelling of a tag is checked, not whether the language subtag is assigned or whether the language suits the text. The schema rejects tags with characters other than letters, digits and hyphens (`en_US` is a schema error, with no suggestion), and `en-UK` as the deck language is already an error of the schema rule, so those are not reported twice.
 
 ### `opf/straight-quotes`
 

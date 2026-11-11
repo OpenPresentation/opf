@@ -487,10 +487,10 @@ describe("the bundled sources", () => {
 		const bytes = sources.docs.reduce((total, doc) => total + Buffer.byteLength(doc.markdown), 0);
 		// Serve the exact checked-in public pages; byte growth must not be hidden by trimming documentation.
 		for (const doc of sources.docs) assert.equal(doc.markdown, readFileSync(path.join(root, "docs", doc.slug + ".md"), "utf8").replaceAll("\r\n", "\n"), doc.slug);
-		// Reviewed v0.33 refresh: 1,197,594 at e3ff9 to 1,231,117 at d260; combined final 1,231,624, all 42 pages retained.
-		// SmartArt adds 22,940 bytes; chart/layout/shape guides account for the remainder. No maintainer page was added.
-		// Source/page deltas and explicit headroom: docs/handoff/2026-11-07/mcp-size-budget-033.md.
-		assert.ok(bytes < 1_240_000, `${bytes} bytes of documentation`);
+		// Reviewed v0.34 source4e03508b6:1,310,537 exact bytes over the same42 public pages.
+		// Accepted schema/chart/layout/viewer guidance accounts for growth; no maintainer or trimmed page.
+		// Same3% rounded headroom and exact prior/current page hashes: docs/handoff/2026-11-10/schema-decision-packet/mcp-docs-size-review.json.
+		assert.ok(bytes < 1_350_000, `${bytes} bytes of documentation`);
 	});
 });
 

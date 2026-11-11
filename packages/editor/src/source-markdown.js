@@ -19,7 +19,7 @@ const LANGUAGES = ["javascript", "typescript", "python", "rust", "go", "bash", "
 const CHAIN_SLIDE = new Set(["layout", "type", "hidden"]);
 const CHAIN_BLOCK = new Set(["type", "as", "region"]);
 // The promoted regions of a slide that a block can be pinned to when the layout names none.
-const PROMOTED = ["top", "middle", "bottom", "left", "center", "right", "top:left", "top:center", "top:right", "middle:left", "middle:center", "middle:right", "bottom:left", "bottom:center", "bottom:right"];
+const PROMOTED = ["top", "middle", "bottom", "start", "center", "end", "top:start", "top:center", "top:end", "middle:start", "middle:center", "middle:end", "bottom:start", "bottom:center", "bottom:end"];
 
 const lineAt = (text, position) => {
   const start = Math.max(text.lastIndexOf("\n", position - 1), text.lastIndexOf("\r", position - 1)) + 1;
@@ -332,8 +332,8 @@ export function markdownOptions(context, { catalogs, text, explicit, makers, sco
   if (context.region === "fence-info") {
     if (context.mode === "kind") {
       let order = 0;
-      for (const kind of ["chart", "mermaid", "metric", "timeline", "opf-block", "opf-slide"]) {
-        const doc = { chart: "A chart: the type, then CSV with a header row", mermaid: "A diagram: Mermaid source, starting with its type (flowchart LR, sequenceDiagram, ...)", metric: "One big number: value, label, unit, delta", timeline: "Events, one per line", "opf-block": "A content block written as YAML", "opf-slide": "Slide fields written as YAML" }[kind];
+      for (const kind of ["chart", "mermaid", "dot", "plantuml", "metric", "timeline", "opf-block", "opf-slide"]) {
+        const doc = { chart: "A chart: the type, then CSV with a header row", mermaid: "A diagram: Mermaid source, starting with its type (flowchart LR, sequenceDiagram, ...)", dot: "A diagram: one Graphviz DOT graph (digraph { a -> b }), laid out in layers", plantuml: "A diagram: PlantUML from @startuml to @enduml (sequence, class, state, activity, use case, component, mind map, gantt)", metric: "One big number: value, label, unit, delta", timeline: "Events, one per line", "opf-block": "A content block written as YAML", "opf-slide": "Slide fields written as YAML" }[kind];
         options.push(kindOption(kind, "keyword", "fence", doc, boostAt(order++), "fence", { word: kind }));
       }
       for (const language of LANGUAGES) options.push(kindOption(language, "text", "code", `Code in ${language}`, boostAt(order++), "fence", { word: language }));
@@ -443,7 +443,7 @@ const BLOCK_DOCS = {
   id: "A name for the block, so a finding or a patch can point at it.",
   type: "The block's content kind, when it cannot be told from the content.",
   as: "bullets stores a list as bullets; video stores an image line as a video.",
-  region: "Pin the block to a region of the slide's layout, or to a promoted region (left, top:left, ...).",
+  region: "Pin the block to a region of the slide's layout, or to a promoted region (start, top:start, ...).",
 };
 
 // ---- accepting ---------------------------------------------------------------------------------------------------------------------
@@ -504,6 +504,8 @@ export const SYNTAX_FIELDS = {
   chart: { key: "chart", written: "```chart column, then CSV" },
   metric: { key: "metric", written: "```metric, then key: value lines" },
   mermaid: { key: "diagram", written: "```mermaid, then the Mermaid source" },
+  dot: { key: "diagram", written: "```dot, then one DOT graph" },
+  plantuml: { key: "diagram", written: "```plantuml, then @startuml ... @enduml" },
   timeline: { key: "timeline", written: "```timeline, then one event per line" },
   code: { key: "code", written: "```js title=\"file\"" },
   image: { key: "image", written: "![alt](src)" },

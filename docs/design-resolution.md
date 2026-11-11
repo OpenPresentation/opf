@@ -81,8 +81,8 @@ There is no ambiguity between "override" and "reference": every scheme value *is
     "theme": "minimal",
     "background": "light1",
     "footer": {
-      "left": { "text": "Acme Corp" },
-      "right": { "text": "{{slide.number}}" }
+      "start": { "text": "Acme Corp" },
+      "end": { "text": "{{slide.number}}" }
     }
   },
   "slides": [
@@ -323,7 +323,7 @@ An OPF layout record (`opf-layout/v2`) is one ordered list of `regions`, declare
 
 The effective `design` value of each key comes from the slide, then the deck, then the resolved theme, then the layout record, then the engine default. This includes `titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFit`, `listBullet` and `mirror`. `resolveDesignHints()` reports the supplying level, and `SlideComposition.design` holds the merged result. A layout's regions determine placement; `design.mirror` reverses its tracks, while the slide's own `composition` arranges the first primary flowing region. A top-level image block may still carry its own `placement` band. A layout sits on any slide background; it does not opt into a picture.
 
-The `tag` (eyebrow) follows `titleAlignment` on every slide, and is left-aligned when none resolves, like the title, so a layout that centres its content does not centre the tag over a left-aligned title. The `subtitle` joins them whenever it sits in the title area (a cover, or a layout with no `subtitle` region of its own), so the heading group shares one alignment axis; a layout with a separate `subtitle` region keeps it on `contentAlignment`. Only the slide's own `design.contentAlignment` keeps the tag and that subtitle on content alignment, preserving the 2026-10-06 authoring decision.
+The `tag` (eyebrow) follows `titleAlignment` on every slide, and is start-aligned when none resolves, like the title, so a layout that centres its content does not centre the tag over a start-aligned title. The `subtitle` joins them whenever it sits in the title area (a cover, or a layout with no `subtitle` region of its own), so the heading group shares one alignment axis; a layout with a separate `subtitle` region keeps it on `contentAlignment`. Only the slide's own `design.contentAlignment` keeps the tag and that subtitle on content alignment, preserving the 2026-10-06 authoring decision.
 
 ### Logos live on the organization (RR-71, OPF 0.18)
 
@@ -379,7 +379,7 @@ On a v2 template, `contentDirection` changes every flowing region into a row or 
 
 ### `titleAlignment` and `contentAlignment` in right-to-left decks
 
-> **Decision, 2026-10-01 (RR-05, supervisor decision, vetoable).** Alignment is logical for right-to-left text. In a deck whose language is written right to left, `left` means the start edge and `right` the end edge of each paragraph: an Arabic or Hebrew paragraph with the default (or authored) `left` is drawn against the right edge, with its bullets, indents and table cells to match, while an English paragraph in the same deck keeps the left edge. `center` is unchanged and a left-to-right deck is unchanged. The effective value (slide design, then deck design, then `left`) is still what `item.alignment` reports; `placement.lines[i].alignment` and the exported `algn` carry the physical edge. A right-to-left deck that wants a paragraph at its end edge sets `right`. See [Layout direction](programs/font-fidelity-everywhere/script-font-model.md#layout-direction-rr-05).
+> **Decision, 2026-10-01 (RR-05, supervisor decision, vetoable).** Alignment is logical. `start` is the start edge and `end` the end edge of each paragraph (the values were `left` and `right` before 0.34): in a deck whose language is written right to left, an Arabic or Hebrew paragraph with the default (or authored) `start` is drawn against the right edge, with its bullets, indents and table cells to match, while an English paragraph in the same deck keeps the left edge. `center` is unchanged and a left-to-right deck is unchanged. `item.alignment` reports the effective value (slide design, then deck design, then the start edge) in the engine's words, `left` for `start` and `right` for `end`; `placement.lines[i].alignment` and the exported `algn` carry the physical edge. A right-to-left deck that wants a paragraph at its end edge sets `end`. See [Layout direction](programs/font-fidelity-everywhere/script-font-model.md#layout-direction-rr-05).
 
 **Numbers in right-to-left text (LH-118).** A number with a sign, a currency or a percent sign (`+16%`, `-2.5%`, `$42`; core `numberRanges`) reads left to right inside right-to-left text: "+16%" in an Arabic metric drew as "16%+". The preview wraps each such number in a left-to-right isolate (U+2066 ... U+2069, core `isolateNumbers`), in metric values, deltas and units, table cells, body text and chart text. PowerPoint draws the isolate characters as boxes, so the PPTX export writes each such number as its own `en-US` run (as RR-05 does for a Latin phrase), and writes a paragraph of only such a number left to right (`rtl="0"`) at the physical alignment it had, because PowerPoint still drew "16%+" for an `en-US` run in a right-to-left paragraph of no letters (checked with PowerPoint's own slide export). Import reads the split runs and the left-to-right number-only paragraph back as they were authored. Bare digits (`2026`, `1,200`, `10:30`) are unchanged: they read the same in either direction.
 
@@ -387,7 +387,7 @@ On a v2 template, `contentDirection` changes every flowing region into a row or 
 
 The resolved `design.chartPrimary` applies on automatic slides only. It changes the root arrangement when the slide has no promoted regions, no `composition.mode` of its own, and its root nodes contain at least one chart leaf and at least one node that is not a chart. The **first chart node is primary** and the other root nodes form one synthetic sub-grid:
 
-- `left` / `right`: the root is a two-track row with weights `[3, 2]` (chart first for `left`, last for `right`); the rest arrange in `auto` mode inside their track.
+- `start` / `end`: the root is a two-track row with weights `[3, 2]` (chart first for `start`, last for `end`; `start` is the left in a left-to-right deck and the right in a right-to-left deck); the rest arrange in `auto` mode inside their track.
 - `top` / `bottom`: a two-track column with weights `[3, 2]` (chart first for `top`).
 - `none`, or any other value: no change, the existing automatic grid with equal weight.
 

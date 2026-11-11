@@ -20,9 +20,14 @@ for(const [start,end] of [[-1,2],[0,99],[2,1],[1.5,2],[0,0]])assert.throws(()=>f
 for(const text of ['a😀b','ae\u0301b','a👩‍👩‍👧‍👧b'])assert.throws(()=>format(text,1,2,{bold:true}),/grapheme/);
 assert.equal(content(format('ae\u0301b',1,3,{bold:true})),'ae\u0301b');
 for(const patch of [{text:'oops'},{fontSize:0},{fontSize:NaN},{bold:'yes'},{superscript:true,subscript:true},JSON.parse('{"__proto__":{}}')])assert.throws(()=>format('text',0,4,patch));
-const editor=createEditorSession({slides:[{text:original,notes:'Preserve'}]},{rejectInvalid:true});
-editor.set('slides.0.text',format(original,0,5,{color:'#2563eb'}),{rejectInvalid:true});
-assert.equal(editor.get('slides.0.notes'),'Preserve');editor.undo();assert.deepEqual(editor.get('slides.0.text'),original);assert.equal(editor.canUndo,false);
+// Helpers preserve unknown detached metadata, while strict document commits reject it.
+const validRuns=original.map(run=>typeof run==='string'?run:Object.fromEntries(Object.entries(run).filter(([key])=>key!=='extension')));
+const editor=createEditorSession({extensions:{richNote:original[1].extension},slides:[{text:validRuns,notes:'Preserve'}]},{rejectInvalid:true});
+assert.throws(()=>editor.set('slides.0.text',original,{rejectInvalid:true}),error=>error.code==='invalid-opf-edit'&&error.issues.some(issue=>issue.path==='/slides/0/text/1/extension'));
+assert.equal(editor.canUndo,false,'a refused unknown run property leaves history untouched');
+editor.set('slides.0.text',format(validRuns,0,5,{color:'#2563eb'}),{rejectInvalid:true});
+assert.deepEqual(editor.get('extensions.richNote'),{keep:true});
+assert.equal(editor.get('slides.0.notes'),'Preserve');editor.undo();assert.deepEqual(editor.get('slides.0.text'),validRuns);assert.equal(editor.canUndo,false);
 console.log('Rich range editing passed: cross-run preservation, replacement, style removal, script exclusivity, grapheme safety, validation and atomic undo.');
 
 const {updateRichTextInput} = await import('../dist/rich-text.js');

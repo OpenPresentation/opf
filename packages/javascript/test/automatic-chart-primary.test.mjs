@@ -7,11 +7,11 @@ const support = [{ text: 'Enterprise seats up 31%' }, { items: ['Churn down', 'P
 const body = result => result.items.filter(item => !['title', 'subtitle', 'tag'].includes(item.field));
 
 test('automatic chartPrimary preserves its weighted chart and automatic support group on every side', () => {
-  for (const side of ['left', 'right', 'top', 'bottom']) {
-    const first = side === 'left' || side === 'top';
+  for (const side of ['start', 'end', 'top', 'bottom']) {
+    const first = side === 'start' || side === 'top';
     const hinted = composeSlide({ title: 'C', blocks: [support[0], chart, support[1]] }, { presentation: { design: { chartPrimary: side } }, explain: true });
     const group = { blocks: support, composition: {} };
-    const explicit = composeSlide({ title: 'C', blocks: first ? [chart, group] : [group, chart], composition: { mode: ['left', 'right'].includes(side) ? 'row' : 'column', weights: first ? [3, 2] : [2, 3] } });
+    const explicit = composeSlide({ title: 'C', blocks: first ? [chart, group] : [group, chart], composition: { mode: ['start', 'end'].includes(side) ? 'row' : 'column', weights: first ? [3, 2] : [2, 3] } });
     const boxes = result => Object.fromEntries(body(result).map(item => [item.field, item.box]));
     assert.deepEqual(boxes(hinted), boxes(explicit), side);
     assert.deepEqual(body(hinted).map(item => item.value).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))), [chart.chart, support[0].text, support[1].items].sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))));

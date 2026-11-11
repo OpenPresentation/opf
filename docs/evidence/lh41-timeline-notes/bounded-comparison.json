@@ -1,0 +1,28 @@
+{
+  "cases": 22,
+  "changed": [
+    {
+      "deck": "batch-03",
+      "id": "s27",
+      "beforeFindings": [
+        {
+          "code": "small-cell",
+          "path": "slides.26.blocks.1.text",
+          "message": "Content cell is too small for comfortable reading; use fewer blocks or a different composition."
+        },
+        {
+          "code": "small-cell",
+          "path": "slides.26.blocks.3.text",
+          "message": "Content cell is too small for comfortable reading; use fewer blocks or a different composition."
+        },
+        {
+          "code": "text-overflow",
+          "path": "slides.26.blocks.1.text",
+          "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+        }
+      ],
+      "afterFindings": []
+    }
+  ],
+  "unchanged": 21
+}

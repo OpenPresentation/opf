@@ -115,9 +115,9 @@ test('an overlay covers the whole picture, or a band along one edge', () => {
   assert.equal(band.edge, 'bottom');
   assert.deepEqual(band.box, { x: 0, y: 540, width: 1280, height: 180 });
   // Default band 0.3; a right-to-left deck mirrors left and right.
-  const left = composeSlide({ title: 'T', design: { background: { type: 'image', src: wide, overlay: { color: '#000000', opacity: 0.5, edge: 'left' } } } }).backgroundImage.overlay;
+  const left = composeSlide({ title: 'T', design: { background: { type: 'image', src: wide, overlay: { color: '#000000', opacity: 0.5, edge: 'start' } } } }).backgroundImage.overlay;
   assert.deepEqual(left.box, { x: 0, y: 0, width: 384, height: 720 });
-  const mirrored = composeSlide({ title: 'T', design: { background: { type: 'image', src: wide, overlay: { color: '#000000', opacity: 0.5, edge: 'left' } } } }, { direction: 'rtl' }).backgroundImage.overlay;
+  const mirrored = composeSlide({ title: 'T', design: { background: { type: 'image', src: wide, overlay: { color: '#000000', opacity: 0.5, edge: 'start' } } } }, { direction: 'rtl' }).backgroundImage.overlay;
   assert.equal(mirrored.edge, 'right');
   assert.deepEqual(mirrored.box, { x: 896, y: 0, width: 384, height: 720 });
 });

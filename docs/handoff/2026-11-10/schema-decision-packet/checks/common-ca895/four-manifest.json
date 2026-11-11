@@ -1,0 +1,68 @@
+{
+  "runtimeSource": "ca895444a710a963fced1983237310abb5d38ab1",
+  "scope": "Four root-reviewed test-only forward corrections on the unchanged common build; original fingerprints remain literal; no rebuild.",
+  "files": 4,
+  "pass": 4,
+  "seconds": 10.833,
+  "zip": {
+    "bytes": 8798,
+    "sha256": "46e412edeeccbc628ba049341ca73f75117d52b21078855596444ab65b8beed6"
+  },
+  "entries": [
+    {
+      "path": "content-topology.mjs.log",
+      "bytes": 353,
+      "sha256": "9b5b99b27b0aca4c180f8f21b96f0895f3263d71e682736e1be697ff74469b94"
+    },
+    {
+      "path": "native-body-inherited-bullets.mjs.log",
+      "bytes": 289,
+      "sha256": "aefc160e8b0cdc418cf55f2f07b36092d0d4ea425d98619800b564ade34d485d"
+    },
+    {
+      "path": "native-body-inherited-style.mjs.log",
+      "bytes": 238,
+      "sha256": "e5b5f46f44cabbc660e79b113f379466ca8b7ea039124f6158b926c944066809"
+    },
+    {
+      "path": "native-furniture.mjs.log",
+      "bytes": 224,
+      "sha256": "44b9e70ad6904ec5e0c2e72cd36df5c5542c20e039b74b279f78ff0b02328276"
+    },
+    {
+      "path": "opf-schema-current-fixture-proposal.patch",
+      "bytes": 7850,
+      "sha256": "ed3c095540bf578ee0d50604d0d0c2f7caea4c8e03ec97ebf714b08268e9ab28"
+    },
+    {
+      "path": "opf-schema-inherited-inverse.json",
+      "bytes": 2725,
+      "sha256": "3d2d467db5d653d71b7f7a0b6fbed4385d1542ab95a5b73b67eba6bcea956126"
+    },
+    {
+      "path": "opf-schema-inherited-inverse.log",
+      "bytes": 2585,
+      "sha256": "09127dbb599f9f6c5ed96fc412ba9784b49fe5d57e8f7caaf88c969242949ac2"
+    },
+    {
+      "path": "opf-schema-inherited-inverse.mjs",
+      "bytes": 2158,
+      "sha256": "cdf72066409c9ed01cdabf2989e956478e76f7f34470bfeb92f81a989c630b35"
+    },
+    {
+      "path": "opf-schema-pptx-four-replay-summary.log",
+      "bytes": 847,
+      "sha256": "5d95b3ba95aa88faa3db35a8e6298ce1e67510e0c178d2228e2f955ab5ba0e50"
+    },
+    {
+      "path": "opf-schema-pptx-four-replay.mjs",
+      "bytes": 1636,
+      "sha256": "2f90ec533016f1009c27de2a4f30b2b7df5070d3776d257e67322eac2152e845"
+    },
+    {
+      "path": "results.json",
+      "bytes": 1668,
+      "sha256": "7ae87bc3ddab1fd1362a7e3a48a0c19e948819c5e19527bb46565f30545c527f"
+    }
+  ]
+}

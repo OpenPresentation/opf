@@ -1,0 +1,86 @@
+{
+  "format": 1,
+  "files": [
+    {
+      "file": "archive-ownership.log",
+      "rawBytes": 827,
+      "rawSha256": "006dd1ee01c098208ff2bc9c07138121ccad8bbd6df37f246e85444607cefe33",
+      "transport": "archive-ownership.log.gz",
+      "storedBytes": 488,
+      "storedSha256": "6a1af11e128c2305db086486f142ff25da5dcc3fa528ba3f0e11b19b8cc23e5c"
+    },
+    {
+      "file": "catalog-previews.log",
+      "rawBytes": 62,
+      "rawSha256": "36114a62b8ebca8eb6a87ddcb6edae0cbd77bf8467410a0934c9d8ed9654b64a",
+      "transport": "catalog-previews.log.gz",
+      "storedBytes": 77,
+      "storedSha256": "2440895693c4a2ba83393f1f0f5377876881e774df51d4486567dd339d3d4b42"
+    },
+    {
+      "file": "font-tracker.log",
+      "rawBytes": 29,
+      "rawSha256": "5a3ec11e87a293bc4556a7b5beb811ae4a0a290c3153107d8f98b3f47c0c965b",
+      "transport": "font-tracker.log.gz",
+      "storedBytes": 49,
+      "storedSha256": "d5109f7998ea2cedd44265e3933910cdf4f6512a830df3392cc7caf697f1f8ba"
+    },
+    {
+      "file": "gallery-tracker.log",
+      "rawBytes": 63,
+      "rawSha256": "19f18071979373714307d6e1654c41c25df06692e8c1ef6377057bbed343e259",
+      "transport": "gallery-tracker.log.gz",
+      "storedBytes": 83,
+      "storedSha256": "1aca35b483b4f7e1a2d5d89aabe33829389628d2749a76d0c527a7d577853586"
+    },
+    {
+      "file": "generated-metadata.log",
+      "rawBytes": 823,
+      "rawSha256": "4c3f0b9a9e9604a63e28748839aecf08d82dc6a6221ea151df106f992d95dab0",
+      "transport": "generated-metadata.log.gz",
+      "storedBytes": 483,
+      "storedSha256": "532ffea07a112fcc9fb06431d125a51570ffc77257409c233a6df1cf57844ed6"
+    },
+    {
+      "file": "receipt.json",
+      "rawBytes": 1376,
+      "rawSha256": "41797b2a23183e43014f1ec75f49ddb411cef88211c0b25791d745eff482a030",
+      "transport": "receipt.json.gz",
+      "storedBytes": 449,
+      "storedSha256": "6722b60be6c849c7e01a8500902ca576760159da152c6a5042e40087a9344fa9"
+    },
+    {
+      "file": "release-report.log",
+      "rawBytes": 667,
+      "rawSha256": "cb92d181e931f99a0a4f9587112734a0457a1895e2abd274d533b3a8d0e13f21",
+      "transport": "release-report.log.gz",
+      "storedBytes": 376,
+      "storedSha256": "4593686711b432690328bbda466aaddb1f27395b9fa07313f41369b269832e3f"
+    },
+    {
+      "file": "docs-check.log",
+      "rawBytes": 902,
+      "rawSha256": "3c4d96d691fcdaba5d82f385b53221619091d0b20eebefc7f55d4a227efa1178",
+      "transport": "docs-check.log.gz",
+      "storedBytes": 404,
+      "storedSha256": "12c70ffa13d7ab292bead5eea9b2e2329a19000743b4d982cfa89ff1d3fd88cd"
+    },
+    {
+      "file": "docs-check.exit.json",
+      "rawBytes": 248,
+      "rawSha256": "e378f228e2b4dcd385d15528b48e4002f31470aa6b795887b331a4970350c656",
+      "transport": "docs-check.exit.json.gz",
+      "storedBytes": 209,
+      "storedSha256": "823c634869cc89269468623ef91a89b83eaaa6cc72dd9353a87e38cffcac7362"
+    },
+    {
+      "file": "sparse-hydration.json",
+      "rawBytes": 821002,
+      "rawSha256": "7c8d00bc20342299811921dd551c0e4cda4b0532f6775fd164361175bbe4424d",
+      "transport": "sparse-hydration.json.gz",
+      "storedBytes": 140183,
+      "storedSha256": "9554bb53f38b7166a7d11432f02b45f734f4e8bf47f40af4a18383257639318d"
+    }
+  ],
+  "scope": "Lossless original bytes. Plain text files are convenient Git-normalized views; these gzip transports are authoritative."
+}

@@ -1,0 +1,26 @@
+{
+  "scope": "Focused timeline PASS after normal source fold; all605ca895 runtime files verified byte-identical; not fresh full aggregate acceptance",
+  "records": [
+    {
+      "path": "results.json.gz",
+      "rawBytes": 573,
+      "rawSha256": "f3a3ce03bbc8f04f3a2b0257b30f3b1b798cb6d512a3963da70cbb4819447b68",
+      "gzipBytes": 370,
+      "gzipSha256": "325307475ae55869f4b36bf2b334d2422943f4cffbfb0823280c32c2b66e05fb"
+    },
+    {
+      "path": "timeline.mjs.log.gz",
+      "rawBytes": 98,
+      "rawSha256": "764d73931ec3438035eb07b5ee5b329f132e1bf774fdb2f9f3a5187f58090030",
+      "gzipBytes": 106,
+      "gzipSha256": "bc88e47dc5c5c64ed12798ea738918b6f6231eede5bcfb4e28b1d63525f8db05"
+    },
+    {
+      "path": "opf-timeline-focus-driver.mjs.gz",
+      "rawBytes": 1655,
+      "rawSha256": "1ecfd437dd018c5288f94933fb896ec1097cd88eda0e389e51e06579415e1ad7",
+      "gzipBytes": 869,
+      "gzipSha256": "d71f24576e92333118231ceb5c0ab64b2f81ab4fc022f14f053e4ca97fd948f1"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+[
+  {
+    "path": "C:/Users/micha/Source/openpresentation-site",
+    "branch": "main",
+    "before": "6b021c80804bb100b5f806f2adc524ae63c8509b",
+    "after": "148cd51184d8d74617379eddf0c0f555d26fc113",
+    "clean": true,
+    "method": "fast-forward-only",
+    "pushed": false
+  },
+  {
+    "path": "C:/Users/micha/Source/pptx-gallery",
+    "branch": "main",
+    "before": "0455cce4fd989baef2e2dd1445944486b971549b",
+    "after": "9d473688bfd806da43b863f9db69500635e60093",
+    "clean": true,
+    "method": "fast-forward-only",
+    "pushed": false
+  },
+  {
+    "path": "C:/Users/micha/Source/pptx-dev",
+    "branch": "master",
+    "before": "bff35eaead9117cf029d521d8e990f547dbc9177",
+    "after": "4fed16d3410b7a629baef7363c0a1ab949543eaa",
+    "clean": true,
+    "method": "fast-forward-only",
+    "pushed": false
+  }
+]

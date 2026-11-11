@@ -1,0 +1,79 @@
+{
+  "format": 1,
+  "base": "d623be2d49da7b448f82c2e0395609487d89a4f5",
+  "scope": "documentation-only descendant; no package tests selected",
+  "seconds": 39.8,
+  "passed": 6,
+  "failed": 1,
+  "typecheckSkipped": 1,
+  "soleFailure": "strict gallery-tracker freshness17/18",
+  "manualBiomeAttempt": {
+    "exitCode": 1,
+    "filesProcessed": 0,
+    "reason": "all supplied handoff paths ignored by repository policy; not a pass"
+  },
+  "zip": {
+    "name": "final-docs-checks.zip",
+    "bytes": 11771,
+    "sha256": "8beac9c07719d9af33bd2297d210b20dc400000175564020f87025f077dd9833"
+  },
+  "rawFiles": 11,
+  "rawBytes": 30465,
+  "files": [
+    {
+      "name": "run/final-docs-plan.log",
+      "bytes": 319,
+      "sha256": "e116496ef921f86aa755c94358d226c67ed0be6c98f7ad5c3cb18dbc3f1eaf11"
+    },
+    {
+      "name": "run/final-docs.log",
+      "bytes": 4373,
+      "sha256": "5e1a2d969ce3859c84510eed8b6c00860c2345ec3839011cd0f7aaebb4f79039"
+    },
+    {
+      "name": "run/final-docs.exit.json",
+      "bytes": 379,
+      "sha256": "c2b17dbcd8c5fb21f7e4726995a70226bf49dd74abddff8696fa9339b896e998"
+    },
+    {
+      "name": "run/final-biome.log",
+      "bytes": 1511,
+      "sha256": "6b01d38b4ea5468951cbf0f0a986d9dfe8a10b0e631c767a24d734f947616c73"
+    },
+    {
+      "name": "steps/build.log",
+      "bytes": 14605,
+      "sha256": "7dd4642853d8624ce584685782101daf88b2da9709ee2985aad92a5443b02832"
+    },
+    {
+      "name": "steps/biome.log",
+      "bytes": 677,
+      "sha256": "55d58e5c3dd31c3be14634669125cefd95927c65d3e57c5f6af3b08111fa7df8"
+    },
+    {
+      "name": "steps/pnpm_run_check_changes.log",
+      "bytes": 2642,
+      "sha256": "8fa9a2b90b0e6bd24e9db79ad1c2d06224751c3ff8c775921bcfc52a4116cbd6"
+    },
+    {
+      "name": "steps/pnpm_run_check_gallery-tracker.log",
+      "bytes": 3026,
+      "sha256": "2a6ce043347b3d888d3e426358863b2513829a4a29273a505db56abb37e8a566"
+    },
+    {
+      "name": "steps/pnpm_run_check_release-report.log",
+      "bytes": 815,
+      "sha256": "3b9d4c59c0d8ead4d2310d08230ddc10f82ed938c99ff7c112bada7d4182186d"
+    },
+    {
+      "name": "steps/pnpm_run_check_skill-commands.log",
+      "bytes": 1043,
+      "sha256": "ae7149e3f8b86636abccecc441595e7d2ee5b75e6ffaf7a491da0a430061f6f4"
+    },
+    {
+      "name": "steps/pnpm_run_check_text.log",
+      "bytes": 1075,
+      "sha256": "24afefc5fe7a82e343e0249b23c4dee4f3ebdf077908aab7926fb9df3de40d24"
+    }
+  ]
+}

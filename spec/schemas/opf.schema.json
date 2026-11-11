@@ -208,7 +208,7 @@
     },
     "icons": {
       "$ref": "#/$defs/Icons",
-      "description": "Optional deck-local icons (LH-14), keyed by name: an author's or an LLM's own SVG, written once and named by any `icon` of the deck. See docs/icons.md."
+      "description": "Optional deck-local icons, keyed by name: an author's or an LLM's own SVG, written once and named by any `icon` of the deck. See docs/icons.md."
     },
     "catalogs": {
       "$ref": "#/$defs/Catalogs",
@@ -273,8 +273,107 @@
         }
       ]
     },
+    "ImagePayload": {
+      "description": "An image source and optional image-local text callouts. Other resource kinds use Asset and do not accept callouts.",
+      "oneOf": [
+        {
+          "type": "string",
+          "examples": [
+            "asset:acme-logo",
+            "https://cdn.acme.com/image.png",
+            "./assets/image.png",
+            "data:image/png;base64,..."
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "src"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "description": "Image source. Accepts an 'asset:<id>' reference, HTTPS URL, data URI, relative path resolved against the OPF file location, or local filesystem path.",
+              "examples": [
+                "asset:acme-logo",
+                "./assets/logo.svg",
+                "https://cdn.acme.com/logo.png",
+                "data:image/svg+xml;base64,..."
+              ]
+            },
+            "alt": {
+              "type": "string",
+              "description": "Alternative text for the image."
+            },
+            "title": {
+              "type": "string",
+              "description": "Human-readable asset title for editors and asset pickers."
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional notes about the asset's contents, provenance, or intended use."
+            },
+            "mediaType": {
+              "type": "string",
+              "description": "Optional MIME media type when it cannot be inferred from src.",
+              "examples": [
+                "image/svg+xml",
+                "image/png",
+                "image/webp"
+              ]
+            },
+            "callouts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ImageCallout"
+              },
+              "description": "Editable text panels over this image. Coordinates are fractions of its visible frame, measured from the physical top-left even in RTL. Panels are drawn above masks and overlays; overflowing text is reported, never clipped or shrunk below the body role."
+            }
+          }
+        }
+      ]
+    },
+    "ImageCallout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Plain editable text. Native edits preserve current words; an empty string is retained."
+        },
+        "x": {
+          "$ref": "#/$defs/FiniteNumber",
+          "description": "Signed fraction of the visible image frame width from its physical left edge. A callout points at pixels, and a picture never mirrors, so this coordinate is physical in every language. Negative values or values greater than 1 position the panel outside the image; its text is not clipped to the image. The slide crops what lies outside it."
+        },
+        "y": {
+          "$ref": "#/$defs/FiniteNumber",
+          "description": "Signed fraction of the visible image frame height from its physical top edge. Negative values or values greater than 1 position the panel outside the image; its text is not clipped to the image. The slide crops what lies outside it."
+        },
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "description": "Positive fraction of the visible image frame width, at most 1. The signed x origin controls placement outside the frame."
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "description": "Positive fraction of the visible image frame height, at most 1. The signed y origin controls placement outside the frame."
+        }
+      }
+    },
     "Audience": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Inline audience metadata for the presentation. Use 'id' to reference an audiences record (a bare id or 'name:id') and override selected fields, or use 'name' for a custom inline audience.",
       "anyOf": [
         { "required": ["id"] },
@@ -337,6 +436,7 @@
     },
     "Purpose": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Inline purpose metadata for the presentation. Use 'id' to reference a purposes record (a bare id or 'name:id') and override selected fields, or use 'name' for a custom inline purpose.",
       "anyOf": [
         { "required": ["id"] },
@@ -388,6 +488,7 @@
     },
     "Language": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Inline language metadata for the presentation: a BCP-47 'bcp47' tag plus overrides of what engines know about it. Languages are an engine vocabulary, not catalog records, so there is no 'id'.",
       "required": ["bcp47"],
       "not": { "required": ["id"] },
@@ -415,7 +516,7 @@
         "direction": {
           "type": "string",
           "enum": ["ltr", "rtl"],
-          "description": "Base text direction for the language. When omitted, engines derive it from the script: Arabic (Arab), Hebrew (Hebr), Syriac (Syrc), Thaana (Thaa), N'Ko (Nkoo), Adlam (Adlm), Samaritan (Samr), Mandaic (Mand) and Hanifi Rohingya (Rohg) are right-to-left; every other script is left-to-right. The engine language vocabulary (spec/reference/engine-vocabularies.json) states it for the tags it knows."
+          "description": "Base text direction for the language. When omitted, engines derive it from the script: Arabic (Arab), Hebrew (Hebr), Syriac (Syrc), Thaana (Thaa), N'Ko (Nkoo), Adlam (Adlm), Samaritan (Samr), Mandaic (Mand) and Hanifi Rohingya (Rohg) are right-to-left; every other script is left-to-right. The engine language vocabulary (spec/reference/engine-vocabularies.json) states it for the tags it knows. A right-to-left deck mirrors its layout, and one rule says what follows it. Layout words and layout coordinates are logical: 'start' and 'end' in alignments, header and footer zones, promoted regions, image placement, overlay bands, chartPrimary and shape anchors, the order of side-by-side blocks and columns, and an overlay shape's 'x' all run from the edge the deck starts on. Coordinates and sides that name pixels of a picture or parts of a plot are physical in every language: ImageFocus, ImageCallout 'x', a chart's 'legend' and data label 'position', and the 'left' and 'right' of table cell borders and paddings and of a shape's padding."
         },
         "script": {
           "type": "string",
@@ -447,6 +548,7 @@
     },
     "Tone": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Inline tone metadata for the presentation. Use 'id' to reference a tones record (a bare id or 'name:id') and override selected fields, or use 'name' for a custom inline tone.",
       "anyOf": [
         { "required": ["id"] },
@@ -499,6 +601,7 @@
     },
     "Organization": {
       "type": "object",
+      "additionalProperties": false,
       "description": "An organization associated with the presentation, typically the presenting company, but also hosts, partners, clients, or sponsors. The primary organization (role 'primary', else the first one) supplies the cover and section logo (unless design.logo overrides it) and the 'socials' header/footer field (its socials). Every field is also a built-in variable ('{{organization.name}}', 'organization.<id>.<field>'), and every logo a slide-scoped image ('var:organization.logo.icon', 'var:organization.<id>.logo'). Nothing else about an organization is drawn automatically. See docs/templates-and-variables.md.",
       "required": ["id", "name"],
       "properties": {
@@ -566,6 +669,7 @@
     },
     "Speaker": {
       "type": "object",
+      "additionalProperties": false,
       "description": "A person presenting the deck. A speaker is drawn only through built-in variables ('{{speaker.name}}' inside any string, a header or footer text included, and 'var:speaker.photo' as a whole image field). No layout, cover or bio slide places a speaker on its own. See docs/templates-and-variables.md.",
       "required": ["id", "name"],
       "properties": {
@@ -650,6 +754,7 @@
     },
     "Design": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Visual design system applied to the presentation; individual slides may override fields via Slide.design.",
       "properties": {
         "theme": {
@@ -732,7 +837,7 @@
             { "$ref": "#/$defs/HeaderFooter" }
           ],
           "description": "Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header.",
-          "examples": [false, { "left": { "text": "{{slide.section}}" }, "right": { "image": "var:organization.logo.icon" } }]
+          "examples": [false, { "start": { "text": "{{slide.section}}" }, "end": { "image": "var:organization.logo.icon" } }]
         },
         "footer": {
           "oneOf": [
@@ -742,18 +847,18 @@
           "description": "Repeated footer furniture rendered outside the main slide content. Use false to suppress an inherited footer.",
           "examples": [
             false,
-            { "left": { "image": "var:organization.logo.icon" }, "center": { "text": "Confidential" }, "right": { "text": "{{slide.number}}" } }
+            { "start": { "image": "var:organization.logo.icon" }, "center": { "text": "Confidential" }, "end": { "text": "{{slide.number}}" } }
           ]
         },
         "titleAlignment": {
           "type": "string",
-          "enum": ["left", "center", "right"],
-          "description": "Default horizontal alignment for the title heading area (the title and the tag) in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout record's design.titleAlignment, then the engine default."
+          "enum": ["start", "center", "end"],
+          "description": "Default horizontal alignment for the title heading area (the title and the tag) in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout record's design.titleAlignment, then the engine default. Logical: 'start' is the edge a paragraph starts on (the left for left-to-right text, the right for right-to-left text) and 'end' is the opposite edge."
         },
         "contentAlignment": {
           "type": "string",
-          "enum": ["left", "center", "right"],
-          "description": "Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.contentAlignment, then the engine default. The tag follows titleAlignment (and so does a subtitle in the title area, as on a cover) unless the slide's own design sets contentAlignment."
+          "enum": ["start", "center", "end"],
+          "description": "Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.contentAlignment, then the engine default. The tag follows titleAlignment (and so does a subtitle in the title area, as on a cover) unless the slide's own design sets contentAlignment. Logical: 'start' is the edge a paragraph starts on (the left for left-to-right text, the right for right-to-left text) and 'end' is the opposite edge."
         },
         "contentBox": {
           "type": "boolean",
@@ -762,12 +867,12 @@
         "contentDirection": {
           "type": "string",
           "enum": ["horizontal", "vertical"],
-          "description": "Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Effective value: the slide's design, then the deck's design, then the theme's design.contentDirection, then the layout record's design.contentDirection. On a slide with a template layout (OPF 0.19) it turns every flowing region of the slide into one row or one column, below the slide's own composition.mode, columns and weights, which arrange its first primary flowing region. On an automatic slide (and a 0.18 record) it sets the root arrangement mode when no composition.mode is set on the slide or on its layout record. Promoted regions (left, top:left, ...) keep their explicit geometry and nested groups keep their own composition."
+          "description": "Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Effective value: the slide's design, then the deck's design, then the theme's design.contentDirection, then the layout record's design.contentDirection. On a slide with a template layout it turns every flowing region of the slide into one row or one column, below the slide's own composition.mode, columns and weights, which arrange its first primary flowing region. On an automatic slide (and a 0.18 record) it sets the root arrangement mode when no composition.mode is set on the slide or on its layout record. Promoted regions (start, top:start, ...) keep their explicit geometry and nested groups keep their own composition."
         },
         "chartPrimary": {
           "type": "string",
-          "enum": ["none", "top", "bottom", "left", "right"],
-          "description": "Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. It applies to automatic slides only; a template layout says the same with its regions (chart-beside). When the slide has no promoted regions and no composition.mode of its own, and its root nodes mix at least one chart with other content, the first chart becomes a primary track and the other nodes form one synthetic sub-grid: 'left'/'right' is a two-track row and 'top'/'bottom' a two-track column, weighted 3:2 in favor of the chart; explicit root columns and weights are ignored while it applies. 'none' (the default) keeps the ordinary automatic grid with equal weight. Automatic composition builds direct content groups; template regions remain authoritative."
+          "enum": ["none", "top", "bottom", "start", "end"],
+          "description": "Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. It applies to automatic slides only; a template layout says the same with its regions (chart-beside). When the slide has no promoted regions and no composition.mode of its own, and its root nodes mix at least one chart with other content, the first chart becomes a primary track and the other nodes form one synthetic sub-grid: 'start'/'end' is a two-track row with the chart on that side (logical: 'start' is the left in a left-to-right deck and the right in a right-to-left one) and 'top'/'bottom' a two-track column, weighted 3:2 in favor of the chart; explicit root columns and weights are ignored while it applies. 'none' (the default) keeps the ordinary automatic grid with equal weight. Automatic composition builds direct content groups; template regions remain authoritative."
         },
         "imageFit": {
           "type": "string",
@@ -782,16 +887,17 @@
         "listStyle": {
           "type": "string",
           "enum": ["stack", "rows"],
-          "description": "How list entries are arranged (LH-08). 'stack' draws each entry's text with its description under it, the entries close together, as before. 'rows' draws ruled rows: a hairline between two first-level entries (the scheme's border neutral, 1 reference pixel), 0.8 em between rows and no bullet (a numbered list keeps its numbers); when every entry has a description and sits at the first level, the labels are bold and, when the widest fits 40% of the list's width on one line, sit in a column beside their descriptions, first baselines aligned, else each description sits under its label. Both engines draw the rules (PowerPoint: native lines). Effective value: the slide's design, then the deck's design, then the theme's design.listStyle, then the layout record's design.listStyle. Without one, a list of two or more first-level entries that each pair a short label (3 words or fewer, no full stop) with a description is drawn as rows when that sets no block of the slide smaller, and every other list is stacked."
+          "description": "How list entries are arranged. 'stack' draws each entry's text with its description under it, the entries close together, as before. 'rows' draws ruled rows: a hairline between two first-level entries (the scheme's border neutral, 1 reference pixel), 0.8 em between rows and no bullet (a numbered list keeps its numbers); when every entry has a description and sits at the first level, the labels are bold and, when the widest fits 40% of the list's width on one line, sit in a column beside their descriptions, first baselines aligned, else each description sits under its label. Both engines draw the rules (PowerPoint: native lines). Effective value: the slide's design, then the deck's design, then the theme's design.listStyle, then the layout record's design.listStyle. Without one, a list of two or more first-level entries that each pair a short label (3 words or fewer, no full stop) with a description is drawn as rows when that sets no block of the slide smaller, and every other list is stacked."
         },
         "mirror": {
           "type": "boolean",
-          "description": "Draw the slide's template layout mirrored (OPF 0.19): each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do not change. Effective value: the slide's design, then the deck's design, then the layout record's design.mirror, then false. Slides without a template layout ignore it."
+          "description": "Draw the slide's template layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do not change. Effective value: the slide's design, then the deck's design, then the layout record's design.mirror, then false. Slides without a template layout ignore it."
         }
       }
     },
     "ColorScheme": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Color palette used by the design system. Every slot and role is a hex color ('#RGB', '#RRGGBB' or '#RRGGBBAA'); a color-scheme name or a 'var:<id>' reference is not valid here, because those resolve through the scheme. The slot fields (accent1-accent6, dark1, dark2, light1, light2, hyperlink, followedHyperlink) mirror color-scheme.schema.json (https://openpresentation.org/schema/opf-color-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML slots - the 12-slot PowerPoint theme model that round-trips directly to OOXML. Use these for full control over the palette as PowerPoint sees it.\n- Abstract roles (primary, secondary, accent, background, surface, text, textSecondary) - OPF-specific semantic aliases the engine maps onto the OOXML slots. Convenient for inline overrides without thinking in slot numbers; not part of the catalog record schema.\n\nIn design.colorScheme, 'id' resolves a colorSchemes record as the base; slot and role overrides on the same object take precedence over the resolved scheme. The string form of design.colorScheme is equivalent to setting only 'id'.",
       "properties": {
         "id": {
@@ -898,6 +1004,7 @@
     },
     "FontScheme": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Typography selections used by the design system. The pair fields (major, minor) and refinement fields (type, app, languageFamily) mirror font-scheme.schema.json (https://openpresentation.org/schema/opf-font-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML pairs (major, minor) - heading and body family names that round-trip directly to PowerPoint majorFont/minorFont entries.\n- Abstract roles (heading, body, accent, code) - OPF-specific font family names the engine maps onto the OOXML pair when serializing. Convenient for inline overrides and for adding accent/code roles that don't have a direct OOXML slot. Catalog records may also carry 'code' (for example the consolas and courier-new records); heading, body and accent are not part of the catalog record schema. A role is a family name only: weight, style and tracking come from the text styles, and PowerPoint has no numeric weight.\n\nIn design.fontScheme, 'id' resolves a fontSchemes record as the base; pair and role overrides on the same object take precedence over the resolved scheme. The string form of design.fontScheme is equivalent to setting only 'id'.",
       "properties": {
         "id": {
@@ -998,6 +1105,7 @@
     },
     "Dimensions": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Slide dimensions: a preset, or custom inches that override it. PowerPoint's Letter Paper (10 x 7.5 in), A4 Paper (10.8333 x 7.5 in) and On-screen Show (16:9) (10 x 5.625 in) are not OPF presets; use widthInches and heightInches. docs/slide-sizes.md compares every preset.",
       "properties": {
         "preset": {
@@ -1048,7 +1156,7 @@
           "$ref": "#/$defs/ColorTransform"
         }
       ],
-      "description": "A color value or reference, enforced on shape fills and strokes, image strokes, styled table cell fill and text colors, cell border colors, solid background colors, gradient stop colors and pattern foreground and background colors. Four forms:\n- Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'.\n- Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary', 'accent', 'background', 'surface', 'surfaceAlt', 'text', 'textSecondary'). Roles resolve through the same role-to-slot mapping engines already apply to color schemes. 'surfaceAlt' has no slot: it is the alternate surface of banded table rows, derived from 'surface' and 'text' (the surface mixed a tenth of the way towards the text color, further when needed, so it always differs visibly from 'surface' and keeps 4.5:1 text contrast; core surfaceAltColor).\n- Variable reference: 'var:<id>' into the top-level variables map.\n- Lighter or darker (SH-02): { \"color\": <ColorRef>, \"lighten\": 0..1 } or { \"color\": <ColorRef>, \"darken\": 0..1 }, PowerPoint's \"Lighter 40%\" and \"Darker 25%\": the color's HSL luminance moved that share of the way to white (lighten) or to black (darken). Core resolves it (resolveColorRef); PPTX export writes the base color (a scheme color where it is one) with a:lumMod and a:lumOff.\n\nNames keep content theme-portable: re-theming the deck updates every named reference, where a literal hex stays frozen. Unknown 'var:' ids produce a validation warning, never an error, and engines fall back to their default text color. TextRun.color documents the same three forms but remains an open string so imported decks with unrecognized run colors stay valid; validators warn there instead of erroring.",
+      "description": "A color value or reference, enforced on shape fills and strokes, image strokes, styled table cell fill and text colors, cell border colors, solid background colors, gradient stop colors and pattern foreground and background colors. Four forms:\n- Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'.\n- Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary', 'accent', 'background', 'surface', 'surfaceAlt', 'text', 'textSecondary'). Roles resolve through the same role-to-slot mapping engines already apply to color schemes. 'surfaceAlt' has no slot: it is the alternate surface of banded table rows, derived from 'surface' and 'text' (the surface mixed a tenth of the way towards the text color, further when needed, so it always differs visibly from 'surface' and keeps 4.5:1 text contrast; core surfaceAltColor).\n- Variable reference: 'var:<id>' into the top-level variables map.\n- Lighter or darker: { \"color\": <ColorRef>, \"lighten\": 0..1 } or { \"color\": <ColorRef>, \"darken\": 0..1 }, PowerPoint's \"Lighter 40%\" and \"Darker 25%\": the color's HSL luminance moved that share of the way to white (lighten) or to black (darken). Core resolves it (resolveColorRef); PPTX export writes the base color (a scheme color where it is one) with a:lumMod and a:lumOff.\n\nNames keep content theme-portable: re-theming the deck updates every named reference, where a literal hex stays frozen. Unknown 'var:' ids produce a validation warning, never an error, and engines fall back to their default text color. TextRun.color documents the same three forms but remains an open string so imported decks with unrecognized run colors stay valid; validators warn there instead of erroring.",
       "examples": [
         "#0F4C81",
         "accent2",
@@ -1068,7 +1176,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["color"],
-      "description": "A ColorRef made lighter or darker (SH-02), as PowerPoint's theme color tints and shades: 'lighten' moves the color's HSL luminance that share of the way to white (lumMod 1 - lighten, lumOff lighten), 'darken' that share of the way to black (lumMod 1 - darken). Exactly one of the two. PPTX export writes a:lumMod and a:lumOff on the base color, a scheme color where the base names one, so re-theming the deck keeps the tint.",
+      "description": "A ColorRef made lighter or darker, as PowerPoint's theme color tints and shades: 'lighten' moves the color's HSL luminance that share of the way to white (lumMod 1 - lighten, lumOff lighten), 'darken' that share of the way to black (lumMod 1 - darken). Exactly one of the two. PPTX export writes a:lumMod and a:lumOff on the base color, a scheme color where the base names one, so re-theming the deck keeps the tint.",
       "properties": {
         "color": {
           "$ref": "#/$defs/ColorRef",
@@ -1548,6 +1656,7 @@
     },
     "ThemeBackground": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Theme-controlled PowerPoint slide background. The slot is resolved through the active color scheme and remains theme-aware.",
       "required": ["type", "slot"],
       "properties": {
@@ -1563,6 +1672,7 @@
     },
     "SolidBackground": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Fixed solid slide background fill.",
       "required": ["type", "color"],
       "properties": {
@@ -1586,6 +1696,7 @@
     },
     "GradientBackground": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Fixed gradient slide background fill.",
       "required": ["type", "gradient"],
       "properties": {
@@ -1601,7 +1712,9 @@
         },
         "gradient": {
           "type": "object",
-          "description": "Gradient fill definition.",
+          "additionalProperties": false,
+          "description": "Gradient fill definition: a linear gradient along 'angle' (default 0, left to right). A shape fill's Gradient also takes radial and path types; a background does not.",
+          "required": ["stops"],
           "properties": {
             "angle": {
               "type": "number",
@@ -1612,7 +1725,7 @@
               "minItems": 2,
               "description": "Ordered list of color stops along the gradient. A gradient needs at least two stops.",
               "items": {
-                "type": "object",
+                "type": "object", "additionalProperties": false,
                 "description": "Color stop along the gradient.",
                 "required": ["color", "position"],
                 "properties": {
@@ -1739,8 +1852,8 @@
         },
         "edge": {
           "type": "string",
-          "enum": ["top", "bottom", "left", "right"],
-          "description": "Cover only a band along this edge of the frame, for example a caption strip. Backgrounds and rectangle image frames only; on another shape the overlay is not drawn and composition reports unsupported-image-treatment. Omit to cover the whole frame. In a right-to-left deck 'left' and 'right' are the start and end sides."
+          "enum": ["top", "bottom", "start", "end"],
+          "description": "Cover only a band along this edge of the frame, for example a caption strip. Backgrounds and rectangle image frames only; on another shape the overlay is not drawn and composition reports unsupported-image-treatment. Omit to cover the whole frame. 'start' and 'end' follow the deck's direction: the left and right sides in a left-to-right deck, the right and left sides in a right-to-left one."
         },
         "size": {
           "type": "number",
@@ -1758,25 +1871,25 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["edge"],
-      "description": "Bleeds an image block to one edge of the slide: the image takes a band along that edge, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. Only top-level blocks (slides.N.blocks.I) can be placed, at most one per edge. Template layout regions do not supply image placement; set it on the image block itself. Bands are taken in block order, each spanning the free area left by earlier ones. Placement is the only mechanism that moves content aside; a background never does. A slide whose only body is placed images is composed like a cover: its headings center in the free area. In a right-to-left deck 'left' is the start side, drawn at the right.",
+      "description": "Bleeds an image block to one edge of the slide: the image takes a band along that edge, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. Only top-level blocks (slides.N.blocks.I) can be placed, at most one per edge. Template layout regions do not supply image placement; set it on the image block itself. Bands are taken in block order, each spanning the free area left by earlier ones. Placement is the only mechanism that moves content aside; a background never does. A slide whose only body is placed images is composed like a cover: its headings center in the free area. 'start' and 'end' follow the deck's direction: 'start' is the left edge in a left-to-right deck and the right edge in a right-to-left one.",
       "properties": {
         "edge": {
           "type": "string",
-          "enum": ["left", "right", "top", "bottom"],
+          "enum": ["start", "end", "top", "bottom"],
           "description": "The slide edge the image bleeds to."
         },
         "size": {
           "type": "number",
           "minimum": 0.1,
           "maximum": 0.9,
-          "description": "Share of the slide width (left, right) or height (top, bottom) given to the band. Default 0.5."
+          "description": "Share of the slide width (start, end) or height (top, bottom) given to the band. Default 0.5."
         },
         "inset": {
           "type": "boolean",
           "description": "Draw the frame inside the slide padding on every side of the band, like a card, instead of edge to edge. Default false."
         }
       },
-      "examples": [{ "edge": "left", "size": 0.45 }, { "edge": "right", "size": 0.4, "inset": true }]
+      "examples": [{ "edge": "start", "size": 0.45 }, { "edge": "end", "size": 0.4, "inset": true }]
     },
     "Stroke": {
       "anyOf": [
@@ -1866,7 +1979,7 @@
           }
         }
       ],
-      "description": "A line along an outline (SH-02): a shape block's outline or a picture's frame (the picture key 'border' was renamed 'stroke' in 0.33, with no alias). DrawingML a:ln. 'none' removes the line.",
+      "description": "A line along an outline: a shape block's outline or a picture's frame (the picture key 'border' was renamed 'stroke' in 0.33, with no alias). DrawingML a:ln. 'none' removes the line.",
       "examples": [
         "none",
         {
@@ -1924,7 +2037,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["stops"],
-      "description": "A gradient fill (SH-02): the background gradient object extended with 'type'. DrawingML a:gradFill: a:lin for linear, a:path circle, rect or shape for the others. The gradient rotates with the shape.",
+      "description": "A gradient fill: the background gradient object extended with 'type'. DrawingML a:gradFill: a:lin for linear, a:path circle, rect or shape for the others. The gradient rotates with the shape.",
       "properties": {
         "type": {
           "type": "string",
@@ -2033,7 +2146,7 @@
           "description": "A pattern fill (a:pattFill)."
         }
       ],
-      "description": "A shape block's fill (SH-02): 'none', a ColorRef, { gradient } or { pattern }. Without a fill a shape takes its style's fill (the theme's accent1 for the default style). Fills rotate with the shape (rotWithShape).",
+      "description": "A shape block's fill: 'none', a ColorRef, { gradient } or { pattern }. Without a fill a shape takes its style's fill (the theme's accent1 for the default style). Fills rotate with the shape (rotWithShape).",
       "examples": [
         "accent2",
         "none",
@@ -2096,7 +2209,7 @@
           "description": "SVG path data with its own viewBox, for example an icon outline drawn on a 24 by 24 grid."
         }
       ],
-      "description": "Custom geometry (SH-02): SVG path data (M, L, H, V, C, S, Q, T, A and Z, absolute or relative) instead of a preset. PPTX export writes a:custGeom with the same path. A subpath that ends without Z is open: arrowheads draw at its ends (its fill closes it, as in PowerPoint).",
+      "description": "Custom geometry: SVG path data (M, L, H, V, C, S, Q, T, A and Z, absolute or relative) instead of a preset. PPTX export writes a:custGeom with the same path. A subpath that ends without Z is open: arrowheads draw at its ends (its fill closes it, as in PowerPoint).",
       "examples": [
         "M0 0 L1 0 L0.5 1 Z",
         {
@@ -2167,12 +2280,12 @@
           }
         }
       ],
-      "description": "Outer shadow (a:outerShdw): a preset name (soft, hard, perspective) or { color, opacity, blur, distance, angle, size }. SH-03 draws it in both engines."
+      "description": "Outer shadow (a:outerShdw): a preset name (soft, hard, perspective) or { color, opacity, blur, distance, angle, size }."
     },
     "InnerShadow": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Inner shadow (a:innerShdw). SH-03 draws it in both engines.",
+      "description": "Inner shadow (a:innerShdw).",
       "properties": {
         "color": {
           "$ref": "#/$defs/ColorRef",
@@ -2207,7 +2320,7 @@
     "Glow": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Glow around the outline (a:glow). SH-03 draws it in both engines.",
+      "description": "Glow around the outline (a:glow).",
       "properties": {
         "color": {
           "$ref": "#/$defs/ColorRef",
@@ -2230,7 +2343,7 @@
     "Reflection": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Reflection below the shape (a:reflection). SH-03 draws it in both engines.",
+      "description": "Reflection below the shape (a:reflection).",
       "properties": {
         "opacity": {
           "type": "number",
@@ -2286,6 +2399,7 @@
     },
     "PatternBackground": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Fixed pattern slide background fill.",
       "required": ["type", "pattern"],
       "properties": {
@@ -2296,6 +2410,7 @@
         },
         "pattern": {
           "type": "object",
+          "additionalProperties": false,
           "description": "Pattern fill definition.",
           "required": ["preset"],
           "properties": {
@@ -2404,25 +2519,26 @@
     },
     "HeaderFooter": {
       "type": "object",
-      "description": "Repeated header or footer content split into left, center, and right zones. Header/footer content is slide furniture, separate from the main slide content payloads.",
+      "additionalProperties": false,
+      "description": "Repeated header or footer content split into start, center, and end zones. The zones follow the deck's direction: 'start' is at the left of a left-to-right deck and at the right of a right-to-left one. Header/footer content is slide furniture, separate from the main slide content payloads.",
       "properties": {
-        "left": {
+        "start": {
           "$ref": "#/$defs/HeaderFooterItem",
-          "description": "Left-aligned header/footer content."
+          "description": "Content at the start edge, aligned to it."
         },
         "center": {
           "$ref": "#/$defs/HeaderFooterItem",
           "description": "Centered header/footer content."
         },
-        "right": {
+        "end": {
           "$ref": "#/$defs/HeaderFooterItem",
-          "description": "Right-aligned header/footer content."
+          "description": "Content at the end edge, aligned to it."
         }
       }
     },
     "HeaderFooterItem": {
       "type": "object",
-      "description": "One header/footer zone. Every configured field renders, side by side in one row in the order image, text, socials, date (mirrored in a right-to-left deck), aligned to the zone's edge (left, center or right) and vertically centered on each other; a line break inside text or socials ('\\n') stacks lines within that part. When the parts are wider than the zone their text wraps, and a row that cannot fit even so is reported as overflow. Generated values such as the slide number, the slide count, the section, the organization or the speaker are variables inside text ('{{slide.number}} / {{deck.slideCount}}', '{{organization.name}}'), so one text writes several values in the author's order. An organization logo is image: 'var:organization.logo.icon'. See docs/templates-and-variables.md.",
+      "description": "One header/footer zone. Every configured field renders, side by side in one row in the order image, text, socials, date (mirrored in a right-to-left deck), aligned to the zone's edge (the start edge, the center or the end edge) and vertically centered on each other; a line break inside text or socials ('\\n') stacks lines within that part. When the parts are wider than the zone their text wraps, and a row that cannot fit even so is reported as overflow. Generated values such as the slide number, the slide count, the section, the organization or the speaker are variables inside text ('{{slide.number}} / {{deck.slideCount}}', '{{organization.name}}'), so one text writes several values in the author's order. An organization logo is image: 'var:organization.logo.icon'. See docs/templates-and-variables.md.",
       "additionalProperties": false,
       "properties": {
         "text": {
@@ -2458,7 +2574,7 @@
     "OverlayShape": {
       "type": "object",
       "additionalProperties": false,
-      "description": "SH-04: an entry of slide 'shapes', drawn over the composed slide above the content and the furniture, later entries on top; it never moves content. An entry with 'connector' is a connector between two blocks or overlay shapes: it takes only 'id', 'connector', 'adjust', 'stroke', 'alt', 'decorative', 'hidden' and 'extensions'; core routes it as PowerPoint's own connector presets and PPTX export writes a native p:cxnSp glued to the shapes at its ends, so it follows them when they are moved in PowerPoint. Any other entry is an overlay shape: the shape block vocabulary (geometry, paint, effects, transform, text, accessibility) and exactly one placement, 'x', 'y', 'width' and 'height' (fractions of the slide) or 'at' (against a block, so it follows the block wherever composition puts it); PPTX export writes a native p:sp.",
+      "description": "An entry of slide 'shapes', drawn over the composed slide above the content and the furniture, later entries on top; it never moves content. An entry with 'connector' is a connector between two blocks or overlay shapes: it takes only 'id', 'connector', 'adjust', 'stroke', 'alt', 'decorative', 'hidden' and 'extensions'; core routes it as PowerPoint's own connector presets and PPTX export writes a native p:cxnSp glued to the shapes at its ends, so it follows them when they are moved in PowerPoint. Any other entry is an overlay shape: the shape block vocabulary (geometry, paint, effects, transform, text, accessibility) and exactly one placement, 'x', 'y', 'width' and 'height' (fractions of the slide) or 'at' (against a block, so it follows the block wherever composition puts it); PPTX export writes a native p:sp.",
       "properties": {
         "id": {
           "type": "string",
@@ -2467,28 +2583,24 @@
           "examples": ["badge-new", "callout-1"]
         },
         "x": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 1,
-          "description": "Left edge as a fraction of the slide width, from the left edge; in a right-to-left deck from the right edge, mirrored as OPF mirrors start and end. With 'y', 'width' and 'height'."
+          "$ref": "#/$defs/FiniteNumber",
+          "description": "The shape's start edge as a signed fraction of the slide width, measured from the slide's start edge: the left edge in a left-to-right deck, the right edge in a right-to-left one. A shape sits over the layout, and the layout mirrors, so this coordinate is logical; only the position mirrors, never the geometry (an arrow keeps the way it points). Negative values or values greater than 1 place the shape partly or wholly outside the slide. With 'y', 'width' and 'height'."
         },
         "y": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 1,
-          "description": "Top edge as a fraction of the slide height, from the top edge."
+          "$ref": "#/$defs/FiniteNumber",
+          "description": "Top edge as a signed fraction of the slide height, from the top edge. Negative values or values greater than 1 place the shape partly or wholly outside the slide."
         },
         "width": {
           "type": "number",
           "minimum": 0,
-          "maximum": 1,
-          "description": "Width as a fraction of the slide width."
+          "maximum": 1.7976931348623157e308,
+          "description": "Width as a fraction of the slide width, from 0 (a vertical line). Above 1 the shape is wider than the slide, for a circle or band that bleeds off it; the slide crops what lies outside."
         },
         "height": {
           "type": "number",
           "minimum": 0,
-          "maximum": 1,
-          "description": "Height as a fraction of the slide height."
+          "maximum": 1.7976931348623157e308,
+          "description": "Height as a fraction of the slide height, from 0 (a horizontal line). Above 1 the shape is taller than the slide."
         },
         "at": {
           "$ref": "#/$defs/OverlayAnchor"
@@ -2625,8 +2737,11 @@
     "OverlayAnchor": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["block", "edge"],
-      "description": "Places an overlay shape against a composed block's box, so the shape follows the block wherever composition puts it. 'edge' puts the shape outside that edge, centered along it ('start' and 'end' follow the deck's direction: left and right in a left-to-right deck, right and left in a right-to-left one); 'center' puts it on the block's center. A block id that is not on the slide is a finding (opf/shape-anchor-missing) and the shape is not drawn.",
+      "required": [
+        "block",
+        "edge"
+      ],
+      "description": "Places an overlay shape against a composed block's box, so the shape follows the block wherever composition puts it. 'edge' puts the shape outside that edge, centered along it ('start' and 'end' follow the deck's direction: left and right in a left-to-right deck, right and left in a right-to-left one); 'center' puts it on the block's center. A block id that is not on the slide is a finding (opf/shape-anchor-missing) and the shape is not drawn. With point, block must carry a supported classic chart. point selects a category label or zero-based row; series selects an exact unique plotted value-column name or zero-based plotted-series index (default first). The selected mark location centers the overlay, and offset moves along its outward normal; whole-block anchors retain their existing outside-edge placement. Unknown, ambiguous, unplotted or unsupported references report opf/shape-anchor-missing and draw no shape.",
       "properties": {
         "block": {
           "type": "string",
@@ -2635,7 +2750,13 @@
         },
         "edge": {
           "type": "string",
-          "enum": ["top", "bottom", "start", "end", "center"],
+          "enum": [
+            "top",
+            "bottom",
+            "start",
+            "end",
+            "center"
+          ],
           "description": "The edge of the block the shape sits outside of, or its center."
         },
         "offset": {
@@ -2647,17 +2768,90 @@
         "width": {
           "type": "number",
           "exclusiveMinimum": 0,
-          "maximum": 1280,
-          "description": "The shape's width: up to 1 a fraction of the block's width, above 1 reference pixels at a 720-pixel short edge. Default the preset's natural proportions with the shape's shorter side at 15% of the block's shorter side."
+          "maximum": 1.7976931348623157e308,
+          "description": "The shape's width as a fraction of its target's width: the block's box, or with 'point' the chart mark's bounds. 1 is the target's own width and 1.08 a frame 8% wider. For a size in pixels use 'widthPx'; not both. Default: the preset's natural proportions with the shape's shorter side at 15% of the target's shorter side (at least 12 reference pixels on a chart mark)."
         },
         "height": {
           "type": "number",
           "exclusiveMinimum": 0,
+          "maximum": 1.7976931348623157e308,
+          "description": "The shape's height as a fraction of its target's height. For a size in pixels use 'heightPx'; not both. Default as for width."
+        },
+        "widthPx": {
+          "type": "number",
+          "exclusiveMinimum": 0,
           "maximum": 1280,
-          "description": "The shape's height: up to 1 a fraction of the block's height, above 1 reference pixels at a 720-pixel short edge. Default as for width."
+          "description": "The shape's width in reference pixels at a 720-pixel short edge, whatever size its target has: a badge or a ring of a fixed size. Instead of 'width'."
+        },
+        "heightPx": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1280,
+          "description": "The shape's height in reference pixels at a 720-pixel short edge. Instead of 'height'."
+        },
+        "point": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            }
+          ],
+          "description": "Exact unique category label or zero-based data row index of the chart. Numeric strings name labels; numbers index rows. Empty/duplicate labels can be selected by index. Requires a supported classic chart block."
+        },
+        "series": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            }
+          ],
+          "description": "Exact unique plotted value-column name or zero-based plotted-series index; omission selects the first plotted series. Requires point. Scatter X is not a value series."
         }
       },
-      "examples": [{ "block": "team-photo", "edge": "top", "offset": 8 }, { "block": "revenue-chart", "edge": "end", "width": 160, "height": 64 }]
+      "examples": [
+        {
+          "block": "team-photo",
+          "edge": "top",
+          "offset": 8
+        },
+        {
+          "block": "revenue-chart",
+          "edge": "end",
+          "widthPx": 160,
+          "heightPx": 64
+        },
+        {
+          "block": "quote",
+          "edge": "center",
+          "width": 1.08,
+          "height": 1.08
+        },
+        {
+          "block": "costs",
+          "series": "Cost ($B)",
+          "point": "United States",
+          "edge": "end",
+          "widthPx": 80,
+          "heightPx": 80
+        }
+      ],
+      "dependentRequired": {
+        "series": [
+          "point"
+        ]
+      },
+      "allOf": [
+        { "not": { "required": ["width", "widthPx"] } },
+        { "not": { "required": ["height", "heightPx"] } }
+      ]
     },
     "Connector": {
       "type": "object",
@@ -2695,13 +2889,24 @@
     },
     "Slide": {
       "type": "object",
-      "description": "A single slide. Content can be authored as a full-slide root payload, or inside promoted named region keys such as 'left', 'center+right', and 'top:left'.",
+      "description": "A single slide. Content can be authored as a full-slide root payload, or inside promoted named region keys such as 'start', 'center+end', and 'top:start'. The columns of that grid are logical: 'start' is the left column in a left-to-right deck and the right column in a right-to-left one.",
       "additionalProperties": false,
+      "dependentSchemas": {
+        "caption": {
+          "anyOf": [{ "required": ["image"] }, { "required": ["chart"] }, { "required": ["table"] }, { "required": ["video"] }, { "required": ["diagram"] }],
+          "description": "A slide's caption belongs to its root image, chart, table, video or diagram."
+        }
+      },
       "properties": {
         "id": {
           "type": "string",
           "description": "Optional stable identifier for the slide within the document. Use when another system needs to reference a slide across edits, comments, generation state, exports, or narrative tooling. Slide order is defined by the slides array, so simple decks may omit this.",
           "examples": ["s1", "cover", "problem-1", "ask"]
+        },
+        "language": {
+          "oneOf": [{ "$ref": "#/$defs/LanguageTag" }, { "$ref": "#/$defs/Language" }],
+          "description": "Language of this slide, overriding the presentation language. Accepts the same BCP-47 tag or inline Language object as the presentation. Omission inherits the deck language. Direction, script fonts, quotation marks, line breaking and number formatting follow the effective slide language; TextRun.language still overrides an individual run.",
+          "examples": ["ar-SA", "ja", "fr-FR"]
         },
         "type": {
           "type": "string",
@@ -2753,7 +2958,7 @@
               "items": { "$ref": "#/$defs/TextRun" }
             }
           ],
-          "description": "Small slide-level label or badge. A v2 layout renders this before the title in its title heading group; tag is not a separate layout area. Engines draw it as an eyebrow (LH-32): 22 reference pixels, bold, in the primary color (the text color where that is under 4.5:1 on the background) and, where its script has case, in capitals with 0.08 em of letter spacing (PowerPoint: cap=all and spc on the authored text). Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
+          "description": "Small slide-level label or badge. A v2 layout renders this before the title in its title heading group; tag is not a separate layout area. Engines draw it as an eyebrow: 22 reference pixels, bold, in the primary color (the text color where that is under 4.5:1 on the background) and, where its script has case, in capitals with 0.08 em of letter spacing (PowerPoint: cap=all and spc on the authored text). Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
           "examples": ["Intro", "Confidential", "Appendix"]
         },
         "text": {
@@ -2782,7 +2987,7 @@
           "examples": ["arabic", "roman-lower", { "style": "alpha-upper", "start": 3, "suffix": "paren" }, ["arabic", "alpha-lower", { "style": "roman-lower", "suffix": "paren-both" }]]
         },
         "image": {
-          "$ref": "#/$defs/Asset",
+          "$ref": "#/$defs/ImagePayload",
           "description": "Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A v2 layout binds it to a compatible body region; a region's bleed setting may extend its outer edges to the slide edge. For fit, focus, treatments or an explicit placement use an image block in blocks; for a full-slide picture behind the content use design.background. Presence of this field infers type 'image'."
         },
         "video": {
@@ -2828,7 +3033,7 @@
             { "type": "string" },
             { "$ref": "#/$defs/Diagram" }
           ],
-          "description": "Full-slide diagram payload: Mermaid source drawn in the deck's fonts and colors. A string is shorthand for { \"source\": value }; object form carries the source syntax and a text alternative. Presence of this field infers type 'diagram'."
+          "description": "Full-slide diagram payload: Mermaid, Graphviz DOT or PlantUML source drawn in the deck's fonts and colors. A string is shorthand for { \"source\": value }; object form carries the source syntax and a text alternative. Presence of this field infers type 'diagram'."
         },
         "caption": {
           "$ref": "#/$defs/Caption",
@@ -2842,7 +3047,7 @@
         "shapes": {
           "type": "array",
           "items": { "$ref": "#/$defs/OverlayShape" },
-          "description": "SH-04: shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or overlay shapes; any other entry is an overlay shape placed by x, y, width and height (fractions of the slide) or at (against a block). See docs/shapes.md.",
+          "description": "Shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or overlay shapes; any other entry is an overlay shape placed by x, y, width and height (fractions of the slide) or at (against a block). See docs/shapes.md.",
           "examples": [[
             { "id": "note", "shape": "wedgeRectCallout", "text": "Launch", "x": 0.7, "y": 0.1, "width": 0.2, "height": 0.1 },
             { "connector": { "from": "plan", "to": "ship", "route": "elbow" }, "stroke": { "end": { "type": "triangle" } } }
@@ -2852,22 +3057,22 @@
           "$ref": "#/$defs/SlideDesign",
           "description": "Slide-level design applied on top of the deck-wide design."
         },
-        "left": {
+        "start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "right": {
+        "end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "left+center": {
+        "start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "center+right": {
+        "center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "left+center+right": {
+        "start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
         "top": {
@@ -2888,112 +3093,112 @@
         "top+middle+bottom": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top:left": {
+        "top:start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "top:center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top:right": {
+        "top:end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top:left+center": {
+        "top:start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top:center+right": {
+        "top:center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top:left+center+right": {
+        "top:start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle:left": {
+        "middle:start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "middle:center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle:right": {
+        "middle:end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle:left+center": {
+        "middle:start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle:center+right": {
+        "middle:center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle:left+center+right": {
+        "middle:start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "bottom:left": {
+        "bottom:start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "bottom:center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "bottom:right": {
+        "bottom:end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "bottom:left+center": {
+        "bottom:start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "bottom:center+right": {
+        "bottom:center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "bottom:left+center+right": {
+        "bottom:start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle:left": {
+        "top+middle:start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "top+middle:center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle:right": {
+        "top+middle:end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle:left+center": {
+        "top+middle:start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle:center+right": {
+        "top+middle:center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle:left+center+right": {
+        "top+middle:start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle+bottom:left": {
+        "middle+bottom:start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "middle+bottom:center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle+bottom:right": {
+        "middle+bottom:end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle+bottom:left+center": {
+        "middle+bottom:start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle+bottom:center+right": {
+        "middle+bottom:center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle+bottom:left+center+right": {
+        "middle+bottom:start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle+bottom:left": {
+        "top+middle+bottom:start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "top+middle+bottom:center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle+bottom:right": {
+        "top+middle+bottom:end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle+bottom:left+center": {
+        "top+middle+bottom:start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle+bottom:center+right": {
+        "top+middle+bottom:center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle+bottom:left+center+right": {
+        "top+middle+bottom:start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
         "notes": {
@@ -3019,10 +3224,144 @@
         }
       }
     },
+    "ImageBlockOption": {
+      "description": "An option of image blocks only (fit, focus, recolor, overlay, placement, portrait): the block must hold an 'image'.",
+      "required": ["image"]
+    },
+    "ImageOrShapeBlockOption": {
+      "description": "An option of image blocks and shape blocks (aspectRatio, adjust, stroke, opacity): the block must hold an 'image', a 'shape' or a 'path'.",
+      "anyOf": [{ "required": ["image"] }, { "required": ["shape"] }, { "required": ["path"] }]
+    },
+    "ShapeBlockOption": {
+      "description": "An option of shape blocks only (fill, style, rotate, flip, the text frame, accessibility, link and the six effects): the block must be a shape block, which is a 'shape' with no 'image', or a 'path'.",
+      "anyOf": [{ "required": ["shape"], "not": { "required": ["image"] } }, { "required": ["path"] }]
+    },
     "ContentPayload": {
       "type": "object",
       "description": "A content leaf or recursively composed group. A group contains blocks and optional composition; it cannot mix blocks with leaf payload fields. Groups may nest up to 32 levels.",
       "additionalProperties": false,
+      "$comment": "dependentSchemas states in the schema what the format check also reports with a located message: which options belong to which kind of block. packages/javascript/test/payload-option-parity.test.mjs keeps the two in step.",
+      "dependentSchemas": {
+        "fit": {
+          "$ref": "#/$defs/ImageBlockOption"
+        },
+        "focus": {
+          "$ref": "#/$defs/ImageBlockOption"
+        },
+        "recolor": {
+          "$ref": "#/$defs/ImageBlockOption"
+        },
+        "overlay": {
+          "$ref": "#/$defs/ImageBlockOption"
+        },
+        "placement": {
+          "$ref": "#/$defs/ImageBlockOption"
+        },
+        "portrait": {
+          "$ref": "#/$defs/ImageBlockOption"
+        },
+        "aspectRatio": {
+          "$ref": "#/$defs/ImageOrShapeBlockOption"
+        },
+        "adjust": {
+          "$ref": "#/$defs/ImageOrShapeBlockOption"
+        },
+        "stroke": {
+          "$ref": "#/$defs/ImageOrShapeBlockOption"
+        },
+        "opacity": {
+          "$ref": "#/$defs/ImageOrShapeBlockOption"
+        },
+        "fill": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "style": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "rotate": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "flip": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "anchor": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "padding": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "textDirection": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "alt": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "decorative": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "hidden": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "link": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "shadow": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "innerShadow": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "glow": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "softEdge": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "reflection": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "blur": {
+          "$ref": "#/$defs/ShapeBlockOption"
+        },
+        "path": {
+          "not": {
+            "required": [
+              "image"
+            ]
+          },
+          "description": "A custom outline makes a shape block; a picture's mask is a preset 'shape'."
+        },
+        "caption": {
+          "anyOf": [
+            {
+              "required": [
+                "image"
+              ]
+            },
+            {
+              "required": [
+                "chart"
+              ]
+            },
+            {
+              "required": [
+                "table"
+              ]
+            },
+            {
+              "required": [
+                "video"
+              ]
+            },
+            {
+              "required": [
+                "diagram"
+              ]
+            }
+          ],
+          "description": "A caption belongs to an image, chart, table, video or diagram."
+        }
+      },
       "properties": {
         "id": {
           "type": "string",
@@ -3036,7 +3375,7 @@
         "region": {
           "type": "string",
           "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Pin a root block (slides.N.blocks.I) to a region of the slide's template layout by name (OPF 0.19). The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin is ignored with a warning (opf/region-unknown, opf/region-kind or opf/region-full) and the block is placed by its kind. Blocks without a pin are bound by reading order, role and kind. A pin on a nested block, or on a slide without a template layout, has no effect.",
+          "description": "Pin a root block (slides.N.blocks.I) to a region of the slide's template layout by name. The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin is ignored with a warning (opf/region-unknown, opf/region-kind or opf/region-full) and the block is placed by its kind. Blocks without a pin are bound by reading order, role and kind. A pin on a nested block, or on a slide without a template layout, has no effect.",
           "examples": ["notes", "metrics"]
         },
         "type": {
@@ -3097,11 +3436,11 @@
               "maximum": 3
             }
           ],
-          "description": "Lay the payload's `items` or `bullets` out in columns (OPF 0.19). 'auto' tries 1, 2 then 3 equal columns at the starting text size and uses the first count at which the list fits, as long as a column stays at least a quarter of the slide wide; when none fits, 'auto' takes the count (1, 2 or 3) whose fitted size is largest, preferring fewer columns on a tie, and sets the list in one column only when its lines stay within the prose measure (or it is a type-scale step larger). A list of 6 or fewer entries is never split by 'auto'; it shrinks in one column. 1, 2 or 3 fixes the count. Column breaks fall between items (a nested item stays with its parent) and keep the columns as even as possible; numbering continues and reading order runs column by column. A lone list in a layout region with listColumns: 'auto' behaves as 'auto'.",
+          "description": "Lay the payload's `items` or `bullets` out in columns. 'auto' tries 1, 2 then 3 equal columns at the starting text size and uses the first count at which the list fits, as long as a column stays at least a quarter of the slide wide; when none fits, 'auto' takes the count (1, 2 or 3) whose fitted size is largest, preferring fewer columns on a tie, and sets the list in one column only when its lines stay within the prose measure (or it is a type-scale step larger). A list of 6 or fewer entries is never split by 'auto'; it shrinks in one column. 1, 2 or 3 fixes the count. Column breaks fall between items (a nested item stays with its parent) and keep the columns as even as possible; numbering continues and reading order runs column by column. A lone list in a layout region with listColumns: 'auto' behaves as 'auto'.",
           "examples": ["auto", 2]
         },
         "image": {
-          "$ref": "#/$defs/Asset",
+          "$ref": "#/$defs/ImagePayload",
           "description": "Source for an image item.",
           "examples": [
             "https://cdn.acme.com/images/diagram.png",
@@ -3127,7 +3466,7 @@
         },
         "shape": {
           "$ref": "#/$defs/ShapePreset",
-          "description": "The preset geometry. Without 'image' it makes the block a shape block (SH-02): the preset drawn at the block's own fitted size with 'fill', 'stroke' and 'style', and 'text' inside its text rectangle. On an image block it is the frame's mask, exported as the picture's native preset geometry (a:prstGeom); 0.33 renamed rectangle, rounded and circle to rect, roundRect and ellipse, and every other preset is a mask too. 'ellipse' makes an image frame square. Default rect.",
+          "description": "The preset geometry. Without 'image' it makes the block a shape block: the preset drawn at the block's own fitted size with 'fill', 'stroke' and 'style', and 'text' inside its text rectangle. On an image block it is the frame's mask, exported as the picture's native preset geometry (a:prstGeom); 0.33 renamed rectangle, rounded and circle to rect, roundRect and ellipse, and every other preset is a mask too. 'ellipse' makes an image frame square. Default rect.",
           "examples": ["roundRect", "chevron", "ellipse", "wedgeRectCallout"]
         },
         "stroke": {
@@ -3206,7 +3545,7 @@
           "type": "number",
           "minimum": 0,
           "maximum": 200,
-          "description": "Shape blocks only. Soft edges (a:softEdge): the radius over which the outline fades, in reference pixels at a 720-pixel short edge. SH-03 draws it in both engines."
+          "description": "Shape blocks only. Soft edges (a:softEdge): the radius over which the outline fades, in reference pixels at a 720-pixel short edge."
         },
         "reflection": {
           "$ref": "#/$defs/Reflection",
@@ -3216,7 +3555,7 @@
           "type": "number",
           "minimum": 0,
           "maximum": 200,
-          "description": "Shape blocks only. Blur of the whole shape (a:blur), radius in reference pixels at a 720-pixel short edge. SH-03 draws it in both engines."
+          "description": "Shape blocks only. Blur of the whole shape (a:blur), radius in reference pixels at a 720-pixel short edge."
         },
         "adjust": {
           "type": "object",
@@ -3349,7 +3688,7 @@
             { "type": "string" },
             { "$ref": "#/$defs/Diagram" }
           ],
-          "description": "Diagram payload: Mermaid source (flowchart, sequence, state, class, ER, mindmap, timeline, journey, C4, architecture and the other built-in Mermaid families) drawn in the deck's fonts and colors. A string is shorthand for { \"source\": value }; object form carries the source syntax and a text alternative. Presence of this field infers type 'diagram'.",
+          "description": "Diagram payload: Mermaid source (flowchart, sequence, state, class, ER, mindmap, timeline, journey, C4, architecture and the other built-in Mermaid families), or Graphviz DOT or PlantUML source with 'syntax', drawn in the deck's fonts and colors. A string is shorthand for { \"source\": value }; object form carries the source syntax and a text alternative. Presence of this field infers type 'diagram'.",
           "examples": [
             "flowchart LR\n  A[Brief] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| A",
             {
@@ -3381,7 +3720,7 @@
         },
         "icon": {
           "$ref": "#/$defs/IconReference",
-          "description": "Groups only (LH-14): an icon drawn on a chip at the top of the group, before its heading, as a card of features or topics draws one: \"<set>:<name>\" (\"lucide:shield-check\"), a name from the deck's icons, or an SVG source. A list entry and a metric take their own `icon`. Decoration only: when the slide has no room for it without setting text smaller, it is not drawn (finding opf/icon-dropped). See docs/icons.md."
+          "description": "Groups only: an icon drawn on a chip at the top of the group, before its heading, as a card of features or topics draws one: \"<set>:<name>\" (\"lucide:shield-check\"), a name from the deck's icons, or an SVG source. A list entry and a metric take their own `icon`. Decoration only: when the slide has no room for it without setting text smaller, it is not drawn (finding opf/icon-dropped). See docs/icons.md."
         }
       },
       "allOf": [
@@ -3754,31 +4093,31 @@
         },
         "icon": {
           "$ref": "#/$defs/IconReference",
-          "description": "An icon drawn on a chip above the metric (LH-14): \"<set>:<name>\" (\"lucide:users\"), a name from the deck's icons, or an SVG source. Decoration only: when the slide has no room for it without setting text smaller, it is not drawn (finding opf/icon-dropped). See docs/icons.md."
+          "description": "An icon drawn on a chip above the metric: \"<set>:<name>\" (\"lucide:users\"), a name from the deck's icons, or an SVG source. Decoration only: when the slide has no room for it without setting text smaller, it is not drawn (finding opf/icon-dropped). See docs/icons.md."
         }
       }
     },
     "Diagram": {
       "type": "object",
-      "description": "A diagram written as text. Engines parse the source, lay it out with the deck's measured fonts at the largest type size that fits the block, and draw it in the slide's resolved colors (color scheme, variant, color map and background); the PPTX export writes it as a native SVG picture with a PNG fallback. A string value in a diagram field is shorthand for { \"source\": value }.",
+      "description": "A diagram written as text (Mermaid, Graphviz DOT or PlantUML), laid out with the deck's measured fonts and resolved colors at the largest type size that fits. PPTX export defaults to editable native shapes, connectors and text in one group for qualified families; unsupported families or drawing constructs use an SVG picture with a PNG fallback. The diagrams: \"picture\" option always uses that picture form. A string diagram is shorthand for { \"source\": value }.",
       "additionalProperties": false,
       "required": ["source"],
       "properties": {
         "source": {
           "type": "string",
           "minLength": 1,
-          "description": "The diagram source. With syntax 'mermaid' (the default) it is Mermaid 12.1 text whose first line names the diagram type (flowchart, sequenceDiagram, classDiagram, stateDiagram-v2, erDiagram, gantt, pie, mindmap, timeline, journey, quadrantChart, xychart, sankey, gitGraph, C4Context, block, architecture-beta, kanban, packet, radar-beta, treemap, venn-beta, ishikawa, requirementDiagram and the other built-in families; ZenUML is not supported). Mermaid themes, colors in themeVariables and click callbacks are ignored: the deck's design decides the colors and fonts.",
-          "examples": ["flowchart LR\n  A[Idea] --> B[Prototype] --> C[Launch]", "mindmap\n  root((Strategy))\n    Growth\n    Efficiency\n    People"]
+          "description": "The diagram source. With syntax 'mermaid' (the default) it is Mermaid 12.1 text whose first line names the diagram type (flowchart, sequenceDiagram, classDiagram, stateDiagram-v2, erDiagram, gantt, pie, mindmap, timeline, journey, quadrantChart, xychart, sankey, gitGraph, C4Context, block, architecture-beta, kanban, packet, radar-beta, treemap, venn-beta, ishikawa, requirementDiagram and the other built-in families; ZenUML is not supported). Mermaid themes, colors in themeVariables and click callbacks are ignored: the deck's design decides the colors and fonts. With syntax 'dot' it is one Graphviz DOT graph (graph or digraph), laid out in layers as Graphviz's dot engine does: rankdir, node shapes, edge styles, arrowheads, labels and subgraph cluster_* groups are drawn; colors, fonts, sizes and positions are the deck's; a graph whose layout attribute names another engine (neato, fdp, sfdp, circo, twopi, osage, patchwork) is not drawn. With syntax 'plantuml' it is one PlantUML diagram from @startuml (or @startmindmap, @startgantt) to its @end line: sequence, class, state, activity (the current syntax), use case, component and deployment diagrams, mind maps and gantt charts are drawn as the Mermaid family of the same kind; other PlantUML diagrams, the legacy activity syntax and the preprocessor are not drawn, and skinparam, themes and colors are ignored.",
+          "examples": ["flowchart LR\n  A[Idea] --> B[Prototype] --> C[Launch]", "mindmap\n  root((Strategy))\n    Growth\n    Efficiency\n    People", "digraph {\n  rankdir=LR\n  Idea -> Prototype -> Launch\n}", "@startuml\nAlice -> Bob : hello\n@enduml"]
         },
         "syntax": {
           "type": "string",
-          "enum": ["mermaid"],
+          "enum": ["mermaid", "dot", "plantuml"],
           "default": "mermaid",
-          "description": "The language of 'source'. Mermaid is the only syntax today."
+          "description": "The language of 'source': 'mermaid' (Mermaid 12.1, the default), 'dot' (Graphviz DOT, drawn with the layered layout) or 'plantuml' (PlantUML, drawn as the Mermaid family of the same kind). OPF reads all three itself; no Graphviz or PlantUML code runs."
         },
         "alt": {
           "type": "string",
-          "description": "Text alternative that says what the diagram shows. Exported as the picture's description. Without it, engines derive one from the diagram's labels.",
+          "description": "Text alternative that says what the diagram shows. Exported as the description of the native shape group or picture. Without it, engines derive one from the diagram's labels.",
           "examples": ["Ideas move from brief to approval; approved work is built, rejected work returns to the brief."]
         }
       }
@@ -3826,6 +4165,13 @@
           "type": "string",
           "description": "Event time, date, or sequence label. Use ISO-like values when possible, but human labels are allowed for quarters, eras, and relative milestones.",
           "examples": ["2026-01", "Q2 2026", "Launch week"]
+        },
+        "duration": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1.7976931348623157e308,
+          "description": "Relative length of this consecutive event period. Use the same unit for every event (for example 1 for Week 1 and 4 for Weeks 2–5). Omitted means one unit. When any event supplies duration, both engines draw proportional ranges. The 'when' field stays the authored display label and is never parsed to guess a duration.",
+          "examples": [1, 4, 0.5]
         },
         "what": {
           "type": "string",
@@ -3900,7 +4246,7 @@
             },
             "icon": {
               "$ref": "#/$defs/IconReference",
-              "description": "An icon drawn on a chip at the start of the entry, in place of its bullet (LH-14): \"<set>:<name>\" (\"lucide:truck\"), a name from the deck's icons, or an SVG source. Drawn on first-level entries of an unnumbered list. Decoration only: when the slide has no room for the chips without setting text smaller, they are not drawn (finding opf/icon-dropped). See docs/icons.md."
+              "description": "An icon drawn on a chip at the start of the entry, in place of its bullet: \"<set>:<name>\" (\"lucide:truck\"), a name from the deck's icons, or an SVG source. Drawn on first-level entries of an unnumbered list. Decoration only: when the slide has no room for the chips without setting text smaller, they are not drawn (finding opf/icon-dropped). See docs/icons.md."
             },
             "start": {
               "type": "integer",
@@ -4008,6 +4354,7 @@
         { "type": "string" },
         {
           "type": "object",
+          "additionalProperties": false,
           "required": ["text"],
           "properties": {
             "text": {
@@ -4054,7 +4401,7 @@
             "fontSize": {
               "type": "number",
               "exclusiveMinimum": 0,
-              "description": "Requested run font size in points."
+              "description": "Run font size in points, the unit presenters know from PowerPoint. One point is 4/3 reference pixels at a 720-pixel short edge, so 12 points corresponds to 16 reference pixels (composition.minFontSize: 16). Other fields state their own units, including inches, reference pixels, fractional geometry and chart data-axis values."
             },
             "fontFamily": {
               "type": "string",
@@ -4065,10 +4412,10 @@
               "type": "boolean",
               "description": "Whether the run is an inline code span: it is drawn in the design's code font (design.fontScheme.code, else the resolved font scheme's code family, else Roboto Mono), unless the run names its own fontFamily. Only the font changes; there is no background, because a PPTX run cannot have one. Markdown backticks read and write code runs."
             },
-            "lang": {
+            "language": {
               "type": "string",
               "pattern": "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$",
-              "description": "BCP-47 language tag of the run, such as 'fr-FR' or 'ja-JP', when it differs from the deck language. It sets the proofing language (PPTX a:rPr lang) and the language the run's script fonts and glyph variants follow (for example the Japanese or the Simplified Chinese face for Han characters); without it the run follows the deck language.",
+              "description": "BCP-47 language tag of the run, such as 'fr-FR' or 'ja-JP', when it differs from the deck language. It sets the proofing language (PPTX a:rPr lang) and the language the run's script fonts and glyph variants follow (for example the Japanese or the Simplified Chinese face for Han characters); without it the run follows the effective slide language, then the deck language.",
               "examples": ["fr-FR", "ja-JP", "de"]
             },
             "link": {
@@ -4129,8 +4476,8 @@
             },
             "align": {
               "type": "string",
-              "enum": ["left", "center", "right"],
-              "description": "Horizontal alignment of the caption text within the block. Defaults to left."
+              "enum": ["start", "center", "end"],
+              "description": "Horizontal alignment of the caption text within the block. Defaults to start. Logical: 'start' is the edge a paragraph starts on (the left for left-to-right text, the right for right-to-left text) and 'end' is the opposite edge."
             }
           }
         }
@@ -4166,11 +4513,53 @@
         }
       }
     },
+    "FiniteNumber": {
+      "type": "number",
+      "minimum": -1.7976931348623157e308,
+      "maximum": 1.7976931348623157e308,
+      "description": "A finite number. JSON text such as 1e999 reads as Infinity in JavaScript and YAML has .inf and .nan; these bounds reject them."
+    },
+    "Line": {
+      "description": "A plain line: its color, width and dash, or 'none' for no line. Shared by table cell borders and chart reference lines. A shape's outline is a Stroke, which adds what only an outline has (gradient, caps, joins, compound lines, arrowheads, sketch). Every part is optional and falls back to the default of the place the line is used.",
+      "anyOf": [
+        { "const": "none", "description": "No line." },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "color": { "$ref": "#/$defs/ColorRef", "description": "Line color: any ColorRef (eight-digit hex keeps its alpha)." },
+            "width": { "type": "number", "minimum": 0, "maximum": 64, "description": "Line width in reference pixels at a 720-pixel short edge. 0 draws no line, the same as 'none'." },
+            "dash": { "type": "string", "enum": ["solid", "dash", "dot"], "description": "Dash pattern, by the names Stroke.dash uses." }
+          }
+        }
+      ],
+      "examples": ["none", { "width": 2 }, { "color": "accent2", "width": 2, "dash": "dash" }]
+    },
+    "ChartReferenceLine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value"],
+      "description": "One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement. A reference at a category or a band between two values is not expressible yet; 'axis' and a separate key are reserved for them.",
+      "properties": {
+        "value": { "$ref": "#/$defs/FiniteNumber", "description": "Finite value in the associated data-axis units. With format 0%, 0.25 means 25%; 25 means 2500%. Every reference expands automatic bounds when needed." },
+        "axis": { "type": "string", "enum": ["value", "secondary"], "default": "value", "description": "Secondary requires a combo chart with an actual secondary line series." },
+        "label": { "type": "string", "minLength": 1, "pattern": "\\S", "description": "Optional nonblank plain text, shown verbatim. Omission draws no label." },
+        "labelPosition": { "type": "string", "enum": ["start", "end"], "default": "end", "description": "Logical endpoint. Horizontal start/end mirror in RTL; on bars they mean top/bottom. Requires label." },
+        "stroke": { "$ref": "#/$defs/Line", "description": "The line's color, width and dash, or 'none' to draw only the label. Defaults: the chart-text neutral, 4/3 reference pixels (1 point) and 'dash'. The value expands the axis bounds whether or not the line is drawn." }
+      },
+      "dependentRequired": { "labelPosition": ["label"] }
+    },
     "Chart": {
       "type": "object",
       "description": "Chart content. The chart object keeps chart-specific fields together so slides and regions do not expose loose chart fields. OPF charts are `{ type, data }` where `data` is `{ columns, rows }`: the first column holds the category labels and every further column is one series. There are no `categories`, `series`, `labels` or `datasets` keys (the Chart.js and ECharts shape); write them as columns and rows. Example: `{ \"type\": \"column\", \"data\": { \"columns\": [\"Quarter\", \"Decks\"], \"rows\": [[\"Q1\", 3], [\"Q2\", 8], [\"Q3\", 21]] } }`.",
       "additionalProperties": false,
       "required": ["type", "data"],
+      "allOf": [
+        {
+          "if": { "required": ["referenceLines"], "properties": { "referenceLines": { "minItems": 1 } } },
+          "then": { "properties": { "type": { "enum": ["column", "bar", "line", "line-with-markers", "area", "combo"] } } }
+        }
+      ],
       "properties": {
         "type": {
           "type": "string",
@@ -4202,24 +4591,29 @@
           "items": { "type": "string" },
           "minItems": 1,
           "uniqueItems": true,
-          "description": "Combo charts only: line series, by column name, plotted against a secondary value axis at the right of the plot. That axis has its own scale, and its tick labels use the number format of the first secondary series' column (DataColumn.format), for example '0%' for a margin. Absent: every series shares the primary value axis at the left. A name that is not a line series (see 'line') stays on the primary axis with a 'chart-mapping-adapted' warning; an unknown column is a 'chart-mapping-unknown-column' error. On any other chart type it is ignored with a 'chart-option-adapted' warning.",
+          "description": "Combo charts only: line series, by column name, plotted against a secondary value axis at the end of the plot (the right; the left in a right-to-left deck, where the category axis runs from the right). That axis has its own scale, and its tick labels use the number format of the first secondary series' column (DataColumn.format), for example '0%' for a margin. Absent: every series shares the primary value axis at the start of the plot (the left; the right in a right-to-left deck). A name that is not a line series (see 'line') stays on the primary axis with a 'chart-mapping-adapted' warning; an unknown column is a 'chart-mapping-unknown-column' error. On any other chart type it is ignored with a 'chart-option-adapted' warning.",
           "examples": [["Margin"]]
+        },
+        "referenceLines": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ChartReferenceLine" },
+          "description": "Explicit numeric references, supported on column, bar, line, line-with-markers, area and combo. Absent or [] means none. Authored order, duplicates and values equal to data are preserved. Vertical charts with two or more categories span first-to-last category centers; bars/single-category charts span the full plot. Titles/subtitles never create references or period bands."
         },
         "axisTitles": {
           "$ref": "#/$defs/ChartAxisTitles",
-          "description": "Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-whisker constructs; the funnel construct takes a category title only; a combo chart also takes 'secondary' when it plots a series on the secondary axis); a title on a type without that axis (pie, doughnut, radar, treemap, map) is dropped with a 'chart-option-adapted' diagnostic by renderers and exporters."
+          "description": "Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-whisker constructs; the funnel construct takes a category title only; a combo chart also takes 'secondary' when it plots a series on the secondary axis); a title on a type without that axis (pie, doughnut, radar, treemap, world) is dropped with a 'chart-option-adapted' diagnostic by renderers and exporters."
         },
         "legend": {
           "type": "string",
           "enum": ["none", "top", "bottom", "left", "right"],
-          "description": "Optional legend position. 'none' hides the legend. Absent keeps today's behaviour exactly (a legend at the right of multi-series charts and of pie and doughnut charts, none for single-series charts). A named position shows the legend there even for a single-series chart. Of the Office 2016 constructs only box-and-whisker takes a legend; histogram, pareto, waterfall, funnel, treemap and map drop the option with a 'chart-option-adapted' diagnostic."
+          "description": "Optional legend position. 'none' hides the legend. Absent leaves it to the engines: a line chart of two to four series names its series at the line ends and a pie or one-series doughnut names its slices, with no legend; a column, bar, area or combo chart of two to four series shows its legend in the header row above the plot; other multi-series charts and pie and doughnut charts take a legend at the physical right; a single-series chart takes none. A named position shows the legend there even for a single-series chart; 'left' and 'right' are physical sides in every language. Of the Office 2016 constructs only box-and-whisker takes a legend; histogram, pareto, waterfall, funnel, treemap and world drop the option with a 'chart-option-adapted' diagnostic."
         },
         "dataLabels": {
           "oneOf": [
             { "type": "boolean" },
             { "$ref": "#/$defs/ChartDataLabels" }
           ],
-          "description": "Optional data labels. true shows value labels at each type's default position, false (or absent) shows none, which is today's behaviour. Use the object form for the label content, position and separator."
+          "description": "Optional data labels. true shows value labels at each type's default position and false shows none. Absent leaves it to the engines: no labels, except on a small chart, which labels its values in place of its value axis, the direct labels of line, pie and doughnut charts, and the labels the funnel and treemap constructs draw by default. Use the object form for the label content, position and separator."
         },
         "alt": {
           "type": "string",
@@ -4236,7 +4630,7 @@
         },
         "highlight": {
           "$ref": "#/$defs/ChartHighlight",
-          "description": "Optional emphasis: the series and/or categories that carry the message. The engines draw the highlighted marks in the deck's primary (accent) color and every other mark in a muted neutral derived from the theme (a light grey on a light chart panel, a dim grey on a dark one); there is no color field. A mark is highlighted when its series OR its category is named. Absent keeps today's colors exactly. Supported on column, bar and line charts (series and categories; on a line a category highlight marks that category's points), pie and doughnut charts (categories, one per slice), and area, scatter and radar charts (series); the histogram, pareto, waterfall, funnel, treemap, box-and-whisker, map and combo constructs drop the option with a 'chart-option-adapted' diagnostic, as does a part the type cannot highlight. A name that matches no column or row label is a 'chart-highlight-unknown-name' error."
+          "description": "Optional emphasis: the series and/or categories that carry the message. The engines draw the highlighted marks in the deck's primary (accent) color and every other mark in a muted neutral derived from the theme (a light grey on a light chart panel, a dim grey on a dark one); there is no color field. A mark is highlighted when its series OR its category is named. Absent keeps today's colors exactly. Supported on column, bar and line charts (series and categories; on a line a category highlight marks that category's points), pie and doughnut charts (categories, one per slice), and area, scatter and radar charts (series); the histogram, pareto, waterfall, funnel, treemap, box-and-whisker, world and combo constructs drop the option with a 'chart-option-adapted' diagnostic, as does a part the type cannot highlight. A name that matches no column or row label is a 'chart-highlight-unknown-name' error."
         }
       }
     },
@@ -4252,12 +4646,12 @@
         },
         "value": {
           "type": "string",
-          "description": "Title of the value (Y) axis. On a combo chart, the primary (left) value axis.",
+          "description": "Title of the value (Y) axis. On a combo chart, the primary value axis (at the start of the plot).",
           "examples": ["Revenue ($M)", "Customers"]
         },
         "secondary": {
           "type": "string",
-          "description": "Combo charts only: title of the secondary value axis at the right of the plot, drawn rotated like the primary value axis title. Dropped with a 'chart-option-adapted' diagnostic on any other chart type and on a combo chart without 'secondaryAxis'.",
+          "description": "Combo charts only: title of the secondary value axis at the end of the plot (the right; the left in a right-to-left deck), drawn rotated like the primary value axis title. Dropped with a 'chart-option-adapted' diagnostic on any other chart type and on a combo chart without 'secondaryAxis'.",
           "examples": ["Margin (%)"]
         }
       }
@@ -4302,7 +4696,7 @@
         "position": {
           "type": "string",
           "enum": ["auto", "center", "inside-end", "inside-base", "outside-end", "above", "below", "left", "right"],
-          "description": "Where a label sits relative to its mark. 'auto' (the default) is the type's default: outside-end for clustered columns and bars, pie slices and the histogram, pareto and waterfall constructs; center for stacked columns and bars; above for line and scatter points. Clustered columns and bars and the histogram, pareto and waterfall constructs take center, inside-end, inside-base and outside-end; stacked columns and bars take center, inside-end and inside-base; pie takes center, inside-end and outside-end; line and scatter points take above, below, left, right and center. Area, doughnut and radar charts and the funnel and treemap constructs take only 'auto' (the box-and-whisker and map constructs have no data labels). A combo chart places the labels of its column series like clustered columns and those of its line series like line points; a position only one part takes applies to that part, and the other part keeps its default (outside-end, above). An unsupported position falls back to 'auto' with a 'chart-option-adapted' diagnostic."
+          "description": "Where a label sits relative to its mark. 'auto' (the default) is the type's default: outside-end for clustered columns and bars, pie slices and the histogram, pareto and waterfall constructs; center for stacked columns and bars; above for line and scatter points. Clustered columns and bars and the histogram, pareto and waterfall constructs take center, inside-end, inside-base and outside-end; stacked columns and bars take center, inside-end and inside-base; pie takes center, inside-end and outside-end; line and scatter points take above, below, left, right and center. Area, doughnut and radar charts and the funnel and treemap constructs take only 'auto' (the box-and-whisker and world constructs have no data labels). A combo chart places the labels of its column series like clustered columns and those of its line series like line points; a position only one part takes applies to that part, and the other part keeps its default (outside-end, above). An unsupported position falls back to 'auto' with a 'chart-option-adapted' diagnostic."
         },
         "separator": {
           "type": "string",
@@ -4714,11 +5108,11 @@
         "align": {
           "type": "string",
           "enum": [
-            "left",
+            "start",
             "center",
-            "right"
+            "end"
           ],
-          "description": "Horizontal text alignment inside the cell."
+          "description": "Horizontal text alignment inside the cell. Logical: 'start' is the edge a paragraph starts on (the left for left-to-right text, the right for right-to-left text) and 'end' is the opposite edge."
         },
         "verticalAlign": {
           "type": "string",
@@ -4782,34 +5176,8 @@
       "description": "Text insets in reference pixels. Defaults: top 8, right 10, bottom 4, left 10."
     },
     "TableCellBorder": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "color",
-        "width"
-      ],
-      "properties": {
-        "color": {
-          "$ref": "#/$defs/ColorRef",
-          "description": "Border color: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. Eight-digit hex colors include alpha; #00000000 is transparent."
-        },
-        "width": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 32,
-          "description": "Border width in reference pixels; 0 removes this edge."
-        },
-        "dash": {
-          "type": "string",
-          "enum": [
-            "solid",
-            "dash",
-            "dot"
-          ],
-          "description": "Default solid."
-        }
-      },
-      "description": "One explicit cell border."
+      "$ref": "#/$defs/Line",
+      "description": "One explicit cell border: a Line, or 'none' to remove this edge. Defaults: the table's rule color (the scheme's border neutral), 1 reference pixel and 'solid'."
     },
     "Catalogs": {
       "type": "object",
@@ -4919,19 +5287,19 @@
         },
         "iconSets": {
           "$ref": "#/$defs/CatalogRecords",
-          "description": "Icon-set records keyed by set id (LH-14), each with the fields of https://openpresentation.org/schema/opf-icon-set/v1, holding only the icons the document uses (no licenseText or tags). Referenced from an icon as \"<set>:<name>\"."
+          "description": "Icon-set records keyed by set id, each with the fields of https://openpresentation.org/schema/opf-icon-set/v1, holding only the icons the document uses (no licenseText or tags). Referenced from an icon as \"<set>:<name>\"."
         }
       }
     },
     "IconReference": {
       "type": "string",
       "pattern": "^(?:[a-z][a-z0-9-]*:[a-z0-9][a-z0-9-]*|[a-z][a-z0-9-]*|(?:asset:|https://|data:|\\./|\\.\\./)\\S+)$",
-      "description": "An icon (LH-14): \"<set>:<name>\" names an icon of a set (\"lucide:truck\", \"tabler:rocket\"; the gallery bundles Lucide and Tabler outline), a bare name names one of the deck's `icons`, and an SVG source (\"asset:<id>\", \"./icon.svg\", an HTTPS URL or a data:image/svg+xml URI) names an SVG file, as pictures accept. A one-color icon draws in the accent and exports as a native, theme-colored PowerPoint shape; a multicolor SVG draws as a picture with its own colors. Unknown names are opf/icon-unknown, unusable SVG opf/icon-invalid.",
+      "description": "An icon: \"<set>:<name>\" names an icon of a set (\"lucide:truck\", \"tabler:rocket\"; the gallery bundles Lucide and Tabler outline), a bare name names one of the deck's `icons`, and an SVG source (\"asset:<id>\", \"./icon.svg\", an HTTPS URL or a data:image/svg+xml URI) names an SVG file, as pictures accept. A one-color icon draws in the accent and exports as a native, theme-colored PowerPoint shape; a multicolor SVG draws as a picture with its own colors. Unknown names are opf/icon-unknown, unusable SVG opf/icon-invalid.",
       "examples": ["lucide:truck", "tabler:rocket", "brand-mark", "asset:partner-logo"]
     },
     "Icons": {
       "type": "object",
-      "description": "Deck-local icons (LH-14), keyed by name: SVG text (\"<svg …>\") or an SVG source (\"asset:<id>\", \"./icon.svg\", an HTTPS URL or a data URI). An `icon` names one by its bare name. The SVG is read, never run: a script, an event handler, an external reference or a raster makes it opf/icon-invalid. One paint (or currentColor) makes it a recolorable glyph; several make it a picture with its own colors.",
+      "description": "Deck-local icons, keyed by name: SVG text (\"<svg …>\") or an SVG source (\"asset:<id>\", \"./icon.svg\", an HTTPS URL or a data URI). An `icon` names one by its bare name. The SVG is read, never run: a script, an event handler, an external reference or a raster makes it opf/icon-invalid. One paint (or currentColor) makes it a recolorable glyph; several make it a picture with its own colors.",
       "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
       "additionalProperties": { "type": "string", "minLength": 1 },
       "examples": [{ "brand-mark": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M4 12l5 5L20 6\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/></svg>" }]

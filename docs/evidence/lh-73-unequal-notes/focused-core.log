@@ -1,0 +1,42 @@
+✔ a two-line note beside a nine-line explanation: the explanation gets the wider column (51.389ms)
+✔ the longer block keeps the wider column wherever it is (1.1015ms)
+✔ peers of similar demand keep equal widths (11.4912ms)
+✔ explicit weights and a three-block row are never reweighted (2.0137ms)
+▶ the sequence rules
+  ✔ repeated pairs: a figure and a text in either order, or a long and a short paragraph, two pairs or more (1.4273ms)
+  ✔ group by kind: interleaved kinds with unequal counts; a grouped sequence stays as written (0.3333ms)
+✔ the sequence rules (2.7291ms)
+▶ LH-58: one cell per pair
+  ✔ four metric + text pairs on a metrics slide are four cells of the grid, each metric with its note (74.3161ms)
+  ✔ without a layout, pairs compose as one group each (36.7962ms)
+  ✔ a pin keeps the binding as written (47.937ms)
+✔ LH-58: one cell per pair (159.3939ms)
+▶ LH-82, LH-73: a grid keeps its kind
+  ✔ 3 metrics and 2 notes: the metric grid keeps only metrics and the notes sit in one row under it (8.5683ms)
+  ✔ 3 charts and 2 notes, right to left: the notes row runs from the right (6.4294ms)
+  ✔ without a layout, the majority kind is a grid above a row of the others (3.2481ms)
+✔ LH-82, LH-73: a grid keeps its kind (18.6883ms)
+▶ LH-46: extra blocks join a fixed region
+  ✔ image with 4 pictures: a lead picture beside a mosaic, cover-cropped, no finding (4.366ms)
+  ✔ a block's own fit wins over the mosaic's cover (1.9654ms)
+  ✔ comparison with 4 texts: one region of 4 cells, its sibling and the verdict collapse into it (11.7139ms)
+  ✔ statement with 4 texts: a lead across the region over a row of three (6.3803ms)
+✔ LH-46: extra blocks join a fixed region (24.7338ms)
+▶ LH-47: balanced grids
+  ✔ gallery with 7 pictures: rows of 4 + 3, one cell size, inside the region (1.5353ms)
+  ✔ gallery with 9 pictures: rows of 3 + 3 + 3, one cell size, inside the region (1.0415ms)
+  ✔ logos with 9 pictures: rows of 3 + 3 + 3, one cell size, inside the region (1.0593ms)
+  ✔ team with 8 pictures: rows of 4 + 4, one cell size, inside the region (1.6929ms)
+✔ LH-47: balanced grids (5.5352ms)
+✔ exact b06 s50 notes share a 60:40 row at 28px and leave the metric grid more body height (106.1255ms)
+✔ long note takes the wider share in either source order and right-to-left layout (44.0008ms)
+✔ cards retain note role sizes and a narrow portrait is free to stack (44.1768ms)
+✔ authored direction and peer notes retain their arrangement (46.3587ms)
+ℹ tests 24
+ℹ suites 5
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 645.2534

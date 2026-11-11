@@ -4,7 +4,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {toPptx, fromPptx, resolvePresentation} from './helpers/default-catalog.mjs';
+import {toPptx, fromPptx, resolvePresentation, catalogs} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),decode=bytes=>new TextDecoder().decode(bytes),array=v=>v===undefined?[]:Array.isArray(v)?v:[v];
@@ -19,7 +19,7 @@ let checkedMarks=0;
 for(const measured of [false,true])for(const language of ['en','ar']){
   // The quote card: a chart and a quote.
   const quote=quotes[language],deck={language,design:{fontScheme:'roboto'},slides:[{title:'Signal trend',blocks:[chart,{quote}]}]};
-  const options=measured?{fonts:await loadFonts({scripts:'auto',presentation:deck})}:{};
+  const options=measured?{fonts:await loadFonts({scripts:'auto',presentation:deck,renderOptions:{catalogs}})}:{};
   const item=resolvePresentation(deck,options).slides[0].geometry.items.find(entry=>entry.quoteLayout),layout=item.quoteLayout;
   assert.ok(item.frameBox&&layout.mark,`${language}: a quote card with a mark`);
   const bytes=await toPptx(deck,options),shapes=shapesOf(bytes);

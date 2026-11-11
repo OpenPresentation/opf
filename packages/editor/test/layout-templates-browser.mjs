@@ -8,6 +8,7 @@ import { chromium } from "playwright";
 const root = fileURLToPath(new URL("../artifacts/playground/", import.meta.url));
 const types = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".ttf": "font/ttf", ".wasm": "application/wasm" };
 const server = createServer(async (req, res) => {
+  if (req.url === '/favicon.ico') { res.writeHead(204).end(); return; }
   try {
     const target = path.resolve(root, "." + decodeURIComponent(new URL(req.url, "http://localhost").pathname));
     const relative = path.relative(root, target);
@@ -19,7 +20,7 @@ const server = createServer(async (req, res) => {
 await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
 let browser;
 try {
-  browser = await chromium.launch();
+  browser = await chromium.launch({ channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined });
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));

@@ -157,7 +157,7 @@ const centeredBody: ValidationRule = {
 				path: pointerOfDotted(item.path),
 				slide,
 				message: `A centered ${item.field === 'text' ? 'paragraph' : 'list'} of ${lines} line${lines === 1 ? '' : 's'} (${characters} characters); every line starts at a different place, which is harder to read.${others}`,
-				help: 'Align body text to the start (contentAlignment "left" on the slide or block design), or shorten it to a statement of one or two lines.',
+				help: 'Align body text to the start (contentAlignment "start" on the slide or block design), or shorten it to a statement of one or two lines.',
 				measured: { lines, characters, maximumLines: CENTERED_BODY_LINES, maximumCharacters: CENTERED_BODY_CHARACTERS, blocks: count },
 			});
 		}

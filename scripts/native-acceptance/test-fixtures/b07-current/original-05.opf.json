@@ -1,0 +1,18 @@
+{
+  "language": "ar-SA",
+  "slides": [
+    {
+      "title": "لغة عربية صريحة",
+      "items": [
+        [
+          "البند: ",
+          {
+            "text": "Bonjour 1",
+            "lang": "ar-SA"
+          }
+        ]
+      ],
+      "numbering": "arabic"
+    }
+  ]
+}

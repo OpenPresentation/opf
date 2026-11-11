@@ -1,0 +1,18 @@
+{
+  "trackedOriginalBytes": true,
+  "source": "HEAD",
+  "rows": [
+    {
+      "file": "docs/evidence/rr59-image-placeholder-oracle/slide1.xml",
+      "bytes": 4500,
+      "gitBlob": "e3f5ea461c7a1a61f847fc54dc225dabcb911d44",
+      "sha256": "8c71370fa476e8db57764fb5a6aab9010bcd6c28e44ae71e3c51d73bfdeff25f"
+    },
+    {
+      "file": "docs/evidence/rr59-image-placeholder-oracle/published-0180-slide1.xml",
+      "bytes": 3829,
+      "gitBlob": "0c3eb1d26c244c62703dff9fad52956b95bec073",
+      "sha256": "76e77eb93392cb66e4fcd0b1eca9c608a9365e7ac1a39931a3ba39fe40d02ee4"
+    }
+  ]
+}

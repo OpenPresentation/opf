@@ -38,7 +38,7 @@ const BEFORE = {up: {'#FFFFFF': '15803D', '#0F172A': '4ADE80'}, down: {'#FFFFFF'
 const MUTED = BEFORE.flat;
 const COLORS = {positive: BEFORE.up, negative: BEFORE.down, neutral: BEFORE.flat};
 const designs = [{colorScheme: 'cool-horizon', background: '#FFFFFF'}, {background: '#0F172A', colorScheme: {light1: '#F8FAFC', dark1: '#0F172A', accent1: '#38BDF8'}}];
-const deckOf = (metric, design = designs[0], align = 'left') => ({design: {fontScheme: 'roboto', contentAlignment: align, ...design}, slides: [{metric}]});
+const deckOf = (metric, design = designs[0], align = 'left') => ({design: {fontScheme: 'roboto', contentAlignment: ({left:'start',right:'end'}[align]??align), ...design}, slides: [{metric}]});
 // LH-137: a delta pill is the backdrop of the delta and its arrow, which are colored against its fill (the preview's pill rectangle).
 const backdropOf = (svg, background) => /fill="(#[0-9A-Fa-f]{6})"/.exec(/<rect\b[^>]*data-opf-metric-role="pill"[^>]*>/.exec(svg)?.[0] ?? '')?.[1] ?? background;
 const fieldColor = (parts, role) => shapes(parts).find(item => new RegExp(`^OPF metric \\d+ ${role} line 1$`).test(item.name)).runs[0][1];

@@ -226,7 +226,7 @@ try {
   assert.equal(await design.getByLabel('Hide it').isVisible(), false, 'hiding is not offered at the deck while the footer shows');
   await field(design, 'Applies to').selectOption('slide');
   await field(design, 'Zone').selectOption('right');
-  await step('slide-scope footer keeps the deck zones', () => field(design, 'Insert value').selectOption('slide.number'), current => current.slides[1].design?.footer?.center?.text === 'Confidential' && current.slides[1].design.footer.right?.text === '{{slide.number}}' && current.design.footer.right === undefined);
+  await step('slide-scope footer keeps the deck zones', () => field(design, 'Insert value').selectOption('slide.number'), current => current.slides[1].design?.footer?.center?.text === 'Confidential' && current.slides[1].design.footer.end?.text === '{{slide.number}}' && current.design.footer.end === undefined);
   await step('hide the footer on one slide', () => design.getByLabel('Hide it').check(), current => current.slides[1].design?.footer === false && current.design.footer.center.text === 'Confidential');
   await field(design, 'Applies to').selectOption('deck');
   await button('Undo').click();
@@ -301,13 +301,13 @@ try {
   await field(design, 'Zone').selectOption('left');
   assert.equal(await design.getByLabel('Show the logo').count(), 0, 'the logo toggle is gone');
   const insertLogo = design.getByRole('button', { name: 'Insert logo', exact: true });
-  await step('header zone: Insert logo', () => insertLogo.click(), current => current.design.header?.left?.image === 'var:organization.logo.icon');
-  await step('header zone: Insert logo, wordmark', async () => { await field(design, 'Logo shape').selectOption('wordmark'); await insertLogo.click(); }, current => current.design.header?.left?.image === 'var:organization.logo.wordmark');
+  await step('header zone: Insert logo', () => insertLogo.click(), current => current.design.header?.start?.image === 'var:organization.logo.icon');
+  await step('header zone: Insert logo, wordmark', async () => { await field(design, 'Logo shape').selectOption('wordmark'); await insertLogo.click(); }, current => current.design.header?.start?.image === 'var:organization.logo.wordmark');
   await field(design, 'Logo shape').selectOption('icon');
   assert.equal(await field(design, 'Logo of').isVisible(), false, 'one organization: no organization choice');
   await field(design, 'Edit').selectOption('footer');
   await field(design, 'Zone').selectOption('right');
-  await step('footer slide number', () => field(design, 'Insert value').selectOption('slide.number'), current => current.design.footer?.right?.text === '{{slide.number}}');
+  await step('footer slide number', () => field(design, 'Insert value').selectOption('slide.number'), current => current.design.footer?.end?.text === '{{slide.number}}');
 
   // FA-23: the catalog section checks for catalog updates on request (nothing embedded here, so nothing to update).
   await design.getByRole('button', { name: 'Check for catalog updates', exact: true }).click();
@@ -547,14 +547,14 @@ try {
   const regionLayout = selection.getByLabel(label('Place blocks in regions'));
   await regionLayout.waitFor();
   assert.deepEqual(await regionLayout.locator('option').evaluateAll(options => options.map(option => option.value)), ['', 'left-right', 'top-bottom']);
-  await step('blocks to regions', () => regionLayout.selectOption('left-right'), current => current.slides[5].left?.text === 'Left text' && current.slides[5].right?.items?.[0] === 'Right' && current.slides[5].blocks === undefined, { preview: true });
+  await step('blocks to regions', () => regionLayout.selectOption('left-right'), current => current.slides[5].start?.text === 'Left text' && current.slides[5].end?.items?.[0] === 'Right' && current.slides[5].blocks === undefined, { preview: true });
   await regionLayout.selectOption('left-right');
-  await waitDoc(current => current.slides[5].left !== undefined, 'regions for the move back');
+  await waitDoc(current => current.slides[5].start !== undefined, 'regions for the move back');
   await settle();
   const toBlocks = selection.getByRole('button', { name: 'Turn regions into blocks', exact: true });
   await toBlocks.waitFor();
   assert.match(await toBlocks.getAttribute('title'), /region placement/, 'what the action would not carry over is its tooltip');
-  await step('regions to blocks', () => toBlocks.click(), current => current.slides[5].blocks?.length === 2 && current.slides[5].left === undefined, { preview: true });
+  await step('regions to blocks', () => toBlocks.click(), current => current.slides[5].blocks?.length === 2 && current.slides[5].start === undefined, { preview: true });
   await button('Undo').click();
   await waitDoc(current => current.slides[5].blocks?.length === 2, 'regions undone');
   await settle();
@@ -639,10 +639,10 @@ try {
     assert.equal(await whose.isVisible(), true, 'several organizations: Insert logo takes an organization');
     assert.deepEqual(await whose.locator('option').evaluateAll(nodes => nodes.map(node => [node.value, node.textContent])), [['', 'Primary organization'], ['acme', 'Acme Corp (acme)'], ['beta', 'Beta Ltd (beta)']]);
     const insertLogo = design.getByRole('button', { name: 'Insert logo', exact: true });
-    await step('Insert logo of another organization', async () => { await whose.selectOption('beta'); await insertLogo.click(); }, current => current.design.footer?.right?.image === 'var:organization.beta.logo.icon');
+    await step('Insert logo of another organization', async () => { await whose.selectOption('beta'); await insertLogo.click(); }, current => current.design.footer?.end?.image === 'var:organization.beta.logo.icon');
     await whose.selectOption('');
     await insertLogo.click();
-    await waitDoc(current => current.design.footer?.right?.image === 'var:organization.logo.icon', 'the primary organization logo in the footer');
+    await waitDoc(current => current.design.footer?.end?.image === 'var:organization.logo.icon', 'the primary organization logo in the footer');
     await settle();
     const light = await preview();
     assert.ok(light.includes(LIGHT) && !light.includes(DARK), 'the light slide draws the onLight artwork');

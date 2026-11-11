@@ -417,8 +417,8 @@
             "Openers and closers"
           ],
           "design": {
-            "titleAlignment": "left",
-            "contentAlignment": "left"
+            "titleAlignment": "start",
+            "contentAlignment": "start"
           },
           "direction": "row",
           "regions": [

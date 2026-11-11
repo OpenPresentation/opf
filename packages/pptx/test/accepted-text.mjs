@@ -18,7 +18,7 @@ let cases=0,lines=0;
 const out=process.env.OPF_TEXT_OUT,records=[],hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 if(out)await mkdir(out,{recursive:true});
 for(const dimensions of [{widthInches:40/3,heightInches:7.5},{widthInches:5.625,heightInches:10}])
-for(const contentBox of [false,true])for(const alignment of ['left','center','right'])
+for(const contentBox of [false,true])for(const alignment of ['start','center','end'])
 for(const text of ['Full source\nSecond paragraph.', ['Exact spacing ',{text:'with bold words',bold:true},' and ',{text:'italics.',italic:true},'\n',{text:'Raised ',superscript:true},{text:'note',fontSize:20,underline:true},' stays editable.']]) {
   const deck={design:{contentBox,dimensions,titleAlignment:alignment,contentAlignment:alignment,fontScheme:{id:'carlito',heading: 'Carlito',body: 'Carlito'}},slides:[{tag:'Source',title:'A measured title that wraps when space is narrow',subtitle:'Supporting text',composition:{mode:'column',minFontSize:24},text}]};
   const original=structuredClone(deck),options={fonts};
@@ -29,12 +29,12 @@ for(const text of ['Full source\nSecond paragraph.', ['Exact spacing ',{text:'wi
   for(const [i,shape] of shapes.entries()) {
     const {item,placed,index}=expected[i],rich=item.text.richLines?.[index],transform=shape['p:spPr']['a:xfrm'];
     const x=Number(transform['a:off'].x)/9525,y=Number(transform['a:off'].y)/9525,width=Number(transform['a:ext'].cx)/9525;
-    const factor=alignment==='right'?1:alignment==='center'?.5:0;
+    const factor=alignment==='end'?1:alignment==='center'?.5:0;
     near(x+width*factor,placed.x+placed.width*factor,'Accepted native alignment anchor');
     near(y,rich?placed.y:placed.baseline-item.text.fontSize,'Accepted native line top');
     near(Number(transform['a:ext'].cy)/9525,placed.height,'Accepted native line height');
     assert.equal(nativeText(shape),item.text.lines[index]);
-    for(const paragraph of array(shape['p:txBody']['a:p']))assert.equal(paragraph['a:pPr'].algn,{left:'l',center:'ctr',right:'r'}[alignment]);
+    for(const paragraph of array(shape['p:txBody']['a:p']))assert.equal(paragraph['a:pPr'].algn,{start:'l',center:'ctr',end:'r'}[alignment]);
     assert.equal(shape['p:txBody']['a:bodyPr'].wrap,'none');
     // Omitted autofit means off; the pinned writer avoids explicit noAutofit for Office 2013.
     // https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.drawing.noautofit

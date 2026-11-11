@@ -1,0 +1,32 @@
+{
+  "base": "0771b7b44465110eec8b9ffaa77aa99f9c3f8cde",
+  "recordedAt": "2026-11-10T19:06:07.708792+00:00",
+  "command": "pnpm check:changed --base HEAD",
+  "node": "24.21.0",
+  "pnpm": "10.33.2",
+  "initialResult": "install passed; sandbox refused shared slot lock before build",
+  "qualifiedResult": "build and all3selected checks pass; Biome/types correctly skipped for docs-only scope",
+  "seconds": 19.5,
+  "files": [
+    {
+      "path": "docs/handoff/2026-11-10/workstreams.md",
+      "sha256": "88e8197290a505d3a00de01323324bb237c5f5bf47fda006865415112595c0a3"
+    },
+    {
+      "path": "docs/programs/shapes/burndown.md",
+      "sha256": "bfaf77c28506c23eb93040983650ee8e5ff424708ad5488803a31ba131da118e"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/takeover/README.md",
+      "sha256": "a959adb5e7e5ec72ade139941ed2338d20d836383560ca697802453992717854"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/takeover/dependency-disposition.md",
+      "sha256": "e2949231278e8d93f80f4d9049ead2dacbc1e15ae5a65c2519587821088ecc1e"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/takeover/issue-1139-original-scope.md",
+      "sha256": "6ba23c86b68e3780ca1e18d54fd8fe43de0ad3fdc60eb69cd46b4d1a286cfff9"
+    }
+  ]
+}

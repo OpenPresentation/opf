@@ -11,6 +11,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
+import { assertAppResourceFrame } from "./app-resource-frame.mjs";
 
 const require = createRequire(import.meta.url);
 const here = new URL("../", import.meta.url);
@@ -39,7 +40,9 @@ for (const face of office.registry.embeddedFonts) {
 }
 if (fonts.startup.length !== 1) throw new Error("The Office font pack has no Roboto Regular face to start the deck view with.");
 
+const profile = process.env.OPF_MCP_APP_PROFILE;
 const bundle = await build({
+	metafile: Boolean(profile),
 	// A path, not URL.pathname, which on Windows is "/C:/..." and does not resolve.
 	entryPoints: [fileURLToPath(new URL("app/main.ts", here))],
 	bundle: true,
@@ -49,6 +52,8 @@ const bundle = await build({
 	// `worker` picks core's precompiled validators (no code generated at run time); `module` is esbuild's default for the browser.
 	conditions: ["worker", "module"],
 	target: "es2022",
+	// The HTML declares UTF-8; preserve identical JS values without inflating non-ASCII literals into escapes.
+	charset: "utf8",
 	minify: true,
 	legalComments: "eof",
 	define: { MCP_VERSION: JSON.stringify(manifest.version), OPF_DECK_FONTS: JSON.stringify(fonts) },
@@ -56,6 +61,7 @@ const bundle = await build({
 	// tsup's chunks of core are imported bare for their order only; they are pure, so dropping the bare import changes nothing.
 	logOverride: { "ignored-bare-import": "silent" },
 });
+if (profile) await writeFile(profile, `${JSON.stringify(bundle.metafile, null, 2)}\n`);
 const script = bundle.outputFiles[0].text;
 // The sandbox refuses code generated from strings: a bundle that calls the Function constructor or eval would break there.
 for (const pattern of [/\bnew Function\(/, /\beval\(/]) {
@@ -68,8 +74,12 @@ const template = await readFile(new URL("app/index.html", here), "utf8");
 // Inline text must not close its element early.
 const html = template.replace("/*OPF_CSS*/", () => styles.replaceAll("</style", "<\\/style")).replace("/*OPF_JS*/", () => script.replaceAll("</script", "<\\/script"));
 
+// Guard the actual escaped protocol response, not just HTML bytes, before publishing the app resource.
+const frame = assertAppResourceFrame(html);
 await mkdir(out, { recursive: true });
 await writeFile(new URL("deck-app.html", out), html);
 await writeFile(new URL("deck-fonts.json", out), `${JSON.stringify({ extra: fonts.extra.map(({ license: _license, ...face }) => face) }, null, 2)}\n`);
 const kib = (bytes) => `${Math.round(bytes / 1024)} KiB`;
 console.log(`build-app: app-dist/deck-app.html ${kib(Buffer.byteLength(html))} (script ${kib(Buffer.byteLength(script))}, styles ${kib(Buffer.byteLength(styles))}, ${fonts.extra.length} faces on request)`);
+
+console.log(`build-app: JSON-RPC resource ${frame.bytes} bytes / ${frame.limit} default stdio bytes (${frame.headroom} bytes headroom)`);

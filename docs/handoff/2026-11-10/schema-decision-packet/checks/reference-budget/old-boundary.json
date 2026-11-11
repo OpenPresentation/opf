@@ -1,0 +1,25 @@
+{
+  "source": "ed51a7e8a6636bb2e08c9a446a7d22c21ad81066",
+  "scope": "Pure actual applyReferenceSeries metadata sample plus exact serialized replication; no complete PPTX export, build, native operation or guard edits",
+  "readerLimitHexBytes": 4194304,
+  "actualWriterHelper": {
+    "id": "OPF chart probe:0",
+    "index": 0,
+    "written": "12700|123456|255|dash",
+    "stroke": {
+      "color": "#123456",
+      "width": 1.3333333333333333,
+      "dash": "dash"
+    }
+  },
+  "minimalCrossing": {
+    "count": 14224,
+    "hexBytes": 4194426,
+    "oldPreflight": "PASS"
+  },
+  "previous": {
+    "count": 14223,
+    "hexBytes": 4194128
+  },
+  "fieldsAddedPerSameIndex": 104
+}

@@ -82,7 +82,7 @@
   "devDependencies": {
     "@resvg/resvg-js": "2.6.2",
     "@tabler/icons": "3.50.0",
-    "lucide-static": "1.68.0",
+    "lucide-static": "1.70.0",
     "typescript": "~5.9.3"
   }
 }

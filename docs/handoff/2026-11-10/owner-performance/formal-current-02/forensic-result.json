@@ -1,0 +1,370 @@
+{
+  "scope": "ONE_ORIGINAL_SNAPSHOT_REJECTION_FORENSIC_NOT_BENCHMARK",
+  "same": true,
+  "before": {
+    "entries": 0,
+    "bytes": 0,
+    "maxEntries": 64,
+    "maxBytes": 8388608
+  },
+  "after": {
+    "entries": 34,
+    "bytes": 3178186,
+    "maxEntries": 64,
+    "maxBytes": 8388608
+  },
+  "stages": {
+    "precompiled-schema": {
+      "calls": 13,
+      "ms": 2.9999999962747097
+    },
+    "presentation-semantics": {
+      "calls": 1,
+      "ms": 0.6000000014901161
+    },
+    "data-semantics": {
+      "calls": 1,
+      "ms": 0
+    },
+    "reference-warnings": {
+      "calls": 1,
+      "ms": 0.19999999925494194
+    },
+    "schema-and-semantics": {
+      "calls": 1,
+      "ms": 1.699999999254942
+    },
+    "references": {
+      "calls": 1,
+      "ms": 14.899999998509884
+    },
+    "cache-key": {
+      "calls": 109,
+      "ms": 16.50000000372529
+    },
+    "cache-begin": {
+      "calls": 1,
+      "ms": 4.400000002235174
+    },
+    "host-measurement": {
+      "calls": 36,
+      "ms": 0.8000000044703484
+    },
+    "slide-context": {
+      "calls": 36,
+      "ms": 3.000000011175871
+    },
+    "compose-miss:0": {
+      "calls": 1,
+      "ms": 57.69999999925494
+    },
+    "cache-snapshot": {
+      "calls": 36,
+      "ms": 16.199999999254942
+    },
+    "compose-miss:1": {
+      "calls": 1,
+      "ms": 25.199999999254942
+    },
+    "compose-miss:2": {
+      "calls": 1,
+      "ms": 8
+    },
+    "compose-miss:3": {
+      "calls": 1,
+      "ms": 6.299999997019768
+    },
+    "compose-miss:4": {
+      "calls": 1,
+      "ms": 5.199999999254942
+    },
+    "compose-miss:5": {
+      "calls": 1,
+      "ms": 2.400000002235174
+    },
+    "compose-miss:6": {
+      "calls": 1,
+      "ms": 1.9000000022351742
+    },
+    "compose-miss:7": {
+      "calls": 1,
+      "ms": 9.400000002235174
+    },
+    "compose-miss:8": {
+      "calls": 1,
+      "ms": 9.100000001490116
+    },
+    "compose-miss:9": {
+      "calls": 1,
+      "ms": 1.8999999985098839
+    },
+    "compose-miss:10": {
+      "calls": 1,
+      "ms": 27.599999997764826
+    },
+    "compose-miss:11": {
+      "calls": 1,
+      "ms": 21.799999997019768
+    },
+    "compose-miss:12": {
+      "calls": 1,
+      "ms": 3.900000002235174
+    },
+    "compose-miss:13": {
+      "calls": 1,
+      "ms": 11.199999999254942
+    },
+    "compose-miss:14": {
+      "calls": 1,
+      "ms": 2.600000001490116
+    },
+    "compose-miss:15": {
+      "calls": 1,
+      "ms": 387.4000000022352
+    },
+    "compose-miss:16": {
+      "calls": 1,
+      "ms": 4
+    },
+    "compose-miss:17": {
+      "calls": 1,
+      "ms": 15.300000000745058
+    },
+    "compose-miss:18": {
+      "calls": 1,
+      "ms": 4.300000000745058
+    },
+    "compose-miss:19": {
+      "calls": 1,
+      "ms": 3.199999999254942
+    },
+    "compose-miss:20": {
+      "calls": 1,
+      "ms": 3.100000001490116
+    },
+    "compose-miss:21": {
+      "calls": 1,
+      "ms": 1.7999999970197678
+    },
+    "compose-miss:22": {
+      "calls": 1,
+      "ms": 1.199999999254942
+    },
+    "compose-miss:23": {
+      "calls": 1,
+      "ms": 4.400000002235174
+    },
+    "compose-miss:24": {
+      "calls": 1,
+      "ms": 5.699999999254942
+    },
+    "compose-miss:25": {
+      "calls": 1,
+      "ms": 1.199999999254942
+    },
+    "compose-miss:26": {
+      "calls": 1,
+      "ms": 23.800000000745058
+    },
+    "compose-miss:27": {
+      "calls": 1,
+      "ms": 19.800000000745058
+    },
+    "compose-miss:28": {
+      "calls": 1,
+      "ms": 2.599999997764826
+    },
+    "compose-miss:29": {
+      "calls": 1,
+      "ms": 10.600000001490116
+    },
+    "compose-miss:30": {
+      "calls": 1,
+      "ms": 2.199999999254942
+    },
+    "compose-miss:31": {
+      "calls": 1,
+      "ms": 379.4000000022352
+    },
+    "compose-miss:32": {
+      "calls": 1,
+      "ms": 3.600000001490116
+    },
+    "compose-miss:33": {
+      "calls": 1,
+      "ms": 14.5
+    },
+    "compose-miss:34": {
+      "calls": 1,
+      "ms": 4.300000000745058
+    },
+    "compose-miss:35": {
+      "calls": 1,
+      "ms": 3
+    },
+    "rule:opf/text-contrast": {
+      "calls": 1,
+      "ms": 1115.6000000014901
+    },
+    "rule:opf/missing-alt-text": {
+      "calls": 1,
+      "ms": 0.29999999701976776
+    },
+    "rule:opf/poor-alt-text": {
+      "calls": 1,
+      "ms": 0.30000000074505806
+    },
+    "rule:opf/missing-slide-title": {
+      "calls": 1,
+      "ms": 0
+    },
+    "rule:opf/duplicate-slide-title": {
+      "calls": 1,
+      "ms": 0.10000000149011612
+    },
+    "rule:opf/reading-order": {
+      "calls": 1,
+      "ms": 0.30000000074505806
+    },
+    "rule:opf/link-text": {
+      "calls": 1,
+      "ms": 0.5
+    },
+    "rule:opf/chart-color-only": {
+      "calls": 1,
+      "ms": 0.19999999925494194
+    },
+    "rule:opf/chart-colors-adjusted": {
+      "calls": 1,
+      "ms": 0.09999999776482582
+    },
+    "rule:opf/chart-text-alternative": {
+      "calls": 1,
+      "ms": 0.10000000149011612
+    },
+    "rule:opf/missing-language": {
+      "calls": 1,
+      "ms": 0
+    },
+    "rule:opf/text-overflow": {
+      "calls": 1,
+      "ms": 0.30000000074505806
+    },
+    "rule:opf/furniture-wraps": {
+      "calls": 1,
+      "ms": 0
+    },
+    "rule:opf/font-outside-scheme": {
+      "calls": 1,
+      "ms": 0.19999999925494194
+    },
+    "rule:opf/image-resolution": {
+      "calls": 1,
+      "ms": 0
+    },
+    "rule:opf/placeholder-text": {
+      "calls": 1,
+      "ms": 0.6999999992549419
+    },
+    "rule:opf/empty-text": {
+      "calls": 1,
+      "ms": 0.10000000149011612
+    },
+    "rule:opf/unused-beat": {
+      "calls": 1,
+      "ms": 0
+    },
+    "rule:opf/empty-slide": {
+      "calls": 1,
+      "ms": 0.19999999925494194
+    },
+    "rule:opf/language-tag": {
+      "calls": 1,
+      "ms": 0.19999999925494194
+    },
+    "rule:opf/text-shrunk": {
+      "calls": 1,
+      "ms": 2.100000001490116
+    },
+    "rule:opf/centered-body": {
+      "calls": 1,
+      "ms": 0.09999999776482582
+    },
+    "rule:opf/tight-spacing": {
+      "calls": 1,
+      "ms": 0.30000000074505806
+    },
+    "rule:opf/layout-monotony": {
+      "calls": 1,
+      "ms": 0.10000000149011612
+    },
+    "rule:opf/straight-quotes": {
+      "calls": 1,
+      "ms": 0.5999999977648258
+    },
+    "rule:opf/chart-dual-axis": {
+      "calls": 1,
+      "ms": 0.10000000149011612
+    },
+    "rule:opf/chart-pie-many-slices": {
+      "calls": 1,
+      "ms": 0
+    }
+  },
+  "unsaved": [
+    {
+      "index": 15,
+      "strict": [],
+      "forensic": {
+        "counts": {
+          "nodes": 1030,
+          "stringUnits": 10685,
+          "keyBytes": 48194
+        },
+        "keyBudgetBytes": 2097152,
+        "keyBudgetExceeded": false,
+        "failures": [
+          {
+            "path": "/composition/Symbol(opf.halfStepped)",
+            "reason": "descriptor",
+            "keyType": "symbol",
+            "enumerable": true,
+            "data": true
+          }
+        ],
+        "structuredClone": "PASS"
+      }
+    },
+    {
+      "index": 31,
+      "strict": [],
+      "forensic": {
+        "counts": {
+          "nodes": 1030,
+          "stringUnits": 10700,
+          "keyBytes": 48254
+        },
+        "keyBudgetBytes": 2097152,
+        "keyBudgetExceeded": false,
+        "failures": [
+          {
+            "path": "/composition/Symbol(opf.halfStepped)",
+            "reason": "descriptor",
+            "keyType": "symbol",
+            "enumerable": true,
+            "data": true
+          }
+        ],
+        "structuredClone": "PASS"
+      }
+    }
+  ],
+  "findings": 48,
+  "counts": {
+    "error": 0,
+    "warning": 46,
+    "info": 2
+  },
+  "browserVersion": "158.0.8127.18",
+  "out": "/tmp/opf-owner-current-core-forensic-01"
+}

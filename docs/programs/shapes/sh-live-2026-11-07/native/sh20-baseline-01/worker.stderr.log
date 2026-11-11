@@ -1,0 +1,7 @@
+Presentations.Open : Invalid request.  Filename cannot exceed 255 characters.
+At C:\opf-work\release-033-artifacts\sh20-baseline-01\com-witness.ps1:115 char:61
++ ... latch "open-control-$i" {$app.Presentations.Open($input.copy,-1,0,0)}
++                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (:) [], COMException
+    + FullyQualifiedErrorId : System.Runtime.InteropServices.COMException
+ 

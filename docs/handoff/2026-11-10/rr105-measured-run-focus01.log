@@ -1,0 +1,10 @@
+✔ one measured authored mixed run keeps exact JSON while the two-run spelling really activates fragments (265.372125ms)
+✔ measured one-source-run native text and style edits survive without stale source reconstruction (48.827ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 608.170708

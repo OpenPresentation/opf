@@ -18,6 +18,6 @@ export const previewA11yDeck = () => ({
       { type: 'chart', chart: { type: 'column', alt: 'North leads', data } },
       { type: 'table', table: { columns: ['Col A', 'Col B'], rows: [['cell x', 'cell y']] } }
     ],
-    design: { footer: { center: { text: 'Footer text' } }, header: { left: { text: 'Header text' } } }
+    design: { footer: { center: { text: 'Footer text' } }, header: { start: { text: 'Header text' } } }
   }]
 });

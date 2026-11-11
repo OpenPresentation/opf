@@ -1,0 +1,143 @@
+{
+  "base": "43ff26fbacbab09c70322ba0dc191e126a2a32f3",
+  "node": "v24.21.0",
+  "pnpm": "10.33.2",
+  "store": "/tmp/.pnpm-store",
+  "sourceAtFocus05": {
+    "packages/pptx/src/native-text-fragments.js": {
+      "bytes": 18776,
+      "sha256": "c1998da42c8490a15c94b277a7260c6bb9d10038e3c33f81867881b3cc8f55aa"
+    },
+    "packages/pptx/src/index.js": {
+      "bytes": 490756,
+      "sha256": "973267442e9803c9fc51cb4d0b09fc74560ea0c82dcf24026a25c9b95330d4eb"
+    },
+    "packages/pptx/src/native-latin-slots.js": {
+      "bytes": 8763,
+      "sha256": "b2a65f9522c572019d2ae90271344825f07a7f11f2ef6da69e7d9fc5140929c7"
+    },
+    "packages/pptx/test/native-text-fragments.mjs": {
+      "bytes": 19918,
+      "sha256": "8f9a3496eb5068a1ba53e303fff077980bb156fec82f07ca0ca9ad96dbc17bec"
+    },
+    "packages/pptx/scripts/build.mjs": {
+      "bytes": 8402,
+      "sha256": "aa7042adfa5af43553cd92c8fc5d54209af2dc29ccd514eaec8a6870ee8c511e"
+    }
+  },
+  "sourceDistEqual": [
+    "packages/pptx/src/native-text-fragments.js",
+    "packages/pptx/src/index.js",
+    "packages/pptx/src/native-latin-slots.js"
+  ],
+  "runtime": {
+    "files": 606,
+    "bytes": 51912802,
+    "sha256": "1cd809b7f64cf887957156ff7fdc701a9ca39e8eef4bfe5cbb2471fbebb100fe",
+    "packet": "runtime-files05.json.gz"
+  },
+  "focus": {
+    "groups": 13,
+    "pass": 13,
+    "fail": 0,
+    "durationMs": 903.093708
+  },
+  "neighbors": [
+    {
+      "name": "native-latin-slots.mjs",
+      "args": [
+        "test/native-latin-slots.mjs"
+      ],
+      "sourceSha256": "3227bb42f99d9c7432f7e6eb14f4ce9ce357f423f5105646efd88712e3c2ffa0",
+      "status": 0,
+      "elapsedMs": 1277,
+      "log": "/tmp/opf-native-fragments-neighbor05-native-latin-slots.mjs.log",
+      "logSha256": "49b1e9da5c2d40c08254c2dbbb3518669c04eed116b3fdd7a3b8abbf00b190c9",
+      "durableLog": "checks/neighbor05-native-latin-slots.mjs.log.gz",
+      "gzipSha256": "aa37bd15152cd716fa9985ccb117216eaef21cab96ce74b7ab0fd7ace29a704b"
+    },
+    {
+      "name": "rr-105-ltr-latin-native.mjs",
+      "args": [
+        "test/rr-105-ltr-latin-native.mjs"
+      ],
+      "sourceSha256": "76e5c479594c4686c1d5579ac0c38855323259e0617f11ec2a2e46288bb01b10",
+      "status": 0,
+      "elapsedMs": 2376,
+      "log": "/tmp/opf-native-fragments-neighbor05-rr-105-ltr-latin-native.mjs.log",
+      "logSha256": "88ccae6c43499169933d56e89c20612fc168888a8eb5a979d12fef7f920d964b",
+      "durableLog": "checks/neighbor05-rr-105-ltr-latin-native.mjs.log.gz",
+      "gzipSha256": "36178a8b100550aa5aeffa5828e39d732ce944df23aec374734b15f4e4a5ff67"
+    },
+    {
+      "name": "rr-105-list-scalar-import.mjs",
+      "args": [
+        "test/rr-105-list-scalar-import.mjs"
+      ],
+      "sourceSha256": "a16f98a81286f424e8ad859cd20afe40424c9f1be4be36862df576b92a994a6c",
+      "status": 0,
+      "elapsedMs": 2596,
+      "log": "/tmp/opf-native-fragments-neighbor05-rr-105-list-scalar-import.mjs.log",
+      "logSha256": "0fe551f2c4bb92348d402e303ab1f3bff96cd7044610a32a4790687c4528ed6b",
+      "durableLog": "checks/neighbor05-rr-105-list-scalar-import.mjs.log.gz",
+      "gzipSha256": "5506720aab775134d27cfdd79407d306c98f26fb33addfefcfc8479d393e7283"
+    },
+    {
+      "name": "source-run-styles.mjs",
+      "args": [
+        "test/source-run-styles.mjs"
+      ],
+      "sourceSha256": "969f445f8423c1e9b0e12b35780ff39735a7be888b45c9ab6657795084d6ea5f",
+      "status": 0,
+      "elapsedMs": 23,
+      "log": "/tmp/opf-native-fragments-neighbor05-source-run-styles.mjs.log",
+      "logSha256": "c822f332a2c29e0b6b824b2143ecf065c29f9529873d9f3e1d32bd3f9c654fea",
+      "durableLog": "checks/neighbor05-source-run-styles.mjs.log.gz",
+      "gzipSha256": "dcefea35b6c89a942e063135a522f0e3d00a54a37cf836955a08968161ecb305"
+    },
+    {
+      "name": "source-run-styles-roundtrip.mjs",
+      "args": [
+        "test/source-run-styles-roundtrip.mjs"
+      ],
+      "sourceSha256": "b72006a2b3686ee0711f745fccc98a6d2042a9ba8bf0f03eaace9890a9f50fd3",
+      "status": 0,
+      "elapsedMs": 826,
+      "log": "/tmp/opf-native-fragments-neighbor05-source-run-styles-roundtrip.mjs.log",
+      "logSha256": "794a623c081f8c171bda5e4e3e7715c9ffb085af526a3b8e859ae08e473bbf28",
+      "durableLog": "checks/neighbor05-source-run-styles-roundtrip.mjs.log.gz",
+      "gzipSha256": "43d188b0c4b78047e6a854f1e8aeabae50e4cc8b048a970bd36a6a6ed4b528b9"
+    }
+  ],
+  "logs": [
+    {
+      "name": "copybuild05",
+      "path": "checks/copybuild05.log.gz",
+      "bytes": 66,
+      "sha256": "9390e93eddb3bcbe5c3d7cc31ae738117d07847d06cfc2fccb6bffae91206eab",
+      "gzipSha256": "7338c7198cac8f1574416ef3704d4befd6b459c569114e94a2c415515df04041"
+    },
+    {
+      "name": "focus05",
+      "path": "checks/focus05.log.gz",
+      "bytes": 1608,
+      "sha256": "301b29ee483722278ca42f57b03fc41200e97be07e0e7e8f8310428ea43ae191",
+      "gzipSha256": "ff11cbde679920db6c252c8331d3e80d4dd2eb3db919aeb6573fe2268ab891d2"
+    },
+    {
+      "name": "neighbors05",
+      "path": "checks/neighbors05.log.gz",
+      "bytes": 1727,
+      "sha256": "1d31980686b8cb4d7d31d83f85546dc778b5450723390d7562dc8eb5aebec7e1",
+      "gzipSha256": "679b398ed6e518c276cbdaa7274a6e1b002df76ce8f1105e9cc5b56cae220d53"
+    }
+  ],
+  "priorReceipt": "checks-focus04.json",
+  "nativeAcceptance": false,
+  "fullMappedGate": "UNRUN",
+  "remaining": [
+    "Painted native word order, digit size, Arabic/carrier/automatic marker baseline and native Save/reopen",
+    "Remaining original06/09/10 topology and native-body scope",
+    "Combined mapped/platform/golden/release qualification"
+  ]
+}

@@ -38,13 +38,13 @@ const roundTrip = async slide => {
     '3-deep group': {blocks: [{type: 'group', blocks: [{type: 'group', blocks: [{type: 'group', blocks: [{type: 'text', text: 'Deep A'}, {type: 'text', text: 'Deep B'}]}]}]}]},
     'block id and extensions': {blocks: [{id: 'b1', type: 'text', text: 'Block one', extensions: {'x-a': 1}}, {type: 'text', text: 'Block two'}]},
     'group id, extensions and composition': {blocks: [{type: 'group', id: 'g1', extensions: {'x-g': true}, composition: {mode: 'column', weights: [1, 2]}, blocks: [{type: 'text', text: 'a'}, {type: 'text', text: 'b'}]}]},
-    'regions left/right': {left: {text: 'Left'}, right: {text: 'Right'}},
-    'regions left/center/right': {left: {text: 'L'}, center: {text: 'C'}, right: {text: 'R'}},
+    'regions left/right': {start: {text: 'Left'}, end: {text: 'Right'}},
+    'regions left/center/right': {start: {text: 'L'}, center: {text: 'C'}, end: {text: 'R'}},
     'regions top/middle/bottom': {top: {text: 'T'}, middle: {text: 'M'}, bottom: {text: 'B'}},
-    'regions spanning': {'left+center': {text: 'Wide'}, right: {text: 'R'}},
-    'regions 2-D': {'top:left': {text: 'TL'}, 'top:right': {text: 'TR'}, 'bottom:left': {text: 'BL'}, 'bottom:right': {text: 'BR'}},
-    'region holding a group': {left: {type: 'group', blocks: [{type: 'text', text: 'g1'}, {type: 'text', text: 'g2'}]}, right: {text: 'R'}},
-    'region host id': {left: {id: 'host', text: 'L', extensions: {'x-h': 1}}, right: {text: 'R'}},
+    'regions spanning': {'start+center': {text: 'Wide'}, end: {text: 'R'}},
+    'regions 2-D': {'top:start': {text: 'TL'}, 'top:end': {text: 'TR'}, 'bottom:start': {text: 'BL'}, 'bottom:end': {text: 'BR'}},
+    'region holding a group': {start: {type: 'group', blocks: [{type: 'text', text: 'g1'}, {type: 'text', text: 'g2'}]}, end: {text: 'R'}},
+    'region host id': {start: {id: 'host', text: 'L', extensions: {'x-h': 1}}, end: {text: 'R'}},
     'root text with type': {type: 'text', text: 'Body'},
     'root list': {items: ['one', 'two']},
     'slide extensions': {extensions: {'x-vendor': {a: 1}}, text: 'Body'},
@@ -156,14 +156,14 @@ const roundTrip = async slide => {
 // Stored boxes that no longer contain a block, or hold several, abort the
 // rebuild for that slide only and report content-structure-changed.
 {
-  const bytes = await toPptx({name: 'Boxes', slides: [{title: 'Probe', left: {text: 'L'}, right: {text: 'R'}}, {title: 'Two', left: {text: 'L2'}, right: {text: 'R2'}}]}, EXPORT);
-  const shrunk = modify(bytes, entries => text(entries, 'ppt/tags/opfSlide1.xml', xml => retag(xml, value => { value.content.regions.right.box = [0, 0, 1, 1]; })));
+  const bytes = await toPptx({name: 'Boxes', slides: [{title: 'Probe', start: {text: 'L'}, end: {text: 'R'}}, {title: 'Two', start: {text: 'L2'}, end: {text: 'R2'}}]}, EXPORT);
+  const shrunk = modify(bytes, entries => text(entries, 'ppt/tags/opfSlide1.xml', xml => retag(xml, value => { value.content.regions.end.box = [0, 0, 1, 1]; })));
   const one = await read(shrunk);
   assert.deepEqual(one.provenance.map(issue => [issue.code, issue.path]), [['content-structure-changed', 'slides.0']]);
-  assert.equal(one.deck.slides[0].left, undefined);
+  assert.equal(one.deck.slides[0].start, undefined);
   assert.equal(one.deck.slides[0].blocks.length, 2);
-  assert.deepEqual(Object.keys(one.deck.slides[1]).filter(key => /left|right/.test(key)), ['left', 'right'], 'Other slides still rebuild.');
-  const crowded = modify(bytes, entries => text(entries, 'ppt/tags/opfSlide1.xml', xml => retag(xml, value => { value.content.regions.left.box = [0, 0, 1300, 740]; delete value.content.regions.right.box; })));
+  assert.deepEqual(Object.keys(one.deck.slides[1]).filter(key => /^(start|end)$/.test(key)), ['start', 'end'], 'Other slides still rebuild.');
+  const crowded = modify(bytes, entries => text(entries, 'ppt/tags/opfSlide1.xml', xml => retag(xml, value => { value.content.regions.start.box = [0, 0, 1300, 740]; delete value.content.regions.end.box; })));
   const two = await read(crowded);
   assert.deepEqual(two.provenance.map(issue => [issue.code, issue.path]), [['content-structure-changed', 'slides.0']]);
   assert.match(two.provenance[0].message, /2 blocks lie in one stored content box/);
@@ -182,13 +182,13 @@ const roundTrip = async slide => {
 
 // A damaged record rejects the slide tag as a whole; nothing else is lost.
 {
-  const bytes = await toPptx({name: 'Damaged', tone: 'formal', slides: [{title: 'Probe', id: 'one', left: {text: 'L'}, right: {text: 'R'}}]}, EXPORT);
+  const bytes = await toPptx({name: 'Damaged', tone: 'formal', slides: [{title: 'Probe', id: 'one', start: {text: 'L'}, end: {text: 'R'}}]}, EXPORT);
   for (const [name, mutate] of Object.entries({
-    'unknown region key': value => { value.content.regions['sideways:up'] = value.content.regions.left; },
+    'unknown region key': value => { value.content.regions['sideways:up'] = value.content.regions.start; },
     'unknown form': value => { value.content.form = 'tree'; },
-    'unknown kind': value => { value.content.regions.left.k = 'script'; },
-    'bad box': value => { value.content.regions.left.box = ['1', 2, 3]; },
-    'too deep': value => { let node = value.content.regions.left; for (let depth = 0; depth <= MAX_GROUP_DEPTH; depth += 1) node = {t: 'group', blocks: [node]}; value.content.regions.left = node; },
+    'unknown kind': value => { value.content.regions.start.k = 'script'; },
+    'bad box': value => { value.content.regions.start.box = ['1', 2, 3]; },
+    'too deep': value => { let node = value.content.regions.start; for (let depth = 0; depth <= MAX_GROUP_DEPTH; depth += 1) node = {t: 'group', blocks: [node]}; value.content.regions.start = node; },
     'too many nodes': value => { value.content = {form: 'blocks', blocks: Array.from({length: 300}, () => ({t: 'leaf', k: 'text'}))}; },
     'bad section': value => { value.section = 42; },
     'bad extensions': value => { value.extensions = []; }
@@ -221,12 +221,12 @@ const roundTrip = async slide => {
 
 // Without the document tag, slide records still rebuild their content (a pasted slide keeps its groups).
 {
-  const bytes = await toPptx({name: 'Pasted', tone: 'formal', slides: [{title: 'Probe', left: {type: 'group', blocks: [{type: 'text', text: 'g1'}, {type: 'text', text: 'g2'}]}, right: {text: 'R'}}]}, EXPORT);
+  const bytes = await toPptx({name: 'Pasted', tone: 'formal', slides: [{title: 'Probe', start: {type: 'group', blocks: [{type: 'text', text: 'g1'}, {type: 'text', text: 'g2'}]}, end: {text: 'R'}}]}, EXPORT);
   const stripped = modify(bytes, entries => text(entries, 'ppt/presentation.xml', xml => xml.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/, '')));
   const {deck, provenance} = await read(stripped);
   assert.deepEqual(provenance, []);
   assert.equal(deck.tone, undefined);
-  assert.deepEqual(content(deck.slides[0]), {left: {type: 'group', blocks: [{type: 'text', text: 'g1'}, {type: 'text', text: 'g2'}]}, right: {text: 'R'}});
+  assert.deepEqual(content(deck.slides[0]), {start: {type: 'group', blocks: [{type: 'text', text: 'g1'}, {type: 'text', text: 'g2'}]}, end: {text: 'R'}});
 }
 
 // Modes: 'references-only' and false store no topology; a deck that states
@@ -317,11 +317,11 @@ const roundTrip = async slide => {
   assert.deepEqual(group.slide.blocks[0].blocks.slice(1).map(block => block.text), ['Short']);
   assert.equal(group.slide.blocks[0].id, 'g');
   assert.equal(group.slide.blocks[1].text, 'Outer');
-  const region = await roundTrip({left: {text: runs}, right: {text: 'Right'}});
+  const region = await roundTrip({start: {text: runs}, end: {text: 'Right'}});
   assert.deepEqual(region.provenance, []);
-  assert.ok(region.record.content.regions.left.lines >= 3);
-  assert.deepEqual(styled(region.slide.left.text), runs);
-  assert.equal(region.slide.right.text, 'Right');
+  assert.ok(region.record.content.regions.start.lines >= 3);
+  assert.deepEqual(styled(region.slide.start.text), runs);
+  assert.equal(region.slide.end.text, 'Right');
   assert.equal(region.slide.blocks, undefined);
   // With an id and extensions: the leaf identity comes back with the rejoined payload.
   const typed = await roundTrip({blocks: [{id: 'body', type: 'text', text: runs, extensions: {'x-a': 1}}, {type: 'text', text: 'Next'}]});

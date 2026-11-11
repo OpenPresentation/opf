@@ -1,0 +1,150 @@
+{
+  "base": "ed51a7e8a6636bb2e08c9a446a7d22c21ad81066",
+  "source": "Review source and precise per-run dirty diff/source/test SHA256 in sealed results receipts; no frozen-clean-source claim for repair runs.",
+  "zip": {
+    "bytes": 25527,
+    "sha256": "0568c65e0a7d5a74ac4fa2bf4901051ee2594ea13798a33b7da09c764c6b398e"
+  },
+  "entries": [
+    {
+      "path": "opf-schema-chart-build.log",
+      "bytes": 180,
+      "sha256": "06954015be5d54e28063af53668fa9e34e522448984b4d51b7e4e29f61bd3921"
+    },
+    {
+      "path": "opf-schema-chart-focus-02-summary.log",
+      "bytes": 1789,
+      "sha256": "7c4636ade251a1870af3ae3b0f41651e51588d66c91bb58feaf086c22911f2fe"
+    },
+    {
+      "path": "opf-schema-chart-focus-02.mjs",
+      "bytes": 1725,
+      "sha256": "0d5a27d3b79a7468c895ad16abc46290cf1f20430eb9178fa1b751bea235f87b"
+    },
+    {
+      "path": "opf-schema-chart-focus-02/chart-reference-bar-options.mjs.log",
+      "bytes": 361,
+      "sha256": "734924eeaa48b311be9fbe41f6f6110e6e19ade0fb587672c11ce594cdbb8c4d"
+    },
+    {
+      "path": "opf-schema-chart-focus-02/chart-reference-category-labels.mjs.log",
+      "bytes": 1349,
+      "sha256": "033fc2997592a8c8027632355eda75833a48bad3c477dedc15f6a2aa7d300991"
+    },
+    {
+      "path": "opf-schema-chart-focus-02/chart-reference-line.mjs.log",
+      "bytes": 1729,
+      "sha256": "fdde0c7ef09e105d38ccd73e2ce91221d54d51796b260753f6d4a158ab2f1c47"
+    },
+    {
+      "path": "opf-schema-chart-focus-02/chart-reference-lines.mjs.log",
+      "bytes": 5987,
+      "sha256": "328717529c4e11290eb06e60036d1349aa02e5ec5c14db2719515682769f0fe6"
+    },
+    {
+      "path": "opf-schema-chart-focus-02/chart-reference-metadata-budget.mjs.log",
+      "bytes": 330,
+      "sha256": "7ae2f88a7dd5d2b758f5c8f4e9886bea53368b802979e063aa54b92b0827c935"
+    },
+    {
+      "path": "opf-schema-chart-focus-02/chart-reference-overlay-save.mjs.log",
+      "bytes": 977,
+      "sha256": "768b7ab89cd8fb0a5927f5e01f7da79ed054ea2c037bce4a925283e8fc74d0fa"
+    },
+    {
+      "path": "opf-schema-chart-focus-02/chart-reference-powerpoint-save.mjs.log",
+      "bytes": 890,
+      "sha256": "1aa6c0c428c0cc4e3ce5e18c7ff8c54ad3b9b63c0ac3bcef0265bf3df11fde49"
+    },
+    {
+      "path": "opf-schema-chart-focus-02/chart-reference-secondary-overlays.mjs.log",
+      "bytes": 1640,
+      "sha256": "b07d46a0807867372ed2fa533bd2c1fe89b911b5c19d499b4f0eef0b54d1c360"
+    },
+    {
+      "path": "opf-schema-chart-focus-02/results.json",
+      "bytes": 2823,
+      "sha256": "f9cbc512a64542f94d81f1d66f6780787092d830cbc31b2f37c3c0617e42fb38"
+    },
+    {
+      "path": "opf-schema-chart-focus-summary.log",
+      "bytes": 1789,
+      "sha256": "17048f51d12e09a84021dab69838726ddcb698aef7cbfc31f12d61e7e220065b"
+    },
+    {
+      "path": "opf-schema-chart-focus.mjs",
+      "bytes": 1722,
+      "sha256": "df98dad32bac908ea3eaa1a1427a8ea1643fdda3f41ddce548414d15057050ec"
+    },
+    {
+      "path": "opf-schema-chart-focus/chart-reference-bar-options.mjs.log",
+      "bytes": 364,
+      "sha256": "9165b3a40a3798e9ab1fb901488128dd2e1c7a035b34c3766699eedfb17cd7d8"
+    },
+    {
+      "path": "opf-schema-chart-focus/chart-reference-category-labels.mjs.log",
+      "bytes": 4955,
+      "sha256": "554d771ee20f5482260c894c8bce3ba3e0e912afb3318ed6596fab44b14fe320"
+    },
+    {
+      "path": "opf-schema-chart-focus/chart-reference-line.mjs.log",
+      "bytes": 2243,
+      "sha256": "067fdf9b3b132970756f2bdb6f4b13c637726a5c4e72e07b99ad73979006f22c"
+    },
+    {
+      "path": "opf-schema-chart-focus/chart-reference-lines.mjs.log",
+      "bytes": 5363,
+      "sha256": "0a21e4650c2ebf9d549d7b6a2258a3488a3bd296dedb7a259cd104e4367d20ab"
+    },
+    {
+      "path": "opf-schema-chart-focus/chart-reference-metadata-budget.mjs.log",
+      "bytes": 330,
+      "sha256": "281b994dd2590c6ffcf38405f612dd703dadb650d0918885b9fcac24bfdff75a"
+    },
+    {
+      "path": "opf-schema-chart-focus/chart-reference-overlay-save.mjs.log",
+      "bytes": 975,
+      "sha256": "e33e8c51fd156631f732f67b4abe69561ea1777ca426af626f4f5ad4a179bf7f"
+    },
+    {
+      "path": "opf-schema-chart-focus/chart-reference-powerpoint-save.mjs.log",
+      "bytes": 886,
+      "sha256": "b0b33b8a6d77d8b1aeeef5fd52236ac8fe26c6c95a0d9bc5668921f6c9bbf98d"
+    },
+    {
+      "path": "opf-schema-chart-focus/chart-reference-secondary-overlays.mjs.log",
+      "bytes": 1635,
+      "sha256": "4f02df2acd6485686f9e4826df31ce2c595df7dd7cc7380eaf521fc6f1ac0b52"
+    },
+    {
+      "path": "opf-schema-chart-focus/results.json",
+      "bytes": 2823,
+      "sha256": "3899d9e0252c3bf20837a212b024a94857fd42230c18b5bba504a27635f1b4f4"
+    },
+    {
+      "path": "opf-schema-chart-line-replay-03.log",
+      "bytes": 1081,
+      "sha256": "f17058c41bf8fe7a349053662b73a2c6e5ecd93a4f6cbcc99e9024e5912408e9"
+    },
+    {
+      "path": "opf-schema-chart-line-replay.log",
+      "bytes": 1576,
+      "sha256": "ecc5f7095c02de1bdc3c9230096fd889e7d9f1fd9b50093716cac37a340d9ffb"
+    },
+    {
+      "path": "opf-schema-chart-lines-replay-03.log",
+      "bytes": 5307,
+      "sha256": "73362e8ebc76be1a2c5f267fbf2cb7c4b326caaa3f7b6bb710ad8b075b3f1529"
+    },
+    {
+      "path": "opf-schema-chart-paint-replay-04.log",
+      "bytes": 242,
+      "sha256": "5e386d0017641eca4b3c9e3d237756e91500816d4aa1bd3050ed7ca3963fafa4"
+    },
+    {
+      "path": "opf-schema-chart-strict30.log",
+      "bytes": 662,
+      "sha256": "afebb2467c513607b72c4e8616d0ac4621854db923ba3e0425b8f16472dbbdd5"
+    }
+  ]
+}

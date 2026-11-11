@@ -26,7 +26,7 @@ test('every image item carries its picture geometry; an untreated block draws in
   // Slide.image is shorthand for one image block, and region payloads carry the same geometry.
   assert.equal(imageOf(composeSlide({ title: 'Heading', image: photo })).image.fit, 'contain');
   assert.equal(imageOf(compose({}, { layout: { name: 'Plain', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['image'], role: 'primary', flow: 'none' }] } })).image.fit, 'cover', 'a layout keeps the engine default');
-  assert.ok(imageOf(composeSlide({ title: 'Heading', left: { image: photo, shape: 'ellipse' }, right: { text: 'Body' } })).image.shape.preset === 'ellipse');
+  assert.ok(imageOf(composeSlide({ title: 'Heading', start: { image: photo, shape: 'ellipse' }, end: { text: 'Body' } })).image.shape.preset === 'ellipse');
   // The payload reports the block's own options for editors.
   assert.deepEqual(imageOf(compose({ fit: 'contain', shape: 'roundRect' })).payload, { type: 'image', image: photo, fit: 'contain', shape: 'roundRect' });
 });
@@ -100,9 +100,9 @@ test('edge overlays on masked frames are reported, not drawn, and never fail str
 
 test('the treatment vocabulary validates on image payloads and is refused elsewhere', () => {
   const block = { type: 'image', image: photo, fit: 'contain', focus: { x: 0.2, y: 0.8 }, aspectRatio: 0.5, shape: 'roundRect', adjust: { adj: 0.12 }, stroke: { color: 'dark1', width: 12 }, opacity: 0.8,
-    recolor: { dark: 'accent1', light: 'light1' }, overlay: { color: 'text', opacity: 0.2, edge: 'bottom', size: 0.3 }, placement: { edge: 'right', size: 0.4, inset: true } };
+    recolor: { dark: 'accent1', light: 'light1' }, overlay: { color: 'text', opacity: 0.2, edge: 'bottom', size: 0.3 }, placement: { edge: 'end', size: 0.4, inset: true } };
   assert.equal(check(deck([{ title: 'Heading', blocks: [block] }])).valid, true);
-  for (const invalid of [{ blur: 8 }, { shadow: true }, { shape: 'star' }, { recolor: 'sepia' }, { fit: 'tile' }, { fit: 'crop' }, { opacity: 2 }, { stroke: { color: 'dark1', width: 70 } }, { border: { color: 'dark1', width: 2 } }, { cornerRadius: 0.1 }, { placement: { edge: 'middle' } }, { placement: { edge: 'left', size: 0.95 } }])
+  for (const invalid of [{ blur: 8 }, { shadow: true }, { shape: 'star' }, { recolor: 'sepia' }, { fit: 'tile' }, { fit: 'crop' }, { opacity: 2 }, { stroke: { color: 'dark1', width: 70 } }, { border: { color: 'dark1', width: 2 } }, { cornerRadius: 0.1 }, { placement: { edge: 'middle' } }, { placement: { edge: 'start', size: 0.95 } }])
     assert.equal(check(deck([{ title: 'Heading', blocks: [{ image: photo, ...invalid }] }])).valid, false, JSON.stringify(invalid));
   // Image options on a text block or a group: opf/image-option-unsupported-payload at the option.
   const text = check(deck([{ title: 'Heading', blocks: [{ text: 'Body', fit: 'cover' }] }]));

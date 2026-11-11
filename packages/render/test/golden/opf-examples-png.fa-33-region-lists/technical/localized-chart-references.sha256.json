@@ -1,0 +1,33 @@
+{
+  "deck": "technical/localized-chart-references.opf.json",
+  "entries": {
+    "technical/localized-chart-references.opf.json#0": {
+      "sha256": "2ce1c079bff120fe8c71e2c50b38969936ae93c3b96e4b144ca318c7cb22a9cf",
+      "bytes": 7530
+    },
+    "technical/localized-chart-references.opf.json#1": {
+      "sha256": "10d95d2a6d188ef235f4edc1fd7fa325303ea07c9c884dae1a88ffec338e7a14",
+      "bytes": 8655
+    },
+    "technical/localized-chart-references.opf.json#2": {
+      "sha256": "21a4f6d58ea5ff91254b5267c139bb2f440792436a4cb7c4f0f2b9f0f3de8ee5",
+      "bytes": 8894
+    },
+    "technical/localized-chart-references.opf.json#3": {
+      "sha256": "db283f19631b08d5603dee30c97bb8adf6ecc1dc1f21d657b5339446085c3361",
+      "bytes": 8459
+    },
+    "technical/localized-chart-references.opf.json#4": {
+      "sha256": "80100140d6de73ed585753c0f69896de3c5f27686d8aebfee4f45d75b7eea956",
+      "bytes": 7095
+    },
+    "technical/localized-chart-references.opf.json#5": {
+      "sha256": "6ecf5af8082f56505c3cd8913f0f88853171f0ddddbc0a53cab807e88f9fa0ae",
+      "bytes": 8498
+    },
+    "technical/localized-chart-references.opf.json#6": {
+      "sha256": "c745fec1d6728285a05ec5f37a13742d0d2ae1f8d77b594471dee6d394aba5fa",
+      "bytes": 8502
+    }
+  }
+}

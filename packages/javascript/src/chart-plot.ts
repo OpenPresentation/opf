@@ -7,7 +7,7 @@
 // by side keep one baseline and one top, and siblings in different rows take the shortest plot's height on their own baseline. The plot
 // is stored as an inset from the chart box (ChartLayer.plot); the preview draws its plot there and the PPTX export writes it as the
 // plot area's manual layout (c:plotArea c:manualLayout, layoutTarget inner), so PowerPoint draws the same plot.
-import {chartTextSize, type ChartValueAxis} from './chart-axis.js';
+import {chartAxisScale, chartTextSize, type ChartValueAxis} from './chart-axis.js';
 import {formatDataNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
 import {chartDrawPlan} from './chart-fallback.js';
 import type {ChartLayer, ChartPlotInset} from './chart-layer.js';
@@ -34,6 +34,7 @@ const VERTICAL: Readonly<Record<string, {key?: 'line'; percent?: boolean}>> = {
   column: {}, 'stacked-column': {}, '100pct-stacked-column': {percent: true},
   line: {key: 'line'}, 'line-with-markers': {key: 'line'}, 'stacked-line': {key: 'line'}, 'stacked-line-with-markers': {key: 'line'},
   area: {}, 'stacked-area': {}, '100pct-stacked-area': {percent: true},
+  combo: {key:'line'},
 };
 
 // Whitespace that may split a category label; no-break spaces stay inside their word (the preview's rule).
@@ -115,20 +116,22 @@ function categoryLabelReserve(labels: readonly string[], plot: {x: number; width
 }
 
 /**
- * LH-93: the inner plot box of a column, line or area chart (not a horizontal bar or combo chart) as an inset from its chart box, laid
+ * LH-93: the inner plot box of a column, line, area or combo chart, and the active-option horizontal bar fallback for explicit references, laid
  * out the way the preview lays it out (opf-render charts.js): below the header row (LH-81) or a top legend, above a bottom legend, the
  * category axis title and the category labels (one line, two, or turned: core reproduces the preview's choice), right of the value
  * axis title and the value tick labels (the composed axis's ticks in the first series' format; half a text size when a small chart drops
  * its value axis), left of a side legend. `composed` is the chart's composed value axis and layer; without a usable axis (none, or one of
  * more than 1000 intervals) there is no inset.
  */
-export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, composed: {valueAxis?: ChartValueAxis; layer?: ChartLayer}, geometry: ChartPlotGeometry): ChartPlotInset | undefined {
-  if (!record(chart) || !resolved.ok || resolved.combo) return undefined;
+export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, composed: {valueAxis?: ChartValueAxis; secondaryValueAxis?:ChartValueAxis; layer?: ChartLayer}, geometry: ChartPlotGeometry): ChartPlotInset | undefined {
+  if (!record(chart) || !resolved.ok) return undefined;
   const axis = composed.valueAxis, layer = composed.layer;
-  if (!axis || !(axis.majorUnit > 0) || !Number.isFinite(axis.max - axis.min) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
+  const axisScale = chartAxisScale(axis);
+  if (!axis || !axisScale) return undefined;
   const authored = typeof chart.type === 'string' ? chart.type.trim().toLowerCase() : '';
   const plan = chartDrawPlan(chart, resolved, {language: geometry.language});
-  const spec = Object.hasOwn(VERTICAL, plan.type) ? VERTICAL[plan.type]! : undefined;
+  const horizontal = plan.type === 'bar';
+  const spec: {key?: 'line'; percent?: boolean} | undefined = horizontal ? {} : Object.hasOwn(VERTICAL, plan.type) ? VERTICAL[plan.type]! : undefined;
   if (!spec || plan.columns.length < 2 || !plan.rows.length) return undefined;
   const {box, scale} = geometry;
   if (![box.width, box.height, scale].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0) return undefined;
@@ -166,8 +169,9 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
     }
   }
   if (options.active) {
-    if (options.axisTitles.value) cut('left', lineHeight);
-    if (options.axisTitles.category) cut('bottom', lineHeight);
+    if (options.axisTitles.value) cut(horizontal ? 'bottom' : resolved.combo&&rtl?'right':'left', lineHeight);
+    if (resolved.combo&&composed.secondaryValueAxis&&options.axisTitles.secondary) cut(rtl?'left':'right',lineHeight);
+    if (options.axisTitles.category) cut(horizontal ? 'left' : 'bottom', lineHeight);
   }
   const hidden = layer?.small?.valueAxis === false;
   const side = names.length > 1 && !legendManaged ? legendWidth(inner.width) + pad : 0;
@@ -176,8 +180,26 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   const top = inner.y + pad + (hidden ? lineHeight : lineHeight / 2);
   const format = typeof plan.formats[1] === 'string' && plan.formats[1] !== '' && !numberFormatError(plan.formats[1]) ? plan.formats[1] : undefined;
   const percent = spec.percent === true;
-  const ticks: number[] = [];
-  for (let index = 0, count = Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9); index <= count; index++) ticks.push(clean(axis.min + index * axis.majorUnit));
+  const ticks = axisScale.ticks;
+  // Explicit horizontal-bar references need the SAME active-option plot the preview draws. The legacy
+  // horizontalBarPlot helper deliberately refuses options; keep that guard and share the actual legend/title
+  // reservations above instead. Only reference placement calls this fallback for horizontal bars.
+  if (horizontal) {
+    const categories = plan.rows.map(row => String(row[0] ?? '').replace(/[\r\n]+/g, ' '));
+    const longestWord = Math.max(0, ...categories.flatMap(name => name.split(BREAKABLE).map(width))) + fontPx * 0.5;
+    const gutter = Math.min(Math.max(inner.width * 0.3, Math.min(inner.width * 0.4, longestWord)), Math.max(0, ...categories.map(width)) + fontPx * 0.5);
+    let x = inner.x + pad + gutter + pad / 2, plotWidth = Math.max(1, right - x - fontPx);
+    // The composed scale is fixed, so one pass leaves both formatted end tick labels inside the chart.
+    if (!hidden && format !== undefined) {
+      const first = width(tickLabel(ticks[0]!, false, format)) / 2;
+      const last = width(tickLabel(ticks.at(-1)!, false, format)) / 2;
+      const nextX = Math.max(x, inner.x + pad + first);
+      plotWidth = Math.max(1, Math.min(x + plotWidth, inner.x + inner.width - pad - last) - nextX); x = nextX;
+    }
+    const plotTop = inner.y + pad + lineHeight / 2, bottom = inner.y + inner.height - pad - (hidden ? 0 : lineHeight);
+    if (!(bottom - plotTop > 1)) return undefined;
+    return {left: x - box.x, top: plotTop - box.y, right: box.x + box.width - (x + plotWidth), bottom: box.y + box.height - bottom};
+  }
   const tickWidth = hidden ? fontPx / 2 : Math.max(...ticks.map(tick => width(tickLabel(tick, percent, format, !percent && format === undefined && groupsAxisTicks(axis) ? {language: geometry.language} : undefined)))) + fontPx * 0.5;
   // The end of the plot (the last category: the right, or the left right to left) keeps half a text size, or the end-label gutter.
   const end = Math.max(fontPx / 2, layer?.endLabels?.gutter ?? 0, layer?.stack?.names?.gutter ?? 0);
@@ -188,7 +210,17 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   const edge = layer?.stack?.edge === true && labels.length >= 2;
   const half = (text: string | undefined) => edge ? Math.min(width(text ?? '') / 2, box.width * 0.15) : 0;
   // The value axis side keeps its tick labels, the other side the end gutter; the plot's edge is that room past the padding.
-  const leftRoom = Math.max(rtl ? end : tickWidth, half(labels[0]) - pad), rightRoom = Math.max(rtl ? tickWidth : end, half(labels.at(-1)) - pad);
+  let secondaryWidth=0;
+  const secondary=composed.secondaryValueAxis;
+  if(resolved.combo&&secondary){
+    const index=resolved.combo.findIndex(entry=>entry.axis==='secondary')+1,format=plan.formats[index];
+    const secondaryScale=chartAxisScale(secondary);
+    if(!secondaryScale)return undefined;
+    const labels=secondaryScale.ticks.map(value=>tickLabel(value,false,format,!format&&groupsAxisTicks(secondary)?{language:geometry.language}:undefined));
+    secondaryWidth=Math.max(...labels.map(width))+fontPx*0.5;
+  }
+  const far=Math.max(end,secondaryWidth);
+  const leftRoom = Math.max(rtl ? far : tickWidth, half(labels[0]) - pad), rightRoom = Math.max(rtl ? tickWidth : far, half(labels.at(-1)) - pad);
   const x = inner.x + pad + leftRoom;
   const plotWidth = Math.max(1, right - rightRoom - x);
   const cap = Math.max(lineHeight + fontPx * 1.22, inner.height * 0.4);

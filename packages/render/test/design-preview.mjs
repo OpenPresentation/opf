@@ -3,8 +3,8 @@ import {toSvg} from '../src/svg.js';
 // The alignment decks below name the gallery's roboto font scheme, so they pass the host catalog (core Catalog[]) explicitly.
 import {gallery as defaultCatalog} from '@openpresentation/gallery';
 const catalogs=[defaultCatalog];
-const deck={organization:{id:'acme',name:'Acme'},design:{header:{left:{text:'Confidential'},center:{text:'{{slide.section}}'},right:{text:'{{organization.name}}'}},footer:{left:{text:'{{slide.number}}'},center:{date:'2026-09-07'},right:{text:'Review'}}},slides:[{title:'Slide',section:'Results'}]};
-const svg=toSvg(deck, 1,{trace:true});for(const text of ['Confidential','Results','Acme','2026-09-07','Review','design.header.left'])assert.ok(svg.includes(text),text);
+const deck={organization:{id:'acme',name:'Acme'},design:{header:{start:{text:'Confidential'},center:{text:'{{slide.section}}'},end:{text:'{{organization.name}}'}},footer:{start:{text:'{{slide.number}}'},center:{date:'2026-09-07'},end:{text:'Review'}}},slides:[{title:'Slide',section:'Results'}]};
+const svg=toSvg(deck, 1,{trace:true});for(const text of ['Confidential','Results','Acme','2026-09-07','Review','design.header.start'])assert.ok(svg.includes(text),text);
 const hidden=toSvg({...deck,slides:[{title:'Slide',design:{header:false,footer:false}}]}, 1);assert.ok(!hidden.includes('Confidential'));assert.ok(!hidden.includes('Review'));
 for(const angle of [0,90,180]){const svg=toSvg({design:{background:{type:'gradient',gradient:{angle,stops:[{position:0,color:'#FF0000'},{position:1,color:'#0000FF'}]},opacity:.4}},slides:[{title:'Gradient'}]}, 1);assert.match(svg,/opacity="0.4"/);assert.ok(svg.includes(angle===0?'x1="0%"':angle===90?'y1="0%"':'x1="100%"'));}
 for(const preset of ['pct5','ltHorz','diagStripe','wdUpDiag','openDmnd','wave']){
@@ -18,7 +18,7 @@ const raster='data:image/png;base64,iVBORw0KGgo=';
 assert.match(toSvg({design:{background:{type:'image',src:raster},watermark:{src:raster,opacity:.12}},slides:[{}]}, 1),/xMidYMid slice/);
 console.log('Design preview: header/footer zones, inheritance suppression, angles, opacity, patterns, image background and watermark passed.');
 
-assert.match(toSvg({design:{titleAlignment:'right',contentAlignment:'center',contentBox:true},slides:[{title:'Right',text:'Center'}]}, 1),/text-anchor="end"/);
+assert.match(toSvg({design:{titleAlignment:'end',contentAlignment:'center',contentBox:true},slides:[{title:'Right',text:'Center'}]}, 1),/text-anchor="end"/);
 
 // Titles follow design.titleAlignment only (unset: left, as core composition
 // places them, RR-93a: and the tag, which sits over the title; WI-2: and the subtitle in the title area); body text follows contentAlignment; a slide's own contentAlignment keeps the tag and subtitle on the content. Default
@@ -30,7 +30,7 @@ assert.match(toSvg({design:{titleAlignment:'right',contentAlignment:'center',con
   const slide={tag:'Tag',title:'Title',subtitle:'Subtitle',text:'Body'};
   for(const options of [{},{fonts: prepared}]){
     assert.deepEqual(anchors(toSvg({design:{fontScheme:'roboto',contentAlignment:'center'},slides:[slide]}, 1,{...options,trace:true,catalogs})),{tag:'start',title:'start',subtitle:'start',text:'middle'});
-    assert.deepEqual(anchors(toSvg({design:{fontScheme:'roboto',contentAlignment:'right',titleAlignment:'center'},slides:[{...slide,design:{titleAlignment:'right',contentAlignment:'left'}}]}, 1,{...options,trace:true,catalogs})),{tag:'start',title:'end',subtitle:'start',text:'start'});
+    assert.deepEqual(anchors(toSvg({design:{fontScheme:'roboto',contentAlignment:'end',titleAlignment:'center'},slides:[{...slide,design:{titleAlignment:'end',contentAlignment:'start'}}]}, 1,{...options,trace:true,catalogs})),{tag:'start',title:'end',subtitle:'start',text:'start'});
   }
   console.log('Design preview alignment: the heading group uses titleAlignment (default left) and body uses contentAlignment with estimated and outline measurement.');
 }

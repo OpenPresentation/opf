@@ -31,7 +31,7 @@ const GOLDEN = {
   "shape-link-hidden": ["This shape is hidden, so its `link` can never be clicked.", "remove `hidden`, or remove the `link`."],
   "shape-anchor-missing": ["`at.block: \"phot\"` names no block on this slide, so the shape is not drawn. Block ids on this slide: photo.", "did you mean `photo`? Or give the block the shape belongs to `id: \"phot\"`."],
   "connector-end-missing": ["The connector's `to: \"shipping\"` names no block or overlay shape on this slide, so the connector is not drawn. Ids on this slide: plan, ship.", "pick one of `plan` or `ship`, or give the block or shape it should join `id: \"shipping\"`."],
-  "image-placement-invalid": ["Blocks 1 and 2 are both placed on the left edge, and a slide edge takes one placed image.", "move one of them to another edge, or remove its `placement`."],
+  "image-placement-invalid": ["Blocks 1 and 2 are both placed on the start edge, and a slide edge takes one placed image.", "move one of them to another edge, or remove its `placement`."],
   "dataset-unknown": ["`dataset: \"sale\"` does not exist. Datasets in this deck: sales.", "did you mean `sales`? Or add `datasets.sale`."],
   "dataset-field-unknown": ["`regon` is not a column of `sales`. Columns: region, revenue.", "did you mean `region`?"],
   "data-column-duplicate": ["Two columns are named `region`. Series and mappings address columns by name.", "rename the second one (for example `region-2`)."],
@@ -46,7 +46,7 @@ const GOLDEN = {
   "asset-reference": ["`asset:lgog` is not in `assets`. Assets: logo.", "did you mean `asset:logo`? Or add `assets.lgog`."],
   "asset-cycle": ["Asset `a` points back to itself through `b`.", "give one link a real source (an https:// address or embedded data) instead of an `asset:` reference."],
   "catalog-record": ["The embedded theme `custom` is invalid: `background` should be an object, but it is text (`light1`).", "write an object."],
-  "layout-region-reserved": ["Region name `left` is reserved, so it can't name a body region of layout `mine`. Reserved names: title, subtitle, tag, auto, left, center, right, top, middle, bottom.", "rename it, for example `left-area`."],
+  "layout-region-reserved": ["Region name `start` is reserved, so it can't name a body region of layout `mine`. Reserved names: title, subtitle, tag, auto, start, center, end, top, middle, bottom.", "rename it, for example `start-area`."],
   "unresolved-reference-layout": ["Layout `pilars` is not embedded or in a registered catalog, so the slide is laid out automatically.", "did you mean `pillars`?"],
   "unresolved-reference-theme": ["Theme `minimall` is not embedded or in a registered catalog, so the engine default is used.", "did you mean `minimal`?"],
   "catalog-record-not-in-source": ["`my-special` says it comes from https://www.pptx.gallery, but that catalog has no such record. It is treated as your own.", "move it to `catalogs.custom`, or use an id that the catalog publishes."],
@@ -72,7 +72,7 @@ const GOLDEN = {
   "region-unknown": ["Block pinned to region `timelin`; layout `r` has timeline and notes.", "did you mean `timeline`? Or remove `region`."],
   "region-kind": ["Region `timeline` doesn't take text content (it takes timeline).", "remove `region` so OPF places the block by its kind, or pin it to a region that takes text."],
   "region-full": ["Region `timeline` already holds 1 block, which is all it takes.", "pin the block to another region with room, or remove `region`."],
-  "furniture-wraps": ["The footer left text wraps onto 3 lines (2 at most); headers and footers should be short.", "shorten it, or move part of it to another zone."],
+  "furniture-wraps": ["The footer start text wraps onto 3 lines (2 at most); headers and footers should be short.", "shorten it, or move part of it to another zone."],
   "font-outside-scheme": ["`Comic Sans MS` isn't in this deck's font scheme (Aptos Display / Aptos), so it won't follow a scheme change.", "remove `fontFamily` to use the scheme font, or add the font to the font scheme."],
   "image-resolution": ["This image is 100×100 px, shown at about 19 ppi; 96 are needed to look sharp.", "use a file of about 519×519 px or larger, or show it smaller."],
   "chart-value-not-numeric": ["`about 12` is text, so it is plotted as a gap.", "write a number (12, -3.5, 1e6) and put units, currency or percent in the column `format`."],
@@ -87,11 +87,12 @@ const GOLDEN = {
   "reading-order-differs": ["`blocks.0` is read at position 1 but appears at position 2 on slide 2, so a screen reader reads the slide out of order.", "reorder the blocks so the reading order follows what people see, or pin them to layout regions."],
   "schema-without-keyword": ["must NOT be valid.", "inspect this schema constraint and preserve unrelated content."],
   "text-shrunk": ["The list on slide 1 (and 2 more blocks) is shrunk to 20 px, 63% of its 32 px starting size, so the slide is likely too dense.", "split it with `opf paginate`, move detail to the speaker notes, or shorten the text."],
-  "centered-body": ["A centered list on slide 1 runs 6 lines (275 characters); each line starts at a different place, which is harder to read.", "set `contentAlignment: \"left\"` in the slide's design, or cut it to a line or two."],
+  "centered-body": ["A centered list on slide 1 runs 6 lines (275 characters); each line starts at a different place, which is harder to read.", "set `contentAlignment: \"start\"` in the slide's design, or cut it to a line or two."],
   "tight-spacing-gap": ["Two blocks on slide 1 are 0.08 in apart, closer than 0.25 in, so they read as one crowded block.", "raise `composition.gap`, use fewer blocks or nested groups, or split the slide."],
   "tight-spacing-margin": ["A block on slide 1 is 0.15 in from the slide edge, closer than 0.5 in.", "raise `composition.padding`, or place a picture meant to reach the edge with `placement`."],
   "layout-monotony": ["Slides 1 to 5 (5 in a row) all use layout `list`, so they look alike.", "give some of them the layout their content asks for (a comparison, a chart, a statement, a picture), or merge or split slides."],
   "chart-dual-axis": ["\"Margin\" is on a second value axis, so two scales share one plot and its crossings mean nothing.", "show the secondary series in a chart of its own beside this one, or drop `secondaryAxis` when the series share a unit."],
+  "variable-group-omitted": ["A group on slide 1 is left out when `quote` has no value, with its pictures, cards and other text.", "give it a value to draw the group, or move what should always show out of the group."],
   "chart-pie-many-slices": ["This chart has 6 slices, more than 5; the small ones are hard to compare and to label.", "compare the parts with bars (`type: \"bar\"`), or group the smallest into one \"Other\" slice."],
   "straight-quotes": ["`They called it \"the easiest setup we’ve done\".` uses straight quotation marks; this deck's language uses “…”.", "apply the quick fix, or type “ and ” instead."],
 };
@@ -103,11 +104,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 96 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 98 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 96);
+	assert.equal(RULE_IDS.length, 98);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {

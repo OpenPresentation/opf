@@ -13,7 +13,7 @@ export const jsonHover = [
   ['J-HOV-004', 'R-HOV-04', 'hovering a problem shows the message, what is next and the quick fix hint', 'json', '{\n  "slides": [{"title": "a"}],\n  "design": {"titleAlignment": "middle"}\n}', [WAIT, ['hoverText', '"middle"']], { hover: { open: 1, has: ['must be left, center or right', 'did you mean `center`', 'Quick Fix'] } }],
   ['J-HOV-005', 'R-HOV-01', 'Escape hides the hover', 'json', '{\n  "slides": [{"title": "a"}],\n  "des|ign": {}\n}', [['chord', 'Mod+k', 'Mod+i'], K('Escape')], { hover: { open: 0 } }],
   ['J-HOV-006', 'R-HOV-01', 'no hover over free text', 'json', '{\n  "slides": [{"title": "Hello"}]\n}', [['hoverText', 'Hello']], { hover: { open: 0 } }],
-  ['J-HOV-007', 'R-HOV-01', 'hovering an enum value shows the field and its values', 'json', '{\n  "slides": [{"title": "a"}],\n  "design": {"titleAlignment": "center"}\n}', [['hoverText', '"center"']], { hover: { open: 1, has: ['titleAlignment', 'left'] } }],
+  ['J-HOV-007', 'R-HOV-01', 'hovering an enum value shows the field and its values', 'json', '{\n  "slides": [{"title": "a"}],\n  "design": {"titleAlignment": "center"}\n}', [['hoverText', '"center"']], { hover: { open: 1, has: ['titleAlignment', 'start'] } }],
   ['J-HOV-008', 'R-HOV-01', 'hovering a key in a slide shows the slide field', 'json', '{\n  "slides": [{"title": "a", "notes": "n"}]\n}', [['hoverText', '"notes"']], { hover: { open: 1, has: ['notes'] } }],
 ];
 

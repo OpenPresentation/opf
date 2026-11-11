@@ -1,0 +1,9 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+const root=fileURLToPath(new URL('../../../',import.meta.url)),sourceRoot=process.argv[2],out=process.argv[3];assert.ok(sourceRoot&&out);await fs.mkdir(out,{recursive:true});const previous=JSON.parse(await fs.readFile(path.join(sourceRoot,'cli-manifest.json'),'utf8')),report={baselineProducer:previous.candidate,candidate:execFileSync('git',['-C',root,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),route:'Maintained CLI convert, date2026-11-08, PNG scale0.5; exact frozen1169 inputs and previously sealed output hashes',cases:[]},hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+for(const row of previous.cases){const input=path.join(sourceRoot,'inputs',row.id+'.opf.json');assert.equal(hash(await fs.readFile(input)),row.inputSha256);const result={id:row.id,inputSha256:row.inputSha256,outputs:{}};for(const ext of ['pptx','png']){const file=path.join(out,row.id+'.'+ext),log=execFileSync(process.execPath,[path.join(root,'packages/cli/dist/index.js'),'convert',input,file,'--date','2026-11-08',...(ext==='png'?['--scale','.5']:[])],{cwd:root,encoding:'utf8'});await fs.writeFile(file+'.log',log);const actual=hash(await fs.readFile(file)),expected=row.after[ext].sha256;result.outputs[ext]={sha256:actual,expected,byteIdentical:actual===expected};}report.cases.push(result);}
+report.allFourteenOutputsByteIdentical=report.cases.every(row=>Object.values(row.outputs).every(output=>output.byteIdentical));await fs.writeFile(path.join(out,'identity.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));assert.equal(report.allFourteenOutputsByteIdentical,true,'existing seven native archives and previews can reuse exact inputs');

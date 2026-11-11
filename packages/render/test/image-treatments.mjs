@@ -61,7 +61,8 @@ for (const treatment of TREATMENTS) {
     assert.deepEqual(image.box, expected.frame.box, `${slug}: frame`);
     assert.deepEqual(outlinePoints(image.shape.path), outlinePoints(expected.frame.shape), `${slug}: outline`);
     assert.deepEqual(outlinePoints(image.overlay?.shape.path), outlinePoints(expected.frame.overlay), `${slug}: overlay outline`);
-    assert.equal(image.placement?.edge, treatment.placement.edge, `${slug}: placement edge`);
+    const physicalEdge = {start: 'left', end: 'right'}[treatment.placement.edge] ?? treatment.placement.edge;
+    assert.equal(image.placement?.edge, physicalEdge, `${slug}: placement edge`);
   } else if (treatment.background) {
     const background = geometry.backgroundImage;
     assert.ok(background, `${slug}: background image geometry`);

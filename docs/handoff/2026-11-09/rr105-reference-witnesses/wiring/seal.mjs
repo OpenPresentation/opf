@@ -1,0 +1,25 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import cp from 'node:child_process';
+import assert from 'node:assert/strict';
+import crypto from 'node:crypto';
+import {gzipSync} from 'node:zlib';
+const repository=path.resolve(import.meta.dirname,'../../../../..'),folder=import.meta.dirname,source='6bdd823a9ee2d6120c187f17df7ac023717b11ed',base='276f339a68069dc11970d649092d6181c9feba38';
+const git=(...args)=>cp.execFileSync('git',['-C',repository,...args],{maxBuffer:8*1024*1024}),text=(...args)=>git(...args).toString('utf8').trim(),sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+assert.equal(text('rev-parse','HEAD'),source);assert.equal(text('diff','--name-only',source,'--','scripts/native-acceptance'),'');assert.equal(text('ls-files','--others','--exclude-standard','scripts/native-acceptance'),'');
+const entries=[];let total=0;
+function put(name,file){const stat=fs.lstatSync(file);assert.ok(stat.isFile()&&!stat.isSymbolicLink());assert.ok(stat.size<=4*1024*1024);assert.ok(entries.length<1000);const bytes=fs.readFileSync(file);total+=bytes.length;assert.ok(total<=32*1024*1024);entries.push({name,bytes:bytes.length,sha256:sha(bytes),base64:bytes.toString('base64')});}
+function walk(prefix,root){const top=path.resolve(root);function visit(directory){for(const name of fs.readdirSync(directory).sort()){const file=path.join(directory,name),stat=fs.lstatSync(file);assert.ok(!stat.isSymbolicLink());assert.ok(file.startsWith(top+path.sep));if(stat.isDirectory())visit(file);else put(prefix+'/'+path.relative(top,file).replaceAll(path.sep,'/'),file);}}visit(top);}
+walk('checks',path.join(repository,'artifacts/reference-wiring-01'));
+walk('managed-final','C:/opf-work/reference-managed-RseDAH/results');
+for(const [tag,root]of [['envelope-first','C:/opf-work/ref-envelope-vNtWWS'],['envelope-final','C:/opf-work/ref-envelope-QB03Rj']]){
+ for(const name of ['child-results.json','envelope.json','suite/suite.json'])put(tag+'/'+name,path.join(root,name));
+ walk(tag+'/default-pure',path.join(root,'default-pure'));
+}
+const sourceFiles=text('diff','--name-only',base,source,'--','scripts/native-acceptance').split('\n').filter(Boolean).map(file=>{const bytes=git('show',source+':'+file);return{file,bytes:bytes.length,sha256:sha(bytes),blob:text('rev-parse',source+':'+file)};});
+const protectedTrees=['packages','spec','.github','pnpm-lock.yaml','pnpm-workspace.yaml','package.json'].map(file=>{const before=text('rev-parse',base+':'+file),after=text('rev-parse',source+':'+file);assert.equal(before,after);return{file,blob:after};});
+const protectedFiles=['fixtures.mjs','chart-modes.mjs','generate.mjs','prepare.mjs','seven-chart-profile.mjs','seven-chart-archive.mjs','seven-chart-worker.ps1','run-seven-chart-profile.ps1'].map(name=>{const file='scripts/native-acceptance/'+name,before=text('rev-parse',base+':'+file),after=text('rev-parse',source+':'+file);assert.equal(before,after);return{file,blob:after};});
+const originalSuiteSha=sha(fs.readFileSync('C:/opf-work/n034-suite03/suite.json'));assert.equal(originalSuiteSha,'fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65');
+const raw=Buffer.from(JSON.stringify({format:'reference-witness-source-wiring-v1',entries})+'\n'),compressed=gzipSync(raw,{level:9,mtime:0});fs.writeFileSync(path.join(folder,'raw.json.gz'),compressed,{flag:'wx'});
+const manifest={format:'reference-witness-source-wiring-v1',status:'SOURCE_PURE_CHECKPOINT; REVIEW_AND_REQUIRED_GATE_PENDING',source,tree:text('rev-parse',source+'^{tree}'),base,runSourceWasClean:true,node:{version:process.version,path:process.execPath,sha256:sha(fs.readFileSync(process.execPath))},sourceFiles,protectedTrees,protectedFiles,originalSuite:{sha256:originalSuiteSha,readOnlyVerification:true},raw:{file:'raw.json.gz',bytes:compressed.length,sha256:sha(compressed),expandedBytes:raw.length,members:entries.length,decodedBytes:total},entries:entries.map(({base64,...entry})=>entry),outcomes:{finalFocused:{pass:18,fail:0,skip:0,managedCases:55,durationMs:12183.7168},firstSyntheticSourceRun:{pass:4,fail:1,error:'ReferenceError: list is not defined; original outcome receipt retained'},firstSupervisorPathLookup:{status:'ENOENT',correction:'Read only the exact immutable suite03 workerRepository directory; both fixture copies verified against its SHA'},firstFormatterFlag:{exitCode:1,error:'unsupported --formatter-enabled flag; preserved'},currentConsumerGeneration:false,exportedShapeCounts:'UNMEASURED',officeInvoked:false,nativeAcceptance:false,registryAcceptance:false,requiredChangedGate:'PARENT_SCHEDULED; UNRUN'},scope:'Only synthetic XML/packages/default-pure child route and managed fake worker functions. No actual consumer build, export, render, Office or native acceptance. Initial WIP packet unchanged.'};
+fs.writeFileSync(path.join(folder,'manifest.json'),JSON.stringify(manifest,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify({source,members:entries.length,decodedBytes:total,archiveBytes:compressed.length,nativeAcceptance:false}));

@@ -16,25 +16,25 @@
   },
   "design": {
     "header": {
-      "left": {
+      "start": {
         "image": "var:organization.logo.icon"
       },
       "center": {
         "text": "{{slide.section}}"
       },
-      "right": {
+      "end": {
         "date": "2026-05-05"
       }
     },
     "footer": {
-      "left": {
+      "start": {
         "image": "var:organization.logo.icon",
         "text": "{{organization.name}}"
       },
       "center": {
         "text": "Confidential fixture"
       },
-      "right": {
+      "end": {
         "text": "{{slide.number}}"
       }
     },

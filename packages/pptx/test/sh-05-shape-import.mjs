@@ -79,7 +79,7 @@ for (const name of ['shapes', 'shape-effects', 'shape-overlays', 'shape-overlays
       blocks: [{ id: 'plan', shape: 'roundRect', text: 'Plan' }, { id: 'ship', shape: 'ellipse', text: 'Ship' }],
       shapes: [
         { id: 'badge', shape: 'star5', text: 'New', x: 0.8, y: 0.1, width: 0.1, height: 0.16, fill: 'accent2' },
-        { id: 'tag', shape: 'roundRect', text: 'Tag', at: { block: 'plan', edge: 'top', offset: -8, width: 72, height: 32 }, style: 'subtle' },
+        { id: 'tag', shape: 'roundRect', text: 'Tag', at: { block: 'plan', edge: 'top', offset: -8, widthPx: 72, heightPx: 32 }, style: 'subtle' },
         { id: 'link', connector: { from: 'plan', to: 'ship', route: 'elbow', fromSite: 3, toSite: 1 }, stroke: { width: 3, end: { type: 'triangle' } } },
         { connector: { from: 'badge', to: 'ship', route: 'curved' }, stroke: { dash: 'dash' }, alt: 'Badge to ship' },
       ],
@@ -88,7 +88,7 @@ for (const name of ['shapes', 'shape-effects', 'shape-overlays', 'shape-overlays
   const imported = await roundTrip(deck);
   const [badge, tag, link, curved] = imported.slides[0].shapes;
   assert.deepEqual(badge, { id: 'badge', shape: 'star5', text: 'New', x: 0.8, y: 0.1, width: 0.1, height: 0.16, fill: 'accent2' });
-  assert.deepEqual(tag, { id: 'tag', shape: 'roundRect', text: 'Tag', at: { block: 'plan', edge: 'top', offset: -8, width: 72, height: 32 }, style: 'subtle' });
+  assert.deepEqual(tag, { id: 'tag', shape: 'roundRect', text: 'Tag', at: { block: 'plan', edge: 'top', offset: -8, widthPx: 72, heightPx: 32 }, style: 'subtle' });
   assert.deepEqual(link, { id: 'link', connector: { from: 'plan', to: 'ship', route: 'elbow', fromSite: 3, toSite: 1 }, stroke: { width: 3, end: { type: 'triangle' } } });
   assert.equal(curved.connector.from, 'badge');
   assert.equal(curved.connector.to, 'ship');

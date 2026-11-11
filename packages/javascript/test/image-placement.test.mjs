@@ -14,7 +14,7 @@ const deck = (slides) => ({ $schema: 'https://openpresentation.org/schema/opf/v1
 const placed = (placement, extra = {}) => ({ type: 'image', image: { src: photo, alt: 'Shipping routes' }, placement, ...extra });
 
 test('left 0.45: the image bleeds to the left, top and bottom edges; title and text compose in the remaining 55% at normal padding', () => {
-  const result = composeSlide({ title: 'Where we ship', blocks: [placed({ edge: 'left', size: 0.45 }), { type: 'text', text: 'Twelve ports, three continents' }] });
+  const result = composeSlide({ title: 'Where we ship', blocks: [placed({ edge: 'start', size: 0.45 }), { type: 'text', text: 'Twelve ports, three continents' }] });
   const image = result.items.find((item) => item.field === 'image');
   assert.deepEqual(image.box, { x: 0, y: 0, width: 576, height: 720 });
   assert.deepEqual(image.image.region, image.box);
@@ -32,7 +32,7 @@ test('left 0.45: the image bleeds to the left, top and bottom edges; title and t
 
 test('each edge takes its band and leaves the rest of the slide to the content', () => {
   for (const [edge, region] of Object.entries({
-    left: { x: 0, y: 0, width: 640, height: 720 }, right: { x: 640, y: 0, width: 640, height: 720 },
+    start: { x: 0, y: 0, width: 640, height: 720 }, end: { x: 640, y: 0, width: 640, height: 720 },
     top: { x: 0, y: 0, width: 1280, height: 360 }, bottom: { x: 0, y: 360, width: 1280, height: 360 },
   })) {
     const result = composeSlide({ title: 'Heading', blocks: [{ text: 'Body' }, placed({ edge })] });
@@ -44,7 +44,7 @@ test('each edge takes its band and leaves the rest of the slide to the content',
 });
 
 test('inset frames the image inside the slide padding of its band; treatments apply inside the frame', () => {
-  const image = composeSlide({ title: 'Heading', blocks: [placed({ edge: 'right', inset: true }, { aspectRatio: 0.5, shape: 'roundRect', stroke: { color: 'dark1', width: 12 } })] }).items.find((item) => item.field === 'image').image;
+  const image = composeSlide({ title: 'Heading', blocks: [placed({ edge: 'end', inset: true }, { aspectRatio: 0.5, shape: 'roundRect', stroke: { color: 'dark1', width: 12 } })] }).items.find((item) => item.field === 'image').image;
   assert.deepEqual(image.region, { x: 640, y: 0, width: 640, height: 720 });
   assert.equal(image.box.height, 720 - 2 * padding);
   assert.equal(image.box.width, (720 - 2 * padding) * 0.5);
@@ -54,7 +54,7 @@ test('inset frames the image inside the slide padding of its band; treatments ap
 });
 
 test('bands are taken in block order; a second block on a used edge flows as content', () => {
-  const result = composeSlide({ title: 'Heading', blocks: [placed({ edge: 'left', size: 0.4 }), placed({ edge: 'top', size: 0.3 }), placed({ edge: 'left' }), { text: 'Body' }] });
+  const result = composeSlide({ title: 'Heading', blocks: [placed({ edge: 'start', size: 0.4 }), placed({ edge: 'top', size: 0.3 }), placed({ edge: 'start' }), { text: 'Body' }] });
   const images = result.items.filter((item) => item.field === 'image');
   assert.deepEqual(images[0].box, { x: 0, y: 0, width: 512, height: 720 });
   assert.deepEqual(images[1].box, { x: 512, y: 0, width: 768, height: 216 });
@@ -64,30 +64,30 @@ test('bands are taken in block order; a second block on a used edge flows as con
 });
 
 test('a right-to-left deck mirrors placement: left is the start side, drawn at the right', () => {
-  const image = composeSlide({ title: 'Heading', blocks: [placed({ edge: 'left', size: 0.4 }), { text: 'Body' }] }, { direction: 'rtl' }).items.find((item) => item.field === 'image');
+  const image = composeSlide({ title: 'Heading', blocks: [placed({ edge: 'start', size: 0.4 }), { text: 'Body' }] }, { direction: 'rtl' }).items.find((item) => item.field === 'image');
   assert.equal(image.image.placement.edge, 'right');
   assert.deepEqual(image.box, { x: 768, y: 0, width: 512, height: 720 });
 });
 
 test('v1 layout placement records are rejected; content block placement remains supported', () => {
-  const record = { name: 'Old placement', placeholders: [{type: 'image', placement: {edge: 'left', size: 0.4}}] };
+  const record = { name: 'Old placement', placeholders: [{type: 'image', placement: {edge: 'start', size: 0.4}}] };
   assert.equal(check({catalogs: {custom: {layouts: {old: record}}}, slides: [{layout: 'old', image: photo}]}, {only:['format','references']}).valid, false);
-  const result = composeSlide({blocks: [placed({edge: 'left',size: 0.4}), {text: 'Body'}]});
+  const result = composeSlide({blocks: [placed({edge: 'start',size: 0.4}), {text: 'Body'}]});
   assert.deepEqual(result.items.find(item=>item.field==='image').box,{x:0,y:0,width:512,height:720});
 });
 
 test('a slide whose only body is placed images is composed like a cover: its headings center in the free area', () => {
-  const result = composeSlide({ title: 'Heading', subtitle: 'Sub', blocks: [placed({ edge: 'left', size: 0.46 })] });
+  const result = composeSlide({ title: 'Heading', subtitle: 'Sub', blocks: [placed({ edge: 'start', size: 0.46 })] });
   const title = result.items.find((item) => item.field === 'title');
   assert.equal(title.box.x, 588.8 + padding);
   assert.ok(title.box.y > 200, 'centered vertically');
   // With other body content the headings stay at the top.
-  const content = composeSlide({ title: 'Heading', blocks: [placed({ edge: 'left', size: 0.46 }), { text: 'Body' }] });
+  const content = composeSlide({ title: 'Heading', blocks: [placed({ edge: 'start', size: 0.46 }), { text: 'Body' }] });
   assert.equal(content.items.find((item) => item.field === 'title').box.y, padding);
 });
 
 test('a caption of a placed block sits inside its band', () => {
-  const result = composeSlide({ title: 'Heading', blocks: [placed({ edge: 'left', inset: true }, { caption: 'Routes in 2026' }), { text: 'Body' }] });
+  const result = composeSlide({ title: 'Heading', blocks: [placed({ edge: 'start', inset: true }, { caption: 'Routes in 2026' }), { text: 'Body' }] });
   const image = result.items.find((item) => item.field === 'image');
   assert.ok(image.caption);
   assert.ok(within(image.caption.box, image.box));
@@ -95,13 +95,13 @@ test('a caption of a placed block sits inside its band', () => {
 });
 
 test('validation: two blocks on the same edge, a placed block inside a group or a region, and placement on a non-image block are errors', () => {
-  assert.equal(check(deck([{ title: 'T', blocks: [placed({ edge: 'left' }), placed({ edge: 'right' }), { text: 'Body' }] }])).valid, true);
-  const twice = errorsOf(check(deck([{ title: 'T', blocks: [placed({ edge: 'left' }), placed({ edge: 'left', size: 0.3 })] }])));
+  assert.equal(check(deck([{ title: 'T', blocks: [placed({ edge: 'start' }), placed({ edge: 'end' }), { text: 'Body' }] }])).valid, true);
+  const twice = errorsOf(check(deck([{ title: 'T', blocks: [placed({ edge: 'start' }), placed({ edge: 'start', size: 0.3 })] }])));
   assert.deepEqual(twice.map((f) => [f.ruleId, f.path]), [['opf/image-placement-invalid', '/slides/0/blocks/1/placement/edge']]);
-  const grouped = errorsOf(check(deck([{ title: 'T', blocks: [{ blocks: [placed({ edge: 'left' }), { text: 'Body' }] }] }])));
+  const grouped = errorsOf(check(deck([{ title: 'T', blocks: [{ blocks: [placed({ edge: 'start' }), { text: 'Body' }] }] }])));
   assert.deepEqual(grouped.map((f) => [f.ruleId, f.path]), [['opf/image-placement-invalid', '/slides/0/blocks/0/blocks/0/placement']]);
-  const region = errorsOf(check(deck([{ title: 'T', left: placed({ edge: 'left' }), right: { text: 'Body' } }])));
-  assert.deepEqual(region.map((f) => [f.ruleId, f.path]), [['opf/image-placement-invalid', '/slides/0/left/placement']]);
-  const text = errorsOf(check(deck([{ title: 'T', blocks: [{ text: 'Body', placement: { edge: 'left' } }] }])));
+  const region = errorsOf(check(deck([{ title: 'T', start: placed({ edge: 'start' }), end: { text: 'Body' } }])));
+  assert.deepEqual(region.map((f) => [f.ruleId, f.path]), [['opf/image-placement-invalid', '/slides/0/start/placement']]);
+  const text = errorsOf(check(deck([{ title: 'T', blocks: [{ text: 'Body', placement: { edge: 'start' } }] }])));
   assert.deepEqual(text.map((f) => [f.ruleId, f.path]), [['opf/image-option-unsupported-payload', '/slides/0/blocks/0/placement']]);
 });

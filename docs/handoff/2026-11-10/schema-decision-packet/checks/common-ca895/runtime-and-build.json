@@ -1,0 +1,2164 @@
+{
+  "source": "ca895444a710a963fced1983237310abb5d38ab1",
+  "sourceDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "lockSha256": "90a3d578ef7c9c3e57a99cf56550cf7543ef7049882975865f60bb85da957512",
+  "node": "24.21.0",
+  "build": "PASS all workspace packages via maintained pnpm run build",
+  "actualResourceFrame": {
+    "bytes": 10425631,
+    "limit": 10485760,
+    "headroom": 60129
+  },
+  "runtimeInventory": [
+    {
+      "path": "packages/javascript/dist/browser.js",
+      "bytes": 4427,
+      "sha256": "3aeb9fab0bd641d15fab1b42ef8612e0e979772c3af65db251d7ce1c6516ee75"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-23YEVBE4.js",
+      "bytes": 1402035,
+      "sha256": "bfbf6a22a6ab88ffde9c5a1f65939da5ecbc4f58570df63291747057f44aa361"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-43JWUIGF.js",
+      "bytes": 203,
+      "sha256": "2b229ad6f7d6b7005f4a974dad1538fc515ff0e3ad09bfde1ccfd74be82198f7"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-466I5SCB.js",
+      "bytes": 63844,
+      "sha256": "bf5dfe9d9fda8b9578df7f60e35a827c194f59a8de2783b54697772f2a046d9f"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-5ZNS5LRY.js",
+      "bytes": 3788,
+      "sha256": "a834c78e87400972c3df140400bd03575c589c1576e97c38d67a1b78bee7d588"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-65NBXF2H.js",
+      "bytes": 4802,
+      "sha256": "79c866a14724d4028a149945aac8f1cabd2a4540916da39c03194b118d3880e0"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-753GZT7B.js",
+      "bytes": 48415,
+      "sha256": "93d653eb2213753c87253804ae963aaad5e76c44c61efc3afd70b950cbf3163c"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-7R2LEBSF.js",
+      "bytes": 28141,
+      "sha256": "a1413d3ac64fc389c197cb7db45ea5f3e60fcfac7bb1fd86122b9dba4a082b7c"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-7UQWV4N3.js",
+      "bytes": 1922275,
+      "sha256": "7a0a8ad42a9e7b112afbe4163c2658d78af0cd9fb08572741752239f7359438a"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-A2ZIZXAL.js",
+      "bytes": 32285,
+      "sha256": "f746da33b854c67d9cd816ac0a06a8b0213d18bed33d05632172a3cffdc35f9e"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-EGWKZBRX.js",
+      "bytes": 466909,
+      "sha256": "25baf3a302b2e49963437b1cdf1a9e1608b309de8d6698649e113ba885efe66b"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-FAFG3JSM.js",
+      "bytes": 513138,
+      "sha256": "37bbebb41e9ba4ca8ef846b8e788d6132a2af163c49bdc158fb6171a867ad2d3"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-FK5XG742.js",
+      "bytes": 157304,
+      "sha256": "e6c95820b6e93c78a61ca11817144781d996dbd77ca7e8c36f39353f53b88fc3"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-FLFHPWER.js",
+      "bytes": 10267,
+      "sha256": "b6cd8a130da143844f1665bf177d9e5f6b2f3f7d7de3a9f23aa7b5f534aa12f7"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-IJXKVM4W.js",
+      "bytes": 10945,
+      "sha256": "675f49f7235e76248dab49255a12e1ecb8c9147e116ea8b7e3230da12038f3e0"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-INIMUBSE.js",
+      "bytes": 286,
+      "sha256": "7e65e95fc14a6d806c7e0335feb620b07034bc137ada002eb5353dc660550494"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-JBARNYFR.js",
+      "bytes": 776,
+      "sha256": "4a48db67e16a9cc9c607a561c0df043f8ffd1b9139b2773401696c1c7a7854bc"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-N4ADR23S.js",
+      "bytes": 56386,
+      "sha256": "d92e22e9d4c3f72c6c85f11ecdee9f43f32770292bd92129a462037cf266c696"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-N7A5CTDW.js",
+      "bytes": 15552,
+      "sha256": "8753adef88e87ed076384653d89b5bd52f95a79b2b4ff40675df269f1a6878cd"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-PBLKNMCS.js",
+      "bytes": 72819,
+      "sha256": "30f5c40b3a8489d63e21612a781a1c59430c4d735a2781416bbf6c32d9544fc6"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-PNM2P2TI.js",
+      "bytes": 36910,
+      "sha256": "242a2dfedf19aa8755c7caa0a29114ed257b18e2850a0f1ede0b08e3b632c2fe"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-PRXZD2II.js",
+      "bytes": 463,
+      "sha256": "46ee4d93f7064a623e4e3203658539c4a48bed40a8e3edef9acf32c1d41a1a66"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-QCK3NJBB.js",
+      "bytes": 44980,
+      "sha256": "a67f98bde063055ba2f498f708cfb2417cb908a395bfb74ce55751cbe81d2f44"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-QKGUAZ3S.js",
+      "bytes": 6461,
+      "sha256": "2eef61cb79552e214ad017c037159b79e95a56240607f4ed89b17d9db225a045"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-QOJKG4QU.js",
+      "bytes": 5033,
+      "sha256": "69dec7855fdf324f6ce94a048b62a70563d435bfeeb538d3d16172d275e98006"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-RYZPBJLB.js",
+      "bytes": 302,
+      "sha256": "648bfbc96d7f5326515b99e812fdfcc90663e86ca78104aa7c2c16946a112747"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-SQVGPXZE.js",
+      "bytes": 3008,
+      "sha256": "881566b0c78f847b1b1c23cfe71229b1100389b117a6c303cfb1ff063216b0ca"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-W4DYDRV2.js",
+      "bytes": 6363,
+      "sha256": "a946040e039d89cc24489d2eb4ed06e95e2eb1962a38a2b0913d3124e4167526"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-YYT6N7AI.js",
+      "bytes": 267856,
+      "sha256": "02f442c34a80d1bf48776bc704e35649c8e366c09f4ee8a47405598407d9eb06"
+    },
+    {
+      "path": "packages/javascript/dist/chunk-ZFZVNKWB.js",
+      "bytes": 31311,
+      "sha256": "cc4aa56008a6de026e9044e6b4902c635460534ce71e4ae6d6091c64babc43df"
+    },
+    {
+      "path": "packages/javascript/dist/composition.js",
+      "bytes": 13179,
+      "sha256": "4b5b1b9792385d30b9b524b1c7d94c7a506215af073133263ef3ed8dffe0f479"
+    },
+    {
+      "path": "packages/javascript/dist/conversion-UBQKSIGU.js",
+      "bytes": 835,
+      "sha256": "acb135c6d2bd8eeabc4f85a26e5d2b1778a9a26b4fecf1c6b52690e5f0c51b84"
+    },
+    {
+      "path": "packages/javascript/dist/convert.js",
+      "bytes": 61378,
+      "sha256": "12809b69b566cae9f483728b729b6fb3e3577ddd68e22b9bf8d111e4e0a81b62"
+    },
+    {
+      "path": "packages/javascript/dist/data.js",
+      "bytes": 443,
+      "sha256": "fa8f5786f6e94679d276f3efd9fd9c92f0051655564c4494e1670ea769f46530"
+    },
+    {
+      "path": "packages/javascript/dist/deck.js",
+      "bytes": 474,
+      "sha256": "73c35ab4ef8d95224cbdbaa5afa5aff2c257c8c4ea6ee8635481cfd5126e4c56"
+    },
+    {
+      "path": "packages/javascript/dist/diagram-engine-eager.js",
+      "bytes": 360,
+      "sha256": "bdda69c4a470ab218074b33edc5c162b40bd1e664e365271faa15fa1747d6fc3"
+    },
+    {
+      "path": "packages/javascript/dist/diagram-engine-lazy.js",
+      "bytes": 430,
+      "sha256": "21c9b614eaecd2abd1792b607ab8c8b19818641d3626d4be20482ebf179c5ce8"
+    },
+    {
+      "path": "packages/javascript/dist/diagram-plantuml-ZZYMHBHZ.js",
+      "bytes": 87,
+      "sha256": "25f6b1cd4ee537704db65ffdc2d1bf09841ac212d6268ddf4d1576e5b2c068a3"
+    },
+    {
+      "path": "packages/javascript/dist/diff.js",
+      "bytes": 271,
+      "sha256": "1213fcef6f6b28bfe5ed451fb3b804aacd9be7dd9ce1e82519c1ff44e9bcab68"
+    },
+    {
+      "path": "packages/javascript/dist/docs.js",
+      "bytes": 1933677,
+      "sha256": "d9e81997788fe1cc26b452d092bc776d5f7ff7038da67c4f3ff5eef286881498"
+    },
+    {
+      "path": "packages/javascript/dist/examples.js",
+      "bytes": 9346752,
+      "sha256": "ce9ded4c5895c38e1d0b59fab8b888c63d8e620bb56d08785c7207aacc13b6d2"
+    },
+    {
+      "path": "packages/javascript/dist/font-policy.js",
+      "bytes": 151,
+      "sha256": "80bafd517897185dc55223e253256ed0fdb59ab37dd37aebf54b6b300002ca7e"
+    },
+    {
+      "path": "packages/javascript/dist/format.js",
+      "bytes": 157,
+      "sha256": "1c38b9d6c7e79e7f3404602e0b85f6c0b3690aa2d07d6881506d8b7388cf70f3"
+    },
+    {
+      "path": "packages/javascript/dist/ids.js",
+      "bytes": 339,
+      "sha256": "d16e13bf8c4a011a5abc15be2d6c52e6b8fa1b564a2209c04764a4a966486f1b"
+    },
+    {
+      "path": "packages/javascript/dist/index.js",
+      "bytes": 5855,
+      "sha256": "1280d75e7b85705a1cd816031ba92a7d541e3fff519e77bbc654cd61201e4ea1"
+    },
+    {
+      "path": "packages/javascript/dist/markdown.js",
+      "bytes": 390,
+      "sha256": "f370451cfebb67c9243dd32589fe42031ead59eeec5b7134590f5eecc530f00c"
+    },
+    {
+      "path": "packages/javascript/dist/node-engine.js",
+      "bytes": 4065,
+      "sha256": "a2ce0c8a85252438620cdad1a461d455445075e01630da71a44a0dfaa86a21fd"
+    },
+    {
+      "path": "packages/javascript/dist/pagination.js",
+      "bytes": 282,
+      "sha256": "683836477d740318d52fd1a55f77784913a5634c2dad8e67e796d5e8ccc67ad6"
+    },
+    {
+      "path": "packages/javascript/dist/patch.js",
+      "bytes": 536,
+      "sha256": "0a79008840f896ca5ef920930cacab44dd719c05f9d0cc06675f7fe45d6ace07"
+    },
+    {
+      "path": "packages/javascript/dist/precompiled.js",
+      "bytes": 231,
+      "sha256": "858284f7b12142861755cfd56243c6f92e969f0de1270f46f183f983643c0746"
+    },
+    {
+      "path": "packages/javascript/dist/repo-readme.js",
+      "bytes": 19933,
+      "sha256": "c0a3317bd4cc0adf95a985fee7c2c937b16ce56406354634ef37e1069896b51c"
+    },
+    {
+      "path": "packages/javascript/dist/schema-engine-ajv.js",
+      "bytes": 1179,
+      "sha256": "0024252637925b3c33340e2fcfd1aed2321aae49fcd0863f01ff1ba4296042f5"
+    },
+    {
+      "path": "packages/javascript/dist/schema-engine-precompiled.js",
+      "bytes": 131,
+      "sha256": "c69eccf9cc5de2a110a6ddb9a64acd9d57112d27bd6fc3f25f6cabb85897b163"
+    },
+    {
+      "path": "packages/javascript/dist/schema.js",
+      "bytes": 396,
+      "sha256": "7ac0ac12147f404244942e725d401ff9bb461d6aacb1628267c3c9965b973519"
+    },
+    {
+      "path": "packages/javascript/dist/schemas.js",
+      "bytes": 241,
+      "sha256": "44669a35d08456b5c2837984df2de4809315323dc6763dbc0ffcb07e8a7077e0"
+    },
+    {
+      "path": "packages/javascript/dist/shape-catalog.js",
+      "bytes": 14977,
+      "sha256": "92e97d7c769114b1d00a56908e91cce2eb8be279a3c9bb5ff561320f7086288c"
+    },
+    {
+      "path": "packages/javascript/dist/shape-engine-eager.js",
+      "bytes": 323,
+      "sha256": "56141eac3331bbd00f6a37c790f4f1b707f4c33ee27c2cc39edd1add2055a788"
+    },
+    {
+      "path": "packages/javascript/dist/shape-engine-lazy.js",
+      "bytes": 308,
+      "sha256": "50e91c640653fd45a180cf9604329ca4407478b22652e10e2c349f19bcc4bb2c"
+    },
+    {
+      "path": "packages/javascript/dist/shape-engine-module-BK7JNEUV.js",
+      "bytes": 308,
+      "sha256": "9085c04cb0378b469ac753ed79c0288f2d41e99bc2d819cfda9c3f9ecb4c0608"
+    },
+    {
+      "path": "packages/javascript/dist/shape-geometry.js",
+      "bytes": 229,
+      "sha256": "eaef14b1f91d6893844e4c05eade8313f5f7283d332401b76ce24e14f861f24a"
+    },
+    {
+      "path": "packages/javascript/dist/source.js",
+      "bytes": 23245,
+      "sha256": "1bb2464c8e022ed1356f918775ab2c53f0d8fcaf00744ad5d199a566dfa54dbe"
+    },
+    {
+      "path": "packages/javascript/dist/spec/reference/engine-defaults.json",
+      "bytes": 1341,
+      "sha256": "9faa8e4a2aec0e138d26f603ab6a0f55d7715e8f0bb0792cca2b5476adca9d6f"
+    },
+    {
+      "path": "packages/javascript/dist/spec/reference/engine-vocabularies.json",
+      "bytes": 37175,
+      "sha256": "362f598ee3eabb4b76314dceeee2358f46c1589c39e855f2bc7c8fada4fa2ae4"
+    },
+    {
+      "path": "packages/javascript/dist/spec/reference/font-policy.json",
+      "bytes": 153842,
+      "sha256": "de84a4926670b0423f07e7aea90f7f19e5191a60bd12575f71ebe081b4d0cffd"
+    },
+    {
+      "path": "packages/javascript/dist/spec/reference/font-policy.schema.json",
+      "bytes": 10295,
+      "sha256": "0e5a1132c08e80f561b0734e9eeb28d0238d3bd5481f8c0b69f85c774a64d837"
+    },
+    {
+      "path": "packages/javascript/dist/spec/reference/preset-geometry.json",
+      "bytes": 318701,
+      "sha256": "1b6fdad7c83022df2187e1874313dbfb38db164f5fca7dade842f395aa08b773"
+    },
+    {
+      "path": "packages/javascript/dist/spec/reference/preset-geometry.schema.json",
+      "bytes": 5271,
+      "sha256": "a9e5928d47f4d13a84150fe0148b0c48c15748ab9802d289710624d824efeb9e"
+    },
+    {
+      "path": "packages/javascript/dist/spec/reference/symbol-font-encodings.json",
+      "bytes": 318426,
+      "sha256": "64f18aa6a2674125d08af6e3d23275a2c9d4318e2aa4718b2b4b8e264582834d"
+    },
+    {
+      "path": "packages/javascript/dist/spec/reference/symbol-font-encodings.schema.json",
+      "bytes": 7451,
+      "sha256": "a2f27e92b29106fd4c1eb8cc2158618bf1bad0e5b2090fb0830b8e9ec13eb74e"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/audience.schema.json",
+      "bytes": 6240,
+      "sha256": "bdeedc46884063b955a54d61f4647368644cee6eba60f369cf88ac319decc939"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/catalog-index.schema.json",
+      "bytes": 4861,
+      "sha256": "c4249cd003aedb5cf6eb822528ecf9b1fe7853809dd480ae5fcd77beb827221e"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/catalog-manifest.schema.json",
+      "bytes": 3787,
+      "sha256": "e2b1df4de499f9f87b12ff67cc8644c25738e2b108e256c9f6890406a567369d"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/chart-type.schema.json",
+      "bytes": 9736,
+      "sha256": "2a602878e5422ea34f49af6f7bd1da3ce8652b60a06bd9fd304c4aa07360b579"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/color-scheme.schema.json",
+      "bytes": 7408,
+      "sha256": "daaef7a0d1ad6e416ab0aa86f10f9b64c47a442a1560c20d17ef4853ec0df6da"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/finding.schema.json",
+      "bytes": 10374,
+      "sha256": "a3d5b2800fbcba3a47acad73b7565fbec1c701657b7ca6d7651e298eee41e31b"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/font-scheme.schema.json",
+      "bytes": 10211,
+      "sha256": "3c576adeac4d5a39238b9e7be4baa4f566b76cd68851fc54f004a52aa0aea707"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/icon-set.schema.json",
+      "bytes": 4896,
+      "sha256": "3008c5d917ff3f0ec73ba46b609aa987a6399e9121f465b32fbf3a4af635c5df"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/language.schema.json",
+      "bytes": 7329,
+      "sha256": "254da39754e210a2bd4d5b0976fa12af3f8fae51f341273544f8c4ff3c1ef7a3"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/layout-preview-index.schema.json",
+      "bytes": 2563,
+      "sha256": "96e52b4a3caf390bfc3bf73559cfbc460060243e718b101bdae1d6e1363f31b2"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/layout.schema.json",
+      "bytes": 32541,
+      "sha256": "407133e832c8feaba746d7c7144beb75ea8e50b345f09490ec6870c085921933"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/narrative.schema.json",
+      "bytes": 8651,
+      "sha256": "1a40f4ea8f15477dcae349275bfbb1bfd75b27ec663f16e13cc59abdb2cd28b3"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/opf.schema.json",
+      "bytes": 303309,
+      "sha256": "a17663750bce48e58a9e21a81d268893b6af2036478921b5e6fd26a4fee5d10e"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/purpose.schema.json",
+      "bytes": 4191,
+      "sha256": "83f4c3a9d577e658d9d6b4a28a4995068de64c9f77d4899c706005eebecc96d9"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/social-platform.schema.json",
+      "bytes": 5925,
+      "sha256": "f94d4789ab382bd9e4aafecd8bc2aeb94375117e82ff507f5d75e04379a11a00"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/theme.schema.json",
+      "bytes": 10947,
+      "sha256": "ccef0bf760c9690f18dee28d1fc0baed3b8e2a69e3ee8f097496eeb42e258bae"
+    },
+    {
+      "path": "packages/javascript/dist/spec/schemas/tone.schema.json",
+      "bytes": 5750,
+      "sha256": "7fbbf17e0985dff85606bb9ffdf7776d06e0dac9668f95ac994eeb826808e22b"
+    },
+    {
+      "path": "packages/javascript/dist/spec-files.js",
+      "bytes": 115,
+      "sha256": "36600b703f46fd680b88f63b91bc21f8afe8a401237ffb1848ab29611d9dd7d9"
+    },
+    {
+      "path": "packages/javascript/dist/symbol-font-encodings.js",
+      "bytes": 424031,
+      "sha256": "46bc0d34dc11b68a694055aa8b06899a941cd0331fced2fa56338993e629fb75"
+    },
+    {
+      "path": "packages/javascript/dist/types.js",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "packages/javascript/dist/validator.js",
+      "bytes": 385,
+      "sha256": "ea25398f44dc5298225da531f1179048e833e75748bebeaf301a71727682a998"
+    },
+    {
+      "path": "packages/javascript/dist/yaml.js",
+      "bytes": 390,
+      "sha256": "c9c857f957fc04f26994d06b0d4138b0bbf2fc3ba504652495587e309114cb1c"
+    },
+    {
+      "path": "packages/gallery/dist/icon-sets/lucide.js",
+      "bytes": 764158,
+      "sha256": "962fc85bdc4c96c08a148026bb39d075965c245a40f9d320df3f9e5ba1fea33b"
+    },
+    {
+      "path": "packages/gallery/dist/icon-sets/tabler.js",
+      "bytes": 1700906,
+      "sha256": "f5ba61f1850d2044106fa3ca2c4a8f0efff98fb2805c8602411d795dd2060b3b"
+    },
+    {
+      "path": "packages/gallery/dist/icon-sets.js",
+      "bytes": 645,
+      "sha256": "7cbf177a16dbbc5723313492c5cda76c8dc66d7e8ab02d22b211aa81d0ea1b6c"
+    },
+    {
+      "path": "packages/gallery/dist/index.js",
+      "bytes": 345088,
+      "sha256": "2964845a7cfde007502f524ead2d4d90d6ef81de01ee500bdca51098ef908e06"
+    },
+    {
+      "path": "packages/gallery/dist/previews.js",
+      "bytes": 190931,
+      "sha256": "af23f09b8b9cbaf119affe3a86727f0261cc6b6d551f8f928be57674eb6f6014"
+    },
+    {
+      "path": "packages/render/dist/annotations.js",
+      "bytes": 4097,
+      "sha256": "14ff09f55fe92c96e3cece9235d8050d4e457e01679b3167f14fda23e22d5738"
+    },
+    {
+      "path": "packages/render/dist/chart-options.js",
+      "bytes": 10447,
+      "sha256": "cfe252a79fcda709bbbcb41cf988f8fc2ccd324cb5afcab6ecd167268e1d6780"
+    },
+    {
+      "path": "packages/render/dist/charts.js",
+      "bytes": 120869,
+      "sha256": "3363788309602198568df9d0ec353db69a50f84f7bd9d2e8ca4ad07d380bc140"
+    },
+    {
+      "path": "packages/render/dist/color-fonts.js",
+      "bytes": 2435,
+      "sha256": "bd65c25d0c4ad6f7c6a1e59dd6ecc5a543a3e21fe0859c9cb852a8d3eaca8468"
+    },
+    {
+      "path": "packages/render/dist/converters.js",
+      "bytes": 2679,
+      "sha256": "5390e6545f344088a24ad4383ed10a2005ca49e6e341b317997950b1e17c486b"
+    },
+    {
+      "path": "packages/render/dist/deck-runtime.js",
+      "bytes": 23518,
+      "sha256": "f813c3b2a1d5ca7b3f108b1793955008a01e45fc787a9a02b10b065206f12441"
+    },
+    {
+      "path": "packages/render/dist/drawn-faces.js",
+      "bytes": 2865,
+      "sha256": "3ba6046997336f4278cf94e66ecfa9e942511c959e8dd7ecbd0b94ff524afe4f"
+    },
+    {
+      "path": "packages/render/dist/effects.js",
+      "bytes": 18498,
+      "sha256": "8e36bbdb90c128f81875046f76e109b4ac7d6aebcb664360085a374540491453"
+    },
+    {
+      "path": "packages/render/dist/element-define.js",
+      "bytes": 314,
+      "sha256": "4a3ae5cc04f57bac3b622eff4342f833376a928f20b1078313aa12a5c2fbedba"
+    },
+    {
+      "path": "packages/render/dist/element.js",
+      "bytes": 38903,
+      "sha256": "b279575209023ed10aea0731d2ff5cab82164465af2c2f5ed7f126908d55e37b"
+    },
+    {
+      "path": "packages/render/dist/export-browser.js",
+      "bytes": 15997,
+      "sha256": "ad95d100d9cb0af04e605367515283eeac6b755fee365aacc1bc530dd63ac7eb"
+    },
+    {
+      "path": "packages/render/dist/font-compatibility.js",
+      "bytes": 9574,
+      "sha256": "0b0be7d18b7d519d905849de3e16423ecd3567fd353a088dc582fd7632218d3a"
+    },
+    {
+      "path": "packages/render/dist/font-demand.js",
+      "bytes": 23737,
+      "sha256": "f9e380aff656a1e988b528f9a12bcffdfffdbe1b695f5d82f4698c79cfbb9a33"
+    },
+    {
+      "path": "packages/render/dist/font-fstype.js",
+      "bytes": 3542,
+      "sha256": "5c60126e48ca99c8be104c4305ed80cfb8b7d63795ea0aeb88e7596aceaf6869"
+    },
+    {
+      "path": "packages/render/dist/font-manifest.js",
+      "bytes": 110526,
+      "sha256": "aca1e2890753d57b75c8661c188cad9595d296151749b4e4e2ae3193d1f0bb9b"
+    },
+    {
+      "path": "packages/render/dist/font-registry.js",
+      "bytes": 35101,
+      "sha256": "c6a1bf547591318b4f688a8efb0a18d1ae61407af5b982ac8f41a06693e07fd5"
+    },
+    {
+      "path": "packages/render/dist/font-selection-metadata.js",
+      "bytes": 809,
+      "sha256": "7ce6fc1afe35a2902352484510b702429a8717e17a86e2072d5bad9497f734da"
+    },
+    {
+      "path": "packages/render/dist/font-selection.js",
+      "bytes": 309,
+      "sha256": "e1faa4603b33156507657417d207eb211ead0207291258a64f21ef34d23f2e27"
+    },
+    {
+      "path": "packages/render/dist/font-subset.js",
+      "bytes": 9956,
+      "sha256": "0895481579fb98de0f3e535c0fe4157add39fbd14732ae680d3ab11c3aef30cc"
+    },
+    {
+      "path": "packages/render/dist/fonts-browser.js",
+      "bytes": 26137,
+      "sha256": "7c5728de57735a169dde631cf4c61348d52bf8173c1d3447b39470c37dda66f6"
+    },
+    {
+      "path": "packages/render/dist/fonts-node.js",
+      "bytes": 26438,
+      "sha256": "2a1201b3c2143d5ebf50aced132719288ecf12e1bdc8f79a9b6cbde3cf38f736"
+    },
+    {
+      "path": "packages/render/dist/fonts.js",
+      "bytes": 1409,
+      "sha256": "230dd980941d2392cde8181b5d02405278004e4c81444afa00e6920777e01d2b"
+    },
+    {
+      "path": "packages/render/dist/hb-shape.js",
+      "bytes": 7331,
+      "sha256": "7a07db6607170c51f4c166331205436800608ca17470eafc47f53fbdd5b4d8d3"
+    },
+    {
+      "path": "packages/render/dist/index.js",
+      "bytes": 237,
+      "sha256": "b49c1708765dc46fb2a7d66b2dfbcc9b1b677c03d3cba16af102e9ae98cc34e4"
+    },
+    {
+      "path": "packages/render/dist/lazy-font-list.js",
+      "bytes": 4834,
+      "sha256": "51ae79039afd67f23c569218234b778f81d0115b59bb2a76de593af43a09b266"
+    },
+    {
+      "path": "packages/render/dist/lazy-fonts.js",
+      "bytes": 29470,
+      "sha256": "d6d01fc45911ee1952973a05cba770b6dad825280b78145641e3f79d442c9e5e"
+    },
+    {
+      "path": "packages/render/dist/measure-pictures-node.js",
+      "bytes": 1311,
+      "sha256": "2f68f6940bac8a69ef2c154d2b33e73d70d186a04ea8f033447c20e7d7b83052"
+    },
+    {
+      "path": "packages/render/dist/measure-pictures.js",
+      "bytes": 10875,
+      "sha256": "2a61cbaaf490e040aede2ad0d795951c3c5cb91ea683f11e168a46317168474f"
+    },
+    {
+      "path": "packages/render/dist/node-resolve.js",
+      "bytes": 1796,
+      "sha256": "0c0abd267065c7a3b702ee36ca338344ebdb2dbb466afaedb42a487260aa3f7f"
+    },
+    {
+      "path": "packages/render/dist/pdf-fonts.js",
+      "bytes": 16436,
+      "sha256": "7c1b031b8e7d5bfe58748c38556d54485e0e2f94f2463e197beb029bb1ae1781"
+    },
+    {
+      "path": "packages/render/dist/pdf-style.js",
+      "bytes": 26153,
+      "sha256": "c7f5f84a6d42502e8b46c96e3fdde0a2510834adc14db9693c036e4012203041"
+    },
+    {
+      "path": "packages/render/dist/pdf-subset.js",
+      "bytes": 8232,
+      "sha256": "d5f78c128380d1570e0c299ce0d530188aa37f010c6e23d36b605f236fb029a1"
+    },
+    {
+      "path": "packages/render/dist/pdf-text.js",
+      "bytes": 17334,
+      "sha256": "ad942dd2e7187cb4878cea2088913d260dbaf8e351732ccf72a5d68a9a7cd758"
+    },
+    {
+      "path": "packages/render/dist/pdf-vector.js",
+      "bytes": 72285,
+      "sha256": "a3b101658fb84a009beab2b7dbe02a115c6a22934a0a2569cdb52a883a8385df"
+    },
+    {
+      "path": "packages/render/dist/pdf-writer.js",
+      "bytes": 6009,
+      "sha256": "0add8171eee8446b2817c0800821a1394dd76102d4735c9b306ae4a5dcec8ad6"
+    },
+    {
+      "path": "packages/render/dist/pdf-xml.js",
+      "bytes": 3847,
+      "sha256": "778acbc775c3a508d5fd7484cdecae1f566a11d8fb8d044f7ce57200e08cd669"
+    },
+    {
+      "path": "packages/render/dist/pdf.js",
+      "bytes": 448,
+      "sha256": "d2eaef8eb54f130b0c242f9c35562b06fd9f038d617e7da4630a2cb14a78146c"
+    },
+    {
+      "path": "packages/render/dist/player.js",
+      "bytes": 42455,
+      "sha256": "a4ba133549e24f7e299056b63dc46131348dccbff69f4b82bc1f5c4f1b576c68"
+    },
+    {
+      "path": "packages/render/dist/png.js",
+      "bytes": 345,
+      "sha256": "488f4b5196459a1ccf8fc8a9bf04579fa965d1bea5064f7eaa9aeb078fe4bfe5"
+    },
+    {
+      "path": "packages/render/dist/preview-fonts-cli.js",
+      "bytes": 2219,
+      "sha256": "53f540f653d9389074f4a21f0a5897b339be8209a4a8a5b2f6823603b012625c"
+    },
+    {
+      "path": "packages/render/dist/preview-fonts-node.js",
+      "bytes": 7956,
+      "sha256": "e37634fdcd22384d167fd23b25e7573887ef2b297220b61124a9e9c38ff0799c"
+    },
+    {
+      "path": "packages/render/dist/preview-fonts.js",
+      "bytes": 4587,
+      "sha256": "52a5714a38fae3c16621b26bd5e3b12d4146c6d49b1b1d56af67b2f825227d47"
+    },
+    {
+      "path": "packages/render/dist/raster-images.js",
+      "bytes": 5367,
+      "sha256": "293265c5b833f52d0ad642af8c14754f9d9c2a3e575ecfda059d036c4319f303"
+    },
+    {
+      "path": "packages/render/dist/raster-text.js",
+      "bytes": 34635,
+      "sha256": "1acc0cf65a15406ef823c521ac462e43ac8a2fd5f31f5c3e4d3df7ec41cfea14"
+    },
+    {
+      "path": "packages/render/dist/raster.js",
+      "bytes": 12058,
+      "sha256": "cffc7d1da6229264355b84cf53527805da4f4d382ec6f78735688f2f3aea5705"
+    },
+    {
+      "path": "packages/render/dist/script-font-pack.js",
+      "bytes": 20646,
+      "sha256": "a944aef7cd6dc2a7945249cb524611312dfa748bb88c3a3167137fec2d692fa8"
+    },
+    {
+      "path": "packages/render/dist/script-fonts.js",
+      "bytes": 47458,
+      "sha256": "da80fe9a64d49eef01d1d6eba219f6a3f64e52eb8ba839665bdfdf017240b8c0"
+    },
+    {
+      "path": "packages/render/dist/sha256.js",
+      "bytes": 3035,
+      "sha256": "39fed065ca4c33c5e097e40bf7e87eefd7b359601df1a6e58e131c27ea96cd6b"
+    },
+    {
+      "path": "packages/render/dist/shapes.js",
+      "bytes": 25718,
+      "sha256": "f3190b2c8c778e576c6c83ad4a388d284cfc326a368e807b88de1e7546860267"
+    },
+    {
+      "path": "packages/render/dist/slide-sources.js",
+      "bytes": 2976,
+      "sha256": "bb989439e821c66552d637b75d5f7f9a70e02bb0f6e13762d0bb8691855923d3"
+    },
+    {
+      "path": "packages/render/dist/svg-internals.js",
+      "bytes": 248,
+      "sha256": "9a99be96460e6b3ed04d1c37b9ca001a67eb705f3e6f115f657cd115d18c35cc"
+    },
+    {
+      "path": "packages/render/dist/svg.js",
+      "bytes": 182128,
+      "sha256": "b7194200e01b8973f2e4a9342afcdc8252b659aa278358669e2f5140c4c1dae8"
+    },
+    {
+      "path": "packages/render/dist/symbol-fonts.js",
+      "bytes": 3986,
+      "sha256": "70d09798a3e53f5227b8000f478e9a6fba8a8bee2cd4074bb9d998c302829ad7"
+    },
+    {
+      "path": "packages/render/dist/text-paths.js",
+      "bytes": 20837,
+      "sha256": "1c671b8751fd1c765338220a2022fa6517703c1406b9281866d81540dba1b6da"
+    },
+    {
+      "path": "packages/pptx/dist/annotation-export.js",
+      "bytes": 7396,
+      "sha256": "a4beaf628f6a4cc769b6cd1086277c4cd939d07dccf29ac1746198739728364e"
+    },
+    {
+      "path": "packages/pptx/dist/annotation-provenance.js",
+      "bytes": 17801,
+      "sha256": "dbe70228e9d399047ef0340b4a9bf43cdee7247520d7b374e267482e94dde032"
+    },
+    {
+      "path": "packages/pptx/dist/background-import.js",
+      "bytes": 11727,
+      "sha256": "8903e0408961bccb16db12d4395748b8c2c06b3d708061f92b9e05c67a172af0"
+    },
+    {
+      "path": "packages/pptx/dist/background.js",
+      "bytes": 16997,
+      "sha256": "e34e5bbc125be779efbe012f41290432f107d29b2635e2e6fd1b0b6bbcb83000"
+    },
+    {
+      "path": "packages/pptx/dist/body-text-import.js",
+      "bytes": 13556,
+      "sha256": "36763608b85bbeef9fa7fb52dd2550384d362696916be93eb4df57f17a96f05d"
+    },
+    {
+      "path": "packages/pptx/dist/card-provenance.js",
+      "bytes": 3588,
+      "sha256": "41b78472f0d8363b98341d9d66529c48f9f821d39bc110b8e43b610205d535fb"
+    },
+    {
+      "path": "packages/pptx/dist/chart-data.js",
+      "bytes": 9643,
+      "sha256": "0505a4df3d90f8221ccc5efc294c0095efd2dfc5d4c3a3eda8eccd77b5ab6f8c"
+    },
+    {
+      "path": "packages/pptx/dist/chart-direct-labels.js",
+      "bytes": 8784,
+      "sha256": "06f3341477aa19a6119156b2827dd27301973736303947feead00fdc1725c4bd"
+    },
+    {
+      "path": "packages/pptx/dist/chart-fallback.js",
+      "bytes": 7749,
+      "sha256": "7656f61cbd2163c83da809ed888e0aa2875e9b1ccc2cef9582d34ed6d3226afd"
+    },
+    {
+      "path": "packages/pptx/dist/chart-highlight.js",
+      "bytes": 8080,
+      "sha256": "9a6b258ba94815dd3ff997101055db18d954c4c063204d2f58769679fe8018f2"
+    },
+    {
+      "path": "packages/pptx/dist/chart-layer.js",
+      "bytes": 14439,
+      "sha256": "ec41409c914a95c4d5e7ddd6d0cdcc1703c218dff470cba5e515c0644c1fd51f"
+    },
+    {
+      "path": "packages/pptx/dist/chart-marks.js",
+      "bytes": 10709,
+      "sha256": "feb9459b478816a5cfef45ac45245b81d627cf06d27301ae720705d3ea7d1cb3"
+    },
+    {
+      "path": "packages/pptx/dist/chart-options.js",
+      "bytes": 21181,
+      "sha256": "00db5b585cc2733938bec6c4145a0e2ee58cefbb1aa27e6a746a860c626f1b50"
+    },
+    {
+      "path": "packages/pptx/dist/chart-order.js",
+      "bytes": 4252,
+      "sha256": "fee0852bf47a347763b600a1ded83a6a54d7cb1221ecdab14d92d6f596a9b543"
+    },
+    {
+      "path": "packages/pptx/dist/chart-references.js",
+      "bytes": 44806,
+      "sha256": "67dff3a0f58333a8baf0201a37558657ca65f05babc82333795afefde1824255"
+    },
+    {
+      "path": "packages/pptx/dist/chart-scheme-colors.js",
+      "bytes": 4422,
+      "sha256": "3057bff3044a8260e68c4428ee8b7131993aec5845d84d999099eab2ea801bce"
+    },
+    {
+      "path": "packages/pptx/dist/chart-types.js",
+      "bytes": 11302,
+      "sha256": "e1d897724933a7659bd3e4872e7e7f218b5397b46f4b488d956ca520c921562b"
+    },
+    {
+      "path": "packages/pptx/dist/chart-workbook.js",
+      "bytes": 13344,
+      "sha256": "c0b742b78ea7eac0b1cf140693d80e95ee80548a94f5826d4ebae002d3a4247b"
+    },
+    {
+      "path": "packages/pptx/dist/chartex.js",
+      "bytes": 41440,
+      "sha256": "3afcc3a81ba1418cd42955301711d6b6e5075085c32685f4a8e1bc47d67f12fd"
+    },
+    {
+      "path": "packages/pptx/dist/code-provenance.js",
+      "bytes": 20392,
+      "sha256": "d63a914082c871edd96829fbda8a8a09a3b3c0e7f44d2e47f51235a31401ced5"
+    },
+    {
+      "path": "packages/pptx/dist/color-ref.js",
+      "bytes": 4265,
+      "sha256": "390e828de8c7f84d988f29f78e35eab380930178b851b94e46e8f5dd9e6b6ef4"
+    },
+    {
+      "path": "packages/pptx/dist/connectors.js",
+      "bytes": 6676,
+      "sha256": "84794a467d4b5c490f3da48c10a0100cebfb02a2b8e8cac944c6bd4de756a19e"
+    },
+    {
+      "path": "packages/pptx/dist/content-topology.js",
+      "bytes": 43737,
+      "sha256": "baa120d696fb5bfda0803f6e79f553c56a3100de4cd2633958def54f2bdc369b"
+    },
+    {
+      "path": "packages/pptx/dist/data-provenance.js",
+      "bytes": 38771,
+      "sha256": "11a1b69b544f2bdcc23d6b27b23a36ca4a0e53fb3c7f60418f409a695bf13dc7"
+    },
+    {
+      "path": "packages/pptx/dist/diagram-provenance.js",
+      "bytes": 13507,
+      "sha256": "6aa4d96e2e3cbedf9013f37cb292e02802b2094d2b8ad099c6e66df15c139cf4"
+    },
+    {
+      "path": "packages/pptx/dist/diagram-shapes.js",
+      "bytes": 64758,
+      "sha256": "0549d3bcdc0bd20b5eeff9727fd8a0ecf207e48be18c5fa7f62dafdd9fca739d"
+    },
+    {
+      "path": "packages/pptx/dist/document-provenance.js",
+      "bytes": 99552,
+      "sha256": "f21bcb7d89f1b6e84a4a1429d3f8ebc087d6b8c015508129f570b2b118852628"
+    },
+    {
+      "path": "packages/pptx/dist/effects.js",
+      "bytes": 8821,
+      "sha256": "81daadab6a098794f36befead6a741dd9b7e9b1917a5d716459a00c7fbae489d"
+    },
+    {
+      "path": "packages/pptx/dist/errors.js",
+      "bytes": 372,
+      "sha256": "a21814578efacd0f8d77f376ebc5414d4f5f686c3257ed4f516b7f2d6322af67"
+    },
+    {
+      "path": "packages/pptx/dist/font-weights.js",
+      "bytes": 3259,
+      "sha256": "360ec5bb64f237c0f410271efae70d048ccbac79e1d6c6c27a8271a40217653e"
+    },
+    {
+      "path": "packages/pptx/dist/format-check.js",
+      "bytes": 2098,
+      "sha256": "dc62edd34718548a8728ea0b04e999cbc263380e579abf5cc1e4532826c645ba"
+    },
+    {
+      "path": "packages/pptx/dist/frame-alt.js",
+      "bytes": 3846,
+      "sha256": "e790e3d8ef21cad79a1c549ab319bff4bc2d6acd3782582df37713c11c4ff100"
+    },
+    {
+      "path": "packages/pptx/dist/furniture-fields.js",
+      "bytes": 17254,
+      "sha256": "0c2ecb783fe74bd10400f1cd6ee6720bec22f5c381c3fdec35585afdf0670121"
+    },
+    {
+      "path": "packages/pptx/dist/furniture-provenance.js",
+      "bytes": 44142,
+      "sha256": "9cb70ea9a45d157aeaec01ba1c39de0853c14fbce3c4b3cbf91f41859f772057"
+    },
+    {
+      "path": "packages/pptx/dist/heading-provenance.js",
+      "bytes": 4289,
+      "sha256": "2ffc3de9d96b5e9b2698b2537eadb444c6623c3357646135389a15326b90fe45"
+    },
+    {
+      "path": "packages/pptx/dist/icons.js",
+      "bytes": 8451,
+      "sha256": "39861f6fc801b12344078fd603d6f0c7c0ad4737c9eda38dbc79b0d794df4ba5"
+    },
+    {
+      "path": "packages/pptx/dist/image-callout-provenance.js",
+      "bytes": 5245,
+      "sha256": "005463443c8ebf160469f166164e58b26f9ccb2c1564926c9d6c6db52ff25a96"
+    },
+    {
+      "path": "packages/pptx/dist/image-fallback-browser.js",
+      "bytes": 2338,
+      "sha256": "911a7f6d329a1ab652c7aaca5047acf1db0bdd3cb97917caa016576488d563a4"
+    },
+    {
+      "path": "packages/pptx/dist/image-fallback-node.js",
+      "bytes": 3044,
+      "sha256": "9cfc5385c070083c03235d9b11a330265434a6fbd13eeda33bc77634043daad0"
+    },
+    {
+      "path": "packages/pptx/dist/image-geometry.js",
+      "bytes": 10359,
+      "sha256": "64d3470d36b70184527a06d0f66ec5e81eae264101cb52dde07fbf2ad180474e"
+    },
+    {
+      "path": "packages/pptx/dist/image-import.js",
+      "bytes": 5776,
+      "sha256": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a"
+    },
+    {
+      "path": "packages/pptx/dist/image-provenance.js",
+      "bytes": 27399,
+      "sha256": "1edc0e9b38bc9664700859784c065e88fcc49a07669d1a5e3264879011530f22"
+    },
+    {
+      "path": "packages/pptx/dist/import-signals.js",
+      "bytes": 46012,
+      "sha256": "062959bcb8b6e681a9e594e1a7dd216c56b3f1822cb1bdd19fbef8777cfe19bb"
+    },
+    {
+      "path": "packages/pptx/dist/index.js",
+      "bytes": 489091,
+      "sha256": "8d78d28ad2d0d3ebd487d09a7c56c271aa6c235f9fff5e5399f09c319be735ce"
+    },
+    {
+      "path": "packages/pptx/dist/input-safety.js",
+      "bytes": 7271,
+      "sha256": "d57d4b01582cbb3c3bb4180e880ad66a1bd0f4e1730ef49acaad76c47f265c62"
+    },
+    {
+      "path": "packages/pptx/dist/legacy-tags.js",
+      "bytes": 9332,
+      "sha256": "aa42723fc79435ca8d84068f83b15fb6ec310299da6b9a277c4d87fc6919112e"
+    },
+    {
+      "path": "packages/pptx/dist/logo-provenance.js",
+      "bytes": 11171,
+      "sha256": "26919d9c2308aeb808b136224776295ab42d4fa269fdd373755ae6d88d00e9ac"
+    },
+    {
+      "path": "packages/pptx/dist/master-furniture.js",
+      "bytes": 24219,
+      "sha256": "e3916cde394a8ddb31287025619d67538ce4437ffb8282617d3a243d7328f44a"
+    },
+    {
+      "path": "packages/pptx/dist/master-themes.js",
+      "bytes": 10369,
+      "sha256": "74d3ec6c3f7e9d687d3ccd14ec28b21eb2832fb39b203f93db50644a6e874426"
+    },
+    {
+      "path": "packages/pptx/dist/media-dedupe.js",
+      "bytes": 2702,
+      "sha256": "7beecb4ad66ba2165f26f26e5ec4c375c76bf1e00048e43885ca35cb18bcaaef"
+    },
+    {
+      "path": "packages/pptx/dist/media-provenance.js",
+      "bytes": 16905,
+      "sha256": "f73d0a824fc5a464029bae4bb4711ef92a5c85511cfaa7d20995b57ecf1048f7"
+    },
+    {
+      "path": "packages/pptx/dist/metric-provenance.js",
+      "bytes": 8026,
+      "sha256": "648d16a9e86e5e51b9c3a71e52e6aaab7cf8f66e5e4c9200354298e63cbc1df3"
+    },
+    {
+      "path": "packages/pptx/dist/native-autofit.js",
+      "bytes": 3566,
+      "sha256": "9c9c4984650d7aa3ca636d3883614e2a37e17ba22a1acb40ae50d3dc560ca03f"
+    },
+    {
+      "path": "packages/pptx/dist/native-body.js",
+      "bytes": 24417,
+      "sha256": "daa079d86abe06ac33e6f60473f0eb673cf9c18cea1ee283e2edba79807446dc"
+    },
+    {
+      "path": "packages/pptx/dist/native-footer-classification.js",
+      "bytes": 8150,
+      "sha256": "60ae1f166d9621274029550fc0f78a4826bd8ae5f9dda3234751af2c5b8134e2"
+    },
+    {
+      "path": "packages/pptx/dist/native-furniture.js",
+      "bytes": 25470,
+      "sha256": "2807cecc6e587a059293690a4fe7fb2eaa9aea267297556684bc6adfcd1e1bf4"
+    },
+    {
+      "path": "packages/pptx/dist/native-language-provenance.js",
+      "bytes": 11041,
+      "sha256": "3e2bec681690be52fecbec8b2ed503bd5b380e5eaa2a9816d5731e93ee6f9a46"
+    },
+    {
+      "path": "packages/pptx/dist/native-latin-slots.js",
+      "bytes": 8674,
+      "sha256": "be95a0fd1a42db752f47d561d5914243494b4571a6a74d344efd5500943e7fe2"
+    },
+    {
+      "path": "packages/pptx/dist/native-text-style.js",
+      "bytes": 6325,
+      "sha256": "03bbbb0ce0c0fa969b72a6f4ee3f64b98e00864a7840500c4b1cb7e3e7bd00f4"
+    },
+    {
+      "path": "packages/pptx/dist/numbered-list.js",
+      "bytes": 7284,
+      "sha256": "92dcd93047cfa1a8e9d5da1e5cb6b8eb75eb38fac3b7a2c1b0f300c258179557"
+    },
+    {
+      "path": "packages/pptx/dist/package-fonts.js",
+      "bytes": 9791,
+      "sha256": "075722b50fd94f29a46a448044e5ad979bb503e1d6a80b3cfc37e66f921038eb"
+    },
+    {
+      "path": "packages/pptx/dist/picture-slides.js",
+      "bytes": 8353,
+      "sha256": "62dea0a0be75bd8779dba6bcdaaeed5f6970966c4b1893759f6d285ed876f6c9"
+    },
+    {
+      "path": "packages/pptx/dist/quote-provenance.js",
+      "bytes": 14384,
+      "sha256": "77cf365fff84fcd44b8a7c2e334ee2b017bf4a192470ec47a52cef1ecf840815"
+    },
+    {
+      "path": "packages/pptx/dist/rich-heading.js",
+      "bytes": 7765,
+      "sha256": "771be6a28469f362c1f9ad8e5eabf1ca79b12939ca2505c1f2bd3564c3b8425d"
+    },
+    {
+      "path": "packages/pptx/dist/run-colors.js",
+      "bytes": 12169,
+      "sha256": "aad77970ca3cb0624e986533ac854373831bd171baf04d7cf4df3b392a73f3f1"
+    },
+    {
+      "path": "packages/pptx/dist/safe-typefaces.js",
+      "bytes": 9586,
+      "sha256": "f58516973dd92fec0654c1825cac503c6236519d57f0adea71b39cd3385b581f"
+    },
+    {
+      "path": "packages/pptx/dist/script-fonts.js",
+      "bytes": 39676,
+      "sha256": "a5d08d919608f4c196087a8bcecaeb9b38911e469064ab4a615f86d3c644de7d"
+    },
+    {
+      "path": "packages/pptx/dist/sections.js",
+      "bytes": 6466,
+      "sha256": "53b140f77568bb7e33fc588fa5c281c5dab7d244015884da9ae0128a1c2021e2"
+    },
+    {
+      "path": "packages/pptx/dist/shape-blocks.js",
+      "bytes": 19034,
+      "sha256": "c1e90a2379b3a8397240f9ffee419b608c468ba76f8592ecca1e7309de41112f"
+    },
+    {
+      "path": "packages/pptx/dist/shape-import.js",
+      "bytes": 49903,
+      "sha256": "6f87c24d223b1420b588809d2c2f83c3235a4dd1dd6df86044df5ad6944d6b6d"
+    },
+    {
+      "path": "packages/pptx/dist/shape-restore.js",
+      "bytes": 17953,
+      "sha256": "f60c17a4ad0c0861dc952a81f925c2f3ea0e7ab8fc3060fe97b8e5f96464afd2"
+    },
+    {
+      "path": "packages/pptx/dist/smart-art-import.js",
+      "bytes": 23105,
+      "sha256": "92a0e3c5c76a773f71785db37152a25e8eac70dd49f59b79238b90f01f0b1741"
+    },
+    {
+      "path": "packages/pptx/dist/smart-art-layouts.js",
+      "bytes": 11700,
+      "sha256": "d6450e4e610a1b91793e78274ca13cf2fa0064bb8b7c11fe9aef1ae28774c722"
+    },
+    {
+      "path": "packages/pptx/dist/smart-art.js",
+      "bytes": 74574,
+      "sha256": "6ec4edb066950ad3a355216cb81e54ef838dd11975464cbedd0502bbb76683b4"
+    },
+    {
+      "path": "packages/pptx/dist/source-run-styles.js",
+      "bytes": 4535,
+      "sha256": "0ed5609f426ea53437b7b49c472e16ae039b59dfc69b51839c52670b95299c2c"
+    },
+    {
+      "path": "packages/pptx/dist/step-badges.js",
+      "bytes": 10880,
+      "sha256": "c7a438735fc8502f80352d55a0b7683415ce4cca1dc44fc0c0fa47ee6e4f7a03"
+    },
+    {
+      "path": "packages/pptx/dist/svg-image.js",
+      "bytes": 19986,
+      "sha256": "f4816024704dd1059bccdce42c8f372588f2c81066a9856c6cb410f70f83b1ea"
+    },
+    {
+      "path": "packages/pptx/dist/table-border-import.js",
+      "bytes": 3629,
+      "sha256": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093"
+    },
+    {
+      "path": "packages/pptx/dist/table-cell-import.js",
+      "bytes": 10232,
+      "sha256": "ec71c8cdae11db5282d61b124fac773809b278f053a0443ecadcddc38706a66f"
+    },
+    {
+      "path": "packages/pptx/dist/table-import.js",
+      "bytes": 10659,
+      "sha256": "10e2cbec653df0b8171dd27ad904b9dba480b1b9161951b56d40bc899a0d784a"
+    },
+    {
+      "path": "packages/pptx/dist/template-layouts.js",
+      "bytes": 45399,
+      "sha256": "6608e59125d57d303292ddd0bffbb62a416823ddd02238b7fccc37bbd8209458"
+    },
+    {
+      "path": "packages/pptx/dist/text-provenance.js",
+      "bytes": 5623,
+      "sha256": "b30ce5e5020b0da129a7a235d5a370392032ad4b239ffd595f870e49b50dd83c"
+    },
+    {
+      "path": "packages/pptx/dist/theme-colors.js",
+      "bytes": 24410,
+      "sha256": "c23e3675acddabad7d598648d409177f724eeeb749a9eced9ccadbbc6229e0c2"
+    },
+    {
+      "path": "packages/pptx/dist/timeline-provenance.js",
+      "bytes": 9927,
+      "sha256": "8fb4ba812eda4ff70351991bf820c7ddbd18994a1139dbab8b61ac171970752b"
+    },
+    {
+      "path": "packages/pptx/dist/title-rule.js",
+      "bytes": 2703,
+      "sha256": "2d64bb95bafaf56704e98113b7d02363fe0242fe1fed8e5878a8c4476b5cc7e2"
+    },
+    {
+      "path": "packages/pptx/dist/typeface-inventory.js",
+      "bytes": 15017,
+      "sha256": "38b9e969e62c2483b33b9b0cf90d48d1f8b16b96948d8271e4c35c10efdc5a9d"
+    },
+    {
+      "path": "packages/pptx/dist/vendor-compat.js",
+      "bytes": 10914,
+      "sha256": "1ec89159eeb55511215924740c37cbfb608451cfa4fc795e1badc07857bd2433"
+    },
+    {
+      "path": "packages/pptx/dist/watermark-provenance.js",
+      "bytes": 13331,
+      "sha256": "15ff4d314c215b196be68fad84600e8accf740ec6aa8e93cfd2b5fddec031f1f"
+    },
+    {
+      "path": "packages/editor/dist/agent-handoff-dialog.js",
+      "bytes": 10137,
+      "sha256": "64ab6199eea4e35b728ea4988be1ff8da183fbf4e0922a30e3b5efc971ecc9e3"
+    },
+    {
+      "path": "packages/editor/dist/agent-handoff.js",
+      "bytes": 5152,
+      "sha256": "45e239275e33c2bf0cb51e435445c121b09ced392e8e8b87a241820c970bdf69"
+    },
+    {
+      "path": "packages/editor/dist/annotations.js",
+      "bytes": 17762,
+      "sha256": "88c754fbc5cf5bfaee5a3b256c13c5d1c74abf1cb0ddca8addedc387e23d9b9d"
+    },
+    {
+      "path": "packages/editor/dist/assets.js",
+      "bytes": 11861,
+      "sha256": "009a1a9ed7a8f15ded16862a93a642765fe44d19d5ef8d3ac5dca74f165795ad"
+    },
+    {
+      "path": "packages/editor/dist/background-options.js",
+      "bytes": 12557,
+      "sha256": "652affb6ffdd4404ae3a28e66bb8dfe128e26313b8769ab000acb170edfbc099"
+    },
+    {
+      "path": "packages/editor/dist/block-controls.js",
+      "bytes": 19075,
+      "sha256": "c1d035af590aeae9f3905849eca8d8dad0d2f9627a6c1b327635352a181d8cb3"
+    },
+    {
+      "path": "packages/editor/dist/block-convert.js",
+      "bytes": 7905,
+      "sha256": "e1105e19345bb106e6c1437f01c82828d974e43753b4040935bd2805f0ea41ab"
+    },
+    {
+      "path": "packages/editor/dist/blocks.js",
+      "bytes": 12117,
+      "sha256": "453aba27558f905cfeee5d1ba1e1e163b309025c57e2c806d8755a5fbabcc575"
+    },
+    {
+      "path": "packages/editor/dist/canvas-fields.js",
+      "bytes": 4156,
+      "sha256": "f6de408adb81c3c77e32eb513830bd7ba47cdd006c84d8545b4eb42997927258"
+    },
+    {
+      "path": "packages/editor/dist/canvas-pages.js",
+      "bytes": 7033,
+      "sha256": "e54c712c094b6b3aab00225793bedca5f1878342e0b99049fe19865378175c9e"
+    },
+    {
+      "path": "packages/editor/dist/canvas-variables.js",
+      "bytes": 2839,
+      "sha256": "29436e1197bd9ca349f1c05e8f27935c2da88a41b834aa2a0e7f224b23b154b6"
+    },
+    {
+      "path": "packages/editor/dist/canvas.js",
+      "bytes": 65743,
+      "sha256": "0efce814cc94a606da24231d2d91d0af641ea7a200a94e1119a12e8ebd847ac9"
+    },
+    {
+      "path": "packages/editor/dist/catalog-control.js",
+      "bytes": 790,
+      "sha256": "f8e3eaa49de4119b195dc22fd4cc510b04234f1a3c6f6cd662cac3cb7fd848b9"
+    },
+    {
+      "path": "packages/editor/dist/catalogs.js",
+      "bytes": 13629,
+      "sha256": "ae0c9238932f26db5b825fd4689894c76aaf9e8017bbff1aece0e77b7e46dd03"
+    },
+    {
+      "path": "packages/editor/dist/chart-data.js",
+      "bytes": 5582,
+      "sha256": "cb5117ad692e1dca57faa9b071fa501fdd9fc26e1965e4467dc033e43598f1bb"
+    },
+    {
+      "path": "packages/editor/dist/chart-options-panel.js",
+      "bytes": 20020,
+      "sha256": "a65997437c8ba4926eba140e82fe2ae50b5f585a1fc0a4fe7daea5563c64ec21"
+    },
+    {
+      "path": "packages/editor/dist/chart-options.js",
+      "bytes": 23587,
+      "sha256": "16868f12edcce46c968e10caa52dde6ed37905a4934b61ba63182ee4c72e8132"
+    },
+    {
+      "path": "packages/editor/dist/checks.js",
+      "bytes": 1511,
+      "sha256": "ee04a8c83a9fb48f659f8624b28f5d610eae9244f7cb13706489c29c4c163116"
+    },
+    {
+      "path": "packages/editor/dist/codemirror-guard.js",
+      "bytes": 3362,
+      "sha256": "6ae79b196127ee4b76dd7a943e2594dd8f2d64ec5734095c06e83a9a3a977fee"
+    },
+    {
+      "path": "packages/editor/dist/color-authoring.js",
+      "bytes": 832,
+      "sha256": "8bc8ca271341460777917c72b082041e2b977524eae1677c1b369a999fe15b45"
+    },
+    {
+      "path": "packages/editor/dist/color-slots.js",
+      "bytes": 1992,
+      "sha256": "0db7dc91c8a867c7aab42e0db320679183b48a01d65d1e4164ad687ccede02b7"
+    },
+    {
+      "path": "packages/editor/dist/content-actions.js",
+      "bytes": 18182,
+      "sha256": "8bac28835d4b020b60acba19eded94e7f1d0d9a23084830802b90be0e16e91f4"
+    },
+    {
+      "path": "packages/editor/dist/content-controls.js",
+      "bytes": 19668,
+      "sha256": "d9fb56f958d6bb2fdc6595806cb8ec83bd8f0e575f793cbf0de154ffec4884e0"
+    },
+    {
+      "path": "packages/editor/dist/continuation.js",
+      "bytes": 3996,
+      "sha256": "baa9b6dd2004ec22650b97358dd9a4e8b4342c054b66060341d29ce0f09ce391"
+    },
+    {
+      "path": "packages/editor/dist/data-grid.js",
+      "bytes": 61763,
+      "sha256": "7a643748630a7f825167992036ab04e37a6056c446993b0ccc1476a2ee34a7ee"
+    },
+    {
+      "path": "packages/editor/dist/data.js",
+      "bytes": 2815,
+      "sha256": "4ea3c494cb406a6259e7db5edccc728866578db29c8f61e5589f0ca01d28f863"
+    },
+    {
+      "path": "packages/editor/dist/dataset-refs.js",
+      "bytes": 2722,
+      "sha256": "9b860bebfbfa95358c803771d49080343ebbead1b451e30b2e7946e9923cacdf"
+    },
+    {
+      "path": "packages/editor/dist/deck-title.js",
+      "bytes": 7086,
+      "sha256": "78d1931d9de6d35cc09dc64ecca925373464966b8477376097f91b19cf05445c"
+    },
+    {
+      "path": "packages/editor/dist/design-controls.js",
+      "bytes": 103426,
+      "sha256": "ee9971a1de8cc5c2dd31b51cb8d93e22fda11b3b63b84ff614f44e0faf7f25f8"
+    },
+    {
+      "path": "packages/editor/dist/design-menu.js",
+      "bytes": 23468,
+      "sha256": "69e08b750c0050580854ddf103e4d41bd9d0e85c26d6806d9ce7417a1ad4f929"
+    },
+    {
+      "path": "packages/editor/dist/design-options.js",
+      "bytes": 40013,
+      "sha256": "da7f69d7f3b5f749d73447a384251b9b2aeb90d2c206597361c2b4efc09916b1"
+    },
+    {
+      "path": "packages/editor/dist/design-variants.js",
+      "bytes": 12631,
+      "sha256": "3f9a0ece8ea5a6942b799cd77b089abcefd852258415b6105bcb3430c1a01a23"
+    },
+    {
+      "path": "packages/editor/dist/edit-helpers.js",
+      "bytes": 2628,
+      "sha256": "2c62e3ab09b7ab401e6f4ac66c6725f5db9c236965d902508e9c17098764afb0"
+    },
+    {
+      "path": "packages/editor/dist/editor-expand.js",
+      "bytes": 20590,
+      "sha256": "bb1e9be1ab8a84f2edae8c300b30b7cc7474b45ad7acc56cf44665cfb272cbcb"
+    },
+    {
+      "path": "packages/editor/dist/element-define.js",
+      "bytes": 670,
+      "sha256": "a30f9b72c5d4fe955e25a9abbef563b0c69064244f85227a5faeefe0dc0875b8"
+    },
+    {
+      "path": "packages/editor/dist/element.js",
+      "bytes": 23788,
+      "sha256": "71f55d705e92871853ca239665b12626e61666d6e60b68bfb456e6607ca8cd02"
+    },
+    {
+      "path": "packages/editor/dist/exact-source.js",
+      "bytes": 15568,
+      "sha256": "96e76149032e039b89560eb3f88331931e77812fd323134d8dd8ca298ade0e27"
+    },
+    {
+      "path": "packages/editor/dist/export-dom.js",
+      "bytes": 4759,
+      "sha256": "17defdb7746e8e946f1190ac9a4b37ea0fa7f02379a8e0e410e1c278a47ea6af"
+    },
+    {
+      "path": "packages/editor/dist/export-menu.js",
+      "bytes": 23807,
+      "sha256": "a38fe48762b02510a3301392b9ec3f4cb5d27292ae05ca33a4a950754d570bc1"
+    },
+    {
+      "path": "packages/editor/dist/export.js",
+      "bytes": 20797,
+      "sha256": "d831bd32e2c9f1c96971a4a90339902c5ecfb37dca3f096465af511e94e62397"
+    },
+    {
+      "path": "packages/editor/dist/find-panel.js",
+      "bytes": 23127,
+      "sha256": "38cb1e06df0d1838c48bc78e036752e5f6fde792d3470b6c68dfa4102726d8a8"
+    },
+    {
+      "path": "packages/editor/dist/find-replace.js",
+      "bytes": 22652,
+      "sha256": "11b6b179877fff2b6b6b3cdb35ee1c7e2f1319a75a3d07726742daf4b63eb77f"
+    },
+    {
+      "path": "packages/editor/dist/font-gate.js",
+      "bytes": 6297,
+      "sha256": "0f4fde9c71050061d43546f136ab962ccde6b7cb97ae775db380e3e8fcf33a42"
+    },
+    {
+      "path": "packages/editor/dist/galleries.js",
+      "bytes": 8829,
+      "sha256": "5ef3fdee1662bb2b79f2992f1b9aa1edf637bd0c41ee216cd453b8ac2fe4f9d0"
+    },
+    {
+      "path": "packages/editor/dist/grid-model.js",
+      "bytes": 76599,
+      "sha256": "bdae04ec8a0a6a12daca0e7e7a4cdfcac2c450e15a51cf15fe01f933015577f1"
+    },
+    {
+      "path": "packages/editor/dist/grid-text.js",
+      "bytes": 11323,
+      "sha256": "f4143d24d9fd09ebd80bda0f54d06d456e7ca5828116619519c0facf24db512e"
+    },
+    {
+      "path": "packages/editor/dist/icon-options.js",
+      "bytes": 25296,
+      "sha256": "a9296d66862ba55c3f932ee95e090b97127c197338a13d1b7e15bc870dbf2490"
+    },
+    {
+      "path": "packages/editor/dist/icon-picker.js",
+      "bytes": 17098,
+      "sha256": "b87855dc32703302d536e5cf7e3d4cf7c0d2792953f85007f6108bf26541af90"
+    },
+    {
+      "path": "packages/editor/dist/icons.js",
+      "bytes": 4884,
+      "sha256": "fcf0e0a55853ad516057d81662f5dedded61020bd24cd124315190fb8bff97d9"
+    },
+    {
+      "path": "packages/editor/dist/image-crop.js",
+      "bytes": 20450,
+      "sha256": "0f6d45bc74e222cbf6820a9755289a7866477e2e88abf0d3d8772d4fd06fa9dc"
+    },
+    {
+      "path": "packages/editor/dist/image-cropper.js",
+      "bytes": 28938,
+      "sha256": "0b7b22b0ebfdddeadda6836b9e36e0453d410626257952795c509d89144f0012"
+    },
+    {
+      "path": "packages/editor/dist/image-options.js",
+      "bytes": 13657,
+      "sha256": "09a11dfc8e323d1b92cee92ab00956f4043e9a348a42b184becafd2e4cf1e78a"
+    },
+    {
+      "path": "packages/editor/dist/index.js",
+      "bytes": 37653,
+      "sha256": "baa7de7ebd0140f845fe6ee015c99c6bbc7313715d5b898c15951b5111f18126"
+    },
+    {
+      "path": "packages/editor/dist/json-editor.js",
+      "bytes": 53849,
+      "sha256": "f9e1f6daecb833841c2bd37ea56c2c3282fa36980b9c8c9ed0c32165fddda0c1"
+    },
+    {
+      "path": "packages/editor/dist/json-format.js",
+      "bytes": 2448,
+      "sha256": "c4048163d7fb6c9fb123d3da628d0d4711f6cb468457c2f7eca7eecb71055109"
+    },
+    {
+      "path": "packages/editor/dist/json-menu.js",
+      "bytes": 8264,
+      "sha256": "1cc05f77a374e89c8cfb5b7b2287fc42af38507a0c60d10637ebf2408bde28d3"
+    },
+    {
+      "path": "packages/editor/dist/json-options.js",
+      "bytes": 14077,
+      "sha256": "0c23070d65a1e8c8fbffc5248bbe768710763f5369a3e06b67b7f287f806cf5c"
+    },
+    {
+      "path": "packages/editor/dist/json-source.js",
+      "bytes": 2662,
+      "sha256": "10c17e4edc8d0b97fbe049d8b6b2edcf639b1d631a274cf2fb4ac00ad4fa5a74"
+    },
+    {
+      "path": "packages/editor/dist/layout-adapter.js",
+      "bytes": 5399,
+      "sha256": "067113fca2a32b664d92b057f8f4c805bb2ef6a27676e6770be2cf479f5ec66b"
+    },
+    {
+      "path": "packages/editor/dist/layout-canvas.js",
+      "bytes": 34318,
+      "sha256": "f237b53407d44653993350eba5b05693ea849d991559c471d7f012f38ee30589"
+    },
+    {
+      "path": "packages/editor/dist/layout-diagram.js",
+      "bytes": 1551,
+      "sha256": "066e7ca444607779271e1402a57f94ca3762d6910a23e1e0755dbca492e08468"
+    },
+    {
+      "path": "packages/editor/dist/layout-editor-ui.js",
+      "bytes": 7502,
+      "sha256": "25225f36960800bc92d1c2b2d2db7f49dffab36ae3b906c77e7effe45ee40ab4"
+    },
+    {
+      "path": "packages/editor/dist/layout-editor.js",
+      "bytes": 12095,
+      "sha256": "f6a30931cefe4bfc36673c92896678538b38b128ebcd47fd568665360be2b389"
+    },
+    {
+      "path": "packages/editor/dist/layout-handles.js",
+      "bytes": 12075,
+      "sha256": "606435220085bb0096030d090c40611b0d448dd33ee00a011140a1ca09f03908"
+    },
+    {
+      "path": "packages/editor/dist/layout-inspector.js",
+      "bytes": 19806,
+      "sha256": "63012da4db2b2f1bd823be37fc699e6dc8783a569f9242c3caa5910eb5321adc"
+    },
+    {
+      "path": "packages/editor/dist/layout-layers.js",
+      "bytes": 17948,
+      "sha256": "e49150f92e03d7d50b39f293611f2bf97c4dcc0495530d51d1f2a41502ddbd2a"
+    },
+    {
+      "path": "packages/editor/dist/layout-model.js",
+      "bytes": 14873,
+      "sha256": "3764c4129de541bd6acbae69c31c479cfcd245adff24a7f1b999f1a190de975a"
+    },
+    {
+      "path": "packages/editor/dist/layout-palette.js",
+      "bytes": 4936,
+      "sha256": "39eb972db5fd717880a8b03c006420359f604325fceb13d95d6d987c890b7c22"
+    },
+    {
+      "path": "packages/editor/dist/layout-samples.js",
+      "bytes": 6205,
+      "sha256": "000bd0214d2fab4792e618237459934b552239343ccb90bff7b7fdf52198da69"
+    },
+    {
+      "path": "packages/editor/dist/layout-templates.js",
+      "bytes": 12485,
+      "sha256": "f13a54b32c2aacbe20ae6da4511e83cc585261957279117705d5ac5ad65457e2"
+    },
+    {
+      "path": "packages/editor/dist/layout-tree.js",
+      "bytes": 39532,
+      "sha256": "2bc9342139928fd08b5fd0a0bc8197914045db88262a05f4bd4ec48cb272a701"
+    },
+    {
+      "path": "packages/editor/dist/layout.js",
+      "bytes": 2738,
+      "sha256": "8e5115b2ac53444a9bd6de4284136098ee8d7cea0253f9fa18317971f01ebe66"
+    },
+    {
+      "path": "packages/editor/dist/numbering-panel.js",
+      "bytes": 9980,
+      "sha256": "932c303953d439e8a26c30c013a9895bad92f52b737d99abe222dbd1b97a55a7"
+    },
+    {
+      "path": "packages/editor/dist/numbering.js",
+      "bytes": 11623,
+      "sha256": "854aba41cf55c539a9ecf2d0a4bad1b9a40a833cabd970aca981c0c0ed395bad"
+    },
+    {
+      "path": "packages/editor/dist/outline-view.js",
+      "bytes": 14874,
+      "sha256": "3b1b5cf160813e01b42100813271136f7b87ab6f8be6b03ba32df5937301d6d7"
+    },
+    {
+      "path": "packages/editor/dist/outline.js",
+      "bytes": 19596,
+      "sha256": "0c6ce7be659e3b6a960239b1b41556856f9cf9f3960eb020eac420c7a0bac753"
+    },
+    {
+      "path": "packages/editor/dist/overlay-tools.js",
+      "bytes": 24169,
+      "sha256": "c652d20acbbd376d4671a2c29a26db0704b4b74c1f9ebaea813e43f2c40f327b"
+    },
+    {
+      "path": "packages/editor/dist/persistence-ui.js",
+      "bytes": 5646,
+      "sha256": "2ce5616e54909f4a7b60b4f3b02b6097bd6830bf2af8cb7e82e00c906872c6b5"
+    },
+    {
+      "path": "packages/editor/dist/persistence.js",
+      "bytes": 23911,
+      "sha256": "8db27b5a0f4a8e28ef9a3dcdfd837246d46df201db1eed4d6b300bd268ed10cd"
+    },
+    {
+      "path": "packages/editor/dist/picture-luminance.js",
+      "bytes": 3754,
+      "sha256": "ed003344d25c0b6c1dd430f6578d301f2e8408696694d3613b5453aa8bf33493"
+    },
+    {
+      "path": "packages/editor/dist/presentation-ids.js",
+      "bytes": 3017,
+      "sha256": "1defec5a73b1ea31da3ee80f07affdc0bbb741e0b8a5cff5e2b25b19e8aec3dc"
+    },
+    {
+      "path": "packages/editor/dist/presenter.js",
+      "bytes": 31774,
+      "sha256": "9ff2fa33f7858b0b9388c01a8112445f9ebee484aba8f7c4a276b34d459b1bfc"
+    },
+    {
+      "path": "packages/editor/dist/react.js",
+      "bytes": 13221,
+      "sha256": "e893baa9db9ce72b7ed0d742f45ed3c6381f08e30a995c0abd051fbeef807f37"
+    },
+    {
+      "path": "packages/editor/dist/read-deck-file.js",
+      "bytes": 7928,
+      "sha256": "378dd7ad975c47437c5f860ec885aa41bac0cfb7a8e236fb324b7d32f9e6330e"
+    },
+    {
+      "path": "packages/editor/dist/review-panel.js",
+      "bytes": 25538,
+      "sha256": "9e6340d0a78e80a97452b0f6ddccdc1b711e8bb947f7445befb294da772f1bef"
+    },
+    {
+      "path": "packages/editor/dist/review-pill.js",
+      "bytes": 7171,
+      "sha256": "e904a5067f0848b361deff28c617031cb563a2033d4e9d0ca9fc4888ff515892"
+    },
+    {
+      "path": "packages/editor/dist/review.js",
+      "bytes": 13837,
+      "sha256": "fe04fcedf2ab3b528efb9765f23d3de001fc23fdba7fe1035a445a494fd21906"
+    },
+    {
+      "path": "packages/editor/dist/rich-text-input.js",
+      "bytes": 10518,
+      "sha256": "3637f982b39ae7f980da3935bff310d9ded51c8116e60c7d87c17d103c9c31b4"
+    },
+    {
+      "path": "packages/editor/dist/rich-text-toolbar.js",
+      "bytes": 9736,
+      "sha256": "0974bd107acdb04e255ef0b91a2583cdfe2eafbc535c4425eb00693c5135bc71"
+    },
+    {
+      "path": "packages/editor/dist/rich-text.js",
+      "bytes": 7372,
+      "sha256": "575b2c34840343b43b60c4abaa00653f554d529ccedbc079c77f8f48eb28d1a8"
+    },
+    {
+      "path": "packages/editor/dist/schema-inspector.js",
+      "bytes": 11421,
+      "sha256": "f524fd63eba7d3b60a86ee13ee6f6a86ea057ad85a02e2c6309e069a229b2712"
+    },
+    {
+      "path": "packages/editor/dist/schema.js",
+      "bytes": 430,
+      "sha256": "4655298b8287d41576a479a258b51f55533aa1df105a660d2ce8c2d5589e9b35"
+    },
+    {
+      "path": "packages/editor/dist/shape-controls.js",
+      "bytes": 50632,
+      "sha256": "2b9c748b7cf4c87e4531ea6a20916737d515dc2fd0e18d442154f5544957e913"
+    },
+    {
+      "path": "packages/editor/dist/shape-engine.js",
+      "bytes": 968,
+      "sha256": "937733dff7d73381463b4712015e64f81cc78f3228b5b1df4f2b4aadc759bfaa"
+    },
+    {
+      "path": "packages/editor/dist/shape-handle-math.js",
+      "bytes": 10027,
+      "sha256": "429a96f2524f4516a7660153df3c316d885c907ce396c2099c1c294aa634bf32"
+    },
+    {
+      "path": "packages/editor/dist/shape-handle-tools.js",
+      "bytes": 536,
+      "sha256": "be5bcc565d69e58b1dbfc10f6758027e7e9b6cd66dc504509433e43e39f25296"
+    },
+    {
+      "path": "packages/editor/dist/shape-handles.js",
+      "bytes": 12001,
+      "sha256": "0e7e174be359eda9568ba8792e47ab78a7b7c23d31e2347b916b27b14769c7c5"
+    },
+    {
+      "path": "packages/editor/dist/shape-options.js",
+      "bytes": 21570,
+      "sha256": "2703caf6109bd081a5eb5c7c780e6e43fd30319f7f9feb3d198a89e06e8dc215"
+    },
+    {
+      "path": "packages/editor/dist/shape-overlays.js",
+      "bytes": 29350,
+      "sha256": "d186f17a94390c7cf7e7984de7092a2fe287b65159d9b34074d4683e73e9845c"
+    },
+    {
+      "path": "packages/editor/dist/shape-picker.js",
+      "bytes": 13885,
+      "sha256": "5eb6e4ab6604ed2f727a2d33bfb87cb9116155694fbc38cc58036ce8a6430142"
+    },
+    {
+      "path": "packages/editor/dist/shortcuts-sheet.js",
+      "bytes": 12255,
+      "sha256": "8c93f3581b34aa86c1d52f6590e905e5a680543b57da79c3383af15f42fb9805"
+    },
+    {
+      "path": "packages/editor/dist/slide-adapter.js",
+      "bytes": 15768,
+      "sha256": "f5945707aeab1ab224f4c6af7bd835ef9b01c5a5e4ea52c512daae0072e45ad9"
+    },
+    {
+      "path": "packages/editor/dist/slide-edits.js",
+      "bytes": 46009,
+      "sha256": "2ac79fc8ed391a3ea161836e33f7daea9b87b4fa4264ba00805de90f09fd1e5a"
+    },
+    {
+      "path": "packages/editor/dist/slide-manager.js",
+      "bytes": 44421,
+      "sha256": "6f1c1e13fced87817b62d7bdf187bdb0df6fbf12a647ed9b284d9321ddfa77e5"
+    },
+    {
+      "path": "packages/editor/dist/slide-navigator.js",
+      "bytes": 8421,
+      "sha256": "08f0ea736423b48e1bd26ee50e8e16ee2c0e51c549e19b7951e2998a6f98bbbf"
+    },
+    {
+      "path": "packages/editor/dist/slide-retention.js",
+      "bytes": 794,
+      "sha256": "2549b37270f75da87d012462c05706ed1c6f049a0de83132f8b01d56f0478225"
+    },
+    {
+      "path": "packages/editor/dist/slide-scene.js",
+      "bytes": 28213,
+      "sha256": "2e138da6e6e5a05d942bf9cef660d931085981f21bc2b65a21f51120c9745761"
+    },
+    {
+      "path": "packages/editor/dist/slides.js",
+      "bytes": 25286,
+      "sha256": "508a5b00beeb74bd7d059ac5e071b4cba6f125a87bb90082e78699ef13146ecb"
+    },
+    {
+      "path": "packages/editor/dist/source-a11y.js",
+      "bytes": 6021,
+      "sha256": "b5d9fd2bd5c853e6119d64b25726d6a2d7a299982981bb804afa6105eee4809b"
+    },
+    {
+      "path": "packages/editor/dist/source-check.js",
+      "bytes": 5863,
+      "sha256": "b6c3695788609c299caaf1c927f59c8d533cf7b7d7855318daed4f9f769c2f00"
+    },
+    {
+      "path": "packages/editor/dist/source-checker.js",
+      "bytes": 10332,
+      "sha256": "077b4f923cad914f460c76ffedd14d5ba58f7782cd5d151eaaa52c9e6e432c49"
+    },
+    {
+      "path": "packages/editor/dist/source-color-scheme.js",
+      "bytes": 3232,
+      "sha256": "798eb2c7f22c4a11bd6a70d3bc1e8faa09c47410b63de08fc938407f4703a394"
+    },
+    {
+      "path": "packages/editor/dist/source-completions.js",
+      "bytes": 44758,
+      "sha256": "cbb2d429a0d356c288e7cbe5f174ea7265a309f6bf7b8570aa24117ce04dbeab"
+    },
+    {
+      "path": "packages/editor/dist/source-details.js",
+      "bytes": 1171,
+      "sha256": "e8e8476fe248b5131d0d356d2446639283dc4c8bc9c280014107cc65550bc5ea"
+    },
+    {
+      "path": "packages/editor/dist/source-diagnostics.js",
+      "bytes": 12352,
+      "sha256": "20acb57516c23e58c185cee162e7c28f583a58f41d56ca451eec64850170650a"
+    },
+    {
+      "path": "packages/editor/dist/source-docs.js",
+      "bytes": 3987,
+      "sha256": "df8d1e1376df188a320dd3cb56a1307fbe7ede811eaf955c3a500478f9aa75e2"
+    },
+    {
+      "path": "packages/editor/dist/source-editing.js",
+      "bytes": 16991,
+      "sha256": "14ccfc2469f7a5fd14ebde7361eba6e21ae70ecc8136eccdabe9750f3f18a9b1"
+    },
+    {
+      "path": "packages/editor/dist/source-findings.js",
+      "bytes": 2699,
+      "sha256": "2ff4da84daf86366475e1a467291d0c2657f222075db61cf5368d84d1daee580"
+    },
+    {
+      "path": "packages/editor/dist/source-fixes-syntax.js",
+      "bytes": 20446,
+      "sha256": "101714ba52734ce2685d6d93b848ca9ec0c0ad504b0f46f99c02856b15179030"
+    },
+    {
+      "path": "packages/editor/dist/source-fixes-text.js",
+      "bytes": 10903,
+      "sha256": "2586e0a98611ff8383facc6c719d01803dcc06e3b9c882e51d5ac7a2573d630a"
+    },
+    {
+      "path": "packages/editor/dist/source-fixes.js",
+      "bytes": 8194,
+      "sha256": "5c25177afa1e1c451680164417937af9adc2c4a81ff58330d7086190df3d82d5"
+    },
+    {
+      "path": "packages/editor/dist/source-folding.js",
+      "bytes": 9088,
+      "sha256": "2b38c07220ae7d509357b77a3f608dda9d5ca65928c81e4ee89f58b59a6679e6"
+    },
+    {
+      "path": "packages/editor/dist/source-format.js",
+      "bytes": 4958,
+      "sha256": "72a42f4d7f9bb75c4ae34334447d3aff5b84af2e2573ee5947bbe4c6dc50f45c"
+    },
+    {
+      "path": "packages/editor/dist/source-hints.js",
+      "bytes": 22642,
+      "sha256": "4608b582a5468f473563417d3a0be236243a3fd6e201932ed7c190559e97f2d5"
+    },
+    {
+      "path": "packages/editor/dist/source-json.js",
+      "bytes": 8635,
+      "sha256": "282bc5b019455141c034e30fe24dcb718d5cb9d749f2738100a23313cf4602ba"
+    },
+    {
+      "path": "packages/editor/dist/source-keymap.js",
+      "bytes": 27932,
+      "sha256": "e82062c819a957f8aadaa2844e70eb4d924bb9589fb0b849d73a66dec5d634a0"
+    },
+    {
+      "path": "packages/editor/dist/source-lines.js",
+      "bytes": 8781,
+      "sha256": "322a655a7751ad58a662dace5536c0efa198ef804ab581e7bdd14c0690e763ea"
+    },
+    {
+      "path": "packages/editor/dist/source-markdown.js",
+      "bytes": 40128,
+      "sha256": "6740e26a4e88868c2ec680cb8be31f0fada28a9dce4b872464881c79030f3e7e"
+    },
+    {
+      "path": "packages/editor/dist/source-messages.js",
+      "bytes": 3288,
+      "sha256": "4efa9515e10757adb7a734a7c33defde0a70c792bf0d53cf211f6c60f9060eab"
+    },
+    {
+      "path": "packages/editor/dist/source-navigation-model.js",
+      "bytes": 25838,
+      "sha256": "ae45fc9f6687780dd3336169ff565a306d59428f2c02aca2f71084e98b393eaa"
+    },
+    {
+      "path": "packages/editor/dist/source-navigation-read.js",
+      "bytes": 15347,
+      "sha256": "b41035c687a31a633e39e54035a00d1d2f3e762d29d682b3a8e8b3c2e0718a60"
+    },
+    {
+      "path": "packages/editor/dist/source-navigation-ui.js",
+      "bytes": 12242,
+      "sha256": "5f87453875d2f0c41b4e30664bc5fa45158bd85348385a7a896ade3924fc1a33"
+    },
+    {
+      "path": "packages/editor/dist/source-navigation.js",
+      "bytes": 12689,
+      "sha256": "1c81219e9ffa000761b103d19f07af9d4b2681d6ec61f054ef8151f7a0687937"
+    },
+    {
+      "path": "packages/editor/dist/source-outline.js",
+      "bytes": 7254,
+      "sha256": "9d500a0f3217d0710ff1c49232e34df267463fed3d5d3c628d7a1cb6ee9576e1"
+    },
+    {
+      "path": "packages/editor/dist/source-pane.js",
+      "bytes": 78372,
+      "sha256": "7ee8e78cc093d2cc92714c751d1879c3ccfe9d2087a1c7cc7493f2b42002c803"
+    },
+    {
+      "path": "packages/editor/dist/source-problems.js",
+      "bytes": 5582,
+      "sha256": "9f27f8f61cecf6b660b1a004b1f789a7c78331bd05da4d4e9c4bab1d8c67c358"
+    },
+    {
+      "path": "packages/editor/dist/source-ranges.js",
+      "bytes": 1929,
+      "sha256": "d872c4f3d36589f847041eac1dbadf8dce5f20895c35a7c59142d61f41afc313"
+    },
+    {
+      "path": "packages/editor/dist/source-references.js",
+      "bytes": 16237,
+      "sha256": "d21d2e4febe0406198d91b6f3cd463cc0fcd5511fb894d2e77ccc2b28bf155ff"
+    },
+    {
+      "path": "packages/editor/dist/source-shortcuts.js",
+      "bytes": 6566,
+      "sha256": "0941094cb8c5c17e5349552b443faad4317ad68d6a4612a4decd4e1574362eaf"
+    },
+    {
+      "path": "packages/editor/dist/source-snippets.js",
+      "bytes": 17432,
+      "sha256": "7efab68cae0e726e209287477460938d9490966c82488894262c7d015194d96d"
+    },
+    {
+      "path": "packages/editor/dist/source-symbols.js",
+      "bytes": 10459,
+      "sha256": "87ba8120bc8631d13956fcfe9b7108faeeec1144d080015097a1ac891bb35ced"
+    },
+    {
+      "path": "packages/editor/dist/source-syntax.js",
+      "bytes": 5210,
+      "sha256": "d0b002ab9a23f220a791ec4d0847ca0bb3a49a04a99c4832980cc8e01425e791"
+    },
+    {
+      "path": "packages/editor/dist/source-undo-groups.js",
+      "bytes": 2597,
+      "sha256": "eac54abd588baef3d011f45a75bb35f492a2e68b4874f477ecea9d6d0394af9f"
+    },
+    {
+      "path": "packages/editor/dist/source-worker.js",
+      "bytes": 2225,
+      "sha256": "131408f6ce66a6f0a57a4e877407eb4932cbd4404e5442039128f40929b5849b"
+    },
+    {
+      "path": "packages/editor/dist/source-wrap.js",
+      "bytes": 5032,
+      "sha256": "dfc71aef95900237e1b020ea67b473e076d60e59968a516dc0f713d3f0b58bd3"
+    },
+    {
+      "path": "packages/editor/dist/source-yaml.js",
+      "bytes": 31697,
+      "sha256": "2c0ffd6ea58031d53e2e40e610432b2a2d3123dc7f2b36ec40f652dd595325a0"
+    },
+    {
+      "path": "packages/editor/dist/studio-canvas.js",
+      "bytes": 31310,
+      "sha256": "9a542442dcc01c4cb300528bea728bca44e7ee2cc87126c9981a91b21f903283"
+    },
+    {
+      "path": "packages/editor/dist/studio-commands.js",
+      "bytes": 15013,
+      "sha256": "60c51a18a6ecc29fb1369f6c042b08938df255852d8bed717e2a8e2c33d7ebf6"
+    },
+    {
+      "path": "packages/editor/dist/studio-design.js",
+      "bytes": 21458,
+      "sha256": "56ffb93f874176a88a804e888aac8e9cf3a7bc066de2f467b31b9171c8bd8d96"
+    },
+    {
+      "path": "packages/editor/dist/studio-kit/commands.js",
+      "bytes": 8653,
+      "sha256": "c07a3ccbbdbb8ea609f0a64ee74ccccbca22f3b8dad46bc854a63e968ab5de53"
+    },
+    {
+      "path": "packages/editor/dist/studio-kit/dom.js",
+      "bytes": 15041,
+      "sha256": "8018c919b5bdcd56f56365e1e3d88223d1ccd44a85dcb03f1ee07c9b3796e0ba"
+    },
+    {
+      "path": "packages/editor/dist/studio-kit/drag.js",
+      "bytes": 5521,
+      "sha256": "5762b6c0880cb5429c43665cb6ddb4411281fd80ac116361f19923afc13a158b"
+    },
+    {
+      "path": "packages/editor/dist/studio-kit/gesture.js",
+      "bytes": 3592,
+      "sha256": "84c3d77f4850ba9750922cc3e5b28cdeefd47a249f586692152f512e85527e37"
+    },
+    {
+      "path": "packages/editor/dist/studio-kit/index.js",
+      "bytes": 1224,
+      "sha256": "fa3a1d007d9ba4bca7d3f6f82ebdf83b43fb51d003c4926734af980b8047e81f"
+    },
+    {
+      "path": "packages/editor/dist/studio-kit/inspector.js",
+      "bytes": 7125,
+      "sha256": "1081d54ad38b69794c27c4f0632767f40fb2da97d97178b11bd5b20f9abfa83e"
+    },
+    {
+      "path": "packages/editor/dist/studio-kit/overlay.js",
+      "bytes": 9340,
+      "sha256": "976cf97d21468efd6338bb4de43b6864e342cc2063980394b656322506bd9b7f"
+    },
+    {
+      "path": "packages/editor/dist/studio-kit/selection.js",
+      "bytes": 5815,
+      "sha256": "d3c5ac1734af93b3fdd8331cd93e0b2bc672efb4dd110427e35dbb8c80a02b1f"
+    },
+    {
+      "path": "packages/editor/dist/studio-kit/tree.js",
+      "bytes": 4536,
+      "sha256": "e343144e61ce6488009115484fc1eb872f55240994abac753ea84d4e42c90c9d"
+    },
+    {
+      "path": "packages/editor/dist/studio-kit/viewport.js",
+      "bytes": 7680,
+      "sha256": "75f7c00e4ebbc8d587ecdf4fa65aab3b213a6f9aa78f37c7a5788e8d6efc34e9"
+    },
+    {
+      "path": "packages/editor/dist/studio-layers.js",
+      "bytes": 13188,
+      "sha256": "83f5f48c74e725ca75ee4da1d8333defccd81733b0dca4c0a370870008f6d450"
+    },
+    {
+      "path": "packages/editor/dist/studio-track-geometry.js",
+      "bytes": 609,
+      "sha256": "c43613be6e84b8d56abb2ac9f174d221591d649102b8bff915875e8b98a770ac"
+    },
+    {
+      "path": "packages/editor/dist/studio.js",
+      "bytes": 97133,
+      "sha256": "139f9d8add0c562ee050aadf6f2d1b7bfe99b614526d08e2679396858b3a1fbf"
+    },
+    {
+      "path": "packages/editor/dist/svelte.js",
+      "bytes": 4353,
+      "sha256": "dc9cf271a12df0561fe83b8f84fb868683b753e903d5cdbc23cf67b7f7e5cdbd"
+    },
+    {
+      "path": "packages/editor/dist/switches.js",
+      "bytes": 38247,
+      "sha256": "e5c2d62884595b99d1941c3e59117b200c43032a4aa612721e8060ac427b6630"
+    },
+    {
+      "path": "packages/editor/dist/table-options.js",
+      "bytes": 26127,
+      "sha256": "a0cc31b3c7c8ed1575242011f32b0303b9eb83e4769e2012b2d44d04056fab00"
+    },
+    {
+      "path": "packages/editor/dist/table-structure.js",
+      "bytes": 4975,
+      "sha256": "5ae56a42b74fc02176201e6736700d6e90006b0138fd0376275dd6c4c2fb0377"
+    },
+    {
+      "path": "packages/editor/dist/template-panel.js",
+      "bytes": 21002,
+      "sha256": "be932cb569f7788960203bec37b29ca5b06d9cf16b7d99d7ea0fbb33dee6d443"
+    },
+    {
+      "path": "packages/editor/dist/templates.js",
+      "bytes": 15276,
+      "sha256": "6dc48ecdb3adfcd95cb070824cc29b622d49e7f8ca8916d27e0497168ca3e490"
+    },
+    {
+      "path": "packages/editor/dist/text-input.js",
+      "bytes": 1646,
+      "sha256": "5e805cfb0a014795631992b9f3ce34865e43d86f141b8091dc78a4238b87dd83"
+    },
+    {
+      "path": "packages/editor/dist/text-pointer.js",
+      "bytes": 9278,
+      "sha256": "a3d860cc14d3e327370f7848db04717aeaac5a592a8ca730dc7f85b7d93cbf7a"
+    },
+    {
+      "path": "packages/editor/dist/thumbnail-cache.js",
+      "bytes": 3180,
+      "sha256": "b2d855e5b0b3a9ddbae1622b59fdcb2aca7256282477f090c75b61960aeeadae"
+    },
+    {
+      "path": "packages/editor/dist/thumbnail-strip.js",
+      "bytes": 32318,
+      "sha256": "664937dfa66f9d44a5bf289ff9c9de34a2a58ba294b28650984f4694164eb69c"
+    },
+    {
+      "path": "packages/editor/dist/toolbar-actions.js",
+      "bytes": 5535,
+      "sha256": "2bd81b80af8d037524e505369b29cdbd6684fe5c49922462279ecbcb57b29ba5"
+    },
+    {
+      "path": "packages/editor/dist/toolbar.js",
+      "bytes": 18705,
+      "sha256": "d14e95ea1625bd26e3e87d87fff51f9b49fbd40e079ebba63d043ea3d1476d0a"
+    },
+    {
+      "path": "packages/editor/dist/transfer.js",
+      "bytes": 11396,
+      "sha256": "49010a3f36536984f6f710a7f38c553aca6f7303056f589ef7fad1f8a572797f"
+    },
+    {
+      "path": "packages/editor/dist/workspace-layouts.js",
+      "bytes": 4418,
+      "sha256": "23cf8a26d90c10ba51e19901304ad5e711785998dfc4d810688c73b3c77dcf0b"
+    },
+    {
+      "path": "packages/editor/dist/workspace-measure.js",
+      "bytes": 2769,
+      "sha256": "94abd645c75d03d33e119f82d42fbd312fd910ac87d3d6dddd5feee555727a2a"
+    },
+    {
+      "path": "packages/editor/dist/workspace-parts.js",
+      "bytes": 1965,
+      "sha256": "b0b1267492a1a75c0a3da1ab8ebbaa5a0045db88b1e272a926ff64b7446f9081"
+    },
+    {
+      "path": "packages/editor/dist/workspace-shell.js",
+      "bytes": 10115,
+      "sha256": "592404ba402da7635671b3490cdb6fdf613403b5837a5c67b3cbdfa2bc41ae6b"
+    },
+    {
+      "path": "packages/editor/dist/workspace-source.js",
+      "bytes": 4325,
+      "sha256": "1fd2c4f2dc66211b5381ec16034590488f7e2cc3d1303b68ffb83cf11919b55a"
+    },
+    {
+      "path": "packages/editor/dist/workspace-theme.js",
+      "bytes": 7703,
+      "sha256": "315a5519d43e11893d1b58efd1ea7c6631773429bdf4b33ffd7c1525b89f7bd8"
+    },
+    {
+      "path": "packages/editor/dist/workspace.js",
+      "bytes": 96102,
+      "sha256": "eb9c4b04331f230d1015b3cc810c8e25921447f591fc0cb6857540c3858fb788"
+    },
+    {
+      "path": "packages/editor/dist/zip.js",
+      "bytes": 4015,
+      "sha256": "8e90b8297593535501ba851cde2181e2932f69f99a06ebb00415f95750141f56"
+    },
+    {
+      "path": "packages/cli/dist/index.js",
+      "bytes": 361867,
+      "sha256": "543f08442d2f70ee4b11baac333f325946f22d470966e77c58709518d52bdf8e"
+    },
+    {
+      "path": "packages/mcp/dist/bin.js",
+      "bytes": 1585,
+      "sha256": "a6ce861a22cc0af92e8cdb3aa723814cb8ce9e138ef52da19aec8844870777d6"
+    },
+    {
+      "path": "packages/mcp/dist/chunk-G2O2AMEK.js",
+      "bytes": 275708,
+      "sha256": "3051d29c09380343ab136a7e31a2c84b4dc3f79b09e6b809c611e5fe1dfdfbec"
+    },
+    {
+      "path": "packages/mcp/dist/chunk-NJL7CFD7.js",
+      "bytes": 3619,
+      "sha256": "9b33adc24cf99ad95a7f21e2ef1c2c2ee795f533505ece3a6e7a64bbda427be7"
+    },
+    {
+      "path": "packages/mcp/dist/chunk-VZJ5HI3V.js",
+      "bytes": 10348078,
+      "sha256": "64aaf911499873ed402fbe7b58456ed562cae77ac9962c549b228ebe5d953280"
+    },
+    {
+      "path": "packages/mcp/dist/index.js",
+      "bytes": 504,
+      "sha256": "686ea261a8183a24a8228d82e123ebe17e165718fc499053524e2d943b5d818c"
+    },
+    {
+      "path": "packages/mcp/dist/server.js",
+      "bytes": 333,
+      "sha256": "829be192c585953c8b30830d81d6d786a7ebb1696afc12b564980201696ed33b"
+    },
+    {
+      "path": "packages/mcp/dist/stdio.js",
+      "bytes": 244,
+      "sha256": "a201e83aea86f15fd144b0caab6c827c0fa68a37b1b07fa2db9204f5a9a6fad0"
+    },
+    {
+      "path": "packages/mcp/app-dist/deck-app.html",
+      "bytes": 10055840,
+      "sha256": "7096eb3d3ae004f4cbf4bf4e05f000276b945e80eee205523f799a2f80a4f9e2"
+    }
+  ]
+}

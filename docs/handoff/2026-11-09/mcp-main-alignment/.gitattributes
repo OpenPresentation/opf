@@ -1,0 +1,3 @@
+*.json -text
+*.gz -text
+captures/*.png -text
