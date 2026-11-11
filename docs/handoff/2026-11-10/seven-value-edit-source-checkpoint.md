@@ -1,5 +1,15 @@
 # Prospective seven-chart numeric edit — current successor design
 
+## World provenance refusal — local unqualified successor
+
+This successor normally includes clean coordinator source `44684136db2f4c390628239021f0f80e28bc93f8`. It preserves the frozen72f/8ca leaves and all historical inputs. Actual native-only causal02 terminated11.53s with329PASS/1RED/15actual-Windows-PS skips (345tests). Its first NEXT-RED log remains `/tmp/opf-034-native-causal02.log`, SHA256 `b9d395ff506538512e6472ca40dc0b2eb0455b959b255c71c2eefd416701cc94`. This bounded causal replay is separate from the original combined four-step gate; neither is retrospectively qualified by a source repair.
+
+Historical World7 reached the unchanged comparator's final diagnostic check AFTER the complete imported document equaled baseline plus ONE numeric cell. Its direct classic clustered-column cache and linked workbook retain North/South/East/West and42/31/-8/19. The exact original `OPF_DATA_V1` evidence `1881775e18d9126b` correctly stops matching after42→43, so native data remains and one literal `chart-data-provenance-changed` warning appears at `slides.6.charts.0`. This is truthful existing provenance refusal, not a product defect or permission to waive diagnostics.
+
+The approved one-test-file repair retains FIVE historical positives `[1,2,3,5,6]` with the same complete comparator and keeps Box4's negative byte-identical. ONLY World7 gains a separate negative binding the original archive hash, direct classic representation/type51, complete cache/formula/workbook cells, original provenance record and byte-identical saved tag. Its full public document must change by ONE numeric cell only, original diagnostics must be empty, saved diagnostics must equal exactly the known warning, and the unchanged strict comparator must REFUSE specifically because diagnostics changed. The actual-current treemap positive, complete equality comparator, input bytes, type eligibility, limits and native-map status are unchanged.
+
+Pinned Node24.21.0 syntax passed1/1 changed module; Git whitespace/source-diff checks passed. Only these source checks ran for this LOCAL UNQUALIFIED checkpoint. Tests, imports/exports, builds, PowerShell/Office/process queries, push and native/release qualification remain UNRUN here. The coordinator owns the next coherent build and causal/renderer/mapped gate; prior actual failures remain intact.
+
 ## Causal test/lint repair — local unqualified successor
 
 This repair starts from fresh `origin/main` `7fb6140804f969550e3a9c9d52916b7610844917`, normally fast-forwarded to the coordinator's frozen combined source `1c80183a2288a04f5506a23bb88ece278cde277d`. It changes only source harness controls and their lint spelling. No package fragment or product change is required. The original `72f2d245ded80b697ebd84dd3173e3e660ba7ebf` leaf, inputs, fixtures, limits, full public comparator, current treemap positive and retained02/03/06–09 witnesses remain unchanged.

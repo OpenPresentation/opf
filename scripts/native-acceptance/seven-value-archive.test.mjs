@@ -130,8 +130,8 @@ test('stale cache, stale workbook, another cell, public data/diagnostics and hid
  xml(parts,fallback.chartPart,text=>once(text,'<c:idx val="0"/>','<c:idx val="1"/>'));
  assert.throws(()=>comparePersistedSevenValueEdit({...context,saved:Buffer.from(deps.zipSync(parts))}));
 });
-test('six historical public imports retain the exact one-value edit without an injected engine',async()=>{
- for(const slideIndex of [1,2,3,5,6,7]){
+test('five historical public imports retain the exact one-value edit without an injected engine',async()=>{
+ for(const slideIndex of [1,2,3,5,6]){
   const context=pureContext(slideIndex),consumer=path.resolve(here,'../..');
   context.imports={original:await importSevenPublic(context.input,{consumer}),'saved-reopened':await importSevenPublic(context.saved,{consumer})};
   comparePersistedSevenValueEdit(context);
@@ -160,6 +160,28 @@ test('historical adapted Box cannot qualify after its numeric edit invalidates w
  assert.deepEqual(changed,[{code:'chart-data-provenance-changed',path:'slides.3.charts.alt0',message:"The chart's cached data or number formats changed after export (for example in Edit Data), so the authored data form, dataset reference, column mapping, column formats and data source recorded at export were not restored; the chart imports the values and formats it now shows."}]);
  assert.deepEqual(after.diagnostics.filter(issue=>issue!==changed[0]),before.diagnostics,'No other diagnostic delta is admitted');
  assert.throws(()=>comparePersistedSevenValueEdit(context),/Public import must retain the native value edit and nothing else/u,'The historical adapted Box archive cannot qualify as an exact one-cell edit');
+});
+test('historical World classic fallback retains the exact numeric edit but refuses changed provenance diagnostics',async()=>{
+ const context=pureContext(7),consumer=path.resolve(here,'../..');
+ context.imports={original:await importSevenPublic(context.input,{consumer}),'saved-reopened':await importSevenPublic(context.saved,{consumer})};
+ assert.equal(digest(context.input),census.archives.find(item=>item.path==='chart-all-seven.pptx').sha256);
+ const archive=inspectSevenArchive(context.input,deps),charts=archive.slides[6].shapes.filter(shape=>shape.kind==='chart');assert.equal(charts.length,1);
+ const shape=charts[0],classic=shape.chart;assert.deepEqual([shape.branch,shape.chartPart,classic.family,classic.construct],['direct','ppt/charts/chart7.xml','classic','c:barChart']);
+ assert.deepEqual([context.action.sourceType,context.action.comChartType],['world',51]);
+ assert.equal(classic.workbook.part,'ppt/embeddings/Microsoft_Excel_Worksheet7.xlsx');
+ assert.deepEqual(classic.series[0]['c:cat'],{formula:'Sheet1!$A$2:$A$5',values:['North','South','East','West']});
+ assert.deepEqual(classic.series[0]['c:val'],{formula:'Sheet1!$B$2:$B$5',values:[42,31,-8,19]});
+ assert.deepEqual(classic.workbook.cells,[{cell:'A1',value:'Region'},{cell:'B1',value:'Value'},{cell:'A2',value:'North'},{cell:'B2',value:42},{cell:'A3',value:'South'},{cell:'B3',value:31},{cell:'A4',value:'East'},{cell:'B4',value:-8},{cell:'A5',value:'West'},{cell:'B5',value:19}]);
+ const parts=deps.unzipSync(context.input),savedParts=deps.unzipSync(context.saved),tag=deps.strFromU8(parts['ppt/tags/opfData2.xml']);
+ assert.match(deps.strFromU8(parts[shape.chartPart]),/<c:barDir val="col"\/>/u);assert.match(deps.strFromU8(parts[shape.chartPart]),/<c:grouping val="clustered"\/>/u);
+ assert.equal(deps.strFromU8(savedParts['ppt/tags/opfData2.xml']),tag,'Numeric edit retains the exact original provenance record');
+ const matches=[...tag.matchAll(/<p:tag name="OPF_DATA_V1" val="([0-9A-F]+)"\/>/gu)];assert.equal(matches.length,1);
+ assert.deepEqual(JSON.parse(Buffer.from(matches[0][1],'hex').toString('utf8')),{v:1,kind:'chart',data:source.slides[6].chart.data,evidence:['1881775e18d9126b']});
+ const before=context.imports.original,after=context.imports['saved-reopened'];assert.equal(before.document.slides[6].chart.type,'column');assert.deepEqual(before.document.slides[6].chart.data,source.slides[6].chart.data);
+ const expected=structuredClone(before.document);expected.slides[6].chart.data.rows[0][1]=43;assert.deepEqual(after.document,expected,'The complete historical World public document changes by ONE numeric cell only');
+ assert.deepEqual(before.diagnostics,[]);
+ assert.deepEqual(after.diagnostics,[{code:'chart-data-provenance-changed',path:'slides.6.charts.0',message:"The chart's cached data or number formats changed after export (for example in Edit Data), so the authored data form, dataset reference, column mapping, column formats and data source recorded at export were not restored; the chart imports the values and formats it now shows."}]);
+ assert.throws(()=>comparePersistedSevenValueEdit(context),/Changed import diagnostics require review; no blanket waiver/u,'An expected provenance warning still refuses the unchanged strict qualification comparator');
 });
 test('Windows actual PowerShell5.1 action definitions: one setter, managed faults, primitive/ownership refusals and no later operation',{
  skip:process.platform!=='win32'?'Actual Windows PowerShell5.1 managed controls; a portable skip is not serialization or COM qualification':false,
