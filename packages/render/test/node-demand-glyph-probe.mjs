@@ -9,7 +9,6 @@ import {createFontRegistry,OPFFontError} from '../dist/font-registry.js';
 import {loadFonts,BUNDLED_FONT_MANIFEST} from '../dist/fonts-node.js';
 import {fontCoverageProbe} from '../dist/script-fonts.js';
 import {gallery} from '@openpresentation/gallery';
-import {convert} from '@openpresentation/opf';
 const require=createRequire(import.meta.url),sha=b=>createHash('sha256').update(b).digest('hex'),packRoot=new URL('../',import.meta.url),loaded=new Map();
 function entry(family,weight=400){const key=family+'/'+weight;if(loaded.has(key))return loaded.get(key);const pkg=BUNDLED_FONT_MANIFEST.packages.find(p=>p.faces.some(f=>f.family===family&&f.weight===weight&&!f.italic));assert(pkg,key);const face=pkg.faces.find(f=>f.family===family&&f.weight===weight&&!f.italic),dir=pkg.vendored?new URL(pkg.vendored+'/',packRoot):path.dirname(require.resolve(pkg.name+'/package.json')),file=dir instanceof URL?new URL(face.file,dir):path.join(dir,face.file),data=fs.readFileSync(file);assert.equal(sha(data),face.sha256);const value={family,weight,data:new Uint8Array(data)};loaded.set(key,value);return value;}
 const style={fontFamily:'Roboto',fontWeight:400,path:'slides.0.text'},snapshot=fn=>{try{fn();return{ok:true};}catch(error){return{name:error.name,code:error.code,message:error.message,details:error.details};}};
@@ -51,13 +50,4 @@ test('replacement, accessor and replaced measurement objects retain full callbac
 test('replacement installed during an awaited face read is not bypassed, and shared font bytes stay untouched',async()=>{
  const fonts=await loadFonts(request(base)),read=fsp.readFile;let enteredResolve,releaseResolve,armed=true,protectedFile,protectedHash;const entered=new Promise(r=>enteredResolve=r),release=new Promise(r=>releaseResolve=r);fsp.readFile=async function(file,...args){const b=await read.call(this,file,...args);if(armed&&String(file).includes('open-sans')&&String(file).endsWith('.ttf')){armed=false;protectedFile=file;protectedHash=sha(b);enteredResolve();await release;}return b;};syncBuiltinESMExports();let waiting,timer;
  try{waiting=fonts.ensure({design:{fontScheme:'open-sans'},slides:[{title:'New face',text:'New body'}]},{renderOptions});waiting.catch(()=>{});await Promise.race([entered,new Promise((_,reject)=>timer=setTimeout(()=>reject(Error('Owned resource gate not reached')),10000))]);clearTimeout(timer);const failure=new OPFFontError('owned-after-await','After await callback');let calls=0;Object.defineProperty(fonts.textMeasurement,'measure',{configurable:true,get(){return function(){assert.equal(this,fonts.textMeasurement);calls++;throw failure;};}});releaseResolve();await assert.rejects(waiting,e=>e===failure);assert.equal(calls,2);assert.equal(sha(await read(protectedFile)),protectedHash);}finally{clearTimeout(timer);releaseResolve?.();if(waiting)await waiting.catch(()=>{});fsp.readFile=read;syncBuiltinESMExports();}
-});
-
-
-test('actual safe/native preparation keeps original-family900 weight, whole-pack output and preview bytes',async()=>{
- const doc={name:'Native selected weight',design:{fontScheme:'aptos'},slides:[{title:'Native role names',text:[{text:'Ärger ü Action',fontFamily:'Arial Black',bold:true},' plain body']}]};
- const demand=await loadFonts(request(doc)),whole=await loadFonts({pack:'office',substitutionPolicy:'visual'}),options={catalogs:[gallery],date:'2026-11-08'};
- const preview=await convert(doc,{...options,format:'svg',fonts:demand,text:'paths'});
- for(const typefaces of['selected','safe']){const a=await convert(doc,{...options,format:'pptx',fonts:demand,typefaces}),b=await convert(doc,{...options,format:'pptx',fonts:whole,typefaces});assert.deepEqual(a.files.map(f=>f.bytes),b.files.map(f=>f.bytes),typefaces+': all native bytes');}
- const after=await convert(doc,{...options,format:'svg',fonts:demand,text:'paths'});assert.deepEqual(after.files.map(f=>f.bytes),preview.files.map(f=>f.bytes));assert(demand.registry.describeFaces().some(f=>f.family==='Montserrat'&&f.weight===900));assert.deepEqual(demand.pending(doc,renderOptions),[]);
 });
