@@ -1,0 +1,122 @@
+{
+  "scope": "NONIDENTIFYING_AGGREGATES_ONLY_NO_RAW_WINDOWS_TRANSFER",
+  "cases": [
+    {
+      "case": "05",
+      "source": "c6d52fbe9f674663bf4194959298cbfbce69aa64",
+      "shapes": 4,
+      "utf16": 31,
+      "lifecycle": "PASS",
+      "phases": 3,
+      "allPngsEqual": true,
+      "rootImageHashVerifiedAndViewed": true,
+      "pngBytes": 3854,
+      "pngSha256": "36d4213ce9fd0a75d33c485b3d6fc823fb198c32e50be6377bc30c6bc24472b0",
+      "wordDigitOrdering": "PASS",
+      "remaining": [
+        "number marker order",
+        "Arabic prefix and heading painted metrics"
+      ],
+      "broadNativeAcceptance": false
+    },
+    {
+      "case": "06",
+      "source": "c6d52fbe9f674663bf4194959298cbfbce69aa64",
+      "shapes": 2,
+      "utf16": 28,
+      "lifecycle": "PASS",
+      "phases": 3,
+      "allPngsEqual": true,
+      "rootImageHashVerifiedAndViewed": true,
+      "pngBytes": 3880,
+      "pngSha256": "43fb785d3e807320e4cb1c008e8d69725c64c8523989e10900b1a2b99749ce91",
+      "wordDigitOrdering": "FAIL",
+      "remaining": [
+        "digit precedes Bonjour",
+        "number marker order",
+        "Arabic and heading painted metrics"
+      ],
+      "broadNativeAcceptance": false
+    },
+    {
+      "case": "09",
+      "source": "c6d52fbe9f674663bf4194959298cbfbce69aa64",
+      "shapes": 3,
+      "utf16": 123,
+      "lifecycle": "PASS",
+      "phases": 3,
+      "allPngsEqual": true,
+      "rootImageHashVerifiedAndViewed": true,
+      "pngBytes": 10479,
+      "pngSha256": "af384e4549bbfdc77cd4364466c6c564efc8a43b46467efad6ed58741ad47d10",
+      "wordDigitOrdering": "FAIL",
+      "remaining": [
+        "first-line numeric suffix letters reversed",
+        "Arabic heading painted metrics"
+      ],
+      "continuationReadable": true,
+      "broadNativeAcceptance": false
+    },
+    {
+      "case": "10",
+      "source": "c6d52fbe9f674663bf4194959298cbfbce69aa64",
+      "shapes": 8,
+      "utf16": 117,
+      "lifecycle": "PASS",
+      "phases": 3,
+      "allPngsEqual": true,
+      "rootImageHashVerifiedAndViewed": true,
+      "pngBytes": 12222,
+      "pngSha256": "75981cad9d4f91c3ceccb1ba0dd78927d19635326e94f2609b19c60789243bcf",
+      "wordDigitOrdering": "FAIL",
+      "reversedBodyLines": 4,
+      "readableContinuationLines": 3,
+      "unicodeDigitIdentityPreserved": true,
+      "remaining": [
+        "four numeric mixed-script line reversals",
+        "Arabic heading painted metrics"
+      ],
+      "broadNativeAcceptance": false
+    },
+    {
+      "case": "native-body-two-paragraphs",
+      "source": "c6d52fbe9f674663bf4194959298cbfbce69aa64",
+      "shapes": 2,
+      "utf16": 32,
+      "lifecycle": "PASS",
+      "phases": 3,
+      "allPngsEqual": true,
+      "rootImageHashVerifiedAndViewed": true,
+      "pngBytes": 6999,
+      "pngSha256": "bcb48882fc97171556128d4d041a0d2a870547ea8c0d80276284bbd4342288fb",
+      "wordDigitOrdering": "PASS",
+      "correctBodyWordDigitGroups": 3,
+      "bodyParagraphs": 2,
+      "bodyRuns": 3,
+      "exactAdmittedLfToCr": true,
+      "canonicalUnexpectedDifferences": [
+        0,
+        0,
+        0
+      ],
+      "expectedAuthoredDifferences": [
+        9,
+        9,
+        9
+      ],
+      "expectedMixedLanguageDiagnostics": [
+        1,
+        1,
+        1
+      ],
+      "remaining": [
+        "native versus preview painted metrics",
+        "physical glyph identity not observed"
+      ],
+      "broadNativeAcceptance": false
+    }
+  ],
+  "sourceVersion": "0.33.0 unpublished candidate",
+  "rawRecordsUploaded": false,
+  "final034RegistryQualification": false
+}
