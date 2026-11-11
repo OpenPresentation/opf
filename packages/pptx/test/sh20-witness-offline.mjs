@@ -2,18 +2,21 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
-import {existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync} from 'node:fs';
+import {existsSync, mkdirSync, mkdtempSync, realpathSync, readFileSync, rmSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 if (process.platform !== 'win32') {
   console.log('SH20 witness offline PowerShell controls are Windows-only; no Office process is created.');
 } else {
-  const root=mkdtempSync(path.join(tmpdir(),'opf-sh20-plan-'));
+  // Windows TEMP may use an 8.3 alias; PowerShell exposes the existing long path.
+  // Canonicalize this test-owned producer root, never the strict witness guard.
+  const requestedRoot=mkdtempSync(path.join(tmpdir(),'opf-sh20-plan-')),root=realpathSync(requestedRoot);
   try {
     const script=fileURLToPath(new URL('../../../tools/shapes/sh-20/com-witness.ps1',import.meta.url));
     const seed=path.join(root,'seed.pptx'),sweep=path.join(root,'sweep'),out=path.join(root,'attempt'),helpers=path.join(root,'helpers.ps1');
     writeFileSync(seed,'seed sentinel');
+    assert.equal(realpathSync(path.join(requestedRoot,'seed.pptx')),seed,'The lexical TEMP alias must identify this same canonical owned file');
     writeFileSync(helpers,"function Get-OpfFileSha256([string]$Path) { [BitConverter]::ToString([Security.Cryptography.SHA256]::Create().ComputeHash([IO.File]::ReadAllBytes($Path))).Replace('-','').ToLowerInvariant() }\nfunction New-OpfNativeLatch { throw 'Plan crossed the Office boundary' }\n");
     for(const kind of ['pptx','pptx-shapes']) {
       mkdirSync(path.join(sweep,kind),{recursive:true});
