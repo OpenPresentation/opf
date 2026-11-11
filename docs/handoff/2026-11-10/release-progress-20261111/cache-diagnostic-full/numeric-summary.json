@@ -623,6 +623,19 @@
       "diagnosticTransport": {
         "roundTripMs": 1.1127919999416918,
         "encodedBytes": 2643
+      },
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
       }
     },
     {
@@ -715,6 +728,19 @@
       "diagnosticTransport": {
         "roundTripMs": 1.043582999962382,
         "encodedBytes": 2861
+      },
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
       }
     },
     {
@@ -825,6 +851,19 @@
       "diagnosticTransport": {
         "roundTripMs": 1.0568750000093132,
         "encodedBytes": 3008
+      },
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
       }
     },
     {
@@ -953,6 +992,19 @@
       "diagnosticTransport": {
         "roundTripMs": 1.1291670000646263,
         "encodedBytes": 3172
+      },
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
       }
     },
     {
@@ -1099,6 +1151,19 @@
       "diagnosticTransport": {
         "roundTripMs": 1.1611670000711456,
         "encodedBytes": 3354
+      },
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
       }
     },
     {
@@ -1263,6 +1328,19 @@
       "diagnosticTransport": {
         "roundTripMs": 1.146582999965176,
         "encodedBytes": 3590
+      },
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
       }
     },
     {
@@ -1445,6 +1523,19 @@
       "diagnosticTransport": {
         "roundTripMs": 1.1812909999862313,
         "encodedBytes": 3736
+      },
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
       }
     },
     {
@@ -1645,6 +1736,19 @@
       "diagnosticTransport": {
         "roundTripMs": 1.3730419999919832,
         "encodedBytes": 3900
+      },
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
       }
     },
     {
@@ -1863,6 +1967,19 @@
       "diagnosticTransport": {
         "roundTripMs": 1.3009999999776483,
         "encodedBytes": 4138
+      },
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
       }
     },
     {
@@ -2099,8 +2216,34 @@
       "diagnosticTransport": {
         "roundTripMs": 1.2947500000009313,
         "encodedBytes": 4285
+      },
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
       }
     }
   ],
-  "limitation": "Instrumented timings are not normal-build latency acceptance; logical UTF16 key units are not heap bytes or unique strings. WeakRef collection covers only the three tracked owner roles; retained-heap drift remains open. Null cache means that row did not record that member."
+  "limitation": "Instrumented timings are not normal-build latency acceptance; logical UTF16 key units are not heap bytes or unique strings. WeakRef collection covers only the three tracked owner roles; retained-heap drift remains open. Null cache means that row did not record that member.",
+  "warmDisposed": {
+    "infos": [
+      {
+        "entries": 0,
+        "bytes": 0,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      }
+    ],
+    "dom": 13,
+    "workspaces": 0,
+    "fontFaces": 4
+  }
 }
