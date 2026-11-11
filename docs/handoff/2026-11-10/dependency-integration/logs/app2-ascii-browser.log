@@ -1,0 +1,17 @@
+# server: in memory (opf 0.0.0-test)
+ok - draws a JSON deck under the restrictive CSP, with fonts from read_font_file
+ok - tells the model what the viewer shows and what its checks found
+ok - switches between Preview, Source and Both
+ok - an edit goes back to the model as the whole deck, and Send to Claude starts a turn
+ok - Undo and Redo, Find, the Review panel and the Design menu are the editor's own
+ok - fits a frame as narrow as a chat column: the bar stays one row, nothing scrolls sideways
+ok - opens a YAML deck in the view named by the arguments, on the slide asked for, in the host's dark theme
+ok - in a chat column with the host's own colours the whole view is one palette, and the open slide's thumbnail is in view
+ok - exports PowerPoint, PDF and PNG in the sandbox and hands each file to the host
+ok - a host that cannot save files gets no Export menu, and a deck that cannot open says so in place of the slide
+ok - Download source sends the exact edited JSON, MIME and filename through the capable host
+ok - host downloads preserve untouched JSON, YAML and Markdown source text and MIME
+ok - a host without download capability gets no request or iframe fallback and a visible error
+ok - host denial, cancellation and protocol errors remain visible failures without fallback
+ok - a capable host binary Export denial is visible and never uses an iframe download
+ok - runs without a CSP violation or a page error

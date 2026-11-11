@@ -1,0 +1,153 @@
+#!/usr/bin/env node
+// FA-21: core's browser-safe entries import no catalog data. RR-78: the catalog is the @openpresentation/gallery
+// package, core has no /catalog subpath, and only the Node entries register the gallery. For each tsup entry of
+// packages/javascript, this bundles the entry's source with esbuild (browser ESM, minified), reads the metafile, and
+// fails when a catalog module is among its inputs or when its gzip size passes the recorded budget.
+//
+//   node scripts/check-catalog-free.mjs            check against scripts/catalog-free-budget.json
+//   node scripts/check-catalog-free.mjs --report   print the sizes and catalog bytes, never fail
+//   node scripts/check-catalog-free.mjs --update   rewrite the budget from the current sizes (+ headroom)
+//
+// An entry can also list modules it must never bundle (FORBIDDEN_INPUTS): `source` (the editor's text tools: locate,
+// describeFinding, explain) reads the rule metadata (src/validation-rule-info.ts) and never the rule implementations
+// (rules-*.ts, validation-rules.ts, the validator and composition), which cost about 26 KB gzipped.
+//
+// The generated modules are inputs; the script generates them when they are missing. Catalog modules are the gallery
+// package's files (packages/gallery/, or node_modules/@openpresentation/gallery/), and core's former catalog modules
+// (src/generated/catalogs.ts, src/generated/previews.ts, src/catalog.ts, spec/catalogs/) should one come back.
+import { spawnSync } from 'node:child_process';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { gzipSync } from 'node:zlib';
+
+const root = "C:/opf-work/sh25-baseline-034";
+const packageRoot = path.join(root, 'packages', 'javascript');
+const budgetFile = path.join(root, 'scripts', 'catalog-free-budget.json');
+/** Content entries (the example decks, the docs, the README) change with every example edit: they carry no catalog modules, but no size budget either. */
+const CONTENT_ENTRIES = new Set(['examples', 'docs', 'repo-readme']);
+/** RR-62, RR-70: the Node entries, the Node build of the root (`index`, the `node` condition) and the CLI engine (`node-engine`,
+ * `./internal/engine`), read files and register the default catalog, as a Node host does; they are not browser bundles, so they
+ * have neither a catalog rule nor a budget. The browser build of the root (`browser`) has both. scripts/check-browser-safe.mjs
+ * proves no other entry reaches them. */
+export const NODE_ENTRIES = new Set(['index', 'node-engine']);
+/** Modules an entry must not bundle, as { entry: { patterns, why } }; a match in the entry's esbuild metafile fails the check. */
+export const FORBIDDEN_INPUTS = {
+  source: {
+    patterns: [/(^|\/)src\/rules-[\w-]+\.ts$/, /(^|\/)src\/validation-rules\.ts$/, /(^|\/)src\/validator\.ts$/, /(^|\/)src\/composition(\/|\.ts$)/],
+    why: 'explain and describeFinding read src/validation-rule-info.ts, not the rule implementations',
+  },
+};
+/** Headroom over the measured gzip size when the budget is rewritten. */
+const HEADROOM = 0.03;
+
+export const isCatalogModule = (input) =>
+  /(^|\/)packages\/gallery\/|(^|\/)node_modules\/@openpresentation\/gallery\/|(^|\/)src\/generated\/(catalogs|previews)\.ts$|(^|\/)src\/catalog\.ts$|(^|\/)spec\/catalogs\//.test(input.split(path.sep).join('/'));
+
+/**
+ * CE-01: the source file `#schema-engine` (package.json "imports") resolves to under the given export conditions, as a bundler
+ * resolves it: the first key of the map that is one of the conditions, else `default`. The built target (`./dist/<entry>.js`) is
+ * mapped back to the tsup entry's source, so a bundle of the sources measures the engine the published package would load.
+ */
+export function schemaEngineSource(conditions = [], imports = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8')).imports, entries = tsupEntries(readFileSync(path.join(packageRoot, 'tsup.config.ts'), 'utf8'))) {
+  const map = imports['#schema-engine'];
+  const key = Object.keys(map).find((name) => name !== 'types' && (name === 'default' || conditions.includes(name)));
+  const entry = /^\.\/dist\/(.+)\.js$/.exec(map[key])?.[1];
+  if (!entry || !entries[entry]) throw new Error(`#schema-engine under ${conditions.join(', ') || 'no conditions'} resolves to ${map[key]}, which is not a tsup entry`);
+  return path.join(packageRoot, entries[entry]);
+}
+
+/** An esbuild plugin that resolves `#schema-engine` in a bundle of the sources (the package's own imports map points at dist/). */
+export const schemaEnginePlugin = (conditions = []) => ({
+  name: 'schema-engine',
+  setup(build) {
+    build.onResolve({ filter: /^#schema-engine$/ }, () => ({ path: schemaEngineSource(conditions) }));
+  },
+});
+
+/**
+ * An esbuild plugin that resolves `#diagram-engine` as a browser bundler does: to the lazy engine, pele's core with each diagram type
+ * in a chunk of its own loaded on demand (src/diagram-engine-lazy.ts). The dynamic imports of pele's diagram types stay external: a
+ * bundler splits them into chunks a page loads only when a deck draws that type, so they are not part of what an entry loads first.
+ */
+export const diagramEnginePlugin = () => ({
+  name: 'diagram-engine',
+  setup(build) {
+    build.onResolve({ filter: /^#diagram-engine$/ }, () => ({ path: path.join(packageRoot, 'src', 'diagram-engine-lazy.ts') }));
+    build.onResolve({ filter: /^\.\/chunks\// }, (args) => args.kind === 'dynamic-import' && /[\\/]pele[\\/]/.test(args.importer) ? { path: args.path, external: true } : undefined);
+    // SH-13: OPF's PlantUML reader is a chunk of its own too, loaded the first time a deck draws a PlantUML diagram.
+    build.onResolve({ filter: /^\.\/diagram-plantuml\.js$/ }, (args) => args.kind === 'dynamic-import' && /diagram-engine-lazy\.ts$/.test(args.importer) ? { path: args.path, external: true } : undefined);
+  },
+});
+
+/**
+ * SH-02: an esbuild plugin that resolves `#shape-engine` as a browser bundler does: to the lazy engine, whose dynamic import of SH-01's
+ * preset geometry and sketched line (src/shape-engine-module.ts) stays external, a chunk a page loads only when a deck has a shape
+ * (src/shape-engine-lazy.ts).
+ */
+export const shapeEnginePlugin = () => ({
+  name: 'shape-engine',
+  setup(build) {
+    build.onResolve({ filter: /^#shape-engine$/ }, () => ({ path: path.join(packageRoot, 'src', 'shape-engine-lazy.ts') }));
+    build.onResolve({ filter: /^\.\/shape-engine-module\.js$/ }, (args) => args.kind === 'dynamic-import' && /shape-engine-lazy\.ts$/.test(args.importer) ? { path: args.path, external: true } : undefined);
+  },
+});
+
+/** The tsup entries of the core package, as { name: source }. */
+export function tsupEntries(text) {
+  const block = /entry\s*[:=]\s*\{([\s\S]*?)\}/.exec(text)?.[1] ?? '';
+  return Object.fromEntries([...block.matchAll(/["']?([\w-]+)["']?\s*:\s*["']([^"']+)["']/g)].map((match) => [match[1], match[2]]));
+}
+
+/** Bundles each browser entry (only the named ones when `only` is given) and returns its sizes and its input modules. */
+export async function measure(only) {
+  // The generated modules are inputs; a fresh checkout generates them first.
+  if (!existsSync(path.join(packageRoot, 'src', 'generated', 'engine-data.ts'))) {
+    const generated = spawnSync(process.execPath, ['scripts/generate.mjs'], { cwd: packageRoot, stdio: 'inherit' });
+    for (const script of ['scripts/generate-content.mjs']) if (generated.status === 0) spawnSync(process.execPath, [script], { cwd: packageRoot, stdio: 'inherit' });
+  }
+  const requireFromCore = createRequire(path.join(packageRoot, 'package.json'));
+  const { build } = createRequire(requireFromCore.resolve('tsup'))('esbuild');
+  const entries = tsupEntries(readFileSync(path.join(packageRoot, 'tsup.config.ts'), 'utf8'));
+  const results = {};
+  for (const [name, source] of Object.entries(entries).sort(([a], [b]) => a.localeCompare(b))) {
+    if (NODE_ENTRIES.has(name) || (only && !only.includes(name))) continue;
+    const result = await build({
+      entryPoints: [path.join(packageRoot, source)],
+      bundle: true,
+      format: 'esm',
+      platform: 'browser',
+      target: 'es2022',
+      minify: true,
+      write: false,
+      metafile: true,
+      logLevel: 'silent',
+      plugins: [schemaEnginePlugin(), diagramEnginePlugin(), shapeEnginePlugin()],
+    });
+    const code = result.outputFiles[0].contents;
+    const output = Object.values(result.metafile.outputs)[0];
+    const catalogBytes = Object.entries(output.inputs).filter(([input]) => isCatalogModule(input)).reduce((sum, [, entry]) => sum + entry.bytesInOutput, 0);
+    const catalogModules = Object.keys(output.inputs).filter(isCatalogModule).map((input) => path.relative(packageRoot, path.resolve(input)).split(path.sep).join('/'));
+    const inputs = Object.keys(output.inputs).map((input) => path.relative(packageRoot, path.resolve(input)).split(path.sep).join('/'));
+    results[name] = { minified: code.length, gzip: gzipSync(code, { level: 9 }).length, catalogBytes, catalogModules, inputs, inputBytes: Object.fromEntries(Object.entries(output.inputs).map(([input, entry]) => [path.relative(packageRoot, path.resolve(input)).split(path.sep).join('/'), entry.bytesInOutput])) };
+  }
+  return results;
+}
+
+export function problems(results, budget) {
+  const found = [];
+  for (const [name, entry] of Object.entries(results)) {
+    if (entry.catalogBytes > 0) found.push(`${name}: ${entry.catalogBytes} bytes from catalog modules (${entry.catalogModules.join(', ')}); only the Node entries may register @openpresentation/gallery (RR-78)`);
+    const forbidden = FORBIDDEN_INPUTS[name];
+    const forbiddenInputs = forbidden ? (entry.inputs ?? []).filter((input) => forbidden.patterns.some((pattern) => pattern.test(input))) : [];
+    if (forbiddenInputs.length) found.push(`${name}: bundles ${forbiddenInputs.join(', ')}; ${forbidden.why}`);
+    if (CONTENT_ENTRIES.has(name)) continue;
+    const limit = budget?.entries?.[name];
+    if (limit === undefined) found.push(`${name}: no recorded budget; run node scripts/check-catalog-free.mjs --update`);
+    else if (entry.gzip > limit) found.push(`${name}: ${entry.gzip} bytes gzipped, over the budget of ${limit}; check what grew, then run --update if it is intended`);
+  }
+  return found;
+}
+
+const report=await measure(['composition']);writeFileSync(process.argv[2],JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({minified:report.composition.minified,gzip:report.composition.gzip,catalogBytes:report.composition.catalogBytes,modules:report.composition.inputs.length}));

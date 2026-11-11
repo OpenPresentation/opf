@@ -1,0 +1,11 @@
+{
+  "source": "ca895444a710a963fced1983237310abb5d38ab1",
+  "rawHtmlBytes": 10055840,
+  "rawHtmlSha256": "7096eb3d3ae004f4cbf4bf4e05f000276b945e80eee205523f799a2f80a4f9e2",
+  "gzip9Bytes": 2770479,
+  "gzip9Sha256": "f3cf434d0123b42adc7d57e26064b5054ef2ffff8e137b3c764f7ebbc6f23596",
+  "resourceFrameBytes": 10425631,
+  "resourceFrameLimit": 10485760,
+  "resourceFrameHeadroom": 60129,
+  "scope": "Read-only exact common built HTML and Node gzip9; no protocol limit or source change; compression is not runtime performance."
+}

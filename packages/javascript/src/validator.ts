@@ -17,6 +17,7 @@ import type { FindingInput, ValidationContext } from './rule-context.js';
 import { validateAgainstSchema, type SchemaCheckResult } from './schema-check.js';
 import { schemaFixes } from './schema-fixes.js';
 import { buildSlides } from './rule-slides.js';
+import { ValidationCompositionCache, type ValidationCacheInfo } from './validation-cache.js';
 import type { Presentation } from './types.js';
 import {
 	DEFAULT_VALIDATION_THRESHOLDS,
@@ -228,7 +229,7 @@ function syntaxReport(parsed: ParsedSource, run: Resolved): ValidationReport {
 	return { valid: tally.error === 0, schemaValid: null, findings, counts: tally, checks };
 }
 
-function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSource): ValidationReport {
+function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSource, cache?: ValidationCompositionCache): ValidationReport {
 	const engine = validateAgainstSchema(document, 'presentation', { template: run.options.template, values: run.options.values, ...(run.options.catalogs ? { catalogs: run.options.catalogs } : {}) });
 	const schemaValid = engine.errors.length === 0;
 	const slides = isObject(document) && Array.isArray(document.slides) ? document.slides : [];
@@ -267,7 +268,7 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 		const doc = document as Rec;
 		const context: ValidationContext = {
 			document: doc,
-			slides: buildSlides(doc, run.options),
+			slides: buildSlides(doc, run.options, cache?.begin(doc, run.options)),
 			thresholds: run.thresholds,
 			options: run.options,
 			chartPalette: run.chartPalette,
@@ -361,14 +362,51 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
  * typo cannot silently disable a check).
  */
 export function validate(input: unknown, options: ValidateOptions = {}): ValidationReport {
+	return validateInput(input, options);
+}
+
+function validateInput(input: unknown, options: ValidateOptions, cache?: ValidationCompositionCache): ValidationReport {
 	const run = resolveOptions(options);
 	if (typeof input === 'string') {
 		const parsed = parseSource(input);
-		return parsed.syntax.length ? syntaxReport(parsed, run) : validateDocument(parsed.value, run, parsed);
+		return parsed.syntax.length ? syntaxReport(parsed, run) : validateDocument(parsed.value, run, parsed, cache);
 	}
-	return validateDocument(input, run);
+	return validateDocument(input, run, undefined, cache);
 }
 
+export type { ValidationCacheInfo } from './validation-cache.js';
+
+export interface Validator {
+	/** Same complete report as validate; only equivalent derived slide compositions can be reused. */
+	validate(input: unknown, options?: ValidateOptions): ValidationReport;
+	/** Invalidate after a host changes resources/measurement behavior behind an unchanged function identity. */
+	clear(): void;
+	/** Bounded logical retention, not engine-specific heap usage. */
+	readonly cache: ValidationCacheInfo;
+}
+
+/**
+ * A validator owned by one editing/review session. Every call runs the full selected checks and reconstructs findings,
+ * fixes and source locations. Only detached, equivalent composition data is retained (64 slides / 8 MiB logical budget,
+ * including at most 2 MiB of shared exact keys); oversized/opaque inputs and failed compositions stay cold.
+ *
+ * Measurement callbacks and lazy catalog loaders must be deterministic until clear() (or their identity changes).
+ * Call clear() after fonts/icons/diagram engines load or a callback's backing resources change. Plain validate is always cold.
+ */
+export function createValidator(): Validator {
+	const cache = new ValidationCompositionCache();
+	return {
+		validate(input, options = {}) {
+			try {
+				const report = validateInput(input, options, cache);
+				if (!report.schemaValid) cache.clear();
+				return report;
+			} catch (error) { cache.clear(); throw error; }
+		},
+		clear: () => cache.clear(),
+		get cache() { return cache.info; },
+	};
+}
 /**
  * Throw `OPFValidationError` (carrying the `report`) unless `validate(value, options)` is valid; afterwards TypeScript
  * knows `value` is a `Presentation`. It takes a parsed value, not text. Pass `{ only: ['format'] }` for the cheap check.

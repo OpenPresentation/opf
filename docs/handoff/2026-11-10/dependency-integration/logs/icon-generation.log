@@ -1,0 +1,9 @@
+Icon sets written: lucide.json, THIRD-PARTY-NOTICES.md, index.json.
+
+> @openpresentation/gallery@0.33.0 rehash /private/tmp/opf-dependency-review/packages/gallery
+> node scripts/sync-gallery-catalog.mjs --rehash --match-gallery
+
+Rehashed:
+icon-sets/index.json
+manifest.json (icon-sets)
+Icon sets match the pinned packages.

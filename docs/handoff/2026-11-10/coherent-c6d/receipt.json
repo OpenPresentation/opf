@@ -1,0 +1,317 @@
+{
+  "source": "c6d52fbe9f674663bf4194959298cbfbce69aa64",
+  "tree": "2559c8bd6b4a7130ef608f9de565d948505c957f",
+  "base": "7fb6140804f969550e3a9c9d52916b7610844917",
+  "command": "pnpm check:changed --base 7fb6140804f969550e3a9c9d52916b7610844917",
+  "exitCode": 1,
+  "seconds": 1483.2,
+  "steps": 53,
+  "passed": 52,
+  "failed": [
+    "tests render"
+  ],
+  "renderer": {
+    "attempted": 59,
+    "selected": 189,
+    "unrun": 130,
+    "cause": "8 strict raster baseline differences; no baseline or tolerance edited; temporary golden-gate directory removed by test cleanup"
+  },
+  "pptx": {
+    "scripts": 311,
+    "seconds": 801.3,
+    "passed": true
+  },
+  "editor": {
+    "scripts": 147,
+    "nodeTestFiles": 1,
+    "seconds": 124.3,
+    "passed": true
+  },
+  "files": [
+    {
+      "path": "aggregate.log",
+      "bytes": 8559,
+      "sha256": "86d26cad31fa82259df41c9a75704e569a01f79e11e884758c85d7f34cd952dd"
+    },
+    {
+      "path": "biome.log",
+      "bytes": 160867,
+      "sha256": "8e81a9a0732c260123ac450711af87f626bb22b5d568ffacf6b59461d5ec6df1"
+    },
+    {
+      "path": "build.log",
+      "bytes": 14667,
+      "sha256": "e676012dff98c1da992e07be59009a5a0a9b1aca244818ce7f341f8966ae807b"
+    },
+    {
+      "path": "install.log",
+      "bytes": 345,
+      "sha256": "0fe28b0fcc6004eb234148d99dd77b46cc43520f2dfd7d13f96422c5034270b4"
+    },
+    {
+      "path": "launch.json",
+      "bytes": 528,
+      "sha256": "4e251c7092283b9e2da9d84ad0dcbfdf78e1730c922b30b8486ce3d4750dbd99"
+    },
+    {
+      "path": "pnpm_run_check_browser-safe.log",
+      "bytes": 1154,
+      "sha256": "df4b8fe38535cfa7176357f7d64d514be197b72fddba39714e604c5d339dcc37"
+    },
+    {
+      "path": "pnpm_run_check_catalog-free.log",
+      "bytes": 193,
+      "sha256": "2baa08920c40fdaed8c67d78f4cc5ae96f6700487d29e46dfcd0994e155164c6"
+    },
+    {
+      "path": "pnpm_run_check_catalog-schema.log",
+      "bytes": 799,
+      "sha256": "b7c2a81a9f5e4b01f974cc85d33e2c4de50f459ba9367a41e9819a40f2d599f7"
+    },
+    {
+      "path": "pnpm_run_check_catalog.log",
+      "bytes": 1144,
+      "sha256": "5e64a91f626a39f3aa3afa1eb249a864537cbb5253fcfc9e4deab04ab908dbaa"
+    },
+    {
+      "path": "pnpm_run_check_changes.log",
+      "bytes": 2666,
+      "sha256": "a2abd7a6d536137f77114e98a3beb4c1f406aa1de713f9db7feeeda9933eb341"
+    },
+    {
+      "path": "pnpm_run_check_ci-scope.log",
+      "bytes": 3110,
+      "sha256": "6f41bb81b3f824d8edb433b015fe3e342a639ee5fe5627e39175b23f1a3b15df"
+    },
+    {
+      "path": "pnpm_run_check_ci-workflows.log",
+      "bytes": 10513,
+      "sha256": "5c73961bfe29fdb41f49a147f369ffee38fe9c0f53ea9a7bf61027ae05299d79"
+    },
+    {
+      "path": "pnpm_run_check_diagram-doc-images.log",
+      "bytes": 164,
+      "sha256": "9a8b5cf3cfcc40818f4a929a162eab4e26a68cf72f915ad32716e6dbfd6f64a8"
+    },
+    {
+      "path": "pnpm_run_check_e1-current-after.log",
+      "bytes": 3290,
+      "sha256": "34b7009064e70899a4886788a735e6e7385772240a57a9e4dd2ff8b965e76e11"
+    },
+    {
+      "path": "pnpm_run_check_engines-range.log",
+      "bytes": 849,
+      "sha256": "6f3c7d4114a01ba20483091e4b69a671e08f38ff37bd4bc95d5268c52bde69c6"
+    },
+    {
+      "path": "pnpm_run_check_examples-convert.log",
+      "bytes": 991,
+      "sha256": "bfb8304840d4167f338220da4eeb3d35114227e4ed36a6107a3a0c7c4dd63f2a"
+    },
+    {
+      "path": "pnpm_run_check_examples.log",
+      "bytes": 506,
+      "sha256": "cdf8d955320462121d88fa7d629191da7b0f842c86087de332e550d4f5b88854"
+    },
+    {
+      "path": "pnpm_run_check_first-deck.log",
+      "bytes": 393,
+      "sha256": "e665ff5cf894d6c82541d03195a9086a5a5c7ea992bdaaf76103fe372868ea73"
+    },
+    {
+      "path": "pnpm_run_check_font-hotlinks.log",
+      "bytes": 861,
+      "sha256": "123f4e5fdd14646975afb14ac95dc155a86bf70721eb4ed4f32ec3ebd14dc40a"
+    },
+    {
+      "path": "pnpm_run_check_font-switch-fixtures.log",
+      "bytes": 1386,
+      "sha256": "382970fb2befb0209f8bc0e7a73833c74cf5f9205c6f33a72e760c6190df083f"
+    },
+    {
+      "path": "pnpm_run_check_font-tracker.log",
+      "bytes": 4646,
+      "sha256": "921048112929a961caaf3415fd1ced05c810f2d99bdee37d075bcedce5e80f29"
+    },
+    {
+      "path": "pnpm_run_check_gallery-editor-imports.log",
+      "bytes": 643,
+      "sha256": "ecd30d78f13f18988d39720679d701831f5a328c9375593f95e73926488d6a7a"
+    },
+    {
+      "path": "pnpm_run_check_gallery-tracker.log",
+      "bytes": 2018,
+      "sha256": "8995e055767273c773fe61c95c86aad612f27c1395f93b9ea01ebdc71fe766a1"
+    },
+    {
+      "path": "pnpm_run_check_golden-update.log",
+      "bytes": 1004,
+      "sha256": "cd44e15d7dcac3ed69223dbadddfadf25e38f2e772d5689f9988bc1ad995494d"
+    },
+    {
+      "path": "pnpm_run_check_libreoffice.log",
+      "bytes": 1424,
+      "sha256": "b5106595664436cfc95d65e06476597dccad15c45b66ff8508dcaf517da184f6"
+    },
+    {
+      "path": "pnpm_run_check_native-acceptance.log",
+      "bytes": 21205,
+      "sha256": "ecb4e56b9c86256001abcd5ab10978846fe6e10b08942bbaf8f6c92b1cb0e8af"
+    },
+    {
+      "path": "pnpm_run_check_palette.log",
+      "bytes": 1417,
+      "sha256": "ab2028d11ed6b3a67f2fb00f4d037f25615a28243d6ca5010235408590feba45"
+    },
+    {
+      "path": "pnpm_run_check_playwright-pin.log",
+      "bytes": 783,
+      "sha256": "8156e6fb098d01739d7be265c6f853aa17ff9a5737574d65482e3b74e7dbe476"
+    },
+    {
+      "path": "pnpm_run_check_prerelease.log",
+      "bytes": 1397,
+      "sha256": "d973caae3e5fd44ca82649242f01a5bebde6e975dc2660c759d445dc3d0364d5"
+    },
+    {
+      "path": "pnpm_run_check_published-matrix-consumer.log",
+      "bytes": 1351,
+      "sha256": "724d91518d8b284953a44c452bb5e7bfdfa3d0b46ad7412369ff2f4fd9b0b7c4"
+    },
+    {
+      "path": "pnpm_run_check_rebuilt-release-files.log",
+      "bytes": 1253,
+      "sha256": "6e7cb5ef5d163a1086db93fdb824c3b6e7ef3237073eebbf7c50e70c4db3f1c1"
+    },
+    {
+      "path": "pnpm_run_check_registry-fidelity-archive.log",
+      "bytes": 464,
+      "sha256": "3edac5d5701dc76ee440b25d289567a2a0046c929aeeb5398f711f998ab5b7ab"
+    },
+    {
+      "path": "pnpm_run_check_registry-golden.log",
+      "bytes": 687,
+      "sha256": "4abd2dce3c2d564765cd64251a89f0c98cc50356f60868b63e47b9769ee0cfee"
+    },
+    {
+      "path": "pnpm_run_check_registry-plan.log",
+      "bytes": 869,
+      "sha256": "28a516c8594c5429f57e4a687eeb415b312e57095ceb35eb07adbe82512ec4b5"
+    },
+    {
+      "path": "pnpm_run_check_registry-toolchain.log",
+      "bytes": 363,
+      "sha256": "3aa5efee9e7e46edf5b71367dd1f37efd9a53d34a0893b1e7eef821049e97961"
+    },
+    {
+      "path": "pnpm_run_check_release-report.log",
+      "bytes": 820,
+      "sha256": "5555cc9719b0851ec542e0d66b47698c6e9b457e4730f60985b13c9ee823b00a"
+    },
+    {
+      "path": "pnpm_run_check_release.log",
+      "bytes": 5603,
+      "sha256": "5eafb75d08723a93cb0d71f3c20aa085320e3fb270fb3b96eb5d349366ad2fa3"
+    },
+    {
+      "path": "pnpm_run_check_runners.log",
+      "bytes": 1767,
+      "sha256": "29014739d6d6feedbbbbcb4809adeded603a1730667670bfb83cf8e4fc0a930e"
+    },
+    {
+      "path": "pnpm_run_check_schema-docs.log",
+      "bytes": 183,
+      "sha256": "5ca190efd5ab20f7c443aadc76470ce4d29682f932962043a19595aec98529e3"
+    },
+    {
+      "path": "pnpm_run_check_schema-examples.log",
+      "bytes": 1072,
+      "sha256": "3559d2baeed24213f14c4186844ce4d44aca335a7e32ef243f2a30147acff45d"
+    },
+    {
+      "path": "pnpm_run_check_schema-strict.log",
+      "bytes": 494,
+      "sha256": "7671e4ba6d579675a8b80241b80cb02db4105654f60709d90421c5b583d8bc44"
+    },
+    {
+      "path": "pnpm_run_check_skill-commands.log",
+      "bytes": 1048,
+      "sha256": "64df3daeb81669a9bf1c4ead55576a42979e111500f93451f0187dc9e0e2f048"
+    },
+    {
+      "path": "pnpm_run_check_skill-glossary.log",
+      "bytes": 413,
+      "sha256": "545fe77abb5881c0d1a8ab47a76681c0844b137e25a88f3994a4da86e23a83f2"
+    },
+    {
+      "path": "pnpm_run_check_spec.log",
+      "bytes": 1042,
+      "sha256": "dadbf26427b6d12e5ec374c4a1d7cc88ab7a4ad27e6f1ff2a7e3ada090087d9e"
+    },
+    {
+      "path": "pnpm_run_check_stability.log",
+      "bytes": 3992,
+      "sha256": "06cc0b7a52727dfbc563cbcf4d5295887f4c54a49c5e89c1246d7e1db0b544cf"
+    },
+    {
+      "path": "pnpm_run_check_text.log",
+      "bytes": 1085,
+      "sha256": "10601a99797c1bba21cbf6414c0ad512425e29344964316dc12357dac3d0b336"
+    },
+    {
+      "path": "pnpm_run_check_works-percent.log",
+      "bytes": 540,
+      "sha256": "71d70a20729ba79c96f2b1bbe58873e80a7e2c89f4f116cede56746e06f66582"
+    },
+    {
+      "path": "tests_cli.log",
+      "bytes": 26727,
+      "sha256": "9cd2e673caedc00ebc1dbd854b828ca4df0eacb4ba096ee52415cccf4f02ff73"
+    },
+    {
+      "path": "tests_editor.log",
+      "bytes": 28848,
+      "sha256": "000a1269cdf6eccadabc9245b018399b41f9fc7393fcac92160c85e73ac44138"
+    },
+    {
+      "path": "tests_gallery.log",
+      "bytes": 28571,
+      "sha256": "fda8f04c3b4fe3819ac1ae6de8dbca55eb5c7af4286ff15e592cac1b67304f4f"
+    },
+    {
+      "path": "tests_integration.log",
+      "bytes": 5202,
+      "sha256": "1297057b22a54e6918eb573b68b4eb42cbde8607b90cfafd923c064b47a47ca8"
+    },
+    {
+      "path": "tests_mcp.log",
+      "bytes": 9175,
+      "sha256": "6167b2c3b61924f2a10d2488edd186dc56e068c1921d3b5a274fee44d7804c30"
+    },
+    {
+      "path": "tests_opf.log",
+      "bytes": 414739,
+      "sha256": "2f7a8880ca97bb6a639d91b0a099d2c5dbf1376f6b593f387ff08b7e8424f162"
+    },
+    {
+      "path": "tests_pptx.log",
+      "bytes": 145687,
+      "sha256": "cbdb7a995f782860d0a9439bb54827af95044f482881fb604d5f76efb656673f"
+    },
+    {
+      "path": "tests_render.log",
+      "bytes": 14748,
+      "sha256": "a44cc498caa02186f20429fa3cfa23b76f607f67ba965d1705cb5689b0d25920"
+    },
+    {
+      "path": "typecheck.log",
+      "bytes": 5148,
+      "sha256": "993c6f64916993953c655ed931617e4040feb4e5124d933c066a72558dd4d63a"
+    }
+  ],
+  "rawArchive": {
+    "bytes": 271428,
+    "sha256": "92dbcc6ac90a3decf479494280ee63cf4b03928c330588683b1f85fec835fc2b"
+  },
+  "scope": "Current coherent mapped gate only; not full/browser/platform/native/registry/release acceptance"
+}

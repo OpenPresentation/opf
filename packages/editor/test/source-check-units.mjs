@@ -17,17 +17,17 @@ const catalogsOf = (entry) => Object.freeze(entry.catalogs === 'gallery' ? [gall
 const plain = (value) => JSON.parse(JSON.stringify(value));
 const tick = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// ---- checkSource equals the pane's old readText --------------------------------------------------------------------------------------
+// ---- checkSource preserves the reviewed source-reading contract --------------------------------------------------------------------------------------
 for (const entry of corpus) {
   const catalogs = catalogsOf(entry);
   const old = golden[entry.id];
   assert.ok(old, `${entry.id} has a golden`);
-  assert.deepEqual(plain(readSource(entry.format, entry.text, catalogs)), old, `${entry.id}: readSource equals the old readText`);
+  assert.deepEqual(plain(readSource(entry.format, entry.text, catalogs)), old, `${entry.id}: readSource equals the reviewed fixture`);
   const bare = checkSource({ format: entry.format, text: entry.text, catalogs, validate: false });
-  assert.deepEqual(plain(bare), old, `${entry.id}: checkSource without validation equals the old readText`);
+  assert.deepEqual(plain(bare), old, `${entry.id}: checkSource without validation equals the reviewed fixture`);
   const full = checkSource({ format: entry.format, text: entry.text, catalogs });
   const { validation, markdownNotes, ...rest } = full;
-  assert.deepEqual(plain(rest), old, `${entry.id}: checkSource keeps every field of the old result`);
+  assert.deepEqual(plain(rest), old, `${entry.id}: checkSource keeps every field of the reviewed result`);
   if (old.deck) {
     assert.deepEqual(validation, checkFormat(full.deck, { catalogs }), `${entry.id}: the validation is the session's`);
     assert.equal(markdownNotes !== undefined, entry.format === 'md', `${entry.id}: Markdown notes come with a Markdown deck only`);
@@ -36,7 +36,40 @@ for (const entry of corpus) {
   // What a worker sends back: structured clone keeps it equal.
   assert.deepEqual(structuredClone(full), full, `${entry.id}: the result survives structured clone`);
 }
-console.log(`checkSource: ${corpus.length} texts equal the golden of the old readText.`);
+console.log(`checkSource: ${corpus.length} texts equal the reviewed source-reading fixture.`);
+
+// Every current layout resolves in both readers; suggestions follow only the supplied catalog.
+// In particular, the new org-chart record is a useful correction for a near miss.
+{
+  const textFor = (format, layout) => format === 'yaml'
+    ? `slides:\n  - title: Current catalog\n    layout: ${layout}\n`
+    : `# Current catalog\n<!-- slide: layout=${layout} -->\n`;
+  const unresolved = result => result.findings.find(finding => finding.ruleId === 'opf/unresolved-reference');
+  for (const format of ['yaml', 'md']) {
+    for (const id of Object.keys(gallery.layouts)) {
+      const result = readSource(format, textFor(format, id), [gallery]);
+      assert.equal(result.deck?.slides[0].layout, id, `${format}: current layout ${id} is parsed`);
+      assert.equal(unresolved(result), undefined, `${format}: current layout ${id} resolves`);
+    }
+    const typo = textFor(format, 'org-chrt');
+    const suggestion = unresolved(readSource(format, typo, [gallery])).suggestions[0];
+    assert.deepEqual(suggestion, {value: 'org-chart', label: gallery.layouts['org-chart'].name, origin: 'registered', definition: `${gallery.source}#/layouts/org-chart`}, `${format}: current organization chart is suggested with its actual catalog identity`);
+    assert.deepEqual(unresolved(readSource(format, typo, [])).suggestions ?? [], [], `${format}: no suggestions from an unregistered gallery`);
+    const local = {source: 'https://example.test/qa-catalog', layouts: {'qa-org-chart': {...gallery.layouts['org-chart'], name: 'Local organization chart'}}};
+    const localSuggestions = unresolved(readSource(format, textFor(format, 'qa-org-chrt'), [local])).suggestions;
+    assert.deepEqual(localSuggestions, [{value: 'qa-org-chart', label: 'Local organization chart', origin: 'registered', definition: 'https://example.test/qa-catalog#/layouts/qa-org-chart'}], `${format}: a host replacement catalog never inherits gallery suggestions`);
+  }
+}
+
+// Slide language is a supported Markdown option, including in the unknown-option help.
+{
+  const accepted = readSource('md', '# Localized\n<!-- slide: language=ar -->\n', []);
+  assert.equal(accepted.deck?.slides[0].language, 'ar');
+  assert.ok(!accepted.findings.some(finding => /unknown.*option/i.test(finding.message)));
+  const misspelled = readSource('md', '# Localized\n<!-- slide: langauge=ar -->\n', []);
+  const optionHelp = misspelled.findings.find(finding => finding.help?.includes('Keys: '))?.help;
+  assert.ok(optionHelp?.match(/Keys: ([^.]+)\./)?.[1].split(',').map(key => key.trim()).includes('language'), 'unknown-option help includes the supported slide language key');
+}
 
 // A registered catalog changes the reference findings; the validation follows the catalogs it was given.
 {

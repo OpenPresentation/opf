@@ -19,7 +19,7 @@ const said = (document, keyword, format = "json") => {
 describe("schema keywords in plain words", () => {
   test("enum: the values, the value that is there and a guess", () => {
     const { message, next } = said({ slides: [{ title: "a" }], design: { titleAlignment: "middle" } }, "enum");
-    assert.equal(message, "`titleAlignment` must be left, center or right, but is `middle`.");
+    assert.equal(message, "`titleAlignment` must be start, center or end, but is `middle`.");
     assert.equal(next, "did you mean `center`?");
   });
   test("enum with more than five values counts them and points at the list", () => {
@@ -218,7 +218,7 @@ describe("patch fixes of schema findings", () => {
   test("enum: the nearest values, as replace patches", () => {
     const document = { slides: [{ title: "a" }], design: { titleAlignment: "middle" } };
     const list = fixes(document, "enum");
-    assert.deepEqual(list.map((fix) => fix.title), ["Change to center", "Change to left", "Change to right"]);
+    assert.deepEqual(list.map((fix) => fix.title), ["Change to center", "Change to start", "Change to end"]);
     assert.deepEqual(list[0].patch, [{ op: "replace", path: "/design/titleAlignment", value: "center" }]);
     assert.equal(list[0].kind, "patch");
   });

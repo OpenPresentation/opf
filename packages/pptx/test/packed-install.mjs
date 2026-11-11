@@ -22,7 +22,7 @@ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const npm = (args, cwd) => { const { command, args: argv, options } = spawnSpec(['npm', ...args]); return execFileSync(command, argv, { ...options, cwd, encoding: 'utf8', maxBuffer: 5 * 1024 * 1024 }); };
 try {
   const candidateManifest=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
-  assert.equal(candidateManifest.dependencies['@rgrove/parse-xml'],'5.0.0','The shipped vendor requires the pinned production XML parser, not a dev dependency.');
+  assert.equal(candidateManifest.dependencies['@rgrove/parse-xml'],'5.1.0','The shipped vendor requires the pinned production XML parser, not a dev dependency.');
   assert.equal(candidateManifest.devDependencies?.['@rgrove/parse-xml'],undefined,'No dev parser may disguise the runtime dependency.');
   const packed = packWorkspacePackage('@openpresentation/opf-pptx', temporary);
   const coreName = '@openpresentation/opf', galleryName = '@openpresentation/gallery', renderName = '@openpresentation/opf-render';
@@ -81,7 +81,7 @@ const installedRoot=await realpath(pkg);
 assert.equal(installedRoot,await realpath(new URL('./node_modules/@openpresentation/opf-pptx/',import.meta.url)),'Candidate imports from this isolated consumer');
 assert.ok(installedRoot.startsWith(modules+path.sep));
 const installedManifest=JSON.parse(await readFile(new URL('package.json',pkg),'utf8'));
-assert.equal(installedManifest.dependencies['@rgrove/parse-xml'],'5.0.0');
+assert.equal(installedManifest.dependencies['@rgrove/parse-xml'],'5.1.0');
 const vendorRequire=createRequire(new URL('vendor/pptxgenjs/pptxgen.es.js',pkg));
 const parserFile=await realpath(vendorRequire.resolve('@rgrove/parse-xml'));
 const parserRoot=await realpath(new URL('./node_modules/@rgrove/parse-xml/',import.meta.url));

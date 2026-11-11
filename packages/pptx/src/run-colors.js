@@ -16,6 +16,7 @@
 //    the slot. The exporter writes schemeClr only where the theme holds the colour, so this is the same convention.
 
 import {ROOT_PAYLOAD_FIELDS, REGION_KEYS} from './content-topology.js';
+import {legacyRegionOrder} from './legacy-tags.js';
 
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const REGION_KEY_SET = new Set(REGION_KEYS);
@@ -27,28 +28,32 @@ const REFERENCE = /^(?:var:[a-z][a-z0-9-]*|accent[1-6]|dark[12]|light[12]|hyperl
 export const isColorReference = value => typeof value === 'string' && REFERENCE.test(value);
 
 /** The payload objects of a slide in the fixed traversal order: regions (by name), else blocks (groups depth first), else the slide's root payload. */
-function* leaves(slide) {
+function* leaves(slide, regionOrder) {
   const walk = function* (block) {
     if (!object(block)) return;
     if (isGroup(block)) { for (const child of Array.isArray(block.blocks) ? block.blocks : []) yield* walk(child); return; }
     yield block;
   };
   const regions = Object.keys(slide).filter(key => REGION_KEY_SET.has(key) && object(slide[key])).sort();
-  if (regions.length) { for (const key of regions) yield* walk(slide[key]); return; }
+  const ordered = Array.isArray(regionOrder) && regionOrder.length === regions.length && new Set(regionOrder).size === regions.length && regionOrder.every(key => regions.includes(key)) ? regionOrder : regions;
+  if (ordered.length) { for (const key of ordered) yield* walk(slide[key]); return; }
   if (Array.isArray(slide.blocks)) { for (const block of slide.blocks) yield* walk(block); return; }
   yield slide;
 }
 
 /** The text runs of the slide's text and list payloads, in order: an object (a run) or null (a plain string). */
-export function slideRunSlots(slide) {
+// Proven scalar fragments occupy their original one logical slot during import;
+// actual native run objects stay intact until color references have settled.
+export function slideRunSlots(slide, scalarValues = null, scalarIndexes = null, regionOrder) {
   const slots = [];
   const runs = value => {
+    if (scalarValues?.has(value)) { scalarIndexes?.add(slots.length); slots.push(null); return; }
     if (Array.isArray(value)) for (const run of value) slots.push(object(run) ? run : null);
     else if (typeof value === 'string') slots.push(null);
   };
   // FA-10: the heading group (tag, title, subtitle) comes first, when it is TextRun[].
   for (const field of ['tag', 'title', 'subtitle']) if (Array.isArray(slide[field])) runs(slide[field]);
-  for (const leaf of leaves(slide)) {
+  for (const leaf of leaves(slide, regionOrder)) {
     for (const field of ROOT_PAYLOAD_FIELDS) {
       const value = leaf[field];
       if (field === 'text') { if (Array.isArray(value)) runs(value); }
@@ -100,9 +105,39 @@ function* markedRuns(value) {
  * colour: a stored reference that resolves to it is restored (an authored `text` role equals the inherited colour), and the
  * marker is removed; a run left with only its text becomes a plain string again.
  */
+// Visit only real content leaves; metadata paths never address arbitrary objects.
+function scalarTargets(slide, index, proof, report) {
+  if (!(proof instanceof Map)) return [];
+  const result = [], base = 'slides.' + index;
+  const visit = (leaf, path) => {
+    if (!object(leaf)) return;
+    if (isGroup(leaf)) { (leaf.blocks ?? []).forEach((child, i) => visit(child, path + '.blocks.' + i)); return; }
+    for (const field of ['items','bullets']) {
+      if (!Array.isArray(leaf[field])) continue;
+      for (const [item, role] of proof.get(path + '.' + field) ?? []) {
+        if (item >= leaf[field].length) continue;
+        const get = () => { const current = leaf[field][item]; return role === 'description' ? object(current) ? current.description : undefined : object(current) ? current.text : current; };
+        const set = value => { const current = leaf[field][item]; if (role === 'description') { if (object(current)) current.description = value; } else if (object(current)) current.text = value; else leaf[field][item] = value; };
+        if (typeof get() === 'string' || Array.isArray(get())) result.push({get, set});
+      }
+    }
+  };
+  const regions = Object.keys(slide).filter(key => REGION_KEY_SET.has(key) && object(slide[key]));
+  if (regions.length) for (const key of regions) visit(slide[key], base + '.' + key);
+  else if (Array.isArray(slide.blocks)) slide.blocks.forEach((block, i) => visit(block, base + '.blocks.' + i));
+  else visit(slide, base);
+  if (result.length !== [...proof.values()].reduce((n, entries) => n + entries.length, 0)) {
+    report?.({code:'list-scalar-reference-changed',path:'slides.'+index,message:'Scalar source paths or item roles no longer match complete current list values; native run boundaries are retained.'});
+    return [];
+  }
+  return result;
+}
+
 export function restoreRunColors(slides, info, resolve, report) {
   slides.forEach((slide, index) => {
     const tag = info[index];
+    let scalars = tag?.structure && tag?.content ? scalarTargets(slide, index, tag.scalars, report) : [];
+    const scalarValues = () => new Set(scalars.map(target => target.get()).filter(Array.isArray));
     const marked = [...markedRuns(slide)];
     const restoreName = (run, name) => {
       const current = run.color ?? run._opfInherited;
@@ -113,7 +148,12 @@ export function restoreRunColors(slides, info, resolve, report) {
       const {n, at} = tag.record.colors;
       // When the content form was not restored its own diagnostic says why, and the slots cannot be aligned.
       if (tag.structure && tag.content) {
-        const slots = slideRunSlots(slide);
+        const scalarIndexes = new Set();
+        let slots = slideRunSlots(slide, scalarValues(), scalarIndexes, legacyRegionOrder(tag.record));
+        if (at.some(([slot]) => scalarIndexes.has(slot))) {
+          report?.({code:'list-scalar-reference-changed',path:'slides.'+index,message:'Scalar source intent conflicts with an authored run color slot; current native run boundaries are retained.'});
+          scalars = []; slots = slideRunSlots(slide, null, null, legacyRegionOrder(tag.record));
+        }
         if (slots.length !== n) report({code: 'color-reference-changed', path: `slides.${index}`, message: `The slide's text runs no longer match the stored colour references (${slots.length} runs now, ${n} at export), so the named run colours of slides.${index} (variables, scheme slots and roles) were not restored; the runs keep their resolved colours.`});
         else for (const [slot, name] of at) if (slots[slot]) restoreName(slots[slot], name);
       }
@@ -124,6 +164,8 @@ export function restoreRunColors(slides, info, resolve, report) {
     const inherited = new Set(marked.filter(run => Object.hasOwn(run, '_opfInherited')));
     for (const run of inherited) delete run._opfInherited;
     if (inherited.size) plainInheritedRuns(slide, inherited);
+    // Color slots settle first. Only proven scalar values with no rich property join.
+    for (const target of scalars) { const value = target.get(); if (Array.isArray(value) && value.every(part => typeof part === 'string')) target.set(value.join('')); }
   });
 }
 

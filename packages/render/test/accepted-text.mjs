@@ -27,9 +27,9 @@ for(const outlines of [false,true])for(const {id,deck} of acceptedTextFixtures()
     for(const entry of lines) {
       const [,attrs,text]=nodes[cursor++],attr=name=>new RegExp(`(?:^|\\s)${name}="([^"]*)"`).exec(attrs)?.[1];
       const fragment=entry.fragment,style=fragment?.style??item.textStyle;
-      const placed=fit.placement?.lines[entry.index],factor=align==='right'?1:align==='center'?.5:0;
-      const x=placed?placed.x+(fragment?fragment.x:placed.width*factor):fragment?item.box.x+(align==='right'?item.box.width-entry.line.width:align==='center'?(item.box.width-entry.line.width)/2:0)+fragment.x:
-        item.box.x+(align==='right'?item.box.width:align==='center'?item.box.width/2:0);
+      const placed=fit.placement?.lines[entry.index],factor=align==='end'?1:align==='center'?.5:0;
+      const x=placed?placed.x+(fragment?fragment.x:placed.width*factor):fragment?item.box.x+(align==='end'?item.box.width-entry.line.width:align==='center'?(item.box.width-entry.line.width)/2:0)+fragment.x:
+        item.box.x+(align==='end'?item.box.width:align==='center'?item.box.width/2:0);
       const y=placed?placed.baseline+(fragment?.baselineShift??0):item.box.y+(fragment?entry.line.baseline+fragment.baselineShift:fit.fontSize+entry.index*fit.lineHeight);
       // LH-32: an eyebrow (the tag) draws the capitals of its accepted text, its last character in a tspan with no letter spacing.
       assert.equal(style.tracking?text.replace(/<tspan letter-spacing="0">([^<]*)<\/tspan>$/,'$1'):text,escape(styledText(fragment?.text??entry.text,style)),id);

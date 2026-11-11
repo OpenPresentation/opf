@@ -12,7 +12,7 @@ import {editEverywhere, shownXml, slideParts} from './helpers/master-furniture.m
 // URL, and re-import rebuilds organization.socials from the current lines.
 const enc = new TextEncoder(), dec = new TextDecoder();
 const organization = {id: 'acme', name: 'Acme', socials: {linkedin: 'acme', x: '@acme', bluesky: 'https://bsky.app/profile/acme.bsky.social', threads: 'Visit us', mastodon: 'http://acme.example/profile'}};
-const source = {organization, design: {footer: {left: {text: '{{organization.name}}'}, right: {socials: true}}}, slides: [{title: 'One', text: 'Body'}, {title: 'Two', text: 'Body'}]};
+const source = {organization, design: {footer: {start: {text: '{{organization.name}}'}, end: {socials: true}}}, slides: [{title: 'One', text: 'Body'}, {title: 'Two', text: 'Body'}]};
 const read = async bytes => { const issues = []; const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)}); assert.equal(validate(deck, {only: ['format']}).valid, true); return {deck, issues}; };
 const modify = (bytes, mutate) => { const entries = unzipSync(bytes); mutate(entries); return zipSync(entries); };
 const slideXml = (entries, index = 1) => dec.decode(entries[`ppt/slides/slide${index}.xml`]);
@@ -23,7 +23,7 @@ const shownRels = (entries, number = 1) => Object.values(slideParts(entries, num
 // A picture bleeding off the right edge covers the right footer zone on both slides: the socials stay shapes on each slide, drawn above
 // it (furniture-on-slide), so the slides can disagree.
 const photo = `data:image/png;base64,${(await readFile(new URL('fixtures/images/wide.png', import.meta.url))).toString('base64')}`;
-const covered = {...source, slides: source.slides.map(slide => ({title: slide.title, blocks: [{text: 'Body'}, {image: photo, placement: {edge: 'right'}}]}))};
+const covered = {...source, slides: source.slides.map(slide => ({title: slide.title, blocks: [{text: 'Body'}, {image: photo, placement: {edge: 'end'}}]}))};
 
 const before = structuredClone(source), bytes = await toPptx(source);
 assert.deepEqual(source, before, 'Export leaves the source unchanged.');
@@ -78,7 +78,7 @@ for (const [mutate, barePattern, storedPattern] of [[disagreeing, /stored organi
 // Missing socials diagnose the controlling path; strict composition rejects them.
 const missing = {...source, organization: {id: 'acme', name: 'Acme'}}, diagnostics = [];
 await toPptx(missing, {onDiagnostic: issue => diagnostics.push(issue)});
-assert.ok(diagnostics.some(issue => issue.code === 'unresolved-content' && issue.path === 'design.footer.right.socials'));
+assert.ok(diagnostics.some(issue => issue.code === 'unresolved-content' && issue.path === 'design.footer.end.socials'));
 
 // OPF 0.15: social platforms are an engine vocabulary (core SOCIAL_PLATFORMS), not a catalog. Every platform with a profile
 // URL exports a handle as a linked profile URL, and re-import restores the authored handle with no host option.
@@ -118,7 +118,7 @@ assert.deepEqual((await read(await toPptx(keyed))).deck.organization.socials, {t
 // the same zone exports <a:fld type="slidenum"> and <a:hlinkClick> side by side and
 // re-imports both, with and without FF-32 document provenance.
 const mixed = {organization: {id: 'acme', name: 'Acme', socials: {x: '@acme', threads: 'Visit us'}},
-  design: {footer: {left: {text: '{{organization.name}}\nSlide {{slide.number}} of {{deck.slideCount}}'}, right: {socials: true, text: '{{slide.number}}'}}},
+  design: {footer: {start: {text: '{{organization.name}}\nSlide {{slide.number}} of {{deck.slideCount}}'}, end: {socials: true, text: '{{slide.number}}'}}},
   slides: [{text: 'One'}, {text: 'Two'}]};
 const mixedBytes = await toPptx(mixed, {slideNumberFields: 'live'}), mixedXml = shownXml(unzipSync(mixedBytes), 2);
 assert.ok(/<a:fld [^>]*type="slidenum"[^>]*>(?:(?!<\/a:fld>).)*<a:t>2<\/a:t><\/a:fld>/.test(mixedXml), 'Live slide-number field.');

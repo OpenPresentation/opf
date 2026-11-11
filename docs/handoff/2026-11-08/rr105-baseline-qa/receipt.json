@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-08",
+  "sourceCommit": "f2d181002cf2d80fd2531510be0db846920d7c71",
+  "baseCommit": "f435a338973a1956025a6bc46f9fbd6ef28c4cc2",
+  "scope": "Local QA-only source review; no push/PR/CI observer/Office/release. Not full-package, integration, registry or native acceptance.",
+  "archive": {
+    "path": "qualification.zip",
+    "bytes": 509967,
+    "sha256": "db1d133daf072d815315994c11b35cc39ee5f45e415ca585821459a95a7f1519",
+    "files": 99,
+    "losslessRoundTripVerified": true
+  },
+  "officialHistory": [
+    {
+      "input": "66eb integration before edits",
+      "result": "RED5/5 fail: sampler indices,3Venn old-wording assertions,36/40count",
+      "log": "retained/rr105-baseline-qa-before.log"
+    },
+    {
+      "input": "First QA candidate",
+      "result": "RED4pass/1fail: original long union-frame predicate; later official long assertions unrun",
+      "log": "retained/rr105-baseline-qa-focused-01.log"
+    },
+    {
+      "input": "Frozen8a strengthened candidate",
+      "result": "RED3pass/2fail: overstrict raw soft-wrap concat and hanging blank advance; later official assertions unrun",
+      "log": "local-qualification/focused-aligned-02.log"
+    },
+    {
+      "input": "f2d181002cf2d80fd2531510be0db846920d7c71",
+      "result": "PASS5/5,0skips; all formerlyunrun official export/import/generic assertions execute",
+      "log": "local-qualification/focused-aligned-03.log"
+    }
+  ],
+  "required": {
+    "command": "node scripts/check-changed.mjs --base f435a338973a1956025a6bc46f9fbd6ef28c4cc2",
+    "exitCode": 0,
+    "seconds": 164.8,
+    "selectedSteps": 11,
+    "passedSteps": 10,
+    "typecheck": "not selected; no TypeScript or tsconfig changed",
+    "pptxSelection": "The maintained test-only mapper ran exactly the3changed test files. Full279/package/integration gate remains owed.",
+    "log": "local-qualification/check-changed-01.log"
+  },
+  "protectedObjects": 11,
+  "apiReads": 0,
+  "apiBudget": 3,
+  "sourceDirtyAtQualification": false,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "fullIntegrationAcceptance": false,
+  "credentialSignatureScan": {
+    "matches": []
+  }
+}

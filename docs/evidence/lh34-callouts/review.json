@@ -1,0 +1,3514 @@
+{
+  "baselineRoot": "C:/opf-work/rr107-mcpb",
+  "baselineCommit": "cabd3c8a03d02255329edd2352eb1e39df7fb40c",
+  "compositionSha256": "7a2663638da1efc6c6af91adcea94deef46b5c64fa27e9173ca53a52eda843c3",
+  "ordinarySvgControls": 6,
+  "ordinaryPptxControls": [
+    {
+      "language": "en",
+      "fit": "contain",
+      "pptxSha256": "c7204d2a158881349d945d4a008fc68367aa121b6007da4094ea7380b0d74c6d"
+    },
+    {
+      "language": "en",
+      "fit": "cover",
+      "pptxSha256": "4fb67cdb933fbe1db85e3969ed0a2c28d2ac5d62a0338777c5131bc513f8fa72"
+    },
+    {
+      "language": "en",
+      "fit": "stretch",
+      "pptxSha256": "3f0607aae9f543de5fa7895c70361e48a5fa5f2708a35ed08416eb25eed14dde"
+    },
+    {
+      "language": "ar",
+      "fit": "contain",
+      "pptxSha256": "f5b53162e6ea4c9e81ae29de3139fea614319e1e603d0ea6d4cbf50abf94bb19"
+    },
+    {
+      "language": "ar",
+      "fit": "cover",
+      "pptxSha256": "156831543594b2f4a762ccadcb3bc25fe8b86541fac8f7da900e2133a3f74ab9"
+    },
+    {
+      "language": "ar",
+      "fit": "stretch",
+      "pptxSha256": "4b1281b8d9174ecbd050b185ddc575539c52385bd8f3579f6b59173e55d69149"
+    }
+  ],
+  "cases": [
+    {
+      "id": "wide",
+      "deck": {
+        "name": "Image callouts remain editable",
+        "description": "Fractional text panels over the visible image frame.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "annotated-picture",
+            "layout": "image",
+            "title": "Read the picture and its labels together",
+            "blocks": [
+              {
+                "image": {
+                  "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAABnElEQVR4nO3Yv0rDUBTH8ZNLXqHBB9CA4O4ibi4+gYuTm/g8bk6CL9HBOaOrCO46O0e0eomxLam5/vo7N7/vVJo/hA+H09Di8fDEvHV6cGfeCtt+gKkkaFCCBiVoUIIGJWhQggYlaFCCBiVoUIIGJWhQggYlaFCl+alu5l+fmln8cvfi1TxUevJd1tPNzIV46Yi4bdvf5xRF0RWn5Q78yu13S0/rHY0DzlbgV7ZhkVsHWuV29RSvKl5CaB1ole2vcVoHRy8Ym0ZlzQW9aMw4p7pDztD16KXBvECIoPNO0BODrpPuDcLtwQKdfYIGVR5d7RlDTco36F4PZ8e27TTRoAQNStATg65uL7v/4idpcbe3+b4RxAKdfYKeHnSVdHtQ7Q0u6Nh467S7PkPo6nOoU8UzznTQlmKBsC0NUmjrWG/KHS9hUyaFts4OGW4dzyRU5oW2n9Zrprt3lFP54znT/v78Ry/n10NOoyV2A71enNzXJXTseefevMW7ozNL0KAEDUrQoAQNStCgBA1K0KAEDUrQoAQNStCgBG2Y3gEQ3Irssa4fzwAAAABJRU5ErkJggg==",
+                  "alt": "Four colored quadrants surround a central white inspection point.",
+                  "callouts": [
+                    {
+                      "text": "Red zone",
+                      "x": 0.04,
+                      "y": 0.06,
+                      "width": 0.38,
+                      "height": 0.3
+                    },
+                    {
+                      "text": "Blue zone",
+                      "x": 0.58,
+                      "y": 0.06,
+                      "width": 0.38,
+                      "height": 0.3
+                    },
+                    {
+                      "text": "Inspection point",
+                      "x": 0.2,
+                      "y": 0.57,
+                      "width": 0.6,
+                      "height": 0.34
+                    }
+                  ]
+                },
+                "fit": "contain"
+              }
+            ]
+          }
+        ],
+        "catalogs": {
+          "default": {
+            "source": "https://www.pptx.gallery",
+            "themes": {
+              "classic": {
+                "name": "Classic",
+                "background": {
+                  "type": "theme",
+                  "slot": "light1"
+                },
+                "colorScheme": "cool-horizon",
+                "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+                "fontScheme": "tenorite",
+                "dimensions": "widescreen",
+                "variants": [
+                  {
+                    "id": "light",
+                    "name": "Light",
+                    "variant": "light1"
+                  },
+                  {
+                    "id": "light-alt",
+                    "name": "Light alt",
+                    "variant": {
+                      "background": "light1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  },
+                  {
+                    "id": "dark",
+                    "name": "Dark",
+                    "variant": "dark1"
+                  },
+                  {
+                    "id": "dark-alt",
+                    "name": "Dark alt",
+                    "variant": {
+                      "background": "dark1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "fontSchemes": {
+              "roboto": {
+                "name": "Roboto",
+                "app": "google-slides",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Roboto",
+                "minor": "Roboto",
+                "textSample": "Perfect for tech",
+                "type": "sans-serif",
+                "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+              },
+              "tenorite": {
+                "name": "Tenorite",
+                "app": "powerpoint",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Tenorite Display",
+                "minor": "Tenorite",
+                "textSample": "Rounded modern tone",
+                "type": "sans-serif",
+                "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+              }
+            },
+            "layouts": {
+              "image": {
+                "name": "Image",
+                "summary": "One picture, filling the slide or shown whole, under an optional title.",
+                "tags": [
+                  "Visuals"
+                ],
+                "direction": "column",
+                "regions": [
+                  {
+                    "name": "title"
+                  },
+                  {
+                    "name": "media",
+                    "accepts": [
+                      "image",
+                      "video",
+                      "diagram"
+                    ],
+                    "role": "media",
+                    "flow": "none",
+                    "bleed": true
+                  }
+                ],
+                "description": "Let one picture carry the message. A photo close to the frame's shape fills it with a light crop (at most 7.5% off each edge); any other picture, a diagram or an SVG is shown whole at its own proportions (fit auto). Add a short title or caption to explain what the audience should notice. For a full-bleed crop of any picture, set the image block's fit to cover; to never crop, contain.",
+                "preview": {
+                  "vectorSrc": "https://www.pptx.gallery/layout-previews/image.svg"
+                },
+                "design": {
+                  "imageFit": "auto"
+                }
+              }
+            },
+            "colorSchemes": {
+              "cool-horizon": {
+                "name": "Cool Horizon",
+                "accent1": "#2874A6",
+                "accent2": "#1B4F72",
+                "accent3": "#5499C7",
+                "accent4": "#7BDBB2",
+                "accent5": "#3AC67A",
+                "accent6": "#24A89E",
+                "dark1": "#000000",
+                "dark2": "#011842",
+                "followedHyperlink": "#551A8B",
+                "hyperlink": "#0000EE",
+                "light1": "#FFFFFF",
+                "light2": "#F0F0F0",
+                "summary": "Cool blue-green palette tuned for professional business decks.",
+                "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+                "tags": [
+                  "professional",
+                  "trustworthy",
+                  "calm",
+                  "technical",
+                  "versatile"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "beforeSource": "Same picture/treatments/heading, with the unsupported new callouts removed.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "582082b05eb0c5d89812ce4bd3e2e98153998aaf383aa85d7cdef89b23a04273",
+          "pngSha256": "379cda2a44894ad35b0da9e8d61c2e8f6c61b8494ebaefc73e261da95b621bd6",
+          "image": {
+            "region": {
+              "x": 0,
+              "y": 147.832422,
+              "width": 1280,
+              "height": 572.167578
+            },
+            "box": {
+              "x": 67.832422,
+              "y": 147.832422,
+              "width": 1144.335156,
+              "height": 572.167578
+            },
+            "fit": "contain",
+            "focus": {
+              "x": 0.5,
+              "y": 0.5
+            },
+            "shape": {
+              "kind": "rect",
+              "preset": "rect",
+              "adjust": {},
+              "path": "M67.832422 147.832422H1212.167578V720H67.832422Z"
+            },
+            "picture": {
+              "image": {
+                "x": 67.832422,
+                "y": 147.832422,
+                "width": 1144.335156,
+                "height": 572.167578
+              },
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            }
+          }
+        },
+        {
+          "side": "after",
+          "svgSha256": "e9eb4097b4181309d1c0bbed6869aec7aef9926941024ca819d04488dbf2cb19",
+          "pngSha256": "e9b533d0781dfee9a733741d095a3468e1493e75ee0629752d42eeee052a145a",
+          "image": {
+            "region": {
+              "x": 0,
+              "y": 147.832422,
+              "width": 1280,
+              "height": 572.167578
+            },
+            "box": {
+              "x": 67.832422,
+              "y": 147.832422,
+              "width": 1144.335156,
+              "height": 572.167578
+            },
+            "fit": "contain",
+            "focus": {
+              "x": 0.5,
+              "y": 0.5
+            },
+            "shape": {
+              "kind": "rect",
+              "preset": "rect",
+              "adjust": {},
+              "path": "M67.832422 147.832422H1212.167578V720H67.832422Z"
+            },
+            "picture": {
+              "image": {
+                "x": 67.832422,
+                "y": 147.832422,
+                "width": 1144.335156,
+                "height": 572.167578
+              },
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            },
+            "calloutFrame": {
+              "x": 67.832422,
+              "y": 147.832422,
+              "width": 1144.335156,
+              "height": 572.167578
+            },
+            "callouts": [
+              {
+                "path": "slides.0.blocks.0.image.callouts.0",
+                "text": "Red zone",
+                "box": {
+                  "x": 113.605828,
+                  "y": 182.162477,
+                  "width": 434.847359,
+                  "height": 171.650273
+                },
+                "textBox": {
+                  "x": 123.605828,
+                  "y": 233.82761349999998,
+                  "width": 414.847359,
+                  "height": 151.650273
+                },
+                "fit": {
+                  "lines": [
+                    "Red zone"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 8,
+                      "nextStart": 8,
+                      "boundary": "end",
+                      "width": 229.578125,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 8,
+                          "x": 0,
+                          "width": 229.578125
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 216.240445,
+                        "y": 233.82761349999998,
+                        "baseline": 289.8276135,
+                        "height": 68.32,
+                        "width": 229.578125,
+                        "outline": {
+                          "x": 220.86153875,
+                          "y": 247.82761349999998,
+                          "width": 222.90625,
+                          "height": 42.546875
+                        }
+                      }
+                    ],
+                    "height": 68.32000000000002,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.0",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.1",
+                "text": "Blue zone",
+                "box": {
+                  "x": 731.546812,
+                  "y": 182.162477,
+                  "width": 434.847359,
+                  "height": 171.650273
+                },
+                "textBox": {
+                  "x": 741.546812,
+                  "y": 233.82761349999998,
+                  "width": 414.847359,
+                  "height": 151.650273
+                },
+                "fit": {
+                  "lines": [
+                    "Blue zone"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 9,
+                      "nextStart": 9,
+                      "boundary": "end",
+                      "width": 242.8671875,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 9,
+                          "x": 0,
+                          "width": 242.8671875
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 827.53689775,
+                        "y": 233.82761349999998,
+                        "baseline": 289.8276135,
+                        "height": 68.32,
+                        "width": 242.8671875,
+                        "outline": {
+                          "x": 832.1579915,
+                          "y": 247.82761349999998,
+                          "width": 236.1953125,
+                          "height": 42.546875
+                        }
+                      }
+                    ],
+                    "height": 68.32000000000002,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.1",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.2",
+                "text": "Inspection point",
+                "box": {
+                  "x": 296.699453,
+                  "y": 473.967941,
+                  "width": 686.601094,
+                  "height": 194.536977
+                },
+                "textBox": {
+                  "x": 306.699453,
+                  "y": 537.0764295,
+                  "width": 666.601094,
+                  "height": 174.536977
+                },
+                "fit": {
+                  "lines": [
+                    "Inspection point"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 16,
+                      "nextStart": 16,
+                      "boundary": "end",
+                      "width": 400.44921875,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 16,
+                          "x": 0,
+                          "width": 400.44921875
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 439.775390625,
+                        "y": 537.0764295,
+                        "baseline": 593.0764295,
+                        "height": 68.32,
+                        "width": 400.44921875,
+                        "outline": {
+                          "x": 444.779296875,
+                          "y": 552.7170545,
+                          "width": 393.50390625,
+                          "height": 51.734375
+                        }
+                      }
+                    ],
+                    "height": 68.375,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.2",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "portrait",
+      "deck": {
+        "name": "Image callouts remain editable",
+        "description": "Fractional text panels over the visible image frame.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto",
+          "dimensions": {
+            "widthInches": 5.625,
+            "heightInches": 10
+          }
+        },
+        "slides": [
+          {
+            "id": "annotated-picture",
+            "layout": "image",
+            "title": "Labels travel with the frame",
+            "blocks": [
+              {
+                "image": {
+                  "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAB4CAIAAAAhVwZfAAAB50lEQVR4nOXWsU5UQRhH8TMn+woQHgBJTOxtDB2NT0BjRWd8HjsrEl+CwprS1pDQY731NSr3uihs9s7MCv/lVxH2zuTky7cXyrfXJ2zH21eft3SzBJJAEkgCSSAJJIEkkASSQBJIAkkgCSSBJJAEkkASSAJJIAkkgSSQBJJAEkgCSSAJJIEkkASSQBJIAkkgCSSBJJAEkkASSAItut94dHlx+9Pl3vTLw7PvTzH6T+t9rj7tdaxfdM8dhuHfZ0opq/WN6fYqHkb3Pjbc/XQa/CNErxZveGTo0W1j8ZrpPmQYj1R321hcd5zxbF233V8Uc13N765fj5YxN97g/1+M9iWJ/DMuOx991HU3qjfkGUz6iVi8+fBixuNd39B/+Xp6zA5PWgLJzkfvn79f/Y++i/LrtuXFy82PPINJp0bvd92QMn83mibd3l1qb6iJ/j3sXpYzx1w/6fYlKVWL0boeU/fc9DIeqStufXtMe7J5dxmfrC7u8Mpb7V4z9XL305bin7f1+lbdvPu4yWPLttzO0evrlz1atxg9uT74sqWbJZAEkkASSAJJIAkkgSSQBJJAEkgCSSAJJIEkkASSQBJIAkkgCSSBJJAEkkASSAJJIAkkgSSQBJJAEkgCSSAJJIEkkATysQNq/ADSb4tkHnk3oAAAAABJRU5ErkJggg==",
+                  "alt": "Four colored quadrants surround a central white inspection point.",
+                  "callouts": [
+                    {
+                      "text": "Red",
+                      "x": 0.04,
+                      "y": 0.05,
+                      "width": 0.4,
+                      "height": 0.4
+                    },
+                    {
+                      "text": "Blue",
+                      "x": 0.56,
+                      "y": 0.05,
+                      "width": 0.4,
+                      "height": 0.4
+                    }
+                  ]
+                },
+                "fit": "contain"
+              }
+            ]
+          }
+        ],
+        "catalogs": {
+          "default": {
+            "source": "https://www.pptx.gallery",
+            "themes": {
+              "classic": {
+                "name": "Classic",
+                "background": {
+                  "type": "theme",
+                  "slot": "light1"
+                },
+                "colorScheme": "cool-horizon",
+                "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+                "fontScheme": "tenorite",
+                "dimensions": "widescreen",
+                "variants": [
+                  {
+                    "id": "light",
+                    "name": "Light",
+                    "variant": "light1"
+                  },
+                  {
+                    "id": "light-alt",
+                    "name": "Light alt",
+                    "variant": {
+                      "background": "light1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  },
+                  {
+                    "id": "dark",
+                    "name": "Dark",
+                    "variant": "dark1"
+                  },
+                  {
+                    "id": "dark-alt",
+                    "name": "Dark alt",
+                    "variant": {
+                      "background": "dark1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "fontSchemes": {
+              "roboto": {
+                "name": "Roboto",
+                "app": "google-slides",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Roboto",
+                "minor": "Roboto",
+                "textSample": "Perfect for tech",
+                "type": "sans-serif",
+                "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+              },
+              "tenorite": {
+                "name": "Tenorite",
+                "app": "powerpoint",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Tenorite Display",
+                "minor": "Tenorite",
+                "textSample": "Rounded modern tone",
+                "type": "sans-serif",
+                "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+              }
+            },
+            "layouts": {
+              "image": {
+                "name": "Image",
+                "summary": "One picture, filling the slide or shown whole, under an optional title.",
+                "tags": [
+                  "Visuals"
+                ],
+                "direction": "column",
+                "regions": [
+                  {
+                    "name": "title"
+                  },
+                  {
+                    "name": "media",
+                    "accepts": [
+                      "image",
+                      "video",
+                      "diagram"
+                    ],
+                    "role": "media",
+                    "flow": "none",
+                    "bleed": true
+                  }
+                ],
+                "description": "Let one picture carry the message. A photo close to the frame's shape fills it with a light crop (at most 7.5% off each edge); any other picture, a diagram or an SVG is shown whole at its own proportions (fit auto). Add a short title or caption to explain what the audience should notice. For a full-bleed crop of any picture, set the image block's fit to cover; to never crop, contain.",
+                "preview": {
+                  "vectorSrc": "https://www.pptx.gallery/layout-previews/image.svg"
+                },
+                "design": {
+                  "imageFit": "auto"
+                }
+              }
+            },
+            "colorSchemes": {
+              "cool-horizon": {
+                "name": "Cool Horizon",
+                "accent1": "#2874A6",
+                "accent2": "#1B4F72",
+                "accent3": "#5499C7",
+                "accent4": "#7BDBB2",
+                "accent5": "#3AC67A",
+                "accent6": "#24A89E",
+                "dark1": "#000000",
+                "dark2": "#011842",
+                "followedHyperlink": "#551A8B",
+                "hyperlink": "#0000EE",
+                "light1": "#FFFFFF",
+                "light2": "#F0F0F0",
+                "summary": "Cool blue-green palette tuned for professional business decks.",
+                "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+                "tags": [
+                  "professional",
+                  "trustworthy",
+                  "calm",
+                  "technical",
+                  "versatile"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "beforeSource": "Same picture/treatments/heading, with the unsupported new callouts removed.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "80442c26df0aeaa10456599415e9ab03b66268c5f49b2adbb638c0757f319446",
+          "pngSha256": "daa7d5a819364b85c8ed80208dccd88d314796232e910c8973d37f58dfbe06da",
+          "image": {
+            "region": {
+              "x": 0,
+              "y": 102.370933,
+              "width": 540,
+              "height": 857.629067
+            },
+            "box": {
+              "x": 55.592733,
+              "y": 102.370933,
+              "width": 428.814533,
+              "height": 857.629067
+            },
+            "fit": "contain",
+            "focus": {
+              "x": 0.5,
+              "y": 0.5
+            },
+            "shape": {
+              "kind": "rect",
+              "preset": "rect",
+              "adjust": {},
+              "path": "M55.592733 102.370933H484.407266V960H55.592733Z"
+            },
+            "picture": {
+              "image": {
+                "x": 55.592733,
+                "y": 102.370933,
+                "width": 428.814533,
+                "height": 857.629066
+              },
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            }
+          }
+        },
+        {
+          "side": "after",
+          "svgSha256": "e4b370a36c882e017a348c0fa99933c764ec7942814e7452b3ecb83e0af69078",
+          "pngSha256": "3f884fab68d76babb43d0a6dcc81652a620b9985c84d4f98ec06eb782dbab3d1",
+          "image": {
+            "region": {
+              "x": 0,
+              "y": 102.370933,
+              "width": 540,
+              "height": 857.629067
+            },
+            "box": {
+              "x": 55.592733,
+              "y": 102.370933,
+              "width": 428.814533,
+              "height": 857.629067
+            },
+            "fit": "contain",
+            "focus": {
+              "x": 0.5,
+              "y": 0.5
+            },
+            "shape": {
+              "kind": "rect",
+              "preset": "rect",
+              "adjust": {},
+              "path": "M55.592733 102.370933H484.407266V960H55.592733Z"
+            },
+            "picture": {
+              "image": {
+                "x": 55.592733,
+                "y": 102.370933,
+                "width": 428.814533,
+                "height": 857.629066
+              },
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            },
+            "calloutFrame": {
+              "x": 55.592733,
+              "y": 102.370933,
+              "width": 428.814533,
+              "height": 857.629066
+            },
+            "callouts": [
+              {
+                "path": "slides.0.blocks.0.image.callouts.0",
+                "text": "Red",
+                "box": {
+                  "x": 72.745314,
+                  "y": 145.252386,
+                  "width": 171.525813,
+                  "height": 343.051626
+                },
+                "textBox": {
+                  "x": 80.245314,
+                  "y": 291.15819899999997,
+                  "width": 156.525813,
+                  "height": 328.051626
+                },
+                "fit": {
+                  "lines": [
+                    "Red"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 3,
+                      "nextStart": 3,
+                      "boundary": "end",
+                      "width": 71.8388671875,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 3,
+                          "x": 0,
+                          "width": 71.8388671875
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 42,
+                  "lineHeight": 51.24,
+                  "tabSize": 4,
+                  "tabWidth": 41.671875,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 0.75,
+                    "lines": [
+                      {
+                        "x": 122.58878690625,
+                        "y": 291.15819899999997,
+                        "baseline": 333.15819899999997,
+                        "height": 51.24,
+                        "width": 71.8388671875,
+                        "outline": {
+                          "x": 126.05460721875,
+                          "y": 301.65819899999997,
+                          "width": 65.37890625,
+                          "height": 31.91015625
+                        }
+                      }
+                    ],
+                    "height": 51.24000000000001,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.0",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.1",
+                "text": "Blue",
+                "box": {
+                  "x": 295.728871,
+                  "y": 145.252386,
+                  "width": 171.525813,
+                  "height": 343.051626
+                },
+                "textBox": {
+                  "x": 303.228871,
+                  "y": 291.15819899999997,
+                  "width": 156.525813,
+                  "height": 328.051626
+                },
+                "fit": {
+                  "lines": [
+                    "Blue"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 4,
+                      "nextStart": 4,
+                      "boundary": "end",
+                      "width": 81.8056640625,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 4,
+                          "x": 0,
+                          "width": 81.8056640625
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 42,
+                  "lineHeight": 51.24,
+                  "tabSize": 4,
+                  "tabWidth": 41.671875,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 0.75,
+                    "lines": [
+                      {
+                        "x": 340.58894546875,
+                        "y": 291.15819899999997,
+                        "baseline": 333.15819899999997,
+                        "height": 51.24,
+                        "width": 81.8056640625,
+                        "outline": {
+                          "x": 344.05476578125,
+                          "y": 301.65819899999997,
+                          "width": 76.8017578125,
+                          "height": 31.91015625
+                        }
+                      }
+                    ],
+                    "height": 51.24000000000001,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.1",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cover-focus",
+      "deck": {
+        "name": "Image callouts remain editable",
+        "description": "Fractional text panels over the visible image frame.",
+        "design": {
+          "theme": "classic",
+          "variant": "dark1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "annotated-picture",
+            "layout": "image",
+            "title": "Read the picture and its labels together",
+            "blocks": [
+              {
+                "image": {
+                  "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAABnElEQVR4nO3Yv0rDUBTH8ZNLXqHBB9CA4O4ibi4+gYuTm/g8bk6CL9HBOaOrCO46O0e0eomxLam5/vo7N7/vVJo/hA+H09Di8fDEvHV6cGfeCtt+gKkkaFCCBiVoUIIGJWhQggYlaFCCBiVoUIIGJWhQggYlaFCl+alu5l+fmln8cvfi1TxUevJd1tPNzIV46Yi4bdvf5xRF0RWn5Q78yu13S0/rHY0DzlbgV7ZhkVsHWuV29RSvKl5CaB1ole2vcVoHRy8Ym0ZlzQW9aMw4p7pDztD16KXBvECIoPNO0BODrpPuDcLtwQKdfYIGVR5d7RlDTco36F4PZ8e27TTRoAQNStATg65uL7v/4idpcbe3+b4RxAKdfYKeHnSVdHtQ7Q0u6Nh467S7PkPo6nOoU8UzznTQlmKBsC0NUmjrWG/KHS9hUyaFts4OGW4dzyRU5oW2n9Zrprt3lFP54znT/v78Ry/n10NOoyV2A71enNzXJXTseefevMW7ozNL0KAEDUrQoAQNStCgBA1K0KAEDUrQoAQNStCgBG2Y3gEQ3Irssa4fzwAAAABJRU5ErkJggg==",
+                  "alt": "Four colored quadrants surround a central white inspection point.",
+                  "callouts": [
+                    {
+                      "text": "Red zone",
+                      "x": 0.04,
+                      "y": 0.06,
+                      "width": 0.38,
+                      "height": 0.3
+                    },
+                    {
+                      "text": "Blue zone",
+                      "x": 0.58,
+                      "y": 0.06,
+                      "width": 0.38,
+                      "height": 0.3
+                    },
+                    {
+                      "text": "Inspection point",
+                      "x": 0.2,
+                      "y": 0.57,
+                      "width": 0.6,
+                      "height": 0.34
+                    }
+                  ]
+                },
+                "fit": "cover",
+                "aspectRatio": 1.9,
+                "focus": {
+                  "x": 0.6,
+                  "y": 0.5
+                }
+              }
+            ]
+          }
+        ],
+        "catalogs": {
+          "default": {
+            "source": "https://www.pptx.gallery",
+            "themes": {
+              "classic": {
+                "name": "Classic",
+                "background": {
+                  "type": "theme",
+                  "slot": "light1"
+                },
+                "colorScheme": "cool-horizon",
+                "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+                "fontScheme": "tenorite",
+                "dimensions": "widescreen",
+                "variants": [
+                  {
+                    "id": "light",
+                    "name": "Light",
+                    "variant": "light1"
+                  },
+                  {
+                    "id": "light-alt",
+                    "name": "Light alt",
+                    "variant": {
+                      "background": "light1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  },
+                  {
+                    "id": "dark",
+                    "name": "Dark",
+                    "variant": "dark1"
+                  },
+                  {
+                    "id": "dark-alt",
+                    "name": "Dark alt",
+                    "variant": {
+                      "background": "dark1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "fontSchemes": {
+              "roboto": {
+                "name": "Roboto",
+                "app": "google-slides",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Roboto",
+                "minor": "Roboto",
+                "textSample": "Perfect for tech",
+                "type": "sans-serif",
+                "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+              },
+              "tenorite": {
+                "name": "Tenorite",
+                "app": "powerpoint",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Tenorite Display",
+                "minor": "Tenorite",
+                "textSample": "Rounded modern tone",
+                "type": "sans-serif",
+                "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+              }
+            },
+            "layouts": {
+              "image": {
+                "name": "Image",
+                "summary": "One picture, filling the slide or shown whole, under an optional title.",
+                "tags": [
+                  "Visuals"
+                ],
+                "direction": "column",
+                "regions": [
+                  {
+                    "name": "title"
+                  },
+                  {
+                    "name": "media",
+                    "accepts": [
+                      "image",
+                      "video",
+                      "diagram"
+                    ],
+                    "role": "media",
+                    "flow": "none",
+                    "bleed": true
+                  }
+                ],
+                "description": "Let one picture carry the message. A photo close to the frame's shape fills it with a light crop (at most 7.5% off each edge); any other picture, a diagram or an SVG is shown whole at its own proportions (fit auto). Add a short title or caption to explain what the audience should notice. For a full-bleed crop of any picture, set the image block's fit to cover; to never crop, contain.",
+                "preview": {
+                  "vectorSrc": "https://www.pptx.gallery/layout-previews/image.svg"
+                },
+                "design": {
+                  "imageFit": "auto"
+                }
+              }
+            },
+            "colorSchemes": {
+              "cool-horizon": {
+                "name": "Cool Horizon",
+                "accent1": "#2874A6",
+                "accent2": "#1B4F72",
+                "accent3": "#5499C7",
+                "accent4": "#7BDBB2",
+                "accent5": "#3AC67A",
+                "accent6": "#24A89E",
+                "dark1": "#000000",
+                "dark2": "#011842",
+                "followedHyperlink": "#551A8B",
+                "hyperlink": "#0000EE",
+                "light1": "#FFFFFF",
+                "light2": "#F0F0F0",
+                "summary": "Cool blue-green palette tuned for professional business decks.",
+                "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+                "tags": [
+                  "professional",
+                  "trustworthy",
+                  "calm",
+                  "technical",
+                  "versatile"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "beforeSource": "Same picture/treatments/heading, with the unsupported new callouts removed.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "c926aa15d9786d46c93e743310f1aa80fa77e532105e6766015a435cce0dd1d0",
+          "pngSha256": "3b8a9d6a9563f48cd9c76aea9c8fee0ae59f9fa2387d321e713713968d89adfd",
+          "image": {
+            "region": {
+              "x": 0,
+              "y": 147.832422,
+              "width": 1280,
+              "height": 572.167578
+            },
+            "box": {
+              "x": 96.440801,
+              "y": 147.832422,
+              "width": 1087.118398,
+              "height": 572.167578
+            },
+            "fit": "cover",
+            "focus": {
+              "x": 0.6,
+              "y": 0.5
+            },
+            "shape": {
+              "kind": "rect",
+              "preset": "rect",
+              "adjust": {},
+              "path": "M96.440801 147.832422H1183.559199V720H96.440801Z"
+            },
+            "picture": {
+              "image": {
+                "x": 39.224043,
+                "y": 147.832422,
+                "width": 1144.335156,
+                "height": 572.167578
+              },
+              "crop": {
+                "left": 0.05,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            }
+          }
+        },
+        {
+          "side": "after",
+          "svgSha256": "8026d73566ae22bf43aa3f649765e809d17a89b2348da8463f4ff52986bcd3db",
+          "pngSha256": "3e5d7933af975fdbe0e2110bc10652a8442ffa6de0f446f155b0c13e08a20573",
+          "image": {
+            "region": {
+              "x": 0,
+              "y": 147.832422,
+              "width": 1280,
+              "height": 572.167578
+            },
+            "box": {
+              "x": 96.440801,
+              "y": 147.832422,
+              "width": 1087.118398,
+              "height": 572.167578
+            },
+            "fit": "cover",
+            "focus": {
+              "x": 0.6,
+              "y": 0.5
+            },
+            "shape": {
+              "kind": "rect",
+              "preset": "rect",
+              "adjust": {},
+              "path": "M96.440801 147.832422H1183.559199V720H96.440801Z"
+            },
+            "picture": {
+              "image": {
+                "x": 39.224043,
+                "y": 147.832422,
+                "width": 1144.335156,
+                "height": 572.167578
+              },
+              "crop": {
+                "left": 0.05,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            },
+            "calloutFrame": {
+              "x": 96.440801,
+              "y": 147.832422,
+              "width": 1087.118398,
+              "height": 572.167578
+            },
+            "callouts": [
+              {
+                "path": "slides.0.blocks.0.image.callouts.0",
+                "text": "Red zone",
+                "box": {
+                  "x": 139.925537,
+                  "y": 182.162477,
+                  "width": 413.104991,
+                  "height": 171.650273
+                },
+                "textBox": {
+                  "x": 149.925537,
+                  "y": 233.82761349999998,
+                  "width": 393.104991,
+                  "height": 151.650273
+                },
+                "fit": {
+                  "lines": [
+                    "Red zone"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 8,
+                      "nextStart": 8,
+                      "boundary": "end",
+                      "width": 229.578125,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 8,
+                          "x": 0,
+                          "width": 229.578125
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 231.68896999999998,
+                        "y": 233.82761349999998,
+                        "baseline": 289.8276135,
+                        "height": 68.32,
+                        "width": 229.578125,
+                        "outline": {
+                          "x": 236.31006374999998,
+                          "y": 247.82761349999998,
+                          "width": 222.90625,
+                          "height": 42.546875
+                        }
+                      }
+                    ],
+                    "height": 68.32000000000002,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.0",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.1",
+                "text": "Blue zone",
+                "box": {
+                  "x": 726.969472,
+                  "y": 182.162477,
+                  "width": 413.104991,
+                  "height": 171.650273
+                },
+                "textBox": {
+                  "x": 736.969472,
+                  "y": 233.82761349999998,
+                  "width": 393.104991,
+                  "height": 151.650273
+                },
+                "fit": {
+                  "lines": [
+                    "Blue zone"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 9,
+                      "nextStart": 9,
+                      "boundary": "end",
+                      "width": 242.8671875,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 9,
+                          "x": 0,
+                          "width": 242.8671875
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 812.08837375,
+                        "y": 233.82761349999998,
+                        "baseline": 289.8276135,
+                        "height": 68.32,
+                        "width": 242.8671875,
+                        "outline": {
+                          "x": 816.7094675,
+                          "y": 247.82761349999998,
+                          "width": 236.1953125,
+                          "height": 42.546875
+                        }
+                      }
+                    ],
+                    "height": 68.32000000000002,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.1",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.2",
+                "text": "Inspection point",
+                "box": {
+                  "x": 313.864481,
+                  "y": 473.967941,
+                  "width": 652.271039,
+                  "height": 194.536977
+                },
+                "textBox": {
+                  "x": 323.864481,
+                  "y": 537.0764295,
+                  "width": 632.271039,
+                  "height": 174.536977
+                },
+                "fit": {
+                  "lines": [
+                    "Inspection point"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 16,
+                      "nextStart": 16,
+                      "boundary": "end",
+                      "width": 400.44921875,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 16,
+                          "x": 0,
+                          "width": 400.44921875
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 439.775391125,
+                        "y": 537.0764295,
+                        "baseline": 593.0764295,
+                        "height": 68.32,
+                        "width": 400.44921875,
+                        "outline": {
+                          "x": 444.779297375,
+                          "y": 552.7170545,
+                          "width": 393.50390625,
+                          "height": 51.734375
+                        }
+                      }
+                    ],
+                    "height": 68.375,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.2",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "masked-rtl",
+      "deck": {
+        "name": "Image callouts remain editable",
+        "description": "Fractional text panels over the visible image frame.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "annotated-picture",
+            "layout": "image",
+            "title": "Read the picture and its labels together",
+            "blocks": [
+              {
+                "image": {
+                  "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAABnElEQVR4nO3Yv0rDUBTH8ZNLXqHBB9CA4O4ibi4+gYuTm/g8bk6CL9HBOaOrCO46O0e0eomxLam5/vo7N7/vVJo/hA+H09Di8fDEvHV6cGfeCtt+gKkkaFCCBiVoUIIGJWhQggYlaFCCBiVoUIIGJWhQggYlaFCl+alu5l+fmln8cvfi1TxUevJd1tPNzIV46Yi4bdvf5xRF0RWn5Q78yu13S0/rHY0DzlbgV7ZhkVsHWuV29RSvKl5CaB1ole2vcVoHRy8Ym0ZlzQW9aMw4p7pDztD16KXBvECIoPNO0BODrpPuDcLtwQKdfYIGVR5d7RlDTco36F4PZ8e27TTRoAQNStATg65uL7v/4idpcbe3+b4RxAKdfYKeHnSVdHtQ7Q0u6Nh467S7PkPo6nOoU8UzznTQlmKBsC0NUmjrWG/KHS9hUyaFts4OGW4dzyRU5oW2n9Zrprt3lFP54znT/v78Ry/n10NOoyV2A71enNzXJXTseefevMW7ozNL0KAEDUrQoAQNStCgBA1K0KAEDUrQoAQNStCgBG2Y3gEQ3Irssa4fzwAAAABJRU5ErkJggg==",
+                  "alt": "Four colored quadrants surround a central white inspection point.",
+                  "callouts": [
+                    {
+                      "text": "المنطقة الحمراء",
+                      "x": 0.04,
+                      "y": 0.06,
+                      "width": 0.38,
+                      "height": 0.3
+                    },
+                    {
+                      "text": "المنطقة الزرقاء",
+                      "x": 0.58,
+                      "y": 0.06,
+                      "width": 0.38,
+                      "height": 0.3
+                    },
+                    {
+                      "text": "نقطة الفحص",
+                      "x": 0.2,
+                      "y": 0.57,
+                      "width": 0.6,
+                      "height": 0.34
+                    }
+                  ]
+                },
+                "fit": "contain",
+                "shape": "roundRect",
+                "overlay": {
+                  "color": "#000000",
+                  "opacity": 0.65
+                }
+              }
+            ]
+          }
+        ],
+        "catalogs": {
+          "default": {
+            "source": "https://www.pptx.gallery",
+            "themes": {
+              "classic": {
+                "name": "Classic",
+                "background": {
+                  "type": "theme",
+                  "slot": "light1"
+                },
+                "colorScheme": "cool-horizon",
+                "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+                "fontScheme": "tenorite",
+                "dimensions": "widescreen",
+                "variants": [
+                  {
+                    "id": "light",
+                    "name": "Light",
+                    "variant": "light1"
+                  },
+                  {
+                    "id": "light-alt",
+                    "name": "Light alt",
+                    "variant": {
+                      "background": "light1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  },
+                  {
+                    "id": "dark",
+                    "name": "Dark",
+                    "variant": "dark1"
+                  },
+                  {
+                    "id": "dark-alt",
+                    "name": "Dark alt",
+                    "variant": {
+                      "background": "dark1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "fontSchemes": {
+              "roboto": {
+                "name": "Roboto",
+                "app": "google-slides",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Roboto",
+                "minor": "Roboto",
+                "textSample": "Perfect for tech",
+                "type": "sans-serif",
+                "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+              },
+              "tenorite": {
+                "name": "Tenorite",
+                "app": "powerpoint",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Tenorite Display",
+                "minor": "Tenorite",
+                "textSample": "Rounded modern tone",
+                "type": "sans-serif",
+                "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+              }
+            },
+            "layouts": {
+              "image": {
+                "name": "Image",
+                "summary": "One picture, filling the slide or shown whole, under an optional title.",
+                "tags": [
+                  "Visuals"
+                ],
+                "direction": "column",
+                "regions": [
+                  {
+                    "name": "title"
+                  },
+                  {
+                    "name": "media",
+                    "accepts": [
+                      "image",
+                      "video",
+                      "diagram"
+                    ],
+                    "role": "media",
+                    "flow": "none",
+                    "bleed": true
+                  }
+                ],
+                "description": "Let one picture carry the message. A photo close to the frame's shape fills it with a light crop (at most 7.5% off each edge); any other picture, a diagram or an SVG is shown whole at its own proportions (fit auto). Add a short title or caption to explain what the audience should notice. For a full-bleed crop of any picture, set the image block's fit to cover; to never crop, contain.",
+                "preview": {
+                  "vectorSrc": "https://www.pptx.gallery/layout-previews/image.svg"
+                },
+                "design": {
+                  "imageFit": "auto"
+                }
+              }
+            },
+            "colorSchemes": {
+              "cool-horizon": {
+                "name": "Cool Horizon",
+                "accent1": "#2874A6",
+                "accent2": "#1B4F72",
+                "accent3": "#5499C7",
+                "accent4": "#7BDBB2",
+                "accent5": "#3AC67A",
+                "accent6": "#24A89E",
+                "dark1": "#000000",
+                "dark2": "#011842",
+                "followedHyperlink": "#551A8B",
+                "hyperlink": "#0000EE",
+                "light1": "#FFFFFF",
+                "light2": "#F0F0F0",
+                "summary": "Cool blue-green palette tuned for professional business decks.",
+                "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+                "tags": [
+                  "professional",
+                  "trustworthy",
+                  "calm",
+                  "technical",
+                  "versatile"
+                ]
+              }
+            }
+          }
+        },
+        "language": "ar"
+      },
+      "beforeSource": "Same picture/treatments/heading, with the unsupported new callouts removed.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "0522bd0e7e8e266a732c4a19f21c7de7c5d5bb57528e1be621757cd5ff290748",
+          "pngSha256": "e4af83341cbc962cc31149fc06e88e8b21205f8d662fd62d4994492ee5ed9bfd",
+          "image": {
+            "region": {
+              "x": 0,
+              "y": 147.832422,
+              "width": 1280,
+              "height": 572.167578
+            },
+            "box": {
+              "x": 67.832422,
+              "y": 147.832422,
+              "width": 1144.335156,
+              "height": 572.167578
+            },
+            "fit": "contain",
+            "focus": {
+              "x": 0.5,
+              "y": 0.5
+            },
+            "shape": {
+              "kind": "roundRect",
+              "preset": "roundRect",
+              "adjust": {
+                "adj": 16667
+              },
+              "path": "M67.832422 243.195592A95.36317 95.36317 0 0 1 163.195592 147.832422H1116.804408A95.36317 95.36317 0 0 1 1212.167578 243.195592V624.63683A95.36317 95.36317 0 0 1 1116.804408 720H163.195592A95.36317 95.36317 0 0 1 67.832422 624.63683Z"
+            },
+            "overlay": {
+              "path": "slides.0.blocks.0.overlay",
+              "color": "#000000",
+              "opacity": 0.65,
+              "box": {
+                "x": 67.832422,
+                "y": 147.832422,
+                "width": 1144.335156,
+                "height": 572.167578
+              },
+              "shape": {
+                "kind": "roundRect",
+                "preset": "roundRect",
+                "adjust": {
+                  "adj": 16667
+                },
+                "path": "M67.832422 243.195592A95.36317 95.36317 0 0 1 163.195592 147.832422H1116.804408A95.36317 95.36317 0 0 1 1212.167578 243.195592V624.63683A95.36317 95.36317 0 0 1 1116.804408 720H163.195592A95.36317 95.36317 0 0 1 67.832422 624.63683Z"
+              }
+            },
+            "picture": {
+              "image": {
+                "x": 67.832422,
+                "y": 147.832422,
+                "width": 1144.335156,
+                "height": 572.167578
+              },
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            }
+          }
+        },
+        {
+          "side": "after",
+          "svgSha256": "4484495294f7b7c0f2c5e4ce73c3a431a3cbe5588fffbe22b8d83ea5e0b4dd9c",
+          "pngSha256": "4a375ce30e703e111e524f85b87f29c8f109e879e606f8dc466d9e23ce65384f",
+          "image": {
+            "region": {
+              "x": 0,
+              "y": 147.832422,
+              "width": 1280,
+              "height": 572.167578
+            },
+            "box": {
+              "x": 67.832422,
+              "y": 147.832422,
+              "width": 1144.335156,
+              "height": 572.167578
+            },
+            "fit": "contain",
+            "focus": {
+              "x": 0.5,
+              "y": 0.5
+            },
+            "shape": {
+              "kind": "roundRect",
+              "preset": "roundRect",
+              "adjust": {
+                "adj": 16667
+              },
+              "path": "M67.832422 243.195592A95.36317 95.36317 0 0 1 163.195592 147.832422H1116.804408A95.36317 95.36317 0 0 1 1212.167578 243.195592V624.63683A95.36317 95.36317 0 0 1 1116.804408 720H163.195592A95.36317 95.36317 0 0 1 67.832422 624.63683Z"
+            },
+            "overlay": {
+              "path": "slides.0.blocks.0.overlay",
+              "color": "#000000",
+              "opacity": 0.65,
+              "box": {
+                "x": 67.832422,
+                "y": 147.832422,
+                "width": 1144.335156,
+                "height": 572.167578
+              },
+              "shape": {
+                "kind": "roundRect",
+                "preset": "roundRect",
+                "adjust": {
+                  "adj": 16667
+                },
+                "path": "M67.832422 243.195592A95.36317 95.36317 0 0 1 163.195592 147.832422H1116.804408A95.36317 95.36317 0 0 1 1212.167578 243.195592V624.63683A95.36317 95.36317 0 0 1 1116.804408 720H163.195592A95.36317 95.36317 0 0 1 67.832422 624.63683Z"
+              }
+            },
+            "picture": {
+              "image": {
+                "x": 67.832422,
+                "y": 147.832422,
+                "width": 1144.335156,
+                "height": 572.167578
+              },
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            },
+            "calloutFrame": {
+              "x": 67.832422,
+              "y": 147.832422,
+              "width": 1144.335156,
+              "height": 572.167578
+            },
+            "callouts": [
+              {
+                "path": "slides.0.blocks.0.image.callouts.0",
+                "text": "المنطقة الحمراء",
+                "box": {
+                  "x": 113.605828,
+                  "y": 182.162477,
+                  "width": 434.847359,
+                  "height": 171.650273
+                },
+                "textBox": {
+                  "x": 123.605828,
+                  "y": 233.82761349999998,
+                  "width": 414.847359,
+                  "height": 151.650273
+                },
+                "fit": {
+                  "lines": [
+                    "المنطقة الحمراء"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 15,
+                      "nextStart": 15,
+                      "boundary": "end",
+                      "width": 194.909,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 15,
+                          "x": 0,
+                          "width": 194.909
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "directions": [
+                    "rtl"
+                  ],
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 233.5750075,
+                        "y": 233.82761349999998,
+                        "baseline": 289.8276135,
+                        "height": 68.32,
+                        "width": 194.909,
+                        "outline": {
+                          "x": 235.5055075,
+                          "y": 265.8393635,
+                          "width": 190.83350000000002,
+                          "height": 31.28125
+                        },
+                        "alignment": "center"
+                      }
+                    ],
+                    "height": 68.32000000000002,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.0",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.1",
+                "text": "المنطقة الزرقاء",
+                "box": {
+                  "x": 731.546812,
+                  "y": 182.162477,
+                  "width": 434.847359,
+                  "height": 171.650273
+                },
+                "textBox": {
+                  "x": 741.546812,
+                  "y": 233.82761349999998,
+                  "width": 414.847359,
+                  "height": 151.650273
+                },
+                "fit": {
+                  "lines": [
+                    "المنطقة الزرقاء"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 15,
+                      "nextStart": 15,
+                      "boundary": "end",
+                      "width": 185.6855,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 15,
+                          "x": 0,
+                          "width": 185.6855
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "directions": [
+                    "rtl"
+                  ],
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 856.1277415000001,
+                        "y": 233.82761349999998,
+                        "baseline": 289.8276135,
+                        "height": 68.32,
+                        "width": 185.6855,
+                        "outline": {
+                          "x": 858.0582415000001,
+                          "y": 265.8393635,
+                          "width": 181.61,
+                          "height": 31.28125
+                        },
+                        "alignment": "center"
+                      }
+                    ],
+                    "height": 68.32000000000002,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.1",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.2",
+                "text": "نقطة الفحص",
+                "box": {
+                  "x": 296.699453,
+                  "y": 473.967941,
+                  "width": 686.601094,
+                  "height": 194.536977
+                },
+                "textBox": {
+                  "x": 306.699453,
+                  "y": 537.0764295,
+                  "width": 666.601094,
+                  "height": 174.536977
+                },
+                "fit": {
+                  "lines": [
+                    "نقطة الفحص"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 10,
+                      "nextStart": 10,
+                      "boundary": "end",
+                      "width": 163.2345,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 10,
+                          "x": 0,
+                          "width": 163.2345
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "directions": [
+                    "rtl"
+                  ],
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 558.38275,
+                        "y": 537.0764295,
+                        "baseline": 593.0764295,
+                        "height": 68.32,
+                        "width": 163.2345,
+                        "outline": {
+                          "x": 560.81375,
+                          "y": 569.0881795,
+                          "width": 159.01600000000002,
+                          "height": 33.35475
+                        },
+                        "alignment": "center"
+                      }
+                    ],
+                    "height": 68.32000000000005,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.2",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "nine-labels",
+      "deck": {
+        "name": "Image callouts remain editable",
+        "description": "Fractional text panels over the visible image frame.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "annotated-picture",
+            "layout": "image",
+            "title": "Nine labels remain readable",
+            "blocks": [
+              {
+                "image": {
+                  "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAABnElEQVR4nO3Yv0rDUBTH8ZNLXqHBB9CA4O4ibi4+gYuTm/g8bk6CL9HBOaOrCO46O0e0eomxLam5/vo7N7/vVJo/hA+H09Di8fDEvHV6cGfeCtt+gKkkaFCCBiVoUIIGJWhQggYlaFCCBiVoUIIGJWhQggYlaFCl+alu5l+fmln8cvfi1TxUevJd1tPNzIV46Yi4bdvf5xRF0RWn5Q78yu13S0/rHY0DzlbgV7ZhkVsHWuV29RSvKl5CaB1ole2vcVoHRy8Ym0ZlzQW9aMw4p7pDztD16KXBvECIoPNO0BODrpPuDcLtwQKdfYIGVR5d7RlDTco36F4PZ8e27TTRoAQNStATg65uL7v/4idpcbe3+b4RxAKdfYKeHnSVdHtQ7Q0u6Nh467S7PkPo6nOoU8UzznTQlmKBsC0NUmjrWG/KHS9hUyaFts4OGW4dzyRU5oW2n9Zrprt3lFP54znT/v78Ry/n10NOoyV2A71enNzXJXTseefevMW7ozNL0KAEDUrQoAQNStCgBA1K0KAEDUrQoAQNStCgBG2Y3gEQ3Irssa4fzwAAAABJRU5ErkJggg==",
+                  "alt": "Four colored quadrants surround a central white inspection point.",
+                  "callouts": [
+                    {
+                      "text": "Zone 1",
+                      "x": 0.02,
+                      "y": 0.05,
+                      "width": 0.28,
+                      "height": 0.2
+                    },
+                    {
+                      "text": "Zone 2",
+                      "x": 0.35333333333333333,
+                      "y": 0.05,
+                      "width": 0.28,
+                      "height": 0.2
+                    },
+                    {
+                      "text": "Zone 3",
+                      "x": 0.6866666666666666,
+                      "y": 0.05,
+                      "width": 0.28,
+                      "height": 0.2
+                    },
+                    {
+                      "text": "Zone 4",
+                      "x": 0.02,
+                      "y": 0.3833333333333333,
+                      "width": 0.28,
+                      "height": 0.2
+                    },
+                    {
+                      "text": "Zone 5",
+                      "x": 0.35333333333333333,
+                      "y": 0.3833333333333333,
+                      "width": 0.28,
+                      "height": 0.2
+                    },
+                    {
+                      "text": "Zone 6",
+                      "x": 0.6866666666666666,
+                      "y": 0.3833333333333333,
+                      "width": 0.28,
+                      "height": 0.2
+                    },
+                    {
+                      "text": "Zone 7",
+                      "x": 0.02,
+                      "y": 0.7166666666666667,
+                      "width": 0.28,
+                      "height": 0.2
+                    },
+                    {
+                      "text": "Zone 8",
+                      "x": 0.35333333333333333,
+                      "y": 0.7166666666666667,
+                      "width": 0.28,
+                      "height": 0.2
+                    },
+                    {
+                      "text": "Zone 9",
+                      "x": 0.6866666666666666,
+                      "y": 0.7166666666666667,
+                      "width": 0.28,
+                      "height": 0.2
+                    }
+                  ]
+                },
+                "fit": "contain"
+              }
+            ]
+          }
+        ],
+        "catalogs": {
+          "default": {
+            "source": "https://www.pptx.gallery",
+            "themes": {
+              "classic": {
+                "name": "Classic",
+                "background": {
+                  "type": "theme",
+                  "slot": "light1"
+                },
+                "colorScheme": "cool-horizon",
+                "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+                "fontScheme": "tenorite",
+                "dimensions": "widescreen",
+                "variants": [
+                  {
+                    "id": "light",
+                    "name": "Light",
+                    "variant": "light1"
+                  },
+                  {
+                    "id": "light-alt",
+                    "name": "Light alt",
+                    "variant": {
+                      "background": "light1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  },
+                  {
+                    "id": "dark",
+                    "name": "Dark",
+                    "variant": "dark1"
+                  },
+                  {
+                    "id": "dark-alt",
+                    "name": "Dark alt",
+                    "variant": {
+                      "background": "dark1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "fontSchemes": {
+              "roboto": {
+                "name": "Roboto",
+                "app": "google-slides",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Roboto",
+                "minor": "Roboto",
+                "textSample": "Perfect for tech",
+                "type": "sans-serif",
+                "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+              },
+              "tenorite": {
+                "name": "Tenorite",
+                "app": "powerpoint",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Tenorite Display",
+                "minor": "Tenorite",
+                "textSample": "Rounded modern tone",
+                "type": "sans-serif",
+                "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+              }
+            },
+            "layouts": {
+              "image": {
+                "name": "Image",
+                "summary": "One picture, filling the slide or shown whole, under an optional title.",
+                "tags": [
+                  "Visuals"
+                ],
+                "direction": "column",
+                "regions": [
+                  {
+                    "name": "title"
+                  },
+                  {
+                    "name": "media",
+                    "accepts": [
+                      "image",
+                      "video",
+                      "diagram"
+                    ],
+                    "role": "media",
+                    "flow": "none",
+                    "bleed": true
+                  }
+                ],
+                "description": "Let one picture carry the message. A photo close to the frame's shape fills it with a light crop (at most 7.5% off each edge); any other picture, a diagram or an SVG is shown whole at its own proportions (fit auto). Add a short title or caption to explain what the audience should notice. For a full-bleed crop of any picture, set the image block's fit to cover; to never crop, contain.",
+                "preview": {
+                  "vectorSrc": "https://www.pptx.gallery/layout-previews/image.svg"
+                },
+                "design": {
+                  "imageFit": "auto"
+                }
+              }
+            },
+            "colorSchemes": {
+              "cool-horizon": {
+                "name": "Cool Horizon",
+                "accent1": "#2874A6",
+                "accent2": "#1B4F72",
+                "accent3": "#5499C7",
+                "accent4": "#7BDBB2",
+                "accent5": "#3AC67A",
+                "accent6": "#24A89E",
+                "dark1": "#000000",
+                "dark2": "#011842",
+                "followedHyperlink": "#551A8B",
+                "hyperlink": "#0000EE",
+                "light1": "#FFFFFF",
+                "light2": "#F0F0F0",
+                "summary": "Cool blue-green palette tuned for professional business decks.",
+                "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+                "tags": [
+                  "professional",
+                  "trustworthy",
+                  "calm",
+                  "technical",
+                  "versatile"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "beforeSource": "Same picture/treatments/heading, with the unsupported new callouts removed.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "caa40cfa81e5c8e5a1b9ac1d5a3887273219ae0b37edddc51bba06a94972507e",
+          "pngSha256": "0cf3b7cf85bf1dafee3ff67f0861488a4e94566714173f27cacc72552a97827f",
+          "image": {
+            "region": {
+              "x": 0,
+              "y": 147.48,
+              "width": 1280,
+              "height": 572.52
+            },
+            "box": {
+              "x": 67.48,
+              "y": 147.48,
+              "width": 1145.04,
+              "height": 572.52
+            },
+            "fit": "contain",
+            "focus": {
+              "x": 0.5,
+              "y": 0.5
+            },
+            "shape": {
+              "kind": "rect",
+              "preset": "rect",
+              "adjust": {},
+              "path": "M67.48 147.48H1212.52V720H67.48Z"
+            },
+            "picture": {
+              "image": {
+                "x": 67.48,
+                "y": 147.48,
+                "width": 1145.04,
+                "height": 572.52
+              },
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            }
+          }
+        },
+        {
+          "side": "after",
+          "svgSha256": "0f93944d1452de581f4d043369961e39090454592f7ff0375756eabf9eaf9c41",
+          "pngSha256": "5d605b23dab0b3145db14263ab618d58d3fdad9a505a20411beeae5cf732c3c8",
+          "image": {
+            "region": {
+              "x": 0,
+              "y": 147.48,
+              "width": 1280,
+              "height": 572.52
+            },
+            "box": {
+              "x": 67.48,
+              "y": 147.48,
+              "width": 1145.04,
+              "height": 572.52
+            },
+            "fit": "contain",
+            "focus": {
+              "x": 0.5,
+              "y": 0.5
+            },
+            "shape": {
+              "kind": "rect",
+              "preset": "rect",
+              "adjust": {},
+              "path": "M67.48 147.48H1212.52V720H67.48Z"
+            },
+            "picture": {
+              "image": {
+                "x": 67.48,
+                "y": 147.48,
+                "width": 1145.04,
+                "height": 572.52
+              },
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            },
+            "calloutFrame": {
+              "x": 67.48,
+              "y": 147.48,
+              "width": 1145.04,
+              "height": 572.52
+            },
+            "callouts": [
+              {
+                "path": "slides.0.blocks.0.image.callouts.0",
+                "text": "Zone 1",
+                "box": {
+                  "x": 90.3808,
+                  "y": 176.106,
+                  "width": 320.6112,
+                  "height": 114.504
+                },
+                "textBox": {
+                  "x": 100.3808,
+                  "y": 199.198,
+                  "width": 300.6112,
+                  "height": 94.504
+                },
+                "fit": {
+                  "lines": [
+                    "Zone 1"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 6,
+                      "nextStart": 6,
+                      "boundary": "end",
+                      "width": 170.8984375,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 6,
+                          "x": 0,
+                          "width": 170.8984375
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 165.23718125,
+                        "y": 199.198,
+                        "baseline": 255.198,
+                        "height": 68.32,
+                        "width": 170.8984375,
+                        "outline": {
+                          "x": 167.6160875,
+                          "y": 215.16675,
+                          "width": 156.98046875,
+                          "height": 40.578125
+                        }
+                      }
+                    ],
+                    "height": 68.32,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.0",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.1",
+                "text": "Zone 2",
+                "box": {
+                  "x": 472.0608,
+                  "y": 176.106,
+                  "width": 320.6112,
+                  "height": 114.504
+                },
+                "textBox": {
+                  "x": 482.0608,
+                  "y": 199.198,
+                  "width": 300.6112,
+                  "height": 94.504
+                },
+                "fit": {
+                  "lines": [
+                    "Zone 2"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 6,
+                      "nextStart": 6,
+                      "boundary": "end",
+                      "width": 170.8984375,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 6,
+                          "x": 0,
+                          "width": 170.8984375
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 546.91718125,
+                        "y": 199.198,
+                        "baseline": 255.198,
+                        "height": 68.32,
+                        "width": 170.8984375,
+                        "outline": {
+                          "x": 549.2960875,
+                          "y": 214.838625,
+                          "width": 166.44140625,
+                          "height": 40.90625
+                        }
+                      }
+                    ],
+                    "height": 68.32,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.1",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.2",
+                "text": "Zone 3",
+                "box": {
+                  "x": 853.7408,
+                  "y": 176.106,
+                  "width": 320.6112,
+                  "height": 114.504
+                },
+                "textBox": {
+                  "x": 863.7408,
+                  "y": 199.198,
+                  "width": 300.6112,
+                  "height": 94.504
+                },
+                "fit": {
+                  "lines": [
+                    "Zone 3"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 6,
+                      "nextStart": 6,
+                      "boundary": "end",
+                      "width": 170.8984375,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 6,
+                          "x": 0,
+                          "width": 170.8984375
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 928.5971812500001,
+                        "y": 199.198,
+                        "baseline": 255.198,
+                        "height": 68.32,
+                        "width": 170.8984375,
+                        "outline": {
+                          "x": 930.9760875000001,
+                          "y": 214.838625,
+                          "width": 164.8828125,
+                          "height": 40.90625
+                        }
+                      }
+                    ],
+                    "height": 68.32,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.2",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.3",
+                "text": "Zone 4",
+                "box": {
+                  "x": 90.3808,
+                  "y": 366.946,
+                  "width": 320.6112,
+                  "height": 114.504
+                },
+                "textBox": {
+                  "x": 100.3808,
+                  "y": 390.038,
+                  "width": 300.6112,
+                  "height": 94.504
+                },
+                "fit": {
+                  "lines": [
+                    "Zone 4"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 6,
+                      "nextStart": 6,
+                      "boundary": "end",
+                      "width": 170.8984375,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 6,
+                          "x": 0,
+                          "width": 170.8984375
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 165.23718125,
+                        "y": 390.038,
+                        "baseline": 446.038,
+                        "height": 68.32,
+                        "width": 170.8984375,
+                        "outline": {
+                          "x": 167.6160875,
+                          "y": 406.2255,
+                          "width": 167.26171875,
+                          "height": 40.359375
+                        }
+                      }
+                    ],
+                    "height": 68.32,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.3",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.4",
+                "text": "Zone 5",
+                "box": {
+                  "x": 472.0608,
+                  "y": 366.946,
+                  "width": 320.6112,
+                  "height": 114.504
+                },
+                "textBox": {
+                  "x": 482.0608,
+                  "y": 390.038,
+                  "width": 300.6112,
+                  "height": 94.504
+                },
+                "fit": {
+                  "lines": [
+                    "Zone 5"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 6,
+                      "nextStart": 6,
+                      "boundary": "end",
+                      "width": 170.8984375,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 6,
+                          "x": 0,
+                          "width": 170.8984375
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 546.91718125,
+                        "y": 390.038,
+                        "baseline": 446.038,
+                        "height": 68.32,
+                        "width": 170.8984375,
+                        "outline": {
+                          "x": 549.2960875,
+                          "y": 406.2255,
+                          "width": 166.3046875,
+                          "height": 40.359375
+                        }
+                      }
+                    ],
+                    "height": 68.32,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.4",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.5",
+                "text": "Zone 6",
+                "box": {
+                  "x": 853.7408,
+                  "y": 366.946,
+                  "width": 320.6112,
+                  "height": 114.504
+                },
+                "textBox": {
+                  "x": 863.7408,
+                  "y": 390.038,
+                  "width": 300.6112,
+                  "height": 94.504
+                },
+                "fit": {
+                  "lines": [
+                    "Zone 6"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 6,
+                      "nextStart": 6,
+                      "boundary": "end",
+                      "width": 170.8984375,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 6,
+                          "x": 0,
+                          "width": 170.8984375
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 928.5971812500001,
+                        "y": 390.038,
+                        "baseline": 446.038,
+                        "height": 68.32,
+                        "width": 170.8984375,
+                        "outline": {
+                          "x": 930.9760875000001,
+                          "y": 406.1708125,
+                          "width": 165.83984375,
+                          "height": 40.4140625
+                        }
+                      }
+                    ],
+                    "height": 68.32,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.5",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.6",
+                "text": "Zone 7",
+                "box": {
+                  "x": 90.3808,
+                  "y": 557.786,
+                  "width": 320.6112,
+                  "height": 114.504
+                },
+                "textBox": {
+                  "x": 100.3808,
+                  "y": 580.8779999999999,
+                  "width": 300.6112,
+                  "height": 94.504
+                },
+                "fit": {
+                  "lines": [
+                    "Zone 7"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 6,
+                      "nextStart": 6,
+                      "boundary": "end",
+                      "width": 170.8984375,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 6,
+                          "x": 0,
+                          "width": 170.8984375
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 165.23718125,
+                        "y": 580.8779999999999,
+                        "baseline": 636.8779999999999,
+                        "height": 68.32,
+                        "width": 170.8984375,
+                        "outline": {
+                          "x": 167.6160875,
+                          "y": 597.0654999999999,
+                          "width": 166.0859375,
+                          "height": 40.359375
+                        }
+                      }
+                    ],
+                    "height": 68.32000000000005,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.6",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.7",
+                "text": "Zone 8",
+                "box": {
+                  "x": 472.0608,
+                  "y": 557.786,
+                  "width": 320.6112,
+                  "height": 114.504
+                },
+                "textBox": {
+                  "x": 482.0608,
+                  "y": 580.8779999999999,
+                  "width": 300.6112,
+                  "height": 94.504
+                },
+                "fit": {
+                  "lines": [
+                    "Zone 8"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 6,
+                      "nextStart": 6,
+                      "boundary": "end",
+                      "width": 170.8984375,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 6,
+                          "x": 0,
+                          "width": 170.8984375
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 546.91718125,
+                        "y": 580.8779999999999,
+                        "baseline": 636.8779999999999,
+                        "height": 68.32,
+                        "width": 170.8984375,
+                        "outline": {
+                          "x": 549.2960875,
+                          "y": 596.5186249999999,
+                          "width": 165.45703125,
+                          "height": 40.90625
+                        }
+                      }
+                    ],
+                    "height": 68.32000000000005,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.7",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              },
+              {
+                "path": "slides.0.blocks.0.image.callouts.8",
+                "text": "Zone 9",
+                "box": {
+                  "x": 853.7408,
+                  "y": 557.786,
+                  "width": 320.6112,
+                  "height": 114.504
+                },
+                "textBox": {
+                  "x": 863.7408,
+                  "y": 580.8779999999999,
+                  "width": 300.6112,
+                  "height": 94.504
+                },
+                "fit": {
+                  "lines": [
+                    "Zone 9"
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 6,
+                      "nextStart": 6,
+                      "boundary": "end",
+                      "width": 170.8984375,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 6,
+                          "x": 0,
+                          "width": 170.8984375
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 928.5971812500001,
+                        "y": 580.8779999999999,
+                        "baseline": 636.8779999999999,
+                        "height": 68.32,
+                        "width": 170.8984375,
+                        "outline": {
+                          "x": 930.9760875000001,
+                          "y": 596.5186249999999,
+                          "width": 164.828125,
+                          "height": 40.90625
+                        }
+                      }
+                    ],
+                    "height": 68.32000000000005,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.8",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "long-label",
+      "deck": {
+        "name": "Image callouts remain editable",
+        "description": "Fractional text panels over the visible image frame.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "annotated-picture",
+            "layout": "image",
+            "title": "The annotation is real text",
+            "blocks": [
+              {
+                "image": {
+                  "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAABnElEQVR4nO3Yv0rDUBTH8ZNLXqHBB9CA4O4ibi4+gYuTm/g8bk6CL9HBOaOrCO46O0e0eomxLam5/vo7N7/vVJo/hA+H09Di8fDEvHV6cGfeCtt+gKkkaFCCBiVoUIIGJWhQggYlaFCCBiVoUIIGJWhQggYlaFCl+alu5l+fmln8cvfi1TxUevJd1tPNzIV46Yi4bdvf5xRF0RWn5Q78yu13S0/rHY0DzlbgV7ZhkVsHWuV29RSvKl5CaB1ole2vcVoHRy8Ym0ZlzQW9aMw4p7pDztD16KXBvECIoPNO0BODrpPuDcLtwQKdfYIGVR5d7RlDTco36F4PZ8e27TTRoAQNStATg65uL7v/4idpcbe3+b4RxAKdfYKeHnSVdHtQ7Q0u6Nh467S7PkPo6nOoU8UzznTQlmKBsC0NUmjrWG/KHS9hUyaFts4OGW4dzyRU5oW2n9Zrprt3lFP54znT/v78Ry/n10NOoyV2A71enNzXJXTseefevMW7ozNL0KAEDUrQoAQNStCgBA1K0KAEDUrQoAQNStCgBG2Y3gEQ3Irssa4fzwAAAABJRU5ErkJggg==",
+                  "alt": "Four colored quadrants surround a central white inspection point.",
+                  "callouts": [
+                    {
+                      "text": "A measured label stays readable above the image and its overlay.",
+                      "x": 0.08,
+                      "y": 0.2,
+                      "width": 0.84,
+                      "height": 0.6
+                    }
+                  ]
+                },
+                "fit": "contain"
+              }
+            ]
+          }
+        ],
+        "catalogs": {
+          "default": {
+            "source": "https://www.pptx.gallery",
+            "themes": {
+              "classic": {
+                "name": "Classic",
+                "background": {
+                  "type": "theme",
+                  "slot": "light1"
+                },
+                "colorScheme": "cool-horizon",
+                "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+                "fontScheme": "tenorite",
+                "dimensions": "widescreen",
+                "variants": [
+                  {
+                    "id": "light",
+                    "name": "Light",
+                    "variant": "light1"
+                  },
+                  {
+                    "id": "light-alt",
+                    "name": "Light alt",
+                    "variant": {
+                      "background": "light1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  },
+                  {
+                    "id": "dark",
+                    "name": "Dark",
+                    "variant": "dark1"
+                  },
+                  {
+                    "id": "dark-alt",
+                    "name": "Dark alt",
+                    "variant": {
+                      "background": "dark1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "fontSchemes": {
+              "roboto": {
+                "name": "Roboto",
+                "app": "google-slides",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Roboto",
+                "minor": "Roboto",
+                "textSample": "Perfect for tech",
+                "type": "sans-serif",
+                "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+              },
+              "tenorite": {
+                "name": "Tenorite",
+                "app": "powerpoint",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Tenorite Display",
+                "minor": "Tenorite",
+                "textSample": "Rounded modern tone",
+                "type": "sans-serif",
+                "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+              }
+            },
+            "layouts": {
+              "image": {
+                "name": "Image",
+                "summary": "One picture, filling the slide or shown whole, under an optional title.",
+                "tags": [
+                  "Visuals"
+                ],
+                "direction": "column",
+                "regions": [
+                  {
+                    "name": "title"
+                  },
+                  {
+                    "name": "media",
+                    "accepts": [
+                      "image",
+                      "video",
+                      "diagram"
+                    ],
+                    "role": "media",
+                    "flow": "none",
+                    "bleed": true
+                  }
+                ],
+                "description": "Let one picture carry the message. A photo close to the frame's shape fills it with a light crop (at most 7.5% off each edge); any other picture, a diagram or an SVG is shown whole at its own proportions (fit auto). Add a short title or caption to explain what the audience should notice. For a full-bleed crop of any picture, set the image block's fit to cover; to never crop, contain.",
+                "preview": {
+                  "vectorSrc": "https://www.pptx.gallery/layout-previews/image.svg"
+                },
+                "design": {
+                  "imageFit": "auto"
+                }
+              }
+            },
+            "colorSchemes": {
+              "cool-horizon": {
+                "name": "Cool Horizon",
+                "accent1": "#2874A6",
+                "accent2": "#1B4F72",
+                "accent3": "#5499C7",
+                "accent4": "#7BDBB2",
+                "accent5": "#3AC67A",
+                "accent6": "#24A89E",
+                "dark1": "#000000",
+                "dark2": "#011842",
+                "followedHyperlink": "#551A8B",
+                "hyperlink": "#0000EE",
+                "light1": "#FFFFFF",
+                "light2": "#F0F0F0",
+                "summary": "Cool blue-green palette tuned for professional business decks.",
+                "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+                "tags": [
+                  "professional",
+                  "trustworthy",
+                  "calm",
+                  "technical",
+                  "versatile"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "beforeSource": "Same picture/treatments/heading, with the unsupported new callouts removed.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "1f2b546d432e060d675c44c1c0de1e7d6e35ce7de3a77d320f1b47a65fabbefe",
+          "pngSha256": "3f165c3681c3f9ad355db61bd0bd083491088b0bc4c69bc26280240beb1344a9",
+          "image": {
+            "region": {
+              "x": 0,
+              "y": 147.48,
+              "width": 1280,
+              "height": 572.52
+            },
+            "box": {
+              "x": 67.48,
+              "y": 147.48,
+              "width": 1145.04,
+              "height": 572.52
+            },
+            "fit": "contain",
+            "focus": {
+              "x": 0.5,
+              "y": 0.5
+            },
+            "shape": {
+              "kind": "rect",
+              "preset": "rect",
+              "adjust": {},
+              "path": "M67.48 147.48H1212.52V720H67.48Z"
+            },
+            "picture": {
+              "image": {
+                "x": 67.48,
+                "y": 147.48,
+                "width": 1145.04,
+                "height": 572.52
+              },
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            }
+          }
+        },
+        {
+          "side": "after",
+          "svgSha256": "869a523a4ec4ec701b08e87b7bbde84e7f04b874cf9aacd638f53ef88354e92b",
+          "pngSha256": "ae4e64f2cbd95c91ee3dabe22cbab298aca40950c8861803ccf67c173df5276a",
+          "image": {
+            "region": {
+              "x": 0,
+              "y": 147.48,
+              "width": 1280,
+              "height": 572.52
+            },
+            "box": {
+              "x": 67.48,
+              "y": 147.48,
+              "width": 1145.04,
+              "height": 572.52
+            },
+            "fit": "contain",
+            "focus": {
+              "x": 0.5,
+              "y": 0.5
+            },
+            "shape": {
+              "kind": "rect",
+              "preset": "rect",
+              "adjust": {},
+              "path": "M67.48 147.48H1212.52V720H67.48Z"
+            },
+            "picture": {
+              "image": {
+                "x": 67.48,
+                "y": 147.48,
+                "width": 1145.04,
+                "height": 572.52
+              },
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            },
+            "calloutFrame": {
+              "x": 67.48,
+              "y": 147.48,
+              "width": 1145.04,
+              "height": 572.52
+            },
+            "callouts": [
+              {
+                "path": "slides.0.blocks.0.image.callouts.0",
+                "text": "A measured label stays readable above the image and its overlay.",
+                "box": {
+                  "x": 159.0832,
+                  "y": 261.984,
+                  "width": 961.8336,
+                  "height": 343.512
+                },
+                "textBox": {
+                  "x": 169.0832,
+                  "y": 365.41999999999996,
+                  "width": 941.8336,
+                  "height": 323.512
+                },
+                "fit": {
+                  "lines": [
+                    "A measured label stays readable ",
+                    "above the image and its overlay."
+                  ],
+                  "sourceLines": [
+                    {
+                      "start": 0,
+                      "end": 32,
+                      "nextStart": 32,
+                      "boundary": "soft",
+                      "width": 821.6796875,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 0,
+                          "end": 32,
+                          "x": 0,
+                          "width": 821.6796875
+                        }
+                      ]
+                    },
+                    {
+                      "start": 32,
+                      "end": 64,
+                      "nextStart": 64,
+                      "boundary": "end",
+                      "width": 795.3203125,
+                      "segments": [
+                        {
+                          "kind": "text",
+                          "start": 32,
+                          "end": 64,
+                          "x": 0,
+                          "width": 795.3203125
+                        }
+                      ]
+                    }
+                  ],
+                  "fontSize": 56,
+                  "lineHeight": 68.32,
+                  "tabSize": 4,
+                  "tabWidth": 55.5625,
+                  "overflow": false,
+                  "placement": {
+                    "alignment": "center",
+                    "rasterPadding": 1,
+                    "lines": [
+                      {
+                        "x": 229.16015625000003,
+                        "y": 365.41999999999996,
+                        "baseline": 421.41999999999996,
+                        "height": 68.32,
+                        "width": 821.6796875,
+                        "outline": {
+                          "x": 229.95312500000003,
+                          "y": 379.41999999999996,
+                          "width": 804.9453125,
+                          "height": 53.94921875
+                        }
+                      },
+                      {
+                        "x": 242.33984375000003,
+                        "y": 433.74,
+                        "baseline": 489.74,
+                        "height": 68.32,
+                        "width": 795.3203125,
+                        "outline": {
+                          "x": 245.32031250000003,
+                          "y": 447.74,
+                          "width": 787.80078125,
+                          "height": 53.94921875
+                        }
+                      }
+                    ],
+                    "height": 137.26921875,
+                    "overflow": false
+                  }
+                },
+                "textStyle": {
+                  "fontFamily": "Roboto",
+                  "fontWeight": 400,
+                  "path": "slides.0.blocks.0.image.callouts.0",
+                  "italic": false,
+                  "fontFace": {
+                    "family": "Roboto",
+                    "bold": false,
+                    "italic": false
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

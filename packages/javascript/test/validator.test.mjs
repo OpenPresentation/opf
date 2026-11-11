@@ -206,8 +206,8 @@ describe("presentation shapes that must validate", () => {
       name: "Columns",
       slides: [{
         title: "Market Shift",
-        left: { text: "Signal" },
-        "center+right": { items: ["Demand moved upmarket", "Procurement cycles shortened"] },
+        start: { text: "Signal" },
+        "center+end": { items: ["Demand moved upmarket", "Procurement cycles shortened"] },
       }],
     });
   });
@@ -291,9 +291,9 @@ describe("presentation shapes that must validate", () => {
       name: "Grid",
       slides: [{
         title: "Operating Model",
-        "top:left": { text: "Inputs" },
-        "top:center+right": { text: "Processing" },
-        "middle+bottom:left+center+right": { items: ["Queue", "Route", "Resolve"] },
+        "top:start": { text: "Inputs" },
+        "top:center+end": { text: "Processing" },
+        "middle+bottom:start+center+end": { items: ["Queue", "Route", "Resolve"] },
       }],
     });
   });
@@ -496,7 +496,7 @@ describe("presentation shapes that must be rejected", () => {
   test("Overlap", () => {
     assertPresentationInvalid({
       name: "Overlap",
-      slides: [{ left: { text: "A" }, "left+center": { text: "B" } }],
+      slides: [{ start: { text: "A" }, "start+center": { text: "B" } }],
     }, "overlap");
   });
 
@@ -524,7 +524,7 @@ describe("presentation shapes that must be rejected", () => {
   test("Mixed Root And Regions", () => {
     assertPresentationInvalid({
       name: "Mixed Root And Regions",
-      slides: [{ items: ["Root"], left: { text: "Region" } }],
+      slides: [{ items: ["Root"], start: { text: "Region" } }],
     }, "cannot be mixed");
   });
 
@@ -687,11 +687,11 @@ describe("presentation shapes that must be rejected", () => {
     }, "must NOT have additional properties");
   });
 
-  test("Removed Loose Code Language Field", () => {
+  test("A code language is not a BCP-47 slide language", () => {
     assertPresentationInvalid({
       name: "Removed Loose Code Language Field",
       slides: [{ title: "Old Code", code: "print('hello')", language: "python" }],
-    }, "must NOT have additional properties");
+    }, "must match pattern");
   });
 
   test("Missing Code Source", () => {
@@ -830,7 +830,7 @@ describe("presentation shapes that must be rejected", () => {
   test("Region Mixed Payload Kinds", () => {
     assertPresentationInvalid({
       name: "Region Mixed Payload Kinds",
-      slides: [{ left: { text: "A", items: ["B"] } }],
+      slides: [{ start: { text: "A", items: ["B"] } }],
     }, "incompatible");
   });
 
@@ -950,11 +950,11 @@ describe("content-reference warning behavior (OPF 0.15)", () => {
       name: "Unknown Chart Type",
       slides: [{
         title: "Slide Title",
-        left: { chart: { type: "no-such-chart", data: { columns: ["A", "B"], rows: [["x", 1]] } } },
+        start: { chart: { type: "no-such-chart", data: { columns: ["A", "B"], rows: [["x", 1]] } } },
       }],
     });
     assert.equal(result.valid, false);
-    assert.ok(result.errors.some((error) => error.path === "/slides/0/left/chart/type"), JSON.stringify(result.errors, null, 2));
+    assert.ok(result.errors.some((error) => error.path === "/slides/0/start/chart/type"), JSON.stringify(result.errors, null, 2));
   });
 
   test("the retired chart types and plural audience ids are gone: errors and unresolved references", () => {

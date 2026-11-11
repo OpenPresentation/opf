@@ -1,0 +1,23 @@
+{
+  "baseline": "67dd9ec10b7019cb95807f59c75186482c800f10",
+  "current": "3e03bd13d693d91f194769d8d6878adbc27f4146",
+  "layoutCount": 40,
+  "layoutIdentitiesExact": true,
+  "unchangedTests": {
+    "sh21-venn-reading-measure.mjs": "a7d17382683c681a6fd70e88680d68914169fd5a9d3905b68d61c188c8838fea",
+    "template-layouts.mjs": "6e493b69445b495100fec400f0be07e8aa61d887cf1ba766f2905ccf45d5d6c5"
+  },
+  "vennSourceGeometryAndDiagnosticsExact": true,
+  "observedVennOverflow": [
+    {
+      "code": "text-overflow",
+      "path": "slides.0.items",
+      "message": "The complete diagram fallback cannot wrap whole words to 70 characters per line at its retained type size within this body. Paginate the slide; strict composition refuses this unfit fallback."
+    }
+  ],
+  "strictVennRefusal": true,
+  "firstFailureScope": "Venn tests stop at obsolete diagnostic wording; subsequent pagination/export assertions still require QA execution.",
+  "nativeBodyWrap": "Hardcoded picked index40 has0text cards on bothbaselines; intended index46 has6text cards/nativeplans, all geometry exact.",
+  "templateLayouts": "Actual40-authoritative catalog identities on bothbaselines versus hardcoded36 assertion.",
+  "qaChangesMade": false
+}

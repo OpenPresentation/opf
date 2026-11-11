@@ -1,0 +1,6 @@
+{
+  "scope": "Correct RR59 row status spelling to existing supported in-progress enum; existing release-report validator8PASS; no tracker regeneration or package/native acceptance",
+  "logBytes": 687,
+  "logSha256": "9097eea4b707f16543c8929cbc38379334bbfc16ac0aab4f566eeed13d4b4d0a",
+  "gzipSha256": "5789f9545abf63138da86911e033c1ba35d077a8cdf31ac4d2a826b804f99613"
+}

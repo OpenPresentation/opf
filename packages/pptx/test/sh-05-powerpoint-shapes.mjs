@@ -153,12 +153,22 @@ for (const shape of autoshapes.shapes) assert.ok(shape.style === undefined && sh
     assert.equal(back.slides[0].shapes.find(shape => shape.fill === '#FFCC00').layer, 'back');
     assert.equal(back.slides[0].shapes.find(shape => shape.text === 'Hi').layer, undefined);
   }
-  // A shape across the whole slide is a background, not an overlay.
+  // A known exported overlay keeps its identity even when native geometry is
+  // edited to the full slide. The foreign-background refusal remains separate.
   const full = zipSync(edit(inShape(shape => shape.replace(/<a:off x="\d+" y="\d+"\/><a:ext cx="\d+" cy="\d+"\/>/, '<a:off x="0" y="0"/><a:ext cx="12192000" cy="6858000"/>'))));
   const reported = [];
   const back = await fromPptx(full, { onDiagnostic: item => reported.push(item) });
-  assert.equal(back.slides[0].shapes, undefined);
-  assert.equal(reported.filter(item => item.code === 'shape-not-imported').length, 1);
+  assert.deepEqual(back.slides[0].shapes.map(({shape, text, fill, x, y, width, height}) => ({shape, text, fill, x, y, width, height})),
+    [{shape: 'rect', text: 'Hi', fill: 'accent2', x: 0, y: 0, width: 1, height: 1}]);
+  assert.equal(reported.filter(item => item.code === 'shape-not-imported').length, 0);
+  const foreign = unzipSync(full);
+  const fullXml = new TextDecoder().decode(foreign['ppt/slides/slide1.xml']);
+  assert.ok(fullXml.includes('name="OPF shape slides.0.shapes.0"'));
+  foreign['ppt/slides/slide1.xml'] = new TextEncoder().encode(fullXml.replace('name="OPF shape slides.0.shapes.0"', 'name="Rectangle 1"'));
+  const foreignFindings = [];
+  const foreignBack = await fromPptx(zipSync(foreign), {onDiagnostic: item => foreignFindings.push(item)});
+  assert.equal(foreignBack.slides[0].shapes, undefined);
+  assert.equal(foreignFindings.filter(item => item.code === 'shape-not-imported').length, 1);
 }
 
 console.log('sh-05 powerpoint shapes: ok');

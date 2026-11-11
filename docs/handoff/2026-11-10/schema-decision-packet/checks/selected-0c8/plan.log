@@ -1,0 +1,19 @@
+check-changed: 10 changed files since (given) (plus uncommitted and untracked)
+run   build
+run   biome
+run   pnpm run check:browser-safe
+run   pnpm run check:catalog-free
+run   pnpm run check:changes
+run   pnpm run check:diagram-doc-images
+run   pnpm run check:font-hotlinks
+run   pnpm run check:font-tracker
+run   pnpm run check:gallery-tracker
+run   pnpm run check:libreoffice
+run   pnpm run check:native-acceptance
+run   pnpm run check:release-report
+run   pnpm run check:skill-commands
+run   pnpm run check:text
+skip  typecheck  (no .ts, .mts or tsconfig change)
+run   tests opf
+run   tests cli
+run   tests integration

@@ -1,0 +1,93 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\rr-20-f1-f3-currency\\packages\\javascript\\test\\fixtures\\chart-report-boundaries.opf.json",
+    "sha256": "e75564aa805c14f1be86ff8a8260743c8d6120b0551508d9e764c6069b034eac",
+    "bytes": 3782
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\rr-20-f1-f3-currency\\docs\\handoff\\2026-11-08\\f1-f3-currency\\chart-convert-witness\\after-final\\png\\slide-1.png",
+      "sha256": "62518fa22e22e0a312b63e3c565c18c62972edc63601002f6d5966a773d9df4c",
+      "bytes": 17926,
+      "mediaType": "image/png",
+      "slide": 1,
+      "id": "s13",
+      "width": 640,
+      "height": 360
+    },
+    {
+      "file": "C:\\opf-work\\rr-20-f1-f3-currency\\docs\\handoff\\2026-11-08\\f1-f3-currency\\chart-convert-witness\\after-final\\png\\slide-2.png",
+      "sha256": "52177f818b65a55d4fdc0b88dbe7a839c97d3b1da11fa20bd30b089e3eae1322",
+      "bytes": 23886,
+      "mediaType": "image/png",
+      "slide": 2,
+      "id": "s07",
+      "width": 640,
+      "height": 360
+    },
+    {
+      "file": "C:\\opf-work\\rr-20-f1-f3-currency\\docs\\handoff\\2026-11-08\\f1-f3-currency\\chart-convert-witness\\after-final\\png\\slide-3.png",
+      "sha256": "367381f8a83cfec8383e2d92e939f52b64e8e7eae4e6befd8b0f5a2cdb2de2b2",
+      "bytes": 10799,
+      "mediaType": "image/png",
+      "slide": 3,
+      "id": "s36",
+      "width": 640,
+      "height": 360
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "png",
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.33.0"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [
+      {
+        "requested": "Aptos Display",
+        "resolved": "Intos Display",
+        "compatibility": "metric"
+      },
+      {
+        "requested": "Aptos",
+        "resolved": "Intos",
+        "compatibility": "metric"
+      }
+    ],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "skippedHidden": [],
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "not-checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

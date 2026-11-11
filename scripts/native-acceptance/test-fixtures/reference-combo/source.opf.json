@@ -1,0 +1,155 @@
+{
+  "name": "Reference witnesses: axes and percentages",
+  "description": "Public synthetic source. Raw percentage units and independently associated axes. Not native acceptance.",
+  "design": {
+    "theme": "minimal",
+    "fontScheme": "roboto",
+    "variant": "light1"
+  },
+  "slides": [
+    {
+      "id": "combo-axes",
+      "chart": {
+        "type": "combo",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Revenue",
+            {
+              "name": "Margin",
+              "format": "0%"
+            }
+          ],
+          "rows": [
+            [
+              "Q1",
+              120,
+              0.2
+            ],
+            [
+              "Q2",
+              140,
+              0.22
+            ],
+            [
+              "Q3",
+              160,
+              0.24
+            ]
+          ]
+        },
+        "legend": "none",
+        "dataLabels": false,
+        "referenceLines": [
+          {
+            "value": 180,
+            "label": "Revenue 180",
+            "labelPosition": "start",
+            "stroke": {
+              "color": "#C44900",
+              "width": 2,
+              "dash": "dot"
+            }
+          },
+          {
+            "value": 0.25,
+            "axis": "secondary",
+            "label": "Margin 25%",
+            "stroke": {
+              "color": "#087E8B",
+              "width": 2,
+              "dash": "dash"
+            }
+          }
+        ],
+        "line": [
+          "Margin"
+        ],
+        "secondaryAxis": [
+          "Margin"
+        ]
+      }
+    },
+    {
+      "id": "column-percent",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            {
+              "name": "Margin",
+              "format": "0%"
+            }
+          ],
+          "rows": [
+            [
+              "Q1",
+              0.12
+            ],
+            [
+              "Q2",
+              0.18
+            ],
+            [
+              "Q3",
+              0.2
+            ]
+          ]
+        },
+        "legend": "none",
+        "dataLabels": false,
+        "referenceLines": [
+          {
+            "value": 0.3,
+            "label": "Target 30%",
+            "labelPosition": "start",
+            "stroke": {
+              "color": "#7D3C98",
+              "width": 2,
+              "dash": "solid"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "area-unlabelled",
+      "chart": {
+        "type": "area",
+        "data": {
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "rows": [
+            [
+              "A",
+              2
+            ],
+            [
+              "B",
+              4
+            ],
+            [
+              "C",
+              6
+            ]
+          ]
+        },
+        "legend": "none",
+        "dataLabels": false,
+        "referenceLines": [
+          {
+            "value": 8,
+            "stroke": {
+              "color": "#087E8B",
+              "width": 1,
+              "dash": "dash"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

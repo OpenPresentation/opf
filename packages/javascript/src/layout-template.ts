@@ -1,3 +1,4 @@
+import {isArrangement,type Arrangement} from './arrangements.js';
 /**
  * OPF layout templates (`opf-layout/v2`, FA-33): a layout record is one ordered list of regions, nested for two
  * dimensions. `direction` says whether the record's `regions` are placed side by side (`row`) or stacked (`column`); an
@@ -26,7 +27,7 @@ export const HEADING_AREAS = ['title', 'subtitle'] as const;
  * Names a body region may not take: the heading words, `auto`, and the six promoted-region words, so `region=` in the
  * Markdown dialect stays unambiguous. `title` and `subtitle` name the heading regions.
  */
-export const RESERVED_REGION_NAMES = ['title', 'subtitle', 'tag', 'auto', 'left', 'center', 'right', 'top', 'middle', 'bottom'] as const;
+export const RESERVED_REGION_NAMES = ['title', 'subtitle', 'tag', 'auto', 'start', 'center', 'end', 'top', 'middle', 'bottom'] as const;
 /** The compiled grid has at most this many rows and this many columns. */
 export const MAX_TEMPLATE_TRACKS = 12;
 /** A list of regions (the record's, or a split's) holds at most this many entries. */
@@ -62,7 +63,9 @@ export interface LayoutRegion {
    * entries as the steps of a loop, nodes on a ring with an arrow to the next). SH-17: `chevrons` (a row of chevrons), `flow` (a row of
    * boxes with arrows between them) or `vertical-flow` (a column of them). Absent: a list.
    */
-  arrangement?: 'pyramid' | 'matrix' | 'cycle' | 'chevrons' | 'flow' | 'vertical-flow';
+  arrangement?: Arrangement;
+  /** Narrow tip at the top (up, default) or bottom (down); authored entry order stays top to bottom. */
+  pyramidDirection?: 'up' | 'down';
   anchor: RegionAnchor;
   empty: 'collapse' | 'keep';
 }
@@ -160,7 +163,8 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
     listColumns: entry.listColumns === 'auto' ? 'auto' : 1,
     ...(entry.metrics === 'tile' ? { metrics: 'tile' as const } : {}),
     ...(entry.sequence === 'steps' || entry.sequence === 'numbered' ? { sequence: entry.sequence } : {}),
-    ...(entry.arrangement === 'pyramid' || entry.arrangement === 'matrix' || entry.arrangement === 'cycle' || entry.arrangement === 'chevrons' || entry.arrangement === 'flow' || entry.arrangement === 'vertical-flow' ? { arrangement: entry.arrangement } : {}),
+    ...(isArrangement(entry.arrangement) ? { arrangement: entry.arrangement } : {}),
+    ...(entry.arrangement === 'pyramid' && entry.pyramidDirection === 'down' ? {pyramidDirection: 'down' as const} : {}),
     anchor: (REGION_ANCHORS as readonly unknown[]).includes(entry.anchor) ? entry.anchor as RegionAnchor : inherited ?? 'top',
     empty: entry.empty === 'keep' ? 'keep' : 'collapse',
   };

@@ -1,0 +1,64 @@
+[
+  {
+    "id": "hierarchy-5-1",
+    "kind": "hierarchy",
+    "count": 5,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": [],
+    "live": true,
+    "drew": "SmartArt (built-in)",
+    "layout": "Hierarchy",
+    "turn": 0,
+    "nodes": 5,
+    "rect": 0,
+    "sizes": "36",
+    "pptSizes": "36",
+    "sizeEqual": true,
+    "itemsMatch": true,
+    "preview": {
+      "mad": 2.85,
+      "hot": 0.64,
+      "mad1280": 3.01,
+      "hot1280": 1.84,
+      "geometry": 0.8,
+      "geometryHot": 0,
+      "text": 6.35,
+      "textMax": 7.14,
+      "dx": -2.05,
+      "dy": -6.02
+    },
+    "native": {
+      "mad": 0.26,
+      "hot": 0,
+      "mad1280": 0.29,
+      "hot1280": 0,
+      "geometry": 0.32,
+      "geometryHot": 0,
+      "text": 0.36,
+      "textMax": 0.43,
+      "dx": -0.18,
+      "dy": -0.31
+    },
+    "nativePreview": {
+      "mad": 2.84,
+      "hot": 0.64,
+      "mad1280": 3,
+      "hot1280": 1.76,
+      "geometry": 0.84,
+      "geometryHot": 0,
+      "text": 5.94,
+      "textMax": 6.81,
+      "dx": -1.79,
+      "dy": -5.67
+    },
+    "checks": {
+      "layout": true,
+      "size": true,
+      "geometry": true,
+      "native": true
+    },
+    "result": "pass"
+  }
+]

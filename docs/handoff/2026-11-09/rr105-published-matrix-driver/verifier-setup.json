@@ -1,0 +1,6 @@
+{
+  "firstOfflineVerifierExit": 1,
+  "error": "291 !== 264",
+  "cause": "The digest report includes27 chart-only states in addition to264 ordinary verified states. The original full matrix passed; only the new evidence verifier counted the two channels together.",
+  "correction": "Assert264 ordinary states,27 chart-only hashes and291 complete digest records separately; no result, driver, assertion or matrix run modified."
+}

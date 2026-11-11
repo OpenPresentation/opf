@@ -1,0 +1,764 @@
+{
+  "sourceCommit": "65694b403467aa4b7ee8390b00cbd7d76d8f638d",
+  "sourceHashes": {
+    "packages/javascript/src/chart-marks.ts": "998860ba9ed10fa2e151f1d2c704e1f31ab4c2ec06ba20fdcd4498bb3fe43205",
+    "packages/javascript/src/composition.ts": "e54870ee6ae132a7dd5e9ab92e1c3811230127812abc3b7528591566654a77c5"
+  },
+  "files": {
+    "witness.pptx": "01770c76c42daf1f1f8a024d23f8eecfe871ea5e7c5f5bd145649ce6f0c95324",
+    "slide-1.svg": "1262c9020199837516acb6253d12a482b3cfdb5912667c104ea6721a682aff22",
+    "slide-1.png": "95e74e4c1f2d783116fe3853c893f54b5cb215a29b8384999fba34702ed4b1a2",
+    "slide-2.svg": "613ce5d9902d9ce2392675eefd9454aa7d7c77d3fc28f4346be5a1bd7d30c1ed",
+    "slide-2.png": "24a62e49c212a33eb5d7db70f7e9ba67f0964e8bd52c1d7d53046487b429ce64",
+    "slide-3.svg": "f2ae39a17b3971ac1cd48a522804b418059f44a1dfc1372dd252ce48c49249db",
+    "slide-3.png": "5b09a40853076d9717bfe9ee95ba3e6466a7fc5342e3e99d96ca001708287d92",
+    "slide-4.svg": "3b1d024c22eaf146871a24e0dccea2885c92c82de999275386ebd5315397de25",
+    "slide-4.png": "3b4683e956d59536fac1fd2714c95cc0070db0ca59a76e8eae95907462259d5c",
+    "slide-5.svg": "26e3d3be60417cdd11ea6ae059909311122b51aeb384458475783bcaab9366a3",
+    "slide-5.png": "03a6a32c1fc468c1bdcc8879d6af48539815d70f3ff7080d303807d310081608",
+    "slide-6.svg": "3c456408e2514420d94a3c6bcb5b5ff8e8d99ae1e9d7748cb94c06e6b15b1212",
+    "slide-6.png": "7032ce209e0e22b1696851ce7eb25a2df7bb09275400209521370c88cb67345a",
+    "slide-7.svg": "8c54ac9c6f49223b2cb3778f2b43721493450d3ac5429a21eb5de1658a5ee40b",
+    "slide-7.png": "30a28dea7936db9e03111e264f82c7eb0b11a3d8b6a9acdac2f2e1f0913841fd"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Shared stacked plots",
+      "charts": [
+        {
+          "box": {
+            "x": 57.6,
+            "y": 147.806055,
+            "width": 570.4,
+            "height": 427.8
+          },
+          "plot": {
+            "left": 66.767578125,
+            "right": 197.9589843749999,
+            "top": 40.400000000000006,
+            "bottom": 10
+          },
+          "stack": {
+            "values": [
+              [
+                true,
+                true
+              ],
+              [
+                true,
+                true
+              ]
+            ],
+            "valueAxis": false,
+            "names": {
+              "gutter": 0,
+              "swatch": 11.4,
+              "entries": [
+                {
+                  "series": 0,
+                  "name": "Current",
+                  "box": {
+                    "x": 124.367578125,
+                    "y": 157.806055,
+                    "width": 87.10498046875,
+                    "height": 28.5
+                  }
+                },
+                {
+                  "series": 1,
+                  "name": "Expansion",
+                  "box": {
+                    "x": 251.7315104166667,
+                    "y": 157.806055,
+                    "width": 112.478515625,
+                    "height": 28.5
+                  }
+                }
+              ],
+              "above": true
+            },
+            "legend": {
+              "legend": {
+                "box": {
+                  "x": 67.6,
+                  "y": 157.806055,
+                  "width": 205.28349609375,
+                  "height": 28.5
+                },
+                "entries": [
+                  {
+                    "series": 0,
+                    "name": "Current",
+                    "box": {
+                      "x": 67.6,
+                      "y": 157.806055,
+                      "width": 82.35498046875,
+                      "height": 28.5
+                    }
+                  },
+                  {
+                    "series": 1,
+                    "name": "Expansion",
+                    "box": {
+                      "x": 165.15498046875,
+                      "y": 157.806055,
+                      "width": 107.728515625,
+                      "height": 28.5
+                    }
+                  }
+                ]
+              },
+              "height": 38.5
+            }
+          },
+          "valueAxis": {
+            "min": 0,
+            "max": 120,
+            "majorUnit": 50
+          }
+        },
+        {
+          "box": {
+            "x": 652,
+            "y": 147.806055,
+            "width": 570.4,
+            "height": 427.8
+          },
+          "plot": {
+            "left": 235.7265625,
+            "right": 29,
+            "top": 40.400000000000006,
+            "bottom": 10
+          },
+          "stack": {
+            "values": [
+              [
+                true,
+                true
+              ],
+              [
+                true,
+                true
+              ]
+            ],
+            "valueAxis": false,
+            "names": {
+              "gutter": 0,
+              "swatch": 11.4,
+              "entries": [
+                {
+                  "series": 0,
+                  "name": "Current",
+                  "box": {
+                    "x": 887.7265625,
+                    "y": 157.806055,
+                    "width": 87.10498046875,
+                    "height": 28.5
+                  }
+                },
+                {
+                  "series": 1,
+                  "name": "Expansion",
+                  "box": {
+                    "x": 1015.0904947916666,
+                    "y": 157.806055,
+                    "width": 112.478515625,
+                    "height": 28.5
+                  }
+                }
+              ],
+              "above": true
+            },
+            "legend": {
+              "legend": {
+                "box": {
+                  "x": 662,
+                  "y": 157.806055,
+                  "width": 205.28349609375,
+                  "height": 28.5
+                },
+                "entries": [
+                  {
+                    "series": 0,
+                    "name": "Current",
+                    "box": {
+                      "x": 662,
+                      "y": 157.806055,
+                      "width": 82.35498046875,
+                      "height": 28.5
+                    }
+                  },
+                  {
+                    "series": 1,
+                    "name": "Expansion",
+                    "box": {
+                      "x": 759.55498046875,
+                      "y": 157.806055,
+                      "width": 107.728515625,
+                      "height": 28.5
+                    }
+                  }
+                ]
+              },
+              "height": 38.5
+            }
+          },
+          "valueAxis": {
+            "min": 0,
+            "max": 120,
+            "majorUnit": 50
+          }
+        }
+      ]
+    },
+    {
+      "slide": 2,
+      "title": "Shared percentage plots",
+      "charts": [
+        {
+          "box": {
+            "x": 57.6,
+            "y": 148.043359,
+            "width": 570.4,
+            "height": 427.8
+          },
+          "plot": {
+            "left": 66.767578125,
+            "right": 197.9589843749999,
+            "top": 40.400000000000006,
+            "bottom": 38.5
+          },
+          "stack": {
+            "values": [
+              [
+                false,
+                false
+              ],
+              [
+                false,
+                false
+              ]
+            ],
+            "names": {
+              "gutter": 0,
+              "swatch": 11.4,
+              "entries": [
+                {
+                  "series": 0,
+                  "name": "Current",
+                  "box": {
+                    "x": 124.367578125,
+                    "y": 158.043359,
+                    "width": 87.10498046875,
+                    "height": 28.5
+                  }
+                },
+                {
+                  "series": 1,
+                  "name": "Expansion",
+                  "box": {
+                    "x": 277.20429687500007,
+                    "y": 158.043359,
+                    "width": 112.478515625,
+                    "height": 28.5
+                  }
+                }
+              ],
+              "above": true
+            },
+            "legend": {
+              "legend": {
+                "box": {
+                  "x": 67.6,
+                  "y": 158.043359,
+                  "width": 205.28349609375,
+                  "height": 28.5
+                },
+                "entries": [
+                  {
+                    "series": 0,
+                    "name": "Current",
+                    "box": {
+                      "x": 67.6,
+                      "y": 158.043359,
+                      "width": 82.35498046875,
+                      "height": 28.5
+                    }
+                  },
+                  {
+                    "series": 1,
+                    "name": "Expansion",
+                    "box": {
+                      "x": 165.15498046875,
+                      "y": 158.043359,
+                      "width": 107.728515625,
+                      "height": 28.5
+                    }
+                  }
+                ]
+              },
+              "height": 38.5
+            }
+          },
+          "valueAxis": {
+            "min": 0,
+            "max": 1,
+            "majorUnit": 0.25,
+            "percent": true
+          }
+        },
+        {
+          "box": {
+            "x": 652,
+            "y": 148.043359,
+            "width": 570.4,
+            "height": 427.8
+          },
+          "plot": {
+            "left": 235.7265625,
+            "right": 29,
+            "top": 40.400000000000006,
+            "bottom": 38.5
+          },
+          "stack": {
+            "values": [
+              [
+                false,
+                false
+              ],
+              [
+                false,
+                false
+              ]
+            ],
+            "names": {
+              "gutter": 0,
+              "swatch": 11.4,
+              "entries": [
+                {
+                  "series": 0,
+                  "name": "Current",
+                  "box": {
+                    "x": 887.7265625,
+                    "y": 158.043359,
+                    "width": 87.10498046875,
+                    "height": 28.5
+                  }
+                },
+                {
+                  "series": 1,
+                  "name": "Expansion",
+                  "box": {
+                    "x": 1040.56328125,
+                    "y": 158.043359,
+                    "width": 112.478515625,
+                    "height": 28.5
+                  }
+                }
+              ],
+              "above": true
+            },
+            "legend": {
+              "legend": {
+                "box": {
+                  "x": 662,
+                  "y": 158.043359,
+                  "width": 205.28349609375,
+                  "height": 28.5
+                },
+                "entries": [
+                  {
+                    "series": 0,
+                    "name": "Current",
+                    "box": {
+                      "x": 662,
+                      "y": 158.043359,
+                      "width": 82.35498046875,
+                      "height": 28.5
+                    }
+                  },
+                  {
+                    "series": 1,
+                    "name": "Expansion",
+                    "box": {
+                      "x": 759.55498046875,
+                      "y": 158.043359,
+                      "width": 107.728515625,
+                      "height": 28.5
+                    }
+                  }
+                ]
+              },
+              "height": 38.5
+            }
+          },
+          "valueAxis": {
+            "min": 0,
+            "max": 1,
+            "majorUnit": 0.25,
+            "percent": true
+          }
+        }
+      ]
+    },
+    {
+      "slide": 3,
+      "title": "Restore the original legend",
+      "charts": [
+        {
+          "box": {
+            "x": 57.6,
+            "y": 148.043359,
+            "width": 570.4,
+            "height": 427.8
+          },
+          "plot": {
+            "left": 66.767578125,
+            "right": 197.9589843749999,
+            "top": 62.75,
+            "bottom": 10
+          },
+          "stack": {
+            "values": [
+              [
+                true,
+                true
+              ],
+              [
+                true,
+                true
+              ]
+            ],
+            "valueAxis": false
+          },
+          "valueAxis": {
+            "min": 0,
+            "max": 120,
+            "majorUnit": 50
+          }
+        },
+        {
+          "box": {
+            "x": 652,
+            "y": 148.043359,
+            "width": 570.4,
+            "height": 427.8
+          },
+          "plot": {
+            "left": 235.7265625,
+            "right": 29,
+            "top": 62.75,
+            "bottom": 10
+          },
+          "stack": {
+            "values": [
+              [
+                true,
+                true
+              ],
+              [
+                true,
+                true
+              ]
+            ],
+            "valueAxis": false
+          },
+          "valueAxis": {
+            "min": 0,
+            "max": 120,
+            "majorUnit": 50
+          }
+        }
+      ]
+    },
+    {
+      "slide": 4,
+      "title": "Restore a complete numeric axis",
+      "charts": [
+        {
+          "box": {
+            "x": 57.6,
+            "y": 147.806055,
+            "width": 570.4,
+            "height": 427.8
+          },
+          "plot": {
+            "left": 66.767578125,
+            "right": 197.9589843749999,
+            "top": 62.75,
+            "bottom": 38.5
+          },
+          "stack": {
+            "values": [
+              [
+                false,
+                false
+              ],
+              [
+                true,
+                true
+              ]
+            ]
+          },
+          "valueAxis": {
+            "min": 0,
+            "max": 120,
+            "majorUnit": 50
+          }
+        },
+        {
+          "box": {
+            "x": 652,
+            "y": 147.806055,
+            "width": 570.4,
+            "height": 427.8
+          },
+          "plot": {
+            "left": 235.7265625,
+            "right": 29,
+            "top": 62.75,
+            "bottom": 38.5
+          },
+          "stack": {
+            "values": [
+              [
+                false,
+                false
+              ],
+              [
+                true,
+                true
+              ]
+            ]
+          },
+          "valueAxis": {
+            "min": 0,
+            "max": 120,
+            "majorUnit": 50
+          }
+        }
+      ]
+    },
+    {
+      "slide": 5,
+      "title": "Negative and missing values",
+      "charts": [
+        {
+          "box": {
+            "x": 57.6,
+            "y": 148.043359,
+            "width": 570.4,
+            "height": 427.8
+          },
+          "plot": {
+            "left": 66.767578125,
+            "right": 197.9589843749999,
+            "top": 62.75,
+            "bottom": 38.5
+          },
+          "stack": {
+            "values": [
+              [
+                false,
+                false
+              ],
+              [
+                true,
+                true
+              ]
+            ]
+          },
+          "valueAxis": {
+            "min": -100,
+            "max": 100,
+            "majorUnit": 100
+          }
+        },
+        {
+          "box": {
+            "x": 652,
+            "y": 148.043359,
+            "width": 570.4,
+            "height": 427.8
+          },
+          "plot": {
+            "left": 235.7265625,
+            "right": 29,
+            "top": 62.75,
+            "bottom": 38.5
+          },
+          "stack": {
+            "values": [
+              [
+                false,
+                false
+              ],
+              [
+                true,
+                true
+              ]
+            ]
+          },
+          "valueAxis": {
+            "min": -100,
+            "max": 100,
+            "majorUnit": 100
+          }
+        }
+      ]
+    },
+    {
+      "slide": 6,
+      "title": "Explicit options control",
+      "charts": [
+        {
+          "box": {
+            "x": 57.6,
+            "y": 147.806055,
+            "width": 570.4,
+            "height": 427.8
+          },
+          "valueAxis": {
+            "min": 0,
+            "max": 120,
+            "majorUnit": 50
+          }
+        },
+        {
+          "box": {
+            "x": 652,
+            "y": 147.806055,
+            "width": 570.4,
+            "height": 427.8
+          },
+          "plot": {
+            "left": 235.7265625,
+            "top": 40.400000000000006,
+            "right": 29,
+            "bottom": 10
+          },
+          "stack": {
+            "values": [
+              [
+                true,
+                true
+              ],
+              [
+                true,
+                true
+              ]
+            ],
+            "valueAxis": false,
+            "names": {
+              "gutter": 0,
+              "swatch": 11.4,
+              "entries": [
+                {
+                  "series": 0,
+                  "name": "Current",
+                  "box": {
+                    "x": 887.7265625,
+                    "y": 157.806055,
+                    "width": 87.10498046875,
+                    "height": 28.5
+                  }
+                },
+                {
+                  "series": 1,
+                  "name": "Expansion",
+                  "box": {
+                    "x": 1015.0904947916666,
+                    "y": 157.806055,
+                    "width": 112.478515625,
+                    "height": 28.5
+                  }
+                }
+              ],
+              "above": true
+            },
+            "legend": {
+              "legend": {
+                "box": {
+                  "x": 662,
+                  "y": 157.806055,
+                  "width": 205.28349609375,
+                  "height": 28.5
+                },
+                "entries": [
+                  {
+                    "series": 0,
+                    "name": "Current",
+                    "box": {
+                      "x": 662,
+                      "y": 157.806055,
+                      "width": 82.35498046875,
+                      "height": 28.5
+                    }
+                  },
+                  {
+                    "series": 1,
+                    "name": "Expansion",
+                    "box": {
+                      "x": 759.55498046875,
+                      "y": 157.806055,
+                      "width": 107.728515625,
+                      "height": 28.5
+                    }
+                  }
+                ]
+              },
+              "height": 38.5
+            }
+          },
+          "valueAxis": {
+            "min": 0,
+            "max": 120,
+            "majorUnit": 50
+          }
+        }
+      ]
+    },
+    {
+      "slide": 7,
+      "title": "Table row alignment control",
+      "charts": [
+        {
+          "box": {
+            "x": 57.6,
+            "y": 191.32168,
+            "width": 570.4,
+            "height": 427.8
+          },
+          "rows": {
+            "top": 192.15,
+            "bottom": 279.15,
+            "centers": [
+              215.4,
+              258.9
+            ],
+            "left": 66.767578125,
+            "right": 29
+          },
+          "stack": {
+            "values": [
+              [
+                true,
+                true
+              ],
+              [
+                true,
+                true
+              ]
+            ]
+          },
+          "valueAxis": {
+            "min": 0,
+            "max": 120,
+            "majorUnit": 50
+          }
+        }
+      ]
+    }
+  ]
+}

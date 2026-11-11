@@ -15,7 +15,7 @@ const arabicDeck = { name: 'Arabic deck', language: 'ar-SA', slides: [{ title: T
 const runInEnglish = {
   name: 'Arabic run in an English deck',
   language: 'en-US',
-  slides: [{ title: ['Quarterly review: ', { text: 'مراجعة ربع سنوية', lang: 'ar-SA' }], text: ['The Arabic phrase ', { text: TITLE, lang: 'ar-SA', bold: true }, ' sits inside this English paragraph.'] }],
+  slides: [{ title: ['Quarterly review: ', { text: 'مراجعة ربع سنوية', language: 'ar-SA' }], text: ['The Arabic phrase ', { text: TITLE, language: 'ar-SA', bold: true }, ' sits inside this English paragraph.'] }],
 };
 const handle = (presentation) => loadFonts({ pack: 'office', scripts: 'auto', presentation, renderOptions: { catalogs } });
 const layoutFailures = (report) => report.findings.filter((finding) => finding.ruleId === 'opf/layout-failed');

@@ -1,0 +1,129 @@
+{
+  "id": "overview-layout-control",
+  "deck": "overview",
+  "ordinal": 26,
+  "originalFullSourceSha256": "b161727dd529c4cf647468a5aa96d3bcd0f0eb0a2da44b49f7a3eca1d54ea560",
+  "derivedFullSourceSha256": "d6b26009e7fd11d5750939cfa4f184e89c67ea17365d1142aee57d0c43426729",
+  "authoredSlideUnchanged": true,
+  "subset": "One authored slide; generated slide-number footer resolves in that one-slide qualification context.",
+  "reports": [
+    {
+      "kind": "png",
+      "fontRoute": {
+        "pack": "office",
+        "substitutionPolicy": "visual",
+        "userFonts": [],
+        "substitutions": [
+          {
+            "requested": "Aptos Display",
+            "resolved": "Intos Display",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Aptos",
+            "resolved": "Intos",
+            "compatibility": "metric"
+          }
+        ],
+        "scripts": {
+          "detected": [],
+          "scripts": [],
+          "unavailable": [],
+          "packages": [],
+          "notInstalled": []
+        }
+      },
+      "findings": []
+    },
+    {
+      "kind": "pptx",
+      "fontRoute": {
+        "pack": "office",
+        "substitutionPolicy": "visual",
+        "userFonts": [],
+        "substitutions": [
+          {
+            "requested": "Aptos Display",
+            "resolved": "Intos Display",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Aptos",
+            "resolved": "Intos",
+            "compatibility": "metric"
+          }
+        ],
+        "scripts": {
+          "detected": [],
+          "scripts": [],
+          "unavailable": [],
+          "packages": [],
+          "notInstalled": []
+        }
+      },
+      "findings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Aptos",
+            "Aptos Display",
+            "Roboto Mono"
+          ]
+        }
+      ]
+    }
+  ],
+  "claudeAvailable": true,
+  "code": {
+    "size": 22,
+    "lines": 3,
+    "bodyHeightFill": 0.5439070521480681,
+    "contentBoundsHeightFill": 0.9999999999999998,
+    "box": {
+      "x": 57.6,
+      "y": 327.421563,
+      "width": 684.48,
+      "height": 148.04
+    },
+    "bounds": {
+      "x": 57.6,
+      "y": 327.421563,
+      "width": 684.48,
+      "height": 148.03999999999996
+    }
+  },
+  "note": {
+    "size": 28,
+    "box": {
+      "x": 766.08,
+      "y": 327.421563,
+      "width": 456.32,
+      "height": 151.04
+    }
+  },
+  "topLevelShapes": {
+    "before": 11,
+    "after": 11
+  },
+  "roundtripBlocksExact": true,
+  "nativeNoteHeadingAndSurfaceGeometryExact": true,
+  "source": {
+    "bytes": 1229,
+    "sha256": "3eb960564304ef06a9a226f0392a954264db56c9e949cee645d4b2af0dad515d"
+  },
+  "pptx": {
+    "bytes": 104401,
+    "sha256": "9e1b58f2e9d8f07404daaff6a72452bca36b12ff82f71b0aac744bf80829758f"
+  },
+  "preview": {
+    "bytes": 52584,
+    "sha256": "c21e889eb71d72dc3c28ca1b31364b2167220f82bee0475b141214ae66f2749b"
+  },
+  "wholeControlArchiveAndPngExact": true
+}

@@ -1,0 +1,1211 @@
+{
+  "summary": {
+    "source": "57acc14a61c19cceab26d5bce7b3ce6c6aa745c2",
+    "contractScripts": 187,
+    "fullScripts": 197,
+    "attempted": 196,
+    "passed": 189,
+    "failed": 7,
+    "unrun": 1,
+    "failures": [
+      "golden-gate.mjs",
+      "lazy-face-fallback.mjs",
+      "raster-script-clusters.mjs",
+      "script-family-hosts.mjs",
+      "script-name-hosts.mjs",
+      "symbol-fonts.mjs",
+      "symbol-role-emoji-fallback.mjs"
+    ],
+    "held": [
+      "golden.mjs"
+    ],
+    "baselineFilesUnchangedEachWave": 3023,
+    "fullAcceptance": false,
+    "browserCheckUnrun": true
+  },
+  "coverage": [
+    {
+      "name": "accepted-text.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "annotations.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "aptos-preview.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "full-only"
+    },
+    {
+      "name": "arabic-size-adjust.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "asset-unresolved.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "background-color-refs.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "background-image.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "builtin-variables.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "bundler-safe-resolve.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "full-only"
+    },
+    {
+      "name": "catalogs.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "ce20-font-face-selection-cache.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-alt.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-axis.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-catalog.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-category-labels.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-colors.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-correctness.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-fallbacks.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-finite-statistics.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-followups.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-highlight.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-layer.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-options.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-reference-bar-options.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-reference-lines.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-rtl-data-labels.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-scale.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-scheme-palette.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-table-data.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "chart-types.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "color-references.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "color-roles.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "color-variants.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "combo-charts.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "core-features.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "cover-centering.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "data-readability.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "default-font-scheme.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "design-fields.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "design-preview.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "diagram.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "emoji-math.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "emphasis-surface.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "example-baseline.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "examples-portable.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "extra-lazy-fonts.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "full-only"
+    },
+    {
+      "name": "fa-13-conveniences.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "fixed-background-layout-variants.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "font-analysis-incremental.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "font-ensure-concurrency.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "font-outlines.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "font-policy.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "font-startup-cleanup.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "font-subset-reference-glyphs.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "font-subsets.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "fonts-browser.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "fonts-handle.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "fonts.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "furniture.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "gallery-layout-alignment.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "glyph-fallback.mjs",
+      "status": "passed",
+      "source": "Maintained original runner advanced past this command before stopping at59; sealed original log"
+    },
+    {
+      "name": "golden-gate.mjs",
+      "status": "failed",
+      "source": "Sealed original contract log; seven raster baseline changes"
+    },
+    {
+      "name": "golden-layout.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "golden.mjs",
+      "status": "unrun",
+      "source": "Direct real-corpus golden command held pending pinned workflow"
+    },
+    {
+      "name": "harfbuzz-measurement.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "hb-cluster-carriers.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "host-continuation.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "icons.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "image-blocks.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "image-placeholders.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "image-treatments.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "item-alignment.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "jpeg-orientation.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "latin-face-coverage.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "latin-family-hosts.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "full-only"
+    },
+    {
+      "name": "layout-design-applied.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "layout-template-goldens.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "layout-templates.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "layout-variants.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lazy-converters.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lazy-face-fallback.mjs",
+      "status": "failed",
+      "source": "renderer-remaining04",
+      "exitCode": 1,
+      "tier": "full-only"
+    },
+    {
+      "name": "lazy-faces.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lazy-fonts.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-105-few-charts.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-106-language-embed.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-106-slide-language.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-107-chart-ideas.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-113-shared-emphasis.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-114-pull-line.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-118-bidi-numbers.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-121-generated-status-fonts.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-121-localized-status.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-125-chart-marks.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-133-faq-takeaways.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-141-chart-fixes.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-153-chart-follow-ups.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-16-duration-timeline.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-160-chart-labels.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-176-rtl-column-series.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-177-latin-family-contract.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-177-light-fonts.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-34-image-callouts.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-63-run-in-quote-marks.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "lh-wave-4-funnel-colors.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "list-bullet-none.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "list-marker-glyphs.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "measure-determinism.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "measure-pictures.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "metric-sentiment.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "mongolian-shaping.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "neutral-scaffolding.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "node-demand-font-failures.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "node-demand-fonts.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "node-demand-glyph-probe.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "numbered-lists.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "office-fonts.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "open-fonts.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "overflow-integrity.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "pdf-harfbuzz-scripts.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "pdf-relative-text-position.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "pdf-vector-visual.mjs",
+      "status": "passed",
+      "source": "renderer-remaining05",
+      "exitCode": 0,
+      "tier": "full-only"
+    },
+    {
+      "name": "pdf-vector.mjs",
+      "status": "passed",
+      "source": "renderer-remaining05",
+      "exitCode": 0,
+      "tier": "full-only"
+    },
+    {
+      "name": "placeholder-groups.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "player-unit.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "portrait-focus.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "preview-a11y.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "preview-fonts-fontconfig.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "preview-polish.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "quote-footer.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "quote-photo.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "raster-cluster-context.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "raster-script-clusters.mjs",
+      "status": "failed",
+      "source": "renderer-remaining05",
+      "exitCode": 1,
+      "tier": "full-only"
+    },
+    {
+      "name": "render-diagnostics.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "resolve-selected-slides.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "rich-headings.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "rich-tab.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "rich-table.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "rich-trace.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "rich-xml-characters.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "rr-116-measurement-cache.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "rtl-layout.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "rtl-mixed-runs.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "script-corpora-order.mjs",
+      "status": "passed",
+      "source": "Original partial contract tail",
+      "exitCode": 0
+    },
+    {
+      "name": "script-corpora.mjs",
+      "status": "passed",
+      "source": "renderer-remaining06",
+      "exitCode": 0,
+      "tier": "full-only"
+    },
+    {
+      "name": "script-family-hosts.mjs",
+      "status": "failed",
+      "source": "Original partial contract tail",
+      "exitCode": 1
+    },
+    {
+      "name": "script-font-encoded-weight.mjs",
+      "status": "passed",
+      "source": "renderer-remaining01",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "script-fonts-auto-robust.mjs",
+      "status": "passed",
+      "source": "renderer-remaining01",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "script-fonts-auto.mjs",
+      "status": "passed",
+      "source": "renderer-remaining01",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "script-fonts.mjs",
+      "status": "passed",
+      "source": "renderer-remaining01",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "script-name-hosts.mjs",
+      "status": "failed",
+      "source": "renderer-remaining01",
+      "exitCode": 1,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "sh-02-shapes.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "sh-04-overlays.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "sh-05-arrowheads.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "sh-09-arrangements.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "sh-12-dot-preview.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "sh-13-plantuml-preview.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "sh-17-arrangements.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "sh-18-cycle.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "sh-19-smartart-layouts.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "sh-25-chart-point-anchors.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "sh-27-offslide-overlays.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "sh26-readable-fallbacks.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "shape-block-effects.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "shape-effects.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "shared-quote.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "skip-hidden.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "slide-arguments.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "slide-context.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "slide-variables.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "smoke.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "soak.mjs",
+      "status": "passed",
+      "source": "renderer-remaining06",
+      "exitCode": 0,
+      "tier": "full-only"
+    },
+    {
+      "name": "socials.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "step-badges.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "styled-table.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "svg-font-embedding.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "svg-fstype.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "svg-image.mjs",
+      "status": "passed",
+      "source": "renderer-remaining02",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "symbol-fonts.mjs",
+      "status": "failed",
+      "source": "renderer-remaining02",
+      "exitCode": 1,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "symbol-role-emoji-fallback.mjs",
+      "status": "failed",
+      "source": "renderer-remaining03",
+      "exitCode": 1,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "table-alt.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "tag-colour.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "template-baseline.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "template-variables.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "text-as-paths-scripts.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "text-as-paths.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "text-run-links.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "theme-slots.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "tier-pillar-svg.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "timeline-status.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "timeline.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "title-rule.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "title-split-trace.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "v2-binding-metadata.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "validate-font-context.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "validate-script-fonts.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "web-delivery.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    },
+    {
+      "name": "webp.mjs",
+      "status": "passed",
+      "source": "renderer-remaining04",
+      "exitCode": 0,
+      "tier": "contract-remainder"
+    }
+  ]
+}

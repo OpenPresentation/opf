@@ -1,0 +1,30 @@
+[
+  {
+    "path": "results.json.gz",
+    "bytes": 873,
+    "sha256": "b975d4bad27e6238029c5b0132e135b2555b4e07242e6158696882af307dff8c",
+    "gzipBytes": 457,
+    "gzipSha256": "e9646fc48a0a9832bcd5466a34f5fb1597f5b54d5a92100d6c46cffbfe80843e"
+  },
+  {
+    "path": "rr-54-chart-table-data.mjs.log.gz",
+    "bytes": 292,
+    "sha256": "76e336c5e36fdd6c3905c5e40501e61c6f4a7beda3e284f3ea6516900a42187c",
+    "gzipBytes": 205,
+    "gzipSha256": "d3d9178fd77fc8f429852254ab0ecd7a1722dd947b585c15a37e217303891c15"
+  },
+  {
+    "path": "rr54-archive-candidate.mjs.log.gz",
+    "bytes": 194,
+    "sha256": "2f07d58190265152e492200fa5530cf50bf518a9d191200a1dee896c941993ef",
+    "gzipBytes": 163,
+    "gzipSha256": "daf653ea2d2aef078de27d4e38465a4db31a512691d8c2aa86d1af27c2a73e25"
+  },
+  {
+    "path": "opf-rr54-promoted-check-driver.mjs.gz",
+    "bytes": 1699,
+    "sha256": "88c23af16261c96905bc81fba9e9478dbbe48274735077749bbb6c05ba422d90",
+    "gzipBytes": 895,
+    "gzipSha256": "229c81d3f0055e097a7299ea7b4beb807f48858e23672e32959e1e679c5b6835"
+  }
+]

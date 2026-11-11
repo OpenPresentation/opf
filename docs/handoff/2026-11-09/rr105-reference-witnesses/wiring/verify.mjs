@@ -1,0 +1,23 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import cp from 'node:child_process';
+import crypto from 'node:crypto';
+import {gunzipSync} from 'node:zlib';
+const folder=import.meta.dirname,root=path.resolve(folder,'../../../../..'),manifest=JSON.parse(fs.readFileSync(path.join(folder,'manifest.json'),'utf8'));
+const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex'),git=(...args)=>cp.execFileSync('git',['-C',root,...args],{maxBuffer:8*1024*1024}),text=(...args)=>git(...args).toString('utf8').trim();
+assert.equal(manifest.format,'reference-witness-source-wiring-v1');assert.equal(manifest.runSourceWasClean,true);assert.equal(text('rev-parse',manifest.source+'^{tree}'),manifest.tree);
+const compressed=fs.readFileSync(path.join(folder,manifest.raw.file));assert.equal(compressed.length,manifest.raw.bytes);assert.equal(sha(compressed),manifest.raw.sha256);
+const decoded=gunzipSync(compressed,{maxOutputLength:16*1024*1024});assert.equal(decoded.length,manifest.raw.expandedBytes);const packet=JSON.parse(decoded),held=new Map();assert.equal(packet.format,manifest.format);assert.equal(packet.entries.length,manifest.raw.members);assert.ok(packet.entries.length<=1000);let bytes=0;
+for(const item of packet.entries){assert.ok(typeof item.name==='string'&&item.name&&!item.name.startsWith('/')&&!item.name.includes('\\')&&!item.name.split('/').some(p=>!p||p==='.'||p==='..'));assert.ok(!held.has(item.name));const content=Buffer.from(item.base64,'base64');assert.equal(content.length,item.bytes);assert.equal(sha(content),item.sha256);assert.deepEqual(manifest.entries[held.size],{name:item.name,bytes:item.bytes,sha256:item.sha256});held.set(item.name,content);bytes+=content.length;}
+assert.equal(bytes,manifest.raw.decodedBytes);assert.ok(bytes<=32*1024*1024);
+for(const item of manifest.sourceFiles){const content=git('show',manifest.source+':'+item.file);assert.equal(content.length,item.bytes);assert.equal(sha(content),item.sha256);assert.equal(text('rev-parse',manifest.source+':'+item.file),item.blob);}
+for(const item of [...manifest.protectedTrees,...manifest.protectedFiles]){assert.equal(text('rev-parse',manifest.base+':'+item.file),item.blob);assert.equal(text('rev-parse',manifest.source+':'+item.file),item.blob);}
+const final=JSON.parse(held.get('checks/focused-final.exit.json'));assert.equal(final.exitCode,0);assert.equal(final.source,manifest.source);assert.equal(final.tree,manifest.tree);
+const log=held.get('checks/focused-final.log').toString('utf8');assert.match(log,/tests 18/);assert.match(log,/pass 18/);assert.match(log,/fail 0/);assert.match(log,/"managedCases":55,"officeInvoked":false/);
+const managed=JSON.parse(held.get('managed-final/mock-results.json').toString('utf8').replace(/^\uFEFF/u,''));assert.equal(managed.mockOnly,true);assert.equal(managed.officeInvoked,false);assert.equal(managed.cases,55);assert.ok(managed.results.every(r=>r.passed));
+const children=JSON.parse(held.get('envelope-final/child-results.json'));assert.equal(children.nativeAcceptance,false);assert.equal(children.logs[0].status,0);assert.equal(children.logs[1].status,0);assert.notEqual(children.logs[2].status,0);assert.equal(children.logs[3].status,0);assert.equal(children.logs.length,11);assert.ok(children.logs.slice(4).every(r=>r.status!==0));
+const runner=JSON.parse(held.get('envelope-final/default-pure/runner.json').toString('utf8').replace(/^\uFEFF/u,''));assert.equal(runner.runOfficeRequested,false);assert.equal(runner.status,'pure-checks-completed; native-not-run');assert.equal(runner.timeoutSeconds,45);assert.equal(runner.limits.maxTotalShapes,9);assert.equal(runner.snapshots.length,5);
+for(const record of runner.snapshots){const content=held.get('envelope-final/default-pure/'+record.path);assert.ok(content);assert.equal(content.length,record.bytes);assert.equal(sha(content),record.sha256);}
+assert.equal(manifest.outcomes.currentConsumerGeneration,false);assert.equal(manifest.outcomes.officeInvoked,false);assert.equal(manifest.outcomes.nativeAcceptance,false);assert.equal(manifest.outcomes.requiredChangedGate,'PARENT_SCHEDULED; UNRUN');assert.equal(manifest.originalSuite.sha256,'fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65');
+console.log(JSON.stringify({ok:true,source:manifest.source,tree:manifest.tree,members:held.size,decodedBytes:bytes,sourceFiles:manifest.sourceFiles.length,focusedTests:18,managedCases:55,actualConsumerGeneration:false,officeInvoked:false,nativeAcceptance:false}));

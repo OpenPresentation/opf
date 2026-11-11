@@ -121,8 +121,8 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 
 // ---- 3. Every place an image appears.
 {
-  const logoDeck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {imageFit: 'contain', background: light, watermark: {src: square, opacity: 1}, footer: {left: {image: 'var:organization.logo'}}},
-    slides: [{title: 'Cover', layout: 'cover'}, {title: 'Body', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: {src: wide, alt: 'Wide'}}, {type: 'image', image: tall, placement: {edge: 'right'}}]}]};
+  const logoDeck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {imageFit: 'contain', background: light, watermark: {src: square, opacity: 1}, footer: {start: {image: 'var:organization.logo'}}},
+    slides: [{title: 'Cover', layout: 'cover'}, {title: 'Body', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: {src: wide, alt: 'Wide'}}, {type: 'image', image: tall, placement: {edge: 'end'}}]}]};
   const {entries, diagnostics, bytes} = await open(logoDeck);
   assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-asset'), []);
   const cover = pictures(slideXml(entries, 0)), body = pictures(slideXml(entries, 1));
@@ -153,7 +153,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   const reports = [];
   const imported = await fromPptx(bytes, {onDiagnostic: item => reports.push(item)});
   assert.equal(imported.organization.logo, wide, 'organization.logo returns as the authored SVG');
-  assert.equal(imported.design.footer.left.image, 'var:organization.logo', 'the footer logo returns as its reference');
+  assert.equal(imported.design.footer.start.image, 'var:organization.logo', 'the footer logo returns as its reference');
   assert.equal(imported.design.watermark.src, square);
   assert.equal(imported.slides[1].blocks.find(block => block.placement)?.image.src, tall);
   assert.deepEqual(reports.filter(item => /invalid|unsupported/.test(item.code)), [], 'no provenance complaint for SVG pictures');
@@ -167,7 +167,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 // (native check 2026-10-01), so those stay native, the effect before the SVG extension; a duotone recolor and a non-rectangular mask
 // are unconfirmed on an SVG picture and keep the PNG (export-lossy, feature svg-rasterized). A picture bullet is a raster (a:buBlip).
 {
-  const deck = {design: {watermark: {src: wide, opacity: .3}, background: light}, slides: [{title: 'T', blocks: [{type: 'image', image: square, placement: {edge: 'left'}, opacity: .5, recolor: 'grayscale', stroke: {color: '#c0392b', width: 6}}]}]};
+  const deck = {design: {watermark: {src: wide, opacity: .3}, background: light}, slides: [{title: 'T', blocks: [{type: 'image', image: square, placement: {edge: 'start'}, opacity: .5, recolor: 'grayscale', stroke: {color: '#c0392b', width: 6}}]}]};
   const {entries, diagnostics, bytes} = await open(deck);
   const xml = slideXml(entries);
   assert.deepEqual(diagnostics.filter(item => item.code === 'export-lossy'), []);
@@ -186,7 +186,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   assert.equal(imported.slides[0].blocks[0].opacity, .5);
   assert.equal(imported.slides[0].blocks[0].recolor, 'grayscale');
   for (const treatment of [{recolor: {dark: '#102030', light: '#f0e0d0'}}, {shape: 'ellipse'}]) {
-    const result = await open({design: {background: light}, slides: [{title: 'T', blocks: [{type: 'image', image: square, placement: {edge: 'left'}, ...treatment}]}]});
+    const result = await open({design: {background: light}, slides: [{title: 'T', blocks: [{type: 'image', image: square, placement: {edge: 'start'}, ...treatment}]}]});
     assert.ok(!/svgBlip/.test(slideXml(result.entries)), `${Object.keys(treatment)}: raster`);
     assert.deepEqual(result.diagnostics.filter(item => item.code === 'export-lossy').map(item => [item.feature, item.path]), [['svg-rasterized', 'slides.0.blocks.0.image']]);
   }
@@ -349,11 +349,11 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
     }
     return zipSync(Object.fromEntries(Object.entries(result).filter(([name]) => !name.endsWith('/'))));
   }
-  const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {watermark: {src: square, opacity: 1}, header: {right: {image: {src: tall, alt: 'Icon'}}}, footer: {left: {image: 'var:organization.logo'}}, background: light},
+  const deck = {organization: {id: 'acme', name: 'Acme', logo: wide}, design: {watermark: {src: square, opacity: 1}, header: {end: {image: {src: tall, alt: 'Icon'}}}, footer: {start: {image: 'var:organization.logo'}}, background: light},
     slides: [
       {title: 'Cover', layout: 'cover'},
-      {title: 'Body', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: {src: wide, alt: 'Wide'}}, {type: 'image', image: tall, fit: 'contain', placement: {edge: 'right'}}]},
-      {title: 'Placed image cover', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: wide, fit: 'cover', placement: {edge: 'left'}}]},
+      {title: 'Body', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: {src: wide, alt: 'Wide'}}, {type: 'image', image: tall, fit: 'contain', placement: {edge: 'end'}}]},
+      {title: 'Placed image cover', blocks: [{type: 'text', text: 'Copy'}, {type: 'image', image: wide, fit: 'cover', placement: {edge: 'start'}}]},
       {title: 'Blocks', blocks: [{image: {src: square, alt: 'Square'}}, {text: 'Beside'}]},
     ]};
   const {bytes} = await open(deck);

@@ -1,0 +1,1467 @@
+{
+  "scope": "PROPOSED_TYPED_PROJECTION_NOT_ADOPTED_OR_BENCHMARKED",
+  "recipe": {
+    "path": "docs/handoff/2026-11-10/owner-performance/propose-projection.mjs",
+    "bytes": 5863,
+    "sha256": "9a67c1c43d29d05c124067707ba9a7f18a2b72479fe1e0e93852d1b6fb827db4"
+  },
+  "schemaSource": "ed51a7e8a6636bb2e08c9a446a7d22c21ad81066",
+  "schemaRecords": [
+    {
+      "file": "spec/schemas/audience.schema.json",
+      "gitBlob": "4e09cf9723560d800a84765f3108b731ac7720b3",
+      "bytes": 6240,
+      "sha256": "bdeedc46884063b955a54d61f4647368644cee6eba60f369cf88ac319decc939"
+    },
+    {
+      "file": "spec/schemas/catalog-index.schema.json",
+      "gitBlob": "7109f2b8fd0e9852502a0f5eb61ff602a925f14d",
+      "bytes": 4861,
+      "sha256": "c4249cd003aedb5cf6eb822528ecf9b1fe7853809dd480ae5fcd77beb827221e"
+    },
+    {
+      "file": "spec/schemas/catalog-manifest.schema.json",
+      "gitBlob": "c3a54e5548f071b415a80244618d1f22c89c2c20",
+      "bytes": 3787,
+      "sha256": "e2b1df4de499f9f87b12ff67cc8644c25738e2b108e256c9f6890406a567369d"
+    },
+    {
+      "file": "spec/schemas/chart-type.schema.json",
+      "gitBlob": "f038699de87045c778b2a8a2caf7683c7616e3c0",
+      "bytes": 9736,
+      "sha256": "2a602878e5422ea34f49af6f7bd1da3ce8652b60a06bd9fd304c4aa07360b579"
+    },
+    {
+      "file": "spec/schemas/color-scheme.schema.json",
+      "gitBlob": "28d8002ed612f1a41965bd8537fc78baf16808ae",
+      "bytes": 7408,
+      "sha256": "daaef7a0d1ad6e416ab0aa86f10f9b64c47a442a1560c20d17ef4853ec0df6da"
+    },
+    {
+      "file": "spec/schemas/finding.schema.json",
+      "gitBlob": "6ca6681160c84c92941361cc4049c80dfff6e67d",
+      "bytes": 10374,
+      "sha256": "a3d5b2800fbcba3a47acad73b7565fbec1c701657b7ca6d7651e298eee41e31b"
+    },
+    {
+      "file": "spec/schemas/font-scheme.schema.json",
+      "gitBlob": "4113c0d7b533751c0098d688cae173af0c8ea64d",
+      "bytes": 10211,
+      "sha256": "3c576adeac4d5a39238b9e7be4baa4f566b76cd68851fc54f004a52aa0aea707"
+    },
+    {
+      "file": "spec/schemas/icon-set.schema.json",
+      "gitBlob": "edb526db3b911d24b7d4e1ed7150b7f77ea89de6",
+      "bytes": 4896,
+      "sha256": "3008c5d917ff3f0ec73ba46b609aa987a6399e9121f465b32fbf3a4af635c5df"
+    },
+    {
+      "file": "spec/schemas/language.schema.json",
+      "gitBlob": "de5b6aece5a24602684afe997ae1ce23bf8c59f5",
+      "bytes": 7329,
+      "sha256": "254da39754e210a2bd4d5b0976fa12af3f8fae51f341273544f8c4ff3c1ef7a3"
+    },
+    {
+      "file": "spec/schemas/layout-preview-index.schema.json",
+      "gitBlob": "7202bf5cd7f23af63ff7666b6d6814a81164f363",
+      "bytes": 2563,
+      "sha256": "96e52b4a3caf390bfc3bf73559cfbc460060243e718b101bdae1d6e1363f31b2"
+    },
+    {
+      "file": "spec/schemas/layout.schema.json",
+      "gitBlob": "a267041d0a174023fc8026e39f71af15ba33954d",
+      "bytes": 32541,
+      "sha256": "407133e832c8feaba746d7c7144beb75ea8e50b345f09490ec6870c085921933"
+    },
+    {
+      "file": "spec/schemas/narrative.schema.json",
+      "gitBlob": "f545c606ce6fb797fd1aec1aa8594ab242bdad0a",
+      "bytes": 8651,
+      "sha256": "1a40f4ea8f15477dcae349275bfbb1bfd75b27ec663f16e13cc59abdb2cd28b3"
+    },
+    {
+      "file": "spec/schemas/opf.schema.json",
+      "gitBlob": "9c64b88b9aa30c9733320319ec684ec63958ee16",
+      "bytes": 303309,
+      "sha256": "a17663750bce48e58a9e21a81d268893b6af2036478921b5e6fd26a4fee5d10e"
+    },
+    {
+      "file": "spec/schemas/purpose.schema.json",
+      "gitBlob": "25158c874ac161b8b0128b1067ac9d8bf7810eb8",
+      "bytes": 4191,
+      "sha256": "83f4c3a9d577e658d9d6b4a28a4995068de64c9f77d4899c706005eebecc96d9"
+    },
+    {
+      "file": "spec/schemas/social-platform.schema.json",
+      "gitBlob": "4d328ff18a70472d1a9ac2f0ca9d019d31cd4b25",
+      "bytes": 5925,
+      "sha256": "f94d4789ab382bd9e4aafecd8bc2aeb94375117e82ff507f5d75e04379a11a00"
+    },
+    {
+      "file": "spec/schemas/theme.schema.json",
+      "gitBlob": "9f355695854ae69e163b6b761d00a50e29584462",
+      "bytes": 10947,
+      "sha256": "ccef0bf760c9690f18dee28d1fc0baed3b8e2a69e3ee8f097496eeb42e258bae"
+    },
+    {
+      "file": "spec/schemas/tone.schema.json",
+      "gitBlob": "fac10b314b0a7cc1b65679a1be187bc84ed24420",
+      "bytes": 5750,
+      "sha256": "7fbbf17e0985dff85606bb9ffdf7776d06e0dac9668f95ac994eeb826808e22b"
+    }
+  ],
+  "ajv": "8.20.0",
+  "ajvFormats": "3.0.1",
+  "literalAndDatasetRewrite": false,
+  "firstSixteenProjectedSlideObjectsEqual": true,
+  "inverseScope": "Whole parsed document deep equality; raw source bytes remain immutable and separately hash-verified",
+  "inputs": [
+    {
+      "name": "original-16",
+      "rawBytes": 48696,
+      "rawSha256": "e14be44e63a8bbe4e64c5bdd2b6d95194ed39dc5e67c09c5a6a1225d13396a29",
+      "projectedBytes": 47066,
+      "projectedSha256": "6309daf437296c2bc1161334dbea93d3b8b291105e3d6b30d436684ff3a55d2f",
+      "valid": true,
+      "changes": [
+        {
+          "kind": "alignment-enum",
+          "type": "Design.titleAlignment",
+          "parts": [
+            "design"
+          ],
+          "property": "titleAlignment",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "rename-property",
+          "type": "HeaderFooter zone",
+          "parts": [
+            "design",
+            "footer"
+          ],
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "rename-property",
+          "type": "HeaderFooter zone",
+          "parts": [
+            "design",
+            "footer"
+          ],
+          "before": "right",
+          "after": "end"
+        },
+        {
+          "kind": "rename-property",
+          "type": "Slide promoted region",
+          "parts": [
+            "slides",
+            4
+          ],
+          "before": "top+middle:left+center+right",
+          "after": "top+middle:start+center+end"
+        },
+        {
+          "kind": "rename-property",
+          "type": "Slide promoted region",
+          "parts": [
+            "slides",
+            4
+          ],
+          "before": "bottom:left+center+right",
+          "after": "bottom:start+center+end"
+        },
+        {
+          "kind": "rename-property",
+          "type": "Slide promoted region",
+          "parts": [
+            "slides",
+            5
+          ],
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "rename-property",
+          "type": "Slide promoted region",
+          "parts": [
+            "slides",
+            6
+          ],
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "columns",
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "columns",
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "columns",
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            0,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            0,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            0,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            1,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            1,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            1,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            2,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            2,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            2,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            3,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            3,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            3,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            4,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            4,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            4,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            5,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            5,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            5,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            6,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            6,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            6,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        }
+      ],
+      "inverseDeepEqual": true,
+      "rawAfterSha256": "e14be44e63a8bbe4e64c5bdd2b6d95194ed39dc5e67c09c5a6a1225d13396a29"
+    },
+    {
+      "name": "extended-36",
+      "rawBytes": 98976,
+      "rawSha256": "249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599",
+      "projectedBytes": 99024,
+      "projectedSha256": "a4a786065f187a556fb14f540ada02f6624f49fbf531685e79b3aad845e45e55",
+      "valid": true,
+      "changes": [
+        {
+          "kind": "alignment-enum",
+          "type": "Design.titleAlignment",
+          "parts": [
+            "design"
+          ],
+          "property": "titleAlignment",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "rename-property",
+          "type": "HeaderFooter zone",
+          "parts": [
+            "design",
+            "footer"
+          ],
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "rename-property",
+          "type": "HeaderFooter zone",
+          "parts": [
+            "design",
+            "footer"
+          ],
+          "before": "right",
+          "after": "end"
+        },
+        {
+          "kind": "rename-property",
+          "type": "Slide promoted region",
+          "parts": [
+            "slides",
+            4
+          ],
+          "before": "top+middle:left+center+right",
+          "after": "top+middle:start+center+end"
+        },
+        {
+          "kind": "rename-property",
+          "type": "Slide promoted region",
+          "parts": [
+            "slides",
+            4
+          ],
+          "before": "bottom:left+center+right",
+          "after": "bottom:start+center+end"
+        },
+        {
+          "kind": "rename-property",
+          "type": "Slide promoted region",
+          "parts": [
+            "slides",
+            5
+          ],
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "rename-property",
+          "type": "Slide promoted region",
+          "parts": [
+            "slides",
+            6
+          ],
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "columns",
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "columns",
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "columns",
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            0,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            0,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            0,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            1,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            1,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            1,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            2,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            2,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            2,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            3,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            3,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            3,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            4,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            4,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            4,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            5,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            5,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            5,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            6,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            6,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            8,
+            "table",
+            "rows",
+            6,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "rename-property",
+          "type": "Slide promoted region",
+          "parts": [
+            "slides",
+            20
+          ],
+          "before": "top+middle:left+center+right",
+          "after": "top+middle:start+center+end"
+        },
+        {
+          "kind": "rename-property",
+          "type": "Slide promoted region",
+          "parts": [
+            "slides",
+            20
+          ],
+          "before": "bottom:left+center+right",
+          "after": "bottom:start+center+end"
+        },
+        {
+          "kind": "rename-property",
+          "type": "Slide promoted region",
+          "parts": [
+            "slides",
+            21
+          ],
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "rename-property",
+          "type": "Slide promoted region",
+          "parts": [
+            "slides",
+            22
+          ],
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "columns",
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "columns",
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "columns",
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            0,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            0,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            0,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            1,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            1,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            1,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            2,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            2,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            2,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            3,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            3,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            3,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            4,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            4,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            4,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            5,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            5,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            5,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            6,
+            0,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            6,
+            1,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        },
+        {
+          "kind": "alignment-enum",
+          "type": "StyledTableCell TextStyle.align",
+          "parts": [
+            "slides",
+            24,
+            "table",
+            "rows",
+            6,
+            2,
+            "style"
+          ],
+          "property": "align",
+          "before": "left",
+          "after": "start"
+        }
+      ],
+      "inverseDeepEqual": true,
+      "rawAfterSha256": "249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599"
+    }
+  ]
+}

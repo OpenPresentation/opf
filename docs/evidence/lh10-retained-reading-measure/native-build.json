@@ -1,0 +1,310 @@
+{
+  "manifestVersion": 1,
+  "revision": "d78e13a314eed05af8dfdae03c46c452b25e5ccc",
+  "dirty": true,
+  "productSourcesMatchCommittedBytes": true,
+  "qualificationTarget": "unreleased034source",
+  "opfVersion": "0.33.0",
+  "node": "v24.20.0",
+  "nativeAcceptance": false,
+  "decks": [
+    {
+      "id": "batch13-s32",
+      "source": "source.opf.json",
+      "sourceSha256": "6069e2b5bb875db2a8a13c218f514f782ca923fa03798704b03bf13f659112e0",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "after.pptx",
+          "ok": true,
+          "sha256": "e50dd0fc395cf14eae063ccd4c289703ffe7126d5de6c163b60d442f42ab19db",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-1-long",
+      "source": "samples/section-1-long/source.opf.json",
+      "sourceSha256": "87eb2ad7e5028c2d71028769e0ea482eee540aad42f30c54487507e339668d4a",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/0/blocks/0",
+          "scope": "document",
+          "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate.",
+          "help": ""
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "samples/section-1-long/after/input.pptx",
+          "ok": true,
+          "sha256": "226a5120cec33501607c7583150db459c9f1bf424d256421244c81e7543898bf",
+          "findings": [
+            {
+              "ruleId": "pptx/layout-unplaced",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/blocks/0",
+              "scope": "document",
+              "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate.",
+              "help": ""
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-3-long",
+      "source": "samples/section-3-long/source.opf.json",
+      "sourceSha256": "0a9c57f5c56be737cedf0e2e116028f1dae315f2ae366931183244684d4c01d5",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/0/blocks/0",
+          "scope": "document",
+          "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate.",
+          "help": ""
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/0/blocks/1",
+          "scope": "document",
+          "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate.",
+          "help": ""
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/0/blocks/2",
+          "scope": "document",
+          "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate.",
+          "help": ""
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "samples/section-3-long/after/input.pptx",
+          "ok": true,
+          "sha256": "35db0731b9fdcaf4461bcbc678a71aad9bfd853c31a7b9bc9069306f6859b786",
+          "findings": [
+            {
+              "ruleId": "pptx/layout-unplaced",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/blocks/0",
+              "scope": "document",
+              "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate.",
+              "help": ""
+            },
+            {
+              "ruleId": "pptx/layout-unplaced",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/blocks/1",
+              "scope": "document",
+              "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate.",
+              "help": ""
+            },
+            {
+              "ruleId": "pptx/layout-unplaced",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/blocks/2",
+              "scope": "document",
+              "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate.",
+              "help": ""
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "statement-5-long",
+      "source": "samples/statement-5-long/source.opf.json",
+      "sourceSha256": "703d61dc9fd6f45bb7cc54979c01f98fa1cbea6e009084b6780488ed218375d4",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "samples/statement-5-long/after/input.pptx",
+          "ok": true,
+          "sha256": "fb813765980ae2d04cb1cea375bb337f0585b3328f4a3c72b57bcc60721109f0",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "closing-3-long",
+      "source": "samples/closing-3-long/source.opf.json",
+      "sourceSha256": "3130971a528078427bd7dcd859b11316c65a24e3a67d26adb6ac05e1eb3f8c05",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "samples/closing-3-long/after/input.pptx",
+          "ok": true,
+          "sha256": "b0c8989c018fd353b05b870362c48f40d55b6d68f3f6349efa8b1a1c5f726b50",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lh86-ltr",
+      "source": "samples/lh86-ltr/source.opf.json",
+      "sourceSha256": "11b4629105a96ddbf1d49c2be4a4228500fd39b260cae451a36540e390bb50da",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "samples/lh86-ltr/after/input.pptx",
+          "ok": true,
+          "sha256": "29ab295bb86af643403634039b063c44aaf8aa1e6ee072f853c6d780cf014a5e",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lh86-rtl",
+      "source": "samples/lh86-rtl/source.opf.json",
+      "sourceSha256": "a45e618bad45f7a742b5c6f4f8bc5f1dd41b590a94559c95884dd496773a9763",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "samples/lh86-rtl/after/input.pptx",
+          "ok": true,
+          "sha256": "ecc9bcb22acdb70138793898aa73d92137ee8440023baaaa702772c07647ad11",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

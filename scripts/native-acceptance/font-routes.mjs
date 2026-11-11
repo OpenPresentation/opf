@@ -38,7 +38,7 @@ export async function loadFontRouteSource(names) {
       {id:'neutrals',text:record.script==='Arab'?'() [] — ، ؛ . , %':'() [] — . , %'},
       {id:'mixed',text:`${samples[0].text} 0123456789 PowerPoint`},
     ];
-    const run=(text,weight,fontSize=18.75,lang=record.language)=>({text,fontFamily:record.requestedNativeFamily,fontSize,bold:weight===700,italic:false,lang});
+    const run=(text,weight,fontSize=18.75,language=record.language)=>({text,fontFamily:record.requestedNativeFamily,fontSize,bold:weight===700,italic:false,language});
     // Plain text lines avoid list marker/spacing allocation shrinking measurement rows.
     const lines=rows=>rows.flatMap((row,index)=>index?['\n',row]:[row]);
     const slides=manifest.styles.map(({weight})=>({

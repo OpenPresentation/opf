@@ -58,9 +58,9 @@ test('at places the shape outside an edge of the composed block, centered along 
   const short = 0.15 * Math.min(plan.width, plan.height);
   const [top, bottom, start, end, center] = compose([
     { shape: 'ellipse', at: { block: 'plan', edge: 'top' } },
-    { shape: 'rect', at: { block: 'plan', edge: 'bottom', offset: 10, width: 0.5, height: 40 } },
+    { shape: 'rect', at: { block: 'plan', edge: 'bottom', offset: 10, width: 0.5, heightPx: 40 } },
     { shape: 'rightArrow', at: { block: 'plan', edge: 'start' } },
-    { shape: 'rect', at: { block: 'plan', edge: 'end', offset: -20, width: 100 } },
+    { shape: 'rect', at: { block: 'plan', edge: 'end', offset: -20, widthPx: 100 } },
     { shape: 'star5', at: { block: 'plan', edge: 'center' } },
   ]).overlayShapes;
   // The preset's natural proportions with the shorter side at 15% of the block's shorter side.

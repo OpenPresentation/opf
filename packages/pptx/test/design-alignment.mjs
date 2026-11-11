@@ -9,11 +9,11 @@ import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 // anchor point as the renderer's preview, with and without outline measurement
 // (core only returns an accepted placement.alignment when outlines are measured).
 const measured = {fonts: await loadFonts()},dec=new TextDecoder();
-const native={left:'l',center:'ctr',right:'r'},anchor={start:'l',middle:'ctr',end:'r'};
+const native={start:'l',center:'ctr',end:'r'},anchor={start:'l',middle:'ctr',end:'r'};
 const attr=(tag,name)=>tag.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
 let lines=0;
-const combos=[['center','center'],['right','left'],['left','right'],[undefined,'center'],[undefined,undefined]];
-for(const options of [{},measured])for(const [width,height]of [[1280,720],[720,1280]])for(const [title,content]of combos)for(const [overrideTitle,overrideContent]of [['left','center'],['center',undefined]]) {
+const combos=[['center','center'],['end','start'],['start','end'],[undefined,'center'],[undefined,undefined]];
+for(const options of [{},measured])for(const [width,height]of [[1280,720],[720,1280]])for(const [title,content]of combos)for(const [overrideTitle,overrideContent]of [['start','center'],['center',undefined]]) {
   const design=Object.fromEntries(Object.entries({titleAlignment:title,contentAlignment:content}).filter(([,value])=>value));
   const override=Object.fromEntries(Object.entries({titleAlignment:overrideTitle,contentAlignment:overrideContent}).filter(([,value])=>value));
   const deck={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},...design},slides:[
@@ -30,7 +30,7 @@ for(const options of [{},measured])for(const [width,height]of [[1280,720],[720,1
       const path=`slides.${slideIndex}.${field}`;
       // RR-93a, WI-2: the tag and the subtitle sit in the title area and follow titleAlignment, unless the slide's own design sets contentAlignment.
       const followsTitle=field==='title'||((field==='tag'||field==='subtitle')&&slide.design?.contentAlignment===undefined);
-      const expected=native[(followsTitle?effective.titleAlignment:effective.contentAlignment)??'left'];
+      const expected=native[(followsTitle?effective.titleAlignment:effective.contentAlignment)??'start'];
       const previews=[...svgs[slideIndex].matchAll(/<text\b[^>]*>/g)].map(match=>match[0]).filter(tag=>attr(tag,'data-opf-path')===path);
       assert.ok(previews.length,`${path} preview lines`);
       for(const [index,preview]of previews.entries()) {

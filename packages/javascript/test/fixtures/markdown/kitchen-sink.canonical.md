@@ -83,10 +83,10 @@ second line
 ---
 
 <!-- slide: id=three -->
-<!-- block: id=left-col region=left -->
+<!-- block: id=left-col region=start -->
 Left text
 
-<!-- block: as=bullets region=right -->
+<!-- block: as=bullets region=end -->
 - right one
 - right two
 

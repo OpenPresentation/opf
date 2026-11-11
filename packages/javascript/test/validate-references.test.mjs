@@ -259,7 +259,7 @@ test('asset references diagnose missing registry entries and cycles without fetc
 			watermark: { src: 'asset:missing-watermark', opacity: 0.1 },
 			background: { type: 'image', src: 'asset:missing-background' },
 			footer: {
-				right: { image: { src: 'asset:missing-footer', alt: 'Keep' } },
+				end: { image: { src: 'asset:missing-footer', alt: 'Keep' } },
 			},
 		},
 		slides: [{ title: 'asset:literal-text', video: 'asset:missing-video' }],
@@ -272,7 +272,7 @@ test('asset references diagnose missing registry entries and cycles without fetc
 		[
 			'/assets/alias/src',
 			'/design/background/src',
-			'/design/footer/right/image/src',
+			'/design/footer/end/image/src',
 			'/design/watermark/src',
 			'/organization/logo/full/onLight',
 			'/slides/0/video',

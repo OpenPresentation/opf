@@ -1,0 +1,25 @@
+{
+  "source": "334dd11d95bc01c47f2f9269fa477c7f34804560",
+  "workerSha256": "8aea2e2774d4b07ffb3d98f482823b8385c7a37ccb7635757458133a34931bc4",
+  "node": "v24.20.0",
+  "controls": {
+    "circle": 20,
+    "curve": 26,
+    "point": 45,
+    "lifecycle": 14,
+    "font": 15
+  },
+  "mockReports": 1,
+  "archiveFiles": 420,
+  "mapped": {
+    "seconds": 207.1,
+    "pass": 6,
+    "skipped": 1,
+    "failed": [
+      "sparse painting-Linux.json.gz, exact tracked blob restored and check:text passes",
+      "Inherited treemap-category fallback PPTX archive strict digest mismatch"
+    ],
+    "unrunPptx": 241
+  },
+  "native": "No Office by agent. Old frozen1183pie5actualpasses and faileddoughnut/separate exact-owned cleanup retained; new helper pilot/full32case qualification remains owed"
+}

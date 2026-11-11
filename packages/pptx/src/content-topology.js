@@ -52,7 +52,7 @@ const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringi
 
 export const CONTENT_KINDS = Object.freeze(['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape']);
 export const ROOT_PAYLOAD_FIELDS = Object.freeze(['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram']);
-const HORIZONTAL = ['left', 'center', 'right', 'left+center', 'center+right', 'left+center+right'];
+const HORIZONTAL = ['start', 'center', 'end', 'start+center', 'center+end', 'start+center+end'];
 const VERTICAL = ['top', 'middle', 'bottom', 'top+middle', 'middle+bottom', 'top+middle+bottom'];
 export const REGION_KEYS = Object.freeze([...HORIZONTAL, ...VERTICAL, ...VERTICAL.flatMap(row => HORIZONTAL.map(column => `${row}:${column}`))]);
 const REGION_KEY_PATTERN = /^[a-z]+(\+[a-z]+)*(:[a-z]+(\+[a-z]+)*)?$/;
@@ -438,6 +438,23 @@ export function validateListBreaks(value) {
 // list's entry lines (`text`) and description lines (`description`) where the source states none: Look = {bold, color,
 // fontSize, fontFamily} (color '#RRGGBB', fontSize in points). Import removes a run value still equal to it, so inherited
 // formatting returns absent; a value edited in PowerPoint differs and is imported as observed. Never text.
+// Source scalar intent only; no words or formatting. Entries are [item, role].
+export function validateListScalars(value) {
+  if (!Array.isArray(value) || !value.length || value.length > MAX_LIST_PATHS) throw Error('Invalid list scalar record.');
+  const paths = new Set(); let total = 0;
+  for (const row of value) {
+    if (!Array.isArray(row) || row.length !== 2 || typeof row[0] !== 'string' || !LIST_PATH.test(row[0]) || paths.has(row[0]) || !Array.isArray(row[1]) || !row[1].length) throw Error('Invalid list scalar path.');
+    paths.add(row[0]); let previous = -1;
+    for (const entry of row[1]) {
+      if (!Array.isArray(entry) || entry.length !== 2 || !Number.isSafeInteger(entry[0]) || entry[0] < 0 || entry[0] >= MAX_LIST_BREAKS || !['text','description'].includes(entry[1]) || ++total > MAX_LIST_BREAKS) throw Error('Invalid list scalar entry.');
+      const order = entry[0] * 2 + (entry[1] === 'description' ? 1 : 0);
+      if (order <= previous) throw Error('Duplicate or unordered list scalar entry.');
+      previous = order;
+    }
+  }
+  return value;
+}
+
 const LOOK_KEYS = Object.freeze({
   bold: value => typeof value === 'boolean',
   color: value => typeof value === 'string' && /^#[0-9A-Fa-f]{6}$/.test(value),

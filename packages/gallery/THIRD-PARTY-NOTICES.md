@@ -4,7 +4,7 @@
 
 ## Lucide (`lucide`)
 
-- Package: [lucide-static](https://www.npmjs.com/package/lucide-static) 1.68.0
+- Package: [lucide-static](https://www.npmjs.com/package/lucide-static) 1.70.0
 - Homepage: https://lucide.dev
 - License: ISC
 - Copyright (c) 2026 Lucide Icons and Contributors; Copyright (c) 2013-present Cole Bemis

@@ -102,10 +102,20 @@ for (const expected of cases) {
     assert.equal(major.block.replace(/<a:(?:ea|cs) typeface="[^"]*"\/>/g, ''), themeFonts(vendored, 'majorFont').block.replace(/<a:(?:ea|cs) typeface="[^"]*"\/>/g, ''), `${expected.id} keeps the vendored per-script list`);
   }
 
-  // Runs (FF-05): slide runs name only the latin face, as PowerPoint writes them; an explicit run ea/cs typeface makes
-  // PowerPoint list an empty-name font. The East Asian and complex-script faces come from the theme slots above.
+  // Runs (FF-05/RR-105): theme script faces remain inherited. The Arabic
+  // proofing exception copies the chosen Latin face into eligible ASCII spans'
+  // CS slot; it must not change genuine Arabic or another script's runs.
   const slot = {eastAsian: 'ea', complexScript: 'cs', latin: 'latin'}[expected.role];
-  for (const other of ['ea', 'cs']) assert.deepEqual(runFaces(xml, other), new Set(), `${expected.id} run ${other} is not written`);
+  assert.deepEqual(runFaces(xml,'ea'),new Set(),`${expected.id} run ea is not written`);
+  assert.deepEqual(runFaces(xml,'cs'),expected.script==='Arab'?new Set([resolved.heading.latin,resolved.body.latin]):new Set(),`${expected.id} run cs matches only the Arabic-proofing Latin exception`);
+  if(expected.script==='Arab'){
+    const selected=[...slides(xml).matchAll(/<a:r>([\s\S]*?)<a:t>([^<]*)<\/a:t><\/a:r>/g)].filter(([,properties])=>/<a:cs\b/.test(properties));
+    assert.ok(selected.length,'The ASCII Latin exception is actually exercised');
+    for(const[,properties,text]of selected){
+      assert.match(text,/^[\x20-\x7e]+$/,'A genuine Arabic glyph never receives the Latin CS exception');
+      assert.equal(/<a:cs typeface="([^"]*)"/.exec(properties)?.[1],/<a:latin typeface="([^"]*)"/.exec(properties)?.[1],'Final Latin and CS typefaces agree');
+    }
+  }
   assert.deepEqual(partsMatching(xml, /^ppt\/notesSlides\/notesSlide\d+\.xml$/).filter(part => /<a:(?:ea|cs)\s+typeface="[^+"]/.test(part)), [], `${expected.id} notes runs name no ea/cs`);
   if (own) {
     // Chart text (whose latin/ea/cs FF-08 sets to the body font) takes the body script font.

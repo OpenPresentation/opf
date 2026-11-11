@@ -104,18 +104,18 @@
         "titleAlignment": {
           "type": "string",
           "enum": [
-            "left",
+            "start",
             "center",
-            "right"
+            "end"
           ],
           "description": "As design.titleAlignment of a deck."
         },
         "contentAlignment": {
           "type": "string",
           "enum": [
-            "left",
+            "start",
             "center",
-            "right"
+            "end"
           ],
           "description": "As design.contentAlignment of a deck."
         },
@@ -159,7 +159,7 @@
       "examples": [
         {
           "contentBox": true,
-          "titleAlignment": "left"
+          "titleAlignment": "start"
         }
       ]
     },

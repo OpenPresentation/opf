@@ -24,7 +24,7 @@ const metrics=[0,'',{value:42,unit:'ms',label:'Left\tRight  ',description:'Exact
   {value:'\t1\t%',unit:'ms',label:'\tBefore\tAfter  ',description:'\t'},
   {value:'\r\n\r\n\n',label:'\t  ',description:'\n'}];
 const cases=[];
-for(const family of ['Carlito','Roboto'])for(const [width,height]of [[1280,720],[540,960]])for(const align of ['left','center','right'])for(const [index,metric]of metrics.entries()){
+for(const family of ['Carlito','Roboto'])for(const [width,height]of [[1280,720],[540,960]])for(const align of ['start','center','end'])for(const [index,metric]of metrics.entries()){
   const id=`${family}-${width}-${align}-${index+1}`;
   const document={design:{dimensions:{widthInches:width/96,heightInches:height/96},contentAlignment:align,fontScheme:{id:'roboto',heading:family,body:family,code:family}},slides:[{composition:{minFontSize:24},metric}]};
   const before=JSON.stringify(document),bound=resolvePresentation(document,options).slides[0],svg=toSvg(document,1,options),item=bound.geometry.items[0];

@@ -1,0 +1,2 @@
+raw/*.gz -text
+metadata/*.gz -text

@@ -1,0 +1,980 @@
+{
+  "command": "validate",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\e1-033-after-02\\decks\\batch-02\\current-gallery.opf.json",
+    "sha256": "6ec1901791c4a5b480a491fdee241ad4eeb098579a406e3d533b9b8efa6f894b",
+    "bytes": 72637
+  },
+  "outputs": [],
+  "findings": [
+    {
+      "ruleId": "opf/chart-mapping-adapted",
+      "severity": "warning",
+      "category": "content",
+      "scope": "document",
+      "path": "/slides/0/blocks/1/chart/type",
+      "message": "a Pareto chart sorts one numeric series and draws its cumulative share; several numeric series are drawn as clustered columns in data order, with every series preserved; use one numeric series for a Pareto chart",
+      "help": "The mapping entry is ignored. Remove it, or name a different column.",
+      "definition": "packages/javascript/src/schema-check.ts",
+      "lookup": [
+        "opf",
+        "schema",
+        "presentation",
+        ""
+      ],
+      "validation": {
+        "path": "/slides/0/blocks/1/chart/type",
+        "message": "a Pareto chart sorts one numeric series and draws its cumulative share; several numeric series are drawn as clustered columns in data order, with every series preserved; use one numeric series for a Pareto chart",
+        "keyword": "opf",
+        "schemaPath": "#/x-opf-semantics",
+        "params": {
+          "code": "chart-mapping-adapted"
+        }
+      },
+      "slide": 0,
+      "slideId": "s01",
+      "location": {
+        "offset": 525,
+        "length": 8,
+        "line": 25,
+        "column": 21
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/6/title",
+      "message": "Slide 7 has the same title as slide 3: \"Signal Trend\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 6,
+      "slideId": "s07",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/6/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 5329,
+        "length": 14,
+        "line": 197,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/chart-mapping-adapted",
+      "severity": "warning",
+      "category": "content",
+      "scope": "document",
+      "path": "/slides/7/blocks/4/chart/type",
+      "message": "a Pareto chart sorts one numeric series and draws its cumulative share; several numeric series are drawn as clustered columns in data order, with every series preserved; use one numeric series for a Pareto chart",
+      "help": "The mapping entry is ignored. Remove it, or name a different column.",
+      "definition": "packages/javascript/src/schema-check.ts",
+      "lookup": [
+        "opf",
+        "schema",
+        "presentation",
+        ""
+      ],
+      "validation": {
+        "path": "/slides/7/blocks/4/chart/type",
+        "message": "a Pareto chart sorts one numeric series and draws its cumulative share; several numeric series are drawn as clustered columns in data order, with every series preserved; use one numeric series for a Pareto chart",
+        "keyword": "opf",
+        "schemaPath": "#/x-opf-semantics",
+        "params": {
+          "code": "chart-mapping-adapted"
+        }
+      },
+      "slide": 7,
+      "slideId": "s08",
+      "location": {
+        "offset": 9082,
+        "length": 8,
+        "line": 311,
+        "column": 21
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/8/title",
+      "message": "Slide 9 has the same title as slide 6: \"Why This Matters\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 8,
+      "slideId": "s09",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/8/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 9995,
+        "length": 18,
+        "line": 356,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/10/title",
+      "message": "Slide 11 has the same title as slide 6: \"Why This Matters\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 10,
+      "slideId": "s11",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/10/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 14685,
+        "length": 18,
+        "line": 458,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/11/title",
+      "message": "Slide 12 has the same title as slide 2: \"Execution Timeline\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 11,
+      "slideId": "s12",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/11/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 15370,
+        "length": 20,
+        "line": 482,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/layout-unplaced",
+      "severity": "warning",
+      "category": "layout",
+      "scope": "document",
+      "path": "/slides/13/blocks/6",
+      "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+      "help": "Paginate the slide, choose a layout with more room, pin the block to a region with room, or remove a block.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opflayout-unplaced",
+      "slide": 13,
+      "slideId": "s14",
+      "location": {
+        "offset": 20780,
+        "length": 501,
+        "line": 608,
+        "column": 9
+      }
+    },
+    {
+      "ruleId": "opf/layout-unplaced",
+      "severity": "warning",
+      "category": "layout",
+      "scope": "document",
+      "path": "/slides/13/blocks/7",
+      "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+      "help": "Paginate the slide, choose a layout with more room, pin the block to a region with room, or remove a block.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opflayout-unplaced",
+      "slide": 13,
+      "slideId": "s14",
+      "location": {
+        "offset": 21291,
+        "length": 504,
+        "line": 614,
+        "column": 9
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/16/title",
+      "message": "Slide 17 has the same title as slide 8: \"Demo Moment\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 16,
+      "slideId": "s17",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/16/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 25990,
+        "length": 13,
+        "line": 683,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/18/title",
+      "message": "Slide 19 has the same title as slide 6: \"Why This Matters\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 18,
+      "slideId": "s19",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/18/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 27558,
+        "length": 18,
+        "line": 739,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/24/title",
+      "message": "Slide 25 has the same title as slide 3: \"Signal Trend\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 24,
+      "slideId": "s25",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/24/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 35058,
+        "length": 14,
+        "line": 995,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/numbering-start-ignored",
+      "severity": "warning",
+      "category": "format",
+      "scope": "document",
+      "path": "/slides/25/blocks/5/items",
+      "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+      "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+      "definition": "packages/javascript/src/schema-check.ts",
+      "lookup": [
+        "opf",
+        "schema",
+        "presentation",
+        ""
+      ],
+      "validation": {
+        "path": "/slides/25/blocks/5/items",
+        "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+        "keyword": "opf",
+        "schemaPath": "#/x-opf-semantics",
+        "params": {
+          "code": "numbering-start-ignored"
+        }
+      },
+      "slide": 25,
+      "slideId": "s26",
+      "location": {
+        "offset": 38345,
+        "length": 204,
+        "line": 1112,
+        "column": 20
+      }
+    },
+    {
+      "ruleId": "opf/numbering-start-ignored",
+      "severity": "warning",
+      "category": "format",
+      "scope": "document",
+      "path": "/slides/27/blocks/1/items",
+      "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+      "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+      "definition": "packages/javascript/src/schema-check.ts",
+      "lookup": [
+        "opf",
+        "schema",
+        "presentation",
+        ""
+      ],
+      "validation": {
+        "path": "/slides/27/blocks/1/items",
+        "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+        "keyword": "opf",
+        "schemaPath": "#/x-opf-semantics",
+        "params": {
+          "code": "numbering-start-ignored"
+        }
+      },
+      "slide": 27,
+      "slideId": "s28",
+      "location": {
+        "offset": 39213,
+        "length": 204,
+        "line": 1145,
+        "column": 20
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/29/title",
+      "message": "Slide 30 has the same title as slide 13: \"Operating Model\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 29,
+      "slideId": "s30",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/29/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 42481,
+        "length": 17,
+        "line": 1274,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/32/title",
+      "message": "Slide 33 has the same title as slide 31: \"Decision Options\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 32,
+      "slideId": "s33",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/32/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 44205,
+        "length": 18,
+        "line": 1331,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/33/title",
+      "message": "Slide 34 has the same title as slide 3: \"Signal Trend\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 33,
+      "slideId": "s34",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/33/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 44754,
+        "length": 14,
+        "line": 1343,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/34/title",
+      "message": "Slide 35 has the same title as slide 31: \"Decision Options\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 34,
+      "slideId": "s35",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/34/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 45454,
+        "length": 18,
+        "line": 1363,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/35/title",
+      "message": "Slide 36 has the same title as slide 3: \"Signal Trend\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 35,
+      "slideId": "s36",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/35/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 47775,
+        "length": 14,
+        "line": 1394,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/chart-text-alternative",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/35/blocks/0/chart",
+      "message": "The chart on slide 36 has no alt text and no text beside it that states what it shows.",
+      "help": "Set chart.alt to a sentence with the chart's point and key numbers, or add a subtitle, text block or table with them, so the message does not depend on seeing the chart.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfchart-text-alternative",
+      "slide": 35,
+      "slideId": "s36",
+      "fixes": [
+        {
+          "id": "focus-alt",
+          "title": "Write alt text",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/35/blocks/0/chart",
+            "field": "alt"
+          }
+        },
+        {
+          "id": "focus-subtitle",
+          "title": "Write a subtitle",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/35/subtitle",
+            "field": "text"
+          }
+        }
+      ],
+      "location": {
+        "offset": 47838,
+        "length": 659,
+        "line": 1397,
+        "column": 20
+      }
+    },
+    {
+      "ruleId": "opf/chart-mapping-adapted",
+      "severity": "warning",
+      "category": "content",
+      "scope": "document",
+      "path": "/slides/35/blocks/0/chart/type",
+      "message": "a Pareto chart sorts one numeric series and draws its cumulative share; several numeric series are drawn as clustered columns in data order, with every series preserved; use one numeric series for a Pareto chart",
+      "help": "The mapping entry is ignored. Remove it, or name a different column.",
+      "definition": "packages/javascript/src/schema-check.ts",
+      "lookup": [
+        "opf",
+        "schema",
+        "presentation",
+        ""
+      ],
+      "validation": {
+        "path": "/slides/35/blocks/0/chart/type",
+        "message": "a Pareto chart sorts one numeric series and draws its cumulative share; several numeric series are drawn as clustered columns in data order, with every series preserved; use one numeric series for a Pareto chart",
+        "keyword": "opf",
+        "schemaPath": "#/x-opf-semantics",
+        "params": {
+          "code": "chart-mapping-adapted"
+        }
+      },
+      "slide": 35,
+      "slideId": "s36",
+      "location": {
+        "offset": 47860,
+        "length": 8,
+        "line": 1398,
+        "column": 21
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/36/title",
+      "message": "Slide 37 has the same title as slide 2: \"Execution Timeline\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 36,
+      "slideId": "s37",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/36/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 48588,
+        "length": 20,
+        "line": 1435,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/layout-unplaced",
+      "severity": "warning",
+      "category": "layout",
+      "scope": "document",
+      "path": "/slides/38/blocks/6",
+      "message": "No region of the layout has room for this block; it is drawn in 'pillars' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+      "help": "Paginate the slide, choose a layout with more room, pin the block to a region with room, or remove a block.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opflayout-unplaced",
+      "slide": 38,
+      "slideId": "s39",
+      "location": {
+        "offset": 51090,
+        "length": 42,
+        "line": 1509,
+        "column": 9
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/39/title",
+      "message": "Slide 40 has the same title as slide 6: \"Why This Matters\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 39,
+      "slideId": "s40",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/39/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 51188,
+        "length": 18,
+        "line": 1516,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/layout-unplaced",
+      "severity": "warning",
+      "category": "layout",
+      "scope": "document",
+      "path": "/slides/41/blocks/6",
+      "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+      "help": "Paginate the slide, choose a layout with more room, pin the block to a region with room, or remove a block.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opflayout-unplaced",
+      "slide": 41,
+      "slideId": "s42",
+      "location": {
+        "offset": 56831,
+        "length": 679,
+        "line": 1648,
+        "column": 9
+      }
+    },
+    {
+      "ruleId": "opf/layout-unplaced",
+      "severity": "warning",
+      "category": "layout",
+      "scope": "document",
+      "path": "/slides/41/blocks/7",
+      "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+      "help": "Paginate the slide, choose a layout with more room, pin the block to a region with room, or remove a block.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opflayout-unplaced",
+      "slide": 41,
+      "slideId": "s42",
+      "location": {
+        "offset": 57520,
+        "length": 508,
+        "line": 1654,
+        "column": 9
+      }
+    },
+    {
+      "ruleId": "opf/layout-unplaced",
+      "severity": "warning",
+      "category": "layout",
+      "scope": "document",
+      "path": "/slides/41/blocks/8",
+      "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+      "help": "Paginate the slide, choose a layout with more room, pin the block to a region with room, or remove a block.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opflayout-unplaced",
+      "slide": 41,
+      "slideId": "s42",
+      "location": {
+        "offset": 58038,
+        "length": 501,
+        "line": 1660,
+        "column": 9
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/42/title",
+      "message": "Slide 43 has the same title as slide 6: \"Why This Matters\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 42,
+      "slideId": "s43",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/42/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 58622,
+        "length": 18,
+        "line": 1671,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/44/title",
+      "message": "Slide 45 has the same title as slide 1: \"Decision Rule\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 44,
+      "slideId": "s45",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/44/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 63457,
+        "length": 15,
+        "line": 1738,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/45/title",
+      "message": "Slide 46 has the same title as slide 29: \"Decision and Follow Through\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 45,
+      "slideId": "s46",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/45/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 64560,
+        "length": 29,
+        "line": 1781,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/46/title",
+      "message": "Slide 47 has the same title as slide 3: \"Signal Trend\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 46,
+      "slideId": "s47",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/46/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 65479,
+        "length": 14,
+        "line": 1805,
+        "column": 16
+      }
+    },
+    {
+      "ruleId": "opf/chart-colors-adjusted",
+      "severity": "warning",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/47/blocks/4/chart/colors/0",
+      "message": "Chart colour 1 (#E67E22) has 2.8:1 contrast against the slide background (#FFFFFF); it is drawn lighter or darker to reach 3:1.",
+      "help": "Choose a colour that already has at least 3:1 contrast against the slide background, so the chart shows the colour you wrote.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfchart-colors-adjusted",
+      "slide": 47,
+      "slideId": "s48",
+      "measured": {
+        "contrast": 2.85,
+        "panel": "#FFFFFF"
+      },
+      "location": {
+        "offset": 68741,
+        "length": 9,
+        "line": 1940,
+        "column": 15
+      }
+    },
+    {
+      "ruleId": "opf/text-contrast",
+      "severity": "warning",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/49/text/1/color",
+      "message": "Coloured text colour #1B49CB on #2874A6 has a contrast ratio of 1.45:1; 3:1 is needed for large text.",
+      "help": "Pick a colour with enough contrast against the background, or remove this colour override so the theme chooses a readable text colour.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opftext-contrast",
+      "slide": 49,
+      "slideId": "s50",
+      "measured": {
+        "ratio": 1.45,
+        "needed": 3,
+        "large": true,
+        "sizePt": 42,
+        "textColor": "#1B49CB",
+        "backgroundColor": "#2874A6"
+      },
+      "fixes": [
+        {
+          "id": "use-readable-color",
+          "title": "Use the slide text colour",
+          "kind": "patch",
+          "safe": true,
+          "patch": [
+            {
+              "op": "replace",
+              "path": "/slides/49/text/1/color",
+              "value": "text"
+            }
+          ]
+        }
+      ],
+      "location": {
+        "offset": 72493,
+        "length": 9,
+        "line": 2058,
+        "column": 20
+      }
+    },
+    {
+      "ruleId": "opf/duplicate-slide-title",
+      "severity": "info",
+      "category": "accessibility",
+      "scope": "document",
+      "path": "/slides/49/title",
+      "message": "Slide 50 has the same title as slide 6: \"Why This Matters\".",
+      "help": "Make the titles distinct so each slide can be told apart in an outline or by assistive technology.",
+      "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfduplicate-slide-title",
+      "slide": 49,
+      "slideId": "s50",
+      "fixes": [
+        {
+          "id": "focus-title",
+          "title": "Edit the title",
+          "kind": "focus",
+          "safe": true,
+          "focus": {
+            "path": "/slides/49/title",
+            "field": "title"
+          }
+        }
+      ],
+      "location": {
+        "offset": 72269,
+        "length": 18,
+        "line": 2052,
+        "column": 16
+      }
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 13,
+    "info": 20
+  },
+  "valid": true,
+  "schemaValid": true,
+  "checks": {
+    "syntax": "checked",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "checked",
+    "content": "checked",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "not-checked"
+  },
+  "file": "C:\\opf-work\\e1-033-after-02\\decks\\batch-02\\current-gallery.opf.json",
+  "sha256": "6ec1901791c4a5b480a491fdee241ad4eeb098579a406e3d533b9b8efa6f894b",
+  "opfVersion": "0.33.0"
+}

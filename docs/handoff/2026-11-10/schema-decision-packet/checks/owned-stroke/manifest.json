@@ -1,0 +1,74 @@
+{
+  "base": "bb1148c94",
+  "scope": "PPTX dist built from ed51 plus bb1148 chart repairs, before table284/common build; source checkout1a4 is not claimed as a newly built common runtime.",
+  "runtimeHashes": {
+    "index": "8d78d28ad2d0d3ebd487d09a7c56c271aa6c235f9fff5e5399f09c319be735ce",
+    "chartReferences": "8c6fd7cf0f9c85355bcf11389b20fd4fa3c74721ce5f83452370cbebfaba733b"
+  },
+  "zip": {
+    "bytes": 221999,
+    "sha256": "39f7c3463e9bfcd03a3c105bf87a31bb602abfb6258dcf752277a6547fdf47d5"
+  },
+  "entries": [
+    {
+      "path": "0-line-edited.pptx",
+      "bytes": 25733,
+      "sha256": "81f9c2b38782b61b06b155b22e060fe8f6d927c2d364b8643f779caaff082b41"
+    },
+    {
+      "path": "1-line-edited.pptx",
+      "bytes": 25715,
+      "sha256": "1a4f34538a9dc82879dfcbd5138b43713f8a0af29dc4b9bac59f16c1e6a1cfb0"
+    },
+    {
+      "path": "2-line-edited.pptx",
+      "bytes": 25713,
+      "sha256": "37d711cda2e1c636d0c6ed70d5ced6346193d73c6751f56da9e2c6cb6a7c0bc7"
+    },
+    {
+      "path": "3-line-edited.pptx",
+      "bytes": 25735,
+      "sha256": "43c17c9c78cf9b2249c680d8fca05f89ad8ab44508c0916d02d6c2932b8ade86"
+    },
+    {
+      "path": "4-bar-edited.pptx",
+      "bytes": 26703,
+      "sha256": "4f729a1a4ddf1fb4641c16298adf05286ac894d72793baf644001ba435a76127"
+    },
+    {
+      "path": "5-bar-edited.pptx",
+      "bytes": 26685,
+      "sha256": "370ff918923560407d58e1616ec0ea8700eb1ecff94a292f7e10e569bac657fa"
+    },
+    {
+      "path": "6-bar-edited.pptx",
+      "bytes": 26686,
+      "sha256": "318c5415c28e81d6fa6a75ca38e33776e6d420884e00b5c961b1b8017b858909"
+    },
+    {
+      "path": "7-bar-edited.pptx",
+      "bytes": 26705,
+      "sha256": "603eb134e2d40ccb53b4b512cf4d9d019745f64c0365db4e5c7ecf96b2640be2"
+    },
+    {
+      "path": "bar-original.pptx",
+      "bytes": 26695,
+      "sha256": "b03947aaf7c6cf48c3bd1c7866023b3fb2a1eeecb27db913453f4208541f8326"
+    },
+    {
+      "path": "line-original.pptx",
+      "bytes": 25725,
+      "sha256": "381a100833c5b915caf4989e0214cc4270ec138ec73ab8b3134f7228fcde1eb5"
+    },
+    {
+      "path": "original-console.log",
+      "bytes": 4684,
+      "sha256": "81c2773297b3814d8ce59290830daf35eb46f89eb813fc05cf3be9b393adc4d6"
+    },
+    {
+      "path": "results.json",
+      "bytes": 4861,
+      "sha256": "77013004a6b9b182a145bf070655db5ee63406567c80e19b9837ba20ca81d565"
+    }
+  ]
+}

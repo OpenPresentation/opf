@@ -115,8 +115,8 @@ describe('numbering', () => {
   });
   test('reading order is regions (sorted keys), then blocks, then the root payload', () => {
     const paths = [];
-    walkCitationRuns({ 'top:right': { text: [{ text: 'r', cite: 'a' }] }, left: { blocks: [{ bullets: [{ text: [{ text: 'b', cite: 'a' }] }] }] } }, 'slides.0', entry => paths.push(entry.path));
-    assert.deepEqual(paths, ['slides.0.left.blocks.0.bullets.0.text.0', 'slides.0.top:right.text.0']);
+    walkCitationRuns({ 'top:end': { text: [{ text: 'r', cite: 'a' }] }, start: { blocks: [{ bullets: [{ text: [{ text: 'b', cite: 'a' }] }] }] } }, 'slides.0', entry => paths.push(entry.path));
+    assert.deepEqual(paths, ['slides.0.start.blocks.0.bullets.0.text.0', 'slides.0.top:end.text.0']);
   });
   test('slideCitations continues the deck numbering for a slide object that is not the document slide', () => {
     const document = deck();
@@ -312,9 +312,9 @@ describe('captions', () => {
     for (const item of slide.items.filter(item => item.caption)) assert.ok(item.caption.box.height <= (item.caption.box.height + item.box.height) * 0.35 + 24);
   });
   test('captionSettings normalizes every caption form', () => {
-    assert.deepEqual(captionSettings('a'), { text: 'a', position: 'below', align: 'left' });
-    assert.deepEqual(captionSettings([{ text: 'a' }]), { text: [{ text: 'a' }], position: 'below', align: 'left' });
-    assert.deepEqual(captionSettings({ text: 'a', position: 'above', align: 'right' }), { text: 'a', position: 'above', align: 'right' });
+    assert.deepEqual(captionSettings('a'), { text: 'a', position: 'below', align: 'start' });
+    assert.deepEqual(captionSettings([{ text: 'a' }]), { text: [{ text: 'a' }], position: 'below', align: 'start' });
+    assert.deepEqual(captionSettings({ text: 'a', position: 'above', align: 'end' }), { text: 'a', position: 'above', align: 'end' });
     assert.equal(captionSettings(undefined), undefined);
   });
 });

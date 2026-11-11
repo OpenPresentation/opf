@@ -2,7 +2,7 @@
 // load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
 import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, textColorForFill, chartColorForFill,
-  resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform, stackedText, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
+  resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform, stackedText, resolveScriptFonts, paragraphDirection, physicalAlignment, itemAlignment, patternRuns, isolateNumbers,
   metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
   arrangementPaint, colorContrast,
@@ -89,54 +89,54 @@ const ROOT_PAYLOAD_FIELDS = [
 ];
 
 const PROMOTED_REGION_KEYS = [
-  "left",
+  "start",
   "center",
-  "right",
-  "left+center",
-  "center+right",
-  "left+center+right",
+  "end",
+  "start+center",
+  "center+end",
+  "start+center+end",
   "top",
   "middle",
   "bottom",
   "top+middle",
   "middle+bottom",
   "top+middle+bottom",
-  "top:left",
+  "top:start",
   "top:center",
-  "top:right",
-  "top:left+center",
-  "top:center+right",
-  "top:left+center+right",
-  "middle:left",
+  "top:end",
+  "top:start+center",
+  "top:center+end",
+  "top:start+center+end",
+  "middle:start",
   "middle:center",
-  "middle:right",
-  "middle:left+center",
-  "middle:center+right",
-  "middle:left+center+right",
-  "bottom:left",
+  "middle:end",
+  "middle:start+center",
+  "middle:center+end",
+  "middle:start+center+end",
+  "bottom:start",
   "bottom:center",
-  "bottom:right",
-  "bottom:left+center",
-  "bottom:center+right",
-  "bottom:left+center+right",
-  "top+middle:left",
+  "bottom:end",
+  "bottom:start+center",
+  "bottom:center+end",
+  "bottom:start+center+end",
+  "top+middle:start",
   "top+middle:center",
-  "top+middle:right",
-  "top+middle:left+center",
-  "top+middle:center+right",
-  "top+middle:left+center+right",
-  "middle+bottom:left",
+  "top+middle:end",
+  "top+middle:start+center",
+  "top+middle:center+end",
+  "top+middle:start+center+end",
+  "middle+bottom:start",
   "middle+bottom:center",
-  "middle+bottom:right",
-  "middle+bottom:left+center",
-  "middle+bottom:center+right",
-  "middle+bottom:left+center+right",
-  "top+middle+bottom:left",
+  "middle+bottom:end",
+  "middle+bottom:start+center",
+  "middle+bottom:center+end",
+  "middle+bottom:start+center+end",
+  "top+middle+bottom:start",
   "top+middle+bottom:center",
-  "top+middle+bottom:right",
-  "top+middle+bottom:left+center",
-  "top+middle+bottom:center+right",
-  "top+middle+bottom:left+center+right"
+  "top+middle+bottom:end",
+  "top+middle+bottom:start+center",
+  "top+middle+bottom:center+end",
+  "top+middle+bottom:start+center+end"
 ];
 
 
@@ -591,13 +591,15 @@ function bindSlide(presentation, index, context) {
   const blocks = blockContent(slide, slidePath);
 
   const design = resolveDesign(presentation, slide, slideContext);
+  // Private native-font analysis maps authored roles before planning; generated fallback names remain raw.
+  if (context.mapInputFamily) design.fonts = Object.fromEntries(Object.entries(design.fonts).map(([role, family]) => [role, context.mapInputFamily(family)]));
   // Script fonts (FF-19): each text run is measured and drawn with its script
   // slot's face; the latin slot stays the design font scheme's family.
   const scriptFonts = createScriptFonts(scriptProfile(presentation, index, design, context), context.options.textMeasurement, {
     glyphFallback: context.options.glyphFallback,
     onFallback: note => reportGlyphFallback(context, note)
   });
-  // FA-13: a run with its own language (TextRun.lang, which core puts on the fragment style as `lang`) is measured and drawn with the
+  // FA-13: a run with its own language (TextRun.language, which core puts on the fragment style as `lang`) is measured and drawn with the
   // script fonts of that language (the Japanese or the Simplified Chinese face for Han text); every other run uses the deck's.
   const languageScripts = new Map();
   const scriptFontsFor = lang => {
@@ -620,6 +622,14 @@ function bindSlide(presentation, index, context) {
     const pick = style => scriptFontsFor(style?.lang)?.textMeasurement ?? deckMeasurement;
     textMeasurement = { ...deckMeasurement, measure: (text, size, style) => pick(style).measure(text, size, style) };
     if (typeof deckMeasurement.outlineBounds === "function") textMeasurement.outlineBounds = (text, size, style) => (pick(style).outlineBounds ?? deckMeasurement.outlineBounds)(text, size, style);
+  }
+  // Only the outer native preparation resolver retains substituted chosen families/weights. Raw glyph planning stays physical.
+  if (context.resolveInputStyle && textMeasurement) textMeasurement = {...textMeasurement, resolveStyle: context.resolveInputStyle};
+  if (context.mapInputFamily && textMeasurement) {
+    const raw = textMeasurement, style = value => value && typeof value.fontFamily === "string" ? {...value, fontFamily: context.mapInputFamily(value.fontFamily)} : value;
+    textMeasurement = {...raw, measure: (text, size, value) => raw.measure(text, size, style(value))};
+    for (const name of ["resolveStyle", "resolveFont"]) if (typeof raw[name] === "function") textMeasurement[name] = (value, ...rest) => raw[name](style(value), ...rest);
+    if (typeof raw.outlineBounds === "function") textMeasurement.outlineBounds = (text, size, value) => raw.outlineBounds(text, size, style(value));
   }
   // fontScheme.accent (the tag and quote text) takes the same look-alike policy.
   // RR-17 (FF-41): a family that names its weight (Arial Black, Segoe UI Semibold and Light) keeps its own name through composition, so each run
@@ -887,7 +897,10 @@ function renderImageBlock(item, bound, options) {
   if (!image) throw new OPFRenderError("missing-image-geometry", "Image rendering requires a coordinated core build with image block geometry (ComposedItem.image).", { path: item.path });
   const picture = renderImage(item, image.box, bound, { ...options, imageFit: image.fit, imageFocus: image.focus, imagePicture: image.picture });
   const trace = options.trace && image.placement ? { "data-opf-image-placement": image.placement.edge } : {};
-  if (isImagePlaceholder(picture)) return Object.keys(trace).length ? tag("g", trace, picture) : picture;
+  const labels = (image.callouts ?? []).map(callout => tag('g', options.trace ? {'data-opf-image-callout': callout.path} : {},
+    tag('rect', {x: callout.box.x, y: callout.box.y, width: callout.box.width, height: callout.box.height, fill: bound.design.colors.background}) +
+    renderTextBox(callout.text, callout.textBox, bound, {path: callout.path + '.text', fit: callout.fit, textStyle: callout.textStyle, fill: bound.design.colors.text, align: 'center', diagnosticsHandled: true, options}))).join('');
+  if (isImagePlaceholder(picture)) return labels || Object.keys(trace).length ? tag('g', trace, picture + labels) : picture;
   const id = `opf-s${bound.index + 1}-image-${item.path.replace(/[^A-Za-z0-9]+/g, "-")}`, shape = image.shape, defs = [];
   // A sketched stroke (core stroke.sketched) clips the picture to its sketched outline, as PowerPoint draws it.
   const sketched = image.stroke?.sketched?.fills[0];
@@ -905,6 +918,7 @@ function renderImageBlock(item, bound, options) {
     children.push(stroke.elements);
   }
   if (image.overlay) children.push(renderImageOverlay(image.overlay, bound, options));
+  if (labels) children.push(labels);
   if (children.length === 2 && !children[0] && !Object.keys(trace).length) return pixels;
   return tag("g", trace, children.filter(Boolean).join(""));
 }
@@ -1013,11 +1027,15 @@ function renderArrangements(bound, options) {
       const {x, y, width, height} = arrangement.background;
       parts.push(tag('path', {...HIDDEN, d: `M${n(x + width / 2)} ${n(y)} L${n(x + width)} ${n(y + height / 2)} L${n(x + width / 2)} ${n(y + height)} L${n(x)} ${n(y + height / 2)} Z`, fill: paint.background.hex}));
     }
+    for(const edge of arrangement.connectors??[])parts.push(tag('path',{...HIDDEN,d:'M'+edge.points.map(([x,y])=>n(x)+' '+n(y)).join(' L'),fill:'none',stroke:paint.fill.hex,'stroke-width':n(arrangement.lineWidth),'stroke-linecap':'butt','stroke-linejoin':'miter'}));
     for (const node of arrangement.nodes) {
       const trace = options.trace && node.path ? {'data-opf-arrangement-path': node.path} : {};
-      if (node.points) parts.push(tag('path', {...HIDDEN, d: `M${node.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill, ...stroke, ...trace}));
-      else if (node.preset === 'ellipse') parts.push(cycleCircle(node, fill, stroke, trace));
-      else parts.push(tag('rect', {...HIDDEN, x: n(node.box.x), y: n(node.box.y), width: n(node.box.width), height: n(node.box.height), rx: n(node.radius ?? 0), fill, ...stroke, ...trace}));
+      if(node.background)parts.push(tag('rect',{...HIDDEN,x:n(node.background.x),y:n(node.background.y),width:n(node.background.width),height:n(node.background.height),rx:n(node.radius??0),fill:paint.fill.hex,...stroke,...trace}));
+      const nodeFill=arrangement.kind==='hierarchy'?paint.line.hex:fill,nodeStroke=arrangement.kind==='hierarchy'?{...stroke,stroke:paint.fill.hex}:stroke,alpha=arrangement.kind==='venn'&&node.preset==='ellipse'?.5:arrangement.kind==='hierarchy'?.9:1;
+      const nodePaint=alpha===1?nodeStroke:{...nodeStroke,'fill-opacity':alpha};
+      if (node.points) parts.push(tag('path', {...HIDDEN, d: `M${node.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill:nodeFill, ...nodePaint, ...trace}));
+      else if (node.preset === 'ellipse') parts.push(cycleCircle(node, nodeFill, nodePaint, trace));
+      else parts.push(tag('rect', {...HIDDEN, x: n(node.box.x), y: n(node.box.y), width: n(node.box.width), height: n(node.box.height), rx: n(node.radius ?? 0), fill:nodeFill, ...nodePaint, ...trace}));
       // SH-18: a cycle's arrow after its node, as PowerPoint stacks them (an arrow of two entries runs under the next circle).
       for (const arrow of arrangement.arrows?.filter(entry => entry.index === node.index) ?? []) parts.push(cycleArrowPath(arrow, paint.arrow.hex));
     }
@@ -1711,11 +1729,13 @@ function renderTimeline(item, box, bound, options) {
   const layout=item.timelineLayout;
   if(!layout)throw new OPFRenderError('missing-timeline-layout','Timeline rendering requires a coordinated core build with shared timeline geometry.',{path:item.path});
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
+  const background=bound.design.backgroundColor??bound.design.colors.background;
   const children=[tag('line',{...HIDDEN,...layout.connector,stroke:bound.design.colors.border,'stroke-width':3*scale,...traceAttrs(options,item.path)})];
+  for(const range of layout.ranges??[])children.push(tag('rect',{...HIDDEN,...range.box,fill:bound.design.colors.primary,'fill-opacity':.32,stroke:background,'stroke-width':2*scale,...traceAttrs(options,range.path),...(options.trace?{'data-opf-timeline-range':range.eventIndex}:{})}));
+  for(const link of layout.rangeLinks??[])children.push(tag('line',{...HIDDEN,x1:link.x1,y1:link.y1,x2:link.x2,y2:link.y2,stroke:bound.design.colors.border,'stroke-width':scale,...traceAttrs(options,link.path),...(options.trace?{'data-opf-timeline-range-link':link.eventIndex}:{})}));
   // LH-121: the connector up to the current event in the primary color, over the border-colored rest.
   if(layout.progress)children.push(tag('line',{...HIDDEN,...layout.progress,stroke:bound.design.colors.primary,'stroke-width':3*scale,...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-progress':'true'}:{})}));
   // FA-11: status colors come from the deck (core's timelineMarkerShapes / timelineTextColor); a marker with no status draws the plain primary circle.
-  const background=bound.design.backgroundColor??bound.design.colors.background;
   const statusColors={background,primary:bound.design.colors.primary,text:bound.design.colors.text,mutedText:bound.design.colors.mutedText};
   for(const marker of layout.markers){
     if(!marker.status){
@@ -1744,7 +1764,7 @@ function renderTimeline(item, box, bound, options) {
 
 function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, alignment:bound.geometry.design.contentAlignment, ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {})});
+  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, alignment:itemAlignment(bound.geometry.design.contentAlignment), ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {})});
   const children = [];
   // LH-113: a highlighted row (table.highlight, or the rows the slide's texts name) draws on an accent tint of the surface.
   const highlightFill = layout.rows.some((row) => row.cells.some((cell) => cell.highlighted)) ? tableHighlightColor(bound.design.colors.surface, bound.design.colors.primary, bound.design.colors.text) : undefined;
@@ -1815,7 +1835,8 @@ function renderTableBorders(defaultEdges, explicitEdges, scale, bound, options) 
       ? [start,axis.fixed,end,axis.fixed] : [axis.fixed,start,axis.fixed,end]}));
   });
   return [...defaults,...explicitEdges].flatMap(({coordinates:[x1,y1,x2,y2],border,path}) => {
-    const width = border ? border.width * scale : 1;
+    // An explicit border without a width keeps the table rule's own (one slide pixel).
+    const width = border?.width != null ? border.width * scale : 1;
     if (width === 0) return [];
     const stroke = border?.color == null
       ? defaultColor
@@ -1868,7 +1889,7 @@ function renderDiagram(item, box, bound, options) {
 function renderChart(item, box, bound, options) {
   // Catalog chart types preview the native
   // construct opf-pptx exports; other ids keep the legacy single-series preview.
-  const rendered = renderCatalogChart(item, box, bound, options, { tag, traceAttrs, stableNumber, renderTextBox, reportDiagnostic });
+  const rendered = renderCatalogChart(item, box, bound, options, { tag, traceAttrs, stableNumber, renderTextBox, reportDiagnostic, resolveColorRef: (value, fallback) => resolveColorRef(value, bound, fallback) });
   if (rendered) return rendered;
   const chart = item.value ?? {};
   const chartType = chart.type ?? engineDefaults.chartType;
@@ -2302,7 +2323,7 @@ function trimRichLineEdges(line,textMeasurement) {
 
 function renderRichLines(value,fit,box,bound,config) {
   for (const run of value) assertXmlText(typeof run === 'string' ? run : run.text, config.path);
-  const logicalAlignment=fit.placement?.alignment??config.align??bound.geometry.design.contentAlignment;
+  const logicalAlignment=fit.placement?.alignment??config.align??itemAlignment(bound.geometry.design.contentAlignment);
   // Each line takes its paragraph's direction from core (every wrapped line shares it) and its physical edge from that.
   const lineAlignment=index=>fit.placement?.lines[index]?.alignment??physicalAlignment(logicalAlignment,fit.directions?.[index]);
   // A rich quote body draws its quotation marks inside the first and last run; config.textOffset (-1) keeps every traced offset on the authored text.
@@ -2426,7 +2447,7 @@ function renderTextBox(text, box, bound, config) {
   const totalHeight = fit.lines.length * fit.lineHeight;
   const startY = config.verticalAlign === "middle"
     ? box.y + Math.max(0, (box.height - totalHeight) / 2) + size : box.y + size;
-  const logicalAlignment=fit.placement?.alignment??config.align??bound.geometry.design.contentAlignment;
+  const logicalAlignment=fit.placement?.alignment??config.align??itemAlignment(bound.geometry.design.contentAlignment);
   const type = config.fontFamily === bound.design.fonts.code ? "monospace" : bound.design.fontScheme.type;
   const source = String(text ?? ""), boxRtl = paragraphRtl(bound, source);
   // LH-76: one part of a split "Topic: qualifier" title traces its source ranges in the authored title, the value at its path.
@@ -2615,9 +2636,9 @@ deckInternals.openDeck = (input, options = {}) => {
       const slideContext = resolveContext(presentation, index, { presentation, options: drawn });
       return resolveDesign(presentation, slideContext.slide, slideContext);
     },
-    bind(index, textMeasurement = drawn.textMeasurement) {
+    bind(index, textMeasurement = drawn.textMeasurement, {mapInputFamily, resolveInputStyle} = {}) {
       measurements[index] = textMeasurement;
-      resolved.slides[index] = bindSlide(presentation, index, { presentation, options: { ...drawn, textMeasurement } });
+      resolved.slides[index] = bindSlide(presentation, index, { presentation, options: { ...drawn, textMeasurement }, mapInputFamily, resolveInputStyle });
     },
     render(index) { return renderResolvedSlide(resolved, index, { ...drawn, textMeasurement: measurements[index] }); },
   };

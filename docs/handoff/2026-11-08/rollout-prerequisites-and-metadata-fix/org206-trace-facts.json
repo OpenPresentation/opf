@@ -1,0 +1,419 @@
+{
+  "kind": "source-only diagnostic trace facts",
+  "createdAt": "2026-11-09T03:56:48.021Z",
+  "repository": "Data-Advantage/openpresentation-site",
+  "pullRequest": 206,
+  "sourceHead": "60a646189f43ee7cc7a2af086fb403e18ca4443c",
+  "sourceTree": "402518ee4c89b54f5b408cf7f65c6144f0c151a4",
+  "workflowRun": "42556826198",
+  "qualificationJob": "128966638702",
+  "immutableDeployment": {
+    "id": "b8cdc0d3-d707-4034-9492-441d5aaa2ab2",
+    "url": "https://b8cdc0d3-openpresentation-site.michael-136.workers.dev"
+  },
+  "artifacts": {
+    "githubArtifactId": "13648237818",
+    "outer": {
+      "path": "C:/opf-work/release-033-artifacts/org206-native-failed-qualification-13648237818.zip",
+      "bytes": 15658071,
+      "sha256": "5b2b3c4dfab4eb9f5585f8b85909f725a5746ad4e3fc36c2621a1b3b5a628e3c"
+    },
+    "innerTrace": {
+      "path": "C:/opf-work/release-033-artifacts/org206-native-failed-qualification-13648237818/native-public/playground-preview-fit-des-8fb55-s-in-Both-and-Preview-views-e2e/trace.zip",
+      "bytes": 15594424,
+      "sha256": "0330776fd0d0aa33bc48642c81ae097145533e5f522c33f79e51859fc298f856"
+    },
+    "originalsPreserved": true
+  },
+  "test": {
+    "file": "tests/e2e/playground-preview-fit.spec.ts",
+    "line": 81,
+    "name": "desktop and short desktop fit widescreen, 4:3 and portrait slides in Both and Preview views",
+    "deadlineMs": 30000,
+    "phaseCount": 7,
+    "phases": [
+      {
+        "phase": 1,
+        "dimensions": "16:9",
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "view": "Both",
+        "geometryEntry": {
+          "callId": "pw:api@54",
+          "startMonotonicMs": 171735.134,
+          "endMonotonicMs": 171820.752,
+          "durationMs": 85.618,
+          "error": null,
+          "source": {
+            "file": "tests/e2e/playground-preview-fit.spec.ts",
+            "line": 35,
+            "function": "geometry"
+          }
+        },
+        "geometryAssertions": "COMPLETE",
+        "completedSuccessfully": true,
+        "assertionCount": 68,
+        "finalProtectedAssertion": {
+          "callId": "expect@124",
+          "startMonotonicMs": 171908.54,
+          "endMonotonicMs": 171917.953,
+          "durationMs": 9.413,
+          "error": null,
+          "source": {
+            "file": "tests/e2e/playground-preview-fit.spec.ts",
+            "line": 77,
+            "function": "geometry"
+          }
+        }
+      },
+      {
+        "phase": 2,
+        "dimensions": "16:9",
+        "viewport": {
+          "width": 1280,
+          "height": 600
+        },
+        "view": "Both",
+        "geometryEntry": {
+          "callId": "pw:api@145",
+          "startMonotonicMs": 172506.071,
+          "endMonotonicMs": 172554.564,
+          "durationMs": 48.493,
+          "error": null,
+          "source": {
+            "file": "tests/e2e/playground-preview-fit.spec.ts",
+            "line": 35,
+            "function": "geometry"
+          }
+        },
+        "geometryAssertions": "COMPLETE",
+        "completedSuccessfully": true,
+        "assertionCount": 68,
+        "finalProtectedAssertion": {
+          "callId": "expect@215",
+          "startMonotonicMs": 172644.198,
+          "endMonotonicMs": 172653.694,
+          "durationMs": 9.496,
+          "error": null,
+          "source": {
+            "file": "tests/e2e/playground-preview-fit.spec.ts",
+            "line": 77,
+            "function": "geometry"
+          }
+        }
+      },
+      {
+        "phase": 3,
+        "dimensions": "16:9",
+        "viewport": {
+          "width": 1280,
+          "height": 600
+        },
+        "view": "Preview",
+        "geometryEntry": {
+          "callId": "pw:api@217",
+          "startMonotonicMs": 172705.854,
+          "endMonotonicMs": 172953.986,
+          "durationMs": 248.132,
+          "error": null,
+          "source": {
+            "file": "tests/e2e/playground-preview-fit.spec.ts",
+            "line": 35,
+            "function": "geometry"
+          }
+        },
+        "geometryAssertions": "COMPLETE",
+        "completedSuccessfully": true,
+        "assertionCount": 68,
+        "finalProtectedAssertion": {
+          "callId": "expect@287",
+          "startMonotonicMs": 173039.662,
+          "endMonotonicMs": 173049.562,
+          "durationMs": 9.9,
+          "error": null,
+          "source": {
+            "file": "tests/e2e/playground-preview-fit.spec.ts",
+            "line": 77,
+            "function": "geometry"
+          }
+        }
+      },
+      {
+        "phase": 4,
+        "dimensions": "4:3",
+        "viewport": {
+          "width": 1280,
+          "height": 600
+        },
+        "view": "Both",
+        "geometryEntry": {
+          "callId": "pw:api@305",
+          "startMonotonicMs": 178347.179,
+          "endMonotonicMs": 178404.407,
+          "durationMs": 57.228,
+          "error": null,
+          "source": {
+            "file": "tests/e2e/playground-preview-fit.spec.ts",
+            "line": 35,
+            "function": "geometry"
+          }
+        },
+        "geometryAssertions": "COMPLETE",
+        "completedSuccessfully": true,
+        "assertionCount": 68,
+        "finalProtectedAssertion": {
+          "callId": "expect@375",
+          "startMonotonicMs": 178532.214,
+          "endMonotonicMs": 178546.806,
+          "durationMs": 14.592,
+          "error": null,
+          "source": {
+            "file": "tests/e2e/playground-preview-fit.spec.ts",
+            "line": 77,
+            "function": "geometry"
+          }
+        }
+      },
+      {
+        "phase": 5,
+        "dimensions": "4:3",
+        "viewport": {
+          "width": 1280,
+          "height": 600
+        },
+        "view": "Preview",
+        "geometryEntry": {
+          "callId": "pw:api@377",
+          "startMonotonicMs": 178921.656,
+          "endMonotonicMs": 178970.622,
+          "durationMs": 48.966,
+          "error": null,
+          "source": {
+            "file": "tests/e2e/playground-preview-fit.spec.ts",
+            "line": 35,
+            "function": "geometry"
+          }
+        },
+        "geometryAssertions": "COMPLETE",
+        "completedSuccessfully": true,
+        "assertionCount": 68,
+        "finalProtectedAssertion": {
+          "callId": "expect@447",
+          "startMonotonicMs": 179097.443,
+          "endMonotonicMs": 179112.104,
+          "durationMs": 14.661,
+          "error": null,
+          "source": {
+            "file": "tests/e2e/playground-preview-fit.spec.ts",
+            "line": 77,
+            "function": "geometry"
+          }
+        }
+      },
+      {
+        "phase": 6,
+        "dimensions": "3:4 portrait",
+        "viewport": {
+          "width": 1280,
+          "height": 600
+        },
+        "view": "Both",
+        "geometryEntry": {
+          "callId": "pw:api@468",
+          "startMonotonicMs": 185170.051,
+          "endMonotonicMs": 185205.103,
+          "durationMs": 35.052,
+          "error": null,
+          "source": {
+            "file": "tests/e2e/playground-preview-fit.spec.ts",
+            "line": 35,
+            "function": "geometry"
+          }
+        },
+        "geometryAssertions": "COMPLETE",
+        "completedSuccessfully": true,
+        "assertionCount": 68,
+        "finalProtectedAssertion": {
+          "callId": "expect@538",
+          "startMonotonicMs": 185300.208,
+          "endMonotonicMs": 185306.693,
+          "durationMs": 6.485,
+          "error": null,
+          "source": {
+            "file": "tests/e2e/playground-preview-fit.spec.ts",
+            "line": 77,
+            "function": "geometry"
+          }
+        }
+      },
+      {
+        "phase": 7,
+        "dimensions": "3:4 portrait",
+        "viewport": {
+          "width": 1280,
+          "height": 600
+        },
+        "view": "Preview",
+        "geometryEntry": {
+          "callId": "pw:api@540",
+          "startMonotonicMs": 185781.053,
+          "endMonotonicMs": 185858.009,
+          "durationMs": 76.956,
+          "error": "Error: locator.scrollIntoViewIfNeeded: Test timeout of 30000ms exceeded.\nCall log:\n  - waiting for getByRole('region', { name: 'Slide preview', exact: true })\n",
+          "source": {
+            "file": "tests/e2e/playground-preview-fit.spec.ts",
+            "line": 35,
+            "function": "geometry"
+          }
+        },
+        "geometryAssertions": "UNRUN",
+        "completedSuccessfully": false,
+        "assertionCount": 0,
+        "finalProtectedAssertion": null
+      }
+    ],
+    "selectedCalls": [
+      {
+        "callId": "pw:api@468",
+        "startMonotonicMs": 185170.051,
+        "endMonotonicMs": 185205.103,
+        "durationMs": 35.052,
+        "error": null,
+        "source": {
+          "file": "tests/e2e/playground-preview-fit.spec.ts",
+          "line": 35,
+          "function": "geometry"
+        },
+        "title": "Scroll into view"
+      },
+      {
+        "callId": "pw:api@539",
+        "startMonotonicMs": 185307.191,
+        "endMonotonicMs": 185780.548,
+        "durationMs": 473.357,
+        "error": null,
+        "source": {
+          "file": "tests/e2e/playground-preview-fit.spec.ts",
+          "line": 95,
+          "function": null
+        },
+        "title": "Click"
+      },
+      {
+        "callId": "pw:api@540",
+        "startMonotonicMs": 185781.053,
+        "endMonotonicMs": 185858.009,
+        "durationMs": 76.956,
+        "error": "Error: locator.scrollIntoViewIfNeeded: Test timeout of 30000ms exceeded.\nCall log:\n  - waiting for getByRole('region', { name: 'Slide preview', exact: true })\n",
+        "source": {
+          "file": "tests/e2e/playground-preview-fit.spec.ts",
+          "line": 35,
+          "function": "geometry"
+        },
+        "title": "Scroll into view"
+      }
+    ]
+  },
+  "timeEvidence": {
+    "readinessWaits": [
+      {
+        "callId": "expect@35",
+        "startMonotonicMs": 158866.55,
+        "endMonotonicMs": 164758.643,
+        "durationMs": 5892.093,
+        "error": null,
+        "source": {
+          "file": "tests/e2e/json-editor-helpers.ts",
+          "line": 6,
+          "function": "waitForSlide"
+        }
+      },
+      {
+        "callId": "expect@46",
+        "startMonotonicMs": 164969.842,
+        "endMonotonicMs": 171477.845,
+        "durationMs": 6508.003,
+        "error": null,
+        "source": {
+          "file": "tests/e2e/playground-preview-fit.spec.ts",
+          "line": 20,
+          "function": "applyCurrentSource"
+        }
+      },
+      {
+        "callId": "expect@297",
+        "startMonotonicMs": 173386.565,
+        "endMonotonicMs": 178077.56,
+        "durationMs": 4690.995,
+        "error": null,
+        "source": {
+          "file": "tests/e2e/playground-preview-fit.spec.ts",
+          "line": 20,
+          "function": "applyCurrentSource"
+        }
+      },
+      {
+        "callId": "expect@457",
+        "startMonotonicMs": 179591.474,
+        "endMonotonicMs": 185028.588,
+        "durationMs": 5437.114,
+        "error": null,
+        "source": {
+          "file": "tests/e2e/playground-preview-fit.spec.ts",
+          "line": 20,
+          "function": "applyCurrentSource"
+        }
+      }
+    ],
+    "readinessTotalMs": 22528.205,
+    "readinessRoundedSeconds": 22.53,
+    "navigation": {
+      "callId": "call@1198",
+      "startMonotonicMs": 154092.12,
+      "endMonotonicMs": 158770.933,
+      "durationMs": 4678.813,
+      "error": null,
+      "source": null
+    },
+    "navigationRoundedSeconds": 4.68,
+    "interpretation": "The final scroll invocation lasted 76.956 ms and failed on the cumulative 30000 ms test deadline; it did not wait 30 seconds for an absent preview. Trace timestamps include runner/tracing overhead and are not a changed timeout."
+  },
+  "network": {
+    "recordedResponses": 70,
+    "statusCounts": {
+      "200": 70
+    },
+    "recordedHttpFailures": 0,
+    "recordedTransferFailures": 0
+  },
+  "failureSnapshot": {
+    "file": "C:/opf-work/release-033-artifacts/org206-native-failed-qualification-13648237818/native-public/playground-preview-fit-des-8fb55-s-in-Both-and-Preview-views-e2e/error-context.md",
+    "observed": [
+      "Preview button pressed",
+      "Slide preview region present",
+      "portrait slide rendered",
+      "Slide 1 of 20",
+      "Valid OPF"
+    ],
+    "inspectedScreenshot": "short-four-three.png",
+    "screenshotObservation": "Whole slide, toolbar, navigation and thumbnails fit."
+  },
+  "conclusion": {
+    "finalPortraitPreviewGeometryAssertions": "UNRUN",
+    "layoutDefectFinding": false,
+    "meaning": "This artifact establishes cumulative test-deadline exhaustion, not a geometry assertion failure. Final portrait Preview fit remains unqualified.",
+    "mergeQualification": false,
+    "gateStatus": "FAILED; no bypass or merge approval",
+    "rootCauseBeyondCumulativeDuration": "Not established; all recorded requests completed with HTTP 200."
+  },
+  "scope": {
+    "diagnosisOnly": true,
+    "productOrTestFilesChanged": false,
+    "testsRun": 0,
+    "browserOrProviderCalls": 0,
+    "retries": 0,
+    "timeoutOrAssertionChanges": false
+  }
+}

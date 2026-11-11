@@ -66,7 +66,8 @@ export function addFitLines(slide, value, fit, box, context, helpers, {objectNam
 export function addCaption(slide, item, mediaName, context, helpers, error) {
   const caption = item.caption;
   if (!caption) return;
-  const record = {v: 1, role: 'caption', path: item.path, field: caption.path, media: mediaName ?? null, position: caption.position, align: caption.alignment};
+  // The record keeps the document's word for the alignment (start, center, end); `caption.alignment` is the engine's (left is the start edge).
+  const record = {v: 1, role: 'caption', path: item.path, field: caption.path, media: mediaName ?? null, position: caption.position, align: {left: 'start', center: 'center', right: 'end'}[caption.alignment]};
   addFitLines(slide, caption.text, caption.fit, caption.box, context, helpers, {objectName: captionShapeName(item.path), record, tags: context.captionTags, align: caption.alignment, color: context.mutedColor, fontFamily: helpers.nativeFontOptions(caption.textStyle).fontFace, error});
 }
 

@@ -1,0 +1,51 @@
+{
+  "scope": "BUILTINS_ONLY_SOURCE_AND_INPUT_CHECKS_NOT_BENCHMARK",
+  "node": "v24.21.0",
+  "sourceCheckpoint": "6db7214e41e9c7afd38ba63c2f467866c9ef6dd6",
+  "syntax": [
+    {
+      "file": "browser-entry.mjs",
+      "bytes": 6072,
+      "sha256": "3af17439c4ba843a8d14f458d024d2afbb2723eea0a3fb3a252f8d9df451896a",
+      "exitCode": 0
+    },
+    {
+      "file": "build-current.mjs",
+      "bytes": 6716,
+      "sha256": "021be3a857e24d4ddc58022b1a684759b09659e413482a1da2f30a2ddf672981",
+      "exitCode": 0
+    },
+    {
+      "file": "build.mjs",
+      "bytes": 5656,
+      "sha256": "1a2ca14f85a309cac25619970c6ef7d43df93d253278e9141ea92c092529eb51",
+      "exitCode": 0
+    },
+    {
+      "file": "current-browser-entry.mjs",
+      "bytes": 6440,
+      "sha256": "6f187ae855cebb2237126ac69dae696efed509448cac86c52de1a1d96252df47",
+      "exitCode": 0
+    },
+    {
+      "file": "materialize-inputs.mjs",
+      "bytes": 2278,
+      "sha256": "c95c7176c42d900708abbff4f2f98dc1d9e0c69df4bbbc634fbbb2fd5bfae415",
+      "exitCode": 0
+    },
+    {
+      "file": "run-current.mjs",
+      "bytes": 19806,
+      "sha256": "60d37f593607c09bb37de96679a28f815162c5c34f1eb3868104c66272a14f1b",
+      "exitCode": 0
+    },
+    {
+      "file": "run-paired-review.mjs",
+      "bytes": 17354,
+      "sha256": "742597ce42ea3f14c1fd5391f2d34d45f6485738489cc2890c67130f453c724b",
+      "exitCode": 0
+    }
+  ],
+  "heavyProcessesStarted": 0,
+  "inputRecovery": "input-recovery.json"
+}

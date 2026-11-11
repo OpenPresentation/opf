@@ -51,8 +51,8 @@ export const REFERENCES_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { catalogs: { custom: { layouts: { mine: { name: "Mine", regions: [{ name: "title" }, { name: "a", accepts: ["text"], size: "auto" }, { name: "b", accepts: ["text"] }] } } } }, slides: [{ title: "Welcome", layout: "mine" }] },
   ),
   "opf/layout-region": ex(
-    "Name each body region with a unique lowercase id that is not reserved (`title`, `subtitle`, `tag`, `auto`, `left`, `center`, `right`, `top`, `middle`, `bottom`), and give it something to accept.",
-    { catalogs: { custom: { layouts: { mine: { name: "Mine", regions: [{ name: "title" }, { name: "left", accepts: ["text"] }] } } } }, slides: [{ title: "Welcome", layout: "mine" }] },
+    "Name each body region with a unique lowercase id that is not reserved (`title`, `subtitle`, `tag`, `auto`, `start`, `center`, `end`, `top`, `middle`, `bottom`), and give it something to accept.",
+    { catalogs: { custom: { layouts: { mine: { name: "Mine", regions: [{ name: "title" }, { name: "start", accepts: ["text"] }] } } } }, slides: [{ title: "Welcome", layout: "mine" }] },
     { catalogs: { custom: { layouts: { mine: { name: "Mine", regions: [{ name: "title" }, { name: "body", accepts: ["text"] }] } } } }, slides: [{ title: "Welcome", layout: "mine" }] },
   ),
   "opf/unresolved-reference": ex(
