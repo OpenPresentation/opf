@@ -20,7 +20,7 @@ test('full pre-observer verifier refuses changed source/runtime/snapshots/reques
   const record=(relative,bytes)=>({path:relative,bytes:bytes.length,sha256:digest(bytes)});
   const mutateFile=(file,bytes)=>{changed.add(file);writeFileSync(file,bytes);};
   const mutateJson=(file,mutate)=>{const value=JSON.parse(readFileSync(file));mutate(value);mutateFile(file,json(value));};
-  const root=path.join(scratch,'controller'),output=path.join(scratch,'run'),prepared=path.join(scratch,'prepared'),worker=path.join(scratch,'worker'),consumer=path.join(scratch,'consumer');
+  const root=path.join(scratch,'controller'),output=path.join(scratch,'run'),prepared=path.join(scratch,'prepared'),worker=path.join(scratch,'worker'),consumer=path.join(scratch,'consumer'),packedPreparationRepository=path.join(scratch,'packed-producer');
   try {
     const sourceFile=path.join(root,'source.txt'),runtimeFile=path.join(consumer,'dist/runtime.js');
     const sourceBytes=put(sourceFile,'Synthetic pinned controller; not a prepared native authority\n'),runtimeBytes=put(runtimeFile,'// synthetic runtime identity; never imported\n');
@@ -29,7 +29,7 @@ test('full pre-observer verifier refuses changed source/runtime/snapshots/reques
     const snapshots=Object.entries(snapshotData).map(([name,bytes])=>{put(path.join(output,name),bytes);return record(name,bytes);});
     const workerFiles=['native-furniture-control.ps1','native-process.ps1'].map(name=>{const bytes=put(path.join(worker,'packages/pptx/test',name),'# Synthetic '+name+'; never executed\n');put(path.join(output,'native/inputs',name),bytes);return record('packages/pptx/test/'+name,bytes);});
     const envelope={output:prepared,spec:{suiteDirectory:path.join(scratch,'suite'),producerRepository:path.join(scratch,'producer'),consumer,workerRepository:worker,probeSha256:digest(snapshotData['inputs/text-probe-plan.json'])},snapshots,workerRepository:{files:workerFiles}};
-    for(const directory of [prepared,envelope.spec.suiteDirectory,envelope.spec.producerRepository])mkdirSync(directory,{recursive:true});
+    for(const directory of [prepared,envelope.spec.suiteDirectory,envelope.spec.producerRepository,packedPreparationRepository])mkdirSync(directory,{recursive:true});
     const envelopeFile=path.join(prepared,'execution-envelope.json'),envelopeBytes=put(envelopeFile,json({synthetic:true,scope:'Not native qualification'})),sha=digest(envelopeBytes);
     put(path.join(output,'execution-envelope.json'),envelopeBytes);
     const metadata=(original,snapshot,bytes)=>({path:path.join(output,original),sha256:digest(bytes),snapshotPath:path.join(output,snapshot),snapshotSha256:digest(bytes)});
@@ -51,7 +51,7 @@ test('full pre-observer verifier refuses changed source/runtime/snapshots/reques
       await tableFileRecords(root,[record('source.txt',sourceBytes)]);
       await tableFileRecords(consumer,[record('dist/runtime.js',runtimeBytes)]);
       await tableFileRecords(worker,workerFiles);
-      return {envelope,source:{selected:{id:runner.caseId,archiveSha256:digest(input)}}};
+      return {envelope,source:{selected:{id:runner.caseId,archiveSha256:digest(input)},packedPreparationRepository}};
     };
     const dependencies={bindB07Profile,plainLocalPath,assertTableOutputSeparate,root,tableAsset,digest,nativeJson:bytes=>JSON.parse(bytes.toString('utf8').replace(/^\uFEFF/u,'')),assert,path,B07_PROFILE,B07_POSTFLIGHT_POLICY,integer:(value,min,max)=>assert.ok(Number.isSafeInteger(value)&&value>=min&&value<=max),tableFileRecords,assertB07PostflightReady,assertB07Case10Phases};
     // The production function has no options/test bypass. Evaluate its exact

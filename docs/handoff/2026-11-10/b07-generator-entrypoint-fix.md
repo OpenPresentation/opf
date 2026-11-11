@@ -66,3 +66,22 @@ The original Windows exit13/unsealed output and packed proof remain separate and
 unchanged. No product build, full mapper, genuine generation, PowerShell, Office
 or CI run occurred. Root's integrated native/doc delta and actual maintained
 Windows generation command against the immutable589 consumer/proof remain owed.
+
+## Integrated fixture follow-up
+
+Root's first required331 mapped delta remains RED: all other10 steps pass; native
+selection is549PASS/1RED/19Windows skips (569total). The sole failure is the
+synthetic full pre-observer harness: its trusted-source mock did not return the
+new required `packedPreparationRepository`, so actual output separation received
+undefined. Production correctly kept requiring the explicit field.
+
+A separate successor changes only three fixture statements: create a distinct
+canonical synthetic retained-producer directory and return it in the actual source
+binding shape. Whole-file inversion proves all real verifier invocation and the
+complete existing refusal matrix remain exact. The sole causal file passes
+1/1 with0skips (105.6ms test time/132.6ms wall) on pinned Node24.21.0, without any
+install/build/mapper/PS/Office. This does not relabel the original aggregate or
+claim genuine generation. Local receipt is
+`/tmp/opf-b07-binding-fixture-focus01/receipt.json`; its238-byte causal log SHA-256
+is `01300626b615b2c7f92f327350083b827df412b10c4eca480896eed10974ea9c`.
+Root integration/replay and actual Windows genuine generation remain separate.
