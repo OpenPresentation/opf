@@ -1,0 +1,112 @@
+[
+  {
+    "file": "build.log",
+    "bytes": 14726,
+    "sha256": "dc2bdcc2e50e3107af3c69d4807e9cf05de15f9d79f1c1dc6d453f570d353ada"
+  },
+  {
+    "file": "changed-gate.log",
+    "bytes": 7465,
+    "sha256": "4284a3853846802edb8066065aa17aca43ef22e6ac34cb533e544bdc4957f4a2"
+  },
+  {
+    "file": "editor-playground-build.log",
+    "bytes": 111899,
+    "sha256": "fca7660539700f7f388b5c58710d685564cba8fdfdec62792451abef7710a9d2"
+  },
+  {
+    "file": "editor-source-pane-browser.log",
+    "bytes": 103,
+    "sha256": "a5b78bfb447e2645fe4d4e3c25d587ab06463196c771c9e12e02d9d40023efd8"
+  },
+  {
+    "file": "first-gallery-tracker.log",
+    "bytes": 12544,
+    "sha256": "d045a35cbdf6a91505d9ecee52aa4e687fa03d8ea26358f4e178849ce621ca25"
+  },
+  {
+    "file": "first-text.log",
+    "bytes": 1870,
+    "sha256": "c591c225b56d598d221e3de9c7a22f129299290581e19da36b6b2a77bebe9f1e"
+  },
+  {
+    "file": "install.log",
+    "bytes": 4192,
+    "sha256": "10e532cdf133f6369ca00f5d93fd8f2f1825b9fdd6ea6cc881a21e48f1f508a4"
+  },
+  {
+    "file": "mapper/biome.log",
+    "bytes": 678,
+    "sha256": "e3648c6637f774d2df4508300d169cc669a1cef0c73a95ec776c4394b78eaadf"
+  },
+  {
+    "file": "mapper/build.log",
+    "bytes": 14726,
+    "sha256": "8f440fe1d87e46878f4378ef4bba7d956e56af180e5e1a1b239f183f507a1b9b"
+  },
+  {
+    "file": "mapper/pnpm_run_check_changes.log",
+    "bytes": 2678,
+    "sha256": "436b2be16350ab3fc6db8d62d86f7f83832faece09756165e11e9ba6cbe1dd6d"
+  },
+  {
+    "file": "mapper/pnpm_run_check_diagram-doc-images.log",
+    "bytes": 176,
+    "sha256": "517bfec49fdc88f901564755e1947fba6a15b4279dd6927f7497e0196d3b5ca9"
+  },
+  {
+    "file": "mapper/pnpm_run_check_font-hotlinks.log",
+    "bytes": 868,
+    "sha256": "7157e7b3f099d7c77b8302067567bf519fbdab16216c8645b7aa0687c5f54930"
+  },
+  {
+    "file": "mapper/pnpm_run_check_gallery-tracker.log",
+    "bytes": 12544,
+    "sha256": "d045a35cbdf6a91505d9ecee52aa4e687fa03d8ea26358f4e178849ce621ca25"
+  },
+  {
+    "file": "mapper/pnpm_run_check_release-report.log",
+    "bytes": 833,
+    "sha256": "aec0e5d3c8bc6589ec11c0d7a3f8c1b9af7160024e5ebc6e7f760f28dc49d9c6"
+  },
+  {
+    "file": "mapper/pnpm_run_check_skill-commands.log",
+    "bytes": 1057,
+    "sha256": "228a3fb935824bf5def387e836585fc85700f3048e1505c1194fb0d46481677f"
+  },
+  {
+    "file": "mapper/pnpm_run_check_text.log",
+    "bytes": 1870,
+    "sha256": "c591c225b56d598d221e3de9c7a22f129299290581e19da36b6b2a77bebe9f1e"
+  },
+  {
+    "file": "mapper/tests_pptx.log",
+    "bytes": 206720,
+    "sha256": "bc43afb42517d5e672bdbf6ad238384ace58279089bca2a51b7ce2fb59e9d977"
+  },
+  {
+    "file": "pptx-dependency-boundary.log",
+    "bytes": 3262,
+    "sha256": "7fe2e2e55372994062be3c628714c0d0953c13a4a3454a81b197ea4c192bf7c1"
+  },
+  {
+    "file": "pptx-zip-bundle-boundary.log",
+    "bytes": 157,
+    "sha256": "a5cb85c9d45da5742007c7b8a4a750813eee1694ebf8b018248a8c5100ebbcd2"
+  },
+  {
+    "file": "render-rich-flow-browser.log",
+    "bytes": 88,
+    "sha256": "a102adb53b3df05d611f93dfae9eb1ff9f4d76794a48f68780151a4726ccc68f"
+  },
+  {
+    "file": "replay-gallery-tracker.log",
+    "bytes": 3004,
+    "sha256": "2778731ed6dde0419f3bd4026a4374e729cafbe8e770fae05261f87f713f989a"
+  },
+  {
+    "file": "replay-text.log",
+    "bytes": 1091,
+    "sha256": "c8f6b0f008e47a3fc2f0dd2d61889444f0aeb45f7595b726a830907dbe44851e"
+  }
+]
