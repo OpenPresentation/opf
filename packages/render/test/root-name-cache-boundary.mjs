@@ -33,7 +33,7 @@ for (const kind of ['header', 'footer']) {
   assert.ok(!visibleText(svg).includes('Before visible name'));
 }
 const unrelated = {
-  name: 'Unused root name', organization: { name: 'Organization', tagline: 'Tagline' }, speaker: { name: 'Speaker' },
+  name: 'Unused root name', organization: { id: 'organization', name: 'Organization', tagline: 'Tagline' }, speaker: { id: 'speaker', name: 'Speaker' },
   design: { footer: { start: { text: '{{organization.name}} · {{organization.tagline}}' }, end: { text: '{{slide.number}} / {{deck.slideCount}}' } } },
   slides: [{ title: 'Authored heading', text: 'By {{speaker.name}} · {{organization.tagline}}' }],
 };
