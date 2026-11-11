@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "base": "266fcbb07dcaee7d368184a289b02a54fd48f555",
+  "scope": "Portable real-filesystem boundary and exact PowerShell/Node source-roster parity only; no actual PowerShell/native qualification",
+  "sourceManifestSha256": "8c298bd97e77a11716484b3164240b051500bfa356250232ec40b889df9e17d5",
+  "node": "v24.21.0",
+  "pnpm": "10.33.2",
+  "ownOfflineFrozenInstall": true,
+  "steps": [
+    {
+      "name": "node",
+      "command": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "--version"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.014,
+      "logBytes": 9,
+      "logSha256": "f2ec568164f99546161909b0189b57bb5be3e80f8e2ccd8a51a4aed8c4055a04"
+    },
+    {
+      "name": "pnpm",
+      "command": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+        "--version"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.125,
+      "logBytes": 8,
+      "logSha256": "abb3ce293b7ae818d9d22051b093e51415a4de46f6dd529189c4feb458037cb5"
+    },
+    {
+      "name": "install",
+      "command": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+        "install",
+        "--offline",
+        "--frozen-lockfile",
+        "--store-dir",
+        "/tmp/.pnpm-store"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 2.495,
+      "logBytes": 4280,
+      "logSha256": "e7966c7f29cc66ffd3e34f33a968626a5d9e2fb8dd527cbca8d7e98b2b992230"
+    },
+    {
+      "name": "syntax",
+      "command": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "--check",
+        "scripts/native-acceptance/seven-value-snapshot-output.test.mjs"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.02,
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "output-and-roster",
+      "command": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "--test",
+        "scripts/native-acceptance/seven-value-snapshot-output.test.mjs"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.118,
+      "logBytes": 2664,
+      "logSha256": "0d28cccac8a071174cf202e8c33388233fcc66fc806b3bb20725f35d05e17758"
+    }
+  ],
+  "testedScripts": [
+    {
+      "path": "scripts/native-acceptance/seven-value-snapshot-bootstrap.ps1",
+      "bytes": 4020,
+      "sha256": "0e29ee26a2ba243d212b29a292f609b93a5a1b7a5216625186c99887e71e56fa"
+    },
+    {
+      "path": "scripts/native-acceptance/seven-value-snapshot-output.test.mjs",
+      "bytes": 7558,
+      "sha256": "507cca7835d1718125bcd263259c157a84d9fe6e18f06f87b51fee7748cf7905"
+    }
+  ],
+  "protectedExact": [
+    {
+      "path": "scripts/native-acceptance/run-seven-value-snapshots.ps1",
+      "bytes": 5805,
+      "sha256": "d8bcf0173dec935a6f868dd80b10a0ffb8ae57a53ac1dab4b07fd711686e0fcc"
+    },
+    {
+      "path": "scripts/native-acceptance/seven-value-snapshot-worker.ps1",
+      "bytes": 8828,
+      "sha256": "6a9068461360e3425590781355ae17aa668826e9c98eb5ec832e56dbf4c22738"
+    },
+    {
+      "path": "scripts/native-acceptance/seven-value-snapshot-profile.mjs",
+      "bytes": 26370,
+      "sha256": "32d9018e8a3d4bcd5060c3a6ff003eb3726a3c6f2c781a99ba023b87bf1f6b96"
+    },
+    {
+      "path": "scripts/native-acceptance/seven-value-bootstrap.ps1",
+      "bytes": 5911,
+      "sha256": "95908e7212d0bd31702aff2e60e7f9f18ce088721f7c0ede47c9c1cde620101c"
+    },
+    {
+      "path": "scripts/native-acceptance/seven-value-profile.mjs",
+      "bytes": 23901,
+      "sha256": "5d849d8c8a5640c5cab2f7d571d80bb6bb1a5368c9701d15d31aba9e9d5dd102"
+    },
+    {
+      "path": "scripts/native-acceptance/owned-postflight.mjs",
+      "bytes": 12137,
+      "sha256": "f1e7371586880fe76db6f3e1d615db23f67a062ad89a1b99abf8377ef601c782"
+    },
+    {
+      "path": "scripts/native-acceptance/owned-postflight.ps1",
+      "bytes": 18877,
+      "sha256": "1779ae802dd73ee8f004bb43620e4eb07683df492cd7fdc24811aa159af51ba4"
+    },
+    {
+      "path": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+      "bytes": 19206,
+      "sha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3"
+    },
+    {
+      "path": "scripts/native-acceptance/seven-value-snapshot-actions.ps1",
+      "bytes": 3215,
+      "sha256": "efbbcc690f3db769901e0cf28a850af48157e6c0d93992b267cab63892af3794"
+    },
+    {
+      "path": "scripts/native-acceptance/seven-value-snapshot-postflight.ps1",
+      "bytes": 7318,
+      "sha256": "58eed77d6fcb98b461c5d45ced6ec906a337cb8b146215f814cb1c4072fa5c1c"
+    },
+    {
+      "path": "scripts/native-acceptance/seven-value-snapshot-compare.mjs",
+      "bytes": 6088,
+      "sha256": "e9a14fbcc1d2dc12f89d05bcfad651bc8725cbb286ac0c8754b468ef80e18170"
+    },
+    {
+      "path": "scripts/native-acceptance/seven-value-snapshot-namespace.mjs",
+      "bytes": 12477,
+      "sha256": "09e9b5cf46d0447f1a3dc1e5a55653b69823ee1ee9208531556881be90e0fe3a"
+    },
+    {
+      "path": "packages/pptx/test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 137976,
+      "sha256": "11c0b695a44fe5dcbefa76722f78fdd725e9ceb70b29287cf70b042a2b3326fb"
+    }
+  ],
+  "bootstrapWholeInverse": {
+    "removed": ",'seven-value-snapshot-output.test.mjs'",
+    "bytes": 3981,
+    "sha256": "fc5c4687493ddb4d96f0ddbd5e31bab1b36c32ce697bc7d8381cda9b3a17b565"
+  },
+  "unchangedPathRegexFacts": [
+    {
+      "path": "scripts/native-acceptance/seven-value-snapshot-bootstrap.ps1",
+      "line": 3,
+      "literalBackslashesBeforeX00": 1
+    },
+    {
+      "path": "scripts/native-acceptance/run-seven-value-snapshots.ps1",
+      "line": 5,
+      "literalBackslashesBeforeX00": 1
+    },
+    {
+      "path": "scripts/native-acceptance/run-seven-value-snapshots.ps1",
+      "line": 13,
+      "literalBackslashesBeforeX00": 1
+    },
+    {
+      "path": "scripts/native-acceptance/seven-value-snapshot-worker.ps1",
+      "line": 5,
+      "literalBackslashesBeforeX00": 1
+    },
+    {
+      "path": "scripts/native-acceptance/seven-value-snapshot-worker.ps1",
+      "line": 10,
+      "literalBackslashesBeforeX00": 1
+    }
+  ],
+  "sourceBeforeAfterEveryCommandExact": true,
+  "tests": {
+    "total": 30,
+    "pass": 30,
+    "fail": 0,
+    "skip": 0,
+    "durationMilliseconds": 93.442458,
+    "originalBoundaryControls": 23,
+    "rosterControls": 7
+  },
+  "retry": false,
+  "productBuild": false,
+  "PowerShell": false,
+  "Office": false,
+  "fullMapper": false,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "stillOwed": "Root integration/mapped gate and fresh actual Windows pure default-launcher invocation; original513 closure failure unchanged"
+}

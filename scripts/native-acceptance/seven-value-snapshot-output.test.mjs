@@ -4,8 +4,9 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import {assertSnapshotOutput,verifySnapshotExecution} from './seven-value-snapshot-profile.mjs';
+import {assertSnapshotOutput,verifySnapshotExecution,SNAPSHOT_ENTRIES,SNAPSHOT_FILES} from './seven-value-snapshot-profile.mjs';
 import {digest,fileIdentity} from './identity.mjs';
+import {VALUE_FILES} from './seven-value-profile.mjs';
 function owned(check){
  const root=fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()),'opf-snapshot-output-'));let passed=false;
  try{
@@ -43,3 +44,22 @@ test('canonical exact-name exception is not a source-authority or digest bypass'
  assert.equal(assertSnapshotOutput(f.output,f.base,f.internal),f.output);const bytes=fs.readFileSync(f.internal);
  assert.throws(()=>verifySnapshotExecution(f.internal,'0'.repeat(64),f.output,false));assert.throws(()=>verifySnapshotExecution(f.internal,digest(bytes),f.output,false),'Inert boundary JSON must fail the actual unmodified source-envelope admission');fs.appendFileSync(f.internal,' ');assert.throws(()=>verifySnapshotExecution(f.internal,digest(bytes),f.output,false));
 }));
+
+// Portable exact source-roster parity, not execution of the PowerShell bootstrap.
+const bootstrapSource=()=>fs.readFileSync(new URL('./seven-value-snapshot-bootstrap.ps1',import.meta.url),'utf8');
+function assertBootstrapEntries(source){
+ const assignments=[...source.matchAll(/^\s*\$extra=@\(([^\r\n]*)\) \| ForEach-Object \{'scripts\/native-acceptance\/'\+\$_\}\r?$/gmu)];assert.equal(assignments.length,1,'One exact literal snapshot roster required');
+ const names=assignments[0][1].split(',').map(value=>{assert.match(value,/^'[a-z0-9-]+(?:\.test)?\.(?:mjs|ps1)'$/u,'Only literal source filenames are admitted');return 'scripts/native-acceptance/'+value.slice(1,-1);});
+ assert.equal(new Set(names).size,names.length,'No duplicate PowerShell source entry');assert.deepEqual(names,SNAPSHOT_ENTRIES,'PowerShell additions must match actual Node source entries exactly');
+ assert.equal(new Set([...VALUE_FILES,...names]).size,VALUE_FILES.length+names.length,'Existing source closure and additions must not overlap');assert.deepEqual([...VALUE_FILES,...names].sort(),SNAPSHOT_FILES,'The entire Node closure must equal the exact PowerShell required roster');return names;
+}
+test('snapshot PowerShell source roster exactly matches Node additions and complete source closure',()=>{assertBootstrapEntries(bootstrapSource());});
+const alterOnce=(source,old,value)=>{assert.equal(source.split(old).length,2);return source.replace(old,value);};
+for(const [name,mutate]of Object.entries({
+ 'missing new test':s=>alterOnce(s,",'seven-value-snapshot-output.test.mjs'",''),
+ 'duplicate entry':s=>alterOnce(s,"'seven-value-snapshot-output.test.mjs'","'seven-value-snapshot-output.test.mjs','seven-value-snapshot-output.test.mjs'"),
+ 'foreign entry':s=>alterOnce(s,"'seven-value-snapshot-output.test.mjs'","'foreign-snapshot.test.mjs'"),
+ 'computed entry':s=>alterOnce(s,"'seven-value-snapshot-output.test.mjs'","'seven-value-snapshot-output.test.mjs'+$env:UNTRUSTED"),
+ 'duplicate assignment':s=>s+'\n'+s.split('\n').find(line=>line.includes('$extra=@('))+'\n',
+ 'missing assignment':s=>alterOnce(s,'$extra=@(','$other=@('),
+}))test('snapshot roster parity refuses '+name,()=>{const source=mutate(bootstrapSource());assert.throws(()=>assertBootstrapEntries(source));});
