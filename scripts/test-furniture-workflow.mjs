@@ -115,9 +115,9 @@ try{
   const exported=await page.evaluate(()=>({bytes:Array.from(lastExport),imported:lastImport,source:editor.presentation}));
   assert.deepEqual(exported.source,accepted);
   const imported=exported.imported,importedHeader=imported.slides[0].design?.header??imported.design?.header,importedFooter=imported.slides[0].design?.footer??imported.design?.footer;
-  assert.equal(importedHeader.left.text,edit);assert.equal(importedHeader.center.text,'{{organization.name}}');assert.equal(importedHeader.right.text,'{{slide.section}}');
+  assert.equal(importedHeader.start.text,edit);assert.equal(importedHeader.center.text,'{{organization.name}}');assert.equal(importedHeader.end.text,'{{slide.section}}');
   assert.deepEqual(imported.organization,deck.organization);assert.equal(imported.slides[0].section,'Review');
-  assert.equal(importedFooter.left.date,deck.design.footer.start.date);assert.equal(importedFooter.right.text,'{{slide.number}}');
+  assert.equal(importedFooter.start.date,deck.design.footer.start.date);assert.equal(importedFooter.end.text,'{{slide.number}}');
   assert.deepEqual(await page.evaluate(()=>failures),[]);if(measured&&floor===32)await page.screenshot({path:path.join(output,`furniture-${width}-${local?'local':'inherited'}.png`),fullPage:true});
   results.push({measured,width,height,floor,local,path:fieldPath,original,accepted:edit,geometry,paint,imported,pptxSha256:hash(new Uint8Array(exported.bytes))});
  }
