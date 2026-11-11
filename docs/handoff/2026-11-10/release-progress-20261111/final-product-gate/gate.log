@@ -1,0 +1,42 @@
+
+> openpresentation-workspace@ check:changed /private/tmp/opf-034
+> node scripts/check-changed.mjs --base 6a83630b694ef31d6fb6fe7c99764567e7ba4c5a
+
+check-changed: 58 changed files since 6a83630b6 (plus uncommitted and untracked)
+ok  build (6.7 s)
+ok  biome (0.2 s)
+ok  pnpm run check:changes (0.5 s)
+ok  pnpm run check:engines-range (0.5 s)
+ok  pnpm run check:gallery-tracker (1.9 s)
+ok  pnpm run check:libreoffice (0.2 s)
+ok  pnpm run check:font-hotlinks (15.7 s)
+ok  pnpm run check:release-report (0.2 s)
+ok  pnpm run check:runners (0.7 s)
+ok  pnpm run check:native-acceptance (18.3 s)
+ok  pnpm run check:skill-commands (12.1 s)
+ok  pnpm run check:text (5.7 s)
+ok  pnpm run check:stability (48.8 s)
+-  typecheck
+ok  tests mcp (104.3 s)
+ok  tests pptx (1008.1 s)
+
+step                              status       time
+build                             passed      6.7 s
+biome                             passed      0.2 s  25 files
+pnpm run check:changes            passed      0.5 s
+pnpm run check:engines-range      passed      0.5 s
+pnpm run check:font-hotlinks      passed     15.7 s
+pnpm run check:gallery-tracker    passed      1.9 s
+pnpm run check:libreoffice        passed      0.2 s
+pnpm run check:native-acceptance  passed     18.3 s
+pnpm run check:release-report     passed      0.2 s
+pnpm run check:runners            passed      0.7 s
+pnpm run check:skill-commands     passed     12.1 s
+pnpm run check:stability          passed     48.8 s
+pnpm run check:text               passed      5.7 s
+typecheck                         skipped         -  no .ts, .mts or tsconfig change
+tests mcp                         passed    104.3 s
+tests pptx                        passed   1008.1 s
+total                                      1188.9 s
+
+check-changed: passed. Run the full `pnpm test` before opening the pull request.

@@ -1,0 +1,21 @@
+{
+  "added": [
+    "packages/mcp/dist/chunk-H4KWE6DZ.js",
+    "packages/mcp/dist/chunk-H4KWE6DZ.js.map",
+    "packages/mcp/dist/chunk-JP3JFCOA.js",
+    "packages/mcp/dist/chunk-JP3JFCOA.js.map"
+  ],
+  "removed": [
+    "packages/mcp/dist/chunk-CR3JJUUM.js",
+    "packages/mcp/dist/chunk-CR3JJUUM.js.map",
+    "packages/mcp/dist/chunk-ZNELULKC.js",
+    "packages/mcp/dist/chunk-ZNELULKC.js.map"
+  ],
+  "changed": [
+    "packages/mcp/dist/bin.js",
+    "packages/mcp/dist/index.js",
+    "packages/mcp/dist/stdio.js",
+    "packages/pptx/dist/native-scalar-fragments.js",
+    "packages/pptx/dist/native-text-fragments.js"
+  ]
+}
