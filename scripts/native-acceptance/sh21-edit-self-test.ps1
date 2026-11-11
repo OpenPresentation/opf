@@ -9,19 +9,26 @@ Import-Sh21Definitions (Join-Path $ControllerRoot 'scripts/native-acceptance/sev
 . (Join-Path $ControllerRoot 'scripts/native-acceptance/sh21-edit-postflight.ps1')
 function New-FakeNode([string]$Text,[int]$Level,$Parent){
     $range=[pscustomobject]@{Text=$Text};$node=[pscustomobject]@{TextFrame2=[pscustomobject]@{TextRange=$range};Level=$Level;ParentNode=$Parent;Type=1;Nodes=[pscustomobject]@{Count=0}}
-    $node|Add-Member ScriptMethod AddNode {param($position,$type)if($position -ne 2 -or $type -ne 1){throw 'Wrong actual AddNode arguments'};$script:addCalls++;if($script:failure -eq 'add-fault'){throw 'Injected AddNode fault'};return $script:newNode}
+    if($Level -eq 1){$node.PSObject.Properties.Remove('ParentNode');$node|Add-Member ScriptProperty ParentNode {throw 'Root ParentNode must never be read'}}
+    $node|Add-Member ScriptMethod AddNode {param($position,$type)if($position -ne 2 -or $type -ne 1){throw 'Wrong actual AddNode arguments'};$script:addCalls++;$script:addTargetText=$this.TextFrame2.TextRange.Text;if($script:failure -eq 'add-fault'){throw 'Injected AddNode fault'};$script:collection.values=@($script:collection.values)+@($script:newNode);if($script:newNode.Level -gt 1){$script:rootNode.Nodes.Count++};return $script:newNode}
     return $node
 }
+function New-Sh21FakeTarget($Plan,[int[]]$Order,[string]$Mode) {
+    $script:sequence=0;$script:stopped=$false;$script:cleanup=$false;$script:failure=$Mode;$script:addCalls=0;$script:addTargetText=$null
+    $script:report=[ordered]@{actions=@();phases=[ordered]@{};probes=@();officeOperationsStopped=$false;cleanupConfirmed=$false;lastStage=$null;lastStatus=$null};$script:app=[pscustomobject]@{};$script:ownedApp=$script:app;$script:ownedPath=Join-Path $script:root 'source.pptx';$script:presentation=[pscustomobject]@{FullName=$script:ownedPath;ReadOnly=-1};$script:ownedPresentation=$script:presentation
+    $values=@();$script:rootNode=$null
+    foreach($row in $Plan.before){$parent=if($row.level -gt 1){$script:rootNode}else{$null};$node=New-FakeNode $row.text $row.level $parent;$node.Nodes.Count=$row.children;$values+=@($node);if($row.index -eq 1){$script:rootNode=$node}}
+    $script:semanticNodes=$values;$row=$Plan.after[3];$parent=if($row.level -gt 1){$script:rootNode}else{$null};$script:newNode=New-FakeNode '' $row.level $parent
+    $script:collection=[pscustomobject]@{values=@($Order|ForEach-Object{$values[$_]})};$script:collection|Add-Member ScriptProperty Count {return $this.values.Count};$script:collection|Add-Member ScriptMethod Item {param($i)return $this.values[$i-1]}
+    $art=[pscustomobject]@{};$art|Add-Member ScriptProperty AllNodes {if($script:failure -ceq 'reorder-before-add' -and $script:semanticNodes[1].TextFrame2.TextRange.Text -ceq 'Craft'){$script:collection.values=@($script:semanticNodes[2],$script:semanticNodes[1],$script:semanticNodes[0])};return $script:collection}
+    return [pscustomobject]@{app=$script:app;presentation=$script:presentation;path=$script:ownedPath;smartArt=$art}
+}
 function New-Plan {
-    return @((Get-Content -LiteralPath (Join-Path $OutputDirectory 'plans.json') -Raw -Encoding UTF8|ConvertFrom-Json))[0]
+    $plans=Get-Content -LiteralPath (Join-Path $OutputDirectory 'plans.json') -Raw -Encoding UTF8|ConvertFrom-Json;return $plans[0]
 }
 $results=@()
 foreach($scenario in @('valid','foreign-path','writable','changed-app','changed-presentation','fullName-fault','readOnly-fault','range-getter-changes-path','range-getter-changes-owner','range-getter-makes-writable','add-fault','second-plan')){
-    $script:root=Join-Path $OutputDirectory $scenario;[void](New-Item -ItemType Directory -Path $script:root);$script:sequence=0;$script:stopped=$false;$script:cleanup=$false;$script:failure=$scenario;$script:addCalls=0
-    $script:report=[ordered]@{actions=@();probes=@();officeOperationsStopped=$false;cleanupConfirmed=$false;lastStage=$null;lastStatus=$null};$script:app=[pscustomobject]@{};$script:ownedApp=$script:app;$script:ownedPath=Join-Path $script:root 'source.pptx';$script:presentation=[pscustomobject]@{FullName=$script:ownedPath;ReadOnly=-1};$script:ownedPresentation=$script:presentation
-    $lead=New-FakeNode 'Lead' 1 $null;$node2=New-FakeNode 'Build' 2 $lead;$node3=New-FakeNode 'Ship' 2 $lead;$script:newNode=New-FakeNode '' 2 $lead
-    $collection=[pscustomobject]@{values=@($lead,$node2,$node3)};$collection|Add-Member ScriptMethod Item {param($i)return $this.values[$i-1]}
-    $target=[pscustomobject]@{app=$script:app;presentation=$script:presentation;path=$script:ownedPath;smartArt=[pscustomobject]@{AllNodes=$collection}}
+    $script:root=Join-Path $OutputDirectory $scenario;[void](New-Item -ItemType Directory -Path $script:root);$plan=New-Plan;$target=New-Sh21FakeTarget $plan @(0,1,2) $scenario;$node2=$script:semanticNodes[1]
     switch($scenario){
         'foreign-path'{$script:presentation.FullName=Join-Path $script:root 'foreign.pptx'}
         'writable'{$script:presentation.ReadOnly=0}
@@ -39,6 +46,37 @@ foreach($scenario in @('valid','foreign-path','writable','changed-app','changed-
         $before=$script:sequence;try{Invoke-SevenCom 'forbidden.later' {throw 'must never run'}}catch{};if($script:sequence -ne $before){throw 'Postfault operation ran'}
         if($scenario -notin @('add-fault') -and $script:addCalls -ne 0){throw 'Ownership refusal reached AddNode'}
         if($scenario.StartsWith('range-getter') -and $script:report.actions[0].textSetterAttempts -ne 0){throw 'Mutation getter reached existing text setter'}
+    }
+    $results+=@([ordered]@{scenario=$scenario;passed=$true;addCalls=$script:addCalls;failure=$caught})
+}
+$plans=Get-Content -LiteralPath (Join-Path $OutputDirectory 'plans.json') -Raw -Encoding UTF8|ConvertFrom-Json
+foreach($plan in $plans){foreach($orderName in @('natural','child-first')){
+    $scenario='identity-'+$plan.caseId+'-'+$orderName;$script:root=Join-Path $OutputDirectory $scenario;[void](New-Item -ItemType Directory -Path $script:root)
+    $order=if($orderName -ceq 'child-first'){@(1,0,2)}else{@(0,1,2)};$target=New-Sh21FakeTarget $plan $order 'valid'
+    Invoke-Sh21Edit $target $plan
+    if($script:addCalls -ne 1 -or $script:addTargetText -cne $plan.before[2].text -or $script:semanticNodes[1].TextFrame2.TextRange.Text -cne $plan.after[1].text -or $script:newNode.TextFrame2.TextRange.Text -cne $plan.after[3].text){throw 'Semantic edit hit the wrong actual node'}
+    $action=$script:report.actions[0];if($action.targets[0].node.index -ne ([array]::IndexOf($order,1)+1) -or $action.targets[1].node.text -cne $plan.before[2].text){throw 'Actual native indices were not retained'}
+    $script:collection.values=@($script:newNode,$script:semanticNodes[2],$script:semanticNodes[0],$script:semanticNodes[1]);$observation=[ordered]@{nodes=@();semanticToNativeIndex=@()};$script:report.phases['afterRead']=$observation
+    [void](Read-Sh21Nodes $target $plan 'afterRead' 'after' $observation)
+    if(($observation.semanticToNativeIndex -join ',') -cne '3,4,2,1' -or $observation.nodes[0].text -cne $plan.after[3].text){throw 'Final raw order or updated parent/child counts differ'}
+    $results+=@([ordered]@{scenario=$scenario;passed=$true;addCalls=$script:addCalls})
+}}
+$plan=New-Plan
+foreach($mode in @('reorder-before-add','duplicate-tuple','wrong-parent','wrong-level','wrong-type','wrong-children','target-reread-changed')){
+    $scenario='identity-'+$mode;$script:root=Join-Path $OutputDirectory $scenario;[void](New-Item -ItemType Directory -Path $script:root);$target=New-Sh21FakeTarget $plan @(1,0,2) $mode
+    switch($mode){
+        'duplicate-tuple'{$script:collection.values=@($script:semanticNodes[1],$script:semanticNodes[1],$script:semanticNodes[2])}
+        'wrong-parent'{$script:semanticNodes[1].ParentNode=$script:semanticNodes[2]}
+        'wrong-level'{$script:semanticNodes[1].Level=1}
+        'wrong-type'{$script:semanticNodes[1].Type=2}
+        'wrong-children'{$script:rootNode.Nodes.Count=1}
+        'target-reread-changed'{$script:collection|Add-Member NoteProperty Reads 0;$script:collection|Add-Member ScriptMethod Item {param($i)$this.Reads++;if($this.Reads -eq 4){$script:semanticNodes[1].TextFrame2.TextRange.Text='Foreign'};return $this.values[$i-1]} -Force}
+    }
+    $caught=$null;try{Invoke-Sh21Edit $target $plan}catch{$caught=$_.Exception.Message}
+    if($mode -ceq 'reorder-before-add'){if($null -ne $caught -or $script:addTargetText -cne 'Ship' -or $script:report.actions[0].targets[1].node.index -ne 1){throw 'Fresh semantic mapping before AddNode differs'}}else{
+        if($null -eq $caught -or -not $script:stopped -or $script:addCalls -ne 0 -or $script:report.actions[0].textSetterAttempts -ne 0){throw 'Identity refusal reached an edit'}
+        if($mode -in @('duplicate-tuple','wrong-parent','wrong-children')){$durable=Get-Content -LiteralPath (Join-Path $script:root 'report.json') -Raw -Encoding UTF8|ConvertFrom-Json;if($durable.actions[0].observations.before.nodes.Count -ne 3 -or $null -eq $durable.actions[0].observations.before.semanticToNativeIndex){throw 'Refused semantic match lost actual raw rows/map'}}
+        $sequence=$script:sequence;try{Invoke-SevenCom 'forbidden.later' {throw 'must not run'}}catch{};if($script:sequence -ne $sequence){throw 'Identity fault allowed later operation'}
     }
     $results+=@([ordered]@{scenario=$scenario;passed=$true;addCalls=$script:addCalls;failure=$caught})
 }

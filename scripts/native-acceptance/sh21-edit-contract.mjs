@@ -31,6 +31,13 @@ export function readSh21HistoricalInput(root,caseId){
  const parsed=JSON.parse(manifest),entry=parsed.cases.find(row=>row.id===caseId);assert.ok(entry);assert.equal(entry.live.sha256,c.sha256);assert.equal(entry.layoutId,sh21Plan(caseId).layoutId);
  return {bytes,manifest,plan:sh21Plan(caseId)};
 }
-export function assertSh21NodeRows(rows,plan,edited){
- assertSh21Plan(plan);assert.deepEqual(rows,edited?plan.after:plan.before,'Exact native node text/order/parent/level/type/children required');
+export function sh21ExpectedNodes(plan,state){
+ assertSh21Plan(plan);assert.ok(['before','middle','after'].includes(state));const rows=structuredClone(state==='after'?plan.after:plan.before);if(state==='middle')rows[1].text=plan.after[1].text;return rows;
 }
+export function sh21NodeMap(rows,plan,state){
+ const expected=sh21ExpectedNodes(plan,state);assert.ok(Array.isArray(rows));assert.equal(rows.length,expected.length);const fields=['text','level','parent','type','children'];
+ for(const [i,row]of rows.entries()){assertOwnedKeys(row,['index',...fields]);assert.equal(row.index,i+1);assert.equal(typeof row.text,'string');assert.ok(Number.isSafeInteger(row.level)&&[1,2].includes(row.level));assert.ok(row.parent===null||typeof row.parent==='string');assert.equal(row.type,1);assert.ok(Number.isSafeInteger(row.children)&&row.children>=0&&row.children<rows.length);}
+ const map=expected.map(node=>{const matches=rows.filter(row=>fields.every(key=>row[key]===node[key]));assert.equal(matches.length,1,'Exactly one full semantic native node tuple required');return matches[0].index;});assert.equal(new Set(map).size,rows.length,'Full semantic/native bijection required');return map;
+}
+export function assertSh21Observation(observation,plan,state){assertOwnedKeys(observation,['nodes','semanticToNativeIndex']);const map=sh21NodeMap(observation.nodes,plan,state);assert.deepEqual(observation.semanticToNativeIndex,map,'Reported mapping must equal actual full-tuple matching');return map;}
+export function assertSh21NodeRows(rows,plan,edited){return sh21NodeMap(rows,plan,edited?'after':'before');}

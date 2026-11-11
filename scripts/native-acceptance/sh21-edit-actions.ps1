@@ -51,32 +51,62 @@ function Get-Sh21Target($Plan,[string]$Prefix) {
     $target.smartArt=Invoke-SevenCom "$Prefix.smartArt" {$target.shape.SmartArt};$layout=Invoke-SevenCom "$Prefix.layout" {$target.smartArt.Layout};$id=Invoke-SevenCom "$Prefix.layout.id" {$layout.Id};Assert-SevenProbe ($id -is [string] -and $id -ceq $Plan.layoutId) "$Prefix.layout.id" $Plan.layoutId (Get-SevenPrimitive $id)
     Assert-Sh21Owner $target "$Prefix.finalOwner";return $target
 }
-function Read-Sh21Nodes($Target,$Plan,[string]$Phase,[bool]$Edited) {
-    Assert-Sh21Owner $Target "$Phase.owner"
-    $expected=if($Edited){$Plan.after}else{$Plan.before};$nodes=Invoke-SevenCom "$Phase.nodes" {$Target.smartArt.AllNodes};$count=Invoke-SevenCom "$Phase.nodes.count" {$nodes.Count};Assert-SevenProbe ((Test-SevenInteger $count) -and $count -eq $expected.Count) "$Phase.nodes.count" $expected.Count $count
-    $rows=@()
-    for($i=1;$i -le $expected.Count;$i++){
-        $node=Invoke-SevenCom "$Phase.node.$i.get" {$nodes.Item($i)};$frame=Invoke-SevenCom "$Phase.node.$i.frame" {$node.TextFrame2};$range=Invoke-SevenCom "$Phase.node.$i.range" {$frame.TextRange};$text=Invoke-SevenCom "$Phase.node.$i.text" {$range.Text};$level=Invoke-SevenCom "$Phase.node.$i.level" {$node.Level};$type=Invoke-SevenCom "$Phase.node.$i.type" {$node.Type};$children=Invoke-SevenCom "$Phase.node.$i.children" {$node.Nodes};$childCount=Invoke-SevenCom "$Phase.node.$i.children.count" {$children.Count}
-        Assert-SevenProbe ($text -is [string] -and (Test-SevenInteger $type) -and (Test-SevenInteger $childCount)) "$Phase.node.$i.types" 'string text and integer type/child count' ($text -is [string] -and (Test-SevenInteger $type) -and (Test-SevenInteger $childCount))
-        Assert-SevenProbe ((Test-SevenInteger $level) -and $level -eq $expected[$i-1].level) "$Phase.node.$i.level" $expected[$i-1].level (Get-SevenPrimitive $level)
-        $parent=$null
-        # Root.ParentNode throws by documented contract; never call it for roots.
-        if($level -gt 1){$p=Invoke-SevenCom "$Phase.node.$i.parent" {$node.ParentNode};$f=Invoke-SevenCom "$Phase.node.$i.parent.frame" {$p.TextFrame2};$r=Invoke-SevenCom "$Phase.node.$i.parent.range" {$f.TextRange};$parent=Invoke-SevenCom "$Phase.node.$i.parent.text" {$r.Text}}
-        Assert-SevenProbe ($null -eq $parent -or $parent -is [string]) "$Phase.node.$i.parent.type" 'null or string' ($null -eq $parent -or $parent -is [string])
-        $row=[ordered]@{index=$i;text=(Get-SevenPrimitive $text);level=(Get-SevenPrimitive $level);parent=(Get-SevenPrimitive $parent);type=(Get-SevenPrimitive $type);children=(Get-SevenPrimitive $childCount)};$rows+=@($row)
-        foreach($key in @('text','parent','type','children')){Assert-SevenProbe ($row[$key] -ceq $expected[$i-1].$key) "$Phase.node.$i.$key" $expected[$i-1].$key $row[$key]}
+function Get-Sh21ExpectedNodes($Plan,[string]$State) {
+    Assert-Sh21Plan $Plan
+    if($State -cnotin @('before','middle','after')){Stop-SevenLifecycle 'Closed SH21 graph state required'}
+    $rows=if($State -ceq 'after'){$Plan.after}else{$Plan.before};$result=@()
+    foreach($r in $rows){$text=if($State -ceq 'middle' -and $r.index -eq 2){$Plan.after[1].text}else{$r.text};$result+=@([pscustomobject]@{index=$r.index;text=$text;level=$r.level;parent=$r.parent;type=$r.type;children=$r.children})}
+    return ,$result
+}
+function Read-Sh21Node($Nodes,[int]$Index,[string]$Prefix) {
+    $node=Invoke-SevenCom "$Prefix.get" {$Nodes.Item($Index)};$frame=Invoke-SevenCom "$Prefix.frame" {$node.TextFrame2};$range=Invoke-SevenCom "$Prefix.range" {$frame.TextRange};$text=Invoke-SevenCom "$Prefix.text" {$range.Text};$level=Invoke-SevenCom "$Prefix.level" {$node.Level};$type=Invoke-SevenCom "$Prefix.type" {$node.Type};$children=Invoke-SevenCom "$Prefix.children" {$node.Nodes};$childCount=Invoke-SevenCom "$Prefix.children.count" {$children.Count}
+    Assert-SevenProbe ($text -is [string] -and (Test-SevenInteger $type) -and $type -eq 1 -and (Test-SevenInteger $childCount) -and $childCount -ge 0 -and $childCount -le 3) "$Prefix.types" 'string text, type1 and bounded integer child count' ($text -is [string] -and $type -eq 1 -and (Test-SevenInteger $childCount) -and $childCount -ge 0 -and $childCount -le 3)
+    Assert-SevenProbe ((Test-SevenInteger $level) -and $level -in @(1,2)) "$Prefix.level" 'native level1 or2' (Get-SevenPrimitive $level)
+    $parent=$null
+    # Root.ParentNode throws by documented contract; never call it for roots.
+    if($level -eq 2){$p=Invoke-SevenCom "$Prefix.parent" {$node.ParentNode};$f=Invoke-SevenCom "$Prefix.parent.frame" {$p.TextFrame2};$r=Invoke-SevenCom "$Prefix.parent.range" {$f.TextRange};$parent=Invoke-SevenCom "$Prefix.parent.text" {$r.Text}}
+    Assert-SevenProbe ($null -eq $parent -or $parent -is [string]) "$Prefix.parent.type" 'null or string' ($null -eq $parent -or $parent -is [string])
+    return [pscustomobject]@{node=$node;range=$range;row=[ordered]@{index=$Index;text=(Get-SevenPrimitive $text);level=(Get-SevenPrimitive $level);parent=(Get-SevenPrimitive $parent);type=(Get-SevenPrimitive $type);children=(Get-SevenPrimitive $childCount)}}
+}
+function Set-Sh21NodeMap($Observation,$Expected,[string]$Prefix) {
+    $Observation.semanticToNativeIndex=@();Write-SevenReport
+    foreach($wanted in $Expected){
+        $matches=@($Observation.nodes|Where-Object{$_.text -ceq $wanted.text -and $_.level -ceq $wanted.level -and $_.parent -ceq $wanted.parent -and $_.type -ceq $wanted.type -and $_.children -ceq $wanted.children})
+        Assert-SevenProbe ($matches.Count -eq 1) "$Prefix.semantic.$($wanted.index).unique" 1 $matches.Count
+        $index=$matches[0].index;Assert-SevenProbe ($Observation.semanticToNativeIndex -cnotcontains $index) "$Prefix.semantic.$($wanted.index).unused" $true ($Observation.semanticToNativeIndex -cnotcontains $index)
+        $Observation.semanticToNativeIndex+=@($index);Write-SevenReport
     }
-    Assert-Sh21Owner $Target "$Phase.finalOwner";return ,$rows
+    Assert-SevenProbe ($Observation.semanticToNativeIndex.Count -eq $Observation.nodes.Count) "$Prefix.semantic.complete" $Observation.nodes.Count $Observation.semanticToNativeIndex.Count
+}
+function Read-Sh21Nodes($Target,$Plan,[string]$Phase,[string]$State,$Observation) {
+    $expected=Get-Sh21ExpectedNodes $Plan $State;Assert-Sh21Owner $Target "$Phase.owner"
+    $nodes=Invoke-SevenCom "$Phase.nodes" {$Target.smartArt.AllNodes};$count=Invoke-SevenCom "$Phase.nodes.count" {$nodes.Count};Assert-SevenProbe ((Test-SevenInteger $count) -and $count -eq $expected.Count) "$Phase.nodes.count" $expected.Count $count
+    $Observation.nodes=@();$Observation.semanticToNativeIndex=@();Write-SevenReport
+    for($i=1;$i -le $expected.Count;$i++){$read=Read-Sh21Node $nodes $i "$Phase.node.$i";$Observation.nodes+=@($read.row);Write-SevenReport}
+    # Complete raw collection rows are durable BEFORE any semantic-match refusal.
+    Assert-Sh21Owner $Target "$Phase.finalOwner";Set-Sh21NodeMap $Observation $expected $Phase
+    return ,$nodes
+}
+function Get-Sh21SemanticTarget($Target,$Nodes,$Observation,$Expected,[int]$SemanticIndex,[string]$Prefix,$Record) {
+    Assert-Sh21Owner $Target "$Prefix.owner"
+    $index=$Observation.semanticToNativeIndex[$SemanticIndex-1];$read=Read-Sh21Node $Nodes $index "$Prefix.node"
+    $Record.targets+=@([ordered]@{semanticIndex=$SemanticIndex;node=$read.row});Write-SevenReport
+    foreach($key in @('index','text','level','parent','type','children')){Assert-SevenProbe ($read.row[$key] -ceq $Observation.nodes[$index-1][$key]) "$Prefix.reread.$key" $Observation.nodes[$index-1][$key] $read.row[$key]}
+    foreach($key in @('text','level','parent','type','children')){Assert-SevenProbe ($read.row[$key] -ceq $Expected[$SemanticIndex-1].$key) "$Prefix.expected.$key" $Expected[$SemanticIndex-1].$key $read.row[$key]}
+    Assert-Sh21Owner $Target "$Prefix.finalOwner";return $read
 }
 function Invoke-Sh21Edit($Target,$Plan) {
     Assert-Sh21Plan $Plan
     if($script:report.actions.Count -ne 0){Stop-SevenLifecycle 'One closed SH21 edit plan only'}
-    $record=[ordered]@{status='begin';textSetterAttempts=0;addNodeAttempts=0;newTextSetterAttempts=0};$script:report.actions+=@($record);Write-SevenReport
-    $nodes=Invoke-SevenCom 'edit.nodes' {$Target.smartArt.AllNodes};$node2=Invoke-SevenCom 'edit.node2' {$nodes.Item(2)};$frame=Invoke-SevenCom 'edit.node2.frame' {$node2.TextFrame2};$range=Invoke-SevenCom 'edit.node2.range' {$frame.TextRange}
-    Assert-Sh21Owner $Target 'edit.text.owner';$record.textSetterAttempts=1;Write-SevenReport
+    $record=[ordered]@{status='begin';textSetterAttempts=0;addNodeAttempts=0;newTextSetterAttempts=0;observations=[ordered]@{before=[ordered]@{nodes=@();semanticToNativeIndex=@()};beforeAdd=[ordered]@{nodes=@();semanticToNativeIndex=@()}};targets=@()};$script:report.actions+=@($record);Write-SevenReport
+    $nodes=Read-Sh21Nodes $Target $Plan 'edit.before' 'before' $record.observations.before
+    $selected=Get-Sh21SemanticTarget $Target $nodes $record.observations.before (Get-Sh21ExpectedNodes $Plan 'before') 2 'edit.node2' $record
+    $range=$selected.range;Assert-Sh21Owner $Target 'edit.text.owner';$record.textSetterAttempts=1;Write-SevenReport
     Invoke-SevenCom 'edit.existingText.set' {$range.Text=$Plan.after[1].text}
     Assert-Sh21Owner $Target 'edit.text.afterOwner'
-    $node3=Invoke-SevenCom 'edit.node3' {$nodes.Item(3)}
+    # Reacquire the ACTUAL collection and identity mapping after the text change.
+    $nodes=Read-Sh21Nodes $Target $Plan 'edit.beforeAdd' 'middle' $record.observations.beforeAdd
+    $selected=Get-Sh21SemanticTarget $Target $nodes $record.observations.beforeAdd (Get-Sh21ExpectedNodes $Plan 'middle') 3 'edit.node3' $record;$node3=$selected.node
     Assert-Sh21Owner $Target 'edit.add.owner';$record.addNodeAttempts=1;Write-SevenReport
     # Office msoSmartArtNodeAfter=2, msoSmartArtNodeTypeDefault=1.
     $added=Invoke-SevenCom 'edit.node.add' {$node3.AddNode(2,1)}
@@ -92,8 +122,8 @@ function Read-Sh21Phase($Target,$Plan,[string]$Phase,[bool]$Edited) {
     $png=Join-Path $script:root "$Phase.png";Assert-SevenProbe (-not(Test-Path -LiteralPath $png)) "$Phase.png.fresh" $false (Test-Path -LiteralPath $png)
     # Export first materializes SmartArt; no Visible/WindowState/UI workaround.
     Invoke-SevenCom "$Phase.export" {$Target.slide.Export($png,'PNG',1280,720)}
-    $rows=Read-Sh21Nodes $Target $Plan $Phase $Edited
-    $record=[ordered]@{nodes=$rows;frame=[ordered]@{};items=@();raster=[ordered]@{path=$png;sha256=(Get-SevenHash $png)}}
+    $record=[ordered]@{nodes=@();semanticToNativeIndex=@();frame=[ordered]@{};items=@();raster=[ordered]@{path=$png;sha256=(Get-SevenHash $png)}};$script:report.phases[$Phase]=$record;Write-SevenReport
+    $state=if($Edited){'after'}else{'before'};[void](Read-Sh21Nodes $Target $Plan $Phase $state $record)
     foreach($property in @('Left','Top','Width','Height')){$value=Read-SevenProperty $Target.shape $property "$Phase.frame.$property";Assert-SevenProbe (Test-SevenFiniteNumber $value) "$Phase.frame.$property.finite" 'finite' (Get-SevenPrimitive $value);$record.frame[$property]=Get-SevenPrimitive $value}
     $group=Invoke-SevenCom "$Phase.group" {$Target.shape.GroupItems};$count=Invoke-SevenCom "$Phase.group.count" {$group.Count}
     # Dedicated bounded descriptor capture, not a legacy worker cap expansion.
