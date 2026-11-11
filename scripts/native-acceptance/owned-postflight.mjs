@@ -41,6 +41,7 @@ export function ownedControllerFiles(root, entries) {
 
 export function canonicalOwnedPath(file) {
   assert.equal(typeof file, 'string');
+  // biome-ignore lint/suspicious/noControlCharactersInRegex: Intentionally reject every ASCII control character in an owned local path.
   assert.ok(path.isAbsolute(file) && !/[\u0000-\u001f]/u.test(file) && !file.startsWith('\\\\'), 'Absolute local path required');
   assert.equal(path.resolve(file), file, 'Canonical path required');
   let cursor = file;

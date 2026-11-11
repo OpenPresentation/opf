@@ -86,7 +86,7 @@ const reference = (face, text, lang, rtl) => {
 };
 const inked = (font) => ([gid]) => font.getGlyph(gid).path.commands.length > 0;
 const order = (glyphs) => [...glyphs].sort((p, q) => p[1] - q[1] || p[0] - q[0]);
-const svgOf = (family, text, lang, rtl, width) => `<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="100"><text x="10" y="50" font-family="${family}" font-size="${SIZE}"${lang ? ` lang="${lang}"` : ''}${rtl ? ' direction="rtl"' : ''} xml:space="preserve" textLength="${width.toFixed(6)}" lengthAdjust="spacingAndGlyphs">${escape(text)}</text></svg>`;
+const svgOf = (family, text, lang, rtl, width) => `<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="100"><text x="10" y="50" font-family="${family}" font-size="${SIZE}"${lang ? ` lang="${lang}"` : ''}${rtl ? ' direction="rtl" text-anchor="end"' : ''} xml:space="preserve" textLength="${width.toFixed(6)}" lengthAdjust="spacingAndGlyphs">${escape(text)}</text></svg>`;
 const plain = { fontFiles: fonts.fontFiles, useBundledFonts: false };
 
 let compared = 0, skipped = 0;
