@@ -1,0 +1,38 @@
+✔ snapshot verifier permits its exact copied canonical envelope and still permits an external sibling envelope (3.335875ms)
+✔ snapshot output refuses unexpected contained envelope other-envelope.json (2.014208ms)
+✔ snapshot output refuses unexpected contained envelope inputs/execution-envelope.json (1.6465ms)
+✔ snapshot output refuses unexpected contained envelope execution-envelope.json.backup (1.562292ms)
+✔ external envelope equality and ancestor overlap remain refused independently of source roots (2.200667ms)
+✔ an output below an external regular envelope file remains impossible or overlap-refused (1.16475ms)
+✔ internal envelope cannot bypass suiteDirectory equal protection (1.368625ms)
+✔ internal envelope cannot bypass suiteDirectory descendant protection (1.633417ms)
+✔ internal envelope cannot bypass suiteDirectory ancestor protection (1.653084ms)
+✔ internal envelope cannot bypass preparationRepository equal protection (1.429125ms)
+✔ internal envelope cannot bypass preparationRepository descendant protection (1.357833ms)
+✔ internal envelope cannot bypass preparationRepository ancestor protection (1.343875ms)
+✔ internal envelope cannot bypass workerRepository equal protection (1.319667ms)
+✔ internal envelope cannot bypass workerRepository descendant protection (1.559ms)
+✔ internal envelope cannot bypass workerRepository ancestor protection (1.538667ms)
+✔ internal envelope cannot bypass consumer equal protection (1.594625ms)
+✔ internal envelope cannot bypass consumer descendant protection (1.657084ms)
+✔ internal envelope cannot bypass consumer ancestor protection (1.42375ms)
+✔ internal envelope cannot bypass controller equal protection (1.558875ms)
+✔ internal envelope cannot bypass controller descendant protection (1.48775ms)
+✔ internal envelope cannot bypass controller ancestor protection (1.226916ms)
+✔ output and copied-envelope directory aliases remain refused (1.542208ms)
+✔ canonical exact-name exception is not a source-authority or digest bypass (1.924125ms)
+✔ snapshot PowerShell source roster exactly matches Node additions and complete source closure (0.226833ms)
+✔ snapshot roster parity refuses missing new test (0.144333ms)
+✔ snapshot roster parity refuses duplicate entry (0.076042ms)
+✔ snapshot roster parity refuses foreign entry (0.088792ms)
+✔ snapshot roster parity refuses computed entry (0.058166ms)
+✔ snapshot roster parity refuses duplicate assignment (0.066667ms)
+✔ snapshot roster parity refuses missing assignment (0.059208ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 93.442458
