@@ -449,11 +449,16 @@ const classicNumbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\
     const multiPareto = deck.slides.filter(slide => slide.chart.type === 'pareto' && slide.chart.data.columns.length > 2).length;
     // RR-105: these fixture rows remain unchanged; negative categorical histograms now keep their reviewed classic bytes in every mode.
     const negativeHistograms = deck.slides.filter(({chart}) => chart.type === 'histogram' && chart.data.columns.length > 1 && chart.data.rows.some(row => row.slice(1).some(value => typeof value === 'number' && value < 0))).length;
+    const signedPareto = deck.slides.filter(({chart}) => {
+      const plan = chartDrawPlan(chart, resolveChartData(chart));
+      return plan.type === 'pareto' && plan.columns.length === 2 && plan.rows.some(row => typeof row[1] === 'number' && row[1] < 0);
+    }).length;
     const auto = await run(deck, undefined), explicit = await run(deck, 'auto');
     const native = await run(deck, 'native');
     assert.deepEqual(digest(auto.bytes), digest(explicit.bytes), `${name}: the default is 'auto'`);
-    assert.equal(auto.chartexParts, deck.slides.length - maps - mapColumns - multiPareto - negativeHistograms, `${name} (auto): chartex parts for every confirmed construct`);
-    assert.equal(native.chartexParts, deck.slides.length - mapColumns - multiPareto - negativeHistograms, `${name} (native): chartex parts for every construct`);
+    assert.equal(auto.chartexParts, deck.slides.length - maps - mapColumns - multiPareto - negativeHistograms - signedPareto, `${name} (auto): chartex parts for every confirmed data domain`);
+    assert.equal(native.chartexParts, deck.slides.length - mapColumns - multiPareto - negativeHistograms - signedPareto, `${name} (native): chartex parts for every supported data domain`);
+    for (const [mode, result] of [['auto', auto], ['native', native]]) assert.equal(result.diagnostics.filter(d => d === 'chart-data-adapted/signed-pareto-combo').length, signedPareto, `${name} (${mode}): exact signed Pareto combo notices`);
     if (maps === 0) assert.deepEqual(digest(auto.bytes), digest(native.bytes), `${name}: auto equals native without a map`);
     else {
       assert.notEqual(digest(auto.bytes), digest(native.bytes), `${name}: the map differs between auto and native`);

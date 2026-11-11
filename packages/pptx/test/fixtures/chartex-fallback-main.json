@@ -87,6 +87,23 @@
           "sha256": "aee881ee7a959225a66e9e3f0f264fab5c51854a0bbab8811ea113457a5eb0c3"
         },
         "scope": "Separate nine-deck chartex:fallback family. All baseline hashes, sizes, ordered diagnostics and layout/tag counts reproduced; no XML normalization, automatic promotion or native acceptance."
+      },
+      {
+        "baseline": {
+          "head": "ceb822e1233a409f3d530f0bf9083844c48e599e",
+          "catalogSha256": "e9b4ecd3919a07168d447b47e308dc3e13b1c5540fba0416274f448a7db2db8a",
+          "distManifestSha256": "2db9a9e31f8250845810c5a8232afb24216c1c206c28c6c0b5bd864dccb52e3e"
+        },
+        "candidate": {
+          "head": "6ea0cfb31dd7712fe6f09cddf98b2cbfb3484df3",
+          "catalogSha256": "e9b4ecd3919a07168d447b47e308dc3e13b1c5540fba0416274f448a7db2db8a",
+          "distManifestSha256": "bc29d36e9c92f7ce458b4d2e28a96e8baabce7145084184c774586d165f9c764"
+        },
+        "evidence": {
+          "file": "review.json",
+          "sha256": "c6f5e33bed15440bdb0f896e87e9b994d6e8d3692bd8eddca0e61f431cb2c552"
+        },
+        "scope": "Separate nine-deck chartex:fallback family. All baseline hashes, sizes, ordered diagnostics and layout/tag counts reproduced; no XML normalization, automatic promotion or native acceptance."
       }
     ],
     "rr20SchemaVocabularyReviews": [
@@ -760,8 +777,8 @@
       ]
     },
     "histogram-category": {
-      "sha256": "56598f78204a1a63ecca23a94681173ac1532bea5c34db8a487a2e2e60d6be17",
-      "bytes": 107622,
+      "sha256": "845b1b0e81f95a6e6f80ca162a409901ed04d215924c5de6ac0d6dd5cd8ea602",
+      "bytes": 107644,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -823,6 +840,15 @@
         {
           "sha256": "b1dacc5a077cafa4d6f1c7e895c4a1dfb00f5675a012f9b9987b5ebea6756a3f",
           "bytes": 107592,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
+        },
+        {
+          "sha256": "56598f78204a1a63ecca23a94681173ac1532bea5c34db8a487a2e2e60d6be17",
+          "bytes": 107622,
           "diagnostics": [
             "chart-data-adapted/chartex-fallback"
           ],
@@ -1206,8 +1232,8 @@
       ]
     },
     "all-seven": {
-      "sha256": "fe8d94387eec3f9f6f633a6afcab952f7e923a61faecec3a5734372ae23e8d9f",
-      "bytes": 171918,
+      "sha256": "2a24dc0950b13ecbf0089f66078c74c80c28c5deaa73fef41c579a84c4dee6b1",
+      "bytes": 171940,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/chartex-fallback",
@@ -1290,6 +1316,22 @@
         {
           "sha256": "b8d9448f8b8a09aca2d5cc3d19432b1c29d875bd227cd617879467fca9d0afde",
           "bytes": 171762,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chart-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chart-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
+        },
+        {
+          "sha256": "fe8d94387eec3f9f6f633a6afcab952f7e923a61faecec3a5734372ae23e8d9f",
+          "bytes": 171918,
           "diagnostics": [
             "chart-data-adapted/chartex-fallback",
             "chart-data-adapted/chartex-fallback",

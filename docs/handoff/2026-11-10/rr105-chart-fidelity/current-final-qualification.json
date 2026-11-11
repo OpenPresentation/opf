@@ -1,0 +1,653 @@
+{
+  "scope": "Strict current lock/source/export qualification only; full mapped gate/CI/genuine packed/registry/native/Office/full59 pending.",
+  "codeSourceCommit": "6ea0cfb31dd7712fe6f09cddf98b2cbfb3484df3",
+  "currentFixtureSha256": "a4ade4939074e2f1b63f989e7e82c0ce83e162a470305341b3daee049de1e7b8",
+  "historicalFixtureSha256": "867c384ba2a1733e7bba738b8e2f797b8efbee0b3083a22bea391c6a32994b1e",
+  "node": {
+    "path": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+    "version": "v24.21.0"
+  },
+  "actualWorkspaceConsumer": "/private/tmp/opf-chart-fidelity-review",
+  "actualModuleResolution": {
+    "@openpresentation/opf": {
+      "resolved": "/private/tmp/opf-chart-fidelity-review/packages/javascript/dist/index.js",
+      "sha256": "3cb64f3e70a19cc52f76bb5d4100d37372be4b180287d33d0fe134431c9b5b0d"
+    },
+    "@openpresentation/opf-pptx": {
+      "resolved": "/private/tmp/opf-chart-fidelity-review/packages/pptx/dist/index.js",
+      "sha256": "28fdb2967ccdbccec4c9443ae4f362b8b1fac2fe0446052c486d052dabcd01a9"
+    },
+    "@openpresentation/opf-render/fonts-node": {
+      "resolved": "/private/tmp/opf-chart-fidelity-review/packages/render/dist/fonts-node.js",
+      "sha256": "2a1201b3c2143d5ebf50aced132719288ecf12e1bdc8f79a9b6cbde3cf38f736"
+    },
+    "@openpresentation/gallery": {
+      "resolved": "/private/tmp/opf-chart-fidelity-review/packages/gallery/dist/index.js",
+      "sha256": "2964845a7cfde007502f524ead2d4d90d6ef81de01ee500bdca51098ef908e06"
+    }
+  },
+  "runtime": {
+    "unchanged": true,
+    "files": 298,
+    "aggregateSha256": "d24947f086ec72abf81de4b6d3e6f74faa861626a751ad0d8e3c8e2f16cf76a0"
+  },
+  "originalPostpromotionAttempt": {
+    "exitCode": 1,
+    "steps": [
+      {
+        "name": "pptx-chartex",
+        "command": [
+          "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+          "test/chartex.mjs"
+        ],
+        "cwd": "/tmp/opf-chart-fidelity-review/packages/pptx",
+        "log": "/tmp/opf-chart-fidelity-lock-qualification01/pptx-chartex.log",
+        "logSha256": "ed1dd079026116e7536a856a60c83efed5ff76d8fcc0f663a383ec593894d7a8",
+        "durationMs": 5060.969375,
+        "code": 1,
+        "signal": null
+      }
+    ],
+    "unrun": [
+      "pptx-native-fallback-contracts",
+      "pptx-chartex-fallback-archive-review",
+      "chart-modes-pure-authority-guards",
+      "maintained-current30-retained"
+    ],
+    "cause": "old all-seven ChartEx counter expected5 instead of4; no retained30 archives generated in this failed attempt"
+  },
+  "causalReplay": {
+    "exitCode": 0,
+    "steps": [
+      {
+        "name": "pptx-chartex",
+        "command": [
+          "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+          "test/chartex.mjs"
+        ],
+        "cwd": "/tmp/opf-chart-fidelity-review/packages/pptx",
+        "log": "/tmp/opf-chart-fidelity-lock-qualification02/pptx-chartex.log",
+        "logSha256": "45d0b189cbb5a3ad86da06c3e0bb62492578cf3e1954f3425f7bfe5b94ee7475",
+        "durationMs": 5181.403292,
+        "code": 0,
+        "signal": null
+      },
+      {
+        "name": "pptx-native-fallback-contracts",
+        "command": [
+          "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+          "test/native-fallback-contracts.mjs"
+        ],
+        "cwd": "/tmp/opf-chart-fidelity-review/packages/pptx",
+        "log": "/tmp/opf-chart-fidelity-lock-qualification02/pptx-native-fallback-contracts.log",
+        "logSha256": "99245025a724716385f022ee6127f503c287b62593644623493e379cdda1e4a8",
+        "durationMs": 1394.086292,
+        "code": 0,
+        "signal": null
+      },
+      {
+        "name": "pptx-chartex-fallback-archive-review",
+        "command": [
+          "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+          "test/chartex-fallback-archive-review.mjs"
+        ],
+        "cwd": "/tmp/opf-chart-fidelity-review/packages/pptx",
+        "log": "/tmp/opf-chart-fidelity-lock-qualification02/pptx-chartex-fallback-archive-review.log",
+        "logSha256": "56cbb94430b05015dbe5a10f3060460369ca8a5381703e445fdd786f1066df58",
+        "durationMs": 400.8138749999998,
+        "code": 0,
+        "signal": null
+      },
+      {
+        "name": "chart-modes-pure-authority-guards",
+        "command": [
+          "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+          "--test",
+          "--test-name-pattern",
+          "source-candidate fallback references|whole-archive reference guard|current package authority",
+          "scripts/native-acceptance/chart-modes.test.mjs"
+        ],
+        "cwd": "/tmp/opf-chart-fidelity-review",
+        "log": "/tmp/opf-chart-fidelity-lock-qualification02/chart-modes-pure-authority-guards.log",
+        "logSha256": "0b1db255ce4db23b1ee5861b0cc776c61358e374bf98c2c2f2b5824a6014036e",
+        "durationMs": 61.27708299999995,
+        "code": 0,
+        "signal": null
+      },
+      {
+        "name": "maintained-current30-retained",
+        "command": [
+          "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+          "/tmp/opf-chart-fidelity-current30-01.mjs"
+        ],
+        "cwd": "/tmp/opf-chart-fidelity-review",
+        "log": "/tmp/opf-chart-fidelity-lock-qualification02/maintained-current30-retained.log",
+        "logSha256": "e058a3e93be3da2ffe2d975186817479617578c6050bb2054c86a5ac1623dcf6",
+        "durationMs": 4562.606374999999,
+        "code": 0,
+        "signal": null
+      }
+    ],
+    "unrun": []
+  },
+  "retainedWholeSeven": [
+    {
+      "mode": "fallback",
+      "path": "/private/tmp/opf-chart-fidelity-current30-01/chart-modes/all-seven-fallback.pptx",
+      "bytes": 171940,
+      "sha256": "2a24dc0950b13ecbf0089f66078c74c80c28c5deaa73fef41c579a84c4dee6b1",
+      "chartExParts": 0,
+      "importedChartTypes": [
+        "column",
+        "column",
+        "column",
+        "column",
+        "column",
+        "column",
+        "column"
+      ]
+    },
+    {
+      "mode": "auto",
+      "path": "/private/tmp/opf-chart-fidelity-current30-01/chart-modes/all-seven-auto.pptx",
+      "bytes": 184592,
+      "sha256": "04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb",
+      "chartExParts": 4,
+      "importedChartTypes": [
+        "treemap",
+        "column",
+        "combo",
+        "box-and-whisker",
+        "waterfall",
+        "funnel",
+        "column"
+      ]
+    },
+    {
+      "mode": "native",
+      "path": "/private/tmp/opf-chart-fidelity-current30-01/chart-modes/all-seven-native.pptx",
+      "bytes": 184592,
+      "sha256": "04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb",
+      "chartExParts": 4,
+      "importedChartTypes": [
+        "treemap",
+        "column",
+        "combo",
+        "box-and-whisker",
+        "waterfall",
+        "funnel",
+        "column"
+      ]
+    }
+  ],
+  "current30": [
+    {
+      "id": "chart-mode-treemap-category-fallback",
+      "mode": "fallback",
+      "chart": "treemap-category",
+      "input": "chart-modes/treemap-category-fallback.pptx",
+      "archiveSha256": "3a658a3b08bc67f05f306f2a3381b170721b03a1ab285d785641573366f5ac68",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-treemap-category-auto",
+      "mode": "auto",
+      "chart": "treemap-category",
+      "input": "chart-modes/treemap-category-auto.pptx",
+      "archiveSha256": "0b22b1f3038befc76a7696e78f7d39aeff738bbd5d3e684d217fc87e92ac7eb7",
+      "chartExParts": 1,
+      "roundTripEqual": true,
+      "importedChartTypes": [
+        "treemap"
+      ],
+      "diagnosticCodes": []
+    },
+    {
+      "id": "chart-mode-treemap-category-native",
+      "mode": "native",
+      "chart": "treemap-category",
+      "input": "chart-modes/treemap-category-native.pptx",
+      "archiveSha256": "0b22b1f3038befc76a7696e78f7d39aeff738bbd5d3e684d217fc87e92ac7eb7",
+      "chartExParts": 1,
+      "roundTripEqual": true,
+      "importedChartTypes": [
+        "treemap"
+      ],
+      "diagnosticCodes": []
+    },
+    {
+      "id": "chart-mode-histogram-single-fallback",
+      "mode": "fallback",
+      "chart": "histogram-single",
+      "input": "chart-modes/histogram-single-fallback.pptx",
+      "archiveSha256": "3ba3624bc531ad73871bf1672f3629a0de3a6a4fc7cf1f67aee7e8d68a9195cf",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/histogram-binned"
+      ]
+    },
+    {
+      "id": "chart-mode-histogram-single-auto",
+      "mode": "auto",
+      "chart": "histogram-single",
+      "input": "chart-modes/histogram-single-auto.pptx",
+      "archiveSha256": "19531b90b1fd5ece2a90cc60d63f65d16733346e1e04c615ac880aef14318e60",
+      "chartExParts": 1,
+      "roundTripEqual": true,
+      "importedChartTypes": [
+        "histogram"
+      ],
+      "diagnosticCodes": []
+    },
+    {
+      "id": "chart-mode-histogram-single-native",
+      "mode": "native",
+      "chart": "histogram-single",
+      "input": "chart-modes/histogram-single-native.pptx",
+      "archiveSha256": "19531b90b1fd5ece2a90cc60d63f65d16733346e1e04c615ac880aef14318e60",
+      "chartExParts": 1,
+      "roundTripEqual": true,
+      "importedChartTypes": [
+        "histogram"
+      ],
+      "diagnosticCodes": []
+    },
+    {
+      "id": "chart-mode-histogram-category-fallback",
+      "mode": "fallback",
+      "chart": "histogram-category",
+      "input": "chart-modes/histogram-category-fallback.pptx",
+      "archiveSha256": "845b1b0e81f95a6e6f80ca162a409901ed04d215924c5de6ac0d6dd5cd8ea602",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-histogram-category-auto",
+      "mode": "auto",
+      "chart": "histogram-category",
+      "input": "chart-modes/histogram-category-auto.pptx",
+      "archiveSha256": "845b1b0e81f95a6e6f80ca162a409901ed04d215924c5de6ac0d6dd5cd8ea602",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-histogram-category-native",
+      "mode": "native",
+      "chart": "histogram-category",
+      "input": "chart-modes/histogram-category-native.pptx",
+      "archiveSha256": "845b1b0e81f95a6e6f80ca162a409901ed04d215924c5de6ac0d6dd5cd8ea602",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-pareto-multi-fallback",
+      "mode": "fallback",
+      "chart": "pareto-multi",
+      "input": "chart-modes/pareto-multi-fallback.pptx",
+      "archiveSha256": "b7a33bf47d7df74a83fadf0e77f9ff0d652da1fcda133fe37527ebd9db6bc45a",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chart-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-pareto-multi-auto",
+      "mode": "auto",
+      "chart": "pareto-multi",
+      "input": "chart-modes/pareto-multi-auto.pptx",
+      "archiveSha256": "b7a33bf47d7df74a83fadf0e77f9ff0d652da1fcda133fe37527ebd9db6bc45a",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chart-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-pareto-multi-native",
+      "mode": "native",
+      "chart": "pareto-multi",
+      "input": "chart-modes/pareto-multi-native.pptx",
+      "archiveSha256": "b7a33bf47d7df74a83fadf0e77f9ff0d652da1fcda133fe37527ebd9db6bc45a",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chart-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-box-multi-fallback",
+      "mode": "fallback",
+      "chart": "box-multi",
+      "input": "chart-modes/box-multi-fallback.pptx",
+      "archiveSha256": "2b836ac6fdda4d0854133788b9c8f577c07a6cc2596db527346438fe06287ebc",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chart-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-box-multi-auto",
+      "mode": "auto",
+      "chart": "box-multi",
+      "input": "chart-modes/box-multi-auto.pptx",
+      "archiveSha256": "71d318d7b7d1bb0b394265e0a7f99cc40edce2366b843a30d4aad259d4182019",
+      "chartExParts": 1,
+      "roundTripEqual": true,
+      "importedChartTypes": [
+        "box-and-whisker"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chart-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-box-multi-native",
+      "mode": "native",
+      "chart": "box-multi",
+      "input": "chart-modes/box-multi-native.pptx",
+      "archiveSha256": "71d318d7b7d1bb0b394265e0a7f99cc40edce2366b843a30d4aad259d4182019",
+      "chartExParts": 1,
+      "roundTripEqual": true,
+      "importedChartTypes": [
+        "box-and-whisker"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chart-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-waterfall-single-fallback",
+      "mode": "fallback",
+      "chart": "waterfall-single",
+      "input": "chart-modes/waterfall-single-fallback.pptx",
+      "archiveSha256": "1982a1fb947b517532dd44117c114365a6b597b7a3d157675cf6ca66b61a7033",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/row-numbers"
+      ]
+    },
+    {
+      "id": "chart-mode-waterfall-single-auto",
+      "mode": "auto",
+      "chart": "waterfall-single",
+      "input": "chart-modes/waterfall-single-auto.pptx",
+      "archiveSha256": "2e823539130058dc103a636af4bc06e07b6e57c39493a08b2663b32b4755d4e5",
+      "chartExParts": 1,
+      "roundTripEqual": true,
+      "importedChartTypes": [
+        "waterfall"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/row-numbers"
+      ]
+    },
+    {
+      "id": "chart-mode-waterfall-single-native",
+      "mode": "native",
+      "chart": "waterfall-single",
+      "input": "chart-modes/waterfall-single-native.pptx",
+      "archiveSha256": "2e823539130058dc103a636af4bc06e07b6e57c39493a08b2663b32b4755d4e5",
+      "chartExParts": 1,
+      "roundTripEqual": true,
+      "importedChartTypes": [
+        "waterfall"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/row-numbers"
+      ]
+    },
+    {
+      "id": "chart-mode-funnel-category-fallback",
+      "mode": "fallback",
+      "chart": "funnel-category",
+      "input": "chart-modes/funnel-category-fallback.pptx",
+      "archiveSha256": "9169273efc9dff405111b34c431dd29344e9f440c9209f7442aee75e2c28ed10",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-funnel-category-auto",
+      "mode": "auto",
+      "chart": "funnel-category",
+      "input": "chart-modes/funnel-category-auto.pptx",
+      "archiveSha256": "4cdedc7fdab92c5f254f538117f48a6f2f537b977b3ff23e7e659d34f17ec368",
+      "chartExParts": 1,
+      "roundTripEqual": true,
+      "importedChartTypes": [
+        "funnel"
+      ],
+      "diagnosticCodes": [
+        "export-lossy/funnel-label-color"
+      ]
+    },
+    {
+      "id": "chart-mode-funnel-category-native",
+      "mode": "native",
+      "chart": "funnel-category",
+      "input": "chart-modes/funnel-category-native.pptx",
+      "archiveSha256": "4cdedc7fdab92c5f254f538117f48a6f2f537b977b3ff23e7e659d34f17ec368",
+      "chartExParts": 1,
+      "roundTripEqual": true,
+      "importedChartTypes": [
+        "funnel"
+      ],
+      "diagnosticCodes": [
+        "export-lossy/funnel-label-color"
+      ]
+    },
+    {
+      "id": "chart-mode-world-category-fallback",
+      "mode": "fallback",
+      "chart": "world-category",
+      "input": "chart-modes/world-category-fallback.pptx",
+      "archiveSha256": "552245dbedf1e344dc3d0ae35c603338dd0b28608a096ffe6381d56bca74738a",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-world-category-auto",
+      "mode": "auto",
+      "chart": "world-category",
+      "input": "chart-modes/world-category-auto.pptx",
+      "archiveSha256": "552245dbedf1e344dc3d0ae35c603338dd0b28608a096ffe6381d56bca74738a",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-world-category-native",
+      "mode": "native",
+      "chart": "world-category",
+      "input": "chart-modes/world-category-native.pptx",
+      "archiveSha256": "88c567a95f2db5ed8eb778b6c627f38412b48c65b013534657d6469893238bc5",
+      "chartExParts": 1,
+      "roundTripEqual": true,
+      "importedChartTypes": [
+        "world"
+      ],
+      "diagnosticCodes": [
+        "chart-map-geodata"
+      ]
+    },
+    {
+      "id": "chart-mode-all-seven-fallback",
+      "mode": "fallback",
+      "chart": "all-seven",
+      "input": "chart-modes/all-seven-fallback.pptx",
+      "archiveSha256": "2a24dc0950b13ecbf0089f66078c74c80c28c5deaa73fef41c579a84c4dee6b1",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "column",
+        "column",
+        "column",
+        "column",
+        "column",
+        "column",
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chart-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chart-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-all-seven-auto",
+      "mode": "auto",
+      "chart": "all-seven",
+      "input": "chart-modes/all-seven-auto.pptx",
+      "archiveSha256": "04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb",
+      "chartExParts": 4,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "treemap",
+        "column",
+        "combo",
+        "box-and-whisker",
+        "waterfall",
+        "funnel",
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/signed-pareto-combo",
+        "chart-data-adapted/chart-fallback",
+        "export-lossy/funnel-label-color",
+        "chart-data-adapted/chart-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-all-seven-native",
+      "mode": "native",
+      "chart": "all-seven",
+      "input": "chart-modes/all-seven-native.pptx",
+      "archiveSha256": "04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb",
+      "chartExParts": 4,
+      "roundTripEqual": false,
+      "importedChartTypes": [
+        "treemap",
+        "column",
+        "combo",
+        "box-and-whisker",
+        "waterfall",
+        "funnel",
+        "column"
+      ],
+      "diagnosticCodes": [
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/signed-pareto-combo",
+        "chart-data-adapted/chart-fallback",
+        "export-lossy/funnel-label-color",
+        "chart-data-adapted/chart-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-pareto-single-auto",
+      "mode": "auto",
+      "chart": "pareto-single",
+      "input": "chart-modes/pareto-single-auto.pptx",
+      "archiveSha256": "ab6fff9cd82fa8fb821e84e199a59added06efba0faeb449518b2f215792044d",
+      "chartExParts": 1,
+      "roundTripEqual": true,
+      "importedChartTypes": null,
+      "diagnosticCodes": []
+    },
+    {
+      "id": "chart-mode-pareto-single-fallback",
+      "mode": "fallback",
+      "chart": "pareto-single",
+      "input": "chart-modes/pareto-single-fallback.pptx",
+      "archiveSha256": "cada5a086c16be7c0cf23baf3b34beb1f629c50e44302ae0dcbf23d3d0bbacbe",
+      "chartExParts": 0,
+      "roundTripEqual": false,
+      "importedChartTypes": null,
+      "diagnosticCodes": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "id": "chart-mode-pareto-single-native",
+      "mode": "native",
+      "chart": "pareto-single",
+      "input": "chart-modes/pareto-single-native.pptx",
+      "archiveSha256": "ab6fff9cd82fa8fb821e84e199a59added06efba0faeb449518b2f215792044d",
+      "chartExParts": 1,
+      "roundTripEqual": true,
+      "importedChartTypes": null,
+      "diagnosticCodes": []
+    }
+  ],
+  "fullChartModesTestFileScope": "Not separately rerun; three pure groups selected; actual all30 generated once through maintained function and retained. Remaining extra-export eligibility group not included."
+}
