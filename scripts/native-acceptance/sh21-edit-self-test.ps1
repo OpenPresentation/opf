@@ -3,7 +3,7 @@ $ErrorActionPreference='Stop'
 if($PSVersionTable.PSEdition -cne 'Desktop' -or $PSVersionTable.PSVersion.Major -ne 5 -or $PSVersionTable.PSVersion.Minor -ne 1){throw 'Actual Windows PowerShell5.1 Desktop required for managed SH21 controls'}
 # Managed test doubles only: no Office factories/process queries/launcher.
 . (Join-Path $ControllerRoot 'scripts/native-acceptance/sh21-edit-bootstrap.ps1')
-Import-Sh21Definitions (Join-Path $ControllerRoot 'scripts/native-acceptance/seven-chart-worker.ps1') @('Test-SevenInteger','Test-SevenFiniteNumber','Get-SevenPrimitive','Write-SevenReport','Write-SevenStage','Stop-SevenLifecycle','Assert-SevenProbe','Invoke-SevenCom','Read-SevenProperty','Assert-SevenOwnedPresentation')
+Import-Sh21Definitions (Join-Path $ControllerRoot 'scripts/native-acceptance/seven-chart-worker.ps1') @('Get-SevenHash','Test-SevenInteger','Test-SevenFiniteNumber','Get-SevenPrimitive','Write-SevenReport','Write-SevenStage','Stop-SevenLifecycle','Assert-SevenProbe','Invoke-SevenCom','Read-SevenProperty','Assert-SevenOwnedPresentation')
 . (Join-Path $ControllerRoot 'scripts/native-acceptance/sh21-edit-actions.ps1')
 . (Join-Path $ControllerRoot 'scripts/native-acceptance/owned-postflight.ps1')
 . (Join-Path $ControllerRoot 'scripts/native-acceptance/sh21-edit-postflight.ps1')
@@ -80,6 +80,61 @@ foreach($mode in @('reorder-before-add','duplicate-tuple','wrong-parent','wrong-
     }
     $results+=@([ordered]@{scenario=$scenario;passed=$true;addCalls=$script:addCalls;failure=$caught})
 }
+# Unlike the original PSCustomObject fixture, these actual CLR collections are
+# enumerable AND expose Office-style one-based Item, so pipeline unrolling is observable.
+Add-Type -TypeDefinition @'
+public sealed class Sh21EnumerableCollection : System.Collections.IEnumerable {
+    private readonly object[] values;
+    public int Enumerations { get; private set; }
+    public int CountReads { get; private set; }
+    public readonly System.Collections.Generic.List<int> ItemCalls = new System.Collections.Generic.List<int>();
+    public Sh21EnumerableCollection(object[] values) { this.values = values; }
+    public int Count { get { CountReads++; return values.Length; } }
+    public object Item(int index) {
+        ItemCalls.Add(index);
+        if (index < 1 || index > values.Length) throw new System.IndexOutOfRangeException("Native one-based Item outside collection");
+        return values[index - 1];
+    }
+    public System.Collections.IEnumerator GetEnumerator() { Enumerations++; return values.GetEnumerator(); }
+}
+public sealed class Sh21EnumerableSmartArt {
+    public Sh21EnumerableCollection AllNodes { get; private set; }
+    public Sh21EnumerableSmartArt(Sh21EnumerableCollection nodes) { AllNodes = nodes; }
+}
+'@
+function New-Sh21EnumerableTarget($Plan) {
+    $target=New-Sh21FakeTarget $Plan @(0,1,2) 'valid';$children=@()
+    for($i=0;$i -lt $Plan.before.Count;$i++){
+        $values=@();for($j=0;$j -lt $Plan.before.Count;$j++){if($Plan.before[$j].parent -is [string] -and $Plan.before[$j].parent -ceq $Plan.before[$i].text){$values+=@($script:semanticNodes[$j])}}
+        $collection=[Sh21EnumerableCollection]::new([object[]]$values);$script:semanticNodes[$i].Nodes=$collection;$children+=,$collection
+    }
+    $all=[Sh21EnumerableCollection]::new([object[]]$script:semanticNodes);$target.smartArt=[Sh21EnumerableSmartArt]::new($all)
+    return [pscustomobject]@{target=$target;all=$all;children=$children}
+}
+$scenario='enumerable-old-unrolled-root';$script:root=Join-Path $OutputDirectory $scenario;[void](New-Item -ItemType Directory -Path $script:root);$plan=New-Plan;$f=New-Sh21EnumerableTarget $plan;$target=$f.target
+# Exercise the OLD operation block through the unchanged actual shared helper.
+$old=Invoke-SevenCom 'enumerable.old.nodes' {$target.smartArt.AllNodes};$outside=$null
+if([object]::ReferenceEquals($old,$f.all) -or $old -isnot [object[]]){throw 'Old operation did not replace the collection with an array'}
+$oldCount=$old.Count;$oldItem1=$old.Item(1).TextFrame2.TextRange.Text;$oldItem2=$old.Item(2).TextFrame2.TextRange.Text;$enumerations=$f.all.Enumerations;$nativeItems=$f.all.ItemCalls.Count
+try{$null=Invoke-SevenCom 'enumerable.old.item3' {$old.Item(3)}}catch{$outside=$_.Exception.Message}
+if($oldCount -ne 3 -or $oldItem1 -cne 'Build' -or $oldItem2 -cne 'Ship' -or $null -eq $outside -or -not $script:stopped -or $enumerations -ne 1 -or $nativeItems -ne 0){throw 'Old enumerable collection counterexample was not reproduced'}
+$results+=@([ordered]@{scenario=$scenario;passed=$true;count=$oldCount;item1=$oldItem1;item2=$oldItem2;item3Failure=$outside;enumerations=$enumerations;faultLatched=$script:stopped})
+foreach($plan in $plans){
+    $scenario='enumerable-native-'+$plan.caseId;$script:root=Join-Path $OutputDirectory $scenario;[void](New-Item -ItemType Directory -Path $script:root);$f=New-Sh21EnumerableTarget $plan;$observation=[ordered]@{nodes=@();semanticToNativeIndex=@()};$script:report.phases['enumerable']=$observation
+    $actual=Read-Sh21Nodes $f.target $plan 'enumerable' 'before' $observation
+    if(-not [object]::ReferenceEquals($actual,$f.all) -or $actual.Count -ne 3 -or ($f.all.ItemCalls -join ',') -cne '1,2,3' -or $f.all.Enumerations -ne 0 -or ($observation.semanticToNativeIndex -join ',') -cne '1,2,3'){throw 'Actual collection identity/count/one-based order was not preserved'}
+    for($i=0;$i -lt 3;$i++){if($observation.nodes[$i].text -cne $plan.before[$i].text -or $observation.nodes[$i].children -ne $plan.before[$i].children -or $f.children[$i].CountReads -ne 1 -or $f.children[$i].Enumerations -ne 0){throw 'Actual child collection, including empty children, was flattened'}}
+    $results+=@([ordered]@{scenario=$scenario;passed=$true;collectionIdentity=$true;count=$actual.Count;itemCalls=@($f.all.ItemCalls);enumerations=$f.all.Enumerations;childCounts=@($observation.nodes|ForEach-Object{$_.children})})
+}
+$scenario='enumerable-phase-group-items';$script:root=Join-Path $OutputDirectory $scenario;[void](New-Item -ItemType Directory -Path $script:root);$plan=New-Plan;$f=New-Sh21EnumerableTarget $plan;$target=$f.target;$groupValues=@()
+for($i=0;$i -lt 3;$i++){$groupValues+=@([pscustomobject]@{Left=($i*10);Top=1;Width=8;Height=5;Rotation=0;Type=1;HasTextFrame=-1;TextFrame2=[pscustomobject]@{TextRange=[pscustomobject]@{Text=$plan.before[$i].text;Font=[pscustomobject]@{Size=36}}}})}
+$group=[Sh21EnumerableCollection]::new([object[]]$groupValues);$shape=[pscustomobject]@{Left=0;Top=0;Width=100;Height=60;GroupItems=$group};$slide=[pscustomobject]@{};$script:inertExports=0
+$slide|Add-Member ScriptMethod Export {param($file,$format,$width,$height)if($file -cne (Join-Path $script:root 'enumerable-phase.png') -or $format -cne 'PNG' -or $width -ne 1280 -or $height -ne 720){throw 'Inert owned export arguments differ'};$script:inertExports++;[IO.File]::WriteAllBytes($file,[byte[]]@(83,72,50,49))}
+$target|Add-Member NoteProperty shape $shape;$target|Add-Member NoteProperty slide $slide
+Read-Sh21Phase $target $plan 'enumerable-phase' $false
+$phase=$script:report.phases['enumerable-phase'];$bytes=[IO.File]::ReadAllBytes((Join-Path $script:root 'enumerable-phase.png'))
+if($script:inertExports -ne 1 -or ($bytes -join ',') -cne '83,72,50,49' -or $group.Enumerations -ne 0 -or $group.CountReads -ne 1 -or ($group.ItemCalls -join ',') -cne '1,2,3' -or $phase.items.Count -ne 3 -or ($phase.items.text -join '|') -cne ($plan.before.text -join '|')){throw 'Actual phase GroupItems collection capture differs'}
+$results+=@([ordered]@{scenario=$scenario;passed=$true;itemCalls=@($group.ItemCalls);enumerations=$group.Enumerations;inertExports=$script:inertExports;nativeRaster=$false})
 $script:root=Join-Path $OutputDirectory 'preflight';[void](New-Item -ItemType Directory -Path $script:root)
 function global:Get-Process {
     [CmdletBinding()]param([string]$Name)
