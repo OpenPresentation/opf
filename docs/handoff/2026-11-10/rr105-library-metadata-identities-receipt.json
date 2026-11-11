@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "status": "bounded-local-qualification-pass; Windows/native unrun",
+  "scope": "Actual collector fixture file and metadata/read/hash-only own normal installed graph. No implementation imports, product build, typecheck, mapper or Office.",
+  "source": {
+    "base": "453bd351fc12403bc93aa71da7dcf893a9860989",
+    "reviewedManifestSha256": "fa5dc917e070df333b1dbaf424a7f4a66fc92dd2e517e1da74bf580606b0b168",
+    "collector": {
+      "file": "scripts/native-acceptance/seven-value-libraries.mjs",
+      "bytes": 2276,
+      "sha256": "df0b187d043b0ac109fab91d270904cdf96d115649d815ddcbf7e09bfc2dc58c"
+    },
+    "fixtureTest": {
+      "file": "scripts/native-acceptance/seven-value-libraries.test.mjs",
+      "bytes": 9422,
+      "sha256": "e94ac3250c5f32b28bd242968fe524672a3c44367f1998e4402872b2b95dea6a"
+    },
+    "beforeAfterIntegrity": "PASS"
+  },
+  "commands": [
+    {
+      "name": "offline-install",
+      "exitCode": 0,
+      "elapsedMs": 2246.236584,
+      "log": {
+        "path": "/tmp/opf-library-identities-focus01/offline-install.log",
+        "bytes": 4276,
+        "sha256": "c649bc68eba159f60c03923d4efbd8af8fb26ef57dc52ab8ddafcf41cb31fa34"
+      }
+    },
+    {
+      "name": "fixture-suite",
+      "exitCode": 0,
+      "elapsedMs": 409.49045799999976,
+      "log": {
+        "path": "/tmp/opf-library-identities-focus01/fixture-suite.log",
+        "bytes": 772,
+        "sha256": "082e4e67adebe94eb5e477a84959af04a2f9197b394f9ca202eac72d3efafbde"
+      }
+    },
+    {
+      "name": "real-inventory",
+      "exitCode": 0,
+      "elapsedMs": 59.487082999999984,
+      "log": {
+        "path": "/tmp/opf-library-identities-focus01/real-inventory.log",
+        "bytes": 777,
+        "sha256": "cbb80c352523460f791054dc718dd68ddb9a41465481c636cbcd8f98bceb8eb1"
+      }
+    }
+  ],
+  "fixtures": {
+    "tests": 7,
+    "pass": 7,
+    "fail": 0,
+    "skipped": 0,
+    "implementationSentinelsAbsent": true
+  },
+  "actualInventory": {
+    "status": "PASS",
+    "scope": "Actual default sevenValueLibraries metadata/read/hash only; no library implementation import, build or native action",
+    "node": "v24.21.0",
+    "execArgv": [],
+    "packages": [
+      {
+        "name": "@nodable/entities",
+        "version": "3.1.0",
+        "files": 9
+      },
+      {
+        "name": "anynum",
+        "version": "1.0.1",
+        "files": 5
+      },
+      {
+        "name": "fast-xml-builder",
+        "version": "1.3.1",
+        "files": 14
+      },
+      {
+        "name": "fast-xml-parser",
+        "version": "5.12.0",
+        "files": 53
+      },
+      {
+        "name": "fflate",
+        "version": "0.8.3",
+        "files": 17
+      },
+      {
+        "name": "is-unsafe",
+        "version": "2.0.3",
+        "files": 16
+      },
+      {
+        "name": "path-expression-matcher",
+        "version": "1.6.2",
+        "files": 12
+      },
+      {
+        "name": "strnum",
+        "version": "2.5.1",
+        "files": 5
+      },
+      {
+        "name": "xml-naming",
+        "version": "0.3.0",
+        "files": 5
+      }
+    ],
+    "count": 136,
+    "total": 2732897,
+    "inventorySha256": "c215b285efc0b43e63ee3dd6d22d0c88d31f64e69cee3cfce0878a9a8f6f5451"
+  },
+  "retainedLocal": {
+    "executionReceipt": "/tmp/opf-library-identities-focus01/receipt.json",
+    "executionSha256": "d525ee26a429366810faafc54655c26b8fcfb2164257ef270ad49cb56572c058",
+    "inventory": "/tmp/opf-library-identities-focus01/inventory.json",
+    "inventoryReceiptSha256": "c2a124b96ec2ea0fc7469de2d56317dbe6d34b0e68faed76f983ac1d9fb56a72"
+  },
+  "unrun": [
+    "Required integrated native/doc source gate",
+    "Fresh Windows controller create-envelope and managed/default admission",
+    "Native execution/qualification"
+  ]
+}
