@@ -7,15 +7,26 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 const folder=fileURLToPath(new URL('./',import.meta.url));
 const sha=b=>createHash('sha256').update(b).digest('hex');
+export const REFERENCE_BASE_REVISION='e5741c2dae7e1b341ca0cf6b22cbc9c2f03f6d85';
+const historicalFolder=path.join(folder,'test-fixtures/reference-controller-base-e5741c2d');
 const bases=[
-  ['seven-chart-worker.ps1','reference-chart-worker.ps1','7735dcd6c9c1f3ff6d0a454319697eda040f66ec515dde96e705a1ed65571af4'],
-  ['run-seven-chart-profile.ps1','run-reference-chart-profile.ps1','060cafa0e782f7aaaaafb9d395bbfa51598f89c2269986a56c17e3e0ce5e3878'],
-  ['seven-chart-worker-self-test.ps1','reference-chart-worker-self-test.ps1','35b1b4e69d21181144ad0cfed5f4050488929717840fff514894f97751d8aa0b']
+  ['seven-chart-worker.ps1','reference-chart-worker.ps1','7735dcd6c9c1f3ff6d0a454319697eda040f66ec515dde96e705a1ed65571af4','9c0e986a4777a22424e41bb53d43ec69d312a7a3',21756],
+  ['run-seven-chart-profile.ps1','run-reference-chart-profile.ps1','060cafa0e782f7aaaaafb9d395bbfa51598f89c2269986a56c17e3e0ce5e3878','aa88bd32163b9b8fd625a6fadd3bf34a0b6a732f',10729],
+  ['seven-chart-worker-self-test.ps1','reference-chart-worker-self-test.ps1','35b1b4e69d21181144ad0cfed5f4050488929717840fff514894f97751d8aa0b','da984e9ceed03e4918842df8325b1122f7a4f230',15017]
 ];
+const historicalAuthority=JSON.parse(fs.readFileSync(path.join(historicalFolder,'authority.json'),'utf8'));
+export function assertReferenceHistoricalBase(base,bytes,authority=historicalAuthority){
+  assert.deepEqual(authority,{schemaVersion:1,scope:'historical derivation source only; never execute',revision:REFERENCE_BASE_REVISION,files:bases.map(([name,,sha256,gitBlob,bytes])=>({path:name,gitBlob,bytes,sha256}))},'Exact historical reference-base authority');
+  const record=bases.find(([name])=>name===base);assert.ok(record,'Unknown historical reference base');
+  assert.ok(Buffer.isBuffer(bytes),'Historical reference base must retain raw bytes');
+  assert.equal(bytes.length,record[4],'Historical reference base length changed '+base);
+  assert.equal(sha(bytes),record[2],'Reviewed historical source changed '+base);
+  return bytes;
+}
 const once=(source,before,after)=>{assert.equal(source.split(before).length-1,1,'Unique policy derivation '+before);return source.replace(before,after);};
 export function referenceControllerBaseDerivation(){
   return bases.map(([base,file,expected])=>{
-    const bytes=fs.readFileSync(path.join(folder,base));assert.equal(sha(bytes),expected,'Reviewed source changed '+base);
+    const bytes=assertReferenceHistoricalBase(base,fs.readFileSync(path.join(historicalFolder,base)));
     let text=bytes.toString('utf8').replaceAll('seven-chart','reference-chart').replaceAll('Seven','ReferenceWitness').replaceAll('seven','referenceWitness');
     if(base==='seven-chart-worker.ps1'){
       text=once(text,'$count -eq 7)','$count -eq 3)');

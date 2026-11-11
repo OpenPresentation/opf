@@ -5,12 +5,29 @@ import {createHash} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {test} from 'node:test';
-import {referenceControllerBaseDerivation,referenceControllerDerivation,applyExactReferenceEdits,deriveReferencePostflight} from './derive-reference-controller.mjs';
+import {REFERENCE_BASE_REVISION,assertReferenceHistoricalBase,referenceControllerBaseDerivation,referenceControllerDerivation,applyExactReferenceEdits,deriveReferencePostflight} from './derive-reference-controller.mjs';
 const folder=path.dirname(fileURLToPath(import.meta.url)),sha=b=>createHash('sha256').update(b).digest('hex');
 const plan=JSON.parse(fs.readFileSync(path.join(folder,'reference-postflight-derivation.json'),'utf8'));
 const base=()=>referenceControllerBaseDerivation().find(item=>item.file==='run-reference-chart-profile.ps1').source;
 
-test('approved postflight is an exact second stage after the immutable whole-seven shell derivation',()=>{
+test('retained historical whole-seven bytes and authority refuse drift independently of live shells',()=>{
+  const historical=path.join(folder,'test-fixtures/reference-controller-base-e5741c2d'),authority=JSON.parse(fs.readFileSync(path.join(historical,'authority.json'),'utf8'));
+  assert.equal(authority.revision,REFERENCE_BASE_REVISION);
+  for(const record of authority.files){
+    const bytes=fs.readFileSync(path.join(historical,record.path));assert.equal(assertReferenceHistoricalBase(record.path,bytes),bytes);
+    const changed=Buffer.from(bytes);changed[0]^=1;
+    assert.throws(()=>assertReferenceHistoricalBase(record.path,changed),/Reviewed historical source changed/);
+    assert.throws(()=>assertReferenceHistoricalBase(record.path,Buffer.concat([bytes,Buffer.from('\n')])),/Historical reference base length changed/);
+  }
+  for(const change of [a=>a.revision='0'.repeat(40),a=>a.files[0].gitBlob='0'.repeat(40),a=>a.files[0].sha256='0'.repeat(64),a=>a.files.pop(),a=>a.files.reverse()]){
+    const altered=structuredClone(authority);change(altered);assert.throws(()=>assertReferenceHistoricalBase(authority.files[0].path,fs.readFileSync(path.join(historical,authority.files[0].path)),altered),/Exact historical reference-base authority/);
+  }
+  // Current request-bound Seven shells deliberately differ. They cannot redefine
+  // the old reference derivation or its independently reviewed postflight stage.
+  for(const name of ['seven-chart-worker.ps1','run-seven-chart-profile.ps1'])assert.throws(()=>assertReferenceHistoricalBase(name,fs.readFileSync(path.join(folder,name))),/Historical reference base length changed|Reviewed historical source changed/);
+});
+
+test('approved postflight is an exact second stage after the retained historical whole-seven shell derivation',()=>{
   assert.equal(plan.reviewedRevision,'f3f04183c2d38ffe3e5755a23b571b6b9ce8155e');
   assert.equal(plan.baseBytes,11352);assert.equal(plan.reviewedBytes,19206);
   assert.equal(plan.reviewedSourceSha256,'8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3');
