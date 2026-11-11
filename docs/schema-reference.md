@@ -563,6 +563,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `type` | yes | `const:"theme"` | Theme-controlled background fill. |
 | `slot` | yes | `ref:ThemeBackgroundSlot` |  |
+| `opacity` | no | `number` | Background opacity from 0 (fully transparent) to 1 (fully opaque). Default 1; the selected theme slot remains unchanged. |
 
 
 ### SolidBackground
