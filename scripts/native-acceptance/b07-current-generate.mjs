@@ -7,7 +7,7 @@ import path from 'node:path';
 import {createRequire} from 'node:module';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {isDeepStrictEqual} from 'node:util';
-import {B07_NATIVE_BODY_ID,b07NativeBodyExpectedImport,b07SourceSummary,readB07Sources,readB07HistoricalArchive} from './b07-current-source.mjs';
+import {B07_NATIVE_BODY_ID,b07NativeBodyExpectedImport,b07SourceSummary,readB07Sources,readB07HistoricalArchive,b07CurrentShapeBound,assertB07Case10Topology} from './b07-current-source.mjs';
 import {digest,fileIdentity,installedIdentity,repositoryIdentity,packageNames} from './identity.mjs';
 import {installedEngines,fixtureWriter,prepareFreshOutput} from './generate.mjs';
 import {preparationInputPaths,sealSuite} from './prepare.mjs';
@@ -69,7 +69,8 @@ export function assertB07Validation(source,current,original) {
 }
 
 /** All wire properties remain raw: XML lang, physical coordinates, marker and body properties are never vocabulary-projected. */
-export function inspectB07Archive(bytes,{fflate,parser}) {
+export function inspectB07Archive(bytes,{fflate,parser},source) {
+  const shapeBound=b07CurrentShapeBound(source);
   assert.ok(bytes.length<=16*1024*1024,'Existing archive byte cap');
   const entries=fflate.unzipSync(bytes),names=Object.keys(entries);assert.ok(names.length<=4096,'Existing ZIP part cap');
   const slideNames=names.filter(name=>/^ppt\/slides\/slide\d+\.xml$/u.test(name)).sort();
@@ -79,7 +80,7 @@ export function inspectB07Archive(bytes,{fflate,parser}) {
       shapes:list(tree['p:sp']).map(shape=>({name:shape['p:nvSpPr']?.['p:cNvPr']?.name,geometry:shape['p:spPr']?.['a:xfrm'],body:shape['p:txBody']}))};
   });
   assert.equal(slides.length,1,'Every complete B07 source remains one slide');
-  assert.ok(slides.every(slide=>slide.topLevelShapes<=16),'Retain original declared16-shape bound, below unchanged global30 cap');
+  assert.ok(slides.every(slide=>slide.topLevelShapes<=shapeBound),'Retain declared'+shapeBound+'-shape bound, below unchanged global30 cap');if(shapeBound===22)assert.equal(slides[0].topLevelShapes,22,'Exact reviewed case10 topology required');
   return {parts:names.map(file=>({file,...{bytes:entries[file].length,sha256:digest(entries[file])}})),slides};
 }
 
@@ -121,6 +122,7 @@ export async function generateB07Current(options) {
   const fontManifest=render.BUNDLED_FONT_MANIFEST;assert.ok(Array.isArray(fontManifest?.packages),'Actual installed font manifest required');
   const require=createRequire(path.join(consumer,'package.json')),peer=createRequire(require.resolve('@openpresentation/opf-pptx/package.json'));
   const {XMLParser}=peer('fast-xml-parser'),parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,parseAttributeValue:false,trimValues:false});
+  const pptxRuntime=before.packages.packages.find(item=>item.name==='@openpresentation/opf-pptx'),scalarFile=path.join(pptxRuntime.directory,'dist/native-scalar-fragments.js');assert.ok(pptxRuntime.runtime.files.some(item=>item.path==='dist/native-scalar-fragments.js'&&item.sha256===fileIdentity(scalarFile).sha256),'Scalar reader must be the actual bound installed runtime');const {readNativeScalarGroups}=await import(pathToFileURL(scalarFile));
   const validations=sources.map(source=>{
     const current=core.validate(source.document,{catalogs:[gallery],only:['format','references']}),original=source.pin?core.validate(source.original,{catalogs:[gallery],only:['format','references']}):undefined;
     assertB07Validation(source,current,original);return {id:source.id,current,original};
@@ -143,7 +145,11 @@ export async function generateB07Current(options) {
         await fonts.ensure(deck,{renderOptions:{catalogs:[gallery]}});const fontsBefore=b07FontFacts(fonts,fontManifest);
         const bytes=await pptx.toPptx(deck,{...exportOptions,fonts,bodyText:source.bodyText,onDiagnostic:issue=>diagnostics.push(issue)});
         assert.deepEqual(deck,source.document,'Export changed authored source');
-        const input=`inputs/${source.id}.pptx`,archive=await put(input,bytes),actual=inspectB07Archive(bytes,{fflate,parser});
+        const input=`inputs/${source.id}.pptx`,archive=await put(input,bytes),actual=inspectB07Archive(bytes,{fflate,parser},source);
+        if(b07CurrentShapeBound(source)===22){const entries=fflate.unzipSync(bytes);
+          // The complete installed V2 reader proves ownership; the shape census below is raw direct text/identity only.
+          const {b07NativeShapes}=await import('./b07-current-profile.mjs');assertB07Case10Topology(source,b07NativeShapes(actual.slides[0].xml,XMLParser,source),readNativeScalarGroups(entries,'ppt/slides/slide1.xml').groups);
+        }
         if(source.id===B07_NATIVE_BODY_ID){
           const bodies=actual.slides[0].shapes.filter(shape=>shape.name?.startsWith('OPF native body'));
           assert.equal(bodies.length,1,'The native body path must execute');assert.equal(list(bodies[0].body?.['a:p']).length,2,'Exactly two native paragraphs, no measured fallback');
@@ -162,7 +168,7 @@ export async function generateB07Current(options) {
           currentArchive:actual,historicalArchive:old,sourceRoundTripEqual:isDeepStrictEqual(imported,source.document),sourceImportDifferences:b07Differences(source.document,imported),
           ...(old?{historicalImported,historicalImportDiagnostics,historicalImportDifferences:b07Differences(source.document,historicalImported),historicalArchiveEqual:Buffer.from(bytes).equals(historical.get(source.id)),historicalPartDifferences:b07Differences(old.parts,actual.parts),historicalNativeDifferences:b07Differences(old.slides,actual.slides)}:{}),
           fontsBefore,fontsAfter:b07FontFacts(fonts,fontManifest),nativeAcceptance:false,scope:'All raw current/historical archive, native properties and import differences retained as findings; no physical glyph or saved/reopened observation.'}));
-        cases.push({id:source.id,input,source:currentSource.path,actionPlan,archiveSha256:archive.sha256,slideCount:1,declaredTopLevelShapes:16,actualTopLevelShapes:actual.slides[0].topLevelShapes,
+        cases.push({id:source.id,input,source:currentSource.path,actionPlan,archiveSha256:archive.sha256,slideCount:1,declaredTopLevelShapes:b07CurrentShapeBound(source),actualTopLevelShapes:actual.slides[0].topLevelShapes,
           bodyText:source.bodyText,automaticControlEligible:false,requiresReviewedNativeProfile:true,previews,nativeAcceptance:false});
       }finally{fonts.dispose?.();}
     }

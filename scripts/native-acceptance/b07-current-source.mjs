@@ -75,3 +75,22 @@ export function b07SourceSummary() {
     ...(source.pin?{historical:{revision:B07_HISTORY,path:source.pin.historicalPath,bytes:source.pin.bytes,sha256:source.pin.sha256,archiveBytes:source.pin.archiveBytes,archiveSha256:source.pin.archiveSha256},typedProjection:source.pin.projection}:{}),
     nativeAcceptance:false,registryAcceptance:false}));
 }
+
+// This is an exact current-source qualification bound, never a caller cap.
+export const B07_CASE10_ID='rtl-contrast-10-non-ascii-digits';
+export function b07CurrentShapeBound(source){
+ if(source===undefined)return 16;
+ const known=readB07Sources().find(row=>row.id===source?.id);assert.ok(known,'Unknown B07 shape-admission source');assert.deepEqual(source,known,'Exact closed B07 source required; no caller cap/policy');
+ if(source.id!==B07_CASE10_ID)return 16;
+ assert.equal(source.currentBytes.length,519);assert.equal(digest(source.currentBytes),'69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb');return 22;
+}
+export function assertB07Case10Topology(source,shapes,groups){
+ assert.equal(b07CurrentShapeBound(source),22);assert.equal(shapes.length,22);
+ const title=source.document.slides[0].title,blocks=source.document.slides[0].blocks,expected=new Map([['slides.0.blocks.0.text',blocks[0].text],['slides.0.blocks.1.text',blocks[1].text],...blocks[2].items.map((text,index)=>['slides.0.blocks.2.items.'+index,text])]);
+ assert.equal(title.length,19);assert.equal([...expected.values()].join('').length,98);assert.equal(shapes.map(shape=>shape.text).join('').length,117);assert.equal(shapes.filter(shape=>shape.text===':').length,4);assert.equal(shapes.filter(shape=>/^ +$/.test(shape.text)).length,2);assert(!shapes.some(shape=>/[\u0660-\u0669\u06f0-\u06f9]/u.test(shape.text)&&shape.text.includes(':')),'Combined digit/neutral ownership is not the reviewed topology');
+ assert.equal(groups.length,4);assert.deepEqual(groups.map(group=>group.header.group).sort(),[...expected.keys()].sort());assert.equal(groups.flatMap(group=>group.header.lines).length,7);
+ const claimed=new Set();for(const group of groups){assert.equal(group.exact,true,'Original current V2 proof must be exact');assert.equal(group.text,expected.get(group.header.group));assert.equal(group.header.kind,group.header.group.endsWith('.text')?'text':'list-item');
+  for(const member of group.header.members){const key=member.id+'|'+member.name;assert(!claimed.has(key));claimed.add(key);const matches=shapes.filter(shape=>shape.id===member.id&&shape.name===member.name);assert.equal(matches.length,1);assert.equal(matches[0].text,group.text.slice(member.from,member.to),'Exact source-bound physical member required');}
+ }
+ assert.equal(claimed.size,21);const unowned=shapes.filter(shape=>!claimed.has(shape.id+'|'+shape.name));assert.equal(unowned.length,1);assert.equal(unowned[0].text,title);return{shapes:22,textUtf16:117,groups:4,lines:7,colonOnly:4,spaceOnly:2};
+}

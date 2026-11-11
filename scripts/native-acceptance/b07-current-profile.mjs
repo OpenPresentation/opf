@@ -10,7 +10,7 @@ import {plainLocalPath} from './reference-chart-profile.mjs';
 import {inspectReferenceRuntimeRoutes} from './reference-runtime-routes.mjs';
 import {preparationInputPaths} from './prepare.mjs';
 import {readB07PackedProof} from './b07-current-generate.mjs';
-import {readB07Sources,b07SourceSummary} from './b07-current-source.mjs';
+import {readB07Sources,b07SourceSummary,b07CurrentShapeBound,assertB07Case10Topology} from './b07-current-source.mjs';
 import {readB07SuccessfulStages} from './b07-stages.mjs';
 import {B07_POSTFLIGHT_POLICY,assertB07PostflightReady,assertB07BoundedPostflight} from './b07-postflight.mjs';
 
@@ -18,6 +18,7 @@ export const B07_PROFILE='b07-current-one-case-readonly-v1';
 export const B07_REVIEWED_WORKER='6831f30a6ecec7ffec870e9aaf80dda27f2bab9a';
 export const B07_WORKER_FILES=['native-furniture-control.ps1','native-process.ps1','native-process-check.ps1','native-furniture-harness-check.ps1','native-text-probes-check.ps1'].map(name=>'packages/pptx/test/'+name);
 export const B07_LIMITS={slides:1,topLevelShapes:16,targets:3,ranges:8,sampledUtf16:32,textUtf16:4096,archiveBytes:16777216,zipParts:4096,phases:3,pngs:3,timeoutSecondsMax:60};
+export const b07LimitsForSource=source=>({...B07_LIMITS,topLevelShapes:b07CurrentShapeBound(source)});
 const root=fileURLToPath(new URL('../../',import.meta.url));
 // Match repositoryIdentity's canonical directory; do not normalize untrusted envelope values.
 export function assertB07ControllerDirectory(directory){assert.equal(directory,fs.realpathSync(root),'Wrong canonical B07 controller directory');}
@@ -63,11 +64,12 @@ export function validateB07Probe(plan,mapping,{archiveSha256,sourceSha256,docume
 }
 
 /** Ordered OOXML; never group all a:r before a:br or trim the native text. */
-export function b07NativeShapes(xml,XMLParser){
+export function b07NativeShapes(xml,XMLParser,source){
+  const shapeBound=b07CurrentShapeBound(source);
   const parser=new XMLParser({preserveOrder:true,ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,parseAttributeValue:false,trimValues:false});
   const child=(nodes,key)=>nodes.flatMap(node=>node[key]?[node]:[]),one=(nodes,key)=>{const found=child(nodes,key);assert.equal(found.length,1,'Expected one '+key);return found[0];};
   const document=parser.parse(xml),slide=one(document,'p:sld'),common=one(slide['p:sld'],'p:cSld'),tree=one(common['p:cSld'],'p:spTree')['p:spTree'];
-  assert.ok(tree.filter(node=>['p:sp','p:pic','p:graphicFrame','p:grpSp','p:cxnSp'].some(key=>Object.hasOwn(node,key))).length<=16);assert.equal(child(tree,'p:grpSp').length,0,'Nested groups need separate review');
+  assert.ok(tree.filter(node=>['p:sp','p:pic','p:graphicFrame','p:grpSp','p:cxnSp'].some(key=>Object.hasOwn(node,key))).length<=shapeBound);if(shapeBound===22)assert.equal(tree.filter(node=>['p:sp','p:pic','p:graphicFrame','p:grpSp','p:cxnSp'].some(key=>Object.hasOwn(node,key))).length,22);assert.equal(child(tree,'p:grpSp').length,0,'Nested groups need separate review');
   const shapes=child(tree,'p:sp').map(node=>{
     const content=node['p:sp'],nv=one(content,'p:nvSpPr'),identity=one(nv['p:nvSpPr'],'p:cNvPr')[':@'];const id=Number(identity.id);integer(id,1,2147483647);literal(identity.name,255);const bodies=child(content,'p:txBody');let text='';const runs=[];
     if(bodies.length){assert.equal(bodies.length,1);for(const [index,p]of child(bodies[0]['p:txBody'],'a:p').entries()){
@@ -87,7 +89,7 @@ async function loadB07ProfileSource(spec){
   assert.equal(suite.schemaVersion,1);assert.deepEqual(suite.scope,{kind:'b07-current-five-case',fullSuite:false,defaultSuite:false,nativeAcceptance:false});assert.equal(suite.nativeAcceptance,false);assert.equal(suite.registryAcceptance,false);
   const sources=readB07Sources();assert.deepEqual(suite.cases.map(item=>item.id),sources.map(item=>item.id),'Exact five-case roster');assert.deepEqual(suite.provenance.sourceSummary,b07SourceSummary());
   for(const [index,item]of suite.cases.entries()){
-    assert.equal(item.automaticControlEligible,false);assert.equal(item.requiresReviewedNativeProfile,true);assert.equal(item.worker,undefined,'Never forge generic furniture eligibility');assert.equal(item.nativeAcceptance,false);assert.equal(item.slideCount,1);assert.equal(item.declaredTopLevelShapes,16);integer(item.actualTopLevelShapes,0,16);assert.equal(item.bodyText,sources[index].bodyText);
+    assert.equal(item.automaticControlEligible,false);assert.equal(item.requiresReviewedNativeProfile,true);assert.equal(item.worker,undefined,'Never forge generic furniture eligibility');assert.equal(item.nativeAcceptance,false);assert.equal(item.slideCount,1);const shapeBound=b07CurrentShapeBound(sources[index]);assert.equal(item.declaredTopLevelShapes,shapeBound);integer(item.actualTopLevelShapes,0,shapeBound);if(shapeBound===22)assert.equal(item.actualTopLevelShapes,22);assert.equal(item.bodyText,sources[index].bodyText);
     assert.equal(item.input,'inputs/'+item.id+'.pptx');assert.equal(item.source,'sources/'+item.id+'.opf.json');assert.equal(item.actionPlan,'actions/'+item.id+'.json');
     for(const name of[item.input,item.source,item.actionPlan])assert.equal(suite.files.filter(record=>record.path===name).length,1,'Selected assets must be sealed');
     assert.deepEqual(await tableAsset(spec.suiteDirectory,item.source),sources[index].currentBytes);assert.deepEqual(JSON.parse(await tableAsset(spec.suiteDirectory,item.actionPlan)),[]);assert.equal(digest(await tableAsset(spec.suiteDirectory,item.input)),item.archiveSha256);
@@ -101,7 +103,8 @@ async function loadB07ProfileSource(spec){
   const pptx=suite.provenance.packages.packages.find(item=>item.name==='@openpresentation/opf-pptx').directory,require=createRequire(path.join(pptx,'package.json')),{XMLParser}=require('fast-xml-parser');
   const safetyFile=path.join(pptx,'dist/input-safety.js');assert.ok(suite.provenance.packages.packages.find(item=>item.directory===pptx).runtime.files.some(item=>item.path==='dist/input-safety.js'&&item.sha256===fileIdentity(safetyFile).sha256),'Archive safety module must be bound installed runtime');
   const {readInputZip}=await import(pathToFileURL(safetyFile));assert.ok(input.length<=B07_LIMITS.archiveBytes);const entries=readInputZip(input);assert.ok(Object.keys(entries).length<=B07_LIMITS.zipParts);assert.deepEqual(Object.keys(entries).filter(name=>/^ppt\/slides\/slide\d+\.xml$/u.test(name)),['ppt/slides/slide1.xml']);
-  const shapes=b07NativeShapes(new TextDecoder('utf-8',{fatal:true}).decode(entries['ppt/slides/slide1.xml']),XMLParser);assert.equal(shapes.length<=selected.actualTopLevelShapes,true);
+  const shapes=b07NativeShapes(new TextDecoder('utf-8',{fatal:true}).decode(entries['ppt/slides/slide1.xml']),XMLParser,source);assert.equal(shapes.length<=selected.actualTopLevelShapes,true);
+  if(b07CurrentShapeBound(source)===22){const scalarFile=path.join(pptx,'dist/native-scalar-fragments.js');assert.ok(suite.provenance.packages.packages.find(item=>item.directory===pptx).runtime.files.some(item=>item.path==='dist/native-scalar-fragments.js'&&item.sha256===fileIdentity(scalarFile).sha256),'Actual installed scalar reader required');const {readNativeScalarGroups}=await import(pathToFileURL(scalarFile));assertB07Case10Topology(source,shapes,readNativeScalarGroups(entries,'ppt/slides/slide1.xml').groups);}
   const probe=await pinnedJson(spec.probePlan,spec.probeSha256,65536),mapping=await pinnedJson(spec.sourceMapping,spec.mappingSha256,262144);
   const counts=validateB07Probe(probe.value,mapping.value,{archiveSha256:selected.archiveSha256,sourceSha256:digest(source.currentBytes),document:source.document,shapes});
   return {suite,suiteBytes,selected,source,input,probe,mapping,shapes,counts,worker};
@@ -113,22 +116,24 @@ export async function prepareB07Profile(spec,output){
   const source=await loadB07ProfileSource(spec);output=plainLocalPath(output,{exists:false});assertTableOutputSeparate(output,[root,...['suiteDirectory','producerRepository','consumer','workerRepository','packedProof','probePlan','sourceMapping'].map(key=>spec[key])]);assert.equal(fs.realpathSync(path.dirname(output)),path.dirname(output));
   fs.mkdirSync(output);fs.mkdirSync(path.join(output,'inputs'));const snapshots=[];const put=(file,bytes)=>{fs.writeFileSync(path.join(output,file),bytes,{flag:'wx'});snapshots.push({path:file,bytes:bytes.length,sha256:digest(bytes)});};
   put('inputs/suite.json',source.suiteBytes);put('inputs/case.pptx',source.input);put('inputs/source.opf.json',source.source.currentBytes);put('inputs/action-plan.json',await tableAsset(spec.suiteDirectory,source.selected.actionPlan));put('inputs/text-probe-plan.json',source.probe.bytes);put('inputs/source-mapping.json',source.mapping.bytes);
-  const envelope={schemaVersion:1,profile:B07_PROFILE,postflightPolicy:B07_POSTFLIGHT_POLICY,spec,output,controllerRepository:controller,workerRepository:source.worker,node:{path:process.execPath,version:process.version,identity:fileIdentity(process.execPath)},selectedCase:source.selected,counts:source.counts,limits:B07_LIMITS,snapshots,nativeAcceptance:false,registryAcceptance:false};
+  const envelope={schemaVersion:1,profile:B07_PROFILE,postflightPolicy:B07_POSTFLIGHT_POLICY,spec,output,controllerRepository:controller,workerRepository:source.worker,node:{path:process.execPath,version:process.version,identity:fileIdentity(process.execPath)},selectedCase:source.selected,counts:source.counts,limits:b07LimitsForSource(source.source),snapshots,nativeAcceptance:false,registryAcceptance:false};
   // Recheck immutable inputs after exclusive snapshots; never resume failed output.
   await loadB07ProfileSource(spec);await tableRepository(root,controller);fs.writeFileSync(path.join(output,'execution-envelope.json'),json(envelope),{flag:'wx'});return {envelope:path.join(output,'execution-envelope.json'),sha256:digest(json(envelope)),nativeAcceptance:false};
 }
 export async function bindB07Profile(file,sha){
   assertB07Node();const {value:envelope}=await pinnedJson(file,sha);exact(envelope,['schemaVersion','profile','postflightPolicy','spec','output','controllerRepository','workerRepository','node','selectedCase','counts','limits','snapshots','nativeAcceptance','registryAcceptance']);assert.equal(envelope.schemaVersion,1);assert.equal(envelope.profile,B07_PROFILE);assert.deepEqual(envelope.postflightPolicy,B07_POSTFLIGHT_POLICY);assert.equal(envelope.nativeAcceptance,false);assert.equal(envelope.registryAcceptance,false);exact(envelope.spec,SPEC_KEYS);
   assert.equal(file,path.join(envelope.output,'execution-envelope.json'));assertB07ControllerDirectory(envelope.controllerRepository.directory);assert.equal(envelope.controllerRepository.revision,envelope.spec.controllerRevision);assert.deepEqual(envelope.controllerRepository.files.map(item=>item.path),await b07ControllerFiles());await tableRepository(root,envelope.controllerRepository);
-  assert.deepEqual(envelope.node,{path:process.execPath,version:process.version,identity:fileIdentity(process.execPath)});assert.deepEqual(envelope.limits,B07_LIMITS);
+  assert.deepEqual(envelope.node,{path:process.execPath,version:process.version,identity:fileIdentity(process.execPath)});assert.deepEqual(envelope.limits,b07LimitsForSource(readB07Sources().find(source=>source.id===envelope.spec.caseId)));
   const source=await loadB07ProfileSource(envelope.spec);assert.deepEqual(envelope.selectedCase,source.selected);assert.deepEqual(envelope.counts,source.counts);assert.deepEqual(envelope.workerRepository,source.worker);assertTableOutputSeparate(envelope.output,[root,...['suiteDirectory','producerRepository','consumer','workerRepository','packedProof','probePlan','sourceMapping'].map(key=>envelope.spec[key])]);
   assert.deepEqual(envelope.snapshots.map(item=>item.path),['inputs/suite.json','inputs/case.pptx','inputs/source.opf.json','inputs/action-plan.json','inputs/text-probe-plan.json','inputs/source-mapping.json']);await tableFileRecords(envelope.output,envelope.snapshots);
   const originals=[source.suiteBytes,source.input,source.source.currentBytes,await tableAsset(envelope.spec.suiteDirectory,source.selected.actionPlan),source.probe.bytes,source.mapping.bytes];for(const [index,item]of envelope.snapshots.entries())assert.equal(item.sha256,digest(originals[index]),'Snapshot differs from admitted original');return {envelope,source};
 }
 
 const nativeJson=bytes=>JSON.parse(bytes.toString('utf8').replace(/^\uFEFF/u,''));
-export function bindB07ObservedPhase(state,plan){
-  assert.equal(state.slideCount,1);assert.equal(state.slides.length,1);const slide=state.slides[0];assert.equal(slide.index,1);integer(slide.shapeCount,0,16);assert.equal(slide.shapes.length,slide.shapeCount);
+export function bindB07ObservedPhase(state,plan,source,expectedShapes){
+  const shapeBound=b07CurrentShapeBound(source);
+  assert.equal(state.slideCount,1);assert.equal(state.slides.length,1);const slide=state.slides[0];assert.equal(slide.index,1);integer(slide.shapeCount,0,shapeBound);assert.equal(slide.shapes.length,slide.shapeCount);
+  if(shapeBound===22){assert.equal(slide.shapeCount,22);assert.equal(expectedShapes?.length,22);assert.deepEqual(slide.shapes.map(({id,name,text})=>({id,name,text})),expectedShapes.map(({id,name,text})=>({id,name,text})),'Complete current case10 identities/text must match original admitted topology');assert.equal(slide.shapes.map(shape=>shape.text).join('').length,117);}
   const observed=[];
   for(const target of plan.targets){
     const matches=slide.shapes.filter(shape=>shape.id===target.shapeId||shape.name===target.shapeName);assert.equal(matches.length,1,'Observed stale/ambiguous target');const shape=matches[0];assert.equal(shape.id,target.shapeId);assert.equal(shape.name,target.shapeName);assert.equal(shape.text,target.text);
@@ -147,6 +152,10 @@ export function bindB07ObservedPhase(state,plan){
   }
   assert.equal(slide.shapes.filter(shape=>shape.textProbe).length,plan.targets.length);assert.equal(state.rasters.length,1);assert.equal(state.rasters[0].slideIndex,1);return observed;
 }
+export function assertB07Case10Phases(report,binding){
+  if(b07CurrentShapeBound(binding.source)!==22)return;assert.deepEqual(Object.keys(report.phases),['original','edited','reopened']);
+  for(const phase of ['original','edited','reopened'])bindB07ObservedPhase(report.phases[phase],binding.probe.value,binding.source,binding.shapes);
+}
 export function b07PngDimensions(bytes){assert.ok(bytes.length>=33);assert.deepEqual(bytes.subarray(0,8),Buffer.from([137,80,78,71,13,10,26,10]));assert.equal(bytes.toString('ascii',12,16),'IHDR');assert.equal(bytes.readUInt32BE(8),13);return {width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20)};}
 export async function completeB07Observation(output,observation){
   await tableFileRecords(output,observation.rows);
@@ -163,6 +172,7 @@ export async function verifyB07Postflight(file,sha,output){
   assert.deepEqual(runner.snapshots.map(item=>item.path),['execution-envelope.json',...envelope.snapshots.map(item=>item.path)]);await tableFileRecords(output,runner.snapshots);assert.equal(runner.snapshots[0].sha256,sha);assert.deepEqual(runner.snapshots.slice(1),envelope.snapshots);
   const terminal=nativeJson(await read('native/supervisor.json')),report=nativeJson(await read('native/report.json')),request=nativeJson(await read('native/request.json')),stageBytes=await read('native/stages.jsonl');
   const ready=assertB07PostflightReady(terminal,report,request,stageBytes),native=path.join(output,'native');
+  assertB07Case10Phases(report,source);
   for(const [key,original,snapshot,expected]of[['source','inputs/case.pptx','native/inputs/input.pptx',source.selected.archiveSha256],['actionPlan','inputs/action-plan.json','native/inputs/action-plan.json',envelope.snapshots.find(item=>item.path==='inputs/action-plan.json').sha256],['textProbePlan','inputs/text-probe-plan.json','native/inputs/text-probe-plan.json',envelope.spec.probeSha256]]){assert.equal(request[key].path,path.join(output,original));assert.equal(request[key].snapshotPath,path.join(output,snapshot));assert.equal(request[key].sha256,expected);assert.equal(request[key].snapshotSha256,expected);assert.equal(digest(await read(snapshot)),expected);assert.equal(report[key].path,request[key].path);assert.equal(report[key].sha256,expected);assert.equal(report[key].snapshotPath??report.source.openedPath,path.join(output,snapshot));assert.equal(report[key].snapshotSha256??report.source.openedSha256,expected);}
   for(const [key,name]of[['verifier','native-furniture-control.ps1'],['processHelper','native-process.ps1']]){const record=envelope.workerRepository.files.find(item=>item.path==='packages/pptx/test/'+name);assert.equal(request[key].path,path.join(envelope.spec.workerRepository,'packages/pptx/test',name));assert.equal(request[key].sha256,record.sha256);assert.equal(request[key].snapshotPath,path.join(native,'inputs',name));assert.equal(request[key].snapshotSha256,record.sha256);assert.equal(digest(await read('native/inputs/'+name)),record.sha256);assert.deepEqual(report.inputs[key],request[key]);}
   const saved=await read('native/native-furniture-control.pptx');assert.equal(report.saved.path,path.join(native,'native-furniture-control.pptx'));assert.equal(report.reopened.path,report.saved.path);assert.equal(report.saved.sha256,digest(saved));assert.equal(report.reopened.sha256,digest(saved));
@@ -183,11 +193,11 @@ export async function observeB07Profile(file,sha,output){
   readB07SuccessfulStages(await read('native/stages.jsonl'));
   assertB07PostflightReady(supervisor,report,request,await tableAsset(output,'native/stages.jsonl'));
   const phases={};for(const phase of['original','edited','reopened']){
-    const state=report.phases[phase],observed=bindB07ObservedPhase(state,source.probe.value),relative=`native/${phase}-slide-01.png`,png=await read(relative);assert.equal(state.rasters[0].path,path.join(output,relative));assert.equal(state.rasters[0].sha256,digest(png));const dimensions=b07PngDimensions(png);assert.deepEqual(dimensions,{width:1280,height:720});phases[phase]={observed,png:{path:relative,bytes:png.length,sha256:digest(png),...dimensions},raw:state};
+    const state=report.phases[phase],observed=bindB07ObservedPhase(state,source.probe.value,source.source,source.shapes),relative=`native/${phase}-slide-01.png`,png=await read(relative);assert.equal(state.rasters[0].path,path.join(output,relative));assert.equal(state.rasters[0].sha256,digest(png));const dimensions=b07PngDimensions(png);assert.deepEqual(dimensions,{width:1280,height:720});phases[phase]={observed,png:{path:relative,bytes:png.length,sha256:digest(png),...dimensions},raw:state};
   }
   const saved=await read('native/native-furniture-control.pptx');assert.equal(report.saved.path,path.join(native,'native-furniture-control.pptx'));assert.equal(report.reopened.path,report.saved.path);assert.equal(report.saved.sha256,digest(saved));assert.equal(report.reopened.sha256,digest(saved));
   const pptx=source.suite.provenance.packages.packages.find(item=>item.name==='@openpresentation/opf-pptx').directory,require=createRequire(path.join(pptx,'package.json')),api=await import(pathToFileURL(require.resolve('@openpresentation/opf-pptx'))),{gallery}=await import(pathToFileURL(require.resolve('@openpresentation/gallery'))),{readInputZip}=await import(pathToFileURL(path.join(pptx,'dist/input-safety.js'))),{XMLParser}=require('fast-xml-parser');
-  const findings={};for(const [phase,bytes]of[['original',source.input],['saved',saved],['reopened',saved]]){const diagnostics=[],entries=readInputZip(bytes);assert.ok(bytes.length<=16777216&&Object.keys(entries).length<=4096);assert.deepEqual(Object.keys(entries).filter(name=>/^ppt\/slides\/slide\d+\.xml$/u.test(name)),['ppt/slides/slide1.xml']);findings[phase]={sha256:digest(bytes),nativeShapes:b07NativeShapes(new TextDecoder('utf-8',{fatal:true}).decode(entries['ppt/slides/slide1.xml']),XMLParser),imported:await api.fromPptx(bytes,{catalogs:[gallery],onDiagnostic:issue=>diagnostics.push(issue)}),diagnostics};}
+  const findings={};for(const [phase,bytes]of[['original',source.input],['saved',saved],['reopened',saved]]){const diagnostics=[],entries=readInputZip(bytes);assert.ok(bytes.length<=16777216&&Object.keys(entries).length<=4096);assert.deepEqual(Object.keys(entries).filter(name=>/^ppt\/slides\/slide\d+\.xml$/u.test(name)),['ppt/slides/slide1.xml']);findings[phase]={sha256:digest(bytes),nativeShapes:b07NativeShapes(new TextDecoder('utf-8',{fatal:true}).decode(entries['ppt/slides/slide1.xml']),XMLParser,source.source),imported:await api.fromPptx(bytes,{catalogs:[gallery],onDiagnostic:issue=>diagnostics.push(issue)}),diagnostics};}
   await bindB07Profile(file,sha);await tableFileRecords(output,rows);await tableFileRecords(output,runner.snapshots);
   const observation={schemaVersion:1,profile:B07_PROFILE,envelopeSha256:sha,caseId:source.selected.id,rows,phases,findings,environment:report.environment,scope:'Raw before/SaveCopy/reopen reported Font/language/bounds, native PNGs, archives and public import findings. No mutation, physical font identity, glyph acceptance, full59 or release qualification.',nativeAcceptance:false,registryAcceptance:false};
   return completeB07Observation(output,observation);
