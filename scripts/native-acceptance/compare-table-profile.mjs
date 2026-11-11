@@ -5,12 +5,14 @@ import {writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {digest} from './identity.mjs';
-import {bindTableProfile, tableRegular, tableAsset} from './table-profile.mjs';
+import {bindTableProfile, bindTableRequest, tableRegular, tableAsset} from './table-profile.mjs';
 import {compareNativeTableColors} from './compare-table-colors.mjs';
+import {assertOwnedPostflightArtifacts, readOwnedJson} from './owned-postflight.mjs';
+import {TABLE_POSTFLIGHT_POLICY, verifyTablePostflightBinding} from './table-postflight.mjs';
 const parse = bytes => JSON.parse(bytes.toString('utf8').replace(/^\uFEFF/u, ''));
 export function assertTableLifecycle({runner, terminal, report, stages, profile, envelopeSha256}) {
   for (const record of [runner, report]) {
-    assert.equal(record.schemaVersion, 2); assert.equal(record.profile, 'table-colors-v2');
+    assert.equal(record.schemaVersion, 3); assert.equal(record.profile, 'table-colors-v3');
     assert.equal(record.envelopeSha256, envelopeSha256);
     assert.deepEqual(record.generationIdentity, profile.generationIdentity);
     assert.deepEqual(record.executionIdentity, profile.controller);
@@ -66,7 +68,11 @@ export function assertTableLifecycle({runner, terminal, report, stages, profile,
   }
 }
 export async function compareTableProfile({envelopeFile, envelopeSha256}) {
-  const {envelope} = await bindTableProfile({envelopeFile, envelopeSha256});
+  const binding = await bindTableProfile({envelopeFile, envelopeSha256}), {envelope} = binding;
+  const admission = verifyTablePostflightBinding(binding, bindTableRequest(binding));
+  assert.deepEqual(readOwnedJson(path.join(envelope.output, 'postflight-admission.json')), admission);
+  const wrapper = readOwnedJson(path.join(envelope.output, 'table-colors/supervisor.json'));
+  assertOwnedPostflightArtifacts(wrapper.postflight, await tableRegular(path.join(envelope.output, 'postflight.jsonl')), TABLE_POSTFLIGHT_POLICY, admission);
   const nativeRoot = path.join(envelope.output, 'table-colors');
   const [runnerBytes, terminalBytes, reportBytes, stageBytes] = await Promise.all([
     tableRegular(path.join(envelope.output, 'runner.json')), tableRegular(path.join(nativeRoot, 'supervisor.json')),
@@ -80,8 +86,8 @@ export async function compareTableProfile({envelopeFile, envelopeSha256}) {
   const expectedInput = path.join(nativeRoot, 'table-colors.pptx');
   assert.equal(path.resolve(report.inputs.sourcePath), expectedInput); assert.equal(report.inputs.sourceSha256, envelope.selectedCase.archiveSha256);
   assert.equal(path.resolve(report.inputs.generationPath), path.join(nativeRoot, 'generation.json'));
-  assert.equal(path.resolve(report.inputs.workerPath), path.join(envelope.output, 'inputs/native-table-colors-v2.ps1'));
-  assert.equal(report.inputs.workerSha256, envelope.snapshots.find(item => item.path === 'inputs/native-table-colors-v2.ps1').sha256);
+  assert.equal(path.resolve(report.inputs.workerPath), path.join(envelope.output, 'inputs/native-table-colors-v3.ps1'));
+  assert.equal(report.inputs.workerSha256, envelope.snapshots.find(item => item.path === 'inputs/native-table-colors-v3.ps1').sha256);
   assert.equal(path.resolve(report.inputs.envelopePath), path.resolve(envelopeFile));
   for (const [phase, expected] of [['original', envelope.selectedCase.archiveSha256], ['reopened', report.savedSha256], ['edited', report.editedSha256]]) assert.equal(report.opens.find(open => open.phase === phase).archiveSha256, expected, 'Open used another archive');
   for (const phase of ['original', 'reopened', 'edited']) for (const slide of report[phase]) {
@@ -92,7 +98,7 @@ export async function compareTableProfile({envelopeFile, envelopeSha256}) {
   const comparison = await compareNativeTableColors({consumer: envelope.consumer, output: envelope.output, sourceIdentity: envelope.generationIdentity});
   const archives = {};
   for (const file of ['table-colors.pptx', 'table-colors-saved.pptx', 'table-colors-edited.pptx']) archives[file] = digest(await tableAsset(nativeRoot, file));
-  const result = {...comparison, profile: 'table-colors-v2', envelopeSha256, sourceSuiteSha256: envelope.suiteSha256,
+  const result = {...comparison, profile: 'table-colors-v3', envelopeSha256, sourceSuiteSha256: envelope.suiteSha256,
     generationIdentity: envelope.generationIdentity, executionIdentity: envelope.controller, archives,
     runnerSha256: digest(runnerBytes), nativeSha256: digest(reportBytes), terminalSha256: digest(terminalBytes), stagesSha256: digest(stageBytes), nativeAcceptance: false, registryAcceptance: false};
   await writeFile(path.join(envelope.output, 'table-profile-comparison.json'), `${JSON.stringify(result, null, 2)}\n`, {flag: 'wx'});

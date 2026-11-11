@@ -4,6 +4,7 @@ param(
     [Parameter(Mandatory=$true)][string]$NodeExecutable,
     [Parameter(Mandatory=$true)][string]$OutputDirectory,
     [ValidateRange(5,60)][int]$TimeoutSeconds=45,
+    [Parameter(Mandatory=$true)][ValidatePattern('^[a-f0-9]{64}$')][string]$ExpectedRequestSha256,
     [switch]$Worker
 )
 $ErrorActionPreference='Stop'
@@ -183,12 +184,16 @@ $validator=Join-Path $profile.controllerRepository.directory 'scripts/native-acc
 $checked=& $NodeExecutable $validator verify-execution --envelope $envelopeFile --expected-envelope-sha256 $ExpectedEnvelopeSha256 --output $execution --require-office true
 if($LASTEXITCODE -ne 0) { throw 'Seven worker authorization failed before Office' }
 $binding=($checked | Out-String) | ConvertFrom-Json
+$requestFile=Join-Path $execution 'execution-request.json'
+if((Get-SevenHash $requestFile) -cne $ExpectedRequestSha256) { throw 'Externally pinned immutable seven request differs' }
+$request=Get-Content -LiteralPath $requestFile -Raw -Encoding UTF8 | ConvertFrom-Json
+if($request.profile -cne 'seven-chart-original-readonly-v2' -or $request.timeoutSeconds -ne $TimeoutSeconds -or $request.nativeRoot -cne $root -or $request.node.path -cne $NodeExecutable -or $request.runOfficeRequested -isnot [bool] -or -not $request.runOfficeRequested) { throw 'Seven worker request arguments differ' }
 $runner=Get-Content -LiteralPath (Join-Path $execution 'runner.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 if($runner.timeoutSeconds -ne $TimeoutSeconds) { throw 'Seven worker deadline differs from authorized runner' }
 $script:root=$root;$script:sourcePath=$binding.inputPath;$script:savedPath=Join-Path $root 'saved.pptx'
 $script:app=$null;$script:ownedApp=$null;$script:presentation=$null;$script:ownedPresentation=$null;$script:ownedPath=$null
 $script:sequence=0;$script:stopped=$false;$script:cleanup=$true;$script:hashes=@{};$script:hashes[$script:sourcePath]=Get-SevenHash $script:sourcePath
-$script:report=[ordered]@{schemaVersion=1;profile=$profile.profile;envelopeSha256=$ExpectedEnvelopeSha256;generation=$profile.generation;controllerRepository=$profile.controllerRepository;node=$profile.node;limits=$profile.limits;sourcePath=$script:sourcePath;sourceSha256=$script:hashes[$script:sourcePath];savedPath=$script:savedPath;savedSha256=$null;workerPath=$workerFile;workerSha256=(Get-SevenHash $workerFile);phases=[ordered]@{};probes=@();actions=@();opens=@();closes=0;saveCopies=0;quits=0;officeOperationsStopped=$false;cleanupConfirmed=$true;error=$null;lastStage=$null;lastStatus=$null}
+$script:report=[ordered]@{schemaVersion=2;requestSha256=$ExpectedRequestSha256;profile=$profile.profile;envelopeSha256=$ExpectedEnvelopeSha256;generation=$profile.generation;controllerRepository=$profile.controllerRepository;node=$profile.node;limits=$profile.limits;sourcePath=$script:sourcePath;sourceSha256=$script:hashes[$script:sourcePath];savedPath=$script:savedPath;savedSha256=$null;workerPath=$workerFile;workerSha256=(Get-SevenHash $workerFile);phases=[ordered]@{};probes=@();actions=@();opens=@();closes=0;saveCopies=0;quits=0;officeOperationsStopped=$false;cleanupConfirmed=$true;error=$null;lastStage=$null;lastStatus=$null}
 try {
     Write-SevenStage 'worker.initialize' 'success'
     Invoke-SevenLifecycle
