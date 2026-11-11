@@ -2,6 +2,7 @@ import { inlineDatasets } from './chart-data.js';
 import { walkCitationRuns } from './annotations.js';
 import { lonePayload } from './composition.js';
 import { HALF_STEPPED } from './composition-metadata.js';
+import { hasBuiltinDependency } from './variables.js';
 import type { Composed, CompositionMemo } from './rule-slides.js';
 import type { Rec } from './rule-design.js';
 import type { ValidateOptions } from './validation-types.js';
@@ -64,6 +65,38 @@ function key(value: unknown, opaque?: unknown[]): string {
 
 // Called only after the exact key guard accepted these data. Never invoke an unknown host/catalog callable.
 const hasCallable = (value: unknown): boolean => typeof value === 'function' || !!value && typeof value === 'object' && Object.values(value).some(hasCallable);
+
+/** Extra eligibility guard for the NEW dependency walk, including otherwise unkeyed unused datasets. */
+function boundedDependencyInput(value: unknown): boolean {
+	let bytes = 0;
+	const seen = new Set<object>();
+	const charge = (count: number) => { bytes += count; if (bytes > MAX_KEY_BYTES) throw new RangeError('Dependency input budget exceeded.'); };
+	const walk = (node: unknown, depth: number): void => {
+		if (depth > 128) throw new RangeError('Dependency input depth exceeded.');
+		if (typeof node === 'string') { charge(node.length * 2 + 8); return; }
+		if (node === null || node === undefined || typeof node === 'boolean' || typeof node === 'number' && Number.isFinite(node)) { charge(16); return; }
+		if (typeof node !== 'object' || seen.has(node)) throw new TypeError('Opaque dependency input.');
+		const array = Array.isArray(node);
+		if (array ? Object.getPrototypeOf(node) !== Array.prototype : ![Object.prototype, null].includes(Object.getPrototypeOf(node))) throw new TypeError('Opaque dependency prototype.');
+		seen.add(node); charge(16);
+		const length = array ? Object.getOwnPropertyDescriptor(node, 'length')?.value : 0;
+		if (array && (!Number.isSafeInteger(length) || length < 0 || length * 8 > MAX_KEY_BYTES - bytes)) throw new RangeError('Dependency input count exceeded.');
+		const names = Reflect.ownKeys(node);
+		if (names.length * 8 > MAX_KEY_BYTES - bytes || array && names.length !== length + 1) throw new RangeError('Dependency input count exceeded.');
+		let index = 0;
+		for (const name of names) {
+			if (typeof name !== 'string') throw new TypeError('Opaque dependency key.');
+			const descriptor = Object.getOwnPropertyDescriptor(node, name);
+			if (!descriptor || !('value' in descriptor)) throw new TypeError('Accessor dependency input.');
+			if (array && name === 'length') continue;
+			if (!descriptor.enumerable || array && name !== String(index++)) throw new TypeError('Non-JSON dependency input.');
+			charge(name.length * 2 + 8);
+			walk(descriptor.value, depth + 1);
+		}
+		seen.delete(node);
+	};
+	try { walk(value, 0); return true; } catch { return false; }
+}
 
 /** What a later slide's composition can read of this slide, beyond the global ID/order/count key. */
 function upstreamKey(slide: Rec, raw: string, conservative: boolean): string {
@@ -135,8 +168,9 @@ export class ValidationCompositionCache {
 			if (![Object.prototype, null].includes(Object.getPrototypeOf(document)) || Reflect.ownKeys(document).length !== Object.keys(document).length || Object.values(Object.getOwnPropertyDescriptors(document)).some(descriptor => !('value' in descriptor))) throw new TypeError('Non-JSON review document.');
 			const { slides, datasets, ...metadata } = document;
 			const opaque: unknown[] = [];
-			// Keep every global/ID/order/count/options dependency exact. Own raw and dataset-inlined data also stay exact.
-			const context = key([metadata, slides.map((slide: Rec) => slide.id), options], opaque);
+			// Guard and budget the COMPLETE original global input before considering any comparison projection.
+			const ids = slides.map((slide: Rec) => slide.id);
+			const rawContext = key([metadata, ids, options], opaque);
 			const raw = slides.map((slide: Rec) => key(slide));
 			const inlined = datasets ? inlineDatasets({ datasets, slides }).slides : slides;
 			const data = datasets ? inlined.map((slide: Rec) => key(slide)) : raw;
@@ -148,10 +182,32 @@ export class ValidationCompositionCache {
 			const conservative = metadata.variables !== undefined || metadata.template === true || options.values !== undefined || options.template !== undefined
 				|| hasCallable(metadata) || hasCallable(otherOptions);
 			const upstream = slides.map((slide: Rec, i: number) => upstreamKey(slide, raw[i], conservative));
-			const bytes = 256 + context.length * 2 + raw.reduce((sum: number, text: string) => sum + text.length * 2 + 32, 0)
+			const bytes = 256 + rawContext.length * 2 + raw.reduce((sum: number, text: string) => sum + text.length * 2 + 32, 0)
 				+ (data === raw ? 0 : data.reduce((sum: number, text: string) => sum + text.length * 2 + 16, 0))
 				+ upstream.reduce((sum: number, text: string, i: number) => sum + (text === raw[i] ? 16 : text.length * 2 + 16), 0) + opaque.length * 16;
 			if (bytes > MAX_KEY_BYTES) throw new RangeError('Review cache shared key budget exceeded.');
+			let context = rawContext;
+			// Core geometry has no implicit deck-name heading. The shared variable resolver is the only route from
+			// that field to drawn content. Follow its actual direct/transitive builtin reads without expansion;
+			// declared/template/opaque modes keep the complete key. Unrelated builtins can stay unchanged.
+			// Already-resolved text/furniture remains exact in the own-slide/global-design keys. SVG accessible
+			// titles and export metadata are generated afresh outside this finished-composition cache.
+			if (!conservative && metadata.template === undefined) {
+				let nameUnused = false;
+				try {
+					// The old cache keys only consumed datasets. Bound/guard the ENTIRE raw dependency walk too;
+					// an oversized or opaque unused dataset simply retains the original full-name comparison.
+					if (boundedDependencyInput(document)) {
+						key(document); // Only now can the existing encoder copy a bounded raw domain; it still checks encoded weight.
+						nameUnused = !hasBuiltinDependency(document, 'deck.name');
+					}
+				} catch { /* Keep the complete original key when the dependency domain is unproven. */ }
+				if (nameUnused) {
+					const { name: _name, ...geometryMetadata } = metadata;
+					context = key([geometryMetadata, ids, options], []);
+					// Only this shorter comparison string is retained. Keep the COMPLETE original key's weight above.
+				}
+			}
 			const previous = this.snapshot;
 			const same = previous?.context === context && previous.opaque.length === opaque.length && opaque.every((value, i) => value === previous.opaque[i]);
 			if (!same) this.clear();
