@@ -63,6 +63,15 @@ function recordFiles(directory) {
   return records.sort((a, b) => (a.path < b.path ? -1 : 1));
 }
 const logs = [];
+test('legacy Node and PowerShell controller rosters remain the exact seven files without current-only data', () => {
+  const source = fs.readFileSync(path.join(root, 'scripts/native-acceptance/run-reference-chart-profile.ps1'), 'utf8'),
+    matches = [...source.matchAll(/\$required=@\(([^\n]*)\)/gu)];
+  assert.equal(matches.length, 1, 'One literal bound PowerShell roster required');
+  const required = [...matches[0][1].matchAll(/'([^']+)'/gu)].map(match => match[1]);
+  assert.equal(required.length, 7);assert.deepEqual(required, REFERENCE_CONTROLLER_FILES);
+  for (const file of ['scripts/native-acceptance/reference-chart-fixtures.mjs', ...REFERENCE_CASES.map(id => 'scripts/native-acceptance/reference-witnesses/' + id + '.opf.json')])
+    assert.equal(required.includes(file), false, 'Current comparison data cannot become a legacy import dependency');
+});
 function child(executable, args, options = {}) {
   const result = spawnSync(executable, args, {
     encoding: "utf8",
@@ -99,6 +108,8 @@ test("actual create/verify/default-pure child route binds four whole cases, six 
   for (const d of [controller, preparation, worker, consumer, suiteRoot]) fs.mkdirSync(d);
   for (const file of REFERENCE_CONTROLLER_FILES)
     write(path.join(controller, file), fs.readFileSync(path.join(root, file)));
+  for (const file of ['scripts/native-acceptance/reference-chart-fixtures.mjs', ...REFERENCE_CASES.map(id => 'scripts/native-acceptance/reference-witnesses/' + id + '.opf.json')])
+    assert.equal(fs.existsSync(path.join(controller, file)), false, 'Default child must run without current-only source data');
   write(path.join(controller, "package.json"), json({ private: true, type: "module" }));
   write(path.join(controller, ".gitignore"), "node_modules/\n");
   fs.symlinkSync(
