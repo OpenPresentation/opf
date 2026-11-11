@@ -50,6 +50,62 @@ test('source-to-before admission refuses changed data, roles, broken relationshi
  const imported=structuredClone(f.imports);imported.before.document.slides[1].title='Foreign title';assert.throws(()=>compareSevenNativeBefore({...f,imports:imported}),/public import/);
  for(const mode of ['title','relationship']){const parts=deps.unzipSync(f.input);if(mode==='title')change(parts,'ppt/slides/slide1.xml',t=>t.replace('</a:t>',' changed</a:t>'));if(mode==='relationship')change(parts,'ppt/slides/_rels/slide1.xml.rels',t=>t.replace('Id="rId1"','Id="rIdChanged"'));assert.throws(()=>compareSevenNativeBefore({...f,before:zip(parts)}),undefined,mode);}
 });
+test('first-Save semantic roles retain complete data while every raw spacing/paint/lexical change stays OPEN',async()=>{
+ const f=await fixture(),parts=deps.unzipSync(f.input),original=Buffer.from(f.input);
+ change(parts,'ppt/charts/chart3.xml',text=>{
+  const axis=/<c:catAx>[\s\S]*?<\/c:catAx>/u.exec(text)?.[0];assert.ok(axis);
+  return once(once(once(text,'<c:overlap val="0"/>',''),'<c:v>0.7934782608695652</c:v>','<c:v>0.79347826086956519</c:v>'),axis,once(axis,'<c:lblAlgn val="ctr"/>','<c:lblAlgn val="ctr"/><c:lblOffset val="100"/>')).replace(/>\s+</gu,'><');
+ });
+ change(parts,'ppt/charts/chartEx3.xml',text=>once(text,'</cx:layoutPr>','<cx:subtotals/></cx:layoutPr>'));
+ change(parts,'ppt/charts/chartEx4.xml',text=>once(text,'gapWidth="0.06"','gapWidth="0.0599999987"'));
+ const before=zip(parts),copy=Buffer.from(before),diagnostics=[],document=await fromPptx(before,{onDiagnostic:d=>diagnostics.push(d)});
+ const result=compareSevenNativeBefore({...f,before,imports:{...f.imports,before:{document,diagnostics}}});
+ assert.equal(result.nativeRoleBindingVerified,true);assert.equal(result.sourceRawStyleQualification,'OPEN');assert.equal(result.rawFindings.qualification,'OPEN');
+ assert.deepEqual(result.rawFindings.changes.map(r=>r.part),['ppt/charts/chart3.xml','ppt/charts/chartEx3.xml','ppt/charts/chartEx4.xml']);
+ assert.deepEqual(f.input,original);assert.deepEqual(before,copy);assert.match(deps.strFromU8(deps.unzipSync(before)['ppt/charts/chartEx4.xml']),/gapWidth="0\.0599999987"/u,'The genuinely different spacing is retained, never rounded');
+ assert.throws(()=>assertSnapshotRawPreservation({...f,saved:before,action:{...f.action,newValues:[...f.action.expectedValues]},archiveContext:f.bound.archiveContext}),'The same raw delta still refuses under the strict later-save guard');
+});
+test('first-Save role admission checks previously omitted srcOrd, axis associations/scaling and closed semantic vectors',async()=>{
+ const f=await fixture();
+ for(const [name,file,edit]of [
+  ['source order','ppt/charts/chartEx1.xml',text=>once(text,'<cx:series layoutId="treemap"','<cx:series srcOrd="0" layoutId="treemap"')],
+  ['native axis association','ppt/charts/chartEx2.xml',text=>once(text,'<cx:axisId val="0"/>','<cx:axisId val="1"/>')],
+  ['native scaling','ppt/charts/chartEx2.xml',text=>once(text,'max="50"','max="51"')],
+  ['classic cross-axis','ppt/charts/chart4.xml',text=>once(text,'<c:crossAx val="2094734552"/>','<c:crossAx val="999"/>')],
+  ['classic series order','ppt/charts/chart4.xml',text=>once(text,'<c:order val="0"/>','<c:order val="1"/>')],
+  ['box statistics','ppt/charts/chartEx2.xml',text=>once(text,'quartileMethod="exclusive"','quartileMethod="inclusive"')],
+  ['waterfall subtotal','ppt/charts/chartEx3.xml',text=>once(text,'</cx:layoutPr>','<cx:subtotals><cx:idx val="0"/></cx:subtotals></cx:layoutPr>')],
+  ['unknown native vector','ppt/charts/chartEx1.xml',text=>once(text,'</cx:data>','<cx:unknownDim/></cx:data>')],
+  ['unknown classic vector','ppt/charts/chart4.xml',text=>once(text,'</c:barChart>','<c:unknownVector/></c:barChart>')],
+  ['classic cache format','ppt/charts/chart4.xml',text=>once(text,'<c:formatCode>General</c:formatCode>','<c:formatCode>0%</c:formatCode>')],
+  ['classic missing cache format','ppt/charts/chart4.xml',text=>once(text,'<c:formatCode>General</c:formatCode>','')],
+  ['native cache format','ppt/charts/chartEx2.xml',text=>once(text,'formatCode="General"','formatCode="0%"')],
+  ['native missing cache format','ppt/charts/chartEx2.xml',text=>once(text,' formatCode="General"','')],
+  ['unknown classic cache vector','ppt/charts/chart4.xml',text=>once(text,'</c:numCache>','<c:unknownVector/></c:numCache>')],
+  ['unknown native level vector','ppt/charts/chartEx2.xml',text=>{const level=/<cx:lvl\b[^>]*>[\s\S]*?<\/cx:lvl>/u.exec(text)?.[0];assert.ok(level);return once(text,level,once(level,'</cx:lvl>','<cx:unknownVector/></cx:lvl>'));}],
+  ['unknown classic point field','ppt/charts/chart4.xml',text=>once(text,'<c:pt idx="0"><c:v>42</c:v></c:pt>','<c:pt idx="0"><c:v>42</c:v><c:unknownVector/></c:pt>')],
+  ['unknown native point field','ppt/charts/chartEx2.xml',text=>once(text,'<cx:pt idx="0">42</cx:pt>','<cx:pt idx="0">42<cx:unknownVector/></cx:pt>')],
+ ]){
+  const parts=deps.unzipSync(f.input);change(parts,file,edit);const before=zip(parts);
+  assert.throws(()=>compareSevenNativeBefore({...f,before}),/whole-seven parsed data\/source roles|Unknown source-role field|Unknown native cache point field/u,name);
+ }
+ const source=deps.strFromU8(deps.unzipSync(f.input)['ppt/charts/chart4.xml']),series=/<c:ser>[\s\S]*?<\/c:ser>/u.exec(source)?.[0];assert.ok(series);
+ const numeric=/<c:val>[\s\S]*?<\/c:val>/u.exec(series)?.[0];assert.ok(numeric);
+ for(const field of ['c:xVal','c:yVal','c:bubbleSize']){
+  const vector=numeric.replace('<c:val>','<'+field+'>').replace('</c:val>','</'+field+'>'),parts=deps.unzipSync(f.input);
+  change(parts,'ppt/charts/chart4.xml',text=>once(text,series,once(series,'</c:ser>',vector+'</c:ser>')));
+  assert.throws(()=>compareSevenNativeBefore({...f,before:zip(parts)}),new RegExp('Unknown source-role field '+field,'u'),'Unsupported complete nested '+field+' vector refuses even when cache/workbook agree');
+ }
+});
+test('first-Save complete data comparison refuses coherent numeric changes in every other source slide',async()=>{
+ const f=await fixture();
+ for(let slideIndex=2;slideIndex<=7;slideIndex++){
+  const parts=deps.unzipSync(f.input),shape=f.bound.archive.slides[slideIndex-1].shapes.find(s=>s.kind==='chart'&&s.chart.family==='classic'),bookPart=shape.chart.workbook.part;
+  for(const slide of f.bound.archive.slides)for(const current of slide.shapes)if(current.kind==='chart'&&current.chart.workbook.part===bookPart)change(parts,current.chartPart,text=>current.chart.family==='classic'?once(text,'<c:pt idx="0"><c:v>42</c:v></c:pt>','<c:pt idx="0"><c:v>43</c:v></c:pt>'):once(text,'<cx:pt idx="0">42</cx:pt>','<cx:pt idx="0">43</cx:pt>'));
+  const book=deps.unzipSync(parts[bookPart]);change(book,'xl/worksheets/sheet1.xml',text=>once(text,'<c r="B2"><v>42</v></c>','<c r="B2"><v>43</v></c>'));parts[bookPart]=deps.zipSync(book);
+  assert.throws(()=>compareSevenNativeBefore({...f,before:zip(parts)}),undefined,'All branches of unselected slide'+slideIndex+' retain their complete data');
+ }
+});
 test('edited/reopened incoherence, extra changes, diagnostics, unknown raw leaves and title/style changes refuse',async()=>{
  const f=await fixture();for(const phaseName of ['edited','reopened']){for(const mode of ['cache','workbook','style','title']){const parts=deps.unzipSync(f.edited);if(mode==='cache')change(parts,f.action.chartPart,t=>once(t,'<cx:pt idx="0">43</cx:pt>','<cx:pt idx="0">44</cx:pt>'));if(mode==='workbook'){const book=deps.unzipSync(parts[f.action.workbookPart]);change(book,'xl/worksheets/sheet1.xml',t=>once(t,'<c r="B2"><v>43</v></c>','<c r="B2"><v>44</v></c>'));parts[f.action.workbookPart]=deps.zipSync(book);}if(mode==='style')change(parts,f.action.chartPart,t=>t.replace('<cx:chartSpace ','<cx:chartSpace newStyle="foreign" '));if(mode==='title')change(parts,'ppt/slides/slide2.xml',t=>t.replace('</a:t>',' changed</a:t>'));assert.throws(()=>compareSevenNativeSnapshots({...f,[phaseName]:zip(parts)}),undefined,phaseName+'/'+mode);}}
  const imports=structuredClone(f.imports);imports.reopened.diagnostics.push({code:'foreign'});assert.throws(()=>compareSevenNativeSnapshots({...f,imports}),/diagnostics/);const model=structuredClone(f.bound.archive),chart=model.slides[0].shapes.find(s=>s.kind==='chart'&&s.branch==='choice');chart.chart.workbook.cells.find(c=>c.cell===f.action.workbookCells[0]).value=999;assert.throws(()=>snapshotNumericReadback(model,f.action),/disagree/);
