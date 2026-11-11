@@ -1,0 +1,272 @@
+[
+  {
+    "file": "biome.log",
+    "bytes": 46531,
+    "sha256": "8b4380b061e872f5649300c686c143371b5870634653452a8ffd218be476721f"
+  },
+  {
+    "file": "build.log",
+    "bytes": 14666,
+    "sha256": "3552760286350a975a43adba03995935b2e7aff8b2c5372acd250611ebed9997"
+  },
+  {
+    "file": "install.log",
+    "bytes": 137,
+    "sha256": "049113778bcede5e250e0d009a16e3b02382f28f4f82253f04325598cc570293"
+  },
+  {
+    "file": "pnpm_run_check_browser-safe.log",
+    "bytes": 1156,
+    "sha256": "d52bb838d1515acd6b0b086f504996689562fabd117a00a9a17a07f0e493f862"
+  },
+  {
+    "file": "pnpm_run_check_catalog-free.log",
+    "bytes": 193,
+    "sha256": "2baa08920c40fdaed8c67d78f4cc5ae96f6700487d29e46dfcd0994e155164c6"
+  },
+  {
+    "file": "pnpm_run_check_catalog-schema.log",
+    "bytes": 799,
+    "sha256": "b7c2a81a9f5e4b01f974cc85d33e2c4de50f459ba9367a41e9819a40f2d599f7"
+  },
+  {
+    "file": "pnpm_run_check_catalog.log",
+    "bytes": 1144,
+    "sha256": "5e64a91f626a39f3aa3afa1eb249a864537cbb5253fcfc9e4deab04ab908dbaa"
+  },
+  {
+    "file": "pnpm_run_check_changes.log",
+    "bytes": 2670,
+    "sha256": "0e94e1dd57c847a343af46ad8bc1fc1c4507d310905b30a20b4d6705eb80cb1c"
+  },
+  {
+    "file": "pnpm_run_check_ci-scope.log",
+    "bytes": 3110,
+    "sha256": "6f41bb81b3f824d8edb433b015fe3e342a639ee5fe5627e39175b23f1a3b15df"
+  },
+  {
+    "file": "pnpm_run_check_ci-workflows.log",
+    "bytes": 10507,
+    "sha256": "424aaf110e3377cb8889d2d1106897b63f5fce97a8a35490a9629d8c51333863"
+  },
+  {
+    "file": "pnpm_run_check_diagram-doc-images.log",
+    "bytes": 164,
+    "sha256": "9a8b5cf3cfcc40818f4a929a162eab4e26a68cf72f915ad32716e6dbfd6f64a8"
+  },
+  {
+    "file": "pnpm_run_check_e1-current-after.log",
+    "bytes": 3290,
+    "sha256": "34b7009064e70899a4886788a735e6e7385772240a57a9e4dd2ff8b965e76e11"
+  },
+  {
+    "file": "pnpm_run_check_engines-range.log",
+    "bytes": 847,
+    "sha256": "4d2efa9f0f42356bbffd1898b6591318db3cf358c812064bf67966876ae9c9e7"
+  },
+  {
+    "file": "pnpm_run_check_examples-convert.log",
+    "bytes": 988,
+    "sha256": "2294b168745b90472c0e121c200dc5519630975549b2270186197b04128d7770"
+  },
+  {
+    "file": "pnpm_run_check_examples.log",
+    "bytes": 506,
+    "sha256": "cdf8d955320462121d88fa7d629191da7b0f842c86087de332e550d4f5b88854"
+  },
+  {
+    "file": "pnpm_run_check_first-deck.log",
+    "bytes": 393,
+    "sha256": "e665ff5cf894d6c82541d03195a9086a5a5c7ea992bdaaf76103fe372868ea73"
+  },
+  {
+    "file": "pnpm_run_check_font-hotlinks.log",
+    "bytes": 860,
+    "sha256": "0dc875d70040aa90e480ea2a3e5b387ce9a62491cbe26e4f9e731febb95080c9"
+  },
+  {
+    "file": "pnpm_run_check_font-switch-fixtures.log",
+    "bytes": 1386,
+    "sha256": "382970fb2befb0209f8bc0e7a73833c74cf5f9205c6f33a72e760c6190df083f"
+  },
+  {
+    "file": "pnpm_run_check_font-tracker.log",
+    "bytes": 4646,
+    "sha256": "921048112929a961caaf3415fd1ced05c810f2d99bdee37d075bcedce5e80f29"
+  },
+  {
+    "file": "pnpm_run_check_gallery-editor-imports.log",
+    "bytes": 643,
+    "sha256": "ecd30d78f13f18988d39720679d701831f5a328c9375593f95e73926488d6a7a"
+  },
+  {
+    "file": "pnpm_run_check_gallery-tracker.log",
+    "bytes": 2012,
+    "sha256": "a629711895bf74a7708adb2941eb2265fe4710a51a7c8648421434c8a4c0e646"
+  },
+  {
+    "file": "pnpm_run_check_golden-update.log",
+    "bytes": 1004,
+    "sha256": "cd44e15d7dcac3ed69223dbadddfadf25e38f2e772d5689f9988bc1ad995494d"
+  },
+  {
+    "file": "pnpm_run_check_libreoffice.log",
+    "bytes": 1421,
+    "sha256": "6ffef5d8cada529cc1b9e1c3d2d0f947c7e84c7a86cc0e5b383db654b1a5e317"
+  },
+  {
+    "file": "pnpm_run_check_native-acceptance.log",
+    "bytes": 50606,
+    "sha256": "56cc26f433d9de9ef1e01bfa385e8bd1c8088200737d2e58aea8cda4b3e560dc"
+  },
+  {
+    "file": "pnpm_run_check_palette.log",
+    "bytes": 1417,
+    "sha256": "ab2028d11ed6b3a67f2fb00f4d037f25615a28243d6ca5010235408590feba45"
+  },
+  {
+    "file": "pnpm_run_check_playwright-pin.log",
+    "bytes": 783,
+    "sha256": "8156e6fb098d01739d7be265c6f853aa17ff9a5737574d65482e3b74e7dbe476"
+  },
+  {
+    "file": "pnpm_run_check_prerelease.log",
+    "bytes": 1397,
+    "sha256": "d973caae3e5fd44ca82649242f01a5bebde6e975dc2660c759d445dc3d0364d5"
+  },
+  {
+    "file": "pnpm_run_check_published-matrix-consumer.log",
+    "bytes": 1351,
+    "sha256": "724d91518d8b284953a44c452bb5e7bfdfa3d0b46ad7412369ff2f4fd9b0b7c4"
+  },
+  {
+    "file": "pnpm_run_check_rebuilt-release-files.log",
+    "bytes": 1253,
+    "sha256": "6e7cb5ef5d163a1086db93fdb824c3b6e7ef3237073eebbf7c50e70c4db3f1c1"
+  },
+  {
+    "file": "pnpm_run_check_registry-fidelity-archive.log",
+    "bytes": 464,
+    "sha256": "3edac5d5701dc76ee440b25d289567a2a0046c929aeeb5398f711f998ab5b7ab"
+  },
+  {
+    "file": "pnpm_run_check_registry-golden.log",
+    "bytes": 691,
+    "sha256": "8a265d6fe8370cd5d08b30006d87243da1f2ea18efd38c06c2eb6c92d5901ae7"
+  },
+  {
+    "file": "pnpm_run_check_registry-plan.log",
+    "bytes": 869,
+    "sha256": "28a516c8594c5429f57e4a687eeb415b312e57095ceb35eb07adbe82512ec4b5"
+  },
+  {
+    "file": "pnpm_run_check_registry-toolchain.log",
+    "bytes": 363,
+    "sha256": "3aa5efee9e7e46edf5b71367dd1f37efd9a53d34a0893b1e7eef821049e97961"
+  },
+  {
+    "file": "pnpm_run_check_release-report.log",
+    "bytes": 826,
+    "sha256": "fa96950c98633469c2909293c56685d10f0a0996ed3e42445a5e4489dbedff7a"
+  },
+  {
+    "file": "pnpm_run_check_release.log",
+    "bytes": 5599,
+    "sha256": "279e67838fdbbeaf740d6226339e3b8cb3750e29fcf48be8fb380eee44d28682"
+  },
+  {
+    "file": "pnpm_run_check_runners.log",
+    "bytes": 1765,
+    "sha256": "dfc53bf6227d38d2d970e14b7c6e3e3590946a30d6c3caa3a9f9abd951fde2ed"
+  },
+  {
+    "file": "pnpm_run_check_schema-docs.log",
+    "bytes": 183,
+    "sha256": "5ca190efd5ab20f7c443aadc76470ce4d29682f932962043a19595aec98529e3"
+  },
+  {
+    "file": "pnpm_run_check_schema-examples.log",
+    "bytes": 1072,
+    "sha256": "66e7784fbb79d4687b710b02e03b320eb7749d14ce8e3ff2be07d5d2672724f8"
+  },
+  {
+    "file": "pnpm_run_check_schema-strict.log",
+    "bytes": 492,
+    "sha256": "c685a0efdc0dccbebe769e9c2b65ea41d58386cfc483fdb1f011b76791787643"
+  },
+  {
+    "file": "pnpm_run_check_skill-commands.log",
+    "bytes": 1047,
+    "sha256": "7194852c3d603734042fbc280487849745e8881985fe8236f5809f14512cf234"
+  },
+  {
+    "file": "pnpm_run_check_skill-glossary.log",
+    "bytes": 414,
+    "sha256": "fb7f3a63549c94a74f9c588775cd006939d12c1986c44e9b00c36803e2829e98"
+  },
+  {
+    "file": "pnpm_run_check_spec.log",
+    "bytes": 1042,
+    "sha256": "dadbf26427b6d12e5ec374c4a1d7cc88ab7a4ad27e6f1ff2a7e3ada090087d9e"
+  },
+  {
+    "file": "pnpm_run_check_stability.log",
+    "bytes": 3986,
+    "sha256": "39c72e6445a8f5892fdebf52befce0132ef0f35459153b6a3d5070a968ac0818"
+  },
+  {
+    "file": "pnpm_run_check_text.log",
+    "bytes": 1084,
+    "sha256": "f1ece61f883a714c5e7b9391997689ac909a8ac334591078011243cea2fba28e"
+  },
+  {
+    "file": "pnpm_run_check_works-percent.log",
+    "bytes": 540,
+    "sha256": "71d70a20729ba79c96f2b1bbe58873e80a7e2c89f4f116cede56746e06f66582"
+  },
+  {
+    "file": "tests_cli.log",
+    "bytes": 26727,
+    "sha256": "9cd2e673caedc00ebc1dbd854b828ca4df0eacb4ba096ee52415cccf4f02ff73"
+  },
+  {
+    "file": "tests_editor.log",
+    "bytes": 28843,
+    "sha256": "129b7d9c55aa993a87487c6ece41e55b7028cfbbac075313146dadc320ddcd3c"
+  },
+  {
+    "file": "tests_gallery.log",
+    "bytes": 28571,
+    "sha256": "fda8f04c3b4fe3819ac1ae6de8dbca55eb5c7af4286ff15e592cac1b67304f4f"
+  },
+  {
+    "file": "tests_integration.log",
+    "bytes": 1032,
+    "sha256": "3d4470214be2135517efe4304d5c7b01726c349440efad10367d052d253c5d24"
+  },
+  {
+    "file": "tests_mcp.log",
+    "bytes": 9599,
+    "sha256": "040ae2eb988a18c9b4c52d96bbf044a73f88804f3b5542461cfbf74710ca8ad8"
+  },
+  {
+    "file": "tests_opf.log",
+    "bytes": 418945,
+    "sha256": "9e9d060102fbb987b5c5bcbd1ecdaf81366ef9940a4bd7398a18a7d661d6ab1f"
+  },
+  {
+    "file": "tests_pptx.log",
+    "bytes": 254204,
+    "sha256": "928ff2343a5006052313c20878bf08ebb83c8f61c8a5c8bb0cef8d79383679ef"
+  },
+  {
+    "file": "tests_render.log",
+    "bytes": 50080,
+    "sha256": "e9c48b5b42cf082fda21f7e161fbd01e273e5f02d31466baf44e00dc3413cc14"
+  },
+  {
+    "file": "typecheck.log",
+    "bytes": 5148,
+    "sha256": "b3467ebe17721e0bc28ca925f63daef90214bc009fdb0e4f094d7c5ecda04d49"
+  }
+]
