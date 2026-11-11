@@ -28,9 +28,19 @@ export async function outlineRasterMarkers(svg,{font,shape,report=()=>{},fail,st
   // duplicate family/style faces refuse below, so directory-vs-file precedence
   // cannot silently choose a different face than the rasterizer.
   await loadFontFiles(library,font.fontFiles??[],font.fontDirs??[],()=>{},face=>prepareOutlineFace(library,face));
-  const result=outlineSlideText([svg],{library,shape,selectText:isMarker,onRefusal:refuse,fail,
-    // Multiple actual byte faces for the same named weight/style cannot be
-    // proven equivalent to resvg fontdb's tie-breaking. Keep that marker text.
-    validateFace:(face,style)=>library.match(parseFontFamilies(style['font-family']),parseFontWeight(style['font-weight'],400),/italic|oblique/i.test(style['font-style']??''))?.face!==face||library.faces.some(other=>other!==face&&other.hash!==face.hash&&other.weight===face.weight&&other.italic===face.italic&&[...other.names].some(name=>face.names.has(name)))?'unresolved':undefined});
+  const validateFace=(face,style)=>{
+    const families=parseFontFamilies(style['font-family']),weight=parseFontWeight(style['font-weight'],400),italic=/italic|oblique/i.test(style['font-style']??'');
+    if(library.match(families,weight,italic)?.face!==face)return 'unresolved';
+    // Resolve generic names through the SAME mapping as matching. An earlier
+    // restricted actual family cannot be skipped merely because usable() hid
+    // it. Stop at the first actual match; later unused restrictions do not win.
+    for(const family of families){
+      const lower=family.toLowerCase(),actual=Object.hasOwn(generics,lower)?generics[lower]??font.defaultFontFamily:family;
+      if(library.restricted.has(actual.toLowerCase()))return 'restricted';
+      if(library.match([family],weight,italic))break;
+    }
+    return library.faces.some(other=>other!==face&&other.hash!==face.hash&&other.weight===face.weight&&other.italic===face.italic&&[...other.names].some(name=>face.names.has(name)))?'unresolved':undefined;
+  };
+  const result=outlineSlideText([svg],{library,shape,selectText:isMarker,onRefusal:refuse,fail,validateFace});
   return result.defs?result.content[0].replace(/<svg\b(?:[^>"']|"[^"]*"|'[^']*')*>/,root=>root+result.defs):result.content[0];
 }
