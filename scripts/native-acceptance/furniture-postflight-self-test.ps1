@@ -1,8 +1,10 @@
-param([Parameter(Mandatory=$true)][string]$FixtureRoot)
+param([Parameter(Mandatory=$true)][string]$FixtureRoot,[switch]$DenseEvents)
 $ErrorActionPreference='Stop'
 if($PSVersionTable.PSVersion.Major -ne 5 -or $PSVersionTable.PSVersion.Minor -ne 1){throw 'Actual Windows PowerShell5.1 required'}
+$profile=if($DenseEvents){'full59-dense-events-furniture-lifecycle-v1'}else{'full59-ordinary-furniture-lifecycle-v1'}
 $context=Get-Content -LiteralPath (Join-Path $FixtureRoot 'context.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 if($context.synthetic -isnot [bool] -or -not $context.synthetic -or $context.nativeAcceptance -cne $false){throw 'Synthetic fixture context required'}
+if($DenseEvents -and $context.profile -cne $profile){throw 'Exact synthetic dense profile required'}
 . (Join-Path $context.controllerRoot 'scripts/native-acceptance/owned-postflight.ps1')
 . (Join-Path $context.controllerRoot 'scripts/native-acceptance/furniture-postflight.ps1')
 function Write-ControlJson([string]$File,$Value){[IO.File]::WriteAllText($File,($Value | ConvertTo-Json -Depth 100),[Text.UTF8Encoding]::new($false))}
@@ -38,7 +40,7 @@ function global:Test-ReferenceWitnessPostflightReady {$script:foreignReadyCalls+
 function global:Get-Process {
     [CmdletBinding()]param([string]$Name)
     if($Name -cne 'POWERPNT'){throw 'Unexpected process query'};$script:queries++
-    if($script:mode -ceq 'zero'){return @()}
+    if($script:mode -cin @('zero','dense-stages-8192')){return @()}
     if($script:mode -ceq 'busy'){return [pscustomobject]@{Id=11}}
     if($script:mode -ceq 'drain'){if($script:queries -eq 1){return [pscustomobject]@{Id=11}};return @()}
     if($script:mode -ceq 'new-pid'){return [pscustomobject]@{Id=if($script:queries -eq 1){11}else{22}}}
@@ -51,7 +53,7 @@ $passed=0
 try {
     foreach($mode in $context.cases){
         $root=Join-Path $FixtureRoot $mode;$file=Join-Path $root 'postflight-admission.json'
-        $e=Read-FurniturePostflightEvidence $file (Get-OwnedPostflightHash $file)
+        $e=Read-FurniturePostflightEvidence $file (Get-OwnedPostflightHash $file) $profile
         if($mode -ceq 'timeout'){$e.terminal.timedOut=$true}
         if($mode -ceq 'kernel-timeout'){$e.kernel.timedOut=$true}
         if($mode -ceq 'worker-budget'){$e.request.timeoutSeconds=61}
@@ -77,6 +79,24 @@ try {
         for($i=0;$i -lt $e.stages.Count;$i++){$e.stages[$i].sequence=$i+1}
         if($mode -ceq 'case-id'){$e.request.caseId='unreviewed-case';$e.admission.ready.caseId='unreviewed-case'}
         if($mode -ceq 'unfinished-action'){$e.request.actionPlan.actions=@([pscustomobject]@{op='set-text';slideIndex=1;shapeName='Synthetic';text='Changed'});$e.admission.ready.actionCount=1}
+        if($mode -match '^shapes-(original|edited|reopened)-(49|51)$'){
+            if(-not $DenseEvents){throw 'Dense-only control'};$phase=$Matches[1];$count=[int]$Matches[2];$slide=$e.report.phases.$phase.slides[0]
+            if($count -eq 49){$slide.shapes=@($slide.shapes[0..48])}else{$slide.shapes+=@($slide.shapes[0])};$slide.shapeCount=$count
+        }
+        if($mode -ceq 'dense-two-slides'){$e.report.phases.original.slides+=@($e.report.phases.original.slides[0]);$e.report.phases.original.slideCount=2}
+        if($mode -ceq 'dense-survey-false'){$e.request.readOnlySurvey=$false;$e.report.readOnlySurvey=$false}
+        if($mode -ceq 'dense-fonts'){$e.request.captureTextFonts=$true;$e.report.captureTextFonts=$true}
+        if($mode -ceq 'dense-completed'){$e.report.actionPlan.completed=@([pscustomobject]@{index=1;op='set-text';status='success'})}
+        if($mode -ceq 'dense-ordinary-profile'){$e.request.profile='full59-ordinary-furniture-lifecycle-v1';$e.admission.profile=$e.request.profile}
+        if($mode -ceq 'dense-ordinary-policy'){$e.request.policy.policy='ordinary-furniture-bounded-global-zero-after-completed-owned-quit-v1';$e.admission.policy.policy=$e.request.policy.policy}
+        if($mode -cin @('dense-stages-8192','dense-stages-8193')){
+            $target=if($mode -ceq 'dense-stages-8192'){8192}else{8193};$extra=[Collections.Generic.List[object]]::new()
+            $template=$e.stages | Where-Object {$_.stage -ceq 'input.presentation.readOnly.get' -and $_.status -ceq 'success'}
+            for($i=0;$i -lt ($target-$e.stages.Count);$i++){$extra.Add([pscustomobject][ordered]@{sequence=0;timestamp=$template.timestamp;stage=('original.bound-inspection-'+$i);status='success';error='';cleanupConfirmed=$false;officeOperationsStopped=$false;ownedPresentationPath=$e.report.source.openedPath})}
+            $position=0;for($i=0;$i -lt $e.stages.Count;$i++){if($e.stages[$i].stage -ceq 'edited.presentation.saveCopyAs' -and $e.stages[$i].status -ceq 'begin'){$position=$i;break}}
+            $e.stages=@($e.stages[0..($position-1)])+$extra.ToArray()+@($e.stages[$position..($e.stages.Count-1)])
+            for($i=0;$i -lt $e.stages.Count;$i++){$e.stages[$i].sequence=$i+1}
+        }
         Rebind-Control $root $e
         if($mode -ceq 'artifact-drift'){[IO.File]::AppendAllText((Join-Path $root 'native/report.json'),' ')}
         $script:mode=$mode;$script:queries=0;$script:clocks=0;$script:delays=0;$result=$null;$caught=$false
@@ -84,10 +104,11 @@ try {
         $utc={'2026-11-11T12:00:00.000Z'};$delay={param($ms) if($ms -ne 100){throw 'Interval changed'};$script:delays++}
         $append=$null;if($mode -ceq 'append-fault'){$append={param($row) throw 'Synthetic append failure'}}
         # OMIT ReadProcesses: the actual default delegate must hit the global mock.
-        try{$result=Invoke-FurniturePostflight -AdmissionFile $file -ExpectedAdmissionSha256 (Get-OwnedPostflightHash $file) -Clock $clock -Utc $utc -Delay $delay -Append $append}catch{$caught=$true}
+        try{$result=Invoke-FurniturePostflight -AdmissionFile $file -ExpectedAdmissionSha256 (Get-OwnedPostflightHash $file) -Clock $clock -Utc $utc -Delay $delay -Append $append -Profile $profile}catch{$caught=$true}
         $preObserver=$mode -cin @('timeout','kernel-timeout','worker-budget','pending','fault','missing-quit','wrong-owner','begin-object-owner','begin-foreign-owner','ordinary-object-owner','ordinary-foreign-owner','original-owner-object','saved-owner-object','crossed-open-begin','crossed-create-begin','missing-create','duplicate-create','create-before-preflight','case-id','unfinished-action','artifact-drift')
+        if($DenseEvents -and ($mode -match '^shapes-' -or ($mode -match '^dense-' -and $mode -cne 'dense-stages-8192'))){$preObserver=$true}
         if($preObserver){if(-not $caught -or $script:queries -ne 0 -or $script:clocks -ne 0 -or $script:delays -ne 0){throw "Completion refusal leaked observer IO: $mode"}}
-        elseif($mode -cin @('zero','absent','drain')){
+        elseif($mode -cin @('zero','absent','drain','dense-stages-8192')){
             $expected=if($mode -ceq 'drain'){2}else{1}
             if($caught -or $null -ne $result.error -or -not $result.result.observedZero -or $script:queries -ne $expected -or $result.finalCount -ne 0){throw "Valid complete synthetic lifecycle refused: $mode"}
             if($result.initialCount -ne $(if($mode -ceq 'drain'){1}else{0})){throw 'Initial sample was not retained'}
