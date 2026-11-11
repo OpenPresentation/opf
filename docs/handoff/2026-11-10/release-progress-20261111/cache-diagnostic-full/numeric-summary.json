@@ -1,0 +1,2106 @@
+{
+  "status": "PASS",
+  "scope": "CACHE_RETENTION_DIAGNOSTIC_NOT_LATENCY_OR_LEAK_ACCEPTANCE",
+  "source": "e6e0fb606444dfb9f82bf7ceb007d50ae384682e",
+  "tree": "8e14d8cf3de0a6a09813f33de3aeaaa5324967ec",
+  "completeColdOracleChecks": 168,
+  "artifactFiles": 20,
+  "artifactBytes": 44949382,
+  "edits": 200,
+  "mountDestroyCycles": 10,
+  "rows": [
+    {
+      "phase": "baseline",
+      "ordinal": 0,
+      "edit": null,
+      "heap": {
+        "usedSize": 28697104,
+        "totalSize": 30539776,
+        "embedderHeapUsedSize": 1187256,
+        "backingStorageSize": 8847847
+      },
+      "cache": null,
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 1888,
+        "utf16Units": 525886,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 1.247207999927923,
+        "encodedBytes": 2463
+      }
+    },
+    {
+      "phase": "edit",
+      "ordinal": 0,
+      "edit": 0,
+      "heap": {
+        "usedSize": 33787656,
+        "totalSize": 34570240,
+        "embedderHeapUsedSize": 5637048,
+        "backingStorageSize": 8958690
+      },
+      "cache": {
+        "entries": 36,
+        "bytes": 3382818,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 4839,
+        "jsEventListeners": 476
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 1888,
+        "utf16Units": 525886,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": true,
+                "destroyed": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": true,
+                "connected": true
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": true
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 1.0534589999588206,
+        "encodedBytes": 2670
+      }
+    },
+    {
+      "phase": "edit",
+      "ordinal": 1,
+      "edit": 20,
+      "heap": {
+        "usedSize": 37096212,
+        "totalSize": 40550400,
+        "embedderHeapUsedSize": 5621456,
+        "backingStorageSize": 8955377
+      },
+      "cache": {
+        "entries": 36,
+        "bytes": 3382730,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 4839,
+        "jsEventListeners": 476
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2020,
+        "utf16Units": 915585,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": true,
+                "destroyed": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": true,
+                "connected": true
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": true
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 0.9889160000020638,
+        "encodedBytes": 2653
+      }
+    },
+    {
+      "phase": "edit",
+      "ordinal": 2,
+      "edit": 40,
+      "heap": {
+        "usedSize": 37508896,
+        "totalSize": 40550400,
+        "embedderHeapUsedSize": 5644912,
+        "backingStorageSize": 8955377
+      },
+      "cache": {
+        "entries": 36,
+        "bytes": 3382730,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 4839,
+        "jsEventListeners": 476
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2140,
+        "utf16Units": 975605,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": true,
+                "destroyed": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": true,
+                "connected": true
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": true
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 0.9644169999519363,
+        "encodedBytes": 2671
+      }
+    },
+    {
+      "phase": "edit",
+      "ordinal": 3,
+      "edit": 80,
+      "heap": {
+        "usedSize": 37798516,
+        "totalSize": 41074688,
+        "embedderHeapUsedSize": 5672824,
+        "backingStorageSize": 8955377
+      },
+      "cache": {
+        "entries": 36,
+        "bytes": 3382730,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 4839,
+        "jsEventListeners": 476
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2268,
+        "utf16Units": 1013117,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": true,
+                "destroyed": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": true,
+                "connected": true
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": true
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 0.9892910000635311,
+        "encodedBytes": 2672
+      }
+    },
+    {
+      "phase": "edit",
+      "ordinal": 4,
+      "edit": 120,
+      "heap": {
+        "usedSize": 38010596,
+        "totalSize": 40288256,
+        "embedderHeapUsedSize": 5716872,
+        "backingStorageSize": 8955126
+      },
+      "cache": {
+        "entries": 36,
+        "bytes": 3382748,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 4839,
+        "jsEventListeners": 476
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2348,
+        "utf16Units": 1015365,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": true,
+                "destroyed": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": true,
+                "connected": true
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": true
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 0.9911250000586733,
+        "encodedBytes": 2656
+      }
+    },
+    {
+      "phase": "edit",
+      "ordinal": 5,
+      "edit": 200,
+      "heap": {
+        "usedSize": 38203204,
+        "totalSize": 41074688,
+        "embedderHeapUsedSize": 5737024,
+        "backingStorageSize": 8955126
+      },
+      "cache": {
+        "entries": 36,
+        "bytes": 3382748,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 4839,
+        "jsEventListeners": 476
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2508,
+        "utf16Units": 1019897,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": true,
+                "destroyed": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": true,
+                "connected": true
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": true
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 1.2138750000158325,
+        "encodedBytes": 2674
+      }
+    },
+    {
+      "phase": "destroy",
+      "ordinal": 0,
+      "edit": null,
+      "heap": {
+        "usedSize": 32569208,
+        "totalSize": 35258368,
+        "embedderHeapUsedSize": 1307592,
+        "backingStorageSize": 8847877
+      },
+      "cache": null,
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2508,
+        "utf16Units": 1019897,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 1.1127919999416918,
+        "encodedBytes": 2643
+      }
+    },
+    {
+      "phase": "destroy",
+      "ordinal": 1,
+      "edit": null,
+      "heap": {
+        "usedSize": 32684812,
+        "totalSize": 34734080,
+        "embedderHeapUsedSize": 1258144,
+        "backingStorageSize": 8847877
+      },
+      "cache": null,
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2508,
+        "utf16Units": 1019927,
+        "iterationMs": 0.09999999776482582,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 3,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 1.043582999962382,
+        "encodedBytes": 2861
+      }
+    },
+    {
+      "phase": "destroy",
+      "ordinal": 2,
+      "edit": null,
+      "heap": {
+        "usedSize": 32758408,
+        "totalSize": 34471936,
+        "embedderHeapUsedSize": 1259144,
+        "backingStorageSize": 8847877
+      },
+      "cache": null,
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2508,
+        "utf16Units": 1019927,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 3,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 4,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 1.0568750000093132,
+        "encodedBytes": 3008
+      }
+    },
+    {
+      "phase": "destroy",
+      "ordinal": 3,
+      "edit": null,
+      "heap": {
+        "usedSize": 32872956,
+        "totalSize": 34209792,
+        "embedderHeapUsedSize": 1273448,
+        "backingStorageSize": 8847877
+      },
+      "cache": null,
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2508,
+        "utf16Units": 1019927,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 3,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 4,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 5,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 1.1291670000646263,
+        "encodedBytes": 3172
+      }
+    },
+    {
+      "phase": "destroy",
+      "ordinal": 4,
+      "edit": null,
+      "heap": {
+        "usedSize": 32917900,
+        "totalSize": 34996224,
+        "embedderHeapUsedSize": 1274056,
+        "backingStorageSize": 8847877
+      },
+      "cache": null,
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2508,
+        "utf16Units": 1019927,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 3,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 4,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 5,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 6,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 1.1611670000711456,
+        "encodedBytes": 3354
+      }
+    },
+    {
+      "phase": "destroy",
+      "ordinal": 5,
+      "edit": null,
+      "heap": {
+        "usedSize": 32960412,
+        "totalSize": 34996224,
+        "embedderHeapUsedSize": 1261576,
+        "backingStorageSize": 8847877
+      },
+      "cache": null,
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2508,
+        "utf16Units": 1019927,
+        "iterationMs": 0.09999999776482582,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 3,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 4,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 5,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 6,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 7,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 1.146582999965176,
+        "encodedBytes": 3590
+      }
+    },
+    {
+      "phase": "destroy",
+      "ordinal": 6,
+      "edit": null,
+      "heap": {
+        "usedSize": 33109120,
+        "totalSize": 34996224,
+        "embedderHeapUsedSize": 1259760,
+        "backingStorageSize": 8847877
+      },
+      "cache": null,
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2508,
+        "utf16Units": 1019927,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 3,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 4,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 5,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 6,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 7,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 8,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 1.1812909999862313,
+        "encodedBytes": 3736
+      }
+    },
+    {
+      "phase": "destroy",
+      "ordinal": 7,
+      "edit": null,
+      "heap": {
+        "usedSize": 33680456,
+        "totalSize": 35258368,
+        "embedderHeapUsedSize": 1247808,
+        "backingStorageSize": 8847877
+      },
+      "cache": null,
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2508,
+        "utf16Units": 1019927,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 3,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 4,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 5,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 6,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 7,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 8,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 9,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 1.3730419999919832,
+        "encodedBytes": 3900
+      }
+    },
+    {
+      "phase": "destroy",
+      "ordinal": 8,
+      "edit": null,
+      "heap": {
+        "usedSize": 33713288,
+        "totalSize": 35520512,
+        "embedderHeapUsedSize": 1248496,
+        "backingStorageSize": 8847877
+      },
+      "cache": null,
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2508,
+        "utf16Units": 1019927,
+        "iterationMs": 0.09999999776482582,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 3,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 4,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 5,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 6,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 7,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 8,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 9,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 10,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 1.3009999999776483,
+        "encodedBytes": 4138
+      }
+    },
+    {
+      "phase": "destroy",
+      "ordinal": 9,
+      "edit": null,
+      "heap": {
+        "usedSize": 33766372,
+        "totalSize": 35520512,
+        "embedderHeapUsedSize": 1262176,
+        "backingStorageSize": 8847877
+      },
+      "cache": null,
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      },
+      "logicalKeyFootprint": {
+        "keyCount": 2508,
+        "utf16Units": 1019927,
+        "iterationMs": 0,
+        "scope": "LOGICAL_RETAINED_KEY_REFERENCES_UTF16_UNITS_NOT_HEAP_BYTES_OR_UNIQUE_STRING_STORAGE"
+      },
+      "weakCensus": {
+        "supported": true,
+        "mounts": [
+          {
+            "mount": 1,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 2,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 3,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 4,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 5,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 6,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 7,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 8,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 9,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 10,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          },
+          {
+            "mount": 11,
+            "omitted": [],
+            "owners": [
+              {
+                "type": "editor-handle",
+                "alive": false
+              },
+              {
+                "type": "workspace-owned-root-element",
+                "alive": false
+              },
+              {
+                "type": "editor-owned-session-object",
+                "alive": false
+              }
+            ]
+          }
+        ],
+        "interpretation": "Collected means absent at this read; alive after forced GC is a candidate, not a leak verdict."
+      },
+      "ownership": {
+        "sharedFontsStillOwned": true,
+        "fontsDisposed": false,
+        "termination": "runner finally closes browser; no added fonts.dispose call"
+      },
+      "diagnosticTransport": {
+        "roundTripMs": 1.2947500000009313,
+        "encodedBytes": 4285
+      }
+    }
+  ],
+  "limitation": "Instrumented timings are not normal-build latency acceptance; logical UTF16 key units are not heap bytes or unique strings. WeakRef collection covers only the three tracked owner roles; retained-heap drift remains open. Null cache means that row did not record that member."
+}
