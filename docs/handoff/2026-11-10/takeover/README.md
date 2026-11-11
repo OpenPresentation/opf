@@ -1,6 +1,6 @@
 # Active v0.34 takeover
 
-The unbudgeted goal covers the complete November 7 handoff, all 31 original issue #1139 items, and the owner additions. v0.33.0 is published. **v0.34.0 is the only remaining release.** There is no 0.33.1 release. The [unified workstream board](../workstreams.md#active-takeover--november-10-2026-mac-coordinator) records owners, defects and next gates.
+The unbudgeted goal covers the complete November 7 handoff, all 31 original issue #1139 items, and the owner additions. v0.33.0 is published. **v0.34.0 is the only remaining release.** There is no 0.33.1 release. The [unified workstream board](../workstreams.md#active-takeover--november-11-2026-mac-coordinator) records owners, defects and next gates.
 
 ## Starting identities and scope
 

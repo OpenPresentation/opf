@@ -1,0 +1,12 @@
+{
+  "source": "16268d880551cbeb6636a6e3bd1d19f2db8fd9fa",
+  "command": "pnpm run check:stability",
+  "exitCode": 0,
+  "logSha256": "887cd3166a89be42516895dbcbe019c41a9cdfa2557db6ba0b9aff6d76781a30",
+  "reason": "Repeat unchanged check with public npm registry access after sandbox ENOTFOUND",
+  "sourceUnchanged": true,
+  "localTestsPassed": 19,
+  "baseline": "published gallery0.33.0",
+  "result": "Every existing record draws the same; declared changes require minor release",
+  "runtimeFilesUnchanged": 301
+}

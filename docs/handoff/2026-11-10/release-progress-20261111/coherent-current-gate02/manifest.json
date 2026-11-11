@@ -1,0 +1,44 @@
+{
+  "artifacts": [
+    {
+      "file": "README.md",
+      "bytes": 2109,
+      "sha256": "39526d623697efb319f95d60ce66695fb9c7e7daedfa8f16734a0d79d2543f98"
+    },
+    {
+      "file": "receipt.json",
+      "bytes": 274,
+      "sha256": "48343edc73b05218bd30abc2c3a8bf8a4e545c3e1e8f128b183b9b9803d647ef"
+    },
+    {
+      "file": "runtime.json",
+      "bytes": 49670,
+      "sha256": "826bca935cfd798c27c005e1a198075e50feae1cc3f9d7922221b59a8f1d20f9"
+    },
+    {
+      "file": "selected-logs.json",
+      "bytes": 3319,
+      "sha256": "b7e3978fb412c2478dd9c22ed8cf70f170dbcb0142f164f5c034505474c3c6c7"
+    },
+    {
+      "file": "selected-logs.zip",
+      "bytes": 47023,
+      "sha256": "2d24fdec131fef706b2a85886d8d85d1e7fdf83d53a9081d31e799dc555816e4"
+    },
+    {
+      "file": "source.json",
+      "bytes": 176,
+      "sha256": "5e818b1f44c1d6a304153cb29a039caeb8b77ad88b472f746bc38fe58daf00de"
+    },
+    {
+      "file": "stability-network-receipt.json",
+      "bytes": 512,
+      "sha256": "de2bd6234c46ffedd1962f4b1e1de251f9103d7551ca14ec0fe8bb14d54b4426"
+    },
+    {
+      "file": "stability-network.log.gz",
+      "bytes": 1387,
+      "sha256": "e30d5c196f9c2ae20f40512ce352b32236252c221948b7c4de470ace29f6ea63"
+    }
+  ]
+}
