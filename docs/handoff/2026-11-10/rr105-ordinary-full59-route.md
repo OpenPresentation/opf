@@ -68,3 +68,28 @@ SOURCE02's reviewed implementation patch is
 No Office or real process query ran in this source lane. Actual PS5 managed
 qualification, native execution and the coordinator's one combined maintained
 PPTX gate remain pending. No extra aggregate or mapper was run for this commit.
+
+## Combined native step: first RED and narrow assertion successor
+
+The e815 combined gate's native tooling step retained **382 PASS / 1 RED /
+16 Windows skips** (399 total). The one RED is the old whole-worker assertion
+in `b07-postflight.test.mjs:65`: the intentional SOURCE02 forward strict-idle
+function differs from its frozen 562 worker. This is a stale source assertion,
+not a native or worker failure. The original 42,823-byte log remains retained
+at `/tmp/opf-034-neutral-furniture-gate01/native-first-failure.log`, SHA256
+`c674d403ce70bad3608bd74facb7386560177d8d62aab8069655e42a2886f3c3`.
+
+The successor test derives a second stage from immutable accepted a06 Git bytes:
+only the uniquely anchored strict-idle function may replace the original one.
+It independently pins both complete workers (562:84,426 bytes; a06:84,855 bytes),
+compares every forward byte and inverts back to the original complete worker.
+The expected target never comes from the current file. Both other whole-file
+comparisons and the exact 8902 observer remain unchanged. After root and
+independent review, exactly the existing named observer/source test ran once on
+Node24.21.0: **1 PASS / 0 RED / 0 skipped**, test interval46.642167ms,
+Node interval85.948666ms (wrapper0.113808791s), exit0. Its fresh242-byte stdout
+has SHA256 `4f508fa91156eb5595205bec33ff6c7d8be5b0d3c6afd4cc48999e992d955dc3`.
+Both reviewed source files stayed byte-identical during execution. No other test,
+PowerShell, build, mapper, Office or process-query execution occurred. The
+original aggregate remains RED; other legs and Windows/native qualification
+remain separate. No full suite or mapper is repeated here.
