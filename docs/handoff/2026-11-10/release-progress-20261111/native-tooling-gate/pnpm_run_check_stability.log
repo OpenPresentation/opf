@@ -1,0 +1,55 @@
+
+> openpresentation-workspace@ check:stability /private/tmp/opf-034
+> node --test scripts/gallery-stability.test.mjs && node scripts/gallery-stability.mjs
+
+✔ the fixtures cover exactly the kinds a fragment may declare (87.51775ms)
+✔ an unchanged candidate draws every existing record the same and needs only a patch (3875.344875ms)
+✔ an undeclared drawing change fails; declaring it passes and forces a minor train (3105.613333ms)
+✔ a changed region is caught on the filled slide and a collapse change on the empty one (5512.108917ms)
+✔ color and font scheme changes are caught, through the themes that use them too (5586.086334ms)
+✔ a removed id fails until declared, and forces a minor train even when the stability run is all there is (5091.749292ms)
+✔ new ids, display text and narrative content never fail and need no minor (2483.112708ms)
+✔ a declared id that did not change warns and does not fail (5524.608208ms)
+✔ a CATALOG_SCHEMA change is a new baseline: nothing fails, and the release is a minor one (6760.552542ms)
+✔ gateVersion refuses a patch when the release needs a minor, and the first shared train is a minor over 0.25.0 (0.487417ms)
+✔ the removed-id and schema reasons need no fragment: the release type reads the comparison (3130.984708ms)
+✔ declaredDrawing counts only gallery fragments and names every declaring fragment (0.140375ms)
+✔ a prepared release's recorded declarations count like its fragments, and only for that version (0.914208ms)
+✔ the baseline is the latest dist-tag, never the highest semver, and is cached by version (1.201709ms)
+✔ offline without a cached baseline fails with the way out; an explicit directory or version needs no registry (0.872042ms)
+✔ the command: an undeclared change exits 1, a declared one 0, with the minimum bump in the JSON (390.611917ms)
+✔ the command: a schema change passes as a new baseline and asks for a minor (88.149458ms)
+✔ the command: an invalid fragment fails the run instead of being ignored (1.578375ms)
+✔ without a tracked packages/gallery the command checks nothing and exits 0 (30.864083ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41849.532875
+@openpresentation/gallery 0.33.0 against the latest release 0.33.0, opf-render 0.33.0
+  layouts: 36 drawn, 0 changed, 4 new
+  themes: 3 drawn, 0 changed
+  colorSchemes: 14 drawn, 0 changed
+  fontSchemes: 89 drawn, 0 changed
+  narratives: unchanged
+  audiences: unchanged
+  purposes: unchanged
+  tones: unchanged
+  chartTypes: unchanged
+  languages: unchanged
+  socialPlatforms: unchanged
+  284 renders in 3.4 s
+  warning: layouts:closing: declared in packages/gallery/release-drawing.json (0.33.0) but it did not change against 0.33.0
+  warning: layouts:comparison: declared in packages/gallery/release-drawing.json (0.33.0) but it did not change against 0.33.0
+  warning: layouts:metrics: declared in packages/gallery/release-drawing.json (0.33.0) but it did not change against 0.33.0
+  warning: layouts:pillars: declared in packages/gallery/release-drawing.json (0.33.0) but it did not change against 0.33.0
+  warning: layouts:process: declared in packages/gallery/release-drawing.json (0.33.0) but it did not change against 0.33.0
+  warning: layouts:section: declared in packages/gallery/release-drawing.json (0.33.0) but it did not change against 0.33.0
+  warning: layouts:statement: declared in packages/gallery/release-drawing.json (0.33.0) but it did not change against 0.33.0
+  warning: layouts:team: declared in packages/gallery/release-drawing.json (0.33.0) but it did not change against 0.33.0
+  warning: layouts:text: declared in packages/gallery/release-drawing.json (0.33.0) but it did not change against 0.33.0
+  minimum bump: minor (declared drawing change: layouts:closing, layouts:comparison, layouts:metrics, layouts:pillars, layouts:process, layouts:section, layouts:statement, layouts:team, layouts:text)
+OK: every existing record draws the same.

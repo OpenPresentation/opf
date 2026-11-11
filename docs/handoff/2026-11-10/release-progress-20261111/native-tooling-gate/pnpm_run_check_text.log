@@ -1,0 +1,28 @@
+
+> openpresentation-workspace@ check:text /private/tmp/opf-034
+> node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs
+
+✔ compressed reports retain the same text checks and original line/column (1.208042ms)
+✔ real compressed evidence is scanned as its text, preserving input bytes (7.713625ms)
+✔ names alone cannot bypass checks and broken/oversized compressed text fails (0.761ms)
+✔ existing recognized binary evidence remains distinct from text (0.060583ms)
+✔ MR-11: other raster images and gzip archives are binary by signature, never by name (0.4105ms)
+✔ MR-11: an imported package is scanned once its package.json exists, and not before (0.160875ms)
+✔ ZIP evidence is binary by signature while plain text under ZIP names stays checked (0.148333ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 50.389083
+{
+  "valid": true,
+  "files": 18378,
+  "binaryImages": 8201,
+  "binaryDocuments": 1589,
+  "binaryFonts": 309,
+  "binaryArchives": 430,
+  "compressedText": 1866
+}
