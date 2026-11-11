@@ -136,10 +136,12 @@ function scalarTargets(slide, index, proof, report) {
 export function restoreRunColors(slides, info, resolve, report) {
   slides.forEach((slide, index) => {
     const tag = info[index];
-    let scalars = tag?.structure && tag?.content ? scalarTargets(slide, index, tag.scalars, report) : [];
+    const protectedValues=tag?.protectedValues??new Set();
+    let scalars = tag?.structure && tag?.content ? scalarTargets(slide, index, tag.scalars, report).filter(target=>!protectedValues.has(target.get())) : [];
     const scalarValues = () => new Set(scalars.map(target => target.get()).filter(Array.isArray));
     const marked = [...markedRuns(slide)];
-    const restoreName = (run, name) => {
+    const restoreName = (run, name, currentNative = false) => {
+      if(protectedValues.has(run)&&!currentNative)return;
       const current = run.color ?? run._opfInherited;
       const hex = typeof current === 'string' && /^#[0-9a-f]{6}$/i.test(current) ? current.toUpperCase() : undefined;
       if (hex && resolve(slide, name)?.toUpperCase() === hex) run.color = name;
@@ -157,13 +159,15 @@ export function restoreRunColors(slides, info, resolve, report) {
         if (slots.length !== n) report({code: 'color-reference-changed', path: `slides.${index}`, message: `The slide's text runs no longer match the stored colour references (${slots.length} runs now, ${n} at export), so the named run colours of slides.${index} (variables, scheme slots and roles) were not restored; the runs keep their resolved colours.`});
         else for (const [slot, name] of at) if (slots[slot]) restoreName(slots[slot], name);
       }
-    } else if (!tag?.record) {
-      for (const run of marked) if (typeof run._opfScheme === 'string') restoreName(run, run._opfScheme);
     }
+    // V2 current-rich runs reject source/default replay, but a bare scheme slot
+    // read from their CURRENT native fill remains evidence of that current role.
+    // Other V1 runs retain the existing no-record-only native-slot behavior.
+    for (const run of marked) if ((!tag?.record||protectedValues.has(run))&&typeof run._opfScheme==='string') restoreName(run,run._opfScheme,true);
     for (const run of marked) delete run._opfScheme;
     const inherited = new Set(marked.filter(run => Object.hasOwn(run, '_opfInherited')));
     for (const run of inherited) delete run._opfInherited;
-    if (inherited.size) plainInheritedRuns(slide, inherited);
+    if (inherited.size) plainInheritedRuns(slide, new Set([...inherited].filter(run=>!protectedValues.has(run))));
     // Color slots settle first. Only proven scalar values with no rich property join.
     for (const target of scalars) { const value = target.get(); if (Array.isArray(value) && value.every(part => typeof part === 'string')) target.set(value.join('')); }
   });

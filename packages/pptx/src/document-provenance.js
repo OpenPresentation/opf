@@ -1012,6 +1012,7 @@ export function slideListRecord(entries, path, root, rels, report = () => {}) {
     const breaks = record.lists === undefined || record.native.structure !== nativeSlide(entries, path).structure ? null : new Map(record.lists.map(([list, lines]) => [list, new Map(lines)]));
     const roles = record.listRoles === undefined || record.native.structure !== nativeSlide(entries, path).structure || record.native.listIdentity !== nativeListIdentity(entries, path) ? null : new Map(record.listRoles);
     const scalars = record.listScalars === undefined || record.native.structure !== nativeSlide(entries, path).structure || record.native.listIdentity !== nativeListIdentity(entries, path) ? null : new Map(record.listScalars);
+    if (record.listRoles !== undefined && !roles) report({code:'list-line-role-changed',message:'Native list names, positions or structure changed; list roles were not restored.'});
     if (record.listScalars !== undefined && !scalars) report({code:'list-scalar-reference-changed',message:'Native list names, positions or structure changed; scalar source intent was not restored.'});
     return {breaks, runs, roles, scalars};
   } catch {
@@ -1098,7 +1099,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
       return false;
     }
     let placedPaths;
-    const result = rebuildContent(record.content, imported.slides[index]?.blocks ?? [], slides[index]?.contentBounds ?? [], paths => { placedPaths = paths; }, Object.fromEntries(['fontSize', 'fontFamily', 'color'].map(key => [key, record.native.runStyles?.[key] !== undefined && record.native.runStyles[key] === observed.runStyles?.[key]])));
+    const result = rebuildContent(record.content, imported.slides[index]?.blocks ?? [], slides[index]?.contentBounds ?? [], paths => { placedPaths = paths; }, Object.fromEntries(['fontSize', 'fontFamily', 'color'].map(key => [key, record.native.runStyles?.[key] !== undefined && record.native.runStyles[key] === observed.runStyles?.[key]])),slides[index]?.v2ProtectedBlocks??new Set());
     if (result.reason) {
       report({code: 'content-structure-changed', path: `slides.${index}`, message: `The slide's content no longer matches its stored structure (${result.reason}), so the authored groups, regions and block ids of slides.${index} were not restored; the imported slide keeps its flat blocks.${typeNote}`});
       return false;

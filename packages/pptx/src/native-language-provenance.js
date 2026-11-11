@@ -46,12 +46,13 @@ export function protectNativeLatinText(xml,base){
  });
 }
 
-export function attachNativeLanguageTags(entries,slotGroups=new Map()){
+export function attachNativeLanguageTags(entries,slotGroups=new Map(),excludedNames=new Set()){
  const records=new Map();
  for(const path of Object.keys(entries).filter(p=>/^ppt\/slides\/slide\d+\.xml$/.test(p))){
   const xml=decoder.decode(entries[path]);
   for(const [shape]of xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)){
    const name=attribute(shape.match(/<p:cNvPr\b[^>]*>/)?.[0]??'','name');
+   if(excludedNames.has(decode(name??'')))continue;
    const slots=slotGroups.get(decode(name??'')),slideIndex=Number(/slide(\d+)\.xml$/.exec(path)?.[1])-1;
    const validSlots=slots?.slideIndex===slideIndex&&slotOwnedName(decode(name??''))?slots.paragraphs:undefined;
    if(!ownedName(name??'')&&!validSlots?.length)continue;
@@ -69,11 +70,12 @@ export function attachNativeLanguageTags(entries,slotGroups=new Map()){
 
 // Return a read view only: existing native/provenance fingerprint checks must
 // retain the original ZIP parts. A pair by itself never erases foreign language.
-export function nativeLanguageReadView(entries,parseRelationships,report=()=>{}){
+export function nativeLanguageReadView(entries,parseRelationships,report=()=>{},excludedNames=new Map()){
  const result=new Map();
  for(const path of Object.keys(entries).filter(p=>/^ppt\/slides\/slide\d+\.xml$/.test(p))){
   const xml=decoder.decode(entries[path]),rels=parseRelationships(entries,path);
   const normalized=xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,shape=>{
+   if(excludedNames.get(path)?.size&&excludedNames.get(path).has(parser.parse(shape)['p:sp']?.['p:nvSpPr']?.['p:cNvPr']?.name))return shape;
    const parsed=parser.parse(shape)['p:sp'],tags=[];
    for(const link of array(parsed?.['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'])){
     const rel=rels.get(link['r:id']);

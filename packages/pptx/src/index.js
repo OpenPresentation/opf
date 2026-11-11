@@ -6,6 +6,7 @@ import {importTableFrames} from './table-import.js';
 import {applyChartFonts, applyPitchFamilies, finalizeFontsUsed, fontPitchFamilies} from './package-fonts.js';
 import {createNativeLatinSlots} from './native-latin-slots.js';
 import {createNativeTextFragments,planNativeTextFragments,importNativeTextFragments,adoptNativeFragmentGroups} from './native-text-fragments.js';
+import {createNativeScalarFragments,readNativeScalarGroups,adoptNativeScalarGroups} from './native-scalar-fragments.js';
 import {officeSafeTypeface, safeMeasurement, sameMetrics, typefaceClasses, unsafeTypefacesIn, writeSafeTypefaces} from './safe-typefaces.js';
 import {PICTURE_SCALE, defaultSlideRasterizer, pictureDeck} from './picture-slides.js';
 import {giveNotesMastersOwnThemes, giveSlidesScriptMasters} from './master-themes.js';
@@ -95,6 +96,7 @@ import {
 import {checkFormat, checkImportedFormat, isValidFormat} from "./format-check.js";
 import {OPFPptxError} from './errors.js';
 import {readInputZip} from './input-safety.js';
+const V2_CURRENT_RICH=Symbol('current native scalar rich paragraph');
 export {OPFPptxError} from './errors.js';
 
 export {checkTypefaces, inventoryTypefaces, packageFontsUsed, THEME_SCRIPT_SUPPLEMENTS} from './typeface-inventory.js';
@@ -451,6 +453,7 @@ export async function toPptx(input, options = {}) {
   context.nativeLatinSlots = createNativeLatinSlots(context.scriptFonts, (language, slideIndex) => resolveScriptFonts(presentation, {slideIndex, ...(language ? {language} : {}), ...(options.catalogs !== undefined ? {catalogs:options.catalogs} : {})}), options.onDiagnostic);
   context.nativeTextFragments = createNativeTextFragments(options.onDiagnostic);
   context.nativeFragmentProfile = (language,slideIndex) => resolveScriptFonts(presentation,{slideIndex,...(language?{language}:{}),...(options.catalogs!==undefined?{catalogs:options.catalogs}:{})});
+  context.nativeScalarFragments = createNativeScalarFragments(options.onDiagnostic);
   // RR-102: the deck language every run is written in (lang); a date field that shows English words says en-US instead.
   context.deckLang = context.scriptFonts?.lang ?? 'en-US';
   // Slide section labels become PowerPoint's native section list (src/sections.js).
@@ -555,7 +558,9 @@ export async function fromPptx(input, options = {}) {
   // the independently validated current-slide ownership below.
   const hasOpfTags = Object.keys(entries).some(path => /^ppt\/tags\/opf/i.test(path));
   const ownedSlides = opfSlideOwnership(entries, slidePaths);
-  const nativeLanguages = nativeLanguageReadView(entries, parseRelationships, options.onDiagnostic);
+  const hasNativeScalars=Object.entries(entries).some(([path,bytes])=>/^ppt\/tags\//.test(path)&&/\bname\s*=\s*(['"])(?:OPF_TEXT_V2|OPF_NATIVE_FRAGMENTS_V2)\1/i.test(decodeText(bytes)));
+  const nativeScalars=new Map(hasNativeScalars?slidePaths.map(path=>[path,readNativeScalarGroups(entries,path,options.onDiagnostic)]):[]);
+  const nativeLanguages = nativeLanguageReadView(entries, parseRelationships, options.onDiagnostic,new Map([...nativeScalars].map(([path,scan])=>[path,scan.names])));
   const observedLanguage = observeLanguage({
     preferBaseRuns: ownedSlides,
     slides: slidePaths.map(path => decodeText(nativeLanguages.get(path) ?? entries[path])),
@@ -649,7 +654,7 @@ export async function fromPptx(input, options = {}) {
   for (let index = 0; index < slidePaths.length; index += 1) {
     furnitureContexts[index].mediaRegistry = mediaRegistry;
     const slideLanguage = observedLanguage.slides?.[index] ?? observedLanguage;
-    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, nativeLanguages, rtlDeck: observedRtl(slideLanguage), deckLang: slideLanguage.lang, codeFamily: hasOpfTags ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
+    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, nativeScalars,nativeLanguages, rtlDeck: observedRtl(slideLanguage), deckLang: slideLanguage.lang, codeFamily: hasOpfTags ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
     if (slideLanguage.language !== undefined && slideLanguage.language !== observedLanguage.language) imported.slides[index].language = slideLanguage.language;
   }
   if (datasets) imported.datasets = datasets;
@@ -755,7 +760,16 @@ export async function fromPptx(input, options = {}) {
 // colour resolution still gives the run's colour; see run-colors.js.
 function applyRunColors(imported, slideProvenance, restoredGroups, report, options, contexts) {
   const restoredContent = new Set(restoredGroups.filter(group => group.applied && group.contentPaths).map(group => group.contentPaths.slide));
-  const info = slideProvenance.map((entry, index) => entry.structure === "untagged" ? undefined : {record: entry.record, structure: entry.structure === "match", content: restoredContent.has(index), scalars: contexts?.[index]?.listScalars});
+  const protectedValues=(index)=>{
+    const values=new Set(),context=contexts?.[index];if(!context?.v2ProtectedBlocks?.size)return values;
+    const add=value=>{if(Array.isArray(value)){values.add(value);for(const item of value)add(item);}else if(value&&typeof value==='object'){values.add(value);for(const item of Object.values(value))add(item);}};
+    if(restoredContent.has(index)){
+      for(const field of context.v2ProtectedPaths??[]){let value=imported;for(const key of field.replace(/^slides\.\d+/,`slides.${index}`).split('.'))value=value?.[key];add(value);}
+      for(const group of restoredGroups.filter(group=>group.applied&&group.contentPaths?.slide===index))for(const [block,fields]of context.v2ProtectedFlatFields??[]){const relative=group.contentPaths.paths?.get(block);if(!relative)continue;let leaf=imported.slides[index];for(const key of relative.split('.'))leaf=leaf?.[key];for(const field of fields){let value=leaf;for(const key of field.split('.'))value=value?.[key];add(value);}}
+    }else for(const [block,fields]of context.v2ProtectedFlatFields??[])for(const field of fields){let value=imported.slides[index]?.blocks?.[block];for(const key of field.split('.'))value=value?.[key];add(value);}
+    return values;
+  };
+  const info = slideProvenance.map((entry, index) => entry.structure === "untagged" ? contexts?.[index]?.v2ProtectedBlocks?.size?{protectedValues:protectedValues(index)}:undefined : {record: entry.record, structure: entry.structure === "match", content: restoredContent.has(index), scalars: contexts?.[index]?.listScalars,protectedValues:protectedValues(index)});
   restoreRunColors(imported.slides, info, colorResolver(imported, options), report);
 }
 
@@ -1146,17 +1160,20 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     const current = item.readNativeBody();
     if (current) {
       item.paragraphs = withDisplayedNumbers(current.map((paragraph, index) => ({...item.paragraphs[index], ...paragraph})));
+      if(item.v2Fallback)for(const paragraph of item.paragraphs)paragraph[V2_CURRENT_RICH]=true;
       item.text = current.map(paragraph => paragraph.text).join('\n');
       if (item.paragraphs.some(paragraph => paragraph.bullet) && item.paragraphs.some(paragraph => !paragraph.bullet))
         options.onDiagnostic?.({code: 'mixed-body-paragraphs', path: `slides.${slideIndex}`, message: 'A native body mixes bulleted and plain paragraphs; current text is retained as list entries because OPF has no mixed-paragraph body model.'});
     }
   }
   const listRecord = slideListRecord(entries, slidePath, slideRoot, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
-  nativeContext.listScalars = listRecord.scalars;
+  nativeContext.listScalars = listRecord.scalars&&new Map([...listRecord.scalars].map(([path,roles])=>[path,roles.filter(([index,role])=>!nativeContext.v2ProtectedPaths?.has(path+'.'+index+(role==='description'?'.description':'')))]).filter(([,roles])=>roles.length));
   const content = mergeAdjacentBulletShapes(restoreStepNumbers(mergeOpfListShapes(items, listRecord.breaks, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`}), listRecord.runs, listRecord.roles), nativeContext.stepNumbers))
-    .map((item) => ({payload: payloadFromSlideItem(item, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`})), bounds: item.visualBounds ?? item.bounds, sources: item.sources ?? [], inferredStretch: item.inferredStretch}))
+    .map((item) => {const payload=payloadFromSlideItem(item,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`})),protectedFields=[];if(payload?.type==='text'&&item.paragraphs?.some(paragraph=>paragraph[V2_CURRENT_RICH]))protectedFields.push('text');if(payload?.type==='list'&&Array.isArray(item.paragraphs))for(const [index,paragraph]of item.paragraphs.entries())if(paragraph[V2_CURRENT_RICH]){protectedFields.push('items.'+index+(payload.items[index]&&!Array.isArray(payload.items[index])&&typeof payload.items[index]==='object'?'.text':''));if(paragraph.description!==undefined)protectedFields.push('items.'+index+'.description');}return {payload,protectedFields,bounds:item.visualBounds??item.bounds,sources:item.sources??[],inferredStretch:item.inferredStretch};})
     .filter((entry) => entry.payload);
   const blocks = content.map((entry) => entry.payload);
+  nativeContext.v2ProtectedBlocks=new Set(content.flatMap((entry,index)=>entry.sources.some(source=>nativeContext.v2ProtectedSources?.has(source))?[index]:[]));
+  nativeContext.v2ProtectedFlatFields=new Map(content.flatMap((entry,index)=>entry.protectedFields.length?[[index,entry.protectedFields]]:[]));
   // RR-81: the region of each block read from one region placeholder of the slide's 0.19 template layout (its p:ph idx).
   if (nativeContext.layoutTag) {
     const frames = asArray(slideRoot['p:cSld']?.['p:spTree']?.['p:graphicFrame']);
@@ -1226,6 +1243,17 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const readBody = nativeBodyReader(slidePath, {
     part: (path, parser) => options.nativeLanguages?.has(path) ? parser.parse(decodeText(options.nativeLanguages.get(path))) : parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
   }, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.${diagnostic.path}`}), {deckLang: options.deckLang, codeFamily: options.codeFamily, rtlDeck: options.rtlDeck === true});
+  const scalarScan=options.nativeScalars?.get(slidePath);let rawScalarReader;
+  const rawBody=(...args)=>{if(!scalarScan?.tagged.size)return undefined;rawScalarReader??=nativeBodyReader(slidePath,{part:(path,parser)=>parseRequiredXml(entries,path,parser),relationships:path=>parseRelationships(entries,path),bytes:path=>entries[path]},relationships,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.${diagnostic.path}`}),{deckLang:options.deckLang,codeFamily:options.codeFamily,rtlDeck:options.rtlDeck===true});return rawScalarReader(...args);};
+  const adoptedScalars=adoptNativeScalarGroups(scalarScan,shapes,rawBody,({group,indexes,carrier,value})=>{
+    const first=paragraphs[carrier]?.[0];if(!first)return;
+    const paragraph={...first,text:group.text,...(group.exact?{}:{richText:value,[V2_CURRENT_RICH]:true})};
+    const item=importShape(shapes[carrier],dimensions,[paragraph],true);if(!item)return;
+    const bounds=indexes.map(index=>shapeBounds(shapes[index]['p:spPr']?.['a:xfrm'])).filter(Boolean);
+    if(bounds.length){const x=Math.min(...bounds.map(box=>box.x)),y=Math.min(...bounds.map(box=>box.y));item.bounds={x,y,w:Math.max(...bounds.map(box=>box.x+box.w))-x,h:Math.max(...bounds.map(box=>box.y+box.h))-y};}
+    return {...item,...(group.header.kind==='text'?{sourceText:true}:{}),sources:indexes.map(index=>'sp:'+index)};
+  },(kind,value,item)=>{const payload=item?payloadFromSlideItem(item,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`})):kind==='text'?{type:'text',text:value}:{type:'list',items:[value]};return payload&&checkImportedFormat({slides:[{blocks:[payload]}]},value).valid;},diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  items.push(...adoptedScalars.items);nativeContext.v2ProtectedSources=adoptedScalars.protectedSources;nativeContext.v2ProtectedPaths=adoptedScalars.protectedPaths;
   const fragments=importNativeTextFragments(shapes,paragraphs,relationships,entries,readBody,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}),decodeText(entries[slidePath]));
   const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
   const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
@@ -1316,6 +1344,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     const role = furniture.text.has(index) ? 'furniture' : nativeContext.imageShapes?.has(index) ? 'image-overlay' : nativeContext.watermarkShapes?.has(index) ? 'watermark' : nativeContext.logoPlaceholderShapes?.has(index) ? 'logo' : cards.has(shape) ? 'card-frame'
       : code.consumed.has(shape) ? 'code' : metric.consumed.has(shape) ? 'metric' : media.consumed.has(shape) ? 'media' : timelines.consumed.has(shape) ? 'timeline' : quotes.consumed.has(shape) ? 'quote' : undefined;
     if (role) roles.set(shapeKeys.get(shape), role);
+    if(adoptedScalars.consumed.has(shape)){roles.set(shapeKeys.get(shape),'native-scalar-fragment');continue;}
     if(adoptedFragments.consumed.has(shape)){roles.set(shapeKeys.get(shape),'native-fragment');continue;}
     if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index) || diagrams.shapes.has(index) || diagramMembers.has(shape)) continue;
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
@@ -1340,11 +1369,14 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
       if (imported) items.push({...imported, sources: [`sp:${index}`]});
       continue;
     }
-    const ordinaryBody = fragments.tagged.has(shape) || Object.hasOwn(shape, 'p:txBody') && (!shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'] || onlyNativeLanguageTags(shape, relationships, entries));
+    const scalarFallback=scalarScan?.tagged.has(Number(shape['p:nvSpPr']?.['p:cNvPr']?.id)+'|'+shape['p:nvSpPr']?.['p:cNvPr']?.name);
+    if(scalarFallback)nativeContext.v2ProtectedSources.add('sp:'+index);
+    const ordinaryBody = scalarFallback || fragments.tagged.has(shape) || Object.hasOwn(shape, 'p:txBody') && (!shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'] || onlyNativeLanguageTags(shape, relationships, entries));
     const item = importShape(shape, dimensions, paragraphs[index], ordinaryBody || furniture.taggedText.has(index) || media.captionShapes.has(shape));
+    if(item&&scalarFallback){item.v2Fallback=true;item.sourceText=true;}
     if (item && ordinaryBody) {
-      const currentBody = readBody(index, {onlyScaled: true});
-      item.readNativeBody = () => currentBody ?? readBody(index);
+      const bodyReader=scalarFallback?rawBody:readBody,currentBody = bodyReader(index, {onlyScaled: true});
+      item.readNativeBody = () => currentBody ?? bodyReader(index);
       // A saved scale also governs native heading/list size comparisons. Only
       // scaled bodies use resolved sizes here; ordinary classification is unchanged.
       if (currentBody?.some(paragraph => paragraph.nativeFontScale !== undefined)) {
@@ -1794,20 +1826,29 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
   const merged = new Map(), consumed = new Set();
   for (const [path, entries] of lists) {
     entries.sort((a, b) => a.line - b.line);
+    const hasV2=entries.some(({item})=>item.v2Scalar),protectedParagraphs=new Set(),coveredLines=new Set(entries.filter(({item})=>item.v2Scalar).flatMap(({item})=>item.v2Scalar.lines??[]));
     const expectedRoles = roles?.get(path);
     // design.listBullet: none writes no bullet at all (a:buNone): the list is unambiguous only through its recorded roles, whose
     // first lines start the entries. Without that record the shapes stay as they are.
     const unbulleted = entries.every(({item}) => !item.paragraphs[0].bullet);
-    if (!entries[0].item.paragraphs[0].bullet && !(unbulleted && expectedRoles?.[0]?.[2])) continue;
-    const validRoles = expectedRoles && expectedRoles.length === entries.length && entries.every(({item, line}, index) => line === index && (unbulleted || Boolean(item.paragraphs[0].bullet) === expectedRoles[index][2]));
+    if (!hasV2&&!entries[0].item.paragraphs[0].bullet && !(unbulleted && expectedRoles?.[0]?.[2])) continue;
+    const projected=new Set();
+    const validRoles = expectedRoles && (hasV2?entries.every(({item,line})=>{
+      const lines=item.v2Scalar?.lines??[line],first=expectedRoles[line];if(!first||lines[0]!==line)return false;
+      if(!unbulleted&&Boolean(item.paragraphs[0].bullet)!==first[2])return false;
+      for(const [index,original]of lines.entries()){const role=expectedRoles[original];if(projected.has(original)||original!==line+index||!role||item.v2Scalar&&(role[0]!==first[0]||role[1]!=='text'||role[2]!==!index))return false;projected.add(original);}
+      return true;
+    })&&projected.size===expectedRoles.length:expectedRoles.length === entries.length && entries.every(({item, line}, index) => line === index && (unbulleted || Boolean(item.paragraphs[0].bullet) === expectedRoles[index][2])));
     const lineRoles = validRoles ? expectedRoles : null;
     if (expectedRoles && !validRoles) report({code: 'list-line-role-changed', message: `The line topology of ${path} changed; list roles were not restored.`});
+    if(hasV2&&!entries[0].item.paragraphs[0].bullet&&!(unbulleted&&lineRoles?.[entries[0].line]?.[2]))continue;
     if (unbulleted && !validRoles) continue;
     const look = runs?.get(path), textLook = cleanBase(look?.text), descriptionLook = cleanBase(look?.description);
     // The line's runs without the inherited look, or the paragraph's own richText when there is no record for this kind of line.
     // Each run is cleaned on its own and none merge, so the runs stay the slots the run colour record counts (src/run-colors.js);
     // they stay run objects until the lines are joined (as before), then `plain` gives the authored form back.
     const own = (paragraph, base) => {
+      if(paragraph[V2_CURRENT_RICH])return paragraph.richText;
       if (!base) return paragraph.richText;
       return richRuns(paragraph.richText ?? paragraph.text).flatMap(run => {
         const value = headingValue([run], base);
@@ -1828,6 +1869,8 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
     let bounds, size = 0;
     for (const {item, line} of entries) {
       const [paragraph] = item.paragraphs, current = paragraphs.at(-1);
+      if(item.v2Scalar){const copy={...paragraph};paragraphs.push(copy);protectedParagraphs.add(copy);size=paragraph.maxFontSize;consumed.add(item);const b=item.visualBounds??item.bounds;if(b){const x=Math.min(bounds?.x??b.x,b.x),y=Math.min(bounds?.y??b.y,b.y);bounds={x,y,w:Math.max((bounds?bounds.x+bounds.w:-Infinity),b.x+b.w)-x,h:Math.max((bounds?bounds.y+bounds.h:-Infinity),b.y+b.h)-y};}continue;}
+      if(paragraph[V2_CURRENT_RICH]&&current&&!paragraph.bullet)current[V2_CURRENT_RICH]=true;
       const gap = recorded?.get(line);
       const join = (a, b) => gap === undefined ? joinRich(a, b) : joinWrappedText([a, b], [gap]);
       if (unbulleted ? lineRoles?.[line][2] : paragraph.bullet) { paragraphs.push({...paragraph, bullet: true, richText: own(paragraph, textLook)}); size = paragraph.maxFontSize; }
@@ -1849,9 +1892,9 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
       }
       consumed.add(item);
     }
-    if (recorded && [...recorded.keys()].some(line => !applied.has(line))) report({code: 'list-line-break-changed', message: `A hard line break recorded at export inside the list ${path} no longer has the continuation line it belonged to (a line was edited away, or became an entry), so that break was not restored; the list keeps the lines it has.`});
-    if (textLook) for (const paragraph of paragraphs) paragraph.richText = plain(paragraph.richText);
-    if (descriptionLook) for (const paragraph of paragraphs) if (paragraph.description !== undefined) paragraph.description = plain(paragraph.description);
+    if (recorded && [...recorded.keys()].some(line => !applied.has(line)&&!coveredLines.has(line))) report({code: 'list-line-break-changed', message: `A hard line break recorded at export inside the list ${path} no longer has the continuation line it belonged to (a line was edited away, or became an entry), so that break was not restored; the list keeps the lines it has.`});
+    if (textLook) for (const paragraph of paragraphs) if(!protectedParagraphs.has(paragraph)&&!paragraph[V2_CURRENT_RICH])paragraph.richText = plain(paragraph.richText);
+    if (descriptionLook) for (const paragraph of paragraphs) if (paragraph.description !== undefined&&!paragraph[V2_CURRENT_RICH]) paragraph.description = plain(paragraph.description);
     const first = entries[0].item;
     merged.set(first, {...first, paragraphs, text: paragraphs.map(paragraph => paragraph.text).join('\n'), bounds, visualBounds: undefined, sources: entries.flatMap(({item}) => item.sources ?? [])});
     // LH-08: the hairlines the export drew between the rows of this list (`OPF list rule <path> N`, no text) are part of its drawing,
@@ -2806,6 +2849,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       }
     }
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
+    if(options.bodyText!=='native'&&!nativeTitle&&!nativePlans.some(plan=>plan.item===item))context.nativeScalarFragments.rememberItem(slideIndex,item,geometry,options.textMeasurement,language=>context.nativeFragmentProfile(language,slideIndex));
     // LH-50: a label drawn as an eyebrow shares its paragraph's card (the same frameBox): the card is drawn once, under the eyebrow, and
     // named for the paragraph (the next item), whose block it is.
     const sharedCard = sameBox(item.frameBox, previousFrame);
@@ -5870,10 +5914,11 @@ async function normalizePptxZip(raw, context) {
     const xml = decodeText(output[path][0]), slots = context.nativeLatinSlots.write(xml, Number(match[1])-1), next = context.nativeTextFragments.write(slots,Number(match[1])-1,context.nativeLatinSlots.groups);
     if (next !== xml) output[path] = [encodeText(next), output[path][1]];
   }
+  if(context.nativeScalarFragments.hasPlans){const scalarParts=Object.fromEntries(Object.entries(output).map(([path,[bytes]])=>[path,bytes]));context.nativeScalarFragments.write(scalarParts,context.nativeLatinSlots.groups);for(const [path,bytes]of Object.entries(scalarParts))if(output[path]?.[0]!==bytes)output[path]=[bytes,{level:context.compressionLevel,mtime:context.zipDate}];}
   finalizeFontsUsed(output);
   // Structural proofing records are needed even without full source provenance.
   const languageParts = Object.fromEntries(Object.entries(output).map(([path, [bytes]]) => [path, bytes]));
-  attachNativeLanguageTags(languageParts,context.nativeLatinSlots.groups);
+  attachNativeLanguageTags(languageParts,context.nativeLatinSlots.groups,context.nativeScalarFragments.committedNames);
   context.nativeTextFragments.attach(languageParts);
   sealReferenceBindings(languageParts,context.chartHeadings,parseRelationships);
   for (const [path, bytes] of Object.entries(languageParts)) output[path] = [bytes, {level: context.compressionLevel, mtime: context.zipDate}];

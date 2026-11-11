@@ -585,7 +585,7 @@ const textRuns = value => typeof value === 'string' || (Array.isArray(value) && 
  * {reason} when a block matches no leaf or several blocks land on one leaf.
  * Leaves with no block are dropped: empty payloads export nothing.
  */
-export function rebuildContent(topology, blocks, bounds, placed, intactStyles = {}) {
+export function rebuildContent(topology, blocks, bounds, placed, intactStyles = {}, protectedBlocks = new Set()) {
   if (!Array.isArray(blocks) || !Array.isArray(bounds) || blocks.length !== bounds.length) return {reason: 'the imported blocks carry no native bounds'};
   const leaves = [];
   const collect = item => {
@@ -639,7 +639,7 @@ export function rebuildContent(topology, blocks, bounds, placed, intactStyles = 
   const payloadOf = leaf => {
     if (!leaf.matches.length) return undefined;
     const payload = clone(leaf.payload ?? blocks[leaf.matches[0]]);
-    if (leaf.kind === 'text' && leaf.node.sourceStyles) payload.text = restoreSourceRunStyles(payload.text, leaf.node.sourceStyles, intactStyles);
+    if (leaf.kind === 'text' && leaf.node.sourceStyles&&!leaf.matches.some(index=>protectedBlocks.has(index))) payload.text = restoreSourceRunStyles(payload.text, leaf.node.sourceStyles, intactStyles);
     // The imported block always names its type; the authored one may have left it implicit.
     if (!leaf.node.typed) delete payload.type;
     // The imported block names every list `items`; a payload authored as `bullets` takes its key back (a bullet has no description).
