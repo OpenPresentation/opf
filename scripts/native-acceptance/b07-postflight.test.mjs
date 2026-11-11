@@ -63,7 +63,8 @@ test('reviewed observer source remains exact and B07 source binds actual worker 
   assert.equal(digest(observer),B07_POSTFLIGHT_POLICY.observerSourceSha256);
   assert.deepEqual(observer,execFileSync('git',['show','f3f04183c2d38ffe3e5755a23b571b6b9ce8155e:'+B07_POSTFLIGHT_POLICY.observerSource],{cwd:root}));
   // Stage 1 remains the immutable original whole worker. Stage 2 is ONLY the
-  // independently reviewed strict idle function; never derive from current bytes.
+  // independently reviewed strict idle function. Stage 3 adds ONLY the pinned
+  // reviewed name-type diagnostic region; never derive from current bytes.
   const worker='packages/pptx/test/native-furniture-control.ps1';
   const frozen=execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+worker],{cwd:root});
   const reviewed=execFileSync('git',['show','a06c78686c3d3f59be6e6b9e8de65bac072ea515:'+worker],{cwd:root});
@@ -82,7 +83,19 @@ test('reviewed observer source remains exact and B07 source binds actual worker 
   const derived=replace(frozen,originalIdle,strictIdle.body);
   assert.deepEqual(derived,reviewed,'Only the reviewed strict idle stage may change the original worker');
   assert.deepEqual(replace(reviewed,strictIdle,originalIdle.body),frozen,'Inverse derivation must preserve every original byte');
-  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),derived);
+  const typeEvidence=execFileSync('git',['show','43f157dbe96c7e5b5b53db44ddbf96a124d3465a:'+worker],{cwd:root});
+  assert.equal(typeEvidence.length,86566);assert.equal(digest(typeEvidence),'3d073e9f6fe0432a38e6e1edd2946f32859594f07e9a3590c9bbf5c3d66a2d32');
+  const nameTypes=bytes=>{
+    const begin=Buffer.from('# Bounded current native chart metadata only: no ChartData, Values setter, Excel or UI.\n'),end=Buffer.from('function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {\n');
+    const from=bytes.indexOf(begin),to=bytes.indexOf(end);
+    assert.ok(from>=0&&to>from);assert.equal(bytes.lastIndexOf(begin),from);assert.equal(bytes.lastIndexOf(end),to);
+    const body=bytes.subarray(from,to);assert.equal(bytes.indexOf(body),from);assert.equal(bytes.lastIndexOf(body),from);
+    return {from,to,body};
+  };
+  const originalTypes=nameTypes(reviewed),observedTypes=nameTypes(typeEvidence),derivedTypes=replace(derived,originalTypes,observedTypes.body);
+  assert.deepEqual(derivedTypes,typeEvidence,'Only the immutable reviewed type-observation region may change the strict-idle worker');
+  assert.deepEqual(replace(typeEvidence,observedTypes,originalTypes.body),reviewed,'Type-evidence inverse must preserve every strict-idle worker byte');
+  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),derivedTypes);
   for(const name of ['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
   const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
   assert.ok(runner.indexOf('if(-not $RunOffice)')<runner.indexOf('$checked=& $node $validator verify-postflight'));
