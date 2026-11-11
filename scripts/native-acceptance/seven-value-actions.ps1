@@ -25,7 +25,7 @@ function Assert-SevenValueAction($Action) {
     if($Action.workbookCells -isnot [array] -or $Action.workbookCells.Rank -ne 1 -or $Action.workbookCells.Count -ne $Action.expectedValues.Count) {Stop-SevenLifecycle 'Bound workbook cells must match the numeric array length'}
     $seenCells=@{}
     foreach($cell in $Action.workbookCells) {
-        if($cell -isnot [string] -or $cell -cnotmatch '^[A-Z]+[1-9][0-9]*$' -or $seenCells.ContainsKey($cell)) {Stop-SevenLifecycle 'Workbook cell names must be distinct typed uppercase references'}
+        if($cell -isnot [string] -or $cell -cnotmatch '^[A-Z]+[1-9][0-9]*\z' -or $seenCells.ContainsKey($cell)) {Stop-SevenLifecycle 'Workbook cell names must be distinct typed uppercase references'}
         $seenCells[$cell]=$true
     }
     $changed=0

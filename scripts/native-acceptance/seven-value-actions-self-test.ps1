@@ -172,6 +172,13 @@ $metadataMutants=@(
     @('lowercaseCell',{$script:action.workbookCells=@('B2','b3','B4','B5')}),
     @('nonstringCell',{$script:action.workbookCells=@('B2',$false,'B4','B5')}),
     @('controlCell',{$script:action.workbookCells=@('B2',"B3`n",'B4','B5')}),
+    @('carriageReturnCell',{$script:action.workbookCells=@('B2',"B3`r",'B4','B5')}),
+    @('crlfCell',{$script:action.workbookCells=@('B2',"B3`r`n",'B4','B5')}),
+    @('embeddedNewlineCell',{$script:action.workbookCells=@('B2',"B`n3",'B4','B5')}),
+    @('tabCell',{$script:action.workbookCells=@('B2',"B3`t",'B4','B5')}),
+    @('nulCell',{$script:action.workbookCells=@('B2',('B3'+[char]0),'B4','B5')}),
+    @('lineSeparatorCell',{$script:action.workbookCells=@('B2',('B3'+[char]0x2028),'B4','B5')}),
+    @('paragraphSeparatorCell',{$script:action.workbookCells=@('B2',('B3'+[char]0x2029),'B4','B5')}),
     @('oversizedName',{$script:action.seriesName='x'*256})
 )
 foreach($mutant in $metadataMutants) {

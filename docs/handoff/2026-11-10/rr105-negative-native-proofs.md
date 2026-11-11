@@ -178,3 +178,12 @@ build, exports, process query, observer, Office or timeout/budget change ran.
 Root and independent source review must precede any separately authorized
 coherent qualification. All prior branches, sources, first failures, trace and
 producer/consumer identities stay frozen.
+
+
+## Actual stage-index result and workbook-cell admission repair — 2026-11-11
+
+A fresh Windows controller at `04c17e3567dc61f8021f3d5d4e900b176afea336` passed the unchanged selected typed-bridge test in 27.787 seconds. The second selected actual PowerShell action test then ran for the first time and failed after 9.606 seconds at the existing malformed-metadata assertion. No timeout, Office activation or process query occurred. Both 60-second child budgets stayed unchanged. Successful test cleanup was left intact; only its wrapper assertions establish coverage.
+
+The preserved failing `metadata-controlCell` case contains one managed setter attempt and an edited readback: its original `B3\n` cell was accepted. The retained report is 10,923 bytes, SHA-256 `01a705ad3024cb6ff7dc1b3f84d281bc0de3ed0afd42a4f45a83f0ed1fed7f24`; its 58-row journal is 11,929 bytes, SHA-256 `14f6bcf817d134bb403a824f475deba3cec82483a76513e0b430f84ba84a3961`. Raw records remain on Windows. This is a real PowerShell admission defect, not a waived test failure: .NET's `$` permits the position before a final LF. Node's unchanged literal regex rejects the same LF, CR, CRLF and Unicode separator inputs.
+
+The forward repair replaces only the PowerShell cell regex's terminal `$` with `\z`, retaining its uppercase/cell-number/uniqueness guards. The original LF mutant and zero-getter/setter assertion remain. Additional actual-PS mutants cover CR, CRLF, embedded LF, tab, NUL and both Unicode line separators; the Node wrapper requires every named control. A public Node model/wire regression rejects all eight controls. Its focused run passes once; fresh actual-PS qualification and the required integrated delta remain pending. No worker deadline, observer, workload, geometry, product output or native qualification changed.

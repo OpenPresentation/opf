@@ -106,6 +106,14 @@ test('source and exact target/type/branch/formula/series admission controls reje
  const {action}=bindSingleSevenValueTarget(input,source,select(),{deps});
  for(const mutate of [a=>a.extra=true,a=>a.shapeId=0,a=>a.seriesIndex=2,a=>a.maxSeriesCount=2,a=>a.comChartType=51,a=>a.branch='fallback',a=>a.dataId=null,a=>a.dimensionIndex='1',a=>a.dimensionIndex=-1,a=>a.layoutId='funnel',a=>a.workbookCells=null,a=>a.workbookCells=['B2'],a=>a.workbookCells[1]='B2',a=>a.workbookCells[1]='b3',a=>a.workbookCells[1]=false,a=>a.newValues[1]=32,a=>a.inputSha256='0']){const altered=structuredClone(action);mutate(altered);assert.throws(()=>assertSevenValueAction(altered));}
 });
+test('bound action cells reject control characters before the model or wire is admitted',()=>{
+ const {action}=bindSingleSevenValueTarget(main(),source,select(),{deps});
+ for(const cell of ['B3\n','B3\r','B3\r\n','B\n3','B3\t','B3\0','B3\u2028','B3\u2029']){
+  const altered=structuredClone(action);altered.workbookCells[1]=cell;
+  assert.throws(()=>assertSevenValueAction(altered),JSON.stringify(cell));
+  assert.throws(()=>bindSevenValueActionFile(Buffer.from(JSON.stringify(altered)),action),JSON.stringify(cell));
+ }
+});
 test('admitted Pareto has no persisted derived percentages/formulas; unknown derived dependencies refuse',()=>{
  const input=main(),{action}=bindSingleSevenValueTarget(input,source,select(3),{deps});assert.equal(action.maxSeriesCount,2);
  for(const addition of ['<cx:layoutPr><cx:aggregation/></cx:layoutPr>','<cx:numDim type="val"><cx:lvl ptCount="1"><cx:pt idx="0">50</cx:pt></cx:lvl></cx:numDim>']){
@@ -199,6 +207,7 @@ test('Windows actual PowerShell5.1 action definitions: one setter, managed fault
   assert.deepEqual(report.probes,sevenValueCriticalProbes(proofContext,action).filter(probe=>probe.stage.startsWith('value.')),'Actual managed action helpers must emit the exact Node-owned proof grammar, not a synthetic mirror');
   assert.ok(receipt.results.every(item=>item.passed===true));assert.ok(!receipt.baselineCalls.some(name=>name.startsWith('FORBIDDEN.')));
   const names=receipt.results.map(item=>item.name);for(const required of ['valuesSet','valuesGet.1','valuesGet.2','valuesGet.3','silentSetter','staleReopened','rankTwo','null','bool','string','nan','infinity','unexpected','secondSetter','foreignApplication','foreignPresentation','foreignPath','writable','beforeValueOwnedAppSwap','beforeValueOwnedPresentationSwap','beforeValueOwnedPathSwap','beforeValueForeignPath','beforeValueWritable','malformedModel','extraWireField','zeroWireBytes','stringWireBytes','invalidWireHash','reopenedModelMismatch','reopenedWireLengthMismatch','reopenedWireHashMismatch'])assert.ok(names.includes(required),required);
+  for(const name of ['controlCell','carriageReturnCell','crlfCell','embeddedNewlineCell','tabCell','nulCell','lineSeparatorCell','paragraphSeparatorCell'])assert.ok(names.includes(name),name);
   for(const change of ['hash','length']){
    const refused=path.join(output,'wire-refused-'+change),args=['-NoProfile','-NonInteractive','-File',path.join(here,'seven-value-actions-self-test.ps1'),'-Worker',path.join(here,'seven-chart-worker.ps1'),'-Actions',path.join(here,'seven-value-actions.ps1'),'-ActionFile',actionFile,'-ExpectedActionModelSha256',bound.actionModelSha256,'-ExpectedActionFileBytes',String(bound.actionFileIdentity.bytes+(change==='length'?1:0)),'-ExpectedActionFileSha256',change==='hash'?'0'.repeat(64):bound.actionFileIdentity.sha256,'-Output',refused];
    const result=spawnSync(path.join(process.env.WINDIR,'System32/WindowsPowerShell/v1.0/powershell.exe'),args,{encoding:'utf8',env:windowsPowerShellEnvironment(process.env),timeout:60000,maxBuffer:4*1024*1024});assert.notEqual(result.status,0);assert.match(result.stdout+result.stderr,/Action wire snapshot identity differs before any managed target operation/u);
