@@ -1,0 +1,19 @@
+{
+  "files": [
+    {
+      "path": "gate.log",
+      "bytes": 1371,
+      "sha256": "5b39468d1f59fe4cbb2eab7458d3bf75b369dc08843f5c0bef7fb6fc2738899b"
+    },
+    {
+      "path": "receipt.json",
+      "bytes": 891,
+      "sha256": "c87c00ec4f7bbc78e8ce5b62e1fe7bfd421380a8d75211cfea2fedb5403262eb"
+    },
+    {
+      "path": "selected-logs.zip",
+      "bytes": 34633,
+      "sha256": "c84c3f0ee07716827180354d6be449a16e81a47ace433c7744d90c81bd0b44ed"
+    }
+  ]
+}
