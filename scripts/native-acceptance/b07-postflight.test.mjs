@@ -65,7 +65,8 @@ test('reviewed observer source remains exact and B07 source binds actual worker 
   // Stage 1 remains the immutable original whole worker. Stage 2 is ONLY the
   // independently reviewed strict idle function. Stage 3 adds ONLY the pinned
   // reviewed name-type diagnostic region. Stage 4 adds ONLY the pinned closed
-  // reference mode in four exact regions; never derive from current bytes.
+  // reference mode in four exact regions; Stage5 renames only nine internal
+  // state references, never the public parameter/request. No current-byte target.
   const worker='packages/pptx/test/native-furniture-control.ps1';
   const frozen=execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+worker],{cwd:root});
   const reviewed=execFileSync('git',['show','a06c78686c3d3f59be6e6b9e8de65bac072ea515:'+worker],{cwd:root});
@@ -115,7 +116,12 @@ test('reviewed observer source remains exact and B07 source binds actual worker 
   for(let index=referenceAnchors.length-1;index>=0;index--){derivedReference=replace(derivedReference,priorRanges[index],closedRanges[index].body);inverseReference=replace(inverseReference,closedRanges[index],priorRanges[index].body);}
   assert.deepEqual(derivedReference,referenceMode,'Only the four immutable reviewed closed-reference regions may extend type diagnostics');
   assert.deepEqual(inverseReference,typeEvidence,'Fourth-stage inverse must preserve every43f type-diagnostic worker byte');
-  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),derivedReference);
+  const priorState='$script:referenceNameEdit',nextState='$script:referenceNameModeEnabled';
+  assert.equal(derivedReference.toString('utf8').split(priorState).length-1,9);assert.ok(!derivedReference.includes(nextState));
+  const startupState=Buffer.from(derivedReference.toString('utf8').replaceAll(priorState,nextState));
+  assert.equal(startupState.length,91281);assert.equal(digest(startupState),'d8f0aa7e0b7fcf72cb2401808f45c2cdb69cd99862ad14c88103180b86278210');
+  assert.deepEqual(Buffer.from(startupState.toString('utf8').replaceAll(nextState,priorState)),referenceMode,'Fifth-stage inverse restores the entire immutable closed-reference worker');
+  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),startupState);
   for(const name of ['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
   const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
   assert.ok(runner.indexOf('if(-not $RunOffice)')<runner.indexOf('$checked=& $node $validator verify-postflight'));

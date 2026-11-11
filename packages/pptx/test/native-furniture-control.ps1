@@ -330,11 +330,11 @@ if((Get-FurnitureSha256 $request.processHelper.path) -cne $request.processHelper
 if((Get-FurnitureSha256 $sourceSnapshot) -cne $sourceHash) { throw 'Presentation snapshot hash does not match the requested source' }
 if((Get-FurnitureSha256 $planSnapshot) -cne $request.actionPlan.snapshotSha256 -or $actions.Count -ne $request.actionPlan.count) { throw 'Action-plan snapshot does not match the validated request' }
 
-$script:referenceNameEdit=$false
+$script:referenceNameModeEnabled=$false
 if($ReferenceNameEdit -or $null -ne $request.PSObject.Properties['referenceNameEdit']){
     if(-not $ReferenceNameEdit -or $request.referenceNameEdit -isnot [bool] -or -not $request.referenceNameEdit){throw 'Reference-name switch differs from its snapshotted request'}
     Assert-FurnitureReferenceNameMode $actions $sourceHash (Get-Item -LiteralPath $sourceSnapshot).Length ([bool]$CaptureTextFonts) ([bool]$ReadOnlySurvey)
-    $script:referenceNameEdit=$true
+    $script:referenceNameModeEnabled=$true
 }
 Assert-FurnitureSurvey ([bool]$ReadOnlySurvey) $actions $sourceSnapshot
 $script:validatedTextProbePlan=$null
@@ -361,7 +361,7 @@ $report=[ordered]@{
     cleanupConfirmed=$script:cleanupConfirmed;officeOperationsStopped=$script:officeOperationsStopped;lastStage=$script:lastStage;lastStatus=$script:lastStatus;error=$null
     scope='One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker quits only its exact verified empty application, never kills Office, changes security, retries, or closes unrelated presentations.'
 }
-if($script:referenceNameEdit){$report.referenceNameEdit=$true}
+if($script:referenceNameModeEnabled){$report.referenceNameEdit=$true}
 if($null -ne $script:validatedTextProbePlan) { $report.textProbePlan=$request.textProbePlan }
 if($ReadOnlySurvey) { $report.scope='One explicitly supplied read-only survey: exactly one slide, at most 100 shapes, an empty action plan, source at most 16 MiB/4096 ZIP entries and the unchanged 60-second maximum. Owned read-only Open, SaveCopyAs, read-only reopen and observations only; no content edits, UI, process termination or retry.' }
 function Write-FurnitureReport {
@@ -791,22 +791,22 @@ function Get-FurnitureSeriesTypeObservation($Value) {
     return [ordered]@{observedType=if($null -eq $Value){'null'}else{$Value.GetType().FullName};observedRawValue=if($null -eq $Value){$null}elseif($Value -is [string] -or $Value -is [bool] -or $Value -is [char] -or $Value -is [byte] -or $Value -is [sbyte] -or $Value -is [int16] -or $Value -is [uint16] -or $Value -is [int] -or $Value -is [uint32] -or $Value -is [long] -or $Value -is [uint64] -or $Value -is [single] -or $Value -is [double] -or $Value -is [decimal] -or $Value -is [Enum]){[Convert]::ToString($Value,[Globalization.CultureInfo]::InvariantCulture)}else{'<unsupported native chart type>'};numericValue=if(Test-Integer $Value){$Value}else{$null}}
 }
 function Get-FurnitureSeriesTarget($Presentation,$Action,[string]$Prefix,$Probe) {
-    if($script:referenceNameEdit){try{Assert-FurnitureReferenceNameAction $Action}catch{Stop-FurnitureLifecycle $_.Exception.Message}}
+    if($script:referenceNameModeEnabled){try{Assert-FurnitureReferenceNameAction $Action}catch{Stop-FurnitureLifecycle $_.Exception.Message}}
     $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $Prefix
     $shape=Get-ExactShape $slide $Action.chartName "$Prefix.chart"
     $has=Invoke-FurnitureCom "$Prefix.chart.hasChart" {$shape.HasChart};if($has -ne -1){Stop-FurnitureLifecycle 'The exact series-name target is not a native chart'}
     $chart=Invoke-FurnitureCom "$Prefix.chart.get" {$shape.Chart};$type=Invoke-FurnitureCom "$Prefix.chart.type" {$member=$chart.PSObject.Properties['ChartType'];if($null -eq $member){throw 'Native chart ChartType property is unavailable'};return ,$member.get_Value()}
     $Probe.chartTypeObservation=Get-FurnitureSeriesTypeObservation $type
-    if($script:referenceNameEdit){
+    if($script:referenceNameModeEnabled){
         $Probe.referenceSeriesTypes=@([ordered]@{index=1;typeObservation=$null});$Probe.referenceSeriesCount=$null
         if($type -isnot [int] -or $type.GetType().FullName -cne 'System.Int32' -or $type -ne -4111 -or $Action.slideIndex -ne 1 -or $Action.chartName -cne 'OPF chart 1' -or $Action.seriesIndex -ne 1){Stop-FurnitureLifecycle 'Only the sealed three-line reference chart may use the measured parent type'}
     }elseif(-not (Test-Integer $type) -or $type -notin @(51,52,53,57,58,59,4,65,63,66,1,76,77,-4169,5,-4120)){Stop-FurnitureLifecycle 'Series-name qualification requires a supported classic point chart'}
     $collection=Invoke-FurnitureCom "$Prefix.series.get" {return ,$chart.SeriesCollection()};$count=Invoke-FurnitureCom "$Prefix.series.count" {$collection.Count}
-    if($script:referenceNameEdit){$Probe.referenceSeriesCount=Get-FurnitureSeriesTypeObservation $count;if(-not(Test-Integer $count) -or $count -ne 3){Stop-FurnitureLifecycle 'Sealed reference chart must expose exactly three native series'}}
+    if($script:referenceNameModeEnabled){$Probe.referenceSeriesCount=Get-FurnitureSeriesTypeObservation $count;if(-not(Test-Integer $count) -or $count -ne 3){Stop-FurnitureLifecycle 'Sealed reference chart must expose exactly three native series'}}
     if(-not (Test-Integer $count) -or $count -lt 1 -or $count -gt 256 -or $Action.seriesIndex -gt $count){Stop-FurnitureLifecycle 'Series-name target count/index is outside the bounded collection'}
     $series=Invoke-FurnitureCom "$Prefix.series.item" {$collection.Item([int]$Action.seriesIndex)}
     $seriesType=Invoke-FurnitureCom "$Prefix.series.type" {$member=$series.PSObject.Properties['ChartType'];if($null -eq $member){throw 'Native series ChartType property is unavailable'};return ,$member.get_Value()};$Probe.seriesTypeObservation=Get-FurnitureSeriesTypeObservation $seriesType
-    if($script:referenceNameEdit){
+    if($script:referenceNameModeEnabled){
         $Probe.referenceSeriesTypes[0].typeObservation=$Probe.seriesTypeObservation
         if($seriesType -isnot [int] -or $seriesType.GetType().FullName -cne 'System.Int32' -or $seriesType -ne 4){Stop-FurnitureLifecycle 'Selected reference series must have the measured Int32 line type'}
         for($index=2;$index -le 3;$index++){
@@ -838,7 +838,7 @@ function Set-FurnitureSeriesName($Presentation,$Action,[string]$Prefix) {
         $other=Invoke-FurnitureCom "$Prefix.series.other-$index.get" {$target.collection.Item($index)}
         $name=Invoke-FurnitureCom "$Prefix.series.other-$index.name.get" {$other.Name};$probe.otherNames+=@([ordered]@{index=$index;name=if($name -is [string]){$name}else{$null}})
         if($name -isnot [string]){Stop-FurnitureLifecycle 'Another native series has no String name'}
-        if($script:referenceNameEdit -and $name -cne ('OPF reference '+($index-1))){Stop-FurnitureLifecycle 'A sealed reference helper name changed before the setter'}
+        if($script:referenceNameModeEnabled -and $name -cne ('OPF reference '+($index-1))){Stop-FurnitureLifecycle 'A sealed reference helper name changed before the setter'}
         if($name -ieq $Action.newName){Stop-FurnitureLifecycle 'New literal name already identifies another native series; no setter was called'}
     }
     Invoke-FurnitureCom "$Prefix.series.name.set" {$target.series.Name=$Action.newName}
@@ -860,7 +860,7 @@ function Read-FurnitureSeriesNameState($Presentation,$Targets,[string]$Phase) {
         # Keep the existing successful phase schema; the complete current probe
         # retains diagnostic types for a failure before the phase can complete.
         $record=[ordered]@{phase=$probe.phase;slideIndex=$probe.slideIndex;chartName=$probe.chartName;seriesIndex=$probe.seriesIndex;expectedName=$probe.expectedName;observedName=$probe.observedName;observedType=$probe.observedType;observedRawValue=$probe.observedRawValue;status=$probe.status}
-        if($script:referenceNameEdit){$record.referenceTypeEvidence=[ordered]@{chart=$probe.chartTypeObservation;count=$probe.referenceSeriesCount;series=@($probe.referenceSeriesTypes)}}
+        if($script:referenceNameModeEnabled){$record.referenceTypeEvidence=[ordered]@{chart=$probe.chartTypeObservation;count=$probe.referenceSeriesCount;series=@($probe.referenceSeriesTypes)}}
         $records.Add($record)
     }
     return ,$records.ToArray()
