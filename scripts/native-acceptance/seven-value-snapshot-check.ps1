@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$Root,[Parameter(Mandatory=$true)][string]$ActionFile,[Parameter(Mandatory=$true)][string]$ActionModelSha256,[Parameter(Mandatory=$true)][string]$ActionFileSha256,[Parameter(Mandatory=$true)][int]$ActionFileBytes,[Parameter(Mandatory=$true)][string]$Output,[Parameter(Mandatory=$true)][string]$FixtureFile,[switch]$HistogramClassic)
+param([Parameter(Mandatory=$true)][string]$Root,[Parameter(Mandatory=$true)][string]$ActionFile,[Parameter(Mandatory=$true)][string]$ActionModelSha256,[Parameter(Mandatory=$true)][string]$ActionFileSha256,[Parameter(Mandatory=$true)][int]$ActionFileBytes,[Parameter(Mandatory=$true)][string]$Output,[Parameter(Mandatory=$true)][string]$FixtureFile,[switch]$HistogramClassic,[switch]$HistogramLiteral)
 $ErrorActionPreference='Stop'
 if($PSVersionTable.PSVersion.Major -ne 5 -or $PSVersionTable.PSVersion.Minor -ne 1){throw 'Actual Windows PowerShell5.1 required'}
 $snapshotControllerRoot=$Root
@@ -9,7 +9,9 @@ $null=Import-SnapshotTest 'scripts/native-acceptance/seven-value-actions.ps1' @(
 $null=Import-SnapshotTest 'scripts/native-acceptance/seven-value-snapshot-actions.ps1' @('Save-SevenNativeSnapshot','Set-SevenSnapshotNumericArray')
 if($HistogramClassic){$null=Import-SnapshotTest 'scripts/native-acceptance/seven-histogram-snapshot-actions.ps1' @('Assert-SevenHistogramAction','Set-SevenHistogramSnapshotArray')}
 $snapshotSetter=if($HistogramClassic){'Set-SevenHistogramSnapshotArray'}else{'Set-SevenSnapshotNumericArray'}
-$snapshotProfile=if($HistogramClassic){'seven-histogram-classic-setter-native-archives-v1'}else{'seven-treemap-setter-native-archives-v1'}
+$snapshotProfile=if($HistogramLiteral){'seven-histogram-literal-setter-native-archives-v1'}elseif($HistogramClassic){'seven-histogram-classic-setter-native-archives-v1'}else{'seven-treemap-setter-native-archives-v1'}
+$setterFlags=if($HistogramLiteral){@{HistogramLiteral=$true}}else{@{}}
+if($HistogramLiteral -and -not $HistogramClassic){throw 'Literal managed mode requires histogram source'}
 $old=Import-SnapshotTest 'scripts/native-acceptance/seven-value-actions-self-test.ps1' @('Initialize-ValueTest')
 # Reuse the maintained real CLR target fixture, not its executable entrypoint.
 $types=@($old.FindAll({param($n) $n -is [Management.Automation.Language.CommandAst] -and $n.GetCommandName() -ceq 'Add-Type'},$true));if($types.Count -ne 1){throw 'One maintained CLR fixture definition required'}
@@ -39,28 +41,31 @@ function Initialize-SnapshotTest([string]$Name,[string]$Mutant='',[string]$Fault
  $script:report['requestSha256']='a'*64;$script:report['sourceSha256']='b'*64;$script:report['snapshots']=[ordered]@{before=[ordered]@{sha256=('c'*64)}}
  $proof=Join-Path $script:root 'before-check.json';[ordered]@{schemaVersion=2;profile=$snapshotProfile;requestSha256=$script:report.requestSha256;sourceSha256=$script:report.sourceSha256;beforeSha256=$script:report.snapshots.before.sha256;sourcePublicModelVerified=$true;nativeRoleBindingVerified=$true;sourceRawStyleQualification='OPEN';nativeAcceptance=$false}|ConvertTo-Json -Depth 10|Set-Content -LiteralPath $proof -Encoding UTF8
  if($HistogramClassic){$record=Get-Content -LiteralPath $proof -Raw|ConvertFrom-Json;$record|Add-Member -NotePropertyName nativeTypeQualified -NotePropertyValue $false;$record|ConvertTo-Json -Depth 10|Set-Content -LiteralPath $proof -Encoding UTF8}
+ if($HistogramLiteral){$record=Get-Content -LiteralPath $proof -Raw|ConvertFrom-Json;$record|Add-Member -NotePropertyName expectedResultBinding -NotePropertyValue 'numeric-literal';$record|Add-Member -NotePropertyName numericWorksheetEditabilityQualified -NotePropertyValue $false;$record|ConvertTo-Json -Depth 10|Set-Content -LiteralPath $proof -Encoding UTF8}
  $script:report['beforeAdmission']=[ordered]@{path=$proof;sha256=(Get-SevenHash $proof)}
 }
 Initialize-SnapshotTest 'null-getter-success' 'null'
-& $snapshotSetter $action $actionModelSha256 $actionFileIdentity
+& $snapshotSetter $action $actionModelSha256 $actionFileIdentity @setterFlags
 if($script:stopped -or [SevenValueFake]::Gets -ne 0 -or [SevenValueFake]::Sets -ne 1 -or $script:report.actions[0].status -cne 'setter-success'){throw 'Actual setter must work without invoking the null getter'}
 $baseline=@([SevenValueFake]::Calls);$results+=@([ordered]@{name='null getter never read; exact setter once';getterCalls=0;setterCalls=1})
 for($i=0;$i -lt $baseline.Count;$i++){
  Initialize-SnapshotTest ('fault-'+$i) 'null';[SevenValueFake]::FaultCallIndex=$i+1
- $caught=$false;try{& $snapshotSetter $action $actionModelSha256 $actionFileIdentity}catch{$caught=$true};$count=[SevenValueFake]::Calls.Count
+ $caught=$false;try{& $snapshotSetter $action $actionModelSha256 $actionFileIdentity @setterFlags}catch{$caught=$true};$count=[SevenValueFake]::Calls.Count
  try{Invoke-SevenCom 'after-refusal' {[SevenValueFake]::Hit('FORBIDDEN')}}catch{}
  if(-not $caught -or -not $script:stopped -or [SevenValueFake]::Calls.Count -ne $count -or $count -ne $i+1 -or [SevenValueFake]::Gets -ne 0){throw 'Setter fault latch allowed later managed work'}
  $results+=@([ordered]@{name=('fault-'+$i);getterCalls=0;setterCalls=[SevenValueFake]::Sets;laterCalls=0})
 }
 $setterRefusals=@('foreignPath','writable','slideCount','shapeCount','duplicateTarget','hasChart','wrongType','zeroSeries','extraSeries','seriesName','foreignApplication','foreignPresentation','missingProof','proofHash','proofRequest','proofFalse','proofRoles','proofRawStatus','proofLegacyFidelity','proofNativeAcceptance','stopped','secondSetter','wire');if($HistogramClassic){$setterRefusals+=@('wrongSeriesType')}
+if($HistogramLiteral){$setterRefusals+=@('proofLinkedProfile','proofResultBinding','proofWorksheetClaim')}
 foreach($mode in $setterRefusals){
  Initialize-SnapshotTest $mode $mode
  if($mode -ceq 'foreignApplication'){$script:ownedApp=[object]::new()};if($mode -ceq 'foreignPresentation'){$script:ownedPresentation=[object]::new()}
  if($mode -ceq 'missingProof'){$script:report.beforeAdmission=$null};if($mode -ceq 'proofHash'){$script:report.beforeAdmission.sha256='0'*64}
  if($mode -cin @('proofRequest','proofFalse','proofRoles','proofRawStatus','proofLegacyFidelity','proofNativeAcceptance')){$p=$script:report.beforeAdmission.path;$proof=Get-Content -LiteralPath $p -Raw|ConvertFrom-Json;if($mode -ceq 'proofRequest'){$proof.requestSha256='0'*64}elseif($mode -ceq 'proofFalse'){$proof.sourcePublicModelVerified=$false}elseif($mode -ceq 'proofRoles'){$proof.nativeRoleBindingVerified=$false}elseif($mode -ceq 'proofRawStatus'){$proof.sourceRawStyleQualification='verified'}elseif($mode -ceq 'proofNativeAcceptance'){$proof.nativeAcceptance=$true}else{$proof.schemaVersion=1;$proof.PSObject.Properties.Remove('sourcePublicModelVerified');$proof|Add-Member -NotePropertyName sourceFidelityVerified -NotePropertyValue $true};$proof|ConvertTo-Json -Depth 10|Set-Content -LiteralPath $p -Encoding UTF8;$script:report.beforeAdmission.sha256=Get-SevenHash $p}
- if($mode -ceq 'stopped'){$script:stopped=$true};if($mode -ceq 'secondSetter'){& $snapshotSetter $action $actionModelSha256 $actionFileIdentity}
+ if($mode -cin @('proofLinkedProfile','proofResultBinding','proofWorksheetClaim')){$p=$script:report.beforeAdmission.path;$proof=Get-Content -LiteralPath $p -Raw|ConvertFrom-Json;if($mode -ceq 'proofLinkedProfile'){$proof.profile='seven-histogram-classic-setter-native-archives-v1'}elseif($mode -ceq 'proofResultBinding'){$proof.expectedResultBinding='worksheet-range'}else{$proof.numericWorksheetEditabilityQualified=$true};$proof|ConvertTo-Json -Depth 10|Set-Content -LiteralPath $p -Encoding UTF8;$script:report.beforeAdmission.sha256=Get-SevenHash $p}
+ if($mode -ceq 'stopped'){$script:stopped=$true};if($mode -ceq 'secondSetter'){& $snapshotSetter $action $actionModelSha256 $actionFileIdentity @setterFlags}
  $identity=$actionFileIdentity;if($mode -ceq 'wire'){$identity=[pscustomobject]@{bytes=0;sha256=$ActionFileSha256}}
- $sets=[SevenValueFake]::Sets;$caught=$false;try{& $snapshotSetter $action $actionModelSha256 $identity}catch{$caught=$true};$count=[SevenValueFake]::Calls.Count
+ $sets=[SevenValueFake]::Sets;$caught=$false;try{& $snapshotSetter $action $actionModelSha256 $identity @setterFlags}catch{$caught=$true};$count=[SevenValueFake]::Calls.Count
  try{Invoke-SevenCom 'after-refusal' {[SevenValueFake]::Hit('FORBIDDEN')}}catch{}
  if(-not $caught -or -not $script:stopped -or [SevenValueFake]::Sets -ne $sets -or [SevenValueFake]::Gets -ne 0 -or [SevenValueFake]::Calls.Count -ne $count){throw ('Managed setter refusal failed: '+$mode)}
  $results+=@([ordered]@{name=$mode;getterCalls=0;setterCalls=$sets;laterCalls=0})
@@ -98,13 +103,13 @@ if($fixture.synthetic -isnot [bool] -or -not $fixture.synthetic -or $fixture.nat
 . (Join-Path $snapshotControllerRoot 'scripts/native-acceptance/owned-postflight.ps1')
 $null=Import-SnapshotTest 'scripts/native-acceptance/seven-value-postflight.ps1' @('Invoke-SevenValueBoundPostflight')
 $null=Import-SnapshotTest 'scripts/native-acceptance/seven-postflight.ps1' @('Get-SevenPostflightOperations')
-$null=Import-SnapshotTest 'scripts/native-acceptance/seven-value-snapshot-postflight.ps1' @('Get-SevenSnapshotPostflightOperations','Test-SevenSnapshotPostflightReady','Read-SevenSnapshotPostflightEvidence','Invoke-SevenSnapshotPostflight','Invoke-SevenHistogramSnapshotPostflight')
+$null=Import-SnapshotTest 'scripts/native-acceptance/seven-value-snapshot-postflight.ps1' @('Get-SevenSnapshotPostflightOperations','Test-SevenSnapshotPostflightReady','Read-SevenSnapshotPostflightEvidence','Invoke-SevenSnapshotPostflight','Invoke-SevenHistogramSnapshotPostflight','Invoke-SevenHistogramLiteralPostflight')
 $script:actualSnapshotReader=(Get-Command Read-SevenSnapshotPostflightEvidence).ScriptBlock
 function Test-SevenValuePostflightReady {throw 'Old v1 readiness must never be used for snapshot completion'}
 function Write-SnapshotSyntheticJson([string]$File,$Value){[IO.File]::WriteAllText($File,($Value|ConvertTo-Json -Depth 100),[Text.UTF8Encoding]::new($false))}
-function Read-SevenSnapshotPostflightEvidence([string]$AdmissionFile,[string]$ExpectedSha256,[string]$ControllerRoot,[switch]$HistogramClassic){
+function Read-SevenSnapshotPostflightEvidence([string]$AdmissionFile,[string]$ExpectedSha256,[string]$ControllerRoot,[switch]$HistogramClassic,[switch]$HistogramLiteral){
  $script:readerCalls++
- if($script:readerMode -ceq 'real'){return & $script:actualSnapshotReader $AdmissionFile $ExpectedSha256 $ControllerRoot -HistogramClassic:$HistogramClassic}
+ if($script:readerMode -ceq 'real'){return & $script:actualSnapshotReader $AdmissionFile $ExpectedSha256 $ControllerRoot -HistogramClassic:$HistogramClassic -HistogramLiteral:$HistogramLiteral}
  if($ControllerRoot -cne $snapshotControllerRoot){throw 'Foreign synthetic controller'}
  return $script:bridgeEvidence
 }
@@ -117,6 +122,7 @@ function global:Get-Process {
 function global:Start-Sleep {throw 'First-zero synthetic observer must not delay'}
 $bridgeRows=@()
 $bridgeModes=@('complete-first-zero','foreign-profile','foreign-request-profile','foreign-policy','failed-worker','timed-out','pending-worker','cleanup-false','stopped','missing-stage','duplicate-stage','reordered-stage','stage-gap','stage-error','nonzero-preflight','wrong-model','wrong-wire','second-setter','missing-snapshot','foreign-snapshot','snapshot-hash','identity-bytes','identity-hash','reader-wire-pin','reader-file-identity');if($HistogramClassic){$bridgeModes+=@('native-type-claim','foreign-histogram-target','wrong-series-type')}
+if($HistogramLiteral){$bridgeModes+=@('wrong-result-binding','worksheet-editability-claim','missing-result-binding')}
 foreach($mode in $bridgeModes){
  $e=(Get-Content -LiteralPath $FixtureFile -Raw -Encoding UTF8|ConvertFrom-Json).evidence
  $directory=Join-Path $fixture.root ('adapter-'+$mode);[void](New-Item -ItemType Directory -Path $directory);$native=Join-Path $directory 'native';[void](New-Item -ItemType Directory -Path $native)
@@ -141,6 +147,7 @@ foreach($mode in $bridgeModes){
  if($mode -ceq 'wrong-wire'){$e.report.actions[0].actionFileIdentity.sha256='0'*64}
  if($mode -ceq 'second-setter'){$e.report.actions[0].setterAttempts=2}
  if($mode -ceq 'native-type-claim'){$e.request.selectedCase.nativeTypeQualified=$true};if($mode -ceq 'foreign-histogram-target'){$e.request.selectedCase.action.shapeId=2};if($mode -ceq 'wrong-series-type'){($e.stages|Where-Object {$_.stage -ceq 'snapshot.target.series.type' -and $_.status -ceq 'success'}).value=4}
+ if($mode -ceq 'wrong-result-binding'){$e.request.selectedCase.expectedResultBinding='worksheet-range'};if($mode -ceq 'worksheet-editability-claim'){$e.request.selectedCase.numericWorksheetEditabilityQualified=$true};if($mode -ceq 'missing-result-binding'){$e.request.selectedCase.PSObject.Properties.Remove('expectedResultBinding')}
  if($mode -ceq 'missing-snapshot'){$e.report.snapshots.PSObject.Properties.Remove('before')}
  if($mode -ceq 'foreign-snapshot'){$e.report.snapshots.before.path=Join-Path $native 'foreign.pptx'}
  if($mode -ceq 'snapshot-hash'){$e.report.snapshots.before.sha256='not-a-hash'}
@@ -151,12 +158,12 @@ foreach($mode in $bridgeModes){
  Write-SnapshotSyntheticJson $admissionFile $e.admission
  $script:bridgeEvidence=$e;$script:readerMode=if($mode.StartsWith('reader-')){'real'}else{'synthetic'};$script:readerCalls=0;$script:mockProcessQueries=0
  $pin=if($mode -ceq 'reader-wire-pin'){'0'*64}else{Get-OwnedPostflightHash $admissionFile}
- $ready=Test-SevenSnapshotPostflightReady $e.terminal $e -HistogramClassic:$HistogramClassic
+ $ready=Test-SevenSnapshotPostflightReady $e.terminal $e -HistogramClassic:$HistogramClassic -HistogramLiteral:$HistogramLiteral
  $identityMode=$mode.StartsWith('identity-') -or $mode.StartsWith('reader-')
  if(($mode -ceq 'complete-first-zero' -or $identityMode) -and -not $ready){throw ('Positive typed snapshot fixture refused: '+$mode)}
  if($mode -cne 'complete-first-zero' -and -not $identityMode -and $ready){throw ('Malformed snapshot completion admitted: '+$mode)}
  $failure=$null;$result=$null
- try{$result=if($HistogramClassic){Invoke-SevenHistogramSnapshotPostflight -AdmissionFile $admissionFile -ExpectedAdmissionSha256 $pin -ControllerRoot $snapshotControllerRoot}else{Invoke-SevenSnapshotPostflight -AdmissionFile $admissionFile -ExpectedAdmissionSha256 $pin -ControllerRoot $snapshotControllerRoot}}catch{$failure=$_.Exception.Message}
+ try{$result=if($HistogramLiteral){Invoke-SevenHistogramLiteralPostflight -AdmissionFile $admissionFile -ExpectedAdmissionSha256 $pin -ControllerRoot $snapshotControllerRoot}elseif($HistogramClassic){Invoke-SevenHistogramSnapshotPostflight -AdmissionFile $admissionFile -ExpectedAdmissionSha256 $pin -ControllerRoot $snapshotControllerRoot}else{Invoke-SevenSnapshotPostflight -AdmissionFile $admissionFile -ExpectedAdmissionSha256 $pin -ControllerRoot $snapshotControllerRoot}}catch{$failure=$_.Exception.Message}
  $observed=@();if(Test-Path -LiteralPath $postflightFile){$observed=@(Get-Content -LiteralPath $postflightFile|ForEach-Object {$_|ConvertFrom-Json})}
  if($script:readerCalls -ne 1){throw 'Actual snapshot entry must invoke its evidence-reader boundary once'}
  if($mode -ceq 'complete-first-zero'){

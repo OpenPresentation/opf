@@ -1,5 +1,6 @@
-param([Parameter(Mandatory=$true)][string]$ExecutionEnvelope,[Parameter(Mandatory=$true)][ValidatePattern('^[a-f0-9]{64}$')][string]$ExpectedEnvelopeSha256,[Parameter(Mandatory=$true)][string]$NodeExecutable,[Parameter(Mandatory=$true)][string]$OutputDirectory,[Parameter(Mandatory=$true)][ValidatePattern('^[a-f0-9]{64}$')][string]$ExpectedRequestSha256,[switch]$RunOffice,[switch]$HistogramClassic)
+param([Parameter(Mandatory=$true)][string]$ExecutionEnvelope,[Parameter(Mandatory=$true)][ValidatePattern('^[a-f0-9]{64}$')][string]$ExpectedEnvelopeSha256,[Parameter(Mandatory=$true)][string]$NodeExecutable,[Parameter(Mandatory=$true)][string]$OutputDirectory,[Parameter(Mandatory=$true)][ValidatePattern('^[a-f0-9]{64}$')][string]$ExpectedRequestSha256,[switch]$RunOffice,[switch]$HistogramClassic,[switch]$HistogramLiteral)
 $ErrorActionPreference='Stop'
+if($HistogramLiteral -and -not $HistogramClassic){throw 'Literal result requires the closed histogram source'}
 # Separate getter-free archive protocol. Default is pure; no retry or v1 continuation.
 foreach($entryPath in @($ExecutionEnvelope,$PSCommandPath)) {
     if(-not [IO.Path]::IsPathRooted($entryPath) -or $entryPath.StartsWith('\') -or $entryPath -match '[\x00-\x1f]'){throw 'Local value entry required'}
@@ -16,11 +17,11 @@ while($cursor){$item=Get-Item -LiteralPath $cursor -Force -ErrorAction SilentlyC
 $record=@($profile.controller.files | Where-Object {$_.path -ceq 'scripts/native-acceptance/seven-value-snapshot-bootstrap.ps1'})
 if($record.Count -ne 1 -or (Get-Item -LiteralPath $bootstrap -Force).Length -ne $record[0].bytes -or (Get-FileHash -LiteralPath $bootstrap -Algorithm SHA256).Hash.ToLowerInvariant() -cne $record[0].sha256){throw 'Bound value bootstrap differs'}
 . $bootstrap
-$controller=Assert-SevenSnapshotBootstrap $profile $NodeExecutable -HistogramClassic:$HistogramClassic
+$controller=Assert-SevenSnapshotBootstrap $profile $NodeExecutable -HistogramClassic:$HistogramClassic -HistogramLiteral:$HistogramLiteral
 if($PSCommandPath -cne (Join-Path $controller 'scripts/native-acceptance/run-seven-value-snapshots.ps1')){throw 'Launcher is not bound controller source'}
 $output=Assert-SnapshotPath $OutputDirectory
 if($ExecutionEnvelope -cne (Join-Path $output 'execution-envelope.json')){throw 'Use the owned prepared envelope snapshot'}
-$validator=Join-Path $controller $(if($HistogramClassic){'scripts/native-acceptance/seven-histogram-snapshot.mjs'}else{'scripts/native-acceptance/seven-value-snapshot-profile.mjs'});$required=([bool]$RunOffice).ToString().ToLowerInvariant()
+$validator=Join-Path $controller $(if($HistogramLiteral){'scripts/native-acceptance/seven-histogram-literal-profile.mjs'}elseif($HistogramClassic){'scripts/native-acceptance/seven-histogram-snapshot.mjs'}else{'scripts/native-acceptance/seven-value-snapshot-profile.mjs'});$required=([bool]$RunOffice).ToString().ToLowerInvariant()
 $verified=& $NodeExecutable $validator verify-execution --envelope $ExecutionEnvelope --sha256 $ExpectedEnvelopeSha256 --output $output --require-office $required
 if($LASTEXITCODE -ne 0){throw 'Value snapshot/source/request refused before Office'}
 $binding=($verified | Out-String) | ConvertFrom-Json
@@ -39,7 +40,7 @@ $admission=($admissionJson | Out-String) | ConvertFrom-Json
 . (Join-Path $controller 'scripts/native-acceptance/owned-postflight.ps1')
 . (Join-Path $controller 'scripts/native-acceptance/seven-value-postflight.ps1')
 . (Join-Path $controller 'scripts/native-acceptance/seven-value-snapshot-postflight.ps1')
-$postflight=if($HistogramClassic){Invoke-SevenHistogramSnapshotPostflight -AdmissionFile $admission.path -ExpectedAdmissionSha256 $admission.sha256 -ControllerRoot $controller}else{Invoke-SevenSnapshotPostflight -AdmissionFile $admission.path -ExpectedAdmissionSha256 $admission.sha256 -ControllerRoot $controller}
+$postflight=if($HistogramLiteral){Invoke-SevenHistogramLiteralPostflight -AdmissionFile $admission.path -ExpectedAdmissionSha256 $admission.sha256 -ControllerRoot $controller}elseif($HistogramClassic){Invoke-SevenHistogramSnapshotPostflight -AdmissionFile $admission.path -ExpectedAdmissionSha256 $admission.sha256 -ControllerRoot $controller}else{Invoke-SevenSnapshotPostflight -AdmissionFile $admission.path -ExpectedAdmissionSha256 $admission.sha256 -ControllerRoot $controller}
 $confirmed=($null -eq $postflight.error -and $null -ne $postflight.result -and $postflight.result.observedZero -ceq $true)
 [ordered]@{schemaVersion=1;profile=$profile.profile;timedOut=$terminal.timedOut;exitCode=$terminal.exitCode;workerCleanupConfirmed=$true;cleanupConfirmed=$confirmed;postflight=$postflight;nativeAcceptance=$false;registryAcceptance=$false} | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath (Join-Path $native 'supervisor.json') -Encoding UTF8
 if(-not $confirmed){throw 'Value bounded postflight failed; preserve output; no retry or cleanup'}

@@ -1,5 +1,5 @@
 # Definitions only. Full Node source/data/raw/import admission precedes the unchanged observer.
-function Get-SevenSnapshotPostflightOperations($Report,$Action,[switch]$HistogramClassic){
+function Get-SevenSnapshotPostflightOperations($Report,$Action,[switch]$HistogramClassic,[switch]$HistogramLiteral){
     $out=[Collections.Generic.List[string]]::new()
     function Add-SnapshotGuard([string]$Prefix){$out.Add($Prefix+'.fullName');$out.Add($Prefix+'.readOnly')}
     function Add-SnapshotCopy([string]$Phase){Add-SnapshotGuard ('archive.'+$Phase);$out.Add('archive.'+$Phase+'.saveCopyAs');Add-SnapshotGuard ('archive.'+$Phase+'.after')}
@@ -19,10 +19,11 @@ function Get-SevenSnapshotPostflightOperations($Report,$Action,[switch]$Histogra
         $out.Add($name)
     };return $out.ToArray()
 }
-function Test-SevenSnapshotPostflightReady($Terminal,$Evidence,[switch]$HistogramClassic){
-    $expectedProfile=if($HistogramClassic){'seven-histogram-classic-setter-native-archives-v1'}else{'seven-treemap-setter-native-archives-v1'}
-    $expectedPolicy=if($HistogramClassic){'seven-histogram-classic-snapshots-bounded-global-zero-v1'}else{'seven-treemap-snapshots-bounded-global-zero-v1'}
+function Test-SevenSnapshotPostflightReady($Terminal,$Evidence,[switch]$HistogramClassic,[switch]$HistogramLiteral){
+    $expectedProfile=if($HistogramLiteral){'seven-histogram-literal-setter-native-archives-v1'}elseif($HistogramClassic){'seven-histogram-classic-setter-native-archives-v1'}else{'seven-treemap-setter-native-archives-v1'}
+    $expectedPolicy=if($HistogramLiteral){'seven-histogram-literal-snapshots-bounded-global-zero-v1'}elseif($HistogramClassic){'seven-histogram-classic-snapshots-bounded-global-zero-v1'}else{'seven-treemap-snapshots-bounded-global-zero-v1'}
     try{
+        if($HistogramLiteral -and (-not $HistogramClassic -or $Evidence.request.selectedCase.expectedResultBinding -cne 'numeric-literal' -or $Evidence.request.selectedCase.numericWorksheetEditabilityQualified -isnot [bool] -or $Evidence.request.selectedCase.numericWorksheetEditabilityQualified)){return $false}
         if(-not(Test-OwnedPostflightCommonReady $Terminal $Evidence $expectedProfile $expectedPolicy 2 3 2 1)){return $false}
         $r=$Evidence.report;$q=$Evidence.request;$s=$Evidence.stages;$a=$q.selectedCase.action
         if($HistogramClassic){
@@ -39,8 +40,8 @@ function Test-SevenSnapshotPostflightReady($Terminal,$Evidence,[switch]$Histogra
         return $s[-1].cleanupConfirmed -ceq $true
     }catch{return $false}
 }
-function Read-SevenSnapshotPostflightEvidence([string]$AdmissionFile,[string]$ExpectedSha256,[string]$ControllerRoot,[switch]$HistogramClassic){
-    $expectedProfile=if($HistogramClassic){'seven-histogram-classic-setter-native-archives-v1'}else{'seven-treemap-setter-native-archives-v1'}
+function Read-SevenSnapshotPostflightEvidence([string]$AdmissionFile,[string]$ExpectedSha256,[string]$ControllerRoot,[switch]$HistogramClassic,[switch]$HistogramLiteral){
+    $expectedProfile=if($HistogramLiteral){'seven-histogram-literal-setter-native-archives-v1'}elseif($HistogramClassic){'seven-histogram-classic-setter-native-archives-v1'}else{'seven-treemap-setter-native-archives-v1'}
     Assert-OwnedPostflightPath $AdmissionFile
     if((Split-Path -Leaf $AdmissionFile) -cne 'postflight-admission.json' -or $ExpectedSha256 -cnotmatch '^[a-f0-9]{64}$' -or (Get-Item -LiteralPath $AdmissionFile).Length -gt 4194304 -or (Get-OwnedPostflightHash $AdmissionFile) -cne $ExpectedSha256){throw 'Externally pinned snapshot admission differs'}
     $a=Get-Content -LiteralPath $AdmissionFile -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -52,7 +53,7 @@ function Read-SevenSnapshotPostflightEvidence([string]$AdmissionFile,[string]$Ex
     if($q.output -cne $output -or $q.nativeRoot -cne (Join-Path $output 'native') -or $q.controller.directory -cne $ControllerRoot -or $a.requestSha256 -cne (Get-OwnedPostflightHash $requestFile) -or -not $seen.ContainsKey($q.node.path)){throw 'Foreign snapshot request/controller'}
     $stageFile=Join-Path $q.nativeRoot 'stages.jsonl';if(-not $seen.ContainsKey($stageFile) -or (Get-Item -LiteralPath $stageFile).Length -gt 4194304){throw 'Unbound snapshot stage journal'}
     foreach($snapshot in $q.snapshots){$file=Join-Path $output $snapshot.path;if($snapshot.path -match '[\\:]|(^|/)\.\.(/|$)' -or -not $seen.ContainsKey($file)){throw 'Unbound immutable snapshot'};$matches=@($a.files | Where-Object {$_.file -ceq $file -and $_.bytes -eq $snapshot.bytes -and $_.sha256 -ceq $snapshot.sha256});if($matches.Count -ne 1){throw 'Snapshot input hash differs'}}
-    & $q.node.path (Join-Path $ControllerRoot $(if($HistogramClassic){'scripts/native-acceptance/seven-histogram-snapshot.mjs'}else{'scripts/native-acceptance/seven-value-snapshot-profile.mjs'})) verify-admission --envelope (Join-Path $output 'execution-envelope.json') --sha256 $q.envelopeSha256 --output $output --require-office true | Out-Null
+    & $q.node.path (Join-Path $ControllerRoot $(if($HistogramLiteral){'scripts/native-acceptance/seven-histogram-literal-profile.mjs'}elseif($HistogramClassic){'scripts/native-acceptance/seven-histogram-snapshot.mjs'}else{'scripts/native-acceptance/seven-value-snapshot-profile.mjs'})) verify-admission --envelope (Join-Path $output 'execution-envelope.json') --sha256 $q.envelopeSha256 --output $output --require-office true | Out-Null
     if($LASTEXITCODE -ne 0){throw 'Complete snapshot source/data/style/public-import admission refused; zero observer IO'}
     return [ordered]@{admission=$a;request=$q;report=(Read-SnapshotJson (Join-Path $q.nativeRoot 'report.json'));terminal=(Read-SnapshotJson (Join-Path $q.nativeRoot 'worker.json'));stages=@(Get-Content -LiteralPath $stageFile -Encoding UTF8 | ForEach-Object {$_ | ConvertFrom-Json})}
 }
@@ -68,5 +69,12 @@ function Invoke-SevenHistogramSnapshotPostflight {
     param([string]$AdmissionFile,[string]$ExpectedAdmissionSha256,[string]$ControllerRoot)
     $evidence=Read-SevenSnapshotPostflightEvidence $AdmissionFile $ExpectedAdmissionSha256 $ControllerRoot -HistogramClassic
     function Test-SevenValuePostflightReady($Terminal,$Evidence){return Test-SevenSnapshotPostflightReady $Terminal $Evidence -HistogramClassic}
+    return Invoke-SevenValueBoundPostflight -Evidence $evidence -ControllerRoot $ControllerRoot -AdmissionFile $AdmissionFile -ExpectedAdmissionSha256 $ExpectedAdmissionSha256
+}
+
+function Invoke-SevenHistogramLiteralPostflight {
+    param([string]$AdmissionFile,[string]$ExpectedAdmissionSha256,[string]$ControllerRoot)
+    $evidence=Read-SevenSnapshotPostflightEvidence $AdmissionFile $ExpectedAdmissionSha256 $ControllerRoot -HistogramClassic -HistogramLiteral
+    function Test-SevenValuePostflightReady($Terminal,$Evidence){return Test-SevenSnapshotPostflightReady $Terminal $Evidence -HistogramClassic -HistogramLiteral}
     return Invoke-SevenValueBoundPostflight -Evidence $evidence -ControllerRoot $ControllerRoot -AdmissionFile $AdmissionFile -ExpectedAdmissionSha256 $ExpectedAdmissionSha256
 }
