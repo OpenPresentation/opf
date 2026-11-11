@@ -38,13 +38,13 @@ Default builtin inspection is safe:
 node scripts/native-acceptance/b07-current-generate.mjs inspect
 ```
 
-Later **separately approved** activation is explicit:
+Current-consumer generation is explicit:
 
 ```sh
-node scripts/native-acceptance/b07-current-generate.mjs generate --consumer /absolute/consumer --output /absolute/new-five-case-suite --proof /absolute/producer/artifacts/editor/installed-code-summary.json --expected-proof-sha256 REVIEWED_PROOF_SHA256 --expected-revision REVIEWED_NEW_HEAD --expected-runtime-sha256 REVIEWED_CONSUMER_SHA256 --expected-routes-sha256 REVIEWED_ROUTES_BINDING_SHA256
+node scripts/native-acceptance/b07-current-generate.mjs generate --packed-preparation-repository /absolute/retained-packed-producer --consumer /absolute/consumer --output /absolute/new-five-case-suite --proof /absolute/producer/artifacts/editor/installed-code-summary.json --expected-proof-sha256 REVIEWED_PROOF_SHA256 --expected-revision REVIEWED_NEW_HEAD --expected-runtime-sha256 REVIEWED_CONSUMER_SHA256 --expected-routes-sha256 REVIEWED_ROUTES_BINDING_SHA256
 ```
 
-The output is external, fresh and exclusive, with overlap/alias refusal, no overwrite/resume/retry/deletion. Each complete case retains old/current sources, old/current whole PPTX, empty actions, fresh SVG/PNG, raw current public import/diagnostics and complete raw XML/property/part differences. Missing versus explicit null is distinguished. Geometry, complete native body/paragraph/run properties, proofing, fonts and marker carriers are findings, never vocabulary-normalized wire values. Actual one-slide/16-shape declaration remains below unchanged global30; no worker caps change. Every case is generic-native-ineligible pending a separately reviewed new profile. No historic bad PNG is presented as current paint. Independent physical boxes are not an accepted fallback and no control-character/proofing/numbering experiment is exported.
+The output is external, fresh and exclusive, with overlap/alias refusal, no overwrite/resume/retry/deletion. Each complete case retains old/current sources, old/current whole PPTX, empty actions, fresh SVG/PNG, raw current public import/diagnostics and complete raw XML/property/part differences. Missing versus explicit null is distinguished. Geometry, complete native body/paragraph/run properties, proofing, fonts and marker carriers are findings, never vocabulary-normalized wire values. Actual one-slide declaration retains16 except the exact current case10's already-reviewed22; both remain below unchanged global30; no worker caps change. Every case is generic-native-ineligible pending a separately reviewed new profile. No historic bad PNG is presented as current paint. Independent physical boxes are not an accepted fallback and no control-character/proofing/numbering experiment is exported.
 
 ## Source qualification
 
@@ -53,3 +53,11 @@ Final exact local pure/source checks: **10/10 PASS**,219.49ms; default actual `i
 [Lossless raw results](raw-results.json.gz) contain11records/137609decompressed bytes; compressed SHA256 `dee892dc7e72fc0c2f1ca0c7810f1e1bcf2321e538f4323e0f80a81c030e862f`. Earlier source-only WIP passes are labeled separately and are not substituted for the final10-group result. Exact seven source/fixture file hashes and final current schema digest are recorded. No actual generation branch was activated: `generateB07Current` was called only by its immediate missing-pin refusal control. The full source/output/consumer pipeline remains unexecuted and unqualified.
 
 The required normal `check:changed` plan against `4e03508b64e3e83e9bbdc33b2e4cd597b8a22985` is retained; execution is explicitly held by root until the final union and next permission. No install/build/package aggregate was launched here. Root source review and final mapper selection remain separate from these pure tests. All real current-consumer generation, final combined gate, native helper admission and physical/native acceptance remain open.
+
+The current generator records a required canonical `packedPreparationRepository`
+separately from its own source `suiteRepository`. A relative maintained packed
+receipt is resolved against that retained producer, then the original receipt,
+tarballs, lock and installed runtime are rechecked before/after preparation. The
+current profile requires that explicit recorded root and protects it from output
+overlap; it does not reinterpret an old suite through a new controller. The exact
+failed/unsealed589 partial attempt remains historical and is never resumed.

@@ -9,7 +9,7 @@ import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import test from 'node:test';
 import {B07_CASES,B07_NATIVE_BODY_ID,B07_NATIVE_BODY_SHA256,b07NativeBodyExpectedImport,b07SourceSummary,projectB07Source,readB07Sources} from './b07-current-source.mjs';
-import {assertB07Output,assertB07Validation,b07Differences,b07FontFacts,generateB07Current,inspectB07Archive,parseB07Arguments,readB07PackedProof} from './b07-current-generate.mjs';
+import {assertB07Output,assertB07Validation,b07Differences,b07FontFacts,generateB07Current,inspectB07Archive,parseB07Arguments,readB07PackedProof,assertB07PackedPreparationRepository} from './b07-current-generate.mjs';
 import {digest,packageNames} from './identity.mjs';
 const require=createRequire(new URL('../../packages/javascript/package.json',import.meta.url));
 const Ajv=require('ajv/dist/2020.js').default,addFormats=require('ajv-formats').default,ajv=new Ajv({allErrors:true,strict:false});addFormats(ajv);
@@ -84,12 +84,13 @@ test('generation requires every explicit external pin; invalid requests fail bef
   assert.deepEqual(parseB07Arguments([]),{command:'inspect',options:{}});
   for(const args of [['other'],['inspect','--consumer','somewhere'],['generate'],['generate','--consumer','x','--consumer','x'],['generate','--other','x']])assert.throws(()=>parseB07Arguments(args));
   await assert.rejects(()=>generateB07Current({}),/reviewed new preparation HEAD/u);
-  const args=['generate','--consumer','/consumer','--output','/output','--proof','/proof','--expected-proof-sha256','a'.repeat(64),'--expected-revision','b'.repeat(40),'--expected-runtime-sha256','c'.repeat(64),'--expected-routes-sha256','d'.repeat(64)];
-  assert.equal(parseB07Arguments(args).options.expectedRevision,'b'.repeat(40));
+  const args=['generate','--packed-preparation-repository','/retained-producer','--consumer','/consumer','--output','/output','--proof','/proof','--expected-proof-sha256','a'.repeat(64),'--expected-revision','b'.repeat(40),'--expected-runtime-sha256','c'.repeat(64),'--expected-routes-sha256','d'.repeat(64)];
+  assert.equal(parseB07Arguments(args).options.expectedRevision,'b'.repeat(40));assert.equal(parseB07Arguments(args).options.packedPreparationRepository,'/retained-producer');assert.throws(()=>parseB07Arguments(args.slice(0,1).concat(args.slice(3))),/explicit source\/consumer pins/);
 });
 
 test('fresh output refuses source/consumer overlap, existing output and owned parent aliases',()=>owned(root=>{
-  const source=path.join(root,'source'),consumer=path.join(root,'consumer');fs.mkdirSync(source);fs.mkdirSync(consumer);
+  const source=path.join(root,'source'),consumer=path.join(root,'consumer'),retained=path.join(root,'retained-packed-producer');fs.mkdirSync(source);fs.mkdirSync(consumer);fs.mkdirSync(retained);
+  assert.throws(()=>assertB07Output(path.join(retained,'new'),consumer,retained),/overlaps/u);
   assert.equal(assertB07Output(path.join(root,'new'),consumer,source),path.join(root,'new'));
   for(const output of [root,source,consumer,path.join(source,'child'),path.join(consumer,'child')])assert.throws(()=>assertB07Output(output,consumer,source),/overlaps/u);
   assert.throws(()=>assertB07Output('relative',consumer,source),/absolute/u);
@@ -127,8 +128,15 @@ test('maintained packed-proof admission binds six real directory identities and 
   const lockBytes=json(lock);fs.writeFileSync(path.join(consumer,'package-lock.json'),lockBytes);const report={mode:'candidate-tarballs',consumer,lockSha256:digest(lockBytes),packages,runtime},proof=path.join(root,'proof.json');
   const check=(options={})=>{const bytes=json(report);fs.writeFileSync(proof,bytes);fs.writeFileSync(path.join(root,'manifest.json'),json({published:false,artifacts:packages.map(({installedVersion:_v,integrity:_i,...archive})=>archive)}));return readB07PackedProof({consumer,proof,expectedProofSha256:digest(bytes),...options});};
   assert.equal(check().runtimeFiles,6);assert.equal(check().installedFiles,12);
-  report.consumer='consumer';assert.equal(check({preparationRepository:root}).runtimeFiles,6,'A separate controller resolves the maintained receipt relative to its actual frozen producer');assert.throws(()=>check(),/ENOENT/u);report.consumer=consumer;
+  report.consumer='consumer';assert.equal(check({preparationRepository:assertB07PackedPreparationRepository(root)}).runtimeFiles,6,'A separate controller resolves the maintained receipt relative to its actual frozen producer');assert.throws(()=>check(),/ENOENT/u);report.consumer=consumer;
   assert.throws(()=>readB07PackedProof({consumer,proof,expectedProofSha256:'0'.repeat(64)}),/receipt changed/u);
   report.packages[0].sourceVersion='0.34.0';assert.throws(check,/sourceVersion/u);report.packages[0].sourceVersion='0.33.0';
   const file=path.join(consumer,'node_modules',packageNames[0],'dist/index.js');fs.writeFileSync(file,'// changed');assert.throws(check,/runtime differs/u);
+}));
+
+test('packed producer root is explicit/canonical and cannot alias the immutable proof authority',()=>owned(root=>{
+ assert.equal(assertB07PackedPreparationRepository(root),root);
+ for(const value of [undefined,null,'relative',path.join(root,'..',path.basename(root))+path.sep])assert.throws(()=>assertB07PackedPreparationRepository(value));
+ const file=path.join(root,'not-directory');fs.writeFileSync(file,'inert');assert.throws(()=>assertB07PackedPreparationRepository(file),/directory/);
+ const target=path.join(root,'retained'),alias=path.join(root,'alias');fs.mkdirSync(target);fs.symlinkSync(target,alias,process.platform==='win32'?'junction':'dir');assert.throws(()=>assertB07PackedPreparationRepository(alias),/Canonical|Aliased|Reparse\/symlink/);
 }));
