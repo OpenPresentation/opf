@@ -15,7 +15,9 @@ The outer launcher exited 1 because `seven-chart-archive.mjs` required the `Requ
 
 Those two direct cases are the signed categorical histogram and category-only world chart. Their existing contract exports classic clustered columns with unchanged source values. This is not native histogram or map qualification. Current Box needs its current contract; historical native Box witnesses are not substitutes.
 
-The coordinator retrieved, independently decoded, hash-checked, dimension-checked and visually inspected all seven original 1280 × 720 PNGs. Observations: treemap has the three positive areas; histogram preserves all four signed values as columns; Pareto omits negative East; Box displays one distribution; waterfall displays all four signed changes; funnel retains the East label without a negative bar; world displays four signed columns. These are observations pending comparison against the genuine current renderer previews, not a blanket visual acceptance.
+The coordinator retrieved, independently decoded, hash-checked, dimension-checked and visually inspected all seven original 1280 × 720 PNGs and all seven sealed renderer previews. All preview source, producer, catalog and suite bindings match the native source. The generation records explicitly describe independently rendered previews; no shared prepared-font handle or exact native font/glyph equivalence is inferred.
+
+The comparison identifies a **real Pareto defect**: the renderer plots sorted North42, South31, West19 and East−8 with a final flat100% cumulative segment, while the native drawing omits East. Exact dataset import does not qualify this drawing. Histogram's classic fallback also has much narrower bars than the renderer; its ordinary clustered-column gap setting is being reviewed against histogram geometry. Funnel's native positive-value labels are white while the renderer uses black; both retain the negative East label without a bar. Treemap displays the same three positive areas, Box displays one distribution, waterfall displays all four signed changes, and world displays four signed columns, with remaining layout/label/font differences not waived. Producer repair and fresh output qualification are required; there is no blanket visual acceptance.
 
 ## Repair and next gate
 
@@ -24,6 +26,8 @@ The independent archive validator now resolves the exact allowed `Requires` pref
 Independent source review approved this bounded repair. Combined root checks and publication are still pending. A future native attempt requires a new reviewed controller, envelope, request and owned output; the old attempt remains failed. No extra Office call or cleanup is authorized by this note.
 
 Raw Windows operational records, XML and complete import documents remain local. Only nonidentifying facts, digests and authorized synthetic PNGs crossed the relay. The earlier approved native03 two-file private transfer is already complete and was not repeated.
+
+The renderer relay retained nineteen bounded base64 chunks. All seven reassembled PNG byte counts, full SHA256 values and1280 × 720 dimensions were independently verified before viewing; no image was edited or regenerated.
 
 ## Image identities
 
