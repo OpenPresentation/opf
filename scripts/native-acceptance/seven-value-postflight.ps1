@@ -29,12 +29,12 @@ function Get-SevenValueCriticalProbes($Report,$Action) {
         foreach($suffix in @('capturedRefs','fullName.refs')){Add-ValueProof "$Prefix.$suffix" 'same captured owned references/path' $true}
         Add-ValueProof "$Prefix.fullName" $File $File
         Add-ValueProof "$Prefix.readOnly.refs" 'same captured owned references/path' $true
-        Add-ValueProof "$Prefix.readOnly" -1 -1
+        Add-ValueProof "$Prefix.readOnly" (-1) (-1)
     }
     function Add-ValueTarget([string]$Prefix,[string]$Phase,[string]$File){
-        Add-ValueOwner $Prefix;Add-ValueProof "$Prefix.fullName" $File $File;Add-ValueProof "$Prefix.readOnly" -1 -1;Add-ValueProof "$Prefix.slides.count" 7 7
+        Add-ValueOwner $Prefix;Add-ValueProof "$Prefix.fullName" $File $File;Add-ValueProof "$Prefix.readOnly" (-1) (-1);Add-ValueProof "$Prefix.slides.count" 7 7
         Add-ValueProof "$Prefix.shapes.count" '1..3' $Report.phases.$Phase.slides[$Action.slideIndex-1].shapeCount
-        Add-ValueProof "$Prefix.exactTarget" 1 1;Add-ValueProof "$Prefix.hasChart" -1 -1;Add-ValueProof "$Prefix.chart.type" $Action.comChartType $Action.comChartType
+        Add-ValueProof "$Prefix.exactTarget" 1 1;Add-ValueProof "$Prefix.hasChart" (-1) (-1);Add-ValueProof "$Prefix.chart.type" $Action.comChartType $Action.comChartType
         Add-ValueProof "$Prefix.series.count" "1..$($Action.maxSeriesCount)" 1;Add-ValueProof "$Prefix.series.name" $Action.seriesName $Action.seriesName
     }
     function Add-ValueReadback([string]$Phase,$Values){for($i=0;$i -lt $Values.Count;$i++){Add-ValueProof "value.$Phase.expected.$i" $Values[$i] ([double]$Values[$i])}}
