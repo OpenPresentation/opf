@@ -1,4 +1,6 @@
 import { inlineDatasets } from './chart-data.js';
+import { walkCitationRuns } from './annotations.js';
+import { lonePayload } from './composition.js';
 import { HALF_STEPPED } from './composition-metadata.js';
 import type { Composed, CompositionMemo } from './rule-slides.js';
 import type { Rec } from './rule-design.js';
@@ -23,6 +25,7 @@ interface Snapshot {
 	opaque: unknown[];
 	raw: string[];
 	data: string[];
+	upstream: string[];
 	prefix: symbol[];
 	bytes: number;
 }
@@ -57,6 +60,25 @@ function key(value: unknown, opaque?: unknown[]): string {
 		return result;
 	};
 	return walk(value, 0);
+}
+
+// Called only after the exact key guard accepted these data. Never invoke an unknown host/catalog callable.
+const hasCallable = (value: unknown): boolean => typeof value === 'function' || !!value && typeof value === 'object' && Object.values(value).some(hasCallable);
+
+/** What a later slide's composition can read of this slide, beyond the global ID/order/count key. */
+function upstreamKey(slide: Rec, raw: string, conservative: boolean): string {
+	try {
+		// This is messageKind's first necessary condition, shared with the actual surface resolver. Preserve the
+		// WHOLE slide for every lone-text body, even when its length/subtitle/background/layout rules out a surface.
+		// Its measured size may decide alternation; do not predict that size or classify by a catalog ID.
+		if (conservative || lonePayload(slide)?.field === 'text') return raw;
+		const notes: unknown[] = [];
+		// The same ordered walker numberSlide uses: path, cited IDs and rich footnotes all affect later numbering.
+		walkCitationRuns(slide, '', entry => { notes.push([entry.path, entry.cite, entry.footnote]); });
+		// Explicit accents depend on the prior slide's design and resolved layout (including a later slide's theme).
+		// Section stays conservative; current built-in resolution reads the current slide's own string, not its title.
+		return key(['non-message-upstream', slide.section, slide.design, slide.layout, notes]);
+	} catch { return raw; }
 }
 
 /** Plain snapshots only: no measurements, getters, functions, or shared references into a prior document. */
@@ -113,24 +135,32 @@ export class ValidationCompositionCache {
 			if (![Object.prototype, null].includes(Object.getPrototypeOf(document)) || Reflect.ownKeys(document).length !== Object.keys(document).length || Object.values(Object.getOwnPropertyDescriptors(document)).some(descriptor => !('value' in descriptor))) throw new TypeError('Non-JSON review document.');
 			const { slides, datasets, ...metadata } = document;
 			const opaque: unknown[] = [];
-			// All global IDs matter even when a link targets a later slide. Other slide-context dependencies are
-			// conservative prefix tokens: section inheritance, citation numbering and alternating message surfaces.
+			// Keep every global/ID/order/count/options dependency exact. Own raw and dataset-inlined data also stay exact.
 			const context = key([metadata, slides.map((slide: Rec) => slide.id), options], opaque);
 			const raw = slides.map((slide: Rec) => key(slide));
 			const inlined = datasets ? inlineDatasets({ datasets, slides }).slides : slides;
 			const data = datasets ? inlined.map((slide: Rec) => key(slide)) : raw;
+			// Measurement callbacks retain the existing deterministic-until-clear contract. Other opaque callables
+			// (for example a catalog loader) keep the old full-raw prefix policy instead of assuming dependencies.
+			const otherOptions = Object.fromEntries(Object.entries(options).filter(([name]) => name !== 'fonts'));
+			// A declared text variable may expand to rich runs with citations, or a list/group can change payload
+			// shape. Do not approximate that expansion from the raw slide; preserve the old prefix for that deck.
+			const conservative = metadata.variables !== undefined || metadata.template === true || options.values !== undefined || options.template !== undefined
+				|| hasCallable(metadata) || hasCallable(otherOptions);
+			const upstream = slides.map((slide: Rec, i: number) => upstreamKey(slide, raw[i], conservative));
 			const bytes = 256 + context.length * 2 + raw.reduce((sum: number, text: string) => sum + text.length * 2 + 32, 0)
-				+ (data === raw ? 0 : data.reduce((sum: number, text: string) => sum + text.length * 2 + 16, 0)) + opaque.length * 16;
+				+ (data === raw ? 0 : data.reduce((sum: number, text: string) => sum + text.length * 2 + 16, 0))
+				+ upstream.reduce((sum: number, text: string, i: number) => sum + (text === raw[i] ? 16 : text.length * 2 + 16), 0) + opaque.length * 16;
 			if (bytes > MAX_KEY_BYTES) throw new RangeError('Review cache shared key budget exceeded.');
 			const previous = this.snapshot;
 			const same = previous?.context === context && previous.opaque.length === opaque.length && opaque.every((value, i) => value === previous.opaque[i]);
 			if (!same) this.clear();
 			let prefixEqual = !!same;
-			const prefix = raw.map((text: string, i: number) => {
-				prefixEqual = prefixEqual && text === previous?.raw[i];
+			const prefix = upstream.map((text: string, i: number) => {
+				prefixEqual = prefixEqual && text === previous?.upstream[i];
 				return (prefixEqual && previous?.prefix[i]) || Symbol();
 			});
-			next = { context, opaque, raw, data, prefix, bytes };
+			next = { context, opaque, raw, data, upstream, prefix, bytes };
 		} catch { this.clear(); return undefined; }
 		this.snapshot = next;
 		for (const [i, entry] of this.entries) if (entry.prefix !== next.prefix[i] || entry.data !== next.data[i]) this.drop(i);
