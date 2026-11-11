@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "source": "b698482f4c20d68b38e442beffce00c0fb099fd6",
+  "sourceTree": "efdd23124e0306d615d4a5ec1e4158ff31c995e3",
+  "initialArchiveSha256": "0b2e29c1e140b99b460694614bd6baf1d48201293f51599c8223c6e4c0414c83",
+  "archiveSha256": "c36a6b9c0793d73bfe15eb65f9f879656b3bd40484961af510145ee722b07fe2",
+  "records": 52,
+  "rawBytes": 2411095,
+  "compressedBytes": 1340320,
+  "bindings": [
+    {
+      "file": "packages/pptx/src/index.js",
+      "sha256": "5212843f3f35822079248e9f4f8afc741275c3cf9b9127ac3d672580f598f34f"
+    },
+    {
+      "file": "packages/pptx/test/lh-16-duration-timeline.mjs",
+      "sha256": "633bc0386810828b7cde6c1b8e9b5b0e36858f6ea38d97bafa243f1c0bc46743"
+    },
+    {
+      "file": "packages/pptx/test/node-demand-native-fallback.mjs",
+      "sha256": "13d3224faf1d665400db87e80eef98e412741719a0125d29f94a70c861d41c9f"
+    },
+    {
+      "file": "packages/pptx/test/registry-glyph-fallback.mjs",
+      "sha256": "a609ae897718cbf65a18c78d691652c4b13c7992053768624476eb2fc899f3f1"
+    },
+    {
+      "file": "packages/render/README.md",
+      "sha256": "ccddbd76307e627e2581fb7ce89c88859097c0f668c348aa57bea5376c3647d5"
+    },
+    {
+      "file": "packages/render/src/font-demand.js",
+      "sha256": "3dcf2705afd5cda50e152008b664de4ac40320554fa8120036fa12e6522ab18e"
+    },
+    {
+      "file": "packages/render/src/fonts-node.d.ts",
+      "sha256": "7d4714b6ec3fb2c7350c399e0bc75d9ad24ef39759035c80d9ab454719f963f8"
+    },
+    {
+      "file": "packages/render/src/fonts-node.js",
+      "sha256": "aa3a38cef856ad5c3b22f69a7d3a4691bf08e524ec3a12b9421c949462f181e8"
+    },
+    {
+      "file": "packages/render/src/lazy-fonts.js",
+      "sha256": "55a5638fc1fda8d39f13afe1410c206e9fc705195c28fe8f635585a7dcd45dfa"
+    },
+    {
+      "file": "packages/render/src/svg.js",
+      "sha256": "9f26dbdabd6ecd179fa0dcb8a20c233fcb92ab68ea90061cead2a34e7bb14c56"
+    },
+    {
+      "file": "packages/render/test/emoji-math.mjs",
+      "sha256": "d7ee799ffe2b4696c08a4ae105847efa0e11cab7d37e4571d3bb86d4bad85eed"
+    },
+    {
+      "file": "packages/render/test/script-fonts-auto-robust.mjs",
+      "sha256": "ad53f5bfae76e550ace0905fa45470099f3bd4f730438c627c69ad6f6218dd6c"
+    }
+  ],
+  "built": [
+    {
+      "source": "packages/pptx/src/index.js",
+      "output": "packages/pptx/dist/index.js",
+      "sourceSha256": "5212843f3f35822079248e9f4f8afc741275c3cf9b9127ac3d672580f598f34f",
+      "builtSha256": "5212843f3f35822079248e9f4f8afc741275c3cf9b9127ac3d672580f598f34f"
+    },
+    {
+      "source": "packages/render/src/font-demand.js",
+      "output": "packages/render/dist/font-demand.js",
+      "sourceSha256": "3dcf2705afd5cda50e152008b664de4ac40320554fa8120036fa12e6522ab18e",
+      "builtSha256": "3dcf2705afd5cda50e152008b664de4ac40320554fa8120036fa12e6522ab18e"
+    },
+    {
+      "source": "packages/render/src/fonts-node.d.ts",
+      "output": "packages/render/dist/fonts-node.d.ts",
+      "sourceSha256": "7d4714b6ec3fb2c7350c399e0bc75d9ad24ef39759035c80d9ab454719f963f8",
+      "builtSha256": "7d4714b6ec3fb2c7350c399e0bc75d9ad24ef39759035c80d9ab454719f963f8"
+    },
+    {
+      "source": "packages/render/src/fonts-node.js",
+      "output": "packages/render/dist/fonts-node.js",
+      "sourceSha256": "aa3a38cef856ad5c3b22f69a7d3a4691bf08e524ec3a12b9421c949462f181e8",
+      "builtSha256": "aa3a38cef856ad5c3b22f69a7d3a4691bf08e524ec3a12b9421c949462f181e8"
+    },
+    {
+      "source": "packages/render/src/lazy-fonts.js",
+      "output": "packages/render/dist/lazy-fonts.js",
+      "sourceSha256": "55a5638fc1fda8d39f13afe1410c206e9fc705195c28fe8f635585a7dcd45dfa",
+      "builtSha256": "55a5638fc1fda8d39f13afe1410c206e9fc705195c28fe8f635585a7dcd45dfa"
+    },
+    {
+      "source": "packages/render/src/svg.js",
+      "output": "packages/render/dist/svg.js",
+      "sourceSha256": "9f26dbdabd6ecd179fa0dcb8a20c233fcb92ab68ea90061cead2a34e7bb14c56",
+      "builtSha256": "9f26dbdabd6ecd179fa0dcb8a20c233fcb92ab68ea90061cead2a34e7bb14c56"
+    }
+  ],
+  "observed": {
+    "originalGlyphReplaySession": 63906,
+    "originalGlyphReplayExit": 0,
+    "originalGlyphDecks": 7,
+    "symbolSchemeDecks": 3,
+    "previewGaps": 0,
+    "newNativeTests": 7,
+    "syntaxChecks": 3,
+    "outputs": {
+      "svgPairs": 4,
+      "nativePartPairs": 16
+    },
+    "nativeApplicationRun": false
+  },
+  "scope": "Append-only correction after genuine ASCII-only Emoji-role RED on4802; inner physical planner, outer chosen resolver, outer safe input map. Default preview/browser path unchanged. Original805syntaxfiles/4oldCIcontrols/18focused-neighbor tests were qualified on initial19d9; finalchanged source has7expandednative, originalglyph10deckreplay,3syntaxchecks and4/16actualoutputpairs. One combined mapper/CI/native gate remains coordinator-owned."
+}

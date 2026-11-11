@@ -22,17 +22,17 @@ const source = (footer, slides = [{title: 'One', text: 'Current body words.'}]) 
 });
 const cases = [
   ['no-footer', source(undefined), 0],
-  ['repeated-literal', source({center: {text: 'ORIGINAL_LITERAL'}, right: {text: '{{slide.number}}'}},
+  ['repeated-literal', source({center: {text: 'ORIGINAL_LITERAL'}, end: {text: '{{slide.number}}'}},
     [{title: 'One', text: 'First body.'}, {title: 'Two', text: 'Second body.'}, {title: 'Three', text: 'Third body.'}]), 3],
-  ['date-number', source({left: {date: true}, center: {text: 'Literal footer'}, right: {text: 'Page {{slide.number}} of {{deck.slideCount}}'}},
-    [{title: 'One'}, {title: 'Two', design: {footer: {left: {date: '2026-09-10'}, center: {text: 'Local literal'}, right: {text: '{{slide.number}}'}}}}]), 2],
-  ['multiple-zones', source({left: {text: 'First literal'}, center: {text: 'Second literal'}, right: {text: 'Page {{slide.number}}'}},
+  ['date-number', source({start: {date: true}, center: {text: 'Literal footer'}, end: {text: 'Page {{slide.number}} of {{deck.slideCount}}'}},
+    [{title: 'One'}, {title: 'Two', design: {footer: {start: {date: '2026-09-10'}, center: {text: 'Local literal'}, end: {text: '{{slide.number}}'}}}}]), 2],
+  ['multiple-zones', source({start: {text: 'First literal'}, center: {text: 'Second literal'}, end: {text: 'Page {{slide.number}}'}},
     [{title: 'One'}, {title: 'Two'}]), 2],
-  ['multiline', source({center: {text: 'First line\nSecond line'}, right: {text: '{{slide.number}}'}}), 0],
-  ['empty-literal', source({center: {text: ''}, right: {text: '{{slide.number}}'}}), 0],
-  ['number-only', source({left: {date: true}, right: {text: 'Page {{slide.number}} of {{deck.slideCount}}'}},
+  ['multiline', source({center: {text: 'First line\nSecond line'}, end: {text: '{{slide.number}}'}}), 0],
+  ['empty-literal', source({center: {text: ''}, end: {text: '{{slide.number}}'}}), 0],
+  ['number-only', source({start: {date: true}, end: {text: 'Page {{slide.number}} of {{deck.slideCount}}'}},
     [{title: 'One'}, {title: 'Two'}]), 0],
-  ['linked-socials', {...source({left: {socials: true}, center: {text: 'Literal beside links'}, right: {text: '{{slide.number}}'}},
+  ['linked-socials', {...source({start: {socials: true}, center: {text: 'Literal beside links'}, end: {text: '{{slide.number}}'}},
     [{title: 'One'}, {title: 'Two'}]), organization: {id: 'acme', name: 'Acme', socials: {linkedin: 'acme'}}}, 2]
 ];
 const modes = ['full', 'references-only', false];
@@ -126,7 +126,7 @@ if (record) {
       const result = await current(transform);
       assert.ok(!JSON.stringify(result.slides[0]).includes('ORIGINAL_LITERAL'), `${mode}: current clear/delete does not replay old words`);
       assert.notEqual(effective(result, 0)?.center?.text, 'ORIGINAL_LITERAL');
-      assert.equal(effective(result, 0).right.text, '{{slide.number}}', 'Current live number remains a number field');
+      assert.equal(effective(result, 0).end.text, '{{slide.number}}', 'Current live number remains a number field');
       for (const index of [1, 2]) assert.equal(effective(result, index).center.text, 'ORIGINAL_LITERAL');
     }
   }

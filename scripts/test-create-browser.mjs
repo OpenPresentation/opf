@@ -62,8 +62,8 @@ try{
  check(JSON.stringify(editor.presentation)===JSON.stringify(grouped),'delete undo restores the complete hierarchy');
  reset({slides:[{title:'Blank after deletion',blocks:[{text:'Only'}]}]});canvas.openBlockMenu('slides.0.blocks.0');button('Delete').click();
  check(editor.get('slides.0.blocks').length===0&&!!host.querySelector('[data-block-add]'),'last root block can be deleted and replaced');check(document.activeElement===host.querySelector('[data-block-add]'),'deleting the last block restores focus to Add content');add();button('Add').click();check(editor.get('slides.0.blocks.0.text')==='Add your text','empty slides accept new content');
- reset({slides:[{title:'Regions',left:{text:'Original left'},right:{text:'Keep right'}}]});canvas.openInsertMenu('slides.0.left');button('Add').click();
- check(editor.get('slides.0.left.blocks.0.text')==='Original left'&&editor.get('slides.0.right.text')==='Keep right','named-region insertion preserves neighboring regions');
+ reset({slides:[{title:'Regions',start:{text:'Original left'},end:{text:'Keep right'}}]});canvas.openInsertMenu('slides.0.start');button('Add').click();
+ check(editor.get('slides.0.start.blocks.0.text')==='Original left'&&editor.get('slides.0.end.text')==='Keep right','named-region insertion preserves neighboring regions');
  const expected=document.createElement('div');expected.innerHTML=toSvg(editor.presentation,1);
  const glyphs=root=>[...root.querySelectorAll('svg text')].map(n=>[n.textContent,n.getAttribute('x'),n.getAttribute('y')]);
  check(JSON.stringify(glyphs(host))===JSON.stringify(glyphs(expected)),'created canvas content uses standalone renderer geometry');

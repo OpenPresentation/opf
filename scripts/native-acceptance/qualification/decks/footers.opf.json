@@ -5,13 +5,13 @@
   "language": "en-US",
   "design": {
     "footer": {
-      "left": {
+      "start": {
         "text": "Northwind Logistics"
       },
       "center": {
         "text": "Page {{slide.number}} of {{deck.slideCount}}"
       },
-      "right": {
+      "end": {
         "date": "2026-11-07"
       }
     }

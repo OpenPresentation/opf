@@ -1,0 +1,34 @@
+[
+  {
+    "repository": "OpenPresentation/opf",
+    "branch": "codex/handoff-recovery-20261110",
+    "head": "d15846a04c1757a091c6ceb772f8162aedcb91c4",
+    "pushedAt": "2026-11-10T17:35:33.6533398Z",
+    "neverMerge": true,
+    "force": false
+  },
+  {
+    "repository": "Data-Advantage/openpresentation-site",
+    "branch": "codex/handoff-recovery-20261110",
+    "head": "abf192cee21aaf612840a9a734762cb80c1bdbd1",
+    "pushedAt": "2026-11-10T17:35:35.6994906Z",
+    "neverMerge": true,
+    "force": false
+  },
+  {
+    "repository": "Data-Advantage/pptx-gallery",
+    "branch": "codex/handoff-recovery-20261110",
+    "head": "8608b71a7d2746b4375fda02fc34a342b8093caf",
+    "pushedAt": "2026-11-10T17:35:37.9727579Z",
+    "neverMerge": true,
+    "force": false
+  },
+  {
+    "repository": "Data-Advantage/pptx-dev",
+    "branch": "codex/handoff-recovery-20261110",
+    "head": "0341b65aac7d7b27631d83f7a9e2ac09f52fab04",
+    "pushedAt": "2026-11-10T17:35:40.4228320Z",
+    "neverMerge": true,
+    "force": false
+  }
+]

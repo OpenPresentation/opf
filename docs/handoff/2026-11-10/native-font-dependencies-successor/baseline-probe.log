@@ -1,0 +1,30 @@
+before [
+  { family: 'Tinos', weight: 400, italic: false },
+  { family: 'Gelasio', weight: 400, italic: false },
+  { family: 'Intos Display', weight: 700, italic: false }
+]
+file:///private/tmp/opf-native-deps/packages/render/dist/font-demand.js:577
+      throw new OPFFontError(
+            ^
+
+OPFFontError: The selected face is not prepared; await fonts.ensure(presentation) before measuring this style.
+    at prepared (file:///private/tmp/opf-native-deps/packages/render/dist/font-demand.js:577:13)
+    at registry.textMeasurement.measure (file:///private/tmp/opf-native-deps/packages/render/dist/font-demand.js:601:5)
+    at Object.measure (file:///private/tmp/opf-native-deps/packages/render/dist/script-fonts.js:732:83)
+    at Object.measure (file:///private/tmp/opf-native-deps/packages/pptx/dist/index.js:4869:73)
+    at Object.measure (file:///private/tmp/opf-native-deps/packages/pptx/dist/index.js:4912:49)
+    at base (file:///private/tmp/opf-native-deps/packages/javascript/dist/chunk-XRHIW6DB.js:12799:31)
+    at nativeWrapBox (file:///private/tmp/opf-native-deps/packages/pptx/dist/native-body.js:188:104)
+    at planOne (file:///private/tmp/opf-native-deps/packages/pptx/dist/native-body.js:80:16)
+    at planNativeBody (file:///private/tmp/opf-native-deps/packages/pptx/dist/native-body.js:32:18)
+    at addSlide (file:///private/tmp/opf-native-deps/packages/pptx/dist/index.js:2672:54) {
+  code: 'font-unavailable',
+  details: {
+    path: 'slides.0.text',
+    fontFamily: 'Aptos',
+    fontWeight: 400,
+    italic: false
+  }
+}
+
+Node.js v24.21.0

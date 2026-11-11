@@ -1,0 +1,23 @@
+{
+  "sourceBefore": "ad233f5cb2c58d86c4cfbd4941d160980f171403",
+  "document": "examples/technical/explicit-chart-reference-lines.opf.json",
+  "change": "Only fifth authored chart type changes from line to line-with-markers; same data,reference,positions and singleton overlay policy",
+  "standaloneSchemaValid": true,
+  "representativeRendersOnly": true,
+  "goldenUpdate": false,
+  "nativeAcceptance": false,
+  "images": [
+    {
+      "name": "before",
+      "svgSha256": "a25f37d9ab8cf97534c1342a714ed09d0209a9c2a9765a2c5ad5cd65db971a3b",
+      "pngSha256": "b8437b4a192e53b4e0e850c60946620b914ee382ca431b305965675066a07c5b",
+      "pngBytes": 16281
+    },
+    {
+      "name": "after",
+      "svgSha256": "4a4b2a6d24d8fca503b617f169d486bc305a6dc36be9b3aeb8a0a3d097c0e87a",
+      "pngSha256": "8e840adef82cee351f9e68895d9126ef2330bfbe72367dc69c491aa324fec79e",
+      "pngBytes": 16594
+    }
+  ]
+}

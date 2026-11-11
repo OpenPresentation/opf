@@ -16,7 +16,7 @@ const wait = ['waitPopup'];
 export const yamlTriggers = [
   ['Y-TRG-001', 'R-CMP-20', 'Ctrl+Space at a new key line', 'yaml', 'name: x\n|', [K('Control+Space')], { popup: { open: 1, has: ['slides', 'design', 'description'], not: ['name'] } }],
   ['Y-TRG-002', 'R-CMP-20', 'typing a key prefix opens the list', 'yaml', 'name: x\n|', [T('des')], { popup: { open: 1, has: ['description', 'design', 'datasets'] } }],
-  ['Y-TRG-003', 'R-CMP-20', 'the space after "key:" opens the value list (enum)', 'yaml', 'slides:\n  - title: a\ndesign:\n  titleAlignment:|', [T(' ')], { popup: { open: 1, has: ['left', 'center', 'right'] } }],
+  ['Y-TRG-003', 'R-CMP-20', 'the space after "key:" opens the value list (enum)', 'yaml', 'slides:\n  - title: a\ndesign:\n  titleAlignment:|', [T(' ')], { popup: { open: 1, has: ['start', 'center', 'end'] } }],
   ['Y-TRG-004', 'R-CMP-20', 'the space after "-" under slides offers the slide keys and snippets', 'yaml', 'slides:\n  -|', [T(' ')], { popup: { open: 1, has: ['title', 'items', 'slide'] } }],
   ['Y-TRG-005', 'R-CMP-20', 'catalog ids', 'yaml', 'slides:\n  - layout: |', [K('Control+Space')], { popup: { open: 1, has: ['agenda', 'pillars'] } }],
   ['Y-TRG-006', 'R-CMP-20', 'booleans', 'yaml', 'slides:\n  - hidden: |', [K('Control+Space')], { popup: { open: 1, has: ['true', 'false'], count: [2, 2] } }],
@@ -27,14 +27,14 @@ export const yamlTriggers = [
   ['Y-TRG-011', 'R-CMP-20', 'flow sequence item values', 'yaml', 'audience: [|]', [K('Control+Space')], { popup: { open: 1, has: ['board'] } }],
   ['Y-TRG-012', 'R-CMP-20', 'nested under design: keys of Design only', 'yaml', 'slides:\n  - title: a\ndesign:\n  |', [K('Control+Space')], { popup: { open: 1, has: ['theme', 'colorScheme', 'fontScheme'], not: ['slides'] } }],
   ['Y-TRG-013', 'R-CMP-20', 'a flow mapping offers keys', 'yaml', 'design: {theme: minimal, |}', [K('Control+Space')], { popup: { open: 1, has: ['colorScheme', 'fontScheme'], not: ['theme'] } }],
-  ['Y-TRG-014', 'R-CMP-20', 'a flow mapping value offers the enum', 'yaml', 'design: {titleAlignment: |}', [K('Control+Space')], { popup: { open: 1, has: ['left', 'center', 'right'] } }],
+  ['Y-TRG-014', 'R-CMP-20', 'a flow mapping value offers the enum', 'yaml', 'design: {titleAlignment: |}', [K('Control+Space')], { popup: { open: 1, has: ['start', 'center', 'end'] } }],
   ['Y-TRG-015', 'R-CMP-20', 'items of a list of ids', 'yaml', 'audience:\n  - |', [K('Control+Space')], { popup: { open: 1, has: ['board', 'customer'] } }],
   ['Y-TRG-016', 'R-CMP-04', 'a list of lines of text never opens', 'yaml', 'slides:\n  - title: a\n    items:\n      - |', [T('Rev')], { popup: { open: 0 } }],
   ['Y-TRG-017', 'R-CMP-20', 'a quoted key opens the list inside the quotes', 'yaml', '"|"', [T('des')], { popup: { open: 1, has: ['design'] } }],
   ['Y-TRG-018', 'R-CMP-20', 'keys already in the mapping, above and below, are not offered', 'yaml', 'name: x\n|\nslides: []\n', [K('Control+Space')], { popup: { open: 1, has: ['design'], not: ['name', 'slides'] } }],
   ['Y-TRG-019', 'R-CMP-20', 'a second slide item offers the slide keys again', 'yaml', 'slides:\n  - title: a\n  - |', [K('Control+Space')], { popup: { open: 1, has: ['title', 'items', 'slide'] } }],
   ['Y-TRG-020', 'R-CMP-20', 'the keys of a slide item continue on its next line', 'yaml', 'slides:\n  - title: a\n    |', [K('Control+Space')], { popup: { open: 1, has: ['items', 'layout'], not: ['title'] } }],
-  ['Y-TRG-021', 'R-CMP-03', 'Ctrl+Space right after the colon, with no space, still offers the values', 'yaml', 'design:\n  titleAlignment:|', [K('Control+Space')], { popup: { open: 1, has: ['left', 'center', 'right'] } }],
+  ['Y-TRG-021', 'R-CMP-03', 'Ctrl+Space right after the colon, with no space, still offers the values', 'yaml', 'design:\n  titleAlignment:|', [K('Control+Space')], { popup: { open: 1, has: ['start', 'center', 'end'] } }],
   ['Y-TRG-022', 'R-CMP-20', 'the required keys come first', 'yaml', 'organization:\n  |', [K('Control+Space')], { popup: { open: 1, first: 'id' } }],
   ['Y-TRG-023', 'R-CMP-04', 'a number field opens nothing', 'yaml', 'duration: |', [T('4')], { popup: { open: 0 } }],
   ['Y-TRG-024', 'R-CMP-20', 'a value inside quotes lists the ids', 'yaml', 'slides:\n  - layout: "|"', [K('Control+Space')], { popup: { open: 1, has: ['pillars'] } }],
@@ -50,7 +50,7 @@ export const yamlInsert = [
   ['Y-ACC-003', 'R-CMP-07', 'Escape closes the list and keeps the text', 'yaml', 'name: x\n|', [T('des'), K('Escape')], { popup: { open: 0 }, text: 'name: x\ndes|' }],
   ['Y-ACC-004', 'R-CMP-05', 'Tab with no list indents', 'yaml', 'name: x|', [K('Tab')], { text: 'name: x |', popup: { open: 0 } }],
   ['Y-INS-001', 'R-CMP-21', 'a scalar key: "key: " and the caret', 'yaml', 'name: x\n|', [T('descr'), K('Tab')], { text: 'name: x\ndescription: |' }],
-  ['Y-INS-002', 'R-CMP-21', 'an enum key chains into the value list', 'yaml', 'design:\n  |', [T('titleA'), K('Tab'), wait], { popup: { open: 1, has: ['left', 'center', 'right'] }, text: 'design:\n  titleAlignment: |' }],
+  ['Y-INS-002', 'R-CMP-21', 'an enum key chains into the value list', 'yaml', 'design:\n  |', [T('titleA'), K('Tab'), wait], { popup: { open: 1, has: ['start', 'center', 'end'] }, text: 'design:\n  titleAlignment: |' }],
   ['Y-INS-003', 'R-CMP-21', 'a list key: "- " on the next line', 'yaml', '|', [T('slid'), K('Tab')], { text: 'slides:\n  - |' }],
   ['Y-INS-004', 'R-CMP-21', 'an object key with required members (phase 3: organization is a snippet key, its placeholders hold acme and Acme Inc.)', 'yaml', '|', [T('organ'), K('Tab')], { text: 'organization:\n  id: ⟦acme⟧\n  name: Acme Inc.' }],
   ['Y-INS-004b', 'R-CMP-16', 'Tab walks the required members', 'yaml', '|', [T('organ'), K('Tab'), T('acme'), K('Tab'), T('Acme')], { deck: { '/organization/id': 'acme', '/organization/name': 'Acme' } }],
@@ -184,7 +184,7 @@ const YXREF = [
   ['cite', 'references:\n  - id: smith2020\n    text: Smith\nslides:\n  - title:\n      - text: x\n        cite: |', ['smith2020']],
   ['cite in a flow list', 'references:\n  - id: smith2020\n    text: Smith\nslides:\n  - title:\n      - text: x\n        cite: [|]', ['smith2020']],
   ['beat', 'narrative: classic-story\nslides:\n  - beat: |', ['opening', 'closing']],
-  ['region', 'slides:\n  - layout: two-column\n    blocks:\n      - region: |', ['first', 'second', 'left', 'right']],
+  ['region', 'slides:\n  - layout: two-column\n    blocks:\n      - region: |', ['first', 'second', 'top', 'middle', 'bottom', 'start', 'center', 'end']],
   ['var:', 'variables:\n  brand:\n    type: color\n    value: "#123456"\nslides:\n  - title:\n      - text: x\n        color: |', ['var:brand']],
 ];
 export const yamlXrefs = [
@@ -211,7 +211,7 @@ export const yamlSnippets = [
   ['Y-SNP-007', 'R-CMP-16', 'design: the snippet is one undo step', 'yaml', 'name: x\n|', [T('design'), K('Tab')], { undo: [1, 'name: x\ndesign|'] }],
   ['Y-SNP-008', 'R-CMP-16', 'design: the key is listed once', 'yaml', 'slides: []\n|', [T('des')], { popup: { open: 1, has: ['design', 'description', 'datasets'], count: [3, 3] } }],
   ['Y-INS-020', 'R-CMP-14', 'chain: accepting the key and its value is one undo step', 'yaml', 'design:\n  |', [T('titleA'), K('Tab'), K('Tab')], { undo: [1, 'design:\n  titleA|'] }],
-  ['Y-INS-021', 'R-CMP-14', 'redo puts the key and its value back together', 'yaml', 'design:\n  |', [T('titleA'), K('Tab'), K('Tab')], { undo: [1, 'design:\n  titleA|'], redo: [1, 'design:\n  titleAlignment: left|'] }],
+  ['Y-INS-021', 'R-CMP-14', 'redo puts the key and its value back together', 'yaml', 'design:\n  |', [T('titleA'), K('Tab'), K('Tab')], { undo: [1, 'design:\n  titleA|'], redo: [1, 'design:\n  titleAlignment: start|'] }],
 ];
 yamlCases.push(...yamlSnippets);
 
@@ -219,7 +219,7 @@ yamlCases.push(...yamlSnippets);
 export const yamlMultiline = [
   ['Y-FLW-001', 'R-CMP-20', 'a flow list continued on the next line offers the ids', 'yaml', 'audience: [board,\n  |]', [K('Control+Space')], { popup: { open: 1, has: ['customer'] } }],
   ['Y-FLW-002', 'R-CMP-20', 'a flow mapping continued on the next line offers the keys left', 'yaml', 'design: {theme: minimal,\n  |}', [K('Control+Space')], { popup: { open: 1, has: ['colorScheme', 'fontScheme'], not: ['theme'] } }],
-  ['Y-FLW-003', 'R-CMP-20', 'the value of a key in a continued flow mapping', 'yaml', 'design: {theme: minimal,\n  titleAlignment: |}', [K('Control+Space')], { popup: { open: 1, has: ['left', 'center', 'right'] } }],
+  ['Y-FLW-003', 'R-CMP-20', 'the value of a key in a continued flow mapping', 'yaml', 'design: {theme: minimal,\n  titleAlignment: |}', [K('Control+Space')], { popup: { open: 1, has: ['start', 'center', 'end'] } }],
   ['Y-FLW-004', 'R-CMP-20', 'typing in the continuation opens the list', 'yaml', 'audience: [board,\n  |]', [T('cus')], { popup: { open: 1, has: ['customer'] } }],
   ['Y-FLW-005', 'R-CMP-21', 'Tab accepts in the continuation and keeps the closing bracket', 'yaml', 'audience: [board,\n  |]', [T('cus'), K('Tab')], { text: 'audience: [board,\n  customer|]' }],
   ['Y-FLW-006', 'R-CMP-20', 'a comment in the first line of the flow collection does not hide the lines below', 'yaml', 'audience: [board, # first\n  |]', [K('Control+Space')], { popup: { open: 1, has: ['customer'] } }],

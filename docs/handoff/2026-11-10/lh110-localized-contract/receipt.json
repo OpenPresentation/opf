@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "source": "cb50fc70ac95b69684e7a41b2925923f582fa59b",
+  "tree": "63e4b36e8ac88d0ca9296e1fcf4327e24602bcfe",
+  "base": "b5a57bc86aba4de3e1ea28dcc38e47cfb46827f1",
+  "changedTest": {
+    "path": "packages/integration/test/lh-110-localized-references.test.mjs",
+    "bytes": 11386,
+    "sha256": "9c341006ea68974abebd10f6058d69e159cb089665477fb0bb850b6d2e0b81a3"
+  },
+  "before": {
+    "source": "dc2e94f77faeb5789421a3cf7d4cadf2536b1834",
+    "testObject": "303a4d31cb2b26da14be286bc39e1b46b17cf71a",
+    "testBytes": 3046,
+    "testSha256": "47f77b90df94750c9df138b964b35f1c0f0af979cde9fdc9c648e64134955472",
+    "sourceSameAtBase": true,
+    "fullAggregateExit": 1,
+    "steps": 51,
+    "passed": 47,
+    "failed": 4,
+    "rendererUnrun": 126,
+    "productLabelLossEstablished": false
+  },
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 33528,
+    "sha256": "eb9959f62196614644924051c8a38d40562a611473aa6a014e1381f29d642276",
+    "records": 23,
+    "rawBytes": 73210
+  },
+  "fullCheck": {
+    "file": "original-full-check.json.gz",
+    "bytes": 770846,
+    "sha256": "5c8e327503c7295a21e7bb13588867344c5e259b5c1ba80f2d43d506ba63b15c",
+    "records": 59,
+    "rawBytes": 2723398,
+    "exitCode": 1,
+    "source": "dc2e94f77faeb5789421a3cf7d4cadf2536b1834"
+  },
+  "focused": {
+    "head": "cb50fc70ac95b69684e7a41b2925923f582fa59b",
+    "exitCode": 0,
+    "testCount": 1,
+    "languages": 7,
+    "retiredInferenceRemoved": true,
+    "allEngineObjectsUnchanged": true
+  },
+  "protectedObjects": [
+    {
+      "path": "packages/javascript",
+      "object": "c937f5570844425c4047b4229cbf7362ed5a1371"
+    },
+    {
+      "path": "packages/render",
+      "object": "38d0751719135dc563576a875ca7f908c8c9ae59"
+    },
+    {
+      "path": "packages/pptx",
+      "object": "a8bd34b804febebcf26cca44d425be11e64379c8"
+    },
+    {
+      "path": "packages/editor",
+      "object": "1b1362e5d8f9813135a5426b167397afe5d16a79"
+    },
+    {
+      "path": "packages/gallery",
+      "object": "609eb292785d0103295a7a2d9eb2fd09c6fbf835"
+    },
+    {
+      "path": "packages/cli",
+      "object": "74c6c57b2d099d88eb4e85f969a3f52ee8267908"
+    },
+    {
+      "path": "packages/mcp",
+      "object": "e70b97d726ec8eace0725945d81f6c239cf73773"
+    },
+    {
+      "path": "spec",
+      "object": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274"
+    },
+    {
+      "path": "scripts",
+      "object": "8fcdc99829f483bbb86334edbbd78ae721400857"
+    },
+    {
+      "path": ".github",
+      "object": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "object": "2e45923e6a027db20e2593a5befef39473259f2a"
+    },
+    {
+      "path": "examples",
+      "object": "33aa659b7da812c52b1c2c290a3f3d9ffc13871d"
+    }
+  ],
+  "groupMapperRun": false,
+  "officeRun": false,
+  "nativeAcceptance": false
+}

@@ -5,6 +5,25 @@ import {primaryDecks} from './fixtures.mjs';
 
 const fixture = name => new URL(`./fixtures/${name}`, import.meta.url);
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
+export const CURRENT_CHART_FIXTURE_PATH='packages/pptx/test/fixtures/chartex-fallback-main.json';
+export const HISTORICAL_CHART_FIXTURE_PATH='scripts/native-acceptance/fixtures/chartex-fallback-main.json';
+export const CHART_FIXTURE_PATHS=Object.freeze([CURRENT_CHART_FIXTURE_PATH,HISTORICAL_CHART_FIXTURE_PATH]);
+
+// Preparation follows the reviewed package archive authority. The old native
+// witness remains immutable evidence; it is never an alternate accepted hash.
+export async function loadChartFixtureSource(){
+  const records=await Promise.all(CHART_FIXTURE_PATHS.map(async path=>{
+    const bytes=await readFile(new URL('../../'+path,import.meta.url));
+    return {path,sha256:sha256(bytes),fixture:JSON.parse(bytes)};
+  }));
+  const [current,historicalNative]=records;
+  assert.deepEqual(current.fixture.decks,historicalNative.fixture.decks,'current and historical chart inputs must remain identical');
+  assert.deepEqual(Object.keys(current.fixture.decks),Object.keys(current.fixture.entries),'every chart has a reviewed current archive entry');
+  assert.equal(Object.keys(current.fixture.decks).length,9,'retain all nine chart fixtures');
+  const identity=record=>({path:record.path,sha256:record.sha256,source:record.fixture.source});
+  return {chartFixture:current.fixture,chartBaselines:{current:{...identity(current),scope:'output-preparation'},historicalNative:{...identity(historicalNative),scope:'historical-native-witness'},nativeAcceptance:false,registryAcceptance:false}};
+}
+
 export const PRIMARY_CASE_NAMES = Object.freeze([
   'layout-title-auto','layout-media-regions','layout-empty-custom','table-save',
   'furniture-inherited','furniture-flags','list-description-native-edit','list-description-native-save','layout-bleed-card','picture-control','furniture-layouts',
@@ -17,9 +36,9 @@ export const PRIMARY_CASE_NAMES = Object.freeze([
 
 export async function loadFixtureSource() {
   const imageBytes=await readFile(fixture('wide.png'));
-  const chartBytes=await readFile(fixture('chartex-fallback-main.json'));
+  const {chartFixture,chartBaselines}=await loadChartFixtureSource();
   const featureManifestBytes=await readFile(fixture('feature-inputs.json'));
-  const chartFixture=JSON.parse(chartBytes), featureManifest=JSON.parse(featureManifestBytes);
+  const featureManifest=JSON.parse(featureManifestBytes);
   assert.deepEqual(Object.keys(chartFixture.decks),Object.keys(chartFixture.entries),'every chart has a reviewed archive entry');
   assert.equal(Object.keys(chartFixture.decks).length,9,'retain all nine chart fixtures');
   assert.equal(Object.keys(featureManifest).length,8,'retain all eight measured feature inputs');
@@ -34,9 +53,9 @@ export async function loadFixtureSource() {
     decks[name]=JSON.parse(bytes);
   }
   assert.deepEqual(Object.keys(decks),PRIMARY_CASE_NAMES,'primary case set or order changed');
-  return {decks,base,chartFixture,featureManifest,sourceFiles:[
+  return {decks,base,chartFixture,chartBaselines,featureManifest,sourceFiles:[
     {path:'fixtures/wide.png',sha256:sha256(imageBytes)},
-    {path:'fixtures/chartex-fallback-main.json',sha256:sha256(chartBytes)},
+    ...CHART_FIXTURE_PATHS.map(path=>({path,sha256:Object.values(chartBaselines).find(record=>record?.path===path).sha256})),
     {path:'fixtures/feature-inputs.json',sha256:sha256(featureManifestBytes)},
   ]};
 }

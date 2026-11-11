@@ -1,0 +1,39 @@
+{
+  "language": "en",
+  "design": {
+    "fontScheme": "roboto"
+  },
+  "slides": [
+    {
+      "id": "s",
+      "title": "A stack",
+      "composition": {
+        "mode": "column",
+        "weights": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "blocks": [
+        {
+          "id": "b0",
+          "text": "Short line 1"
+        },
+        {
+          "id": "b1",
+          "text": "Short line 2"
+        },
+        {
+          "id": "b2",
+          "text": "Short line 3"
+        },
+        {
+          "id": "b3",
+          "text": "Short line 4"
+        }
+      ]
+    }
+  ]
+}

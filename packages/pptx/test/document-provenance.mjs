@@ -255,7 +255,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
 
 // Furniture already owns a slide tag list; both records share it.
 {
-  const deck = {name: 'Footer deck', organization: {id: 'acme', name: 'Acme'}, design: {fontScheme: 'arial', footer: {left: {text: '{{organization.name}}'}, right: {text: '{{slide.number}}'}}},
+  const deck = {name: 'Footer deck', organization: {id: 'acme', name: 'Acme'}, design: {fontScheme: 'arial', footer: {start: {text: '{{organization.name}}'}, end: {text: '{{slide.number}}'}}},
     slides: [{layout: 'cover', title: 'One', subtitle: 'Two'}]};
   const bytes = await toPptx(deck);
   const entries = unzipSync(bytes);
@@ -272,7 +272,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   // The footer is only words: a retyped name changes the footer text and leaves the stored organization.
   const renamed = await read(modify(bytes, entries => text(entries, 'ppt/slides/slide1.xml', xml => xml.replace('>Acme<', '>Acme Corp<'))));
   assert.deepEqual(renamed.deck.organization, deck.organization);
-  assert.equal(renamed.deck.design.footer.left.text, 'Acme Corp');
+  assert.equal(renamed.deck.design.footer.start.text, 'Acme Corp');
 }
 
 // In 'references-only' mode documents that state nothing keep their package unchanged ('full' records the defaults they
@@ -345,7 +345,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
 // omitted; import then keeps observed values instead of treating them as unstated.
 {
   const issues = [];
-  const bytes = await toPptx({name: 'Sizes', design: {fontScheme: 'arial', colorScheme: {id: 'boost', name: 'x'.repeat(300 * 1024)}},
+  const bytes = await toPptx({name: 'Sizes', design: {fontScheme: 'arial', colorScheme: {id: 'x'.repeat(300 * 1024)}},
     slides: [{layout: 'cover', beat: ['y'.repeat(300 * 1024)], title: 'One', subtitle: 'Two'}]}, {onDiagnostic: issue => issues.push(issue)});
   assert.deepEqual(issues.filter(issue => issue.code === 'document-provenance-omitted').map(issue => issue.path), ['design.colorScheme', 'slides.0.beat']);
   const entries = unzipSync(bytes);

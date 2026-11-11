@@ -58,6 +58,33 @@ test('five schema-valid route fixtures preserve corpus text, explicit upright st
  await assert.rejects(()=>loadFontRouteSource([FONT_ROUTE_CASE_NAMES[1],FONT_ROUTE_CASE_NAMES[0]]),/canonical explicit/);
 });
 
+test('current run language projects pinned corpus metadata without rewriting literal text or historical corpus keys',async()=>{
+ const corpusFile=new URL('../../docs/evidence/script-corpora-20261001/script-corpora.json',import.meta.url);
+ const original=await readFile(corpusFile),corpus=JSON.parse(original);
+ const source=await loadFontRouteSource(selectFontRoutes('all'));
+ for(const name of FONT_ROUTE_CASE_NAMES){
+  const route=source.fontRoutes[name],deck=source.decks[name];
+  const samples=route.samples.map(id=>corpus.groups.find(group=>group.script===route.script).samples.find(sample=>sample.id===id));
+  for(const [index,weight]of [400,700].entries())for(const [row,sample]of samples.entries()){
+   const authored=rows(deck.slides[index])[row];
+   assert.deepEqual(authored,{text:sample.text,fontFamily:route.requestedNativeFamily,fontSize:18.75,bold:weight===700,italic:false,language:sample.lang??route.language});
+   assert.deepEqual(Buffer.from(authored.text,'utf16le'),Buffer.from(sample.text,'utf16le'),'literal UTF16 units, marks, digits and punctuation stay exact');
+  }
+  for(const slide of deck.slides)for(const run of [...slide.title,...rows(slide)]){
+   assert.equal(Object.hasOwn(run,'lang'),false,'authored runs use only the current language field');
+   assert.equal(typeof run.language,'string');
+  }
+  const literal=structuredClone(deck);
+  literal.slides[0].title=[{text:'lang left right language start end',language:'fr-FR'}];
+  assert.equal(validate(literal),true,JSON.stringify(validate.errors));
+  assert.equal(literal.slides[0].title[0].text,'lang left right language start end');
+  literal.slides[0].title[0].lang='fr-FR';delete literal.slides[0].title[0].language;
+  assert.equal(validate(literal),false,'legacy authored run.lang is rejected rather than silently accepted');
+ }
+ assert.deepEqual(await readFile(corpusFile),original,'pinned historical corpus bytes stay immutable');
+ assert.ok(corpus.groups.flatMap(group=>group.samples).some(sample=>Object.hasOwn(sample,'lang')),'historical corpus metadata keeps its own lang key');
+});
+
 test('measurement rows keep point sizes and upright weights through shared rich-text fitting',async()=>{
  const peer=createRequire(rootRequire.resolve('@openpresentation/opf-pptx/package.json'));
  const corePeer=createRequire(peer.resolve('@openpresentation/opf/package.json'));
@@ -117,7 +144,7 @@ test('selected generation seals all files, shares measured handle and refuses re
   const other=fakeEngines();other.engines.fontManifest.packages[0].faces[0].sha256='0'.repeat(64);
   const source=await loadFontRouteSource(names);
   assert.throws(()=>previewRoutePins(source.fontRoutes[names[0]],other.fonts,other.engines.fontManifest),/loaded preview bytes differ/);
-  const linked=path.join(scratch,'linked');await mkdir(linked);await symlink(consumer,path.join(linked,'foreign'));
+  const linked=path.join(scratch,'linked');await mkdir(linked);await symlink(consumer,path.join(linked,'foreign'),process.platform==='win32'?'junction':'dir');
   await assert.rejects(()=>sealSuite(linked,{schemaVersion:1}),/symlink/);
  }finally{await rm(scratch,{recursive:true,force:true});}
 });

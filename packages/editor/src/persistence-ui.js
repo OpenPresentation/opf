@@ -51,7 +51,13 @@ export function createPersistenceUi(options) {
       const discard = el(doc, "button", { type: "button", class: "secondary restore-no", text: "Discard copy", title: "Delete the stored copy" });
       const earlier = offer.earlier ? el(doc, "button", { type: "button", class: "secondary restore-earlier", text: "Restore older copy" }) : null;
       restore.addEventListener("click", async () => { restore.disabled = discard.disabled = true; const done = await actions.restore(); if (done) { hide(); say("Restored. Undo goes back to what you had."); } else { restore.disabled = discard.disabled = false; } });
-      discard.addEventListener("click", async () => { await actions.discard(); hide(); say("Discarded the stored copy."); });
+      discard.addEventListener("click", async () => {
+        restore.disabled = discard.disabled = true;
+        if (earlier) earlier.disabled = true;
+        const done = await actions.discard();
+        if (done) { hide(); say("Discarded the stored copy."); }
+        else { restore.disabled = discard.disabled = false; if (earlier) earlier.disabled = false; }
+      });
       earlier?.addEventListener("click", async () => { const done = await options.restoreEarlier?.(); if (done) { hide(); say("Restored the older copy. Undo goes back to what you had."); } });
       banner.replaceChildren(el(doc, "p", { class: "restore-text", id: `${banner.id || "restore"}-text`, text: intro }), ...(note ? [note] : []), el(doc, "div", { class: "restore-actions" }, restore, discard, earlier));
       banner.setAttribute("role", "region");

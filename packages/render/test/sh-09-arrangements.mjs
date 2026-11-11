@@ -7,7 +7,7 @@ import {applyColorTransform} from '@openpresentation/opf/composition';
 import {resolvePresentation, toSvg} from '../src/svg.js';
 
 const catalogs = [gallery];
-const deck = {design: {colorScheme: {id: 'test', name: 'Test', dark1: '#111111', light1: '#FFFFFF', dark2: '#333333', light2: '#EEEEEE', accent1: '#1F6FB2', accent2: '#C0504D', accent3: '#9BBB59', accent4: '#8064A2', accent5: '#4BACC6', accent6: '#F79646', hyperlink: '#0563C1', followedHyperlink: '#954F72'}},
+const deck = {design: {colorScheme: {id: 'test', dark1: '#111111', light1: '#FFFFFF', dark2: '#333333', light2: '#EEEEEE', accent1: '#1F6FB2', accent2: '#C0504D', accent3: '#9BBB59', accent4: '#8064A2', accent5: '#4BACC6', accent6: '#F79646', hyperlink: '#0563C1', followedHyperlink: '#954F72'}},
   slides: [{layout: 'pyramid', title: 'Our strategy', items: ['Vision', 'Goals', 'Programs', 'Teams']}, {layout: 'matrix', title: 'Four markets', items: ['North', 'South', 'East', 'West']}, {layout: 'matrix', title: 'Three markets', items: ['North', 'South', 'East']}]};
 const resolved = resolvePresentation(deck, {catalogs});
 const primary = resolved.slides[0].design.colors.primary, background = resolved.slides[0].design.roles.background;

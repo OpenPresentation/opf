@@ -1,5 +1,6 @@
 import {unbindNoBreak} from '@openpresentation/opf/composition';
-import {nativeRunStyle as runStyle, mergeNativeRunProperties as mergeProperties} from './native-text-style.js';
+import {nativeRunLanguage, nativeRunStyle as runStyle, mergeNativeRunProperties as mergeProperties} from './native-text-style.js';
+import {nativeAutofit, scaledNativeRun, reportNativeAutofit} from './native-autofit.js';
 import {drawingObject, readSlideTheme} from './background-import.js';
 import {readBackgroundColor} from './background.js';
 import {nativeCellStyle, nativeTableGrid, nativeStyleFill} from './table-cell-import.js';
@@ -13,7 +14,9 @@ const text = tree => unbindNoBreak((tree ?? []).map(node => node['#text'] ?? '')
 const boolean = value => ['1','true','on'].includes(value) ? true : ['0','false','off'].includes(value) ? false : undefined;
 
 
-function cellText(body, context, relationships, report, header, tableDefaults) {
+function cellText(body, context, relationships, report, header, tableDefaults, deckLang) {
+  const fit = nativeAutofit([drawingObject(body)['a:bodyPr']], report);
+  reportNativeAutofit(fit, report);
   const listStyle = drawingObject(child(body, 'a:lstStyle'));
   const paragraphs = nodes(body, 'a:p');
   const runs = [];
@@ -31,7 +34,8 @@ function cellText(body, context, relationships, report, header, tableDefaults) {
       const tag = ['a:r', 'a:fld', 'a:br'].find(tag => Object.hasOwn(node, tag));
       if (!tag) continue;
       const properties = mergeProperties(defaults, drawingObject(node[tag])['a:rPr']);
-      append(tag === 'a:br' ? '\n' : text(child(node[tag], 'a:t')), runStyle(properties, context, relationships, report));
+      const effective = tag === 'a:br' && !(Number(properties.sz) > 0) ? properties : scaledNativeRun(properties, fit, report);
+      append(tag === 'a:br' ? '\n' : text(child(node[tag], 'a:t')), {...runStyle(effective, context, relationships, report), ...nativeRunLanguage(properties, {deckLang})});
     }
   });
   return runs.some(run => typeof run !== 'string') ? runs : runs.join('');
@@ -123,7 +127,7 @@ function conditionalProperties(style, properties, row, column, rowCount, columnC
 
 // Use the same direct graphic-frame ordering as the slide collector. The ordered
 // reader retains interleaved runs, fields, breaks, empty paragraphs and spaces.
-export function importTableFrames(slidePath, archive, relationships, report, dimensions, {rtlDeck = false} = {}) {
+export function importTableFrames(slidePath, archive, relationships, report, dimensions, {rtlDeck = false, deckLang} = {}) {
   const context = readSlideTheme(slidePath, archive);
   const scale = Math.min(dimensions.widthInches,dimensions.heightInches) * 96 / 720;
   const root = child(context.parsedPart(slidePath)?.tree, 'p:sld');
@@ -151,7 +155,7 @@ export function importTableFrames(slidePath, archive, relationships, report, dim
       const inherited=mergeProperties(defaults.cell,cellProperties);
       return {
         geometry,
-        value:cellText(body, context, relationships, emit, headers && rowIndex === 0, defaults.text),
+        value:cellText(body, context, relationships, emit, headers && rowIndex === 0, defaults.text, deckLang),
         style:nativeCellStyle(mergeCellBorderOverrides(defaults.cell,cellProperties,inherited),body,context,scale,emit,{rtlDeck}),
         borderEdges:[['left','a:lnL'],['right','a:lnR'],['top','a:lnT'],['bottom','a:lnB']]
           .filter(([,key])=>Object.hasOwn(inherited,key)).map(([edge])=>edge),

@@ -1,0 +1,13 @@
+{
+  "manifestSha256": "73971be7bba2c721f95cb366bfbd773b1f190a468b789c6d51cd72e750677ac4",
+  "currentSha256": "0446667709415837e0a9190beb93d14cb61d9ccf7f90db39a3ac1c1bfa80ded8",
+  "metadata": {
+    "bytes": 3793,
+    "sha256": "0c1b0c5c414df7e1c973dac514bd38ae9d1825de586bbb42651128e6ea7c7d49",
+    "records": 8
+  },
+  "qualifiedSource": "57acc14a61c19cceab26d5bce7b3ce6c6aa745c2",
+  "normalFold": "ae4a13f9a2912454013ed0e55a23fecac77b0017",
+  "nativeProof": "013956bedc90de00f39bf9584735cbb029588307",
+  "setupCorrection": "Initial coordinator inline collector had a JavaScript backtick syntax error before execution; no files were written. This is an explicit projection of the tool refusal, not a raw transcript."
+}

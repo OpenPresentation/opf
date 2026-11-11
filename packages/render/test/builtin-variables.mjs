@@ -9,7 +9,7 @@ const deck = () => ({
   name: 'Q4 Review',
   speaker: [{id: 'ada', name: 'Ada Lovelace', title: 'CTO'}, {id: 'grace', name: 'Grace Hopper'}],
   organization: {id: 'acme', name: 'Acme Corp', tagline: 'Build the future', logo},
-  design: {footer: {left: {text: '{{organization.name}}\n{{speaker.name}}, {{speaker.title}}'}, right: {text: '{{organization.tagline}}'}}},
+  design: {footer: {start: {text: '{{organization.name}}\n{{speaker.name}}, {{speaker.title}}'}, end: {text: '{{organization.tagline}}'}}},
   slides: [{id: 'cover', title: '{{deck.name}}', subtitle: '{{speaker.name}}, {{speaker.title}} · {{organization.name}}', image: 'var:organization.logo'}]
 });
 const text = (svg, value) => svg.includes(`>${value}<`);
@@ -28,7 +28,7 @@ assert.ok(svg.indexOf('>Acme Corp<') < svg.indexOf('>Ada Lovelace, CTO<'), 'the 
 
 const geometry = resolvePresentation(source).slides[0].geometry;
 assert.deepEqual(geometry.diagnostics, []);
-const parts = geometry.furniture.parts.filter(part => part.zone === 'left');
+const parts = geometry.furniture.parts.filter(part => part.zone === 'start');
 assert.deepEqual(parts.map(part => part.field), ['text']);
 assert.equal(parts[0].text, 'Acme Corp\nAda Lovelace, CTO');
 
@@ -39,7 +39,7 @@ const seen = [];
 const bareSvg = toSvg(bare, 1, {onDiagnostic: entry => seen.push(entry.code)});
 assert.ok(!bareSvg.includes('{{speaker'));
 assert.ok(seen.includes('variable-builtin-missing'));
-assert.equal(resolvePresentation(bare).slides[0].geometry.furniture.parts.find(part => part.zone === 'left').text, 'Acme Corp\n, ');
+assert.equal(resolvePresentation(bare).slides[0].geometry.furniture.parts.find(part => part.zone === 'start').text, 'Acme Corp\n, ');
 
 // An unknown path is refused like any other variable error.
 const typo = deck();

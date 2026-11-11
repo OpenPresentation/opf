@@ -1,0 +1,69 @@
+{
+  "testedHead": "e4bb0ced880dbd70385d22ac9d69087e7368d4c2",
+  "files": [
+    {
+      "path": "biome.log",
+      "archive": "metadata/000.gz",
+      "bytes": 695,
+      "sha256": "caf35b3a2a561bbb3ee0291a47c97ebb72ae9513cf6ce01c8ed9dcf5626ff351",
+      "compressedBytes": 318,
+      "compressedSha256": "69b500f347a612b22b9e9e3a66ef9bf895d520a2b1b8d3b53e114cab931853db"
+    },
+    {
+      "path": "build.log",
+      "archive": "metadata/001.gz",
+      "bytes": 14559,
+      "sha256": "8edc9fe338ab691b1d0711209dd5f52cfdd2fb25e4b35da000d3355a86952094",
+      "compressedBytes": 2982,
+      "compressedSha256": "e5368ef36e8ab1126118f77be3024c9fd3d1010d74a79254e97dbd314e636e61"
+    },
+    {
+      "path": "identity.json",
+      "archive": "metadata/002.gz",
+      "bytes": 4503,
+      "sha256": "60a738f843f340e421c1759138be685fbb4e4a8f3808f9a47b11459632ff8397",
+      "compressedBytes": 1429,
+      "compressedSha256": "67b259a60b55b96f86c6e00df7aabee2faa8aa4e107287d43a952623d9f1fb40"
+    },
+    {
+      "path": "metadata-01.exit.json",
+      "archive": "metadata/003.gz",
+      "bytes": 579,
+      "sha256": "c8cb857c67769c3ef6f6e8e7a02d7bf6b8fa27ab2b0cb11274536197067770a8",
+      "compressedBytes": 362,
+      "compressedSha256": "14c035935cfdae8aa3a134ba75071b41efe7ea0edfcc2081b096c589b18ef7f8"
+    },
+    {
+      "path": "metadata-01.log",
+      "archive": "metadata/004.gz",
+      "bytes": 2851,
+      "sha256": "27c9fbca9d3b292071cd3bb91420e48872e72cf1bd52acc28d2bbf06b5c96a3d",
+      "compressedBytes": 1213,
+      "compressedSha256": "2be66ee68120754911bfebbe9124a906a4662dddc27e31846a5003830c0f3d36"
+    },
+    {
+      "path": "pnpm_run_check_changes.log",
+      "archive": "metadata/005.gz",
+      "bytes": 2632,
+      "sha256": "50905f5ce820e320db6029987f00d60f694352ad17815a98ea8b121f3a0132d7",
+      "compressedBytes": 1163,
+      "compressedSha256": "74bad81cf7f9c036efe6bb9b0b56df0409b4b521593f79be4067c4168c426126"
+    },
+    {
+      "path": "pnpm_run_check_skill-commands.log",
+      "archive": "metadata/006.gz",
+      "bytes": 1034,
+      "sha256": "70df39a52e7bac8152427b4dd7f89c29673546cece0dd8ce5eeed10b391a5a26",
+      "compressedBytes": 581,
+      "compressedSha256": "8ef51815d0d07658372cab6d0681772ca688911d53aff7f4a97d71fef15d0bd4"
+    },
+    {
+      "path": "pnpm_run_check_text.log",
+      "archive": "metadata/007.gz",
+      "bytes": 1818,
+      "sha256": "7421e1b87ae9ae6162444308e13a6f7df52b2fd6398d355a772d4e2f8fedd65a",
+      "compressedBytes": 869,
+      "compressedSha256": "5775d027b51e935c9ae19d92fc257255af0447deccd0f5c157866d5b90e678cd"
+    }
+  ]
+}

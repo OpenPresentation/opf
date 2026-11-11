@@ -1,0 +1,274 @@
+{
+  "versions": [
+    {
+      "version": "0.4.7",
+      "tables": {
+        "COLR": {
+          "bytes": 1108818,
+          "sha256": "542106fd0908badd2acf74cb6b9d833dd69ba492dd62d3ef6330ce4302aa92ba"
+        },
+        "CPAL": {
+          "bytes": 25598,
+          "sha256": "b632f59144e25df7c60e1a93267c8d74db1e870e33b95b472cb9067e34b771dd"
+        },
+        "GSUB": {
+          "bytes": 31384,
+          "sha256": "98039356aff3f340bc38c2257af08081c33dda8ee095a34536612d829d5b16a5"
+        },
+        "OS/2": {
+          "bytes": 96,
+          "sha256": "e68d4296dc82781b8845d896a91b088ed78d97ce99383d2743f353f6505c7904"
+        },
+        "SVG ": {
+          "bytes": 20281843,
+          "sha256": "9782ae30a6b1f9f0dcba88c44ef0582b25a1815e656a567a9cf86b2792045004"
+        },
+        "cmap": {
+          "bytes": 8520,
+          "sha256": "ff4d71f4360845237d6ca8685a17655de9beac2b586509102c124af9e763dabe"
+        },
+        "glyf": {
+          "bytes": 3456424,
+          "sha256": "609f61b63185f1ebc71721ff1468a2620222a8f4d8738a5b233108ad34a1684d"
+        },
+        "head": {
+          "bytes": 54,
+          "sha256": "3cd2068aba82e04be5d22c25ec71e2e0d31bfde17fd1bea3438e30ccf467d422"
+        },
+        "hhea": {
+          "bytes": 36,
+          "sha256": "d4054c1b2b90e9edada98e866e44d2aa7d5142b9e2fdb3d5254b122c6623a208"
+        },
+        "hmtx": {
+          "bytes": 169268,
+          "sha256": "0335e4e9c08844703f50a174f2d3265e93ca69f19af1a0186361da70460b08d1"
+        },
+        "loca": {
+          "bytes": 169324,
+          "sha256": "e5c02802ef14902140e89b70f6667b208b16c5c6125174f661d18ab18ee99d49"
+        },
+        "maxp": {
+          "bytes": 32,
+          "sha256": "cfe346348027dfe5ac6d2885288eaf48fe824713127ec78a8b5f8dcbd3b48417"
+        },
+        "name": {
+          "bytes": 1418,
+          "sha256": "ce3b0ce6db23e0ffa8c5e429a82800bf5b0d0f8896ed6440c16b45d5838d0751"
+        },
+        "post": {
+          "bytes": 32,
+          "sha256": "bcbbe1931b950a60a8ce98a0b8835ea09370de10e9b4827b1d86b9b37706ea1a"
+        },
+        "vhea": {
+          "bytes": 36,
+          "sha256": "c717f7a67e12805ee2a6b0699e2b5e885f3fd16dfa8d988d93f9bb417d46edf6"
+        },
+        "vmtx": {
+          "bytes": 84662,
+          "sha256": "19430dd9d3c092854ec9fe6bf8f0b73cbe7b7e26b13ceb161d866b00cce99fd7"
+        }
+      }
+    },
+    {
+      "version": "0.4.8",
+      "tables": {
+        "COLR": {
+          "bytes": 1109253,
+          "sha256": "1b5a9e9d7e278c2b4e89a023cc027bc858e9d03914f1089d4b26ad4dad67ab6a"
+        },
+        "CPAL": {
+          "bytes": 25590,
+          "sha256": "4d0021ddf4da79f86d2847d58467e87e1fee4e3201cb34bcb6c7c84082752ffc"
+        },
+        "GSUB": {
+          "bytes": 31384,
+          "sha256": "247dc9e1ac4923acd925e9d5b48de8b25345104eeb4d3a62b0897f2d43f56c1b"
+        },
+        "OS/2": {
+          "bytes": 96,
+          "sha256": "e68d4296dc82781b8845d896a91b088ed78d97ce99383d2743f353f6505c7904"
+        },
+        "SVG ": {
+          "bytes": 20288281,
+          "sha256": "560516bbbea27af4be724394a0c6ad9bf9e5447ca7e26c21a246583f4b61dc03"
+        },
+        "cmap": {
+          "bytes": 8508,
+          "sha256": "9d9967c48ff04baa744c6c64eed6cd7dde3d442df9b278ec6961e77c15429a00"
+        },
+        "glyf": {
+          "bytes": 3458700,
+          "sha256": "d9ad507b9a27f6a345ae53dac2218cc2e7364cf5755a3fefd62fc6eb536a988d"
+        },
+        "head": {
+          "bytes": 54,
+          "sha256": "64982eb6cd73c594debbd0ec93f173d6ac6dcd14f3119693aaa037600cbe75cb"
+        },
+        "hhea": {
+          "bytes": 36,
+          "sha256": "fa4d663b8959b99986e94c1f570f2f009e996b9443536b43b68e518266e198e2"
+        },
+        "hmtx": {
+          "bytes": 169356,
+          "sha256": "f169f4ee326c67771963ee25504ea8348c92a335ef03eed2ead379c485556c2c"
+        },
+        "loca": {
+          "bytes": 169412,
+          "sha256": "72bf5e8fcf1dd7f592de22a785e216a9d40076ed43a9f479236819b9b5c28efe"
+        },
+        "maxp": {
+          "bytes": 32,
+          "sha256": "08e9ad43e0faa5f1a5249623f4cd42af345faed54aa0e8937dba2f685820c902"
+        },
+        "name": {
+          "bytes": 1418,
+          "sha256": "1494c60fd557aa47dceb103e76ad176ca23e8a1c5d1d3cbdc12236efc1fdbd33"
+        },
+        "post": {
+          "bytes": 32,
+          "sha256": "bcbbe1931b950a60a8ce98a0b8835ea09370de10e9b4827b1d86b9b37706ea1a"
+        },
+        "vhea": {
+          "bytes": 36,
+          "sha256": "c717f7a67e12805ee2a6b0699e2b5e885f3fd16dfa8d988d93f9bb417d46edf6"
+        },
+        "vmtx": {
+          "bytes": 84706,
+          "sha256": "ca64550a19a513ad6f0031a4b96950c6c0b21f3cc3fb4e30652a79466c8c333c"
+        }
+      }
+    }
+  ],
+  "changed": {
+    "COLR": [
+      {
+        "bytes": 1108818,
+        "sha256": "542106fd0908badd2acf74cb6b9d833dd69ba492dd62d3ef6330ce4302aa92ba"
+      },
+      {
+        "bytes": 1109253,
+        "sha256": "1b5a9e9d7e278c2b4e89a023cc027bc858e9d03914f1089d4b26ad4dad67ab6a"
+      }
+    ],
+    "CPAL": [
+      {
+        "bytes": 25598,
+        "sha256": "b632f59144e25df7c60e1a93267c8d74db1e870e33b95b472cb9067e34b771dd"
+      },
+      {
+        "bytes": 25590,
+        "sha256": "4d0021ddf4da79f86d2847d58467e87e1fee4e3201cb34bcb6c7c84082752ffc"
+      }
+    ],
+    "GSUB": [
+      {
+        "bytes": 31384,
+        "sha256": "98039356aff3f340bc38c2257af08081c33dda8ee095a34536612d829d5b16a5"
+      },
+      {
+        "bytes": 31384,
+        "sha256": "247dc9e1ac4923acd925e9d5b48de8b25345104eeb4d3a62b0897f2d43f56c1b"
+      }
+    ],
+    "SVG ": [
+      {
+        "bytes": 20281843,
+        "sha256": "9782ae30a6b1f9f0dcba88c44ef0582b25a1815e656a567a9cf86b2792045004"
+      },
+      {
+        "bytes": 20288281,
+        "sha256": "560516bbbea27af4be724394a0c6ad9bf9e5447ca7e26c21a246583f4b61dc03"
+      }
+    ],
+    "cmap": [
+      {
+        "bytes": 8520,
+        "sha256": "ff4d71f4360845237d6ca8685a17655de9beac2b586509102c124af9e763dabe"
+      },
+      {
+        "bytes": 8508,
+        "sha256": "9d9967c48ff04baa744c6c64eed6cd7dde3d442df9b278ec6961e77c15429a00"
+      }
+    ],
+    "glyf": [
+      {
+        "bytes": 3456424,
+        "sha256": "609f61b63185f1ebc71721ff1468a2620222a8f4d8738a5b233108ad34a1684d"
+      },
+      {
+        "bytes": 3458700,
+        "sha256": "d9ad507b9a27f6a345ae53dac2218cc2e7364cf5755a3fefd62fc6eb536a988d"
+      }
+    ],
+    "head": [
+      {
+        "bytes": 54,
+        "sha256": "3cd2068aba82e04be5d22c25ec71e2e0d31bfde17fd1bea3438e30ccf467d422"
+      },
+      {
+        "bytes": 54,
+        "sha256": "64982eb6cd73c594debbd0ec93f173d6ac6dcd14f3119693aaa037600cbe75cb"
+      }
+    ],
+    "hhea": [
+      {
+        "bytes": 36,
+        "sha256": "d4054c1b2b90e9edada98e866e44d2aa7d5142b9e2fdb3d5254b122c6623a208"
+      },
+      {
+        "bytes": 36,
+        "sha256": "fa4d663b8959b99986e94c1f570f2f009e996b9443536b43b68e518266e198e2"
+      }
+    ],
+    "hmtx": [
+      {
+        "bytes": 169268,
+        "sha256": "0335e4e9c08844703f50a174f2d3265e93ca69f19af1a0186361da70460b08d1"
+      },
+      {
+        "bytes": 169356,
+        "sha256": "f169f4ee326c67771963ee25504ea8348c92a335ef03eed2ead379c485556c2c"
+      }
+    ],
+    "loca": [
+      {
+        "bytes": 169324,
+        "sha256": "e5c02802ef14902140e89b70f6667b208b16c5c6125174f661d18ab18ee99d49"
+      },
+      {
+        "bytes": 169412,
+        "sha256": "72bf5e8fcf1dd7f592de22a785e216a9d40076ed43a9f479236819b9b5c28efe"
+      }
+    ],
+    "maxp": [
+      {
+        "bytes": 32,
+        "sha256": "cfe346348027dfe5ac6d2885288eaf48fe824713127ec78a8b5f8dcbd3b48417"
+      },
+      {
+        "bytes": 32,
+        "sha256": "08e9ad43e0faa5f1a5249623f4cd42af345faed54aa0e8937dba2f685820c902"
+      }
+    ],
+    "name": [
+      {
+        "bytes": 1418,
+        "sha256": "ce3b0ce6db23e0ffa8c5e429a82800bf5b0d0f8896ed6440c16b45d5838d0751"
+      },
+      {
+        "bytes": 1418,
+        "sha256": "1494c60fd557aa47dceb103e76ad176ca23e8a1c5d1d3cbdc12236efc1fdbd33"
+      }
+    ],
+    "vmtx": [
+      {
+        "bytes": 84662,
+        "sha256": "19430dd9d3c092854ec9fe6bf8f0b73cbe7b7e26b13ceb161d866b00cce99fd7"
+      },
+      {
+        "bytes": 84706,
+        "sha256": "ca64550a19a513ad6f0031a4b96950c6c0b21f3cc3fb4e30652a79466c8c333c"
+      }
+    ]
+  }
+}

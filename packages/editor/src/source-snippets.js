@@ -67,7 +67,7 @@ export const SNIPPETS = Object.freeze([
   { prefix: "slide-metric", where: "slide", description: "A slide with one big number", fragment: { metric: { value: ph(1, "42"), label: ph(2, "Label") } } },
   { prefix: "slide-table", where: "slide", description: "A slide with a table", fragment: { title: ph(1, "Title"), table: { columns: [ph(2, "Name"), ph(3, "Value")], rows: [[ph(4, "A"), ph(5, "1")]] } } },
   { prefix: "slide-code", where: "slide", description: "A slide with a piece of code", fragment: { code: { source: ph(1, "code"), language: ph(2, "js") } } },
-  { prefix: "slide-two-column", where: "slide", description: "A slide with two columns", fragment: { title: ph(1, "Title"), layout: "two-column", left: { items: [ph(2, "Left")] }, right: { items: [ph(3, "Right")] } } },
+  { prefix: "slide-two-column", where: "slide", description: "A slide with two columns", fragment: { title: ph(1, "Title"), layout: "two-column", start: { items: [ph(2, "First")] }, end: { items: [ph(3, "Second")] } } },
   { prefix: "section", where: "slide", description: "A section divider", fragment: { layout: "section", title: ph(1, "Section title") } },
   { prefix: "reference", where: "reference", description: "A reference a slide can cite", fragment: { id: ph(1, "smith2020"), text: ph(2, "Citation") } },
   { prefix: "dataset", where: "dataset", description: "A table of data that charts and tables can share", name: ph(1, "sales"), fragment: { columns: [ph(2, "Category"), ph(3, "Value")], rows: [[ph(4, "A"), ph(5, "1", { raw: true })]] } },
@@ -223,7 +223,7 @@ export function renderMarkdown(fragment, { separator = false, entry } = {}) {
   const csv = (rows) => rows.map((row) => row.map((cell) => value(cell)).join(",")).join("\n");
   if (fragment.text !== undefined) blocks.push(value(fragment.text));
   if (Array.isArray(fragment.items)) blocks.push(bullets(fragment.items));
-  for (const region of ["left", "right"]) {
+  for (const region of ["start", "end"]) {
     if (fragment[region]) blocks.push(`<!-- block: region=${region} -->\n${bullets(fragment[region].items ?? [])}`);
   }
   if (fragment.image) blocks.push(`![${value(fragment.image.alt)}](${value(fragment.image.src)})`);

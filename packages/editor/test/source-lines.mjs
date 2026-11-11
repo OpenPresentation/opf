@@ -9,7 +9,7 @@ const deck = {
   design: { theme: 'minimal' },
   slides: [
     { title: 'A', text: 'hi' },
-    { title: 'B', subtitle: 'sub', items: ['x', 'y'], design: { layout: 'title' } },
+    { title: 'B', subtitle: 'sub', items: ['x', 'y'], layout: 'title', design: { contentAlignment: 'start' } },
     { title: 'C', notes: 'n' },
   ],
 };
@@ -35,7 +35,7 @@ assert.equal(lineForPath('yaml', yaml, '/design/theme'), lineOf(yaml, 'theme:'))
 assert.equal(lineForPath('yaml', yaml, '/slides/0/title'), lineOf(yaml, 'title: A'));
 assert.equal(lineForPath('yaml', yaml, '/slides/1/subtitle'), lineOf(yaml, 'subtitle:'));
 assert.equal(lineForPath('yaml', yaml, '/slides/1/items/1'), lineOf(yaml, '- "y"'));
-assert.equal(lineForPath('yaml', yaml, '/slides/1/design/layout'), lineOf(yaml, 'layout:'));
+assert.equal(lineForPath('yaml', yaml, '/slides/1/layout'), lineOf(yaml, 'layout:'));
 assert.equal(lineForPath('yaml', yaml, '/slides/2/notes'), lineOf(yaml, 'notes:'));
 // Sequences at the key's own column, quoted keys, block scalars and flow collections.
 const loose = 'name: D\nslides:\n- title: A\n  items:\n  - x\n  - y\n- title: "B"\n  text: |\n    title: not a key\n  items: [a, b]\n';

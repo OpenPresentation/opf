@@ -180,12 +180,16 @@ export function chartDrawPlan(chart: unknown, resolved: Extract<ResolvedChartDat
 const quoted = (names: readonly string[]): string => names.map(name => JSON.stringify(name)).join(', ');
 
 /**
- * The `chart-series-dropped` warning of a chart whose drawn construct leaves a resolved column out ({@link chartDrawPlan}'s `dropped`), at
- * the chart's `type` (`path` is the chart's JSON Pointer). Empty when every column is drawn.
+ * The multi-series Pareto type-adaptation warning, or the `chart-series-dropped` warning when a drawn construct leaves a resolved column out ({@link chartDrawPlan}'s `dropped`), at
+ * the chart's `type` (`path` is the chart's JSON Pointer). Empty when no reported type adaptation or series loss applies.
  */
 export function chartDrawDiagnostics(chart: unknown, resolved: ResolvedChartData, path = '', options: { language?: string } = {}): DataDiagnostic[] {
   if (!resolved.ok) return [];
   const plan = chartDrawPlan(chart, resolved, options);
+  if (plan.fallback === 'pareto-as-columns') return [{
+    code: 'chart-mapping-adapted', severity: 'warning', path: `${path}/type`,
+    message: 'a Pareto chart sorts one numeric series and draws its cumulative share; several numeric series are drawn as clustered columns in data order, with every series preserved; use one numeric series for a Pareto chart',
+  }];
   if (!plan.dropped.length) return [];
   const type = typeId(chart);
   const message = plan.fallback === 'scatter-by-position'

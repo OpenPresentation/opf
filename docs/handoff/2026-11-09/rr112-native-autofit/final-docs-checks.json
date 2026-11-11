@@ -1,0 +1,130 @@
+{
+  "head": "de563073bd0a969568a9766b0be91c343bec9442",
+  "tree": "ea3696da7ee7b919f72fe831a186c2a8e4c10edf",
+  "base": "373d472f8d7d1be73cd4518a79a655fecc204979",
+  "sourceQualificationPreserved": true,
+  "exitCode": 1,
+  "selected": [
+    "build",
+    "biome",
+    "pnpm run check:changes",
+    "pnpm run check:ci-workflows",
+    "pnpm run check:font-hotlinks",
+    "pnpm run check:gallery-tracker",
+    "pnpm run check:release",
+    "pnpm run check:release-report",
+    "pnpm run check:skill-commands",
+    "pnpm run check:text"
+  ],
+  "skipped": [
+    "typecheck"
+  ],
+  "packageTestsSelected": [],
+  "zipBytes": 21693,
+  "zipSHA256": "1c9d478ef6af46dde5bf668b95678958538f6fa5a761d0dbb54dc5030cacaba9",
+  "rawBytes": 49795,
+  "files": [
+    {
+      "path": "raw/final-docs-check.exit.json",
+      "bytes": 400,
+      "sha256": "f4274c94cc9185342bf2d183abb3ac84e728b643d9faebf48ca1d85f965fbdd7"
+    },
+    {
+      "path": "raw/final-docs-check.log",
+      "bytes": 4613,
+      "sha256": "71a3ece97bba2240d02d720f40ed47d1aaccf1aa4c9abc2b9e6e22b17cc1eed1"
+    },
+    {
+      "path": "raw/final-docs-plan.log",
+      "bytes": 429,
+      "sha256": "9b2ad2b47049c6b30e4fe29ccbaf0028ada6e655b06f734dc748ddc40f86acf5"
+    },
+    {
+      "path": "raw/post-docs-state.mjs",
+      "bytes": 2373,
+      "sha256": "2b91a5f9d05630516558c361e14ed2ca04bc860edd424f223077bfb2dc25a98b"
+    },
+    {
+      "path": "raw/post-seal-verify.exit.json",
+      "bytes": 23,
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "raw/post-seal-verify.log",
+      "bytes": 309,
+      "sha256": "dc4c68e1b5c7bac945994c2fc6f04f31f88708988dbc1c7d2b8cc31f00976cfa"
+    },
+    {
+      "path": "raw/post-tail-release-report.exit.json",
+      "bytes": 167,
+      "sha256": "1f4b8e1e0bf62aa0fee3fbc688ec3514c2a9a51a31cb34c6e5a22973a9e76b9a"
+    },
+    {
+      "path": "raw/post-tail-release-report.log",
+      "bytes": 827,
+      "sha256": "c77feba462fb0ee081b8806c9ab68225dba74cfdc56a9dfdfaf7f5315edb52c1"
+    },
+    {
+      "path": "raw/seal.exit.json",
+      "bytes": 23,
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "raw/seal.log",
+      "bytes": 185,
+      "sha256": "81376976a9899de7a7f450d2e3dc4d00530f4504c7abf2c56a18bd0e8749cc60"
+    },
+    {
+      "path": "steps/biome.log",
+      "bytes": 697,
+      "sha256": "7fc81b7c1d585ee4055a415b716eab5a65aaf9599169985f76b1171e306f89b2"
+    },
+    {
+      "path": "steps/build.log",
+      "bytes": 14554,
+      "sha256": "45c7679ceb3fc18ece74f10dbaa0222212bb4efcde60a120a3340b3d6657f105"
+    },
+    {
+      "path": "steps/pnpm_run_check_changes.log",
+      "bytes": 2630,
+      "sha256": "9b14878eef3c8b4147447ac57ed5029ee161a90ddbce0c07f0e132dfa4c39376"
+    },
+    {
+      "path": "steps/pnpm_run_check_ci-workflows.log",
+      "bytes": 10249,
+      "sha256": "9ddb10444790d07bd8cac9f058b661b2498d4e203548d106fac247434496b53a"
+    },
+    {
+      "path": "steps/pnpm_run_check_font-hotlinks.log",
+      "bytes": 880,
+      "sha256": "6454192812594388ecbe68952304305a9ccde0892181a505ef6ac3ca9951673b"
+    },
+    {
+      "path": "steps/pnpm_run_check_gallery-tracker.log",
+      "bytes": 3007,
+      "sha256": "6f660e4ec88bd353a8cdb19c4a85ef10c0b9a3463c631146027618660a68fde6"
+    },
+    {
+      "path": "steps/pnpm_run_check_release-report.log",
+      "bytes": 805,
+      "sha256": "9c73deb4d90e8022ab37fec5a78ce0bae01da11afe12ba16dcbe177c0dd213be"
+    },
+    {
+      "path": "steps/pnpm_run_check_release.log",
+      "bytes": 5526,
+      "sha256": "9283b45109b06f1dbf07c208b6558200c19bfde3350437daa0da58e2be8e10da"
+    },
+    {
+      "path": "steps/pnpm_run_check_skill-commands.log",
+      "bytes": 1033,
+      "sha256": "e2812b97a15a98cc5bfaa0910beb393385773f7694cb7a1627ba04e27dd2eeff"
+    },
+    {
+      "path": "steps/pnpm_run_check_text.log",
+      "bytes": 1065,
+      "sha256": "ac944cfa27ff1fbcbb42048ff036ded191c3c0f5c635917ff25291b37df1d181"
+    }
+  ],
+  "logText": "\r\n> openpresentation-workspace@ check:changed C:\\opf-work\\fontscale\r\n> node scripts/check-changed.mjs \"--base\" \"373d472f8d7d1be73cd4518a79a655fecc204979\"\r\n\r\ncheck-changed: 7 changed files since 373d472f8 (plus uncommitted and untracked)\r\nok  build (10.9 s)\r\nok  biome (0.1 s)\r\nok  pnpm run check:changes (0.7 s)\r\nok  pnpm run check:font-hotlinks (10.1 s)\r\nFAILED  pnpm run check:gallery-tracker (2.4 s)\r\nok  pnpm run check:release (0.9 s)\r\nok  pnpm run check:release-report (0.4 s)\r\nok  pnpm run check:ci-workflows (21.6 s)\r\nok  pnpm run check:text (4.0 s)\r\nok  pnpm run check:skill-commands (20.5 s)\r\n-  typecheck\r\n\r\n--- pnpm run check:gallery-tracker failed (exit 1); last 55 lines of artifacts\\check-changed\\pnpm_run_check_gallery-tracker.log:\r\n\r\n> openpresentation-workspace@ check:gallery-tracker C:\\opf-work\\fontscale\r\n> node --test scripts/build-gallery-tracker.test.mjs scripts/tracker-staleness.test.mjs && node scripts/build-gallery-tracker.mjs --check\r\n\r\nGallery tracker is stale: docs/programs/release-readiness/gallery-tracker.json, docs/programs/release-readiness/gallery-tracker.md\r\n✔ every catalog record and every gallery item is exactly one record (12.03ms)\r\n✔ statuses, gaps and the addressed flag are consistent (2.3946ms)\r\n✔ columns use their documented values and unknown where nothing measured (2.4065ms)\r\n✖ the committed tracker follows the configured freshness policy (363.6622ms)\r\n✔ rules match by gap, type, id and detail; links resolve against the burndown (0.4102ms)\r\n✔ native evidence counts only native or PowerPoint folders (4.4066ms)\r\n✔ the gallery and editor snapshots read pages, previews, published ids, teasers and switch dimensions (9.6512ms)\r\n✔ a stale tracker, an unused rule and an unknown RR link fail the build (265.0565ms)\r\n✔ Pareto limitation preserves measured verdicts and remains an open data-preservation gap (118.7611ms)\r\n✔ input limitations reject unknown records, duplicate scopes and missing evidence (165.539ms)\r\n✔ offline catalog snapshot rejects missing and modified evidence (42.0609ms)\r\n✔ v2 layout identity never inherits historical same-name measurements (332.1268ms)\r\n✔ offline snapshot rejects wrong integrity, version and gitHead (119.6424ms)\r\n✔ old passing and failing audit/native channels cannot certify any schema2 layout (511.5636ms)\r\n✔ slide-size fallback retains the general gap without requiring a dedicated preset result (101.4455ms)\r\n✔ a stale tracker fails by default, so main, the merge queue, releases and a local pnpm test stay strict (0.8095ms)\r\n✔ OPF_TRACKER_STALE=warn turns the failure into a warning annotation (0.1707ms)\r\n✔ any other value is an error rather than a silent pass (0.2124ms)\r\nℹ tests 18\r\nℹ suites 0\r\n\r\nstep                            status     time\r\nbuild                           passed   10.9 s\r\nbiome                           passed    0.1 s  2 files\r\npnpm run check:changes          passed    0.7 s\r\nℹ pass 17\r\nℹ fail 1\r\npnpm run check:ci-workflows     passed   21.6 s\r\npnpm run check:font-hotlinks    passed   10.1 s\r\npnpm run check:gallery-tracker  FAILED    2.4 s\r\npnpm run check:release          passed    0.9 s\r\npnpm run check:release-report   passed    0.4 s\r\npnpm run check:skill-commands   passed   20.5 s\r\npnpm run check:text             passed    4.0 s\r\ntypecheck                       skipped       -  no .ts, .mts or tsconfig change\r\ntotal                                    46.1 s\r\nℹ cancelled 0\r\nℹ skipped 0\r\nℹ todo 0\r\nℹ duration_ms 2139.0754\r\n\r\n✖ failing tests:\r\n\r\ntest at scripts\\build-gallery-tracker.test.mjs:121:1\r\n✖ the committed tracker follows the configured freshness policy (363.6622ms)\r\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\r\n  \r\n  true !== false\r\n  \r\n      at TestContext.<anonymous> (file:///C:/opf-work/fontscale/scripts/build-gallery-tracker.test.mjs:125:28)\r\n      at Test.runInAsyncScope (node:async_hooks:227:14)\r\n      at Test.run (node:internal/test_runner/test:1397:25)\r\n      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)\r\n      at Test.postRun (node:internal/test_runner/test:1537:19)\r\n      at Test.run (node:internal/test_runner/test:1462:12)\r\n      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {\r\n    generatedMessage: true,\r\n    code: 'ERR_ASSERTION',\r\n    actual: true,\r\n    expected: false,\r\n    operator: 'strictEqual',\r\n    diff: 'simple'\r\n  }\r\n ELIFECYCLE  Command failed with exit code 1.\r\n\r\ncheck-changed: 1 of 11 steps failed: pnpm run check:gallery-tracker\r\n ELIFECYCLE  Command failed with exit code 1.\r\n",
+  "scope": "Actual docs-only check plus evidence-only tail/current queue parser and offline transport verification; original source aggregate remains RED"
+}

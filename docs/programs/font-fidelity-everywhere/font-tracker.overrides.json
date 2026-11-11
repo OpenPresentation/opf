@@ -1422,7 +1422,7 @@
       ]
     },
     "Segoe UI Light": {
-      "nextAction": "Red Hat Display 300 italic is bundled (FF-43). Measured against Segoe UI Light 5.71: 1.7% mean and 5.4% max upright, 2.0% and 6.6% italic. Qualify light metrics.",
+      "nextAction": "LH-177: regular previews with Red Hat Display 300 and bold emphasis with 400, reviewed against the STEM native witness. Re-measure the changed style link before making any metric claim; historical 2026-09 widths do not qualify this mapping.",
       "evidence": [
         "openPack",
         "measurement",
@@ -1431,7 +1431,7 @@
       ]
     },
     "Segoe UI Semilight": {
-      "nextAction": "Define an explicit matching Red Hat Display weight for weight 350 (measured against 400) and qualify Semilight independently (max 9.1%).",
+      "nextAction": "LH-177: target 350 uses the nearest bundled Red Hat Display 300 face; bold emphasis uses 400. The preview is closer to native but remains visual. Re-measure and qualify the changed mapping independently.",
       "evidence": [
         "openPack",
         "measurement",
@@ -1716,7 +1716,7 @@
       ]
     },
     "Yu Gothic": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans JP (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 14 of 14 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta -1.4% mean, 4.1% max over 7 samples; line height 1.6 (original) against 1.45 em (preview face).",
+      "nextAction": "Native PowerPoint comparison: LH-183 records the retained visual gap. Noto Sans JP Regular draws heavier strokes than Yu Gothic Regular, including Japanese diagram labels. Keep the current mapping visual until a lighter stand-in is qualified; a licensed original supplied by the host resolves exactly. Historical script-corpus coverage and width measurements do not clear this stroke-weight finding.",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -3299,7 +3299,7 @@
     },
     "Segoe UI Light": {
       "original": "Segoe UI Light: the light weight.",
-      "replacement": "Red Hat Display 300."
+      "replacement": "Red Hat Display 300; bold uses 400 to retain the named family's light emphasis."
     },
     "Segoe UI Semibold": {
       "original": "Segoe UI Semibold: the semibold weight.",
@@ -3307,7 +3307,8 @@
     },
     "Segoe UI Semilight": {
       "original": "Segoe UI Semilight: weight 350.",
-      "replacement": "Red Hat Display 400: there is no 350 face."
+      "replacement": "Red Hat Display 300, the nearest bundled face to 350; bold uses 400.",
+      "caveat": "Visual approximation: the bundled font has no 350 face. The previous 400/700 preview was visibly heavier than PowerPoint."
     },
     "Skeena": {
       "original": "Skeena: Microsoft 365 cloud sans.",
@@ -3345,6 +3346,11 @@
     "Source Sans Pro": {
       "original": "Source Sans Pro 2.045: Adobe's humanist sans (the predecessor name).",
       "replacement": "Source Sans 3: the renamed family; regular and bold match within 0.15%, italics within 0.41%."
+    },
+    "Yu Gothic": {
+      "original": "Yu Gothic Regular: a light Japanese gothic face.",
+      "replacement": "Noto Sans JP Regular.",
+      "caveat": "LH-183: PowerPoint draws Yu Gothic Regular visibly lighter than this preview stand-in. The shape of the strokes and width remain a visual approximation; supplying the licensed Yu Gothic face gives an exact preview. This gap affects all Japanese text, including diagrams, and remains open in font fidelity."
     }
   },
   "scriptCorpus": {

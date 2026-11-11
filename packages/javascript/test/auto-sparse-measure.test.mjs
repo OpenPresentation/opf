@@ -28,7 +28,7 @@ test('the measure follows the content alignment', () => {
   };
   const [centered, area] = body('center');
   assert.ok(Math.abs(centered.box.x + centered.box.width / 2 - (area.x + area.width / 2)) < 1);
-  const [right] = body('right');
+  const [right] = body('end');
   assert.ok(Math.abs(right.box.x + right.box.width - (area.x + area.width)) < 1);
 });
 

@@ -15,9 +15,9 @@ const base = { name: 'Probe', regions: [{ name: 'title' }, { name: 'body', accep
 const two = { name: 'Two', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'a', accepts: ['text'], flow: 'none' }, { name: 'b', accepts: ['text'] }] }] };
 const regionsOf = (...regions) => ({ ...base, regions });
 
-describe('the 36 built-in templates (design section 6)', () => {
-  test('there are 36, in six groups, and every one has a title area', () => {
-    assert.equal(Object.keys(layouts).length, 36);
+describe('the 40 built-in templates (design section 6)', () => {
+  test('there are 40, in six groups, and every one has a title area', () => {
+    assert.equal(Object.keys(layouts).length, 40);
     assert.deepEqual([...new Set(Object.values(layouts).map((record) => record.tags[0]))], ['Openers and closers', 'Text', 'Groups of items', 'Numbers', 'Visuals', 'Mixed']);
     for (const [id, record] of Object.entries(layouts)) assert.ok(JSON.stringify(record.regions).includes('"title"'), id);
   });
@@ -93,7 +93,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
   test('the names: unique across the tree, not reserved, headings take only a size', () => {
     assert.deepEqual(issues(regionsOf({ name: 'title' }, { name: 'a', accepts: ['text'] }, { direction: 'row', regions: [{ name: 'a', accepts: ['text'] }, { name: 'b', accepts: ['text'] }] })), ['layout-region /regions/2/regions/0/name']);
     assert.deepEqual(issues(regionsOf({ name: 'title' }, { name: 'title' })), ['layout-region /regions/1/name']);
-    for (const word of ['left', 'center', 'right', 'top', 'middle', 'bottom', 'tag', 'auto']) {
+    for (const word of ['start', 'center', 'end', 'top', 'middle', 'bottom', 'tag', 'auto']) {
       assert.ok(issues(regionsOf({ name: 'title' }, { name: word, accepts: ['text'] })).includes('layout-region /regions/1/name'), word);
     }
     assert.deepEqual(issues(regionsOf({ name: 'Body', accepts: ['text'] })), ['layout-region /regions/0/name']);
@@ -114,7 +114,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
   test('validate reports them on embedded records, and the schema checks types, kinds and unknown keys', () => {
     const repeated = validate(deckWith(regionsOf({ name: 'a' }, { name: 'a' })), { only: ['format', 'references'] });
     assert.ok(rulesOf(repeated).includes('opf/layout-region'));
-    const reserved = validate(deckWith(regionsOf({ name: 'title' }, { name: 'left', accepts: ['text'] })), { only: ['format', 'references'] });
+    const reserved = validate(deckWith(regionsOf({ name: 'title' }, { name: 'start', accepts: ['text'] })), { only: ['format', 'references'] });
     assert.ok(rulesOf(reserved).includes('opf/layout-region') || rulesOf(reserved).includes('opf/catalog-record'));
     const tooDeep = validate(deckWith({ ...base, regions: [{ direction: 'row', regions: [{ direction: 'column', regions: [{ direction: 'row', regions: [{ direction: 'column', regions: [{ name: 'a' }] }] }] }] }] }), { only: ['format', 'references'] });
     assert.ok(rulesOf(tooDeep).includes('opf/layout-template'));
@@ -205,7 +205,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
 });
 
 describe('no migration path from the 0.18 ids (owner decision, 2026-10-10)', () => {
-  // The 0.19 catalog: the 36 templates under the default catalog's source, so a removed 0.18 id resolves nowhere.
+  // The 0.19 catalog: the 40 templates under the default catalog's source, so a removed 0.18 id resolves nowhere.
   const gallery2 = { source: 'https://www.pptx.gallery', layouts };
 
   test('a former id such as list-2x is an unknown layout: opf/unresolved-reference, automatic composition', async () => {

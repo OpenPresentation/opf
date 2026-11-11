@@ -107,7 +107,7 @@ test('furniture-layouts exports inherited carriers on distinct tagged layout var
     const identity=JSON.parse(Buffer.from(tags.find(tag=>tag.name==='OPF_LAYOUT_V1').val,'hex').toString());
     assert.equal(identity.reference,id);
     const shapes=list(layout['p:cSld']['p:spTree']['p:sp']);
-    const sharedHeader=shapes.filter(shape=>shape['p:nvSpPr']['p:cNvPr'].name.startsWith('OPF furniture header left text line '));
+    const sharedHeader=shapes.filter(shape=>shape['p:nvSpPr']['p:cNvPr'].name.startsWith('OPF furniture header start text line '));
     assert.equal(sharedHeader.length,index===1?0:3,'Inherited header belongs to each used layout variant, not the local slide');
     if(index!==1){
       assert.match(layout['p:cSld'].name,/furniture/);

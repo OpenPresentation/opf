@@ -15,10 +15,10 @@ const read = async entries => {
 };
 const slidePath = index => `ppt/slides/slide${index}.xml`;
 const edit = (entries, index, mutate) => ({...entries, [slidePath(index)]: enc.encode(mutate(dec.decode(entries[slidePath(index)])))});
-const imageOf = (slide) => slide.left?.image ?? slide.image ?? slide.blocks?.[0]?.image;
+const imageOf = (slide) => slide.start?.image ?? slide.image ?? slide.blocks?.[0]?.image;
 
 const deck = {
-  design: {footer: {left: {text: 'Acme Corp'}, right: {text: '{{slide.number}} / {{deck.slideCount}}'}}},
+  design: {footer: {start: {text: 'Acme Corp'}, end: {text: '{{slide.number}} / {{deck.slideCount}}'}}},
   slides: [
     {title: 'A long title that wraps over several lines because it carries a great many words for the box to hold'},
     {title: 'Body text', text: 'A paragraph of plain text that is long enough to wrap onto a second visual line in its box on the slide.'},
@@ -69,7 +69,7 @@ const entries = await exportDeck(deck);
 }
 
 // Images: the authored relative path or URL comes back while the picture bytes still match.
-const imageDeck = image => ({slides: [{title: 'Picture', left: {image}, 'center+right': {text: 'Beside the picture.'}}]});
+const imageDeck = image => ({slides: [{title: 'Picture', start: {image}, 'center+end': {text: 'Beside the picture.'}}]});
 const withAssets = {imageResolver: src => (src.endsWith('.png') ? {data: png, mediaType: 'image/png'} : undefined)};
 for (const src of ['./pics/chart.png', 'pics/my chart.png', 'https://example.com/pics/chart.png']) {
   const imageEntries = await exportDeck(imageDeck(src), withAssets);

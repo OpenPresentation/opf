@@ -1,0 +1,655 @@
+﻿{
+    "passed":  false,
+    "scope":  "Read-only product baseline, no native domain acceptance or edit qualification",
+    "stages":  [
+                   "create-app:ok",
+                   "empty-visible-minimized:ok",
+                   "venn-1-live-open:ok",
+                   "venn-1-live-export-read:ok",
+                   "venn-1-live-close-owned:ok",
+                   "venn-1-native-open:ok",
+                   "venn-1-native-export-read:ok",
+                   "venn-1-native-close-owned:ok",
+                   "venn-2-live-open:ok",
+                   "venn-2-live-export-read:failed"
+               ],
+    "failure":  "venn-2-live-export-read: Native count/materialization mismatch: expected 2 data nodes; observed 2 data nodes and 0 group items.",
+    "inputs":  [
+                   {
+                       "id":  "venn-1",
+                       "sha256After":  "bcf90fc7447075b8938bb0c51d27d458ec185a262f95a8febcf756ccb9f3cbad",
+                       "relative":  "pptx/venn-1.pptx",
+                       "copySha256After":  "bcf90fc7447075b8938bb0c51d27d458ec185a262f95a8febcf756ccb9f3cbad",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx\\venn-1.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx\\venn-1.pptx",
+                       "spec":  {
+                                    "id":  "venn-1",
+                                    "kind":  "venn",
+                                    "count":  1,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-1.pptx",
+                                                 "sha256":  "bcf90fc7447075b8938bb0c51d27d458ec185a262f95a8febcf756ccb9f3cbad"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-1.pptx",
+                                                   "sha256":  "440b81dd31258d534bd6ed5c9aa8a131d5d8aa60b00a285d90f2a66340efcdd4"
+                                               }
+                                },
+                       "mode":  "live",
+                       "sha256":  "bcf90fc7447075b8938bb0c51d27d458ec185a262f95a8febcf756ccb9f3cbad"
+                   },
+                   {
+                       "id":  "venn-1",
+                       "sha256After":  "440b81dd31258d534bd6ed5c9aa8a131d5d8aa60b00a285d90f2a66340efcdd4",
+                       "relative":  "pptx-shapes/venn-1.pptx",
+                       "copySha256After":  "440b81dd31258d534bd6ed5c9aa8a131d5d8aa60b00a285d90f2a66340efcdd4",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx-shapes\\venn-1.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx-shapes\\venn-1.pptx",
+                       "spec":  {
+                                    "id":  "venn-1",
+                                    "kind":  "venn",
+                                    "count":  1,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-1.pptx",
+                                                 "sha256":  "bcf90fc7447075b8938bb0c51d27d458ec185a262f95a8febcf756ccb9f3cbad"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-1.pptx",
+                                                   "sha256":  "440b81dd31258d534bd6ed5c9aa8a131d5d8aa60b00a285d90f2a66340efcdd4"
+                                               }
+                                },
+                       "mode":  "native",
+                       "sha256":  "440b81dd31258d534bd6ed5c9aa8a131d5d8aa60b00a285d90f2a66340efcdd4"
+                   },
+                   {
+                       "id":  "venn-2",
+                       "sha256After":  "1f055af76d369c341f4cfd46d33e928f38f8ad12e6e0136b8a51d480579f6e87",
+                       "relative":  "pptx/venn-2.pptx",
+                       "copySha256After":  "1f055af76d369c341f4cfd46d33e928f38f8ad12e6e0136b8a51d480579f6e87",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx\\venn-2.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx\\venn-2.pptx",
+                       "spec":  {
+                                    "id":  "venn-2",
+                                    "kind":  "venn",
+                                    "count":  2,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1",
+                                                  "N2"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-2.pptx",
+                                                 "sha256":  "1f055af76d369c341f4cfd46d33e928f38f8ad12e6e0136b8a51d480579f6e87"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-2.pptx",
+                                                   "sha256":  "5df748361e43cfde88e5f38c569a3fb6a2a6980e2c1a1c75650fd3ffe041e048"
+                                               }
+                                },
+                       "mode":  "live",
+                       "sha256":  "1f055af76d369c341f4cfd46d33e928f38f8ad12e6e0136b8a51d480579f6e87"
+                   },
+                   {
+                       "id":  "venn-2",
+                       "sha256After":  "5df748361e43cfde88e5f38c569a3fb6a2a6980e2c1a1c75650fd3ffe041e048",
+                       "relative":  "pptx-shapes/venn-2.pptx",
+                       "copySha256After":  "5df748361e43cfde88e5f38c569a3fb6a2a6980e2c1a1c75650fd3ffe041e048",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx-shapes\\venn-2.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx-shapes\\venn-2.pptx",
+                       "spec":  {
+                                    "id":  "venn-2",
+                                    "kind":  "venn",
+                                    "count":  2,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1",
+                                                  "N2"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-2.pptx",
+                                                 "sha256":  "1f055af76d369c341f4cfd46d33e928f38f8ad12e6e0136b8a51d480579f6e87"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-2.pptx",
+                                                   "sha256":  "5df748361e43cfde88e5f38c569a3fb6a2a6980e2c1a1c75650fd3ffe041e048"
+                                               }
+                                },
+                       "mode":  "native",
+                       "sha256":  "5df748361e43cfde88e5f38c569a3fb6a2a6980e2c1a1c75650fd3ffe041e048"
+                   },
+                   {
+                       "id":  "venn-3",
+                       "sha256After":  "a18ea1c52e19ad3ede3ffb65859d1e38a3e209226babe711689baa2e031bbaa0",
+                       "relative":  "pptx/venn-3.pptx",
+                       "copySha256After":  "a18ea1c52e19ad3ede3ffb65859d1e38a3e209226babe711689baa2e031bbaa0",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx\\venn-3.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx\\venn-3.pptx",
+                       "spec":  {
+                                    "id":  "venn-3",
+                                    "kind":  "venn",
+                                    "count":  3,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1",
+                                                  "N2",
+                                                  "N3"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-3.pptx",
+                                                 "sha256":  "a18ea1c52e19ad3ede3ffb65859d1e38a3e209226babe711689baa2e031bbaa0"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-3.pptx",
+                                                   "sha256":  "b9a0f96c0535656d078c07fa74a3dc70c66152d7e82a095de0ad9ffe98323af0"
+                                               }
+                                },
+                       "mode":  "live",
+                       "sha256":  "a18ea1c52e19ad3ede3ffb65859d1e38a3e209226babe711689baa2e031bbaa0"
+                   },
+                   {
+                       "id":  "venn-3",
+                       "sha256After":  "b9a0f96c0535656d078c07fa74a3dc70c66152d7e82a095de0ad9ffe98323af0",
+                       "relative":  "pptx-shapes/venn-3.pptx",
+                       "copySha256After":  "b9a0f96c0535656d078c07fa74a3dc70c66152d7e82a095de0ad9ffe98323af0",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx-shapes\\venn-3.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx-shapes\\venn-3.pptx",
+                       "spec":  {
+                                    "id":  "venn-3",
+                                    "kind":  "venn",
+                                    "count":  3,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1",
+                                                  "N2",
+                                                  "N3"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-3.pptx",
+                                                 "sha256":  "a18ea1c52e19ad3ede3ffb65859d1e38a3e209226babe711689baa2e031bbaa0"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-3.pptx",
+                                                   "sha256":  "b9a0f96c0535656d078c07fa74a3dc70c66152d7e82a095de0ad9ffe98323af0"
+                                               }
+                                },
+                       "mode":  "native",
+                       "sha256":  "b9a0f96c0535656d078c07fa74a3dc70c66152d7e82a095de0ad9ffe98323af0"
+                   },
+                   {
+                       "id":  "venn-4",
+                       "sha256After":  "e0af058ed6adcb57b7dc711ab76a0e9cdb349c57a7a551d0d762d36a837ead9e",
+                       "relative":  "pptx/venn-4.pptx",
+                       "copySha256After":  "e0af058ed6adcb57b7dc711ab76a0e9cdb349c57a7a551d0d762d36a837ead9e",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx\\venn-4.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx\\venn-4.pptx",
+                       "spec":  {
+                                    "id":  "venn-4",
+                                    "kind":  "venn",
+                                    "count":  4,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1",
+                                                  "N2",
+                                                  "N3",
+                                                  "N4"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-4.pptx",
+                                                 "sha256":  "e0af058ed6adcb57b7dc711ab76a0e9cdb349c57a7a551d0d762d36a837ead9e"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-4.pptx",
+                                                   "sha256":  "f8599ae4a9cab406f3f10027c34e1461fd35c012a657ca5f2389837ba8cd45c7"
+                                               }
+                                },
+                       "mode":  "live",
+                       "sha256":  "e0af058ed6adcb57b7dc711ab76a0e9cdb349c57a7a551d0d762d36a837ead9e"
+                   },
+                   {
+                       "id":  "venn-4",
+                       "sha256After":  "f8599ae4a9cab406f3f10027c34e1461fd35c012a657ca5f2389837ba8cd45c7",
+                       "relative":  "pptx-shapes/venn-4.pptx",
+                       "copySha256After":  "f8599ae4a9cab406f3f10027c34e1461fd35c012a657ca5f2389837ba8cd45c7",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx-shapes\\venn-4.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx-shapes\\venn-4.pptx",
+                       "spec":  {
+                                    "id":  "venn-4",
+                                    "kind":  "venn",
+                                    "count":  4,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1",
+                                                  "N2",
+                                                  "N3",
+                                                  "N4"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-4.pptx",
+                                                 "sha256":  "e0af058ed6adcb57b7dc711ab76a0e9cdb349c57a7a551d0d762d36a837ead9e"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-4.pptx",
+                                                   "sha256":  "f8599ae4a9cab406f3f10027c34e1461fd35c012a657ca5f2389837ba8cd45c7"
+                                               }
+                                },
+                       "mode":  "native",
+                       "sha256":  "f8599ae4a9cab406f3f10027c34e1461fd35c012a657ca5f2389837ba8cd45c7"
+                   },
+                   {
+                       "id":  "venn-5",
+                       "sha256After":  "43656d0acbbf87fdd192178b325610afe074ae1aad87df7e6494e600de1b409f",
+                       "relative":  "pptx/venn-5.pptx",
+                       "copySha256After":  "43656d0acbbf87fdd192178b325610afe074ae1aad87df7e6494e600de1b409f",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx\\venn-5.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx\\venn-5.pptx",
+                       "spec":  {
+                                    "id":  "venn-5",
+                                    "kind":  "venn",
+                                    "count":  5,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1",
+                                                  "N2",
+                                                  "N3",
+                                                  "N4",
+                                                  "N5"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-5.pptx",
+                                                 "sha256":  "43656d0acbbf87fdd192178b325610afe074ae1aad87df7e6494e600de1b409f"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-5.pptx",
+                                                   "sha256":  "ea1513d53b3d86c540ac3194a583a8ad4637e18b00923e01b4e6f04a4797e346"
+                                               }
+                                },
+                       "mode":  "live",
+                       "sha256":  "43656d0acbbf87fdd192178b325610afe074ae1aad87df7e6494e600de1b409f"
+                   },
+                   {
+                       "id":  "venn-5",
+                       "sha256After":  "ea1513d53b3d86c540ac3194a583a8ad4637e18b00923e01b4e6f04a4797e346",
+                       "relative":  "pptx-shapes/venn-5.pptx",
+                       "copySha256After":  "ea1513d53b3d86c540ac3194a583a8ad4637e18b00923e01b4e6f04a4797e346",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx-shapes\\venn-5.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx-shapes\\venn-5.pptx",
+                       "spec":  {
+                                    "id":  "venn-5",
+                                    "kind":  "venn",
+                                    "count":  5,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1",
+                                                  "N2",
+                                                  "N3",
+                                                  "N4",
+                                                  "N5"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-5.pptx",
+                                                 "sha256":  "43656d0acbbf87fdd192178b325610afe074ae1aad87df7e6494e600de1b409f"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-5.pptx",
+                                                   "sha256":  "ea1513d53b3d86c540ac3194a583a8ad4637e18b00923e01b4e6f04a4797e346"
+                                               }
+                                },
+                       "mode":  "native",
+                       "sha256":  "ea1513d53b3d86c540ac3194a583a8ad4637e18b00923e01b4e6f04a4797e346"
+                   },
+                   {
+                       "id":  "venn-6",
+                       "sha256After":  "5543c7473a2f854ddb7414900f1a200ac62339d8900c89a85d3a6012a896e9dd",
+                       "relative":  "pptx/venn-6.pptx",
+                       "copySha256After":  "5543c7473a2f854ddb7414900f1a200ac62339d8900c89a85d3a6012a896e9dd",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx\\venn-6.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx\\venn-6.pptx",
+                       "spec":  {
+                                    "id":  "venn-6",
+                                    "kind":  "venn",
+                                    "count":  6,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1",
+                                                  "N2",
+                                                  "N3",
+                                                  "N4",
+                                                  "N5",
+                                                  "N6"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-6.pptx",
+                                                 "sha256":  "5543c7473a2f854ddb7414900f1a200ac62339d8900c89a85d3a6012a896e9dd"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-6.pptx",
+                                                   "sha256":  "b3ac1889acc329631358082938dcf4b0c8e3db820c0bdad6177cda214af7f509"
+                                               }
+                                },
+                       "mode":  "live",
+                       "sha256":  "5543c7473a2f854ddb7414900f1a200ac62339d8900c89a85d3a6012a896e9dd"
+                   },
+                   {
+                       "id":  "venn-6",
+                       "sha256After":  "b3ac1889acc329631358082938dcf4b0c8e3db820c0bdad6177cda214af7f509",
+                       "relative":  "pptx-shapes/venn-6.pptx",
+                       "copySha256After":  "b3ac1889acc329631358082938dcf4b0c8e3db820c0bdad6177cda214af7f509",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx-shapes\\venn-6.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx-shapes\\venn-6.pptx",
+                       "spec":  {
+                                    "id":  "venn-6",
+                                    "kind":  "venn",
+                                    "count":  6,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1",
+                                                  "N2",
+                                                  "N3",
+                                                  "N4",
+                                                  "N5",
+                                                  "N6"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-6.pptx",
+                                                 "sha256":  "5543c7473a2f854ddb7414900f1a200ac62339d8900c89a85d3a6012a896e9dd"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-6.pptx",
+                                                   "sha256":  "b3ac1889acc329631358082938dcf4b0c8e3db820c0bdad6177cda214af7f509"
+                                               }
+                                },
+                       "mode":  "native",
+                       "sha256":  "b3ac1889acc329631358082938dcf4b0c8e3db820c0bdad6177cda214af7f509"
+                   },
+                   {
+                       "id":  "venn-7",
+                       "sha256After":  "57c276c8db2f5afe769537800544ce436231fb81859c6556903cf264a776779b",
+                       "relative":  "pptx/venn-7.pptx",
+                       "copySha256After":  "57c276c8db2f5afe769537800544ce436231fb81859c6556903cf264a776779b",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx\\venn-7.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx\\venn-7.pptx",
+                       "spec":  {
+                                    "id":  "venn-7",
+                                    "kind":  "venn",
+                                    "count":  7,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1",
+                                                  "N2",
+                                                  "N3",
+                                                  "N4",
+                                                  "N5",
+                                                  "N6",
+                                                  "N7"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-7.pptx",
+                                                 "sha256":  "57c276c8db2f5afe769537800544ce436231fb81859c6556903cf264a776779b"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-7.pptx",
+                                                   "sha256":  "484ab25bb4439f4ae0d6f7dcc0590fa5dba2d9a031a8bd42e3270b3ae43fc1ea"
+                                               }
+                                },
+                       "mode":  "live",
+                       "sha256":  "57c276c8db2f5afe769537800544ce436231fb81859c6556903cf264a776779b"
+                   },
+                   {
+                       "id":  "venn-7",
+                       "sha256After":  "484ab25bb4439f4ae0d6f7dcc0590fa5dba2d9a031a8bd42e3270b3ae43fc1ea",
+                       "relative":  "pptx-shapes/venn-7.pptx",
+                       "copySha256After":  "484ab25bb4439f4ae0d6f7dcc0590fa5dba2d9a031a8bd42e3270b3ae43fc1ea",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-venn-products-04\\result\\pptx-shapes\\venn-7.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx-shapes\\venn-7.pptx",
+                       "spec":  {
+                                    "id":  "venn-7",
+                                    "kind":  "venn",
+                                    "count":  7,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                    "items":  [
+                                                  "N1",
+                                                  "N2",
+                                                  "N3",
+                                                  "N4",
+                                                  "N5",
+                                                  "N6",
+                                                  "N7"
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/venn-7.pptx",
+                                                 "sha256":  "57c276c8db2f5afe769537800544ce436231fb81859c6556903cf264a776779b"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/venn-7.pptx",
+                                                   "sha256":  "484ab25bb4439f4ae0d6f7dcc0590fa5dba2d9a031a8bd42e3270b3ae43fc1ea"
+                                               }
+                                },
+                       "mode":  "native",
+                       "sha256":  "484ab25bb4439f4ae0d6f7dcc0590fa5dba2d9a031a8bd42e3270b3ae43fc1ea"
+                   }
+               ],
+    "controls":  [
+                     {
+                         "shapes":  [
+                                        {
+                                            "left":  43.200000762939453,
+                                            "rotation":  0,
+                                            "name":  "OPF heading slides.0.title line 0",
+                                            "complexScript":  "+mj-cs",
+                                            "shapeType":  14,
+                                            "transparency":  1,
+                                            "alignment":  1,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "lines":  [
+                                                          {
+                                                              "left":  43.2,
+                                                              "width":  429.13,
+                                                              "top":  43.2,
+                                                              "height":  48.6,
+                                                              "text":  "Measured venn geometry"
+                                                          }
+                                                      ],
+                                            "type":  1,
+                                            "size":  40.5,
+                                            "text":  "Measured venn geometry",
+                                            "eastAsian":  "Source Sans 3",
+                                            "latin":  "Source Sans 3",
+                                            "top":  43.200000762939453,
+                                            "fillType":  -2,
+                                            "height":  49.409999847412109,
+                                            "width":  873.5999755859375
+                                        }
+                                    ],
+                         "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx\\venn-1.pptx",
+                         "id":  "venn-1",
+                         "mode":  "live",
+                         "smartArt":  [
+                                          {
+                                              "layoutName":  "Basic Venn",
+                                              "nodes":  1,
+                                              "layout":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+                                              "dataNodes":  [
+                                                                {
+                                                                    "children":  0,
+                                                                    "text":  "N1",
+                                                                    "type":  1,
+                                                                    "level":  1,
+                                                                    "parent":  null,
+                                                                    "index":  1
+                                                                }
+                                                            ],
+                                              "items":  [
+                                                            {
+                                                                "left":  287.09771728515625,
+                                                                "rotation":  0,
+                                                                "name":  "",
+                                                                "complexScript":  "+mn-cs",
+                                                                "shapeType":  1,
+                                                                "transparency":  0.5,
+                                                                "alignment":  2,
+                                                                "spacing":  {
+                                                                                "rule":  0,
+                                                                                "within":  43.92,
+                                                                                "before":  0,
+                                                                                "after":  0
+                                                                            },
+                                                                "lines":  [
+                                                                              {
+                                                                                  "left":  416.209961,
+                                                                                  "width":  41.18504,
+                                                                                  "top":  169.99472,
+                                                                                  "height":  45.81504,
+                                                                                  "text":  "N1"
+                                                                              }
+                                                                          ],
+                                                                "type":  9,
+                                                                "size":  36,
+                                                                "text":  "N1",
+                                                                "eastAsian":  "Source Sans 3",
+                                                                "latin":  "Source Sans 3",
+                                                                "top":  110.99551391601563,
+                                                                "fillType":  1,
+                                                                "height":  385.80447387695313,
+                                                                "width":  385.80447387695313
+                                                            }
+                                                        ],
+                                              "frame":  {
+                                                            "left":  43.2,
+                                                            "width":  873.6,
+                                                            "top":  110.995514,
+                                                            "height":  385.804474
+                                                        }
+                                          }
+                                      ]
+                     },
+                     {
+                         "shapes":  [
+                                        {
+                                            "width":  385.80447387695313,
+                                            "height":  385.80447387695313,
+                                            "shapeType":  1,
+                                            "transparency":  0.5,
+                                            "type":  9,
+                                            "left":  287.09771728515625,
+                                            "name":  "OPF arrangement slides.0.items node 0",
+                                            "fillType":  1,
+                                            "top":  110.99551391601563,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "left":  43.200000762939453,
+                                            "rotation":  0,
+                                            "name":  "OPF heading slides.0.title line 0",
+                                            "complexScript":  "+mj-cs",
+                                            "shapeType":  14,
+                                            "transparency":  1,
+                                            "alignment":  1,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "lines":  [
+                                                          {
+                                                              "left":  43.2,
+                                                              "width":  429.13,
+                                                              "top":  43.2,
+                                                              "height":  48.6,
+                                                              "text":  "Measured venn geometry"
+                                                          }
+                                                      ],
+                                            "type":  1,
+                                            "size":  40.5,
+                                            "text":  "Measured venn geometry",
+                                            "eastAsian":  "Source Sans 3",
+                                            "latin":  "Source Sans 3",
+                                            "top":  43.200000762939453,
+                                            "fillType":  -2,
+                                            "height":  49.409999847412109,
+                                            "width":  873.5999755859375
+                                        },
+                                        {
+                                            "left":  459.40802001953125,
+                                            "rotation":  0,
+                                            "name":  "OPF list slides.0.items line 0",
+                                            "complexScript":  "+mn-cs",
+                                            "shapeType":  17,
+                                            "transparency":  1,
+                                            "alignment":  1,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "lines":  [
+                                                          {
+                                                              "left":  459.40802,
+                                                              "width":  41.13,
+                                                              "top":  281.9377,
+                                                              "height":  43.2,
+                                                              "text":  "N1"
+                                                          }
+                                                      ],
+                                            "type":  1,
+                                            "size":  36,
+                                            "text":  "N1",
+                                            "eastAsian":  "Source Sans 3",
+                                            "latin":  "Source Sans 3",
+                                            "top":  281.93771362304688,
+                                            "fillType":  -2,
+                                            "height":  43.919998168945313,
+                                            "width":  41.184017181396484
+                                        }
+                                    ],
+                         "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx-shapes\\venn-1.pptx",
+                         "id":  "venn-1",
+                         "mode":  "native",
+                         "smartArt":  [
+
+                                      ]
+                     }
+                 ]
+}

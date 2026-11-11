@@ -15,7 +15,7 @@ const cases = [
   {label: 'named theme', deck: {design: {theme: 'classic'}, slides: [{layout: 'cover', title: 'Cover'}]}, theme: defaultCatalog.themes.classic.name, masters: 1},
   {label: 'authored theme', deck: {design: {theme: 'authored'}, slides: [{layout: 'text', title: 'Text', text: 'Body'}]}, theme: catalog.themes.authored.name, masters: 1},
   {label: 'embedded theme', deck: {design: {theme: 'embedded'}, catalogs: {default: {source: defaultCatalog.source, themes: {embedded: embeddedTheme}}}, slides: [{layout: 'text', title: 'Embedded', text: 'Body'}]}, theme: embeddedTheme.name, masters: 1, importCatalog: {...catalog, themes: {...catalog.themes, embedded: embeddedTheme}}},
-  {label: 'script profiles and custom layouts', deck: {language: 'ja', design: {theme: 'classic', header: {left: {text: 'Shared header'}}},
+  {label: 'script profiles and custom layouts', deck: {language: 'ja', design: {theme: 'classic', header: {start: {text: 'Shared header'}}},
     catalogs: {custom: {layouts: {studio: {name: 'Studio & Notes', direction: 'column', regions: [{name: 'title'}, {name: 'body', accepts: ['text']}]}}}},
     slides: [{layout: 'text', title: '日本語', text: 'ひらがな'},
       {layout: 'studio', title: '日本語', text: 'カタカナ', design: {fontScheme: 'ms-mincho'}},
@@ -23,7 +23,7 @@ const cases = [
     theme: defaultCatalog.themes.classic.name, masters: 2},
 ];
 cases.push({...cases.at(-1), label: 'default theme and script profiles',
-  deck: {...cases.at(-1).deck, design: {header: {left: {text: 'Shared header'}}}}, theme: 'pptx.gallery'});
+  deck: {...cases.at(-1).deck, design: {header: {start: {text: 'Shared header'}}}}, theme: 'pptx.gallery'});
 for (const {label, deck, theme, masters, importCatalog = catalog} of cases) {
   const before = structuredClone(deck);
   const bytes = await toPptx(deck, {...fixed, catalogs: [catalog]});

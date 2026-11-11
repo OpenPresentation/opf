@@ -21,26 +21,26 @@ for (const name of ['edits', 'edits-bare']) {
   // Apply to All: Date and time on (Update automatically); slide 2: Footer retyped; slide 3: Slide number off; slide 6 (its footer
   // hidden in OPF): Footer and Slide number on.
   const {document, issues, footers} = await read(name);
-  const dated = {...deckFooter, left: {...deckFooter.left, date: true}};
+  const dated = {...deckFooter, start: {...deckFooter.start, date: true}};
   assert.deepEqual(document.design.footer, dated, `${name}: the date added to every slide is the deck's, in the zone of the footer text`);
-  assert.deepEqual(footers.slice(0, 5), [undefined, {...dated, left: {text: 'Acme Labs', date: true}}, {left: dated.left, center: dated.center}, undefined, undefined], `${name}: slides 2 and 3 keep their own change`);
-  assert.deepEqual(footers[5], {left: {date: true, text: 'Added in PowerPoint'}, right: {text: '{{slide.number}}'}}, `${name}: the footer turned on where OPF hid it`);
+  assert.deepEqual(footers.slice(0, 5), [undefined, {...dated, start: {text: 'Acme Labs', date: true}}, {start: dated.start, center: dated.center}, undefined, undefined], `${name}: slides 2 and 3 keep their own change`);
+  assert.deepEqual(footers[5], {start: {date: true, text: 'Added in PowerPoint'}, end: {text: '{{slide.number}}'}}, `${name}: the footer turned on where OPF hid it`);
   assert.deepEqual(issues.filter(issue => issue.code === 'invalid-furniture-provenance'), [], `${name}: no furniture provenance is damaged`);
 }
 
 for (const name of ['apply-all', 'apply-all-bare']) {
   // Apply to All: Date and time Fixed "Q4 2026", Footer retyped "Acme Group", Slide number off.
   const {document, footers} = await read(name);
-  assert.deepEqual(document.design.footer, {left: {text: 'Acme Group', date: 'Q4 2026'}, center: deckFooter.center}, `${name}: the deck's footer changed`);
-  assert.deepEqual(footers, [undefined, undefined, undefined, undefined, undefined, {left: {date: 'Q4 2026', text: 'Acme Group'}}], `${name}: the slide OPF drew without a footer shows only the dialog's parts`);
+  assert.deepEqual(document.design.footer, {start: {text: 'Acme Group', date: 'Q4 2026'}, center: deckFooter.center}, `${name}: the deck's footer changed`);
+  assert.deepEqual(footers, [undefined, undefined, undefined, undefined, undefined, {start: {date: 'Q4 2026', text: 'Acme Group'}}], `${name}: the slide OPF drew without a footer shows only the dialog's parts`);
 }
 
 {
   // Apply to All: Date and time on, Update automatically, the fourth format (November 6, 2026).
   const {document, footers} = await read('date-format');
-  assert.deepEqual(document.design.footer, {...deckFooter, left: {...deckFooter.left, date: true, dateFormat: 'MMMM d, yyyy'}});
+  assert.deepEqual(document.design.footer, {...deckFooter, start: {...deckFooter.start, date: true, dateFormat: 'MMMM d, yyyy'}});
   assert.deepEqual(footers.slice(0, 5), [undefined, undefined, undefined, undefined, undefined]);
-  assert.deepEqual(footers[5], {left: {date: true, dateFormat: 'MMMM d, yyyy'}});
+  assert.deepEqual(footers[5], {start: {date: true, dateFormat: 'MMMM d, yyyy'}});
 }
 
 {
@@ -53,8 +53,8 @@ for (const name of ['apply-all', 'apply-all-bare']) {
   }
   const document = await fromPptx(zipSync(entries));
   assert.equal(validate(document, {only: ['format']}).valid, true);
-  assert.deepEqual(document.design.footer, {left: {text: 'Acme Corp', date: true}, right: {text: 'Page {{slide.number}} of 6'}}, 'stripped: the placeholders are the deck footer');
-  assert.deepEqual(document.slides.map(slide => slide.design?.footer), [undefined, {left: {text: 'Acme Labs', date: true}, right: {text: 'Page {{slide.number}} of 6'}}, {left: {text: 'Acme Corp', date: true}}, undefined, undefined, {left: {date: true, text: 'Added in PowerPoint'}, right: {text: '{{slide.number}}'}}]);
+  assert.deepEqual(document.design.footer, {start: {text: 'Acme Corp', date: true}, end: {text: 'Page {{slide.number}} of 6'}}, 'stripped: the placeholders are the deck footer');
+  assert.deepEqual(document.slides.map(slide => slide.design?.footer), [undefined, {start: {text: 'Acme Labs', date: true}, end: {text: 'Page {{slide.number}} of 6'}}, {start: {text: 'Acme Corp', date: true}}, undefined, undefined, {start: {date: true, text: 'Added in PowerPoint'}, end: {text: '{{slide.number}}'}}]);
 }
 
 console.log('Header & Footer dialog: 5 PowerPoint-saved decks (per-slide edits and Apply to All, full provenance, provenance: false and stripped tags, a date format) import their changes.');

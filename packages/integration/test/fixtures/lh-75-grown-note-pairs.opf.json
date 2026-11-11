@@ -1,0 +1,90 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Growing table-note pairs from LH-27 b15",
+  "language": "en",
+  "design": {
+    "background": "dark2"
+  },
+  "slides": [
+    {
+      "layout": "table",
+      "title": "Operating Model",
+      "blocks": [
+        {
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Pricing",
+                "Program lead",
+                "At risk",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "On track",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "Watch",
+                "Add weekly office hours"
+              ]
+            ]
+          }
+        },
+        {
+          "text": "Northbeam Software should focus the next cycle on select the packaging move that improves conversion and expansion while making the operating tradeoffs clear to pricing stakeholders."
+        }
+      ],
+      "id": "s23"
+    },
+    {
+      "layout": "table",
+      "title": "Why This Matters",
+      "blocks": [
+        {
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Corporate strategy",
+                "Program lead",
+                "Watch",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "At risk",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "On track",
+                "Add weekly office hours"
+              ]
+            ]
+          }
+        },
+        {
+          "text": "Northstar Studio should focus the next cycle on focus leadership debate on the few choices that matter while making the operating tradeoffs clear to corporate strategy stakeholders."
+        }
+      ],
+      "id": "s41"
+    }
+  ]
+}

@@ -206,18 +206,18 @@ test('built-ins are listed with kind, availability and uses for pickers', () => 
 });
 
 test('header and footer text carries speaker and organization built-ins in the author order', () => {
-  const presentation = deck({design: {footer: {left: {text: '{{organization.name}}\n{{speaker.name}}, {{speaker.title}}'}, right: {text: '{{speaker.name}}'}}}});
+  const presentation = deck({design: {footer: {start: {text: '{{organization.name}}\n{{speaker.name}}, {{speaker.title}}'}, end: {text: '{{speaker.name}}'}}}});
   const {presentation: concrete} = resolved(presentation);
-  assert.equal(concrete.design.footer.left.text, 'Acme Corp\nAda Lovelace, CTO');
+  assert.equal(concrete.design.footer.start.text, 'Acme Corp\nAda Lovelace, CTO');
   const geometry = composeSlide({id: 'cover', title: 'Hello'}, {width: 1280, height: 720, presentation: concrete, slideIndex: 0});
   assert.deepEqual(geometry.diagnostics, []);
   const parts = geometry.furniture.parts;
-  assert.deepEqual(parts.map((part) => [part.zone, part.field, part.text]), [['left', 'text', 'Acme Corp\nAda Lovelace, CTO'], ['right', 'text', 'Ada Lovelace']]);
+  assert.deepEqual(parts.map((part) => [part.zone, part.field, part.text]), [['start', 'text', 'Acme Corp\nAda Lovelace, CTO'], ['end', 'text', 'Ada Lovelace']]);
   const validation = check(presentation);
   assert.equal(validation.valid, true, JSON.stringify(errorsOf(validation)));
   // FA-31: the 0.16 furniture flags are gone, with no alias.
   for (const key of ['organization', 'speaker', 'section', 'slideNumber', 'slideNumberFormat']) {
-    const old = deck({design: {footer: {left: {[key]: key === 'slideNumberFormat' ? '{current}' : true}}}});
+    const old = deck({design: {footer: {start: {[key]: key === 'slideNumberFormat' ? '{current}' : true}}}});
     assert.equal(check(old).valid, false, key);
   }
 });

@@ -1,0 +1,21 @@
+{
+  "scope": "BUILTINS_ONLY_NOT_PRODUCT_BUILD_OR_BROWSER",
+  "checks": [
+    "Exact source/manifest/driver/Node binding passes",
+    "Reject altered binding for build-current.mjs",
+    "Reject altered binding for run-current.mjs",
+    "Reject altered binding for current-browser-entry.mjs",
+    "Reject altered binding for bindings.mjs",
+    "Reject altered binding for pnpm-lock.yaml",
+    "Reject altered binding for package.json",
+    "Reject changed source-manifest identity",
+    "Reject changed asset-input bytes",
+    "Reject changed asset-output bytes",
+    "Explicit reviewed projection pins/inverse/datasets/first16/raw preservation pass",
+    "Reject altered typed inverse receipt",
+    "Actual owned Node tracer preserves read/copy bytes and binds imported module plus data input"
+  ],
+  "node": "v24.21.0",
+  "productBuilds": 0,
+  "browsers": 0
+}

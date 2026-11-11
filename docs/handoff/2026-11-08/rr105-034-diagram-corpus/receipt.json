@@ -1,0 +1,32 @@
+{
+  "scope": "Narrow source-only qualification manifest correction against af2fd; no native acceptance claimed",
+  "focusedTests": {
+    "before": "missing DOT syntax failed",
+    "after": "5/5 pass"
+  },
+  "mappedChanged": {
+    "seconds": 103,
+    "passed": [
+      "build",
+      "biome",
+      "fragments",
+      "LibreOffice controls",
+      "release report",
+      "skill commands",
+      "stability"
+    ],
+    "initialSparseFailures": [
+      "native acceptance",
+      "gallery tracker",
+      "text"
+    ],
+    "restoredExactGitBlobs": 15293,
+    "restoredBytes": 419657987,
+    "afterRestore": {
+      "text": "PASS14518scanned files",
+      "native": "48/49PASS; existing Windows EPERM symlink fixture permission",
+      "gallery": "17/18PASS; inherited strict generated tracker staleness105vs110"
+    }
+  },
+  "fullIntegrationAndNativeRemaining": true
+}

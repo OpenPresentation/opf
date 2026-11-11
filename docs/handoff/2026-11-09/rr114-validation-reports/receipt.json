@@ -1,0 +1,314 @@
+{
+  "schemaVersion": 1,
+  "base": "e7dc37096a7332a65ae2af8c37e2283790408650",
+  "source": "3ef13409c6fb6d49b0aa47bbb809b6f2100f13cf",
+  "tree": "679691c7759ba4793aab0afaa6ab251c6fca7507",
+  "files": [
+    {
+      "path": "changes/rr-114-validation-font-reports.md",
+      "blob": "6b78830c73b1b28b03fb3c2b05ef6a14da8cd462"
+    },
+    {
+      "path": "packages/cli/src/validate.ts",
+      "blob": "6d86790fee958c60f7311cbb7ff52cb7e0bb6a96"
+    },
+    {
+      "path": "packages/cli/test/validation-fonts.test.mjs",
+      "blob": "f6577cf3ca8b43e3e9d4dfe795579ab1041b22a5"
+    },
+    {
+      "path": "packages/javascript/src/node/paginate.ts",
+      "blob": "d6e607b05fead139222a408c22dd2b1ad76bb000"
+    },
+    {
+      "path": "packages/javascript/src/node/peers.ts",
+      "blob": "2122934d048d13ed2b3f6e33f8b027b106fabdaf"
+    },
+    {
+      "path": "packages/javascript/src/node/validation-fonts.ts",
+      "blob": "97adc772dc30f96503160f49b2e819e3764ef317"
+    },
+    {
+      "path": "packages/javascript/test/node-validation-fonts.test.mjs",
+      "blob": "62f96cf4db83cac32c4862250afdd814952b7697"
+    },
+    {
+      "path": "packages/mcp/src/stdio.ts",
+      "blob": "44efafe19f9b16a69289073dc6d00cc38a3abc0a"
+    },
+    {
+      "path": "packages/mcp/test/validation-fonts.test.mjs",
+      "blob": "bdde4f0c1861a05b7a4db5e6fc2b42c47e143d2b"
+    }
+  ],
+  "protectedObjects": [
+    {
+      "path": "packages/render",
+      "object": "fe9d2eb653c92ca6da957462ad3a25a8ebf2cdf4"
+    },
+    {
+      "path": "packages/pptx",
+      "object": "7b1629564fd013d98ec522971fb2c5fb875f33cd"
+    },
+    {
+      "path": "packages/editor",
+      "object": "c029edc9b5bdb45ce3122b88df721b8ace478274"
+    },
+    {
+      "path": "packages/gallery",
+      "object": "609eb292785d0103295a7a2d9eb2fd09c6fbf835"
+    },
+    {
+      "path": "spec",
+      "object": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274"
+    },
+    {
+      "path": "scripts",
+      "object": "c75be32ff561d9ee5e6e4a15b78b356ec2eaa7de"
+    },
+    {
+      "path": ".github",
+      "object": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4"
+    },
+    {
+      "path": "package.json",
+      "object": "846e509ef00827a8efe72c059ca3238f88be6fbb"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "object": "3432ab613e493c84d6eea74cb68d30be08720102"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "object": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    }
+  ],
+  "raw": {
+    "path": "raw.zip",
+    "bytes": 40877,
+    "sha256": "e835181c074e3b8cb47d8dbea3f19bfd2e61b3322a0bb78703cfab69f7f28db4",
+    "members": 31,
+    "decodedBytes": 124718,
+    "files": [
+      {
+        "path": "baseline-build.exit.json",
+        "bytes": 69,
+        "sha256": "109074cf0b180353ffae6feb69bc02a3f18040c11f43ba8703212a8109321aad"
+      },
+      {
+        "path": "baseline-build.log",
+        "bytes": 14840,
+        "sha256": "9b5d0b95534ba70f551f178515014ac32a78fb513f83a69041322ab42fb9c750"
+      },
+      {
+        "path": "baseline-probe.exit.json",
+        "bytes": 69,
+        "sha256": "55121bbed2992fef0e1d68d39c95370bdceb76975445298a60aa5165fc576817"
+      },
+      {
+        "path": "baseline-probe.json",
+        "bytes": 8109,
+        "sha256": "c13cf757611287c55a22789f9486372da4073af70142710742283a965b246dd3"
+      },
+      {
+        "path": "baseline-probe.log",
+        "bytes": 7860,
+        "sha256": "f3f9f4d28bdc7d4ec8bbf7495598b65ab1f0577f9807cd0ffb0ef3eed954262d"
+      },
+      {
+        "path": "biome.exit.json",
+        "bytes": 69,
+        "sha256": "25c06353777013c7ecc4821cf1c06d2cd691d5db356060e024ff9895ffeecb33"
+      },
+      {
+        "path": "biome.log",
+        "bytes": 712,
+        "sha256": "5edda5ce3060b007c024b7debe3edef736e60f35c5cd50be2b0ff43f279a71a1"
+      },
+      {
+        "path": "candidate-build-01.exit.json",
+        "bytes": 69,
+        "sha256": "44d156a09a5be9fa8160d1425c1b4eccef375e4d927cdaf49f3c78f150f43839"
+      },
+      {
+        "path": "candidate-build-01.log",
+        "bytes": 14840,
+        "sha256": "b55bc7fbc9d29e2957c6e4f7b9cd6758eb0ec2f4036add3eacbbd3253da6fae4"
+      },
+      {
+        "path": "candidate-probe.exit.json",
+        "bytes": 69,
+        "sha256": "3157a67cc69db33e7b40122fd29d0d165fdc1495f1bce69557bdc5d36291055f"
+      },
+      {
+        "path": "candidate-probe.json",
+        "bytes": 10190,
+        "sha256": "48fa1c501449c5d233bd5ba54aaecc1bda5022baea9bd6e0edc110e14706ed99"
+      },
+      {
+        "path": "candidate-probe.log",
+        "bytes": 289,
+        "sha256": "88b5a6846ee8013221336fcb04dc82122c730621d03f9ffd2cd4026b6f2e6655"
+      },
+      {
+        "path": "existing-cli.exit.json",
+        "bytes": 69,
+        "sha256": "f94abdbd7d8599298915426dcb9e2c01bea63dfd163c3c55933994d248aab2a5"
+      },
+      {
+        "path": "existing-cli.log",
+        "bytes": 1568,
+        "sha256": "052a80073041c255c1a09901706f46a86c8e0ff1b8b7ce027c4f464b1aaf4112"
+      },
+      {
+        "path": "existing-mcp-validation.exit.json",
+        "bytes": 69,
+        "sha256": "080c1bc264ea820b67677eb42754d31648a1d43fa729f0752a78c81dc2f4586e"
+      },
+      {
+        "path": "existing-mcp-validation.log",
+        "bytes": 587,
+        "sha256": "abeac50bdab1c9dc6b1393c89edfafd1b06ec825cb4bc8a328ac958ace58a474"
+      },
+      {
+        "path": "focused-01.exit.json",
+        "bytes": 69,
+        "sha256": "beb512bcaa7f2a1f0904bdaf40a2a441fb2363897302a46a4f6c17d91ceea698"
+      },
+      {
+        "path": "focused-01.log",
+        "bytes": 1000,
+        "sha256": "096e7e90728f590efe999027e895a47afa742720c2fb0771b7d0c962567824e5"
+      },
+      {
+        "path": "install.exit.json",
+        "bytes": 69,
+        "sha256": "9defe194dc7c6cd02dfe10cea0d2a34681a5558a971d80024b9e21efe0683ca9"
+      },
+      {
+        "path": "install.log",
+        "bytes": 4270,
+        "sha256": "769569a1d630bcd40f45506957de909c41a88643bfc27dbb2d2e1249b75ed0bd"
+      },
+      {
+        "path": "probe.mjs",
+        "bytes": 1888,
+        "sha256": "c3bde0d85dcc17924c43f17007c04638dfdcaa179cac346830605c0e4ffb3cac"
+      },
+      {
+        "path": "qualified-source/changes/rr-114-validation-font-reports.md",
+        "bytes": 415,
+        "sha256": "b74175d2387976eaa70bd50f9cdfe6c5ddf18a1b7b1e244ee4e11ff6571e4644"
+      },
+      {
+        "path": "qualified-source/packages/cli/src/validate.ts",
+        "bytes": 18588,
+        "sha256": "4926bd6a840f946cbc02804e044dbf1c4dd1b48242c36dcb5f781d5e65762c24"
+      },
+      {
+        "path": "qualified-source/packages/cli/test/validation-fonts.test.mjs",
+        "bytes": 3351,
+        "sha256": "ca5399c5872c50e171e12541c677c9dfb03392fc696a77ee05e8479548f89d7c"
+      },
+      {
+        "path": "qualified-source/packages/javascript/src/node/paginate.ts",
+        "bytes": 4690,
+        "sha256": "5c94da7405d02b276bec4dfac893ba5ec83d62256b79a1b9b541c24115239947"
+      },
+      {
+        "path": "qualified-source/packages/javascript/src/node/peers.ts",
+        "bytes": 14548,
+        "sha256": "9d2a7249a36e5f8d9e6ed36286a199b7800b3966bdffea49c395a30911da50db"
+      },
+      {
+        "path": "qualified-source/packages/javascript/src/node/validation-fonts.ts",
+        "bytes": 1232,
+        "sha256": "fa3da692cc6e124cfb3d8b439b3384d99be3a0c8cfb2e050fa244f2103f2da76"
+      },
+      {
+        "path": "qualified-source/packages/javascript/test/node-validation-fonts.test.mjs",
+        "bytes": 3874,
+        "sha256": "14fb1f38b7691d0cf410143bd27d6011e68f30111c466b4262e10d3595e2513e"
+      },
+      {
+        "path": "qualified-source/packages/mcp/src/stdio.ts",
+        "bytes": 5314,
+        "sha256": "f59033d492ad9bea9356e3c4d7ad1b4b44190ad399a801d6c19bbd0d35cbcf40"
+      },
+      {
+        "path": "qualified-source/packages/mcp/test/validation-fonts.test.mjs",
+        "bytes": 2423,
+        "sha256": "f3bd6848ce862fc68d16f1b327521f3177fb4a2e9a5d00e5d7f57e727ec65017"
+      },
+      {
+        "path": "source-binding.json",
+        "bytes": 3509,
+        "sha256": "73db1cd04cb1696b0279e9414c369711ee9879c8a1b9aa9b1086189b67e96761"
+      }
+    ]
+  },
+  "outcomes": [
+    {
+      "log": "install.log",
+      "exit": "install.exit.json",
+      "exitCode": 0
+    },
+    {
+      "log": "baseline-build.log",
+      "exit": "baseline-build.exit.json",
+      "exitCode": 0
+    },
+    {
+      "log": "baseline-probe.log",
+      "exit": "baseline-probe.exit.json",
+      "exitCode": 1
+    },
+    {
+      "log": "biome.log",
+      "exit": "biome.exit.json",
+      "exitCode": 0
+    },
+    {
+      "log": "candidate-build-01.log",
+      "exit": "candidate-build-01.exit.json",
+      "exitCode": 0
+    },
+    {
+      "log": "focused-01.log",
+      "exit": "focused-01.exit.json",
+      "exitCode": 0
+    },
+    {
+      "log": "candidate-probe.log",
+      "exit": "candidate-probe.exit.json",
+      "exitCode": 0
+    },
+    {
+      "log": "existing-cli.log",
+      "exit": "existing-cli.exit.json",
+      "exitCode": 0
+    },
+    {
+      "log": "existing-mcp-validation.log",
+      "exit": "existing-mcp-validation.exit.json",
+      "exitCode": 0
+    }
+  ],
+  "counts": {
+    "newGroups": 8,
+    "existingCli": 14,
+    "existingMcp": 4,
+    "baselineBadSources": 3,
+    "baselineCliExit": 2,
+    "candidateCliExit": 1
+  },
+  "acceptance": {
+    "rootSourceReviewed": true,
+    "focused": true,
+    "existingNeighbors": true,
+    "fullMapped": false,
+    "ci": false,
+    "native": false,
+    "release": false
+  }
+}

@@ -179,11 +179,11 @@
     },
     {
       "id": "three",
-      "left": {
+      "start": {
         "id": "left-col",
         "text": "Left text"
       },
-      "right": {
+      "end": {
         "bullets": [
           "right one",
           "right two"

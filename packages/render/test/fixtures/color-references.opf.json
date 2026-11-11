@@ -114,7 +114,7 @@
     {
       "id": "addressable-payloads",
       "title": "Ids Below Slide Level",
-      "left": {
+      "start": {
         "id": "kpi-adoption",
         "metric": {
           "value": "2.1x",
@@ -127,7 +127,7 @@
           }
         }
       },
-      "center+right": {
+      "center+end": {
         "id": "kpi-detail",
         "type": "group",
         "blocks": [

@@ -17,6 +17,8 @@ const LEAF_BLOCK = /^(slides\.(?:0|[1-9][0-9]*)(?:\.blocks\.(?:0|[1-9][0-9]*))+)
 const HANDLES = { nw: [0, 0], n: [0.5, 0], ne: [1, 0], e: [1, 0.5], se: [1, 1], s: [0.5, 1], sw: [0, 1], w: [0, 0.5] };
 const CURSORS = { nw: "nwse-resize", se: "nwse-resize", ne: "nesw-resize", sw: "nesw-resize", n: "ns-resize", s: "ns-resize", e: "ew-resize", w: "ew-resize" };
 const MIN_FRACTION = 0.01;
+// A shape may be larger than the slide (it bleeds off it), subject to finite representable geometry.
+const MAX_FRACTION = Number.MAX_VALUE;
 const round4 = (value) => Math.round(value * 10000) / 10000;
 const MOVE_THRESHOLD = 4;
 
@@ -65,8 +67,8 @@ export function createOverlayTools(root, options) {
     const W = lastGeometry.width;
     const H = lastGeometry.height;
     const box = entry.shape.box;
-    // The deck's direction: x counts from the right edge in a right-to-left deck (the entry's x tells which way it is drawn).
-    const rtl = raw.x !== undefined ? Math.abs(box.x - raw.x * W) > 1 && Math.abs(box.x - (W - (raw.x + (raw.width ?? 0)) * W)) < 1 : slideIsRtl(editor.presentation, Number(path.split(".")[1]));
+    // A centered box looks identical in either direction; never infer direction from its position.
+    const rtl = slideIsRtl(editor.presentation, Number(path.split(".")[1]));
     return { path, box: { ...box }, W, H, scale: Math.min(W, H) / 720, rtl, placement: raw.at ? "at" : "fractions", at: raw.at, edge: entry.attachedTo?.edge, base: signature(path) };
   }
 
@@ -81,7 +83,8 @@ export function createOverlayTools(root, options) {
         return { frame: { offset: Math.round(Math.max(-720, Math.min(720, (drag.at.offset ?? 0) + travel)) * 100) / 100 } };
       }
       const sized = resized(box, drag.handle, dx, dy);
-      return { frame: { width: Math.max(2, Math.round((sized.width / scale) * 10) / 10), height: Math.max(2, Math.round((sized.height / scale) * 10) / 10) } };
+      // A handle sizes an attached shape in reference pixels (`widthPx`, `heightPx`); a fraction of its target is set in the panel.
+      return { frame: { widthPx: Math.max(2, Math.round((sized.width / scale) * 10) / 10), heightPx: Math.max(2, Math.round((sized.height / scale) * 10) / 10) } };
     }
     const next = drag.handle === "move" ? { x: box.x + dx, y: box.y + dy, width: box.width, height: box.height } : resized(box, drag.handle, dx, dy, W * MIN_FRACTION, H * MIN_FRACTION);
     return { frame: framed(drag, next) };
@@ -90,8 +93,8 @@ export function createOverlayTools(root, options) {
   /** A box in slide pixels as fractions of the slide (mirrored in a right-to-left deck). */
   function framed(drag, box) {
     const { W, H } = drag;
-    const width = Math.min(1, Math.max(MIN_FRACTION, box.width / W));
-    const height = Math.min(1, Math.max(MIN_FRACTION, box.height / H));
+    const width = Math.min(MAX_FRACTION, Math.max(MIN_FRACTION, box.width / W));
+    const height = Math.min(MAX_FRACTION, Math.max(MIN_FRACTION, box.height / H));
     const left = drag.rtl ? (W - (box.x + box.width)) / W : box.x / W;
     return { x: round4(left), y: round4(box.y / H), width: round4(width), height: round4(height) };
   }

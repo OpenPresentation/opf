@@ -1,0 +1,25 @@
+{
+  "deck": "technical/explicit-chart-reference-lines.opf.json",
+  "entries": {
+    "technical/explicit-chart-reference-lines.opf.json#0": {
+      "sha256": "155dd6f1a128b933c0f6da4b67d9ee3320986ce9f814bd8c82a53bc84f98d2ef",
+      "bytes": 5477
+    },
+    "technical/explicit-chart-reference-lines.opf.json#1": {
+      "sha256": "ca95f68300c579bf8953754838cb84506913b7af47726d1e1ad222403459ea43",
+      "bytes": 5092
+    },
+    "technical/explicit-chart-reference-lines.opf.json#2": {
+      "sha256": "4f648b9858fea329b9ba20f0e4603776a7af62c095e19e522c773b0bbd61bf2f",
+      "bytes": 6951
+    },
+    "technical/explicit-chart-reference-lines.opf.json#3": {
+      "sha256": "0e7a1893e24a36b96e36d0e8d3746812e78afb82cf38ad7eec20385933bd1242",
+      "bytes": 4656
+    },
+    "technical/explicit-chart-reference-lines.opf.json#4": {
+      "sha256": "d8088be508d964e6e28325d6d987a41c9bee761fcd89a6bc91e78999ae5628da",
+      "bytes": 2908
+    }
+  }
+}

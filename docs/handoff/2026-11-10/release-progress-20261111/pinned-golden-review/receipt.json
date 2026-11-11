@@ -1,0 +1,25 @@
+{
+  "workflow": "https://github.com/OpenPresentation/opf/actions/runs/42931442501",
+  "source": "e6497ee68b6b5fc73661a9b1cb45124e6dd902b0",
+  "generatedCommit": "dba1fb4470aff1aaa1cd3d33202a86bee7c48652",
+  "changedGeneratedFiles": 6,
+  "artifact": {
+    "id": 13815924889,
+    "bytes": 212339,
+    "sha256": "150eedb77f2d9e4efdb2348924ea7608955d0a09c3257dd1518e202c342e583a"
+  },
+  "artifactEntries": 20,
+  "rootVisualReview": {
+    "actualImages": 14,
+    "changedExisting": 8,
+    "new": 6,
+    "method": "Each actual image viewed independently after extraction and hash/entry checks; authored chart references, axes and localized values checked.",
+    "result": "accepted"
+  },
+  "templates": {
+    "count": 40,
+    "changedImages": 0,
+    "change": "source revision metadata only"
+  },
+  "nativeParityClaim": false
+}

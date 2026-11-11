@@ -48,13 +48,13 @@ const {fromPptx} = await import(pathToFileURL(resolver.resolve('@openpresentatio
 const imported = await fromPptx(await readFile(new URL('keynote-15.1.1-noop.pptx', directory)));
 const furniture = importedFurnitureFindings(imported, sourceDeck('data:image/png;base64,AA=='), baseline);
 assert.deepEqual(furniture, [], 'The current native literal is furniture, without discarding authored content');
-assert.deepEqual(imported.design.footer, {left: {text: 'Keynote qualification'}, right: {text: '{{slide.number}}'}});
+assert.deepEqual(imported.design.footer, {start: {text: 'Keynote qualification'}, end: {text: '{{slide.number}}'}});
 const authored = sourceDeck('data:image/png;base64,AA==');
 assert.equal(imported.slides.length, 16);
 for (const [index, slide] of imported.slides.entries()) {
   assert.equal(slide.title, authored.slides[index].title, 'Current ordered slide title remains intact');
   assert.equal(slide.notes, authored.slides[index].notes, 'Current authored notes survive independently of removed generated fields');
   const footer = slide.design?.footer ?? imported.design.footer;
-  assert.equal(footer.left.text, 'Keynote qualification'); assert.equal(footer.right.text, '{{slide.number}}');
+  assert.equal(footer.start.text, 'Keynote qualification'); assert.equal(footer.end.text, '{{slide.number}}');
 }
 console.log('Keynote retained no-op: ordered words/notes and literal footer pass; slide fields survive without cached text; all 16 notes-field removals remain explicit; current literal footer and live number recover as furniture with zero footer-as-body findings. Word loss/reorder, wrong notes, duplicate/changed/unidentified footer and wrong/missing fields fail.');

@@ -1,0 +1,132 @@
+{
+  "archive": "raw.json.gz",
+  "bytes": 50694,
+  "sha256": "40b9b812c3e9c3aa9803ab9956ec131a6d9ab0e7668db8d230e22e7750ea698c",
+  "files": [
+    {
+      "file": "artifacts/rr115/add-browser-control.mjs",
+      "bytes": 2395,
+      "sha256": "cc53a01fef03a42a7cc65458d832c06156673dab0cadce6fd8c5a5f20109b1c0"
+    },
+    {
+      "file": "artifacts/rr115/apply-discard.mjs",
+      "bytes": 2286,
+      "sha256": "318354b439f64babfd881bb4211e415796db4c4cd8c9f9da5cef24ec04f9efce"
+    },
+    {
+      "file": "artifacts/rr115/build-after.log",
+      "bytes": 117,
+      "sha256": "21ce6ddf949f32a890cf5a2bca4fb6e3c822eeef7ac16046624c5900d218a9cd"
+    },
+    {
+      "file": "artifacts/rr115/build-before.log",
+      "bytes": 12082,
+      "sha256": "2ee4e1ab6b437d37965f31958594cd5424f2d12ad888d7c193b6104cdf6bc900"
+    },
+    {
+      "file": "artifacts/rr115/changes.log",
+      "bytes": 2671,
+      "sha256": "a4682d2056a7000977f073affb7d08e301b18275e2460697644af12b437cd054"
+    },
+    {
+      "file": "artifacts/rr115/discard-after.log",
+      "bytes": 594,
+      "sha256": "92ba7e6283466fdd1269e273061f416928453342c55ff418a83e813edbc93156"
+    },
+    {
+      "file": "artifacts/rr115/discard-before.log",
+      "bytes": 4038,
+      "sha256": "37da7ea8c289f9360d0c05152a8bd6f90b1d6237486e622ca86a8b5a43299658"
+    },
+    {
+      "file": "artifacts/rr115/document.mjs",
+      "bytes": 4263,
+      "sha256": "4fc2026108a6db93da69460573fa48f3ba3a48a2e4221b74fe3adf98f6c2fc63"
+    },
+    {
+      "file": "artifacts/rr115/final-docs.mjs",
+      "bytes": 4016,
+      "sha256": "b6d04fc3122411478b9ce28f493b2b69b1201691bcd38b67acff776ab5eccbb7"
+    },
+    {
+      "file": "artifacts/rr115/install.log",
+      "bytes": 4326,
+      "sha256": "c84f0009e0119b5ac7c97f69045e9ce7a5fbad66ec74b50eed0b2a4250cfed31"
+    },
+    {
+      "file": "artifacts/rr115/persistence-existing.log",
+      "bytes": 23,
+      "sha256": "569a128627c457b8c03b3430a52f26f6947b7b670521dc4faf739e99c74da621"
+    },
+    {
+      "file": "artifacts/rr115/release-report-contract.log",
+      "bytes": 3903,
+      "sha256": "c13181a316a86c28da3e4a53fd31f1158dcf9c39ef4aa98c435a3eb4e8b918de"
+    },
+    {
+      "file": "artifacts/rr115/release-report-current.log",
+      "bytes": 15311,
+      "sha256": "1876e16efada671e4e7f30dcb19eb6e19649905700fa6f7399fdc17d370c12f5"
+    },
+    {
+      "file": "artifacts/rr115/seal.mjs",
+      "bytes": 3441,
+      "sha256": "462505dc88eb481274fe7d44dbaba711cf207532c7c3b360c53e19ae29bc4b00"
+    },
+    {
+      "file": "artifacts/rr115/syntax.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts/rr115/ui-after/bundle.js",
+      "bytes": 6866,
+      "sha256": "7cad785c2979d2e0f409314408d19d1e3cb4e280469722afc70041f250a345f7"
+    },
+    {
+      "file": "artifacts/rr115/ui-after/failed-discard.png",
+      "bytes": 10673,
+      "sha256": "58f879014ee82a734ffed92f23ac9b22dc19b009a6fd3d045bebf51edf2afb34"
+    },
+    {
+      "file": "artifacts/rr115/ui-after/receipt.json",
+      "bytes": 334,
+      "sha256": "d7d3d6fab6bf478276284599827532a2d1dd895f448352a5248d7b3e9fcb4adb"
+    },
+    {
+      "file": "artifacts/rr115/ui-after/successful-retry.png",
+      "bytes": 6392,
+      "sha256": "c7674e821271c85781943017c2a3d0ccb75261565cf661c10f195575d70bb6ac"
+    },
+    {
+      "file": "artifacts/rr115/ui-after.log",
+      "bytes": 23,
+      "sha256": "18f1760d849d74467f8a478568ddac28fed6e5c1f76b4b6a38f2d79462ce9f7d"
+    },
+    {
+      "file": "artifacts/rr115/ui-before/bundle.js",
+      "bytes": 6586,
+      "sha256": "1bd95508b61f4667d4c9dc8b3add43e3f840f7042451670b0e8123535b294947"
+    },
+    {
+      "file": "artifacts/rr115/ui-before/failed-discard.png",
+      "bytes": 6392,
+      "sha256": "c7674e821271c85781943017c2a3d0ccb75261565cf661c10f195575d70bb6ac"
+    },
+    {
+      "file": "artifacts/rr115/ui-before/failure.json",
+      "bytes": 453,
+      "sha256": "73a3e6c4abf9690d80a9070450e86c15ef933aaf8d2227a31a98671270f78b82"
+    },
+    {
+      "file": "artifacts/rr115/ui-before.log",
+      "bytes": 329,
+      "sha256": "ce030b679de56dda596139ebd55bde84c517d99f7a6141b475a828eac0c94347"
+    },
+    {
+      "file": "artifacts/rr115/ui-discard-probe.mjs",
+      "bytes": 3747,
+      "sha256": "cf5e2aff9e619d2d5d3376e3585aceb7a84185e6e60a8a28e4bed7b67ae6c264"
+    }
+  ]
+}

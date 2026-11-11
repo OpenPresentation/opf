@@ -52,7 +52,7 @@
           "image": "asset:hero",
           "fit": "cover",
           "placement": {
-            "edge": "left",
+            "edge": "start",
             "size": 0.46
           }
         }
@@ -86,7 +86,7 @@
           "aspectRatio": 1.1547,
           "shape": "hexagon",
           "placement": {
-            "edge": "right",
+            "edge": "end",
             "inset": true
           }
         }
@@ -102,7 +102,7 @@
           "fit": "cover",
           "shape": "ellipse",
           "placement": {
-            "edge": "left",
+            "edge": "start",
             "size": 0.4,
             "inset": true
           }
@@ -213,7 +213,7 @@
             "width": 12
           },
           "placement": {
-            "edge": "right",
+            "edge": "end",
             "inset": true
           }
         }
@@ -228,7 +228,7 @@
           "image": "asset:hero",
           "fit": "contain",
           "placement": {
-            "edge": "right"
+            "edge": "end"
           }
         }
       ]

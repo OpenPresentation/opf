@@ -28,15 +28,15 @@ import { ICONS } from "./studio-kit/dom.js";
 /** Region layouts offered for a slide with this many blocks (each block gets its own region, none overlap). */
 export const REGION_LAYOUTS = Object.freeze({
   2: [
-    { id: "left-right", label: "Side by side", regions: ["left", "right"] },
+    { id: "left-right", label: "Side by side", regions: ["start", "end"] },
     { id: "top-bottom", label: "Stacked", regions: ["top", "bottom"] },
   ],
   3: [
-    { id: "three-columns", label: "Three columns", regions: ["left", "center", "right"] },
-    { id: "top-two-columns", label: "One on top, two below", regions: ["top", "bottom:left", "bottom:right"] },
-    { id: "left-two-rows", label: "One on the left, two on the right", regions: ["left", "top:right", "bottom:right"] },
+    { id: "three-columns", label: "Three columns", regions: ["start", "center", "end"] },
+    { id: "top-two-columns", label: "One on top, two below", regions: ["top", "bottom:start", "bottom:end"] },
+    { id: "left-two-rows", label: "One on the left, two on the right", regions: ["start", "top:end", "bottom:end"] },
   ],
-  4: [{ id: "grid", label: "Two by two", regions: ["top:left", "top:right", "bottom:left", "bottom:right"] }],
+  4: [{ id: "grid", label: "Two by two", regions: ["top:start", "top:end", "bottom:start", "bottom:end"] }],
 });
 
 /**
@@ -48,7 +48,7 @@ export const IMAGE_DESTINATIONS = Object.freeze([
   { value: "watermark", label: "Watermark", target: "watermark", options: {} },
 ]);
 
-const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:left|center|right)(?:\+(?:left|center|right))*)?|(?:left|center|right)(?:\+(?:left|center|right))*)$/;
+const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/;
 const regionKeysOfSlide = (slide) => Object.keys(slide).filter((key) => REGION_KEY.test(key));
 const DESIGN_IMAGE_LABELS = { background: "background image", watermark: "watermark" };
 // An image block's own framing fields (FA-22) do not stop it being "a block that holds only an image".

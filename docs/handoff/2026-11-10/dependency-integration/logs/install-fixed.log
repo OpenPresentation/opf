@@ -1,0 +1,20 @@
+Scope: all 9 workspace projects
+Lockfile is up to date, resolution step is skipped
+Packages: -1
+-
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/packages/cli/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/packages/integration/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/packages/pptx/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/packages/mcp/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/packages/mcp/node_modules/.bin/opf. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/packages/cli/dist/index.js'
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/packages/editor/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/packages/render/dist/preview-fonts-cli.js'
+
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/packages/pptx/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/packages/pptx/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/packages/cli/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/packages/cli/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/packages/editor/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/packages/editor/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/packages/integration/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/packages/integration/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/packages/mcp/node_modules/.bin/opf. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/packages/mcp/node_modules/@openpresentation/cli/dist/index.js'
+ WARN  Failed to create bin at /private/tmp/opf-dependency-review/packages/mcp/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-dependency-review/packages/mcp/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+Done in 257ms using pnpm v10.33.2

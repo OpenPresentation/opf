@@ -26,7 +26,7 @@ const textOf = shape => array(shape['p:txBody']?.['a:p']).map(p => array(p['a:r'
 const near = (a, b, message) => assert.ok(Math.abs(a - b) < .002, `${message}: ${a} vs ${b}`);
 const dec = new TextDecoder();
 let lines = 0;
-for (const [id, record] of Object.entries(gallery.layouts)) for (const alignment of ['left', 'center', 'right']) {
+for (const [id, record] of Object.entries(gallery.layouts)) for (const alignment of ['start', 'center', 'end']) {
   const blocks = layoutTemplate(record).regions.map(region => ({...sample[region.accepts.find(kind => sample[kind])](), region: region.name}));
   const document = {design: {fontScheme: {id: 'carlito', heading: 'Carlito', body: 'Carlito'}, titleAlignment: alignment, contentAlignment: alignment}, slides: [{layout: id, title: 'Clear title', subtitle: 'Supporting words', ...(blocks.length ? {blocks} : {})}]};
   const options = {fonts, catalogs: [gallery], seed: 1, timestamp: '2026-01-01T00:00:00Z'};

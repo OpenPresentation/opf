@@ -1,0 +1,65 @@
+{
+  "created": "2026-11-10T11:00:51.867Z",
+  "sourceBefore": "b5a57bc86aba4de3e1ea28dcc38e47cfb46827f1",
+  "originalIssueCheckboxes": {
+    "total": 31,
+    "checked": 21,
+    "open": 10,
+    "unchanged": true
+  },
+  "replays": [
+    {
+      "name": "hb-clusters",
+      "status": 0
+    },
+    {
+      "name": "dc2-followups",
+      "status": 0
+    }
+  ],
+  "retained": [
+    {
+      "source": "C:/opf-work/site218-main01.log",
+      "file": "opf-work-site218-main01.log",
+      "bytes": 1116,
+      "sha256": "a9a4cd53d19a2450a3221839b473aa953e5bc3ec029e65693bd2e462622d45d8"
+    },
+    {
+      "source": "C:/opf-work/site218-main01-exit.json",
+      "file": "opf-work-site218-main01-exit.json",
+      "bytes": 168,
+      "sha256": "0c866a99621e73607fcf06b378e1ffbd59ab40359803dc43588f4e2a07c4a58c"
+    },
+    {
+      "source": "C:/opf-work/cli-pagination-diagnostic01/exit.json",
+      "file": "cli-pagination-diagnostic01-exit.json",
+      "bytes": 907,
+      "sha256": "4a69131bf200fe2cbd6958675f4efd9fb19ed108d987927da724af5c17ceb3fb"
+    },
+    {
+      "source": "C:/opf-work/hb-clusters-cli01/exit.json",
+      "file": "hb-clusters-cli01-exit.json",
+      "bytes": 505,
+      "sha256": "1c09af6e24e053c835148b673fb0a14a096f50ae6a246c0fcac4721be38bd954"
+    }
+  ],
+  "referenceGroup": {
+    "head": "b11342f2611420380be52ad24c097488b8b8edc7",
+    "path": "C:/opf-work/ref-qualification",
+    "local": true,
+    "mapped": "pending"
+  },
+  "harfbuzzRepair": {
+    "head": "d4bb1a56a54cd60565aae16ef9417ee80ca70147",
+    "rootAndPeerSourceReview": true,
+    "local": true,
+    "mapped": "pending"
+  },
+  "site218": {
+    "merged": "148cd51184d8d74617379eddf0c0f555d26fc113",
+    "exactMainGate": "terminal 0 at 10:44:57 UTC",
+    "currentProductionReceiptAudit": "pending A"
+  },
+  "release034": "unpublished",
+  "nativeAcceptance": false
+}

@@ -1,0 +1,219 @@
+{
+  "base": "ed51a7e8a6636bb2e08c9a446a7d22c21ad81066",
+  "scope": "Exact current checked-in LF-normalized same42-page source bytes after previous666payload prose and generic viewer-page wording; bundled-source equality will be rechecked by maintained MCP test after common build. Hosted-paragraph reconciliation remains coordinator-owned.",
+  "total": 1310479,
+  "cap": 1350000,
+  "policy": "Unchanged root-approved3%rounded headroom; no roster/trim or protocol guard change.",
+  "rows": [
+    {
+      "slug": "format-card",
+      "bytes": 10808,
+      "sha256": "57184cec64121243e7c037dc48683ad8b6183f1f0cf20b1fdb2df8a8df9903c5"
+    },
+    {
+      "slug": "how-opf-works",
+      "bytes": 21238,
+      "sha256": "3d862148e73e7dcfde24ab88395dd51b197a3d0dbfe056b40e2adfe3f7e9a451"
+    },
+    {
+      "slug": "quickstart",
+      "bytes": 11855,
+      "sha256": "a315203a55034e0023b4d92ff52bd652996dc96ae4ef5b31f125abce56eef477"
+    },
+    {
+      "slug": "llm-authoring",
+      "bytes": 7475,
+      "sha256": "318214d8b2e3302d24df4bb83d34e17b478b7d2e8da71ac32577e40beea132d9"
+    },
+    {
+      "slug": "agent-skills",
+      "bytes": 7721,
+      "sha256": "15e50bfbd06797fbc64aa67c2a53b36af3c824a6c4384dd61e9e0b31ab64bcc4"
+    },
+    {
+      "slug": "mcp",
+      "bytes": 25490,
+      "sha256": "6c765e050433875816ed79e47a59b7f5d6b1d562235e479634ff0f955f110120"
+    },
+    {
+      "slug": "schema-reference",
+      "bytes": 138742,
+      "sha256": "3061dbe25d31756957ae74504d4d70addb8cb941534846be52bff32afe6ccb47"
+    },
+    {
+      "slug": "validate",
+      "bytes": 105529,
+      "sha256": "362774bcfab5c37cf17afbff83d12423a76bccad7e8bfc6c3c8eb5ee09a144ca"
+    },
+    {
+      "slug": "finding-schema-reference",
+      "bytes": 7602,
+      "sha256": "36229d91dd093c8694561cce55bd5df715e8d2f37945eb7194d1460f3ff8d40c"
+    },
+    {
+      "slug": "content-payloads",
+      "bytes": 40802,
+      "sha256": "a63791e35a3a75c95fe0e76df69b938ddeb248420ef0688ff93363eeda267a98"
+    },
+    {
+      "slug": "diagrams",
+      "bytes": 37005,
+      "sha256": "c6b4a0da3a37797ce33a113b3c54006052b5410cf1ffc7ca566fd696fc4f3f9e"
+    },
+    {
+      "slug": "content-item-design-overrides",
+      "bytes": 2424,
+      "sha256": "6c8f91ce685f17fc113cc02648ea397a289e2785e44091735e8e8671d41dc9f3"
+    },
+    {
+      "slug": "design-resolution",
+      "bytes": 54754,
+      "sha256": "d635d928267bf27a7174bde33efb88fa9d394ffca9d833ed366ea5ec7e561a82"
+    },
+    {
+      "slug": "dynamic-composition",
+      "bytes": 136667,
+      "sha256": "d81199925fb1f11c54931848e37d01f212eef81a669196345a87ba10c3d5c5a9"
+    },
+    {
+      "slug": "layout-templates",
+      "bytes": 61326,
+      "sha256": "8233267719b95ff23e65ee7f6d2b57db1a36eaf5297530cb0f3efee52c32ec83"
+    },
+    {
+      "slug": "slide-sizes",
+      "bytes": 9212,
+      "sha256": "043dc680c4fccc23ecf3870c182c659f804b4f0dc64d41a31b85e41c5298ee76"
+    },
+    {
+      "slug": "slide-design-principles",
+      "bytes": 8936,
+      "sha256": "e64a9f298b8d767cc437d0426f332e66f611ad84f8018bdfe6a54dbfb2845d48"
+    },
+    {
+      "slug": "rich-text",
+      "bytes": 12163,
+      "sha256": "8931c0d3ebaa053054fa6e314b9d1201c6c6b5d4baa5d97558b0c2ac0f904e2b"
+    },
+    {
+      "slug": "numbered-lists",
+      "bytes": 6612,
+      "sha256": "0bb8080c9d0f9e9c096f1cf75d7d74466bf120ad3f9a68f3b532e1bc5abc917f"
+    },
+    {
+      "slug": "table-text-colors",
+      "bytes": 1949,
+      "sha256": "52843d910c205aacdbbdb9de035f2662804389ecb4516790f7e6f7008ad70d0d"
+    },
+    {
+      "slug": "image-treatments",
+      "bytes": 29017,
+      "sha256": "a1ebb562b7e33bb8d9ed0f1b082a8d93cfcc253eaf204375122ad550d19afe0b"
+    },
+    {
+      "slug": "shapes",
+      "bytes": 75412,
+      "sha256": "dff6ce80ba82fc50cce537fdaa6e6bd9558611f95af2a72bfcb11e76263fe61b"
+    },
+    {
+      "slug": "shape-effects",
+      "bytes": 5633,
+      "sha256": "22a1a2cf51bcae76e66b72c236b376265a733e89e00c29e5ec193b5097ce1cbc"
+    },
+    {
+      "slug": "smartart",
+      "bytes": 63707,
+      "sha256": "7f55819bd814c66eeb0c2320fef17e7795126535de07f4ffe27b548916ede8b1"
+    },
+    {
+      "slug": "icons",
+      "bytes": 11820,
+      "sha256": "5e725f811acd5fafefdb7de739263ef4c5e0263ebb096572526979ffe7619873"
+    },
+    {
+      "slug": "chart-options",
+      "bytes": 83322,
+      "sha256": "57b5c533dab2f849f5f118b8c5d4d412378c6a25d0a3d048921174d86f86dbc6"
+    },
+    {
+      "slug": "chart-table-data",
+      "bytes": 27368,
+      "sha256": "1aa912501eb16704149dab769068d41a0175f2b06884d51c4e7d8d193caf0251"
+    },
+    {
+      "slug": "footnotes-citations-captions",
+      "bytes": 10644,
+      "sha256": "357a805236346670752db1c55bfa29c07f3dffb541dd75b8b6ae618d52f1b568"
+    },
+    {
+      "slug": "templates-and-variables",
+      "bytes": 35016,
+      "sha256": "7eba854ac1af5c62e592bb27e8440966af2cce0e83ca949a33c96a7c5ae9ad09"
+    },
+    {
+      "slug": "data-import",
+      "bytes": 8222,
+      "sha256": "165a6f47a24faed9ce8126ffafdcf6cc1e7d875c7f3e80b0d1ee278a292a365a"
+    },
+    {
+      "slug": "catalog-schema-reference",
+      "bytes": 57004,
+      "sha256": "a1d04040180112fb5f456dbec5867b3a235b662a2bc07db7e621fdea8baabd17"
+    },
+    {
+      "slug": "default-catalog",
+      "bytes": 28541,
+      "sha256": "035fd4a6ac11c1dd5482100201729dc0cc3237a93efe2dc952f13d52b749626c"
+    },
+    {
+      "slug": "examples",
+      "bytes": 5853,
+      "sha256": "7de3654faae9faa3d3f332305534a59d0933737edfe88020b7b504dcce21af9f"
+    },
+    {
+      "slug": "stats",
+      "bytes": 9609,
+      "sha256": "39013f2773b9f0cb55f1214a9c1658c6ebb4ab251c91b1b280a675c1ccf23695"
+    },
+    {
+      "slug": "markdown",
+      "bytes": 25603,
+      "sha256": "f924fa1cd73be3aa2afbc038537752e5f55c7f313f96616343372037e915eb81"
+    },
+    {
+      "slug": "yaml",
+      "bytes": 15894,
+      "sha256": "f28a17cd217041804e14c5ffc807ebad328bb050a773398e28580cb76a508cf2"
+    },
+    {
+      "slug": "conversions",
+      "bytes": 10866,
+      "sha256": "6b38efee52cf84f6eec9e4d86ab9e6e8f9d35258c4f0fefa7950d8b423e8d671"
+    },
+    {
+      "slug": "patch-diff-merge-format",
+      "bytes": 19534,
+      "sha256": "cf30a2f3e16b41cb59fac70e27350634ba4a2a6eccc36620aa9ff621a22cc7a7"
+    },
+    {
+      "slug": "node",
+      "bytes": 20177,
+      "sha256": "8da9e4b057a8e0a69e052d611795dbd186f85d4509a6389ebfd4c9c3766138ef"
+    },
+    {
+      "slug": "cli",
+      "bytes": 26938,
+      "sha256": "dc2424a3a2ca1e5ff5a126681c6b3b1b80a7293470217875bbee2b3d6ce228d6"
+    },
+    {
+      "slug": "live-editor",
+      "bytes": 28429,
+      "sha256": "88a05f1219791cacc3cfbc98c7290a252d1b538168c7f112d112acbbf698fbb4"
+    },
+    {
+      "slug": "open-ecosystem",
+      "bytes": 3560,
+      "sha256": "591b1b7d7d902cf4e4c157296b78ae756051151b5167eae9e7a764f228975d67"
+    }
+  ]
+}

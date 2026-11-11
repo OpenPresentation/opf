@@ -9,6 +9,8 @@ name: Slow checks
 # scripts/published-matrix, the parity harness or the golden corpus). A scheduled red run opens or updates one issue labeled
 # `slow-checks-red`; a green one closes it.
 #
+# The published-matrix driver is the reviewed checkout, with explicit driver/consumer provenance.
+# Its image fixture stays on the published core gitHead; installed packages remain the registry graph.
 # The published-matrix and installed-parity scripts install the registry's `latest` dist-tag of each package (scripts/registry-plan.mjs;
 # they test the registry, not this commit). OPF_REGISTRY_TAG selects another tag; the `overrides` input replaces single packages.
 on:
@@ -40,7 +42,7 @@ jobs:
     name: Full goldens
     if: ${{ github.event_name != 'pull_request' || github.event.label.name == 'slow-checks' }}
     runs-on: ubuntu-24.04
-    container: mcr.microsoft.com/playwright:v1.64.1-noble@sha256:47b510dd9230bf0b9bfc9b20102241e577ea7a99334ab4c3ca19f19770e9b8ea
+    container: mcr.microsoft.com/playwright:v1.65.0-noble@sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d
     timeout-minutes: 45
     env:
       OPF_GOLDEN_ARTIFACTS: '1'
@@ -108,16 +110,16 @@ jobs:
           mkdir -p artifacts/published-matrix/out
           node artifacts/published-matrix/consumer/dist/consumer.js | tee artifacts/published-matrix/out/consumer.json
 
-      - name: Take the font-switch harness of the published core's release commit
+      - name: Prepare the reviewed driver with the published core image fixture
         run: |
-          ref="$(node scripts/registry-plan.mjs ref opf)"
+          ref="$(node -p "require('./artifacts/published-matrix/consumer/installed.json').packages['@openpresentation/opf'].gitHead")"
           git fetch --no-tags --depth=1 origin "$ref"
           harness="$RUNNER_TEMP/published-harness"
-          for file in scripts/test-font-switch-ecosystem.mjs docs/fixtures/image-treatments.opf.json; do
-            mkdir -p "$harness/$(dirname "$file")"
-            git show "$ref:$file" > "$harness/$file"
-          done
+          node scripts/published-matrix/prepare-harness.mjs artifacts/published-matrix/consumer "$harness" artifacts/published-matrix/out
           echo "OPF_FONT_SWITCH_HARNESS=$harness/scripts/test-font-switch-ecosystem.mjs" >> "$GITHUB_ENV"
+
+      - name: Check real installed layout fixture compatibility
+        run: node scripts/published-matrix/layout-fixtures.mjs
 
       - name: Pairwise font-switch matrix
         run: node "$OPF_FONT_SWITCH_HARNESS"
@@ -156,6 +158,7 @@ jobs:
         with:
           name: published-matrix-${{ matrix.os }}
           path: |
+            artifacts/published-matrix/out/driver.json
             artifacts/published-matrix/out/digests.json
             artifacts/published-matrix/out/consumer.json
             artifacts/published-matrix/out/installed.json

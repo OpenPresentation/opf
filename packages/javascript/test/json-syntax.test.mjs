@@ -91,7 +91,7 @@ describe("the owner's case: a key with no value, followed by the next key", () =
 
 describe("what a missing value could be depends on the field", () => {
   const cases = [
-    ['{"design": {"titleAlignment":}}', /one of left, center, right/, "Add \"left\"", '"titleAlignment": "left"'],
+    ['{"design": {"titleAlignment":}}', /one of start, center, end/, "Add \"start\"", '"titleAlignment": "start"'],
     ['{"template":}', /true or false/, "Add false", '"template": false'],
     ['{"duration":}', /a number/, "Add 1", '"duration": 1'],
     ['{"slides":}', /a list such as/, "Add [ ]", '"slides": []'],
@@ -516,7 +516,7 @@ describe("agreement with JSON.parse", () => {
   };
   const pick = (items) => items[Math.floor(random() * items.length)];
   const documents = [
-    JSON.stringify({ name: "x", design: { theme: "minimal", titleAlignment: "left" }, slides: [{ title: "a", items: ["one", "two"] }, { title: "b", chart: { type: "column", data: [[1, 2], [3, 4]] } }] }, null, 2),
+    JSON.stringify({ name: "x", design: { theme: "minimal", titleAlignment: "start" }, slides: [{ title: "a", items: ["one", "two"] }, { title: "b", chart: { type: "column", data: [[1, 2], [3, 4]] } }] }, null, 2),
     '{"a":1,"b":[true,false,null],"c":{"d":"e\\n\\u00e9"}}',
     '{\r\n  "slides": [\r\n    {"title": "T", "text": "Line"}\r\n  ]\r\n}\r\n',
   ];

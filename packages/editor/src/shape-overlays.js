@@ -4,7 +4,7 @@
 // as for any other edit; the `prepare...` forms return the patch without a session. Stacking is the array order (later is on top). A connector end names a
 // block or overlay by its `id`: connecting two things that have none gives them one, in the same patch, so one undo takes both back. Editing a shape's own
 // properties (fill, line, text) is shape-options.js, which also takes an overlay shape's path. Plain JS with no DOM and no Node imports.
-import { SHAPE_PRESETS, presetAspect } from "@openpresentation/opf/composition";
+import { SHAPE_PRESETS, presetAspect, resolveChartData, chartDrawPlan, resolveSlideDirection } from "@openpresentation/opf/composition";
 import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { checkedDocument, fail, same } from "./edit-helpers.js";
 import { checkFormat } from "./checks.js";
@@ -15,11 +15,9 @@ const isObject = (value) => Boolean(value) && typeof value === "object" && !Arra
 const bad = (message, details) => fail("invalid-overlay", message, details);
 const rounded = (value) => Math.round(value * 10000) / 10000;
 
-const RTL_LANGUAGES = new Set(["ar", "he", "fa", "ur", "yi", "ps", "sd", "ug", "dv", "ckb", "iw"]);
-/** Whether a slide is drawn right to left (its language, else the deck's, is Arabic, Hebrew, Persian, Urdu and the like): its overlays' `x` counts from the right edge. */
+/** The authoritative language/script direction, including inline and slide overrides. Overlay x counts from that start edge. */
 export function slideIsRtl(presentation, slideIndex) {
-  const language = presentation.slides?.[slideIndex]?.language ?? presentation.language;
-  return typeof language === "string" && RTL_LANGUAGES.has(language.toLowerCase().split(/[-_]/)[0]);
+  return resolveSlideDirection(presentation, slideIndex) === "rtl";
 }
 
 /** How a connector draws between its ends. */
@@ -89,7 +87,7 @@ function applyPrepared(editor, result, meta, source) {
 
 /**
  * Compute the patch that adds an overlay shape on top of a slide: `{ shape, x, y, width, height, ...block }`. The frame is `options.frame` (fractions), else
- * about a fifth of the slide wide at the preset's own proportions, centered on `options.center` (fractions, default the middle). `options.size` is the slide's
+ * about a fifth of the slide wide at the preset's own proportions, centered on `options.center` (finite signed fractions in the overlay's start-edge convention; omission stays visible in the middle). `options.size` is the slide's
  * pixel size for those proportions (default 1280 by 720). Returns `{ presentation, patches, path, changed, shape, frame }` with `path` the new entry.
  */
 export function prepareOverlayInsert(presentation, options) {
@@ -109,7 +107,10 @@ export function prepareOverlayInsert(presentation, options) {
       width = (height * size.height * aspect) / size.width;
     }
     const center = options.center ?? { x: 0.5, y: 0.5 };
-    frame = { x: Math.min(1 - width, Math.max(0, center.x - width / 2)), y: Math.min(1 - height, Math.max(0, center.y - height / 2)), width, height };
+    if (![center.x, center.y].every(Number.isFinite)) throw bad("An explicit center needs finite x and y slide fractions.", { center });
+    const x = center.x - width / 2, y = center.y - height / 2;
+    // Gallery insertion stays visible by default; an authored center is placement, not a clamp request.
+    frame = { x: options.center == null ? Math.min(1 - width, Math.max(0, x)) : x, y: options.center == null ? Math.min(1 - height, Math.max(0, y)) : y, width, height };
   }
   const entry = { shape: preset, x: rounded(frame.x), y: rounded(frame.y), width: rounded(frame.width), height: rounded(frame.height), ...(isObject(options.block) ? structuredClone(options.block) : {}) };
   const existing = Array.isArray(slide.shapes) ? slide.shapes.length : 0;
@@ -126,10 +127,12 @@ export function insertOverlayShape(editor, options, meta = {}) {
 // --- moving and resizing ---------------------------------------------------------------------------------------------------------
 
 const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
+// The format's largest overlay width or height: bounded by finite representable geometry (above 1 it bleeds off).
+const OVERLAY_SIZE_MAX = Number.MAX_VALUE;
 
 /**
  * Compute the patch that places an overlay shape. A shape placed by fractions takes `{ x, y, width, height }` (any of them, fractions of the slide: the
- * frame is kept on the slide and at least 0.5% wide and high). A shape attached to a block (`at`) keeps its anchor: it takes `{ offset, width, height }`
+ * position may cross the slide edge; the frame stays at least 0.5% wide and high). A shape attached to a block (`at`) keeps its anchor: it takes `{ offset, width, height }`
  * (reference pixels for the offset; the sizes in the unit the anchor already uses, a fraction of the block up to 1, else pixels), and asking it for `x` or `y`
  * is refused (`overlay-anchored`): detach it first (`detachOverlay`).
  */
@@ -145,7 +148,10 @@ export function prepareOverlayFrame(presentation, path, change) {
     if (old === undefined) patches.push({ op: "add", path: at, value });
     else if (!same(old, value)) patches.push({ op: "replace", path: at, value });
   };
-  for (const key of Object.keys(change)) if (change[key] !== undefined && !["x", "y", "width", "height", "offset"].includes(key)) throw bad(`Unknown frame key: ${key}. Use x, y, width, height or offset.`, { key });
+  for (const key of Object.keys(change)) if (change[key] !== undefined && !["x", "y", "width", "height", "widthPx", "heightPx", "offset"].includes(key)) throw bad(`Unknown frame key: ${key}. Use x, y, width, height or, on a shape attached to a block, offset, widthPx and heightPx.`, { key });
+  const drop = (key) => {
+    if (entry.at?.[key] !== undefined) patches.push({ op: "remove", path: opfPathToJsonPointer([...parts, "at", key]) });
+  };
   const number = (key) => {
     const value = Number(change[key]);
     if (!Number.isFinite(value)) throw bad(`${key} is a number.`, { key, value: change[key] });
@@ -154,15 +160,28 @@ export function prepareOverlayFrame(presentation, path, change) {
   if (found.placement === "at") {
     if (change.x !== undefined || change.y !== undefined) throw fail("overlay-anchored", "This shape is attached to a block, so it has no x and y of its own. Detach it from the block first.", { path: found.path });
     if (change.offset !== undefined) write(["at"], "offset", Math.round(clamp(number("offset"), -720, 720) * 100) / 100);
-    for (const key of ["width", "height"]) if (change[key] !== undefined) write(["at"], key, Math.round(clamp(number(key), 0.001, 1280) * 10000) / 10000);
+    // One unit per key: `width` and `height` are fractions of the target (1 is its own size), `widthPx` and `heightPx` reference pixels.
+    // Setting one removes the other, because an anchor takes one of the two for each side.
+    for (const [key, px] of [["width", "widthPx"], ["height", "heightPx"]]) {
+      if (change[key] !== undefined && change[px] !== undefined) throw bad(`Give ${key} (a fraction of the target) or ${px} (reference pixels), not both.`, { path: found.path });
+      if (change[key] !== undefined) {
+        write(["at"], key, Math.round(clamp(number(key), 0.001, OVERLAY_SIZE_MAX) * 10000) / 10000);
+        drop(px);
+      }
+      if (change[px] !== undefined) {
+        write(["at"], px, Math.round(clamp(number(px), 0.001, 1280) * 10000) / 10000);
+        drop(key);
+      }
+    }
   } else {
     if (change.offset !== undefined) throw bad("offset belongs to a shape attached to a block.", { path: found.path });
-    const width = clamp(change.width !== undefined ? number("width") : (entry.width ?? 0.2), 0.005, 1);
-    const height = clamp(change.height !== undefined ? number("height") : (entry.height ?? 0.2), 0.005, 1);
+    for (const px of ["widthPx", "heightPx"]) if (change[px] !== undefined) throw bad(`${px} belongs to a shape attached to a block; a free shape's width and height are fractions of the slide.`, { path: found.path });
+    const width = clamp(change.width !== undefined ? number("width") : (entry.width ?? 0.2), 0.005, OVERLAY_SIZE_MAX);
+    const height = clamp(change.height !== undefined ? number("height") : (entry.height ?? 0.2), 0.005, OVERLAY_SIZE_MAX);
     if (change.width !== undefined) write([], "width", rounded(width));
     if (change.height !== undefined) write([], "height", rounded(height));
-    if (change.x !== undefined || change.width !== undefined) write([], "x", rounded(clamp(change.x !== undefined ? number("x") : (entry.x ?? 0), 0, 1 - width)));
-    if (change.y !== undefined || change.height !== undefined) write([], "y", rounded(clamp(change.y !== undefined ? number("y") : (entry.y ?? 0), 0, 1 - height)));
+    if (change.x !== undefined) write([], "x", rounded(number("x")));
+    if (change.y !== undefined) write([], "y", rounded(number("y")));
   }
   return prepared(presentation, patches, found.path);
 }
@@ -181,14 +200,14 @@ export function prepareOverlayDetach(presentation, path, frame) {
   const found = requireOverlay(presentation, path, "shape");
   if (found.placement !== "at") throw bad("This shape is not attached to a block.", { path: found.path });
   if (![frame?.x, frame?.y, frame?.width, frame?.height].every(Number.isFinite)) throw bad("Pass the frame the shape has now, in fractions of the slide: { x, y, width, height }.", { frame });
-  const width = clamp(frame.width, 0.005, 1);
-  const height = clamp(frame.height, 0.005, 1);
+  const width = clamp(frame.width, 0.005, OVERLAY_SIZE_MAX);
+  const height = clamp(frame.height, 0.005, OVERLAY_SIZE_MAX);
   const parts = splitOpfPath(found.path);
   const at = (key) => opfPathToJsonPointer([...parts, key]);
   const patches = [
     { op: "remove", path: at("at") },
-    { op: "add", path: at("x"), value: rounded(clamp(frame.x, 0, 1 - width)) },
-    { op: "add", path: at("y"), value: rounded(clamp(frame.y, 0, 1 - height)) },
+    { op: "add", path: at("x"), value: rounded(frame.x) },
+    { op: "add", path: at("y"), value: rounded(frame.y) },
     { op: "add", path: at("width"), value: rounded(width) },
     { op: "add", path: at("height"), value: rounded(height) },
   ];
@@ -199,6 +218,32 @@ export function prepareOverlayDetach(presentation, path, frame) {
 export function detachOverlay(editor, path, frame, meta = {}) {
   requireEditor(editor);
   return applyPrepared(editor, prepareOverlayDetach(editor.presentation, path, frame), meta, "overlay-detach");
+}
+
+/** Attach a shape to a block or a source-backed chart point as one atomic, validated edit. */
+export function prepareOverlayAnchor(presentation, path, anchor) {
+  const found = requireOverlay(presentation, path, "shape");
+  if (!isObject(anchor)) throw bad("An anchor is an object with block and edge, and optionally point and series.", {anchor});
+  const parts = splitOpfPath(found.path), pointer = key => opfPathToJsonPointer([...parts, key]);
+  const patches = ["x", "y", "width", "height"].filter(key => Object.hasOwn(found.entry, key)).map(key => ({op: "remove", path: pointer(key)}));
+  if (!same(found.entry.at, anchor)) patches.push({op: Object.hasOwn(found.entry, "at") ? "replace" : "add", path: pointer("at"), value: structuredClone(anchor)});
+  return prepared(presentation, patches, found.path);
+}
+export function setOverlayAnchor(editor, path, anchor, meta = {}) {
+  requireEditor(editor);
+  return applyPrepared(editor, prepareOverlayAnchor(editor.presentation, path, anchor), meta, "overlay-anchor");
+}
+/** Chart blocks a shape can follow, with zero-based point/series choices (indexes disambiguate repeated names). */
+export function listChartPointTargets(presentation, slideIndex) {
+  const classic = new Set(["column","stacked-column","100pct-stacked-column","bar","stacked-bar","100pct-stacked-bar","line","line-with-markers","stacked-line","stacked-line-with-markers","area","stacked-area","100pct-stacked-area","scatter","pie","doughnut"]);
+  return listConnectionEnds(presentation, slideIndex).flatMap(end => {
+    if (end.kind !== "block" || !end.id) return [];
+    const block = getValueAtPath(presentation, splitOpfPath(end.path)), chart = block?.chart;
+    if (!classic.has(chart?.type)) return [];
+    const data = resolveChartData(chart, presentation); if (!data.ok) return [];
+    const plan = chartDrawPlan(chart, data), first = plan.kind === "scatter" && plan.hasX ? 2 : 1;
+    return [{id: end.id, path: end.path, label: end.label, points: plan.rows.map((row, index) => ({index, name: String(row[0] ?? "")})), series: plan.columns.slice(first).map((name, index) => ({index, name: String(name ?? "")}))}];
+  });
 }
 
 // --- stacking and removing -------------------------------------------------------------------------------------------------------

@@ -1,0 +1,1525 @@
+{
+  "format": "rr105-reference-source-wip-v1",
+  "status": "INCOMPLETE_SOURCE_WIP",
+  "source": "a33d2bbc7e2e73c377b7483366d1886400d92835",
+  "tree": "af03ec2cd1320b98132ad2e707140db40923f365",
+  "base": "276f339a68069dc11970d649092d6181c9feba38",
+  "runGitRevision": "276f339a68069dc11970d649092d6181c9feba38",
+  "runSourceWasDirty": true,
+  "sourceFiles": [
+    {
+      "file": "changes/rr105-reference-witnesses.md",
+      "bytes": 251,
+      "sha256": "f08ea1d73cc9059be7f23da725260df88e311e9a9f768c1aa599acabcba1a34e",
+      "blob": "cbf01d3da513f231a892ddd0aad4bd363b947809"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-reference-witnesses/README.md",
+      "bytes": 5639,
+      "sha256": "89c3d31068a807ed5f59aeea06cd6c433ed5166e7736540706e6b2b1db2d926c",
+      "blob": "37af81c0ce575f3bc52223adec8b1c64ea4e4d3d"
+    },
+    {
+      "file": "docs/programs/release-readiness/burndown.md",
+      "bytes": 432681,
+      "sha256": "999c2282cf7145d4f236b7037f9c84db437dd4bb1c6568385c53a031e312b0f5",
+      "blob": "77ce2792a999fefc941e3c780105e0136dc621a2"
+    },
+    {
+      "file": "scripts/native-acceptance/derive-reference-controller.mjs",
+      "bytes": 2953,
+      "sha256": "e6d3692b053ed6362cdf29d58b6a1438d0bffe402ff6d5ab3b8a84d5e886c312",
+      "blob": "4dbe4a3899e177e82b1cff6225026f166b53044c"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-fixtures.mjs",
+      "bytes": 6332,
+      "sha256": "930ead1cee7ca404c6a896944be5aaeab05916d304247ad48667be13acae55b3",
+      "blob": "a77ab5cc655f563363608bb4475ee4dcb0e4d31c"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-fixtures.test.mjs",
+      "bytes": 3885,
+      "sha256": "8f5cfd0407bf37bef3a8849dabc800c2fe7505184848c93634c0e063c762ea58",
+      "blob": "16ce8ab448930bdce324fd05b7850cdf0b5b64ab"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-worker-self-test.ps1",
+      "bytes": 16733,
+      "sha256": "93df6be95310271ca1b9dfde824309f259b6f908db147c67e81d6170dbba6038",
+      "blob": "eff934c819528ae88e4bc815a0deb14c93cedf33"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-worker-source.test.mjs",
+      "bytes": 2985,
+      "sha256": "be173a7f3e772e515eb4e012630cd93f9b5f49e79b4c321d83b980fb31a70f1b",
+      "blob": "853a3af8d126c0d9c6c0712d4e25bb83637067af"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-chart-worker.ps1",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda",
+      "blob": "2d998abcbb21965037dda8b677c50978ef7485f2"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-witnesses/reference-native-axes.opf.json",
+      "bytes": 3111,
+      "sha256": "ec455bebf5e5460fcaac18d8247a4d22b67d02568914c8936a7a3b1d5eb44db4",
+      "blob": "d0edcfa1f71b33601b2fa47dc1d453dbacf4d5b2"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-witnesses/reference-native-lines.opf.json",
+      "bytes": 2418,
+      "sha256": "87a3a6c20edcc4cb05d821019f3abc2b9bbaa5b0a73911853563665ae7b5a02e",
+      "blob": "ac242b9c4534a436630d15931205e377ae4cff72"
+    },
+    {
+      "file": "scripts/native-acceptance/reference-witnesses/reference-overlays-markers.opf.json",
+      "bytes": 2464,
+      "sha256": "2c9855331e99bd5bebfce326f056e9c990e1b7d55f41f7a772ec850af97950a1",
+      "blob": "e73006882ac3d2a57da4efea7954c1683cce41d9"
+    },
+    {
+      "file": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+      "bytes": 11293,
+      "sha256": "93612081c9b7bc8517c6fa3079c017ae21905b91eb05bb355228fff3150456c6",
+      "blob": "4e080e3a5f9ee0694817f757d8b0047092db90ec"
+    }
+  ],
+  "originalSuite": {
+    "path": "C:/opf-work/n034-suite03/suite.json",
+    "sha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+    "readOnlyVerification": true
+  },
+  "originalProducerFiles": [
+    {
+      "file": "scripts/native-acceptance/fixtures.mjs",
+      "blob": "9138bb90f00177df4fd5c1c56832dd49afa8bcb3"
+    },
+    {
+      "file": "scripts/native-acceptance/chart-modes.mjs",
+      "blob": "9acf3f2e0af9e2555a4b057e33fed5c7aaf16e41"
+    },
+    {
+      "file": "scripts/native-acceptance/generate.mjs",
+      "blob": "a06cd1a2c67db8a66d51ccd13f203d0c2289cc04"
+    },
+    {
+      "file": "scripts/native-acceptance/prepare.mjs",
+      "blob": "229293545cd77e002143e45b2d92170920fe7e18"
+    },
+    {
+      "file": "scripts/native-acceptance/seven-chart-profile.mjs",
+      "blob": "141158f99bdeba1f9c414515029234e494217272"
+    },
+    {
+      "file": "scripts/native-acceptance/seven-chart-archive.mjs",
+      "blob": "cfd4f4bca84efd88daf9aa953ac16cc39fdb895e"
+    },
+    {
+      "file": "scripts/native-acceptance/seven-chart-worker.ps1",
+      "blob": "9c0e986a4777a22424e41bb53d43ec69d312a7a3"
+    },
+    {
+      "file": "scripts/native-acceptance/run-seven-chart-profile.ps1",
+      "blob": "aa88bd32163b9b8fd625a6fadd3bf34a0b6a732f"
+    }
+  ],
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 157795,
+    "sha256": "fb16cd0124f661e8428eadeb33df7f8bcffc8ee963cba2ed80c8bf30e9745b67",
+    "expandedBytes": 2258786,
+    "members": 272,
+    "decodedBytes": 1661241
+  },
+  "entries": [
+    {
+      "name": "checks/install-exit.json",
+      "size": 370,
+      "sha256": "c5a752dd5f0f90fe8e8fa297e4acbdd1d96effb3fcd1afcc0072e8a22c3f78dd"
+    },
+    {
+      "name": "checks/install.log",
+      "size": 4270,
+      "sha256": "efadb2a0d72c3e371dfeefc2231fc701138102eff34c0cd1204def04399f2d91"
+    },
+    {
+      "name": "checks/managed-01-exit.json",
+      "size": 367,
+      "sha256": "38f23308b42771215d53a7e71459ae5f83e078fb41ee1fad02e3c0467a1ff9ea"
+    },
+    {
+      "name": "checks/managed-01.log",
+      "size": 2026,
+      "sha256": "e67ae940e5d982d701529605867c5d7243aeebb5743d76c472c366f093776780"
+    },
+    {
+      "name": "checks/managed-02-exit.json",
+      "size": 461,
+      "sha256": "0d1691cb083abae79eb96e478b97f462cbd587768deebdd20e2ce984fceca274"
+    },
+    {
+      "name": "checks/managed-02.log",
+      "size": 587,
+      "sha256": "607181d0a2ab08b9e274820c006dcc6eefd840b7bbf81b25bcc2e2897e39ffb1"
+    },
+    {
+      "name": "checks/pure-01-exit.json",
+      "size": 346,
+      "sha256": "ea52e031f5ae35a26475a2d619665a65c6c6f27d8b37fdbf3f142ee8fe320caa"
+    },
+    {
+      "name": "checks/pure-01.log",
+      "size": 1952,
+      "sha256": "efb5c4eff0b38620768f1be8c85b520bed59e9c7f645fbc5bf9ae069beb3c794"
+    },
+    {
+      "name": "checks/pure-02-exit.json",
+      "size": 362,
+      "sha256": "3358bcc287ccb70b6370fab773b17e7b41dea40c47aea6f89f2e2e74f988ed62"
+    },
+    {
+      "name": "checks/pure-02.log",
+      "size": 681,
+      "sha256": "1024c62352b6fff9a7907af3c3a9fe25bed831b1821630645dc7ace184d9dacf"
+    },
+    {
+      "name": "managed-initial-failed/success/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-initial-failed/success/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-app-path/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-app-path/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-app-path/report.json",
+      "size": 955,
+      "sha256": "d1094907874880ef31658ea36016edd490403b448e606938f8f8cc29031cce72"
+    },
+    {
+      "name": "managed-pass/fault-app-path/stages.jsonl",
+      "size": 2097,
+      "sha256": "efdd47d5fe9460c9235329854f67f833c544f549b95e27fc3931ba67778da040"
+    },
+    {
+      "name": "managed-pass/fault-app-presentations/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-app-presentations/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-app-presentations/report.json",
+      "size": 498,
+      "sha256": "3a7dac72800640587618a0a2bdd946218cd221454d4bddb9c0fb8208c955d448"
+    },
+    {
+      "name": "managed-pass/fault-app-presentations/stages.jsonl",
+      "size": 942,
+      "sha256": "7a9123e3d4aed368934e749669cdb031eab21c35f066e5e04a276aa121a9b8b3"
+    },
+    {
+      "name": "managed-pass/fault-app-quit/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-app-quit/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-app-quit/original-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-app-quit/original-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-app-quit/original-03.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-app-quit/report.json",
+      "size": 72686,
+      "sha256": "2f33692c4cfb1c7b5cb43bb9d58e8bae09f89860490519d6f88f1f317460ba04"
+    },
+    {
+      "name": "managed-pass/fault-app-quit/saved-reopened-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-app-quit/saved-reopened-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-app-quit/saved-reopened-03.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-app-quit/saved.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-app-quit/stages.jsonl",
+      "size": 89444,
+      "sha256": "734b8f4eec222fbe86bf01c1360898566abed8aa11d69c446097bc7a7cf8d4b7"
+    },
+    {
+      "name": "managed-pass/fault-app-version/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-app-version/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-app-version/report.json",
+      "size": 708,
+      "sha256": "8cce3d81d3bf966db8590627008dbee9288833e1e54aa9c4573fdc26f693f750"
+    },
+    {
+      "name": "managed-pass/fault-app-version/stages.jsonl",
+      "size": 1722,
+      "sha256": "4e946ae3cbec5f59df1fde8ac5ac233503077bd6a8d89964edcaf48bbd40814c"
+    },
+    {
+      "name": "managed-pass/fault-application-factory/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-application-factory/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-application-factory/report.json",
+      "size": 483,
+      "sha256": "4a9ba9d4b98f536598011eca20d392c2498e22b4d5938f3c466b43463b6d2643"
+    },
+    {
+      "name": "managed-pass/fault-application-factory/stages.jsonl",
+      "size": 462,
+      "sha256": "bae26b413153751de5cea453c3750436e646eea84a1863f3cded5c6e309ceea3"
+    },
+    {
+      "name": "managed-pass/fault-global-preflight/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-global-preflight/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-open-original/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-open-original/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-open-original/report.json",
+      "size": 2623,
+      "sha256": "ea1befede78954b69b22bc9235f6a2e0cd84fc2f5dd5c0abcbe750aab341ee92"
+    },
+    {
+      "name": "managed-pass/fault-open-original/stages.jsonl",
+      "size": 3317,
+      "sha256": "8698e581ef2fc93a44e1a735a22277eb19e701b34e750a6f8f7315143b4e7e94"
+    },
+    {
+      "name": "managed-pass/fault-open-saved/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-open-saved/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-open-saved/original-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-open-saved/original-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-open-saved/original-03.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-open-saved/report.json",
+      "size": 37608,
+      "sha256": "3ad6e5e02c9213478bb7325ae06e8f35a51dc03a7485dad374535c01e418ea81"
+    },
+    {
+      "name": "managed-pass/fault-open-saved/saved.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-open-saved/stages.jsonl",
+      "size": 46389,
+      "sha256": "ef224931a8b7e18bfcfb98d45349e701c30d4e46024fa6410566fc1e9f825b81"
+    },
+    {
+      "name": "managed-pass/fault-original-close/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-close/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-close/original-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-original-close/original-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-original-close/original-03.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-original-close/report.json",
+      "size": 36798,
+      "sha256": "26d84e12251bc8f2e7b41a8331abf9bc97080974427b6fa6a7384b50c982e821"
+    },
+    {
+      "name": "managed-pass/fault-original-close/saved.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-close/stages.jsonl",
+      "size": 45186,
+      "sha256": "9ab2b3022d828eea5645db065e29636f74bb3708dbbfd8d26e0f2cb79ab10ed4"
+    },
+    {
+      "name": "managed-pass/fault-original-discard/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-discard/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-discard/original-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-original-discard/original-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-original-discard/original-03.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-original-discard/report.json",
+      "size": 36836,
+      "sha256": "3f2b912fbdfa60c8f788900025a7b12c08d42f37fd19c1c10be184d1f898dc68"
+    },
+    {
+      "name": "managed-pass/fault-original-discard/saved.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-discard/stages.jsonl",
+      "size": 44805,
+      "sha256": "3474daef520dc8c5d6250c903847d9119b467b910f1565e5c5ce9a0149c9fbea"
+    },
+    {
+      "name": "managed-pass/fault-original-fullName/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-fullName/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-fullName/report.json",
+      "size": 2635,
+      "sha256": "a6ee6dd1594daf5628179c8f7a1d282326a75e0dd917202a21386d3719420eb7"
+    },
+    {
+      "name": "managed-pass/fault-original-fullName/stages.jsonl",
+      "size": 3771,
+      "sha256": "0214925f196937674b71b3f07c7cfe0c624a743b84eabfdcb6c0ea8b7ad6d157"
+    },
+    {
+      "name": "managed-pass/fault-original-readOnly/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-readOnly/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-readOnly/report.json",
+      "size": 3022,
+      "sha256": "a09f7eadf47029b02d8c13e715b2697cbf2831c68a3bc29020ce55e0532c1e04"
+    },
+    {
+      "name": "managed-pass/fault-original-readOnly/stages.jsonl",
+      "size": 4226,
+      "sha256": "caf3f95cc5ddb070353cff5f9e7737f8a5759d4805a8d839a2b4ea8d25781aae"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1/report.json",
+      "size": 4425,
+      "sha256": "c53447bf78fa61fc676bd9eb3971da009660a264b422c9efa8aad221137da627"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1/stages.jsonl",
+      "size": 5340,
+      "sha256": "3c7aeec487bf0ba2327dfce2a5bfb7a9b0d64b8df72eb865ea592d13cbc68f22"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-export/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-export/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-export/report.json",
+      "size": 14083,
+      "sha256": "999927f583febe43ce71c4eb597c469d3cdcd15b11db57a532447a4ef718915c"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-export/stages.jsonl",
+      "size": 17527,
+      "sha256": "1d28239f07fee0f52d7b3ff61250f207dcc0354d288d80519dd819e7ac8fa3b0"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-id/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-id/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-id/report.json",
+      "size": 4976,
+      "sha256": "1caa6be19f14f6b5741d25aec1516396eae9f9a0c380f4b79af31c0bd14460c8"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-id/stages.jsonl",
+      "size": 5798,
+      "sha256": "cbb4be3646c0a281aba38267287ab75f33d4c5e5729ac64655d22d32e389b107"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-name/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-name/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-name/report.json",
+      "size": 5227,
+      "sha256": "c1f9d506d0084fc309a6e2cbb50ec5fe1e6129e50dfe8535cb18cdfb82945656"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-name/stages.jsonl",
+      "size": 6182,
+      "sha256": "1daac63133156c269afd45cfb54508bdbfa74d6d4a033cf245bbcb65fd3a1f40"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1/report.json",
+      "size": 5994,
+      "sha256": "57cfb56b3a39254a126c8aef1353cd13963aa26d5bbe89d2dce39dc463f85f8a"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1/stages.jsonl",
+      "size": 7367,
+      "sha256": "9287dbe33baaf8771c522e84f2d5183b924ac42c575e3e0249e514f5791a21e5"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-alternativeText/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-alternativeText/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-alternativeText/report.json",
+      "size": 9438,
+      "sha256": "d7f322f9a56c34f42ab6a36081b0dd6c2f3c982fab448f86b40a0599bab95c73"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-alternativeText/stages.jsonl",
+      "size": 11507,
+      "sha256": "1f7265aca8f411a2f67bb7425df95148c9a5a417cedb23ef36ad3c84f52c056e"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-hasTextFrame/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-hasTextFrame/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-hasTextFrame/report.json",
+      "size": 9076,
+      "sha256": "6e912398b85cba54bcf6967bf76e465e13f3272a76c3a012cdba81182968623b"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-hasTextFrame/stages.jsonl",
+      "size": 11077,
+      "sha256": "adb54f11ee85aa100a6e678e8db66daa193e149009ea05c0954aa7638a41df4d"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-height/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-height/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-height/report.json",
+      "size": 8336,
+      "sha256": "913e51e8e6a684af7398762d804c966f35747a649351a334753942b92754b045"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-height/stages.jsonl",
+      "size": 10237,
+      "sha256": "2aca1b83e74ded2d72ca242777e743b5feb65361e59b61f56cf4ef3c3b9ad010"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-id/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-id/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-id/report.json",
+      "size": 6239,
+      "sha256": "757ed98389dd0ceb1d2c30b9166750979d9a8302d41a12a90955b37c4368d81b"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-id/stages.jsonl",
+      "size": 7836,
+      "sha256": "5e5dc7d3bf3e8303b7b904728cf59822006990a607211199bf09c226af91a343"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-left/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-left/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-left/report.json",
+      "size": 7284,
+      "sha256": "6d751551d069ccc41d9a631003c000af947b7e32847c81431348bf7414ba956b"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-left/stages.jsonl",
+      "size": 9036,
+      "sha256": "07db79433333ae970e7d9f0c704ca2345708d55e5825e4b39c6511b8054145ed"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-name/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-name/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-name/report.json",
+      "size": 6596,
+      "sha256": "fe29bb6e53eb0864ec05f698021f7d7c8fda678158cf5293ac217e2d34519f56"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-name/stages.jsonl",
+      "size": 8239,
+      "sha256": "acd4e1845b42d886701c57fc6dc71b30b89400f2ff5c0e2777b426ebb8130e9d"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-rotation/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-rotation/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-rotation/report.json",
+      "size": 8700,
+      "sha256": "914017f15fc325547c885a50e81f1f346188cc27fd7d15c47ddfabaa3392ef0b"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-rotation/stages.jsonl",
+      "size": 10650,
+      "sha256": "ae1444c854f07354b4403c5617b7d204309a1c425bc8930c5314473324fc52f3"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-text/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-text/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-text/report.json",
+      "size": 9811,
+      "sha256": "f48f66326d850a5eb143c21bb88fbda62f542a770296897ca7dafa92a5a18bd8"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-text/stages.jsonl",
+      "size": 12737,
+      "sha256": "176d1a7318d7136534788c46fd9494e4161631122b2661150436cea4eabd56fa"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-textFrame/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-textFrame/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-textFrame/report.json",
+      "size": 9841,
+      "sha256": "d9111d7a1c7b76b582b17b252567825474e9caa951f8f458f6ff9bf206137d02"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-textFrame/stages.jsonl",
+      "size": 11889,
+      "sha256": "3580caa789142bf57256ec82ac3b9992556dfa1ca918b620ebfe03bb0cba1b95"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-textRange/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-textRange/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-textRange/report.json",
+      "size": 9841,
+      "sha256": "382b4913c95ef2aa4cbcf2e55d66dc12670ea0d4024a9da0cada4c73692d3e10"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-textRange/stages.jsonl",
+      "size": 12328,
+      "sha256": "1c7e6d1118b562e1cea68c25abfb5a12f27adb7d633f933220171c59372edeef"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-top/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-top/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-top/report.json",
+      "size": 7624,
+      "sha256": "f82cb6bfc20f26689c7e6c377c13978044b0f89f0038db4e49bc7d1b7471580d"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-top/stages.jsonl",
+      "size": 9426,
+      "sha256": "f2ef976ca02f0b01d7918301ee14505331c6b4e78f79ba3a855d6192905960dc"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-type/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-type/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-type/report.json",
+      "size": 6933,
+      "sha256": "18360c6385f6b2dc341a1006ad111c6671d165795cf7ab8e01d8137488de6d00"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-type/stages.jsonl",
+      "size": 8640,
+      "sha256": "a5d52aa320336025013001b1ef4a88925f491cde534cf774142c25233787ea5f"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-width/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-width/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-width/report.json",
+      "size": 7980,
+      "sha256": "84a33e3162a16c38ba32e1e1a7b6f6ec41537ded630a0fc6d93fd65a64542961"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shape-1-width/stages.jsonl",
+      "size": 9832,
+      "sha256": "fe7419cd77728d13e33b8a2676da9fe1797d3dc141d9225687d129270039dfd4"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shapes/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shapes/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shapes/report.json",
+      "size": 5482,
+      "sha256": "cb2f5906d0c478d48113d7e11bad89b1226a85ad04d61fba067f10d893bc3e9b"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shapes/stages.jsonl",
+      "size": 6581,
+      "sha256": "e160e7a98b8a43b976a18e6d55aac10c5d147789882a508592bb9e5093b9a580"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shapes-count/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shapes-count/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shapes-count/report.json",
+      "size": 5518,
+      "sha256": "4dd1c249376250a8c47c9f6110ecfe9c4d561adec4593c76570ce6edc901fe2d"
+    },
+    {
+      "name": "managed-pass/fault-original-slide-1-shapes-count/stages.jsonl",
+      "size": 7027,
+      "sha256": "e463c8cf052c0f382301c99c2395b746fe87a5333a1fb3b687c33cf015ee4a30"
+    },
+    {
+      "name": "managed-pass/fault-original-slides/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slides/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slides/report.json",
+      "size": 4195,
+      "sha256": "d185c5c3b45a6136a912e270d08f0b05439d0a8d39cce1023cdf35195da3316a"
+    },
+    {
+      "name": "managed-pass/fault-original-slides/stages.jsonl",
+      "size": 4586,
+      "sha256": "c7541c011ad90dc3583816a7225feaeab6d819c5b5aa7ab2e7a40bbc139a1a30"
+    },
+    {
+      "name": "managed-pass/fault-original-slides-count/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-original-slides-count/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-original-slides-count/report.json",
+      "size": 4231,
+      "sha256": "756b55f6874e39603363d86613bcb8887c8f6450f8195e40e918ac4e5be996a3"
+    },
+    {
+      "name": "managed-pass/fault-original-slides-count/stages.jsonl",
+      "size": 5016,
+      "sha256": "8a0e504bee6483292877564081785415edc4ff8ea0a0c6349c1523bf36cd2911"
+    },
+    {
+      "name": "managed-pass/fault-presentations-count/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-presentations-count/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-presentations-count/report.json",
+      "size": 490,
+      "sha256": "3bb5e8834308868ed33bbdbb953a6672bca311fd8c9c77a9d256a26180c95f9d"
+    },
+    {
+      "name": "managed-pass/fault-presentations-count/stages.jsonl",
+      "size": 1355,
+      "sha256": "387e65a70bb55a4a6bc7661dd7a1a8205731a6421c8aa1dce36e1967de1bebb2"
+    },
+    {
+      "name": "managed-pass/fault-saveCopyAs/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-saveCopyAs/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-saveCopyAs/original-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saveCopyAs/original-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saveCopyAs/original-03.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saveCopyAs/report.json",
+      "size": 35633,
+      "sha256": "e1b2850da3a39a0e409a0ac9ee264d94efe4a4d5f2a987f58597e94f7e8f339c"
+    },
+    {
+      "name": "managed-pass/fault-saveCopyAs/stages.jsonl",
+      "size": 43505,
+      "sha256": "a5664faf89cad69bda3c8866f8d844d99f2004b6641532a788d9d34ad8f54c09"
+    },
+    {
+      "name": "managed-pass/fault-saved-close/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-saved-close/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-saved-close/original-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saved-close/original-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saved-close/original-03.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saved-close/report.json",
+      "size": 71678,
+      "sha256": "ad24e18562527a9092c30a4ed1b75f8e634cec027efdc408b85c4b7bd634baee"
+    },
+    {
+      "name": "managed-pass/fault-saved-close/saved-reopened-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saved-close/saved-reopened-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saved-close/saved-reopened-03.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saved-close/saved.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-saved-close/stages.jsonl",
+      "size": 88275,
+      "sha256": "01974d29f19b3bd8881acb8c2efbdc8a0e30f18b25510bdf6c1dc63bf8c74950"
+    },
+    {
+      "name": "managed-pass/fault-saved-slide-3-export/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/fault-saved-slide-3-export/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-saved-slide-3-export/original-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saved-slide-3-export/original-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saved-slide-3-export/original-03.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saved-slide-3-export/report.json",
+      "size": 70667,
+      "sha256": "43e1dfdd5dce374f3b6eca21937f4fa8ce8b30b9657092fe45ad9948adbd3411"
+    },
+    {
+      "name": "managed-pass/fault-saved-slide-3-export/saved-reopened-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saved-slide-3-export/saved-reopened-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/fault-saved-slide-3-export/saved.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/fault-saved-slide-3-export/stages.jsonl",
+      "size": 87083,
+      "sha256": "406f5539765e4fbee2498a49a761262547c0d8855f6bf10bf2b0519528379de8"
+    },
+    {
+      "name": "managed-pass/forbidden-getter/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/forbidden-getter/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/global-busy/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/global-busy/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/mock-results.json",
+      "size": 29382,
+      "sha256": "c59858faebdb6946a8e348692d3c04f530255ef7e80255e8c688281122d64701"
+    },
+    {
+      "name": "managed-pass/mutant-badTriState/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/mutant-badTriState/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/mutant-badTriState/report.json",
+      "size": 9297,
+      "sha256": "a5ea624b5413122aff36b5cc7f74501511c33435b71f79b0045ae5c33dc0e11f"
+    },
+    {
+      "name": "managed-pass/mutant-badTriState/stages.jsonl",
+      "size": 10875,
+      "sha256": "07861daa79ae92aa1409defad07cbdcbaf45463d66166dd9186dab71c8e8ccd5"
+    },
+    {
+      "name": "managed-pass/mutant-busyApplication/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/mutant-busyApplication/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/mutant-busyApplication/report.json",
+      "size": 718,
+      "sha256": "a483db0e4f89a2dca4c550aad84e9b4c0eca0facd7aae4ae9ef4bd58341272f1"
+    },
+    {
+      "name": "managed-pass/mutant-busyApplication/stages.jsonl",
+      "size": 1228,
+      "sha256": "0841b82455eb6cef07a005f5df54db37b203862a99cd07d728c94f2358e1f31b"
+    },
+    {
+      "name": "managed-pass/mutant-countObject/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/mutant-countObject/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/mutant-countObject/report.json",
+      "size": 4478,
+      "sha256": "524f9f41d002c717e58e093dee26d9378a5d04412ec6ced7a519d96a77cb91d3"
+    },
+    {
+      "name": "managed-pass/mutant-countObject/stages.jsonl",
+      "size": 4903,
+      "sha256": "85472e6ed9487d6b92dfc485f90518e2549b1593921b4de1e977d4e8b1706f7a"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeOpen/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeOpen/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeOpen/report.json",
+      "size": 2298,
+      "sha256": "a04a075536d6dedc6f5691897908527c9de82292e7ec251d7b5ef9f952d0c1c2"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeOpen/stages.jsonl",
+      "size": 2876,
+      "sha256": "2d8031b0459ae088563802a73b921e17e58fff8742d92c7ba7b3be54ee5172bc"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeQuit/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeQuit/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeQuit/original-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeQuit/original-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeQuit/original-03.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeQuit/report.json",
+      "size": 72927,
+      "sha256": "a2c73fc96713f24f14e5f3fe58cc0372bc6b7f72fbe24eb553725717beeae507"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeQuit/saved-reopened-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeQuit/saved-reopened-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeQuit/saved-reopened-03.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeQuit/saved.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/mutant-foreignBeforeQuit/stages.jsonl",
+      "size": 89065,
+      "sha256": "b905bb3a11551c7cbd3d00e5aa1e649f6458e9d9963018e2b9642a947ec635b9"
+    },
+    {
+      "name": "managed-pass/mutant-foreignFullName/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/mutant-foreignFullName/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/mutant-foreignFullName/report.json",
+      "size": 3030,
+      "sha256": "331409fe876cdfeba85e1035b71d9c6e9626f3b73efcea2519e12ef596a380d0"
+    },
+    {
+      "name": "managed-pass/mutant-foreignFullName/stages.jsonl",
+      "size": 3733,
+      "sha256": "644a0be5743f925cc44c1719b01be682fe59a3cf4c6de4342aae7f8e62073336"
+    },
+    {
+      "name": "managed-pass/mutant-nonfinite/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/mutant-nonfinite/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/mutant-nonfinite/report.json",
+      "size": 8288,
+      "sha256": "06c37a1cc829e33488fb3a75da289fce441f38dd4c203901881e48ec6b524f7e"
+    },
+    {
+      "name": "managed-pass/mutant-nonfinite/stages.jsonl",
+      "size": 9683,
+      "sha256": "97819d026d0921afdd8a594414dd360569dc956fb9e6ff76485cbae7a8b2463d"
+    },
+    {
+      "name": "managed-pass/mutant-shapeCount/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/mutant-shapeCount/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/mutant-shapeCount/report.json",
+      "size": 5703,
+      "sha256": "8f5af94c1faac889b439f6a277dedeb0953c84d47a3d410c299c07d755f9a02d"
+    },
+    {
+      "name": "managed-pass/mutant-shapeCount/stages.jsonl",
+      "size": 6854,
+      "sha256": "93cd768b2ac6156e07d72c470d03eb8a927ee4c7514ec6d27afdbb4e6625d23e"
+    },
+    {
+      "name": "managed-pass/mutant-slideCount/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/mutant-slideCount/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/mutant-slideCount/report.json",
+      "size": 4405,
+      "sha256": "e6f2ab4d2183011d72e6e21fca2cad207ba8db86d35136eee5dee263101aef8b"
+    },
+    {
+      "name": "managed-pass/mutant-slideCount/stages.jsonl",
+      "size": 4867,
+      "sha256": "9476d300f75c3633241f4b96e94f0b33b4c54a388aa64acb961060d96a884ba2"
+    },
+    {
+      "name": "managed-pass/mutant-writable/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/mutant-writable/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/mutant-writable/report.json",
+      "size": 3216,
+      "sha256": "f3b2128354a35b7f9ab59f95babe1bafe74ad18558526e5adf25325761d5d1d9"
+    },
+    {
+      "name": "managed-pass/mutant-writable/stages.jsonl",
+      "size": 4082,
+      "sha256": "fcba09b1cc1a75ffa311bf2b686a6642ebb43a136625db429f76913e7b592c30"
+    },
+    {
+      "name": "managed-pass/ownership-Close-ReferenceWitnessOwned/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/ownership-Close-ReferenceWitnessOwned/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/ownership-Close-ReferenceWitnessOwned/report.json",
+      "size": 757,
+      "sha256": "dcc9fd315869856abf6c903a40e82b55aed8b23e71f562c3de27485cc3817f67"
+    },
+    {
+      "name": "managed-pass/ownership-Quit-ReferenceWitnessOwned/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/ownership-Quit-ReferenceWitnessOwned/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/ownership-Quit-ReferenceWitnessOwned/report.json",
+      "size": 708,
+      "sha256": "bb77e004b71096faa7482f590d13fcab72b3af5330732aa77b23d3c22623c315"
+    },
+    {
+      "name": "managed-pass/ownership-Read-ReferenceWitnessPhase/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/ownership-Read-ReferenceWitnessPhase/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/ownership-Read-ReferenceWitnessPhase/report.json",
+      "size": 747,
+      "sha256": "b5babdd3c810e11cb4ad248f2d46ff92642e42fb8a5de164023834abd64f1b72"
+    },
+    {
+      "name": "managed-pass/ownership-Save-ReferenceWitnessCopy/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/ownership-Save-ReferenceWitnessCopy/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/ownership-Save-ReferenceWitnessCopy/report.json",
+      "size": 747,
+      "sha256": "847a4d78cf3de4e57e484aed2efdf4cbae36b5570135d1f6f094f57b1c6adfe6"
+    },
+    {
+      "name": "managed-pass/success/POWERPNT.EXE",
+      "size": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb"
+    },
+    {
+      "name": "managed-pass/success/case.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/success/original-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/success/original-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/success/original-03.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/success/report.json",
+      "size": 72526,
+      "sha256": "34cb68b86a1b388669d4dbd7c37ac057701251bd8e76304eac0ec583bd932995"
+    },
+    {
+      "name": "managed-pass/success/saved-reopened-01.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/success/saved-reopened-02.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/success/saved-reopened-03.png",
+      "size": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9"
+    },
+    {
+      "name": "managed-pass/success/saved.pptx",
+      "size": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693"
+    },
+    {
+      "name": "managed-pass/success/stages.jsonl",
+      "size": 89694,
+      "sha256": "4bea035f50ea896f1125df23f7d7558a2427285ee68aebc9fecc4b6dae3c987b"
+    }
+  ],
+  "outcomes": {
+    "schemaAndSourceTests": {
+      "pass": 5,
+      "fail": 0
+    },
+    "workerSourceTests": {
+      "pass": 3,
+      "fail": 0,
+      "managedCases": 55
+    },
+    "initialSchemaSetup": {
+      "pass": 4,
+      "fail": 1
+    },
+    "initialManagedSetup": {
+      "pass": 2,
+      "fail": 1
+    },
+    "packageBuild": false,
+    "currentConsumerGeneration": false,
+    "exportedShapeCounts": "UNMEASURED",
+    "nativeProfileAdmission": "NOT_IMPLEMENTED",
+    "officeInvoked": false,
+    "nativeAcceptance": false,
+    "registryAcceptance": false
+  },
+  "limitation": "Fake executable/PPTX/PNG bytes are managed test fixtures only. Public profile/archive/generator/envelope/default-wrapper-positive controls remain owed. No original59/fd13/four-WHOLE mutation or native observation."
+}

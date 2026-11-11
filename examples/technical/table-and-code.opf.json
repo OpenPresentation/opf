@@ -35,14 +35,14 @@
     },
     {
       "title": "Decision Rule",
-      "left": {
+      "start": {
         "code": {
           "source": "if risk > threshold:\n    escalate(owner)\nelse:\n    approve(change)",
           "language": "python",
           "filename": "decision.py"
         }
       },
-      "center+right": {
+      "center+end": {
         "items": [
           "Escalate only when the decision is irreversible",
           "Keep reversible changes moving",

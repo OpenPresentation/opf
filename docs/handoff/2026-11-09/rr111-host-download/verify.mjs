@@ -1,0 +1,61 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+import {gunzipSync} from 'node:zlib';
+
+const dir = fileURLToPath(new URL('./', import.meta.url));
+const root = fileURLToPath(new URL('../../../../', import.meta.url));
+const prefix = 'docs/handoff/2026-11-09/rr111-host-download/';
+const hash = value => crypto.createHash('sha256').update(value).digest('hex');
+const manifestBytes = fs.readFileSync(path.join(dir, 'manifest.json'));
+assert.equal(hash(manifestBytes), fs.readFileSync(path.join(dir, 'manifest.sha256'), 'utf8').split(' ')[0]);
+const manifest = JSON.parse(manifestBytes), raw = new Map();
+for (const item of manifest.files) {
+  assert(!path.isAbsolute(item.transport) && !item.transport.split('/').includes('..'));
+  const transport = fs.readFileSync(path.join(dir, item.transport));
+  assert.equal(transport.length, item.transportBytes); assert.equal(hash(transport), item.transportSha256);
+  const bytes = item.kind === 'gzip' ? gunzipSync(transport, {maxOutputLength: 2 * 1024 * 1024}) : transport;
+  assert.equal(bytes.length, item.bytes); assert.equal(hash(bytes), item.sha256);
+  assert(!raw.has(item.name)); raw.set(item.name, bytes);
+}
+assert.equal([...raw.values()].reduce((sum, bytes) => sum + bytes.length, 0), manifest.rawBytes);
+const json = name => JSON.parse(raw.get(name));
+const git = (...args) => execFileSync('git', args, {cwd: root, encoding: 'utf8'}).trim();
+const proof = json('source-proof.json');
+assert.equal(proof.source, manifest.source); assert.equal(proof.base, manifest.base);
+assert.equal(git('rev-parse', `${manifest.source}^{tree}`), manifest.sourceTree);
+assert.deepEqual(git('diff', '--name-only', manifest.base, manifest.source).split('\n').sort(), proof.changed);
+for (const item of proof.protectedObjects) {
+  assert.equal(git('rev-parse', `${manifest.base}:${item.path}`), item.object);
+  assert.equal(git('rev-parse', `${manifest.source}:${item.path}`), item.object);
+}
+assert.equal(proof.productionAdapterLines, 24); assert.equal(proof.originalBrowserGroups.length, 8); assert.equal(proof.newBrowserGroups.length, 4);
+assert.equal(proof.sandbox, 'allow-scripts allow-same-origin'); assert(!proof.csp.includes('unsafe-eval'));
+const main = 'packages/mcp/app/main.ts';
+const before = git('show', `${manifest.base}:${main}`), current = git('show', `${manifest.source}:${main}`);
+const start = current.indexOf('\t\tsource: {\n'), end = current.indexOf("\t\t// The editor's own parts", start);
+assert(start > 0 && end > start); assert.equal(current.slice(0, start) + current.slice(end), before);
+const later = git('diff', '--name-only', manifest.source, 'HEAD').split('\n').filter(Boolean);
+assert(later.every(file => file.startsWith(prefix) || file === 'docs/programs/release-readiness/burndown.md'), 'Later changes exceed this frozen source qualification');
+assert.equal(json('before-browser.exit.json').exitCode, 1);
+assert.equal(json('after-browser.exit.json').exitCode, 1);
+assert.match(raw.get('before-browser.log').toString(), /4 failed:/);
+assert.match(raw.get('after-browser.log').toString(), /4 failed:/);
+assert.equal(json('after-browser-02.exit.json').exitCode, 0);
+const passing = raw.get('after-browser-02.log').toString();
+assert.equal(passing.split(/\r?\n/).filter(line => line.startsWith('ok - ')).length, 12);
+for (const group of [...proof.originalBrowserGroups.map(item => item.name), ...proof.newBrowserGroups]) assert(passing.includes('ok - ' + group));
+assert.equal(json('app-types.exit.json').exitCode, 0);
+assert.equal(json('mapped-01.exit.json').exitCode, 1);
+const mapped = raw.get('mapped-01.log').toString();
+assert.match(mapped, /1 of 10 steps failed: pnpm run check:gallery-tracker/);
+assert.match(mapped, /tests mcp\s+passed/); assert.match(mapped, /typecheck\s+passed/);
+const node = raw.get('mapped-tests_mcp.log').toString();
+assert.match(node, /pass 55/); assert.match(node, /fail 0/); assert.match(node, /skipped 1/);
+assert.equal(json('final-metadata-check.exit.json').exitCode, 1);
+assert.match(raw.get('final-metadata-check.log').toString(), /1 of 8 steps failed: pnpm run check:gallery-tracker/);
+assert.equal(proof.remoteMcpRpc, 0); assert.equal(proof.officeCalls, 0);
+console.log(JSON.stringify({files: raw.size, rawBytes: manifest.rawBytes, source: manifest.source, protectedObjects: proof.protectedObjects.length, browserGroups: 12, mcpNodePass: 55, mcpOptionalSkip: 1, mapped: 'RED: strict gallery-tracker freshness only', remoteMcpRpc: 0, officeCalls: 0}));
