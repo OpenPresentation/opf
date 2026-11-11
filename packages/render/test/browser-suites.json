@@ -9,6 +9,10 @@
           "command": "pnpm run test:browser"
         },
         {
+          "id": "browser:rtl-number-markers",
+          "command": "node test/rtl-number-markers-browser.mjs"
+        },
+        {
           "id": "browser:player-browser",
           "command": "pnpm run test:player-browser"
         },
