@@ -38,7 +38,21 @@ test('one original mixed fragment uses source-selected script intervals and refu
  for(const mutate of [value=>{delete value.fragments[0].run.language;},value=>{value.fragments[0].width+=0.001;},value=>{value.fragments[0].run.text=value.fragments[0].text='البند: Bonjour ١';},value=>{value.fragments[0].run.text=value.fragments[0].text='البند: Bonjour ۱';}]){
   const candidate=structuredClone(mixed);mutate(candidate);assert.equal(planNativeTextFragments(candidate,request),undefined);
  }
- const whole=fragment('Item 1: Customers',0,0);assert.equal(planNativeTextFragments({...line,fragments:[whole],width:whole.width},{...request,rtl:false}),undefined,'Unobserved whole-ASCII LTR paragraphs remain outside this successor');
+ const whole=fragment('Item 1',0,0);assert.equal(planNativeTextFragments({...line,fragments:[whole],width:whole.width},{...request,rtl:false}),undefined,'The bounded LTR topology requires a numeric-free suffix and never creates an empty carrier');
+});
+
+test('explicit Arabic-proofed LTR numeric intervals keep their whole source prefix and suffix',()=>{
+ const whole=fragment('Item 1: Customers told us',0,0),input={...line,fragments:[whole],width:whole.width},before=structuredClone(input),plan=planNativeTextFragments(input,{...request,rtl:false});
+ assert(plan);assert.deepEqual(input,before);assert.equal(plan.prefix,5);
+ assert.equal(whole.text.length,25);assert.deepEqual(plan.members.map(({start,end,kind,x,width})=>({start,end,kind,x,width})),[{start:5,end:6,kind:'number',x:240,width:8},{start:6,end:25,kind:'word',x:248,width:152}]);
+ assert.deepEqual(plan.source,[{run:0,start:0,end:25}]);
+ for(const mutate of [value=>{delete value.fragments[0].run.language;},value=>{value.fragments[0].run.language='en-US';},value=>{value.fragments[0].width+=0.001;},value=>{value.fragments[0].run.text=value.fragments[0].text='Item ١: Customers told us';},value=>{value.fragments[0].run.text=value.fragments[0].text='Item ۱: Customers told us';}]){
+  const candidate=structuredClone(input);mutate(candidate);assert.equal(planNativeTextFragments(candidate,{...request,rtl:false}),undefined);
+ }
+ const continuation=fragment('around the customer journey.',0,0);assert.equal(planNativeTextFragments({...line,fragments:[continuation],width:continuation.width},{...request,rtl:false}),undefined);
+ const multiple=fragment('Phase 1 then 2 details',0,0),parts=planNativeTextFragments({...line,fragments:[multiple],width:multiple.width},{...request,rtl:false});assert(parts);
+ assert.deepEqual(parts.members.map(({start,end,kind})=>({text:multiple.text.slice(start,end),kind})),[{text:'1',kind:'number'},{text:' then ',kind:'word'},{text:'2',kind:'number'},{text:' details',kind:'word'}]);
+ assert.equal(planNativeTextFragments({...input,fragments:[whole,{...whole,runIndex:1,x:whole.width}]},{...request,rtl:false}),undefined,'Multiple authored fragments stay outside the bounded LTR topology');
 });
 
 test('final native writer preserves full run/paragraph/carrier geometry and applies no Unicode control',()=>{
