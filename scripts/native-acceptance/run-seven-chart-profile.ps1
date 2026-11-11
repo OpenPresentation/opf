@@ -25,7 +25,7 @@ function Read-SevenBootstrapEnvelope([string]$Path,[string]$Sha256) {
     $full=Assert-SevenBootstrapPath $Path;$file=Get-Item -LiteralPath $full -Force
     if($file.PSIsContainer -or $file.Length -gt 4194304 -or $Sha256 -cnotmatch '^[a-f0-9]{64}$' -or (Get-FileHash -LiteralPath $full -Algorithm SHA256).Hash.ToLowerInvariant() -cne $Sha256) { throw 'External seven execution envelope SHA-256/size differs' }
     $value=Get-Content -LiteralPath $full -Raw -Encoding UTF8 | ConvertFrom-Json
-    if($value.schemaVersion -ne 1 -or $value.profile -cne 'seven-chart-original-readonly-v1' -or $value.nativeAcceptance -isnot [bool] -or $value.nativeAcceptance -or $value.registryAcceptance -isnot [bool] -or $value.registryAcceptance) { throw 'Unsupported seven execution envelope' }
+    if($value.schemaVersion -ne 2 -or $value.profile -cne 'seven-chart-original-readonly-v2' -or $value.nativeAcceptance -isnot [bool] -or $value.nativeAcceptance -or $value.registryAcceptance -isnot [bool] -or $value.registryAcceptance) { throw 'Unsupported seven execution envelope' }
     return $value
 }
 function Assert-SevenBootstrapNode([string]$Path,$Identity) {
@@ -37,8 +37,8 @@ function Assert-SevenBootstrapController([string]$Root,$Identity) {
     if($full -ine $Identity.directory -or $Identity.dirty -isnot [bool] -or $Identity.dirty -or $Identity.revision -cnotmatch '^[a-f0-9]{40}$') { throw 'Seven controller requires its separate clean Git identity' }
     $head=(& git -C $full rev-parse HEAD | Out-String).Trim();if($LASTEXITCODE -ne 0 -or $head -cne $Identity.revision) { throw 'Seven controller HEAD differs' }
     $status=(& git -C $full status --porcelain --untracked-files=normal | Out-String).Trim();if($LASTEXITCODE -ne 0 -or $status -ne '') { throw 'Seven controller must remain clean' }
-    $required=@('scripts/native-acceptance/seven-chart-profile.mjs','scripts/native-acceptance/seven-chart-archive.mjs','scripts/native-acceptance/run-seven-chart-profile.ps1','scripts/native-acceptance/seven-chart-worker.ps1','scripts/native-acceptance/identity.mjs','scripts/native-acceptance/run-windows.ps1')
-    if($Identity.files -isnot [array] -or $Identity.files.Count -ne $required.Count) { throw 'Seven controller requires all six exact code identities' }
+    $required=@('scripts/native-acceptance/identity.mjs','scripts/native-acceptance/owned-postflight.mjs','scripts/native-acceptance/owned-postflight.ps1','scripts/native-acceptance/reference-chart-archive.mjs','scripts/native-acceptance/reference-chart-profile.mjs','scripts/native-acceptance/reference-runtime-routes.mjs','scripts/native-acceptance/run-reference-chart-profile.ps1','scripts/native-acceptance/run-seven-chart-profile.ps1','scripts/native-acceptance/run-windows.ps1','scripts/native-acceptance/seven-chart-archive.mjs','scripts/native-acceptance/seven-chart-profile.mjs','scripts/native-acceptance/seven-chart-worker.ps1','scripts/native-acceptance/seven-postflight.mjs','scripts/native-acceptance/seven-postflight.ps1')
+    if($Identity.files -isnot [array] -or $Identity.files.Count -ne $required.Count) { throw 'Seven controller requires the exact closed controller dependency identities' }
     foreach($name in $required) {
         $matches=@($Identity.files | Where-Object {$_.path -ceq $name});if($matches.Count -ne 1) { throw 'Missing/duplicate seven controller code identity' }
         $file=Assert-SevenBootstrapPath (Join-Path $full $name);$item=Get-Item -LiteralPath $file -Force
@@ -76,12 +76,16 @@ $output=Assert-FreshNativeOutput $OutputDirectory $protected
 [void](New-Item -ItemType Directory -Path $output)
 [void](New-Item -ItemType Directory -Path (Join-Path $output 'inputs'))
 $script:sevenRunnerPath=Join-Path $output 'runner.json'
-$script:sevenRunner=[ordered]@{schemaVersion=1;profile=$profile.profile;envelopeSha256=$ExpectedEnvelopeSha256;generation=$profile.generation;controllerRepository=$profile.controllerRepository;node=$profile.node;limits=$profile.limits;timeoutSeconds=$TimeoutSeconds;runOfficeRequested=[bool]$RunOffice;nativeAcceptance=$false;registryAcceptance=$false;status='snapshots-pending';snapshots=@()}
+$script:sevenRunner=[ordered]@{schemaVersion=2;profile=$profile.profile;envelopeSha256=$ExpectedEnvelopeSha256;generation=$profile.generation;controllerRepository=$profile.controllerRepository;node=$profile.node;limits=$profile.limits;timeoutSeconds=$TimeoutSeconds;runOfficeRequested=[bool]$RunOffice;nativeAcceptance=$false;registryAcceptance=$false;status='snapshots-pending';snapshots=@();request=$null}
 Write-SevenRunner
 try {
     $copies=@(@($ExecutionEnvelope,'execution-envelope.json'),@($binding.inputPath,'inputs/case.pptx'),@($binding.planPath,'inputs/action-plan.json'),@((Join-Path $PSScriptRoot 'seven-chart-worker.ps1'),'inputs/seven-chart-worker.ps1'),@((Join-Path $profile.generation.workerRepository 'test/native-process.ps1'),'inputs/native-process.ps1'))
     foreach($copy in $copies) { $id=Copy-SevenExclusive $copy[0] (Join-Path $output $copy[1]);$script:sevenRunner.snapshots+=@([ordered]@{path=$copy[1];bytes=$id.bytes;sha256=$id.sha256});Write-SevenRunner }
     $script:sevenRunner.status=if($RunOffice){'native-worker-pending'}else{'pure-checks-completed; native-not-run'};Write-SevenRunner
+    $requestCreated=& $NodeExecutable $validator create-request --envelope $ExecutionEnvelope --expected-envelope-sha256 $ExpectedEnvelopeSha256 --output $output --require-office ([bool]$RunOffice).ToString().ToLowerInvariant()
+    if($LASTEXITCODE -ne 0) { throw 'Seven immutable request creation failed before Office' }
+    $requestBinding=($requestCreated | Out-String) | ConvertFrom-Json
+    $script:sevenRunner.request=$requestBinding.identity;Write-SevenRunner
     & $NodeExecutable $validator verify-execution --envelope $ExecutionEnvelope --expected-envelope-sha256 $ExpectedEnvelopeSha256 --output $output --require-office ([bool]$RunOffice).ToString().ToLowerInvariant()
     if($LASTEXITCODE -ne 0) { throw 'Seven owned execution snapshot verification failed' }
     if(-not $RunOffice) { return }
@@ -89,17 +93,17 @@ try {
     # The unchanged ce92 supervisor is loaded only after explicit RunOffice and all pure checks.
     $native=Join-Path $output 'native';[void](New-Item -ItemType Directory -Path $native)
     . (Join-Path $output 'inputs/native-process.ps1')
-    $arguments=@('-ExecutionEnvelope',(Join-Path $output 'execution-envelope.json'),'-ExpectedEnvelopeSha256',$ExpectedEnvelopeSha256,'-NodeExecutable',$NodeExecutable,'-OutputDirectory',$native,'-TimeoutSeconds',"$TimeoutSeconds",'-Worker')
+    $arguments=@('-ExecutionEnvelope',(Join-Path $output 'execution-envelope.json'),'-ExpectedEnvelopeSha256',$ExpectedEnvelopeSha256,'-NodeExecutable',$NodeExecutable,'-OutputDirectory',$native,'-TimeoutSeconds',"$TimeoutSeconds",'-ExpectedRequestSha256',$requestBinding.identity.sha256,'-Worker')
     $terminal=Invoke-OpfNativeWorker -ScriptPath (Join-Path $output 'inputs/seven-chart-worker.ps1') -WorkerArguments $arguments -OutputDirectory $native -TimeoutSeconds $TimeoutSeconds
     # No COM cleanup on any outcome. Raw worker.json remains the original supervisor's receipt.
-    $success=(-not $terminal.timedOut -and $terminal.exitCode -eq 0)
-    $reportPath=Join-Path $native 'report.json';$report=$null
-    if($success -and (Test-Path -LiteralPath $reportPath -PathType Leaf)) { $report=Get-Content -LiteralPath $reportPath -Raw -Encoding UTF8 | ConvertFrom-Json }
-    $confirmed=($success -and $null -ne $report -and $report.cleanupConfirmed -ceq $true -and $report.officeOperationsStopped -ceq $false -and $report.lastStage -ceq 'worker.complete' -and $report.lastStatus -ceq 'success')
-    $remaining=$null
-    if($confirmed) { $remaining=@(Get-Process -Name POWERPNT -ErrorAction SilentlyContinue).Count;$confirmed=($remaining -eq 0) }
-    [ordered]@{schemaVersion=1;profile=$profile.profile;timedOut=[bool]$terminal.timedOut;exitCode=$terminal.exitCode;cleanupConfirmed=[bool]$confirmed;powerPointPostflightCount=$remaining;originalSupervisorSha256='b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c';nativeAcceptance=$false;registryAcceptance=$false} | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $native 'supervisor.json') -Encoding UTF8
-    if(-not $confirmed) { throw 'Seven worker failed or cleanup is unconfirmed; preserve outputs and stop. No retry or COM cleanup was attempted.' }
+    $admissionJson=& $NodeExecutable $validator verify-postflight --envelope $ExecutionEnvelope --expected-envelope-sha256 $ExpectedEnvelopeSha256 --output $output --require-office true
+    if($LASTEXITCODE -ne 0) { throw 'Seven typed completion admission failed; no observer query is permitted' }
+    $admissionIdentity=($admissionJson | Out-String) | ConvertFrom-Json
+    . (Join-Path $PSScriptRoot 'owned-postflight.ps1')
+    $postflight=Invoke-OwnedProfilePostflight -AdmissionFile $admissionIdentity.path -ExpectedAdmissionSha256 $admissionIdentity.sha256 -Profile $profile.profile -ControllerRoot $controller
+    $confirmed=($null -eq $postflight.error -and $null -ne $postflight.result -and $postflight.result.observedZero -ceq $true)
+    [ordered]@{schemaVersion=2;profile=$profile.profile;timedOut=$terminal.timedOut;exitCode=$terminal.exitCode;workerCleanupConfirmed=$true;cleanupConfirmed=$confirmed;postflight=$postflight;nativeAcceptance=$false;registryAcceptance=$false} | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath (Join-Path $native 'supervisor.json') -Encoding UTF8
+    if(-not $confirmed) { throw 'Seven bounded global-zero observation failed; preserve output; no retry or cleanup' }
     & $NodeExecutable $validator observe --envelope $ExecutionEnvelope --expected-envelope-sha256 $ExpectedEnvelopeSha256 --output $output
     if($LASTEXITCODE -ne 0) { throw 'Seven offline observation binding failed; preserve the native outputs' }
     $script:sevenRunner.status='native-observation-completed; supervisor-review-required';Write-SevenRunner

@@ -13,21 +13,28 @@ export const SEVEN_SUPERVISOR = {
   bytes: 2341,
   sha256: 'b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c',
 };
-export const SEVEN_PROFILE = 'seven-chart-original-readonly-v1';
+import {OWNED_SHARED_FILES, ownedControllerFiles, makeOwnedRequest, writeOwnedRequest, bindOwnedRequest, writeOwnedAdmission, assertOwnedPostflightArtifacts, readOwnedFile, readOwnedJson, REQUEST_HASH_TOKEN, assertOwnedOperations, assertOwnedStageWire} from './owned-postflight.mjs';
+import {SEVEN_POSTFLIGHT_POLICY, verifySevenPostflightBinding, sevenExpectedOperations} from './seven-postflight.mjs';
+
+export const SEVEN_PROFILE = 'seven-chart-original-readonly-v2';
 export const SEVEN_CASES = [
   'chart-all-seven',
   'chart-mode-all-seven-fallback',
   'chart-mode-all-seven-auto',
   'chart-mode-all-seven-native',
 ];
-export const SEVEN_CONTROLLER_FILES = [
+const sevenControllerEntries = [
   'scripts/native-acceptance/seven-chart-profile.mjs',
   'scripts/native-acceptance/seven-chart-archive.mjs',
   'scripts/native-acceptance/run-seven-chart-profile.ps1',
   'scripts/native-acceptance/seven-chart-worker.ps1',
   'scripts/native-acceptance/identity.mjs',
   'scripts/native-acceptance/run-windows.ps1',
+  'scripts/native-acceptance/seven-postflight.mjs',
+  'scripts/native-acceptance/seven-postflight.ps1',
+  ...OWNED_SHARED_FILES,
 ];
+export const SEVEN_CONTROLLER_FILES = ownedControllerFiles(fileURLToPath(new URL('../../', import.meta.url)), sevenControllerEntries);
 const controllerRoot = fileURLToPath(new URL('../../', import.meta.url));
 const hasControl = (value) => [...value].some((char) => char.charCodeAt(0) < 32);
 const hex = (value) => assert.match(value, /^[a-f0-9]{64}$/u, 'Expected an explicit SHA256 digest');
@@ -231,7 +238,8 @@ export function validateSevenEnvelope(
   envelope,
   { root = controllerRoot, deps = dependencies() } = {},
 ) {
-  assert.equal(envelope.schemaVersion, 1);
+  assert.equal(envelope.schemaVersion, 2);
+  assert.deepEqual(envelope.postflightPolicy, SEVEN_POSTFLIGHT_POLICY);
   assert.equal(envelope.profile, SEVEN_PROFILE);
   assert.equal(envelope.nativeAcceptance, false);
   assert.equal(envelope.registryAcceptance, false);
@@ -303,8 +311,9 @@ export function createSevenEnvelope({
   assert.equal(controllerRepository.dirty, false, 'Freeze controller before envelope creation');
   const binding = suiteBinding(generation, dependencies()),
     envelope = {
-      schemaVersion: 1,
+      schemaVersion: 2,
       profile: SEVEN_PROFILE,
+      postflightPolicy: SEVEN_POSTFLIGHT_POLICY,
       nativeAcceptance: false,
       registryAcceptance: false,
       generation,
@@ -356,6 +365,7 @@ export function validateSevenExecution({
   expectedEnvelopeSha256,
   output,
   requireOffice = false,
+  requestRequired = true,
   root = controllerRoot,
   deps = dependencies(),
 }) {
@@ -366,7 +376,7 @@ export function validateSevenExecution({
   if (envelopePath !== fs.realpathSync(snapshotEnvelope))
     assertSevenOutput(output, binding.envelope, envelopeFile);
   const runner = readJson(asset(directory, 'runner.json'));
-  assert.equal(runner.schemaVersion, 1);
+  assert.equal(runner.schemaVersion, 2);
   assert.equal(runner.profile, SEVEN_PROFILE);
   assert.equal(runner.envelopeSha256, binding.envelopeSha256);
   assert.equal(runner.nativeAcceptance, false);
@@ -413,13 +423,35 @@ export function validateSevenExecution({
   );
   records(directory, runner.snapshots);
   assert.equal(fileIdentity(snapshotEnvelope).sha256, binding.envelopeSha256);
-  return { ...binding, directory, runner, snapshots: expected };
+  const result = { ...binding, directory, runner, snapshots: expected };
+  if (requestRequired) {
+    const requestBinding = bindSevenRequest(result);
+    assert.deepEqual(runner.request, requestBinding.identity);
+  }
+  return result;
+}
+export function expectedSevenRequest(binding) {
+  const {directory, envelope, runner, snapshots} = binding;
+  const nativeRoot = path.join(directory, 'native');
+  return makeOwnedRequest({
+    profile: SEVEN_PROFILE, policy: SEVEN_POSTFLIGHT_POLICY, envelopeSha256: binding.envelopeSha256,
+    output: directory, node: envelope.node, controller: envelope.controllerRepository, generation: envelope.generation,
+    snapshots, timeoutSeconds: runner.timeoutSeconds, runOfficeRequested: runner.runOfficeRequested,
+    selectedCase: envelope.generation.caseId, nativeRoot, workerPath: path.join(directory, 'inputs/seven-chart-worker.ps1'),
+    workerArguments: ['-ExecutionEnvelope', path.join(directory, 'execution-envelope.json'),
+      '-ExpectedEnvelopeSha256', binding.envelopeSha256, '-NodeExecutable', envelope.node.path,
+      '-OutputDirectory', nativeRoot, '-TimeoutSeconds', String(runner.timeoutSeconds),
+      '-ExpectedRequestSha256', REQUEST_HASH_TOKEN, '-Worker'],
+  });
+}
+export function bindSevenRequest(binding, expectedSha256) {
+  return bindOwnedRequest(path.join(binding.directory, 'execution-request.json'), expectedSevenRequest(binding), expectedSha256);
 }
 export function assertSevenLifecycle(report, terminal, inputSha256, envelopeSha256) {
   assert.equal(terminal.timedOut, false);
   assert.equal(terminal.exitCode, 0);
   assert.equal(terminal.cleanupConfirmed, true);
-  assert.equal(report.schemaVersion, 1);
+  assert.equal(report.schemaVersion, 2);
   assert.equal(report.profile, SEVEN_PROFILE);
   assert.equal(report.envelopeSha256, envelopeSha256);
   assert.equal(report.sourceSha256, inputSha256);
@@ -448,86 +480,11 @@ export function assertSevenLifecycle(report, terminal, inputSha256, envelopeSha2
   return true;
 }
 export function assertSevenStages(report, stages) {
-  const names = [
-    'worker.initialize',
-    'application.create',
-    'application.initial.presentations',
-    'application.initial.count',
-    'application.version',
-    'application.path',
-  ];
-  for (const phase of ['original', 'saved-reopened']) {
-    names.push(
-      phase + '.preflight.presentations',
-      phase + '.preflight.count',
-      phase + '.open',
-      phase + '.fullName',
-      phase + '.readOnly',
-      phase + '.slides',
-      phase + '.slides.count',
-    );
-    for (let i = 1; i <= 7; i++) {
-      names.push(
-        phase + '.slide.' + i + '.get',
-        phase + '.slide.' + i + '.id',
-        phase + '.slide.' + i + '.name',
-        phase + '.slide.' + i + '.shapes',
-        phase + '.slide.' + i + '.shapes.count',
-      );
-      const slide = report.phases[phase].slides[i - 1];
-      for (let j = 1; j <= slide.shapeCount; j++) {
-        const base = phase + '.slide.' + i + '.shape.' + j;
-        names.push(
-          base + '.get',
-          ...[
-            'id',
-            'name',
-            'type',
-            'left',
-            'top',
-            'width',
-            'height',
-            'rotation',
-            'hasTextFrame',
-            'alternativeText',
-          ].map((p) => base + '.' + p),
-        );
-        if (slide.shapes[j - 1].hasTextFrame === -1)
-          names.push(base + '.textFrame', base + '.textRange', base + '.text');
-      }
-      names.push(phase + '.slide.' + i + '.export');
-    }
-    if (phase === 'original') names.push('copy.fullName', 'copy.saveCopyAs', 'copy.afterName');
-    names.push(phase + '.close.fullName', phase + '.close.discard', phase + '.close');
-  }
-  names.push(
-    'application.final.presentations',
-    'application.final.count',
-    'application.quit',
-    'worker.complete',
-  );
-  const expected = names.flatMap((stage) =>
-    stage.startsWith('worker.')
-      ? [{ stage, status: 'success' }]
-      : [
-          { stage, status: 'begin' },
-          { stage, status: 'success' },
-        ],
-  );
-  assert.equal(stages.length, expected.length, 'Missing or extra seven Office stage');
-  stages.forEach((s, i) => {
-    assert.equal(s.sequence, i + 1, 'Noncontiguous seven stage journal');
-    assert.equal(s.stage, expected[i].stage);
-    assert.equal(s.status, expected[i].status);
-    assert.equal(s.officeOperationsStopped, false);
-    assert.equal(typeof s.timestamp, 'string');
-    assert.ok(Number.isFinite(Date.parse(s.timestamp)));
-  });
-  assert.ok(
-    Array.isArray(report.probes) && report.probes.length > 0,
-    'Primitive probes must be retained',
-  );
-  for (const probe of report.probes) assert.equal(probe.matched, true, 'A native probe refused');
+  // Refuse managed object/nonfinite values before JSON serialization can coerce them.
+  assertOwnedOperations(stages, sevenExpectedOperations(report));
+  assertOwnedStageWire(Buffer.from(stages.map(stage => JSON.stringify(stage)).join('\n') + '\n'));
+  assert.ok(Array.isArray(report.probes) && report.probes.length > 0);
+  for (const probe of report.probes) assert.equal(probe.matched, true);
   return true;
 }
 function semanticChart(chart) {
@@ -669,6 +626,10 @@ export async function bindSevenObservation({
     assert.equal(fileIdentity(asset(directory, file)).sha256, hash);
   const report = readJson(asset(directory, 'native/report.json')),
     terminal = readJson(asset(directory, 'native/supervisor.json'));
+  const requestBinding = bindSevenRequest(binding);
+  const admission = verifySevenPostflightBinding(binding, requestBinding);
+  assert.deepEqual(readOwnedJson(path.join(directory, 'postflight-admission.json')), admission);
+  assertOwnedPostflightArtifacts(terminal.postflight, readOwnedFile(path.join(directory, 'postflight.jsonl'), 65536), SEVEN_POSTFLIGHT_POLICY, admission);
   assertSevenLifecycle(report, terminal, digest(binding.input), binding.envelopeSha256);
   const stages = fs
     .readFileSync(asset(directory, 'native/stages.jsonl'), 'utf8')
@@ -814,6 +775,19 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
         archive: b.archive,
       }),
     );
+  } else if (mode === 'create-request' || mode === 'verify-postflight') {
+    assert.deepEqual(Object.keys(o).sort(), ['--envelope', '--expected-envelope-sha256', '--output', '--require-office'].sort());
+    assert.ok(['true', 'false'].includes(o['--require-office']));
+    const b = validateSevenExecution({envelopeFile: o['--envelope'], expectedEnvelopeSha256: o['--expected-envelope-sha256'],
+      output: o['--output'], requireOffice: o['--require-office'] === 'true', requestRequired: mode !== 'create-request'});
+    if (mode === 'create-request') console.log(JSON.stringify(writeOwnedRequest(path.join(b.directory, 'execution-request.json'), expectedSevenRequest(b))));
+    else {
+      assert.equal(o['--require-office'], 'true');
+      const admission = verifySevenPostflightBinding(b, bindSevenRequest(b));
+      // Recheck generation/runtime/controller after reading every native evidence file.
+      validateSevenExecution({envelopeFile: o['--envelope'], expectedEnvelopeSha256: o['--expected-envelope-sha256'], output: o['--output'], requireOffice: true});
+      console.log(JSON.stringify(writeOwnedAdmission(path.join(b.directory, 'postflight-admission.json'), admission)));
+    }
   } else if (mode === 'verify-execution') {
     assert.deepEqual(
       Object.keys(o).sort(),
