@@ -5,7 +5,8 @@ import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { isDeepStrictEqual } from "node:util";
-import { inspectReferenceArchive, bindReferenceWitnessPhase } from "./reference-chart-archive.mjs";
+import { inspectReferenceArchive, inspectCurrentReferenceStrokes, bindReferenceWitnessPhase } from "./reference-chart-archive.mjs";
+import { readReferenceSources } from "./reference-chart-fixtures.mjs";
 import { digest, fileIdentity, installedIdentity, repositoryIdentity } from "./identity.mjs";
 import { assertReferenceRuntimeRoutes } from "./reference-runtime-routes.mjs";
 
@@ -866,6 +867,22 @@ export function assertReferenceWitnessSource(archive, source) {
 }
 const chartOf = (slide) => slide.chart ?? slide.blocks?.find((b) => b.chart)?.chart;
 export function compareReferenceWitnessImports(source, imported, sourceCanvas, resolveChartData) {
+  return compareReferenceImports(source, imported, sourceCanvas, resolveChartData);
+}
+// Current preparation only; bytes and closed source evidence select exact S4 Line
+// expectations. No legacy caller or historical fixture gets this path implicitly.
+export function compareCurrentReferenceWitnessImports(source, imported, inputs, resolveChartData, deps) {
+  assert.deepEqual(Object.keys(inputs).sort(), ['original','saved-reopened'].sort());
+  assert.ok(readReferenceSources().some(item => isDeepStrictEqual(item.document, source)), 'Exact current four-case reference source required');
+  const proof = Object.fromEntries(Object.entries(inputs).map(([phase, bytes]) => [phase, inspectCurrentReferenceStrokes(bytes, source, deps)]));
+  for (const current of Object.values(proof)) {
+    assertReferenceWitnessSource(current.archive, source);
+    assert.deepEqual(current.archive.canvas, proof.original.archive.canvas);
+  }
+  return {findings:compareReferenceImports(source, imported, proof.original.archive.canvas, resolveChartData, proof),
+    currentLineEvidence:Object.fromEntries(Object.entries(proof).map(([phase,{archiveSha256,evidence}]) => [phase,{archiveSha256,evidence}]))};
+}
+function compareReferenceImports(source, imported, sourceCanvas, resolveChartData, current) {
   assert.ok(
     sourceCanvas && ["cx", "cy"].every((key) => Number.isSafeInteger(sourceCanvas[key]) && sourceCanvas[key] > 0),
     "Explicit verified source canvas is required",
@@ -928,10 +945,12 @@ export function compareReferenceWitnessImports(source, imported, sourceCanvas, r
             (a.axis ?? "value") !== (w.axis ?? "value") ||
             a.label !== w.label ||
             (w.label !== undefined && (a.labelPosition ?? "end") !== (w.labelPosition ?? "end")) ||
-            a.stroke?.width !== canonicalWidth ||
-            a.stroke?.dash !== (w.stroke?.dash ?? "dash") ||
-            (w.stroke?.color !== undefined &&
-              String(a.stroke?.color).toUpperCase() !== String(w.stroke.color).toUpperCase());
+            (current?.[phase].styles.has((i + 1) + '|' + j)
+              ? Object.hasOwn(a, 'stroke') !== Object.hasOwn(w, 'stroke') || !isDeepStrictEqual(a.stroke, w.stroke)
+              : a.stroke?.width !== canonicalWidth ||
+                a.stroke?.dash !== (w.stroke?.dash ?? "dash") ||
+                (w.stroke?.color !== undefined &&
+                  String(a.stroke?.color).toUpperCase() !== String(w.stroke.color).toUpperCase()));
         if (mismatch)
           findings.push({
             phase,

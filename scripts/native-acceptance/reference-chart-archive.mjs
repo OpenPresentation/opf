@@ -2,6 +2,7 @@
 import assert from "node:assert/strict";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { createHash } from "node:crypto";
 
 export function archiveDependencies() {
   const local = createRequire(import.meta.url),
@@ -468,6 +469,88 @@ export const inspectReferenceArchive = (input, deps = archiveDependencies()) =>
   inspectReferenceWhole(input, 3, deps);
 export const inspectReferenceTitlePair = (input, deps = archiveDependencies()) =>
   inspectReferenceWhole(input, 1, deps);
+
+// Explicit-current evidence only. The legacy archive model above is unchanged.
+// These four witnesses use literal opaque paints or this one minimal/light1 neutral.
+export function inspectCurrentReferenceStrokes(input, source, deps = archiveDependencies()) {
+  const archive = inspectReferenceArchive(input, deps), { parts } = boundedParts(input, deps),
+    tools = xmlTools(parts, deps), styles = new Set(), evidence = [],
+    sha = bytes => createHash('sha256').update(bytes).digest('hex'),
+    relationshipType = kind => 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/' + kind;
+  assert.equal(source.slides.length, 3);
+  const rels = file => {
+    const name = path.posix.join(path.posix.dirname(file), '_rels', path.posix.basename(file) + '.rels');
+    const rows = parts[name] ? list(tools.object(name).Relationships.Relationship) : [];
+    assert.ok(!rows.some(row => row.Type === relationshipType('themeOverride')), 'Current paint refuses theme overrides');
+    return rows;
+  };
+  const related = (file, kind) => {
+    const matches = rels(file).filter(row => row.Type === relationshipType(kind));
+    assert.equal(matches.length, 1, 'One actual current paint ' + kind + ' relationship required');
+    return tools.relationships(file)(matches[0].Id).target;
+  };
+  const neutralContext = slide => {
+    const layout = related(slide, 'slideLayout'), master = related(layout, 'slideMaster'), theme = related(master, 'theme');
+    for (const file of [slide,layout]) assert.ok(!rels(file).some(row => row.Type === relationshipType('theme')), 'Current neutral refuses a direct slide/layout theme');
+    assert.deepEqual(tools.object(slide)['p:sld']['p:clrMapOvr'], {'a:masterClrMapping': ''}, 'Current slide must inherit the master color map');
+    assert.deepEqual(tools.object(layout)['p:sldLayout']['p:clrMapOvr'], {'a:masterClrMapping': ''}, 'Current layout must inherit the master color map');
+    assert.deepEqual(tools.object(master)['p:sldMaster']['p:clrMap'], {bg1:'lt1',tx1:'dk1',bg2:'lt2',tx2:'dk2',accent1:'accent1',accent2:'accent2',accent3:'accent3',accent4:'accent4',accent5:'accent5',accent6:'accent6',hlink:'hlink',folHlink:'folHlink'}, 'Current neutral requires the exact actual master mapping');
+    assert.deepEqual(tools.object(theme)['a:theme']['a:themeElements']['a:clrScheme']['a:dk1'], {'a:srgbClr': {val:'000000'}}, 'Current neutral requires actual theme dk1 black');
+    rels(theme);
+    return [slide,layout,master,theme].map(file => ({path:file,bytes:parts[file].length,sha256:sha(parts[file])}));
+  };
+  archive.slides.forEach((slide, index) => {
+    const chart = slide.shapes.find(shape => shape.kind === 'chart'), refs = source.slides[index].chart.referenceLines ?? [];
+    assert.ok(!rels(chart.chartPart).some(row => row.Type === relationshipType('theme')), 'Current helper refuses a direct chart theme');
+    assert.equal(tools.object(chart.chartPart)['c:chartSpace']['c:clrMapOvr'], undefined, 'Current helper refuses a chart color-map override');
+    for (const owned of chart.chart.ownership?.helpers ?? []) {
+      assert.ok(Number.isSafeInteger(owned.index) && owned.index >= 0 && owned.index < refs.length, 'Current helper index must name an authored reference');
+      const ref = refs[owned.index], present = Object.hasOwn(ref, 'stroke'), key = (index + 1) + '|' + owned.index;
+      assert.equal(styles.has(key), false, 'Duplicate current reference index');
+      assert.deepEqual(Object.keys(owned).sort(), ['id','index','written',...(present ? ['stroke'] : [])].sort(), 'Exact current authored Line record required');
+      assert.equal(owned.id, chart.chart.ownership.key + ':' + owned.index);
+      assert.equal(Object.hasOwn(owned, 'stroke'), present, 'Authored stroke absence is significant');
+      assert.deepEqual(owned.stroke, ref.stroke, 'Current metadata must contain this exact authored Line');
+      const helpers = chart.chart.groups.flatMap(group => group.series).filter(series => series.owner?.id === owned.id);
+      assert.equal(helpers.length, 1, 'One exact current helper owner required');
+      assert.deepEqual(helpers[0].owner, {v:1,id:owned.id});
+      assert.deepEqual(Object.keys(helpers[0].paint ?? {}), ['a:ln'], 'Current helper refuses additional paint');
+      const line = helpers[0].paint['a:ln'];
+      assert.deepEqual(Object.keys(line).sort(), ['a:prstDash','a:solidFill','cap','w'].sort());
+      assert.equal(line.cap, 'flat');
+      assert.deepEqual(Object.keys(line['a:prstDash']), ['val']);
+      const fill = line['a:solidFill'];
+      let color, context;
+      if (Object.hasOwn(fill, 'a:srgbClr')) {
+        assert.deepEqual(Object.keys(fill), ['a:srgbClr']);
+        assert.deepEqual(Object.keys(fill['a:srgbClr']), ['val']);
+        assert.match(fill['a:srgbClr'].val, /^[0-9A-Fa-f]{6}$/u);
+        color = fill['a:srgbClr'].val.toUpperCase();
+      } else {
+        assert.deepEqual(Object.keys(fill), ['a:schemeClr']);
+        const scheme = fill['a:schemeClr'];
+        assert.deepEqual(Object.keys(scheme).filter(key => key.startsWith('a:')), ['a:lumMod','a:lumOff'], 'Current neutral transform order is fixed');
+        assert.deepEqual(scheme, {'a:lumMod':{val:'65000'},'a:lumOff':{val:'35000'},val:'tx1'}, 'Only the observed neutral transform is admitted');
+        context = neutralContext(slide.part);
+        // Black remains black under lumMod; lumOff .35 yields round(255*.35)=89.
+        color = '595959';
+      }
+      const authoredColor = ref.stroke?.color;
+      if (authoredColor === undefined) context ??= neutralContext(slide.part);
+      else assert.match(authoredColor, /^#[0-9A-Fa-f]{6}$/u, 'Closed witnesses use literal opaque colors');
+      const expectedColor = authoredColor === undefined ? '595959' : authoredColor.slice(1).toUpperCase(),
+        scale = Math.min(archive.canvas.cx, archive.canvas.cy) / 6858000,
+        expectedWidth = Math.round(((ref.stroke?.width ?? 4 / 3) * scale) * 9525),
+        expectedDash = ref.stroke?.dash ?? 'dash', written = `${Number(line.w)}|${color}|255|${line['a:prstDash'].val}`;
+      assert.equal(color, expectedColor, 'Current paint color differs from the closed source');
+      assert.equal(Number(line.w), expectedWidth, 'Current paint width differs from the authored source');
+      assert.equal(line['a:prstDash'].val, expectedDash);
+      assert.equal(owned.written, written, 'Current native paint must exactly match its authored-Line written binding');
+      styles.add(key);evidence.push({slide:index+1,reference:owned.index,id:owned.id,written,strokePresent:present,...(present?{stroke:structuredClone(ref.stroke)}:{}),...(context?{neutralContext:context}:{})});
+    }
+  });
+  return {archive,styles,evidence,archiveSha256:sha(input)};
+}
 export function bindReferenceWitnessPhase(archive, phase) {
   assert.equal(phase.slideCount, 3);
   assert.equal(phase.slides.length, 3);

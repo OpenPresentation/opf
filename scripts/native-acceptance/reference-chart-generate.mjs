@@ -22,7 +22,7 @@ import {
 } from "./reference-chart-archive.mjs";
 import {
   assertReferenceWitnessSource,
-  compareReferenceWitnessImports,
+  compareCurrentReferenceWitnessImports,
   importReferenceWitnessPublic,
   REFERENCE_SUPERVISOR,
 } from "./reference-chart-profile.mjs";
@@ -144,10 +144,11 @@ export async function generateReferenceWitnesses({
       archive = inspectReferenceArchive(bytes, deps);
     assertReferenceWitnessSource(archive, deck); // Real counts BEFORE locking a profile/case.
     const imported = await importReferenceWitnessPublic(bytes, { engines }),
-      findings = compareReferenceWitnessImports(deck, {
+      currentComparison = compareCurrentReferenceWitnessImports(deck, {
         original: imported,
         "saved-reopened": imported,
-      }, archive.canvas, core.resolveChartData);
+      }, {original:bytes,"saved-reopened":bytes}, core.resolveChartData, deps),
+      findings = currentComparison.findings;
     await put(
       "inspection/" + source.id + ".json",
       json({
@@ -156,6 +157,7 @@ export async function generateReferenceWitnesses({
         archive,
         imported,
         findings,
+        currentLineEvidence: currentComparison.currentLineEvidence,
         nativeAcceptance: false,
         scope: "Preparation/source import only; no Office or native saved phase",
       }),
