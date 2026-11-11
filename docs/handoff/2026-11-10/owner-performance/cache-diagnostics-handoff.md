@@ -1,0 +1,17 @@
+# Shared-font cache and weak-owner diagnostic — source checkpoint
+
+Status: source reviewed only. Syntax, overlay execution, builds, browser smoke and retention diagnostics are **UNRUN** pending the coordinator's execution lease. This is not latency, heap-byte attribution or leak acceptance.
+
+`--cache-diagnostics` must be present on both `build-current.mjs` and `run-current.mjs`. It enables an in-memory esbuild overlay; product source, committed `dist`, public APIs, the six-case matrix, the 36-slide/200-edit/10-destroy workload and the existing GC sequence stay unchanged. The helper is included in driver binding. Exact source sites, actual-owner getters, maintained source/dist equality, all overlay inputs, raw/transformed hashes and build/runner flag agreement fail closed.
+
+Readers return entry counts and configured bounds. Per-face rows use a stable registry ordinal, weight, italic flag and entry count; no family names, text or cache keys are exposed. WeakMaps hold cache readers. The census stores only numeric mount IDs and WeakRefs to the actual editor handle, its owned workspace root element and its owned session object; unavailable/nonobject owners are omitted and labeled. Census reads occur after the original GC/heap/DOM observation, return scalar status only and record read/registration/transport overhead. Collected owners narrow candidates; surviving WeakRefs do not establish a leak or a deadline for collection.
+
+Ownership is deliberate: editor destruction clears the review cache and removes the workspace, while the one shared fonts handle remains owned. The retention runner's `finally` closes the browser; it never calls the existing `browserPerf.destroy()` path that would explicitly invoke `fonts.dispose()`. The diagnostic adds no clear/dispose call. It reports that lifecycle instead of treating browser closure as a measured explicit-font-disposal result.
+
+## Planned qualification after the lease
+
+1. Freeze one public product source S and prove identical actual product/entry/dist bytes, compiler binary/version, inputs/projection and maintained font/assets for both control builds. Compare the old harness's original forwarder plugin/build options with the new harness **without** `--cache-diagnostics`; the effective browser entry, compiler options and original plugin source must match. Require exact `app.js` byte equality and record both hashes. Do not compare an e649 product bundle against a later product source or attribute that difference to instrumentation. No output tolerance or hash replacement is allowed.
+2. Exercise the overlay's exact-site and missing/duplicate-input refusals, flag mismatch and source/binding controls; then build the opt-in bundle. Record its exact source/recipe and bundle size relative to the matched flag-off control. Source-byte additions are not bundled-byte overhead.
+3. Run the unchanged authorized workload with diagnostics. Keep original cold-report/SVG, bounded review-cache and ownership controls. Observe font-cache cardinalities and WeakRefs only at warm-disposed, edit 0/20/40/80/120/200 and each existing destroy checkpoint, after heap recording. Preserve raw failures; do not add GC, snapshots, thresholds, forced cache clearing or fonts disposal.
+
+Stable shared-cache counts with rising heap leave attribution open. Growing counts identify retained cache filling, not its measured byte cost. Collected editor/workspace/session owners distinguish those objects from resources intentionally retained by the shared fonts handle.

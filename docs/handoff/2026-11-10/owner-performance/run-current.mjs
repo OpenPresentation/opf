@@ -6,9 +6,10 @@ import {createRequire} from 'node:module';
 import {createHash} from 'node:crypto';
 import {gzipSync,brotliCompressSync,constants} from 'node:zlib';
 import {verifyBinding,verifyFiles,measuredInputs,assetAdmission,fileRecord} from './bindings.mjs';
+import {FONT_CACHE_DIAGNOSTIC_VERSION,FONT_CACHE_TARGETS} from './font-cache-diagnostics.mjs';
 
 const root=process.cwd(),req=createRequire(path.join(root,'packages/editor/package.json')),{chromium}=req('playwright');
-const smoke=process.argv.includes('--smoke'),measured=process.argv.includes('--measure');
+const smoke=process.argv.includes('--smoke'),measured=process.argv.includes('--measure'),cacheDiagnostics=process.argv.includes('--cache-diagnostics');
 assert.notEqual(smoke,measured,'Choose exactly --smoke (functional only) or coordinator-authorized --measure');
 const option=(name,fallback)=>process.argv.find(arg=>arg.startsWith(name+'='))?.slice(name.length+1)??fallback;
 const site=path.resolve(root,option('--build','artifacts/owner-current-build-01'));
@@ -16,7 +17,7 @@ const output=path.resolve(root,option('--out',`artifacts/owner-current-${smoke?'
 const relative=path.relative(root,output);assert.ok(relative&&!relative.startsWith('..')&&!path.isAbsolute(relative)&&!fs.existsSync(output),'Fresh owned output directory required');fs.mkdirSync(output,{recursive:true});
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const buildReceiptFile=path.join(site,'build-receipt.json'),buildReceiptRecord=fileRecord(root,buildReceiptFile);
-const build=JSON.parse(fs.readFileSync(buildReceiptFile)),scope=smoke?'FUNCTIONAL_NOT_TIMING':'MEASURED_CURRENT_CANDIDATE_NOT_VERSION_COMPARISON';
+const build=JSON.parse(fs.readFileSync(buildReceiptFile)),scope=cacheDiagnostics?'CACHE_RETENTION_DIAGNOSTIC_NOT_LATENCY_OR_LEAK_ACCEPTANCE':smoke?'FUNCTIONAL_NOT_TIMING':'MEASURED_CURRENT_CANDIDATE_NOT_VERSION_COMPARISON';
 // Explicit roots replace the archived driver's machine-private Windows paths.
 const inputDir=path.resolve(root,option('--inputs','artifacts/owner-performance-inputs'));
 const assetSite=path.resolve(root,option('--assets','artifacts/owner-current-assets-01'));
@@ -27,7 +28,11 @@ const inputSelection=measuredInputs(root,inputDir,projectionFile),inputs=inputSe
 assert.deepEqual(inputSelection.admission,build.projection,'Explicit raw/projection admission must equal the frozen build');
 assert.deepEqual(inputSelection.inputFiles,build.inputFiles);
 const prepared=assetAdmission(root,assetSite);assert.deepEqual(prepared.record,build.assets,'Prepared assets must be the frozen build inputs');
-function verifyBuild(){verifyFiles(root,[buildReceiptRecord]);verifyBinding(root,build.binding);verifyFiles(root,[build.buildDriver,...build.inputFiles,...build.outputs,...build.inputs,...build.compiler]);assert.deepEqual(measuredInputs(root,inputDir,projectionFile).admission,build.projection);assert.deepEqual(assetAdmission(root,assetSite).record,build.assets);}
+function verifyBuild(){
+ assert.equal(build.cacheDiagnostics?.enabled,cacheDiagnostics,'Build/runner cache diagnostic flags differ');
+ assert.equal(build.cacheDiagnostics.recipeVersion,FONT_CACHE_DIAGNOSTIC_VERSION,'Cache diagnostic recipe differs');
+ if(cacheDiagnostics){assert.deepEqual(build.cacheDiagnostics.transforms.map(row=>row.name).sort(),[...FONT_CACHE_TARGETS].sort(),'Incomplete diagnostic overlay receipt');verifyFiles(root,[build.cacheDiagnostics.ownershipSource,...build.cacheDiagnostics.transforms.map(row=>row.original)]);}
+ verifyFiles(root,[buildReceiptRecord]);verifyBinding(root,build.binding);verifyFiles(root,[build.buildDriver,...build.inputFiles,...build.outputs,...build.inputs,...build.compiler]);assert.deepEqual(measuredInputs(root,inputDir,projectionFile).admission,build.projection);assert.deepEqual(assetAdmission(root,assetSite).record,build.assets);}
 verifyBuild();
 const allowedResources=new Map([...build.outputs,...prepared.receipt.outputs].map(record=>[path.resolve(root,record.path),record]));
 const requests=[],blocked=[],errors=[],assets=new Map(),cases=[],renderedVectors=new Map();let activeCase='setup';
@@ -46,6 +51,13 @@ const mapMetrics=result=>Object.fromEntries(result.metrics.map(item=>[item.name,
 const delta=(a,b)=>Object.fromEntries(Object.keys(b).filter(key=>a[key]!==undefined).map(key=>[key,b[key]-a[key]]));
 function chartCell(deck){const charts=[];function walk(value,parts){if(!value||typeof value!=='object')return;if(value.chart)charts.push({chart:value.chart,path:parts,slideIndex:Number(parts[1])});for(const[key,child]of Object.entries(value))walk(child,[...parts,key]);}walk(deck,[]);for(const entry of charts){const dataset=entry.chart.data?.dataset,data=dataset?deck.datasets?.[dataset]:entry.chart.data;if(!Array.isArray(data?.rows))continue;for(let i=0;i<data.rows.length;i++)for(let j=1;j<data.rows[i].length;j++){const previous=data.rows[i][j];if(typeof previous==='number'&&Number.isFinite(previous))return{path:(dataset?['datasets',dataset,'rows',i,j]:[...entry.path,'chart','data','rows',i,j]).join('.'),previous,slideIndex:entry.slideIndex,dataset:dataset??null,dependentChartIndices:dataset?charts.filter(item=>item.chart.data?.dataset===dataset).map(item=>item.slideIndex):[entry.slideIndex]};}}throw Error('Fixed input has no numeric datum');}
 async function gc(cdp){await cdp.send('HeapProfiler.collectGarbage');return{heap:await cdp.send('Runtime.getHeapUsage'),dom:await cdp.send('Memory.getDOMCounters')};}
+// Read WeakRefs only after the original heap/DOM observation. The extra evaluation returns scalars, never owners.
+async function retentionGc(session,checkpoint){
+ assert.ok(cacheDiagnostics,'Diagnostic observation requires explicit opt-in');const observed=await gc(session.cdp);
+ const start=performance.now(),diagnostic=await session.page.evaluate(checkpoint=>window.reviewTrial.fontCacheDiagnostics(checkpoint),checkpoint);
+ return{...observed,cacheDiagnostic:diagnostic,diagnosticTransport:{roundTripMs:performance.now()-start,encodedBytes:Buffer.byteLength(JSON.stringify(diagnostic))}};
+}
+
 async function startCase(configuration){
  activeCase=configuration.name;verifyBuild();
  const browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined,args:['--js-flags=--expose-gc']});
@@ -114,20 +126,20 @@ async function soak(mode){
  try{
   await phase(session,configuration,'soak:warmup','mount',deck);
   const warmDisposed=await session.page.evaluate(()=>window.reviewTrial.dispose());assert.ok(warmDisposed.infos.length>0&&warmDisposed.infos.every(info=>info.entries===0&&info.bytes===0));
-  const baseline=await gc(session.cdp);
+  const baseline=await (cacheDiagnostics?retentionGc(session,'warm-disposed'):gc(session.cdp));
   await phase(session,configuration,'soak:mount','mount',deck);
-  samples.push({edit:0,cache:await session.page.evaluate(()=>window.browserPerf.snapshot().cache),...await gc(session.cdp)});
+  samples.push({edit:0,cache:await session.page.evaluate(()=>window.browserPerf.snapshot().cache),...await (cacheDiagnostics?retentionGc(session,'edit-0'):gc(session.cdp))});
   for(let edit=0;edit<(smoke?3:200);edit++){
    await bounded(session.page.evaluate(async edit=>{await window.browserPerf.operation('set',{path:'slides.35.title',value:'Retained heap edit '+edit});},edit),'soak-edit',30000);
-   if([20,40,80,120,200].includes(edit+1)||smoke){const oracle=await session.page.evaluate(()=>window.reviewTrial.oracle());assert.equal(oracle.same,true);const cache=await session.page.evaluate(()=>window.browserPerf.snapshot().cache);assert.ok(cache.entries<=64&&cache.bytes<=cache.maxBytes);samples.push({edit:edit+1,cache,...await gc(session.cdp)});await session.page.evaluate(()=>window.reviewTrial.outputs());}
+   if([20,40,80,120,200].includes(edit+1)||smoke){const oracle=await session.page.evaluate(()=>window.reviewTrial.oracle());assert.equal(oracle.same,true);const cache=await session.page.evaluate(()=>window.browserPerf.snapshot().cache);assert.ok(cache.entries<=64&&cache.bytes<=cache.maxBytes);samples.push({edit:edit+1,cache,...await (cacheDiagnostics?retentionGc(session,'edit-'+(edit+1)):gc(session.cdp))});await session.page.evaluate(()=>window.reviewTrial.outputs());}
   }
   const cycles=[];
   for(let cycle=0;cycle<(smoke?1:10);cycle++){
    const disposed=await session.page.evaluate(()=>window.reviewTrial.dispose());assert.ok(disposed.infos.length>0&&disposed.infos.every(info=>info.entries===0&&info.bytes===0));assert.equal(disposed.workspaces,0);assert.equal(disposed.fontFaces,warmDisposed.fontFaces,'repeated sessions do not duplicate prepared faces');
-   cycles.push({cycle,disposed,...await gc(session.cdp)});
+   cycles.push({cycle,disposed,...await (cacheDiagnostics?retentionGc(session,'destroy-'+cycle):gc(session.cdp))});
    if(cycle<(smoke?1:10)-1)await phase(session,configuration,'soak:remount-'+cycle,'mount',deck);
   }
-  const record={scope:'BOUNDED_RETENTION_NOT_LEAK_ACCEPTANCE',configuration,baseline,warmDisposed,samples,cycles,edits:smoke?3:200,mountDestroyCycles:smoke?1:10,browserVersion:session.browserVersion};fs.writeFileSync(path.join(output,configuration.name+'.json'),JSON.stringify(record,null,2)+'\n');return record;
+  const record={scope:cacheDiagnostics?'CACHE_AND_WEAKREF_DIAGNOSTIC_NOT_LEAK_ACCEPTANCE':'BOUNDED_RETENTION_NOT_LEAK_ACCEPTANCE',...(cacheDiagnostics?{diagnosticBuild:build.cacheDiagnostics,ownership:'Shared fonts remain owned throughout; finally closes browser without an explicit fonts.dispose call.'}:{}),configuration,baseline,warmDisposed,samples,cycles,edits:smoke?3:200,mountDestroyCycles:smoke?1:10,browserVersion:session.browserVersion};fs.writeFileSync(path.join(output,configuration.name+'.json'),JSON.stringify(record,null,2)+'\n');return record;
  }finally{await session.browser.close();}
 }
 try{
@@ -135,7 +147,7 @@ try{
  for(const cell of cells)await measuredCase({...cell,name:`${cell.label}-cpu${cell.cpu}-${cell.size}-cached`,mode:'cached'});
  const retained=[await soak('cached')];
  assert.equal(errors.length,0,JSON.stringify(errors));assert.deepEqual(blocked,[]);verifyBuild();for(const[file,sha256]of assets)assert.equal(hash(fs.readFileSync(file)),sha256,'served asset remains byte exact: '+file);for(const input of Object.values(inputs))assert.equal(hash(fs.readFileSync(input.file)),input.sha256);
- const receipt={status:'PASS',scope,source:build.source,tree:build.tree,bundleSha256:build.bundleSha256,node:process.version,buildReceipt:buildReceiptRecord,binding:build.binding,projection:build.projection,assetProvenance:build.assets,assetsObserved:[...assets].map(([file,sha256])=>({path:path.relative(root,file),sha256})),assetCoverage:'Only observed served resources are browser-used; prepared unused outputs are bound, not qualified',inputFiles:Object.fromEntries(Object.entries(inputs).map(([size,input])=>[size,{rawBytes:input.bytes.length,rawSha256:input.sha256,measuredBytes:input.measuredBytes.length,measuredSha256:input.measuredSha256}])),cases:cases.map(item=>({configuration:item.configuration,rows:item.rows.length})),completeColdOracleChecks:cases.reduce((n,item)=>n+item.rows.length,0),retained:retained.map(item=>({configuration:item.configuration,edits:item.edits,mountDestroyCycles:item.mountDestroyCycles})),requests,blocked,errors,limits:{setupMs:90000,phaseMs:30000,traceEndMs:15000},disclosure:['One current candidate with public cold-oracle equality outside intervals; no historical/version speed comparison.','One fresh browser process per case;390px viewport and4xCPU are desktop proxies; no physical-mobile/low-power-device claim.','Debounce stays inside settled elapsed time; report/SVG equality, hashing, GC and storage are outside primary intervals. Sorter direct-oracle work primes caches outside intervals.','Trace/forwarder/observer overhead is present symmetrically; no unperturbed-production claim.','Cache policy bounds are logical; short post-GC heap/DOM soak is not leak acceptance.','Original root smoke is functional evidence only and is preserved separately; no invented root stdout.']};
+ const receipt={status:'PASS',scope,cacheDiagnostics:build.cacheDiagnostics,source:build.source,tree:build.tree,bundleSha256:build.bundleSha256,node:process.version,buildReceipt:buildReceiptRecord,binding:build.binding,projection:build.projection,assetProvenance:build.assets,assetsObserved:[...assets].map(([file,sha256])=>({path:path.relative(root,file),sha256})),assetCoverage:'Only observed served resources are browser-used; prepared unused outputs are bound, not qualified',inputFiles:Object.fromEntries(Object.entries(inputs).map(([size,input])=>[size,{rawBytes:input.bytes.length,rawSha256:input.sha256,measuredBytes:input.measuredBytes.length,measuredSha256:input.measuredSha256}])),cases:cases.map(item=>({configuration:item.configuration,rows:item.rows.length})),completeColdOracleChecks:cases.reduce((n,item)=>n+item.rows.length,0),retained:retained.map(item=>({configuration:item.configuration,edits:item.edits,mountDestroyCycles:item.mountDestroyCycles})),requests,blocked,errors,limits:{setupMs:90000,phaseMs:30000,traceEndMs:15000},disclosure:[...(cacheDiagnostics?['Opt-in cache/WeakRef registration and after-GC reads add recorded diagnostic overhead; this run does not establish latency or leak acceptance.']:[]),'One current candidate with public cold-oracle equality outside intervals; no historical/version speed comparison.','One fresh browser process per case;390px viewport and4xCPU are desktop proxies; no physical-mobile/low-power-device claim.','Debounce stays inside settled elapsed time; report/SVG equality, hashing, GC and storage are outside primary intervals. Sorter direct-oracle work primes caches outside intervals.','Trace/forwarder/observer overhead is present symmetrically; no unperturbed-production claim.','Cache policy bounds are logical; short post-GC heap/DOM soak is not leak acceptance.','Original root smoke is functional evidence only and is preserved separately; no invented root stdout.']};
  fs.writeFileSync(path.join(output,'receipt.json'),JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({status:'PASS',scope,cases:receipt.cases.length,completeColdOracleChecks:receipt.completeColdOracleChecks,output}));
 }catch(error){fs.writeFileSync(path.join(output,'first-failure.json'),JSON.stringify({status:'FAILED',scope,message:error.stack??String(error),requests,blocked,errors},null,2)+'\n');console.error(error);process.exitCode=1;}
 finally{await new Promise(resolve=>server.close(resolve));}

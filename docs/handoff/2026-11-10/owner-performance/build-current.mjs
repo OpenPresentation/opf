@@ -5,6 +5,7 @@ import {createRequire} from 'node:module';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {captureBinding,verifyBinding,verifyFiles,measuredInputs,assetAdmission,fileRecord,compilerRecords} from './bindings.mjs';
+import {createFontCacheOverlay,FONT_CACHE_DIAGNOSTIC_VERSION} from './font-cache-diagnostics.mjs';
 const root=process.cwd(),folder=path.dirname(fileURLToPath(import.meta.url));
 const req=createRequire(path.join(root,'packages/editor/package.json')),{build}=req('esbuild');
 const git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim();
@@ -18,6 +19,8 @@ const assetDir=path.resolve(root,process.argv.find(arg=>arg.startsWith('--assets
 const assets=assetAdmission(root,assetDir);
 fs.mkdirSync(out,{recursive:true});
 const core=abs('packages/javascript/dist/browser.js'),panel=abs('packages/editor/src/review-panel.js'),svg=abs('packages/render/dist/svg.js'),selection=abs('packages/render/dist/slide-sources.js');
+const cacheDiagnostics=process.argv.includes('--cache-diagnostics');
+const fontCacheOverlay=cacheDiagnostics?createFontCacheOverlay({root,entry:path.join(folder,'current-browser-entry.mjs')}):undefined;
 const virtual=[];
 const plugin={name:'rr117-public-forwarders',setup(builder){
  builder.onResolve({filter:/^@rr117\/workspace$/},()=>({path:abs('packages/editor/src/workspace.js')}));
@@ -39,13 +42,14 @@ const measured=measuredInputs(root,inputDir,projectionFile?path.resolve(root,pro
 const [{validate},{gallery}]=await Promise.all([import(pathToFileURL(abs('packages/javascript/dist/index.js')).href),import(pathToFileURL(abs('packages/gallery/dist/index.js')).href)]);
 const validationInputs=[];
 for(const input of Object.values(measured.inputs)){const report=validate(input.deck,{only:['format'],catalogs:[gallery]});if(!report.valid)throw Error('Explicit measured input fails current format: '+JSON.stringify(report.findings));validationInputs.push({rawBytes:input.bytes.length,rawSha256:input.sha256,measuredBytes:input.measuredBytes.length,measuredSha256:input.measuredSha256,valid:report.valid});}
-const result=await build({entryPoints:[path.join(folder,'current-browser-entry.mjs')],absWorkingDir:root,bundle:true,platform:'browser',format:'esm',minify:true,write:false,metafile:true,plugins:[plugin],define:{'process.env.NODE_ENV':'"production"'},logLevel:'error'});
+const result=await build({entryPoints:[path.join(folder,'current-browser-entry.mjs')],absWorkingDir:root,bundle:true,platform:'browser',format:'esm',minify:true,write:false,metafile:true,plugins:fontCacheOverlay?[plugin,fontCacheOverlay.plugin]:[plugin],define:{'process.env.NODE_ENV':'"production"'},logLevel:'error'});
+const diagnosticReceipt=fontCacheOverlay?.receipt()??{enabled:false,recipeVersion:FONT_CACHE_DIAGNOSTIC_VERSION};
 const js=result.outputFiles[0].contents;fs.writeFileSync(path.join(out,'app.js'),js);
 fs.writeFileSync(path.join(out,'index.html'),'<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="./styles.css"><style>html,body{margin:0;height:100%;width:100%;overflow:hidden}#host{height:100dvh;width:100vw}</style><div id="host"></div><script type="module" src="./app.js"></script>');
-const inputs=Object.keys(result.metafile.inputs).filter(file=>!file.startsWith('rr117:')).map(file=>{const bytes=fs.readFileSync(path.resolve(root,file));return{path:file,bytes:bytes.length,sha256:hash(bytes)};});
+const inputs=Object.keys(result.metafile.inputs).filter(file=>!file.startsWith('rr117:')&&!(fontCacheOverlay&&file.startsWith('rr117-font-cache:'))).map(file=>{const bytes=fs.readFileSync(path.resolve(root,file));return{path:file,bytes:bytes.length,sha256:hash(bytes)};});
 verifyBinding(root,beforeBinding);verifyFiles(root,compiler);verifyFiles(root,measured.inputFiles);verifyFiles(root,[assets.record]);assetAdmission(root,assetDir);
 const binding=captureBinding(root,[...inputs,...compiler]);
 const outputs=['app.js','index.html'].map(file=>fileRecord(root,path.join(out,file)));
-const receipt={scope:'BUILT_NOT_MEASURED',binding,compiler,outputs,projection:measured.admission,inputFiles:measured.inputFiles,assets:assets.record,validationInputs,source:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),node:process.version,bundleBytes:js.length,bundleSha256:hash(js),inputs,virtual,buildDriver:fileRecord(root,fileURLToPath(import.meta.url)),control:'One frozen current-candidate bundle in six cached cases; complete public cold-oracle reports checked outside intervals. Wrapper instrumentation only; no product source/dist rewrite.'};
+const receipt={scope:'BUILT_NOT_MEASURED',cacheDiagnostics:diagnosticReceipt,binding,compiler,outputs,projection:measured.admission,inputFiles:measured.inputFiles,assets:assets.record,validationInputs,source:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),node:process.version,bundleBytes:js.length,bundleSha256:hash(js),inputs,virtual,buildDriver:fileRecord(root,fileURLToPath(import.meta.url)),control:'One frozen current-candidate bundle in six cached cases; complete public cold-oracle reports checked outside intervals. Wrapper instrumentation only; no product source/dist rewrite.'};
 fs.writeFileSync(path.join(out,'build-receipt.json'),JSON.stringify(receipt,null,2)+'\n');
 console.log(JSON.stringify({scope:receipt.scope,source:receipt.source,inputs:inputs.length,bundleBytes:js.length,out}));
