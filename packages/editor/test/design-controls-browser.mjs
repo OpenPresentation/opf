@@ -225,7 +225,7 @@ try {
   await settle();
   assert.equal(await design.getByLabel('Hide it').isVisible(), false, 'hiding is not offered at the deck while the footer shows');
   await field(design, 'Applies to').selectOption('slide');
-  await field(design, 'Zone').selectOption('right');
+  await field(design, 'Zone').selectOption('end');
   await step('slide-scope footer keeps the deck zones', () => field(design, 'Insert value').selectOption('slide.number'), current => current.slides[1].design?.footer?.center?.text === 'Confidential' && current.slides[1].design.footer.end?.text === '{{slide.number}}' && current.design.footer.end === undefined);
   await step('hide the footer on one slide', () => design.getByLabel('Hide it').check(), current => current.slides[1].design?.footer === false && current.design.footer.center.text === 'Confidential');
   await field(design, 'Applies to').selectOption('deck');
@@ -238,10 +238,10 @@ try {
   await slide(0);
 
   // Design options.
-  await step('title alignment', () => field(design, 'Title alignment').selectOption('right'), current => current.design.titleAlignment === 'right', { preview: true });
+  await step('title alignment', () => field(design, 'Title alignment').selectOption('end'), current => current.design.titleAlignment === 'end', { preview: true });
   await step('content alignment', () => field(design, 'Content alignment').selectOption('center'), current => current.design.contentAlignment === 'center');
   await step('content direction', () => field(design, 'Content direction').selectOption('vertical'), current => current.design.contentDirection === 'vertical');
-  await step('primary chart position', () => field(design, 'Primary chart position').selectOption('left'), current => current.design.chartPrimary === 'left');
+  await step('primary chart position', () => field(design, 'Primary chart position').selectOption('start'), current => current.design.chartPrimary === 'start');
   await step('content box', () => field(design, 'Content box').selectOption('yes'), current => current.design.contentBox === true);
   await step('accent font', async () => { const input = field(design, 'Accent font'); await input.fill('Georgia'); await input.press('Enter'); }, current => current.design.fontScheme?.accent === 'Georgia');
   {
@@ -298,7 +298,7 @@ try {
   mark('no bullets offered and set');
   // Header and footer zones, with the logo warning (Insert logo writes a var:organization.logo reference as the zone's image).
   await field(design, 'Edit').selectOption('header');
-  await field(design, 'Zone').selectOption('left');
+  await field(design, 'Zone').selectOption('start');
   assert.equal(await design.getByLabel('Show the logo').count(), 0, 'the logo toggle is gone');
   const insertLogo = design.getByRole('button', { name: 'Insert logo', exact: true });
   await step('header zone: Insert logo', () => insertLogo.click(), current => current.design.header?.start?.image === 'var:organization.logo.icon');
@@ -306,7 +306,7 @@ try {
   await field(design, 'Logo shape').selectOption('icon');
   assert.equal(await field(design, 'Logo of').isVisible(), false, 'one organization: no organization choice');
   await field(design, 'Edit').selectOption('footer');
-  await field(design, 'Zone').selectOption('right');
+  await field(design, 'Zone').selectOption('end');
   await step('footer slide number', () => field(design, 'Insert value').selectOption('slide.number'), current => current.design.footer?.end?.text === '{{slide.number}}');
 
   // FA-23: the catalog section checks for catalog updates on request (nothing embedded here, so nothing to update).
@@ -522,7 +522,7 @@ try {
   // FA-22: the selected image block's fit, focus, treatments and placement.
   await step('image block fit', () => field(selection, 'Fit').selectOption('contain'), current => current.slides[4].blocks[0].fit === 'contain', { preview: true });
   // The first block's picture already takes a track at the left edge (LH-80), so the authored band goes to the right.
-  await step('image block placement', () => field(selection, 'Bleed to an edge').selectOption('right'), current => current.slides[4].blocks[0].placement?.edge === 'right', { preview: true });
+  await step('image block placement', () => field(selection, 'Bleed to an edge').selectOption('end'), current => current.slides[4].blocks[0].placement?.edge === 'end', { preview: true });
   await step('image block shape', () => field(selection, 'Shape').selectOption('ellipse'), current => current.slides[4].blocks[0].shape === 'ellipse', { preview: true });
   // SH-02: a picture's line is its stroke (renamed from border, no alias).
   await step('image block stroke', async () => { const input = field(selection, 'Stroke color'); await input.fill('accent1'); await input.press('Enter'); }, current => current.slides[4].blocks[0].stroke?.color === 'accent1' && current.slides[4].blocks[0].border === undefined, { preview: true });
@@ -634,7 +634,7 @@ try {
     await settle();
     // Insert logo in a zone, with the organization choice; the preview picks onLight or onDark by each slide's background.
     await field(design, 'Edit').selectOption('footer');
-    await field(design, 'Zone').selectOption('right');
+    await field(design, 'Zone').selectOption('end');
     const whose = field(design, 'Logo of');
     assert.equal(await whose.isVisible(), true, 'several organizations: Insert logo takes an organization');
     assert.deepEqual(await whose.locator('option').evaluateAll(nodes => nodes.map(node => [node.value, node.textContent])), [['', 'Primary organization'], ['acme', 'Acme Corp (acme)'], ['beta', 'Beta Ltd (beta)']]);

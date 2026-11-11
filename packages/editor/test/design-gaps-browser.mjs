@@ -315,11 +315,11 @@ try {
       await waitDoc(current => current.design.footer === undefined, `text ${JSON.stringify(value)} undone`);
       await settle();
     };
-    let zoneNow = 'left';
+    let zoneNow = 'start';
     const zone = async name => { zoneNow = name; await field(design, 'Zone').selectOption(name); };
     const warnings = () => page.locator('#design-controls .opf-dc-warnings').evaluateAll(nodes => nodes.map(node => node.textContent).join(' '));
     await field(design, 'Edit').selectOption('footer');
-    await zone('left');
+    await zone('start');
     await write('text', current => current.design.footer?.start?.text === 'Acme Corp', 'Text', 'Acme Corp');
     // RR-71: the logo is the zone's image, a reference to the organization's logo; Insert logo writes it.
     assert.equal(await design.getByLabel('Show the logo').count(), 0, 'the logo toggle is gone');
@@ -342,7 +342,7 @@ try {
       assert.equal(await design.getByLabel(old).count(), 0, `${old} is gone: it is a variable in the text now`);
     await step('footer: a value into an empty zone', () => insert('speaker.name'), current => current.design.footer?.start?.text === '{{speaker.name}}');
     await withText('Acme Corp', () => step('footer: a value after the text', () => insert('organization.name'), current => current.design.footer?.start?.text === 'Acme Corp{{organization.name}}'));
-    await zone('right');
+    await zone('end');
     // The caret decides where the token lands, and it ends up after the token with the text box focused again.
     await withText('Page  of ', () => step('footer: a value at the caret', async () => {
       await caret(5);
@@ -384,7 +384,7 @@ try {
     });
     mark('an unknown slide variable is refused and changes nothing');
     // Parts that need something say so.
-    await zone('left');
+    await zone('start');
     await design.getByLabel('Social profiles').check();
     await waitDoc(current => current.design.footer?.start?.socials === true, 'socials without any');
     assert.match(await warnings(), /social profiles, but the organization has none/);
@@ -398,19 +398,19 @@ try {
     await waitDoc(current => current.design.footer?.center?.text === 'Draft', 'center text');
     const summary = await design.getByRole('list', { name: 'Zones in use' }).textContent();
     assert.match(summary, /Center: text “Draft”/);
-    assert.match(summary, /Left: empty/);
+    assert.match(summary, /Start: empty/);
     await button('Undo').click();
     await waitDoc(current => current.design.footer === undefined, 'summary reset');
     await settle();
     // Same scope rules: a slide edit keeps the deck's zones, and hiding is per slide.
-    await field(design, 'Zone').selectOption('left');
+    await field(design, 'Zone').selectOption('start');
     await typeInto(design, 'Text', 'Acme');
     await waitDoc(current => current.design.footer?.start?.text === 'Acme', 'deck footer');
     await settle();
     await slide(1);
     await field(design, 'Applies to').selectOption('slide');
     await settle();
-    await field(design, 'Zone').selectOption('right');
+    await field(design, 'Zone').selectOption('end');
     await step('slide scope: a date part keeps the deck zones', () => design.getByLabel("Today's date").check(), current => current.slides[1].design?.footer?.start?.text === 'Acme' && current.slides[1].design.footer.end?.date === true && current.design.footer.end === undefined);
     await field(design, 'Edit').selectOption('header');
     await step('slide scope: hide the header on this slide', () => design.getByLabel('Hide it').check(), current => current.slides[1].design?.header === false);
