@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
+import assert from 'node:assert/strict';
 
 export const FONT_CACHE_DIAGNOSTIC_VERSION=2;
 export const FONT_CACHE_TARGETS=['font-registry.js','lazy-fonts.js','script-font-pack.js','fonts-browser.js','current-browser-entry.mjs'];
@@ -58,14 +59,21 @@ function replaceOne(source,needle,replacement,label,sites){
  sites.push(label);return source.slice(0,at)+replacement+source.slice(at+needle.length);
 }
 
-export function createFontCacheOverlay({root,entry}){
- const targets=new Map(FONT_CACHE_TARGETS.map(name=>[name==='current-browser-entry.mjs'?path.resolve(entry):path.resolve(root,'packages/render/dist',name),name]));
+function ownershipSourceRecord(root){
  const ownerFile=path.resolve(root,'packages/editor/src/workspace.js'),ownerSource=fs.readFileSync(ownerFile,'utf8'),ownerSites=[];
  for(const[getter,value]of[['root','root'],['session','session']]){
   const needle=`    get ${getter}() {\n      return ${value};\n    },`;
   replaceOne(ownerSource,needle,needle,'workspace actual-owner getter '+getter,ownerSites);
  }
- const ownershipSource={path:normalized(path.relative(root,ownerFile)),bytes:Buffer.byteLength(ownerSource),sha256:hash(ownerSource),sites:ownerSites};
+ return{path:normalized(path.relative(root,ownerFile)),bytes:Buffer.byteLength(ownerSource),sha256:hash(ownerSource),sites:ownerSites};
+}
+export function assertFontCacheOwnershipSource(root,record){
+ assert.deepEqual(record,ownershipSourceRecord(root),'Diagnostic ownership source/site record differs');
+}
+
+export function createFontCacheOverlay({root,entry}){
+ const targets=new Map(FONT_CACHE_TARGETS.map(name=>[name==='current-browser-entry.mjs'?path.resolve(entry):path.resolve(root,'packages/render/dist',name),name]));
+ const ownershipSource=ownershipSourceRecord(root);
  const records=[],seen=new Set();let runtimeLoads=0;
  const plugin={name:'rr117-font-cache-diagnostics',setup(builder){
   builder.onResolve({filter:/^@rr117\/font-cache-diagnostics$/},()=>({path:'runtime',namespace:'rr117-font-cache'}));

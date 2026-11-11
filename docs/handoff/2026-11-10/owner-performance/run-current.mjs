@@ -6,7 +6,7 @@ import {createRequire} from 'node:module';
 import {createHash} from 'node:crypto';
 import {gzipSync,brotliCompressSync,constants} from 'node:zlib';
 import {verifyBinding,verifyFiles,measuredInputs,assetAdmission,fileRecord} from './bindings.mjs';
-import {FONT_CACHE_DIAGNOSTIC_VERSION,FONT_CACHE_TARGETS} from './font-cache-diagnostics.mjs';
+import {FONT_CACHE_DIAGNOSTIC_VERSION,FONT_CACHE_TARGETS,assertFontCacheOwnershipSource} from './font-cache-diagnostics.mjs';
 
 const root=process.cwd(),req=createRequire(path.join(root,'packages/editor/package.json')),{chromium}=req('playwright');
 const smoke=process.argv.includes('--smoke'),measured=process.argv.includes('--measure'),cacheDiagnostics=process.argv.includes('--cache-diagnostics');
@@ -31,7 +31,7 @@ const prepared=assetAdmission(root,assetSite);assert.deepEqual(prepared.record,b
 function verifyBuild(){
  assert.equal(build.cacheDiagnostics?.enabled,cacheDiagnostics,'Build/runner cache diagnostic flags differ');
  assert.equal(build.cacheDiagnostics.recipeVersion,FONT_CACHE_DIAGNOSTIC_VERSION,'Cache diagnostic recipe differs');
- if(cacheDiagnostics){assert.deepEqual(build.cacheDiagnostics.transforms.map(row=>row.name).sort(),[...FONT_CACHE_TARGETS].sort(),'Incomplete diagnostic overlay receipt');verifyFiles(root,[build.cacheDiagnostics.ownershipSource,...build.cacheDiagnostics.transforms.map(row=>row.original)]);}
+ if(cacheDiagnostics){assert.deepEqual(build.cacheDiagnostics.transforms.map(row=>row.name).sort(),[...FONT_CACHE_TARGETS].sort(),'Incomplete diagnostic overlay receipt');const owner=build.cacheDiagnostics.ownershipSource;assertFontCacheOwnershipSource(root,owner);verifyFiles(root,[{path:owner.path,bytes:owner.bytes,sha256:owner.sha256},...build.cacheDiagnostics.transforms.map(row=>row.original)]);}
  verifyFiles(root,[buildReceiptRecord]);verifyBinding(root,build.binding);verifyFiles(root,[build.buildDriver,...build.inputFiles,...build.outputs,...build.inputs,...build.compiler]);assert.deepEqual(measuredInputs(root,inputDir,projectionFile).admission,build.projection);assert.deepEqual(assetAdmission(root,assetSite).record,build.assets);}
 verifyBuild();
 const allowedResources=new Map([...build.outputs,...prepared.receipt.outputs].map(record=>[path.resolve(root,record.path),record]));
