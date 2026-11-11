@@ -7,11 +7,20 @@ import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
 import {createRequire} from 'node:module';
 import {SH21_CASES,SH21_PROFILE,sh21Plan,assertSh21Plan,assertSh21NodeRows,readSh21HistoricalInput} from './sh21-edit-contract.mjs';
-import {SH21_POLICY,sh21Operations,assertSh21Ready,assertSh21OriginalOutline,importSh21Composition} from './sh21-edit-profile.mjs';
+import {SH21_POLICY,sh21Operations,assertSh21Ready,assertSh21OriginalOutline,importSh21Composition,archiveView} from './sh21-edit-profile.mjs';
 import {digest,runtimeIdentity} from './identity.mjs';
 import {assertOwnedStageWire} from './owned-postflight.mjs';
 import {windowsPowerShellEnvironment} from './windows-powershell-env.mjs';
 const ROOT=fs.realpathSync(fileURLToPath(new URL('../../',import.meta.url)));
+test('SH21 parses all three real historical archives through the selected PPTX public parser dependency',async()=>{
+ for(const caseId of Object.keys(SH21_CASES)){
+  const source=readSh21HistoricalInput(ROOT,caseId),view=await archiveView(source.bytes,ROOT);
+  assert.equal(view.layout,source.plan.layoutId);
+  assert.deepEqual(view.nodes.map(({text,level,parent})=>({text,level,parent})),source.plan.before.map(({text,level,parent})=>({text,level,parent})));
+  const dataPoints=view.orderedPoints.filter(point=>point[':@']?.['@_type']===undefined||point[':@']['@_type']==='node');
+  assert.deepEqual(dataPoints.map(point=>point[':@']['@_modelId']),view.points.map(point=>point['@_modelId']),'The actual ordered parser must retain the same complete data-node order');
+ }
+});
 async function withCompositionFixture(action){
  const root=fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(),'sh21-public-import-'))),consumer=path.join(root,'consumer'),directory=path.join(consumer,'node_modules','@openpresentation','opf'),file=path.join(directory,'dist','composition.js');let passed=false;
  try{fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(path.join(consumer,'package.json'),'{}');const manifest={name:'@openpresentation/opf',version:'0.0.0-fixture',type:'module',exports:{'./package.json':'./package.json','./composition':{import:'./dist/composition.js'}}};const writeManifest=()=>fs.writeFileSync(path.join(directory,'package.json'),JSON.stringify(manifest));writeManifest();fs.writeFileSync(file,'export const marker = "admitted-public-import";\n');const record={name:manifest.name,version:manifest.version,directory,runtime:runtimeIdentity(directory)},installed={consumer,packages:[record]};await action({consumer,directory,file,manifest,writeManifest,record,installed});passed=true;
