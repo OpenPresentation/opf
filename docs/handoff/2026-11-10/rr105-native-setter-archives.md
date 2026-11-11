@@ -189,3 +189,20 @@ launcher/bootstrap/worker/postflight identities remain exact. Required root
 integrated native/doc qualification, actual managed Windows controls and fresh
 source/consumer/native evidence remain pending; no mapper/PS/Office/CI was run by
 this focused lane.
+
+## Windows managed CLR compilation successor — source only
+
+The actual WindowsPS5 selected run reached the second Add-Type, then failed to
+resolve `SevenValueFake` from the earlier dynamically compiled assembly. The
+original failed attempt remains retained. No final managed result, save controls
+or25-adapter completion was produced, and no Office action occurred.
+
+A separate b18 successor moves the saving fixture declaration before compilation
+and appends it to the exact existing CLR source string in one Add-Type. The old
+fixture file and AST extraction remain byte-identical. Only three System type
+references in the saving class become fully qualified; it has no midstream using
+directives. Class members, Hit calls, tracking and every managed control are
+otherwise exact, verified by whole-file inverse reconstruction. No production
+proof/action/worker/lifecycle/observer or budgets change. This successor has no
+syntax/compiler/test/build/import/PS/native execution; root/peer source review
+and a fresh actual WindowsPS5 managed run remain required before qualification.
