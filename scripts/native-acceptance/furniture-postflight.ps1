@@ -1,12 +1,28 @@
+# Closed literal-name guard for the one reference-bearing source; no caller target or cap override.
+function Test-ReferenceNameActionReady($Request,$Report){
+    try{
+        if($Request.caseId -cne 'reference-native-lines' -or $Request.captureTextFonts -isnot [bool] -or $Request.captureTextFonts -or $Request.readOnlySurvey -isnot [bool] -or $Request.readOnlySurvey -or $Request.slideCount -ne 3 -or $Request.actionPlan.actions.Count -ne 1){return $false}
+        $a=$Request.actionPlan.actions[0]
+        if(-not(Test-OwnedPostflightKeys $a @('op','slideIndex','chartName','seriesIndex','expectedName','newName')) -or -not(Test-OwnedPostflightInteger $a.slideIndex) -or $a.slideIndex -ne 1 -or -not(Test-OwnedPostflightInteger $a.seriesIndex) -or $a.seriesIndex -ne 1 -or $a.op -cne 'set-chart-series-name' -or $a.chartName -cne 'OPF chart 1' -or $a.expectedName -cne 'Actual' -or $a.newName -cne 'Actual edited'){return $false}
+        if($Report.actionPlan.chartSeriesEdits.Count -ne 1){return $false}
+        foreach($phase in @('original','edited','reopened')){
+            $state=$Report.phases.$phase;$expected=if($phase -ceq 'original'){'Actual'}else{'Actual edited'}
+            if($state.slideCount -ne 3 -or $state.chartSeriesNames.Count -ne 1){return $false};$n=$state.chartSeriesNames[0]
+            if($n.phase -cne $phase -or $n.slideIndex -ne 1 -or $n.chartName -cne 'OPF chart 1' -or $n.seriesIndex -ne 1 -or $n.expectedName -cne $expected -or $n.observedName -cne $expected -or $n.observedType -cne 'System.String' -or $n.observedRawValue -cne $expected -or $n.status -cne 'success'){return $false}
+        }
+        return $true
+    }catch{return $false}
+}
 # Definitions only. Two closed furniture schemas; shared Seven/table guards stay closed.
 function Get-FurnitureProfileMode([string]$Profile) {
     if($Profile -ceq 'full59-ordinary-furniture-lifecycle-v1'){return $false}
     if($Profile -ceq 'full59-dense-events-furniture-lifecycle-v1'){return $true}
+    if($Profile -ceq 'reference-line-one-series-name-edit-v1'){return $false}
     throw 'Unknown closed furniture profile'
 }
 function Test-FurniturePostflightReady($Terminal,$Evidence,[string]$Profile='full59-ordinary-furniture-lifecycle-v1') {
     try {
-        $dense=Get-FurnitureProfileMode $Profile;$policy=if($dense){'dense-events-exact50-global-zero-after-completed-owned-quit-v1'}else{'ordinary-furniture-bounded-global-zero-after-completed-owned-quit-v1'}
+        $dense=Get-FurnitureProfileMode $Profile;$reference=$Profile -ceq 'reference-line-one-series-name-edit-v1';$policy=if($reference){'reference-name-exact-one-global-zero-after-completed-owned-quit-v1'}elseif($dense){'dense-events-exact50-global-zero-after-completed-owned-quit-v1'}else{'ordinary-furniture-bounded-global-zero-after-completed-owned-quit-v1'}
         $r=$Evidence.report;$q=$Evidence.request;$a=$Evidence.admission;$stages=$Evidence.stages
         if($a.profile -cne $Profile -or $q.profile -cne $a.profile -or $a.schemaVersion -ne 1 -or $q.schemaVersion -ne 1 -or $a.nativeAcceptance -isnot [bool] -or $a.nativeAcceptance -or $a.registryAcceptance -isnot [bool] -or $a.registryAcceptance){return $false}
         if($q.nativeAcceptance -isnot [bool] -or $q.nativeAcceptance -or $q.registryAcceptance -isnot [bool] -or $q.registryAcceptance -or -not(Test-OwnedPostflightInteger $q.timeoutSeconds) -or $q.timeoutSeconds -lt 5 -or $q.timeoutSeconds -gt 60){return $false}
@@ -25,9 +41,10 @@ function Test-FurniturePostflightReady($Terminal,$Evidence,[string]$Profile='ful
         if($q.actionPlan.actions -isnot [array] -or $q.actionPlan.actions.Count -gt 20 -or $r.actionPlan.actions -isnot [array] -or $r.actionPlan.completed -isnot [array] -or $r.actionPlan.completed.Count -ne $q.actionPlan.actions.Count){return $false}
         if((ConvertTo-Json -InputObject $r.actionPlan.actions -Compress -Depth 30) -cne (ConvertTo-Json -InputObject $q.actionPlan.actions -Compress -Depth 30)){return $false}
         for($i=0;$i -lt $q.actionPlan.actions.Count;$i++){$row=$r.actionPlan.completed[$i];if(-not(Test-OwnedPostflightKeys $row @('index','op','status')) -or -not(Test-OwnedPostflightInteger $row.index) -or $row.index -ne ($i+1) -or $row.op -cne $q.actionPlan.actions[$i].op -or $row.status -cne 'success'){return $false}}
+        if($reference -and -not(Test-ReferenceNameActionReady $q $r)){return $false}
         $ordinary=@('layout-title-auto','layout-media-regions','layout-empty-custom','table-save','furniture-inherited','furniture-flags','list-description-native-edit','list-description-native-save','layout-bleed-card','picture-control','furniture-layouts','chart-treemap-category','chart-histogram-single','chart-histogram-category','chart-pareto-multi','chart-box-multi','chart-waterfall-single','chart-funnel-category','chart-world-category','feature-catalog-timeline','feature-custom-roadmap','feature-long-labels','feature-metrics','feature-quote','feature-list','feature-table')
         if($dense){if($q.caseId -cne 'feature-dense-events' -or $q.slideCount -ne 1 -or $q.captureTextFonts -or $q.actionPlan.actions.Count -ne 0 -or $r.actionPlan.completed.Count -ne 0){return $false}}
-        elseif($q.caseId -cnotin $ordinary -and $q.caseId -cnotmatch '^chart-mode-(treemap-category|histogram-single|histogram-category|pareto-multi|box-multi|waterfall-single|funnel-category|world-category|pareto-single)-(fallback|auto|native)$'){return $false}
+        elseif(-not $reference -and $q.caseId -cnotin $ordinary -and $q.caseId -cnotmatch '^chart-mode-(treemap-category|histogram-single|histogram-category|pareto-multi|box-multi|waterfall-single|funnel-category|world-category|pareto-single)-(fallback|auto|native)$'){return $false}
         if($dense){foreach($name in @('styleEdits','chartPoints','chartSeriesEdits')){if($r.actionPlan.$name -isnot [array] -or $r.actionPlan.$name.Count -ne 0){return $false}}}
         foreach($phase in @('original','edited','reopened')){$state=$r.phases.$phase;if($state.slides -isnot [array] -or $state.slides.Count -lt 1 -or $state.slides.Count -gt $(if($dense){1}else{3}) -or $state.slideCount -ne $q.slideCount -or $state.slides.Count -ne $q.slideCount -or $state.rasters.Count -ne $state.slides.Count){return $false};foreach($slide in $state.slides){if($slide.shapes -isnot [array]){return $false};if($dense){if($slide.shapes.Count -ne 50 -or $slide.shapeCount -ne 50){return $false}}elseif($slide.shapes.Count -gt 30){return $false}}}
         $ready=$a.ready
@@ -110,9 +127,10 @@ function Invoke-FurniturePostflight {
     return [ordered]@{schemaVersion=1;policy=$evidence.admission.policy;workerCleanupConfirmed=$true;initialCount=$initial;finalCount=$final;identity=$identity;result=$result;error=$failure}
 }
 function Invoke-FurnitureTypedRunner {
-    param([string]$Envelope,[string]$Sha256,[string]$RequestSha256,[string]$Node,[string]$Suite,[string]$WorkerRoot,[string]$CaseId,[string]$Output,[int]$Seconds,[bool]$Office,[bool]$Fonts,[switch]$DenseEvents)
-    $profile=if($DenseEvents){'full59-dense-events-furniture-lifecycle-v1'}else{'full59-ordinary-furniture-lifecycle-v1'}
-    $validator=Join-Path $PSScriptRoot $(if($DenseEvents){'dense-furniture-profile.mjs'}else{'furniture-profile.mjs'});$required=$Office.ToString().ToLowerInvariant()
+    param([string]$Envelope,[string]$Sha256,[string]$RequestSha256,[string]$Node,[string]$Suite,[string]$WorkerRoot,[string]$CaseId,[string]$Output,[int]$Seconds,[bool]$Office,[bool]$Fonts,[switch]$DenseEvents,[switch]$ReferenceNameEdit)
+    if($DenseEvents -and $ReferenceNameEdit){throw 'Choose one closed furniture route'}
+    $profile=if($ReferenceNameEdit){'reference-line-one-series-name-edit-v1'}elseif($DenseEvents){'full59-dense-events-furniture-lifecycle-v1'}else{'full59-ordinary-furniture-lifecycle-v1'}
+    $validator=Join-Path $PSScriptRoot $(if($ReferenceNameEdit){'reference-name-profile.mjs'}elseif($DenseEvents){'dense-furniture-profile.mjs'}else{'furniture-profile.mjs'});$required=$Office.ToString().ToLowerInvariant()
     function Assert-FurnitureTypedBinding {
         $result=& $Node $validator verify-execution --envelope $Envelope --sha256 $Sha256 --output $Output --require-office $required
         if($LASTEXITCODE -ne 0){throw 'Typed furniture source/request refused before native operations'}
