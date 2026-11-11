@@ -62,7 +62,28 @@ test('reviewed observer source remains exact and B07 source binds actual worker 
   const observer=readFileSync(new URL('../../'+B07_POSTFLIGHT_POLICY.observerSource,import.meta.url));
   assert.equal(digest(observer),B07_POSTFLIGHT_POLICY.observerSourceSha256);
   assert.deepEqual(observer,execFileSync('git',['show','f3f04183c2d38ffe3e5755a23b571b6b9ce8155e:'+B07_POSTFLIGHT_POLICY.observerSource],{cwd:root}));
-  for(const name of ['packages/pptx/test/native-furniture-control.ps1','packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
+  // Stage 1 remains the immutable original whole worker. Stage 2 is ONLY the
+  // independently reviewed strict idle function; never derive from current bytes.
+  const worker='packages/pptx/test/native-furniture-control.ps1';
+  const frozen=execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+worker],{cwd:root});
+  const reviewed=execFileSync('git',['show','a06c78686c3d3f59be6e6b9e8de65bac072ea515:'+worker],{cwd:root});
+  assert.equal(frozen.length,84426);assert.equal(digest(frozen),'d6b9232eb7f25ff3402ea4629345681396085b5a6c309a694099f33371910c02');
+  assert.equal(reviewed.length,84855);assert.equal(digest(reviewed),'43d2742d9d680d4ccf1394849b189472f06811ed1455af9da398076acc78465d');
+  const idle=bytes=>{
+    const begin=Buffer.from('function Assert-FurnitureOfficeIdle {\n'),end=Buffer.from('function Stop-FurnitureLifecycle([string]$Message) {\n');
+    const from=bytes.indexOf(begin),to=bytes.indexOf(end);
+    assert.ok(from>=0&&to>from);assert.equal(bytes.lastIndexOf(begin),from);assert.equal(bytes.lastIndexOf(end),to);
+    const body=bytes.subarray(from,to);assert.equal(bytes.indexOf(body),from);assert.equal(bytes.lastIndexOf(body),from);
+    return {from,to,body};
+  };
+  const originalIdle=idle(frozen),strictIdle=idle(reviewed);
+  assert.deepEqual(originalIdle.body,Buffer.from("function Assert-FurnitureOfficeIdle {\n    if(Get-Process -Name POWERPNT -ErrorAction SilentlyContinue) { throw 'POWERPNT.EXE is already running; do not attach to another session' }\n}\n"));
+  const replace=(bytes,range,body)=>Buffer.concat([bytes.subarray(0,range.from),body,bytes.subarray(range.to)]);
+  const derived=replace(frozen,originalIdle,strictIdle.body);
+  assert.deepEqual(derived,reviewed,'Only the reviewed strict idle stage may change the original worker');
+  assert.deepEqual(replace(reviewed,strictIdle,originalIdle.body),frozen,'Inverse derivation must preserve every original byte');
+  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),derived);
+  for(const name of ['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
   const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
   assert.ok(runner.indexOf('if(-not $RunOffice)')<runner.indexOf('$checked=& $node $validator verify-postflight'));
   assert.ok(runner.indexOf('$checked=& $node $validator verify-postflight')<runner.indexOf('$postflightResult=Invoke-ReferenceWitnessPostflight'));
