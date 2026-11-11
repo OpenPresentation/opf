@@ -10,7 +10,16 @@ $null=Import-SnapshotTest 'scripts/native-acceptance/seven-value-snapshot-action
 $old=Import-SnapshotTest 'scripts/native-acceptance/seven-value-actions-self-test.ps1' @('Initialize-ValueTest')
 # Reuse the maintained real CLR target fixture, not its executable entrypoint.
 $types=@($old.FindAll({param($n) $n -is [Management.Automation.Language.CommandAst] -and $n.GetCommandName() -ceq 'Add-Type'},$true));if($types.Count -ne 1){throw 'One maintained CLR fixture definition required'}
-Add-Type -TypeDefinition ($types[0].CommandElements[2].SafeGetValue())
+# Compile the exact maintained CLR source and its saving fixture in one assembly.
+# No midstream using directives or dynamically compiled assembly reference needed.
+$snapshotSavingFixtureType=@"
+public sealed class SevenSnapshotSavingPresentation {
+ public string FullName {get {SevenValueFake.Hit("snapshot.fullName");return SevenValueFake.Mutant=="afterSaveForeignPath"&&SevenValueFake.Calls.Contains("snapshot.save")?"foreign-owned-file":"managed-owned-only";}}
+ public int ReadOnly {get {SevenValueFake.Hit("snapshot.readOnly");return -1;}}
+ public void SaveCopyAs(string path,int format){SevenValueFake.Hit("snapshot.save");if(format!=24)throw new System.Exception("Wrong native save format");System.IO.File.WriteAllText(path,"ACTUAL_MANAGED_SAVE_NOT_NATIVE:"+System.IO.Path.GetFileName(path));}
+}
+"@
+Add-Type -TypeDefinition (($types[0].CommandElements[2].SafeGetValue())+[Environment]::NewLine+$snapshotSavingFixtureType)
 function global:Get-Process {throw 'Snapshot managed test forbids process queries'}
 function global:Start-Process {throw 'Snapshot managed test forbids child processes'}
 function global:Stop-Process {throw 'Snapshot managed test forbids termination'}
@@ -47,15 +56,7 @@ foreach($mode in @('foreignPath','writable','slideCount','shapeCount','duplicate
  if(-not $caught -or -not $script:stopped -or [SevenValueFake]::Sets -ne $sets -or [SevenValueFake]::Gets -ne 0 -or [SevenValueFake]::Calls.Count -ne $count){throw ('Managed setter refusal failed: '+$mode)}
  $results+=@([ordered]@{name=$mode;getterCalls=0;setterCalls=$sets;laterCalls=0})
 }
-# Actual save helper, actual temporary file bytes, no PowerPoint object.
-Add-Type -TypeDefinition @"
-using System; using System.IO;
-public sealed class SevenSnapshotSavingPresentation {
- public string FullName {get {SevenValueFake.Hit("snapshot.fullName");return SevenValueFake.Mutant=="afterSaveForeignPath"&&SevenValueFake.Calls.Contains("snapshot.save")?"foreign-owned-file":"managed-owned-only";}}
- public int ReadOnly {get {SevenValueFake.Hit("snapshot.readOnly");return -1;}}
- public void SaveCopyAs(string path,int format){SevenValueFake.Hit("snapshot.save");if(format!=24)throw new Exception("Wrong native save format");File.WriteAllText(path,"ACTUAL_MANAGED_SAVE_NOT_NATIVE:"+Path.GetFileName(path));}
-}
-"@
+
 function Initialize-SnapshotSave([string]$Name,[string]$Mutant=''){
  Initialize-SnapshotTest $Name $Mutant
  $script:presentation=[SevenSnapshotSavingPresentation]::new();$script:ownedPresentation=$script:presentation;$script:report.snapshots=[ordered]@{};$script:report['saveCopies']=0;$script:hashes=@{}
