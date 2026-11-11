@@ -1,0 +1,34 @@
+{
+  "head": "2765298016c0162274b8bf982f8d2eea764a07c4",
+  "node": "v24.21.0",
+  "steps": [
+    {
+      "name": "build",
+      "code": 0,
+      "signal": null,
+      "seconds": 5.558,
+      "logSha256": "d1402c762b337e110a3925534ccff7108b317a730063ac9b64810299fad7f35d",
+      "sourceUnchanged": true,
+      "runtimeFiles": 301
+    },
+    {
+      "name": "font-buffer-ownership.mjs",
+      "code": 0,
+      "signal": null,
+      "seconds": 0.222,
+      "logSha256": "6647561430834c34529191c578674bd15271b5eb8c388e8fe26b3c6a4f69fd5f",
+      "sourceUnchanged": true,
+      "runtimeUnchanged": true
+    },
+    {
+      "name": "rtl-marker-backends.mjs",
+      "code": 0,
+      "signal": null,
+      "seconds": 1.012,
+      "logSha256": "d830b101ff346160e6a1b2854d1cc7710aff7f10d6efa96fba0e8342f538d722",
+      "sourceUnchanged": true,
+      "runtimeUnchanged": true
+    }
+  ],
+  "unrun": []
+}
