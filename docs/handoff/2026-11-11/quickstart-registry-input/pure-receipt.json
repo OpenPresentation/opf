@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "kind": "sole-existing-pure-file",
+  "source": "5aeedd7832365f4c4d05c6a8f1982164ca5d1efd",
+  "tree": "7ceed4f7d2ddc092fefa28bf420aee40e99acdd0",
+  "startedAt": "2026-11-11T23:52:15.373093+00:00",
+  "elapsedSeconds": 0.351501292,
+  "argv": [
+    "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+    "--test",
+    "scripts/registry-consumer.test.mjs"
+  ],
+  "exitCode": 0,
+  "log": {
+    "path": "/tmp/opf-quickstart-registry-input-focus01/pure.log",
+    "bytes": 1657,
+    "sha256": "7ab762ce6b1cd2efd4ab2620d820ffc2d123992f9f4788c316617170e3c5d9f1"
+  },
+  "sourcePinsUnchanged": true,
+  "runtimePathsBeforeAfter": {
+    "node_modules": "absent",
+    "packages/javascript/dist": "absent",
+    "packages/gallery/dist": "absent",
+    "packages/render/dist": "absent",
+    "packages/pptx/dist": "absent",
+    "packages/editor/dist": "absent",
+    "packages/cli/dist": "absent",
+    "packages/mcp/dist": "absent"
+  },
+  "install": false,
+  "build": false,
+  "network": false,
+  "Office": false
+}
