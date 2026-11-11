@@ -1,0 +1,348 @@
+[
+  {
+    "name": "install",
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+      "install",
+      "--frozen-lockfile",
+      "--store-dir",
+      "/private/tmp/.pnpm-store"
+    ],
+    "node": {
+      "path": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "version": "v24.21.0"
+    },
+    "seconds": 2.286,
+    "exitCode": 0,
+    "signal": null,
+    "sourceBefore": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceAfter": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceUnchanged": true,
+    "runtimeBeforeFiles": 0,
+    "runtimeAfterFiles": 0,
+    "runtimeUnchanged": true,
+    "log": {
+      "file": "install.log",
+      "bytes": 4192,
+      "sha256": "10e532cdf133f6369ca00f5d93fd8f2f1825b9fdd6ea6cc881a21e48f1f508a4"
+    }
+  },
+  {
+    "name": "build",
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+      "run",
+      "build:packages"
+    ],
+    "node": {
+      "path": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "version": "v24.21.0"
+    },
+    "seconds": 6.635,
+    "exitCode": 0,
+    "signal": null,
+    "sourceBefore": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceAfter": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceUnchanged": true,
+    "runtimeBeforeFiles": 0,
+    "runtimeAfterFiles": 609,
+    "runtimeUnchanged": false,
+    "log": {
+      "file": "build.log",
+      "bytes": 14726,
+      "sha256": "dc2bdcc2e50e3107af3c69d4807e9cf05de15f9d79f1c1dc6d453f570d353ada"
+    }
+  },
+  {
+    "name": "pptx-dependency-boundary",
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "packages/pptx/test/dependency-boundary.mjs"
+    ],
+    "node": {
+      "path": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "version": "v24.21.0"
+    },
+    "seconds": 72.811,
+    "exitCode": 0,
+    "signal": null,
+    "sourceBefore": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceAfter": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceUnchanged": true,
+    "runtimeBeforeFiles": 609,
+    "runtimeAfterFiles": 609,
+    "runtimeUnchanged": true,
+    "log": {
+      "file": "pptx-dependency-boundary.log",
+      "bytes": 3262,
+      "sha256": "7fe2e2e55372994062be3c628714c0d0953c13a4a3454a81b197ea4c192bf7c1"
+    }
+  },
+  {
+    "name": "pptx-zip-bundle-boundary",
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "packages/pptx/test/zip-bundle-boundary.mjs"
+    ],
+    "node": {
+      "path": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "version": "v24.21.0"
+    },
+    "seconds": 0.4,
+    "exitCode": 0,
+    "signal": null,
+    "sourceBefore": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceAfter": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceUnchanged": true,
+    "runtimeBeforeFiles": 609,
+    "runtimeAfterFiles": 609,
+    "runtimeUnchanged": true,
+    "log": {
+      "file": "pptx-zip-bundle-boundary.log",
+      "bytes": 157,
+      "sha256": "a5cb85c9d45da5742007c7b8a4a750813eee1694ebf8b018248a8c5100ebbcd2"
+    }
+  },
+  {
+    "name": "render-rich-flow-browser",
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "packages/render/test/rich-flow-browser.mjs",
+      "/tmp/opf-ci-fixture-wave-gate01/rich-flow-artifacts"
+    ],
+    "node": {
+      "path": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "version": "v24.21.0"
+    },
+    "seconds": 1.213,
+    "exitCode": 0,
+    "signal": null,
+    "sourceBefore": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceAfter": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceUnchanged": true,
+    "runtimeBeforeFiles": 609,
+    "runtimeAfterFiles": 609,
+    "runtimeUnchanged": true,
+    "log": {
+      "file": "render-rich-flow-browser.log",
+      "bytes": 88,
+      "sha256": "a102adb53b3df05d611f93dfae9eb1ff9f4d76794a48f68780151a4726ccc68f"
+    }
+  },
+  {
+    "name": "editor-playground-build",
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+      "--filter",
+      "@openpresentation/opf-editor",
+      "run",
+      "build:playground"
+    ],
+    "node": {
+      "path": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "version": "v24.21.0"
+    },
+    "seconds": 1.457,
+    "exitCode": 0,
+    "signal": null,
+    "sourceBefore": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceAfter": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceUnchanged": true,
+    "runtimeBeforeFiles": 609,
+    "runtimeAfterFiles": 609,
+    "runtimeUnchanged": true,
+    "log": {
+      "file": "editor-playground-build.log",
+      "bytes": 111899,
+      "sha256": "fca7660539700f7f388b5c58710d685564cba8fdfdec62792451abef7710a9d2"
+    }
+  },
+  {
+    "name": "editor-source-pane-browser",
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "packages/editor/test/source-pane-browser.mjs"
+    ],
+    "node": {
+      "path": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "version": "v24.21.0"
+    },
+    "seconds": 8.248,
+    "exitCode": 0,
+    "signal": null,
+    "sourceBefore": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceAfter": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceUnchanged": true,
+    "runtimeBeforeFiles": 609,
+    "runtimeAfterFiles": 609,
+    "runtimeUnchanged": true,
+    "log": {
+      "file": "editor-source-pane-browser.log",
+      "bytes": 103,
+      "sha256": "a5b78bfb447e2645fe4d4e3c25d587ab06463196c771c9e12e02d9d40023efd8"
+    }
+  },
+  {
+    "name": "changed-gate",
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+      "check:changed",
+      "--base",
+      "9a20aed56f2d1a762c3a88ab24f8cc25d849d61f"
+    ],
+    "node": {
+      "path": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "version": "v24.21.0"
+    },
+    "seconds": 833.386,
+    "exitCode": 1,
+    "signal": null,
+    "sourceBefore": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceAfter": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceUnchanged": true,
+    "runtimeBeforeFiles": 609,
+    "runtimeAfterFiles": 609,
+    "runtimeUnchanged": true,
+    "log": {
+      "file": "changed-gate.log",
+      "bytes": 7465,
+      "sha256": "4284a3853846802edb8066065aa17aca43ef22e6ac34cb533e544bdc4957f4a2"
+    }
+  },
+  {
+    "name": "replay-gallery-tracker",
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+      "check:gallery-tracker"
+    ],
+    "node": {
+      "path": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "version": "v24.21.0"
+    },
+    "seconds": 0.965,
+    "exitCode": 1,
+    "signal": null,
+    "sourceBefore": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceAfter": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceUnchanged": true,
+    "runtimeBeforeFiles": 609,
+    "runtimeAfterFiles": 609,
+    "runtimeUnchanged": true,
+    "log": {
+      "file": "replay-gallery-tracker.log",
+      "bytes": 3004,
+      "sha256": "2778731ed6dde0419f3bd4026a4374e729cafbe8e770fae05261f87f713f989a"
+    }
+  },
+  {
+    "name": "replay-text",
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+      "check:text"
+    ],
+    "node": {
+      "path": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "version": "v24.21.0"
+    },
+    "seconds": 2.503,
+    "exitCode": 0,
+    "signal": null,
+    "sourceBefore": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceAfter": {
+      "head": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+      "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+      "status": ""
+    },
+    "sourceUnchanged": true,
+    "runtimeBeforeFiles": 609,
+    "runtimeAfterFiles": 609,
+    "runtimeUnchanged": true,
+    "log": {
+      "file": "replay-text.log",
+      "bytes": 1091,
+      "sha256": "c8f6b0f008e47a3fc2f0dd2d61889444f0aeb45f7595b726a830907dbe44851e"
+    }
+  }
+]

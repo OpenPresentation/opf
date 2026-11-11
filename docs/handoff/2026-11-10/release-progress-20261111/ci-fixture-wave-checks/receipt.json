@@ -1,0 +1,118 @@
+{
+  "scope": "Public local test-fixture qualification and separate sparse-input limitation; not a green aggregate or native/platform/release acceptance",
+  "testedSource": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+  "tree": "a95acd5d971efbe9ba2a58aaf5c3b8c117e418c5",
+  "originalPptxCheckpoint": "f39e981267ddf9e1e25244b3732a2178cabcd258",
+  "node": {
+    "path": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+    "version": "v24.21.0"
+  },
+  "pnpm": {
+    "version": "10.33.2",
+    "path": "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs"
+  },
+  "path": "Node24bin:/tmp/opf-native-toolbin:/opt/homebrew/bin:/usr/bin:/bin",
+  "originalAggregate": {
+    "exitCode": 1,
+    "seconds": 833.386,
+    "steps": 13,
+    "passed": 8,
+    "failed": 2,
+    "unselected": 3,
+    "failedNames": [
+      "check:gallery-tracker",
+      "check:text"
+    ],
+    "unselectedNames": [
+      "typecheck",
+      "render browser test selection",
+      "editor browser test selection"
+    ],
+    "pptxContracts": {
+      "passed": 317,
+      "seconds": 815.5
+    }
+  },
+  "directFocused": {
+    "dependencyBoundary": {
+      "exitCode": 0,
+      "seconds": 72.811,
+      "tableCases": 24,
+      "tableCells": 168,
+      "contentSizedRows": 24,
+      "structuralCorpusDecks": 149,
+      "structuralCorpusSlides": 966,
+      "explicitlySubstitutedImages": 1406,
+      "limit": "Structural substituted assets/fonts, not typography or Office fidelity"
+    },
+    "zipBundleBoundary": {
+      "exitCode": 0,
+      "seconds": 0.4
+    },
+    "richFlowBrowser": {
+      "exitCode": 0,
+      "seconds": 1.213,
+      "cases": 30,
+      "browser": "158.0.8127.18",
+      "errors": 0,
+      "externalRequests": 0
+    },
+    "editorPlaygroundBuild": {
+      "exitCode": 0,
+      "seconds": 1.457
+    },
+    "sourcePaneBrowser": {
+      "exitCode": 0,
+      "seconds": 8.248,
+      "scope": "Full existing script, not a selector; warning/path/fence/cursor/Undo and later format/findings/menu/download checks remain strict"
+    }
+  },
+  "sevenBlobRestoration": {
+    "files": 7,
+    "bytes": 218999,
+    "exactFrozenGitOidModeSizeSha256": true,
+    "sparseConfigAndIndexEntriesUnchanged": true
+  },
+  "separateReplays": {
+    "galleryTracker": {
+      "exitCode": 1,
+      "seconds": 0.965,
+      "passed": 17,
+      "failed": 1,
+      "cause": "Strict committed tracker freshness remains unresolved in local sparse evidence checkout; not proved product defect or PASS",
+      "noWarnRegenerateBulkHydration": true
+    },
+    "text": {
+      "exitCode": 0,
+      "seconds": 2.503,
+      "controlsPassed": 7,
+      "filesScanned": 10521,
+      "valid": true
+    }
+  },
+  "runtime": {
+    "ownCompiledFiles": 609,
+    "unchangedThroughAllFocusAndMapperReplays": true,
+    "referenceDomains": [
+      "javascript",
+      "gallery",
+      "render",
+      "pptx"
+    ],
+    "matchingJavaScriptFiles": 217,
+    "missingOrAddedOrChangedInThoseDomains": 0,
+    "additionalJsOutsideReference": 191,
+    "additionalDomains": [
+      "cli",
+      "editor",
+      "mcp"
+    ],
+    "limit": "Own additional identities recorded, no baseline-equality claim outside the provided reference; no whole Git/packages tree equality. Original e092 benchmark binding is unchanged."
+  },
+  "firstFailuresPreserved": true,
+  "aggregateRepeated": false,
+  "moreHydrationOrReplay": false,
+  "heavyLeaseReleased": true,
+  "metadataQualification": "This packet is a later metadata commit; root will qualify its integrated native/doc delta separately",
+  "privateBoundary": "No private-site inventory, owner inputs or new raw Windows/Office records included"
+}
