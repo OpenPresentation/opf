@@ -143,7 +143,9 @@ const sourceFragments=(fragment,measurement,profile)=>{
 // followed by measured Latin word/number members under Arabic proofing. An
 // explicitly Arabic-proofed, wholly ASCII LTR line may instead keep its first
 // nonnumeric span as carrier and isolate numeric intervals from the WHOLE
-// numeric-free suffix. This is not word or character layout.
+// numeric-free suffix. A leading punctuation/space prefix in that suffix is
+// partitioned by those source classes, so native bidi cannot swap their ink.
+// The remaining letter phrase stays whole; this is not word or glyph layout.
 export function planNativeTextFragments(line,{rtl,originX,measurement,profile}) {
  if(typeof rtl!=='boolean'||!line||!Array.isArray(line.fragments)||!line.fragments.length||!measurement?.measure||typeof profile!=='function'||!Number.isFinite(originX)||!Number.isFinite(line.width)||!Number.isFinite(line.baseline)||!Number.isFinite(line.height))return;
  if(!rtl&&line.fragments.length!==1)return;
@@ -170,18 +172,31 @@ export function planNativeTextFragments(line,{rtl,originX,measurement,profile}) 
   for(const [from,to]of [...numberRanges(text),...[...text.matchAll(/[0-9]+(?:[.,:/'-][0-9]+)*/g)].map(match=>[match.index,match.index+match[0].length])].sort((a,b)=>a[0]-b[0]||b[1]-a[1])){
    const last=numbers.at(-1);if(last&&from<=last[1])last[1]=Math.max(last[1],to);else numbers.push([from,to]);
   }
-  const cuts=[...new Set([0,text.length,...numbers.flat()])].sort((a,b)=>a-b);
+  const originalCuts=[...new Set([0,text.length,...numbers.flat()])].sort((a,b)=>a-b),extraCuts=[],neutralPrefixes=[],subdivided=[];
+  if(!rtl)for(let i=0;i<originalCuts.length-1;i++){
+   const from=originalCuts[i],to=originalCuts[i+1];
+   if(!numbers.some(([,end])=>end===from))continue;
+   const head=/^[^A-Za-z0-9]+(?=[A-Za-z])/.exec(text.slice(from,to))?.[0];
+   if(!head?.includes(' ')||!(/[^ ]/.test(head)))continue;
+   let cursor=from;for(const part of head.match(/ +|[^ ]+/g)){cursor+=part.length;extraCuts.push(cursor);}
+   neutralPrefixes.push([from,from+head.length]);subdivided.push([from,to]);
+  }
+  const cuts=[...new Set([...originalCuts,...extraCuts])].sort((a,b)=>a-b);
   const measure=textWidthMeasurer(style,measurement),full=measure(text,fragment.fontSize);
   if(!Number.isFinite(full)||full<=0||Math.abs(full-fragment.width)>1e-7)return;
   const left=originX+(rtl?line.width-fragment.x-fragment.width:fragment.x);
   for(let i=0;i<cuts.length-1;i++){
    const from=cuts[i],to=cuts[i+1];if(to<=from)continue;
    const numeric=numbers.some(([a,b])=>from>=a&&to<=b),word=/[A-Za-z]/.test(text.slice(from,to));
-   if(!numeric&&!word)return;
+   if(!numeric&&!word&&!neutralPrefixes.some(([a,b])=>from>=a&&to<=b))return;
    hasWord ||= word;hasNumber ||= numeric;
    const x=left+measure(text.slice(0,from),fragment.fontSize);
    const right=left+measure(text.slice(0,to),fragment.fontSize);
    if(!Number.isFinite(x)||!Number.isFinite(right)||right<=x)return;
+   if(subdivided.some(([a,b])=>from>=a&&to<=b)){
+    const independent=measure(text.slice(from,to),fragment.fontSize);
+    if(!Number.isFinite(independent)||independent<=0||Math.abs(right-x-independent)>1e-7)return;
+   }
    members.push({from:offset+from,to:offset+to,x,right,width:right-x,sourceRun:fragment.runIndex,start:start+from,end:start+to,kind:numeric?'number':'word'});
   }
   offset+=text.length;
@@ -205,7 +220,7 @@ export function planNativeTextFragments(line,{rtl,originX,measurement,profile}) 
 const sliceRuns=(native,from,to)=>{
  let offset=0;const result=[];
  for(const entry of native){const start=Math.max(from,offset),end=Math.min(to,offset+entry.text.length);
-  if(end>start)result.push('<a:r>'+entry.properties+'<a:t>'+escapeXml(entry.text.slice(start-offset,end-offset))+'</a:t></a:r>');
+  if(end>start){const text=entry.text.slice(start-offset,end-offset);result.push('<a:r>'+entry.properties+'<a:t'+(/^ +$/.test(text)?' xml:space="preserve"':'')+'>'+escapeXml(text)+'</a:t></a:r>');}
   offset+=entry.text.length;
  }
  return result.join('');
