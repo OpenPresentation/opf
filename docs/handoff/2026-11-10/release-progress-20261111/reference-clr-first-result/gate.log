@@ -1,0 +1,95 @@
+
+> openpresentation-workspace@ check:changed /private/tmp/opf-034
+> node scripts/check-changed.mjs --base b18f44c18341df131ebedca31576d22a47b8cc23
+
+check-changed: 20 changed files since b18f44c18 (plus uncommitted and untracked)
+ok  build (6.4 s)
+FAILED  biome (0.1 s)
+ok  pnpm run check:changes (0.4 s)
+ok  pnpm run check:libreoffice (0.3 s)
+ok  pnpm run check:gallery-tracker (4.1 s)
+ok  pnpm run check:release-report (0.5 s)
+ok  pnpm run check:native-acceptance (17.5 s)
+ok  pnpm run check:skill-commands (14.0 s)
+ok  pnpm run check:text (5.9 s)
+ok  pnpm run check:stability (43.3 s)
+-  typecheck
+
+--- biome failed (exit 1); last 60 lines of artifacts/check-changed/biome.log:
+
+scripts/native-acceptance/reference-name-profile.test.mjs:51:722 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    49 │ test('real original/saved import comparison rejects shared style drift as well as asymmetric edits',...
+    50 │ test('a reopened name observation cannot precede the actual reopen',()=>{const e=completion(),select...
+  > 51 │ ...minal.timedOut=true;}}))test('closed reference readiness refuses '+name,()=>{const e=completion();mu...
+       │                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    52 │ test('actual PS5 closed reference action/phase readiness is pure and retains ordinary/dense dispatch',{skip:process.platform!=='win32'},()=>{
+    53 │  const dir=fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(),'opf-ref-name-'))),fixture=completio...
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+    49 49 │   ...dings(source,changed,before,resolveChartData));});
+    50 50 │   ...=>assertReferenceNameNative(e.report,wire(e)));});
+    51    │ - ...,'timeout':e=>{e.terminal.timedOut=true;}}))test('closed·reference·readiness·refuses·'+name,()=>{con...
+       51 │ + ...'timeout':e=>{e.terminal.timedOut=true;}}))test(`closed·reference·readiness·refuses·${name}`,()=>{co...
+    52 52 │   test('actual PS5 closed reference action/phase readiness is pure and retains ordinary/dense dispatch',{skip:process.platform!=='win32'},()=>{
+    53 53 │   ...));fs.writeFileSync(file,JSON.stringify(fixture));
+  
+
+scripts/native-acceptance/reference-name-contract.mjs:48:471 lint/suspicious/noControlCharactersInRegex ━━━━━━━━━━
+
+  × Unexpected control character in a regular expression.
+  
+    46 │  // The public reader follows tags relationships, not a fixed tag directory. This
+    47 │  // closed source refuses any linked target outside its conventional tag parts.
+  > 48 │ ...al(typeof rel.Target,'string');assert.ok(!/[\\:%\x00-\x1f]/u.test(rel.Target));const target=path.pos...
+       │                                                    ^^^^
+    49 │  for(const [name,bytes]of Object.entries(parts))if(/^ppt\/tags\/[^/]+\.xml$/u.test(name))for(const tag of list(parse(bytes)?.['p:tagLst']?.['p:tag']))if(String(tag?.name??'').toUpperCase()==='OPF_DATA_V1')count++;
+    50 │  assert.equal(count,0,'This exact inline reference source has no authored chart-data restoration records');return{sourceArchiveSha256:digest(input),dataTagCount:count};
+  
+  i Control characters are unusual and potentially incorrect inputs, so they are disallowed.
+  
+
+scripts/native-acceptance/reference-name-contract.mjs:48:476 lint/suspicious/noControlCharactersInRegex ━━━━━━━━━━
+
+  × Unexpected control character in a regular expression.
+  
+    46 │  // The public reader follows tags relationships, not a fixed tag directory. This
+    47 │  // closed source refuses any linked target outside its conventional tag parts.
+  > 48 │ ...peof rel.Target,'string');assert.ok(!/[\\:%\x00-\x1f]/u.test(rel.Target));const target=path.posix.no...
+       │                                                    ^^^^
+    49 │  for(const [name,bytes]of Object.entries(parts))if(/^ppt\/tags\/[^/]+\.xml$/u.test(name))for(const tag of list(parse(bytes)?.['p:tagLst']?.['p:tag']))if(String(tag?.name??'').toUpperCase()==='OPF_DATA_V1')count++;
+    50 │  assert.equal(count,0,'This exact inline reference source has no authored chart-data restoration records');return{sourceArchiveSha256:digest(input),dataTagCount:count};
+  
+  i Control characters are unusual and potentially incorrect inputs, so they are disallowed.
+  
+
+The number of diagnostics exceeds the limit allowed. Use --max-diagnostics to increase it.
+Diagnostics not shown: 7.
+Checked 4 files in 38ms. No fixes applied.
+Found 2 errors.
+Found 25 infos.
+check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Some errors were emitted while running checks.
+
+step                              status     time
+build                             passed    6.4 s
+biome                             FAILED    0.1 s  7 files
+pnpm run check:changes            passed    0.4 s
+pnpm run check:gallery-tracker    passed    4.1 s
+pnpm run check:libreoffice        passed    0.3 s
+pnpm run check:native-acceptance  passed   17.5 s
+pnpm run check:release-report     passed    0.5 s
+pnpm run check:skill-commands     passed   14.0 s
+pnpm run check:stability          passed   43.3 s
+pnpm run check:text               passed    5.9 s
+typecheck                         skipped       -  no .ts, .mts or tsconfig change
+total                                      67.9 s
+
+check-changed: 1 of 11 steps failed: biome
+ ELIFECYCLE  Command failed with exit code 1.

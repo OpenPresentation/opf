@@ -1,0 +1,62 @@
+[
+  {
+    "name": "build",
+    "file": "build.log",
+    "bytes": 14666,
+    "sha256": "d2c6376ef1df76ba18fe1eed6b2b5a2bb94c070f70afbc36d0dfd6548f3cf4f7"
+  },
+  {
+    "name": "biome",
+    "file": "biome.log",
+    "bytes": 37639,
+    "sha256": "dfa3ccd8aeb596786a6fd8bef5404f7b31d84e6e6f292e315da00706286e4382"
+  },
+  {
+    "name": "pnpm run check:changes",
+    "file": "pnpm_run_check_changes.log",
+    "bytes": 2665,
+    "sha256": "57be2008f336b25c17fc48d70a0bf3a37b09caba8546f121ca92e2646c2a955e"
+  },
+  {
+    "name": "pnpm run check:libreoffice",
+    "file": "pnpm_run_check_libreoffice.log",
+    "bytes": 1424,
+    "sha256": "1aa07755de553c29548418419ff5ac53a7f9512fbfd7714a49222d54c4e2bdb0"
+  },
+  {
+    "name": "pnpm run check:gallery-tracker",
+    "file": "pnpm_run_check_gallery-tracker.log",
+    "bytes": 2016,
+    "sha256": "7a30e46946daa2e4fe96bc30bff370d75905151cea18f62599c4b63aa8009614"
+  },
+  {
+    "name": "pnpm run check:release-report",
+    "file": "pnpm_run_check_release-report.log",
+    "bytes": 822,
+    "sha256": "a172fcdc193631f278e0739ac5fa2080886c7288dbfc16235d43e885254e18ea"
+  },
+  {
+    "name": "pnpm run check:native-acceptance",
+    "file": "pnpm_run_check_native-acceptance.log",
+    "bytes": 51727,
+    "sha256": "4b9843d2eae016885c18d8d768b1bdec9d94f5f632678dab8271d5e5ed337ea9"
+  },
+  {
+    "name": "pnpm run check:skill-commands",
+    "file": "pnpm_run_check_skill-commands.log",
+    "bytes": 1048,
+    "sha256": "762408cba1f1fd0ee9118a7fdf70ba8a9fc3a72e254ad63ea84d5cca324bffff"
+  },
+  {
+    "name": "pnpm run check:text",
+    "file": "pnpm_run_check_text.log",
+    "bytes": 1085,
+    "sha256": "03eb454619d07ae67aed4b4dc104a50f311866dc4d9d65d9bb309686306818a7"
+  },
+  {
+    "name": "pnpm run check:stability",
+    "file": "pnpm_run_check_stability.log",
+    "bytes": 3996,
+    "sha256": "4290273cfea240aca04de1d04de2d66a056d4fd94cb57c70b63205bf21e86c14"
+  }
+]
