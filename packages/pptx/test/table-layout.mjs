@@ -19,7 +19,7 @@ import {colorHex, clrMapOf, themeColorsOf} from './helpers/scheme-colors.mjs';
 let checked = 0, shrunk = 0, grown = 0;
 for (const scale of [1, 0.5]) {
 for (const [fontScheme, family, chosen] of [['roboto', 'Roboto', 'Roboto'], [{major:'Calibri',minor:'Calibri'}, 'Carlito', 'Calibri']]) {
-for (const align of ['left', 'center', 'right']) {
+for (const align of ['start', 'center', 'end']) {
   for (const withHeaders of [true, false]) {
     const table = {
       ...(withHeaders ? { columns: ['Region', 'Description'] } : {}),
@@ -88,7 +88,7 @@ for (const align of ['left', 'center', 'right']) {
           assert.equal(find(prop, 'a:latin')[0]['@_typeface'], chosen);
         }
         const pPr = find(cell, 'a:pPr')[0];
-        assert.equal(pPr['@_algn'] ?? 'l', {left:'l',center:'ctr',right:'r'}[align], 'Native alignment matches the SVG anchor');
+        assert.equal(pPr['@_algn'] ?? 'l', {start:'l',center:'ctr',end:'r'}[align], 'Native alignment matches the SVG anchor');
         assert.ok(find(pPr, 'a:spcPts').length, 'Native cell must carry measured line spacing');
         assert.equal(Number(find(pPr, 'a:spcPts')[0]['@_val']), Math.round(expectedSize * 1.22 * 75), 'Native line spacing matches measured lines');
         const margins = cell['a:tcPr'];
