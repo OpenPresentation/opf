@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {unzipSync,zipSync,strFromU8,strToU8} from 'fflate';
 import {chartDrawPlan,resolveChartData,validate} from '@openpresentation/opf';
+import {paretoPlan} from '@openpresentation/opf/composition';
 import {toPptx,fromPptx} from './helpers/default-catalog.mjs';
 
 const hidden = ['Global header must be suppressed.','Global footer must be suppressed.'];
@@ -77,12 +78,17 @@ for(const name of ['world-category','all-seven'])for(const mode of ['auto','fall
       // RR-105: signed categorical histograms truthfully import their data-preserving column fallback, with or without provenance.
       const plan=chartDrawPlan(slide.chart,resolveChartData(slide.chart));
       const negativeHistogram=slide.chart.type==='histogram'&&plan.columns.length>1&&plan.rows.some(row=>row.slice(1).some(value=>typeof value==='number'&&value<0));
-      const expectedType=mode==='fallback'||slide.chart.type==='world'||negativeHistogram?'column':slide.chart.type;
+      const signedPareto=mode!=='fallback'&&slide.chart.type==='pareto'&&plan.columns.length===2&&plan.rows.some(row=>typeof row[1]==='number'&&row[1]<0);
+      const expectedType=signedPareto?'combo':mode==='fallback'||slide.chart.type==='world'||negativeHistogram?'column':slide.chart.type;
       assert.equal(actual.type,expectedType,`${name}/${mode}/stripped${stripped}/slide${index+1}`);
       // LH-60: a box-and-whisker chart with one value per category is exported as one group (one box per series); its data record
       // restores the authored categories, and without the OPF tags the values come back under the group's name.
       const expectedData=stripped&&plan.fallback==='box-per-series'?{...slide.chart.data,rows:plan.rows}:slide.chart.data;
-      assert.deepEqual(actual.data,expectedData,`${name}/${mode}/stripped${stripped}: every authored category/series/value survives`);
+      if(signedPareto){
+        const planned=paretoPlan(plan.rows.map(row=>({label:row[0],value:row[1]})).filter(point=>typeof point.value==='number'));
+        assert.deepEqual(actual.data.rows,planned.bars.map((point,index)=>[point.label,point.value,planned.cumulative[index]]),`${name}/${mode}/stripped${stripped}: signed bars and explicit cumulative series`);
+        assert.deepEqual(actual.data.columns.map(column=>typeof column==='string'?column:column.name),[...plan.columns,`${plan.columns[1]} — cumulative share`]);
+      }else assert.deepEqual(actual.data,expectedData,`${name}/${mode}/stripped${stripped}: every authored category/series/value survives`);
     }
   }
 }

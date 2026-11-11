@@ -32,6 +32,18 @@ export const HISTOGRAM_MIN_BINS = 5;
 /** One bin of a histogram of a lone value column. */
 export interface HistogramBin { low: number; high: number; count: number; label: string }
 
+/** Sorted signed Pareto bars and their positive-only cumulative share, shared by preview and native export. */
+export function paretoPlan<T extends {value: number}>(input: readonly T[]): {bars: T[]; total: number; cumulative: number[]} {
+  const bars = [...input].sort((a, b) => b.value - a.value);
+  const total = bars.reduce((sum, bar) => sum + Math.max(0, bar.value), 0);
+  let running = 0;
+  const cumulative = bars.map(bar => {
+    running += Math.max(0, bar.value);
+    return total ? running / total : 0;
+  });
+  return {bars, total, cumulative};
+}
+
 /** LH-160: what composition decides for a histogram or Pareto chart. Absent keys keep the engines' defaults. */
 export interface ChartLayerHistogram {
   /** The bin count of a lone value column (`cx:binCount`): Scott's count, or fewer when the labels would not fit. */

@@ -88,10 +88,11 @@ export interface SvgSanitizedDiagnostic { code: "svg-sanitized"; path: string; m
  *   and a border to an SVG picture, and those stay native);
  * - `border-dot`: a dotted table cell border is PowerPoint's square dot (one width on, one off); the preview leaves two widths between dots;
  * - `pattern-preset`: an engine-defined pattern preset (`diagStripe`) is its closest DrawingML preset (`wdUpDiag`);
- * - `image-animation`: an animated WebP becomes a still PNG of its first frame under `imageFormat: "compatible"`.
+ * - `image-animation`: an animated WebP becomes a still PNG of its first frame under `imageFormat: "compatible"`;
+ * - `funnel-label-color`: PowerPoint can ignore the written native funnel label color and choose its own contrast color.
  * The skill `opf-export` lists every mapping, including the ones that report another code or none.
  */
-export interface ExportLossyDiagnostic { code: "export-lossy"; feature: "svg-rasterized" | "border-dot" | "pattern-preset" | "image-animation"; path: string; message: string }
+export interface ExportLossyDiagnostic { code: "export-lossy"; feature: "svg-rasterized" | "border-dot" | "pattern-preset" | "image-animation" | "funnel-label-color"; path: string; message: string }
 /** LH-28, `typefaces: "safe"`: an authored family written as its Office-safe family (`replacement`), once per family; `path` is `""`. */
 export interface TypefaceReplacedDiagnostic { code: "typeface-replaced"; path: string; family: string; replacement: string; message: string }
 /**
@@ -100,7 +101,7 @@ export interface TypefaceReplacedDiagnostic { code: "typeface-replaced"; path: s
  * a chartex chart type was written as a clustered column chart (`chartex-fallback`) and a one-column histogram was binned into counts
  * (`histogram-binned`).
  */
-export interface ChartDataAdaptedDiagnostic { code: "chart-data-adapted"; path: string; message: string; adaptation: "histogram-binned" | "row-numbers" | "series-dropped" | "chartex-fallback" }
+export interface ChartDataAdaptedDiagnostic { code: "chart-data-adapted"; path: string; message: string; adaptation: "histogram-binned" | "row-numbers" | "series-dropped" | "chartex-fallback" | "signed-pareto-combo" }
 /** With `chartex: "native"`, a map chart (`world`) is exported as a chartex regionMap (`Requires="cx4"`) without cached geography: PowerPoint must fetch the region shapes from its online map service and shows "There was a problem getting the information for your map chart" with an empty chart until it does. */
 export interface ChartMapGeodataDiagnostic { code: "chart-map-geodata"; path: string; message: string }
 /** RR-54: chart values that core `chartNumber` rejects (not a number or a plain decimal string) were exported as gaps; one per chart, with their count. */
@@ -167,7 +168,9 @@ export interface ToPptxOptions {
    * histogram, pareto, box-and-whisker, waterfall, funnel) and keeps `world` on the clustered column chart with
    * `chart-data-adapted` (`chartex-fallback`) because the regionMap part, though accepted with `Requires="cx4"`, draws
    * nothing until PowerPoint fetches map data online. Multi-series Pareto also uses editable clustered columns with all series and this diagnostic;
-   * explicit native mode rejects it with unsupported-chart-data before returning bytes. Single-series Pareto stays native.
+   * explicit native mode rejects it with unsupported-chart-data before returning bytes. Single-series Pareto stays native except signed
+   * categorical data, which uses an editable classic combo (descending signed columns and an explicit positive-only cumulative-share
+   * line on a secondary 0–1 axis). Its cumulative values are static after native edits; import returns the sorted/derived combo data.
    * "native" writes supported chartex parts, the map included (reports
    * `chart-map-geodata`). "fallback" writes clustered columns only
    * (`chartex-fallback`, `histogram-binned`), as releases before FF-22b did. Import of chartex parts is always on.

@@ -88,7 +88,10 @@ test('all30 current chart archives retain strict locks, every series/cache/workb
       const pareto=result.cases.find(item=>item.chart==='pareto-multi'&&item.mode===mode);
       assert.equal(pareto.chartExParts,0);assert.deepEqual(pareto.importedChartTypes,['column']);
       assert.deepEqual(pareto.diagnostics.map(issue=>issue.code+'/'+issue.adaptation),['chart-data-adapted/chart-fallback']);
-      assert.equal(result.cases.find(item=>item.chart==='all-seven'&&item.mode===mode).chartExParts,mode==='fallback'?0:5);
+      const seven=result.cases.find(item=>item.chart==='all-seven'&&item.mode===mode);
+      assert.equal(seven.chartExParts,mode==='fallback'?0:4);
+      assert.equal(seven.importedChartTypes[2],mode==='fallback'?'column':'combo');
+      assert.equal(seven.diagnostics.filter(issue=>issue.adaptation==='signed-pareto-combo').length,mode==='fallback'?0:1);
     }
     for(const mode of ['fallback','auto','native']){
       const signed=result.cases.find(item=>item.chart==='histogram-category'&&item.mode===mode);

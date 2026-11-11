@@ -2,6 +2,14 @@
 
 Status: RR-35 (release readiness) for axis titles, legend and data labels, FA-14 (format audit) for `highlight`, and RR-89 and RR-92 (core 0.21.0) for series colors (`chart.colors`) and the computed value axis. The first four fields change geometry only for charts that use the first three fields, and colors only for charts that use `highlight`. Use the coordinated package set in the [compatibility matrix](compatibility-matrix.md); schema support alone does not establish native visual fidelity.
 
+## Native export data domains and limitations
+
+PowerPoint's native categorical Pareto aggregation can omit negative categories even when its workbook and caches retain them. A single-series Pareto with signed category values therefore exports, in default/auto/native modes, as an editable classic combo: descending signed columns plus an explicit positive-only cumulative-share line on a secondary 0–1 axis. Negative values remain visible bars and do not subtract from the cumulative share. The cumulative cells are static values: native bar edits do not recalculate them. Import returns the actual combo with its sorted/derived series, not the original Pareto source form. Positive categorical Pareto and raw-sample binning retain their native constructs. Explicit `chartex: "fallback"` retains the documented column-only representation and its adaptation diagnostic.
+
+A categorical histogram exported as classic columns keeps the preview's broad bars (6% gap) and composed histogram value-axis bounds and unit. It is still a column representation, with an adaptation diagnostic where native aggregation cannot display signed category data; it does not establish native histogram editability or complete visual parity.
+
+Native funnel labels have a separate Office limitation: PowerPoint can ignore the written label color and choose its own contrast color, observed as white where the renderer uses black. Export reports `export-lossy` with `feature: "funnel-label-color"` when native funnel labels are enabled. The chart remains editable. XML contrast checks establish only the requested paint, not the physical color PowerPoint renders.
+
 ## The fields
 
 Four optional fields on the `Chart` object (the fourth, `highlight`, has [its own section](#chart-emphasis-highlight) below):
