@@ -1,0 +1,34 @@
+{
+  "language": "en",
+  "design": {
+    "fontScheme": "roboto"
+  },
+  "slides": [
+    {
+      "id": "stack",
+      "title": "Centered track resize",
+      "composition": {
+        "mode": "column",
+        "weights": [
+          5.834,
+          2.5,
+          5.334
+        ]
+      },
+      "blocks": [
+        {
+          "id": "b0",
+          "text": "Short line"
+        },
+        {
+          "id": "b1",
+          "text": "Another short line"
+        },
+        {
+          "id": "b2",
+          "text": "Third"
+        }
+      ]
+    }
+  ]
+}

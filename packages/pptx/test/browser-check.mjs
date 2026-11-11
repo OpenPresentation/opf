@@ -50,3 +50,7 @@ try {
   await browser?.close();
   await new Promise(resolve => server.close(resolve));
 }
+
+// A separate owned browser runs the real font-loader/native-export dependency
+// flow after the importer fixture browser and local server have closed.
+await import('./native-measurements-browser.mjs');

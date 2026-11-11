@@ -5,6 +5,7 @@
 // @expo-google-fonts/noto-emoji installed previews and exports emoji instead of throwing missing-glyph; the colour face stays first.
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
+import {validate} from '@openpresentation/opf';
 import {toPng, toSvg} from '../dist/index.js';
 import {loadFonts} from '../dist/fonts-node.js';
 import {designatedFamilies, glyphFallbackFamilies, mapSymbolText as mapCodes} from '../dist/fonts.js';
@@ -42,14 +43,18 @@ const textRuns = svg => [...svg.matchAll(/<(?:text|tspan)\b([^>]*)>([^<]*)(?=<)/
   // The role case draws the same glyph as the run-level symbol path (a run that names the family itself).
   const check = '';
   const role = deck('Role', check, scheme('Aptos', 'Wingdings'));
-  const run = deck('Run', {runs: [{text: check, fontFamily: 'Wingdings'}]}, scheme('Aptos', 'Aptos'));
+  const run = deck('Run', [{text: check, fontFamily: 'Wingdings'}], scheme('Aptos', 'Aptos'));
+  assert.equal(validate(role, {only: ['format']}).valid, true, 'role fixture is schema-valid');
+  assert.equal(validate(run, {only: ['format']}).valid, true, 'run fixture is a valid OPF rich text array');
   const roleFonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: role});
   const runFonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: run});
   const roleGlyphs = textRuns(svgOf(role, roleFonts)).filter(([, text]) => text.includes(mapSymbolText('Wingdings', check)));
   assert.ok(roleGlyphs.length, 'the role deck draws the mapped check mark');
-  let runSvg;
-  try { runSvg = svgOf(run, runFonts); } catch { runSvg = undefined; }
-  if (runSvg) assert.deepEqual(roleGlyphs.map(([family]) => family), textRuns(runSvg).filter(([, text]) => text.includes(mapSymbolText('Wingdings', check))).map(([family]) => family), 'the same open face draws the glyph by role and by run');
+  const runSvg = svgOf(run, runFonts);
+  const runGlyphs = textRuns(runSvg).filter(([, text]) => text.includes(mapSymbolText('Wingdings', check)));
+  assert.ok(runGlyphs.length, 'the valid run deck actually draws the mapped check mark');
+  assert.ok([...roleGlyphs, ...runGlyphs].every(([family]) => typeof family === 'string' && family.length > 0), 'both glyph routes name a concrete open SVG family');
+  assert.deepEqual(roleGlyphs.map(([family]) => family), runGlyphs.map(([family]) => family), 'the same open face draws the glyph by role and by run');
   // Raster output paints the glyph: the page differs from the same deck without it.
   const blank = deck('Role', ' ', scheme('Aptos', 'Wingdings'));
   assert.notDeepEqual(await toPng(svgOf(role, roleFonts), {fonts: roleFonts}), await toPng(svgOf(blank, roleFonts), {fonts: roleFonts}), 'the raster draws the symbol glyph');

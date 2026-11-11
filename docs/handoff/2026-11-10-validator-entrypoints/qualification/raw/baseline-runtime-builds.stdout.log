@@ -1,0 +1,50 @@
+▶ the exports map
+  ✔ the root has a Node build and a browser-safe build, with types first (0.6405ms)
+  ✔ /node and /node/engine are removed; the CLI engine resolves under the node condition only (0.0782ms)
+  ✔ Node resolves the package name to the Node build (9.147ms)
+✔ the exports map (10.4937ms)
+▶ the two builds
+  ✖ export the same names, sharing every class and function but the file API and the verbs with the CLI's default catalog (0.6599ms)
+  ✔ the browser build's file functions reject with node-only and name the browser-safe alternative (0.352ms)
+✖ the two builds (1.1231ms)
+▶ parseSlideSelection
+  ✔ is in both builds and in the CLI engine (0.0782ms)
+  ✔ reads numbers, lists and text selections, one-based, ascending, without repeats (0.243ms)
+  ✔ refuses out-of-range and malformed selections with invalid-option (0.2548ms)
+  ✔ names the option it reads in the message, and refuses an empty presentation with no-slides (0.0926ms)
+✔ parseSlideSelection (0.7988ms)
+ℹ tests 9
+ℹ suites 3
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 215.9673
+
+✖ failing tests:
+
+test at packages\javascript\test\runtime-builds.test.mjs:56:3
+✖ export the same names, sharing every class and function but the file API and the verbs with the CLI's default catalog (0.6599ms)
+  AssertionError [ERR_ASSERTION]: createValidator
+  + actual - expected
+  
+  + [Function: createValidator]
+  - [Function: createValidator2]
+                              ^
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/runtime519/packages/javascript/test/runtime-builds.test.mjs:61:19)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at node:internal/test_runner/test:1887:71
+      at node:internal/per_context/primordials:504:82
+      at new Promise (<anonymous>)
+      at new SafePromise (node:internal/per_context/primordials:478:3)
+      at node:internal/per_context/primordials:504:9
+      at Array.map (<anonymous>) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

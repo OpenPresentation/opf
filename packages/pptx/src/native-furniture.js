@@ -27,9 +27,9 @@ const EMU = 9525;
 // idx values are PowerPoint's own: layouts number the three footer placeholders
 // 10, 11, 12 and the master 2, 3, 4; a slide placeholder points at its layout by idx.
 export const NATIVE_PLACEHOLDERS = Object.freeze({
-  dt: {field: 'date', name: 'Date Placeholder', sz: 'half', idx: 10, masterIdx: 2, zone: 'left', align: 'l'},
+  dt: {field: 'date', name: 'Date Placeholder', sz: 'half', idx: 10, masterIdx: 2, zone: 'start', align: 'l'},
   ftr: {field: 'text', name: 'Footer Placeholder', sz: 'quarter', idx: 11, masterIdx: 3, zone: 'center', align: 'ctr'},
-  sldNum: {field: 'text', name: 'Slide Number Placeholder', sz: 'quarter', idx: 12, masterIdx: 4, zone: 'right', align: 'r'},
+  sldNum: {field: 'text', name: 'Slide Number Placeholder', sz: 'quarter', idx: 12, masterIdx: 4, zone: 'end', align: 'r'},
 });
 const ORDER = ['dt', 'ftr', 'sldNum'];
 export const isNativePlaceholderType = value => Object.hasOwn(NATIVE_PLACEHOLDERS, value);
@@ -47,7 +47,7 @@ export function nativePlaceholderForPart(part, {staticNumbers = false} = {}) {
   if (staticNumbers && hasSlideNumberField(part) && !isBareSlideNumber(part)) return undefined;
   return hasSlideNumberField(part) ? 'sldNum' : 'ftr';
 }
-const ZONES = ['left', 'center', 'right'];
+const ZONES = ['start', 'center', 'end'];
 const ALIGN = {left: 'l', center: 'ctr', right: 'r'};
 
 /**
@@ -314,7 +314,8 @@ function inheritedBounds(chain) {
   return undefined;
 }
 
-const ALIGN_ZONES = {l: 'left', ctr: 'center', r: 'right'};
+// The zone a physical position names: the left of the slide is the `start` zone and the right the `end` zone, as on a left-to-right slide.
+const ALIGN_ZONES = {l: 'start', ctr: 'center', r: 'end'};
 // The paragraph alignment of a footer shape: its first paragraph, else its list style, else what the layout and master
 // placeholder say. Read as the physical edge, as the exporter writes it (an RTL zone is `algn="r"` with `rtl="1"`).
 function inheritedAlignment(chain) {
@@ -339,7 +340,7 @@ function zoneOf(chain, slideWidth, fallback) {
     if (aligned) return aligned;
   }
   const center = (bounds.x + bounds.cx / 2) / slideWidth;
-  return center < 1 / 3 ? 'left' : center > 2 / 3 ? 'right' : 'center';
+  return center < 1 / 3 ? 'start' : center > 2 / 3 ? 'end' : 'center';
 }
 
 /**
@@ -384,7 +385,7 @@ export function readNativePlaceholders(context, claimed, relationships, readPart
 }
 
 /**
- * The OPF footer value for native placeholder fields: zones keyed left/center/right. A footer text and a slide
+ * The OPF footer value for native placeholder fields: zones keyed start/center/end. A footer text and a slide
  * number in one zone are one `text`: the footer words, then the number's line (the zone stack's order).
  */
 export function footerValue(fields) {

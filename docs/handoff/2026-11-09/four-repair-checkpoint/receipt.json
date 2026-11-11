@@ -1,0 +1,1431 @@
+{
+  "base": "1ef0e17a58198defa34cd515ad7078d56a7d97d0",
+  "source": "00a828777342e4e7339472dcccc1b4b3bc265204",
+  "sourceTree": "a0b88b8bc4fa880b892b49a05c26b4f3aab01ae3",
+  "leaves": [
+    {
+      "pr": 1236,
+      "head": "51bf02d299550f969e90e3db3ef54eea89b26dd6",
+      "merge": "4a8d2ec431d007702c69090c75c6b89b57a8bbcc",
+      "tree": "469d453cd42009bdadac1bcb5a4ea5debd39beef",
+      "mergeTree": "469d453cd42009bdadac1bcb5a4ea5debd39beef",
+      "parents": [
+        "1ef0e17a58198defa34cd515ad7078d56a7d97d0",
+        "51bf02d299550f969e90e3db3ef54eea89b26dd6"
+      ],
+      "paths": [
+        "changes/rr-105-windows-zip-refusal.md",
+        "docs/handoff/2026-11-09/rr105-windows-zip-refusal/README.md",
+        "docs/handoff/2026-11-09/rr105-windows-zip-refusal/ci-job-exact.log.gz",
+        "docs/handoff/2026-11-09/rr105-windows-zip-refusal/ci-job.log.gz",
+        "docs/handoff/2026-11-09/rr105-windows-zip-refusal/files.json",
+        "docs/handoff/2026-11-09/rr105-windows-zip-refusal/metadata-checks.files.json",
+        "docs/handoff/2026-11-09/rr105-windows-zip-refusal/metadata-checks.zip",
+        "docs/handoff/2026-11-09/rr105-windows-zip-refusal/provenance-checks.files.json",
+        "docs/handoff/2026-11-09/rr105-windows-zip-refusal/provenance-checks.zip",
+        "docs/handoff/2026-11-09/rr105-windows-zip-refusal/raw.zip",
+        "docs/handoff/2026-11-09/rr105-windows-zip-refusal/receipt.json",
+        "docs/handoff/2026-11-09/rr105-windows-zip-refusal/verify.mjs",
+        "docs/programs/release-readiness/burndown.md",
+        "packages/pptx/test/native-readonly-survey.mjs"
+      ]
+    },
+    {
+      "pr": 1237,
+      "head": "180590bad546ba40f00707324b729acd9ccef812",
+      "merge": "52ce140facf898f36c851c1011c5aa6b1d29aff3",
+      "tree": "91ea48da0976f46219da34642a1c4d19d12acabd",
+      "mergeTree": "f0823906f96b04b83d436f9cb39dee08885c0f10",
+      "parents": [
+        "4a8d2ec431d007702c69090c75c6b89b57a8bbcc",
+        "180590bad546ba40f00707324b729acd9ccef812"
+      ],
+      "paths": [
+        ".github/workflows/nightly.yml",
+        "changes/lh-179-windows-webkit.md",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/.gitattributes",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/README.md",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/approval-review.json",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/diagnosis.json",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/metadata-qualification.json",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/000.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/001.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/002.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/003.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/004.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/005.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/006.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/007.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw-files.json",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/000.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/001.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/002.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/003.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/004.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/005.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/006.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/007.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/008.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/009.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/010.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/011.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/012.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/013.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/014.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/015.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/016.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/017.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/018.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/019.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/020.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/021.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/022.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/023.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/024.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/025.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/026.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/027.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/028.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/029.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/030.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/031.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/032.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/033.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/034.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/035.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/036.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/037.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/038.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/039.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/040.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/041.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/042.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/043.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/044.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/045.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/046.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/047.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/048.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/049.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/050.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/051.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/raw/052.gz",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/source-proof.json",
+        "docs/handoff/2026-11-09/lh179-windows-webkit/verify.mjs",
+        "docs/programs/layout-harvest/burndown.md",
+        "docs/programs/release-readiness/burndown.md",
+        "scripts/ci-workflows.test.mjs"
+      ],
+      "controlledBurndownSHA256": "06f94ad01573810c8af55983327568e6d0a457885cebf40528f42c0fc7359481"
+    },
+    {
+      "pr": 1238,
+      "head": "04a277a923d799d4792e5dd3474a8df65c570b26",
+      "merge": "a8876b44bcf7b21276d89d9de372edc83e27049b",
+      "tree": "d0d91893cf374624c0d600a435d42706bd352c53",
+      "mergeTree": "60cd69d5b4fc37b6c691d59e129debcaea456b0f",
+      "parents": [
+        "52ce140facf898f36c851c1011c5aa6b1d29aff3",
+        "04a277a923d799d4792e5dd3474a8df65c570b26"
+      ],
+      "paths": [
+        "changes/rr-105-source-empty-font-comparator.md",
+        "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/README.md",
+        "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/files.json",
+        "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/metadata-checks.files.json",
+        "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/metadata-checks.zip",
+        "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/original-refusal.log.gz",
+        "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/raw.zip",
+        "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/receipt.json",
+        "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/verify.mjs",
+        "docs/programs/release-readiness/burndown.md",
+        "scripts/native-acceptance/compare-text-fonts.mjs",
+        "scripts/native-acceptance/compare-text-fonts.test.mjs",
+        "scripts/native-acceptance/fixtures/metrics-font-empty-frame/input.pptx",
+        "scripts/native-acceptance/fixtures/metrics-font-empty-frame/native-report.json.gz",
+        "scripts/native-acceptance/fixtures/metrics-font-empty-frame/receipt.json"
+      ],
+      "controlledBurndownSHA256": "f41de065cc686f3bb4dd1d265493115619f01c2d8782f9cfe7ea3f050d721264"
+    },
+    {
+      "pr": 1239,
+      "head": "dc4fc9ab1b851a6c5b68a0301f0f2604e078e33a",
+      "merge": "00a828777342e4e7339472dcccc1b4b3bc265204",
+      "tree": "ad8eb1ef2c17cb9aad87770d6d246dd1fb9b68dd",
+      "mergeTree": "a0b88b8bc4fa880b892b49a05c26b4f3aab01ae3",
+      "parents": [
+        "a8876b44bcf7b21276d89d9de372edc83e27049b",
+        "dc4fc9ab1b851a6c5b68a0301f0f2604e078e33a"
+      ],
+      "paths": [
+        ".github/workflows/slow-checks.yml",
+        "changes/rr105-published-matrix-fixtures.md",
+        "docs/handoff/2026-11-09/rr105-published-matrix-driver/.gitattributes",
+        "docs/handoff/2026-11-09/rr105-published-matrix-driver/README.md",
+        "docs/handoff/2026-11-09/rr105-published-matrix-driver/files.json",
+        "docs/handoff/2026-11-09/rr105-published-matrix-driver/gallery-binding-followup/README.md",
+        "docs/handoff/2026-11-09/rr105-published-matrix-driver/gallery-binding-followup/files.json",
+        "docs/handoff/2026-11-09/rr105-published-matrix-driver/gallery-binding-followup/raw.zip",
+        "docs/handoff/2026-11-09/rr105-published-matrix-driver/gallery-binding-followup/receipt.json",
+        "docs/handoff/2026-11-09/rr105-published-matrix-driver/gallery-binding-followup/verify.mjs",
+        "docs/handoff/2026-11-09/rr105-published-matrix-driver/raw.zip",
+        "docs/handoff/2026-11-09/rr105-published-matrix-driver/receipt.json",
+        "docs/handoff/2026-11-09/rr105-published-matrix-driver/verifier-setup.json",
+        "docs/handoff/2026-11-09/rr105-published-matrix-driver/verify.mjs",
+        "docs/programs/release-readiness/burndown.md",
+        "package.json",
+        "scripts/font-switch-list-fixture.mjs",
+        "scripts/font-switch-list-fixture.test.mjs",
+        "scripts/published-matrix/compare.mjs",
+        "scripts/published-matrix/layout-fixtures.mjs",
+        "scripts/published-matrix/prepare-consumer.mjs",
+        "scripts/published-matrix/prepare-harness.mjs",
+        "scripts/published-matrix/prepare-harness.test.mjs",
+        "scripts/test-font-switch-ecosystem.mjs"
+      ],
+      "controlledBurndownSHA256": "d091db4d13f2d8ac48edd400ac0501a47e570635cfa4bb5a989709492ff5c15f"
+    }
+  ],
+  "changedPaths": [
+    {
+      "file": "changes/rr-105-windows-zip-refusal.md",
+      "oid": "6b9c10799c06dc64cbfaa99b8fac556840e56ea3",
+      "owners": [
+        1236
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-windows-zip-refusal/README.md",
+      "oid": "d53a99464e1eb04e24d4c10b725293e9d02ed78c",
+      "owners": [
+        1236
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-windows-zip-refusal/ci-job-exact.log.gz",
+      "oid": "2584d373b0cd20a590afed71ccb33358f1612d65",
+      "owners": [
+        1236
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-windows-zip-refusal/ci-job.log.gz",
+      "oid": "a92f1419a41cee926e49471b1907a42b0a333e7e",
+      "owners": [
+        1236
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-windows-zip-refusal/files.json",
+      "oid": "e107c0274a763ee3bbea8358d3fcb8c7f5b1891b",
+      "owners": [
+        1236
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-windows-zip-refusal/metadata-checks.files.json",
+      "oid": "a8c2aefde5038bd686e5fae08f394d5407b6783a",
+      "owners": [
+        1236
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-windows-zip-refusal/metadata-checks.zip",
+      "oid": "5241e1290a9f8dc4d857eba952802a4ec71e6cdf",
+      "owners": [
+        1236
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-windows-zip-refusal/provenance-checks.files.json",
+      "oid": "e0575538143a525d17c3e9e4d049e93f76d9ce3e",
+      "owners": [
+        1236
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-windows-zip-refusal/provenance-checks.zip",
+      "oid": "691b6649b39671011e47148ece9a66266823ba2a",
+      "owners": [
+        1236
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-windows-zip-refusal/raw.zip",
+      "oid": "9b5c59bafcb2ec4007c83ec3d3797171de3d8799",
+      "owners": [
+        1236
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-windows-zip-refusal/receipt.json",
+      "oid": "9ccdf5432cae463a838ca795de621ce2202e0df3",
+      "owners": [
+        1236
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-windows-zip-refusal/verify.mjs",
+      "oid": "fdf3410216481b3d2a0abfc7d6d0618b15573730",
+      "owners": [
+        1236
+      ]
+    },
+    {
+      "file": "packages/pptx/test/native-readonly-survey.mjs",
+      "oid": "9f5853bc7c60f147e4f812eda367616f5bc66a7e",
+      "owners": [
+        1236
+      ]
+    },
+    {
+      "file": ".github/workflows/nightly.yml",
+      "oid": "847e163a796496e7b0ec98524325422c10cd0177",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "changes/lh-179-windows-webkit.md",
+      "oid": "91f9326b507d0d8c309699e0bc7e8d14d96460e4",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/.gitattributes",
+      "oid": "ed8139609a19ba8ff80dfce337ec833218056ba7",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/README.md",
+      "oid": "f57bc36eb81e81f65ead38def805695ab655fd66",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/approval-review.json",
+      "oid": "23a680d63a9916a1dd4c7a4b471ed33eb9966add",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/diagnosis.json",
+      "oid": "5ca4c5fc8b8ad6517068bcc7d74a1ea77fd07489",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/metadata-qualification.json",
+      "oid": "6a45aab3098871210b788d64c02bd055fb370177",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/000.gz",
+      "oid": "78df186887c9f6f25cfa18504dbdd903b12c43a5",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/001.gz",
+      "oid": "f9e02f0d7d00256adf6b03034204d7efbe044fc6",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/002.gz",
+      "oid": "adfd3c4e64fd287ceff2f490d6de69f7b0fe1734",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/003.gz",
+      "oid": "f93a4d76d35c11f72d5cfbc3754bfbd1f6cd356a",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/004.gz",
+      "oid": "e3982cba27de4d832541c09547353c30c8422428",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/005.gz",
+      "oid": "2433eb6a7a39811b9dab93b8670089d155994f31",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/006.gz",
+      "oid": "0738742ea6263786845c8f47b87881f75dddc5d8",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/qualification/007.gz",
+      "oid": "f5fbfe3fc390592acef5911787366377206987d1",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw-files.json",
+      "oid": "f3593e09523cce9b45ee0b48382f7db1e26b292a",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/000.gz",
+      "oid": "95f4fbcc96036f5c9b794389dac9f918b1058274",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/001.gz",
+      "oid": "62a3769281b0abe37bdc3c704ec9aeef9d58d21d",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/002.gz",
+      "oid": "ae14fa30d95bc43380979fbb155b9760625ff5a4",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/003.gz",
+      "oid": "2d05a4b3c1d099e00f315c9a0a9a3c287237c218",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/004.gz",
+      "oid": "c731e5f09391b44de268745ab9342afc600c7b67",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/005.gz",
+      "oid": "d83173c76eeb4b849216f96c50281e76ef3686ab",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/006.gz",
+      "oid": "64f86901471eac6846adee4ea6f9674f556a8c3d",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/007.gz",
+      "oid": "3a1f9086a1480812c217b731907b7659dc0e8744",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/008.gz",
+      "oid": "b60edc27b25a93874926f7b107ae331c80b2acbf",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/009.gz",
+      "oid": "28bf8303840b75d8a269d40be18a27af77de0e68",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/010.gz",
+      "oid": "6113c08a3ede755ded5135530681e3c546149eb0",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/011.gz",
+      "oid": "37e9179c340e1438bf99e44592754b976188ffaa",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/012.gz",
+      "oid": "c8a66c852a0a876ad68cac96efaee66e007a2592",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/013.gz",
+      "oid": "92f53fcf539f093f7412732833ee6019df403645",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/014.gz",
+      "oid": "9d654f1625767c6dfe56d75a02d3e2fe961928a4",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/015.gz",
+      "oid": "5ecac17948b70b9edfd96c8c96d621416cbe01c1",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/016.gz",
+      "oid": "b72db83a5347884e5b3318e1d4a337b56d4f491d",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/017.gz",
+      "oid": "a6070bc0d91bf2166d08ef56a3f7e1796ccc3520",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/018.gz",
+      "oid": "0ce9150ddadbb08a77083415e3d907f96b2e7df9",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/019.gz",
+      "oid": "2ef004378a2f7b0696cd468434bf2bbda5eff70f",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/020.gz",
+      "oid": "52a47b0acea7d0e82db1e61a9e3638a3b1a2060d",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/021.gz",
+      "oid": "2f8ee4f71de9031d38b300f27db349b506b1cbe8",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/022.gz",
+      "oid": "fd3657a85ec9cc5cdf2edcd46c30061e418cfe12",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/023.gz",
+      "oid": "f29e3fa50a5b95f30adc0ae7b21b67e9030c1a8a",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/024.gz",
+      "oid": "70cc566d730ca91367c90bf3a50c6d695e9a28a4",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/025.gz",
+      "oid": "40b2f52c51a51188711821aae28ef16c7b2cbf1e",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/026.gz",
+      "oid": "24f36887d10a87fcd77b8b17c45d556be1ed57af",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/027.gz",
+      "oid": "c49772cded66898508db06a261ba8e83456de370",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/028.gz",
+      "oid": "bd89ed7a6ab4b78927350d0583a642630b893cb6",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/029.gz",
+      "oid": "027d45d61ed1ec005eea42f43c8bfad69212830d",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/030.gz",
+      "oid": "ce69fe5bca9c3de9b88dcc57c5b553e57c201a47",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/031.gz",
+      "oid": "14641113711094102699662225c898bd29cb2cbd",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/032.gz",
+      "oid": "b81195260c782e5394f19250e3c73b21bba74f64",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/033.gz",
+      "oid": "c955f41c12af306f020ff7ab8cd6e798f7ba9ac1",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/034.gz",
+      "oid": "5165cb0545feec9a0fe5f98f60062d20002fc2fc",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/035.gz",
+      "oid": "1cedffc095217974709b089650f0b89da162ce37",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/036.gz",
+      "oid": "33a71caa13a03cd7d39b6afe3156539b4268532c",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/037.gz",
+      "oid": "2812af5b4db96efb974ed02914ceb810d37c7764",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/038.gz",
+      "oid": "932f70a31375602c49b8aca1e6b3a195d9c14e0c",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/039.gz",
+      "oid": "25fc2f7aaaea558bada3c32041b150b7abeb79ce",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/040.gz",
+      "oid": "0ee721a86ba9bb1d36421863ae4e42812845d189",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/041.gz",
+      "oid": "5b7a55e1729db060dfc655db59b59d9b9a10827b",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/042.gz",
+      "oid": "b9764c2f676eee785c4f85c10b978282a9be76d5",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/043.gz",
+      "oid": "67263ea2f87a44337af6cdb0d6517f260dd3cf04",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/044.gz",
+      "oid": "d4b551daa74a2a61ebec5f577d4a901134a5c428",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/045.gz",
+      "oid": "bebb816abfbe7b0daaf44d2a0d16aca597e79d67",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/046.gz",
+      "oid": "053e73a3252091bab7e33219e61669389a77cc4a",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/047.gz",
+      "oid": "78b17361ae77ab538822a1177bbacbd9defe22d0",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/048.gz",
+      "oid": "30565168d5fbe1db134d6e2d45a0ab2f5b9c4e88",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/049.gz",
+      "oid": "a4da1d7ba4388afdb6e5be7f03db26b0a81f3f5d",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/050.gz",
+      "oid": "9c01c3a3ad73fafae45bcff812c613eca6819c99",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/051.gz",
+      "oid": "8b7d879ff4991140345ac81e135467b8f3772e4b",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/raw/052.gz",
+      "oid": "98becda6b67a7095cae662c99315b133ee6b9486",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/source-proof.json",
+      "oid": "75abb742610fc3a4094a3768fd35c0aa60b08571",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh179-windows-webkit/verify.mjs",
+      "oid": "5ba5e6ff7394e2cb5f021342a6c0de2620ab70fb",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "docs/programs/layout-harvest/burndown.md",
+      "oid": "c462718a22bba2e04058ceea3a6c90b1adbf2983",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "scripts/ci-workflows.test.mjs",
+      "oid": "f7781f254a97286095bf8213a42d6f0ea87cabc3",
+      "owners": [
+        1237
+      ]
+    },
+    {
+      "file": "changes/rr-105-source-empty-font-comparator.md",
+      "oid": "baae0ebabcd8c6ebc28c77fd58da67f19efe8827",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/README.md",
+      "oid": "e2679efc68f9f124ded7930e9bd81bddbcf064bc",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/files.json",
+      "oid": "b3edc05e47d309e851808579670d50fe7e00760b",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/metadata-checks.files.json",
+      "oid": "00d0173dd920f61a40e3b086e2853dad6031d5e6",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/metadata-checks.zip",
+      "oid": "826b465cdb5e876d0d993610ec17b81b4d91619b",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/original-refusal.log.gz",
+      "oid": "ed1cb43b8e7b4d7cc631ff226e4e4fac3f41185e",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/raw.zip",
+      "oid": "13706a3204f72d136e13e09e6115384579c2cae1",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/receipt.json",
+      "oid": "0ec20e8c03facb0c7aadce2f1d01d5c011b7019f",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-source-empty-font-comparator/verify.mjs",
+      "oid": "0bbff82048f11f81dab97e20ef4343a110cc8613",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": "scripts/native-acceptance/compare-text-fonts.mjs",
+      "oid": "525c36bb83ee76b382f6fa1969a8d1df1ddaa7f0",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": "scripts/native-acceptance/compare-text-fonts.test.mjs",
+      "oid": "18e6d8a26577377eb6940055453dcbfe57871832",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": "scripts/native-acceptance/fixtures/metrics-font-empty-frame/input.pptx",
+      "oid": "da2736fca2d6a426cf697a903e9943ed729f5730",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": "scripts/native-acceptance/fixtures/metrics-font-empty-frame/native-report.json.gz",
+      "oid": "f4e77bd47d8ce25fc0aba85a8a15890e4656b08b",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": "scripts/native-acceptance/fixtures/metrics-font-empty-frame/receipt.json",
+      "oid": "5995997494fce9d585a62daf6464ca51e5ace7de",
+      "owners": [
+        1238
+      ]
+    },
+    {
+      "file": ".github/workflows/slow-checks.yml",
+      "oid": "82bab0b5f03532b9f3ef90d74c773f4c2c9d71d8",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "changes/rr105-published-matrix-fixtures.md",
+      "oid": "db1867c60a311209f36f73b5dbd321108988769a",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-published-matrix-driver/.gitattributes",
+      "oid": "fa1385d99a319b43c06f5309d1aae9fdd3adea46",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-published-matrix-driver/README.md",
+      "oid": "1d5f988c32380ae2763bfc85884c56329ef90392",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-published-matrix-driver/files.json",
+      "oid": "e7f25538db7082d6087f4875868503be5623489a",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-published-matrix-driver/gallery-binding-followup/README.md",
+      "oid": "e0f930470f0effe6c8997ad4f741a54b12ccac39",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-published-matrix-driver/gallery-binding-followup/files.json",
+      "oid": "68ae6d14f2e258812b3f4e46b5a0ab9bd250e556",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-published-matrix-driver/gallery-binding-followup/raw.zip",
+      "oid": "3729b180e657d270790d55515a1d354f1fa4e093",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-published-matrix-driver/gallery-binding-followup/receipt.json",
+      "oid": "01703e5027f7911aa2bfa2cac7c026b4ad3f4e11",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-published-matrix-driver/gallery-binding-followup/verify.mjs",
+      "oid": "e57ad57cd3b750e8e9d4957966d8f34a53c97f36",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-published-matrix-driver/raw.zip",
+      "oid": "2c29932765d11085f95b7ed0764db3b4322d644a",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-published-matrix-driver/receipt.json",
+      "oid": "6dacb41c9a17e23f1656170c67d50e2d63657afb",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-published-matrix-driver/verifier-setup.json",
+      "oid": "f8edc8486d11e07fe16841b89bef5c5c0fd62f1b",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-published-matrix-driver/verify.mjs",
+      "oid": "2f95d1f843dc182bb8d1e7e88d43f96850f6715f",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "package.json",
+      "oid": "846e509ef00827a8efe72c059ca3238f88be6fbb",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "scripts/font-switch-list-fixture.mjs",
+      "oid": "677afc900fdba7f58c6c7388087815af2bbe6f6e",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "scripts/font-switch-list-fixture.test.mjs",
+      "oid": "3e06f8706455b21cfb4cc6577e0f637ca2a3e106",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "scripts/published-matrix/compare.mjs",
+      "oid": "1aa24a9da64b142d1b974aaa7df0360f18ca5d2b",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "scripts/published-matrix/layout-fixtures.mjs",
+      "oid": "3edfb20138303e36b988949ce72cce0a454ec593",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "scripts/published-matrix/prepare-consumer.mjs",
+      "oid": "31bd0a2674735c1118b4b5cc8bfbe5913355910b",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "scripts/published-matrix/prepare-harness.mjs",
+      "oid": "66d5a7fb0e999c71649128566c76241e9a51c086",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "scripts/published-matrix/prepare-harness.test.mjs",
+      "oid": "463992e963da42a7abfd1768d65067b2c613cf70",
+      "owners": [
+        1239
+      ]
+    },
+    {
+      "file": "scripts/test-font-switch-ecosystem.mjs",
+      "oid": "d3367befb9f59ea86ab90613e20c3f4d2c455bbd",
+      "owners": [
+        1239
+      ]
+    }
+  ],
+  "controlledBurndown": "docs/programs/release-readiness/burndown.md",
+  "protectedObjects": [
+    {
+      "file": "spec",
+      "oid": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5"
+    },
+    {
+      "file": "packages/javascript/src",
+      "oid": "2ede77fd4b6d59c2adf687fac5fc5abd17bd6e69"
+    },
+    {
+      "file": "packages/render/src",
+      "oid": "afc9aff76ce525790544010cff6aed78e053c314"
+    },
+    {
+      "file": "packages/render/test/golden",
+      "oid": "68dd38c05ba762f104515c4b5a35fe847c91059d"
+    },
+    {
+      "file": "packages/pptx/src",
+      "oid": "d3f6bc8ab9e874813d947ccfbbb10cfb5da3cdec"
+    },
+    {
+      "file": "packages/pptx/test/fixtures",
+      "oid": "c1889d397872a5fdae5194601ca08db8c83df085"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "oid": "3432ab613e493c84d6eea74cb68d30be08720102"
+    }
+  ],
+  "mapped": {
+    "exitCode": 1,
+    "selectedSteps": 25,
+    "failedSteps": 6,
+    "typecheck": "skipped: no TypeScript change",
+    "seconds": 117.6,
+    "failures": [
+      "gallery-tracker: absent sparse historical inputs",
+      "native-acceptance: four absent input cases",
+      "registry-fidelity-archive: unchanged Windows EOL expectation",
+      "registry-plan: unchanged Windows file-URL cwd handling",
+      "registry-toolchain: existing local symlink privilege EPERM",
+      "text: absent painting input"
+    ]
+  },
+  "recovery": {
+    "restoredExactFiles": 4,
+    "restoredBytes": 98398,
+    "originalAggregateStillRed": true,
+    "text": "7/7 PASS, complete declared integrity scan",
+    "native": "68/69 PASS; final absent-input chart-modes then 4/4 PASS",
+    "broaderGalleryClosureRestored": false,
+    "binaryIndexFirstGuard": "FAILED, retained; complete 26594 staged mode/OID/path audit exact HEAD"
+  },
+  "nativeEvidence": "73a79918b2e9562d712cfa40998a0820bc62463e",
+  "raw": [
+    {
+      "label": "integration034-four-repairs-mapped-01.log",
+      "file": "raw/000.gz",
+      "bytes": 20355,
+      "sha256": "5e1879e190d362eca75e4eaa67b5298ea4072458ab67ee4722de170e5d9c2dfc",
+      "gzipBytes": 3882,
+      "gzipSHA256": "86de97e964496a48ab95adaec54d64d24a4dca9cbaa919add58b5e1e7826d977"
+    },
+    {
+      "label": "integration034-four-repairs-mapped-01-exit.json",
+      "file": "raw/001.gz",
+      "bytes": 404,
+      "sha256": "f01bc842b5182f88dfe1def151d3701a92d0197d44a53a5ec4a95aa4295932e4",
+      "gzipBytes": 302,
+      "gzipSHA256": "27cb901b82e9d3610ab2ad43279484194fe1caa4ac53635934b6e671926d410e"
+    },
+    {
+      "label": "integration034-four-repairs-native-recovery-01.log",
+      "file": "raw/002.gz",
+      "bytes": 7594,
+      "sha256": "734332107012e77ea832c30f01e9dfaca1f5a3ecd4bbb88b77bb8d5ddc3827fd",
+      "gzipBytes": 3159,
+      "gzipSHA256": "8aca8fd9190921f714ea1489b460cf0d1c16a300055cfa8284c01f77b28f742b"
+    },
+    {
+      "label": "integration034-four-repairs-native-recovery-01-exit.json",
+      "file": "raw/003.gz",
+      "bytes": 316,
+      "sha256": "db7641a148937b1692a3eabacaa946575b785d1238a75dea1fb1cd128abaad83",
+      "gzipBytes": 248,
+      "gzipSHA256": "0b63b45c5477df6d1bbddc99fb86b4d971df670258c6020cf0273d027c7e9d6f"
+    },
+    {
+      "label": "integration034-four-repairs-text-recovery-01.log",
+      "file": "raw/004.gz",
+      "bytes": 1101,
+      "sha256": "aeb9e8ebd241f777fe064ab6b0fb860ee38e30a2f728f47329714d2fe28b11b9",
+      "gzipBytes": 604,
+      "gzipSHA256": "f8dfe8ea78aef1b7132de5be3ed022987d0e2d66a1f28ec673f3fcb142fa046d"
+    },
+    {
+      "label": "integration034-four-repairs-text-recovery-01-exit.json",
+      "file": "raw/005.gz",
+      "bytes": 303,
+      "sha256": "e64c35c61aa837ab72cca428ef8251436e141419588eea076bdb4fcb3877bb4a",
+      "gzipBytes": 240,
+      "gzipSHA256": "824519f02e191c31edb9dfebc3b2d1d67363ee89446e7d11a2480bcde7d33bee"
+    },
+    {
+      "label": "integration034-four-repairs-chart-modes-recovery-01.log",
+      "file": "raw/006.gz",
+      "bytes": 554,
+      "sha256": "b753d9aa27106a6719054453fcee917c235ca1acc29c9df130b2717c6c93ca68",
+      "gzipBytes": 359,
+      "gzipSHA256": "bd8da96630003f489a85c1558ee0ae491896eb9586436285daeecf8340ea90ed"
+    },
+    {
+      "label": "integration034-four-repairs-chart-modes-recovery-01-exit.json",
+      "file": "raw/007.gz",
+      "bytes": 255,
+      "sha256": "76ea9d55f309cdfd927bc3d29291fe6f7f226a5bd062ecb1ea9f2fa1bc83ec4c",
+      "gzipBytes": 206,
+      "gzipSHA256": "abfeb27727b410a05aa7086e8ddfca353a0d7943a3ac68617cf42254d32132b0"
+    },
+    {
+      "label": "three-native-text-inputs-reviewed-00a828.json",
+      "file": "raw/008.gz",
+      "bytes": 1667,
+      "sha256": "d5510854ea842852428d3df29e3b1ccc8d99e7e11e211aab0b8c81defe87b616",
+      "gzipBytes": 920,
+      "gzipSHA256": "9712da2f670c3812a08e4b6d08e5b4bc76c087c4ed352a3a2b7a68cd3026edf8"
+    },
+    {
+      "label": "one-native-chart-input-00a828.json",
+      "file": "raw/009.gz",
+      "bytes": 637,
+      "sha256": "4eb3210a61964dbc677a7abaecc40d5a1ae4550949a263043235698249dba400",
+      "gzipBytes": 437,
+      "gzipSHA256": "48289ecbf127ce9f9dcce227b7223b127a294ba0e58b1486d608dc825884a702"
+    },
+    {
+      "label": "restore-three-native-text-inputs.mjs",
+      "file": "raw/010.gz",
+      "bytes": 2779,
+      "sha256": "11710df2451506ef6ea049eb7694796be7f2e88f15b8bc25f305bf585ab8ee40",
+      "gzipBytes": 1306,
+      "gzipSHA256": "18e94ebf68d0c37b273ebc7b38fe0faffc51ea04c2172c060c725b98643b775a"
+    },
+    {
+      "label": "resolve-qualification-burndown.mjs",
+      "file": "raw/011.gz",
+      "bytes": 2605,
+      "sha256": "a98d1ed3c8243765d0851cc63337789edb8c7506994a5a8c054b378a32bbb583",
+      "gzipBytes": 1217,
+      "gzipSHA256": "b368bf122c33db60c20188f1948b4a0eaaf22eccdc3b4ddfb78ee94ffed45637"
+    },
+    {
+      "label": "burndown-merge-180590bad546.json",
+      "file": "raw/012.gz",
+      "bytes": 794,
+      "sha256": "bf675b74e4c20f6a26c0689aaea437b283318e410d01dd25f28985ed420dd57d",
+      "gzipBytes": 558,
+      "gzipSHA256": "92600faf51b70c92e7ff30dabaaf87095f124791c0d9110dcc79b44522481367"
+    },
+    {
+      "label": "burndown-merge-04a277a923d7.json",
+      "file": "raw/013.gz",
+      "bytes": 1112,
+      "sha256": "ee1d3ce4972dd9bb7616df924e713db5c96cdee5666a7e0e74adc8302f6b6613",
+      "gzipBytes": 686,
+      "gzipSHA256": "75bfd9a8fd229540bcb0bacadd5eee40a958a1ae0e0e176de607bd6c8267757e"
+    },
+    {
+      "label": "burndown-merge-dc4fc9ab1b85.json",
+      "file": "raw/014.gz",
+      "bytes": 1552,
+      "sha256": "b2816c82b5bce120f99036d7a9bfa791d2c1fc95ac528f5cb52c7b5a18ca1b42",
+      "gzipBytes": 910,
+      "gzipSHA256": "041ea7a347172ea6198c4f2f3e60fa52c950200eb0d940ddd00d346fc647cd03"
+    },
+    {
+      "label": "original-mapped/build.log",
+      "file": "raw/015.gz",
+      "bytes": 14584,
+      "sha256": "79852f27439c6752fed7aa02b12effbda1a8ee16217fb5fb3448d73515d4e7f0",
+      "gzipBytes": 2979,
+      "gzipSHA256": "9912527db8f9751b97346df06bd929c2a537642fdbce88dea55a02029c3b4de9"
+    },
+    {
+      "label": "original-mapped/biome.log",
+      "file": "raw/016.gz",
+      "bytes": 40327,
+      "sha256": "0284eec062b3e6931d140b0af4de7d7c4e1854e2a2b9e283d76bf1697eef0864",
+      "gzipBytes": 6173,
+      "gzipSHA256": "18acb7cc6bc6475e1bd2d1c3bfe1c402e67a460c07a278946f83f1a091542944"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_changes.log",
+      "file": "raw/017.gz",
+      "bytes": 2634,
+      "sha256": "e69eb3dd1ecc7a7714a6d0217bd186919cadd9579b6136650f9980b6146ffe36",
+      "gzipBytes": 1161,
+      "gzipSHA256": "4302322c97ac973cbaa6b24550a74ab63be0e67187b60fda7747f8ac4031adec"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_ci-scope.log",
+      "file": "raw/018.gz",
+      "bytes": 3337,
+      "sha256": "63ef1bd2d7520de14a7e927d32c29b8c9db5a065f39a234fc68d92d9799bf461",
+      "gzipBytes": 1566,
+      "gzipSHA256": "a27c27aa6cbfb1e4d3dbae5baefabae0de30257efc8aba345c074465bdca79e3"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_engines-range.log",
+      "file": "raw/019.gz",
+      "bytes": 844,
+      "sha256": "30c6d5554e7c01c2b9ac50bf9b714b9ab882e026fea4bfa66768e23b5cf8a721",
+      "gzipBytes": 480,
+      "gzipSHA256": "da56b8b242675e745621c4ac06f74f31fbce7b7592a3d1e553ac96bac146d1bd"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_font-hotlinks.log",
+      "file": "raw/020.gz",
+      "bytes": 884,
+      "sha256": "8656c21f1dfaf73af4a1230c441fe50c61df583ffde4ea92d44732f6f2f150ed",
+      "gzipBytes": 530,
+      "gzipSHA256": "025eef170fbc2c79d2c1b1a1fcae12d86f1b36f357f01ef237df64c781167b08"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_ci-workflows.log",
+      "file": "raw/021.gz",
+      "bytes": 10355,
+      "sha256": "66f005903e25c6cfc1d4f06650103379f80cf2351b634c41b86d31e3089d30ad",
+      "gzipBytes": 3858,
+      "gzipSHA256": "1378be79ed99e660de085e63cddfb160fa0bd45275bdfdf5eb45d08564f93dcb"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_font-switch-fixtures.log",
+      "file": "raw/022.gz",
+      "bytes": 1379,
+      "sha256": "80d3323eef79ce508f995bae8c42d7cd258b1b4116a62569802d16fb07869e48",
+      "gzipBytes": 762,
+      "gzipSHA256": "f3269e18f8368cbeb6ecc52fc6b574c1ca0f4df50caa9a5020a63ee9d1f7af0a"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_gallery-tracker.log",
+      "file": "raw/023.gz",
+      "bytes": 12397,
+      "sha256": "32e41a4a894707c8c9cde49c41a8850627620f38d9e01ce5c77ff1da608f52a0",
+      "gzipBytes": 1743,
+      "gzipSHA256": "bb94ca4ef80d1888152f74a41dcc322ccad88391b2567cf353aee0545b90d765"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_libreoffice.log",
+      "file": "raw/024.gz",
+      "bytes": 1409,
+      "sha256": "b74d838ea0013e6b286176a04afa985b409e76c878d435aff3475f2d52526dc2",
+      "gzipBytes": 800,
+      "gzipSHA256": "d3df86b57db3742d47cdae69b941936ec54aae8a7722394f2440b07a4ff43bad"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_playwright-pin.log",
+      "file": "raw/025.gz",
+      "bytes": 779,
+      "sha256": "985f7c76df9197691cdfffcecffeede20bd5da87663fd55ec8b07a668fc9cac0",
+      "gzipBytes": 425,
+      "gzipSHA256": "4daa845ac52aa40a2d71e8ccb7e27a472227268c3ec7e5be7ce8d9d65316c859"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_published-matrix-consumer.log",
+      "file": "raw/026.gz",
+      "bytes": 1338,
+      "sha256": "f69abb46d813bed318e9ab122cf9caeada836fbd9a028a76b930bffe32527058",
+      "gzipBytes": 679,
+      "gzipSHA256": "3dcf6dbf66d5e4ec2a10e052046ab021a7c7232f5cf23ea1956b5b17e5df6ff1"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_native-acceptance.log",
+      "file": "raw/027.gz",
+      "bytes": 10670,
+      "sha256": "d2469a7653ad78c3338a7d5e07643a7797abee97d7513d1f9c0542e7433c6342",
+      "gzipBytes": 3343,
+      "gzipSHA256": "8d98f89be366a54b091e63ee2589809fb0a0ee1e98c403911a843a00d99aa7ea"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_registry-fidelity-archive.log",
+      "file": "raw/028.gz",
+      "bytes": 2575,
+      "sha256": "41953ca8f2d4ccc9cd679de76183785389d8025623e4a0a72451cd6932864882",
+      "gzipBytes": 827,
+      "gzipSHA256": "86dc49cab6b44193d7e8416f1cc7c3c73a851eddec70bf7bc4eea431ec860051"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_rebuilt-release-files.log",
+      "file": "raw/029.gz",
+      "bytes": 3293,
+      "sha256": "d559d02c0acb853a44e52f93c2f9cf79e2515d2723cbcd3237d7166b15dca2ca",
+      "gzipBytes": 791,
+      "gzipSHA256": "0f328e019034ceb32a9c9ced7c58ee3b3b154fd59ebd7ec4d9134b340304eba7"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_registry-plan.log",
+      "file": "raw/030.gz",
+      "bytes": 2740,
+      "sha256": "dcca0a5dce5dbb7e958c913382213bf77cf5e270c2d4e8c362ded0c5b7e95eb3",
+      "gzipBytes": 955,
+      "gzipSHA256": "34df15ebb5964c68f172f600f77a969aad2fb5500e72bb6ffd5feee9403c1c00"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_registry-golden.log",
+      "file": "raw/031.gz",
+      "bytes": 689,
+      "sha256": "8e39c581b3102de3f37253ea30e3511b4cf1db93015224754cf56048c1be4a99",
+      "gzipBytes": 414,
+      "gzipSHA256": "cffaeeb978d70e2a992f838c7168a02a65a152aad0ab570fa23df2060a29360f"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_registry-toolchain.log",
+      "file": "raw/032.gz",
+      "bytes": 1534,
+      "sha256": "dad1aafe8dd674cb9fc97ba251af6e5b637d8ad826ec93ffdefdc0c69ad66602",
+      "gzipBytes": 670,
+      "gzipSHA256": "667e23a7b673bee0442ed203800216b8380a1a0e393ed48b7dac3a386d1f2154"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_release-report.log",
+      "file": "raw/033.gz",
+      "bytes": 812,
+      "sha256": "03634c06c0f23c0a9468c728bf3e4e0f7d2db32f0705d57bbf02168f233badd5",
+      "gzipBytes": 462,
+      "gzipSHA256": "610b55476edc099fba08b0d9e44ff558b17305261429b33943d4a8ee9ea33fe5"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_runners.log",
+      "file": "raw/034.gz",
+      "bytes": 1747,
+      "sha256": "652fd996a106878a2edc1fa8960eb440dd40a94c0946ee05de035bd46729c508",
+      "gzipBytes": 820,
+      "gzipSHA256": "6bda364045a2cfce18b7f5edad364173ef9f03f83c78e1ffddb1b173287c8ad9"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_skill-commands.log",
+      "file": "raw/035.gz",
+      "bytes": 1039,
+      "sha256": "6e6ffba0763cdaf9f946e5b694fd84416d8eb1154a21bb2389f844f16e56e8a0",
+      "gzipBytes": 581,
+      "gzipSHA256": "291fe7945304f84d78b72829c6f19befc4d6a025305f3c9e135a6f4960e4b437"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_text.log",
+      "file": "raw/036.gz",
+      "bytes": 1843,
+      "sha256": "ef9c32e374b51f45c4a48b0e7a299d67cc02e7a1220f9a35ebca5e132318474f",
+      "gzipBytes": 869,
+      "gzipSHA256": "f4a38955df3ecb104f7112dfdc3b7d002ee46632c97d96ce701877c748f6e2c8"
+    },
+    {
+      "label": "original-mapped/pnpm_run_check_stability.log",
+      "file": "raw/037.gz",
+      "bytes": 3968,
+      "sha256": "2e834732edf7f932a9bb830dc0a39e78c100465a13baace2e1b3393ae92ad0e2",
+      "gzipBytes": 1365,
+      "gzipSHA256": "179a8d8071feca53cf85d5e1af645391f409f65dc0d7f7e57241b697d1edcc8b"
+    },
+    {
+      "label": "original-mapped/tests_pptx.log",
+      "file": "raw/038.gz",
+      "bytes": 297,
+      "sha256": "62c0d1f884ce5363d5de4c75f29351589c2fb79687f9e49db211a2e83362466c",
+      "gzipBytes": 226,
+      "gzipSHA256": "71122c32c73bbb82ae336ee230e42e84dc889610d8f3e2c7ddb45ea76ad719d6"
+    },
+    {
+      "label": "previous-CURRENT.md",
+      "file": "raw/039.gz",
+      "bytes": 13719,
+      "sha256": "7e21664fe95456101d97ba7f2046f4d231bb10ca5454c2345b6773e2983deba3",
+      "gzipBytes": 6606,
+      "gzipSHA256": "8deb10e7af8e036905a38f6bba7c8fe31bd97dfb18717075a62523268e1946ad"
+    }
+  ],
+  "scope": "Exact four reviewed source unions and original local outcomes only. No combined CI/native/release acceptance; folded leaves frozen. No chart representation approval."
+}

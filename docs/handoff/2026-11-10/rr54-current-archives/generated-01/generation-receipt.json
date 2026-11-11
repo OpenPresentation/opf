@@ -1,0 +1,232 @@
+{
+  "scope": "GENERATED_REPOSITORY_HELPER_CANDIDATE_NOT_PROMOTED",
+  "constructorSource": "036a2d64159f07a8d1d5c702f5a2b811602a447b",
+  "archiveProducerSource": "284de14a45f05502f28941c153eb62e8769224c7",
+  "originalFixtureSha256": "d62b991a3772856d812296cf12582be2ede6850e39d644d3414ab39a89a06e27",
+  "reviewSha256": "6d1175df4458467aa5a08494e271ea8e805dab3cb15acc14c7dcc23fe9a2ed5f",
+  "candidateSha256": "6ac461500703cde99ae7a2293a9a1e7b45d5aad5055fa8789a6418b8a1365208",
+  "candidateBytes": 72306,
+  "entries": 21,
+  "projectedDecks": 1,
+  "inputProjection": {
+    "path": "/slides/0/table/columns/1/style/align",
+    "before": "right",
+    "after": "end",
+    "scope": "Only authored LTR TableCellStyle logical vocabulary; whole inverse equals original",
+    "originalDeckSha256": "f4aef92f6312546823d9c48334bbb0f51a5ef87fe7236ca4c039585072d4d6f6",
+    "currentDeckSha256": "952bf27e6884f06c9d6c51ba57dda67749f07d36acfc2a8d044f5d885bb17518"
+  },
+  "sealedProducer": {
+    "path": "docs/evidence/rr105-034-archive-review/receipt.json",
+    "sha256": "55431d25e100873d45abf2e2c13076acd76a845dc1d25b95b2843a56676d0e2f",
+    "gitBlob": "981e2a9e6b169d240e61953a9876cd89d4da053c",
+    "producerBaseline": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+    "producerCandidate": "513156a982397eaa0033808215fbb86dd284745b",
+    "producerBuildHead": "b124b1ad3670e1dba9122d4180d5f07a1ed4abb2",
+    "nativeAcceptance": false,
+    "metadataLimit": "twenty-one-candidate-fixture.json is original maintained output. Its hardcoded source.rr105033ArchiveReview narrative/evidence path describes033 and is not accepted for034; root must give correct034 provenance in a separately reviewed promotion."
+  },
+  "sourceEvidence": {
+    "directory": "docs/handoff/2026-11-10/rr54-current-archives/generated-01",
+    "baselineSourceTrees": "100644 blob 0d5eec02984fea0ef0b564a4b83658cc35a1bbf0\tpackage.json\n040000 tree 0299af51fc1866552ba6d6022e7caddeb0f2bf4f\tpackages/gallery\n040000 tree b74a16068838e9a31c1d52fe5580a807cc31f959\tpackages/javascript\n040000 tree 0c570bd278c2deb0b83b4036dd42cb7bfc77ca75\tpackages/pptx\n040000 tree 20c8f6d1f1c5cd0efea0c96176b96b9bf7d4f47f\tpackages/render\n100644 blob 3432ab613e493c84d6eea74cb68d30be08720102\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree eead5477c84895367abc9d909866b23ba77e35ac\tspec",
+    "candidateSourceTrees": "100644 blob 846e509ef00827a8efe72c059ca3238f88be6fbb\tpackage.json\n040000 tree 6c75a5ac33f85b88b005480c7069f85c9b6c49c9\tpackages/gallery\n040000 tree a9a5484b1787dcddc2e4b3f8ce1d3aaa86a1ba64\tpackages/javascript\n040000 tree a8e26423cc1742acb211bc75795cc0e7aa2e478a\tpackages/pptx\n040000 tree c8e0f6a96632e8a336503df71ac358415b6b682d\tpackages/render\n100644 blob 624c471f1d054e9d5b38686c55ab3bb76679fcb9\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree a0498ccdaba262de2fc98f0f5e8222ef2cd4994d\tspec",
+    "fixtureSha256": "d62b991a3772856d812296cf12582be2ede6850e39d644d3414ab39a89a06e27",
+    "reviewerSha256": "dac73fa4526a3994646d25c8353981f25ce69c161911b46b8f57113268f55ec5",
+    "candidateHelperSha256": "3baf818c1cfea66a9917aae8d32c0904bc018aa35f2437210a26728e397f99a1",
+    "constructorSource": "036a2d64159f07a8d1d5c702f5a2b811602a447b",
+    "rawAudit": {
+      "bytes": 193060,
+      "sha256": "fbd731492d8b69c4794bbaefd506ced41488ac946e3aff9b59b5ecc8dac178a3"
+    },
+    "independentReview": {
+      "bytes": 14740,
+      "sha256": "ff7a680862586f4b28fdc991d5dd8cbd46dd33acb288cbeb67ccb16b7bd44c5e"
+    },
+    "baselineOrigin": {
+      "mode": "sealed-git-bytes",
+      "storageRevision": "5e89a184ffc8a38539f5fb5e573f403066bcca17",
+      "receipt": {
+        "path": "docs/evidence/rr105-034-archive-review/receipt.json",
+        "sha256": "55431d25e100873d45abf2e2c13076acd76a845dc1d25b95b2843a56676d0e2f",
+        "gitBlob": "981e2a9e6b169d240e61953a9876cd89d4da053c",
+        "producerBaseline": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+        "producerCandidate": "513156a982397eaa0033808215fbb86dd284745b",
+        "producerBuildHead": "b124b1ad3670e1dba9122d4180d5f07a1ed4abb2",
+        "nativeAcceptance": false,
+        "metadataLimit": "twenty-one-candidate-fixture.json is original maintained output. Its hardcoded source.rr105033ArchiveReview narrative/evidence path describes033 and is not accepted for034; root must give correct034 provenance in a separately reviewed promotion."
+      },
+      "oldRuntimeRerun": false,
+      "matchedArchives": [
+        {
+          "name": "column",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "a9ee19fa6b2ade6292eaccf6fc5170a4b00927fcee33f4d9b1d7398158f9b1d5"
+        },
+        {
+          "name": "column-labels",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "58e8913d6759db4bda07dbdcc7dbf7383bfffa424a2955a0ce351321fcb2fa70"
+        },
+        {
+          "name": "bar",
+          "matchingSealedMembers": [
+            "after.pptx"
+          ],
+          "sha256": "0edac61c7f74aa56418d7327423d919adcddd44c5acbb4eb4d8040a49f314f91"
+        },
+        {
+          "name": "line",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "fcda3b2d2b4619f200f26d2487ec3e6e88a2a3e4d2bb22b9f3d7f760c4fbf5fd"
+        },
+        {
+          "name": "area",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "88b0531ecba29768a7f7717ed3e4c5cb912812a6c093ba7c33a83135e71b8329"
+        },
+        {
+          "name": "stacked-column",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "8b67739b24ff9fc1b8decb34dbc2c12eb9c78678be22fb39d7adea798da4038f"
+        },
+        {
+          "name": "percent-stacked",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "403396b000eb9b98b4779bcbe66cee2891f7815401b32d668a2849ed496bdd6f"
+        },
+        {
+          "name": "pie",
+          "matchingSealedMembers": [
+            "after.pptx"
+          ],
+          "sha256": "bf51c580af4cf742c067b55b03e4f3a6f3e5d1e08bbb3e70fc5605017c0ffe88"
+        },
+        {
+          "name": "doughnut",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "e3b9ec19cc6772fb59f5174ef888726fcf6ff1fd64fccb18f7eadebcdebb5643"
+        },
+        {
+          "name": "radar",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "5939afd5992f94e9b047482c0675887adac41334cd7c2ac01fbba4e5e20ecb62"
+        },
+        {
+          "name": "scatter",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "88eb8aac1e5fdf959606db7a8def632ed3d891bbdc19e3c32622e6d2f982e416"
+        },
+        {
+          "name": "scatter-two-columns",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "e45baf1046649e32670e9519a35b6b13f80f2a598d8424a0eec56078ad891525"
+        },
+        {
+          "name": "single-column",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "6b7afc94f54ee867b5124d85f7ff30f0c800ebde1f9955619347bea0f0946389"
+        },
+        {
+          "name": "scatter-labels",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "96148b77dce65ca678e506042621df03e813f661cc298b5c644d37fb31384aab"
+        },
+        {
+          "name": "chartex-native-map",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "d6ffcc5251d70b68ac1d128ff9876eefd7da591d9a043c38314ac229208e7318"
+        },
+        {
+          "name": "histogram",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "51394036520211662be53127a5c348600e8146ae37bfa49042ec86e44bf6b1de"
+        },
+        {
+          "name": "treemap",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "3f46573198b0e8db4d3a3eb60f4ccb46892fb52b4ebbe8d01554a765893fcd53"
+        },
+        {
+          "name": "waterfall",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "963e262393f5ff6a0b2581e1695470a36b515797589a90daa803659268f6b1aa"
+        },
+        {
+          "name": "table",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "27463fec020ca9382f851a01b95b3cbd0fde807d369ee14b6621b36aa5f227e2"
+        },
+        {
+          "name": "styled-table",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "bbad327522f1e99cff6a127e16738e9699058130332b8aabcd7061a002aeb374"
+        },
+        {
+          "name": "mixed-blocks",
+          "matchingSealedMembers": [
+            "after.pptx",
+            "before.pptx"
+          ],
+          "sha256": "8d018b2132a43688b86a83fb54fb352e5d8ff09c9fd54d35d6eaaa2f00294bce"
+        }
+      ]
+    }
+  },
+  "exports": 0,
+  "builds": 0,
+  "promoted": false
+}

@@ -394,8 +394,8 @@
     "axe-core": "4.14.0",
     "esbuild": "0.28.2",
     "pdf-lib": "1.17.1",
-    "pdfjs-dist": "6.4.299",
-    "playwright": "1.64.1",
+    "pdfjs-dist": "6.5.438",
+    "playwright": "1.65.0",
     "sharp": "0.35.5"
   },
   "bin": {

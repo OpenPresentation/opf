@@ -1,0 +1,543 @@
+{
+  "note": "Direct native Latin run slots remain Roboto families. Script glyphs inherit theme ea/cs/supplement names; preview Noto replacements are not a claim that native names changed or are installed.",
+  "decks": [
+    {
+      "id": "ar-SA",
+      "directRunFonts": [
+        "Roboto",
+        "Roboto Medium",
+        "Roboto SemiBold"
+      ],
+      "generatedRuns": [
+        {
+          "word": "مكتمل",
+          "fontSlots": [
+            {
+              "slot": "latin",
+              "family": "Roboto Medium"
+            }
+          ],
+          "runProperties": "<a:rPr lang=\"ar-SA\" sz=\"1950\" dirty=\"0\">"
+        },
+        {
+          "word": "حالي",
+          "fontSlots": [
+            {
+              "slot": "latin",
+              "family": "Roboto Medium"
+            }
+          ],
+          "runProperties": "<a:rPr lang=\"ar-SA\" sz=\"1950\" dirty=\"0\">"
+        },
+        {
+          "word": "مخطط",
+          "fontSlots": [
+            {
+              "slot": "latin",
+              "family": "Roboto Medium"
+            }
+          ],
+          "runProperties": "<a:rPr lang=\"ar-SA\" sz=\"1950\" dirty=\"0\">"
+        }
+      ],
+      "themes": [
+        {
+          "file": "ppt/theme/theme1.xml",
+          "roles": {
+            "majorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Roboto",
+                "cs": "Arabic Typesetting"
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "新細明體"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arabic Typesetting"
+                }
+              ]
+            },
+            "minorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Roboto",
+                "cs": "Arabic Typesetting"
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "新細明體"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arabic Typesetting"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "file": "ppt/theme/theme2.xml",
+          "roles": {
+            "majorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Roboto",
+                "cs": "Arabic Typesetting"
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "新細明體"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arabic Typesetting"
+                }
+              ]
+            },
+            "minorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Roboto",
+                "cs": "Arabic Typesetting"
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "新細明體"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arabic Typesetting"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "zh-TW",
+      "directRunFonts": [
+        "Roboto",
+        "Roboto Medium",
+        "Roboto SemiBold"
+      ],
+      "generatedRuns": [
+        {
+          "word": "已完成",
+          "fontSlots": [
+            {
+              "slot": "latin",
+              "family": "Roboto Medium"
+            }
+          ],
+          "runProperties": "<a:rPr lang=\"zh-TW\" sz=\"1950\" dirty=\"0\">"
+        },
+        {
+          "word": "目前",
+          "fontSlots": [
+            {
+              "slot": "latin",
+              "family": "Roboto Medium"
+            }
+          ],
+          "runProperties": "<a:rPr lang=\"zh-TW\" sz=\"1950\" dirty=\"0\">"
+        },
+        {
+          "word": "計畫",
+          "fontSlots": [
+            {
+              "slot": "latin",
+              "family": "Roboto Medium"
+            }
+          ],
+          "runProperties": "<a:rPr lang=\"zh-TW\" sz=\"1950\" dirty=\"0\">"
+        }
+      ],
+      "themes": [
+        {
+          "file": "ppt/theme/theme1.xml",
+          "roles": {
+            "majorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Microsoft JhengHei",
+                "cs": ""
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "Microsoft JhengHei"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Times New Roman"
+                }
+              ]
+            },
+            "minorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Microsoft JhengHei",
+                "cs": ""
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "Microsoft JhengHei"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arial"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "file": "ppt/theme/theme2.xml",
+          "roles": {
+            "majorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Microsoft JhengHei",
+                "cs": ""
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "Microsoft JhengHei"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Times New Roman"
+                }
+              ]
+            },
+            "minorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Microsoft JhengHei",
+                "cs": ""
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "Microsoft JhengHei"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arial"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ar-SA-no-status",
+      "directRunFonts": [
+        "Roboto",
+        "Roboto Medium",
+        "Roboto SemiBold"
+      ],
+      "generatedRuns": [],
+      "themes": [
+        {
+          "file": "ppt/theme/theme1.xml",
+          "roles": {
+            "majorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Roboto",
+                "cs": "Arabic Typesetting"
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "新細明體"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arabic Typesetting"
+                }
+              ]
+            },
+            "minorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Roboto",
+                "cs": "Arabic Typesetting"
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "新細明體"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arabic Typesetting"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "file": "ppt/theme/theme2.xml",
+          "roles": {
+            "majorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Roboto",
+                "cs": "Arabic Typesetting"
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "新細明體"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arabic Typesetting"
+                }
+              ]
+            },
+            "minorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Roboto",
+                "cs": "Arabic Typesetting"
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "新細明體"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arabic Typesetting"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "zh-TW-no-status",
+      "directRunFonts": [
+        "Roboto",
+        "Roboto Medium",
+        "Roboto SemiBold"
+      ],
+      "generatedRuns": [],
+      "themes": [
+        {
+          "file": "ppt/theme/theme1.xml",
+          "roles": {
+            "majorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Microsoft JhengHei",
+                "cs": ""
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "Microsoft JhengHei"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Times New Roman"
+                }
+              ]
+            },
+            "minorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Microsoft JhengHei",
+                "cs": ""
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "Microsoft JhengHei"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arial"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "file": "ppt/theme/theme2.xml",
+          "roles": {
+            "majorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Microsoft JhengHei",
+                "cs": ""
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "Microsoft JhengHei"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Times New Roman"
+                }
+              ]
+            },
+            "minorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Microsoft JhengHei",
+                "cs": ""
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "Microsoft JhengHei"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arial"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "parent-rtl-duration",
+      "directRunFonts": [
+        "Roboto",
+        "Roboto Medium",
+        "Roboto SemiBold"
+      ],
+      "generatedRuns": [
+        {
+          "word": "مكتمل",
+          "fontSlots": [
+            {
+              "slot": "latin",
+              "family": "Roboto Medium"
+            }
+          ],
+          "runProperties": "<a:rPr lang=\"ar-SA\" sz=\"2625\" dirty=\"0\">"
+        },
+        {
+          "word": "حالي",
+          "fontSlots": [
+            {
+              "slot": "latin",
+              "family": "Roboto Medium"
+            }
+          ],
+          "runProperties": "<a:rPr lang=\"ar-SA\" sz=\"2625\" dirty=\"0\">"
+        },
+        {
+          "word": "مخطط",
+          "fontSlots": [
+            {
+              "slot": "latin",
+              "family": "Roboto Medium"
+            }
+          ],
+          "runProperties": "<a:rPr lang=\"ar-SA\" sz=\"2625\" dirty=\"0\">"
+        }
+      ],
+      "themes": [
+        {
+          "file": "ppt/theme/theme1.xml",
+          "roles": {
+            "majorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Roboto",
+                "cs": "Arabic Typesetting"
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "新細明體"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arabic Typesetting"
+                }
+              ]
+            },
+            "minorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Roboto",
+                "cs": "Arabic Typesetting"
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "新細明體"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arabic Typesetting"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "file": "ppt/theme/theme2.xml",
+          "roles": {
+            "majorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Roboto",
+                "cs": "Arabic Typesetting"
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "新細明體"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arabic Typesetting"
+                }
+              ]
+            },
+            "minorFont": {
+              "slots": {
+                "latin": "Roboto",
+                "ea": "Roboto",
+                "cs": "Arabic Typesetting"
+              },
+              "supplements": [
+                {
+                  "script": "Hant",
+                  "family": "新細明體"
+                },
+                {
+                  "script": "Arab",
+                  "family": "Arabic Typesetting"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

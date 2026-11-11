@@ -13,7 +13,8 @@ try {
  const page=await browser.newPage();page.on('pageerror',error=>errors.push(error.message));await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});await page.setContent('<style>body{margin:0}</style><main></main>');
  await page.evaluate(async faces=>{for(const face of faces)document.fonts.add(await new FontFace(face.family,`url(${face.dataUrl})`,{weight:String(face.weight),style:face.italic?'italic':'normal'}).load());await document.fonts.ready;},registry.embeddedFonts);
  for(const mode of ['estimated','measured'])for(const align of ['left','center','right'])for(const [width,height]of [[1280,720],[720,1280]])for(const [fixture,text]of fixtures.entries()) {
-  const document={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},contentAlignment:align,titleAlignment:align},slides:[{title:'  Exact  title\tend  ',text}]},before=structuredClone(document),options={trace:true,...(mode==='measured'?{fonts:{textMeasurement:prepared.textMeasurement}}:{})};
+  const logicalAlign=align==='left'?'start':align==='right'?'end':'center';
+  const document={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},contentAlignment:logicalAlign,titleAlignment:logicalAlign},slides:[{title:'  Exact  title\tend  ',text}]},before=structuredClone(document),options={trace:true,...(mode==='measured'?{fonts:{textMeasurement:prepared.textMeasurement}}:{})};
   const bound=resolvePresentation(document,options).slides[0],svg=toSvg(document, 1,options);assert.deepEqual(document,before);assert.deepEqual(bound.geometry.diagnostics,[]);
   await page.setViewportSize({width,height});
   const actual=await page.evaluate(async({svg,items,mode,align})=>{

@@ -43,7 +43,7 @@ describe("LH-117: table columns align by appearance", () => {
   });
 
   test("an author's cell alignment wins, then the header's (the column's), then the design's", () => {
-    const table = { columns: ["Item", { value: "Share", style: { align: "center" } }, "Count"], rows: [["a", "12%", { value: 3, style: { align: "left" } }], ["b", "14%", 4]] };
+    const table = { columns: ["Item", { value: "Share", style: { align: "center" } }, "Count"], rows: [["a", "12%", { value: 3, style: { align: "start" } }], ["b", "14%", 4]] };
     assert.deepEqual(alignments(table), ["left center right", "left center left", "left center right"]);
     assert.deepEqual(alignments({ columns: ["Item", "Count"], rows: [["a", 3]] }, { alignment: "center" }), ["center center", "center center"]);
   });

@@ -89,7 +89,7 @@ A deck without front matter starts with its first slide, so a file never begins 
 
 | Part | Syntax | OPF |
 | --- | --- | --- |
-| Options | `<!-- slide: id=cover layout=cover section="Part 1" tag=NEW hidden beat=a beat=b type=chart -->` | `id`, `layout`, `section`, `tag`, `hidden` (`hidden=false` too), `beat` (repeat for several), `type`. Values are bare words or JSON strings. At most one per slide, anywhere in it; written first |
+| Options | `<!-- slide: id=cover layout=cover section="Part 1" tag=NEW hidden beat=a beat=b type=chart -->` | `id`, `layout`, `section`, `tag`, `hidden` (`hidden=false` too), `beat` (repeat for several), `type`, `language` (a BCP-47 tag overriding the deck on this slide). Values are bare words or JSON strings. At most one per slide, anywhere in it; written first |
 | Title | `# Title` | `title`: a string, or `TextRun[]` when the line has [inline formatting](#inline-text). One per slide; closing `#` characters are dropped |
 | Subtitle | `## Subtitle` | `subtitle`, a string or `TextRun[]` like the title. One per slide |
 | Deeper headings | `### Text` | A bold paragraph, with a `heading-demoted` warning |
@@ -106,7 +106,7 @@ Blocks are separated by blank lines; a fence, heading, quote, table, image line 
 | `id=...`, `type=...` | The block's `id` and explicit `type`. Such a block is always an entry in `blocks` |
 | `as=bullets` | Store a list as `bullets` instead of `items` |
 | `as=video` | Store an image line as `video` |
-| `region=top:left` | Put the block in that promoted region of the slide (`left`, `center+right`, `top+middle`, `middle+bottom:left+center+right`, ...) instead of the content |
+| `region=top:start` | Put the block in that promoted region of the slide (`start`, `center+end`, `top+middle`, `middle+bottom:start+center+end`, ...) instead of the content |
 
 | Markdown | OPF field | Notes |
 | --- | --- | --- |
@@ -120,6 +120,8 @@ Blocks are separated by blank lines; a fence, heading, quote, table, image line 
 | ```` ```chart column ```` | `chart` | The word after `chart` is the chart `type`; an optional `alt="..."` after it is the chart's text alternative (`alt=""` marks it decorative; a quoted JSON string, as on the timeline fence). The body is CSV with a header row (the first column is the category labels and always text; in the other columns an unquoted decimal is a number, `true` and `false` are booleans, an empty field is `null` and a quoted field is text) or a JSON object holding `columns` and `rows` |
 | ```` ```timeline name="Roadmap" ```` | `timeline` | One event per line: `when — what` (spaced em dash), or the date forms of the conversions (`2026 Q1: Pilot`, `Jan - Kickoff`), or just `what`. A task-list prefix sets the event's `status`: `[x]` done, `[>]` current ("we are here"), `[ ]` planned. An indented line is the event's `description`. `name` and `description` go on the fence line |
 | ```` ```mermaid ```` | `diagram` | The body is [Mermaid](https://mermaid.js.org) source, drawn in the deck's fonts and colors (see the [diagrams guide](diagrams.md) and [Diagram](content-payloads.md#diagram)); an optional `alt="..."` after the word is the diagram's text alternative (```` ```mermaid alt="What it shows" ````). A diagram with only a source is the string shorthand; with an `alt` it is `{ source, alt }`. The writer emits the same fence, longer than any run of backticks in the source. A source with a blank first or last line, a carriage return, or an `alt` that holds a backtick or a line break cannot round-trip through the fence, so it is written as an `opf-block` and reads back exactly |
+| ```` ```dot ```` | `diagram` | The body is one [Graphviz DOT](diagrams.md#graphviz-dot) graph, read as `{ source, syntax: "dot" }` (with `alt` when the fence has one, as on the mermaid fence). The writer emits a `dot` fence for a DOT diagram. A code block in the `dot` language is written as an `opf-block`, so it reads back as code |
+| ```` ```plantuml ```` | `diagram` | The body is one [PlantUML](diagrams.md#plantuml) diagram from its `@start` line to its `@end` line, read as `{ source, syntax: "plantuml" }` (with `alt` when the fence has one). The writer emits a `plantuml` fence for a PlantUML diagram; a code block in the `plantuml` language is written as an `opf-block` |
 | ```` ```opf-block ```` | any block | A YAML `ContentPayload`: `id`, `type`, any content field, nested `blocks` groups |
 
 ### Inline text
@@ -132,7 +134,7 @@ Blocks are separated by blank lines; a fence, heading, quote, table, image line 
 | `` `code` ``, ``` ``a ` b`` ``` | `code` (a backtick fence of any length; one space is trimmed from each side when both sides have one; the text is literal and other formatting wraps the span) |
 | `<u>`, `<sup>`, `<sub>` | `underline`, `superscript`, `subscript` |
 | `[text](url)`, `<https://...>` | `link` (a link title is ignored) |
-| `[text]{color=#B42318 size=24 font="Open Sans"}` | `color` (a hex colour, scheme slot or `var:name`), `fontSize`, `fontFamily`, `lang` (a BCP-47 tag); `bold italic underline strike sup sub` work inside the braces too |
+| `[text]{color=#B42318 size=24 font="Open Sans"}` | `color` (a hex colour, scheme slot or `var:name`), `fontSize`, `fontFamily`, `language` (written `lang=fr`, a BCP-47 tag); `bold italic underline strike sup sub` work inside the braces too |
 | `\*` and any backslash before ASCII punctuation | The character itself |
 
 Flanking follows CommonMark, so `2*(3+4)*5` and `a * b` are text. A backtick that has no matching fence, or that is escaped with a backslash, is text. There is no raw HTML beyond the tags above and `<br>`, no entities (`&amp;` is literal) and no setext headings or indented code. The title, the subtitle and a quote's text keep inline formatting (a string when nothing is formatted, `TextRun[]` otherwise); a quote with formatted text and no attribution stays `{ text: [...] }`, because the string shorthand is for plain text. A quote's attribution and source are plain strings and drop formatting with a `formatting-dropped` warning; backticks in them stay literal characters. `cite` and `footnote` have no inline syntax: a heading or quote that carries one is written in an `opf-slide` fence. Image alt text, code, metric values and timeline lines are read as written, without inline formatting.

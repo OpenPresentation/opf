@@ -6,10 +6,10 @@
     "theme": "classic",
     "fontScheme": "roboto",
     "footer": {
-      "left": {
+      "start": {
         "text": "Harbor Light Coffee · sample data"
       },
-      "right": {
+      "end": {
         "text": "{{slide.number}} / {{deck.slideCount}}"
       }
     }
@@ -130,7 +130,7 @@
               }
             ],
             "style": {
-              "align": "right",
+              "align": "end",
               "padding": {
                 "top": 12,
                 "right": 16,
@@ -147,7 +147,7 @@
               }
             ],
             "style": {
-              "align": "right",
+              "align": "end",
               "padding": {
                 "top": 12,
                 "right": 16,
@@ -173,7 +173,7 @@
             {
               "value": "$8.1M",
               "style": {
-                "align": "right",
+                "align": "end",
                 "padding": {
                   "top": 12,
                   "right": 16,
@@ -191,7 +191,7 @@
                 }
               ],
               "style": {
-                "align": "right",
+                "align": "end",
                 "padding": {
                   "top": 12,
                   "right": 16,
@@ -216,7 +216,7 @@
             {
               "value": "$4.6M",
               "style": {
-                "align": "right",
+                "align": "end",
                 "padding": {
                   "top": 12,
                   "right": 16,
@@ -228,7 +228,7 @@
             {
               "value": "+40%",
               "style": {
-                "align": "right",
+                "align": "end",
                 "padding": {
                   "top": 12,
                   "right": 16,
@@ -253,7 +253,7 @@
             {
               "value": "$2.1M",
               "style": {
-                "align": "right",
+                "align": "end",
                 "padding": {
                   "top": 12,
                   "right": 16,
@@ -265,7 +265,7 @@
             {
               "value": "+31%",
               "style": {
-                "align": "right",
+                "align": "end",
                 "padding": {
                   "top": 12,
                   "right": 16,

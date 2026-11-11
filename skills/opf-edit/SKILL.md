@@ -14,7 +14,7 @@ Preserve document fields unrelated to the requested change, including assets, ca
 - **Furniture**: the parts that repeat on slides outside the content: header, footer, logo, slide number. You set them once on the deck or a layout, not in `blocks`.
 - **Composition**: the automatic layout step that turns a slide's content into boxes with a position, size and font size. A `composition` key steers it.
 - **Implicit blocks**: content fields written straight on the slide (`text`, `items`, `table`, ...) with no `blocks` list. Composition treats them as blocks, and editing can turn them into an explicit `blocks` list.
-- **Promoted region**: content placed by a 3×3 grid key on the slide (`left`, `top:right`, `center+right`), used when relative position matters. It cannot be mixed with root content.
+- **Promoted region**: content placed by a 3×3 grid key on the slide (`start`, `top:end`, `center+end`), used when relative position matters. It cannot be mixed with root content.
 - **Catalog record**: one named, reusable design entry (a theme, layout, color scheme, font scheme, ...) from the `@openpresentation/gallery` package or a deck's `catalogs`. A deck refers to it by id.
 - **Reflow**: text wrapping again when its box or size changes. OPF computes preview line breaks. Default PPTX export keeps each wrapped line in its own box; opt-in native paragraph export lets supported text re-wrap in the application, while fallback content stays measured.
 - **Provenance**: tags that OPF writes into an exported PPTX to record where each shape came from, so a later import can map edits back to the OPF source.

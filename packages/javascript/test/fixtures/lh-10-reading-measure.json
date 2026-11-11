@@ -1,0 +1,93 @@
+{
+  "slide": {
+    "layout": "two-column",
+    "title": "Signal Trend",
+    "blocks": [
+      {
+        "text": "Meridian Cloud should focus the next cycle on help regional partners explain the new integration story while making the operating tradeoffs clear to partnerships stakeholders."
+      },
+      {
+        "text": "Inputs"
+      },
+      {
+        "text": "Slide-level design can suppress inherited repeated furniture."
+      },
+      {
+        "text": "SilverOak Group should focus the next cycle on right-size office services around actual hybrid usage while making the operating tradeoffs clear to facilities stakeholders."
+      },
+      {
+        "text": "Decision owners need one place to see what changed."
+      }
+    ],
+    "id": "s32"
+  },
+  "layout": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "two-column",
+    "name": "Two columns",
+    "summary": "Two independent columns of any content.",
+    "tags": [
+      "Text"
+    ],
+    "design": {
+      "imageFit": "contain",
+      "contentBox": true
+    },
+    "direction": "column",
+    "anchor": "bottom",
+    "regions": [
+      {
+        "name": "title"
+      },
+      {
+        "direction": "row",
+        "regions": [
+          {
+            "name": "first",
+            "accepts": [
+              "text",
+              "list",
+              "quote",
+              "code",
+              "image",
+              "shape",
+              "video",
+              "chart",
+              "table",
+              "metric",
+              "timeline",
+              "group",
+              "diagram"
+            ],
+            "role": "primary",
+            "flow": "none"
+          },
+          {
+            "name": "second",
+            "accepts": [
+              "text",
+              "list",
+              "quote",
+              "code",
+              "image",
+              "shape",
+              "video",
+              "chart",
+              "table",
+              "metric",
+              "timeline",
+              "group",
+              "diagram"
+            ],
+            "role": "primary",
+            "flow": "none"
+          }
+        ]
+      }
+    ],
+    "description": "Place two bodies of content beside each other. Use it for paired explanations or an argument with supporting evidence. Pictures remain visible in full unless an explicit fit overrides the layout default.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/two-column.svg"
+    }
+  }
+}

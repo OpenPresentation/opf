@@ -1,5 +1,6 @@
+import { fontCoverageProbe } from './script-fonts.js';
 import { fontPolicyFor } from "@openpresentation/opf/font-policy";
-import { pickFace } from "./font-registry.js";
+import { pickFace, OPFFontError } from "./font-registry.js";
 import { toSvg } from "./svg.js";
 import { deckInternals } from "./svg-internals.js";
 export { lazyFontEntries, lazyFontList } from "./lazy-font-list.js";
@@ -44,11 +45,32 @@ export function presentationFamilies(presentation, options = {}) {
 const RECORDED_EM = 0.01;
 
 /** The registry's view with faces added: what a registry holding `faces` resolves families to (`pickFace`, its own selection). */
-function registryView({ faces, policy = "none", aliases = new Map(), fallbackFamily }) {
+function registryView({ faces, policy = "none", aliases = new Map(), fallbackFamily, mapFamily }) {
   const pool = [...faces].map(face => ({ ...face, familyGroup: face.familyGroup ?? face.family }));
-  return style => {
-    const family = style?.fontFamily;
-    const { face } = pickFace(pool, family, style, { policy, aliases, fallbackFamily });
+  // Fitting asks about the same styles many times. This view owns one fixed pool
+  // and selection policy: keep only successful choices, never full styles or
+  // failures (their paths belong to the current request), for this call only.
+  const selected = new Map();
+  let selections = 0;
+  return (style, preserveChosen = false) => {
+    if(mapFamily&&typeof style?.fontFamily==="string")style={...style,fontFamily:mapFamily(style.fontFamily)};
+    const family = style?.fontFamily, weight = style?.fontWeight ?? 400, italic = !!style?.italic;
+    let weights = selected.get(family), variants = weights?.get(weight), choice = variants?.get(italic);
+    if (choice === undefined) {
+      choice = pickFace(pool, family, style, { policy, aliases, fallbackFamily });
+      // Bound memory even for a host with hundreds of distinct requested styles.
+      if (selections >= 512) { selected.clear(); selections = 0; weights = undefined; variants = undefined; }
+      if (!weights) selected.set(family, weights = new Map());
+      if (!variants) weights.set(weight, variants = new Map());
+      variants.set(italic, choice);
+      selections++;
+    }
+    if (preserveChosen && choice.via !== "family") {
+      const chosen = { ...style };
+      delete chosen.fontFace;
+      return chosen;
+    }
+    const { face } = choice;
     return { ...style, fontFamily: face.family, fontWeight: face.weight, italic: face.italic };
   };
 }
@@ -89,7 +111,7 @@ const byFace = (a, b) => a.family < b.family ? -1 : a.family > b.family ? 1 : Nu
  * The measurement `presentationFaces` draws with: it records every style it is asked to measure (resolved through `settle`) into
  * the map `record.into` holds (switch it to file what follows elsewhere).
  */
-function recordingMeasurement(settle, into) {
+function recordingMeasurement(settle, into, coverage) {
   const record = { into };
   record.textMeasurement = {
     measure(text, size, style) {
@@ -100,10 +122,16 @@ function recordingMeasurement(settle, into) {
           const key = faceKey(family, weight, italic);
           if (!record.into.has(key)) record.into.set(key, { family, weight, italic });
         }
+        // Demand loaders know coverage only after selected bytes are verified. Unknown faces are optimistic for one round.
+        try { coverage?.(String(text), size, settled); }
+        catch(error) { if(!['missing-glyph','font-unavailable','font-style-unavailable'].includes(error?.code))throw error; }
+        // Recording must finish on unresolved styles or uncovered glyphs: ensure still runs its bounded optional fallback chain.
+        // Actual rendering has no recording hook and retains its original missing-glyph refusal.
       }
       return String(text).length * size * RECORDED_EM;
     },
     resolveStyle: settle,
+    ...(coverage ? { [fontCoverageProbe](text,size,style) { coverage(String(text),size,settle(style)); } } : {}),
   };
   return record;
 }
@@ -206,16 +234,26 @@ export function createFontAnalysis() {
   function faces(presentation, options = {}, registry) {
     const resolveOptions = resolveOptionsOf(options);
     if (registry) registry = { ...registry, faces: [...registry.faces] };
-    const view = registry ? registryView(registry) : undefined;
+    const view = registry ? registryView(registry.preserveChosenFamilies ? {...registry, mapFamily: undefined} : registry) : undefined;
     const settle = style => {
       if (!view) return { ...style };
       try { return view(style); } catch { return { ...style }; }
     };
+    // Native keeps chosen roles outside its raw script planner. Its inner resolver must still expose physical Emoji/script faces.
+    const inputBinding = registry?.preserveChosenFamilies && view ? {
+      mapInputFamily: registry.mapFamily,
+      resolveInputStyle: style => { try { return view(style, true); } catch { return { ...style }; } },
+    } : undefined;
     const keys = deckKeys(presentation);
     if (!keys) {
       // Not a deck object: one whole-deck pass, kept nowhere.
       const seen = new Map();
-      toSvg(presentation, { ...resolveOptions, fonts: { textMeasurement: recordingMeasurement(settle, seen).textMeasurement } });
+      const measurement = recordingMeasurement(settle, seen, registry?.coverage).textMeasurement;
+      if (inputBinding) {
+        const opened = deckInternals.openDeck(presentation, resolveOptions);
+        for (let index = 0; index < opened.presentation.slides.length; index++) opened.bind(index, measurement, inputBinding);
+        for (let index = 0; index < opened.presentation.slides.length; index++) if (resolveOptions.skipHidden !== true || !opened.presentation.slides[index].hidden) opened.render(index);
+      } else toSvg(presentation, { ...resolveOptions, fonts: { textMeasurement: measurement } });
       stats.decks++;
       return [...seen.values()].sort(byFace);
     }
@@ -228,8 +266,8 @@ export function createFontAnalysis() {
       // Composition of the slides, then their drawing, as `toSvg` runs them.
       const opened = deck.open();
       const made = new Map(missing.map(index => [index, { composed: new Map(), drawn: new Map() }]));
-      const recorders = new Map(missing.map(index => [index, recordingMeasurement(settle, made.get(index).composed)]));
-      for (const index of missing) opened.bind(index, recorders.get(index).textMeasurement);
+      const recorders = new Map(missing.map(index => [index, recordingMeasurement(settle, made.get(index).composed, registry?.coverage)]));
+      for (const index of missing) opened.bind(index, recorders.get(index).textMeasurement, inputBinding);
       // A slide is drawn with the measurement it was composed with; what it measures from here on is its drawing. `skipHidden`
       // leaves hidden slides undrawn (they are still composed), as in `toSvg`.
       for (const index of missing) {
@@ -276,9 +314,63 @@ export function createFontAnalysis() {
   return { faces, families, stats };
 }
 
-function registryKey({ faces, policy = "none", aliases = new Map(), fallbackFamily }) {
+function registryKey({ faces, policy = "none", aliases = new Map(), fallbackFamily, coverageKey, mapFamily, preserveChosenFamilies }) {
   // Every field `pickFace` reads, as it reads them (`italic` is compared with ===, `fallbackOnly` and `scripts` by truth).
-  return JSON.stringify([faces.map(face => [face.family, face.familyGroup ?? face.family, face.weight ?? null, face.italic ?? null, !!face.fallbackOnly, !!face.scripts]), policy, [...aliases], fallbackFamily ?? null]);
+  return JSON.stringify([faces.map(face => [face.family, face.familyGroup ?? face.family, face.weight ?? null, face.italic ?? null, !!face.fallbackOnly, !!face.scripts]), policy, [...aliases], fallbackFamily ?? null, coverageKey ?? null, optionToken(mapFamily), !!preserveChosenFamilies]);
+}
+
+/** Validate extra measurements without changing the caller's requests. */
+export function fontMeasurementRequests(requests = []) {
+  if (!Array.isArray(requests) || requests.some(request =>
+    !request || typeof request.text !== 'string' || !Number.isFinite(request.size) || request.size <= 0 ||
+    !request.style || typeof request.style.fontFamily !== 'string' || !request.style.fontFamily.trim() ||
+    !Number.isFinite(request.style.fontWeight ?? 400) || (request.style.fontWeight ?? 400) < 1 || (request.style.fontWeight ?? 400) > 1000))
+    throw new OPFFontError('invalid-font-measurement-request', 'Measurement requests need text, a positive finite size, and a concrete font style.');
+  return requests;
+}
+
+// Nominal names only: an exporter can resolve an undrawn role without loading
+// it. Actual measurement still requires the registry's verified physical face.
+export function lazyFontNames({lazy, describeFaces, policy = 'none', aliases = new Map(), fallbackFamily}) {
+  let signature, pool, selected = new Map();
+  const unavailable=error=>['font-unavailable','font-style-unavailable','font-encoding-required'].includes(error?.code);
+  const pick = style => {
+    if(typeof style?.fontFamily!=='string'||!style.fontFamily.trim()||/[\u0000-\u001f"'\\<>;]/.test(style.fontFamily))
+      throw new OPFFontError('invalid-font-family','Font family must be a nonempty plain name.');
+    if(!Number.isFinite(style.fontWeight??400)||(style.fontWeight??400)<1||(style.fontWeight??400)>1000)
+      throw new OPFFontError('invalid-font-weight','Font weight must be between 1 and 1000.');
+    const held = describeFaces({selection: true}), current = JSON.stringify(held);
+    if (current !== signature) {
+      signature = current;
+      const keys = new Set(held.map(faceKeyOf));
+      pool = [...held, ...lazy.filter(face => !keys.has(faceKeyOf(face)))].map(face => ({...face, familyGroup: face.familyGroup ?? face.family}));
+      selected = new Map();
+    }
+    const key = JSON.stringify([style.fontFamily, style.fontWeight ?? 400, !!style.italic]);
+    let result = selected.get(key);
+    if (!result) {
+      result = pickFace(pool, style.fontFamily, style, {policy, aliases, fallbackFamily});
+      if (selected.size >= 512) selected.clear();
+      selected.set(key, result);
+    }
+    return result;
+  };
+  return {
+    resolveStyle(style) {
+      try {
+        const {face} = pick(style), result = {...style, fontFamily: face.family, fontWeight: face.weight, italic: !!face.italic};
+        delete result.fontFace;
+        return result;
+      } catch(error) { if(!unavailable(error))throw error;return {...style}; }
+    },
+    resolveFont(style) {
+      try {
+        const {face, via, compatibility} = pick(style);
+        return {requestedFamily: style.fontFamily, sourceFamily: style.fontFamily, resolvedFamily: face.family,
+          requestedWeight: style.fontWeight ?? 400, resolvedWeight: face.weight, italic: !!face.italic, substitute: via !== 'family', compatibility};
+      } catch(error) { if(!unavailable(error))throw error;return {requestedFamily: style.fontFamily, resolvedFamily: style.fontFamily, substitute: false}; }
+    },
+  };
 }
 
 /**
@@ -289,11 +381,16 @@ function registryKey({ faces, policy = "none", aliases = new Map(), fallbackFami
  * does not resolve throws what `toSvg` throws for it. Face level: a bold or italic run added by an edit adds just that face.
  * Pass `analysis` (`createFontAnalysis()`) to keep each slide's faces between calls: then only slides that changed are analyzed.
  */
-export function lazyFacesNeeded(presentation, renderOptions, { lazy, held, loaded = new Set(), policy = "none", aliases = new Map(), fallbackFamily, analysis }) {
+export function lazyFacesNeeded(presentation, renderOptions, { lazy, held, loaded = new Set(), policy = "none", aliases = new Map(), fallbackFamily, analysis, mapFamily, preserveChosenFamilies, measurementRequests = [] }) {
   const heldFaces = [...held], heldKeys = new Set(heldFaces.map(faceKeyOf));
   const missing = lazy.filter(face => !heldKeys.has(faceKeyOf(face)) && !loaded.has(face.file));
+  const pool = [...heldFaces, ...missing].map(face => ({...face, familyGroup: face.familyGroup ?? face.family}));
   // `analysis` (from `createFontAnalysis`) keeps each slide's faces between calls, so a fonts handle redoes only changed slides.
-  const drawn = new Set((analysis ?? createFontAnalysis()).faces(presentation, renderOptions, { faces: [...heldFaces, ...missing], policy, aliases, fallbackFamily }).map(faceKeyOf));
+  const drawn = new Set((analysis ?? createFontAnalysis()).faces(presentation, renderOptions, { faces: pool, policy, aliases, fallbackFamily, mapFamily, preserveChosenFamilies }).map(faceKeyOf));
+  // Requests already use the exporter's chosen/safe family. Keep them separate
+  // from SVG analysis and its cache identity; only actual measurement adds a face.
+  for (const request of fontMeasurementRequests(measurementRequests)) if (request.text !== '')
+    drawn.add(faceKeyOf(pickFace(pool, request.style.fontFamily, request.style, {policy, aliases, fallbackFamily}).face));
   return missing.filter(face => drawn.has(faceKeyOf(face)));
 }
 function faceKeyOf(face) { return `${lc(face.family)}\u0000${face.weight}\u0000${!!face.italic}`; }
@@ -343,8 +440,8 @@ export function lazyFontsFor(entries, { lazy, held, hasFamily, loaded = new Set(
   // The registry's view with every vendored face added: what Node draws with everything loaded.
   let pool;
   const universe = () => pool ??= [
-    ...heldFaces.map(face => ({ ...face, familyGroup: face.family })),
-    ...lazy.filter(face => !heldKeys.has(faceKey(face)) && !loaded.has(face.file)).map(face => ({ family: face.family, familyGroup: face.family, weight: face.weight, italic: !!face.italic, lazy: face })),
+    ...heldFaces.map(face => ({ ...face, familyGroup: face.familyGroup ?? face.family })),
+    ...lazy.filter(face => !heldKeys.has(faceKey(face)) && !loaded.has(face.file)).map(face => ({ family: face.family, familyGroup: face.familyGroup ?? face.family, weight: face.weight, italic: !!face.italic, lazy: face })),
   ];
   for (const entry of entries) {
     if (typeof entry === "string") { addFamily(entry); continue; }

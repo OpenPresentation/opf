@@ -1,0 +1,62 @@
+{
+  "rows": [
+    {
+      "id": "ltr-scalar",
+      "before": "1cc8ec96b278eefda93932fc1a88c96201ea546cbd53f6fc214b31fbf857af9e",
+      "after": "1cc8ec96b278eefda93932fc1a88c96201ea546cbd53f6fc214b31fbf857af9e",
+      "byteExact": true,
+      "changedParts": [],
+      "displayPartsByteExact": true
+    },
+    {
+      "id": "ltr-array",
+      "before": "f131f750d8db41b3588ef90a46b681940588def92ee17b855f19868ff9144c56",
+      "after": "f131f750d8db41b3588ef90a46b681940588def92ee17b855f19868ff9144c56",
+      "byteExact": true,
+      "changedParts": [],
+      "displayPartsByteExact": true
+    },
+    {
+      "id": "ltr-rich",
+      "before": "a392fb7f571f562f7891a020d5232f36fcd23ea38880f7cd03ee790e2893a9c6",
+      "after": "a392fb7f571f562f7891a020d5232f36fcd23ea38880f7cd03ee790e2893a9c6",
+      "byteExact": true,
+      "changedParts": [],
+      "displayPartsByteExact": true
+    },
+    {
+      "id": "rtl-arabic",
+      "before": "ee9a41fb229be9101ecec4c0cd2f75c1aed0a565df118536305cdbab1530b00e",
+      "after": "ee9a41fb229be9101ecec4c0cd2f75c1aed0a565df118536305cdbab1530b00e",
+      "byteExact": true,
+      "changedParts": [],
+      "displayPartsByteExact": true
+    },
+    {
+      "id": "rtl-authored-array",
+      "before": "9f6de097092c52629cf565d3813a353a4cdd30b25bc609f8df2a147a44bddc96",
+      "after": "9f6de097092c52629cf565d3813a353a4cdd30b25bc609f8df2a147a44bddc96",
+      "byteExact": true,
+      "changedParts": [],
+      "displayPartsByteExact": true
+    },
+    {
+      "id": "rtl-explicit",
+      "before": "c8d9df36ed78b46da4527110fdb4d51afea9730ba127c20a46c872556a3e2210",
+      "after": "c8d9df36ed78b46da4527110fdb4d51afea9730ba127c20a46c872556a3e2210",
+      "byteExact": true,
+      "changedParts": [],
+      "displayPartsByteExact": true
+    },
+    {
+      "id": "rtl-scalar",
+      "before": "323c6d2c7f6258af1011bdbeed444283023670126cac37e8e37d63e0297facd9",
+      "after": "d7942b02f0dda35ccf0ba57e9720006d134b33c53fbc200fa7eecc82847ac217",
+      "byteExact": false,
+      "changedParts": [
+        "ppt/tags/opfSlide1.xml"
+      ],
+      "displayPartsByteExact": true
+    }
+  ]
+}

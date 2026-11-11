@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "producerHead": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+  "nativeOwner": "Coordinator-owned unchanged SaveCopyAs/reopen; no Office run by this continuation",
+  "acceptance": false,
+  "files": {
+    "07-input.pptx": {
+      "sha256": "e6b961eaebe0132faf83db3f9395f8c5d4dd2b710748a6320dc388f149e980e8",
+      "bytes": 100893,
+      "source": "C:/opf-work/rtl-native-contrast-export-01/suite/inputs/rtl-contrast-07-mixed-inherited.pptx"
+    },
+    "07-saved.pptx": {
+      "sha256": "d58cd176ac43b599af05e1fb5ebc91c74bb266207ef92d556112ebb2c8b5e50a",
+      "bytes": 104057,
+      "source": "C:/opf-work/qualification034-rtl-contrast-native-01/rtl-contrast-07-mixed-inherited/native/native-furniture-control.pptx"
+    },
+    "07-source.json": {
+      "sha256": "97451f1a570432ebdfa3744b5dcd7a82e4f9937fedf299922f6f2b3ec4d16e6a",
+      "bytes": 206,
+      "source": "C:/opf-work/rtl-native-contrast-export-01/suite/sources/rtl-contrast-07-mixed-inherited.opf.json"
+    },
+    "11-input.pptx": {
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+      "bytes": 101016,
+      "source": "C:/opf-work/rtl-native-contrast-export-01/suite/inputs/rtl-contrast-11-long-explicit-french.pptx"
+    },
+    "11-saved.pptx": {
+      "sha256": "6d6af8fa300374a7ae1ff1f20883b76d2b65cb45805252310d95bcb6ecef4d91",
+      "bytes": 104199,
+      "source": "C:/opf-work/qualification034-rtl-contrast-native-01/rtl-contrast-11-long-explicit-french/native/native-furniture-control.pptx"
+    },
+    "11-source.json": {
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303",
+      "bytes": 373,
+      "source": "C:/opf-work/rtl-native-contrast-export-01/suite/sources/rtl-contrast-11-long-explicit-french.opf.json"
+    }
+  }
+}

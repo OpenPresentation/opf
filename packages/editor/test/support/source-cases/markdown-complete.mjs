@@ -16,7 +16,7 @@ export const markdownFrontMatter = [
   ['M-FM-001', 'R-CMP-22', 'Ctrl+Space inside the front matter offers the deck keys', 'md', '---\n|\n---\n\n# A\n', [K('Control+Space')], { popup: { open: 1, has: ['name', 'design', 'language'], not: ['slides'] } }],
   ['M-FM-002', 'R-CMP-22', 'typing a key prefix', 'md', '---\n|\n---\n\n# A\n', [T('des')], { popup: { open: 1, has: ['design', 'description'] } }],
   ['M-FM-003', 'R-CMP-22', 'Tab accepts', 'md', '---\n|\n---\n\n# A\n', [T('descr'), K('Tab')], { text: '---\ndescription: |\n---\n\n# A\n' }],
-  ['M-FM-004', 'R-CMP-22', 'a value list in the front matter', 'md', '---\ndesign:\n  titleAlignment: |\n---\n\n# A\n', [K('Control+Space')], { popup: { open: 1, has: ['left', 'center', 'right'] } }],
+  ['M-FM-004', 'R-CMP-22', 'a value list in the front matter', 'md', '---\ndesign:\n  titleAlignment: |\n---\n\n# A\n', [K('Control+Space')], { popup: { open: 1, has: ['start', 'center', 'end'] } }],
   ['M-FM-005', 'R-KEY-04', 'Enter after "key:" indents inside the front matter', 'md', '---\ndesign:|\n---\n\n# A\n', [K('Enter')], { text: '---\ndesign:\n  |\n---\n\n# A\n' }],
   ['M-FM-006', 'R-CMP-22', 'the closing line is offered nothing', 'md', '---\nname: x\n---|\n\n# A\n', [K('Control+Space')], { popup: { open: 0 } }],
   ['M-FM-007', 'R-CMP-22', 'the opening line is offered nothing', 'md', '---|\nname: x\n---\n\n# A\n', [K('Control+Space')], { popup: { open: 0 } }],
@@ -76,7 +76,7 @@ export const markdownSnippets = [
   ['M-SNP-004', 'R-CMP-16', 'the notes snippet', 'md', '# A\n\n|', [T('notes'), K('Tab')], { has: 'Note: Speaker notes' }],
   ['M-SNP-005', 'R-CMP-16', 'a blank line is added above the separator when the text above has none', 'md', '# A\n|', [T('slide'), K('Tab')], { has: '# A\n\n---\n\n# Slide title' }],
   ['M-SNP-006', 'R-CMP-16', 'the snippet after a separator does not repeat it', 'md', '# A\n\n---\n\n|', [T('slide'), K('Tab')], { has: '---\n\n# Slide title', not: '---\n\n---' }],
-  ['M-SNP-007', 'R-CMP-16', 'the two-column snippet pins its blocks to regions', 'md', '|', [T('slide-two-column'), K('Tab')], { has: '<!-- slide: layout=two-column -->\n# Title\n\n<!-- block: region=left -->\n- Left\n\n<!-- block: region=right -->\n- Right' }],
+  ['M-SNP-007', 'R-CMP-16', 'the two-column snippet pins its blocks to regions', 'md', '|', [T('slide-two-column'), K('Tab')], { has: '<!-- slide: layout=two-column -->\n# Title\n\n<!-- block: region=start -->\n- Left\n\n<!-- block: region=end -->\n- Right' }],
   ['M-SNP-008', 'R-CMP-16', 'the quote snippet reads back', 'md', '|', [T('slide-quote'), K('Tab')], { deck: { '/slides/0/quote/text': 'Quote', '/slides/0/quote/attribution': 'Name, Title' } }],
   ['M-SNP-009', 'R-CMP-16', 'the table snippet reads back', 'md', '|', [T('slide-table'), K('Tab')], { deck: { '/slides/0/table/columns': ['Name', 'Value'] } }],
   ['M-SNP-010', 'R-CMP-16', 'the code snippet reads back', 'md', '|', [T('slide-code'), K('Tab')], { deck: { '/slides/0/code/language': 'js' } }],
@@ -143,7 +143,7 @@ export const markdownFormat = [
 ];
 
 export const markdownHover = [
-  ['M-HOV-001', 'R-HOV-01', 'a front matter key shows its description', 'md', '---\nname: Deck\ndesign:\n  titleAlignment: left\n---\n# A\n', [['hoverText', 'titleAlignment']], { hover: { open: true, has: ['titleAlignment'] } }],
+  ['M-HOV-001', 'R-HOV-01', 'a front matter key shows its description', 'md', '---\nname: Deck\ndesign:\n  titleAlignment: start\n---\n# A\n', [['hoverText', 'titleAlignment']], { hover: { open: true, has: ['titleAlignment'] } }],
   ['M-HOV-002', 'R-HOV-02', 'the layout in an options comment shows the record', 'md', '# A\n<!-- slide: layout=pillars -->\n', [['hoverText', 'pillars']], { hover: { open: true, has: ['Pillars'] } }],
   ['M-HOV-003', 'R-HOV-01', 'a title shows nothing', 'md', '# Hello there\n', [['hoverText', 'Hello']], { hover: { open: false } }],
 ];

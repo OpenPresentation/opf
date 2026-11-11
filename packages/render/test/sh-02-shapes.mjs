@@ -6,7 +6,7 @@ import { composeSlide } from '@openpresentation/opf/composition';
 import { toSvg } from '../dist/index.js';
 import { shadeColor, strokeElements, PRESET_DASHES } from '../dist/shapes.js';
 
-const scheme = { name: 'Test', dark1: '#101820', light1: '#FFFFFF', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
+const scheme = { dark1: '#101820', light1: '#FFFFFF', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
 const deck = (blocks) => ({ name: 'Shapes', language: 'en-US', design: { colorScheme: scheme }, slides: [{ title: 'Shapes', blocks }] });
 const svgOf = (blocks, options = {}) => toSvg(deck(blocks), 1, options);
 const item = (blocks) => composeSlide(deck(blocks).slides[0], { presentation: deck(blocks) }).items.find((entry) => entry.field === 'shape');

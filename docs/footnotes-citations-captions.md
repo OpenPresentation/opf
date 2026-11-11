@@ -12,7 +12,7 @@ and the editor. A deck without the new fields validates, composes, previews and 
 - `references` (presentation root): `[{ id, text, url? }]`; `text` is a string or `TextRun[]`.
 - `caption` on an `image`, `chart`, `table` or `video` payload (a block, a promoted region payload, or the
   slide root when it holds exactly one of those payloads): a string, `TextRun[]`, or
-  `{ text, position?: "below" | "above", align?: "left" | "center" | "right" }` (defaults `below`, `left`).
+  `{ text, position?: "below" | "above", align?: "start" | "center" | "end" }` (defaults `below`, `start`).
 
 ```json
 {

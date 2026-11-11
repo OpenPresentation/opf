@@ -35,6 +35,7 @@ export interface OverlayInsertOptions {
   shape: string;
   /** The frame in fractions of the slide; else about a fifth of the slide wide at the preset's proportions, centered on `center`. */
   frame?: OverlayFrame;
+  /** Explicit finite signed center in the overlay start-edge convention; may cross the slide. Omission keeps gallery insertion visible. */
   center?: { x: number; y: number };
   /** The slide's pixel size for those proportions (default 1280 by 720). */
   size?: { width: number; height: number };
@@ -45,8 +46,15 @@ export declare function prepareOverlayInsert(presentation: unknown, options: Ove
 /** Add an overlay shape on top of a slide as one undoable step; the change's `path` is the new entry. */
 export declare function insertOverlayShape(editor: EditorSession, options: OverlayInsertOptions, meta?: Record<string, unknown>): OverlayChange & { shape: string; frame: OverlayFrame };
 
-/** A frame change: fractions for a shape placed by `x`, `y`, `width` and `height`; `offset` (pixels), `width` and `height` for one attached to a block. */
-export interface OverlayFrameChange { x?: number; y?: number; width?: number; height?: number; offset?: number }
+/** An anchor: `width` and `height` are fractions of the target (the block, or with `point` the chart mark; 1 is its own size), `widthPx` and `heightPx` reference pixels; one of the two for each side. */
+export interface OverlayAnchor {block: string; edge: "top" | "bottom" | "start" | "end" | "center"; point?: string | number; series?: string | number; offset?: number; width?: number; height?: number; widthPx?: number; heightPx?: number}
+export declare function prepareOverlayAnchor(presentation: unknown, path: string, anchor: OverlayAnchor): PreparedOverlayChange;
+/** Attach a shape to a block or chart point as one validated, undoable change. */
+export declare function setOverlayAnchor(editor: EditorSession, path: string, anchor: OverlayAnchor, meta?: Record<string, unknown>): OverlayChange;
+export interface ChartPointTarget {id: string; path: string; label: string; points: {index: number; name: string}[]; series: {index: number; name: string}[]}
+export declare function listChartPointTargets(presentation: unknown, slideIndex: number): ChartPointTarget[];
+/** A frame change: signed x/y fractions and width/height fractions subject to finite representable geometry for a shape placed by `x`, `y`, `width` and `height`; for one attached to a block `offset` (pixels), `width`/`height` (fractions of the target) or `widthPx`/`heightPx` (reference pixels; setting one unit removes the other). */
+export interface OverlayFrameChange { x?: number; y?: number; width?: number; height?: number; widthPx?: number; heightPx?: number; offset?: number }
 export declare function prepareOverlayFrame(presentation: unknown, path: string, change: OverlayFrameChange): PreparedOverlayChange;
 /** Move or resize an overlay shape as one undoable step. An attached shape keeps its `at`; `x` or `y` on it throws `overlay-anchored`. */
 export declare function setOverlayFrame(editor: EditorSession, path: string, change: OverlayFrameChange, meta?: Record<string, unknown>): OverlayChange;

@@ -36,6 +36,7 @@ export {
   findValidationRule,
   validate,
   validateCatalogRecord,
+  createValidator,
   validationCategories,
   validationRules,
 } from "./validator.js";
@@ -49,6 +50,8 @@ export type {
   ValidationRuleCost,
   ValidationRuleInfo,
   ValidationThresholds,
+  Validator,
+  ValidationCacheInfo,
 } from "./validator.js";
 
 export {

@@ -80,10 +80,10 @@ for (const fit of ['cover', 'contain', 'stretch', 'tile']) {
 // Recolor (FA-22 draft 3): a:grayscl or a:duotone, then a:alphaModFix, on the background's blip, in the native fill or the
 // alt picture; both import back.
 {
-  const scheme = {name: 'Recolor', dark1: '#101820', light1: '#F4F1EA', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A'};
+  const scheme = { dark1: '#101820', light1: '#F4F1EA', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A'};
   for (const alt of [undefined, 'Harbour']) {
     const duotone = {type: 'image', src: wide, ...(alt ? {alt} : {}), recolor: {dark: 'accent1', light: 'light1'}, opacity: 0.5};
-    const deck = {design: {colorScheme: scheme}, slides: [{title: 'Duotone', design: {background: duotone}}]};
+    const deck = {extensions: {fixture: {colorSchemeName: 'Recolor'}}, design: {colorScheme: scheme}, slides: [{title: 'Duotone', design: {background: duotone}}]};
     const {xml, background} = await exported(deck);
     assert.match(alt ? xml : background, /<a:blip r:embed="[^"]+"><a:duotone><a:schemeClr val="accent1"><\/a:schemeClr><a:schemeClr val="bg1"><\/a:schemeClr><\/a:duotone><a:alphaModFix amt="50000"\/>/, `${alt ? 'picture' : 'fill'}: duotone (accent1 and bg1, the theme colours of the recolor) then alpha`);
     const plain = await fromPptx(await toPptx(deck, {imageFormat: 'preserve', provenance: false}), {onDiagnostic: () => {}});
@@ -125,13 +125,13 @@ for (const provenance of [false, 'full']) {
 // same OPF.
 {
   const deck = {
-    $schema: 'https://openpresentation.org/schema/opf/v1', name: 'Round trip', language: 'en-US',
-    design: {dimensions: 'widescreen', colorScheme: {name: 'Harbour', dark1: '#101820', light1: '#F4F1EA', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A',
+    $schema: 'https://openpresentation.org/schema/opf/v1', name: 'Round trip', language: 'en-US', extensions: {fixture: {colorSchemeName: 'Harbour'}},
+    design: {dimensions: 'widescreen', colorScheme: { dark1: '#101820', light1: '#F4F1EA', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A',
       accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A'}},
     slides: [
       {title: 'Shipping, rebuilt', design: {background: {type: 'image', src: wide, alt: 'Container ships at dawn', focus: {x: 0.5, y: 0.7}, overlay: {color: 'dark1', opacity: 0.4}}}},
       {title: 'Where we ship', blocks: [
-        {type: 'image', image: {src: square, alt: 'Shipping routes'}, fit: 'contain', shape: 'roundRect', adjust: { adj: 0.1 }, stroke: {color: 'accent1', width: 2}, overlay: {color: '#000000', opacity: 0.2}, placement: {edge: 'right', size: 0.45}},
+        {type: 'image', image: {src: square, alt: 'Shipping routes'}, fit: 'contain', shape: 'roundRect', adjust: { adj: 0.1 }, stroke: {color: 'accent1', width: 2}, overlay: {color: '#000000', opacity: 0.2}, placement: {edge: 'end', size: 0.45}},
         {type: 'text', text: 'Twelve ports, three continents'}]}
     ]
   };

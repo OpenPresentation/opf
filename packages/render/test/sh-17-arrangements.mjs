@@ -7,7 +7,7 @@ import {applyColorTransform, composeSlide} from '@openpresentation/opf/compositi
 import {resolvePresentation, toSvg} from '../src/svg.js';
 
 const catalogs = [gallery];
-const deck = {design: {colorScheme: {id: 'test', name: 'Test', dark1: '#111111', light1: '#FFFFFF', dark2: '#333333', light2: '#EEEEEE', accent1: '#1F6FB2', accent2: '#C0504D', accent3: '#9BBB59', accent4: '#8064A2', accent5: '#4BACC6', accent6: '#F79646', hyperlink: '#0563C1', followedHyperlink: '#954F72'}},
+const deck = {design: {colorScheme: {id: 'test', dark1: '#111111', light1: '#FFFFFF', dark2: '#333333', light2: '#EEEEEE', accent1: '#1F6FB2', accent2: '#C0504D', accent3: '#9BBB59', accent4: '#8064A2', accent5: '#4BACC6', accent6: '#F79646', hyperlink: '#0563C1', followedHyperlink: '#954F72'}},
   slides: [{layout: 'chevrons', title: 'How we work', items: ['Plan', 'Build', 'Test', 'Ship']}, {layout: 'flow', title: 'The pilot', items: ['Research', 'Design', 'Run']},
     {layout: 'vertical-flow', title: 'Onboarding', items: ['Sign up', 'Set up', 'Launch']}]};
 const resolved = resolvePresentation(deck, {catalogs});

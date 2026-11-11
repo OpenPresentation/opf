@@ -1,0 +1,163 @@
+{
+  "scope": "Actual seven-slide SVG/PPTX causal conversion and focused corrected integration test PASS; no native application/golden acceptance",
+  "source": "6c980ef1295c69793b46adf98d28ce2d0f11380c",
+  "zipBytes": 4531614,
+  "zipSha256": "617c12b181d33e4bd96ab27b3f145ece375420e9eac4f766e602d6ec11d3d5c1",
+  "records": [
+    {
+      "path": "actual.pptx",
+      "bytes": 102708,
+      "sha256": "eb58db4eba0a4299e7b6d958f148ebc67b733029821e0e201b7cdb0932913736"
+    },
+    {
+      "path": "chart-1.xml",
+      "bytes": 9836,
+      "sha256": "9e47fca8e336c651d7dae9441d05fe58b43574f554e1a5af65f18abcd8ffa284"
+    },
+    {
+      "path": "chart-2.xml",
+      "bytes": 9822,
+      "sha256": "bbd4931aa788fb1da52f4ffc951ce4b60e481f0ab060e2c43e2e9dcb70dd7d5a"
+    },
+    {
+      "path": "chart-3.xml",
+      "bytes": 9822,
+      "sha256": "bf9629853a1cd361080046faea2b0ce7c6e79c0ec02fe14355e53edead654b8d"
+    },
+    {
+      "path": "chart-4.xml",
+      "bytes": 9820,
+      "sha256": "b268bac98d8525a1913603b5742e053e2552c38cb476485888d609c7fcec2f65"
+    },
+    {
+      "path": "chart-5.xml",
+      "bytes": 9821,
+      "sha256": "f13b62d70fc790dabaabcc4e51855eee31fc6d2957ffdab4ad69321141b715e4"
+    },
+    {
+      "path": "chart-6.xml",
+      "bytes": 9818,
+      "sha256": "7de575b9f9d61f4556298cf4a5ac5bc5b63b2e2913dfcbd69b07b03cdc7a72d0"
+    },
+    {
+      "path": "chart-7.xml",
+      "bytes": 9812,
+      "sha256": "45b6ace458682ae94c1ce66d04dbcb239270fd5fbc06e3fb5d7b0a03f90c76e8"
+    },
+    {
+      "path": "helper-1.xml",
+      "bytes": 1883,
+      "sha256": "3df64f3ed0ac8b1c9ff873749614fc9cdcc00d33d3033d04d262b595c2f232ec"
+    },
+    {
+      "path": "helper-2.xml",
+      "bytes": 1881,
+      "sha256": "31750a1736a82880181249669bb441b7292f829c6c16e33c0d16d25f02d48af7"
+    },
+    {
+      "path": "helper-3.xml",
+      "bytes": 1885,
+      "sha256": "70a2b581dceee422c6c65a5a0f50927fe37bb610543266212492229ff89e38d6"
+    },
+    {
+      "path": "helper-4.xml",
+      "bytes": 1885,
+      "sha256": "f07dec3505b713f49389d47c672dcff756d4604582e9b0d5f5d27e3cae2bc89f"
+    },
+    {
+      "path": "helper-5.xml",
+      "bytes": 1886,
+      "sha256": "433f7a02f54153be3300a371455853b4fe85d56e489772dc5e0deff513d5cd4b"
+    },
+    {
+      "path": "helper-6.xml",
+      "bytes": 1881,
+      "sha256": "ac8ff8b431a77a299f0bc316161f345d3c351a81ff0b192e15f91f98152fcf70"
+    },
+    {
+      "path": "helper-7.xml",
+      "bytes": 1881,
+      "sha256": "b224a8c59685ad06be1468927554ea7215be05eccec5994ea3f743d9da0bc6b1"
+    },
+    {
+      "path": "imported.json",
+      "bytes": 46836,
+      "sha256": "64a2867c551914609bed41665620c75e85e122a5deae7e7d1fd28cbb07cc13f9"
+    },
+    {
+      "path": "paint-rows.json",
+      "bytes": 3958,
+      "sha256": "77e794ac755c1a023dc3bf8da09d4815178c58d068860e6b554e60be9ee933f3"
+    },
+    {
+      "path": "ppt-theme-theme1.xml",
+      "bytes": 8309,
+      "sha256": "12e91499337ff82685e7e8cede051edaeac2ed398b357720190948ca166e17d3"
+    },
+    {
+      "path": "ppt-theme-theme2.xml",
+      "bytes": 8309,
+      "sha256": "12e91499337ff82685e7e8cede051edaeac2ed398b357720190948ca166e17d3"
+    },
+    {
+      "path": "probe.mjs",
+      "bytes": 6055,
+      "sha256": "9670f79a7ac8e942d0bf41a1eaee106fb2f035c4e19ee2c26bf3af5c34b1f2b9"
+    },
+    {
+      "path": "rows.json",
+      "bytes": 9862,
+      "sha256": "fa95f9228287a3892ee12e27cf49a97498ef8fe512cd5f9bcd27653f69df6739"
+    },
+    {
+      "path": "slide-1.svg",
+      "bytes": 1320534,
+      "sha256": "1cbd53535134462012e4ad320641627b5e55422d51b0f64a69d517565358a7ce"
+    },
+    {
+      "path": "slide-2.svg",
+      "bytes": 1320541,
+      "sha256": "be872a6dde5c889e624d5a833bcf290a75cf9245c9f9c22da7e0de4c93d3b3eb"
+    },
+    {
+      "path": "slide-3.svg",
+      "bytes": 1320551,
+      "sha256": "a2d7512eeb27df65fc07600a0ac5b4f88ebe057879997849643c91accf17c7ba"
+    },
+    {
+      "path": "slide-4.svg",
+      "bytes": 1320536,
+      "sha256": "f2608baff7ddcde1e54c499854aaf07ba1d6fdc47561c4dcf9d0db544a405580"
+    },
+    {
+      "path": "slide-5.svg",
+      "bytes": 1320256,
+      "sha256": "3f25f3e4302408761f3729b647cbaf71fab095ddfef50167c6adbc9d5287cb86"
+    },
+    {
+      "path": "slide-6.svg",
+      "bytes": 1320530,
+      "sha256": "b5dbf03d5b8c2cce9d638d6b6e0190a776520734cd69c923958baaba24a714b6"
+    },
+    {
+      "path": "slide-7.svg",
+      "bytes": 1320534,
+      "sha256": "0c25a5efa0dec6797024480a7c1b8c692d9166f82a6fee7c8133a8f55ccfee61"
+    },
+    {
+      "path": "opf-lh110-forward-focused.log.gz",
+      "rawBytes": 243,
+      "rawSha256": "eecb3ac5d71f90f64669474796446be81d1294108dbb920fcc660e1c1a7ef4ac"
+    },
+    {
+      "path": "opf-lh110-causal.mjs.gz",
+      "rawBytes": 6055,
+      "rawSha256": "9670f79a7ac8e942d0bf41a1eaee106fb2f035c4e19ee2c26bf3af5c34b1f2b9"
+    },
+    {
+      "path": "opf-lh110-setup-refusals.json.gz",
+      "rawBytes": 1046,
+      "rawSha256": "746ce84bddb7dc27dfd48b9a0e8465672cb60545c9074fd42ec11d8912a53f65"
+    }
+  ]
+}

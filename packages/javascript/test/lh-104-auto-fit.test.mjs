@@ -113,6 +113,6 @@ test('LH-104 with LH-80: a track is a frame the engine chose to crop into, so au
   assert.equal(composeSlide({ title: 'T', blocks: [{ image: svg(1600, 1000), fit: 'auto' }, { text: paragraph }, quote] }).track?.kind, 'picture');
   assert.equal(composeSlide({ title: 'T', blocks: blocks({ fit: 'contain' }) }).track, undefined);
   // An authored placement is the block's own frame: auto decides there (a 16:10 photo in a half-slide band is shown whole).
-  const placed = picture(composeSlide({ title: 'T', blocks: [{ image: png(1600, 1000), fit: 'auto', placement: { edge: 'left', size: 0.5 } }, { text: paragraph }] }));
+  const placed = picture(composeSlide({ title: 'T', blocks: [{ image: png(1600, 1000), fit: 'auto', placement: { edge: 'start', size: 0.5 } }, { text: paragraph }] }));
   assert.equal(placed.fit, 'contain');
 });

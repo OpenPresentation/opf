@@ -1,0 +1,35 @@
+Scope: all 9 workspace projects
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +296
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 296, reused 296, downloaded 0, added 126
+Progress: resolved 296, reused 296, downloaded 0, added 283
+Progress: resolved 296, reused 296, downloaded 0, added 294
+Progress: resolved 296, reused 296, downloaded 0, added 295
+Progress: resolved 296, reused 296, downloaded 0, added 296
+Progress: resolved 296, reused 296, downloaded 0, added 296, done
+ WARN  Failed to create bin at C:\opf-work\runtime519\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\packages\render\dist\preview-fonts-cli.js.EXE'
+ WARN  Failed to create bin at C:\opf-work\runtime519\packages\editor\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\packages\render\dist\preview-fonts-cli.js.EXE'
+ WARN  Failed to create bin at C:\opf-work\runtime519\packages\integration\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\packages\render\dist\preview-fonts-cli.js.EXE'
+ WARN  Failed to create bin at C:\opf-work\runtime519\packages\cli\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\packages\render\dist\preview-fonts-cli.js.EXE'
+ WARN  Failed to create bin at C:\opf-work\runtime519\packages\mcp\node_modules\.bin\opf. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\packages\cli\dist\index.js.EXE'
+ WARN  Failed to create bin at C:\opf-work\runtime519\packages\mcp\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\packages\render\dist\preview-fonts-cli.js.EXE'
+ WARN  Failed to create bin at C:\opf-work\runtime519\packages\pptx\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\packages\render\dist\preview-fonts-cli.js.EXE'
+
+devDependencies:
++ @biomejs/biome 2.6.4
++ @openpresentation/gallery 0.33.0 <- packages\gallery
++ @openpresentation/opf 0.33.0 <- packages\javascript
++ @openpresentation/opf-pptx 0.33.0 <- packages\pptx
++ @openpresentation/opf-render 0.33.0 <- packages\render
++ @typescript/native <- typescript 7.0.2
+
+ WARN  Failed to create bin at C:\opf-work\runtime519\packages\pptx\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\packages\pptx\node_modules\@openpresentation\opf-render\dist\preview-fonts-cli.js.EXE'
+ WARN  Failed to create bin at C:\opf-work\runtime519\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\node_modules\@openpresentation\opf-render\dist\preview-fonts-cli.js.EXE'
+ WARN  Failed to create bin at C:\opf-work\runtime519\packages\editor\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\packages\editor\node_modules\@openpresentation\opf-render\dist\preview-fonts-cli.js.EXE'
+ WARN  Failed to create bin at C:\opf-work\runtime519\packages\integration\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\packages\integration\node_modules\@openpresentation\opf-render\dist\preview-fonts-cli.js.EXE'
+ WARN  Failed to create bin at C:\opf-work\runtime519\packages\cli\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\packages\cli\node_modules\@openpresentation\opf-render\dist\preview-fonts-cli.js.EXE'
+ WARN  Failed to create bin at C:\opf-work\runtime519\packages\mcp\node_modules\.bin\opf. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\packages\mcp\node_modules\@openpresentation\cli\dist\index.js.EXE'
+ WARN  Failed to create bin at C:\opf-work\runtime519\packages\mcp\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'C:\opf-work\runtime519\packages\mcp\node_modules\@openpresentation\opf-render\dist\preview-fonts-cli.js.EXE'
+Done in 5.9s using pnpm v10.33.2

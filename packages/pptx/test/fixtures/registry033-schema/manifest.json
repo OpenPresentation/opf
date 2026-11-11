@@ -1,0 +1,45 @@
+{
+  "purpose": "Immutable actual registry 0.33 exporter witness; not native PowerPoint qualification",
+  "files": {
+    "registry033.pptx": {
+      "bytes": 113310,
+      "sha256": "80c53d0482cfd385f6745d4c7af6143d212d0b053bbb8e9a21236297f18be4da"
+    },
+    "source.opf.json": {
+      "bytes": 2411,
+      "sha256": "cb7aee4d207fc34efd112f13ae03b8278509ec82b53b6cd12f0ba663b46d9685"
+    },
+    "registry033-import.opf.json": {
+      "bytes": 2382,
+      "sha256": "e62f1aa857e768a9305ecc24e98591422ab5f5dc170ba1ce884045f05cdf0d11"
+    },
+    "receipt.json": {
+      "bytes": 5254,
+      "sha256": "e173c93087185b40b48dcf8fd3d9ea9d34f4e6c158319e403e56012475784077"
+    },
+    "generate.mjs": {
+      "bytes": 3455,
+      "sha256": "704cea98d44014595f64eb67267cc3e66998911045e247c2a3f21bee6067738e"
+    },
+    "package.json": {
+      "bytes": 567,
+      "sha256": "3ef6674acd360b374f74b55f85788dc3e50a4cee6ceb6d0e691b8ddc9d44514a"
+    },
+    "pnpm-lock.yaml": {
+      "bytes": 30784,
+      "sha256": "b6a9b47508d4be10c2b99aba30c595052fd89ed9a0b9b729871284f5e4b6b551"
+    },
+    "registry-identities.json": {
+      "bytes": 2411,
+      "sha256": "2305f5fbf74e93e88dc9b75f3f07ccb5bead23a6547720ee6301e86d4c36618f"
+    },
+    "generate-attempt01-invalid-catalogs.log": {
+      "bytes": 1931,
+      "sha256": "1994b0da88d65dc03bc91f6b1469f3a2d406727254b260fcc9f5a8e75d28b2f0"
+    },
+    "generate-attempt02-missing-required-font-peers.log": {
+      "bytes": 2345,
+      "sha256": "8e5bbdf8311a33b6c1adce3e3ab134b1116c0c78434fc93697f51b15d6855cdf"
+    }
+  }
+}

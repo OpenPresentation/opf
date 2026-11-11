@@ -347,7 +347,7 @@ export const COMMON_KEYS: Readonly<{ deck: readonly string[]; slide: readonly st
   /** The root of a document. */
   deck: Object.freeze(["name", "slides", "design", "language", "audience", "purpose", "tone", "narrative", "organization", "speaker"]),
   /** A slide (`slides[n]`). */
-  slide: Object.freeze(["title", "subtitle", "layout", "items", "text", "notes", "image", "chart", "table", "quote", "code", "metric", "timeline", "diagram", "blocks", "design", "id", "section", "tag", "hidden", "beat"]),
+  slide: Object.freeze(["title", "subtitle", "layout", "items", "text", "notes", "image", "chart", "table", "quote", "code", "metric", "timeline", "diagram", "blocks", "design", "id", "section", "tag", "hidden", "beat", "language"]),
   /** `design`, on the deck and on a slide. */
   design: Object.freeze(["theme", "colorScheme", "fontScheme", "dimensions", "background", "header", "footer"]),
 });
@@ -357,11 +357,11 @@ export const UNRANKED_PRIORITY = 1e6;
 
 const DEFINITION_LISTS: Readonly<Record<string, readonly string[]>> = { Slide: COMMON_KEYS.slide, Design: COMMON_KEYS.design, SlideDesign: COMMON_KEYS.design };
 const ADVANCED_KEYS: ReadonlySet<string> = new Set(["extensions", "$schema"]);
-// A promoted region of a slide: one or more of top/middle/bottom, a colon, one or more of left/center/right (`top+middle:left+center`),
+// A promoted region of a slide: one or more of top/middle/bottom, a colon, one or more of start/center/end (`top+middle:start+center`),
 // or either half alone (`left`, `top+middle`).
-const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*)?(?::)?(?:(?:left|center|right)(?:\+(?:left|center|right))*)?$/;
+const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*)?(?::)?(?:(?:start|center|end)(?:\+(?:start|center|end))*)?$/;
 
-/** Whether a slide key is a promoted region (`left`, `top+middle`, `top+middle:left+center`, ...): 48 keys of the slide schema, all `advanced`. */
+/** Whether a slide key is a promoted region (`start`, `top+middle`, `top+middle:start+center`, ...): 48 keys of the slide schema, all `advanced`. */
 export function isPromotedRegionKey(key: string): boolean {
   return key !== "" && key !== ":" && REGION_KEY.test(key);
 }

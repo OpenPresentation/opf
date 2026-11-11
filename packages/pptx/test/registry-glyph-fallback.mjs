@@ -88,6 +88,8 @@ for (const [pattern, deck] of decks) {
 // never measures that way, so the decks above export.
 {
   const fonts = await fontsFor(decks[1][1]);
+  // Demand preparation does not preload an unrelated Latin family. Prepare its actual ASCII use before testing glyph strictness.
+  await fonts.ensure({slides: [{text: [{text: 'ASCII', fontFamily: 'Arimo'}]}]}, {renderOptions: {catalogs}});
   assert.throws(() => fonts.textMeasurement.measure('Հ', 24, {fontFamily: 'Arimo'}), error => error.code === 'missing-glyph');
 }
 

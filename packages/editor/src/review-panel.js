@@ -5,7 +5,7 @@
 // quiet for a moment, not on every keystroke (the session itself checks only the `format` category per edit). The panel owns no
 // document state: every fix is an undoable edit through the editor session. Importing this module does not need a DOM;
 // mounting does.
-import { validate } from "@openpresentation/opf";
+import { createValidator } from "@openpresentation/opf";
 import { mergeCatalogs } from "./catalogs.js";
 import {
   applyReviewFix,
@@ -117,8 +117,9 @@ function summaryText(counts, scopeLabel) {
 export function createReviewPanel(container, options) {
   const { editor, getSlideIndex, getValidateOptions, onGoTo, onFocusField, onStatus, onIgnoredChange, onChange, review } = options;
   // Core resolves the deck's references with the session's registered catalogs (and any the host adds): the same list as the preview.
-  const validateOptions = () => {
-    const host = getValidateOptions?.(editor.presentation) ?? {};
+  const checker = createValidator();
+  const validateOptions = (deck = editor.snapshot().presentation) => {
+    const host = getValidateOptions?.(deck) ?? {};
     return { ...host, catalogs: mergeCatalogs(editor.catalogs, host.catalogs) };
   };
   if (review !== undefined && typeof review !== "function") throw new TypeError("The Review panel's review hook must be a function (presentation, options) returning a FindingReport.");
@@ -136,6 +137,8 @@ export function createReviewPanel(container, options) {
   let findings = [];
   let destroyed = false;
   let timer;
+  let auditing = false;
+  const idleWaiters = new Set();
   let currentId;
   let editingAlt;
   let altDraft = "";
@@ -178,7 +181,8 @@ export function createReviewPanel(container, options) {
   function validateNow() {
     lastAuditError = undefined;
     try {
-      coreReport = validate(editor.presentation, validateOptions());
+      const deck = editor.snapshot().presentation;
+      coreReport = checker.validate(deck, validateOptions(deck));
     } catch (error) {
       coreReport = undefined;
       lastAuditError = error;
@@ -400,20 +404,31 @@ export function createReviewPanel(container, options) {
     }
   }
 
-  function refresh() {
+  function settle() {
+    if (timer !== undefined || auditing) return;
+    for (const resolve of idleWaiters) resolve();
+    idleWaiters.clear();
+  }
+
+  function checkNow() {
     if (destroyed) return;
     clearTimeout(timer);
     timer = undefined;
-    validateNow();
-    renderList();
+    auditing = true;
+    try { validateNow(); renderList(); } finally { auditing = false; settle(); }
     if (options.autoReview && review) void runHook();
+  }
+
+  function refresh() {
+    checker.clear();
+    checkNow();
   }
 
   // One full check per burst of changes (typing, an undo group, a paste): when nothing has changed for `delay` milliseconds.
   function schedule() {
     if (destroyed) return;
     clearTimeout(timer);
-    timer = setTimeout(refresh, delay);
+    timer = setTimeout(checkNow, delay);
   }
 
   // A change while the hosted review runs drops its result (it was about the old text); one that comes after marks it out of date.
@@ -449,6 +464,10 @@ export function createReviewPanel(container, options) {
     /** Core's `validate` report alone. */
     get validation() { return coreReport; },
     refresh,
+    /** Clear retained geometry when host resources change; does not start a check. */
+    invalidate() { checker.clear(); },
+    /** Settles after the pending debounced core check AND list update; excludes the optional hosted hook. */
+    whenIdle() { return timer !== undefined || auditing ? new Promise((resolve) => idleWaiters.add(resolve)) : Promise.resolve(); },
     /** Check after `delay` milliseconds without another call: a host that drives its own checks (`autoRefresh: false`) calls this after each redraw. */
     schedule,
     /** Run the hosted reviewer now (the `review` hook); resolves when its findings are listed. */
@@ -459,6 +478,9 @@ export function createReviewPanel(container, options) {
     destroy() {
       destroyed = true;
       clearTimeout(timer);
+      timer = undefined;
+      checker.clear();
+      settle();
       hookRunning?.controller.abort();
       stop();
       root.remove();

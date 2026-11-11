@@ -1,0 +1,16 @@
+✔ native selected prepares the undrawn wrap face and preserves eager output (629.531791ms)
+✔ native safe prepares the undrawn wrap face and preserves eager output (444.169583ms)
+✔ measured exports do not request native-wrap fonts (83.732ms)
+✔ custom and no-font providers retain synchronous native measurement contracts (169.692333ms)
+✔ explicit measurement preparation refuses missing faces and recovers its queue (16.273833ms)
+✔ rich styles, aliases and in-place edits preserve exact native geometry (265.25775ms)
+✔ malformed additional requests fail without poisoning later normal preparation (9.425083ms)
+✔ ineligible native bodies do not load an undrawn default face (52.447208ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1954.112

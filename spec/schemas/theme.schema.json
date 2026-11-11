@@ -104,18 +104,18 @@
         "titleAlignment": {
           "type": "string",
           "enum": [
-            "left",
+            "start",
             "center",
-            "right"
+            "end"
           ],
           "description": "As design.titleAlignment of a deck."
         },
         "contentAlignment": {
           "type": "string",
           "enum": [
-            "left",
+            "start",
             "center",
-            "right"
+            "end"
           ],
           "description": "As design.contentAlignment of a deck."
         },
@@ -159,7 +159,7 @@
       "examples": [
         {
           "contentBox": true,
-          "titleAlignment": "left"
+          "titleAlignment": "start"
         }
       ]
     },
@@ -264,6 +264,12 @@
         },
         "slot": {
           "$ref": "#/$defs/ThemeBackgroundSlot"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Background opacity from 0 (fully transparent) to 1 (fully opaque). Default 1; the selected theme slot remains unchanged."
         }
       }
     }

@@ -49,7 +49,7 @@ let checks = 0;
   // Without provenance, a number-only cell written left to right still imports as the logical start.
   const native = await fromPptx(zipSync(nativeTableEntries(out.bytes)));
   const table = native.slides[0].blocks?.find(block => block.table)?.table ?? native.slides[0].table;
-  assert.ok([...table.rows.flat()].every(entry => entry?.style?.align === undefined || entry.style.align === 'left'), 'number-only cells import as the start edge');
+  assert.ok([...table.rows.flat()].every(entry => entry?.style?.align === undefined || entry.style.align === 'start'), 'number-only cells import as the start edge');
   assert.deepEqual(leftToRightPieces('عن v2.0 و +3% و $5'), [[3, 7], [10, 13], [16, 18]]);
   checks += 13;
 }

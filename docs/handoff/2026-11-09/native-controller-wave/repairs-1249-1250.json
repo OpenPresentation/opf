@@ -1,0 +1,161 @@
+{
+  "schema": 1,
+  "before": "d179ed759bc54642c66d66644b8c8580fe7b7f4e",
+  "source": "782a1534bf4bd76673fc33d577d55a95f49d885b",
+  "leaves": [
+    {
+      "pr": 1249,
+      "base": "e5de880999235872f4c44fe646e78fec49c16baa",
+      "head": "372031577291116f3533225822082d1c2d61e1cd",
+      "files": [
+        "changes/rr105-chartex-caption-data-evidence.md",
+        "docs/chart-table-data.md",
+        "docs/handoff/2026-11-09/rr105-chartex-caption-data-evidence/README.md",
+        "docs/handoff/2026-11-09/rr105-chartex-caption-data-evidence/manifest.json",
+        "docs/handoff/2026-11-09/rr105-chartex-caption-data-evidence/raw.zip",
+        "docs/handoff/2026-11-09/rr105-chartex-caption-data-evidence/verify.mjs",
+        "docs/programs/release-readiness/burndown.md",
+        "packages/pptx/src/data-provenance.js",
+        "packages/pptx/test/chartex-title-data-provenance.mjs",
+        "packages/pptx/test/fixtures/native-waterfall-caption-20261109.zip"
+      ]
+    },
+    {
+      "pr": 1250,
+      "base": "169055e9b5431aab58d3cf16199bf9d2bc38af97",
+      "head": "7ece2739f1fa1e629c47e71c464832e024917efb",
+      "files": [
+        "changes/rr-105-table-color-expectation.md",
+        "docs/handoff/2026-11-09/rr105-table-color-expectation/README.md",
+        "docs/programs/release-readiness/burndown.md",
+        "packages/pptx/test/native-table-color-contract.mjs",
+        "packages/pptx/test/native-table-colors-v2-check.ps1",
+        "packages/pptx/test/native-table-colors-v2.mjs",
+        "packages/pptx/test/native-table-colors-v2.ps1",
+        "scripts/native-acceptance/table-colors.mjs",
+        "scripts/native-acceptance/table-profile.mjs",
+        "scripts/native-acceptance/table-profile.test.mjs"
+      ]
+    }
+  ],
+  "exactSourceObjects": [
+    {
+      "path": "changes/rr-105-table-color-expectation.md",
+      "oid": "352c5f3fd46d5fa9e1295b718ed2106134a85876"
+    },
+    {
+      "path": "changes/rr105-chartex-caption-data-evidence.md",
+      "oid": "8d7488797dad0ecf2f4ed0b13212b48ef6cbe1fd"
+    },
+    {
+      "path": "docs/chart-table-data.md",
+      "oid": "59fd07a8282d75dc1150c94be0b04d3faa2909a8"
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-chartex-caption-data-evidence/README.md",
+      "oid": "a5e64c82d810afe37093b9ce8011626a17b01430"
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-chartex-caption-data-evidence/manifest.json",
+      "oid": "929887786c38b4952fe491eeda343952e0c08eda"
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-chartex-caption-data-evidence/raw.zip",
+      "oid": "b6ad2bd4f80fb2a8a6ef0b143617d37a45ebe9bd"
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-chartex-caption-data-evidence/verify.mjs",
+      "oid": "fa8bec2c76b773c72e2805ba7e36c9247dcbeda7"
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-table-color-expectation/README.md",
+      "oid": "317f6744342851f0c568715656f05fa6512db7d8"
+    },
+    {
+      "path": "packages/pptx/src/data-provenance.js",
+      "oid": "ea44a4ceaaf1334f1a5b1df3a53ce04312cb3d6b"
+    },
+    {
+      "path": "packages/pptx/test/chartex-title-data-provenance.mjs",
+      "oid": "a8de5b4757924fc577159f5ac4522ba058112794"
+    },
+    {
+      "path": "packages/pptx/test/fixtures/native-waterfall-caption-20261109.zip",
+      "oid": "223dc933dbf861dfdaa9dba142608b93dc259a40"
+    },
+    {
+      "path": "packages/pptx/test/native-table-color-contract.mjs",
+      "oid": "ed208c2013c8d21fc7ef98556a5e232b88dcfb4c"
+    },
+    {
+      "path": "packages/pptx/test/native-table-colors-v2-check.ps1",
+      "oid": "b95b67a9bc6aab8734493813a27d247236b051e5"
+    },
+    {
+      "path": "packages/pptx/test/native-table-colors-v2.mjs",
+      "oid": "da9e95f756a97b8766ccab24bebed662cb15f124"
+    },
+    {
+      "path": "packages/pptx/test/native-table-colors-v2.ps1",
+      "oid": "f351296013527768521d5a613e15c65f76cb0441"
+    },
+    {
+      "path": "scripts/native-acceptance/table-colors.mjs",
+      "oid": "d22ae78f7877927025309743deef1f5e768ea490"
+    },
+    {
+      "path": "scripts/native-acceptance/table-profile.mjs",
+      "oid": "83a96cf314c26985dd2a191502554f2327626919"
+    },
+    {
+      "path": "scripts/native-acceptance/table-profile.test.mjs",
+      "oid": "42c953e18806e8ed6c25360bc2f7580ff42d6c5e"
+    }
+  ],
+  "controlledBurndownReceipts": [
+    {
+      "base": "e5de880999235872f4c44fe646e78fec49c16baa",
+      "ours": "d179ed759bc54642c66d66644b8c8580fe7b7f4e",
+      "incoming": "372031577291116f3533225822082d1c2d61e1cd",
+      "file": "docs/programs/release-readiness/burndown.md",
+      "onlyConflictedFile": true,
+      "sourceChanges": "Append-only RR105 row and all exact dated progress entries; exact duplicates occur once",
+      "rowSuffixes": [
+        " **Negative categorical histogram:** approved PPTX-only fallback guard is in local review; exact native omission and existing classic contrast retained, no new Office acceptance ([handoff](../../handoff/2026-11-09/rr105-negative-categorical-histogram/README.md)). Dense read-only source controller is under review; original false generic eligibility and frozen generation identities remain separate ([handoff](../../handoff/2026-11-09/rr105-dense-survey-controller/README.md)); no native run yet. Public dense CLI correction is under qualification after the initial documented SHA256 flag was rejected; no Office run occurred ([correction](../../handoff/2026-11-09/rr105-dense-survey-cli-correction/README.md)). Table-v2 bounded replacement is in source review: separate generation/execution envelope, full6slides/72cells/18PNGs/6actualprefixes/9imports, retired helper untouched; pure controls only and physical Office still owed ([handoff](../../handoff/2026-11-09/rr105-owned-table-colors/README.md)).",
+        " **ChartEx caption evidence:** actual native08 no-op title rewrite falsely invalidates unchanged one-column data; narrow generic title exclusion and7 real-archive controls are in local review, with25 existing row/31 ChartEx controls passing; required/native gates remain separate ([handoff](../../handoff/2026-11-09/rr105-chartex-caption-data-evidence/README.md))."
+      ],
+      "entries": [
+        "- 2026-11-09: RR-105 negative categorical histogram repair: preserve the genuine native omission of East -8 and same-data classic fallback contrast. A regression-only baseline fails before the narrow all-mode eligibility guard; positive category/negative raw-sample controls and exact legacy fallback archives remain required. Source/checks are in local review; no Office, CI retry, archive-fixture promotion or release acceptance. Vetoable policy and source-bound results: [handoff](../../handoff/2026-11-09/rr105-negative-categorical-histogram/README.md).",
+        "- 2026-11-09: RR-105 negative histogram caller contract: preserve the actual old all30 0!=1 refusal, retain every30 mode case/canonical fallback lock, and bind classic eligibility plus data/import/diagnostic checks to the negative resolved category values. Actual all30 and positive/raw-negative counterexamples PASS10.1seconds against frozen6fc consumer; original exporter required qualification remains in progress. No old witness/fixture/native acceptance is replaced ([handoff](../../handoff/2026-11-09/rr105-negative-categorical-histogram/README.md)).",
+        "- 2026-11-09: RR-105 negative categorical histogram source7514 reviewed without findings. Full maintained exporter contract282/282 plus browser build PASS; all30 chart modes/new eligibility controls PASS. Second required aggregate11PASS/3sparseRED/typeSKIP1482.8s retains all original failures; no hydration/promotion/Office/release claim. Exact canonical candidates in every mode equal the already observed classic inputb1d; a separately authored primary case still needs fresh binding before physical adoption ([sealed evidence](../../handoff/2026-11-09/rr105-negative-categorical-histogram/README.md)).",
+        "- 2026-11-09 RR-105: implement the separately bound dense-events survey controller after coordinator approval. New execution envelope records current clean controller HEAD/code separately from unchanged generation/worker/consumer identities; exact1-slide/50-shape/empty-action profile delegates unchanged ReadOnlySurvey. Initial PowerShell self-test setup RED retained;18 Office-free controls passed before final source qualification. Generic eligibility remains false and original caps/latches remain exact. No Office, native pass, registry pass, table-helper revival, chart-reference implementation or release claim. Vetoable decision and resume: [handoff](../../handoff/2026-11-09/rr105-dense-survey-controller/README.md).",
+        "- 2026-11-09 RR-105: retain the genuinebcfc public-create parser failure (OfficeCalls0). Correct only digit-bearing option grammar in source PR1240 and append real child create/verify/observe option+digest regressions, retaining all19 prior controls. All22 module controls pass; full public pure flow against the frozen original suite/runtime remains pending a new clean source head; no RunOffice, guard relaxation, restoration or seven-slide implementation is authorized by this correction. See [handoff](../../handoff/2026-11-09/rr105-dense-survey-cli-correction/README.md).",
+        "- 2026-11-09: RR-105 table-v2 source lane adds a separately pinned, owned and bounded replacement for the retired six-slide table-color control. It retains every native edit/color/capture/import criterion and generic ineligibility; pure source/lifecycle/identity controls are under qualification. No Office/native pass is claimed. See [handoff](../../handoff/2026-11-09/rr105-owned-table-colors/README.md).",
+        "- 2026-11-09: RR-105 ChartEx caption/data provenance repair: exact native08 OPF_DATA/caches survive, but Office title rewrite adds a decorative cx:v to the old global fingerprint. Preserve real5PASS/2FAIL baseline; title-only exclusion yields7PASS plus25 row/31 ChartEx controls with real edits still refusing stale data. No original/canonical fixture edit, golden/tolerance change, Office retry or native acceptance. One required source check pending ([handoff](../../handoff/2026-11-09/rr105-chartex-caption-data-evidence/README.md))."
+      ],
+      "sha256": "ee206dd100620cb83561d3d585061de40bcc4e4567e7bb4aac953a3c207a91fd",
+      "receiptSHA256": "8368c82b8d33eb127ef90363161c26f9f97134a1a07009e0017fbb0eb07a164f"
+    },
+    {
+      "base": "169055e9b5431aab58d3cf16199bf9d2bc38af97",
+      "ours": "86573ef94a8095444a401abd262897f04135c2be",
+      "incoming": "7ece2739f1fa1e629c47e71c464832e024917efb",
+      "file": "docs/programs/release-readiness/burndown.md",
+      "onlyConflictedFile": true,
+      "sourceChanges": "Append-only RR105 row and all exact dated progress entries; exact duplicates occur once",
+      "rowSuffixes": [
+        " **ChartEx caption evidence:** actual native08 no-op title rewrite falsely invalidates unchanged one-column data; narrow generic title exclusion and7 real-archive controls are in local review, with25 existing row/31 ChartEx controls passing; required/native gates remain separate ([handoff](../../handoff/2026-11-09/rr105-chartex-caption-data-evidence/README.md)).",
+        " Current table run failed a stale preferred-white expectation; maintained RR96 maximum-contrast source repair and durable RGB diagnostics are in qualification, with original actual RGB unknown and physical acceptance still open ([handoff](../../handoff/2026-11-09/rr105-table-color-expectation/README.md))."
+      ],
+      "entries": [
+        "- 2026-11-09: RR-105 ChartEx caption/data provenance repair: exact native08 OPF_DATA/caches survive, but Office title rewrite adds a decorative cx:v to the old global fingerprint. Preserve real5PASS/2FAIL baseline; title-only exclusion yields7PASS plus25 row/31 ChartEx controls with real edits still refusing stale data. No original/canonical fixture edit, golden/tolerance change, Office retry or native acceptance. One required source check pending ([handoff](../../handoff/2026-11-09/rr105-chartex-caption-data-evidence/README.md)).",
+        "- 2026-11-09: RR-105 actual table-v2 original slide4 color refusal retained, exit1/cleanupfalse and no later Office. Pure all24cell/36run OOXML/theme trace finds two stale inherited-white expectations against reviewed RR96 black-on-#767676 maximum contrast. Narrow generator/probe repair is in qualification; old source/suite/profile unchanged, native RGB unknown and fresh binding/physical qualification still owed. Vetoable RR105-TABLE-CONTRAST: no exporter/schema/palette/tolerance change."
+      ],
+      "sha256": "6bab6ecec20f89a79e7a6065288cafa207999a0457139a45f28c5c51b431fd3b",
+      "receiptSHA256": "f99d1706064c01d5b6f835d8304b16a59e5990b67cb67954b2d8b7820d0f8337"
+    }
+  ],
+  "allOtherTrackedObjectsUnchanged": true,
+  "nativeAcceptance": false,
+  "combinedGateOwed": true
+}

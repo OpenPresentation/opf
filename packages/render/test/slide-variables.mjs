@@ -8,7 +8,7 @@ import {slideInfo} from '../src/deck-runtime.js';
 const long = 'Pagination keeps this paragraph whole where it can and splits it where it cannot. '.repeat(60);
 const make = body => ({
   name: 'Slide variables',
-  design: {fontScheme: 'roboto', footer: {left: {text: '{{slide.section}}'}, right: {text: 'Page {{slide.number}} of {{deck.slideCount}}'}}},
+  design: {fontScheme: 'roboto', footer: {start: {text: '{{slide.section}}'}, end: {text: 'Page {{slide.number}} of {{deck.slideCount}}'}}},
   slides: [
     {section: 'Intro', title: 'Overview', text: 'This is slide {{slide.number}} of {{deck.slideCount}} in {{slide.section}}.', notes: 'Notes for slide {{slide.number}}'},
     {section: 'Details', title: 'Details {{slide.number}}/{{deck.slideCount}}', blocks: [{text: body}]},
@@ -28,7 +28,7 @@ assert.ok(!svgs.join('').includes('{{slide.') && !svgs.join('').includes('{{deck
 
 // Furniture geometry: one slideNumber field per substituted token, fixed text for the count and the section.
 const parts = resolvePresentation(deck).slides[0].geometry.furniture.parts;
-assert.deepEqual(parts.map(part => [part.zone, part.field, part.text]), [['left', 'text', 'Intro'], ['right', 'text', 'Page 1 of 3']]);
+assert.deepEqual(parts.map(part => [part.zone, part.field, part.text]), [['start', 'text', 'Intro'], ['end', 'text', 'Page 1 of 3']]);
 assert.deepEqual(parts[1].fields, [{type: 'slideNumber', start: 5, end: 6}]);
 
 // An escaped token is the literal text.

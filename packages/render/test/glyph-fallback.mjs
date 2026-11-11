@@ -227,15 +227,54 @@ function designatedFamiliesAll() {
   // With the script pack requested explicitly, Noto Sans is loaded once.
   const all = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: ['Latn', 'Jpan']});
   assert.equal(all.registry.describeFaces().filter((face) => face.family === 'Noto Sans').length, 4);
-  // Auto script selection (scripts: 'auto') owns fallback packages: kanji beside Hangul loads the language face plus at most
-  // one CJK fallback face, and Greek needs no package because Noto Sans is always loaded.
+  // With a presentation, Node auto preparation loads physical faces by actual style, not the whole fallback family.
+  const notoStyles = handle => handle.registry.describeFaces().filter(face => face.family === 'Noto Sans').map(face => [face.weight, face.italic]);
+  const notoFiles = handle => handle.fontFiles.filter(file => /[\\/]NotoSans_[^\\/]+\.ttf$/.test(file));
+  const assertDrawn = (handle, document, expected) => {
+    const notes = [];
+    const svg = toSvg(document, 1, {fonts: handle, onDiagnostic: note => notes.push(note)});
+    const runs = drawnRuns(svg);
+    for (const [family, text] of expected) {
+      assert.ok(runs.some(([drawnFamily, drawnText]) => drawnFamily === family && drawnText.includes(text)), family + ': the prepared registry actually draws ' + text);
+      const style = {fontFamily: family, fontWeight: 700};
+      assert.ok(handle.registry.textMeasurement.measure(text, 20, style) > 0, family + ': real prepared glyph advances');
+      assert.ok(handle.registry.textMeasurement.outlineBounds(text, 20, style).width > 0, family + ': real prepared glyph outlines');
+    }
+    assert.ok(toSvg(document, 1, {fonts: handle, text: 'paths'}).includes('<path'), 'the same prepared faces draw actual glyph paths');
+    return notes;
+  };
   const cjk = {language: 'en', design: {fontScheme: 'calibri'}, slides: [{title: 'Revenue 収益 성장', text: 'Revenue grew'}]};
   const auto = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: cjk, renderOptions: {catalogs}});
-  assert.equal(auto.registry.describeFaces().filter((face) => face.family === 'Noto Sans').length, 4, 'Noto Sans is loaded once under auto');
-  assert.ok(auto.registry.scriptSelection.packages.length <= 2, `${auto.registry.scriptSelection.packages}`);
-  assert.doesNotThrow(() => toSvg(deck('en', 'calibri', 'Revenue 収益 성장', 'Revenue grew'), 1, { fonts: {...auto, textMeasurement: createScriptTextMeasurement(auto.registry.textMeasurement, scriptProfile(cjk))}}));
-  const greek = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: {language: 'el', design: {fontScheme: 'georgia'}, slides: [{title: TEXT.el.title}]}, renderOptions: {catalogs}});
-  assert.deepEqual(greek.registry.scriptSelection.packages, []);
+  assert.deepEqual(notoStyles(auto), [[700, false]], 'auto prepares only the needed bold upright Noto Sans fallback face');
+  assert.equal(notoFiles(auto).length, 1);
+  assert.match(notoFiles(auto)[0], /NotoSans_700Bold\.ttf$/);
+  for (const family of ['Noto Sans JP', 'Noto Sans KR']) assert.deepEqual(auto.registry.describeFaces().filter(face => face.family === family).map(face => [face.weight, face.italic]), [[700, false]], family + ': only the title style is prepared');
+  assert.ok(auto.registry.scriptSelection.packages.length <= 2, String(auto.registry.scriptSelection.packages));
+  assert.deepEqual(auto.pending(cjk, {catalogs}), []);
+  assertDrawn(auto, cjk, [['Noto Sans JP', '収益'], ['Noto Sans KR', '성장']]);
+  const greekDocument = {language: 'el', design: {fontScheme: 'georgia'}, slides: [{title: TEXT.el.title}]};
+  const greek = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: greekDocument, renderOptions: {catalogs}});
+  assert.deepEqual(greek.registry.scriptSelection.packages, [], 'Greek uses the office fallback, not an extra script package');
+  assert.deepEqual(notoStyles(greek), [[700, false]]);
+  assert.equal(notoFiles(greek).length, 1);
+  assert.match(notoFiles(greek)[0], /NotoSans_700Bold\.ttf$/);
+  assert.ok(assertDrawn(greek, greekDocument, [['Noto Sans', 'Τριμηνιαία']]).some(note => note.code === 'font-glyph-fallback' && note.fallbackFamily === 'Noto Sans'));
+  // A later explicit style is not silently substituted by the one face held so far.
+  const edited = {...greekDocument, slides: [{...greekDocument.slides[0], text: [{text: 'Τριμηνιαία', fontFamily: 'Noto Sans', bold: true, italic: true}]}]};
+  const boldItalic = {fontFamily: 'Noto Sans', fontWeight: 700, italic: true};
+  assert.throws(() => greek.registry.textMeasurement.measure('Τριμηνιαία', 20, boldItalic), error => error.code === 'font-unavailable' && error.details.fontWeight === 700 && error.details.italic === true, 'an unprepared bold italic style remains an honest refusal');
+  const beforeFiles = [...greek.fontFiles];
+  const prepared = await greek.ensure(edited, {renderOptions: {catalogs}});
+  assert.deepEqual(prepared.lazy.map(face => [face.family, face.weight, face.italic]), [['Noto Sans', 700, true]], 'ensure adds exactly the newly requested face');
+  assert.deepEqual(greek.fontFiles.filter(file => !beforeFiles.includes(file)).map(file => file.split(/[\\/]/).at(-1)), ['NotoSans_700Bold_Italic.ttf']);
+  assert.deepEqual(notoStyles(greek), [[700, false], [700, true]]);
+  assert.ok(greek.registry.textMeasurement.measure('Τριμηνιαία', 20, boldItalic) > 0);
+  assert.ok(toSvg(edited, 1, {fonts: greek, text: 'paths'}).includes('<path'));
+  const afterFiles = [...greek.fontFiles];
+  assert.deepEqual((await greek.ensure(edited, {renderOptions: {catalogs}})).lazy, [], 'a repeated ensure adds no faces');
+  assert.deepEqual(greek.fontFiles, afterFiles);
+  assert.equal(new Set(greek.fontFiles).size, greek.fontFiles.length);
+  assert.deepEqual(greek.pending(edited, {catalogs}), []);
 }
 
 // 8d. Notes: one per path (a cached plan still reports its own path), the face actually drawn, and copied arrays.

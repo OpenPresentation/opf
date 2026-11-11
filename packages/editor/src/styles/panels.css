@@ -790,10 +790,11 @@
   pointer-events: none;
 }
 
+/* Keep the complete SVG inside the fixed grid frame; its native meet transform letterboxes other slide ratios. */
 .opf-slides .thumbnail svg {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
 }
 
 .opf-slides .slide-card[aria-current="true"] .thumbnail {

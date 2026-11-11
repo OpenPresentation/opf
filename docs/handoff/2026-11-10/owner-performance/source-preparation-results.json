@@ -1,0 +1,109 @@
+{
+  "scope": "SOURCE_ONLY_AJV_BINDING_CHECKS_NOT_PRODUCT_BUILD_OR_BROWSER",
+  "schemaRef": "ed51a7e8a6636bb2e08c9a446a7d22c21ad81066",
+  "rawRefusalCounts": [
+    202,
+    398
+  ],
+  "projectionApprovedChanges": [
+    31,
+    59
+  ],
+  "projectionValid": true,
+  "pureChecksPassed": 13,
+  "syntax": [
+    {
+      "file": "bindings-pure.mjs",
+      "bytes": 4452,
+      "sha256": "a96fc1cfa7a3c3dd6e322ffa84e28360f13bae4ec6aea20dfdadec8bbc68ca3e",
+      "syntaxExitCode": 0
+    },
+    {
+      "file": "bindings.mjs",
+      "bytes": 8769,
+      "sha256": "aa617647c8cf50bd38b36ea252b615ff8f3453a70b722b41819331a6611f1054",
+      "syntaxExitCode": 0
+    },
+    {
+      "file": "browser-entry.mjs",
+      "bytes": 6072,
+      "sha256": "3af17439c4ba843a8d14f458d024d2afbb2723eea0a3fb3a252f8d9df451896a",
+      "syntaxExitCode": 0
+    },
+    {
+      "file": "build-current.mjs",
+      "bytes": 7384,
+      "sha256": "e88ba9f495703c681b1799ec3f4409b742dc99b28032efb1193132a4820ddc7a",
+      "syntaxExitCode": 0
+    },
+    {
+      "file": "build.mjs",
+      "bytes": 5656,
+      "sha256": "1a2ca14f85a309cac25619970c6ef7d43df93d253278e9141ea92c092529eb51",
+      "syntaxExitCode": 0
+    },
+    {
+      "file": "current-browser-entry.mjs",
+      "bytes": 6440,
+      "sha256": "6f187ae855cebb2237126ac69dae696efed509448cac86c52de1a1d96252df47",
+      "syntaxExitCode": 0
+    },
+    {
+      "file": "materialize-inputs.mjs",
+      "bytes": 2278,
+      "sha256": "c95c7176c42d900708abbff4f2f98dc1d9e0c69df4bbbc634fbbb2fd5bfae415",
+      "syntaxExitCode": 0
+    },
+    {
+      "file": "prepare-assets.mjs",
+      "bytes": 3097,
+      "sha256": "e97bf2f26d5e2cbaa683af26d653522b2002dc00bb2d61406fdd9636ae4c3f10",
+      "syntaxExitCode": 0
+    },
+    {
+      "file": "propose-projection.mjs",
+      "bytes": 5863,
+      "sha256": "9a67c1c43d29d05c124067707ba9a7f18a2b72479fe1e0e93852d1b6fb827db4",
+      "syntaxExitCode": 0
+    },
+    {
+      "file": "run-current.mjs",
+      "bytes": 20652,
+      "sha256": "9d2f1791821ef147917a4c8046d12d22d35b97cf86fb347832a0cad410e569ab",
+      "syntaxExitCode": 0
+    },
+    {
+      "file": "run-paired-review.mjs",
+      "bytes": 17354,
+      "sha256": "742597ce42ea3f14c1fd5391f2d34d45f6485738489cc2890c67130f453c724b",
+      "syntaxExitCode": 0
+    },
+    {
+      "file": "trace-asset-inputs.mjs",
+      "bytes": 1845,
+      "sha256": "a0e4388ef66268ac1a798df7416637470bd7498e5234e33ce7ef7f35504fc9e3",
+      "syntaxExitCode": 0
+    },
+    {
+      "file": "validate-source-inputs.mjs",
+      "bytes": 3695,
+      "sha256": "46751a49e8e697f6d55bbf6674df03be136ee28e75332a98ea8d506b65a610c8",
+      "syntaxExitCode": 0
+    }
+  ],
+  "productBuilds": 0,
+  "browsers": 0,
+  "benchmarks": 0,
+  "initialFailures": [
+    {
+      "kind": "setup",
+      "actual": "captureBinding glob included missing sparse historical docs/evidence package.json and failed ENOENT",
+      "correction": "Capture exact workspace manifests and nearest manifests of actual bundle/asset inputs; do not treat archives as current dependency inputs."
+    },
+    {
+      "kind": "syntax",
+      "actual": "run-current.mjs reused measured identifier already declared for --measure; node --check refused duplicate binding",
+      "correction": "Renamed selected input binding to inputSelection; all13 scripts now pass syntax."
+    }
+  ]
+}

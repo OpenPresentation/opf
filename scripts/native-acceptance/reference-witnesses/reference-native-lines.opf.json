@@ -1,0 +1,123 @@
+{
+  "name": "Reference witnesses: native lines",
+  "description": "Public synthetic source. Explicit values and styles; native helper ownership and title inference control. Not native acceptance.",
+  "design": {
+    "theme": "minimal",
+    "fontScheme": "roboto",
+    "variant": "light1"
+  },
+  "slides": [
+    {
+      "id": "line-multiple",
+      "chart": {
+        "type": "line",
+        "data": {
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "rows": [
+            [
+              "Jan",
+              40
+            ],
+            [
+              "Feb",
+              60
+            ],
+            [
+              "Mar",
+              50
+            ]
+          ]
+        },
+        "legend": "none",
+        "dataLabels": false,
+        "referenceLines": [
+          {
+            "value": 80,
+            "label": "Target 80",
+            "stroke": {
+              "color": "#C44900",
+              "width": 2,
+              "dash": "dash"
+            }
+          },
+          {
+            "value": -10,
+            "label": "Floor -10",
+            "labelPosition": "start",
+            "stroke": {
+              "color": "#087E8B",
+              "width": 1.5,
+              "dash": "dot"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "line-defaults",
+      "chart": {
+        "type": "line",
+        "data": {
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "rows": [
+            [
+              "Jan",
+              40
+            ],
+            [
+              "Feb",
+              60
+            ],
+            [
+              "Mar",
+              50
+            ]
+          ]
+        },
+        "legend": "none",
+        "dataLabels": false,
+        "referenceLines": [
+          {
+            "value": 55
+          }
+        ]
+      }
+    },
+    {
+      "id": "no-inference",
+      "title": "Target 92%",
+      "subtitle": "Threshold 30",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "rows": [
+            [
+              "Jan",
+              40
+            ],
+            [
+              "Feb",
+              60
+            ],
+            [
+              "Mar",
+              50
+            ]
+          ]
+        },
+        "legend": "none",
+        "dataLabels": false
+      }
+    }
+  ]
+}

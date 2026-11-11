@@ -13,10 +13,10 @@ test('the tag follows the title alignment, not content alignment', () => {
   assert.equal(field(composed, 'title').alignment, 'left');
   assert.equal(field(composed, 'tag').alignment, 'left');
   // A resolved titleAlignment moves both, from the slide, the deck option or the layout.
-  for (const options of [{layout: metrics, titleAlignment: 'right'}, {layout: {...metrics, design: {...metrics.design, titleAlignment: 'right'}}}]) {
+  for (const options of [{layout: metrics, titleAlignment: 'end'}, {layout: {...metrics, design: {...metrics.design, titleAlignment: 'end'}}}]) {
     assert.equal(field(composeSlide(slide, options), 'tag').alignment, 'right');
   }
-  const own = composeSlide({...slide, design: {titleAlignment: 'left'}}, {layout: {...metrics, design: {...metrics.design, titleAlignment: 'center'}}});
+  const own = composeSlide({...slide, design: {titleAlignment: 'start'}}, {layout: {...metrics, design: {...metrics.design, titleAlignment: 'center'}}});
   assert.equal(field(own, 'tag').alignment, 'left');
   assert.equal(field(own, 'title').alignment, 'left');
 });
@@ -24,7 +24,7 @@ test('the tag follows the title alignment, not content alignment', () => {
 test('the tag and the title-area subtitle keep the slide\'s own contentAlignment, and otherwise follow the title', () => {
   const withContent = composeSlide({...slide, subtitle: 'Sub', design: {contentAlignment: 'center'}}, {layout: metrics});
   assert.equal(field(withContent, 'tag').alignment, 'center');
-  const body = composeSlide({...slide, subtitle: 'Sub', text: 'Body'}, {titleAlignment: 'left', contentAlignment: 'center'});
+  const body = composeSlide({...slide, subtitle: 'Sub', text: 'Body'}, {titleAlignment: 'start', contentAlignment: 'center'});
   assert.equal(field(body, 'tag').alignment, 'left');
   // WI-2 (P35): the subtitle in the title area follows titleAlignment like the tag; only the slide's own design keeps it on the content.
   assert.equal(field(body, 'subtitle').alignment, 'left');

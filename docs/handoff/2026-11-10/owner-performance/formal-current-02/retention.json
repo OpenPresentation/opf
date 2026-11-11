@@ -1,0 +1,432 @@
+{
+  "scope": "BOUNDED_RETENTION_NOT_LEAK_ACCEPTANCE",
+  "configuration": {
+    "name": "retained-heap-cached",
+    "size": 36,
+    "cpu": 1,
+    "mode": "cached"
+  },
+  "baseline": {
+    "heap": {
+      "usedSize": 28549664,
+      "totalSize": 30539776,
+      "embedderHeapUsedSize": 1187256,
+      "backingStorageSize": 8840757
+    },
+    "dom": {
+      "documents": 1,
+      "nodes": 20,
+      "jsEventListeners": 13
+    }
+  },
+  "warmDisposed": {
+    "infos": [
+      {
+        "entries": 0,
+        "bytes": 0,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      }
+    ],
+    "dom": 13,
+    "workspaces": 0,
+    "fontFaces": 4
+  },
+  "samples": [
+    {
+      "edit": 0,
+      "cache": {
+        "entries": 34,
+        "bytes": 3178186,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      },
+      "heap": {
+        "usedSize": 33486428,
+        "totalSize": 34308096,
+        "embedderHeapUsedSize": 5635856,
+        "backingStorageSize": 8952831
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 4838,
+        "jsEventListeners": 476
+      }
+    },
+    {
+      "edit": 20,
+      "cache": {
+        "entries": 34,
+        "bytes": 3178098,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      },
+      "heap": {
+        "usedSize": 36714976,
+        "totalSize": 37928960,
+        "embedderHeapUsedSize": 5627144,
+        "backingStorageSize": 8950277
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 4839,
+        "jsEventListeners": 476
+      }
+    },
+    {
+      "edit": 40,
+      "cache": {
+        "entries": 34,
+        "bytes": 3178098,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      },
+      "heap": {
+        "usedSize": 37253892,
+        "totalSize": 39501824,
+        "embedderHeapUsedSize": 5639304,
+        "backingStorageSize": 8950282
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 4839,
+        "jsEventListeners": 476
+      }
+    },
+    {
+      "edit": 80,
+      "cache": {
+        "entries": 34,
+        "bytes": 3178098,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      },
+      "heap": {
+        "usedSize": 37407788,
+        "totalSize": 38977536,
+        "embedderHeapUsedSize": 5712992,
+        "backingStorageSize": 8950277
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 4839,
+        "jsEventListeners": 476
+      }
+    },
+    {
+      "edit": 120,
+      "cache": {
+        "entries": 34,
+        "bytes": 3178116,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      },
+      "heap": {
+        "usedSize": 37597232,
+        "totalSize": 39763968,
+        "embedderHeapUsedSize": 5737080,
+        "backingStorageSize": 8950186
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 4839,
+        "jsEventListeners": 476
+      }
+    },
+    {
+      "edit": 200,
+      "cache": {
+        "entries": 34,
+        "bytes": 3178116,
+        "maxEntries": 64,
+        "maxBytes": 8388608
+      },
+      "heap": {
+        "usedSize": 36644948,
+        "totalSize": 40026112,
+        "embedderHeapUsedSize": 5720696,
+        "backingStorageSize": 8944371
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 4839,
+        "jsEventListeners": 476
+      }
+    }
+  ],
+  "cycles": [
+    {
+      "cycle": 0,
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
+      },
+      "heap": {
+        "usedSize": 30856644,
+        "totalSize": 34209792,
+        "embedderHeapUsedSize": 1269576,
+        "backingStorageSize": 8834935
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      }
+    },
+    {
+      "cycle": 1,
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
+      },
+      "heap": {
+        "usedSize": 31199852,
+        "totalSize": 33423360,
+        "embedderHeapUsedSize": 1240192,
+        "backingStorageSize": 8840728
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      }
+    },
+    {
+      "cycle": 2,
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
+      },
+      "heap": {
+        "usedSize": 31241336,
+        "totalSize": 33423360,
+        "embedderHeapUsedSize": 1241864,
+        "backingStorageSize": 8840728
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      }
+    },
+    {
+      "cycle": 3,
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
+      },
+      "heap": {
+        "usedSize": 31324144,
+        "totalSize": 33423360,
+        "embedderHeapUsedSize": 1242352,
+        "backingStorageSize": 8840728
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      }
+    },
+    {
+      "cycle": 4,
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
+      },
+      "heap": {
+        "usedSize": 31389184,
+        "totalSize": 33423360,
+        "embedderHeapUsedSize": 1242960,
+        "backingStorageSize": 8840728
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      }
+    },
+    {
+      "cycle": 5,
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
+      },
+      "heap": {
+        "usedSize": 31491660,
+        "totalSize": 33685504,
+        "embedderHeapUsedSize": 1243704,
+        "backingStorageSize": 8840728
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      }
+    },
+    {
+      "cycle": 6,
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
+      },
+      "heap": {
+        "usedSize": 31586000,
+        "totalSize": 33685504,
+        "embedderHeapUsedSize": 1244448,
+        "backingStorageSize": 8840728
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      }
+    },
+    {
+      "cycle": 7,
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
+      },
+      "heap": {
+        "usedSize": 31631876,
+        "totalSize": 33423360,
+        "embedderHeapUsedSize": 1245072,
+        "backingStorageSize": 8840728
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      }
+    },
+    {
+      "cycle": 8,
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
+      },
+      "heap": {
+        "usedSize": 31716152,
+        "totalSize": 33947648,
+        "embedderHeapUsedSize": 1269288,
+        "backingStorageSize": 8840728
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      }
+    },
+    {
+      "cycle": 9,
+      "disposed": {
+        "infos": [
+          {
+            "entries": 0,
+            "bytes": 0,
+            "maxEntries": 64,
+            "maxBytes": 8388608
+          }
+        ],
+        "dom": 13,
+        "workspaces": 0,
+        "fontFaces": 4
+      },
+      "heap": {
+        "usedSize": 32249444,
+        "totalSize": 34471936,
+        "embedderHeapUsedSize": 1249944,
+        "backingStorageSize": 8840728
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      }
+    }
+  ],
+  "edits": 200,
+  "mountDestroyCycles": 10,
+  "browserVersion": "158.0.8127.18"
+}

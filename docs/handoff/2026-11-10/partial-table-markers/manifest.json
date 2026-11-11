@@ -1,0 +1,122 @@
+{
+  "scope": "Current-source diagnosis and focused public regression checks; no native run, archive-baseline approval or full-package-green claim",
+  "baseline": "ed51a7e8a6636bb2e08c9a446a7d22c21ad81066",
+  "candidateBase": "25f71eef61555cff90019127b9b05b056b861984",
+  "archive": {
+    "path": "diagnostics-and-checks.zip",
+    "bytes": 50374,
+    "sha256": "d6192e19065fd2c589a20dc6f3020709bc58155c70a30834415b55a9bb7b4e4f"
+  },
+  "files": [
+    {
+      "path": "opf-table-partial-probe.mjs",
+      "bytes": 2726,
+      "sha256": "30ee89e18bc636029d03078c9a16535da8542dfdc7278834870fcf9ab8d55d35"
+    },
+    {
+      "path": "opf-table-partial-probe-02.mjs",
+      "bytes": 3708,
+      "sha256": "b6c5e737e5c04404187434256ba463d9b9256c295d5c0c5aae6e26337f107da4"
+    },
+    {
+      "path": "opf-table-partial-probe-01.log",
+      "bytes": 374,
+      "sha256": "a1d9ed4a3fc9145410790a780287ca72041c87ce9e223800c9b6b658f7aefe42"
+    },
+    {
+      "path": "opf-table-partial-probe-02.log",
+      "bytes": 1458,
+      "sha256": "3efa2ab1ca31b7c5d7961d3d473d00f85cfb0163e2e2c0e1f9cfbb6b21a1a041"
+    },
+    {
+      "path": "opf-table-markers-ed51-baseline.log",
+      "bytes": 594,
+      "sha256": "9b9dd6d5c677b9424d2722b2f6fcfe804dc4b05fdd94a8f2ffe2f74f63511b7e"
+    },
+    {
+      "path": "opf-table-markers-ed51-baseline.json",
+      "bytes": 226,
+      "sha256": "f533873dbcc5cc00b0781d3bf11847510a6632f8b1869d203f12c4ab938592f0"
+    },
+    {
+      "path": "opf-table-build.log",
+      "bytes": 14717,
+      "sha256": "58152813b0dfda53b741caead64f798b2a2bb946e61cac4b78d8fbb6fe78cf3e"
+    },
+    {
+      "path": "opf-table-install.log",
+      "bytes": 4196,
+      "sha256": "c26709bcaed51c600f9f5bcb574bec15c447e61317972cc9fed845689af201c1"
+    },
+    {
+      "path": "opf-table-focused-driver.mjs",
+      "bytes": 1797,
+      "sha256": "8f3c65a14222ed5eb1a6907f085c8102f40b9b1ba0dedd0787c90f79ac437f68"
+    },
+    {
+      "path": "opf-table-focused-01.log",
+      "bytes": 1389,
+      "sha256": "d876eff236c46ebc0eddc502049e8ed6bfa6dc36eea993bc158a528ef8375f11"
+    },
+    {
+      "path": "opf-table-partial-probe-01/edited.pptx",
+      "bytes": 20245,
+      "sha256": "26de5a1e06b5d15bb12d9312fe0c6458f4d9a172f530d3a64065729e87f7fb3a"
+    },
+    {
+      "path": "opf-table-partial-probe-01/original.pptx",
+      "bytes": 20244,
+      "sha256": "ca369a3fa75a1eed85a82dd5cb13cc0a7c132eaef47a5961f28380d250937b12"
+    },
+    {
+      "path": "opf-table-partial-probe-01/receipt.json",
+      "bytes": 17620,
+      "sha256": "bc7ed3e2fbb19b96c7e1bccb8d99e5cd3a5dc4afbfae2e30c491aff84561dd87"
+    },
+    {
+      "path": "opf-table-partial-probe-02/receipt.json",
+      "bytes": 25584,
+      "sha256": "474bedf486cfc18181ece372324ad01de359a795c6dc9baa7de1e928b7168a39"
+    },
+    {
+      "path": "opf-table-focused-01/import-format-markers.mjs.log",
+      "bytes": 95,
+      "sha256": "95daaab8242af97329b86a573bddcde20213d933fe454581cdcb03e8acc5070b"
+    },
+    {
+      "path": "opf-table-focused-01/lh-113-shared-emphasis.mjs.log",
+      "bytes": 41,
+      "sha256": "c6a33dafaa4556ef4d106b56c00d8cd3269d4a029d2e58a5125240e31a8bcd2b"
+    },
+    {
+      "path": "opf-table-focused-01/results.json",
+      "bytes": 2196,
+      "sha256": "a47b2a28974097342ac339fb24e32c48b24684a3e1239a8b30b128e49dafe160"
+    },
+    {
+      "path": "opf-table-focused-01/rr-54-chart-table-data.mjs.log",
+      "bytes": 712,
+      "sha256": "7f08fe450edfd817e5888c2fb59bc039e24d10193bf388af1adf6076f7062c23"
+    },
+    {
+      "path": "opf-table-focused-01/rr-54-data-hardening.mjs.log",
+      "bytes": 212,
+      "sha256": "406b8890131a187e5a3d7975747d2cc17cd05a1efbbb652d395afa37d6ec67ef"
+    },
+    {
+      "path": "opf-table-focused-01/rr-59-absent-defaults.mjs.log",
+      "bytes": 229,
+      "sha256": "018c999d6b2d84563279baf4d496a61e1608d6be4cb9a26f3b9cbb9c708f881a"
+    },
+    {
+      "path": "opf-table-focused-01/rr-59-export-integrity.mjs.log",
+      "bytes": 176,
+      "sha256": "7c09aa9e67ef73a2106704854cc3b1d4599686ee5d19dcbd546843607a6b2dee"
+    },
+    {
+      "path": "opf-table-focused-01/table-powerpoint-save.mjs.log",
+      "bytes": 50,
+      "sha256": "058dc0e75ac02490f0dd96ff1741bed6c31fce04fee6029f92ee23e0b479e3de"
+    }
+  ]
+}
