@@ -1,0 +1,44 @@
+[
+  {
+    "name": "build",
+    "file": "build.log",
+    "bytes": 14666,
+    "sha256": "50ddf376c685ddf9efc96d22cfa92f1bf713d77112fb4f0ab9f6886ce100d1d3"
+  },
+  {
+    "name": "biome",
+    "file": "biome.log",
+    "bytes": 12254,
+    "sha256": "e65cc7683e2d689601ed3aa50229e35f31f60c2819d57aebee3e8ace91072b98"
+  },
+  {
+    "name": "pnpm run check:changes",
+    "file": "pnpm_run_check_changes.log",
+    "bytes": 2661,
+    "sha256": "c192e89708b007e35bbb4c76e1e0aeb287743eef389b31f7abf2b2238f5b0428"
+  },
+  {
+    "name": "pnpm run check:libreoffice",
+    "file": "pnpm_run_check_libreoffice.log",
+    "bytes": 1426,
+    "sha256": "06e51d388dfbd6cb3652c929a0434a7bae2180d13cc3da483a953db4d33170f7"
+  },
+  {
+    "name": "pnpm run check:skill-commands",
+    "file": "pnpm_run_check_skill-commands.log",
+    "bytes": 1047,
+    "sha256": "d62ad480f8c729ce58a9bdfe0fb195780e71d2be8e3ef7fba9355aca8b08c71f"
+  },
+  {
+    "name": "pnpm run check:native-acceptance",
+    "file": "pnpm_run_check_native-acceptance.log",
+    "bytes": 49531,
+    "sha256": "4f5c530a522373bddbe5308d19532f190c38777457bb3aca30d6d15122b5a6af"
+  },
+  {
+    "name": "pnpm run check:text",
+    "file": "pnpm_run_check_text.log",
+    "bytes": 1080,
+    "sha256": "4473831860b166229116e517111ea5812b6ad7c72d7d380baf98bce5fc5188ea"
+  }
+]
