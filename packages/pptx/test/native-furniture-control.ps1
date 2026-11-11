@@ -764,16 +764,20 @@ function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix,$Probe=$
 }
 
 # Bounded current native chart metadata only: no ChartData, Values setter, Excel or UI.
-function Get-FurnitureSeriesTarget($Presentation,$Action,[string]$Prefix) {
+function Get-FurnitureSeriesTypeObservation($Value) {
+    return [ordered]@{observedType=if($null -eq $Value){'null'}else{$Value.GetType().FullName};observedRawValue=if($null -eq $Value){$null}elseif($Value -is [string] -or $Value -is [bool] -or $Value -is [char] -or $Value -is [byte] -or $Value -is [sbyte] -or $Value -is [int16] -or $Value -is [uint16] -or $Value -is [int] -or $Value -is [uint32] -or $Value -is [long] -or $Value -is [uint64] -or $Value -is [single] -or $Value -is [double] -or $Value -is [decimal] -or $Value -is [Enum]){[Convert]::ToString($Value,[Globalization.CultureInfo]::InvariantCulture)}else{'<unsupported native chart type>'};numericValue=if(Test-Integer $Value){$Value}else{$null}}
+}
+function Get-FurnitureSeriesTarget($Presentation,$Action,[string]$Prefix,$Probe) {
     $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $Prefix
     $shape=Get-ExactShape $slide $Action.chartName "$Prefix.chart"
     $has=Invoke-FurnitureCom "$Prefix.chart.hasChart" {$shape.HasChart};if($has -ne -1){Stop-FurnitureLifecycle 'The exact series-name target is not a native chart'}
-    $chart=Invoke-FurnitureCom "$Prefix.chart.get" {$shape.Chart};$type=Invoke-FurnitureCom "$Prefix.chart.type" {$chart.ChartType}
+    $chart=Invoke-FurnitureCom "$Prefix.chart.get" {$shape.Chart};$type=Invoke-FurnitureCom "$Prefix.chart.type" {$member=$chart.PSObject.Properties['ChartType'];if($null -eq $member){throw 'Native chart ChartType property is unavailable'};return ,$member.get_Value()}
+    $Probe.chartTypeObservation=Get-FurnitureSeriesTypeObservation $type
     if(-not (Test-Integer $type) -or $type -notin @(51,52,53,57,58,59,4,65,63,66,1,76,77,-4169,5,-4120)){Stop-FurnitureLifecycle 'Series-name qualification requires a supported classic point chart'}
     $collection=Invoke-FurnitureCom "$Prefix.series.get" {return ,$chart.SeriesCollection()};$count=Invoke-FurnitureCom "$Prefix.series.count" {$collection.Count}
     if(-not (Test-Integer $count) -or $count -lt 1 -or $count -gt 256 -or $Action.seriesIndex -gt $count){Stop-FurnitureLifecycle 'Series-name target count/index is outside the bounded collection'}
     $series=Invoke-FurnitureCom "$Prefix.series.item" {$collection.Item([int]$Action.seriesIndex)}
-    $seriesType=Invoke-FurnitureCom "$Prefix.series.type" {$series.ChartType};if($seriesType -ne $type){Stop-FurnitureLifecycle 'Mixed native series types are outside name-edit qualification'}
+    $seriesType=Invoke-FurnitureCom "$Prefix.series.type" {$member=$series.PSObject.Properties['ChartType'];if($null -eq $member){throw 'Native series ChartType property is unavailable'};return ,$member.get_Value()};$Probe.seriesTypeObservation=Get-FurnitureSeriesTypeObservation $seriesType;if($seriesType -ne $type){Stop-FurnitureLifecycle 'Mixed native series types are outside name-edit qualification'}
     return [pscustomobject]@{series=$series;collection=$collection;count=$count;chartType=$type}
 }
 function Read-FurnitureLiteralSeriesName($Series,[string]$Prefix,$Probe) {
@@ -785,9 +789,9 @@ function Read-FurnitureLiteralSeriesName($Series,[string]$Prefix,$Probe) {
 function Set-FurnitureSeriesName($Presentation,$Action,[string]$Prefix) {
     if($script:officeOperationsStopped){throw 'Office operations already stopped; preserve the original series-name failure receipt'}
     try{Assert-LiteralSeriesName $Action.expectedName 'expectedName' $Prefix;Assert-LiteralSeriesName $Action.newName 'newName' $Prefix;if($Action.expectedName -ceq $Action.newName){throw 'Series-name action must make a literal change'}}catch{Stop-FurnitureLifecycle $_.Exception.Message}
-    $probe=[ordered]@{phase='action';slideIndex=$Action.slideIndex;chartName=$Action.chartName;seriesIndex=$Action.seriesIndex;expectedName=$Action.expectedName;newName=$Action.newName;before=$null;after=$null;observedType=$null;observedName=$null;observedRawValue=$null;otherNames=@();status='begin'}
+    $probe=[ordered]@{phase='action';slideIndex=$Action.slideIndex;chartName=$Action.chartName;seriesIndex=$Action.seriesIndex;expectedName=$Action.expectedName;newName=$Action.newName;before=$null;after=$null;observedType=$null;observedName=$null;observedRawValue=$null;chartTypeObservation=$null;seriesTypeObservation=$null;otherNames=@();status='begin'}
     $report.actionPlan.currentChartSeriesProbe=$probe;$report.actionPlan.chartSeriesEdits+=@($probe)
-    $target=Get-FurnitureSeriesTarget $Presentation $Action $Prefix
+    $target=Get-FurnitureSeriesTarget $Presentation $Action $Prefix $probe
     $before=Read-FurnitureLiteralSeriesName $target.series $Prefix $probe;$probe.before=$before
     if($before -cne $Action.expectedName){Stop-FurnitureLifecycle 'Native series name no longer equals the literal expectedName; no setter was called'}
     for($index=1;$index -le $target.count;$index++){
@@ -808,11 +812,14 @@ function Read-FurnitureSeriesNameState($Presentation,$Targets,[string]$Phase) {
     foreach($action in $Targets){
         if($action.op -cne 'set-chart-series-name'){continue}
         $expected=if($Phase -ceq 'original'){$action.expectedName}else{$action.newName}
-        $probe=[ordered]@{phase=$Phase;slideIndex=$action.slideIndex;chartName=$action.chartName;seriesIndex=$action.seriesIndex;expectedName=$expected;observedName=$null;observedType=$null;observedRawValue=$null;status='begin'};$report.actionPlan.currentChartSeriesProbe=$probe
-        $target=Get-FurnitureSeriesTarget $Presentation $action "$Phase.series-name-$($records.Count+1)"
+        $probe=[ordered]@{phase=$Phase;slideIndex=$action.slideIndex;chartName=$action.chartName;seriesIndex=$action.seriesIndex;expectedName=$expected;observedName=$null;observedType=$null;observedRawValue=$null;chartTypeObservation=$null;seriesTypeObservation=$null;status='begin'};$report.actionPlan.currentChartSeriesProbe=$probe
+        $target=Get-FurnitureSeriesTarget $Presentation $action "$Phase.series-name-$($records.Count+1)" $probe
         $name=Read-FurnitureLiteralSeriesName $target.series "$Phase.series-name-$($records.Count+1)" $probe
         if($name -cne $expected){Stop-FurnitureLifecycle "Native $Phase series name does not equal its exact expected current literal"}
-        $probe.status='success';$records.Add($probe)
+        $probe.status='success'
+        # Keep the existing successful phase schema; the complete current probe
+        # retains diagnostic types for a failure before the phase can complete.
+        $records.Add([ordered]@{phase=$probe.phase;slideIndex=$probe.slideIndex;chartName=$probe.chartName;seriesIndex=$probe.seriesIndex;expectedName=$probe.expectedName;observedName=$probe.observedName;observedType=$probe.observedType;observedRawValue=$probe.observedRawValue;status=$probe.status})
     }
     return ,$records.ToArray()
 }
