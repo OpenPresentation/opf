@@ -1,0 +1,67 @@
+{
+  "scope": "Exact public metadata packet: original aggregate remains exit1; separate unchanged network replay exit0",
+  "source": "d40a0d6702d38a0a5f8d37269caa0666e3e6ae4b",
+  "tree": "e8ec0a4d1e9fc23eda3759a5a14c7c6fefb9abe4",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3371,
+      "sha256": "3b3d81b6fcaafa8a805d2b15d1bbdf13dc3aa9ad2a523554424e9a5e5f1ee80f"
+    },
+    {
+      "path": "frozen-selected-log-identities.json",
+      "bytes": 1514,
+      "sha256": "d221486ecba0e60357794e8b14570258217ad9d70104042c7cb482376ff546bf"
+    },
+    {
+      "path": "log-identities.json",
+      "bytes": 2034,
+      "sha256": "68aa623a4e73a97b92443b5ba227e8eee2b477946bde7fc190b5173806020045"
+    },
+    {
+      "path": "logs.zip",
+      "bytes": 27392,
+      "sha256": "ba801570c616d368b9466a96fb97f6d305330f8c81d5d4f61f2bb46caf40d69a"
+    },
+    {
+      "path": "network-replay-receipt.json",
+      "bytes": 917,
+      "sha256": "0c7d8e2acf5272a9dde93fc2625d151ddb513371ed2aaaba178985596b8c4aaa"
+    },
+    {
+      "path": "original-gate-receipt.json",
+      "bytes": 892,
+      "sha256": "d9b04b72233eaf8aedb78ab7255cc5091623ab45053443e795b921eebad0f0ae"
+    },
+    {
+      "path": "run-driver.mjs.txt",
+      "bytes": 3010,
+      "sha256": "9e5a0bcb26dcdf0f976efcc0806168ee125805ac28755e6fd38dbe8819d57ce7"
+    },
+    {
+      "path": "runtime-after.json.gz",
+      "bytes": 31410,
+      "sha256": "41e7e168247a1e4b405423d85b6e6d042de51f5c5516a578ecd61311d155549c"
+    },
+    {
+      "path": "runtime-before.json.gz",
+      "bytes": 31410,
+      "sha256": "41e7e168247a1e4b405423d85b6e6d042de51f5c5516a578ecd61311d155549c"
+    },
+    {
+      "path": "source-after.json",
+      "bytes": 127,
+      "sha256": "6b7f757400a9ee5675cd44be6e786fbf598f663a376c91317c3f75a83438e558"
+    },
+    {
+      "path": "source-before.json",
+      "bytes": 127,
+      "sha256": "6b7f757400a9ee5675cd44be6e786fbf598f663a376c91317c3f75a83438e558"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 2225,
+      "sha256": "8ae08818d6d4ebceb839701f0169a5b71ea46a3f8fdc511b26d761922746663b"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "scope": "Public metadata only: original selected gate RED plus separately passing unchanged network replay; not an all-green original aggregate or new native/Office execution",
+  "source": "d40a0d6702d38a0a5f8d37269caa0666e3e6ae4b",
+  "tree": "e8ec0a4d1e9fc23eda3759a5a14c7c6fefb9abe4",
+  "base": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+  "originalGate": {
+    "exitCode": 1,
+    "seconds": 124.572,
+    "passed": 9,
+    "failed": 1,
+    "unselected": 1,
+    "failure": "check:stability public npm DNS ENOTFOUND after 19 local controls PASS",
+    "typecheck": "unselected, no TypeScript change",
+    "native": {
+      "tests": 346,
+      "passed": 331,
+      "failed": 0,
+      "actualWindowsPowerShell5Skips": 15,
+      "mapperSeconds": 13.1,
+      "nodeTestMilliseconds": 12935.044416
+    },
+    "galleryTracker": {
+      "passed": 18,
+      "failed": 0,
+      "records": 863,
+      "unaddressed": 313,
+      "strictPolicy": "fail; current freshness check PASS"
+    },
+    "text": {
+      "controlsPassed": 7,
+      "filesScanned": 18262,
+      "valid": true
+    }
+  },
+  "networkReplay": {
+    "exitCode": 0,
+    "seconds": 36.79312610626221,
+    "localControlsPassed": 19,
+    "publishedGallery": "0.33.0",
+    "publishedRenderer": "0.33.0",
+    "renders": 284,
+    "existingRecordDrawingChanges": 0,
+    "newLayouts": 4,
+    "legacyDeclarationWarningsPreserved": 9,
+    "minimumBumpReported": "minor",
+    "sourceUnchanged": true,
+    "runtimeUnchanged": true
+  },
+  "runtime": {
+    "files": 609,
+    "beforeAfterExactBytesEqual": true
+  },
+  "priorQualification": {
+    "source": "f73d20d5bc9570d3bd74cec61f79ce85b6013749",
+    "fullPptxContracts": 317,
+    "boundariesAndActualBrowsers": "Separate prior packet, not repeated or rebound by this gate",
+    "packet": "../ci-fixture-wave-checks/README.md"
+  },
+  "limits": [
+    "15 managed Windows PS5 cases remained skipped on Mac; no actual PS5 qualification from these logs",
+    "No Office/native process/COM execution or new B07 image evidence in this packet",
+    "No whole 317-contract repetition; no new benchmark acceptance",
+    "This metadata commit awaits the next integrated maintained native/doc delta; original gate exit1 remains literal"
+  ]
+}
