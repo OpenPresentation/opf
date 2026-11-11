@@ -51,7 +51,7 @@ foreach($mutate in $mutations) {
 $scenarios=0
 foreach($name in @('immediate-zero','delayed-zero','persistent','new-pid','query-fault','late-zero','append-fault','late-append')) {
     $state=[pscustomobject]@{time=0.0;queries=0;delays=0;rows=[Collections.Generic.List[object]]::new()}
-    $result=$null;$error=$null
+    $result=$null;$scenarioFailure=$null
     try {
         $result=Invoke-ReferenceWitnessPostflight (New-B07Terminal) (New-B07Evidence) {
             $state.queries++
@@ -70,13 +70,13 @@ foreach($name in @('immediate-zero','delayed-zero','persistent','new-pid','query
             $state.rows.Add($row)
             if($name -eq 'late-append') {$state.time=5000.0}
         }
-    } catch {$error=$_.Exception.Message}
+    } catch {$scenarioFailure=$_.Exception.Message}
     switch($name) {
-        'immediate-zero' {Require-B07 ($null -eq $error -and $state.queries -eq 1 -and $state.delays -eq 0 -and $result.initialCount -eq 0) 'Immediate zero changed'}
-        'delayed-zero' {Require-B07 ($null -eq $error -and $state.queries -eq 3 -and $state.rows[0].processIds[0] -eq 12345 -and $result.initialCount -eq 1 -and $result.finalCount -eq 0 -and $result.elapsedMilliseconds -eq 200) 'Initial nonzero was lost'}
-        'persistent' {Require-B07 ($null -ne $error -and $state.queries -eq 50 -and $state.time -eq 5000) 'Persistent nonzero did not stop'}
-        'new-pid' {Require-B07 ($null -ne $error -and $state.queries -eq 2 -and $state.rows[1].processIds[0] -eq 99999) 'New PID did not stop'}
-        default {Require-B07 ($null -ne $error -and $state.queries -eq 1 -and $state.delays -eq 0) 'Postflight fault caused another process read or wait'}
+        'immediate-zero' {Require-B07 ($null -eq $scenarioFailure -and $state.queries -eq 1 -and $state.delays -eq 0 -and $result.initialCount -eq 0) 'Immediate zero changed'}
+        'delayed-zero' {Require-B07 ($null -eq $scenarioFailure -and $state.queries -eq 3 -and $state.rows[0].processIds[0] -eq 12345 -and $result.initialCount -eq 1 -and $result.finalCount -eq 0 -and $result.elapsedMilliseconds -eq 200) 'Initial nonzero was lost'}
+        'persistent' {Require-B07 ($null -ne $scenarioFailure -and $state.queries -eq 50 -and $state.time -eq 5000) 'Persistent nonzero did not stop'}
+        'new-pid' {Require-B07 ($null -ne $scenarioFailure -and $state.queries -eq 2 -and $state.rows[1].processIds[0] -eq 99999) 'New PID did not stop'}
+        default {Require-B07 ($null -ne $scenarioFailure -and $state.queries -eq 1 -and $state.delays -eq 0) 'Postflight fault caused another process read or wait'}
     }
     $scenarios++
 }
