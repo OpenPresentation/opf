@@ -4,7 +4,7 @@ import { gallery } from '@openpresentation/gallery';
 import { toSvg } from '../dist/index.js';
 
 const options = { catalogs: [gallery] };
-const titleOf = svg => svg.match(/<title\b[^>]*>([\s\S]*?)<\/title>/)?.[1];
+const accessibleNameOf = svg => svg.match(/^<svg\b[^>]*\baria-label="([^"]*)"/)?.[1];
 const visibleText = svg => [...svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(match => match[1].replace(/<[^>]+>/g, '')).join('\n');
 const check = (checker, source) => assert.deepEqual(checker.validate(source, options), validate(source, options), 'complete fresh report equals cold');
 
@@ -12,11 +12,11 @@ for (const language of ['en-US', 'ar-SA']) {
   const source = { name: 'Original accessible name', language, slides: [{ layout: 'cover', subtitle: 'Authored subtitle' }] };
   const checker = createValidator(); check(checker, source);
   const before = toSvg(source, 1, options);
-  assert.equal(titleOf(before), source.name);
+  assert.equal(accessibleNameOf(before), source.name, 'the root SVG aria-label uses the document-name fallback');
   assert.ok(!visibleText(before).includes(source.name), 'root name is not an implicit visible cover heading');
   source.name = 'Changed accessible name'; check(checker, source);
   const after = toSvg(source, 1, options);
-  assert.equal(titleOf(after), source.name, 'the accessible fallback is fresh despite reusable validation geometry');
+  assert.equal(accessibleNameOf(after), source.name, 'the root SVG aria-label is fresh despite reusable validation geometry');
   assert.ok(!visibleText(after).includes(source.name));
   assert.notEqual(after, before, 'do not claim whole SVG equality when its accessible name changed');
 }
@@ -28,7 +28,7 @@ for (const kind of ['header', 'footer']) {
   source.name = 'After visible name'; check(checker, source);
   check(resolvedChecker, resolveVariables(source).presentation);
   const svg = toSvg(source, 1, options);
-  assert.equal(titleOf(svg), 'Authored heading');
+  assert.equal(accessibleNameOf(svg), 'Authored heading', 'the root SVG aria-label prefers the authored slide title');
   assert.ok(visibleText(svg).includes('After visible name'), 'renderer resolves the actual new furniture name');
   assert.ok(!visibleText(svg).includes('Before visible name'));
 }
