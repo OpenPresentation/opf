@@ -107,3 +107,9 @@ The five sparse-input scopes subsequently pass in one exact-name serial replay:5
 Canonical PR1225 and its staging alias are normally fast-forwarded to `6a83630b694ef31d6fb6fe7c99764567e7ba4c5a`. It adds only this gate's evidence/board after b0d86; its documentation delta passes five selected steps in17.783s, with source and609 runtime files exact. The PR stays draft with no full-ci label, main merge or release.
 
 The sole maintained exact-head/all-check observer stops RED on the actual [audit job](https://github.com/OpenPresentation/opf/actions/runs/43041036390/job/130592648852). Split MCP client2.0.0 has high `GHSA-6qxp-vccf-f47h` (fixed2.2+) and moderate `GHSA-6prh-2h8m-c8cw` (fixed2.3+) advisories. A secure compatible client/core successor is in source review; no ignore, audit waiver or private-site inventory permission is used. Other ordinary jobs are not promoted to green by this failure. Final coherent CI/platform/slow gates remain owed.
+
+## Latest09/chart visual acceptance and SH21 parser refusal
+
+Current09 native02 and original seven chart visual reviews now have separately linked scope on the active board. The previous human-closure/transfer holds are resolved; the owner allows ownership-checked failure cleanup. Native01 idle failure, failed treemap getter and all historical outcomes remain literal.
+
+Actual c169 SH21 create-envelope passes1.084s; first verify-source fails1.815s with `TypeError: XMLParser is not a constructor`, before first original archive-view admission. Envelope152998B/SHA479c2ff280f0b612b47231230ed7060d28a92b65533fee5792ac9addad6e7013. Execution2520B/SHA294f0c6507fba52d6cee2e0269159bc8e8fc60fb42a7c3eb22838cd0f6c332c3; failedstderr375B/SHA6b743022ae830d920fac677216df56f39a28f290d5d5877385c85efae2929f6a.403consumer runtime/proof/priorprofiles exact; no prepare/default/native/processquery or later-case attempt. Minimal public require-entry repair is a forward source proposal, not a rescued pass.

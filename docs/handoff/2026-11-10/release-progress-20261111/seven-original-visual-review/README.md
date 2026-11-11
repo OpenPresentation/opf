@@ -1,0 +1,9 @@
+# Seven original chart visuals reviewed
+
+Root and independent review viewed all seven native/renderer pairs. Native captures are ORIGINAL-only from the failed06baf controller, actual9a20 producer. Setter attempts0; the getter failure remains failed. These images do not establish edits, saved/reopened output, cleanup or native lifecycle acceptance.
+
+This packet contains exactly seven chart pairs. Histogram preserves42/31/−8/19 with broad bars. Signed Pareto sorts42/31/19/−8, retains negative East and holds its positive-only cumulative line at100%. Waterfall42,+31,−8,+19 directions and order are preserved. Treemap, box and truthful world-column fallback show consistent data/roles without substantive clipping. Funnel shows42/31/19; East negative has no area in both images. White native versus dark renderer funnel labels match the already documented Office label-color limitation; no new recolor or overlay fix is warranted.
+
+The sealed renderer primary chart-all-seven has identical slides but a separately sealed design from native chart-mode-all-seven-native. Plot placement and widths are not pixel-equivalence evidence. These scoped original visual checks expose no new confirmed defect. Actual numeric edit/Save/reopen acceptance remains open.
+
+The private transfer commit56852ef5cd5b5a892bdce91ebe1e64e42829c67b has17 exact files. Manifest8133B/SHAac321c94949af17ef5184c63785d7427cab1bce25e9a1ae7b75484721865ee8f. Root independently verified all16 payload sizes/hashes. Original actual archive184592B/SHA04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb; source68672B/SHAa4ade4939074e2f1b63f989e7e82c0ce83e162a470305341b3daee049de1e7b8; suiteSHA132ae22279365ff57d883bdc141fbc945f5fb1f737dd4250f8b834fd048f5e5b. Historical ba0b source/saved archives stay private for raw Save-rewrite analysis and cannot qualify current output.
