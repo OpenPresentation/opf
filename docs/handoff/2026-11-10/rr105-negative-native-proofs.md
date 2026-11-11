@@ -78,3 +78,43 @@ test is added. This source successor has not run PowerShell, parsing/imports,
 tests, builds, exports, process queries or Office. A separately authorized fresh
 controller and both managed controls remain required before any native action;
 frozen 9a20 producer/consumer/evidence identities are not relabeled.
+
+## Source-only JSON proof-view successor — 2026-11-11
+
+The first actual selected managed test on frozen f332 fails at the newly added
+eight-row negative roster assertion before the earlier valid-bridge branch;
+child exit 1 after 1.094 seconds. The second archive managed test is held. This
+first failure and its Windows-local fixture remain unchanged. It does not show a
+production proof or observer failure. A separately authorized language-only PS5
+probe confirms the setup cause: direct selection yields eight rows; the old
+pipeline yields one Object[] item; assignment and explicit foreach each yield
+eight parsed-object rows with Int32 expected values. The successor ran once,
+exit 0 after 0.323 seconds, without production imports, retained fixtures,
+observer, process queries or Office. The first JavaScript launcher failed to
+parse before its PowerShell body ran and remains preserved; neither language
+attempt reran the failed managed test. Retained stdout SHA256 is
+`178952f231cafb90e6bf368b8cf8a203ca355a18c83fda4f925f1b16b6474922`;
+execution receipt SHA256 is
+`6f0a9755584e26e07e96e8cca73e1753dc27d68d0078290463560c682d9409b8`.
+
+This new test-only successor is normally based on frozen
+`d2313cfee7233adb7bb3899f2d2ab1196c498616`. It assigns the JSON roundtrip to a
+variable, then selects negative rows using a language `foreach` over that value.
+It no longer relies on `ConvertFrom-Json` emitting each array member individually
+to a subsequent pipeline filter. The broad critical namespace/suffix selection
+still retains extras and duplicates for the unchanged ordered eight-row check.
+All three views, the strict 57-proof guard, numeric Int32/Int64 minus-one checks,
+original report, 23 mutations and default/lifecycle/bridge controls stay intact.
+Capture, recomputation, readiness comparisons and all other production bytes
+remain d231-exact. No coercion, schema relaxation or new test pass is claimed.
+
+The test-only views now carry direct/json/original labels; the identical roster
+count condition includes that label and expected/actual counts when it throws.
+No proof data or private path is added to this error.
+
+No local PowerShell parsing/import/execution, tests, build, exports, process
+queries, observer or Office action ran while preparing this source proposal.
+The separate Windows language observation is scoped above. Root and independent
+source review and a separately authorized fresh managed attempt remain required.
+The old f332/d231 branches,
+worktrees, source proposals, diagnostic and all failed evidence stay frozen.

@@ -83,11 +83,12 @@ try {
     $negativeStages=@('value.original.target.readOnly','value.original.target.hasChart','value.original.read.readOnly','value.setter.readOnly','value.edited.read.readOnly','value.saved-reopened.target.readOnly','value.saved-reopened.target.hasChart','value.saved-reopened.read.readOnly')
     if($criticalProof.Count -ne 57){throw 'Exact critical proof count changed'}
     $negativeProof=@($criticalProof | Where-Object {$_.stage -cmatch '^value\..*\.(readOnly|hasChart)$'})
-    $negativeWire=@((ConvertTo-Json -InputObject $criticalProof -Depth 100) | ConvertFrom-Json | Where-Object {$_.stage -cmatch '^value\..*\.(readOnly|hasChart)$'})
+    $negativeRoundTrip=(ConvertTo-Json -InputObject $criticalProof -Depth 100) | ConvertFrom-Json
+    $negativeWire=@(foreach($row in $negativeRoundTrip){if($row.stage -cmatch '^value\..*\.(readOnly|hasChart)$'){$row}})
     $negativeOriginal=@($negativeContext.report.probes | Where-Object {$_.stage -cmatch '^value\..*\.(readOnly|hasChart)$'})
-    foreach($view in @([pscustomobject]@{rows=$negativeProof},[pscustomobject]@{rows=$negativeWire},[pscustomobject]@{rows=$negativeOriginal})){
+    foreach($view in @([pscustomobject]@{label='direct';rows=$negativeProof},[pscustomobject]@{label='json';rows=$negativeWire},[pscustomobject]@{label='original';rows=$negativeOriginal})){
         $rows=$view.rows
-        if($rows.Count -ne $negativeStages.Count){throw 'Exact negative proof roster changed'}
+        if($rows.Count -ne $negativeStages.Count){throw ('Exact negative proof roster changed: view='+$view.label+' expected='+$negativeStages.Count+' actual='+$rows.Count)}
         for($i=0;$i -lt $negativeStages.Count;$i++){
             $row=$rows[$i];if($row.stage -cne $negativeStages[$i] -or $row.matched -cne $true){throw ('Negative proof order/status changed: '+$negativeStages[$i])}
             foreach($field in @('expected','actual')){if(($row.$field -isnot [int] -and $row.$field -isnot [long]) -or $row.$field -ne (-1)){throw ('Negative proof is not numeric -1: '+$row.stage+'.'+$field)}}
