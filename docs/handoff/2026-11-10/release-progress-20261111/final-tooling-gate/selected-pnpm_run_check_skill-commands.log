@@ -1,0 +1,20 @@
+
+> openpresentation-workspace@ check:skill-commands /private/tmp/opf-034
+> node --test scripts/check-skill-commands.test.mjs && node scripts/check-skill-commands.mjs
+
+✔ words keeps quoted text together (1.992959ms)
+✔ commandOf strips launchers and cuts at shell operators (0.703125ms)
+✔ extractCommands reads shell fences, continued lines and inline spans, and skips other code (0.614583ms)
+✔ valueOptions finds the options that take a value (0.25925ms)
+✔ probeArguments gives value options a placeholder, drops positionals and ends with --help (0.314042ms)
+✔ checkSources fails a command the CLI rejects, honours the allowlist and reports a stale entry (0.591833ms)
+✔ the workspace CLI rejects the removed create --from and an unknown command, and accepts current commands (2605.576875ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2661.726916
+check:skill-commands: 435 quoted opf commands in skills/, docs/*.md and the first-deck README parse against the workspace CLI.
