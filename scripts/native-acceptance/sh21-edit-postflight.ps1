@@ -1,24 +1,36 @@
 # Dedicated SH21 admission. Polling is ONLY the maintained hash-pinned kernel.
-function Test-Sh21PostflightReady($Evidence) {
+function Test-Sh21PostflightReady($Evidence) { return Test-Sh21CompletionReady $Evidence $false $false }
+function Test-Sh21WindowedPostflightReady($Evidence) {
+    if($Evidence.request.mode -cnotin @('org-witness','edit')){return $false}
+    if($Evidence.request.mode -ceq 'org-witness' -and $Evidence.request.plan.caseId -cne 'org-chart-3'){return $false}
+    $w=$Evidence.request.windowMode
+    if(-not(Test-OwnedPostflightKeys $w @('visible','windowState','withWindow','readOnly')) -or $w.visible -cne -1 -or $w.windowState -cne 2 -or $w.withWindow -cne -1 -or $w.readOnly -cne -1 -or $Evidence.request.timeoutSeconds -ne 45){return $false}
+    return Test-Sh21CompletionReady $Evidence $true ($Evidence.request.mode -ceq 'org-witness')
+}
+function Test-Sh21CompletionReady($Evidence,[bool]$Windowed,[bool]$Witness) {
     try{
+        $profile=if($Windowed){'sh21-three-case-owned-windowed-qualification-v1'}else{'sh21-three-case-node-and-text-edit-v1'}
+        $policy=if($Windowed){'sh21-owned-windowed-global-zero-after-completed-owned-quit-v1'}else{'sh21-node-text-bounded-global-zero-after-completed-owned-quit-v1'}
+        $opens=if($Witness){1}else{2};$saves=if($Witness){0}else{1};$setters=if($Witness){0}else{2};$adds=if($Witness){0}else{1}
         $a=$Evidence.admission;$r=$Evidence.report;$q=$Evidence.request;$s=$Evidence.stages;$t=$Evidence.terminal
         if($q.plan.caseId -isnot [string] -or $q.plan.caseId -cnotin @('org-chart-3','hierarchy-3','venn-3')){return $false}
-        if($a.profile -cne 'sh21-three-case-node-and-text-edit-v1' -or $q.profile -cne $a.profile -or $r.profile -cne $a.profile -or $a.requestSha256 -cne $r.requestSha256 -or $q.envelopeSha256 -cne $r.envelopeSha256 -or $q.runOfficeRequested -isnot [bool] -or -not $q.runOfficeRequested){return $false}
+        if($a.profile -cne $profile -or $q.profile -cne $a.profile -or $r.profile -cne $a.profile -or $a.requestSha256 -cne $r.requestSha256 -or $q.envelopeSha256 -cne $r.envelopeSha256 -or $q.runOfficeRequested -isnot [bool] -or -not $q.runOfficeRequested){return $false}
         foreach($v in @($a,$q)){if($v.nativeAcceptance -isnot [bool] -or $v.nativeAcceptance -or $v.registryAcceptance -isnot [bool] -or $v.registryAcceptance){return $false}}
-        if($a.policy.policy -cne 'sh21-node-text-bounded-global-zero-after-completed-owned-quit-v1' -or $a.policy.observationPolicy -cne 'global-zero-after-completed-owned-quit-v1' -or $a.policy.budgetMilliseconds -ne 5000 -or $a.policy.intervalMilliseconds -ne 100 -or $a.policy.maximumQueries -ne 51 -or $a.policy.observerSource -cne 'scripts/native-acceptance/run-reference-chart-profile.ps1' -or $a.policy.observerSourceSha256 -cne '8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3'){return $false}
+        if($a.policy.policy -cne $policy -or $a.policy.observationPolicy -cne 'global-zero-after-completed-owned-quit-v1' -or $a.policy.budgetMilliseconds -ne 5000 -or $a.policy.intervalMilliseconds -ne 100 -or $a.policy.maximumQueries -ne 51 -or $a.policy.observerSource -cne 'scripts/native-acceptance/run-reference-chart-profile.ps1' -or $a.policy.observerSourceSha256 -cne '8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3'){return $false}
         if(($q.policy|ConvertTo-Json -Compress) -cne ($a.policy|ConvertTo-Json -Compress)){return $false}
         if($t.timedOut -isnot [bool] -or $t.timedOut -or -not(Test-OwnedPostflightInteger $t.exitCode) -or $t.exitCode -ne 0 -or $t.timeoutSeconds -ne $q.timeoutSeconds -or -not(Test-OwnedPostflightInteger $q.timeoutSeconds) -or $q.timeoutSeconds -lt 5 -or $q.timeoutSeconds -gt 60){return $false}
-        if($r.cleanupConfirmed -isnot [bool] -or -not $r.cleanupConfirmed -or $r.officeOperationsStopped -isnot [bool] -or $r.officeOperationsStopped -or $r.error -ne $null -or $r.PSObject.Properties.Name -cnotcontains 'error' -or $r.lastStage -cne 'worker.complete' -or $r.lastStatus -cne 'success' -or $r.opens.Count -ne 2 -or $r.saveCopies -ne 1 -or $r.closes -ne 2 -or $r.quits -ne 1){return $false}
-        if($r.actions -isnot [array] -or $r.actions.Count -ne 1 -or $r.actions[0].status -cne 'success' -or $r.actions[0].textSetterAttempts -ne 1 -or $r.actions[0].newTextSetterAttempts -ne 1 -or $r.actions[0].addNodeAttempts -ne 1){return $false}
+        if($r.cleanupConfirmed -isnot [bool] -or -not $r.cleanupConfirmed -or $r.officeOperationsStopped -isnot [bool] -or $r.officeOperationsStopped -or $r.error -ne $null -or $r.PSObject.Properties.Name -cnotcontains 'error' -or $r.lastStage -cne 'worker.complete' -or $r.lastStatus -cne 'success' -or $r.opens.Count -ne $opens -or $r.saveCopies -ne $saves -or $r.closes -ne $opens -or $r.quits -ne 1){return $false}
+        if($Witness){if($r.actions -isnot [array] -or $r.actions.Count -ne 0 -or $r.savedSha256 -ne $null){return $false}}elseif($r.actions -isnot [array] -or $r.actions.Count -ne 1 -or $r.actions[0].status -cne 'success' -or $r.actions[0].textSetterAttempts -ne 1 -or $r.actions[0].newTextSetterAttempts -ne 1 -or $r.actions[0].addNodeAttempts -ne 1){return $false}
         foreach($name in @('closes','saveCopies','quits')){if(-not(Test-OwnedPostflightInteger $r.$name)){return $false}}
-        foreach($name in @('textSetterAttempts','newTextSetterAttempts','addNodeAttempts')){if(-not(Test-OwnedPostflightInteger $r.actions[0].$name)){return $false}}
+        foreach($name in $(if($Witness){@()}else{@('textSetterAttempts','newTextSetterAttempts','addNodeAttempts')})){if(-not(Test-OwnedPostflightInteger $r.actions[0].$name)){return $false}}
         if(-not(Test-OwnedPostflightStageWire $s)){return $false}
         $ready=$a.ready;$success=@($s|Where-Object{$_.status -ceq 'success'})
         foreach($name in @('stageCount','opens','saves','closes','textSetters','nodeAdds','quits')){if(-not(Test-OwnedPostflightInteger $ready.$name)){return $false}}
-        if($ready.workerCleanupConfirmed -isnot [bool] -or -not $ready.workerCleanupConfirmed -or $ready.stageCount -ne $s.Count -or $ready.lifecycle.Count -ne $success.Count -or $ready.opens -ne 2 -or $ready.saves -ne 1 -or $ready.closes -ne 2 -or $ready.textSetters -ne 2 -or $ready.nodeAdds -ne 1 -or $ready.quits -ne 1){return $false}
+        if($ready.workerCleanupConfirmed -isnot [bool] -or -not $ready.workerCleanupConfirmed -or $ready.stageCount -ne $s.Count -or $ready.lifecycle.Count -ne $success.Count -or $ready.opens -ne $opens -or $ready.saves -ne $saves -or $ready.closes -ne $opens -or $ready.textSetters -ne $setters -or $ready.nodeAdds -ne $adds -or $ready.quits -ne 1){return $false}
         for($i=0;$i -lt $success.Count;$i++){if($ready.lifecycle[$i].stage -cne $success[$i].stage -or $ready.lifecycle[$i].sequence -ne $success[$i].sequence){return $false}}
-        $critical=@('worker.initialize','preflight.globalIdle','application.create','application.initial.count','original.open','edit.existingText.set','edit.node.add','edit.newText.set','copy.saveCopyAs','original.close','saved-reopened.open','saved-reopened.close','application.final.count','application.quit','worker.complete');$previous=0
+        $critical=@('worker.initialize','preflight.globalIdle','application.create','application.initial.count','original.open','edit.existingText.set','edit.node.add','edit.newText.set','copy.saveCopyAs','original.close','saved-reopened.open','saved-reopened.close','application.final.count','application.quit','worker.complete');if($Witness){$critical=@($critical|Where-Object{$_ -cnotlike 'edit.*' -and $_ -cnotlike 'copy.*' -and $_ -cnotlike 'saved-reopened.*'})};if($Windowed){$before=@($critical[0..3]);$after=@($critical[4..($critical.Count-1)]);$critical=$before+@('application.window.preflight.count','application.visible.set','application.visible','application.windowState.set','application.windowState')+$after};$previous=0
         foreach($name in $critical){$rows=@($s|Where-Object{$_.stage -ceq $name});$ends=@($rows|Where-Object{$_.status -ceq 'success'});if($ends.Count -ne 1){return $false};if($name.StartsWith('worker.')){if($rows.Count -ne 1){return $false}}else{$begins=@($rows|Where-Object{$_.status -ceq 'begin'});if($rows.Count -ne 2 -or $begins.Count -ne 1 -or $begins[0].sequence -le $previous -or $begins[0].sequence -ge $ends[0].sequence){return $false}};if($ends[0].sequence -le $previous){return $false};$previous=$ends[0].sequence;if($name -cin @('preflight.globalIdle','application.initial.count','application.final.count') -and $ends[0].value -ne 0){return $false}}
+        if($Windowed){foreach($pair in @(@('application.window.preflight.count',0),@('application.visible',(-1)),@('application.windowState',2),@('original.windows.count',1))){$row=@($s|Where-Object{$_.stage -ceq $pair[0] -and $_.status -ceq 'success'});if($row.Count -ne 1 -or $row[0].value -cne $pair[1]){return $false}};if(-not $Witness){$row=@($s|Where-Object{$_.stage -ceq 'saved-reopened.windows.count' -and $_.status -ceq 'success'});if($row.Count -ne 1 -or $row[0].value -cne 1){return $false}}}
         if($r.probes -isnot [array] -or $r.probes.Count -lt 1){return $false};foreach($p in $r.probes){if($p.matched -isnot [bool] -or -not $p.matched){return $false}}
         return $true
     }catch{return $false}
@@ -63,4 +75,12 @@ function Invoke-Sh21BoundPostflight {
     $identity=$null;if(Test-Path -LiteralPath $journal){$identity=[ordered]@{path='postflight.jsonl';bytes=(Get-Item -LiteralPath $journal).Length;sha256=(Get-OwnedPostflightHash $journal)}}
     $observed=@($rows|Where-Object{$_.status -ceq 'observed'})
     return [ordered]@{schemaVersion=1;policy=$Evidence.admission.policy;admission=[ordered]@{path=$AdmissionFile;bytes=(Get-Item -LiteralPath $AdmissionFile).Length;sha256=$ExpectedAdmissionSha256};workerCleanupConfirmed=$true;initialCount=if($observed.Count){@($observed[0].processIds).Count}else{$null};finalCount=if($observed.Count){@($observed[$observed.Count-1].processIds).Count}else{$null};error=$failure;result=$result;identity=$identity}
+}
+
+# Closed local dispatch; genuine windowed evidence keeps its own profile/policy.
+# The old bound observer implementation and normal readiness remain unchanged.
+function Invoke-Sh21WindowedBoundPostflight {
+    param($Evidence,[string]$AdmissionFile,[string]$ExpectedAdmissionSha256,[string]$ControllerRoot,[scriptblock]$ReadProcesses,[scriptblock]$Clock,[scriptblock]$Utc,[scriptblock]$Delay,[scriptblock]$Append)
+    function Test-Sh21PostflightReady($Current){return Test-Sh21WindowedPostflightReady $Current}
+    return Invoke-Sh21BoundPostflight -Evidence $Evidence -AdmissionFile $AdmissionFile -ExpectedAdmissionSha256 $ExpectedAdmissionSha256 -ControllerRoot $ControllerRoot -ReadProcesses $ReadProcesses -Clock $Clock -Utc $Utc -Delay $Delay -Append $Append
 }
