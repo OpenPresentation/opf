@@ -120,7 +120,16 @@ test('inherited proofing and non-ASCII digits keep their existing measured route
   const before=structuredClone(document),fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:document});
   try{
    const bytes=await toPptx(document,{fonts}),zip=unzipSync(new Uint8Array(bytes)),xml=strFromU8(zip[slidePath]);assert.deepEqual(document,before);assert.equal(tags(zip).length,0,name+' cannot acquire numeric fragment ownership');
-   if(name==='inherited'){const body=shapes(xml).filter(shape=>shape.name.startsWith('OPF list '));assert.equal(body.length,2);for(const member of body.flatMap(shape=>shape.runs)){assert.match(member.properties,/lang="ar-SA"/);assert(!/\baltLang=/.test(member.properties));}assert.deepEqual(await fromPptx(bytes),{...inherited,slides:[{...inherited.slides[0],items:[run.text]}]},'The existing inherited route returns the exact scalar canonical source without an authored language override');}
+   if(name==='inherited'){
+    const all=shapes(xml),body=all.filter(shape=>shape.name.startsWith('OPF list '));assert.equal(all.length,3);
+    const expected=new Map([
+     ['OPF list slides.0.items line 0',{text:run.text.slice(0,69),utf16:69,lang:'en-US',altLang:'ar-SA'}],
+     ['OPF list slides.0.items line 1',{text:run.text.slice(69),utf16:28,lang:'ar-SA',altLang:undefined}],
+    ]);
+    assert.deepEqual(body.map(shape=>shape.name),[...expected.keys()],'Every original inherited line has one exact identity');
+    for(const shape of body){assert.equal(shape.runs.length,1);const member=shape.runs[0];assert.deepEqual({text:member.text,utf16:member.text.length,lang:attr(member.properties,'lang'),altLang:attr(member.properties,'altLang')},expected.get(shape.name),'Proofing follows this original line, not a blanket language assumption');}
+    assert.deepEqual(await fromPptx(bytes),{...inherited,slides:[{...inherited.slides[0],items:[run.text]}]},'The existing inherited route returns the exact scalar canonical source without an authored language override');
+   }
    else{assert(xml.includes('١'));assert(xml.includes('۱'));assert(!xml.includes('Item 1:'),'Arabic/Persian source digits cannot be coerced to ASCII');}
   }finally{fonts.dispose?.();}
  }
