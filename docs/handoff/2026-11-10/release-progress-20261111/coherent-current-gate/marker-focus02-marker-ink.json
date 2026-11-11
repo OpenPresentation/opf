@@ -1,0 +1,20 @@
+{
+  "left": 1191,
+  "top": 373,
+  "width": 34,
+  "height": 43,
+  "components": [
+    {
+      "x": 1206,
+      "right": 1214,
+      "height": 23,
+      "pixels": 87
+    },
+    {
+      "x": 1195,
+      "right": 1198,
+      "height": 4,
+      "pixels": 12
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "scope": "Public source/aggregate test logs and synthetic render metadata only; no raw Windows records or private-site inventory",
+  "measuredHead": "baa2c5807539cfa4298bae009c091a225b5707fa",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 6222,
+      "sha256": "d8595b8e9264d237257e8b53674c374bcf9e939a6fae9ce4291fc62178b17208"
+    },
+    {
+      "file": "causal03-native-acceptance.log.gz",
+      "bytes": 12401,
+      "sha256": "4400d9c1c0ac94810d9dca13cca847f57080ce5d82ed59be24dd21a7696f18b0"
+    },
+    {
+      "file": "causal03-pdf-harfbuzz-scripts.mjs.log.gz",
+      "bytes": 490,
+      "sha256": "23f1ccd9d8db0763f08966f1507055e594f5d3a6225e9b7ee8244935f0d2690d"
+    },
+    {
+      "file": "causal03-receipt.json",
+      "bytes": 1171,
+      "sha256": "1115805fd93c1d2b870deb09169e5cc0fe4c26d0f6bc26869347c476cd045fdb"
+    },
+    {
+      "file": "causal03-rtl-number-markers.mjs.log.gz",
+      "bytes": 176,
+      "sha256": "dac6008870d6a825657302726ae8c49bc6e45bc6b734a21270be19fe6ce03017"
+    },
+    {
+      "file": "causal03-text-as-paths-scripts.mjs.log.gz",
+      "bytes": 279,
+      "sha256": "1ec5fbf0531e5f3c717ca9122f365edb0e8a162c1ec030c89c97eac3e3d8afd7"
+    },
+    {
+      "file": "combined01-product-runtime.json",
+      "bytes": 49670,
+      "sha256": "43b17a4aa49913f7db26ea88c46d47fd0d9de7c8035d95a402b5de08b1503c39"
+    },
+    {
+      "file": "combined01-receipt.json",
+      "bytes": 6657,
+      "sha256": "fc60a5f12ef115c69c3c6dcd7a004122f2ddd249751a7928c7ab672961a5fd82"
+    },
+    {
+      "file": "combined01-selected-logs.zip",
+      "bytes": 221195,
+      "sha256": "9b6ee8d4ee0f39b2357dc05ab8b5dd0e88c86c1ab98df5bd0fe94af86423e0f7"
+    },
+    {
+      "file": "combined01-source.json",
+      "bytes": 217,
+      "sha256": "b606fd7e1808df78c4d0fd378e07686b21854a5cadca9c7f021ab36005249c12"
+    },
+    {
+      "file": "font-buffer-before01-receipt.json",
+      "bytes": 4742,
+      "sha256": "e450c545a0fde23ab5b1a9dd9683d5ffe77eb30333b97f674b6b4cb24e605d67"
+    },
+    {
+      "file": "font-buffer-before01.log.gz",
+      "bytes": 632,
+      "sha256": "9978a82f348e1adc81625ea38d36fd2b6830b4c116fe116740a874f51933d6b3"
+    },
+    {
+      "file": "font-buffer-ownership-summary.json",
+      "bytes": 2257,
+      "sha256": "0851b0cf0e0df4e7b27c02f4c3463923b4ebf9d1fa218ee26af5002bb03c1ebc"
+    },
+    {
+      "file": "marker-browser-current01-report.json",
+      "bytes": 109264,
+      "sha256": "352cdeac0cf6089d229914eb56594e681c44fa95a63786eec8ca2a8eebfdc557"
+    },
+    {
+      "file": "marker-browser-current01.log.gz",
+      "bytes": 143,
+      "sha256": "d4d7d15182533c42460c24548f5664838504d411166154c9c16603fcad6493ee"
+    },
+    {
+      "file": "marker-focus02-failure.log.gz",
+      "bytes": 313,
+      "sha256": "e6db8a799064f3a1a76ec0245b1931a83ddd16327b3babfe40d8483c6224be86"
+    },
+    {
+      "file": "marker-focus02-marker-ink.json",
+      "bytes": 265,
+      "sha256": "d8e4db2c43c96ed5926cd43f18467ddf2df5383dc5ea72fd539adbc0a2cb6f8a"
+    },
+    {
+      "file": "marker-focus02-receipt.json",
+      "bytes": 717,
+      "sha256": "2f1f52d137fb9c7726706b490619e6dc4eaa70d613dfeb9639e05d2fb07724b7"
+    },
+    {
+      "file": "marker-focus02-runtime.json",
+      "bytes": 49670,
+      "sha256": "a0be3a9c50b8a47c4bd8e555caef14f264f0d7c391ed6b833aaecb8f76bb42e9"
+    },
+    {
+      "file": "marker-focus02-visibility.json",
+      "bytes": 730,
+      "sha256": "9f4210a9c8ea30c266d553fffdfc386b05373c536b6c174949cf788380606e59"
+    },
+    {
+      "file": "marker-paint-matrix01-summary.json",
+      "bytes": 5425,
+      "sha256": "42920914eaee83560cf6c309a0525b9364fceb99cc9b92cf315f273490cd2d43"
+    },
+    {
+      "file": "native-causal02.log.gz",
+      "bytes": 11566,
+      "sha256": "c82e2057bb4b41793ece0205a76bbea972d3bb50722f3557eeb34d2113f9661a"
+    },
+    {
+      "file": "native-causal04-summary.json",
+      "bytes": 694,
+      "sha256": "2f2fb0c3cd01482498919de5527e34010479772716d0ef53ad2124c41cb6c79e"
+    },
+    {
+      "file": "native-causal04.log.gz",
+      "bytes": 11016,
+      "sha256": "37d5e3fac3d5839336fc331e5874ebc1faca1a06c8d6fb57fb1cb0ed10fd8b70"
+    }
+  ],
+  "originalReceipts": {
+    "combined01": {
+      "bytes": 6657,
+      "sha256": "fc60a5f12ef115c69c3c6dcd7a004122f2ddd249751a7928c7ab672961a5fd82"
+    },
+    "focus02": {
+      "bytes": 717,
+      "sha256": "2f1f52d137fb9c7726706b490619e6dc4eaa70d613dfeb9639e05d2fb07724b7"
+    },
+    "causal03": {
+      "bytes": 1171,
+      "sha256": "1115805fd93c1d2b870deb09169e5cc0fe4c26d0f6bc26869347c476cd045fdb"
+    },
+    "nativeCausal02": {
+      "bytes": 34374,
+      "sha256": "b9d395ff506538512e6472ca40dc0b2eb0455b959b255c71c2eefd416701cc94"
+    },
+    "nativeCausal04": {
+      "bytes": 32808,
+      "sha256": "c7f26cac8a61a78a861771f9a0fbea9badfcbaa6388b117d62268dbb40559c63"
+    }
+  },
+  "integrityScope": "Copied receipts/ZIP preserve exact bytes; gzip logs preserve exact decompressed bytes; matrix summary explicitly selects numeric fields. This is evidence packaging, not another product/check execution."
+}
