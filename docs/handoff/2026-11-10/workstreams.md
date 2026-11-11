@@ -48,6 +48,9 @@ The supplied documents are reference material. Their historical release/retry/re
 - All43 historical before/after/Claude associations are visually inspected after133original hashes are verified. This establishes historical raster review only. Editable original source and current0.34images remain owed; the recovered approximate Claude cover omits title/subtitle, so no equivalent-content quality claim follows. Private original images and per-slide observations stay private.
 - A source-reviewed cache-prefix successor passes15first focused controls, including actual downstream message surfaces, complete warm/cold geometry and reports. Existing neighbors are still running; no measured speedup is claimed.
 
+- The independently reviewed upstream-cache successor is normally folded;15new and85existing functional controls pass, with complete report/geometry equality. Measured mixed-run regression separately passes2/2including five current-native edit variants. One combined maintained delta is next. These controls do not establish measured speedup.
+- Main-site repair has all exact merged-commit CI/production checks GREEN. DEV’s minimal bootstrap source is prepared, but ordinary CI exposed a vulnerable parser dependency; its narrow direct/transitive5.12repair is local and a dependency-audit metadata approval is pending. No audit policy is weakened and no bootstrap merge exception is requested before ordinary CI is green. Private details stay in that repository.
+
 ## Historical stopped-team ownership and acceptance gates
 
 | ID / workstream | Owner | Current state | Next concrete gate / definition of done |

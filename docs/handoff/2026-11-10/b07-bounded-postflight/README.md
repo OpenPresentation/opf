@@ -74,3 +74,7 @@ or Office execution in these checks. Final added mapped-receipt metadata is
 left for the coordinator combined delta after the shared slot was released.
 Reader qualification stays bound to its separate frozen commit and coordinator
 addendum.
+
+## Actual Windows managed qualification
+
+Initial source08d555 exposes a reserved PowerShell `$Error` variable in the new self-test before its eight scenarios. The original7PASS/1FAIL result remains a failure. The one-file correction48293249944d137f7d2445a81d9f3288a50a93c1 renames only seven references to `$scenarioFailure`; production observers, source guards, deadlines and scenario assertions are unchanged. Actual WindowsPS5 then passes **8PASS/0FAIL/0SKIP**,1.025seconds:25B07 readiness refusals, eight injected observer scenarios and38existing reference controls. No real process query or Office action runs. Root normally folds this correction after c6d’s aggregate terminates. A complete future envelope/default-launcher qualification and any actual native run remain distinct.
