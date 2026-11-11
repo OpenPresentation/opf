@@ -513,7 +513,7 @@ importers:
         specifier: 5.1.0
         version: 5.1.0
       fast-xml-parser:
-        specifier: ^5.8.0
+        specifier: ^5.12.0
         version: 5.12.0
       fflate:
         specifier: ^0.8.3
