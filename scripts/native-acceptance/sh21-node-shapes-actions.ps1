@@ -2,6 +2,12 @@
 function Add-Sh21ShapeFinding($Record,[string]$Code,[int]$NodeIndex=0,[int]$ShapeIndex=0) {
     $Record.findings+=@([ordered]@{code=$Code;nativeNodeIndex=$NodeIndex;shapeIndex=$ShapeIndex});Write-SevenReport
 }
+# Same fault-aware property invocation as the maintained shared reader, but only
+# these additional read-only node-shape/text/font properties. No reflection scan.
+function Read-Sh21ShapeProperty($Object,[string]$Property,[string]$Stage) {
+    if($Property -cnotin @('Connector','TextFrame2','TextRange','Font','Size','Bold','Italic')){Stop-SevenLifecycle 'Property is outside the closed node Shapes descriptor list'}
+    return ,(Invoke-SevenCom $Stage {if($null -eq $Object){throw 'Missing owned node Shape object'};$member=$Object.PSObject.Properties[$Property];if($null -eq $member){throw "Missing node Shapes property $Property"};return ,$member.get_Value()})
+}
 function Read-Sh21NodeShapesCapability($Target,$Plan) {
     Assert-Sh21Plan $Plan
     Assert-SevenProbe ($Plan.caseId -ceq 'org-chart-3') 'capability.case' 'org-chart-3' $Plan.caseId
@@ -18,10 +24,10 @@ function Read-Sh21NodeShapesCapability($Target,$Plan) {
         Assert-Sh21Owner $Target "$p.owner"
         $read=Read-Sh21Node $nodes $i "$p.node";$row.node=$read.row;Write-SevenReport
         foreach($key in @('index','text','level','parent','type','children')){Assert-SevenProbe ($read.row[$key] -ceq $record.nodes[$i-1][$key]) "$p.reread.$key" $record.nodes[$i-1][$key] $read.row[$key]}
-        try{$range=Invoke-SevenCom "$p.shapes" {return ,$read.node.Shapes}}catch{$row.status='getter-fault';Add-Sh21ShapeFinding $record 'node-shapes-getter-fault' $i;throw}
+        try{$range=Read-SevenProperty $read.node 'Shapes' "$p.shapes"}catch{$row.status='getter-fault';Add-Sh21ShapeFinding $record 'node-shapes-getter-fault' $i;throw}
         Assert-Sh21Owner $Target "$p.shapesOwner"
         if($null -eq $range){$row.status='unavailable';Add-Sh21ShapeFinding $record 'node-shapes-unavailable' $i;continue}
-        $count=Invoke-SevenCom "$p.count" {$range.Count};$row.count=Get-SevenPrimitive $count;Write-SevenReport;Assert-Sh21Owner $Target "$p.countOwner"
+        $count=Read-SevenProperty $range 'Count' "$p.count";$row.count=Get-SevenPrimitive $count;Write-SevenReport;Assert-Sh21Owner $Target "$p.countOwner"
         if(-not(Test-SevenInteger $count) -or $count -lt 0 -or $count -gt (32-$total)){$row.status='bounded-stop';Add-Sh21ShapeFinding $record 'node-shapes-count-outside-total-bound' $i;break}
         if($count -eq 0){$row.status='empty';Add-Sh21ShapeFinding $record 'node-shapes-empty' $i;continue}
         $row.status='capturing';Write-SevenReport
@@ -29,11 +35,11 @@ function Read-Sh21NodeShapesCapability($Target,$Plan) {
             $ip="$p.item.$j";$item=[ordered]@{index=$j};$row.items+=@($item);Write-SevenReport
             $shape=Invoke-SevenCom "$ip.get" {$range.Item($j)};Assert-Sh21Owner $Target "$ip.owner"
             foreach($property in @('Id','Name','Left','Top','Width','Height','Rotation','Type','HasTextFrame')){$v=Read-SevenProperty $shape $property "$ip.$property";$item[$property]=Get-SevenPrimitive $v;Write-SevenReport}
-            $v=Invoke-SevenCom "$ip.Connector" {$shape.Connector};$item.Connector=Get-SevenPrimitive $v;$item.text=$null;$item.font=$null;Write-SevenReport
+            $v=Read-Sh21ShapeProperty $shape 'Connector' "$ip.Connector";$item.Connector=Get-SevenPrimitive $v;$item.text=$null;$item.font=$null;Write-SevenReport
             if($item.HasTextFrame -eq -1){
-                $frame=Invoke-SevenCom "$ip.frame" {$shape.TextFrame2};$textRange=Invoke-SevenCom "$ip.range" {$frame.TextRange};$v=Invoke-SevenCom "$ip.text" {$textRange.Text};$item.text=Get-SevenPrimitive $v;Write-SevenReport
-                $font=Invoke-SevenCom "$ip.font" {$textRange.Font};$item.font=[ordered]@{};Write-SevenReport
-                foreach($property in @('Name','Size','Bold','Italic')){$v=Invoke-SevenCom "$ip.font.$property" {$font.$property};$item.font[$property]=Get-SevenPrimitive $v;Write-SevenReport}
+                $frame=Read-Sh21ShapeProperty $shape 'TextFrame2' "$ip.frame";$textRange=Read-Sh21ShapeProperty $frame 'TextRange' "$ip.range";$v=Read-SevenProperty $textRange 'Text' "$ip.text";$item.text=Get-SevenPrimitive $v;Write-SevenReport
+                $font=Read-Sh21ShapeProperty $textRange 'Font' "$ip.font";$item.font=[ordered]@{};Write-SevenReport
+                foreach($property in @('Name','Size','Bold','Italic')){$v=if($property -ceq 'Name'){Read-SevenProperty $font $property "$ip.font.$property"}else{Read-Sh21ShapeProperty $font $property "$ip.font.$property"};$item.font[$property]=Get-SevenPrimitive $v;Write-SevenReport}
             }
             Assert-Sh21Owner $Target "$ip.finalOwner";$total++
         }
