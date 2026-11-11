@@ -114,7 +114,7 @@ export function sevenValueCriticalProbes(report,action){
  const owned=prefix=>add(prefix+'.ownership','same verified owned application/presentation references',true);
  const guard=(prefix,file)=>{owned(prefix);for(const suffix of ['capturedRefs','fullName.refs'])add(prefix+'.'+suffix,'same captured owned references/path',true);add(prefix+'.fullName',file);add(prefix+'.readOnly.refs','same captured owned references/path',true);add(prefix+'.readOnly',-1);};
  const target=(prefix,phase,file)=>{owned(prefix);add(prefix+'.fullName',file);add(prefix+'.readOnly',-1);add(prefix+'.slides.count',7);add(prefix+'.shapes.count','1..3',report.phases[phase].slides[action.slideIndex-1].shapeCount);add(prefix+'.exactTarget',1);add(prefix+'.hasChart',-1);add(prefix+'.chart.type',action.comChartType);add(prefix+'.series.count','1..'+action.maxSeriesCount,1);add(prefix+'.series.name',action.seriesName);};
- const readback=(phase,values)=>values.forEach((value,index)=>add('value.'+phase+'.expected.'+index,value));
+ const readback=(phase,values)=>values.forEach((value,index)=>{add('value.'+phase+'.expected.'+index,value);});
  target('value.original.target','original',report.sourcePath);guard('value.original.read',report.sourcePath);readback('original',action.expectedValues);guard('value.setter',report.sourcePath);guard('value.edited.read',report.sourcePath);readback('edited',action.newValues);
  target('value.saved-reopened.target','saved-reopened',report.savedPath);guard('value.saved-reopened.read',report.savedPath);readback('saved-reopened',action.newValues);
  return records;
