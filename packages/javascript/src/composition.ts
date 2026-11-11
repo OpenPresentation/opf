@@ -11444,7 +11444,7 @@ export {CHART_REFERENCE_TYPES} from './chart-references.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartNumericAxes} from './chart-numeric-axes.js';
 export type {ChartNumericAxes} from './chart-numeric-axes.js';
-export {chartHistogram,histogramBins,scottBinCount,histogramEdgeDecimals,histogramEdgeFormat,histogramEdgeText,HISTOGRAM_LABEL_SLOT,HISTOGRAM_MIN_BINS} from './chart-histogram.js';
+export {chartHistogram,histogramBins,paretoPlan,scottBinCount,histogramEdgeDecimals,histogramEdgeFormat,histogramEdgeText,HISTOGRAM_LABEL_SLOT,HISTOGRAM_MIN_BINS} from './chart-histogram.js';
 export type {ChartLayerHistogram,HistogramBin} from './chart-histogram.js';
 export {chartLayer,chartHeader,chartHeaderCaption,chartRingLabels,smallChart,chartLayerDataLabels,SMALL_CHART_MAX_SERIES,SMALL_CHART_MAX_POINTS,CHART_HEADER_MAX_LEGEND,CHART_HEADER_LEGEND_ROWS,chartValueAxisHidden,chartBarGeometry,chartBarSeriesOffset,CHART_BAR_GAP_WIDTH} from './chart-layer.js';
 export type {ChartLayer,ChartBarGeometry,ChartLayerSmall,ChartLayerHeader,ChartLayerRing,ChartPlotInset,ChartHeaderLegendEntry,ChartLayerGeometry,ChartEndLabel,ChartLayerEndLabels,ChartSliceLabel,ChartLayerSlices} from './chart-layer.js';

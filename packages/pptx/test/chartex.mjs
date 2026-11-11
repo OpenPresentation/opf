@@ -28,7 +28,8 @@ assert.deepEqual(chartexIds, ['treemap', 'histogram', 'pareto', 'box-and-whisker
 const mapData = {columns: ['Country', 'Value'], rows: [['Germany', 42], ['France', 31], ['Spain', -8], ['Italy', 19]]};
 // RR-105: valid native aggregation control; the exact negative case is retained in histogram-negative-category.mjs.
 const histogramData = {...categoryData, rows: categoryData.rows.map(([label, value]) => [label, Math.abs(value)])};
-const dataFor = (id) => (id === 'box-and-whisker' ? boxData : id === 'world' ? mapData : id === 'histogram' ? histogramData : categoryData);
+// Native aggregation controls use supported nonnegative categories; signed Pareto has its own strict combo controls.
+const dataFor = (id) => (id === 'box-and-whisker' ? boxData : id === 'world' ? mapData : ['histogram', 'pareto'].includes(id) ? histogramData : categoryData);
 
 // Exercise eligible native constructs explicitly; the auto default and data-domain fallbacks are checked below.
 async function exportDeck(slides, options = {}) {
@@ -173,7 +174,7 @@ for (const id of chartexIds) {
     assert.deepEqual(axes.map(([, axisId]) => axisId), ['0', '1', '2'].slice(0, want.axes));
     // CT_Axis order: scaling, gridlines, tickLabels, then the axis's own txPr (PowerPoint does not inherit the chartSpace txPr for axis labels).
     assert.match(axes[0][2], /^<cx:catScaling gapWidth="[0-9.]+"\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: category axis`);
-    const scaling = id === 'histogram' ? '<cx:valScaling max="50" min="0" majorUnit="10"/>' : id === 'pareto' ? '<cx:valScaling max="50" min="-20" majorUnit="20"/>' : id === 'box-and-whisker' ? '<cx:valScaling max="15" min="0" majorUnit="5"/>' : id === 'waterfall' ? '<cx:valScaling max="100" min="0" majorUnit="20"/>' : '<cx:valScaling/>';
+    const scaling = ['histogram', 'pareto'].includes(id) ? '<cx:valScaling max="50" min="0" majorUnit="10"/>' : id === 'box-and-whisker' ? '<cx:valScaling max="15" min="0" majorUnit="5"/>' : id === 'waterfall' ? '<cx:valScaling max="100" min="0" majorUnit="20"/>' : '<cx:valScaling/>';
     assert.ok(axes[1][2].startsWith(scaling), `${id}: exact value scale`);
     const axisContent = axes[1][2].slice(scaling.length);
     assert.match(axisContent, id === 'funnel' || id === 'waterfall' ? /^<cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/ : /^<cx:majorGridlines><cx:spPr>[\s\S]*<\/cx:spPr><\/cx:majorGridlines><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: value axis`);
@@ -247,7 +248,8 @@ for (const id of chartexIds) {
   assert.match(colors, /<cs:colorStyle [^>]*meth="cycle" id="10">(<a:schemeClr val="accent[1-6]"\/>){6}(<cs:variation\/>|<cs:variation>[\s\S]*?<\/cs:variation>){9}<\/cs:colorStyle>$/);
 
   // Diagnostics: only the map reports its missing geography cache.
-  assert.deepEqual(diagnostics.map((diagnostic) => diagnostic.code), id === 'world' ? ['chart-map-geodata'] : [], `${id}: diagnostics`);
+  assert.deepEqual(diagnostics.map((diagnostic) => diagnostic.code), id === 'world' ? ['chart-map-geodata'] : id === 'funnel' ? ['export-lossy'] : [], `${id}: diagnostics`);
+  if (id === 'funnel') assert.equal(diagnostics[0].feature, 'funnel-label-color');
   if (id === 'world') assert.match(diagnostics[0].message, /online map service.*draws nothing/);
   checks++;
 }
@@ -292,7 +294,8 @@ for (const [type, data, expectedType = type] of [
 // Row numbers are still plotted and reported, while full provenance restores the authored single column.
 {
   const {bytes, diagnostics} = await exportDeck([{title: 'funnel', chart: {type: 'funnel', data: singleData}}]);
-  assert.deepEqual(diagnostics.map((diagnostic) => diagnostic.adaptation), ['row-numbers']);
+  assert.deepEqual(diagnostics.filter(diagnostic => diagnostic.code === 'chart-data-adapted').map((diagnostic) => diagnostic.adaptation), ['row-numbers']);
+  assert.deepEqual(diagnostics.filter(diagnostic => diagnostic.code === 'export-lossy').map(diagnostic => diagnostic.feature), ['funnel-label-color']);
   assert.deepEqual(await importedChart(bytes), {type: 'funnel', data: singleData});
 }
 // Several charts in one deck: numbered parts, distinct uniqueIds, each frame wrapped, and the whole export deterministic.

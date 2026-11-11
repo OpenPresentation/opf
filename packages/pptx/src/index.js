@@ -14,6 +14,7 @@ import {readChartCategoryHeading,writeChartCategoryHeading,writeChartWorkbookFor
 import {applyChartNumberFormats,chartNumber,groupsThousands,excelCode,formattedColumns,inlineChartData,inlineTableData,isDatasetRef,numericRanges,resolveChartData} from './chart-data.js';
 import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord,tableCellEvidence,tableEnvironmentEvidence} from './data-provenance.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,comboFromNative,NATIVE_CHART_ELEMENTS} from './chart-types.js';
+import {paretoPlan} from '@openpresentation/opf/composition';
 import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
 import {applyDoughnutRings,applyRingLabels,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
 import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
@@ -3785,6 +3786,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   let chartOptions = chartLayerDataLabels(authoredOptions, layer, chartTargetFor(chart.type)?.kind);
   // LH-160: a histogram or Pareto chart whose data labels would not fit beside each other draws none (core `layer.histogram`), in the classic fallback too.
   const histogram = chartLayout?.layer?.histogram;
+  const histogramClassic = !chartData.chartex && chartTargetFor(chart.type)?.kind === 'histogram' && chartData.resolved?.columns?.length > 1;
+  const classicValueAxis = (histogramClassic || chartData.paretoCombo ? histogram?.valueAxis : undefined) ?? chartLayout?.valueAxis;
   if (histogram?.valueLabels === false) chartOptions = {...chartOptions, dataLabels: undefined};
   // LH-109: a stacked column or area chart labels its segments with their values by default (in the middle of a column; an area point
   // has no position); the values that do not fit are hidden per point after the labels are written (src/chart-marks.js).
@@ -3829,7 +3832,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     options:chartOptions,kind:chartTargetFor(chart.type)?.kind,pointCount:chartData.pointCount,numberFormats});
   // Synthetic row-number categories are a native adaptation, not an authored
   // data column. Full provenance restores the source form only on unchanged caches.
-  recordPayloadData(context, objectName, 'chart', presentation, path, undefined, {rowNumbers: chart.data?.columns?.length === 1 && chartData.adaptations?.some(entry => entry.adaptation === 'row-numbers') === true,
+  // A signed Pareto combo imports its actual sorted/derived data; restoring the source data would erase its cumulative series.
+  if (!chartData.paretoCombo) recordPayloadData(context, objectName, 'chart', presentation, path, undefined, {rowNumbers: chart.data?.columns?.length === 1 && chartData.adaptations?.some(entry => entry.adaptation === 'row-numbers') === true,
     fallback: chartData.adaptations?.some(entry => entry.adaptation === 'chart-fallback') === true});
   context.chartFonts.set(objectName,{heading:context.fonts.heading,body:context.fonts.body});
   // FA-09: the chart's text alternative (the frame's descr; the empty string is PowerPoint's decorative marker), applied before the chartex frame copies the head.
@@ -3874,6 +3878,10 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
       colors: layer.endLabels.entries.map(entry => normalizeHex(chartSeriesLabelColor(panelFill, `#${fills[entry.series % fills.length]}`)))};
   }
   if (chartData.chartex) {
+    if (chartData.chartex.layoutId === 'funnel' && !chartOptions.dataLabelsOff) options.onDiagnostic?.({
+      code: 'export-lossy', feature: 'funnel-label-color', path,
+      message: 'PowerPoint chooses its own contrast color for native funnel value labels and can ignore the written label color (white where the preview uses black). The funnel remains an editable native chart; XML label colors do not establish physical color parity.',
+    });
     // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.
     const series = chartData.series.map((entry) => ({name: entry.name, labels: [...entry.labels], values: [...entry.values]}));
@@ -3903,7 +3911,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     h: region.h,
     // LH-105: a line chart that names its series at the line ends and a pie that names its slices draw no legend.
     // LH-108, LH-109: nor does a pie with its value list, or a stacked chart that names its series beside the last column.
-    showLegend: !layer?.endLabels && !(layer?.slices && !chartOptions.dataLabels) && !layer?.valueList && !layer?.stack?.names && (circular || chartData.series.length > (chartData.type === 'scatter' ? 2 : 1)),
+    showLegend: !chartData.paretoCombo && !layer?.endLabels && !(layer?.slices && !chartOptions.dataLabels) && !layer?.valueList && !layer?.stack?.names && (circular || chartData.series.length > (chartData.type === 'scatter' ? 2 : 1)),
     ...classicChartOptions(chartOptions, {labelColor, font: context.fonts.body, textSize}),
     showTitle: false,
     chartColors,
@@ -3936,14 +3944,14 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     } : {}),
     // RR-92: the value axis core composed (column, bar, line and area charts), as the preview draws it: PowerPoint and Keynote
     // otherwise choose their own bounds and major unit. A 100% stacked chart's axis is a fraction.
-    ...(chartLayout?.valueAxis ? {valAxisMinVal: chartLayout.valueAxis.min, valAxisMaxVal: chartLayout.valueAxis.max, valAxisMajorUnit: chartLayout.valueAxis.majorUnit} : {}),
+    ...(classicValueAxis ? {valAxisMinVal: classicValueAxis.min, valAxisMaxVal: classicValueAxis.max, valAxisMajorUnit: classicValueAxis.majorUnit} : {}),
     barDir: chartData.barDir,
     barGrouping: chartData.barGrouping,
     // LH-176: core's gap width (clustered 150%, stacked 50%), the preview's bar geometry (chartBarGeometry), written explicitly.
-    ...(chartData.type === "bar" ? {barGapWidthPct: /tacked/.test(chartData.barGrouping ?? "") ? CHART_BAR_GAP_WIDTH.stacked : CHART_BAR_GAP_WIDTH.clustered} : {}),
+    ...(chartData.type === "bar" ? {barGapWidthPct: histogramClassic || chartData.paretoCombo ? 6 : /tacked/.test(chartData.barGrouping ?? "") ? CHART_BAR_GAP_WIDTH.stacked : CHART_BAR_GAP_WIDTH.clustered} : {}),
     // Right to left (RR-05): column, line and area charts reverse their categories (c:catAx orientation maxMin), which also moves the
     // value axis to the right, as the preview draws them. Bar charts keep their vertical category axis.
-    ...(context.direction === 'rtl' && ((chartData.type === 'bar' && chartData.barDir === 'col') || chartData.type === 'line' || chartData.type === 'area') ? { catAxisOrientation: 'maxMin' } : {}),
+    ...(context.direction === 'rtl' && !chartData.paretoCombo && ((chartData.type === 'bar' && chartData.barDir === 'col') || chartData.type === 'line' || chartData.type === 'area') ? { catAxisOrientation: 'maxMin' } : {}),
     // LH-59: a horizontal bar chart lists its categories top to bottom in data order, as the preview draws it: the category axis runs
     // from the top (c:catAx orientation maxMin) and the value axis crosses it at the last category (c:valAx crosses max), so the value
     // labels stay at the bottom.
@@ -3971,6 +3979,10 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   if(refInfo&&!referenceLines.some(l=>l.native))assertReferenceExportBudget(chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines',multiAxisOverlays:chartData.combo?.some(entry=>entry.axis==='secondary')??false});
   if(refInfo)context.chartHeadings.get(objectName).references=refInfo;
   const comboArgs=chartData.combo?.length&&chartData.combo.length===chartData.series.length?comboChart(chartData,chartOptionsXml,{palette,chartOptions,labelColor,font:context.fonts.body,textSize}):undefined;
+  if (comboArgs && chartData.paretoCombo) comboArgs[1].valAxes = [
+    {valAxisMinVal: histogram?.valueAxis?.min, valAxisMaxVal: histogram?.valueAxis?.max, valAxisMajorUnit: histogram?.valueAxis?.majorUnit},
+    {...comboArgs[1].valAxes?.[1], valAxisMinVal: 0, valAxisMaxVal: 1, ...(histogram?.percentUnit ? {valAxisMajorUnit: histogram.percentUnit} : {})},
+  ];
   const secondary=chartLayout?.secondaryValueAxis;
   if(comboArgs&&secondary)comboArgs[1].valAxes=[{valAxisMinVal:chartLayout.valueAxis.min,valAxisMaxVal:chartLayout.valueAxis.max,valAxisMajorUnit:chartLayout.valueAxis.majorUnit},{...comboArgs[1].valAxes?.[1],valAxisMinVal:secondary.min,valAxisMaxVal:secondary.max,valAxisMajorUnit:secondary.majorUnit}];
   if(referenceLines.some(l=>l.native)){
@@ -4003,7 +4015,7 @@ function comboChart(chartData, options, {palette, chartOptions, labelColor, font
   const series = chartData.series.map((entry, index) => ({...entry, color: palette[index % palette.length]}));
   const part = (role, axis) => series.filter((_, index) => chartData.combo[index].role === role && (role === 'bar' || chartData.combo[index].axis === axis));
   const bars = part('bar'), primaryLines = part('line', 'primary'), secondaryLines = part('line', 'secondary');
-  const lineOptions = {lineDataSymbol: 'circle'};
+  const lineOptions = {lineDataSymbol: chartData.paretoCombo ? 'none' : 'circle'};
   const types = [
     // The column group's own colour list: with one column series, a longer list would make PptxGenJS colour each column (c:dPt, RR-36).
     ...(bars.length ? [{type: 'bar', data: bars, options: {barDir: 'col', barGrouping: 'clustered', chartColors: bars.map((entry) => entry.color)}}] : []),
@@ -5126,12 +5138,15 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   // RR-105: native category aggregation omits negative categories in PowerPoint, even though its cache retains them.
   // Keep the editable classic representation in every mode; negative raw samples in one column still use native binning.
   const negativeCategoricalHistogram = resolvedType === 'histogram' && data.columns.length > 1 && data.rows.some(row => row.slice(1).some(value => typeof value === 'number' && value < 0));
-  const native = !negativeCategoricalHistogram && (chartexMode === 'native' || (chartexMode === 'auto' && resolved.family === 'chartex' && !resolved.unconfirmed));
+  const signedParetoCombo = resolvedType === 'pareto' && data.columns.length === 2 && data.rows.some(row => typeof row[1] === 'number' && row[1] < 0) && chartexMode !== 'fallback';
+  const native = !negativeCategoricalHistogram && !signedParetoCombo && (chartexMode === 'native' || (chartexMode === 'auto' && resolved.family === 'chartex' && !resolved.unconfirmed));
   const chartex = resolved.family === 'chartex' && native ? resolved : null;
   const spec = resolved.family === 'chartex' ? CHARTEX_FALLBACK : resolved;
   const typeName = stringifyText(chart.type);
   const adaptations = [];
-  if (negativeCategoricalHistogram) {
+  if (signedParetoCombo) {
+    adaptations.push({adaptation: 'signed-pareto-combo', message: "PowerPoint's native categorical Pareto aggregation can omit negative categories. Every numeric category is exported in descending order as editable signed columns with an explicit positive-only cumulative-share line on a secondary 0–1 axis. The cumulative values are static: native bar edits do not recalculate them. Import returns this combo and its sorted/derived data, not the original Pareto data form."});
+  } else if (negativeCategoricalHistogram) {
     adaptations.push({adaptation: "chartex-fallback", message: "PowerPoint's native categorical histogram aggregation does not display negative category values; every category and value is exported as an editable native clustered column chart instead. This data-domain fallback applies in every chartex mode."});
   } else if (resolved.family === 'chartex' && !native) {
     const reason = chartexMode === 'fallback'
@@ -5186,6 +5201,20 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   }
 
   const labels = data.rows.map((row) => stringifyText(row?.[0]));
+  if (signedParetoCombo) {
+    const planned = paretoPlan(data.rows.map((row, index) => ({label: labels[index], value: chartNumber(row[1])})).filter(point => point.value !== null));
+    if (!Number.isFinite(planned.total)) throw new RangeError('The signed Pareto cumulative total must be finite.');
+    const sortedLabels = planned.bars.map(point => point.label);
+    const values = planned.bars.map(point => point.value);
+    const cumulativeBase = `${data.columns[1]} — cumulative share`;
+    let cumulativeName = cumulativeBase, suffix = 2;
+    while (data.columns.includes(cumulativeName)) cumulativeName = `${cumulativeBase} (${suffix++})`;
+    const series = [{name: data.columns[1], labels: sortedLabels, values}, {name: cumulativeName, labels: sortedLabels, values: planned.cumulative}];
+    return withFormats({...mapped, spec: resolveChartType('combo').spec, paretoCombo: true,
+      resolved: {columns: [data.columns[0], data.columns[1], cumulativeName], rows: planned.bars.map((point, index) => [point.label, point.value, planned.cumulative[index]])},
+      combo: [{role: 'bar', axis: 'primary'}, {role: 'line', axis: 'secondary'}], series, hasCategories: true, pointCount: values.length,
+      adaptations, notNumeric: notNumericDiagnostic(rejected)}, {series: [columnCodes[1], '0%'], groups: [columnCodes[1] === undefined && groupsThousands(values), false]});
+  }
   let series = data.columns.slice(1).map((name, seriesIndex) => ({
     name,
     labels,

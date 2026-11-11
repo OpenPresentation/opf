@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, paretoPlan, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -1475,8 +1475,9 @@ function renderHistogramChart(c, spec) {
   } else {
     bars = histogramBins(values, { count: c.histogram?.bins, decimals: c.histogram?.decimals }).map((bin) => ({ value: bin.count, name: bin.label, path: `${c.path}.data.columns.${column}`, labelPath: c.path }));
   }
-  if (pareto) bars = bars.slice().sort((a, b) => b.value - a.value);
-  const total = bars.reduce((sum, bar) => sum + Math.max(0, bar.value), 0);
+  const cumulative = pareto ? paretoPlan(bars) : undefined;
+  if (cumulative) bars = cumulative.bars;
+  const total = cumulative?.total ?? bars.reduce((sum, bar) => sum + Math.max(0, bar.value), 0);
   if (!Number.isFinite(total)) throw chartAggregateError(c.path, "cumulative total");
   const dataMax = bars.length ? Math.max(...bars.map((bar) => bar.value)) : 1, dataMin = bars.length ? Math.min(0, ...bars.map((bar) => bar.value)) : 0;
   // RR-105: the value axis core composed (layer.histogram.valueAxis), which the PPTX export writes as the chartex cx:valScaling.
@@ -1507,10 +1508,8 @@ function renderHistogramChart(c, spec) {
       const y = plot.y + axisFraction(tick, percent, true) * plot.height;
       c.text(formatTick(tick, true), { x: right + c.fontPx * 0.35, y: y - c.lineHeight / 2, width: c.box.x + c.box.width - c.pad - right - c.fontPx * 0.35, height: c.lineHeight }, c.path, "left");
     }
-    let running = 0;
     const points = bars.map((bar, i) => {
-      running += Math.max(0, bar.value);
-      const fraction = total ? running / total : 0;
+      const fraction = cumulative.cumulative[i];
       return `${c.num(plot.x + (i + 0.5) * band)},${c.num(plot.y + axisFraction(fraction, percent, true) * plot.height)}`;
     });
     c.mark("polyline", { points: points.join(" "), fill: "none", stroke: c.colors[1 % c.colors.length], "stroke-width": 2 * c.pt, "stroke-linejoin": "round", "stroke-linecap": "round" }, `${c.path}.data.columns.${column}`);

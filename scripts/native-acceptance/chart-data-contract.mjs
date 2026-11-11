@@ -54,6 +54,64 @@ export function assertClassicChartData(parts,number,data,{parser,fflate},id){
   assert.deepEqual(rows,[data.columns,...data.rows],id+': complete embedded workbook values');
 }
 
+/** Dedicated current signed-Pareto combo contract. The ordinary classic-only checker above remains strict. */
+export function assertSignedParetoComboData(parts,number,data,{parser,fflate},id){
+  assert.equal(data.columns.length,3,id+': category, signed value and cumulative share');
+  const file='ppt/charts/chart'+number+'.xml';
+  assert.ok(parts[file],id+': signed combo part');
+  const space=parser.parse(fflate.strFromU8(parts[file]))['c:chartSpace'],plot=space['c:chart']['c:plotArea'];
+  assert.deepEqual(Object.keys(plot).filter(key=>key.endsWith('Chart')),['c:barChart','c:lineChart'],id+': exactly signed columns and cumulative line');
+  const bar=plot['c:barChart'],line=plot['c:lineChart'];
+  assert.equal(bar['c:barDir'].val,'col',id+': vertical signed columns');
+  assert.equal(bar['c:grouping'].val,'clustered',id+': clustered signed columns');
+  assert.equal(bar['c:gapWidth'].val,'6',id+': broad histogram-style columns');
+  const bars=list(bar['c:ser']),lines=list(line['c:ser']);
+  assert.equal(bars.length,1,id+': one signed series');assert.equal(lines.length,1,id+': one cumulative series');
+  const series=[bars[0],lines[0]];
+  assert.equal(lines[0]['c:marker']['c:symbol'].val,'none',id+': cumulative line has no added point markers');
+  for(const[index,entry]of series.entries()){
+    const letter=String.fromCharCode(66+index);
+    assert.equal(entry['c:idx'].val,String(index),id+': globally distinct series index');
+    assert.equal(entry['c:order'].val,String(index),id+': explicit series order');
+    assert.equal(entry['c:tx']['c:strRef']['c:f'],'Sheet1!$'+letter+'$1',id+': combo name formula');
+    assert.equal(entry['c:cat']['c:strRef']['c:f'],range('A',data.rows.length),id+': combo category formula');
+    assert.equal(entry['c:val']['c:numRef']['c:f'],range(letter,data.rows.length),id+': combo value formula');
+    assert.deepEqual(cache(entry['c:tx'],'string',1,id),[data.columns[index+1]],id+': combo series name');
+    assert.deepEqual(cache(entry['c:cat'],'string',data.rows.length,id),data.rows.map(row=>String(row[0])),id+': sorted categories');
+    assert.deepEqual(cache(entry['c:val'],'number',data.rows.length,id),data.rows.map(row=>String(row[index+1])),id+': complete signed/cumulative cache');
+  }
+  const axes=[...list(plot['c:catAx']).map(node=>({kind:'category',node})),...list(plot['c:valAx']).map(node=>({kind:'value',node}))];
+  assert.equal(axes.length,4,id+': two category and two value axes');
+  const byId=new Map(axes.map(axis=>[axis.node['c:axId'].val,axis]));
+  assert.equal(byId.size,4,id+': distinct axis identities');
+  const groupAxes=[bar,line].map(group=>list(group['c:axId']).map(axis=>axis.val));
+  assert.equal(new Set(groupAxes.flat()).size,4,id+': disjoint primary/secondary associations');
+  for(const ids of groupAxes){
+    assert.equal(ids.length,2,id+': exact group axis pair');
+    const category=byId.get(ids[0]),value=byId.get(ids[1]);
+    assert.equal(category?.kind,'category',id+': category association');assert.equal(value?.kind,'value',id+': value association');
+    assert.equal(category.node['c:crossAx'].val,ids[1],id+': category crosses its value axis');
+    assert.equal(value.node['c:crossAx'].val,ids[0],id+': value crosses its category axis');
+  }
+  const secondary=byId.get(groupAxes[1][1]).node;
+  assert.equal(secondary['c:scaling']['c:min'].val,'0',id+': percentage minimum');
+  assert.equal(secondary['c:scaling']['c:max'].val,'1',id+': percentage maximum');
+  assert.equal(secondary['c:numFmt'].formatCode,'0%',id+': percentage format');
+  assert.equal(byId.get(groupAxes[1][0]).node['c:delete'].val,'1',id+': secondary category axis hidden');
+  const nested=fflate.unzipSync(parts[workbookPath(parts,file,space['c:externalData'],{parser,fflate},id)]);
+  const strings=list(parser.parse(fflate.strFromU8(nested['xl/sharedStrings.xml'])).sst.si).map(si=>String(text(si.t)??''));
+  const sheetXml=fflate.strFromU8(nested['xl/worksheets/sheet1.xml']);
+  assert.doesNotMatch(sheetXml,/<f(?:\s|>)/,id+': cumulative values are static, not formulas');
+  const rows=list(parser.parse(sheetXml).worksheet.sheetData.row).map((row,rowIndex)=>{
+    assert.equal(row.r,String(rowIndex+1),id+': workbook row order');
+    return list(row.c).map((cell,columnIndex)=>{
+      assert.equal(cell.r,String.fromCharCode(65+columnIndex)+(rowIndex+1),id+': combo workbook cell mapping');
+      return cell.t==='s'?strings[Number(cell.v)]:cell.t==='inlineStr'?String(text(cell.is?.t)??''):Number(cell.v);
+    });
+  });
+  assert.deepEqual(rows,[data.columns,...data.rows],id+': complete sorted/derived workbook');
+}
+
 export function assertNativeBoxData(parts,data,{parser,fflate},id){
   const files=Object.keys(parts).filter(file=>/^ppt\/charts\/chartEx\d+\.xml$/.test(file));
   assert.equal(files.length,1,id+': one native box chart');

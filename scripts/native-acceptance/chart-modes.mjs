@@ -1,7 +1,7 @@
 // Extended chart archive matrix from the same nine tracked source fixtures.
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
-import {assertClassicChartData,assertNativeBoxData} from './chart-data-contract.mjs';
+import {assertClassicChartData,assertNativeBoxData,assertSignedParetoComboData} from './chart-data-contract.mjs';
 import {realpath} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
@@ -54,11 +54,29 @@ export async function generateChartModes({consumer,output,engines}={}){
     const maps=deck.slides.filter((slide,index)=>slide.chart.type==='world'&&plans[index].type==='world').length;
     // RR-105: category aggregation cannot paint signed values; keep every row in classic columns in every mode.
     const negativeHistograms=new Set(deck.slides.map(({chart},index)=>chart.type==='histogram'&&plans[index].columns.length>1&&plans[index].rows.some(row=>row.slice(1).some(value=>typeof value==='number'&&value<0))?index:null).filter(index=>index!==null));
-    const forcedColumns=deck.slides.filter((slide,index)=>slide.chart.type==='pareto'&&slide.chart.data.columns.length>2||slide.chart.type==='world'&&plans[index].type!=='world'||negativeHistograms.has(index)).length;
-    assert.equal(chartExParts.length,mode==='fallback'?0:deck.slides.length-forcedColumns-(mode==='auto'?maps:0),id+': exact current chartEx count');
+    const signedParetos=new Set(deck.slides.map(({chart},index)=>mode!=='fallback'&&plans[index].type==='pareto'&&plans[index].columns.length===2&&plans[index].rows.some(row=>typeof row[1]==='number'&&row[1]<0)?index:null).filter(index=>index!==null));
+    const forcedClassic=deck.slides.filter((slide,index)=>slide.chart.type==='pareto'&&slide.chart.data.columns.length>2||slide.chart.type==='world'&&plans[index].type!=='world'||negativeHistograms.has(index)||signedParetos.has(index)).length;
+    assert.equal(chartExParts.length,mode==='fallback'?0:deck.slides.length-forcedClassic-(mode==='auto'?maps:0),id+': exact current chartEx count');
     assert.ok(!diagnostics.some(issue=>issue.adaptation==='series-dropped'),id+': no dropped series');
     for(const [index,slide] of deck.slides.entries()){
       const chart=slide.chart,pareto=chart.type==='pareto'&&chart.data.columns.length>2,world=chart.type==='world',box=chart.type==='box-and-whisker'&&chart.data.columns.length>2,negativeHistogram=negativeHistograms.has(index);
+      if(signedParetos.has(index)){
+        // Expected contract is independently constructed from this fixture's resolved values, not exporter metadata.
+        const plan=plans[index],bars=plan.rows.filter(row=>typeof row[1]==='number').slice().sort((a,b)=>b[1]-a[1]);
+        const total=bars.reduce((sum,row)=>sum+Math.max(0,row[1]),0);let running=0;
+        const cumulativeName=plan.columns[1]+' — cumulative share';
+        const data={columns:[...plan.columns,cumulativeName],rows:bars.map(row=>{running+=Math.max(0,row[1]);return[row[0],row[1],total?running/total:0];})};
+        assertSignedParetoComboData(parts,index+1,data,contracts,id);
+        const actual=imported.slides[index].chart;
+        assert.equal(actual.type,'combo',id+': signed Pareto imports its actual editable combo');
+        assert.deepEqual(actual.data.rows,data.rows,id+': complete sorted/derived public data');
+        assert.deepEqual(actual.data.columns.map(column=>typeof column==='string'?column:column.name),data.columns,id+': actual series headings');
+        assert.equal(actual.data.columns[2].format,'0%',id+': cumulative public format');
+        const notices=diagnostics.filter(issue=>issue.path==='slides.'+index+'.chart'&&issue.code==='chart-data-adapted');
+        assert.equal(notices.length,1,id+': one signed Pareto adaptation');assert.equal(notices[0].adaptation,'signed-pareto-combo');
+        assert.match(notices[0].message,/negative.*descending.*static.*Import returns/s,id+': explicit representation/edit/import limitations');
+        continue;
+      }
       if(!pareto&&!world&&!box&&!negativeHistogram)continue;
       assert.deepEqual(imported.slides[index].chart.data,chart.data,id+': complete authored data/import mapping');
       // Box fallback deliberately groups samples under its column heading;
