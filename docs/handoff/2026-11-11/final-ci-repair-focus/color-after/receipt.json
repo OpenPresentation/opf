@@ -1,0 +1,21 @@
+{
+  "scope": "ONE_WHOLE_COLOR_RASTER_FILE_EACH_NODE22_AND24_NO_BUILD",
+  "source": "56401e99ee4b863598eb8428d4bd0b2f004eebf7",
+  "results": [
+    {
+      "node": "22.23.3",
+      "code": 0,
+      "seconds": 5.058135747909546,
+      "logBytes": 3036,
+      "logSha256": "5c0bb1dfc804a7329d3f0e495247661ce8ea51ff4748cb6a039bb1dbddb86e5b"
+    },
+    {
+      "node": "24.21.0",
+      "code": 0,
+      "seconds": 4.550893783569336,
+      "logBytes": 1385,
+      "logSha256": "7689eaba9a6cd95ee527d4f6127b55c40932b7df79d28fdcbed5df65e2914cff"
+    }
+  ],
+  "runtimeFilesUnchanged": 609
+}

@@ -1,0 +1,12 @@
+{
+  "source": "0302db76aef6ad953cca90e05f7847ce34f7674c",
+  "args": [
+    "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+    "--test",
+    "packages/javascript/test/arrangement-space-context.test.mjs"
+  ],
+  "code": 1,
+  "seconds": 0.159016333,
+  "logBytes": 1694,
+  "logSha256": "b9f7d7b42716c0a98248b2db3feb759ee317ce2c581974dddf1b75b204921db6"
+}

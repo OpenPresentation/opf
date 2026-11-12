@@ -1,0 +1,14 @@
+{
+  "source": "6615c3549db4adeedf1ff7611c85c57956991cb8",
+  "args": [
+    "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+    "--test",
+    "scripts/native-acceptance/reference-name-snapshot.test.mjs",
+    "scripts/native-acceptance/b07-postflight.test.mjs",
+    "packages/pptx/test/native-reference-startup.mjs"
+  ],
+  "code": 1,
+  "seconds": 1.659264917,
+  "logBytes": 4441,
+  "logSha256": "098635d2143b4b5bb060e3b0d4bafc3342850971f88d8ba66b193dacd5d97a1f"
+}

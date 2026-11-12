@@ -1,0 +1,13 @@
+{
+  "args": [
+    "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+    "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+    "run",
+    "build:packages"
+  ],
+  "code": 0,
+  "seconds": 5.777339935302734,
+  "source": "c1d50ef5cec2e32f94dfe0b0966cf9c3ec3aa51e",
+  "logBytes": 14666,
+  "logSha256": "b5588d05d356b4772968ca4037e696d00688d0ea1ae0ae5788b8a9cd6e4396f6"
+}

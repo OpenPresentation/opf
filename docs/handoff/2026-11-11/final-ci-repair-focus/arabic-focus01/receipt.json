@@ -1,0 +1,18 @@
+{
+  "source": "c1d50ef5cec2e32f94dfe0b0966cf9c3ec3aa51e",
+  "steps": [
+    {
+      "name": "focus",
+      "args": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "--test",
+        "packages/javascript/test/arrangement-space-context.test.mjs",
+        "packages/integration/test/arabic-arrangement-demand.test.mjs"
+      ],
+      "code": 1,
+      "seconds": 2.0293282500000003,
+      "logBytes": 1674,
+      "logSha256": "6da349c4d71ab324b32226db733c929c48bb15e287232a76ce735bc407e4901a"
+    }
+  ]
+}

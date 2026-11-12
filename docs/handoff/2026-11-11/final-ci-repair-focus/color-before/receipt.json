@@ -1,0 +1,37 @@
+{
+  "argv": [
+    "/Users/michael/Library/Application Support/fnm/node-versions/v22.23.3/installation/bin/node",
+    "--test",
+    "--test-name-pattern=missing raster companion|color-missing",
+    "packages/render/test/node-color-raster.mjs"
+  ],
+  "node": "v22.23.3",
+  "ciNode": "v22.23.4",
+  "head": "311e7d027bbc2b140b7e08d40eb398cb55355ba4",
+  "exitCode": 1,
+  "elapsedSeconds": 1.685708875,
+  "source": {
+    "file": "packages/render/test/node-color-raster.mjs",
+    "bytes": 16450,
+    "sha256": "36d383d799dc297078a0078b5a16aa8b0d36f9d66389cab8faec915e8316de10"
+  },
+  "runtimeCount": 609,
+  "sourceAndRuntimeUnchanged": true,
+  "artifacts": [
+    {
+      "file": "runtime-before.json",
+      "bytes": 99609,
+      "sha256": "e4e9a2edf7375ce01944b394e63bc54157cf7ce633688bbb8202050536071778"
+    },
+    {
+      "file": "stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "stdout.log",
+      "bytes": 2136,
+      "sha256": "8986a2935102af05fdabebcba73a68830f00639fe947eefe0153342e5d114a9b"
+    }
+  ]
+}

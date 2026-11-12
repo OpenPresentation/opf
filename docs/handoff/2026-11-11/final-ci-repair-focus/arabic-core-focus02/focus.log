@@ -1,0 +1,32 @@
+✖ centered Arabic arrangement wrapping never measures its trailing space in a different script slot (14.783083ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 126.916333
+
+✖ failing tests:
+
+test at packages/javascript/test/arrangement-space-context.test.mjs:11:1
+✖ centered Arabic arrangement wrapping never measures its trailing space in a different script slot (14.783083ms)
+  AssertionError [ERR_ASSERTION]: Only the prepared complex-script face is available
+      at Object.measure (file:///private/tmp/opf-034/packages/javascript/test/arrangement-space-context.test.mjs:15:3)
+      at base (file:///private/tmp/opf-034/packages/javascript/dist/chunk-VRZ6LTWC.js:12973:31)
+      at breakLines (file:///private/tmp/opf-034/packages/javascript/dist/chunk-VRZ6LTWC.js:14685:22)
+      at layout (file:///private/tmp/opf-034/packages/javascript/dist/chunk-VRZ6LTWC.js:14676:35)
+      at balanced (file:///private/tmp/opf-034/packages/javascript/dist/chunk-VRZ6LTWC.js:14768:20)
+      at fitAtSizes (file:///private/tmp/opf-034/packages/javascript/dist/chunk-VRZ6LTWC.js:13670:138)
+      at fitSourceText (file:///private/tmp/opf-034/packages/javascript/dist/chunk-VRZ6LTWC.js:14782:10)
+      at fitText (file:///private/tmp/opf-034/packages/javascript/dist/chunk-VRZ6LTWC.js:13652:10)
+      at fitPlacedText (file:///private/tmp/opf-034/packages/javascript/dist/chunk-VRZ6LTWC.js:16823:118)
+      at fitTitle (file:///private/tmp/opf-034/packages/javascript/dist/chunk-VRZ6LTWC.js:16874:19) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

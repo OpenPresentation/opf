@@ -1,0 +1,18 @@
+{
+  "scope": "TWO_EXISTING_LOCAL_MAC_BROWSER_FILES_NOT_WINDOWS_OR_FULLCI_ACCEPTANCE",
+  "source": "311e7d027bbc2b140b7e08d40eb398cb55355ba4",
+  "results": [
+    {
+      "name": "slide-navigator-browser",
+      "code": 0,
+      "seconds": 9.087498903274536,
+      "logSha256": "325aef09d53881526736a80451e0ecb137ae9d9e755274eea63edf69a04754d4"
+    },
+    {
+      "name": "shape-overlays-browser",
+      "code": 0,
+      "seconds": 15.171641111373901,
+      "logSha256": "62dc06941a11ca8ff7f4989f88ddcf6e6a61b3537e6786a06e75d6c0f00d94e0"
+    }
+  ]
+}
