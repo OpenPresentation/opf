@@ -230,11 +230,29 @@ export function analyzePresentationScripts(presentation, profile, renderOptions,
  * step badges, slide numbers) on each slide whose language (its own, else the deck's) has digits of its own: Arab for `ar-SA` and
  * `fa-IR`, Beng for `bn`, none for `ar-AE` or `ar-SA-u-nu-latn`. Like a font scheme's scripts they are faces the deck may draw
  * without one authored character in the script (an `ar-SA` deck titled "T" with the metric 1000 draws ١٬٠٠٠), so their packages
- * are offered to the drawn-face analysis, which loads only the faces the composed slides actually draw.
+ * are offered to the drawn-face analysis, which loads only the faces the composed slides actually draw. A slide counts when it may
+ * generate a number (`generatesNumbers`); a slide of words alone (a timeline of "Week 1" labels) offers nothing.
  */
 function generatedNumeralScripts(presentation) {
   const slides = Array.isArray(presentation?.slides) ? presentation.slides : [];
-  return numeralScripts(slides.map((_, index) => languageInEffect(presentation, index)));
+  const furniture = generatesNumbers(presentation?.design?.header) || generatesNumbers(presentation?.design?.footer);
+  return numeralScripts(slides.map((slide, index) => furniture || generatesNumbers(slide) || generatesNumbers(slide?.design?.header) || generatesNumbers(slide?.design?.footer) ? languageInEffect(presentation, index) : undefined));
+}
+
+// Payload keys whose content the engines number: a chart's labels and ticks, a table's cells, a metric, list numerals and step badges
+// (a list or a layout's sequence), and a slide that names a layout (whose regions may badge its blocks).
+const NUMBERED_KEYS = new Set(["chart", "table", "metric", "numbering", "items", "bullets", "blocks", "layout"]);
+/** True when a slide (or a header or footer) may draw a number the engines generate: a JSON number, a numbered payload or a `{{token}}`. */
+function generatesNumbers(value, depth = 0) {
+  if (typeof value === "number") return Number.isFinite(value);
+  if (typeof value === "string") return value.includes("{{");
+  if (!value || typeof value !== "object" || depth > MAX_COMPOSITION_DEPTH + 8) return false;
+  if (Array.isArray(value)) return value.some(entry => generatesNumbers(entry, depth + 1));
+  for (const [key, entry] of Object.entries(value)) {
+    if (UNDRAWN_KEYS.includes(key) || key === "language" || key === "design" || key === "composition") continue;
+    if (NUMBERED_KEYS.has(key) || generatesNumbers(entry, depth + 1)) return true;
+  }
+  return false;
 }
 
 /** One string's scripts (`scriptsOfText`) and the Han, kana and Hangul characters it draws, in order. One pass over the characters. */
