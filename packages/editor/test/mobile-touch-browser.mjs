@@ -13,7 +13,7 @@
 // OPF_TOUCH_ENGINES=chromium,webkit picks the engines (default both); OPF_WEBKIT_EXECUTABLE points at a WebKit build you already have.
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium, webkit } from 'playwright';
@@ -47,6 +47,49 @@ const sizesFor = (engine) => (full || engine === 'chromium' ? sizes : [sizes[0]]
 const isPhone = (width) => width <= 480;
 const checks = [];
 const problems = [];
+
+// Failure evidence only: no retry, extra successful-page wait, or changed test deadline.
+let failureReports = 0;
+function playgroundFailure(page, context) {
+  const started = Date.now(), pending = new Map(), failed = [], responses = [], errors = [], consoles = [];
+  const dropped = { pending: 0, failed: 0, responses: 0, errors: 0, consoles: 0 };
+  const text = value => String(value ?? '').slice(0, 2048);
+  const row = request => ({ url: text(request.url()), type: request.resourceType(), method: request.method() });
+  const keep = (list, key, value) => { if (list.length < 128) list.push(value); else dropped[key]++; };
+  page.on('request', request => { if (pending.size < 128) pending.set(request, { ...row(request), startedMs: Date.now() - started }); else dropped.pending++; });
+  page.on('requestfinished', request => pending.delete(request));
+  page.on('requestfailed', request => { keep(failed, 'failed', { ...row(request), failure: text(request.failure()?.errorText) }); pending.delete(request); });
+  page.on('response', response => { const own = pending.get(response.request()); if (own) own.status = response.status(); if (response.status() >= 400) keep(responses, 'responses', { url: text(response.url()), status: response.status() }); });
+  page.on('pageerror', error => keep(errors, 'errors', text(error.message)));
+  page.on('console', message => { if (message.type() === 'error') { const location = message.location(); keep(consoles, 'consoles', { message: text(message.text()), location: { ...location, url: text(location.url) } }); } });
+  return async (error, phase) => {
+    const report = { ...context, phase, failedAt: new Date().toISOString(), url: text(page.url()), error: { name: error.name, message: text(error.message), stack: String(error.stack ?? '').slice(0, 8192) }, pageErrors: [...errors], consoleErrors: [...consoles], failedRequests: [...failed], httpErrors: [...responses], pendingRequests: [...pending.values()], dropped: { ...dropped }, allProblems: problems.slice(0, 128).map(text) };
+    // This separate 3s observation budget begins only AFTER the original failure; it cannot extend readiness or turn it green.
+    let timer;
+    try {
+      report.dom = await Promise.race([
+        page.evaluate(() => {
+          const box = selector => { const node = document.querySelector(selector); if (!node) return null; const bounds = node.getBoundingClientRect(), style = getComputedStyle(node); return { x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height, display: style.display, visibility: style.visibility }; };
+          return { readyState: document.readyState, status: document.querySelector('#status')?.textContent?.slice(0, 2048) ?? null, preview: box('#preview'), svg: box('#preview svg'), svgCount: document.querySelectorAll('#preview svg').length, fonts: document.fonts.status, viewport: { width: innerWidth, height: innerHeight, coarse: matchMedia('(pointer: coarse)').matches } };
+        }),
+        new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('Failure-only DOM observation exceeded 3000ms')), 3000); }),
+      ]);
+    } catch (captureError) { report.domError = text(captureError.message); }
+    finally { clearTimeout(timer); }
+    try {
+      if (++failureReports > 8) throw new Error('Failure artifact cap reached (8)');
+      const parent = fileURLToPath(new URL('../artifacts/mobile-touch-failures/', import.meta.url));
+      await mkdir(parent, { recursive: true });
+      const id = `${context.engine}-${context.width}-${context.state}`.replace(/[^a-z0-9_-]/gi, '-').slice(0, 100);
+      const directory = path.join(parent, `${Date.now()}-${process.pid}-${failureReports}-${id}`);
+      await mkdir(directory);
+      const file = path.join(directory, 'failure.json');
+      report.capturedAt = new Date().toISOString();
+      await writeFile(file, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
+      console.error(`Mobile/touch failure evidence: ${JSON.stringify({ ...context, phase, file, pageErrors: errors.length, failedRequests: failed.length, pendingRequests: pending.size })}`);
+    } catch (captureError) { console.error(`Mobile/touch failure evidence unavailable: ${text(captureError.message)}; ${JSON.stringify(context)}`); }
+  };
+}
 
 // Popups and sheets (a menu, the find panel, the code under a list) lie over the page by design: a control of the page that one of them covers is
 // not a finding, two controls of the popup covering each other is.
@@ -165,18 +208,26 @@ async function playground(browser, engine, { width, height }) {
   const phone = isPhone(width);
   const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 2, hasTouch: true, isMobile: false });
   const tag = (name) => `${engine} ${width}px playground, ${name}`;
-  const open = async () => {
+  const open = async (state) => {
     const page = await context.newPage();
     page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`));
     page.on('console', (message) => { if (message.type() === 'error' && !/Failed to load resource/.test(message.text())) problems.push(`console: ${message.text()}`); });
+    const captureFailure = playgroundFailure(page, { engine, version: browser.version(), width, height, state });
+    let phase = 'navigation';
+    try {
     await page.goto(`${origin}/index.html`);
+    phase = 'preview SVG visible';
     await page.locator('#preview svg').waitFor({ timeout: 60000 });
+    phase = 'font-loading status';
     await page.waitForFunction(() => !/Loading fonts/.test(document.querySelector('#status').textContent), undefined, { timeout: 60000 });
     // The slide parts (the add, layout and gallery buttons among them) mount after their lazily loaded chunk, so a preview on screen
     // does not yet mean the whole top bar is there.
+    phase = 'lazy toolbar controls';
     await page.waitForFunction(() => ['#add', '#add-layout', '#browse-gallery', '#more-actions'].every((selector) => document.querySelector(selector)), undefined, { timeout: 60000 });
+    phase = 'coarse pointer';
     assert.equal(await page.evaluate(() => matchMedia('(pointer: coarse)').matches), true, `${tag('page')}: a coarse pointer`);
     return page;
+    } catch (error) { await captureFailure(error, phase); throw error; }
   };
   const sheet = (page, id) => async () => { await page.locator(`#${id}`).click(); await page.waitForFunction(() => getComputedStyle(document.querySelector('.inspector')).transform === 'none'); };
   const states = [
@@ -198,7 +249,7 @@ async function playground(browser, engine, { width, height }) {
   const core = new Set(['the start', 'the Edit sheet (selection, text, notes)', 'the Design sheet with every group open', 'the More menu', 'the Import dialog, Gallery tab', 'the Layouts view', 'the Find panel']);
   for (const [name, run] of states) {
     if (!full && !(core.has(name) && (engine === 'chromium' || ['the start', 'the Edit sheet (selection, text, notes)', 'the Design sheet with every group open', 'the Layouts view'].includes(name)))) continue;
-    const page = await open();
+    const page = await open(name);
     await run(page);
     // A sheet or a menu may still be sliding (a slow machine starts the transition late): measure when nothing moves.
     await page.waitForFunction(() => document.getAnimations().every((animation) => animation.playState !== 'running'), undefined, { timeout: 5000 }).catch(() => {});
@@ -212,7 +263,7 @@ async function playground(browser, engine, { width, height }) {
   checks.push(`${engine} ${width}px: the playground states (${full ? 'start, More, Edit, Design, Review, Source, Import, Copy, Properties, Outline, Layouts, Find, Add content, slide menu' : 'start, Edit, Design, and on Chromium More, Import, Layouts, Find'}) have 44px controls, 16px fields, no sideways scroll, no cut-off or overlapping control`);
 
   // The top bar and the footer, by name (a phone's layout: the tablet has the long labels and wider rows).
-  const page = await open();
+  const page = await open('top bar and notes');
   if (phone) {
     const bar = await page.evaluate(() => {
       const box = (selector) => { const node = document.querySelector(selector); const b = node.getBoundingClientRect(); return { left: b.left, right: b.right, top: b.top, bottom: b.bottom, width: b.width, height: b.height, text: node.textContent.trim().replace(/\s+/g, ' ') }; };
