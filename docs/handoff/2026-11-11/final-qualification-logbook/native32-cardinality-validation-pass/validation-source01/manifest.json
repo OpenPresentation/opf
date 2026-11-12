@@ -1,0 +1,224 @@
+{
+  "sourceOnly": true,
+  "neverMerge": true,
+  "worktree": "/tmp/opf-name-snapshot-cardinality-validation",
+  "branch": "codex/evidence-name-snapshot-cardinality-validation-20261112",
+  "base": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "baseTree": "9cf8c91755ef0a5447dd6d6f84b5d1f2ebabc1b9",
+  "requiredFirstParent": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "oneSourceCommitRequired": true,
+  "changed": [
+    {
+      "path": ".github/workflows/full-ci.yml",
+      "bytes": 1281,
+      "sha256": "2cf76a2fa25a85c1dad5187d001985e26a94063572b981203a5b5761f928630c"
+    },
+    {
+      "path": "docs/evidence/name-snapshot-cardinality-validation/README.md",
+      "bytes": 3348,
+      "sha256": "ab36be22822a1acbf1ec4dc360e9aa27174ff9a3d49a9dd74dcf754f538fbb96"
+    },
+    {
+      "path": "docs/evidence/name-snapshot-cardinality-validation/native-controls.mjs",
+      "bytes": 14324,
+      "sha256": "711987b9eda5181eb747ce18b8f276c64381edb4a5b3704ed0d29d968e2bc7f3"
+    },
+    {
+      "path": "docs/evidence/name-snapshot-cardinality-validation/run.mjs",
+      "bytes": 7767,
+      "sha256": "98c53b0e4e6f69402e96f1b99777f6cd3e4886981a19d3814b628360aee1c111"
+    }
+  ],
+  "protectedBaseExact": [
+    {
+      "path": "scripts/native-acceptance/reference-name-snapshot.test.mjs",
+      "bytes": 21871,
+      "sha256": "c259f3a115cb36226fbf8651f87cfbeb5f06dbc1882dc2a11b9494808bd2242d",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-name-snapshot-check.ps1",
+      "bytes": 15354,
+      "sha256": "16a7399f3674eaf2cdaa1ec846efe564e94589d2e964f3418308b0a73504cab4",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-name-snapshot-contract.mjs",
+      "bytes": 18290,
+      "sha256": "adb918178ee2b95ba99355385ed2a4b039a2088cc350cfa43f8f5968f0255dd6",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-name-contract.mjs",
+      "bytes": 18047,
+      "sha256": "aa6a91dd5cab84560a7a21896ee510614e8fec640adc634e1f731cd84a1c384b",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/furniture-postflight.ps1",
+      "bytes": 30405,
+      "sha256": "5749f01004839c08f4b98487a36653bbe0a8297f3e02370cfecc63744cee33bf",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/furniture-profile.mjs",
+      "bytes": 31852,
+      "sha256": "470b5134f4e822de5cb549547487fba419570186288b7e248fb978951b639b6d",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/owned-postflight.ps1",
+      "bytes": 18877,
+      "sha256": "1779ae802dd73ee8f004bb43620e4eb07683df492cd7fdc24811aa159af51ba4",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/owned-postflight.mjs",
+      "bytes": 12137,
+      "sha256": "f1e7371586880fe76db6f3e1d615db23f67a062ad89a1b99abf8377ef601c782",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/windows-powershell-env.mjs",
+      "bytes": 495,
+      "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/test-fixtures/reference-chart/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "packages/pptx/test/native-furniture-control.ps1",
+      "bytes": 93940,
+      "sha256": "1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+      "bytes": 19206,
+      "sha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "scripts/package-manager.mjs",
+      "bytes": 4969,
+      "sha256": "c66d7950909a2627b283a26f3edd597f329d343fbe3acde031aba8755fcb3023",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": ".github/actions/setup-workspace/action.yml",
+      "bytes": 4261,
+      "sha256": "c53d656f6d508ac7a242ef62e02118eeada14316aef31ddc9031a2b9fe3a12a6",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": ".gitattributes",
+      "bytes": 383,
+      "sha256": "f1e1f210d385a230ff22d7341e8785c60439ce1299c8794d969c42b4ef472fbb",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "package.json",
+      "bytes": 13093,
+      "sha256": "6fbaac685fe76f992f246084ab4b58cc15b20122babae2cbc674f64056566ff0",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 137976,
+      "sha256": "11c0b695a44fe5dcbefa76722f78fdd725e9ceb70b29287cf70b042a2b3326fb",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "bytes": 1651,
+      "sha256": "a4c126fc53ef833e4b5d36e373efe8c6138b8a98b04fb2b079536f97ade693b1",
+      "authority": "actual combined-base Git blob; equal own checkout or frozen root file"
+    }
+  ],
+  "helperInverse": {
+    "change": "ONLY BASE literal from accepted previous999 evidence helper781 to combinedcandidate0f53564",
+    "previousBytes": 14324,
+    "previousSha256": "b5281f3d45ab4770427b3e71acf504f6ac40f69f5b9a4938dece88d21c77e253",
+    "wholePreviousInverseExact": true,
+    "originalHelper02Bytes": 14324,
+    "originalHelper02Sha256": "6d2e9b0f7dbd81a50187ba819079e89d05d683b4582002a2e9a5538258af8558",
+    "wholeOriginalInverseExact": true
+  },
+  "workflow": {
+    "dispatchOnly": true,
+    "windowsJobs": 1,
+    "minutes": 20,
+    "fetchDepth": 2,
+    "node": "24.22.2",
+    "pnpm": "10.33.2",
+    "build": "pnpm run build:packages",
+    "browser": false,
+    "office": false,
+    "uploadAlways": true
+  },
+  "run": {
+    "exactMaintainedInvocation": "node --test --test-reporter=tap scripts/native-acceptance/reference-name-snapshot.test.mjs",
+    "nodeRequired": {
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "originalManaged": {
+      "startup": 8,
+      "saves": 13,
+      "privateAdapter": 11,
+      "total": 32
+    },
+    "separateCardinality": {
+      "total": 6,
+      "names": [
+        "before-0",
+        "before-1",
+        "before-2",
+        "reopened-0",
+        "reopened-1",
+        "reopened-2"
+      ],
+      "rows": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        2
+      ],
+      "ready": [
+        false,
+        true,
+        false,
+        false,
+        true,
+        false
+      ],
+      "fullExactRowsRequired": true
+    },
+    "originalPsTimeoutMilliseconds": 15000,
+    "outerHelperTimeoutMilliseconds": 120000,
+    "source": "clean exact GITHUB_SHA/head parent/diff4/operative roots plus explicit test/checker/readiness identities",
+    "compiled": "ALL regular files in seven actual own dist directories before/after, no hardcoded runtime count",
+    "TEMP_TMP_cwd": "unchanged",
+    "firstFailurePreserved": true
+  },
+  "qualification": "SOURCE ONLY; diffcheck/hash/inverse inspection only; no syntax/import/install/build/test/PS/browser/Office/commit/push/dispatch",
+  "retainedFailure": {
+    "run": "43160756096",
+    "job": "130991095157",
+    "outcome": "FAILED Node9/8/1; pathfix proved same fixture; completion readiness refused; original32 unqualified"
+  },
+  "patch": {
+    "bytes": 29472,
+    "sha256": "cdb6ce2c98a409c27678b2dd65d6b06082f0490f3871b766b24d54ea1e9e30c4"
+  }
+}

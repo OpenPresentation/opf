@@ -1,0 +1,10 @@
+{
+  "measuredSource": "0fe8031fc012c416ab6ee87f22b143c4cb1f7ee1",
+  "currentSource": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "actualFileRecordsCompared": 1609,
+  "allActualInputsAndAssetsUnchanged": true,
+  "bundleInputs": 574,
+  "compiledFiles": 609,
+  "compiledUnchangedThroughMappedBuild": true,
+  "scope": "Input equality only; original W06 receipts remain on measured0fe. No rerender, revised guard, current-head performance measurement or version comparison claimed."
+}

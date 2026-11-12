@@ -1,0 +1,16 @@
+{
+  "review": "ACCEPT SOURCE02 with independent peer; actual browser qualifications pending",
+  "patch": {
+    "bytes": 30452,
+    "sha256": "c8611a8d6792857fc2d22b7c2dc1cb278b431e996356826c1f8fb21af8d97860"
+  },
+  "manifestSha256": "b56f484785f1fbbee109e4cc39ae66e8f151ef704df07ec98cf0c5f4a683a839",
+  "pureIntervalsPinnedNode24": "PASS",
+  "crossCollection": "Cumulative bounded history; current-beat intersections and exact fresh closed requests; stale history alone remains null",
+  "majorityAndBudgets": "Unchanged",
+  "peer": {
+    "path": "/tmp/opf-worker-flight-intervals-peer-review02.json",
+    "sha256": "45ff137f09e5f3f610e9a9bb62c431715a56de41174f26d537b42b3979c3187e"
+  },
+  "oldSource01AndOldWindowsFailure": "Preserved"
+}

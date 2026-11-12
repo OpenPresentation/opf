@@ -1,0 +1,125 @@
+{
+  "verdict": "ACCEPTED within Office-free source/prepared-request scope",
+  "reviewOnly": true,
+  "source": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "consumer": "/private/tmp/opf-034/packages/mcp",
+  "receipt": {
+    "bytes": 137299,
+    "sha256": "51a0302d7b1d0f8aab88a7762a37405f0c0f02a90f1dcd00191e954d7426e608"
+  },
+  "envelope": {
+    "bytes": 166921,
+    "sha256": "b8fd9f3061e67d920df80b739d4342f84f3664f7bc12c28881a90138d3f8e8a9"
+  },
+  "request": {
+    "bytes": 9961,
+    "sha256": "946d2a6bd124c4ba5332f33055f99a6607c7bed6275457bf57a4ebdd1e8b425b"
+  },
+  "commands": [
+    {
+      "command": "create-envelope",
+      "exitCode": 0
+    },
+    {
+      "command": "verify-source",
+      "exitCode": 0
+    },
+    {
+      "command": "prepare --require-office false",
+      "exitCode": 0
+    },
+    {
+      "command": "verify-execution --require-office false",
+      "exitCode": 0
+    }
+  ],
+  "originals": [
+    {
+      "caseId": "org-chart-3",
+      "input": {
+        "bytes": 117059,
+        "sha256": "098581b8ddf53f8fc035cd3fb7164e7605977e702a79db494c5160e98c761c7b"
+      },
+      "schemaValid": true,
+      "valid": true,
+      "findings": 0,
+      "diagnostics": 0,
+      "publicDocumentSha256": "17800ce9eae9a825e9cedfc7fa825469f030c460a01cb3bb75f9ea8b4b253ff6",
+      "outlineNodes": 3,
+      "composition": {
+        "originalNodes": 3,
+        "apiAvailable": true,
+        "nativeEvidence": false
+      }
+    },
+    {
+      "caseId": "hierarchy-3",
+      "input": {
+        "bytes": 137659,
+        "sha256": "7f8130b1251ba803d26055f7b4f779ad14c7ee42117fd6e35227e352997f88ca"
+      },
+      "schemaValid": true,
+      "valid": true,
+      "findings": 0,
+      "diagnostics": 0,
+      "publicDocumentSha256": "fc2e1ea4a9a23bed74dc72a08d7065c0047ad82991e22badf0ffdc36a3a44fea",
+      "outlineNodes": 3,
+      "composition": {
+        "originalNodes": 3,
+        "apiAvailable": true,
+        "nativeEvidence": false
+      }
+    },
+    {
+      "caseId": "venn-3",
+      "input": {
+        "bytes": 172612,
+        "sha256": "d5c3996d89c1ac7b442b65cc6fe81b5985813d36d3df17f5e7f85355e5450db8"
+      },
+      "schemaValid": true,
+      "valid": true,
+      "findings": 0,
+      "diagnostics": 0,
+      "publicDocumentSha256": "348b873b78aa2c5e3dcdf1ac02d227cab3bd05f95a9b91bba2bff1554299cc27",
+      "outlineNodes": 3,
+      "composition": {
+        "originalNodes": 3,
+        "apiAvailable": true,
+        "nativeEvidence": false
+      }
+    }
+  ],
+  "boundFilesVerified": 15,
+  "preparedSnapshotsVerified": 5,
+  "limits": {
+    "timeoutSeconds": 45,
+    "maximumTotalShapes": 32,
+    "mode": "org-witness",
+    "runOfficeRequested": false
+  },
+  "rootRecordedCurrency": {
+    "sourceCleanAfter": true,
+    "compiledFiles": 609,
+    "compiledUnchanged": true,
+    "NameCurrentPublic": {
+      "log": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_native-acceptance.log",
+      "line": 447,
+      "milliseconds": 3564.0735,
+      "input": "129025/06c82"
+    },
+    "histogramCurrentInput": {
+      "log": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_native-acceptance.log",
+      "line": 492,
+      "milliseconds": 3567.606917,
+      "input": "184592/04c927"
+    }
+  },
+  "remaining": "Windows actual default/current-consumer/native Name; SH21 PS default plus pending owner window exception/org witness then assigned edits; histogram accepted native retained, no blanket rerun",
+  "notClaimed": [
+    "Office/GroupItems materialization",
+    "36pt/0.1pt native geometry",
+    "actual PS default launch",
+    "packed install",
+    "genuine034 publication"
+  ]
+}

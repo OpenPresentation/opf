@@ -1,0 +1,30 @@
+{
+  "engine": "webkit",
+  "version": "27.2",
+  "width": 320,
+  "height": 740,
+  "state": "the start",
+  "phase": "preview SVG visible",
+  "failedAt": "2026-11-12T06:03:18.974Z",
+  "url": "http://127.0.0.1:53470/index.html",
+  "error": {
+    "name": "TimeoutError",
+    "message": "locator.waitFor: Timeout 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#preview svg') to be visible\u001b[22m\n",
+    "stack": "locator.waitFor: Timeout 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#preview svg') to be visible\u001b[22m\n\n    at open (D:\\a\\opf\\opf\\packages\\editor\\test\\mobile-touch-browser.mjs:220:40)\n    at async playground (D:\\a\\opf\\opf\\packages\\editor\\test\\mobile-touch-browser.mjs:252:18)\n    at async file:///D:/a/opf/opf/packages/editor/test/mobile-touch-browser.mjs:434:9\n    at async file:///D:/a/opf/opf/packages/editor/test/mobile-touch-browser.mjs:427:5"
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "httpErrors": [],
+  "pendingRequests": [],
+  "dropped": {
+    "pending": 0,
+    "failed": 0,
+    "responses": 0,
+    "errors": 0,
+    "consoles": 0
+  },
+  "allProblems": [],
+  "domError": "Failure-only DOM observation exceeded 3000ms",
+  "capturedAt": "2026-11-12T06:03:21.977Z"
+}

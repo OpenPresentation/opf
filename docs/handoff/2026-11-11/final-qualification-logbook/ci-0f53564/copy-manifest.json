@@ -1,0 +1,53 @@
+{
+  "scope": "Byte-preserving existing public CI/source-only evidence; no new tests/build/browser/native",
+  "files": [
+    {
+      "path": "snapshot01/query.graphql",
+      "source": "/tmp/opf-final-logbook-current-snapshot01/query.graphql",
+      "bytes": 621,
+      "sha256": "2e75d3c09786f677e7d61aa23cdfba3fd342f931ad87557cc8a3e1c7b14dab64"
+    },
+    {
+      "path": "snapshot01/result.json",
+      "source": "/tmp/opf-final-logbook-current-snapshot01/result.json",
+      "bytes": 21591,
+      "sha256": "959e6e6b0d79336d01a198f75c9277831db4943446bce9d178ce26eea6fc0738"
+    },
+    {
+      "path": "snapshot01/snapshot.json",
+      "source": "/tmp/opf-final-logbook-current-snapshot01/snapshot.json",
+      "bytes": 41004,
+      "sha256": "fcdd2501132980f79bcf1315657500c77dbe0d7149521f8c9fd1dcd0974a2599"
+    },
+    {
+      "path": "snapshot01/snapshot.mjs",
+      "source": "/tmp/opf-final-logbook-current-snapshot01/snapshot.mjs",
+      "bytes": 1314,
+      "sha256": "3d42427b30e8d993e1dc558e0678c96a0166d76159040fbc72e1c86de152c0a4"
+    },
+    {
+      "path": "observer.log",
+      "source": "/tmp/opf-final-candidate-ci02/observer.log",
+      "bytes": 11261,
+      "sha256": "032900d1a479d74d1b1bbf07b0de0f639a4e0c5d241b6d3459c85907afc0f0dd"
+    },
+    {
+      "path": "windows-pptx2-131000118536.log",
+      "source": "/tmp/opf-final-candidate-ci02/windows-pptx2-131000118536.log",
+      "bytes": 95265,
+      "sha256": "7a5e28e02819f580165d50b4a2ffe4007b7cfacad74aea8e5ce9e590b0747e79"
+    },
+    {
+      "path": "pr-description-0f53564.md",
+      "source": "/tmp/opf-final-candidate-ci02/pr-description-0f53564.md",
+      "bytes": 7831,
+      "sha256": "fe89278b418c6eed668305fb704d85ac5edc909c11a07e7b5449b94aaeeac55b"
+    },
+    {
+      "path": "windows-browser1-131000118531.log",
+      "source": "/tmp/opf-final-candidate-ci02/windows-browser1-131000118531.log",
+      "bytes": 400529,
+      "sha256": "4c99cd82249f45ecfdeca2c9ef75b62029188429cb47875cbb96bff52ae2e542"
+    }
+  ]
+}

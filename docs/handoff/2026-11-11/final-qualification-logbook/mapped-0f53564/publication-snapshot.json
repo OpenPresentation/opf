@@ -1,0 +1,31 @@
+{
+  "authority": "Root-provided terminal/publication message; no new API or Git remote query by evidence lane",
+  "candidate": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "tree": "9cf8c91755ef0a5447dd6d6f84b5d1f2ebabc1b9",
+  "atomicThreeCandidateBranchesPushed": true,
+  "sourceLeavesPushed": [
+    "58d86e350b30c8d068e0d3bac1361c4ca62e9aef",
+    "ea83936b250de8c3075c7bdde1a1f696ac9711be"
+  ],
+  "freshMainAncestor": "7fb6140804f969550e3a9c9d52916b7610844917",
+  "fullCIRun": 43163569283,
+  "fullCIStatus": "RUNNING",
+  "ordinaryCIStatus": "PENDING; not claimed passing",
+  "registry034Published": false,
+  "actualCurrentPS32Plus6": "UNQUALIFIED; run43163971460 RUNNING at c0750870476019f04f56fae58a98df2bf8f75f10/direct0f53564",
+  "localGitProof": {
+    "candidateTreeExact": true,
+    "freshMainIsAncestor": true,
+    "cardinalityFullSHAResolvedFromLocalGit": true
+  },
+  "soleBatchedObserver": {
+    "intervalSeconds": 180,
+    "scope": "Current candidate and one Windows validation; no evidence-lane polling"
+  },
+  "subsequentStatus": {
+    "authority": "One authorized complete snapshot06:08:15.843Z plus actualc075 artifact review",
+    "fullCI": "RED, two failures and17pending tails; ordinary verify absent/not claimedPASS",
+    "actualCurrentPS32Plus6": "PASS within Office-free validation-only scope; original32 and separate6 kept distinct",
+    "WindowsDesktop": "Recovered; root read-only POWERPNT0; no newOffice assignment"
+  }
+}

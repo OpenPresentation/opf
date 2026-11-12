@@ -1,0 +1,7 @@
+AssertionError [ERR_ASSERTION]: Aliased path
+
+true !== false
+
+    at canonicalOwnedPath (file:///private/tmp/opf-034/scripts/native-acceptance/owned-postflight.mjs:49:39)
+    at write (file:///private/tmp/opf-034/scripts/native-acceptance/sh21-windowed-profile.mjs:19:151)
+    at main (file:///private/tmp/opf-034/scripts/native-acceptance/sh21-windowed-profile.mjs:82:170)

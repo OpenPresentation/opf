@@ -1,0 +1,19 @@
+{
+  "sourceReview": "ACCEPT; peer and actual browser qualification pending",
+  "base": "79cdb85d6ab8a58dde5d474e254cffa027735c51",
+  "patch": {
+    "bytes": 27792,
+    "sha256": "f9d12f01d87ea0d1234cfb40b20feff938c9cb7127234270190ae6fec67ef0ce"
+  },
+  "manifestSha256": "b75a55030b298a333bb3f68d3a73dbe563eafbe0106ad72dba0f12465cc6238a",
+  "changedFiles": 5,
+  "protectedGitBlobs": 16,
+  "syntax3": "PASS",
+  "pureIntervals": "PASS, actual top-level file under pinned Node24.21.0",
+  "normal": "UNRUN",
+  "workerOff": "UNRUN",
+  "BURN45": "UNRUN",
+  "wholeEditAndBudget": "Unchanged",
+  "oldWindowsFailure": "Still RED; exact89mscause UNKNOWN",
+  "metric": "ALL heartbeat min(positive excess,native busy union overlap) maximum; can increase previous flight; conservative wall time"
+}

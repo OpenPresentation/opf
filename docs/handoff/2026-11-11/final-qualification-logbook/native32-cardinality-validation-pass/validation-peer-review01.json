@@ -1,0 +1,25 @@
+{
+  "verdict": "ACCEPTED; no concrete blocker",
+  "scope": "Independent source-only, no imports/syntax/tests/build/PS/browser/Office/API",
+  "patch": {
+    "bytes": 29472,
+    "sha256": "cdb6ce2c98a409c27678b2dd65d6b06082f0490f3871b766b24d54ea1e9e30c4"
+  },
+  "manifestSha256": "f8892c0e2848b1c2d5646ae8a0386f08a3940c249a54ca71631757ffe94f11d1",
+  "base": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "verified": {
+    "changedFiles": 4,
+    "protectedBaseExact": 18,
+    "helperWholePreviousAndOriginalInverseExact": true,
+    "sourceBinding": "actual clean GITHUB_SHA; direct parent; four exact paths; operative roots; current test/checker/readiness bytes",
+    "runtime": "all seven own dist before/after; no donor consumer",
+    "workflow": "one read-only Windows dispatch/depth2/Node24.22.2/pnpm10.33.2/package build/20min/always artifacts; no browser",
+    "maintainedInvocation": "ONE original Node9/TAP/PS32 file; no separate startup file",
+    "cardinality": "Separate six exact row objects, names/phases/counts/expected and actual booleans/passed checked; original32 not relabeled",
+    "PSChildMilliseconds": 15000,
+    "outerHelperMilliseconds": 120000,
+    "TEMP_TMP_cwdUnchanged": true,
+    "freshOwnedTempsPrimaryFailureTAPRetained": true
+  },
+  "qualification": "Prior Windows REDs remain literal; new original32+separate6 qualification unrun."
+}

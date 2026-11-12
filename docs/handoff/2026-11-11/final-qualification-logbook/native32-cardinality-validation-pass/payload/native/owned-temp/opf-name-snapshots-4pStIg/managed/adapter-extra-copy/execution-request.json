@@ -1,0 +1,43 @@
+﻿{
+    "schemaVersion":  1,
+    "profile":  "reference-line-one-name-three-native-archives-v1",
+    "policy":  {
+                   "policy":  "reference-name-three-archives-global-zero-after-completed-owned-quit-v1",
+                   "observationPolicy":  "global-zero-after-completed-owned-quit-v1",
+                   "budgetMilliseconds":  5000,
+                   "intervalMilliseconds":  100,
+                   "maximumQueries":  51,
+                   "observerSource":  "scripts/native-acceptance/run-reference-chart-profile.ps1",
+                   "observerSourceSha256":  "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3"
+               },
+    "timeoutSeconds":  45,
+    "nativeAcceptance":  false,
+    "registryAcceptance":  false,
+    "caseId":  "reference-native-lines",
+    "runOfficeRequested":  true,
+    "readOnlySurvey":  false,
+    "captureTextFonts":  false,
+    "actionPlan":  {
+                       "actions":  [
+                                       {
+                                           "op":  "set-chart-series-name",
+                                           "slideIndex":  1,
+                                           "chartName":  "OPF chart 1",
+                                           "seriesIndex":  1,
+                                           "expectedName":  "Actual",
+                                           "newName":  "Actual edited"
+                                       }
+                                   ]
+                   },
+    "output":  "C:\\Users\\runneradmin\\AppData\\Local\\Temp\\opf-name-snapshots-4pStIg\\managed\\adapter-extra-copy",
+    "controller":  {
+                       "directory":  "D:\\a\\opf\\opf"
+                   },
+    "slideCount":  3,
+    "referenceNameEdit":  true,
+    "referenceNameSnapshots":  true,
+    "input":  {
+                  "bytes":  129025,
+                  "sha256":  "06c82deb1dbe067d4f097aebe760b8f1dbdcc0e2a74e95b8d1f99eeea2302a83"
+              }
+}

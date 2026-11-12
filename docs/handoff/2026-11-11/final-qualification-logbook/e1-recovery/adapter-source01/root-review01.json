@@ -1,0 +1,22 @@
+{
+  "review": "ACCEPT SOURCE ONLY; actual assembly and output visual review pending",
+  "builder": "/tmp/build-pilot034-artifact.py",
+  "bytes": 24943,
+  "sha256": "1ac8ca27fe23599b523d641e21c98be4755a7138b47711e1c58e6b94592fb734",
+  "syntaxAST": "PASS, adapter not imported or executed",
+  "requirements": [
+    "Actual complete20deck940 published034 receipt/authority with external expected hashes",
+    "Exact seven-package authority and six-direct-pin consumer metadata",
+    "All940After byte hashes/dimensions",
+    "43pilot/129panel roster and fixed recovery hashes",
+    "Schema-owned typed projection exact values and literal inverse",
+    "Pinned Inter/OFL and byte-preserving offline downloads"
+  ],
+  "limitations": [
+    "No034 authority fabricated",
+    "No actual render/assembly/visual review/publication performed",
+    "Runtime inventory seal replayed; installed runtime is not independently revalidated by adapter",
+    "Intermediate currentGallery hash retained as sealed producer metadata; intermediate bytes do not exist in output"
+  ],
+  "historical033": "Unchanged"
+}

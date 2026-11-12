@@ -1,0 +1,14 @@
+{
+  "artifactBytes": 95515774,
+  "sha256": "0ce5d601b9bb32d7913c96a2cd631fcb3f727bd886e01a3d3cde06632bb551e3",
+  "inventoryFiles": 527,
+  "rootAllCRCAndInventoryVerified": true,
+  "independentThisLane": {
+    "zipSHAExact": true,
+    "wholeMemberNamesEqual527Inventory": true,
+    "selectedMembersByteHashCRCVerified": 5
+  },
+  "copiedMembers": 5,
+  "bulkZIPCopied": false,
+  "privateNativeAuditCopied": false
+}

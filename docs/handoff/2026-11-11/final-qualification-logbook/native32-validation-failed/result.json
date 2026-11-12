@@ -1,0 +1,32 @@
+{
+  "run": 43160756096,
+  "job": 130991095157,
+  "head": "9997d46f553bde26f5b4e5b06b8713ecc61e368d",
+  "base": "781028f73be79341b9bac6fab078e8416ddd8539",
+  "outcome": "FAILED",
+  "pathFixtureObservation": {
+    "lexicalSpellingDiffers": true,
+    "sameOwnedFixture": true
+  },
+  "tapSummary": {
+    "tests": 9,
+    "pass": 8,
+    "fail": 1,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "actualManagedScenarios": null,
+  "failedBoundary": "First real private-adapter positive; Furniture completion refused; zero observer IO",
+  "managedGroupSeconds": 1.9213579,
+  "outerChildSeconds": 14.01,
+  "sourceAnd609CompiledFilesUnchanged": true,
+  "artifact": {
+    "id": 13918280350,
+    "bytes": 138163,
+    "sha256": "9d3ee465b9120ccfb9cdb0bc0e406d9f118b5424519b09296a83ab5937b1ac2d",
+    "files": 43
+  },
+  "scope": "Office-free; browser not rerun; no native acceptance",
+  "triage": "Source/retained-stage evidence identifies PS5 singleton Count construction defect; no actual first-false trace claimed"
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "old": "import { bigDeck, bigText } from './support/source-perf.mjs';",
+    "new": "import { bigDeck, bigText } from './support/source-perf.mjs';\nimport { installWorkerFlightClock, workerFlightBlock } from './support/worker-flight.mjs';\nimport { mkdir, readFile, writeFile } from 'node:fs/promises';\nimport { createHash } from 'node:crypto';\nimport path from 'node:path';\nimport { fileURLToPath } from 'node:url';"
+  },
+  {
+    "old": "const suite = await startKeyboardSuite();",
+    "new": "// Fresh owned evidence is written outside measured edits, before verdict gates and again on failure.\nconst parent = fileURLToPath(new URL('../artifacts/source-worker-perf/', import.meta.url));\nawait mkdir(parent, { recursive: true });\nconst output = path.join(parent, `${Date.now()}-${process.pid}`);\nawait mkdir(output);\nconst sources = await Promise.all(['./source-worker-perf-browser.mjs', './support/worker-flight.mjs', './support/block-budget.mjs'].map(async name => {\n  const bytes = await readFile(new URL(name, import.meta.url)); return { name, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') };\n}));\nconst evidence = { schemaVersion: 1, scope: 'Conservative native-busy heartbeat attribution; wall time, not CPU time', node: process.version, platform: process.platform, sourceHead: process.env.GITHUB_SHA ?? null, sources,\n  parameters: { CI, LIMIT, ROUNDS, COMPARE, WORKER_OFF, BURN, SLOW_APPLY, SLIDES, TAIL, PATTERNS, engineName, cpuThrottle: process.env.OPF_CPU_THROTTLE ?? null }, rows: [], originalFailure: null, preservationErrors: [] };\nconst describeError = error => ({ name: String(error?.name ?? 'Error'), message: String(error?.message ?? error), stack: String(error?.stack ?? '') });\nconst persist = () => writeFile(path.join(output, 'report.json'), JSON.stringify(evidence, null, 2) + '\\n');\nawait persist();\nconsole.log(`Source worker raw evidence: ${output}`);\nconst suite = await startKeyboardSuite();\nevidence.browserVersion = suite.browserVersion;"
+  },
+  {
+    "old": "  suite.problems.length = 0;\n  try {",
+    "new": "  suite.problems.length = 0;\n  const row = { mode, format, samples: [], result: null, error: null, clock: null }; evidence.rows.push(row);\n  let measureError = null;\n  try {"
+  },
+  {
+    "old": "    await page.waitForTimeout(500);\n    await page.evaluate((marker) => {",
+    "new": "    await page.waitForTimeout(500);\n    await page.evaluate(installWorkerFlightClock);\n    await page.evaluate((marker) => {"
+  },
+  {
+    "old": "for (const entry of list.getEntries()) window.__long.push(entry.duration);",
+    "new": "for (const entry of list.getEntries()) { window.__long.push(entry.duration); window.__workerFlight.record('longtasks', { start: entry.startTime, duration: entry.duration }); }"
+  },
+  {
+    "old": "window.__gaps.push([now, now - last - 4]); last = now;",
+    "new": "window.__gaps.push([now, now - last - 4, last]); window.__workerFlight.record('beats', [last, now, now - last - 4]); last = now;"
+  },
+  {
+    "old": "const now = performance.now(), on = Boolean(document.querySelector('[data-opf-checking]'));\n        if (on",
+    "new": "const now = performance.now(), on = Boolean(document.querySelector('[data-opf-checking]'));\n        window.__workerFlight.record('moEdges', { at: now, on, opened });\n        if (on"
+  },
+  {
+    "old": "    const collect = () => page.evaluate(() => {\n      const long = window.__long.splice(0), beats = window.__gaps.splice(0), spans = window.__checks.splice(0);\n      const inflight = beats.filter(([end]) => spans.some(([from, to]) => end >= from && end <= to)).map(([, gap]) => gap);\n      return { longest: Math.max(0, ...long), count: long.length, gap: Math.max(0, ...beats.map(([, gap]) => gap)), flight: spans.length ? Math.max(0, ...inflight) : null };\n    });",
+    "new": "    const collect = async () => {\n      const raw = await page.evaluate(() => {\n        const long = window.__long.splice(0), beats = window.__gaps.splice(0), spans = window.__checks.splice(0);\n        const inflight = beats.filter(([end]) => spans.some(([from, to]) => end >= from && end <= to)).map(([, gap]) => gap);\n        // Keep the old observer-based result as evidence only. Its whole-edit fields remain the verdict's exact fields.\n        const observed = { longest: Math.max(0, ...long), count: long.length, gap: Math.max(0, ...beats.map(([, gap]) => gap)), flight: spans.length ? Math.max(0, ...inflight) : null };\n        const nativeSpans = window.__workerFlight.takeSpans(), intervals = beats.map(([end, gap, from]) => [from, end, gap]);\n        const record = { at: performance.now(), observed, intervals, nativeSpans, moSpans: spans, longDurations: long };\n        window.__workerFlight.record('samples', record);\n        return record;\n      });\n      const result = { ...raw.observed, flight: workerFlightBlock(raw.intervals, raw.nativeSpans) };\n      row.samples.push({ ...raw, result });\n      return result;\n    };"
+  },
+  {
+    "old": "    return { quick, paced };\n  } finally { await page.close(); }",
+    "new": "    row.result = { quick, paced };\n    return { quick, paced };\n  } catch (error) { measureError = error; row.error = describeError(error); throw error; }\n  finally {\n    let secondary = null;\n    try {\n      row.clock = await page.evaluate(() => {\n        const state = window.__workerFlight;\n        if (!state) return { notInstalled: true };\n        state.restore(); return state.snapshot();\n      });\n      if (row.clock.notInstalled || !row.clock.restored || row.clock.opened !== null || row.clock.faults.length || Object.keys(row.clock.overflow).length) throw new Error('Worker-flight evidence incomplete, invalid, unrestored or overflowed');\n    } catch (error) { secondary = error; evidence.preservationErrors.push(describeError(error)); }\n    try { await persist(); } catch (error) { secondary ??= error; evidence.preservationErrors.push(describeError(error)); }\n    try { await page.close(); } catch (error) { secondary ??= error; evidence.preservationErrors.push(describeError(error)); }\n    if (secondary) { if (measureError) console.error('Source worker evidence also failed:', describeError(secondary)); else throw secondary; }\n  }"
+  },
+  {
+    "old": "} finally { await suite.close(); }",
+    "new": "} catch (error) { evidence.originalFailure = describeError(error); throw error; }\nfinally {\n  let secondary = null;\n  try { await persist(); } catch (error) { secondary = error; }\n  try { await suite.close(); } catch (error) { secondary ??= error; }\n  if (secondary) { if (evidence.originalFailure) console.error('Source worker final evidence also failed:', describeError(secondary)); else throw secondary; }\n}"
+  },
+  {
+    "old": "// CI). No single edit may block for three limits. No retries.",
+    "new": "// CI). No single edit may block for three limits. No retries.\n// Flight uses native busy-write bounds and EVERY heartbeat interval: at most min(positive excess, intersected busy-union time). This conservative\n// wall-time upper bound keeps true boundary overlaps; delayed MutationObserver spans remain raw evidence, never the flight verdict."
+  },
+  {
+    "old": "engineName, cpuThrottle: process.env.OPF_CPU_THROTTLE ?? null",
+    "new": "engineName, cpuThrottle: process.env.OPF_CPU_THROTTLE ?? null, keyboardPlatform: process.env.OPF_KEYBOARD_PLATFORM ?? process.platform"
+  },
+  {
+    "old": "const nativeSpans = window.__workerFlight.takeSpans(), intervals = beats.map(([end, gap, from]) => [from, end, gap]);",
+    "new": "const { spans: nativeSpans, newSpans: newNativeSpans } = window.__workerFlight.takeSpans(), intervals = beats.map(([end, gap, from]) => [from, end, gap]);"
+  },
+  {
+    "old": "const record = { at: performance.now(), observed, intervals, nativeSpans, moSpans: spans, longDurations: long };",
+    "new": "const record = { at: performance.now(), observed, intervals, nativeSpans, newNativeSpans, moSpans: spans, longDurations: long };"
+  },
+  {
+    "old": "flight: workerFlightBlock(raw.intervals, raw.nativeSpans)",
+    "new": "flight: workerFlightBlock(raw.intervals, raw.nativeSpans, raw.newNativeSpans)"
+  }
+]

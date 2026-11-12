@@ -1,0 +1,41 @@
+{
+  "source": {
+    "head": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+    "tree": "9cf8c91755ef0a5447dd6d6f84b5d1f2ebabc1b9",
+    "status": ""
+  },
+  "node": "v24.21.0",
+  "compiledFiles": 609,
+  "assets": 223,
+  "scope": "One normal, two maintained negative controls and one maintained outside-apply positive; unchanged workload and budgets; no retry",
+  "runs": [
+    {
+      "name": "normal",
+      "env": {},
+      "code": 1,
+      "signal": null,
+      "error": null,
+      "seconds": 0.252,
+      "freshOutputs": [
+        "1794461883283-51395"
+      ],
+      "report": {
+        "bytes": 1240,
+        "sha256": "720e6d78b5ccad529d014f7986dd98c6c3308d830c031e7da1191c853485ccb7"
+      },
+      "originalFailure": null,
+      "rows": []
+    }
+  ],
+  "failure": {
+    "name": "AssertionError",
+    "message": "normal\n\n1 !== 0\n",
+    "stack": "AssertionError [ERR_ASSERTION]: normal\n\n1 !== 0\n\n    at file:///private/tmp/opf-final-worker-controls01/run.mjs:34:79\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+  },
+  "afterSource": {
+    "head": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+    "tree": "9cf8c91755ef0a5447dd6d6f84b5d1f2ebabc1b9",
+    "status": ""
+  },
+  "boundRuntimeAndAssetsUnchanged": true
+}

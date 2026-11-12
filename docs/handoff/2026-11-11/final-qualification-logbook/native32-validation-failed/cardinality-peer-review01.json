@@ -1,0 +1,29 @@
+{
+  "verdict": "ACCEPTED; no concrete blocker",
+  "scope": "Independent source-only; no imports/syntax/tests/build/PS/Office",
+  "patch": {
+    "bytes": 14757,
+    "sha256": "2b4670978c040617143e9f14a900c34ee8118bfe5f588b41d5b382d6d5a01348"
+  },
+  "manifestSha256": "4f0eb2cf8912ce06808f0468d8eba48f15b0ccdcd7de7ba7d3dcbd20536ad8e5",
+  "verified": {
+    "changedFiles": 6,
+    "protectedBaseExact": 16,
+    "wholeFileInverses": [
+      "production guard",
+      "managed checker minus new6group/resultfield",
+      "Node test minus six assertions"
+    ],
+    "productionChange": "Outer array around complete conditional only; original success filters/Count1/order remain exact",
+    "newControls": "Actual complete readiness function; endpoint0/1/2 for before/reopened separately; no subguard mock",
+    "originalGroups": {
+      "startup": 8,
+      "saves": 13,
+      "adapter": 11,
+      "node": 9
+    },
+    "PSChildMilliseconds": 15000,
+    "observerAndWorkerUnchanged": true
+  },
+  "qualification": "Source acceptance only. Prior43160756096 RED retained. Actual new PS controls unrun."
+}

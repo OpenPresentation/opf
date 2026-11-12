@@ -1,0 +1,131 @@
+{
+  "scope": "Existing root terminal mapped execution copied byte-for-byte; no new execution",
+  "files": [
+    {
+      "path": "gate.log",
+      "source": "/tmp/opf-final-coherent-qualification02/gate.log",
+      "bytes": 1555,
+      "sha256": "f7817cbbd0b5f3eeb1830febadc4571180f1166a2973a7d4bd4d5827f4eccab8"
+    },
+    {
+      "path": "receipt.json",
+      "source": "/tmp/opf-final-coherent-qualification02/receipt.json",
+      "bytes": 892,
+      "sha256": "cb27724ab202d92d969a07e25240944bdc4880021886e1b6035e0c156616f51d"
+    },
+    {
+      "path": "run.mjs",
+      "source": "/tmp/opf-final-coherent-qualification02/run.mjs",
+      "bytes": 3019,
+      "sha256": "5a3260d7df92129952b5df3d016e3a812507141437472a02a1523dba9ed3ab53"
+    },
+    {
+      "path": "runner.log",
+      "source": "/tmp/opf-final-coherent-qualification02/runner.log",
+      "bytes": 750,
+      "sha256": "3f5db0768f0d052e3c961bae415e80979350f85ae9201a3d3e70987638cb6001"
+    },
+    {
+      "path": "runtime-after.json",
+      "source": "/tmp/opf-final-coherent-qualification02/runtime-after.json",
+      "bytes": 99609,
+      "sha256": "e12e1ea2bc06a3972e875964e100344fbe1ee784a2426c0f5b49ff4b17f4afc2"
+    },
+    {
+      "path": "runtime-before.json",
+      "source": "/tmp/opf-final-coherent-qualification02/runtime-before.json",
+      "bytes": 99609,
+      "sha256": "e12e1ea2bc06a3972e875964e100344fbe1ee784a2426c0f5b49ff4b17f4afc2"
+    },
+    {
+      "path": "source-after.json",
+      "source": "/tmp/opf-final-coherent-qualification02/source-after.json",
+      "bytes": 127,
+      "sha256": "06f3e8f1b78eda2090849ebc3f271c34839d53d1c1847da0bd9c64a33d6772c2"
+    },
+    {
+      "path": "source-before.json",
+      "source": "/tmp/opf-final-coherent-qualification02/source-before.json",
+      "bytes": 127,
+      "sha256": "06f3e8f1b78eda2090849ebc3f271c34839d53d1c1847da0bd9c64a33d6772c2"
+    },
+    {
+      "path": "w06-input-equality.json",
+      "source": "/tmp/opf-final-coherent-qualification02/w06-input-equality.json",
+      "bytes": 482,
+      "sha256": "9169b3b9e20500dd2b8f38ba5b7cc64d7ba149b5f6b0a515d6e58b3c3d00f675"
+    },
+    {
+      "path": "selected-logs/build.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/build.log",
+      "bytes": 14666,
+      "sha256": "74e83348c2fa9a9b6e26282bddc5601c0ece23023cd51ee730d659af2728d068"
+    },
+    {
+      "path": "selected-logs/biome.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/biome.log",
+      "bytes": 20433,
+      "sha256": "18d83a499bf94a4fb45f14ea7b4a365bc107a1cfdb530db8440116a189708478"
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_changes.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_changes.log",
+      "bytes": 2675,
+      "sha256": "cedbdb18cf82e0d2144b8f19cb6d42a058e95e9fc50c9b6d059080a12bd6bca9"
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_font-hotlinks.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_font-hotlinks.log",
+      "bytes": 861,
+      "sha256": "80859cd8545eef77fa093394650654ec5b3bec7a3b225cb5a394152a51b81acd"
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_gallery-tracker.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_gallery-tracker.log",
+      "bytes": 2014,
+      "sha256": "16f61a5433da710835cc613d04d1022f3f82a3c4d36c31162b065ac9195f57a6"
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_libreoffice.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_libreoffice.log",
+      "bytes": 1428,
+      "sha256": "0fbf039a8c7ebe09e1f43065eb78660b9da80efda336ce986c8e8bf8d3050c7a"
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_native-acceptance.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_native-acceptance.log",
+      "bytes": 68830,
+      "sha256": "e2d0f3ea06e60465df78adcf342e4459fcef5b1787061eeb4acb8f74779c04bc"
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_release-report.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_release-report.log",
+      "bytes": 825,
+      "sha256": "9f69b5e7d47ab0032e4787d1774e86ab3ba337cc89bb39312e0dc0ab6767c312"
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_skill-commands.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_skill-commands.log",
+      "bytes": 1048,
+      "sha256": "475b1b10ebba9a7d33b8e2a39c1978bedab67d5f8b2f1270cf3206cf697bbfb0"
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_text.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_text.log",
+      "bytes": 1082,
+      "sha256": "d85be642233a3cbd4b1003587d9f1cc9bc71c52fecd574889b0362db654ec10d"
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_stability.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_stability.log",
+      "bytes": 3997,
+      "sha256": "fcaeb38b987f3fa17cf3f20778f18f1247e014a1e46e46bdb02c9f496363703d"
+    },
+    {
+      "path": "selected-logs/tests_editor.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/tests_editor.log",
+      "bytes": 29048,
+      "sha256": "4a2ad17df0b758040a7f85a8bf88a32d82913bf5f9f59577a6fdae37280fa920"
+    }
+  ]
+}

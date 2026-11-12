@@ -1,0 +1,35 @@
+{
+  "scope": "Byte-preserving evidence-only copies; no new qualification execution",
+  "files": [
+    {
+      "path": "e1-recovery/adapter-source01/README.md",
+      "source": "/tmp/opf-pilot034-adapter-source01/README.md",
+      "bytes": 3099,
+      "sha256": "34c1a2b7c485a39342a809d8ab58eabb5002bd1b28f50162b02f7c343db1a671"
+    },
+    {
+      "path": "e1-recovery/adapter-source01/source.patch",
+      "source": "/tmp/opf-pilot034-adapter-source01/source.patch",
+      "bytes": 39633,
+      "sha256": "9d6bc2557b23f6bc6585cd52352ccbc8facda9c2a0c4eba454d5837c2ea8369e"
+    },
+    {
+      "path": "e1-recovery/adapter-source01/manifest.json",
+      "source": "/tmp/opf-pilot034-adapter-source01/manifest.json",
+      "bytes": 3051,
+      "sha256": "c2d67003e641238ef3e20ba0fb495f111b8c170502ed1b5fed3b08afe501799f"
+    },
+    {
+      "path": "e1-recovery/adapter-source01/build-pilot034-artifact.py",
+      "source": "/tmp/opf-pilot034-adapter-source01/build-pilot034-artifact.py",
+      "bytes": 24943,
+      "sha256": "1ac8ca27fe23599b523d641e21c98be4755a7138b47711e1c58e6b94592fb734"
+    },
+    {
+      "path": "e1-recovery/adapter-source01/root-review01.json",
+      "source": "/tmp/opf-pilot034-adapter-root-review01.json",
+      "bytes": 1092,
+      "sha256": "2d342f19807fc3ca8f24d9763db77175421d3bfefb819c7ba0dc7c7ea01200e5"
+    }
+  ]
+}

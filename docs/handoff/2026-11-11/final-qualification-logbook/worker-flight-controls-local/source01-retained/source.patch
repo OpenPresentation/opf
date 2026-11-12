@@ -1,0 +1,305 @@
+diff --git a/docs/handoff/2026-11-11/worker-flight-native-intervals.md b/docs/handoff/2026-11-11/worker-flight-native-intervals.md
+new file mode 100644
+index 000000000..d4cb2cc65
+--- /dev/null
++++ b/docs/handoff/2026-11-11/worker-flight-native-intervals.md
+@@ -0,0 +1,15 @@
++# Native-busy worker-flight measurement
++
++SOURCE ONLY; interval tests and all new normal/BURN/worker-off/browser execution UNRUN. Base `79cdb85d6ab8a58dde5d474e254cffa027735c51`. No product, threshold, fixture, font or dependency changes.
++
++The original79 Windows YAML quick flight89ms/159ms baseline failure remains RED and its exact cause UNKNOWN: it has no raw timing trace. Two separately accepted passive witnesses preserve the original metric/gates and pass: Mac32.584s and Windows36.839s. Independent analysis exactly recomputes all80samples in each. Both demonstrate an actual measurement boundary defect:20Mac and10Windows winning flight samples include excess outside even the widest native-busy window, with maxima7.3ms and9.5ms respectively. Every such beat end equals the delayed MutationObserver close timestamp numerically; native checking cleared earlier. This establishes the mechanism on both platforms, not the old89ms cause or a product regression.
++
++Retained raw Mac report1263045B SHA256 `ee1abe8c6b7fd2df4d9baf6812aad0c64f6dd2a81efb747ddf99b0454cf5557e`; Windows report1200712B SHA256 `73b883b6596ffe1509187414cf258b4c0c07d7df94288dd6afe4d4a1eabbcad8`. Data/analyses remain `/tmp/opf-worker-flight-diagnostic-run01/report.json`, `/tmp/opf-worker-flight-windows-review01/payload/browser/report.json` and `/tmp/opf-worker-flight-{independent-analysis01,windows-independent-analysis01}/`. No native Office claim is part of either witness. The separate Windows managed-fixture failure is not this browser result.
++
++The corrected flight value is the maximum over EVERY heartbeat interval of min(positive heartbeat excess, union length of possible native-busy time intersected by that interval). Busy boundaries bracket the actual native dataset/remove write with performance.now before/after. The4ms nominal timer period is not invented as blocked time; taking the upper bound assumes as much of the observed excess as possible happened while busy. It is a conservative wall-time attribution, not measured CPU duration. All intersecting beats participate, including those ending after busy clears; this can increase prior flight values, so it is not a cap on old selected winners or a half-open endpoint workaround. Overlapping/adjacent windows form a union without double counting. Invalid/decreasing clocks refuse.
++
++The one-pane test hook delegates DOMStringMap operations with the real native receiver and removeAttribute with its original receiver/arguments/result/throw, then restores original own descriptors. It does not wrap Worker prototypes or change source-pane/product code. It records bounds on full beats/native edges/MO observations/long tasks/sample data; cap overflow/open spans/clock faults/restoration errors refuse completeness. Existing checks, source text,1000slides,4quick/12paced edits, three formats, all modes/rounds/env flags, actual keyboard events, timeouts,40%flight/85%whole-edit/3xlimit ceiling, uppermedian, majority-flight/counts, final text/error checks and original fail-fast ordering stay unchanged. The old MO-derived result remains raw evidence; whole-edit fields are reused exactly. The shared interval function runs in Node after collecting a sample; the extra raw transfer/recording has diagnostic overhead and is not claimed cost-free.
++
++Every run creates a fresh owned `packages/editor/artifacts/source-worker-perf/<timestamp>-<pid>/report.json` before startup; after each measure it captures raw page evidence/restores hooks/persists before page close and verdict gates, then persists again in outer finally. Original assertions survive secondary capture/write/close failures. As before, startKeyboardSuite/openPage startup boundaries rely on normal runner logs for failures that occur before their try blocks; the initial owned report still exists. Source/helper/budget hashes, actual Node/browser/parameters and partial samples are retained. No prior output is overwritten; incomplete evidence cannot turn an original failure green.
++
++The new top-level `worker-flight-intervals.mjs` is discovered by the existing runner; its helper lives under support and is not a top-level runnable test. No package.json/test-list changes. Finite independent cases cover entry/exit/full outside/full inside/multiple union/late endpoints/nominal4ms/invalid clocks plus real retainedMac/Win examples. An actual late-ending Mac beat demonstrates an increase over the old selected maximum. Pure budget-reason controls cover full busy BURN-like refusal, no-request majority refusal and a small busy overlap with large outside-apply time; they do not replace real qualification. Root must run the new normal test and existing actual worker-off/BURN45 negative controls (for intended reasons), plus the applicable unchanged outside-apply positive if needed, after root/peer review. All such execution remains UNRUN here.
+diff --git a/docs/programs/release-readiness/burndown.md b/docs/programs/release-readiness/burndown.md
+index 6f5521386..eb2ffdfb9 100644
+--- a/docs/programs/release-readiness/burndown.md
++++ b/docs/programs/release-readiness/burndown.md
+@@ -1508,3 +1508,5 @@ package, close RR-68 or claim a new release result; normal source integration ga
+ - 2026-11-11 RR-105 late-CI batch: preserve final e210 Win8.3 fixture andNode26regexp stack failures; reviewednativefixture repair andstack-safe renderer normallyfolded. ExactNode26.13beforeRED reproduced; aftercoherentbuild4files×2runtimesPASS8/8, realMCPframe3/3PASS/headroom6839. Prior464e gate deliberatelyinterruptedafter13PASS/193renderer; PPTXpartial/editorunrun, notPASS. Finalcombinedmapper/CI/native/currentW06 remainowed. [Records](../../handoff/2026-11-11/late-ci-repairs/README.md).
+ 
+ - 2026-11-11 RR-105 Node22 demand-test SOURCE ONLY: preserve0fe FullCI9PASS/2RED/11 actual tests. Remaining two registerHooks child programs missed the production createRequire.resolve boundary; test-only wrapper correction preserves exact package/mode/refusal/disk/retry/eagerSVG contracts and adds actual loader-capture/blocked-lookup/load-return evidence. No other renderer test uses registerHooks; new execution UNRUN during W06 quiet window. [Scope and first failures](../../handoff/2026-11-11/node22-demand-resolver-test.md).
++
++- 2026-11-11 RR-105 worker-flight measurement SOURCE ONLY: independently recomputed actualMac+Windows passive80-sample witnesses prove delayed-MO boundary misattribution, while oldWin89ms remainsuntracedRED/unknown. Nativebusy/all-heartbeat union upper-bound repair and finite real-boundary/unit controls drafted; whole-edit/40%/85%/ceilings/counts/workload unchanged, rawdata nowretainedbeforegates/finally. New normal and actualworkerOff/BURN45 controls UNRUN; no product/golden/limit changes. [Cause and exact scope](../../handoff/2026-11-11/worker-flight-native-intervals.md).
+diff --git a/packages/editor/test/source-worker-perf-browser.mjs b/packages/editor/test/source-worker-perf-browser.mjs
+index dc06423a8..31f0e8857 100644
+--- a/packages/editor/test/source-worker-perf-browser.mjs
++++ b/packages/editor/test/source-worker-perf-browser.mjs
+@@ -20,6 +20,8 @@
+ //    answer) is the one regression this budget sees only when it is most of the main-thread cost.
+ // Where there is no measurable comparison (JSON, whose main-thread check is cheap, or OPF_PERF_COMPARE=0) the median must be within the limit (50 ms; 100 ms on
+ // CI). No single edit may block for three limits. No retries.
++// Flight uses native busy-write bounds and EVERY heartbeat interval: at most min(positive excess, intersected busy-union time). This conservative
++// wall-time upper bound keeps true boundary overlaps; delayed MutationObserver spans remain raw evidence, never the flight verdict.
+ //
+ // OPF_PERF_LIMIT_MS sets the limit for a typical edit; OPF_PERF_COMPARE=0 skips the main-thread run (then the limit judges); OPF_PERF_ROUNDS
+ // repeats the whole measurement (default 1; the samples of all rounds count); OPF_CPU_THROTTLE=<rate> slows Chromium down; OPF_BROWSER_ENGINE=webkit runs it on WebKit.
+@@ -31,6 +33,11 @@ import assert from 'node:assert/strict';
+ import { engineName, startKeyboardSuite } from './support/source-keyboard.mjs';
+ import { assertBlockBudget, median } from './support/block-budget.mjs';
+ import { bigDeck, bigText } from './support/source-perf.mjs';
++import { installWorkerFlightClock, workerFlightBlock } from './support/worker-flight.mjs';
++import { mkdir, readFile, writeFile } from 'node:fs/promises';
++import { createHash } from 'node:crypto';
++import path from 'node:path';
++import { fileURLToPath } from 'node:url';
+ 
+ // On a CI runner (CI is set) the limit is the plan's 2x for noise.
+ const CI = Boolean(process.env.CI);
+@@ -49,12 +56,29 @@ const cases = [
+   { format: 'json', label: 'JSON', needle: '"title": "Slide 500 headline', text: () => `${JSON.stringify(bigDeck(SLIDES), null, 2)}\n` },
+ ];
+ 
++// Fresh owned evidence is written outside measured edits, before verdict gates and again on failure.
++const parent = fileURLToPath(new URL('../artifacts/source-worker-perf/', import.meta.url));
++await mkdir(parent, { recursive: true });
++const output = path.join(parent, `${Date.now()}-${process.pid}`);
++await mkdir(output);
++const sources = await Promise.all(['./source-worker-perf-browser.mjs', './support/worker-flight.mjs', './support/block-budget.mjs'].map(async name => {
++  const bytes = await readFile(new URL(name, import.meta.url)); return { name, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') };
++}));
++const evidence = { schemaVersion: 1, scope: 'Conservative native-busy heartbeat attribution; wall time, not CPU time', node: process.version, platform: process.platform, sourceHead: process.env.GITHUB_SHA ?? null, sources,
++  parameters: { CI, LIMIT, ROUNDS, COMPARE, WORKER_OFF, BURN, SLOW_APPLY, SLIDES, TAIL, PATTERNS, engineName, cpuThrottle: process.env.OPF_CPU_THROTTLE ?? null, keyboardPlatform: process.env.OPF_KEYBOARD_PLATFORM ?? process.platform }, rows: [], originalFailure: null, preservationErrors: [] };
++const describeError = error => ({ name: String(error?.name ?? 'Error'), message: String(error?.message ?? error), stack: String(error?.stack ?? '') });
++const persist = () => writeFile(path.join(output, 'report.json'), JSON.stringify(evidence, null, 2) + '\n');
++await persist();
++console.log(`Source worker raw evidence: ${output}`);
+ const suite = await startKeyboardSuite();
++evidence.browserVersion = suite.browserVersion;
+ 
+ /** One round: open the harness, load the deck, type, and report the longest long task, the worst heartbeat gap and the pane's check counts. */
+ async function measure(mode, { format, needle, text }) {
+   const page = await suite.openPage(`?worker=${mode}`);
+   suite.problems.length = 0;
++  const row = { mode, format, samples: [], result: null, error: null, clock: null }; evidence.rows.push(row);
++  let measureError = null;
+   try {
+     const value = text();
+     await page.evaluate(([name, source]) => {
+@@ -65,15 +89,17 @@ async function measure(mode, { format, needle, text }) {
+     await page.evaluate(() => Promise.race([demo.pane.whenIdle(), new Promise((_, reject) => setTimeout(() => reject(new Error('the pane did not become idle in 60 s')), 60000))]));
+     await page.waitForFunction(() => demo.pane.getProblems().length === 0 && document.querySelector('.opf-source-findings')?.hidden !== false);
+     await page.waitForTimeout(500);
++    await page.evaluate(installWorkerFlightClock);
+     await page.evaluate((marker) => {
+       window.__long = []; window.__gaps = []; window.__checks = [];
+-      try { new PerformanceObserver((list) => { for (const entry of list.getEntries()) window.__long.push(entry.duration); }).observe({ entryTypes: ['longtask'] }); } catch { /* No longtask entries on this engine. */ }
++      try { new PerformanceObserver((list) => { for (const entry of list.getEntries()) { window.__long.push(entry.duration); window.__workerFlight.record('longtasks', { start: entry.startTime, duration: entry.duration }); } }).observe({ entryTypes: ['longtask'] }); } catch { /* No longtask entries on this engine. */ }
+       let last = performance.now();
+-      window.__beat = setInterval(() => { const now = performance.now(); window.__gaps.push([now, now - last - 4]); last = now; }, 4);
++      window.__beat = setInterval(() => { const now = performance.now(); window.__gaps.push([now, now - last - 4, last]); window.__workerFlight.record('beats', [last, now, now - last - 4]); last = now; }, 4);
+       // The pane marks `data-opf-checking` while a worker request is in flight: the span between the mark and its removal is when only the worker is working.
+       let opened = null;
+       new MutationObserver(() => {
+         const now = performance.now(), on = Boolean(document.querySelector('[data-opf-checking]'));
++        window.__workerFlight.record('moEdges', { at: now, on, opened });
+         if (on && opened === null) opened = now; else if (!on && opened !== null) { window.__checks.push([opened, now]); opened = null; }
+       }).observe(document, { attributes: true, attributeFilter: ['data-opf-checking'], subtree: true });
+       const { api } = demo.pane.editor, at = api.getValue().indexOf(marker);
+@@ -95,11 +121,21 @@ async function measure(mode, { format, needle, text }) {
+         return post.apply(this, args);
+       };
+     }, SLOW_APPLY);
+-    const collect = () => page.evaluate(() => {
+-      const long = window.__long.splice(0), beats = window.__gaps.splice(0), spans = window.__checks.splice(0);
+-      const inflight = beats.filter(([end]) => spans.some(([from, to]) => end >= from && end <= to)).map(([, gap]) => gap);
+-      return { longest: Math.max(0, ...long), count: long.length, gap: Math.max(0, ...beats.map(([, gap]) => gap)), flight: spans.length ? Math.max(0, ...inflight) : null };
+-    });
++    const collect = async () => {
++      const raw = await page.evaluate(() => {
++        const long = window.__long.splice(0), beats = window.__gaps.splice(0), spans = window.__checks.splice(0);
++        const inflight = beats.filter(([end]) => spans.some(([from, to]) => end >= from && end <= to)).map(([, gap]) => gap);
++        // Keep the old observer-based result as evidence only. Its whole-edit fields remain the verdict's exact fields.
++        const observed = { longest: Math.max(0, ...long), count: long.length, gap: Math.max(0, ...beats.map(([, gap]) => gap)), flight: spans.length ? Math.max(0, ...inflight) : null };
++        const nativeSpans = window.__workerFlight.takeSpans(), intervals = beats.map(([end, gap, from]) => [from, end, gap]);
++        const record = { at: performance.now(), observed, intervals, nativeSpans, moSpans: spans, longDurations: long };
++        window.__workerFlight.record('samples', record);
++        return record;
++      });
++      const result = { ...raw.observed, flight: workerFlightBlock(raw.intervals, raw.nativeSpans) };
++      row.samples.push({ ...raw, result });
++      return result;
++    };
+     // One pattern is a series of bursts. A burst is typed, then the pane is left alone until it has checked and applied it (`whenIdle`) plus a moment for the paint
+     // that follows, and only then is the next burst typed. That makes every burst exactly one sample of "typing, then a check", whatever the machine's speed; with
+     // keys typed on a timer, a slow runner merged them into one check (one sample, paced run: `1 checks in the worker`).
+@@ -120,8 +156,23 @@ async function measure(mode, { format, needle, text }) {
+     assert.equal(result.slides, SLIDES);
+     assert.equal(result.title, 'Slide 500 headlineabcdefghijklmnopqrstuvwx', `${format}: the typed text reached the document`);
+     assert.deepEqual(suite.problems, [], `${format}: no page error`);
++    row.result = { quick, paced };
+     return { quick, paced };
+-  } finally { await page.close(); }
++  } catch (error) { measureError = error; row.error = describeError(error); throw error; }
++  finally {
++    let secondary = null;
++    try {
++      row.clock = await page.evaluate(() => {
++        const state = window.__workerFlight;
++        if (!state) return { notInstalled: true };
++        state.restore(); return state.snapshot();
++      });
++      if (row.clock.notInstalled || !row.clock.restored || row.clock.opened !== null || row.clock.faults.length || Object.keys(row.clock.overflow).length) throw new Error('Worker-flight evidence incomplete, invalid, unrestored or overflowed');
++    } catch (error) { secondary = error; evidence.preservationErrors.push(describeError(error)); }
++    try { await persist(); } catch (error) { secondary ??= error; evidence.preservationErrors.push(describeError(error)); }
++    try { await page.close(); } catch (error) { secondary ??= error; evidence.preservationErrors.push(describeError(error)); }
++    if (secondary) { if (measureError) console.error('Source worker evidence also failed:', describeError(secondary)); else throw secondary; }
++  }
+ }
+ 
+ try {
+@@ -142,4 +193,10 @@ try {
+     for (const pattern of ['quick', 'paced']) assertBlockBudget(`${spec.label} ${pattern}`, { samples: series('on', pattern, 'gap'), flight: series('on', pattern, 'flight'), limit: LIMIT, baseline: rounds.off.length ? series('off', pattern, 'gap') : undefined });
+   }
+   console.log(`Source worker budgets: a typical edit in a 1000-slide deck blocks the main thread for less than ${LIMIT} ms (${engineName} ${suite.browserVersion}).`);
+-} finally { await suite.close(); }
++} catch (error) { evidence.originalFailure = describeError(error); throw error; }
++finally {
++  let secondary = null;
++  try { await persist(); } catch (error) { secondary = error; }
++  try { await suite.close(); } catch (error) { secondary ??= error; }
++  if (secondary) { if (evidence.originalFailure) console.error('Source worker final evidence also failed:', describeError(secondary)); else throw secondary; }
++}
+diff --git a/packages/editor/test/support/worker-flight.mjs b/packages/editor/test/support/worker-flight.mjs
+new file mode 100644
+index 000000000..700e174bf
+--- /dev/null
++++ b/packages/editor/test/support/worker-flight.mjs
+@@ -0,0 +1,78 @@
++// A heartbeat reports excess over its nominal4ms period, without knowing where within the interval that excess occurred.
++// Its conservative in-flight contribution cannot exceed either that excess or the union of native-busy time it intersects.
++export function workerFlightBlock(beats, spans) {
++  const finite = value => typeof value === 'number' && Number.isFinite(value);
++  let previousEnd = -Infinity;
++  for (const beat of beats) {
++    if (!Array.isArray(beat) || beat.length !== 3 || !beat.every(finite) || beat[0] < 0 || beat[1] < beat[0] || beat[0] < previousEnd || beat[2] !== beat[1] - beat[0] - 4) throw new TypeError('Invalid worker-flight heartbeat clock');
++    previousEnd = beat[1];
++  }
++  const union = [];
++  for (const span of spans) if (!Array.isArray(span) || span.length !== 2 || !span.every(finite) || span[0] < 0 || span[1] < span[0]) throw new TypeError('Invalid native-busy clock');
++  for (const [from, to] of spans.map(span => [...span]).sort((a, b) => a[0] - b[0])) {
++    const last = union.at(-1);
++    if (last && from <= last[1]) last[1] = Math.max(last[1], to); else union.push([from, to]);
++  }
++  if (!union.length) return null;
++  let flight = 0;
++  for (const [from, to, excess] of beats) {
++    let overlap = 0;
++    for (const [start, end] of union) overlap += Math.max(0, Math.min(to, end) - Math.max(from, start));
++    flight = Math.max(flight, Math.min(Math.max(0, excess), overlap));
++  }
++  return flight;
++}
++
++// Self-contained for page.evaluate. Only this pane is wrapped; every native method keeps its receiver/arguments/result/error.
++export function installWorkerFlightClock() {
++  const root = demo.pane.element, dataset = root.dataset;
++  if (root.hasAttribute('data-opf-checking')) throw new Error('Install the native-busy clock only on an idle pane');
++  const ownDataset = Object.getOwnPropertyDescriptor(root, 'dataset'), ownRemove = Object.getOwnPropertyDescriptor(root, 'removeAttribute');
++  const remove = root.removeAttribute, limits = { beats: 131072, nativeEdges: 8192, moEdges: 8192, longtasks: 8192, samples: 128 };
++  const buffers = Object.fromEntries(Object.keys(limits).map(key => [key, []])), overflow = {};
++  const spans = [], faults = [], restoreErrors = [];
++  let opened = null, cursor = 0, lastClock = -Infinity, restored = false;
++  const record = (kind, value) => { if (buffers[kind].length < limits[kind]) buffers[kind].push(value); else overflow[kind] = (overflow[kind] ?? 0) + 1; };
++  const clock = () => {
++    const value = performance.now();
++    if (!Number.isFinite(value) || value < 0 || value < lastClock) { if (faults.length < 16) faults.push('Invalid or decreasing native clock'); else overflow.clockFaults = (overflow.clockFaults ?? 0) + 1; }
++    if (Number.isFinite(value)) lastClock = value;
++    return value;
++  };
++  const mutate = (operation, action) => {
++    const before = clock(); let failed = false;
++    try { return action(); } catch (error) { failed = true; throw error; }
++    finally {
++      const after = clock(), on = root.hasAttribute('data-opf-checking');
++      record('nativeEdges', { operation, before, after, on, failed });
++      if (failed) { if (faults.length < 16) faults.push('Native mutation threw'); else overflow.clockFaults = (overflow.clockFaults ?? 0) + 1; }
++      if (on && opened === null) opened = before;
++      else if (!on && opened !== null) {
++        if (spans.length < limits.nativeEdges) spans.push([opened, after]); else overflow.spans = (overflow.spans ?? 0) + 1;
++        opened = null;
++      }
++    }
++  };
++  const proxy = new Proxy(dataset, {
++    get(target, key) { return Reflect.get(target, key, target); },
++    set(target, key, value) { return key === 'opfChecking' ? mutate('dataset.opfChecking=set', () => Reflect.set(target, key, value, target)) : Reflect.set(target, key, value, target); },
++  });
++  const validate = () => {
++    if (opened !== null || faults.length || Object.keys(overflow).length) throw new Error('Native worker-flight clock incomplete, invalid or overflowed');
++  };
++  const restore = () => {
++    const attempt = action => { try { action(); } catch (error) { restoreErrors.push(String(error?.message ?? error)); } };
++    attempt(() => { if (ownDataset) Object.defineProperty(root, 'dataset', ownDataset); else delete root.dataset; });
++    attempt(() => { if (ownRemove) Object.defineProperty(root, 'removeAttribute', ownRemove); else delete root.removeAttribute; });
++    restored = root.dataset === dataset && root.removeAttribute === remove && !restoreErrors.length;
++  };
++  window.__workerFlight = {
++    record, restore, validate,
++    takeSpans() { validate(); const result = spans.slice(cursor); cursor = spans.length; return result; },
++    snapshot: () => ({ clock: { timeOrigin: performance.timeOrigin, unit: 'performance.now milliseconds' }, limits, buffers, spans, opened, faults, overflow, restored, restoreErrors }),
++  };
++  try {
++    Object.defineProperty(root, 'dataset', { configurable: true, enumerable: ownDataset?.enumerable ?? true, get: () => proxy });
++    Object.defineProperty(root, 'removeAttribute', { configurable: true, writable: true, value: function (...args) { return this === root && args[0] === 'data-opf-checking' ? mutate('removeAttribute', () => Reflect.apply(remove, this, args)) : Reflect.apply(remove, this, args); } });
++  } catch (error) { restore(); throw error; }
++}
+diff --git a/packages/editor/test/worker-flight-intervals.mjs b/packages/editor/test/worker-flight-intervals.mjs
+new file mode 100644
+index 000000000..f68ca65bb
+--- /dev/null
++++ b/packages/editor/test/worker-flight-intervals.mjs
+@@ -0,0 +1,45 @@
++import assert from 'node:assert/strict';
++import { workerFlightBlock } from './support/worker-flight.mjs';
++import { blockFailures } from './support/block-budget.mjs';
++
++const cases = [
++  ['no request remains null for the majority-flight guard', [[0, 20, 16]], [], null],
++  ['fully inside keeps all excess', [[0, 20, 16]], [[0, 20]], 16],
++  ['fully outside contributes zero', [[20, 40, 16]], [[0, 10]], 0],
++  ['entering busy excludes earlier outside time', [[0, 20, 16]], [[17, 30]], 3],
++  ['leaving busy still counts its possible excess', [[0, 20, 16]], [[0, 8]], 8],
++  ['late endpoint outside busy is not discarded', [[0, 20, 16]], [[5, 10]], 5],
++  ['the nominal4ms is not invented as blocked time', [[0, 4, 0]], [[0, 4]], 0],
++  ['a shorter timer interval has no positive excess', [[0, 3, -1]], [[0, 3]], 0],
++  ['a short overlap caps excess, not a proportional share', [[0, 20, 16]], [[10, 12]], 2],
++  ['a zero-width window contributes zero', [[0, 20, 16]], [[10, 10]], 0],
++  ['overlapping/unsorted windows count their union once', [[0, 30, 26]], [[12, 18], [4, 10], [0, 6]], 16],
++  ['adjacent windows stay one union', [[0, 20, 16]], [[0, 5], [5, 10]], 10],
++  ['the maximum considers all beats rather than one selected endpoint', [[0, 10, 6], [10, 30, 16]], [[8, 18]], 8],
++  // Actual retained clocks: Mac ee1abe8c6b7fd2df... JSON paced6, Windows73b883b6596ffe15... JSON paced11.
++  ['retained Mac post-clear boundary caps old10.5ms at3.2ms possible busy', [[3685.7999999970198, 3700.2999999970198, 10.5]], [[3665.5, 3689]], 3.2000000029802322],
++  ['retained Windows post-clear boundary caps old10ms at0.5ms possible busy', [[5206.700000000012, 5220.700000000012, 10]], [[5186.700000000012, 5207.200000000012]], 0.5],
++  ['retained Mac late-ending beat can INCREASE old1ms flight', [[2096.7999999970198, 2107.7999999970198, 7]], [[2052.7000000029802, 2100.2000000029802]], 3.4000000059604645],
++];
++for (const [name, beats, windows, expected] of cases) {
++  const before = structuredClone({ beats, windows });
++  assert.equal(workerFlightBlock(beats, windows), expected, name);
++  assert.deepEqual({ beats, windows }, before, `${name}: inputs remain unchanged`);
++}
++for (const [beats, windows] of [
++  [[[0, Infinity, 1]], []], [[[0, 10, NaN]], [[0, 10]]], [[[-1, 10, 7]], [[0, 10]]],
++  [[[10, 0, -14]], [[0, 10]]], [[[0, 10, 5]], [[0, 10]]], [[[0, 10, 6], [5, 15, 6]], [[0, 20]]],
++  [[[0, 10, 6]], [[0, NaN]]], [[[0, 10, 6]], [[5, 1]]], [[[0, 10, 6]], [[-1, 10]]],
++]) assert.throws(() => workerFlightBlock(beats, windows), TypeError, 'bad clocks must refuse, not become a cheap flight sample');
++
++// These finite controls isolate the intended budget reason; they do not substitute for the existing real BURN/worker-off runs.
++const baseline = [100, 100, 100, 100], samples = [45, 45, 45, 45];
++const burned = workerFlightBlock([[0, 49, 45]], [[0, 49]]);
++const burnFailures = blockFailures({ samples, flight: [burned, burned, burned, burned], baseline, limit: 100 });
++assert.equal(burnFailures.length, 1);
++assert.match(burnFailures[0], /while the worker checks, over 40%/);
++const absent = workerFlightBlock([[0, 49, 45]], []);
++assert.match(blockFailures({ samples, flight: [absent, absent, absent, absent], baseline, limit: 100 })[0], /only 0 of 4 edits were checked in the worker/);
++const outsideApply = workerFlightBlock([[0, 84, 80]], [[0, 3]]);
++assert.deepEqual(blockFailures({ samples: [80, 80, 80, 80], flight: [outsideApply, outsideApply, outsideApply, outsideApply], baseline, limit: 100 }), []);
++console.log('Worker-flight intervals: full/partial/late overlap, union, nominal period, actual Mac/Windows boundaries, clock refusals and unchanged budget controls passed.');

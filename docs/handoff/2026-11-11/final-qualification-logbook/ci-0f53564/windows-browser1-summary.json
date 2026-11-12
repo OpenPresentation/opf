@@ -1,0 +1,53 @@
+{
+  "authority": "Retained public CI job131000118531 raw log; no new execution/API/artifact triage",
+  "workerPerf": {
+    "allYAMLMarkdownJSONCases": "PASS",
+    "duration": "approximately46s",
+    "original79Failure": "remainsRED/untraced; no rescue"
+  },
+  "subsequentMobileTouch": {
+    "outcome": "FAIL",
+    "phase": "preview SVG visible",
+    "primary": {
+      "engine": "webkit",
+      "version": "27.2",
+      "width": 320,
+      "height": 740,
+      "state": "the start",
+      "failedAt": "2026-11-12T06:03:18.974Z",
+      "error": "TimeoutError:locator.waitFor60000ms",
+      "failureDOMProbe": "exceeded3000ms",
+      "domOrScreenshotRetained": false
+    },
+    "collateral": {
+      "count": 3,
+      "error": "Target page/context/browser closed by shared teardown, not three additional timeouts",
+      "contexts": [
+        {
+          "engine": "chromium",
+          "width": 390,
+          "state": "the Import dialog, Gallery tab"
+        },
+        {
+          "engine": "chromium",
+          "width": 820,
+          "state": "the Design sheet with every group open"
+        },
+        {
+          "engine": "chromium",
+          "width": 320,
+          "state": "the Import dialog, Gallery tab"
+        }
+      ],
+      "failedAtRange": "2026-11-12T06:03:22.067Z\u201306:03:22.089Z"
+    },
+    "everyFailureRecord": {
+      "pageErrors": 0,
+      "consoleErrors": 0,
+      "failedRequests": 0,
+      "pendingRequests": 0
+    },
+    "cause": "PrimarypreviewcauseUNKNOWN; noDOM/screenshot retained, empty error/network counters are not cause proof"
+  },
+  "bulkArtifact": "95MB retained locally; not copied"
+}

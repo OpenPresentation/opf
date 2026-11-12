@@ -1,0 +1,240 @@
+{
+  "source": {
+    "head": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+    "tree": "9cf8c91755ef0a5447dd6d6f84b5d1f2ebabc1b9",
+    "status": ""
+  },
+  "node": "v24.21.0",
+  "compiledFiles": 609,
+  "assets": 223,
+  "scope": "One normal, two maintained negative controls and one maintained outside-apply positive; unchanged workload and budgets; no retry",
+  "runs": [
+    {
+      "name": "normal",
+      "env": {},
+      "code": 0,
+      "signal": null,
+      "error": null,
+      "seconds": 31.917,
+      "freshOutputs": [
+        "1794461927759-51507"
+      ],
+      "report": {
+        "bytes": 2170348,
+        "sha256": "a3d9ee2c32dbb9e64a54e33fcca9d6f37c56b84ae6c90530ade4a68b68e82098"
+      },
+      "browserVersion": "158.0.8127.18",
+      "originalFailure": null,
+      "rows": [
+        {
+          "mode": "on",
+          "format": "yaml",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        },
+        {
+          "mode": "off",
+          "format": "yaml",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        },
+        {
+          "mode": "on",
+          "format": "md",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        },
+        {
+          "mode": "off",
+          "format": "md",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        },
+        {
+          "mode": "on",
+          "format": "json",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        }
+      ],
+      "qualified": true
+    },
+    {
+      "name": "worker-off",
+      "env": {
+        "OPF_PERF_WORKER_OFF": "1"
+      },
+      "code": 1,
+      "signal": null,
+      "error": null,
+      "seconds": 13.452,
+      "freshOutputs": [
+        "1794461959968-51554"
+      ],
+      "report": {
+        "bytes": 727416,
+        "sha256": "8b68b2041e5090907819245bc3da025aa761f9cf9e1e66f470038ab994889a07"
+      },
+      "browserVersion": "158.0.8127.18",
+      "originalFailure": {
+        "name": "AssertionError",
+        "message": "YAML quick: the typical edit blocks for 47 ms with the worker, over 85% of the 54 ms it blocks without it; only 0 of 4 edits were checked in the worker (edits [51,47,44,42], in flight [null,null,null,null])\n+ actual - expected\n\n+ [\n+   'the typical edit blocks for 47 ms with the worker, over 85% of the 54 ms it blocks without it',\n+   'only 0 of 4 edits were checked in the worker'\n+ ]\n- []\n",
+        "stack": "AssertionError [ERR_ASSERTION]: YAML quick: the typical edit blocks for 47 ms with the worker, over 85% of the 54 ms it blocks without it; only 0 of 4 edits were checked in the worker (edits [51,47,44,42], in flight [null,null,null,null])\n+ actual - expected\n\n+ [\n+   'the typical edit blocks for 47 ms with the worker, over 85% of the 54 ms it blocks without it',\n+   'only 0 of 4 edits were checked in the worker'\n+ ]\n- []\n\n    at assertBlockBudget (file:///private/tmp/opf-034/packages/editor/test/support/block-budget.mjs:61:10)\n    at file:///private/tmp/opf-034/packages/editor/test/source-worker-perf-browser.mjs:193:47"
+      },
+      "rows": [
+        {
+          "mode": "off",
+          "format": "yaml",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        },
+        {
+          "mode": "off",
+          "format": "yaml",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        }
+      ],
+      "qualified": true
+    },
+    {
+      "name": "burn45",
+      "env": {
+        "OPF_PERF_BURN_MS": "45"
+      },
+      "code": 1,
+      "signal": null,
+      "error": null,
+      "seconds": 13.929,
+      "freshOutputs": [
+        "1794461973616-51586"
+      ],
+      "report": {
+        "bytes": 845438,
+        "sha256": "959c0da8ada7ee29ab8da9a877192545fcabd4618f52fb0f48cc0b3c30c32a0f"
+      },
+      "browserVersion": "158.0.8127.18",
+      "originalFailure": {
+        "name": "AssertionError",
+        "message": "YAML quick: the typical edit blocks for 42 ms with the worker, over 85% of the 47 ms it blocks without it; the main thread blocks for 42 ms while the worker checks, over 40% of the 47 ms an edit blocks without the worker (edits [41,44,41,42], in flight [41,44,41,42])\n+ actual - expected\n\n+ [\n+   'the typical edit blocks for 42 ms with the worker, over 85% of the 47 ms it blocks without it',\n+   'the main thread blocks for 42 ms while the worker checks, over 40% of the 47 ms an edit blocks without the worker'\n+ ]\n- []\n",
+        "stack": "AssertionError [ERR_ASSERTION]: YAML quick: the typical edit blocks for 42 ms with the worker, over 85% of the 47 ms it blocks without it; the main thread blocks for 42 ms while the worker checks, over 40% of the 47 ms an edit blocks without the worker (edits [41,44,41,42], in flight [41,44,41,42])\n+ actual - expected\n\n+ [\n+   'the typical edit blocks for 42 ms with the worker, over 85% of the 47 ms it blocks without it',\n+   'the main thread blocks for 42 ms while the worker checks, over 40% of the 47 ms an edit blocks without the worker'\n+ ]\n- []\n\n    at assertBlockBudget (file:///private/tmp/opf-034/packages/editor/test/support/block-budget.mjs:61:10)\n    at file:///private/tmp/opf-034/packages/editor/test/source-worker-perf-browser.mjs:193:47"
+      },
+      "rows": [
+        {
+          "mode": "on",
+          "format": "yaml",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        },
+        {
+          "mode": "off",
+          "format": "yaml",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        }
+      ],
+      "qualified": true
+    },
+    {
+      "name": "outside-apply26",
+      "env": {
+        "OPF_PERF_SLOW_APPLY_MS": "26"
+      },
+      "code": 0,
+      "signal": null,
+      "error": null,
+      "seconds": 32.95,
+      "freshOutputs": [
+        "1794461987737-51617"
+      ],
+      "report": {
+        "bytes": 2172149,
+        "sha256": "9a865cde9046ee7e38d5ff48aefd44e36b85c9c86a4ae0f3b2b95b50f969a309"
+      },
+      "browserVersion": "158.0.8127.18",
+      "originalFailure": null,
+      "rows": [
+        {
+          "mode": "on",
+          "format": "yaml",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        },
+        {
+          "mode": "off",
+          "format": "yaml",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        },
+        {
+          "mode": "on",
+          "format": "md",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        },
+        {
+          "mode": "off",
+          "format": "md",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        },
+        {
+          "mode": "on",
+          "format": "json",
+          "restored": true,
+          "error": null,
+          "opened": null,
+          "faults": [],
+          "overflow": {}
+        }
+      ],
+      "qualified": true
+    }
+  ],
+  "failure": null,
+  "afterSource": {
+    "head": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+    "tree": "9cf8c91755ef0a5447dd6d6f84b5d1f2ebabc1b9",
+    "status": ""
+  },
+  "boundRuntimeAndAssetsUnchanged": true
+}

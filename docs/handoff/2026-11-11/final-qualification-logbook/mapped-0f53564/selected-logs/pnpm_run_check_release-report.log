@@ -1,0 +1,20 @@
+
+> openpresentation-workspace@ check:release-report /private/tmp/opf-034
+> node --test docs/programs/release-readiness/report.test.mjs
+
+✔ parses rows, counts statuses and lists open items (1.481166ms)
+✔ rejects malformed tables (0.219792ms)
+✔ joins the Now work queue onto the open items and flags stale or missing rows (0.287541ms)
+✔ the Now table is optional and validated (0.138542ms)
+✔ the committed burndown parses and covers RR-01 to its highest item without gaps (11.031208ms)
+✔ the gallery tracker summary is one line with the unaddressed records by type (0.301042ms)
+✔ a malformed gallery tracker summary is rejected (0.077875ms)
+✔ the committed gallery tracker summarizes (8.357791ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 72.193625

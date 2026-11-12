@@ -1,0 +1,46 @@
+{
+  "scope": "Selected existing publicCI original bytes only; no95MBZIP copied",
+  "files": [
+    {
+      "path": "mobile-touch-failures/1794463401977-6216-1-webkit-320-the-start/failure.json",
+      "source": "/tmp/opf-0f5-browser-review01/selected/mobile-touch-failures/1794463401977-6216-1-webkit-320-the-start/failure.json",
+      "bytes": 1275,
+      "sha256": "830b384063d30ea52591d012a2130737105a6cedd7751de39715fd8b144636d2",
+      "zipMemberCRCAndBytesExact": true
+    },
+    {
+      "path": "mobile-touch-failures/1794463402068-6216-2-chromium-390-the-Import-dialog--Gallery-tab/failure.json",
+      "source": "/tmp/opf-0f5-browser-review01/selected/mobile-touch-failures/1794463402068-6216-2-chromium-390-the-Import-dialog--Gallery-tab/failure.json",
+      "bytes": 1362,
+      "sha256": "9b825e92e68ccffffeb0bf3bddd3c07f674c0ecbbf54e54e3388aedbc89360d9",
+      "zipMemberCRCAndBytesExact": true
+    },
+    {
+      "path": "mobile-touch-failures/1794463402090-6216-4-chromium-320-the-Import-dialog--Gallery-tab/failure.json",
+      "source": "/tmp/opf-0f5-browser-review01/selected/mobile-touch-failures/1794463402090-6216-4-chromium-320-the-Import-dialog--Gallery-tab/failure.json",
+      "bytes": 5224,
+      "sha256": "f77e056a16bceb5df114d91646085da077bec1421d36172b57ff663313bf415b",
+      "zipMemberCRCAndBytesExact": true
+    },
+    {
+      "path": "mobile-touch-failures/1794463402090-6216-4-chromium-820-the-Design-sheet-with-every-group-open/failure.json",
+      "source": "/tmp/opf-0f5-browser-review01/selected/mobile-touch-failures/1794463402090-6216-4-chromium-820-the-Design-sheet-with-every-group-open/failure.json",
+      "bytes": 5233,
+      "sha256": "43133bea75a5a02449c2edc77bb8d4bfb6c80e265976f1b9130be099a13f2a40",
+      "zipMemberCRCAndBytesExact": true
+    },
+    {
+      "path": "source-worker-perf/1794463267543-3440/report.json",
+      "source": "/tmp/opf-0f5-browser-review01/selected/source-worker-perf/1794463267543-3440/report.json",
+      "bytes": 2195308,
+      "sha256": "6970b1e5d6a0e9922df98637f1df4393650fe9ed1501e015f221169ba385eff6",
+      "zipMemberCRCAndBytesExact": true
+    },
+    {
+      "path": "inventory-all527.json",
+      "source": "/tmp/opf-0f5-browser-review01/inventory.json",
+      "bytes": 95670,
+      "sha256": "c8af128c6171a66b144e880fe7bcd03addd461f73963538422276126c6834b10"
+    }
+  ]
+}

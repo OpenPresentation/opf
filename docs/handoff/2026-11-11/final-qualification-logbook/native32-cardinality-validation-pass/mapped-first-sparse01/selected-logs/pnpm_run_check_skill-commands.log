@@ -1,0 +1,21 @@
+
+> openpresentation-workspace@ check:skill-commands /private/tmp/opf-name-snapshot-cardinality-validation
+> node --test scripts/check-skill-commands.test.mjs && node scripts/check-skill-commands.mjs
+
+✔ words keeps quoted text together (0.885208ms)
+✔ commandOf strips launchers and cuts at shell operators (0.286875ms)
+✔ extractCommands reads shell fences, continued lines and inline spans, and skips other code (0.230375ms)
+✔ valueOptions finds the options that take a value (0.088792ms)
+✔ probeArguments gives value options a placeholder, drops positionals and ends with --help (0.128041ms)
+✔ checkSources fails a command the CLI rejects, honours the allowlist and reports a stale entry (0.255375ms)
+﹣ the workspace CLI rejects the removed create --from and an unknown command, and accepts current commands (0.031958ms) # packages/cli/dist is not built
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 37.333291
+check:skill-commands needs the built CLI (packages/cli/dist/index.js). Run pnpm build first.
+ ELIFECYCLE  Command failed with exit code 2.

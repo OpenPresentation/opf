@@ -1,0 +1,34 @@
+{
+  "head": "9997d46f553bde26f5b4e5b06b8713ecc61e368d",
+  "files": [
+    {
+      "path": ".github/workflows/full-ci.yml",
+      "bytes": 1221,
+      "sha256": "edc40a4f2f7263a66ecec6754159db7a292877aee8a9f301ba21904d76d7f4fa",
+      "matchesFrozenManifest": true,
+      "matchesExecutedGitHead": true
+    },
+    {
+      "path": "docs/evidence/name-snapshot-temp-validation/README.md",
+      "bytes": 3054,
+      "sha256": "eef13121341b17ff59535fc70ae9acdf149ba5a8803dc687f613f410d998e0fc",
+      "matchesFrozenManifest": true,
+      "matchesExecutedGitHead": true
+    },
+    {
+      "path": "docs/evidence/name-snapshot-temp-validation/native-controls.mjs",
+      "bytes": 14324,
+      "sha256": "b5281f3d45ab4770427b3e71acf504f6ac40f69f5b9a4938dece88d21c77e253",
+      "matchesFrozenManifest": true,
+      "matchesExecutedGitHead": true
+    },
+    {
+      "path": "docs/evidence/name-snapshot-temp-validation/run.mjs",
+      "bytes": 6787,
+      "sha256": "3c523ccb79eb012050dade01a83361f3696966f5c9132b3d348940fc8070acdd",
+      "matchesFrozenManifest": true,
+      "matchesExecutedGitHead": true
+    }
+  ],
+  "scope": "Read-only byte verification; no execution"
+}

@@ -1,0 +1,8 @@
+Real private observer adapter positive failed: Furniture completion refused; zero observer IO
+At D:\a\opf\opf\scripts\native-acceptance\reference-name-snapshot-check.ps1:75 char:127
++ ... ries -ne 1){throw ('Real private observer adapter positive failed: '+ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Real private ob...ero observer IO:String) [], RuntimeException
+    + FullyQualifiedErrorId : Real private observer adapter positive failed: Furniture completion refused; zero observ 
+   er IO
+ 

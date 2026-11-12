@@ -1,0 +1,19 @@
+{
+  "productionWholeFile": {
+    "bytes": 30402,
+    "sha256": "7f194a3a9113cb433c04238e5444e71fa7c90f8c2a9895df22fa8e0173f34367",
+    "baseExact": true
+  },
+  "managedWholeFileRemovingOnlyNewGroupAndResultField": {
+    "bytes": 14039,
+    "sha256": "110aca84401d6ea181c43ecfa9ae504d5ff8365b858d821fdac18f3275e64242",
+    "baseExact": true
+  },
+  "nodeWholeFileRemovingOnlyNewAssertions": {
+    "bytes": 21474,
+    "sha256": "e1788f87e4a9ae12f0c470aef92500d39fdadde7696f7a71ce018588bb9ca0a2",
+    "baseExact": true
+  },
+  "newManagedGroup": "# Six separate actual-definition cardinality controls; the original32 scenarios remain unchanged.\n$cardinality=@()\nforeach($phase in @('before','reopened')){\n    foreach($count in @(0,1,2)){\n        $e=Get-Content -LiteralPath $Fixture -Raw -Encoding UTF8|ConvertFrom-Json\n        $stage=if($phase -ceq 'before'){'action-1-set-chart-series-name.series.name.set'}else{'reopened.presentation.close'}\n        $endpoint=@($e.stages|Where-Object {$_.stage -ceq $stage -and $_.status -ceq 'success'})\n        if($endpoint.Count -ne 1){throw 'Cardinality fixture requires one actual endpoint'}\n        if($count -eq 0){$e.stages=@($e.stages|Where-Object {-not($_.stage -ceq $stage -and $_.status -ceq 'success')})}\n        if($count -eq 2){$e.stages+=@($endpoint[0].PSObject.Copy())}\n        $actual=@($e.stages|Where-Object {$_.stage -ceq $stage -and $_.status -ceq 'success'}).Count\n        $ready=Test-ReferenceNameSnapshotsReady $e.request $e.report $e.stages;$expected=$count -eq 1\n        if($actual -ne $count -or $ready -isnot [bool] -or $ready -cne $expected){throw ('Actual snapshot endpoint cardinality failed: '+$phase+'-'+$count)}\n        $cardinality+=@([ordered]@{scenario=($phase+'-'+$count);phase=$phase;endRows=$actual;expectedReady=$expected;ready=$ready;passed=$true})\n    }\n}\n",
+  "newNodeAssertions": "assert.deepEqual(data.cardinality.map(row=>row.scenario),['before-0','before-1','before-2','reopened-0','reopened-1','reopened-2']);assert.deepEqual(data.cardinality.map(({phase,endRows,expectedReady,ready,passed})=>({phase,endRows,expectedReady,ready,passed})),['before','reopened'].flatMap(phase=>[0,1,2].map(endRows=>({phase,endRows,expectedReady:endRows===1,ready:endRows===1,passed:true}))));"
+}

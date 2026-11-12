@@ -1,0 +1,93 @@
+--- source01/packages/editor/test/source-worker-perf-browser.mjs
++++ source02/packages/editor/test/source-worker-perf-browser.mjs
+@@ -127,12 +127,12 @@
+         const inflight = beats.filter(([end]) => spans.some(([from, to]) => end >= from && end <= to)).map(([, gap]) => gap);
+         // Keep the old observer-based result as evidence only. Its whole-edit fields remain the verdict's exact fields.
+         const observed = { longest: Math.max(0, ...long), count: long.length, gap: Math.max(0, ...beats.map(([, gap]) => gap)), flight: spans.length ? Math.max(0, ...inflight) : null };
+-        const nativeSpans = window.__workerFlight.takeSpans(), intervals = beats.map(([end, gap, from]) => [from, end, gap]);
+-        const record = { at: performance.now(), observed, intervals, nativeSpans, moSpans: spans, longDurations: long };
++        const { spans: nativeSpans, newSpans: newNativeSpans } = window.__workerFlight.takeSpans(), intervals = beats.map(([end, gap, from]) => [from, end, gap]);
++        const record = { at: performance.now(), observed, intervals, nativeSpans, newNativeSpans, moSpans: spans, longDurations: long };
+         window.__workerFlight.record('samples', record);
+         return record;
+       });
+-      const result = { ...raw.observed, flight: workerFlightBlock(raw.intervals, raw.nativeSpans) };
++      const result = { ...raw.observed, flight: workerFlightBlock(raw.intervals, raw.nativeSpans, raw.newNativeSpans) };
+       row.samples.push({ ...raw, result });
+       return result;
+     };
+--- source01/packages/editor/test/support/worker-flight.mjs
++++ source02/packages/editor/test/support/worker-flight.mjs
+@@ -1,6 +1,6 @@
+ // A heartbeat reports excess over its nominal4ms period, without knowing where within the interval that excess occurred.
+ // Its conservative in-flight contribution cannot exceed either that excess or the union of native-busy time it intersects.
+-export function workerFlightBlock(beats, spans) {
++export function workerFlightBlock(beats, spans, newSpans = []) {
+   const finite = value => typeof value === 'number' && Number.isFinite(value);
+   let previousEnd = -Infinity;
+   for (const beat of beats) {
+@@ -9,7 +9,12 @@
+   }
+   const union = [];
+   for (const span of spans) if (!Array.isArray(span) || span.length !== 2 || !span.every(finite) || span[0] < 0 || span[1] < span[0]) throw new TypeError('Invalid native-busy clock');
+-  for (const [from, to] of spans.map(span => [...span]).sort((a, b) => a[0] - b[0])) {
++  const sameSpan = (a, b) => a[0] === b[0] && a[1] === b[1];
++  for (const span of newSpans) if (!Array.isArray(span) || span.length !== 2 || !span.every(finite) || !spans.some(known => sameSpan(span, known))) throw new TypeError('New request missing from native-busy history');
++  // Keep prior windows for a beat crossing collection, but do not count unrelated old requests as current participation.
++  // A newly completed request still counts when its first overlapping heartbeat has not completed yet (as the old guard did).
++  const relevant = spans.filter(span => newSpans.some(fresh => sameSpan(span, fresh)) || beats.some(([from, to]) => from <= span[1] && to >= span[0]));
++  for (const [from, to] of relevant.map(span => [...span]).sort((a, b) => a[0] - b[0])) {
+     const last = union.at(-1);
+     if (last && from <= last[1]) last[1] = Math.max(last[1], to); else union.push([from, to]);
+   }
+@@ -68,7 +73,7 @@
+   };
+   window.__workerFlight = {
+     record, restore, validate,
+-    takeSpans() { validate(); const result = spans.slice(cursor); cursor = spans.length; return result; },
++    takeSpans() { validate(); const result = { spans: spans.slice(), newSpans: spans.slice(cursor) }; cursor = spans.length; return result; },
+     snapshot: () => ({ clock: { timeOrigin: performance.timeOrigin, unit: 'performance.now milliseconds' }, limits, buffers, spans, opened, faults, overflow, restored, restoreErrors }),
+   };
+   try {
+--- source01/packages/editor/test/worker-flight-intervals.mjs
++++ source02/packages/editor/test/worker-flight-intervals.mjs
+@@ -5,7 +5,7 @@
+ const cases = [
+   ['no request remains null for the majority-flight guard', [[0, 20, 16]], [], null],
+   ['fully inside keeps all excess', [[0, 20, 16]], [[0, 20]], 16],
+-  ['fully outside contributes zero', [[20, 40, 16]], [[0, 10]], 0],
++  ['fully outside old requests do not count current participation', [[20, 40, 16]], [[0, 10]], null],
+   ['entering busy excludes earlier outside time', [[0, 20, 16]], [[17, 30]], 3],
+   ['leaving busy still counts its possible excess', [[0, 20, 16]], [[0, 8]], 8],
+   ['late endpoint outside busy is not discarded', [[0, 20, 16]], [[5, 10]], 5],
+@@ -26,6 +26,14 @@
+   assert.equal(workerFlightBlock(beats, windows), expected, name);
+   assert.deepEqual({ beats, windows }, before, `${name}: inputs remain unchanged`);
+ }
++// Across two collections the prior closed window must remain available to a heartbeat that was incomplete at the first.
++const history = [[8, 18]];
++assert.equal(workerFlightBlock([[0, 4, 0]], history, history), 0, 'a fresh request counts before its pending heartbeat completes');
++assert.equal(workerFlightBlock([[4, 24, 16]], history, []), 10, 'the next collection includes the late heartbeat overlap with the prior window');
++assert.equal(workerFlightBlock([[24, 34, 6]], history, []), null, 'a later no-request edit cannot inherit a zero-valued phantom request');
++assert.equal(workerFlightBlock([], history, history), 0, 'a real fresh request is recorded even without a completed heartbeat');
++assert.equal(workerFlightBlock([], history, []), null, 'old cumulative history alone is not evidence of a new request');
++assert.throws(() => workerFlightBlock([[0, 4, 0]], history, [[9, 19]]), TypeError, 'fresh-request facts must belong to actual retained history');
+ for (const [beats, windows] of [
+   [[[0, Infinity, 1]], []], [[[0, 10, NaN]], [[0, 10]]], [[[-1, 10, 7]], [[0, 10]]],
+   [[[10, 0, -14]], [[0, 10]]], [[[0, 10, 5]], [[0, 10]]], [[[0, 10, 6], [5, 15, 6]], [[0, 20]]],
+--- source01/docs/handoff/2026-11-11/worker-flight-native-intervals.md
++++ source02/docs/handoff/2026-11-11/worker-flight-native-intervals.md
+@@ -6,10 +6,12 @@
+ 
+ Retained raw Mac report1263045B SHA256 `ee1abe8c6b7fd2df4d9baf6812aad0c64f6dd2a81efb747ddf99b0454cf5557e`; Windows report1200712B SHA256 `73b883b6596ffe1509187414cf258b4c0c07d7df94288dd6afe4d4a1eabbcad8`. Data/analyses remain `/tmp/opf-worker-flight-diagnostic-run01/report.json`, `/tmp/opf-worker-flight-windows-review01/payload/browser/report.json` and `/tmp/opf-worker-flight-{independent-analysis01,windows-independent-analysis01}/`. No native Office claim is part of either witness. The separate Windows managed-fixture failure is not this browser result.
+ 
+-The corrected flight value is the maximum over EVERY heartbeat interval of min(positive heartbeat excess, union length of possible native-busy time intersected by that interval). Busy boundaries bracket the actual native dataset/remove write with performance.now before/after. The4ms nominal timer period is not invented as blocked time; taking the upper bound assumes as much of the observed excess as possible happened while busy. It is a conservative wall-time attribution, not measured CPU duration. All intersecting beats participate, including those ending after busy clears; this can increase prior flight values, so it is not a cap on old selected winners or a half-open endpoint workaround. Overlapping/adjacent windows form a union without double counting. Invalid/decreasing clocks refuse.
++The corrected flight value is the maximum over EVERY heartbeat interval of min(positive heartbeat excess, union length of possible native-busy time intersected by that interval). Busy boundaries bracket the actual native dataset/remove write with performance.now before/after. The4ms nominal timer period is not invented as blocked time; taking the upper bound assumes as much of the observed excess as possible happened while busy. It is a conservative wall-time attribution, not measured CPU duration. All intersecting beats participate, including those ending after busy clears; this can increase prior flight values, so it is not a cap on old selected winners or a half-open endpoint workaround. Overlapping/adjacent windows form a union without double counting. Invalid/decreasing clocks refuse. Cumulative closed-window history remains bounded and is not discarded at collection: a heartbeat completing in a later sample may overlap an earlier request. Only windows intersecting the current completed heartbeat intervals, plus actual newly closed request windows, count participation; unrelated old windows leave flight null. A fresh request with no completed overlapping heartbeat remains0, preserving the original majority-flight meaning. New-request windows must be exact members of retained history.
+ 
+ The one-pane test hook delegates DOMStringMap operations with the real native receiver and removeAttribute with its original receiver/arguments/result/throw, then restores original own descriptors. It does not wrap Worker prototypes or change source-pane/product code. It records bounds on full beats/native edges/MO observations/long tasks/sample data; cap overflow/open spans/clock faults/restoration errors refuse completeness. Existing checks, source text,1000slides,4quick/12paced edits, three formats, all modes/rounds/env flags, actual keyboard events, timeouts,40%flight/85%whole-edit/3xlimit ceiling, uppermedian, majority-flight/counts, final text/error checks and original fail-fast ordering stay unchanged. The old MO-derived result remains raw evidence; whole-edit fields are reused exactly. The shared interval function runs in Node after collecting a sample; the extra raw transfer/recording has diagnostic overhead and is not claimed cost-free.
+ 
+ Every run creates a fresh owned `packages/editor/artifacts/source-worker-perf/<timestamp>-<pid>/report.json` before startup; after each measure it captures raw page evidence/restores hooks/persists before page close and verdict gates, then persists again in outer finally. Original assertions survive secondary capture/write/close failures. As before, startKeyboardSuite/openPage startup boundaries rely on normal runner logs for failures that occur before their try blocks; the initial owned report still exists. Source/helper/budget hashes, actual Node/browser/parameters and partial samples are retained. No prior output is overwritten; incomplete evidence cannot turn an original failure green.
+ 
+ The new top-level `worker-flight-intervals.mjs` is discovered by the existing runner; its helper lives under support and is not a top-level runnable test. No package.json/test-list changes. Finite independent cases cover entry/exit/full outside/full inside/multiple union/late endpoints/nominal4ms/invalid clocks plus real retainedMac/Win examples. An actual late-ending Mac beat demonstrates an increase over the old selected maximum. Pure budget-reason controls cover full busy BURN-like refusal, no-request majority refusal and a small busy overlap with large outside-apply time; they do not replace real qualification. Root must run the new normal test and existing actual worker-off/BURN45 negative controls (for intended reasons), plus the applicable unchanged outside-apply positive if needed, after root/peer review. All such execution remains UNRUN here.
++
++SOURCE02 preserves the frozen SOURCE01 packet and closes the peer-reviewed cross-collection omission. It adds explicit two-collection pending-heartbeat/retained-window coverage, a following no-request-null control, and fresh-request-without-completed-beat coverage. All new execution remains UNRUN; no gate/workload/predicate change.

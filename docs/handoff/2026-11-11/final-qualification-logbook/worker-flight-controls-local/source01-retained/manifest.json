@@ -1,0 +1,189 @@
+{
+  "base": "79cdb85d6ab8a58dde5d474e254cffa027735c51",
+  "branch": "codex/rr-105-worker-flight-intervals",
+  "sourceOnly": true,
+  "qualification": "All new syntax/import/interval tests/browser/workerOff/BURN/outside-apply/build execution UNRUN; originalWin89untracedFAIL remainsUNKNOWN",
+  "changed": [
+    {
+      "path": "packages/editor/test/source-worker-perf-browser.mjs",
+      "bytes": 18233,
+      "sha256": "73fc22cc149dc77a8b13bfdc091ac160f67d3b8be7dbeb4b85894b28dc61880c"
+    },
+    {
+      "path": "packages/editor/test/support/worker-flight.mjs",
+      "bytes": 5326,
+      "sha256": "508579f4e7ab4b2fcec9276824dd5589a0deb3de01efd7b0b9a39f5d5799fa56"
+    },
+    {
+      "path": "packages/editor/test/worker-flight-intervals.mjs",
+      "bytes": 3667,
+      "sha256": "f2e09f7c6e2ca936f6a38a59373d9249b574097c70a80663fb20f811c55f9fe9"
+    },
+    {
+      "path": "docs/handoff/2026-11-11/worker-flight-native-intervals.md",
+      "bytes": 4858,
+      "sha256": "dcc0ae3030f470d40a9e42d2759aa74f033b5a89f7c2498e47af932f48043633"
+    },
+    {
+      "path": "docs/programs/release-readiness/burndown.md",
+      "bytes": 569545,
+      "sha256": "988dede92d9d5eb48a937e70599f05b3827690f99f391b9ef4b214311b96010d"
+    }
+  ],
+  "protected": [
+    {
+      "path": "packages/editor/test/support/block-budget.mjs",
+      "bytes": 5593,
+      "sha256": "fbb22aca8d1a23b4a1b69670705435f76c529e09f224cf6a82f1c433e0af1cee",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "packages/editor/test/support/source-keyboard.mjs",
+      "bytes": 56123,
+      "sha256": "eb1bf6f21913ce9ed098e5de44398d73125584a5f932dc18311b122cacbe481a",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "packages/editor/test/support/source-perf.mjs",
+      "bytes": 5550,
+      "sha256": "7553fa2a648a63a835cfdd1eee982ad2f0a4264f907e856c34e0e6f11d711fb0",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "packages/editor/src/source-pane.js",
+      "bytes": 78372,
+      "sha256": "7ee8e78cc093d2cc92714c751d1879c3ccfe9d2087a1c7cc7493f2b42002c803",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "packages/editor/src/source-checker.js",
+      "bytes": 10332,
+      "sha256": "077b4f923cad914f460c76ffedd14d5ba58f7782cd5d151eaaa52c9e6e432c49",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "packages/editor/src/source-worker.js",
+      "bytes": 2225,
+      "sha256": "131408f6ce66a6f0a57a4e877407eb4932cbd4404e5442039128f40929b5849b",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "packages/editor/src/json-editor.js",
+      "bytes": 53849,
+      "sha256": "f9e1f6daecb833841c2bd37ea56c2c3282fa36980b9c8c9ed0c32165fddda0c1",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "packages/editor/src/index.js",
+      "bytes": 37653,
+      "sha256": "baa7de7ebd0140f845fe6ee015c99c6bbc7313715d5b898c15951b5111f18126",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "packages/editor/test/suites.json",
+      "bytes": 1015,
+      "sha256": "8a4b6ff697c96d29681daf74c294dfaec54acc744f190751d28bda62ae02a809",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "packages/editor/test/browser-suites.json",
+      "bytes": 12566,
+      "sha256": "aa7ab1b557f00b672b839d617ffc46569f13519d02d1053b50155e703dc870a5",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "packages/editor/test/quarantine.json",
+      "bytes": 218,
+      "sha256": "cbab13be93962a3ec8446df93adbc1f11f1520141815284a66c707e0d4f338f9",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "packages/editor/package.json",
+      "bytes": 19257,
+      "sha256": "063136c1018960950a186531421d700d31aa6f60411f7f0a873efd6f238968d2",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "packages/editor/scripts/build-playground.mjs",
+      "bytes": 8147,
+      "sha256": "b262dd38bc09b9a6971b0369e203787119b3cddba94e4702733545fc0e8ec33c",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "scripts/run-tests.mjs",
+      "bytes": 6688,
+      "sha256": "d612fee0d60877522d37febf41a195c5d88cd3fad14abaadba8eff9846450e93",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "package.json",
+      "bytes": 13093,
+      "sha256": "6fbaac685fe76f992f246084ab4b58cc15b20122babae2cbc674f64056566ff0",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 137976,
+      "sha256": "11c0b695a44fe5dcbefa76722f78fdd725e9ceb70b29287cf70b042a2b3326fb",
+      "authority": "immutable79Gitblob, equal currentroot file; sparseauthorcheckout intentionallynotmaterialized"
+    }
+  ],
+  "wholeMaintainedInverse": {
+    "transforms": 12,
+    "bytes": 13582,
+    "sha256": "e3c2bd911e6958505e9e7f077132d5eeaf3f6a7d65a7a17795ae26216b72760c",
+    "exact": true
+  },
+  "unchangedSections": {
+    "keyboardBurstLoop": {
+      "bytes": 815,
+      "sha256": "113cac4e7c986e1baafa55ea1c8cbe551b6798d67bea972a74e3b17bd0cf4b05"
+    },
+    "outerCasesAllPredicatesAssertionsAndGates": {
+      "bytes": 2612,
+      "sha256": "eb7fb46d3be92fd1895333a76d20506dc2a76e7efa5a5bf9218a1c1b30fbe8ec"
+    },
+    "allOriginalParametersPatternsCases": {
+      "bytes": 1021,
+      "sha256": "ff24c726bf8ea7bc250e9ca004596674c884ab7643e20088460b13a874a7adba"
+    },
+    "entireOriginalMetricObjectPreservedAsRawObservation": {
+      "bytes": 159,
+      "sha256": "2f664dc4c54dd47672baf498367f3e1861ac0b03c7e19eee1391a898ffcc4394"
+    }
+  },
+  "semantics": "flight=max overALLbeats min(max(0,excess),unionlength possible-nativebusy overlap); same whole-edit andbudgethelper, no end-only filter/no oldwinner cap",
+  "dataRetention": "Freshowned editorartifacts source-worker-perf child; original+new metrics/rawfullbeats/nativeedges/MO/longtasks/partialresults beforegates/finally; no silentoverflow; primaryfailure preserved",
+  "discovery": {
+    "runner": "scripts/run-tests.mjs:71-72 direct testDir .isFile .mjs",
+    "runnable": "test/worker-flight-intervals.mjs",
+    "nonrunnableHelper": "test/support/worker-flight.mjs",
+    "packageJsonOrListsChanged": false
+  },
+  "retainedEvidence": [
+    {
+      "path": "/tmp/opf-worker-flight-diagnostic-run01/report.json",
+      "bytes": 1263045,
+      "sha256": "ee1abe8c6b7fd2df4d9baf6812aad0c64f6dd2a81efb747ddf99b0454cf5557e"
+    },
+    {
+      "path": "/tmp/opf-worker-flight-windows-review01/payload/browser/report.json",
+      "bytes": 1200712,
+      "sha256": "73b883b6596ffe1509187414cf258b4c0c07d7df94288dd6afe4d4a1eabbcad8"
+    },
+    {
+      "path": "/tmp/opf-worker-flight-independent-analysis01/compact-result.json",
+      "bytes": 8493,
+      "sha256": "58f5e77d8785cc5110f461f78fe5b9e2df83d13abb11db3d802d485d4f82ecb3"
+    },
+    {
+      "path": "/tmp/opf-worker-flight-windows-independent-analysis01/result.json",
+      "bytes": 36471,
+      "sha256": "aeab4b09832c4569eabbd21d0cbea8c3abadb42e68c6727623d814a6dfe368ed"
+    }
+  ],
+  "patch": {
+    "bytes": 27792,
+    "sha256": "f9d12f01d87ea0d1234cfb40b20feff938c9cb7127234270190ae6fec67ef0ce"
+  }
+}

@@ -1,0 +1,94 @@
+diff --git a/docs/programs/release-readiness/burndown.md b/docs/programs/release-readiness/burndown.md
+index 5d68d80fb..2d18aac2c 100644
+--- a/docs/programs/release-readiness/burndown.md
++++ b/docs/programs/release-readiness/burndown.md
+@@ -1510,3 +1510,5 @@ package, close RR-68 or claim a new release result; normal source integration ga
+ - 2026-11-11 RR-105 Node22 demand-test SOURCE ONLY: preserve0fe FullCI9PASS/2RED/11 actual tests. Remaining two registerHooks child programs missed the production createRequire.resolve boundary; test-only wrapper correction preserves exact package/mode/refusal/disk/retry/eagerSVG contracts and adds actual loader-capture/blocked-lookup/load-return evidence. No other renderer test uses registerHooks; new execution UNRUN during W06 quiet window. [Scope and first failures](../../handoff/2026-11-11/node22-demand-resolver-test.md).
+ 
+ - 2026-11-11 RR-105 Name snapshot fixture SOURCE ONLY: retain actualWindows43157898641 browserPASS and Node9/8/1FAILED; firstprivateadapter refused shortTEMP spelling at strict canonical-path guard, full32unqualified. Native-canonicalize only the new test-owned temp root, prove same BigInt device/file identity and record actual spelling difference; all PS/worker/kernel/archives/modes/deadlines/observer guards unchanged. New validation-only attempt owed; no browser repeat or old-result rescue. [Scope](../../handoff/2026-11-11/reference-name-snapshot-temp.md).
++
++- 2026-11-11 RR-105 Name snapshot endpoint SOURCE ONLY: preserve actual43160756096 Node9/8PASS1FAIL and successful same-owned native-temp identity facts. Correct whole-IF singleton collection construction for PS5.1 without changing Count1/order/observer guards; six separately named actual-definition cardinality controls added alongside unchanged original32 and Node9/15s deadline. All new execution UNRUN. [Cause and scope](../../handoff/2026-11-11/reference-name-snapshot-cardinality.md).
+diff --git a/scripts/native-acceptance/furniture-postflight.ps1 b/scripts/native-acceptance/furniture-postflight.ps1
+index 10176fb5f..42db4f9fc 100644
+--- a/scripts/native-acceptance/furniture-postflight.ps1
++++ b/scripts/native-acceptance/furniture-postflight.ps1
+@@ -41,7 +41,7 @@ function Test-ReferenceNameSnapshotsReady($Request,$Report,$Stages){
+                 if($ops.Count -ne 2 -or $ops[0].status -cne 'begin' -or $ops[1].status -cne 'success' -or $ops[0].sequence -le $previous -or $ops[1].sequence -le $ops[0].sequence){return $false}
+                 foreach($op in $ops){if($op.ownedPresentationPath -cne $owner -or $op.cleanupConfirmed -isnot [bool] -or $op.cleanupConfirmed){return $false}};$previous=$ops[1].sequence
+             }
+-            $end=if($i -eq 0){$set}else{@($Stages|Where-Object {$_.stage -ceq 'reopened.presentation.close' -and $_.status -ceq 'success'})};if($end.Count -ne 1 -or $previous -ge $end[0].sequence){return $false}
++            $end=@(if($i -eq 0){$set}else{@($Stages|Where-Object {$_.stage -ceq 'reopened.presentation.close' -and $_.status -ceq 'success'})});if($end.Count -ne 1 -or $previous -ge $end[0].sequence){return $false}
+         }
+         $copies=@($Stages|Where-Object {$_.stage.EndsWith('.saveCopyAs') -and $_.status -ceq 'success'});if($copies.Count -ne 3){return $false}
+         $wanted=@('reference-before.presentation.saveCopyAs','edited.presentation.saveCopyAs','reference-reopened.presentation.saveCopyAs');for($i=0;$i -lt 3;$i++){if($copies[$i].stage -cne $wanted[$i]){return $false}}
+diff --git a/scripts/native-acceptance/reference-name-snapshot-check.ps1 b/scripts/native-acceptance/reference-name-snapshot-check.ps1
+index 5954679c6..b60185387 100644
+--- a/scripts/native-acceptance/reference-name-snapshot-check.ps1
++++ b/scripts/native-acceptance/reference-name-snapshot-check.ps1
+@@ -57,6 +57,22 @@ foreach($mode in @('before','reopened','no-mode','no-reference','foreign-phase',
+ . (Join-Path $Root 'scripts/native-acceptance/owned-postflight.ps1')
+ . (Join-Path $Root 'scripts/native-acceptance/furniture-postflight.ps1')
+ $original=Get-Content -LiteralPath $Fixture -Raw -Encoding UTF8|ConvertFrom-Json;$adapter=@()
++# Six separate actual-definition cardinality controls; the original32 scenarios remain unchanged.
++$cardinality=@()
++foreach($phase in @('before','reopened')){
++    foreach($count in @(0,1,2)){
++        $e=Get-Content -LiteralPath $Fixture -Raw -Encoding UTF8|ConvertFrom-Json
++        $stage=if($phase -ceq 'before'){'action-1-set-chart-series-name.series.name.set'}else{'reopened.presentation.close'}
++        $endpoint=@($e.stages|Where-Object {$_.stage -ceq $stage -and $_.status -ceq 'success'})
++        if($endpoint.Count -ne 1){throw 'Cardinality fixture requires one actual endpoint'}
++        if($count -eq 0){$e.stages=@($e.stages|Where-Object {-not($_.stage -ceq $stage -and $_.status -ceq 'success')})}
++        if($count -eq 2){$e.stages+=@($endpoint[0].PSObject.Copy())}
++        $actual=@($e.stages|Where-Object {$_.stage -ceq $stage -and $_.status -ceq 'success'}).Count
++        $ready=Test-ReferenceNameSnapshotsReady $e.request $e.report $e.stages;$expected=$count -eq 1
++        if($actual -ne $count -or $ready -isnot [bool] -or $ready -cne $expected){throw ('Actual snapshot endpoint cardinality failed: '+$phase+'-'+$count)}
++        $cardinality+=@([ordered]@{scenario=($phase+'-'+$count);phase=$phase;endRows=$actual;expectedReady=$expected;ready=$ready;passed=$true})
++    }
++}
+ foreach($mode in @('positive','missing-before','missing-reopened','crossed-copy-order','copy-after-setter','wrong-owner','extra-copy','wrong-type','missing-mode','wrong-input','pending')){
+     $e=Get-Content -LiteralPath $Fixture -Raw -Encoding UTF8|ConvertFrom-Json
+     $dir=Join-Path $Output ('adapter-'+$mode);[void](New-Item -ItemType Directory -Path $dir);[void](New-Item -ItemType Directory -Path (Join-Path $dir 'native'))
+@@ -76,4 +92,4 @@ foreach($mode in @('positive','missing-before','missing-reopened','crossed-copy-
+     $adapter+=@([ordered]@{scenario=$mode;passed=$true;mockQueries=$script:mockQueries;failure=$failure})
+ }
+ if((Get-FileHash -LiteralPath $worker -Algorithm SHA256).Hash -cne $before){throw 'Worker changed during managed controls'}
+-[ordered]@{schemaVersion=1;officeInvoked=$false;realProcessQueries=0;genuineStartupArchive=$false;earlierSourceBootstrapExercised=$false;startup=$startup;saves=$saves;adapter=$adapter}|ConvertTo-Json -Depth 30|Set-Content -LiteralPath (Join-Path $Output 'result.json') -Encoding UTF8
++[ordered]@{schemaVersion=1;officeInvoked=$false;realProcessQueries=0;genuineStartupArchive=$false;earlierSourceBootstrapExercised=$false;startup=$startup;saves=$saves;adapter=$adapter;cardinality=$cardinality}|ConvertTo-Json -Depth 30|Set-Content -LiteralPath (Join-Path $Output 'result.json') -Encoding UTF8
+diff --git a/scripts/native-acceptance/reference-name-snapshot.test.mjs b/scripts/native-acceptance/reference-name-snapshot.test.mjs
+index f01b69e32..c1e9953c6 100644
+--- a/scripts/native-acceptance/reference-name-snapshot.test.mjs
++++ b/scripts/native-acceptance/reference-name-snapshot.test.mjs
+@@ -92,6 +92,6 @@ test('actualPS5 closed owned Save helper and real unchanged observer adapter',{s
+  assert.equal(requestedStat.dev,canonicalStat.dev,'Both temp spellings must identify the same owned fixture device');
+  assert.equal(requestedStat.ino,canonicalStat.ino,'Both temp spellings must identify the same owned fixture file');
+  console.log('Reference Name snapshot fixture identity:',JSON.stringify({lexicalSpellingDiffers:requestedOut!==out,sameOwnedFixture:true}));
+- const result=spawnSync(path.join(process.env.SystemRoot,'System32/WindowsPowerShell/v1.0/powershell.exe'),['-NoProfile','-NonInteractive','-File',path.join(ROOT,'scripts/native-acceptance/reference-name-snapshot-check.ps1'),'-Root',ROOT,'-Fixture',fixture,'-Output',path.join(out,'managed')],{env:windowsPowerShellEnvironment(process.env),encoding:'utf8',timeout:15000});fs.writeFileSync(path.join(out,'stdout.log'),result.stdout??'');fs.writeFileSync(path.join(out,'stderr.log'),result.stderr??'');assert.equal(result.status,0,result.error?.message??result.stdout+result.stderr);const data=JSON.parse(fs.readFileSync(path.join(out,'managed/result.json'),'utf8').replace(/^\uFEFF/u,''));assert.equal(data.officeInvoked,false);assert.equal(data.realProcessQueries,0);assert.equal(data.genuineStartupArchive,false);assert.equal(data.earlierSourceBootstrapExercised,false);assert.deepEqual(data.startup.map(row=>row.scenario),['enabled','old-name-only','disabled','missing-new-switch','missing-new-request','false-new-request','new-without-reference','wrong-source']);assert.ok(data.startup.every(row=>row.passed));assert.deepEqual(data.saves.map(row=>row.scenario),['before','reopened','no-mode','no-reference','foreign-phase','foreign-path','same-input','existing-copy','foreign-owner','wrong-before-name','wrong-after-name','getter-fault','save-fault']);assert.ok(data.saves.every(row=>row.passed));assert.deepEqual(data.adapter.map(row=>row.scenario),['positive','missing-before','missing-reopened','crossed-copy-order','copy-after-setter','wrong-owner','extra-copy','wrong-type','missing-mode','wrong-input','pending']);assert.ok(data.adapter.every(row=>row.passed));assert.equal(data.adapter[0].mockQueries,1);assert.ok(data.adapter.slice(1).every(row=>row.mockQueries===0));
++ const result=spawnSync(path.join(process.env.SystemRoot,'System32/WindowsPowerShell/v1.0/powershell.exe'),['-NoProfile','-NonInteractive','-File',path.join(ROOT,'scripts/native-acceptance/reference-name-snapshot-check.ps1'),'-Root',ROOT,'-Fixture',fixture,'-Output',path.join(out,'managed')],{env:windowsPowerShellEnvironment(process.env),encoding:'utf8',timeout:15000});fs.writeFileSync(path.join(out,'stdout.log'),result.stdout??'');fs.writeFileSync(path.join(out,'stderr.log'),result.stderr??'');assert.equal(result.status,0,result.error?.message??result.stdout+result.stderr);const data=JSON.parse(fs.readFileSync(path.join(out,'managed/result.json'),'utf8').replace(/^\uFEFF/u,''));assert.equal(data.officeInvoked,false);assert.equal(data.realProcessQueries,0);assert.equal(data.genuineStartupArchive,false);assert.equal(data.earlierSourceBootstrapExercised,false);assert.deepEqual(data.startup.map(row=>row.scenario),['enabled','old-name-only','disabled','missing-new-switch','missing-new-request','false-new-request','new-without-reference','wrong-source']);assert.ok(data.startup.every(row=>row.passed));assert.deepEqual(data.saves.map(row=>row.scenario),['before','reopened','no-mode','no-reference','foreign-phase','foreign-path','same-input','existing-copy','foreign-owner','wrong-before-name','wrong-after-name','getter-fault','save-fault']);assert.ok(data.saves.every(row=>row.passed));assert.deepEqual(data.adapter.map(row=>row.scenario),['positive','missing-before','missing-reopened','crossed-copy-order','copy-after-setter','wrong-owner','extra-copy','wrong-type','missing-mode','wrong-input','pending']);assert.ok(data.adapter.every(row=>row.passed));assert.equal(data.adapter[0].mockQueries,1);assert.ok(data.adapter.slice(1).every(row=>row.mockQueries===0));assert.deepEqual(data.cardinality.map(row=>row.scenario),['before-0','before-1','before-2','reopened-0','reopened-1','reopened-2']);assert.deepEqual(data.cardinality.map(({phase,endRows,expectedReady,ready,passed})=>({phase,endRows,expectedReady,ready,passed})),['before','reopened'].flatMap(phase=>[0,1,2].map(endRows=>({phase,endRows,expectedReady:endRows===1,ready:endRows===1,passed:true}))));
+ });
+ export {completion};
+diff --git a/changes/rr-105-name-snapshot-endpoint-cardinality.md b/changes/rr-105-name-snapshot-endpoint-cardinality.md
+new file mode 100644
+index 000000000..dc97b3780
+--- /dev/null
++++ b/changes/rr-105-name-snapshot-endpoint-cardinality.md
+@@ -0,0 +1,5 @@
++---
++type: fixed
++packages: []
++---
++RR-105: Preserve snapshot endpoint collections in the closed native Name qualification guard on Windows PowerShell5.1, retaining exact cardinality and ordering checks.
+diff --git a/docs/handoff/2026-11-11/reference-name-snapshot-cardinality.md b/docs/handoff/2026-11-11/reference-name-snapshot-cardinality.md
+new file mode 100644
+index 000000000..70df166fc
+--- /dev/null
++++ b/docs/handoff/2026-11-11/reference-name-snapshot-cardinality.md
+@@ -0,0 +1,9 @@
++# Reference Name snapshot endpoint cardinality
++
++SOURCE ONLY; all new syntax, portable/PS tests and qualification execution UNRUN. Direct parent is the frozen test-owned native-temp leaf781028f73be79341b9bac6fab078e8416ddd8539. No Office assignment or existing failure is changed.
++
++Preserve actual Windows validation43160756096/job130991095157: Node9tests8PASS/1FAIL, PS1.92s, first private adapter positive refused completion before observer IO. The native-temp correction worked (`lexicalSpellingDiffers=true`, `sameOwnedFixture=true`), but the original32 managed controls remain unqualified. Exact43-file evidence is retained at `/tmp/opf-name-snapshot-temp-validation-review01/payload`; ZIP138163B SHA256 `9d3ee465b9120ccfb9cdb0bc0e406d9f118b5424519b09296a83ab5937b1ac2d`.
++
++The actual readiness function assigns `$end=if(...)` then checks `$end.Count`. Statement output unwraps the one selected JSON PSCustomObject. Windows PowerShell5.1 has no Count property for that object, so the exact-one predicate refuses. Retained actual rows have no Count member: before35→setter53 and reopened104→close106; both endpoints have exactly one row and valid owners/order/status. Microsoft [about_PSCustomObject Notes](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_pscustomobject#notes) documents this version difference. This is a source and retained-record diagnosis; no new actual first-false trace or PS execution is claimed.
++
++Wrap only the complete conditional in `@(...)`. Both success filters, Count1 predicate, order comparison and every other readiness/observer guard remain exact. Add a separately named cardinality result group containing six actual-function controls: zero/one/two success endpoints for each of the before/reopened branches. The whole unchanged function must return true for singleton positives and false for zero/duplicates; no mocked subguard or rewritten function is used. Original8startup+13Save+11adapter scenarios remain their separate32 group, and the full private adapter positive still exercises the complete real readiness-to-observer chain. The same nine Node groups now also require the exact six names, row counts and boolean outcomes. Original15-second PS child deadline, source/archive/mode/ownership/kernel/observer bounds and TEMP/TMP/cwd behavior remain unchanged. Actual PS execution is still owed; six new controls are not a retroactive38-pass claim.

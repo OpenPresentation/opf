@@ -1,0 +1,22 @@
+Scope: all 9 workspace projects
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +127
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 127, reused 127, downloaded 0, added 127, done
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/packages/cli/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/packages/editor/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/packages/integration/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/packages/pptx/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/packages/mcp/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/packages/mcp/node_modules/.bin/opf. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/cli/dist/index.js'
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/render/dist/preview-fonts-cli.js'
+
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/packages/pptx/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/pptx/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/packages/cli/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/cli/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/packages/integration/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/integration/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/packages/editor/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/editor/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/packages/mcp/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/mcp/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-name-snapshot-cardinality-validation/packages/mcp/node_modules/.bin/opf. ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/mcp/node_modules/@openpresentation/cli/dist/index.js'
+Done in 509ms using pnpm v10.33.2

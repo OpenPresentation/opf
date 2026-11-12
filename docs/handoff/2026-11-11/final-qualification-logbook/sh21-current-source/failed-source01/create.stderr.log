@@ -1,0 +1,13 @@
+Error: Cannot find module '@openpresentation/opf-editor/package.json'
+Require stack:
+- /private/tmp/opf-034/package.json
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at require.resolve (node:internal/modules/helpers:175:31)
+    at file:///private/tmp/opf-034/scripts/native-acceptance/identity.mjs:38:34
+    at Array.map (<anonymous>)
+    at installedIdentity (file:///private/tmp/opf-034/scripts/native-acceptance/identity.mjs:37:33)
+    at createSh21Envelope (file:///private/tmp/opf-034/scripts/native-acceptance/sh21-edit-profile.mjs:26:271)
+    at createWindowedEnvelope (file:///private/tmp/opf-034/scripts/native-acceptance/sh21-windowed-profile.mjs:23:15)
+    at main (file:///private/tmp/opf-034/scripts/native-acceptance/sh21-windowed-profile.mjs:82:48)

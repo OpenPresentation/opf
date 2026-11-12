@@ -1,0 +1,103 @@
+{
+  "source": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "actualSelectedPassSteps": 12,
+  "typecheck": "unselected: no .ts/.mts/tsconfig change",
+  "files": [
+    {
+      "path": "selected-logs/build.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/build.log",
+      "bytes": 14666,
+      "sha256": "74e83348c2fa9a9b6e26282bddc5601c0ece23023cd51ee730d659af2728d068",
+      "sourceMtimeUTC": "2026-11-12T05:41:01.167865+00:00",
+      "withinActualGateWindow": true
+    },
+    {
+      "path": "selected-logs/biome.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/biome.log",
+      "bytes": 20433,
+      "sha256": "18d83a499bf94a4fb45f14ea7b4a365bc107a1cfdb530db8440116a189708478",
+      "sourceMtimeUTC": "2026-11-12T05:41:01.321360+00:00",
+      "withinActualGateWindow": true
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_changes.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_changes.log",
+      "bytes": 2675,
+      "sha256": "cedbdb18cf82e0d2144b8f19cb6d42a058e95e9fc50c9b6d059080a12bd6bca9",
+      "sourceMtimeUTC": "2026-11-12T05:41:01.535182+00:00",
+      "withinActualGateWindow": true
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_font-hotlinks.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_font-hotlinks.log",
+      "bytes": 861,
+      "sha256": "80859cd8545eef77fa093394650654ec5b3bec7a3b225cb5a394152a51b81acd",
+      "sourceMtimeUTC": "2026-11-12T05:41:17.669975+00:00",
+      "withinActualGateWindow": true
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_gallery-tracker.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_gallery-tracker.log",
+      "bytes": 2014,
+      "sha256": "16f61a5433da710835cc613d04d1022f3f82a3c4d36c31162b065ac9195f57a6",
+      "sourceMtimeUTC": "2026-11-12T05:41:03.348984+00:00",
+      "withinActualGateWindow": true
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_libreoffice.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_libreoffice.log",
+      "bytes": 1428,
+      "sha256": "0fbf039a8c7ebe09e1f43065eb78660b9da80efda336ce986c8e8bf8d3050c7a",
+      "sourceMtimeUTC": "2026-11-12T05:41:03.596186+00:00",
+      "withinActualGateWindow": true
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_native-acceptance.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_native-acceptance.log",
+      "bytes": 68830,
+      "sha256": "e2d0f3ea06e60465df78adcf342e4459fcef5b1787061eeb4acb8f74779c04bc",
+      "sourceMtimeUTC": "2026-11-12T05:41:23.164161+00:00",
+      "withinActualGateWindow": true
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_release-report.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_release-report.log",
+      "bytes": 825,
+      "sha256": "9f69b5e7d47ab0032e4787d1774e86ab3ba337cc89bb39312e0dc0ab6767c312",
+      "sourceMtimeUTC": "2026-11-12T05:41:17.944809+00:00",
+      "withinActualGateWindow": true
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_skill-commands.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_skill-commands.log",
+      "bytes": 1048,
+      "sha256": "475b1b10ebba9a7d33b8e2a39c1978bedab67d5f8b2f1270cf3206cf697bbfb0",
+      "sourceMtimeUTC": "2026-11-12T05:41:28.677894+00:00",
+      "withinActualGateWindow": true
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_text.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_text.log",
+      "bytes": 1082,
+      "sha256": "d85be642233a3cbd4b1003587d9f1cc9bc71c52fecd574889b0362db654ec10d",
+      "sourceMtimeUTC": "2026-11-12T05:41:33.493170+00:00",
+      "withinActualGateWindow": true
+    },
+    {
+      "path": "selected-logs/pnpm_run_check_stability.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_stability.log",
+      "bytes": 3997,
+      "sha256": "fcaeb38b987f3fa17cf3f20778f18f1247e014a1e46e46bdb02c9f496363703d",
+      "sourceMtimeUTC": "2026-11-12T05:42:03.717376+00:00",
+      "withinActualGateWindow": true
+    },
+    {
+      "path": "selected-logs/tests_editor.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/tests_editor.log",
+      "bytes": 29048,
+      "sha256": "4a2ad17df0b758040a7f85a8bf88a32d82913bf5f9f59577a6fdae37280fa920",
+      "sourceMtimeUTC": "2026-11-12T05:44:10.390393+00:00",
+      "withinActualGateWindow": true
+    }
+  ]
+}

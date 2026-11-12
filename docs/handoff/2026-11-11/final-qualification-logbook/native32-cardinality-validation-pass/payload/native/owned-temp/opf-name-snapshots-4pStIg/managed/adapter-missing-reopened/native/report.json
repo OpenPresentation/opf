@@ -1,0 +1,601 @@
+﻿{
+    "schemaVersion":  1,
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "error":  null,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "captureTextFonts":  false,
+    "readOnlySurvey":  false,
+    "globalPreflight":  {
+                            "policy":  "strict-name-query-v1",
+                            "count":  0
+                        },
+    "actionPlan":  {
+                       "actions":  [
+                                       {
+                                           "op":  "set-chart-series-name",
+                                           "slideIndex":  1,
+                                           "chartName":  "OPF chart 1",
+                                           "seriesIndex":  1,
+                                           "expectedName":  "Actual",
+                                           "newName":  "Actual edited"
+                                       }
+                                   ],
+                       "completed":  [
+                                         {
+                                             "index":  1,
+                                             "op":  "set-chart-series-name",
+                                             "status":  "success"
+                                         }
+                                     ],
+                       "styleEdits":  [
+
+                                      ],
+                       "chartPoints":  [
+
+                                       ],
+                       "chartSeriesEdits":  [
+                                                {
+                                                    "slideIndex":  1,
+                                                    "chartName":  "OPF chart 1",
+                                                    "seriesIndex":  1,
+                                                    "expectedName":  "Actual",
+                                                    "newName":  "Actual edited",
+                                                    "before":  "Actual",
+                                                    "after":  "Actual edited",
+                                                    "status":  "success",
+                                                    "otherNames":  [
+                                                                       {
+                                                                           "index":  2,
+                                                                           "name":  "OPF reference 1"
+                                                                       },
+                                                                       {
+                                                                           "index":  3,
+                                                                           "name":  "OPF reference 2"
+                                                                       }
+                                                                   ],
+                                                    "chartTypeObservation":  {
+                                                                                 "observedType":  "System.Int32",
+                                                                                 "observedRawValue":  "-4111",
+                                                                                 "numericValue":  -4111
+                                                                             },
+                                                    "referenceSeriesCount":  {
+                                                                                 "observedType":  "System.Int32",
+                                                                                 "observedRawValue":  "3",
+                                                                                 "numericValue":  3
+                                                                             },
+                                                    "referenceSeriesTypes":  [
+                                                                                 {
+                                                                                     "index":  1,
+                                                                                     "typeObservation":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "4",
+                                                                                                             "numericValue":  4
+                                                                                                         }
+                                                                                 },
+                                                                                 {
+                                                                                     "index":  2,
+                                                                                     "typeObservation":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "4",
+                                                                                                             "numericValue":  4
+                                                                                                         }
+                                                                                 },
+                                                                                 {
+                                                                                     "index":  3,
+                                                                                     "typeObservation":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "4",
+                                                                                                             "numericValue":  4
+                                                                                                         }
+                                                                                 }
+                                                                             ]
+                                                }
+                                            ]
+                   },
+    "source":  {
+                   "openedPath":  "C:\\Users\\runneradmin\\AppData\\Local\\Temp\\opf-name-snapshots-4pStIg\\managed\\adapter-missing-reopened\\native\\inputs\\input.pptx"
+               },
+    "saved":  {
+                  "path":  "C:\\Users\\runneradmin\\AppData\\Local\\Temp\\opf-name-snapshots-4pStIg\\managed\\adapter-missing-reopened\\native\\native-furniture-control.pptx",
+                  "sha256":  "778a927c8a90446c318d9a58cc7ca82cbff7128d7afa5e91afc66db3e587fc4d"
+              },
+    "phases":  {
+                   "original":  {
+                                    "slideCount":  3,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Synthetic 0",
+                                                       "shapeCount":  1,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF chart 1",
+                                                                          "type":  3,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  453.6,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  ""
+                                                                      }
+                                                                  ]
+                                                   },
+                                                   {
+                                                       "index":  2,
+                                                       "slideId":  257,
+                                                       "name":  "Synthetic 1",
+                                                       "shapeCount":  1,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF chart 2",
+                                                                          "type":  3,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  453.6,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  ""
+                                                                      }
+                                                                  ]
+                                                   },
+                                                   {
+                                                       "index":  3,
+                                                       "slideId":  258,
+                                                       "name":  "Synthetic 2",
+                                                       "shapeCount":  3,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.2.title line 0",
+                                                                          "type":  17,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Target 92%",
+                                                                          "alternativeText":  ""
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF heading slides.2.subtitle line 0",
+                                                                          "type":  17,
+                                                                          "left":  43.43732283464567,
+                                                                          "top":  101.87433070866142,
+                                                                          "width":  873.6,
+                                                                          "height":  25.62,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Threshold 30",
+                                                                          "alternativeText":  ""
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF chart 3",
+                                                                          "type":  3,
+                                                                          "left":  43.2,
+                                                                          "top":  145.4943307086614,
+                                                                          "width":  873.6,
+                                                                          "height":  351.3056692913386,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  ""
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1
+                                                    },
+                                                    {
+                                                        "slideIndex":  2
+                                                    },
+                                                    {
+                                                        "slideIndex":  3
+                                                    }
+                                                ],
+                                    "chartSeriesNames":  [
+                                                             {
+                                                                 "phase":  "original",
+                                                                 "slideIndex":  1,
+                                                                 "chartName":  "OPF chart 1",
+                                                                 "seriesIndex":  1,
+                                                                 "expectedName":  "Actual",
+                                                                 "observedName":  "Actual",
+                                                                 "observedType":  "System.String",
+                                                                 "observedRawValue":  "Actual",
+                                                                 "status":  "success",
+                                                                 "referenceTypeEvidence":  {
+                                                                                               "chart":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "-4111",
+                                                                                                             "numericValue":  -4111
+                                                                                                         },
+                                                                                               "count":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "3",
+                                                                                                             "numericValue":  3
+                                                                                                         },
+                                                                                               "series":  [
+                                                                                                              {
+                                                                                                                  "index":  1,
+                                                                                                                  "typeObservation":  {
+                                                                                                                                          "observedType":  "System.Int32",
+                                                                                                                                          "observedRawValue":  "4",
+                                                                                                                                          "numericValue":  4
+                                                                                                                                      }
+                                                                                                              },
+                                                                                                              {
+                                                                                                                  "index":  2,
+                                                                                                                  "typeObservation":  {
+                                                                                                                                          "observedType":  "System.Int32",
+                                                                                                                                          "observedRawValue":  "4",
+                                                                                                                                          "numericValue":  4
+                                                                                                                                      }
+                                                                                                              },
+                                                                                                              {
+                                                                                                                  "index":  3,
+                                                                                                                  "typeObservation":  {
+                                                                                                                                          "observedType":  "System.Int32",
+                                                                                                                                          "observedRawValue":  "4",
+                                                                                                                                          "numericValue":  4
+                                                                                                                                      }
+                                                                                                              }
+                                                                                                          ]
+                                                                                           }
+                                                             }
+                                                         ]
+                                },
+                   "edited":  {
+                                  "slideCount":  3,
+                                  "slides":  [
+                                                 {
+                                                     "index":  1,
+                                                     "slideId":  256,
+                                                     "name":  "Synthetic 0",
+                                                     "shapeCount":  1,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF chart 1",
+                                                                        "type":  3,
+                                                                        "left":  43.2,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  453.6,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  0,
+                                                                        "text":  null,
+                                                                        "alternativeText":  ""
+                                                                    }
+                                                                ]
+                                                 },
+                                                 {
+                                                     "index":  2,
+                                                     "slideId":  257,
+                                                     "name":  "Synthetic 1",
+                                                     "shapeCount":  1,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF chart 2",
+                                                                        "type":  3,
+                                                                        "left":  43.2,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  453.6,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  0,
+                                                                        "text":  null,
+                                                                        "alternativeText":  ""
+                                                                    }
+                                                                ]
+                                                 },
+                                                 {
+                                                     "index":  3,
+                                                     "slideId":  258,
+                                                     "name":  "Synthetic 2",
+                                                     "shapeCount":  3,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF heading slides.2.title line 0",
+                                                                        "type":  17,
+                                                                        "left":  43.2,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  49.41,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Target 92%",
+                                                                        "alternativeText":  ""
+                                                                    },
+                                                                    {
+                                                                        "index":  2,
+                                                                        "id":  3,
+                                                                        "name":  "OPF heading slides.2.subtitle line 0",
+                                                                        "type":  17,
+                                                                        "left":  43.43732283464567,
+                                                                        "top":  101.87433070866142,
+                                                                        "width":  873.6,
+                                                                        "height":  25.62,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Threshold 30",
+                                                                        "alternativeText":  ""
+                                                                    },
+                                                                    {
+                                                                        "index":  3,
+                                                                        "id":  4,
+                                                                        "name":  "OPF chart 3",
+                                                                        "type":  3,
+                                                                        "left":  43.2,
+                                                                        "top":  145.4943307086614,
+                                                                        "width":  873.6,
+                                                                        "height":  351.3056692913386,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  0,
+                                                                        "text":  null,
+                                                                        "alternativeText":  ""
+                                                                    }
+                                                                ]
+                                                 }
+                                             ],
+                                  "rasters":  [
+                                                  {
+                                                      "slideIndex":  1
+                                                  },
+                                                  {
+                                                      "slideIndex":  2
+                                                  },
+                                                  {
+                                                      "slideIndex":  3
+                                                  }
+                                              ],
+                                  "chartSeriesNames":  [
+                                                           {
+                                                               "phase":  "edited",
+                                                               "slideIndex":  1,
+                                                               "chartName":  "OPF chart 1",
+                                                               "seriesIndex":  1,
+                                                               "expectedName":  "Actual edited",
+                                                               "observedName":  "Actual edited",
+                                                               "observedType":  "System.String",
+                                                               "observedRawValue":  "Actual edited",
+                                                               "status":  "success",
+                                                               "referenceTypeEvidence":  {
+                                                                                             "chart":  {
+                                                                                                           "observedType":  "System.Int32",
+                                                                                                           "observedRawValue":  "-4111",
+                                                                                                           "numericValue":  -4111
+                                                                                                       },
+                                                                                             "count":  {
+                                                                                                           "observedType":  "System.Int32",
+                                                                                                           "observedRawValue":  "3",
+                                                                                                           "numericValue":  3
+                                                                                                       },
+                                                                                             "series":  [
+                                                                                                            {
+                                                                                                                "index":  1,
+                                                                                                                "typeObservation":  {
+                                                                                                                                        "observedType":  "System.Int32",
+                                                                                                                                        "observedRawValue":  "4",
+                                                                                                                                        "numericValue":  4
+                                                                                                                                    }
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "index":  2,
+                                                                                                                "typeObservation":  {
+                                                                                                                                        "observedType":  "System.Int32",
+                                                                                                                                        "observedRawValue":  "4",
+                                                                                                                                        "numericValue":  4
+                                                                                                                                    }
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "index":  3,
+                                                                                                                "typeObservation":  {
+                                                                                                                                        "observedType":  "System.Int32",
+                                                                                                                                        "observedRawValue":  "4",
+                                                                                                                                        "numericValue":  4
+                                                                                                                                    }
+                                                                                                            }
+                                                                                                        ]
+                                                                                         }
+                                                           }
+                                                       ]
+                              },
+                   "reopened":  {
+                                    "slideCount":  3,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Synthetic 0",
+                                                       "shapeCount":  1,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF chart 1",
+                                                                          "type":  3,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  453.6,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  ""
+                                                                      }
+                                                                  ]
+                                                   },
+                                                   {
+                                                       "index":  2,
+                                                       "slideId":  257,
+                                                       "name":  "Synthetic 1",
+                                                       "shapeCount":  1,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF chart 2",
+                                                                          "type":  3,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  453.6,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  ""
+                                                                      }
+                                                                  ]
+                                                   },
+                                                   {
+                                                       "index":  3,
+                                                       "slideId":  258,
+                                                       "name":  "Synthetic 2",
+                                                       "shapeCount":  3,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.2.title line 0",
+                                                                          "type":  17,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Target 92%",
+                                                                          "alternativeText":  ""
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF heading slides.2.subtitle line 0",
+                                                                          "type":  17,
+                                                                          "left":  43.43732283464567,
+                                                                          "top":  101.87433070866142,
+                                                                          "width":  873.6,
+                                                                          "height":  25.62,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Threshold 30",
+                                                                          "alternativeText":  ""
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF chart 3",
+                                                                          "type":  3,
+                                                                          "left":  43.2,
+                                                                          "top":  145.4943307086614,
+                                                                          "width":  873.6,
+                                                                          "height":  351.3056692913386,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  ""
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1
+                                                    },
+                                                    {
+                                                        "slideIndex":  2
+                                                    },
+                                                    {
+                                                        "slideIndex":  3
+                                                    }
+                                                ],
+                                    "chartSeriesNames":  [
+                                                             {
+                                                                 "phase":  "reopened",
+                                                                 "slideIndex":  1,
+                                                                 "chartName":  "OPF chart 1",
+                                                                 "seriesIndex":  1,
+                                                                 "expectedName":  "Actual edited",
+                                                                 "observedName":  "Actual edited",
+                                                                 "observedType":  "System.String",
+                                                                 "observedRawValue":  "Actual edited",
+                                                                 "status":  "success",
+                                                                 "referenceTypeEvidence":  {
+                                                                                               "chart":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "-4111",
+                                                                                                             "numericValue":  -4111
+                                                                                                         },
+                                                                                               "count":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "3",
+                                                                                                             "numericValue":  3
+                                                                                                         },
+                                                                                               "series":  [
+                                                                                                              {
+                                                                                                                  "index":  1,
+                                                                                                                  "typeObservation":  {
+                                                                                                                                          "observedType":  "System.Int32",
+                                                                                                                                          "observedRawValue":  "4",
+                                                                                                                                          "numericValue":  4
+                                                                                                                                      }
+                                                                                                              },
+                                                                                                              {
+                                                                                                                  "index":  2,
+                                                                                                                  "typeObservation":  {
+                                                                                                                                          "observedType":  "System.Int32",
+                                                                                                                                          "observedRawValue":  "4",
+                                                                                                                                          "numericValue":  4
+                                                                                                                                      }
+                                                                                                              },
+                                                                                                              {
+                                                                                                                  "index":  3,
+                                                                                                                  "typeObservation":  {
+                                                                                                                                          "observedType":  "System.Int32",
+                                                                                                                                          "observedRawValue":  "4",
+                                                                                                                                          "numericValue":  4
+                                                                                                                                      }
+                                                                                                              }
+                                                                                                          ]
+                                                                                           }
+                                                             }
+                                                         ]
+                                }
+               },
+    "referenceNameEdit":  true,
+    "referenceNameSnapshots":  [
+                                   {
+                                       "phase":  "before",
+                                       "path":  "C:\\Users\\runneradmin\\AppData\\Local\\Temp\\opf-name-snapshots-4pStIg\\managed\\adapter-missing-reopened\\native\\reference-name-before.pptx",
+                                       "sha256":  "69a9fcdbe143dad539138193969cbd064fa54adad08f1045801fbebc39da5b5f"
+                                   }
+                               ],
+    "reopened":  {
+                     "path":  "C:\\Users\\runneradmin\\AppData\\Local\\Temp\\opf-name-snapshots-4pStIg\\managed\\adapter-missing-reopened\\native\\native-furniture-control.pptx",
+                     "sha256":  "778a927c8a90446c318d9a58cc7ca82cbff7128d7afa5e91afc66db3e587fc4d"
+                 }
+}

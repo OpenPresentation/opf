@@ -1,0 +1,26 @@
+{
+  "review": "ACCEPT SOURCE; actual Windows outcome pending",
+  "base": "781028f73be79341b9bac6fab078e8416ddd8539",
+  "patch": {
+    "bytes": 27958,
+    "sha256": "c9a8c9150a1bb5707ab488a43729cc811f13998ae94b04665fb9e898888e0adc"
+  },
+  "manifest": {
+    "bytes": 6297,
+    "sha256": "4e8a11dc1675d6cda89cb99da13adff2dc7ca1c7fdecb98c5facc2333ab08376"
+  },
+  "changedFiles": 4,
+  "protectedFiles": 18,
+  "syntax": [
+    "run.mjs PASS",
+    "native-controls.mjs PASS"
+  ],
+  "actionlint": "PASS",
+  "diffCheck": "PASS",
+  "scope": "One maintained Node9/PS32 file; no Office/browser; NEVERMERGE evidence branch",
+  "limitations": [
+    "Not normal CI qualification",
+    "No actual Windows result yet",
+    "Prior failure remains failed"
+  ]
+}

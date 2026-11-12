@@ -1,0 +1,13 @@
+05:20:54 OpenPresentation/opf@9997d46f553b: waiting for One maintained Node9 and actual Office-free PS32
+05:23:55 OpenPresentation/opf@9997d46f553b: RED
+  One maintained Node9 and actual Office-free PS32: FAILURE https://github.com/OpenPresentation/opf/actions/runs/43160756096/job/130991095157
+{
+  "code": 1,
+  "results": [
+    {
+      "label": "OpenPresentation/opf@9997d46f553b",
+      "code": 1,
+      "text": "RED\n  One maintained Node9 and actual Office-free PS32: FAILURE https://github.com/OpenPresentation/opf/actions/runs/43160756096/job/130991095157"
+    }
+  ]
+}

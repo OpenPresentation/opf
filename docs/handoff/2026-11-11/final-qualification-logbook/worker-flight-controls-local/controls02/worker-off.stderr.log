@@ -1,0 +1,27 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: YAML quick: the typical edit blocks for 47 ms with the worker, over 85% of the 54 ms it blocks without it; only 0 of 4 edits were checked in the worker (edits [51,47,44,42], in flight [null,null,null,null])
++ actual - expected
+
++ [
++   'the typical edit blocks for 47 ms with the worker, over 85% of the 54 ms it blocks without it',
++   'only 0 of 4 edits were checked in the worker'
++ ]
+- []
+
+    at assertBlockBudget (file:///private/tmp/opf-034/packages/editor/test/support/block-budget.mjs:61:10)
+    at file:///private/tmp/opf-034/packages/editor/test/source-worker-perf-browser.mjs:193:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'the typical edit blocks for 47 ms with the worker, over 85% of the 54 ms it blocks without it',
+    'only 0 of 4 edits were checked in the worker'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

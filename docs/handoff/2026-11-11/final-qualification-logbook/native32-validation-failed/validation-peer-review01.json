@@ -1,0 +1,43 @@
+{
+  "scope": "Independent SOURCE-only review; no project imports/syntax/tests/build/PS/browser/API execution",
+  "verdict": "ACCEPTED; no concrete blocker found",
+  "sourcePacket": {
+    "patchBytes": 27958,
+    "patchSha256": "c9a8c9150a1bb5707ab488a43729cc811f13998ae94b04665fb9e898888e0adc",
+    "manifestSha256": "4e8a11dc1675d6cda89cb99da13adff2dc7ca1c7fdecb98c5facc2333ab08376",
+    "base": "781028f73be79341b9bac6fab078e8416ddd8539"
+  },
+  "verified": {
+    "changedFiles": 4,
+    "protectedBaseExact": 18,
+    "wholeHelperInverse": {
+      "bytes": 14324,
+      "sha256": "6d2e9b0f7dbd81a50187ba819079e89d05d683b4582002a2e9a5538258af8558"
+    },
+    "soleMaintainedFile": "scripts/native-acceptance/reference-name-snapshot.test.mjs",
+    "tapExpected": {
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "managedExpected": {
+      "startup": 8,
+      "saves": 13,
+      "privateAdapter": 11,
+      "total": 32
+    },
+    "originalPSChildMilliseconds": 15000,
+    "outerHelperMilliseconds": 120000,
+    "TEMP_TMP_cwdUnchanged": true,
+    "sourceAndSevenDistBeforeAfter": true,
+    "primaryFailurePreservedBeforeReceiptParse": true,
+    "freshOwnedTempsAndTAPRetained": true,
+    "workflowDispatchOnlyNeverMerge": true,
+    "readOnlyDepth2PinnedNode24222": true,
+    "noBrowserPlaygroundChromiumOfficeOrSeparateStartupFile": true
+  },
+  "qualification": "Source acceptance only. Prior Windows witness remainsRED; new actualPS32 validation unrun. No normalCI/native/release acceptance."
+}

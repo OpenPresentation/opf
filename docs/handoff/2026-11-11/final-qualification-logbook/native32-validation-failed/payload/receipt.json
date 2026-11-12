@@ -1,0 +1,67 @@
+{
+  "scope": "NEVERMERGE validation-only Node9/PS32; not native or normal Full CI acceptance",
+  "base": "781028f73be79341b9bac6fab078e8416ddd8539",
+  "head": "9997d46f553bde26f5b4e5b06b8713ecc61e368d",
+  "errors": [
+    {
+      "phase": "original-maintained-controls",
+      "args": [
+        "D:\\a\\opf\\opf\\docs\\evidence\\name-snapshot-temp-validation\\native-controls.mjs",
+        "--expect-head",
+        "9997d46f553bde26f5b4e5b06b8713ecc61e368d",
+        "--output",
+        "D:\\a\\opf\\opf\\artifacts\\name-snapshot-temp-validation\\native"
+      ],
+      "seconds": 14.01,
+      "code": 1,
+      "signal": null,
+      "error": null
+    }
+  ],
+  "child": {
+    "args": [
+      "D:\\a\\opf\\opf\\docs\\evidence\\name-snapshot-temp-validation\\native-controls.mjs",
+      "--expect-head",
+      "9997d46f553bde26f5b4e5b06b8713ecc61e368d",
+      "--output",
+      "D:\\a\\opf\\opf\\artifacts\\name-snapshot-temp-validation\\native"
+    ],
+    "seconds": 14.01,
+    "code": 1,
+    "signal": null,
+    "error": null
+  },
+  "afterSourceChecksPassed": true,
+  "sourceAndBuildUnchanged": true,
+  "startedAt": "2026-11-12T05:21:54.631Z",
+  "versions": {
+    "node": "v24.22.2",
+    "pnpm": "10.33.2",
+    "platform": "win32"
+  },
+  "compiledFilesBefore": 609,
+  "nativeReceipt": {
+    "bytes": 119809,
+    "sha256": "a837e7fa9f871b07d24320e2cc46adc953e3974ee6c09cfee5b75fd1b865b28e"
+  },
+  "native": {
+    "status": "FAILED",
+    "failure": {
+      "name": "MaintainedTestFailure",
+      "message": "Original test did not exit0; retained stdout/stderr is authoritative",
+      "code": 1
+    },
+    "tapSummary": {
+      "tests": 9,
+      "pass": 8,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "actualManagedScenarios": null
+  },
+  "compiledFilesAfter": 609,
+  "finishedAt": "2026-11-12T05:22:10.975Z",
+  "code": 1
+}

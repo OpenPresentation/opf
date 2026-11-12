@@ -1,0 +1,18 @@
+{
+  "review": "ACCEPT SOURCE with independent peer; actualWindowsUNRUN",
+  "base": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "patch": {
+    "bytes": 29472,
+    "sha256": "cdb6ce2c98a409c27678b2dd65d6b06082f0490f3871b766b24d54ea1e9e30c4"
+  },
+  "manifest": {
+    "bytes": 8515,
+    "sha256": "f8892c0e2848b1c2d5646ae8a0386f08a3940c249a54ca71631757ffe94f11d1"
+  },
+  "syntax2": "PASS",
+  "actionlint": "PASS",
+  "diffCheck": "PASS",
+  "scope": "NEVERMERGE dispatch-only Windows; originalNode9/PS32 and separate6 exact results; noOffice/browser",
+  "productionMapper": "Running on base candidate; branch-specific mapper remains owed",
+  "peerSha256": "7aaf04b320e26bc4a2809239623eed18d62037452473ed0a580ccd17ebe7f5da"
+}

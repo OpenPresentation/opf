@@ -1,0 +1,209 @@
+{
+  "scope": "Existing actual root executions/source review copied byte-for-byte; no new execution",
+  "files": [
+    {
+      "path": "first-startup-failure01/normal.report.json",
+      "source": "/tmp/opf-final-worker-controls01/normal.report.json",
+      "bytes": 1240,
+      "sha256": "720e6d78b5ccad529d014f7986dd98c6c3308d830c031e7da1191c853485ccb7"
+    },
+    {
+      "path": "first-startup-failure01/normal.stderr.log",
+      "source": "/tmp/opf-final-worker-controls01/normal.stderr.log",
+      "bytes": 593,
+      "sha256": "a57b675c9aab4b3ee9d469bdc9f905a6e1b2010d58576b7cc4b93f68c50f13dd"
+    },
+    {
+      "path": "first-startup-failure01/normal.stdout.log",
+      "source": "/tmp/opf-final-worker-controls01/normal.stdout.log",
+      "bytes": 114,
+      "sha256": "5e30d08162dcf1af9643b80e862cee19eb9500a53c3a92755210f83faef2e3c7"
+    },
+    {
+      "path": "first-startup-failure01/receipt.json",
+      "source": "/tmp/opf-final-worker-controls01/receipt.json",
+      "bytes": 1384,
+      "sha256": "1cf7d5d06cb31278124b0a5533a211de967bd0eb7def2ba8aa11e998f6a63850"
+    },
+    {
+      "path": "first-startup-failure01/run.mjs",
+      "source": "/tmp/opf-final-worker-controls01/run.mjs",
+      "bytes": 4718,
+      "sha256": "10423bfa896dc731ebd793a92954073f7bfa7a648b6aee57dfcc9712c11ce9dc"
+    },
+    {
+      "path": "first-startup-failure01/runner.log",
+      "source": "/tmp/opf-final-worker-controls01/runner.log",
+      "bytes": 540,
+      "sha256": "d29f2e1cf301e8bcdb80ef6ef3a0a73f3e89fcc86e8d5375939cc2fbded6fed5"
+    },
+    {
+      "path": "controls02/burn45.report.json",
+      "source": "/tmp/opf-final-worker-controls02/burn45.report.json",
+      "bytes": 845438,
+      "sha256": "959c0da8ada7ee29ab8da9a877192545fcabd4618f52fb0f48cc0b3c30c32a0f"
+    },
+    {
+      "path": "controls02/burn45.stderr.log",
+      "source": "/tmp/opf-final-worker-controls02/burn45.stderr.log",
+      "bytes": 1205,
+      "sha256": "b9522eb43f3ec88c3c533b28f2119aac45591764bc6a532cd3ffcdec1c54c23d"
+    },
+    {
+      "path": "controls02/burn45.stdout.log",
+      "source": "/tmp/opf-final-worker-controls02/burn45.stdout.log",
+      "bytes": 1076,
+      "sha256": "82ed346b2fdcfba534637676c62968af40e34ff5a879bb1bd4ffcf3e4b798910"
+    },
+    {
+      "path": "controls02/normal.report.json",
+      "source": "/tmp/opf-final-worker-controls02/normal.report.json",
+      "bytes": 2170348,
+      "sha256": "a3d9ee2c32dbb9e64a54e33fcca9d6f37c56b84ae6c90530ade4a68b68e82098"
+    },
+    {
+      "path": "controls02/normal.stderr.log",
+      "source": "/tmp/opf-final-worker-controls02/normal.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "controls02/normal.stdout.log",
+      "source": "/tmp/opf-final-worker-controls02/normal.stdout.log",
+      "bytes": 2586,
+      "sha256": "bd3d7fd5bd2db2cdd5b3325eadca712e0ff3cf54f5c56989d57ba82adf17846e"
+    },
+    {
+      "path": "controls02/outside-apply26.report.json",
+      "source": "/tmp/opf-final-worker-controls02/outside-apply26.report.json",
+      "bytes": 2172149,
+      "sha256": "9a865cde9046ee7e38d5ff48aefd44e36b85c9c86a4ae0f3b2b95b50f969a309"
+    },
+    {
+      "path": "controls02/outside-apply26.stderr.log",
+      "source": "/tmp/opf-final-worker-controls02/outside-apply26.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "controls02/outside-apply26.stdout.log",
+      "source": "/tmp/opf-final-worker-controls02/outside-apply26.stdout.log",
+      "bytes": 2596,
+      "sha256": "613273c42c5ba5443683b4f69afab2d14a3e9c9bbd8ef51d2fe3602688ad0b96"
+    },
+    {
+      "path": "controls02/receipt.json",
+      "source": "/tmp/opf-final-worker-controls02/receipt.json",
+      "bytes": 7876,
+      "sha256": "7d89e398c6528ce89c812d5e3eb3f3fc50316abbd84f53549fc2e515c80d8fec"
+    },
+    {
+      "path": "controls02/run.mjs",
+      "source": "/tmp/opf-final-worker-controls02/run.mjs",
+      "bytes": 4718,
+      "sha256": "c59bebda42cdea84059578cc41c235ec77eed5ae50d0db09845e7e9a504e024c"
+    },
+    {
+      "path": "controls02/runner.log",
+      "source": "/tmp/opf-final-worker-controls02/runner.log",
+      "bytes": 360,
+      "sha256": "e6378ebd97c34dfd19bc47c1b6ae95640a9a6c7e7d109a9da5f25bc05a07ebf4"
+    },
+    {
+      "path": "controls02/worker-off.report.json",
+      "source": "/tmp/opf-final-worker-controls02/worker-off.report.json",
+      "bytes": 727416,
+      "sha256": "8b68b2041e5090907819245bc3da025aa761f9cf9e1e66f470038ab994889a07"
+    },
+    {
+      "path": "controls02/worker-off.stderr.log",
+      "source": "/tmp/opf-final-worker-controls02/worker-off.stderr.log",
+      "bytes": 1006,
+      "sha256": "fb317d6dad2bbeec381ab31aeb1722ab4f193797a37ecc0225deab7717528c0a"
+    },
+    {
+      "path": "controls02/worker-off.stdout.log",
+      "source": "/tmp/opf-final-worker-controls02/worker-off.stdout.log",
+      "bytes": 1166,
+      "sha256": "30dca4c35616e0d39b929ce519136050faa1f5385ba4d8c35d38bcfdd1c2bdae"
+    },
+    {
+      "path": "source02/manifest.json",
+      "source": "/tmp/opf-worker-flight-intervals-source02/manifest.json",
+      "bytes": 8978,
+      "sha256": "b56f484785f1fbbee109e4cc39ae66e8f151ef704df07ec98cf0c5f4a683a839"
+    },
+    {
+      "path": "source02/source.patch",
+      "source": "/tmp/opf-worker-flight-intervals-source02/source.patch",
+      "bytes": 30452,
+      "sha256": "c8611a8d6792857fc2d22b7c2dc1cb278b431e996356826c1f8fb21af8d97860"
+    },
+    {
+      "path": "source02/source01-to-source02.patch",
+      "source": "/tmp/opf-worker-flight-intervals-source02/source01-to-source02.patch",
+      "bytes": 11738,
+      "sha256": "91f9a6e87ba7575da4c0aa946023e13bd0e63ff78b6a247bd7537566dbcd354b"
+    },
+    {
+      "path": "source02/transforms.json",
+      "source": "/tmp/opf-worker-flight-intervals-source02/transforms.json",
+      "bytes": 8205,
+      "sha256": "46a2a9bf296b0f4a67942064ad9eb90f8175130ccbbc61adcfd135698a28ca85"
+    },
+    {
+      "path": "source01-retained/manifest.json",
+      "source": "/tmp/opf-worker-flight-intervals-source01/manifest.json",
+      "bytes": 8215,
+      "sha256": "b75a55030b298a333bb3f68d3a73dbe563eafbe0106ad72dba0f12465cc6238a"
+    },
+    {
+      "path": "source01-retained/source.patch",
+      "source": "/tmp/opf-worker-flight-intervals-source01/source.patch",
+      "bytes": 27792,
+      "sha256": "f9d12f01d87ea0d1234cfb40b20feff938c9cb7127234270190ae6fec67ef0ce"
+    },
+    {
+      "path": "reviews/root-review01.json",
+      "source": "/tmp/opf-worker-flight-intervals-root-review01.json",
+      "bytes": 784,
+      "sha256": "91291b3ad58130036f13f18b4207cdcf6b02ebc448c8c8e4d7b25088e585c083"
+    },
+    {
+      "path": "reviews/root-review02.json",
+      "source": "/tmp/opf-worker-flight-intervals-root-review02.json",
+      "bytes": 738,
+      "sha256": "a9b623f1567e33f50480b30adcf84422b2c3422bf89adaadc5378e3f16d83c51"
+    },
+    {
+      "path": "reviews/root-pure01.log",
+      "source": "/tmp/opf-worker-flight-intervals-root-pure01.log",
+      "bytes": 159,
+      "sha256": "b93e341860e5c1b3bb6a4bc52d9bbc5e0bf2d18782f87fc5c711c1205a1ebe55"
+    },
+    {
+      "path": "reviews/root-pure02.log",
+      "source": "/tmp/opf-worker-flight-intervals-root-pure02.log",
+      "bytes": 159,
+      "sha256": "b93e341860e5c1b3bb6a4bc52d9bbc5e0bf2d18782f87fc5c711c1205a1ebe55"
+    },
+    {
+      "path": "reviews/peer-review02.json",
+      "source": "/tmp/opf-worker-flight-intervals-peer-review02.json",
+      "bytes": 1328,
+      "sha256": "45ff137f09e5f3f610e9a9bb62c431715a56de41174f26d537b42b3979c3187e"
+    },
+    {
+      "path": "bindings/compiled609.json",
+      "source": "/tmp/opf-node22-demand-root-mapped01/runtime-after.json",
+      "bytes": 99609,
+      "sha256": "e12e1ea2bc06a3972e875964e100344fbe1ee784a2426c0f5b49ff4b17f4afc2"
+    },
+    {
+      "path": "bindings/assets223.json",
+      "source": "/tmp/opf-worker-flight-assets01/receipt.json",
+      "bytes": 49233,
+      "sha256": "06f311c30026509d9552158871c8876c7026b2e95a3b2d1e365a8948d123485a"
+    }
+  ]
+}

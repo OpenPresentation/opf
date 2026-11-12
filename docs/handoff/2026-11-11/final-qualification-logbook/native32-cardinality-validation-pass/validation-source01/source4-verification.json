@@ -1,0 +1,34 @@
+{
+  "head": "c0750870476019f04f56fae58a98df2bf8f75f10",
+  "files": [
+    {
+      "path": ".github/workflows/full-ci.yml",
+      "bytes": 1281,
+      "sha256": "2cf76a2fa25a85c1dad5187d001985e26a94063572b981203a5b5761f928630c",
+      "matchesExecutedGitHead": true,
+      "matchesFrozenSourcePacket": true
+    },
+    {
+      "path": "docs/evidence/name-snapshot-cardinality-validation/README.md",
+      "bytes": 3348,
+      "sha256": "ab36be22822a1acbf1ec4dc360e9aa27174ff9a3d49a9dd74dcf754f538fbb96",
+      "matchesExecutedGitHead": true,
+      "matchesFrozenSourcePacket": true
+    },
+    {
+      "path": "docs/evidence/name-snapshot-cardinality-validation/native-controls.mjs",
+      "bytes": 14324,
+      "sha256": "711987b9eda5181eb747ce18b8f276c64381edb4a5b3704ed0d29d968e2bc7f3",
+      "matchesExecutedGitHead": true,
+      "matchesFrozenSourcePacket": true
+    },
+    {
+      "path": "docs/evidence/name-snapshot-cardinality-validation/run.mjs",
+      "bytes": 7767,
+      "sha256": "98c53b0e4e6f69402e96f1b99777f6cd3e4886981a19d3814b628360aee1c111",
+      "matchesExecutedGitHead": true,
+      "matchesFrozenSourcePacket": true
+    }
+  ],
+  "scope": "Read-only exact byte checks; no execution"
+}

@@ -1,0 +1,36 @@
+
+> openpresentation-workspace@ check:text /private/tmp/opf-name-snapshot-cardinality-validation
+> node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs
+
+✔ compressed reports retain the same text checks and original line/column (1.1015ms)
+✖ real compressed evidence is scanned as its text, preserving input bytes (1.168625ms)
+✔ names alone cannot bypass checks and broken/oversized compressed text fails (0.893666ms)
+✔ existing recognized binary evidence remains distinct from text (0.065958ms)
+✔ MR-11: other raster images and gzip archives are binary by signature, never by name (0.184ms)
+✔ MR-11: an imported package is scanned once its package.json exists, and not before (0.135625ms)
+✔ ZIP evidence is binary by signature while plain text under ZIP names stays checked (0.1415ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35.442917
+
+✖ failing tests:
+
+test at scripts/check-text-integrity.test.mjs:17:1
+✖ real compressed evidence is scanned as its text, preserving input bytes (1.168625ms)
+  Error: ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async TestContext.<anonymous> (file:///private/tmp/opf-name-snapshot-cardinality-validation/scripts/check-text-integrity.test.mjs:18:17)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/tmp/opf-name-snapshot-cardinality-validation/docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz'
+  }
+ ELIFECYCLE  Command failed with exit code 1.

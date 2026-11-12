@@ -1,0 +1,81 @@
+{
+  "status": "SOURCE_ONLY_UNQUALIFIED",
+  "source": {
+    "path": "/tmp/build-pilot034-artifact.py",
+    "bytes": 24943,
+    "sha256": "1ac8ca27fe23599b523d641e21c98be4755a7138b47711e1c58e6b94592fb734"
+  },
+  "patch": {
+    "path": "/tmp/opf-pilot034-adapter-source01/source.patch",
+    "bytes": 39633,
+    "sha256": "9d6bc2557b23f6bc6585cd52352ccbc8facda9c2a0c4eba454d5837c2ea8369e"
+  },
+  "historicalPresentationCss": {
+    "bytes": 1832,
+    "sha256": "161b32d8ef020582f80ea64ab7b8ab60e4a92269d487fab09a6a3b7c04d1e9ee",
+    "exactCopy": true
+  },
+  "protectedUnchanged": [
+    {
+      "path": "/tmp/build-pilot033-artifact.py",
+      "bytes": 14302,
+      "sha256": "be772bb949257eed8959bc955543226a0676809938791ef5c359e248ad3ef082"
+    },
+    {
+      "path": "/tmp/refine-pilot033-copy.py",
+      "bytes": 4490,
+      "sha256": "e107353235e2d374ebe032a5caf240d24e2ac659a704397823e5083d043e1d87"
+    },
+    {
+      "path": "/tmp/opf-034/scripts/e1-current-after.mjs",
+      "bytes": 34230,
+      "sha256": "b99136b00e8d0112da25c8f1c2566fe2c23bb2b0049411b2e781b658bf8ffce4"
+    },
+    {
+      "path": "/tmp/opf-e1-full-recovery-inventory01/payload/recovery.json",
+      "bytes": 1654321,
+      "sha256": "901296967ae1cad3c709cbb65f58f4277261133ec00a704c385a40b6ad458816"
+    },
+    {
+      "path": "/tmp/opf-e1-pilot033-artifact/docs/evidence/rr20-pilot033-comparison-20261111/receipt.json",
+      "bytes": 2643,
+      "sha256": "78f7daf8f323c15bae1ae6917bf3ddb72cfac8bc7d549e04f38dfb1f78c58306"
+    },
+    {
+      "path": "/tmp/opf-e1-pilot033-artifact/docs/evidence/rr20-pilot033-comparison-20261111/manifest.json",
+      "bytes": 48846,
+      "sha256": "2ba8b75efd4e61d6d5c68815a00fc4b53a5429ed2f3a48480f29f9b7ce17cff6"
+    },
+    {
+      "path": "/tmp/opf-e1-pilot033-artifact/docs/evidence/rr20-pilot033-comparison-20261111/comparison.html",
+      "bytes": 7016422,
+      "sha256": "88346d462a09e1cab13bf8903f3bf150f092a0edf96be9d2c7665338d4cbdfbc"
+    },
+    {
+      "path": "/tmp/opf-e1-pilot033-artifact/docs/evidence/rr20-pilot033-comparison-20261111/published-033-pilot-comparison.zip",
+      "bytes": 4701902,
+      "sha256": "c52a49457cdac391a03ec3483f1f6bc603a53dde030b43fede094e2c99b10b11"
+    },
+    {
+      "path": "/tmp/opf-e1-pilot033-artifact/docs/evidence/rr20-pilot033-comparison-20261111/sources/original.opf.json",
+      "bytes": 73443,
+      "sha256": "e4a6bca4405ffc24bb6dd404f18cb85675e47e7e047ade1b9428044aa401fab8"
+    },
+    {
+      "path": "/tmp/opf-e1-pilot033-artifact/docs/evidence/rr20-pilot033-comparison-20261111/sources/current-gallery.opf.json",
+      "bytes": 39060,
+      "sha256": "bc1f4d001e04450bf2172ddfffad6210de8999d4a38f730cdebe96d81540a389"
+    }
+  ],
+  "expectedExecution": "Future genuine034 complete maintained render only; no values fabricated",
+  "executionPerformed": {
+    "adapter": false,
+    "syntaxOrCompile": false,
+    "projectImports": false,
+    "renderOrAssembly": false,
+    "browser": false,
+    "networkOrRegistry": false,
+    "publish": false
+  },
+  "productionFilesChanged": 0
+}

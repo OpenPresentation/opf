@@ -1,0 +1,5 @@
+Source worker raw evidence: /private/tmp/opf-034/packages/editor/artifacts/source-worker-perf/1794461959968-51554
+P-003 YAML 1000 slides, bursts of three keys 30 ms apart, main thread: typical block 54 ms, edits [52,50,54,56], in flight [null,null,null,null], worst 56 ms (4 edits; longest task 60 ms), 4 checks in the page (chromium).
+P-003 YAML 1000 slides, bursts of three keys 30 ms apart, worker run made on the main thread: typical block 47 ms, edits [51,47,44,42], in flight [null,null,null,null], worst 51 ms (4 edits; longest task 53 ms), 4 checks in the worker (chromium).
+P-003 YAML 1000 slides, single keys 90 ms apart, main thread: typical block 58 ms, edits [59,56,47,55,58,50,57,58,56,59,58,66], in flight [null,null,null,null,null,null,null,null,null,null,null,null], worst 66 ms (12 edits; longest task 70 ms), 12 checks in the page (chromium).
+P-003 YAML 1000 slides, single keys 90 ms apart, worker run made on the main thread: typical block 59 ms, edits [52,53,51,58,51,60,59,60,61,56,59,69], in flight [null,null,null,null,null,null,null,null,null,null,null,null], worst 69 ms (12 edits; longest task 72 ms), 12 checks in the worker (chromium).

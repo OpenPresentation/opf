@@ -1,0 +1,174 @@
+{
+  "sourceOnly": true,
+  "neverMerge": true,
+  "worktree": "/tmp/opf-name-snapshot-temp-validation",
+  "branch": "codex/evidence-name-snapshot-temp-validation-20261111",
+  "base": "781028f73be79341b9bac6fab078e8416ddd8539",
+  "requiredFirstParent": "781028f73be79341b9bac6fab078e8416ddd8539",
+  "oneSourceCommitRequired": true,
+  "changed": [
+    {
+      "path": ".github/workflows/full-ci.yml",
+      "bytes": 1221,
+      "sha256": "edc40a4f2f7263a66ecec6754159db7a292877aee8a9f301ba21904d76d7f4fa"
+    },
+    {
+      "path": "docs/evidence/name-snapshot-temp-validation/README.md",
+      "bytes": 3054,
+      "sha256": "eef13121341b17ff59535fc70ae9acdf149ba5a8803dc687f613f410d998e0fc"
+    },
+    {
+      "path": "docs/evidence/name-snapshot-temp-validation/native-controls.mjs",
+      "bytes": 14324,
+      "sha256": "b5281f3d45ab4770427b3e71acf504f6ac40f69f5b9a4938dece88d21c77e253"
+    },
+    {
+      "path": "docs/evidence/name-snapshot-temp-validation/run.mjs",
+      "bytes": 6787,
+      "sha256": "3c523ccb79eb012050dade01a83361f3696966f5c9132b3d348940fc8070acdd"
+    }
+  ],
+  "protectedBaseExact": [
+    {
+      "path": "scripts/native-acceptance/reference-name-snapshot.test.mjs",
+      "bytes": 21474,
+      "sha256": "e1788f87e4a9ae12f0c470aef92500d39fdadde7696f7a71ce018588bb9ca0a2"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-name-snapshot-check.ps1",
+      "bytes": 14039,
+      "sha256": "110aca84401d6ea181c43ecfa9ae504d5ff8365b858d821fdac18f3275e64242"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-name-snapshot-contract.mjs",
+      "bytes": 18290,
+      "sha256": "adb918178ee2b95ba99355385ed2a4b039a2088cc350cfa43f8f5968f0255dd6"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-name-contract.mjs",
+      "bytes": 18047,
+      "sha256": "aa6a91dd5cab84560a7a21896ee510614e8fec640adc634e1f731cd84a1c384b"
+    },
+    {
+      "path": "scripts/native-acceptance/furniture-postflight.ps1",
+      "bytes": 30402,
+      "sha256": "7f194a3a9113cb433c04238e5444e71fa7c90f8c2a9895df22fa8e0173f34367"
+    },
+    {
+      "path": "scripts/native-acceptance/furniture-profile.mjs",
+      "bytes": 31852,
+      "sha256": "470b5134f4e822de5cb549547487fba419570186288b7e248fb978951b639b6d"
+    },
+    {
+      "path": "scripts/native-acceptance/owned-postflight.ps1",
+      "bytes": 18877,
+      "sha256": "1779ae802dd73ee8f004bb43620e4eb07683df492cd7fdc24811aa159af51ba4"
+    },
+    {
+      "path": "scripts/native-acceptance/owned-postflight.mjs",
+      "bytes": 12137,
+      "sha256": "f1e7371586880fe76db6f3e1d615db23f67a062ad89a1b99abf8377ef601c782"
+    },
+    {
+      "path": "scripts/native-acceptance/windows-powershell-env.mjs",
+      "bytes": 495,
+      "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6"
+    },
+    {
+      "path": "scripts/native-acceptance/test-fixtures/reference-chart/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "packages/pptx/test/native-furniture-control.ps1",
+      "bytes": 93940,
+      "sha256": "1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870"
+    },
+    {
+      "path": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+      "bytes": 19206,
+      "sha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3"
+    },
+    {
+      "path": "scripts/package-manager.mjs",
+      "bytes": 4969,
+      "sha256": "c66d7950909a2627b283a26f3edd597f329d343fbe3acde031aba8755fcb3023"
+    },
+    {
+      "path": ".github/actions/setup-workspace/action.yml",
+      "bytes": 4261,
+      "sha256": "c53d656f6d508ac7a242ef62e02118eeada14316aef31ddc9031a2b9fe3a12a6"
+    },
+    {
+      "path": ".gitattributes",
+      "bytes": 383,
+      "sha256": "f1e1f210d385a230ff22d7341e8785c60439ce1299c8794d969c42b4ef472fbb"
+    },
+    {
+      "path": "package.json",
+      "bytes": 13093,
+      "sha256": "6fbaac685fe76f992f246084ab4b58cc15b20122babae2cbc674f64056566ff0"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 137976,
+      "sha256": "11c0b695a44fe5dcbefa76722f78fdd725e9ceb70b29287cf70b042a2b3326fb"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "bytes": 1651,
+      "sha256": "a4c126fc53ef833e4b5d36e373efe8c6138b8a98b04fb2b079536f97ade693b1"
+    }
+  ],
+  "helperInverse": {
+    "onlyDifference": "BASE literal79\u2192fixtureleaf781028f73",
+    "acceptedBytes": 14324,
+    "acceptedSha256": "6d2e9b0f7dbd81a50187ba819079e89d05d683b4582002a2e9a5538258af8558",
+    "exact": true
+  },
+  "workflow": {
+    "event": "workflow_dispatch only",
+    "jobs": 1,
+    "runner": "windows-latest",
+    "timeoutMinutes": 20,
+    "fetchDepth": 2,
+    "node": "24.22.2",
+    "pnpm": "10.33.2",
+    "build": [
+      "pnpm run build:packages"
+    ],
+    "browserOrChromiumOrPlayground": false,
+    "entry": "node docs/evidence/name-snapshot-temp-validation/run.mjs",
+    "artifact": "name-snapshot-temp-validation-once",
+    "alwaysUpload": true,
+    "inputs": []
+  },
+  "run": {
+    "onlyMaintainedTarget": "node --test --test-reporter=tap scripts/native-acceptance/reference-name-snapshot.test.mjs",
+    "requiredNodeSummary": {
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "requiredManaged": {
+      "startup": 8,
+      "saves": 13,
+      "privateAdapter": 11,
+      "total": 32
+    },
+    "originalPSChildTimeoutMilliseconds": 15000,
+    "outerHelperTimeoutMilliseconds": 120000,
+    "TEMP_TMP_cwd": "Unchanged actual job values",
+    "runtimeBeforeAfter": "ALL regular files in7dist directories; originalhelper additionally own4public package manifests/entries/runtime",
+    "sourceAuthority": "Clean GITHUB_SHA and direct-parent fixtureleaf;exact4changedpaths;entireoperative roots and fixtureequalleaf; helper wholeinverse"
+  },
+  "qualification": "No source syntax/import/install/build/test/PS/browser/push/dispatch by preparers. Prior9/8/1 remainsFAILED; alreadypassedbrowsernotrerun. NewWindows validation owed. Not normalCI/native/releaseacceptance.",
+  "patch": {
+    "path": "/tmp/opf-name-snapshot-temp-validation-source01/source.patch",
+    "bytes": 27958,
+    "sha256": "c9a8c9150a1bb5707ab488a43729cc811f13998ae94b04665fb9e898888e0adc"
+  }
+}

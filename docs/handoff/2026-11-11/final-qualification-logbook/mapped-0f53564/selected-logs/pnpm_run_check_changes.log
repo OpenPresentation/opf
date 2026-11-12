@@ -1,0 +1,35 @@
+
+> openpresentation-workspace@ check:changes /private/tmp/opf-034
+> node --test scripts/changelog-fragments.test.mjs scripts/changes-config.test.mjs && node scripts/changelog-fragments.mjs check
+
+✔ parseFragment reads type, packages and the entry text (0.883375ms)
+✔ parseFragment rejects what would silently corrupt the changelog (0.30375ms)
+✔ assembleChangelog adds a dated section under an empty Unreleased and keeps the older sections byte for byte (0.250958ms)
+✔ assembleChangelog follows a loose list and folds leftover Unreleased bullets in first (0.127708ms)
+✔ assembleChangelog keeps a multi-line entry together and refuses a duplicate or empty release (0.158083ms)
+✔ assembleChangelog adds the Unreleased heading when a changelog lacks one (0.054875ms)
+✔ assemble groups by type (added, changed, fixed) then slug, and deletes the fragments it used (1.376291ms)
+✔ assemble in a monorepo splits fragments by package and keeps a shared one until both changelogs have it (1.831333ms)
+✔ withoutPackage drops one package and reports when none remain (0.473542ms)
+✔ needsFragment warns only for package code without a fragment or a hand edit of the changelog (0.188833ms)
+✔ the command line validates fragments, assembles with --dry-run untouched, and fails on a bad fragment (72.527083ms)
+✔ --dir selects the directory whose changes/ and changelog are used, whatever the current directory (51.313792ms)
+✔ parseFragment reads a drawing list, quoted or bare (0.224709ms)
+✔ parseFragment rejects a malformed or misplaced drawing declaration (0.208166ms)
+✔ assemble lists the declared ids in the gallery bullet only, and a shared fragment loses the line once the gallery has it (1.486333ms)
+✔ the config names the seven packages, the root changelog for core and packages/<x>/CHANGELOG.md for the others (0.62675ms)
+✔ every package has code paths, and each stays inside its own directory (0.176791ms)
+✔ a fragment may name any of the seven packages, several at once, or none; any other name fails (0.655041ms)
+✔ the fragments in changes/ today are valid under the seven-package config (none is valid: changes/ is empty right after a release) (22.109958ms)
+✔ code in any of the seven packages asks for a fragment; tests, docs and evidence do not (0.215542ms)
+✔ check:changes fails on an unknown package name, and on a package whose changelog is not in the repository (78.672584ms)
+✔ check:changes passes with no fragment at all (changes/ is empty right after a release) (24.093167ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 167.378667
+changes/: 240 fragment(s) valid

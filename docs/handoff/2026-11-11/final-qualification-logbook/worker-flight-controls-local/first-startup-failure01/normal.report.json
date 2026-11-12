@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "scope": "Conservative native-busy heartbeat attribution; wall time, not CPU time",
+  "node": "v24.21.0",
+  "platform": "darwin",
+  "sourceHead": null,
+  "sources": [
+    {
+      "name": "./source-worker-perf-browser.mjs",
+      "bytes": 18306,
+      "sha256": "da2b69c8412b8004d91b585cc3aa75274e8604c712c72ac104a6023f9f597f25"
+    },
+    {
+      "name": "./support/worker-flight.mjs",
+      "bytes": 6059,
+      "sha256": "232145f98c045b4556ec403ac7fb1b4084e36ab124967ec857ec554d294a39a9"
+    },
+    {
+      "name": "./support/block-budget.mjs",
+      "bytes": 5593,
+      "sha256": "fbb22aca8d1a23b4a1b69670705435f76c529e09f224cf6a82f1c433e0af1cee"
+    }
+  ],
+  "parameters": {
+    "CI": true,
+    "LIMIT": 100,
+    "ROUNDS": 1,
+    "COMPARE": true,
+    "WORKER_OFF": false,
+    "BURN": 0,
+    "SLOW_APPLY": 0,
+    "SLIDES": 1000,
+    "TAIL": 150,
+    "PATTERNS": {
+      "quick": {
+        "bursts": 4,
+        "size": 3,
+        "spacing": 30
+      },
+      "paced": {
+        "bursts": 12,
+        "size": 1,
+        "spacing": 90
+      }
+    },
+    "engineName": "chromium",
+    "cpuThrottle": null,
+    "keyboardPlatform": "darwin"
+  },
+  "rows": [],
+  "originalFailure": null,
+  "preservationErrors": []
+}

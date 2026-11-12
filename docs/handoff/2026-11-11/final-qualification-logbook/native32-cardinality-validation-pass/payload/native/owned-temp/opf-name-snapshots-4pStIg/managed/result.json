@@ -1,0 +1,247 @@
+﻿{
+    "schemaVersion":  1,
+    "officeInvoked":  false,
+    "realProcessQueries":  0,
+    "genuineStartupArchive":  false,
+    "earlierSourceBootstrapExercised":  false,
+    "startup":  [
+                    {
+                        "scenario":  "enabled",
+                        "passed":  true,
+                        "failure":  null
+                    },
+                    {
+                        "scenario":  "old-name-only",
+                        "passed":  true,
+                        "failure":  null
+                    },
+                    {
+                        "scenario":  "disabled",
+                        "passed":  true,
+                        "failure":  null
+                    },
+                    {
+                        "scenario":  "missing-new-switch",
+                        "passed":  true,
+                        "failure":  "Name snapshot switch differs from its closed snapshotted request"
+                    },
+                    {
+                        "scenario":  "missing-new-request",
+                        "passed":  true,
+                        "failure":  "Name snapshot switch differs from its closed snapshotted request"
+                    },
+                    {
+                        "scenario":  "false-new-request",
+                        "passed":  true,
+                        "failure":  "Name snapshot switch differs from its closed snapshotted request"
+                    },
+                    {
+                        "scenario":  "new-without-reference",
+                        "passed":  true,
+                        "failure":  "Name snapshots require the exact closed reference-name mode"
+                    },
+                    {
+                        "scenario":  "wrong-source",
+                        "passed":  true,
+                        "failure":  "Exact sealed reference-name source and one plan required"
+                    }
+                ],
+    "saves":  [
+                  {
+                      "scenario":  "before",
+                      "passed":  true,
+                      "saves":  1,
+                      "failure":  null
+                  },
+                  {
+                      "scenario":  "reopened",
+                      "passed":  true,
+                      "saves":  1,
+                      "failure":  null
+                  },
+                  {
+                      "scenario":  "no-mode",
+                      "passed":  true,
+                      "saves":  0,
+                      "failure":  "Only the closed Name snapshot mode may save these two copies"
+                  },
+                  {
+                      "scenario":  "no-reference",
+                      "passed":  true,
+                      "saves":  0,
+                      "failure":  "Only the closed Name snapshot mode may save these two copies"
+                  },
+                  {
+                      "scenario":  "foreign-phase",
+                      "passed":  true,
+                      "saves":  0,
+                      "failure":  "Only the closed Name snapshot mode may save these two copies"
+                  },
+                  {
+                      "scenario":  "foreign-path",
+                      "passed":  true,
+                      "saves":  0,
+                      "failure":  "Name snapshot requires its exact fresh derivative separate from the owned input"
+                  },
+                  {
+                      "scenario":  "same-input",
+                      "passed":  true,
+                      "saves":  0,
+                      "failure":  "Name snapshot requires its exact fresh derivative separate from the owned input"
+                  },
+                  {
+                      "scenario":  "existing-copy",
+                      "passed":  true,
+                      "saves":  0,
+                      "failure":  "Name snapshot requires its exact fresh derivative separate from the owned input"
+                  },
+                  {
+                      "scenario":  "foreign-owner",
+                      "passed":  true,
+                      "saves":  0,
+                      "failure":  "Refusing to snapshot a presentation whose exact identity is not owned"
+                  },
+                  {
+                      "scenario":  "wrong-before-name",
+                      "passed":  true,
+                      "saves":  0,
+                      "failure":  "Refusing to snapshot a presentation whose exact identity is not owned"
+                  },
+                  {
+                      "scenario":  "wrong-after-name",
+                      "passed":  true,
+                      "saves":  1,
+                      "failure":  "Name snapshot changed the owned input identity"
+                  },
+                  {
+                      "scenario":  "getter-fault",
+                      "passed":  true,
+                      "saves":  0,
+                      "failure":  "Refusing to snapshot a presentation whose exact identity is not owned"
+                  },
+                  {
+                      "scenario":  "save-fault",
+                      "passed":  true,
+                      "saves":  1,
+                      "failure":  "Exception calling \"SaveCopyAs\" with \"2\" argument(s): \"Actual fake SaveCopyAs fault\""
+                  }
+              ],
+    "adapter":  [
+                    {
+                        "scenario":  "positive",
+                        "passed":  true,
+                        "mockQueries":  1,
+                        "failure":  null
+                    },
+                    {
+                        "scenario":  "missing-before",
+                        "passed":  true,
+                        "mockQueries":  0,
+                        "failure":  "Furniture completion refused; zero observer IO"
+                    },
+                    {
+                        "scenario":  "missing-reopened",
+                        "passed":  true,
+                        "mockQueries":  0,
+                        "failure":  "Furniture completion refused; zero observer IO"
+                    },
+                    {
+                        "scenario":  "crossed-copy-order",
+                        "passed":  true,
+                        "mockQueries":  0,
+                        "failure":  "Furniture completion refused; zero observer IO"
+                    },
+                    {
+                        "scenario":  "copy-after-setter",
+                        "passed":  true,
+                        "mockQueries":  0,
+                        "failure":  "Furniture completion refused; zero observer IO"
+                    },
+                    {
+                        "scenario":  "wrong-owner",
+                        "passed":  true,
+                        "mockQueries":  0,
+                        "failure":  "Furniture completion refused; zero observer IO"
+                    },
+                    {
+                        "scenario":  "extra-copy",
+                        "passed":  true,
+                        "mockQueries":  0,
+                        "failure":  "Furniture completion refused; zero observer IO"
+                    },
+                    {
+                        "scenario":  "wrong-type",
+                        "passed":  true,
+                        "mockQueries":  0,
+                        "failure":  "Furniture completion refused; zero observer IO"
+                    },
+                    {
+                        "scenario":  "missing-mode",
+                        "passed":  true,
+                        "mockQueries":  0,
+                        "failure":  "Furniture completion refused; zero observer IO"
+                    },
+                    {
+                        "scenario":  "wrong-input",
+                        "passed":  true,
+                        "mockQueries":  0,
+                        "failure":  "Furniture completion refused; zero observer IO"
+                    },
+                    {
+                        "scenario":  "pending",
+                        "passed":  true,
+                        "mockQueries":  0,
+                        "failure":  "Furniture completion refused; zero observer IO"
+                    }
+                ],
+    "cardinality":  [
+                        {
+                            "scenario":  "before-0",
+                            "phase":  "before",
+                            "endRows":  0,
+                            "expectedReady":  false,
+                            "ready":  false,
+                            "passed":  true
+                        },
+                        {
+                            "scenario":  "before-1",
+                            "phase":  "before",
+                            "endRows":  1,
+                            "expectedReady":  true,
+                            "ready":  true,
+                            "passed":  true
+                        },
+                        {
+                            "scenario":  "before-2",
+                            "phase":  "before",
+                            "endRows":  2,
+                            "expectedReady":  false,
+                            "ready":  false,
+                            "passed":  true
+                        },
+                        {
+                            "scenario":  "reopened-0",
+                            "phase":  "reopened",
+                            "endRows":  0,
+                            "expectedReady":  false,
+                            "ready":  false,
+                            "passed":  true
+                        },
+                        {
+                            "scenario":  "reopened-1",
+                            "phase":  "reopened",
+                            "endRows":  1,
+                            "expectedReady":  true,
+                            "ready":  true,
+                            "passed":  true
+                        },
+                        {
+                            "scenario":  "reopened-2",
+                            "phase":  "reopened",
+                            "endRows":  2,
+                            "expectedReady":  false,
+                            "ready":  false,
+                            "passed":  true
+                        }
+                    ]
+}

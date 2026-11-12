@@ -1,0 +1,20 @@
+
+> openpresentation-workspace@ check:font-hotlinks /private/tmp/opf-034
+> node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs
+
+✔ flags each kind of font CDN reference (1.36125ms)
+✔ does not flag bundled files, data URLs or provenance strings (0.310667ms)
+✔ allowlist is exact, needs a reason, and goes stale (1.636792ms)
+✔ build output is scanned and never allowlisted (0.668917ms)
+✔ only regular files are scanned: a tracked symlink is skipped, a missing file is not an error (0.649458ms)
+✔ --built directories are relative to --dir, or to the current directory without it (9082.079541ms)
+✔ this repository has no font CDN references (3967.074042ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13105.025916
+font hotlink check passed (tracked files)

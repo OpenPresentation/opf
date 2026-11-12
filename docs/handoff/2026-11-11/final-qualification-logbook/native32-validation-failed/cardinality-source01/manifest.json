@@ -1,0 +1,159 @@
+{
+  "base": "781028f73be79341b9bac6fab078e8416ddd8539",
+  "branch": "codex/rr-105-name-snapshot-cardinality",
+  "worktree": "/tmp/opf-name-snapshot-cardinality",
+  "qualification": "SOURCE ONLY; diffcheck only; no syntax/import/test/build/PS/Office/new validation executed",
+  "changed": [
+    {
+      "path": "changes/rr-105-name-snapshot-endpoint-cardinality.md",
+      "bytes": 201,
+      "sha256": "9738545be68636dcb6bce00cc2923575f3b4549d75400704671f1a1590f50975"
+    },
+    {
+      "path": "docs/handoff/2026-11-11/reference-name-snapshot-cardinality.md",
+      "bytes": 2437,
+      "sha256": "c06a0ee68ac6e55a6a1d2d3a49d5ab743a660ef5ce2a8581fb825b4c6f07cb4f"
+    },
+    {
+      "path": "docs/programs/release-readiness/burndown.md",
+      "bytes": 570022,
+      "sha256": "3b88a7e535d7d4b7f804b1b1179d12a0d74df29fc3affd35f08ebcfe53d2409a"
+    },
+    {
+      "path": "scripts/native-acceptance/furniture-postflight.ps1",
+      "bytes": 30405,
+      "sha256": "5749f01004839c08f4b98487a36653bbe0a8297f3e02370cfecc63744cee33bf"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-name-snapshot-check.ps1",
+      "bytes": 15354,
+      "sha256": "16a7399f3674eaf2cdaa1ec846efe564e94589d2e964f3418308b0a73504cab4"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-name-snapshot.test.mjs",
+      "bytes": 21871,
+      "sha256": "c259f3a115cb36226fbf8651f87cfbeb5f06dbc1882dc2a11b9494808bd2242d"
+    }
+  ],
+  "protectedBaseExact": [
+    {
+      "path": "scripts/native-acceptance/reference-name-snapshot-contract.mjs",
+      "bytes": 18290,
+      "sha256": "adb918178ee2b95ba99355385ed2a4b039a2088cc350cfa43f8f5968f0255dd6",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-name-contract.mjs",
+      "bytes": 18047,
+      "sha256": "aa6a91dd5cab84560a7a21896ee510614e8fec640adc634e1f731cd84a1c384b",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/furniture-profile.mjs",
+      "bytes": 31852,
+      "sha256": "470b5134f4e822de5cb549547487fba419570186288b7e248fb978951b639b6d",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "packages/pptx/test/native-furniture-control.ps1",
+      "bytes": 93940,
+      "sha256": "1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/owned-postflight.ps1",
+      "bytes": 18877,
+      "sha256": "1779ae802dd73ee8f004bb43620e4eb07683df492cd7fdc24811aa159af51ba4",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/owned-postflight.mjs",
+      "bytes": 12137,
+      "sha256": "f1e7371586880fe76db6f3e1d615db23f67a062ad89a1b99abf8377ef601c782",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+      "bytes": 19206,
+      "sha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/test-fixtures/reference-chart/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-chart-archive.mjs",
+      "bytes": 28116,
+      "sha256": "9cd112578015c4a5284906f58db9e6f040fe1ceafd0eff8147fc715df1a2236a",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-chart-fixtures.mjs",
+      "bytes": 7391,
+      "sha256": "a1cbac3ff5f836a93303cedff74f2e2767ea46e7b7aca092b7522d97c91f1526",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/windows-powershell-env.mjs",
+      "bytes": 495,
+      "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/test-fixtures/reference-width/manifest.json",
+      "bytes": 878,
+      "sha256": "bd6e44da06cb2053f39c637d6c33cbcbc17cea7aecd160d6b97918fba9eb9d5b",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/test-fixtures/reference-width/reference-native-lines.pptx",
+      "bytes": 128812,
+      "sha256": "229f3b9db61aabae4b1b52b8554d125f27649ef8e0a5f74f8b94698087848e08",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "package.json",
+      "bytes": 13093,
+      "sha256": "6fbaac685fe76f992f246084ab4b58cc15b20122babae2cbc674f64056566ff0",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 137976,
+      "sha256": "11c0b695a44fe5dcbefa76722f78fdd725e9ceb70b29287cf70b042a2b3326fb",
+      "authority": "immutable base Git blob; equal own file or frozen root file"
+    },
+    {
+      "path": "docs/handoff/2026-11-11/reference-name-snapshot-temp.md",
+      "bytes": 2544,
+      "sha256": "e2dafc612a6f00582b315eb27e0663cd4137d716dafe546c2ddc75116d28be5f"
+    }
+  ],
+  "counts": {
+    "nodeGroups": 9,
+    "originalStartup": 8,
+    "originalSaves": 13,
+    "originalAdapter": 11,
+    "newCardinalitySeparate": 6,
+    "unchangedPsChildTimeoutMilliseconds": 15000
+  },
+  "policy": "Only whole-conditional array wrapper; original filters/Count1/order/observer unchanged",
+  "failureEvidence": {
+    "run": "43160756096",
+    "job": "130991095157",
+    "result": "FAILED9/8/1; path identity positive; full32 unqualified",
+    "zipBytes": 138163,
+    "zipSha256": "9d3ee465b9120ccfb9cdb0bc0e406d9f118b5424519b09296a83ab5937b1ac2d"
+  },
+  "patch": {
+    "bytes": 14757,
+    "sha256": "2b4670978c040617143e9f14a900c34ee8118bfe5f588b41d5b382d6d5a01348"
+  },
+  "inverseProof": {
+    "bytes": 2276,
+    "sha256": "d5fe65d56ddddee30727e8056145a0507fe7a716e6df9865dec46afe58f96dd2"
+  }
+}

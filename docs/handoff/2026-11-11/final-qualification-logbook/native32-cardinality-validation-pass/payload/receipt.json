@@ -1,0 +1,106 @@
+{
+  "scope": "NEVERMERGE validation-only Node9/PS32 plus separate six cardinality controls; not native or normal Full CI acceptance",
+  "base": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "head": "c0750870476019f04f56fae58a98df2bf8f75f10",
+  "errors": [],
+  "child": {
+    "args": [
+      "D:\\a\\opf\\opf\\docs\\evidence\\name-snapshot-cardinality-validation\\native-controls.mjs",
+      "--expect-head",
+      "c0750870476019f04f56fae58a98df2bf8f75f10",
+      "--output",
+      "D:\\a\\opf\\opf\\artifacts\\name-snapshot-cardinality-validation\\native"
+    ],
+    "seconds": 25.157,
+    "code": 0,
+    "signal": null,
+    "error": null
+  },
+  "afterSourceChecksPassed": true,
+  "sourceAndBuildUnchanged": true,
+  "startedAt": "2026-11-12T05:55:49.195Z",
+  "versions": {
+    "node": "v24.22.2",
+    "pnpm": "10.33.2",
+    "platform": "win32"
+  },
+  "compiledFilesBefore": 609,
+  "nativeReceipt": {
+    "bytes": 139400,
+    "sha256": "d27f40d482f458c253b45d7b2277ae307ab9aae4b5e17cd34884e60c01d09e5d"
+  },
+  "native": {
+    "status": "PASS",
+    "failure": null,
+    "tapSummary": {
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "actualManagedScenarios": {
+      "startup": 8,
+      "saves": 13,
+      "privateAdapter": 11,
+      "total": 32
+    }
+  },
+  "actualCardinalityScenarios": {
+    "total": 6,
+    "results": [
+      {
+        "scenario": "before-0",
+        "phase": "before",
+        "endRows": 0,
+        "expectedReady": false,
+        "ready": false,
+        "passed": true
+      },
+      {
+        "scenario": "before-1",
+        "phase": "before",
+        "endRows": 1,
+        "expectedReady": true,
+        "ready": true,
+        "passed": true
+      },
+      {
+        "scenario": "before-2",
+        "phase": "before",
+        "endRows": 2,
+        "expectedReady": false,
+        "ready": false,
+        "passed": true
+      },
+      {
+        "scenario": "reopened-0",
+        "phase": "reopened",
+        "endRows": 0,
+        "expectedReady": false,
+        "ready": false,
+        "passed": true
+      },
+      {
+        "scenario": "reopened-1",
+        "phase": "reopened",
+        "endRows": 1,
+        "expectedReady": true,
+        "ready": true,
+        "passed": true
+      },
+      {
+        "scenario": "reopened-2",
+        "phase": "reopened",
+        "endRows": 2,
+        "expectedReady": false,
+        "ready": false,
+        "passed": true
+      }
+    ]
+  },
+  "compiledFilesAfter": 609,
+  "finishedAt": "2026-11-12T05:56:17.762Z",
+  "code": 0
+}

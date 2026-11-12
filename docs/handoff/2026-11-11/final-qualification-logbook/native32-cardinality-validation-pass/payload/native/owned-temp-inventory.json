@@ -1,0 +1,715 @@
+{
+  "prefix": "opf-name-snapshots-",
+  "before": [],
+  "after": [
+    "opf-name-snapshots-4pStIg"
+  ],
+  "created": [
+    "opf-name-snapshots-4pStIg"
+  ],
+  "retained": [
+    {
+      "name": "opf-name-snapshots-4pStIg",
+      "canonical": "C:\\Users\\runneradmin\\AppData\\Local\\Temp\\opf-name-snapshots-4pStIg",
+      "files": [
+        {
+          "file": "completion.json",
+          "bytes": 46920,
+          "sha256": "839f8887192b57d9a68749cf0dcc40ebe0757ebf9c5becc8c1a92955cbb4e033"
+        },
+        {
+          "file": "managed/actual-startup.ps1",
+          "bytes": 3334,
+          "sha256": "268167b66c77a256af0d9e9c2aabc872fa969f5b79e49d3e53fa01ce1ce352ed"
+        },
+        {
+          "file": "managed/adapter-copy-after-setter/execution-request.json",
+          "bytes": 2036,
+          "sha256": "81a7e5bccb2953971ce75c07e0fdbfd56458c5f29929a571f3defec7d48763b3"
+        },
+        {
+          "file": "managed/adapter-copy-after-setter/native/report.json",
+          "bytes": 53506,
+          "sha256": "d0de385fe0fdeac1501592e4186adf51cfadfe71ce0da6e132316ebca8d185c9"
+        },
+        {
+          "file": "managed/adapter-copy-after-setter/native/stages.jsonl",
+          "bytes": 38065,
+          "sha256": "d9fb4748ef9e4d5808df07f2993e66a2a71ee2ffd6adb9e890cd3878ccb5fcf0"
+        },
+        {
+          "file": "managed/adapter-copy-after-setter/native/supervisor.json",
+          "bytes": 169,
+          "sha256": "5ca52c3e651879673a7a114fd765567a74467c2c24152f333155feec6aed60d0"
+        },
+        {
+          "file": "managed/adapter-copy-after-setter/native/worker.json",
+          "bytes": 177,
+          "sha256": "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+        },
+        {
+          "file": "managed/adapter-copy-after-setter/postflight-admission.json",
+          "bytes": 7713,
+          "sha256": "df26a2a38623f85c730deb576d4cfa36d8b0ea8379d667bfec5eb7a6c34d8886"
+        },
+        {
+          "file": "managed/adapter-crossed-copy-order/execution-request.json",
+          "bytes": 2037,
+          "sha256": "30e401f2027dfd7912938b23a2310c6612f88635ae4bd97e0301316445cfc74f"
+        },
+        {
+          "file": "managed/adapter-crossed-copy-order/native/report.json",
+          "bytes": 53511,
+          "sha256": "79b9c513c08a501e5af674e3c0aa9f9688f82b666c591155c1f70c95cb666e69"
+        },
+        {
+          "file": "managed/adapter-crossed-copy-order/native/stages.jsonl",
+          "bytes": 38163,
+          "sha256": "c34aa74e7963daecc8748b82921412ee207690a6e0e63fcb330b5215a2a2b63b"
+        },
+        {
+          "file": "managed/adapter-crossed-copy-order/native/supervisor.json",
+          "bytes": 169,
+          "sha256": "5ca52c3e651879673a7a114fd765567a74467c2c24152f333155feec6aed60d0"
+        },
+        {
+          "file": "managed/adapter-crossed-copy-order/native/worker.json",
+          "bytes": 177,
+          "sha256": "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+        },
+        {
+          "file": "managed/adapter-crossed-copy-order/postflight-admission.json",
+          "bytes": 7718,
+          "sha256": "c237e203218e1bedda648cb12e6be39da0d43b80e2185d8cf873ab9a3f20170c"
+        },
+        {
+          "file": "managed/adapter-extra-copy/execution-request.json",
+          "bytes": 2029,
+          "sha256": "89c4bbe25eb7d9acd7487b629530c169b39c5dde9e3e50da417ee1f84b95e6b7"
+        },
+        {
+          "file": "managed/adapter-extra-copy/native/report.json",
+          "bytes": 53471,
+          "sha256": "1fe801bda7e3a621e8c783b18f5294023ccec94bc5d02e15458bf9fc0ac19ce1"
+        },
+        {
+          "file": "managed/adapter-extra-copy/native/stages.jsonl",
+          "bytes": 38081,
+          "sha256": "718cfda978afbdeb0c58cbd6785c57996cc298a8c110955e00d67464823bd778"
+        },
+        {
+          "file": "managed/adapter-extra-copy/native/supervisor.json",
+          "bytes": 169,
+          "sha256": "5ca52c3e651879673a7a114fd765567a74467c2c24152f333155feec6aed60d0"
+        },
+        {
+          "file": "managed/adapter-extra-copy/native/worker.json",
+          "bytes": 177,
+          "sha256": "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+        },
+        {
+          "file": "managed/adapter-extra-copy/postflight-admission.json",
+          "bytes": 7678,
+          "sha256": "9b13cc3151124c23c3a65f8a632cad539b7ff10b303b55cda2b11a7feb24f786"
+        },
+        {
+          "file": "managed/adapter-missing-before/execution-request.json",
+          "bytes": 2033,
+          "sha256": "6cca026fc991f515de3a41e92f6f2eeb46aeff41c881bb8114d5f4e15ce02ab6"
+        },
+        {
+          "file": "managed/adapter-missing-before/native/report.json",
+          "bytes": 53043,
+          "sha256": "7d506af07d0095a6a14a75070cbe664c45a7f31a7cb3ac32a41ca9ff34f30604"
+        },
+        {
+          "file": "managed/adapter-missing-before/native/stages.jsonl",
+          "bytes": 37771,
+          "sha256": "c21261a665cca6a7e777771e15bee5d02bd1e9f308a25c94eb55057e490d0149"
+        },
+        {
+          "file": "managed/adapter-missing-before/native/supervisor.json",
+          "bytes": 169,
+          "sha256": "5ca52c3e651879673a7a114fd765567a74467c2c24152f333155feec6aed60d0"
+        },
+        {
+          "file": "managed/adapter-missing-before/native/worker.json",
+          "bytes": 177,
+          "sha256": "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+        },
+        {
+          "file": "managed/adapter-missing-before/postflight-admission.json",
+          "bytes": 7698,
+          "sha256": "f9a091d1909ebeefe992e793b6096e22d5e5796c0e31d5c858f1e7863556f287"
+        },
+        {
+          "file": "managed/adapter-missing-mode/execution-request.json",
+          "bytes": 2032,
+          "sha256": "a5715bb693a4a220be10d4df51287ecafa0fb8639ff9317e7705d842e3a9e778"
+        },
+        {
+          "file": "managed/adapter-missing-mode/native/report.json",
+          "bytes": 53481,
+          "sha256": "ace37e33c790453db00b8c89d14b14c20f3e24903d2965078a98adde6a3cc9c7"
+        },
+        {
+          "file": "managed/adapter-missing-mode/native/stages.jsonl",
+          "bytes": 37575,
+          "sha256": "5d5b6414aacdd99ac2c95466af9c5e4054fc81de4cf5535363343eaf6b6acfa2"
+        },
+        {
+          "file": "managed/adapter-missing-mode/native/supervisor.json",
+          "bytes": 169,
+          "sha256": "5ca52c3e651879673a7a114fd765567a74467c2c24152f333155feec6aed60d0"
+        },
+        {
+          "file": "managed/adapter-missing-mode/native/worker.json",
+          "bytes": 177,
+          "sha256": "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+        },
+        {
+          "file": "managed/adapter-missing-mode/postflight-admission.json",
+          "bytes": 7688,
+          "sha256": "e65b6011058deb0ebccf1143f48ab3cf64ebf33fe188cb816d74b2fa848fa181"
+        },
+        {
+          "file": "managed/adapter-missing-reopened/execution-request.json",
+          "bytes": 2035,
+          "sha256": "805dc17f4cdb5a2e2d9a188500d3adf5c6c98f5333e42e0797b9d81e4d0457a1"
+        },
+        {
+          "file": "managed/adapter-missing-reopened/native/report.json",
+          "bytes": 53047,
+          "sha256": "b2b3cceebdfca84f4aa278b5e653e8aa410e2464973dd3dbaf0d752a6b611e18"
+        },
+        {
+          "file": "managed/adapter-missing-reopened/native/stages.jsonl",
+          "bytes": 37967,
+          "sha256": "909be6bd242515b69d919e57ddbaf38709570abe14791cd9699af6edf482fd30"
+        },
+        {
+          "file": "managed/adapter-missing-reopened/native/supervisor.json",
+          "bytes": 169,
+          "sha256": "5ca52c3e651879673a7a114fd765567a74467c2c24152f333155feec6aed60d0"
+        },
+        {
+          "file": "managed/adapter-missing-reopened/native/worker.json",
+          "bytes": 177,
+          "sha256": "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+        },
+        {
+          "file": "managed/adapter-missing-reopened/postflight-admission.json",
+          "bytes": 7708,
+          "sha256": "d637b657bc227d7c5022e281eb9568f80027626c7a887352d59f92ed5e3aa0a8"
+        },
+        {
+          "file": "managed/adapter-pending/execution-request.json",
+          "bytes": 2026,
+          "sha256": "8bb45d0815bd06e74454d82f8feda92c3413eb42dbb9e0a13ca31dde36fd4d55"
+        },
+        {
+          "file": "managed/adapter-pending/native/report.json",
+          "bytes": 53456,
+          "sha256": "857ed4f29e8e0527a636a7a58751076bbf03984afbb3b836b38684a198eb88e8"
+        },
+        {
+          "file": "managed/adapter-pending/native/stages.jsonl",
+          "bytes": 37085,
+          "sha256": "c80a4d37a1bace569feb6183ef10a779ca83a84172c4806e98b69c432c7a5236"
+        },
+        {
+          "file": "managed/adapter-pending/native/supervisor.json",
+          "bytes": 167,
+          "sha256": "73922fd5f8d0165833753e111babf49e90549b838fcc2cf166efc2f1bc94694a"
+        },
+        {
+          "file": "managed/adapter-pending/native/worker.json",
+          "bytes": 177,
+          "sha256": "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+        },
+        {
+          "file": "managed/adapter-pending/postflight-admission.json",
+          "bytes": 7663,
+          "sha256": "a60f1c3bca77eeb0ba72e33f89bec508287067de243573ea3750fb066d761fb9"
+        },
+        {
+          "file": "managed/adapter-positive/execution-request.json",
+          "bytes": 2027,
+          "sha256": "fcd84fbc3181ec5eb977e63787a8b336ee68264dcaf0482a319b72d6fed7aede"
+        },
+        {
+          "file": "managed/adapter-positive/native/report.json",
+          "bytes": 53461,
+          "sha256": "691a83a36fa2bd125e7ec4b8853f3db3a8ebf528020ce6969e8108cd572ddf6f"
+        },
+        {
+          "file": "managed/adapter-positive/native/stages.jsonl",
+          "bytes": 37183,
+          "sha256": "c4aa342206a2f43b9ed3f1afe2bff0d997e94ce7cf48ae6578cfab873bf1bf0a"
+        },
+        {
+          "file": "managed/adapter-positive/native/supervisor.json",
+          "bytes": 169,
+          "sha256": "5ca52c3e651879673a7a114fd765567a74467c2c24152f333155feec6aed60d0"
+        },
+        {
+          "file": "managed/adapter-positive/native/worker.json",
+          "bytes": 177,
+          "sha256": "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+        },
+        {
+          "file": "managed/adapter-positive/postflight-admission.json",
+          "bytes": 7668,
+          "sha256": "3d83fb5c054f975d0072c1197076fb0b9d828ce5ec033a158aa6bafb36967b64"
+        },
+        {
+          "file": "managed/adapter-wrong-input/execution-request.json",
+          "bytes": 2030,
+          "sha256": "447371d5e48e1e164d3a5a59d45e9e29648fc09597cd16bed11b489e110da648"
+        },
+        {
+          "file": "managed/adapter-wrong-input/native/report.json",
+          "bytes": 53476,
+          "sha256": "cdbc1060fb7c26bde705ca53c41617c97fdf81557d353abc70e9b00b2c29825b"
+        },
+        {
+          "file": "managed/adapter-wrong-input/native/stages.jsonl",
+          "bytes": 37477,
+          "sha256": "46d3ca95a7ea605da2a0e8f13dd165514b6afb25b9adfe1cfdd454a221758cf7"
+        },
+        {
+          "file": "managed/adapter-wrong-input/native/supervisor.json",
+          "bytes": 169,
+          "sha256": "5ca52c3e651879673a7a114fd765567a74467c2c24152f333155feec6aed60d0"
+        },
+        {
+          "file": "managed/adapter-wrong-input/native/worker.json",
+          "bytes": 177,
+          "sha256": "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+        },
+        {
+          "file": "managed/adapter-wrong-input/postflight-admission.json",
+          "bytes": 7683,
+          "sha256": "8f09198fed0540cb414b0096455b256e35e7e5a6d7d657414471f52a2ac25a73"
+        },
+        {
+          "file": "managed/adapter-wrong-owner/execution-request.json",
+          "bytes": 2030,
+          "sha256": "22934af748c99397a4a79daa2cbae110f6bc5931f4b761237401ff42f2b80e39"
+        },
+        {
+          "file": "managed/adapter-wrong-owner/native/report.json",
+          "bytes": 53476,
+          "sha256": "839e97d3054c0d38ebce741cba75e645e729adca978a7121e6e78b3a1b50b840"
+        },
+        {
+          "file": "managed/adapter-wrong-owner/native/stages.jsonl",
+          "bytes": 37488,
+          "sha256": "e86cb155c399d0cc88ee563345f3c749352b59b2150942032e0884c8fe2093c1"
+        },
+        {
+          "file": "managed/adapter-wrong-owner/native/supervisor.json",
+          "bytes": 169,
+          "sha256": "5ca52c3e651879673a7a114fd765567a74467c2c24152f333155feec6aed60d0"
+        },
+        {
+          "file": "managed/adapter-wrong-owner/native/worker.json",
+          "bytes": 177,
+          "sha256": "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+        },
+        {
+          "file": "managed/adapter-wrong-owner/postflight-admission.json",
+          "bytes": 7683,
+          "sha256": "43f2383216dec54de8d108e948d45fbc28f319669e4bd31107b762d2063a5f0b"
+        },
+        {
+          "file": "managed/adapter-wrong-type/execution-request.json",
+          "bytes": 2029,
+          "sha256": "059e6b9cc9633a5fa572f549d3ad870d1d980669a0b5f90c8b848ecaf015d513"
+        },
+        {
+          "file": "managed/adapter-wrong-type/native/report.json",
+          "bytes": 53472,
+          "sha256": "8149a712d545e3d9b07e51c5f1a57136417260d4487ee5dececb77f651215f3c"
+        },
+        {
+          "file": "managed/adapter-wrong-type/native/stages.jsonl",
+          "bytes": 37379,
+          "sha256": "dbff9184155a35abd78a6eafa37191bcf663c8432b42f9f8c423dd70d8514fda"
+        },
+        {
+          "file": "managed/adapter-wrong-type/native/supervisor.json",
+          "bytes": 169,
+          "sha256": "5ca52c3e651879673a7a114fd765567a74467c2c24152f333155feec6aed60d0"
+        },
+        {
+          "file": "managed/adapter-wrong-type/native/worker.json",
+          "bytes": 177,
+          "sha256": "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+        },
+        {
+          "file": "managed/adapter-wrong-type/postflight-admission.json",
+          "bytes": 7678,
+          "sha256": "5b873fcc8dc58bc923992a3b4f4a47003089f7e35df5894a0c8c804ef26154e6"
+        },
+        {
+          "file": "managed/before/owned-input.pptx",
+          "bytes": 21,
+          "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+        },
+        {
+          "file": "managed/before/reference-name-before.pptx",
+          "bytes": 20,
+          "sha256": "a24d78a0129e98b76be6101a94f380a7cb40602856d1f5a508e4bedd8b82568e"
+        },
+        {
+          "file": "managed/existing-copy/owned-input.pptx",
+          "bytes": 21,
+          "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+        },
+        {
+          "file": "managed/existing-copy/reference-name-before.pptx",
+          "bytes": 8,
+          "sha256": "46e3b5b126e731103c086ccaecb010b6f1733cf71b2419add8c617d3c7c07f24"
+        },
+        {
+          "file": "managed/foreign-owner/owned-input.pptx",
+          "bytes": 21,
+          "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+        },
+        {
+          "file": "managed/foreign-path/owned-input.pptx",
+          "bytes": 21,
+          "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+        },
+        {
+          "file": "managed/foreign-phase/owned-input.pptx",
+          "bytes": 21,
+          "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+        },
+        {
+          "file": "managed/getter-fault/owned-input.pptx",
+          "bytes": 21,
+          "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+        },
+        {
+          "file": "managed/no-mode/owned-input.pptx",
+          "bytes": 21,
+          "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+        },
+        {
+          "file": "managed/no-reference/owned-input.pptx",
+          "bytes": 21,
+          "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+        },
+        {
+          "file": "managed/reopened/owned-input.pptx",
+          "bytes": 21,
+          "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+        },
+        {
+          "file": "managed/reopened/reference-name-reopened.pptx",
+          "bytes": 20,
+          "sha256": "a24d78a0129e98b76be6101a94f380a7cb40602856d1f5a508e4bedd8b82568e"
+        },
+        {
+          "file": "managed/result.json",
+          "bytes": 10657,
+          "sha256": "e7d35d202bcbbc3d06be9e74fe45ba10d4b0d62b57ea62e47c76562573572890"
+        },
+        {
+          "file": "managed/same-input/owned-input.pptx",
+          "bytes": 21,
+          "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+        },
+        {
+          "file": "managed/save-fault/owned-input.pptx",
+          "bytes": 21,
+          "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+        },
+        {
+          "file": "managed/startup-control.json",
+          "bytes": 633,
+          "sha256": "ff0d21414ce9521798551654d46a6f6b35266a4cccf05e51a3fcb032dc058c40"
+        },
+        {
+          "file": "managed/synthetic-length.pptx",
+          "bytes": 129025,
+          "sha256": "e31a87953f64b93b942bb279d42a8e11652e907703b650a07f04b246b4d7b310"
+        },
+        {
+          "file": "managed/wrong-after-name/owned-input.pptx",
+          "bytes": 21,
+          "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+        },
+        {
+          "file": "managed/wrong-after-name/reference-name-before.pptx",
+          "bytes": 20,
+          "sha256": "a24d78a0129e98b76be6101a94f380a7cb40602856d1f5a508e4bedd8b82568e"
+        },
+        {
+          "file": "managed/wrong-before-name/owned-input.pptx",
+          "bytes": 21,
+          "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+        },
+        {
+          "file": "stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "file": "stdout.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "managedResult": {
+        "schemaVersion": 1,
+        "officeInvoked": false,
+        "realProcessQueries": 0,
+        "genuineStartupArchive": false,
+        "earlierSourceBootstrapExercised": false,
+        "startup": [
+          {
+            "scenario": "enabled",
+            "passed": true,
+            "failure": null
+          },
+          {
+            "scenario": "old-name-only",
+            "passed": true,
+            "failure": null
+          },
+          {
+            "scenario": "disabled",
+            "passed": true,
+            "failure": null
+          },
+          {
+            "scenario": "missing-new-switch",
+            "passed": true,
+            "failure": "Name snapshot switch differs from its closed snapshotted request"
+          },
+          {
+            "scenario": "missing-new-request",
+            "passed": true,
+            "failure": "Name snapshot switch differs from its closed snapshotted request"
+          },
+          {
+            "scenario": "false-new-request",
+            "passed": true,
+            "failure": "Name snapshot switch differs from its closed snapshotted request"
+          },
+          {
+            "scenario": "new-without-reference",
+            "passed": true,
+            "failure": "Name snapshots require the exact closed reference-name mode"
+          },
+          {
+            "scenario": "wrong-source",
+            "passed": true,
+            "failure": "Exact sealed reference-name source and one plan required"
+          }
+        ],
+        "saves": [
+          {
+            "scenario": "before",
+            "passed": true,
+            "saves": 1,
+            "failure": null
+          },
+          {
+            "scenario": "reopened",
+            "passed": true,
+            "saves": 1,
+            "failure": null
+          },
+          {
+            "scenario": "no-mode",
+            "passed": true,
+            "saves": 0,
+            "failure": "Only the closed Name snapshot mode may save these two copies"
+          },
+          {
+            "scenario": "no-reference",
+            "passed": true,
+            "saves": 0,
+            "failure": "Only the closed Name snapshot mode may save these two copies"
+          },
+          {
+            "scenario": "foreign-phase",
+            "passed": true,
+            "saves": 0,
+            "failure": "Only the closed Name snapshot mode may save these two copies"
+          },
+          {
+            "scenario": "foreign-path",
+            "passed": true,
+            "saves": 0,
+            "failure": "Name snapshot requires its exact fresh derivative separate from the owned input"
+          },
+          {
+            "scenario": "same-input",
+            "passed": true,
+            "saves": 0,
+            "failure": "Name snapshot requires its exact fresh derivative separate from the owned input"
+          },
+          {
+            "scenario": "existing-copy",
+            "passed": true,
+            "saves": 0,
+            "failure": "Name snapshot requires its exact fresh derivative separate from the owned input"
+          },
+          {
+            "scenario": "foreign-owner",
+            "passed": true,
+            "saves": 0,
+            "failure": "Refusing to snapshot a presentation whose exact identity is not owned"
+          },
+          {
+            "scenario": "wrong-before-name",
+            "passed": true,
+            "saves": 0,
+            "failure": "Refusing to snapshot a presentation whose exact identity is not owned"
+          },
+          {
+            "scenario": "wrong-after-name",
+            "passed": true,
+            "saves": 1,
+            "failure": "Name snapshot changed the owned input identity"
+          },
+          {
+            "scenario": "getter-fault",
+            "passed": true,
+            "saves": 0,
+            "failure": "Refusing to snapshot a presentation whose exact identity is not owned"
+          },
+          {
+            "scenario": "save-fault",
+            "passed": true,
+            "saves": 1,
+            "failure": "Exception calling \"SaveCopyAs\" with \"2\" argument(s): \"Actual fake SaveCopyAs fault\""
+          }
+        ],
+        "adapter": [
+          {
+            "scenario": "positive",
+            "passed": true,
+            "mockQueries": 1,
+            "failure": null
+          },
+          {
+            "scenario": "missing-before",
+            "passed": true,
+            "mockQueries": 0,
+            "failure": "Furniture completion refused; zero observer IO"
+          },
+          {
+            "scenario": "missing-reopened",
+            "passed": true,
+            "mockQueries": 0,
+            "failure": "Furniture completion refused; zero observer IO"
+          },
+          {
+            "scenario": "crossed-copy-order",
+            "passed": true,
+            "mockQueries": 0,
+            "failure": "Furniture completion refused; zero observer IO"
+          },
+          {
+            "scenario": "copy-after-setter",
+            "passed": true,
+            "mockQueries": 0,
+            "failure": "Furniture completion refused; zero observer IO"
+          },
+          {
+            "scenario": "wrong-owner",
+            "passed": true,
+            "mockQueries": 0,
+            "failure": "Furniture completion refused; zero observer IO"
+          },
+          {
+            "scenario": "extra-copy",
+            "passed": true,
+            "mockQueries": 0,
+            "failure": "Furniture completion refused; zero observer IO"
+          },
+          {
+            "scenario": "wrong-type",
+            "passed": true,
+            "mockQueries": 0,
+            "failure": "Furniture completion refused; zero observer IO"
+          },
+          {
+            "scenario": "missing-mode",
+            "passed": true,
+            "mockQueries": 0,
+            "failure": "Furniture completion refused; zero observer IO"
+          },
+          {
+            "scenario": "wrong-input",
+            "passed": true,
+            "mockQueries": 0,
+            "failure": "Furniture completion refused; zero observer IO"
+          },
+          {
+            "scenario": "pending",
+            "passed": true,
+            "mockQueries": 0,
+            "failure": "Furniture completion refused; zero observer IO"
+          }
+        ],
+        "cardinality": [
+          {
+            "scenario": "before-0",
+            "phase": "before",
+            "endRows": 0,
+            "expectedReady": false,
+            "ready": false,
+            "passed": true
+          },
+          {
+            "scenario": "before-1",
+            "phase": "before",
+            "endRows": 1,
+            "expectedReady": true,
+            "ready": true,
+            "passed": true
+          },
+          {
+            "scenario": "before-2",
+            "phase": "before",
+            "endRows": 2,
+            "expectedReady": false,
+            "ready": false,
+            "passed": true
+          },
+          {
+            "scenario": "reopened-0",
+            "phase": "reopened",
+            "endRows": 0,
+            "expectedReady": false,
+            "ready": false,
+            "passed": true
+          },
+          {
+            "scenario": "reopened-1",
+            "phase": "reopened",
+            "endRows": 1,
+            "expectedReady": true,
+            "ready": true,
+            "passed": true
+          },
+          {
+            "scenario": "reopened-2",
+            "phase": "reopened",
+            "endRows": 2,
+            "expectedReady": false,
+            "ready": false,
+            "passed": true
+          }
+        ]
+      }
+    }
+  ]
+}

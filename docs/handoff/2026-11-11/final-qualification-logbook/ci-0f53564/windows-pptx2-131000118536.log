@@ -1,0 +1,890 @@
+﻿2026-11-12T05:51:53.1643473Z Current runner version: '2.338.2'
+2026-11-12T05:51:53.1661322Z ##[group]Runner Image Provisioner
+2026-11-12T05:51:53.1662244Z Hosted Compute Agent
+2026-11-12T05:51:53.1662623Z Version: 20261103.629
+2026-11-12T05:51:53.1662978Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-12T05:51:53.1663373Z Build Date: 2026-11-03T17:26:59Z
+2026-11-12T05:51:53.1663743Z Worker ID: {62ec4032-a141-4100-8ad7-e0305b3ad8be}
+2026-11-12T05:51:53.1664119Z Region: westus3
+2026-11-12T05:51:53.1664410Z Cloud: Azure
+2026-11-12T05:51:53.1664718Z ##[endgroup]
+2026-11-12T05:51:53.1665482Z ##[group]Operating System
+2026-11-12T05:51:53.1665828Z Microsoft Windows Server 2025
+2026-11-12T05:51:53.1666155Z 10.0.26100
+2026-11-12T05:51:53.1666429Z Datacenter
+2026-11-12T05:51:53.1666729Z ##[endgroup]
+2026-11-12T05:51:53.1667032Z ##[group]Runner Image
+2026-11-12T05:51:53.1667348Z Image: windows-2025-vs2026
+2026-11-12T05:51:53.1667753Z Version: 20261103.298.1
+2026-11-12T05:51:53.1668687Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20261103.298/images/windows/Windows2025-VS2026-Readme.md
+2026-11-12T05:51:53.1669549Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20261103.298
+2026-11-12T05:51:53.1670066Z ##[endgroup]
+2026-11-12T05:51:53.1670692Z ##[group]GITHUB_TOKEN Permissions
+2026-11-12T05:51:53.1671825Z Contents: read
+2026-11-12T05:51:53.1672213Z Metadata: read
+2026-11-12T05:51:53.1672564Z ##[endgroup]
+2026-11-12T05:51:53.1673827Z Secret source: Actions
+2026-11-12T05:51:53.1674320Z Cache mode: write
+2026-11-12T05:51:53.1674730Z Prepare workflow directory
+2026-11-12T05:51:53.1919299Z Prepare all required actions
+2026-11-12T05:51:53.1950600Z Getting action download info
+2026-11-12T05:51:53.4877560Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-11-12T05:51:53.5629868Z Download action repository 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9' (SHA:cf430e030ddbb5b0abf93d22962f4752f3646cd9)
+2026-11-12T05:51:53.7604873Z Uses: OpenPresentation/opf/.github/workflows/nightly.yml@refs/heads/codex/integration-034 (0f53564afa6a79ff9b7235140afbe85c9cf94bfc)
+2026-11-12T05:51:53.7608611Z ##[group] Inputs
+2026-11-12T05:51:53.7609037Z   report: false
+2026-11-12T05:51:53.7609270Z   flake: false
+2026-11-12T05:51:53.7609526Z ##[endgroup]
+2026-11-12T05:51:53.7609869Z Complete job name: slow set (only with the full-ci label) / pptx on Windows (2/3)
+2026-11-12T05:51:53.8629788Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-11-12T05:51:53.8630554Z with:
+2026-11-12T05:51:53.8630774Z   persist-credentials: false
+2026-11-12T05:51:53.8631041Z   repository: OpenPresentation/opf
+2026-11-12T05:51:53.8633078Z   token: ***
+2026-11-12T05:51:53.8633289Z   ssh-strict: true
+2026-11-12T05:51:53.8633507Z   ssh-user: git
+2026-11-12T05:51:53.8633709Z   clean: true
+2026-11-12T05:51:53.8633933Z   sparse-checkout-cone-mode: true
+2026-11-12T05:51:53.8634214Z   fetch-depth: 1
+2026-11-12T05:51:53.8634428Z   fetch-tags: false
+2026-11-12T05:51:53.8634643Z   show-progress: true
+2026-11-12T05:51:53.8634865Z   lfs: false
+2026-11-12T05:51:53.8635066Z   submodules: false
+2026-11-12T05:51:53.8635293Z   set-safe-directory: true
+2026-11-12T05:51:53.8635579Z   allow-unsafe-pr-checkout: false
+2026-11-12T05:51:53.8635927Z ##[endgroup]
+2026-11-12T05:51:53.9631455Z Syncing repository: OpenPresentation/opf
+2026-11-12T05:51:53.9632643Z ##[group]Getting Git version info
+2026-11-12T05:51:53.9632951Z Working directory is 'D:\a\opf\opf'
+2026-11-12T05:51:54.0075337Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-12T05:51:54.4295395Z git version 2.56.0.windows.4
+2026-11-12T05:51:54.4338398Z ##[endgroup]
+2026-11-12T05:51:54.4350168Z Temporarily overriding HOME='D:\a\_temp\cd954dae-0b2f-457f-832c-948ff49ccbea' before making global git config changes
+2026-11-12T05:51:54.4351291Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-12T05:51:54.4357788Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\opf\opf
+2026-11-12T05:51:54.4860426Z Deleting the contents of 'D:\a\opf\opf'
+2026-11-12T05:51:54.4863591Z ##[group]Determining repository object format
+2026-11-12T05:51:54.4865052Z ##[endgroup]
+2026-11-12T05:51:54.4865568Z ##[group]Initializing the repository
+2026-11-12T05:51:54.4870695Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\opf\opf
+2026-11-12T05:51:54.5861955Z Initialized empty Git repository in D:/a/opf/opf/.git/
+2026-11-12T05:51:54.5898448Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/OpenPresentation/opf
+2026-11-12T05:51:54.6533640Z ##[endgroup]
+2026-11-12T05:51:54.6534181Z ##[group]Disabling automatic garbage collection
+2026-11-12T05:51:54.6540039Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-11-12T05:51:54.6800403Z ##[endgroup]
+2026-11-12T05:51:54.6800997Z ##[group]Setting up auth
+2026-11-12T05:51:54.6801490Z Removing SSH command configuration
+2026-11-12T05:51:54.6809219Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-12T05:51:54.7059858Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-12T05:51:56.1204515Z Removing HTTP extra header
+2026-11-12T05:51:56.1214258Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-12T05:51:56.1493275Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-12T05:51:56.4996407Z Removing includeIf entries pointing to credentials config files
+2026-11-12T05:51:56.5004057Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-12T05:51:56.5300372Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-12T05:51:56.9560393Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-bab1c870-e3dc-424e-a70f-0bfb432a9a0d.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-11-12T05:51:56.9816494Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/opf/opf/.git.path D:\a\_temp\git-credentials-bab1c870-e3dc-424e-a70f-0bfb432a9a0d.config
+2026-11-12T05:51:57.0054318Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/opf/opf/.git/worktrees/*.path D:\a\_temp\git-credentials-bab1c870-e3dc-424e-a70f-0bfb432a9a0d.config
+2026-11-12T05:51:57.0339816Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-bab1c870-e3dc-424e-a70f-0bfb432a9a0d.config
+2026-11-12T05:51:57.0579166Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-bab1c870-e3dc-424e-a70f-0bfb432a9a0d.config
+2026-11-12T05:51:57.0817990Z ##[endgroup]
+2026-11-12T05:51:57.0818496Z ##[group]Fetching the repository
+2026-11-12T05:51:57.0828395Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +0f53564afa6a79ff9b7235140afbe85c9cf94bfc:refs/remotes/origin/codex/integration-034
+2026-11-12T05:52:06.8958546Z From https://github.com/OpenPresentation/opf
+2026-11-12T05:52:06.8959145Z  * [new ref]           0f53564afa6a79ff9b7235140afbe85c9cf94bfc -> origin/codex/integration-034
+2026-11-12T05:52:06.8999411Z [command]"C:\Program Files\Git\bin\git.exe" branch --list --remote origin/codex/integration-034
+2026-11-12T05:52:06.9331205Z   origin/codex/integration-034
+2026-11-12T05:52:06.9359643Z [command]"C:\Program Files\Git\bin\git.exe" rev-parse refs/remotes/origin/codex/integration-034
+2026-11-12T05:52:06.9658866Z 0f53564afa6a79ff9b7235140afbe85c9cf94bfc
+2026-11-12T05:52:06.9679251Z ##[endgroup]
+2026-11-12T05:52:06.9679473Z ##[group]Determining the checkout info
+2026-11-12T05:52:06.9680348Z ##[endgroup]
+2026-11-12T05:52:06.9685464Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-11-12T05:52:07.0106467Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-11-12T05:52:07.0340454Z ##[group]Checking out the ref
+2026-11-12T05:52:07.0349922Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B codex/integration-034 refs/remotes/origin/codex/integration-034
+2026-11-12T05:52:08.1184866Z Updating files:  17% (5044/28668)
+2026-11-12T05:52:08.2021275Z Updating files:  18% (5161/28668)
+2026-11-12T05:52:08.2489705Z Updating files:  19% (5447/28668)
+2026-11-12T05:52:08.2944181Z Updating files:  20% (5734/28668)
+2026-11-12T05:52:08.3243260Z Updating files:  21% (6021/28668)
+2026-11-12T05:52:08.3542378Z Updating files:  22% (6307/28668)
+2026-11-12T05:52:08.3835301Z Updating files:  23% (6594/28668)
+2026-11-12T05:52:08.4428495Z Updating files:  24% (6881/28668)
+2026-11-12T05:52:08.5351012Z Updating files:  25% (7167/28668)
+2026-11-12T05:52:08.5816056Z Updating files:  26% (7454/28668)
+2026-11-12T05:52:08.6238309Z Updating files:  27% (7741/28668)
+2026-11-12T05:52:08.6617421Z Updating files:  28% (8028/28668)
+2026-11-12T05:52:08.7034190Z Updating files:  29% (8314/28668)
+2026-11-12T05:52:08.7362671Z Updating files:  30% (8601/28668)
+2026-11-12T05:52:08.7713792Z Updating files:  31% (8888/28668)
+2026-11-12T05:52:08.9673623Z Updating files:  32% (9174/28668)
+2026-11-12T05:52:09.0672801Z Updating files:  33% (9461/28668)
+2026-11-12T05:52:09.0859538Z Updating files:  34% (9748/28668)
+2026-11-12T05:52:09.1517897Z Updating files:  34% (9843/28668)
+2026-11-12T05:52:09.1873731Z Updating files:  35% (10034/28668)
+2026-11-12T05:52:09.2253275Z Updating files:  36% (10321/28668)
+2026-11-12T05:52:09.2891636Z Updating files:  37% (10608/28668)
+2026-11-12T05:52:09.3231656Z Updating files:  38% (10894/28668)
+2026-11-12T05:52:09.3581553Z Updating files:  39% (11181/28668)
+2026-11-12T05:52:09.3927529Z Updating files:  40% (11468/28668)
+2026-11-12T05:52:09.4231100Z Updating files:  41% (11754/28668)
+2026-11-12T05:52:09.4678830Z Updating files:  42% (12041/28668)
+2026-11-12T05:52:09.5180725Z Updating files:  43% (12328/28668)
+2026-11-12T05:52:09.5617738Z Updating files:  44% (12614/28668)
+2026-11-12T05:52:09.6030994Z Updating files:  45% (12901/28668)
+2026-11-12T05:52:09.6449383Z Updating files:  46% (13188/28668)
+2026-11-12T05:52:09.6757750Z Updating files:  47% (13474/28668)
+2026-11-12T05:52:09.7053302Z Updating files:  48% (13761/28668)
+2026-11-12T05:52:09.7491336Z Updating files:  49% (14048/28668)
+2026-11-12T05:52:09.7961063Z Updating files:  50% (14334/28668)
+2026-11-12T05:52:09.8494821Z Updating files:  51% (14621/28668)
+2026-11-12T05:52:09.8848790Z Updating files:  52% (14908/28668)
+2026-11-12T05:52:09.9271937Z Updating files:  53% (15195/28668)
+2026-11-12T05:52:09.9826602Z Updating files:  54% (15481/28668)
+2026-11-12T05:52:10.0239524Z Updating files:  55% (15768/28668)
+2026-11-12T05:52:10.0645299Z Updating files:  56% (16055/28668)
+2026-11-12T05:52:10.1952583Z Updating files:  57% (16341/28668)
+2026-11-12T05:52:10.3323523Z Updating files:  57% (16417/28668)
+2026-11-12T05:52:10.3716340Z Updating files:  58% (16628/28668)
+2026-11-12T05:52:10.4069026Z Updating files:  59% (16915/28668)
+2026-11-12T05:52:10.4508199Z Updating files:  60% (17201/28668)
+2026-11-12T05:52:10.4874591Z Updating files:  61% (17488/28668)
+2026-11-12T05:52:10.5621938Z Updating files:  62% (17775/28668)
+2026-11-12T05:52:10.6272338Z Updating files:  63% (18061/28668)
+2026-11-12T05:52:10.6895977Z Updating files:  64% (18348/28668)
+2026-11-12T05:52:10.7326267Z Updating files:  65% (18635/28668)
+2026-11-12T05:52:10.8285718Z Updating files:  66% (18921/28668)
+2026-11-12T05:52:10.9304329Z Updating files:  67% (19208/28668)
+2026-11-12T05:52:11.0249963Z Updating files:  68% (19495/28668)
+2026-11-12T05:52:11.1020226Z Updating files:  69% (19781/28668)
+2026-11-12T05:52:11.1430125Z Updating files:  69% (19944/28668)
+2026-11-12T05:52:11.2021542Z Updating files:  70% (20068/28668)
+2026-11-12T05:52:11.2724389Z Updating files:  71% (20355/28668)
+2026-11-12T05:52:11.3562806Z Updating files:  72% (20641/28668)
+2026-11-12T05:52:11.3984570Z Updating files:  73% (20928/28668)
+2026-11-12T05:52:11.4395754Z Updating files:  74% (21215/28668)
+2026-11-12T05:52:11.4780115Z Updating files:  75% (21501/28668)
+2026-11-12T05:52:11.5102859Z Updating files:  76% (21788/28668)
+2026-11-12T05:52:11.5516527Z Updating files:  77% (22075/28668)
+2026-11-12T05:52:11.7324736Z Updating files:  78% (22362/28668)
+2026-11-12T05:52:11.7696194Z Updating files:  79% (22648/28668)
+2026-11-12T05:52:11.8295981Z Updating files:  80% (22935/28668)
+2026-11-12T05:52:11.8810273Z Updating files:  81% (23222/28668)
+2026-11-12T05:52:11.9209510Z Updating files:  82% (23508/28668)
+2026-11-12T05:52:12.0434639Z Updating files:  83% (23795/28668)
+2026-11-12T05:52:12.1027996Z Updating files:  84% (24082/28668)
+2026-11-12T05:52:12.1515811Z Updating files:  84% (24226/28668)
+2026-11-12T05:52:12.3006263Z Updating files:  85% (24368/28668)
+2026-11-12T05:52:12.3393916Z Updating files:  86% (24655/28668)
+2026-11-12T05:52:12.3720518Z Updating files:  87% (24942/28668)
+2026-11-12T05:52:12.4027515Z Updating files:  88% (25228/28668)
+2026-11-12T05:52:12.4331636Z Updating files:  89% (25515/28668)
+2026-11-12T05:52:12.4624069Z Updating files:  90% (25802/28668)
+2026-11-12T05:52:12.4920509Z Updating files:  91% (26088/28668)
+2026-11-12T05:52:12.5222922Z Updating files:  92% (26375/28668)
+2026-11-12T05:52:12.5508248Z Updating files:  93% (26662/28668)
+2026-11-12T05:52:12.5807279Z Updating files:  94% (26948/28668)
+2026-11-12T05:52:12.6121619Z Updating files:  95% (27235/28668)
+2026-11-12T05:52:12.6421507Z Updating files:  96% (27522/28668)
+2026-11-12T05:52:12.6782203Z Updating files:  97% (27808/28668)
+2026-11-12T05:52:12.7200943Z Updating files:  98% (28095/28668)
+2026-11-12T05:52:12.7609668Z Updating files:  99% (28382/28668)
+2026-11-12T05:52:12.7609910Z Updating files: 100% (28668/28668)
+2026-11-12T05:52:12.7610311Z Updating files: 100% (28668/28668), done.
+2026-11-12T05:52:12.7909623Z Switched to a new branch 'codex/integration-034'
+2026-11-12T05:52:12.7918030Z branch 'codex/integration-034' set up to track 'origin/codex/integration-034'.
+2026-11-12T05:52:12.8348978Z ##[endgroup]
+2026-11-12T05:52:12.8643731Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-11-12T05:52:12.8874478Z 0f53564afa6a79ff9b7235140afbe85c9cf94bfc
+2026-11-12T05:52:12.8908228Z ##[group]Removing auth
+2026-11-12T05:52:12.8908435Z Removing SSH command configuration
+2026-11-12T05:52:12.8914842Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-12T05:52:12.9177100Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-12T05:52:13.3023497Z Removing HTTP extra header
+2026-11-12T05:52:13.3030119Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-12T05:52:13.3290574Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-12T05:52:13.7242854Z Removing includeIf entries pointing to credentials config files
+2026-11-12T05:52:13.7249474Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-12T05:52:13.7485578Z includeif.gitdir:D:/a/opf/opf/.git.path
+2026-11-12T05:52:13.7485817Z includeif.gitdir:D:/a/opf/opf/.git/worktrees/*.path
+2026-11-12T05:52:13.7486036Z includeif.gitdir:/github/workspace/.git.path
+2026-11-12T05:52:13.7486269Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-12T05:52:13.7516861Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/opf/opf/.git.path
+2026-11-12T05:52:13.7738155Z D:\a\_temp\git-credentials-bab1c870-e3dc-424e-a70f-0bfb432a9a0d.config
+2026-11-12T05:52:13.7768099Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/opf/opf/.git.path D\:\\a\\_temp\\git\-credentials\-bab1c870\-e3dc\-424e\-a70f\-0bfb432a9a0d\.config
+2026-11-12T05:52:13.8022571Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/opf/opf/.git/worktrees/*.path
+2026-11-12T05:52:13.8236480Z D:\a\_temp\git-credentials-bab1c870-e3dc-424e-a70f-0bfb432a9a0d.config
+2026-11-12T05:52:13.8268004Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/opf/opf/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-bab1c870\-e3dc\-424e\-a70f\-0bfb432a9a0d\.config
+2026-11-12T05:52:13.8511493Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-12T05:52:13.8730398Z /github/runner_temp/git-credentials-bab1c870-e3dc-424e-a70f-0bfb432a9a0d.config
+2026-11-12T05:52:13.8757883Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-bab1c870\-e3dc\-424e\-a70f\-0bfb432a9a0d\.config
+2026-11-12T05:52:13.8997147Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-12T05:52:13.9200819Z /github/runner_temp/git-credentials-bab1c870-e3dc-424e-a70f-0bfb432a9a0d.config
+2026-11-12T05:52:13.9226517Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-bab1c870\-e3dc\-424e\-a70f\-0bfb432a9a0d\.config
+2026-11-12T05:52:13.9461130Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-12T05:52:14.3398781Z Removing credentials config 'D:\a\_temp\git-credentials-bab1c870-e3dc-424e-a70f-0bfb432a9a0d.config'
+2026-11-12T05:52:14.3408426Z ##[endgroup]
+2026-11-12T05:52:14.3828445Z Prepare all required actions
+2026-11-12T05:52:14.3828843Z Getting action download info
+2026-11-12T05:52:14.4920863Z Download action repository 'pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413' (SHA:ea17c68df8912ef543352723c149a84f56e3d413)
+2026-11-12T05:52:14.9338143Z Download action repository 'actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+2026-11-12T05:52:15.0679707Z ##[group]Run ./.github/actions/setup-workspace
+2026-11-12T05:52:15.0679874Z with:
+2026-11-12T05:52:15.0679998Z   build-deps: @openpresentation/opf-pptx
+2026-11-12T05:52:15.0680146Z   node-version: 24
+2026-11-12T05:52:15.0680257Z   container: false
+2026-11-12T05:52:15.0680376Z ##[endgroup]
+2026-11-12T05:52:15.0719101Z ##[start-action display=Install pnpm (host runner);id=__self.__pnpm_action-setup]
+2026-11-12T05:52:15.0832905Z ##[group]Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+2026-11-12T05:52:15.0833108Z with:
+2026-11-12T05:52:15.0833249Z   dest: ~/setup-pnpm
+2026-11-12T05:52:15.0833366Z   run_install: null
+2026-11-12T05:52:15.0833473Z   cache: false
+2026-11-12T05:52:15.0833592Z   cache_dependency_path: pnpm-lock.yaml
+2026-11-12T05:52:15.0833743Z   package_json_file: package.json
+2026-11-12T05:52:15.0833873Z   standalone: false
+2026-11-12T05:52:15.0833978Z ##[endgroup]
+2026-11-12T05:52:15.2013445Z ##[group]Running self-installer...
+2026-11-12T05:52:15.2096621Z (node:4280) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+2026-11-12T05:52:15.2097518Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-12T05:52:28.2286016Z 
+2026-11-12T05:52:28.2286814Z added 1 package, and audited 2 packages in 7s
+2026-11-12T05:52:28.2287132Z 
+2026-11-12T05:52:28.2287223Z 1 package is looking for funding
+2026-11-12T05:52:28.2287442Z   run `npm fund` for details
+2026-11-12T05:52:28.2292298Z 
+2026-11-12T05:52:28.2292463Z found 0 vulnerabilities
+2026-11-12T05:52:30.2298376Z Checking for updates...
+2026-11-12T05:52:30.6117372Z Switching pnpm from v11.25.0 to v10.33.2...
+2026-11-12T05:52:31.1204504Z .../v11/4e0-1a1ce5098e9-17a60e643ed55649 | Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-11-12T05:52:31.1217598Z .../v11/4e0-1a1ce5098e9-17a60e643ed55649 |   +1 +
+2026-11-12T05:52:32.8195300Z .../v11/4e0-1a1ce5098e9-17a60e643ed55649 | Progress: resolved 1, reused 0, downloaded 1, added 0
+2026-11-12T05:52:33.2040122Z .../v11/4e0-1a1ce5098e9-17a60e643ed55649 | Progress: resolved 1, reused 0, downloaded 1, added 1, done
+2026-11-12T05:52:33.6918507Z [WARN] Detected a pnpm v10 installation layout at PNPM_HOME. The pnpm shims at PNPM_HOME have been refreshed so the new version is active, but pnpm v11 expects bins in PNPM_HOME/bin. Run "pnpm setup" to migrate your PATH to the v11 layout.
+2026-11-12T05:52:33.6947243Z Successfully updated pnpm to v10.33.2
+2026-11-12T05:52:33.7645946Z ##[endgroup]
+2026-11-12T05:52:33.7646240Z Installation Completed!
+2026-11-12T05:52:33.7759043Z ##[end-action id=__self.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=18703]
+2026-11-12T05:52:33.7761710Z ##[start-action display=Install pnpm (container);id=__self.__run]
+2026-11-12T05:52:33.7768917Z ##[end-action id=__self.__run;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-12T05:52:33.7770191Z ##[start-action display=Trust the checkout (container);id=__self.__run_2]
+2026-11-12T05:52:33.7772383Z ##[end-action id=__self.__run_2;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-12T05:52:33.7773431Z ##[start-action display=Set up Node.js;id=__self.__actions_setup-node]
+2026-11-12T05:52:33.7899539Z ##[group]Run actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+2026-11-12T05:52:33.7899750Z with:
+2026-11-12T05:52:33.7899864Z   node-version: 24
+2026-11-12T05:52:33.7899989Z   cache: pnpm
+2026-11-12T05:52:33.7900108Z   check-latest: false
+2026-11-12T05:52:33.7903733Z   token: ***
+2026-11-12T05:52:33.7903899Z   package-manager-cache: true
+2026-11-12T05:52:33.7904041Z env:
+2026-11-12T05:52:33.7904196Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-11-12T05:52:33.7904386Z ##[endgroup]
+2026-11-12T05:52:33.9065955Z Found in cache @ C:\hostedtoolcache\windows\node\24.22.2\x64
+2026-11-12T05:52:35.2581226Z ##[group]Environment details
+2026-11-12T05:52:39.3000143Z node: v24.22.2
+2026-11-12T05:52:39.3000353Z npm: 11.19.1
+2026-11-12T05:52:39.3000474Z yarn: 1.22.22
+2026-11-12T05:52:39.3000782Z ##[endgroup]
+2026-11-12T05:52:39.3345311Z [command]C:\Windows\system32\cmd.exe /D /S /C "C:\Users\runneradmin\setup-pnpm\node_modules\.bin\bin\pnpm.CMD store path --silent"
+2026-11-12T05:52:39.9146706Z D:\.pnpm-store\v10
+2026-11-12T05:52:40.2479670Z Cache hit for: node-cache-Windows-x64-pnpm-d4ffbf076089ec4c46de8580f929db170f5887029ad69a38c42643130159df66
+2026-11-12T05:52:41.4808976Z Received 62914560 of 402770918 (15.6%), 59.9 MBs/sec
+2026-11-12T05:52:42.4821671Z Received 134217728 of 402770918 (33.3%), 63.9 MBs/sec
+2026-11-12T05:52:43.5873420Z Received 268435456 of 402770918 (66.6%), 82.4 MBs/sec
+2026-11-12T05:52:44.7578546Z Received 402653184 of 402770918 (100.0%), 89.7 MBs/sec
+2026-11-12T05:52:44.8151900Z Received 402770918 of 402770918 (100.0%), 88.6 MBs/sec
+2026-11-12T05:52:44.8154276Z Cache Size: ~384 MB (402770918 B)
+2026-11-12T05:52:44.8178145Z [command]"C:\Program Files\Git\usr\bin\tar.exe" -xf D:/a/_temp/b0365912-fc86-46f8-b3a5-d79fabcaaa95/cache.tzst -P -C D:/a/opf/opf --force-local --use-compress-program "zstd -d"
+2026-11-12T05:52:49.6550274Z Cache restored successfully
+2026-11-12T05:52:49.6785248Z Cache restored from key: node-cache-Windows-x64-pnpm-d4ffbf076089ec4c46de8580f929db170f5887029ad69a38c42643130159df66
+2026-11-12T05:52:49.6957289Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=15917]
+2026-11-12T05:52:49.6959236Z ##[start-action display=Install dependencies;id=__self.__run_3]
+2026-11-12T05:52:49.7055998Z ##[group]Run node -e "console.log('Node', process.version)"
+2026-11-12T05:52:49.7056275Z [36;1mnode -e "console.log('Node', process.version)"[0m
+2026-11-12T05:52:49.7056467Z [36;1mpnpm install --frozen-lockfile[0m
+2026-11-12T05:52:49.7067949Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-12T05:52:49.7068181Z env:
+2026-11-12T05:52:49.7068346Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-11-12T05:52:49.7068534Z ##[endgroup]
+2026-11-12T05:52:49.9060727Z Node v24.22.2
+2026-11-12T05:52:50.2806661Z Scope: all 9 workspace projects
+2026-11-12T05:52:50.3213800Z Lockfile is up to date, resolution step is skipped
+2026-11-12T05:52:50.4094628Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-11-12T05:52:50.4324513Z Packages: +298
+2026-11-12T05:52:50.4327621Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-11-12T05:52:51.4101929Z Progress: resolved 298, reused 298, downloaded 0, added 147
+2026-11-12T05:52:52.4222128Z Progress: resolved 298, reused 298, downloaded 0, added 296
+2026-11-12T05:52:53.2270831Z Progress: resolved 298, reused 298, downloaded 0, added 298, done
+2026-11-12T05:52:53.4166167Z  WARN  Failed to create bin at D:\a\opf\opf\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'D:\a\opf\opf\packages\render\dist\preview-fonts-cli.js.EXE'
+2026-11-12T05:52:53.4167647Z  WARN  Failed to create bin at D:\a\opf\opf\packages\editor\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'D:\a\opf\opf\packages\render\dist\preview-fonts-cli.js.EXE'
+2026-11-12T05:52:53.4169679Z  WARN  Failed to create bin at D:\a\opf\opf\packages\cli\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'D:\a\opf\opf\packages\render\dist\preview-fonts-cli.js.EXE'
+2026-11-12T05:52:53.4177901Z  WARN  Failed to create bin at D:\a\opf\opf\packages\integration\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'D:\a\opf\opf\packages\render\dist\preview-fonts-cli.js.EXE'
+2026-11-12T05:52:53.4179638Z  WARN  Failed to create bin at D:\a\opf\opf\packages\mcp\node_modules\.bin\opf. ENOENT: no such file or directory, stat 'D:\a\opf\opf\packages\cli\dist\index.js.EXE'
+2026-11-12T05:52:53.4181050Z  WARN  Failed to create bin at D:\a\opf\opf\packages\mcp\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'D:\a\opf\opf\packages\render\dist\preview-fonts-cli.js.EXE'
+2026-11-12T05:52:53.4182292Z  WARN  Failed to create bin at D:\a\opf\opf\packages\pptx\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'D:\a\opf\opf\packages\render\dist\preview-fonts-cli.js.EXE'
+2026-11-12T05:52:53.5367671Z 
+2026-11-12T05:52:53.5368167Z devDependencies:
+2026-11-12T05:52:53.5368392Z + @biomejs/biome 2.6.6
+2026-11-12T05:52:53.5368625Z + @openpresentation/gallery 0.33.0 <- packages\gallery
+2026-11-12T05:52:53.5368906Z + @openpresentation/opf 0.33.0 <- packages\javascript
+2026-11-12T05:52:53.5369122Z + @openpresentation/opf-pptx 0.33.0 <- packages\pptx
+2026-11-12T05:52:53.5369342Z + @openpresentation/opf-render 0.33.0 <- packages\render
+2026-11-12T05:52:53.5369538Z + @typescript/native <- typescript 7.0.2
+2026-11-12T05:52:53.5369702Z 
+2026-11-12T05:52:53.5600722Z  WARN  Failed to create bin at D:\a\opf\opf\packages\pptx\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'D:\a\opf\opf\packages\pptx\node_modules\@openpresentation\opf-render\dist\preview-fonts-cli.js.EXE'
+2026-11-12T05:52:53.5754708Z  WARN  Failed to create bin at D:\a\opf\opf\packages\cli\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'D:\a\opf\opf\packages\cli\node_modules\@openpresentation\opf-render\dist\preview-fonts-cli.js.EXE'
+2026-11-12T05:52:53.5758507Z  WARN  Failed to create bin at D:\a\opf\opf\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'D:\a\opf\opf\node_modules\@openpresentation\opf-render\dist\preview-fonts-cli.js.EXE'
+2026-11-12T05:52:53.5761546Z  WARN  Failed to create bin at D:\a\opf\opf\packages\editor\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'D:\a\opf\opf\packages\editor\node_modules\@openpresentation\opf-render\dist\preview-fonts-cli.js.EXE'
+2026-11-12T05:52:53.5770320Z  WARN  Failed to create bin at D:\a\opf\opf\packages\integration\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'D:\a\opf\opf\packages\integration\node_modules\@openpresentation\opf-render\dist\preview-fonts-cli.js.EXE'
+2026-11-12T05:52:53.5830393Z  WARN  Failed to create bin at D:\a\opf\opf\packages\mcp\node_modules\.bin\opf. ENOENT: no such file or directory, stat 'D:\a\opf\opf\packages\mcp\node_modules\@openpresentation\cli\dist\index.js.EXE'
+2026-11-12T05:52:53.5832948Z  WARN  Failed to create bin at D:\a\opf\opf\packages\mcp\node_modules\.bin\opf-preview-fonts. ENOENT: no such file or directory, stat 'D:\a\opf\opf\packages\mcp\node_modules\@openpresentation\opf-render\dist\preview-fonts-cli.js.EXE'
+2026-11-12T05:52:53.5979314Z Done in 3.5s using pnpm v10.33.2
+2026-11-12T05:52:53.6262504Z ##[end-action id=__self.__run_3;outcome=success;conclusion=success;duration_ms=3930]
+2026-11-12T05:52:53.6266638Z ##[start-action display=Build the dependencies;id=__self.__run_4]
+2026-11-12T05:52:53.6356520Z ##[group]Run filters=()
+2026-11-12T05:52:53.6356693Z [36;1mfilters=()[0m
+2026-11-12T05:52:53.6356871Z [36;1mif [ -n "${PACKAGE}" ]; then filters+=(--filter "${PACKAGE}^..."); fi[0m
+2026-11-12T05:52:53.6357117Z [36;1mfor name in ${ALSO}; do filters+=(--filter "${name}..."); done[0m
+2026-11-12T05:52:53.6357324Z [36;1mpnpm "${filters[@]}" run --if-present build[0m
+2026-11-12T05:52:53.6365958Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-12T05:52:53.6366168Z env:
+2026-11-12T05:52:53.6366316Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-11-12T05:52:53.6366648Z   PACKAGE: @openpresentation/opf-pptx
+2026-11-12T05:52:53.6366787Z   ALSO: 
+2026-11-12T05:52:53.6366894Z ##[endgroup]
+2026-11-12T05:52:54.0081522Z Scope: 3 of 9 workspace projects
+2026-11-12T05:52:54.0099873Z packages/gallery build$ node scripts/build.mjs
+2026-11-12T05:52:54.1785929Z packages/gallery build: Built @openpresentation/gallery: 226 content records, 40 layout previews.
+2026-11-12T05:52:54.1910222Z packages/gallery build: Done
+2026-11-12T05:52:54.1918873Z packages/javascript build$ node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/minify-precompiled.mjs && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)
+2026-11-12T05:52:54.5020895Z packages/javascript build: > @openpresentation/opf@0.33.0 generate D:\a\opf\opf\packages\javascript
+2026-11-12T05:52:54.5023110Z packages/javascript build: > node scripts/generate.mjs && node scripts/generate-content.mjs
+2026-11-12T05:52:55.6044750Z packages/javascript build: Generated src/generated/examples.ts (149 examples, 7 galleries)
+2026-11-12T05:52:55.6271478Z packages/javascript build: Generated src/generated/docs.ts (69 docs)
+2026-11-12T05:52:55.6276203Z packages/javascript build: Generated src/generated/repo-readme.ts (19513 bytes)
+2026-11-12T05:52:56.1543294Z packages/javascript build: [34mCLI[39m Building entry: {"deck":"src/deck.ts","markdown":"src/markdown.ts","yaml":"src/yaml.ts","schema":"src/schema-navigation.ts","source":"src/source.ts","patch":"src/patch.ts","ids":"src/ids.ts","diff":"src/diff.ts","format":"src/format.ts","convert":"src/convert.ts","font-policy":"src/font-policy.ts","symbol-font-encodings":"src/symbol-font-encodings.ts","shape-geometry":"src/shape-geometry.ts","shape-catalog":"src/shape-catalog.ts","data":"src/data.ts","pagination":"src/pagination.ts","composition":"src/composition.ts","index":"src/index.ts","schemas":"src/schemas.ts","validator":"src/validator.ts","types":"src/types.ts","spec-files":"src/spec-files.ts","examples":"src/examples.ts","docs":"src/docs.ts","repo-readme":"src/repo-readme.ts","browser":"src/browser.ts","node-engine":"src/node-engine.ts","schema-engine-ajv":"src/schema-engine-ajv.ts","schema-engine-precompiled":"src/schema-engine-precompiled.ts","precompiled":"src/precompiled.ts","diagram-engine-eager":"src/diagram-engine-eager.ts","diagram-engine-lazy":"src/diagram-engine-lazy.ts","shape-engine-eager":"src/shape-engine-eager.ts","shape-engine-lazy":"src/shape-engine-lazy.ts"}
+2026-11-12T05:52:56.1549319Z packages/javascript build: [34mCLI[39m Using tsconfig: tsconfig.json
+2026-11-12T05:52:56.1549861Z packages/javascript build: [34mCLI[39m tsup v9.0.0
+2026-11-12T05:52:56.1550527Z packages/javascript build: [34mCLI[39m Using tsup config: D:\a\opf\opf\packages\javascript\tsup.config.ts
+2026-11-12T05:52:56.1569850Z packages/javascript build: [34mCLI[39m Target: es2022
+2026-11-12T05:52:56.1609493Z packages/javascript build: [34mCLI[39m Cleaning output folder
+2026-11-12T05:52:56.1620073Z packages/javascript build: [34mESM[39m Build start
+2026-11-12T05:52:56.6239538Z packages/javascript build: [34mDTS[39m Build start
+2026-11-12T05:52:57.0285366Z packages/javascript build: Generated an empty chunk: "types".
+2026-11-12T05:53:01.4501828Z packages/javascript build: [32mESM[39m [1mdist\shape-engine-eager.js           [22m[32m323.00 B[39m
+2026-11-12T05:53:01.4502917Z packages/javascript build: [32mESM[39m [1mdist\shape-engine-lazy.js            [22m[32m308.00 B[39m
+2026-11-12T05:53:01.4505712Z packages/javascript build: [32mESM[39m [1mdist\diagram-plantuml-ZZYMHBHZ.js    [22m[32m87.00 B[39m
+2026-11-12T05:53:01.4507354Z packages/javascript build: [32mESM[39m [1mdist\repo-readme.js                  [22m[32m19.47 KB[39m
+2026-11-12T05:53:01.4508130Z packages/javascript build: [32mESM[39m [1mdist\conversion-OBN4FRIC.js          [22m[32m835.00 B[39m
+2026-11-12T05:53:01.4508886Z packages/javascript build: [32mESM[39m [1mdist\chunk-IJXKVM4W.js               [22m[32m10.69 KB[39m
+2026-11-12T05:53:01.4510138Z packages/javascript build: [32mESM[39m [1mdist\shape-engine-module-BK7JNEUV.js [22m[32m308.00 B[39m
+2026-11-12T05:53:01.4511385Z packages/javascript build: [32mESM[39m [1mdist\browser.js                      [22m[32m4.32 KB[39m
+2026-11-12T05:53:01.4512261Z packages/javascript build: [32mESM[39m [1mdist\node-engine.js                  [22m[32m3.97 KB[39m
+2026-11-12T05:53:01.4513191Z packages/javascript build: [32mESM[39m [1mdist\chunk-HU6DUXMN.js               [22m[32m71.11 KB[39m
+2026-11-12T05:53:01.4514884Z packages/javascript build: [32mESM[39m [1mdist\schema-engine-ajv.js            [22m[32m1.15 KB[39m
+2026-11-12T05:53:01.4515559Z packages/javascript build: [32mESM[39m [1mdist\schema-engine-precompiled.js    [22m[32m131.00 B[39m
+2026-11-12T05:53:01.4516217Z packages/javascript build: [32mESM[39m [1mdist\precompiled.js                  [22m[32m231.00 B[39m
+2026-11-12T05:53:01.4516877Z packages/javascript build: [32mESM[39m [1mdist\diagram-engine-lazy.js          [22m[32m430.00 B[39m
+2026-11-12T05:53:01.4517563Z packages/javascript build: [32mESM[39m [1mdist\chunk-43JWUIGF.js               [22m[32m203.00 B[39m
+2026-11-12T05:53:01.4518226Z packages/javascript build: [32mESM[39m [1mdist\index.js                        [22m[32m5.72 KB[39m
+2026-11-12T05:53:01.4518872Z packages/javascript build: [32mESM[39m [1mdist\chunk-INIMUBSE.js               [22m[32m286.00 B[39m
+2026-11-12T05:53:01.4520663Z packages/javascript build: [32mESM[39m [1mdist\composition.js                  [22m[32m12.88 KB[39m
+2026-11-12T05:53:01.4521792Z packages/javascript build: [32mESM[39m [1mdist\chunk-T5LC6OQY.js               [22m[32m47.25 KB[39m
+2026-11-12T05:53:01.4522473Z packages/javascript build: [32mESM[39m [1mdist\schemas.js                      [22m[32m241.00 B[39m
+2026-11-12T05:53:01.4523190Z packages/javascript build: [32mESM[39m [1mdist\validator.js                    [22m[32m385.00 B[39m
+2026-11-12T05:53:01.4523920Z packages/javascript build: [32mESM[39m [1mdist\types.js                        [22m[32m1.00 B[39m
+2026-11-12T05:53:01.4524636Z packages/javascript build: [32mESM[39m [1mdist\spec-files.js                   [22m[32m115.00 B[39m
+2026-11-12T05:53:01.4525348Z packages/javascript build: [32mESM[39m [1mdist\chunk-466I5SCB.js               [22m[32m62.35 KB[39m
+2026-11-12T05:53:01.4526239Z packages/javascript build: [32mESM[39m [1mdist\chunk-W4DYDRV2.js               [22m[32m6.21 KB[39m
+2026-11-12T05:53:01.4526925Z packages/javascript build: [32mESM[39m [1mdist\format.js                       [22m[32m157.00 B[39m
+2026-11-12T05:53:01.4527625Z packages/javascript build: [32mESM[39m [1mdist\convert.js                      [22m[32m59.94 KB[39m
+2026-11-12T05:53:01.4528308Z packages/javascript build: [32mESM[39m [1mdist\font-policy.js                  [22m[32m151.00 B[39m
+2026-11-12T05:53:01.4529063Z packages/javascript build: [32mESM[39m [1mdist\chunk-FK5XG742.js               [22m[32m153.62 KB[39m
+2026-11-12T05:53:01.4529768Z packages/javascript build: [32mESM[39m [1mdist\shape-geometry.js               [22m[32m229.00 B[39m
+2026-11-12T05:53:01.4530469Z packages/javascript build: [32mESM[39m [1mdist\diagram-engine-eager.js         [22m[32m360.00 B[39m
+2026-11-12T05:53:01.4531150Z packages/javascript build: [32mESM[39m [1mdist\data.js                         [22m[32m443.00 B[39m
+2026-11-12T05:53:01.4531885Z packages/javascript build: [32mESM[39m [1mdist\chunk-D46FQ4XC.js               [22m[32m6.31 KB[39m
+2026-11-12T05:53:01.4532709Z packages/javascript build: [32mESM[39m [1mdist\shape-catalog.js                [22m[32m14.63 KB[39m
+2026-11-12T05:53:01.4535246Z packages/javascript build: [32mESM[39m [1mdist\pagination.js                   [22m[32m282.00 B[39m
+2026-11-12T05:53:01.4535989Z packages/javascript build: [32mESM[39m [1mdist\symbol-font-encodings.js        [22m[32m414.09 KB[39m
+2026-11-12T05:53:01.4537942Z packages/javascript build: [32mESM[39m [1mdist\chunk-WWGO62TS.js               [22m[32m36.04 KB[39m
+2026-11-12T05:53:01.4538849Z packages/javascript build: [32mESM[39m [1mdist\deck.js                         [22m[32m474.00 B[39m
+2026-11-12T05:53:01.4539526Z packages/javascript build: [32mESM[39m [1mdist\markdown.js                     [22m[32m390.00 B[39m
+2026-11-12T05:53:01.4540080Z packages/javascript build: [32mESM[39m [1mdist\yaml.js                         [22m[32m390.00 B[39m
+2026-11-12T05:53:01.4540498Z packages/javascript build: [32mESM[39m [1mdist\chunk-NFHIMAXF.js               [22m[32m15.19 KB[39m
+2026-11-12T05:53:01.4540923Z packages/javascript build: [32mESM[39m [1mdist\chunk-IXMYBALY.js               [22m[32m31.53 KB[39m
+2026-11-12T05:53:01.4541335Z packages/javascript build: [32mESM[39m [1mdist\chunk-RYZPBJLB.js               [22m[32m302.00 B[39m
+2026-11-12T05:53:01.4541749Z packages/javascript build: [32mESM[39m [1mdist\chunk-AXCBSIUG.js               [22m[32m3.70 KB[39m
+2026-11-12T05:53:01.4542158Z packages/javascript build: [32mESM[39m [1mdist\schema.js                       [22m[32m396.00 B[39m
+2026-11-12T05:53:01.4542573Z packages/javascript build: [32mESM[39m [1mdist\chunk-DSXV4ICG.js               [22m[32m43.93 KB[39m
+2026-11-12T05:53:01.4542975Z packages/javascript build: [32mESM[39m [1mdist\source.js                       [22m[32m22.70 KB[39m
+2026-11-12T05:53:01.4543540Z packages/javascript build: [32mESM[39m [1mdist\chunk-YKNKUZSB.js               [22m[32m4.88 KB[39m
+2026-11-12T05:53:01.4543954Z packages/javascript build: [32mESM[39m [1mdist\patch.js                        [22m[32m536.00 B[39m
+2026-11-12T05:53:01.4544618Z packages/javascript build: [32mESM[39m [1mdist\chunk-H6E2DX44.js               [22m[32m4.69 KB[39m
+2026-11-12T05:53:01.4545037Z packages/javascript build: [32mESM[39m [1mdist\chunk-YYT6N7AI.js               [22m[32m261.58 KB[39m
+2026-11-12T05:53:01.4545453Z packages/javascript build: [32mESM[39m [1mdist\chunk-BBGWBDFA.js               [22m[32m55.06 KB[39m
+2026-11-12T05:53:01.4546089Z packages/javascript build: [32mESM[39m [1mdist\ids.js                          [22m[32m339.00 B[39m
+2026-11-12T05:53:01.4546755Z packages/javascript build: [32mESM[39m [1mdist\chunk-422DNC64.js               [22m[32m2.94 KB[39m
+2026-11-12T05:53:01.4547431Z packages/javascript build: [32mESM[39m [1mdist\diff.js                         [22m[32m271.00 B[39m
+2026-11-12T05:53:01.4548081Z packages/javascript build: [32mESM[39m [1mdist\chunk-ISLW722H.js               [22m[32m30.58 KB[39m
+2026-11-12T05:53:01.4548496Z packages/javascript build: [32mESM[39m [1mdist\chunk-ZFMMXPQQ.js               [22m[32m27.48 KB[39m
+2026-11-12T05:53:01.4548906Z packages/javascript build: [32mESM[39m [1mdist\chunk-JBARNYFR.js               [22m[32m776.00 B[39m
+2026-11-12T05:53:01.4549316Z packages/javascript build: [32mESM[39m [1mdist\chunk-GDFA3SQL.js               [22m[32m10.03 KB[39m
+2026-11-12T05:53:01.4549724Z packages/javascript build: [32mESM[39m [1mdist\chunk-PRXZD2II.js               [22m[32m463.00 B[39m
+2026-11-12T05:53:01.4550139Z packages/javascript build: [32mESM[39m [1mdist\chunk-LTDKM6Z4.js               [22m[32m456.47 KB[39m
+2026-11-12T05:53:01.4550550Z packages/javascript build: [32mESM[39m [1mdist\chunk-HS37ISVZ.js               [22m[32m505.76 KB[39m
+2026-11-12T05:53:01.4550963Z packages/javascript build: [32mESM[39m [1mdist\chunk-VRZ6LTWC.js               [22m[32m1.34 MB[39m
+2026-11-12T05:53:01.4551359Z packages/javascript build: [32mESM[39m [1mdist\docs.js                         [22m[32m1.85 MB[39m
+2026-11-12T05:53:01.4551757Z packages/javascript build: [32mESM[39m [1mdist\chunk-22SDLDS6.js               [22m[32m2.40 MB[39m
+2026-11-12T05:53:01.4552160Z packages/javascript build: [32mESM[39m [1mdist\examples.js                     [22m[32m8.91 MB[39m
+2026-11-12T05:53:01.4552695Z packages/javascript build: [32mESM[39m ⚡️ Build success in 5288ms
+2026-11-12T05:53:01.8950789Z packages/javascript build: [plugin dts] Entry "data.d.ts" still references private shared type exports with no public re-export: Chart. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-11-12T05:53:01.9076791Z packages/javascript build: [plugin dts] Entry "node-engine.d.ts" still references private shared type exports with no public re-export: EmbeddedFace. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-11-12T05:53:01.9081054Z packages/javascript build: [plugin dts] Entry "schemas.d.ts" still references private shared type exports with no public re-export: JsonObject, JsonSchemaDocument. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-11-12T05:53:01.9130797Z packages/javascript build: [32mDTS[39m ⚡️ Build success in 5309ms
+2026-11-12T05:53:01.9135199Z packages/javascript build: [32mDTS[39m [1mdist\precompiled.d.ts               [22m[32m13.00 B[39m
+2026-11-12T05:53:01.9136030Z packages/javascript build: [32mDTS[39m [1mdist\data.d.ts                      [22m[32m2.55 KB[39m
+2026-11-12T05:53:01.9136713Z packages/javascript build: [32mDTS[39m [1mdist\deck.d.ts                      [22m[32m2.89 KB[39m
+2026-11-12T05:53:01.9137920Z packages/javascript build: [32mDTS[39m [1mdist\format.d.ts                    [22m[32m951.00 B[39m
+2026-11-12T05:53:01.9138741Z packages/javascript build: [32mDTS[39m [1mdist\ids.d.ts                       [22m[32m6.71 KB[39m
+2026-11-12T05:53:01.9140919Z packages/javascript build: [32mDTS[39m [1mdist\repo-readme.d.ts               [22m[32m139.00 B[39m
+2026-11-12T05:53:01.9141718Z packages/javascript build: [32mDTS[39m [1mdist\shape-catalog.d.ts             [22m[32m4.49 KB[39m
+2026-11-12T05:53:01.9142467Z packages/javascript build: [32mDTS[39m [1mdist\symbol-font-encodings.d.ts     [22m[32m5.56 KB[39m
+2026-11-12T05:53:01.9143190Z packages/javascript build: [32mDTS[39m [1mdist\shape-geometry.d.ts            [22m[32m7.40 KB[39m
+2026-11-12T05:53:01.9143911Z packages/javascript build: [32mDTS[39m [1mdist\docs.d.ts                      [22m[32m682.00 B[39m
+2026-11-12T05:53:01.9144636Z packages/javascript build: [32mDTS[39m [1mdist\examples.d.ts                  [22m[32m2.07 KB[39m
+2026-11-12T05:53:01.9145681Z packages/javascript build: [32mDTS[39m [1mdist\font-policy.d.ts               [22m[32m7.72 KB[39m
+2026-11-12T05:53:01.9149830Z packages/javascript build: [32mDTS[39m [1mdist\patch.d.ts                     [22m[32m10.44 KB[39m
+2026-11-12T05:53:01.9150776Z packages/javascript build: [32mDTS[39m [1mdist\schema.d.ts                    [22m[32m9.33 KB[39m
+2026-11-12T05:53:01.9151430Z packages/javascript build: [32mDTS[39m [1mdist\yaml.d.ts                      [22m[32m5.88 KB[39m
+2026-11-12T05:53:01.9152069Z packages/javascript build: [32mDTS[39m [1mdist\diff.d.ts                      [22m[32m5.80 KB[39m
+2026-11-12T05:53:01.9152725Z packages/javascript build: [32mDTS[39m [1mdist\markdown.d.ts                  [22m[32m5.02 KB[39m
+2026-11-12T05:53:01.9153382Z packages/javascript build: [32mDTS[39m [1mdist\validator.d.ts                 [22m[32m6.37 KB[39m
+2026-11-12T05:53:01.9154040Z packages/javascript build: [32mDTS[39m [1mdist\convert.d.ts                   [22m[32m14.69 KB[39m
+2026-11-12T05:53:01.9154708Z packages/javascript build: [32mDTS[39m [1mdist\node-engine.d.ts               [22m[32m11.38 KB[39m
+2026-11-12T05:53:01.9155366Z packages/javascript build: [32mDTS[39m [1mdist\source.d.ts                    [22m[32m16.21 KB[39m
+2026-11-12T05:53:01.9156021Z packages/javascript build: [32mDTS[39m [1mdist\index.d.ts                     [22m[32m39.54 KB[39m
+2026-11-12T05:53:01.9156922Z packages/javascript build: [32mDTS[39m [1mdist\schemas.d.ts                   [22m[32m14.83 KB[39m
+2026-11-12T05:53:01.9157582Z packages/javascript build: [32mDTS[39m [1mdist\spec-files.d.ts                [22m[32m1.59 KB[39m
+2026-11-12T05:53:01.9158238Z packages/javascript build: [32mDTS[39m [1mdist\types.d.ts                     [22m[32m74.64 KB[39m
+2026-11-12T05:53:01.9158891Z packages/javascript build: [32mDTS[39m [1mdist\pagination.d.ts                [22m[32m540.00 B[39m
+2026-11-12T05:53:01.9159553Z packages/javascript build: [32mDTS[39m [1mdist\composition.d.ts               [22m[32m25.59 KB[39m
+2026-11-12T05:53:01.9160222Z packages/javascript build: [32mDTS[39m [1mdist\deck-report-jjy4WO1y.d.ts      [22m[32m2.36 KB[39m
+2026-11-12T05:53:01.9160894Z packages/javascript build: [32mDTS[39m [1mdist\catalog-schemas-CiEafJRf.d.ts  [22m[32m1.70 KB[39m
+2026-11-12T05:53:01.9161568Z packages/javascript build: [32mDTS[39m [1mdist\chart-data-yEE-WzgV.d.ts       [22m[32m11.01 KB[39m
+2026-11-12T05:53:01.9162252Z packages/javascript build: [32mDTS[39m [1mdist\presentation-BdFIzc0E.d.ts     [22m[32m295.96 KB[39m
+2026-11-12T05:53:01.9162930Z packages/javascript build: [32mDTS[39m [1mdist\catalog-refs-BacOFTcg.d.ts     [22m[32m7.55 KB[39m
+2026-11-12T05:53:01.9163593Z packages/javascript build: [32mDTS[39m [1mdist\json-BFSdESOE.d.ts             [22m[32m825.00 B[39m
+2026-11-12T05:53:01.9164396Z packages/javascript build: [32mDTS[39m [1mdist\finding-l9dlQ2NF.d.ts          [22m[32m7.24 KB[39m
+2026-11-12T05:53:01.9165063Z packages/javascript build: [32mDTS[39m [1mdist\pagination-Bkn4oVmQ.d.ts       [22m[32m13.51 KB[39m
+2026-11-12T05:53:01.9165737Z packages/javascript build: [32mDTS[39m [1mdist\explain-iZeNOUc6.d.ts          [22m[32m3.89 KB[39m
+2026-11-12T05:53:01.9166412Z packages/javascript build: [32mDTS[39m [1mdist\validation-types-6VL4gx4_.d.ts [22m[32m15.15 KB[39m
+2026-11-12T05:53:01.9167226Z packages/javascript build: [32mDTS[39m [1mdist\conversion-HJPDH9Eg.d.ts       [22m[32m32.53 KB[39m
+2026-11-12T05:53:01.9167907Z packages/javascript build: [32mDTS[39m [1mdist\composition-oMPqZtbM.d.ts      [22m[32m469.41 KB[39m
+2026-11-12T05:53:02.2625537Z packages/javascript build: Minified dist/chunk-22SDLDS6.js: 2515327 -> 1924752 bytes.
+2026-11-12T05:53:02.3614549Z packages/javascript build: Done
+2026-11-12T05:53:02.3619411Z packages/render build$ node scripts/build.mjs
+2026-11-12T05:53:02.4179699Z packages/render build: Done
+2026-11-12T05:53:02.4322886Z ##[end-action id=__self.__run_4;outcome=success;conclusion=success;duration_ms=8805]
+2026-11-12T05:53:02.4428721Z ##[group]Run node scripts/ci-test-shards.mjs --package pptx --script test --shard "2/3"
+2026-11-12T05:53:02.4429101Z [36;1mnode scripts/ci-test-shards.mjs --package pptx --script test --shard "2/3"[0m
+2026-11-12T05:53:02.4437520Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-12T05:53:02.4437723Z env:
+2026-11-12T05:53:02.4437876Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-11-12T05:53:02.4438052Z ##[endgroup]
+2026-11-12T05:53:02.5524211Z ##[notice]pptx test: 107 command(s)
+2026-11-12T05:53:02.5531074Z + pnpm run build:deps
+2026-11-12T05:53:03.9266303Z 
+2026-11-12T05:53:03.9266991Z > @openpresentation/opf-pptx@0.33.0 build:deps D:\a\opf\opf\packages\pptx
+2026-11-12T05:53:03.9267373Z > pnpm --filter "@openpresentation/opf-pptx^..." --fail-if-no-match run build
+2026-11-12T05:53:03.9267579Z 
+2026-11-12T05:53:04.1450874Z Scope: 3 of 9 workspace projects
+2026-11-12T05:53:04.1489540Z ../gallery build$ node scripts/build.mjs
+2026-11-12T05:53:04.2827621Z ../gallery build: Built @openpresentation/gallery: 226 content records, 40 layout previews.
+2026-11-12T05:53:04.2918398Z ../gallery build: Done
+2026-11-12T05:53:04.2926344Z ../javascript build$ node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/minify-precompiled.mjs && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)
+2026-11-12T05:53:04.5864773Z ../javascript build: > @openpresentation/opf@0.33.0 generate D:\a\opf\opf\packages\javascript
+2026-11-12T05:53:04.5866696Z ../javascript build: > node scripts/generate.mjs && node scripts/generate-content.mjs
+2026-11-12T05:53:05.7296351Z ../javascript build: Generated src/generated/examples.ts (149 examples, 7 galleries)
+2026-11-12T05:53:05.7479819Z ../javascript build: Generated src/generated/docs.ts (69 docs)
+2026-11-12T05:53:05.7485473Z ../javascript build: Generated src/generated/repo-readme.ts (19513 bytes)
+2026-11-12T05:53:06.0656014Z ../javascript build: [34mCLI[39m Building entry: {"deck":"src/deck.ts","markdown":"src/markdown.ts","yaml":"src/yaml.ts","schema":"src/schema-navigation.ts","source":"src/source.ts","patch":"src/patch.ts","ids":"src/ids.ts","diff":"src/diff.ts","format":"src/format.ts","convert":"src/convert.ts","font-policy":"src/font-policy.ts","symbol-font-encodings":"src/symbol-font-encodings.ts","shape-geometry":"src/shape-geometry.ts","shape-catalog":"src/shape-catalog.ts","data":"src/data.ts","pagination":"src/pagination.ts","composition":"src/composition.ts","index":"src/index.ts","schemas":"src/schemas.ts","validator":"src/validator.ts","types":"src/types.ts","spec-files":"src/spec-files.ts","examples":"src/examples.ts","docs":"src/docs.ts","repo-readme":"src/repo-readme.ts","browser":"src/browser.ts","node-engine":"src/node-engine.ts","schema-engine-ajv":"src/schema-engine-ajv.ts","schema-engine-precompiled":"src/schema-engine-precompiled.ts","precompiled":"src/precompiled.ts","diagram-engine-eager":"src/diagram-engine-eager.ts","diagram-engine-lazy":"src/diagram-engine-lazy.ts","shape-engine-eager":"src/shape-engine-eager.ts","shape-engine-lazy":"src/shape-engine-lazy.ts"}
+2026-11-12T05:53:06.0658791Z ../javascript build: [34mCLI[39m Using tsconfig: tsconfig.json
+2026-11-12T05:53:06.0659062Z ../javascript build: [34mCLI[39m tsup v9.0.0
+2026-11-12T05:53:06.0659415Z ../javascript build: [34mCLI[39m Using tsup config: D:\a\opf\opf\packages\javascript\tsup.config.ts
+2026-11-12T05:53:06.0684120Z ../javascript build: [34mCLI[39m Target: es2022
+2026-11-12T05:53:06.0790004Z ../javascript build: [34mCLI[39m Cleaning output folder
+2026-11-12T05:53:06.0797982Z ../javascript build: [34mESM[39m Build start
+2026-11-12T05:53:06.4890134Z ../javascript build: [34mDTS[39m Build start
+2026-11-12T05:53:07.0352817Z ../javascript build: Generated an empty chunk: "types".
+2026-11-12T05:53:11.2196421Z ../javascript build: [32mESM[39m [1mdist\shape-engine-eager.js           [22m[32m323.00 B[39m
+2026-11-12T05:53:11.2206983Z ../javascript build: [32mESM[39m [1mdist\shape-engine-lazy.js            [22m[32m308.00 B[39m
+2026-11-12T05:53:11.2207937Z ../javascript build: [32mESM[39m [1mdist\diagram-plantuml-ZZYMHBHZ.js    [22m[32m87.00 B[39m
+2026-11-12T05:53:11.2208717Z ../javascript build: [32mESM[39m [1mdist\shape-engine-module-BK7JNEUV.js [22m[32m308.00 B[39m
+2026-11-12T05:53:11.2209458Z ../javascript build: [32mESM[39m [1mdist\conversion-OBN4FRIC.js          [22m[32m835.00 B[39m
+2026-11-12T05:53:11.2210116Z ../javascript build: [32mESM[39m [1mdist\repo-readme.js                  [22m[32m19.47 KB[39m
+2026-11-12T05:53:11.2210920Z ../javascript build: [32mESM[39m [1mdist\browser.js                      [22m[32m4.32 KB[39m
+2026-11-12T05:53:11.2211946Z ../javascript build: [32mESM[39m [1mdist\node-engine.js                  [22m[32m3.97 KB[39m
+2026-11-12T05:53:11.2215250Z ../javascript build: [32mESM[39m [1mdist\chunk-IJXKVM4W.js               [22m[32m10.69 KB[39m
+2026-11-12T05:53:11.2216699Z ../javascript build: [32mESM[39m [1mdist\schema-engine-precompiled.js    [22m[32m131.00 B[39m
+2026-11-12T05:53:11.2217660Z ../javascript build: [32mESM[39m [1mdist\schema-engine-ajv.js            [22m[32m1.15 KB[39m
+2026-11-12T05:53:11.2218572Z ../javascript build: [32mESM[39m [1mdist\precompiled.js                  [22m[32m231.00 B[39m
+2026-11-12T05:53:11.2220492Z ../javascript build: [32mESM[39m [1mdist\chunk-43JWUIGF.js               [22m[32m203.00 B[39m
+2026-11-12T05:53:11.2221191Z ../javascript build: [32mESM[39m [1mdist\diagram-engine-eager.js         [22m[32m360.00 B[39m
+2026-11-12T05:53:11.2221930Z ../javascript build: [32mESM[39m [1mdist\diagram-engine-lazy.js          [22m[32m430.00 B[39m
+2026-11-12T05:53:11.2222614Z ../javascript build: [32mESM[39m [1mdist\chunk-HU6DUXMN.js               [22m[32m71.11 KB[39m
+2026-11-12T05:53:11.2223253Z ../javascript build: [32mESM[39m [1mdist\index.js                        [22m[32m5.72 KB[39m
+2026-11-12T05:53:11.2223912Z ../javascript build: [32mESM[39m [1mdist\composition.js                  [22m[32m12.88 KB[39m
+2026-11-12T05:53:11.2224533Z ../javascript build: [32mESM[39m [1mdist\chunk-INIMUBSE.js               [22m[32m286.00 B[39m
+2026-11-12T05:53:11.2225167Z ../javascript build: [32mESM[39m [1mdist\schemas.js                      [22m[32m241.00 B[39m
+2026-11-12T05:53:11.2225789Z ../javascript build: [32mESM[39m [1mdist\chunk-466I5SCB.js               [22m[32m62.35 KB[39m
+2026-11-12T05:53:11.2226413Z ../javascript build: [32mESM[39m [1mdist\validator.js                    [22m[32m385.00 B[39m
+2026-11-12T05:53:11.2227043Z ../javascript build: [32mESM[39m [1mdist\types.js                        [22m[32m1.00 B[39m
+2026-11-12T05:53:11.2227656Z ../javascript build: [32mESM[39m [1mdist\spec-files.js                   [22m[32m115.00 B[39m
+2026-11-12T05:53:11.2228566Z ../javascript build: [32mESM[39m [1mdist\chunk-W4DYDRV2.js               [22m[32m6.21 KB[39m
+2026-11-12T05:53:11.2229217Z ../javascript build: [32mESM[39m [1mdist\format.js                       [22m[32m157.00 B[39m
+2026-11-12T05:53:11.2229852Z ../javascript build: [32mESM[39m [1mdist\chunk-T5LC6OQY.js               [22m[32m47.25 KB[39m
+2026-11-12T05:53:11.2230493Z ../javascript build: [32mESM[39m [1mdist\font-policy.js                  [22m[32m151.00 B[39m
+2026-11-12T05:53:11.2231124Z ../javascript build: [32mESM[39m [1mdist\convert.js                      [22m[32m59.94 KB[39m
+2026-11-12T05:53:11.2231783Z ../javascript build: [32mESM[39m [1mdist\chunk-FK5XG742.js               [22m[32m153.62 KB[39m
+2026-11-12T05:53:11.2232450Z ../javascript build: [32mESM[39m [1mdist\shape-geometry.js               [22m[32m229.00 B[39m
+2026-11-12T05:53:11.2233118Z ../javascript build: [32mESM[39m [1mdist\data.js                         [22m[32m443.00 B[39m
+2026-11-12T05:53:11.2234453Z ../javascript build: [32mESM[39m [1mdist\symbol-font-encodings.js        [22m[32m414.09 KB[39m
+2026-11-12T05:53:11.2235139Z ../javascript build: [32mESM[39m [1mdist\shape-catalog.js                [22m[32m14.63 KB[39m
+2026-11-12T05:53:11.2236078Z ../javascript build: [32mESM[39m [1mdist\pagination.js                   [22m[32m282.00 B[39m
+2026-11-12T05:53:11.2236719Z ../javascript build: [32mESM[39m [1mdist\chunk-D46FQ4XC.js               [22m[32m6.31 KB[39m
+2026-11-12T05:53:11.2237396Z ../javascript build: [32mESM[39m [1mdist\chunk-WWGO62TS.js               [22m[32m36.04 KB[39m
+2026-11-12T05:53:11.2238094Z ../javascript build: [32mESM[39m [1mdist\deck.js                         [22m[32m474.00 B[39m
+2026-11-12T05:53:11.2238766Z ../javascript build: [32mESM[39m [1mdist\markdown.js                     [22m[32m390.00 B[39m
+2026-11-12T05:53:11.2239480Z ../javascript build: [32mESM[39m [1mdist\chunk-422DNC64.js               [22m[32m2.94 KB[39m
+2026-11-12T05:53:11.2240193Z ../javascript build: [32mESM[39m [1mdist\chunk-IXMYBALY.js               [22m[32m31.53 KB[39m
+2026-11-12T05:53:11.2240925Z ../javascript build: [32mESM[39m [1mdist\yaml.js                         [22m[32m390.00 B[39m
+2026-11-12T05:53:11.2242963Z ../javascript build: [32mESM[39m [1mdist\chunk-NFHIMAXF.js               [22m[32m15.19 KB[39m
+2026-11-12T05:53:11.2243571Z ../javascript build: [32mESM[39m [1mdist\schema.js                       [22m[32m396.00 B[39m
+2026-11-12T05:53:11.2244204Z ../javascript build: [32mESM[39m [1mdist\chunk-AXCBSIUG.js               [22m[32m3.70 KB[39m
+2026-11-12T05:53:11.2244960Z ../javascript build: [32mESM[39m [1mdist\chunk-RYZPBJLB.js               [22m[32m302.00 B[39m
+2026-11-12T05:53:11.2245741Z ../javascript build: [32mESM[39m [1mdist\source.js                       [22m[32m22.70 KB[39m
+2026-11-12T05:53:11.2246242Z ../javascript build: [32mESM[39m [1mdist\chunk-DSXV4ICG.js               [22m[32m43.93 KB[39m
+2026-11-12T05:53:11.2246689Z ../javascript build: [32mESM[39m [1mdist\chunk-ISLW722H.js               [22m[32m30.58 KB[39m
+2026-11-12T05:53:11.2247205Z ../javascript build: [32mESM[39m [1mdist\chunk-YKNKUZSB.js               [22m[32m4.88 KB[39m
+2026-11-12T05:53:11.2247654Z ../javascript build: [32mESM[39m [1mdist\patch.js                        [22m[32m536.00 B[39m
+2026-11-12T05:53:11.2248122Z ../javascript build: [32mESM[39m [1mdist\chunk-H6E2DX44.js               [22m[32m4.69 KB[39m
+2026-11-12T05:53:11.2248832Z ../javascript build: [32mESM[39m [1mdist\chunk-YYT6N7AI.js               [22m[32m261.58 KB[39m
+2026-11-12T05:53:11.2249328Z ../javascript build: [32mESM[39m [1mdist\ids.js                          [22m[32m339.00 B[39m
+2026-11-12T05:53:11.2249778Z ../javascript build: [32mESM[39m [1mdist\diff.js                         [22m[32m271.00 B[39m
+2026-11-12T05:53:11.2250403Z ../javascript build: [32mESM[39m [1mdist\chunk-BBGWBDFA.js               [22m[32m55.06 KB[39m
+2026-11-12T05:53:11.2250893Z ../javascript build: [32mESM[39m [1mdist\chunk-GDFA3SQL.js               [22m[32m10.03 KB[39m
+2026-11-12T05:53:11.2251365Z ../javascript build: [32mESM[39m [1mdist\chunk-ZFMMXPQQ.js               [22m[32m27.48 KB[39m
+2026-11-12T05:53:11.2263606Z ../javascript build: [32mESM[39m [1mdist\chunk-JBARNYFR.js               [22m[32m776.00 B[39m
+2026-11-12T05:53:11.2264393Z ../javascript build: [32mESM[39m [1mdist\chunk-PRXZD2II.js               [22m[32m463.00 B[39m
+2026-11-12T05:53:11.2265023Z ../javascript build: [32mESM[39m [1mdist\chunk-HS37ISVZ.js               [22m[32m505.76 KB[39m
+2026-11-12T05:53:11.2265678Z ../javascript build: [32mESM[39m [1mdist\chunk-LTDKM6Z4.js               [22m[32m456.47 KB[39m
+2026-11-12T05:53:11.2266316Z ../javascript build: [32mESM[39m [1mdist\chunk-VRZ6LTWC.js               [22m[32m1.34 MB[39m
+2026-11-12T05:53:11.2266845Z ../javascript build: [32mESM[39m [1mdist\docs.js                         [22m[32m1.85 MB[39m
+2026-11-12T05:53:11.2267418Z ../javascript build: [32mESM[39m [1mdist\chunk-22SDLDS6.js               [22m[32m2.40 MB[39m
+2026-11-12T05:53:11.2267874Z ../javascript build: [32mESM[39m [1mdist\examples.js                     [22m[32m8.91 MB[39m
+2026-11-12T05:53:11.2268254Z ../javascript build: [32mESM[39m ⚡️ Build success in 5140ms
+2026-11-12T05:53:11.5796439Z ../javascript build: [plugin dts] Entry "data.d.ts" still references private shared type exports with no public re-export: Chart. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-11-12T05:53:11.5870057Z ../javascript build: [plugin dts] Entry "node-engine.d.ts" still references private shared type exports with no public re-export: EmbeddedFace. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-11-12T05:53:11.5873869Z ../javascript build: [plugin dts] Entry "schemas.d.ts" still references private shared type exports with no public re-export: JsonObject, JsonSchemaDocument. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-11-12T05:53:11.5926870Z ../javascript build: [32mDTS[39m ⚡️ Build success in 5104ms
+2026-11-12T05:53:11.5931800Z ../javascript build: [32mDTS[39m [1mdist\precompiled.d.ts               [22m[32m13.00 B[39m
+2026-11-12T05:53:11.5932657Z ../javascript build: [32mDTS[39m [1mdist\data.d.ts                      [22m[32m2.55 KB[39m
+2026-11-12T05:53:11.5933222Z ../javascript build: [32mDTS[39m [1mdist\deck.d.ts                      [22m[32m2.89 KB[39m
+2026-11-12T05:53:11.5933841Z ../javascript build: [32mDTS[39m [1mdist\format.d.ts                    [22m[32m951.00 B[39m
+2026-11-12T05:53:11.5934631Z ../javascript build: [32mDTS[39m [1mdist\ids.d.ts                       [22m[32m6.71 KB[39m
+2026-11-12T05:53:11.5935334Z ../javascript build: [32mDTS[39m [1mdist\repo-readme.d.ts               [22m[32m139.00 B[39m
+2026-11-12T05:53:11.5936411Z ../javascript build: [32mDTS[39m [1mdist\shape-catalog.d.ts             [22m[32m4.49 KB[39m
+2026-11-12T05:53:11.5937234Z ../javascript build: [32mDTS[39m [1mdist\symbol-font-encodings.d.ts     [22m[32m5.56 KB[39m
+2026-11-12T05:53:11.5938411Z ../javascript build: [32mDTS[39m [1mdist\shape-geometry.d.ts            [22m[32m7.40 KB[39m
+2026-11-12T05:53:11.5939091Z ../javascript build: [32mDTS[39m [1mdist\docs.d.ts                      [22m[32m682.00 B[39m
+2026-11-12T05:53:11.5939748Z ../javascript build: [32mDTS[39m [1mdist\examples.d.ts                  [22m[32m2.07 KB[39m
+2026-11-12T05:53:11.5940426Z ../javascript build: [32mDTS[39m [1mdist\font-policy.d.ts               [22m[32m7.72 KB[39m
+2026-11-12T05:53:11.5941442Z ../javascript build: [32mDTS[39m [1mdist\patch.d.ts                     [22m[32m10.44 KB[39m
+2026-11-12T05:53:11.5942116Z ../javascript build: [32mDTS[39m [1mdist\schema.d.ts                    [22m[32m9.33 KB[39m
+2026-11-12T05:53:11.5944088Z ../javascript build: [32mDTS[39m [1mdist\yaml.d.ts                      [22m[32m5.88 KB[39m
+2026-11-12T05:53:11.5944778Z ../javascript build: [32mDTS[39m [1mdist\diff.d.ts                      [22m[32m5.80 KB[39m
+2026-11-12T05:53:11.5945445Z ../javascript build: [32mDTS[39m [1mdist\markdown.d.ts                  [22m[32m5.02 KB[39m
+2026-11-12T05:53:11.5946155Z ../javascript build: [32mDTS[39m [1mdist\validator.d.ts                 [22m[32m6.37 KB[39m
+2026-11-12T05:53:11.5947039Z ../javascript build: [32mDTS[39m [1mdist\convert.d.ts                   [22m[32m14.69 KB[39m
+2026-11-12T05:53:11.5947789Z ../javascript build: [32mDTS[39m [1mdist\node-engine.d.ts               [22m[32m11.38 KB[39m
+2026-11-12T05:53:11.5948659Z ../javascript build: [32mDTS[39m [1mdist\source.d.ts                    [22m[32m16.21 KB[39m
+2026-11-12T05:53:11.5949578Z ../javascript build: [32mDTS[39m [1mdist\index.d.ts                     [22m[32m39.54 KB[39m
+2026-11-12T05:53:11.5950244Z ../javascript build: [32mDTS[39m [1mdist\schemas.d.ts                   [22m[32m14.83 KB[39m
+2026-11-12T05:53:11.5950855Z ../javascript build: [32mDTS[39m [1mdist\spec-files.d.ts                [22m[32m1.59 KB[39m
+2026-11-12T05:53:11.5951357Z ../javascript build: [32mDTS[39m [1mdist\types.d.ts                     [22m[32m74.64 KB[39m
+2026-11-12T05:53:11.5951730Z ../javascript build: [32mDTS[39m [1mdist\pagination.d.ts                [22m[32m540.00 B[39m
+2026-11-12T05:53:11.5952108Z ../javascript build: [32mDTS[39m [1mdist\composition.d.ts               [22m[32m25.59 KB[39m
+2026-11-12T05:53:11.5952496Z ../javascript build: [32mDTS[39m [1mdist\deck-report-jjy4WO1y.d.ts      [22m[32m2.36 KB[39m
+2026-11-12T05:53:11.5952889Z ../javascript build: [32mDTS[39m [1mdist\catalog-schemas-CiEafJRf.d.ts  [22m[32m1.70 KB[39m
+2026-11-12T05:53:11.5953278Z ../javascript build: [32mDTS[39m [1mdist\chart-data-yEE-WzgV.d.ts       [22m[32m11.01 KB[39m
+2026-11-12T05:53:11.5953685Z ../javascript build: [32mDTS[39m [1mdist\presentation-BdFIzc0E.d.ts     [22m[32m295.96 KB[39m
+2026-11-12T05:53:11.5954081Z ../javascript build: [32mDTS[39m [1mdist\catalog-refs-BacOFTcg.d.ts     [22m[32m7.55 KB[39m
+2026-11-12T05:53:11.5954466Z ../javascript build: [32mDTS[39m [1mdist\json-BFSdESOE.d.ts             [22m[32m825.00 B[39m
+2026-11-12T05:53:11.5954851Z ../javascript build: [32mDTS[39m [1mdist\finding-l9dlQ2NF.d.ts          [22m[32m7.24 KB[39m
+2026-11-12T05:53:11.5955241Z ../javascript build: [32mDTS[39m [1mdist\pagination-Bkn4oVmQ.d.ts       [22m[32m13.51 KB[39m
+2026-11-12T05:53:11.5955629Z ../javascript build: [32mDTS[39m [1mdist\explain-iZeNOUc6.d.ts          [22m[32m3.89 KB[39m
+2026-11-12T05:53:11.5956032Z ../javascript build: [32mDTS[39m [1mdist\validation-types-6VL4gx4_.d.ts [22m[32m15.15 KB[39m
+2026-11-12T05:53:11.5956425Z ../javascript build: [32mDTS[39m [1mdist\conversion-HJPDH9Eg.d.ts       [22m[32m32.53 KB[39m
+2026-11-12T05:53:11.5956822Z ../javascript build: [32mDTS[39m [1mdist\composition-oMPqZtbM.d.ts      [22m[32m469.41 KB[39m
+2026-11-12T05:53:11.9285543Z ../javascript build: Minified dist/chunk-22SDLDS6.js: 2515327 -> 1924752 bytes.
+2026-11-12T05:53:12.0348725Z ../javascript build: Done
+2026-11-12T05:53:12.0361437Z ../render build$ node scripts/build.mjs
+2026-11-12T05:53:12.0968247Z ../render build: Done
+2026-11-12T05:53:12.1995329Z + pnpm run build
+2026-11-12T05:53:12.7637111Z 
+2026-11-12T05:53:12.7637747Z > @openpresentation/opf-pptx@0.33.0 build D:\a\opf\opf\packages\pptx
+2026-11-12T05:53:12.7638025Z > node scripts/build.mjs
+2026-11-12T05:53:12.7638118Z 
+2026-11-12T05:53:12.8152811Z Vendored upstream distribution and license match recorded hashes.
+2026-11-12T05:53:12.8746803Z + node test/chart-colors.mjs
+2026-11-12T05:53:15.7592179Z Native chart colors passed: 38 charts, no chart panel, axis/legend colors legible on the background and exact data reimport.
+2026-11-12T05:53:15.7886500Z + node test/chart-fallbacks.mjs
+2026-11-12T05:53:17.0662616Z pptx chart fallbacks ok
+2026-11-12T05:53:17.0913288Z + node test/chart-layer.mjs
+2026-11-12T05:53:18.6156560Z Chart layer export passed: 37 checks (small charts, explicit options, emphasis parity, header row, legend option).
+2026-11-12T05:53:18.6436623Z + node test/chart-reference-boundaries.mjs
+2026-11-12T05:53:20.0315442Z ✔ export refuses series-count before helper label/value matrix allocation (13.4215ms)
+2026-11-12T05:53:20.0315896Z ✔ export refuses points before helper label/value matrix allocation (0.1655ms)
+2026-11-12T05:53:20.0316251Z ✔ export refuses cache-cells before helper label/value matrix allocation (0.0808ms)
+2026-11-12T05:53:20.0316689Z ✔ export refuses ownership-count before helper label/value matrix allocation (11.5728ms)
+2026-11-12T05:53:20.0317335Z ✔ export refuses ownership-metadata before helper label/value matrix allocation (60.7253ms)
+2026-11-12T05:53:20.0319804Z ✔ singleton category growth preserves full-span visible overlays rather than restoring a now-native reference (444.15ms)
+2026-11-12T05:53:20.0321043Z ✔ unrelated ordinary numeric cache edits keep exact overlay value when category eligibility and plot are unchanged (97.1282ms)
+2026-11-12T05:53:20.0321851Z ✔ ja native reference labels use existing effective chart language/script normalization (91.818ms)
+2026-11-12T05:53:20.0322526Z ✔ ar native reference labels use existing effective chart language/script normalization (96.6167ms)
+2026-11-12T05:53:20.0323230Z ✔ line finite-extreme references keep exact cache/workbook or overlay values and finite axes (86.547ms)
+2026-11-12T05:53:20.0323952Z ✔ bar finite-extreme references keep exact cache/workbook or overlay values and finite axes (64.4546ms)
+2026-11-12T05:53:20.0324698Z ✔ column finite-extreme references keep exact cache/workbook or overlay values and finite axes (61.8923ms)
+2026-11-12T05:53:20.0326001Z ℹ tests 12
+2026-11-12T05:53:20.0326282Z ℹ suites 0
+2026-11-12T05:53:20.0326442Z ℹ pass 12
+2026-11-12T05:53:20.0326607Z ℹ fail 0
+2026-11-12T05:53:20.0327001Z ℹ cancelled 0
+2026-11-12T05:53:20.0327324Z ℹ skipped 0
+2026-11-12T05:53:20.0327706Z ℹ todo 0
+2026-11-12T05:53:20.0327903Z ℹ duration_ms 1034.6946
+2026-11-12T05:53:20.0598993Z + node test/chart-reference-lines.mjs
+2026-11-12T05:53:25.7085714Z ✔ column: native helpers, workbook, order, bounds and import (448.0354ms)
+2026-11-12T05:53:25.7086306Z ✔ line: native helpers, workbook, order, bounds and import (104.337ms)
+2026-11-12T05:53:25.7086860Z ✔ line-with-markers: native helpers, workbook, order, bounds and import (91.6811ms)
+2026-11-12T05:53:25.7087189Z ✔ area: native helpers, workbook, order, bounds and import (98.6815ms)
+2026-11-12T05:53:25.7087625Z ✔ solid main line, independent dot/solid/dash refs; optional labels, duplicate values and legend exclusions (72.8125ms)
+2026-11-12T05:53:25.7088152Z ✔ references beyond data extend the pinned native axis, including all-null data (135.1873ms)
+2026-11-12T05:53:25.7088563Z ✔ percent secondary combo uses the SAME composed native axes and retains association (81.4834ms)
+2026-11-12T05:53:25.7089028Z ✔ native constant edits restore CURRENT value/label/style/endpoint; primary dataset provenance remains usable (68.3896ms)
+2026-11-12T05:53:25.7089495Z ✔ area: nonconstant helpers become ALL ordinary data with no stale refs/duplicate shapes (67.4862ms)
+2026-11-12T05:53:25.7089908Z ✔ line: nonconstant helpers become ALL ordinary data with no stale refs/duplicate shapes (61.5407ms)
+2026-11-12T05:53:25.7090321Z ✔ column: nonconstant helpers become ALL ordinary data with no stale refs/duplicate shapes (60.3183ms)
+2026-11-12T05:53:25.7090794Z ✔ stripped area ownership preserves BOTH groups and every row, never infers from constant values or names (55.7424ms)
+2026-11-12T05:53:25.7091761Z ✔ duplicate helper identity is refused rather than consuming either copy (61.5853ms)
+2026-11-12T05:53:25.7092118Z ✔ horizontal: exact unchanged overlay recovery + current-edit refusal (271.2237ms)
+2026-11-12T05:53:25.7092466Z ✔ singleton: exact unchanged overlay recovery + current-edit refusal (250.2036ms)
+2026-11-12T05:53:25.7092797Z ✔ overlay labels are native text boxes with explicit zero insets (117.146ms)
+2026-11-12T05:53:25.7093134Z ✔ overlay ownership does not depend on host locale collation (140.474ms)
+2026-11-12T05:53:25.7093565Z ✔ structural identification is retained with provenance false/references (225.3883ms)
+2026-11-12T05:53:25.7093922Z ✔ legacy V1 references, labels and bands remain ordinary VISIBLE shapes (51.7319ms)
+2026-11-12T05:53:25.7094269Z ✔ title/subtitle cannot add, remove, move or restyle explicit references (134.0311ms)
+2026-11-12T05:53:25.7094667Z ✔ representative authored example exports every chart without helper data/duplicate shapes (348.8609ms)
+2026-11-12T05:53:25.7095162Z ✔ ColorRef alpha, transform, theme/variable resolution and zero-width are retained by native and overlay paint (400.4708ms)
+2026-11-12T05:53:25.7095776Z ✔ RTL start/end native endpoints and singleton overlay labels follow logical category order (165.1767ms)
+2026-11-12T05:53:25.7096314Z ✔ unknown marker, unsupported dash and invalid helper point counts are retained as ordinary data or refused by maintained cache guards (111.5764ms)
+2026-11-12T05:53:25.7096762Z ✔ native label deletion/clearing never resurrects stale authored text (87.2575ms)
+2026-11-12T05:53:25.7097207Z ✔ ordinary data edits cannot be overwritten by a primary dataset receipt while native references remain explicit (56.4401ms)
+2026-11-12T05:53:25.7097662Z ✔ fully stripped overlays stay visible ordinary drawings, never synthetic reference data (52.0321ms)
+2026-11-12T05:53:25.7098041Z ✔ same-axis edited helpers remain lines; marker adaptations are explicit (109.9376ms)
+2026-11-12T05:53:25.7098436Z ✔ secondary helpers without an ordinary secondary data line are retained as ordinary data (55.426ms)
+2026-11-12T05:53:25.7098847Z ✔ native labels carry explicit legible paint/body font on light and dark backgrounds (85.8919ms)
+2026-11-12T05:53:25.7099251Z ✔ native multiline labels use hard breaks and current a:br edits preserve all words (120.1084ms)
+2026-11-12T05:53:25.7099644Z ✔ malformed explicit ownership records preserve ordinary series without crashing (57.4769ms)
+2026-11-12T05:53:25.7100110Z ✔ maximum stroke width survives native EMU quantization on custom landscape and portrait canvases (196.9247ms)
+2026-11-12T05:53:25.7100555Z ✔ actual legacy band rectangle retains its native fill and frame as a visible ordinary overlay (55.839ms)
+2026-11-12T05:53:25.7101003Z ✔ moving a constant helper onto an unused secondary axis never yields an invalid secondary reference (56.329ms)
+2026-11-12T05:53:25.7101489Z ✔ separate-axis ordinary line groups disclose required primary-column adaptation and retain all values/roles (54.9823ms)
+2026-11-12T05:53:25.7101944Z ✔ native stroke above the mathematically rounded schema maximum remains ordinary data (49.9158ms)
+2026-11-12T05:53:25.7102381Z ✔ actual bar and singleton labels use full native label paint while default stroke stays quiet (251.6135ms)
+2026-11-12T05:53:25.7102863Z ✔ divergent ordinary group category caches are diagnosed without losing numeric series or claiming category parity (46.23ms)
+2026-11-12T05:53:25.7103415Z ✔ current native auto-label, leader-line and manual-placement edits remain ordinary data rather than lose visible labels (194.1601ms)
+2026-11-12T05:53:25.7103906Z ✔ edited stacked multi-helper groups retain ordinary data instead of restoring raw thresholds (51.0173ms)
+2026-11-12T05:53:25.7104379Z ✔ edited percentStacked multi-helper groups retain ordinary data instead of restoring raw thresholds (52.5982ms)
+2026-11-12T05:53:25.7104810Z ✔ explicit helpers still restore under an omitted standard/default native grouping (51.7749ms)
+2026-11-12T05:53:25.7112718Z ℹ tests 43
+2026-11-12T05:53:25.7112891Z ℹ suites 0
+2026-11-12T05:53:25.7113346Z ℹ pass 43
+2026-11-12T05:53:25.7113988Z ℹ fail 0
+2026-11-12T05:53:25.7114211Z ℹ cancelled 0
+2026-11-12T05:53:25.7114415Z ℹ skipped 0
+2026-11-12T05:53:25.7114592Z ℹ todo 0
+2026-11-12T05:53:25.7118020Z ℹ duration_ms 5319.253
+2026-11-12T05:53:25.7434658Z + node test/chart-reference-powerpoint-save.mjs
+2026-11-12T05:53:27.7949644Z ✔ actual PowerPoint Save keeps explicit ownership; added percent/bubble flags are the only helper label normalization (8.6418ms)
+2026-11-12T05:53:27.7950279Z ✔ public direct and actual saved imports retain primary data and each current reference value/label/full stroke once (400.665ms)
+2026-11-12T05:53:27.7950801Z ✔ visible native value/category/series/legend labels, leaders and manual geometry remain ordinary data (603.8807ms)
+2026-11-12T05:53:27.7951315Z ✔ missing/invalid/duplicated explicit identities never turn reserved-name ordinary series into references (333.1662ms)
+2026-11-12T05:53:27.7951872Z ✔ synthetic current constant/paint/text edits restore current properties without changing identification metadata (65.431ms)
+2026-11-12T05:53:27.7952844Z ✔ ordinary current data edits retain references while nonconstant helpers/markers/unsupported strokes remain ordinary (291.5976ms)
+2026-11-12T05:53:27.7957691Z ℹ tests 6
+2026-11-12T05:53:27.7957859Z ℹ suites 0
+2026-11-12T05:53:27.7958043Z ℹ pass 6
+2026-11-12T05:53:27.7958202Z ℹ fail 0
+2026-11-12T05:53:27.7958372Z ℹ cancelled 0
+2026-11-12T05:53:27.7958547Z ℹ skipped 0
+2026-11-12T05:53:27.7958707Z ℹ todo 0
+2026-11-12T05:53:27.7958888Z ℹ duration_ms 1709.2236
+2026-11-12T05:53:27.8138097Z + node test/chart-text-size.mjs
+2026-11-12T05:53:37.0406333Z Chart text size passed: 627 checks; axis, data label and legend text at the preview's size for 22 chart types on 8 slide and font-size settings, classic and chartex parts and the chartex style part.
+2026-11-12T05:53:37.0747795Z + node test/chart-types.mjs
+2026-11-12T05:53:41.1973539Z Chart types passed: 56 exports (19 classic chart types, rejected retired ids) with exact constructs and same-id reimport.
+2026-11-12T05:53:41.2285078Z + node test/chart-workbook-ranges.mjs
+2026-11-12T05:53:43.4029065Z Chart workbook ranges: 56 workbooks checked (PptxGenJS 10 families incl. bubble, every OPF chart type, anchored-table rule).
+2026-11-12T05:53:43.4347184Z + node test/chart-workbook.mjs
+2026-11-12T05:53:44.7115694Z Chart workbook checks passed: 37 bounded heading/preservation cases, Unicode/whitespace, rich shared strings, unsupported/external/corrupt metadata and deterministic actual export/reimport.
+2026-11-12T05:53:44.7447522Z + node test/chartex-fallback-archive-review.mjs
+2026-11-12T05:53:46.7452157Z RR20 nine-deck reviewer passes: authoritative source equality, exact caller and every baseline lock, full archives/nested workbook diffs, immutable source/fixture and prior-evidence refusal. No real fixture refreshed.
+2026-11-12T05:53:46.7844617Z + node test/color-variants.mjs
+2026-11-12T05:53:48.5765692Z color-variants passed: master map, accent re-mapping, per-slide overrides, scheme-colored neutrals, literals, round trips and an unsupported map.
+2026-11-12T05:53:48.6041246Z + node test/combo-charts.mjs
+2026-11-12T05:53:49.8328519Z Combo charts passed: native bar and line groups, secondary value and category axes, formats, workbook, schema order, import.
+2026-11-12T05:53:49.8555877Z + node test/core-features.mjs
+2026-11-12T05:53:50.0495618Z {"test":"core-features","passed":true,"coreImports":148}
+2026-11-12T05:53:50.0577349Z + node test/default-font-scheme.mjs
+2026-11-12T05:53:51.2407033Z {"test":"default-font-scheme","passed":true,"lastResort":"engine default"}
+2026-11-12T05:53:51.8990154Z {"test":"default-font-scheme","unresolved":"engine default base and one diagnostic"}
+2026-11-12T05:53:51.9261568Z + node test/design-fields.mjs
+2026-11-12T05:53:53.7785436Z Design fields passed: 12 groups (cover and section logo, tones and partner logo, unresolved logo, footer logo reference, picture bullets, accent font, provenance).
+2026-11-12T05:53:53.8100436Z + node test/determinism.mjs
+2026-11-12T05:58:21.0349151Z {"test":"determinism","passed":true,"node":"v24.22.2","platform":"win32","arch":"x64","icu":"78.3","unicode":"17.0","children":45,"staticGuardFiles":91,"graphemeSignature":"121111211112","envGridChangedIcuDefaultLocale":false,"icuDefaultLocalesSeen":["en-US"],"scope":"Local single-OS evidence only. Compare this manifest between operating systems for cross-OS identity.","cases":43,"seconds":267}
+2026-11-12T05:58:21.0484901Z + node test/drawing-id-collisions.mjs
+2026-11-12T05:58:21.1085456Z Drawing IDs: 14 MCE feasible-branch collision controls pass.
+2026-11-12T05:58:21.1151475Z + node test/fa-13-conveniences.mjs
+2026-11-12T05:58:25.1051818Z FA-13: presets, code highlight, text watermark, inline code and run language export natively and import back.
+2026-11-12T05:58:25.1341195Z + node test/fixed-background-layout-variants.mjs
+2026-11-12T05:58:26.5737213Z fixed background layout variants: ok
+2026-11-12T05:58:26.6141415Z + node test/furniture-fields.mjs
+2026-11-12T05:58:27.9854670Z Furniture fields: live slide numbers, fixed {{deck.slideCount}}, fixed and current dates, native date types, edits and helpers pass. Native Office is a separate gate.
+2026-11-12T05:58:28.0124563Z + node test/furniture-provenance.mjs
+2026-11-12T05:58:34.3031493Z Furniture provenance: 8 measured/estimated local/inherited wide/portrait cases, 12 damaged-tag controls, edits/clearing/reordering, current images and metadata conflicts pass (38 validated imports). Native Office is a separate gate.
+2026-11-12T05:58:34.3451572Z + node test/hard-line-breaks.mjs
+2026-11-12T05:58:38.1407491Z Hard line break checks passed: newline inside and between runs, blank lines, CRLF, trimmed spaces, soft wraps with hard breaks, root, group, region and blocks, a PowerPoint-style re-save, edited and damaged records, unprovable runs, plain PPTX, and hard breaks inside list items (root, bullets, group, region, nested levels, descriptions).
+2026-11-12T05:58:38.1720969Z + node test/header-footer-dialog.mjs
+2026-11-12T05:58:39.1687336Z Header & Footer dialog: 5 PowerPoint-saved decks (per-slide edits and Apply to All, full provenance, provenance: false and stripped tags, a date format) import their changes.
+2026-11-12T05:58:39.1879764Z + node test/heading-provenance.mjs
+2026-11-12T05:58:42.7072320Z Heading provenance: native edits, shape renaming/reordering and 8 damaged/ambiguous group fallbacks preserve visible words.
+2026-11-12T05:58:46.6942259Z Heading role isolation: 16 wide/portrait quote imports, explicit native placeholders and ordinary untagged title/subtitle inference pass.
+2026-11-12T05:58:46.7398206Z + node test/icons.mjs
+2026-11-12T05:58:47.9361779Z icons passed: 20 checks (native theme-colored glyphs, an SVG picture for a multicolor icon, tags, and the round trip).
+2026-11-12T05:58:47.9619623Z + node test/keynote-footer-controls.mjs
+2026-11-12T05:58:50.3954378Z Footer A/B control: original archive unchanged; B deterministic with exactly16 literal ftr token removals; all other part bytes, fields, locks, geometry/styles and paint order invariant; malformed targets and unrelated mutations refused; sealed fresh copies and tamper checks pass. No native acceptance.
+2026-11-12T05:58:50.4796558Z + node test/keynote-qualification.mjs
+2026-11-12T05:58:50.5817077Z Keynote qualification: unchanged 16-case baseline, paired 17-case body fixture, actual-body/ignored-option/fallback guards, three routes, independent XML/object/order checks and fresh sealed-copy/tamper controls pass; no native acceptance claimed.
+2026-11-12T05:58:50.5889901Z + node test/layout-design-applied.mjs
+2026-11-12T05:58:52.5291995Z Layout design applied: 9 text lines agree between preview and export for layout-only, deck-over-layout and slide-over-deck alignment; contentBox and imageFit follow the same merge; re-import keeps the layout record.
+2026-11-12T05:58:52.5577911Z + node test/layout-intent.mjs
+2026-11-12T05:58:56.8505784Z Layout intent passed: 11 groups; OPF_SLIDE_V1 carries the layout record and its group, and import restores layout, type, composition, hints and records with and without document provenance, for pasted slides, conflicting records, tampering and edits.
+2026-11-12T05:58:56.8841618Z + node test/layout-variants.mjs
+2026-11-12T05:59:02.3252265Z layout variants: ok
+2026-11-12T05:59:02.3724852Z + node test/lh-106-slide-language.mjs
+2026-11-12T05:59:03.1940743Z LH-106: PPTX per-slide language tags, RTL and round trip
+2026-11-12T05:59:05.0401872Z + node test/lh-114-pull-line-timeline.mjs
+2026-11-12T05:59:07.5666203Z lh-114 pull line and timeline progress: ok
+2026-11-12T05:59:07.5980171Z + node test/lh-125-chart-marks.mjs
+2026-11-12T05:59:08.5829414Z LH-125 export passed: 22 checks (stacked bars, edge-to-edge area, doughnut hole, waterfall connectors).
+2026-11-12T05:59:08.6022708Z + node test/lh-139-master-backgrounds.mjs
+2026-11-12T05:59:10.3127639Z LH-139/140/146 passed: 54 checks (fixed backgrounds on the master, no stray bullets on subtitle and text placeholders, en-US badge numerals).
+2026-11-12T05:59:10.3410712Z + node test/lh-156-flow-citation.mjs
+2026-11-12T05:59:11.0827791Z LH-156 a cited flow chip keeps its citation marker
+2026-11-12T05:59:11.1118073Z + node test/lh-160-chart-labels.mjs
+2026-11-12T05:59:21.7306610Z lh-160-chart-labels pptx: 118 checks
+2026-11-12T05:59:21.7678852Z + node test/lh-182-optioned-doughnut.mjs
+2026-11-12T05:59:23.6479513Z LH-182: 12 optioned native plots/holes agree, and legend/percentage label choices survive current-content import.
+2026-11-12T05:59:23.6729053Z + node test/lh-63-run-in-quote-marks.mjs
+2026-11-12T05:59:27.7800815Z lh-63 run-in headings and lh-78 quote marks: ok
+2026-11-12T05:59:27.8140522Z + node test/lh-93-rtl-legend.mjs
+2026-11-12T05:59:28.7503803Z LH-93 RTL legend export: traced physical source order, native data/series order, negative gutter and saved semantic import pass.
+2026-11-12T05:59:28.7802681Z + node test/lh-98-native-line-pitch.mjs
+2026-11-12T05:59:29.6947623Z LH-98: native bodies write core's line pitch and entry gap, so a native list ends where core measured it.
+2026-11-12T05:59:29.7143549Z + node test/list-bullet-none.mjs
+2026-11-12T05:59:30.6089885Z listBullet none: a:buNone export without indent, numbering kept, round trip through the line roles.
+2026-11-12T05:59:30.6434618Z + node test/list-description-identity.mjs
+2026-11-12T05:59:32.0328975Z list-description-identity: exact native edits, multiline roles, topology refusals and omission budgets PASS
+2026-11-12T05:59:32.0630410Z + node test/media-dedupe.mjs
+2026-11-12T05:59:35.3270893Z 50 slides, watermark 203153 B + picture 43388 B: package 527535 B, 2 media parts
+2026-11-12T05:59:35.4312624Z Media dedupe checks passed (3).
+2026-11-12T05:59:35.4607956Z + node test/narrative-provenance.mjs
+2026-11-12T05:59:36.4761978Z + node test/native-body-inherited-bullets.mjs
+2026-11-12T05:59:40.6399186Z Retained Keynote master bullets: K17 semantic items/current styles, paragraph/shape/layout/master precedence, explicit cancellation, levels/numbers, edits/add/delete/clear, mixed diagnostics and missing/ambiguous bindings pass; reviewed other16 import and21 diagnostic fingerprints exact.
+2026-11-12T05:59:40.6672551Z + node test/native-body-rich-text.mjs
+2026-11-12T05:59:43.4928897Z {"passed":42,"failed":0,"output":"D:\\a\\opf\\opf\\packages\\pptx\\artifacts\\native-body-rich-text\\source"}
+2026-11-12T05:59:43.5235087Z + node test/native-conformance.mjs
+2026-11-12T06:01:08.0638608Z Native conformance passed: 149 example decks (966 slides) with theme fonts and slots, scheme colours, chart text fonts, text boxes, names, alt text, zero insets, chart guards and paragraph bullets; 49 stacked label cases and a secondary-axis combo. Colours: 20698 a:schemeClr and 4137 a:srgbClr (16.7% literal); 785 literals equal a theme slot and every one is a colour the author wrote literally, the rest are engine-derived colours with no theme slot.
+2026-11-12T06:01:08.1373638Z + node test/native-fallback-contracts.mjs
+2026-11-12T06:01:11.3102791Z All-suppressed furniture stays suppressed without cached global words; native addition/deletion stays authoritative. World/all-seven tagged and stripped auto/fallback native types and exact data PASS.
+2026-11-12T06:01:11.3366749Z + node test/native-furniture-style-controls.mjs
+2026-11-12T06:01:41.5520303Z node:internal/modules/run_main:107
+2026-11-12T06:01:41.5520820Z     triggerUncaughtException(
+2026-11-12T06:01:41.5521081Z     ^
+2026-11-12T06:01:41.5521212Z 
+2026-11-12T06:01:41.5521607Z AssertionError [ERR_ASSERTION]: spawnSync C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe ETIMEDOUT
+2026-11-12T06:01:41.5522018Z 
+2026-11-12T06:01:41.5522120Z null !== 0
+2026-11-12T06:01:41.5522223Z 
+2026-11-12T06:01:41.5522509Z     at file:///D:/a/opf/opf/packages/pptx/test/native-furniture-style-controls.mjs:59:9
+2026-11-12T06:01:41.5523027Z     at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+2026-11-12T06:01:41.5523455Z     at async node:internal/modules/esm/loader:647:26
+2026-11-12T06:01:41.5523950Z     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+2026-11-12T06:01:41.5524363Z   generatedMessage: false,
+2026-11-12T06:01:41.5524957Z   code: 'ERR_ASSERTION',
+2026-11-12T06:01:41.5525213Z   actual: null,
+2026-11-12T06:01:41.5525421Z   expected: 0,
+2026-11-12T06:01:41.5525860Z   operator: 'strictEqual',
+2026-11-12T06:01:41.5526106Z   diff: 'simple'
+2026-11-12T06:01:41.5526343Z }
+2026-11-12T06:01:41.5526458Z 
+2026-11-12T06:01:41.5526561Z Node.js v24.22.2
+2026-11-12T06:01:41.5592123Z node test/native-furniture-style-controls.mjs failed (1)
+2026-11-12T06:01:41.5699771Z ##[error]Process completed with exit code 1.
+2026-11-12T06:01:41.5885327Z ##[group]Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+2026-11-12T06:01:41.5885659Z with:
+2026-11-12T06:01:41.5885823Z   name: pptx-windows-2
+2026-11-12T06:01:41.5886104Z   path: packages/pptx/artifacts/native-picture-harness/**
+packages/pptx/artifacts/quarantine/**
+
+2026-11-12T06:01:41.5886438Z   retention-days: 7
+2026-11-12T06:01:41.5886608Z   if-no-files-found: ignore
+2026-11-12T06:01:41.5886780Z   compression-level: 6
+2026-11-12T06:01:41.5886937Z   overwrite: false
+2026-11-12T06:01:41.5887118Z   include-hidden-files: false
+2026-11-12T06:01:41.5887303Z   archive: true
+2026-11-12T06:01:41.5887453Z env:
+2026-11-12T06:01:41.5887641Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-11-12T06:01:41.5887878Z ##[endgroup]
+2026-11-12T06:01:41.7208334Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-11-12T06:01:41.7210480Z The least common ancestor is D:\a\opf\opf\packages\pptx\artifacts. This will be the root directory of the artifact
+2026-11-12T06:01:41.7211270Z No files were found with the provided path: packages/pptx/artifacts/native-picture-harness/**
+2026-11-12T06:01:41.7211894Z packages/pptx/artifacts/quarantine/**. No artifacts will be uploaded.
+2026-11-12T06:01:41.7499830Z Post job cleanup.
+2026-11-12T06:01:41.7504042Z ##[start-action display=Set up Node.js;id=__222bd94e-a0d6-4b7f-ade9-76dbac065e1a.__actions_setup-node]
+2026-11-12T06:01:41.7505952Z ##[end-action id=__222bd94e-a0d6-4b7f-ade9-76dbac065e1a.__actions_setup-node;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-12T06:01:41.7507032Z ##[start-action display=Install pnpm (host runner);id=__222bd94e-a0d6-4b7f-ade9-76dbac065e1a.__pnpm_action-setup]
+2026-11-12T06:01:41.7609062Z Post job cleanup.
+2026-11-12T06:01:41.8891183Z Pruning is unnecessary.
+2026-11-12T06:01:41.8997326Z ##[end-action id=__222bd94e-a0d6-4b7f-ade9-76dbac065e1a.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=148]
+2026-11-12T06:01:41.9131035Z Post job cleanup.
+2026-11-12T06:01:42.0470941Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-12T06:01:42.0769147Z git version 2.56.0.windows.4
+2026-11-12T06:01:42.0826147Z Temporarily overriding HOME='D:\a\_temp\b334ea47-6e99-472d-9174-761ce7ebb240' before making global git config changes
+2026-11-12T06:01:42.0827313Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-12T06:01:42.0834004Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\opf\opf
+2026-11-12T06:01:42.1137968Z Removing SSH command configuration
+2026-11-12T06:01:42.1147115Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-12T06:01:42.1505274Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-12T06:01:42.6647500Z Removing HTTP extra header
+2026-11-12T06:01:42.6655026Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-12T06:01:42.6949389Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-12T06:01:43.2479720Z Removing includeIf entries pointing to credentials config files
+2026-11-12T06:01:43.2492095Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-12T06:01:43.2842249Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-12T06:01:44.0481747Z Cleaning up orphan processes

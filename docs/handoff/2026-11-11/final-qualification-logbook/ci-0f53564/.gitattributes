@@ -1,0 +1,2 @@
+# Preserve original public/source evidence bytes, including CRLF.
+* -text

@@ -1,0 +1,5 @@
+
+> openpresentation-workspace@ build:packages /private/tmp/opf-name-snapshot-cardinality-validation
+> pnpm -r --if-present run build
+
+No projects matched the filters in "/private/tmp/opf-name-snapshot-cardinality-validation"

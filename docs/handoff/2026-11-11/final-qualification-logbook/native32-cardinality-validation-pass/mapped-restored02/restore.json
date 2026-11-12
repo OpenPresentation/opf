@@ -1,0 +1,21 @@
+{
+  "head": "c0750870476019f04f56fae58a98df2bf8f75f10",
+  "tree": "7f3a8b944a877547c2c7902a34a586319d016864",
+  "clean": true,
+  "frozenSourceFiles": 4,
+  "packageManifests": 7,
+  "README": true,
+  "paintingFixture": {
+    "file": "docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz",
+    "bytes": 16102,
+    "sha256": "0b7ef1b73bbd4f31c5ac67716bea08f22a64df066f4ad343765c0d3d74511e56",
+    "gitBlobExact": true
+  },
+  "materializedEvidenceFiles": [
+    "docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz",
+    "docs/evidence/name-snapshot-cardinality-validation/run.mjs",
+    "docs/evidence/name-snapshot-cardinality-validation/README.md",
+    "docs/evidence/name-snapshot-cardinality-validation/native-controls.mjs"
+  ],
+  "qualification": "Checkout restore only; no tests/build/push"
+}

@@ -1,0 +1,93 @@
+{
+  "run": 43163971460,
+  "job": 131001400901,
+  "head": "c0750870476019f04f56fae58a98df2bf8f75f10",
+  "base": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "result": "PASS within Office-free control scope",
+  "Node": "v24.22.2",
+  "PowerShell": {
+    "edition": "Desktop",
+    "version": "5.1.26100.33648"
+  },
+  "NodeSummary": {
+    "tests": 9,
+    "pass": 9,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "originalManaged": {
+    "startup": 8,
+    "saves": 13,
+    "privateAdapter": 11,
+    "total": 32
+  },
+  "separateCardinality": {
+    "total": 6,
+    "results": [
+      {
+        "scenario": "before-0",
+        "phase": "before",
+        "endRows": 0,
+        "expectedReady": false,
+        "ready": false,
+        "passed": true
+      },
+      {
+        "scenario": "before-1",
+        "phase": "before",
+        "endRows": 1,
+        "expectedReady": true,
+        "ready": true,
+        "passed": true
+      },
+      {
+        "scenario": "before-2",
+        "phase": "before",
+        "endRows": 2,
+        "expectedReady": false,
+        "ready": false,
+        "passed": true
+      },
+      {
+        "scenario": "reopened-0",
+        "phase": "reopened",
+        "endRows": 0,
+        "expectedReady": false,
+        "ready": false,
+        "passed": true
+      },
+      {
+        "scenario": "reopened-1",
+        "phase": "reopened",
+        "endRows": 1,
+        "expectedReady": true,
+        "ready": true,
+        "passed": true
+      },
+      {
+        "scenario": "reopened-2",
+        "phase": "reopened",
+        "endRows": 2,
+        "expectedReady": false,
+        "ready": false,
+        "passed": true
+      }
+    ]
+  },
+  "outerSeconds": 25.157,
+  "managedTestSeconds": 20.2618963,
+  "compiledFilesUnchanged": 609,
+  "sourceAndBuildUnchanged": true,
+  "fixtureIdentity": {
+    "lexicalSpellingDiffers": true,
+    "sameOwnedFixture": true
+  },
+  "artifact": {
+    "bytes": 223610,
+    "sha256": "b584e3dc7de78af98a5010770cc25621c9bc75a1471cedf2166a1a7700853881",
+    "files": 104
+  },
+  "scope": "No browser or Office; no native chart acceptance or ordinary/fullCI substitute; originalfailedruns preserved"
+}

@@ -1,0 +1,309 @@
+{
+  "schemaVersion": 1,
+  "profile": "sh21-three-case-owned-windowed-qualification-v1",
+  "policy": {
+    "policy": "sh21-owned-windowed-global-zero-after-completed-owned-quit-v1",
+    "observationPolicy": "global-zero-after-completed-owned-quit-v1",
+    "budgetMilliseconds": 5000,
+    "intervalMilliseconds": 100,
+    "maximumQueries": 51,
+    "observerSource": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+    "observerSourceSha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3"
+  },
+  "envelopeSha256": "b8fd9f3061e67d920df80b739d4342f84f3664f7bc12c28881a90138d3f8e8a9",
+  "output": "/private/tmp/opf-sh21-current-source03/default",
+  "timeoutSeconds": 45,
+  "maximumTotalShapes": 32,
+  "planModelSha256": "31fed00d4c7fa4892c00883a7b021ff8de381e0c52f550f87ec4e4d2f8476331",
+  "planFileIdentity": {
+    "bytes": 1697,
+    "sha256": "d898704f86de6cd88f15067469731e8a33da84b5b289a3a8e42ef9987cbc6894"
+  },
+  "mode": "org-witness",
+  "windowMode": {
+    "visible": -1,
+    "windowState": 2,
+    "withWindow": -1,
+    "readOnly": -1
+  },
+  "witness": null,
+  "runOfficeRequested": false,
+  "plan": {
+    "schemaVersion": 1,
+    "profile": "sh21-three-case-node-and-text-edit-v1",
+    "caseId": "org-chart-3",
+    "kind": "org-chart",
+    "inputSha256": "098581b8ddf53f8fc035cd3fb7164e7605977e702a79db494c5160e98c761c7b",
+    "shapeId": 2,
+    "shapeName": "OPF smartart slides.0.items",
+    "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/orgChart1",
+    "slideCount": 1,
+    "sourceFontSize": 36,
+    "before": [
+      {
+        "index": 1,
+        "text": "Lead",
+        "level": 1,
+        "parent": null,
+        "type": 1,
+        "children": 2
+      },
+      {
+        "index": 2,
+        "text": "Build",
+        "level": 2,
+        "parent": "Lead",
+        "type": 1,
+        "children": 0
+      },
+      {
+        "index": 3,
+        "text": "Ship",
+        "level": 2,
+        "parent": "Lead",
+        "type": 1,
+        "children": 0
+      }
+    ],
+    "after": [
+      {
+        "index": 1,
+        "text": "Lead",
+        "level": 1,
+        "parent": null,
+        "type": 1,
+        "children": 3
+      },
+      {
+        "index": 2,
+        "text": "Craft",
+        "level": 2,
+        "parent": "Lead",
+        "type": 1,
+        "children": 0
+      },
+      {
+        "index": 3,
+        "text": "Ship",
+        "level": 2,
+        "parent": "Lead",
+        "type": 1,
+        "children": 0
+      },
+      {
+        "index": 4,
+        "text": "Grow",
+        "level": 2,
+        "parent": "Lead",
+        "type": 1,
+        "children": 0
+      }
+    ],
+    "operations": [
+      {
+        "op": "set-existing-text",
+        "index": 2,
+        "text": "Craft"
+      },
+      {
+        "op": "add-node",
+        "afterIndex": 3,
+        "position": 2,
+        "type": 1
+      },
+      {
+        "op": "set-new-text",
+        "index": 4,
+        "text": "Grow"
+      }
+    ],
+    "nativeAcceptance": false,
+    "registryAcceptance": false
+  },
+  "node": {
+    "path": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+    "version": "v24.21.0",
+    "identity": {
+      "bytes": 122129232,
+      "sha256": "e4b5a3af0e05c75de2eae013904145f40fe7fc2a6e6f17510128bf45cca4e79b"
+    }
+  },
+  "controller": {
+    "directory": "/private/tmp/opf-034",
+    "revision": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+    "dirty": false,
+    "files": [
+      {
+        "path": "packages/pptx/test/native-process.ps1",
+        "bytes": 2341,
+        "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+      },
+      {
+        "path": "scripts/native-acceptance/identity.mjs",
+        "bytes": 3090,
+        "sha256": "7cf2fcc8951860353269f3a026e3d7a19a6251ba242f0cce1e37b118da6a3912"
+      },
+      {
+        "path": "scripts/native-acceptance/owned-postflight.mjs",
+        "bytes": 12137,
+        "sha256": "f1e7371586880fe76db6f3e1d615db23f67a062ad89a1b99abf8377ef601c782"
+      },
+      {
+        "path": "scripts/native-acceptance/owned-postflight.ps1",
+        "bytes": 18877,
+        "sha256": "1779ae802dd73ee8f004bb43620e4eb07683df492cd7fdc24811aa159af51ba4"
+      },
+      {
+        "path": "scripts/native-acceptance/reference-chart-archive.mjs",
+        "bytes": 28116,
+        "sha256": "9cd112578015c4a5284906f58db9e6f040fe1ceafd0eff8147fc715df1a2236a"
+      },
+      {
+        "path": "scripts/native-acceptance/reference-chart-profile.mjs",
+        "bytes": 53533,
+        "sha256": "7be6a3fe576d83f2fb40d6dbf966701b5b1138cf7bd5a5e768d90f398d9ee0b4"
+      },
+      {
+        "path": "scripts/native-acceptance/reference-runtime-routes.mjs",
+        "bytes": 3993,
+        "sha256": "9568f30aedbc6920861f9174d40f250566467b002dc1064b05bf23c1a7a94585"
+      },
+      {
+        "path": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+        "bytes": 19206,
+        "sha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3"
+      },
+      {
+        "path": "scripts/native-acceptance/run-sh21-edit-profile.ps1",
+        "bytes": 5056,
+        "sha256": "c9780ee31537dc4d5fc2139751b3ee1fc47c2c108df5332a579c13a21bf49c52"
+      },
+      {
+        "path": "scripts/native-acceptance/run-sh21-windowed-profile.ps1",
+        "bytes": 5183,
+        "sha256": "ef4f4de740eab2f8ef31dfedf7a7f8c2807a9e8bf3639d0fd98d693766dabece"
+      },
+      {
+        "path": "scripts/native-acceptance/seven-chart-worker.ps1",
+        "bytes": 22481,
+        "sha256": "d8901f1d49fbf21b3d228e4ed466f6d4d7240556623b612e30380ac0d0ff70d5"
+      },
+      {
+        "path": "scripts/native-acceptance/seven-value-bootstrap.ps1",
+        "bytes": 6124,
+        "sha256": "e61a779b8bba7aa5592bfb7e023784e2cc6f12edde0b10552e7c28bc5e880f48"
+      },
+      {
+        "path": "scripts/native-acceptance/seven-value-libraries.mjs",
+        "bytes": 2276,
+        "sha256": "df0b187d043b0ac109fab91d270904cdf96d115649d815ddcbf7e09bfc2dc58c"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-edit-actions.ps1",
+        "bytes": 17007,
+        "sha256": "a43a13530977847b36ebc62a3c24b7d26bc2bb2907874b37cb01f170a78396bf"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-edit-bootstrap.ps1",
+        "bytes": 3615,
+        "sha256": "7e6da14c04575c85a992ae15bbe4ea4486fa1f7ef237535549ab6ab469a4d339"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-edit-contract.mjs",
+        "bytes": 4433,
+        "sha256": "6d1c09263112a4c2263d140faf504335332706279abc052ce35d2c844a14ce2c"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-edit-postflight.ps1",
+        "bytes": 14126,
+        "sha256": "d19316f8870f880d5795a960572d2cb8448656ee497e26aec912a3ad6cf01b5a"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-edit-profile.mjs",
+        "bytes": 40046,
+        "sha256": "cd2c47f292a0c7cc4cbc58d6894b5e0644d708364a0921e018f14e0242a637f1"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-edit-profile.test.mjs",
+        "bytes": 23136,
+        "sha256": "85e109939d170e56f9f4142c2bd3ac0dcdff50799f060637f334700e5d190ba1"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-edit-self-test.ps1",
+        "bytes": 20916,
+        "sha256": "dd5e46c89bfdbf8994f09975843e41457acdd5f62ba5b6b8d4bba6aa905b88a1"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-edit-worker.ps1",
+        "bytes": 7459,
+        "sha256": "b2f848bd4a4cbb38a8c40cd26eada89e9f4209ccf3c0dad2dc17fb16c8f61c44"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-windowed-actions.ps1",
+        "bytes": 6385,
+        "sha256": "d6ee0c07c014cd2f06dddc2df9c9385555137ac91cf753eeacd7eedbdb747bc6"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-windowed-bootstrap.ps1",
+        "bytes": 5283,
+        "sha256": "b230d8b981c7f2bba657096e538d505b16c27b604a360610afe97a9950aa2548"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-windowed-check.ps1",
+        "bytes": 12077,
+        "sha256": "291f8fd659a587059408bdbb8dc96b9b09ec85b5bf32c7dd849c7da0d5dac672"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-windowed-profile.mjs",
+        "bytes": 15413,
+        "sha256": "269778087357eb0b06129027e49fa0756a166cf33b6d70fbcb1e84293ff60059"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-windowed-worker.ps1",
+        "bytes": 7826,
+        "sha256": "f7bff876a3c545a58d494bb1a1585f36799915913e51ac1fedfcbc0665d19c7a"
+      },
+      {
+        "path": "scripts/native-acceptance/sh21-windowed.test.mjs",
+        "bytes": 21260,
+        "sha256": "c9a30a3a2031a544674100024aa3ee5100388b4ef58cff85b769340ccfa32901"
+      },
+      {
+        "path": "scripts/native-acceptance/windows-powershell-env.mjs",
+        "bytes": 495,
+        "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6"
+      }
+    ]
+  },
+  "snapshots": [
+    {
+      "path": "execution-envelope.json",
+      "bytes": 166921,
+      "sha256": "b8fd9f3061e67d920df80b739d4342f84f3664f7bc12c28881a90138d3f8e8a9"
+    },
+    {
+      "path": "inputs/case.pptx",
+      "bytes": 117059,
+      "sha256": "098581b8ddf53f8fc035cd3fb7164e7605977e702a79db494c5160e98c761c7b"
+    },
+    {
+      "path": "inputs/plan.json",
+      "bytes": 1697,
+      "sha256": "d898704f86de6cd88f15067469731e8a33da84b5b289a3a8e42ef9987cbc6894"
+    },
+    {
+      "path": "inputs/sh21-windowed-worker.ps1",
+      "bytes": 7826,
+      "sha256": "f7bff876a3c545a58d494bb1a1585f36799915913e51ac1fedfcbc0665d19c7a"
+    },
+    {
+      "path": "inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    }
+  ],
+  "workerPath": "/private/tmp/opf-sh21-current-source03/default/inputs/sh21-windowed-worker.ps1",
+  "nativeRoot": "/private/tmp/opf-sh21-current-source03/default/native",
+  "nativeAcceptance": false,
+  "registryAcceptance": false
+}

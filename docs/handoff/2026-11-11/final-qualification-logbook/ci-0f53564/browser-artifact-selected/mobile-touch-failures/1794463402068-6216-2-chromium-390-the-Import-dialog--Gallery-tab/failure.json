@@ -1,0 +1,30 @@
+{
+  "engine": "chromium",
+  "version": "158.0.8127.18",
+  "width": 390,
+  "height": 740,
+  "state": "the Import dialog, Gallery tab",
+  "phase": "preview SVG visible",
+  "failedAt": "2026-11-12T06:03:22.067Z",
+  "url": "http://127.0.0.1:53470/index.html",
+  "error": {
+    "name": "Error",
+    "message": "locator.waitFor: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('#preview svg') to be visible\u001b[22m\n",
+    "stack": "locator.waitFor: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('#preview svg') to be visible\u001b[22m\n\n    at open (D:\\a\\opf\\opf\\packages\\editor\\test\\mobile-touch-browser.mjs:220:40)\n    at async playground (D:\\a\\opf\\opf\\packages\\editor\\test\\mobile-touch-browser.mjs:252:18)\n    at async file:///D:/a/opf/opf/packages/editor/test/mobile-touch-browser.mjs:434:9\n    at async file:///D:/a/opf/opf/packages/editor/test/mobile-touch-browser.mjs:427:5"
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "httpErrors": [],
+  "pendingRequests": [],
+  "dropped": {
+    "pending": 0,
+    "failed": 0,
+    "responses": 0,
+    "errors": 0,
+    "consoles": 0
+  },
+  "allProblems": [],
+  "domError": "page.evaluate: Target page, context or browser has been closed",
+  "capturedAt": "2026-11-12T06:03:22.068Z"
+}

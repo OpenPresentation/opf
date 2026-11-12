@@ -1,0 +1,59 @@
+{
+  "verdict": "ACCEPTED within actual Office-free Windows control scope",
+  "review": "Read-only archive/hash/JSON/TAP/Git-blob comparison; no test, imports, API, browser or Office execution",
+  "run": 43163971460,
+  "job": 131001400901,
+  "artifact": {
+    "bytes": 223610,
+    "sha256": "b584e3dc7de78af98a5010770cc25621c9bc75a1471cedf2166a1a7700853881",
+    "files": 104,
+    "allPayloadHashesAndCRCPassed": true
+  },
+  "source": {
+    "base": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+    "head": "c0750870476019f04f56fae58a98df2bf8f75f10",
+    "nineOperativeSourceRecordsMatchBase": true,
+    "sourceAndBuildUnchanged": true,
+    "compiledRegularFilesUnchanged": 609
+  },
+  "actual": {
+    "node": "v24.22.2",
+    "powerShell": {
+      "edition": "Desktop",
+      "version": "5.1.26100.33648"
+    },
+    "tap": {
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "originalManaged": {
+      "startup": 8,
+      "saves": 13,
+      "privateAdapter": 11,
+      "total": 32
+    },
+    "separateCardinality": {
+      "total": 6,
+      "exactOrderedRowsAndOutcomes": true
+    },
+    "privateAdapter": {
+      "positiveMockQueries": 1,
+      "negativeCases": 10,
+      "negativeObserverQueries": 0
+    },
+    "ownedFixtureAlias": {
+      "lexicalSpellingDiffers": true,
+      "sameOwnedFixture": true
+    }
+  },
+  "constraints": [
+    "Original failed attempts remain failed; this fresh pass does not rewrite them",
+    "No Office/browser/process-query/native chart or normalFullCI qualification; managed synthetic archive/bootstrap limits retained",
+    "Original15s child budget unchanged; actual PS wrapper6.589s including surrounding Node work",
+    "Before genuine Name native assignment, root must bind default/profile to exact current source and separately assign the owned native run; native Name edit/Save/reopen/import acceptance still pending"
+  ]
+}

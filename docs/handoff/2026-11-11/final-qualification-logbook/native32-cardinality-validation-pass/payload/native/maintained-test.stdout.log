@@ -1,0 +1,65 @@
+TAP version 13
+# Subtest: prospective Name request is exact and old single-copy request does not opt in
+ok 1 - prospective Name request is exact and old single-copy request does not opt in
+  ---
+  duration_ms: 66.6949
+  type: 'test'
+  ...
+# Subtest: the actual new Node source seeds match the closed PS startup roster and all transitive files are admitted
+ok 2 - the actual new Node source seeds match the closed PS startup roster and all transitive files are admitted
+  ---
+  duration_ms: 15.3851
+  type: 'test'
+  ...
+# Subtest: real retained three-archive comparison permits only one literal name with whole workbook bytes unchanged
+ok 3 - real retained three-archive comparison permits only one literal name with whole workbook bytes unchanged
+  ---
+  duration_ms: 451.3758
+  type: 'test'
+  ...
+# Reference Name snapshot fixture identity: {"lexicalSpellingDiffers":true,"sameOwnedFixture":true}
+# Subtest: complete current public imports/source roles are exact before then only Name changes
+ok 4 - complete current public imports/source roles are exact before then only Name changes
+  ---
+  duration_ms: 3307.7664
+  type: 'test'
+  ...
+# Subtest: category automatic selection stays exact and only closed first-Save line smoothing is OPEN
+ok 5 - category automatic selection stays exact and only closed first-Save line smoothing is OPEN
+  ---
+  duration_ms: 4535.8916
+  type: 'test'
+  ...
+# Subtest: structural first-Save style findings persist with explicit presence and exact recomputation
+ok 6 - structural first-Save style findings persist with explicit presence and exact recomputation
+  ---
+  duration_ms: 2651.6581
+  type: 'test'
+  ...
+# Subtest: strict later raw guard refuses name/cache/header/style/axis/label/metadata/part changes
+ok 7 - strict later raw guard refuses name/cache/header/style/axis/label/metadata/part changes
+  ---
+  duration_ms: 1492
+  type: 'test'
+  ...
+# Subtest: all extra copies are owned begin/success pairs in their exact pre-setter and pre-close slots
+ok 8 - all extra copies are owned begin/success pairs in their exact pre-setter and pre-close slots
+  ---
+  duration_ms: 126.1387
+  type: 'test'
+  ...
+# Subtest: actualPS5 closed owned Save helper and real unchanged observer adapter
+ok 9 - actualPS5 closed owned Save helper and real unchanged observer adapter
+  ---
+  duration_ms: 6588.5009
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 20204.3481

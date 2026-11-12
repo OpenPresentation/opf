@@ -1,0 +1,413 @@
+{
+  "scope": "Byte-preserving evidence-only copies; no new qualification execution",
+  "files": [
+    {
+      "path": "native32-validation-failed/payload/bindings-after.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/bindings-after.json",
+      "bytes": 105978,
+      "sha256": "52f3f8eda3221fa46e10b3fac2c6931bb6f50cc7ac6f7dd9284bc9057df7e585"
+    },
+    {
+      "path": "native32-validation-failed/payload/bindings-before.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/bindings-before.json",
+      "bytes": 105978,
+      "sha256": "52f3f8eda3221fa46e10b3fac2c6931bb6f50cc7ac6f7dd9284bc9057df7e585"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/admission.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/admission.json",
+      "bytes": 55616,
+      "sha256": "3ff9d679b6097e1042db9444bd0b114c04cc4a93ac12fda66512db09b1cffede"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/maintained-test.stderr.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/maintained-test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/maintained-test.stdout.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/maintained-test.stdout.log",
+      "bytes": 3837,
+      "sha256": "ac0ac6285a9edd85756eaec933ac609e05cd644a94412a906f9c2639943071c3"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/completion.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/completion.json",
+      "bytes": 46920,
+      "sha256": "0583b96908296810ee1e8d6374c33c90f5d13b7879c61d04d2caf6b83fa1856a"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/actual-startup.ps1",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/actual-startup.ps1",
+      "bytes": 3334,
+      "sha256": "268167b66c77a256af0d9e9c2aabc872fa969f5b79e49d3e53fa01ce1ce352ed"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/adapter-positive/execution-request.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/adapter-positive/execution-request.json",
+      "bytes": 2027,
+      "sha256": "e6f79810db460105782e8370f505f470857e6a595b39b3e7ec8ea0f073008942"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/adapter-positive/native/report.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/adapter-positive/native/report.json",
+      "bytes": 53461,
+      "sha256": "8e62a672fa885ee3833662359bb4f475d8b63272ae5be548da0492ea6221f475"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/adapter-positive/native/stages.jsonl",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/adapter-positive/native/stages.jsonl",
+      "bytes": 37183,
+      "sha256": "ab08fe9978e9f92ed0c52ea7e898c67ec6b6c76b97172258ec1d38826dc4de7f"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/adapter-positive/native/supervisor.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/adapter-positive/native/supervisor.json",
+      "bytes": 169,
+      "sha256": "5ca52c3e651879673a7a114fd765567a74467c2c24152f333155feec6aed60d0"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/adapter-positive/native/worker.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/adapter-positive/native/worker.json",
+      "bytes": 177,
+      "sha256": "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/adapter-positive/postflight-admission.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/adapter-positive/postflight-admission.json",
+      "bytes": 7668,
+      "sha256": "38ce7053db545d1f272e9698863d1c395ed5e56abc9aeca80b1a10baf45dc47b"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/before/owned-input.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/before/owned-input.pptx",
+      "bytes": 21,
+      "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/before/reference-name-before.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/before/reference-name-before.pptx",
+      "bytes": 20,
+      "sha256": "a24d78a0129e98b76be6101a94f380a7cb40602856d1f5a508e4bedd8b82568e"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/existing-copy/owned-input.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/existing-copy/owned-input.pptx",
+      "bytes": 21,
+      "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/existing-copy/reference-name-before.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/existing-copy/reference-name-before.pptx",
+      "bytes": 8,
+      "sha256": "46e3b5b126e731103c086ccaecb010b6f1733cf71b2419add8c617d3c7c07f24"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/foreign-owner/owned-input.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/foreign-owner/owned-input.pptx",
+      "bytes": 21,
+      "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/foreign-path/owned-input.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/foreign-path/owned-input.pptx",
+      "bytes": 21,
+      "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/foreign-phase/owned-input.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/foreign-phase/owned-input.pptx",
+      "bytes": 21,
+      "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/getter-fault/owned-input.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/getter-fault/owned-input.pptx",
+      "bytes": 21,
+      "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/no-mode/owned-input.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/no-mode/owned-input.pptx",
+      "bytes": 21,
+      "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/reopened/owned-input.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/reopened/owned-input.pptx",
+      "bytes": 21,
+      "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/no-reference/owned-input.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/no-reference/owned-input.pptx",
+      "bytes": 21,
+      "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/reopened/reference-name-reopened.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/reopened/reference-name-reopened.pptx",
+      "bytes": 20,
+      "sha256": "a24d78a0129e98b76be6101a94f380a7cb40602856d1f5a508e4bedd8b82568e"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/same-input/owned-input.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/same-input/owned-input.pptx",
+      "bytes": 21,
+      "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/save-fault/owned-input.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/save-fault/owned-input.pptx",
+      "bytes": 21,
+      "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/startup-control.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/startup-control.json",
+      "bytes": 633,
+      "sha256": "ff0d21414ce9521798551654d46a6f6b35266a4cccf05e51a3fcb032dc058c40"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/synthetic-length.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/synthetic-length.pptx",
+      "bytes": 129025,
+      "sha256": "e31a87953f64b93b942bb279d42a8e11652e907703b650a07f04b246b4d7b310"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/wrong-after-name/owned-input.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/wrong-after-name/owned-input.pptx",
+      "bytes": 21,
+      "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/wrong-after-name/reference-name-before.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/wrong-after-name/reference-name-before.pptx",
+      "bytes": 20,
+      "sha256": "a24d78a0129e98b76be6101a94f380a7cb40602856d1f5a508e4bedd8b82568e"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/wrong-before-name/owned-input.pptx",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/managed/wrong-before-name/owned-input.pptx",
+      "bytes": 21,
+      "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/stdout.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp/opf-name-snapshots-rBAb5f/stderr.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp/opf-name-snapshots-rBAb5f/stderr.log",
+      "bytes": 589,
+      "sha256": "d422ac963f8e5188f760113f62f07d66dd17c6f20b984b84d2ae8b5f1c7658e7"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/owned-temp-inventory.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/owned-temp-inventory.json",
+      "bytes": 5888,
+      "sha256": "f887b6aaedc0d73138d32e637e58c58c2746c7f08a0cf7621fcd8c426220cd13"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/powershell-version.stderr.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/powershell-version.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/powershell-version.stdout.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/powershell-version.stdout.log",
+      "bytes": 51,
+      "sha256": "a95361d0955511fa86e906b94e20bd2c2119835165c4cee97d26739a55a7757d"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/receipt.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/receipt.json",
+      "bytes": 119809,
+      "sha256": "a837e7fa9f871b07d24320e2cc46adc953e3974ee6c09cfee5b75fd1b865b28e"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/temp-before.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/temp-before.json",
+      "bytes": 53,
+      "sha256": "c69bac37bd0116f43773fb256efe03c22d3c9b9f0068a2985f9b6bdee14efd92"
+    },
+    {
+      "path": "native32-validation-failed/payload/native/temp-after.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native/temp-after.json",
+      "bytes": 140,
+      "sha256": "ea6df2471de634a949a22574a88ba9c4280d4659cad91d13a29101fa7f4bc2ac"
+    },
+    {
+      "path": "native32-validation-failed/payload/native-controls.stdout.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native-controls.stdout.log",
+      "bytes": 349,
+      "sha256": "72dece69a6b800eb98dd5c6381770da139a8709fec2165ed79eb763a9e87fa13"
+    },
+    {
+      "path": "native32-validation-failed/payload/native-controls.stderr.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/native-controls.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native32-validation-failed/payload/receipt.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/payload/receipt.json",
+      "bytes": 1862,
+      "sha256": "9723ac4ab48b74e8508dd1557c642bd214e36444dbb9171b3bf354e8ff70d836"
+    },
+    {
+      "path": "native32-validation-failed/artifact.zip",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/artifact.zip",
+      "bytes": 138163,
+      "sha256": "9d3ee465b9120ccfb9cdb0bc0e406d9f118b5424519b09296a83ab5937b1ac2d"
+    },
+    {
+      "path": "native32-validation-failed/inventory.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/inventory.json",
+      "bytes": 8018,
+      "sha256": "16965adeb5c99898464d09bba0ae767c3b43c94fda13d877756671de71dd01ac"
+    },
+    {
+      "path": "native32-validation-failed/result.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-review01/result.json",
+      "bytes": 1017,
+      "sha256": "5969d5c39c18dd38755fef14158466ddaf45134a5eeafe7629458ba6497f722a"
+    },
+    {
+      "path": "native32-validation-failed/ci/job130991095157.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation-ci01/job130991095157.log",
+      "bytes": 59792,
+      "sha256": "4aa550e1daf76047f6f2e7ca5da1b012eee4812001407808f7e7b514c82b3a93"
+    },
+    {
+      "path": "native32-validation-failed/ci/observer.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation-ci01/observer.log",
+      "bytes": 575,
+      "sha256": "54cf1081a18119e607ffb2f0be8e8a61e3622b36e320592e78102e1c35b30b3f"
+    },
+    {
+      "path": "native32-validation-failed/validation-source01/source.patch",
+      "source": "/tmp/opf-name-snapshot-temp-validation-source01/source.patch",
+      "bytes": 27958,
+      "sha256": "c9a8c9150a1bb5707ab488a43729cc811f13998ae94b04665fb9e898888e0adc"
+    },
+    {
+      "path": "native32-validation-failed/validation-source01/manifest.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-source01/manifest.json",
+      "bytes": 6297,
+      "sha256": "4e8a11dc1675d6cda89cb99da13adff2dc7ca1c7fdecb98c5facc2333ab08376"
+    },
+    {
+      "path": "native32-validation-failed/validation-root-review01.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-root-review01.json",
+      "bytes": 742,
+      "sha256": "da7c497989dd55940d004f8359652d19ca9c9e0bd02ee6a3e82bdf3a97184fc6"
+    },
+    {
+      "path": "native32-validation-failed/validation-peer-review01.json",
+      "source": "/tmp/opf-name-snapshot-temp-validation-peer-review01.json",
+      "bytes": 1566,
+      "sha256": "1f4cbf047690031eca34956998e0338bdfb33533d77509820b7bf296ba0e1184"
+    },
+    {
+      "path": "native32-validation-failed/mapped/gate.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation-mapped01.log",
+      "bytes": 6455,
+      "sha256": "fed60aac76c8434ac26a15a7bc796ae46801687f6db9c33979b51a800fb7a649"
+    },
+    {
+      "path": "native32-validation-failed/mapped/selected-logs/biome.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation/artifacts/check-changed/biome.log",
+      "bytes": 651,
+      "sha256": "fc8c44cb5e76240bcb4373271abcd58f27162eb5a05d27e878f1aadf70a4b35b"
+    },
+    {
+      "path": "native32-validation-failed/mapped/selected-logs/build.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation/artifacts/check-changed/build.log",
+      "bytes": 14796,
+      "sha256": "35c85c887575143ab8a66ca5fb52ea7cd6f3f7e471a4b47d64984a8cd130ffd6"
+    },
+    {
+      "path": "native32-validation-failed/mapped/selected-logs/install.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation/artifacts/check-changed/install.log",
+      "bytes": 4584,
+      "sha256": "616728bcbab3160a050b4ccf5258c872d07bc4cb057c43f58140103f523eb977"
+    },
+    {
+      "path": "native32-validation-failed/mapped/selected-logs/pnpm_run_check_changes.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation/artifacts/check-changed/pnpm_run_check_changes.log",
+      "bytes": 2696,
+      "sha256": "f3e0dfea049f777c5a314a95b269294fcb92216ae920fdf67b0b7a96a335b94e"
+    },
+    {
+      "path": "native32-validation-failed/mapped/selected-logs/pnpm_run_check_ci-scope.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation/artifacts/check-changed/pnpm_run_check_ci-scope.log",
+      "bytes": 3142,
+      "sha256": "0ca9a93afb54f16bae3ce08e01cb45af1c1b22dfe8e9047ede5e75820026819c"
+    },
+    {
+      "path": "native32-validation-failed/mapped/selected-logs/pnpm_run_check_ci-workflows.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation/artifacts/check-changed/pnpm_run_check_ci-workflows.log",
+      "bytes": 11591,
+      "sha256": "cfaa9eb94350403c6c3f518aacfd29a5dae9d213ec694092f0092b9cf724739d"
+    },
+    {
+      "path": "native32-validation-failed/mapped/selected-logs/pnpm_run_check_playwright-pin.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation/artifacts/check-changed/pnpm_run_check_playwright-pin.log",
+      "bytes": 810,
+      "sha256": "62f61a93e8c4ff6edd8eb9f51566a19c3aa86be1087e2df76537e9eaa24d0f3d"
+    },
+    {
+      "path": "native32-validation-failed/mapped/selected-logs/pnpm_run_check_skill-commands.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation/artifacts/check-changed/pnpm_run_check_skill-commands.log",
+      "bytes": 1070,
+      "sha256": "f1a08243b9be98c476a8a5d40a9890be32cd1dc7bb15e5d84f7c72930c01898b"
+    },
+    {
+      "path": "native32-validation-failed/mapped/selected-logs/pnpm_run_check_text.log",
+      "source": "/tmp/opf-name-snapshot-temp-validation/artifacts/check-changed/pnpm_run_check_text.log",
+      "bytes": 1111,
+      "sha256": "b2c5f4095a00a3e4f5a8312920ec80ca372650a77f743d89ef56c52092ad64e4"
+    },
+    {
+      "path": "native32-validation-failed/cardinality-source01/source.patch",
+      "source": "/tmp/opf-name-snapshot-cardinality-source01/source.patch",
+      "bytes": 14757,
+      "sha256": "2b4670978c040617143e9f14a900c34ee8118bfe5f588b41d5b382d6d5a01348"
+    },
+    {
+      "path": "native32-validation-failed/cardinality-source01/manifest.json",
+      "source": "/tmp/opf-name-snapshot-cardinality-source01/manifest.json",
+      "bytes": 6496,
+      "sha256": "4f0eb2cf8912ce06808f0468d8eba48f15b0ccdcd7de7ba7d3dcbd20536ad8e5"
+    },
+    {
+      "path": "native32-validation-failed/cardinality-source01/inverse-proof.json",
+      "source": "/tmp/opf-name-snapshot-cardinality-source01/inverse-proof.json",
+      "bytes": 2276,
+      "sha256": "d5fe65d56ddddee30727e8056145a0507fe7a716e6df9865dec46afe58f96dd2"
+    },
+    {
+      "path": "native32-validation-failed/cardinality-root-review01.json",
+      "source": "/tmp/opf-name-snapshot-cardinality-root-review01.json",
+      "bytes": 747,
+      "sha256": "0c3f3ed0109719220def93a3d20f0018743afdb49c687002552f82c306d3ed9d"
+    },
+    {
+      "path": "native32-validation-failed/cardinality-peer-review01.json",
+      "source": "/tmp/opf-name-snapshot-cardinality-peer-review01.json",
+      "bytes": 1093,
+      "sha256": "8e1bb28a62e1bd345e2752287fd0cb6d5d4c33747bdfbbcb130e45521a8cdca9"
+    },
+    {
+      "path": "native32-validation-failed/cardinality-source01/source-note.md",
+      "source": "/tmp/opf-name-snapshot-cardinality/docs/handoff/2026-11-11/reference-name-snapshot-cardinality.md",
+      "bytes": 2437,
+      "sha256": "c06a0ee68ac6e55a6a1d2d3a49d5ab743a660ef5ce2a8581fb825b4c6f07cb4f"
+    }
+  ]
+}

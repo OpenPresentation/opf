@@ -1,0 +1,216 @@
+
+> openpresentation-workspace@ check:changed /private/tmp/opf-name-snapshot-cardinality-validation
+> node scripts/check-changed.mjs --base 0f53564afa6a79ff9b7235140afbe85c9cf94bfc
+
+check-changed: 4 changed files since 0f53564af (plus uncommitted and untracked)
+ok  install (2.2 s)
+ok  build (0.3 s)
+FAILED  pnpm run check:changes (0.3 s)
+ok  biome (1.1 s)
+ok  pnpm run check:ci-scope (3.3 s)
+ok  pnpm run check:playwright-pin (0.2 s)
+FAILED  pnpm run check:skill-commands (0.2 s)
+FAILED  pnpm run check:text (0.2 s)
+FAILED  pnpm run check:ci-workflows (4.7 s)
+-  typecheck
+
+--- pnpm run check:changes failed (exit 1); last 60 lines of artifacts/check-changed/pnpm_run_check_changes.log:
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/changes-config.test.mjs:41:1
+✖ a fragment may name any of the seven packages, several at once, or none; any other name fails (0.289667ms)
+  Error: changes/a.md: this repository has one changelog; drop "packages"
+      at fail (file:///private/tmp/opf-name-snapshot-cardinality-validation/scripts/changelog-fragments.mjs:53:11)
+      at parseFragment (file:///private/tmp/opf-name-snapshot-cardinality-validation/scripts/changelog-fragments.mjs:74:26)
+      at TestContext.<anonymous> (file:///private/tmp/opf-name-snapshot-cardinality-validation/scripts/changes-config.test.mjs:42:62)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at scripts/changes-config.test.mjs:58:1
+✖ code in any of the seven packages asks for a fragment; tests, docs and evidence do not (0.167125ms)
+  AssertionError [ERR_ASSERTION]: packages/javascript/src/a.ts
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///private/tmp/opf-name-snapshot-cardinality-validation/scripts/changes-config.test.mjs:60:35)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/changes-config.test.mjs:82:1
+✖ check:changes fails on an unknown package name, and on a package whose changelog is not in the repository (26.726833ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /changes\/a\.md: unknown package "renderer" \(known: opf, cli, render, pptx, editor, gallery, mcp\)/. Input:
+  
+  'changes/a.md: this repository has one changelog; drop "packages"\n'
+  
+      at TestContext.<anonymous> (file:///private/tmp/opf-name-snapshot-cardinality-validation/scripts/changes-config.test.mjs:86:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'changes/a.md: this repository has one changelog; drop "packages"\n',
+    expected: /changes\/a\.md: unknown package "renderer" \(known: opf, cli, render, pptx, editor, gallery, mcp\)/,
+    operator: 'match',
+    diff: 'simple'
+  }
+ ELIFECYCLE  Command failed with exit code 1.
+
+--- pnpm run check:ci-workflows failed (exit 1); last 60 lines of artifacts/check-changed/pnpm_run_check_ci-workflows.log:
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/tmp/opf-name-snapshot-cardinality-validation/packages/render/README.md'
+  }
+
+test at scripts/release-workflows.test.mjs:288:3
+✖ current release instructions match publisher roster: packages/pptx/README.md (0.037666ms)
+  Error: ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/pptx/README.md'
+      at readFileSync (node:fs:483:20)
+      at read (file:///private/tmp/opf-name-snapshot-cardinality-validation/scripts/release-workflows.test.mjs:14:28)
+      at TestContext.<anonymous> (file:///private/tmp/opf-name-snapshot-cardinality-validation/scripts/release-workflows.test.mjs:289:18)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/tmp/opf-name-snapshot-cardinality-validation/packages/pptx/README.md'
+  }
+
+test at scripts/release-workflows.test.mjs:288:3
+✖ current release instructions match publisher roster: packages/editor/README.md (0.029583ms)
+  Error: ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/packages/editor/README.md'
+      at readFileSync (node:fs:483:20)
+      at read (file:///private/tmp/opf-name-snapshot-cardinality-validation/scripts/release-workflows.test.mjs:14:28)
+      at TestContext.<anonymous> (file:///private/tmp/opf-name-snapshot-cardinality-validation/scripts/release-workflows.test.mjs:289:18)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/tmp/opf-name-snapshot-cardinality-validation/packages/editor/README.md'
+  }
+
+test at scripts/release-workflows.test.mjs:301:1
+✖ current release roster enumeration includes every authoritative published npm name (0.057083ms)
+  Error: ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/docs/release-process.md'
+      at readFileSync (node:fs:483:20)
+      at read (file:///private/tmp/opf-name-snapshot-cardinality-validation/scripts/release-workflows.test.mjs:14:28)
+      at TestContext.<anonymous> (file:///private/tmp/opf-name-snapshot-cardinality-validation/scripts/release-workflows.test.mjs:305:7)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/tmp/opf-name-snapshot-cardinality-validation/docs/release-process.md'
+  }
+ ELIFECYCLE  Command failed with exit code 1.
+
+--- pnpm run check:skill-commands failed (exit 2); last 21 lines of artifacts/check-changed/pnpm_run_check_skill-commands.log:
+
+> openpresentation-workspace@ check:skill-commands /private/tmp/opf-name-snapshot-cardinality-validation
+> node --test scripts/check-skill-commands.test.mjs && node scripts/check-skill-commands.mjs
+
+✔ words keeps quoted text together (0.885208ms)
+✔ commandOf strips launchers and cuts at shell operators (0.286875ms)
+✔ extractCommands reads shell fences, continued lines and inline spans, and skips other code (0.230375ms)
+✔ valueOptions finds the options that take a value (0.088792ms)
+✔ probeArguments gives value options a placeholder, drops positionals and ends with --help (0.128041ms)
+✔ checkSources fails a command the CLI rejects, honours the allowlist and reports a stale entry (0.255375ms)
+﹣ the workspace CLI rejects the removed create --from and an unknown command, and accepts current commands (0.031958ms) # packages/cli/dist is not built
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 37.333291
+check:skill-commands needs the built CLI (packages/cli/dist/index.js). Run pnpm build first.
+ ELIFECYCLE  Command failed with exit code 2.
+
+--- pnpm run check:text failed (exit 1); last 36 lines of artifacts/check-changed/pnpm_run_check_text.log:
+
+> openpresentation-workspace@ check:text /private/tmp/opf-name-snapshot-cardinality-validation
+> node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs
+
+✔ compressed reports retain the same text checks and original line/column (1.1015ms)
+✖ real compressed evidence is scanned as its text, preserving input bytes (1.168625ms)
+✔ names alone cannot bypass checks and broken/oversized compressed text fails (0.893666ms)
+✔ existing recognized binary evidence remains distinct from text (0.065958ms)
+✔ MR-11: other raster images and gzip archives are binary by signature, never by name (0.184ms)
+✔ MR-11: an imported package is scanned once its package.json exists, and not before (0.135625ms)
+✔ ZIP evidence is binary by signature while plain text under ZIP names stays checked (0.1415ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35.442917
+
+✖ failing tests:
+
+test at scripts/check-text-integrity.test.mjs:17:1
+✖ real compressed evidence is scanned as its text, preserving input bytes (1.168625ms)
+  Error: ENOENT: no such file or directory, open '/private/tmp/opf-name-snapshot-cardinality-validation/docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async TestContext.<anonymous> (file:///private/tmp/opf-name-snapshot-cardinality-validation/scripts/check-text-integrity.test.mjs:18:17)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/tmp/opf-name-snapshot-cardinality-validation/docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz'
+  }
+ ELIFECYCLE  Command failed with exit code 1.
+
+step                           status    time
+install                        passed   2.2 s
+build                          passed   0.3 s
+biome                          passed   1.1 s  2 files
+pnpm run check:changes         FAILED   0.3 s
+pnpm run check:ci-scope        passed   3.3 s
+pnpm run check:ci-workflows    FAILED   4.7 s
+pnpm run check:playwright-pin  passed   0.2 s
+pnpm run check:skill-commands  FAILED   0.2 s
+pnpm run check:text            FAILED   0.2 s
+typecheck                      skipped      -  no .ts, .mts or tsconfig change
+total                                   8.2 s
+
+check-changed: 4 of 10 steps failed: pnpm run check:changes, pnpm run check:ci-workflows, pnpm run check:skill-commands, pnpm run check:text
+ ELIFECYCLE  Command failed with exit code 1.

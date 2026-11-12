@@ -1,0 +1,16 @@
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +172
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 172, reused 172, downloaded 0, added 170
+Progress: resolved 172, reused 172, downloaded 0, added 172, done
+
+devDependencies:
++ @biomejs/biome 2.6.6
++ @openpresentation/gallery 0.0.0 <- packages/gallery
++ @openpresentation/opf 0.0.0 <- packages/javascript
++ @openpresentation/opf-pptx 0.0.0 <- packages/pptx
++ @openpresentation/opf-render 0.0.0 <- packages/render
++ @typescript/native <- typescript 7.0.2
+
+Done in 2.1s using pnpm v10.33.2

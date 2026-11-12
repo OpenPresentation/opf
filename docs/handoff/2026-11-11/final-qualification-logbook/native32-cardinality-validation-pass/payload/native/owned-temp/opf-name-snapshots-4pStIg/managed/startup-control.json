@@ -1,0 +1,17 @@
+﻿{
+    "request":  {
+                    "referenceNameEdit":  true,
+                    "referenceNameSnapshots":  true
+                },
+    "declaredSourceHash":  "0000000000000000000000000000000000000000000000000000000000000000",
+    "actions":  [
+                    {
+                        "op":  "set-chart-series-name",
+                        "slideIndex":  1,
+                        "chartName":  "OPF chart 1",
+                        "seriesIndex":  1,
+                        "expectedName":  "Actual",
+                        "newName":  "Actual edited"
+                    }
+                ]
+}

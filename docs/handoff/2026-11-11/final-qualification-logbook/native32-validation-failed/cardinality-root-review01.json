@@ -1,0 +1,17 @@
+{
+  "review": "ACCEPT SOURCE; independent peer and actual PS execution pending",
+  "base": "781028f73be79341b9bac6fab078e8416ddd8539",
+  "patch": {
+    "bytes": 14757,
+    "sha256": "2b4670978c040617143e9f14a900c34ee8118bfe5f588b41d5b382d6d5a01348"
+  },
+  "manifest": {
+    "bytes": 6496,
+    "sha256": "4f0eb2cf8912ce06808f0468d8eba48f15b0ccdcd7de7ba7d3dcbd20536ad8e5"
+  },
+  "syntaxNode": "PASS",
+  "fix": "Only wrap complete conditional in array, preserving both success filters/exact-one/order guards",
+  "newControls": "Six actual-function zero/one/two branch controls, separately named from unchanged32",
+  "oldControls": "Original Node9, managed8+13+11, child15seconds unchanged",
+  "actualWindows": "UNRUN; prior failure remains failed"
+}

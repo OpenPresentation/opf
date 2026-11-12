@@ -1,0 +1,19 @@
+
+> openpresentation-workspace@ check:playwright-pin /private/tmp/opf-name-snapshot-cardinality-validation
+> node --test scripts/check-playwright-pin.test.mjs && node scripts/check-playwright-pin.mjs
+
+✔ one image string, and a package pin at the same version, pass (0.531416ms)
+✔ a reference without a digest fails (0.083708ms)
+✔ two different image strings fail, whether the version or only the digest differs (0.074583ms)
+✔ a package pin that differs from the image fails (0.08225ms)
+✔ collect reads workflow files, actions, manifests and the pnpm catalog (1.328959ms)
+✔ this repository passes check:playwright-pin (23.032208ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 58.582333
+check:playwright-pin ok: 10 image references, 0 package pins
