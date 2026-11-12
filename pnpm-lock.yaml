@@ -363,6 +363,9 @@ importers:
       '@resvg/resvg-js':
         specifier: 2.6.2
         version: 2.6.2
+      esbuild:
+        specifier: 0.28.2
+        version: 0.28.2
       pdf-lib:
         specifier: 1.17.1
         version: 1.17.1

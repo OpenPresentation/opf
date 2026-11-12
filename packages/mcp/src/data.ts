@@ -60,6 +60,8 @@ export const DOC_SLUGS: readonly string[] = [
 	"open-ecosystem",
 ];
 
+const ICON_SETS = galleryIconSets();
+
 /** The bundled sources. Pass `{ ...defaultSources(), examples: [] }` to a host that must stay small. */
 export function defaultSources(): OpfMcpSources {
 	const bySlug = new Map(docs.map((doc) => [doc.slug, doc]));
@@ -71,7 +73,8 @@ export function defaultSources(): OpfMcpSources {
 		examples: examples.map((example): ExamplePage => ({ slug: example.slug, category: example.category, gallery: example.gallery, file: example.file, deck: example.deck })),
 		skills: OPF_MCP_SKILLS,
 		whatsNew: OPF_MCP_WHATS_NEW,
-		// LH-14: the gallery icon sets; each set is a module of its own, loaded the first time a search or a deck needs it.
-		iconSets: galleryIconSets,
+		// LH-14, RR-63: the gallery icon sets, read one icon at a time from the installed package in Node (the stdio server); where there is
+		// no installed package to read (a Worker), a search or a set icon reports that the files must be served (galleryIconSets(fetchIcons(url))).
+		iconSets: ICON_SETS,
 	};
 }

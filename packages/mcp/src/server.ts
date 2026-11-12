@@ -43,8 +43,8 @@ export interface OpfMcpSources {
 	/** The recent release notes, as text: `opf://docs/whats-new`. Left out when absent. */
 	whatsNew?: string;
 	/**
-	 * LH-14: the icon sets `search_icons` searches and `validate_deck` checks icon names in: `galleryIconSets` of
-	 * `@openpresentation/gallery/icon-sets` (each set a module loaded on first use). Left out of the lean server, which then names no icon set.
+	 * LH-14: the icon sets `search_icons` searches and `validate_deck` checks icon names in: `galleryIconSets()` (RR-63: `galleryIconSets(fetchIcons(url))` where the files are served) of
+	 * `@openpresentation/gallery/icon-sets` (static files read one icon at a time). Left out of the lean server, which then names no icon set.
 	 */
 	iconSets?: Catalog;
 }
@@ -589,9 +589,10 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			}),
 	);
 
-	// LH-14: the icon sets of the gallery, each a module of its own, loaded on the first search that needs it.
-	type IconSet = { name: string; license: string; copyright: string; version?: string; icons: Record<string, unknown>; tags?: Record<string, readonly string[]> };
-	const iconSets = (sources.iconSets?.iconSets ?? {}) as Record<string, () => Promise<IconSet>>;
+	// LH-14: the icon sets of the gallery, loaded on the first search that needs them; RR-63: a search reads the names and keywords only
+	// (`{ tags: true }`), never the icons' path data.
+	type IconSet = { name: string; license: string; copyright: string; version?: string; names?: readonly string[]; icons: Record<string, unknown>; tags?: Record<string, readonly string[]> };
+	const iconSets = (sources.iconSets?.iconSets ?? {}) as Record<string, (request?: { icons?: readonly string[]; tags?: boolean }) => Promise<IconSet>>;
 	const setNames = Object.keys(iconSets);
 	server.registerTool(
 		"search_icons",
@@ -614,14 +615,14 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		},
 		({ query, set, limit }) =>
 			respond(async () => {
-				if (!setNames.length) throw fail("This server bundles no icon sets (the lean @openpresentation/mcp/server): pass sources.iconSets, galleryIconSets of @openpresentation/gallery/icon-sets.", "unknown-id");
+				if (!setNames.length) throw fail("This server bundles no icon sets (the lean @openpresentation/mcp/server): pass sources.iconSets, galleryIconSets(fetchIcons(url)) of @openpresentation/gallery/icon-sets.", "unknown-id");
 				const ids = set === undefined ? setNames : [set];
 				for (const id of ids) if (!Object.hasOwn(iconSets, id)) throw fail(`Unknown icon set ${id}.${didYouMean(id, setNames)} Sets: ${setNames.join(", ")}.`, "unknown-id");
-				const loaded = await Promise.all(ids.map(async (id) => [id, await iconSets[id]!()] as const));
+				const loaded = await Promise.all(ids.map(async (id) => [id, await iconSets[id]!({ tags: true })] as const));
 				const words = query.toLowerCase().split(/[\s,]+/).filter(Boolean);
 				const found: { score: number; icon: { icon: string; set: string; name: string; tags: string[] } }[] = [];
 				for (const [id, record] of loaded)
-					for (const name of Object.keys(record.icons)) {
+					for (const name of record.names ?? Object.keys(record.icons)) {
 						const tags = [...(record.tags?.[name] ?? [])];
 						const hay = [name, ...tags].join(" ").toLowerCase();
 						if (!words.every((word) => hay.includes(word))) continue;
@@ -636,7 +637,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 					total: found.length,
 					returned: Math.min(max, found.length),
 					icons: found.slice(0, max).map((item) => item.icon),
-					sets: loaded.map(([id, record]) => ({ id, name: record.name, license: record.license, copyright: record.copyright, ...(record.version ? { version: record.version } : {}), icons: Object.keys(record.icons).length })),
+					sets: loaded.map(([id, record]) => ({ id, name: record.name, license: record.license, copyright: record.copyright, ...(record.version ? { version: record.version } : {}), icons: (record.names ?? Object.keys(record.icons)).length })),
 				};
 			}),
 	);

@@ -97,8 +97,8 @@ export interface IconSetInfo {
 }
 /** The icon sets a host registered (a catalog's `iconSets`), then the deck's embedded ones. A registered loader's set has only its id until loaded. */
 export declare function listIconSets(source: IconSetSource): IconSetInfo[];
-/** Load the registered sets (once each) and prime core's registry so the deck draws them. Resolves with the records by id. */
-export declare function loadIconSets(source: IconSetSource, ids?: readonly string[]): Promise<Map<string, IconSetRecord>>;
+/** Load the registered sets and prime core's registry so the deck draws them: `request.icons` the names to draw (a set loaded one icon at a time reads only these), `request.tags` the search keywords. Resolves with the records by id. */
+export declare function loadIconSets(source: IconSetSource, ids?: readonly string[], request?: { icons?: readonly string[]; tags?: boolean }): Promise<Map<string, IconSetRecord>>;
 
 export interface IconSearchResult { icon: string; set: string; name: string; tags: string[] }
 export interface IconSearch {

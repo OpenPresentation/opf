@@ -4,7 +4,9 @@
 import assert from 'node:assert/strict';
 import { ensureIcons } from '@openpresentation/opf';
 import { gallery } from '@openpresentation/gallery';
-import { galleryIconSets } from '@openpresentation/gallery/icon-sets';
+import { galleryIconSets as gallerySets } from '@openpresentation/gallery/icon-sets';
+// RR-63: the gallery icon sets, read from the installed package one icon at a time.
+const galleryIconSets = gallerySets();
 import { checkSource, createCheckService } from '../dist/source-check.js';
 import { createSourceChecker } from '../dist/source-checker.js';
 

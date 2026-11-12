@@ -55,13 +55,14 @@ assignable to it.
 
 ## Icon sets
 
-`@openpresentation/gallery/icon-sets` exports `galleryIconSets`, a catalog of two icon sets that decks name as `<set>:<name>` in an `icon` field: `lucide:truck` ([Lucide](https://lucide.dev), ISC, 2,029 icons, the default set) and `tabler:rocket` ([Tabler outline](https://tabler.io/icons), MIT, 5,203 icons). Each set is a module of its own (`@openpresentation/gallery/icon-sets/<id>`), so a host loads only the sets a deck uses. Register it beside `gallery`:
+`@openpresentation/gallery/icon-sets` exports `galleryIconSets(load?)`, a catalog of two icon sets that decks name as `<set>:<name>` in an `icon` field: `lucide:truck` ([Lucide](https://lucide.dev), ISC, 2,029 icons, the default set) and `tabler:rocket` ([Tabler outline](https://tabler.io/icons), MIT, 5,203 icons). The icon data is plain static files under `dist/icons/` (each set's index with its license and every name, one small file per icon, and the search keywords), read one icon at a time, so a host pays for the icons its decks draw and a bundle carries none of the data. Register it beside `gallery`:
 
 ```js
 import { gallery } from "@openpresentation/gallery";
-import { galleryIconSets } from "@openpresentation/gallery/icon-sets";
+import { fetchIcons, galleryIconSets } from "@openpresentation/gallery/icon-sets";
 
-const catalogs = [gallery, galleryIconSets];
+const catalogs = [gallery, galleryIconSets()]; // Node, Bun and Deno: the installed files
+const served = [gallery, galleryIconSets(fetchIcons("/opf-icons/"))]; // a browser or a Worker: dist/icons/ served at /opf-icons/
 ```
 
 The licenses are in `THIRD-PARTY-NOTICES.md`. See [icons](https://github.com/OpenPresentation/opf/blob/main/docs/icons.md).

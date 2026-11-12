@@ -45,8 +45,14 @@ export interface IconSetRecord {
   icons: Readonly<Record<string, IconSetIcon>>; tags?: Readonly<Record<string, readonly string[]>>;
   summary?: string; version?: string; package?: string; homepage?: string; licenseText?: string;
 }
-/** A registered catalog's set: its record, or a function that loads it (a module whose default export is the record also does). */
-export type IconSetLoader = () => Promise<unknown>;
+/**
+ * A registered catalog's set: its record, or a function that loads it (a module whose default export is the record also does).
+ * RR-63: ensureIcons calls a loader with the icons a document draws (`{ icons: [names] }`; a search asks for `{ tags: true }`), and a
+ * loader may resolve with only those: a record whose `names` lists every icon of the set and whose `icons` holds the ones asked for
+ * (the gallery's sets read one file per icon). A loader that ignores the request resolves with the whole record, as before.
+ */
+export interface IconSetRequest { icons?: readonly string[]; tags?: boolean }
+export type IconSetLoader = (request?: IconSetRequest) => Promise<unknown>;
 export type RegisteredIconSet = IconSetRecord | IconSetLoader;
 
 /** A path command in absolute coordinates: every SVG command is normalized to these four. */
@@ -372,8 +378,15 @@ export function iconFromSvg(text: string): { ok: true; parts?: IconPart[]; pictu
 // ------------------------------------------------------------------------------------------------------------------------------
 // Resolution
 
-/** Sets loaded by ensureIcons (or registered as records), by id: what the synchronous code resolves a set's icon in. */
-const loadedSets = new Map<string, IconSetRecord>();
+/**
+ * Sets loaded by ensureIcons (or registered as records), by id: what the synchronous code resolves a set's icon in. A set loaded one icon
+ * at a time has `names` (every icon of the set) and the icons loaded so far, merged over the calls.
+ */
+const loadedSets = new Map<string, IconSetRecord & { names?: readonly string[] }>();
+/** Sets whose loader failed, with its message: a set icon of theirs is `icon-unknown` until a later ensureIcons loads them. */
+const failedSets = new Map<string, string>();
+/** Every icon name of a set: its `names` when it is loaded one icon at a time, else its icons. */
+const setNames = (set: IconSetRecord & { names?: readonly string[] }): readonly string[] => Array.isArray(set.names) ? set.names : Object.keys(set.icons);
 /** SVG text of the icon sources ensureIcons read, by source. */
 const sourceTexts = new Map<string, string>();
 
@@ -479,6 +492,8 @@ export function resolveIcon(document: unknown, value: unknown, options: IconOpti
     const embedded = embeddedSets(document).get(reference.set), registered = registeredSets(options.catalogs).get(reference.set);
     const set = embedded && Object.hasOwn(embedded.icons, reference.name) ? embedded : isRec(registered) ? registered as IconSetRecord : loadedSets.get(reference.set) ?? embedded;
     if (!set) {
+      const failed = typeof registered === 'function' ? failedSets.get(reference.set) : undefined;
+      if (failed !== undefined) return { ok: false, code: 'icon-unknown', message: `The icon set ${reference.set} is registered but could not be loaded: ${failed}` };
       if (typeof registered === 'function') return { ok: false, code: 'icon-unloaded', message: `The icon set ${reference.set} is registered but not loaded yet (ensureIcons).` };
       const known = new Set([...embeddedSets(document).keys(), ...registeredSets(options.catalogs).keys(), ...loadedSets.keys()]);
       const suggestions = nearIconNames(reference.set, known);
@@ -486,7 +501,9 @@ export function resolveIcon(document: unknown, value: unknown, options: IconOpti
     }
     const icon = Object.hasOwn(set.icons, reference.name) ? set.icons[reference.name] : undefined;
     if (icon === undefined) {
-      const suggestions = nearIconNames(reference.name, Object.keys(set.icons));
+      const names = setNames(set);
+      if (Array.isArray((set as { names?: unknown }).names) && names.includes(reference.name)) return { ok: false, code: 'icon-unloaded', message: `The icon ${written} is registered but not loaded yet (ensureIcons).` };
+      const suggestions = nearIconNames(reference.name, names);
       return { ok: false, code: 'icon-unknown', message: `The icon set ${reference.set} has no icon ${reference.name}.`, ...(suggestions.length ? { suggestions: suggestions.map(name => `${reference.set}:${name}`) } : {}) };
     }
     const parts = setIconParts(set, icon);
@@ -523,15 +540,26 @@ function resolveSource(document: unknown, src: string, written: string, name: st
 
 /** What ensureIcons loads: the registered sets the document names that are not loaded yet, and the SVG files it has not read. */
 export function iconsPending(document: unknown, options: IconOptions = {}): { sets: string[]; sources: string[] } {
-  const sets = new Set<string>(), sources = new Set<string>(), registered = registeredSets(options.catalogs), embedded = embeddedSets(document);
+  const { sets, sources } = pendingIcons(document, options);
+  return { sets: [...sets.keys()], sources };
+}
+/** The registered sets with the icons of each a document names that are not loaded yet, and the SVG files it has not read. */
+function pendingIcons(document: unknown, options: IconOptions): { sets: Map<string, Set<string>>; sources: string[] } {
+  const sets = new Map<string, Set<string>>(), sources = new Set<string>(), registered = registeredSets(options.catalogs), embedded = embeddedSets(document);
   const visit = (value: unknown) => {
     const reference = parseIconReference(value);
-    if (reference?.kind === 'set') { if (!loadedSets.has(reference.set) && typeof registered.get(reference.set) === 'function' && !(embedded.get(reference.set) && Object.hasOwn(embedded.get(reference.set)!.icons, reference.name))) sets.add(reference.set); }
+    if (reference?.kind === 'set') {
+      if (typeof registered.get(reference.set) !== 'function' || (embedded.get(reference.set) && Object.hasOwn(embedded.get(reference.set)!.icons, reference.name))) return;
+      const loaded = loadedSets.get(reference.set);
+      // A whole set is loaded once; a set loaded one icon at a time loads each icon it has, once.
+      if (loaded && (!Array.isArray(loaded.names) || Object.hasOwn(loaded.icons, reference.name) || !loaded.names.includes(reference.name))) return;
+      (sets.get(reference.set) ?? sets.set(reference.set, new Set()).get(reference.set)!).add(reference.name);
+    }
     else if (reference?.kind === 'source') { const source = sourceOf(document, reference.src); if (source && !source.startsWith('data:') && !sourceTexts.has(source)) sources.add(source); }
     else if (reference?.kind === 'deck') { const local = deckIcon(document, reference.name); if (typeof local === 'string' && !local.trim().startsWith('<')) visit(local); }
   };
   for (const { value } of documentIcons(document)) visit(value);
-  return { sets: [...sets], sources: [...sources] };
+  return { sets, sources: [...sources] };
 }
 
 /**
@@ -541,15 +569,22 @@ export function iconsPending(document: unknown, options: IconOptions = {}): { se
  * nothing is pending. opf-pptx's `toPptx`, the renderer's browser fonts handle, core's Node file API, the CLI and the MCP call it.
  */
 export async function ensureIcons(document: unknown, options: IconOptions & { readSource?: (source: string) => Promise<string | Uint8Array | undefined> } = {}): Promise<{ sets: string[]; sources: string[] }> {
-  const pending = iconsPending(document, options), registered = registeredSets(options.catalogs), loaded: string[] = [], read: string[] = [];
+  const pending = pendingIcons(document, options), registered = registeredSets(options.catalogs), loaded: string[] = [], read: string[] = [];
   // A set registered as its record is available to the synchronous code (composition has no catalogs option) as a loaded one is.
   for (const [id, set] of registered) if (isRec(set) && !loadedSets.has(id) && isRec(set.icons)) loadedSets.set(id, set as unknown as IconSetRecord);
-  await Promise.all(pending.sets.map(async id => {
+  await Promise.all([...pending.sets].map(async ([id, names]) => {
     const loader = registered.get(id);
     if (typeof loader !== 'function') return;
-    const module = await loader();
+    let module: unknown;
+    // A loader that fails (a host that cannot read the icon files) leaves the set unloaded with its message, never a rejection.
+    try { module = await (loader as IconSetLoader)({ icons: [...names].sort() }); } catch (error) { failedSets.set(id, error instanceof Error ? error.message : String(error)); return; }
     const record = isRec(module) && isRec(module.default) && !isRec(module.icons) ? module.default : module;
-    if (isRec(record) && isRec(record.icons) && Array.isArray(record.viewBox)) { loadedSets.set(id, record as unknown as IconSetRecord); loaded.push(id); }
+    if (!isRec(record) || !isRec(record.icons) || !Array.isArray(record.viewBox)) return;
+    const previous = loadedSets.get(id);
+    const set = record as unknown as IconSetRecord & { names?: readonly string[] };
+    loadedSets.set(id, Array.isArray(set.names) && previous && Array.isArray(previous.names) ? { ...set, icons: { ...previous.icons, ...set.icons } } : set);
+    failedSets.delete(id);
+    loaded.push(id);
   }));
   if (options.readSource) await Promise.all(pending.sources.map(async source => {
     try {
@@ -597,7 +632,7 @@ export function embedIcons(document: unknown, options: IconOptions = {}): { docu
     const sets = groupFor(entry.source)!;
     const missing = [...names].filter(name => !(own && Object.hasOwn(own.icons, name)) && Object.hasOwn(source.icons, name)).sort();
     if (!missing.length) continue;
-    const base = isRec(sets[id]) ? sets[id] as Rec : (({ icons: _icons, tags: _tags, licenseText: _text, ...rest }) => Object.fromEntries(Object.entries(rest).filter(([key]) => key !== '$schema' && key !== 'id' && !key.startsWith('x-'))))(source as unknown as Rec & IconSetRecord);
+    const base = isRec(sets[id]) ? sets[id] as Rec : (({ icons: _icons, tags: _tags, licenseText: _text, names: _names, ...rest }) => Object.fromEntries(Object.entries(rest).filter(([key]) => key !== '$schema' && key !== 'id' && !key.startsWith('x-'))))(source as unknown as Rec & IconSetRecord);
     sets[id] = { ...base, icons: { ...(isRec(base.icons) ? base.icons : {}), ...Object.fromEntries(missing.map(name => [name, source.icons[name]])) } };
     added.push(...missing.map(name => `${id}:${name}`));
   }

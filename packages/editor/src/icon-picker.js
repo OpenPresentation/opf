@@ -153,7 +153,7 @@ export function createIconPicker(container, options = {}) {
     if (!sets.length) {
       results.replaceChildren();
       more.hidden = true;
-      count.textContent = "No icon sets are registered here, so there is nothing to search. Paste an SVG instead, or register the sets (galleryIconSets of @openpresentation/gallery/icon-sets) with the host's catalogs.";
+      count.textContent = "No icon sets are registered here, so there is nothing to search. Paste an SVG instead, or register the sets (galleryIconSets() of @openpresentation/gallery/icon-sets) with the host's catalogs.";
       return;
     }
     count.textContent = "Searching…";
@@ -165,7 +165,8 @@ export function createIconPicker(container, options = {}) {
       return;
     }
     if (epoch !== state.epoch || state.destroyed) return;
-    const records = await loadIconSets(source(), found.sets.map((entry) => entry.id));
+    // The page's glyphs only: a set loaded one icon at a time reads these and no others.
+    const records = await loadIconSets(source(), found.sets.map((entry) => entry.id), { icons: found.icons.map((entry) => entry.name) });
     if (epoch !== state.epoch || state.destroyed) return;
     const now = state.target ? readIcon(editor.presentation, state.target.path)?.icon : undefined;
     results.replaceChildren(
@@ -206,7 +207,8 @@ export function createIconPicker(container, options = {}) {
     let glyph = iconGlyph(editor.presentation, reference, { catalogs: catalogs() });
     if (!glyph && parseIconReference(reference)?.kind === "set") {
       // The set is registered but not loaded yet: load it, then draw (unless the selection moved on).
-      await loadIconSets(source());
+      const { set, name } = parseIconReference(reference);
+      await loadIconSets(source(), [set], { icons: [name] });
       if (state.destroyed || state.target?.path !== target.path) return;
       glyph = iconGlyph(editor.presentation, reference, { catalogs: catalogs() });
     }

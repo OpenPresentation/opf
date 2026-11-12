@@ -1,7 +1,7 @@
 // Icons (LH-166, OPF 0.32): the `icon` of a list entry, a metric and a group, edited as one undoable step each. An icon is one string:
 // "<set>:<name>" (an icon of a registered or embedded set), a bare name from the deck's `icons` map, or an SVG source. Pasting an SVG
 // stores it in `icons` under a name and references that name, in the same patch list, so one undo takes both back. The editor bundles no
-// icon set: the host registers them as a catalog's `iconSets` (the gallery's are `galleryIconSets` of `@openpresentation/gallery/icon-sets`),
+// icon set: the host registers them as a catalog's `iconSets` (the gallery's are `galleryIconSets()` of `@openpresentation/gallery/icon-sets`),
 // and search reads whatever is registered. A set icon or an SVG that cannot be drawn is refused with the validator's own finding message
 // (`opf/icon-unknown`, `opf/icon-invalid`). Plain JS with no DOM and no Node imports, so it runs in a browser, a Worker or Node.
 import { ensureIcons, parseIconReference, resolveIcon, validate } from "@openpresentation/opf";
@@ -248,10 +248,18 @@ export function setSvgIcon(editor, path, svg, options = {}, meta = {}) {
 
 // --- the icon sets a host registered ----------------------------------------------------------------------------------------------
 
-/** A registered set is its record or a function that loads it (a module whose default export is the record also does). */
+/**
+ * A registered set is its record or a function that loads it (a module whose default export is the record also does). RR-63: a loader
+ * is asked for the icons a call draws (`{ icons }`) and a search's keywords (`{ tags: true }`), and may resolve with only those: a
+ * record whose `names` lists every icon (the gallery's sets read one file per icon). The records a loader gave are kept, merged.
+ */
 const recordOf = (module) => (isObject(module) && isObject(module.default) && !isObject(module.icons) ? module.default : module);
 const isRecord = (value) => isObject(value) && isObject(value.icons) && Array.isArray(value.viewBox);
 const loading = new WeakMap();
+/** Every icon name of a set record: its `names` when it was loaded one icon at a time. */
+const namesOf = (record) => (Array.isArray(record.names) ? record.names : Object.keys(record.icons));
+const merged = (previous, next) =>
+  !Array.isArray(next.names) || !isRecord(previous) ? next : { ...previous, ...next, icons: { ...previous.icons, ...next.icons }, ...(next.tags ?? previous.tags ? { tags: next.tags ?? previous.tags } : {}) };
 
 /** The catalogs a call reads: an editor session's registered ones, `options.catalogs`, and the deck's embedded sets. */
 function sourceOf(source) {
@@ -278,34 +286,32 @@ function setEntries({ catalogs, presentation }) {
 export function listIconSets(source) {
   return [...setEntries(sourceOf(source)).values()].map(({ id, set, source: origin }) => {
     const record = isRecord(set) ? set : isRecord(loading.get(set)?.record) ? loading.get(set).record : undefined;
-    return { id, ...(record ? { name: record.name, license: record.license, copyright: record.copyright, ...(record.version ? { version: record.version } : {}), icons: Object.keys(record.icons).length } : { name: id }), loaded: Boolean(record), embedded: origin === "document" };
+    return { id, ...(record ? { name: record.name, license: record.license, copyright: record.copyright, ...(record.version ? { version: record.version } : {}), icons: namesOf(record).length } : { name: id }), loaded: Boolean(record), embedded: origin === "document" };
   });
 }
 
 /**
- * Load the registered icon sets (each registered loader once; the second call is free) and prime core's own registry, so a deck that
- * names a set draws it (`composeSlide`, the renderer and the exporter read what `ensureIcons` loaded). Resolves with the records by id.
- * `ids` limits it to some sets; an id nothing registers is ignored.
+ * Load the registered icon sets and prime core's own registry, so a deck that names a set draws it (`composeSlide`, the renderer and
+ * the exporter read what `ensureIcons` loaded). Resolves with the records by id. `ids` limits it to some sets; an id nothing registers
+ * is ignored. `request`: `icons` (the names to draw: a set loaded one icon at a time loads only these) and `tags` (the keywords a
+ * search reads).
  */
-export async function loadIconSets(source, ids) {
+export async function loadIconSets(source, ids, request = {}) {
   const context = sourceOf(source), entries = [...setEntries(context).values()].filter((entry) => ids === undefined || ids.includes(entry.id));
+  const icons = Array.isArray(request.icons) ? [...new Set(request.icons)] : [];
   const records = await Promise.all(entries.map(async ({ id, set }) => {
     if (isRecord(set)) return [id, set];
     if (typeof set !== "function") return [id, undefined];
-    let entry = loading.get(set);
-    if (!entry) {
-      entry = { promise: Promise.resolve().then(set).then(recordOf), record: undefined };
-      entry.promise.then((record) => { entry.record = record; }, () => loading.delete(set));
-      loading.set(set, entry);
-    }
     try {
-      return [id, await entry.promise];
+      const record = recordOf(await set({ icons, ...(request.tags ? { tags: true } : {}) }));
+      if (isRecord(record)) loading.set(set, { record: merged(loading.get(set)?.record, record) });
     } catch {
-      return [id, undefined];
+      // A set that cannot be read stays unloaded; what it had loaded before is kept.
     }
+    return [id, loading.get(set)?.record];
   }));
   const loaded = new Map(records.filter(([, record]) => isRecord(record)));
-  if (loaded.size) await ensureIcons({ slides: [{ items: [...loaded.keys()].map((id) => ({ text: id, icon: `${id}:probe` })) }] }, { catalogs: context.catalogs });
+  if (loaded.size) await ensureIcons({ slides: [{ items: [...loaded.keys()].flatMap((id) => (icons.length ? icons : ["probe"]).map((name) => ({ text: id, icon: `${id}:${name}` }))) }] }, { catalogs: context.catalogs });
   return loaded;
 }
 
@@ -319,12 +325,12 @@ export async function searchIcons(source, query = "", options = {}) {
   const available = listIconSets(source).map((entry) => entry.id);
   if (options.set !== undefined && !available.includes(options.set)) throw fail("unknown-icon-set", `No icon set ${options.set} is registered${available.length ? ` (sets: ${available.join(", ")})` : ""}.`, { set: options.set });
   const ids = options.set === undefined ? available : [options.set];
-  const loaded = await loadIconSets(source, ids);
+  const loaded = await loadIconSets(source, ids, { tags: true });
   const words = String(query).toLowerCase().split(/[\s,]+/).filter(Boolean);
   const found = [];
   for (const [id, record] of loaded) {
     const bonus = id === available[0] ? 0.5 : 0;
-    for (const name of Object.keys(record.icons)) {
+    for (const name of namesOf(record)) {
       const tags = [...(record.tags?.[name] ?? [])];
       const hay = [name, ...tags].join(" ").toLowerCase();
       if (!words.every((word) => hay.includes(word))) continue;
@@ -340,7 +346,7 @@ export async function searchIcons(source, query = "", options = {}) {
     total: found.length,
     returned: icons.length,
     icons,
-    sets: [...loaded].map(([id, record]) => ({ id, name: record.name, license: record.license, copyright: record.copyright, ...(record.version ? { version: record.version } : {}), icons: Object.keys(record.icons).length })),
+    sets: [...loaded].map(([id, record]) => ({ id, name: record.name, license: record.license, copyright: record.copyright, ...(record.version ? { version: record.version } : {}), icons: namesOf(record).length })),
   };
 }
 

@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { gallery } from '@openpresentation/gallery';
-import { galleryIconSets } from '@openpresentation/gallery/icon-sets';
+import { galleryIconSets as gallerySets } from '@openpresentation/gallery/icon-sets';
+// RR-63: the gallery icon sets, read from the installed package one icon at a time.
+const galleryIconSets = gallerySets();
 import { createEditorSession } from '../src/index.js';
 import { mergeCatalogs } from '../src/catalogs.js';
 import {
@@ -73,7 +75,10 @@ assert.ok((await searchIcons(editor, '')).total > 1000, 'an empty query browses 
 assert.equal((await searchIcons(editor, 'zzzzqqqq')).total, 0);
 const paged = await searchIcons(editor, 'arrow', { limit: 5, offset: 5 });
 assert.deepEqual(paged.icons.map((entry) => entry.icon), (await searchIcons(editor, 'arrow', { limit: 10 })).icons.slice(5).map((entry) => entry.icon));
-const glyph = setIconGlyph((await loadIconSets(editor)).get('lucide'), 'truck');
+// RR-63: a set loaded one icon at a time reads the icons asked for: a search read names and keywords only, no path data.
+assert.deepEqual(Object.keys((await loadIconSets(editor)).get('lucide').icons), [], 'no icon is read until one is asked for');
+const glyph = setIconGlyph((await loadIconSets(editor, undefined, { icons: ['truck'] })).get('lucide'), 'truck');
+assert.deepEqual(Object.keys((await loadIconSets(editor)).get('lucide').icons), ['truck'], 'only the icon asked for');
 assert.equal(glyph.viewBox, '0 0 24 24');
 assert.ok(glyph.parts.length >= 1 && glyph.parts.every((part) => part.d && ['stroke', 'fill'].includes(part.mode)));
 assert.equal(setIconGlyph((await loadIconSets(editor)).get('lucide'), 'no-such-icon'), undefined);
@@ -235,11 +240,13 @@ assert.equal(Object.hasOwn(editor.presentation.slides[1].items[0] ?? {}, 'icon')
 assert.equal(prepareSvgIcon(deck(), 'slides.1.items.0', SVG, { name: 'x' }).name, 'x');
 assert.equal(prepareIcon(deck(), 'slides.1.items.0', 'lucide:nope', { validate: false }).changed, true);
 
-// --- the composed slide draws what was chosen (the sets are loaded by search)
+// --- the composed slide draws what was chosen (RR-63: a search reads names and keywords; the picker's page, like ensureIcons, reads
+// the icons drawn)
 const drawn = session();
 await searchIcons(drawn, 'truck');
 setIcon(drawn, 'slides.1.items.0', 'lucide:truck');
 setIcon(drawn, 'slides.1.items.1', 'tabler:rocket');
+await loadIconSets(drawn, undefined, { icons: ['truck', 'rocket'] });
 assert.equal(drawn.composeSlide(1).icons.length, 2);
 
 console.log('LH-166 editor icons: targets, search, set, change, remove, pasted SVG, refusals, pruning and undo checked.');

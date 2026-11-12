@@ -7,7 +7,9 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { describe, test } from "node:test";
 import { gallery } from "@openpresentation/gallery";
-import { galleryIconSets } from "@openpresentation/gallery/icon-sets";
+import { galleryIconSets as gallerySets } from "@openpresentation/gallery/icon-sets";
+// RR-63: the gallery icon sets, read from the installed package one icon at a time.
+const galleryIconSets = gallerySets();
 
 const manifest = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
 const nodeBuild = await import("../dist/index.js");
