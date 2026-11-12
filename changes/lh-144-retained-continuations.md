@@ -2,5 +2,4 @@
 type: fixed
 packages: [opf]
 ---
-
-Retain settled source text sizes when automatically continuing overfull whole blocks. Page selection prioritizes comparable automatic body roles before page count, preserves explicit author styles and minima, and caps actual arrangement labels consistently across pages. This changes continued-slide drawing; it adds no fixed readability floor or schema property.
+LH-144 (output-changing for continued slides): when an overfull slide continues onto further slides, its text keeps the size it was set at, and the split prefers pages whose body text reads at a comparable size.

@@ -2,5 +2,4 @@
 type: changed
 packages: [opf, render, pptx]
 ---
-
-Prepare Node fonts by the document's actual family, weight and style instead of eagerly loading every face in a pack. Preserve explicit whole-pack loading without a presentation and caller-supplied faces; load missing styles and glyph fallbacks through serialized ensure. Share the same preferred-family metadata as physical font selection and forward real catalog/export context through conversion and pagination.
+RR-114: in Node, fonts are prepared for the families, weights and styles a document uses instead of every face of a pack, and coverage is checked without shaping, so a shaping failure may now surface while rendering. A color-emoji face also gets its monochrome companion, so PNG and raster PDF paint emoji.

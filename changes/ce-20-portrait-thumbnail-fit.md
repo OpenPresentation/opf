@@ -2,4 +2,4 @@
 type: fixed
 packages: [editor]
 ---
-CE-20: slide-manager and sorter thumbnails now contain the full slide without cropping or distortion when its dimensions are widescreen, 4:3 or portrait. The existing grid frames stay consistent; other slide ratios are letterboxed.
+CE-20: slide-manager and sorter thumbnails show the whole slide, without cropping or stretching, for widescreen, 4:3 and portrait decks.

@@ -2,4 +2,4 @@
 type: fixed
 packages: [opf, render, pptx]
 ---
-Doughnut holes retain the surface color with explicit legend positions and data labels, preserving all existing slice/text geometry. PPTX uses the shared circular plot, and its surface-only hole mark no longer discards authored data-label options on import.
+A doughnut chart's hole keeps the surface color when the chart sets a legend position or data labels, and PPTX import no longer drops those data-label options.

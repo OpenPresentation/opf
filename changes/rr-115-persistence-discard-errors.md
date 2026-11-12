@@ -2,4 +2,4 @@
 type: fixed
 packages: [editor]
 ---
-RR-115: failed autosave-copy deletion now returns false with an error and retains the recovery offer for restore or retry. Discard is serialized with pending writes, and its prompt announces success only after deletion succeeds, preserving newer queued edits.
+RR-115: when deleting an autosave copy fails, discarding returns false with an error and keeps the recovery offer; a discard now waits for pending writes and keeps newer edits.

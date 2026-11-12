@@ -2,4 +2,4 @@
 type: added
 packages: [opf, render, pptx]
 ---
-LH-34: Image payloads accept fractional visible-frame `callouts`, drawn above picture effects as real SVG text and native editable PowerPoint panels/line boxes. Text grows from the body role without shrinking; overflow is reported. Native import keeps current words and fractional frames only with complete valid picture/panel provenance; damaged records retain ordinary native content. Images without callouts retain their drawing.
+LH-34: an image can carry `callouts`, text panels placed in fractions of the picture's visible frame that may cross the picture and slide edges, drawn as real text in SVG and as editable panels in PowerPoint. PPTX import restores them, also after PowerPoint has saved the file.
