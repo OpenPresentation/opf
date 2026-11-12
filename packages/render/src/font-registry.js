@@ -203,6 +203,9 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
   };
   let shaper, ownedShaper, ownedBackend = true;
   const faces = [], duplicates = new Set(), familySlots = new Map();
+  // Bumped whenever the held faces or what selection reads of them (their scripts, fallbackOnly) change: addFaces, activateScriptFamilies.
+  // A cache of selection results (lazyFontNames) compares this number instead of describing every face on every call.
+  let generation = 0;
   // Adds faces atomically: every check runs before any face is registered.
   const register = added => {
     const ids = new Set(duplicates), slots = new Map(familySlots);
@@ -217,6 +220,7 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
       slots.set(id,face);
     }
     faces.push(...added);
+    generation++;
     for (const id of ids) duplicates.add(id);
     for (const [id,face] of slots) familySlots.set(id,face);
   };
@@ -235,7 +239,7 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
     const named = new Set(families.map(family=>family.toLowerCase()));
     let changed = false;
     for (const face of faces) if (face.fallbackOnly && named.has(face.family.toLowerCase())) { face.fallbackOnly = false; changed = true; }
-    if (changed) { buildAliases(); substitutions.clear(); }
+    if (changed) { buildAliases(); substitutions.clear(); generation++; }
     return changed;
   };
   const policy = options.substitutionPolicy ?? "none";
@@ -384,7 +388,7 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
   // validate asks for each slide's measurement, so its layout checks measure script runs in the faces this renderer draws.
   const textMeasurement={measure,resolveStyle,outlineBounds,resolveFont:style=>resolve(style).resolution};
   textMeasurement.forScripts=profile=>createScriptFonts(profile,textMeasurement).textMeasurement;
-  return {
+  const registry = {
     textMeasurement,
     // Attach the handle's outline shaper after its WASM loads. Earlier measurements must not survive the engine switch.
     setShaper(engine) {
@@ -421,5 +425,8 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
       return made.map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.scripts?{scripts:[...face.scripts]}:{})}));
     },
   };
+  // Not part of the public registry (like fontNames): the number lazyFontNames compares to know the face pool changed.
+  Object.defineProperty(registry, "facesGeneration", { get: () => generation });
+  return registry;
   function embedded(predicate) { return faces.filter(face=>predicate({family:face.family,weight:face.weight,italic:face.italic,scripts:face.scripts,embed:face.embed,fallbackOnly:face.fallbackOnly})).map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.license ? {license:face.license} : {}),...(face.embed ? {embed:face.embed} : {}),dataUrl:`data:font/${face.format};base64,${base64(face.data)}`})); }
 }
