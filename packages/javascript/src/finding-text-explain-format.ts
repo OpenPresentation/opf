@@ -69,9 +69,9 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Plan", blocks: [{ shape: "rect", text: "Pricing", link: "https://example.com/pricing" }] },
   ),
   "opf/shape-anchor-size-unit": ex(
-    "In `at`, `width` and `height` are fractions of the block; a size in pixels is `widthPx` or `heightPx`.",
-    { title: "Team", blocks: [{ id: "photo", image: IMG("team") }], shapes: [{ shape: "ellipse", text: "New", at: { block: "photo", edge: "top", width: 160, height: 64 } }] },
-    { title: "Team", blocks: [{ id: "photo", image: IMG("team") }], shapes: [{ shape: "ellipse", text: "New", at: { block: "photo", edge: "top", widthPx: 160, heightPx: 64 } }] },
+    "Write pixels as `widthPx`; `width` is a fraction.",
+    { title: "T", blocks: [{ id: "a", text: "x" }], shapes: [{ shape: "ellipse", at: { block: "a", edge: "top", width: 160 } }] },
+    { title: "T", blocks: [{ id: "a", text: "x" }], shapes: [{ shape: "ellipse", at: { block: "a", edge: "top", widthPx: 160 } }] },
   ),
   "opf/shape-anchor-missing": ex(
     "Name a block of the slide in `at.block` (give the block an `id`), or place the shape by `x`, `y`, `width` and `height`.",

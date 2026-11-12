@@ -158,12 +158,8 @@ const shapeLinkHidden: RuleText = () => ({
 });
 
 const shapeAnchorSizeUnit: RuleText = (finding) => {
-  const { key, pixelKey, size } = params(finding);
-  if (typeof key !== "string" || typeof pixelKey !== "string") return undefined;
-  return {
-    message: `${code(`at.${key}: ${String(size)}`)} is a fraction of the target (${String(size)} times its ${key}), not pixels.`,
-    next: `rename ${code(key)} to ${code(pixelKey)} if ${String(size)} is a size in pixels, or write a fraction such as 1.08.`,
-  };
+  const { key, size } = params(finding);
+  return typeof key === "string" ? { message: `${code(`at.${key}: ${String(size)}`)} is a fraction, not pixels.`, next: `rename ${code(key)} to ${code(`${key}Px`)} if it is pixels.` } : undefined;
 };
 
 const shapeAnchorMissing: RuleText = (finding) => {

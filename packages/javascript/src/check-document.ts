@@ -707,11 +707,7 @@ export function engineFindings(document: unknown, engine: SchemaCheckResult, ena
 	for (const issue of engine.errors) {
 		const ruleId = issueRuleId(issue);
 		if (!enabled(ruleId)) continue;
-		const found = issueFinding(issue, ruleId);
-		// A semantic error that names the one value to write (`en-UK` for `en-GB`) carries it as a patch.
-		if (issue.keyword === 'opf' && typeof issue.params.replacement === 'string' && found.fixes === undefined)
-			found.fixes = [{ id: 'use-replacement', title: `Use ${JSON.stringify(issue.params.replacement)}`, kind: 'patch', safe: false, patch: [{ op: 'replace', path: found.path, value: issue.params.replacement }] }];
-		findings.push(found);
+		findings.push(issueFinding(issue, ruleId));
 	}
 	collapseChartShape(document, findings);
 	collapseAuthoringShapes(document, findings);
@@ -738,9 +734,9 @@ export function engineFindings(document: unknown, engine: SchemaCheckResult, ena
 		const help = HELP[code];
 		if (help) found.help = help;
 		if (code === 'shape-anchor-size-unit') {
-			const key = String(issue.params.key), pixelKey = String(issue.params.pixelKey);
-			found.help = `Did you mean "${pixelKey}"? ${JSON.stringify(key)} is a fraction of the target block (1 is its own ${key}); a size in reference pixels, as 0.33 wrote it, is ${JSON.stringify(pixelKey)}. Apply fixes[0] to rename the key and keep the value, or write a fraction.`;
-			found.fixes = [{ id: `rename-to:${pixelKey}`, title: `Rename ${key} to ${pixelKey} (the value is pixels)`, kind: 'patch', safe: false, patch: [{ op: 'move', from: found.path, path: found.path.slice(0, found.path.length - key.length) + pixelKey }] }];
+			const key = String(issue.params.key), px = `${key}Px`;
+			found.help = `Did you mean "${px}"? "${key}" is a fraction of the block.`;
+			found.fixes = [{ id: 'rename', title: `Rename ${key} to ${px}`, kind: 'patch', safe: false, patch: [{ op: 'move', from: found.path, path: `${found.path}Px` }] }];
 		}
 		findings.push(found);
 	}

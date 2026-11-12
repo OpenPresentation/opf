@@ -25,12 +25,16 @@ test('a written-out fix leaves no finding, and a fraction or an explicit pixel s
 
 const tags = (document) => validate(document).findings.filter((entry) => entry.path.endsWith('language') || entry.path.endsWith('/bcp47')).map((entry) => [entry.severity, entry.ruleId, entry.path]);
 
-test('en-UK is the same schema error on the deck, a slide, an inline language and a run', () => {
+test('en-UK is the same schema error on the deck and a slide, and an error on a run', () => {
 	const slide = { title: 'A', text: 'x' };
 	assert.deepEqual(tags({ name: 'N', language: 'en-UK', slides: [slide] }), [['error', 'opf/schema', '/language']]);
 	assert.deepEqual(tags({ name: 'N', slides: [{ ...slide, language: 'en-UK' }] }), [['error', 'opf/schema', '/slides/0/language']]);
 	assert.deepEqual(tags({ name: 'N', slides: [{ ...slide, language: { bcp47: 'en-uk' } }] }), [['error', 'opf/schema', '/slides/0/language/bcp47']]);
-	assert.deepEqual(tags({ name: 'N', slides: [{ title: 'A', text: [{ text: 'colour', language: 'en-UK' }] }] }), [['error', 'opf/schema', '/slides/0/text/0/language']]);
+	// A run's tag is reported by opf/language-tag, as an error with the en-GB patch.
+	const run = validate({ name: 'N', slides: [{ title: 'A', text: [{ text: 'colour', language: 'en-UK' }] }] });
+	assert.deepEqual(tags({ name: 'N', slides: [{ title: 'A', text: [{ text: 'colour', language: 'en-UK' }] }] }), [['error', 'opf/language-tag', '/slides/0/text/0/language']]);
+	assert.equal(run.valid, false);
+	assert.deepEqual(run.findings.find((entry) => entry.ruleId === 'opf/language-tag').fixes[0].patch, [{ op: 'replace', path: '/slides/0/text/0/language', value: 'en-GB' }]);
 	const [finding] = validate({ name: 'N', slides: [{ ...slide, language: 'en-UK' }] }).findings.filter((entry) => entry.ruleId === 'opf/schema');
 	assert.match(finding.message, /en-GB/);
 	// Another bad region stays the opf/language-tag warning.
@@ -65,8 +69,8 @@ test('the did-you-mean help reads as a sentence', () => {
 test('an omitted template group names the shapes attached to it', () => {
 	const template = { name: 'T', template: true, variables: { q: { type: 'text', required: false }, n: { type: 'text', required: true, example: 'N' } }, slides: [{ title: '{{n}}', blocks: [{ id: 'grp', blocks: [{ text: '{{q}}' }, { text: 'static' }] }, { id: 'other', text: 'always' }], shapes: [{ shape: 'rect', at: { block: 'grp', edge: 'end' } }, { connector: { from: 'grp', to: 'other' } }] }] };
 	const diagnostic = resolveVariables(template, { n: 'Name' }).diagnostics.find((entry) => entry.code === 'variable-group-omitted');
-	assert.match(diagnostic.message, /overlay shape or connector attached to "grp"/);
+	assert.match(diagnostic.message, /Shapes attached to "grp"/);
 	const plain = structuredClone(template);
 	plain.slides[0].shapes = [];
-	assert.doesNotMatch(resolveVariables(plain, { n: 'Name' }).diagnostics.find((entry) => entry.code === 'variable-group-omitted').message, /overlay shape/);
+	assert.doesNotMatch(resolveVariables(plain, { n: 'Name' }).diagnostics.find((entry) => entry.code === 'variable-group-omitted').message, /Shapes attached/);
 });

@@ -15,7 +15,6 @@ import { codeHighlightLines } from "./code-highlight.js";
 import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
 import { numberingFindings } from "./numbering.js";
-import { runsOf, textValues } from "./rule-content.js";
 import { schemaEngine } from "#schema-engine";
 import { schemas, type SchemaName } from "./schemas.js";
 import { bestMatchErrors, type UnionError } from "./union-errors.js";
@@ -248,30 +247,23 @@ function isEnUkTag(value: unknown): boolean {
 
 const EN_UK_MESSAGE = "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag";
 
-// The deck, a slide and a text run all author a language tag; 'en-UK' is the same error wherever it is written.
+// The deck and a slide author a language tag; 'en-UK' is the same schema error on both (a run's is reported by opf/language-tag, as an error).
 function enUkIssues(language: unknown, path: string): ValidationIssue[] {
-  if (isEnUkTag(language)) return [semanticIssue(path, EN_UK_MESSAGE, { replacement: "en-GB" })];
-  if (isRecord(language) && isEnUkTag(language.bcp47)) return [semanticIssue(`${path}/bcp47`, EN_UK_MESSAGE, { replacement: "en-GB" })];
-  return [];
+  const at = isEnUkTag(language) ? path : isRecord(language) && isEnUkTag(language.bcp47) ? `${path}/bcp47` : undefined;
+  return at ? [semanticIssue(at, EN_UK_MESSAGE, { replacement: "en-GB" })] : [];
 }
 
-/** The largest anchored `width` or `height` still read as a fraction of the target; the format documents 1 and 1.08. */
-export const OVERLAY_ANCHOR_FRACTION_MAX = 4;
-const OVERLAY_ANCHOR_PIXEL_MAX = 1280;
-
-// 0.33 wrote an anchored overlay size in reference pixels under `width` and `height`; 0.34 reads them as fractions, so an old deck still validates.
+// 0.33 wrote an anchored overlay size in pixels under `width` and `height`; 0.34 reads fractions, so an old deck still validates. A value above 4
+// (the format documents 1 and 1.08) and up to 1280 (the `widthPx` maximum, so the rename stays valid) is taken for a pixel size.
 function overlayAnchorSizeWarnings(value: unknown): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
-  if (!isRecord(value) || !Array.isArray(value.slides)) return issues;
-  value.slides.forEach((slide, index) => {
-    if (!isRecord(slide) || !Array.isArray(slide.shapes)) return;
-    slide.shapes.forEach((entry, shapeIndex) => {
-      if (!isRecord(entry) || !isRecord(entry.at)) return;
-      for (const key of ["width", "height"] as const) {
-        const size = entry.at[key];
-        const pixelKey = `${key}Px`;
-        if (typeof size !== "number" || !(size > OVERLAY_ANCHOR_FRACTION_MAX && size <= OVERLAY_ANCHOR_PIXEL_MAX) || hasOwn(entry.at, pixelKey)) continue;
-        issues.push(semanticIssue(`/slides/${index}/shapes/${shapeIndex}/at/${key}`, `at.${key} is ${size}, a fraction of the target (${size} times its ${key}); a size in reference pixels is ${pixelKey}`, { code: "shape-anchor-size-unit", key, pixelKey, size }));
+  if (isRecord(value) && Array.isArray(value.slides)) value.slides.forEach((slide, index) => {
+    if (isRecord(slide) && Array.isArray(slide.shapes)) slide.shapes.forEach((entry, shapeIndex) => {
+      const at = isRecord(entry) ? entry.at : undefined;
+      if (isRecord(at)) for (const key of ["width", "height"]) {
+        const size = at[key];
+        if (typeof size === "number" && size > 4 && size <= 1280 && !hasOwn(at, `${key}Px`))
+          issues.push(semanticIssue(`/slides/${index}/shapes/${shapeIndex}/at/${key}`, `at.${key} is ${size}, a fraction; pixels are ${key}Px`, { code: "shape-anchor-size-unit", key, size }));
       }
     });
   });
@@ -614,8 +606,6 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
       });
       for (const issue of overlayIssues(slide, slidePath, value, canvasForOverlays(slide, index))) issues.push(semanticIssue(issue.path, issue.message, { ...(issue.code ? { code: issue.code } : {}), ...issue.params }));
       issues.push(...enUkIssues(slide.language, `${slidePath}/language`));
-      for (const text of textValues(slide, slidePath))
-        if (typeof text.value !== "string") for (const run of runsOf(text)) issues.push(...enUkIssues(run.style.language, `${run.path}/language`));
       issues.push(...validateSlideRegions(slide, slidePath));
       const payloadTableIssues = (payload: Record<string, unknown>, path: string): void => {
         if (isRecord(payload.table)) for(const issue of tableGrid(payload.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
@@ -981,17 +971,7 @@ function presentationReferenceWarnings(value: unknown, catalogs: readonly Catalo
 }
 
 function validateLanguageSemantics(value: unknown): ValidationIssue[] {
-  if (!isRecord(value)) {
-    return [];
-  }
-
-  if (isEnUkTag(value.bcp47)) {
-    return [semanticIssue("/bcp47", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
-      replacement: "en-GB",
-    })];
-  }
-
-  return [];
+  return isRecord(value) ? enUkIssues(value.bcp47, "/bcp47") : [];
 }
 
 // Guard recursive payloads before AJV or recursive semantic/reference traversal.

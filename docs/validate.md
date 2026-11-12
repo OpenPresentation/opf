@@ -244,7 +244,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/shape-adjust-range`](#opfshape-adjust-range) | Format | warning | structure | An adjust value is outside the range of the preset's handle. |
 | [`opf/shape-link-hidden`](#opfshape-link-hidden) | Format | warning | structure | A hidden shape carries a link. |
 | [`opf/shape-anchor-missing`](#opfshape-anchor-missing) | Format | error | structure | An overlay shape has no resolvable block or qualified plotted chart point. |
-| [`opf/shape-anchor-size-unit`](#opfshape-anchor-size-unit) | Format | warning | structure | An anchored overlay size is a pixel size written under a fraction key. |
+| [`opf/shape-anchor-size-unit`](#opfshape-anchor-size-unit) | Format | warning | structure | A pixel size is under a fraction key. |
 | [`opf/connector-end-missing`](#opfconnector-end-missing) | Format | error | structure | A connector end names no block or overlay shape on the slide. |
 | [`opf/image-placement-invalid`](#opfimage-placement-invalid) | Format | error | structure | An image placement cannot be honoured. |
 | [`opf/layout-placeholder-group`](#opflayout-placeholder-group) | Format | error | structure | A layout record's placeholder group breaks a nesting rule. |
@@ -447,9 +447,9 @@ Default severity: **error**. Cost: structure. An overlay shape has no resolvable
 
 ### `opf/shape-anchor-size-unit`
 
-Default severity: **warning**. Cost: structure. An anchored overlay size is a pixel size written under a fraction key.
+Default severity: **warning**. Cost: structure. A pixel size is under a fraction key.
 
-**Why.** In `at`, `width` and `height` are fractions of the target block (1 is the size of the block itself, 1.08 a frame 8% wider); pixel sizes are `widthPx` and `heightPx`. Before 0.34 `width` and `height` were pixels, so an old `"width": 160` still validates but now draws a frame 160 times the block. A value above 4 (a frame more than four times its target; the format documents 1 and 1.08) and up to 1280 (the pixel maximum) is almost certainly such a size; the fix renames the key and keeps the value. Engines read only the fraction meaning.
+**Why.** In `at`, `width` and `height` are fractions of the block; pixels are `widthPx` and `heightPx`.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

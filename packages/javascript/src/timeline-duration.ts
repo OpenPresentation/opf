@@ -1,5 +1,5 @@
 /** The smallest share of the whole range one event can take, so an extreme but schema-valid ratio never produces an empty range. */
-export const TIMELINE_MIN_DURATION_SHARE = 1e-6;
+const TIMELINE_MIN_DURATION_SHARE = 1e-6;
 
 /** Consecutive relative event ranges. Omission is one unit; no authored duration preserves the ordinary milestone layout. */
 export function timelineDurationFractions(values: readonly (number | undefined)[]): {start: number; size: number}[] | undefined {
