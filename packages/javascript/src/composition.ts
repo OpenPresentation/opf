@@ -1740,6 +1740,14 @@ const SENTENCE_END = /[.!?\u2026\u3002\uff01\uff1f]["'\u201d\u2019)\]\u00bb]*$/u
 /** The balancer reads at most this many words per paragraph; a longer heading keeps its greedy wrap. */
 const BALANCE_MAX_WORDS = 48;
 /**
+ * RR-105: an authored gap between two words: two or more consecutive breakable spaces, or a tab. The author set that separation, so
+ * the balancer keeps every authored gap at the end of a line, where it hangs, and never inside a balanced line: "Strong quarter
+ * across<17 spaces>business" keeps "across" on line 1 instead of moving it next to the gap on line 2. When no break set of the greedy
+ * line count does that, the paragraph keeps its greedy wrap, which is how PowerPoint wraps it. No-break spaces and word joiners belong
+ * to their word and are no gap; a leading or trailing run is not between words.
+ */
+const AUTHORED_GAP = /\t|[^\S\r\n\u00a0\u202f\ufeff]{2}/u;
+/**
  * WI-4 (P15), the `text-wrap: balance` rule for headings. Each wrapped paragraph of a greedy wrap keeps its line count (and so its
  * size); the balancer picks the break set of that many lines that minimizes the variance of the line widths, with a small credit
  * for a line that ends a sentence or a clause, so "A smaller pilot. A clearer decision." breaks after "pilot." and not after "A".
@@ -1754,6 +1762,10 @@ function balancedBreaks(text:string,lines:readonly WrappedLine[],widthOf:(start:
     const words=proseWords(text.slice(from,to)).map(word=>({start:from+word.start,end:from+word.end,text:word.text}));
     const total=words.length;
     if (total<count||total>BALANCE_MAX_WORDS) return;
+    // RR-105: gaps[k], how many authored gaps (AUTHORED_GAP) lie between words[0] and words[k]; a line words[first, last) holds one
+    // inside it when gaps[last-1] > gaps[first].
+    const gaps=[0];
+    for (let k=1;k<total;k++) gaps.push(gaps[k-1]!+(AUTHORED_GAP.test(text.slice(words[k-1]!.end,words[k]!.start))?1:0));
     const cache=new Map<number,number>(),span=(first:number,last:number)=>{
       const key=first*(BALANCE_MAX_WORDS+1)+last;
       let value=cache.get(key);
@@ -1769,6 +1781,7 @@ function balancedBreaks(text:string,lines:readonly WrappedLine[],widthOf:(start:
     for (let line=1;line<=count;line++) for (let last=line;last<=total-(count-line);last++) for (let first=line-1;first<last;first++) {
       const before=best[line-1]![first]!;
       if (before===Infinity) continue;
+      if (gaps[last-1]!>gaps[first]!) continue;
       const width=span(first,last);
       if (width>boxWidth+WRAP_TOLERANCE) continue;
       const cost=before+((width-target)/target)**2-credit(last);
