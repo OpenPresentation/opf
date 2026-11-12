@@ -650,7 +650,7 @@ function collapseAuthoringShapes(document: unknown, findings: Finding[]): void {
 	for (const [index, entry] of findings.entries()) {
 		if (!schema(entry) || entry.validation?.keyword !== 'maximum') continue;
 		const match = /^(\/slides\/\d+\/shapes\/\d+\/at)\/(width|height)$/.exec(entry.path);
-		const at = match ? valueAt(match[1]) : undefined, key = match?.[2], size = key && isRecord(at) ? at[key] : undefined;
+		const at = match?.[1] ? valueAt(match[1]) : undefined, key = match?.[2], size = key && isRecord(at) ? at[key] : undefined;
 		if (!key || !isRecord(at) || typeof size !== 'number' || !(size > 8 && size <= 1280) || Object.hasOwn(at, `${key}Px`)) continue;
 		const px = `${key}Px`;
 		findings[index] = {
