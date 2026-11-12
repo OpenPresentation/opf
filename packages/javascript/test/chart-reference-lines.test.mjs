@@ -13,7 +13,15 @@ test('schema: six types, optional empty array, finite values, labels, styles and
  for(const type of ['column','bar','line','line-with-markers','area','combo'])assert.deepEqual(errorsOf(check(deck(chart({type,referenceLines:[{value:25,label:'Target',stroke:{color:{color:'accent1',lighten:0.2},width:64,dash:'dot'}}]})))),[],type);
  for(const referenceLines of [undefined,[]])assert.deepEqual(errorsOf(check(deck(chart({type:'pie',referenceLines})))),[]);
  for(const referenceLines of [[{value:'25'}],[{value:NaN}],[{value:Infinity}],[{}],[{value:25,label:''}],[{value:25,label:'  '}],[{value:25,labelPosition:'start'}],[{value:25,stroke:{width:-1}}],[{value:25,stroke:{width:65}}],[{value:25,stroke:{dash:'dashed'}}],[{value:25,axis:'primary'}]])assert.ok(errorsOf(check(deck(chart({referenceLines})))).length,JSON.stringify(referenceLines));
- for(const type of ['pie','stacked-column','scatter','histogram'])assert.ok(errorsOf(check(deck(chart({type,referenceLines:[{value:25}]})))).length,type);
+ // An unsupported type is one located error that names the property and the six types that can draw it, never a silent drop.
+ // The stacked and 100% stacked types are among the unsupported ones.
+ for(const type of ['pie','stacked-column','stacked-bar','stacked-line','stacked-line-with-markers','stacked-area','100pct-stacked-column','scatter','histogram','radar']){
+  const found=errorsOf(check(deck(chart({type,referenceLines:[{value:25}]}))));
+  assert.equal(found.length,1,type+JSON.stringify(found));assert.equal(found[0].ruleId,'opf/chart-reference-unsupported-type');assert.equal(found[0].path,'/slides/0/chart/referenceLines');
+  assert.match(found[0].message,new RegExp(`a '${type}' chart has none`));assert.ok(found[0].message.includes('(column, bar, line, line-with-markers, area, combo);'),found[0].message);
+ }
+ // The schema no longer restricts type: an unsupported type is not also a schema enum error at /type.
+ assert.ok(!errorsOf(check(deck(chart({type:'pie',referenceLines:[{value:25}]})))).some(f=>f.ruleId==='opf/schema'),'no schema error');
  const bad=errorsOf(check(deck(chart({referenceLines:[{value:25,axis:'secondary'}]}))));
  assert.ok(bad.some(f=>f.ruleId==='opf/chart-reference-axis-unavailable'&&JSON.stringify(f).includes('/slides/0/chart/referenceLines/0/axis')),JSON.stringify(bad));
  const missing=warningsOf(check({...deck(chart({referenceLines:[{value:25,stroke:{color:'var:missing'}}]})),variables:{}},{only:['format','references']}));

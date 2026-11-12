@@ -2,8 +2,9 @@
 import {chartAxisFraction, chartTextSize, type ChartValueAxis} from './chart-axis.js';
 import {chartNumber,type ResolvedChartData} from './chart-data.js';
 import type {ChartPlotGeometry} from './chart-plot.js';
+import {CHART_REFERENCE_TYPES} from './chart-reference-types.js';
 
-export const CHART_REFERENCE_TYPES: ReadonlySet<string> = new Set(['column','bar','line','line-with-markers','area','combo']);
+export {CHART_REFERENCE_TYPES};
 export interface ChartReference {
   value: number;
   axis: 'value' | 'secondary';

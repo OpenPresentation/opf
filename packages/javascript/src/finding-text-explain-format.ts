@@ -118,6 +118,11 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: {...CHART, referenceLines: [{value: 20, axis: "secondary"}]} },
     { title: "Revenue", chart: {...CHART, referenceLines: [{value: 20, axis: "value"}]} },
   ),
+  "opf/chart-reference-unsupported-type": ex(
+    "Remove `referenceLines`, or change the chart to a type with one value axis for every series: column, bar, line, line-with-markers, area or combo.",
+    { title: "Share", chart: { type: "pie", data: { columns: ["Region", "Share"], rows: [["North", 60], ["South", 40]] }, referenceLines: [{ value: 50 }] } },
+    { title: "Share", chart: { type: "column", data: { columns: ["Region", "Share"], rows: [["North", 60], ["South", 40]] }, referenceLines: [{ value: 50 }] } },
+  ),
   "opf/number-format-invalid": ex(
     "Write the format as an Excel-style pattern with a numeric part, such as `0.0`, `#,##0`, `0%` or `$#,##0.00`.",
     { title: "Revenue", table: { columns: [{ name: "Revenue", format: "units" }], rows: [[12]] } },

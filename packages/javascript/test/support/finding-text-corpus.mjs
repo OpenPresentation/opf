@@ -60,6 +60,7 @@ export const CASES = [
 	{ name: 'dataset-field-unknown', rule: 'opf/dataset-field-unknown', input: deck([{ title: 'T', table: { dataset: 'sales', fields: ['regon'] } }], { datasets: { sales: { columns: ['region', 'revenue'], rows: [['EMEA', 1]] } } }) },
 	{ name: 'data-column-duplicate', rule: 'opf/data-column-duplicate', input: deck([{ title: 'T', chart: { type: 'column', data: { dataset: 'sales' } } }], { datasets: { sales: { columns: ['region', 'region'], rows: [['EMEA', 1]] } } }) },
 	{ name: 'chart-mapping-unknown-column', rule: 'opf/chart-mapping-unknown-column', input: deck([{ title: 'T', chart: { type: 'column', data: { columns: ['Q', 'R', 'S'], rows: [['x', 1, 2]] }, mapping: { series: ['Profit'] } } }]) },
+	{ name: 'chart-reference-unsupported-type', rule: 'opf/chart-reference-unsupported-type', input: deck([{title:'T',chart:{type:'pie',data:{columns:['Region','Share'],rows:[['North',60],['South',40]]},referenceLines:[{value:50}]}}]) },
 	{ name: 'chart-reference-axis-unavailable', rule: 'opf/chart-reference-axis-unavailable', input: deck([{title:'T',chart:{type:'line',data:{columns:['Q','R'],rows:[['Q1',10],['Q2',20]]},referenceLines:[{value:15,axis:'secondary'}]}}]) },
 	{ name: 'number-format-invalid', rule: 'opf/number-format-invalid', input: deck([{ title: 'T', table: { columns: [{ name: 'a', format: '%' }], rows: [[1]] } }]) },
 	{ name: 'variable-invalid-value', rule: 'opf/variable-invalid-value', input: { ...deck([{ title: '{{n}}', text: 'x' }]), variables: { n: { type: 'number', value: 1 } } }, options: { values: { n: 'abc' } } },

@@ -253,6 +253,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/data-column-duplicate`](#opfdata-column-duplicate) | Format | error | structure | A dataset or table has two columns with the same name. |
 | [`opf/chart-mapping-unknown-column`](#opfchart-mapping-unknown-column) | Format | error | structure | A chart mapping names a column the data does not have. |
 | [`opf/chart-reference-axis-unavailable`](#opfchart-reference-axis-unavailable) | Format | error | structure | A reference names a value axis the chart does not have. |
+| [`opf/chart-reference-unsupported-type`](#opfchart-reference-unsupported-type) | Format | error | structure | A chart has reference lines but its type has no single value axis to draw them on. |
 | [`opf/number-format-invalid`](#opfnumber-format-invalid) | Format | error | structure | A number format cannot be read. |
 | [`opf/variable-invalid-value`](#opfvariable-invalid-value) | Format | error | structure | A variable value does not match its declared type. |
 | [`opf/variable-unknown-builtin`](#opfvariable-unknown-builtin) | Format | error | structure | A token names a built-in variable that does not exist. |
@@ -514,6 +515,14 @@ Default severity: **error**. Cost: structure. A chart mapping names a column the
 Default severity: **error**. Cost: structure. A reference names a value axis the chart does not have.
 
 **Why.** Secondary references require an actual secondary line series on a combo chart.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/chart-reference-unsupported-type`
+
+Default severity: **error**. Cost: structure. A chart has reference lines but its type has no single value axis to draw them on.
+
+**Why.** An explicit reference line is never dropped silently, so a chart type that cannot draw it is an error. Column, bar, line, line-with-markers, area and combo charts draw references; the stacked, 100% stacked and every other type do not.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

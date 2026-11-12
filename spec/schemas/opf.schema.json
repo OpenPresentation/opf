@@ -4560,12 +4560,6 @@
       "description": "Chart content. The chart object keeps chart-specific fields together so slides and regions do not expose loose chart fields. OPF charts are `{ type, data }` where `data` is `{ columns, rows }`: the first column holds the category labels and every further column is one series. There are no `categories`, `series`, `labels` or `datasets` keys (the Chart.js and ECharts shape); write them as columns and rows. Example: `{ \"type\": \"column\", \"data\": { \"columns\": [\"Quarter\", \"Decks\"], \"rows\": [[\"Q1\", 3], [\"Q2\", 8], [\"Q3\", 21]] } }`.",
       "additionalProperties": false,
       "required": ["type", "data"],
-      "allOf": [
-        {
-          "if": { "required": ["referenceLines"], "properties": { "referenceLines": { "minItems": 1 } } },
-          "then": { "properties": { "type": { "enum": ["column", "bar", "line", "line-with-markers", "area", "combo"] } } }
-        }
-      ],
       "properties": {
         "type": {
           "type": "string",
@@ -4603,7 +4597,7 @@
         "referenceLines": {
           "type": "array",
           "items": { "$ref": "#/$defs/ChartReferenceLine" },
-          "description": "Explicit numeric references, supported on column, bar, line, line-with-markers, area and combo. Absent or [] means none. Authored order, duplicates and values equal to data are preserved. Vertical charts with two or more categories span first-to-last category centers; bars/single-category charts span the full plot. Titles/subtitles never create references or period bands."
+          "description": "Explicit numeric references on the chart's value axis, supported on the chart types with one value axis for every series: column, bar, line, line-with-markers, area and combo. A non-empty list on any other type (the stacked and 100% stacked types among them) is the error opf/chart-reference-unsupported-type, located at referenceLines, so a reference is never dropped silently. Absent or [] means none. Authored order, duplicates and values equal to data are preserved. Vertical charts with two or more categories span first-to-last category centers; bars/single-category charts span the full plot. Titles/subtitles never create references or period bands."
         },
         "axisTitles": {
           "$ref": "#/$defs/ChartAxisTitles",

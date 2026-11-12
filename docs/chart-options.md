@@ -217,7 +217,7 @@ A [singleton combo example](../examples/technical/singleton-combo-reference-line
 
 | Property | Meaning and default |
 | --- | --- |
-| `referenceLines` | Optional array. Absent/`[]` means none. Authored order, duplicates and values equal to data are retained; no two-line cap or inferred-range cutoff. Nonempty arrays are supported only by `column`, `bar`, `line`, `line-with-markers`, `area` and `combo`. |
+| `referenceLines` | Optional array. Absent/`[]` means none. Authored order, duplicates and values equal to data are retained; no two-line cap or inferred-range cutoff. Nonempty arrays are supported only by `column`, `bar`, `line`, `line-with-markers`, `area` and `combo`, the types with one value axis for every series. On any other type, the stacked and 100% stacked types among them, a nonempty array is the located error `opf/chart-reference-unsupported-type` at `referenceLines`: a reference is never dropped silently. In the editor, a chart-type switch to such a type refuses (`chart-reference-lines-unsupported`) unless the caller passes `removeReferenceLines: true`, which removes them in the same step and reports them. |
 | `value` | Required finite number in the associated value axis's data units. With a `0%` column format, `0.25` means 25%, and `25` means 2500%. Strings are invalid; neither labels nor titles select units, and there is no 0–1 clamp. |
 | `axis` | `"value"` by default. `"secondary"` requires an actual combo secondary value axis. Category/X references are outside this scope. Invalid associations produce located validation errors. |
 | `label` | Optional nonblank plain text, shown verbatim. No label or numeric text is synthesized. |
