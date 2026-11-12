@@ -75,7 +75,7 @@ Resources have stable URIs. The server lists them (`resources/list`) and also of
 | `opf://catalog/<kind>/<id>` | A record of the default catalog (`@openpresentation/gallery`): `opf://catalog/layouts/two-column` |
 | `opf://skills/<name>` | A skill entrypoint (`opf-author`, `opf-layout`, `opf-presets`, `opf-edit`, `opf-export`, `opf-inspect`) |
 | `opf://skills/<name>/<path>` | A reference or asset of a skill: `opf://skills/opf-author/references/content.md` |
-| `ui://opf/deck` | The OPF viewer (`text/html;profile=mcp-app`): one HTML page (about 9.9 MB of UTF-8; `pnpm --filter @openpresentation/mcp build` prints the exact size and the JSON-RPC frame's headroom under the 10 MiB stdio limit) that `show_deck` and `open_editor` open. The `resources/read` content item carries `_meta.ui` `{ prefersBorder: false, preferredDisplayMode: "fullscreen" }`; the viewer declares no `csp`, `domain` or `permissions` (any of them would go on the same content item). |
+| `ui://opf/deck` | The OPF viewer (`text/html;profile=mcp-app`): one HTML page (about 9.1 MB of UTF-8; `pnpm --filter @openpresentation/mcp build` prints the exact size and the JSON-RPC frame's headroom under the 10 MiB stdio limit) that `show_deck` and `open_editor` open. The `resources/read` content item carries `_meta.ui` `{ prefersBorder: false, preferredDisplayMode: "fullscreen" }`; the viewer declares no `csp`, `domain` or `permissions` (any of them would go on the same content item). |
 
 Skill scripts and agent manifests are not served; the server runs no code from them.
 
@@ -202,7 +202,7 @@ It reads only font files under the font folders and the faces the site's manifes
 
 ## Limits
 
-- The viewer is about 9.9 MB of UTF-8 HTML (the build prints the exact size), loaded once per conversation or cached by the client. Its bundle carries only zod's English messages (`scripts/build-app.mjs`), which keeps the JSON-RPC frame under the default 10 MiB stdio limit. A client may cap the size of an MCP App or ask the user before it shows one.
+- The viewer is about 9.1 MB of UTF-8 HTML (9,064,031 bytes in 0.34; the build prints the exact size), loaded once per conversation or cached by the client. Its `resources/read` frame is 9,390,901 bytes, about 1.1 MB under the default 10 MiB stdio limit, and `test/app-resource-frame.test.mjs` fails when that headroom drops below 1,000,000 bytes. The bundle carries only zod's English messages (`scripts/build-app.mjs`) and core's precompiled validators, whose errors are built by shared helper functions (`packages/javascript/scripts/validators-codegen.mjs`). A client may cap the size of an MCP App or ask the user before it shows one.
 - Export needs a client that saves files for the viewer (`ui/download-file`); in one that does not, there is no Export menu. A PowerPoint or PNG export draws an SVG picture through the browser's image decoder from a `data:` URL (`svgSource: "data"` of the renderer's `export-browser`), because the sandbox allows no `blob:` image. The model sees the deck as JSON, not as pictures of the slides.
 - The `convert` tool handles JSON, YAML and Markdown. Viewer Export runs in the client and requires its file-saving capability; the local `opf` command can also render and write files.
 - `validate_deck` reads no files, so a local image path in a deck is not looked up (the CLI warns with `cli/asset-missing`). Pass images as data URIs or assets.
