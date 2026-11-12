@@ -2,7 +2,6 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
-import os from "node:os";
 import { spawnSync, execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -22,6 +21,7 @@ import { syntheticCase, sources } from "./test-fixtures/reference-chart-syntheti
 import { windowsPowerShellEnvironment } from "./windows-powershell-env.mjs";
 import { syntheticConsumer } from "./test-fixtures/reference-runtime-routes.mjs";
 import { inspectReferenceRuntimeRoutes } from "./reference-runtime-routes.mjs";
+import { makeTestTempDir } from "./test-fixtures/temp-root.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const write = (file, bytes) => {
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -95,11 +95,7 @@ function child(executable, args, options = {}) {
 test("actual create/verify/default-pure child route binds four whole cases, six packages, clean separate repos and unchanged supervisor without Office", {
   timeout: 30000,
 }, async () => {
-  const folder = fs.realpathSync(fs.mkdtempSync(
-      process.platform === "win32"
-        ? "C:/opf-work/ref-envelope-"
-        : path.join(os.tmpdir(), "ref-envelope-"),
-    )),
+  const folder = fs.realpathSync(makeTestTempDir("ref-envelope-")),
     controller = path.join(folder, "controller"),
     preparation = path.join(folder, "preparation"),
     worker = path.join(folder, "worker"),

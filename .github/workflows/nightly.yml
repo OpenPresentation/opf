@@ -42,6 +42,10 @@ on:
       repeat:
         description: Runs per test for the flake measurement.
         default: '5'
+      libreoffice:
+        description: Run the report-only LibreOffice qualification.
+        type: boolean
+        default: true
   workflow_call:
     inputs:
       report:
@@ -52,6 +56,10 @@ on:
         description: Also run the flake measurement.
         type: boolean
         default: false
+      libreoffice:
+        description: Run the report-only LibreOffice qualification (false for the release gate, which it can never fail).
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -609,9 +617,12 @@ jobs:
   # difference from OPF's preview, in two font profiles. Experimental and report-only until the owner promotes the baseline: the
   # runner exits 0 whatever it finds (its summary is the job summary, its results the artifact), continue-on-error keeps an
   # infrastructure fault from failing the run or a release, and the report ignores it. Promotion is `--fail-on-defect` here and
-  # dropping continue-on-error and the ignore.
+  # dropping continue-on-error and the ignore. The release gate passes libreoffice: false: a report-only leg cannot stop a release,
+  # so the gate skips its 45 minutes and its LibreOffice download. The scheduled run (which has no inputs), a dispatch and full-ci
+  # (both default to true) still run it. The comparison is with true on purpose: a missing input is null, and null == false.
   libreoffice:
     name: LibreOffice qualification (experimental)
+    if: ${{ github.event_name == 'schedule' || inputs.libreoffice == true }}
     runs-on: ubuntu-24.04
     container: mcr.microsoft.com/playwright:v1.65.0-noble@sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d
     continue-on-error: true

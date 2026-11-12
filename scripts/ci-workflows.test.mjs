@@ -264,6 +264,11 @@ test('nightly.yml reports only a scheduled run or one that asked for it, ignores
   const legs = jobsOf(nightly).map((entry) => entry.id).filter((id) => !['plan', 'report'].includes(id));
   assert.deepEqual(needsOf(report).sort(), legs.sort(), 'the report waits for every leg');
   assert.match(nightly, /report:\n {8}description: [^\n]*\n {8}type: boolean\n {8}default: false/u, 'a call reports nothing by default (a release gate stops the release, it opens no issue)');
+  // The report-only LibreOffice leg runs unless a caller (the release gate) turns it off. The scheduled run has no inputs, and a
+  // missing input is null, which GitHub compares as equal to false: the schedule is matched by its event instead.
+  assert.match(job(nightly, 'libreoffice').text, /^ {4}if: \$\{\{ github\.event_name == 'schedule' \|\| inputs\.libreoffice == true \}\}$/mu);
+  assert.match(job(nightly, 'libreoffice').text, /^ {4}continue-on-error: true$/mu);
+  assert.equal([...nightly.matchAll(/libreoffice:\n {8}description: [^\n]*\n {8}type: boolean\n {8}default: true/gu)].length, 2, 'a dispatch and a call both run it by default');
 });
 
 test('slow-checks.yml: weekly, on demand, or by the label slow-checks; its jobs run for no other label', () => {

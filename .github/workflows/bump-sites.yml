@@ -13,7 +13,9 @@ name: Bump sites
 #          --opf opf`, scripts/opf-bump.mjs of the site: its pins, its lockfile, every file it generates from the release, and the
 #          checks of its own CI that read them, so the pull request needs no human edit to be green), the branch bot/opf-vX.Y.Z and the
 #          pull request. A patch bump (the same major and minor) is labeled `auto-merge`, a minor or major bump `needs-review` (D19).
-#          An existing open branch is updated through normal merges, closed heads are refused, and an older open bump pull request is closed as superseded. Release facts
+#          An existing open branch is updated through normal merges, closed heads are refused, a branch that conflicts with the
+#          regenerated files is left unchanged and the bump goes to a fresh bot/opf-vX.Y.Z-2 (then -3, ...), and an older open bump
+#          pull request is closed as superseded. Release facts
 #          (publication times, summaries) come from the registry and from the GitHub release of the tag; the pptx-gallery editor bundle
 #          (public/opf-editor, data/opf-spec.json) from scripts/vendor-gallery-editor.mjs of the release tag in the `opf` checkout.
 #          The App token is not in the environment of the site's script (the site is checked out without credentials, the script runs
@@ -194,6 +196,7 @@ jobs:
           GH_TOKEN: ${{ steps.app.outputs.token }}
           LABEL: ${{ steps.bump.outputs.label }}
           KIND: ${{ steps.bump.outputs.kind }}
+          BUMP_SITE: ${{ github.workspace }}/opf/scripts/bump-site.mjs
         run: |
           set -euo pipefail
           branch="bot/opf-v$VERSION"
@@ -212,6 +215,15 @@ jobs:
             exit 0
           fi
           # BEGIN history-preserving publication
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          echo "::add-mask::$auth"
+          # The bump branches of this version: bot/opf-vX.Y.Z, and bot/opf-vX.Y.Z-2, -3, ... made by earlier reruns that met a
+          # conflict (scripts/bump-site.mjs branch). A rerun continues on the highest one.
+          heads="$(mktemp)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" ls-remote --heads origin "refs/heads/$branch" "refs/heads/$branch-*" > "$heads"
+          existing="$(node "$BUMP_SITE" branch --base "$branch" --heads "$heads" --field exists)"
+          fresh="$(node "$BUMP_SITE" branch --base "$branch" --heads "$heads" --field next)"
+          branch="$(node "$BUMP_SITE" branch --base "$branch" --heads "$heads" --field current)"
           closed="$(gh pr list --repo "$SITE" --head "$branch" --state all --limit 100 --json state --jq '[.[] | select(.state != "OPEN")] | length')"
           [ "$closed" = 0 ] || { echo '::error::Refusing to update a closed or merged bump head; use a fresh reviewed branch.'; exit 1; }
           git config user.name "opf-release[bot]"
@@ -220,15 +232,6 @@ jobs:
           git add -A
           git commit -m "$title"
           # The site generator already ran on the trusted default branch. Merge reviewed branch history only after that execution.
-          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
-          echo "::add-mask::$auth"
-          existing=false
-          if git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" ls-remote --exit-code --heads origin "refs/heads/$branch" >/dev/null; then
-            existing=true
-          else
-            status=$?
-            [ "$status" -eq 2 ] || exit "$status"
-          fi
           # Keep this array nonempty: Bash 3.2 treats an empty array as unset under nounset.
           fetch=(fetch)
           [ "$(git rev-parse --is-shallow-repository)" = false ] || fetch+=(--unshallow)
@@ -236,7 +239,15 @@ jobs:
           [ "$existing" = false ] || refs+=("refs/heads/$branch:refs/remotes/origin/$branch")
           git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" "${fetch[@]}" origin "${refs[@]}"
           git merge --no-edit "origin/$BASE"
-          [ "$existing" = false ] || git merge --no-edit "origin/$branch"
+          # A conflict with the existing branch (its lockfile or generated files against this run's, after the site moved) is
+          # neither failed nor forced: that branch stays as it is, and this run's work goes to a fresh branch and pull request,
+          # which closes the older one as superseded below.
+          if [ "$existing" = true ] && ! git merge --no-edit "origin/$branch"; then
+            git merge --abort
+            echo "::warning::$branch conflicts with the files this run regenerated; leaving it unchanged and publishing to $fresh."
+            echo "$branch conflicted with the regenerated files; published to $fresh instead." >> "${GITHUB_STEP_SUMMARY:-/dev/null}"
+            branch="$fresh"
+          fi
           # Recheck just before pushing; neither a folded head nor a concurrent non-fast-forward update may be overwritten.
           closed="$(gh pr list --repo "$SITE" --head "$branch" --state all --limit 100 --json state --jq '[.[] | select(.state != "OPEN")] | length')"
           [ "$closed" = 0 ] || { echo '::error::Bump head closed during preparation; nothing is pushed.'; exit 1; }

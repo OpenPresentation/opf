@@ -8,7 +8,7 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { LABELS, NAMES, bumpKind, changedPaths, largest, lockfileCommand, main, manifestsOf, missingFromRegistry, planBump, pullRequestBody, runSiteScript, siteScript, siteScriptCommand, specifierFor, writeBump } from './bump-site.mjs';
+import { LABELS, NAMES, bumpBranches, bumpKind, changedPaths, largest, lockfileCommand, main, manifestsOf, missingFromRegistry, planBump, pullRequestBody, runSiteScript, siteScript, siteScriptCommand, specifierFor, writeBump } from './bump-site.mjs';
 import { PUBLISHED } from './workspace-packages.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -140,6 +140,27 @@ test('bump-sites.yml: called after a release or dispatched by hand; the dispatch
   assert.match(bump, /\^\(0\|\[1-9\]\[0-9\]\*\)\\\.\(0\|\[1-9\]\[0-9\]\*\)\\\.\(0\|\[1-9\]\[0-9\]\*\)\$/u, 'a stable X.Y.Z only');
 });
 
+test('bumpBranches: the first bump uses bot/opf-vX.Y.Z; a conflicting rerun moves to -2, -3, ...; later reruns continue on the highest', () => {
+  assert.deepEqual(bumpBranches('bot/opf-v0.34.0', []), { current: 'bot/opf-v0.34.0', exists: false, next: 'bot/opf-v0.34.0-2' });
+  assert.deepEqual(bumpBranches('bot/opf-v0.34.0', ['0123abcd\trefs/heads/bot/opf-v0.34.0']), { current: 'bot/opf-v0.34.0', exists: true, next: 'bot/opf-v0.34.0-2' });
+  assert.deepEqual(bumpBranches('bot/opf-v0.34.0', ['a\trefs/heads/bot/opf-v0.34.0', 'b\trefs/heads/bot/opf-v0.34.0-2']), { current: 'bot/opf-v0.34.0-2', exists: true, next: 'bot/opf-v0.34.0-3' });
+  assert.deepEqual(bumpBranches('bot/opf-v0.34.0', ['bot/opf-v0.34.0-10', 'bot/opf-v0.34.0-9']), { current: 'bot/opf-v0.34.0-10', exists: true, next: 'bot/opf-v0.34.0-11' });
+  // Other versions, a -1, a non-numeric suffix and a lookalike whose dots are not dots are not bump branches of this version.
+  assert.deepEqual(bumpBranches('bot/opf-v0.34.0', ['bot/opf-v0.34.1', 'bot/opf-v0.34.0-1', 'bot/opf-v0.34.0-x', 'bot/opf-v0x34x0-3', 'bot/opf-v0.34.01', 'refs/heads/bot/opf-v0.3.0-4']), { current: 'bot/opf-v0.34.0', exists: false, next: 'bot/opf-v0.34.0-2' });
+  for (const invalid of ['bot/opf-v0.34.0-2', 'main', 'bot/opf-v0.34', undefined]) assert.throws(() => bumpBranches(invalid, []), /not a bump branch/u);
+});
+
+test('bump-site.mjs branch prints one field of the branch plan from git ls-remote output', async () => {
+  const heads = path.join(mkdtempSync(path.join(os.tmpdir(), 'bump-branch-')), 'heads');
+  writeFileSync(heads, 'aaa\trefs/heads/bot/opf-v0.34.0\nbbb\trefs/heads/bot/opf-v0.34.0-2\n');
+  for (const [field, expected] of [['current', 'bot/opf-v0.34.0-2'], ['exists', 'true'], ['next', 'bot/opf-v0.34.0-3']]) {
+    const lines = [];
+    await main(['branch', '--base', 'bot/opf-v0.34.0', '--heads', heads, '--field', field], { log: (line) => lines.push(line) });
+    assert.deepEqual(lines, [expected]);
+  }
+  await assert.rejects(main(['branch', '--base', 'bot/opf-v0.34.0', '--heads', heads, '--field', 'all']), /usage/u);
+});
+
 test('bump-sites.yml: the App token is per site repository and narrow; the pull request is opened, labeled and never merged', () => {
   assert.match(bump, /uses: actions\/create-github-app-token@[0-9a-f]{40}[^\n]*\n {8}with:\n {10}app-id: \$\{\{ vars\.ECOSYSTEM_APP_ID \}\}\n {10}private-key: \$\{\{ secrets\.ECOSYSTEM_APP_PRIVATE_KEY \}\}\n {10}owner: Data-Advantage\n {10}repositories: \$\{\{ matrix\.repo \}\}\n {10}permission-contents: write\n {10}permission-pull-requests: write\n/u);
   assert.doesNotMatch(code(bump), /gh pr merge|\s--auto\b/u, 'D19: the workflow never merges');
@@ -148,7 +169,8 @@ test('bump-sites.yml: the App token is per site repository and narrow; the pull 
   assert.match(bump, /branch="bot\/opf-v\$VERSION"/u);
   assert.doesNotMatch(code(bump), /git[^\n]*(?:--force|checkout -B)/u, 'published bump history is never rewritten');
   assert.match(bump, /git merge --no-edit "origin\/\$BASE"/u);
-  assert.match(bump, /git merge --no-edit "origin\/\$branch"/u);
+  assert.match(bump, /if \[ "\$existing" = true \] && ! git merge --no-edit "origin\/\$branch"; then\n\s+git merge --abort\n[\s\S]*?branch="\$fresh"\n/u, 'a conflict moves to a fresh branch');
+  assert.match(bump, /BUMP_SITE: \$\{\{ github\.workspace \}\}\/opf\/scripts\/bump-site\.mjs/u);
   assert.match(bump, /gh label create auto-merge[\s\S]*gh label create needs-review/u);
   assert.match(bump, /Superseded by/u);
   assert.match(bump, /if \[ "\$DRY_RUN" = true \]; then[\s\S]*exit 0/u, 'a dry run pushes nothing');
@@ -300,11 +322,19 @@ function publicationFixture(mode) {
   const existing = !['new', 'closed'].includes(mode);
   if (existing) {
     git(seed, 'checkout', '-b', 'bot/opf-v0.34.0');
-    writeFileSync(path.join(seed, 'pins.txt'), mode === 'conflict' ? 'reviewed-custom-version\n' : '0.34.0\n');
+    writeFileSync(path.join(seed, 'pins.txt'), ['conflict', 'after-fresh'].includes(mode) ? 'reviewed-custom-version\n' : '0.34.0\n');
     writeFileSync(path.join(seed, 'manual.txt'), 'reviewed branch work\n');
     git(seed, 'add', '.'); git(seed, 'commit', '-m', 'reviewed bump'); git(seed, 'push', 'origin', 'bot/opf-v0.34.0'); git(seed, 'checkout', 'main');
   }
+  // after-fresh: an earlier rerun met that conflict and published bot/opf-v0.34.0-2, which this run continues.
+  if (mode === 'after-fresh') {
+    git(seed, 'checkout', '-b', 'bot/opf-v0.34.0-2', 'main');
+    writeFileSync(path.join(seed, 'pins.txt'), '0.34.0\n');
+    writeFileSync(path.join(seed, 'manual.txt'), 'reviewed fresh-branch work\n');
+    git(seed, 'add', '.'); git(seed, 'commit', '-m', 'fresh bump'); git(seed, 'push', 'origin', 'bot/opf-v0.34.0-2'); git(seed, 'checkout', 'main');
+  }
   const previous = existing ? git(seed, 'rev-parse', 'origin/bot/opf-v0.34.0') : null;
+  const previousFresh = mode === 'after-fresh' ? git(seed, 'rev-parse', 'origin/bot/opf-v0.34.0-2') : null;
   const cloneArgs = mode === 'full-history' ? [] : ['--depth=1'];
   git(dir, 'clone', ...cloneArgs, '--branch', 'main', pathToFileURL(remote).href, job);
   assert.equal(git(job, 'rev-parse', '--is-shallow-repository'), mode === 'full-history' ? 'false' : 'true', 'exercise both shallow and full-history fetch paths');
@@ -329,10 +359,10 @@ if [ "$FIXTURE_MODE" = closed ] || { [ "$FIXTURE_MODE" = closes ] && [ "$n" = 2 
   writeFileSync(path.join(bin, 'gh'), fakeGh, { mode: 0o755 });
   const wrapper = `set -euo pipefail\nif command -v cygpath >/dev/null; then FIXTURE_BIN="$(cygpath -u "$FIXTURE_BIN")"; FIXTURE_COUNT="$(cygpath -u "$FIXTURE_COUNT")"; FIXTURE_WRITER="$(cygpath -u "$FIXTURE_WRITER")"; export FIXTURE_COUNT FIXTURE_WRITER; fi\nexport PATH="$FIXTURE_BIN:$PATH"\n${publishBlock}`;
   const script = path.join(dir, 'publish.sh'); writeFileSync(script, wrapper);
-  const result = spawnSync(gitBash, [script], { cwd: job, encoding: 'utf8', env: { ...env, FIXTURE_BIN: bin, FIXTURE_COUNT: path.join(dir, 'calls'), FIXTURE_WRITER: seed, FIXTURE_MODE: mode, GH_TOKEN: 'unit-token', SITE: 'Data-Advantage/pptx-gallery', BASE: 'main', branch: 'bot/opf-v0.34.0', title: 'bump to v0.34.0' }, timeout: 30_000 });
-  return { dir, remote, job, seed, git, previous, latestMain, result };
+  const result = spawnSync(gitBash, [script], { cwd: job, encoding: 'utf8', env: { ...env, FIXTURE_BIN: bin, FIXTURE_COUNT: path.join(dir, 'calls'), FIXTURE_WRITER: seed, FIXTURE_MODE: mode, GH_TOKEN: 'unit-token', BUMP_SITE: path.join(root, 'scripts/bump-site.mjs'), SITE: 'Data-Advantage/pptx-gallery', BASE: 'main', branch: 'bot/opf-v0.34.0', title: 'bump to v0.34.0' }, timeout: 30_000 });
+  return { dir, remote, job, seed, git, previous, previousFresh, latestMain, result };
 }
-for (const mode of ['new', 'existing', 'full-history', 'conflict', 'closed', 'closes', 'concurrent']) {
+for (const mode of ['new', 'existing', 'full-history', 'conflict', 'after-fresh', 'closed', 'closes', 'concurrent']) {
   test(`bump publication: ${mode} preserves history or refuses without overwriting it`, () => {
     assert.ok(publishBlock, 'the tested block exists in the actual workflow');
     mkdirSync(path.join(root, 'artifacts'), { recursive: true });
@@ -348,6 +378,24 @@ for (const mode of ['new', 'existing', 'full-history', 'conflict', 'closed', 'cl
       assert.equal(f.git(f.remote, 'show', `${head}:upstream.txt`), 'latest default-branch work');
       assert.equal(f.git(f.remote, 'show', `${head}:pins.txt`), '0.34.0');
       assert.equal(f.git(f.job, 'rev-parse', '--is-shallow-repository'), 'false');
+    } else if (['conflict', 'after-fresh'].includes(mode)) {
+      // RR-107: a conflicting existing branch is neither failed nor forced; the regenerated work goes to a fresh branch (or the
+      // fresh branch an earlier rerun made), and bot/opf-v0.34.0 stays byte-for-byte where it was.
+      assert.equal(f.result.status, 0, f.result.stderr + f.result.stdout);
+      assert.equal(f.git(f.remote, 'rev-parse', 'refs/heads/bot/opf-v0.34.0'), f.previous, 'the conflicting branch is untouched');
+      const head = f.git(f.remote, 'rev-parse', 'refs/heads/bot/opf-v0.34.0-2');
+      f.git(f.remote, 'merge-base', '--is-ancestor', f.latestMain, head);
+      assert.equal(f.git(f.remote, 'show', head + ':pins.txt'), '0.34.0');
+      assert.equal(f.git(f.remote, 'show', head + ':upstream.txt'), 'latest default-branch work');
+      const contains = spawnSync('git', ['--git-dir', f.remote, 'merge-base', '--is-ancestor', f.previous, head]);
+      assert.notEqual(contains.status, 0, 'the conflicting history is not merged into the fresh branch');
+      if (mode === 'conflict') assert.match(f.result.stdout, /::warning::bot\/opf-v0\.34\.0 conflicts[^\n]*publishing to bot\/opf-v0\.34\.0-2/u);
+      else {
+        f.git(f.remote, 'merge-base', '--is-ancestor', f.previousFresh, head);
+        assert.equal(f.git(f.remote, 'show', head + ':manual.txt'), 'reviewed fresh-branch work');
+        const third = spawnSync('git', ['--git-dir', f.remote, 'rev-parse', '--verify', 'refs/heads/bot/opf-v0.34.0-3'], { encoding: 'utf8' });
+        assert.notEqual(third.status, 0, 'a clean rerun continues on -2 and makes no -3');
+      }
     } else {
       assert.notEqual(f.result.status, 0, 'unsafe update must fail');
       const head = spawnSync('git', ['--git-dir', f.remote, 'rev-parse', '--verify', 'refs/heads/bot/opf-v0.34.0'], { encoding: 'utf8' });

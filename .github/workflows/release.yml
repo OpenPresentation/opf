@@ -15,12 +15,13 @@ name: Release
 #            O4 and O5) applies the patch as one commit "release vX.Y.Z" on the head the gate tested, pushes it to main and
 #            pushes the tag vX.Y.Z. A tag pushed with the App's token (not GITHUB_TOKEN) starts npm-publish.yml, which builds,
 #            publishes in dependency order with provenance, verifies the registry and creates the GitHub release.
-#   watch    (not a dry run) follows that npm-publish.yml run, so this run is green only when the whole release is.
+#   watch    (not a dry run) follows that npm-publish.yml run, so this run is green only when the npm publication and the GitHub
+#            release are (scripts/release-publish-run.mjs). Missing MCP bundle assets are a warning here, not a failure.
 #   rehearse (dry run) dispatches npm-publish.yml with dry-run=true on this ref and follows it.
 #
 # The fallback is a release pull request: `pnpm release:prepare X.Y.Z` locally, merge it, push the tag vX.Y.Z (owner steps).
 # npm-publish.yml, not this workflow, is the trusted publisher (it is the workflow npm sees; see its header).
-#   sites    (not a dry run, a stable version) after the publish run succeeded: calls bump-sites.yml, which opens a "bump to vX.Y.Z" pull
+#   sites    (not a dry run, a stable version) after the publication succeeded: calls bump-sites.yml, which opens a "bump to vX.Y.Z" pull
 #            request in each of the three site repositories (MR-52, D17, D19). It opens and labels them only; a site's own CI merges a
 #            patch bump. A failed bump opens an issue and never fails this run. A prerelease (a canary) never bumps a site.
 on:
@@ -89,6 +90,7 @@ jobs:
     uses: ./.github/workflows/nightly.yml
     with:
       report: false
+      libreoffice: false
 
   prepare:
     name: prepare
@@ -218,13 +220,30 @@ jobs:
     needs: [plan, prepare, commit]
     if: ${{ needs.plan.outputs.dry-run != 'true' }}
     runs-on: ubuntu-24.04
-    # build (30 at most) + publish (30) + verify (120: the registry wait is up to 60 minutes) + release, with room to spare
-    timeout-minutes: 210
+    # build (30 at most) + publish (30) + verify (120: the registry wait is up to 60 minutes) + release (10) + assets (15), with
+    # room to spare (the MCP bundle job runs beside build and publish)
+    timeout-minutes: 240
     permissions:
       actions: read
       contents: read
+    outputs:
+      assets: ${{ steps.follow.outputs.assets }}
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            /scripts/
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      # The run is judged by its publication jobs (scripts/release-publish-run.mjs): a red MCP bundle job means "assets missing",
+      # is reported as a warning (and by the publish run's release-assets-missing issue) and does not stop the site bumps.
       - name: Follow npm-publish.yml on the tag
+        id: follow
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
@@ -238,12 +257,16 @@ jobs:
           done
           [ -n "$id" ] || { echo "::error title=Release::no npm-publish.yml run started for $TAG; was the tag pushed with the App token?"; exit 1; }
           echo "npm-publish.yml run: https://github.com/$REPOSITORY/actions/runs/$id" | tee -a "$GITHUB_STEP_SUMMARY"
-          gh run watch "$id" --repo "$REPOSITORY" --exit-status --interval 30
+          # Without --exit-status, watch returns 0 once the run has finished, red or green; the jobs decide below.
+          gh run watch "$id" --repo "$REPOSITORY" --interval 30
+          gh run view "$id" --repo "$REPOSITORY" --json jobs > "$RUNNER_TEMP/publish-jobs.json"
+          node scripts/release-publish-run.mjs "$RUNNER_TEMP/publish-jobs.json"
 
   sites:
     name: bump the sites
     needs: [plan, prepare, watch]
-    # Only after the whole publish run (publish, verify, GitHub release) is green, and only for a stable version.
+    # Only after the publication jobs of the publish run (build, publish, verify, GitHub release) are green, and only for a stable
+    # version. Missing MCP bundle assets do not hold the sites back: the packages they pin are live.
     if: ${{ needs.plan.outputs.dry-run != 'true' && !contains(needs.prepare.outputs.version, '-') }}
     # The caller grants what bump-sites.yml asks for: its failure reporter opens issues. The App's key is passed explicitly.
     permissions:
