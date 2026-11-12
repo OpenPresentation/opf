@@ -7,6 +7,16 @@ $tokens=$null;$errors=$null;$ast=[Management.Automation.Language.Parser]::ParseF
 foreach($name in @('Invoke-FurnitureCom','Stop-FurnitureLifecycle','Get-FurnitureSha256','Save-OwnedReferenceNameSnapshot')){
     $nodes=@($ast.FindAll({param($n)$n -is [Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -ceq $name},$true));if($nodes.Count -ne 1){throw 'Exact bounded Save helper dependency required'};Invoke-Expression $nodes[0].Extent.Text
 }
+$controllerRootBefore=$Root
+$workerRootNodes=@($ast.EndBlock.Statements|Where-Object {$_ -is [Management.Automation.Language.AssignmentStatementAst] -and $_.Left.Extent.Text -ceq '$root'})
+$savedPathNodes=@($ast.EndBlock.Statements|Where-Object {$_ -is [Management.Automation.Language.AssignmentStatementAst] -and $_.Left.Extent.Text -ceq '$savedPath'})
+if($workerRootNodes.Count -ne 1 -or $savedPathNodes.Count -ne 1){throw 'Exact real worker output initializers required'}
+$script:workerRootInitializer=$workerRootNodes[0].Extent.Text
+function Invoke-NameSnapshotFixtureRoot([string]$OutputDirectory,[string]$ExpectedPath,[string]$CopyPath,[string]$Phase){
+    # Function-local actual initializer cannot overwrite the case-insensitive repository $Root parameter.
+    Invoke-Expression $script:workerRootInitializer
+    Save-OwnedReferenceNameSnapshot $ExpectedPath $CopyPath $Phase
+}
 $script:events=[Collections.Generic.List[string]]::new();function Write-FurnitureStage([string]$Name,[string]$Status,[string]$ErrorMessage=$null){$script:events.Add($Name+':'+$Status)};function Write-FurnitureReport{}
 function global:Get-Process {throw 'Managed Name controls forbid real process queries'}
 function global:New-Object {throw 'Managed Name controls forbid Office/factory construction'}
@@ -44,15 +54,60 @@ foreach($mode in @('before','reopened','no-mode','no-reference','foreign-phase',
     $script:presentation|Add-Member -MemberType ScriptProperty -Name FullName -Value {if($script:fixtureMode -ceq 'getter-fault'){throw 'Actual fake FullName fault'};return $this.CurrentPath}
     $script:presentation|Add-Member -MemberType ScriptMethod -Name SaveCopyAs -Value {param($path,$format)$script:saveCount++;if($format -ne 24){throw 'Exact native format required'};if($script:fixtureMode -ceq 'save-fault'){throw 'Actual fake SaveCopyAs fault'};[IO.File]::WriteAllText($path,'SYNTHETIC INERT COPY');if($script:fixtureMode -ceq 'wrong-after-name'){$this.CurrentPath+='-foreign'}}
     if($mode -ceq 'no-mode'){$script:referenceNameSnapshotsModeEnabled=$false};if($mode -ceq 'no-reference'){$script:referenceNameModeEnabled=$false};if($mode -ceq 'foreign-phase'){$phase='edited'};if($mode -ceq 'foreign-path'){$copy=Join-Path $outputRoot 'foreign.pptx'};if($mode -ceq 'same-input'){$copy=$input};if($mode -ceq 'existing-copy'){[IO.File]::WriteAllText($copy,'OLD COPY')};if($mode -ceq 'foreign-owner'){$script:ownedPresentationPath+='-foreign'};if($mode -ceq 'wrong-before-name'){$script:presentation.CurrentPath+='-foreign'}
-    $failure=$null;try{Save-OwnedReferenceNameSnapshot $input $copy $phase}catch{$failure=$_.Exception.Message}
+    $failure=$null;try{Invoke-NameSnapshotFixtureRoot $outputRoot $input $copy $phase}catch{$failure=$_.Exception.Message}
     if($mode -cin @('before','reopened')){
         if($null -ne $failure -or $script:saveCount -ne 1 -or $script:report.referenceNameSnapshots.Count -ne 1 -or $script:report.referenceNameSnapshots[0].path -cne $copy -or $script:report.referenceNameSnapshots[0].sha256 -cne (Get-FurnitureSha256 $copy)){throw ('Owned copy positive failed: '+$mode)}
     }else{
         if($null -eq $failure -or -not $script:officeOperationsStopped -or $script:cleanupConfirmed){throw ('Expected bounded copy refusal: '+$mode)}
         if($mode -cnotin @('wrong-after-name','save-fault') -and $script:saveCount -ne 0){throw 'Refused precondition reached SaveCopyAs'}
-        $count=$script:events.Count;try{Save-OwnedReferenceNameSnapshot $input $copy 'before'}catch{};if($script:events.Count -ne $count){throw 'Fault latch allowed later Office operations'}
+        $count=$script:events.Count;try{Invoke-NameSnapshotFixtureRoot $outputRoot $input $copy 'before'}catch{};if($script:events.Count -ne $count){throw 'Fault latch allowed later Office operations'}
     }
     if((Get-FileHash -LiteralPath $input -Algorithm SHA256).Hash -cne $hash){throw 'Owned input bytes changed'};$saves+=@([ordered]@{scenario=$mode;passed=$true;saves=$script:saveCount;failure=$failure})
+}
+# Actual worker initializer/helper/calls in a separate script scope with supervisor outputRoot explicitly null.
+$copyCalls=@($ast.FindAll({param($n)$n -is [Management.Automation.Language.IfStatementAst] -and $n.Extent.Text.StartsWith('if($script:referenceNameSnapshotsModeEnabled){Save-OwnedReferenceNameSnapshot ',[StringComparison]::Ordinal)},$true))
+if($copyCalls.Count -ne 2){throw 'Both exact real worker snapshot call sites required'}
+$beforeCall=@($copyCalls|Where-Object {$_.Extent.Text.Contains("'reference-name-before.pptx'")});$reopenedCall=@($copyCalls|Where-Object {$_.Extent.Text.Contains("'reference-name-reopened.pptx'")})
+if($beforeCall.Count -ne 1 -or $reopenedCall.Count -ne 1){throw 'Unique before/reopened real worker calls required'}
+$saveDefinitions=@(foreach($name in @('Invoke-FurnitureCom','Stop-FurnitureLifecycle','Get-FurnitureSha256','Save-OwnedReferenceNameSnapshot')){$nodes=@($ast.FindAll({param($n)$n -is [Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -ceq $name},$true));if($nodes.Count -ne 1){throw 'Exact scope helper required'};$nodes[0].Extent.Text})
+$scopeSetup=@'
+$ErrorActionPreference='Stop'
+$outputRoot=$null
+function Write-FurnitureReport{}
+function Write-FurnitureStage([string]$Name,[string]$Status,[string]$ErrorMessage=$null){$script:events.Add($Name+':'+$Status)}
+$script:events=[Collections.Generic.List[string]]::new();$script:saveCount=0
+$script:referenceNameModeEnabled=$true;$script:referenceNameSnapshotsModeEnabled=$true;$script:officeOperationsStopped=$false;$script:cleanupConfirmed=$false
+$script:report=[ordered]@{referenceNameSnapshots=@()}
+$sourceSnapshot=(Resolve-Path -LiteralPath $InputPresentation).Path;$script:ownedPresentationPath=$sourceSnapshot
+$script:presentation=[pscustomobject]@{CurrentPath=$sourceSnapshot}
+$script:presentation|Add-Member -MemberType ScriptProperty -Name FullName -Value {return $this.CurrentPath}
+$script:presentation|Add-Member -MemberType ScriptMethod -Name SaveCopyAs -Value {param($path,$format)if($format -ne 24){throw 'Exact inert copy format required'};$script:saveCount++;[IO.File]::WriteAllText($path,'SYNTHETIC INERT SCOPE COPY')}
+$failure=$null
+'@
+$scopeBetween=@'
+[IO.File]::WriteAllText($savedPath,'SYNTHETIC INERT EDITED INPUT')
+$script:presentation.CurrentPath=$savedPath;$script:ownedPresentationPath=$savedPath
+'@
+$scopeResult=@'
+}catch{$failure=$_.Exception.Message}
+[pscustomobject]@{worker=[bool]$Worker;supervisorOutputRootNull=($null -eq $outputRoot);workerRootExact=($root -ceq (Resolve-Path -LiteralPath $OutputDirectory).Path);saveCount=$script:saveCount;snapshots=@($script:report.referenceNameSnapshots);events=@($script:events.ToArray());failure=$failure}
+'@
+$scopeBody=@($ast.ParamBlock.Extent.Text,($saveDefinitions -join "`n"),$scopeSetup,$workerRootNodes[0].Extent.Text,$savedPathNodes[0].Extent.Text,'try{',$beforeCall[0].Extent.Text,$scopeBetween,$reopenedCall[0].Extent.Text,$scopeResult)-join "`n"
+$oldScope=$scopeBody
+foreach($pair in @(@("Join-Path `$root ('reference-name-'+`$Phase+'.pptx')","Join-Path `$outputRoot ('reference-name-'+`$Phase+'.pptx')"),@("Join-Path `$root 'reference-name-before.pptx'","Join-Path `$outputRoot 'reference-name-before.pptx'"),@("Join-Path `$root 'reference-name-reopened.pptx'","Join-Path `$outputRoot 'reference-name-reopened.pptx'"))){if(($oldScope.Split([string[]]@($pair[0]),[StringSplitOptions]::None)).Count -ne 2){throw 'Unique three-path old-scope counterexample required'};$oldScope=$oldScope.Replace($pair[0],$pair[1])}
+$workerScope=@()
+foreach($mode in @('current-worker-root','old-supervisor-root')){
+    $dir=Join-Path $Output ('scope-'+$mode);[void](New-Item -ItemType Directory -Path $dir)
+    $input=Join-Path $dir 'owned-input.pptx';[IO.File]::WriteAllText($input,'SYNTHETIC INERT SOURCE');$inputHash=Get-FurnitureSha256 $input
+    $file=Join-Path $Output ($mode+'.ps1');$body=if($mode -ceq 'current-worker-root'){$scopeBody}else{$oldScope};[IO.File]::WriteAllText($file,$body,[Text.UTF8Encoding]::new($false))
+    $value=& $file -OutputDirectory $dir -InputPresentation $input -Worker -ReferenceNameEdit -ReferenceNameSnapshots
+    if($value.worker -cne $true -or $value.supervisorOutputRootNull -cne $true -or $value.workerRootExact -cne $true){throw 'Fresh real worker initializer scope differed'}
+    if($mode -ceq 'current-worker-root'){
+        if($null -ne $value.failure -or $value.saveCount -ne 2 -or $value.snapshots.Count -ne 2 -or $value.events.Count -ne 12){throw 'Actual fresh worker snapshot calls failed'}
+        for($i=0;$i -lt 2;$i++){$phase=@('before','reopened')[$i];$copy=Join-Path $dir ('reference-name-'+$phase+'.pptx');if($value.snapshots[$i].phase -cne $phase -or $value.snapshots[$i].path -cne $copy -or $value.snapshots[$i].sha256 -cne (Get-FurnitureSha256 $copy)){throw 'Fresh worker snapshot path/hash differed'}}
+    }elseif($null -eq $value.failure -or $value.saveCount -ne 0 -or $value.snapshots.Count -ne 0 -or $value.events.Count -ne 0){throw 'Old supervisor-only variable did not fail before inert Save'}
+    if((Get-FurnitureSha256 $input) -cne $inputHash -or $Root -cne $controllerRootBefore){throw 'Scope control changed input or parent repository Root'}
+    $workerScope+=@([ordered]@{scenario=$mode;passed=$true;worker=$value.worker;supervisorOutputRootNull=$value.supervisorOutputRootNull;workerRootExact=$value.workerRootExact;saveCount=$value.saveCount;snapshotCount=$value.snapshots.Count;eventCount=$value.events.Count;controllerRootPreserved=$true;failure=$value.failure})
 }
 . (Join-Path $Root 'scripts/native-acceptance/owned-postflight.ps1')
 . (Join-Path $Root 'scripts/native-acceptance/furniture-postflight.ps1')
@@ -92,4 +147,4 @@ foreach($mode in @('positive','missing-before','missing-reopened','crossed-copy-
     $adapter+=@([ordered]@{scenario=$mode;passed=$true;mockQueries=$script:mockQueries;failure=$failure})
 }
 if((Get-FileHash -LiteralPath $worker -Algorithm SHA256).Hash -cne $before){throw 'Worker changed during managed controls'}
-[ordered]@{schemaVersion=1;officeInvoked=$false;realProcessQueries=0;genuineStartupArchive=$false;earlierSourceBootstrapExercised=$false;startup=$startup;saves=$saves;adapter=$adapter;cardinality=$cardinality}|ConvertTo-Json -Depth 30|Set-Content -LiteralPath (Join-Path $Output 'result.json') -Encoding UTF8
+[ordered]@{schemaVersion=1;officeInvoked=$false;realProcessQueries=0;genuineStartupArchive=$false;earlierSourceBootstrapExercised=$false;startup=$startup;saves=$saves;adapter=$adapter;cardinality=$cardinality;workerScope=$workerScope}|ConvertTo-Json -Depth 30|Set-Content -LiteralPath (Join-Path $Output 'result.json') -Encoding UTF8

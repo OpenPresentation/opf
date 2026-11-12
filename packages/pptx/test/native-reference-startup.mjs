@@ -9,7 +9,24 @@ import {scanPowerShellSource} from './powershell-scan.mjs';
 import {windowsPowerShellEnvironment} from '../../../scripts/native-acceptance/windows-powershell-env.mjs';
 const worker=new URL('./native-furniture-control.ps1',import.meta.url),checker=new URL('./native-reference-startup-check.ps1',import.meta.url),sha=b=>createHash('sha256').update(b).digest('hex');
 test('reference startup retains exact immutable stages with fixed hashes and no Git/history requirement',()=>{
- const source=readFileSync(worker);assert.equal(source.length,93940);assert.equal(sha(source),'1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870');
+ const source=readFileSync(worker);assert.equal(source.length,93922);assert.equal(sha(source),'21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255');
+ const workerRootEdits=[
+  [
+    "$fixed=Join-Path $outputRoot ('reference-name-'+$Phase+'.pptx')",
+    "$fixed=Join-Path $root ('reference-name-'+$Phase+'.pptx')"
+  ],
+  [
+    "Join-Path $outputRoot 'reference-name-before.pptx'",
+    "Join-Path $root 'reference-name-before.pptx'"
+  ],
+  [
+    "Join-Path $outputRoot 'reference-name-reopened.pptx'",
+    "Join-Path $root 'reference-name-reopened.pptx'"
+  ]
+];
+ let rootInverse=source.toString('utf8');for(const [prior,next]of [...workerRootEdits].reverse()){assert.equal(rootInverse.split(next).length-1,1);rootInverse=rootInverse.replace(next,prior);}
+ const snapshotSource=Buffer.from(rootInverse);assert.equal(snapshotSource.length,93940);assert.equal(sha(snapshotSource),'1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870');
+ let forward=rootInverse;for(const [prior,next]of workerRootEdits){assert.equal(forward.split(prior).length-1,1);forward=forward.replace(prior,next);}assert.deepEqual(Buffer.from(forward),source,'Only three worker-root paths extend the six prior immutable stages');
  const snapshotEdits=[
   [
     "    [switch]$ReferenceNameEdit\n",
@@ -48,7 +65,7 @@ test('reference startup retains exact immutable stages with fixed hashes and no 
     "    $report.phases.reopened=Read-FurnitureState $script:presentation 'reopened'; Write-FurnitureReport\n    if($script:referenceNameSnapshotsModeEnabled){Save-OwnedReferenceNameSnapshot $savedPath (Join-Path $outputRoot 'reference-name-reopened.pptx') 'reopened'}"
   ]
 ];
- let inverse=source.toString('utf8');for(const [prior,next]of [...snapshotEdits].reverse()){assert.equal(inverse.split(next).length-1,1);inverse=inverse.replace(next,prior);}
+ let inverse=snapshotSource.toString('utf8');for(const [prior,next]of [...snapshotEdits].reverse()){assert.equal(inverse.split(next).length-1,1);inverse=inverse.replace(next,prior);}
  const stage5=Buffer.from(inverse);assert.equal(stage5.length,91281);assert.equal(sha(stage5),'d8f0aa7e0b7fcf72cb2401808f45c2cdb69cd99862ad14c88103180b86278210');
  const old='$script:referenceNameEdit',next='$script:referenceNameModeEnabled';assert.equal(inverse.split(next).length-1,9);assert.ok(!inverse.includes(old));const stage4=Buffer.from(inverse.replaceAll(next,old));assert.equal(stage4.length,91218);assert.equal(sha(stage4),'641c30e6dc9e3e89bae814c752e4fbc1bea41d8318b4f8a0af7e863434466060');assert.deepEqual(Buffer.from(stage4.toString('utf8').replaceAll(old,next)),stage5);
  for(const file of [worker,checker])assert.deepEqual(scanPowerShellSource(readFileSync(file,'utf8')).issues,[]);assert.match(source.toString('utf8'),/\[switch\]\$ReferenceNameEdit/);assert.match(source.toString('utf8'),/\$request\.referenceNameEdit -isnot \[bool\]/);
