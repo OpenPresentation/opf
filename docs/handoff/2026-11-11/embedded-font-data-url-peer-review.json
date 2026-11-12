@@ -1,0 +1,10 @@
+{
+  "scope": "Independent SOURCE ONLY; no execution",
+  "patchSha256": "7f23b373ed4264ffc6061428c7d526b613637675eb2ed6188b26904d8cc46fab",
+  "verdict": "ACCEPTED; no concrete blocker",
+  "changedVerified": 5,
+  "protectedVerified": 14,
+  "wholeSourceInverseExact": true,
+  "reason": "Bounded anchored MIME-prefix exec plus complete indexed ASCII scan preserves original nonempty four-MIME payload grammar, arbitrary-position equals, whole-input coercion and throws. Full scan rejects non-ASCII and all trailing controls without suffix copy or repeated unbounded regex. Original WeakMap URL identity policy, family/weight/fsType/license/subset/drawn filtering remain unchanged. Public genuine full Noto JP/always embedding, changed-cache URL/family/weight refusal, MIME/padding/endings/coercion tests are meaningful.",
+  "qualification": "No public imports/build/tests or Node26 qualification by peer; original26.13 CI failure retained, local26.7 not substituted."
+}
