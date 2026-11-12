@@ -224,13 +224,13 @@ test('unused optional packages are never resolved; missing needed faces fail hon
   const moduleURL = new URL('../dist/fonts-node.js', import.meta.url).href,
     galleryURL = new URL('../../gallery/dist/index.js', import.meta.url).href;
   const code = String.raw`
-import fs from 'node:fs/promises';import{registerHooks,syncBuiltinESMExports}from'node:module';import{createHash}from'node:crypto';
-const mode=process.argv[1],moduleURL=process.argv[2],galleryURL=process.argv[3],calls=[];
-if(mode==='optional')registerHooks({resolve(specifier,context,next){if(specifier.includes('@expo-google-fonts/'))calls.push(specifier);if(specifier==='@expo-google-fonts/roboto-mono/package.json')throw Object.assign(Error('Not installed'),{code:'MODULE_NOT_FOUND'});return next(specifier,context);}});
-if(mode==='required')registerHooks({resolve(specifier,context,next){if(specifier==='@expo-google-fonts/roboto/package.json')throw Object.assign(Error('Not installed'),{code:'MODULE_NOT_FOUND'});return next(specifier,context);}});
+import fs from 'node:fs/promises';import module,{syncBuiltinESMExports}from'node:module';import{createHash}from'node:crypto';
+const mode=process.argv[1],moduleURL=process.argv[2],galleryURL=process.argv[3],calls=[],blockedResolutions=[],nodeResolveURL=new URL('./node-resolve.js',moduleURL).href;let ownedResolvers=0;
+// Intercept the actual createRequire(...).resolve boundary before the loader captures it, including Node22.
+const createRequire=module.createRequire;module.createRequire=(...args)=>{const require=createRequire(...args),resolve=require.resolve;if(String(args[0])===nodeResolveURL)ownedResolvers++;require.resolve=(specifier,...options)=>{if(mode==='optional'&&specifier.includes('@expo-google-fonts/'))calls.push(specifier);if((mode==='optional'&&specifier==='@expo-google-fonts/roboto-mono/package.json')||(mode==='required'&&specifier==='@expo-google-fonts/roboto/package.json')){blockedResolutions.push(specifier);throw Object.assign(Error('Not installed'),{code:'MODULE_NOT_FOUND'});}return resolve(specifier,...options);};return require;};syncBuiltinESMExports();
 const {loadFonts}=await import(moduleURL),{gallery}=await import(galleryURL),renderOptions={catalogs:[gallery]},doc={slides:[{title:'Title',text:'Body'}]},opts={pack:'office',substitutionPolicy:'visual',presentation:doc,scripts:'auto',renderOptions};
-if(mode==='optional'){const fonts=await loadFonts(opts);console.log(JSON.stringify({faces:fonts.fontFiles.length,unneeded:calls.filter(s=>s.includes('roboto-mono')).length}));}
-else if(mode==='required'){let result;try{await loadFonts({...opts,presentation:{design:{fontScheme:'roboto'},slides:[{text:'Body'}]}});}catch(error){result={code:error.code,packages:error.details?.packages,message:error.message};}console.log(JSON.stringify(result??{unexpectedSuccess:true}));}
+if(mode==='optional'){const fonts=await loadFonts(opts);console.log(JSON.stringify({faces:fonts.fontFiles.length,unneeded:calls.filter(s=>s.includes('roboto-mono')).length,ownedResolvers,blockedResolutions}));}
+else if(mode==='required'){let result,loadReturned=false;try{await loadFonts({...opts,presentation:{design:{fontScheme:'roboto'},slides:[{text:'Body'}]}});loadReturned=true;}catch(error){result={code:error.code,packages:error.details?.packages,message:error.message};}console.log(JSON.stringify({...(result??{unexpectedSuccess:true}),loadReturned,ownedResolvers,blockedResolutions}));}
 else{const fonts=await loadFonts(opts),before=fonts.fontFiles.length,original=fs.readFile;let protectedFile,protectedBefore;fs.readFile=async function(file,...args){const data=await original.call(this,file,...args);if(String(file).endsWith('Intos-Italic.ttf')){protectedFile=file;protectedBefore=createHash('sha256').update(data).digest('hex');const copy=Buffer.from(data);copy[copy.length-1]^=1;return copy;}return data;};syncBuiltinESMExports();const edit={slides:[{title:'Title',text:[{text:'Italic',italic:true}]}]};let refused;try{await fonts.ensure(edit,{renderOptions});}catch(error){refused=error.code;}const afterFailure=fonts.fontFiles.length;fs.readFile=original;syncBuiltinESMExports();const retried=await fonts.ensure(edit,{renderOptions});const protectedAfter=createHash('sha256').update(await original(protectedFile)).digest('hex');console.log(JSON.stringify({before,refused,afterFailure,added:retried.lazy.length,after:fonts.fontFiles.length,pending:fonts.pending(edit,renderOptions),protectedBefore,protectedAfter}));}
 `;
   const child = (mode) =>
@@ -244,7 +244,13 @@ else{const fonts=await loadFonts(opts),before=fonts.fontFiles.length,original=fs
   const unused = child('optional');
   assert.equal(unused.faces, 2);
   assert.equal(unused.unneeded, 0);
+  assert.ok(unused.ownedResolvers >= 1, JSON.stringify(unused));
+  assert.deepEqual(unused.blockedResolutions, []);
   const required = child('required');
+  assert.ok(required.ownedResolvers >= 1, JSON.stringify(required));
+  assert.equal(required.loadReturned, false, JSON.stringify(required));
+  assert.ok(required.blockedResolutions.length >= 1, JSON.stringify(required));
+  assert.ok(required.blockedResolutions.every(specifier => specifier === '@expo-google-fonts/roboto/package.json'));
   assert.equal(required.code, 'font-resource-unavailable');
   assert.deepEqual(required.packages, ['@expo-google-fonts/roboto']);
   const retry = child('integrity');
@@ -326,13 +332,13 @@ test('optional script absence retains bounded fallback ordering and all-unavaila
   const galleryURL = new URL('../../gallery/dist/index.js', import.meta.url)
     .href;
   const code = String.raw`
-import {registerHooks} from 'node:module';
-const mode=process.argv[1],calls=[];
-registerHooks({resolve(specifier,context,next){if(specifier.includes('@expo-google-fonts/'))calls.push(specifier);if(mode==='jp'?specifier==='@expo-google-fonts/noto-sans-jp/package.json':/^@expo-google-fonts\/noto-(sans|serif)-(jp|sc|tc|hk|kr)\//.test(specifier))throw Object.assign(Error('Simulated absent optional package'),{code:'MODULE_NOT_FOUND'});return next(specifier,context);}});
+import module,{syncBuiltinESMExports} from 'node:module';
+const mode=process.argv[1],calls=[],blockedResolutions=[],nodeResolveURL=new URL('./node-resolve.js',process.argv[2]).href;let ownedResolvers=0;
+const createRequire=module.createRequire;module.createRequire=(...args)=>{const require=createRequire(...args),resolve=require.resolve;if(String(args[0])===nodeResolveURL)ownedResolvers++;require.resolve=(specifier,...options)=>{if(specifier.includes('@expo-google-fonts/'))calls.push(specifier);if(mode==='jp'?specifier==='@expo-google-fonts/noto-sans-jp/package.json':/^@expo-google-fonts\/noto-(sans|serif)-(jp|sc|tc|hk|kr)\//.test(specifier)){blockedResolutions.push(specifier);throw Object.assign(Error('Simulated absent optional package'),{code:'MODULE_NOT_FOUND'});}return resolve(specifier,...options);};return require;};syncBuiltinESMExports();
 const {loadFonts}=await import(process.argv[2]),{toSvg}=await import(process.argv[3]),{gallery}=await import(process.argv[4]);
 const presentation={language:'ja',slides:[{title:'日本語',text:'こんにちは'}]},renderOptions={catalogs:[gallery]},options={pack:'office',substitutionPolicy:'visual',scripts:'auto',renderOptions};
-async function run(demand){const diagnostics=[];const fonts=await loadFonts({...options,...(demand?{presentation}:{scripts:[]}),onDiagnostic:d=>diagnostics.push(d)});if(!demand)await fonts.ensure(presentation,{renderOptions,onDiagnostic:d=>diagnostics.push(d)});let output;try{output={svg:toSvg(presentation,1,{...renderOptions,fonts,text:'paths'})};}catch(error){output={code:error.code};}return {diagnostics:diagnostics.filter(d=>d.code.startsWith('script-')).map(d=>[d.code,d.package??d.characters]),output,pending:fonts.pending(presentation,renderOptions),selection:fonts.registry.scriptSelection};}
-console.log(JSON.stringify({eager:await run(false),demand:await run(true),calls}));
+async function run(demand){const diagnostics=[],blockedBefore=blockedResolutions.length;const fonts=await loadFonts({...options,...(demand?{presentation}:{scripts:[]}),onDiagnostic:d=>diagnostics.push(d)});if(!demand)await fonts.ensure(presentation,{renderOptions,onDiagnostic:d=>diagnostics.push(d)});let output;try{output={svg:toSvg(presentation,1,{...renderOptions,fonts,text:'paths'})};}catch(error){output={code:error.code};}return {diagnostics:diagnostics.filter(d=>d.code.startsWith('script-')).map(d=>[d.code,d.package??d.characters]),output,pending:fonts.pending(presentation,renderOptions),selection:fonts.registry.scriptSelection,preparationReturned:true,blockedResolutions:blockedResolutions.slice(blockedBefore)};}
+console.log(JSON.stringify({eager:await run(false),demand:await run(true),calls,ownedResolvers,blockedResolutions}));
 `;
   for (const mode of ['jp', 'all']) {
     const result = JSON.parse(
@@ -350,6 +356,13 @@ console.log(JSON.stringify({eager:await run(false),demand:await run(true),calls}
         { encoding: 'utf8', timeout: 20000, maxBuffer: 4000000 },
       ).trim(),
     );
+    assert.ok(result.ownedResolvers >= 1, JSON.stringify({ mode, ownedResolvers: result.ownedResolvers }));
+    for (const [phase, facts] of [['eager', result.eager], ['demand', result.demand]]) {
+      const evidence = JSON.stringify({ mode, phase, preparationReturned: facts.preparationReturned, blockedResolutions: facts.blockedResolutions });
+      assert.equal(facts.preparationReturned, true, evidence);
+      assert.ok(facts.blockedResolutions.includes('@expo-google-fonts/noto-sans-jp/package.json'), evidence);
+      assert.ok(facts.blockedResolutions.every(specifier => mode === 'jp' ? specifier === '@expo-google-fonts/noto-sans-jp/package.json' : /^@expo-google-fonts\/noto-(sans|serif)-(jp|sc|tc|hk|kr)\//.test(specifier)), evidence);
+    }
     assert.deepEqual(result.demand.output, result.eager.output, mode);
     assert.ok(
       result.demand.diagnostics.some(
