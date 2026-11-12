@@ -26,11 +26,11 @@ const before=tx(input,text=>text.replace(/>[ \t\r\n]+</gu,'><')),edited=mutate(t
 const typeEvidence=()=>({chart:{observedType:'System.Int32',observedRawValue:'-4111',numericValue:-4111},count:{observedType:'System.Int32',observedRawValue:'3',numericValue:3},series:Array.from({length:3},(_,i)=>({index:i+1,typeObservation:{observedType:'System.Int32',observedRawValue:'4',numericValue:4}}))});
 const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n');
 let current;
-function currentFixture(){return current??=(async()=>{
+function currentFixture(){current??=(async()=>{
  const deck=structuredClone(source),renderOptions={catalogs:[gallery]},fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck,renderOptions});await fonts.ensure(deck,{renderOptions});
  const input=Buffer.from(await toPptx(deck,{catalogs:[gallery],seed:1,timestamp:'2026-01-01T00:00:00Z',date:'2026-10-10',provenance:'full',fonts}));assert.deepEqual(deck,source);assert.deepEqual({bytes:input.length,sha256:digest(input)},REFERENCE_NAME_INPUT,'Maintained current export must reproduce the sealed production authority before it can enter admission');
  const before=tx(input,text=>text.replace(/>[ \t\r\n]+</gu,'><')),edited=mutate(tx(before,()=>'<c:tx><c:v>Actual edited</c:v></c:tx>'),'docProps/core.xml',text=>once(text,'<cp:revision>1</cp:revision>','<cp:revision>2</cp:revision>'));return{input,before,edited,reopened:edited};
-})();}
+})();return current;}
 function completion(output,phaseSource=input,snapshotArchives={before,edited,reopened:edited}){
  const e=furnitureFixture(output),a=REFERENCE_NAME_ACTION;Object.assign(e.request,{profile:REFERENCE_NAME_SNAPSHOT_PROFILE,policy:structuredClone(REFERENCE_NAME_SNAPSHOT_POLICY),caseId:'reference-native-lines',slideCount:3,readOnlySurvey:false,captureTextFonts:false,referenceNameEdit:true,referenceNameSnapshots:true,input:structuredClone(REFERENCE_NAME_INPUT)});e.request.actionPlan.actions=referenceNamePlan();e.report.referenceNameEdit=true;
  e.report.actionPlan={actions:referenceNamePlan(),completed:[{index:1,op:a.op,status:'success'}],styleEdits:[],chartPoints:[],chartSeriesEdits:[{slideIndex:1,chartName:a.chartName,seriesIndex:1,expectedName:a.expectedName,newName:a.newName,before:a.expectedName,after:a.newName,status:'success',otherNames:[{index:2,name:'OPF reference 1'},{index:3,name:'OPF reference 2'}],chartTypeObservation:typeEvidence().chart,referenceSeriesCount:typeEvidence().count,referenceSeriesTypes:typeEvidence().series}]};
