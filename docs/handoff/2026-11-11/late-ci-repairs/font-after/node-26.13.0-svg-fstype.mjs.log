@@ -1,0 +1,1 @@
+SVG fsType: restricted and bitmap-only faces are never embedded (Node and browser handles, text as paths), named with a diagnostic; permitted faces are embedded.

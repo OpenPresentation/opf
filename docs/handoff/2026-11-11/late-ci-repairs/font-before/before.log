@@ -1,0 +1,15 @@
+file:///private/tmp/opf-034/packages/render/dist/svg.js:2300
+    && (checkedDataUrls.get(font) === font.dataUrl || /^data:font\/(ttf|otf|woff|woff2);base64,[A-Za-z0-9+/=]+$/.test(font.dataUrl));
+                                                                                                                 ^
+
+RangeError: Maximum call stack size exceeded
+    at RegExp.test (<anonymous>)
+    at assertEmbeddableFont (file:///private/tmp/opf-034/packages/render/dist/svg.js:2300:114)
+    at Array.forEach (<anonymous>)
+    at embeddedFontsFor (file:///private/tmp/opf-034/packages/render/dist/svg.js:2258:9)
+    at renderResolvedSlide (file:///private/tmp/opf-034/packages/render/dist/svg.js:765:49)
+    at Module.toSvg (file:///private/tmp/opf-034/packages/render/dist/svg.js:723:12)
+    at toSvg (file:///private/tmp/opf-034/packages/render/test/catalog-harness.mjs:13:180)
+    at file:///private/tmp/opf-034/packages/render/test/script-fonts-auto-robust.mjs:188:15
+
+Node.js v26.13.0

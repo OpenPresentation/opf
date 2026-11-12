@@ -1,0 +1,15 @@
+{
+  "scope": "Intentional before-control on retained old compiled renderer, not current-source qualification",
+  "source": "e0bf7b3ed760034a0299b46f7b5ccac2f6632102",
+  "compiledReference": "464e70586c617f2c03b1b2d96aab1aa9907bcdd0",
+  "runtimeFilesBeforeVerified": 609,
+  "args": [
+    "/tmp/opf-node26-exact-prepare01/fnm/node-versions/v26.13.0/installation/bin/node",
+    "packages/render/test/script-fonts-auto-robust.mjs"
+  ],
+  "nodeVersion": "v26.13.0",
+  "code": 1,
+  "seconds": 4.800501833,
+  "logBytes": 986,
+  "logSha256": "ea3d325fe8c4c57164156a345d0cf30382f89ea1914ef320b53a357bb950a42f"
+}

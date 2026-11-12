@@ -1,0 +1,21 @@
+{
+  "args": [
+    "/Users/michael/Library/Application Support/fnm/fnm",
+    "install",
+    "26.13.0",
+    "--fnm-dir",
+    "/tmp/opf-node26-exact-prepare01/fnm",
+    "--node-dist-mirror",
+    "https://nodejs.org/dist",
+    "--progress",
+    "never"
+  ],
+  "code": 0,
+  "seconds": 1.8284474579999999,
+  "logBytes": 33,
+  "logSha256": "ff7066c4f68c8bf436f164f2e1003fa144a4eaeb0269c95eeba9656dbf805d5d",
+  "scope": "Isolated task-specific fnm directory; no fnm use or user-default change",
+  "version": "v26.13.0",
+  "node": "/tmp/opf-node26-exact-prepare01/fnm/node-versions/v26.13.0/installation/bin/node",
+  "nodeSha256": "533bd644c5ae0e0ea3a80e433aad16b817447ccba1e1eea701875eac80cb75d4"
+}

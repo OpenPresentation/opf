@@ -1,0 +1,135 @@
+{
+  "scope": "Late CI first failures, reviewed repairs and focused results; final coherent gate/native/release incomplete",
+  "files": [
+    {
+      "file": "font-after/node-24.21.0-embedded-font-data-url.mjs.log",
+      "bytes": 164,
+      "sha256": "938208e0013e7fba8e975654e40dae8fdb64043ae0dc9cf0fc5873b515a8aa31"
+    },
+    {
+      "file": "font-after/node-24.21.0-script-fonts-auto-robust.mjs.log",
+      "bytes": 189,
+      "sha256": "f273f120bab36ccadc12cd1ca194090a7f8ee8bc3a151c19ca50de882b6b0299"
+    },
+    {
+      "file": "font-after/node-24.21.0-svg-font-embedding.mjs.log",
+      "bytes": 178,
+      "sha256": "68fc1321e81a1d5c9434daa110700c99e91afce3695128666797a699b261fb22"
+    },
+    {
+      "file": "font-after/node-24.21.0-svg-fstype.mjs.log",
+      "bytes": 162,
+      "sha256": "70c66950f1409446fabd79f82a5b73ebe7a0bef4413176d951cf148c7871991b"
+    },
+    {
+      "file": "font-after/node-26.13.0-embedded-font-data-url.mjs.log",
+      "bytes": 164,
+      "sha256": "938208e0013e7fba8e975654e40dae8fdb64043ae0dc9cf0fc5873b515a8aa31"
+    },
+    {
+      "file": "font-after/node-26.13.0-script-fonts-auto-robust.mjs.log",
+      "bytes": 189,
+      "sha256": "f273f120bab36ccadc12cd1ca194090a7f8ee8bc3a151c19ca50de882b6b0299"
+    },
+    {
+      "file": "font-after/node-26.13.0-svg-font-embedding.mjs.log",
+      "bytes": 178,
+      "sha256": "68fc1321e81a1d5c9434daa110700c99e91afce3695128666797a699b261fb22"
+    },
+    {
+      "file": "font-after/node-26.13.0-svg-fstype.mjs.log",
+      "bytes": 162,
+      "sha256": "70c66950f1409446fabd79f82a5b73ebe7a0bef4413176d951cf148c7871991b"
+    },
+    {
+      "file": "font-after/receipt.json",
+      "bytes": 3981,
+      "sha256": "04bf76cffcf5d7be12fd540b03abbe86122e105d12dae0cd498255266a5d96bc"
+    },
+    {
+      "file": "font-before/before.log",
+      "bytes": 986,
+      "sha256": "ea3d325fe8c4c57164156a345d0cf30382f89ea1914ef320b53a357bb950a42f"
+    },
+    {
+      "file": "font-before/receipt.json",
+      "bytes": 603,
+      "sha256": "5e93e0b77a6c33e8231471dd978cda92f6dd939e20b89a8538a2937d757f90ab"
+    },
+    {
+      "file": "font-build/build.log",
+      "bytes": 14666,
+      "sha256": "fc812d2c8a9687e4a93d7e00a0ee3aaf77868d51ffd4b3dee687f2456bfb681a"
+    },
+    {
+      "file": "font-build/receipt.json",
+      "bytes": 510,
+      "sha256": "a2aa1565c48b4b65b2ede0ac51b2b4de855dcbf13e029899c372e0af5432dbcf"
+    },
+    {
+      "file": "interrupted-gate/gate.log",
+      "bytes": 719,
+      "sha256": "a28d2dc06bfde4d057e7c5467f7ce9425e5d7a3719f24cfba8c5573e897a1218"
+    },
+    {
+      "file": "interrupted-gate/interruption-after.json",
+      "bytes": 267,
+      "sha256": "76544cf20045923d7679f01493920e549791edbc1596457a25be33e6e7744b7e"
+    },
+    {
+      "file": "interrupted-gate/interruption.json",
+      "bytes": 1848,
+      "sha256": "ecd74eba7bf519c9d72f80401db8332b918110646e532d15db464d9d3f80248c"
+    },
+    {
+      "file": "interrupted-gate/renderer-pass.log",
+      "bytes": 50094,
+      "sha256": "907998c01bcdd23f29771ff8e6e007487251a68b8fc3dd298d8f7e575a802897"
+    },
+    {
+      "file": "interrupted-gate/selected-logs.json",
+      "bytes": 2750,
+      "sha256": "2dc2f0a24455beedc6c115c3e65125b87f5b5739c9ea48a08bc0fd4cd65d77eb"
+    },
+    {
+      "file": "late-original-ci/job-130893933455.log",
+      "bytes": 113556,
+      "sha256": "4a3d509b12c60aa4902cd0ad02d4c3fcdde43e3117d0ca6f3f7e7d00b2b04759"
+    },
+    {
+      "file": "late-original-ci/job-130893933627.log",
+      "bytes": 87776,
+      "sha256": "188946fe24009490a6abe49a4e69dbe8a7caed242eb85dee21ba9e6b652ec629"
+    },
+    {
+      "file": "late-original-ci/snapshot-final.log",
+      "bytes": 3141,
+      "sha256": "3788021e80368086a806c72b564b222a92db86eff4a55e247dec9a73eb02d457"
+    },
+    {
+      "file": "mcp-budget/focus.log",
+      "bytes": 391,
+      "sha256": "8b3d9dce9c4cc664da7dcf3aab797e0fceb3248db9f7939016169cc193316ec1"
+    },
+    {
+      "file": "mcp-budget/frame.json",
+      "bytes": 65,
+      "sha256": "c84ab3387d4e5cb6dedeb18636f5d11f3abace9b44a465a7bdc2a016790cb573"
+    },
+    {
+      "file": "mcp-budget/receipt.json",
+      "bytes": 382,
+      "sha256": "b1f33bc70e8c93c03feeac35239a976fc41c36ab6698b317bbd6d96005746117"
+    },
+    {
+      "file": "node26-runtime/install.log",
+      "bytes": 33,
+      "sha256": "ff7066c4f68c8bf436f164f2e1003fa144a4eaeb0269c95eeba9656dbf805d5d"
+    },
+    {
+      "file": "node26-runtime/receipt.json",
+      "bytes": 691,
+      "sha256": "51bd0d1d59695d33110e21da4b1d2d915bc19487efa765405de29623471aed7c"
+    }
+  ]
+}
