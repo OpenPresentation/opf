@@ -27,10 +27,13 @@ const typeEvidence=()=>({chart:{observedType:'System.Int32',observedRawValue:'-4
 const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n');
 // The current export of the reference deck. It is no longer the archive PowerPoint was measured with (REFERENCE_NAME_INPUT, 129,025 bytes):
 // v0.34.0 made the data-label XML of the reference series schema-valid (no <c:delete val="0"/> before the show flags, and nothing after
-// <c:delete val="1"/>), which removes 9 bytes from the two chart parts and changes nothing else. The native route still admits only the
-// measured archive (retained as test-fixtures/reference-name/reference-native-lines.pptx, which the comparison contract below runs on);
-// measuring the current export needs a new sealed input.
-const CURRENT_EXPORT=Object.freeze({bytes:129016,sha256:'a34458fbf371bee230cd34000378fbbf04bbbe8db461d5fc291b9c03f932296e'});
+// <c:delete val="1"/>), which removes 9 bytes from the two chart parts and changes nothing else. LH-110 (v0.34.0) then changed the same
+// two parts again: a labeled helper's data labels state every show flag (c:showPercent and c:showBubbleSize 0, c:showLeaderLines 0), and
+// a line chart with reference helpers keeps the vertical axis layout (c:catAx axPos b, c:valAx axPos l), which Keynote needs to open
+// the file. The native route still admits only the measured archive (retained as
+// test-fixtures/reference-name/reference-native-lines.pptx, which the comparison contract below runs on); measuring the current export
+// needs a new sealed input.
+const CURRENT_EXPORT=Object.freeze({bytes:129026,sha256:'9b05b9b1b473503893869effb4dd33ad56845dd06fa8ea29e685d1c0e43bdea1'});
 let current;
 function currentFixture(){current??=(async()=>{
  const deck=structuredClone(source),renderOptions={catalogs:[gallery]},fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck,renderOptions});await fonts.ensure(deck,{renderOptions});
