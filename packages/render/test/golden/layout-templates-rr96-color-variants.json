@@ -2806,19 +2806,19 @@
    "bytes": 19759
   },
   "paginated pyramid 5 long page 2": {
-   "svg": "aaa11b113509ea91b97096f11b7d8c18d4cd4e09a62b077197d7fc87aa20f293",
-   "png": "04369680abdeb1bc1c31eed6716fa61d9c76aded7e0f67323898b24ad2a93e40",
-   "bytes": 11953
+   "svg": "34bcf29599be15ed9fcde026b7a30b843e86c92ed1ef2e98cf925c259cb4497b",
+   "png": "eca913830aceff5e9cb5543edc6694904c7f9a3067f0c8704a9086ba308aa02e",
+   "bytes": 14376
   },
   "paginated pyramid 5 long page 3": {
-   "svg": "8bb76a69903ebc088ac73ab30f04e3894045e78a35662bd28e38eeacdd5ea175",
-   "png": "04369680abdeb1bc1c31eed6716fa61d9c76aded7e0f67323898b24ad2a93e40",
-   "bytes": 11953
+   "svg": "3efc0edf2b58b718df276dfec8a632cdec811974b424c55e7f6a184edf2f8745",
+   "png": "eca913830aceff5e9cb5543edc6694904c7f9a3067f0c8704a9086ba308aa02e",
+   "bytes": 14376
   },
   "paginated pyramid 5 long page 4": {
-   "svg": "24b69f61359e19a44ec11218dfb431255a1ee90843d1b28fc596235414215863",
-   "png": "04369680abdeb1bc1c31eed6716fa61d9c76aded7e0f67323898b24ad2a93e40",
-   "bytes": 11953
+   "svg": "c71abee6d34e1ea7b6609346037a1e3cfcb9c89572f6d8739ef9be7f304e2175",
+   "png": "eca913830aceff5e9cb5543edc6694904c7f9a3067f0c8704a9086ba308aa02e",
+   "bytes": 14376
   },
   "paginated pyramid 6 long page 1": {
    "svg": "4c88eb785e1ded18a460877946335215a3c2fa5cf5d4fbe9e62caa50a36ea231",
@@ -2876,19 +2876,19 @@
    "bytes": 20214
   },
   "paginated inverted-pyramid 5 long page 2": {
-   "svg": "576cea670b07e76ac2b28f9a62cdae8fc4b44a981a9d4ce62cbbbdbc6f905625",
-   "png": "a55e3ceadf75f93957c32b5ed95d86138ecd8dc08e7f15a4af7ac536628e3522",
-   "bytes": 12404
+   "svg": "852a90b5474a7d4c4e45ec96f47246b65c8191f79ca36691d10b7d7ae1bbcee3",
+   "png": "fa4a0dba98f1526243e3fd705f94fb424a5aea22ed671ff11c4c101b833c5c55",
+   "bytes": 16296
   },
   "paginated inverted-pyramid 5 long page 3": {
-   "svg": "2f92aa7c186dbde8373408201d089f71b19afbc54b93e39b875ccf6eb1aa80d1",
-   "png": "a55e3ceadf75f93957c32b5ed95d86138ecd8dc08e7f15a4af7ac536628e3522",
-   "bytes": 12404
+   "svg": "18b839642f6a9d542159dd8461a1f75b407810af912c6f8b7f7823f4cf5ec96f",
+   "png": "fa4a0dba98f1526243e3fd705f94fb424a5aea22ed671ff11c4c101b833c5c55",
+   "bytes": 16296
   },
   "paginated inverted-pyramid 5 long page 4": {
-   "svg": "6cd0387c465d5db7c00ef6d068d199209f3886d4bb8d700f4feeb95416711051",
-   "png": "a55e3ceadf75f93957c32b5ed95d86138ecd8dc08e7f15a4af7ac536628e3522",
-   "bytes": 12404
+   "svg": "a0278a3ee5ba51ac7d2ed9247b2eaa8663f466664819eb8ac123105e80ddd179",
+   "png": "fa4a0dba98f1526243e3fd705f94fb424a5aea22ed671ff11c4c101b833c5c55",
+   "bytes": 16296
   },
   "paginated inverted-pyramid 6 long page 1": {
    "svg": "3848149e5ae6da90f566737b369fb3eda426c392e4d6d36bb97987142d7076b1",
@@ -2946,19 +2946,19 @@
    "bytes": 19683
   },
   "paginated matrix 5 long page 2": {
-   "svg": "8baf39d6e43497252fd8bc3b2011dc82f697365b94e71c04f393b37a98a96a58",
-   "png": "dca7bdb8a584ae6fb56c3e46bd8e324aa6ccf5eeafe453f4ab00180847575638",
-   "bytes": 12892
+   "svg": "b5e524a9fbcf7174d56910ba648ed39fba915af87f8bba02ea83e8775fa04fe3",
+   "png": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0",
+   "bytes": 17202
   },
   "paginated matrix 5 long page 3": {
-   "svg": "cb64273c0c4e2b0f9064046d398a0ce4f0001cc2eceaf40c7ce8203745d32921",
-   "png": "dca7bdb8a584ae6fb56c3e46bd8e324aa6ccf5eeafe453f4ab00180847575638",
-   "bytes": 12892
+   "svg": "b7d31ae8fafc12994c51774720b838eb5f906f48189857de3d0d3481cfb173a3",
+   "png": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0",
+   "bytes": 17202
   },
   "paginated matrix 5 long page 4": {
-   "svg": "87bd09ab58cf6080985698e0b6c92c3b2dc49d0a78b7a472abb737f7d9e605b7",
-   "png": "dca7bdb8a584ae6fb56c3e46bd8e324aa6ccf5eeafe453f4ab00180847575638",
-   "bytes": 12892
+   "svg": "2ade921893e8cfcb84cf4c6971d5bffd3c7d2fae02046ff989141ab1a7857812",
+   "png": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0",
+   "bytes": 17202
   },
   "paginated matrix 6 long page 1": {
    "svg": "db15436ada619974892ad140dad1f0deac4bedf0355646035b60e5a84f64173c",
@@ -3016,19 +3016,19 @@
    "bytes": 19691
   },
   "paginated cycle 5 long page 2": {
-   "svg": "36375f7db421038feb79696ab21a9c85603e392cf66c3d836379af3c79cd0e5a",
-   "png": "e3a0fe0567d02712cd473e3e353429bc82237d4fe1a37828320d77bc2cf72ab4",
-   "bytes": 12891
+   "svg": "d59965b8c02f30b6da37222ed227306c42c601a8f4ced37abf304fe250e91de2",
+   "png": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe",
+   "bytes": 17203
   },
   "paginated cycle 5 long page 3": {
-   "svg": "a4ecdf66a08662ffe035dbc406e7379fd572ebafcf572c3c4a41f4da889fec0a",
-   "png": "e3a0fe0567d02712cd473e3e353429bc82237d4fe1a37828320d77bc2cf72ab4",
-   "bytes": 12891
+   "svg": "a116b2a4774625a995eedfa29abf249f4db42d4ca354236df9516c63ea44def0",
+   "png": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe",
+   "bytes": 17203
   },
   "paginated cycle 5 long page 4": {
-   "svg": "e7e8e917391f97c7da13452f0bde02e8b13b4bb973b8ce1a54ae732e2fdce4ca",
-   "png": "e3a0fe0567d02712cd473e3e353429bc82237d4fe1a37828320d77bc2cf72ab4",
-   "bytes": 12891
+   "svg": "b9064e7d1f5f53779aa6b4d78cbeb43e73e25c073b96e3d97fa28c97e228ac5c",
+   "png": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe",
+   "bytes": 17203
   },
   "paginated cycle 6 long page 1": {
    "svg": "3bc7eb5b762e4b695379f9c8aee3d9467597a55a75d92634f6c9c6ad0e753ba2",
@@ -3086,19 +3086,19 @@
    "bytes": 19835
   },
   "paginated chevrons 5 long page 2": {
-   "svg": "74fda63cb8c3072d0fca1d2eb7cc00b738c8b726c1afc9433d4764078de875d6",
-   "png": "510f9846d7e4dba824342b6653153f51853384c019b81f47dd6c7b01627ec218",
-   "bytes": 18534
+   "svg": "4eef9c579532a4a5acbdbbe038f5b59ca91ae66c2d237486b8494b88b557b2da",
+   "png": "523167640acf2e6333f713fd5a86fbd9fc3d8751871d48dfde548bf83038be7e",
+   "bytes": 21590
   },
   "paginated chevrons 5 long page 3": {
-   "svg": "2a4955a4da90b80ea4f7987b0dd120cf9b05a2fad57342fa7d81fa93640e84cb",
-   "png": "510f9846d7e4dba824342b6653153f51853384c019b81f47dd6c7b01627ec218",
-   "bytes": 18534
+   "svg": "afdd6c8e8c90a490b53661b4fb8f09db9a7ade3e0677af1569668cfbfe2791ea",
+   "png": "523167640acf2e6333f713fd5a86fbd9fc3d8751871d48dfde548bf83038be7e",
+   "bytes": 21590
   },
   "paginated chevrons 5 long page 4": {
-   "svg": "65ccdd96a478507a02c4e8e7d430eab5b7a8a07505bc86859c002e96eb37c3b0",
-   "png": "510f9846d7e4dba824342b6653153f51853384c019b81f47dd6c7b01627ec218",
-   "bytes": 18534
+   "svg": "b188d03e64b7f03fb6a302c1348ec39fb09fe93c1882b706e69e47ee887d7afa",
+   "png": "523167640acf2e6333f713fd5a86fbd9fc3d8751871d48dfde548bf83038be7e",
+   "bytes": 21590
   },
   "paginated chevrons 6 long page 1": {
    "svg": "bcd3a22055122a39376ccbf88da0d3e0e8f740c6c0d5eda1c807c9250c4a5f9e",
@@ -3156,19 +3156,19 @@
    "bytes": 19519
   },
   "paginated flow 5 long page 2": {
-   "svg": "8a9a0f592b29596c8c0e27bdc9c7d6af5a65baa4438d1a3c80bbbdc92d172c46",
-   "png": "8e26dd289fe80c64fb793ed5c606a271761e67aa9a41ccb66c4837416e951957",
-   "bytes": 16214
+   "svg": "7ec241e343107731898c168c74f1a8e6cc1b2893a614d91024de366427a96f70",
+   "png": "71722151c753c69f1d6fb8a2ba20266dcb6de2fb506d8ad32fc4b45c01b86c64",
+   "bytes": 14133
   },
   "paginated flow 5 long page 3": {
-   "svg": "f59b8879f005184b73477fce9ea8f6c4970ab47038dfc7aafaacfcb02dad42a0",
-   "png": "8e26dd289fe80c64fb793ed5c606a271761e67aa9a41ccb66c4837416e951957",
-   "bytes": 16214
+   "svg": "4e11c8cac7926b5ccd2a9a5a507af5d0a72f1a1bf3751e8cffabddc6b974308b",
+   "png": "71722151c753c69f1d6fb8a2ba20266dcb6de2fb506d8ad32fc4b45c01b86c64",
+   "bytes": 14133
   },
   "paginated flow 5 long page 4": {
-   "svg": "6d9d514f020ab00c15a145a4d0a12123d8eaef3011f6b557d0aa925d75dffd17",
-   "png": "8e26dd289fe80c64fb793ed5c606a271761e67aa9a41ccb66c4837416e951957",
-   "bytes": 16214
+   "svg": "a9d893639abfdf200dbb9e7b5b6b35779fc3fdd9e1f91627a8b079faab6753e8",
+   "png": "71722151c753c69f1d6fb8a2ba20266dcb6de2fb506d8ad32fc4b45c01b86c64",
+   "bytes": 14133
   },
   "paginated flow 6 long page 1": {
    "svg": "4da4a347349b043ddccceb721f0d83637b9e9c06f20dc981b5d0826dbe8259c8",
@@ -3226,19 +3226,19 @@
    "bytes": 20074
   },
   "paginated vertical-flow 5 long page 2": {
-   "svg": "21371f06d253ebb63824108a515528b17561f3342c1f422af9d684b38ce7cc5e",
-   "png": "cfaee6ec2871788e6f2eea66efa30150d86962e4d22e0e018ba634cedf4864ca",
-   "bytes": 12955
+   "svg": "7b81200d56a90d0441c0032bfd425eb5d5118b55894e0e3a9f0d38addb62384e",
+   "png": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84",
+   "bytes": 17325
   },
   "paginated vertical-flow 5 long page 3": {
-   "svg": "1c6433e7a1d05784cbb7251dc1493b33d430d609a8cb309568d52dab11c49c2d",
-   "png": "cfaee6ec2871788e6f2eea66efa30150d86962e4d22e0e018ba634cedf4864ca",
-   "bytes": 12955
+   "svg": "40ca6b0e266e65dd54f5786edb2ec429d6ab0617eec0f257ecfaf41163c4cbb5",
+   "png": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84",
+   "bytes": 17325
   },
   "paginated vertical-flow 5 long page 4": {
-   "svg": "b22eeaf4426a7f6a1d6c3e8dd3451b8d161ded8e15ec3b6075ba43f4007c4f06",
-   "png": "cfaee6ec2871788e6f2eea66efa30150d86962e4d22e0e018ba634cedf4864ca",
-   "bytes": 12955
+   "svg": "b936f50807b027254af6e222404767ec490de8a7b66f5a3b83a74ed72af40add",
+   "png": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84",
+   "bytes": 17325
   },
   "paginated vertical-flow 6 long page 1": {
    "svg": "ebe1d7bdb34b51066270f32df3f08f0c6a32ea5dba78b9fe5bdbbe2447d5a008",
@@ -3296,19 +3296,19 @@
    "bytes": 20345
   },
   "paginated org-chart 5 long page 2": {
-   "svg": "c874076fb11810ed52a60537b2aa396903f6a5de52d540b289753a57b47210bd",
-   "png": "63d49b69526a0bd7b0754bdbbc2f51496e67fccee83bca36af09977b86502532",
-   "bytes": 12536
+   "svg": "75f3b588374a1e6cad08fa309d9f3c43be55136ab5a3c135c66898f8aa433bd4",
+   "png": "1edfeee258bab0c6ff2b3392826792a4b44376cafaccda7944dc5b1833f6ddee",
+   "bytes": 16436
   },
   "paginated org-chart 5 long page 3": {
-   "svg": "bc70a90b99246c517eeccc862211e02d6098e32ec41f9710b7a3fdd98d2335d3",
-   "png": "63d49b69526a0bd7b0754bdbbc2f51496e67fccee83bca36af09977b86502532",
-   "bytes": 12536
+   "svg": "353311411d3c5a208ba18cc846d7432416f7c24c92f8a531973866762f221888",
+   "png": "1edfeee258bab0c6ff2b3392826792a4b44376cafaccda7944dc5b1833f6ddee",
+   "bytes": 16436
   },
   "paginated org-chart 5 long page 4": {
-   "svg": "52ba52566fb5239ec2f0a54e6276ca1911a05d705661540cdd34a9b02cc13518",
-   "png": "63d49b69526a0bd7b0754bdbbc2f51496e67fccee83bca36af09977b86502532",
-   "bytes": 12536
+   "svg": "96af75e30bde4bdf3f60914969169d9426e0ee93294da93a4246f2b72f30f586",
+   "png": "1edfeee258bab0c6ff2b3392826792a4b44376cafaccda7944dc5b1833f6ddee",
+   "bytes": 16436
   },
   "paginated org-chart 6 long page 1": {
    "svg": "2721482d4c3c4c05c76c64ed2bb2a96ec93a09a32203fa656dee8c61524a43f5",
@@ -3366,19 +3366,19 @@
    "bytes": 19825
   },
   "paginated hierarchy 5 long page 2": {
-   "svg": "6e3aa5797182eae98e6b5a9f297d3d704be1116633908810f624c3fdd3fdb1a2",
-   "png": "aac76b5c5824842e034847036de5fe677990876fdc871354f39cadfbeb174158",
-   "bytes": 12014
+   "svg": "e221bdc85fb155a75f05cea8fe99f552d3fc8cac0be148a54234bb01b6b16cff",
+   "png": "3780a1ab295501423179f9ad5cf1da88d2013bb728368e39e287aea18e6be033",
+   "bytes": 15913
   },
   "paginated hierarchy 5 long page 3": {
-   "svg": "d9b41e6fe95eb86445c040b1bf2952c382daeb846e0ab7d2d7240f79a69b39a0",
-   "png": "aac76b5c5824842e034847036de5fe677990876fdc871354f39cadfbeb174158",
-   "bytes": 12014
+   "svg": "6a13f415f95bef478593cc6bdba662706acc87fb9708d3cbe2e63fb82431fbec",
+   "png": "3780a1ab295501423179f9ad5cf1da88d2013bb728368e39e287aea18e6be033",
+   "bytes": 15913
   },
   "paginated hierarchy 5 long page 4": {
-   "svg": "f0cf490961e85551c5f56d18a91176f6077c66c5e5b9ea9643b422ab63bd128a",
-   "png": "aac76b5c5824842e034847036de5fe677990876fdc871354f39cadfbeb174158",
-   "bytes": 12014
+   "svg": "16d0d2b9f3ba6951a4096ed6d7233de517ceb68b9d7be05fcee3604e1c92358a",
+   "png": "3780a1ab295501423179f9ad5cf1da88d2013bb728368e39e287aea18e6be033",
+   "bytes": 15913
   },
   "paginated hierarchy 6 long page 1": {
    "svg": "4feeb14071255894b0cb988de0da730c9ff9221058b1c683cf59e55cf5b8834f",
@@ -3436,19 +3436,19 @@
    "bytes": 19539
   },
   "paginated venn 5 long page 2": {
-   "svg": "310cd90f3a2816d99a7a2308f2e92ad2e83aa6d9eb3996b91326b87afb000f3e",
-   "png": "2fcc5bb1fdabd4d77fcb9ffb2d213f467ffdad558ba548d3f6e9dd371f8fc7d7",
-   "bytes": 13916
+   "svg": "1387ecdccc9d3c8215cd4051c6c88630791f27cf3721158c9c4821f66a6275c0",
+   "png": "6a237c0d31dc96af5ebcbea0e44d031d315ee0b12af800ca9c209ef78b7d240c",
+   "bytes": 15634
   },
   "paginated venn 5 long page 3": {
-   "svg": "ccce69f4013e7eb40b05526016403ec5745704599157b608522e9608d1e1a521",
-   "png": "2fcc5bb1fdabd4d77fcb9ffb2d213f467ffdad558ba548d3f6e9dd371f8fc7d7",
-   "bytes": 13916
+   "svg": "01c109b7be3fc9c8081984535edb4848b1861d5af3d502ff37d512dc7ab31223",
+   "png": "6a237c0d31dc96af5ebcbea0e44d031d315ee0b12af800ca9c209ef78b7d240c",
+   "bytes": 15634
   },
   "paginated venn 5 long page 4": {
-   "svg": "03d66d5100511c2e2e3a23c231c01ac8caa7624968b3764c78f28c6daa3fb676",
-   "png": "2fcc5bb1fdabd4d77fcb9ffb2d213f467ffdad558ba548d3f6e9dd371f8fc7d7",
-   "bytes": 13916
+   "svg": "208cbe2d72fe168158d8692fd058cd03fd38b00fb1605b5c8cf6ace63f9d18a1",
+   "png": "6a237c0d31dc96af5ebcbea0e44d031d315ee0b12af800ca9c209ef78b7d240c",
+   "bytes": 15634
   },
   "paginated venn 6 long page 1": {
    "svg": "42fe5c48125ba5e5a2fd31a79711f72a66f85b2e9b34ab342bb1ca976fd581e9",
