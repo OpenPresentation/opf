@@ -57,6 +57,18 @@ test('complete current public imports/source roles are exact before then only Na
  const vector=bytes=>mutate(bytes,'ppt/charts/chart2.xml',text=>{const first=/<c:ser>[\s\S]*?<\/c:ser>/u.exec(text)[0],values=/<c:val>[\s\S]*?<\/c:val>/u.exec(first)[0],extra=values.replaceAll('c:val','c:xVal');return once(text,first,first.replace('</c:ser>',extra+'</c:ser>'));}),vectors={before:vector(f.before),edited:vector(f.edited),reopened:vector(f.edited)},ve=completion(undefined,f.input,vectors);await assert.rejects(()=>compareReferenceNameSnapshots(b,ve.report,wire(ve),{source:f.input,...vectors}));
  await assert.rejects(()=>compareReferenceNameSnapshots(b,e.report,wire(e),{source:input,before,edited,reopened:edited}),/exact current production source/);
 });
+test('category automatic selection stays exact and only closed first-Save line smoothing is OPEN',async()=>{
+ const f=await currentFixture(),b={input:f.input,reference:{source:{deck:source}},envelope:{generation:{consumer:ROOT}}};
+ const axis=(bytes,next)=>mutate(bytes,'ppt/charts/chart1.xml',text=>{const raw=/<c:catAx>[\s\S]*?<\/c:catAx>/u.exec(text)[0];return once(text,raw,once(raw,'<c:auto val="1"/>',next));});
+ const group=(bytes,next)=>mutate(bytes,'ppt/charts/chart1.xml',text=>{const raw=/<c:lineChart>[\s\S]*?<\/c:lineChart>/u.exec(text)[0];return once(text,raw,raw.replace(/<c:axId /u,next+'<c:axId '));});
+ const coherent=(change)=>({source:f.input,before:change(f.before),edited:change(f.edited),reopened:change(f.reopened)}),compare=archives=>{const e=completion(undefined,f.input,archives);return compareReferenceNameSnapshots(b,e.report,wire(e),archives);};
+ // Every mutated phase agrees, so the source→before semantic boundary must refuse.
+ for(const next of ['', '<c:auto val="0"/>','<c:auto val="true"/>','<c:auto/>','<c:auto val="1" extra="1"/>','<c:auto val="1"/><c:auto val="1"/>','<c:auto val="1"/><c:unknownVector val="1"/>'])await assert.rejects(()=>compare(coherent(bytes=>axis(bytes,next))));
+ for(const next of ['<c:smooth val="2"/>','<c:smooth/>','<c:smooth val="0" extra="1"/>','<c:smooth val="0"/><c:smooth val="0"/>','<c:unknownVector val="0"/>'])await assert.rejects(()=>compare(coherent(bytes=>group(bytes,next))));
+ const archives=coherent(bytes=>group(bytes,'<c:smooth val="0"/>')),result=await compare(archives);assert.equal(result.sourceBefore.qualification,'OPEN');assert.ok(result.sourceBefore.rawFindings.some(row=>row.part==='ppt/charts/chart1.xml'));assert.deepEqual(JSON.parse(JSON.stringify(result)),result);
+ // A single later smoothing change remains a raw style failure, with actual hashes updated.
+ const later=mutate(archives.edited,'ppt/charts/chart1.xml',text=>once(text,'<c:smooth val="0"/><c:axId ','<c:smooth val="1"/><c:axId '));assert.throws(()=>assertReferenceNameSnapshotRaw(archives.before,later,archives.reopened,deps),/axes\/labels\/styles\/resources remain strict/);await assert.rejects(()=>compare({...archives,edited:later}));
+});
 test('structural first-Save style findings persist with explicit presence and exact recomputation',async()=>{
  const f=await currentFixture(),b={input:f.input,reference:{source:{deck:source}},envelope:{generation:{consumer:ROOT}}};
  const structural=bytes=>mutate(bytes,'ppt/charts/chart2.xml',text=>{const first=/<c:ser>[\s\S]*?<\/c:ser>/u.exec(text)[0],marker=/<c:marker>[\s\S]*?<\/c:marker>/u.exec(first)[0];assert.equal(marker.split('<c:size val="6"/>').length,2);return once(text,first,once(first,marker,marker.replace('<c:size val="6"/>','')));});

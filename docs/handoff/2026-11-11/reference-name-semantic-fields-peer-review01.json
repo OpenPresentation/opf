@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "verdict": "SOURCE ACCEPTED; no concrete blocker",
+  "sourceOnly": true,
+  "patch": {
+    "bytes": 14409,
+    "sha256": "d1e1bee44256a5d018b1d31ed03ecb372b5fab8cadbae137363b7d021ed0825c"
+  },
+  "manifestSha256": "77d8d214ce424314f568b9a81c00c781a4ca78f10bbfcc1034ba1c619c45142b",
+  "sourceFilesVerified": 4,
+  "protectedFilesVerified": 35,
+  "laterRawFunctionBaseExact": true,
+  "findings": [
+    "c:auto is category-axis-only, one explicit 0/1 val, exact presence/value retained in cache-role equality",
+    "c:smooth only on line groups with same closed0/1 grammar, firstSave recordedOPEN without style equivalence claim",
+    "Later complete raw function unchanged; smoothing mutation still refuses",
+    "Mutants bind all3snapshot hashes before comparison; malformed/duplicate/unknown/presence/value negatives reach actual semanticboundary; positive recordsOPEN andJSONroundtrip"
+  ],
+  "execution": "No imports/syntax/tests/build/PowerShell/Office"
+}

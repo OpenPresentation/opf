@@ -21,10 +21,11 @@ function scalarTree(node){
 }
 function cacheRoles(archive,parts,deps){
  const parser=new deps.XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,parseAttributeValue:false,trimValues:false});
+ const boolean=node=>{keys(node,['val']);assert.deepEqual(Object.keys(node),['val']);assert.ok(node.val==='0'||node.val==='1','One explicit closed Boolean value required');return node;};
  const fields=(node,allowed)=>{keys(node,[...allowed,'#text']);if(Object.hasOwn(node,'#text'))assert.ok(typeof node['#text']==='string'&&/^\s*$/u.test(node['#text']));return Object.fromEntries(Object.entries(node).filter(([key])=>key!=='#text'));};
  return archive.slides.map(slide=>{const shape=slide.shapes.find(shape=>shape.kind==='chart'),plot=fields(parser.parse(deps.strFromU8(parts[shape.chartPart]))['c:chartSpace']['c:chart']['c:plotArea'],['c:layout','c:lineChart','c:barChart','c:catAx','c:valAx','c:spPr','c:extLst']);
-  const axes=['c:catAx','c:valAx'].flatMap(kind=>list(plot[kind]).map(axis=>{fields(axis,['c:axId','c:scaling','c:delete','c:axPos','c:majorGridlines','c:minorGridlines','c:title','c:numFmt','c:majorTickMark','c:minorTickMark','c:tickLblPos','c:spPr','c:txPr','c:crossAx','c:crosses','c:crossesAt','c:crossBetween','c:lblAlgn','c:lblOffset','c:tickLblSkip','c:tickMarkSkip','c:noMultiLvlLbl','c:majorUnit','c:minorUnit','c:extLst']);return{kind,id:axis['c:axId'],cross:axis['c:crossAx'],crosses:axis['c:crosses'],crossesAt:axis['c:crossesAt'],crossBetween:axis['c:crossBetween'],minorUnit:Object.hasOwn(axis,'c:minorUnit')?{present:true,value:axis['c:minorUnit']}:{present:false}};}));
-  const groups=[...new Set(shape.chart.groups.map(group=>group.construct))].flatMap(constructName=>list(plot[constructName]).map(construct=>{fields(construct,['c:barDir','c:grouping','c:varyColors','c:ser','c:marker','c:dLbls','c:gapWidth','c:overlap','c:axId','c:extLst']);return list(construct['c:ser']).map(series=>{
+  const axes=['c:catAx','c:valAx'].flatMap(kind=>list(plot[kind]).map(axis=>{fields(axis,['c:axId','c:scaling','c:delete','c:axPos','c:majorGridlines','c:minorGridlines','c:title','c:numFmt','c:majorTickMark','c:minorTickMark','c:tickLblPos','c:spPr','c:txPr','c:crossAx','c:crosses','c:crossesAt','c:crossBetween','c:auto','c:lblAlgn','c:lblOffset','c:tickLblSkip','c:tickMarkSkip','c:noMultiLvlLbl','c:majorUnit','c:minorUnit','c:extLst']);if(Object.hasOwn(axis,'c:auto'))assert.equal(kind,'c:catAx','Automatic category selection is category-axis only');return{kind,auto:Object.hasOwn(axis,'c:auto')?{present:true,value:boolean(axis['c:auto'])}:{present:false},id:axis['c:axId'],cross:axis['c:crossAx'],crosses:axis['c:crosses'],crossesAt:axis['c:crossesAt'],crossBetween:axis['c:crossBetween'],minorUnit:Object.hasOwn(axis,'c:minorUnit')?{present:true,value:axis['c:minorUnit']}:{present:false}};}));
+  const groups=[...new Set(shape.chart.groups.map(group=>group.construct))].flatMap(constructName=>list(plot[constructName]).map(construct=>{fields(construct,['c:barDir','c:grouping','c:varyColors','c:ser','c:marker','c:smooth','c:dLbls','c:gapWidth','c:overlap','c:axId','c:extLst']);if(Object.hasOwn(construct,'c:smooth')){assert.equal(constructName,'c:lineChart');boolean(construct['c:smooth']);}return list(construct['c:ser']).map(series=>{
    fields(series,['c:idx','c:order','c:tx','c:cat','c:val','c:spPr','c:marker','c:dLbls','c:invertIfNegative','c:smooth','c:extLst']);
    for(const vector of ['c:xVal','c:yVal','c:bubbleSize'])assert.equal(series[vector],undefined,'Closed reference charts refuse unsupported semantic vectors');
    return{index:series['c:idx'],order:series['c:order'],fields:['c:tx','c:cat','c:val'].map(field=>{
@@ -38,6 +39,9 @@ function cacheRoles(archive,parts,deps){
 }
 // Only source→first Save has raw/style/placement OPEN. Data, role identity,
 // formulas, workbook cells, reference ownership and numeric scaling stay exact.
+// Automatic category-axis selection is compared with exact presence/value. Group
+// line smoothing is validated but its first-Save style difference remains OPEN;
+// the separate complete raw guard refuses every later smoothing change.
 function sourceRoles(archive){return archive.slides.map(slide=>({index:slide.index,shapes:slide.shapes.map(shape=>{
  const out=structuredClone(shape);if(shape.kind!=='chart')return out;const chart=shape.chart;
  keys(chart,['family','layout','groups','axes','ownership','workbook']);
