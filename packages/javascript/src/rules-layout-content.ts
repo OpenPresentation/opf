@@ -46,6 +46,9 @@ const layoutRules: ValidationRule[] = [
 						context.report(arrangementAdaptedRule, { path, slide, message: diagnostic.message, help: /four entries/.test(diagnostic.message) ? 'Write four entries for the quadrants, or choose another layout for this many.' : 'Shorten the entries, write one level without descriptions, or choose another layout.' });
 					else if (Object.hasOwn(REGION_RULES, diagnostic.code))
 						context.report(REGION_RULES[diagnostic.code as keyof typeof REGION_RULES], { path, slide, message: diagnostic.message, help: diagnostic.code === 'layout-unplaced' ? 'Paginate the slide, choose a layout with more room, pin the block to a region with room, or remove a block.' : 'Pin the block to a region of the layout that accepts it and has room, or remove the pin.' });
+					// A diagram whose source cannot be drawn (composition.ts composeDiagram): Mermaid, DOT and PlantUML errors alike.
+					else if (diagnostic.message.startsWith('The diagram cannot be drawn'))
+						context.report(unresolvedRule, { path, slide: path.startsWith('/slides/') ? slide : undefined, message: diagnostic.message, help: 'Fix the diagram source where the message points. OPF refuses what it does not draw: write it in the form the diagrams guide lists for that syntax, or remove it.' });
 					else context.report(unresolvedRule, { path, slide: path.startsWith('/slides/') ? slide : undefined, message: diagnostic.message, help: 'Supply what the message asks for, or remove the setting that cannot be honoured.' });
 				}
 				for (const tv of slide.texts)

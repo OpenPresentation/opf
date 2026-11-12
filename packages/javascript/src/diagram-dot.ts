@@ -9,6 +9,8 @@
 // attribute and `ID = ID` statements, subgraphs (named, anonymous or `{ ... }`) as statements and as edge ends, ports, the four kinds of
 // ID (names, numerals, double-quoted strings joined with `+`, and HTML strings), `//`, `/* */` and `#` line comments.
 
+import { DIAGRAM_MAX_NESTING, DIAGRAM_SOURCE_LIMIT, DIAGRAM_TRANSLATED_LIMIT } from './diagram-limits.js';
+
 /** Why a DOT source cannot be drawn, with its 1-based position. */
 export interface DotIssue {
   code: 'diagram-syntax' | 'diagram-unsupported' | 'diagram-limit';
@@ -72,16 +74,24 @@ function tokenize(source: string): Token[] {
     }
     if ('{}[]=;,:'.includes(char)) { push('punct', char); index++; continue; }
     if (char === '"') {
-      // A double-quoted string; `\"` is a quote and every other backslash stays for the label escapes (\n, \l, \N, ...). Strings joined
-      // with `+` are one ID.
+      // A double-quoted string; `\"` is a quote, a backslash before a line break continues the line, and every other backslash stays with
+      // the character after it for the label escapes (\n, \l, \N, \\, ...). The character after a backslash never closes the string, so
+      // "c:\\" ends at its last quote. Strings joined with `+` are one ID.
       let value = '';
       for (;;) {
         let at = index + 1;
         for (;;) {
           if (at >= source.length) { index = at; fail('A quoted string is not closed.', source.length); }
           const next = source[at]!;
-          if (next === '\\' && source[at + 1] === '"') { value += '"'; at += 2; continue; }
-          if (next === '\\' && source[at + 1] === '\n') { at += 2; continue; }
+          if (next === '\\' && at + 1 < source.length) {
+            const escaped = source[at + 1]!;
+            if (escaped === '"') value += '"';
+            else if (escaped === '\n') { /* a continued line */ }
+            else if (escaped === '\r' && source[at + 2] === '\n') at++;
+            else value += `\\${escaped}`;
+            at += 2;
+            continue;
+          }
           if (next === '"') break;
           value += next;
           at++;
@@ -217,9 +227,10 @@ function parseDot(source: string, maxEdges: number): DotGraph {
 
   // A statement list; returns the nodes it mentions (for a subgraph used as an edge end).
   const statements = (scope: Scope, depth: number): string[] => {
-    if (depth > 64) fail('The subgraphs are nested too deeply.');
+    if (depth > DIAGRAM_MAX_NESTING) fail(`Subgraphs are nested more than ${DIAGRAM_MAX_NESTING} deep; flatten the graph or split it.`);
     const mentioned: string[] = [];
-    const mention = (id: string) => { if (!mentioned.includes(id)) mentioned.push(id); };
+    const seenIds = new Set<string>();
+    const mention = (id: string) => { if (!seenIds.has(id)) { seenIds.add(id); mentioned.push(id); } };
     for (;;) {
       const token = peek();
       if (isPunct(token, '}')) { next(); return mentioned; }
@@ -346,7 +357,8 @@ export const DOT_SHAPES: Readonly<Record<string, string>> = Object.freeze({
 
 /** Text for a Mermaid label in double quotes: entities for what Mermaid or pele would read as syntax or markup, <br> for line breaks. */
 function quoted(text: string): string {
-  const escaped = text.replace(/[#"<>&\\]/g, char => ({ '#': '#35;', '"': '#quot;', '<': '#lt;', '>': '#gt;', '&': '#amp;', '\\': '#92;' })[char]!);
+  // The backtick opens a Mermaid markdown string, so it is an entity too.
+  const escaped = text.replace(/[#"<>&\\`]/g, char => ({ '#': '#35;', '"': '#quot;', '<': '#lt;', '>': '#gt;', '&': '#amp;', '\\': '#92;', '`': '#96;' })[char]!);
   return escaped.split('\n').join('<br>');
 }
 
@@ -539,10 +551,13 @@ export function dotToMermaid(source: string, options: { maxEdges: number }): { o
   let result = translations.get(key);
   if (!result) {
     try {
+      // The reader enforces the limits itself: it is a public export, so it cannot rely on a caller having checked the source.
+      if (source.length > DIAGRAM_SOURCE_LIMIT) throw new DotError({ code: 'diagram-limit', message: `The diagram source is longer than ${DIAGRAM_SOURCE_LIMIT} characters.` });
       result = translate(source, options.maxEdges);
+      if (result.mermaid.length > DIAGRAM_TRANSLATED_LIMIT) throw new DotError({ code: 'diagram-limit', message: 'The graph has too many nodes, labels or groups for one slide; split it.' });
     } catch (error) {
-      if (!(error instanceof DotError)) throw error;
-      result = error.issue;
+      // Untrusted text never throws: an error that is not a DotError is a bug in the reader, reported as a source it cannot read.
+      result = error instanceof DotError ? error.issue : { code: 'diagram-syntax', message: `OPF could not read this DOT source (${error instanceof Error ? error.message : String(error)}).` };
     }
     if (translations.size >= 500) translations.clear();
     translations.set(key, result);
