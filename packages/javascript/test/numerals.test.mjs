@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import {
   asciiDigits, composeSlide, formatDataNumber, formatListNumber, formatNumber, formatPercentNumber, groupNumber, languageInEffect, layoutMetric, layoutTable,
-  listNumbers, localizeDigits, numberLocale, numberingSystemExtension, numberingSystemOf, numeralScripts, plainLanguageTag, resolveScriptFonts,
+  chartNumberLanguage, listNumberLabel, listNumbers, localizeDigits, numberLocale, numberingSystemExtension, numberingSystemOf, numeralScripts, plainLanguageTag, resolveScriptFonts,
   NUMBER_LOCALE_SOURCE, NUMBER_LOCALES, NUMBER_SEPARATOR_OVERRIDES, NUMBERING_SYSTEMS, NUMERAL_SHAPES, numeralShapePrefix, supportedNumberingSystems,
 } from "../dist/composition.js";
 import { formatVariableNumber, resolveSlideVariables, resolveVariables, validate } from "../dist/index.js";
@@ -93,6 +93,14 @@ describe("LH-106 numerals: the one number path", () => {
     assert.equal(localizeDigits("12", "en-US"), "12");
   });
 
+  test("a chartex chart draws Latin digits; a classic chart the language's", () => {
+    for (const type of ["waterfall", "histogram", "pareto", "box-and-whisker", "funnel", "treemap"]) assert.equal(chartNumberLanguage({ type }, "ar-SA"), "ar-SA-u-nu-latn", type);
+    for (const type of ["column", "pie", "100pct-stacked-column", "line"]) assert.equal(chartNumberLanguage({ type }, "ar-SA"), "ar-SA", type);
+    assert.equal(chartNumberLanguage({ type: "waterfall" }, "de-DE"), "de-DE");
+    assert.equal(chartNumberLanguage("waterfall", "fa-IR-u-nu-arabext"), "fa-IR-u-nu-latn");
+    assert.equal(formatNumber(1234.5, chartNumberLanguage({ type: "waterfall" }, "ar-SA"), { group: true }), "1,234.5");
+  });
+
   test("the language in effect: the slide's own, else the deck's", () => {
     const deck = { language: "ar-SA", slides: [{ title: "a" }, { title: "b", language: "en-US" }, { title: "c", language: { bcp47: "fa-IR" } }] };
     assert.deepEqual([0, 1, 2].map((index) => languageInEffect(deck, index)), ["ar-SA", "en-US", "fa-IR"]);
@@ -126,12 +134,12 @@ describe("LH-106 numerals: what the engines generate", () => {
     assert.deepEqual(cells("fa-IR"), ["۷", "۱٬۰۰۰٫۰۰", "۱۲۳۴۵۶۷٫۸۹۱", "۲٫۵۰"]);
     assert.deepEqual(cells("en-US"), ["7", "1,000.00", "1234567.891", "2.50"]);
     assert.deepEqual(cells(undefined), ["7", "1,000.00", "1234567.891", "2.50"]);
-    assert.deepEqual(listNumbers(["a", "b"], "arabic", "ar-SA").map((number) => [number.text, number.numberingSystem]), [["١.", "arab"], ["٢.", "arab"]]);
-    assert.deepEqual(listNumbers(["a", "b"], "roman-upper", "ar-SA").map((number) => [number.text, number.numberingSystem]), [["I.", undefined], ["II.", undefined]]);
-    // A list marker is PowerPoint's auto-number: the language's digits only where a native scheme draws them (ar-SA "1." and "1)").
-    assert.equal(formatListNumber(12, "arabic", "paren", "ar-SA"), "١٢)");
-    for (const [suffix, language] of [["paren-both", "ar-SA"], ["period", "fa-IR"], ["paren-both", "fa-IR"], ["period", "hi-IN-u-nu-deva"], ["period", "bn"]]) assert.equal(formatListNumber(12, "arabic", suffix, language), suffix === "paren-both" ? "(12)" : "12.", `${language} ${suffix}`);
-    assert.deepEqual(listNumbers(["a"], "arabic", "fa-IR").map((number) => [number.text, number.numberingSystem]), [["1.", undefined]]);
+    // A list marker is PowerPoint's auto-number, whose digits PowerPoint picks from the paragraph: Latin in every language. A step badge
+    // or numeral drawn as text takes the language's digits.
+    assert.deepEqual(listNumbers(["a", "b"], "arabic").map((number) => number.text), ["1.", "2."]);
+    for (const suffix of ["period", "paren", "paren-both"]) assert.equal(formatListNumber(12, "arabic", suffix), suffix === "period" ? "12." : suffix === "paren" ? "12)" : "(12)");
+    assert.equal(listNumberLabel({ value: 12, style: "arabic" }, "ar-SA"), "١٢");
+    assert.equal(listNumberLabel({ value: 12, style: "arabic" }, "fa-IR"), "۱۲");
     // Slide tokens export as (or beside) PowerPoint's live slide-number field, which PowerPoint draws in Latin digits.
     assert.equal(resolveSlideVariables({ title: "{{slide.number}} / {{deck.slideCount}}", language: "ar-SA" }, { slideNumber: 3, slideCount: 12 }).title, "3 / 12");
     assert.equal(resolveSlideVariables({ title: "{{slide.number}}" }, { slideNumber: 3, presentation: { language: "fa-IR" } }).title, "3");

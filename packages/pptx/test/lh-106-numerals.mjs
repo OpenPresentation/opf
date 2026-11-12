@@ -1,6 +1,6 @@
 // LH-106: the PowerPoint export draws every number OPF generates as PowerPoint will draw it. Text OPF writes (metrics, tables) is in
 // the language's digits; a native chart's number formats carry PowerPoint's numeral-shape prefix ([$-2000000] Arabic-Indic, [$-3000000]
-// Persian), so PowerPoint draws the same digits; an auto-numbered list uses the language's digits only with PowerPoint's Hindi schemes;
+// Persian), so PowerPoint draws the same digits; a chartex chart and an auto-numbered list keep Latin digits;
 // slide numbers stay Latin (PowerPoint's live field). `lang` drops the -u-nu- extension, the export never fails on generated digits, and
 // import brings the numbers, the chart formats and the author's language tag back.
 import assert from 'node:assert/strict';
@@ -20,6 +20,7 @@ const deck = (language, title = 'T') => ({
     {title, items: ['one', 'two', 'three'], numbering: {style: 'arabic', suffix: 'paren-both'}},
     {title, chart: {type: 'column', alt: 'Values', data: {columns: ['C', {name: 'V', format: '#,##0.00'}], rows: [['a', 7], ['b', 4500]]}, dataLabels: true}},
     {title, chart: {type: 'pie', alt: 'Shares', data: {columns: ['C', 'V'], rows: [['a', 1], ['b', 3]]}, dataLabels: {content: ['percent']}}},
+    {title, chart: {type: 'waterfall', alt: 'Bridge', data: {columns: ['Step', {name: 'Value', format: '#,##0.0'}], rows: [['Start', 1200.5], ['Sales', 450.25], ['Costs', -320.75], ['End', 1330]]}}},
   ],
 });
 const exported = async document => {
@@ -30,6 +31,7 @@ const files = bytes => unzipSync(new Uint8Array(bytes));
 const slideXml = (bytes, number) => strFromU8(files(bytes)[`ppt/slides/slide${number}.xml`]);
 const texts = xml => [...xml.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]);
 const langs = bytes => [...new Set(Object.entries(files(bytes)).filter(([path]) => /^ppt\/(?:slides\/slide|charts\/chart)\d+\.xml$/.test(path)).flatMap(([, data]) => [...strFromU8(data).matchAll(/ lang="([^"]+)"/g)].map(match => match[1])))];
+const chartexCodes = bytes => Object.entries(files(bytes)).filter(([path]) => /^ppt\/charts\/chartEx\d+\.xml$/.test(path)).flatMap(([, data]) => [...strFromU8(data).matchAll(/formatCode="([^"]*)"/g)].map(match => match[1]));
 const chartCodes = bytes => Object.entries(files(bytes)).filter(([path]) => /^ppt\/charts\/chart\d+\.xml$/.test(path)).flatMap(([, data]) => [...strFromU8(data).matchAll(/formatCode="([^"]*)"|<c:formatCode>([^<]*)<\/c:formatCode>/g)].map(match => match[1] ?? match[2]));
 
 // The prefix is added once, and stripped on import; an LCID-only block stays.
@@ -46,11 +48,11 @@ assert.equal(stripNumeralShape('[$-409]#,##0'), '[$-409]#,##0');
 }
 
 const expected = {
-  'ar-SA': {metrics: ['٧', '٩٩٩', '١,٠٠٠', '١,٢٣٤,٥٦٧.٨٩١'], cells: ['٧', '٧.٠٠', '٩٩٩', '٩٩٩.٠٠', '١٠٠٠', '١,٠٠٠.٠٠', '١٢٣٤٥٦٧.٨٩١', '١,٢٣٤,٥٦٧.٨٩'], schemes: ['hindiNumPeriod', 'arabicParenBoth'], prefix: '[$-2000000]', lang: 'ar-SA'},
+  'ar-SA': {metrics: ['٧', '٩٩٩', '١,٠٠٠', '١,٢٣٤,٥٦٧.٨٩١'], cells: ['٧', '٧.٠٠', '٩٩٩', '٩٩٩.٠٠', '١٠٠٠', '١,٠٠٠.٠٠', '١٢٣٤٥٦٧.٨٩١', '١,٢٣٤,٥٦٧.٨٩'], schemes: ['arabicPeriod', 'arabicParenBoth'], prefix: '[$-2000000]', lang: 'ar-SA'},
   'fa-IR': {metrics: ['۷', '۹۹۹', '۱٬۰۰۰', '۱٬۲۳۴٬۵۶۷٫۸۹۱'], cells: ['۷', '۷٫۰۰', '۹۹۹', '۹۹۹٫۰۰', '۱۰۰۰', '۱٬۰۰۰٫۰۰', '۱۲۳۴۵۶۷٫۸۹۱', '۱٬۲۳۴٬۵۶۷٫۸۹'], schemes: ['arabicPeriod', 'arabicParenBoth'], prefix: '[$-3000000]', lang: 'fa-IR'},
   'hi-IN': {metrics: ['7', '999', '1,000', '12,34,567.891'], cells: ['7', '7.00', '999', '999.00', '1000', '1,000.00', '1234567.891', '12,34,567.89'], schemes: ['arabicPeriod', 'arabicParenBoth'], prefix: '', lang: 'hi-IN'},
   'ar-SA-u-nu-latn': {metrics: ['7', '999', '1,000', '1,234,567.891'], cells: ['7', '7.00', '999', '999.00', '1000', '1,000.00', '1234567.891', '1,234,567.89'], schemes: ['arabicPeriod', 'arabicParenBoth'], prefix: '', lang: 'ar-SA'},
-  'ar-AE-u-nu-arab': {metrics: ['٧', '٩٩٩', '١,٠٠٠', '١,٢٣٤,٥٦٧.٨٩١'], cells: ['٧', '٧.٠٠', '٩٩٩', '٩٩٩.٠٠', '١٠٠٠', '١,٠٠٠.٠٠', '١٢٣٤٥٦٧.٨٩١', '١,٢٣٤,٥٦٧.٨٩'], schemes: ['hindiNumPeriod', 'arabicParenBoth'], prefix: '[$-2000000]', lang: 'ar-AE'},
+  'ar-AE-u-nu-arab': {metrics: ['٧', '٩٩٩', '١,٠٠٠', '١,٢٣٤,٥٦٧.٨٩١'], cells: ['٧', '٧.٠٠', '٩٩٩', '٩٩٩.٠٠', '١٠٠٠', '١,٠٠٠.٠٠', '١٢٣٤٥٦٧.٨٩١', '١,٢٣٤,٥٦٧.٨٩'], schemes: ['arabicPeriod', 'arabicParenBoth'], prefix: '[$-2000000]', lang: 'ar-AE'},
 };
 for (const [language, want] of Object.entries(expected)) {
   // An Arabic title on every slide, so a deck in Latin digits also needs its Arabic face (the Latin-text case is the crash above).
@@ -61,11 +63,14 @@ for (const [language, want] of Object.entries(expected)) {
   for (const cell of want.cells) assert.ok(table.includes(cell), `${language} table cell ${cell} in ${table.join(' | ')}`);
   for (const [index, scheme] of want.schemes.entries()) assert.deepEqual([...new Set([...slideXml(bytes, 6 + index).matchAll(/<a:buAutoNum type="([^"]+)"/g)].map(match => match[1]))], [scheme], `${language} list scheme`);
   // The slide number is PowerPoint's live field, which PowerPoint draws in Latin digits; the static count beside it is Latin too.
-  assert.ok(texts(slideXml(bytes, 3)).join('').includes('3 / 9'), `${language} footer stays Latin: ${texts(slideXml(bytes, 3)).join('|')}`);
+  assert.ok(texts(slideXml(bytes, 3)).join('').includes('3 / 10'), `${language} footer stays Latin: ${texts(slideXml(bytes, 3)).join('|')}`);
   const codes = chartCodes(bytes);
   assert.ok(codes.length > 0);
   assert.ok(codes.every(code => want.prefix ? code.startsWith(want.prefix) : !/^\[\$-[1-9A-Fa-f][0-9A-Fa-f]{6}\]/.test(code)), `${language} chart codes: ${codes.join(' ')}`);
   if (want.prefix) assert.ok(codes.includes(`${want.prefix}0%`), `${language} pie percent labels name their format: ${codes.join(' ')}`);
+  // A chartex chart (the waterfall) keeps Latin digits: no numeral shape.
+  const chartex = chartexCodes(bytes);
+  assert.ok(chartex.length > 0 && chartex.every(code => !code.includes('[$-')), `${language} chartex codes: ${chartex.join(' ')}`);
   assert.deepEqual(langs(bytes).filter(lang => lang !== 'en-US'), [want.lang], `${language}: lang is the plain tag`);
 
   // Round trip: the numbers come back as numbers, the list as a numbered list, the chart format without the prefix, the tag as written.

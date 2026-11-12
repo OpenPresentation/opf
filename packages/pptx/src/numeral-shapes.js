@@ -3,7 +3,7 @@
 // PowerPoint formats a native chart's values itself, with the chart's number format codes, and draws Latin digits whatever the run
 // language. An Excel numeral-shape prefix on the format code changes that: PowerPoint 16.0.20527 draws `[$-2000000]#,##0.00` as
 // "٤,٥٠٠.٠٠" (Arabic-Indic digits, Latin separators) and `[$-3000000]#,##0.00` as "۴٬۵۰۰٫۰۰" (Persian). So in a slide whose language
-// draws digits of its own (core `numeralShapePrefix`), every number format code of its charts and chartex charts carries the prefix:
+// draws digits of its own (core `numeralShapePrefix`), every number format code of its classic charts carries the prefix:
 // series caches, data labels and value axes, a percent label (`0%`) included. Import strips it again (`stripNumeralShape`): the
 // language carries the digits, so the document comes back as it was.
 import {numeralShapePrefix} from '@openpresentation/opf/composition';
@@ -44,13 +44,14 @@ export function shapeChartNumbers(xml, prefix) {
 }
 
 /**
- * Prefix the number formats of every native chart part (`ppt/charts/chart*.xml`, `ppt/charts/chartEx*.xml`) by the language of the
+ * Prefix the number formats of every classic chart part (`ppt/charts/chart*.xml`; never a chartex part, whose numbers stay Latin) by the language of the
  * slide it belongs to (`partSlides`: part path -> slide index; `languageOf(index)`: that slide's language tag). Entries change in place.
  */
 export function applyNumeralShapes(entries, partSlides, languageOf) {
   const decoder = new TextDecoder(), encoder = new TextEncoder();
   for (const [part, slide] of partSlides) {
-    if (!/^ppt\/charts\/chart(?:Ex)?\d+\.xml$/i.test(part) || !entries[part]) continue;
+    // LH-106: a chartex part (cx:chartSpace: waterfall, histogram, ...) keeps Latin digits, as core draws it (chartNumberLanguage).
+    if (!/^ppt\/charts\/chart\d+\.xml$/.test(part) || !entries[part]) continue;
     const prefix = numeralShapePrefix(languageOf(slide));
     if (!prefix) continue;
     const bytes = entries[part], text = typeof bytes === 'string' ? bytes : decoder.decode(bytes);

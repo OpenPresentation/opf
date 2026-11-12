@@ -12,18 +12,10 @@ const STYLES = ['arabic', 'roman-upper', 'roman-lower', 'alpha-upper', 'alpha-lo
 const STYLE_STEMS = {arabic: 'arabic', 'roman-upper': 'romanUc', 'roman-lower': 'romanLc', 'alpha-upper': 'alphaUc', 'alpha-lower': 'alphaLc'};
 const SUFFIX_TAILS = {period: 'Period', paren: 'ParenR', 'paren-both': 'ParenBoth'};
 
-/**
- * LH-106: the native schemes that draw an `arabic` number in another numbering system's digits: PowerPoint's Hindi numerals are the
- * Arabic-Indic digits (١. ٢. ٣.), with a period (verified in PowerPoint 16.0.20527) or a closing parenthesis. Core draws every other
- * combination in Latin digits (`nativeListNumerals`), which the arabic scheme draws too.
- */
-const NUMERAL_SCHEMES = {arab: {period: 'hindiNumPeriod', paren: 'hindiNumParenR'}};
+/** The `a:buAutoNum@type` scheme of an OPF style and suffix. */
+export const autoNumScheme = (style, suffix = 'period') => `${STYLE_STEMS[style]}${SUFFIX_TAILS[suffix]}`;
 
-/** The `a:buAutoNum@type` scheme of an OPF style and suffix, in `system`'s digits where a native scheme has them (LH-106). */
-export const autoNumScheme = (style, suffix = 'period', system = undefined) => (style === 'arabic' && NUMERAL_SCHEMES[system]?.[suffix]) || `${STYLE_STEMS[style]}${SUFFIX_TAILS[suffix]}`;
-
-const SCHEMES = new Map([...STYLES.flatMap(style => Object.keys(SUFFIX_TAILS).map(suffix => [autoNumScheme(style, suffix), {style, suffix}])),
-  ...Object.values(NUMERAL_SCHEMES).flatMap(schemes => Object.entries(schemes).map(([suffix, type]) => [type, {style: 'arabic', suffix}]))]);
+const SCHEMES = new Map(STYLES.flatMap(style => Object.keys(SUFFIX_TAILS).map(suffix => [autoNumScheme(style, suffix), {style, suffix}])));
 /** OPF style and suffix of a native scheme, or `undefined` for a scheme OPF has no equivalent for. */
 export const schemeNumbering = type => SCHEMES.get(type);
 

@@ -234,10 +234,10 @@ export function nativeTitleWrapBox(item, geometry, textMeasurement, {nativeStyle
 function nativeNumbering(entries) {
   const first = entries[0]?.marker?.number;
   if (!first || !Number.isInteger(first.value) || first.value < 1) return undefined;
-  const scheme = autoNumScheme(first.style, first.suffix, first.numberingSystem);
+  const scheme = autoNumScheme(first.style, first.suffix);
   return entries.every((entry, index) => {
     const number = entry.marker?.number;
-    return number && number.value === first.value + index && autoNumScheme(number.style, number.suffix, number.numberingSystem) === scheme;
+    return number && number.value === first.value + index && autoNumScheme(number.style, number.suffix) === scheme;
   }) ? {style: scheme, startAt: first.value} : undefined;
 }
 
