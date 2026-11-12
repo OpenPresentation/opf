@@ -231,6 +231,7 @@ jobs:
         with:
           name: pptx-windows-${{ matrix.shard }}
           path: |
+            packages/pptx/artifacts/native-furniture-style-controls/**
             packages/pptx/artifacts/native-picture-harness/**
             packages/pptx/artifacts/quarantine/**
           retention-days: 7
