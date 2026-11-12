@@ -129,6 +129,21 @@ export function insertOverlayShape(editor, options, meta = {}) {
 const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
 // The format's largest overlay width or height: bounded by finite representable geometry (above 1 it bleeds off).
 const OVERLAY_SIZE_MAX = Number.MAX_VALUE;
+// A drag sizes a shape up to this many slide widths or heights: room for a circle or band that bleeds off the slide (docs/shapes.md), not for a handle
+// that runs away with the pointer. The schema and typed input (setOverlayFrame, the panel) still take up to OVERLAY_SIZE_MAX, and a shape that is already
+// larger keeps its size when it is moved or shrunk.
+export const OVERLAY_DRAG_MAX = 4;
+
+/**
+ * A dragged box in slide pixels as the frame fractions a drag commits: `{ x, y, width, height }` of the slide (`W` by `H` pixels; mirrored in a right-to-left
+ * deck), each size between `min` and the larger of OVERLAY_DRAG_MAX and what `current` (the box the drag started from, when it has one) already was.
+ */
+export function draggedFrame(box, { W, H, rtl = false, min = 0.01, current }) {
+  const size = (pixels, extent, now) => Math.min(Math.max(OVERLAY_DRAG_MAX, (now ?? 0) / extent), Math.max(min, pixels / extent));
+  const round = (value) => Math.round(value * 10000) / 10000;
+  const left = rtl ? (W - (box.x + box.width)) / W : box.x / W;
+  return { x: round(left), y: round(box.y / H), width: round(size(box.width, W, current?.width)), height: round(size(box.height, H, current?.height)) };
+}
 
 /**
  * Compute the patch that places an overlay shape. A shape placed by fractions takes `{ x, y, width, height }` (any of them, fractions of the slide: the
