@@ -169,13 +169,13 @@ async function sourcePane(context, engine, width) {
     ['JSON', '', async () => {}],
     ['YAML (Canonicalize)', '?format=yaml', async () => {}],
     ['outline', '?outline=open', async () => {}],
-    ['format menu', '', async (page) => { await page.getByRole('button', { name: /^Source format \.opf\./ }).click(); }],
-    ['rename', '', async (page) => { await page.getByRole('button', { name: 'Rename deck' }).click(); }],
+    ['format menu', '', async (page) => { await page.getByRole('button', { name: /^Source format \.opf\./ }).tap(); }],
+    ['rename', '', async (page) => { await page.getByRole('button', { name: 'Rename deck' }).tap(); }],
     ['problems with a fix and details', '?deck=broken', async (page) => {
       await page.locator('.opf-source-finding-fix').first().waitFor();
       const toggle = page.locator('.opf-source-findings-toggle');
-      if ((await toggle.getAttribute('aria-expanded')) !== 'true') await toggle.click();
-      await page.locator('.opf-source-finding-details').first().click();
+      if ((await toggle.getAttribute('aria-expanded')) !== 'true') await toggle.tap();
+      await page.locator('.opf-source-finding-details').first().tap();
     }],
     ['completion list', '', async (page) => {
       await page.evaluate(() => { const at = demo.pane.getText().indexOf('"OWAA Rocks!"') + 13; demo.pane.editor.api.setSelection(at); demo.pane.editor.api.focus(); });
@@ -229,22 +229,22 @@ async function playground(browser, engine, { width, height }) {
     return page;
     } catch (error) { await captureFailure(error, phase); throw error; }
   };
-  const sheet = (page, id) => async () => { await page.locator(`#${id}`).click(); await page.waitForFunction(() => getComputedStyle(document.querySelector('.inspector')).transform === 'none'); };
+  const sheet = (page, id) => async () => { await page.locator(`#${id}`).tap(); await page.waitForFunction(() => getComputedStyle(document.querySelector('.inspector')).transform === 'none'); };
   const states = [
     ['the start', async () => {}],
-    ['the More menu', async (page) => { await page.locator('#more-actions').click(); }],
+    ['the More menu', async (page) => { await page.locator('#more-actions').tap(); }],
     ['the Edit sheet (selection, text, notes)', async (page) => sheet(page, 'bar-edit')()],
-    ['the Design sheet with every group open', async (page) => { await sheet(page, 'bar-edit')(); await page.locator('#bar-design').click(); await page.evaluate(() => document.querySelectorAll('.opf-dc-group').forEach((group) => { group.open = true; })); }],
-    ['the Review sheet', async (page) => { await sheet(page, 'bar-edit')(); await page.locator('#tab-review').click(); }],
-    ['the Source dialog', async (page) => { await page.locator('#more-actions').click(); await page.locator('#open-json').click(); }],
-    ['the Import dialog, Gallery tab', async (page) => { await page.locator('#more-actions').click(); await page.locator('#add-opf').click(); await page.locator('#import-tab-gallery').click(); }],
-    ['the Copy dialog', async (page) => { await page.locator('#more-actions').click(); await page.locator('#copy-opf').click(); }],
-    ['the Properties dialog', async (page) => { await page.locator('#more-actions').click(); await page.locator('#open-properties').click(); }],
-    ['the Outline view', async (page) => { await page.locator('#view-outline').click(); }],
-    ['the Layouts view', async (page) => { await page.locator('#view-layouts').click(); }],
-    ['the Find panel', async (page) => { await page.locator('#bar-find').click(); await page.locator('.opf-find').waitFor({ state: 'visible' }); }],
-    ['the Add content panel', async (page) => { await page.locator('#insert-content').click(); }],
-    ['the slide menu', async (page) => { await page.locator('button.slide-tool[data-action]').last().click(); }],
+    ['the Design sheet with every group open', async (page) => { await sheet(page, 'bar-edit')(); await page.locator('#bar-design').tap(); await page.evaluate(() => document.querySelectorAll('.opf-dc-group').forEach((group) => { group.open = true; })); }],
+    ['the Review sheet', async (page) => { await sheet(page, 'bar-edit')(); await page.locator('#tab-review').tap(); }],
+    ['the Source dialog', async (page) => { await page.locator('#more-actions').tap(); await page.locator('#open-json').tap(); }],
+    ['the Import dialog, Gallery tab', async (page) => { await page.locator('#more-actions').tap(); await page.locator('#add-opf').tap(); await page.locator('#import-tab-gallery').tap(); }],
+    ['the Copy dialog', async (page) => { await page.locator('#more-actions').tap(); await page.locator('#copy-opf').tap(); }],
+    ['the Properties dialog', async (page) => { await page.locator('#more-actions').tap(); await page.locator('#open-properties').tap(); }],
+    ['the Outline view', async (page) => { await page.locator('#view-outline').tap(); }],
+    ['the Layouts view', async (page) => { await page.locator('#view-layouts').tap(); }],
+    ['the Find panel', async (page) => { await page.locator('#bar-find').tap(); await page.locator('.opf-find').waitFor({ state: 'visible' }); }],
+    ['the Add content panel', async (page) => { await page.locator('#insert-content').tap(); }],
+    ['the slide menu', async (page) => { await page.locator('button.slide-tool[data-action]').last().tap(); }],
   ];
   const core = new Set(['the start', 'the Edit sheet (selection, text, notes)', 'the Design sheet with every group open', 'the More menu', 'the Import dialog, Gallery tab', 'the Layouts view', 'the Find panel']);
   for (const [name, run] of states) {
@@ -321,7 +321,7 @@ async function layoutEditor(browser, engine, { width, height }) {
     return page;
   };
   // In a narrow editor the layers are a tab beside the inspector; in a wide one both panels are on screen.
-  const showLayers = async (page) => { const tab = page.getByRole('tab', { name: 'Layers' }); if (await tab.count()) await tab.click(); };
+  const showLayers = async (page) => { const tab = page.getByRole('tab', { name: 'Layers' }); if (await tab.count()) await tab.tap(); };
   const select = (...paths) => (page) => page.evaluate((list) => { demo.model.select([list[0]]); for (const path of list.slice(1)) demo.model.selectAdd(path); }, paths);
   const states = [
     // The zoom buttons, the validity button, the Row and Column segments, the remove button of a design hint: the controls that sized themselves.
@@ -329,7 +329,7 @@ async function layoutEditor(browser, engine, { width, height }) {
     ['a nested region (name, size, chips, flow, bleed checkbox)', '?layout=hero', select([1, 0])],
     ['a layout with findings (the validity button asks to show them)', '?layout=broken', select([0])],
     ['the context menu', '?layout=hero', async (page) => { await select([0])(page); await page.locator('.opf-lx-node[data-path="0"]').click({ button: 'right', force: true }); await page.locator('.opf-lx-menu').waitFor(); }],
-    ['the heading tool menu', '?layout=hero', async (page) => { await page.getByRole('toolbar', { name: 'Layout tools' }).getByRole('button', { name: 'Heading regions' }).click(); await page.locator('.opf-lx-menu').waitFor(); }],
+    ['the heading tool menu', '?layout=hero', async (page) => { await page.getByRole('toolbar', { name: 'Layout tools' }).getByRole('button', { name: 'Heading regions' }).tap(); await page.locator('.opf-lx-menu').waitFor(); }],
     ['renaming a region in the layers', '?layout=hero', async (page) => { await showLayers(page); await page.evaluate(() => { demo.model.select([[0]]); demo.model.requestRename([0], 'layers'); }); await page.locator('input.opf-lx-rename-row').waitFor(); }],
     ['renaming a region on the canvas', '?layout=hero', async (page) => { await page.evaluate(() => { demo.model.select([[0]]); demo.model.requestRename([0], 'canvas'); }); await page.locator('.opf-lx-rename').waitFor(); }],
     ['two regions selected', '?layout=hero', select([1, 0], [1, 1])],
