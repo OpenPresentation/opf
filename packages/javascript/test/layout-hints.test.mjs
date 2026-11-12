@@ -65,8 +65,8 @@ test('chartPrimary splits the first chart from a synthetic container of the othe
   const control = composeSlide(slide, {explain: true});
   const gap = 720 / 30, width = control.contentBox.width, height = control.contentBox.height;
   for (const [side, expect] of [
-    ['left', {mode: 'row', columns: 2, chart: box => box.x === control.contentBox.x && Math.abs(box.width - (width - gap) * 3 / 5) < 1e-6}],
-    ['right', {mode: 'row', columns: 2, chart: box => Math.abs(box.x + box.width - (control.contentBox.x + width)) < 1e-6 && Math.abs(box.width - (width - gap) * 3 / 5) < 1e-6}],
+    ['start', {mode: 'row', columns: 2, chart: box => box.x === control.contentBox.x && Math.abs(box.width - (width - gap) * 3 / 5) < 1e-6}],
+    ['end', {mode: 'row', columns: 2, chart: box => Math.abs(box.x + box.width - (control.contentBox.x + width)) < 1e-6 && Math.abs(box.width - (width - gap) * 3 / 5) < 1e-6}],
     ['top', {mode: 'column', columns: 1, chart: box => box.y === control.contentBox.y && Math.abs(box.height - (height - gap) * 3 / 5) < 1e-6}],
     ['bottom', {mode: 'column', columns: 1, chart: box => Math.abs(box.y + box.height - (control.contentBox.y + height)) < 1e-6 && Math.abs(box.height - (height - gap) * 3 / 5) < 1e-6}],
   ]) {
@@ -104,7 +104,7 @@ test('chartPrimary splits the first chart from a synthetic container of the othe
 test('chartPrimary does not apply with regions, an explicit mode, no chart, only charts, or a nested chart', () => {
   const side = {presentation: {design: {chartPrimary: 'start'}}};
   const cases = [
-    [{title: 'Regions', left: chart, end: {text: 'R'}}, 'promoted-regions'],
+    [{title: 'Regions', start: chart, end: {text: 'R'}}, 'promoted-regions'],
     [{title: 'Explicit', composition: {mode: 'grid', columns: 2}, blocks: [chart, {text: 'a'}]}, 'configured-mode'],
     // LH-71: a chart above a one-letter text fills more of the body than beside it (LH-06: not a foot band).
     [{title: 'Explicit', composition: {mode: 'auto'}, blocks: [chart, {text: 'a', emphasis: false}]}, 'split-fill'],

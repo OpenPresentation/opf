@@ -91,7 +91,7 @@ describe("the owner's case: a key with no value, followed by the next key", () =
 
 describe("what a missing value could be depends on the field", () => {
   const cases = [
-    ['{"design": {"titleAlignment":}}', /one of left, center, right/, "Add \"left\"", '"titleAlignment": "start"'],
+    ['{"design": {"titleAlignment":}}', /one of start, center, end/, "Add \"start\"", '"titleAlignment": "start"'],
     ['{"template":}', /true or false/, "Add false", '"template": false'],
     ['{"duration":}', /a number/, "Add 1", '"duration": 1'],
     ['{"slides":}', /a list such as/, "Add [ ]", '"slides": []'],

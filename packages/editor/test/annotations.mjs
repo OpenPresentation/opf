@@ -51,10 +51,10 @@ const throws = (fn, code) => { try { fn(); } catch (error) { assert.equal(error.
   assert.equal(change.changed, true);
   assert.deepEqual(change.patches.map((patch) => patch.op), ["test", "replace"]);
   assert.equal(editor.presentation.slides[1].blocks[0].caption, "Figure 1. Pixel");
-  assert.deepEqual(readCaption(editor.presentation, "slides.1.blocks.0").caption, { text: "Figure 1. Pixel", position: "below", align: "left" });
+  assert.deepEqual(readCaption(editor.presentation, "slides.1.blocks.0").caption, { text: "Figure 1. Pixel", position: "below", align: "start" });
   setCaption(editor, "slides.1.blocks.1", { text: ["Table ", { text: "1", bold: true }], position: "above", align: "center" });
   assert.deepEqual(editor.presentation.slides[1].blocks[1].caption, { text: ["Table ", { text: "1", bold: true }], position: "above", align: "center" });
-  setCaption(editor, "slides.3", { text: "Figure 2", position: "below", align: "left" });
+  setCaption(editor, "slides.3", { text: "Figure 2", position: "below", align: "start" });
   assert.equal(editor.presentation.slides[3].caption, "Figure 2", "default position and alignment store the short form");
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
   ok(toSvg(editor.presentation, 2, { trace: true }).includes('data-opf-caption="above"'), "the preview draws the caption band");

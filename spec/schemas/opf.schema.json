@@ -900,6 +900,12 @@
       "additionalProperties": false,
       "description": "Color palette used by the design system. Every slot and role is a hex color ('#RGB', '#RRGGBB' or '#RRGGBBAA'); a color-scheme name or a 'var:<id>' reference is not valid here, because those resolve through the scheme. The slot fields (accent1-accent6, dark1, dark2, light1, light2, hyperlink, followedHyperlink) mirror color-scheme.schema.json (https://openpresentation.org/schema/opf-color-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML slots - the 12-slot PowerPoint theme model that round-trips directly to OOXML. Use these for full control over the palette as PowerPoint sees it.\n- Abstract roles (primary, secondary, accent, background, surface, text, textSecondary) - OPF-specific semantic aliases the engine maps onto the OOXML slots. Convenient for inline overrides without thinking in slot numbers; not part of the catalog record schema.\n\nIn design.colorScheme, 'id' resolves a colorSchemes record as the base; slot and role overrides on the same object take precedence over the resolved scheme. The string form of design.colorScheme is equivalent to setting only 'id'.",
       "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of this palette. PPTX export writes it as the name of the theme's color scheme (a:clrScheme name), which PowerPoint lists under Design, Variants, Colors; without it the scheme takes the name of the record 'id' resolves, then that id, then 'OpenPresentation'. It names the palette only: it is not a reference and resolves nothing.",
+          "examples": ["Harbour", "Acme 2026"]
+        },
         "id": {
           "$ref": "#/$defs/CatalogReference",
           "description": "Colour-scheme reference (a bare id or 'name:id') resolved as the base; slot and role overrides on the surrounding ColorScheme object take precedence over the resolved scheme.",

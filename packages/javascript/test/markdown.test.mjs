@@ -497,7 +497,7 @@ describe("round trips", () => {
     assert.deepEqual(deck.slides[2].blocks.map((block) => Object.keys(block)[0]), ["chart", "text"]);
     assert.equal(deck.slides[3].blocks.length, 3);
     assert.equal(deck.slides[9].hidden, true);
-    assert.deepEqual(deck.slides[7].left, { bullets: ["One on-call rotation per region", "Quarterly capacity reviews"] });
+    assert.deepEqual(deck.slides[7].start, { bullets: ["One on-call rotation per region", "Quarterly capacity reviews"] });
   });
 
   test("the examples in the guide and in the skill reference convert as shown", () => {
@@ -513,7 +513,7 @@ describe("round trips", () => {
 
   // Every text, number and block kind of a deck, independent of how the content is arranged on the slide.
   const CONTENT = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"];
-  const REGION = /^(?:top|middle|bottom)|^(?:left|center|right)/;
+  const REGION = /^(?:top|middle|bottom)|^(?:start|center|end)/;
   function facts(deck) {
     const kinds = [];
     const leaves = [];

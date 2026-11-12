@@ -111,12 +111,12 @@ const refused = (action, pattern) => assert.throws(action, (error) => error.code
   assert.deepEqual(back.loss, ["region placement"]);
   assert.deepEqual(editor.get("slides.1.blocks").map((block) => block.id), ["a", "b", "c", "d"]);
   undoAll(editor, original);
-  const swapped = moveSlideRegion(editor, 2, "left", "right", { swap: true });
+  const swapped = moveSlideRegion(editor, 2, "start", "end", { swap: true });
   assert.equal(swapped.changed, true);
   assert.deepEqual(editor.get("slides.2.end"), { text: "Left" });
   assert.deepEqual(editor.get("slides.2.start"), { items: ["Right"] });
-  refused(() => moveSlideRegion(editor, 2, "left", "right"), /already has content/);
-  refused(() => placeBlocksInRegions(editor, 1, ["left"]), /region for each/);
+  refused(() => moveSlideRegion(editor, 2, "start", "end"), /already has content/);
+  refused(() => placeBlocksInRegions(editor, 1, ["start"]), /region for each/);
   undoAll(editor, original);
 }
 

@@ -91,7 +91,7 @@ for (const options of [{}, {fonts}]) {
   ok(tableCaption && tableCaption.text === 'Table 1' && /algn="ctr"/.test(tableCaption.raw) && close(tableCaption.box.y, core1.items[2].caption.box.y, 0.5), 'centered table caption above');
   ok(table && table.box.y >= tableCaption.box.y + tableCaption.box.height - 0.02, 'table below its caption');
   const captionTags = tagRecords(entries, 'opfCaption');
-  assert.deepEqual(captionTags.map(tag => [tag.path, tag.field, tag.media, tag.position, tag.align]).sort(), [['slides.1.blocks.0.image', 'slides.1.blocks.0.caption', 'OPF image 1', 'below', 'left'], ['slides.1.blocks.1.table', 'slides.1.blocks.1.caption', 'OPF table 1', 'above', 'center'], ['slides.3.chart', 'slides.3.caption', 'OPF chart 1', 'below', 'left']].sort());
+  assert.deepEqual(captionTags.map(tag => [tag.path, tag.field, tag.media, tag.position, tag.align]).sort(), [['slides.1.blocks.0.image', 'slides.1.blocks.0.caption', 'OPF image 1', 'below', 'start'], ['slides.1.blocks.1.table', 'slides.1.blocks.1.caption', 'OPF table 1', 'above', 'center'], ['slides.3.chart', 'slides.3.caption', 'OPF chart 1', 'below', 'start']].sort());
 
   // Preview parity: the same boxes and marker numbers read from the SVG.
   const svg = index => toSvg(source, index + 1, {trace: true, date: '2026-10-01', ...options});

@@ -1,0 +1,26 @@
+cli: 32 commands, 10 failed, 299s
+  FAIL node --test test/catalog-contract.test.mjs
+  FAIL node --test test/cli.test.mjs
+  FAIL node --test test/first-use-diagnostics.test.mjs
+  FAIL node --test test/markdown-decks.test.mjs
+  FAIL node --test test/schema-version.test.mjs
+  FAIL node --test test/validate-multi.test.mjs
+  FAIL node --test test/validate.test.mjs
+  FAIL node --test test/yaml.test.mjs
+  FAIL node test/cli.mjs
+  FAIL node test/files.mjs
+mcp: 6 commands, 1 failed, 179s
+  FAIL node --test test/mcp.test.mjs
+integration: 5 commands, 2 failed, 26s
+  FAIL node --test test/lh-110-localized-references.test.mjs
+  FAIL node --test test/overfull-continuation.test.mjs
+gallery: 15 commands, 0 failed, 10s
+pptx: 291 commands, 6 failed, 1502s
+  FAIL node test/determinism.mjs
+  FAIL node test/keynote-registry-runtime.mjs
+  FAIL node test/lh-16-duration-timeline.mjs
+  FAIL node test/lh-63-run-in-quote-marks.mjs
+  FAIL node test/native-conformance.mjs
+  FAIL node test/registry-glyph-fallback.mjs
+editor: 147 commands, 0 failed, 245s
+javascript: 331 commands, 0 failed, 452s

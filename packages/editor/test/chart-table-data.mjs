@@ -537,7 +537,7 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
     assert.deepEqual(editor.get(`${T}.rows`)[0], ["Region", "Share"], "the names become the first body row");
     assert.equal(editor.get(`${T}.columns`), undefined);
   });
-  step(editor, "style a DataColumn header cell", () => tables.setTableCellStyle(editor, T, [{ section: "header", column: 1 }], { align: "right" }), () => {
+  step(editor, "style a DataColumn header cell", () => tables.setTableCellStyle(editor, T, [{ section: "header", column: 1 }], { align: "end" }), () => {
     assert.deepEqual(editor.get(`${T}.columns.1`), { value: "Share", format: "0%", style: { align: "end" } }, "the column keeps its format as a styled header");
   });
   step(editor, "a table style over DataColumn headers", () => tables.setTableStyle(editor, T, "minimal"));
