@@ -23,10 +23,10 @@ test('finding 6: a callout or overlay composition cannot place is reported and l
   assert.ok(codes(anchored).includes('unresolved-content'));
 });
 
-test('finding 5: a timeline period shorter than its marker is a crowded mark, which a strict composition reports without refusing', () => {
+test('finding 5: a timeline period shorter than its marker is timeline-period-short, which a strict composition reports without refusing', () => {
   const slide = { title: 'Plan', composition: { overflow: 'error' }, timeline: { events: [{ when: 'Day 1', what: 'Kickoff', duration: 1 }, { when: 'Year 3', what: 'Delivery', duration: 1000 }] } };
   const result = composeSlide(slide);
-  assert.ok(result.diagnostics.some((entry) => entry.code === 'mark-crowded'), codes(result).join());
+  assert.ok(result.diagnostics.some((entry) => entry.code === 'timeline-period-short'), codes(result).join());
   assert.ok(!codes(result).includes('text-overflow'));
 });
 

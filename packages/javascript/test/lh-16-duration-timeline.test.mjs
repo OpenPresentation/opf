@@ -54,13 +54,13 @@ test('intrinsic measurement stays finite while retaining relative vertical perio
   near(out.ranges[1].box.height,4*out.ranges[0].box.height);
 });
 
-// RR-105: a period too short for its marker is a crowded mark (mark-crowded), not text overflow: no size changes it, so a strict
+// RR-105: a period too short for its marker is a short period (timeline-period-short), not text overflow: no size changes it, so a strict
 // composition reports it and does not refuse the timeline.
-test('an unreadable proportional interval is reported as a crowded mark instead of dropping content or changing its duration',()=>{
+test('an unreadable proportional interval is reported as a short period instead of dropping content or changing its duration',()=>{
   const value=[{when:'Brief',what:'All of these source words remain here',duration:.001},{when:'Long',what:'Build',duration:100}],before=structuredClone(value),box={x:0,y:0,width:280,height:160};
   const out=layoutTimeline(value,box);
-  assert.ok(out.diagnostics.some(entry=>entry.code==='mark-crowded'&&entry.reason==='event-space'));assert.deepEqual(value,before);
-  assert.equal(out.overflow,out.diagnostics.some(entry=>entry.code!=='mark-crowded'));
+  assert.ok(out.diagnostics.some(entry=>entry.code==='timeline-period-short'&&entry.reason==='event-space'));assert.deepEqual(value,before);
+  assert.equal(out.overflow,out.diagnostics.some(entry=>entry.code!=='timeline-period-short'));
   assert.deepEqual(out.parts.map(part=>part.text),value.flatMap(event=>[event.when,event.what]));
   if(out.overflow)assert.throws(()=>layoutTimeline(value,box,{overflow:'error'}),OPFCompositionError);
   else assert.doesNotThrow(()=>layoutTimeline(value,box,{overflow:'error'}));

@@ -128,11 +128,12 @@ export interface LayoutDiagnostic {
    * LH-14: `icon-dropped` for an icon the slide has no room for without setting text smaller: the text stays, the chip is not drawn.
    * SH-09: `arrangement-adapted` for a pyramid or matrix drawn another way: a matrix of other than four entries as cards, or a list the
    * arrangement's designs cannot hold at the list's size (or of a shape it does not draw) as a list.
-   * RR-105: `mark-crowded` for a mark drawn without room to read clearly that no size or arrangement changes: a timeline period shorter than
-   * its marker (LH-16's proportions are the author's), a chart reference label that collides with a data line or another label. It is
-   * geometry, not overflow: a strict (`overflow: "error"`) composition reports it and does not refuse the slide.
+   * RR-105: two marks drawn without room that no size or arrangement changes, which are geometry, not overflow (a strict `overflow: "error"`
+   * composition reports them and does not refuse the slide): `chart-label-collision` for an explicit reference label that meets another label
+   * or a data line on both of its sides (drawn at its preferred place, its text and value kept), and `timeline-period-short` for a timeline
+   * period shorter than its marker (LH-16's proportions are the author's).
    */
-  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "mark-crowded";
+  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "chart-label-collision" | "timeline-period-short";
   path: string;
   message: string;
   /**
@@ -3256,7 +3257,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
           y+=16*scale;
         });
       }
-      for(const range of ranges){const length=arrangement==='vertical'?range.box.height:range.box.width;if(length<2*scale){diagnostics.push({code:'mark-crowded',reason:'event-space',path:range.path,message:'Timeline period is too short to draw readably; enlarge the timeline or split its events.'});score+=2*scale-length;}}
+      for(const range of ranges){const length=arrangement==='vertical'?range.box.height:range.box.width;if(length<2*scale){diagnostics.push({code:'timeline-period-short',reason:'event-space',path:range.path,message:'Timeline period is too short to draw readably; enlarge the timeline or split its events.'});score+=2*scale-length;}}
       for(const marker of markers){const extent=(marker.ring?.radius??marker.radius)+(marker.strokeWidth??0)/2;if(marker.x-extent<box.x-.01||marker.y-extent<box.y-.01||marker.x+extent>box.x+box.width+.01||marker.y+extent>box.y+box.height+.01){diagnostics.push({code:'text-overflow',reason:'event-space',path:marker.path,message:'Timeline marker has no usable space; increase the cell or paginate events.'});score+=1;}}
       const firstMarker=markers[0]!,last=markers.at(-1)!,connector=rtl?{x1:Math.min(firstMarker.x,last.x),y1:firstMarker.y,x2:Math.max(firstMarker.x,last.x),y2:last.y}:{x1:firstMarker.x,y1:firstMarker.y,x2:last.x,y2:last.y};
       // LH-121: progress runs from the first event to the current one, or to the last done one when none is current.
@@ -3278,7 +3279,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     if(!options.horizontal&&!tryArrangement('vertical',reduction).length)settled=true;
   }
   const {score,...result}=selected!;
-  const overflowing=result.diagnostics.filter(entry=>entry.code!=='mark-crowded');
+  const overflowing=result.diagnostics.filter(entry=>entry.code!=='timeline-period-short');
   if(overflowing.length&&options.overflow==='error')throw new OPFCompositionError(overflowing);
   let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
   const cover=(x:number,y:number,width:number,height:number)=>{left=Math.min(left,x);top=Math.min(top,y);right=Math.max(right,x+width);bottom=Math.max(bottom,y+height);};
@@ -10166,9 +10167,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
   }
   // Explicit labels report only their final placement, after sibling scales/plots and table-row alignment.
-  // A reference label past its chart is overflow; one that collides with a data line or another label after both placements is a crowded
-  // mark (mark-crowded), which a strict composition does not refuse. Paths name the authored entry (chartReferenceSources).
-  for (const item of items) { const sources = chartReferenceSources(item.value); for (const finding of item.chart?.layer?.references?.diagnostics ?? []) diagnostics.push({code: finding.code === 'chart-reference-label-collision' ? 'mark-crowded' : 'text-overflow', path: item.path + '.referenceLines.' + (sources[finding.index] ?? finding.index) + '.label', message: finding.message}); }
+  // A reference label past its chart is overflow; one that meets a data line or another label after both placements is a collision
+  // (chart-label-collision), which a strict composition does not refuse. Paths name the authored entry (chartReferenceSources).
+  for (const item of items) { const sources = chartReferenceSources(item.value); for (const finding of item.chart?.layer?.references?.diagnostics ?? []) diagnostics.push({code: finding.code === 'chart-reference-label-collision' ? 'chart-label-collision' : 'text-overflow', path: item.path + '.referenceLines.' + (sources[finding.index] ?? finding.index) + '.label', message: finding.message}); }
   // LH-115: the timeline under its column chart spans the plot, so each event sits under its column; it is listed before the chart when
   // it was written first (reading order).
   if (underChart?.chart && underChart.timeline) {
@@ -11340,7 +11341,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   diagnostics.push(...imageCalloutDiagnostics);
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
   const failures = diagnostics.filter(diagnostic => {
-    if(diagnostic.code==='mark-crowded')return false;
+    if(diagnostic.code==='chart-label-collision'||diagnostic.code==='timeline-period-short')return false;
     if(composition.overflow==='error')return true;
     let path = diagnostic.path;
     while (path) {

@@ -525,7 +525,7 @@ function overlayBox(host: Rec, context: { path: string; width: number; height: n
 // One reference pixel is 9525 EMU; outputs must remain finite through the actual
 // six-place geometry rounding and exactly representable as JavaScript integers.
 type OverlayFrameKey = 'x' | 'y' | 'width' | 'height';
-class PositionRangeError extends RangeError {
+export class PositionRangeError extends RangeError {
   constructor(public readonly coordinate: OverlayFrameKey, path: string) {
     super(`Position coordinate ${path}.${coordinate} cannot be represented as finite rounded geometry and a safe integer native coordinate.`);
     this.name = 'RangeError';
