@@ -256,8 +256,8 @@ function detect(kind: string, lines: Line[]): PlantumlDiagram {
   const component = any(/^\[[\w$\u0080-\uFFFF][^\]\[]*\]/) || declared.some(match => COMPONENT_KEYWORDS.has(match[1]!.toLowerCase())) || any(/^\(\)\s/);
   const classes = outside.some(line => {
     const match = CLASS_DECLARATION.exec(line.text);
-    const word = match?.[1]!.toLowerCase();
-    return !!match && !['entity', 'circle', 'diamond'].includes(word!) && (word !== 'interface' || !!match[9]);
+    const word = match?.[1]?.toLowerCase();
+    return !!match && !['entity', 'circle', 'diamond'].includes(word as string) && (word !== 'interface' || !!match[9]);
   });
   const usecaseName = (name: string) => /^\([^()*]+\)$/.test(name);
   const cases = any(USECASE_DECLARATION) || any(/^\([^()*]+\)(\s|$)/) || any(/^(actor\s+)?:[^:]+:/) || outside.some(line => { const link = readLink(line.text); return !!link && (usecaseName(link.from) || usecaseName(link.to)); });
@@ -1092,7 +1092,7 @@ function component(lines: Line[], title: string | undefined, direction: string |
     else {
       name = unquote(name);
       const group = kind === undefined && alias === undefined ? groupByCode.get(name) : undefined;
-      if (group !== undefined) return `\u0001${group}\u0002`;
+      if (group !== undefined) return `#${group}#`;
     }
     label = name;
     if (alias) name = alias;
@@ -1175,7 +1175,7 @@ function component(lines: Line[], title: string | undefined, direction: string |
     out.push(`${indent}end`);
   };
   groups.forEach((entry, index) => { if (entry.parent === undefined) write(index, '  '); });
-  out.push(...edges.map(edge => edge.replace(/\u0001(\d+)\u0002/g, (_, at: string) => groups[Number(at)]!.id)));
+  out.push(...edges.map(edge => edge.replace(/#(\d+)#/g,(_, at: string) => groups[Number(at)]!.id)));
   return out.join('\n');
 }
 
