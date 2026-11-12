@@ -4,7 +4,7 @@ import type { ValidationRule } from './rule-context.js';
 import { plainText, pointerOfDotted, runsOf, slidePayloads } from './rule-content.js';
 import { type Rec, rec } from './rule-design.js';
 import { resolveNarrative, unreferencedBeats } from './narrative-plan.js';
-import { ruleInfo, MAX_FURNITURE_LINES, emptySlideRule, emptyTextRule, furnitureWrapsRule, layoutFailedRule, minFontRule, outsideRule, overflowRule, placeholderRule, regionFullRule, regionKindRule, regionUnknownRule, resolutionRule, unplacedRule, unresolvedRule, unusedBeatRule, iconDroppedRule, arrangementAdaptedRule, chartLabelCollisionRule, timelinePeriodShortRule } from './validation-rule-info.js';
+import { ruleInfo, MAX_FURNITURE_LINES, emptySlideRule, emptyTextRule, furnitureWrapsRule, layoutFailedRule, minFontRule, outsideRule, overflowRule, placeholderRule, regionFullRule, regionKindRule, regionUnknownRule, resolutionRule, unplacedRule, unresolvedRule, unusedBeatRule, iconDroppedRule, arrangementAdaptedRule, chartLabelCollisionRule, timelinePeriodShortRule, shapeOffSlideRule } from './validation-rule-info.js';
 
 const PX_TO_PT = 0.75;
 const round = (value: number, places = 1) => Math.round(value * 10 ** places) / 10 ** places;
@@ -19,7 +19,7 @@ const layoutRules: ValidationRule[] = [
 		info: overflowRule,
 		// Format validates anchor identities in schema-check without composition. Geometry may add
 		// the same located finding during an enabled layout audit, but must not trigger one.
-		also: [unresolvedRule, layoutFailedRule, minFontRule, regionUnknownRule, regionKindRule, regionFullRule, unplacedRule, iconDroppedRule, arrangementAdaptedRule, chartLabelCollisionRule, timelinePeriodShortRule],
+		also: [unresolvedRule, layoutFailedRule, minFontRule, regionUnknownRule, regionKindRule, regionFullRule, unplacedRule, iconDroppedRule, arrangementAdaptedRule, chartLabelCollisionRule, timelinePeriodShortRule, shapeOffSlideRule],
 		run(context) {
 			// Diagnostics about deck-level settings (header, footer, design) repeat on every slide; report each once.
 			const deckLevel = new Set<string>();
@@ -44,6 +44,9 @@ const layoutRules: ValidationRule[] = [
 					// SH-09: a pyramid or matrix drawn as cards or as a list (SH-18: a cycle as a list).
 					else if (diagnostic.code === 'arrangement-adapted')
 						context.report(arrangementAdaptedRule, { path, slide, message: diagnostic.message, help: /four entries/.test(diagnostic.message) ? 'Write four entries for the quadrants, or choose another layout for this many.' : 'Shorten the entries, write one level without descriptions, or choose another layout.' });
+					// An overlay shape or image callout with no part on the slide: advice, never an overflow.
+					else if (diagnostic.code === 'shape-off-slide')
+						context.report(shapeOffSlideRule, { path, slide, message: diagnostic.message, help: 'Write the position as fractions (0.2 for 20%), move the shape so part of it is on the slide, or remove it. A shape may hang over an edge; only one with nothing on the slide is reported.' });
 					// A reference label that meets another label or a data line on both of its sides: drawn as asked, and reported as what it is.
 					else if (diagnostic.code === 'chart-label-collision')
 						context.report(chartLabelCollisionRule, { path, slide, message: diagnostic.message, help: "Put the label at the other end of its line (labelPosition 'start' or 'end'), shorten it, or give the chart more room. Its text and value are kept." });

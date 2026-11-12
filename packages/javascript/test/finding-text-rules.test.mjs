@@ -105,11 +105,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 102 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 103 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 102);
+	assert.equal(RULE_IDS.length, 103);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {

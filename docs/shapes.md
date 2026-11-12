@@ -354,6 +354,7 @@ The `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` and `vertical-flow` layouts
 | `opf/shape-link-hidden` | A hidden shape has a link nobody can click. |
 | `opf/shape-option-unsupported-payload` | A shape-only property (`fill`, `style`, `rotate` and the others) is on a block that is not a shape. |
 | `opf/shape-anchor-missing` | An overlay's block, chart point or series does not resolve, or its native plot is unqualified; the shape is not drawn. |
+| `opf/shape-off-slide` | An overlay shape (or an image callout) lies wholly outside the slide, so nothing of it is drawn: usually a percent or a pixel written where a fraction belongs. A warning; a shape that straddles an edge, a hidden one, and a rotated one whose circumscribed circle reaches the slide are not reported. |
 | `opf/connector-end-missing` | A connector's `from` or `to` names no block or overlay shape on the slide (or names a connector); the connector is not drawn. |
 | `opf/schema` | An overlay shape has both placements or none, or only some of `x`, `y`, `width` and `height`; a connector has a shape-only key; a `fromSite` or `toSite` is an index the shape does not have. |
 

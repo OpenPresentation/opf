@@ -429,6 +429,9 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
     }
     if (!placed) return;
     const shape = composeShape(host, placed.box, { scale, aspect: 0 });
+    // A shape wholly outside the slide draws nothing: usually a percent or a pixel written where a fraction belongs.
+    if (host.hidden !== true && outsideCanvas(placed.box, { width, height }, typeof host.rotate === 'number' && host.rotate % 180 !== 0))
+      composition.diagnostics.push({ code: 'shape-off-slide', path, message: placed.attachedTo ? `This shape lies wholly outside the slide where it is attached to '${placed.attachedTo.id}', so nothing of it is drawn.` : `This shape lies wholly outside the slide (x ${host.x}, y ${host.y}), so nothing of it is drawn. x and y are fractions of the slide: 0.2 is 20% of its width, and 20 is twenty slide widths away.` });
     const item: ComposedOverlayShape = {
       kind: 'shape', index, ...(nonEmpty(host.id) ? { id: host.id } : {}), path, field: 'shape', type: 'shape', value: host.text, payload: host, box: { ...shape.box }, shape,
       ...context.item(host, shape, path), alignment: 'center', ...(placed.attachedTo ? { attachedTo: placed.attachedTo } : {}), layer: host.layer === 'back' ? 'back' : 'front',
@@ -538,6 +541,17 @@ function fractionalOverlayFrame(host: Rec, canvas: { width: number; height: numb
 /** representablePositionBox, or undefined where it would throw: composition reports such a panel and leaves it out. */
 export function representableBox(box: LayoutBox, path: string): LayoutBox | undefined {
   try { return representablePositionBox(box, path); } catch (error) { if (error instanceof PositionRangeError) return undefined; throw error; }
+}
+/**
+ * True when a box has no part on the canvas. A rotated box is judged by its bounding circle (the circle through its corners), so a
+ * shape whose turned corner may reach the slide is never reported.
+ */
+export function outsideCanvas(box: LayoutBox, canvas: { width: number; height: number }, rotated = false): boolean {
+  if (rotated) {
+    const radius = Math.hypot(box.width, box.height) / 2, x = box.x + box.width / 2, y = box.y + box.height / 2;
+    return x + radius <= 0 || x - radius >= canvas.width || y + radius <= 0 || y - radius >= canvas.height;
+  }
+  return box.x + box.width <= 0 || box.x >= canvas.width || box.y + box.height <= 0 || box.y >= canvas.height;
 }
 /** Internal shared geometry boundary for authored positioned panels. No layout, fonts or data loading. */
 export function representablePositionBox(box: LayoutBox, path: string): LayoutBox {

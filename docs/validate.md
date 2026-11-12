@@ -307,6 +307,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/icon-dropped`](#opficon-dropped) | Layout | warning | composition | An icon is not drawn. |
 | [`opf/arrangement-adapted`](#opfarrangement-adapted) | Layout | info | composition | A pyramid, matrix, cycle, row of chevrons or flow is drawn another way. |
 | [`opf/chart-label-collision`](#opfchart-label-collision) | Layout | warning | composition | A reference label meets another label or a data line. |
+| [`opf/shape-off-slide`](#opfshape-off-slide) | Layout | warning | composition | A shape or image callout lies wholly outside the slide. |
 | [`opf/timeline-period-short`](#opftimeline-period-short) | Layout | warning | composition | A timeline period is too short to read. |
 | [`opf/furniture-wraps`](#opffurniture-wraps) | Layout | warning | composition | A header or footer zone wraps onto more than 2 lines. |
 | [`opf/font-outside-scheme`](#opffont-outside-scheme) | Layout | warning | structure | Text uses a font family that is not in the deck's font scheme. |
@@ -997,6 +998,12 @@ Default severity: **info**. Cost: composition. A pyramid, matrix, cycle, row of 
 Default severity: **warning**. Cost: composition. A reference label meets another label or a data line.
 
 **Why.** A reference label is tried above and below its line (beside it on a bar chart). When both places meet another reference label or a data line, it is drawn at the first and reported; its text and value are kept.
+
+### `opf/shape-off-slide`
+
+Default severity: **warning**. Cost: composition. A shape or image callout lies wholly outside the slide.
+
+**Why.** Overlay shapes and image callouts may straddle or leave the slide on purpose, so a position outside it is valid. One with no part on the slide draws nothing, which is nearly always a percent or a pixel written where a fraction belongs.
 
 ### `opf/timeline-period-short`
 
