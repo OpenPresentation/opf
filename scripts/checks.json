@@ -20,6 +20,7 @@
       {"match": ["docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/render-api.mjs", "docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/font-availability.mjs", "docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/parity.mjs"], "run": ["check:audit-render-api"]},
       {"match": ["scripts/test-registry-fidelity.mjs", "scripts/registry-fidelity-archive.mjs"], "run": ["check:registry-fidelity-archive"]},
       {"match": ["scripts/native-acceptance/"], "run": ["check:native-acceptance", "check:libreoffice"]},
+      {"match": ["spec/schemas/opf.schema.json", "scripts/native-acceptance/qualification/", "packages/gallery/catalog/layouts/", "examples/"], "run": ["check:format-coverage"]},
       {"match": ["scripts/libreoffice/", "packages/pptx/test/fixtures/native-long-text/", "spec/reference/font-policy.json"], "run": ["check:libreoffice"]},
       {"match": ["scripts/pack-ecosystem.mjs", "scripts/ecosystem-preview-plan.mjs", "scripts/ecosystem-preview-plan.test.mjs"], "run": ["check:preview-packaging"]},
       {"match": ["scripts/gallery-editor-wasm.mjs", "scripts/gallery-editor-wasm.test.mjs", "scripts/vendor-gallery-editor.mjs", "scripts/prepare-gallery-editor.mjs"], "run": ["check:gallery-editor-wasm"]},

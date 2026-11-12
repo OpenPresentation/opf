@@ -42,6 +42,17 @@ Build the corpus on that machine, open each file, and grade the manifest's featu
 fallback for SmartArt) is graded only where the app does not lay SmartArt out. Record the results beside the Windows table in
 `docs/programs/release-readiness/`.
 
+## Format coverage
+
+The `coverage-*.opf.json` decks in `decks/` use every key, enum value and `oneOf`/`anyOf` alternative of
+`spec/schemas/opf.schema.json` and every default layout, one area per deck (text, lists, tables, charts, images, backgrounds,
+shape presets and styles, overlays, diagrams, regions, composition, design, furniture, metadata, variables, template,
+languages, catalogs, deliberate warnings, and one deck per slide size). `pnpm check:format-coverage`
+(`scripts/check-format-coverage.mjs`) walks every JSON deck of the manifest along the schema and fails on a location no deck
+uses, unless `scripts/format-coverage-allowlist.json` lists it with a reason; a schema addition therefore comes with a slide.
+`packages/integration/test/format-coverage-decks.test.mjs` validates, draws and exports every coverage deck on each CI run.
+`coverage-known-issues.opf.json` holds a valid case the engines cannot draw yet; it is not in the manifest.
+
 ## Maintain
 
 Add a feature as a slide in `decks/` (or an example by path) and a `features` entry naming its change fragments, deck, variant,
