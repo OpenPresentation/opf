@@ -3,8 +3,8 @@
   "artifacts": [
     {
       "file": "README.md",
-      "bytes": 5457,
-      "sha256": "03d5008a57367dc52e2b4250b8e2d672ca92eb2714a6167a8dbfdfc9127f002e"
+      "bytes": 5609,
+      "sha256": "c92b026ece6531108b61bb5d9dbc195b188211f5a4731d821fff6004455937da"
     },
     {
       "file": "after-and-raw-inventory.json",

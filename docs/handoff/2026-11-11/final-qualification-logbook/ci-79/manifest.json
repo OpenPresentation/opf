@@ -1,0 +1,60 @@
+{
+  "scope": "Exact terminal79 packet supplied by root; no new API query",
+  "files": [
+    {
+      "file": "observer.log",
+      "bytes": 19090,
+      "sha256": "c6d3e7f9da7a6467be8e71b735a8d631245e036e431c4151bcc335a07a5ca988"
+    },
+    {
+      "file": "snapshot01.json",
+      "bytes": 16236,
+      "sha256": "4ad01f5387d46bd7c68f33cede9f79da17ed963cabc17aa40cf723e2baaf65cf"
+    },
+    {
+      "file": "snapshot02.json",
+      "bytes": 16236,
+      "sha256": "5503989c033ac572e649ff1b71f7ad9b4a5699fdc528e1c77642c745f812b80c"
+    },
+    {
+      "file": "snapshot03.json",
+      "bytes": 16473,
+      "sha256": "da5401fd1f21ab5ba95605456d485f88fd605239cc8adab66e7aee7e6537a8a6"
+    },
+    {
+      "file": "node22-render2-130955321915.log",
+      "bytes": 104528,
+      "sha256": "1ff05a279110325b46c4910c4b552a7bfb2c954a076c3a091ec8a233e6e0876b"
+    },
+    {
+      "file": "windows-pptx2-130955319706.log",
+      "bytes": 130136,
+      "sha256": "a188925ad56e7a2b6533691dcf0ebe88537d8dd556918f5130d2a3aa88015272"
+    },
+    {
+      "file": "windows-browser1-130955321934.log",
+      "bytes": 396916,
+      "sha256": "5a33c3a36477df967818a1e4eeab86ab581c53ec5c5e808328f81d089f6f5fec"
+    },
+    {
+      "file": "browser-artifact-inventory.json",
+      "bytes": 70597,
+      "sha256": "d83a65d507ba874810abb0b7893da135c056ce59c62613fca24d1183eeb08b36"
+    }
+  ],
+  "final": {
+    "at": "2026-11-12T04:32:22.044Z",
+    "head": "79cdb85d6ab8a58dde5d474e254cffa027735c51",
+    "checkNames": 70,
+    "states": {
+      "SUCCESS": 67,
+      "FAILURE": 1,
+      "SKIPPED": 2
+    }
+  },
+  "largeArtifactRemainsLocal": {
+    "bytes": 95358043,
+    "sha256": "0d37c724b55d9b8c1e8578941b814d9e549a40b33b8276dec9049f6c57895d11",
+    "members": 522
+  }
+}

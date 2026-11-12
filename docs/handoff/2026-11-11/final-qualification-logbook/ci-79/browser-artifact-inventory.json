@@ -1,0 +1,2635 @@
+{
+  "archiveBytes": 95358043,
+  "sha256": "0d37c724b55d9b8c1e8578941b814d9e549a40b33b8276dec9049f6c57895d11",
+  "crcVerified": true,
+  "entries": 522,
+  "members": [
+    {
+      "path": "chrome-examples/chunks/24BXRY42-BISFKJJN.js",
+      "bytes": 8532,
+      "crc32": "fc35f2b1"
+    },
+    {
+      "path": "chrome-examples/chunks/4FHPYW2L-Z6HXJXGS.js",
+      "bytes": 9146,
+      "crc32": "40dc8ac3"
+    },
+    {
+      "path": "chrome-examples/chunks/5XYWFMKW-UIZHQ5EU.js",
+      "bytes": 16875,
+      "crc32": "5dc9947e"
+    },
+    {
+      "path": "chrome-examples/chunks/64PMEAB3-4ZZIGN3Z.js",
+      "bytes": 44909,
+      "crc32": "2d91988d"
+    },
+    {
+      "path": "chrome-examples/chunks/6BEWHPQE-ODPIGBW4.js",
+      "bytes": 7605,
+      "crc32": "b727205c"
+    },
+    {
+      "path": "chrome-examples/chunks/CGIZI67J-PF4U4Y3N.js",
+      "bytes": 5444,
+      "crc32": "3f0fa9fc"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-2SY5SHRH.js",
+      "bytes": 473466,
+      "crc32": "9401e153"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-3BO2N6GE.js",
+      "bytes": 838,
+      "crc32": "4a0f06d6"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-3JKY5OUE.js",
+      "bytes": 0,
+      "crc32": "00000000"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-3PDQOPFW.js",
+      "bytes": 2171,
+      "crc32": "663643fc"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-3UNY26LM.js",
+      "bytes": 7352,
+      "crc32": "ad6c53aa"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-4WOTH4CS.js",
+      "bytes": 25670,
+      "crc32": "3626a22d"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-66QLPS5Q.js",
+      "bytes": 980,
+      "crc32": "f29e52df"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-6CST55LI.js",
+      "bytes": 1952,
+      "crc32": "3f68126f"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-ABBESK67.js",
+      "bytes": 222011,
+      "crc32": "777fab3a"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-AWWPH2PI.js",
+      "bytes": 0,
+      "crc32": "00000000"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-BFDX2RFE.js",
+      "bytes": 159,
+      "crc32": "04b21b1c"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-BWWP5HKW.js",
+      "bytes": 741523,
+      "crc32": "e00dda21"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-EMBIDUMY.js",
+      "bytes": 894,
+      "crc32": "ffd55ee6"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-FCOVVEZM.js",
+      "bytes": 4954,
+      "crc32": "5932701c"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-FDDBAFWX.js",
+      "bytes": 2584,
+      "crc32": "ec2de7a4"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-FFOC7WPN.js",
+      "bytes": 17928,
+      "crc32": "1038052b"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-FH2F7LAS.js",
+      "bytes": 941240,
+      "crc32": "56a186be"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-GJE5RMEE.js",
+      "bytes": 164656,
+      "crc32": "57d8a0da"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-GPSOHTNV.js",
+      "bytes": 269581,
+      "crc32": "25298d68"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-HHRGMQLI.js",
+      "bytes": 12630,
+      "crc32": "95cbd855"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-I2RZURUT.js",
+      "bytes": 106,
+      "crc32": "b40f7893"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-IKII3OTF.js",
+      "bytes": 29252,
+      "crc32": "013dc810"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-IM6KFMUH.js",
+      "bytes": 29956,
+      "crc32": "792bf3b5"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-IS4KEFJQ.js",
+      "bytes": 42991,
+      "crc32": "83161930"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-IVIMBHXF.js",
+      "bytes": 0,
+      "crc32": "00000000"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-IXMD3XGK.js",
+      "bytes": 37471,
+      "crc32": "05e08b89"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-JF4Z4CDO.js",
+      "bytes": 843,
+      "crc32": "cd32a3ab"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-JYGU7BCZ.js",
+      "bytes": 4292,
+      "crc32": "56a98397"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-KG5TQP2H.js",
+      "bytes": 117689,
+      "crc32": "bfe371e2"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-L2L5M7U2.js",
+      "bytes": 2497,
+      "crc32": "c9e65852"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-LDDYKPFY.js",
+      "bytes": 484,
+      "crc32": "456d0736"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-LX44GY3Z.js",
+      "bytes": 0,
+      "crc32": "00000000"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-MHR3MMMQ.js",
+      "bytes": 15132,
+      "crc32": "d82896ef"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-ML7H3O7R.js",
+      "bytes": 4095,
+      "crc32": "fad84a9e"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-NFPJFSJ4.js",
+      "bytes": 492,
+      "crc32": "00b1d939"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-NWVXWVBH.js",
+      "bytes": 598,
+      "crc32": "49c29ec5"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-O4QJVUXU.js",
+      "bytes": 3700,
+      "crc32": "6682df63"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-O5IBNYKI.js",
+      "bytes": 315531,
+      "crc32": "44dfc669"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-OY5PIZP7.js",
+      "bytes": 242454,
+      "crc32": "4e6b5d68"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-P3RHOSVJ.js",
+      "bytes": 1968,
+      "crc32": "08463cdf"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-PH3VQVB5.js",
+      "bytes": 193983,
+      "crc32": "1fe263eb"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-Q2A3ZBYD.js",
+      "bytes": 27455,
+      "crc32": "2ce6d174"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-QAGP74NF.js",
+      "bytes": 11647,
+      "crc32": "4783570b"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-QW4V26Q7.js",
+      "bytes": 10238,
+      "crc32": "44f2e228"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-R7UIKJYN.js",
+      "bytes": 13719,
+      "crc32": "2536ac63"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-RCFJWOJT.js",
+      "bytes": 38422,
+      "crc32": "8c1c4383"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-SAHTLAFB.js",
+      "bytes": 119737,
+      "crc32": "dd6ae866"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-SUDSS3UN.js",
+      "bytes": 8857,
+      "crc32": "c2550433"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-T2MG34PX.js",
+      "bytes": 237,
+      "crc32": "d6826fde"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-TATUMB3Y.js",
+      "bytes": 956,
+      "crc32": "5d6776bb"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-UAE5QX6N.js",
+      "bytes": 1103,
+      "crc32": "3e8cf495"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-VINPVD35.js",
+      "bytes": 375,
+      "crc32": "d688c6d2"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-VJPREESI.js",
+      "bytes": 14506,
+      "crc32": "f0de3167"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-VNBF3TKI.js",
+      "bytes": 35224,
+      "crc32": "6005da71"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-VNLP6RDR.js",
+      "bytes": 561,
+      "crc32": "6669f4bd"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-VVBIY6JS.js",
+      "bytes": 18531,
+      "crc32": "152be3e4"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-W2YTLQ76.js",
+      "bytes": 34937,
+      "crc32": "20de3d01"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-WOT62YLA.js",
+      "bytes": 935,
+      "crc32": "eaf93aec"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-XNNU7PIT.js",
+      "bytes": 36904,
+      "crc32": "a43fc6ab"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-Y4SBY2TA.js",
+      "bytes": 44419,
+      "crc32": "f611b76f"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-ZI4NHQE6.js",
+      "bytes": 3701,
+      "crc32": "31b05c05"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-ZJVMJ4TB.js",
+      "bytes": 12295,
+      "crc32": "a7eab052"
+    },
+    {
+      "path": "chrome-examples/chunks/chunk-ZKYS2HWI.js",
+      "bytes": 10535,
+      "crc32": "6e72ec1c"
+    },
+    {
+      "path": "chrome-examples/chunks/data-grid-RVNG2TJF.js",
+      "bytes": 71701,
+      "crc32": "30eb837c"
+    },
+    {
+      "path": "chrome-examples/chunks/diagram-plantuml-ZZYMHBHZ-RQCTDZMT.js",
+      "bytes": 37779,
+      "crc32": "61548fee"
+    },
+    {
+      "path": "chrome-examples/chunks/DNNCRC2E-7WUWDFLW.js",
+      "bytes": 20775,
+      "crc32": "7d9e5d1c"
+    },
+    {
+      "path": "chrome-examples/chunks/E67EBMDD-7KAIL3KB.js",
+      "bytes": 30446,
+      "crc32": "9f5f675a"
+    },
+    {
+      "path": "chrome-examples/chunks/export-browser-VVO5WVMN.js",
+      "bytes": 44198,
+      "crc32": "f69076c8"
+    },
+    {
+      "path": "chrome-examples/chunks/fonts-A44RIT4V.js",
+      "bytes": 1559,
+      "crc32": "3a3e2818"
+    },
+    {
+      "path": "chrome-examples/chunks/G76NGGFM-UYG4CRL3.js",
+      "bytes": 12829,
+      "crc32": "58a03fec"
+    },
+    {
+      "path": "chrome-examples/chunks/GH6G3TJC-Z4P3COE7.js",
+      "bytes": 7728,
+      "crc32": "e8ede145"
+    },
+    {
+      "path": "chrome-examples/chunks/HPNUA7RO-TFMITFTN.js",
+      "bytes": 5850,
+      "crc32": "83edd276"
+    },
+    {
+      "path": "chrome-examples/chunks/HQRGC5D7-76ECJFYO.js",
+      "bytes": 32155,
+      "crc32": "86b3246d"
+    },
+    {
+      "path": "chrome-examples/chunks/IX6Z2TVR-EC3V7UHJ.js",
+      "bytes": 28938,
+      "crc32": "21f17384"
+    },
+    {
+      "path": "chrome-examples/chunks/J77NQRCJ-D56M4HZG.js",
+      "bytes": 24191,
+      "crc32": "a7917110"
+    },
+    {
+      "path": "chrome-examples/chunks/JAD36DTZ-XNBWC3LO.js",
+      "bytes": 14788,
+      "crc32": "3458a448"
+    },
+    {
+      "path": "chrome-examples/chunks/json-menu-KX26BGSM.js",
+      "bytes": 9905,
+      "crc32": "4251c3d7"
+    },
+    {
+      "path": "chrome-examples/chunks/LF3NJQAX-VUZQ3ILU.js",
+      "bytes": 9493,
+      "crc32": "7f24a139"
+    },
+    {
+      "path": "chrome-examples/chunks/LRZCOFJZ-EZ3O4XMY.js",
+      "bytes": 15383,
+      "crc32": "76ac220f"
+    },
+    {
+      "path": "chrome-examples/chunks/markdown-PWUXZGC7.js",
+      "bytes": 349,
+      "crc32": "2b045d1e"
+    },
+    {
+      "path": "chrome-examples/chunks/N5NF2FGY-ZXY44BWB.js",
+      "bytes": 19289,
+      "crc32": "2563932d"
+    },
+    {
+      "path": "chrome-examples/chunks/N7OWWQHY-XWIUIR67.js",
+      "bytes": 14898,
+      "crc32": "5b728b51"
+    },
+    {
+      "path": "chrome-examples/chunks/OT7W3RNY-TNJG7JFO.js",
+      "bytes": 27931,
+      "crc32": "ef554ca0"
+    },
+    {
+      "path": "chrome-examples/chunks/P67P66DB-7HHORQWV.js",
+      "bytes": 11903,
+      "crc32": "6b15f63e"
+    },
+    {
+      "path": "chrome-examples/chunks/pako-XCILCAON.js",
+      "bytes": 1013,
+      "crc32": "a0c4e074"
+    },
+    {
+      "path": "chrome-examples/chunks/PFLLLM7K-6IJQYIHI.js",
+      "bytes": 13673,
+      "crc32": "7c38f70e"
+    },
+    {
+      "path": "chrome-examples/chunks/preview-fonts-5GAEPNFV.js",
+      "bytes": 619,
+      "crc32": "aaef324c"
+    },
+    {
+      "path": "chrome-examples/chunks/PUAMC4MJ-2EME4F7I.js",
+      "bytes": 41929,
+      "crc32": "463110f9"
+    },
+    {
+      "path": "chrome-examples/chunks/PVFCHRLY-C244LHSJ.js",
+      "bytes": 28041,
+      "crc32": "f274589a"
+    },
+    {
+      "path": "chrome-examples/chunks/schema-inspector-O6SBOA6P.js",
+      "bytes": 7432,
+      "crc32": "5e01909d"
+    },
+    {
+      "path": "chrome-examples/chunks/SG5TVYLW-IZSQMX7L.js",
+      "bytes": 7186,
+      "crc32": "2d69fa5a"
+    },
+    {
+      "path": "chrome-examples/chunks/shape-engine-module-BK7JNEUV-MSODIXZP.js",
+      "bytes": 5513,
+      "crc32": "93a42eec"
+    },
+    {
+      "path": "chrome-examples/chunks/shape-geometry-EZVLFCC5.js",
+      "bytes": 358,
+      "crc32": "a6d296eb"
+    },
+    {
+      "path": "chrome-examples/chunks/shape-handle-tools-B5U6RNIO.js",
+      "bytes": 3635,
+      "crc32": "70bc2458"
+    },
+    {
+      "path": "chrome-examples/chunks/source-completions-PAP53RLA.js",
+      "bytes": 23453,
+      "crc32": "e72e867a"
+    },
+    {
+      "path": "chrome-examples/chunks/source-hints-ADJH2KGF.js",
+      "bytes": 10606,
+      "crc32": "ab2dc952"
+    },
+    {
+      "path": "chrome-examples/chunks/source-navigation-3TLKZDVE.js",
+      "bytes": 29170,
+      "crc32": "d1ee1ee7"
+    },
+    {
+      "path": "chrome-examples/chunks/source-outline-IJHKVDYB.js",
+      "bytes": 4244,
+      "crc32": "026204ab"
+    },
+    {
+      "path": "chrome-examples/chunks/source-shortcuts-DZPGVRPD.js",
+      "bytes": 106,
+      "crc32": "81f598af"
+    },
+    {
+      "path": "chrome-examples/chunks/source-syntax-TUVCBGSH.js",
+      "bytes": 322,
+      "crc32": "7e0cc594"
+    },
+    {
+      "path": "chrome-examples/chunks/svg-T7VBS2WI.js",
+      "bytes": 671,
+      "crc32": "695f8610"
+    },
+    {
+      "path": "chrome-examples/chunks/UGRSUGA2-WPW37NBU.js",
+      "bytes": 6524,
+      "crc32": "7fc05370"
+    },
+    {
+      "path": "chrome-examples/chunks/V67O4WWV-REKVH2FM.js",
+      "bytes": 400,
+      "crc32": "16d7d0be"
+    },
+    {
+      "path": "chrome-examples/chunks/VINGRCPA-2Y3QZX4S.js",
+      "bytes": 11293,
+      "crc32": "804d424c"
+    },
+    {
+      "path": "chrome-examples/chunks/WL6DNKX4-LB7RCF6A.js",
+      "bytes": 21291,
+      "crc32": "235a3e81"
+    },
+    {
+      "path": "chrome-examples/chunks/workspace-L2MXHNLH.js",
+      "bytes": 916,
+      "crc32": "59846b3e"
+    },
+    {
+      "path": "chrome-examples/chunks/workspace-parts-FQTLJETA.js",
+      "bytes": 788457,
+      "crc32": "a5cc7ff7"
+    },
+    {
+      "path": "chrome-examples/chunks/WQ63CJYP-4ZIHSYUK.js",
+      "bytes": 12263,
+      "crc32": "2e573a9d"
+    },
+    {
+      "path": "chrome-examples/chunks/XOYAOB3S-T756SESF.js",
+      "bytes": 42528,
+      "crc32": "8d4ed8af"
+    },
+    {
+      "path": "chrome-examples/chunks/Y5LQLG3M-Y4XMEWGE.js",
+      "bytes": 5206,
+      "crc32": "4b243f73"
+    },
+    {
+      "path": "chrome-examples/chunks/yaml-GKNHFZJM.js",
+      "bytes": 356,
+      "crc32": "e3e6e711"
+    },
+    {
+      "path": "chrome-examples/chunks/YIK6JTN6-MWY2MYL2.js",
+      "bytes": 1427,
+      "crc32": "e0ac6dff"
+    },
+    {
+      "path": "chrome-examples/element.html",
+      "bytes": 1415,
+      "crc32": "c47e36d4"
+    },
+    {
+      "path": "chrome-examples/element.js",
+      "bytes": 10362,
+      "crc32": "c38a8739"
+    },
+    {
+      "path": "chrome-examples/embed.html",
+      "bytes": 869,
+      "crc32": "35e4e31a"
+    },
+    {
+      "path": "chrome-examples/embed.js",
+      "bytes": 1528,
+      "crc32": "6b103a74"
+    },
+    {
+      "path": "chrome-examples/full.html",
+      "bytes": 807,
+      "crc32": "9d20afb2"
+    },
+    {
+      "path": "chrome-examples/full.js",
+      "bytes": 2062,
+      "crc32": "04c14b33"
+    },
+    {
+      "path": "chrome-examples/headless.html",
+      "bytes": 1474,
+      "crc32": "ade1246c"
+    },
+    {
+      "path": "chrome-examples/headless.js",
+      "bytes": 2549,
+      "crc32": "9d9e805e"
+    },
+    {
+      "path": "chrome-examples/index.html",
+      "bytes": 1781,
+      "crc32": "ce72b856"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/arimo/400Regular/Arimo_400Regular.ttf",
+      "bytes": 318320,
+      "crc32": "8eb63b40"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/arimo/400Regular_Italic/Arimo_400Regular_Italic.ttf",
+      "bytes": 340984,
+      "crc32": "b8c0d6c2"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/arimo/700Bold/Arimo_700Bold.ttf",
+      "bytes": 318844,
+      "crc32": "d1b93be1"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/arimo/700Bold_Italic/Arimo_700Bold_Italic.ttf",
+      "bytes": 342368,
+      "crc32": "2c0ce173"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/arimo/LICENSE_FONT",
+      "bytes": 4384,
+      "crc32": "bf01cf2b"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/caladea/400Regular/Caladea_400Regular.ttf",
+      "bytes": 77020,
+      "crc32": "3c869831"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/caladea/400Regular_Italic/Caladea_400Regular_Italic.ttf",
+      "bytes": 77336,
+      "crc32": "1313ad49"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/caladea/700Bold/Caladea_700Bold.ttf",
+      "bytes": 79648,
+      "crc32": "329870b8"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/caladea/700Bold_Italic/Caladea_700Bold_Italic.ttf",
+      "bytes": 78792,
+      "crc32": "571af6ad"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/caladea/LICENSE_FONT",
+      "bytes": 4393,
+      "crc32": "cc7c780f"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/carlito/Carlito-Bold.ttf",
+      "bytes": 682468,
+      "crc32": "05e45174"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/carlito/Carlito-BoldItalic.ttf",
+      "bytes": 808508,
+      "crc32": "c2401a81"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/carlito/Carlito-Italic.ttf",
+      "bytes": 615236,
+      "crc32": "0b3f17de"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/carlito/Carlito-Regular.ttf",
+      "bytes": 628032,
+      "crc32": "b2f923b3"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/carlito/OFL.txt",
+      "bytes": 4424,
+      "crc32": "b055b01c"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/cousine/400Regular/Cousine_400Regular.ttf",
+      "bytes": 289556,
+      "crc32": "86416a32"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/cousine/400Regular_Italic/Cousine_400Regular_Italic.ttf",
+      "bytes": 298680,
+      "crc32": "a16b0108"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/cousine/700Bold/Cousine_700Bold.ttf",
+      "bytes": 290500,
+      "crc32": "904a06c9"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/cousine/700Bold_Italic/Cousine_700Bold_Italic.ttf",
+      "bytes": 300160,
+      "crc32": "823085c4"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/cousine/LICENSE_FONT",
+      "bytes": 4387,
+      "crc32": "41b59fae"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/gelasio/400Regular/Gelasio_400Regular.ttf",
+      "bytes": 105512,
+      "crc32": "985e4187"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/gelasio/400Regular_Italic/Gelasio_400Regular_Italic.ttf",
+      "bytes": 107376,
+      "crc32": "3042d37c"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/gelasio/700Bold/Gelasio_700Bold.ttf",
+      "bytes": 105776,
+      "crc32": "5d3e5359"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/gelasio/700Bold_Italic/Gelasio_700Bold_Italic.ttf",
+      "bytes": 107452,
+      "crc32": "090050ab"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/gelasio/LICENSE_FONT",
+      "bytes": 4387,
+      "crc32": "713835bd"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/roboto/400Regular/Roboto_400Regular.ttf",
+      "bytes": 159108,
+      "crc32": "a84ff79b"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/roboto/400Regular_Italic/Roboto_400Regular_Italic.ttf",
+      "bytes": 165268,
+      "crc32": "27e8f233"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/roboto/500Medium/Roboto_500Medium.ttf",
+      "bytes": 159296,
+      "crc32": "ac76b2b8"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/roboto/600SemiBold/Roboto_600SemiBold.ttf",
+      "bytes": 159876,
+      "crc32": "111c8225"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/roboto/700Bold/Roboto_700Bold.ttf",
+      "bytes": 159900,
+      "crc32": "06351e96"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/roboto/700Bold_Italic/Roboto_700Bold_Italic.ttf",
+      "bytes": 166256,
+      "crc32": "26489a5e"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/roboto/800ExtraBold/Roboto_800ExtraBold.ttf",
+      "bytes": 160012,
+      "crc32": "a9746b7b"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/roboto/LICENSE_FONT",
+      "bytes": 4394,
+      "crc32": "282fd25b"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/roboto-mono/400Regular/RobotoMono_400Regular.ttf",
+      "bytes": 87540,
+      "crc32": "aad3f054"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/roboto-mono/700Bold/RobotoMono_700Bold.ttf",
+      "bytes": 87696,
+      "crc32": "7d8c6c58"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/roboto-mono/LICENSE_FONT",
+      "bytes": 4395,
+      "crc32": "0d10cd9e"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/tinos/400Regular/Tinos_400Regular.ttf",
+      "bytes": 508752,
+      "crc32": "d31f0c39"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/tinos/400Regular_Italic/Tinos_400Regular_Italic.ttf",
+      "bytes": 549824,
+      "crc32": "76a19eb9"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/tinos/700Bold/Tinos_700Bold.ttf",
+      "bytes": 583484,
+      "crc32": "41e4d434"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/tinos/700Bold_Italic/Tinos_700Bold_Italic.ttf",
+      "bytes": 563688,
+      "crc32": "516a87e1"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/base/tinos/LICENSE_FONT",
+      "bytes": 4383,
+      "crc32": "ff0cc115"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/anton/Anton-Regular.ttf",
+      "bytes": 170812,
+      "crc32": "401105c3"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/anton/OFL.txt",
+      "bytes": 4484,
+      "crc32": "88077e7f"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/archivo-narrow/ArchivoNarrow_400Regular.ttf",
+      "bytes": 63652,
+      "crc32": "70a9680b"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/archivo-narrow/ArchivoNarrow_400Regular_Italic.ttf",
+      "bytes": 66396,
+      "crc32": "33165666"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/archivo-narrow/ArchivoNarrow_700Bold.ttf",
+      "bytes": 63640,
+      "crc32": "fa41e007"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/archivo-narrow/ArchivoNarrow_700Bold_Italic.ttf",
+      "bytes": 66284,
+      "crc32": "a35a3d0d"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/archivo-narrow/OFL.txt",
+      "bytes": 4495,
+      "crc32": "b62c7671"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/barlow/Barlow-Bold.ttf",
+      "bytes": 108220,
+      "crc32": "cd0cfd37"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/barlow/Barlow-BoldItalic.ttf",
+      "bytes": 111996,
+      "crc32": "5477c235"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/barlow/Barlow-Italic.ttf",
+      "bytes": 109624,
+      "crc32": "b013df63"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/barlow/Barlow-Regular.ttf",
+      "bytes": 104068,
+      "crc32": "236a4a6b"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/barlow/OFL.txt",
+      "bytes": 4377,
+      "crc32": "2c731687"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/bebas-neue/BebasNeue_400Regular.ttf",
+      "bytes": 57676,
+      "crc32": "03d3716f"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/bebas-neue/OFL.txt",
+      "bytes": 4337,
+      "crc32": "6e26c2d4"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/bitter/Bitter_400Regular.ttf",
+      "bytes": 187176,
+      "crc32": "b2ebcf06"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/bitter/Bitter_400Regular_Italic.ttf",
+      "bytes": 186624,
+      "crc32": "87748d1a"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/bitter/Bitter_700Bold.ttf",
+      "bytes": 188372,
+      "crc32": "34d4194c"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/bitter/Bitter_700Bold_Italic.ttf",
+      "bytes": 187244,
+      "crc32": "44b5e721"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/bitter/OFL.txt",
+      "bytes": 4424,
+      "crc32": "c4fb0acd"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/eb-garamond/EBGaramond_400Regular.ttf",
+      "bytes": 489640,
+      "crc32": "c009294f"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/eb-garamond/EBGaramond_400Regular_Italic.ttf",
+      "bytes": 440240,
+      "crc32": "951bbe14"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/eb-garamond/EBGaramond_700Bold.ttf",
+      "bytes": 492280,
+      "crc32": "2ec11c12"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/eb-garamond/EBGaramond_700Bold_Italic.ttf",
+      "bytes": 443560,
+      "crc32": "01f9bc87"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/eb-garamond/OFL.txt",
+      "bytes": 4398,
+      "crc32": "0f7f34e4"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/figtree/Figtree_400Regular.ttf",
+      "bytes": 40140,
+      "crc32": "0c341644"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "bytes": 40636,
+      "crc32": "d5ed7b79"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/figtree/Figtree_700Bold.ttf",
+      "bytes": 40324,
+      "crc32": "117f4f09"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/figtree/Figtree_700Bold_Italic.ttf",
+      "bytes": 40928,
+      "crc32": "dc24a320"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/figtree/OFL.txt",
+      "bytes": 4388,
+      "crc32": "0e1c7492"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/Intos-Bold.ttf",
+      "bytes": 771364,
+      "crc32": "27e3fa74"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/Intos-BoldItalic.ttf",
+      "bytes": 793796,
+      "crc32": "c44ba41f"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/Intos-Italic.ttf",
+      "bytes": 769196,
+      "crc32": "832f8d76"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/Intos-Regular.ttf",
+      "bytes": 766880,
+      "crc32": "117ffb15"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/IntosDisplay-Bold.ttf",
+      "bytes": 773028,
+      "crc32": "ce4fd9e1"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/IntosDisplay-BoldItalic.ttf",
+      "bytes": 795224,
+      "crc32": "23c1c9b3"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/IntosDisplay-Italic.ttf",
+      "bytes": 769804,
+      "crc32": "e484053b"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/IntosDisplay-Regular.ttf",
+      "bytes": 766576,
+      "crc32": "adbf605a"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/IntosNarrow-Bold.ttf",
+      "bytes": 771956,
+      "crc32": "11ab28f1"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/IntosNarrow-BoldItalic.ttf",
+      "bytes": 806784,
+      "crc32": "f91a6d6f"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/IntosNarrow-Italic.ttf",
+      "bytes": 771332,
+      "crc32": "603ff27c"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/IntosNarrow-Regular.ttf",
+      "bytes": 758048,
+      "crc32": "47cf7f22"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/IntosSerif-Bold.ttf",
+      "bytes": 614616,
+      "crc32": "17385b9f"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/IntosSerif-BoldItalic.ttf",
+      "bytes": 524188,
+      "crc32": "7eb520aa"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/IntosSerif-Italic.ttf",
+      "bytes": 546064,
+      "crc32": "94bcd1ac"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/IntosSerif-Regular.ttf",
+      "bytes": 616712,
+      "crc32": "416cc691"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/NOTICE.md",
+      "bytes": 2424,
+      "crc32": "323b9640"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/intos/OFL.txt",
+      "bytes": 4380,
+      "crc32": "656bf643"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "bytes": 91316,
+      "crc32": "5055a883"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf",
+      "bytes": 100380,
+      "crc32": "4c70c12a"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf",
+      "bytes": 91136,
+      "crc32": "e295fb63"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/libre-caslon-text/OFL.txt",
+      "bytes": 4404,
+      "crc32": "a1cf1b8c"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/lora/Lora-Bold.ttf",
+      "bytes": 218640,
+      "crc32": "1f40d644"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/lora/Lora-BoldItalic.ttf",
+      "bytes": 213560,
+      "crc32": "68738fc9"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/lora/Lora-Italic.ttf",
+      "bytes": 206912,
+      "crc32": "714524e5"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/lora/Lora-Regular.ttf",
+      "bytes": 198380,
+      "crc32": "76ddfdff"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/lora/OFL.txt",
+      "bytes": 4423,
+      "crc32": "986987cf"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/merriweather-sans/MerriweatherSans-Bold.ttf",
+      "bytes": 169508,
+      "crc32": "9ecec858"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/merriweather-sans/MerriweatherSans-BoldItalic.ttf",
+      "bytes": 157120,
+      "crc32": "d1bff79b"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/merriweather-sans/MerriweatherSans-Italic.ttf",
+      "bytes": 149612,
+      "crc32": "2ce94daf"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/merriweather-sans/MerriweatherSans-Regular.ttf",
+      "bytes": 164764,
+      "crc32": "ff859a13"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/merriweather-sans/OFL.txt",
+      "bytes": 4586,
+      "crc32": "725be997"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/montserrat/Montserrat_400Regular.ttf",
+      "bytes": 330948,
+      "crc32": "4d408b54"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/montserrat/Montserrat_400Regular_Italic.ttf",
+      "bytes": 337132,
+      "crc32": "d06d60cf"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/montserrat/Montserrat_700Bold.ttf",
+      "bytes": 335788,
+      "crc32": "2dde1efb"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/montserrat/Montserrat_700Bold_Italic.ttf",
+      "bytes": 342016,
+      "crc32": "5fe8596f"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/montserrat/Montserrat_900Black.ttf",
+      "bytes": 343296,
+      "crc32": "3908a219"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/montserrat/OFL.txt",
+      "bytes": 4400,
+      "crc32": "85541068"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/open-sans/OFL.txt",
+      "bytes": 4389,
+      "crc32": "5ea85bb0"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/open-sans/OpenSans_400Regular.ttf",
+      "bytes": 130832,
+      "crc32": "0ab27336"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "bytes": 136604,
+      "crc32": "fd9eb61a"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/open-sans/OpenSans_700Bold.ttf",
+      "bytes": 130860,
+      "crc32": "f4f1acee"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/open-sans/OpenSans_700Bold_Italic.ttf",
+      "bytes": 136360,
+      "crc32": "c2c8be82"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/playfair-display/OFL.txt",
+      "bytes": 4542,
+      "crc32": "97d60b3d"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "bytes": 225552,
+      "crc32": "abfb7979"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf",
+      "bytes": 225284,
+      "crc32": "58df63c9"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "bytes": 223352,
+      "crc32": "1b6333ce"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/playfair-display/PlayfairDisplay-Regular.ttf",
+      "bytes": 222056,
+      "crc32": "2c3d9452"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/poppins/OFL.txt",
+      "bytes": 4385,
+      "crc32": "1cd85f33"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/poppins/Poppins_400Regular.ttf",
+      "bytes": 158240,
+      "crc32": "96e21ded"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/poppins/Poppins_400Regular_Italic.ttf",
+      "bytes": 182012,
+      "crc32": "bd4dc572"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/poppins/Poppins_700Bold.ttf",
+      "bytes": 153944,
+      "crc32": "bc6347d6"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/poppins/Poppins_700Bold_Italic.ttf",
+      "bytes": 176588,
+      "crc32": "c7aa876f"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/pt-serif/OFL.txt",
+      "bytes": 4434,
+      "crc32": "ec7f8475"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "bytes": 339996,
+      "crc32": "1313919b"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf",
+      "bytes": 337580,
+      "crc32": "f34c5f96"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "bytes": 375356,
+      "crc32": "21c54c4f"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "bytes": 359048,
+      "crc32": "875eb683"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/raleway/OFL.txt",
+      "bytes": 4497,
+      "crc32": "e756a03d"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/raleway/Raleway-Bold.ttf",
+      "bytes": 137952,
+      "crc32": "77700e98"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/raleway/Raleway-BoldItalic.ttf",
+      "bytes": 138168,
+      "crc32": "cad6570e"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/raleway/Raleway-Italic.ttf",
+      "bytes": 132224,
+      "crc32": "1b3c79b2"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/raleway/Raleway-Regular.ttf",
+      "bytes": 132000,
+      "crc32": "4364d586"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-display/OFL.txt",
+      "bytes": 4394,
+      "crc32": "a9a74d44"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-display/RedHatDisplay_300Light.ttf",
+      "bytes": 51700,
+      "crc32": "01ab84b3"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-display/RedHatDisplay_300Light_Italic.ttf",
+      "bytes": 53168,
+      "crc32": "3c1c0829"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "bytes": 51660,
+      "crc32": "b6fe6234"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "bytes": 53064,
+      "crc32": "dcb8e45f"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-display/RedHatDisplay_600SemiBold.ttf",
+      "bytes": 51712,
+      "crc32": "5f8bafd7"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-display/RedHatDisplay_600SemiBold_Italic.ttf",
+      "bytes": 53172,
+      "crc32": "71ba5c0b"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "bytes": 51664,
+      "crc32": "73d6ad45"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf",
+      "bytes": 53088,
+      "crc32": "4b1e66a6"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-text/OFL.txt",
+      "bytes": 4394,
+      "crc32": "a9a74d44"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-text/RedHatText_400Regular.ttf",
+      "bytes": 52656,
+      "crc32": "f7eecf6b"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-text/RedHatText_400Regular_Italic.ttf",
+      "bytes": 53504,
+      "crc32": "39ac284d"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-text/RedHatText_700Bold.ttf",
+      "bytes": 52616,
+      "crc32": "485618e9"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/red-hat-text/RedHatText_700Bold_Italic.ttf",
+      "bytes": 53552,
+      "crc32": "24f46e10"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/source-sans-3/OFL.txt",
+      "bytes": 4579,
+      "crc32": "efc568fc"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "bytes": 428176,
+      "crc32": "9cb524ef"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/source-sans-3/SourceSans3-BoldIt.ttf",
+      "bytes": 318700,
+      "crc32": "014685a2"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/source-sans-3/SourceSans3-It.ttf",
+      "bytes": 315812,
+      "crc32": "305a7e23"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "bytes": 431196,
+      "crc32": "92ac772d"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/work-sans/OFL.txt",
+      "bytes": 4396,
+      "crc32": "175cf7b0"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/work-sans/WorkSans_400Regular.ttf",
+      "bytes": 188916,
+      "crc32": "21d555b2"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "bytes": 174280,
+      "crc32": "0d7b2db8"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/work-sans/WorkSans_700Bold.ttf",
+      "bytes": 191304,
+      "crc32": "6a44167f"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/lazy/fonts/work-sans/WorkSans_700Bold_Italic.ttf",
+      "bytes": 175772,
+      "crc32": "00d04dd0"
+    },
+    {
+      "path": "chrome-examples/opf-fonts/LICENSES.txt",
+      "bytes": 134129,
+      "crc32": "56bc1453"
+    },
+    {
+      "path": "chrome-examples/own-header.html",
+      "bytes": 1296,
+      "crc32": "26ffb06a"
+    },
+    {
+      "path": "chrome-examples/own-header.js",
+      "bytes": 1710,
+      "crc32": "4ec537fa"
+    },
+    {
+      "path": "chrome-examples/page.css",
+      "bytes": 1904,
+      "crc32": "6a7a3b73"
+    },
+    {
+      "path": "chrome-examples/react.html",
+      "bytes": 658,
+      "crc32": "a8c75ffa"
+    },
+    {
+      "path": "chrome-examples/react.js",
+      "bytes": 226926,
+      "crc32": "9e2c2385"
+    },
+    {
+      "path": "chrome-examples/styled.html",
+      "bytes": 1499,
+      "crc32": "5f77b4b2"
+    },
+    {
+      "path": "chrome-examples/styled.js",
+      "bytes": 1682,
+      "crc32": "22555d6d"
+    },
+    {
+      "path": "chrome-examples/styles.css",
+      "bytes": 239570,
+      "crc32": "c9ff74f1"
+    },
+    {
+      "path": "chrome-examples/styles.layered.css",
+      "bytes": 239886,
+      "crc32": "d70398a0"
+    },
+    {
+      "path": "chrome-examples/viewer.html",
+      "bytes": 683,
+      "crc32": "441c840d"
+    },
+    {
+      "path": "chrome-examples/viewer.js",
+      "bytes": 1259457,
+      "crc32": "469d5730"
+    },
+    {
+      "path": "data-grid-datasets/bundle.js",
+      "bytes": 2962989,
+      "crc32": "601d3257"
+    },
+    {
+      "path": "data-grid-datasets/index.html",
+      "bytes": 147,
+      "crc32": "b905af41"
+    },
+    {
+      "path": "playground/base-fonts.json",
+      "bytes": 2,
+      "crc32": "0d4cbb29"
+    },
+    {
+      "path": "playground/fonts/anton/Anton-Regular.ttf",
+      "bytes": 170812,
+      "crc32": "401105c3"
+    },
+    {
+      "path": "playground/fonts/anton/OFL.txt",
+      "bytes": 4484,
+      "crc32": "88077e7f"
+    },
+    {
+      "path": "playground/fonts/anton/PROVENANCE.json",
+      "bytes": 815,
+      "crc32": "3f0b3da1"
+    },
+    {
+      "path": "playground/fonts/archivo-narrow/ArchivoNarrow_400Regular.ttf",
+      "bytes": 63652,
+      "crc32": "70a9680b"
+    },
+    {
+      "path": "playground/fonts/archivo-narrow/ArchivoNarrow_400Regular_Italic.ttf",
+      "bytes": 66396,
+      "crc32": "33165666"
+    },
+    {
+      "path": "playground/fonts/archivo-narrow/ArchivoNarrow_700Bold.ttf",
+      "bytes": 63640,
+      "crc32": "fa41e007"
+    },
+    {
+      "path": "playground/fonts/archivo-narrow/ArchivoNarrow_700Bold_Italic.ttf",
+      "bytes": 66284,
+      "crc32": "a35a3d0d"
+    },
+    {
+      "path": "playground/fonts/archivo-narrow/OFL.txt",
+      "bytes": 4495,
+      "crc32": "b62c7671"
+    },
+    {
+      "path": "playground/fonts/archivo-narrow/PROVENANCE.json",
+      "bytes": 1745,
+      "crc32": "90792d4c"
+    },
+    {
+      "path": "playground/fonts/barlow/Barlow-Bold.ttf",
+      "bytes": 108220,
+      "crc32": "cd0cfd37"
+    },
+    {
+      "path": "playground/fonts/barlow/Barlow-BoldItalic.ttf",
+      "bytes": 111996,
+      "crc32": "5477c235"
+    },
+    {
+      "path": "playground/fonts/barlow/Barlow-Italic.ttf",
+      "bytes": 109624,
+      "crc32": "b013df63"
+    },
+    {
+      "path": "playground/fonts/barlow/Barlow-Regular.ttf",
+      "bytes": 104068,
+      "crc32": "236a4a6b"
+    },
+    {
+      "path": "playground/fonts/barlow/OFL.txt",
+      "bytes": 4377,
+      "crc32": "2c731687"
+    },
+    {
+      "path": "playground/fonts/barlow/PROVENANCE.json",
+      "bytes": 1834,
+      "crc32": "fd39666b"
+    },
+    {
+      "path": "playground/fonts/bebas-neue/BebasNeue_400Regular.ttf",
+      "bytes": 57676,
+      "crc32": "03d3716f"
+    },
+    {
+      "path": "playground/fonts/bebas-neue/OFL.txt",
+      "bytes": 4337,
+      "crc32": "6e26c2d4"
+    },
+    {
+      "path": "playground/fonts/bebas-neue/PROVENANCE.json",
+      "bytes": 799,
+      "crc32": "7dc9c63a"
+    },
+    {
+      "path": "playground/fonts/bitter/Bitter_400Regular.ttf",
+      "bytes": 187176,
+      "crc32": "b2ebcf06"
+    },
+    {
+      "path": "playground/fonts/bitter/Bitter_400Regular_Italic.ttf",
+      "bytes": 186624,
+      "crc32": "87748d1a"
+    },
+    {
+      "path": "playground/fonts/bitter/Bitter_700Bold.ttf",
+      "bytes": 188372,
+      "crc32": "34d4194c"
+    },
+    {
+      "path": "playground/fonts/bitter/Bitter_700Bold_Italic.ttf",
+      "bytes": 187244,
+      "crc32": "44b5e721"
+    },
+    {
+      "path": "playground/fonts/bitter/OFL.txt",
+      "bytes": 4424,
+      "crc32": "c4fb0acd"
+    },
+    {
+      "path": "playground/fonts/bitter/PROVENANCE.json",
+      "bytes": 1645,
+      "crc32": "a689481c"
+    },
+    {
+      "path": "playground/fonts/eb-garamond/EBGaramond_400Regular.ttf",
+      "bytes": 489640,
+      "crc32": "c009294f"
+    },
+    {
+      "path": "playground/fonts/eb-garamond/EBGaramond_400Regular_Italic.ttf",
+      "bytes": 440240,
+      "crc32": "951bbe14"
+    },
+    {
+      "path": "playground/fonts/eb-garamond/EBGaramond_700Bold.ttf",
+      "bytes": 492280,
+      "crc32": "2ec11c12"
+    },
+    {
+      "path": "playground/fonts/eb-garamond/EBGaramond_700Bold_Italic.ttf",
+      "bytes": 443560,
+      "crc32": "01f9bc87"
+    },
+    {
+      "path": "playground/fonts/eb-garamond/OFL.txt",
+      "bytes": 4398,
+      "crc32": "0f7f34e4"
+    },
+    {
+      "path": "playground/fonts/eb-garamond/PROVENANCE.json",
+      "bytes": 1699,
+      "crc32": "f08c3a2a"
+    },
+    {
+      "path": "playground/fonts/figtree/Figtree_400Regular.ttf",
+      "bytes": 40140,
+      "crc32": "0c341644"
+    },
+    {
+      "path": "playground/fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "bytes": 40636,
+      "crc32": "d5ed7b79"
+    },
+    {
+      "path": "playground/fonts/figtree/Figtree_700Bold.ttf",
+      "bytes": 40324,
+      "crc32": "117f4f09"
+    },
+    {
+      "path": "playground/fonts/figtree/Figtree_700Bold_Italic.ttf",
+      "bytes": 40928,
+      "crc32": "dc24a320"
+    },
+    {
+      "path": "playground/fonts/figtree/OFL.txt",
+      "bytes": 4388,
+      "crc32": "0e1c7492"
+    },
+    {
+      "path": "playground/fonts/figtree/PROVENANCE.json",
+      "bytes": 1642,
+      "crc32": "45af8cee"
+    },
+    {
+      "path": "playground/fonts/intos/Intos-Bold.ttf",
+      "bytes": 771364,
+      "crc32": "27e3fa74"
+    },
+    {
+      "path": "playground/fonts/intos/Intos-BoldItalic.ttf",
+      "bytes": 793796,
+      "crc32": "c44ba41f"
+    },
+    {
+      "path": "playground/fonts/intos/Intos-Italic.ttf",
+      "bytes": 769196,
+      "crc32": "832f8d76"
+    },
+    {
+      "path": "playground/fonts/intos/Intos-Regular.ttf",
+      "bytes": 766880,
+      "crc32": "117ffb15"
+    },
+    {
+      "path": "playground/fonts/intos/IntosDisplay-Bold.ttf",
+      "bytes": 773028,
+      "crc32": "ce4fd9e1"
+    },
+    {
+      "path": "playground/fonts/intos/IntosDisplay-BoldItalic.ttf",
+      "bytes": 795224,
+      "crc32": "23c1c9b3"
+    },
+    {
+      "path": "playground/fonts/intos/IntosDisplay-Italic.ttf",
+      "bytes": 769804,
+      "crc32": "e484053b"
+    },
+    {
+      "path": "playground/fonts/intos/IntosDisplay-Regular.ttf",
+      "bytes": 766576,
+      "crc32": "adbf605a"
+    },
+    {
+      "path": "playground/fonts/intos/IntosNarrow-Bold.ttf",
+      "bytes": 771956,
+      "crc32": "11ab28f1"
+    },
+    {
+      "path": "playground/fonts/intos/IntosNarrow-BoldItalic.ttf",
+      "bytes": 806784,
+      "crc32": "f91a6d6f"
+    },
+    {
+      "path": "playground/fonts/intos/IntosNarrow-Italic.ttf",
+      "bytes": 771332,
+      "crc32": "603ff27c"
+    },
+    {
+      "path": "playground/fonts/intos/IntosNarrow-Regular.ttf",
+      "bytes": 758048,
+      "crc32": "47cf7f22"
+    },
+    {
+      "path": "playground/fonts/intos/IntosSerif-Bold.ttf",
+      "bytes": 614616,
+      "crc32": "17385b9f"
+    },
+    {
+      "path": "playground/fonts/intos/IntosSerif-BoldItalic.ttf",
+      "bytes": 524188,
+      "crc32": "7eb520aa"
+    },
+    {
+      "path": "playground/fonts/intos/IntosSerif-Italic.ttf",
+      "bytes": 546064,
+      "crc32": "94bcd1ac"
+    },
+    {
+      "path": "playground/fonts/intos/IntosSerif-Regular.ttf",
+      "bytes": 616712,
+      "crc32": "416cc691"
+    },
+    {
+      "path": "playground/fonts/intos/NOTICE.md",
+      "bytes": 2424,
+      "crc32": "323b9640"
+    },
+    {
+      "path": "playground/fonts/intos/OFL.txt",
+      "bytes": 4380,
+      "crc32": "656bf643"
+    },
+    {
+      "path": "playground/fonts/intos/PROVENANCE.json",
+      "bytes": 6370,
+      "crc32": "6d2025c6"
+    },
+    {
+      "path": "playground/fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "bytes": 91316,
+      "crc32": "5055a883"
+    },
+    {
+      "path": "playground/fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf",
+      "bytes": 100380,
+      "crc32": "4c70c12a"
+    },
+    {
+      "path": "playground/fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf",
+      "bytes": 91136,
+      "crc32": "e295fb63"
+    },
+    {
+      "path": "playground/fonts/libre-caslon-text/OFL.txt",
+      "bytes": 4404,
+      "crc32": "a1cf1b8c"
+    },
+    {
+      "path": "playground/fonts/libre-caslon-text/PROVENANCE.json",
+      "bytes": 1483,
+      "crc32": "80094e4a"
+    },
+    {
+      "path": "playground/fonts/lora/Lora-Bold.ttf",
+      "bytes": 218640,
+      "crc32": "1f40d644"
+    },
+    {
+      "path": "playground/fonts/lora/Lora-BoldItalic.ttf",
+      "bytes": 213560,
+      "crc32": "68738fc9"
+    },
+    {
+      "path": "playground/fonts/lora/Lora-Italic.ttf",
+      "bytes": 206912,
+      "crc32": "714524e5"
+    },
+    {
+      "path": "playground/fonts/lora/Lora-Regular.ttf",
+      "bytes": 198380,
+      "crc32": "76ddfdff"
+    },
+    {
+      "path": "playground/fonts/lora/OFL.txt",
+      "bytes": 4423,
+      "crc32": "986987cf"
+    },
+    {
+      "path": "playground/fonts/lora/PROVENANCE.json",
+      "bytes": 2055,
+      "crc32": "2add2e63"
+    },
+    {
+      "path": "playground/fonts/merriweather-sans/MerriweatherSans-Bold.ttf",
+      "bytes": 169508,
+      "crc32": "9ecec858"
+    },
+    {
+      "path": "playground/fonts/merriweather-sans/MerriweatherSans-BoldItalic.ttf",
+      "bytes": 157120,
+      "crc32": "d1bff79b"
+    },
+    {
+      "path": "playground/fonts/merriweather-sans/MerriweatherSans-Italic.ttf",
+      "bytes": 149612,
+      "crc32": "2ce94daf"
+    },
+    {
+      "path": "playground/fonts/merriweather-sans/MerriweatherSans-Regular.ttf",
+      "bytes": 164764,
+      "crc32": "ff859a13"
+    },
+    {
+      "path": "playground/fonts/merriweather-sans/OFL.txt",
+      "bytes": 4586,
+      "crc32": "725be997"
+    },
+    {
+      "path": "playground/fonts/merriweather-sans/PROVENANCE.json",
+      "bytes": 2212,
+      "crc32": "3df1640a"
+    },
+    {
+      "path": "playground/fonts/montserrat/Montserrat_400Regular.ttf",
+      "bytes": 330948,
+      "crc32": "4d408b54"
+    },
+    {
+      "path": "playground/fonts/montserrat/Montserrat_400Regular_Italic.ttf",
+      "bytes": 337132,
+      "crc32": "d06d60cf"
+    },
+    {
+      "path": "playground/fonts/montserrat/Montserrat_700Bold.ttf",
+      "bytes": 335788,
+      "crc32": "2dde1efb"
+    },
+    {
+      "path": "playground/fonts/montserrat/Montserrat_700Bold_Italic.ttf",
+      "bytes": 342016,
+      "crc32": "5fe8596f"
+    },
+    {
+      "path": "playground/fonts/montserrat/Montserrat_900Black.ttf",
+      "bytes": 343296,
+      "crc32": "3908a219"
+    },
+    {
+      "path": "playground/fonts/montserrat/OFL.txt",
+      "bytes": 4400,
+      "crc32": "85541068"
+    },
+    {
+      "path": "playground/fonts/montserrat/PROVENANCE.json",
+      "bytes": 1960,
+      "crc32": "1eb4d398"
+    },
+    {
+      "path": "playground/fonts/open-sans/OFL.txt",
+      "bytes": 4389,
+      "crc32": "5ea85bb0"
+    },
+    {
+      "path": "playground/fonts/open-sans/OpenSans_400Regular.ttf",
+      "bytes": 130832,
+      "crc32": "0ab27336"
+    },
+    {
+      "path": "playground/fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "bytes": 136604,
+      "crc32": "fd9eb61a"
+    },
+    {
+      "path": "playground/fonts/open-sans/OpenSans_700Bold.ttf",
+      "bytes": 130860,
+      "crc32": "f4f1acee"
+    },
+    {
+      "path": "playground/fonts/open-sans/OpenSans_700Bold_Italic.ttf",
+      "bytes": 136360,
+      "crc32": "c2c8be82"
+    },
+    {
+      "path": "playground/fonts/open-sans/PROVENANCE.json",
+      "bytes": 1664,
+      "crc32": "4588c3a8"
+    },
+    {
+      "path": "playground/fonts/playfair-display/OFL.txt",
+      "bytes": 4542,
+      "crc32": "97d60b3d"
+    },
+    {
+      "path": "playground/fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "bytes": 225552,
+      "crc32": "abfb7979"
+    },
+    {
+      "path": "playground/fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf",
+      "bytes": 225284,
+      "crc32": "58df63c9"
+    },
+    {
+      "path": "playground/fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "bytes": 223352,
+      "crc32": "1b6333ce"
+    },
+    {
+      "path": "playground/fonts/playfair-display/PlayfairDisplay-Regular.ttf",
+      "bytes": 222056,
+      "crc32": "2c3d9452"
+    },
+    {
+      "path": "playground/fonts/playfair-display/PROVENANCE.json",
+      "bytes": 2207,
+      "crc32": "cd30d3fb"
+    },
+    {
+      "path": "playground/fonts/poppins/OFL.txt",
+      "bytes": 4385,
+      "crc32": "1cd85f33"
+    },
+    {
+      "path": "playground/fonts/poppins/Poppins_400Regular.ttf",
+      "bytes": 158240,
+      "crc32": "96e21ded"
+    },
+    {
+      "path": "playground/fonts/poppins/Poppins_400Regular_Italic.ttf",
+      "bytes": 182012,
+      "crc32": "bd4dc572"
+    },
+    {
+      "path": "playground/fonts/poppins/Poppins_700Bold.ttf",
+      "bytes": 153944,
+      "crc32": "bc6347d6"
+    },
+    {
+      "path": "playground/fonts/poppins/Poppins_700Bold_Italic.ttf",
+      "bytes": 176588,
+      "crc32": "c7aa876f"
+    },
+    {
+      "path": "playground/fonts/poppins/PROVENANCE.json",
+      "bytes": 1639,
+      "crc32": "5c2f9bc7"
+    },
+    {
+      "path": "playground/fonts/pt-serif/OFL.txt",
+      "bytes": 4434,
+      "crc32": "ec7f8475"
+    },
+    {
+      "path": "playground/fonts/pt-serif/PROVENANCE.json",
+      "bytes": 2067,
+      "crc32": "6c269873"
+    },
+    {
+      "path": "playground/fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "bytes": 339996,
+      "crc32": "1313919b"
+    },
+    {
+      "path": "playground/fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf",
+      "bytes": 337580,
+      "crc32": "f34c5f96"
+    },
+    {
+      "path": "playground/fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "bytes": 375356,
+      "crc32": "21c54c4f"
+    },
+    {
+      "path": "playground/fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "bytes": 359048,
+      "crc32": "875eb683"
+    },
+    {
+      "path": "playground/fonts/raleway/OFL.txt",
+      "bytes": 4497,
+      "crc32": "e756a03d"
+    },
+    {
+      "path": "playground/fonts/raleway/PROVENANCE.json",
+      "bytes": 2046,
+      "crc32": "6d37a112"
+    },
+    {
+      "path": "playground/fonts/raleway/Raleway-Bold.ttf",
+      "bytes": 137952,
+      "crc32": "77700e98"
+    },
+    {
+      "path": "playground/fonts/raleway/Raleway-BoldItalic.ttf",
+      "bytes": 138168,
+      "crc32": "cad6570e"
+    },
+    {
+      "path": "playground/fonts/raleway/Raleway-Italic.ttf",
+      "bytes": 132224,
+      "crc32": "1b3c79b2"
+    },
+    {
+      "path": "playground/fonts/raleway/Raleway-Regular.ttf",
+      "bytes": 132000,
+      "crc32": "4364d586"
+    },
+    {
+      "path": "playground/fonts/red-hat-display/OFL.txt",
+      "bytes": 4394,
+      "crc32": "a9a74d44"
+    },
+    {
+      "path": "playground/fonts/red-hat-display/PROVENANCE.json",
+      "bytes": 2901,
+      "crc32": "9661f2c2"
+    },
+    {
+      "path": "playground/fonts/red-hat-display/RedHatDisplay_300Light.ttf",
+      "bytes": 51700,
+      "crc32": "01ab84b3"
+    },
+    {
+      "path": "playground/fonts/red-hat-display/RedHatDisplay_300Light_Italic.ttf",
+      "bytes": 53168,
+      "crc32": "3c1c0829"
+    },
+    {
+      "path": "playground/fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "bytes": 51660,
+      "crc32": "b6fe6234"
+    },
+    {
+      "path": "playground/fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "bytes": 53064,
+      "crc32": "dcb8e45f"
+    },
+    {
+      "path": "playground/fonts/red-hat-display/RedHatDisplay_600SemiBold.ttf",
+      "bytes": 51712,
+      "crc32": "5f8bafd7"
+    },
+    {
+      "path": "playground/fonts/red-hat-display/RedHatDisplay_600SemiBold_Italic.ttf",
+      "bytes": 53172,
+      "crc32": "71ba5c0b"
+    },
+    {
+      "path": "playground/fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "bytes": 51664,
+      "crc32": "73d6ad45"
+    },
+    {
+      "path": "playground/fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf",
+      "bytes": 53088,
+      "crc32": "4b1e66a6"
+    },
+    {
+      "path": "playground/fonts/red-hat-text/OFL.txt",
+      "bytes": 4394,
+      "crc32": "a9a74d44"
+    },
+    {
+      "path": "playground/fonts/red-hat-text/PROVENANCE.json",
+      "bytes": 1701,
+      "crc32": "f91e7614"
+    },
+    {
+      "path": "playground/fonts/red-hat-text/RedHatText_400Regular.ttf",
+      "bytes": 52656,
+      "crc32": "f7eecf6b"
+    },
+    {
+      "path": "playground/fonts/red-hat-text/RedHatText_400Regular_Italic.ttf",
+      "bytes": 53504,
+      "crc32": "39ac284d"
+    },
+    {
+      "path": "playground/fonts/red-hat-text/RedHatText_700Bold.ttf",
+      "bytes": 52616,
+      "crc32": "485618e9"
+    },
+    {
+      "path": "playground/fonts/red-hat-text/RedHatText_700Bold_Italic.ttf",
+      "bytes": 53552,
+      "crc32": "24f46e10"
+    },
+    {
+      "path": "playground/fonts/source-sans-3/OFL.txt",
+      "bytes": 4579,
+      "crc32": "efc568fc"
+    },
+    {
+      "path": "playground/fonts/source-sans-3/PROVENANCE.json",
+      "bytes": 2197,
+      "crc32": "d4ed3fef"
+    },
+    {
+      "path": "playground/fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "bytes": 428176,
+      "crc32": "9cb524ef"
+    },
+    {
+      "path": "playground/fonts/source-sans-3/SourceSans3-BoldIt.ttf",
+      "bytes": 318700,
+      "crc32": "014685a2"
+    },
+    {
+      "path": "playground/fonts/source-sans-3/SourceSans3-It.ttf",
+      "bytes": 315812,
+      "crc32": "305a7e23"
+    },
+    {
+      "path": "playground/fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "bytes": 431196,
+      "crc32": "92ac772d"
+    },
+    {
+      "path": "playground/fonts/work-sans/OFL.txt",
+      "bytes": 4396,
+      "crc32": "175cf7b0"
+    },
+    {
+      "path": "playground/fonts/work-sans/PROVENANCE.json",
+      "bytes": 1670,
+      "crc32": "da113e52"
+    },
+    {
+      "path": "playground/fonts/work-sans/WorkSans_400Regular.ttf",
+      "bytes": 188916,
+      "crc32": "21d555b2"
+    },
+    {
+      "path": "playground/fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "bytes": 174280,
+      "crc32": "0d7b2db8"
+    },
+    {
+      "path": "playground/fonts/work-sans/WorkSans_700Bold.ttf",
+      "bytes": 191304,
+      "crc32": "6a44167f"
+    },
+    {
+      "path": "playground/fonts/work-sans/WorkSans_700Bold_Italic.ttf",
+      "bytes": 175772,
+      "crc32": "00d04dd0"
+    },
+    {
+      "path": "playground/fonts.json",
+      "bytes": 12796015,
+      "crc32": "c51b832f"
+    },
+    {
+      "path": "playground/galleries.json",
+      "bytes": 166,
+      "crc32": "ce0a4f9c"
+    },
+    {
+      "path": "playground/harfbuzz-subset.wasm",
+      "bytes": 683531,
+      "crc32": "38911664"
+    },
+    {
+      "path": "playground/harfbuzz.wasm",
+      "bytes": 444394,
+      "crc32": "5f491111"
+    },
+    {
+      "path": "playground/index.html",
+      "bytes": 19747,
+      "crc32": "b9a6607d"
+    },
+    {
+      "path": "playground/layout-editor.html",
+      "bytes": 2864,
+      "crc32": "2e50586a"
+    },
+    {
+      "path": "playground/layout-editor.js",
+      "bytes": 2212572,
+      "crc32": "8974b4e8"
+    },
+    {
+      "path": "playground/playground.css",
+      "bytes": 37668,
+      "crc32": "7f3c413a"
+    },
+    {
+      "path": "playground/playground.js",
+      "bytes": 9961190,
+      "crc32": "26c2ed67"
+    },
+    {
+      "path": "playground/script-fonts/noto-color-emoji/400Regular/NotoColorEmoji_400Regular.ttf",
+      "bytes": 25337824,
+      "crc32": "51d3b4c6"
+    },
+    {
+      "path": "playground/script-fonts/noto-emoji/400Regular/NotoEmoji_400Regular.ttf",
+      "bytes": 886572,
+      "crc32": "b888064b"
+    },
+    {
+      "path": "playground/script-fonts/noto-naskh-arabic/400Regular/NotoNaskhArabic_400Regular.ttf",
+      "bytes": 199512,
+      "crc32": "530c50c0"
+    },
+    {
+      "path": "playground/script-fonts/noto-naskh-arabic/700Bold/NotoNaskhArabic_700Bold.ttf",
+      "bytes": 199624,
+      "crc32": "28dad7d6"
+    },
+    {
+      "path": "playground/script-fonts/noto-nastaliq-urdu/400Regular/NotoNastaliqUrdu_400Regular.ttf",
+      "bytes": 529104,
+      "crc32": "f184fe48"
+    },
+    {
+      "path": "playground/script-fonts/noto-nastaliq-urdu/700Bold/NotoNastaliqUrdu_700Bold.ttf",
+      "bytes": 529980,
+      "crc32": "b9ec7c99"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans/400Regular/NotoSans_400Regular.ttf",
+      "bytes": 629024,
+      "crc32": "dc7afb63"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans/400Regular_Italic/NotoSans_400Regular_Italic.ttf",
+      "bytes": 642344,
+      "crc32": "4e431d95"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans/700Bold/NotoSans_700Bold.ttf",
+      "bytes": 630968,
+      "crc32": "eca2d9fa"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans/700Bold_Italic/NotoSans_700Bold_Italic.ttf",
+      "bytes": 644344,
+      "crc32": "fc15acce"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-arabic/400Regular/NotoSansArabic_400Regular.ttf",
+      "bytes": 194176,
+      "crc32": "74e589da"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-arabic/700Bold/NotoSansArabic_700Bold.ttf",
+      "bytes": 194380,
+      "crc32": "af930a65"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-armenian/400Regular/NotoSansArmenian_400Regular.ttf",
+      "bytes": 49932,
+      "crc32": "42597fd2"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-armenian/700Bold/NotoSansArmenian_700Bold.ttf",
+      "bytes": 49952,
+      "crc32": "14da3b6b"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-bengali/400Regular/NotoSansBengali_400Regular.ttf",
+      "bytes": 141064,
+      "crc32": "dada8f0f"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-bengali/700Bold/NotoSansBengali_700Bold.ttf",
+      "bytes": 141476,
+      "crc32": "201ac66d"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-devanagari/400Regular/NotoSansDevanagari_400Regular.ttf",
+      "bytes": 217048,
+      "crc32": "8c528fe5"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-devanagari/700Bold/NotoSansDevanagari_700Bold.ttf",
+      "bytes": 217620,
+      "crc32": "5bb7d35d"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-ethiopic/400Regular/NotoSansEthiopic_400Regular.ttf",
+      "bytes": 366892,
+      "crc32": "33cf519c"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-ethiopic/700Bold/NotoSansEthiopic_700Bold.ttf",
+      "bytes": 366840,
+      "crc32": "70e32d4d"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-georgian/400Regular/NotoSansGeorgian_400Regular.ttf",
+      "bytes": 62928,
+      "crc32": "b7e01337"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-georgian/700Bold/NotoSansGeorgian_700Bold.ttf",
+      "bytes": 62872,
+      "crc32": "5a88520b"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-gujarati/400Regular/NotoSansGujarati_400Regular.ttf",
+      "bytes": 175148,
+      "crc32": "7e830612"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-gujarati/700Bold/NotoSansGujarati_700Bold.ttf",
+      "bytes": 175324,
+      "crc32": "c0083555"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-gurmukhi/400Regular/NotoSansGurmukhi_400Regular.ttf",
+      "bytes": 58724,
+      "crc32": "08f55473"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-gurmukhi/700Bold/NotoSansGurmukhi_700Bold.ttf",
+      "bytes": 58784,
+      "crc32": "ebffd575"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-hebrew/400Regular/NotoSansHebrew_400Regular.ttf",
+      "bytes": 48036,
+      "crc32": "eb72097b"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-hebrew/700Bold/NotoSansHebrew_700Bold.ttf",
+      "bytes": 47992,
+      "crc32": "f3cc66ec"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf",
+      "bytes": 5731428,
+      "crc32": "b2822244"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-jp/700Bold/NotoSansJP_700Bold.ttf",
+      "bytes": 5726432,
+      "crc32": "1d29ce17"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-kannada/400Regular/NotoSansKannada_400Regular.ttf",
+      "bytes": 148988,
+      "crc32": "854b7ac5"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-kannada/700Bold/NotoSansKannada_700Bold.ttf",
+      "bytes": 149124,
+      "crc32": "f63bd2dd"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-khmer/400Regular/NotoSansKhmer_400Regular.ttf",
+      "bytes": 105696,
+      "crc32": "f193553a"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-khmer/700Bold/NotoSansKhmer_700Bold.ttf",
+      "bytes": 106224,
+      "crc32": "8060a763"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-kr/400Regular/NotoSansKR_400Regular.ttf",
+      "bytes": 6191364,
+      "crc32": "4b6910b5"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-kr/700Bold/NotoSansKR_700Bold.ttf",
+      "bytes": 6189424,
+      "crc32": "b535a7ee"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-lao/400Regular/NotoSansLao_400Regular.ttf",
+      "bytes": 53076,
+      "crc32": "58c79a1f"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-lao/700Bold/NotoSansLao_700Bold.ttf",
+      "bytes": 53216,
+      "crc32": "d1ed86ca"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-malayalam/400Regular/NotoSansMalayalam_400Regular.ttf",
+      "bytes": 106808,
+      "crc32": "738c3e3a"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-malayalam/700Bold/NotoSansMalayalam_700Bold.ttf",
+      "bytes": 106764,
+      "crc32": "f1926212"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-math/400Regular/NotoSansMath_400Regular.ttf",
+      "bytes": 1004120,
+      "crc32": "e87245b2"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-mongolian/400Regular/NotoSansMongolian_400Regular.ttf",
+      "bytes": 388820,
+      "crc32": "b042cdf8"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-myanmar/400Regular/NotoSansMyanmar_400Regular.ttf",
+      "bytes": 183164,
+      "crc32": "1582f642"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-myanmar/700Bold/NotoSansMyanmar_700Bold.ttf",
+      "bytes": 183356,
+      "crc32": "c6d1c806"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-oriya/400Regular/NotoSansOriya_400Regular.ttf",
+      "bytes": 170112,
+      "crc32": "bc70ca19"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-oriya/700Bold/NotoSansOriya_700Bold.ttf",
+      "bytes": 170380,
+      "crc32": "75569f20"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-sc/400Regular/NotoSansSC_400Regular.ttf",
+      "bytes": 10559284,
+      "crc32": "6602f87f"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-sc/700Bold/NotoSansSC_700Bold.ttf",
+      "bytes": 10549020,
+      "crc32": "487c280a"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-sinhala/400Regular/NotoSansSinhala_400Regular.ttf",
+      "bytes": 243496,
+      "crc32": "84e8b300"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-sinhala/700Bold/NotoSansSinhala_700Bold.ttf",
+      "bytes": 243160,
+      "crc32": "16e3d10a"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-symbols/400Regular/NotoSansSymbols_400Regular.ttf",
+      "bytes": 185152,
+      "crc32": "edcb75df"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-symbols/700Bold/NotoSansSymbols_700Bold.ttf",
+      "bytes": 184868,
+      "crc32": "e7f906f0"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-symbols-2/400Regular/NotoSansSymbols2_400Regular.ttf",
+      "bytes": 1228868,
+      "crc32": "a376dcca"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-syriac/400Regular/NotoSansSyriac_400Regular.ttf",
+      "bytes": 84320,
+      "crc32": "338a5211"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-syriac/700Bold/NotoSansSyriac_700Bold.ttf",
+      "bytes": 84648,
+      "crc32": "b6341106"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-tamil/400Regular/NotoSansTamil_400Regular.ttf",
+      "bytes": 78988,
+      "crc32": "dcbfdc87"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-tamil/700Bold/NotoSansTamil_700Bold.ttf",
+      "bytes": 79016,
+      "crc32": "93fa297a"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-tc/400Regular/NotoSansTC_400Regular.ttf",
+      "bytes": 7109460,
+      "crc32": "c62d023f"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-tc/700Bold/NotoSansTC_700Bold.ttf",
+      "bytes": 7104212,
+      "crc32": "c530b690"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-telugu/400Regular/NotoSansTelugu_400Regular.ttf",
+      "bytes": 179900,
+      "crc32": "8a4fd13b"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-telugu/700Bold/NotoSansTelugu_700Bold.ttf",
+      "bytes": 180348,
+      "crc32": "62c687a3"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-thaana/400Regular/NotoSansThaana_400Regular.ttf",
+      "bytes": 47260,
+      "crc32": "fe0c6133"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-thaana/700Bold/NotoSansThaana_700Bold.ttf",
+      "bytes": 47260,
+      "crc32": "02136058"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-thai/400Regular/NotoSansThai_400Regular.ttf",
+      "bytes": 47484,
+      "crc32": "a40dcc70"
+    },
+    {
+      "path": "playground/script-fonts/noto-sans-thai/700Bold/NotoSansThai_700Bold.ttf",
+      "bytes": 47480,
+      "crc32": "08caeb8b"
+    },
+    {
+      "path": "playground/script-fonts/noto-serif-hebrew/400Regular/NotoSerifHebrew_400Regular.ttf",
+      "bytes": 56176,
+      "crc32": "2d153a67"
+    },
+    {
+      "path": "playground/script-fonts/noto-serif-hebrew/700Bold/NotoSerifHebrew_700Bold.ttf",
+      "bytes": 56188,
+      "crc32": "36a1de76"
+    },
+    {
+      "path": "playground/script-fonts/noto-serif-tibetan/400Regular/NotoSerifTibetan_400Regular.ttf",
+      "bytes": 736448,
+      "crc32": "8b5f6890"
+    },
+    {
+      "path": "playground/script-fonts/noto-serif-tibetan/700Bold/NotoSerifTibetan_700Bold.ttf",
+      "bytes": 739048,
+      "crc32": "584a9363"
+    },
+    {
+      "path": "playground/script-fonts/stix-two-math/400Regular/STIXTwoMath_400Regular.ttf",
+      "bytes": 1471976,
+      "crc32": "0a441d45"
+    },
+    {
+      "path": "playground/source-pane.html",
+      "bytes": 2142,
+      "crc32": "6dd41276"
+    },
+    {
+      "path": "playground/source-pane.js",
+      "bytes": 2836285,
+      "crc32": "4856f57c"
+    },
+    {
+      "path": "playground/source-worker.js",
+      "bytes": 1703070,
+      "crc32": "f62a3c64"
+    },
+    {
+      "path": "playground/studio.html",
+      "bytes": 452,
+      "crc32": "b96d3b49"
+    },
+    {
+      "path": "playground/studio.js",
+      "bytes": 5980559,
+      "crc32": "b4fad1fe"
+    },
+    {
+      "path": "rich-input-browser.json",
+      "bytes": 72515,
+      "crc32": "7a7af46c"
+    },
+    {
+      "path": "playground/styles.css",
+      "bytes": 239570,
+      "crc32": "c9ff74f1"
+    }
+  ],
+  "diagnosticCandidates": [
+    {
+      "path": "playground/source-pane.html",
+      "bytes": 2142,
+      "crc32": "6dd41276"
+    },
+    {
+      "path": "playground/source-pane.js",
+      "bytes": 2836285,
+      "crc32": "4856f57c"
+    },
+    {
+      "path": "playground/source-worker.js",
+      "bytes": 1703070,
+      "crc32": "f62a3c64"
+    }
+  ]
+}

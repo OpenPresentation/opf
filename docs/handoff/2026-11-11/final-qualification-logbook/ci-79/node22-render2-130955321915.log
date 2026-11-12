@@ -1,0 +1,1114 @@
+﻿2026-11-12T03:57:52.9246128Z Current runner version: '2.338.2'
+2026-11-12T03:57:52.9264214Z ##[group]Runner Image Provisioner
+2026-11-12T03:57:52.9264910Z Hosted Compute Agent
+2026-11-12T03:57:52.9265508Z Version: 20261028.624
+2026-11-12T03:57:52.9266016Z Commit: 54898b74c23fde5556c9b3c3a2290865feef0dfe
+2026-11-12T03:57:52.9266610Z Build Date: 2026-10-28T21:51:42Z
+2026-11-12T03:57:52.9267179Z Worker ID: {f702f147-c7cb-4ae4-acb9-fb1ce72a16cd}
+2026-11-12T03:57:52.9267757Z Region: centralus
+2026-11-12T03:57:52.9268222Z Cloud: Azure
+2026-11-12T03:57:52.9268873Z ##[endgroup]
+2026-11-12T03:57:52.9270239Z ##[group]Operating System
+2026-11-12T03:57:52.9270786Z Ubuntu
+2026-11-12T03:57:52.9271208Z 24.04.5
+2026-11-12T03:57:52.9271696Z LTS
+2026-11-12T03:57:52.9272122Z ##[endgroup]
+2026-11-12T03:57:52.9272547Z ##[group]Runner Image
+2026-11-12T03:57:52.9273054Z Image: ubuntu-24.04
+2026-11-12T03:57:52.9273520Z Version: 20261101.360.1
+2026-11-12T03:57:52.9274585Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261101.360/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-12T03:57:52.9275804Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261101.360
+2026-11-12T03:57:52.9276602Z ##[endgroup]
+2026-11-12T03:57:52.9277705Z ##[group]GITHUB_TOKEN Permissions
+2026-11-12T03:57:52.9279779Z Contents: read
+2026-11-12T03:57:52.9280252Z Metadata: read
+2026-11-12T03:57:52.9280726Z ##[endgroup]
+2026-11-12T03:57:52.9282375Z Secret source: Actions
+2026-11-12T03:57:52.9283136Z Cache mode: write
+2026-11-12T03:57:52.9283872Z Prepare workflow directory
+2026-11-12T03:57:52.9771188Z Prepare all required actions
+2026-11-12T03:57:52.9829765Z Getting action download info
+2026-11-12T03:57:53.1967226Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-11-12T03:57:53.3715841Z Uses: OpenPresentation/opf/.github/workflows/nightly.yml@refs/heads/codex/integration-034 (79cdb85d6ab8a58dde5d474e254cffa027735c51)
+2026-11-12T03:57:53.3719571Z ##[group] Inputs
+2026-11-12T03:57:53.3720661Z   report: false
+2026-11-12T03:57:53.3721232Z   flake: false
+2026-11-12T03:57:53.3721658Z ##[endgroup]
+2026-11-12T03:57:53.3722289Z Complete job name: slow set (only with the full-ci label) / Node 22 (engines range, render-2)
+2026-11-12T03:57:53.4140592Z ##[group]Checking docker version
+2026-11-12T03:57:53.4152973Z ##[command]/usr/bin/docker version --format '{{.Server.APIVersion}}'
+2026-11-12T03:57:53.4976550Z '1.48'
+2026-11-12T03:57:53.4987458Z Docker daemon API version: '1.48'
+2026-11-12T03:57:53.4988171Z ##[command]/usr/bin/docker version --format '{{.Client.APIVersion}}'
+2026-11-12T03:57:53.5139722Z '1.48'
+2026-11-12T03:57:53.5150300Z Docker client API version: '1.48'
+2026-11-12T03:57:53.5154555Z ##[endgroup]
+2026-11-12T03:57:53.5156460Z ##[group]Clean up resources from previous jobs
+2026-11-12T03:57:53.5160569Z ##[command]/usr/bin/docker ps --all --quiet --no-trunc --filter "label=d2d4ad"
+2026-11-12T03:57:53.5304580Z ##[command]/usr/bin/docker network prune --force --filter "label=d2d4ad"
+2026-11-12T03:57:53.5429582Z ##[endgroup]
+2026-11-12T03:57:53.5430083Z ##[group]Create local container network
+2026-11-12T03:57:53.5437729Z ##[command]/usr/bin/docker network create --label d2d4ad github_network_a07ef894e75a40879ac113e5ddf5dd20
+2026-11-12T03:57:53.5824578Z c0edf920ca00a798be7ccb0d34fe5a75c407f565d15987841600db01623520f4
+2026-11-12T03:57:53.5834587Z ##[endgroup]
+2026-11-12T03:57:53.5855571Z ##[group]Starting job container
+2026-11-12T03:57:53.5874754Z ##[command]/usr/bin/docker pull mcr.microsoft.com/playwright:v1.65.0-noble@sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d
+2026-11-12T03:57:53.6914767Z mcr.microsoft.com/playwright@sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d: Pulling from playwright
+2026-11-12T03:57:53.7220667Z 7a48b8f0e5c7: Already exists
+2026-11-12T03:57:53.7250647Z 78726cd6a756: Pulling fs layer
+2026-11-12T03:57:53.7252682Z 47729e89bb8a: Pulling fs layer
+2026-11-12T03:57:53.7253680Z 172f5253b14c: Pulling fs layer
+2026-11-12T03:57:53.7255052Z 6e6e59b7eb37: Pulling fs layer
+2026-11-12T03:57:53.7256404Z 51f9ecabea91: Pulling fs layer
+2026-11-12T03:57:53.7256976Z 1aea89d9b89d: Pulling fs layer
+2026-11-12T03:57:53.7257549Z 6e6e59b7eb37: Waiting
+2026-11-12T03:57:53.7258171Z 51f9ecabea91: Waiting
+2026-11-12T03:57:53.7258996Z 1aea89d9b89d: Waiting
+2026-11-12T03:57:53.7853538Z 47729e89bb8a: Verifying Checksum
+2026-11-12T03:57:53.7855501Z 47729e89bb8a: Download complete
+2026-11-12T03:57:54.2522195Z 78726cd6a756: Verifying Checksum
+2026-11-12T03:57:54.2523812Z 78726cd6a756: Download complete
+2026-11-12T03:57:54.7968348Z 51f9ecabea91: Verifying Checksum
+2026-11-12T03:57:54.7970569Z 51f9ecabea91: Download complete
+2026-11-12T03:57:55.2694387Z 6e6e59b7eb37: Verifying Checksum
+2026-11-12T03:57:55.2698313Z 6e6e59b7eb37: Download complete
+2026-11-12T03:57:55.3305757Z 1aea89d9b89d: Verifying Checksum
+2026-11-12T03:57:55.3309765Z 1aea89d9b89d: Download complete
+2026-11-12T03:57:55.3507274Z 172f5253b14c: Verifying Checksum
+2026-11-12T03:57:55.3507951Z 172f5253b14c: Download complete
+2026-11-12T03:58:05.3192617Z 78726cd6a756: Pull complete
+2026-11-12T03:58:05.3474410Z 47729e89bb8a: Pull complete
+2026-11-12T03:58:15.2472764Z 172f5253b14c: Pull complete
+2026-11-12T03:58:19.0312124Z 6e6e59b7eb37: Pull complete
+2026-11-12T03:58:24.2962096Z 51f9ecabea91: Pull complete
+2026-11-12T03:58:27.2041739Z 1aea89d9b89d: Pull complete
+2026-11-12T03:58:27.2093939Z Digest: sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d
+2026-11-12T03:58:27.2101976Z Status: Downloaded newer image for mcr.microsoft.com/playwright@sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d
+2026-11-12T03:58:27.2113053Z mcr.microsoft.com/playwright:v1.65.0-noble@sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d
+2026-11-12T03:58:27.2190195Z ##[command]/usr/bin/docker create --name 84f19b124e384a729308f206803a067c_mcrmicrosoftcomplaywrightv1650noblesha2566e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d_ad87eb --label d2d4ad --workdir /__w/opf/opf --network github_network_a07ef894e75a40879ac113e5ddf5dd20  -e "HOME=/github/home" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work":"/__w" -v "/home/runner/actions-runner/cached/2.338.2/externals":"/__e":ro -v "/home/runner/work/_temp":"/__w/_temp" -v "/home/runner/work/_actions":"/__w/_actions" -v "/opt/hostedtoolcache":"/__t" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" --entrypoint "tail" mcr.microsoft.com/playwright:v1.65.0-noble@sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d "-f" "/dev/null"
+2026-11-12T03:58:27.2454579Z f5c4f4e18c6cd2e760cbce19d63bff46fffc64375ae7586342514fa2e32746e9
+2026-11-12T03:58:27.2471346Z ##[command]/usr/bin/docker start f5c4f4e18c6cd2e760cbce19d63bff46fffc64375ae7586342514fa2e32746e9
+2026-11-12T03:58:27.4115337Z f5c4f4e18c6cd2e760cbce19d63bff46fffc64375ae7586342514fa2e32746e9
+2026-11-12T03:58:27.4129154Z ##[command]/usr/bin/docker ps --all --filter id=f5c4f4e18c6cd2e760cbce19d63bff46fffc64375ae7586342514fa2e32746e9 --filter status=running --no-trunc --format "{{.ID}} {{.Status}}"
+2026-11-12T03:58:27.4242783Z f5c4f4e18c6cd2e760cbce19d63bff46fffc64375ae7586342514fa2e32746e9 Up Less than a second
+2026-11-12T03:58:27.4255800Z ##[command]/usr/bin/docker inspect --format "{{range .Config.Env}}{{println .}}{{end}}" f5c4f4e18c6cd2e760cbce19d63bff46fffc64375ae7586342514fa2e32746e9
+2026-11-12T03:58:27.4374555Z HOME=/github/home
+2026-11-12T03:58:27.4375219Z GITHUB_ACTIONS=true
+2026-11-12T03:58:27.4375883Z CI=true
+2026-11-12T03:58:27.4382825Z PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+2026-11-12T03:58:27.4387554Z LANG=C.UTF-8
+2026-11-12T03:58:27.4389520Z LC_ALL=C.UTF-8
+2026-11-12T03:58:27.4390212Z PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+2026-11-12T03:58:27.4397165Z ##[endgroup]
+2026-11-12T03:58:27.4404949Z ##[group]Waiting for all services to be ready
+2026-11-12T03:58:27.4406787Z ##[endgroup]
+2026-11-12T03:58:27.4640345Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-11-12T03:58:27.4641501Z with:
+2026-11-12T03:58:27.4641808Z   persist-credentials: false
+2026-11-12T03:58:27.4642125Z   repository: OpenPresentation/opf
+2026-11-12T03:58:27.4644585Z   token: ***
+2026-11-12T03:58:27.4644865Z   ssh-strict: true
+2026-11-12T03:58:27.4645182Z   ssh-user: git
+2026-11-12T03:58:27.4645463Z   clean: true
+2026-11-12T03:58:27.4645741Z   sparse-checkout-cone-mode: true
+2026-11-12T03:58:27.4646075Z   fetch-depth: 1
+2026-11-12T03:58:27.4646349Z   fetch-tags: false
+2026-11-12T03:58:27.4646689Z   show-progress: true
+2026-11-12T03:58:27.4646967Z   lfs: false
+2026-11-12T03:58:27.4647218Z   submodules: false
+2026-11-12T03:58:27.4647515Z   set-safe-directory: true
+2026-11-12T03:58:27.4647824Z   allow-unsafe-pr-checkout: false
+2026-11-12T03:58:27.4648264Z env:
+2026-11-12T03:58:27.4648719Z   OPF_REUSE_BUILD: 43149577020-1-node-range-22-render-2
+2026-11-12T03:58:27.4649074Z ##[endgroup]
+2026-11-12T03:58:27.4701694Z ##[command]/usr/bin/docker exec  f5c4f4e18c6cd2e760cbce19d63bff46fffc64375ae7586342514fa2e32746e9 sh -c "cat /etc/*release | grep ^ID"
+2026-11-12T03:58:28.0327162Z Syncing repository: OpenPresentation/opf
+2026-11-12T03:58:28.0328360Z ##[group]Getting Git version info
+2026-11-12T03:58:28.0329017Z Working directory is '/__w/opf/opf'
+2026-11-12T03:58:28.0329580Z [command]/usr/bin/git version
+2026-11-12T03:58:28.0453789Z git version 2.43.0
+2026-11-12T03:58:28.0466272Z ##[endgroup]
+2026-11-12T03:58:28.0474532Z Temporarily overriding HOME='/__w/_temp/0688df4a-40e4-47d3-8277-cafb53356986' before making global git config changes
+2026-11-12T03:58:28.0476583Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-12T03:58:28.0477721Z [command]/usr/bin/git config --global --add safe.directory /__w/opf/opf
+2026-11-12T03:58:28.0501059Z Deleting the contents of '/__w/opf/opf'
+2026-11-12T03:58:28.0505517Z ##[group]Determining repository object format
+2026-11-12T03:58:28.0509766Z ##[endgroup]
+2026-11-12T03:58:28.0510825Z ##[group]Initializing the repository
+2026-11-12T03:58:28.0512004Z [command]/usr/bin/git init /__w/opf/opf
+2026-11-12T03:58:28.0538191Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-12T03:58:28.0539543Z hint: is subject to change. To configure the initial branch name to use in all
+2026-11-12T03:58:28.0540624Z hint: of your new repositories, which will suppress this warning, call:
+2026-11-12T03:58:28.0541293Z hint: 
+2026-11-12T03:58:28.0541836Z hint: 	git config --global init.defaultBranch <name>
+2026-11-12T03:58:28.0542218Z hint: 
+2026-11-12T03:58:28.0542642Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-12T03:58:28.0543520Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-12T03:58:28.0544188Z hint: 
+2026-11-12T03:58:28.0544478Z hint: 	git branch -m <name>
+2026-11-12T03:58:28.0550071Z Initialized empty Git repository in /__w/opf/opf/.git/
+2026-11-12T03:58:28.0560682Z [command]/usr/bin/git remote add origin https://github.com/OpenPresentation/opf
+2026-11-12T03:58:28.0588742Z ##[endgroup]
+2026-11-12T03:58:28.0589574Z ##[group]Disabling automatic garbage collection
+2026-11-12T03:58:28.0592844Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-12T03:58:28.0617469Z ##[endgroup]
+2026-11-12T03:58:28.0618320Z ##[group]Setting up auth
+2026-11-12T03:58:28.0619515Z Removing SSH command configuration
+2026-11-12T03:58:28.0621260Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-12T03:58:28.0645835Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-12T03:58:28.1355358Z Removing HTTP extra header
+2026-11-12T03:58:28.1358974Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-12T03:58:28.1382655Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-12T03:58:28.1555054Z Removing includeIf entries pointing to credentials config files
+2026-11-12T03:58:28.1560291Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-12T03:58:28.1585389Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-12T03:58:28.1760297Z [command]/usr/bin/git config --file /__w/_temp/git-credentials-dc3f6dc1-09fe-4a4a-85e9-e18e5c7fa303.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-12T03:58:28.1794281Z [command]/usr/bin/git config --local includeIf.gitdir:/__w/opf/opf/.git.path /__w/_temp/git-credentials-dc3f6dc1-09fe-4a4a-85e9-e18e5c7fa303.config
+2026-11-12T03:58:28.1824730Z [command]/usr/bin/git config --local includeIf.gitdir:/__w/opf/opf/.git/worktrees/*.path /__w/_temp/git-credentials-dc3f6dc1-09fe-4a4a-85e9-e18e5c7fa303.config
+2026-11-12T03:58:28.1875897Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-dc3f6dc1-09fe-4a4a-85e9-e18e5c7fa303.config
+2026-11-12T03:58:28.1919983Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-dc3f6dc1-09fe-4a4a-85e9-e18e5c7fa303.config
+2026-11-12T03:58:28.1970366Z ##[endgroup]
+2026-11-12T03:58:28.1970770Z ##[group]Fetching the repository
+2026-11-12T03:58:28.1975629Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +79cdb85d6ab8a58dde5d474e254cffa027735c51:refs/remotes/origin/codex/integration-034
+2026-11-12T03:58:40.1482919Z From https://github.com/OpenPresentation/opf
+2026-11-12T03:58:40.1483747Z  * [new ref]           79cdb85d6ab8a58dde5d474e254cffa027735c51 -> origin/codex/integration-034
+2026-11-12T03:58:40.1505866Z [command]/usr/bin/git branch --list --remote origin/codex/integration-034
+2026-11-12T03:58:40.1530158Z   origin/codex/integration-034
+2026-11-12T03:58:40.1536288Z [command]/usr/bin/git rev-parse refs/remotes/origin/codex/integration-034
+2026-11-12T03:58:40.1558211Z 79cdb85d6ab8a58dde5d474e254cffa027735c51
+2026-11-12T03:58:40.1562252Z ##[endgroup]
+2026-11-12T03:58:40.1562982Z ##[group]Determining the checkout info
+2026-11-12T03:58:40.1567363Z ##[endgroup]
+2026-11-12T03:58:40.1567873Z [command]/usr/bin/git sparse-checkout disable
+2026-11-12T03:58:40.1603813Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-12T03:58:40.1629554Z ##[group]Checking out the ref
+2026-11-12T03:58:40.1639991Z [command]/usr/bin/git checkout --progress --force -B codex/integration-034 refs/remotes/origin/codex/integration-034
+2026-11-12T03:58:41.2592994Z Updating files:  34% (9755/28662)
+2026-11-12T03:58:41.2739360Z Updating files:  35% (10032/28662)
+2026-11-12T03:58:41.2881582Z Updating files:  36% (10319/28662)
+2026-11-12T03:58:41.3374273Z Updating files:  37% (10605/28662)
+2026-11-12T03:58:41.3522514Z Updating files:  38% (10892/28662)
+2026-11-12T03:58:41.3680397Z Updating files:  39% (11179/28662)
+2026-11-12T03:58:41.3816880Z Updating files:  40% (11465/28662)
+2026-11-12T03:58:41.3902529Z Updating files:  41% (11752/28662)
+2026-11-12T03:58:41.4165490Z Updating files:  42% (12039/28662)
+2026-11-12T03:58:41.4469057Z Updating files:  43% (12325/28662)
+2026-11-12T03:58:41.4671205Z Updating files:  44% (12612/28662)
+2026-11-12T03:58:41.4883354Z Updating files:  45% (12898/28662)
+2026-11-12T03:58:41.5082028Z Updating files:  46% (13185/28662)
+2026-11-12T03:58:41.5172157Z Updating files:  47% (13472/28662)
+2026-11-12T03:58:41.5249445Z Updating files:  48% (13758/28662)
+2026-11-12T03:58:41.5500460Z Updating files:  49% (14045/28662)
+2026-11-12T03:58:41.5751256Z Updating files:  50% (14331/28662)
+2026-11-12T03:58:41.6099913Z Updating files:  51% (14618/28662)
+2026-11-12T03:58:41.6221125Z Updating files:  52% (14905/28662)
+2026-11-12T03:58:41.6417516Z Updating files:  53% (15191/28662)
+2026-11-12T03:58:41.6810409Z Updating files:  54% (15478/28662)
+2026-11-12T03:58:41.6997872Z Updating files:  55% (15765/28662)
+2026-11-12T03:58:41.7179972Z Updating files:  56% (16051/28662)
+2026-11-12T03:58:41.7322103Z Updating files:  57% (16338/28662)
+2026-11-12T03:58:41.7530884Z Updating files:  58% (16624/28662)
+2026-11-12T03:58:41.7670005Z Updating files:  59% (16911/28662)
+2026-11-12T03:58:41.7913421Z Updating files:  60% (17198/28662)
+2026-11-12T03:58:41.8047929Z Updating files:  61% (17484/28662)
+2026-11-12T03:58:41.8610544Z Updating files:  62% (17771/28662)
+2026-11-12T03:58:41.9029013Z Updating files:  63% (18058/28662)
+2026-11-12T03:58:41.9372395Z Updating files:  64% (18344/28662)
+2026-11-12T03:58:41.9570777Z Updating files:  65% (18631/28662)
+2026-11-12T03:58:42.0357793Z Updating files:  66% (18917/28662)
+2026-11-12T03:58:42.0582228Z Updating files:  67% (19204/28662)
+2026-11-12T03:58:42.1168553Z Updating files:  68% (19491/28662)
+2026-11-12T03:58:42.1872747Z Updating files:  69% (19777/28662)
+2026-11-12T03:58:42.2008743Z Updating files:  69% (20003/28662)
+2026-11-12T03:58:42.2318198Z Updating files:  70% (20064/28662)
+2026-11-12T03:58:42.2805925Z Updating files:  71% (20351/28662)
+2026-11-12T03:58:42.3465035Z Updating files:  72% (20637/28662)
+2026-11-12T03:58:42.3650174Z Updating files:  73% (20924/28662)
+2026-11-12T03:58:42.3828795Z Updating files:  74% (21210/28662)
+2026-11-12T03:58:42.3987402Z Updating files:  75% (21497/28662)
+2026-11-12T03:58:42.4106978Z Updating files:  76% (21784/28662)
+2026-11-12T03:58:42.4291117Z Updating files:  77% (22070/28662)
+2026-11-12T03:58:42.4463986Z Updating files:  78% (22357/28662)
+2026-11-12T03:58:42.4599700Z Updating files:  79% (22643/28662)
+2026-11-12T03:58:42.4986875Z Updating files:  80% (22930/28662)
+2026-11-12T03:58:42.5296310Z Updating files:  81% (23217/28662)
+2026-11-12T03:58:42.5482991Z Updating files:  82% (23503/28662)
+2026-11-12T03:58:42.6697702Z Updating files:  83% (23790/28662)
+2026-11-12T03:58:42.7667938Z Updating files:  84% (24077/28662)
+2026-11-12T03:58:42.9111128Z Updating files:  85% (24363/28662)
+2026-11-12T03:58:42.9250717Z Updating files:  86% (24650/28662)
+2026-11-12T03:58:42.9342735Z Updating files:  87% (24936/28662)
+2026-11-12T03:58:42.9409737Z Updating files:  88% (25223/28662)
+2026-11-12T03:58:42.9475591Z Updating files:  89% (25510/28662)
+2026-11-12T03:58:42.9532203Z Updating files:  90% (25796/28662)
+2026-11-12T03:58:42.9585069Z Updating files:  91% (26083/28662)
+2026-11-12T03:58:42.9649546Z Updating files:  92% (26370/28662)
+2026-11-12T03:58:42.9701715Z Updating files:  93% (26656/28662)
+2026-11-12T03:58:42.9752689Z Updating files:  94% (26943/28662)
+2026-11-12T03:58:42.9810476Z Updating files:  95% (27229/28662)
+2026-11-12T03:58:42.9865898Z Updating files:  96% (27516/28662)
+2026-11-12T03:58:43.0017008Z Updating files:  97% (27803/28662)
+2026-11-12T03:58:43.0212487Z Updating files:  98% (28089/28662)
+2026-11-12T03:58:43.0390369Z Updating files:  99% (28376/28662)
+2026-11-12T03:58:43.0391123Z Updating files: 100% (28662/28662)
+2026-11-12T03:58:43.0391565Z Updating files: 100% (28662/28662), done.
+2026-11-12T03:58:43.0626802Z Switched to a new branch 'codex/integration-034'
+2026-11-12T03:58:43.0627641Z branch 'codex/integration-034' set up to track 'origin/codex/integration-034'.
+2026-11-12T03:58:43.0712712Z ##[endgroup]
+2026-11-12T03:58:43.0748519Z [command]/usr/bin/git log -1 --format=%H
+2026-11-12T03:58:43.0772823Z 79cdb85d6ab8a58dde5d474e254cffa027735c51
+2026-11-12T03:58:43.0781387Z ##[group]Removing auth
+2026-11-12T03:58:43.0781924Z Removing SSH command configuration
+2026-11-12T03:58:43.0784963Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-12T03:58:43.0812118Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-12T03:58:43.1024663Z Removing HTTP extra header
+2026-11-12T03:58:43.1027252Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-12T03:58:43.1052460Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-12T03:58:43.1254907Z Removing includeIf entries pointing to credentials config files
+2026-11-12T03:58:43.1257365Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-12T03:58:43.1278187Z includeif.gitdir:/__w/opf/opf/.git.path
+2026-11-12T03:58:43.1279173Z includeif.gitdir:/__w/opf/opf/.git/worktrees/*.path
+2026-11-12T03:58:43.1279764Z includeif.gitdir:/github/workspace/.git.path
+2026-11-12T03:58:43.1280330Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-12T03:58:43.1285151Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/__w/opf/opf/.git.path
+2026-11-12T03:58:43.1303836Z /__w/_temp/git-credentials-dc3f6dc1-09fe-4a4a-85e9-e18e5c7fa303.config
+2026-11-12T03:58:43.1311289Z [command]/usr/bin/git config --local --unset includeif.gitdir:/__w/opf/opf/.git.path \/__w\/_temp\/git\-credentials\-dc3f6dc1\-09fe\-4a4a\-85e9\-e18e5c7fa303\.config
+2026-11-12T03:58:43.1338110Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/__w/opf/opf/.git/worktrees/*.path
+2026-11-12T03:58:43.1357417Z /__w/_temp/git-credentials-dc3f6dc1-09fe-4a4a-85e9-e18e5c7fa303.config
+2026-11-12T03:58:43.1365319Z [command]/usr/bin/git config --local --unset includeif.gitdir:/__w/opf/opf/.git/worktrees/*.path \/__w\/_temp\/git\-credentials\-dc3f6dc1\-09fe\-4a4a\-85e9\-e18e5c7fa303\.config
+2026-11-12T03:58:43.1393234Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-12T03:58:43.1414253Z /github/runner_temp/git-credentials-dc3f6dc1-09fe-4a4a-85e9-e18e5c7fa303.config
+2026-11-12T03:58:43.1420479Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-dc3f6dc1\-09fe\-4a4a\-85e9\-e18e5c7fa303\.config
+2026-11-12T03:58:43.1450273Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-12T03:58:43.1468109Z /github/runner_temp/git-credentials-dc3f6dc1-09fe-4a4a-85e9-e18e5c7fa303.config
+2026-11-12T03:58:43.1473693Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-dc3f6dc1\-09fe\-4a4a\-85e9\-e18e5c7fa303\.config
+2026-11-12T03:58:43.1501374Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-12T03:58:43.1702549Z Removing credentials config '/__w/_temp/git-credentials-dc3f6dc1-09fe-4a4a-85e9-e18e5c7fa303.config'
+2026-11-12T03:58:43.1712208Z ##[endgroup]
+2026-11-12T03:58:43.2082465Z Prepare all required actions
+2026-11-12T03:58:43.2083010Z Getting action download info
+2026-11-12T03:58:43.3637221Z Download action repository 'pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413' (SHA:ea17c68df8912ef543352723c149a84f56e3d413)
+2026-11-12T03:58:43.6300529Z Download action repository 'actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+2026-11-12T03:58:43.7536143Z ##[group]Run ./.github/actions/setup-workspace
+2026-11-12T03:58:43.7536470Z with:
+2026-11-12T03:58:43.7536724Z   container: true
+2026-11-12T03:58:43.7536994Z   node-version: 22
+2026-11-12T03:58:43.7537234Z env:
+2026-11-12T03:58:43.7537556Z   OPF_REUSE_BUILD: 43149577020-1-node-range-22-render-2
+2026-11-12T03:58:43.7537880Z ##[endgroup]
+2026-11-12T03:58:43.7592115Z ##[start-action display=Install pnpm (host runner);id=__self.__pnpm_action-setup]
+2026-11-12T03:58:43.7607454Z ##[end-action id=__self.__pnpm_action-setup;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-12T03:58:43.7610013Z ##[start-action display=Install pnpm (container);id=__self.__run]
+2026-11-12T03:58:43.7651927Z ##[group]Run version="$(node -p "require('./package.json').packageManager.split('@')[1].split('+')[0]")"
+2026-11-12T03:58:43.7652576Z [36;1mversion="$(node -p "require('./package.json').packageManager.split('@')[1].split('+')[0]")"[0m
+2026-11-12T03:58:43.7653108Z [36;1mnpm install --global --no-audit --no-fund "pnpm@${version}"[0m
+2026-11-12T03:58:43.7653486Z [36;1mpnpm --version[0m
+2026-11-12T03:58:43.7657562Z shell: bash --noprofile --norc -e -o pipefail {0}
+2026-11-12T03:58:43.7658013Z env:
+2026-11-12T03:58:43.7658320Z   OPF_REUSE_BUILD: 43149577020-1-node-range-22-render-2
+2026-11-12T03:58:43.7659026Z ##[endgroup]
+2026-11-12T03:58:44.9672189Z 
+2026-11-12T03:58:44.9672776Z added 1 package in 976ms
+2026-11-12T03:58:45.2404767Z 10.33.2
+2026-11-12T03:58:45.2506069Z ##[end-action id=__self.__run;outcome=success;conclusion=success;duration_ms=1489]
+2026-11-12T03:58:45.2509571Z ##[start-action display=Trust the checkout (container);id=__self.__run_2]
+2026-11-12T03:58:45.2531648Z ##[group]Run git config --global --add safe.directory "$GITHUB_WORKSPACE"
+2026-11-12T03:58:45.2532152Z [36;1mgit config --global --add safe.directory "$GITHUB_WORKSPACE"[0m
+2026-11-12T03:58:45.2532651Z shell: bash --noprofile --norc -e -o pipefail {0}
+2026-11-12T03:58:45.2533001Z env:
+2026-11-12T03:58:45.2533287Z   OPF_REUSE_BUILD: 43149577020-1-node-range-22-render-2
+2026-11-12T03:58:45.2533597Z ##[endgroup]
+2026-11-12T03:58:45.2979854Z ##[end-action id=__self.__run_2;outcome=success;conclusion=success;duration_ms=46]
+2026-11-12T03:58:45.2982038Z ##[start-action display=Set up Node.js;id=__self.__actions_setup-node]
+2026-11-12T03:58:45.3033659Z ##[group]Run actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+2026-11-12T03:58:45.3034078Z with:
+2026-11-12T03:58:45.3034336Z   node-version: 22
+2026-11-12T03:58:45.3034583Z   cache: pnpm
+2026-11-12T03:58:45.3034823Z   check-latest: false
+2026-11-12T03:58:45.3037078Z   token: ***
+2026-11-12T03:58:45.3037337Z   package-manager-cache: true
+2026-11-12T03:58:45.3037680Z env:
+2026-11-12T03:58:45.3037952Z   OPF_REUSE_BUILD: 43149577020-1-node-range-22-render-2
+2026-11-12T03:58:45.3038256Z ##[endgroup]
+2026-11-12T03:58:45.3044964Z ##[command]/usr/bin/docker exec  f5c4f4e18c6cd2e760cbce19d63bff46fffc64375ae7586342514fa2e32746e9 sh -c "cat /etc/*release | grep ^ID"
+2026-11-12T03:58:45.4930872Z Found in cache @ /__t/node/22.23.4/x64
+2026-11-12T03:58:46.5610103Z ##[group]Environment details
+2026-11-12T03:58:48.5242684Z node: v22.23.4
+2026-11-12T03:58:48.5242999Z npm: 10.9.9
+2026-11-12T03:58:48.5243406Z yarn: 1.22.22
+2026-11-12T03:58:48.5244006Z ##[endgroup]
+2026-11-12T03:58:48.5256492Z [command]/usr/bin/pnpm store path --silent
+2026-11-12T03:58:49.0219177Z /__w/.pnpm-store/v10
+2026-11-12T03:58:49.1850049Z Cache hit for: node-cache-Linux-x64-pnpm-d4ffbf076089ec4c46de8580f929db170f5887029ad69a38c42643130159df66
+2026-11-12T03:58:50.3345069Z Received 134217728 of 409561664 (32.8%), 127.9 MBs/sec
+2026-11-12T03:58:51.3346800Z Received 352321536 of 409561664 (86.0%), 167.9 MBs/sec
+2026-11-12T03:58:51.6075155Z Received 409561664 of 409561664 (100.0%), 171.8 MBs/sec
+2026-11-12T03:58:51.6075768Z Cache Size: ~391 MB (409561664 B)
+2026-11-12T03:58:51.6165016Z [command]/usr/bin/tar -xf /__w/_temp/a28dff0a-32e4-4b48-b0d5-280d0639e9f2/cache.tzst -P -C /__w/opf/opf --use-compress-program unzstd
+2026-11-12T03:58:53.6145639Z Cache restored successfully
+2026-11-12T03:58:53.6281097Z Cache restored from key: node-cache-Linux-x64-pnpm-d4ffbf076089ec4c46de8580f929db170f5887029ad69a38c42643130159df66
+2026-11-12T03:58:53.6410287Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=8342]
+2026-11-12T03:58:53.6412780Z ##[start-action display=Install dependencies;id=__self.__run_3]
+2026-11-12T03:58:53.6523791Z ##[group]Run node -e "console.log('Node', process.version)"
+2026-11-12T03:58:53.6524253Z [36;1mnode -e "console.log('Node', process.version)"[0m
+2026-11-12T03:58:53.6524618Z [36;1mpnpm install --frozen-lockfile[0m
+2026-11-12T03:58:53.6525422Z shell: bash --noprofile --norc -e -o pipefail {0}
+2026-11-12T03:58:53.6525773Z env:
+2026-11-12T03:58:53.6526065Z   OPF_REUSE_BUILD: 43149577020-1-node-range-22-render-2
+2026-11-12T03:58:53.6526389Z ##[endgroup]
+2026-11-12T03:58:53.7289859Z Node v22.23.4
+2026-11-12T03:58:53.9902777Z Scope: all 9 workspace projects
+2026-11-12T03:58:54.0468343Z Lockfile is up to date, resolution step is skipped
+2026-11-12T03:58:54.0718135Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-11-12T03:58:54.1041967Z Packages: +299
+2026-11-12T03:58:54.1043905Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-11-12T03:58:54.9494379Z Progress: resolved 299, reused 299, downloaded 0, added 299, done
+2026-11-12T03:58:55.0802288Z  WARN  Failed to create bin at /__w/opf/opf/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/__w/opf/opf/packages/render/dist/preview-fonts-cli.js'
+2026-11-12T03:58:55.0804626Z  WARN  Failed to create bin at /__w/opf/opf/packages/cli/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/__w/opf/opf/packages/render/dist/preview-fonts-cli.js'
+2026-11-12T03:58:55.0806751Z  WARN  Failed to create bin at /__w/opf/opf/packages/editor/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/__w/opf/opf/packages/render/dist/preview-fonts-cli.js'
+2026-11-12T03:58:55.0809041Z  WARN  Failed to create bin at /__w/opf/opf/packages/integration/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/__w/opf/opf/packages/render/dist/preview-fonts-cli.js'
+2026-11-12T03:58:55.0811190Z  WARN  Failed to create bin at /__w/opf/opf/packages/mcp/node_modules/.bin/opf. ENOENT: no such file or directory, open '/__w/opf/opf/packages/cli/dist/index.js'
+2026-11-12T03:58:55.0813106Z  WARN  Failed to create bin at /__w/opf/opf/packages/mcp/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/__w/opf/opf/packages/render/dist/preview-fonts-cli.js'
+2026-11-12T03:58:55.0815179Z  WARN  Failed to create bin at /__w/opf/opf/packages/pptx/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/__w/opf/opf/packages/render/dist/preview-fonts-cli.js'
+2026-11-12T03:58:55.2243451Z 
+2026-11-12T03:58:55.2244134Z devDependencies:
+2026-11-12T03:58:55.2244745Z + @biomejs/biome 2.6.6
+2026-11-12T03:58:55.2245206Z + @openpresentation/gallery 0.33.0 <- packages/gallery
+2026-11-12T03:58:55.2245638Z + @openpresentation/opf 0.33.0 <- packages/javascript
+2026-11-12T03:58:55.2246122Z + @openpresentation/opf-pptx 0.33.0 <- packages/pptx
+2026-11-12T03:58:55.2246552Z + @openpresentation/opf-render 0.33.0 <- packages/render
+2026-11-12T03:58:55.2246948Z + @typescript/native <- typescript 7.0.2
+2026-11-12T03:58:55.2247187Z 
+2026-11-12T03:58:55.2420666Z  WARN  Failed to create bin at /__w/opf/opf/packages/pptx/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/__w/opf/opf/packages/pptx/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+2026-11-12T03:58:55.2551816Z  WARN  Failed to create bin at /__w/opf/opf/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/__w/opf/opf/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+2026-11-12T03:58:55.2557746Z  WARN  Failed to create bin at /__w/opf/opf/packages/editor/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/__w/opf/opf/packages/editor/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+2026-11-12T03:58:55.2561293Z  WARN  Failed to create bin at /__w/opf/opf/packages/integration/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/__w/opf/opf/packages/integration/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+2026-11-12T03:58:55.2564284Z  WARN  Failed to create bin at /__w/opf/opf/packages/cli/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/__w/opf/opf/packages/cli/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+2026-11-12T03:58:55.2627624Z  WARN  Failed to create bin at /__w/opf/opf/packages/mcp/node_modules/.bin/opf. ENOENT: no such file or directory, open '/__w/opf/opf/packages/mcp/node_modules/@openpresentation/cli/dist/index.js'
+2026-11-12T03:58:55.2630651Z  WARN  Failed to create bin at /__w/opf/opf/packages/mcp/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/__w/opf/opf/packages/mcp/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+2026-11-12T03:58:55.2847001Z Done in 1.5s using pnpm v10.33.2
+2026-11-12T03:58:55.2976474Z ##[end-action id=__self.__run_3;outcome=success;conclusion=success;duration_ms=1656]
+2026-11-12T03:58:55.2981154Z ##[start-action display=Build the dependencies;id=__self.__run_4]
+2026-11-12T03:58:55.2987815Z ##[end-action id=__self.__run_4;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-12T03:58:55.3027174Z ##[group]Run pnpm build
+2026-11-12T03:58:55.3027484Z [36;1mpnpm build[0m
+2026-11-12T03:58:55.3029109Z shell: sh -e {0}
+2026-11-12T03:58:55.3029403Z env:
+2026-11-12T03:58:55.3029704Z   OPF_REUSE_BUILD: 43149577020-1-node-range-22-render-2
+2026-11-12T03:58:55.3030087Z ##[endgroup]
+2026-11-12T03:58:55.5598901Z 
+2026-11-12T03:58:55.5599506Z > openpresentation-workspace@ build /__w/opf/opf
+2026-11-12T03:58:55.5600357Z > pnpm run build:packages
+2026-11-12T03:58:55.5600668Z 
+2026-11-12T03:58:55.7927849Z 
+2026-11-12T03:58:55.7928905Z > openpresentation-workspace@ build:packages /__w/opf/opf
+2026-11-12T03:58:55.7929410Z > pnpm -r --if-present run build
+2026-11-12T03:58:55.7929627Z 
+2026-11-12T03:58:56.0367860Z Scope: 8 of 9 workspace projects
+2026-11-12T03:58:56.0427229Z packages/gallery build$ node scripts/build.mjs
+2026-11-12T03:58:56.1974760Z packages/gallery build: Built @openpresentation/gallery: 226 content records, 40 layout previews.
+2026-11-12T03:58:56.2013632Z packages/gallery build: Done
+2026-11-12T03:58:56.2024154Z packages/javascript build$ node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/minify-precompiled.mjs && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)
+2026-11-12T03:58:56.4520515Z packages/javascript build: > @openpresentation/opf@0.33.0 generate /__w/opf/opf/packages/javascript
+2026-11-12T03:58:56.4522652Z packages/javascript build: > node scripts/generate.mjs && node scripts/generate-content.mjs
+2026-11-12T03:58:57.8066296Z packages/javascript build: Generated src/generated/examples.ts (149 examples, 7 galleries)
+2026-11-12T03:58:57.8328077Z packages/javascript build: Generated src/generated/docs.ts (69 docs)
+2026-11-12T03:58:57.8335177Z packages/javascript build: Generated src/generated/repo-readme.ts (19513 bytes)
+2026-11-12T03:58:58.2670815Z packages/javascript build: [34mCLI[39m Building entry: {"deck":"src/deck.ts","markdown":"src/markdown.ts","yaml":"src/yaml.ts","schema":"src/schema-navigation.ts","source":"src/source.ts","patch":"src/patch.ts","ids":"src/ids.ts","diff":"src/diff.ts","format":"src/format.ts","convert":"src/convert.ts","font-policy":"src/font-policy.ts","symbol-font-encodings":"src/symbol-font-encodings.ts","shape-geometry":"src/shape-geometry.ts","shape-catalog":"src/shape-catalog.ts","data":"src/data.ts","pagination":"src/pagination.ts","composition":"src/composition.ts","index":"src/index.ts","schemas":"src/schemas.ts","validator":"src/validator.ts","types":"src/types.ts","spec-files":"src/spec-files.ts","examples":"src/examples.ts","docs":"src/docs.ts","repo-readme":"src/repo-readme.ts","browser":"src/browser.ts","node-engine":"src/node-engine.ts","schema-engine-ajv":"src/schema-engine-ajv.ts","schema-engine-precompiled":"src/schema-engine-precompiled.ts","precompiled":"src/precompiled.ts","diagram-engine-eager":"src/diagram-engine-eager.ts","diagram-engine-lazy":"src/diagram-engine-lazy.ts","shape-engine-eager":"src/shape-engine-eager.ts","shape-engine-lazy":"src/shape-engine-lazy.ts"}
+2026-11-12T03:58:58.2677168Z packages/javascript build: [34mCLI[39m Using tsconfig: tsconfig.json
+2026-11-12T03:58:58.2679210Z packages/javascript build: [34mCLI[39m tsup v9.0.0
+2026-11-12T03:58:58.2680631Z packages/javascript build: [34mCLI[39m Using tsup config: /__w/opf/opf/packages/javascript/tsup.config.ts
+2026-11-12T03:58:58.2705274Z packages/javascript build: [34mCLI[39m Target: es2022
+2026-11-12T03:58:58.2780293Z packages/javascript build: [34mCLI[39m Cleaning output folder
+2026-11-12T03:58:58.2781489Z packages/javascript build: [34mESM[39m Build start
+2026-11-12T03:58:58.6541685Z packages/javascript build: [34mDTS[39m Build start
+2026-11-12T03:58:59.3502623Z packages/javascript build: Generated an empty chunk: "types".
+2026-11-12T03:59:03.8112687Z packages/javascript build: [32mESM[39m [1mdist/shape-engine-eager.js           [22m[32m323.00 B[39m
+2026-11-12T03:59:03.8118207Z packages/javascript build: [32mESM[39m [1mdist/shape-engine-lazy.js            [22m[32m308.00 B[39m
+2026-11-12T03:59:03.8120364Z packages/javascript build: [32mESM[39m [1mdist/diagram-plantuml-ZZYMHBHZ.js    [22m[32m87.00 B[39m
+2026-11-12T03:59:03.8121771Z packages/javascript build: [32mESM[39m [1mdist/shape-engine-module-BK7JNEUV.js [22m[32m308.00 B[39m
+2026-11-12T03:59:03.8123026Z packages/javascript build: [32mESM[39m [1mdist/conversion-OBN4FRIC.js          [22m[32m835.00 B[39m
+2026-11-12T03:59:03.8124212Z packages/javascript build: [32mESM[39m [1mdist/repo-readme.js                  [22m[32m19.47 KB[39m
+2026-11-12T03:59:03.8125400Z packages/javascript build: [32mESM[39m [1mdist/browser.js                      [22m[32m4.32 KB[39m
+2026-11-12T03:59:03.8126512Z packages/javascript build: [32mESM[39m [1mdist/node-engine.js                  [22m[32m3.97 KB[39m
+2026-11-12T03:59:03.8127839Z packages/javascript build: [32mESM[39m [1mdist/precompiled.js                  [22m[32m231.00 B[39m
+2026-11-12T03:59:03.8129146Z packages/javascript build: [32mESM[39m [1mdist/chunk-43JWUIGF.js               [22m[32m203.00 B[39m
+2026-11-12T03:59:03.8130338Z packages/javascript build: [32mESM[39m [1mdist/diagram-engine-lazy.js          [22m[32m430.00 B[39m
+2026-11-12T03:59:03.8131550Z packages/javascript build: [32mESM[39m [1mdist/schema-engine-precompiled.js    [22m[32m131.00 B[39m
+2026-11-12T03:59:03.8132721Z packages/javascript build: [32mESM[39m [1mdist/chunk-INIMUBSE.js               [22m[32m286.00 B[39m
+2026-11-12T03:59:03.8133897Z packages/javascript build: [32mESM[39m [1mdist/diagram-engine-eager.js         [22m[32m360.00 B[39m
+2026-11-12T03:59:03.8135071Z packages/javascript build: [32mESM[39m [1mdist/index.js                        [22m[32m5.72 KB[39m
+2026-11-12T03:59:03.8136232Z packages/javascript build: [32mESM[39m [1mdist/composition.js                  [22m[32m12.88 KB[39m
+2026-11-12T03:59:03.8137394Z packages/javascript build: [32mESM[39m [1mdist/schemas.js                      [22m[32m241.00 B[39m
+2026-11-12T03:59:03.8148896Z packages/javascript build: [32mESM[39m [1mdist/validator.js                    [22m[32m385.00 B[39m
+2026-11-12T03:59:03.8150346Z packages/javascript build: [32mESM[39m [1mdist/schema-engine-ajv.js            [22m[32m1.15 KB[39m
+2026-11-12T03:59:03.8151566Z packages/javascript build: [32mESM[39m [1mdist/types.js                        [22m[32m1.00 B[39m
+2026-11-12T03:59:03.8152694Z packages/javascript build: [32mESM[39m [1mdist/chunk-466I5SCB.js               [22m[32m62.35 KB[39m
+2026-11-12T03:59:03.8153978Z packages/javascript build: [32mESM[39m [1mdist/spec-files.js                   [22m[32m115.00 B[39m
+2026-11-12T03:59:03.8155128Z packages/javascript build: [32mESM[39m [1mdist/chunk-HU6DUXMN.js               [22m[32m71.11 KB[39m
+2026-11-12T03:59:03.8156302Z packages/javascript build: [32mESM[39m [1mdist/format.js                       [22m[32m157.00 B[39m
+2026-11-12T03:59:03.8157519Z packages/javascript build: [32mESM[39m [1mdist/chunk-T5LC6OQY.js               [22m[32m47.25 KB[39m
+2026-11-12T03:59:03.8179096Z packages/javascript build: [32mESM[39m [1mdist/font-policy.js                  [22m[32m151.00 B[39m
+2026-11-12T03:59:03.8181019Z packages/javascript build: [32mESM[39m [1mdist/convert.js                      [22m[32m59.94 KB[39m
+2026-11-12T03:59:03.8182269Z packages/javascript build: [32mESM[39m [1mdist/chunk-IJXKVM4W.js               [22m[32m10.69 KB[39m
+2026-11-12T03:59:03.8183454Z packages/javascript build: [32mESM[39m [1mdist/shape-geometry.js               [22m[32m229.00 B[39m
+2026-11-12T03:59:03.8184614Z packages/javascript build: [32mESM[39m [1mdist/chunk-FK5XG742.js               [22m[32m153.62 KB[39m
+2026-11-12T03:59:03.8185805Z packages/javascript build: [32mESM[39m [1mdist/shape-catalog.js                [22m[32m14.63 KB[39m
+2026-11-12T03:59:03.8186959Z packages/javascript build: [32mESM[39m [1mdist/data.js                         [22m[32m443.00 B[39m
+2026-11-12T03:59:03.8188197Z packages/javascript build: [32mESM[39m [1mdist/chunk-D46FQ4XC.js               [22m[32m6.31 KB[39m
+2026-11-12T03:59:03.8189511Z packages/javascript build: [32mESM[39m [1mdist/pagination.js                   [22m[32m282.00 B[39m
+2026-11-12T03:59:03.8190637Z packages/javascript build: [32mESM[39m [1mdist/deck.js                         [22m[32m474.00 B[39m
+2026-11-12T03:59:03.8191838Z packages/javascript build: [32mESM[39m [1mdist/chunk-422DNC64.js               [22m[32m2.94 KB[39m
+2026-11-12T03:59:03.8192970Z packages/javascript build: [32mESM[39m [1mdist/chunk-WWGO62TS.js               [22m[32m36.04 KB[39m
+2026-11-12T03:59:03.8194081Z packages/javascript build: [32mESM[39m [1mdist/markdown.js                     [22m[32m390.00 B[39m
+2026-11-12T03:59:03.8195289Z packages/javascript build: [32mESM[39m [1mdist/chunk-NFHIMAXF.js               [22m[32m15.19 KB[39m
+2026-11-12T03:59:03.8196423Z packages/javascript build: [32mESM[39m [1mdist/chunk-AXCBSIUG.js               [22m[32m3.70 KB[39m
+2026-11-12T03:59:03.8197644Z packages/javascript build: [32mESM[39m [1mdist/chunk-W4DYDRV2.js               [22m[32m6.21 KB[39m
+2026-11-12T03:59:03.8198868Z packages/javascript build: [32mESM[39m [1mdist/schema.js                       [22m[32m396.00 B[39m
+2026-11-12T03:59:03.8200025Z packages/javascript build: [32mESM[39m [1mdist/chunk-RYZPBJLB.js               [22m[32m302.00 B[39m
+2026-11-12T03:59:03.8201210Z packages/javascript build: [32mESM[39m [1mdist/source.js                       [22m[32m22.70 KB[39m
+2026-11-12T03:59:03.8202322Z packages/javascript build: [32mESM[39m [1mdist/chunk-DSXV4ICG.js               [22m[32m43.93 KB[39m
+2026-11-12T03:59:03.8203524Z packages/javascript build: [32mESM[39m [1mdist/chunk-YKNKUZSB.js               [22m[32m4.88 KB[39m
+2026-11-12T03:59:03.8204703Z packages/javascript build: [32mESM[39m [1mdist/chunk-BBGWBDFA.js               [22m[32m55.06 KB[39m
+2026-11-12T03:59:03.8205875Z packages/javascript build: [32mESM[39m [1mdist/chunk-H6E2DX44.js               [22m[32m4.69 KB[39m
+2026-11-12T03:59:03.8207002Z packages/javascript build: [32mESM[39m [1mdist/patch.js                        [22m[32m536.00 B[39m
+2026-11-12T03:59:03.8208192Z packages/javascript build: [32mESM[39m [1mdist/ids.js                          [22m[32m339.00 B[39m
+2026-11-12T03:59:03.8209450Z packages/javascript build: [32mESM[39m [1mdist/chunk-YYT6N7AI.js               [22m[32m261.58 KB[39m
+2026-11-12T03:59:03.8210630Z packages/javascript build: [32mESM[39m [1mdist/chunk-GDFA3SQL.js               [22m[32m10.03 KB[39m
+2026-11-12T03:59:03.8211801Z packages/javascript build: [32mESM[39m [1mdist/diff.js                         [22m[32m271.00 B[39m
+2026-11-12T03:59:03.8212916Z packages/javascript build: [32mESM[39m [1mdist/chunk-ZFMMXPQQ.js               [22m[32m27.48 KB[39m
+2026-11-12T03:59:03.8214132Z packages/javascript build: [32mESM[39m [1mdist/chunk-ISLW722H.js               [22m[32m30.58 KB[39m
+2026-11-12T03:59:03.8215261Z packages/javascript build: [32mESM[39m [1mdist/chunk-JBARNYFR.js               [22m[32m776.00 B[39m
+2026-11-12T03:59:03.8216489Z packages/javascript build: [32mESM[39m [1mdist/chunk-LTDKM6Z4.js               [22m[32m456.47 KB[39m
+2026-11-12T03:59:03.8217708Z packages/javascript build: [32mESM[39m [1mdist/chunk-PRXZD2II.js               [22m[32m463.00 B[39m
+2026-11-12T03:59:03.8218957Z packages/javascript build: [32mESM[39m [1mdist/chunk-HS37ISVZ.js               [22m[32m505.76 KB[39m
+2026-11-12T03:59:03.8220725Z packages/javascript build: [32mESM[39m [1mdist/yaml.js                         [22m[32m390.00 B[39m
+2026-11-12T03:59:03.8221853Z packages/javascript build: [32mESM[39m [1mdist/chunk-IXMYBALY.js               [22m[32m31.53 KB[39m
+2026-11-12T03:59:03.8223016Z packages/javascript build: [32mESM[39m [1mdist/symbol-font-encodings.js        [22m[32m414.09 KB[39m
+2026-11-12T03:59:03.8224330Z packages/javascript build: [32mESM[39m [1mdist/docs.js                         [22m[32m1.85 MB[39m
+2026-11-12T03:59:03.8225445Z packages/javascript build: [32mESM[39m [1mdist/chunk-VRZ6LTWC.js               [22m[32m1.34 MB[39m
+2026-11-12T03:59:03.8226627Z packages/javascript build: [32mESM[39m [1mdist/chunk-22SDLDS6.js               [22m[32m2.40 MB[39m
+2026-11-12T03:59:03.8227921Z packages/javascript build: [32mESM[39m [1mdist/examples.js                     [22m[32m8.91 MB[39m
+2026-11-12T03:59:03.8229172Z packages/javascript build: [32mESM[39m ⚡️ Build success in 5535ms
+2026-11-12T03:59:05.3205216Z packages/javascript build: [plugin dts] Entry "data.d.ts" still references private shared type exports with no public re-export: Chart. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-11-12T03:59:05.3296379Z packages/javascript build: [plugin dts] Entry "node-engine.d.ts" still references private shared type exports with no public re-export: EmbeddedFace. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-11-12T03:59:05.3300169Z packages/javascript build: [plugin dts] Entry "schemas.d.ts" still references private shared type exports with no public re-export: JsonObject, JsonSchemaDocument. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-11-12T03:59:05.3361704Z packages/javascript build: [32mDTS[39m ⚡️ Build success in 6681ms
+2026-11-12T03:59:05.3363165Z packages/javascript build: [32mDTS[39m [1mdist/precompiled.d.ts               [22m[32m13.00 B[39m
+2026-11-12T03:59:05.3364856Z packages/javascript build: [32mDTS[39m [1mdist/data.d.ts                      [22m[32m2.55 KB[39m
+2026-11-12T03:59:05.3366339Z packages/javascript build: [32mDTS[39m [1mdist/deck.d.ts                      [22m[32m2.89 KB[39m
+2026-11-12T03:59:05.3367936Z packages/javascript build: [32mDTS[39m [1mdist/format.d.ts                    [22m[32m951.00 B[39m
+2026-11-12T03:59:05.3369524Z packages/javascript build: [32mDTS[39m [1mdist/ids.d.ts                       [22m[32m6.71 KB[39m
+2026-11-12T03:59:05.3371044Z packages/javascript build: [32mDTS[39m [1mdist/repo-readme.d.ts               [22m[32m139.00 B[39m
+2026-11-12T03:59:05.3372604Z packages/javascript build: [32mDTS[39m [1mdist/shape-catalog.d.ts             [22m[32m4.49 KB[39m
+2026-11-12T03:59:05.3374132Z packages/javascript build: [32mDTS[39m [1mdist/symbol-font-encodings.d.ts     [22m[32m5.56 KB[39m
+2026-11-12T03:59:05.3375773Z packages/javascript build: [32mDTS[39m [1mdist/shape-geometry.d.ts            [22m[32m7.40 KB[39m
+2026-11-12T03:59:05.3377249Z packages/javascript build: [32mDTS[39m [1mdist/docs.d.ts                      [22m[32m682.00 B[39m
+2026-11-12T03:59:05.3378842Z packages/javascript build: [32mDTS[39m [1mdist/examples.d.ts                  [22m[32m2.07 KB[39m
+2026-11-12T03:59:05.3380379Z packages/javascript build: [32mDTS[39m [1mdist/font-policy.d.ts               [22m[32m7.72 KB[39m
+2026-11-12T03:59:05.3382200Z packages/javascript build: [32mDTS[39m [1mdist/patch.d.ts                     [22m[32m10.44 KB[39m
+2026-11-12T03:59:05.3383789Z packages/javascript build: [32mDTS[39m [1mdist/schema.d.ts                    [22m[32m9.33 KB[39m
+2026-11-12T03:59:05.3385268Z packages/javascript build: [32mDTS[39m [1mdist/yaml.d.ts                      [22m[32m5.88 KB[39m
+2026-11-12T03:59:05.3386827Z packages/javascript build: [32mDTS[39m [1mdist/diff.d.ts                      [22m[32m5.80 KB[39m
+2026-11-12T03:59:05.3388380Z packages/javascript build: [32mDTS[39m [1mdist/markdown.d.ts                  [22m[32m5.02 KB[39m
+2026-11-12T03:59:05.3390059Z packages/javascript build: [32mDTS[39m [1mdist/validator.d.ts                 [22m[32m6.37 KB[39m
+2026-11-12T03:59:05.3391772Z packages/javascript build: [32mDTS[39m [1mdist/convert.d.ts                   [22m[32m14.69 KB[39m
+2026-11-12T03:59:05.3393232Z packages/javascript build: [32mDTS[39m [1mdist/node-engine.d.ts               [22m[32m11.38 KB[39m
+2026-11-12T03:59:05.3394850Z packages/javascript build: [32mDTS[39m [1mdist/source.d.ts                    [22m[32m16.21 KB[39m
+2026-11-12T03:59:05.3396318Z packages/javascript build: [32mDTS[39m [1mdist/index.d.ts                     [22m[32m39.54 KB[39m
+2026-11-12T03:59:05.3397869Z packages/javascript build: [32mDTS[39m [1mdist/schemas.d.ts                   [22m[32m14.83 KB[39m
+2026-11-12T03:59:05.3399579Z packages/javascript build: [32mDTS[39m [1mdist/spec-files.d.ts                [22m[32m1.59 KB[39m
+2026-11-12T03:59:05.3401112Z packages/javascript build: [32mDTS[39m [1mdist/types.d.ts                     [22m[32m74.64 KB[39m
+2026-11-12T03:59:05.3402774Z packages/javascript build: [32mDTS[39m [1mdist/pagination.d.ts                [22m[32m540.00 B[39m
+2026-11-12T03:59:05.3404317Z packages/javascript build: [32mDTS[39m [1mdist/composition.d.ts               [22m[32m25.59 KB[39m
+2026-11-12T03:59:05.3405978Z packages/javascript build: [32mDTS[39m [1mdist/deck-report-jjy4WO1y.d.ts      [22m[32m2.36 KB[39m
+2026-11-12T03:59:05.3407680Z packages/javascript build: [32mDTS[39m [1mdist/catalog-schemas-CiEafJRf.d.ts  [22m[32m1.70 KB[39m
+2026-11-12T03:59:05.3409313Z packages/javascript build: [32mDTS[39m [1mdist/chart-data-yEE-WzgV.d.ts       [22m[32m11.01 KB[39m
+2026-11-12T03:59:05.3411009Z packages/javascript build: [32mDTS[39m [1mdist/presentation-BdFIzc0E.d.ts     [22m[32m295.96 KB[39m
+2026-11-12T03:59:05.3412629Z packages/javascript build: [32mDTS[39m [1mdist/catalog-refs-BacOFTcg.d.ts     [22m[32m7.55 KB[39m
+2026-11-12T03:59:05.3414272Z packages/javascript build: [32mDTS[39m [1mdist/json-BFSdESOE.d.ts             [22m[32m825.00 B[39m
+2026-11-12T03:59:05.3415922Z packages/javascript build: [32mDTS[39m [1mdist/finding-l9dlQ2NF.d.ts          [22m[32m7.24 KB[39m
+2026-11-12T03:59:05.3417612Z packages/javascript build: [32mDTS[39m [1mdist/pagination-Bkn4oVmQ.d.ts       [22m[32m13.51 KB[39m
+2026-11-12T03:59:05.3419317Z packages/javascript build: [32mDTS[39m [1mdist/explain-iZeNOUc6.d.ts          [22m[32m3.89 KB[39m
+2026-11-12T03:59:05.3420971Z packages/javascript build: [32mDTS[39m [1mdist/validation-types-6VL4gx4_.d.ts [22m[32m15.15 KB[39m
+2026-11-12T03:59:05.3422580Z packages/javascript build: [32mDTS[39m [1mdist/conversion-HJPDH9Eg.d.ts       [22m[32m32.53 KB[39m
+2026-11-12T03:59:05.3424365Z packages/javascript build: [32mDTS[39m [1mdist/composition-oMPqZtbM.d.ts      [22m[32m469.41 KB[39m
+2026-11-12T03:59:05.7220062Z packages/javascript build: Minified dist/chunk-22SDLDS6.js: 2515327 -> 1924752 bytes.
+2026-11-12T03:59:05.7871705Z packages/javascript build: Done
+2026-11-12T03:59:05.7886879Z packages/render build$ node scripts/build.mjs
+2026-11-12T03:59:05.8249327Z packages/render build: Done
+2026-11-12T03:59:05.8257385Z packages/pptx build$ node scripts/build.mjs
+2026-11-12T03:59:05.8603719Z packages/pptx build: Vendored upstream distribution and license match recorded hashes.
+2026-11-12T03:59:05.8703962Z packages/pptx build: Done
+2026-11-12T03:59:05.8708637Z packages/cli build$ node ../../scripts/reuse-build.mjs check || (tsup && node ../../scripts/reuse-build.mjs stamp)
+2026-11-12T03:59:05.8710340Z packages/editor build$ node scripts/build.mjs
+2026-11-12T03:59:05.9672774Z packages/editor build: Done
+2026-11-12T03:59:06.1562756Z packages/cli build: [34mCLI[39m Building entry: {"index":"src/index.ts"}
+2026-11-12T03:59:06.1568229Z packages/cli build: [34mCLI[39m Using tsconfig: tsconfig.json
+2026-11-12T03:59:06.1570062Z packages/cli build: [34mCLI[39m tsup v9.0.0
+2026-11-12T03:59:06.1573196Z packages/cli build: [34mCLI[39m Using tsup config: /__w/opf/opf/packages/cli/tsup.config.ts
+2026-11-12T03:59:06.1584025Z packages/cli build: [34mCLI[39m Target: node24
+2026-11-12T03:59:06.1607560Z packages/cli build: [34mCLI[39m Cleaning output folder
+2026-11-12T03:59:06.1616945Z packages/cli build: [34mESM[39m Build start
+2026-11-12T03:59:06.2024321Z packages/cli build: [32mESM[39m [1mdist/index.js     [22m[32m354.20 KB[39m
+2026-11-12T03:59:06.2026470Z packages/cli build: [32mESM[39m [1mdist/index.js.map [22m[32m502.31 KB[39m
+2026-11-12T03:59:06.2027516Z packages/cli build: [32mESM[39m ⚡️ Build success in 41ms
+2026-11-12T03:59:06.2282310Z packages/cli build: Done
+2026-11-12T03:59:06.2286510Z packages/mcp build$ node ../../scripts/reuse-build.mjs check || (node scripts/build-app.mjs && tsup && node ../../scripts/reuse-build.mjs stamp)
+2026-11-12T03:59:08.0898049Z packages/mcp build: build-app: app-dist/deck-app.html 9879 KiB (script 9681 KiB, styles 193 KiB, 32 faces on request)
+2026-11-12T03:59:08.0900957Z packages/mcp build: build-app: JSON-RPC resource 10478921 bytes / 10485760 default stdio bytes (6839 bytes headroom)
+2026-11-12T03:59:08.3631325Z packages/mcp build: [34mCLI[39m Building entry: {"index":"src/index.ts","server":"src/server.ts","stdio":"src/stdio.ts","bin":"src/bin.ts"}
+2026-11-12T03:59:08.3632494Z packages/mcp build: [34mCLI[39m Using tsconfig: tsconfig.json
+2026-11-12T03:59:08.3633372Z packages/mcp build: [34mCLI[39m tsup v9.0.0
+2026-11-12T03:59:08.3634312Z packages/mcp build: [34mCLI[39m Using tsup config: /__w/opf/opf/packages/mcp/tsup.config.ts
+2026-11-12T03:59:08.3660612Z packages/mcp build: [34mCLI[39m Target: node24
+2026-11-12T03:59:08.3710352Z packages/mcp build: [34mCLI[39m Cleaning output folder
+2026-11-12T03:59:08.3720137Z packages/mcp build: [34mESM[39m Build start
+2026-11-12T03:59:08.6665801Z packages/mcp build: [34mDTS[39m Build start
+2026-11-12T03:59:09.0420442Z packages/mcp build: [32mESM[39m [1mdist/index.js              [22m[32m504.00 B[39m
+2026-11-12T03:59:09.0421973Z packages/mcp build: [32mESM[39m [1mdist/server.js             [22m[32m333.00 B[39m
+2026-11-12T03:59:09.0423303Z packages/mcp build: [32mESM[39m [1mdist/stdio.js              [22m[32m244.00 B[39m
+2026-11-12T03:59:09.0424595Z packages/mcp build: [32mESM[39m [1mdist/bin.js                [22m[32m1.55 KB[39m
+2026-11-12T03:59:09.0425685Z packages/mcp build: [32mESM[39m [1mdist/chunk-ROS4H3OS.js     [22m[32m3.53 KB[39m
+2026-11-12T03:59:09.0426476Z packages/mcp build: [32mESM[39m [1mdist/chunk-AIHGHPEB.js     [22m[32m270.06 KB[39m
+2026-11-12T03:59:09.0427132Z packages/mcp build: [32mESM[39m [1mdist/index.js.map          [22m[32m71.00 B[39m
+2026-11-12T03:59:09.0427775Z packages/mcp build: [32mESM[39m [1mdist/server.js.map         [22m[32m71.00 B[39m
+2026-11-12T03:59:09.0428355Z packages/mcp build: [32mESM[39m [1mdist/stdio.js.map          [22m[32m71.00 B[39m
+2026-11-12T03:59:09.0429500Z packages/mcp build: [32mESM[39m [1mdist/bin.js.map            [22m[32m2.17 KB[39m
+2026-11-12T03:59:09.0430548Z packages/mcp build: [32mESM[39m [1mdist/chunk-ROS4H3OS.js.map [22m[32m7.77 KB[39m
+2026-11-12T03:59:09.0431615Z packages/mcp build: [32mESM[39m [1mdist/chunk-AIHGHPEB.js.map [22m[32m342.35 KB[39m
+2026-11-12T03:59:09.0432714Z packages/mcp build: [32mESM[39m [1mdist/chunk-QMY46EDM.js     [22m[32m9.92 MB[39m
+2026-11-12T03:59:09.0434162Z packages/mcp build: [32mESM[39m [1mdist/chunk-QMY46EDM.js.map [22m[32m9.97 MB[39m
+2026-11-12T03:59:09.0435070Z packages/mcp build: [32mESM[39m ⚡️ Build success in 668ms
+2026-11-12T03:59:10.1769072Z packages/mcp build: [32mDTS[39m ⚡️ Build success in 1510ms
+2026-11-12T03:59:10.1770164Z packages/mcp build: [32mDTS[39m [1mdist/index.d.ts  [22m[32m1.83 KB[39m
+2026-11-12T03:59:10.1771199Z packages/mcp build: [32mDTS[39m [1mdist/stdio.d.ts  [22m[32m1.22 KB[39m
+2026-11-12T03:59:10.1772084Z packages/mcp build: [32mDTS[39m [1mdist/server.d.ts [22m[32m5.46 KB[39m
+2026-11-12T03:59:10.2341391Z packages/mcp build: Done
+2026-11-12T03:59:10.2598761Z ##[group]Run case "$LEG" in
+2026-11-12T03:59:10.2599374Z [36;1mcase "$LEG" in[0m
+2026-11-12T03:59:10.2599799Z [36;1m  core)[0m
+2026-11-12T03:59:10.2600230Z [36;1m    pnpm typecheck[0m
+2026-11-12T03:59:10.2600827Z [36;1m    pnpm --filter @openpresentation/opf --fail-if-no-match run test[0m
+2026-11-12T03:59:10.2601569Z [36;1m    pnpm --filter @openpresentation/cli --fail-if-no-match run test[0m
+2026-11-12T03:59:10.2602382Z [36;1m    pnpm --filter @openpresentation/mcp --fail-if-no-match run test[0m
+2026-11-12T03:59:10.2603070Z [36;1m    pnpm --filter @openpresentation/gallery --fail-if-no-match run test[0m
+2026-11-12T03:59:10.2603486Z [36;1m    ;;[0m
+2026-11-12T03:59:10.2603744Z [36;1m  render-*)[0m
+2026-11-12T03:59:10.2604173Z [36;1m    pnpm --filter @openpresentation/opf-render --fail-if-no-match run typecheck[0m
+2026-11-12T03:59:10.2604741Z [36;1m    node scripts/ci-test-shards.mjs --package render --script test --shard "${LEG#render-}/2"[0m
+2026-11-12T03:59:10.2605287Z [36;1m    ;;[0m
+2026-11-12T03:59:10.2605541Z [36;1m  pptx-*)[0m
+2026-11-12T03:59:10.2605938Z [36;1m    pnpm --filter @openpresentation/opf-pptx --fail-if-no-match run typecheck[0m
+2026-11-12T03:59:10.2606499Z [36;1m    node scripts/ci-test-shards.mjs --package pptx --script test --shard "${LEG#pptx-}/2"[0m
+2026-11-12T03:59:10.2606926Z [36;1m    ;;[0m
+2026-11-12T03:59:10.2607188Z [36;1m  editor)[0m
+2026-11-12T03:59:10.2607581Z [36;1m    pnpm --filter @openpresentation/opf-editor --fail-if-no-match run typecheck[0m
+2026-11-12T03:59:10.2608075Z [36;1m    pnpm --filter @openpresentation/opf-editor --fail-if-no-match run test[0m
+2026-11-12T03:59:10.2608660Z [36;1m    ;;[0m
+2026-11-12T03:59:10.2609000Z [36;1mesac[0m
+2026-11-12T03:59:10.2609558Z shell: sh -e {0}
+2026-11-12T03:59:10.2609817Z env:
+2026-11-12T03:59:10.2610109Z   OPF_REUSE_BUILD: 43149577020-1-node-range-22-render-2
+2026-11-12T03:59:10.2610464Z   LEG: render-2
+2026-11-12T03:59:10.2610728Z ##[endgroup]
+2026-11-12T03:59:10.5493104Z 
+2026-11-12T03:59:10.5493761Z > @openpresentation/opf-render@0.33.0 typecheck /__w/opf/opf/packages/render
+2026-11-12T03:59:10.5494405Z > node scripts/check-syntax.mjs src test scripts
+2026-11-12T03:59:10.5494686Z 
+2026-11-12T03:59:12.8856807Z 348 files checked, 0 failed
+2026-11-12T03:59:12.9492266Z ##[notice]render test: 104 command(s)
+2026-11-12T03:59:12.9498339Z + pnpm run build:deps
+2026-11-12T03:59:13.1517594Z 
+2026-11-12T03:59:13.1518732Z > @openpresentation/opf-render@0.33.0 build:deps /__w/opf/opf/packages/render
+2026-11-12T03:59:13.1519634Z > pnpm --filter "@openpresentation/opf-render^..." --fail-if-no-match run build
+2026-11-12T03:59:13.1520086Z 
+2026-11-12T03:59:13.4222462Z Scope: 2 of 9 workspace projects
+2026-11-12T03:59:13.4299471Z ../gallery build$ node scripts/build.mjs
+2026-11-12T03:59:13.5895396Z ../gallery build: Built @openpresentation/gallery: 226 content records, 40 layout previews.
+2026-11-12T03:59:13.5937459Z ../gallery build: Done
+2026-11-12T03:59:13.5945296Z ../javascript build$ node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/minify-precompiled.mjs && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)
+2026-11-12T03:59:13.6189636Z ../javascript build: reuse-build: javascript was built earlier in this CI job (OPF_REUSE_BUILD); reusing dist/
+2026-11-12T03:59:13.6208292Z ../javascript build: Done
+2026-11-12T03:59:13.6342637Z + pnpm run build
+2026-11-12T03:59:13.8408534Z 
+2026-11-12T03:59:13.8409304Z > @openpresentation/opf-render@0.33.0 build /__w/opf/opf/packages/render
+2026-11-12T03:59:13.8410046Z > node scripts/build.mjs
+2026-11-12T03:59:13.8410445Z 
+2026-11-12T03:59:13.8817699Z + node test/builtin-variables.mjs
+2026-11-12T03:59:14.4768259Z Built-in variables passed: inline and whole-field forms, speaker footer text, missing and unknown sources, template preview.
+2026-11-12T03:59:14.4863752Z + node test/bundler-safe-resolve.mjs
+2026-11-12T03:59:15.1531389Z Node entries locate harfbuzzjs, font packages and vendored fonts bundler-safely; a missing harfbuzzjs is reported.
+2026-11-12T03:59:15.1606551Z + node test/catalogs.mjs
+2026-11-12T03:59:16.1179783Z catalogs: 15 checks passed
+2026-11-12T03:59:16.1324028Z + node test/chart-alt.mjs
+2026-11-12T03:59:18.8325428Z + node test/chart-axis.mjs
+2026-11-12T03:59:21.9805919Z Chart axis passed: 15 public ordinary-range cases and 47 automatic-minimum cases; authored fractions, zero baselines, evenly spaced ticks, zero magnitude baseline for column/bar/area and top-sixth zoom retained for line, source preservation and deterministic bytes.
+2026-11-12T03:59:21.9917147Z + node test/chart-correctness.mjs
+2026-11-12T03:59:23.4603541Z Chart correctness passed: 26 checks; bars read top to bottom, a waterfall total stands on zero, axes end within 1.25 x the data.
+2026-11-12T03:59:23.4710605Z + node test/chart-followups.mjs
+2026-11-12T03:59:24.8121378Z Chart follow-ups passed: 31 checks (ring names, one plot height across siblings).
+2026-11-12T03:59:24.8225698Z + node test/chart-options.mjs
+2026-11-12T03:59:28.1904061Z Chart options: inert options leave every chart type byte-identical; legend positions, axis titles and data labels draw where the support table says.
+2026-11-12T03:59:28.2028259Z + node test/chart-reference-bar-options.mjs
+2026-11-12T03:59:28.9984512Z TAP version 13
+2026-11-12T03:59:28.9990557Z # Subtest: suite03 bar options render the missing dashed target using the same value scale as ordinary bars
+2026-11-12T03:59:28.9996263Z ok 1 - suite03 bar options render the missing dashed target using the same value scale as ordinary bars
+2026-11-12T03:59:28.9997562Z   ---
+2026-11-12T03:59:28.9997994Z   duration_ms: 343.950775
+2026-11-12T03:59:28.9998582Z   type: 'test'
+2026-11-12T03:59:28.9999158Z   ...
+2026-11-12T03:59:29.0000263Z # Subtest: active legends/title bands and percentage/negative targets preserve explicit labels and independent strokes
+2026-11-12T03:59:29.0002229Z ok 2 - active legends/title bands and percentage/negative targets preserve explicit labels and independent strokes
+2026-11-12T03:59:29.0003014Z   ---
+2026-11-12T03:59:29.0003456Z   duration_ms: 164.187341
+2026-11-12T03:59:29.0003894Z   type: 'test'
+2026-11-12T03:59:29.0004321Z   ...
+2026-11-12T03:59:29.0010774Z 1..2
+2026-11-12T03:59:29.0011064Z # tests 2
+2026-11-12T03:59:29.0012067Z # suites 0
+2026-11-12T03:59:29.0013156Z # pass 2
+2026-11-12T03:59:29.0013808Z # fail 0
+2026-11-12T03:59:29.0014212Z # cancelled 0
+2026-11-12T03:59:29.0014773Z # skipped 0
+2026-11-12T03:59:29.0015143Z # todo 0
+2026-11-12T03:59:29.0015544Z # duration_ms 514.265157
+2026-11-12T03:59:29.0124212Z + node test/chart-rtl-data-labels.mjs
+2026-11-12T03:59:29.6782733Z Line/area data labels follow actual LTR/RTL category coordinates.
+2026-11-12T03:59:29.6864751Z + node test/chart-scale.mjs
+2026-11-12T03:59:53.4879563Z Chart scales passed: 36 public finite-value geometry cases; 8 explicit aggregate-overflow rejections.
+2026-11-12T03:59:53.5000660Z + node test/chart-scheme-palette.mjs
+2026-11-12T03:59:54.8907215Z Chart scheme palette passed: series colours follow the colour scheme, the value axis and text size are core's.
+2026-11-12T03:59:54.8999705Z + node test/chart-table-data.mjs
+2026-11-12T03:59:57.9399092Z Chart and table data passed: strict numbers, formatted labels, ticks and cells, DataColumn headers, dataset charts and tables, mapping, scatter X, trace paths.
+2026-11-12T03:59:57.9517309Z + node test/color-roles.mjs
+2026-11-12T03:59:58.5544488Z Color roles: preview roles, dark-slide text, background role and link colors follow core resolveColorRoles.
+2026-11-12T03:59:58.5620106Z + node test/combo-charts.mjs
+2026-11-12T03:59:59.3656768Z Combo charts passed: columns, lines with markers, secondary axis scale and format, legend keys, axis titles, labels, RTL.
+2026-11-12T03:59:59.3754888Z + node test/core-features.mjs
+2026-11-12T03:59:59.6531791Z Core features: 77 required exports, 138 imported names resolve, no feature detection, /fonts re-exports core's helpers.
+2026-11-12T03:59:59.6708748Z + node test/data-readability.mjs
+2026-11-12T04:00:00.3608337Z Data readability passed: metric value 4.5:1 on the default navy, horizontal table rules, no chart frame, five intervals and series 1 at 4.5:1.
+2026-11-12T04:00:00.3766031Z + node test/default-font-scheme.mjs
+2026-11-12T04:00:04.9620002Z shared engine default font scheme (Aptos Display / Aptos): estimated and measured previews match the no-design path
+2026-11-12T04:00:05.0449195Z unresolved font schemes: engine default base and one unresolved-reference diagnostic, as in every engine
+2026-11-12T04:00:05.0716630Z + node test/design-fields.mjs
+2026-11-12T04:00:07.9481296Z Design fields passed: 9 groups (cover and section logo, design.logo override and false, onLight/onDark tone, partner and row-laid zone logos, picture bullets, accent font).
+2026-11-12T04:00:08.1787887Z + node test/design-preview.mjs
+2026-11-12T04:00:08.7022673Z Design preview: header/footer zones, inheritance suppression, angles, opacity, patterns, image background and watermark passed.
+2026-11-12T04:00:08.9743940Z Design preview alignment: the heading group uses titleAlignment (default left) and body uses contentAlignment with estimated and outline measurement.
+2026-11-12T04:00:09.2178546Z + node test/embedded-font-data-url.mjs
+2026-11-12T04:00:10.3221793Z Embedded-font data URLs: actual Noto Sans JP 7641925 characters, whole-byte embedding/cache mutations, four MIME types, exact alphabet/endings and coercion passed.
+2026-11-12T04:00:10.3353538Z + node test/emoji-math.mjs
+2026-11-12T04:00:17.2045563Z {"test":"emoji-math","sequences":10,"emojiAdvanceEm":1.2451171875,"segoeAdvanceEm":1.373,"mathCorpus":31,"stixMeanAbs":4.98,"stixMaxAbs":18.16,"raster":"monochrome Noto Emoji"}
+2026-11-12T04:00:17.2475091Z + node test/extra-lazy-fonts.mjs
+2026-11-12T04:01:51.0584070Z {"test":"extra-lazy-fonts","extraFaces":32,"decks":298,"plannedFiles":897}
+2026-11-12T04:01:51.0874704Z + node test/fa-13-conveniences.mjs
+2026-11-12T04:01:51.7658270Z FA-13: presets, code highlight, text watermark, inline code and run language render in the SVG preview.
+2026-11-12T04:01:51.7740532Z + node test/fixed-background-layout-variants.mjs
+2026-11-12T04:01:52.5042224Z fixed background layout variants: ok
+2026-11-12T04:01:52.5138985Z + node test/font-buffer-ownership.mjs
+2026-11-12T04:01:52.9975494Z {"passed":true,"rows":[{"route":"public registry/outlines","kind":"Buffer","bytesUnchanged":true,"diagnostics":[]},{"route":"public registry/outlines","kind":"Uint8Array","bytesUnchanged":true,"diagnostics":[]},{"route":"direct FontLibrary/fontData","kind":"Buffer","bytesUnchanged":true},{"route":"direct FontLibrary/fontData","kind":"Uint8Array","bytesUnchanged":true}],"sourceFont":{"bytes":159108,"sha256":"15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459","signature":"00010000","tableCount":18,"fsType":0},"noPermissionOrShapingGuardChanged":true}
+2026-11-12T04:01:53.0071284Z + node test/font-policy.mjs
+2026-11-12T04:01:53.9629665Z {"test":"font-policy","rows":168,"decisions":["aptos-preview","segoe-ui-preview","cambria-tier"],"bundledPreview":{"latin":53,"declared":51,"alternate":2,"unavailable":["Angsana New","Aparajita","Arabic Typesetting","Batang","BatangChe","DaunPenh","David","DilleniaUPC","FangSong","Gautami","Gisha","Gungsuh","GungsuhChe","Kalinga","Kartika","Khmer UI","Latha","Malgun Gothic","Mangal","Meiryo","Microsoft JhengHei","Microsoft YaHei","MingLiU","Miriam","MS Gothic","MS Mincho","Nirmala UI","Nyala","PMingLiU","Raavi","Sakkal Majalla","Segoe UI Emoji","Shonar Bangla","Shruti","SimHei","SimSun","Sylfaen","Traditional Arabic","Tunga","Vrinda","Yu Gothic"]}}
+2026-11-12T04:01:53.9776115Z + node test/font-subset-reference-glyphs.mjs
+2026-11-12T04:01:56.0508832Z Subset reference glyphs: 8 actual font subsets retain named X/o and identical sample shaping.
+2026-11-12T04:01:56.1176348Z + node test/furniture.mjs
+2026-11-12T04:01:57.1573754Z Furniture renderer passed: shared readable fields, combined image/text, generated metadata, fit images, local disabling and unresolved-content rejection.
+2026-11-12T04:01:57.2462171Z + node test/glyph-fallback.mjs
+2026-11-12T04:02:08.0382559Z Glyph fallback passed: 15 scheme and script cases, CJK Han fallback, strict faces, chain order, notes, estimated stacks and raster.
+2026-11-12T04:02:08.0900006Z + node test/golden.mjs
+2026-11-12T04:02:26.8230905Z Golden passed: 966 slides, 149 decks (0 new, 0 removed) (18.4 s).
+2026-11-12T04:02:26.8839783Z + node test/harfbuzz-measurement.mjs
+2026-11-12T04:02:34.7877769Z HarfBuzz layout measurement: 140 independently shaped samples; 3 widths changed from fontkit; direction/cache/fallback and Latin advances pass.
+2026-11-12T04:02:34.8319934Z + node test/hb-cluster-carriers.mjs
+2026-11-12T04:02:35.0342410Z {"status":"PASS","cases":13,"maxTextUtf16":8100,"fonts":5,"fontBytes":27144952,"allGlyphFieldsAndCodePoints":true,"wasmSha256":"6eeed8e1bc9ad7773038e48ff8f9e07e0ad228572c594b45e5357e9c2f7a0b2e"}
+2026-11-12T04:02:35.0403801Z + node test/icons.mjs
+2026-11-12T04:02:35.7740429Z icons passed: 9 checks (chips and glyphs at core's geometry and colors, a multicolor picture, nothing without icons).
+2026-11-12T04:02:35.7844901Z + node test/image-blocks.mjs
+2026-11-12T04:02:36.6482430Z image blocks: 24 render checks passed
+2026-11-12T04:02:36.6601029Z + node test/image-placeholders.mjs
+2026-11-12T04:02:37.2009364Z Image placeholders passed: 8 source-preserving theme, bounded-label/icon, accessible-description, alias override and resolver cases; opacity preserved and asset failures explicit.
+2026-11-12T04:02:37.2089504Z + node test/latin-face-coverage.mjs
+2026-11-12T04:02:37.5230649Z Informational Latin-face coverage retains literal s, excludes mixed whitespace and reports real missing glyphs.
+2026-11-12T04:02:37.5297874Z + node test/latin-family-hosts.mjs
+2026-11-12T04:02:45.4446371Z Latin family hosts (Node): 87 families, 348 family-styles resolved to the route face at the face's own advances, 333 route faces painted by resvg as themselves.
+2026-11-12T04:02:45.4733425Z + node test/layout-templates.mjs
+2026-11-12T04:05:56.5907507Z Layout templates: 1385 region items, 664 cards, 95 bled pictures and 30 lists in columns drawn from core's geometry; 53 overflowing slides paginate into 238 pages with no text-overflow and 12731 region elements inside their region boxes.
+2026-11-12T04:05:57.0130097Z Gallery2 alignment: 120 registered layout/alignment cases preserve traced anchors.
+2026-11-12T04:05:57.0665314Z + node test/lazy-converters.mjs
+2026-11-12T04:05:57.8583386Z lazy converters: optional peers, converter-missing, font-package errors and the png/pdf subpaths pass
+2026-11-12T04:05:57.8696359Z + node test/lazy-face-fallback.mjs
+2026-11-12T04:06:17.3444946Z Lazy face fallback passed: 59 renders (Aptos, Calibri and Open Sans with Japanese, Arabic, Greek and Cyrillic; script-named schemes), strict failures, selection API.
+2026-11-12T04:06:17.3739377Z + node test/lh-105-few-charts.mjs
+2026-11-12T04:06:18.3037867Z LH-105 preview passed: 19 checks (no panel, soft colours, six intervals, title focus, line-end labels, pie slice names, emphasis over time).
+2026-11-12T04:06:18.3128046Z + node test/lh-106-slide-language.mjs
+2026-11-12T04:06:18.9752500Z LH-106: per-slide SVG language, direction and number formats
+2026-11-12T04:06:18.9854335Z + node test/lh-113-shared-emphasis.mjs
+2026-11-12T04:06:19.9223856Z lh-113-shared-emphasis: 11 checks passed
+2026-11-12T04:06:19.9331799Z + node test/lh-118-bidi-numbers.mjs
+2026-11-12T04:06:20.7010057Z LH-117/118/120 preview passed: 14 checks (bidi-safe numbers, no trend word, numeric columns end-aligned, bar labels wrap).
+2026-11-12T04:06:20.7107447Z + node test/lh-121-localized-status.mjs
+2026-11-12T04:06:21.3155743Z LH-121: French, Arabic, Japanese and Traditional Chinese SVG status words.
+2026-11-12T04:06:21.3254417Z + node test/lh-133-faq-takeaways.mjs
+2026-11-12T04:06:21.9672849Z LH-133 and LH-134: the preview draws accent terms, accent rules and numerals
+2026-11-12T04:06:21.9754370Z + node test/lh-153-chart-follow-ups.mjs
+2026-11-12T04:06:23.2140377Z lh-153-chart-follow-ups render: 27 checks
+2026-11-12T04:06:23.2243313Z + node test/lh-160-chart-labels.mjs
+2026-11-12T04:06:26.5028333Z lh-160-chart-labels render: 122 checks
+2026-11-12T04:06:26.5192564Z + node test/lh-177-latin-family-contract.mjs
+2026-11-12T04:06:27.4303357Z LH-177 Latin fixture: named Light/Semilight defaults, styles, heading/rich runs and four planned faces; explicit parent 700 and heavier-family controls pass.
+2026-11-12T04:06:27.4472489Z + node test/lh-34-image-callouts.mjs
+2026-11-12T04:06:28.2932546Z image callout SVG: exact physical frame geometry, text above mask/overlay, unavailable pixels preserve labels
+2026-11-12T04:06:28.7112741Z + node test/lh-wave-4-funnel-colors.mjs
+2026-11-12T04:06:29.4093660Z LH wave 4 funnel colors passed: 4 checks (a funnel without a focus keeps the scheme's series color).
+2026-11-12T04:06:29.4247874Z + node test/list-marker-glyphs.mjs
+2026-11-12T04:06:30.3444015Z List marker glyphs passed: 127 bundled faces have • and –; 10 drawn markers measured without a missing glyph (27 families lack ◦ or ▪).
+2026-11-12T04:06:30.3651388Z + node test/measure-determinism.mjs
+2026-11-12T04:06:32.9991741Z Measurement determinism passed: 4 trigger sequences leave the Bengali body at 354.9 px, 7 script decks render alike alone, in order, in reverse and interleaved.
+2026-11-12T04:06:33.0164921Z + node test/metric-sentiment.mjs
+2026-11-12T04:06:34.1109728Z FA-06 metric sentiment: 18 trend/sentiment/background combinations drawn with the trend's arrow and the sentiment's colour; default sentiment and absent sentiment are byte-identical.
+2026-11-12T04:06:34.1224799Z + node test/neutral-scaffolding.mjs
+2026-11-12T04:06:35.0418180Z Neutral SVG rules, numeric/explicit alignment and positive/negative/mixed zero-baseline bars passed.
+2026-11-12T04:06:35.0508782Z + node test/node-color-raster.mjs
+2026-11-12T04:06:35.6889978Z TAP version 13
+2026-11-12T04:06:38.9075327Z # Subtest: the same demand handle preserves color SVG and exact PNG/raster-PDF companion bytes
+2026-11-12T04:06:38.9078295Z ok 1 - the same demand handle preserves color SVG and exact PNG/raster-PDF companion bytes
+2026-11-12T04:06:38.9080003Z   ---
+2026-11-12T04:06:38.9080469Z   duration_ms: 3507.024618
+2026-11-12T04:06:38.9080740Z   type: 'test'
+2026-11-12T04:06:38.9081040Z   ...
+2026-11-12T04:06:39.0142015Z # Subtest: demand raster paints the pinned monochrome glyph, not a blank or another font fallback
+2026-11-12T04:06:39.0143297Z ok 2 - demand raster paints the pinned monochrome glyph, not a blank or another font fallback
+2026-11-12T04:06:39.0144069Z   ---
+2026-11-12T04:06:39.0144576Z   duration_ms: 110.720431
+2026-11-12T04:06:39.0144972Z   type: 'test'
+2026-11-12T04:06:39.0145313Z   ...
+2026-11-12T04:06:39.0372360Z # Subtest: plain documents do not resolve/read color dependencies or load unrelated scripts/styles
+2026-11-12T04:06:39.0373644Z ok 3 - plain documents do not resolve/read color dependencies or load unrelated scripts/styles
+2026-11-12T04:06:39.0374611Z   ---
+2026-11-12T04:06:39.0375117Z   duration_ms: 22.774103
+2026-11-12T04:06:39.0375654Z   type: 'test'
+2026-11-12T04:06:39.0376120Z   ...
+2026-11-12T04:06:39.7031820Z # Subtest: edits prepare the effective raster dependency once and preserve the same handle through repeat/concurrent ensure
+2026-11-12T04:06:39.7033239Z ok 4 - edits prepare the effective raster dependency once and preserve the same handle through repeat/concurrent ensure
+2026-11-12T04:06:39.7034457Z   ---
+2026-11-12T04:06:39.7035120Z   duration_ms: 675.313928
+2026-11-12T04:06:39.7036112Z   type: 'test'
+2026-11-12T04:06:39.7036605Z   ...
+2026-11-12T04:06:39.7490130Z # Subtest: a caller-owned same-name face does not acquire a manifest raster dependency
+2026-11-12T04:06:39.7491441Z ok 5 - a caller-owned same-name face does not acquire a manifest raster dependency
+2026-11-12T04:06:39.7492051Z   ---
+2026-11-12T04:06:39.7492383Z   duration_ms: 23.301198
+2026-11-12T04:06:39.7492796Z   type: 'test'
+2026-11-12T04:06:39.7493164Z   ...
+2026-11-12T04:06:42.0426371Z # Subtest: initial script reporting keeps declared package order and actual symbol SVG/PNG bytes
+2026-11-12T04:06:42.0427558Z ok 6 - initial script reporting keeps declared package order and actual symbol SVG/PNG bytes
+2026-11-12T04:06:42.0428079Z   ---
+2026-11-12T04:06:42.0428356Z   duration_ms: 2304.701718
+2026-11-12T04:06:42.0428865Z   type: 'test'
+2026-11-12T04:06:42.0429164Z   ...
+2026-11-12T04:06:45.3764372Z # Subtest: incremental script reporting preserves the prior ensure prefix, current declared order and deduplication
+2026-11-12T04:06:45.3765763Z ok 7 - incremental script reporting preserves the prior ensure prefix, current declared order and deduplication
+2026-11-12T04:06:45.3766515Z   ---
+2026-11-12T04:06:45.3766874Z   duration_ms: 179.01502
+2026-11-12T04:06:45.3767312Z   type: 'test'
+2026-11-12T04:06:45.3767576Z   ...
+2026-11-12T04:06:45.3768170Z # Subtest: missing raster companion refuses with the typed public error; no package mutation and same-handle retry succeeds
+2026-11-12T04:06:45.3769192Z ok 8 - missing raster companion refuses with the typed public error; no package mutation and same-handle retry succeeds
+2026-11-12T04:06:45.3769919Z   ---
+2026-11-12T04:06:45.3770422Z   duration_ms: 769.260151
+2026-11-12T04:06:45.3770799Z   type: 'test'
+2026-11-12T04:06:45.3771142Z   ...
+2026-11-12T04:06:45.3772019Z # Subtest: integrity raster companion refuses with the typed public error; no package mutation and same-handle retry succeeds
+2026-11-12T04:06:45.3773244Z ok 9 - integrity raster companion refuses with the typed public error; no package mutation and same-handle retry succeeds
+2026-11-12T04:06:45.3774016Z   ---
+2026-11-12T04:06:45.3774367Z   duration_ms: 787.376882
+2026-11-12T04:06:45.3774778Z   type: 'test'
+2026-11-12T04:06:45.3775105Z   ...
+2026-11-12T04:06:45.3775937Z # Subtest: color-missing: package reporting describes only actual verified resources and strict glyph coverage
+2026-11-12T04:06:45.3777088Z ok 10 - color-missing: package reporting describes only actual verified resources and strict glyph coverage
+2026-11-12T04:06:45.3777734Z   ---
+2026-11-12T04:06:45.3778138Z   duration_ms: 891.521015
+2026-11-12T04:06:45.3778599Z   type: 'test'
+2026-11-12T04:06:45.3778983Z   ...
+2026-11-12T04:06:45.3779769Z # Subtest: math-unneeded: package reporting describes only actual verified resources and strict glyph coverage
+2026-11-12T04:06:45.3781359Z ok 11 - math-unneeded: package reporting describes only actual verified resources and strict glyph coverage
+2026-11-12T04:06:45.3782067Z   ---
+2026-11-12T04:06:45.3782452Z   duration_ms: 714.877487
+2026-11-12T04:06:45.3782864Z   type: 'test'
+2026-11-12T04:06:45.3783184Z   ...
+2026-11-12T04:06:45.3783549Z 1..11
+2026-11-12T04:06:45.3783858Z # tests 11
+2026-11-12T04:06:45.3784190Z # suites 0
+2026-11-12T04:06:45.3784541Z # pass 11
+2026-11-12T04:06:45.3784891Z # fail 0
+2026-11-12T04:06:45.3787512Z # cancelled 0
+2026-11-12T04:06:45.3787882Z # skipped 0
+2026-11-12T04:06:45.3788253Z # todo 0
+2026-11-12T04:06:45.3788732Z # duration_ms 9991.957398
+2026-11-12T04:06:45.4135303Z + node test/node-demand-fonts.mjs
+2026-11-12T04:06:45.7134315Z TAP version 13
+2026-11-12T04:06:49.4778952Z # Subtest: presentation demand holds only the two/three actual default faces; no-presentation whole pack stays explicit
+2026-11-12T04:06:49.4781604Z ok 1 - presentation demand holds only the two/three actual default faces; no-presentation whole pack stays explicit
+2026-11-12T04:06:49.4782508Z   ---
+2026-11-12T04:06:49.4782918Z   duration_ms: 3754.399733
+2026-11-12T04:06:49.4783503Z   type: 'test'
+2026-11-12T04:06:49.4784549Z   ...
+2026-11-12T04:06:49.4785512Z # Subtest: neutral and valid no-text documents need zero faces without weakening default empty-registry refusal
+2026-11-12T04:06:49.4786578Z ok 2 - neutral and valid no-text documents need zero faces without weakening default empty-registry refusal
+2026-11-12T04:06:49.4787389Z   ---
+2026-11-12T04:06:49.4787779Z   duration_ms: 5.881928
+2026-11-12T04:06:49.4788098Z   type: 'test'
+2026-11-12T04:06:49.4788735Z   ...
+2026-11-12T04:06:49.9746295Z # Subtest: edits add only missing bold/italic and family faces; concurrent ensure is serialized and duplicate-free
+2026-11-12T04:06:49.9747689Z ok 3 - edits add only missing bold/italic and family faces; concurrent ensure is serialized and duplicate-free
+2026-11-12T04:06:49.9748244Z   ---
+2026-11-12T04:06:49.9748850Z   duration_ms: 502.626099
+2026-11-12T04:06:49.9749251Z   type: 'test'
+2026-11-12T04:06:49.9749653Z   ...
+2026-11-12T04:06:50.0138005Z # Subtest: caller faces stay explicit and take precedence while unknown/policy-disallowed families stay errors
+2026-11-12T04:06:50.0139277Z ok 4 - caller faces stay explicit and take precedence while unknown/policy-disallowed families stay errors
+2026-11-12T04:06:50.0140221Z   ---
+2026-11-12T04:06:50.0140850Z   duration_ms: 33.269858
+2026-11-12T04:06:50.0141406Z   type: 'test'
+2026-11-12T04:06:50.0141869Z   ...
+2026-11-12T04:07:05.4431295Z # Subtest: CJK, Arabic and Greek fallback retain exact eager SVG and actual weight/style choices
+2026-11-12T04:07:05.4435542Z ok 5 - CJK, Arabic and Greek fallback retain exact eager SVG and actual weight/style choices
+2026-11-12T04:07:05.4436345Z   ---
+2026-11-12T04:07:05.4437324Z   duration_ms: 15434.31368
+2026-11-12T04:07:05.4437824Z   type: 'test'
+2026-11-12T04:07:05.4438370Z   ...
+2026-11-12T04:07:07.5733087Z # Subtest: the generated preferred-family companion exactly matches every pinned physical candidate
+2026-11-12T04:07:07.5734667Z ok 6 - the generated preferred-family companion exactly matches every pinned physical candidate
+2026-11-12T04:07:07.5735630Z   ---
+2026-11-12T04:07:07.5736687Z   duration_ms: 140.285748
+2026-11-12T04:07:07.5737023Z   type: 'test'
+2026-11-12T04:07:07.5737585Z   ...
+2026-11-12T04:07:07.5738366Z # Subtest: unused optional packages are never resolved; missing needed faces fail honestly and failed ensure retries
+2026-11-12T04:07:07.5739838Z ok 7 - unused optional packages are never resolved; missing needed faces fail honestly and failed ensure retries
+2026-11-12T04:07:07.5740644Z   ---
+2026-11-12T04:07:07.5741062Z   duration_ms: 1976.083832
+2026-11-12T04:07:07.5741631Z   type: 'test'
+2026-11-12T04:07:07.5742086Z   ...
+2026-11-12T04:07:15.2598746Z # Subtest: style-only metadata keeps absent roles cheap and exact while unprepared measured weights still refuse
+2026-11-12T04:07:15.2599950Z ok 8 - style-only metadata keeps absent roles cheap and exact while unprepared measured weights still refuse
+2026-11-12T04:07:15.2600750Z   ---
+2026-11-12T04:07:15.2601058Z   duration_ms: 48.81154
+2026-11-12T04:07:15.2601395Z   type: 'test'
+2026-11-12T04:07:15.2601694Z   ...
+2026-11-12T04:07:15.2602327Z # Subtest: optional script absence retains bounded fallback ordering and all-unavailable diagnostics without weakening real measurement
+2026-11-12T04:07:15.2603244Z ok 9 - optional script absence retains bounded fallback ordering and all-unavailable diagnostics without weakening real measurement
+2026-11-12T04:07:15.2603808Z   ---
+2026-11-12T04:07:15.2604073Z   duration_ms: 7651.599492
+2026-11-12T04:07:15.2604346Z   type: 'test'
+2026-11-12T04:07:15.2604666Z   ...
+2026-11-12T04:07:15.6801822Z # Subtest: explicit aliases and fallbackFamily select the same single actual face as the whole base pack
+2026-11-12T04:07:15.6803373Z ok 10 - explicit aliases and fallbackFamily select the same single actual face as the whole base pack
+2026-11-12T04:07:15.6804267Z   ---
+2026-11-12T04:07:15.6804679Z   duration_ms: 405.57776
+2026-11-12T04:07:15.6805147Z   type: 'test'
+2026-11-12T04:07:15.6805481Z   ...
+2026-11-12T04:07:15.8168919Z # Subtest: document preparation preserves unresolved-family inspection; actual measurement and drawing still refuse
+2026-11-12T04:07:15.8170310Z ok 11 - document preparation preserves unresolved-family inspection; actual measurement and drawing still refuse
+2026-11-12T04:07:15.8170866Z   ---
+2026-11-12T04:07:15.8171168Z   duration_ms: 151.858933
+2026-11-12T04:07:15.8171498Z   type: 'test'
+2026-11-12T04:07:15.8171790Z   ...
+2026-11-12T04:07:15.8177481Z 1..11
+2026-11-12T04:07:15.8178631Z # tests 11
+2026-11-12T04:07:15.8179176Z # suites 0
+2026-11-12T04:07:15.8179556Z # pass 11
+2026-11-12T04:07:15.8179901Z # fail 0
+2026-11-12T04:07:15.8180369Z # cancelled 0
+2026-11-12T04:07:15.8180731Z # skipped 0
+2026-11-12T04:07:15.8181416Z # todo 0
+2026-11-12T04:07:15.8181857Z # duration_ms 30109.773176
+2026-11-12T04:07:15.8577510Z + node test/office-fonts.mjs
+2026-11-12T04:07:22.0073681Z Office font policy passed: 24 bundled faces plus the default Noto Sans fallback, exact-first lookup, scoped metric claims, theme aliases, explicit approximate fallback, and symbol/math/coverage errors.
+2026-11-12T04:07:22.0400915Z + node test/overflow-integrity.mjs
+2026-11-12T04:07:22.6391722Z overflow integrity: the code layout with five blocks draws with its finding; strict fails
+2026-11-12T04:07:22.6479497Z + node test/placeholder-groups.mjs
+2026-11-12T04:07:23.5912259Z placeholder groups: 33 leaves of 10 slides drawn in their composed boxes; automatic chartPrimary preserves its direct group arrangement
+2026-11-12T04:07:23.6008968Z + node test/preview-fonts-fontconfig.mjs
+2026-11-12T04:07:24.5703931Z opf-preview-fonts --fontconfig: 98 font-policy aliases and the font directory
+2026-11-12T04:07:24.5779173Z + node test/quote-photo.mjs
+2026-11-12T04:07:25.8964307Z Quote photo: circle clip at the core frame, cover crop, alt text, mirrored in a right-to-left deck, unique clip ids, placeholder for an unresolved source; no photo changes nothing; a wide quote portrait is placed around its focus in its rounded frame.
+2026-11-12T04:07:25.9128767Z + node test/raster-script-clusters.mjs
+2026-11-12T04:07:29.5897203Z Raster script clusters: segmentation, rewrite, five languages through toSvg + toPng + toPdf, Latin untouched.
+2026-11-12T04:07:29.6114319Z + node test/rich-headings.mjs
+2026-11-12T04:07:30.3986233Z Rich headings passed.
+2026-11-12T04:07:30.4134596Z + node test/rich-table.mjs
+2026-11-12T04:07:31.1150804Z Rich table renderer passed: formatted cell/header runs, trace paths, links, empty rich cells, PNG output and strict overflow.
+2026-11-12T04:07:31.1319834Z + node test/rich-trace.mjs
+2026-11-12T04:07:31.6476702Z Rich trace passed: leading/trailing blank lines, CRLF, cross-run offsets and measured heights.
+2026-11-12T04:07:31.6647211Z + node test/root-name-cache-boundary.mjs
+2026-11-12T04:07:32.5635072Z Root-name cache boundary: fresh LTR/RTL accessible names, no implicit visible title, actual header/footer variable expansion and complete cold-report equality passed.
+2026-11-12T04:07:32.5737436Z + node test/rtl-layout.mjs
+2026-11-12T04:07:33.3120010Z RTL layout passed: logical alignment, bullet side, mirrored regions, table columns, chart categories and per-paragraph line direction.
+2026-11-12T04:07:33.3213687Z + node test/rtl-marker-backends.mjs
+2026-11-12T04:07:35.1676852Z {"passed":true,"groups":6,"actualPng":{"bytes":12172,"sha256":"8b36fd144f61e28714dcf24c0432246e649f243702ca474ff353e1774094cefa"},"nativePixelsAccepted":false}
+2026-11-12T04:07:35.1875212Z + node test/rtl-mixed-runs.mjs
+2026-11-12T04:07:38.0525812Z RTL mixed runs: run-boundary spaces, right-to-left bullet clearance and the Latin face of Arabic list items match the body.
+2026-11-12T04:07:38.0801431Z + node test/script-corpora-order.mjs
+2026-11-12T04:07:38.1103171Z Script corpus order: actual observation callback ignores whitespace/isolates, retains literal s and uses UTF-16 addresses. No browser/native qualification.
+2026-11-12T04:07:38.1126054Z + node test/script-family-hosts.mjs
+2026-11-12T04:07:46.0451976Z Script family hosts (Node): 35 families, 137 styles resolved to the family itself, 350 runs drawn strictly in it at the face's own advances, 67 faces painted by resvg as themselves.
+2026-11-12T04:07:46.0810910Z + node test/script-font-encoded-weight.mjs
+2026-11-12T04:07:46.6876906Z TAP version 13
+2026-11-12T04:07:46.7513761Z # Subtest: a chosen Arial Black Latin run checks the exact 900 face it measures, without preparing an unrelated 700 face
+2026-11-12T04:07:46.7516562Z ok 1 - a chosen Arial Black Latin run checks the exact 900 face it measures, without preparing an unrelated 700 face
+2026-11-12T04:07:46.7519893Z   ---
+2026-11-12T04:07:46.7520215Z   duration_ms: 367.902749
+2026-11-12T04:07:46.7520725Z   type: 'test'
+2026-11-12T04:07:46.7521107Z   ...
+2026-11-12T04:07:46.7525845Z 1..1
+2026-11-12T04:07:46.7527346Z # tests 1
+2026-11-12T04:07:46.7528114Z # suites 0
+2026-11-12T04:07:46.7529569Z # pass 1
+2026-11-12T04:07:46.7530252Z # fail 0
+2026-11-12T04:07:46.7532853Z # cancelled 0
+2026-11-12T04:07:46.7533659Z # skipped 0
+2026-11-12T04:07:46.7533933Z # todo 0
+2026-11-12T04:07:46.7534196Z # duration_ms 372.15582
+2026-11-12T04:07:46.7674634Z + node test/script-fonts-auto-robust.mjs
+2026-11-12T04:08:00.7161314Z Auto script fonts robustness: drawn-text detection, 149-deck parity corpus, all-or-nothing browser loads, dispose and abort, stale substitutions, used-only embedding, glyph fallback faces.
+2026-11-12T04:08:00.7676615Z + node test/script-fonts.mjs
+2026-11-12T04:08:03.3686846Z Script fonts passed: 11 script classes (latin:Roboto, cyrillic:Roboto, greek:Roboto, ja:Noto Sans JP, zh-Hans:Noto Sans SC, zh-Hant:Noto Sans TC, ko:Noto Sans KR, ar:Noto Naskh Arabic, he:Noto Serif Hebrew, hi:Noto Sans Devanagari, th:Noto Sans Thai), mixed-script runs, lang, RTL isolates, estimated stacks, deterministic raster and 37 pinned OFL packages.
+2026-11-12T04:08:03.3933133Z + node test/script-name-hosts.mjs
+2026-11-12T04:08:17.9424819Z Script name hosts (Node): 23 proprietary names resolved to their policy routes (46 resolutions), 25 scripts drawn in their route faces with 1509 run checks, 30 route faces painted by resvg from their pinned files.
+2026-11-12T04:08:17.9761575Z + node test/sh-04-overlays.mjs
+2026-11-12T04:08:18.6075531Z sh-04 overlays: ok
+2026-11-12T04:08:18.6118120Z sh-04 overlay layers: ok
+2026-11-12T04:08:18.6211670Z + node test/sh-09-arrangements.mjs
+2026-11-12T04:08:19.1463961Z SH-09 arrangements passed: pyramid levels and matrix quadrants with the diamond, in the primary with background outlines, under centered entries.
+2026-11-12T04:08:19.1539774Z + node test/sh-13-plantuml-preview.mjs
+2026-11-12T04:08:19.8721042Z SH-13 preview: PlantUML diagrams draw as their Mermaid family, a refused one as the placeholder
+2026-11-12T04:08:19.8905888Z + node test/sh-18-cycle.mjs
+2026-11-12T04:08:20.4588399Z SH-18 cycles passed: Basic Cycle circles with an arrow after each, and OPF's own cycle, in the primary under centered entries.
+2026-11-12T04:08:20.4711107Z + node test/sh-25-chart-point-anchors.mjs
+2026-11-12T04:08:22.0141205Z SH25:18 actual SVG bar/marker bounds and overlay centers match shared geometry, including RTL and scatter X columns.
+2026-11-12T04:08:22.0260050Z + node test/sh26-readable-fallbacks.mjs
+2026-11-12T04:08:23.2175010Z TAP version 13
+2026-11-12T04:08:26.1622617Z # Subtest: SH-26 measured inverted-pyramid: real office fonts refuse the unfit32px body and paginate complete items without shrinking
+2026-11-12T04:08:26.1626781Z ok 1 - SH-26 measured inverted-pyramid: real office fonts refuse the unfit32px body and paginate complete items without shrinking
+2026-11-12T04:08:26.1627717Z   ---
+2026-11-12T04:08:26.1628093Z   duration_ms: 3294.131002
+2026-11-12T04:08:26.1628319Z   type: 'test'
+2026-11-12T04:08:26.1628648Z   ...
+2026-11-12T04:08:29.0118309Z # Subtest: SH-26 measured org-chart: real office fonts refuse the unfit32px body and paginate complete items without shrinking
+2026-11-12T04:08:29.0120086Z ok 2 - SH-26 measured org-chart: real office fonts refuse the unfit32px body and paginate complete items without shrinking
+2026-11-12T04:08:29.0120861Z   ---
+2026-11-12T04:08:29.0121618Z   duration_ms: 2850.596752
+2026-11-12T04:08:29.0122270Z   type: 'test'
+2026-11-12T04:08:29.0122456Z   ...
+2026-11-12T04:08:31.7797631Z # Subtest: SH-26 measured hierarchy: real office fonts refuse the unfit32px body and paginate complete items without shrinking
+2026-11-12T04:08:31.7798921Z ok 3 - SH-26 measured hierarchy: real office fonts refuse the unfit32px body and paginate complete items without shrinking
+2026-11-12T04:08:31.7799544Z   ---
+2026-11-12T04:08:31.7799742Z   duration_ms: 2774.682611
+2026-11-12T04:08:31.7799952Z   type: 'test'
+2026-11-12T04:08:31.7800140Z   ...
+2026-11-12T04:08:34.6059329Z # Subtest: SH-26 measured venn: real office fonts refuse the unfit32px body and paginate complete items without shrinking
+2026-11-12T04:08:34.6061085Z ok 4 - SH-26 measured venn: real office fonts refuse the unfit32px body and paginate complete items without shrinking
+2026-11-12T04:08:34.6063954Z   ---
+2026-11-12T04:08:34.6064323Z   duration_ms: 2722.394511
+2026-11-12T04:08:34.6064662Z   type: 'test'
+2026-11-12T04:08:34.6064925Z   ...
+2026-11-12T04:08:37.0959217Z # Subtest: SH-26 measured RTL pagination preserves the exact numbered sequence through generated continuation starts
+2026-11-12T04:08:37.0960366Z ok 5 - SH-26 measured RTL pagination preserves the exact numbered sequence through generated continuation starts
+2026-11-12T04:08:37.0960958Z   ---
+2026-11-12T04:08:37.0961218Z   duration_ms: 3127.905513
+2026-11-12T04:08:37.0961537Z   type: 'test'
+2026-11-12T04:08:37.0961780Z   ...
+2026-11-12T04:08:37.1091375Z 1..5
+2026-11-12T04:08:37.1092013Z # tests 5
+2026-11-12T04:08:37.1092736Z # suites 0
+2026-11-12T04:08:37.1092960Z # pass 5
+2026-11-12T04:08:37.1093127Z # fail 0
+2026-11-12T04:08:37.1093302Z # cancelled 0
+2026-11-12T04:08:37.1093530Z # skipped 0
+2026-11-12T04:08:37.1093692Z # todo 0
+2026-11-12T04:08:37.1093879Z # duration_ms 14786.243335
+2026-11-12T04:08:37.1217439Z + node test/shape-effects.mjs
+2026-11-12T04:08:37.3214292Z shape effects (SVG filters): ok
+2026-11-12T04:08:37.3279034Z + node test/shared-quote.mjs
+2026-11-12T04:08:46.8372055Z Shared quote SVG: 4 exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission.
+2026-11-12T04:08:46.8626976Z + node test/slide-context.mjs
+2026-11-12T04:08:47.5117132Z Slide context: core resolveSlideContext supplies the font families (roboto measures with Roboto); host Catalog[] reach it (host default, named groups by source only); unresolved references fall back to the engine defaults with unresolved-reference, or fail under strictReferences.
+2026-11-12T04:08:47.5217412Z + node test/svg-font-embedding.mjs
+2026-11-12T04:08:51.1518561Z SVG font embedding passed: one family per one-family slide (Carlito 2 faces, 1.75 MB vs 50.3 MB of faces in the handle), embed "always", text "system", PDF from @font-face data.
+2026-11-12T04:08:51.1752507Z + node test/svg-fstype.mjs
+2026-11-12T04:08:52.9134171Z SVG fsType: restricted and bitmap-only faces are never embedded (Node and browser handles, text as paths), named with a diagnostic; permitted faces are embedded.
+2026-11-12T04:08:52.9265602Z + node test/svg-image.mjs
+2026-11-12T04:08:53.7721559Z SVG image checks passed (29): data URI encodings, raster-identical boxes and fit, every image place, unusable SVG placeholders, PNG output and no outside reach.
+2026-11-12T04:08:53.7969398Z + node test/symbol-role-emoji-fallback.mjs
+2026-11-12T04:09:04.6504263Z Symbol role and emoji fallback passed: symbol-encoded font-scheme roles map their codes, and Noto Emoji backs up Noto Color Emoji.
+2026-11-12T04:09:04.6928778Z + node test/table-alt.mjs
+2026-11-12T04:09:05.4534450Z + node test/table-border-line.mjs
+2026-11-12T04:09:06.0742738Z TAP version 13
+2026-11-12T04:09:06.0746812Z # Subtest: 'none' draws no line and a partial line takes the table rule's color and width
+2026-11-12T04:09:06.0752019Z ok 1 - 'none' draws no line and a partial line takes the table rule's color and width
+2026-11-12T04:09:06.0752455Z   ---
+2026-11-12T04:09:06.0752693Z   duration_ms: 327.360627
+2026-11-12T04:09:06.0752979Z   type: 'test'
+2026-11-12T04:09:06.0753720Z   ...
+2026-11-12T04:09:06.0780330Z 1..1
+2026-11-12T04:09:06.0780761Z # tests 1
+2026-11-12T04:09:06.0781212Z # suites 0
+2026-11-12T04:09:06.0785785Z # pass 1
+2026-11-12T04:09:06.0786335Z # fail 0
+2026-11-12T04:09:06.0786693Z # cancelled 0
+2026-11-12T04:09:06.0787073Z # skipped 0
+2026-11-12T04:09:06.0787434Z # todo 0
+2026-11-12T04:09:06.0787801Z # duration_ms 334.824546
+2026-11-12T04:09:06.0902154Z + node test/template-variables.mjs
+2026-11-12T04:09:06.9271958Z Template variables: template plus values matches the hand-written deck on 4 slides; examples, unfilled and invalid inputs behave.
+2026-11-12T04:09:06.9383335Z + node test/text-as-paths-scripts.mjs
+2026-11-12T04:09:14.3094040Z Text as paths, scripts: 135 corpus samples outlined with HarfBuzz's glyphs and positions (5 mixed or multi-face samples skipped); fontkit differs on 10 (Beng/beng-title, Beng/beng-ctg, Thai/thai-tone-marks, Thai/thai-sara-am, Laoo/laoo-marks, Khmr/khmr-coeng, Mymr/mymr-words, Mymr/mymr-medials, Syrc/syrc-marks, Jpan/jpan-combining-dakuten); unpinned divergent runs and restricted faces stay text.
+2026-11-12T04:09:14.3615902Z + node test/text-run-links.mjs
+2026-11-12T04:09:14.9934705Z Text run links passed: http, https, mailto and tel link in the SVG preview; other targets are rejected and never linked.
+2026-11-12T04:09:15.0035618Z + node test/timeline-status.mjs
+2026-11-12T04:09:15.7779827Z Timeline status passed: the no-vocabulary control remains byte-identical; English/German words, colors and all marker geometry match their own light/dark layouts.
+2026-11-12T04:09:15.7902251Z + node test/title-rule.mjs
+2026-11-12T04:09:16.4025588Z title-rule: ok
+2026-11-12T04:09:16.4110235Z + node test/v2-binding-metadata.mjs
+2026-11-12T04:09:16.9721193Z Public v2 binding metadata: removed title/slot/placeholder fields; authored body and actual region geometry retained.
+2026-11-12T04:09:16.9802528Z + node test/validate-font-context.mjs
+2026-11-12T04:09:19.8879401Z validate font context: ok
+2026-11-12T04:09:20.0708613Z + node test/validate-script-fonts.mjs
+2026-11-12T04:09:22.5147600Z validate and paginate measure script runs with the registry's script planner (forScripts).
+2026-11-12T04:09:22.5966713Z + node test/web-delivery.mjs
+2026-11-12T04:09:27.6113880Z web delivery: base/Office used faces, styles, aliases, glyph fallback and measured SSR modes pass
+2026-11-12T04:09:27.6404977Z + node test/webp.mjs
+2026-11-12T04:09:28.5540302Z WebP raster passed: 23 PNG/PDF and fit/crop cases; independent pixels, PDF image streams, alpha/EXIF/first frame, SVG input forms, errors and unchanged source SVG.
+2026-11-12T04:09:28.5931003Z Post job cleanup.
+2026-11-12T04:09:28.5935039Z ##[start-action display=Set up Node.js;id=__99440bb5-69b5-4ca9-bcc3-631f980cf764.__actions_setup-node]
+2026-11-12T04:09:28.5988288Z Post job cleanup.
+2026-11-12T04:09:28.5996564Z ##[command]/usr/bin/docker exec  f5c4f4e18c6cd2e760cbce19d63bff46fffc64375ae7586342514fa2e32746e9 sh -c "cat /etc/*release | grep ^ID"
+2026-11-12T04:09:28.7805519Z Cache hit occurred on the primary key node-cache-Linux-x64-pnpm-d4ffbf076089ec4c46de8580f929db170f5887029ad69a38c42643130159df66, not saving cache.
+2026-11-12T04:09:28.7875099Z ##[end-action id=__99440bb5-69b5-4ca9-bcc3-631f980cf764.__actions_setup-node;outcome=success;conclusion=success;duration_ms=193]
+2026-11-12T04:09:28.7952022Z Post job cleanup.
+2026-11-12T04:09:28.7962225Z ##[command]/usr/bin/docker exec  f5c4f4e18c6cd2e760cbce19d63bff46fffc64375ae7586342514fa2e32746e9 sh -c "cat /etc/*release | grep ^ID"
+2026-11-12T04:09:28.9550157Z [command]/usr/bin/git version
+2026-11-12T04:09:28.9579400Z git version 2.43.0
+2026-11-12T04:09:28.9616450Z Copying '/github/home/.gitconfig' to '/__w/_temp/db0d5ae0-01d1-46f6-adcd-93efd39e7ac7/.gitconfig'
+2026-11-12T04:09:28.9632327Z Temporarily overriding HOME='/__w/_temp/db0d5ae0-01d1-46f6-adcd-93efd39e7ac7' before making global git config changes
+2026-11-12T04:09:28.9634940Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-12T04:09:28.9638837Z [command]/usr/bin/git config --global --add safe.directory /__w/opf/opf
+2026-11-12T04:09:28.9667309Z Removing SSH command configuration
+2026-11-12T04:09:28.9681200Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-12T04:09:28.9717016Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-12T04:09:29.0029236Z Removing HTTP extra header
+2026-11-12T04:09:29.0033412Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-12T04:09:29.0083487Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-12T04:09:29.0404110Z Removing includeIf entries pointing to credentials config files
+2026-11-12T04:09:29.0409564Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-12T04:09:29.0444277Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-12T04:09:29.0758316Z Stop and remove container: 84f19b124e384a729308f206803a067c_mcrmicrosoftcomplaywrightv1650noblesha2566e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d_ad87eb
+2026-11-12T04:09:29.0762755Z ##[command]/usr/bin/docker rm --force f5c4f4e18c6cd2e760cbce19d63bff46fffc64375ae7586342514fa2e32746e9
+2026-11-12T04:09:29.2900409Z f5c4f4e18c6cd2e760cbce19d63bff46fffc64375ae7586342514fa2e32746e9
+2026-11-12T04:09:29.2921541Z Remove container network: github_network_a07ef894e75a40879ac113e5ddf5dd20
+2026-11-12T04:09:29.2924837Z ##[command]/usr/bin/docker network rm github_network_a07ef894e75a40879ac113e5ddf5dd20
+2026-11-12T04:09:29.3727799Z github_network_a07ef894e75a40879ac113e5ddf5dd20
+2026-11-12T04:09:29.3790274Z Cleaning up orphan processes
+
