@@ -1,0 +1,59 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/keynote/trees-and-sets/keynote-export.pptx",
+    "sha256": "1ca5eb29413e19a78132b752f66d372602fa646b04fd16fbbc1d985011ca3126",
+    "bytes": 75860
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/trees-and-sets.keynote.opf.json",
+      "sha256": "2152d89aa7f688823733aa830008c0fd8c8e28bbebc22176f0ee4065536cc0c0",
+      "bytes": 6560,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "import/unclassified-native-footer",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/shapes/0",
+      "scope": "document",
+      "message": "The current generated-name literal remains content: there is no unique accepted same-group live-number row.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unclassified-native-footer",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/shapes/0",
+      "scope": "document",
+      "message": "The current generated-name literal remains content: there is no unique accepted same-group live-number row.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unclassified-native-footer",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/2/shapes/0",
+      "scope": "document",
+      "message": "The current generated-name literal remains content: there is no unique accepted same-group live-number row.",
+      "help": ""
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 3,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

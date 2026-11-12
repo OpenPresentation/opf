@@ -1,0 +1,38 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "pie-en",
+ "slides": [
+  {
+   "title": "Share",
+   "chart": {
+    "type": "pie",
+    "data": {
+     "columns": [
+      "Region",
+      "n"
+     ],
+     "rows": [
+      [
+       "East",
+       50
+      ],
+      [
+       "West",
+       30
+      ],
+      [
+       "North",
+       20
+      ]
+     ]
+    },
+    "dataLabels": {
+     "content": [
+      "percent"
+     ],
+     "position": "outside-end"
+    }
+   }
+  }
+ ]
+}

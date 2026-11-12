@@ -1,0 +1,31 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/pptx/footers.pptx",
+    "sha256": "7261e66c7d8d4aeceb8ee47168a7fd0b6a4859632b7e24528f9c37edf6c252af",
+    "bytes": 117908
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/footers.original.opf.json",
+      "sha256": "9ec31b03ea7f4d67a42dd3c291d426fbcb87047f58b8f494bb1e3e8e7010e634",
+      "bytes": 1282,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

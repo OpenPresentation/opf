@@ -1,0 +1,40 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "rtl-table-text",
+ "language": {
+  "bcp47": "ar-SA",
+  "fontScheme": "noto-sans-arabic"
+ },
+ "design": {
+  "theme": "minimal",
+  "footer": {
+   "center": {
+    "text": "{{slide.number}} / {{deck.slideCount}}"
+   }
+  }
+ },
+ "slides": [
+  {
+   "title": "جدول المناطق",
+   "table": {
+    "columns": [
+     "المنطقة",
+     "المسؤول",
+     "الحالة"
+    ],
+    "rows": [
+     [
+      "الشرق",
+      "أحمد",
+      "جاهز"
+     ],
+     [
+      "الغرب",
+      "سارة",
+      "قيد التنفيذ"
+     ]
+    ]
+   }
+  }
+ ]
+}

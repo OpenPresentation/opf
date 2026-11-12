@@ -1,0 +1,267 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/keynote/data-story-academy/keynote-export.pptx",
+    "sha256": "63dae5f3ea0f1bb2d90bb6ef16d2ae9d09458d33269196fbecb50a1bf1941be3",
+    "bytes": 550677
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/data-story-academy.keynote.opf.json",
+      "sha256": "4faa12f392c5a8905eb7f2d3c9b9b5a12bac55c502d13131df9a16f22d2b8d61",
+      "bytes": 984266,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/2/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/3/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/5/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/6/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/7/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/8/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/9/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/10/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/12/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/13/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/14/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/shapes/1/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/chart-option-adapted",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/2/charts/0/dataLabels",
+      "scope": "document",
+      "message": "The label number format '\"$\"#,##0.0' cannot be expressed; labels import in the General format.",
+      "help": "",
+      "option": "dataLabels"
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/2/shapes/1/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/3/shapes/1/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/6/shapes/1/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/7/shapes/1/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/8/shapes/1/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/9/shapes/1/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/10/shapes/1/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/11/shapes/0/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/12/shapes/1/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/13/shapes/1/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/14/shapes/1/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/theme-unverified",
+      "severity": "warning",
+      "category": "import",
+      "path": "/design/theme",
+      "scope": "document",
+      "message": "The native theme has the name of OPF catalog theme 'minimal', but neither its color scheme nor its heading/body fonts match that theme, so design.theme was not set.",
+      "help": ""
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 26,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

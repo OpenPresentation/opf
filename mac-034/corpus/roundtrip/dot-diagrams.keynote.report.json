@@ -1,0 +1,108 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/keynote/dot-diagrams/keynote-export.pptx",
+    "sha256": "30ac45de7a1c59f2c9117ab7ed7dbd86d233637ee647e92902da8bff986ce126",
+    "bytes": 87190
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/dot-diagrams.keynote.opf.json",
+      "sha256": "bb16103e7c9b2a05983ef06b2d111dec20c2dc7e5642098cbc6f096673928d17",
+      "bytes": 38089,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "import/grouped-text-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0",
+      "scope": "document",
+      "message": "Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/grouped-text-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1",
+      "scope": "document",
+      "message": "Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/grouped-text-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/2",
+      "scope": "document",
+      "message": "Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/shape-property-dropped",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/3",
+      "scope": "document",
+      "message": "The native shape \"Triangle\" has color transform lumMod/lumOff, which OPF does not represent; it was dropped.",
+      "help": "OPF has no form for this property of a PowerPoint shape (3-D, preset shadows, autofit and the others in docs/shapes.md); it was dropped and the shape imported. Set it again in the PowerPoint file if it matters.",
+      "property": "color transform lumMod/lumOff",
+      "shape": "Triangle"
+    },
+    {
+      "ruleId": "import/shape-property-dropped",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/3",
+      "scope": "document",
+      "message": "The native shape \"Line\" has color transform lumMod/lumOff, which OPF does not represent; it was dropped.",
+      "help": "OPF has no form for this property of a PowerPoint shape (3-D, preset shadows, autofit and the others in docs/shapes.md); it was dropped and the shape imported. Set it again in the PowerPoint file if it matters.",
+      "property": "color transform lumMod/lumOff",
+      "shape": "Line"
+    },
+    {
+      "ruleId": "import/grouped-text-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/3",
+      "scope": "document",
+      "message": "Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/grouped-text-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/4",
+      "scope": "document",
+      "message": "Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/theme-unverified",
+      "severity": "warning",
+      "category": "import",
+      "path": "/design/theme",
+      "scope": "document",
+      "message": "The native theme has the name of OPF catalog theme 'classic', but neither its color scheme nor its heading/body fonts match that theme, so design.theme was not set.",
+      "help": ""
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 8,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

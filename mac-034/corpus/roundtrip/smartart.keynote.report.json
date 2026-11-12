@@ -1,0 +1,31 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/keynote/smartart/keynote-export.pptx",
+    "sha256": "7ca7285ed9f9eece39ad25b47c6bd0ad653e252772e20a0d16475d019c5ef53b",
+    "bytes": 509439
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/smartart.keynote.opf.json",
+      "sha256": "53d5d5d94a2590d85652d4819dca8619da4d5c1d3e0be9e03a262536212601fe",
+      "bytes": 816744,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

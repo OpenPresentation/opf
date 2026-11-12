@@ -1,0 +1,129 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Digits review hi-IN-u-nu-deva",
+  "language": {
+    "bcp47": "hi-IN-u-nu-deva",
+    "fontScheme": "noto-sans-devangari"
+  },
+  "design": {
+    "theme": "minimal",
+    "footer": {
+      "center": {
+        "text": "{{slide.number}} / {{deck.slideCount}}"
+      }
+    }
+  },
+  "slides": [
+    {
+      "title": "मुख्य मीट्रिक",
+      "metric": {
+        "value": 999,
+        "label": "नए ग्राहक"
+      }
+    },
+    {
+      "title": "तिमाही बिक्री",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "तिमाही",
+            "बिक्री"
+          ],
+          "rows": [
+            [
+              "पहली",
+              120
+            ],
+            [
+              "दूसरी",
+              450
+            ],
+            [
+              "तीसरी",
+              1250
+            ],
+            [
+              "चौथी",
+              3400
+            ]
+          ]
+        },
+        "dataLabels": true,
+        "axisTitles": {
+          "value": "बिक्री"
+        }
+      }
+    },
+    {
+      "title": "क्षेत्र हिस्सेदारी",
+      "chart": {
+        "type": "pie",
+        "data": {
+          "columns": [
+            "क्षेत्र हिस्सेदारी",
+            "n"
+          ],
+          "rows": [
+            [
+              "पूर्व",
+              50
+            ],
+            [
+              "पश्चिम",
+              30
+            ],
+            [
+              "उत्तर",
+              20
+            ]
+          ]
+        },
+        "dataLabels": {
+          "content": [
+            "percent"
+          ],
+          "position": "outside-end"
+        }
+      }
+    },
+    {
+      "title": "संख्याओं की तालिका",
+      "table": {
+        "columns": [
+          "मद",
+          {
+            "name": "राशि",
+            "format": "#,##0.00"
+          },
+          {
+            "name": "अनुपात",
+            "format": "#,##0"
+          }
+        ],
+        "rows": [
+          [
+            "क",
+            1234.5,
+            98765
+          ],
+          [
+            "ख",
+            2500.75,
+            1234567
+          ]
+        ]
+      }
+    },
+    {
+      "title": "कार्य के चरण",
+      "items": [
+        "डेटा जुटाना",
+        "परिणाम विश्लेषण",
+        "रिपोर्ट प्रस्तुत करना",
+        "अनुवर्तन"
+      ],
+      "numbering": "arabic"
+    }
+  ]
+}

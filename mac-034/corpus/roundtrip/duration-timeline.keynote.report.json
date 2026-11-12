@@ -1,0 +1,113 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/keynote/duration-timeline/keynote-export.pptx",
+    "sha256": "c010822138014b1b4bf9d05f448d624ccaf588ac42835e8a9109457a1df32de5",
+    "bytes": 72498
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/duration-timeline.keynote.opf.json",
+      "sha256": "723d01f9308f6cc9c4b7ff95af332116ffd8112a986f4c98d0fb3754fb9a9cc4",
+      "bytes": 4776,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "import/approximate-body-font-weight",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/shapes/14/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "OPF text runs represent regular or bold only; the native weight face was imported as its family, with bold for weights of 600 and above.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/approximate-body-font-weight",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/shapes/17/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "OPF text runs represent regular or bold only; the native weight face was imported as its family, with bold for weights of 600 and above.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/approximate-body-font-weight",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/shapes/21/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "OPF text runs represent regular or bold only; the native weight face was imported as its family, with bold for weights of 600 and above.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/approximate-body-font-weight",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/shapes/15/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "OPF text runs represent regular or bold only; the native weight face was imported as its family, with bold for weights of 600 and above.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/approximate-body-font-weight",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/shapes/22/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "OPF text runs represent regular or bold only; the native weight face was imported as its family, with bold for weights of 600 and above.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/approximate-body-font-weight",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/shapes/24/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "OPF text runs represent regular or bold only; the native weight face was imported as its family, with bold for weights of 600 and above.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/approximate-body-font-weight",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/shapes/25/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "OPF text runs represent regular or bold only; the native weight face was imported as its family, with bold for weights of 600 and above.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/approximate-body-font-weight",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/shapes/26/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "OPF text runs represent regular or bold only; the native weight face was imported as its family, with bold for weights of 600 and above.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/theme-unverified",
+      "severity": "warning",
+      "category": "import",
+      "path": "/design/theme",
+      "scope": "document",
+      "message": "The native theme has the name of OPF catalog theme 'classic', but neither its color scheme nor its heading/body fonts match that theme, so design.theme was not set.",
+      "help": ""
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 9,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

@@ -1,0 +1,46 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "rtl-table-numbers",
+ "language": {
+  "bcp47": "ar-SA",
+  "fontScheme": "noto-sans-arabic"
+ },
+ "design": {
+  "theme": "minimal",
+  "footer": {
+   "center": {
+    "text": "{{slide.number}} / {{deck.slideCount}}"
+   }
+  }
+ },
+ "slides": [
+  {
+   "title": "جدول الأرقام",
+   "table": {
+    "columns": [
+     "البند",
+     {
+      "name": "المبلغ",
+      "format": "#,##0.00"
+     },
+     {
+      "name": "النسبة",
+      "format": "#,##0"
+     }
+    ],
+    "rows": [
+     [
+      "أ",
+      1234.5,
+      98765
+     ],
+     [
+      "ب",
+      2500.75,
+      1234567
+     ]
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/keynote/image-callouts/keynote-export.pptx",
+    "sha256": "3196088f7b6f0186c20610578d26b471bb286e78982c32bbb748018d4142f6de",
+    "bytes": 72420
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/image-callouts.keynote.opf.json",
+      "sha256": "0a51c2d902eb6293f0d08a9266fca621df3b7a6320ab86bbcd409d538b9b8d49",
+      "bytes": 2431,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "import/theme-unverified",
+      "severity": "warning",
+      "category": "import",
+      "path": "/design/theme",
+      "scope": "document",
+      "message": "The native theme has the name of OPF catalog theme 'classic', but neither its color scheme nor its heading/body fonts match that theme, so design.theme was not set.",
+      "help": ""
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 1,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

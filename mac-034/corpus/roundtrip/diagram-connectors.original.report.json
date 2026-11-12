@@ -1,0 +1,31 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/pptx/diagram-connectors.pptx",
+    "sha256": "d8a99ee5dcb6bc3f065dbb4f88cbbd3ef26ab0ce4f79e7c9ba416421f4890643",
+    "bytes": 106468
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/diagram-connectors.original.opf.json",
+      "sha256": "c715455faac2d9bc8620e33e6a2e285e7bdb2e3bc4a205ca4b9c8d1e4c56c903",
+      "bytes": 656,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

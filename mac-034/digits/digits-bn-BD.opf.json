@@ -1,0 +1,129 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Digits review bn-BD",
+  "language": {
+    "bcp47": "bn-BD",
+    "fontScheme": "noto-sans-bengali"
+  },
+  "design": {
+    "theme": "minimal",
+    "footer": {
+      "center": {
+        "text": "{{slide.number}} / {{deck.slideCount}}"
+      }
+    }
+  },
+  "slides": [
+    {
+      "title": "মূল মেট্রিক",
+      "metric": {
+        "value": 999,
+        "label": "নতুন গ্রাহক"
+      }
+    },
+    {
+      "title": "ত্রৈমাসিক বিক্রয়",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "ত্রৈমাসিক",
+            "বিক্রয়"
+          ],
+          "rows": [
+            [
+              "প্রথম",
+              120
+            ],
+            [
+              "দ্বিতীয়",
+              450
+            ],
+            [
+              "তৃতীয়",
+              1250
+            ],
+            [
+              "চতুর্থ",
+              3400
+            ]
+          ]
+        },
+        "dataLabels": true,
+        "axisTitles": {
+          "value": "বিক্রয়"
+        }
+      }
+    },
+    {
+      "title": "অঞ্চলভিত্তিক অংশ",
+      "chart": {
+        "type": "pie",
+        "data": {
+          "columns": [
+            "অঞ্চলভিত্তিক অংশ",
+            "n"
+          ],
+          "rows": [
+            [
+              "পূর্ব",
+              50
+            ],
+            [
+              "পশ্চিম",
+              30
+            ],
+            [
+              "উত্তর",
+              20
+            ]
+          ]
+        },
+        "dataLabels": {
+          "content": [
+            "percent"
+          ],
+          "position": "outside-end"
+        }
+      }
+    },
+    {
+      "title": "সংখ্যার সারণি",
+      "table": {
+        "columns": [
+          "আইটেম",
+          {
+            "name": "পরিমাণ",
+            "format": "#,##0.00"
+          },
+          {
+            "name": "অনুপাত",
+            "format": "#,##0"
+          }
+        ],
+        "rows": [
+          [
+            "ক",
+            1234.5,
+            98765
+          ],
+          [
+            "খ",
+            2500.75,
+            1234567
+          ]
+        ]
+      }
+    },
+    {
+      "title": "কাজের ধাপ",
+      "items": [
+        "তথ্য সংগ্রহ",
+        "ফলাফল বিশ্লেষণ",
+        "প্রতিবেদন উপস্থাপন",
+        "ফলো-আপ"
+      ],
+      "numbering": "arabic"
+    }
+  ]
+}

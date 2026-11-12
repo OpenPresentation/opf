@@ -1,0 +1,37 @@
+columns__identity-rezip exit=0 slides=2 size=960x540 docsBefore=0 docsAfter=0
+r1-line__identity-rezip HUNG after 90s (windows captured: 1)
+r1-line-norefs exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0
+r1-line exit=1 /private/tmp/claude-501/-Users-michael--claude-spares-spare-xwRGlu/b880ca3c-5fc0-4adb-8327-3ed99fec6259/scratchpad/kn-one.applescript:279:304: execution error: Keynote Creator Studio got an error: Can’t make missing value into type specifier. (-1700)
+r1-line__merge-line-groups HUNG after 90s (windows captured: 2)
+localized-chart-references__merge-line-groups exit=1 /private/tmp/claude-501/-Users-michael--claude-spares-spare-xwRGlu/b880ca3c-5fc0-4adb-8327-3ed99fec6259/scratchpad/kn-one.applescript:279:304: execution error: 
+r1-line__no-ref-ext HUNG after 90s (windows captured: 2)
+r1-line__flags exit=1 /private/tmp/claude-501/-Users-michael--claude-spares-spare-xwRGlu/b880ca3c-5fc0-4adb-8327-3ed99fec6259/scratchpad/kn-one.applescript:279:304: execution error: 
+localized-chart-references__flags exit=1 /private/tmp/claude-501/-Users-michael--claude-spares-spare-xwRGlu/b880ca3c-5fc0-4adb-8327-3ed99fec6259/scratchpad/kn-one.applescript:279:304: execution error: 
+explicit-chart-reference-lines__flags exit=1 /private/tmp/claude-501/-Users-michael--claude-spares-spare-xwRGlu/b880ca3c-5fc0-4adb-8327-3ed99fec6259/scratchpad/kn-one.applescript:279:304: execution error: 
+r5-line-markers-single exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+r5-line-markers-single-norefs exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+r1-line__no-dlbl FAILED-ALERT (seen on screen by the owner; same alert)
+r1-line__drop-helper-group FAILED-ALERT after 4s (windows captured: 2)
+r1-line__helper-no-dlbls FAILED-ALERT after 4s (windows captured: 2)
+r1-line__drop-group-dlbls FAILED-ALERT after 4s (windows captured: 2)
+r1-line__outer-layout FAILED-ALERT after 4s (windows captured: 2)
+r2-column-pct exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+r3-combo-secondary exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+r4-bar exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+c033-chart-type-sampler exit=0 slides=3 size=960x540 docsBefore=0 docsAfter=0 
+footer-en.rc exit=0 slides=2 size=960x540 docsBefore=0 docsAfter=0 
+footer-en.v033 exit=0 slides=2 size=960x540 docsBefore=0 docsAfter=0 
+pie-ar-latn.rc exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+pie-ar-latn.v033 exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+pie-en.rc exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+pie-en.v033 exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+rtl-table-numbers.rc-nortl exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+rtl-table-numbers.rc exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+rtl-table-numbers.v033 exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+rtl-table-text.rc-nortl exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+rtl-table-text.rc exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+rtl-table-text.v033 exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+r1-line__axpos exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+r1-line__axpos-tick exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+localized-chart-references__axpos-tick exit=0 slides=7 size=960x540 docsBefore=0 docsAfter=0 
+explicit-chart-reference-lines__axpos-tick exit=0 slides=5 size=960x540 docsBefore=0 docsAfter=0 

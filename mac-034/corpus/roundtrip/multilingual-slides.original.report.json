@@ -1,0 +1,77 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/pptx/multilingual-slides.pptx",
+    "sha256": "6b386bb50387d9e1c05b2f725f98b261d15e057ea008fe0086f683f6c00cb52e",
+    "bytes": 292995
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/multilingual-slides.original.opf.json",
+      "sha256": "ffa0bd06fca9fece65b1753242c0cd15c1158f47e2a5711d070e417b3410e986",
+      "bytes": 4384,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "import/mixed-run-languages",
+      "severity": "warning",
+      "category": "import",
+      "path": "/language",
+      "scope": "document",
+      "message": "Runs use 3 languages (ar-SA x4, fr-FR x4, ja-JP x3). The presentation uses ar-SA; slides with another predominant language declare it, and individual rich-text runs keep their own lang.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/script-font-not-imported",
+      "severity": "warning",
+      "category": "import",
+      "path": "/design/fontScheme",
+      "scope": "document",
+      "message": "Theme majorFont eastAsian font \"Meiryo\" differs from both its latin font and what the imported document resolves, and is not represented in the imported OPF.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/script-font-not-imported",
+      "severity": "warning",
+      "category": "import",
+      "path": "/design/fontScheme",
+      "scope": "document",
+      "message": "Theme minorFont eastAsian font \"Meiryo\" differs from both its latin font and what the imported document resolves, and is not represented in the imported OPF.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/script-font-not-imported",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/design/fontScheme",
+      "scope": "document",
+      "message": "Slide 2's master theme majorFont eastAsian font \"Meiryo\" differs from both its latin font and what the imported slide resolves, and is not represented in the imported OPF.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/script-font-not-imported",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/design/fontScheme",
+      "scope": "document",
+      "message": "Slide 2's master theme minorFont eastAsian font \"Meiryo\" differs from both its latin font and what the imported slide resolves, and is not represented in the imported OPF.",
+      "help": ""
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 5,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

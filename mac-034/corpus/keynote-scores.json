@@ -1,0 +1,2670 @@
+{
+ "chart-point-overlays": {
+  "keynoteSlides": 3,
+  "previewSlides": 3,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0361
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0191
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0254
+   }
+  ]
+ },
+ "chart-type-sampler": {
+  "keynoteSlides": 3,
+  "previewSlides": 3,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0929
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1818
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1354
+   }
+  ]
+ },
+ "columns": {
+  "keynoteSlides": 2,
+  "previewSlides": 2,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0541
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0672
+   }
+  ]
+ },
+ "compliance-readiness-review": {
+  "keynoteSlides": 9,
+  "previewSlides": 9,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0519
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0919
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0234
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0447
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0671
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1009
+   },
+   {
+    "n": 7,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0913
+   },
+   {
+    "n": 8,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0113
+   },
+   {
+    "n": 9,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0759
+   }
+  ]
+ },
+ "data-story-academy": {
+  "keynoteSlides": 16,
+  "previewSlides": 16,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0977
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0725
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.075
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0909
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0859
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0723
+   },
+   {
+    "n": 7,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0643
+   },
+   {
+    "n": 8,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0912
+   },
+   {
+    "n": 9,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0606
+   },
+   {
+    "n": 10,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0834
+   },
+   {
+    "n": 11,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0771
+   },
+   {
+    "n": 12,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0824
+   },
+   {
+    "n": 13,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0966
+   },
+   {
+    "n": 14,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0563
+   },
+   {
+    "n": 15,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0545
+   },
+   {
+    "n": 16,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0664
+   }
+  ]
+ },
+ "diagram-connectors": {
+  "keynoteSlides": 2,
+  "previewSlides": 2,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0222
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0198
+   }
+  ]
+ },
+ "diagrams": {
+  "keynoteSlides": 7,
+  "previewSlides": 7,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0326
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0504
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0346
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0373
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0399
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0271
+   },
+   {
+    "n": 7,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0303
+   }
+  ]
+ },
+ "diagrams-markdown": {
+  "keynoteSlides": 3,
+  "previewSlides": 3,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0363
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0418
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0253
+   }
+  ]
+ },
+ "diagrams~picture": {
+  "keynoteSlides": 7,
+  "previewSlides": 7,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0312
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0527
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0298
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0342
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0378
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0254
+   },
+   {
+    "n": 7,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.029
+   }
+  ]
+ },
+ "dot-diagrams": {
+  "keynoteSlides": 5,
+  "previewSlides": 5,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0338
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0483
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.036
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0317
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0286
+   }
+  ]
+ },
+ "duration-timeline": {
+  "keynoteSlides": 1,
+  "previewSlides": 1,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0677
+   }
+  ]
+ },
+ "explicit-chart-reference-lines": {
+  "keynoteSlides": 0,
+  "previewSlides": 5,
+  "slides": []
+ },
+ "footers": {
+  "keynoteSlides": 4,
+  "previewSlides": 4,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0255
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0274
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0219
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0192
+   }
+  ]
+ },
+ "footers~static": {
+  "keynoteSlides": 4,
+  "previewSlides": 4,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0258
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0276
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0219
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0192
+   }
+  ]
+ },
+ "full-feature-tour": {
+  "keynoteSlides": 10,
+  "previewSlides": 10,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0343
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0509
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0453
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0644
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0458
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0534
+   },
+   {
+    "n": 7,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0444
+   },
+   {
+    "n": 8,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0422
+   },
+   {
+    "n": 9,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0097
+   },
+   {
+    "n": 10,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0374
+   }
+  ]
+ },
+ "header-footer-logo-set": {
+  "keynoteSlides": 2,
+  "previewSlides": 2,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0977
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.045
+   }
+  ]
+ },
+ "image-callouts": {
+  "keynoteSlides": 1,
+  "previewSlides": 1,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0466
+   }
+  ]
+ },
+ "inverted-pyramids": {
+  "keynoteSlides": 3,
+  "previewSlides": 3,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0421
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.071
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0792
+   }
+  ]
+ },
+ "layout-harvest": {
+  "keynoteSlides": 20,
+  "previewSlides": 20,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0381
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0952
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.086
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0449
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0476
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0336
+   },
+   {
+    "n": 7,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0556
+   },
+   {
+    "n": 8,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0542
+   },
+   {
+    "n": 9,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0442
+   },
+   {
+    "n": 10,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0678
+   },
+   {
+    "n": 11,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0352
+   },
+   {
+    "n": 12,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.091
+   },
+   {
+    "n": 13,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0724
+   },
+   {
+    "n": 14,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0905
+   },
+   {
+    "n": 15,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.093
+   },
+   {
+    "n": 16,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0821
+   },
+   {
+    "n": 17,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.2574
+   },
+   {
+    "n": 18,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1305
+   },
+   {
+    "n": 19,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1935
+   },
+   {
+    "n": 20,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0457
+   }
+  ]
+ },
+ "layout-harvest~native-body": {
+  "keynoteSlides": 20,
+  "previewSlides": 20,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0381
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0969
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.086
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0445
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0476
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0336
+   },
+   {
+    "n": 7,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0556
+   },
+   {
+    "n": 8,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0535
+   },
+   {
+    "n": 9,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0442
+   },
+   {
+    "n": 10,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0678
+   },
+   {
+    "n": 11,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0351
+   },
+   {
+    "n": 12,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.091
+   },
+   {
+    "n": 13,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0724
+   },
+   {
+    "n": 14,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.091
+   },
+   {
+    "n": 15,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0932
+   },
+   {
+    "n": 16,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0821
+   },
+   {
+    "n": 17,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.2574
+   },
+   {
+    "n": 18,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1305
+   },
+   {
+    "n": 19,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1935
+   },
+   {
+    "n": 20,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0442
+   }
+  ]
+ },
+ "layout-sampler": {
+  "keynoteSlides": 53,
+  "previewSlides": 53,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0343
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0283
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0451
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0369
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0551
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0564
+   },
+   {
+    "n": 7,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0872
+   },
+   {
+    "n": 8,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0656
+   },
+   {
+    "n": 9,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0586
+   },
+   {
+    "n": 10,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0693
+   },
+   {
+    "n": 11,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0983
+   },
+   {
+    "n": 12,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0838
+   },
+   {
+    "n": 13,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0922
+   },
+   {
+    "n": 14,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0923
+   },
+   {
+    "n": 15,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0561
+   },
+   {
+    "n": 16,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0699
+   },
+   {
+    "n": 17,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0619
+   },
+   {
+    "n": 18,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.055
+   },
+   {
+    "n": 19,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0212
+   },
+   {
+    "n": 20,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0442
+   },
+   {
+    "n": 21,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0244
+   },
+   {
+    "n": 22,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1559
+   },
+   {
+    "n": 23,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1526
+   },
+   {
+    "n": 24,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0606
+   },
+   {
+    "n": 25,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0566
+   },
+   {
+    "n": 26,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0579
+   },
+   {
+    "n": 27,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0805
+   },
+   {
+    "n": 28,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1428
+   },
+   {
+    "n": 29,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0835
+   },
+   {
+    "n": 30,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0187
+   },
+   {
+    "n": 31,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0282
+   },
+   {
+    "n": 32,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0411
+   },
+   {
+    "n": 33,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0282
+   },
+   {
+    "n": 34,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0239
+   },
+   {
+    "n": 35,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0265
+   },
+   {
+    "n": 36,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0253
+   },
+   {
+    "n": 37,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0975
+   },
+   {
+    "n": 38,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0812
+   },
+   {
+    "n": 39,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0469
+   },
+   {
+    "n": 40,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1314
+   },
+   {
+    "n": 41,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1259
+   },
+   {
+    "n": 42,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.151
+   },
+   {
+    "n": 43,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0661
+   },
+   {
+    "n": 44,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0448
+   },
+   {
+    "n": 45,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0404
+   },
+   {
+    "n": 46,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0654
+   },
+   {
+    "n": 47,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0673
+   },
+   {
+    "n": 48,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0933
+   },
+   {
+    "n": 49,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1603
+   },
+   {
+    "n": 50,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0446
+   },
+   {
+    "n": 51,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.045
+   },
+   {
+    "n": 52,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0421
+   },
+   {
+    "n": 53,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0344
+   }
+  ]
+ },
+ "layout-sampler~native-body": {
+  "keynoteSlides": 53,
+  "previewSlides": 53,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0343
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0283
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0451
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0368
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0538
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0552
+   },
+   {
+    "n": 7,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0872
+   },
+   {
+    "n": 8,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0656
+   },
+   {
+    "n": 9,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0586
+   },
+   {
+    "n": 10,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0693
+   },
+   {
+    "n": 11,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0983
+   },
+   {
+    "n": 12,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0838
+   },
+   {
+    "n": 13,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0926
+   },
+   {
+    "n": 14,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0923
+   },
+   {
+    "n": 15,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0566
+   },
+   {
+    "n": 16,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0699
+   },
+   {
+    "n": 17,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0619
+   },
+   {
+    "n": 18,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.055
+   },
+   {
+    "n": 19,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0212
+   },
+   {
+    "n": 20,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0442
+   },
+   {
+    "n": 21,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0244
+   },
+   {
+    "n": 22,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1564
+   },
+   {
+    "n": 23,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1533
+   },
+   {
+    "n": 24,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.061
+   },
+   {
+    "n": 25,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0573
+   },
+   {
+    "n": 26,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0586
+   },
+   {
+    "n": 27,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0809
+   },
+   {
+    "n": 28,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1428
+   },
+   {
+    "n": 29,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0835
+   },
+   {
+    "n": 30,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0187
+   },
+   {
+    "n": 31,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0282
+   },
+   {
+    "n": 32,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.041
+   },
+   {
+    "n": 33,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0287
+   },
+   {
+    "n": 34,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0239
+   },
+   {
+    "n": 35,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0265
+   },
+   {
+    "n": 36,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0245
+   },
+   {
+    "n": 37,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1002
+   },
+   {
+    "n": 38,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0812
+   },
+   {
+    "n": 39,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0469
+   },
+   {
+    "n": 40,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1314
+   },
+   {
+    "n": 41,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1269
+   },
+   {
+    "n": 42,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.151
+   },
+   {
+    "n": 43,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.067
+   },
+   {
+    "n": 44,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0448
+   },
+   {
+    "n": 45,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0406
+   },
+   {
+    "n": 46,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0656
+   },
+   {
+    "n": 47,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0662
+   },
+   {
+    "n": 48,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0941
+   },
+   {
+    "n": 49,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.1603
+   },
+   {
+    "n": 50,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0446
+   },
+   {
+    "n": 51,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.045
+   },
+   {
+    "n": 52,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0421
+   },
+   {
+    "n": 53,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0344
+   }
+  ]
+ },
+ "localized-chart-references": {
+  "keynoteSlides": 0,
+  "previewSlides": 7,
+  "slides": []
+ },
+ "localized-timeline": {
+  "keynoteSlides": 1,
+  "previewSlides": 1,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0335
+   }
+  ]
+ },
+ "multilingual-slides": {
+  "keynoteSlides": 4,
+  "previewSlides": 4,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.068
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0328
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0559
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0788
+   }
+  ]
+ },
+ "plantuml-diagrams": {
+  "keynoteSlides": 8,
+  "previewSlides": 8,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0331
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0215
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0283
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0284
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0353
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.034
+   },
+   {
+    "n": 7,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0317
+   },
+   {
+    "n": 8,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0254
+   }
+  ]
+ },
+ "shape-effects": {
+  "keynoteSlides": 4,
+  "previewSlides": 4,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0501
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0644
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0423
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.035
+   }
+  ]
+ },
+ "shape-overlays": {
+  "keynoteSlides": 6,
+  "previewSlides": 6,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.055
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0474
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0246
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0263
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0151
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0525
+   }
+  ]
+ },
+ "shape-overlays-rtl": {
+  "keynoteSlides": 1,
+  "previewSlides": 1,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0126
+   }
+  ]
+ },
+ "shapes": {
+  "keynoteSlides": 8,
+  "previewSlides": 8,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0257
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0246
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0847
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0439
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0166
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0312
+   },
+   {
+    "n": 7,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0275
+   },
+   {
+    "n": 8,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0193
+   }
+  ]
+ },
+ "singleton-combo-reference-lines": {
+  "keynoteSlides": 1,
+  "previewSlides": 1,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0112
+   }
+  ]
+ },
+ "smartart": {
+  "keynoteSlides": 17,
+  "previewSlides": 17,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0121
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0893
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0189
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0336
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0144
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0553
+   },
+   {
+    "n": 7,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.015
+   },
+   {
+    "n": 8,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.065
+   },
+   {
+    "n": 9,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0154
+   },
+   {
+    "n": 10,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0547
+   },
+   {
+    "n": 11,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0128
+   },
+   {
+    "n": 12,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0523
+   },
+   {
+    "n": 13,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0183
+   },
+   {
+    "n": 14,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0101
+   },
+   {
+    "n": 15,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0193
+   },
+   {
+    "n": 16,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0196
+   },
+   {
+    "n": 17,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0175
+   }
+  ]
+ },
+ "smartart-arabic": {
+  "keynoteSlides": 3,
+  "previewSlides": 3,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0178
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0155
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0167
+   }
+  ]
+ },
+ "smartart-japanese": {
+  "keynoteSlides": 3,
+  "previewSlides": 3,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0285
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0298
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.02
+   }
+  ]
+ },
+ "smartart~shapes": {
+  "keynoteSlides": 17,
+  "previewSlides": 17,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0155
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0893
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0207
+   },
+   {
+    "n": 4,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0336
+   },
+   {
+    "n": 5,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.02
+   },
+   {
+    "n": 6,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0553
+   },
+   {
+    "n": 7,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.022
+   },
+   {
+    "n": 8,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.065
+   },
+   {
+    "n": 9,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.022
+   },
+   {
+    "n": 10,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0547
+   },
+   {
+    "n": 11,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0146
+   },
+   {
+    "n": 12,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0523
+   },
+   {
+    "n": 13,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0251
+   },
+   {
+    "n": 14,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0151
+   },
+   {
+    "n": 15,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0289
+   },
+   {
+    "n": 16,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0269
+   },
+   {
+    "n": 17,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0203
+   }
+  ]
+ },
+ "table-and-code": {
+  "keynoteSlides": 2,
+  "previewSlides": 2,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0412
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0438
+   }
+  ]
+ },
+ "trees-and-sets": {
+  "keynoteSlides": 3,
+  "previewSlides": 3,
+  "slides": [
+   {
+    "n": 1,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0449
+   },
+   {
+    "n": 2,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0419
+   },
+   {
+    "n": 3,
+    "native": [
+     960,
+     540
+    ],
+    "changed": 0.0342
+   }
+  ]
+ }
+}

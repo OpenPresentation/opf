@@ -1,0 +1,129 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Digits review ar-SA-u-nu-latn",
+  "language": {
+    "bcp47": "ar-SA-u-nu-latn",
+    "fontScheme": "noto-sans-arabic"
+  },
+  "design": {
+    "theme": "minimal",
+    "footer": {
+      "center": {
+        "text": "{{slide.number}} / {{deck.slideCount}}"
+      }
+    }
+  },
+  "slides": [
+    {
+      "title": "نتيجة المقياس",
+      "metric": {
+        "value": 999,
+        "label": "عملاء جدد"
+      }
+    },
+    {
+      "title": "المبيعات حسب الربع",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "الربع",
+            "المبيعات"
+          ],
+          "rows": [
+            [
+              "الأول",
+              120
+            ],
+            [
+              "الثاني",
+              450
+            ],
+            [
+              "الثالث",
+              1250
+            ],
+            [
+              "الرابع",
+              3400
+            ]
+          ]
+        },
+        "dataLabels": true,
+        "axisTitles": {
+          "value": "المبيعات"
+        }
+      }
+    },
+    {
+      "title": "حصة المناطق",
+      "chart": {
+        "type": "pie",
+        "data": {
+          "columns": [
+            "حصة المناطق",
+            "n"
+          ],
+          "rows": [
+            [
+              "الشرق",
+              50
+            ],
+            [
+              "الغرب",
+              30
+            ],
+            [
+              "الشمال",
+              20
+            ]
+          ]
+        },
+        "dataLabels": {
+          "content": [
+            "percent"
+          ],
+          "position": "outside-end"
+        }
+      }
+    },
+    {
+      "title": "جدول الأرقام",
+      "table": {
+        "columns": [
+          "البند",
+          {
+            "name": "المبلغ",
+            "format": "#,##0.00"
+          },
+          {
+            "name": "النسبة",
+            "format": "#,##0"
+          }
+        ],
+        "rows": [
+          [
+            "أ",
+            1234.5,
+            98765
+          ],
+          [
+            "ب",
+            2500.75,
+            1234567
+          ]
+        ]
+      }
+    },
+    {
+      "title": "خطوات العمل",
+      "items": [
+        "جمع البيانات",
+        "تحليل النتائج",
+        "عرض التقرير",
+        "المتابعة"
+      ],
+      "numbering": "arabic"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/pptx/duration-timeline.pptx",
+    "sha256": "c829bf1f8506721e33681326bb40651ad207e66a655d1f46e7a0859b8c944712",
+    "bytes": 112549
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/duration-timeline.original.opf.json",
+      "sha256": "fab888e439732ffde200aa493a85383c19fa3fb724713cf677446efc29131120",
+      "bytes": 5954,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

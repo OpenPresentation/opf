@@ -1,0 +1,3 @@
+slide 1 charts=0 tables=0 images=0 shapes=0 lines=0 groups=1 textItems=3 skipped=false
+slide 2 charts=0 tables=0 images=0 shapes=0 lines=0 groups=1 textItems=3 skipped=false
+

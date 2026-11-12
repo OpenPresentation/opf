@@ -1,0 +1,51 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/pptx/full-feature-tour.pptx",
+    "sha256": "a336c68a5fdc2e2d99658369949091707cebd75661b875bd8ccd32714a577f4d",
+    "bytes": 233471
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/full-feature-tour.original.opf.json",
+      "sha256": "100f6e7832bdef698931674ea717e56e75b49f48d08b27bea3a307448066a167",
+      "bytes": 59455,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/shapes/0/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/chart-option-adapted",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/2/charts/0/series/0/line/color",
+      "scope": "document",
+      "message": "Line series 'Active Teams' has explicit native solid paint that is not retained as per-series formatting in OPF; imported chart colors follow its design and semantic highlight.",
+      "help": "",
+      "option": "series.0.line.color"
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 2,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

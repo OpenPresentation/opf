@@ -1,0 +1,86 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/keynote/shape-overlays/keynote-export.pptx",
+    "sha256": "0d9bbc5362c4619b067bb1845c14bcc8ccafb70ff1ff229231f00a9c62609d52",
+    "bytes": 116123
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/shape-overlays.keynote.opf.json",
+      "sha256": "bdd27ef93f38b9eb75ef4410385ca38ecc55a4527b9a23916a1440ee918a86dd",
+      "bytes": 69838,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "import/grouped-text-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0",
+      "scope": "document",
+      "message": "Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/grouped-text-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1",
+      "scope": "document",
+      "message": "Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-image-crop",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/pictures/0",
+      "scope": "document",
+      "message": "Native picture crop is not represented by the imported OPF asset; the full image was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/grouped-text-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/2",
+      "scope": "document",
+      "message": "Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/grouped-text-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/3",
+      "scope": "document",
+      "message": "Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/grouped-text-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/5",
+      "scope": "document",
+      "message": "Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.",
+      "help": ""
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 6,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

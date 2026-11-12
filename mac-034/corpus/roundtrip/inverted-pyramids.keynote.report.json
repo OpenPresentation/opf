@@ -1,0 +1,31 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/keynote/inverted-pyramids/keynote-export.pptx",
+    "sha256": "69448cea5748cfb794c90286e0d5828e818f1ccc5c97d4f43d8e710cfa6fc355",
+    "bytes": 75425
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/inverted-pyramids.keynote.opf.json",
+      "sha256": "4f8e8e90e39e33b5c54beea196ddbb98448294b13e3ba502dd6916bc030ee24a",
+      "bytes": 5432,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

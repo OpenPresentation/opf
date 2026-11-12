@@ -1,0 +1,51 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/keynote/chart-point-overlays/keynote-export.pptx",
+    "sha256": "d14031741fa721dfc68c49f02df1982637c878ed21a6f49e6754019e9ff0cd75",
+    "bytes": 96809
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/chart-point-overlays.keynote.opf.json",
+      "sha256": "7dd350f14803924dca66015c1f22cf72870f35774af058de259dff10c85273d8",
+      "bytes": 6088,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "import/chart-option-adapted",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/charts/0/dataLabels",
+      "scope": "document",
+      "message": "The label number format '0.#' cannot be expressed; labels import in the General format.",
+      "help": "",
+      "option": "dataLabels"
+    },
+    {
+      "ruleId": "import/theme-unverified",
+      "severity": "warning",
+      "category": "import",
+      "path": "/design/theme",
+      "scope": "document",
+      "message": "The native theme has the name of OPF catalog theme 'classic', but neither its color scheme nor its heading/body fonts match that theme, so design.theme was not set.",
+      "help": ""
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 2,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

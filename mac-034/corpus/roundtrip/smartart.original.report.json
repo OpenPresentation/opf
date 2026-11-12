@@ -1,0 +1,31 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/pptx/smartart.pptx",
+    "sha256": "163e3c400bd210ca3eb49805ff92af12f7cbf578045b3c7ab906bda5835bcfe1",
+    "bytes": 727434
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/smartart.original.opf.json",
+      "sha256": "af3c37cd35c96dd392fa00f12d6b53936e553a88a5db8f9496e25d09d35353ff",
+      "bytes": 4802,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

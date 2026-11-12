@@ -1,0 +1,31 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/pptx/dot-diagrams.pptx",
+    "sha256": "1e9a35203fc3a5409d00a5ca43c187897b3c5667a60b9c581ad7eee27e61ceb3",
+    "bytes": 126243
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/dot-diagrams.original.opf.json",
+      "sha256": "e5666a550bcbce1940e853d166c4f2551d00ee324067beacf70e44b831f6792f",
+      "bytes": 7430,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

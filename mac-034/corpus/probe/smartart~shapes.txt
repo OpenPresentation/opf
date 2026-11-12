@@ -1,0 +1,18 @@
+slide 1 charts=0 tables=0 images=0 shapes=3 lines=0 groups=0 textItems=6 skipped=false
+slide 2 charts=0 tables=0 images=0 shapes=6 lines=0 groups=0 textItems=9 skipped=false
+slide 3 charts=0 tables=0 images=0 shapes=5 lines=0 groups=0 textItems=7 skipped=false
+slide 4 charts=0 tables=0 images=0 shapes=3 lines=0 groups=0 textItems=7 skipped=false
+slide 5 charts=0 tables=0 images=0 shapes=10 lines=0 groups=0 textItems=8 skipped=false
+slide 6 charts=0 tables=0 images=0 shapes=14 lines=0 groups=0 textItems=39 skipped=false
+slide 7 charts=0 tables=0 images=0 shapes=4 lines=0 groups=0 textItems=7 skipped=false
+slide 8 charts=0 tables=0 images=0 shapes=8 lines=0 groups=0 textItems=17 skipped=false
+slide 9 charts=0 tables=0 images=0 shapes=7 lines=0 groups=0 textItems=7 skipped=false
+slide 10 charts=0 tables=0 images=0 shapes=13 lines=0 groups=0 textItems=16 skipped=false
+slide 11 charts=0 tables=0 images=0 shapes=5 lines=0 groups=0 textItems=6 skipped=false
+slide 12 charts=0 tables=0 images=0 shapes=11 lines=0 groups=0 textItems=14 skipped=false
+slide 13 charts=0 tables=0 images=0 shapes=7 lines=0 groups=0 textItems=10 skipped=false
+slide 14 charts=0 tables=0 images=0 shapes=3 lines=0 groups=0 textItems=6 skipped=false
+slide 15 charts=0 tables=0 images=0 shapes=8 lines=0 groups=0 textItems=11 skipped=false
+slide 16 charts=0 tables=0 images=0 shapes=15 lines=0 groups=0 textItems=11 skipped=false
+slide 17 charts=0 tables=0 images=0 shapes=11 lines=0 groups=0 textItems=9 skipped=false
+

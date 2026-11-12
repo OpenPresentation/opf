@@ -1,0 +1,41 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/pptx/image-callouts.pptx",
+    "sha256": "62107bd0949d015e7f25429a6f0038b6a489baa9ce90aa6d14f41d513f50c091",
+    "bytes": 105770
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/image-callouts.original.opf.json",
+      "sha256": "5c02c5e34e1edfaee12d04d998cad90192984b3e99f4f98e54c28df4778ebf7a",
+      "bytes": 6493,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "import/image-callout-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/image/callouts",
+      "scope": "document",
+      "message": "Current native callout words and authored fractional frames were recovered. Native text formatting, panel fill/line styling and positions reflow from OPF; review the labels.",
+      "help": ""
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 1,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

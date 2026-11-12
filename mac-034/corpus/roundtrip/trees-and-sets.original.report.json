@@ -1,0 +1,31 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/pptx/trees-and-sets.pptx",
+    "sha256": "9f7dcec93d29212b7542392568b808af2bc2de61048f584bf124b792677a7845",
+    "bytes": 129389
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/trees-and-sets.original.opf.json",
+      "sha256": "fd6ae49032de60830b9f6a5d680a11ab81766828e0f39594080cb988ad06ecf1",
+      "bytes": 5416,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

@@ -1,0 +1,129 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Digits review fa-IR",
+  "language": {
+    "bcp47": "fa-IR",
+    "fontScheme": "noto-sans-arabic"
+  },
+  "design": {
+    "theme": "minimal",
+    "footer": {
+      "center": {
+        "text": "{{slide.number}} / {{deck.slideCount}}"
+      }
+    }
+  },
+  "slides": [
+    {
+      "title": "شاخص کلیدی",
+      "metric": {
+        "value": 999,
+        "label": "مشتریان جدید"
+      }
+    },
+    {
+      "title": "فروش به تفکیک فصل",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "فصل",
+            "فروش"
+          ],
+          "rows": [
+            [
+              "اول",
+              120
+            ],
+            [
+              "دوم",
+              450
+            ],
+            [
+              "سوم",
+              1250
+            ],
+            [
+              "چهارم",
+              3400
+            ]
+          ]
+        },
+        "dataLabels": true,
+        "axisTitles": {
+          "value": "فروش"
+        }
+      }
+    },
+    {
+      "title": "سهم مناطق",
+      "chart": {
+        "type": "pie",
+        "data": {
+          "columns": [
+            "سهم مناطق",
+            "n"
+          ],
+          "rows": [
+            [
+              "شرق",
+              50
+            ],
+            [
+              "غرب",
+              30
+            ],
+            [
+              "شمال",
+              20
+            ]
+          ]
+        },
+        "dataLabels": {
+          "content": [
+            "percent"
+          ],
+          "position": "outside-end"
+        }
+      }
+    },
+    {
+      "title": "جدول اعداد",
+      "table": {
+        "columns": [
+          "مورد",
+          {
+            "name": "مبلغ",
+            "format": "#,##0.00"
+          },
+          {
+            "name": "نسبت",
+            "format": "#,##0"
+          }
+        ],
+        "rows": [
+          [
+            "الف",
+            1234.5,
+            98765
+          ],
+          [
+            "ب",
+            2500.75,
+            1234567
+          ]
+        ]
+      }
+    },
+    {
+      "title": "مراحل کار",
+      "items": [
+        "جمع آوری داده",
+        "تحلیل نتایج",
+        "ارائه گزارش",
+        "پیگیری"
+      ],
+      "numbering": "arabic"
+    }
+  ]
+}

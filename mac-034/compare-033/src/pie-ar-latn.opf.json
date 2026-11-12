@@ -1,0 +1,42 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "pie-ar-latn",
+ "language": {
+  "bcp47": "ar-SA-u-nu-latn",
+  "fontScheme": "noto-sans-arabic"
+ },
+ "slides": [
+  {
+   "title": "Share",
+   "chart": {
+    "type": "pie",
+    "data": {
+     "columns": [
+      "Region",
+      "n"
+     ],
+     "rows": [
+      [
+       "East",
+       50
+      ],
+      [
+       "West",
+       30
+      ],
+      [
+       "North",
+       20
+      ]
+     ]
+    },
+    "dataLabels": {
+     "content": [
+      "percent"
+     ],
+     "position": "outside-end"
+    }
+   }
+  }
+ ]
+}

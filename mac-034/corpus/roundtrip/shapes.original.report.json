@@ -1,0 +1,31 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/pptx/shapes.pptx",
+    "sha256": "29c8e1b18af5f036f62fb36fa8985175c85e5e56b403dfc48d48aa0165d53877",
+    "bytes": 167840
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/shapes.original.opf.json",
+      "sha256": "f6a91ff66f17377a7e5215933af2c33bc1f4867e33c09692d268e9977b2fa9d8",
+      "bytes": 9813,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

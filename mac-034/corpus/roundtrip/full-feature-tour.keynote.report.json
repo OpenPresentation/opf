@@ -1,0 +1,404 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/keynote/full-feature-tour/keynote-export.pptx",
+    "sha256": "f4c95f7c92eef7d7d698b78bcec3396b4a784449219ecaf1071c5a45b2923780",
+    "bytes": 141576
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/full-feature-tour.keynote.opf.json",
+      "sha256": "1ee36e4cf4c1dfbc2c4c6c47b078e5da9be39ae576ae95dfea0e5405b833d0ff",
+      "bytes": 50659,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "import/unclassified-native-footer",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/8/shapes/0",
+      "scope": "document",
+      "message": "The current generated-name literal remains content: several current literal candidates are ambiguous.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unclassified-native-footer",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/8/shapes/2",
+      "scope": "document",
+      "message": "The current generated-name literal remains content: several current literal candidates are ambiguous.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unclassified-native-footer",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/10/shapes/0",
+      "scope": "document",
+      "message": "The current generated-name literal remains content: several current literal candidates are ambiguous.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unclassified-native-footer",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/10/shapes/4",
+      "scope": "document",
+      "message": "The current generated-name literal remains content: several current literal candidates are ambiguous.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/2/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/3/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/4/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/5/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/6/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/7/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/8/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/9/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/furniture-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/10/design",
+      "scope": "document",
+      "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/shapes/1/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-color",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/shapes/2/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "The native text color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-color",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/shapes/3/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "The native text color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-color",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/shapes/3/paragraphs/0/runs/2",
+      "scope": "document",
+      "message": "The native text color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-color",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/shapes/3/paragraphs/0/runs/3",
+      "scope": "document",
+      "message": "The native text color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-color",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/shapes/3/paragraphs/0/runs/4",
+      "scope": "document",
+      "message": "The native text color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/shapes/3/paragraphs/0/runs/5",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-color",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1/shapes/3/paragraphs/0/runs/6",
+      "scope": "document",
+      "message": "The native text color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/chart-option-adapted",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/2/charts/0/series/0/line/color",
+      "scope": "document",
+      "message": "Line series 'Active Teams' has explicit native solid paint that is not retained as per-series formatting in OPF; imported chart colors follow its design and semantic highlight.",
+      "help": "",
+      "option": "series.0.line.color"
+    },
+    {
+      "ruleId": "import/chart-option-adapted",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/2/charts/0/dataLabels",
+      "scope": "document",
+      "message": "The label number format '0' cannot be expressed; labels import in the General format.",
+      "help": "",
+      "option": "dataLabels"
+    },
+    {
+      "ruleId": "import/chart-option-adapted",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/3/charts/0/dataLabels",
+      "scope": "document",
+      "message": "The label number format '0.#' cannot be expressed; labels import in the General format.",
+      "help": "",
+      "option": "dataLabels"
+    },
+    {
+      "ruleId": "import/unsupported-table-cell-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/4/tables/0",
+      "scope": "document",
+      "message": "The native table style background is not represented; supported character styles are retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-table-border",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/4/tables/0/rows/0/0",
+      "scope": "document",
+      "message": "The native solid color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-table-border",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/4/tables/0/rows/0/1",
+      "scope": "document",
+      "message": "The native solid color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-table-border",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/4/tables/0/rows/0/2",
+      "scope": "document",
+      "message": "The native solid color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-table-border",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/4/tables/0/rows/1/0",
+      "scope": "document",
+      "message": "The native solid color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-table-border",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/4/tables/0/rows/1/1",
+      "scope": "document",
+      "message": "The native solid color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-table-border",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/4/tables/0/rows/1/2",
+      "scope": "document",
+      "message": "The native solid color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-table-border",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/4/tables/0/rows/2/0",
+      "scope": "document",
+      "message": "The native solid color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-table-border",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/4/tables/0/rows/2/1",
+      "scope": "document",
+      "message": "The native solid color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-table-border",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/4/tables/0/rows/2/2",
+      "scope": "document",
+      "message": "The native solid color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-image-crop",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/8/pictures/0",
+      "scope": "document",
+      "message": "Native picture crop is not represented by the imported OPF asset; the full image was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-style",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/9/shapes/5/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-color",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/10/shapes/2/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "The native text color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-body-text-color",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/10/shapes/3/paragraphs/0/runs/0",
+      "scope": "document",
+      "message": "The native text color or its transforms could not be resolved.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/theme-unverified",
+      "severity": "warning",
+      "category": "import",
+      "path": "/design/theme",
+      "scope": "document",
+      "message": "The native theme has the name of OPF catalog theme 'classic', but neither its color scheme nor its heading/body fonts match that theme, so design.theme was not set.",
+      "help": ""
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 41,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

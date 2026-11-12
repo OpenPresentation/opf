@@ -1,0 +1,31 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/pptx/inverted-pyramids.pptx",
+    "sha256": "002939edb2559e1c6d93d0104d93e0a5fbe5d1645db041fa5f48b2ae2b66aa18",
+    "bytes": 115802
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/inverted-pyramids.original.opf.json",
+      "sha256": "f2d50c1520b2dbeafffd2ee87a62a5aa52228bd450ca9b34f56ede8c9de20fdb",
+      "bytes": 2773,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

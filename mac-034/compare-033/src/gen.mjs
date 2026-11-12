@@ -1,0 +1,10 @@
+import fs from 'fs';
+const d=JSON.parse(fs.readFileSync('/Users/michael/opf-work/mac-034-digits/digits-ar-SA.opf.json','utf8'));
+const w=(n,o)=>fs.writeFileSync(`src/${n}.opf.json`,JSON.stringify(o,null,1));
+const ar={bcp47:"ar-SA",fontScheme:"noto-sans-arabic"};
+w('rtl-table-numbers',{...d,name:'rtl-table-numbers',slides:[d.slides[3]]});
+w('rtl-table-text',{$schema:d.$schema,name:'rtl-table-text',language:ar,design:d.design,slides:[{title:'جدول المناطق',table:{columns:['المنطقة','المسؤول','الحالة'],rows:[['الشرق','أحمد','جاهز'],['الغرب','سارة','قيد التنفيذ']]}}]});
+w('footer-en',{$schema:d.$schema,name:'footer-en',language:'en-US',design:{footer:{center:{text:"{{slide.number}} / {{deck.slideCount}}"}}},slides:[{title:'First slide',text:'Hello world'},{title:'Second slide',text:'More text here'}]});
+const pie={title:'Share',chart:{type:'pie',data:{columns:['Region','n'],rows:[['East',50],['West',30],['North',20]]},dataLabels:{content:['percent'],position:'outside-end'}}};
+w('pie-en',{$schema:d.$schema,name:'pie-en',slides:[pie]});
+w('pie-ar-latn',{$schema:d.$schema,name:'pie-ar-latn',language:{bcp47:'ar-SA-u-nu-latn',fontScheme:'noto-sans-arabic'},slides:[pie]});

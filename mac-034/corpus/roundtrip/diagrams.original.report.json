@@ -1,0 +1,31 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/pptx/diagrams.pptx",
+    "sha256": "3019d5647ae328ed556f90cc32b7d55cd7772c4cdd6227920bec0bb608545baa",
+    "bytes": 138100
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/diagrams.original.opf.json",
+      "sha256": "d94773471ec47118797d8a707f9c5fb7dd71b87365d5895056e0ce690a3c9409",
+      "bytes": 7390,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

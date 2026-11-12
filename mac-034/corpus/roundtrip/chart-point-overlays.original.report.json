@@ -1,0 +1,31 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/pptx/chart-point-overlays.pptx",
+    "sha256": "ffe73e7fae0db372eac518a42f8da5234c3d355daf606364a397845b9ae0d425",
+    "bytes": 136243
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/chart-point-overlays.original.opf.json",
+      "sha256": "ef19566c1d715889850623edbb80f164e3a40e7ecfd62a97d2438c4fdddc4e24",
+      "bytes": 8284,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

@@ -1,0 +1,50 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "/Users/michael/opf-work/mac-034-corpus/keynote/diagram-connectors/keynote-export.pptx",
+    "sha256": "903303a8668da573e9a50a84b344e49d8d1ba1f2c3b7c4b4c18f9c1d7e7adda8",
+    "bytes": 75368
+  },
+  "outputs": [
+    {
+      "file": "/Users/michael/opf-work/mac-034-corpus/roundtrip/diagram-connectors.keynote.opf.json",
+      "sha256": "fe0044878db25597ca9e3b5e1e9204ca8c872a026b63154556a18e96c8d6783a",
+      "bytes": 7820,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "import/grouped-text-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0",
+      "scope": "document",
+      "message": "Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/grouped-text-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1",
+      "scope": "document",
+      "message": "Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.",
+      "help": ""
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 2,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.33.0"
+  },
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "written": true
+}

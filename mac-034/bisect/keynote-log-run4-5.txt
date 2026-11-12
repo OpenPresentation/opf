@@ -1,0 +1,26 @@
+r1-line__drop-helper-group FAILED-ALERT after 4s (windows captured: 2)
+r1-line__helper-no-dlbls FAILED-ALERT after 4s (windows captured: 2)
+r1-line__drop-group-dlbls FAILED-ALERT after 4s (windows captured: 2)
+r1-line__outer-layout FAILED-ALERT after 4s (windows captured: 2)
+r2-column-pct exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+r3-combo-secondary exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+r4-bar exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+c033-chart-type-sampler exit=0 slides=3 size=960x540 docsBefore=0 docsAfter=0 
+footer-en.rc exit=0 slides=2 size=960x540 docsBefore=0 docsAfter=0 
+footer-en.v033 exit=0 slides=2 size=960x540 docsBefore=0 docsAfter=0 
+pie-ar-latn.rc exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+pie-ar-latn.v033 exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+pie-en.rc exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+pie-en.v033 exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+rtl-table-numbers.rc-nortl exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+rtl-table-numbers.rc exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+rtl-table-numbers.v033 exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+rtl-table-text.rc-nortl exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+rtl-table-text.rc exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+rtl-table-text.v033 exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+DONE-RUN4
+r1-line__axpos exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+r1-line__axpos-tick exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0 
+localized-chart-references__axpos-tick exit=0 slides=7 size=960x540 docsBefore=0 docsAfter=0 
+explicit-chart-reference-lines__axpos-tick exit=0 slides=5 size=960x540 docsBefore=0 docsAfter=0 
+DONE-RUN5

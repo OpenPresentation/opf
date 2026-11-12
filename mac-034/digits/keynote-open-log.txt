@@ -1,0 +1,5 @@
+digits-ar-SA-u-nu-latn exit=0 slides=5 size=960x540 docsBefore=0 docsAfter=0
+digits-ar-SA exit=0 slides=5 size=960x540 docsBefore=0 docsAfter=0
+digits-bn-BD exit=0 slides=5 size=960x540 docsBefore=0 docsAfter=0
+digits-fa-IR exit=0 slides=5 size=960x540 docsBefore=0 docsAfter=0
+digits-hi-IN-u-nu-deva exit=0 slides=5 size=960x540 docsBefore=0 docsAfter=0

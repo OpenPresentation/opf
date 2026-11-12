@@ -1,0 +1,5 @@
+slide 1 charts=0 tables=0 images=0 shapes=0 lines=0 groups=0 textItems=5 skipped=false
+slide 2 charts=0 tables=0 images=0 shapes=0 lines=0 groups=0 textItems=6 skipped=false
+slide 3 charts=0 tables=0 images=0 shapes=0 lines=0 groups=0 textItems=5 skipped=false
+slide 4 charts=0 tables=0 images=0 shapes=0 lines=0 groups=0 textItems=6 skipped=false
+

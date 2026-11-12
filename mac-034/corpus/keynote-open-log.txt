@@ -1,0 +1,37 @@
+chart-point-overlays exit=0 slides=3 size=960x540 docsBefore=0 docsAfter=0
+chart-type-sampler exit=0 slides=3 size=960x540 docsBefore=0 docsAfter=0
+columns exit=0 slides=2 size=960x540 docsBefore=0 docsAfter=0
+compliance-readiness-review exit=0 slides=10 size=960x540 docsBefore=0 docsAfter=0
+data-story-academy exit=0 slides=16 size=960x540 docsBefore=0 docsAfter=0
+diagram-connectors exit=0 slides=2 size=960x540 docsBefore=0 docsAfter=0
+diagrams-markdown exit=0 slides=3 size=960x540 docsBefore=0 docsAfter=0
+diagrams exit=0 slides=7 size=960x540 docsBefore=0 docsAfter=0
+diagrams~picture exit=0 slides=7 size=960x540 docsBefore=0 docsAfter=0
+dot-diagrams exit=0 slides=5 size=960x540 docsBefore=0 docsAfter=0
+duration-timeline exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0
+explicit-chart-reference-lines HUNG after 90s (windows captured: 1)
+footers exit=0 slides=4 size=960x540 docsBefore=0 docsAfter=0
+footers~static exit=0 slides=4 size=960x540 docsBefore=0 docsAfter=0
+full-feature-tour exit=0 slides=11 size=960x540 docsBefore=0 docsAfter=0
+header-footer-logo-set exit=0 slides=2 size=960x540 docsBefore=0 docsAfter=0
+image-callouts exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0
+inverted-pyramids exit=0 slides=3 size=960x540 docsBefore=0 docsAfter=0
+layout-harvest exit=0 slides=20 size=960x540 docsBefore=0 docsAfter=0
+layout-harvest~native-body exit=0 slides=20 size=960x540 docsBefore=0 docsAfter=0
+layout-sampler exit=0 slides=53 size=960x540 docsBefore=0 docsAfter=0
+layout-sampler~native-body exit=0 slides=53 size=960x540 docsBefore=0 docsAfter=0
+localized-chart-references HUNG after 90s (windows captured: 1)
+localized-timeline exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0
+multilingual-slides exit=0 slides=4 size=960x540 docsBefore=0 docsAfter=0
+plantuml-diagrams exit=0 slides=8 size=960x540 docsBefore=0 docsAfter=0
+shape-effects exit=0 slides=4 size=960x540 docsBefore=0 docsAfter=0
+shape-overlays-rtl exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0
+shape-overlays exit=0 slides=6 size=960x540 docsBefore=0 docsAfter=0
+shapes exit=0 slides=8 size=960x540 docsBefore=0 docsAfter=0
+singleton-combo-reference-lines exit=0 slides=1 size=960x540 docsBefore=0 docsAfter=0
+smartart-arabic exit=0 slides=3 size=960x540 docsBefore=0 docsAfter=0
+smartart-japanese exit=0 slides=3 size=960x540 docsBefore=0 docsAfter=0
+smartart exit=0 slides=17 size=960x540 docsBefore=0 docsAfter=0
+smartart~shapes exit=0 slides=17 size=960x540 docsBefore=0 docsAfter=0
+table-and-code exit=0 slides=2 size=960x540 docsBefore=0 docsAfter=0
+trees-and-sets exit=0 slides=3 size=960x540 docsBefore=0 docsAfter=0

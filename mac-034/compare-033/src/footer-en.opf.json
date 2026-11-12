@@ -1,0 +1,22 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "footer-en",
+ "language": "en-US",
+ "design": {
+  "footer": {
+   "center": {
+    "text": "{{slide.number}} / {{deck.slideCount}}"
+   }
+  }
+ },
+ "slides": [
+  {
+   "title": "First slide",
+   "text": "Hello world"
+  },
+  {
+   "title": "Second slide",
+   "text": "More text here"
+  }
+ ]
+}
