@@ -441,7 +441,7 @@ test('native label deletion/clearing never resurrects stale authored text', asyn
   const e = await exported(doc());
   for (const fn of [
     // Deleting the labels: CT_DLbls then holds c:delete in place of the show flags (RR-105: never both).
-    (s) => s.replace('</c:dLbl><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/></c:dLbls>', '</c:dLbl><c:delete val="1"/></c:dLbls>'),
+    (s) => s.replace('</c:dLbl><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/><c:showPercent val="0"/><c:showBubbleSize val="0"/><c:showLeaderLines val="0"/></c:dLbls>', '</c:dLbl><c:delete val="1"/></c:dLbls>'),
     (s) => s.replace('<a:t>Target</a:t>', '<a:t> </a:t>'),
   ]) {
     const out = await imported(rewrite(e.entries, 'ppt/charts/chart1.xml', (x) => editHelpers(x, fn)));

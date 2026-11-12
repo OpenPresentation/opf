@@ -59,8 +59,10 @@ for (const [language, label, slideLanguage, cs] of [['de-DE', 'Ziel & <Plan> "1"
       assert.equal(entries.length, 1);
       assert.equal(rest.includes('delete'), false, `${language}: a labeled helper has the show flags and no c:delete`);
       assert.ok(inOrder(rest, DLBLS_GROUP), `${language}: the show flags in order (${rest.join(', ')})`);
-      assert.deepEqual(rest, ['showLegendKey', 'showVal', 'showCatName', 'showSerName']);
+      // LH-110: every show flag is explicit; CT_Boolean defaults to true, and Keynote refuses an absent showPercent/showBubbleSize.
+      assert.deepEqual(rest, ['showLegendKey', 'showVal', 'showCatName', 'showSerName', 'showPercent', 'showBubbleSize', 'showLeaderLines']);
       const entry = children(entries[0].body).map(kid => kid.name);
+      assert.deepEqual(entry.filter(name => name.startsWith('show')), ['showLegendKey', 'showVal', 'showCatName', 'showSerName', 'showPercent', 'showBubbleSize'], language + ': the c:dLbl states every show flag');
       assert.ok(inOrder(entry, DLBL), `${language}: c:dLbl children in order (${entry.join(', ')})`);
       assert.equal(entry.includes('delete'), false);
       const runs = [...entries[0].body.matchAll(/<a:rPr\b[^>]*\blang="([^"]+)"[^>]*>([\s\S]*?)<\/a:rPr>/g)];
