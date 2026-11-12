@@ -73,12 +73,17 @@ export function textValue(runs) {
 // ---------------------------------------------------------------------------
 // The data model
 
+/** The largest outline import reads as a tree: points deep below the doc point, and entries in all. */
+export const SMART_ART_LIMITS = Object.freeze({depth: 64, entries: 10000});
+
 /**
- * Read a SmartArt data model: `{layoutId, category, roots, dropped, pictures, drawingRelId}`. `roots` is the outline: entries `{runs,
- * assistant, detail, edge, children}` in `srcOrd` order (`detail`: a presentation point's own text, such as a name-and-title chart's title;
- * `edge`: the text of the connection from its parent). An entry without text gives its place to its children. `dropped` lists the text no
- * entry carries ({role, text}): transitions between siblings, presentation text not tied to an entry and nodes no connection reaches.
- * `pictures` counts the entries with a picture fill. Undefined when the part is not a data model.
+ * Read a SmartArt data model: `{layoutId, category, roots, dropped, pictures, drawingRelId, sharedConnections, limited, omitted}`. `roots`
+ * is the outline: entries `{runs, assistant, detail, edge, children}` in `srcOrd` order (`detail`: a presentation point's own text, such as
+ * a name-and-title chart's title; `edge`: the text of the connection from its parent). An entry without text gives its place to its
+ * children. Each point is one entry, under the first parent that reaches it; `sharedConnections` counts the further connections to a point
+ * already placed. `limited` ('depth' or 'entries') says the model passed SMART_ART_LIMITS, and `roots` is then flat (`omitted`: the entries
+ * past the entry limit). `dropped` lists the text no entry carries ({role, text}): transitions between siblings, presentation text not tied
+ * to an entry and nodes no connection reaches. `pictures` counts the entries with a picture fill. Undefined when the part is not a data model.
  */
 export function readSmartArtModel(xml) {
   let tree;
@@ -121,34 +126,52 @@ export function readSmartArtModel(xml) {
     const owner = byCxn.get(point.cxnId)?.destId;
     if (owner && ['node', 'asst'].includes(byId.get(owner)?.type) && !detailOf.has(owner)) { detailOf.set(owner, point.runs); usedTransitions.add(point.id); }
   }
-  const reached = new Set();
-  const build = (parentId, seen) => (childrenOf.get(parentId) ?? []).slice().sort((a, b) => Number(a.srcOrd ?? 0) - Number(b.srcOrd ?? 0)).flatMap(cxn => {
+  // A data model is untrusted input. Each point is imported once, under the first parent that reaches it: a further parent, or a
+  // connection back to an ancestor, is counted in `sharedConnections`. The outline is at most SMART_ART_LIMITS.depth points deep and
+  // SMART_ART_LIMITS.entries entries long; past either limit (`limited`) it is flat: the entries' text in the part's order, up to the
+  // entry limit (`omitted` counts the rest). So the outline's walks below and in smart-art.js stay shallow and linear.
+  const reached = new Set([doc.id]);
+  let sharedConnections = 0, entries = 0, limited;
+  const build = (parentId, depth) => (childrenOf.get(parentId) ?? []).slice().sort((a, b) => Number(a.srcOrd ?? 0) - Number(b.srcOrd ?? 0)).flatMap(cxn => {
     const point = byId.get(cxn.destId);
-    if (!point || !['node', 'asst'].includes(point.type) || seen.has(point.id)) return [];
+    if (limited || !point || !['node', 'asst'].includes(point.type)) return [];
+    if (reached.has(point.id)) { sharedConnections++; return []; }
+    if (depth >= SMART_ART_LIMITS.depth) { limited = 'depth'; return []; }
     reached.add(point.id);
-    const children = build(point.id, new Set([...seen, point.id]));
+    const children = build(point.id, depth + 1);
     const edge = byId.get(cxn.parTransId);
     if (!plainText(point.runs).trim()&&point.set.custT!=='1'&&point.set.phldr!=='0') return children;
+    if (++entries > SMART_ART_LIMITS.entries) { limited = 'entries'; return []; }
     if (edge && plainText(edge.runs).trim()) usedTransitions.add(edge.id);
     return [{runs: point.runs, paragraphs: point.paragraphs, assistant: point.type === 'asst', ...(detailOf.has(point.id) ? {detail: detailOf.get(point.id)} : {}),
       ...(edge && plainText(edge.runs).trim() ? {edge: edge.runs, edgeId: edge.id} : {}), picture: point.picture, children}];
   });
-  const roots = build(doc.id, new Set([doc.id]));
+  let roots = build(doc.id, 0), omitted = 0;
+  if (limited) {
+    const flat = points.filter(point => ['node', 'asst'].includes(point.type) && plainText(point.runs).trim());
+    omitted = Math.max(0, flat.length - SMART_ART_LIMITS.entries);
+    roots = flat.slice(0, SMART_ART_LIMITS.entries).map(point => ({runs: point.runs, paragraphs: point.paragraphs, assistant: false,
+      ...(detailOf.has(point.id) ? {detail: detailOf.get(point.id)} : {}), picture: point.picture, children: []}));
+    sharedConnections = 0;
+    for (const point of points) if (point.type === 'parTrans') usedTransitions.delete(point.id);
+  }
   for (const point of points) {
-    if (['node', 'asst'].includes(point.type) && !reached.has(point.id) && plainText(point.runs).trim()) dropped.push({role: 'node', text: plainText(point.runs)});
+    if (!limited && ['node', 'asst'].includes(point.type) && !reached.has(point.id) && plainText(point.runs).trim()) dropped.push({role: 'node', text: plainText(point.runs)});
     if (['parTrans', 'sibTrans'].includes(point.type) && plainText(point.runs).trim() && !(point.type === 'sibTrans' && usedTransitions.has(point.id)))
       dropped.push({role: 'transition', text: plainText(point.runs), id: point.id, used: usedTransitions.has(point.id)});
   }
-  const extension = (function search(nodes) {
+  // dsp:dataModelExt lies two levels down (dgm:extLst > a:ext > dsp:dataModelExt); the search goes no deeper than a few levels.
+  const extension = (function search(nodes, depth) {
     for (const node of nodes ?? []) {
       if (tagOf(node) === 'dsp:dataModelExt') return attrsOf(node).relId;
-      const found = search(kidsOf(node));
+      const found = depth < 4 ? search(kidsOf(node), depth + 1) : undefined;
       if (found) return found;
     }
     return undefined;
-  })(kidsOf(find(kids, 'dgm:extLst')));
+  })(kidsOf(find(kids, 'dgm:extLst')), 0);
   const count = list => list.reduce((sum, entry) => sum + (entry.picture ? 1 : 0) + count(entry.children), 0);
-  return {layoutId: doc.set.loTypeId ?? '', category: doc.set.loCatId ?? '', roots, dropped, pictures: count(roots), ...(extension ? {drawingRelId: extension} : {})};
+  return {layoutId: doc.set.loTypeId ?? '', category: doc.set.loCatId ?? '', roots, dropped, pictures: count(roots), ...(extension ? {drawingRelId: extension} : {}),
+    ...(sharedConnections ? {sharedConnections} : {}), ...(limited ? {limited, omitted} : {})};
 }
 
 // ---------------------------------------------------------------------------
@@ -225,7 +248,7 @@ const label = runs => plainText(runs).trim().replace(/[#"<>]/g, char => ({'#': '
 
 /**
  * A hierarchy or organization chart as a Mermaid flowchart (`direction` TD or LR): one node per entry, `n1` on, its text (and detail on a
- * second line) as its label; an edge from each parent, dotted to an assistant, labelled with the connection's own text. Returns
+ * second line) as its label; an edge from each parent, dotted to an assistant, labeled with the connection's own text. Returns
  * `{source, alt, formatted}` (`formatted`: some run had formatting a label does not carry).
  */
 export function hierarchyDiagram(roots, direction, noun) {

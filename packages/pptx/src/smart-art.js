@@ -38,7 +38,7 @@
 // layout's list, a Mermaid hierarchy, or its drawing as overlay shapes).
 import {SMART_ART_LAYOUTS, SMART_ART_NAMES, arrangementTree, arrangementPaint, applyColorTransform, bindNoBreak, colorContrast, opfSmartArtUnavailable, smartArtScript, smartArtUnavailable} from '@openpresentation/opf/composition';
 import {layoutDefinitionXml, opfLayoutDefinition} from './smart-art-layouts.js';
-import {drawingSlide, hierarchyDiagram, layoutStem, outlineItems, outlineText, plainText, readSmartArtModel, smartArtForm} from './smart-art-import.js';
+import {SMART_ART_LIMITS, drawingSlide, hierarchyDiagram, layoutStem, outlineItems, outlineText, plainText, readSmartArtModel, smartArtForm} from './smart-art-import.js';
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
 import {mediaKey} from './media-dedupe.js';
@@ -653,6 +653,8 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
   for (const [index, frame] of frames.entries()) {
     const data = frame?.['a:graphic']?.['a:graphicData'];
     if (data?.uri !== SMART_ART_URI) continue;
+    // A SmartArt's parts are untrusted input: one that cannot be read leaves its frame to the rest of the import and never fails it.
+    try {
     const ids = data['dgm:relIds'] ?? {}, dataPart = relationships.get(ids['r:dm'])?.path;
     if (!dataPart || !entries[dataPart]) continue;
     const model = readSmartArtModel(decoder.decode(entries[dataPart]));
@@ -668,6 +670,12 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
     if(extraLabels)form={drawing:true};
     const frameName = scalar(frame?.['p:nvGraphicFramePr']?.['p:cNvPr']?.name) || 'SmartArt';
     const named = `The SmartArt ${JSON.stringify(frameName)} (layout ${stem})`;
+    // Past the outline's limits the model's entries are a flat list: the drawing, or that list, is imported.
+    if (model.limited) {
+      form = {drawing: true};
+      report?.({code: 'smartart-limited', path, layout: stem, limit: model.limited, message: `${named} has ${model.limited === 'depth' ? `entries nested more than ${SMART_ART_LIMITS.depth} levels deep` : `more than ${SMART_ART_LIMITS.entries} entries`}; its drawing is imported, or without one its entries as a flat list${model.omitted ? ` (the first ${SMART_ART_LIMITS.entries}; ${model.omitted} more are not imported)` : ''}.`});
+    }
+    if (model.sharedConnections) report?.({code: 'smartart-connection-dropped', path, layout: stem, message: `${named} has ${model.sharedConnections} ${model.sharedConnections === 1 ? 'connection' : 'connections'} to an entry that already has a parent (or to its own ancestor); each entry is imported once, under its first parent.`});
     // Never lose text silently: what the OPF form does not keep is named.
     for (const item of model.dropped) {
       if (item.role === 'transition' && item.used && form.hierarchy) continue;
@@ -729,6 +737,10 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
     }
     report?.({code: 'smartart-adapted', path, layout: stem, form: 'list', message: `${named} has no OPF arrangement and no drawing; its entries are imported as a list.`});
     out.set(index, items.length ? {type: 'list', kind: 'list', layout: 'default:list', tagged: false, payload: {type: 'list', items: outlineItems(model.roots, {split: true})}} : {type: 'empty'});
+    } catch (error) {
+      out.delete(index);
+      report?.({code: 'smartart-unreadable', path: `slides.${slideIndex}`, message: `A SmartArt's parts could not be read (${error instanceof Error ? error.name : 'error'}); the frame imports as any other graphic frame.`});
+    }
   }
   return out;
 }

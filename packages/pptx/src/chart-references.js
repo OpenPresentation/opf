@@ -125,20 +125,24 @@ export function applyReferenceSeries(xml, info, binding) {
     const label =
       line.label === undefined
         ? ''
-        : `<c:dLbl><c:idx val="${line.endpoint}"/><c:tx>${nativeLabelXml(line.label, info)}</c:tx><c:dLblPos val="${line.labelSide === 'below' ? 'b' : 't'}"/><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/></c:dLbl>`;
-    next = next.replace(
-      /(<c:tx>[\s\S]*?<\/c:tx>)/,
-      `$1${paint}${marker}<c:dLbls>${label}<c:delete val="${line.label === undefined ? 1 : 0}"/><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/></c:dLbls>`,
-    );
+        : `<c:dLbl><c:idx val="${line.endpoint}"/><c:tx>${nativeLabelXml(line.label, info, binding?.lang)}</c:tx><c:dLblPos val="${line.labelSide === 'below' ? 'b' : 't'}"/><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/></c:dLbl>`;
+    // CT_DLbls: the c:dLbl entries, then either c:delete or the show flags, never both. A labeled helper shows only its one point's text;
+    // an unlabeled one deletes its labels.
+    const labels = line.label === undefined
+      ? '<c:dLbls><c:delete val="1"/></c:dLbls>'
+      : `<c:dLbls>${label}<c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/></c:dLbls>`;
+    next = next.replace(/(<c:tx>[\s\S]*?<\/c:tx>)/, `$1${paint}${marker}${labels}`);
     next = addExt(next, '</c:ser>', 'reference', { v: 1, id });
     info.hidden.push(idx);
     return next;
   });
   if (ordinal !== info.primaryCount + refs.length) throw Error('Missing reference helper series.');
+  const legendOrder = legendOrderIndexes(out);
+  out = legendOrder.xml;
   if (info.hidden.length)
     out = out.replace(
       /(<c:legend>\s*<c:legendPos\b[^>]*\/>)/,
-      `$1${info.hidden.map((idx) => `<c:legendEntry><c:idx val="${idx}"/><c:delete val="1"/></c:legendEntry>`).join('')}`,
+      `$1${info.hidden.map((idx) => legendOrder.indexes.get(idx) ?? idx).sort((a, b) => a - b).map((idx) => `<c:legendEntry><c:idx val="${idx}"/><c:delete val="1"/></c:legendEntry>`).join('')}`,
     );
   const overlayDoc = info.lines.some(line => !line.native) ? parser.parse(out) : undefined;
   const overlayPlot = overlayDoc?.['c:chartSpace']?.['c:chart']?.['c:plotArea'];
@@ -895,9 +899,44 @@ export function coalesceOrdinaryLines(plot) {
   return { ...groups[0], 'c:ser': entries };
 }
 
-function nativeLabelXml(label, info) {
+/**
+ * RR-105: PowerPoint lists a chart's legend by chart group, the groups on the primary axes before those on the secondary axes, and a
+ * c:legendEntry names its entry by its place in that list. A combo with a reference on each axis has a helper group on the primary
+ * axes after the authored line group on the secondary axes, so the helper's c:idx was not its legend place: deleting the helpers'
+ * entries by c:idx hid the authored line series instead. The series indexes are renumbered in legend order (c:order, the plotting
+ * order, is unchanged), so an entry's place and its series' c:idx agree. Returns the part and Map<old c:idx, new c:idx>; a chart whose
+ * groups are already in that order keeps its bytes.
+ */
+function legendOrderIndexes(xml) {
+  const indexes = new Map(),
+    plot = /<c:plotArea>[\s\S]*<\/c:plotArea>/.exec(xml);
+  if (!plot) return { xml, indexes };
+  const primary = /<c:valAx>\s*<c:axId val="([^"]+)"/.exec(plot[0])?.[1];
+  const groups = [...plot[0].matchAll(/<c:(\w+Chart)>[\s\S]*?<\/c:\1>/g)].map((m) => ({
+    xml: m[0],
+    primary: primary === undefined || [...m[0].matchAll(/<c:axId val="([^"]+)"\/>/g)].some((a) => a[1] === primary),
+    series: [...m[0].matchAll(/<c:ser>\s*<c:idx val="(\d+)"\/>/g)].map((s) => Number(s[1])),
+  }));
+  let next = 0;
+  for (const group of [...groups.filter((g) => g.primary), ...groups.filter((g) => !g.primary)])
+    for (const idx of group.series) indexes.set(idx, next++);
+  if ([...indexes].every(([from, to]) => from === to)) return { xml, indexes };
+  let body = plot[0];
+  for (const group of groups)
+    body = body.replace(group.xml, group.xml.replace(/(<c:ser>\s*<c:idx val=")(\d+)("\/>)/g, (_, a, idx, b) => a + indexes.get(Number(idx)) + b));
+  const remapped = xml.slice(0, plot.index) + body + xml.slice(plot.index + plot[0].length);
+  return {
+    xml: remapped.replace(/(<c:legendEntry>\s*<c:idx val=")(\d+)("\/>)/g, (_, a, idx, b) => a + (indexes.get(Number(idx)) ?? idx) + b),
+    indexes,
+  };
+}
+
+/** A helper's label as chart rich text: a paragraph a line, its runs in the slide's language (`lang`, en-US when the plan names none). */
+function nativeLabelXml(label, info, lang = 'en-US') {
   const run = (part) =>
-    '<a:r><a:rPr lang="en-US" sz="' +
+    '<a:r><a:rPr lang="' +
+    escape(lang) +
+    '" sz="' +
     info.textSize +
     '"><a:solidFill><a:srgbClr val="' +
     info.labelColor +

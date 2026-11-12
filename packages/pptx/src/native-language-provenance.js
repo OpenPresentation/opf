@@ -20,11 +20,22 @@ const attribute=(value,name)=>new RegExp('\\s'+name+'="([^"]*)"').exec(value)?.[
 const decode=value=>String(parser.parse('<t>'+value+'</t>').t??'');
 const paragraphText=value=>[...value.matchAll(/<a:t>([^<]*)<\/a:t>|<a:br\b/g)].map(m=>m[1]===undefined?'\n':decode(m[1])).join('');
 const ownedName=value=>/^OPF (?:list|text) /.test(value);
+// Imported files name these tags (altLang), so the cache holds only a language-tag shape of at most RTL_TAG_LENGTH characters and at
+// most RTL_TAG_CACHE entries (the oldest goes first); any other value is not right to left and is never resolved or kept.
+const RTL_TAG_LENGTH=35,RTL_TAG_CACHE=64,LANGUAGE_TAG=/^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$/;
 const rtlTags=new Map();
-const rtlLanguage=value=>{
- if(!rtlTags.has(value)){let rtl=false;try{rtl=resolveScriptFonts({language:value}).rtl===true;}catch{/* Unknown native tags remain observed. */}rtlTags.set(value,rtl);}
+export const rtlLanguage=value=>{
+ if(typeof value!=='string'||value.length>RTL_TAG_LENGTH||!LANGUAGE_TAG.test(value))return false;
+ if(!rtlTags.has(value)){
+  let rtl=false;try{rtl=resolveScriptFonts({language:value}).rtl===true;}catch{/* Unknown native tags remain observed. */}
+  if(rtlTags.size>=RTL_TAG_CACHE)rtlTags.delete(rtlTags.keys().next().value);
+  rtlTags.set(value,rtl);
+  return rtl;
+ }
  return rtlTags.get(value);
 };
+/** How many language tags the cache holds (a test reads it). */
+export const rtlLanguageCacheSize=()=>rtlTags.size;
 export const latinNumericText=value=>{
  if(typeof value!=='string')return false;
  // Normalize only the eligibility probe; native/source characters stay exact.

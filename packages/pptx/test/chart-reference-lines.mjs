@@ -440,7 +440,8 @@ test('unknown marker, unsupported dash and invalid helper point counts are retai
 test('native label deletion/clearing never resurrects stale authored text', async () => {
   const e = await exported(doc());
   for (const fn of [
-    (s) => s.replace('<c:delete val="0"/>', '<c:delete val="1"/>'),
+    // Deleting the labels: CT_DLbls then holds c:delete in place of the show flags (RR-105: never both).
+    (s) => s.replace('</c:dLbl><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/></c:dLbls>', '</c:dLbl><c:delete val="1"/></c:dLbls>'),
     (s) => s.replace('<a:t>Target</a:t>', '<a:t> </a:t>'),
   ]) {
     const out = await imported(rewrite(e.entries, 'ppt/charts/chart1.xml', (x) => editHelpers(x, fn)));
@@ -763,7 +764,7 @@ test('current native auto-label, leader-line and manual-placement edits remain o
         rewrite(e.entries, 'ppt/charts/chart1.xml', (xml) =>
           editHelpers(xml, (s) =>
             mode === 'auto-value'
-              ? s.replace('<c:delete val="1"/>', '<c:delete val="0"/>').replace('<c:showVal val="0"/>', '<c:showVal val="1"/>')
+              ? s.replace('<c:dLbls><c:delete val="1"/></c:dLbls>', '<c:dLbls><c:showLegendKey val="0"/><c:showVal val="1"/><c:showCatName val="0"/><c:showSerName val="0"/></c:dLbls>')
               : mode === 'auto-category'
                 ? s.replace('<c:showCatName val="0"/>', '<c:showCatName val="1"/>')
                 : mode === 'leader'
