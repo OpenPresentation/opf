@@ -1368,7 +1368,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Which series and categories a chart emphasizes. Names are matched exactly: series by data column name (after any 'fields' selection; a series is a plotted value column), categories by row label (the first column, or mapping.category), as text. A category label shared by several rows highlights each of them.
+- Purpose: Which series and categories a chart emphasizes. Present, it is the only source of emphasis: engines then derive none from the slide's texts. Empty lists (for example { "categories": [] }) highlight nothing, which switches derived emphasis off as table.highlight { "rows": [] } does. Names are matched exactly: series by data column name (after any 'fields' selection; a series is a plotted value column), categories by row label (the first column, or mapping.category), as text. A category label s...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |

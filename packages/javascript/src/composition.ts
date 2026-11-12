@@ -7834,7 +7834,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let valueAxis = axisFor(layer?.header?.height ?? 0);
     // LH-105, LH-113: the series or categories the slide names are the chart's focus (chart-focus.ts): the title's, else what its other
     // texts, list entries, quotes and chart alts name together; a focus replaces the small chart's last-point emphasis.
-    const focus = drawn.data.ok && !references.length ? chartSlideFocus(drawn.chart, drawn.data, {sources: focusSources(), ...(language !== undefined ? {language} : {})}) : undefined;
+    const focus = drawn.data.ok ? chartSlideFocus(drawn.chart, drawn.data, {sources: focusSources(), ...(language !== undefined ? {language} : {})}) : undefined;
     if (focus) {
       const small = layer?.small ? (({emphasis: _emphasis, ...rest}) => rest)(layer.small) : undefined;
       layer = {...layer, ...(small ? {small} : {}), focus};

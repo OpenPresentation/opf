@@ -4666,12 +4666,11 @@
       "type": "object",
       "additionalProperties": false,
       "minProperties": 1,
-      "description": "Which series and categories a chart emphasizes. Names are matched exactly: series by data column name (after any 'fields' selection; a series is a plotted value column), categories by row label (the first column, or mapping.category), as text. A category label shared by several rows highlights each of them.",
+      "description": "Which series and categories a chart emphasizes. Present, it is the only source of emphasis: engines then derive none from the slide's texts. Empty lists (for example { \"categories\": [] }) highlight nothing, which switches derived emphasis off as table.highlight { \"rows\": [] } does. Names are matched exactly: series by data column name (after any 'fields' selection; a series is a plotted value column), categories by row label (the first column, or mapping.category), as text. A category label shared by several rows highlights each of them.",
       "properties": {
         "series": {
           "type": "array",
           "items": { "type": "string" },
-          "minItems": 1,
           "uniqueItems": true,
           "description": "Series (value columns) to highlight: all marks of each named series. A name that is not a column is a 'chart-highlight-unknown-name' error; a column that is not plotted as a series (the category or X column, or one mapping.series leaves out) highlights nothing and is a 'chart-highlight-adapted' warning.",
           "examples": [["Revenue"]]
@@ -4679,7 +4678,6 @@
         "categories": {
           "type": "array",
           "items": { "type": "string" },
-          "minItems": 1,
           "uniqueItems": true,
           "description": "Categories (row labels) to highlight: the marks of each named category (a column or bar of every series, a line's points, a pie or doughnut slice). A label no row has is a 'chart-highlight-unknown-name' error.",
           "examples": [["Q3"]]

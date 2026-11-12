@@ -111,9 +111,13 @@ describe("validation", () => {
     assert.equal(check(deck({ highlight: { categories: ["Q1"] } }, "pie")).valid, true);
   });
 
-  test("the schema rejects an empty or malformed highlight", () => {
+  test("an empty list highlights nothing and switches derived emphasis off; a highlight with no key or a malformed one is rejected", () => {
     assert.equal(check(deck({ highlight: {} })).valid, false);
-    assert.equal(check(deck({ highlight: { series: [] } })).valid, false);
+    // As table.highlight { rows: [] }: the author's explicit "no emphasis".
+    for (const highlight of [{ series: [] }, { categories: [] }, { series: [], categories: [] }]) {
+      assert.equal(check(deck({ highlight })).valid, true, JSON.stringify(highlight));
+      assert.equal(resolveChartOptions({ type: "column", highlight }, chartOptionTarget("column")).highlight, undefined);
+    }
     assert.equal(check(deck({ highlight: { series: ["Revenue", "Revenue"] } })).valid, false);
     assert.equal(check(deck({ highlight: { series: "Revenue" } })).valid, false);
     assert.equal(check(deck({ highlight: { color: "#FF0000" } })).valid, false, "there is no color field");
