@@ -70,7 +70,7 @@ Actual pinned Node24.21 ran with empty execArgv; source/protected pins match
 before/after and no dependency/lock change occurred. This is current local
 metadata qualification, not a fresh Windows envelope or native result.
 
-[Compact receipt](rr105-library-metadata-identities-receipt.json) binds exact
+Compact receipt binds exact
 source/log/inventory hashes. Original full inventory and raw logs remain local
 under `/tmp/opf-library-identities-focus01`; failed225 envelope inputs remain
 unchanged on Windows. Root's required integrated source gate and a new actual

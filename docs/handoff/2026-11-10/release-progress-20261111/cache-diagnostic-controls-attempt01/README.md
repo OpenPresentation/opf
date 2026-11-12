@@ -4,4 +4,4 @@ Source `5f2cc26a73db1400b4fe2d9b8d7825aec610e356`; actual aggregate exit 1. Fres
 
 The diagnostic smoke failed before browser launch: the recorded ownership source adds a `sites` array while the maintained file verifier expects exactly path/bytes/hash. Actual file identity matches. A prospective narrow caller repair must preserve generic file verification and exact getter-site validation. No retry or receipt rewriting occurred.
 
-[Receipt](receipt.json) and [lossless nine child logs, first failure and pure-control receipt](logs.zip) retain this attempt. Normal smoke is shortened functional evidence; no new latency, full retention, physical mobile or leak qualification is claimed. Twenty original formal files remain immutable.
+Receipt and lossless nine child logs, first failure and pure-control receipt retain this attempt. Normal smoke is shortened functional evidence; no new latency, full retention, physical mobile or leak qualification is claimed. Twenty original formal files remain immutable.

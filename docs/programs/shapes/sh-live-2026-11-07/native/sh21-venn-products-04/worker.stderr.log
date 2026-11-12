@@ -1,8 +1,0 @@
-Native count/materialization mismatch: expected 2 data nodes; observed 2 data nodes and 0 group items.
-At C:\opf-work\sh21-qualification\tools\shapes\sh-21\verify-product.ps1:48 char:65
-+ ... ount -lt 1){throw "Native count/materialization mismatch: expected $( ...
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : OperationStopped: (Native count/ma... 0 group items.:String) [], RuntimeException
-    + FullyQualifiedErrorId : Native count/materialization mismatch: expected 2 data nodes; observed 2 data nodes and  
-   0 group items.
- 

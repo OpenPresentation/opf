@@ -2,7 +2,7 @@
 
 > **Status (2026-11-07).** This is the audit as written; the line numbers are from `a34478680`. The owner chose follow-ups 1 to 4, 8 and 9 for v0.33.0: RR-104 (follow-up 2, [opf#1081](https://github.com/OpenPresentation/opf/pull/1081), merged), LH-185 (follow-up 8, [opf#1080](https://github.com/OpenPresentation/opf/pull/1080), merged), SH-11 (follow-up 9, [opf#1088](https://github.com/OpenPresentation/opf/pull/1088), merged), and LH-184 (follow-up 3, [opf#1082](https://github.com/OpenPresentation/opf/pull/1082)) and LH-186 (follow-ups 4 and 1, [opf#1087](https://github.com/OpenPresentation/opf/pull/1087)), both folded into the v0.33.0 integration PR. The original audit listed SH-10 as open; its implementation is now folded into #1133 for v0.33.0. Still open: follow-ups 5, 6, 7 and 10, and [opf#1089](https://github.com/OpenPresentation/opf/issues/1089) (native-body rewrap, 0.34; diagnosis in [issue-1089-native-body-diagnosis.md](issue-1089-native-body-diagnosis.md)). The LH-186 before/after review is in [lh-186-review/](lh-186-review/).
 
-Checked on 2026-11-07 against `origin/main` at `a34478680` (SH-19), in the checkout `C:/opf-work/never-shrink-text`. Line numbers are from that commit. Evidence came from reading the code, from probes that compose slides and export PPTX (scripts in [probes/](probes/), run from a checkout's `packages/javascript` or `packages/pptx`, with the absolute output paths of the machine they ran on; the exported decks are in [powerpoint/](powerpoint/)), from 272 PPTX exports of the example decks, and from PowerPoint 16.0 driven over COM. No code was changed.
+Checked on 2026-11-07 against `origin/main` at `a34478680` (SH-19), in the checkout `C:/opf-work/never-shrink-text`. Line numbers are from that commit. Evidence came from reading the code, from probes that compose slides and export PPTX (scripts in probes/, run from a checkout's `packages/javascript` or `packages/pptx`, with the absolute output paths of the machine they ran on; the exported decks are in powerpoint/), from 272 PPTX exports of the example decks, and from PowerPoint 16.0 driven over COM. No code was changed.
 
 Sizes are reference pixels on the 1280 x 720 slide (1 px = 0.75 pt), as composition states them.
 
@@ -91,7 +91,7 @@ Each one is labeled *by design*, *bug*, *latent bug* or *gap*.
 
 ## PowerPoint's "Shrink text on overflow"
 
-This is how it behaves, checked over COM on PowerPoint 16.0 (Microsoft 365, Windows). Evidence: [powerpoint/](powerpoint/) `autofit*.pptx` and `af-*.pptx` (written by [probes/make-autofit.mjs](probes/make-autofit.mjs)).
+This is how it behaves, checked over COM on PowerPoint 16.0 (Microsoft 365, Windows). Evidence: powerpoint/ `autofit*.pptx` and `af-*.pptx` (written by probes/make-autofit.mjs).
 
 **How it is stored.** `<a:bodyPr><a:normAutofit fontScale="85000" lnSpcReduction="10000"/></a:bodyPr>`. The runs keep their authored `sz` (2400 stayed 2400). PowerPoint draws them at `sz × fontScale`, with line spacing reduced by `lnSpcReduction`. The scale is a **cached result** that PowerPoint writes when it fits the box.
 

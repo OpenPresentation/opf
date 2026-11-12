@@ -59,8 +59,8 @@ Run Node24 from this checkout: node docs/handoff/2026-11-10/rr114-color-raster/v
 
 | Synthetic source case | Actual saved PNG |
 | --- | --- |
-| Original57 demand, missing raster companion | [Before](images/before-demand.png) |
-| Current3042 demand | [After](images/after-demand.png) |
-| Whole requested pack reference, identical to after | [Reference](images/whole-reference.png) |
+| Original57 demand, missing raster companion | Before |
+| Current3042 demand | After |
+| Whole requested pack reference, identical to after | Reference |
 
 These are unedited renderer outputs, not native PowerPoint captures. The SVG keeps the color family; PNG/raster PDF use its documented monochrome fallback. No physical glyph, browser, native or release acceptance follows from these tests.

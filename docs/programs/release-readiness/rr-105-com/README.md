@@ -26,9 +26,9 @@ checks still owed. Large outputs (PNGs, PPTX, raw probes) stayed on the Windows 
 - **Results:**
   - [pass1/qualification-0.33-windows.md](pass1/qualification-0.33-windows.md): the results table, findings and file hashes.
     It is a copy of the page #1085 adds.
-  - [pass1/results.md](pass1/results.md) and [pass1/results.json](pass1/results.json): the grader's per-feature output.
-  - [pass1/run.json](pass1/run.json): per file, opened, slide count and time.
-  - [pass1/build.json](pass1/build.json): the revision, per-deck source and PPTX hashes, and export findings.
+  - [pass1/results.md](pass1/results.md) and pass1/results.json: the grader's per-feature output.
+  - pass1/run.json: per file, opened, slide count and time.
+  - pass1/build.json: the revision, per-deck source and PPTX hashes, and export findings.
 
 | Finding | Severity | Status |
 | --- | --- | --- |
@@ -51,7 +51,7 @@ The job was `make-powerpoint-smartart.ps1` on branch `sh-08-smartart-import`. It
 
 **Final run, script commit 88196f7f4:**
 - Exit 0. All 17 slides built, with no `error` entries; every PowerPoint layout Id and Name matches.
-- 15 slides are clean. The manifest is [sh-08/powerpoint-smartart.json](sh-08/powerpoint-smartart.json).
+- 15 slides are clean. The manifest is sh-08/powerpoint-smartart.json.
 - Two slides have `issues`:
   - Slide 9, Accent Process: "Field visits: Unable to add node to graphic".
   - Slide 11, Vertical Bullet List: "Enter two markets" and "Supply chain" could not be added.
@@ -59,13 +59,13 @@ The job was `make-powerpoint-smartart.ps1` on branch `sh-08-smartart-import`. It
 **What the earlier runs and probes established:**
 - **`SmartArtLayouts`:** on this build, `Application.SmartArtLayouts` raises "Object does not exist" through automation.
   - It does so with PowerPoint windowless and visible-minimized, and after opening a deck that has SmartArt
-    ([sh-08/probe3.ps1](sh-08/probe3.ps1)).
+    (sh-08/probe3.ps1).
   - Word's `SmartArtLayouts` is null too.
   - The working route: `AddSmartArt` accepts an existing graphic's `SmartArt.Layout`. The seed deck
-    `make-smartart-seeds.mjs` gives all 17 built-in layouts ([sh-08/probe5.ps1](sh-08/probe5.ps1)).
+    `make-smartart-seeds.mjs` gives all 17 built-in layouts (sh-08/probe5.ps1).
 - **Basic Matrix:** after every node is deleted, only one `Nodes.Add()` succeeds, and a fifth node on a fresh graphic
-  fails. Filling the four default nodes in place works ([sh-08/probe6.ps1](sh-08/probe6.ps1)).
-- **A second child in Accent Process and Vertical Bullet List** ([sh-08/probe7.ps1](sh-08/probe7.ps1)):
+  fails. Filling the four default nodes in place works (sh-08/probe6.ps1).
+- **A second child in Accent Process and Vertical Bullet List** (sh-08/probe7.ps1):
   - `AddNode(below)` on the parent fails, and so does `AddNode(after)` on the child.
   - `AddNode(default)` adds a top-level sibling instead of a child.
   - The only form accepted is one child whose text holds several paragraphs (`First\rSecond\rThird`).
@@ -77,7 +77,7 @@ The job was `make-powerpoint-smartart.ps1` on branch `sh-08-smartart-import`. It
 ## 3. SmartArt live-gate sweep (SH-20 to SH-23)
 
 The job ran `C:\opf-work\_supervisor\com-jobs\sh-live-extras\run.ps1` on 2026-11-07, 14:36 to 14:55. Its job sheet is
-[sweep/job.md](sweep/job.md), and the logs are [sweep/run.log](sweep/run.log) and [sweep/trees-run.log](sweep/trees-run.log).
+[sweep/job.md](sweep/job.md), and the logs are sweep/run.log and sweep/trees-run.log.
 **All three steps completed.**
 
 **Step 1: `com-probe` over the live and native-shape decks. Exit 0.**
@@ -88,14 +88,14 @@ The job ran `C:\opf-work\_supervisor\com-jobs\sh-live-extras\run.ps1` on 2026-11
     - On built-in layouts (118): pyramid1 20, matrix3 3, cycle2 28, chevron1 24, process1 23, process2 20.
   - 51 slides stay native shapes by design: the list-block controls, the `-rtl-` and `-he-` decks, and long or
     medium text at high counts.
-  - The probe is [sweep/ppt-probe.json.gz](sweep/ppt-probe.json.gz) (6.8 MB raw). It records every node, every
+  - The probe is sweep/ppt-probe.json.gz (6.8 MB raw). It records every node, every
     GroupItems shape, and each text line's bounds.
 - **Native-shape export (`sweep\ppt-shapes`):** 516 decks, no SmartArt, no errors
-  ([sweep/ppt-shapes-probe.json](sweep/ppt-shapes-probe.json)).
-- [sweep/meta.json](sweep/meta.json) is the sweep's instance metadata: kind, count, text, slide size, script and findings.
+  (sweep/ppt-shapes-probe.json).
+- sweep/meta.json is the sweep's instance metadata: kind, count, text, slide size, script and findings.
 
 **Step 2: the ninth node, `com-checks` on the 18 `*-8-short-*` decks. Results:
-[sweep/ninth-com-checks.json](sweep/ninth-com-checks.json).**
+sweep/ninth-com-checks.json.**
 - All 18 are live on OPF's layout.
 - A node edit keeps every size and rectangle (18 of 18).
 - `add=9` keeps OPF's layout and OPF's size on all nine nodes (18 of 18). This is the SH-23 input: the nine-entry
@@ -118,9 +118,9 @@ The job ran `C:\opf-work\_supervisor\com-jobs\sh-live-extras\run.ps1` on 2026-11
 - **One known issue:** in all 20 frames of the Hierarchy tree with an assistant (`asst`), adding the assistant failed
   with "Aide: The specified value is out of range". Hierarchy has no assistant node type, so that tree was measured
   without it.
-- The data is [sweep/trees.json.gz](sweep/trees.json.gz) (4.8 MB raw). For each row it records every shape PowerPoint
+- The data is sweep/trees.json.gz (4.8 MB raw). For each row it records every shape PowerPoint
   drew: type, connector flag, rectangle, rotation, flips, text, size and margins. The script is
-  [sweep/measure-trees.ps1](sweep/measure-trees.ps1).
+  sweep/measure-trees.ps1.
 
 **Local outputs** in `C:\opf-work\_supervisor\com-jobs\sh-live-extras\`:
 - `sweep\ppt\` (16 MB) and `sweep\ppt-shapes\` (9 MB): the PNGs.

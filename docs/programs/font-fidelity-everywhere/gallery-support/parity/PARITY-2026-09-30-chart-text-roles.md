@@ -5,8 +5,8 @@ The parity size check for chart text compares each text role (axis, data labels,
 | run | check | opf-pptx | perfect | near | mismatch | results |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | main (any size in the part) | main `71bd94e` | 5 | 21 | 0 | (reproduce with the main harness) |
-| 2 | per role | main `71bd94e` | 0 | 26 | 0 | [parity-results-2026-09-30-chart-text-roles-main-export.json](parity-results-2026-09-30-chart-text-roles-main-export.json) |
-| 3 | per role | FF-62 `7561ac5` | **10** | 16 | 0 | [parity-results-2026-09-30-chart-text-roles.json](parity-results-2026-09-30-chart-text-roles.json) |
+| 2 | per role | main `71bd94e` | 0 | 26 | 0 | parity-results-2026-09-30-chart-text-roles-main-export.json |
+| 3 | per role | FF-62 `7561ac5` | **10** | 16 | 0 | parity-results-2026-09-30-chart-text-roles.json |
 
 Run 2 is the check doing its job: against main's export it reports 23 axis (9 pt in the part vs the preview's 12), 10 legend (no explicit size) and 2 data label (9 vs 12, treemap and funnel) mismatches, so the five classic charts that run 1 passed (100% stacked column, bar and area, pie, doughnut) are near. Run 3: treemap, histogram, pareto, box and whisker and funnel (near on size in run 1) are perfect, and nothing regresses (improved 5, regressed 0 against run 1). `waterfall` stays near for a reason that is not size and predates FF-62, "chart label wrapped/split in preview" (a tick label such as `0` is a substring of a category string; 14 classic charts carry the same note); `world` is the accepted chartex map limitation.
 

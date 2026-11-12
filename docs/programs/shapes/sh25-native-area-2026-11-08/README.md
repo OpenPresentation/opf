@@ -1,6 +1,6 @@
 # Actual native area-tip probe evidence
 
-[Verification](verification.json) identifies clean source9b20bdf8f588e1e44c0c8a306b0ff3c1c5cf1a17 and frozen candidate worker354C4351E1A8E62FF38EB7D338DE43F5920361E2EC23127FDFE43B80A4E04140. [Lossless raw archive](raw.zip) and [per-file hashes](hashes.json) preserve all six original native area-family attempts, all30measurement failures, exact source/saved PPTX and phase PNGs, original midpoint failure and mocked new endpoint receipts. No product overlay or four-pixel criterion moves.
+Verification identifies clean source9b20bdf8f588e1e44c0c8a306b0ff3c1c5cf1a17 and frozen candidate worker354C4351E1A8E62FF38EB7D338DE43F5920361E2EC23127FDFE43B80A4E04140. Lossless raw archive and per-file hashes preserve all six original native area-family attempts, all30measurement failures, exact source/saved PPTX and phase PNGs, original midpoint failure and mocked new endpoint receipts. No product overlay or four-pixel criterion moves.
 
 Fifty-eight native-only mocked controls pass, including30actual-coordinate/native-saved-cache cases; signed/stacked/zero, zero/one-based arrays and singleton/scalar cases; five unchanged line/scatter types; and raw serialized getter/rank/count/type/bounds refusals. Existing45point,20circle and26curve controls pass. Actual Series.Values getter availability and negative endpoint semantics are still unqualified until the coordinator runs the frozen helper. The new primitive data reader never activates ChartData/Excel or resolves a worksheet address.
 

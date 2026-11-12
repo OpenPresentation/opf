@@ -1,1 +1,0 @@
-Font gate registry: a catalog-only font scheme resolves, loading is face level, an italic edit loads one face, an unknown layout never fails the gate, script faces load.

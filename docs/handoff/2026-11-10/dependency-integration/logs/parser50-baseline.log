@@ -1,3 +1,0 @@
-{"version":"5.0.0","kind":"literal","accepted":false,"error":"Root element is missing or invalid (line 1, column 42)"}
-{"version":"5.0.0","kind":"comment","accepted":false,"error":"Extra content at the end of the document (line 1, column 36)"}
-{"version":"5.0.0","kind":"processing-instruction","accepted":false,"error":"Extra content at the end of the document (line 1, column 40)"}

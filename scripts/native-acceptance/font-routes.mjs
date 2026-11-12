@@ -14,7 +14,7 @@ export function selectFontRoutes(value) {
   for(const name of names)assert.ok(FONT_ROUTE_CASE_NAMES.includes(name),`Unknown font route: ${name}`);
   return FONT_ROUTE_CASE_NAMES.filter(name=>names.includes(name));
 }
-const sourcePaths=['scripts/native-acceptance/fixtures/font-routes.json','docs/evidence/script-corpora-20261001/script-corpora.json'];
+const sourcePaths=['scripts/native-acceptance/fixtures/font-routes.json','docs/programs/font-fidelity-everywhere/tracker-inputs/script-corpora-20261001/script-corpora.json'];
 export const fontRouteSourcePaths=()=>[...sourcePaths];
 export async function loadFontRouteSource(names) {
   assert.deepEqual(names,selectFontRoutes(names.join(',')),'canonical explicit selection required');

@@ -9,8 +9,8 @@
 //                                                     refresh the pinned opf-editor switch snapshot, then rebuild
 //
 // Derived data (never hand edited): the committed tracker-only catalog snapshot, the opf schema, the gallery support audits A and B, the latest
-// committed parity run, the font tracker, the committed native evidence under docs/evidence, the RR burndown and the
-// two pinned snapshots (pptx.gallery data and pages, opf-editor switch dimensions). Authored data:
+// committed parity run, the font tracker, the native evidence index (frozen from docs/evidence when the evidence left the
+// tree, RR-20; a new native run adds a values.json to inputs.nativeRuns), the RR burndown and the two pinned snapshots (pptx.gallery data and pages, opf-editor switch dimensions). Authored data:
 // docs/programs/release-readiness/gallery-tracker.overrides.json (the rules that give each gap its next action and its
 // link: an RR item, a pull request, or an issue for a descoped gap). Internal tracking only; never shown on a site.
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
@@ -56,7 +56,7 @@ const OPEN_RR = new Set(["todo", "in-progress", "review"]);
 const ACCEPTED_FONT = new Set(["qualified", "documented-visual"]);
 
 const DEFAULT_NEXT = {
-  "works-unverified": "Include the value in a native PowerPoint sample (supervisor-run) and commit the evidence under docs/evidence.",
+  "works-unverified": "Include the value in a native PowerPoint sample (supervisor-run) and add its per-value verdicts to inputs.nativeRuns.",
   unknown: "Measure the missing columns (audit or probe) and commit the result.",
   "parity-near": "Find the cause of the near check and fix the engine or the harness, then re-run parity.",
   "font-gap": "Finish the font tracker's next action for the family.",
@@ -312,7 +312,8 @@ export function buildTracker({ root = ROOT } = {}) {
   const schema = readJson(root, inputs.schema);
   const burndownItems = parseBurndown(readFileSync(path.join(root, inputs.burndown), "utf8"));
   const burndown = new Map(burndownItems.map((item) => [item.id, item]));
-  const native = nativeEvidenceIndex(root, inputs.evidence);
+  // inputs.evidence scans a directory (the tests use one); inputs.nativeEvidenceIndex is the frozen index of docs/evidence.
+  const native = inputs.evidence ? nativeEvidenceIndex(root, inputs.evidence) : readJson(root, inputs.nativeEvidenceIndex).index;
   // RR-42: per-value verdicts of the native PowerPoint runs (values.json); a later file overrides an earlier one for the same value.
   const nativeRuns = new Map();
   for (const file of inputs.nativeRuns ?? []) for (const v of readJson(root, file).values) nativeRuns.set(`${v.type}/${v.id}`, { ...v, file });
@@ -570,7 +571,7 @@ export function buildTracker({ root = ROOT } = {}) {
       parityExtra: parityExtra.map((x) => ({ file: x.file, generatedAt: x.meta.generatedAt, heads: Object.fromEntries(Object.entries(x.meta.heads).map(([k, v]) => [k, String(v).slice(0, 7)])), values: x.results.length })),
       inputLimitations: { file: inputs.inputLimitations ?? null, records: limitations.length },
       fontTracker: { file: inputs.fontTracker, asOf: fontTracker.asOf, records: fontTracker.records.length },
-      nativeEvidence: { dir: inputs.evidence, rule: "json and md files under a path segment naming native or PowerPoint; a value counts as exercised when such a file names it", runs: (inputs.nativeRuns ?? []).map((file) => ({ file, values: readJson(root, file).values.length })) },
+      nativeEvidence: { dir: inputs.evidence ?? inputs.nativeEvidenceIndex, rule: "json and md files under a path segment naming native or PowerPoint; a value counts as exercised when such a file names it", runs: (inputs.nativeRuns ?? []).map((file) => ({ file, values: readJson(root, file).values.length })) },
       burndown: { file: inputs.burndown, items: burndownItems.length },
       overrides: { file: FILES.overrides, rules: rules.length },
     },

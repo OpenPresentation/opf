@@ -10,4 +10,4 @@ New automatically discovered package test `native-text-fragment-mixed-run.mjs` i
 
 ## Executed root qualification
 
-After the c6d aggregate completed, root normally folded test-only67b0f242 into bda1d7365fd6297a7d289036b9d47105c7c7d212 and executed both groups against the actual freshly built c6d product runtime. **2PASS/0FAIL/0SKIP**,608.170708ms; all five native edit variants ran. [Original focus01](rr105-measured-run-focus01.log) is retained. Strict authored-run JSON, active two-part four-shape control and current text/style ownership passed; no new product defect or native pixel cure is inferred. The subsequent combined changed gate remains separate.
+After the c6d aggregate completed, root normally folded test-only67b0f242 into bda1d7365fd6297a7d289036b9d47105c7c7d212 and executed both groups against the actual freshly built c6d product runtime. **2PASS/0FAIL/0SKIP**,608.170708ms; all five native edit variants ran. Original focus01 is retained. Strict authored-run JSON, active two-part four-shape control and current text/style ownership passed; no new product defect or native pixel cure is inferred. The subsequent combined changed gate remains separate.

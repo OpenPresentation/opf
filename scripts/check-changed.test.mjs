@@ -34,7 +34,7 @@ test('splitPaths, matches and referencedPaths', () => {
 
 test('selectChangedChecks maps changed paths to checks', () => {
   const docs = selectChangedChecks(['docs/agent-skills.md'], scripts, config);
-  assert.deepEqual(docs, ['check:changes', 'check:skill-commands', 'check:text']);
+  assert.deepEqual(docs, ['check:changes', 'check:evidence-size', 'check:skill-commands', 'check:text']);
   const schema = selectChangedChecks(['spec/schemas/opf.schema.json'], scripts, config);
   for (const name of ['check:schema-docs', 'check:registry-golden', 'check:spec']) assert.ok(schema.includes(name), name);
   const catalog = selectChangedChecks(['spec/schemas/layout.schema.json'], scripts, config);
@@ -57,12 +57,12 @@ test('selectPackageTests runs the whole package for code and only the changed fi
 
 test('buildPlan: a docs-only change runs the text and skill-command checks only; a .ts change adds the type check and the package tests', () => {
   const docs = buildPlan(['docs/agent-skills.md'], env);
-  assert.deepEqual(docs.map((step) => step.name), ['build', 'biome', 'pnpm run check:changes', 'pnpm run check:skill-commands', 'pnpm run check:text', 'typecheck']);
+  assert.deepEqual(docs.map((step) => step.name), ['build', 'biome', 'pnpm run check:changes', 'pnpm run check:evidence-size', 'pnpm run check:skill-commands', 'pnpm run check:text', 'typecheck']);
   assert.equal(docs.find((step) => step.name === 'biome').skip, true);
   assert.equal(docs.at(-1).skip, true);
 
   const code = buildPlan(['packages/javascript/src/index.ts'], env);
-  assert.deepEqual(code.map((step) => step.name), ['build', 'biome', 'pnpm run check:browser-safe', 'pnpm run check:catalog-free', 'pnpm run check:changes', 'pnpm run check:diagram-doc-images', 'pnpm run check:font-hotlinks', 'pnpm run check:text', 'typecheck', 'tests opf']);
+  assert.deepEqual(code.map((step) => step.name), ['build', 'biome', 'pnpm run check:browser-safe', 'pnpm run check:catalog-free', 'pnpm run check:changes', 'pnpm run check:diagram-doc-images', 'pnpm run check:evidence-size', 'pnpm run check:font-hotlinks', 'pnpm run check:text', 'typecheck', 'tests opf']);
   const typecheck = code.find((step) => step.name === 'typecheck');
   assert.ok(typecheck.heavy && typecheck.commands[0].argv.some((part) => part.endsWith('agent-slot.mjs')));
   assert.equal(code.find((step) => step.name === 'biome').biome[0], 'packages/javascript/src/index.ts');

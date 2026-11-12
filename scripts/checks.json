@@ -13,7 +13,7 @@
     "check:quarantine"
   ],
   "changed": {
-    "always": ["check:changes"],
+    "always": ["check:changes", "check:evidence-size"],
     "rules": [
       {"match": ["scripts/published-matrix/parity-work-directory.mjs", "scripts/published-matrix/installed-parity.mjs"], "run": ["check:parity-work-directory"]},
       {"match": ["docs/programs/font-fidelity-everywhere/gallery-support/parity/build.ps1", "docs/programs/font-fidelity-everywhere/gallery-support/parity/run.ps1"], "run": ["check:parity-wrappers"]},

@@ -2,7 +2,7 @@
 
 This branch copies the maintained reviewed nine-deck candidate JSON byte for byte into `packages/pptx/test/fixtures/chartex-fallback-main.json`. It repairs the strict archive lock after SH-24 removed public live-qualification wording from the inverted-pyramid catalog description. The exporter already writes the corrected record hash; this branch changes no runtime behavior.
 
-Fresh main was fetched through the maintained worktree helper, then normally fast-forwarded to exact reviewed candidate `5b9e4386c00319da1fa4370dcc0b3eb6e93c9578`. Before copying, the working tree was clean and all four core/Gallery/renderer/PPTX package objects matched that source. [Exact copy/source proof](source-proof.json) records the objects, original73ce fixture and generated94cf proposal identities. The proposal retains its actual5b9 producer reference; no descendant is mislabeled as that producer.
+Fresh main was fetched through the maintained worktree helper, then normally fast-forwarded to exact reviewed candidate `5b9e4386c00319da1fa4370dcc0b3eb6e93c9578`. Before copying, the working tree was clean and all four core/Gallery/renderer/PPTX package objects matched that source. Exact copy/source proof records the objects, original73ce fixture and generated94cf proposal identities. The proposal retains its actual5b9 producer reference; no descendant is mislabeled as that producer.
 
 ## Review basis and scope
 
@@ -22,7 +22,7 @@ Qualified source is `d623be2d49da7b448f82c2e0395609487d89a4f5` / tree `28de71d5e
 
 The required mapped run executed once against5b9 and remains **RED** after1,480.9seconds:9 steps pass, strict gallery freshness alone fails17/18, and TypeScript is correctly skipped. The entire selected PPTX contract passes280/280 scripts plus its browser-bundle build in1,393.2seconds. Build, Biome, fragments, release report, font-hotlink policy, skills, stability and text checks pass. No tracker warning override or unrelated generated repair was used. The separate current-wave metadata leaf owns freshness recovery.
 
-[Qualification](qualification.json) and the lossless check packet retain the actual outputs, sparse-input preparation and complete package log. The earlier combined86997 remains RED. These checks establish local source/serialization scope; cross-platform CI, browser execution and native application acceptance remain separate. This documentation descendant does not change the tested package payload.
+Qualification and the lossless check packet retain the actual outputs, sparse-input preparation and complete package log. The earlier combined86997 remains RED. These checks establish local source/serialization scope; cross-platform CI, browser execution and native application acceptance remain separate. This documentation descendant does not change the tested package payload.
 
 No source/runtime/catalog/schema/chart/native change, Office operation, CI dispatch, push, golden regeneration or release occurs in this task. The maintainer-only `packages: []` fragment and RR-20 progress row describe the fixture repair. Root owns publication, integration, combined acceptance and the separately held chart/native/release work.
 

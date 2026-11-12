@@ -45,4 +45,4 @@ producers, site qualification and deployments are separate acceptance steps.
 No native support is expanded here: Windows Office remains on human HOLD,
 supervisor-only native work stays separate, and RR-86 drafts do not inherit the
 frozen historical native qualification. The original program criteria and earlier
-[RR-85 evidence](evidence/rr-85-final-published-set-2026-10-16/README.md) are unchanged.
+RR-85 evidence are unchanged.

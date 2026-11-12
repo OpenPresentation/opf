@@ -15,7 +15,7 @@ test("compressed reports retain the same text checks and original line/column", 
 });
 
 test("real compressed evidence is scanned as its text, preserving input bytes", async () => {
-  const bytes = await readFile(new URL("../docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz", import.meta.url));
+  const bytes = await readFile(new URL("../scripts/fixtures/text-integrity/painting-Linux.json.gz", import.meta.url));
   const copy = Buffer.from(bytes);
   assert.ok(bytes.toString("utf8").includes("\u00c2"), "Fixture reproduces the previous compressed-byte false match");
   const result = inspectTextBytes("painting-Linux.json.gz", bytes);

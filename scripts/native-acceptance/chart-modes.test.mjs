@@ -14,8 +14,8 @@ import {installedEngines} from './generate.mjs';
 
 test('source-candidate fallback references retain both published histories and exact theme-only review',async()=>{
   const fixture=JSON.parse(await readFile(new URL('./fixtures/chartex-fallback-main.json',import.meta.url)));
-  const review=JSON.parse(await readFile(new URL('../../docs/evidence/rr-68-native-chart-master-name-2026-10-15/comparison.json',import.meta.url)));
-  const candidate=JSON.parse(await readFile(new URL('../../docs/evidence/rr-68-native-chart-master-name-2026-10-15/source-candidate-theme-category.json',import.meta.url)));
+  const review=JSON.parse(await readFile(new URL('../../scripts/native-acceptance/test-fixtures/rr-68-native-chart-master-name/comparison.json',import.meta.url)));
+  const candidate=JSON.parse(await readFile(new URL('../../scripts/native-acceptance/test-fixtures/rr-68-native-chart-master-name/source-candidate-theme-category.json',import.meta.url)));
   const current=candidate.cases.slice(0,9);
   assert.equal(fixture.source.sourceCandidateDefaultThemeReview.sourceCandidate.commit,'560571c7ced447484c55c673c8fbeb8f69f838a4');
   assert.equal(fixture.source.sourceCandidateDefaultThemeReview.sourceCandidate.registryAcceptance,false);

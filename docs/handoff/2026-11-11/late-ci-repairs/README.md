@@ -1,6 +1,6 @@
 # Late CI repairs — focused results
 
-The final maintained e210 snapshot retained two late failures beyond the earlier collected set: Windows PPTX3/3 still observed the long seed path while the fixture expected RUNNER~1; Node26.13 render2 overflowed inside the production whole-font-URL regexp. Both original job logs and the final snapshot are bound in the [manifest](manifest.json). No old failure is relabeled.
+The final maintained e210 snapshot retained two late failures beyond the earlier collected set: Windows PPTX3/3 still observed the long seed path while the fixture expected RUNNER~1; Node26.13 render2 overflowed inside the production whole-font-URL regexp. Both original job logs and the final snapshot are bound in the manifest. No old failure is relabeled.
 
 ## Font data URL validator
 

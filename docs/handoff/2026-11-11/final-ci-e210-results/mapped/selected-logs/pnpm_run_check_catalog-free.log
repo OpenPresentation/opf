@@ -1,5 +1,0 @@
-
-> openpresentation-workspace@ check:catalog-free /private/tmp/opf-034
-> node scripts/check-catalog-free.mjs
-
-catalog-free: 32 entries import no catalog data and stay within their gzip budget.

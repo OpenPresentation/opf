@@ -8,6 +8,6 @@ Exact sparse corpus, painting and two chart-history inputs are restored from Git
 
 ## Final verification
 
-[Exact raw receipts](rr109-directory-link-data/verification.json) preserve both fresh-checkout and built-baseline failures, the4focused after passes,44maintained native-acceptance tooling passes and the one mapped run. The complete normalized source is proved identical to main except the one link-type argument; all assertions/cleanup and production/spec/skills/workflow/lockfile trees stay unchanged.
+Exact raw receipts preserve both fresh-checkout and built-baseline failures, the4focused after passes,44maintained native-acceptance tooling passes and the one mapped run. The complete normalized source is proved identical to main except the one link-type argument; all assertions/cleanup and production/spec/skills/workflow/lockfile trees stay unchanged.
 
 Mapped77.6seconds: eight steps pass, typecheck skips, only gallery-tracker fails for missing sparse historical evidence. Reusing the existing033proof input set restores1817files/45,984,638bytes, each independently authenticated against this branch's Git blob identity before writing. Strict tracker18tests and freshness then pass (863records/313unaddressed). No tracker regeneration, policy relaxation, admin fallback, Office or native acceptance. This source correction is ready for final integration; bundle-cap causality remains a separate read-only task after the coordinator's final fold.

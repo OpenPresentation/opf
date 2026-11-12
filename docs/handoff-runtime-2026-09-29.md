@@ -44,7 +44,7 @@ relaxed. Passing local tests is not a cross-platform, production or desktop
 PowerPoint result.
 
 The following accepted trees were independently reviewed and verified after
-squash merge. [Compact merge receipts](evidence/local-acceptance-merges-20260929/README.md)
+squash merge. Compact merge receipts
 record each exact head, base, tree and accepted commit.
 
 | Accepted PR | Change and local evidence |
@@ -186,7 +186,7 @@ have distinct limits. This does not restore arbitrary native formatting/geometry
 or certify desktop Office. Owner #78 merged earlier; the owner closed #80
 unmerged, and its branch remains preserved.
 
-The [compact receipts](evidence/runtime-pr-review-20260929/README.md) bind the
+The compact receipts bind the
 earlier #81/#82/#83 records; #85 is recorded separately above. All source fixes
 above remain unpublished.
 
@@ -240,7 +240,7 @@ Core [#153](https://github.com/OpenPresentation/opf/pull/153), accepted as
 renderer/editor pins, adds 19
 installed wrapped-date mutation controls and expands the
 [browser fixture](../scripts/test-furniture-fields-browser.mjs) to four workflows.
-The [compact acceptance record](evidence/wrapped-furniture-20260929/README.md)
+The compact acceptance record
 binds fresh local package checks, 805-slide goldens, 707 core tests and all four
 passing browser workflows. Both original PR workflows
 ([core](https://github.com/OpenPresentation/opf/actions/runs/36559866383),

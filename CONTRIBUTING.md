@@ -73,6 +73,10 @@ A change that touches several packages is one pull request with one `changes/<sl
 
 `pnpm test` discovers its tests instead of listing them: a package runs every `test/*.mjs` (`node ../../scripts/run-tests.mjs`, with `test/suites.json` for the few helpers and separately-run files that are excluded) and the root runs every `check:*` script (`scripts/run-checks.mjs`, with `scripts/checks.json`). A new test is one new file and a new check is one new `check:*` script, so two pull requests that each add one never conflict.
 
+### Evidence
+
+Raw evidence (archives, screenshots, logs, saved decks, receipts) stays out of the tree: keep it on an evidence-only branch that is never merged and link it from the pull request by commit; commit only a short written result. `pnpm check:evidence-size` enforces it; see [AGENTS.md](./AGENTS.md#evidence-stays-out-of-main).
+
 ### Generated trackers
 
 The gallery tracker (`docs/programs/release-readiness/gallery-tracker.*`) and the font tracker (`docs/programs/font-fidelity-everywhere/font-tracker.*`) are derived from committed data. A pull request does not have to regenerate them: when it changes a tracker input, CI only warns that the committed tracker is stale (`OPF_TRACKER_STALE=warn`), and after the merge the "Tracker refresh" workflow regenerates both and offers the result as one pull request from `bot/tracker-refresh`. Regenerate in your own pull request (`pnpm build:font-tracker`, then `pnpm build:gallery-tracker`) only when that pull request changes a tracker generator, its overrides or its tests. A local `pnpm test` and the CI runs on `main`, tags and releases still fail on a stale tracker; if `main` is red for that reason, merge the refresh pull request.

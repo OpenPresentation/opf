@@ -1,6 +1,6 @@
 # Source-preserving font shaping
 
-The [Akasia shaping study](../evidence/akasia-shaping-20260914/README.md) changes
+The Akasia shaping study changes
 the next implementation decision: investigate a full shaping backend before
 adapting the font or introducing width corrections. Current Fontkit differs
 from Chromium on 460 of 8,568 canonical-form specimens from twelve exact open
@@ -192,7 +192,7 @@ SVG versus the verified DFont predecessor, without pulling in HarfBuzz WASM.
 These are bundle measurements, not deployed page-load measurements. No package
 publication, deployment or native variable-instance acceptance occurred.
 
-A further [CFF2 glyph probe](../evidence/variable-rounding-probe-20260914/README.md)
+A further CFF2 glyph probe
 found 458 one-unit counterexamples to naive HVAR delta rounding across 143,207
 glyph/instance combinations. Renderer `489273e1ae0688cb8295cd09b7137636ad4c72f5`
 corrects Fontkit coordinate normalization before glyph/layout caches populate:
@@ -359,7 +359,7 @@ shaping jobs and a failed Linux package job. The Linux source and installed
 native variable-font gate reports Fontkit 334.06213682353496px versus native
 334.193115234375px for Source Serif 4 Roman SmText Bold, exceeding the existing
 strict 0.1px requirement. See
-[the exact-head checkpoint](../evidence/rich-input-and-platform-ci-20260915/README.md).
+the exact-head checkpoint.
 All three prepared-painting reports pass 650 supported cases and thirteen
 explicit coverage rejections, with zero RGBA differences and identical five
 slide hashes matching the reviewed source images. Linux native Fontkit has
@@ -373,7 +373,7 @@ passing prepared painting or editor source-preservation checks.
 Renderer `6fed8d4` supplies original-source caret maps from the accepted glyph
 run, including physical-font GDEF positions and explicitly labeled interpolation.
 Editor `67ce1b7` consumes those maps for scalar/rich caret, selection and pointer
-geometry. Both are pushed draft PRs. The [checkpoint evidence](../evidence/prepared-caret-checkpoint-20260915/README.md)
+geometry. Both are pushed draft PRs. The checkpoint evidence
 retains a failing predecessor, six passing independent caret browser workflows,
 ten measured and ten estimated rich-input workflows, and the Node direction/font
 matrix. Fresh installed/CI acceptance and broader prepared-input coverage remain

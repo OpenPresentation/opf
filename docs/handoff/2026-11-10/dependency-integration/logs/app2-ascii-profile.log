@@ -1,2 +1,0 @@
-build-app: app-dist/deck-app.html 9811 KiB (script 9558 KiB, styles 249 KiB, 32 faces on request)
-build-app: JSON-RPC resource 10437368 bytes / 10485760 default stdio bytes (48392 bytes headroom)

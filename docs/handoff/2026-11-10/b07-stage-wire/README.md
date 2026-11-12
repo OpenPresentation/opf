@@ -41,7 +41,7 @@ checks were replayed: gallery18/18+strict863fresh, native171PASS/0FAIL/11SKIP,
 text7/7+11850validfiles. The composite is all7selectedchecksPASS; no full
 `pnpm test`, actual PowerShell5 serialization or Office ran.
 
-[Actual receipts](qualification.json) bind the four reader files, five unchanged
+Actual receipts bind the four reader files, five unchanged
 worker/supervisor/reference files and unchanged product trees. The original
 mapper failure, failed-only replay logs and exact hydration receipt are retained
 losslessly in `raw-results.json.gz`. Added receipt/docs metadata checks remain

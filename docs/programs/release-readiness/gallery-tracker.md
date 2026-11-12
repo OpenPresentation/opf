@@ -412,8 +412,8 @@ Historical measured verdicts below retain their original input scope; an additio
 | Audit B, later run | `docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results-2026-10-02-published-0.12-catalog-only.json` (62 values; pptx-gallery `c349a61`, opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, opf-editor `f4779da`, node `26.7.0`) |
 | Parity, later run | `docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-published-0.12-catalog-only.json` (62 values, 2026-10-03T00:22:05.850Z; opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, pptx-gallery `c349a61`) |
 | Fonts | `docs/programs/font-fidelity-everywhere/font-tracker.json` (168 families, as of 2026-10-02) |
-| Native evidence | `docs/evidence`: json and md files under a path segment naming native or PowerPoint; a value counts as exercised when such a file names it |
-| Native run (RR-42) | `docs/evidence/rr-42-native-20261002/values.json` (881 values; per-value verdict of the gated checks: verified or failed) |
-| Native run (RR-42) | `docs/evidence/rr-17-viet-supplement-native-20261002/values.json` (2 values; per-value verdict of the gated checks: verified or failed) |
+| Native evidence | `docs/programs/release-readiness/tracker-inputs/native-evidence-index.json`: json and md files under a path segment naming native or PowerPoint; a value counts as exercised when such a file names it |
+| Native run (RR-42) | `docs/programs/release-readiness/tracker-inputs/rr-42-native-20261002/values.json` (881 values; per-value verdict of the gated checks: verified or failed) |
+| Native run (RR-42) | `docs/programs/release-readiness/tracker-inputs/rr-17-viet-supplement-native-20261002/values.json` (2 values; per-value verdict of the gated checks: verified or failed) |
 | Links | `docs/programs/release-readiness/burndown.md` (117 items) and 8 rules in `docs/programs/release-readiness/gallery-tracker.overrides.json` |
 

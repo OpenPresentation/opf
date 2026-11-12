@@ -1,9 +1,0 @@
-{
-  "scope": "Independent SOURCE ONLY; no execution",
-  "patchSha256": "adc4e95dce1dc053c2325373bbc152ac08df15f8df9678a83954c1f8c2d2fcae",
-  "verdict": "ACCEPTED; no concrete blocker",
-  "changedVerified": 3,
-  "protectedVerified": 13,
-  "reason": "Only the two owned fixture canonicalizations use supported native realpath; exact canonical-string and BigInt device/inode equality are additive. Entire original Open/hash/type/flags/no-Office/refusal tail is base-exact. Production path guards/helpers/PS/kernel/lock unchanged. Names-only actual spelling fact prevents claiming a long-TEMP pass is8.3 qualification.",
-  "qualification": "Actual Windows alias-host execution owed; Mac skip is not Windows proof."
-}

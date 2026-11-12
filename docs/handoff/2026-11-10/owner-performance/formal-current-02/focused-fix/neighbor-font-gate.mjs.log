@@ -1,1 +1,0 @@
-Font gate: gates on the fonts handle's pending and ensure, reports one failure without retrying, drops superseded results.

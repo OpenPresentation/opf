@@ -24,7 +24,7 @@ Node 24.20.0, pnpm 10.33.2, Windows. The source baseline is main's 0.32.1 packag
 
 `OPF_TRACKER_STALE=warn pnpm check:changed` completed with all selected root checks and build passing. Its sole nonzero step was the MCP suite: 48 passed, one skipped and seven cancelled by three workerd setup hooks (`spawn UNKNOWN`). The new font subprocess passed inside that suite. An independent direct `workerd.exe --version` probe also failed `spawnSync UNKNOWN`, without invoking OPF. No new assertion failed. Require normal Linux CI and the integration's full CI on a working Windows host before acceptance. Do not regenerate goldens or trackers for this tooling change. Final trusted release rehearsal and the real v0.34 attachment remain acceptance steps after merge.
 
-The compact [verification receipt](../../evidence/rr107-mcpb/verification.json) records the baseline, diagnostic bundle digest and performed versus pending checks.
+The compact verification receipt records the baseline, diagnostic bundle digest and performed versus pending checks.
 
 ## Prerequisite metadata
 

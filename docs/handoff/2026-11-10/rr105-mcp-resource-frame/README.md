@@ -22,7 +22,7 @@ Pinned offline setup and normal dependency build passed. The three actual frame 
 
 ## Durable replay and scope
 
-The [lossless raw packet](raw.json.gz) contains 85 records / 4,727,555 raw bytes: exact module inventories, source/build identities, original failures, rejected hypotheses, setup refusals, continued checker evidence, SDK source and browser receipts. All [19 captures](screenshots) are byte-exact copies of the actual run. The baseline/current HTML artifacts are gzip evidence only; browser code is not compressed or dynamically evaluated. Both contain only public UI code and the existing renderer-pinned OFL Roboto fallback, with no owner deck, standalone/private/system font or secret.
+The lossless raw packet contains 85 records / 4,727,555 raw bytes: exact module inventories, source/build identities, original failures, rejected hypotheses, setup refusals, continued checker evidence, SDK source and browser receipts. All 19 captures are byte-exact copies of the actual run. The baseline/current HTML artifacts are gzip evidence only; browser code is not compressed or dynamically evaluated. Both contain only public UI code and the existing renderer-pinned OFL Roboto fallback, with no owner deck, standalone/private/system font or secret.
 
 The original 519 HTML at its earlier 0cbec404 hash was no longer present after the coordinator built 455. The capture guard refused it; no substitute is called 519. The archived baseline instead exactly matches the independently recorded clean-455 diagnostic SHA a35bc3e4, while the original 519 log and earlier byte observations remain literal.
 

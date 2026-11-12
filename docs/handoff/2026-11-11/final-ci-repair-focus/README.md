@@ -19,4 +19,4 @@ Name focus02 passes8 portable tests/1 actual-PS skip in4.423s, including complet
 
 The Name test reproduced the exact current129025-byte/06c82 input after the Arabic core build. Historical128812-byte fixture controls remain separate. No first-Save style/axis finding has been waived, and the old47c6 overall archive failure stays failed.
 
-Each linked subdirectory contains its original log and receipt; [manifest.json](manifest.json) binds all29 copied records, including the three reviewed Node previews. Other scope notes retain the registry quickstart's genuine033 replay and Windows SH20 fixture qualification. Final coherent mapped tests, fresh W06 graph qualification, required cross-platform/installed/native gates and genuine034 delivery remain open.
+Each linked subdirectory contains its original log and receipt; manifest.json binds all29 copied records, including the three reviewed Node previews. Other scope notes retain the registry quickstart's genuine033 replay and Windows SH20 fixture qualification. Final coherent mapped tests, fresh W06 graph qualification, required cross-platform/installed/native gates and genuine034 delivery remain open.

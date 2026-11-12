@@ -10,6 +10,6 @@ The initial source-only successor starts from `origin/main` normally integrated 
 
 ## Actual bounded qualification
 
-After independent source approval, Node24.21.0/pnpm10.33.2 checks and both syntax checks pass. One own frozen offline install passes in3.054s. The sole maintained `sh21-edit-profile.test.mjs` passes67 tests with zero failures and one actual-PowerShell skip in0.304s; its real three-original archive/parser/layout/graph/ordered-ID control passes in89ms. No product build was needed. Source, lock and all eight protected worker/PS/observer identities remained unchanged throughout. [Receipt](sh21-parser-entry/receipt.json) and [complete focused log](sh21-parser-entry/sh21-focus.log).
+After independent source approval, Node24.21.0/pnpm10.33.2 checks and both syntax checks pass. One own frozen offline install passes in3.054s. The sole maintained `sh21-edit-profile.test.mjs` passes67 tests with zero failures and one actual-PowerShell skip in0.304s; its real three-original archive/parser/layout/graph/ordered-ID control passes in89ms. No product build was needed. Source, lock and all eight protected worker/PS/observer identities remained unchanged throughout. Receipt and complete focused log.
 
 This local workspace result is not the genuine726 consumer's three-original schema/composition prerequisite, Windows managed/PowerShell result or native edit acceptance. Those remain required before Office. The original c169 Windows constructor failure remains unchanged; no retries or native operations occurred here.

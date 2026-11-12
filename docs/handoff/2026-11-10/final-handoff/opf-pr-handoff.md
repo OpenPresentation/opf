@@ -4,7 +4,7 @@ Handoff only; no source/PR changes, tests, Office, release or CI watcher. Frozen
 
 ## Census and actions
 
-The retained inventory is complete: **49OPEN / 20draft**, **41ancestor heads**, **8not ancestors**. Of the latter, six are unreviewed dependency proposals and two are standalone native evidence. PR1225 is the umbrella but its snapshotted e5de head lags audited55db. Exact full heads/trees/merge bases and per-PR action are in[JSON](opf-pr-handoff.json). One bounded named-ref blobless fetch, zero additional GitHub API calls. No merge/close/push performed.
+The retained inventory is complete: **49OPEN / 20draft**, **41ancestor heads**, **8not ancestors**. Of the latter, six are unreviewed dependency proposals and two are standalone native evidence. PR1225 is the umbrella but its snapshotted e5de head lags audited55db. Exact full heads/trees/merge bases and per-PR action are inJSON. One bounded named-ref blobless fetch, zero additional GitHub API calls. No merge/close/push performed.
 
 **Do not remerge or push folded leaves.** Preserve immutable producer/worker/evidence branches regardless of ancestry; evidence retention and product acceptance are different decisions. Close stale PRs only under coordinator control after umbrella disposition; never delete a provenance-bound worktree merely to tidy the PR list. Snapshot mergeability is not current CI.
 

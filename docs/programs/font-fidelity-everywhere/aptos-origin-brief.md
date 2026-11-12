@@ -5,11 +5,11 @@ The September 22 research below was read-only and started no Office or COM.
 
 ## October 2 root cause (native)
 
-The cause is determined; see the [probe record](../../evidence/ff-05-native-20261002/README.md). `Aptos` was PowerPoint's default notes master: the exporter wrote `p:notesMasterIdLst` after `p:sldIdLst` (out of schema order), PowerPoint ignored it and synthesised its own. Putting the list in schema order makes PowerPoint read the exporter's notes master, which must then own its theme part (it shared `theme1.xml`; the package is unreadable that way). The empty name had two sources: explicit run-level `a:ea`/`a:cs` typefaces, and an empty theme `ea` slot read through every `a:endParaRPr`. H1 (temporary registration), the Calibri and explicit-slot controls (E6, E7) and the E8 query-order control all ran with these defects present, which is why filling the theme slots alone changed nothing. The fix is [opf-pptx#152](https://github.com/OpenPresentation/opf-pptx/pull/152); the text below is the history that led to it.
+The cause is determined; see the probe record. `Aptos` was PowerPoint's default notes master: the exporter wrote `p:notesMasterIdLst` after `p:sldIdLst` (out of schema order), PowerPoint ignored it and synthesised its own. Putting the list in schema order makes PowerPoint read the exporter's notes master, which must then own its theme part (it shared `theme1.xml`; the package is unreadable that way). The empty name had two sources: explicit run-level `a:ea`/`a:cs` typefaces, and an empty theme `ea` slot read through every `a:endParaRPr`. H1 (temporary registration), the Calibri and explicit-slot controls (E6, E7) and the E8 query-order control all ran with these defects present, which is why filling the theme slots alone changed nothing. The fix is [opf-pptx#152](https://github.com/OpenPresentation/opf-pptx/pull/152); the text below is the history that led to it.
 
 ## September 29 native evidence update
 
-The [FF-04 inventory bundle](../../evidence/windows-native-font-inventory-20260929/README.md)
+The FF-04 inventory bundle
 records the unedited fixture with temporary Carlito fonts, the same fixture
 without temporary registration in a fresh PowerPoint session, and an exporter
 control. All three report `Aptos` and an empty-name entry in
@@ -25,7 +25,7 @@ on different dates and PowerPoint sessions; this is not a simultaneous test of
 every host variable. **FF-05 remains open.**
 
 **E6 completed at 09:01 UTC.** The independently reviewed
-[Calibri control](../../evidence/windows-native-calibri-control-20260929/README.md)
+Calibri control
 replaces all 17 explicit Carlito typeface attributes with Calibri across three
 parts, preserving the other 38 ZIP entry contents, every relationship and the four
 empty theme ea/cs slots. Source SHA-256:
@@ -49,7 +49,7 @@ caused the Aptos entry. H3's broader native-resolution branch remains open.
 The earlier Carlito and this Calibri control ran sequentially in the same
 PowerPoint process; neither controls every host variable or glyph identity.
 
-**E7 completed at 09:38 UTC.** The [explicit-slot control](../../evidence/windows-native-explicit-slots-20260929/README.md)
+**E7 completed at 09:38 UTC.** The explicit-slot control
 starts from the exact E6 hash and changes only the four empty theme major/minor
 ea/cs attributes to Calibri. The other 40 ZIP entry contents, relationships,
 authored text and supplemental font mappings remain unchanged. Source SHA-256:
@@ -70,7 +70,7 @@ responsible style, prove native collection behavior is a defect, or establish
 glyph identity. E6 and E7 were sequential runs in the same PowerPoint process;
 they do not control every host variable.
 
-**E8 completed at 15:07 UTC.** The [dual-snapshot evidence](../../evidence/windows-native-font-query-order-20260929/README.md)
+**E8 completed at 15:07 UTC.** The dual-snapshot evidence
 uses the exact E7 input above and the separately reviewed opt-in harness from
 [PPTX88](https://github.com/OpenPresentation/opf-pptx/pull/88), merged as
 `9a7f3c1`. It reads `Presentation.Fonts` first and once more after the existing

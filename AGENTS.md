@@ -42,10 +42,15 @@ The owner authorized agents to publish npm packages on 2026-09-29 ("yes, prepare
 - Tests: a package test is one new `test/*.mjs` (a package's `scripts/run-tests.mjs` run discovers it; `test/suites.json` lists only helpers and separately-run files) and a root check is one new `check:*` script (`scripts/run-checks.mjs`; `scripts/checks.json`). Do not add test lists to `package.json`.
 - Generated trackers (gallery and font): do not regenerate them in an unrelated PR. CI only warns about a stale tracker on a PR; the "Tracker refresh" workflow regenerates them after merge into `bot/tracker-refresh`. Regenerate in your PR only when it changes a tracker generator, overrides or tests. Details: `CONTRIBUTING.md`.
 - Goldens (`packages/render/test/golden/`) are exact hashes. Regenerate them only by dispatching the `golden.yml` workflow on your branch (`gh workflow run golden.yml --ref <branch>`) in the pinned Playwright image, never by hand and never with a changed tolerance; see `docs/ecosystem-development.md`.
+- Evidence: see [Evidence stays out of main](#evidence-stays-out-of-main).
+
+## Evidence stays out of main
+
+Raw working evidence (archives, screenshots and review sheets, logs, saved decks, machine receipts, replay scripts) never goes into `main`. Push it to an evidence-only branch (`codex/evidence-<slug>`) that is never merged, and link it from the pull request by full commit SHA (`git show <sha>:<path>`). Commit only a short human-readable result summary with the change, and put a small input a test really reads in that package's `test/fixtures/`. `pnpm check:evidence-size` enforces this against `origin/main`: no new files under `docs/evidence/` or `packages/*/docs/evidence/`, no archives, decks, images (outside `docs/images/` and `docs/brand/`), logs or patches under any `docs/`, only Markdown under `docs/handoff/`, and at most 5 MB of growth under `docs/`.
 
 ## Checks for agents
 
-Work in your own worktree on its own branch from a fresh `origin/main`: `node scripts/agent-worktree.mjs add <task>` makes a small blobless checkout (the evidence archives under `docs/evidence` are left out), installs with one shared pnpm store and prints the path; `remove <task>` deletes it once the branch is merged or abandoned.
+Work in your own worktree on its own branch from a fresh `origin/main`: `node scripts/agent-worktree.mjs add <task>` makes a small blobless checkout, installs with one shared pnpm store and prints the path; `remove <task>` deletes it once the branch is merged or abandoned.
 
 After each change run `pnpm check:changed`: it checks only what the branch changed (Biome, the mapped checks, the type check and the tests of the affected packages when relevant). Leave the full `pnpm test` to CI and the last run before a PR. Heavy commands (`pnpm typecheck`, `pnpm test`, the package tests in `check:changed`) wait for one of three machine-wide slots (`OPF_AGENT_SLOTS`; no limit in CI), so concurrent sessions do not starve each other. A hook in `.claude/settings.json` runs Biome on each file you edit, applies its safe fixes and reports the errors that fail `pnpm lint`; re-read a file it says it changed.
 
