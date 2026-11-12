@@ -1,0 +1,12 @@
+{
+  "source": "ca073ff030015ec5acfae0364440e5dfdf76a8b0",
+  "args": [
+    "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+    "--test",
+    "scripts/native-acceptance/reference-name-snapshot.test.mjs"
+  ],
+  "code": 0,
+  "seconds": 4.422511167000001,
+  "logBytes": 1097,
+  "logSha256": "4b1a459ce9b1463ab31dac519ce1a799f3508c48a10c40866601c776d9b7dfb1"
+}

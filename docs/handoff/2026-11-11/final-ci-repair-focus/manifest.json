@@ -135,6 +135,16 @@
       "file": "name-focus01/receipt.json",
       "bytes": 508,
       "sha256": "41c5df9a2a2f2a0f2034a2dedee72121de8ef774957cec1309ba97980468d1b4"
+    },
+    {
+      "file": "name-focus02/focus.log",
+      "bytes": 1097,
+      "sha256": "4b1a459ce9b1463ab31dac519ce1a799f3508c48a10c40866601c776d9b7dfb1"
+    },
+    {
+      "file": "name-focus02/receipt.json",
+      "bytes": 402,
+      "sha256": "4f2258cc1dd47b1d33adf3c4c266e7a5f73d1b52fc5d22f05c9f273f9e94d507"
     }
   ]
 }
