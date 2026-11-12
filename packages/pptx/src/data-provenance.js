@@ -1,5 +1,6 @@
 import {XMLParser} from 'fast-xml-parser';
 import {checkFormat, checkImportedFormat, isValidFormat} from './format-check.js';
+import {stripNumeralShape} from './numeral-shapes.js';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
 import {currentTag, upgradeTag} from './legacy-tags.js';
 import {chartUsesDataFields, isDatasetRef, fromExcelNumberFormat, resolveTableData, tableCellDisplayValue} from './chart-data.js';
@@ -112,7 +113,9 @@ export function chartEvidence(xml) {
   const cached = String(xml).replace(/<cx:title\b[\s\S]*?<\/cx:title>/g, '');
   const parts = [];
   for (const match of cached.matchAll(/<(c:v|c:formatCode|cx:pt|cx:v)\b[^>]*>([^<]*)<\/\1>|<cx:lvl\b[^>]*?\bformatCode="([^"]*)"/g)) {
-    const code = match[3] !== undefined ? decodeEntities(match[3]) : match[1] === 'c:formatCode' ? decodeEntities(match[2]) : undefined;
+    // LH-106: the numeral-shape prefix a slide language adds (src/numeral-shapes.js) is not cached data: with or without it, the same evidence.
+    const raw = match[3] !== undefined ? decodeEntities(match[3]) : match[1] === 'c:formatCode' ? decodeEntities(match[2]) : undefined;
+    const code = raw === undefined ? undefined : stripNumeralShape(raw);
     if (code === undefined) parts.push(`${match[1]}:${canonicalValue(decodeEntities(match[2]))}`);
     else if (!generalCode(code)) parts.push(formatEvidence(code));
   }

@@ -15,6 +15,7 @@
 // Import reads the chartex part back: the `cx:series` layoutIds name the OPF
 // chart type (an owned `paretoLine` marks the Office Pareto chart), and the
 // cached dimensions restore the category-major data.
+import {stripNumeralShape} from './numeral-shapes.js';
 import {CHARTEX_NAMESPACES, chartTypeFromChartex} from './chart-types.js';
 import {chartOptionsFromChartex} from './chart-options.js';
 import {formattedColumns} from './chart-data.js';
@@ -509,7 +510,7 @@ export function chartFromChartex(doc, {heading, limits, invalid, path, report}) 
     values.push(numeric ? level(numeric, `${location}/cx:numDim`, true) : []);
     // RR-54: the series' number format code (cx:lvl formatCode); core maps the codes it can back to column formats.
     const code = asArray(numeric?.['cx:lvl'])[0]?.formatCode;
-    codes.push(typeof code === 'string' ? code : undefined);
+    codes.push(typeof code === 'string' ? stripNumeralShape(code) : undefined);
     const name = series['cx:tx']?.['cx:txData']?.['cx:v'];
     names.push(name === undefined ? `Series ${index + 1}` : scalar(name));
   });

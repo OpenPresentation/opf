@@ -42,12 +42,19 @@ for (const system of Intl.supportedValuesOf('numberingSystem')) {
   if (code) systems[system] = [zero, code];
 }
 
+// LH-106 (vetoable, 2026-11-12): the separators OPF writes with these digits, where they differ from CLDR, so that a number OPF draws
+// as text and a number PowerPoint draws in a native chart agree. PowerPoint 16.0.20527 draws a chart format code with the Arabic-Indic
+// numeral shape (`[$-2000000]#,##0.00`) as "٤,٥٠٠.٠٠": Arabic-Indic digits with the Latin comma and period (and `0%` with the Latin
+// percent sign), where CLDR writes "٤٬٥٠٠٫٠٠". With the Persian shape (`[$-3000000]`) it draws "۴٬۵۰۰٫۰۰" and "٪", as CLDR does.
+// The list is written into the table (`NUMBER_SEPARATOR_OVERRIDES`), which test/numerals.test.mjs applies when it compares with Intl.
+const POWERPOINT_SEPARATORS = {arab: {decimal: '.', group: ','}};
+
 const describe = (tag) => {
   const format = new Intl.NumberFormat(tag, {maximumFractionDigits: 12});
   const system = format.resolvedOptions().numberingSystem;
   const parts = format.formatToParts(1234567.891);
-  const decimal = parts.find((part) => part.type === 'decimal')?.value ?? '.';
-  const group = parts.find((part) => part.type === 'group')?.value ?? ',';
+  const decimal = POWERPOINT_SEPARATORS[system]?.decimal ?? parts.find((part) => part.type === 'decimal')?.value ?? '.';
+  const group = POWERPOINT_SEPARATORS[system]?.group ?? parts.find((part) => part.type === 'group')?.value ?? ',';
   // The sizes of the groups 1234567 falls into, in characters (a digit outside the BMP is one): the primary group (the last) and the
   // secondary one (the others): 33 for thousands, 32 for the Indian lakh and crore, 22 for Toki Pona.
   const sizes = parts.filter((part) => part.type === 'integer').map((part) => [...part.value].length);
@@ -100,7 +107,10 @@ const lines = [
   `/** The ICU and CLDR versions this table was read from. */`,
   `export const NUMBER_LOCALE_SOURCE = {icu: ${literal(process.versions.icu)}, cldr: ${literal(process.versions.cldr ?? '')}} as const;`,
   '',
-  '/** Each numbering system OPF draws: the code point of its digit zero (its digits follow it) and the ISO 15924 script of its digits. */',
+  '/** The separators the table writes for a numbering system instead of CLDR\'s, as PowerPoint draws its numeral shape (see the generator). */',
+  `export const NUMBER_SEPARATOR_OVERRIDES: Readonly<Record<string, {readonly decimal: string; readonly group: string}>> = ${JSON.stringify(POWERPOINT_SEPARATORS)};`,
+  '',
+  '/** Each numbering system with ten consecutive digits: the code point of its digit zero (its digits follow it) and the ISO 15924 script of its digits. */',
   'export const NUMBERING_SYSTEMS: Readonly<Record<string, readonly [zero: number, script: string]>> = {',
   ...Object.entries(systems).map(([system, [zero, code]]) => `  ${system}: [0x${zero.toString(16)}, ${literal(code)}],`),
   '};',

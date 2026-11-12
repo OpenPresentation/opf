@@ -1,6 +1,7 @@
 import {nativeBodyReader, joinNativeParagraphs} from './body-text-import.js';
 import {addNativeBody, nativeBodyDefaults, nativeTitleAutofit, nativeTitleWrapBox, planNativeBody} from './native-body.js';
 import {autoNumScheme, deriveListNumbering, withDisplayedNumbers} from './numbered-list.js';
+import {applyNumeralShapes, stripNumeralShape} from './numeral-shapes.js';
 import {isFaceStyleSuffix} from './font-weights.js';
 import {importTableFrames} from './table-import.js';
 import {applyChartFonts, applyPitchFamilies, finalizeFontsUsed, fontPitchFamilies} from './package-fonts.js';
@@ -2108,7 +2109,8 @@ function elideComboDefault(chart, datasets) {
 function cacheFormatCode(node) {
   const cache = node?.["c:numRef"]?.["c:numCache"] ?? node?.["c:numLit"];
   const code = cache?.["c:formatCode"];
-  return code === undefined ? undefined : scalarText(code);
+  // LH-106: a numeral-shape prefix the export wrote for the slide language is not part of the column format.
+  return code === undefined ? undefined : stripNumeralShape(scalarText(code));
 }
 
 // RR-54: a cached value is a number in strict decimal syntax (core chartNumber) or another XML number form (a leading '+',
@@ -3209,7 +3211,7 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
         const number=first?entry.marker.number:undefined;
         context.nativeLatinSlots.remember(context.slideIndex,objectName,line.fragments.map(fragment=>({text:fragment.text,source:fragment.run.text,start:fragment.start,end:fragment.end,style:fragment.style,sourceRun:fragment.runIndex,marker:fragment.kind==='marker'})),path);
         if(first&&!markerless)context.listMarkers.set(objectName,{fontFamily:entry.marker.style.fontFamily,fontSize:entry.marker.fontSize*.75,color:pptxColor(context.textColor),picture:number?false:picture});
-        const paragraph=first&&!markerless?{bullet:number?{type:'number',style:autoNumScheme(number.style,number.suffix,number.numberingSystem),startAt:number.value,indent:entry.marker.indent*.75}:{characterCode:entry.marker.text.codePointAt(0).toString(16).padStart(4,'0'),indent:entry.marker.indent*.75},indentLevel:level}:{bullet:false,...(keepLevels?{indentLevel:level}:{})};
+        const paragraph=first&&!markerless?{bullet:number?{type:'number',style:autoNumScheme(number.style,number.suffix),startAt:number.value,indent:entry.marker.indent*.75}:{characterCode:entry.marker.text.codePointAt(0).toString(16).padStart(4,'0'),indent:entry.marker.indent*.75},indentLevel:level}:{bullet:false,...(keepLevels?{indentLevel:level}:{})};
         const runs=richLineRuns(line,color,native,context,path);
         if(!runs.length)runs.push({text:'',options:{}});
         // Keep paragraph intent identical across runs. ZIP normalization below
@@ -5889,6 +5891,8 @@ async function normalizePptxZip(raw, context) {
       }
     }
   }
+  // LH-106: a chart on a slide whose language has digits of its own draws them (numeral-shape prefixes, src/numeral-shapes.js).
+  applyNumeralShapes(entries, context.partSlides, index => context.scriptFonts?.slides?.[index]?.bcp47 ?? context.scriptFonts?.deck?.bcp47);
   const output = {};
   const renameMaps = buildRenameMaps(Object.keys(entries));
   // The host may transform assets or supply a filename/MIME hint that no

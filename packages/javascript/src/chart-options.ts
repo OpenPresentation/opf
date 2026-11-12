@@ -7,7 +7,7 @@
 // `chart-option-adapted` diagnostic. Decks that carry none of the three fields
 // resolve to `active: false` and nothing in any engine changes.
 import {groupNumber} from './number-grouping.js';
-import {formatNumber, formatPercentNumber} from './numerals.js';
+import {formatNumber, formatPercentNumber, numberingSystemOf, plainLanguageTag} from './numerals.js';
 
 /** The chart constructs the engines draw. Every catalog chart type id resolves to one (see `chartOptionTarget`). */
 /** `combo` (FA-15) draws clustered columns and line series in one plot, the lines optionally on a secondary value axis. */
@@ -330,4 +330,20 @@ export function chartHighlightMarks(
   const label = (cell: unknown): string => cell === null || cell === undefined ? '' : String(cell);
   const categories = data.columns.length > 1 ? data.rows.map(row => highlight.categories.includes(label(row[0]))) : data.rows.map(() => false);
   return series.some(Boolean) || categories.some(Boolean) ? {series, categories} : undefined;
+}
+
+/** LH-106: the chart kinds PowerPoint draws with its second chart engine (chartex), whose numbers it draws in Latin digits. */
+const CHARTEX_KINDS: ReadonlySet<ChartOptionKind> = new Set(['waterfall', 'histogram', 'pareto', 'box', 'funnel', 'treemap']);
+
+/**
+ * LH-106 (vetoable): the language a chart's numbers are drawn in. A chartex chart (waterfall, histogram, pareto, box and whisker,
+ * funnel, treemap) keeps Latin digits with the locale's Latin separators (`ar-SA` draws them as `ar-SA-u-nu-latn`): PowerPoint
+ * 16.0.20527 draws chartex numbers with another decimal mark than its classic charts and puts a minus sign after Arabic-Indic digits,
+ * so only Latin digits agree. Every other chart draws the language's digits. `chart` is the chart payload (its `type`) or a type id.
+ */
+export function chartNumberLanguage(chart: unknown, language?: string): string | undefined {
+  if (language === undefined || numberingSystemOf(language) === 'latn') return language;
+  const type = typeof chart === 'string' ? chart : chart && typeof chart === 'object' ? (chart as {type?: unknown}).type : undefined;
+  const kind = chartOptionTarget(type)?.kind;
+  return kind !== undefined && CHARTEX_KINDS.has(kind) ? `${plainLanguageTag(language)}-u-nu-latn` : language;
 }

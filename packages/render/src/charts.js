@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, paretoPlan, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartFocusContextColors, chartSeriesStrokes, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer, formatNumber, formatPercentNumber } from "@openpresentation/opf/composition";
+import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, paretoPlan, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartFocusContextColors, chartSeriesStrokes, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer, formatNumber, formatPercentNumber, chartNumberLanguage } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -358,7 +358,7 @@ const neutrals = bound.design.roles.neutrals;
     },
     textElement(value, rect, path, align = "center", fill = chartTextColor, weight = 400) {
       if (!(rect.width > 0 && rect.height > 0)) return "";
-      return svg.renderTextBox(String(value), rect, bound, {
+      return svg.renderTextBox(isolateNumerals(String(value)), rect, bound, {
         path: tracePath(path), fontSize: requested, fontFamily: bound.design.fonts.body, fontWeight: weight,
         fill, options, align, verticalAlign: "middle"
       });
@@ -369,7 +369,8 @@ const neutrals = bound.design.roles.neutrals;
     },
     // LH-141: whether the default value labels of column `column` group their thousands (no format of its own, whole numbers, one of four digits).
     group: (column) => (formats[column] === undefined || formats[column] === "") && groupsThousands(rows.map((row) => chartNumber(row[column]))),
-    language: bound.scriptFonts?.profile?.bcp47,
+    // LH-106: a chartex chart (waterfall, histogram, ...) draws Latin digits, as PowerPoint does (core chartNumberLanguage).
+    language: chartNumberLanguage(item.value, bound.scriptFonts?.profile?.bcp47),
     series(first = 1) {
       return columns.slice(first).map((name, offset) => ({
         name: c.label(name), column: first + offset, index: offset,
@@ -396,6 +397,15 @@ export function formatChartValue(value, format, language = undefined) {
   // LH-106: in the language's numbering system (core formatNumber and formatDataNumber).
   if (format === undefined) return formatNumber(clean(value), language);
   return formatDataNumber(clean(value), format, language);
+}
+
+// LH-106: a chart number in another script's digits (٢٥%, -٣٢٠.٨, ۱٬۰۰۰) is laid out left to right as one unit wherever it is drawn:
+// digits, then the percent sign, a sign before the digits, as PowerPoint draws its chart labels. Arabic-Indic digits are Arabic
+// numbers in the bidi algorithm, which leave a percent or minus sign to the right-to-left paragraph; a left-to-right isolate keeps
+// them together. The text is measured without the isolates, which take no width, so SVG, PNG and PDF agree.
+const NUMERAL_RUN = /(?<![\p{L}\p{N}])[+\-\u2212\u00b1]?[\u0660-\u0669\u06f0-\u06f9\u0966-\u096f\u09e6-\u09ef](?:[\u0660-\u0669\u06f0-\u06f9\u0966-\u096f\u09e6-\u09ef]|[,.\u066b\u066c](?=[\u0660-\u0669\u06f0-\u06f9\u0966-\u096f\u09e6-\u09ef]))*[%\u066a]?/gu;
+export function isolateNumerals(text) {
+  return /[\u0660-\u0669\u06f0-\u06f9\u0966-\u096f\u09e6-\u09ef]/.test(text) ? text.replace(NUMERAL_RUN, run => `\u2066${run}\u2069`) : text;
 }
 
 // ---------------------------------------------------------------------------
@@ -937,7 +947,7 @@ function drawLines(c, spec, series, stacks, { plot, band, at, categorySlot = (i)
     const s = series[entry.series];
     if (!s) continue;
     const fill = chartSeriesLabelColor(c.surface, c.highlight ? seriesColor(c, entry.series) : c.strongColors[entry.series % c.strongColors.length]);
-    const element = c.svg.renderTextBox(entry.text ?? entry.name, entry.box, c.bound, {
+    const element = c.svg.renderTextBox(isolateNumerals(entry.text ?? entry.name), entry.box, c.bound, {
       path: c.tracePath(`${c.path}.data.columns.${s.column}`), fontSize: c.fontPx / c.u, fontFamily: c.bound.design.fonts.body, fontWeight: entry.bold ? 700 : 400,
       fill, options: c.options, align: rtl(c) ? "right" : "left", verticalAlign: "middle"
     });
@@ -1021,7 +1031,7 @@ function drawValueList(c, list) {
   // its category under it in the chart text color.
   const hole = list.hole;
   if (hole) {
-    const element = c.svg.renderTextBox(hole.value.text, hole.value.box, c.bound, {
+    const element = c.svg.renderTextBox(isolateNumerals(hole.value.text), hole.value.box, c.bound, {
       path: c.tracePath(`${c.path}.data.rows.${hole.row}.1`), fontSize: hole.value.size / c.u, fontFamily: c.bound.design.fonts.body, fontWeight: 700,
       fill: chartSeriesLabelColor(c.surface, sliceColor(c, hole.row)), options: c.options, align: "center", verticalAlign: "middle"
     });

@@ -79,7 +79,7 @@ export function languageTagProblem(tag: string): LanguageTagProblem | undefined 
 	if (system !== undefined && !isSupportedNumberingSystem(system)) {
 		const only = /-u-nu-[a-z0-9]+$/i.test(tag) && tag.toLowerCase().split('-u-').length === 2;
 		return {
-			message: `'${tag}' names the numbering system '${system}', which OPF does not draw; generated numbers use the language's own digits. OPF draws ${supportedNumberingSystems().length} systems whose ten digits belong to one script, such as 'latn', 'arab', 'arabext', 'deva', 'beng' and 'thai'.`,
+			message: `'${tag}' names the numbering system '${system}', which OPF does not draw; generated numbers use the language's own digits, or Latin ones. OPF draws only the systems PowerPoint also draws in a native chart: ${supportedNumberingSystems().map((name) => `'${name}'`).join(', ')}.`,
 			...(only ? { suggestion: plainLanguageTag(tag) } : {}),
 			caseOnly: false,
 		};

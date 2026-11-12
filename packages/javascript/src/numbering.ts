@@ -5,7 +5,7 @@
  * exporters, so the preview and the native PowerPoint export number every entry identically. Nothing here
  * measures text or reads a document beyond the items it is given.
  */
-import { localizeDigits, numberingSystemOf } from './numerals.js';
+import { localizeDigits } from './numerals.js';
 
 /** The five number styles OPF supports; each maps to a native PowerPoint auto-number scheme. */
 export const NUMBERING_STYLES = ['arabic', 'roman-upper', 'roman-lower', 'alpha-upper', 'alpha-lower'] as const;
@@ -105,12 +105,11 @@ export function numberingStyleDraws(style: NumberingStyleName, value: number): b
  * `formatListNumber(4, 'roman-lower')` is `iv.`, `(3, 'alpha-upper', 'paren')` is `C)` and `(27, 'alpha-lower')` is `aa.`.
  * Roman values above 3999 fall back to arabic (see {@link listNumbers} for the reported adaptation).
  */
-export function formatListNumber(value: number, style: NumberingStyleName = 'arabic', suffix: NumberingSuffix = 'period', language?: string): string {
+export function formatListNumber(value: number, style: NumberingStyleName = 'arabic', suffix: NumberingSuffix = 'period'): string {
   if (!Number.isInteger(value) || value < 1) throw new RangeError('A list number must be an integer of at least 1.');
   if (!styleSet.has(style)) throw new RangeError(`Unknown numbering style '${String(style)}'.`);
   if (!suffixSet.has(suffix)) throw new RangeError(`Unknown numbering suffix '${String(suffix)}'.`);
-  // LH-106: an arabic numeral is in the language's numbering system (Arabic-Indic digits in `ar-SA`); letters and Roman numerals stay.
-  const bare = localizeDigits(bareNumber(value, style) ?? String(value), language);
+  const bare = bareNumber(value, style) ?? String(value);
   return suffix === 'period' ? `${bare}.` : suffix === 'paren' ? `${bare})` : `(${bare})`;
 }
 
@@ -119,6 +118,8 @@ export function formatListNumber(value: number, style: NumberingStyleName = 'ara
  * already sets it apart from the text.
  */
 export function listNumberLabel(number: Pick<ListNumber, 'value' | 'style'>, language?: string): string {
+  // LH-106: a badge or numeral drawn as text is in the language's digits; a list marker (`formatListNumber`) is PowerPoint's auto-number
+  // and stays Latin, since PowerPoint picks the digits of its Hindi schemes from the paragraph's text.
   return localizeDigits(bareNumber(number.value, number.style) ?? String(number.value), language);
 }
 
@@ -132,21 +133,19 @@ export interface ListNumber {
   /** The style actually drawn: `arabic` when the authored style cannot draw `value`. */
   style: NumberingStyleName;
   suffix: NumberingSuffix;
-  /** The drawn marker, for example `iv.` (in the language's digits when `listNumbers` was given one). */
+  /** The drawn marker, for example `iv.`. */
   text: string;
   /** Why the drawn style differs from the authored one: Roman numerals stop at 3999. */
   adapted?: 'roman-range';
-  /** LH-106: the numbering system an `arabic` number is drawn in when it is not Latin (`arab` in `ar-SA`), for the exporters' native schemes. */
-  numberingSystem?: string;
 }
 
 /**
  * The numbers of a list, counted as PowerPoint counts them: consecutive entries of one level count up from that
  * level's `start`; an entry of a shallower level restarts every deeper level; deeper entries between two entries of
  * one level do not interrupt it. An object item's own `start` (an integer from 1 to 32767) restarts the count at that
- * entry. Items are read for their `level` and `start` only. LH-106: with `language`, each `text` is in its numbering system.
+ * entry. Items are read for their `level` and `start` only.
  */
-export function listNumbers(items: readonly unknown[], numbering: NumberingInput, language?: string): ListNumber[] {
+export function listNumbers(items: readonly unknown[], numbering: NumberingInput): ListNumber[] {
   const levels = resolveNumbering(numbering);
   const counters: (number | undefined)[] = [];
   return items.map((item, index) => {
@@ -162,8 +161,7 @@ export function listNumbers(items: readonly unknown[], numbering: NumberingInput
     counters.length = level + 1;
     const adapted = !numberingStyleDraws(authored, value);
     const style = adapted ? 'arabic' : authored;
-    const system = style === 'arabic' ? numberingSystemOf(language) : 'latn';
-    return { index, level, value, style, suffix, text: formatListNumber(value, style, suffix, language), ...(adapted ? { adapted: 'roman-range' as const } : {}), ...(system !== 'latn' ? { numberingSystem: system } : {}) };
+    return { index, level, value, style, suffix, text: formatListNumber(value, style, suffix), ...(adapted ? { adapted: 'roman-range' as const } : {}) };
   });
 }
 
