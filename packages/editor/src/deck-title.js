@@ -1,8 +1,10 @@
 // Deck title (CE-28): the presentation's `name`, edited in place. It reads as plain heading text until it is hovered or focused. Focusing it opens
 // an edit: the field stretches over the whole row it sits in (the row's other controls give way, the row keeps its height) with a Save and a Cancel
 // button at its end. Enter or Save commits through the editor session as one undoable edit (an empty name removes the key); Escape or Cancel puts
-// the current name back. After Save or Cancel the focus stays in the field without an edit; a click or tap, Enter, F2 or typing opens it again. Leaving the field does not commit and does not close the edit: the draft stays until one of those four. The field follows
-// the document (undo, the source pane, the host) unless an edit is open. Plain DOM, no framework, no network.
+// the current name back. After Save or Cancel the focus stays in the field without an edit; a click or tap, Enter, F2 or typing opens it again. Leaving
+// the field and its buttons never commits: with the name unchanged the edit closes as Cancel does; with typed text the draft stays open until one of
+// those four. The field follows the document (undo, the source pane, the host) unless an edit with typed text is open; an open edit with the name
+// unchanged closes and shows the new name. Plain DOM, no framework, no network.
 
 const DEFAULT_LABELS = {
   /** The accessible name of the field. */
@@ -55,6 +57,7 @@ export function createDeckTitle(container, options = {}) {
   let open = false; // an edit is open: the field is stretched and Save and Cancel are shown
   let reentering = false; // the focus is being put back in the field by this part: that must not open an edit
   let row = null;
+  let baseline; // the document's name when the edit opened: the draft is unchanged while committing it would change nothing
   let disposed = false;
 
   const element = doc.createElement("div");
@@ -106,8 +109,14 @@ export function createDeckTitle(container, options = {}) {
     paintState();
     fit();
   }
+  const unchanged = () => deckNamePatch(baseline, input.value) === null;
   function refresh() {
-    if (disposed || open) return;
+    if (disposed) return;
+    if (open) {
+      // An edit with nothing typed gives way to the new name; typed text is never clobbered.
+      if (!unchanged()) return;
+      end();
+    }
     paint();
   }
 
@@ -119,6 +128,7 @@ export function createDeckTitle(container, options = {}) {
   function begin() {
     if (open || disposed || readOnly || disabled) return;
     open = true;
+    baseline = currentName();
     row = resolveRow();
     // The part keeps the room it had, so what sits beside it does not move while it is out of the flow.
     const box = element.getBoundingClientRect();
@@ -237,9 +247,19 @@ export function createDeckTitle(container, options = {}) {
     if (open) cancel();
     else if (event.target === input) input.blur();
   });
+  // A press on Save or Cancel keeps the focus in the field (WebKit does not focus a pressed button, so the field would seem left before the
+  // click lands).
+  actions.addEventListener("mousedown", (event) => {
+    if (event.button === 0) event.preventDefault();
+  });
+  // Leaving the rename row (the field, Save and Cancel) with the name unchanged closes the edit as Cancel does, so the row's controls come back.
+  // With typed text the edit stays open: leaving never commits and never drops a draft.
+  element.addEventListener("focusout", (event) => {
+    if (!open || disposed || element.contains(event.relatedTarget)) return;
+    if (unchanged()) revert();
+  });
   saveButton.addEventListener("click", () => save());
   cancelButton.addEventListener("click", () => cancel());
-  // Leaving the field neither commits nor closes the edit: only Enter, Save, Escape and Cancel end it.
   input.addEventListener("focus", () => {
     if (readOnly || disabled) return;
     input.select();
