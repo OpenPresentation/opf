@@ -2055,6 +2055,26 @@ dialog::backdrop {
    The text typed on the slide (.opf-inline-input) mirrors the slide's type, so it keeps its size: mobile-controls.js stops the zoom
    while that field is focused. */
 @media (pointer: coarse) {
+  /* Touch controls keep their full hit areas beside a docked inspector; groups wrap rather than overflowing it. */
+  .canvas-toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+    height: auto;
+    min-height: 48px;
+    padding-block: 6px;
+  }
+
+  .view-switch {
+    flex-shrink: 0;
+  }
+
+  .history-actions {
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    min-width: 0;
+  }
+
   button,
   summary,
   select,

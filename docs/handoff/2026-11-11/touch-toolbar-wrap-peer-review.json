@@ -1,0 +1,18 @@
+{
+  "verdict": "SOURCE ACCEPTED; no concrete blocker found",
+  "base": "b5119ae00e8ba5339722647d9dbf2d567404d71b",
+  "patch": {
+    "bytes": 8149,
+    "sha256": "7ec9ad08aed315c07c250d52a5a53643d23d3410df47a15184373ecbbdc6da2b"
+  },
+  "changedPins": 5,
+  "protectedBaseExact": 12,
+  "retainedEvidencePinsExact": 7,
+  "review": [
+    "Coarse-pointer only: wrapping/auto-height toolbar, nonshrinking view group and wrapping full-row history; fine-pointer rules unchanged.",
+    "Existing landscape touch audit and 44px assertions retained; added actual group scroll and control rectangle containment assertions. No tolerance, deadline, states, engines, action or parallelism change.",
+    "Actual original settled overflow screenshot independently viewed; unchanged-width/settled facts are retained evidence, not a new browser run.",
+    "Original Windows preview-timeout cause remains unknown; full new browser qualification is UNRUN."
+  ],
+  "execution": "Read-only source/hash/evidence/image review only; no imports, syntax, tests, builds, browser execution or source edits"
+}
