@@ -2,5 +2,4 @@
 type: added
 packages: [opf, render, pptx]
 ---
-
-Draw timeline status labels in the deck's language for the documented localized vocabulary, including regional variants and Chinese scripts. Unknown generated translations keep the semantic status markers and progress without inserting English; authored event text stays intact.
+LH-121: the status words a timeline draws are in the deck's language, including regional variants and Chinese scripts, and their fonts are prepared even when the authored labels are Latin. Languages without a translation keep the status markers without inserting English.

@@ -2,5 +2,4 @@
 type: added
 packages: [opf, render, pptx, editor]
 ---
-
-Attach native overlay shapes to exact chart categories and series through shared plotted-point geometry, with missing-reference findings, undoable editor controls, and current-data import checks. The academy example uses a native ring attached to the United States bar end.
+SH-25: an overlay shape can be attached to a chart's category and series and is drawn at that plotted point in the preview and in PowerPoint, with editor controls and a finding when the reference is missing. Format-only validation stays fast.

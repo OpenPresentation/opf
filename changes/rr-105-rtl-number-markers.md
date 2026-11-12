@@ -2,7 +2,4 @@
 type: fixed
 packages: [render]
 ---
-
-Keep right-to-left numbered markers in their paragraph direction without changing logical numbering text or physical marker edges, and honor explicit SVG direction when anchoring vector PDF and outlined text.
-
-This preserves horizontal marker placement; native vertical marker and font-metric qualification remains separate.
+Right-to-left numbered list markers stay in their paragraph's direction and sit on the first line's baseline in SVG, PNG and PDF; a raster marker may use a later family of its font stack, and one whose font cannot be outlined is reported.

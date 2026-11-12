@@ -1,5 +1,0 @@
----
-type: fixed
-packages: []
----
-RR-107: the release workflows keep the Claude Desktop bundle off the npm publication path. `npm-publish.yml` builds and checks the bundle in its own `mcpb` job (its unlocked `npm install` runs with `--ignore-scripts` and never in the runner that packs the published tarballs), creates the GitHub release notes first, and attaches the bundle and checksum in a separate `assets` job whose failure opens a `release-assets-missing` issue instead of `release-failed`; `release.yml` judges the publish run by its publication jobs, so missing assets warn and the sites are still bumped. The bundle's zip entries carry a fixed time. The release gate skips the report-only LibreOffice leg, a rerun site bump that conflicts with its existing branch publishes to a fresh `bot/opf-vX.Y.Z-N` branch, the native-acceptance reference tests use `OPF_WORKTREE_DIR` or the OS temp directory instead of `C:/opf-work`, and `check:changed` maps the sources of `check:font-switch-fixtures` and `check:e1-current-after`.

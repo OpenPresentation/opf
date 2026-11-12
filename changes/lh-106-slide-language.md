@@ -2,5 +2,4 @@
 type: added
 packages: [opf, render, pptx, editor]
 ---
-
-A slide can set its own `language` (a BCP-47 tag or inline Language object). Direction, script fonts, quotation marks, line breaking and number formatting follow the slide; omission inherits the deck language and a run's `language` still wins. Markdown supports `<!-- slide: language=ar-SA -->`, source completion exposes the field, and PPTX language/script slots and import preserve it. An Arabic slide in an English deck now writes its selected complex-script font instead of relying on an application fallback.
+A slide can set its own `language` (a BCP-47 tag or a Language object; in Markdown `<!-- slide: language=ar-SA -->`): direction, script fonts, quotation marks, line breaking and number formats follow that slide, and PPTX export and import keep it. An Arabic slide in an English deck now gets its complex-script font in PowerPoint, and embedding or copying slides includes the font schemes their languages select.

@@ -2,5 +2,4 @@
 type: fixed
 packages: [opf, editor, render, pptx]
 ---
-
-Allow overlay shapes to begin outside the slide, including negative x/y coordinates. Composition, editor frame changes and PPTX import preserve signed positions instead of rejecting, skipping or clamping them. Slide dimensions and shape width/height limits are unchanged.
+SH-27: overlay shapes may start outside the slide (negative `x` and `y`); composition, the editor and PPTX import keep those positions, and right-to-left overlays keep their place when moved.

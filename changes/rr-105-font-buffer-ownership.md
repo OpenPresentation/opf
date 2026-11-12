@@ -2,5 +2,4 @@
 type: fixed
 packages: [render]
 ---
-
-Copy caller font bytes into owned plain Uint8Array storage before registry and PDF font validation. Node Buffer inputs no longer share slice views that subset validation could corrupt; font permissions and shaping refusals stay unchanged.
+Font bytes passed in as Node `Buffer`s are copied before validation, so font subsetting can no longer corrupt the caller's data.

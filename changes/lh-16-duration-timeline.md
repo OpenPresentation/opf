@@ -2,4 +2,4 @@
 type: added
 packages: [opf, render, pptx]
 ---
-LH-16: timeline events accept a positive relative `duration`, with omission equal to one unit. Shared geometry draws exact proportional ranges with native leader lines in SVG and PPTX, keeps authored date labels on a readable track without shrinking type, and preserves numeric periods and current native text through PPTX import. Timelines without durations draw as before.
+LH-16: timeline events take an optional relative `duration` (one unit when omitted) and draw proportional ranges in the preview and in PowerPoint, and PPTX import keeps them. On right-to-left slides, Latin dates and number ranges keep their order in PowerPoint.

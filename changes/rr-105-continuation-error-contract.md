@@ -1,6 +1,5 @@
 ---
 type: fixed
-packages: []
+packages: [opf]
 ---
-
-Document strict-composition export failures as `layout-overflow` and verify that public conversion retains the original composition error and located diagnostics. Engine error codes remain unchanged; `export-failed` is a fallback for errors without a code.
+The guides document that a strict export that cannot fit its composition fails with `layout-overflow`, and conversion keeps that original error and its locations.

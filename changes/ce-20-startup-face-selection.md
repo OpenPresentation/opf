@@ -2,4 +2,4 @@
 type: fixed
 packages: [render]
 ---
-CE-20: font-face analysis reuses successful face selections during repeated layout fitting, reducing editor startup work while preserving the selected faces, current text styles and font-loading behavior.
+CE-20, RR-114, RR-116: text preparation is faster: font-face choices are reused while a layout is refitted, cached text metrics skip repeated direction and language analysis, and long text is matched to HarfBuzz clusters in one pass. Output is unchanged.

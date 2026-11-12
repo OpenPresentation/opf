@@ -2,4 +2,4 @@
 type: fixed
 packages: [pptx]
 ---
-Preserve scalar list text and descriptions after automatic RTL run splitting using bounded source-form provenance. Authored run arrays, current words, line breaks, language/style edits and named color references retain their identities. Unowned alternate-language pairs remain observed instead of being mistaken for legacy automatic English runs.
+PPTX import of right-to-left text keeps authored run languages, rich-text run boundaries, list text and descriptions, also when PowerPoint has renamed OPF's tag parts or every run carries its own language.

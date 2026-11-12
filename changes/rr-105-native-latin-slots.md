@@ -2,4 +2,4 @@
 type: fixed
 packages: [opf, render, pptx]
 ---
-RR-105: Keep source-selected ASCII Latin spans under Arabic proofing on their final chosen Latin font in native PPTX complex-script slots, including safe-typeface mapping and wrapped rich text. Preserve genuine Arabic-context digits and original rich-run boundaries through bounded existing-tag ownership records. Share the renderer's unchanged pure script itemizer with core and PPTX; this does not change bidirectional word order.
+RR-105 (PPTX output for right-to-left text): Latin words, digits, punctuation and spaces inside Arabic text keep their order, font and style in PowerPoint, in body text, numbered lists and wrapped list lines, also after the text is edited in PowerPoint. Typed export callbacks receive the diagnostics of text that falls back to measured fragments.
