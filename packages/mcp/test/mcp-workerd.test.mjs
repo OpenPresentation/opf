@@ -39,7 +39,11 @@ test("lean Worker preserves data exclusions and production size budgets", async 
 	}
 	// Reviewed v0.34 source076725b5b:8,273,467 lean unminified bytes, no retained data.
 	// Exact source measurements and3% rounded headroom: docs/handoff/2026-11-07/mcp-size-budget-034.md.
-	assert.ok(lean.bytes < 8_522_000, `${lean.bytes} unminified bytes`);
+	// RR-111 viewer size cut (vetoable, RR111-WORKER-CEILINGS): core's precompiled validators build their errors with helper
+	// functions. On the integration-034 wave 3 head d27954fc3 the lean Worker measured 8,542,441 unminified / 5,577,531 minified /
+	// 1,265,413 gzip bytes (over its own ceilings) and 7,333,178 / 4,677,145 / 1,219,884 with the cut, so all three ceilings come back
+	// to the 3% headroom policy, rounded up to 1,000 bytes: 7,554,000, 4,818,000 and 1,257,000.
+	assert.ok(lean.bytes < 7_554_000, `${lean.bytes} unminified bytes`);
 	const production = await bundleWorker("mcp-worker-lean.mjs", { minify: true });
 	assert.deepEqual(retainedData(production), [], "production also excludes every data source");
 	const compressed = gzipSync(production.text, { level: 9 }).length;
@@ -48,9 +52,9 @@ test("lean Worker preserves data exclusions and production size budgets", async 
 	// measures 5,558,585 (0.03% under that ceiling), and RR-111 (open_editor, the derived session keys, the in-place instructions and
 	// tool descriptions) brings it to 5,563,948. 5,565,000 is 3.1% above the reviewed 5,397,634, 0.12% above the base and 0.02% above
 	// this branch: it is no longer a 3% headroom, so the release assembly must re-measure it. The unminified and gzip ceilings keep
-	// their 3% policy.
-	assert.ok(production.bytes < 5_565_000, `${production.bytes} minified bytes`);
-	assert.ok(compressed < 1_270_000, `${compressed} gzip bytes`);
+	// their 3% policy. RR-111's viewer size cut (above) replaces that ceiling with one at 3% again.
+	assert.ok(production.bytes < 4_818_000, `${production.bytes} minified bytes`);
+	assert.ok(compressed < 1_257_000, `${compressed} gzip bytes`);
 });
 
 describe("the MCP server in workerd", { skip: !available && "the workerd package has no binary for this platform" }, () => {
