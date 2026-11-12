@@ -1,0 +1,16 @@
+
+> openpresentation-workspace@ check:gallery-editor-imports /private/tmp/opf-034
+> node --test scripts/gallery-editor-imports.test.mjs
+
+✔ the rewrite maps ../src/<module>.js to the package specifier and keeps the quotes (0.863375ms)
+✔ every example import of ../src is a public entry of the editor package (2.957458ms)
+✔ every export the examples reach is built from the source module the example imports (0.780292ms)
+✔ the unexported-module workaround lists only modules that exist and are still unexported (0.066875ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.05225

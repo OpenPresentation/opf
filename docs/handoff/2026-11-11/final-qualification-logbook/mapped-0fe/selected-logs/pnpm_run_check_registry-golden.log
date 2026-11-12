@@ -1,0 +1,16 @@
+
+> openpresentation-workspace@ check:registry-golden /private/tmp/opf-034
+> node --test scripts/registry-golden.test.mjs
+
+✔ the digest sorts files, ignores key order and strips the examples/ prefix, like the renderer golden test (0.590541ms)
+✔ registry golden preserves exact release bytes when current source moves pixels for the same examples (126.32275ms)
+✔ registry golden rejects invalid, unavailable or wrong-version source refs and a different installed corpus (147.955041ms)
+✔ registry golden refuses escaped paths and missing release fixtures (242.565042ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 552.585167

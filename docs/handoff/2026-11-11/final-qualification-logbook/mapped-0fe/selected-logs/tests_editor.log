@@ -1,0 +1,431 @@
+
+> @openpresentation/opf-editor@0.33.0 test:contract /private/tmp/opf-034/packages/editor
+> pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs --suite contract
+
+
+> @openpresentation/opf-editor@0.33.0 build:deps /private/tmp/opf-034/packages/editor
+> pnpm --filter "@openpresentation/opf-editor^..." --fail-if-no-match run build
+
+Scope: 4 of 9 workspace projects
+../gallery build$ node scripts/build.mjs
+../gallery build: Built @openpresentation/gallery: 226 content records, 40 layout previews.
+../gallery build: Done
+../javascript build$ node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/minify-precompiled.mjs && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)
+../javascript build: reuse-build: javascript was built earlier in this CI job (OPF_REUSE_BUILD); reusing dist/
+../javascript build: Done
+../render build$ node scripts/build.mjs
+../render build: Done
+../pptx build$ node scripts/build.mjs
+../pptx build: Vendored upstream distribution and license match recorded hashes.
+../pptx build: Done
+
+> @openpresentation/opf-editor@0.33.0 build /private/tmp/opf-034/packages/editor
+> node scripts/build.mjs
+
+[node:test] 1 files
+✔ failed discard of main retains recovery offer and allows a successful retry (100.155ms)
+✔ failed discard of earlier retains recovery offer and allows a successful retry (0.820292ms)
+✔ discard waits for a previously queued write instead of deleting beneath it (0.966292ms)
+✔ a newer edit queued while deletion is held is written after discard and retained (0.913209ms)
+✔ failed discard leaves the offered document restorable through the public action (1.703125ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 224.688708
+[1/147] node test/accepted-text.mjs
+Accepted text editor: 12 wide/portrait/alignment/card layouts match rendering across edit, undo/redo and explicit pagination.
+[2/147] node test/agent-handoff.mjs
+{"passed":true,"targets":["pptx","pdf","svg"]}
+[3/147] node test/annotations.mjs
+Annotations passed: 14 caption, reference, citation and footnote checks.
+[4/147] node test/assets.mjs
+Image uploads: 5 types by their bytes, size cap and type/content/script refusals, one undo step for the organization logo (one image for every shape, and each shape for both, light and dark backgrounds), watermark, slide image, background and zone image, asset ids and alt text, and the onAddAsset host hook.
+[5/147] node test/background-options.mjs
+Backgrounds: 5 types with scheme-slot colors, gradient stop validation, 54 patterns round-tripped through PPTX, scope, removal, one undo step each.
+[6/147] node test/block-convert.mjs
+Block conversion: 9 source kinds, 9 fixtures, text/list/quote/metric/code/timeline/chart/table pairs, loss reports, refusals, one undo step each, preview refresh.
+[7/147] node test/block-duplicate-ids.mjs
+Block duplication: root/nested/reserved IDs, id-less content and exact undo/redo.
+[8/147] node test/blocks.mjs
+Block moves passed: sibling order, shifted group destinations, nested/ancestor/cross-slide moves, formatting/data preservation, no-op, cycle/empty rejection, guards and undo.
+Block creation passed: presets, implicit normalization, groups/regions, duplication, empty ancestor pruning, guards, metadata and undo.
+[9/147] node test/builtin-variables.mjs
+Editor built-in variables passed: listing (deck and slide scope), token insertion, header/footer variables and warnings.
+[10/147] node test/canvas-fields.mjs
+Canvas fields: escaped keys, types, immutable drafts, validation and undo passed.
+[11/147] node test/catalog-optional-design.mjs
+Optional design catalog transactions and all three binding error paths passed.
+[12/147] node test/catalogs.mjs
+catalogs ok: one merged list, references from catalogRecords, embed on save and copy, copySlides on paste, approved catalog updates, reference findings
+catalogs ok: not-in-source records move to custom with their references
+catalogs ok: editing a catalog record forks it into custom (one undo step, references follow, no catalog updates)
+[13/147] node test/chart-alt.mjs
+chart alt: editor field, undo, review fix, find and replace
+[14/147] node test/chart-colors.mjs
+chart colors ok
+[15/147] node test/chart-highlight.mjs
+Chart highlight (editor): series and categories edit as one undoable patch, follow core's support table and the chart's own names, redraw in the preview and survive the PPTX round trip.
+[16/147] node test/chart-options.mjs
+Chart options (editor): axis titles, legend position and data labels edit as one undoable patch, follow core's support table, redraw in the preview and survive the PPTX round trip.
+[17/147] node test/chart-table-data.mjs
+Chart and table data (editor): DataColumn headers, shared datasets through fields, column number formats, chart mapping and import as a dataset, each one undoable patch; documents without the new fields behave as before.
+[18/147] node test/chrome-guide.mjs
+chrome guide checks passed: 22 blocks equal their example regions, 8 examples shown, links and sections present
+[19/147] node test/codemirror-guard.mjs
+codemirror-guard: a second copy of @codemirror/view is found (plain, with an argument, wrapped) and reported once; one copy is quiet.
+[20/147] node test/combo-charts.mjs
+Combo charts (editor): picker, series lines and secondary axis, secondary title, refusals, switch-away cleanup, export.
+[21/147] node test/component-smoke.mjs
+opf-editor component smoke passed
+[22/147] node test/compose-slide-date.mjs
+Session composition passes the host date to the slide resolution: message surfaces match the engines.
+[23/147] node test/content-actions.mjs
+Content actions: list levels, group and ungroup, regions, image to design and back, slide split, merge, split on overflow and un-paginate: guarded patches, loss reports, refusals and one undo step each.
+[24/147] node test/convert-contract.mjs
+convert contract passed: ConvertResult and ConvertedFile members from core, findings against finding.schema.json, one-based selections, zip, raster, name.
+[25/147] node test/core-features.mjs
+Core features: 171 named imports from 22 sibling modules exist; no run-time feature detection remains.
+[26/147] node test/data-grid.mjs
+data grid model tests passed
+[27/147] node test/deck-stats.mjs
+Deck stats: core's stats over the session's document, following edits and undo, with no severities.
+[28/147] node test/deck-title.mjs
+deck-title: ok
+[29/147] node test/declared-options.mjs
+declared options: canvas and design-controls types name every option the code reads
+[30/147] node test/default-font-scheme.mjs
+shared engine default font scheme (Aptos) passed
+unresolved font schemes: engine default base and one diagnostic, as in every engine
+[31/147] node test/design-options.mjs
+Design options: 11 options with patch, scope, undo/redo, preview and export; slide scope, shadowing, validation, accent font, watermark and slide image merging, organization logos, the logo choice, header/footer zones, Insert logo and logo warnings.
+[32/147] node test/design-variants.mjs
+design variants ok
+[33/147] node test/diagram.mjs
+Diagram passed: sample and insert, replace and undo, source and alt editing, canvas form fields, find and replace, outline and scene labels, menus, the mermaid fence (completion, hover, quick fix) and broken sources.
+[34/147] node test/editor-expand.mjs
+editor expand unit checks passed
+[35/147] node test/element-units.mjs
+element unit checks passed
+[36/147] node test/exact-source-entry.mjs
+exact-source entry: @openpresentation/opf-editor/exact-source rewrites only changed tokens and restores authored bytes.
+[37/147] node test/exact-source.mjs
+Exact source: edited tokens only, Escape/Undo/Redo bytes, long drafts, chains, removals and bounds pass.
+[38/147] node test/export-subset.mjs
+Export subset passed: SVG faces cut with the handle's subset engine, whole without it, PDF and PNG unchanged, outlined text from the handle.
+[39/147] node test/export.mjs
+Export API passed: file names, slide choice, ZIP, SVG with embedded faces, license rule, converter hand-off, findings and cancel.
+[40/147] node test/fa-13-conveniences.mjs
+FA-13 editor: ten slide sizes, watermark text, inline code and run language, generic-form schema, code.highlight preview.
+[41/147] node test/find-replace-empty-unicode.mjs
+Empty Unicode regex progression and no-empty replacement controls passed.
+[42/147] node test/find-replace.mjs
+find-replace: ok
+[43/147] node test/font-gate-latin-families.mjs
+Font gate Latin families: 87 families through the editor's gate, 348 family-styles resolved to their route, 94 vendored files fetched in total, each only when a family needed it.
+[44/147] node test/font-gate-registry.mjs
+Font gate registry: a catalog-only font scheme resolves, loading is face level, an italic edit loads one face, an unknown layout never fails the gate, script faces load.
+[45/147] node test/font-gate-script-families.mjs
+Font gate script families: 35 families through the editor's gate, 194 styles resolved to the family itself, 350 runs drawn strictly in it, 67 pinned files fetched in total, each only when a document needed it.
+[46/147] node test/font-gate-script-names.mjs
+Font gate script names: 23 proprietary names through the editor's gate, 188 resolutions to their policy routes, 1509 runs drawn in their route faces, 41 pinned files fetched in total.
+[47/147] node test/font-gate.mjs
+Font gate: gates on the fonts handle's pending and ensure, reports one failure without retrying, drops superseded results.
+[48/147] node test/gallery-font-roles.mjs
+gallery font-scheme roles passed
+[49/147] node test/gallery-layout-records.mjs
+Gallery definitions preserve exact v2 region/grid/design records without migration fallback.
+[50/147] node test/hang-cap.mjs
+hang cap: 40% of the width in whole columns, never above MAX_HANG, uncapped while the size is unknown
+[51/147] node test/host-continuation.mjs
+LH-99 editor continuation ok
+[52/147] node test/icon-options.mjs
+LH-166 editor icons: targets, search, set, change, remove, pasted SVG, refusals, pruning and undo checked.
+[53/147] node test/icons.mjs
+icon helper checks passed
+[54/147] node test/id-paths.mjs
+id paths, documentHash, expectHash and assignIds passed
+[55/147] node test/image-crop-async.mjs
+Actual session crop load/encode races, abort cleanup and one-undo success passed (controlled encoder; no pixel/native claim).
+[56/147] node test/image-crop.mjs
+image-crop: ok
+[57/147] node test/image-options.mjs
+image options ok: block fit, focus, treatments and placement; flat image backgrounds; the removed design keys are refused
+[58/147] node test/json-options.mjs
+JSON options: schema paths, catalog precedence, exact token edits, custom values, invalid drafts, malformed catalog arrays and duplicate-key rejection pass.
+V2 layout options: intent groups, region descriptions, exact content-preserving reference edits and atomic source undo pass.
+JSON completions: keys, values, booleans, catalogs, invalid drafts and the field menu data agree.
+[59/147] node test/json-source.mjs
+JSON source: exact mixed endings through typing, multi-range edits, deletion, native history, explicit paste and external changes.
+[60/147] node test/layout-design-applied.mjs
+Editor layout design applied: layout, deck and slide alignment and content box resolve with one merge in the editor composition.
+[61/147] node test/layout-groups.mjs
+Layout pickers group every Gallery layout by its Gallery group; no default layout is Custom.
+[62/147] node test/layout-model.mjs
+layout model: commands, history, gestures, findings and deck functions passed
+[63/147] node test/layout-templates.mjs
+layout template editor operations: passed
+[64/147] node test/layout-tree.mjs
+layout tree operations: split, wrap, unwrap, move, delete-collapse, resize and geometry stay core-valid
+[65/147] node test/layout.mjs
+Layout resizing passed: exact track geometry, row/column/nested/grid behavior, auto freeze, weight bounds, metadata preservation, stale guards and undo.
+[66/147] node test/lh-100-chart-label-default.mjs
+LH-100: the chart options read a small chart's default value labels; LH-104: auto is an image fit in the editor.
+[67/147] node test/lh-97-variant-trend-fit.mjs
+lh-97 variant, trend and fit ok
+[68/147] node test/metric-sentiment.mjs
+FA-06 editor: Metric.sentiment is a schema-driven enum field, set, validated, undone and composed through the session.
+[69/147] node test/narrative-switch.mjs
+narrative switch: ok
+[70/147] node test/native-playground-controls.mjs
+Native playground helper: static shape checked; the PowerShell controls run on Windows only.
+[71/147] node test/numbering.mjs
+Numbering model passed: lists found in roots, regions, blocks and groups, state and markers, the shortest value, number / change / restart / turn off as one undoable validated edit each.
+[72/147] node test/outline.mjs
+RR-21 outline: ok
+[73/147] node test/overlay-size-units.mjs
+overlay size units: ok
+[74/147] node test/patch.mjs
+Editor patch: core RFC 6902 module, move/copy, 269 checks of undo/redo exactness, events, error codes, path helpers and guards pass.
+[75/147] node test/persistence.mjs
+RR-22 persistence: ok
+[76/147] node test/picture-luminance.mjs
+picture luminance: the meter, its coalescing and the export helper checked.
+[77/147] node test/placeholder-groups.mjs
+Nested groups: 33 direct content leaves preserve core/renderer geometry; v2 summaries and content-preserving layout switch undo/redo pass.
+[78/147] node test/placeholder-selection.mjs
+PASS short headings use the allocated item box, not glyph ink
+PASS code and metric parts keep traced part boxes over the parent item
+PASS source-text traces and rich-line fallbacks still provide a selectable box
+[79/147] node test/playground-thumbnail-cache.mjs
+{"passed":true,"byteIdenticalSvg":true,"hidden":true,"sections":true,"furniture":true,"registeredCatalogInvalidation":true,"fontClear":true,"longDeck":{"slides":60,"fullDeckCompositionCalls":1},"perSlideErrorFallback":true}
+[80/147] node test/presentation-ids.mjs
+presentation-ids and reference-layer editor guards passed.
+[81/147] node test/presenter.mjs
+RR-98 presenter wiring ok
+[82/147] node test/quote-role-photo.mjs
+Quote role and photo: schema form, session edit/undo/validation, canvas fields and find/replace pass.
+[83/147] node test/read-deck-file.mjs
+RR-98 readDeckFile ok
+[84/147] node test/replace-document.mjs
+Replace document: opens a document as one undoable change without forking catalog records.
+[85/147] node test/review-logo-alt.mjs
+Review logo alt passed: a logo reference stays whole, its alt is written on the organization's light and dark assets (or the registry entry), and a reference with no logo is refused.
+[86/147] node test/review-pill.mjs
+review pill ok
+[87/147] node test/review.mjs
+Review model passed 74 checks.
+[88/147] node test/rich-headings.mjs
+Rich headings: formatting, citations, outline and slide lists, find and replace.
+[89/147] node test/rich-text.mjs
+Rich range editing passed: cross-run preservation, replacement, style removal, script exclusivity, grapheme safety, validation and atomic undo.
+Native rich input passed: style/link preservation, repeated-character affinity, graphemes and bounded run growth.
+Native rich input preserves mixed source line endings, cross-run CRLF, selection affinity, marks and metadata.
+[90/147] node test/rr-20-centered-track-resize.mjs
+✔ a centered content-sized column at rest is an exact no-op at every divider and keeps all accepted type (43.32825ms)
+✔ drawn weights allocate both leading and trailing slack, preserving all divider coordinates (4.198375ms)
+✔ already explicit weighted rows keep their established resize semantics (99.727583ms)
+✔ allowed outer-slack drags preserve type and every unrelated divider, with free and snapped bounds (60.864709ms)
+✔ the original positive-first request and opposite inner edge refuse to shrink current type (10.932625ms)
+✔ four authored column rows expose actual displayed frames and allow outer-slack resizing without smaller type (8.43975ms)
+✔ physical gap midpoint maps to the logical first share for actual LTR and RTL weighted rows (2.030209ms)
+✔ two-track whole-ratio snapping keeps its ratio and skips a snapped no-op before the first nudge (23.275291ms)
+✔ an already filled implicit row also keeps exact source and geometry at rest (1.805709ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 257.404333
+[91/147] node test/schema.mjs
+Schema controls: 969 documented fields, nested paths, catalog records, background forms, required defaults passed.
+[92/147] node test/session-boundaries.mjs
+Session boundaries passed: isolated reads, explicit empty catalogs, fresh/refused/serialized flushes and a debounce that leaves a draft alone and one lifecycle hook.
+[93/147] node test/sh-25-chart-point-anchors.mjs
+SH-25 undoable point anchors pass
+[94/147] node test/shape-handle-math.mjs
+shape handle math ok: 243 handles of 187 presets
+[95/147] node test/shape-options.mjs
+shape options ok
+[96/147] node test/shape-overlays.mjs
+shape overlays ok
+signed explicit center insertion and default visible placement passed
+[97/147] node test/shortcuts-sheet.mjs
+shortcuts sheet ok
+[98/147] node test/slide-adapter.mjs
+slide adapter: ok
+[99/147] node test/slide-context.mjs
+Slide context: composition, pagination and the renderer share core's resolved fonts, layout and theme; unknown ids fall back and report.
+[100/147] node test/slide-edits-corpus.mjs
+slide edits over 52 decks: applied {"duplicate":297,"delete":288,"paste":295,"slides":43,"reorder":92,"group":59,"resize":36,"into a group":4,"ungroup":4,"out of a group":4,"between regions":9}; refused {"delete":10,"between regions":45,"reorder":4,"paste":3,"resize":1,"duplicate":1}
+[101/147] node test/slide-navigator.mjs
+RR-98 navigator wiring ok
+[102/147] node test/slide-scene.mjs
+slide scene: 576 slides of 56 decks
+[103/147] node test/slide-variables.mjs
+Slide variables (editor): composeSlide and the preview substitute {{slide.number}}, {{slide.section}} and {{deck.slideCount}}; pagination and edits keep the tokens.
+[104/147] node test/slides-declarations.mjs
+slide public-import/declaration catalog and record-source controls passed
+[105/147] node test/slides.mjs
+RR-21 slide management: ok
+[106/147] node test/smoke.mjs
+opf-editor smoke passed
+[107/147] node test/source-block-budget.mjs
+✔ the median is the upper one of two (0.368875ms)
+✔ one 101 ms stall among twelve quiet edits does not break the 100 ms limit it was reported against (0.358417ms)
+✔ four quick bursts tolerate one stall, not two (0.365833ms)
+✔ the check back on the main thread breaks the budget on a fast machine and on a CI runner, even when it is under the limit (0.135291ms)
+✔ the worker that is clearly cheaper than the main-thread run passes, on a fast and a slow machine (0.075833ms)
+✔ a bad 2-vCPU CI runner, where the pane applies the answer slowly, passes: 52 against 80 ms and 73 against 105 ms (runs of one job) (0.0685ms)
+✔ the edits must have been checked in the worker (0.057958ms)
+✔ a stall while the request is in flight in a minority of edits passes (0.041208ms)
+✔ a main-thread run that does not block measurably does not judge the worker (0.0555ms)
+✔ a slow stretch that hits half the edits breaks the budget, and so does a single huge block (0.087416ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4.228333
+[108/147] node test/source-check-units.mjs
+checkSource: 26 texts equal the reviewed source-reading fixture.
+Source worker: the checks, the session handoff and the client behave.
+[109/147] node test/source-checker-icon-sets.mjs
+Source checker: icon-set loaders reach the worker as cloneable data, and the worker checks as the main thread does.
+[110/147] node test/source-completions-phase4-units.mjs
+Source completions (phase 4): built-in variables, multi-cursor variables and Markdown image targets pass.
+[111/147] node test/source-completions-units.mjs
+Source completions: references, ranking, footer, snippets and multi-line YAML pass.
+[112/147] node test/source-findings.mjs
+Source findings: every rejection issue becomes one finding with its path.
+[113/147] node test/source-fixes-markdown-units.mjs
+Source fixes (Markdown phase 4): conflict, empty quote, orphan, trailing, syntax, value, attribute and metric fixes give the golden text and remove their findings.
+[114/147] node test/source-fixes-syntax-units.mjs
+Source fixes (syntax and phase 3 text fixes): YAML and Markdown syntax fixes and the text fixes for schema findings give the golden text and remove their findings.
+[115/147] node test/source-format.mjs
+Source format: JSON, YAML (comments kept) and Markdown (fences kept) lay out as whitespace only, and are idempotent.
+[116/147] node test/source-hints-units.mjs
+Shape hint: slides by layout, other objects by schema, blocks by type, in JSON, YAML and Markdown.
+[117/147] node test/source-keymap-units.mjs
+✔ table: ids are unique, groups are known, titles are present (0.414625ms)
+✔ table: every stroke parses on every platform (0.353667ms)
+✔ table: one stroke is not two commands on a platform, unless they apply at different times (0.17725ms)
+✔ table: the first stroke of a chord is not also a command of its own (0.135875ms)
+✔ strokeText: words and symbols per platform (0.106708ms)
+✔ platformOf reads navigator.platform like CodeMirror (0.059792ms)
+✔ eventMatches: exact modifiers, lowercase letters with Shift, the physical key under Alt (0.095459ms)
+✔ createKeymap: bind records keys per platform and returns CodeMirror bindings (0.641708ms)
+✔ createKeymap: bindDom builds the strokes of a chord, spread titles CodeMirror commands and reports the ones without a title (0.767333ms)
+✔ no key is installed outside the table: keymap.of is only used in the files that read it from there (5.826333ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11.145792
+[118/147] node test/source-language-units.mjs
+Source language units: contexts, lists and their order, accepted text, snippets, problem text, quick fixes and panel rows pass.
+[119/147] node test/source-language-yaml-markdown-units.mjs
+Source language units (YAML and Markdown): contexts, lists, accepted text, snippets, regions, hover and Enter pass; 20785 positions of the example decks agree with core.
+[120/147] node test/source-lines.mjs
+Source pane line lookup: JSON, YAML and Markdown.
+[121/147] node test/source-navigation-units.mjs
+Navigation model, json 187 KB, 1000 slides: 6 ms
+Navigation model, yaml 139 KB, 1000 slides: 25 ms
+Navigation model, md 105 KB, 1000 slides: 2 ms
+Source navigation units: definitions, references and renames pass in JSON, YAML and Markdown.
+[122/147] node test/source-symbols-units.mjs
+✔ JSON: slides numbered by position, titles from strings and runs, ranges of the slide objects (1.199875ms)
+✔ JSON: records of embedded catalogs, references, datasets and variables (0.205833ms)
+✔ JSON: broken text still gives the slides it can read (0.125ms)
+✔ YAML: slide mappings without their trailing line break; runs in titles (2.872625ms)
+✔ Markdown: slides by their heading outside fences, layout from the options comment, front matter sections (0.71025ms)
+✔ symbolAt finds the innermost symbol around an offset; filterSymbols matches words, then letters in order (0.175625ms)
+✔ a 1000-slide deck is read quickly (5.863209ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13.570041
+[123/147] node test/source-worker-bundle.mjs
+source-worker-bundle: a host file that only imports the worker entry bundles the worker (2928 KiB unminified).
+[124/147] node test/studio-commands.mjs
+studio commands: 66 spec ids registered, the keymap of section 6, reasons when off, the context menu and host keymaps
+[125/147] node test/studio-kit-commands.mjs
+studio kit commands: key specs, matching, formatting, guard, scopes, when, repeat, keymap, menus and list passed
+[126/147] node test/studio-kit-drag.mjs
+studio kit drag: threshold, refused start, callback order, release, Escape, cancel, touch hold and pointer tracking passed
+[127/147] node test/studio-kit-gesture.mjs
+studio kit gesture history: drafts, one step per gesture, cancel, reset, undo and redo, coalescing, limit and append passed
+[128/147] node test/studio-kit-overlay.mjs
+studio kit overlay: hit-testing, divider keyboard and ratio label passed
+[129/147] node test/studio-kit-selection.mjs
+studio kit selection: set, sibling-only add, toggle, range, parent, child, sibling, siblings, prune and click target passed
+[130/147] node test/studio-kit-tree.mjs
+studio kit tree: keyboard (focus, expand, collapse, activate, menu) and drop places passed
+[131/147] node test/studio-kit-viewport.mjs
+studio kit viewport: steps, clamp, unit mapping, anchored zoom, wheel, hand and Space pan, pinch, fit and destroy passed
+[132/147] node test/studio-tracks.mjs
+studio tracks: a content-sized column starts from its drawn heights; weighted containers resize as before
+[133/147] node test/styled-table.mjs
+Styled table editor model passed: value-path typing/formatting, styles/spans, empty cells, properties, guarded structural edits and atomic undo.
+[134/147] node test/styles.mjs
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "fail-if-no-match". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "recursive". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "overrides". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+editor stylesheet checks passed
+[135/147] node test/styling-contract.mjs
+styling contract checks passed (162 hooks in 10 parts)
+[136/147] node test/switches-export.mjs
+Exports after switches passed the FF-08 typeface check: 84 packages checked (84 built).
+[137/147] node test/switches-ui.mjs
+Switch pickers: options for every catalog dimension, chart types by data shape, and current values at deck and slide scope.
+[138/147] node test/switches.mjs
+Dimension switches passed: 16 dimensions (patch, one undo step, undo/redo, preview refresh; language preview checked).
+[139/147] node test/table-alt.mjs
+table alt: editor field, undo, dataset table, find and replace
+[140/147] node test/table-options.mjs
+Table options: merge, join, split, refusals, 5 style presets plus per-axis styles and Theme reset, cell styles, preview and PPTX export/reimport, one undo step each.
+[141/147] node test/task-budget.mjs
+✔ one 101 to 109 ms stall among three attempts does not break the 100 ms limit it was reported against (0.515791ms)
+✔ a typical attempt over the limit fails, and so does a block that every attempt has (0.088209ms)
+✔ a single attempt of three limits fails whatever the median says (0.058541ms)
+✔ an engine without long task entries (WebKit) reports no tasks and passes (0.287916ms)
+✔ the limit is the laptop one, the CI one, or OPF_PERF_LIMIT_MS (0.08325ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3.245625
+[142/147] node test/templates.mjs
+Templates passed fields, previews, one undoable fill, partial fills, declarations and token insertion.
+[143/147] node test/toolbar-actions.mjs
+toolbar actions ok
+[144/147] node test/transfer.mjs
+Transfer: clipboard formats, code fences, fragments, collision-safe insertion, design/assets, undo and explicit gallery fetches passed.
+[145/147] node test/workspace-bundle.mjs
+workspace-bundle: a source-only SDK host loads 2579 KiB (842 KiB gzip) up front (the bare source pane: 2338 KiB (778 KiB gzip)); the slide chunk and the rest bring the build to 5355 KiB (1814 KiB gzip); no renderer up front.
+[146/147] node test/workspace-ssr.mjs
+workspace SSR checks passed
+[147/147] node test/workspace-units.mjs
+workspace unit checks passed
+run-tests: 1 node:test files and 147 scripts passed (contract suite)

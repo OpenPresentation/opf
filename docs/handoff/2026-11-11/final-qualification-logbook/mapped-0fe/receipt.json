@@ -1,0 +1,33 @@
+{
+  "base": "1f230e3bb28519604338f85da3f6e5471b0e904b",
+  "argv": [
+    "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+    "run",
+    "check:changed",
+    "--base",
+    "1f230e3bb28519604338f85da3f6e5471b0e904b"
+  ],
+  "node": "v24.21.0",
+  "startedAt": "2026-11-12T02:50:09.644Z",
+  "seconds": 1535.114,
+  "code": 0,
+  "signal": null,
+  "sourceBefore": {
+    "head": "0fe8031fc012c416ab6ee87f22b143c4cb1f7ee1",
+    "tree": "692c9191c001e04f8434f692aa6450718ab336fd",
+    "status": ""
+  },
+  "sourceAfter": {
+    "head": "0fe8031fc012c416ab6ee87f22b143c4cb1f7ee1",
+    "tree": "692c9191c001e04f8434f692aa6450718ab336fd",
+    "status": ""
+  },
+  "sourceUnchanged": true,
+  "runtimeFilesBefore": 609,
+  "runtimeFilesAfter": 609,
+  "runtimeUnchanged": true,
+  "log": {
+    "bytes": 1905,
+    "sha256": "4266c90a3dddfa04deb86f4369989ef81215794e4fe98137febbb6cd170e48ed"
+  }
+}
