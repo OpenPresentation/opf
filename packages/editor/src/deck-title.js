@@ -1,12 +1,18 @@
-// Deck title (CE-28): the presentation's `name`, edited in place. It reads as plain heading text until it is hovered or focused, then shows a
-// border and a focus ring. Enter or blur commits through the editor session as one undoable edit (an empty name removes the key); Escape puts the
-// current name back. The field follows the document (undo, the source pane, the host) unless the person is typing. Plain DOM, no framework, no network.
+// Deck title (CE-28): the presentation's `name`, edited in place. It reads as plain heading text until it is hovered or focused. Focusing it opens
+// an edit: the field stretches over the whole row it sits in (the row's other controls give way, the row keeps its height) with a Save and a Cancel
+// button at its end. Enter or Save commits through the editor session as one undoable edit (an empty name removes the key); Escape or Cancel puts
+// the current name back. Leaving the field does not commit and does not close the edit: the draft stays until one of those four. The field follows
+// the document (undo, the source pane, the host) unless an edit is open. Plain DOM, no framework, no network.
 
 const DEFAULT_LABELS = {
   /** The accessible name of the field. */
   label: "Presentation name",
   /** The placeholder shown while the deck has no name. */
   placeholder: "Untitled presentation",
+  /** The button that commits the name being edited. */
+  save: "Save",
+  /** The button that drops the name being edited. */
+  cancel: "Cancel",
 };
 
 const MIN_CHARS = 6;
@@ -29,11 +35,12 @@ export function deckNamePatch(current, next) {
  * Mount the editable deck name into `container`.
  *
  * Options: `editor` (an editor session), `placeholder`, `label` (the accessible name), `readOnly`, `density` (`"comfortable"` or `"touch"`),
- * `labels` (`label`, `placeholder`), `beforeCommit()` (return `false` to stop the rename, for example when committing an open canvas edit
- * failed; the typed text stays), `onRename({ name, previous })` (after a successful rename; `name` is `""` when the name was removed) and
- * `onError(error)` (when the session refuses the patch; the field shows the current name again).
+ * `labels` (`label`, `placeholder`, `save`, `cancel`), `row` (the element the field stretches over while editing: an element or a function
+ * returning one; default the nearest ancestor with `data-opf-title-row`, else the container's parent), `beforeCommit()` (return `false` to stop
+ * the rename, for example when committing an open canvas edit failed; the typed text stays), `onRename({ name, previous })` (after a successful
+ * rename; `name` is `""` when the name was removed) and `onError(error)` (when the session refuses the patch; the field shows the current name again).
  *
- * Returns `{ element, input, setDensity(d), setDisabled(b), setReadOnly(b), refresh(), focus(), destroy() }`.
+ * Returns `{ element, input, saveButton, cancelButton, editing, setDensity(d), setDisabled(b), setReadOnly(b), refresh(), focus(), destroy() }`.
  */
 export function createDeckTitle(container, options = {}) {
   if (!container?.ownerDocument) throw new TypeError("A DOM container is required.");
@@ -45,8 +52,9 @@ export function createDeckTitle(container, options = {}) {
   const label = options.label ?? labels.label;
   let readOnly = Boolean(options.readOnly);
   let disabled = false;
-  let editing = false;
-  let painted = "";
+  let open = false; // an edit is open: the field is stretched and Save and Cancel are shown
+  let reentering = false; // the focus is being put back in the field by this part: that must not open an edit
+  let row = null;
   let disposed = false;
 
   const element = doc.createElement("div");
@@ -59,7 +67,21 @@ export function createDeckTitle(container, options = {}) {
   input.setAttribute("autocomplete", "off");
   input.setAttribute("autocapitalize", "off");
   input.spellcheck = false;
-  element.append(input);
+  const actions = doc.createElement("span");
+  actions.className = "opf-title-actions";
+  actions.hidden = true;
+  const makeButton = (kind, text) => {
+    const button = doc.createElement("button");
+    button.type = "button";
+    button.className = "opf-title-button";
+    button.dataset.action = kind;
+    button.textContent = text;
+    return button;
+  };
+  const saveButton = makeButton("save", labels.save);
+  const cancelButton = makeButton("cancel", labels.cancel);
+  actions.append(saveButton, cancelButton);
+  element.append(input, actions);
   container.append(element);
 
   const currentName = () => {
@@ -80,35 +102,78 @@ export function createDeckTitle(container, options = {}) {
   }
   function paint() {
     const name = currentName() ?? "";
-    painted = name;
     if (input.value !== name) input.value = name;
     paintState();
     fit();
   }
   function refresh() {
-    if (disposed || editing) return;
+    if (disposed || open) return;
     paint();
   }
 
-  // Put the document's name back in the field and stop the edit.
+  const resolveRow = () => {
+    const given = typeof options.row === "function" ? options.row() : options.row;
+    return given ?? container.closest("[data-opf-title-row]") ?? container.parentElement;
+  };
+  // Open an edit: the field takes the whole row (an overlay, so the row keeps its height and its other controls stay where they are, hidden).
+  function begin() {
+    if (open || disposed || readOnly || disabled) return;
+    open = true;
+    row = resolveRow();
+    // The part keeps the room it had, so what sits beside it does not move while it is out of the flow.
+    const box = element.getBoundingClientRect();
+    element.style.minWidth = `${box.width}px`;
+    element.style.minHeight = `${box.height}px`;
+    if (row && row !== container) {
+      const style = doc.defaultView.getComputedStyle(row);
+      if (style.position === "static") row.setAttribute("data-opf-title-relative", "");
+      element.style.setProperty("--opf-title-pad-start", style.paddingLeft);
+      element.style.setProperty("--opf-title-pad-end", style.paddingRight);
+      row.setAttribute("data-opf-title-editing", "");
+    }
+    element.dataset.editing = "true";
+    actions.hidden = false;
+  }
+  function end() {
+    if (!open) return;
+    open = false;
+    delete element.dataset.editing;
+    actions.hidden = true;
+    for (const property of ["min-width", "min-height", "--opf-title-pad-start", "--opf-title-pad-end"]) element.style.removeProperty(property);
+    row?.removeAttribute("data-opf-title-editing");
+    row?.removeAttribute("data-opf-title-relative");
+    row = null;
+  }
+  // Put the focus back in the field without opening an edit.
+  function refocus(select = false) {
+    reentering = true;
+    try {
+      input.focus();
+      if (select) input.select();
+    } finally {
+      reentering = false;
+    }
+  }
+
+  // Put the document's name back in the field and close the edit.
   function revert() {
-    editing = false;
+    end();
     paint();
   }
   // Commit the typed text. Returns "done" (applied, unchanged or refused: the field shows the document again) or "aborted" (`beforeCommit` said no).
   function commit() {
-    if (!editing && input.value === painted) return "done";
+    if (!open) return "done";
     if (options.beforeCommit && options.beforeCommit() === false) return "aborted";
     const previous = currentName();
     const patch = deckNamePatch(previous, input.value);
-    editing = false;
+    end();
     if (!patch) {
       paint();
       return "done";
     }
     const name = patch[0].op === "remove" ? "" : patch[0].value;
     try {
-      // The session's own listeners repaint this field during the call (nothing is being typed any more).
+      // The session's own listeners repaint this field during the call (no edit is open any more).
       editor.applyPatch(patch, { source: "deck-name", rejectInvalid: true });
     } catch (error) {
       paint();
@@ -119,9 +184,22 @@ export function createDeckTitle(container, options = {}) {
     options.onRename?.({ name, previous });
     return "done";
   }
+  // Commit, from Enter or Save. When `beforeCommit` stops it the edit stays open with the text typed. The focus ends in the field either way
+  // (the name selected after a commit, so typing again replaces it): moving it would drop it on the page's body, where neither the editor's
+  // keys nor a screen reader's place in the bar survive.
+  function save() {
+    if (readOnly || disabled) return;
+    refocus(commit() === "done");
+  }
+  // Drop the draft, from Escape or Cancel: the field shows the document's name again and keeps the focus.
+  function cancel() {
+    if (readOnly || disabled) return;
+    revert();
+    refocus(true);
+  }
 
   input.addEventListener("input", () => {
-    editing = true;
+    begin();
     input.title = input.value;
     fit();
   });
@@ -131,22 +209,24 @@ export function createDeckTitle(container, options = {}) {
     if (event.isComposing || event.keyCode === 229) return;
     if (event.key === "Enter") {
       event.preventDefault();
-      // The focus stays in the field (the name selected, so typing again replaces it); Escape or Tab leaves it. Moving it would drop it on
-      // the page's body, where neither the editor's keys nor a screen reader's place in the bar survive.
-      if (commit() === "done") input.select();
-    } else if (event.key === "Escape") {
-      event.preventDefault();
-      event.stopPropagation();
-      revert();
-      input.blur();
+      save();
     }
   });
-  input.addEventListener("blur", () => {
-    if (readOnly || disabled) return;
-    commit();
+  // Escape closes an open edit from the field or from Save and Cancel; with no edit open it leaves the field.
+  element.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || readOnly || disabled || event.isComposing || event.keyCode === 229) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (open) cancel();
+    else if (event.target === input) input.blur();
   });
+  saveButton.addEventListener("click", () => save());
+  cancelButton.addEventListener("click", () => cancel());
+  // Leaving the field neither commits nor closes the edit: only Enter, Save, Escape and Cancel end it.
   input.addEventListener("focus", () => {
-    if (!readOnly && !disabled) input.select();
+    if (readOnly || disabled) return;
+    input.select();
+    if (!reentering) begin();
   });
 
   paint();
@@ -155,6 +235,11 @@ export function createDeckTitle(container, options = {}) {
   const handle = {
     element,
     input,
+    saveButton,
+    cancelButton,
+    get editing() {
+      return open;
+    },
     setDensity(density) {
       element.dataset.density = density === "touch" ? "touch" : "comfortable";
     },
@@ -176,6 +261,7 @@ export function createDeckTitle(container, options = {}) {
       if (disposed) return;
       disposed = true;
       unsubscribe?.();
+      end();
       element.remove();
     },
   };
