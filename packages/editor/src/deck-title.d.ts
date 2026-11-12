@@ -58,7 +58,7 @@ export interface DeckTitle {
   /** The Save and Cancel buttons, shown only while the name is edited. */
   readonly saveButton: HTMLButtonElement;
   readonly cancelButton: HTMLButtonElement;
-  /** An edit is open: focusing or typing in the field opens it; Enter or Save commits, Escape or Cancel reverts. Leaving the field does neither. */
+  /** An edit is open: focusing or typing in the field opens it; Enter or Save commits, Escape or Cancel reverts. Leaving the field and its buttons never commits: it closes an edit whose name is unchanged and keeps typed text open. */
   readonly editing: boolean;
   setDensity(density: "comfortable" | "touch"): void;
   /** Disabled shows the name as text, like read-only; any typed text is dropped. */

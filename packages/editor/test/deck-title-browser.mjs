@@ -6,8 +6,8 @@ import { buildStyles } from '../scripts/build-styles.mjs';
 
 // CE-28: the deck title in a real browser, on a bare page (no workspace): the package stylesheet, the module and an editor session, bundled the way a
 // host's bundler would. Focusing the name opens an edit that takes the whole row, with Save and Cancel; Enter or Save renames as one undoable edit,
-// Escape or Cancel restores, and leaving the field does neither (the draft stays open); an empty name removes the key; the field follows undo and
-// outside changes unless an edit is open; beforeCommit can stop a rename; a refused patch reports and restores; read-only and disabled show text
+// Escape or Cancel restores, leaving the row with the name unchanged closes the edit and leaving with typed text keeps the draft open (never a
+// commit); an empty name removes the key; the field follows undo and outside changes unless an edit with typed text is open; beforeCommit can stop a rename; a refused patch reports and restores; read-only and disabled show text
 // without buttons; IME Enter does not commit; the row returns to its normal layout; destroy cleans up; under a coarse pointer the field and the
 // buttons are 44px high, the text 16px, and nothing overflows at 320, 390, 820 and 1024 px.
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -383,7 +383,56 @@ try {
   assert.equal(await isEditing(), false, 'a disabled title never opens');
   mark('after Save, Cancel and Escape one click (or Enter, F2, typing, Tab away and back) reopens the edit; a click in an open edit keeps the draft; read-only and disabled never open');
 
-  // Leaving the field neither commits nor closes the edit.
+  // Leaving with the name unchanged closes the edit as Cancel does, and the row's controls come back.
+  await mount({ name: 'Untouched' });
+  await input.focus();
+  assert.equal(await isEditing(), true);
+  assert.equal(await page.locator('#tools').isVisible(), false, "the row's controls give way while editing");
+  await page.mouse.click(450, 200);
+  assert.equal(await isEditing(), false, 'a click elsewhere with the name unchanged closes the edit');
+  assert.equal(await page.locator('#tools').isVisible() && await page.locator('#other').isVisible(), true, "and the row's controls are back");
+  assert.equal(await save.isVisible(), false, 'Save and Cancel are gone');
+  assert.equal(await field(), 'Untouched');
+  await input.focus();
+  await input.blur();
+  assert.equal(await isEditing(), false, 'so does a plain blur');
+  // Typing the same name again (after trimming) is unchanged too.
+  await input.focus();
+  await page.keyboard.press('End');
+  await page.keyboard.type('  ');
+  await page.mouse.click(450, 200);
+  assert.equal(await isEditing(), false, 'trailing spaces are no change');
+  assert.equal(await field(), 'Untouched');
+  // Moving within the row does not close it: the focus on Save or Cancel (keyboard), or a press on them (the press keeps the focus in the field).
+  await input.focus();
+  await page.keyboard.press('Tab');
+  assert.equal(await page.evaluate(() => document.activeElement === window.title.saveButton), true);
+  assert.equal(await isEditing(), true, 'Tab from the field to Save keeps the edit open');
+  await page.keyboard.press('Tab');
+  assert.equal(await isEditing(), true, 'and on to Cancel');
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Shift+Tab');
+  assert.equal(await page.evaluate(() => document.activeElement === window.title.input), true);
+  await save.hover();
+  await page.mouse.down();
+  assert.equal(await isEditing(), true, 'pressing Save does not close the edit before the click lands');
+  assert.equal(await page.evaluate(() => document.activeElement === window.title.input), true, 'the focus stays in the field during the press');
+  await page.mouse.up();
+  assert.equal(await isEditing(), false, 'the click on Save ends the edit');
+  assert.equal((await events()).length, 0, 'none of this made an edit');
+  // An outside change while an unchanged edit is open closes it and shows the new name.
+  await input.click();
+  assert.equal(await isEditing(), true);
+  await page.evaluate(() => window.session.applyPatch([{ op: 'add', path: '/name', value: 'Replaced' }], { source: 'source' }));
+  assert.equal(await isEditing(), false, 'an outside rename closes an edit with nothing typed');
+  assert.equal(await field(), 'Replaced', 'and the field shows the new name');
+  await input.click();
+  await page.evaluate(() => window.session.undo());
+  assert.equal(await isEditing(), false, 'so does an undo');
+  assert.equal(await field(), 'Untouched');
+  mark('leaving with the name unchanged closes the edit and brings the row back; Tab to Save or Cancel and a press on them do not; an outside change closes an unchanged edit');
+
+  // Leaving with typed text neither commits nor closes the edit.
   await mount({ name: 'Before blur' });
   await input.focus();
   await page.keyboard.press('Control+A');
@@ -398,7 +447,7 @@ try {
   await page.mouse.click(450, 200);
   assert.equal(await name(), 'Before blur');
   assert.equal(await field(), 'Draft name');
-  await page.keyboard.press('Tab');
+  assert.equal(await isEditing() && await save.isVisible(), true, 'a click elsewhere with typed text keeps the row open with Save and Cancel');  await page.keyboard.press('Tab');
   await input.focus();
   assert.equal(await field(), 'Draft name', 'refocusing keeps the draft');
   assert.equal((await events()).length, 0);
@@ -435,7 +484,7 @@ try {
   await page.keyboard.press('Tab');
   await page.keyboard.press('Tab');
   assert.equal(await page.evaluate(() => ['other', 'tools'].includes(document.activeElement.id)), false, "Tab never lands on the row's hidden controls");
-  mark('blur neither commits nor closes; Tab reaches Save then Cancel; Space and Enter activate them; the hidden controls leave the Tab order');
+  mark('with typed text, leaving neither commits nor closes; Tab reaches Save then Cancel; Space and Enter activate them; the hidden controls leave the Tab order');
 
   // An unchanged or empty name from Save: nothing for the document to do.
   await mount({ name: 'Same' });

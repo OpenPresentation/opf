@@ -72,7 +72,7 @@ A dark toolbar over a light page: the tokens go on the bar and on every part ins
 
 ## Deck title
 
-The `title` item: an input that looks like text until it is hovered or focused. Focusing it opens an edit: the field stretches over the whole row (the row's other controls are hidden, its height is kept) with Save and Cancel buttons. Enter or Save commits and keeps the focus in the field, Escape or Cancel reverts, and leaving the field neither commits nor closes the edit. The row is the container's nearest ancestor with `data-opf-title-row`, else its parent (`row` option).
+The `title` item: an input that looks like text until it is hovered or focused. Focusing it opens an edit: the field stretches over the whole row (the row's other controls are hidden, its height is kept) with Save and Cancel buttons. Enter or Save commits and keeps the focus in the field, Escape or Cancel reverts, and leaving the field never commits: with the name unchanged the edit closes (as Cancel does), with typed text it stays open. While an edit with the name unchanged is open, a change to the name from elsewhere closes it and shows the new name. The row is the container's nearest ancestor with `data-opf-title-row`, else its parent (`row` option).
 
 | Hook | Kind | What it is |
 | --- | --- | --- |

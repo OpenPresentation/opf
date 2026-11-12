@@ -116,7 +116,7 @@ try {
   await button('Redo').click();
   await settled('مراجعة ربع سنوية.');
   await page.locator('#document-name').fill('Renamed presentation');
-  await page.locator('#document-name').blur();
+  await page.locator('#document-name').press('Enter');
   assert.equal(scriptRequests.length, settledCount, 'already loaded scripts are not fetched again');
   assert.equal(new Set(scriptRequests).size, scriptRequests.length, 'no font file is fetched twice');
 
