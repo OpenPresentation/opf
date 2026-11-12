@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import {spawnSync,execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+const root='/tmp/opf-034',out='/tmp/opf-node22-demand-root-focus01';
+const node='/Users/michael/Library/Application Support/fnm/node-versions/v22.23.3/installation/bin/node';
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const git=(...a)=>execFileSync('git',a,{cwd:root,encoding:'utf8'}).trim();
+const files=JSON.parse(fs.readFileSync('/tmp/opf-034-final-coherent-font-url-gate01/runtime-after.json'));
+const unchanged=()=>files.every(r=>{const b=fs.readFileSync(root+'/'+r.file);return b.length===r.bytes&&hash(b)===r.sha256;});
+const head=git('rev-parse','HEAD');if(head!=='79cdb85d6ab8a58dde5d474e254cffa027735c51'||git('status','--porcelain')||!unchanged())throw Error('Frozen current source/runtime required');
+const version=execFileSync(node,['--version'],{encoding:'utf8'}).trim();if(version!=='v22.23.3')throw Error('Pinned Node22 required');
+const started=Date.now(),command=['test/node-demand-fonts.mjs'];
+const r=spawnSync(node,command,{cwd:root+'/packages/render',encoding:'utf8',timeout:180000,maxBuffer:8*1024*1024,env:{...process.env,CI:'true',OPF_AGENT_SLOTS:'1',PATH:node.slice(0,node.lastIndexOf('/'))+':/tmp/opf-native-toolbin:/opt/homebrew/bin:/usr/bin:/bin'}});
+const log=(r.stdout??'')+(r.stderr??'');fs.writeFileSync(out+'/test.log',log,{flag:'wx'});
+const receipt={source:head,tree:git('rev-parse','HEAD^{tree}'),node:version,nodeExecutableSha256:hash(fs.readFileSync(node)),command,startedAt:new Date(started).toISOString(),seconds:(Date.now()-started)/1000,code:r.status,signal:r.signal,error:r.error?.message??null,sourceUnchanged:git('rev-parse','HEAD')===head&&!git('status','--porcelain'),compiledFiles:files.length,compiledUnchanged:unchanged(),log:{bytes:Buffer.byteLength(log),sha256:hash(log)}};
+fs.writeFileSync(out+'/receipt.json',JSON.stringify(receipt,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(receipt));process.exitCode=r.status===0&&receipt.sourceUnchanged&&receipt.compiledUnchanged?0:1;

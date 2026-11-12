@@ -1,0 +1,648 @@
+{
+  "scope": "MEASURED_CURRENT_CANDIDATE_NOT_VERSION_COMPARISON",
+  "status": "PASS",
+  "source": "0fe8031fc012c416ab6ee87f22b143c4cb1f7ee1",
+  "tree": "692c9191c001e04f8434f692aa6450718ab336fd",
+  "normalBuild": true,
+  "bundleBytes": 5984924,
+  "bundleSha256": "0cb519439053066570cbf6bf2da54d163108682ad9decc3852a4f4ab5acdd80f",
+  "actualGraphInputs": 574,
+  "node": "v24.21.0",
+  "browser": "158.0.8127.18",
+  "hardwareRecordedAfterRun": {
+    "scope": "HOST_FACTS_RECORDED_AFTER_MEASUREMENT_NOT_PRE_RUN_AUTHORITY",
+    "recordedAtUTC": "2026-11-12T03:40:31.112114+00:00",
+    "cpu": "Apple M4",
+    "logicalCores": 10,
+    "memoryBytes": 25769803776,
+    "macOS": "26.6.2",
+    "build": "25G83"
+  },
+  "coldOracles": 168,
+  "primaryRows": 108,
+  "svgPayloadsChecked": 1259,
+  "smokeColdOracles": 11,
+  "errors": [],
+  "blocked": [],
+  "requests": 70,
+  "requestCookieOrAuthorization": false,
+  "limits": {
+    "setupMs": 90000,
+    "phaseMs": 30000,
+    "traceEndMs": 15000
+  },
+  "observedAssets": 10,
+  "preparedAssets": {
+    "inputs": 708,
+    "outputs": 255
+  },
+  "assetScope": "Only observed served resources are browser-used; prepared unused outputs are bound, not qualified",
+  "inputFiles": {
+    "16": {
+      "rawBytes": 48696,
+      "rawSha256": "e14be44e63a8bbe4e64c5bdd2b6d95194ed39dc5e67c09c5a6a1225d13396a29",
+      "measuredBytes": 47066,
+      "measuredSha256": "6309daf437296c2bc1161334dbea93d3b8b291105e3d6b30d436684ff3a55d2f"
+    },
+    "36": {
+      "rawBytes": 98976,
+      "rawSha256": "249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599",
+      "measuredBytes": 99024,
+      "measuredSha256": "a4a786065f187a556fb14f540ada02f6624f49fbf531685e79b3aad845e45e55"
+    }
+  },
+  "typedProjection": {
+    "authority": "ed51a7e8a6636bb2e08c9a446a7d22c21ad81066",
+    "changes": [
+      31,
+      59
+    ],
+    "inverseDeepEqual": true
+  },
+  "latency": [
+    {
+      "configuration": {
+        "size": 16,
+        "cpu": 1,
+        "label": "desktop",
+        "name": "desktop-cpu1-16-cached",
+        "mode": "cached"
+      },
+      "coldOracleRows": 29,
+      "primaryRows": 18,
+      "medianSettledMs": {
+        "navigate": 47.2,
+        "sorter": 571.3,
+        "slide": 33.7,
+        "local-title0": 410.8,
+        "shared-datum": 571.6,
+        "global-name": 568.1
+      },
+      "browser": "158.0.8127.18",
+      "findingCountRanges": {
+        "error": {
+          "min": 0,
+          "max": 0
+        },
+        "warning": {
+          "min": 19,
+          "max": 46
+        },
+        "info": {
+          "min": 1,
+          "max": 2
+        }
+      }
+    },
+    {
+      "configuration": {
+        "size": 16,
+        "cpu": 4,
+        "label": "desktop",
+        "name": "desktop-cpu4-16-cached",
+        "mode": "cached"
+      },
+      "coldOracleRows": 29,
+      "primaryRows": 18,
+      "medianSettledMs": {
+        "navigate": 187.7,
+        "sorter": 2228.4,
+        "slide": 101.6,
+        "local-title0": 642.8,
+        "shared-datum": 1209.5,
+        "global-name": 1278.4
+      },
+      "browser": "158.0.8127.18",
+      "findingCountRanges": {
+        "error": {
+          "min": 0,
+          "max": 0
+        },
+        "warning": {
+          "min": 19,
+          "max": 46
+        },
+        "info": {
+          "min": 1,
+          "max": 2
+        }
+      }
+    },
+    {
+      "configuration": {
+        "size": 16,
+        "cpu": 4,
+        "label": "viewport390",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "name": "viewport390-cpu4-16-cached",
+        "mode": "cached"
+      },
+      "coldOracleRows": 29,
+      "primaryRows": 18,
+      "medianSettledMs": {
+        "navigate": 232.3,
+        "sorter": 2217.3,
+        "slide": 84.4,
+        "local-title0": 608.6,
+        "shared-datum": 1208.1,
+        "global-name": 1218
+      },
+      "browser": "158.0.8127.18",
+      "findingCountRanges": {
+        "error": {
+          "min": 0,
+          "max": 0
+        },
+        "warning": {
+          "min": 19,
+          "max": 46
+        },
+        "info": {
+          "min": 1,
+          "max": 2
+        }
+      }
+    },
+    {
+      "configuration": {
+        "size": 36,
+        "cpu": 1,
+        "label": "desktop",
+        "name": "desktop-cpu1-36-cached",
+        "mode": "cached"
+      },
+      "coldOracleRows": 27,
+      "primaryRows": 18,
+      "medianSettledMs": {
+        "navigate": 55.5,
+        "sorter": 1170.4,
+        "slide": 36.9,
+        "local-title0": 500.8,
+        "shared-datum": 810.3,
+        "global-name": 847.1
+      },
+      "browser": "158.0.8127.18",
+      "findingCountRanges": {
+        "error": {
+          "min": 0,
+          "max": 0
+        },
+        "warning": {
+          "min": 46,
+          "max": 46
+        },
+        "info": {
+          "min": 2,
+          "max": 2
+        }
+      }
+    },
+    {
+      "configuration": {
+        "size": 36,
+        "cpu": 4,
+        "label": "desktop",
+        "name": "desktop-cpu4-36-cached",
+        "mode": "cached"
+      },
+      "coldOracleRows": 27,
+      "primaryRows": 18,
+      "medianSettledMs": {
+        "navigate": 219.4,
+        "sorter": 4603.8,
+        "slide": 101,
+        "local-title0": 871.4,
+        "shared-datum": 2212.9,
+        "global-name": 2296.9
+      },
+      "browser": "158.0.8127.18",
+      "findingCountRanges": {
+        "error": {
+          "min": 0,
+          "max": 0
+        },
+        "warning": {
+          "min": 46,
+          "max": 46
+        },
+        "info": {
+          "min": 2,
+          "max": 2
+        }
+      }
+    },
+    {
+      "configuration": {
+        "size": 36,
+        "cpu": 4,
+        "label": "viewport390",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "name": "viewport390-cpu4-36-cached",
+        "mode": "cached"
+      },
+      "coldOracleRows": 27,
+      "primaryRows": 18,
+      "medianSettledMs": {
+        "navigate": 228.6,
+        "sorter": 4468.2,
+        "slide": 88,
+        "local-title0": 867.3,
+        "shared-datum": 2199.2,
+        "global-name": 2214.9
+      },
+      "browser": "158.0.8127.18",
+      "findingCountRanges": {
+        "error": {
+          "min": 0,
+          "max": 0
+        },
+        "warning": {
+          "min": 46,
+          "max": 46
+        },
+        "info": {
+          "min": 2,
+          "max": 2
+        }
+      }
+    }
+  ],
+  "retention": {
+    "scope": "BOUNDED_RETENTION_NOT_LEAK_ACCEPTANCE",
+    "edits": 200,
+    "destroyCycles": 10,
+    "warmDisposedBaseline": {
+      "heap": {
+        "usedSize": 28687488,
+        "totalSize": 30277632,
+        "embedderHeapUsedSize": 1187656,
+        "backingStorageSize": 8846937
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 20,
+        "jsEventListeners": 13
+      }
+    },
+    "samples": [
+      {
+        "edit": 0,
+        "heapUsed": 33764136,
+        "cache": {
+          "entries": 36,
+          "bytes": 3382818,
+          "maxEntries": 64,
+          "maxBytes": 8388608
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 4839,
+          "jsEventListeners": 476
+        }
+      },
+      {
+        "edit": 20,
+        "heapUsed": 37045848,
+        "cache": {
+          "entries": 36,
+          "bytes": 3382730,
+          "maxEntries": 64,
+          "maxBytes": 8388608
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 4839,
+          "jsEventListeners": 476
+        }
+      },
+      {
+        "edit": 40,
+        "heapUsed": 37572452,
+        "cache": {
+          "entries": 36,
+          "bytes": 3382730,
+          "maxEntries": 64,
+          "maxBytes": 8388608
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 4839,
+          "jsEventListeners": 476
+        }
+      },
+      {
+        "edit": 80,
+        "heapUsed": 37736076,
+        "cache": {
+          "entries": 36,
+          "bytes": 3382730,
+          "maxEntries": 64,
+          "maxBytes": 8388608
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 4839,
+          "jsEventListeners": 476
+        }
+      },
+      {
+        "edit": 120,
+        "heapUsed": 37920572,
+        "cache": {
+          "entries": 36,
+          "bytes": 3382748,
+          "maxEntries": 64,
+          "maxBytes": 8388608
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 4839,
+          "jsEventListeners": 476
+        }
+      },
+      {
+        "edit": 200,
+        "heapUsed": 38111240,
+        "cache": {
+          "entries": 36,
+          "bytes": 3382748,
+          "maxEntries": 64,
+          "maxBytes": 8388608
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 4839,
+          "jsEventListeners": 476
+        }
+      }
+    ],
+    "cycles": [
+      {
+        "cycle": 0,
+        "heapUsed": 32492828,
+        "disposed": {
+          "infos": [
+            {
+              "entries": 0,
+              "bytes": 0,
+              "maxEntries": 64,
+              "maxBytes": 8388608
+            }
+          ],
+          "dom": 13,
+          "workspaces": 0,
+          "fontFaces": 4
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 20,
+          "jsEventListeners": 13
+        }
+      },
+      {
+        "cycle": 1,
+        "heapUsed": 32634920,
+        "disposed": {
+          "infos": [
+            {
+              "entries": 0,
+              "bytes": 0,
+              "maxEntries": 64,
+              "maxBytes": 8388608
+            }
+          ],
+          "dom": 13,
+          "workspaces": 0,
+          "fontFaces": 4
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 20,
+          "jsEventListeners": 13
+        }
+      },
+      {
+        "cycle": 2,
+        "heapUsed": 32704472,
+        "disposed": {
+          "infos": [
+            {
+              "entries": 0,
+              "bytes": 0,
+              "maxEntries": 64,
+              "maxBytes": 8388608
+            }
+          ],
+          "dom": 13,
+          "workspaces": 0,
+          "fontFaces": 4
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 20,
+          "jsEventListeners": 13
+        }
+      },
+      {
+        "cycle": 3,
+        "heapUsed": 32818016,
+        "disposed": {
+          "infos": [
+            {
+              "entries": 0,
+              "bytes": 0,
+              "maxEntries": 64,
+              "maxBytes": 8388608
+            }
+          ],
+          "dom": 13,
+          "workspaces": 0,
+          "fontFaces": 4
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 20,
+          "jsEventListeners": 13
+        }
+      },
+      {
+        "cycle": 4,
+        "heapUsed": 32865648,
+        "disposed": {
+          "infos": [
+            {
+              "entries": 0,
+              "bytes": 0,
+              "maxEntries": 64,
+              "maxBytes": 8388608
+            }
+          ],
+          "dom": 13,
+          "workspaces": 0,
+          "fontFaces": 4
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 20,
+          "jsEventListeners": 13
+        }
+      },
+      {
+        "cycle": 5,
+        "heapUsed": 32954272,
+        "disposed": {
+          "infos": [
+            {
+              "entries": 0,
+              "bytes": 0,
+              "maxEntries": 64,
+              "maxBytes": 8388608
+            }
+          ],
+          "dom": 13,
+          "workspaces": 0,
+          "fontFaces": 4
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 20,
+          "jsEventListeners": 13
+        }
+      },
+      {
+        "cycle": 6,
+        "heapUsed": 33095632,
+        "disposed": {
+          "infos": [
+            {
+              "entries": 0,
+              "bytes": 0,
+              "maxEntries": 64,
+              "maxBytes": 8388608
+            }
+          ],
+          "dom": 13,
+          "workspaces": 0,
+          "fontFaces": 4
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 20,
+          "jsEventListeners": 13
+        }
+      },
+      {
+        "cycle": 7,
+        "heapUsed": 33637924,
+        "disposed": {
+          "infos": [
+            {
+              "entries": 0,
+              "bytes": 0,
+              "maxEntries": 64,
+              "maxBytes": 8388608
+            }
+          ],
+          "dom": 13,
+          "workspaces": 0,
+          "fontFaces": 4
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 20,
+          "jsEventListeners": 13
+        }
+      },
+      {
+        "cycle": 8,
+        "heapUsed": 33670956,
+        "disposed": {
+          "infos": [
+            {
+              "entries": 0,
+              "bytes": 0,
+              "maxEntries": 64,
+              "maxBytes": 8388608
+            }
+          ],
+          "dom": 13,
+          "workspaces": 0,
+          "fontFaces": 4
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 20,
+          "jsEventListeners": 13
+        }
+      },
+      {
+        "cycle": 9,
+        "heapUsed": 33720140,
+        "disposed": {
+          "infos": [
+            {
+              "entries": 0,
+              "bytes": 0,
+              "maxEntries": 64,
+              "maxBytes": 8388608
+            }
+          ],
+          "dom": 13,
+          "workspaces": 0,
+          "fontFaces": 4
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 20,
+          "jsEventListeners": 13
+        }
+      }
+    ],
+    "editHeapChange": 4347104,
+    "destroyHeapChange": 1227312
+  },
+  "forwardInputEquality": {
+    "measuredSource": "0fe8031fc012c416ab6ee87f22b143c4cb1f7ee1",
+    "currentSource": "79cdb85d6ab8a58dde5d474e254cffa027735c51",
+    "actualRecordsCompared": 1609,
+    "compiledFilesCompared": 609,
+    "allActualInputsAndAssetsUnchanged": true,
+    "compiledUnchanged": true,
+    "changedPaths": [
+      "docs/handoff/2026-11-11/node22-demand-resolver-test.md",
+      "docs/programs/release-readiness/burndown.md",
+      "packages/render/test/node-demand-fonts.mjs"
+    ],
+    "scope": "Read-only input equality evidence; original W06 receipts stay bound to measured0fe. No formal guard edited, current-head measurement or version comparison claimed."
+  },
+  "disclosure": [
+    "One current candidate with public cold-oracle equality outside intervals; no historical/version speed comparison.",
+    "One fresh browser process per case;390px viewport and4xCPU are desktop proxies; no physical-mobile/low-power-device claim.",
+    "Debounce stays inside settled elapsed time; report/SVG equality, hashing, GC and storage are outside primary intervals. Sorter direct-oracle work primes caches outside intervals.",
+    "Trace/forwarder/observer overhead is present symmetrically; no unperturbed-production claim.",
+    "Cache policy bounds are logical; short post-GC heap/DOM soak is not leak acceptance.",
+    "Original root smoke is functional evidence only and is preserved separately; no invented root stdout."
+  ],
+  "rawRecordsRemainLocal": {
+    "files": 20,
+    "bytes": 45044447
+  },
+  "wasmIdentities": [
+    {
+      "path": "artifacts/owner-post-arabic-assets-01/harfbuzz-subset.wasm",
+      "bytes": 683531,
+      "sha256": "62415fe6bad92ef16f3e5d2dbed6c66a4adec7f5a59c6d27084811c92cce1ba5"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-assets-01/harfbuzz.wasm",
+      "bytes": 444394,
+      "sha256": "6eeed8e1bc9ad7773038e48ff8f9e07e0ad228572c594b45e5357e9c2f7a0b2e"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+✔ presentation demand holds only the two/three actual default faces; no-presentation whole pack stays explicit (1920.620541ms)
+✔ neutral and valid no-text documents need zero faces without weakening default empty-registry refusal (2.652875ms)
+✔ edits add only missing bold/italic and family faces; concurrent ensure is serialized and duplicate-free (272.37725ms)
+✔ caller faces stay explicit and take precedence while unknown/policy-disallowed families stay errors (11.63825ms)
+✔ CJK, Arabic and Greek fallback retain exact eager SVG and actual weight/style choices (8384.916625ms)
+✔ the generated preferred-family companion exactly matches every pinned physical candidate (89.381458ms)
+✔ unused optional packages are never resolved; missing needed faces fail honestly and failed ensure retries (844.3065ms)
+✔ style-only metadata keeps absent roles cheap and exact while unprepared measured weights still refuse (18.153541ms)
+✔ optional script absence retains bounded fallback ordering and all-unavailable diagnostics without weakening real measurement (4051.229708ms)
+✔ explicit aliases and fallbackFamily select the same single actual face as the whole base pack (163.936417ms)
+✔ document preparation preserves unresolved-family inspection; actual measurement and drawing still refuse (58.467208ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15821.046875

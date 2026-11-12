@@ -1,0 +1,19 @@
+{
+  "reviewedAtUTC": "2026-11-12T03:43:49.139110+00:00",
+  "source": "0fe8031fc012c416ab6ee87f22b143c4cb1f7ee1",
+  "formalReceipt": {
+    "bytes": 73879,
+    "sha256": "c99ecbcc78410029e822f4cffa784ebcf89378abe3cf910d141d11f73c79f7c4"
+  },
+  "formalFiles": 20,
+  "formalBytes": 45044447,
+  "caseColdOracles": 168,
+  "primaryRows": 108,
+  "svgPayloadsChecked": 1259,
+  "actualCarryRecordsChecked": 1609,
+  "actualCompiledRecordsChecked": 609,
+  "uniqueActualFilesHashed": 1862,
+  "productsImported": false,
+  "rerendered": false,
+  "benchmarksRepeated": false
+}

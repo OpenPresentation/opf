@@ -1,0 +1,21 @@
+{
+  "source": "79cdb85d6ab8a58dde5d474e254cffa027735c51",
+  "tree": "1008ffecc6ffd6878017fe68d4e2bb6f5cd3960e",
+  "node": "v22.23.3",
+  "nodeExecutableSha256": "68f4d07ca49e0500cc135c7e0a445093e228e42e126ac22306d045f0a8c2636b",
+  "command": [
+    "test/node-demand-fonts.mjs"
+  ],
+  "startedAt": "2026-11-12T03:35:54.352Z",
+  "seconds": 16.373,
+  "code": 0,
+  "signal": null,
+  "error": null,
+  "sourceUnchanged": true,
+  "compiledFiles": 609,
+  "compiledUnchanged": true,
+  "log": {
+    "bytes": 3145,
+    "sha256": "2118594998795bb9f21adb7706baac125977486284b47b20a96f08c84d297bb7"
+  }
+}

@@ -1,0 +1,7 @@
+# Final old0fe CI snapshot — overall FullCI RED
+
+Exact source0fe8031fc012c416ab6ee87f22b143c4cb1f7ee1, final immutable-commit snapshot05 at2026-11-12T03:40:45.035Z:70 unique check names,67SUCCESS,1FAILURE,2SKIPPED,0pending. OrdinaryCI43144293318 verify isSUCCESS. FullCI43144409279 remainsRED: the sole failing context is `slow set (only with the full-ci label) / Node 22 (engines range, render-2)`, whose node-demand-fonts file has9PASS/2RED. Its old raw failure is not rescued by subsequent local successor passes.
+
+The two literal skipped names are `slow set (only with the full-ci label) / Flake measurement (${{ matrix.name }})` and `slow set (only with the full-ci label) / report`; neither is represented as passed. Windows PPTX3 logs show lexicalSpellingDiffers:true/sameOwnedSeed:true, genuinely exercising the SH20 alias-path fixture. Windows browser1 logs record the normal21 groups across Chromium/WebKit. The registry job succeeds including all six previously unreached quote/code/metric tail commands and genuine0.11.6 interop.
+
+Four original job logs, the sole observer output and all five original snapshots are copied byte-exact. No new API query, rerun or snapshot was produced in this lane. Candidate79cdb85d6ab8a58dde5d474e254cffa027735c51 is separate: its new FullCI43149577020 isRUNNING under sole observer41039; no current CI PASS or merge/release is inferred here.

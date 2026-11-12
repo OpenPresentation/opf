@@ -1,0 +1,14 @@
+{"scope":"FUNCTIONAL_NOT_TIMING","case":"desktop-cpu1-16-cached","phase":"setup:mount","primary":false,"ms":2156.1000000089407,"coreMs":1139.9000000059605,"rendererCalls":2,"requestedSlides":7,"cacheEntries":16}
+{"scope":"FUNCTIONAL_NOT_TIMING","case":"desktop-cpu1-16-cached","phase":"setup:sorter","primary":false,"ms":561.4000000059605,"coreMs":0,"rendererCalls":1,"requestedSlides":16,"cacheEntries":16}
+{"scope":"FUNCTIONAL_NOT_TIMING","case":"desktop-cpu1-16-cached","phase":"setup:slide","primary":false,"ms":32.79999999701977,"coreMs":0,"rendererCalls":1,"requestedSlides":1,"cacheEntries":16}
+{"scope":"FUNCTIONAL_NOT_TIMING","case":"desktop-cpu1-16-cached","phase":"warmup:navigate","primary":false,"ms":37.20000000298023,"coreMs":0,"rendererCalls":1,"requestedSlides":1,"cacheEntries":16}
+{"scope":"FUNCTIONAL_NOT_TIMING","case":"desktop-cpu1-16-cached","phase":"warmup:sorter","primary":false,"ms":34.6000000089407,"coreMs":0,"rendererCalls":0,"requestedSlides":0,"cacheEntries":16}
+{"scope":"FUNCTIONAL_NOT_TIMING","case":"desktop-cpu1-16-cached","phase":"warmup:slide","primary":false,"ms":32.70000000298023,"coreMs":0,"rendererCalls":1,"requestedSlides":1,"cacheEntries":16}
+{"scope":"FUNCTIONAL_NOT_TIMING","case":"desktop-cpu1-16-cached","phase":"warmup:local-title0","primary":false,"ms":440.30000001192093,"coreMs":45.599999994039536,"rendererCalls":2,"requestedSlides":2,"cacheEntries":16}
+{"scope":"FUNCTIONAL_NOT_TIMING","case":"desktop-cpu1-16-cached","phase":"warmup:shared-datum","primary":false,"ms":579.2000000029802,"coreMs":47.3999999910593,"rendererCalls":2,"requestedSlides":9,"cacheEntries":16}
+{"scope":"FUNCTIONAL_NOT_TIMING","case":"desktop-cpu1-16-cached","phase":"warmup:global-name","primary":false,"ms":573.2000000029802,"coreMs":34.69999998807907,"rendererCalls":2,"requestedSlides":9,"cacheEntries":16}
+{"scope":"FUNCTIONAL_NOT_TIMING","case":"desktop-cpu1-16-cached","phase":"update:append-twenty","primary":false,"ms":1939.0999999940395,"coreMs":1155.300000011921,"rendererCalls":2,"requestedSlides":9,"cacheEntries":36}
+{"scope":"FUNCTIONAL_NOT_TIMING","case":"desktop-cpu1-16-cached","phase":"update:append-sorter","primary":false,"ms":1158,"coreMs":0,"rendererCalls":1,"requestedSlides":36,"cacheEntries":36}
+{"scope":"FUNCTIONAL_NOT_TIMING","case":"retained-heap-cached","phase":"soak:warmup","primary":false,"ms":3469,"coreMs":2049.2999999970198,"rendererCalls":2,"requestedSlides":7,"cacheEntries":36}
+{"scope":"FUNCTIONAL_NOT_TIMING","case":"retained-heap-cached","phase":"soak:mount","primary":false,"ms":1628.2000000029802,"coreMs":1167.3999999910593,"rendererCalls":4,"requestedSlides":8,"cacheEntries":36}
+{"status":"PASS","scope":"FUNCTIONAL_NOT_TIMING","cases":1,"completeColdOracleChecks":11,"output":"/private/tmp/opf-034/artifacts/owner-post-arabic-smoke-01"}

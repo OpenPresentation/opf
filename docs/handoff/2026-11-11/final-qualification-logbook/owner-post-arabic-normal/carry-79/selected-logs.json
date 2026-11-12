@@ -1,0 +1,62 @@
+[
+  {
+    "step": "build",
+    "file": "selected-logs/build.log",
+    "bytes": 14666,
+    "sha256": "41511f9ff8a2798586cf022f887d3918c19570fe93ba39e5db20ad3f9617dc72"
+  },
+  {
+    "step": "biome",
+    "file": "selected-logs/biome.log",
+    "bytes": 699,
+    "sha256": "7cc313c845e3ae238f796cf1ffe8e18c6fe98451774e640d8edf319b04e0e06a"
+  },
+  {
+    "step": "pnpm run check:changes",
+    "file": "selected-logs/pnpm_run_check_changes.log",
+    "bytes": 2669,
+    "sha256": "d149eeef60800037c951392a063899506fe506a96ab61bc986dcd872b59a6df3"
+  },
+  {
+    "step": "pnpm run check:diagram-doc-images",
+    "file": "selected-logs/pnpm_run_check_diagram-doc-images.log",
+    "bytes": 164,
+    "sha256": "9a8b5cf3cfcc40818f4a929a162eab4e26a68cf72f915ad32716e6dbfd6f64a8"
+  },
+  {
+    "step": "pnpm run check:gallery-tracker",
+    "file": "selected-logs/pnpm_run_check_gallery-tracker.log",
+    "bytes": 2009,
+    "sha256": "3a22b2182013eed8a2ad65339da4f6378889c28b5c7e7258b69d907738e1cd63"
+  },
+  {
+    "step": "pnpm run check:release-report",
+    "file": "selected-logs/pnpm_run_check_release-report.log",
+    "bytes": 818,
+    "sha256": "49fa07c1fc6923e9f8238be9240a631af236100f5ac41e28adf9a193982bafda"
+  },
+  {
+    "step": "pnpm run check:font-hotlinks",
+    "file": "selected-logs/pnpm_run_check_font-hotlinks.log",
+    "bytes": 859,
+    "sha256": "177896a5e26d140a4d4c93ef5bdc208c8bdce2e668fbae0e59e744569bb245c9"
+  },
+  {
+    "step": "pnpm run check:skill-commands",
+    "file": "selected-logs/pnpm_run_check_skill-commands.log",
+    "bytes": 1047,
+    "sha256": "ac61743793e2aa4b7f78031c8b24025ec2df8c33e152858cc6f322cc9a440be3"
+  },
+  {
+    "step": "pnpm run check:text",
+    "file": "selected-logs/pnpm_run_check_text.log",
+    "bytes": 1082,
+    "sha256": "1a8662cb141213e05b468f75cf701d5d962fb0c0b32c106616a385a25f363d0e"
+  },
+  {
+    "step": "tests render",
+    "file": "selected-logs/tests_render.log",
+    "bytes": 1442,
+    "sha256": "6fdd845f66918b324208075e99a4833de18dc9504e5adcca7e7af56f0713b2fb"
+  }
+]

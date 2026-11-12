@@ -1,0 +1,130 @@
+{
+  "scope": "Identity list only; all20 original formal files45044447B and other raw owner/trace/SVG/data/receipt files remain local. Published summaries are selected numeric facts, not replacement original records.",
+  "files": [
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/desktop-cpu1-16-cached-trace.json.gz",
+      "bytes": 3028582,
+      "sha256": "0b02b1d68511bd458c181ad93000772f5d7e451fec5db1826134f536ad4ae583"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/desktop-cpu1-16-cached-warmup.png",
+      "bytes": 294867,
+      "sha256": "932322dea2c9ef2a21bbe9a660802254acdba2d5993d5f927cb7c9290356afce"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/desktop-cpu1-16-cached.json",
+      "bytes": 3550834,
+      "sha256": "012660cfbb29ef214fd496b1bacd26eb6c7b59ad4d99062d80c609a01c6d7a00"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/desktop-cpu1-36-cached-trace.json.gz",
+      "bytes": 3180951,
+      "sha256": "45ac989acf1fdf76ccba1243a1320019ab57a81fcfd6aad5fad38a267815977e"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/desktop-cpu1-36-cached-warmup.png",
+      "bytes": 298656,
+      "sha256": "8d8a2ff0b7502c49727ef94553c45c3cb638dfa43d15fb9fa06f4cc9465e4653"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/desktop-cpu1-36-cached.json",
+      "bytes": 4987006,
+      "sha256": "056263f5fdf94ea6f0584f0c6801fd1c9a641576da88b3caf90b4202369c59c0"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/desktop-cpu4-16-cached-trace.json.gz",
+      "bytes": 2676398,
+      "sha256": "e50adaa982858965bae154ecd7a428ebb0ff7ac339ca05575695c2c50b426502"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/desktop-cpu4-16-cached-warmup.png",
+      "bytes": 294867,
+      "sha256": "932322dea2c9ef2a21bbe9a660802254acdba2d5993d5f927cb7c9290356afce"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/desktop-cpu4-16-cached.json",
+      "bytes": 3556123,
+      "sha256": "add448d51e7a9d1120eb25cff13e906492b6aa87d47e7ee886e1f8ae00a2072c"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/desktop-cpu4-36-cached-trace.json.gz",
+      "bytes": 3185950,
+      "sha256": "fc1fb185e1eac3e7251e4b8de4c598545c1d0ab76063a39eadab160cbf10fd95"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/desktop-cpu4-36-cached-warmup.png",
+      "bytes": 298651,
+      "sha256": "7a04e5ee4ada73344a292efdc0ae72e52aee191ca626d1da5f29cff3ce314f50"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/desktop-cpu4-36-cached.json",
+      "bytes": 4991236,
+      "sha256": "9da8e2ad40bbc4538402cb330c4c4f27c07cbae29911f96bc61b32e83db04595"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/receipt.json",
+      "bytes": 73879,
+      "sha256": "c99ecbcc78410029e822f4cffa784ebcf89378abe3cf910d141d11f73c79f7c4"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/retained-heap-cached.json",
+      "bytes": 8896,
+      "sha256": "6b7ff06a30303ba7ab09032ac0b89a4e6859acb9ac0e8e55d7b5929e7afcb2f3"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/viewport390-cpu4-16-cached-trace.json.gz",
+      "bytes": 2888543,
+      "sha256": "a0dbdb5ed2f742b4e63d270012ad0e720ad921460fee59d7976e5e7f4fec30c0"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/viewport390-cpu4-16-cached-warmup.png",
+      "bytes": 72327,
+      "sha256": "61f8ad4b00147de70b627af951957460e8638024f004dc3cd590615a2b76a6f6"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/viewport390-cpu4-16-cached.json",
+      "bytes": 3524130,
+      "sha256": "bcf624fbae506f94a3d561c10b39dac45d920e0d3a23158db19efc1fd74e8b47"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/viewport390-cpu4-36-cached-trace.json.gz",
+      "bytes": 3098022,
+      "sha256": "65ebbc1a58b513fdbd6484ce4c1bcb7c5c404f07ac8bacf11086ad240dddab65"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/viewport390-cpu4-36-cached-warmup.png",
+      "bytes": 71631,
+      "sha256": "0be22d8040021204a828fe75429619d32747cc20a5a0ca9359e527301e235bad"
+    },
+    {
+      "path": "artifacts/owner-post-arabic-formal-01/viewport390-cpu4-36-cached.json",
+      "bytes": 4962898,
+      "sha256": "ac0c5e6001bc1ba29a2c1ede4ac310c78252f5afd629d4ed429187ef4c16041c"
+    },
+    {
+      "bytes": 232449,
+      "sha256": "6188c8785f8d65bab07da8c3820eea2739af456e36027d2130ac1e6d21441395",
+      "path": "artifacts/owner-post-arabic-assets-01/asset-receipt.json"
+    },
+    {
+      "bytes": 167764,
+      "sha256": "47cf3b38d710e8fa5102859fac843f11f1b5e75db0bdd8bbf498e05d3aff58d5",
+      "path": "artifacts/owner-post-arabic-build-01/build-receipt.json"
+    },
+    {
+      "bytes": 58754,
+      "sha256": "215ebb7f078e3745d7204fe79efb2688be84e11337bc9920370243571f5ad5e5",
+      "path": "artifacts/owner-post-arabic-smoke-01/receipt.json"
+    },
+    {
+      "bytes": 1639700,
+      "sha256": "c3e64d051c0ebedece1e60114aec4f54ecc91970db9ababfd47783f64dbdce25",
+      "path": "artifacts/owner-post-arabic-smoke-01/desktop-cpu1-16-cached.json"
+    },
+    {
+      "bytes": 3021,
+      "sha256": "60bfe4a728e9bcb2deb057ee79fb32b3268db19e76d40c4d854af64f1e3a8d58",
+      "path": "artifacts/owner-post-arabic-smoke-01/retained-heap-cached.json"
+    }
+  ]
+}

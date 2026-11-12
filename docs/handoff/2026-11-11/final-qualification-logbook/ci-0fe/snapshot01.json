@@ -1,0 +1,421 @@
+{
+  "at": "2026-11-12T03:23:52.354Z",
+  "head": "0fe8031fc012c416ab6ee87f22b143c4cb1f7ee1",
+  "calls": 1,
+  "checks": [
+    {
+      "name": "scope",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938369311",
+      "at": "2026-11-12T02:51:52Z"
+    },
+    {
+      "name": "lint (static)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421388",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "lint (checks 1/2)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421386",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "lint (checks 2/2)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421395",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "audit",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421452",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "gallery",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421385",
+      "at": "2026-11-12T02:59:56Z"
+    },
+    {
+      "name": "core",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421476",
+      "at": "2026-11-12T02:56:18Z"
+    },
+    {
+      "name": "cli",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421430",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "mcp (tests)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421451",
+      "at": "2026-11-12T02:53:40Z"
+    },
+    {
+      "name": "mcp (browser)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421349",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "render (tests 1/4)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421399",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "render (tests 2/4)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421524",
+      "at": "2026-11-12T02:57:22Z"
+    },
+    {
+      "name": "render (tests 3/4)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421454",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "render (tests 4/4)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421424",
+      "at": "2026-11-12T02:52:00Z"
+    },
+    {
+      "name": "render (browser)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421464",
+      "at": "2026-11-12T02:56:19Z"
+    },
+    {
+      "name": "pptx (tests 1/4)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421455",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "pptx (tests 2/4)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421472",
+      "at": "2026-11-12T02:53:38Z"
+    },
+    {
+      "name": "pptx (tests 3/4)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421529",
+      "at": "2026-11-12T02:59:48Z"
+    },
+    {
+      "name": "pptx (tests 4/4)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421496",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "pptx (browser)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421419",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "editor (tests 1/2)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421375",
+      "at": "2026-11-12T02:52:00Z"
+    },
+    {
+      "name": "editor (tests 2/2)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421420",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "editor (playground 1/4)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421556",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "editor (playground 2/4)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421478",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "editor (playground 3/4)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421406",
+      "at": "2026-11-12T02:53:15Z"
+    },
+    {
+      "name": "editor (playground 4/4)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421443",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "editor (browser 1/3)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421570",
+      "at": "2026-11-12T02:59:39Z"
+    },
+    {
+      "name": "editor (browser 2/3)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421547",
+      "at": "2026-11-12T02:54:42Z"
+    },
+    {
+      "name": "editor (browser 3/3)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421489",
+      "at": "2026-11-12T03:01:35Z"
+    },
+    {
+      "name": "integration",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421568",
+      "at": "2026-11-12T02:52:35Z"
+    },
+    {
+      "name": "goldens",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421462",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "gallery-gates",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421504",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "pack-shape",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130938421490",
+      "at": "2026-11-12T02:52:01Z"
+    },
+    {
+      "name": "verify",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144293318/job/130948384275",
+      "at": "2026-11-12T03:19:27Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / CLI and core (windows-latest)",
+      "state": "PENDING",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744177",
+      "at": "2026-11-12T02:53:25Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / pptx on Windows (2/3)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744284",
+      "at": "2026-11-12T02:54:06Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Installed candidates (macos-latest)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744340",
+      "at": "2026-11-12T02:53:54Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / editor browser suites on Windows (playground 1/2)",
+      "state": "PENDING",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744344",
+      "at": "2026-11-12T03:14:56Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / pptx on Windows (3/3)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744352",
+      "at": "2026-11-12T03:04:25Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Platform residual (linux)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744355",
+      "at": "2026-11-12T02:57:08Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / editor browser suites on Windows (browser 1/3)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744361",
+      "at": "2026-11-12T02:58:30Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Platform residual (macos)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744368",
+      "at": "2026-11-12T02:55:58Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / pptx on Windows (1/3)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744371",
+      "at": "2026-11-12T02:57:22Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / editor playground on macOS (2/2)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744374",
+      "at": "2026-11-12T02:59:38Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / editor playground on macOS (1/2)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744378",
+      "at": "2026-11-12T02:54:10Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / plan",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744387",
+      "at": "2026-11-12T02:59:44Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Dependency audit",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744393",
+      "at": "2026-11-12T03:03:52Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / editor browser suites on Windows (playground 2/2)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744396",
+      "at": "2026-11-12T02:59:33Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / npm 12 consumer",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744403",
+      "at": "2026-11-12T02:57:41Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Node 22 (engines range, pptx-2)",
+      "state": "PENDING",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744405",
+      "at": "2026-11-12T03:12:52Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Node 26 (engines range, pptx-1)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744413",
+      "at": "2026-11-12T02:57:29Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / editor browser suites on Windows (browser 2/3)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744421",
+      "at": "2026-11-12T03:05:58Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Packed install (Linux)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744427",
+      "at": "2026-11-12T02:58:12Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / CLI and core (macos-latest)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744443",
+      "at": "2026-11-12T02:58:07Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / LibreOffice qualification (experimental)",
+      "state": "PENDING",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744452",
+      "at": "2026-11-12T03:15:28Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Node 22 (engines range, editor)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744459",
+      "at": "2026-11-12T03:08:05Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / editor browser suites on Windows (browser 3/3)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744462",
+      "at": "2026-11-12T02:58:29Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Node 26 (engines range, render-2)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744468",
+      "at": "2026-11-12T03:02:49Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Node 26 (engines range, pptx-2)",
+      "state": "PENDING",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744479",
+      "at": "2026-11-12T03:00:58Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Node 26 (engines range, core)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744481",
+      "at": "2026-11-12T03:02:53Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Node 22 (engines range, core)",
+      "state": "PENDING",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744489",
+      "at": "2026-11-12T03:09:45Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Installed candidates (windows-latest)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744490",
+      "at": "2026-11-12T03:14:40Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Node 26 (engines range, render-1)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744496",
+      "at": "2026-11-12T03:02:56Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Registry consumers",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744545",
+      "at": "2026-11-12T03:07:18Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Node 22 (engines range, render-2)",
+      "state": "FAILURE",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744546",
+      "at": "2026-11-12T03:07:39Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Node 22 (engines range, pptx-1)",
+      "state": "PENDING",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744549",
+      "at": "2026-11-12T03:08:01Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Node 26 (engines range, editor)",
+      "state": "SUCCESS",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744557",
+      "at": "2026-11-12T03:10:19Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Node 22 (engines range, render-1)",
+      "state": "PENDING",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130938744617",
+      "at": "2026-11-12T03:12:02Z"
+    },
+    {
+      "name": "slow set (only with the full-ci label) / Flake measurement (${{ matrix.name }})",
+      "state": "SKIPPED",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/43144409279/job/130941138228",
+      "at": "2026-11-12T02:59:47Z"
+    }
+  ]
+}

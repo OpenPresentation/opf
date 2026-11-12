@@ -1,0 +1,15 @@
+{
+  "measuredSource": "0fe8031fc012c416ab6ee87f22b143c4cb1f7ee1",
+  "currentSource": "79cdb85d6ab8a58dde5d474e254cffa027735c51",
+  "actualFileRecordsCompared": 1609,
+  "allActualInputsAndAssetsUnchanged": true,
+  "bundleInputs": 574,
+  "compiledFiles": 609,
+  "compiledUnchangedThroughMappedBuild": true,
+  "changedPaths": [
+    "docs/handoff/2026-11-11/node22-demand-resolver-test.md",
+    "docs/programs/release-readiness/burndown.md",
+    "packages/render/test/node-demand-fonts.mjs"
+  ],
+  "scope": "Read-only input equality evidence; original W06 receipts stay bound to measured0fe. No formal guard edited, current-head measurement or version comparison claimed."
+}

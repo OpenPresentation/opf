@@ -1,0 +1,65 @@
+{
+  "scope": "Complete final old0fe packet supplied by root; no new polling",
+  "files": [
+    {
+      "file": "observer.log",
+      "bytes": 20622,
+      "sha256": "0e98a76fdeb8415ccc3e2a3f34476ba72432d8f8f45e8db3351bea444a2091b5"
+    },
+    {
+      "file": "snapshot01.json",
+      "bytes": 16236,
+      "sha256": "ffee2f0527d438a1aa8ae8b59f85a0fad03c7e337c13a52f8b62bb33e33a91d1"
+    },
+    {
+      "file": "snapshot02.json",
+      "bytes": 16236,
+      "sha256": "e7e40a64415110623df5f08b696128d9883c3acc2007a55ecba33ba25d3382db"
+    },
+    {
+      "file": "snapshot03.json",
+      "bytes": 16236,
+      "sha256": "6abddb9da54d9159819df46c2b3c35789b2e42874ae529afc9af7a0737957664"
+    },
+    {
+      "file": "snapshot04.json",
+      "bytes": 16236,
+      "sha256": "d1a136bcd30b15ce62a4047b13c5aaccd9d02816a6e31888cb477576df5ad42d"
+    },
+    {
+      "file": "snapshot05.json",
+      "bytes": 16473,
+      "sha256": "a146638df5381a16c3cc8d87ee76c6ea7e3eeec58aa706d6a06e4c4fc563fba3"
+    },
+    {
+      "file": "node22-render2-130938744546.log",
+      "bytes": 92206,
+      "sha256": "1538f1aff2d760e2dd4d1253d0b7a83e5298975fb2c7d1c2a1073b6acc31e972"
+    },
+    {
+      "file": "registry-130938744545.log",
+      "bytes": 174374,
+      "sha256": "56c7d2b0ac1dfdb478a2d9b6033b825a22451faa08c185493855b56c6fa2330e"
+    },
+    {
+      "file": "windows-browser1-130938744361.log",
+      "bytes": 416332,
+      "sha256": "0ab032d345dc5382625ee0104335154ca6cd5f5efe2097a9dfb04439a0bbd5d9"
+    },
+    {
+      "file": "windows-pptx3-130938744352.log",
+      "bytes": 116279,
+      "sha256": "f9776bce62f251fa626a4d293b8d4a0a7988d22f66123de38fc36b06737e939d"
+    }
+  ],
+  "final": {
+    "at": "2026-11-12T03:40:45.035Z",
+    "head": "0fe8031fc012c416ab6ee87f22b143c4cb1f7ee1",
+    "states": {
+      "SUCCESS": 67,
+      "FAILURE": 1,
+      "SKIPPED": 2
+    },
+    "checkNames": 70
+  }
+}
