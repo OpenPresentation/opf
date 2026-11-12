@@ -245,6 +245,31 @@ function isEnUkTag(value: unknown): boolean {
   return typeof value === "string" && value.toLowerCase() === "en-uk";
 }
 
+const EN_UK_MESSAGE = "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag";
+
+// The deck and a slide author a language tag; 'en-UK' is the same schema error on both (a run's is reported by opf/language-tag, as an error).
+function enUkIssues(language: unknown, path: string): ValidationIssue[] {
+  const at = isEnUkTag(language) ? path : isRecord(language) && isEnUkTag(language.bcp47) ? `${path}/bcp47` : undefined;
+  return at ? [semanticIssue(at, EN_UK_MESSAGE, { replacement: "en-GB" })] : [];
+}
+
+// 0.33 wrote an anchored overlay size in pixels under `width` and `height`; 0.34 reads fractions, so an old deck still validates. A value above 4
+// (the format documents 1 and 1.08) and up to 1280 (the `widthPx` maximum, so the rename stays valid) is taken for a pixel size.
+function overlayAnchorSizeWarnings(value: unknown): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  if (isRecord(value) && Array.isArray(value.slides)) value.slides.forEach((slide, index) => {
+    if (isRecord(slide) && Array.isArray(slide.shapes)) slide.shapes.forEach((entry, shapeIndex) => {
+      const at = isRecord(entry) ? entry.at : undefined;
+      if (isRecord(at)) for (const key of ["width", "height"]) {
+        const size = at[key];
+        if (typeof size === "number" && size > 4 && size <= 1280 && !hasOwn(at, `${key}Px`))
+          issues.push(semanticIssue(`/slides/${index}/shapes/${shapeIndex}/at/${key}`, `at.${key} is ${size}, a fraction; pixels are ${key}Px`, { code: "shape-anchor-size-unit", key, size }));
+      }
+    });
+  });
+  return issues;
+}
+
 function presentFields(value: Record<string, unknown>, fields: readonly string[]): string[] {
   return fields.filter((field) => hasOwn(value, field));
 }
@@ -295,8 +320,8 @@ function validateContentPayload(
   const explicitType = value.type;
   const payloadFields = presentFields(value, rootPayloadFields);
   const hasBlocks = hasOwn(value, "blocks");
-  // RR-34: a caption belongs to exactly one image, chart, table or video payload of this host.
-  const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table or video payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
+  // RR-34: a caption belongs to exactly one image, chart, table, video or diagram payload of this host.
+  const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table, video or diagram payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
   // FA-22: image options on anything but an image payload, and a placement anywhere but a top-level block.
   const imageOptionIssues = (reason: string, params: Record<string, unknown> = {}, except: ReadonlySet<string> = new Set()) => {
     for (const field of imageOptionFields) if (hasOwn(value, field) && !except.has(field)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on an image payload; ${reason}`, { code: "image-option-unsupported-payload", field, ...params }));
@@ -530,15 +555,7 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
 
   const issues: ValidationIssue[] = [];
 
-  if (isEnUkTag(value.language)) {
-    issues.push(semanticIssue("/language", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
-      replacement: "en-GB",
-    }));
-  } else if (isRecord(value.language) && isEnUkTag(value.language.bcp47)) {
-    issues.push(semanticIssue("/language/bcp47", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
-      replacement: "en-GB",
-    }));
-  }
+  issues.push(...enUkIssues(value.language, "/language"));
 
   issues.push(...deckMetadataIssues(value));
   // 'speakers' is the one built-in variable name without a dot, so a declared variable may not take it.
@@ -588,6 +605,7 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
         if (checked) for (const issue of shapeIssues(checked, (...keys) => keys.reduce((at, key) => pathFor(at, key), entryPath))) issues.push(semanticIssue(issue.path, issue.message, { code: issue.code, ...issue.params }));
       });
       for (const issue of overlayIssues(slide, slidePath, value, canvasForOverlays(slide, index))) issues.push(semanticIssue(issue.path, issue.message, { ...(issue.code ? { code: issue.code } : {}), ...issue.params }));
+      issues.push(...enUkIssues(slide.language, `${slidePath}/language`));
       issues.push(...validateSlideRegions(slide, slidePath));
       const payloadTableIssues = (payload: Record<string, unknown>, path: string): void => {
         if (isRecord(payload.table)) for(const issue of tableGrid(payload.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
@@ -953,17 +971,7 @@ function presentationReferenceWarnings(value: unknown, catalogs: readonly Catalo
 }
 
 function validateLanguageSemantics(value: unknown): ValidationIssue[] {
-  if (!isRecord(value)) {
-    return [];
-  }
-
-  if (isEnUkTag(value.bcp47)) {
-    return [semanticIssue("/bcp47", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
-      replacement: "en-GB",
-    })];
-  }
-
-  return [];
+  return isRecord(value) ? enUkIssues(value.bcp47, "/bcp47") : [];
 }
 
 // Guard recursive payloads before AJV or recursive semantic/reference traversal.
@@ -1124,6 +1132,7 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
     errors.push(...data.errors);
     warnings.push(...presentationReferenceWarnings(subject, options.catalogs));
     warnings.push(...data.warnings);
+    warnings.push(...overlayAnchorSizeWarnings(subject));
     warnings.push(...variableIssues.warnings);
   } else if (resolved.schemaName === "language") {
     errors.push(...validateLanguageSemantics(value));

@@ -171,7 +171,7 @@ export function prepareUngroupBlock(presentation, groupPath, options = {}) {
   const { slideIndex, relative } = slideParts(presentation, groupPath, "a group");
   return slideAction(presentation, slideIndex, (slide) => unwrapGroup(slide, asNumbers(relative)), undefined, options.validate !== false);
 }
-/** Place every block of a slide in its own named region: `regions[i]` is block i's region (`left`, `right`, `top:left`, ...). */
+/** Place every block of a slide in its own named region: `regions[i]` is block i's region (`start`, `end`, `top:start`, ...). */
 export function prepareBlocksToRegions(presentation, slideIndex, regions, options = {}) {
   slideParts(presentation, `slides.${slideIndex}`, "a slide");
   return slideAction(presentation, slideIndex, (slide) => blocksToRegions(slide, regions), undefined, options.validate !== false);

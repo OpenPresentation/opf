@@ -39,11 +39,12 @@ test('a region that is not assigned is reported, and UK suggests GB', () => {
 	assert.deepEqual(only(deck({ language: 'en-XK' })), [], 'Kosovo has a user-assigned code in CLDR');
 });
 
-test('en-UK as the deck language is the schema rule, not reported twice; a run is still reported', () => {
+test('en-UK as the deck language is the schema rule, not reported twice; a run is still reported, as an error with the en-GB patch', () => {
 	const result = validate(deck({ language: 'en-UK' }), { only: ['language-tag', 'schema'] });
 	assert.deepEqual(result.findings.map((entry) => entry.ruleId).filter((id) => id === 'opf/language-tag'), []);
 	const run = only(deck({}, { title: 'T', text: ['The ', { text: 'colour', language: 'en-UK' }] }));
 	assert.equal(run.length, 1);
+	assert.equal(run[0].severity, 'error');
 	assert.equal(run[0].path, '/slides/0/text/1/language');
 	assert.equal(run[0].fixes[0].patch[0].value, 'en-GB');
 });

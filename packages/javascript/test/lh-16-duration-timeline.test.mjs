@@ -12,7 +12,7 @@ test('duration is a positive numeric period, not a guessed display label',()=>{
   assert.equal(check({slides:[{timeline:events}]}).valid,true);
   for(const duration of [0,-1,null,'4',NaN,Infinity])assert.equal(check({slides:[{timeline:[{what:'Build',duration}]}]}).valid,false,String(duration));
   for(const duration of [0,-1,NaN,Infinity])assert.throws(()=>layoutTimeline([{what:'Build',duration}],{x:0,y:0,width:800,height:400}),/finite positive/);
-  assert.throws(()=>layoutTimeline([{what:'First',duration:1e-300},{what:'Second',duration:1e300}],{x:0,y:0,width:800,height:400}),/finite layout precision/);
+  // A schema-valid extreme ratio is not an error: the tiny range takes the minimum share (see timeline-duration-extremes.test.mjs).
 });
 
 test('horizontal and vertical ranges preserve 1:4:1 in both directions and at every canvas scale',()=>{

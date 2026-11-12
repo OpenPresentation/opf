@@ -24,7 +24,7 @@ const NONE = Object.freeze({ move: false, group: false, delete: false, duplicate
 const CONTAINERS = new Set(["slide", "region", "group"]);
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
-/** Whether `key` names a promoted region of a slide (`left`, `center+right`, `top:left`, ...). */
+/** Whether `key` names a promoted region of a slide (`start`, `center+end`, `top:start`, ...). */
 export const isPromotedRegion = (key) => REGION_KEY.test(key);
 /** The content fields `owner` holds itself, in conversion order. */
 export const contentFieldsOf = (owner) => (isObject(owner) ? CONTENT_FIELDS.filter((key) => Object.hasOwn(owner, key)) : []);

@@ -1277,7 +1277,7 @@ _No named properties._
 
 - Type: `oneOf:string / array<ref:TextRun> / object`
 - Required fields: none
-- Purpose: A caption for an image, chart, table or video payload. A string or TextRun[] is the caption text placed below the media; object form adds the position and alignment.
+- Purpose: A caption for an image, chart, table, video or diagram payload. A string or TextRun[] is the caption text placed below the media; object form adds the position and alignment.
 
 _No named properties._
 

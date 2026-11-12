@@ -211,7 +211,7 @@ Approximations: anti-aliasing, text shadows, font weight and the exact glyph cov
 
 Overflow, minimum type size, reading order and image resolution use `composeSlide` at the deck's slide size with the resolved font scheme, the same composition the preview and the PPTX export consume. Without `fonts.textMeasurement` the text widths are core's portable estimate and can differ from the real fonts by a few percent; hosts that load fonts (the editor, the renderer) pass their measurement for font-exact results. A composition with `overflow: "error"` fails at composition time; `validate` still computes the geometry, relaxes the setting, and reports the overflow as a **warning**, so that `valid` never depends on font metrics. Rendering and export still refuse such a slide when it does not fit, and a host that wants the finding to fail promotes it with `severity: { 'opf/text-overflow': 'error' }`.
 
-Promoted region keys (`left`, `center`, `right`, `top:left` and the rest) are composed in visual reading order (rows from top to bottom, then along the row), whatever order the keys are written in. The PPTX export writes shapes in that order, which is the reading order of assistive technology; `opf/reading-order` checks that the composed order still matches the geometry (the same `visualReadingOrder` that composes the regions). Authoring with `blocks` (an ordered list) keeps the reading order equal to the visual order.
+Promoted region keys (`start`, `center`, `end`, `top:start` and the rest) are composed in visual reading order (rows from top to bottom, then along the row), whatever order the keys are written in. The PPTX export writes shapes in that order, which is the reading order of assistive technology; `opf/reading-order` checks that the composed order still matches the geometry (the same `visualReadingOrder` that composes the regions). Authoring with `blocks` (an ordered list) keeps the reading order equal to the visual order.
 
 ## Templates and variables
 
@@ -244,6 +244,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/shape-adjust-range`](#opfshape-adjust-range) | Format | warning | structure | An adjust value is outside the range of the preset's handle. |
 | [`opf/shape-link-hidden`](#opfshape-link-hidden) | Format | warning | structure | A hidden shape carries a link. |
 | [`opf/shape-anchor-missing`](#opfshape-anchor-missing) | Format | error | structure | An overlay shape has no resolvable block or qualified plotted chart point. |
+| [`opf/shape-anchor-size-unit`](#opfshape-anchor-size-unit) | Format | warning | structure | A pixel size is under a fraction key. |
 | [`opf/connector-end-missing`](#opfconnector-end-missing) | Format | error | structure | A connector end names no block or overlay shape on the slide. |
 | [`opf/image-placement-invalid`](#opfimage-placement-invalid) | Format | error | structure | An image placement cannot be honoured. |
 | [`opf/layout-placeholder-group`](#opflayout-placeholder-group) | Format | error | structure | A layout record's placeholder group breaks a nesting rule. |
@@ -390,7 +391,7 @@ Default severity: **error**. Cost: structure. A citation or footnote sits where 
 
 Default severity: **error**. Cost: structure. A caption is on a payload that cannot carry one.
 
-**Why.** A caption belongs to exactly one image, chart, table or video; a group, text or code block has no place to draw it.
+**Why.** A caption belongs to exactly one image, chart, table, video or diagram; a group, text or code block has no place to draw it.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -441,6 +442,14 @@ Default severity: **warning**. Cost: structure. A hidden shape carries a link.
 Default severity: **error**. Cost: structure. An overlay shape has no resolvable block or qualified plotted chart point.
 
 **Why.** An overlay shape placed with `at` sits against a composed block of its slide, named by the block's `id`. A chart point also requires a unique plotted category and series in a qualified shared plot. When an identity or geometry is missing, the shape is not drawn.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/shape-anchor-size-unit`
+
+Default severity: **warning**. Cost: structure. A pixel size is under a fraction key.
+
+**Why.** In `at`, `width` and `height` are fractions of the block; pixels are `widthPx` and `heightPx`.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
