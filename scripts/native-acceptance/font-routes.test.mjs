@@ -59,7 +59,7 @@ test('five schema-valid route fixtures preserve corpus text, explicit upright st
 });
 
 test('current run language projects pinned corpus metadata without rewriting literal text or historical corpus keys',async()=>{
- const corpusFile=new URL('../../docs/evidence/script-corpora-20261001/script-corpora.json',import.meta.url);
+ const corpusFile=new URL('../../docs/programs/font-fidelity-everywhere/tracker-inputs/script-corpora-20261001/script-corpora.json',import.meta.url);
  const original=await readFile(corpusFile),corpus=JSON.parse(original);
  const source=await loadFontRouteSource(selectFontRoutes('all'));
  for(const name of FONT_ROUTE_CASE_NAMES){

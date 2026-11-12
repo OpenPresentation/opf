@@ -240,7 +240,7 @@ test("Pareto limitation preserves measured verdicts and remains an open data-pre
     assert.equal(gap.link, "https://github.com/OpenPresentation/opf-pptx/issues/246");
     assert.equal(gap.addressed, false);
     assert.equal(gap.descoped, undefined);
-    const proof = read("docs/evidence/rr-20-pareto-series-scope/reproduction.json");
+    const proof = read("docs/programs/release-readiness/tracker-inputs/rr-20-pareto-series-scope/reproduction.json");
     assert.equal(proof.input.slides[0].chart.data.columns.length, 4);
     assert.equal(proof.imported.slides[0].chart.data.columns.length, 2);
     assert.ok(proof.export.diagnostics.some((d) => d.code === "chart-data-adapted" && d.adaptation === "series-dropped"));

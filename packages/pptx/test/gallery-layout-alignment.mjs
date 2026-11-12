@@ -1,4 +1,4 @@
-// The historical gallery 1 alignment-only fixture remains in docs/evidence/rr-81-layout-review/.
+// The historical gallery 1 alignment-only fixture is in history: 7fb6140804f969550e3a9c9d52916b7610844917:docs/evidence/rr-81-layout-review/.
 // Gallery 2 templates change region geometry as well as design. Compare each accepted
 // line directly with native geometry and preview anchors instead of assuming only alignment changes.
 import assert from 'node:assert/strict';

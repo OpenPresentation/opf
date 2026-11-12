@@ -10,7 +10,7 @@ import { chromium } from 'playwright';
 import { loadCorpora } from '../scripts/script-corpora.mjs';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const require = createRequire(import.meta.url);
-const evidence = JSON.parse(await readFile(new URL('../docs/evidence/harfbuzz-layout-measurement/report.json', import.meta.url), 'utf8'));
+const evidence = JSON.parse(await readFile(new URL('./fixtures/harfbuzz-layout-measurement/report.json', import.meta.url), 'utf8'));
 const corpora = await loadCorpora();
 const targets = evidence.samples.filter(sample => Math.abs(sample.delta) > 0.001);
 const faceData = [];

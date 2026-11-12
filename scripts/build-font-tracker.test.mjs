@@ -635,8 +635,8 @@ test("native verification comes from committed comparison output, and only for f
     assert.deepEqual(record(name).nativeVerification.runs.map((run) => run.run), ["ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005", "ff-46-documented-visual-native-20261005-fonts"], name);
   }
   assert.match(record("Arial").nativeVerification.note, /Passed in ff-46-native-0.12-20261002/);
-  // Evidence is committed without absolute user paths.
-  for (const run of overrides.nativeEvidence) for (const file of [run.file, path.join(path.dirname(run.file), "compare.md")]) assert.doesNotMatch(readFileSync(path.join(ROOT, file), "utf8"), /[A-Z]:\\Users|\/Users\/|micha/, file);
+  // The committed tracker inputs carry no absolute user paths.
+  for (const run of overrides.nativeEvidence) for (const file of [run.file]) assert.doesNotMatch(readFileSync(path.join(ROOT, file), "utf8"), /[A-Z]:\\Users|\/Users\/|micha/, file);
 });
 
 test("a deck that fails a gated check marks the families it reads back failed, and a family no deck names stays unverified", () => {
@@ -647,7 +647,7 @@ test("a deck that fails a gated check marks the families it reads back failed, a
     const base = JSON.parse(readFileSync(baseFile, "utf8"));
     base.nativeEvidence = base.nativeEvidence.filter((run) => !run.id.startsWith("ff-46-"));
     writeFileSync(baseFile, JSON.stringify(base));
-    const cjk = path.join(dir, "docs/evidence/rr-05-cjk-native-20261002/compare.json");
+    const cjk = path.join(dir, "docs/programs/font-fidelity-everywhere/tracker-inputs/rr-05-cjk-native-20261002/compare.json");
     const report = JSON.parse(readFileSync(cjk, "utf8"));
     const deck = (id) => report.decks.find((item) => item.id === id);
     // Mangal: the only deck that names it fails the per-run fonts check.
@@ -691,7 +691,7 @@ test("a deck that fails a gated check marks the families it reads back failed, a
 test("a failing FF-46 deck marks failed the families only that deck reads back, and a passing deck elsewhere keeps a family verified", () => {
   const dir = scratchCopy();
   try {
-    const file = path.join(dir, "docs/evidence/ff-46-native-0.12-20261002/compare.json");
+    const file = path.join(dir, "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-native-0.12-20261002/compare.json");
     const report = JSON.parse(readFileSync(file, "utf8"));
     const deck = report.decks.find((item) => item.id === "latin-03-tahoma");
     deck.checks.presentationFonts.ok = false;
@@ -1098,5 +1098,5 @@ test("the name assembler turns the four host reports into the evidence file, key
   assert.equal(out.hosts.node.families.A.route, "Noto Sans X");
   assert.equal(out.hosts.node.findings, undefined);
   assert.equal(out.lazyBudget.node.families, 2);
-  assert.equal(defaultOut("2026-10-10"), "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json");
+  assert.equal(defaultOut("2026-10-10"), "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/script-name-host-fixtures-20261010.json");
 });

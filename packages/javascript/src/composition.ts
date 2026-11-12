@@ -1798,7 +1798,7 @@ function balancedBreaks(text:string,lines:readonly WrappedLine[],widthOf:(start:
 /** Whitespace that can hang at a soft line break: every space except the no-break spaces and the zero-width no-break space. */
 const HANGING_SPACE = /[^\S\r\n\u00a0\u202f\ufeff]/u;
 
-/** Corpus-calibrated robust advances; see docs/evidence/script-width-estimates/README.md.
+/** Corpus-calibrated robust advances (scripts/report-script-width-estimates.mjs over the FF-44 script corpora).
  * Shared punctuation and Latin/CJK retain their original widths. These are estimates, not font metrics. */
 const SCRIPT_WIDTH_FACTORS: readonly (readonly [RegExp, number])[] = [
   [/\p{Script=Tamil}/u, 1.53], [/\p{Script=Malayalam}/u, 1.76],
