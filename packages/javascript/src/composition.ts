@@ -47,7 +47,7 @@ export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceE
 export {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 export {isolateNumbers,numberRanges,numericText} from './number-text.js';
 import {listNumberLabel,listNumbers,sliceNumberedItems,type ListNumber,type NumberingInput} from './numbering.js';
-export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumberLabel,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
+export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumberLabel,listNumbers,nativeListNumerals,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
 import {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,parseIsoDate,type FurnitureField} from './furniture-fields.js';
 import {substituteSlideTokens,usesSlideBuiltin} from './slide-variables.js';
 import {parseLogoName,resolveLogo,resolveOrganizationLogo,type LogoShape,type LogoVariant} from './logos.js';
@@ -1614,7 +1614,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
       }
       if(typeof content.text==='string'){
         // The slide-scoped built-ins resolve here, per slide; each {{slide.number}} becomes a live slide-number field.
-        const resolved=substituteSlideTokens(content.text,{slideNumber:number,...(slideCount!==undefined?{slideCount}:{}),section:slide.section,...numberLanguage(options)});
+        const resolved=substituteSlideTokens(content.text,{slideNumber:number,...(slideCount!==undefined?{slideCount}:{}),section:slide.section});
         if(slideCount===undefined&&usesSlideBuiltin(content.text,'deck.slideCount'))error(`${path}.text`,'{{deck.slideCount}} needs the rendered slide count (the slideCount option or the presentation slides).','unresolved-content');
         add('text',resolved.text,false,undefined,{fields:resolved.fields});
       }
@@ -11497,8 +11497,8 @@ export {chartAxisFraction,chartAxisScale,niceScale,maxIntervalsFor,stackCategory
 export type {ChartScale,ChartValueAxis,ChartAxisGeometry,WaterfallStep} from './chart-axis.js';
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export {groupNumber,groupsThousands,groupsAxisTicks,groupsDataRange,NUMBER_GROUPING_MIN,GROUPED_LABEL_CODE} from './number-grouping.js';
-export {formatNumber,formatPercentNumber,localizeDigits,localizeNumberText,localizeNumberParts,localizePatternNumber,numberLocale,numberingSystemOf,numberingSystemExtension,isSupportedNumberingSystem,supportedNumberingSystems,plainLanguageTag,languageInEffect,numeralScripts,asciiDigits,type NumberLocale} from './numerals.js';
-export {NUMBER_LOCALES,NUMBERING_SYSTEMS,NUMBER_LOCALE_SOURCE} from './number-locale-data.js';
+export {formatNumber,formatPercentNumber,localizeDigits,localizeNumberText,localizeNumberParts,localizePatternNumber,numberLocale,numberingSystemOf,numberingSystemExtension,isSupportedNumberingSystem,supportedNumberingSystems,plainLanguageTag,languageInEffect,numeralScripts,asciiDigits,NUMERAL_SHAPES,numeralShapePrefix,type NumberLocale} from './numerals.js';
+export {NUMBER_LOCALES,NUMBER_SEPARATOR_OVERRIDES,NUMBERING_SYSTEMS,NUMBER_LOCALE_SOURCE} from './number-locale-data.js';
 export {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 export {horizontalBarPlot} from './chart-marks.js';
 export {chartDoughnut,restackForRows,chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';

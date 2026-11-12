@@ -22,7 +22,7 @@ test('LH-106: the digits a slide generates choose its script faces, not only its
 });
 
 test('LH-106: an ar-SA deck without Arabic text renders its generated digits (no missing-glyph)', async () => {
-  for (const [language, values] of [['ar-SA', ['١٬٠٠٠', '٩٩٩']], ['fa-IR', ['۱٬۰۰۰', '۹۹۹']], ['ar-SA-u-nu-latn', ['1,000', '999']], ['de-DE', ['1.000', '999']]]) {
+  for (const [language, values] of [['ar-SA', ['١,٠٠٠', '٩٩٩']], ['fa-IR', ['۱٬۰۰۰', '۹۹۹']], ['ar-SA-u-nu-latn', ['1,000', '999']], ['de-DE', ['1.000', '999']]]) {
     const document = deck(language), fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: document, renderOptions: {catalogs}});
     try {
       const svgs = toSvg(document, {catalogs, fonts});
@@ -40,6 +40,6 @@ test('LH-106: fonts.ensure loads the digits a slide language added in place', as
     assert.ok(fonts.pending(document, {catalogs}).some(name => name.includes('arabic')), 'the Arabic face is pending');
     await fonts.ensure(document, {renderOptions: {catalogs}});
     assert.deepEqual(fonts.pending(document, {catalogs}), []);
-    assert.ok(drawn(toSvg(document, {catalogs, fonts})[0]).includes('١٬٠٠٠'));
+    assert.ok(drawn(toSvg(document, {catalogs, fonts})[0]).includes('١,٠٠٠'));
   } finally { fonts.dispose?.(); }
 });

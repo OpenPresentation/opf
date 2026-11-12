@@ -45,6 +45,6 @@ await gate.ensure(arabic);
 assert.deepEqual(gate.pending(arabic), []);
 assert.ok(served.some((file) => /arabic/.test(file)), "an Arabic face was fetched");
 const svgs = toSvg(arabic, { fonts, glyphFallback: "none" });
-assert.ok(drawn(svgs[0]).includes("١٬٠٠٠"), "1000 draws ١٬٠٠٠");
+assert.ok(drawn(svgs[0]).includes("١,٠٠٠"), "1000 draws ١,٠٠٠");
 assert.ok(drawn(svgs[1]).includes("٩٩٩"), "999 draws ٩٩٩, in the same digits");
 console.log("font gate generated numerals: ok");

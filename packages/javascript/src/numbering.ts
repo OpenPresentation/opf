@@ -95,6 +95,16 @@ function bareNumber(value: number, style: NumberingStyleName): string | null {
   return style === 'alpha-upper' ? letter.toUpperCase() : letter;
 }
 
+/**
+ * LH-106 (vetoable): whether a numbered list's markers are drawn in the language's digits. A list exports as PowerPoint's auto-number,
+ * whose digits PowerPoint draws: Arabic-Indic only with its Hindi schemes, `hindiNumPeriod` (verified) and `hindiNumParenR`. Every
+ * other style, suffix and numbering system keeps Latin digits in the preview too, so the two agree. Step badges and other numerals
+ * that export as text use the language's digits (`listNumberLabel`).
+ */
+export function nativeListNumerals(style: NumberingStyleName, suffix: NumberingSuffix, language?: string): boolean {
+  return style === 'arabic' && (suffix === 'period' || suffix === 'paren') && numberingSystemOf(language) === 'arab';
+}
+
 /** Whether `style` can draw `value` as that style (Roman numerals stop at 3999). */
 export function numberingStyleDraws(style: NumberingStyleName, value: number): boolean {
   return bareNumber(value, style) !== null;
@@ -109,8 +119,8 @@ export function formatListNumber(value: number, style: NumberingStyleName = 'ara
   if (!Number.isInteger(value) || value < 1) throw new RangeError('A list number must be an integer of at least 1.');
   if (!styleSet.has(style)) throw new RangeError(`Unknown numbering style '${String(style)}'.`);
   if (!suffixSet.has(suffix)) throw new RangeError(`Unknown numbering suffix '${String(suffix)}'.`);
-  // LH-106: an arabic numeral is in the language's numbering system (Arabic-Indic digits in `ar-SA`); letters and Roman numerals stay.
-  const bare = localizeDigits(bareNumber(value, style) ?? String(value), language);
+  // LH-106: an auto-number is in the language's digits only where PowerPoint's native scheme draws them (`nativeListNumerals`).
+  const bare = localizeDigits(bareNumber(value, style) ?? String(value), nativeListNumerals(style, suffix, language) ? language : undefined);
   return suffix === 'period' ? `${bare}.` : suffix === 'paren' ? `${bare})` : `(${bare})`;
 }
 
@@ -136,7 +146,7 @@ export interface ListNumber {
   text: string;
   /** Why the drawn style differs from the authored one: Roman numerals stop at 3999. */
   adapted?: 'roman-range';
-  /** LH-106: the numbering system an `arabic` number is drawn in when it is not Latin (`arab` in `ar-SA`), for the exporters' native schemes. */
+  /** LH-106: the numbering system the marker is drawn in when it is not Latin (`arab`: `ar-SA` with a period or parenthesis), for the exporters' native schemes. */
   numberingSystem?: string;
 }
 
@@ -162,7 +172,7 @@ export function listNumbers(items: readonly unknown[], numbering: NumberingInput
     counters.length = level + 1;
     const adapted = !numberingStyleDraws(authored, value);
     const style = adapted ? 'arabic' : authored;
-    const system = style === 'arabic' ? numberingSystemOf(language) : 'latn';
+    const system = nativeListNumerals(style, suffix, language) ? numberingSystemOf(language) : 'latn';
     return { index, level, value, style, suffix, text: formatListNumber(value, style, suffix, language), ...(adapted ? { adapted: 'roman-range' as const } : {}), ...(system !== 'latn' ? { numberingSystem: system } : {}) };
   });
 }

@@ -14,10 +14,10 @@ const SUFFIX_TAILS = {period: 'Period', paren: 'ParenR', 'paren-both': 'ParenBot
 
 /**
  * LH-106: the native schemes that draw an `arabic` number in another numbering system's digits: PowerPoint's Hindi numerals are the
- * Arabic-Indic digits (١. ٢. ٣.), with a period or a closing parenthesis only; Thai digits have all three suffixes. A system or suffix
- * without one keeps the arabic scheme, which PowerPoint draws in its own digits.
+ * Arabic-Indic digits (١. ٢. ٣.), with a period (verified in PowerPoint 16.0.20527) or a closing parenthesis. Core draws every other
+ * combination in Latin digits (`nativeListNumerals`), which the arabic scheme draws too.
  */
-const NUMERAL_SCHEMES = {arab: {period: 'hindiNumPeriod', paren: 'hindiNumParenR'}, thai: {period: 'thaiNumPeriod', paren: 'thaiNumParenR', 'paren-both': 'thaiNumParenBoth'}};
+const NUMERAL_SCHEMES = {arab: {period: 'hindiNumPeriod', paren: 'hindiNumParenR'}};
 
 /** The `a:buAutoNum@type` scheme of an OPF style and suffix, in `system`'s digits where a native scheme has them (LH-106). */
 export const autoNumScheme = (style, suffix = 'period', system = undefined) => (style === 'arabic' && NUMERAL_SCHEMES[system]?.[suffix]) || `${STYLE_STEMS[style]}${SUFFIX_TAILS[suffix]}`;

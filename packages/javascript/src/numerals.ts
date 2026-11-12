@@ -6,7 +6,7 @@
 // typed is never rewritten. Digits, separators and the percent sign come from one table (number-locale-data.ts, read from
 // `Intl` once by scripts/build-number-locales.mjs), never from the runtime's `Intl`, so every runtime draws the same text.
 
-import {NUMBER_LOCALES, NUMBERING_SYSTEMS} from './number-locale-data.js';
+import {NUMBER_LOCALES, NUMBER_SEPARATOR_OVERRIDES, NUMBERING_SYSTEMS} from './number-locale-data.js';
 
 /** How one locale writes numbers. */
 export interface NumberLocale {
@@ -23,7 +23,7 @@ export interface NumberLocale {
   secondaryGroup: number;
   /** Whole numbers group from this many digits: 4, or 5 in a locale that leaves four digits alone (Spanish 1000, 10.000). */
   groupsFrom: number;
-  /** The percent sign, which follows the number as PowerPoint's `0%` prints it: `%`, or `٪` with Arabic and Persian digits. */
+  /** The percent sign, which follows the number as PowerPoint's `0%` prints it: `٪` with Persian digits, else `%` (Arabic-Indic too). */
   percent: string;
 }
 
@@ -56,12 +56,29 @@ export function numberingSystemExtension(tag: string): string | undefined {
 
 /** True when OPF draws the numbering system's digits (it is in the table: digits that are ten consecutive characters of one script). */
 export function isSupportedNumberingSystem(system: string): boolean {
-  return Object.hasOwn(NUMBERING_SYSTEMS, system);
+  return system === 'latn' || Object.hasOwn(NUMERAL_SHAPES, system);
 }
 
 /** The numbering systems OPF draws, sorted. */
 export function supportedNumberingSystems(): string[] {
-  return Object.keys(NUMBERING_SYSTEMS).sort();
+  return ['latn', ...Object.keys(NUMERAL_SHAPES)].sort();
+}
+
+/**
+ * LH-106 (vetoable): the numbering systems OPF draws other than Latin, each with the numeral shape PowerPoint draws a native chart's
+ * number format in (the `[$-<code>]` prefix of an Excel format code): a system draws only where PowerPoint draws the same digits, so
+ * the preview and the export agree. Arabic-Indic and Persian were verified in PowerPoint 16.0.20527 (2026-11-12); Devanagari and
+ * Bengali follow Excel's documented numbering and await that check. Any other system (Thai, Myanmar, ...) is drawn in Latin digits.
+ */
+export const NUMERAL_SHAPES: Readonly<Record<string, string>> = {arab: '2000000', arabext: '3000000', deva: '4000000', beng: '5000000'};
+
+/**
+ * The prefix a native chart's number format takes so PowerPoint draws its digits in the language's numbering system (`[$-2000000]`
+ * in `ar-SA`), or '' with Latin digits.
+ */
+export function numeralShapePrefix(language?: string): string {
+  const code = NUMERAL_SHAPES[numberLocale(language).system];
+  return code ? `[$-${code}]` : '';
 }
 
 /**
@@ -87,13 +104,14 @@ export function numberLocale(language?: string): NumberLocale {
   const entry = (parts && ((parts.script && parts.region && NUMBER_LOCALES[`${parts.language}-${parts.script}-${parts.region}`]) ?? (parts.region && NUMBER_LOCALES[`${parts.language}-${parts.region}`]) ?? (parts.script && NUMBER_LOCALES[`${parts.language}-${parts.script}`]) ?? NUMBER_LOCALES[parts.language])) || ROOT;
   const [own = 'latn', decimal = '.', group = ',', grouping = '33', minimum = '1', latinDecimal, latinGroup] = entry.split('|');
   const primaryGroup = Number(grouping[0]) || 3, secondaryGroup = Number(grouping[1]) || primaryGroup;
-  const requested = parts?.nu && isSupportedNumberingSystem(parts.nu) ? parts.nu : own;
+  // A system OPF does not draw (the locale's own, or the one -u-nu- names) is drawn in Latin digits.
+  const requested = parts?.nu && isSupportedNumberingSystem(parts.nu) ? parts.nu : isSupportedNumberingSystem(own) ? own : 'latn';
   // The locale's separators with Latin digits: its own when its digits are Latin, else the ones its `-u-nu-latn` form uses.
   const latin = own === 'latn' ? {decimal, group} : {decimal: latinDecimal ?? '.', group: latinGroup ?? ','};
-  const arabic = (system: string) => system === 'arab' || system === 'arabext';
-  const separators = requested === own ? {decimal, group} : arabic(requested) ? {decimal: '٫', group: '٬'} : latin;
+  // Arabic-Indic digits take PowerPoint's Latin comma and period (NUMBER_SEPARATOR_OVERRIDES), Persian digits the Persian separators.
+  const separators = requested === own ? {decimal, group} : NUMBER_SEPARATOR_OVERRIDES[requested] ?? (requested === 'arabext' ? {decimal: '٫', group: '٬'} : latin);
   const [zero, script] = NUMBERING_SYSTEMS[requested] ?? NUMBERING_SYSTEMS.latn!;
-  locale = {system: requested, script, digits: Array.from({length: 10}, (_, digit) => String.fromCodePoint(zero + digit)).join(''), ...separators, primaryGroup, secondaryGroup, groupsFrom: primaryGroup + (minimum === '2' ? 2 : 1), percent: arabic(requested) ? '٪' : '%'};
+  locale = {system: requested, script, digits: Array.from({length: 10}, (_, digit) => String.fromCodePoint(zero + digit)).join(''), ...separators, primaryGroup, secondaryGroup, groupsFrom: primaryGroup + (minimum === '2' ? 2 : 1), percent: requested === 'arabext' ? '٪' : '%'};
   if (cache.size >= 256) cache.clear();
   cache.set(key, locale);
   return locale;
