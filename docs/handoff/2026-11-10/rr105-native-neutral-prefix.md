@@ -89,7 +89,7 @@ the batch. These are honest current-local-runtime comparisons, not raw9a20 or
 installed-consumer evidence. All raw ZIPs, part receipts, source/runtime lists
 and test logs remain unchanged under `/tmp/opf-neutral-prefix-focus01`.
 
-[Compact scoped receipt](rr105-native-neutral-prefix-receipt.json) records the
+Compact scoped receipt records the
 exact hashes and paths. The heavy lease was released at terminal. No full317
 suite, required changed mapper, new profile, native execution or spacing cure is
 claimed. Independent source review and the separately coordinated current

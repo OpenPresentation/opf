@@ -63,7 +63,7 @@ original/native snapshots, request/report paths and hashes, self-consistent
 foreign helper replacements, saved bytes, fault stages and source changed at
 the final rebind. No production injection/test option was added.
 
-[Actual pure receipts](qualification.json) and lossless `pure-results.json.gz`
+Actual pure receipts and lossless `pure-results.json.gz`
 retain both results and pin source/protected bytes. The maintained11-path mapper
 passed exit0 in20.3s: fresh build/Biome/all7selectedchecksPASS, typesSKIP.
 Native acceptance is176PASS/0FAIL/12platformSKIP; gallery18/18+strict863fresh;

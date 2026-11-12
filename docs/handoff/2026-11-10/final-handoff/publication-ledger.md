@@ -4,7 +4,7 @@ All pushes are normal, without force. Frozen folded leaves were not modified. Th
 
 ## Current branches
 
-See [seven checked publication receipts](published-current-branches.json) and [four new drafts](created-resume-prs.json). They retain actual known failures and unrun gates. Canonical/staging final alignment is separately recorded in the closeout.
+See seven checked publication receipts and four new drafts. They retain actual known failures and unrun gates. Canonical/staging final alignment is separately recorded in the closeout.
 
 ## Recovery archives — NEVERMERGE
 
@@ -31,7 +31,7 @@ Six opaque site artifact/temp-source/dependency directories remain untouched/unr
 
 ## Local default checkouts
 
-[Fast-forward receipts](primary-checkout-sync.json) show the three clean site defaults updated to origin: Orgmain148/Gallerymain9d/DEVmaster4fed. No remote default branch was changed and no deployment was triggered. Use fresh own worktrees for new changes.
+Fast-forward receipts show the three clean site defaults updated to origin: Orgmain148/Gallerymain9d/DEVmaster4fed. No remote default branch was changed and no deployment was triggered. Use fresh own worktrees for new changes.
 
 ## Final inventory
 

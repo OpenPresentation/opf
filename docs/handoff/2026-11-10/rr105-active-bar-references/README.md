@@ -8,7 +8,7 @@ Final source checkpoint: `044fc7d6a4d2a92410e196e36be2aa32ca734ffb`. All **8 foc
 
 Coordinator-authorized restoration of nine exact-HEAD sparse historical input files (raw Git blob OID and SHA guards) allowed only the original failed sparse controls to be replayed: corpus35PASS, compressed-text1PASS, gallery8/9PASS. The remaining gallery freshness check still reports stale tracker JSON under the incomplete native evidence index. Its RED is retained; no tracker regeneration, warning-mode waiver or full mapper rerun occurred. The original official mapper result remains unchanged.
 
-See [qualification.json](qualification.json) and replay the offline [verify.mjs](verify.mjs) for raw failures, corrected setup controls, actual no-reference byte comparisons and representative outputs.
+See qualification.json and replay the offline verify.mjs for raw failures, corrected setup controls, actual no-reference byte comparisons and representative outputs.
 
 ## Product result
 

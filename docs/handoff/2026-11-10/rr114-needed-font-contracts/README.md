@@ -20,7 +20,7 @@ The coordinator's original full 519 aggregate stays RED: renderer stopped at gly
 
 ## Durable replay
 
-The lossless [packet](raw.json.gz) contains 93 records / 1,196,323 raw bytes: original root logs, own baseline and positive controls, setup failures, actual CLI output, one-slide whole-pack native contrast, source and built-module identities, all mapped logs and protected-tree equality. [receipt.json](receipt.json) keeps exact outcomes and source identity. The diagnostic SVG containing embedded font programs is hash-bound but excluded from upload; no font programs are published. This does not weaken the seven path-SVG equality assertions.
+The lossless packet contains 93 records / 1,196,323 raw bytes: original root logs, own baseline and positive controls, setup failures, actual CLI output, one-slide whole-pack native contrast, source and built-module identities, all mapped logs and protected-tree equality. receipt.json keeps exact outcomes and source identity. The diagnostic SVG containing embedded font programs is hash-bound but excluded from upload; no font programs are published. This does not weaken the seven path-SVG equality assertions.
 
 Run with Node 24: `node docs/handoff/2026-11-10/rr114-needed-font-contracts/verify.mjs`. It verifies every record, source blobs and unchanged protected objects. Source review, combined CI/managed golden review, fresh consumer and physical native acceptance remain separate. No additional package suite or aggregate retry was performed.
 

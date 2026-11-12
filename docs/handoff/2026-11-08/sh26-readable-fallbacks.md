@@ -109,7 +109,7 @@ composition-template snapshot; all other selected checks pass. All thirty
 maintained archive locks remain exact (Chartex31 + RR54 data42). No golden or
 fixture promotion was performed.
 
-The durable [review packet](../../evidence/sh26-readable-fallbacks-034/README.md)
+The durable review packet
 contains all twelve actually viewed paired sheets, thirty after panels, exact
 source/control hashes, complete raw failures and both mapped batches. Native
 qualification now uses thirteen complete-slide OPF subsets, at most three slides

@@ -8,4 +8,4 @@ The regression reads the actual YAML step and matrix, checks explicit shell/envi
 
 Vetoable decision: select the shell the existing script requires, preserving the advisory contract. This derived 0.34 fix does not mutate a folded branch or an active Release run.
 
-Required changed-scope check:82.0seconds;10steps pass, typecheck is unselected, and only existing strict gallery-tracker freshness fails (17/18controls). No warning-mode override or tracker regeneration. [Literal evidence](../../evidence/rr20-flake-bash/receipt.json) preserves all logs. Package/schema/example trees are byte-identical to the approved base.
+Required changed-scope check:82.0seconds;10steps pass, typecheck is unselected, and only existing strict gallery-tracker freshness fails (17/18controls). No warning-mode override or tracker regeneration. Literal evidence preserves all logs. Package/schema/example trees are byte-identical to the approved base.

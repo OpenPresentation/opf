@@ -489,7 +489,7 @@ describe("the bundled sources", () => {
 		for (const doc of sources.docs) assert.equal(doc.markdown, readFileSync(path.join(root, "docs", doc.slug + ".md"), "utf8").replaceAll("\r\n", "\n"), doc.slug);
 		// Reviewed v0.34 source4e03508b6:1,310,537 exact bytes over the same42 public pages.
 		// Accepted schema/chart/layout/viewer guidance accounts for growth; no maintainer or trimmed page.
-		// Same3% rounded headroom and exact prior/current page hashes: docs/handoff/2026-11-10/schema-decision-packet/mcp-docs-size-review.json.
+		// Same3% rounded headroom and exact prior/current page hashes: 6cb8f52aa8dc43e37af8d5a6eda2b5ef5ebcca04:docs/handoff/2026-11-10/schema-decision-packet/mcp-docs-size-review.json (read it with git show).
 		assert.ok(bytes < 1_350_000, `${bytes} bytes of documentation`);
 	});
 });

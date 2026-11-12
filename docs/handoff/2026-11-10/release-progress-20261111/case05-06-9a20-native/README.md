@@ -27,10 +27,10 @@ All three images within each native attempt were byte-identical according to the
 
 Case05:
 
-![Case05 exact native image](case05.png)
+
 
 Case06:
 
-![Case06 exact native image](case06.png)
+
 
 The older native03 failure, its transfer and all previous source/image records remain separate and unchanged. No broad 0.34, all-font, native editability or case09 result follows from this packet. Preparation of this metadata performed only local file identity/PNG structure reads and exact copying; no tests, builds, CI, native or Office execution occurred. Workstreams and burndown are unchanged. The coordinator will qualify the metadata in its next integrated delta.

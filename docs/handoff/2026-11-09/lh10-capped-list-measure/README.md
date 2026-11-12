@@ -19,7 +19,7 @@ The implemented fallback uses the existing whole-word fitter and keeps one narro
 
 All 35 entries, values, order and original pagination mappings remain exact. Continuation caps remain 24. No fit failure is added. The heading SVG groups and the full-size top 1280×190 pixel regions are exactly unchanged; a transient display impression is not a missing-heading finding.
 
-![Four before/after pages, with original unscaled PNG panels](pairs.png)
+
 
 The derivative sheet has eight native 320×180 panels. Every embedded panel's RGBA is independently checked against its source PNG. Source-bound full-size page-2 before/after PNGs, all eight SVGs/PNGs, geometry, mappings and the driver are in the lossless evidence archive.
 

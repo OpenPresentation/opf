@@ -19,14 +19,14 @@ Vetoable implementation decisions within the approved contract:
 - Reject nonfinite in-memory numbers with located semantic validation as well as schema validation, because the validator's number type alone accepts NaN/Infinity in some call paths.
 - Preserve uncertain mixed area/helper groups as all-data combo import with an explicit area-to-column diagnostic where the current OPF model cannot retain the native mixed representation. This is limited preservation, not parity.
 
-- Visual inspection found avoidable singleton overlay endpoint-label overhang. Full-plot horizontal overlay labels now align inward at their logical endpoint; native point labels remain centered. Numeric positions and spans are unchanged. Five pinned-font PNGs and geometry/hash evidence are kept in [chart-reference-lines-evidence](chart-reference-lines-evidence/render-evidence.json).
+- Visual inspection found avoidable singleton overlay endpoint-label overhang. Full-plot horizontal overlay labels now align inward at their logical endpoint; native point labels remain centered. Numeric positions and spans are unchanged. Five pinned-font PNGs and geometry/hash evidence are kept in chart-reference-lines-evidence.
 
 - Final-plot audit repaired table-aligned bar references after LH-115 alignment and moved label diagnostics to the final shared/aligned placement. Existing no-reference alignment remains covered. SVG dot uses the existing Stroke/DrawingML 1:3 pattern. The expanded focused/neighbor suite passes 44 tests after retaining/correcting a float equality assertion and an incorrect assumed area SVG tag. Coherent required check and PPTX/native remain pending.
 
 
 ## Broader local check and repair
 
-Original official `pnpm check:changed --base 169055e9b5431aab58d3cf16199bf9d2bc38af97` finished 16 passed/7 failed steps in 302.4s. [Original output](chart-reference-lines-evidence/mapped-check-01.log) is retained unchanged. It is not an aggregate-green result.
+Original official `pnpm check:changed --base 169055e9b5431aab58d3cf16199bf9d2bc38af97` finished 16 passed/7 failed steps in 302.4s. Original output is retained unchanged. It is not an aggregate-green result.
 
 Owned failures repaired: generated schema reference via maintained generator; generated validator reference plus 98-rule text/explain/corpus integration; new example embeds every catalog record and source inventory now 148; legacy combo-axis test updated for the newly shared axes; final combo plot binds the 400-weight measurer. The focused validation/schema/examples/core/render contract set passes 377 tests, and subsequent full `pnpm typecheck` passes. The original full core and render suites still need a coherent rerun after PPTX integration.
 
@@ -46,7 +46,7 @@ Final source integration removes the unused period-band color utility/export as 
 
 The complete PPTX contribution df3e0356351a6a3aa6a56a03b075325760217c6f was independently reviewed and normally merged into current core b4e1fd569729e6960f167b9d69be884c3d087911 at bde4c47e27aae2ef24997c5f3b933db714c7451a. The contribution branch is folded and frozen; qualification must use a new branch, never another push to that leaf. The final cleanup removes dead band-color APIs/callers and completes shared docs.
 
-The durable [PPTX receipt verifier](chart-reference-lines-pptx/verify.mjs) passes: 70 records, 485,025 expanded bytes; historical exact runtime6c426406 has 38 focused controls passing. The earlier 37-pass receipt and original genuine before-RED/faulty-fixture corrections are retained separately. This verifier does not claim the combined core revision was run. Core/render current dedicated suite passes 20 tests; the earlier broader repaired contract set passed 377, and subsequent typecheck passed before final cleanup.
+The durable PPTX receipt verifier passes: 70 records, 485,025 expanded bytes; historical exact runtime6c426406 has 38 focused controls passing. The earlier 37-pass receipt and original genuine before-RED/faulty-fixture corrections are retained separately. This verifier does not claim the combined core revision was run. Core/render current dedicated suite passes 20 tests; the earlier broader repaired contract set passed 377, and subsequent typecheck passed before final cleanup.
 
 Scheduling is binding: root67306 and then a bounded quiet performance measurement window precede another heavy command. Run exactly one official combined mapped check after coordinator go-ahead. The PPTX contributor may normally merge this combined head into a NEW qualification branch and run that one gate; record exact head/tree and preserve all original output. The lead reuses identical-source results instead of repeating unchanged full suites. All native Office/CI/golden/release acceptance remains coordinator-owned. No release under this feature task.
 

@@ -21,7 +21,7 @@ Existing approved explicit chart reference lines and signed positioning do not n
 
 ## Concrete JSON
 
-Every snippet here is represented as a complete validated document in [examples.json](examples.json).
+Every snippet here is represented as a complete validated document in examples.json.
 
 S1 keeps the size of an existing fixed badge:
 
@@ -49,7 +49,7 @@ The table alignment `style.align:"left"` becomes `"start"`; `style.borders.left`
 
 ## Executed evidence
 
-[Results](results.json) record Node 24.21.0, Ajv 8.20.0 and ajv-formats 3.0.1, plus exact schema and source SHA-256 identities. All **20 complete documents** from the previous report validate against their declared schema: current canonical `7618e916dacc166463cddf5f2ea029f523bbe51d`, or proposed `c7d396520c324c2d448757e906c00cf326dbd99e`. A misspelled `design.titleAlignmnt` is accepted by current schema and refused by the proposed schema. This establishes schema behavior only; it does not establish improved diagnostics or runtime behavior.
+Results record Node 24.21.0, Ajv 8.20.0 and ajv-formats 3.0.1, plus exact schema and source SHA-256 identities. All **20 complete documents** from the previous report validate against their declared schema: current canonical `7618e916dacc166463cddf5f2ea029f523bbe51d`, or proposed `c7d396520c324c2d448757e906c00cf326dbd99e`. A misspelled `design.titleAlignmnt` is accepted by current schema and refused by the proposed schema. This establishes schema behavior only; it does not establish improved diagnostics or runtime behavior.
 
 The exact unadopted `legacy-tags.js` reproduces **six actual corruption cases**: path-like text, code source, a table cell, an extension string, an extension's `titleAlignment` value, and an extension's path-like object key. The last two are new controls. The module rewrites both arbitrary keys and arbitrary values, so merely exempting text strings would leave silent data corruption. Known structural caption paths still upgrade and the existing footer-key collision control preserves both spellings. The probe intentionally records the unchanged defective implementation; success of the probe means the finding reproduced, not that a repair passed.
 

@@ -4,7 +4,7 @@
 
 ## Public OPF — all46current open PRs
 
-Full heads, base refs and status snapshots: [currentJSON](opf-current-inventory.json). The canonical final handoff may add documentation after this exact snapshot; its finalSHA is in the closeout and per-repo recovery snapshot. CI rollup is a dated observation, not a maintained required-all acceptance gate.
+Full heads, base refs and status snapshots: currentJSON. The canonical final handoff may add documentation after this exact snapshot; its finalSHA is in the closeout and per-repo recovery snapshot. CI rollup is a dated observation, not a maintained required-all acceptance gate.
 
 | PR / title | Draft | Workstream | Head | Disposition | CI snapshot |
 | --- | --- | --- | --- | --- | --- |

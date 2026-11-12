@@ -8,7 +8,7 @@ import {toSvg,resolvePresentation,defaultCatalog} from '../packages/render/test/
 import {toPng} from '../packages/render/dist/png.js';
 import {loadFonts} from '../packages/render/dist/fonts-node.js';
 import {toPptx} from '../packages/pptx/test/helpers/default-catalog.mjs';
-const out=path.resolve(process.argv[2]??'artifacts/sh25-native'),evidence=path.resolve(process.argv[3]??'docs/evidence/sh25-chart-points');
+const out=path.resolve(process.argv[2]??'artifacts/sh25-native'),evidence=path.resolve(process.argv[3]??'artifacts/sh25-chart-points');
 assert.ok(process.argv[4], 'Pass an explicit current baseline JSON as argument 4; do not substitute the historical 67698 baseline');
 const baselinePath=path.resolve(process.argv[4]);
 const baseline=JSON.parse(await readFile(baselinePath,'utf8')),hash=value=>createHash('sha256').update(value).digest('hex');
