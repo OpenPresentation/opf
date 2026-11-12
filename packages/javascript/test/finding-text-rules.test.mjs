@@ -23,9 +23,10 @@ const GOLDEN = {
   "reference-id-duplicate": ["Two references use the id `a` (references 1 and 2).", "give the later one another id (for example `a-2`); runs cite references by id."],
   "cite-unknown-reference": ["`cite: \"smth\"` names a reference that does not exist.", "did you mean `smith`? Or add a reference with the id `smth` under `references`."],
   "cite-unsupported-location": ["`cite` and `footnote` are drawn only in titles, text, bullets, list items and quotes, not in table cells.", "move the cited run into a text block, or remove the citation here."],
-  "caption-unsupported-payload": ["A `caption` belongs to one image, chart, table or video; this block is text.", "put the `caption` on the image, chart, table or video it describes, or remove it."],
+  "caption-unsupported-payload": ["A `caption` belongs to one image, chart, table, video or diagram; this block is text.", "put the `caption` on the image, chart, table, video or diagram it describes, or remove it."],
   "image-option-unsupported-payload": ["`fit` only applies to pictures; this block is a chart.", "remove `fit`, or move it onto an image."],
   "shape-option-unsupported-payload": ["`fill` only applies to shapes; this block is text.", "remove `fill`, or make the block a shape with `shape` (a preset such as roundRect) or `path`."],
+  "shape-anchor-size-unit": ["`at.width: 400` is a fraction of the target (400 times its width), not pixels.", "rename `width` to `widthPx` if 400 is a size in pixels, or write a fraction such as 1.08."],
   "shape-adjust-unknown": ["roundRect has no adjust value `adj1`; it has `adj`.", "use `adj`, or remove `adj1`."],
   "shape-adjust-range": ["`adjust.adj` of roundRect is 0.8, outside 0 to 0.5, so the preset's default is drawn.", "set it between 0 to 0.5."],
   "shape-link-hidden": ["This shape is hidden, so its `link` can never be clicked.", "remove `hidden`, or remove the `link`."],
@@ -104,11 +105,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 98 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 99 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 98);
+	assert.equal(RULE_IDS.length, 99);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {

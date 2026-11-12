@@ -180,7 +180,7 @@ export function issueFinding(
 	if (typedName !== undefined && nearest[0]?.value === logicalName(typedName) && nearest[0].value !== typedName)
 		help = `Write ${JSON.stringify(nearest[0].value)}: layout words follow the deck's direction, so the sides are "start" and "end", not "left" and "right".`;
 	else if (typedName !== undefined && typeof nearest[0]?.value === 'string' && nearest[0].value.startsWith(typedName))
-		help = `Write ${JSON.stringify(nearest[0].value)}: ${JSON.stringify(typedName)} is not a field of this object.`;
+		help = `Write ${JSON.stringify(nearest[0].value)} instead; ${JSON.stringify(typedName)} is not a field of this object.`;
 	return finding(ruleId, {
 		...(severity ? { severity } : {}),
 		path,
@@ -582,7 +582,8 @@ function collapseAuthoringShapes(document: unknown, findings: Finding[]): void {
 	for (const entry of findings) {
 		if (!schema(entry)) continue;
 		const at = /^(.*\/fill)(?:\/[^/]+)?$/.exec(entry.path)?.[1];
-		if (!at || fills.has(at)) continue;
+		// A table cell's `style.fill` is a color reference, not a shape fill; its finding stays the schema's own.
+		if (!at || fills.has(at) || at.endsWith('/style/fill')) continue;
 		const fill = valueAt(at);
 		if (!isRecord(fill) || Object.hasOwn(fill, 'lighten') || Object.hasOwn(fill, 'darken')) continue;
 		const solid = (fill.type === 'solid' || fill.type === undefined) && fill.color !== undefined && !Object.hasOwn(fill, 'gradient') && !Object.hasOwn(fill, 'pattern');
@@ -705,7 +706,12 @@ export function engineFindings(document: unknown, engine: SchemaCheckResult, ena
 	const findings: Finding[] = [];
 	for (const issue of engine.errors) {
 		const ruleId = issueRuleId(issue);
-		if (enabled(ruleId)) findings.push(issueFinding(issue, ruleId));
+		if (!enabled(ruleId)) continue;
+		const found = issueFinding(issue, ruleId);
+		// A semantic error that names the one value to write (`en-UK` for `en-GB`) carries it as a patch.
+		if (issue.keyword === 'opf' && typeof issue.params.replacement === 'string' && found.fixes === undefined)
+			found.fixes = [{ id: 'use-replacement', title: `Use ${JSON.stringify(issue.params.replacement)}`, kind: 'patch', safe: false, patch: [{ op: 'replace', path: found.path, value: issue.params.replacement }] }];
+		findings.push(found);
 	}
 	collapseChartShape(document, findings);
 	collapseAuthoringShapes(document, findings);
@@ -731,6 +737,11 @@ export function engineFindings(document: unknown, engine: SchemaCheckResult, ena
 		const found = issueFinding(issue, ruleId, 'presentation', '', 'document', code === 'variable-group-omitted' ? 'info' : 'warning');
 		const help = HELP[code];
 		if (help) found.help = help;
+		if (code === 'shape-anchor-size-unit') {
+			const key = String(issue.params.key), pixelKey = String(issue.params.pixelKey);
+			found.help = `Did you mean "${pixelKey}"? ${JSON.stringify(key)} is a fraction of the target block (1 is its own ${key}); a size in reference pixels, as 0.33 wrote it, is ${JSON.stringify(pixelKey)}. Apply fixes[0] to rename the key and keep the value, or write a fraction.`;
+			found.fixes = [{ id: `rename-to:${pixelKey}`, title: `Rename ${key} to ${pixelKey} (the value is pixels)`, kind: 'patch', safe: false, patch: [{ op: 'move', from: found.path, path: found.path.slice(0, found.path.length - key.length) + pixelKey }] }];
+		}
 		findings.push(found);
 	}
 	return findings;

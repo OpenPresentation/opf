@@ -39,7 +39,7 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { references: [{ id: "gartner", text: "Gartner, 2026" }], slides: [{ title: "Market", text: [{ text: "EMEA grew 12%", cite: "gartner" }], table: { columns: ["Region", "Growth"], rows: [["EMEA", "12%"]] } }] },
   ),
   "opf/caption-unsupported-payload": ex(
-    "Put the `caption` on the image, chart, table or video it describes, or remove it.",
+    "Put the `caption` on the image, chart, table, video or diagram it describes, or remove it.",
     { title: "Revenue", blocks: [{ text: "Revenue grew", caption: "Source: finance" }] },
     { title: "Revenue", blocks: [{ chart: CHART, caption: "Source: finance" }] },
   ),
@@ -67,6 +67,11 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     "Show the shape, or drop its link: a hidden shape cannot be clicked.",
     { title: "Plan", blocks: [{ shape: "rect", text: "Pricing", link: "https://example.com/pricing", hidden: true }] },
     { title: "Plan", blocks: [{ shape: "rect", text: "Pricing", link: "https://example.com/pricing" }] },
+  ),
+  "opf/shape-anchor-size-unit": ex(
+    "In `at`, `width` and `height` are fractions of the block; a size in pixels is `widthPx` or `heightPx`.",
+    { title: "Team", blocks: [{ id: "photo", image: IMG("team") }], shapes: [{ shape: "ellipse", text: "New", at: { block: "photo", edge: "top", width: 160, height: 64 } }] },
+    { title: "Team", blocks: [{ id: "photo", image: IMG("team") }], shapes: [{ shape: "ellipse", text: "New", at: { block: "photo", edge: "top", widthPx: 160, heightPx: 64 } }] },
   ),
   "opf/shape-anchor-missing": ex(
     "Name a block of the slide in `at.block` (give the block an `id`), or place the shape by `x`, `y`, `width` and `height`.",

@@ -645,12 +645,34 @@ function subtreeVariables(value: unknown, path: string, context: Context, found 
  * keeps it and reports the same info, so a template says which groups go when it is filled without them.
  */
 /** The message of `variable-group-omitted` for the group's variable ids. */
-function groupOmittedMessage(ids: readonly string[]): string {
+function groupOmittedMessage(ids: readonly string[], anchored: readonly string[] = []): string {
   const names = ids.map((id) => `'${id}'`), one = ids.length === 1;
   const list = one ? names[0] : `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`;
+  // Double quotes: the finding text reads the single-quoted names as variable ids.
+  const shapes = anchored.length ? ` An overlay shape or connector attached to ${anchored.map((id) => `"${id}"`).join(", ")} has nothing to attach to then and is not drawn (opf/shape-anchor-missing, opf/connector-end-missing).` : "";
   return one
-    ? `This group uses only the optional variable ${list}, which has no value, so the whole group is left out: its pictures, cards and other text go with it. Give ${list} a value to draw the group.`
-    : `This group uses only the optional variables ${list}, which have no value, so the whole group is left out: its pictures, cards and other text go with them. Give one of them a value to draw the group.`;
+    ? `This group uses only the optional variable ${list}, which has no value, so the whole group is left out: its pictures, cards and other text go with it.${shapes} Give ${list} a value to draw the group.`
+    : `This group uses only the optional variables ${list}, which have no value, so the whole group is left out: its pictures, cards and other text go with them.${shapes} Give one of them a value to draw the group.`;
+}
+
+/** The ids a group (and the blocks inside it) carries that an overlay shape or connector of the same slide is attached to. */
+function anchoredIds(value: Record<string, unknown>, path: string, context: Context): string[] {
+  const slide = isRecord(context.doc) && Array.isArray(context.doc.slides) ? context.doc.slides[Number(/^\/slides\/(\d+)/.exec(path)?.[1])] : undefined;
+  if (!isRecord(slide) || !Array.isArray(slide.shapes) || !slide.shapes.length) return [];
+  const own = new Set<string>();
+  const collect = (node: unknown, depth: number): void => {
+    if (!isRecord(node) || depth > 64) return;
+    if (typeof node.id === "string") own.add(node.id);
+    if (Array.isArray(node.blocks)) for (const child of node.blocks) collect(child, depth + 1);
+  };
+  collect(value, 0);
+  const named = new Set<string>();
+  for (const shape of slide.shapes) {
+    if (!isRecord(shape)) continue;
+    const refs = [isRecord(shape.at) ? shape.at.block : undefined, ...(isRecord(shape.connector) ? [shape.connector.from, shape.connector.to] : [])];
+    for (const ref of refs) if (typeof ref === "string" && own.has(ref)) named.add(ref);
+  }
+  return [...named];
 }
 
 function omittedGroup(value: Record<string, unknown>, path: string, context: Context): boolean {
@@ -664,7 +686,7 @@ function omittedGroup(value: Record<string, unknown>, path: string, context: Con
   const ids = [...used.keys()];
   // The resolution does not walk an omitted group, so its uses are recorded here (no variable-unused); the validation view walks it.
   if (!context.shape) for (const uses of used.values()) context.uses.push(...uses);
-  diag(context, { code: "variable-group-omitted", severity: "info", path, id: ids[0] as string, message: groupOmittedMessage(ids) }, `grp:${path}`);
+  diag(context, { code: "variable-group-omitted", severity: "info", path, id: ids[0] as string, message: groupOmittedMessage(ids, anchoredIds(value, path, context)) }, `grp:${path}`);
   return true;
 }
 

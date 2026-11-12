@@ -15,6 +15,7 @@ import { codeHighlightLines } from "./code-highlight.js";
 import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
 import { numberingFindings } from "./numbering.js";
+import { runsOf, textValues } from "./rule-content.js";
 import { schemaEngine } from "#schema-engine";
 import { schemas, type SchemaName } from "./schemas.js";
 import { bestMatchErrors, type UnionError } from "./union-errors.js";
@@ -245,6 +246,38 @@ function isEnUkTag(value: unknown): boolean {
   return typeof value === "string" && value.toLowerCase() === "en-uk";
 }
 
+const EN_UK_MESSAGE = "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag";
+
+// The deck, a slide and a text run all author a language tag; 'en-UK' is the same error wherever it is written.
+function enUkIssues(language: unknown, path: string): ValidationIssue[] {
+  if (isEnUkTag(language)) return [semanticIssue(path, EN_UK_MESSAGE, { replacement: "en-GB" })];
+  if (isRecord(language) && isEnUkTag(language.bcp47)) return [semanticIssue(`${path}/bcp47`, EN_UK_MESSAGE, { replacement: "en-GB" })];
+  return [];
+}
+
+/** The largest anchored `width` or `height` still read as a fraction of the target; the format documents 1 and 1.08. */
+export const OVERLAY_ANCHOR_FRACTION_MAX = 4;
+const OVERLAY_ANCHOR_PIXEL_MAX = 1280;
+
+// 0.33 wrote an anchored overlay size in reference pixels under `width` and `height`; 0.34 reads them as fractions, so an old deck still validates.
+function overlayAnchorSizeWarnings(value: unknown): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  if (!isRecord(value) || !Array.isArray(value.slides)) return issues;
+  value.slides.forEach((slide, index) => {
+    if (!isRecord(slide) || !Array.isArray(slide.shapes)) return;
+    slide.shapes.forEach((entry, shapeIndex) => {
+      if (!isRecord(entry) || !isRecord(entry.at)) return;
+      for (const key of ["width", "height"] as const) {
+        const size = entry.at[key];
+        const pixelKey = `${key}Px`;
+        if (typeof size !== "number" || !(size > OVERLAY_ANCHOR_FRACTION_MAX && size <= OVERLAY_ANCHOR_PIXEL_MAX) || hasOwn(entry.at, pixelKey)) continue;
+        issues.push(semanticIssue(`/slides/${index}/shapes/${shapeIndex}/at/${key}`, `at.${key} is ${size}, a fraction of the target (${size} times its ${key}); a size in reference pixels is ${pixelKey}`, { code: "shape-anchor-size-unit", key, pixelKey, size }));
+      }
+    });
+  });
+  return issues;
+}
+
 function presentFields(value: Record<string, unknown>, fields: readonly string[]): string[] {
   return fields.filter((field) => hasOwn(value, field));
 }
@@ -295,8 +328,8 @@ function validateContentPayload(
   const explicitType = value.type;
   const payloadFields = presentFields(value, rootPayloadFields);
   const hasBlocks = hasOwn(value, "blocks");
-  // RR-34: a caption belongs to exactly one image, chart, table or video payload of this host.
-  const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table or video payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
+  // RR-34: a caption belongs to exactly one image, chart, table, video or diagram payload of this host.
+  const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table, video or diagram payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
   // FA-22: image options on anything but an image payload, and a placement anywhere but a top-level block.
   const imageOptionIssues = (reason: string, params: Record<string, unknown> = {}, except: ReadonlySet<string> = new Set()) => {
     for (const field of imageOptionFields) if (hasOwn(value, field) && !except.has(field)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on an image payload; ${reason}`, { code: "image-option-unsupported-payload", field, ...params }));
@@ -530,15 +563,7 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
 
   const issues: ValidationIssue[] = [];
 
-  if (isEnUkTag(value.language)) {
-    issues.push(semanticIssue("/language", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
-      replacement: "en-GB",
-    }));
-  } else if (isRecord(value.language) && isEnUkTag(value.language.bcp47)) {
-    issues.push(semanticIssue("/language/bcp47", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
-      replacement: "en-GB",
-    }));
-  }
+  issues.push(...enUkIssues(value.language, "/language"));
 
   issues.push(...deckMetadataIssues(value));
   // 'speakers' is the one built-in variable name without a dot, so a declared variable may not take it.
@@ -588,6 +613,9 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
         if (checked) for (const issue of shapeIssues(checked, (...keys) => keys.reduce((at, key) => pathFor(at, key), entryPath))) issues.push(semanticIssue(issue.path, issue.message, { code: issue.code, ...issue.params }));
       });
       for (const issue of overlayIssues(slide, slidePath, value, canvasForOverlays(slide, index))) issues.push(semanticIssue(issue.path, issue.message, { ...(issue.code ? { code: issue.code } : {}), ...issue.params }));
+      issues.push(...enUkIssues(slide.language, `${slidePath}/language`));
+      for (const text of textValues(slide, slidePath))
+        if (typeof text.value !== "string") for (const run of runsOf(text)) issues.push(...enUkIssues(run.style.language, `${run.path}/language`));
       issues.push(...validateSlideRegions(slide, slidePath));
       const payloadTableIssues = (payload: Record<string, unknown>, path: string): void => {
         if (isRecord(payload.table)) for(const issue of tableGrid(payload.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
@@ -1124,6 +1152,7 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
     errors.push(...data.errors);
     warnings.push(...presentationReferenceWarnings(subject, options.catalogs));
     warnings.push(...data.warnings);
+    warnings.push(...overlayAnchorSizeWarnings(subject));
     warnings.push(...variableIssues.warnings);
   } else if (resolved.schemaName === "language") {
     errors.push(...validateLanguageSemantics(value));

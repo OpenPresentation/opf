@@ -253,7 +253,7 @@ function declareRegions(analysis, regions, scope) {
   }
 }
 
-// `region` is a name or names joined by `+` and `:` (`left`, `top:left`, `middle+bottom`): each name is a use.
+// `region` is a name or names joined by `+` and `:` (`start`, `top:start`, `middle+bottom`): each name is a use.
 function regionTokens(analysis, node, layout) {
   if (!layout.identity) return;
   const raw = analysis.text.slice(node.cFrom, node.cTo);

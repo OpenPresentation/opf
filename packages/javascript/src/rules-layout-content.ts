@@ -209,7 +209,7 @@ const contentRules: ValidationRule[] = [
 		run(context) {
 			for (const slide of context.slides)
 				for (const tv of slide.texts) {
-					if (['table', 'table-header', 'list-description'].includes(tv.role)) continue;
+					if (['table', 'table-header', 'list-description', 'callout'].includes(tv.role)) continue;
 					if (plainText(tv.value).trim() !== '') continue;
 					context.report(emptyTextRule, {
 						path: tv.path,

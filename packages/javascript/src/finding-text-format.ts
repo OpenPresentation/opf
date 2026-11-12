@@ -104,8 +104,8 @@ const captionUnsupportedPayload: RuleText = (finding) => {
   const kind = type ?? (/a group cannot carry one/.test(finding.message) ? "group" : undefined);
   const is = kind ? kindPhrase(kind) : "not one of those";
   return {
-    message: `A ${code("caption")} belongs to one image, chart, table or video; this block is ${is}.`,
-    next: `put the ${code("caption")} on the image, chart, table or video it describes, or remove it.`,
+    message: `A ${code("caption")} belongs to one image, chart, table, video or diagram; this block is ${is}.`,
+    next: `put the ${code("caption")} on the image, chart, table, video or diagram it describes, or remove it.`,
   };
 };
 
@@ -156,6 +156,15 @@ const shapeLinkHidden: RuleText = () => ({
   message: "This shape is hidden, so its `link` can never be clicked.",
   next: "remove `hidden`, or remove the `link`.",
 });
+
+const shapeAnchorSizeUnit: RuleText = (finding) => {
+  const { key, pixelKey, size } = params(finding);
+  if (typeof key !== "string" || typeof pixelKey !== "string") return undefined;
+  return {
+    message: `${code(`at.${key}: ${String(size)}`)} is a fraction of the target (${String(size)} times its ${key}), not pixels.`,
+    next: `rename ${code(key)} to ${code(pixelKey)} if ${String(size)} is a size in pixels, or write a fraction such as 1.08.`,
+  };
+};
 
 const shapeAnchorMissing: RuleText = (finding) => {
   const { id, known } = params(finding);
@@ -708,6 +717,7 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/shape-adjust-unknown": shapeAdjustUnknown,
   "opf/shape-adjust-range": shapeAdjustRange,
   "opf/shape-link-hidden": shapeLinkHidden,
+  "opf/shape-anchor-size-unit": shapeAnchorSizeUnit,
   "opf/shape-anchor-missing": shapeAnchorMissing,
   "opf/connector-end-missing": connectorEndMissing,
   "opf/layout-placeholder-group": layoutPlaceholderGroup,
