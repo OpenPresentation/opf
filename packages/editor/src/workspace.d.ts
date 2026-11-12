@@ -380,7 +380,7 @@ export interface OpfEditorOptions {
   /**
    * Text for the default layouts (`review`, `design`, `find`, `undo`, `redo`, `slideView`, `inspector`) and the accessible names of the slide row's
    * two landmarks (`navigator`, default "Slide navigation"; `thumbnails`, default "Slides"). CE-28, the toolbar: `title` (the name of the deck
-   * title field, default "Presentation name"), `untitled` (its placeholder, default "Untitled presentation"), `expand` and `collapse` (the expand
+   * title field, default "Presentation name"), `untitled` (its placeholder, default "Untitled presentation"), `titleSave` and `titleCancel` (the buttons shown while the name is edited, default "Save" and "Cancel"), `expand` and `collapse` (the expand
    * button, default "Expand editor" and "Exit expanded editor"), `more` (the ⋯ button, default "More"), `moreMenu` (its menu, default "More
    * actions") and `counter` (the toolbar counter's landmark, default "Slide navigation").
    */
@@ -410,7 +410,7 @@ export interface OpfEditorOptions {
 }
 
 /** CE-28: the labels of the toolbar's parts. */
-export type OpfEditorChromeLabel = "title" | "untitled" | "expand" | "collapse" | "more" | "moreMenu" | "counter" | "exportItem";
+export type OpfEditorChromeLabel = "title" | "untitled" | "titleSave" | "titleCancel" | "expand" | "collapse" | "more" | "moreMenu" | "counter" | "exportItem";
 
 export interface OpfEditorSourceState {
   /** `valid`, `invalid` (the document has errors) or `syntax` (the text does not read as a document in `format`). */

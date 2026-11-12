@@ -1296,6 +1296,7 @@ export function createOpfEditor(element, options = {}) {
         editor: ui,
         ...(chromeLabels().untitled ? { placeholder: chromeLabels().untitled } : {}),
         ...(chromeLabels().title ? { label: chromeLabels().title } : {}),
+        labels: { ...(chromeLabels().titleSave ? { save: chromeLabels().titleSave } : {}), ...(chromeLabels().titleCancel ? { cancel: chromeLabels().titleCancel } : {}) },
         readOnly,
         density,
         beforeCommit: () => inSync && commitPending(),
@@ -1713,8 +1714,8 @@ export function createOpfEditor(element, options = {}) {
     const add = (id, label, keys, group) => list.push({ id, label, keys, group });
     if (listeners.get("save")?.size && layout !== "viewer" && options.shortcuts !== false) add("save", "Save", ["Mod-s"], "Edit");
     if (deckTitle && !readOnly) {
-      add("title-commit", "Rename: keep the name typed in the title", ["Enter"], "Presentation name");
-      add("title-cancel", "Rename: put the name back", ["Escape"], "Presentation name");
+      add("title-commit", "Rename: save the name typed in the title", ["Enter"], "Presentation name");
+      add("title-cancel", "Rename: cancel and put the name back", ["Escape"], "Presentation name");
     }
     if (expandCtl) add("expand-exit", "Leave the expanded editor", ["Escape"], "Window");
     return list;
