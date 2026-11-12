@@ -1,0 +1,9 @@
+{
+  "scope": "SOURCE ONLY independent peer acceptance; no execution",
+  "patchSha256": "68e6574d0ab690fe80ff0c04f304d9ea803f5916b1f7bb1e507c5ffafe09c12b",
+  "sourcesVerified": 3,
+  "protectedVerified": 10,
+  "verdict": "ACCEPTED; no concrete blocker",
+  "reason": "Child-only actual module.createRequire.resolve interception before loader import, exact armed/activation/RobotoMono condition and unchanged other delegation. syncBuiltinESMExports retains actual named boundary. Original copied-buffer tamper and all view/cache/activation/pending/width assertions and3scenario20s roster preserved; positive true block-count and explicit ensure-return/typed-code facts strengthen refusal proof. No production loader, font bytes, pins, budgets or aliases changed.",
+  "execution": "No project imports/syntax/tests/build/install/network/PS/Office"
+}
