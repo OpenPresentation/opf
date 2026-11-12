@@ -2,11 +2,15 @@
   "schema": 1,
   "suites": {
     "browser": {
-      "description": "The deck view (show_deck's MCP App) in Chromium under an MCP Apps host's sandbox and restrictive default CSP; the CI mcp job's browser leg.",
+      "description": "The deck view (show_deck's and open_studio's MCP App) in Chromium under an MCP Apps host's sandbox and restrictive default CSP: the viewer itself, and its app tools, display modes, layout, downloads, messages and instances behind a stand-in host that behaves as Claude's MCP Apps documentation describes; the CI mcp job's browser leg.",
       "tests": [
         {
           "id": "browser:deck-app-browser",
           "command": "node test/deck-app-browser.mjs"
+        },
+        {
+          "id": "browser:deck-app-tools-browser",
+          "command": "node test/deck-app-tools-browser.mjs"
         }
       ]
     }
