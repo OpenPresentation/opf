@@ -9,6 +9,8 @@
  * own group first.
  */
 
+import type { IconSetLoader } from './icons.js';
+
 /** The content kinds a catalog group holds, keyed by id. */
 export const catalogKinds = ['layouts', 'themes', 'colorSchemes', 'fontSchemes', 'narratives', 'audiences', 'purposes', 'tones'] as const;
 export type CatalogKind = (typeof catalogKinds)[number];
@@ -28,9 +30,10 @@ export interface Catalog extends CatalogRecords {
   readonly source: string;
   /**
    * LH-14: the icon sets an `icon` names as `<set>:<name>`, by set id: each the set's record (opf-icon-set/v1 without `$schema`
-   * and `id`), or a function that loads it (`galleryIconSets` of @openpresentation/gallery/icon-sets: each set loads on first use; `ensureIcons` calls it). See icons.ts.
+   * and `id`), or a function that loads it (`galleryIconSets()` of @openpresentation/gallery/icon-sets: `ensureIcons` calls it with
+   * `{ icons: [names] }`, the icons a deck draws, and the gallery reads only those; a search asks `{ tags: true }`). See icons.ts.
    */
-  readonly iconSets?: Readonly<Record<string, Readonly<Record<string, unknown>> | (() => Promise<unknown>)>>;
+  readonly iconSets?: Readonly<Record<string, Readonly<Record<string, unknown>> | IconSetLoader>>;
 }
 /** The one option every entry point that resolves references accepts. */
 export interface CatalogOptions {

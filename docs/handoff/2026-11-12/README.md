@@ -11,77 +11,117 @@ branch `codex/handoff-034-20261112` (never merged); this file states what was ve
 | --- | --- |
 | v0.33.0 | Published on 2026-11-08: all seven packages on npm at `latest` with provenance, `gitHead` equal to tag `v0.33.0` (`26fd4de9`), GitHub release present |
 | pptx.gallery, openpresentation.org | On 0.33.0 (`main` pins 0.33.0; the hosted `/mcp` endpoint and viewer are on openpresentation.org `main`) |
-| pptx.dev | Still on 0.32.1 at takeover. The old adoption pull requests (#200, #208, #209, #211) bury the change under evidence files and workflow rewrites; a clean adoption pull request replaces them (see Sites) |
-| v0.34 source | `codex/integration-034` (pull request #1225) plus the four test-only commits of `codex/rr-034-next-source-20261112` (`6cb8f52`), then the review fixes listed below |
+| pptx.dev | `master` pinned 0.32.1 at takeover and production served an older build (the 0.32.0 diagram change): see Sites |
+| v0.34 source | `codex/integration-034` (pull request #1225): the previous agent's assembly (`6cb8f52`) plus the review fixes and the additions listed below |
 
 ## What v0.34.0 contains
 
-Wave 2 layouts (LH-46, LH-69, LH-102, LH-30, LH-80, LH-75, LH-73, LH-10, LH-41, LH-101), duration timelines (LH-16), image
-callouts (LH-34), a slide-level language with its complex-script font (LH-106, LH-178), light named fonts (LH-177), localized
-timeline status words (LH-121), explicit chart reference lines (LH-110), Graphviz DOT and PlantUML (SH-12, SH-13), SmartArt
-import (SH-08), added SmartArt entries (SH-23), inverted pyramids (SH-24, issue #1128), overlays anchored to a chart data point
-(SH-25, issue #1113), readable diagram fallbacks (SH-26), org chart, hierarchy and Venn layouts (SH-21, as OPF layouts with
-editable shapes in PPTX), native wrapped titles and body wrap margins (issues #1127, #1089, #1091), the format-audit schema
-renames (FA-34 to FA-38), LibreOffice qualification tooling (RR-106, still experimental), the editor browser suites on Windows
-(LH-179), the MCP bundle attached to releases (RR-107) and dependency updates.
+From the previous assembly: wave 2 layouts (LH-46, LH-69, LH-102, LH-30, LH-80, LH-75, LH-73, LH-10, LH-41, LH-101), duration
+timelines (LH-16), image callouts (LH-34), a slide-level language with its complex-script font (LH-106, LH-178), light named fonts
+(LH-177), localized timeline status words (LH-121), explicit chart reference lines (LH-110), Graphviz DOT and PlantUML (SH-12,
+SH-13), SmartArt import (SH-08), added SmartArt entries (SH-23), inverted pyramids (SH-24, issue #1128), overlays anchored to a
+chart data point (SH-25, issue #1113), readable diagram fallbacks (SH-26), org chart, hierarchy and Venn layouts (SH-21, as OPF
+layouts with editable shapes in PPTX), native wrapped titles and body wrap margins (issues #1127, #1089, #1091), the format-audit
+schema renames (FA-34 to FA-38), LibreOffice qualification tooling (RR-106, still experimental), the editor browser suites on
+Windows (LH-179), the MCP bundle attached to releases (RR-107) and dependency updates.
 
-Updating a deck from 0.33: see the migration page added with the schema review fixes (run `lang` becomes `language`; physical
-`left`/`right` become `start`/`end` where the schema changed; anchored overlay pixel sizes move to `widthPx`/`heightPx`; closed
-objects reject unknown keys; a gradient background needs `stops`; reference lines are authored as `chart.referenceLines`).
+Added on 2026-11-12 at the owner's direction:
+
+- **MCP Apps in the viewer (RR-111).** The viewer registers `read_deck`, `select_slide` and `edit_deck`; the server tool that opens
+  it for editing is `open_editor`; a session is derived from the deck's name.
+- **A smaller viewer.** The precompiled validators and the unused locales were cut; the viewer resource has about 1 MB of headroom
+  under the 10 MiB JSON-RPC frame, asserted by a test ([mcp-viewer-size.md](../../programs/release-readiness/mcp-viewer-size.md)).
+- **Icon sets as files (RR-63).** `@openpresentation/gallery` ships each icon as its own file plus one whole-set file per set;
+  `galleryIconSets(load?)` reads only the icons a deck uses, `fetchIcons(base)` reads them over HTTP, and a failed load never
+  blocks drawing. No bundle carries a whole icon library unless the host asks for it. See `docs/icons.md`, "Loading".
+- **Numbers in the language's own digits (LH-106).** One table generated from CLDR 48 replaces render-time `Intl`; a `-u-nu-`
+  language tag overrides the digits. See `docs/design-resolution.md`.
+- **The agreed schema-review items** (from the branch `claude/elegant-bell-2g5ks5`): `opf/chart-reference-unsupported-type`,
+  `opf/shape-off-slide`, overlay sizes capped at 8, emphasis kept with reference lines, `ColorScheme.name`.
+- **Evidence out of the tree (RR-20).** See the decision below.
+
+Updating a deck or a host from 0.33: [docs/migrations/0.34.md](../../migrations/0.34.md).
 
 ## Acceptance done on 2026-11-12
 
-1. **Code review.** Six independent reviews of the whole diff from `main`: schema and validation; layout and chart geometry; the
+1. **Code review.** Six independent reviews of the whole diff from `main` (schema and validation; layout and chart geometry; the
    DOT and PlantUML readers; the PPTX exporter and importer; renderer, editor, MCP, CLI and gallery; workflows, scripts and the
-   release path. Every confirmed finding was fixed on a review-fix branch and folded in (see the pull request body for the list).
+   release path), then an independent review of each addition above. Every confirmed finding was fixed on a branch and folded in.
 2. **Before/after sheets.** Every slide whose golden hash moved from `main` was rendered in both versions and judged against the
-   owner's direction (bodies fill the slide, type grows and is centered, never shrink text, lines within about 70 characters):
-   23 example slides in 10 decks, 24 template slides, 46 new example slides and 104 new template slides.
+   owner's direction (bodies fill the slide, type grows and is centered, never shrink text, lines within about 70 characters).
 3. **PowerPoint (COM) pass.** The RR-105 qualification corpus, extended with the ten new v0.34 example decks (32 decks, 37 files,
-   67 features), was exported, opened in PowerPoint 16.0.20527 on Windows, probed, round-tripped and compared slide by slide with
-   OPF's preview.
-4. **Goldens.** Regenerated only by `golden.yml` on the branch; every moved hash was reviewed against the sheets.
+   67 features), exported, opened in PowerPoint 16.0.20527 on Windows, probed, round-tripped and compared slide by slide with
+   OPF's preview; then targeted runs for live SmartArt (SH-21) and for digits.
+4. **Goldens.** Regenerated only by `golden.yml` on the branch; every moved hash was reviewed.
 
 Results and the remaining gaps are in the pull request body and in the RR-105 progress log.
 
 ## Decisions made for the owner on 2026-11-12 (all vetoable)
 
-- **Evidence stays in the tree for this release.** The integration carries about 316 MB of qualification evidence under `docs/`
-  (archives, logs, images). `main` already holds about 387 MB of the same kind, a few tests read files from it, and removing it
-  safely is its own job. A follow-up moves handoff evidence under the sparse-excluded `docs/evidence` or off the tree.
+- **Evidence leaves the source tree.** The owner asked for it. All qualification evidence (about 310 MB the release had added and
+  about 427 MB already on `main`) is removed; the 30 small files that tests and trackers read moved to named fixtures and tracker
+  inputs. `pnpm check:evidence-size` refuses a pull request that adds evidence under `docs/`. Nothing was rewritten in history and
+  no branch was deleted: old evidence is readable with `git show <sha>:<path>` (see [docs/handoff/README.md](../README.md)). New
+  evidence goes to pull-request attachments or workflow artifacts, or as a fallback to an evidence-only branch.
 - **Org charts, hierarchies and Venn diagrams ship as OPF layouts that export as editable native shapes.** Live SmartArt for them
-  stays off (core's domain has no entry for them, so the exporter falls back with the reason). The live-SmartArt witness run the
-  previous agent prepared is not needed for 0.34 and is deferred with SH-21's live domain.
-- **One PowerPoint pass with the maintained RR-105 runner replaces the previous agent's separate native campaigns.** It covers
-  every new feature example and the 0.33 baseline in one run.
+  was measured on 2026-11-12 (66 files): as opened it matches OPF exactly (geometry within 0.001 pt, same text sizes and line
+  breaks) for Latin text with one line per entry, 2 to 8 entries (Venn 1 to 3 sets). Editing is the problem: a longer retyped label
+  wraps inside words and overflows its box, and an added node gets PowerPoint's own text size beside OPF-sized siblings. The owner
+  has the results and decides the strategy; until then live SmartArt stays off for these three.
+- **Checking and PPTX export stay in the viewer.** Moving checks to the server saves 0 bytes (the editor validates every edit
+  itself) and the findings differ on 16 of 157 decks; server export is slower, not byte-identical on 4 of 149 examples, and does
+  not fit the hosted Worker. Numbers are in the RR-111 progress log.
+- **One PowerPoint pass with the maintained RR-105 runner replaces the previous agent's separate native campaigns.** One of those
+  campaigns (the reference series-name edit) was measured on the export before the data-label XML fix; the measured archive is kept
+  as a fixture and the route still admits only it.
 - **Continuation pages may grow.** A continuation page never draws text smaller than the page before it, but it is not capped at
-  the first page's size: its body grows to fill the slide as an unpaginated slide's does, within the reading measure. v0.34
-  development had capped it, which drew paginated matrix, cycle and flow lists at 24 px where v0.33.0 drew 30.67 px.
-- **The layout sampler shows the catalog's current layouts.** Its embedded layout records were a stale copy in v0.33.0 (centered
-  cover, section, statement and closing); the refreshed copy draws them start-aligned under the accent rule, as the gallery
-  records and pptx.gallery already did in v0.33.0. No engine change is involved.
+  the first page's size: its body grows to fill the slide as an unpaginated slide's does, within the reading measure.
+- **The layout sampler shows the catalog's current layouts.** Its embedded layout records were a stale copy in v0.33.0.
 - **Short mixed code grows even when a statement wraps onto more lines** (layout sampler slide 48), and **a grown table header may
   wrap** (slide 46): accepted as larger type that fills the slide; both are worth the owner's eye.
-- **Repeated spaces in a title:** see the RR-105 progress log for the contract (balancing never moves a word because of an
-  authored run of spaces).
+- **Repeated spaces in a title:** balancing never moves a word because of an authored run of spaces (RR-105 progress log).
 - **Renaming a presentation** uses the full toolbar row with Save and Cancel; leaving the field no longer saves.
+- **A dimmed chart line keeps 3:1 contrast** even when every point carries its value; filled marks keep the lighter treatment.
+- **Digits:** see the LH-106 progress log for the rules (which numbers follow the language, which stay Latin because PowerPoint
+  draws them, and the separators used with Arabic-Indic digits).
 
 ## Known gaps carried into 0.34.0 (not regressions)
 
 - PowerPoint draws text 2 to 6 px higher than the preview, growing with the font size (84 pt titles: 4 to 5 px). It is smaller
   than in the accepted 0.33.0 pass; an exact first-baseline model is future work.
 - PowerPoint lays out a chart's inner plot area itself: gridlines and axis titles can sit 5 to 15 px from the preview's.
+- Aptos Display draws in a substitute face in PowerPoint at very large sizes (174 pt; fine at 120 pt and below).
+- Roboto SemiBold is not among Office's cloud fonts: timeline labels draw regular in PowerPoint.
 - `shapes` slide 6: the probe reports the stacked "OPF" label past its frame; the same false positive was accepted for 0.33.0.
-- UI-only checks (Accessibility Checker, Edit Data, adjust handles) are not run: UI control is not allowed.
+- UI-only checks (Accessibility Checker, Edit Data, adjust handles, the Numeral option) are not run: UI control is not allowed.
 - Yu Gothic draws lighter in PowerPoint than the preview's stand-in (LH-183): recorded in the font tracker.
+
+## Deferred, each with its reason
+
+| Item | Where | Reason |
+| --- | --- | --- |
+| YAML and Markdown sources keep their formatting on outside edits | issue #1274 | A source-preserving writer is its own design; YAML first, in 0.35 |
+| Reference lines on stacked charts | issue #1276 | Needs a decision on which total a line refers to |
+| Fill vocabulary (O2 of the schema review) | issue #1275 | Not to be built without the owner |
+| D2 as a diagram language | issue #1273 | Owner decision; recommended against |
+| Promoting LibreOffice from "experimental" | issue #1272 | Owner decision after 0.34 |
+| Loading viewer parts on demand, or compressing the viewer | RR-111 log | Needs a test in a real Claude host first |
+| Keynote and PowerPoint for Mac review of 0.34 | [mac-review-brief.md](mac-review-brief.md) | Runs on the Mac mini after the release |
 
 ## Owner-only steps
 
-- Merge the site pull requests (each merge deploys its site).
 - In Claude: Settings, Connectors, Add custom connector, `https://www.openpresentation.org/mcp`; then uninstall the local OPF
-  `.mcpb` extension.
-- Decide whether to promote LibreOffice from "experimental" and whether to take up D2 (recommended against).
-- Any deploy, DNS change or login.
+  `.mcpb` extension; then run the MCP Apps checklist in the RR-111 log in a real Claude host.
+- Decide the SmartArt strategy, LibreOffice promotion and D2.
+- Any DNS change or login. (On 2026-11-12 the owner allowed the supervising session to merge and deploy the sites when the
+  change is verified; that permission was for that session.)
+- Decide whether to delete the evidence-only branches and the previous agent's folders under `C:\opf-work`.
+
+## Sites
+
+See the release pull request and the three site repositories for the 0.34 pull requests. pptx.dev needed three fixes before any
+adoption could deploy: its signed-in tests waited for Clerk on a page that no longer loads it (pptx-dev#214), a revoked API key
+still authenticated (pptx-dev#215), and its size check still enforced a compressed limit Cloudflare removed (in pptx-dev#212).
 
 ## How to resume
 

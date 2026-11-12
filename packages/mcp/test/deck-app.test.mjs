@@ -81,7 +81,7 @@ describe("the deck view", () => {
 		assert.match(result.content[0].text, /Slides: 1\. Revenue grew 18%; 2\. Next steps\./);
 		assert.match(result.content[0].text, /Checks: 0 errors, \d+ warnings/);
 		const { viewer, ...rest } = result.structuredContent;
-		assert.deepEqual({ ...rest, findings: undefined, counts: undefined }, { opened: true, checked: true, view: "both", slide: 2, format: "json", name: "Quarterly update", slides: 2, outline: [{ slide: 1, title: "Revenue grew 18%" }, { slide: 2, title: "Next steps" }], valid: true, findings: undefined, counts: undefined });
+		assert.deepEqual({ ...rest, findings: undefined, counts: undefined }, { opened: true, checked: true, view: "both", slide: 2, iconSets: ["lucide", "tabler"], format: "json", name: "Quarterly update", slides: 2, outline: [{ slide: 1, title: "Revenue grew 18%" }, { slide: 2, title: "Next steps" }], valid: true, findings: undefined, counts: undefined });
 		assert.match(viewer.session, /^deck-[0-9a-f]{32}$/, "derived from the deck name");
 		assert.match(result.content[0].text, new RegExp(`Viewer session: ${viewer.session}\. `));
 		const yaml = await client.callTool({ name: "show_deck", arguments: { document: "name: Y\nslides:\n  - title: One\n", format: "yaml" } });
@@ -211,17 +211,17 @@ describe("the deck view", () => {
 	test("processDecks: false does no deck work: show_deck only opens the view, and validate_deck and convert are gone", async () => {
 		const client = await connected({ processDecks: false });
 		const names = (await client.listTools()).tools.map((tool) => tool.name).sort();
-		assert.deepEqual(names, ["get_catalog_record", "get_schema", "list_examples", "open_editor", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here"]);
+		assert.deepEqual(names, ["get_catalog_record", "get_schema", "list_examples", "open_editor", "read_icons", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here"]);
 		assert.deepEqual((await client.listPrompts()).prompts.map((prompt) => prompt.name).sort(), ["author_deck", "choose_layout", "learn_opf"]);
 		assert.doesNotMatch(client.getInstructions(), /validate_deck|convert/);
 		const result = await client.callTool({ name: "show_deck", arguments: { document: deck } });
 		const { viewer: key, ...opened } = result.structuredContent;
-		assert.deepEqual(opened, { opened: true, checked: false, view: "preview", format: "json" });
+		assert.deepEqual(opened, { opened: true, checked: false, view: "preview", iconSets: ["lucide", "tabler"], format: "json" });
 		assert.ok(key.session && key.createdAt > 0 && Number.isInteger(key.tie));
 		assert.match(result.content[0].text, /does not check decks itself/);
 		// Not even a broken deck is read.
 		const broken = await client.callTool({ name: "show_deck", arguments: { document: "{ not json" } });
-		assert.deepEqual({ ...broken.structuredContent, viewer: undefined }, { opened: true, checked: false, view: "preview", viewer: undefined });
+		assert.deepEqual({ ...broken.structuredContent, viewer: undefined }, { opened: true, checked: false, view: "preview", iconSets: ["lucide", "tabler"], viewer: undefined });
 		const path = (await client.callTool({ name: "start_here", arguments: { goal: "a board update" } })).structuredContent;
 		assert.equal(path.validate.tool, "show_deck");
 		assert.ok(path.steps.every((step) => step.tool !== "validate_deck" && step.tool !== "convert"));

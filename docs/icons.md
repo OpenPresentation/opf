@@ -118,23 +118,71 @@ nested or numbered entry) gets the same finding.
 
 ## Loading
 
-Core is catalog-free. A host registers icon sets with its catalogs, as a catalog's `iconSets` (each set its record, or a function that
-loads it). The gallery's sets are an entry of their own, so a host that does not register them (a Worker bundled into one file, say)
-carries none of their data, and `gallery` itself names none:
+Core is catalog-free. A host registers icon sets with its catalogs, as a catalog's `iconSets`: each set its record, or a function that
+loads it. `ensureIcons(deck, { catalogs })` calls a loader with the icons the deck draws (`{ icons: ["truck", ...] }`), and a loader
+may resolve with only those, as a record whose `names` lists every icon of the set (and whose `errors` may say, by name, why an icon
+asked for could not be read); a loader that ignores the request resolves with the whole record. `gallery` itself names no icon set.
+
+The gallery's sets are code only. Their data is plain static files in the gallery package, under `dist/icons/` (exported as
+`@openpresentation/gallery/icons/*`), written by its build from `catalog/icon-sets/`:
+
+| File | What it holds | Size (gzip) |
+| --- | --- | --- |
+| `lucide.json`, `tabler.json` | The index: the set's name, license, copyright, license text, version, viewBox, style and every icon name | 33 KB (10 KB), 82 KB (21 KB) |
+| `lucide/<name>.json`, `tabler/<name>.json` | One icon's path data | about 150 bytes (at most 1.4 KB) |
+| `lucide.icons.json`, `tabler.icons.json` | The whole set: the index and every icon's path data | 364 KB (99 KB), 1,009 KB (236 KB) |
+| `lucide.tags.json`, `tabler.tags.json` | Every icon's search keywords, read only by a search | 353 KB (59 KB), 628 KB (113 KB) |
+
+`galleryIconSets(load)` of `@openpresentation/gallery/icon-sets` registers the two sets over those files: drawing a deck reads each
+set's index once and one file per icon the deck names, so three icons cost three small files, and no bundler can pull a set in. A
+batch of more than 40 icons of one set (an icon browser's page) reads the whole-set file instead, and so does a batch whose per-icon
+file is missing (a 404, or the page a single-page host answers with): a host may serve only the six set-level files. `load(path)`
+reads a file by its path under `dist/icons/`; leave it out where the package is installed.
+
+### What each host does
+
+| Host | What to write |
+| --- | --- |
+| Node, Bun or Deno (core's `convert`, `open`, `validate`, the CLI, the stdio MCP server, a script) | Nothing: core's Node defaults register `galleryIconSets()`, which reads the installed package. A script that registers its own catalogs writes `[gallery, galleryIconSets()]`. |
+| A bundled Node server (esbuild, webpack, Next.js, ESM or CommonJS) | Nothing, when it is deployed with `@openpresentation/gallery` installed (its `node_modules`): the files are found next to the module, else as the package installed for the working directory. Keep `@openpresentation/opf-render` and `@openpresentation/opf-pptx` external, as any native dependency. A deploy that ships only traced files (Next.js standalone, a serverless function) must include `node_modules/@openpresentation/gallery/dist/icons/**` in the trace, or copy that folder next to the bundle as `icons/`. Without either, a set icon is `opf/icon-unknown` naming the folders it looked in and these remedies. |
+| A server that wants a set inside its bundle | Import the whole-set file and pass it by id: `galleryIconSets({ lucide })` with `import lucide from "@openpresentation/gallery/icons/lucide.icons.json" with { type: "json" }`. Only the sets passed are registered, and nothing is read at run time (Lucide adds 364 KB to the bundle, Tabler 1 MB). |
+| A browser page | `galleryIconSets(fetchIcons("/opf-icons/"))`, and its build copies the icon files to `/opf-icons/` (below). A relative URL resolves against the page. |
+| A Worker (Cloudflare and the like) | `galleryIconSets(fetchIcons(new URL("/opf-icons/", request.url), env.ASSETS))` with the files in its static assets: `fetchIcons` takes a fetch function or an object with a `fetch` method (the `env.ASSETS` binding, called as `env.ASSETS.fetch(url)`), and the base must be absolute (there is no page). Or bundle a set, as above. `@openpresentation/mcp`'s `defaultSources()` registers no icon set in a Worker (there are no files to read), as the lean server does; pass `sources.iconSets` to give it one. |
+| The MCP viewer (`show_deck`, `open_editor`) | Nothing in the page: it cannot fetch, so it reads each set icon a deck names from its server through the app-only tool `read_icons` (at most 100 icons a call; each set's index, with its license and copyright, once). The server needs icon sets: `opf-mcp` and the `.mcpb` read the installed files; a Worker passes `sources.iconSets` as in the row above, else the viewer draws the slide without the icon and says it could not be loaded. See [the OPF viewer](mcp.md#the-opf-viewer-show_deck). |
+| The headless editor | `await loadIconSets(editor)`: it loads the icons the deck draws, so `composeSlide` draws them. After `setIcon`, `await change.ready` before the next `composeSlide` (the editor starts loading the one icon as part of the edit). The canvas, the workspace and the Studio wait for icons by themselves. |
 
 ```js
 import { gallery } from "@openpresentation/gallery";
-import { galleryIconSets } from "@openpresentation/gallery/icon-sets";
-const catalogs = [gallery, galleryIconSets];
-await ensureIcons(deck, { catalogs });
+import { fetchIcons, galleryIconSets } from "@openpresentation/gallery/icon-sets";
+
+const node = [gallery, galleryIconSets()]; // Node, Bun and Deno: the installed files (core's defaults already do this)
+const page = [gallery, galleryIconSets(fetchIcons("/opf-icons/"))]; // a browser page
+const worker = (request, env) => [gallery, galleryIconSets(fetchIcons(new URL("/opf-icons/", request.url), env.ASSETS))];
+await ensureIcons(deck, { catalogs: page });
 ```
 
-`galleryIconSets.iconSets` holds one loader per set, and each set is a module of its own (`@openpresentation/gallery/icon-sets/<id>`),
-so a deck that draws no icon loads none. Before synchronous code reads a deck, a host awaits `ensureIcons(deck, { catalogs })`:
-opf-pptx's `toPptx` and the renderer's browser fonts handle (`ensure`) do with the catalogs they are given; core's Node defaults, the
-CLI and the MCP register `galleryIconSets` and load the sets a deck names before they check or draw it. A Node script that calls `toSvg`
-directly calls `ensureIcons` first; diagrams and shapes load the same way, and one preload covers all three (see
-[Engines and icon sets that load on demand](how-opf-works.md#engines-and-icon-sets-that-load-on-demand)). `validate` alone checks only the set ids and the sets the document embeds until the sets are loaded.
+Copying the files for a page or a Worker (from the folder that has `node_modules/@openpresentation/gallery`):
+
+```sh
+# Everything (7,238 files, 3.6 MB): the fewest bytes per deck, one small request per icon.
+node -e "require('fs').cpSync('node_modules/@openpresentation/gallery/dist/icons', 'public/opf-icons', { recursive: true })"
+# Or only the six set-level files (2.5 MB, 538 KB gzip): a deck reads each set it names whole, once.
+node -e "const fs = require('fs'); fs.mkdirSync('public/opf-icons', { recursive: true }); for (const f of fs.readdirSync('node_modules/@openpresentation/gallery/dist/icons')) if (f.endsWith('.json')) fs.copyFileSync('node_modules/@openpresentation/gallery/dist/icons/' + f, 'public/opf-icons/' + f)"
+```
+
+An icon that cannot be loaded never blocks drawing. Its load is settled: the slide draws without it, `opf/icon-unknown` says which
+icon could not be loaded and why ("The icon lucide:truck could not be loaded: https://example.com/opf-icons/lucide.json answered
+404."), and nothing asks for it again, so a preview never waits on it in a loop. `ensureIcons(deck, { catalogs, retry: true })` asks
+again (a host's "try again" after the files or the connection are back). What `ensureIcons` loads is shared by every copy of core in
+a process, so a server that bundles core and keeps the engines external draws what its own copy loaded.
+
+Before synchronous code reads a deck, a host awaits `ensureIcons(deck, { catalogs })`: opf-pptx's `toPptx` and the renderer's browser
+fonts handle (`ensure`) do with the catalogs they are given; core's Node file API, the CLI and the MCP load the icons a deck names before
+they check or draw it. A Node script that calls `toSvg` directly calls `ensureIcons` first; diagrams and shapes load the same way, and one
+preload covers all three (see [Engines and icon sets that load on demand](how-opf-works.md#engines-and-icon-sets-that-load-on-demand)).
+`validate` alone checks only the set ids and the sets the document embeds until the sets are loaded. Search (the MCP's `search_icons`,
+the editor's `searchIcons` and icon picker) reads the names and the keywords, and the picker reads the path data of the icons on the page
+it shows.
 
 `embedIcons(deck, { catalogs })` copies the set icons a deck uses (only those, with the set's license and copyright) into
 `catalogs.default.iconSets`, so the deck draws them with no registered catalog. An icon set is a catalog kind
@@ -143,12 +191,12 @@ directly calls `ensureIcons` first; diagrams and shapes load the same way, and o
 
 ## Editing icons
 
-The editor (`@openpresentation/opf-editor`) sets, changes and removes an `icon` on a list entry, a metric and a group, each as one undoable patch: `setIcon`, `removeIcon` and `setSvgIcon` of `@openpresentation/opf-editor/icon-options`, and an icon picker in the Content panel (`@openpresentation/opf-editor/icon-picker`). The picker searches the sets the host registered (the editor bundles none), lists the deck's own icons, and takes a pasted SVG, which it stores in the deck's `icons` under a name and references by that name; an SVG that cannot be an icon is refused with the `opf/icon-invalid` message. Removing the last use of a deck icon also removes it from `icons`.
+The editor (`@openpresentation/opf-editor`) sets, changes and removes an `icon` on a list entry, a metric and a group, each as one undoable patch: `setIcon`, `removeIcon` and `setSvgIcon` of `@openpresentation/opf-editor/icon-options`, and an icon picker in the Content panel (`@openpresentation/opf-editor/icon-picker`). The picker searches the sets the host registered (the editor bundles none), lists the deck's own icons, and takes a pasted SVG, which it stores in the deck's `icons` under a name and references by that name; an SVG that cannot be an icon is refused with the `opf/icon-invalid` message. Removing the last use of a deck icon also removes it from `icons`. A set icon is read on demand: `setIcon` starts loading it and returns `ready`, which a headless host awaits before `composeSlide` (the canvas waits by itself); `await loadIconSets(editor)` loads every icon the deck draws. When a set cannot be read the picker says why instead of "no matches".
 
 ## Findings
 
 | Rule | When |
 | --- | --- |
-| `opf/icon-unknown` | The set or the name is not found; the finding suggests the nearest names. |
+| `opf/icon-unknown` | The set or the name is not found (the finding suggests the nearest names), or the icon could not be loaded (the finding says why). |
 | `opf/icon-invalid` | The SVG cannot be an icon (see SVG intake). |
 | `opf/icon-dropped` | The icon is not drawn: no room without setting text smaller, or nothing it can mark. |

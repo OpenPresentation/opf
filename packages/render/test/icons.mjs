@@ -3,7 +3,9 @@
 // chip; a slide without icons draws none. Traced icons name their field, not data-opf-path.
 import assert from 'node:assert/strict';
 import {gallery} from '@openpresentation/gallery';
-import {galleryIconSets} from '@openpresentation/gallery/icon-sets';
+import { galleryIconSets as gallerySets } from '@openpresentation/gallery/icon-sets';
+// RR-63: the gallery icon sets, read from the installed package one icon at a time.
+const galleryIconSets = gallerySets();
 import {composeSlide, ensureIcons} from '@openpresentation/opf/composition';
 import {resolveSlideContext} from '@openpresentation/opf';
 import {toSvg} from '../dist/index.js';

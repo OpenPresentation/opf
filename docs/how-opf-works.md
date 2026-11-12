@@ -270,7 +270,7 @@ Binary content lives in the top-level `assets` registry, keyed by id. Content pa
 
 ## Engines and icon sets that load on demand
 
-Three parts of a deck draw from code or data that a browser bundle or an edge Worker (Cloudflare Workers, Vercel Edge) loads only when a deck needs it: diagram types ([diagrams](diagrams.md#the-engine), the `#diagram-engine` import map), the preset shape geometry ([shapes](shapes.md#loading-in-browsers-and-edge-runtimes), `#shape-engine`) and icon sets ([icons](icons.md), each set a module of `@openpresentation/gallery/icon-sets` that a host registers with its catalogs). Node, Bun and Deno load the engines with core; icon sets always load on demand. One preload covers all three, and a host awaits it before synchronous code (`validate`, `composeSlide`, `toSvg`) reads the deck:
+Three parts of a deck draw from code or data that a browser bundle or an edge Worker (Cloudflare Workers, Vercel Edge) loads only when a deck needs it: diagram types ([diagrams](diagrams.md#the-engine), the `#diagram-engine` import map), the preset shape geometry ([shapes](shapes.md#loading-in-browsers-and-edge-runtimes), `#shape-engine`) and icon sets ([icons](icons.md), the static files of `@openpresentation/gallery/icon-sets` that a host registers with its catalogs, read one icon at a time). Node, Bun and Deno load the engines with core; icons always load on demand. One preload covers all three, and a host awaits it before synchronous code (`validate`, `composeSlide`, `toSvg`) reads the deck:
 
 ```js
 import { ensureDiagrams, ensureIcons, ensureShapes } from "@openpresentation/opf/composition";

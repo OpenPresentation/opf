@@ -13,7 +13,7 @@ const isObject = (value) => Boolean(value) && typeof value === "object" && !Arra
  * One catalog list from any number of lists (or single catalogs): the session's registration first, then each host list, in order.
  * A catalog is identified by its `source`; the first catalog with a source wins and later ones with the same source are dropped,
  * so the host default (the first entry) never moves. The one exception is a later catalog that registers `iconSets` (LH-166:
- * `galleryIconSets` shares the gallery's source and is registered beside it): it is kept, because core reads the icon sets of every
+ * `galleryIconSets()` shares the gallery's source and is registered beside it): it is kept, because core reads the icon sets of every
  * registered catalog. Entries that are not catalogs throw `invalid-catalogs` (core's `OPFCatalogsOptionError` code).
  */
 export function mergeCatalogs(...lists) {

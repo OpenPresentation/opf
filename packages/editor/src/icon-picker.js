@@ -153,7 +153,7 @@ export function createIconPicker(container, options = {}) {
     if (!sets.length) {
       results.replaceChildren();
       more.hidden = true;
-      count.textContent = "No icon sets are registered here, so there is nothing to search. Paste an SVG instead, or register the sets (galleryIconSets of @openpresentation/gallery/icon-sets) with the host's catalogs.";
+      count.textContent = "No icon sets are registered here, so there is nothing to search. Paste an SVG instead, or register the sets (galleryIconSets() of @openpresentation/gallery/icon-sets) with the host's catalogs.";
       return;
     }
     count.textContent = "Searching…";
@@ -165,7 +165,13 @@ export function createIconPicker(container, options = {}) {
       return;
     }
     if (epoch !== state.epoch || state.destroyed) return;
-    const records = await loadIconSets(source(), found.sets.map((entry) => entry.id));
+    // The page's glyphs only, each set asked for its own names: a set loaded one icon at a time reads these and no others.
+    const records = new Map();
+    await Promise.all(found.sets.map(async ({ id }) => {
+      const names = found.icons.filter((entry) => entry.set === id).map((entry) => entry.name);
+      const record = (await loadIconSets(source(), [id], { icons: names })).get(id);
+      if (record) records.set(id, record);
+    }));
     if (epoch !== state.epoch || state.destroyed) return;
     const now = state.target ? readIcon(editor.presentation, state.target.path)?.icon : undefined;
     results.replaceChildren(
@@ -176,7 +182,8 @@ export function createIconPicker(container, options = {}) {
       }),
     );
     more.hidden = found.returned >= found.total;
-    count.textContent = found.total === 0 ? `No icons match "${state.query}".` : `${found.returned} of ${found.total} icon${found.total === 1 ? "" : "s"}`;
+    const missing = found.unavailable?.length ? ` ${found.unavailable.map((entry) => entry.message).join(" ")}` : "";
+    count.textContent = `${found.total === 0 ? `No icons match "${state.query}".` : `${found.returned} of ${found.total} icon${found.total === 1 ? "" : "s"}`}${missing}`;
     // The set choices (with their names) are known once a set loads.
     const wanted = JSON.stringify(listIconSets(source()).map((entry) => [entry.id, entry.name]));
     if (setSelect.dataset.signature !== wanted) {
@@ -206,7 +213,8 @@ export function createIconPicker(container, options = {}) {
     let glyph = iconGlyph(editor.presentation, reference, { catalogs: catalogs() });
     if (!glyph && parseIconReference(reference)?.kind === "set") {
       // The set is registered but not loaded yet: load it, then draw (unless the selection moved on).
-      await loadIconSets(source());
+      const { set, name } = parseIconReference(reference);
+      await loadIconSets(source(), [set], { icons: [name] });
       if (state.destroyed || state.target?.path !== target.path) return;
       glyph = iconGlyph(editor.presentation, reference, { catalogs: catalogs() });
     }

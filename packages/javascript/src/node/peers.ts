@@ -131,8 +131,9 @@ const hint = (name: string) =>
 	(name === RENDER_PACKAGE ? `\n${renderHint()}` : "");
 
 function bases(): string[] {
-	// Resolution starts at core's own file, then at the working directory.
-	return [import.meta.url, pathToFileURL(path.join(process.cwd(), "noop.js")).href];
+	// Resolution starts at core's own file, then at the working directory. A CommonJS bundle of core has no import.meta.url (RR-63).
+	const here: unknown = import.meta.url;
+	return [...(typeof here === "string" ? [here] : []), pathToFileURL(path.join(process.cwd(), "noop.js")).href];
 }
 
 function locate(specifier: string): string | undefined {
