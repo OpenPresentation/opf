@@ -41,7 +41,7 @@ function Test-ReferenceNameSnapshotsReady($Request,$Report,$Stages){
                 if($ops.Count -ne 2 -or $ops[0].status -cne 'begin' -or $ops[1].status -cne 'success' -or $ops[0].sequence -le $previous -or $ops[1].sequence -le $ops[0].sequence){return $false}
                 foreach($op in $ops){if($op.ownedPresentationPath -cne $owner -or $op.cleanupConfirmed -isnot [bool] -or $op.cleanupConfirmed){return $false}};$previous=$ops[1].sequence
             }
-            $end=if($i -eq 0){$set}else{@($Stages|Where-Object {$_.stage -ceq 'reopened.presentation.close' -and $_.status -ceq 'success'})};if($end.Count -ne 1 -or $previous -ge $end[0].sequence){return $false}
+            $end=@(if($i -eq 0){$set}else{@($Stages|Where-Object {$_.stage -ceq 'reopened.presentation.close' -and $_.status -ceq 'success'})});if($end.Count -ne 1 -or $previous -ge $end[0].sequence){return $false}
         }
         $copies=@($Stages|Where-Object {$_.stage.EndsWith('.saveCopyAs') -and $_.status -ceq 'success'});if($copies.Count -ne 3){return $false}
         $wanted=@('reference-before.presentation.saveCopyAs','edited.presentation.saveCopyAs','reference-reopened.presentation.saveCopyAs');for($i=0;$i -lt 3;$i++){if($copies[$i].stage -cne $wanted[$i]){return $false}}
