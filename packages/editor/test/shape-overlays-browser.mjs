@@ -270,7 +270,7 @@ try {
   assert.ok(moveUp.slides[1].shapes[0].at.offset > 8);
   const sw = page.locator('[data-overlay-handle="se"]');
   const swBox = await sw.boundingBox();
-  await step('resizing an attached shape changes at.width and at.height', async () => { await drag({ x: swBox.x + swBox.width / 2, y: swBox.y + swBox.height / 2 }, { x: swBox.x + swBox.width / 2 + 24, y: swBox.y + swBox.height / 2 + 24 }); }, current => { const s = current.slides[1].shapes[0]; return s.at.width > 48 && s.at.height > 48 && s.x === undefined; }, { single: true });
+  await step('resizing an attached shape changes at.widthPx and at.heightPx', async () => { await drag({ x: swBox.x + swBox.width / 2, y: swBox.y + swBox.height / 2 }, { x: swBox.x + swBox.width / 2 + 24, y: swBox.y + swBox.height / 2 + 24 }); }, current => { const s = current.slides[1].shapes[0]; return s.at.widthPx > 48 && s.at.heightPx > 48 && s.x === undefined; }, { single: true });
   await step('Free from block turns it into fractions', async () => { await selection.locator('[data-role="shape-free"]').click(); }, current => { const s = current.slides[1].shapes[0]; return s.at === undefined && s.x > 0 && s.width > 0; }, { single: true });
   await shot('overlay-anchored');
   mark('an attached shape keeps its anchor until it is freed');
