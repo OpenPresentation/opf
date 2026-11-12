@@ -42,6 +42,11 @@ The owner authorized agents to publish npm packages on 2026-09-29 ("yes, prepare
 - Tests: a package test is one new `test/*.mjs` (a package's `scripts/run-tests.mjs` run discovers it; `test/suites.json` lists only helpers and separately-run files) and a root check is one new `check:*` script (`scripts/run-checks.mjs`; `scripts/checks.json`). Do not add test lists to `package.json`.
 - Generated trackers (gallery and font): do not regenerate them in an unrelated PR. CI only warns about a stale tracker on a PR; the "Tracker refresh" workflow regenerates them after merge into `bot/tracker-refresh`. Regenerate in your PR only when it changes a tracker generator, overrides or tests. Details: `CONTRIBUTING.md`.
 - Goldens (`packages/render/test/golden/`) are exact hashes. Regenerate them only by dispatching the `golden.yml` workflow on your branch (`gh workflow run golden.yml --ref <branch>`) in the pinned Playwright image, never by hand and never with a changed tolerance; see `docs/ecosystem-development.md`.
+- Evidence: see [Evidence stays out of main](#evidence-stays-out-of-main).
+
+## Evidence stays out of main
+
+Raw working evidence (archives, screenshots and review sheets, logs, saved decks, machine receipts, replay scripts) never goes into `main`. Push it to an evidence-only branch (`codex/evidence-<slug>`) that is never merged, and link it from the pull request by full commit SHA (`git show <sha>:<path>`). Commit only a short human-readable result summary with the change, and put a small input a test really reads in that package's `test/fixtures/`. `pnpm check:evidence-size` enforces this against `origin/main`: no new files under `docs/evidence/` or `packages/*/docs/evidence/`, no archives, decks, images (outside `docs/images/` and `docs/brand/`), logs or patches under any `docs/`, only Markdown under `docs/handoff/`, and at most 5 MB of growth under `docs/`.
 
 ## Checks for agents
 

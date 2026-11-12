@@ -42,6 +42,7 @@
     "release:prepare": "node scripts/release.mjs prepare",
     "release:verify": "node scripts/release.mjs verify",
     "check:engines-range": "node --test scripts/check-engines-range.test.mjs && node scripts/check-engines-range.mjs",
+    "check:evidence-size": "node --test scripts/check-evidence-size.test.mjs && node scripts/check-evidence-size.mjs",
     "check:workspace-graph": "node --test scripts/check-workspace-graph.test.mjs && node scripts/check-workspace-graph.mjs",
     "check:pins": "node --test scripts/check-pins.test.mjs && node scripts/check-pins.mjs",
     "check:prerelease": "node --test scripts/prerelease-tree.test.mjs",
