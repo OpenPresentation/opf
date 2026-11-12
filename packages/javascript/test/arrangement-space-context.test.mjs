@@ -21,6 +21,7 @@ test('centered Arabic arrangement wrapping never measures its trailing space in 
  assert.throws(()=>measure(' ',20),/Only the prepared complex-script face/);
  assert.equal(itemizeScripts('الفرق والمنصة ',profile)[0].role,'complexScript');
  const constrained=structuredClone(document);
+ delete constrained.slides[1].title; // Isolate arrangement measurement; actual titles remain covered by the public integration test.
  constrained.slides[1].composition={minFontSize:32,maxFontSize:40};
  const context=resolveSlideContext(constrained,1,{catalogs:[gallery],fonts:{textMeasurement:{measure}}});
  const geometry=composeSlide(context.slide,context.options);
