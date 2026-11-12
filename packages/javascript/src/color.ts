@@ -1264,7 +1264,9 @@ export function chartFocusContextColors(surface: string, text: string, context: 
   groups.forEach((group, which) => {
     if (!group.length) return;
     const grays = chartContextColors(surface, text, group.length, { labeled: which === 0, ...(options.avoid ? { avoid: options.avoid } : {}) });
-    group.forEach((index, k) => colors.set(index, grays[k]!));
+    group.forEach((index, k) => {
+      colors.set(index, grays[k]!);
+    });
   });
   // No context series (every series focused): the first neutral still names the muted color, as chartContextColors does for zero.
   if (!context.length) return chartContextColors(surface, text, 0, { labeled: options.labeled === true, ...(options.avoid ? { avoid: options.avoid } : {}) });
