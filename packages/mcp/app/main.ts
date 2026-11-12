@@ -1,18 +1,19 @@
-// The OPF deck view: the MCP App that `show_deck` and `open_studio` open (ui://opf/deck). It runs in the host's sandboxed iframe and
+// The OPF deck view: the MCP App that `show_deck` and `open_editor` open (ui://opf/deck). It runs in the host's sandboxed iframe and
 // does the deck's work there, on the user's machine: the editor session, the source pane, the slide renderer and the checks are the
 // OPF packages themselves (@openpresentation/opf-editor, opf-render and the precompiled validators of @openpresentation/opf). The
 // server only hands over this page and, when a deck needs them, font files. The sandbox allows no network, no eval and no WASM; the
 // build (scripts/build-app.mjs) bundles everything into one HTML file and picks the precompiled validators.
 //
-// The loop: the host sends the tool's arguments (show_deck's deck) or its result (open_studio's starter deck), the view mounts the
+// The loop: the host sends the tool's arguments (show_deck's deck) or its result (open_editor's starter deck), the view mounts the
 // editor and shows Preview, Source or Both. Every edit is applied, checked and redrawn here; one second after the last edit the whole
 // deck goes to the model as context (ui/update-model-context), and "Send to Claude" also asks for a turn (ui/message). Where the
 // host calls tools in the view (MCP Apps app tools), the model also reads and edits the open deck in place: read_deck, select_slide
 // and edit_deck, registered before connect() and never changed afterwards.
 //
 // Instances: every tool call mounts its own view, and earlier ones stay live. The server mints an order key and a session key in
-// its result (`structuredContent.viewer`); views of the same session meet on a BroadcastChannel named by that key, and the older
-// one greys out and stops publishing (context, messages, tool edits). Views of other sessions never hear each other.
+// its result (`structuredContent.viewer`; the session is the caller's, or derived from the deck's name); views of the same session
+// meet on a BroadcastChannel named by that key, and the older one greys out and stops publishing (context, messages, tool edits).
+// Views of other sessions never hear each other.
 //
 // The look is the openpresentation.org design system's playground bar (a 48px bar, a 28px status footer; view.css) in one
 // palette: the viewer's own chrome and the editor's parts read the same `--opf-ui-*` tokens, mapped onto the host's colors.
@@ -34,11 +35,12 @@ interface ShowDeckArguments {
 	view?: View;
 	slide?: number;
 }
-/** What the server mints for each view (show_deck and open_studio results): the session it belongs to and its place in it. */
+/** What the server mints for each view (show_deck and open_editor results): the session it belongs to and its place in it. */
 interface ViewerKey {
 	session: string;
 	createdAt: number;
-	seq: number;
+	/** A random tie-break, minted per call (the server counts nothing). */
+	tie: number;
 }
 interface ExampleEntry {
 	slug: string;
@@ -51,12 +53,16 @@ const CHECK_DELAY = 400;
 const MAX_LISTED_FINDINGS = 20;
 /** Claude reads at most 100,000 characters of a tool result; a read stays under it with room for its header. */
 const RESULT_LIMIT = 100_000;
-const MAX_OUTLINE = 400;
+/** read_deck's outline: at most this many characters of JSON, each title at most MAX_TEXT; a source page always has MIN_ROOM. */
+const OUTLINE_CHARS = 30_000;
+const MAX_TEXT = 200;
+const MIN_ROOM = 40_000;
+const MAX_OPERATIONS = 100;
 const MAX_EDIT_CHARS = 200_000;
+/** A status message stays this long, then the footer clears it (the next message replaces it sooner). */
+const STATUS_TIME = 8000;
 /** A host's save dialog can stay open a while: ten minutes before a download counts as unconfirmed (the SDK's default is 60 s). */
 const DOWNLOAD_TIMEOUT = 600_000;
-/** Program, installer, shortcut and script types a host refuses outright: never offered. */
-const BLOCKED_FILE = /\.(exe|msi|bat|cmd|com|scr|ps1|vbs|js|mjs|cjs|jar|app|dmg|pkg|lnk|url)$/i;
 const MESSAGE = "I edited the deck in the OPF viewer. Please continue from my version.";
 const catalogs = [gallery];
 
@@ -99,8 +105,18 @@ let tornDown = false;
 let viewer: ViewerKey | undefined;
 let channel: BroadcastChannel | undefined;
 let examples: ExampleEntry[] = [];
-/** Opened by open_studio: the start bar (an example to open, a deck to paste) shows once the deck is on screen. */
-let studio = false;
+/** Opened by open_editor: the start row (an example to open, a deck to paste) shows once the deck is on screen. */
+let editorEntry = false;
+/** What open_editor opened, for the model's first context: the starter deck or a bundled example. */
+let openedWith: { example: string | null; name: string | null } | undefined;
+/**
+ * The source pane's text as of the last change of the deck or the last check of the text: text that differs from it is typing the pane
+ * has not taken in yet (a check runs after a pause in typing; a valid result changes the deck, an invalid one is a draft).
+ */
+let sourceBaseline: string | undefined;
+const paneText = () => editor?.sourcePane?.editor.api.getValue();
+const sourcePending = () => sourceBaseline !== undefined && paneText() !== sourceBaseline;
+let statusTimer: ReturnType<typeof setTimeout> | undefined;
 /** The tool's arguments arrived without a deck, or its result did: the other one must bring it. */
 let inputWithoutDeck = false;
 let resultWithoutDeck = false;
@@ -113,9 +129,23 @@ let mounted = false;
 let themed: string[] = [];
 
 /** What the person calls the model on the other side: Claude in Claude, "the assistant" in another MCP Apps host. */
-const assistant = () => (/claude/i.test(app.getHostVersion()?.name ?? "") ? "Claude" : "the assistant");
+const assistant = () => (isClaude() ? "Claude" : "the assistant");
 const sentence = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 const textOf = (value: unknown) => (typeof value === "string" ? value : null);
+/** A string cut to at most `max` characters (never inside a surrogate pair), with an ellipsis when it was longer. */
+const clip = (value: unknown, max = MAX_TEXT) => {
+	if (typeof value !== "string") return null;
+	if (value.length <= max) return value;
+	const end = /[\uD800-\uDBFF]/.test(value.charAt(max - 2)) ? max - 2 : max - 1;
+	return `${value.slice(0, end)}…`;
+};
+/** A short, stable fingerprint of a text (FNV-1a, 32 bits): read_deck marks each source page with the text it was cut from. */
+const fingerprint = (text: string) => {
+	let hash = 0x811c9dc5;
+	for (let at = 0; at < text.length; at++) hash = Math.imul(hash ^ text.charCodeAt(at), 0x01000193);
+	return (hash >>> 0).toString(16).padStart(8, "0");
+};
+const isClaude = () => /claude/i.test(app.getHostVersion()?.name ?? "");
 
 // -------------------------------------------------------------------------------------------------------------------
 // Fonts: Roboto Regular is in the page; any other face comes from the server through the host (read_font_file).
@@ -198,9 +228,15 @@ function contextText(): string {
 	const lines = findingLines();
 	const checks = `Checks in the viewer: ${counts.error} errors, ${counts.warning} warnings, ${counts.info} notes.${lines.length ? `\n${lines.join("\n")}` : ""}`;
 	const where = editor ? ` Revision ${editor.session.documentHash()}${viewer ? `, viewer session ${viewer.session}` : ""}.` : "";
+	const json = `\n\nThe current deck:\n\`\`\`json\n${JSON.stringify(deck, null, 2)}\n\`\`\``;
+	// open_editor sent no deck of the model's: the first context says what opened, with the deck itself.
+	if (!edited && openedWith) {
+		const what = openedWith.example ? `the bundled example deck ${openedWith.example}${openedWith.name ? ` ("${openedWith.name}")` : ""}` : `a starter deck${openedWith.name ? ` "${openedWith.name}"` : ""}`;
+		return `The OPF viewer's editor opened ${what} (${slides} slides, slide ${at} open, ${view} view). The user can edit it there.${where} ${checks}${json}`;
+	}
 	if (!edited) return `The OPF viewer shows the deck you sent (${slides} slides, slide ${at} open, ${view} view).${where} ${checks}`;
 	const who = userEdited ? "The user edited the deck in the OPF viewer" : "The deck in the OPF viewer has your edit_deck changes";
-	return `${who} (${slides} slides, slide ${at} open). Continue from this version, not the one you sent.${where} ${checks}\n\nThe current deck:\n\`\`\`json\n${JSON.stringify(deck, null, 2)}\n\`\`\``;
+	return `${who} (${slides} slides, slide ${at} open). Continue from this version, not the one you sent.${where} ${checks}${json}`;
 }
 
 /** A view that another view of its session replaced, or that the host closed, publishes nothing. */
@@ -212,7 +248,7 @@ async function sendContext(): Promise<void> {
 	if (!editor || silent() || !app.getHostCapabilities()?.updateModelContext) return;
 	const deck = editor.getDocument();
 	try {
-		await app.updateModelContext({ content: [{ type: "text", text: contextText() }], structuredContent: { edited, counts, findings: findings.slice(0, MAX_LISTED_FINDINGS), ...(edited ? { document: deck as Record<string, unknown> } : {}) } });
+		await app.updateModelContext({ content: [{ type: "text", text: contextText() }], structuredContent: { edited, counts, findings: findings.slice(0, MAX_LISTED_FINDINGS), ...(edited || openedWith ? { document: deck as Record<string, unknown> } : {}) } });
 		// Edits made while this update was on its way wait for the next one.
 		if (edited && !contextTimer && sync.dataset.state === "pending") setSync("shared");
 	} catch (error) {
@@ -228,8 +264,9 @@ function setSync(state: SyncState): void {
 		none: "",
 		pending: "Edits not shared yet",
 		shared: `${sentence(assistant())} has your edits`,
-		// The host accepted the message; the person still decides whether it goes (and nothing says the model read it).
-		sent: `Sent to ${assistant()} for your approval`,
+		// Claude accepted the message; the person still decides whether it goes (and nothing says the model read it). Another host's
+		// acceptance is reported as no more than that.
+		sent: isClaude() ? "Sent to Claude for your approval" : "Sent to the assistant",
 		refused: `${sentence(assistant())} didn't take the message`,
 		unknown: "The message couldn't be confirmed",
 	};
@@ -283,13 +320,13 @@ async function sendToClaude(): Promise<void> {
 let fallbackId: string | undefined;
 const instanceId = () => String(app.getHostContext()?.toolInfo?.id ?? (fallbackId ??= crypto.randomUUID()));
 type Announcement = ViewerKey & { type: "hello" | "born"; instanceId: string };
-const isKey = (key: unknown): key is ViewerKey => typeof (key as ViewerKey)?.session === "string" && Number.isFinite((key as ViewerKey).createdAt) && Number.isFinite((key as ViewerKey).seq);
-/** Is `a` newer than `b`: created later, then the server's sequence, then the instance id as the last tie-break. */
-const newer = (a: Announcement, b: Announcement) => (a.createdAt !== b.createdAt ? a.createdAt > b.createdAt : a.seq !== b.seq ? a.seq > b.seq : a.instanceId > b.instanceId);
+const isKey = (key: unknown): key is ViewerKey => typeof (key as ViewerKey)?.session === "string" && Number.isFinite((key as ViewerKey).createdAt) && Number.isFinite((key as ViewerKey).tie);
+/** Is `a` newer than `b`: created later by the server's clock, then the server's random tie-break, then the instance id. */
+const newer = (a: Announcement, b: Announcement) => (a.createdAt !== b.createdAt ? a.createdAt > b.createdAt : a.tie !== b.tie ? a.tie > b.tie : a.instanceId > b.instanceId);
 
 function joinSession(key: unknown): void {
 	if (viewer || !isKey(key) || typeof BroadcastChannel !== "function") return;
-	viewer = { session: key.session, createdAt: key.createdAt, seq: key.seq };
+	viewer = { session: key.session, createdAt: key.createdAt, tie: key.tie };
 	const me = (type: Announcement["type"]): Announcement => ({ type, ...(viewer as ViewerKey), instanceId: instanceId() });
 	// A fixed ui.domain shares this origin across conversations: the channel is named by the session the server minted.
 	channel = new BroadcastChannel(`opf-deck:${viewer.session}`);
@@ -308,6 +345,10 @@ function supersede(): void {
 	contextTimer = undefined;
 	channel?.close();
 	editor?.setReadOnly(true);
+	// Nothing is shared any more, and nothing stays selected or focused in a view that takes no input.
+	setSync("none");
+	window.getSelection()?.removeAllRanges();
+	if (document.activeElement instanceof HTMLElement && shell.contains(document.activeElement)) document.activeElement.blur();
 	shell.dataset.superseded = "true";
 	note.textContent = "A newer viewer of this deck is open in the conversation. This one is read-only and no longer shares changes.";
 	note.hidden = false;
@@ -326,31 +367,46 @@ const answer = (lead: string, data: Record<string, unknown>, tail = "", shown: R
 const refuse = (code: string, message: string, extra: Record<string, unknown> = {}): ToolResult => answer(message, { ok: false, code, message, ...extra });
 
 /** Why this view cannot do the tool's work now, or undefined when it can. */
-function unavailable(mutating: boolean): ToolResult | undefined {
+function unavailable(): ToolResult | undefined {
 	if (tornDown) return refuse("closed", "This viewer was closed. Open the deck again with show_deck.");
 	if (superseded) return refuse("superseded", "A newer viewer of this deck is open in the conversation; this one no longer reads or takes changes. Use the newest viewer's tools.");
 	if (phase === "failed") return refuse("not-open", "No deck is open in this viewer: it did not open. Open one with show_deck.");
 	if (!editor || phase !== "ready") return refuse("loading", "The deck is still loading in this viewer. Try again in a few seconds.");
-	if (mutating && editor.readOnly) return refuse("read-only", "This viewer is read-only, so it takes no edits.");
 	return undefined;
 }
 
-function deckState(): Record<string, unknown> {
+/** The person has an edit in progress: text open on the slide, typing the source pane has not taken in yet, or a rename. */
+const userTyping = () => Boolean((editor as OpfEditor).canvas?.editingPath != null || sourcePending() || shell.querySelector(".opf-title[data-editing]"));
+const BUSY = "The user is typing in the viewer (an edit on the slide, in the source or of the deck's name is not finished). Nothing was applied. Try again after the user's next message.";
+
+/**
+ * The open deck's state, bounded whatever the deck: each name, id, title and finding message at most MAX_TEXT characters, and the
+ * outline at most OUTLINE_CHARS of JSON (then `outlineTruncated` names how many slides it lists). `outline: false` leaves it out.
+ */
+function deckState(outline = true): Record<string, unknown> {
 	const ed = editor as OpfEditor;
 	const deck = ed.getDocument() as { name?: unknown; slides?: { id?: unknown; title?: unknown; layout?: unknown }[] };
 	const slides = Array.isArray(deck.slides) ? deck.slides : [];
+	const listed: { index: number; id: string | null; title: string | null; layout: string | null }[] = [];
+	let size = 2;
+	for (const [index, slide] of (outline ? slides : []).entries()) {
+		const item = { index, id: clip(slide?.id), title: clip(slide?.title), layout: clip(slide?.layout, 100) };
+		size += JSON.stringify(item).length + 1;
+		if (size > OUTLINE_CHARS) break;
+		listed.push(item);
+	}
+	const checks = currentChecks();
 	return {
 		ok: true,
 		revision: ed.session.documentHash(),
 		session: viewer?.session ?? null,
-		name: textOf(deck.name),
+		name: clip(deck.name),
 		slideCount: slides.length,
-		selected: { index: ed.slideIndex, id: textOf(slides[ed.slideIndex]?.id) },
-		outline: slides.slice(0, MAX_OUTLINE).map((slide, index) => ({ index, id: textOf(slide?.id), title: textOf(slide?.title), layout: textOf(slide?.layout) })),
-		...(slides.length > MAX_OUTLINE ? { outlineTruncated: true } : {}),
-		readOnly: ed.readOnly,
-		sourceDraft: !ed.inSync,
-		checks: currentChecks(),
+		selected: { index: ed.slideIndex, id: clip(slides[ed.slideIndex]?.id) },
+		...(outline ? { outline: listed } : {}),
+		...(outline && listed.length < slides.length ? { outlineTruncated: { listed: listed.length, of: slides.length } } : {}),
+		sourceDraft: !ed.inSync || sourcePending(),
+		checks: { ...checks, findings: checks.findings.map((finding) => ({ ...finding, path: clip(finding.path) as string, message: clip(finding.message, 300) as string })) },
 	};
 }
 
@@ -365,30 +421,43 @@ app.registerTool(
 	{
 		title: "Read the deck open in the OPF viewer",
 		description:
-			"Read the deck open in this OPF viewer: its revision, name, slide outline, selected slide and current check findings, and optionally its source text.\nCall it before edit_deck: edit_deck needs the revision it returns, and the user may have edited the deck since you last saw it. Slide indexes count from 0, as in a JSON Pointer such as /slides/0/title. With source (json, yaml or markdown) the result also carries the deck's text, in pieces of under 100,000 characters: when it says the text was truncated, call again with the offset it names. session is the key to pass to show_deck or open_studio to replace this viewer.",
+			"Read the deck open in this OPF viewer: its revision, name, slide outline, selected slide and current check findings, and optionally its source text.\nCall it before edit_deck: edit_deck needs the revision it returns, and the user may have edited the deck since you last saw it. Slide indexes count from 0, as in a JSON Pointer such as /slides/0/title. Long titles are shortened and a long outline is cut (outlineTruncated says how far it goes). With source (json, yaml or markdown) the result also carries the deck's text, in pages of under 100,000 characters: when a page says it was truncated, call again with the offset it names; pages after the first leave the outline out, and every page has a textHash (start again at 0 when it changes). session is this viewer's session key: show_deck or open_editor with the same deck or the same session replaces this viewer.",
 		inputSchema: z.object({
 			source: z.enum(["json", "yaml", "markdown"]).optional().describe("Also return the deck's text in this form. The form the user is editing in the source pane comes back exactly as written."),
-			offset: z.number().int().min(0).optional().describe("With source: where the text starts, in characters. Default 0."),
+			offset: z.number().optional().describe("With source: where the text starts, in characters (a whole number from 0). Default 0."),
 		}),
 	},
 	async ({ source, offset }) => {
-		const refused = unavailable(false);
+		const refused = unavailable();
 		if (refused) return refused;
-		const state = deckState();
+		if (offset !== undefined && (!Number.isInteger(offset) || offset < 0)) return refuse("invalid-input", `offset must be a whole number from 0 (it was ${offset}). Use the next offset a truncated read_deck result named, or leave it out.`);
+		if (offset !== undefined && !source) return refuse("invalid-input", "offset pages the source text: pass source (json, yaml or markdown) with it.");
+		const at = offset ?? 0;
+		// Pages after the first leave the outline out, so every page has room for the text and paging always moves on.
+		const state = deckState(at === 0);
 		const lead = `The deck open in this viewer, at revision ${state.revision}.`;
 		if (!source) return answer(lead, state);
 		const ed = editor as OpfEditor;
-		const pane = ed.readSource();
-		const paneFormat: Format = pane.format === "md" ? "markdown" : pane.format;
-		const text = paneFormat === source ? pane.text : await sourceIn(ed.getDocument(), source);
-		const from = Math.min(offset ?? 0, text.length);
-		const room = RESULT_LIMIT - lead.length - JSON.stringify(state).length - 600;
-		const piece = text.slice(from, from + room);
-		const end = from + piece.length;
+		const pane = ed.sourcePane;
+		const paneFormat: Format | undefined = pane ? ((pane.getFormat() === "md" ? "markdown" : pane.getFormat()) as Format) : undefined;
+		// The text in the source pane as it stands, read without applying anything the user is still typing.
+		const shown = paneFormat === source && pane ? pane.editor.api.getValue() : undefined;
+		const draft = shown !== undefined && (sourcePending() || !ed.inSync);
+		const text = shown ?? (await sourceIn(ed.getDocument(), source));
+		let from = Math.min(at, text.length);
+		// Never start or end a page inside a surrogate pair.
+		if (from > 0 && from < text.length && /[\uDC00-\uDFFF]/.test(text.charAt(from)) && /[\uD800-\uDBFF]/.test(text.charAt(from - 1))) from -= 1;
+		const header = JSON.stringify({ ...state, source: { format: source, offset: from, end: text.length, total: text.length, truncated: true, next: text.length, textHash: "00000000", draft } });
+		const room = Math.max(MIN_ROOM, RESULT_LIMIT - lead.length - header.length - 700);
+		let end = Math.min(text.length, from + room);
+		if (end < text.length && /[\uD800-\uDBFF]/.test(text.charAt(end - 1))) end -= 1;
+		const piece = text.slice(from, end);
 		const more = end < text.length;
-		const info = { format: source, offset: from, end, total: text.length, truncated: more, ...(more ? { next: end } : {}), ...(paneFormat === source && pane.draft ? { draft: true } : {}) };
-		const how = more ? ` Truncated: call read_deck again with source "${source}" and offset ${end} for the rest (start again at 0 if the revision changed).` : "";
-		return answer(lead, { ...state, source: { ...info, text: piece } }, `\n\nSource (${source}, characters ${from} to ${end} of ${text.length}${pane.draft && paneFormat === source ? ", a draft the deck has not taken" : ""}).${how}\n${piece}`, { ...state, source: info });
+		const textHash = fingerprint(text);
+		const info = { format: source, offset: from, end, total: text.length, truncated: more, ...(more ? { next: end } : {}), textHash, ...(draft ? { draft: true } : {}) };
+		const how = more ? ` Truncated: call read_deck again with source "${source}" and offset ${end} for the rest. Every page carries textHash ${textHash}: if a later page has another textHash, the text changed (the user is editing it), so start again at offset 0.` : "";
+		const what = draft ? ", the text in the source pane, which the user is still editing and the deck has not taken" : "";
+		return answer(lead, { ...state, source: { ...info, text: piece } }, `\n\nSource (${source}, characters ${from} to ${end} of ${text.length}${what}).${how}\n${piece}`, { ...state, source: info });
 	},
 );
 
@@ -398,15 +467,18 @@ app.registerTool(
 		title: "Select a slide in the OPF viewer",
 		description: "Show a slide in this OPF viewer, chosen by its index (from 0) or its id.\nGive exactly one of index and id. The user sees the slide; the deck does not change.",
 		inputSchema: z.object({
-			index: z.number().int().min(0).optional().describe("The slide's index, from 0 (read_deck's outline lists them)."),
-			id: z.string().min(1).optional().describe("The slide's id."),
+			index: z.number().optional().describe("The slide's index, a whole number from 0 (read_deck's outline lists them)."),
+			id: z.string().optional().describe("The slide's id."),
 		}),
 	},
 	({ index, id }) => {
-		const refused = unavailable(false);
+		const refused = unavailable();
 		if (refused) return refused;
 		const ed = editor as OpfEditor;
-		if ((index === undefined) === (id === undefined)) return refuse("invalid-input", "Give exactly one of index (from 0) and id.");
+		if ((index === undefined) === (id === undefined || id === "")) return refuse("invalid-input", "Give exactly one of index (a whole number from 0) and id.");
+		if (index !== undefined && (!Number.isInteger(index) || index < 0)) return refuse("invalid-input", `index must be a whole number from 0 (it was ${index}).`);
+		// Changing slides would commit the person's open edit on the slide.
+		if (userTyping()) return refuse("busy", BUSY);
 		const slides = ((ed.getDocument() as { slides?: { id?: unknown }[] }).slides ?? []) as { id?: unknown }[];
 		const at = id === undefined ? (index as number) : slides.findIndex((slide) => slide?.id === id);
 		if (at < 0 || at >= slides.length) return refuse("unknown-slide", `There is no slide ${id === undefined ? `at index ${index}` : `with id ${id}`}: the deck has ${slides.length} slides (indexes 0 to ${slides.length - 1}). Call read_deck for the outline.`);
@@ -415,9 +487,10 @@ app.registerTool(
 	},
 );
 
+const OPERATIONS = ["add", "remove", "replace", "move", "copy", "test"];
 const operationSchema = z.object({
-	op: z.enum(["add", "remove", "replace", "move", "copy", "test"]),
-	path: z.string().describe('A JSON Pointer into the deck, such as /slides/0/title or by id /slides/@intro/title. Never "" (the whole deck).'),
+	op: z.string().describe("add, remove, replace, move, copy or test."),
+	path: z.string().describe('A JSON Pointer into the deck, such as /slides/0/title or by id /slides/@intro/title. Not "" (the whole deck) and not /slides itself.'),
 	from: z.string().optional().describe("For move and copy: the JSON Pointer to take the value from."),
 	value: z.unknown().optional().describe("For add, replace and test: the JSON value."),
 });
@@ -427,30 +500,35 @@ app.registerTool(
 	{
 		title: "Edit the deck open in the OPF viewer",
 		description:
-			"Change the deck open in this OPF viewer with JSON Patch operations, applied as one undoable edit only if the deck is still at expectedRevision.\nGet the revision from read_deck (or the viewer's context). Edit only the parts that change (an operation on the whole deck, path \"\", is refused); paths are JSON Pointers and may name slides and blocks by id (/slides/@intro/title). If the deck changed since that revision, nothing is applied and the result says to read it again. A valid deck stays valid: an edit that would add an error is refused with the findings. The result has the new revision, what changed and the viewer's check findings; the user sees the change at once and can undo it.",
+			"Change the deck open in this OPF viewer with JSON Patch operations, applied as one undoable edit only if the deck is still at expectedRevision.\nGet the revision from read_deck (or the viewer's context). Edit only the parts that change: an operation on the whole deck (path or from \"\") and any operation but test on the whole slides array (path or from /slides) is refused, so edit slides one at a time (/slides/2, /slides/-). Paths are JSON Pointers and may name slides and blocks by id (/slides/@intro/title). Up to 100 operations, all or none. If the deck changed since that revision, nothing is applied and the result says to read it again; while the user is typing in the viewer nothing is applied either (try again after their next message). An edit that would make the deck invalid (format or references) is refused with the findings. In the source pane, JSON keeps its formatting; YAML and Markdown text is written again from the deck, so YAML comments are dropped (the pane says so). The result has the new revision, what changed and the viewer's check findings; the user sees the change at once and can undo it.",
 		inputSchema: z.object({
-			expectedRevision: z.string().min(1).describe("The revision read_deck returned (sha256:...)."),
-			operations: z.array(operationSchema).min(1).max(100).describe("JSON Patch operations (RFC 6902), applied in order, all or none."),
+			expectedRevision: z.string().describe("The revision read_deck returned (sha256:...)."),
+			operations: z.array(operationSchema).describe("1 to 100 JSON Patch operations (RFC 6902), applied in order, all or none."),
 		}),
 	},
 	({ expectedRevision, operations }) => {
-		const refused = unavailable(true);
+		const refused = unavailable();
 		if (refused) return refused;
 		const ed = editor as OpfEditor;
+		if (!expectedRevision) return refuse("invalid-input", "expectedRevision is empty: pass the revision read_deck returned.");
+		if (operations.length < 1 || operations.length > MAX_OPERATIONS) return refuse("invalid-input", `Send 1 to ${MAX_OPERATIONS} operations (this call had ${operations.length}); split a larger change into several edit_deck calls.`);
+		const unknownOp = operations.find((operation) => !OPERATIONS.includes(operation.op));
+		if (unknownOp) return refuse("invalid-input", `Unknown operation op "${unknownOp.op}": use one of ${OPERATIONS.join(", ")}.`);
 		if (operations.some((operation) => operation.path === "" || operation.from === "")) return refuse("whole-deck", 'Edit the parts that change (a path such as /slides/0/title), not the whole deck: an operation on the root path "" is refused.');
+		if (operations.some((operation) => operation.op !== "test" && (operation.path === "/slides" || operation.from === "/slides"))) return refuse("whole-slides", "Edit slides one at a time (/slides/0, /slides/@intro, /slides/- to add one): adding, replacing, removing, moving or copying the whole /slides array is refused.");
 		if (JSON.stringify(operations).length > MAX_EDIT_CHARS) return refuse("too-large", `The operations are over ${MAX_EDIT_CHARS} characters. Split the change into several edit_deck calls.`);
-		// The person's open edit (text on the slide, typing in the source) lands first, so a revision check sees the deck as they left it.
-		if (!ed.commit()) return refuse("busy", "The user is in the middle of an edit on the slide that could not be committed. Try again in a moment.");
-		ed.readSource();
-		if (!ed.inSync) return refuse("source-draft", "The user is editing the deck's text in the source pane and it is not a valid deck right now; an edit would replace their draft. Ask them, or try again after they finish.");
+		// The person's own edit is never committed for them: while they are typing, nothing is applied.
+		if (userTyping()) return refuse("busy", BUSY);
+		if (!ed.inSync) return refuse("source-draft", "The user is editing the deck's text in the source pane and it is not a valid deck right now; an edit would replace their draft. Nothing was applied. Try again after the user's next message.");
 		const before = ed.session.documentHash();
 		const stale = () => refuse("stale-revision", `The deck changed since revision ${expectedRevision}: nothing was applied. Call read_deck for the current deck and its revision, then send the edit again against it.`, { revision: ed.session.documentHash() });
 		if (expectedRevision !== before) return stale();
 		byTool = true;
 		let changed: { op: string; path: string }[];
 		try {
-			// A valid deck stays valid; a deck with errors can still be fixed one edit at a time.
-			const change = ed.session.applyPatch(operations as never, { source: "edit_deck", rejectInvalid: ed.session.validation.valid }, { expectHash: expectedRevision });
+			// The deck in the viewer is always valid (format and references): an invalid deck does not open, and invalid source text stays a
+			// draft the session never takes. An edit keeps it so.
+			const change = ed.session.applyPatch(operations as never, { source: "edit_deck", rejectInvalid: true }, { expectHash: expectedRevision });
 			changed = change.patches.filter((operation) => operation.op !== "test").map((operation) => ({ op: operation.op, path: operation.path }));
 		} catch (error) {
 			const failed = error as { code?: string; message?: string; details?: { path?: string; issues?: { ruleId?: string; path?: string; message?: string }[] } };
@@ -550,8 +628,13 @@ function layOut(): void {
 	const box = (context.containerDimensions ?? {}) as { width?: number; maxWidth?: number; height?: number; maxHeight?: number };
 	const width = Math.min(box.width ?? box.maxWidth ?? Number.POSITIVE_INFINITY, window.innerWidth || Number.POSITIVE_INFINITY);
 	root.dataset.size = width < 400 ? "compact narrow tiny" : width < 640 ? "compact narrow" : width < 860 ? "compact" : "wide";
-	// Inline, the view is as tall as its content; a host that fixes the height (full screen, the side panel) gets a view that fills it.
-	root.dataset.fill = String(typeof box.height === "number");
+	// Renaming opens over the row the name sits in: the whole bar while it is one row, the name's own row once the bar wraps.
+	const ownRow = width < 640;
+	$("deck-title-row").toggleAttribute("data-opf-title-row", ownRow);
+	(shell.querySelector(".deck-bar") as HTMLElement).toggleAttribute("data-opf-title-row", !ownRow);
+	// Inline, the view is as tall as its content; a host that fixes the height, and full screen or the side panel (also when the host
+	// sends no dimensions with it), get a view that fills the frame.
+	root.dataset.fill = String(context.displayMode === "fullscreen" || typeof box.height === "number");
 	if (typeof box.maxHeight === "number") shell.style.setProperty("--deck-max-height", `${box.maxHeight}px`);
 	else shell.style.removeProperty("--deck-max-height");
 	const insets = context.safeAreaInsets;
@@ -587,14 +670,18 @@ function setReviewOpen(open: boolean): void {
 
 /** A message for the person: under the placeholder slide until the deck is on screen, then in the footer (the editor's status line). */
 function status(message: string): void {
-	if (mounted && editor) editor.status(message);
-	else wait.textContent = message;
+	clearTimeout(statusTimer);
+	if (mounted && editor) {
+		editor.status(message);
+		if (message) statusTimer = setTimeout(() => editor?.status(""), STATUS_TIME);
+	} else wait.textContent = message;
 }
 
 /** The deck will not open: the placeholder stops promising one. */
 function fail(message: string): void {
 	phase = "failed";
 	status(message);
+	clearTimeout(statusTimer);
 	if (!mounted) $("deck-wait").dataset.failed = "true";
 }
 
@@ -629,7 +716,6 @@ async function saveFile(name: string, type: string, data: Blob | string): Promis
 	};
 	if (downloading) throw refuse("A download is already waiting for you. Finish or close it first.");
 	const file = savedName(name);
-	if (BLOCKED_FILE.test(file)) throw refuse(`${file} is a file type that cannot be downloaded here.`);
 	downloading = true;
 	status("");
 	let outcome: string;
@@ -646,9 +732,16 @@ async function saveFile(name: string, type: string, data: Blob | string): Promis
 		const result = await app.downloadFile({ contents: [{ type: "resource", resource }] }, { timeout: DOWNLOAD_TIMEOUT });
 		// isError: false means the host started the download; true means it did not finish (the host does not say why).
 		outcome = result.isError ? "The download didn't finish." : "Download started.";
-	} catch {
-		// A rejection or a timeout: the host's dialog may still be open and still save the file, so nothing more is claimed.
-		outcome = "The download couldn't be confirmed.";
+	} catch (error) {
+		if ((error as { code?: unknown })?.code === -32601) {
+			// The host does not offer downloads here after all: no more Download or Export; the source text can be copied instead.
+			shell.dataset.download = "false";
+			$("deck-export").hidden = true;
+			outcome = "This host does not offer downloads here. Select the source text to copy it.";
+		} else {
+			// A rejection or a timeout: the host's dialog may still be open and still save the file, so nothing more is claimed.
+			outcome = "The download couldn't be confirmed.";
+		}
 	} finally {
 		downloading = false;
 	}
@@ -715,9 +808,14 @@ async function copyText(text: string): Promise<void> {
 }
 
 // -------------------------------------------------------------------------------------------------------------------
-// The studio (open_studio): a starter deck to edit at once, a bundled example to open instead, or a deck to paste into Source.
+// The editor's start row (open_editor): a starter deck to edit at once, a bundled example to open instead, or a deck to paste.
 
-function showStudio(): void {
+/** Once the person opened an example or pasted a deck, the row no longer calls it a starter deck. */
+const leaveStarter = () => {
+	$("deck-start-label").hidden = true;
+};
+
+function showStart(): void {
 	const canOpen = Boolean(app.getHostCapabilities()?.serverTools) && examples.length > 0;
 	exampleSelect.hidden = !canOpen;
 	for (const example of canOpen ? examples : []) exampleSelect.add(new Option(example.name ? `${example.name} (${example.slug})` : example.slug, example.slug));
@@ -733,6 +831,7 @@ async function openExample(slug: string): Promise<void> {
 		const record = (result.structuredContent as { record?: unknown } | undefined)?.record;
 		if (result.isError || !record) throw new Error("the server sent no deck");
 		if (!editor.setDocument(record)) throw new Error("the viewer did not take it");
+		leaveStarter();
 		status(`Opened the example ${slug}. Undo goes back to the deck before it.`);
 	} catch (error) {
 		status(`The example could not open: ${error instanceof Error ? error.message : String(error)}.`);
@@ -743,7 +842,7 @@ async function openExample(slug: string): Promise<void> {
 }
 
 // -------------------------------------------------------------------------------------------------------------------
-// Start: the tool's arguments arrive once (ui/notifications/tool-input), after the host has initialized the view; open_studio's
+// Start: the tool's arguments arrive once (ui/notifications/tool-input), after the host has initialized the view; open_editor's
 // deck arrives with its result (ui/notifications/tool-result).
 
 const isText = (value: unknown): value is string => typeof value === "string";
@@ -803,6 +902,8 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	let depth = 0;
 	let openedAt = 0;
 	editor.on("change", (event) => {
+		// The parts heard the change first: the source pane already shows the deck as it now is.
+		sourceBaseline = paneText();
 		depth = (event.event as { snapshot?: { undoDepth?: number } } | undefined)?.snapshot?.undoDepth ?? (event.canUndo ? openedAt + 1 : 0);
 		undoButton.disabled = !ready || superseded || depth <= openedAt;
 		redoButton.disabled = !ready || superseded || !event.canRedo;
@@ -812,6 +913,7 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		if (!byTool) {
 			userEdited = true;
 			unsent = true;
+			if (editorEntry) leaveStarter();
 		}
 		syncSend();
 		if (!byTool) setSync(app.getHostCapabilities()?.updateModelContext && !silent() ? "pending" : "none");
@@ -820,6 +922,10 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		scheduleContext();
 	});
 	editor.on("slide", () => scheduleContext());
+	// Where the source pane stands: edit_deck waits for typing the pane has not taken in, rather than commit it for the person.
+	editor.on("source", () => {
+		sourceBaseline = paneText();
+	});
 	// The pill opens the Review panel: the editor has no side panel here, so it asks the host page (this view) to show it.
 	editor.on("review-open", () => setReviewOpen(true));
 	await editor.ready;
@@ -829,9 +935,10 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	openedAt = depth;
 	mounted = true;
 	phase = "ready";
+	sourceBaseline = paneText();
 	shell.dataset.ready = "true";
 	if (superseded) editor.setReadOnly(true);
-	if (studio) showStudio();
+	if (editorEntry) showStart();
 	if (typeof args.slide === "number" && args.slide >= 1) editor.setSlide(args.slide - 1);
 	setView(VIEWS.includes(args.view as View) ? (args.view as View) : "preview");
 	showDeck();
@@ -866,17 +973,45 @@ sendButton.addEventListener("click", () => void sendToClaude());
 // Straight from the click: the host opens a larger view only right after the person pressed something in this one.
 expandButton.addEventListener("click", () => setDisplayMode(context.displayMode === "fullscreen" ? "inline" : "fullscreen"));
 exampleSelect.addEventListener("change", () => void openExample(exampleSelect.value));
+/** The form of pasted deck text: JSON when it starts with { or [, OPF Markdown when it starts with front matter or a heading, else YAML. */
+const pastedFormat = (text: string) => (/^[\s\uFEFF]*[[{]/.test(text) ? "json" : /^[\s\uFEFF]*(---\s*\n[\s\S]*?\n---|#\s)/.test(text) ? "md" : "yaml");
+// Paste does the work: the whole source is selected and focused, so what the person pastes replaces it; where the host lets the view
+// read the clipboard (on this click), the deck on it is put in at once.
 pasteButton.addEventListener("click", () => {
+	if (!editor || silent()) return;
 	setView("source", true);
-	editor?.focus("source");
-	status("Select all in Source (Ctrl/Cmd A) and paste a deck in JSON, YAML or OPF Markdown.");
+	const pane = editor.sourcePane;
+	const selectAll = () => {
+		const api = pane?.editor.api;
+		api?.focus();
+		api?.setSelection(0, api.getValue().length);
+	};
+	selectAll();
+	const ask = () => status("Paste a deck in JSON, YAML or OPF Markdown: it replaces the selected text.");
+	// Only where the frame is allowed to read the clipboard (the host's permissions policy); otherwise asking would only log a refusal.
+	const policy = (document as unknown as { permissionsPolicy?: { allowsFeature(name: string): boolean }; featurePolicy?: { allowsFeature(name: string): boolean } });
+	const allowed = (policy.permissionsPolicy ?? policy.featurePolicy)?.allowsFeature("clipboard-read") ?? false;
+	const clipboard = allowed ? navigator.clipboard?.readText?.bind(navigator.clipboard) : undefined;
+	if (!clipboard) return ask();
+	clipboard().then(
+		(text) => {
+			if (!text.trim() || !editor) return ask();
+			const taken = editor.setSourceText(text, { format: pastedFormat(text) });
+			leaveStarter();
+			status(taken ? "Pasted the deck from the clipboard. Undo goes back to the deck before it." : "Pasted the text from the clipboard; it is not a valid deck yet, so the slides still show the deck before it.");
+		},
+		() => {
+			selectAll();
+			ask();
+		},
+	);
 });
 window.addEventListener("resize", layOut);
 
 app.addEventListener("toolinputpartial", () => {
 	if (!started) status(`${sentence(assistant())} is writing the deck…`);
 });
-// show_deck's deck is its argument; open_studio's comes with the result.
+// show_deck's deck is its argument; open_editor's comes with the result.
 app.addEventListener("toolinput", (params) => {
 	const args = (params.arguments ?? {}) as ShowDeckArguments;
 	if (args.document !== undefined) startOrFail(args);
@@ -884,15 +1019,16 @@ app.addEventListener("toolinput", (params) => {
 	else inputWithoutDeck = true;
 });
 app.addEventListener("toolresult", (result) => {
-	const data = result.structuredContent as { viewer?: unknown; document?: unknown; studio?: unknown; examples?: unknown } | undefined;
+	const data = result.structuredContent as { viewer?: unknown; document?: unknown; editor?: unknown; example?: unknown; name?: unknown; examples?: unknown } | undefined;
 	joinSession(data?.viewer);
 	if (started) return;
 	if (result.isError) {
 		const text = result.content?.find((part) => part.type === "text");
 		fail(text && "text" in text ? String(text.text) : "The tool failed.");
 	} else if (data?.document !== undefined) {
-		studio = data.studio === true;
-		if (studio && Array.isArray(data.examples)) examples = (data.examples as ExampleEntry[]).filter((item) => typeof item?.slug === "string");
+		editorEntry = data.editor === true;
+		if (editorEntry) openedWith = { example: textOf(data.example), name: textOf(data.name) };
+		if (editorEntry && Array.isArray(data.examples)) examples = (data.examples as ExampleEntry[]).filter((item) => typeof item?.slug === "string");
 		startOrFail({ document: data.document });
 	} else if (inputWithoutDeck) fail(`${sentence(assistant())} sent no deck.`);
 	else resultWithoutDeck = true;

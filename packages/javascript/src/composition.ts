@@ -19,6 +19,7 @@ import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} fr
 import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-labels.js';
 import {chartSlideFocus,slideFocusSources,tableHighlightRows,tableSlideFocus,type FocusSource} from './chart-focus.js';
 import {chartDoughnut,restackForRows,chartStack,chartReferences,chartValueList,chartWaterfall,horizontalBarPlot,placeReferences,refreshChartMarks} from './chart-marks.js';
+import {chartReferenceSources} from './chart-references.js';
 import {chartHistogram} from './chart-histogram.js';
 import {chartNumericAxes} from './chart-numeric-axes.js';
 import {chartDrawPlan} from './chart-fallback.js';
@@ -98,7 +99,7 @@ export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_
 import {layoutDiagram,type ComposedDiagram,type DiagramIssue,type DiagramMeasure} from './diagram.js';
 import {composeShape,composeStroke,isPresetShape,isShapeBlock,presetAspect,presetMask,sketchStroke,stackedText,PICTURE_STROKE_WIDTH,SHAPE_BLOCK_KEYS,type ComposedShape,type ComposedStroke} from './shape-block.js';
 import {chartPointGeometry} from './chart-point-anchors.js';
-import {composeOverlayShapes,hasOverlayShapes,representablePositionBox,type ComposedOverlayEntry,type ComposedOverlayShape} from './overlay-shapes.js';
+import {composeOverlayShapes,hasOverlayShapes,representableBox,type ComposedOverlayEntry,type ComposedOverlayShape} from './overlay-shapes.js';
 import {ICON_VIEWBOX,documentIcons,iconColors,parseIconReference,placeIconCommands,resolveIcon,type IconPaint,type IconPart,type ResolvedIcon} from './icons.js';
 export {ICON_CHIP_TINT,ICON_MIN_CONTRAST,ICON_VIEWBOX,documentIcons,embedIcons,ensureIcons,iconColors,iconFromSvg,iconPathCommands,iconPathData,iconsPending,nearIconNames,parseIconReference,placeIconCommands,resolveIcon,type IconCommand,type IconOptions,type IconPaint,type IconPart,type IconReference,type IconResolution,type IconSetIcon,type IconSetLoader,type IconSetRecord,type ResolvedIcon} from './icons.js';
 export {DIAGRAM_BORDER_MIN_CONTRAST,DIAGRAM_LINE_MIN_CONTRAST,DIAGRAM_MAX_EDGES,DIAGRAM_SHAPE_FAMILIES,DIAGRAM_SECONDARY_FLOOR,DIAGRAM_SOURCE_LIMIT,DIAGRAM_SURFACE_ALT_MIX,DIAGRAM_SURFACE_MIX,DIAGRAM_SYNTAXES,checkDiagram,diagramPalette,diagramPayload,diagramsPending,ensureDiagrams,layoutDiagram,paintDiagram,paintDiagramGroup} from './diagram.js';
@@ -128,8 +129,12 @@ export interface LayoutDiagnostic {
    * LH-14: `icon-dropped` for an icon the slide has no room for without setting text smaller: the text stays, the chip is not drawn.
    * SH-09: `arrangement-adapted` for a pyramid or matrix drawn another way: a matrix of other than four entries as cards, or a list the
    * arrangement's designs cannot hold at the list's size (or of a shape it does not draw) as a list.
+   * RR-105: two marks drawn without room that no size or arrangement changes, which are geometry, not overflow (a strict `overflow: "error"`
+   * composition reports them and does not refuse the slide): `chart-label-collision` for an explicit reference label that meets another label
+   * or a data line on both of its sides (drawn at its preferred place, its text and value kept), and `timeline-period-short` for a timeline
+   * period shorter than its marker (LH-16's proportions are the author's).
    */
-  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted";
+  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "chart-label-collision" | "timeline-period-short";
   path: string;
   message: string;
   /**
@@ -634,7 +639,7 @@ export const TEXT_TILE_MIN = 4, TEXT_TILE_MAX = 8, TEXT_TILE_CHARACTERS = 90, TE
 /** LH-69: a placed short text's tile sets it on at most PLACED_TILE_LINES lines, covering at most PLACED_TILE_SHARE of the card's inner height. */
 export const PLACED_TILE_LINES = 3, PLACED_TILE_SHARE = .6;
 /** LH-69: a placed short text that ends as a sentence ("Teams want fewer exports.") is a statement, not a tile's label: it keeps its bold heading. */
-const PLACED_SENTENCE = /[.!?\u3002\uff01\uff1f\u2026\u06d4\u0964]$/u;
+const PLACED_SENTENCE = /[.!?\u3002\uff01\uff1f\u2026\u06d4\u061f\u0964]$/u;
 /**
  * LH-165, LH-162: the column counts of the balanced grids of `count` equal cards: two to four cards a row, at most four rows, every row
  * full but the last, which is at most one card short and never a lone card under full rows.
@@ -1049,9 +1054,9 @@ export interface ComposeSlideOptions {
   fontFamilies?: Partial<FontFamilies>;
   /**
    * Deck base direction (RR-05). Defaults to the direction of the presentation language's script. In a right-to-left deck
-   * composition mirrors the arrangement (the first column or `left` region is drawn at the right, slide images, logos and
+   * composition mirrors the arrangement (the first column or `start` region is drawn at the right, slide images, logos and
    * header/footer zones swap sides, tables run right to left), lists put their markers at the right, and every text fit
-   * reports each paragraph's direction. Alignment stays logical: `left` is the start edge.
+   * reports each paragraph's direction. Alignment stays logical: `start` is the edge the text starts at.
    */
   direction?: TextDirection;
   /** Deck-level alignment a host resolved itself. It ranks with `presentation.design`, above the layout record's design and below the slide's own design; hosts normally omit it because composition reads `presentation.design` and the layout. */
@@ -1336,15 +1341,23 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   if (pictureAspect) result.picture = fitImage(box, fit, pictureAspect, focus);
   const callouts = record(host.image).callouts;
   if (callouts !== undefined && context.callout) {
-    if (!Array.isArray(callouts)) throw new TypeError('Image callouts must be an array at ' + hostPath);
+    // A document being edited may hold a callout validation refuses (or one whose panel is too far away to place): composition reports it
+    // and leaves that callout out, and draws the others; refusing the document is validation's job.
     const frame = fit === 'contain' && result.picture ? result.picture.image : box;
-    if (callouts.length) result.calloutFrame = { ...frame };
-    result.callouts = callouts.map((value: unknown, index: number) => {
+    const entries: unknown[] = Array.isArray(callouts) ? callouts : [];
+    if (!Array.isArray(callouts)) context.diagnostics.push({ code: 'unresolved-content', path: `${hostPath}.image.callouts`, message: 'Image callouts must be an array; they are not drawn.' });
+    if (entries.length) result.calloutFrame = { ...frame };
+    result.callouts = entries.flatMap((value: unknown, index: number) => {
       const source = record(value), path = `${hostPath}.image.callouts.${index}`;
-      if (typeof source.text !== 'string' || ['x','y'].some(key => typeof source[key] !== 'number' || !Number.isFinite(source[key])) || ['width','height'].some(key => typeof source[key] !== 'number' || !Number.isFinite(source[key]) || source[key] <= 0 || source[key] > 1)) throw new TypeError('Callouts need plain text, finite signed origins and positive unit width and height at ' + path);
+      if (typeof source.text !== 'string' || ['x','y'].some(key => typeof source[key] !== 'number' || !Number.isFinite(source[key])) || ['width','height'].some(key => typeof source[key] !== 'number' || !Number.isFinite(source[key]) || source[key] <= 0 || source[key] > 1)) {
+        context.diagnostics.push({ code: 'unresolved-content', path, message: 'A callout needs plain text, finite signed origins and a positive width and height of at most 1; it is not drawn.' });
+        return [];
+      }
       // Authored panels may straddle the image or slide edge. Only text fit is overflow;
       // image cropping/masks never reposition or clip the annotation.
-      return context.callout!(source.text, representablePositionBox({ x: frame.x + frame.width * source.x, y: frame.y + frame.height * source.y, width: frame.width * source.width, height: frame.height * source.height }, path), path);
+      const panel = representableBox({ x: frame.x + frame.width * source.x, y: frame.y + frame.height * source.y, width: frame.width * source.width, height: frame.height * source.height }, path);
+      if (!panel) { context.diagnostics.push({ code: 'unresolved-content', path, message: 'The callout lies too far from its image to be placed; it is not drawn.' }); return []; }
+      return [context.callout!(source.text, panel, path)];
     });
   }
   return result;
@@ -2960,8 +2973,12 @@ export function timelineStatusWordsFor(language?: string): Readonly<Record<Timel
   try { locale=new Intl.Locale(language??'en-US'); } catch { return undefined; }
   const base=locale.language==='nb'?'no':locale.language;
   const tag=base==='zh' ? (locale.script==='Hant'||!locale.script&&['TW','HK','MO'].includes(locale.region??'')?'zh-Hant':'zh-Hans') : base==='vi'?'vi-Latn':base;
-  return LANGUAGES.find(entry=>entry.tag===tag)?.timelineStatusWords;
+  const words=LANGUAGES.find(entry=>entry.tag===tag)?.timelineStatusWords;
+  // The language table's `pt` is Brazilian Portuguese (pt-BR); Portuguese of any other region plans with the European "Planeado".
+  if(!words||base!=='pt'||locale.region===undefined||locale.region==='BR')return words;
+  return EUROPEAN_PORTUGUESE_STATUS_WORDS??={...words,planned:'Planeado'};
 }
+let EUROPEAN_PORTUGUESE_STATUS_WORDS: Readonly<Record<TimelineStatus, string>> | undefined;
 /** LH-41: a lone timeline in its region may grow its type by up to this many reference pixels when it still fits. */
 const TIMELINE_GROWTH = 4;
 /**
@@ -3110,7 +3127,9 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   type Candidate={arrangement:TimelineLayout['arrangement'];parts:TimelineTextPart[];markers:TimelineLayout['markers'];ranges?:TimelineLayout['ranges'];rangeLinks?:TimelineLayout['rangeLinks'];connector:TimelineLayout['connector'];progress?:TimelineLayout['progress'];diagnostics:TimelineLayoutDiagnostic[];score:number};
   let selected:Candidate|undefined,attempts=0;
   // The search starts `sizeOffset` from the role sizes and steps down one reference pixel at a time to the floor.
-  const effectiveOffset=durations&&!options.intrinsic?Math.max(0,offset):offset;
+  // LH-16: ranged labels never shrink, whatever offset a stack or a cap asks for (placement); their natural height (intrinsic) is measured
+  // at the same sizes, so a stack gives a duration timeline the height it is drawn in (RR-105).
+  const effectiveOffset=durations?Math.max(0,offset):offset;
   const sizeAt=(part:TimelineTextPart,reduction:number)=>gridFontSize(part.requestedFontSize+(effectiveOffset-reduction)*scale,minimum);
   let reductionLimit=0;
   for(const part of source)reductionLimit=Math.max(reductionLimit,(part.requestedFontSize+offset*scale-minimum)/scale);
@@ -3252,7 +3271,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
           y+=16*scale;
         });
       }
-      for(const range of ranges){const length=arrangement==='vertical'?range.box.height:range.box.width;if(length<2*scale){diagnostics.push({code:'text-overflow',reason:'event-space',path:range.path,message:'Timeline period is too short to draw readably; enlarge the timeline or split its events.'});score+=2*scale-length;}}
+      for(const range of ranges){const length=arrangement==='vertical'?range.box.height:range.box.width;if(length<2*scale){diagnostics.push({code:'timeline-period-short',reason:'event-space',path:range.path,message:'Timeline period is too short to draw readably; enlarge the timeline or split its events.'});score+=2*scale-length;}}
       for(const marker of markers){const extent=(marker.ring?.radius??marker.radius)+(marker.strokeWidth??0)/2;if(marker.x-extent<box.x-.01||marker.y-extent<box.y-.01||marker.x+extent>box.x+box.width+.01||marker.y+extent>box.y+box.height+.01){diagnostics.push({code:'text-overflow',reason:'event-space',path:marker.path,message:'Timeline marker has no usable space; increase the cell or paginate events.'});score+=1;}}
       const firstMarker=markers[0]!,last=markers.at(-1)!,connector=rtl?{x1:Math.min(firstMarker.x,last.x),y1:firstMarker.y,x2:Math.max(firstMarker.x,last.x),y2:last.y}:{x1:firstMarker.x,y1:firstMarker.y,x2:last.x,y2:last.y};
       // LH-121: progress runs from the first event to the current one, or to the last done one when none is current.
@@ -3274,7 +3293,8 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     if(!options.horizontal&&!tryArrangement('vertical',reduction).length)settled=true;
   }
   const {score,...result}=selected!;
-  if(result.diagnostics.length&&options.overflow==='error')throw new OPFCompositionError(result.diagnostics);
+  const overflowing=result.diagnostics.filter(entry=>entry.code!=='timeline-period-short');
+  if(overflowing.length&&options.overflow==='error')throw new OPFCompositionError(overflowing);
   let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
   const cover=(x:number,y:number,width:number,height:number)=>{left=Math.min(left,x);top=Math.min(top,y);right=Math.max(right,x+width);bottom=Math.max(bottom,y+height);};
   for(const part of result.parts)cover(part.box.x,part.box.y,part.box.width,part.box.height);
@@ -3282,7 +3302,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   for(const range of result.ranges??[])cover(range.box.x,range.box.y,range.box.width,range.box.height);
   // LH-121: the status words are drawn, measured and covered like the other parts, but they are not source fields.
   const statusLabels=result.parts.filter(part=>part.role==='status'),parts=result.parts.filter(part=>part.role!=='status');
-  return {algorithm:'timeline-flow-v1',attempts,textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:outlines?'provided':'unavailable',...result,parts,...(statusLabels.length?{statusLabels}:{}),bounds:{x:left,y:top,width:right-left,height:bottom-top},overflow:result.diagnostics.length>0};
+  return {algorithm:'timeline-flow-v1',attempts,textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:outlines?'provided':'unavailable',...result,parts,...(statusLabels.length?{statusLabels}:{}),bounds:{x:left,y:top,width:right-left,height:bottom-top},overflow:overflowing.length>0};
 }
 
 export interface CodeContent { source: string; language?: string; filename?: string }
@@ -4854,6 +4874,14 @@ function bodyFill(result: SlideComposition): { fill: number; spare: number } | u
 // no finding, sets every block larger and fills at most LONE_TARGET is kept. The body then sits in the middle of the space under the
 // headings where its rows hug their content (CENTER). Siblings keep one size (LH-43). A stacked record (statement, quote, closing)
 // already centers its message.
+/** The slide fields that never hold a body icon: notes, overlays (`shapes`), design and the slide's metadata. */
+const NON_BODY_FIELDS = new Set(['id', 'language', 'type', 'beat', 'layout', 'design', 'shapes', 'notes', 'section', 'hidden', 'composition', 'extensions']);
+/** LH-102: whether a body field of the slide (a list entry, a block, a metric) names an `icon`, read from the fields, not from its text. */
+function bodyIcons(input: unknown): boolean {
+  const walk = (value: unknown): boolean => Array.isArray(value) ? value.some(walk)
+    : value !== null && typeof value === 'object' ? (value as Record<string, unknown>).icon !== undefined || Object.values(value as Record<string, unknown>).some(walk) : false;
+  return Object.entries(record(input)).some(([key, value]) => !NON_BODY_FIELDS.has(key) && walk(value));
+}
 function growBody(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition | undefined {
   if (options.fill === false || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || overflowCount(result) > 0) return undefined;
   const start = bodyFill(result);
@@ -4904,7 +4932,7 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
     // drawings are held to the same body they were before (composeSlideBody, withCards). A placed tile is not a step badge: its fixed label
     // stays out of the sibling body's growth. Each step keeps the body's arrangement: as many
     // columns and rows as the three steps left.
-    const blocks = record(input).blocks, drawn = JSON.stringify(input).includes('"icon"') || (result.steps !== undefined && !PLACED_TILES.has(result))
+    const blocks = record(input).blocks, drawn = bodyIcons(input) || (result.steps !== undefined && !PLACED_TILES.has(result))
       || (Array.isArray(blocks) && (blocks.some(block => Array.isArray(record(block).blocks)) || (blocks.length >= TEXT_TILE_MIN && blocks.length <= TEXT_TILE_MAX && permitsTextTiles(result.composition))));
     if (result.regions || !reached || reached.fill >= LONE_FILL || drawn || (options as Record<symbol, unknown>)[NO_STEPS] === true) return done(grown);
     const shapeOf = (composed: SlideComposition) => { const body = composed.items.filter(item => !headings.has(item.field) && !item.eyebrow); return `${new Set(body.map(item => Math.round(item.box.x / 4))).size}:${new Set(body.map(item => Math.round(item.box.y / 4))).size}`; };
@@ -6114,8 +6142,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
   const scale = Math.min(width, height) / 720;
-  // A directly composed slide has no presentation context; its own language still controls every language-aware rule.
-  if (options.presentation === undefined && slide.language !== undefined) options = { ...options, presentation: { language: slide.language } };
+  // A directly composed slide, or one composed with its presentation but without its index, has no slide entry to read its language
+  // from; its own language still controls every language-aware rule.
+  if (slide.language !== undefined && (options.presentation === undefined || !Number.isInteger(options.slideIndex))) options = { ...options, presentation: { ...(options.presentation ?? {}), language: slide.language } };
   const deckDirection: TextDirection = options.direction ?? resolveSlideDirection(options.presentation, options.slideIndex);
   const rtl = deckDirection === 'rtl', textDirection = rtl ? 'rtl' as const : undefined;
   // OPF 0.19: a template record (areas and regions) composes through its regions; it is checked first, so an invalid
@@ -6929,7 +6958,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // Valid documents choose exactly one of regions, blocks, or root payloads.
   // Promoted regions are composed in visual reading order (rows top to bottom, then along the row), not in key order,
   // so the composed item order, the SVG draw order, the PPTX shape order and the accessibility reading order agree.
-  // The order comes from the logical region cells before any mirroring, so a right-to-left deck (which draws `left`
+  // The order comes from the logical region cells before any mirroring, so a right-to-left deck (which draws `start`
   // at the right and reads from the right) keeps the same logical order.
   const regionsInReadingOrder = visualReadingOrder(regions.map(key => ({ key, box: regionBox(regionParts(key)!, contentBox, gap) }))).map(entry => entry.key);
   const pending: Pending[] = regions.length
@@ -7730,7 +7759,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       grid.boxes = jointRowBoxes(nodes, grid.boxes, nodes.map((_, index) => Math.floor(index / cols)), area, grid.gap, settings, hasCards, 'top', true, area === contentBox && !pullItem);
       grid.rows = grid.rows.map((_, row) => { const box = grid.boxes[row * cols]!; return { offset: box.y - area.y, size: box.height }; });
     }
-    // Right to left: the first column and the `left` region sit at the right of their container (RR-05). Track sizes,
+    // Right to left: the first column and the `start` region sit at the right of their container (RR-05). Track sizes,
     // weights and the scoring above are unchanged; only each box moves to its mirrored place within the container.
     const mirrored = (box: LayoutBox): LayoutBox => rtl ? { ...box, x: area.x + area.width - (box.x - area.x) - box.width } : box;
     const boxes = grid.boxes.map(mirrored);
@@ -7739,7 +7768,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const stack: number[] = [];
     // LH-52 with LH-70 and LH-67: paragraph columns and a lead plus stack keep their own cells; LH-52 centers the scored grid or LH-71's row.
     const filled = !hasRegions && !paragraphs && !lead && count === nodes.length && fillsSplit(nodes, grid.boxes, area, settings, cols);
-    // LH-102: promoted regions that each run the body's full height (`left`, `center+right`), holding paragraphs and lists that fill too
+    // LH-102: promoted regions that each run the body's full height (`start`, `center+end`), holding paragraphs and lists that fill too
     // little of it (LH-48's growBody composes them with CENTER), set their blocks as one band in the middle of the body, each at the height
     // the tallest of them needs, instead of each at the top of its column over an empty foot.
     const regionBand = (options as Record<symbol, unknown>)[CENTER] === true && hasRegions && !pullItem && area === contentBox && nodes.every(node => node.region?.[0].length === rows.length && proseLeaf(node))
@@ -7863,8 +7892,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const labeled = Boolean(layer.small?.labels || layer.endLabels || layer.slices || layer.valueList || layer.stack?.names || (record?.dataLabels !== undefined && record.dataLabels !== false));
       layer = {...layer, focus: {...layer.focus, ...(labeled ? {labeled} : {})}};
     }
-    const secondaryValueAxis=chartComboAxes(drawn.chart,drawn.data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSize:settings.minFontSize,language})?.secondary;
-    if(drawn.data.ok&&drawn.data.combo&&valueAxis&&!layer?.plot){const plot=chartPlotInset(drawn.chart,drawn.data,{valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}),...(layer?{layer}:{})},{...geometry,measure:(text:string,size:number)=>measure(text,size,400)});if(plot)layer={...layer,plot};}
+    // A combo with reference lines (LH-110) draws on its composed primary and secondary scales and plot in both engines; one without them
+    // has no composed axis (chartValueAxis) and keeps both engines' own layout.
+    const secondaryValueAxis=references.length?chartComboAxes(drawn.chart,drawn.data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSize:settings.minFontSize,language})?.secondary:undefined;
+    if(drawn.data.ok&&drawn.data.combo&&references.length&&valueAxis&&!layer?.plot){const plot=chartPlotInset(drawn.chart,drawn.data,{valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}),...(layer?{layer}:{})},{...geometry,measure:(text:string,size:number)=>measure(text,size,400)});if(plot)layer={...layer,plot};}
     return valueAxis || layer ? {...(valueAxis ? {valueAxis} : {}),...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})} : undefined;
   };
   // WI-3: a contained picture and a video frame sit at the region's anchor inside the cell the flow gave them (top by default),
@@ -10157,7 +10188,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
   }
   // Explicit labels report only their final placement, after sibling scales/plots and table-row alignment.
-  for (const item of items) for (const finding of item.chart?.layer?.references?.diagnostics ?? []) diagnostics.push({code: 'text-overflow', path: item.path + '.referenceLines.' + finding.index + '.label', message: finding.message});
+  // A reference label past its chart is overflow; one that meets a data line or another label after both placements is a collision
+  // (chart-label-collision), which a strict composition does not refuse. Paths name the authored entry (chartReferenceSources).
+  for (const item of items) { const sources = chartReferenceSources(item.value); for (const finding of item.chart?.layer?.references?.diagnostics ?? []) diagnostics.push({code: finding.code === 'chart-reference-label-collision' ? 'chart-label-collision' : 'text-overflow', path: item.path + '.referenceLines.' + (sources[finding.index] ?? finding.index) + '.label', message: finding.message}); }
   // LH-115: the timeline under its column chart spans the plot, so each event sits under its column; it is listed before the chart when
   // it was written first (reading order).
   if (underChart?.chart && underChart.timeline) {
@@ -11329,6 +11362,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   diagnostics.push(...imageCalloutDiagnostics);
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
   const failures = diagnostics.filter(diagnostic => {
+    if(diagnostic.code==='chart-label-collision'||diagnostic.code==='timeline-period-short')return false;
     if(composition.overflow==='error')return true;
     let path = diagnostic.path;
     while (path) {
@@ -11465,7 +11499,7 @@ export {horizontalBarPlot} from './chart-marks.js';
 export {chartDoughnut,restackForRows,chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';
 export type {ChartLayerDoughnut,WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartLayerReferences} from './chart-marks.js';
 export type {ChartReference,ChartReferenceDiagnostic} from './chart-references.js';
-export {CHART_REFERENCE_TYPES} from './chart-references.js';
+export {CHART_REFERENCE_TYPES,chartReferenceSources} from './chart-references.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartNumericAxes} from './chart-numeric-axes.js';
 export type {ChartNumericAxes} from './chart-numeric-axes.js';

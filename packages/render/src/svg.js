@@ -898,7 +898,7 @@ function renderImageBlock(item, bound, options) {
   const picture = renderImage(item, image.box, bound, { ...options, imageFit: image.fit, imageFocus: image.focus, imagePicture: image.picture });
   const trace = options.trace && image.placement ? { "data-opf-image-placement": image.placement.edge } : {};
   const labels = (image.callouts ?? []).map(callout => tag('g', options.trace ? {'data-opf-image-callout': callout.path} : {},
-    tag('rect', {x: callout.box.x, y: callout.box.y, width: callout.box.width, height: callout.box.height, fill: bound.design.colors.background}) +
+    tag('rect', {x: stableNumber(callout.box.x), y: stableNumber(callout.box.y), width: stableNumber(callout.box.width), height: stableNumber(callout.box.height), fill: bound.design.colors.background}) +
     renderTextBox(callout.text, callout.textBox, bound, {path: callout.path + '.text', fit: callout.fit, textStyle: callout.textStyle, fill: bound.design.colors.text, align: 'center', diagnosticsHandled: true, options}))).join('');
   if (isImagePlaceholder(picture)) return labels || Object.keys(trace).length ? tag('g', trace, picture + labels) : picture;
   const id = `opf-s${bound.index + 1}-image-${item.path.replace(/[^A-Za-z0-9]+/g, "-")}`, shape = image.shape, defs = [];
@@ -1749,8 +1749,8 @@ function renderTimeline(item, box, bound, options) {
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
   const background=bound.design.backgroundColor??bound.design.colors.background;
   const children=[tag('line',{...HIDDEN,...layout.connector,stroke:bound.design.colors.border,'stroke-width':3*scale,...traceAttrs(options,item.path)})];
-  for(const range of layout.ranges??[])children.push(tag('rect',{...HIDDEN,...range.box,fill:bound.design.colors.primary,'fill-opacity':.32,stroke:background,'stroke-width':2*scale,...traceAttrs(options,range.path),...(options.trace?{'data-opf-timeline-range':range.eventIndex}:{})}));
-  for(const link of layout.rangeLinks??[])children.push(tag('line',{...HIDDEN,x1:link.x1,y1:link.y1,x2:link.x2,y2:link.y2,stroke:bound.design.colors.border,'stroke-width':scale,...traceAttrs(options,link.path),...(options.trace?{'data-opf-timeline-range-link':link.eventIndex}:{})}));
+  for(const range of layout.ranges??[])children.push(tag('rect',{...HIDDEN,x:stableNumber(range.box.x),y:stableNumber(range.box.y),width:stableNumber(range.box.width),height:stableNumber(range.box.height),fill:bound.design.colors.primary,'fill-opacity':.32,stroke:background,'stroke-width':stableNumber(2*scale),...traceAttrs(options,range.path),...(options.trace?{'data-opf-timeline-range':range.eventIndex}:{})}));
+  for(const link of layout.rangeLinks??[])children.push(tag('line',{...HIDDEN,x1:stableNumber(link.x1),y1:stableNumber(link.y1),x2:stableNumber(link.x2),y2:stableNumber(link.y2),stroke:bound.design.colors.border,'stroke-width':stableNumber(scale),...traceAttrs(options,link.path),...(options.trace?{'data-opf-timeline-range-link':link.eventIndex}:{})}));
   // LH-121: the connector up to the current event in the primary color, over the border-colored rest.
   if(layout.progress)children.push(tag('line',{...HIDDEN,...layout.progress,stroke:bound.design.colors.primary,'stroke-width':3*scale,...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-progress':'true'}:{})}));
   // FA-11: status colors come from the deck (core's timelineMarkerShapes / timelineTextColor); a marker with no status draws the plain primary circle.

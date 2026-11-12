@@ -9,7 +9,7 @@ export interface Reference { id: string; text: RichText; url?: string }
 
 export declare const CAPTION_POSITIONS: readonly ["below", "above"];
 export declare const CAPTION_ALIGNMENTS: readonly ["start", "center", "end"];
-export declare const CAPTIONABLE_FIELDS: readonly ["image", "chart", "table", "video"];
+export declare const CAPTIONABLE_FIELDS: readonly ["image", "chart", "table", "video", "diagram"];
 
 export interface PreparedAnnotationChange {
   action: "caption" | "add-reference" | "update-reference" | "remove-reference" | "cite" | "uncite" | "footnote";

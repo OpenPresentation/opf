@@ -10,7 +10,7 @@ for(const language of ['en','ar'])for(const dimensions of [[1280,720],[540,960]]
   assert.equal((svg.match(/data-opf-image-callout=/g)??[]).length,2);
   for(const label of image.callouts){
     const start=svg.indexOf('data-opf-image-callout="'+label.path+'"'),end=svg.indexOf('</g>',start),part=svg.slice(start,end);
-    for(const key of ['x','y','width','height'])assert.ok(part.includes(key+'="'+label.box[key]+'"'),key+' shares geometry');
+    for(const key of ['x','y','width','height']){const drawn=Number(new RegExp('<rect[^>]* '+key+'="([^"]+)"').exec(part)?.[1]);assert.ok(Math.abs(drawn-label.box[key])<.0005,key+' shares geometry');}
     assert.ok(part.includes(label.text));assert.ok(!part.includes('clip-path='),'text is above the image mask');
   }
   assert.ok(svg.indexOf('data-opf-image-callout=')>svg.indexOf('clip-path='));

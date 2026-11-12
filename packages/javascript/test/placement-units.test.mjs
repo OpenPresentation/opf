@@ -26,5 +26,20 @@ test('duplicate units and nonpositive anchor sizes refuse, while dimensions can 
     assert.equal(validate(document([shape(at)]), {only: ['format']}).valid, true, JSON.stringify(at));
   const conflict = compose([shape({width: 0.5, widthPx: 40})]);
   assert.equal((conflict.overlayShapes ?? []).length, 0, 'composition does not silently select a unit when validation was skipped');
-  assert.throws(() => compose([shape({width: 1e300, height: 0.5})]), /safe integer native coordinate/);
+  // RR-105: a frame composition cannot place is reported and left out, never thrown.
+  const far = compose([shape({width: 1e300, height: 0.5})]);
+  assert.equal((far.overlayShapes ?? []).length, 0);
+  assert.ok(far.diagnostics.some(d => d.code === 'unresolved-content' && /safe integer native coordinate/.test(d.message)));
+});
+
+// Ported from claude/elegant-bell-2g5ks5 (4a8e47d02): validation refuses a callout origin composition cannot place, at its coordinate.
+test('a callout origin too far away to be exact geometry is an error at its coordinate, as a shape\'s is', () => {
+  const image = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+  const errors = doc => validate(doc, {only: ['format']}).findings.filter(f => f.severity === 'error');
+  const callouts = list => ({name: 'Sensor', language: 'en-US', slides: [{title: 'Where the sensor sits', blocks: [{image: {src: image, alt: 'Pump housing', callouts: list}}]}]});
+  for (const key of ['x', 'y']) for (const value of [1e300, -1e300, 1e20]) {
+    const found = errors(callouts([{text: 'Inlet', x: 0, y: 0, width: 0.3, height: 0.14, [key]: value}]));
+    assert.ok(found.some(f => f.path === '/slides/0/blocks/0/image/callouts/0/' + key && /safe integer native coordinate/.test(f.message)), key + ' ' + value + JSON.stringify(found.map(f => f.path)));
+  }
+  assert.deepEqual(errors(callouts([{text: 'Inlet', x: -1000, y: 1000, width: 0.3, height: 0.14}])), []);
 });

@@ -3489,7 +3489,8 @@ function addImageCalloutItems(slide, item, owner, context, options) {
     const box = callout.box;
     slide.addShape('rect', {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96, fill: {color: pptxColor(context.colors.background)}, line: {transparency: 100}, objectName});
     if (owner) {
-      const source = item.value.callouts[index];
+      // Core leaves out a callout it cannot draw, so the source is the one the composed path names.
+      const source = item.value.callouts[Number(callout.path.slice(callout.path.lastIndexOf('.') + 1))];
       context.imageCalloutTags.set(objectName, {v: 1, owner, index, total: item.image.callouts.length, role: 'panel', frame: {x: source.x, y: source.y, width: source.width, height: source.height}, lines: callout.fit.lines.length});
     }
     addMeasuredPayloadText(slide, callout.text, callout.textBox, context, options, {color: context.colors.text, path: callout.path + '.text', fit: callout.fit, textStyle: callout.textStyle, align: 'center', keepEmpty: true, diagnosticsHandled: true, objectName, ...(owner ? {imageCallout: {owner, index}} : {})});
