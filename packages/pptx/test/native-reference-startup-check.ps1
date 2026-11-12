@@ -4,9 +4,23 @@ if($PSVersionTable.PSEdition -cne 'Desktop' -or $PSVersionTable.PSVersion.Major 
 if(Test-Path -LiteralPath $ReportPath){throw 'Preserve prior startup controls'}
 $root=$ReportPath+'.startup';if(Test-Path -LiteralPath $root){throw 'Preserve prior startup fixture'};[void](New-Item -ItemType Directory -Path $root)
 $before=(Get-FileHash -LiteralPath $ScriptPath -Algorithm SHA256).Hash.ToLowerInvariant()
-if($before -cne '1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870'){throw 'Exact reviewed startup worker required'}
+if((Get-Item -LiteralPath $ScriptPath).Length -ne 93922 -or $before -cne '21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255'){throw 'Exact reviewed startup worker required'}
 $source=[IO.File]::ReadAllText($ScriptPath)
-$oldSource=$source.Replace('$script:referenceNameModeEnabled','$script:referenceNameEdit')
+# Stage7 accepts only the current worker, then proves the exact prior stage before any startup extraction.
+$workerRootEdits=@(
+ @("`$fixed=Join-Path `$outputRoot ('reference-name-'+`$Phase+'.pptx')","`$fixed=Join-Path `$root ('reference-name-'+`$Phase+'.pptx')"),
+ @("Join-Path `$outputRoot 'reference-name-before.pptx'","Join-Path `$root 'reference-name-before.pptx'"),
+ @("Join-Path `$outputRoot 'reference-name-reopened.pptx'","Join-Path `$root 'reference-name-reopened.pptx'")
+)
+$snapshotSource=$source
+foreach($pair in $workerRootEdits){$at=$snapshotSource.IndexOf($pair[1],[StringComparison]::Ordinal);if($at -lt 0 -or $snapshotSource.LastIndexOf($pair[1],[StringComparison]::Ordinal) -ne $at){throw 'Unique seventh-stage worker-root inverse required'};$snapshotSource=$snapshotSource.Replace($pair[1],$pair[0])}
+$snapshotBytes=[Text.Encoding]::UTF8.GetBytes($snapshotSource)
+$sha=[Security.Cryptography.SHA256]::Create();try{$snapshotHash=([BitConverter]::ToString($sha.ComputeHash($snapshotBytes))).Replace('-','').ToLowerInvariant()}finally{$sha.Dispose()}
+if($snapshotBytes.Length -ne 93940 -or $snapshotHash -cne '1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870'){throw 'Exact sixth-stage worker inverse required'}
+$workerRootForward=$snapshotSource
+foreach($pair in $workerRootEdits){$at=$workerRootForward.IndexOf($pair[0],[StringComparison]::Ordinal);if($at -lt 0 -or $workerRootForward.LastIndexOf($pair[0],[StringComparison]::Ordinal) -ne $at){throw 'Unique seventh-stage worker-root forward required'};$workerRootForward=$workerRootForward.Replace($pair[0],$pair[1])}
+if($workerRootForward -cne $source){throw 'Seventh-stage worker-root forward differs'}
+$oldSource=$snapshotSource.Replace('$script:referenceNameModeEnabled','$script:referenceNameEdit')
 $sha=[Security.Cryptography.SHA256]::Create();try{$oldHash=([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($oldSource)))).Replace('-','').ToLowerInvariant()}finally{$sha.Dispose()}
 if($oldHash -cne '4fc89960c8b1e777d7ccc5d9f8f54e9f9dddb9ca1ca864b4bb9cf9ac881ff6fa'){throw 'Old whole-worker inverse differs'}
 function New-StartupScript([string]$Text,[string]$StateName,[string]$Path){
@@ -49,4 +63,4 @@ foreach($mode in @('valid','old-collision','disabled','missing-switch','missing-
  $rows+=@([ordered]@{scenario=$mode;passed=$true;publicSwitch=if($null -eq $value){$null}else{$value.publicSwitch};internalEnabled=if($null -eq $value){$null}else{$value.internalEnabled};refusal=$caught})
 }
 if((Get-FileHash -LiteralPath $ScriptPath -Algorithm SHA256).Hash.ToLowerInvariant() -cne $before -or (Get-FileHash -LiteralPath $inputPath -Algorithm SHA256).Hash.ToLowerInvariant() -cne $inputHash){throw 'Startup controls mutated source/input bytes'}
-[ordered]@{schemaVersion=1;powerShellEdition=$PSVersionTable.PSEdition;powerShellVersion=$PSVersionTable.PSVersion.ToString();scope='Actual ParamBlock and two exact pre-COM startup statements only';earlierFullSourceBootstrapExercised=$false;syntheticLengthFixture=$true;genuineArchive=$false;officeConstructed=$false;processQueries=0;observerIO=0;workerSha256=$before;oldInverseSha256=$oldHash;cases=$rows}|ConvertTo-Json -Depth 12|Set-Content -LiteralPath $ReportPath -Encoding UTF8
+[ordered]@{schemaVersion=1;powerShellEdition=$PSVersionTable.PSEdition;powerShellVersion=$PSVersionTable.PSVersion.ToString();scope='Actual ParamBlock and two exact pre-COM startup statements only';earlierFullSourceBootstrapExercised=$false;syntheticLengthFixture=$true;genuineArchive=$false;officeConstructed=$false;processQueries=0;observerIO=0;workerSha256=$before;oldInverseSha256=$oldHash;workerRootDerivation=[ordered]@{edits=$workerRootEdits.Count;workerBytes=(Get-Item -LiteralPath $ScriptPath).Length;inverseBytes=$snapshotBytes.Length;inverseSha256=$snapshotHash;forwardExact=($workerRootForward -ceq $source)};cases=$rows}|ConvertTo-Json -Depth 12|Set-Content -LiteralPath $ReportPath -Encoding UTF8
