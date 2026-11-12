@@ -38,7 +38,7 @@
     { "name": "convert", "description": "Convert a deck between JSON, YAML and Markdown" },
     { "name": "search_docs", "description": "Search the OPF documentation and skills" },
     { "name": "list_examples", "description": "List the example decks" },
-    { "name": "open_studio", "description": "Open the OPF deck studio with a deck to edit" }
+    { "name": "open_editor", "description": "Open the OPF viewer's editor with a deck to edit" }
   ],
   "keywords": ["presentation", "slides", "deck", "opf", "powerpoint", "viewer", "editor"],
   "license": "MIT",

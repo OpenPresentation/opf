@@ -15,6 +15,17 @@ test("the exact escaped viewer frame fits the unchanged default SDK transport",(
   assert.deepEqual(reader.readMessage(),appResourceMessage(DECK_APP_HTML));
 });
 
+// RR-111 headroom floor (vetoable). The build fails only at the 10 MiB limit itself, which twice in a week stopped the viewer build
+// with no warning. This floor fails earlier: the viewer's frame must leave at least FRAME_HEADROOM_FLOOR bytes under the limit.
+// Measured after RR-111 (v0.34): 9,390,901 frame bytes, 1,094,859 bytes of headroom; the floor is that rounded down to 1,000,000,
+// about 95 KB of room for normal growth. When a change reaches the floor, make the viewer smaller (the options and what each saves
+// are in docs/programs/release-readiness/mcp-viewer-size.md); lower the floor only as a reviewed, recorded decision, never to pass.
+const FRAME_HEADROOM_FLOOR=1_000_000;
+test("the viewer frame keeps its headroom floor under the stdio limit",()=>{
+  const {bytes,headroom}=assertAppResourceFrame(DECK_APP_HTML);
+  assert.ok(headroom>=FRAME_HEADROOM_FLOOR,`the viewer frame is ${bytes} bytes, ${headroom} bytes under the limit; the floor is ${FRAME_HEADROOM_FLOOR}`);
+});
+
 test("exact-limit frames pass and one additional byte fails both build guard and SDK",()=>{
   const overhead=appResourceFrame("").length;
   const html="x".repeat(STDIO_DEFAULT_MAX_BUFFER_SIZE-overhead),frame=appResourceFrame(html);

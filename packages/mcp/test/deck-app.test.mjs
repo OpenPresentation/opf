@@ -82,8 +82,8 @@ describe("the deck view", () => {
 		assert.match(result.content[0].text, /Checks: 0 errors, \d+ warnings/);
 		const { viewer, ...rest } = result.structuredContent;
 		assert.deepEqual({ ...rest, findings: undefined, counts: undefined }, { opened: true, checked: true, view: "both", slide: 2, format: "json", name: "Quarterly update", slides: 2, outline: [{ slide: 1, title: "Revenue grew 18%" }, { slide: 2, title: "Next steps" }], valid: true, findings: undefined, counts: undefined });
-		assert.match(viewer.session, /^[0-9a-f-]{36}$/);
-		assert.match(result.content[0].text, new RegExp(`Viewer session: ${viewer.session} `));
+		assert.match(viewer.session, /^deck-[0-9a-f]{32}$/, "derived from the deck name");
+		assert.match(result.content[0].text, new RegExp(`Viewer session: ${viewer.session}\. `));
 		const yaml = await client.callTool({ name: "show_deck", arguments: { document: "name: Y\nslides:\n  - title: One\n", format: "yaml" } });
 		assert.deepEqual(yaml.structuredContent.outline, [{ slide: 1, title: "One" }]);
 		// A deck the server cannot read still opens: the view shows its text and the syntax error.
@@ -94,55 +94,81 @@ describe("the deck view", () => {
 		const unknown = await client.callTool({ name: "show_deck", arguments: { document: "slides are here" } });
 		assert.equal(unknown.structuredContent.checked, false);
 		assert.match(unknown.content[0].text, /could not be read/);
+		assert.ok(unknown.structuredContent.viewer?.session, "the parse-error path still carries the viewer key");
 		await client.close();
 	});
 
-	test("show_deck and open_studio mint viewer keys: a new session unless the caller passes one back, in creation order", async () => {
+	test("show_deck and open_editor mint viewer keys: the caller's session, else one derived from the deck's name, ordered without a counter", async () => {
 		const client = await connected({});
 		const first = (await client.callTool({ name: "show_deck", arguments: { document: deck } })).structuredContent.viewer;
-		const other = (await client.callTool({ name: "show_deck", arguments: { document: deck } })).structuredContent.viewer;
-		assert.notEqual(first.session, other.session, "a deck shown without a session key is its own session");
-		const again = (await client.callTool({ name: "show_deck", arguments: { document: deck, session: first.session } })).structuredContent.viewer;
-		assert.equal(again.session, first.session, "the key the viewer reported carries the session forward");
-		assert.ok(again.createdAt > first.createdAt || (again.createdAt === first.createdAt && again.seq > first.seq), "a later view orders after an earlier one");
-		const studio = (await client.callTool({ name: "open_studio", arguments: { session: first.session } })).structuredContent.viewer;
-		assert.equal(studio.session, first.session);
-		// Anything that is not a key the server mints starts a new session.
-		const forged = (await client.callTool({ name: "show_deck", arguments: { document: deck, session: "x" } })).structuredContent.viewer;
-		assert.notEqual(forged.session, "x");
+		const again = (await client.callTool({ name: "show_deck", arguments: { document: deck } })).structuredContent.viewer;
+		assert.equal(again.session, first.session, "a newer version of the same deck (the same name) is the same session, with no key passed back");
+		assert.ok(again.createdAt >= first.createdAt && Number.isInteger(again.tie) && again.tie >= 0, "ordered by the server's clock, with a random tie-break");
+		assert.equal(Object.keys(again).sort().join(), "createdAt,session,tie", "no sequence: the server counts nothing");
+		// The name is normalized: case, surrounding space and runs of spaces do not make another deck.
+		const respelled = (await client.callTool({ name: "show_deck", arguments: { document: { ...deck, name: "  quarterly   UPDATE " } } })).structuredContent.viewer;
+		assert.equal(respelled.session, first.session);
+		const other = (await client.callTool({ name: "show_deck", arguments: { document: { ...deck, name: "Another deck" } } })).structuredContent.viewer;
+		assert.notEqual(other.session, first.session, "a deck with another name stays independent");
+		const yaml = (await client.callTool({ name: "show_deck", arguments: { document: "name: Quarterly update\nslides:\n  - title: One\n", format: "yaml" } })).structuredContent.viewer;
+		assert.equal(yaml.session, first.session, "YAML text names the same deck");
+		const nameless = (await client.callTool({ name: "show_deck", arguments: { document: { slides: [{ title: "A" }] } } })).structuredContent.viewer;
+		const nameless2 = (await client.callTool({ name: "show_deck", arguments: { document: { slides: [{ title: "A" }] } } })).structuredContent.viewer;
+		assert.notEqual(nameless.session, nameless2.session, "a deck without a name has a session of its own");
+		// An explicit session wins, both to replace a viewer and to keep two apart.
+		const kept = (await client.callTool({ name: "show_deck", arguments: { document: deck, session: "draft-b" } })).structuredContent.viewer;
+		assert.equal(kept.session, "draft-b");
+		const editor = (await client.callTool({ name: "open_editor", arguments: { session: first.session } })).structuredContent.viewer;
+		assert.equal(editor.session, first.session);
+		const invalid = (await client.callTool({ name: "show_deck", arguments: { document: deck, session: "has spaces/and slashes" } })).structuredContent.viewer;
+		assert.equal(invalid.session, first.session, "a session that is not a key is ignored and the deck's own is used");
+		// open_editor derives its session from the deck it opens.
+		const starter = (await client.callTool({ name: "open_editor", arguments: {} })).structuredContent.viewer;
+		const starter2 = (await client.callTool({ name: "open_editor", arguments: {} })).structuredContent.viewer;
+		assert.equal(starter.session, starter2.session);
+		const titled = (await client.callTool({ name: "open_editor", arguments: { title: "Quarterly update" } })).structuredContent.viewer;
+		assert.equal(titled.session, first.session, "a starter deck named like an open deck replaces its viewer");
 		await client.close();
 	});
 
-	test("open_studio is the entry point: all inputs optional, a useful starter deck from {}, a bundled example by slug", async () => {
+	test("open_editor is the entry point: all inputs optional, a useful starter deck from {}, a bundled example by slug", async () => {
 		const client = await connected({});
 		const { tools } = await client.listTools();
-		const studio = tools.find((tool) => tool.name === "open_studio");
-		assert.deepEqual(studio._meta, { ui: { resourceUri: DECK_APP_URI }, "ui/resourceUri": DECK_APP_URI, "openai/ui": { entrypoints: [{ type: "global" }] } });
-		assert.equal(studio._meta.ui.visibility, undefined, "visible to the model");
-		assert.equal(studio.inputSchema.type, "object");
-		assert.equal(studio.inputSchema.required, undefined, "every input is optional");
-		assert.deepEqual(Object.keys(studio.inputSchema.properties).sort(), ["example", "session", "title"]);
-		assert.ok(studio.title.length <= 60 && !/claude|anthropic/i.test(studio.title), studio.title);
-		assert.doesNotMatch(studio.name, /__|\.\.|\._|_\./);
-		assert.ok(studio.description.split("\n")[0].length <= 200);
+		const entry = tools.find((tool) => tool.name === "open_editor");
+		assert.deepEqual(entry._meta, { ui: { resourceUri: DECK_APP_URI }, "ui/resourceUri": DECK_APP_URI, "openai/ui": { entrypoints: [{ type: "global" }] } });
+		assert.equal(entry._meta.ui.visibility, undefined, "visible to the model");
+		assert.equal(entry.title, "OPF deck editor");
+		assert.equal(entry.inputSchema.type, "object");
+		assert.equal(entry.inputSchema.required, undefined, "every input is optional");
+		assert.deepEqual(Object.keys(entry.inputSchema.properties).sort(), ["example", "session", "title"]);
+		assert.ok(entry.title.length <= 60 && !/claude|anthropic/i.test(entry.title), entry.title);
+		assert.doesNotMatch(entry.name, /__|\.\.|\._|_\./);
+		assert.ok(entry.description.split("\n")[0].length <= 200);
+		assert.doesNotMatch(JSON.stringify(entry), /studio/i, "the editor, not a studio");
+		for (const name of ["show_deck", "open_editor"]) assert.match(tools.find((tool) => tool.name === name).description, /same deck \(the same name\) replaces the viewer/, `${name} says a new call replaces the open viewer`);
 		assert.deepEqual(tools.find((tool) => tool.name === "show_deck").inputSchema.required, ["document"], "show_deck still needs its deck");
-		const empty = await client.callTool({ name: "open_studio", arguments: {} });
+		const empty = await client.callTool({ name: "open_editor", arguments: {} });
 		assert.equal(empty.isError, undefined);
-		assert.equal(empty.structuredContent.studio, true);
+		assert.equal(empty.structuredContent.editor, true);
 		assert.equal(empty.structuredContent.name, "Untitled deck");
 		assert.equal(empty.structuredContent.example, null);
 		assert.ok(empty.structuredContent.examples.length > 5 && empty.structuredContent.examples.every((item) => typeof item.slug === "string"));
-		assert.match(empty.content[0].text, /^Opened the OPF studio with a starter deck "Untitled deck" \(2 slides\)\./);
+		assert.match(empty.content[0].text, /^Opened the OPF viewer's editor with a starter deck "Untitled deck" \(2 slides\)\./);
 		const checked = await client.callTool({ name: "validate_deck", arguments: { document: empty.structuredContent.document, failOn: "warning" } });
 		assert.equal(checked.structuredContent.ok, true, `the starter deck is clean: ${JSON.stringify(checked.structuredContent.findings)}`);
-		const titled = await client.callTool({ name: "open_studio", arguments: { title: "Board update" } });
+		const titled = await client.callTool({ name: "open_editor", arguments: { title: "Board update" } });
 		assert.equal(titled.structuredContent.document.name, "Board update");
 		assert.equal(titled.structuredContent.document.slides[0].title, "Board update");
-		const example = await client.callTool({ name: "open_studio", arguments: { example: "columns" } });
+		const example = await client.callTool({ name: "open_editor", arguments: { example: "columns" } });
 		assert.equal(example.structuredContent.example, "columns");
 		assert.ok(example.structuredContent.slides > 0);
-		const unknown = await client.callTool({ name: "open_studio", arguments: { example: "colums" } });
-		assert.equal(unknown.isError, undefined, "an unknown example still opens the studio");
+		// A title with an example names the example deck, and the result says so.
+		const renamed = await client.callTool({ name: "open_editor", arguments: { example: "columns", title: "My columns" } });
+		assert.equal(renamed.structuredContent.document.name, "My columns");
+		assert.equal(renamed.structuredContent.name, "My columns");
+		assert.match(renamed.content[0].text, /the example deck columns, named "My columns"/);
+		const unknown = await client.callTool({ name: "open_editor", arguments: { example: "colums" } });
+		assert.equal(unknown.isError, undefined, "an unknown example still opens the editor");
 		assert.equal(unknown.structuredContent.example, null);
 		assert.match(unknown.content[0].text, /no bundled example colums\. Did you mean columns\?/);
 		await client.close();
@@ -185,13 +211,13 @@ describe("the deck view", () => {
 	test("processDecks: false does no deck work: show_deck only opens the view, and validate_deck and convert are gone", async () => {
 		const client = await connected({ processDecks: false });
 		const names = (await client.listTools()).tools.map((tool) => tool.name).sort();
-		assert.deepEqual(names, ["get_catalog_record", "get_schema", "list_examples", "open_studio", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here"]);
+		assert.deepEqual(names, ["get_catalog_record", "get_schema", "list_examples", "open_editor", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here"]);
 		assert.deepEqual((await client.listPrompts()).prompts.map((prompt) => prompt.name).sort(), ["author_deck", "choose_layout", "learn_opf"]);
 		assert.doesNotMatch(client.getInstructions(), /validate_deck|convert/);
 		const result = await client.callTool({ name: "show_deck", arguments: { document: deck } });
 		const { viewer: key, ...opened } = result.structuredContent;
 		assert.deepEqual(opened, { opened: true, checked: false, view: "preview", format: "json" });
-		assert.ok(key.session && key.createdAt > 0 && key.seq > 0);
+		assert.ok(key.session && key.createdAt > 0 && Number.isInteger(key.tie));
 		assert.match(result.content[0].text, /does not check decks itself/);
 		// Not even a broken deck is read.
 		const broken = await client.callTool({ name: "show_deck", arguments: { document: "{ not json" } });

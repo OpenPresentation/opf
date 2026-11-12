@@ -365,7 +365,8 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   // LH-60: the drawn construct (a map over categories that are not places is drawn as columns, and takes their axis).
   const id = resolved.ok ? chartDrawPlan(chart, resolved, { language: geometry.language }).type : authored;
   const spec = Object.hasOwn(CATEGORY_CHARTS, id) ? CATEGORY_CHARTS[id] : undefined;
-  if (resolved.ok && resolved.combo) return chartComboAxes(chart,resolved,geometry)?.value;
+  // A combo takes a composed axis only for its explicit reference lines (LH-110); without them both engines scale it themselves, as in v0.33.
+  if (resolved.ok && resolved.combo) return chartReferences(chart).length ? chartComboAxes(chart,resolved,geometry)?.value : undefined;
   if (!spec || !resolved.ok) return undefined;
   const { scale, width, height } = geometry;
   if (![width, height, scale].every(Number.isFinite) || width <= 0 || height <= 0 || scale <= 0) return undefined;

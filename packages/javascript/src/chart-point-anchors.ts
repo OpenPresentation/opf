@@ -1,10 +1,11 @@
 // SH-25: source-backed point identities; geometry is composed separately from the actual shared plot.
-import { chartNumber, resolveChartData, type ResolvedChartData } from './chart-data.js';
+import { chartNumber, formatDataNumber, resolveChartData, type ResolvedChartData } from './chart-data.js';
 import { chartDrawPlan, type ChartDrawPlan } from './chart-fallback.js';
-import { chartAxisFraction, chartTextSize, stackCategoryValues } from './chart-axis.js';
+import { chartAxisFraction, chartAxisScale, chartTextSize, stackCategoryValues } from './chart-axis.js';
+import { groupNumber, groupsDataRange } from './number-grouping.js';
 import { chartBarGeometry, chartBarSeriesOffset } from './chart-layer.js';
 import { chartPlotInset, type ChartPlotGeometry } from './chart-plot.js';
-import { horizontalBarPlot } from './chart-marks.js';
+import { chartCircleSquare, horizontalBarPlot } from './chart-marks.js';
 import { chartOptionTarget, resolveChartOptions } from './chart-options.js';
 import type { ComposedChart, LayoutBox } from './composition.js';
 export type ChartPointKey = string | number;
@@ -162,40 +163,80 @@ export function chartPointGeometry(chart: unknown, composed: ComposedChart, refe
     return { ok: true, series: selected.series, row: selected.row, column: selected.column, box, position, normal };
 }
 const pointNormal = (edge: unknown, rtl: boolean) => edge === 'top' ? { x: 0, y: -1 } : edge === 'bottom' ? { x: 0, y: 1 } : edge === 'start' ? { x: rtl ? 1 : -1, y: 0 } : edge === 'end' ? { x: rtl ? -1 : 1, y: 0 } : { x: 0, y: 0 };
-function pointArea(chart: unknown, selected: ChartPointSelection, geometry: ChartPlotGeometry, circular = false): LayoutBox {
-    const { box, scale } = geometry, font = chartTextSize({ width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize }) * scale, pad = 10 * scale, line = font * 1.5;
-    const options = resolveChartOptions(chart, chartOptionTarget(selected.type)!), names = circular ? selected.plan.rows.map(row => label(row[0])) : selected.plan.columns.slice(selected.plan.hasX ? 2 : 1).map(label);
-    let x = box.x + pad, y = box.y + pad, width = box.width - 2 * pad, height = box.height - 2 * pad;
-    const legend = options.legend ?? (names.length > 1 ? 'right' : 'none'), legendWidth = Math.min(box.width * .45, font * 1.5 + Math.max(0, ...names.map(text => geometry.measure(text, font)))) + pad;
-    if (legend === 'left' || legend === 'right') {
-        width -= legendWidth;
-        if (legend === 'left')
-            x += legendWidth;
-    }
-    if (legend === 'top' || legend === 'bottom') {
-        height -= line + pad;
-        if (legend === 'top')
-            y += line + pad;
-    }
-    if (options.axisTitles.value) {
-        x += line;
-        width -= line;
-    }
-    if (options.axisTitles.category)
-        height -= line;
-    return { x, y, width: Math.max(1, width), height: Math.max(1, height) };
-}
 function pin(composed: ComposedChart, outer: LayoutBox, plot: LayoutBox) { composed.layer = { ...composed.layer, plot: { left: plot.x - outer.x, top: plot.y - outer.y, right: outer.x + outer.width - plot.x - plot.width, bottom: outer.y + outer.height - plot.y - plot.height } }; }
+/**
+ * The plot a scatter is drawn in when composition pins none, as the preview lays it out (charts.js renderScatterChart on core's numeric
+ * axes): the box less the header, an explicit legend (placeLegend), the axis-title bands (reserveAxisTitles) and the side legend of several
+ * series; a value-axis gutter as wide as its widest tick label in the column's format; and, on a formatted X axis, the end labels kept inside.
+ */
+function scatterPlot(chart: unknown, composed: ComposedChart, selected: ChartPointSelection, geometry: ChartPlotGeometry): LayoutBox | undefined {
+    const axes = composed.layer?.numericAxes, valueScale = chartAxisScale(axes?.value), categoryScale = chartAxisScale(axes?.category);
+    if (!valueScale || !categoryScale)
+        return undefined;
+    const { scale } = geometry, font = chartTextSize({ width: geometry.box.width, height: geometry.box.height, scale, minFontSize: geometry.minFontSize }) * scale, pad = 10 * scale, line = font * 1.5;
+    const width = (text: string) => geometry.measure(text, font), options = resolveChartOptions(chart, chartOptionTarget('scatter')!);
+    const plan = selected.plan, hasX = plan.hasX, first = hasX ? 2 : 1, names = plan.columns.slice(first).map(label);
+    let box = { ...geometry.box };
+    const header = composed.layer?.header;
+    if (header)
+        box = { ...box, y: box.y + header.height, height: Math.max(1, box.height - header.height) };
+    // The legend keys of a scatter are markers: a swatch-wide key, a gap, the name.
+    const keyWidth = font * .6, gap = font * .4, textWidth = Math.max(0, ...names.map(width));
+    let managed = false;
+    if (options.legend !== undefined) {
+        managed = true;
+        if (options.legend !== 'none' && names.length) {
+            if (options.legend === 'left' || options.legend === 'right') {
+                const reserve = Math.min(box.width * .45, keyWidth + gap + textWidth + font * .5) + pad;
+                box = { x: options.legend === 'left' ? box.x + reserve : box.x, y: box.y, width: Math.max(1, box.width - reserve), height: box.height };
+            }
+            else {
+                const available = Math.max(1, box.width - 2 * pad), spacing = font * .8, rows: number[] = [];
+                for (const name of names) {
+                    const entry = Math.min(available, keyWidth + gap + width(name) + spacing), last = rows.length - 1;
+                    if (last >= 0 && rows[last]! + entry <= available + .01) rows[last]! += entry;
+                    else rows.push(entry);
+                }
+                const reserve = rows.length * line + pad;
+                box = { x: box.x, y: options.legend === 'top' ? box.y + reserve : box.y, width: box.width, height: Math.max(1, box.height - reserve) };
+            }
+        }
+    }
+    if (options.axisTitles.category || options.axisTitles.value) {
+        const left = options.axisTitles.value ? line : 0, bottom = options.axisTitles.category ? line : 0;
+        box = { x: box.x + left, y: box.y, width: Math.max(1, box.width - left), height: Math.max(1, box.height - bottom) };
+    }
+    const legendWidth = !managed && names.length > 1 ? Math.min(box.width * .45, keyWidth + gap + textWidth + font * .5) + pad : 0;
+    const top = box.y + pad + line / 2, bottom = box.y + box.height - pad - line;
+    const clean = (value: number) => { const rounded = Number(value.toPrecision(12)); return Object.is(rounded, -0) ? 0 : rounded; };
+    const tick = (value: number, format: string | undefined, group: string | undefined | false) => format !== undefined ? formatDataNumber(clean(value), format) : group !== false ? groupNumber(clean(value), group) : String(clean(value));
+    const yFormat = plan.formats[first], xFormat = hasX ? plan.formats[1] : undefined;
+    const xs = plan.rows.map((row, index) => hasX ? chartNumber(row[1]) : index + 1);
+    const ys = plan.rows.flatMap((row, index) => xs[index] === null ? [] : plan.columns.slice(first).map((_, offset) => chartNumber(row[first + offset]))).filter((entry): entry is number => entry !== null);
+    const yGroup = yFormat === undefined && groupsDataRange(ys, { zeroBased: false }) ? geometry.language : false;
+    const tickWidth = Math.max(...valueScale.ticks.map(entry => width(tick(entry, yFormat, yGroup)))) + font * .5;
+    let x = box.x + pad + tickWidth, plotWidth = Math.max(1, box.x + box.width - pad - legendWidth - font - x);
+    if (xFormat !== undefined && categoryScale.ticks.length) {
+        // RR-54: a formatted X axis keeps its end labels inside the chart (insetForEndLabels, on core's fixed scale).
+        const firstHalf = width(tick(categoryScale.ticks[0]!, xFormat, false)) / 2, lastHalf = width(tick(categoryScale.ticks.at(-1)!, xFormat, false)) / 2;
+        const nextX = Math.max(x, box.x + pad + firstHalf);
+        plotWidth = Math.max(1, Math.min(x + plotWidth, box.x + box.width - pad - lastHalf) - nextX);
+        x = nextX;
+    }
+    const plot = { x, y: top, width: plotWidth, height: Math.max(1, bottom - top) };
+    return [plot.x, plot.y, plot.width, plot.height].every(Number.isFinite) ? plot : undefined;
+}
 function scatterPoint(chart: unknown, composed: ComposedChart, selected: ChartPointSelection, at: Record<string, unknown>, geometry: ChartPlotGeometry): ChartPointGeometry | ChartPointMissing {
     const axes = composed.layer?.numericAxes;
     if (!axes?.category)
         return missing('point', 'The scatter has no shared finite numeric axes.');
-    const { box, scale } = geometry, font = chartTextSize({ width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize }) * scale;
-    const area = pointArea(chart, selected, geometry), value = axes.value, category = axes.category;
-    // Axis labels stay outside this explicitly pinned inner rectangle; Office and SVG use the same rectangle.
-    const ticks = Array.from({ length: Math.round((value.max - value.min) / value.majorUnit) + 1 }, (_, i) => value.min + i * value.majorUnit);
-    const gutter = Math.max(font, ...ticks.map(tick => geometry.measure(String(Number(tick.toPrecision(12))), font))) + font * .5;
-    const plot = composed.layer?.plot ? { x: box.x + composed.layer.plot.left, y: box.y + composed.layer.plot.top, width: box.width - composed.layer.plot.left - composed.layer.plot.right, height: box.height - composed.layer.plot.top - composed.layer.plot.bottom } : { x: area.x + gutter, y: area.y + font * .75, width: Math.max(1, area.width - gutter - font), height: Math.max(1, area.height - font * 2.25) };
+    const { box, scale } = geometry;
+    const value = axes.value, category = axes.category;
+    // SH-04: an overlay never moves content. The point is placed on the plot the scatter is drawn in without it (scatterPlot, the preview's
+    // own layout on core's numeric axes), pinned so the PPTX plot is that rectangle too.
+    const plot = composed.layer?.plot ? { x: box.x + composed.layer.plot.left, y: box.y + composed.layer.plot.top, width: box.width - composed.layer.plot.left - composed.layer.plot.right, height: box.height - composed.layer.plot.top - composed.layer.plot.bottom } : scatterPlot(chart, composed, selected, geometry);
+    if (!plot)
+        return missing('point', 'The scatter has no finite shared plot for this point.');
     const xValue = selected.plan.hasX ? chartNumber(selected.plan.rows[selected.row]?.[1])! : selected.row + 1;
     const x = plot.x + chartAxisFraction(xValue, category) * plot.width, y = plot.y + chartAxisFraction(selected.value, value, true) * plot.height, radius = 4 * scale;
     if (![x, y, plot.width, plot.height].every(Number.isFinite))
@@ -207,7 +248,14 @@ function circularPoint(chart: unknown, composed: ComposedChart, selected: ChartP
     const values = selected.plan.rows.map(row => Math.abs(chartNumber(row[selected.column]) ?? 0)), total = values.reduce((sum, value) => sum + value, 0);
     if (!Number.isFinite(total) || total <= 0)
         return missing('point', 'The slice total is not finite and positive.');
-    const area = composed.layer?.valueList?.pie ?? composed.layer?.doughnut?.pie ?? pointArea(chart, selected, geometry, true), side = Math.min(area.width, area.height);
+    // SH-04: an overlay never moves content. The point is placed on the square the chart is drawn in without it: core's value list or
+    // doughnut square (both engines already draw there, so nothing is pinned), else the preview's own pie square (chartCircleSquare),
+    // pinned so the PPTX plot is that square too.
+    const drawnSquare = composed.layer?.valueList?.pie ?? composed.layer?.doughnut?.pie;
+    const area = drawnSquare ?? chartCircleSquare({ ...record(chart), type: selected.type }, { ...selected.data, columns: selected.plan.columns, rows: selected.plan.rows, formats: selected.plan.formats }, { ...geometry, measure: (text: string, size: number) => geometry.measure(text, size) }, composed.layer);
+    if (!area)
+        return missing('point', 'A pie with outside data labels is not yet qualified for point anchors; its labels are measured by the preview.');
+    const side = Math.min(area.width, area.height);
     const plot = { x: area.x + (area.width - side) / 2, y: area.y + (area.height - side) / 2, width: side, height: side };
     if (![plot.x, plot.y, side].every(Number.isFinite) || side <= 0)
         return missing('point', 'The circular point has no usable shared square.');
@@ -218,6 +266,7 @@ function circularPoint(chart: unknown, composed: ComposedChart, selected: ChartP
     const radius = at.edge === 'start' ? inner : at.edge === 'center' ? (inner + outer) / 2 : outer, radial = { x: Math.cos(mid), y: Math.sin(mid) };
     const position = at.edge === 'top' ? { x: x + box.width / 2, y } : at.edge === 'bottom' ? { x: x + box.width / 2, y: y + box.height } : { x: cx + radius * radial.x, y: cy + radius * radial.y };
     const normal = at.edge === 'top' ? { x: 0, y: -1 } : at.edge === 'bottom' ? { x: 0, y: 1 } : at.edge === 'center' ? { x: 0, y: 0 } : at.edge === 'start' ? { x: -radial.x, y: -radial.y } : radial;
-    pin(composed, geometry.box, plot);
+    if (!drawnSquare)
+        pin(composed, geometry.box, plot);
     return { ok: true, series: selected.series, row: selected.row, column: selected.column, box, position, normal };
 }
