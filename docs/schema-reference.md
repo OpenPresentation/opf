@@ -249,6 +249,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
+| `name` | no | `string` | Name of this palette. PPTX export writes it as the name of the theme's color scheme (a:clrScheme name), which PowerPoint lists under Design, Variants, Colors; without it, an object form with 'id' writes that id, and t... |
 | `id` | no | `ref:CatalogReference` | Colour-scheme reference (a bare id or 'name:id') resolved as the base; slot and role overrides on the surrounding ColorScheme object take precedence over the resolved scheme. |
 | `accent1` | no | `ref:HexColor` | Accent 1 color (hex). Mirrors the OOXML accent1 slot. |
 | `accent2` | no | `ref:HexColor` | Accent 2 color (hex). Mirrors the OOXML accent2 slot. |
