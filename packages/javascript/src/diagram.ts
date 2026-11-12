@@ -8,6 +8,7 @@ import type { TextMeasurer } from 'pele';
 // core with each type loaded on demand in browsers (diagram-engine-eager.ts, diagram-engine-lazy.ts).
 import { PeleError, detectType, loadDiagramType, loadPlantumlReader, parse as parseMermaid, plantumlReader, registered, render as renderMermaid } from '#diagram-engine';
 import { dotToMermaid } from './diagram-dot.js';
+import { DIAGRAM_MAX_EDGES, DIAGRAM_SOURCE_LIMIT, DIAGRAM_TRANSLATED_LIMIT } from './diagram-limits.js';
 import type { PlantumlIssue, PlantumlTranslation } from './diagram-plantuml.js';
 import { chartColorForFill, chartPaletteForFill, chartSeriesPalette, colorContrast, normalizeHexColor, textColorForFill, type ChartColorContext } from './color.js';
 
@@ -50,17 +51,17 @@ export function diagramPayload(value: unknown): DiagramPayload | undefined {
  * The Mermaid source pele draws for a diagram payload: a Mermaid source as written, a DOT or PlantUML source as the Mermaid OPF's reader
  * makes of it, with the name of the kind for the derived alt text. A DOT or PlantUML source's issue keeps its position in that source.
  */
-function peleSource(payload: DiagramPayload): { ok: true; source: string; translated: boolean; name?: string } | { ok: false; issue: DiagramIssue } {
+function peleSource(payload: DiagramPayload): { ok: true; source: string; translated: boolean; from?: 'DOT' | 'PlantUML'; name?: string } | { ok: false; issue: DiagramIssue } {
   if (payload.syntax === 'mermaid') return { ok: true, source: payload.source, translated: false };
   if (payload.source.length > DIAGRAM_SOURCE_LIMIT) return { ok: false, issue: { code: 'diagram-limit', message: `The diagram source is longer than ${DIAGRAM_SOURCE_LIMIT} characters.` } };
   if (payload.syntax === 'plantuml') {
     // In a browser the reader loads on demand (ensureDiagrams), like a pele type.
     if (!plantumlReader()) return { ok: false, issue: { code: 'diagram-unloaded', message: 'The PlantUML reader is still loading.' } };
     const result = plantumlToMermaid(payload.source, { maxEdges: DIAGRAM_MAX_EDGES });
-    return result.ok ? { ok: true, source: result.translation.mermaid, translated: true, name: PLANTUML_NAMES[result.translation.diagram] } : { ok: false, issue: result.issue };
+    return result.ok ? { ok: true, source: result.translation.mermaid, translated: true, from: 'PlantUML', name: PLANTUML_NAMES[result.translation.diagram] } : { ok: false, issue: result.issue };
   }
   const result = dotToMermaid(payload.source, { maxEdges: DIAGRAM_MAX_EDGES });
-  return result.ok ? { ok: true, source: result.translation.mermaid, translated: true, name: 'graph' } : { ok: false, issue: result.issue };
+  return result.ok ? { ok: true, source: result.translation.mermaid, translated: true, from: 'DOT', name: 'graph' } : { ok: false, issue: result.issue };
 }
 
 /**
@@ -83,7 +84,7 @@ export function plantumlToMermaid(source: string, options: { maxEdges: number })
 const PLANTUML_NAMES: Readonly<Record<string, string>> = { activity: 'activity', component: 'component' };
 
 /** The source limit pele checks: the authored source's for Mermaid; a translated source was checked before it was translated. */
-const peleLimit = (translated: boolean) => translated ? DIAGRAM_SOURCE_LIMIT * 16 : DIAGRAM_SOURCE_LIMIT;
+const peleLimit = (translated: boolean) => translated ? DIAGRAM_TRANSLATED_LIMIT : DIAGRAM_SOURCE_LIMIT;
 
 /** A diagram value's syntax when it names one OPF does not read. */
 function unknownSyntax(value: unknown): string | undefined {
@@ -102,19 +103,23 @@ export const DIAGRAM_SECONDARY_FLOOR = 0.75;
  */
 export const DIAGRAM_SHAPE_FAMILIES: readonly string[] = Object.freeze(['agentflow', 'architecture', 'block', 'c4', 'class', 'cynefin', 'er', 'eventmodeling', 'flowchart', 'gantt', 'gitGraph', 'ishikawa', 'journey', 'kanban', 'mindmap', 'packet', 'pie', 'quadrantChart', 'radar', 'railroad', 'requirement', 'sankey', 'sequence', 'state', 'swimlane', 'timeline', 'treeView', 'treemap', 'usecase', 'venn', 'wardley', 'xychart']);
 
-/** The diagram's own size limits, below pele's defaults: a slide holds one readable drawing, not a document. */
-export const DIAGRAM_SOURCE_LIMIT = 20000;
-export const DIAGRAM_MAX_EDGES = 500;
+/** The diagram's own size limits, below pele's defaults: a slide holds one readable drawing, not a document (diagram-limits.ts). */
+export { DIAGRAM_MAX_EDGES, DIAGRAM_SOURCE_LIMIT };
 
-function issueOf(error: unknown, translated = false): DiagramIssue {
+function issueOf(error: unknown, from?: 'DOT' | 'PlantUML'): DiagramIssue {
   if (error instanceof PeleError) {
     const code = error.code === 'syntax' || error.code === 'semantic' ? 'diagram-syntax' : error.code === 'limit' ? 'diagram-limit' : 'diagram-unsupported';
     // A parse error's message is "Parse error on line N:", the source line, a caret under it and what was expected. The finding
     // gives the position separately, so it keeps what was expected.
     const lines = error.message.split('\n').map(line => line.trim()).filter(Boolean);
     const message = (lines.length > 1 && /^Parse error on line \d+:?$/.test(lines[0]!) ? lines.at(-1)! : lines[0]) || 'The diagram source cannot be read.';
-    // A translated source's position is in the generated flowchart, not in what the author wrote, so it is not given.
-    return { code, message, ...(error.line > 0 && !translated ? { line: error.line, column: error.column } : {}) };
+    // A translated source's position is in the Mermaid OPF generated, not in what the author wrote, so it is not given, and neither is a
+    // line number inside the message: the message says that the author's own source could not be drawn.
+    if (from) {
+      const cleaned = message.replace(/s*(?:on|at|in) line d+(?:[,:]?s*column d+)?.?:?/gi, '').replace(/s+/g, ' ').trim().replace(/[.:]$/, '');
+      return { code, message: `The layout engine rejected the ${from} source${cleaned ? ` (${cleaned})` : ''}; its position is in generated text, so none is given.` };
+    }
+    return { code, message, ...(error.line > 0 ? { line: error.line, column: error.column } : {}) };
   }
   return { code: 'diagram-syntax', message: error instanceof Error ? error.message : String(error) };
 }
@@ -134,15 +139,16 @@ export function checkDiagram(value: unknown): { ok: true; type: string } | { ok:
   if (!pele.ok) return pele;
   const unloaded = unloadedType(pele.source);
   if (unloaded) return { ok: false, issue: { code: 'diagram-unloaded', message: `The ${unloaded} diagram type is still loading.` } };
-  let result = checked.get(pele.source);
+  const key = `${pele.from ?? ''}\u0000${pele.source}`;
+  let result = checked.get(key);
   if (!result) {
     try {
       result = { type: String(parseMermaid(pele.source, { limit: peleLimit(pele.translated), maxEdges: DIAGRAM_MAX_EDGES }).type) };
     } catch (error) {
-      result = issueOf(error, pele.translated);
+      result = issueOf(error, pele.from);
     }
     if (checked.size >= 2000) checked.clear();
-    checked.set(pele.source, result);
+    checked.set(key, result);
   }
   return 'type' in result ? { ok: true, type: result.type } : { ok: false, issue: result };
 }
@@ -345,18 +351,25 @@ export function layoutDiagram(value: unknown, options: DiagramLayoutOptions): Co
   const checkedValue = checkDiagram(value);
   if (!checkedValue.ok) throw Object.assign(new Error(checkedValue.issue.message), { diagramIssue: checkedValue.issue });
   const payload = diagramPayload(value)!;
-  const pele = peleSource(payload) as { ok: true; source: string; translated: boolean; name?: string };
+  const pele = peleSource(payload) as { ok: true; source: string; translated: boolean; from?: 'DOT' | 'PlantUML'; name?: string };
   // A DOT graph is drawn as the flowchart OPF reads it as, and a PlantUML diagram as its Mermaid family; the derived alt text names the
   // kind the author wrote (a graph, an activity or component diagram).
   const limit = peleLimit(pele.translated), name = pele.name;
-  const written = fitSource(pele.source, limit, payload.alt, name, options);
+  // pele can reject at layout what it accepted at parse; the author gets the same issue checkDiagram gives (no generated line numbers).
+  const fit = (source: string): ComposedDiagram => {
+    try { return fitSource(source, limit, payload.alt, name, options); } catch (error) {
+      const issue = issueOf(error, pele.from);
+      throw Object.assign(new Error(issue.message), { diagramIssue: issue });
+    }
+  };
+  const written = fit(pele.source);
   if (!written.overflow) return written;
   // LH-185: not even the floor fits, so the other main direction is tried before the drawing is scaled. The source keeps its text;
   // only the drawing turns, and the result says so (`direction`).
   const turned = turnedSource(pele.source);
   if (!turned) return written;
   let other: ComposedDiagram | undefined;
-  try { other = pele.translated || checkDiagram({ source: turned.source }).ok ? fitSource(turned.source, limit, payload.alt, name, options) : undefined; } catch { other = undefined; }
+  try { other = pele.translated || checkDiagram({ source: turned.source }).ok ? fit(turned.source) : undefined; } catch { other = undefined; }
   if (other && !other.overflow) return { ...other, direction: { from: turned.from, to: turned.to, turned: true } };
   return { ...written, direction: { from: turned.from, to: turned.to, turned: false } };
 }
