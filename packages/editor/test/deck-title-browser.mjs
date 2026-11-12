@@ -22,7 +22,7 @@ const bundle = (await build({ stdin: { resolveDir: root, contents: `
 ` }, bundle: true, platform: 'browser', format: 'iife', write: false, minify: !process.env.OPF_TEST_UNMINIFIED, conditions: ['browser'], logLevel: 'error' })).outputFiles[0].text;
 const css = (await buildStyles(new URL('../src/styles/', import.meta.url))).css;
 const channel = process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined;
-const browser = await chromium.launch({ channel });
+const browser = await chromium.launch({ channel, ...(process.env.OPF_BROWSER_EXECUTABLE_PATH ? { executablePath: process.env.OPF_BROWSER_EXECUTABLE_PATH } : {}) });
 
 async function openPage(contextOptions = {}) {
   const context = await browser.newContext({ viewport: { width: 900, height: 500 }, ...contextOptions });
@@ -278,6 +278,9 @@ try {
   assert.equal(await focusedIsInput(), true, 'the focus returns to the title field');
   await page.keyboard.press('Enter');
   assert.equal((await events()).length, 1, 'Enter with no edit open commits nothing more');
+  assert.equal(await page.evaluate(() => window.title.editing), true, 'Enter with no edit open opens the edit');
+  await page.keyboard.press('Escape');
+  assert.equal(await page.evaluate(() => window.title.editing), false);
   await page.evaluate(() => window.session.undo());
   assert.equal(await name(), 'Before save', 'undo restores the old name');
   assert.equal(await field(), 'Before save');
@@ -303,6 +306,82 @@ try {
   assert.equal(await field(), 'Keep this', 'Escape on Save cancels');
   assert.equal(await focusedIsInput(), true);
   mark('Cancel and Escape revert without a commit and return the focus to the field');
+
+  // After Save, Cancel or Escape the field keeps the focus without an edit, and the user's intent opens it again.
+  const isEditing = () => page.evaluate(() => window.title.editing);
+  const selection = () => input.evaluate((node) => [node.selectionStart, node.selectionEnd, node.value.length]);
+  const typeNew = async (text) => { await page.keyboard.press('Control+A'); await page.keyboard.type(text); };
+  const saveAs = async (text) => { await input.focus(); await typeNew(text); await save.click(); };
+  await mount({ name: 'Start' });
+  await saveAs('Saved once');
+  assert.equal(await isEditing(), false);
+  assert.equal(await focusedIsInput(), true);
+  await input.click();
+  assert.equal(await isEditing(), true, 'one click after Save reopens the edit');
+  assert.deepEqual(await selection(), [0, 'Saved once'.length, 'Saved once'.length], 'with the saved name selected, as on a first open');
+  assert.equal(await save.isVisible() && await cancel.isVisible(), true, 'Save and Cancel are back');
+  assert.equal(await field(), 'Saved once');
+  // A click while the edit is open keeps the draft.
+  await typeNew('Draft kept');
+  await input.click();
+  await input.click();
+  assert.equal(await field(), 'Draft kept', 'a click while an edit is open does not reset the draft');
+  assert.equal(await isEditing(), true);
+  assert.equal((await events()).length, 1, 'and commits nothing');
+  await cancel.click();
+  assert.equal(await isEditing(), false);
+  assert.equal(await focusedIsInput(), true);
+  await input.click();
+  assert.equal(await isEditing(), true, 'one click after Cancel reopens the edit');
+  assert.deepEqual(await selection(), [0, 'Saved once'.length, 'Saved once'.length], 'with the name selected');
+  await page.keyboard.press('Escape');
+  assert.equal(await isEditing(), false, 'Escape closes it');
+  assert.equal(await focusedIsInput(), true);
+  await input.click();
+  assert.equal(await isEditing(), true, 'one click after Escape reopens the edit');
+  await page.keyboard.press('Escape');
+  // Enter and F2 reopen it, with nothing committed.
+  await page.keyboard.press('F2');
+  assert.equal(await isEditing(), true, 'F2 opens the edit');
+  assert.deepEqual(await selection(), [0, 'Saved once'.length, 'Saved once'.length]);
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('Enter');
+  assert.equal(await isEditing(), true, 'Enter opens the edit');
+  await page.keyboard.press('Escape');
+  assert.equal((await events()).length, 1, 'none of this committed anything');
+  // Typing a character opens it with the character applied, as on a first open.
+  await page.keyboard.type('Z');
+  assert.equal(await isEditing(), true, 'typing opens the edit');
+  assert.equal(await field(), 'Z', 'the character replaces the selected name');
+  await save.click();
+  assert.equal(await name(), 'Z');
+  // Tab away and back opens it too.
+  await page.keyboard.press('Tab');
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'other');
+  await page.keyboard.press('Shift+Tab');
+  assert.equal(await focusedIsInput(), true);
+  assert.equal(await isEditing(), true, 'Tab away and back opens the edit');
+  await page.keyboard.press('Escape');
+  // A fresh mouse focus opens the edit once and the same click does not reset anything.
+  await page.locator('#other').focus();
+  await input.click();
+  assert.equal(await isEditing(), true, 'a click on the unfocused name opens the edit');
+  assert.deepEqual(await selection(), [0, 1, 1]);
+  // Read-only never opens, by focus, click, Enter, F2 or typing.
+  await page.evaluate(() => window.title.setReadOnly(true));
+  await page.locator('#other').focus();
+  await input.click();
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('F2');
+  await page.keyboard.type('q');
+  assert.equal(await isEditing(), false, 'a read-only title never opens');
+  assert.equal(await field(), 'Z');
+  assert.equal(await save.isVisible(), false);
+  await page.evaluate(() => { window.title.setReadOnly(false); window.title.setDisabled(true); });
+  await input.click({ force: true });
+  await page.keyboard.press('F2');
+  assert.equal(await isEditing(), false, 'a disabled title never opens');
+  mark('after Save, Cancel and Escape one click (or Enter, F2, typing, Tab away and back) reopens the edit; a click in an open edit keeps the draft; read-only and disabled never open');
 
   // Leaving the field neither commits nor closes the edit.
   await mount({ name: 'Before blur' });
