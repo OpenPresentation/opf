@@ -13,6 +13,7 @@
 // OPF_TOUCH_ENGINES=chromium,webkit picks the engines (default both); OPF_WEBKIT_EXECUTABLE points at a WebKit build you already have.
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
+import { closeSync, fsyncSync, mkdirSync, openSync, writeSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -88,6 +89,106 @@ function playgroundFailure(page, context) {
       await writeFile(file, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
       console.error(`Mobile/touch failure evidence: ${JSON.stringify({ ...context, phase, file, pageErrors: errors.length, failedRequests: failed.length, pendingRequests: pending.size })}`);
     } catch (captureError) { console.error(`Mobile/touch failure evidence unavailable: ${text(captureError.message)}; ${JSON.stringify(context)}`); }
+  };
+}
+
+// Passive startup evidence lives in Node, so a later blocked page.evaluate cannot erase earlier progress.
+// No successful-page readiness retry: only an owned sampler stop, bounded separately at 250ms, follows the original SVG wait.
+let startupJournals = 0;
+async function playgroundStartup(page, context) {
+  const delays = [0, 100, 250, 500, 1000, 2000, 5000, 10000, 20000, 40000, 60000, 89000];
+  const binding = '__opfMobileStartupSample', stopName = '__opfMobileStartupStop';
+  const started = performance.now(), listeners = [];
+  let fd, file, active = true, closed = false, events = 0, bytes = 0, samples = 0, overflow = false, ioFailed = false, writeMilliseconds = 0;
+  const text = value => typeof value === 'string' ? value.slice(0, 1024) : null;
+  const warn = error => { if (!ioFailed) console.error(`Mobile startup evidence fault: ${String(error.message ?? error).slice(0, 512)}`); ioFailed = true; };
+  const write = (kind, data = {}) => {
+    if (closed || fd === undefined || ioFailed) return;
+    try {
+      let line = JSON.stringify({ kind, nodeMs: performance.now() - started, ...data }) + '\n';
+      if (events >= 511 || bytes + Buffer.byteLength(line) > 262144 - 256) {
+        if (overflow) return;
+        overflow = true; line = JSON.stringify({ kind: 'overflow', nodeMs: performance.now() - started, events, bytes }) + '\n';
+      }
+      const encodedBytes = Buffer.byteLength(line), at = performance.now();
+      const writtenBytes = writeSync(fd, line); writeMilliseconds += performance.now() - at;
+      if (writtenBytes !== encodedBytes) throw new Error(`Short startup journal write: ${writtenBytes}/${encodedBytes}`);
+      events++; bytes += encodedBytes;
+    } catch (error) { warn(error); }
+  };
+  const detach = () => { for (const [name, callback] of listeners) page.off(name, callback); listeners.length = 0; };
+  const finish = () => {
+    if (closed) return;
+    active = false; detach(); write('journal-close', { events, bytes, samples, overflow, ioFailed, writeMilliseconds });
+    closed = true;
+    if (fd !== undefined) {
+      const at = performance.now();
+      try { fsyncSync(fd); } catch (error) { warn(error); } finally { try { closeSync(fd); } catch (error) { warn(error); } }
+      console.error(`Mobile startup journal: ${JSON.stringify({ file, events, bytes, samples, overflow, ioFailed, writeMilliseconds, flushCloseMilliseconds: performance.now() - at })}`);
+    }
+  };
+  const listen = (name, callback) => { page.on(name, callback); listeners.push([name, callback]); };
+  const mark = phase => { if (active) write('phase', { phase }); };
+  const fail = error => {
+    active = false; detach(); write('original-failure', { name: text(error?.name), message: text(error?.message), samples, samplerObserved: samples > 0 });
+    // Flush BEFORE the unchanged after-failure DOM probe, which may itself hang.
+    if (fd !== undefined && !closed) { const at = performance.now(); try { fsyncSync(fd); write('failure-flush', { milliseconds: performance.now() - at }); } catch (fault) { warn(fault); } }
+  };
+  try {
+    if (++startupJournals > 128) throw new Error('Mobile startup journal cap reached (128)');
+    const directory = fileURLToPath(new URL('../artifacts/mobile-touch-failures/startup/', import.meta.url));
+    mkdirSync(directory, { recursive: true });
+    file = path.join(directory, `${Date.now()}-${process.pid}-${startupJournals}.jsonl`);
+    fd = openSync(file, 'wx'); write('start', { ...context, delays, caps: { events: 512, bytes: 262144, samples: 12 }, diagnosticIO: 'synchronous bounded writes; timing overhead is not zero' });
+    page.once('close', finish);
+    for (const name of ['domcontentloaded', 'load', 'crash']) listen(name, () => { if (active) write(name); });
+    listen('framenavigated', frame => { if (active && frame === page.mainFrame()) write('navigation', { url: text(frame.url()) }); });
+    listen('request', request => { if (active) write('request', { url: text(request.url()), type: request.resourceType() }); });
+    listen('requestfinished', request => { if (active) write('request-finished', { url: text(request.url()) }); });
+    listen('requestfailed', request => { if (active) write('request-failed', { url: text(request.url()), error: text(request.failure()?.errorText) }); });
+    listen('response', response => { if (active) write('response', { url: text(response.url()), status: response.status() }); });
+    await page.exposeBinding(binding, (source, sample) => {
+      if (!active || source.frame !== page.mainFrame()) return false;
+      if (samples >= 12 || !sample || sample.index !== samples || !Number.isFinite(sample.browserMs) || sample.browserMs < 0 || !Number.isFinite(sample.readMilliseconds) || sample.readMilliseconds < 0) { write('sample-refused'); return false; }
+      const snapshot = { index: sample.index, browserMs: sample.browserMs, readMilliseconds: sample.readMilliseconds, readyState: text(sample.readyState), status: text(sample.status), fonts: text(sample.fonts), editorPresent: sample.editorPresent === true, lastError: text(sample.lastError), svgCount: Number.isInteger(sample.svgCount) && sample.svgCount >= 0 ? sample.svgCount : null, readError: text(sample.readError) };
+      samples++; write('startup-sample', { sample: snapshot }); return active;
+    });
+    await page.addInitScript(({ binding, stopName, delays }) => {
+      if (globalThis !== globalThis.top || Object.prototype.hasOwnProperty.call(globalThis, stopName)) return;
+      let alive = true; const timers = [];
+      const stop = () => { if (!alive) return; alive = false; for (const timer of timers) clearTimeout(timer); globalThis.removeEventListener('pagehide', stop); if (globalThis[stopName] === stop) delete globalThis[stopName]; };
+      Object.defineProperty(globalThis, stopName, { value: stop, configurable: true });
+      globalThis.addEventListener('pagehide', stop, { once: true });
+      const sample = index => {
+        if (!alive) return;
+        const began = performance.now(); let row;
+        try {
+          const editor = globalThis.opfEditor, error = editor?.lastError;
+          row = { index, browserMs: began, readyState: document.readyState, status: document.querySelector('#status')?.textContent?.slice(0, 512) ?? null, fonts: document.fonts?.status ?? null, editorPresent: Boolean(editor), lastError: typeof error?.message === 'string' ? error.message.slice(0, 512) : null, svgCount: document.querySelectorAll('#preview svg').length };
+        } catch (error) { row = { index, browserMs: began, readError: typeof error?.message === 'string' ? error.message.slice(0, 512) : 'non-string startup read fault' }; }
+        row.readMilliseconds = performance.now() - began;
+        // Do not await the sink in the page: neither application startup nor input waits on diagnostic disk I/O.
+        try { Promise.resolve(globalThis[binding](row)).then(keep => { if (!keep) stop(); }, stop); } catch { stop(); }
+        if (index === delays.length - 1) stop();
+      };
+      sample(0);
+      for (let index = 1; index < delays.length; index++) timers.push(setTimeout(() => sample(index), delays[index]));
+    }, { binding, stopName, delays });
+  } catch (error) { write('setup-fault', { message: text(error.message) }); warn(error); }
+  return {
+    mark, fail,
+    async ready() {
+      active = false; detach(); write('preview-visible', { samples, samplerObserved: samples > 0 });
+      let timer; const at = performance.now();
+      try {
+        const result = await Promise.race([
+          page.evaluate(name => { const stop = globalThis[name]; if (typeof stop !== 'function') return 'already-stopped-or-not-installed'; stop(); return 'stopped'; }, stopName),
+          new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('Startup sampler stop exceeded250ms')), 250); }),
+        ]);
+        write('sampler-stop', { result, milliseconds: performance.now() - at });
+      } catch (error) { write('sampler-stop-fault', { message: text(error.message), milliseconds: performance.now() - at }); }
+      finally { clearTimeout(timer); }
+    },
   };
 }
 
@@ -213,11 +314,15 @@ async function playground(browser, engine, { width, height }) {
     page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`));
     page.on('console', (message) => { if (message.type() === 'error' && !/Failed to load resource/.test(message.text())) problems.push(`console: ${message.text()}`); });
     const captureFailure = playgroundFailure(page, { engine, version: browser.version(), width, height, state });
+    const startup = await playgroundStartup(page, { engine, version: browser.version(), width, height, state });
     let phase = 'navigation';
     try {
+    startup.mark('navigation');
     await page.goto(`${origin}/index.html`);
     phase = 'preview SVG visible';
+    startup.mark(phase);
     await page.locator('#preview svg').waitFor({ timeout: 60000 });
+    await startup.ready();
     phase = 'font-loading status';
     await page.waitForFunction(() => !/Loading fonts/.test(document.querySelector('#status').textContent), undefined, { timeout: 60000 });
     // The slide parts (the add, layout and gallery buttons among them) mount after their lazily loaded chunk, so a preview on screen
@@ -227,7 +332,7 @@ async function playground(browser, engine, { width, height }) {
     phase = 'coarse pointer';
     assert.equal(await page.evaluate(() => matchMedia('(pointer: coarse)').matches), true, `${tag('page')}: a coarse pointer`);
     return page;
-    } catch (error) { await captureFailure(error, phase); throw error; }
+    } catch (error) { startup.fail(error); await captureFailure(error, phase); throw error; }
   };
   const sheet = (page, id) => async () => { await page.locator(`#${id}`).tap(); await page.waitForFunction(() => getComputedStyle(document.querySelector('.inspector')).transform === 'none'); };
   const states = [
