@@ -386,26 +386,40 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     return {slide,mappings,overlay};
   };
   const diagnosticsFor = (portions: Map<string,Portion>) => fit(geometry(project(portions,slides.length).slide,slides.length).diagnostics);
-  // LH-144: the largest body size the first page draws for each kind of block (reference pixels). A later page is capped at the largest of
-  // these for the kinds it holds (composition.maxFontSize), so a last page with one timeline, list or paragraph does not read larger than
-  // the pages before it. A cap only lowers sizes, so a page that fits without it fits with it; breaks are chosen without it.
-  let firstSizes: Map<string, number> | undefined;
+  // LH-144: the pages after the first share their type sizes, so a last page with one timeline, list or paragraph does not read larger
+  // than the pages before it. Each page is first drawn as an unpaginated slide would be (its body grows to fill it); then every later page
+  // is capped (composition.maxFontSize), for each kind of block it holds, at the larger of the first page's size and the smallest size any
+  // later page draws for that kind on its own. The cap never sets a page under the first page's size or under what every later page
+  // reaches, so continuation pages that all grow (an arrangement beside a side title) keep their growth (RR-105, the v0.33.0 sizes), and
+  // only a page that would read larger than its siblings is held to them. A cap only lowers sizes, so a page that fits without it fits
+  // with it; breaks are chosen without it.
   const kindOf = (field: string) => field === 'items' || field === 'bullets' ? 'list' : field;
+  const drawnSizes: {kinds: Set<string>; sizes: Map<string, number>}[] = [];
   const finish = () => {
     if (!selected.size) return;
     if (slides.length >= maxSlides) throw new OPFPaginationError(`Pagination needs more than ${maxSlides} slides. No partial result was returned.`);
     const {slide,mappings,overlay} = project(selected,slides.length);
-    const cap = firstSizes && Math.max(0, ...[...selected.values()].map(portion => firstSizes!.get(kindOf(portion.leaf.field)) ?? 0));
-    if (cap) slide.composition = {...slide.composition, maxFontSize: Math.min(Math.max(8, cap), 200, slide.composition?.maxFontSize ?? Infinity)};
     const drawn = geometry(slide,slides.length), issues = fit(drawn.diagnostics);
-    if (!firstSizes) firstSizes = bodySizes(drawn,composeOptions);
     if (issues.length) throw new OPFPaginationError('A continuation page does not fit at its final page number. No partial result was returned.',issues);
+    drawnSizes.push({kinds: new Set([...selected.values()].map(portion => kindOf(portion.leaf.field))), sizes: bodySizes(drawn,composeOptions)});
     assignPageIds(slide,slides.length);
     // RR-34: a page that cites references validates only with the deck's references list (RR-54: and its datasets).
     assertValid({...deckContext(options.presentation),slides:[slide]}, { only: ['format'] });
     slides.push(slide); pages.push({slideIndex:sourceIndex+slides.length-1,mappings,...(initial.furniture?{repeatedMappings:repeatedMappings(slides.length-1)}:{})});
     pageConnectors.push(overlay);
     selected = new Map();
+  };
+  const shareSizes = () => {
+    const first = drawnSizes[0]?.sizes, shared = new Map<string, number>();
+    if (!first) return;
+    for (const page of drawnSizes.slice(1)) for (const [kind, size] of page.sizes) shared.set(kind, Math.min(shared.get(kind) ?? Infinity, size));
+    for (let index = 1; index < slides.length; index++) {
+      const slide = slides[index]!, cap = Math.max(0, ...[...drawnSizes[index]!.kinds].map(kind => Math.max(first.get(kind) ?? 0, shared.get(kind) ?? 0)));
+      if (!cap) continue;
+      slide.composition = {...slide.composition, maxFontSize: Math.min(Math.max(8, cap), 200, slide.composition?.maxFontSize ?? Infinity)};
+      const issues = fit(geometry(slide,index).diagnostics);
+      if (issues.length) throw new OPFPaginationError('A continuation page does not fit at its final page number. No partial result was returned.',issues);
+    }
   };
   if (options.wholeBlocks) {
     // LH-90: a page holds a run of whole units, each with all of its leaves: the slide's block units (a lead block and the
@@ -464,6 +478,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     const balancedFits=balanced.every(([from,to],page)=>{const candidate=inspect(from,to,page,planningCaps);if(!planningCaps)planningCaps=bodySizes(candidate.drawn,composeOptions);return !candidate.issues.length;});
     const ranges = balancedFits ? balanced : greedy;
     for (const [from,to] of ranges) { selected = portions(from,to); finish(); }
+    shareSizes();
     splitDiagnostics();
     return {slides,pages};
   }
@@ -511,6 +526,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   }
   finish();
   if (!slides.length) throw new OPFPaginationError('No body content can be paginated.', initial.diagnostics);
+  shareSizes();
   splitDiagnostics();
   return {slides,pages};
 }

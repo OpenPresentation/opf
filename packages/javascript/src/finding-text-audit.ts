@@ -316,6 +316,17 @@ const iconDropped: RuleText = (finding) => {
   };
 };
 
+const chartLabelCollision: RuleText = () => ({
+  message: "A reference label meets another label or a data line.",
+  next: "put the label at the other end of its line, shorten it, or give the chart more room.",
+});
+
+// RR-105: a timeline period shorter than its marker.
+const timelinePeriodShort: RuleText = () => ({
+  message: "A timeline period is too short to read: its duration gives it less room than its marker.",
+  next: "give the timeline more room, or make its shortest period longer.",
+});
+
 // SH-09: a pyramid or matrix drawn as cards or as a list (SH-18: a cycle as a list).
 const arrangementAdapted: RuleText = (finding) => {
   const cards = /needs four entries/.test(finding.message);
@@ -645,6 +656,8 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/region-full": regionFull,
   "opf/icon-dropped": iconDropped,
   "opf/arrangement-adapted": arrangementAdapted,
+  "opf/chart-label-collision": chartLabelCollision,
+  "opf/timeline-period-short": timelinePeriodShort,
   "opf/layout-unplaced": layoutUnplaced,
   "opf/furniture-wraps": furnitureWraps,
   "opf/font-outside-scheme": fontOutsideScheme,

@@ -37,6 +37,11 @@ export function chartReferences(chart: unknown): ChartReference[] {
     return [{value:entry.value,axis:entry.axis==='secondary'?'secondary':'value',...(typeof entry.label==='string'&&entry.label.trim()?{label:entry.label}:{}),labelPosition:entry.labelPosition==='start'?'start':'end',stroke:{...(stroke.color!==undefined?{color:stroke.color}:{}),width:typeof stroke.width==='number'&&Number.isFinite(stroke.width)?stroke.width:4/3,dash:stroke.dash==='solid'||stroke.dash==='dot'?stroke.dash:'dash'},...(entry.stroke!==undefined?{authoredStroke:entry.stroke}:{})}];
   });
 }
+/** The authored position (`referenceLines.<n>`) of each reference chartReferences keeps, in its order: an entry without a finite value is skipped. */
+export function chartReferenceSources(chart: unknown): number[] {
+  if(!record(chart)||typeof chart.type!=='string'||!CHART_REFERENCE_TYPES.has(chart.type)||!Array.isArray(chart.referenceLines))return [];
+  return chart.referenceLines.flatMap((entry,index)=>record(entry)&&typeof entry.value==='number'&&Number.isFinite(entry.value)?[index]:[]);
+}
 const overlap=(a:Box,b:Box)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
 const inside=(a:Box,b:Box)=>a.x>=b.x-0.01&&a.y>=b.y-0.01&&a.x+a.width<=b.x+b.width+0.01&&a.y+a.height<=b.y+b.height+0.01;
 /** The same category-center span for SVG and native helpers; bars and singleton categories use full-plot overlays. */
