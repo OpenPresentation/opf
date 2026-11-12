@@ -1,6 +1,6 @@
 ---
 type: added
-packages: [pptx]
+packages: []
 ---
 opf#926 (experimental): a tested LibreOffice interoperability check for the PPTX export. A pinned LibreOffice (26.8.2.2, hash-checked)
 in the pinned Linux image converts a maintained corpus (cover and text, long and nested lists, images and crops, tables, common charts,
