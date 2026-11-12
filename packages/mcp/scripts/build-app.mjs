@@ -9,6 +9,7 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
+import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
 import { assertAppResourceFrame } from "./app-resource-frame.mjs";
@@ -41,8 +42,19 @@ for (const face of office.registry.embeddedFonts) {
 }
 if (fonts.startup.length !== 1) throw new Error("The Office font pack has no Roboto Regular face to start the deck view with.");
 
+// zod's locale messages: `z.locales` re-exports about fifty of them (some 230 KiB), which a bundler cannot drop because the whole
+// namespace is exported. Nothing in the view picks a locale (zod's default, English, imports en.js itself), so the view carries only
+// English. Without this the viewer would not fit the resource frame below.
+const zodEnglishOnly = {
+	name: "zod-english-only",
+	setup(context) {
+		context.onLoad({ filter: /[\\/]zod[\\/]v4[\\/]locales[\\/]index\.js$/ }, (args) => ({ contents: 'export { default as en } from "./en.js";\n', loader: "js", resolveDir: dirname(args.path) }));
+	},
+};
+
 const profile = process.env.OPF_MCP_APP_PROFILE;
 const bundle = await build({
+	plugins: [zodEnglishOnly],
 	metafile: Boolean(profile),
 	// A path, not URL.pathname, which on Windows is "/C:/..." and does not resolve.
 	entryPoints: [fileURLToPath(new URL("app/main.ts", here))],
