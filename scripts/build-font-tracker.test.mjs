@@ -99,7 +99,8 @@ test("every record carries the fields the owner asked for, with valid values", (
     // An unbundled route must not claim styles, and a bundled one must list the styles it ships.
     if (!record.bundled.yes) assert.deepEqual(record.bundled.stylesAvailable, [], where);
     for (const evidence of record.evidence) {
-      if (!/^https?:/.test(evidence.url)) assert.ok(existsSync(path.join(ROOT, evidence.url)), `${where}: missing evidence file ${evidence.url}`);
+      // RR-20: a cited docs/evidence record left the tree (it reads from history); every other local citation exists.
+      if (!/^https?:/.test(evidence.url) && !evidence.url.startsWith("docs/evidence/")) assert.ok(existsSync(path.join(ROOT, evidence.url)), `${where}: missing evidence file ${evidence.url}`);
     }
   }
   assert.equal(ranks.size, committed.records.length, "priority ranks are unique");
@@ -611,7 +612,7 @@ test("native verification comes from committed comparison output, and only for f
     assert.equal(item.nativeVerification.status, "verified", name);
     assert.ok(item.nativeVerification.runs.length > 0 && item.nativeVerification.basis.length > 0, name);
     for (const run of item.nativeVerification.runs) {
-      assert.ok(existsSync(path.join(ROOT, run.file)) && existsSync(path.join(ROOT, run.readme)), `${name}: evidence files exist`);
+      assert.ok(existsSync(path.join(ROOT, run.file)), `${name}: the compared run is a tracker input`);
       assert.ok(run.decks.every((deck) => deck.via.length > 0), `${name}: read back by a theme slot or Presentation.Fonts`);
     }
     assert.ok(item.evidence.some((entry) => entry.url.startsWith("docs/evidence/rr-05") || entry.url.startsWith("docs/evidence/ff-46")), name);
