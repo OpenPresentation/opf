@@ -1,0 +1,88 @@
+{
+  "scope": "Retained transcription of the single already-run authorized pure probe; not a rerun or live qualification",
+  "sourceHead": "6cb8f52aa8dc43e37af8d5a6eda2b5ef5ebcca04",
+  "sourceTree": "e5979e1804b39db9c94bb263239bb94039eaa37c",
+  "node": "v24.21.0",
+  "entry": "/tmp/opf-034/packages/javascript/dist/composition.js",
+  "input": "Strong quarter across                 business",
+  "size": 64,
+  "minimum": 64,
+  "height": 500,
+  "measurement": "default estimate",
+  "rows": [
+    {
+      "width": 600,
+      "greedy": [
+        "Strong quarter ",
+        "across                 ",
+        "business"
+      ],
+      "balanced": [
+        "Strong ",
+        "quarter across                 ",
+        "business"
+      ]
+    },
+    {
+      "width": 700,
+      "greedy": [
+        "Strong quarter ",
+        "across                 ",
+        "business"
+      ],
+      "balanced": [
+        "Strong ",
+        "quarter across                 ",
+        "business"
+      ]
+    },
+    {
+      "width": 800,
+      "greedy": [
+        "Strong quarter across                 ",
+        "business"
+      ],
+      "balanced": [
+        "Strong quarter across                 ",
+        "business"
+      ]
+    },
+    {
+      "width": 900,
+      "greedy": [
+        "Strong quarter across                 ",
+        "business"
+      ],
+      "balanced": [
+        "Strong quarter ",
+        "across                 business"
+      ]
+    },
+    {
+      "width": 1000,
+      "greedy": [
+        "Strong quarter across                 ",
+        "business"
+      ],
+      "balanced": [
+        "Strong quarter ",
+        "across                 business"
+      ]
+    },
+    {
+      "width": 1100,
+      "greedy": [
+        "Strong quarter across                 ",
+        "business"
+      ],
+      "balanced": [
+        "Strong quarter ",
+        "across                 business"
+      ]
+    }
+  ],
+  "live": "UNREPRODUCED: CUA chrome/iab unavailable; no browser interactions",
+  "implementation": "NONE; stop requested before further work",
+  "testsBuildExports": "UNRUN",
+  "performedCommand": "<pinned Node24.21.0> --input-type=module -e 'const {fitText}=await import(\"/tmp/opf-034/packages/javascript/dist/composition.js\"); const t=\"Strong quarter across\"+\" \".repeat(17)+\"business\";for(const width of [600,700,800,900,1000,1100]){const box={x:0,y:0,width,height:500};console.log(JSON.stringify({width,greedy:fitText(t,box,64,64,undefined,undefined,false).lines,balanced:fitText(t,box,64,64,undefined,undefined,true).lines}));}'"
+}

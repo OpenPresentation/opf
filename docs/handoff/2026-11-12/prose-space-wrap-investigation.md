@@ -1,0 +1,27 @@
+# User-reported repeated-space heading wrap — unfinished handoff
+
+**Status: diagnosis only, no product patch; live reproduction and qualification UNRUN.** Investigation source6cb8f52aa8dc43e37af8d5a6eda2b5ef5ebcca04/treee5979e1804b39db9c94bb263239bb94039eaa37c. The user requested wrap-up before further experiments. Startup-checker e47791418ca0ff142e3334e395003d81f07f635d and earlier style/Name-root leaves are separate frozen work already normally integrated by root; this note changes none of them.
+
+## User observation
+
+In the live openpresentation.org homepage bizreview.opf.json example, the edited cover title reads `Strong quarter across                 business`. Screenshots show `Strong quarter` on line1 and `across                 business` on line2. The user asks why `across` moves when that word fits, and requests testing repeated spaces live. Title/body content remains visible; there is no missing-body claim. Screenshot originals remain with the coordinator/private attachment evidence; they are not copied here.
+
+## Actual work completed
+
+Read the supplied two screenshots and relevant OPF layout/export/inspection skills and geometry/render references. Read source/core composition, line-break tokenization and existing line-break tests. Source6cb is a descendant of the already fetched origin/main7fb6140804f969550e3a9c9d52916b7610844917 (0left/1281right at inspection); no fetch, main edit, site change or publication was performed.
+
+One root-authorized SMALL PURE probe imported the existing built core composition entry at /tmp/opf-034/packages/javascript/dist/composition.js with pinned local Node24.21.0. Input was `'Strong quarter across' + ' '.repeat(17) + 'business'`; font size/minimum64; box height500; widths600,700,800,900,1000,1100; measured with the existing default estimate, not live actual fonts. At widths900/1000/1100, greedy fitText(balance=false) produced `["Strong quarter across                 ", "business"]`; balanced fitText(balance=true) produced `["Strong quarter ", "across                 business"]`, matching the screenshot's word arrangement. Width800 retained greedy lines in both modes; widths600/700 produced three lines with different balanced breaks. No source content was mutated. This was not a package test, own build, actual-font/SVG/PPTX or browser qualification, and no before/after immutable compiled graph receipt was established for the probe.
+
+Live browser attempts through the available computer-use API failed immediately: createBrowserTab chrome and iab each returned `Browser is not available`. No live tab/input/account/private state was opened or edited. Live behavior/version/operative bundle is therefore UNVERIFIED by this investigator; the screenshots plus pure candidate probe are the actual evidence.
+
+## Concrete source cause and limits
+
+packages/javascript/src/composition.ts:1748 balancedBreaks selects a same-line-count break set minimizing measured line-width variance. Its span measure includes authored spaces INSIDE each candidate line. fitPlacedText around6219 enables balance for title/subtitle/display text. Thus a large preserved gap between `across` and `business` can make the balancer prefer moving `across` onto the second line even when greedy fitting places it on the first. The plain/rich greedy breakers already retain oversized spaces as hanging source whitespace rather than forcing spaces to begin the next line. This is a demonstrated balancing mechanism, not a proven word-token grouping bug or a reason to collapse source spaces. The rich path calls the same balancer, but its actual repeated-space output was NOT probed.
+
+No source fix has been selected or implemented. Ordinary heading balancing is intentional and must remain covered. Any change must preserve exact source units, legitimate leading indentation, tabs, NBSP/narrow-NBSP/word joiners, authored hard breaks, rich run ownership/styles, and shared SVG/PPTX geometry. Do not shrink fonts, rewrite text, globally disable balancing or normalize whitespace merely to match the screenshot.
+
+## Exact next step for the successor
+
+After the coordinator's active mapper releases its lease, use a fresh ephemeral browser context on the public live homepage, record its actual runtime/assets/version, enter only the public demo title with known1/2/4/8/17 plain spaces, and retain the exact editor source plus actual SVG text/line positions. Compare actual measured greedy/balanced plain and equivalent rich runs on the current candidate in the successor's own checkout/build. Use a real selected font handle for final geometry, with the same provider in composition/render/PPTX. The open design decision is how heading balancing should respect deliberately authored repeated-space separation while preserving ordinary balancing and lossless source mapping. Establish that narrow contract with meaningful core/plain/rich regressions plus SVG/PPTX line/source geometry before implementing. Root owns heavier builds/tests and final coherent changed gate; do not launch another full aggregate per leaf. Preserve all prior failures and current release/native tasks independently.
+
+Only this dated note and [the retained pure-probe transcription](prose-space-wrap-probe.json) are changed. git diff --check passes; repository pnpm check:changed is NOT RUN for this handoff leaf while root's sole heavy mapper04 is active. This is an unfinished, unqualified investigation checkpoint, not a fix/release/site deployment or live pass.
