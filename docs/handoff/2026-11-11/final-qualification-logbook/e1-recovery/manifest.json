@@ -1,0 +1,25 @@
+{
+  "scope": "Metadata only: historical Git-local materialization and maintained loadRecovery admission; no payload copy or034 authority/render/comparison claim",
+  "files": [
+    {
+      "file": "admission.json",
+      "bytes": 997,
+      "sha256": "786a6987b322aa613034404c41ae9c4f47623e0fd2154e5f97c6e0f7c3efae77"
+    },
+    {
+      "file": "materialization.json",
+      "bytes": 8279,
+      "sha256": "06162cb14b7511579b12cde7201b34f30387259670fc3cd2c33a8592737f2cf3"
+    },
+    {
+      "file": "git-files.json",
+      "bytes": 4110,
+      "sha256": "ecbe4c04880070e4fcc1d4c95d382a3bfcb603ebb41b9e7065673066b419aeef"
+    }
+  ],
+  "rawPayloadLocalOnly": {
+    "files": 23,
+    "bytes": 93971297,
+    "sourceCommit": "442ad549d53131cfb32b5c65d974777f33f68a67"
+  }
+}

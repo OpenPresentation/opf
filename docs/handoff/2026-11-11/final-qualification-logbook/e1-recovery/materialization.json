@@ -1,0 +1,169 @@
+{
+  "sourceCommit": "442ad549d53131cfb32b5c65d974777f33f68a67",
+  "files": [
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-01.zip",
+      "gitObject": "d6300eb45b20a30a00a1dbd355752fea7410e3fd",
+      "bytes": 4910321,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-01.zip",
+      "sha256": "0c14f24fa2c37bdc2f9caf2babcdf1ac33d18db3383b26286fe6a5205d5c39f2"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-02.zip",
+      "gitObject": "908688dc0c800ee19af2a543335b2831a24453e4",
+      "bytes": 5329961,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-02.zip",
+      "sha256": "f9640c8f8fad894d1ae19890fd4f8242945c1a07332d8063c334980f4c4f9384"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-03.zip",
+      "gitObject": "0c6727af6bea31c39fdcad298dca59acda5557d1",
+      "bytes": 5253238,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-03.zip",
+      "sha256": "02647cab4017cb1937a95a678bfdea5c2fd300ff5e93508bff69a4d95fb75a0e"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-04.zip",
+      "gitObject": "e04fc7c8220f2bc4d61301590a4008ee12be7b5b",
+      "bytes": 5029984,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-04.zip",
+      "sha256": "1f2a7bca25c7e1669361aa1e6a54b7963b9efbce5da259939ad09bb2cf9ff814"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-05.zip",
+      "gitObject": "aca5ca39f53531adbe29ce46c973bb07ebae3c74",
+      "bytes": 5469147,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-05.zip",
+      "sha256": "b9a370f65845f362d5df996d57cb07151b89efb5b08545ad6587379f6c9d7880"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-06.zip",
+      "gitObject": "77b65bb95571556cc34c9a4ed8a648f14b37c667",
+      "bytes": 5319454,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-06.zip",
+      "sha256": "4c4a14e67ebbf40d36372ecd70de055d0623ef060e5a4684ad3b5eb84e6fa29f"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-07.zip",
+      "gitObject": "89826b1f30db5ddaf5dec3fca265e284d9e4a28d",
+      "bytes": 4889644,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-07.zip",
+      "sha256": "910236fb53ad49ed26e7a1313e21c09e914f5f7359e06a8f8bc713d783c241e4"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-08.zip",
+      "gitObject": "5e98da14eb7f1a59f20e95dd0a656644c5d1b90b",
+      "bytes": 4870864,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-08.zip",
+      "sha256": "c3904923eb6575564118d8cd8b7d5953b0ddaaf2a0baeb4aaae514e6670eb313"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-09.zip",
+      "gitObject": "6c8dd757b282e0c749dff1734b8390eacf5619c7",
+      "bytes": 5131563,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-09.zip",
+      "sha256": "3b59f85b51d1f5a1de2c20e58e4a23d2773da63d08ea6eee8c585476d1e1dace"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-10.zip",
+      "gitObject": "82b14a351db23de19d2a6362aff8799c90f0d24b",
+      "bytes": 5567090,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-10.zip",
+      "sha256": "dba49911dac0c797a0c7785c72b316fa616181a9288088ed6a3ea6183bd350b9"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-11.zip",
+      "gitObject": "e12cb4c43f12608c570aae6754cd34690d4ec559",
+      "bytes": 5797246,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-11.zip",
+      "sha256": "bcdedf9da11c82eb8d16c77298f2d1c8b278b79f96829534a4885bdc3af6c2c5"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-12.zip",
+      "gitObject": "4f3de6b4b1c1ca8a2519782c76914258322c7312",
+      "bytes": 5136923,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-12.zip",
+      "sha256": "ba90cee766a0d81dc1e209f8ae6a94c5fa5e666c408313f34e40a65a9fe4cb20"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-13.zip",
+      "gitObject": "8703e6ba6712f949d3307e7ca3d81424d5d0ea0b",
+      "bytes": 3694693,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-13.zip",
+      "sha256": "fdab6c8fc1d90336d1fd8a8c822d655bfd5a373762ecd63a29e77ef23bbf6cb5"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-14.zip",
+      "gitObject": "b0d2c30e3cb2ee5b86ef1e8811187ad0a0ef7eb4",
+      "bytes": 5540342,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-14.zip",
+      "sha256": "88674b0f80ccd64270023e15b1d916d2c4ad3e2892d8b1515c984359a74531a1"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-15.zip",
+      "gitObject": "3538b858468339ba7833df32406a65a5bb885af0",
+      "bytes": 4896672,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-15.zip",
+      "sha256": "84c06cc09dac50b0614f506a41c7c49ef833e09f9422c524402ba2a23c5a48f0"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-16.zip",
+      "gitObject": "47262953a30ee063cc343533634d5e059e02ba02",
+      "bytes": 5319633,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-16.zip",
+      "sha256": "818a10e58024b3f6bfde17ca1decc7115515dcaaed11ce18a8309f882466d6ad"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-17.zip",
+      "gitObject": "61c652a4488ea0c7842e0ffcf4b43cb22fe7997b",
+      "bytes": 4900508,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-17.zip",
+      "sha256": "2395323bcfa576fed602086ef476aaa62d34618a9b8e010c2530b20b3355fe37"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/batch-18.zip",
+      "gitObject": "0f4c18f1d26a076d966d0fc426753fd7f893dd84",
+      "bytes": 1072072,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/batch-18.zip",
+      "sha256": "bd0ae12637ffacb371079bd12542985aa0d2e9f0a473f11f9414ea06ef23698b"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/controls.zip",
+      "gitObject": "689ff2a2b351ec86f02f332844ba560980e57fc7",
+      "bytes": 9660,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/controls.zip",
+      "sha256": "5faa6078d7cc0c8a722d4a59ed1b42dfc00d81bc95231da160f3115cac09c5b7"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/pilot.zip",
+      "gitObject": "7d62aaa037c185bed1fe9ab0494c99554ac9889a",
+      "bytes": 4167579,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/pilot.zip",
+      "sha256": "b6ee5d1401263a84e22d45de113b54f264eee71b10c376d049a3d34b00027286"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/packets/sources.zip",
+      "gitObject": "bd5da4b36d37b09222c31d1208f26696c7a94e1f",
+      "bytes": 6414,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/packets/sources.zip",
+      "sha256": "0eacd8dda4e041571980654a4b0be73385f9661581e303aff81ede31dfde34cc"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/recovery.json",
+      "gitObject": "56416079bec6ae36e1a36eafedebbe74295fc63a",
+      "bytes": 1654321,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/recovery.json",
+      "sha256": "901296967ae1cad3c709cbb65f58f4277261133ec00a704c385a40b6ad458816"
+    },
+    {
+      "path": "docs/evidence/rr20-e1-recovery/payload/seal.json",
+      "gitObject": "767a9a293561e54c9c400e835c74296fe98c7a8b",
+      "bytes": 3968,
+      "materialized": "/tmp/opf-e1-full-recovery-inventory01/payload/seal.json",
+      "sha256": "8f9c4fb605f67e64b1924ff77cea1993b5c1de17914f24e288131bae6d9603ef"
+    }
+  ],
+  "assetCount": 2901,
+  "gitAssets": 19,
+  "scope": "Exact historical recovery materialization only; no v0.34 consumer, render or comparison acceptance"
+}

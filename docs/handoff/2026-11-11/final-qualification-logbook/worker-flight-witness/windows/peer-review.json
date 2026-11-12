@@ -1,0 +1,30 @@
+{
+  "sourceOnly": true,
+  "verdict": "ACCEPTED; no remaining concrete source blocker for one Windows evidence workflow dispatch",
+  "reviewer": "native_font_deps",
+  "reviewedAt": "2026-11-12T04:52:05.060957+00:00",
+  "patch": {
+    "path": "/tmp/opf-worker-flight-windows-source01/source.patch",
+    "bytes": 56909,
+    "sha256": "ae47470ef0c2237709501dc67eadcfd47ee0e4a139b0368d9b801439c5393069"
+  },
+  "manifestSha256": "d5037d429403ad348e47f4d94182e19c85b4451f1e57d03008a2d4786841ed72",
+  "nativeHelperSource02Sha256": "6d2e9b0f7dbd81a50187ba819079e89d05d683b4582002a2e9a5538258af8558",
+  "checked": [
+    "Full unified patch applied independently IN MEMORY to immutable79 bytes equals all6reviewed livefiles; all24protected bytes equal79Gitblobs",
+    "Portable diagnostic wholeinverse exactly reconstructs accepted20717B0bf63aa3 withonly3helperimports+EVIDENCE adaptation; no metric/workload/gate delta",
+    "Workflow is dispatch-only/singleWindows job/read-onlypermissions/pinnedexistingactions/Node24.22.2/20min bound andalwaysartifactupload; no PR/main/release verification claim",
+    "Runner requires exactGITHUB_SHA/directparent79/closed6changedpaths/cleanstatus/Node+pnpm+Playwright,9sourcepins and4actualfailedWindows assetpins beforechildren",
+    "All223assets andALLregularfilesof7ownpackage dist directories comparedbefore/between/after; source/head status also rechecked; initialauthorityfailure startsneitherchild and drift preventsbrowser",
+    "Exactlyone nativehelper thenone normalbrowser; independentnative ordinaryRED is retained while source-clean browser still runs; eitherchildRED/error/missing/drifted evidence leaveswrapperRED",
+    "Nativehelper02 fixesrequestedTAPseam: ONEoriginal9-test file with9pass/0fail/cancelled/skipped/todo plus all32managed8+13+11, exactPS5.1Desktop/env/source/runtime andownnewprefixscratchretention; no separatestartup8file/Office/processqueries",
+    "Original childstdout/stderr/status/signal/error+timing retained, rawbrowserJSON preservedbeforegates/finally; originaltest assertions/budgets/samples/env/deadlines unchanged andfirstfailures notrelabeled",
+    "Parentchild120s/360s caps and20minjob bound do not change original60s browser waits or originalPS15s internalmanagedwrapper"
+  ],
+  "limits": [
+    "This replaces full-ci.yml only on the NEVERMERGE evidencebranch; never merge/promote it as canonical or FullCI qualification",
+    "Runtime/Windows/browser/PowerShell outcomes remainUNRUN by reviewers/authors; prior Windows89ms remainsRED/unknown, notrescuedbyMac evidence or any futurepass",
+    "Startupbeforeoriginaldiagnostictry is preserved by outerrunnerlog/receipt; no promise all startup errors populate diagnostic.originalFailure",
+    "Only static source/byte/hash/in-memorypatch checks performed; no imports/syntax/tests/build/install/browser/PS/API/dispatch/push or trackedsource edits byreviewer"
+  ]
+}

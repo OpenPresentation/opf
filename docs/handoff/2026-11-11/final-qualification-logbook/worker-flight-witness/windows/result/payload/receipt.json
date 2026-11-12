@@ -1,0 +1,171 @@
+{
+  "scope": "NEVERMERGE evidence only: ONE normal Windows worker-flight witness plus exact Office-free Name snapshot controls",
+  "base": "79cdb85d6ab8a58dde5d474e254cffa027735c51",
+  "head": "103e87be816b643f04c801fc6b16409a60bf3f9a",
+  "phases": {
+    "native-controls": {
+      "args": [
+        "D:\\a\\opf\\opf\\docs\\evidence\\worker-flight-witness\\native-controls.mjs",
+        "--expect-head",
+        "103e87be816b643f04c801fc6b16409a60bf3f9a",
+        "--output",
+        "D:\\a\\opf\\opf\\artifacts\\worker-flight-witness\\native"
+      ],
+      "seconds": 15.286,
+      "code": 1,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "bytes": 341,
+        "sha256": "649232ab536826f1720d5a65d9342463557447bce3903002b776c8335bbc05ee"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "browser": {
+      "args": [
+        "D:\\a\\opf\\opf\\docs\\evidence\\worker-flight-witness\\diagnostic.mjs"
+      ],
+      "seconds": 36.839,
+      "code": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "bytes": 2485,
+        "sha256": "f646ddf1bf9a48613cc1914df90bf498a16ede2cb3d4e1c3ab243090f8fc9e60"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "errors": [
+    {
+      "phase": "native-controls",
+      "args": [
+        "D:\\a\\opf\\opf\\docs\\evidence\\worker-flight-witness\\native-controls.mjs",
+        "--expect-head",
+        "103e87be816b643f04c801fc6b16409a60bf3f9a",
+        "--output",
+        "D:\\a\\opf\\opf\\artifacts\\worker-flight-witness\\native"
+      ],
+      "seconds": 15.286,
+      "code": 1,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "bytes": 341,
+        "sha256": "649232ab536826f1720d5a65d9342463557447bce3903002b776c8335bbc05ee"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "afterSourceChecksPassed": true,
+  "sourceAndBuildUnchanged": true,
+  "startedAt": "2026-11-12T04:56:48.258Z",
+  "changedPaths": [
+    ".github/workflows/full-ci.yml",
+    "docs/evidence/worker-flight-witness/README.md",
+    "docs/evidence/worker-flight-witness/diagnostic.mjs",
+    "docs/evidence/worker-flight-witness/native-controls.mjs",
+    "docs/evidence/worker-flight-witness/run.mjs",
+    "docs/evidence/worker-flight-witness/source-bindings.json"
+  ],
+  "versions": {
+    "node": "v24.22.2",
+    "pnpm": "10.33.2",
+    "playwright": "1.65.0",
+    "platform": "win32",
+    "nativeKeymap": "win32",
+    "cpuThrottle": "1"
+  },
+  "boundBefore": {
+    "assets": 223,
+    "compiled": 609,
+    "sources": 9
+  },
+  "preBrowserSourceAndBuildUnchanged": true,
+  "browserReport": {
+    "bytes": 1200712,
+    "sha256": "73b883b6596ffe1509187414cf258b4c0c07d7df94288dd6afe4d4a1eabbcad8"
+  },
+  "browser": {
+    "parameters": {
+      "CI": true,
+      "LIMIT": 100,
+      "ROUNDS": 1,
+      "COMPARE": true,
+      "WORKER_OFF": false,
+      "BURN": 0,
+      "SLOW_APPLY": 0,
+      "SLIDES": 1000,
+      "TAIL": 150,
+      "PATTERNS": {
+        "quick": {
+          "bursts": 4,
+          "size": 3,
+          "spacing": 30
+        },
+        "paced": {
+          "bursts": 12,
+          "size": 1,
+          "spacing": 90
+        }
+      },
+      "engineName": "chromium"
+    },
+    "browserVersion": "158.0.8127.18",
+    "originalFailure": null,
+    "preservationErrors": [],
+    "rows": [
+      {
+        "format": "yaml",
+        "mode": "on",
+        "error": null,
+        "restored": true,
+        "overflow": {}
+      },
+      {
+        "format": "yaml",
+        "mode": "off",
+        "error": null,
+        "restored": true,
+        "overflow": {}
+      },
+      {
+        "format": "md",
+        "mode": "on",
+        "error": null,
+        "restored": true,
+        "overflow": {}
+      },
+      {
+        "format": "md",
+        "mode": "off",
+        "error": null,
+        "restored": true,
+        "overflow": {}
+      },
+      {
+        "format": "json",
+        "mode": "on",
+        "error": null,
+        "restored": true,
+        "overflow": {}
+      }
+    ]
+  },
+  "boundAfter": {
+    "assets": 223,
+    "compiled": 609,
+    "sources": 9
+  },
+  "finishedAt": "2026-11-12T04:57:43.085Z",
+  "code": 1
+}

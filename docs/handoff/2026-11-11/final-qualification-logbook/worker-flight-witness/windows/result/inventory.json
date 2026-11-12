@@ -1,0 +1,247 @@
+[
+  {
+    "file": "bindings-before.json",
+    "bytes": 155945,
+    "sha256": "ed8cf549c211ec5bd6eb3c0fdf12698bc76127b63c52b9c0d2fcafab3e35f6d7"
+  },
+  {
+    "file": "bindings-after.json",
+    "bytes": 155945,
+    "sha256": "ed8cf549c211ec5bd6eb3c0fdf12698bc76127b63c52b9c0d2fcafab3e35f6d7"
+  },
+  {
+    "file": "bindings-between.json",
+    "bytes": 155945,
+    "sha256": "ed8cf549c211ec5bd6eb3c0fdf12698bc76127b63c52b9c0d2fcafab3e35f6d7"
+  },
+  {
+    "file": "browser/report.json",
+    "bytes": 1200712,
+    "sha256": "73b883b6596ffe1509187414cf258b4c0c07d7df94288dd6afe4d4a1eabbcad8"
+  },
+  {
+    "file": "browser.log",
+    "bytes": 2485,
+    "sha256": "f646ddf1bf9a48613cc1914df90bf498a16ede2cb3d4e1c3ab243090f8fc9e60"
+  },
+  {
+    "file": "browser.stderr.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "browser.stdout.log",
+    "bytes": 2485,
+    "sha256": "f646ddf1bf9a48613cc1914df90bf498a16ede2cb3d4e1c3ab243090f8fc9e60"
+  },
+  {
+    "file": "native/admission.json",
+    "bytes": 55616,
+    "sha256": "131cf7c586bdb1f2ff8c0c94a55ba9bad1a8ec6d284e06863a2f9b9d0e673f0b"
+  },
+  {
+    "file": "native/maintained-test.stderr.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "native/maintained-test.stdout.log",
+    "bytes": 3717,
+    "sha256": "409dbc9a4f39cc87466dd31e4d3be5ee7d2f50ee5392297bb99d55e9b0febbe4"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/completion.json",
+    "bytes": 46608,
+    "sha256": "4725e33c67c75b0776c4b73eb47c9e4ca40a625cfb1b8de8e1e287447d788146"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/actual-startup.ps1",
+    "bytes": 3334,
+    "sha256": "268167b66c77a256af0d9e9c2aabc872fa969f5b79e49d3e53fa01ce1ce352ed"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/adapter-positive/execution-request.json",
+    "bytes": 2024,
+    "sha256": "734c3e5715d2066da4730f7e34cd1f4b5d203095fe199f25314d12a7de81dea8"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/adapter-positive/native/report.json",
+    "bytes": 53446,
+    "sha256": "e94992ac9d3e2bc1a0d73dfa1250b9c1cf618108f770eedba4b64b1cb75d10f8"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/adapter-positive/native/supervisor.json",
+    "bytes": 169,
+    "sha256": "5ca52c3e651879673a7a114fd765567a74467c2c24152f333155feec6aed60d0"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/adapter-positive/native/stages.jsonl",
+    "bytes": 36889,
+    "sha256": "6a70f891a5b160c6f98d532e70560fc5cfcfb2b0996b9a28e8a946a484c1b990"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/adapter-positive/native/worker.json",
+    "bytes": 177,
+    "sha256": "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/adapter-positive/postflight-admission.json",
+    "bytes": 7653,
+    "sha256": "555f33f5f0050e95c12235e3d3a3a42ccaaf859bf348f5f73fe4e30c61cdba89"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/before/owned-input.pptx",
+    "bytes": 21,
+    "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/before/reference-name-before.pptx",
+    "bytes": 20,
+    "sha256": "a24d78a0129e98b76be6101a94f380a7cb40602856d1f5a508e4bedd8b82568e"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/existing-copy/owned-input.pptx",
+    "bytes": 21,
+    "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/existing-copy/reference-name-before.pptx",
+    "bytes": 8,
+    "sha256": "46e3b5b126e731103c086ccaecb010b6f1733cf71b2419add8c617d3c7c07f24"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/foreign-path/owned-input.pptx",
+    "bytes": 21,
+    "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/foreign-phase/owned-input.pptx",
+    "bytes": 21,
+    "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/getter-fault/owned-input.pptx",
+    "bytes": 21,
+    "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/foreign-owner/owned-input.pptx",
+    "bytes": 21,
+    "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/no-mode/owned-input.pptx",
+    "bytes": 21,
+    "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/no-reference/owned-input.pptx",
+    "bytes": 21,
+    "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/reopened/owned-input.pptx",
+    "bytes": 21,
+    "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/reopened/reference-name-reopened.pptx",
+    "bytes": 20,
+    "sha256": "a24d78a0129e98b76be6101a94f380a7cb40602856d1f5a508e4bedd8b82568e"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/same-input/owned-input.pptx",
+    "bytes": 21,
+    "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/save-fault/owned-input.pptx",
+    "bytes": 21,
+    "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/startup-control.json",
+    "bytes": 633,
+    "sha256": "ff0d21414ce9521798551654d46a6f6b35266a4cccf05e51a3fcb032dc058c40"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/synthetic-length.pptx",
+    "bytes": 129025,
+    "sha256": "e31a87953f64b93b942bb279d42a8e11652e907703b650a07f04b246b4d7b310"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/wrong-after-name/owned-input.pptx",
+    "bytes": 21,
+    "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/wrong-after-name/reference-name-before.pptx",
+    "bytes": 20,
+    "sha256": "a24d78a0129e98b76be6101a94f380a7cb40602856d1f5a508e4bedd8b82568e"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/managed/wrong-before-name/owned-input.pptx",
+    "bytes": 21,
+    "sha256": "743f6cdb821de829dbc0041f0af28831cb837912e0eaed85200ee657014f626d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/stderr.log",
+    "bytes": 571,
+    "sha256": "26b9fd894c5170191c401a5ed7ea65dec12d95df8e28dac4e6ad3a139a53765d"
+  },
+  {
+    "file": "native/owned-temp/opf-name-snapshots-dm2u2X/stdout.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "native/owned-temp-inventory.json",
+    "bytes": 5888,
+    "sha256": "5178c2d5ea3c23c3a7f4c01118095f08bd4a0a5c5580c6d2be5b9336b42c595a"
+  },
+  {
+    "file": "native/powershell-version.stderr.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "native/powershell-version.stdout.log",
+    "bytes": 51,
+    "sha256": "a95361d0955511fa86e906b94e20bd2c2119835165c4cee97d26739a55a7757d"
+  },
+  {
+    "file": "native/receipt.json",
+    "bytes": 119810,
+    "sha256": "ff224fd43d903d467a32d65f5565f4021b48e02e8c05d518ecedab9fba9cd859"
+  },
+  {
+    "file": "native/temp-after.json",
+    "bytes": 140,
+    "sha256": "42204125bf1e713930d7828da1ef13f4415029d11550cd832489e6ef5b1760f5"
+  },
+  {
+    "file": "native/temp-before.json",
+    "bytes": 53,
+    "sha256": "c69bac37bd0116f43773fb256efe03c22d3c9b9f0068a2985f9b6bdee14efd92"
+  },
+  {
+    "file": "native-controls.log",
+    "bytes": 341,
+    "sha256": "649232ab536826f1720d5a65d9342463557447bce3903002b776c8335bbc05ee"
+  },
+  {
+    "file": "native-controls.stdout.log",
+    "bytes": 341,
+    "sha256": "649232ab536826f1720d5a65d9342463557447bce3903002b776c8335bbc05ee"
+  },
+  {
+    "file": "receipt.json",
+    "bytes": 4407,
+    "sha256": "cf7865731bd5baa7cce48fa6de3eec0505d48de4bc9fdbdea85eaad798a59904"
+  },
+  {
+    "file": "native-controls.stderr.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

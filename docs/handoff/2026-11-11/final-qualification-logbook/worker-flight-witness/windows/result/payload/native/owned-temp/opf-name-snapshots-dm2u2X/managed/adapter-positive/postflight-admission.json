@@ -1,0 +1,138 @@
+﻿{
+    "schemaVersion":  1,
+    "profile":  "reference-line-one-name-three-native-archives-v1",
+    "policy":  {
+                   "policy":  "reference-name-three-archives-global-zero-after-completed-owned-quit-v1",
+                   "observationPolicy":  "global-zero-after-completed-owned-quit-v1",
+                   "budgetMilliseconds":  5000,
+                   "intervalMilliseconds":  100,
+                   "maximumQueries":  51,
+                   "observerSource":  "scripts/native-acceptance/run-reference-chart-profile.ps1",
+                   "observerSourceSha256":  "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3"
+               },
+    "requestSha256":  "734c3e5715d2066da4730f7e34cd1f4b5d203095fe199f25314d12a7de81dea8",
+    "ready":  {
+                  "workerCleanupConfirmed":  true,
+                  "stageCount":  112,
+                  "lifecycle":  [
+                                    {
+                                        "stage":  "worker.initialize",
+                                        "sequence":  1
+                                    },
+                                    {
+                                        "stage":  "preflight.globalIdle",
+                                        "sequence":  3
+                                    },
+                                    {
+                                        "stage":  "application.create",
+                                        "sequence":  5
+                                    },
+                                    {
+                                        "stage":  "application.ownership.presentations.count.get",
+                                        "sequence":  7
+                                    },
+                                    {
+                                        "stage":  "input.presentation.open",
+                                        "sequence":  9
+                                    },
+                                    {
+                                        "stage":  "input.presentation.fullName.get",
+                                        "sequence":  11
+                                    },
+                                    {
+                                        "stage":  "input.presentation.readOnly.get",
+                                        "sequence":  13
+                                    },
+                                    {
+                                        "stage":  "edited.presentation.saveCopyAs",
+                                        "sequence":  57
+                                    },
+                                    {
+                                        "stage":  "edited.presentation.close",
+                                        "sequence":  75
+                                    },
+                                    {
+                                        "stage":  "edited.presentation.cleanup",
+                                        "sequence":  76
+                                    },
+                                    {
+                                        "stage":  "reopen.presentation.open",
+                                        "sequence":  78
+                                    },
+                                    {
+                                        "stage":  "reopen.presentation.fullName.get",
+                                        "sequence":  80
+                                    },
+                                    {
+                                        "stage":  "reopen.presentation.readOnly.get",
+                                        "sequence":  82
+                                    },
+                                    {
+                                        "stage":  "reopened.presentation.close",
+                                        "sequence":  106
+                                    },
+                                    {
+                                        "stage":  "reopened.presentation.cleanup",
+                                        "sequence":  107
+                                    },
+                                    {
+                                        "stage":  "application.cleanup.presentations.count.get",
+                                        "sequence":  109
+                                    },
+                                    {
+                                        "stage":  "application.cleanup.quit",
+                                        "sequence":  111
+                                    },
+                                    {
+                                        "stage":  "worker.complete",
+                                        "sequence":  112
+                                    }
+                                ],
+                  "caseId":  "reference-native-lines",
+                  "actionCount":  1
+              },
+    "files":  [
+                  {
+                      "file":  "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\opf-name-snapshots-dm2u2X\\managed\\adapter-positive\\execution-request.json",
+                      "bytes":  2024,
+                      "sha256":  "734c3e5715d2066da4730f7e34cd1f4b5d203095fe199f25314d12a7de81dea8"
+                  },
+                  {
+                      "file":  "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\opf-name-snapshots-dm2u2X\\managed\\adapter-positive\\native\\report.json",
+                      "bytes":  53446,
+                      "sha256":  "e94992ac9d3e2bc1a0d73dfa1250b9c1cf618108f770eedba4b64b1cb75d10f8"
+                  },
+                  {
+                      "file":  "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\opf-name-snapshots-dm2u2X\\managed\\adapter-positive\\native\\supervisor.json",
+                      "bytes":  169,
+                      "sha256":  "5ca52c3e651879673a7a114fd765567a74467c2c24152f333155feec6aed60d0"
+                  },
+                  {
+                      "file":  "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\opf-name-snapshots-dm2u2X\\managed\\adapter-positive\\native\\worker.json",
+                      "bytes":  177,
+                      "sha256":  "7313ae05a724b175ee8a560bc725e0f76c0c6eaad9a4585735d5633decbcc44e"
+                  },
+                  {
+                      "file":  "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\opf-name-snapshots-dm2u2X\\managed\\adapter-positive\\native\\stages.jsonl",
+                      "bytes":  36889,
+                      "sha256":  "6a70f891a5b160c6f98d532e70560fc5cfcfb2b0996b9a28e8a946a484c1b990"
+                  },
+                  {
+                      "file":  "D:\\a\\opf\\opf\\scripts\\native-acceptance\\furniture-postflight.ps1",
+                      "bytes":  30402,
+                      "sha256":  "7f194a3a9113cb433c04238e5444e71fa7c90f8c2a9895df22fa8e0173f34367"
+                  },
+                  {
+                      "file":  "D:\\a\\opf\\opf\\scripts\\native-acceptance\\owned-postflight.ps1",
+                      "bytes":  18877,
+                      "sha256":  "1779ae802dd73ee8f004bb43620e4eb07683df492cd7fdc24811aa159af51ba4"
+                  },
+                  {
+                      "file":  "D:\\a\\opf\\opf\\scripts\\native-acceptance\\run-reference-chart-profile.ps1",
+                      "bytes":  19206,
+                      "sha256":  "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3"
+                  }
+              ],
+    "nativeAcceptance":  false,
+    "registryAcceptance":  false
+}

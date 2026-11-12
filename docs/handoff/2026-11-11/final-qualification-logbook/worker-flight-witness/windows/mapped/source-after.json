@@ -1,0 +1,36 @@
+{
+  "head": "79cdb85d6ab8a58dde5d474e254cffa027735c51",
+  "status": " M .github/workflows/full-ci.yml\n?? docs/evidence/worker-flight-witness/\n",
+  "files": [
+    {
+      "path": ".github/workflows/full-ci.yml",
+      "bytes": 1456,
+      "sha256": "9ba9323937ae1b701876ff1c5e7b566e2d2527b30c4e0d281ddd949f04716973"
+    },
+    {
+      "path": "docs/evidence/worker-flight-witness/README.md",
+      "bytes": 4210,
+      "sha256": "0421727ecdedacd3aa54330abbcc74c52abac3cf4b1ab15bc92fe1f08d12f773"
+    },
+    {
+      "path": "docs/evidence/worker-flight-witness/diagnostic.mjs",
+      "bytes": 20684,
+      "sha256": "9248aeac81a5a4a4b4707795908d2233de34b80b24b4b0b807a2b647515582a5"
+    },
+    {
+      "path": "docs/evidence/worker-flight-witness/run.mjs",
+      "bytes": 8943,
+      "sha256": "df73fcba9174163afa276cb96a91dc2d6568ffaa5900deeaa2e9684db32116c0"
+    },
+    {
+      "path": "docs/evidence/worker-flight-witness/source-bindings.json",
+      "bytes": 3958,
+      "sha256": "171b0aaac6f14c4d1b6fda6d25cee181ba8069d251f219e234a794b936e9ac07"
+    },
+    {
+      "path": "docs/evidence/worker-flight-witness/native-controls.mjs",
+      "bytes": 14324,
+      "sha256": "6d2e9b0f7dbd81a50187ba819079e89d05d683b4582002a2e9a5538258af8558"
+    }
+  ]
+}

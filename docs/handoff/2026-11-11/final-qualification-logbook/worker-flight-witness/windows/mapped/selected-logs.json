@@ -1,0 +1,56 @@
+[
+  {
+    "step": "install",
+    "file": "selected-logs/install.log",
+    "bytes": 4360,
+    "sha256": "6e0b97ad84fda27125f5a48c5b87fe43b5328c7f14eb88d3af5a39c8274aa990"
+  },
+  {
+    "step": "build",
+    "file": "selected-logs/build.log",
+    "bytes": 14756,
+    "sha256": "556615548855c8f738ec91e5278e710bc1d9bb8c8caa6bfed394448ce2e7cf76"
+  },
+  {
+    "step": "pnpm run check:changes",
+    "file": "selected-logs/pnpm_run_check_changes.log",
+    "bytes": 2690,
+    "sha256": "b361db8edf1ab6b2265c68ccf18a4a8705b021ed2be0f7518acf6485f6230fdb"
+  },
+  {
+    "step": "biome",
+    "file": "selected-logs/biome.log",
+    "bytes": 667,
+    "sha256": "66240052a991bc1529d6d8493f0d8aff2d9895f5000d5d01ba4d799a1e58d438"
+  },
+  {
+    "step": "pnpm run check:ci-scope",
+    "file": "selected-logs/pnpm_run_check_ci-scope.log",
+    "bytes": 3124,
+    "sha256": "9c54988c9d686f91510e9955e60195a7cd235090256a9f6aa6588e1f157fd26d"
+  },
+  {
+    "step": "pnpm run check:playwright-pin",
+    "file": "selected-logs/pnpm_run_check_playwright-pin.log",
+    "bytes": 799,
+    "sha256": "eeaf8060fbb630ebbf8a670d7dbbbce2b4a57ea15f96bce4a6c27aee4b6326b6"
+  },
+  {
+    "step": "pnpm run check:ci-workflows",
+    "file": "selected-logs/pnpm_run_check_ci-workflows.log",
+    "bytes": 11555,
+    "sha256": "64680d3cd6ce070c615c867c353a3c0418e627c0cbf1bcfad10167131177a37a"
+  },
+  {
+    "step": "pnpm run check:text",
+    "file": "selected-logs/pnpm_run_check_text.log",
+    "bytes": 1101,
+    "sha256": "63df6f1461fa93f2d16c8c6865cee6d807699b3ba0dc9ce4492bf10cf9a56603"
+  },
+  {
+    "step": "pnpm run check:skill-commands",
+    "file": "selected-logs/pnpm_run_check_skill-commands.log",
+    "bytes": 1065,
+    "sha256": "2f72bc9ea8d88b1324a50192edccf8be00a3a9abd665b0c8e7404e678e2ab1a5"
+  }
+]

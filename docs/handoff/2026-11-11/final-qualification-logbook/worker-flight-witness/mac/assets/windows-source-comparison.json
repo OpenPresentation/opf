@@ -1,0 +1,34 @@
+[
+  {
+    "file": "source-pane.html",
+    "windowsBytes": 2142,
+    "macBytes": 2142,
+    "byteExact": true,
+    "windowsSha256": "4c1a85c8027cbcfaba4323c88f71b0371e09ae741b207c535c02706c363bf041",
+    "macSha256": "4c1a85c8027cbcfaba4323c88f71b0371e09ae741b207c535c02706c363bf041"
+  },
+  {
+    "file": "source-pane.js",
+    "windowsBytes": 2836285,
+    "macBytes": 2836285,
+    "byteExact": true,
+    "windowsSha256": "47271beee5630ba893dbd6f806e93eeb2b528ae67d836402ed27fa3ec04180e1",
+    "macSha256": "47271beee5630ba893dbd6f806e93eeb2b528ae67d836402ed27fa3ec04180e1"
+  },
+  {
+    "file": "source-worker.js",
+    "windowsBytes": 1703070,
+    "macBytes": 1703070,
+    "byteExact": true,
+    "windowsSha256": "75dec0a3a4ad46d24e0ebcc93597102b7b68261710027eb68d9d25a472c72610",
+    "macSha256": "75dec0a3a4ad46d24e0ebcc93597102b7b68261710027eb68d9d25a472c72610"
+  },
+  {
+    "file": "styles.css",
+    "windowsBytes": 239570,
+    "macBytes": 239570,
+    "byteExact": true,
+    "windowsSha256": "5820c467006bd8542f97f7986cfcfae1243f2a8d07513f729b382fcb1307dcf1",
+    "macSha256": "5820c467006bd8542f97f7986cfcfae1243f2a8d07513f729b382fcb1307dcf1"
+  }
+]

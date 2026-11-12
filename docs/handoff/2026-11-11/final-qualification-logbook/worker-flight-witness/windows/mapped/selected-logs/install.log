@@ -1,0 +1,31 @@
+Scope: all 9 workspace projects
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +299
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 299, reused 299, downloaded 0, added 297
+Progress: resolved 299, reused 299, downloaded 0, added 299, done
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/packages/cli/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/packages/editor/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/packages/integration/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/packages/mcp/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/packages/render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/packages/mcp/node_modules/.bin/opf. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/packages/cli/dist/index.js'
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/packages/pptx/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/packages/render/dist/preview-fonts-cli.js'
+
+devDependencies:
++ @biomejs/biome 2.6.6
++ @openpresentation/gallery 0.33.0 <- packages/gallery
++ @openpresentation/opf 0.33.0 <- packages/javascript
++ @openpresentation/opf-pptx 0.33.0 <- packages/pptx
++ @openpresentation/opf-render 0.33.0 <- packages/render
++ @typescript/native <- typescript 7.0.2
+
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/packages/pptx/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/packages/pptx/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/packages/cli/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/packages/cli/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/packages/editor/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/packages/editor/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/packages/integration/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/packages/integration/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/packages/mcp/node_modules/.bin/opf. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/packages/mcp/node_modules/@openpresentation/cli/dist/index.js'
+ WARN  Failed to create bin at /private/tmp/opf-worker-flight-windows/packages/mcp/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/private/tmp/opf-worker-flight-windows/packages/mcp/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+Done in 2.1s using pnpm v10.33.2

@@ -1,0 +1,162 @@
+{
+  "sourceOnly": true,
+  "sourceHead": "79cdb85d6ab8a58dde5d474e254cffa027735c51",
+  "parentProductSource": "0fe8031fc012c416ab6ee87f22b143c4cb1f7ee1",
+  "scope": "ONE passive normal-default Mac same-code witness, not Windows timing/cause acceptance",
+  "exactTransformations": 15,
+  "wholeMaintainedTestInverseExact": true,
+  "baseSource": {
+    "path": "/tmp/opf-worker-flight-diagnostic-source01/base-source.mjs",
+    "bytes": 13582,
+    "sha256": "e3c2bd911e6958505e9e7f077132d5eeaf3f6a7d65a7a17795ae26216b72760c"
+  },
+  "files": [
+    {
+      "path": "/tmp/opf-worker-flight-diagnostic-source01/diagnostic.mjs",
+      "bytes": 20717,
+      "sha256": "0bf63aa3fc13dfe4bcbd41ec5c685fec41e0b74b985e6d0ac4a62c130e185cb2"
+    },
+    {
+      "path": "/tmp/opf-worker-flight-diagnostic-source01/base-source.mjs",
+      "bytes": 13582,
+      "sha256": "e3c2bd911e6958505e9e7f077132d5eeaf3f6a7d65a7a17795ae26216b72760c"
+    },
+    {
+      "path": "/tmp/opf-worker-flight-diagnostic-source01/source.patch",
+      "bytes": 12392,
+      "sha256": "734b0e7d212a90588e1108d75120b41f541d71b6b0a2106150924c0bb1d765e7"
+    },
+    {
+      "path": "/tmp/opf-worker-flight-diagnostic-source01/transform.json",
+      "bytes": 9846,
+      "sha256": "a6f7283038aae926d35bed7d3da834eb5a398187b15055967a07fc28e4cd2a35"
+    },
+    {
+      "path": "/tmp/opf-worker-flight-diagnostic-source01/README.md",
+      "bytes": 3680,
+      "sha256": "5ee3a9242527bd18fad70008bb7ff70315d455fd20661eeb53a308bff7c02694"
+    },
+    {
+      "path": "/tmp/opf-worker-flight-diagnostic-source01/recorder.txt",
+      "bytes": 4013,
+      "sha256": "3669b5fbf2f30455b0e6acde633109dee63f5243db76865c4b79d1c68d0f2af6"
+    },
+    {
+      "path": "/tmp/opf-worker-flight-diagnostic-source01/node-recorder.txt",
+      "bytes": 652,
+      "sha256": "23fabc3410644851ab67993b2f14d62d37f21d63170c5a65bc71f0058b4b4c97"
+    }
+  ],
+  "protectedSources": [
+    {
+      "path": "/tmp/opf-034/packages/editor/test/source-worker-perf-browser.mjs",
+      "bytes": 13582,
+      "sha256": "e3c2bd911e6958505e9e7f077132d5eeaf3f6a7d65a7a17795ae26216b72760c"
+    },
+    {
+      "path": "/tmp/opf-034/packages/editor/test/support/block-budget.mjs",
+      "bytes": 5593,
+      "sha256": "fbb22aca8d1a23b4a1b69670705435f76c529e09f224cf6a82f1c433e0af1cee"
+    },
+    {
+      "path": "/tmp/opf-034/packages/editor/test/support/source-keyboard.mjs",
+      "bytes": 56123,
+      "sha256": "eb1bf6f21913ce9ed098e5de44398d73125584a5f932dc18311b122cacbe481a"
+    },
+    {
+      "path": "/tmp/opf-034/packages/editor/src/source-pane.js",
+      "bytes": 78372,
+      "sha256": "7ee8e78cc093d2cc92714c751d1879c3ccfe9d2087a1c7cc7493f2b42002c803"
+    },
+    {
+      "path": "/tmp/opf-034/packages/editor/src/source-checker.js",
+      "bytes": 10332,
+      "sha256": "077b4f923cad914f460c76ffedd14d5ba58f7782cd5d151eaaa52c9e6e432c49"
+    },
+    {
+      "path": "/tmp/opf-034/packages/editor/src/source-worker.js",
+      "bytes": 2225,
+      "sha256": "131408f6ce66a6f0a57a4e877407eb4932cbd4404e5442039128f40929b5849b"
+    },
+    {
+      "path": "/tmp/opf-034/packages/editor/src/json-editor.js",
+      "bytes": 53849,
+      "sha256": "f9e1f6daecb833841c2bd37ea56c2c3282fa36980b9c8c9ed0c32165fddda0c1"
+    },
+    {
+      "path": "/tmp/opf-034/packages/editor/src/index.js",
+      "bytes": 37653,
+      "sha256": "baa7de7ebd0140f845fe6ee015c99c6bbc7313715d5b898c15951b5111f18126"
+    },
+    {
+      "path": "/tmp/opf-034/packages/editor/test/support/source-perf.mjs",
+      "bytes": 5550,
+      "sha256": "7553fa2a648a63a835cfdd1eee982ad2f0a4264f907e856c34e0e6f11d711fb0"
+    }
+  ],
+  "windowsAndFreshMacAssets": [
+    {
+      "mac": {
+        "path": "/tmp/opf-034/packages/editor/artifacts/playground/source-pane.html",
+        "bytes": 2142,
+        "sha256": "4c1a85c8027cbcfaba4323c88f71b0371e09ae741b207c535c02706c363bf041"
+      },
+      "windows": {
+        "path": "/tmp/opf-79c-win-browser-evidence01/selected/playground/source-pane.html",
+        "bytes": 2142,
+        "sha256": "4c1a85c8027cbcfaba4323c88f71b0371e09ae741b207c535c02706c363bf041"
+      },
+      "byteExact": true
+    },
+    {
+      "mac": {
+        "path": "/tmp/opf-034/packages/editor/artifacts/playground/source-pane.js",
+        "bytes": 2836285,
+        "sha256": "47271beee5630ba893dbd6f806e93eeb2b528ae67d836402ed27fa3ec04180e1"
+      },
+      "windows": {
+        "path": "/tmp/opf-79c-win-browser-evidence01/selected/playground/source-pane.js",
+        "bytes": 2836285,
+        "sha256": "47271beee5630ba893dbd6f806e93eeb2b528ae67d836402ed27fa3ec04180e1"
+      },
+      "byteExact": true
+    },
+    {
+      "mac": {
+        "path": "/tmp/opf-034/packages/editor/artifacts/playground/source-worker.js",
+        "bytes": 1703070,
+        "sha256": "75dec0a3a4ad46d24e0ebcc93597102b7b68261710027eb68d9d25a472c72610"
+      },
+      "windows": {
+        "path": "/tmp/opf-79c-win-browser-evidence01/selected/playground/source-worker.js",
+        "bytes": 1703070,
+        "sha256": "75dec0a3a4ad46d24e0ebcc93597102b7b68261710027eb68d9d25a472c72610"
+      },
+      "byteExact": true
+    },
+    {
+      "mac": {
+        "path": "/tmp/opf-034/packages/editor/artifacts/playground/styles.css",
+        "bytes": 239570,
+        "sha256": "5820c467006bd8542f97f7986cfcfae1243f2a8d07513f729b382fcb1307dcf1"
+      },
+      "windows": {
+        "path": "/tmp/opf-79c-win-browser-evidence01/selected/playground/styles.css",
+        "bytes": 239570,
+        "sha256": "5820c467006bd8542f97f7986cfcfae1243f2a8d07513f729b382fcb1307dcf1"
+      },
+      "byteExact": true
+    }
+  ],
+  "rootBuildReceipt": {
+    "path": "/tmp/opf-worker-flight-assets01/receipt.json",
+    "bytes": 49233,
+    "sha256": "06f311c30026509d9552158871c8876c7026b2e95a3b2d1e365a8948d123485a"
+  },
+  "firstFailure": {
+    "path": "/tmp/opf-79c-final-ci01/windows-browser1-130955321934.log",
+    "bytes": 396916,
+    "sha256": "5a33c3a36477df967818a1e4eeab86ab581c53ec5c5e808328f81d089f6f5fec"
+  },
+  "qualification": "All new Node syntax/import/test/browser execution UNRUN; no tracked/product/source/gates modified"
+}

@@ -1,0 +1,7 @@
+import { mkdir, writeFile } from 'node:fs/promises';
+const EVIDENCE = '/tmp/opf-worker-flight-diagnostic-run01';
+await mkdir(EVIDENCE); // Fresh owned output only; never overwrite an earlier attempt.
+const diagnostic = { schemaVersion: 1, scope: 'Passive worker-flight attribution; original metric and gates unchanged', rows: [], originalFailure: null, preservationErrors: [] };
+const describeError = error => ({ name: String(error?.name ?? 'Error'), message: String(error?.message ?? error), stack: String(error?.stack ?? '') });
+const persist = () => writeFile(`${EVIDENCE}/report.json`, `${JSON.stringify(diagnostic, null, 2)}\n`);
+await persist();

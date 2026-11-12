@@ -1,0 +1,7 @@
+Real private observer adapter positive failed: Canonical local postflight path required
+At D:\a\opf\opf\scripts\native-acceptance\reference-name-snapshot-check.ps1:75 char:127
++ ... ries -ne 1){throw ('Real private observer adapter positive failed: '+ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Real private ob...t path required:String) [], RuntimeException
+    + FullyQualifiedErrorId : Real private observer adapter positive failed: Canonical local postflight path required
+ 

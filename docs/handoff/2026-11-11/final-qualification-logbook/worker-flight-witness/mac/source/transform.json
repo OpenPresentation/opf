@@ -1,0 +1,62 @@
+[
+  {
+    "old": "'./support/source-keyboard.mjs'",
+    "new": "'file:///tmp/opf-034/packages/editor/test/support/source-keyboard.mjs'"
+  },
+  {
+    "old": "'./support/block-budget.mjs'",
+    "new": "'file:///tmp/opf-034/packages/editor/test/support/block-budget.mjs'"
+  },
+  {
+    "old": "'./support/source-perf.mjs'",
+    "new": "'file:///tmp/opf-034/packages/editor/test/support/source-perf.mjs'"
+  },
+  {
+    "old": "const suite = await startKeyboardSuite();",
+    "new": "import { mkdir, writeFile } from 'node:fs/promises';\nconst EVIDENCE = '/tmp/opf-worker-flight-diagnostic-run01';\nawait mkdir(EVIDENCE); // Fresh owned output only; never overwrite an earlier attempt.\nconst diagnostic = { schemaVersion: 1, scope: 'Passive worker-flight attribution; original metric and gates unchanged', rows: [], originalFailure: null, preservationErrors: [] };\nconst describeError = error => ({ name: String(error?.name ?? 'Error'), message: String(error?.message ?? error), stack: String(error?.stack ?? '') });\nconst persist = () => writeFile(`${EVIDENCE}/report.json`, `${JSON.stringify(diagnostic, null, 2)}\\n`);\nawait persist();\n\nconst suite = await startKeyboardSuite();"
+  },
+  {
+    "old": "  suite.problems.length = 0;\n  try {",
+    "new": "  suite.problems.length = 0;\n  const row = { mode, format, originalResult: null, error: null, evidence: null }; diagnostic.rows.push(row);\n  let measureError = null;\n  try {"
+  },
+  {
+    "old": "      window.__long = []; window.__gaps = []; window.__checks = [];",
+    "new": "      // Diagnostic-only: one pane's mutations and this page's worker timing; never a verdict input.\n      const root = demo.pane.element, dataset = root.dataset;\n      const ownDataset = Object.getOwnPropertyDescriptor(root, 'dataset'), ownRemove = Object.getOwnPropertyDescriptor(root, 'removeAttribute');\n      const remove = root.removeAttribute, post = Worker.prototype.postMessage;\n      const limits = { beats: 131072, moEdges: 8192, nativeEdges: 8192, longtasks: 8192, posts: 8192, messages: 8192, samples: 128 };\n      const buffers = Object.fromEntries(Object.keys(limits).map(key => [key, []])), overflow = {}, listeners = new Map();\n      const record = (kind, row) => { if (buffers[kind].length < limits[kind]) buffers[kind].push(row); else overflow[kind] = (overflow[kind] ?? 0) + 1; };\n      let restored = false, restoreErrors = [];\n      const mutate = (operation, run) => {\n        const before = performance.now(); let failed = false;\n        try { return run(); } catch (error) { failed = true; throw error; }\n        finally { record('nativeEdges', { operation, before, after: performance.now(), on: root.hasAttribute('data-opf-checking'), failed }); }\n      };\n      const proxy = new Proxy(dataset, {\n        get(target, key) { return Reflect.get(target, key, target); },\n        set(target, key, value) { return key === 'opfChecking' ? mutate('dataset.opfChecking=set', () => Reflect.set(target, key, value, target)) : Reflect.set(target, key, value, target); },\n      });\n      const restore = () => {\n        const attempt = run => { try { run(); } catch (error) { restoreErrors.push(String(error?.message ?? error)); } };\n        attempt(() => { if (ownDataset) Object.defineProperty(root, 'dataset', ownDataset); else delete root.dataset; });\n        attempt(() => { if (ownRemove) Object.defineProperty(root, 'removeAttribute', ownRemove); else delete root.removeAttribute; });\n        attempt(() => { Worker.prototype.postMessage = post; });\n        for (const [worker, listener] of listeners) attempt(() => worker.removeEventListener('message', listener, true));\n        restored = root.dataset === dataset && root.removeAttribute === remove && Worker.prototype.postMessage === post && restoreErrors.length === 0;\n      };\n      const facts = message => ({ id: typeof message?.id === 'number' ? message.id : null, type: typeof message?.type === 'string' ? message.type : null, ready: message?.ready === true, ok: typeof message?.ok === 'boolean' ? message.ok : null, skipped: message?.skipped === true });\n      window.__workerFlightDiagnostic = { record, restore, snapshot: () => ({ limits, buffers, overflow, restored, restoreErrors }) };\n      try {\n        Object.defineProperty(root, 'dataset', { configurable: true, enumerable: ownDataset?.enumerable ?? true, get: () => proxy });\n        Object.defineProperty(root, 'removeAttribute', { configurable: true, writable: true, value: function (...args) { return this === root && args[0] === 'data-opf-checking' ? mutate('removeAttribute', () => Reflect.apply(remove, this, args)) : Reflect.apply(remove, this, args); } });\n        Worker.prototype.postMessage = function (...args) {\n          if (!listeners.has(this)) {\n            if (listeners.size >= 64) overflow.workerListeners = (overflow.workerListeners ?? 0) + 1;\n            else {\n              const workerId = listeners.size + 1;\n              const listener = event => record('messages', { at: performance.now(), workerId, phase: 'passive capture listener', ...facts(event.data) });\n              listeners.set(this, listener); this.addEventListener('message', listener, { capture: true, passive: true });\n            }\n          }\n          const before = performance.now(); let failed = false;\n          try { return Reflect.apply(post, this, args); } catch (error) { failed = true; throw error; }\n          finally { record('posts', { before, after: performance.now(), failed, ...facts(args[0]) }); }\n        };\n      } catch (error) { restore(); throw error; }\n      window.__long = []; window.__gaps = []; window.__checks = [];"
+  },
+  {
+    "old": "for (const entry of list.getEntries()) window.__long.push(entry.duration);",
+    "new": "for (const entry of list.getEntries()) { window.__long.push(entry.duration); window.__workerFlightDiagnostic.record('longtasks', { start: entry.startTime, duration: entry.duration, name: entry.name }); }"
+  },
+  {
+    "old": "window.__gaps.push([now, now - last - 4]); last = now;",
+    "new": "window.__gaps.push([now, now - last - 4]); window.__workerFlightDiagnostic.record('beats', [last, now, now - last - 4]); last = now;"
+  },
+  {
+    "old": "const now = performance.now(), on = Boolean(document.querySelector('[data-opf-checking]'));\n        if (on",
+    "new": "const now = performance.now(), on = Boolean(document.querySelector('[data-opf-checking]'));\n        window.__workerFlightDiagnostic.record('moEdges', { at: now, on, opened });\n        if (on"
+  },
+  {
+    "old": "      return { longest: Math.max(0, ...long), count: long.length, gap: Math.max(0, ...beats.map(([, gap]) => gap)), flight: spans.length ? Math.max(0, ...inflight) : null };",
+    "new": "      const result = { longest: Math.max(0, ...long), count: long.length, gap: Math.max(0, ...beats.map(([, gap]) => gap)), flight: spans.length ? Math.max(0, ...inflight) : null };\n      window.__workerFlightDiagnostic.record('samples', { at: performance.now(), originalBeats: beats, originalSpans: spans, originalLongDurations: long, originalResult: result });\n      return result;"
+  },
+  {
+    "old": "    return { quick, paced };\n  } finally { await page.close(); }",
+    "new": "    row.originalResult = { quick, paced };\n    return { quick, paced };\n  } catch (error) { measureError = error; row.error = describeError(error); throw error; }\n  finally {\n    let secondary = null;\n    try {\n      row.evidence = await page.evaluate(() => {\n        const state = window.__workerFlightDiagnostic;\n        if (!state) return { notInstalled: true };\n        state.restore(); return state.snapshot();\n      });\n      if (row.evidence.notInstalled || !row.evidence.restored || Object.keys(row.evidence.overflow).length) throw new Error('Diagnostic recorder incomplete, unrestored, or overflowed; retained evidence is not sufficient');\n    } catch (error) { secondary = error; diagnostic.preservationErrors.push(describeError(error)); }\n    try { await persist(); } catch (error) { secondary ??= error; diagnostic.preservationErrors.push(describeError(error)); }\n    try { await page.close(); } catch (error) { secondary ??= error; diagnostic.preservationErrors.push(describeError(error)); }\n    if (secondary) { if (measureError) console.error('Diagnostic preservation also failed:', describeError(secondary)); else throw secondary; }\n  }"
+  },
+  {
+    "old": "} finally { await suite.close(); }",
+    "new": "} catch (error) { diagnostic.originalFailure = describeError(error); throw error; }\nfinally {\n  let secondary = null;\n  try { await persist(); } catch (error) { secondary = error; }\n  try { await suite.close(); } catch (error) { secondary ??= error; }\n  if (secondary) { if (diagnostic.originalFailure) console.error('Diagnostic final preservation also failed:', describeError(secondary)); else throw secondary; }\n}"
+  },
+  {
+    "old": "const diagnostic = { schemaVersion: 1, scope: 'Passive worker-flight attribution; original metric and gates unchanged', rows: [], originalFailure: null, preservationErrors: [] };",
+    "new": "const diagnostic = { schemaVersion: 1, scope: 'Passive worker-flight attribution; original metric and gates unchanged', parameters: { CI, LIMIT, ROUNDS, COMPARE, WORKER_OFF, BURN, SLOW_APPLY, SLIDES, TAIL, PATTERNS, engineName }, rows: [], originalFailure: null, preservationErrors: [] };"
+  },
+  {
+    "old": "const suite = await startKeyboardSuite();",
+    "new": "const suite = await startKeyboardSuite();\ndiagnostic.browserVersion = suite.browserVersion;"
+  },
+  {
+    "old": "snapshot: () => ({ limits, buffers, overflow, restored, restoreErrors })",
+    "new": "snapshot: () => ({ clock: { timeOrigin: performance.timeOrigin, unit: 'performance.now milliseconds' }, limits, buffers, overflow, restored, restoreErrors })"
+  }
+]

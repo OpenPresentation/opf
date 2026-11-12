@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "source": {
+    "commit": "442ad549d53131cfb32b5c65d974777f33f68a67",
+    "path": "docs/evidence/rr20-e1-recovery/payload",
+    "sha256": "901296967ae1cad3c709cbb65f58f4277261133ec00a704c385a40b6ad458816"
+  },
+  "assets": 2901,
+  "sealSha256": "8f9c4fb605f67e64b1924ff77cea1993b5c1de17914f24e288131bae6d9603ef",
+  "corpusSlides": 844,
+  "publishedSubsetSlides": 550,
+  "missingBefore": [
+    {
+      "batch": "batch-11",
+      "id": "s27",
+      "role": "before",
+      "publishedBatch": false
+    },
+    {
+      "batch": "batch-13",
+      "id": "s29",
+      "role": "before",
+      "publishedBatch": false
+    },
+    {
+      "batch": "batch-17",
+      "id": "s04",
+      "role": "before",
+      "publishedBatch": false
+    }
+  ],
+  "scope": "Historical recovery admission only; no genuine0.34 authority, rendering, comparison or publication",
+  "node": "v24.21.0",
+  "seconds": 0.438,
+  "driverSha256": "b99136b00e8d0112da25c8f1c2566fe2c23bb2b0049411b2e781b658bf8ffce4"
+}

@@ -1,0 +1,18 @@
+/private/tmp/opf-worker-flight-windows/biome.json:2:14 deserialize ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i The configuration schema version does not match the CLI version 2.6.6
+  
+    1 │ {
+  > 2 │   "$schema": "https://biomejs.dev/schemas/2.5.12/schema.json",
+      │              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    3 │   "vcs": {
+    4 │     "enabled": true,
+  
+  i   Expected:                     2.6.6
+      Found:                        2.5.12
+  
+  
+  i Run the command biome migrate to migrate the configuration file.
+  
+
+Checked 0 files in 1699µs. No fixes applied.

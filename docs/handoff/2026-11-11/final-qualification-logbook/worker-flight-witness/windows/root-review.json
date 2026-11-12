@@ -1,0 +1,13 @@
+{
+  "sourcePacketSha256": "d5037d429403ad348e47f4d94182e19c85b4451f1e57d03008a2d4786841ed72",
+  "changedFilesVerified": 6,
+  "protectedBaseExactVerified": 24,
+  "portableWholeInverseExact": true,
+  "syntaxChecks": {
+    "diagnostic": 0,
+    "runner": 0,
+    "nativeControls": 0
+  },
+  "actionlint": 0,
+  "scope": "Source/syntax review only; no Windows/PS/browser execution or release qualification"
+}

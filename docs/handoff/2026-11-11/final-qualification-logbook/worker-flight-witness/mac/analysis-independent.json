@@ -1,0 +1,269 @@
+{
+  "report": {
+    "path": "/tmp/opf-worker-flight-diagnostic-run01/report.json",
+    "bytes": 1263045,
+    "sha256": "ee1abe8c6b7fd2df4d9baf6812aad0c64f6dd2a81efb747ddf99b0454cf5557e"
+  },
+  "summary": {
+    "recomputedSamples": 80,
+    "workerSamples": 48,
+    "positiveWinningFlightBeatCount": 58,
+    "winningEndAfterNativeClear": 20,
+    "winningEntirelyAfterNativeClear": 0,
+    "winningReportedExcessExceedsPossibleNativeBusyDuration": 20,
+    "largestSuchConservativeExcessMs": 7.299999997019768,
+    "maximumPostDurationMs": 0.20000000298023224,
+    "maximumNativeClearToMOClosingDelayMs": 12.5,
+    "conclusion": "Actual small Mac winning-flight samples include time outside possible native checking windows. This demonstrates boundary misattribution in this witness, not the cause of the retained Windows89ms result. No alternate metric enters a verdict.",
+    "uniqueWinningSamples": 47,
+    "uniqueSamplesWithConservativeOutsideExcess": 20,
+    "lateWinningEndExactlyMOClose": 20,
+    "allLateWinningEndMinusMOCloseMs": [
+      0.0
+    ]
+  },
+  "cases": [
+    {
+      "format": "yaml",
+      "pattern": "quick",
+      "edits": 4,
+      "workerChecks": 4,
+      "inlineChecks": 0,
+      "gapUpperMedian": 24.299999997019768,
+      "flightUpperMedian": 1.2000000029802322,
+      "baselineGapUpperMedian": 58.5,
+      "wholeRatio": 0.41538461533367127,
+      "flightRatio": 0.020512820563764654,
+      "worstGap": 37.900000005960464,
+      "flightNonNull": 4
+    },
+    {
+      "format": "yaml",
+      "pattern": "paced",
+      "edits": 12,
+      "workerChecks": 12,
+      "inlineChecks": 0,
+      "gapUpperMedian": 14.699999988079071,
+      "flightUpperMedian": 1.1000000089406967,
+      "baselineGapUpperMedian": 56.400000005960464,
+      "wholeRatio": 0.26063829763343166,
+      "flightRatio": 0.019503546255752596,
+      "worstGap": 19.100000008940697,
+      "flightNonNull": 12
+    },
+    {
+      "format": "md",
+      "pattern": "quick",
+      "edits": 4,
+      "workerChecks": 4,
+      "inlineChecks": 0,
+      "gapUpperMedian": 17.799999997019768,
+      "flightUpperMedian": 7.300000011920929,
+      "baselineGapUpperMedian": 71.09999999403954,
+      "wholeRatio": 0.25035161741929646,
+      "flightRatio": 0.10267229272198176,
+      "worstGap": 18.69999998807907,
+      "flightNonNull": 4
+    },
+    {
+      "format": "md",
+      "pattern": "paced",
+      "edits": 12,
+      "workerChecks": 12,
+      "inlineChecks": 0,
+      "gapUpperMedian": 10.599999994039536,
+      "flightUpperMedian": 5.4000000059604645,
+      "baselineGapUpperMedian": 65.90000000596046,
+      "wholeRatio": 0.16084977227740208,
+      "flightRatio": 0.08194233695708726,
+      "worstGap": 18.399999991059303,
+      "flightNonNull": 12
+    },
+    {
+      "format": "json",
+      "pattern": "quick",
+      "edits": 4,
+      "workerChecks": 4,
+      "inlineChecks": 0,
+      "gapUpperMedian": 18.099999994039536,
+      "flightUpperMedian": 1,
+      "baselineGapUpperMedian": null,
+      "wholeRatio": null,
+      "flightRatio": null,
+      "worstGap": 18.30000001192093,
+      "flightNonNull": 4
+    },
+    {
+      "format": "json",
+      "pattern": "paced",
+      "edits": 12,
+      "workerChecks": 12,
+      "inlineChecks": 0,
+      "gapUpperMedian": 16.5,
+      "flightUpperMedian": 4.9000000059604645,
+      "baselineGapUpperMedian": null,
+      "wholeRatio": null,
+      "flightRatio": null,
+      "worstGap": 21.600000008940697,
+      "flightNonNull": 12
+    }
+  ],
+  "timingContext": [
+    {
+      "format": "yaml",
+      "postMaxMs": 0.10000000894069672,
+      "nativeClearToMOCloseMinMaxMs": [
+        6.899999991059303,
+        9.200000002980232
+      ],
+      "nativeSetToMOOpenMinMaxMs": [
+        0.0,
+        0.20000000298023224
+      ],
+      "nativeClearToPassiveMessageCallbackMinMaxMs": [
+        6.899999991059303,
+        9.200000002980232
+      ],
+      "longTaskRecords": 0
+    },
+    {
+      "format": "md",
+      "postMaxMs": 0.20000000298023224,
+      "nativeClearToMOCloseMinMaxMs": [
+        7.399999991059303,
+        9.599999994039536
+      ],
+      "nativeSetToMOOpenMinMaxMs": [
+        0.0,
+        0.29999999701976776
+      ],
+      "nativeClearToPassiveMessageCallbackMinMaxMs": [
+        7.399999991059303,
+        9.700000002980232
+      ],
+      "longTaskRecords": 0
+    },
+    {
+      "format": "json",
+      "postMaxMs": 0.20000000298023224,
+      "nativeClearToMOCloseMinMaxMs": [
+        8.200000002980232,
+        12.5
+      ],
+      "nativeSetToMOOpenMinMaxMs": [
+        0.0,
+        0.29999999701976776
+      ],
+      "nativeClearToPassiveMessageCallbackMinMaxMs": [
+        8.200000002980232,
+        12.700000002980232
+      ],
+      "longTaskRecords": 0
+    }
+  ],
+  "examples": [
+    {
+      "format": "json",
+      "pattern": "paced",
+      "sampleIndex": 5,
+      "beat": {
+        "from": 3685.7999999970198,
+        "to": 3700.2999999970198,
+        "reportedExcessGap": 10.5
+      },
+      "nativeSet": {
+        "operation": "dataset.opfChecking=set",
+        "before": 3665.5,
+        "after": 3665.5999999940395,
+        "on": true,
+        "failed": false
+      },
+      "nativeClear": {
+        "operation": "removeAttribute",
+        "before": 3689,
+        "after": 3689,
+        "on": false,
+        "failed": false
+      },
+      "moSpan": [
+        3665.7000000029802,
+        3700.2999999970198
+      ],
+      "possibleNativeBusyOverlapDuration": 3.2000000029802322,
+      "reportedExcessBeyondMaximumPossibleNativeBusyDurationAtLeast": 7.299999997019768,
+      "beatEntirelyAfterNativeClear": false,
+      "endAfterNativeClear": true
+    },
+    {
+      "format": "json",
+      "pattern": "paced",
+      "sampleIndex": 9,
+      "beat": {
+        "from": 4737.399999991059,
+        "to": 4749.79999999702,
+        "reportedExcessGap": 8.400000005960464
+      },
+      "nativeSet": {
+        "operation": "dataset.opfChecking=set",
+        "before": 4713.399999991059,
+        "after": 4713.5,
+        "on": true,
+        "failed": false
+      },
+      "nativeClear": {
+        "operation": "removeAttribute",
+        "before": 4739.0999999940395,
+        "after": 4739.0999999940395,
+        "on": false,
+        "failed": false
+      },
+      "moSpan": [
+        4713.5,
+        4749.79999999702
+      ],
+      "possibleNativeBusyOverlapDuration": 1.7000000029802322,
+      "reportedExcessBeyondMaximumPossibleNativeBusyDurationAtLeast": 6.700000002980232,
+      "beatEntirelyAfterNativeClear": false,
+      "endAfterNativeClear": true
+    },
+    {
+      "format": "json",
+      "pattern": "paced",
+      "sampleIndex": 4,
+      "beat": {
+        "from": 3425.0999999940395,
+        "to": 3435.7000000029802,
+        "reportedExcessGap": 6.600000008940697
+      },
+      "nativeSet": {
+        "operation": "dataset.opfChecking=set",
+        "before": 3397.2999999970198,
+        "after": 3397.3999999910593,
+        "on": true,
+        "failed": false
+      },
+      "nativeClear": {
+        "operation": "removeAttribute",
+        "before": 3425.3999999910593,
+        "after": 3425.3999999910593,
+        "on": false,
+        "failed": false
+      },
+      "moSpan": [
+        3397.3999999910593,
+        3435.7000000029802
+      ],
+      "possibleNativeBusyOverlapDuration": 0.29999999701976776,
+      "reportedExcessBeyondMaximumPossibleNativeBusyDurationAtLeast": 6.300000011920929,
+      "beatEntirelyAfterNativeClear": false,
+      "endAfterNativeClear": true
+    }
+  ],
+  "attributionLimits": [
+    "Heartbeat gap is timer excess, not a measured CPU-task duration. Native mutation instant is bracketed by before/after samples; outside-excess bound uses the widest possible busy interval.",
+    "All20late winning records end numerically exactly at the MOclose timestamp, so inclusive endpoint selection admits post-native-clear intervals in this witness. Timestamp equality does not identify sub-clock execution order.",
+    "Passive message callback stamps occur after nativeclear here; do not reinterpret them as true worker message arrival/worker CPU completion.",
+    "The Mac witness passes. Its demonstrated7.3ms conservative maximum outside portion does not explain the old Windows89ms sample or justify revising that verdict."
+  ],
+  "minimalNextWitnessIfWindowsAttributionRequired": "One fresh Windows normal-default execution of this same bound passive diagnostic/alloriginalsamples+gates, recording native edges/beat intervals before original verdict; no retry, threshold/CPU change or burn on that first witness."
+}

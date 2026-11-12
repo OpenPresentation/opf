@@ -1,0 +1,1138 @@
+{
+  "source": "79cdb85d6ab8a58dde5d474e254cffa027735c51",
+  "tree": "1008ffecc6ffd6878017fe68d4e2bb6f5cd3960e",
+  "node": "v24.21.0",
+  "command": [
+    "packages/editor/scripts/build-playground.mjs"
+  ],
+  "startedAt": "2026-11-12T04:14:46.841Z",
+  "seconds": 1.259,
+  "code": 0,
+  "signal": null,
+  "error": null,
+  "sourceUnchanged": true,
+  "compiledFiles": 609,
+  "compiledUnchanged": true,
+  "backup": "/tmp/opf-034/packages/editor/artifacts/playground-before-worker-flight01",
+  "outputs": [
+    {
+      "path": "packages/editor/artifacts/playground/base-fonts.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/anton/Anton-Regular.ttf",
+      "bytes": 170812,
+      "sha256": "a4ba3a92350ebb031da0cb47630ac49eb265082ca1bc0450442f4a83ab947cab"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/anton/OFL.txt",
+      "bytes": 4484,
+      "sha256": "ee67e6ee22790b7929f1a3769ca2801d565c64b5a9096942c1adf5596de9c9e4"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/anton/PROVENANCE.json",
+      "bytes": 815,
+      "sha256": "183c9c6841ae4a2fea2746f90bfed34eda84b0b08b3965936e7270ae36bb996d"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/archivo-narrow/ArchivoNarrow_400Regular_Italic.ttf",
+      "bytes": 66396,
+      "sha256": "61653c68a59fc5f0a660f2cfec0bad7344a626b8177649370e94cb732eabbb37"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/archivo-narrow/ArchivoNarrow_400Regular.ttf",
+      "bytes": 63652,
+      "sha256": "a6f42674111326d8a14897d87de4ce667090560941afc3e190709021982abf5a"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/archivo-narrow/ArchivoNarrow_700Bold_Italic.ttf",
+      "bytes": 66284,
+      "sha256": "dd588c564e4dec669335f6fea01b1f229f7629c3e836178e3ad9db8d6e9d6228"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/archivo-narrow/ArchivoNarrow_700Bold.ttf",
+      "bytes": 63640,
+      "sha256": "bc2698008c4fa878f17b9ffb64c6fd2f0c83ca1f69cda591253221efb357a78d"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/archivo-narrow/OFL.txt",
+      "bytes": 4495,
+      "sha256": "b2087ef3fb91248e346600d19021249152a9688efea72905aa1996bb16a4c8de"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/archivo-narrow/PROVENANCE.json",
+      "bytes": 1745,
+      "sha256": "a97a47812369695f598be6c65f4b4f404b13a18f812cb4436283d2b78c3b92c5"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/barlow/Barlow-Bold.ttf",
+      "bytes": 108220,
+      "sha256": "84e6a4d61e7c3e21f3c50ea6a4f7e5303a3467864c038be6ea3759bab8d547f9"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/barlow/Barlow-BoldItalic.ttf",
+      "bytes": 111996,
+      "sha256": "079dcee4a53544177f3b16354b27b40b521e22861a40084ab4d052f0289ed9e8"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/barlow/Barlow-Italic.ttf",
+      "bytes": 109624,
+      "sha256": "70cf45c354af39e55082fd506e748cc6a0a1812949875f99ded3f76bf691e4ca"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/barlow/Barlow-Regular.ttf",
+      "bytes": 104068,
+      "sha256": "95aa02c7c43096e0dd44d787ba6216864a67157e402adab59b35572e0c1577ea"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/barlow/OFL.txt",
+      "bytes": 4377,
+      "sha256": "186d750eb496a4c17a76385f82be6aea2ac1cf2de074a811d63786cf374ea73f"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/barlow/PROVENANCE.json",
+      "bytes": 1834,
+      "sha256": "39765b4894f83970b6afcc9ba0e763b537a54a736bba3ca7cf4c289227f9b17b"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/bebas-neue/BebasNeue_400Regular.ttf",
+      "bytes": 57676,
+      "sha256": "830ea186acffc2316ed1a4e42319246ba3b46b04e33a211079249bf901193f04"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/bebas-neue/OFL.txt",
+      "bytes": 4337,
+      "sha256": "72082f6cb4d04be2ecf7cc7d9e1e7d73787f0af8a5a278a47cade70c16b78341"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/bebas-neue/PROVENANCE.json",
+      "bytes": 799,
+      "sha256": "90115ef2224f5373ff828721f146eb54371747b43c92179196783c8dab4fa053"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/bitter/Bitter_400Regular_Italic.ttf",
+      "bytes": 186624,
+      "sha256": "4eda5cb005b1af2d5a733e0dcd727f65e2bddd0ea0466893f6d9259929ef20b2"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/bitter/Bitter_400Regular.ttf",
+      "bytes": 187176,
+      "sha256": "46a52a6b4e3202563bac5134c02e4d9db63685c439104a803a0b4fbf9e8ceaf4"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/bitter/Bitter_700Bold_Italic.ttf",
+      "bytes": 187244,
+      "sha256": "65fad0650e416aebb4a7f6893633907f0e10ea153974b0c69f9074b611c259c4"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/bitter/Bitter_700Bold.ttf",
+      "bytes": 188372,
+      "sha256": "391582a3004c7600b7234123c3c810b8c2c5ed3c90af7f087fe55f003cc075bf"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/bitter/OFL.txt",
+      "bytes": 4424,
+      "sha256": "152a1e283e23b42c4940da4c72f2f5bebaa17969cb77c76d7af05903846006f1"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/bitter/PROVENANCE.json",
+      "bytes": 1645,
+      "sha256": "cd897b0b061101463efc3a78e29b4363fe9feeca08d17b78abd0206634923d7a"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/eb-garamond/EBGaramond_400Regular_Italic.ttf",
+      "bytes": 440240,
+      "sha256": "228da33df456ec4e0a149f33cfc2264d5bd500bdfcf55ee36710ca8df923cbd6"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/eb-garamond/EBGaramond_400Regular.ttf",
+      "bytes": 489640,
+      "sha256": "d5baed6e48bf4c99a770e6edc86ddaf67942bb1850491ed54f94d5c2c213531e"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/eb-garamond/EBGaramond_700Bold_Italic.ttf",
+      "bytes": 443560,
+      "sha256": "0030bda44f15b85f5adee17dc25cb5948c547ecf7f6d06e10723b406cd15a472"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/eb-garamond/EBGaramond_700Bold.ttf",
+      "bytes": 492280,
+      "sha256": "8bb7f13020d522de1c441da0a76f05843b74d788c1b16a933af3be4880782d17"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/eb-garamond/OFL.txt",
+      "bytes": 4398,
+      "sha256": "0985066662eb755ed3683ae5482a81a9195b49ce3f7e165cc2388b3dbece7dd7"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/eb-garamond/PROVENANCE.json",
+      "bytes": 1699,
+      "sha256": "3133f45ef52e9b0d1878dea2d0452355a02a4c21f714120895266545ee7361c1"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "bytes": 40636,
+      "sha256": "9e77e88c4713c641faa7385d8c367a52542969fcb24022fc649c06422ad721f5"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/figtree/Figtree_400Regular.ttf",
+      "bytes": 40140,
+      "sha256": "4e2e9876c4a908c2cbe410ceb648e4724464a84492bd49cb2d6e7b0d3f769a66"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/figtree/Figtree_700Bold_Italic.ttf",
+      "bytes": 40928,
+      "sha256": "eccf9cafb8a6112216b040112ce783553e30b30b1eb2649b9f2913e34d7ecbd2"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/figtree/Figtree_700Bold.ttf",
+      "bytes": 40324,
+      "sha256": "183bf1a8523731738c72be9aa8236453a21d6a3ed70bd8e5266723b212331dc4"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/figtree/OFL.txt",
+      "bytes": 4388,
+      "sha256": "140d37233e7f3ce7313798befa9600893bcceaf41a55fa0fa5ad52f7f657a268"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/figtree/PROVENANCE.json",
+      "bytes": 1642,
+      "sha256": "2027b31fe5b2c64bb9cacfb94a37fa1fc10f2c633f264ce616473122bebd1c6c"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/Intos-Bold.ttf",
+      "bytes": 771364,
+      "sha256": "8afd148fff67d6426d0d6906d4c6232886aedc81a7832544806e6c93c44340ab"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/Intos-BoldItalic.ttf",
+      "bytes": 793796,
+      "sha256": "dec13afb35718df39f5a422d7ecb2f69bd719c9ae3196508c17021a428578a11"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/Intos-Italic.ttf",
+      "bytes": 769196,
+      "sha256": "8ca602e312af876190610b0416fdfc67f58ee38bcf9e01ce2f0fcc1094d8fbe4"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/Intos-Regular.ttf",
+      "bytes": 766880,
+      "sha256": "4de204b6414d30f9f49b9375dc9b71ccea1683e55ac37de6c8d541abbc760eea"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/IntosDisplay-Bold.ttf",
+      "bytes": 773028,
+      "sha256": "5055714a7215331b7786b10538138baa4dc969a8afe018bbf459f8b5395026d8"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/IntosDisplay-BoldItalic.ttf",
+      "bytes": 795224,
+      "sha256": "1d9e18845be66b00793b8142581898b70ca72425f4d9f498fe4c35f88c39014d"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/IntosDisplay-Italic.ttf",
+      "bytes": 769804,
+      "sha256": "2741bd21a8904acf3ce28aff7a896c0c87777e3d459e1e10ffe085057471bc28"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/IntosDisplay-Regular.ttf",
+      "bytes": 766576,
+      "sha256": "b652fdab5e8939540f084529a507ddd158629985b8eee1b553ef05c46d131877"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/IntosNarrow-Bold.ttf",
+      "bytes": 771956,
+      "sha256": "59fd6e53b61ae483809ce1d8fc396357ec33d7beedef2e81f87da11551a99e51"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/IntosNarrow-BoldItalic.ttf",
+      "bytes": 806784,
+      "sha256": "6e1cb55b955539301ffc51b1a602a3fb9c8411b9082383fd29f555492eb9d079"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/IntosNarrow-Italic.ttf",
+      "bytes": 771332,
+      "sha256": "f2b4745a51b0c0c13d9768caf14017014c299e11a19031f83c1d8c77f4e23c6b"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/IntosNarrow-Regular.ttf",
+      "bytes": 758048,
+      "sha256": "ea91acdb933f2f1919df688f154140b851191adf4ecb77f7d931724198ea23c1"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/IntosSerif-Bold.ttf",
+      "bytes": 614616,
+      "sha256": "ad994397ce37c29f8881e9fe6e7fcdc743b643465a96ab4d1e2a02d95784a79f"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/IntosSerif-BoldItalic.ttf",
+      "bytes": 524188,
+      "sha256": "f99eb0845ab26e305ffe58f3baa9c920d676d2204a222d925d4fa001573f53f2"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/IntosSerif-Italic.ttf",
+      "bytes": 546064,
+      "sha256": "eed3fa7449ce0fc31fe51569ce056ce483e25ce8f6e2fdda16d6cd36ff231327"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/IntosSerif-Regular.ttf",
+      "bytes": 616712,
+      "sha256": "56351ac7a9d0b66a5d9a0b6c656cefa6fa5cf9fb5e3ee7e44bd1e4e327828d35"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/NOTICE.md",
+      "bytes": 2424,
+      "sha256": "3e1241892bf385141df55d9762612505cd47ce8fd046438e2d4babb3d3c0fcf7"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/OFL.txt",
+      "bytes": 4380,
+      "sha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/intos/PROVENANCE.json",
+      "bytes": 6370,
+      "sha256": "773b622cfb701ee7bc448c540dfd912644a7401976c6529e6ec977b9482e1519"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf",
+      "bytes": 100380,
+      "sha256": "a32b7d8314e5f7e6dd919d1df2334ecc7b92e54173c8cc421ef8e9e4bae97061"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "bytes": 91316,
+      "sha256": "912cda295d683d283f65944563ef2204413ef85bf49748482a5e263c4d56afd4"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf",
+      "bytes": 91136,
+      "sha256": "ddff46045846dfc35f20db138117a2bf249bb75b9336c4ee823b162d22ac82e6"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/libre-caslon-text/OFL.txt",
+      "bytes": 4404,
+      "sha256": "a294245c822c5aa9fd9a9f3189418e99415428be5fecadf797793d5d8f6a3ad3"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/libre-caslon-text/PROVENANCE.json",
+      "bytes": 1483,
+      "sha256": "9972b971895aa702c95d7eb4e226e1643fc6cc64c74aa2532863578a06978a11"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/lora/Lora-Bold.ttf",
+      "bytes": 218640,
+      "sha256": "32baf740eac1bf3f257904a6cf89e4e067ca1566b375bf22f743a26fc88b3791"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/lora/Lora-BoldItalic.ttf",
+      "bytes": 213560,
+      "sha256": "f448e41ab0bf529ec7bd4f8aef843eb4d33b5608c7ed0a53128ead588e6ea9e5"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/lora/Lora-Italic.ttf",
+      "bytes": 206912,
+      "sha256": "1985f2fa49d675c3d88ca6a0b9161be38f955bec7efb025d2a5b68bc03e471fe"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/lora/Lora-Regular.ttf",
+      "bytes": 198380,
+      "sha256": "c72a925082ba55885e7b4ead25d34a3c91fa44edda72a16a3a2983fc7fa7cef3"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/lora/OFL.txt",
+      "bytes": 4423,
+      "sha256": "1d9a970809ac804b582a6ce7f0ebc4e7fefcbfd7ff6299cad35ee656a21be716"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/lora/PROVENANCE.json",
+      "bytes": 2055,
+      "sha256": "fa60f228250a2b19c80754f5100ade658cbdb237143926a6a77da5b55fbbd704"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/merriweather-sans/MerriweatherSans-Bold.ttf",
+      "bytes": 169508,
+      "sha256": "94ac9ad8fc7decbf9108b2fd532dafc34747c3fb0a43adc96d0182ff9242b2be"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/merriweather-sans/MerriweatherSans-BoldItalic.ttf",
+      "bytes": 157120,
+      "sha256": "cb77e6a773760f24c84e8388eb0226fe4b58af4e1d91bc402e1087e64038415c"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/merriweather-sans/MerriweatherSans-Italic.ttf",
+      "bytes": 149612,
+      "sha256": "977d0588a2da17b6a773b8f34492ef0b368e32350463b8ac8bb15741ca17e072"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/merriweather-sans/MerriweatherSans-Regular.ttf",
+      "bytes": 164764,
+      "sha256": "aef68ceec429f644df7e35e57667a5f37df42d231210ecc456ef4abe4b1e3595"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/merriweather-sans/OFL.txt",
+      "bytes": 4586,
+      "sha256": "c487138e4ea4688386abfaf72ab2cbc72a7c8c358cca19bd70095e0d07d8d9f2"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/merriweather-sans/PROVENANCE.json",
+      "bytes": 2212,
+      "sha256": "efd296d1c8bf2070570125e36efe08d036dbf34f357e976be0b5851e82303664"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/montserrat/Montserrat_400Regular_Italic.ttf",
+      "bytes": 337132,
+      "sha256": "7e87c0f96b39fbb919b30aef8991323d0b257649f391e6456bcf03c231448f49"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/montserrat/Montserrat_400Regular.ttf",
+      "bytes": 330948,
+      "sha256": "ef9cf99f0175bef530b88934bd904fcf56f773cec6fd4dfb8ccaf7ce2bbd395e"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/montserrat/Montserrat_700Bold_Italic.ttf",
+      "bytes": 342016,
+      "sha256": "001a59b0f2c541080033b83ca6dfacce03095d99caa3594835f51b7c6d9ce758"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/montserrat/Montserrat_700Bold.ttf",
+      "bytes": 335788,
+      "sha256": "7fa93d7daa5c2f881a6727229c211782de6b76008fbd6346b3d7664e8fc83f43"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/montserrat/Montserrat_900Black.ttf",
+      "bytes": 343296,
+      "sha256": "b48e6741b9889ede4ffe3d8acfda3e6917c62127537b19fe7206cba04e6ebb63"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/montserrat/OFL.txt",
+      "bytes": 4400,
+      "sha256": "8b7141c03fa4f8d44e6345d5d4931709290f0f67875e452e95ac1fd3a027802e"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/montserrat/PROVENANCE.json",
+      "bytes": 1960,
+      "sha256": "0f668431219772171574af14e9a77c909b2f919de4d1aa22e9ad3b7d6c3ace9d"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/open-sans/OFL.txt",
+      "bytes": 4389,
+      "sha256": "fbbbcfef55318de350562559b671360de6d597112ecc5c73881b05092db89602"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "bytes": 136604,
+      "sha256": "dd74eb2d271b57ef5c382a97403818715bfb6b1d53d7fa6da9c88336763651fb"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/open-sans/OpenSans_400Regular.ttf",
+      "bytes": 130832,
+      "sha256": "33e93bec67d91c396876db50694213802a39e43a911bb5c22322f0dbdf4d5e43"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/open-sans/OpenSans_700Bold_Italic.ttf",
+      "bytes": 136360,
+      "sha256": "c7e0a936ff0f08b6726cf205126a5e6dd6ae1340111325f7e86cbba1408e82d7"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/open-sans/OpenSans_700Bold.ttf",
+      "bytes": 130860,
+      "sha256": "5f4c6f0c6beae94863a099a7a538059c480f91587f1abffc06552e9fa3a44f40"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/open-sans/PROVENANCE.json",
+      "bytes": 1664,
+      "sha256": "b3cdf0eec6a5f1fa3e1b18ba7635b5f169367b3b5d6268ea6e1ebcea62b7cce0"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/playfair-display/OFL.txt",
+      "bytes": 4542,
+      "sha256": "e414e07f7a4da16ed47ebec80d52dd79f21d3ca42bc92385a755d8078a038814"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "bytes": 225552,
+      "sha256": "898a01a59214578e72012131ef4c346844c1fd35613f4ee113a37d61a094a2d0"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf",
+      "bytes": 225284,
+      "sha256": "bd3b48ca605438de4337d05ece1ecb9e4149a975d3207174f28e02098bbec3ff"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "bytes": 223352,
+      "sha256": "30a7eb5a9309754d4b3e205e6435ef07d80e1b86735774b2ace427f6ed61f991"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/playfair-display/PlayfairDisplay-Regular.ttf",
+      "bytes": 222056,
+      "sha256": "70ef3ee8de32dc81c39f2733a4a2a050c7e6ba78a2f1632f9d5c6cfd482c3abb"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/playfair-display/PROVENANCE.json",
+      "bytes": 2207,
+      "sha256": "88acfb693f6f8a738f61e02af941cdcfc3e0193f8a69084089a64f4a2579850b"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/poppins/OFL.txt",
+      "bytes": 4385,
+      "sha256": "6be04893d770899a015649c7aa3b582f871b272f8747a92b78b17c3e5c8b2573"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/poppins/Poppins_400Regular_Italic.ttf",
+      "bytes": 182012,
+      "sha256": "3225cec6a018310497ea9ee116aa43b2a833464fed6156dceb9a3a4424bb8613"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/poppins/Poppins_400Regular.ttf",
+      "bytes": 158240,
+      "sha256": "707fdc5c8bab57a90061c6a8ed7b70d5ffb82fc810e994e79f90bace890c255a"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/poppins/Poppins_700Bold_Italic.ttf",
+      "bytes": 176588,
+      "sha256": "9d4d9f3c2c289eaec403660ec215bdc45e62b49f978807714bfc31ca7916c8fe"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/poppins/Poppins_700Bold.ttf",
+      "bytes": 153944,
+      "sha256": "7219547ee25334cbac0fe4b3acf0bf631e48ebb622c71af038edaaa652c60875"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/poppins/PROVENANCE.json",
+      "bytes": 1639,
+      "sha256": "167815d22ded62a9f9e4b3cb2b3ebc4d8a217aff93ad00e5343cab3b0d25ff68"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/pt-serif/OFL.txt",
+      "bytes": 4434,
+      "sha256": "ddf311c28ddf5a5ad9747649837346b67bed9d356789c3072bb27dbce49e514d"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/pt-serif/PROVENANCE.json",
+      "bytes": 2067,
+      "sha256": "b1a0d7e0ff00cf49dac63eef7fa9ff6d28bb89c7085340ecf7a91ac05b41104f"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "bytes": 339996,
+      "sha256": "038ba7336bd7ea14f12ad155bed51a4345cac5153275d521dec3ba04021c526e"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf",
+      "bytes": 337580,
+      "sha256": "f003788ba08981eb0988b3557a6f224a53dab49c20e283e8b74d5af3c466f8be"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "bytes": 375356,
+      "sha256": "f57e95ff9dc85691a3b2e193f2028db36f6663939a46c0fc4f286d618b80b7ce"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "bytes": 359048,
+      "sha256": "a4951fade06ff8f09b7673aa81ffb65a8cd409e24d3289a6dc670bc4dda2557a"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/raleway/OFL.txt",
+      "bytes": 4497,
+      "sha256": "7e946cf1171784d1015279e7dc35f827957a6b5d1f1f659ae0c98e5f5e37ed9b"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/raleway/PROVENANCE.json",
+      "bytes": 2046,
+      "sha256": "f08c34bcd4d35b090ba330951640d680fb279d457c03d57ee10185e15d8e7c1d"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/raleway/Raleway-Bold.ttf",
+      "bytes": 137952,
+      "sha256": "6894481ab1c298e9c66f23455ecf05ccb25393d719a6b2d63428358c0409d2d0"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/raleway/Raleway-BoldItalic.ttf",
+      "bytes": 138168,
+      "sha256": "57eb1a701136eca30b52a4847edcec93daa53f0b5597dd98dbc0b07f475ce44a"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/raleway/Raleway-Italic.ttf",
+      "bytes": 132224,
+      "sha256": "63f52b6d8e88afa43d94162147ff55846f28af630d834018de5cb7ccc75a8ee8"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/raleway/Raleway-Regular.ttf",
+      "bytes": 132000,
+      "sha256": "cb70f8815eecd850263d54fa59286377b1d7362bec612e981155a00039d8b513"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-display/OFL.txt",
+      "bytes": 4394,
+      "sha256": "435fbfb7e66988b2a06686a4cb966faec733f35d8fe100a1601573c27f3e0bb8"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-display/PROVENANCE.json",
+      "bytes": 2901,
+      "sha256": "7ef1ee49592f0bc092a44054789b7fb9fef5c1001fa882a3a7b093449ecb6dc5"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-display/RedHatDisplay_300Light_Italic.ttf",
+      "bytes": 53168,
+      "sha256": "b76f8742593b53a466c99c61522f494aed59a3e4485f94fcdb2d2600bab0d6fb"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-display/RedHatDisplay_300Light.ttf",
+      "bytes": 51700,
+      "sha256": "77eae6c6360c8a8445268dac09c32b6915f658aed2613408d7e118436a0c3eef"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "bytes": 53064,
+      "sha256": "947a7431db8083115e2aa2db5265a1abcb5a80a56c6d46e2c7862b9fab406b90"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "bytes": 51660,
+      "sha256": "b3c6289677cb95107738025b86cba835f0283b46dc60d6ace3bff9b9700bfbd0"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-display/RedHatDisplay_600SemiBold_Italic.ttf",
+      "bytes": 53172,
+      "sha256": "d39a86c7334a400505a068b1c1a824c91b3ebae37563e36836c19bf889bfcd3a"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-display/RedHatDisplay_600SemiBold.ttf",
+      "bytes": 51712,
+      "sha256": "d8a250cf848e2b52e505776ec15c078dd022d920846d83f21bdb7a56e43c5ad8"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf",
+      "bytes": 53088,
+      "sha256": "6af3f3c0ce2b4aa5cee332cc5f075e3cab7707ce02db8a4dc241ab8104cb21cc"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "bytes": 51664,
+      "sha256": "861c7d8c0ebe239611dddce4f017d6a5c3389aea28bb31d9ee5bf8cded0826d0"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-text/OFL.txt",
+      "bytes": 4394,
+      "sha256": "435fbfb7e66988b2a06686a4cb966faec733f35d8fe100a1601573c27f3e0bb8"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-text/PROVENANCE.json",
+      "bytes": 1701,
+      "sha256": "cabdbceb17926fb801819db1cc8b42c186efd02aed3564ff8fa29edf4170877d"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-text/RedHatText_400Regular_Italic.ttf",
+      "bytes": 53504,
+      "sha256": "6da9408ce2ad47d8f4b2881853d92aee45ca52af39b4c28ddedaab1fb91f57c5"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-text/RedHatText_400Regular.ttf",
+      "bytes": 52656,
+      "sha256": "65bce50e2d904363a2ade7dac0b381c72638c43fd690a65a35aad1cc874f75cf"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-text/RedHatText_700Bold_Italic.ttf",
+      "bytes": 53552,
+      "sha256": "1f2b2ed57f70ea28bacc1bd3ce3f0b740c5b16a262c61925400f1da5d1045a7c"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/red-hat-text/RedHatText_700Bold.ttf",
+      "bytes": 52616,
+      "sha256": "a82d498bd5314be56ccb79fb5c2244513a41a5c2b04be56a45751c26a2132a03"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/source-sans-3/OFL.txt",
+      "bytes": 4579,
+      "sha256": "89ad2c4f66dd29127527493e729c31e731f111cf10faf5774c3db9275ed0c22c"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/source-sans-3/PROVENANCE.json",
+      "bytes": 2197,
+      "sha256": "b62baf525eee2b2294c250e4b3a83a5356634bc580faef5b4a393752f15515ee"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "bytes": 428176,
+      "sha256": "9214b9d95e4231c609802815c2646c98174e2102d0d37f88978a7f8e71006e6a"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/source-sans-3/SourceSans3-BoldIt.ttf",
+      "bytes": 318700,
+      "sha256": "7978291fc1bf314db887e0366853b33c5cf2e964c7b95cfb9ce403a6ec46a842"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/source-sans-3/SourceSans3-It.ttf",
+      "bytes": 315812,
+      "sha256": "192afd78f0f54a3c69eaf02d43f4d9a821e9d6110e41d3d25d61a7385cd580e4"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "bytes": 431196,
+      "sha256": "4644c81b86ec9caaa76b634889968ed3c4f4f52f054855933acc7c2b21e53b0f"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/work-sans/OFL.txt",
+      "bytes": 4396,
+      "sha256": "749aca05078664ce682dce1b1b10096ac397cb088c1a6df4e1bb56f0092a9272"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/work-sans/PROVENANCE.json",
+      "bytes": 1670,
+      "sha256": "af73f6c3432e95ded1350290901c1efb2504376105f751aa7aee93f3f294c478"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "bytes": 174280,
+      "sha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/work-sans/WorkSans_400Regular.ttf",
+      "bytes": 188916,
+      "sha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/work-sans/WorkSans_700Bold_Italic.ttf",
+      "bytes": 175772,
+      "sha256": "a5b2cad813df0aaa7d16621f2e93b5117c25e9bc788bc9a3ad218e9d6348ce34"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts/work-sans/WorkSans_700Bold.ttf",
+      "bytes": 191304,
+      "sha256": "240d125fc9f8561363dc1ea3f513501253bd70942f41468f48f0b0cafb0c82e2"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/fonts.json",
+      "bytes": 12796015,
+      "sha256": "ee01ce24d0bc7f7a19a8827640623b902223c098c41db7f3a365603b18fee28c"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/galleries.json",
+      "bytes": 166,
+      "sha256": "58f9f58c7473843b5e76459b1d83dbece829e6095e6ff364d9ecd36c96dcc743"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/harfbuzz-subset.wasm",
+      "bytes": 683531,
+      "sha256": "62415fe6bad92ef16f3e5d2dbed6c66a4adec7f5a59c6d27084811c92cce1ba5"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/harfbuzz.wasm",
+      "bytes": 444394,
+      "sha256": "6eeed8e1bc9ad7773038e48ff8f9e07e0ad228572c594b45e5357e9c2f7a0b2e"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/index.html",
+      "bytes": 19747,
+      "sha256": "9169ed55c252d81c9c064e3d775c4cfd8be7329433f0a92c446c238c78aa16a6"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/layout-editor.html",
+      "bytes": 2864,
+      "sha256": "ddf0ae4503460457c964819e1b0e6d17e55a976f7e707d95eef7c12b6a7563ae"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/layout-editor.js",
+      "bytes": 2212572,
+      "sha256": "139654e20fed9d0dc28b2c601fa4251f026e2a831fc75a35a0012dd2f3ac2b25"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/playground.css",
+      "bytes": 37668,
+      "sha256": "770ea6de56eaf251609150fa8b94a11e12edf5c39f0d860dd450bcec5e46323a"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/playground.js",
+      "bytes": 9961190,
+      "sha256": "e861367d4e8b941d2980f4a6f1abc4fd67e629cbc259753273fc432ba38cb0c8"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-color-emoji/400Regular/NotoColorEmoji_400Regular.ttf",
+      "bytes": 25337824,
+      "sha256": "ad4a3478943b88660a194d1434793bc02c8007819f2d1e7da9ede289e78f9ca7"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-emoji/400Regular/NotoEmoji_400Regular.ttf",
+      "bytes": 886572,
+      "sha256": "24aaa2a20c9c06ffe9bf04284bfd1f14376a329d10122f902abe2770817eb504"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-naskh-arabic/400Regular/NotoNaskhArabic_400Regular.ttf",
+      "bytes": 199512,
+      "sha256": "706b4580c025f6c75ec1c06013e17f00a23ec1780091b77a5a5b339469bda94d"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-naskh-arabic/700Bold/NotoNaskhArabic_700Bold.ttf",
+      "bytes": 199624,
+      "sha256": "35418f91100645a36e4d72d75866b61c5da14dc5ebbade64db434d2c9e76234c"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-nastaliq-urdu/400Regular/NotoNastaliqUrdu_400Regular.ttf",
+      "bytes": 529104,
+      "sha256": "360220888c7519d127c143d0a830d187dd41e184036508a868dd89e6cbfc7521"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-nastaliq-urdu/700Bold/NotoNastaliqUrdu_700Bold.ttf",
+      "bytes": 529980,
+      "sha256": "0f76cabd37fb8a5458eae1cd143d2fff3101b4d19448d13373e30c0407ba56a7"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans/400Regular/NotoSans_400Regular.ttf",
+      "bytes": 629024,
+      "sha256": "fe8c022f48d8dd29f17b744d16f9346f4357e16f7d4f7be58b000ae7c291b614"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans/400Regular_Italic/NotoSans_400Regular_Italic.ttf",
+      "bytes": 642344,
+      "sha256": "feb3e57888ce3acb604f270c278cfb304c674306518771619ddbdefca42a066b"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans/700Bold/NotoSans_700Bold.ttf",
+      "bytes": 630968,
+      "sha256": "13a813c49624ae3ba3c5c6e72c5ebffc4b9e1e6ea32f421c04069b037c6ad431"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans/700Bold_Italic/NotoSans_700Bold_Italic.ttf",
+      "bytes": 644344,
+      "sha256": "7e34616e092593c340449baf9a259075a054c6419511ccf21ff0d83a1c9dd0d0"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-arabic/400Regular/NotoSansArabic_400Regular.ttf",
+      "bytes": 194176,
+      "sha256": "252629ca0e87b6233851249b8cbf7b43445211a8caf199f1b306a19202251508"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-arabic/700Bold/NotoSansArabic_700Bold.ttf",
+      "bytes": 194380,
+      "sha256": "a86a704ff8b315082f4859b04c2f8f746f4cefb14553ef10505f143e0d4829d3"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-armenian/400Regular/NotoSansArmenian_400Regular.ttf",
+      "bytes": 49932,
+      "sha256": "678a89f5dafb25b71ba5c323b428a579e4e664e9dc8c35b9f1d327d82fc9e5ba"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-armenian/700Bold/NotoSansArmenian_700Bold.ttf",
+      "bytes": 49952,
+      "sha256": "beaf0d8d52a118d108a9e4502d3f3fbbcd0ed78e26bcc00d9d80932c342b934a"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-bengali/400Regular/NotoSansBengali_400Regular.ttf",
+      "bytes": 141064,
+      "sha256": "6826d9667972f0f96e48c46f7a24e70afe97205032e6295cfb1f13fbbb8b90a3"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-bengali/700Bold/NotoSansBengali_700Bold.ttf",
+      "bytes": 141476,
+      "sha256": "3a44a4cf2c4f79c3ead8f52dffd5b3a66f0b2483792d66bad81e1a51e888bfd6"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-devanagari/400Regular/NotoSansDevanagari_400Regular.ttf",
+      "bytes": 217048,
+      "sha256": "30f20b135b2b7b8c370ea30dd8c88f5174c1209f0373534ad4c814717f375b9e"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-devanagari/700Bold/NotoSansDevanagari_700Bold.ttf",
+      "bytes": 217620,
+      "sha256": "614d1bf087d082e88f0802a6259d96ec846351c0a6fb736294af01fadd09ebac"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-ethiopic/400Regular/NotoSansEthiopic_400Regular.ttf",
+      "bytes": 366892,
+      "sha256": "321ff186e0f066a46257c3008e8a22070720350a9d17f8a32d0d3da53f52e7a2"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-ethiopic/700Bold/NotoSansEthiopic_700Bold.ttf",
+      "bytes": 366840,
+      "sha256": "b968f7d5c79d6caaff5e29031b1598555f4b154de7456dd51b7c866f90d37597"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-georgian/400Regular/NotoSansGeorgian_400Regular.ttf",
+      "bytes": 62928,
+      "sha256": "78783e9fe5330b28952ee2433340b3f0632974ba854fcbcf83efff1d9bad1574"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-georgian/700Bold/NotoSansGeorgian_700Bold.ttf",
+      "bytes": 62872,
+      "sha256": "13e854391de82fcc9eb994558233d61de1b7d615883fd5bf87aa61b611c74b94"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-gujarati/400Regular/NotoSansGujarati_400Regular.ttf",
+      "bytes": 175148,
+      "sha256": "7cc0f340be8ef8b63f92181fd5576a4b19631059fd6576c6fd5fcd40f1543610"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-gujarati/700Bold/NotoSansGujarati_700Bold.ttf",
+      "bytes": 175324,
+      "sha256": "d5aee2fbe1dec84e8e54ec72dfda1d138f1401ddf18f06bbd11ea8b64f8b45b2"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-gurmukhi/400Regular/NotoSansGurmukhi_400Regular.ttf",
+      "bytes": 58724,
+      "sha256": "2b0fbe8d4cc2a18aa08c6f21d3924423c113fb7ec6d786a77c30cf1d3153c4c7"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-gurmukhi/700Bold/NotoSansGurmukhi_700Bold.ttf",
+      "bytes": 58784,
+      "sha256": "49b4d13ee80c9ba8ae008948b43dc53f200f619d8bc206cacaddb6b781c49625"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-hebrew/400Regular/NotoSansHebrew_400Regular.ttf",
+      "bytes": 48036,
+      "sha256": "e0ee753f09733337b9236221018d4bf71fd6d06c87dd76bbc83120514bc55911"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-hebrew/700Bold/NotoSansHebrew_700Bold.ttf",
+      "bytes": 47992,
+      "sha256": "8010b087f33f152e25aef020e68cb5568d6f8deebb6dde8f60d655196e59ebde"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf",
+      "bytes": 5731428,
+      "sha256": "6255ea4692e97ef27330304fb96fd650f9111f868cd585fcf2802d42823930e5"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-jp/700Bold/NotoSansJP_700Bold.ttf",
+      "bytes": 5726432,
+      "sha256": "7c03e14d8a03e8f5181dbd130712d51e4ae01ac648cbd59442ae8b16c0951835"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-kannada/400Regular/NotoSansKannada_400Regular.ttf",
+      "bytes": 148988,
+      "sha256": "40e8188c98e3913aae2241d570b179fdc29fd90ecb6b5dc4376298bcbe45c38b"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-kannada/700Bold/NotoSansKannada_700Bold.ttf",
+      "bytes": 149124,
+      "sha256": "bba4d58d9d5a58834c4bca50cf3b00cc230b05341566cf08961e632ef5c6ab75"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-khmer/400Regular/NotoSansKhmer_400Regular.ttf",
+      "bytes": 105696,
+      "sha256": "fff6f415386616d8d99c4f64b876e54e6e231dc0c007c87a61b254b3795957f9"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-khmer/700Bold/NotoSansKhmer_700Bold.ttf",
+      "bytes": 106224,
+      "sha256": "c72f01526f03b16b64a355cc898605c950c0c5bdcef6d00974a8e753358d3a8e"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-kr/400Regular/NotoSansKR_400Regular.ttf",
+      "bytes": 6191364,
+      "sha256": "b4a747e78805bc25b610dcfc3003cb5fb2e2ec034763774b24216ed15889eef4"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-kr/700Bold/NotoSansKR_700Bold.ttf",
+      "bytes": 6189424,
+      "sha256": "c76f806dc46b8e7981410cb083801f7f124b7f8bc0d181cdae80e78f16d0e9cc"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-lao/400Regular/NotoSansLao_400Regular.ttf",
+      "bytes": 53076,
+      "sha256": "0fb229c3a29c4c6e916b0ea27cb823aa9d899751c6306b6fca428b83feedf37d"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-lao/700Bold/NotoSansLao_700Bold.ttf",
+      "bytes": 53216,
+      "sha256": "6d666b31ab236a835eb53db8ea00f15aa026b3f7c80c313312629ad105377f7b"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-malayalam/400Regular/NotoSansMalayalam_400Regular.ttf",
+      "bytes": 106808,
+      "sha256": "68cbfeac7177700d87671f2a3bdb3db70fa26016e41cdac24e20877bf3736485"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-malayalam/700Bold/NotoSansMalayalam_700Bold.ttf",
+      "bytes": 106764,
+      "sha256": "3b717223c3d06ed724acce05d87ac40bb63d4bec5fdba282cbecc5b1f57c05da"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-math/400Regular/NotoSansMath_400Regular.ttf",
+      "bytes": 1004120,
+      "sha256": "b4a1dfdbfa13b4755e5eac20cb25c1d17ed5a745ceb89639595e8cf45a2b1e07"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-mongolian/400Regular/NotoSansMongolian_400Regular.ttf",
+      "bytes": 388820,
+      "sha256": "7c0edce49dfc23a2f7b5697df7d73b0dad24c8bb751a1ea1a4b9b59fc849f481"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-myanmar/400Regular/NotoSansMyanmar_400Regular.ttf",
+      "bytes": 183164,
+      "sha256": "52c27fe2643e3e34bae3b3d8865f6a2400e8c955d1adbe311979ea012116eb13"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-myanmar/700Bold/NotoSansMyanmar_700Bold.ttf",
+      "bytes": 183356,
+      "sha256": "e8c0650bd16c279dc64b7baabb33fd5b0266e4ef8005fe36fd8122dcc43dba18"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-oriya/400Regular/NotoSansOriya_400Regular.ttf",
+      "bytes": 170112,
+      "sha256": "ba383a603869b5874d88a51ccd9aa526aefd18130c497bae6ce25db09507dd6e"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-oriya/700Bold/NotoSansOriya_700Bold.ttf",
+      "bytes": 170380,
+      "sha256": "19416e5e9f4bcf208960e43ba1e3c41564de632d06001c4a176bde0e8ac923dd"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-sc/400Regular/NotoSansSC_400Regular.ttf",
+      "bytes": 10559284,
+      "sha256": "d45f67f0a7c0ca3f256950777ce6a61cc7ce5f9696d02900cbbaac25f8aa7d16"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-sc/700Bold/NotoSansSC_700Bold.ttf",
+      "bytes": 10549020,
+      "sha256": "9a38ae0ab28cd5a256f9ea8e00dedc688aac17f7915fcb000572990afa956b96"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-sinhala/400Regular/NotoSansSinhala_400Regular.ttf",
+      "bytes": 243496,
+      "sha256": "33a77b6965e5245f1bab858ead09e4789aaa8daa918f9e26e924b016a3e1d7bd"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-sinhala/700Bold/NotoSansSinhala_700Bold.ttf",
+      "bytes": 243160,
+      "sha256": "69b79ed8e643a86cf3b72e971bfdc745b1d211e0c90e8afe1f9341306a950d6e"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-symbols/400Regular/NotoSansSymbols_400Regular.ttf",
+      "bytes": 185152,
+      "sha256": "aedeec1cd0514930aeeafc4a88a6deff83cda1e6b58086f0b9bb9c7dd0157578"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-symbols/700Bold/NotoSansSymbols_700Bold.ttf",
+      "bytes": 184868,
+      "sha256": "5682f6c88d6199623edf026f67a8722697e8c5f409e5249477594e409d657eb0"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-symbols-2/400Regular/NotoSansSymbols2_400Regular.ttf",
+      "bytes": 1228868,
+      "sha256": "f67f40c65f929f029827ab37cfdc4897dfd9ae3c28d9e98ba46e0d52e39eb97e"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-syriac/400Regular/NotoSansSyriac_400Regular.ttf",
+      "bytes": 84320,
+      "sha256": "dfa870966a83a2440a0bb392fd6b39058e712c2ad493fbfadceea09d07191b8f"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-syriac/700Bold/NotoSansSyriac_700Bold.ttf",
+      "bytes": 84648,
+      "sha256": "351382df72e00372d330f8d914574c066068302fca6e7941802ddcbe31a01493"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-tamil/400Regular/NotoSansTamil_400Regular.ttf",
+      "bytes": 78988,
+      "sha256": "f26d8b66bf6f38dd9af6326a52188fa1a8a0b9b2905c4bd7e07c865f65a85d79"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-tamil/700Bold/NotoSansTamil_700Bold.ttf",
+      "bytes": 79016,
+      "sha256": "c4abfe6f1291568247afb568fe6a666584f9bf7c91f7e163fd628abb368af316"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-tc/400Regular/NotoSansTC_400Regular.ttf",
+      "bytes": 7109460,
+      "sha256": "add35d53f70727657b4509531677c4e3712b67df3d54661efdee5d3a0c16d954"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-tc/700Bold/NotoSansTC_700Bold.ttf",
+      "bytes": 7104212,
+      "sha256": "ed4ae6ed781e34d0beee896e9be5d835a938ac7adabbcc1b6b6904290006f372"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-telugu/400Regular/NotoSansTelugu_400Regular.ttf",
+      "bytes": 179900,
+      "sha256": "7fcef235380f945d4a97fdfec030952afab6907004cfa37ed664fed8d4962eac"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-telugu/700Bold/NotoSansTelugu_700Bold.ttf",
+      "bytes": 180348,
+      "sha256": "25f2402bfa537c74c5c555452ad2a3289caf5925efeabc116ac4b90469b42a6a"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-thaana/400Regular/NotoSansThaana_400Regular.ttf",
+      "bytes": 47260,
+      "sha256": "71189ebea47ebfebeaa7ad3d1e54450efc419561e5323e3df9b12bf7681d271b"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-thaana/700Bold/NotoSansThaana_700Bold.ttf",
+      "bytes": 47260,
+      "sha256": "a5d0e4db39e321f19f875abc8bf44e960e9b23e88d3f082dce2046344421c531"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-thai/400Regular/NotoSansThai_400Regular.ttf",
+      "bytes": 47484,
+      "sha256": "9acb585d8662ca4ed1b1cf5889dfa1393f8555103b3986e1ea1e3af4faef70bd"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-sans-thai/700Bold/NotoSansThai_700Bold.ttf",
+      "bytes": 47480,
+      "sha256": "0be544f347b3ab6382bdc2b555a783727a4858a3dc140670406924670967d916"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-serif-hebrew/400Regular/NotoSerifHebrew_400Regular.ttf",
+      "bytes": 56176,
+      "sha256": "5e72a179024ad0463437b73b948f6d282da7d5b301a66e7f31efa05220c3fe02"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-serif-hebrew/700Bold/NotoSerifHebrew_700Bold.ttf",
+      "bytes": 56188,
+      "sha256": "ff3e349594c618b58d0044c25d6aa4045bba312f07ee6627197f4285be6389cc"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-serif-tibetan/400Regular/NotoSerifTibetan_400Regular.ttf",
+      "bytes": 736448,
+      "sha256": "33bd11da711ad8fbf55e5df25f29e6ebdfce53424fb41d61c7c6b83c2ba948cf"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/noto-serif-tibetan/700Bold/NotoSerifTibetan_700Bold.ttf",
+      "bytes": 739048,
+      "sha256": "b42678aaaac6e0bbd267dcf5bf7042f982fd92a36868a237d09ce6c338f63480"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/script-fonts/stix-two-math/400Regular/STIXTwoMath_400Regular.ttf",
+      "bytes": 1471976,
+      "sha256": "c3377c20641ecee349677e3f6cc71a6405c30cda7171a4cbc4a1c3970cfff0b4"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/source-pane.html",
+      "bytes": 2142,
+      "sha256": "4c1a85c8027cbcfaba4323c88f71b0371e09ae741b207c535c02706c363bf041"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/source-pane.js",
+      "bytes": 2836285,
+      "sha256": "47271beee5630ba893dbd6f806e93eeb2b528ae67d836402ed27fa3ec04180e1"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/source-worker.js",
+      "bytes": 1703070,
+      "sha256": "75dec0a3a4ad46d24e0ebcc93597102b7b68261710027eb68d9d25a472c72610"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/studio.html",
+      "bytes": 452,
+      "sha256": "74936dd4f106616f51a0e6a28e1ed92b9b05ad978d40d1c0c34ff402dccdbdcc"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/studio.js",
+      "bytes": 5980559,
+      "sha256": "2b931cb99e09d306493610f150063f7563e753ccf2290037bf93523274024481"
+    },
+    {
+      "path": "packages/editor/artifacts/playground/styles.css",
+      "bytes": 239570,
+      "sha256": "5820c467006bd8542f97f7986cfcfae1243f2a8d07513f729b382fcb1307dcf1"
+    }
+  ],
+  "log": {
+    "bytes": 116191,
+    "sha256": "efab22e7fe37af40f5b1a211329c2a9a72dad126805cc1cc06fa56b0a5698163"
+  }
+}

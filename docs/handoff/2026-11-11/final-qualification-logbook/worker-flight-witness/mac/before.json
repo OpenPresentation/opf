@@ -1,0 +1,22 @@
+{
+  "source": "79cdb85d6ab8a58dde5d474e254cffa027735c51",
+  "tree": "1008ffecc6ffd6878017fe68d4e2bb6f5cd3960e",
+  "node": "v24.21.0",
+  "nodeExecutableSha256": "e4b5a3af0e05c75de2eae013904145f40fe7fc2a6e6f17510128bf45cca4e79b",
+  "records": 858,
+  "compiledFiles": 609,
+  "freshAssets": 223,
+  "scrubbed": [],
+  "defaults": {
+    "CI": true,
+    "limit": 100,
+    "rounds": 1,
+    "compare": true,
+    "workerOff": false,
+    "burn": 0,
+    "slowApply": 0,
+    "cpu": 1,
+    "engine": "chromium",
+    "keyboardPlatform": "darwin"
+  }
+}

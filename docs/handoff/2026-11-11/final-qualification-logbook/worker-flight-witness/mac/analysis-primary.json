@@ -1,0 +1,181 @@
+{
+  "verdict": "Mac causal witness analyzed; observed endpoint/MO-close bias, Windows first-failure cause remains UNKNOWN",
+  "source": "79cdb85d6ab8a58dde5d474e254cffa027735c51",
+  "raw": {
+    "path": "/tmp/opf-worker-flight-diagnostic-run01/report.json",
+    "bytes": 1263045,
+    "sha256": "ee1abe8c6b7fd2df4d9baf6812aad0c64f6dd2a81efb747ddf99b0454cf5557e"
+  },
+  "originalSamplesExactlyRecomputed": 80,
+  "workerSamples": 48,
+  "winningSamplesCrossingNativeClose": 20,
+  "winningGapsCrossingNativeOpen": 0,
+  "allCrossCloseWinnersEndExactlyAtMOclose": true,
+  "MOnativeLagMilliseconds": {
+    "open": [
+      0.0,
+      0.29999999701976776
+    ],
+    "close": [
+      6.899999991059303,
+      12.5
+    ]
+  },
+  "maximumPostDurationMilliseconds": 0.20000000298023224,
+  "workerPageLongtasks": 0,
+  "inlinePageLongtasks": 32,
+  "patterns": [
+    {
+      "format": "yaml",
+      "pattern": "quick",
+      "samples": 4,
+      "originalMedianGap": 24.299999997019768,
+      "originalMedianFlight": 1.2000000029802322,
+      "allBeatIntersectionMedianBounds": [
+        1.0999999940395355,
+        3.4000000059604645
+      ],
+      "crossNativeCloseWinningSamples": [
+        2
+      ]
+    },
+    {
+      "format": "yaml",
+      "pattern": "paced",
+      "samples": 12,
+      "originalMedianGap": 14.699999988079071,
+      "originalMedianFlight": 1.1000000089406967,
+      "allBeatIntersectionMedianBounds": [
+        1,
+        1.8999999910593033
+      ],
+      "crossNativeCloseWinningSamples": [
+        5,
+        7,
+        9
+      ]
+    },
+    {
+      "format": "md",
+      "pattern": "quick",
+      "samples": 4,
+      "originalMedianGap": 17.799999997019768,
+      "originalMedianFlight": 7.300000011920929,
+      "allBeatIntersectionMedianBounds": [
+        1.0,
+        4.5999999940395355
+      ],
+      "crossNativeCloseWinningSamples": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "format": "md",
+      "pattern": "paced",
+      "samples": 12,
+      "originalMedianGap": 10.599999994039536,
+      "originalMedianFlight": 5.4000000059604645,
+      "allBeatIntersectionMedianBounds": [
+        1.199999988079071,
+        1.6000000089406967
+      ],
+      "crossNativeCloseWinningSamples": [
+        6,
+        8,
+        10,
+        11,
+        12,
+        14,
+        15
+      ]
+    },
+    {
+      "format": "json",
+      "pattern": "quick",
+      "samples": 4,
+      "originalMedianGap": 18.099999994039536,
+      "originalMedianFlight": 1,
+      "allBeatIntersectionMedianBounds": [
+        1.0,
+        3.300000011920929
+      ],
+      "crossNativeCloseWinningSamples": []
+    },
+    {
+      "format": "json",
+      "pattern": "paced",
+      "samples": 12,
+      "originalMedianGap": 16.5,
+      "originalMedianFlight": 4.9000000059604645,
+      "allBeatIntersectionMedianBounds": [
+        1,
+        2.0999999940395355
+      ],
+      "crossNativeCloseWinningSamples": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        13
+      ]
+    }
+  ],
+  "example": [
+    {
+      "format": "yaml",
+      "sampleIndex": 2,
+      "start": 2827.3999999910593,
+      "end": 2836.2000000029802,
+      "excess": 4.800000011920929,
+      "definiteBusyIntersection": 1.4000000059604645,
+      "possibleBusyIntersection": 1.4000000059604645,
+      "excessIntersectionBounds": [
+        0,
+        1.4000000059604645
+      ],
+      "startsBeforeBusy": false,
+      "endsAfterBusy": true,
+      "nativeSpanCount": 1,
+      "nativeSpans": [
+        {
+          "open": [
+            2785.7999999970198,
+            2785.8999999910593
+          ],
+          "close": [
+            2828.7999999970198,
+            2828.7999999970198
+          ]
+        }
+      ],
+      "moSpans": [
+        [
+          2785.8999999910593,
+          2836.2000000029802
+        ]
+      ]
+    }
+  ],
+  "interpretation": [
+    "The original classifier charges a whole excess gap when its END lies in a delayed MO span; synchronous native busy-clear precedes MO close. Equal rounded timestamps permit a heartbeat at the closing callback timestamp to be included.",
+    "All-beat intersection bounds include gaps whose end lies OUTSIDE the MO span as well. They may be above or below the original flight metric and are diagnostic only; original verdict/40%/85%/ceiling/count gates were untouched.",
+    "Message passive capture-listener stamps occur AFTER native clear by6.9..12.7ms here; these are observer callbacks after the pane handler, not native arrival/worker CPU timestamps.",
+    "No worker-page longtask >=50ms was reported; all same-code Mac samples pass. No direct extrapolation to the Windows98/89ms gaps is justified."
+  ],
+  "boundsDefinition": "For a heartbeat [start,end] with excess=max(0,end-start-4), sum its intersections with definite native busy [open.after,close.before] and possible native busy [open.before,close.after]. Conservative excess-in-busy bounds are [max(0,definiteIntersection-4), min(excess,possibleIntersection)]. Diagnostic wall-time bounds, not CPU attribution or replacement verdict. allBeatConservativeBusyExcessBounds additionally takes maxima across ALL original sample heartbeat intervals intersecting native windows, including beats whose end falls outside MO span. This is diagnostic only and may exceed or be below original flight.",
+  "minimalNextStep": "For actual Windows failure attribution, root may review one Windows-path derivative of this passive witness and run it once on the Windows CI class with identical workload/env/gates and exact own source/assets, retaining raw evidence before assertions. A pass is a new observation, not retrospective proof. Separately, the observed boundary examples can support a narrowly reviewed measurement-correction proposal and pure recorded-interval controls; any later acceptance must retain thresholds and demonstrate existing BURN/worker-off negatives. No product patch or claim that the Windows failure is fixed follows from this Mac result. No further run/repair is authorized in this analysis.",
+  "executionReceipt": {
+    "path": "/tmp/opf-worker-flight-execution01/receipt.json",
+    "bytes": 1950,
+    "sha256": "163fc43361d0bab37064822a9522232ac871e8d8607c4eb0487574575f76b35e"
+  },
+  "completeDerivedSamples": {
+    "path": "/tmp/opf-worker-flight-analysis02.json",
+    "bytes": 100753,
+    "sha256": "c760451373c4ee9d18e4acc64df0f59fd8cc701e3559cce847b5c2b4fb76ec34"
+  },
+  "analysisOnly": "Read-only retained JSON/numeric analysis; no browser/build/import/test/CPU/BURN/new input or tracked source edits."
+}

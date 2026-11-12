@@ -1,0 +1,88 @@
+{
+  "source": "79cdb85d6ab8a58dde5d474e254cffa027735c51",
+  "tree": "1008ffecc6ffd6878017fe68d4e2bb6f5cd3960e",
+  "node": "v24.21.0",
+  "command": [
+    "/tmp/opf-worker-flight-diagnostic-source01/diagnostic.mjs"
+  ],
+  "startedAt": "2026-11-12T04:21:01.234Z",
+  "seconds": 32.584,
+  "code": 0,
+  "signal": null,
+  "error": null,
+  "sourceUnchanged": true,
+  "boundRecords": 858,
+  "boundRecordsUnchanged": true,
+  "compiledFiles": 609,
+  "assets": 223,
+  "log": {
+    "bytes": 2471,
+    "sha256": "fb84caa3ae90eeb971539d364d3838bcb13791a765d91c54a8d54b24963973e2"
+  },
+  "reportError": null,
+  "parameters": {
+    "CI": true,
+    "LIMIT": 100,
+    "ROUNDS": 1,
+    "COMPARE": true,
+    "WORKER_OFF": false,
+    "BURN": 0,
+    "SLOW_APPLY": 0,
+    "SLIDES": 1000,
+    "TAIL": 150,
+    "PATTERNS": {
+      "quick": {
+        "bursts": 4,
+        "size": 3,
+        "spacing": 30
+      },
+      "paced": {
+        "bursts": 12,
+        "size": 1,
+        "spacing": 90
+      }
+    },
+    "engineName": "chromium"
+  },
+  "browserVersion": "158.0.8127.18",
+  "rows": [
+    {
+      "mode": "on",
+      "format": "yaml",
+      "error": null,
+      "recorderRestored": true,
+      "overflow": {}
+    },
+    {
+      "mode": "off",
+      "format": "yaml",
+      "error": null,
+      "recorderRestored": true,
+      "overflow": {}
+    },
+    {
+      "mode": "on",
+      "format": "md",
+      "error": null,
+      "recorderRestored": true,
+      "overflow": {}
+    },
+    {
+      "mode": "off",
+      "format": "md",
+      "error": null,
+      "recorderRestored": true,
+      "overflow": {}
+    },
+    {
+      "mode": "on",
+      "format": "json",
+      "error": null,
+      "recorderRestored": true,
+      "overflow": {}
+    }
+  ],
+  "originalFailure": null,
+  "preservationErrors": [],
+  "scope": "ONE instrumented normal Mac witness on exact Windows operative asset bytes; original verdict retained; no Windows failure-cause or benchmark acceptance claim"
+}
