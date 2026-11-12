@@ -282,7 +282,7 @@ try {
 		await page.waitForFunction(() => window.host.messages.length === 1, null, { timeout: 15000 });
 		assert.match((await hostState()).messages[0].content[0].text, /I edited the deck in the OPF viewer/);
 		await view().locator('#deck-sync[data-state="sent"]').waitFor();
-		assert.equal(await view().locator("#deck-sync").innerText(), "Sent to the assistant for your approval", "the host took it; the person still decides");
+		assert.equal(await view().locator("#deck-sync").innerText(), "Sent to the assistant", "another host took it: no more is claimed (in Claude it reads \"Sent to Claude for your approval\")");
 		assert.equal(await send.isDisabled(), false, "Send stays usable, to send again");
 		assert.equal(await send.getAttribute("data-unsent"), "false", "and is no longer the primary action");
 	});

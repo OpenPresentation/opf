@@ -91,7 +91,7 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 /* The studio's start row (open_studio): an example to open, or a deck to paste into Source. */
 .deck-start { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; min-width: 0; padding: 6px 12px; border-bottom: 1px solid var(--opf-ui-border); color: var(--opf-ui-muted-fg); }
 .deck-start-label { min-width: 0; }
-.deck-select { min-width: 0; max-width: 100%; height: var(--opf-ui-control-h); padding: 0 8px; border: 1px solid var(--opf-ui-border); border-radius: var(--opf-ui-radius); background: var(--opf-ui-surface); color: var(--opf-ui-fg); font: inherit; }
+.deck-select { flex: 0 1 280px; min-width: 0; max-width: 280px; height: var(--opf-ui-control-h); padding: 0 8px; border: 1px solid var(--opf-ui-border); border-radius: var(--opf-ui-radius); background: var(--opf-ui-surface); color: var(--opf-ui-fg); font: inherit; }
 .deck-small { height: 28px; padding: 0 10px; }
 
 /* ---- the panes ------------------------------------------------------------------------------------------------------------------ */
@@ -199,12 +199,18 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root[data-size~="narrow"] .deck-tabs { align-self: auto; height: 36px; }
 :root[data-size~="narrow"] #tab-both { display: none; }
 :root[data-size~="narrow"] .deck-foot .deck-mono { display: none; }
-/* The narrowest side panel (about 320px): the bar keeps every control in two rows, and the footer drops what does not fit. */
+/* The narrowest side panel (about 320px, a phone): every control is at least 44 by 44 CSS pixels; the bar keeps the history and the
+   views on its first row, the tools on its second and Send on a row of its own; the footer wraps instead of cutting a message short. */
 :root[data-size~="tiny"] .deck-bar { gap: 4px; padding: 6px; }
 :root[data-size~="tiny"] .deck-spacer { display: none; }
-:root[data-size~="tiny"] .deck-tabs [role="tab"] { padding: 0 8px; }
-:root[data-size~="tiny"] .deck-foot { gap: 6px; padding: 0 6px 0 2px; }
-:root[data-size~="tiny"] .deck-sync { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+:root[data-size~="tiny"] :is(.deck-button, .deck-select, .deck-tabs [role="tab"], #deck-design .opf-design-menu-trigger, .deck-export .opf-export .opf-export-trigger, .deck-nav .opf-nav .opf-nav-button, .deck-verdict .opf-review-pill) { min-width: 44px; min-height: 44px; }
+:root[data-size~="tiny"] .deck-tabs { height: 44px; }
+:root[data-size~="tiny"] .deck-tabs [role="tab"] { padding: 0 10px; }
+:root[data-size~="tiny"] .deck-send { order: 10; flex: 1 0 100%; }
+:root[data-size~="tiny"] .deck-foot { flex-wrap: wrap; height: auto; gap: 0 6px; padding: 0 6px 0 2px; white-space: normal; }
+:root[data-size~="tiny"] :is(.deck-status, .deck-sync) { flex: 1 0 100%; overflow: visible; white-space: normal; text-overflow: clip; padding: 2px 4px 6px; }
+:root[data-size~="tiny"] :is(.deck-status, .deck-sync):empty { display: none; }
+:root[data-size~="tiny"] #deck-status * { white-space: normal; overflow: visible; text-overflow: clip; }
 :root[data-size~="tiny"] .deck-nav .opf-nav-counter { min-width: 40px; }
 :root[data-size~="tiny"] .deck-start { padding: 6px; }
 
