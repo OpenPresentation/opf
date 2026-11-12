@@ -1,0 +1,207 @@
+{
+  "head": "37873455c5406852dc647fe61f213d8b74dd1ad3",
+  "complete": true,
+  "browser": "158.0.8127.18",
+  "noInputs": true,
+  "assetsUnchanged": 223,
+  "pageAndConsoleErrors": [],
+  "failedRequests": [],
+  "externalRequests": [],
+  "fontStatus": "loaded",
+  "animations": [],
+  "beforeAfter": {
+    ".canvas-toolbar": {
+      "before": {
+        "left": 176,
+        "right": 778,
+        "top": 56,
+        "bottom": 104,
+        "width": 602,
+        "height": 48
+      },
+      "after": {
+        "left": 176,
+        "right": 778,
+        "top": 56,
+        "bottom": 167,
+        "width": 602,
+        "height": 111
+      },
+      "afterScrollWidth": 602,
+      "afterClientWidth": 602
+    },
+    ".view-switch": {
+      "before": {
+        "left": 214,
+        "right": 216,
+        "top": 56.5,
+        "bottom": 102.5,
+        "width": 2,
+        "height": 46
+      },
+      "after": {
+        "left": 490.65625,
+        "right": 744,
+        "top": 62,
+        "bottom": 108,
+        "width": 253.34375,
+        "height": 46
+      },
+      "afterScrollWidth": 251,
+      "afterClientWidth": 251
+    },
+    ".history-actions": {
+      "before": {
+        "left": 244,
+        "right": 800.953125,
+        "top": 57.5,
+        "bottom": 101.5,
+        "width": 556.953125,
+        "height": 44
+      },
+      "after": {
+        "left": 198,
+        "right": 756,
+        "top": 116,
+        "bottom": 160,
+        "width": 558,
+        "height": 44
+      },
+      "afterScrollWidth": 558,
+      "afterClientWidth": 558
+    },
+    "#redo": {
+      "before": {
+        "left": 756.953125,
+        "right": 800.953125,
+        "top": 57.5,
+        "bottom": 101.5,
+        "width": 44,
+        "height": 44
+      },
+      "after": {
+        "left": 712,
+        "right": 756,
+        "top": 116,
+        "bottom": 160,
+        "width": 44,
+        "height": 44
+      },
+      "afterScrollWidth": 42,
+      "afterClientWidth": 42
+    },
+    "#tab-content": {
+      "before": {
+        "left": 796,
+        "right": 849.59375,
+        "top": 56,
+        "bottom": 103,
+        "width": 53.59375,
+        "height": 47
+      },
+      "after": {
+        "left": 796,
+        "right": 849.59375,
+        "top": 56,
+        "bottom": 103,
+        "width": 53.59375,
+        "height": 47
+      },
+      "afterScrollWidth": 54,
+      "afterClientWidth": 54
+    },
+    "#view-slide": {
+      "before": {
+        "left": 215,
+        "right": 259,
+        "top": 57.5,
+        "bottom": 101.5,
+        "width": 44,
+        "height": 44
+      },
+      "after": {
+        "left": 491.65625,
+        "right": 545.03125,
+        "top": 63,
+        "bottom": 107,
+        "width": 53.375,
+        "height": 44
+      },
+      "afterScrollWidth": 53,
+      "afterClientWidth": 53
+    },
+    "#view-sorter": {
+      "before": {
+        "left": 259,
+        "right": 303,
+        "top": 57.5,
+        "bottom": 101.5,
+        "width": 44,
+        "height": 44
+      },
+      "after": {
+        "left": 545.03125,
+        "right": 606.203125,
+        "top": 63,
+        "bottom": 107,
+        "width": 61.171875,
+        "height": 44
+      },
+      "afterScrollWidth": 60,
+      "afterClientWidth": 60
+    },
+    "#view-outline": {
+      "before": {
+        "left": 303,
+        "right": 347,
+        "top": 57.5,
+        "bottom": 101.5,
+        "width": 44,
+        "height": 44
+      },
+      "after": {
+        "left": 606.203125,
+        "right": 672.734375,
+        "top": 63,
+        "bottom": 107,
+        "width": 66.53125,
+        "height": 44
+      },
+      "afterScrollWidth": 66,
+      "afterClientWidth": 66
+    },
+    "#view-layouts": {
+      "before": {
+        "left": 347,
+        "right": 391,
+        "top": 57.5,
+        "bottom": 101.5,
+        "width": 44,
+        "height": 44
+      },
+      "after": {
+        "left": 672.734375,
+        "right": 743,
+        "top": 63,
+        "bottom": 107,
+        "width": 70.265625,
+        "height": 44
+      },
+      "afterScrollWidth": 69,
+      "afterClientWidth": 69
+    }
+  },
+  "audit": {
+    "width": 1024,
+    "scrollWidth": 1024,
+    "bodyScrollWidth": 1024,
+    "controls": 51,
+    "small": [],
+    "fonts": [],
+    "outside": [],
+    "clipped": [
+      "button.opf-thumbs-item \"Keep content structured \" is scrolled out of nav.opf-thumbs \"Slide thumbnails\""
+    ],
+    "overlaps": []
+  }
+}

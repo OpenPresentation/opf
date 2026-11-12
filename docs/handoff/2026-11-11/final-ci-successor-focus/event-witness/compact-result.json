@@ -1,0 +1,1018 @@
+{
+  "head": "933cdd1aae874b9553a5321b86049a6779dcea07",
+  "node": "v24.21.0",
+  "webkit": "27.2",
+  "complete": true,
+  "assetsUnchanged": 223,
+  "errors": [],
+  "outside": [],
+  "mouse": {
+    "requested": {
+      "x": 203.5859375,
+      "y": 421.53125
+    },
+    "boundingBox": {
+      "x": 169.8125,
+      "y": 399.53125,
+      "width": 67.546875,
+      "height": 44
+    },
+    "condition": {
+      "timeout": "page.waitForFunction: Timeout 1000ms exceeded."
+    },
+    "events": [
+      {
+        "phase": "bubble",
+        "type": "pointerdown",
+        "time": 335,
+        "target": {
+          "tag": "HTML",
+          "id": "",
+          "class": "",
+          "text": ".\u037c1.cm-focused {outline: 1px dotted #212121;}\n.\u037c1 {position:"
+        },
+        "path": [
+          {
+            "tag": "HTML",
+            "id": "",
+            "class": "",
+            "text": ".\u037c1.cm-focused {outline: 1px dotted #212121;}\n.\u037c1 {position:"
+          },
+          {
+            "class": ""
+          },
+          {
+            "class": ""
+          }
+        ],
+        "client": {
+          "x": -1027.7787308692932,
+          "y": 1578.8894028663635
+        },
+        "page": {
+          "x": -1027.7787308692932,
+          "y": 1578.8894028663635
+        },
+        "screen": {
+          "x": -11027.778730869293,
+          "y": -10858.889402866364
+        },
+        "isTrusted": true,
+        "defaultPrevented": false,
+        "expanded": "false",
+        "hit": null,
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 320,
+          "height": 740
+        },
+        "pointerType": "mouse",
+        "afterMicrotask": {
+          "defaultPrevented": false,
+          "expanded": "false"
+        }
+      },
+      {
+        "phase": "bubble",
+        "type": "mousedown",
+        "time": 335,
+        "target": {
+          "tag": "HTML",
+          "id": "",
+          "class": "",
+          "text": ".\u037c1.cm-focused {outline: 1px dotted #212121;}\n.\u037c1 {position:"
+        },
+        "path": [
+          {
+            "tag": "HTML",
+            "id": "",
+            "class": "",
+            "text": ".\u037c1.cm-focused {outline: 1px dotted #212121;}\n.\u037c1 {position:"
+          },
+          {
+            "class": ""
+          },
+          {
+            "class": ""
+          }
+        ],
+        "client": {
+          "x": -1028,
+          "y": 1578
+        },
+        "page": {
+          "x": -1028,
+          "y": 1578
+        },
+        "screen": {
+          "x": -11028,
+          "y": -10859
+        },
+        "isTrusted": true,
+        "defaultPrevented": false,
+        "expanded": "false",
+        "hit": null,
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 320,
+          "height": 740
+        },
+        "afterMicrotask": {
+          "defaultPrevented": false,
+          "expanded": "false"
+        }
+      },
+      {
+        "phase": "bubble",
+        "type": "pointerup",
+        "time": 335,
+        "target": {
+          "tag": "HTML",
+          "id": "",
+          "class": "",
+          "text": ".\u037c1.cm-focused {outline: 1px dotted #212121;}\n.\u037c1 {position:"
+        },
+        "path": [
+          {
+            "tag": "HTML",
+            "id": "",
+            "class": "",
+            "text": ".\u037c1.cm-focused {outline: 1px dotted #212121;}\n.\u037c1 {position:"
+          },
+          {
+            "class": ""
+          },
+          {
+            "class": ""
+          }
+        ],
+        "client": {
+          "x": -1027.7787308692932,
+          "y": 1578.8894028663635
+        },
+        "page": {
+          "x": -1027.7787308692932,
+          "y": 1578.8894028663635
+        },
+        "screen": {
+          "x": -11027.778730869293,
+          "y": -10858.889402866364
+        },
+        "isTrusted": true,
+        "defaultPrevented": false,
+        "expanded": "false",
+        "hit": null,
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 320,
+          "height": 740
+        },
+        "pointerType": "mouse",
+        "afterMicrotask": {
+          "defaultPrevented": false,
+          "expanded": "false"
+        }
+      },
+      {
+        "phase": "bubble",
+        "type": "mouseup",
+        "time": 335,
+        "target": {
+          "tag": "HTML",
+          "id": "",
+          "class": "",
+          "text": ".\u037c1.cm-focused {outline: 1px dotted #212121;}\n.\u037c1 {position:"
+        },
+        "path": [
+          {
+            "tag": "HTML",
+            "id": "",
+            "class": "",
+            "text": ".\u037c1.cm-focused {outline: 1px dotted #212121;}\n.\u037c1 {position:"
+          },
+          {
+            "class": ""
+          },
+          {
+            "class": ""
+          }
+        ],
+        "client": {
+          "x": -1028,
+          "y": 1578
+        },
+        "page": {
+          "x": -1028,
+          "y": 1578
+        },
+        "screen": {
+          "x": -11028,
+          "y": -10859
+        },
+        "isTrusted": true,
+        "defaultPrevented": false,
+        "expanded": "false",
+        "hit": null,
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 320,
+          "height": 740
+        },
+        "afterMicrotask": {
+          "defaultPrevented": false,
+          "expanded": "false"
+        }
+      },
+      {
+        "phase": "bubble",
+        "type": "click",
+        "time": 335,
+        "target": {
+          "tag": "HTML",
+          "id": "",
+          "class": "",
+          "text": ".\u037c1.cm-focused {outline: 1px dotted #212121;}\n.\u037c1 {position:"
+        },
+        "path": [
+          {
+            "tag": "HTML",
+            "id": "",
+            "class": "",
+            "text": ".\u037c1.cm-focused {outline: 1px dotted #212121;}\n.\u037c1 {position:"
+          },
+          {
+            "class": ""
+          },
+          {
+            "class": ""
+          }
+        ],
+        "client": {
+          "x": -1028,
+          "y": 1578
+        },
+        "page": {
+          "x": -1028,
+          "y": 1578
+        },
+        "screen": {
+          "x": -11028,
+          "y": -10859
+        },
+        "isTrusted": true,
+        "defaultPrevented": false,
+        "expanded": "false",
+        "hit": null,
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 320,
+          "height": 740
+        },
+        "pointerType": "mouse",
+        "afterMicrotask": {
+          "defaultPrevented": false,
+          "expanded": "false"
+        }
+      }
+    ]
+  },
+  "touch": {
+    "requested": {
+      "x": 203.5859375,
+      "y": 421.53125
+    },
+    "condition": true,
+    "events": [
+      {
+        "phase": "bubble",
+        "type": "pointerdown",
+        "time": 1420,
+        "target": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "path": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "opf-source-finding-details",
+            "text": "Details"
+          },
+          {
+            "tag": "SPAN",
+            "id": "",
+            "class": "opf-source-finding-fixes",
+            "text": "Convert to stringDetails"
+          },
+          {
+            "tag": "LI",
+            "id": "",
+            "class": "opf-source-finding-item",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "UL",
+            "id": "opf-source-1-findings",
+            "class": "opf-source-findings-list",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "SECTION",
+            "id": "",
+            "class": "opf-source-findings",
+            "text": "2 schema errorsError: /slides/0/title`title` should be text "
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "opf-source opf-ui",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "pane",
+            "class": "",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "harness",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          }
+        ],
+        "client": {
+          "x": 203,
+          "y": 421
+        },
+        "page": {
+          "x": 203,
+          "y": 421
+        },
+        "screen": {
+          "x": 203,
+          "y": 421
+        },
+        "isTrusted": true,
+        "defaultPrevented": false,
+        "expanded": "false",
+        "hit": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 320,
+          "height": 740
+        },
+        "pointerType": "touch",
+        "afterMicrotask": {
+          "defaultPrevented": false,
+          "expanded": "false"
+        }
+      },
+      {
+        "phase": "bubble",
+        "type": "touchstart",
+        "time": 1421,
+        "target": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "path": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "opf-source-finding-details",
+            "text": "Details"
+          },
+          {
+            "tag": "SPAN",
+            "id": "",
+            "class": "opf-source-finding-fixes",
+            "text": "Convert to stringDetails"
+          },
+          {
+            "tag": "LI",
+            "id": "",
+            "class": "opf-source-finding-item",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "UL",
+            "id": "opf-source-1-findings",
+            "class": "opf-source-findings-list",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "SECTION",
+            "id": "",
+            "class": "opf-source-findings",
+            "text": "2 schema errorsError: /slides/0/title`title` should be text "
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "opf-source opf-ui",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "pane",
+            "class": "",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "harness",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          }
+        ],
+        "client": {
+          "x": 203,
+          "y": 421
+        },
+        "page": {
+          "x": 203,
+          "y": 421
+        },
+        "screen": {
+          "x": 203,
+          "y": 421
+        },
+        "isTrusted": true,
+        "defaultPrevented": false,
+        "expanded": "false",
+        "hit": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 320,
+          "height": 740
+        },
+        "afterMicrotask": {
+          "defaultPrevented": false,
+          "expanded": "false"
+        }
+      },
+      {
+        "phase": "bubble",
+        "type": "pointerup",
+        "time": 1421,
+        "target": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "path": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "opf-source-finding-details",
+            "text": "Details"
+          },
+          {
+            "tag": "SPAN",
+            "id": "",
+            "class": "opf-source-finding-fixes",
+            "text": "Convert to stringDetails"
+          },
+          {
+            "tag": "LI",
+            "id": "",
+            "class": "opf-source-finding-item",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "UL",
+            "id": "opf-source-1-findings",
+            "class": "opf-source-findings-list",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "SECTION",
+            "id": "",
+            "class": "opf-source-findings",
+            "text": "2 schema errorsError: /slides/0/title`title` should be text "
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "opf-source opf-ui",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "pane",
+            "class": "",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "harness",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          }
+        ],
+        "client": {
+          "x": 203,
+          "y": 421
+        },
+        "page": {
+          "x": 203,
+          "y": 421
+        },
+        "screen": {
+          "x": 203,
+          "y": 421
+        },
+        "isTrusted": true,
+        "defaultPrevented": false,
+        "expanded": "false",
+        "hit": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 320,
+          "height": 740
+        },
+        "pointerType": "touch",
+        "afterMicrotask": {
+          "defaultPrevented": false,
+          "expanded": "false"
+        }
+      },
+      {
+        "phase": "bubble",
+        "type": "touchend",
+        "time": 1421,
+        "target": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "path": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "opf-source-finding-details",
+            "text": "Details"
+          },
+          {
+            "tag": "SPAN",
+            "id": "",
+            "class": "opf-source-finding-fixes",
+            "text": "Convert to stringDetails"
+          },
+          {
+            "tag": "LI",
+            "id": "",
+            "class": "opf-source-finding-item",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "UL",
+            "id": "opf-source-1-findings",
+            "class": "opf-source-findings-list",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "SECTION",
+            "id": "",
+            "class": "opf-source-findings",
+            "text": "2 schema errorsError: /slides/0/title`title` should be text "
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "opf-source opf-ui",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "pane",
+            "class": "",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "harness",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          }
+        ],
+        "client": {
+          "x": 203,
+          "y": 421
+        },
+        "page": {
+          "x": 203,
+          "y": 421
+        },
+        "screen": {
+          "x": 203,
+          "y": 421
+        },
+        "isTrusted": true,
+        "defaultPrevented": false,
+        "expanded": "false",
+        "hit": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 320,
+          "height": 740
+        },
+        "afterMicrotask": {
+          "defaultPrevented": false,
+          "expanded": "false"
+        }
+      },
+      {
+        "phase": "bubble",
+        "type": "mousedown",
+        "time": 1422,
+        "target": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "path": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "opf-source-finding-details",
+            "text": "Details"
+          },
+          {
+            "tag": "SPAN",
+            "id": "",
+            "class": "opf-source-finding-fixes",
+            "text": "Convert to stringDetails"
+          },
+          {
+            "tag": "LI",
+            "id": "",
+            "class": "opf-source-finding-item",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "UL",
+            "id": "opf-source-1-findings",
+            "class": "opf-source-findings-list",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "SECTION",
+            "id": "",
+            "class": "opf-source-findings",
+            "text": "2 schema errorsError: /slides/0/title`title` should be text "
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "opf-source opf-ui",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "pane",
+            "class": "",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "harness",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          }
+        ],
+        "client": {
+          "x": 203,
+          "y": 421
+        },
+        "page": {
+          "x": 203,
+          "y": 421
+        },
+        "screen": {
+          "x": 203,
+          "y": 421
+        },
+        "isTrusted": true,
+        "defaultPrevented": false,
+        "expanded": "false",
+        "hit": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 320,
+          "height": 740
+        },
+        "afterMicrotask": {
+          "defaultPrevented": false,
+          "expanded": "false"
+        }
+      },
+      {
+        "phase": "bubble",
+        "type": "mouseup",
+        "time": 1422,
+        "target": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "path": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "opf-source-finding-details",
+            "text": "Details"
+          },
+          {
+            "tag": "SPAN",
+            "id": "",
+            "class": "opf-source-finding-fixes",
+            "text": "Convert to stringDetails"
+          },
+          {
+            "tag": "LI",
+            "id": "",
+            "class": "opf-source-finding-item",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "UL",
+            "id": "opf-source-1-findings",
+            "class": "opf-source-findings-list",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "SECTION",
+            "id": "",
+            "class": "opf-source-findings",
+            "text": "2 schema errorsError: /slides/0/title`title` should be text "
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "opf-source opf-ui",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "pane",
+            "class": "",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "harness",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          }
+        ],
+        "client": {
+          "x": 203,
+          "y": 421
+        },
+        "page": {
+          "x": 203,
+          "y": 421
+        },
+        "screen": {
+          "x": 203,
+          "y": 421
+        },
+        "isTrusted": true,
+        "defaultPrevented": false,
+        "expanded": "false",
+        "hit": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 320,
+          "height": 740
+        },
+        "afterMicrotask": {
+          "defaultPrevented": false,
+          "expanded": "false"
+        }
+      },
+      {
+        "phase": "bubble",
+        "type": "click",
+        "time": 1422,
+        "target": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "path": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "opf-source-finding-details",
+            "text": "Details"
+          },
+          {
+            "tag": "SPAN",
+            "id": "",
+            "class": "opf-source-finding-fixes",
+            "text": "Convert to stringDetails"
+          },
+          {
+            "tag": "LI",
+            "id": "",
+            "class": "opf-source-finding-item",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "UL",
+            "id": "opf-source-1-findings",
+            "class": "opf-source-findings-list",
+            "text": "Error: /slides/0/title`title` should be text or a list, but "
+          },
+          {
+            "tag": "SECTION",
+            "id": "",
+            "class": "opf-source-findings",
+            "text": "2 schema errorsError: /slides/0/title`title` should be text "
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "opf-source opf-ui",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "pane",
+            "class": "",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "harness",
+            "text": "deck.opf.jsonSource formatJSONThe canonical OPF document..op"
+          }
+        ],
+        "client": {
+          "x": 203,
+          "y": 421
+        },
+        "page": {
+          "x": 203,
+          "y": 421
+        },
+        "screen": {
+          "x": 203,
+          "y": 421
+        },
+        "isTrusted": true,
+        "defaultPrevented": false,
+        "expanded": "true",
+        "hit": {
+          "tag": "BUTTON",
+          "id": "",
+          "class": "opf-source-finding-details",
+          "text": "Details"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 320,
+          "height": 740
+        },
+        "pointerType": "mouse",
+        "afterMicrotask": {
+          "defaultPrevented": false,
+          "expanded": "true"
+        }
+      }
+    ]
+  },
+  "protocolInputs": [
+    {
+      "id": 165,
+      "method": "Input.dispatchMouseEvent",
+      "params": {
+        "type": "move",
+        "button": "none",
+        "buttons": 0,
+        "x": 203.5859375,
+        "y": 421.53125,
+        "modifiers": 0
+      },
+      "pageProxyId": "7"
+    },
+    {
+      "id": 166,
+      "method": "Input.dispatchMouseEvent",
+      "params": {
+        "type": "down",
+        "button": "left",
+        "buttons": 1,
+        "x": 203.5859375,
+        "y": 421.53125,
+        "modifiers": 0,
+        "clickCount": 1
+      },
+      "pageProxyId": "7"
+    },
+    {
+      "id": 167,
+      "method": "Input.dispatchMouseEvent",
+      "params": {
+        "type": "up",
+        "button": "left",
+        "buttons": 0,
+        "x": 203.5859375,
+        "y": 421.53125,
+        "modifiers": 0,
+        "clickCount": 1
+      },
+      "pageProxyId": "7"
+    },
+    {
+      "id": 214,
+      "method": "Input.dispatchTapEvent",
+      "params": {
+        "x": 203.5859375,
+        "y": 421.53125,
+        "modifiers": 0
+      },
+      "pageProxyId": "7"
+    }
+  ],
+  "scope": "Actual input-delivery diagnostic; no product fix or whole-test qualification; Windows original preview timeout remains unclassified."
+}

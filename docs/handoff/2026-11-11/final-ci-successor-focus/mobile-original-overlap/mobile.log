@@ -1,0 +1,31 @@
+Mobile/touch failure evidence: {"engine":"chromium","version":"158.0.8127.18","width":320,"height":740,"state":"the More menu","phase":"preview SVG visible","file":"/private/tmp/opf-034/packages/editor/artifacts/mobile-touch-failures/1794447362824-24422-1-chromium-320-the-More-menu/failure.json","pageErrors":0,"failedRequests":0,"pendingRequests":0}
+Mobile/touch failure evidence: {"engine":"webkit","version":"27.2","width":320,"height":740,"state":"the start","phase":"preview SVG visible","file":"/private/tmp/opf-034/packages/editor/artifacts/mobile-touch-failures/1794447362836-24422-2-webkit-320-the-start/failure.json","pageErrors":0,"failedRequests":0,"pendingRequests":1}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: chromium 1024px playground, start: 1 problem(s)
++ actual - expected
+
++ [
++   'overlaps: button#redo.icon-button "Redo" x button#tab-content "Content" (5x44)'
++ ]
+- []
+
+    at assertClean (file:///private/tmp/opf-034/packages/editor/test/mobile-touch-browser.mjs:105:10)
+    at landscapeTablet (file:///private/tmp/opf-034/packages/editor/test/mobile-touch-browser.mjs:398:3)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:541:9)
+    at async Promise.all (index 5)
+    at async file:///private/tmp/opf-034/packages/editor/test/mobile-touch-browser.mjs:416:5 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'overlaps: button#redo.icon-button "Redo" x button#tab-content "Content" (5x44)'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

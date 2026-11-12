@@ -1,0 +1,35 @@
+{
+  "sourceBefore": "933cdd1aae874b9553a5321b86049a6779dcea07",
+  "sourceAfter": "933cdd1aae874b9553a5321b86049a6779dcea07",
+  "statusAfter": "",
+  "steps": [
+    {
+      "name": "build",
+      "args": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+        "--filter",
+        "@openpresentation/opf-editor",
+        "run",
+        "build:playground"
+      ],
+      "cwd": "/tmp/opf-034",
+      "code": 0,
+      "seconds": 1.3265905420000002,
+      "logBytes": 111875,
+      "logSha256": "16b5c47346847732121aafcbabb7b064ebb6aef1b1d24c535f8231f246f20531"
+    },
+    {
+      "name": "mobile",
+      "args": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "test/mobile-touch-browser.mjs"
+      ],
+      "cwd": "/tmp/opf-034/packages/editor",
+      "code": 1,
+      "seconds": 34.594519749999996,
+      "logBytes": 3229,
+      "logSha256": "cae9c2f47ae9f9ba36f5fbdec5b554a617fbaa067adb5256b73b98258adf34d2"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "args": [
+    "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+    "/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/bin/pnpm.cjs",
+    "--filter",
+    "@openpresentation/opf-editor",
+    "exec",
+    "playwright",
+    "install",
+    "webkit"
+  ],
+  "code": 0,
+  "seconds": 4.87573425,
+  "logBytes": 2241,
+  "logSha256": "581dd85a59c79eb86e4aec3ddcd6bddfe52280728b186e86eaf18dece67a9f88"
+}

@@ -1,0 +1,77 @@
+{
+  "verdict": "No source-proven event-policy cause or safe production repair established by retained evidence",
+  "head": "933cdd1aae874b9553a5321b86049a6779dcea07",
+  "sourceFacts": [
+    "source-pane.js1121-1132: ordinary enabled native button click immediately toggles body.hidden and aria-expanded; no coarse/WebKit/readOnly condition or event suppression.",
+    "source-pane.js1166-1179: findings list handles keydown only; format-menu document pointerdown756/764 only closes menu without cancellation.",
+    "source-pane harness imports source-pane/editor and does not include mobile-controls.js; CodeMirror mousedown is limited to its own view/modifier navigation.",
+    "source-pane.css192-221: max-height40% flex findings region/list overflow:auto; touch.css32-49 raises controls to44px and gap6, no touch-action/pointer-events override.",
+    "mobile-touch-browser.mjs174-179 uses normal locator click; no fallback/force."
+  ],
+  "retainedFacts": {
+    "noPageErrorsOrFailedRequests": true,
+    "beforeDomAndProtocolBox": {
+      "x": 169.8125,
+      "y": 399.53125,
+      "width": 67.546875,
+      "height": 44
+    },
+    "afterDomAndProtocolBox": {
+      "x": 169.8125,
+      "y": 94.53125,
+      "width": 67.546875,
+      "height": 44
+    },
+    "beforeDocumentScrollY": 0,
+    "afterDocumentScrollY": 217,
+    "beforeListScrollTop": 0,
+    "afterListScrollTop": 88,
+    "stableDirectPoint": {
+      "x": 203.5859375,
+      "y": 116.53125
+    },
+    "directExpanded": "false",
+    "domCenterHit": "Details button",
+    "locatorNativeInterception": "html",
+    "domEventTracePresent": false
+  },
+  "proposal": "No CSS/handler change or force-click waiver. If further evidence is authorized, capture a bounded passive document capture+bubble event log for pointer/mouse/touch/click (target/path, client/page coords, trusted/defaultPrevented, current target connection, hidden/expanded and scroll offsets) around one unchanged normal click. This distinguishes no dispatch, native wrong target, cancellation, or node replacement; do not assert the cause before observing it. Existing protocol parser may resolve the same boundary without another input.",
+  "limits": "Original Windows preview timeout remains separate/unknown. New toolbar wrap is not full-mobile-qualified by this audit. No tests/browser/input/network/import/build/source edits performed.",
+  "sourcePins": [
+    {
+      "path": "packages/editor/src/source-pane.js",
+      "bytes": 78372,
+      "sha256": "7ee8e78cc093d2cc92714c751d1879c3ccfe9d2087a1c7cc7493f2b42002c803"
+    },
+    {
+      "path": "packages/editor/src/json-editor.js",
+      "bytes": 53849,
+      "sha256": "f9e1f6daecb833841c2bd37ea56c2c3282fa36980b9c8c9ed0c32165fddda0c1"
+    },
+    {
+      "path": "packages/editor/src/styles/source-pane.css",
+      "bytes": 19102,
+      "sha256": "f95a759a1662bf311b96f1cd6e5e7ea76b2cddd0f7e647eb5b6da56fbfe7df8f"
+    },
+    {
+      "path": "packages/editor/src/styles/touch.css",
+      "bytes": 8920,
+      "sha256": "19bb58b8bb3a0b8046f2e25611bb7e93af48e2af39938b398b81ed22895de5ea"
+    },
+    {
+      "path": "packages/editor/examples/source-pane.html",
+      "bytes": 2142,
+      "sha256": "4c1a85c8027cbcfaba4323c88f71b0371e09ae741b207c535c02706c363bf041"
+    },
+    {
+      "path": "packages/editor/examples/source-pane.js",
+      "bytes": 4856,
+      "sha256": "8a04e20c01a2c2a4500745d7c02ef50ae30af91a6b9d43de752393efe9cf3fb9"
+    },
+    {
+      "path": "packages/editor/test/mobile-touch-browser.mjs",
+      "bytes": 37601,
+      "sha256": "7ec9b94d94b99f9583b80e18e8728eaaeb0783db480b0da3bd8b701ca4a2ea29"
+    }
+  ]
+}

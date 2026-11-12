@@ -1,0 +1,20 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+browserType.launch: Executable doesn't exist at /Users/michael/Library/Caches/ms-playwright/webkit-2388/pw_run.sh
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     npx playwright install                                 ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+    at Object.webkit (/private/tmp/opf-034/packages/editor/test/mobile-touch-browser.mjs:39:24)
+    at /private/tmp/opf-034/packages/editor/test/mobile-touch-browser.mjs:408:55 {
+  log: [],
+  name: 'Error'
+}
+
+Node.js v24.21.0

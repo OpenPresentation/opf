@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "verdict": "ACCEPT generated four-SVG-hash baseline update; no rendering regression found in reviewed scope",
+  "generatedCommit": "27a4b628d390427347be20c36d6db9b47a84c948",
+  "parentAndWorkflowSeed": "1f230e3bb28519604338f85da3f6e5471b0e904b",
+  "workflow": 43133817339,
+  "artifact": {
+    "bytes": 226939,
+    "sha256": "4d0d082d1122a7daa2c03b0ff085402fef8003c492df453ee645609ca26d4d6c",
+    "all9PayloadFilesExactZipBytes": true
+  },
+  "changedPaths": [
+    "packages/render/test/golden/layout-templates-rr96-color-variants.json"
+  ],
+  "baseline": {
+    "bytes": 151116,
+    "sha256": "c492456ec51f49ef77b8e49d019dd7232773db9107ee8e97b824f48b30df7e58",
+    "entries": 728,
+    "changedSvgEntries": 4,
+    "allPngHashesAndByteCountsUnchanged": true,
+    "sourceMetadataUnchanged": true,
+    "candidateExactGeneratedBlob": true
+  },
+  "sheet": {
+    "file": "/tmp/opf-golden-context43133817339/payload/templates/sheet-0.png",
+    "bytes": 107344,
+    "sha256": "f548396d8d0e632b56a64644f1775158bf6f9e7576ec6e28b92bf7bac72cae72",
+    "independentlyViewed": true,
+    "labelsAndFourSourcePanelsMatch": true
+  },
+  "examples": {
+    "sourceMatches": true,
+    "changedSlides": 0,
+    "changedDecks": 0
+  },
+  "actualFiveCaseBindings": [
+    {
+      "key": "chevrons 1 long",
+      "geometryWidthChanges": 72,
+      "maxAbsNumericDelta": 2.842170943040401e-14,
+      "paintSvgOutsideRichLineDataExact": true,
+      "pngAndRgbaExact": true,
+      "svgMatchesGenerated": true
+    },
+    {
+      "key": "paginated flow 5 long page 1",
+      "geometryWidthChanges": 0,
+      "maxAbsNumericDelta": 0,
+      "paintSvgOutsideRichLineDataExact": true,
+      "pngAndRgbaExact": true,
+      "svgMatchesGenerated": true
+    },
+    {
+      "key": "paginated flow 5 long page 2",
+      "geometryWidthChanges": 24,
+      "maxAbsNumericDelta": 5.684341886080802e-14,
+      "paintSvgOutsideRichLineDataExact": true,
+      "pngAndRgbaExact": true,
+      "svgMatchesGenerated": true
+    },
+    {
+      "key": "paginated flow 5 long page 3",
+      "geometryWidthChanges": 24,
+      "maxAbsNumericDelta": 5.684341886080802e-14,
+      "paintSvgOutsideRichLineDataExact": true,
+      "pngAndRgbaExact": true,
+      "svgMatchesGenerated": true
+    },
+    {
+      "key": "paginated flow 5 long page 4",
+      "geometryWidthChanges": 24,
+      "maxAbsNumericDelta": 5.684341886080802e-14,
+      "paintSvgOutsideRichLineDataExact": true,
+      "pngAndRgbaExact": true,
+      "svgMatchesGenerated": true
+    }
+  ],
+  "maxWidthDelta": 5.684341886080802e-14,
+  "paginationJsonByteExact": true,
+  "scope": "Floating-point traced metadata only; no tolerance/rounding or product change, no new native/whole-release acceptance",
+  "execution": "Read-only Git/JSON/ZIP/hash/image review; no tests/build/render/source or baseline writes"
+}

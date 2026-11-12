@@ -1,0 +1,22 @@
+Mobile and touch (chromium, webkit; core states): 21 groups.
+  chromium 1024px: the playground at a touch landscape width (the view switch, Undo and Redo and the rest of the start) has 44px controls, 16px fields, no sideways scroll, no cut-off or overlapping control
+  chromium 320px: "Galleries" and "Layout…" are whole (full names in aria-label), the document name has its own 16px row, the zoom select is 16px, and the zoom select stays off the notes field, which is 16px
+  chromium 320px: the layout editor's start, nested region and findings states have 44px controls (zoom, validity, segments, remove, checkbox), 16px fields, no sideways scroll, no cut-off or overlapping control
+  chromium 320px: the playground states (start, Edit, Design, and on Chromium More, Import, Layouts, Find) have 44px controls, 16px fields, no sideways scroll, no cut-off or overlapping control
+  chromium 320px: the source pane's bar, menu, problems, fix and detail buttons, completion list and search panel (all states with OPF_TOUCH_FULL=1) are all 44px, fields 16px, nothing overlaps
+  chromium 320px: wrapped lines hang 2 columns under their first glyph in JSON, YAML and Markdown; no sideways scroll
+  chromium 390px: "Galleries" and "Layout…" are whole (full names in aria-label), the document name has its own 16px row, the zoom select is 16px, and the zoom select stays off the notes field, which is 16px
+  chromium 390px: the layout editor's start, nested region and findings states have 44px controls (zoom, validity, segments, remove, checkbox), 16px fields, no sideways scroll, no cut-off or overlapping control
+  chromium 390px: the playground states (start, Edit, Design, and on Chromium More, Import, Layouts, Find) have 44px controls, 16px fields, no sideways scroll, no cut-off or overlapping control
+  chromium 390px: the source pane's bar, menu, problems, fix and detail buttons, completion list and search panel (all states with OPF_TOUCH_FULL=1) are all 44px, fields 16px, nothing overlaps
+  chromium 390px: wrapped lines hang 2 columns under their first glyph in JSON, YAML and Markdown; no sideways scroll
+  chromium 820px: the layout editor's start, nested region and findings states have 44px controls (zoom, validity, segments, remove, checkbox), 16px fields, no sideways scroll, no cut-off or overlapping control
+  chromium 820px: the playground states (start, Edit, Design, and on Chromium More, Import, Layouts, Find) have 44px controls, 16px fields, no sideways scroll, no cut-off or overlapping control
+  chromium 820px: the source pane's bar, menu, problems, fix and detail buttons, completion list and search panel (all states with OPF_TOUCH_FULL=1) are all 44px, fields 16px, nothing overlaps
+  chromium 820px: the zoom select stays off the notes field, which is 16px
+  chromium, mouse: the layout editor keeps its compact sizes (zoom 28px, validity 26px, segments 30px)
+  webkit 320px: "Galleries" and "Layout…" are whole (full names in aria-label), the document name has its own 16px row, the zoom select is 16px, and the zoom select stays off the notes field, which is 16px
+  webkit 320px: the layout editor's start, nested region and findings states have 44px controls (zoom, validity, segments, remove, checkbox), 16px fields, no sideways scroll, no cut-off or overlapping control
+  webkit 320px: the playground states (start, Edit, Design, and on Chromium More, Import, Layouts, Find) have 44px controls, 16px fields, no sideways scroll, no cut-off or overlapping control
+  webkit 320px: the source pane's bar, menu, problems, fix and detail buttons, completion list and search panel (all states with OPF_TOUCH_FULL=1) are all 44px, fields 16px, nothing overlaps
+  webkit 320px: wrapped lines hang 2 columns under their first glyph in JSON, YAML and Markdown; no sideways scroll

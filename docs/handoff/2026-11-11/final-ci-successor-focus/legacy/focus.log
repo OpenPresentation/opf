@@ -1,0 +1,2 @@
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+Provenance interop passed: an export of this build imports with published opf-pptx 0.11.6 (common-domain metadata/furniture kept; unsupported current layouts/furniture reported; native words and edits preserved) and current typed fields fully with this build.

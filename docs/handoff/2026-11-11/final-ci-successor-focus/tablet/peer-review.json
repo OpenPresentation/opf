@@ -1,0 +1,102 @@
+{
+  "verdict": "ACCEPT scoped tablet toolbar visual/geometry repair and recorded normal-mobile result",
+  "source": "37873455c5406852dc647fe61f213d8b74dd1ad3",
+  "visual": "Independently viewed old and new retained PNGs: all four labelled views are now visible, title and toolbar history row remain readable, no toolbar/inspector overlap or new content clipping observed. Slide preview retains its content in the smaller available canvas.",
+  "geometry": {
+    "toolbarWidthUnchanged": 602,
+    "toolbarHeightOldNew": [
+      48,
+      111
+    ],
+    "viewGroupWidthOldNew": [
+      2,
+      253.34375
+    ],
+    "viewGroupClientAndScrollWidth": 251,
+    "historyBounds": [
+      198,
+      756,
+      116,
+      160
+    ],
+    "redoBounds": [
+      712,
+      756,
+      116,
+      160
+    ],
+    "contentLeft": 796,
+    "fourViewAndUndoRedoHeights": 44,
+    "oldOverlapCount": 1,
+    "newOverlapCount": 0,
+    "remainingClip": "One intentionally scrolled thumbnail, unchanged exception"
+  },
+  "recordedFocus": {
+    "code": 0,
+    "seconds": 34.815051374999996,
+    "groups": 21,
+    "engines": [
+      "chromium",
+      "webkit"
+    ],
+    "mode": "normal core states",
+    "assets": 223,
+    "beforeAfterAssetsExact": true,
+    "logHashVerified": true
+  },
+  "probe": {
+    "browser": "158.0.8127.18",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "hasTouch": true,
+    "isMobile": false,
+    "complete": true,
+    "zeroErrorsFailedAndExternalRequests": true,
+    "assetsUnchanged": 223
+  },
+  "limits": [
+    "No OPF_TOUCH_FULL-only state qualification",
+    "No Windows preview-timeout cause/fix claim",
+    "No physical-device or all-platform fidelity claim",
+    "Retained failed inputs/receipts remain failed; no new execution by peer"
+  ],
+  "files": [
+    {
+      "path": "/tmp/opf-tablet1024-probe01/settled.png",
+      "bytes": 297730,
+      "sha256": "30e0545c3bf3b09ae1bc27c006512aa45774a8c8efe2b7e532e6a2c39098dffc"
+    },
+    {
+      "path": "/tmp/opf-tablet1024-probe01/settled.json",
+      "bytes": 38986,
+      "sha256": "f66df585cbe66b92baf4be8dd8959011144283dbba00e7ce71e8fe1e7312a4f5"
+    },
+    {
+      "path": "/tmp/opf-tablet1024-probe02/settled.png",
+      "bytes": 310957,
+      "sha256": "9a2f629ae33ccd09c9d463f15c5bf75505e5baa2438c043fbd4a76f510f667e1"
+    },
+    {
+      "path": "/tmp/opf-tablet1024-probe02/settled.json",
+      "bytes": 39706,
+      "sha256": "eff01a9dde0a6dc3c13398e77b352495f88729c1453911da2390c281b6237b0e"
+    },
+    {
+      "path": "/tmp/opf-tablet1024-probe02/receipt.json",
+      "bytes": 86085,
+      "sha256": "76495ad301e42c8358852aa5ee0d825d214d90ef3656f952ebbc364ba9791e55"
+    },
+    {
+      "path": "/tmp/opf-mobile-real-touch-root-focus04/receipt.json",
+      "bytes": 621,
+      "sha256": "274c4acbdb42af3bdb8231edc57542d34c9c61a027488219ed7671a24f3503ba"
+    },
+    {
+      "path": "/tmp/opf-mobile-real-touch-root-focus04/mobile.log",
+      "bytes": 3811,
+      "sha256": "fc533dc9971aa1b200a6e9285cad792b5aef9e6323f71cee5687824934d7ac60"
+    }
+  ]
+}
