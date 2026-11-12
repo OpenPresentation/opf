@@ -210,7 +210,7 @@ async function loadRegistry(entries, options = {}, startup = {}) {
   // A document that does not resolve throws what `toSvg` throws for it.
   const neededLazy = (presentation, callOptions) => lazyFacesNeeded(presentation, renderOptionsFor(callOptions), { lazy, held: registry.describeFaces(callOptions?.preserveChosenFamilies||callOptions?.measurementRequests?.length?{selection:true}:undefined), loaded: lazyLoaded, policy, aliases: aliasTargets, fallbackFamily: options.fallbackFamily, analysis: fontAnalysis,
     mapFamily:callOptions?.mapFamily,preserveChosenFamilies:callOptions?.preserveChosenFamilies,measurementRequests:callOptions?.measurementRequests });
-  Object.defineProperty(registry,'fontNames',{value:lazyFontNames({lazy,describeFaces:registry.describeFaces,policy,aliases:aliasTargets,fallbackFamily:options.fallbackFamily})});
+  Object.defineProperty(registry,'fontNames',{value:lazyFontNames({lazy,describeFaces:registry.describeFaces,generation:()=>registry.facesGeneration,policy,aliases:aliasTargets,fallbackFamily:options.fallbackFamily})});
   const lazyBaseUrl = () => {
     if (typeof options.lazyFontsBaseUrl !== "string" || !options.lazyFontsBaseUrl)
       throw new OPFFontError("invalid-font-source", "Loading vendored fonts requires lazyFontsBaseUrl, where the host serves the package's fonts directory.");

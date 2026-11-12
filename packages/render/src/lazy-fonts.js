@@ -140,6 +140,7 @@ function recordingMeasurement(settle, into, coverage) {
 // freezes its catalog list), plain values and small plain objects by content.
 const objectTokens = new WeakMap();
 let nextObjectToken = 0;
+// A function option (the exporter's `mapFamily`) is keyed by identity: a host that passes a fresh closure on every call gets a cold cache each time, so the option docs ask for one stable function.
 function optionToken(value) {
   if (value === null || typeof value !== "object" && typeof value !== "function") return JSON.stringify(value ?? null);
   if (Array.isArray(value)) return `[${value.map(optionToken).join(",")}]`;
@@ -331,17 +332,23 @@ export function fontMeasurementRequests(requests = []) {
 
 // Nominal names only: an exporter can resolve an undrawn role without loading
 // it. Actual measurement still requires the registry's verified physical face.
-export function lazyFontNames({lazy, describeFaces, policy = 'none', aliases = new Map(), fallbackFamily}) {
-  let signature, pool, selected = new Map();
+// `generation` (optional) returns a number that changes whenever the registry's faces change (registry.facesGeneration): the pool is then
+// rebuilt only on a change, and a call costs a map lookup. Without it every call describes the faces and compares them.
+export function lazyFontNames({lazy, describeFaces, generation, policy = 'none', aliases = new Map(), fallbackFamily}) {
+  let signature, stamp, pool, selected = new Map();
   const unavailable=error=>['font-unavailable','font-style-unavailable','font-encoding-required'].includes(error?.code);
   const pick = style => {
     if(typeof style?.fontFamily!=='string'||!style.fontFamily.trim()||/[\u0000-\u001f"'\\<>;]/.test(style.fontFamily))
       throw new OPFFontError('invalid-font-family','Font family must be a nonempty plain name.');
     if(!Number.isFinite(style.fontWeight??400)||(style.fontWeight??400)<1||(style.fontWeight??400)>1000)
       throw new OPFFontError('invalid-font-weight','Font weight must be between 1 and 1000.');
-    const held = describeFaces({selection: true}), current = JSON.stringify(held);
-    if (current !== signature) {
+    const now = generation?.();
+    // With a generation the faces are described only when it changed; without one, on every call, to compare them.
+    const held = now !== undefined && now === stamp ? undefined : describeFaces({selection: true});
+    const current = held && now === undefined ? JSON.stringify(held) : undefined;
+    if (held && (now !== undefined || current !== signature)) {
       signature = current;
+      stamp = now;
       const keys = new Set(held.map(faceKeyOf));
       pool = [...held, ...lazy.filter(face => !keys.has(faceKeyOf(face)))].map(face => ({...face, familyGroup: face.familyGroup ?? face.family}));
       selected = new Map();
