@@ -20,6 +20,8 @@
 //    answer) is the one regression this budget sees only when it is most of the main-thread cost.
 // Where there is no measurable comparison (JSON, whose main-thread check is cheap, or OPF_PERF_COMPARE=0) the median must be within the limit (50 ms; 100 ms on
 // CI). No single edit may block for three limits. No retries.
+// Flight uses native busy-write bounds and EVERY heartbeat interval: at most min(positive excess, intersected busy-union time). This conservative
+// wall-time upper bound keeps true boundary overlaps; delayed MutationObserver spans remain raw evidence, never the flight verdict.
 //
 // OPF_PERF_LIMIT_MS sets the limit for a typical edit; OPF_PERF_COMPARE=0 skips the main-thread run (then the limit judges); OPF_PERF_ROUNDS
 // repeats the whole measurement (default 1; the samples of all rounds count); OPF_CPU_THROTTLE=<rate> slows Chromium down; OPF_BROWSER_ENGINE=webkit runs it on WebKit.
@@ -31,6 +33,11 @@ import assert from 'node:assert/strict';
 import { engineName, startKeyboardSuite } from './support/source-keyboard.mjs';
 import { assertBlockBudget, median } from './support/block-budget.mjs';
 import { bigDeck, bigText } from './support/source-perf.mjs';
+import { installWorkerFlightClock, workerFlightBlock } from './support/worker-flight.mjs';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // On a CI runner (CI is set) the limit is the plan's 2x for noise.
 const CI = Boolean(process.env.CI);
@@ -49,12 +56,29 @@ const cases = [
   { format: 'json', label: 'JSON', needle: '"title": "Slide 500 headline', text: () => `${JSON.stringify(bigDeck(SLIDES), null, 2)}\n` },
 ];
 
+// Fresh owned evidence is written outside measured edits, before verdict gates and again on failure.
+const parent = fileURLToPath(new URL('../artifacts/source-worker-perf/', import.meta.url));
+await mkdir(parent, { recursive: true });
+const output = path.join(parent, `${Date.now()}-${process.pid}`);
+await mkdir(output);
+const sources = await Promise.all(['./source-worker-perf-browser.mjs', './support/worker-flight.mjs', './support/block-budget.mjs'].map(async name => {
+  const bytes = await readFile(new URL(name, import.meta.url)); return { name, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') };
+}));
+const evidence = { schemaVersion: 1, scope: 'Conservative native-busy heartbeat attribution; wall time, not CPU time', node: process.version, platform: process.platform, sourceHead: process.env.GITHUB_SHA ?? null, sources,
+  parameters: { CI, LIMIT, ROUNDS, COMPARE, WORKER_OFF, BURN, SLOW_APPLY, SLIDES, TAIL, PATTERNS, engineName, cpuThrottle: process.env.OPF_CPU_THROTTLE ?? null, keyboardPlatform: process.env.OPF_KEYBOARD_PLATFORM ?? process.platform }, rows: [], originalFailure: null, preservationErrors: [] };
+const describeError = error => ({ name: String(error?.name ?? 'Error'), message: String(error?.message ?? error), stack: String(error?.stack ?? '') });
+const persist = () => writeFile(path.join(output, 'report.json'), JSON.stringify(evidence, null, 2) + '\n');
+await persist();
+console.log(`Source worker raw evidence: ${output}`);
 const suite = await startKeyboardSuite();
+evidence.browserVersion = suite.browserVersion;
 
 /** One round: open the harness, load the deck, type, and report the longest long task, the worst heartbeat gap and the pane's check counts. */
 async function measure(mode, { format, needle, text }) {
   const page = await suite.openPage(`?worker=${mode}`);
   suite.problems.length = 0;
+  const row = { mode, format, samples: [], result: null, error: null, clock: null }; evidence.rows.push(row);
+  let measureError = null;
   try {
     const value = text();
     await page.evaluate(([name, source]) => {
@@ -65,15 +89,17 @@ async function measure(mode, { format, needle, text }) {
     await page.evaluate(() => Promise.race([demo.pane.whenIdle(), new Promise((_, reject) => setTimeout(() => reject(new Error('the pane did not become idle in 60 s')), 60000))]));
     await page.waitForFunction(() => demo.pane.getProblems().length === 0 && document.querySelector('.opf-source-findings')?.hidden !== false);
     await page.waitForTimeout(500);
+    await page.evaluate(installWorkerFlightClock);
     await page.evaluate((marker) => {
       window.__long = []; window.__gaps = []; window.__checks = [];
-      try { new PerformanceObserver((list) => { for (const entry of list.getEntries()) window.__long.push(entry.duration); }).observe({ entryTypes: ['longtask'] }); } catch { /* No longtask entries on this engine. */ }
+      try { new PerformanceObserver((list) => { for (const entry of list.getEntries()) { window.__long.push(entry.duration); window.__workerFlight.record('longtasks', { start: entry.startTime, duration: entry.duration }); } }).observe({ entryTypes: ['longtask'] }); } catch { /* No longtask entries on this engine. */ }
       let last = performance.now();
-      window.__beat = setInterval(() => { const now = performance.now(); window.__gaps.push([now, now - last - 4]); last = now; }, 4);
+      window.__beat = setInterval(() => { const now = performance.now(); window.__gaps.push([now, now - last - 4, last]); window.__workerFlight.record('beats', [last, now, now - last - 4]); last = now; }, 4);
       // The pane marks `data-opf-checking` while a worker request is in flight: the span between the mark and its removal is when only the worker is working.
       let opened = null;
       new MutationObserver(() => {
         const now = performance.now(), on = Boolean(document.querySelector('[data-opf-checking]'));
+        window.__workerFlight.record('moEdges', { at: now, on, opened });
         if (on && opened === null) opened = now; else if (!on && opened !== null) { window.__checks.push([opened, now]); opened = null; }
       }).observe(document, { attributes: true, attributeFilter: ['data-opf-checking'], subtree: true });
       const { api } = demo.pane.editor, at = api.getValue().indexOf(marker);
@@ -95,11 +121,21 @@ async function measure(mode, { format, needle, text }) {
         return post.apply(this, args);
       };
     }, SLOW_APPLY);
-    const collect = () => page.evaluate(() => {
-      const long = window.__long.splice(0), beats = window.__gaps.splice(0), spans = window.__checks.splice(0);
-      const inflight = beats.filter(([end]) => spans.some(([from, to]) => end >= from && end <= to)).map(([, gap]) => gap);
-      return { longest: Math.max(0, ...long), count: long.length, gap: Math.max(0, ...beats.map(([, gap]) => gap)), flight: spans.length ? Math.max(0, ...inflight) : null };
-    });
+    const collect = async () => {
+      const raw = await page.evaluate(() => {
+        const long = window.__long.splice(0), beats = window.__gaps.splice(0), spans = window.__checks.splice(0);
+        const inflight = beats.filter(([end]) => spans.some(([from, to]) => end >= from && end <= to)).map(([, gap]) => gap);
+        // Keep the old observer-based result as evidence only. Its whole-edit fields remain the verdict's exact fields.
+        const observed = { longest: Math.max(0, ...long), count: long.length, gap: Math.max(0, ...beats.map(([, gap]) => gap)), flight: spans.length ? Math.max(0, ...inflight) : null };
+        const { spans: nativeSpans, newSpans: newNativeSpans } = window.__workerFlight.takeSpans(), intervals = beats.map(([end, gap, from]) => [from, end, gap]);
+        const record = { at: performance.now(), observed, intervals, nativeSpans, newNativeSpans, moSpans: spans, longDurations: long };
+        window.__workerFlight.record('samples', record);
+        return record;
+      });
+      const result = { ...raw.observed, flight: workerFlightBlock(raw.intervals, raw.nativeSpans, raw.newNativeSpans) };
+      row.samples.push({ ...raw, result });
+      return result;
+    };
     // One pattern is a series of bursts. A burst is typed, then the pane is left alone until it has checked and applied it (`whenIdle`) plus a moment for the paint
     // that follows, and only then is the next burst typed. That makes every burst exactly one sample of "typing, then a check", whatever the machine's speed; with
     // keys typed on a timer, a slow runner merged them into one check (one sample, paced run: `1 checks in the worker`).
@@ -120,8 +156,23 @@ async function measure(mode, { format, needle, text }) {
     assert.equal(result.slides, SLIDES);
     assert.equal(result.title, 'Slide 500 headlineabcdefghijklmnopqrstuvwx', `${format}: the typed text reached the document`);
     assert.deepEqual(suite.problems, [], `${format}: no page error`);
+    row.result = { quick, paced };
     return { quick, paced };
-  } finally { await page.close(); }
+  } catch (error) { measureError = error; row.error = describeError(error); throw error; }
+  finally {
+    let secondary = null;
+    try {
+      row.clock = await page.evaluate(() => {
+        const state = window.__workerFlight;
+        if (!state) return { notInstalled: true };
+        state.restore(); return state.snapshot();
+      });
+      if (row.clock.notInstalled || !row.clock.restored || row.clock.opened !== null || row.clock.faults.length || Object.keys(row.clock.overflow).length) throw new Error('Worker-flight evidence incomplete, invalid, unrestored or overflowed');
+    } catch (error) { secondary = error; evidence.preservationErrors.push(describeError(error)); }
+    try { await persist(); } catch (error) { secondary ??= error; evidence.preservationErrors.push(describeError(error)); }
+    try { await page.close(); } catch (error) { secondary ??= error; evidence.preservationErrors.push(describeError(error)); }
+    if (secondary) { if (measureError) console.error('Source worker evidence also failed:', describeError(secondary)); else throw secondary; }
+  }
 }
 
 try {
@@ -142,4 +193,10 @@ try {
     for (const pattern of ['quick', 'paced']) assertBlockBudget(`${spec.label} ${pattern}`, { samples: series('on', pattern, 'gap'), flight: series('on', pattern, 'flight'), limit: LIMIT, baseline: rounds.off.length ? series('off', pattern, 'gap') : undefined });
   }
   console.log(`Source worker budgets: a typical edit in a 1000-slide deck blocks the main thread for less than ${LIMIT} ms (${engineName} ${suite.browserVersion}).`);
-} finally { await suite.close(); }
+} catch (error) { evidence.originalFailure = describeError(error); throw error; }
+finally {
+  let secondary = null;
+  try { await persist(); } catch (error) { secondary = error; }
+  try { await suite.close(); } catch (error) { secondary ??= error; }
+  if (secondary) { if (evidence.originalFailure) console.error('Source worker final evidence also failed:', describeError(secondary)); else throw secondary; }
+}
