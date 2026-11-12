@@ -1,6 +1,6 @@
 # Final CI repair focus — retained results
 
-Original ordinary CI43121176918 and FullCI43121176974 on e148 remain RED. No observer is running and no merge/release is authorized by these focused results. The nine failed jobs have identified causes; their original logs remain retained. The coherent successor carries the reviewed fixes, with new Name and Arabic unit-test corrections still being verified.
+Original ordinary CI43121176918 and FullCI43121176974 on e148 remain RED. No observer is running and no merge/release is authorized by these focused results. The nine failed jobs have identified causes; their original logs remain retained. The coherent successor carries the reviewed fixes, with new Name field correction still being verified.
 
 | Focus | Actual result | Limit |
 | --- | --- | --- |
@@ -12,8 +12,9 @@ Original ordinary CI43121176918 and FullCI43121176974 on e148 remain RED. No obs
 | Arabic maintained producer | Three preview PNGs and default PPTX PASS,0.946s | No LibreOffice or PowerPoint execution |
 | Arabic pure core focus01 | RED: fixture minimum40 exceeds schema maximum32 | Original failure preserved |
 | Arabic pure core focus02 | RED after legal minimum32: provider rejects an ordinary title space before reaching arrangement | Source-only causal successor pending; no product failure inferred from this fixture |
+| Arabic pure core focus03 | PASS,0.165s: actual40px wrapping and independent120px widths with strict complex-script provider | Only cloned test title removed; integration retains all source titles |
 | Name three-archive focus01 | 10PASS/2RED/3actual-PS skips,1.659s | Both current public tests reject current export field c:auto; strict explicit support is under review |
 
 The Name test reproduced the exact current129025-byte/06c82 input after the Arabic core build. Historical128812-byte fixture controls remain separate. No first-Save style/axis finding has been waived, and the old47c6 overall archive failure stays failed.
 
-Each linked subdirectory contains its original log and receipt; [manifest.json](manifest.json) binds all21 copied files. Other scope notes retain the registry quickstart's genuine033 replay and Windows SH20 fixture qualification. Final coherent mapped tests, fresh W06 graph qualification, required cross-platform/installed/native gates and genuine034 delivery remain open.
+Each linked subdirectory contains its original log and receipt; [manifest.json](manifest.json) binds all27 copied records, including the three reviewed Node previews. Other scope notes retain the registry quickstart's genuine033 replay and Windows SH20 fixture qualification. Final coherent mapped tests, fresh W06 graph qualification, required cross-platform/installed/native gates and genuine034 delivery remain open.
