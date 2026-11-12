@@ -97,9 +97,10 @@ function playgroundFailure(page, context) {
 let startupJournals = 0;
 async function playgroundStartup(page, context) {
   const delays = [0, 100, 250, 500, 1000, 2000, 5000, 10000, 20000, 40000, 60000, 89000];
-  const binding = '__opfMobileStartupSample', stopName = '__opfMobileStartupStop';
+  const binding = '__opfMobileStartupSample', stopName = '__opfMobileStartupStop', consolePrefix = '__OPF_MOBILE_STARTUP__';
   const started = performance.now(), listeners = [];
   let fd, file, active = true, closed = false, events = 0, bytes = 0, samples = 0, overflow = false, ioFailed = false, writeMilliseconds = 0;
+  let independentEvents = 0, independentDroppedDiagnostics = 0, browserStopObserved = false, browserStoppedObserved = false, hostReadyObserved = false;
   const text = value => typeof value === 'string' ? value.slice(0, 1024) : null;
   const warn = error => { if (!ioFailed) console.error(`Mobile startup evidence fault: ${String(error.message ?? error).slice(0, 512)}`); ioFailed = true; };
   const write = (kind, data = {}) => {
@@ -117,9 +118,33 @@ async function playgroundStartup(page, context) {
     } catch (error) { warn(error); }
   };
   const detach = () => { for (const [name, callback] of listeners) page.off(name, callback); listeners.length = 0; };
+  const independentConsole = message => {
+    if (closed || message.type() !== 'debug' || !message.text().startsWith(consolePrefix)) return;
+    try {
+      const row = JSON.parse(message.text().slice(consolePrefix.length, consolePrefix.length + 4096));
+      const stop = row.kind === 'stop', stopped = row.kind === 'stopped', critical = stop || stopped;
+      if ((stop && browserStopObserved) || (stopped && browserStoppedObserved) || (!critical && independentEvents >= 62)) {
+        if (++independentDroppedDiagnostics === 1) write('independent-console-overflow');
+        return;
+      }
+      independentEvents++;
+      if (stop) browserStopObserved = true;
+      if (stopped) browserStoppedObserved = true;
+      if (row.kind === 'host-ready') hostReadyObserved = true;
+      const event = { kind: text(row.kind), reason: text(row.reason), message: text(row.message), state: text(row.state), browserMs: Number.isFinite(row.browserMs) ? row.browserMs : null, sequence: Number.isInteger(row.sequence) ? row.sequence : null, visibilityState: text(row.visibilityState), hidden: row.hidden === true, droppedDiagnostics: Number.isInteger(row.droppedDiagnostics) && row.droppedDiagnostics >= 0 ? row.droppedDiagnostics : null };
+      // Two reserved terminal records also survive a full/failed phase journal in bounded Node stderr.
+      if (critical) console.error(`Mobile startup independent stop: ${JSON.stringify({ file, event, independentDroppedDiagnostics })}`);
+      write('browser-diagnostic', { event });
+    } catch (error) { write('independent-console-fault', { message: text(error.message) }); }
+  };
+  // These endpoints are cached by Playwright Request.timing(); no protocol/network call or request mutation.
+  const cachedTiming = request => {
+    try { const t = request.timing(); return Object.fromEntries(['startTime', 'requestStart', 'responseStart', 'responseEnd'].map(key => [key, Number.isFinite(t[key]) ? t[key] : null])); }
+    catch (error) { return { unavailable: true, message: text(error.message) }; }
+  };
   const finish = () => {
     if (closed) return;
-    active = false; detach(); write('journal-close', { events, bytes, samples, overflow, ioFailed, writeMilliseconds });
+    active = false; detach(); page.off('console', independentConsole); write('journal-close', { events, bytes, samples, overflow, ioFailed, writeMilliseconds, independentEvents, independentDroppedDiagnostics, browserStopObserved, browserStoppedObserved, hostReadyObserved });
     closed = true;
     if (fd !== undefined) {
       const at = performance.now();
@@ -141,39 +166,83 @@ async function playgroundStartup(page, context) {
     file = path.join(directory, `${Date.now()}-${process.pid}-${startupJournals}.jsonl`);
     fd = openSync(file, 'wx'); write('start', { ...context, delays, caps: { events: 512, bytes: 262144, samples: 12 }, diagnosticIO: 'synchronous bounded writes; timing overhead is not zero' });
     page.once('close', finish);
+    page.on('console', independentConsole);
     for (const name of ['domcontentloaded', 'load', 'crash']) listen(name, () => { if (active) write(name); });
     listen('framenavigated', frame => { if (active && frame === page.mainFrame()) write('navigation', { url: text(frame.url()) }); });
     listen('request', request => { if (active) write('request', { url: text(request.url()), type: request.resourceType() }); });
-    listen('requestfinished', request => { if (active) write('request-finished', { url: text(request.url()) }); });
-    listen('requestfailed', request => { if (active) write('request-failed', { url: text(request.url()), error: text(request.failure()?.errorText) }); });
-    listen('response', response => { if (active) write('response', { url: text(response.url()), status: response.status() }); });
+    listen('requestfinished', request => { if (active) write('request-finished', { url: text(request.url()), browserTiming: cachedTiming(request) }); });
+    listen('requestfailed', request => { if (active) write('request-failed', { url: text(request.url()), error: text(request.failure()?.errorText), browserTiming: cachedTiming(request) }); });
+    listen('response', response => { if (active) write('response', { url: text(response.url()), status: response.status(), browserTiming: cachedTiming(response.request()) }); });
     await page.exposeBinding(binding, (source, sample) => {
       if (!active || source.frame !== page.mainFrame()) return false;
       if (samples >= 12 || !sample || sample.index !== samples || !Number.isFinite(sample.browserMs) || sample.browserMs < 0 || !Number.isFinite(sample.readMilliseconds) || sample.readMilliseconds < 0) { write('sample-refused'); return false; }
-      const snapshot = { index: sample.index, browserMs: sample.browserMs, readMilliseconds: sample.readMilliseconds, readyState: text(sample.readyState), status: text(sample.status), fonts: text(sample.fonts), editorPresent: sample.editorPresent === true, lastError: text(sample.lastError), svgCount: Number.isInteger(sample.svgCount) && sample.svgCount >= 0 ? sample.svgCount : null, readError: text(sample.readError) };
+      const snapshot = { index: sample.index, browserMs: sample.browserMs, readMilliseconds: sample.readMilliseconds, readyState: text(sample.readyState), status: text(sample.status), fonts: text(sample.fonts), visibilityState: text(sample.visibilityState), hidden: sample.hidden === true, editorPresent: sample.editorPresent === true, lastError: text(sample.lastError), svgCount: Number.isInteger(sample.svgCount) && sample.svgCount >= 0 ? sample.svgCount : null, readError: text(sample.readError) };
       samples++; write('startup-sample', { sample: snapshot }); return active;
     });
-    await page.addInitScript(({ binding, stopName, delays }) => {
+    await page.addInitScript(({ binding, stopName, delays, consolePrefix }) => {
       if (globalThis !== globalThis.top || Object.prototype.hasOwnProperty.call(globalThis, stopName)) return;
-      let alive = true; const timers = [];
-      const stop = () => { if (!alive) return; alive = false; for (const timer of timers) clearTimeout(timer); globalThis.removeEventListener('pagehide', stop); if (globalThis[stopName] === stop) delete globalThis[stopName]; };
+      let alive = true, diagnosticEvents = 0, regularDiagnostics = 0, droppedDiagnostics = 0, diagnosticOverflow = false, hostReady = false;
+      const timers = [], subscriptions = [], debug = globalThis.console.debug.bind(globalThis.console);
+      const primitive = value => typeof value === 'string' ? value.slice(0, 512) : null;
+      const diagnostic = (kind, data = {}) => {
+        try {
+          const terminal = kind === 'stop' || kind === 'stopped';
+          if (!terminal && regularDiagnostics >= 61) {
+            droppedDiagnostics++;
+            if (!diagnosticOverflow) { diagnosticOverflow = true; debug(consolePrefix + JSON.stringify({ kind: 'overflow', sequence: ++diagnosticEvents, browserMs: performance.now(), droppedDiagnostics })); }
+            return;
+          }
+          if (!terminal) regularDiagnostics++;
+          // 61 regular + one overflow + stop + stopped = at most64, terminal slots cannot be consumed by render/font floods.
+          debug(consolePrefix + JSON.stringify({ kind, sequence: ++diagnosticEvents, browserMs: performance.now(), visibilityState: document.visibilityState, hidden: document.hidden, droppedDiagnostics, ...data }));
+        } catch { /* The independent channel can be unavailable; absence is not a claimed hang. */ }
+      };
+      let ownedHost;
+      const pagehide = () => stop('pagehide');
+      const stop = (reason = 'normal-preview-ready', message = null) => {
+        if (!alive) return;
+        diagnostic('stop', { reason, message }); alive = false;
+        for (const timer of timers) clearTimeout(timer);
+        globalThis.removeEventListener('pagehide', pagehide);
+        for (const unsubscribe of subscriptions) { try { unsubscribe(); } catch (error) { diagnostic('unsubscribe-fault', { message: primitive(error?.message) }); } }
+        subscriptions.length = 0;
+        if (ownedHost && globalThis.OPF_EDITOR_HOST === ownedHost) delete globalThis.OPF_EDITOR_HOST;
+        if (globalThis[stopName] === stop) delete globalThis[stopName];
+        diagnostic('stopped', { reason });
+      };
       Object.defineProperty(globalThis, stopName, { value: stop, configurable: true });
-      globalThis.addEventListener('pagehide', stop, { once: true });
+      globalThis.addEventListener('pagehide', pagehide, { once: true });
+      // The only runtime host reads are document??startDeck, optional persistence and this callback.
+      // An owned callback-only config leaves both defaults exact; an existing host config is never changed.
+      if (!('OPF_EDITOR_HOST' in globalThis)) {
+        ownedHost = { onReady: ({ editor }) => {
+          if (!alive || hostReady) return;
+          hostReady = true; diagnostic('host-ready');
+          try {
+            for (const name of ['fonts', 'render', 'error']) subscriptions.push(editor.on(name, event => {
+              if (!alive) return;
+              try { diagnostic('editor-' + name, { state: primitive(event?.state), message: primitive(event?.error?.message) }); }
+              catch (error) { diagnostic('event-read-fault', { message: primitive(error?.message) }); }
+            }));
+          } catch (error) { diagnostic('host-hook-fault', { message: primitive(error?.message) }); }
+        } };
+        Object.defineProperty(globalThis, 'OPF_EDITOR_HOST', { value: ownedHost, configurable: true, writable: true });
+      } else diagnostic('host-hook-omitted', { reason: 'existing-host-config' });
       const sample = index => {
         if (!alive) return;
         const began = performance.now(); let row;
         try {
           const editor = globalThis.opfEditor, error = editor?.lastError;
-          row = { index, browserMs: began, readyState: document.readyState, status: document.querySelector('#status')?.textContent?.slice(0, 512) ?? null, fonts: document.fonts?.status ?? null, editorPresent: Boolean(editor), lastError: typeof error?.message === 'string' ? error.message.slice(0, 512) : null, svgCount: document.querySelectorAll('#preview svg').length };
+          row = { index, browserMs: began, readyState: document.readyState, status: document.querySelector('#status')?.textContent?.slice(0, 512) ?? null, fonts: document.fonts?.status ?? null, visibilityState: document.visibilityState, hidden: document.hidden, editorPresent: Boolean(editor), lastError: typeof error?.message === 'string' ? error.message.slice(0, 512) : null, svgCount: document.querySelectorAll('#preview svg').length };
         } catch (error) { row = { index, browserMs: began, readError: typeof error?.message === 'string' ? error.message.slice(0, 512) : 'non-string startup read fault' }; }
         row.readMilliseconds = performance.now() - began;
         // Do not await the sink in the page: neither application startup nor input waits on diagnostic disk I/O.
-        try { Promise.resolve(globalThis[binding](row)).then(keep => { if (!keep) stop(); }, stop); } catch { stop(); }
-        if (index === delays.length - 1) stop();
+        try { Promise.resolve(globalThis[binding](row)).then(keep => { if (!keep) stop('binding-closed'); }, error => stop('binding-rejected', primitive(error?.message))); } catch (error) { stop('binding-threw', primitive(error?.message)); }
+        if (index === delays.length - 1) stop('finite-end');
       };
       sample(0);
       for (let index = 1; index < delays.length; index++) timers.push(setTimeout(() => sample(index), delays[index]));
-    }, { binding, stopName, delays });
+    }, { binding, stopName, delays, consolePrefix });
   } catch (error) { write('setup-fault', { message: text(error.message) }); warn(error); }
   return {
     mark, fail,
