@@ -4,11 +4,11 @@ if($PSVersionTable.PSEdition -cne 'Desktop' -or $PSVersionTable.PSVersion.Major 
 if(Test-Path -LiteralPath $ReportPath){throw 'Preserve prior startup controls'}
 $root=$ReportPath+'.startup';if(Test-Path -LiteralPath $root){throw 'Preserve prior startup fixture'};[void](New-Item -ItemType Directory -Path $root)
 $before=(Get-FileHash -LiteralPath $ScriptPath -Algorithm SHA256).Hash.ToLowerInvariant()
-if($before -cne 'd8f0aa7e0b7fcf72cb2401808f45c2cdb69cd99862ad14c88103180b86278210'){throw 'Exact reviewed startup worker required'}
+if($before -cne '1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870'){throw 'Exact reviewed startup worker required'}
 $source=[IO.File]::ReadAllText($ScriptPath)
 $oldSource=$source.Replace('$script:referenceNameModeEnabled','$script:referenceNameEdit')
 $sha=[Security.Cryptography.SHA256]::Create();try{$oldHash=([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($oldSource)))).Replace('-','').ToLowerInvariant()}finally{$sha.Dispose()}
-if($oldHash -cne '641c30e6dc9e3e89bae814c752e4fbc1bea41d8318b4f8a0af7e863434466060'){throw 'Old whole-worker inverse differs'}
+if($oldHash -cne '4fc89960c8b1e777d7ccc5d9f8f54e9f9dddb9ca1ca864b4bb9cf9ac881ff6fa'){throw 'Old whole-worker inverse differs'}
 function New-StartupScript([string]$Text,[string]$StateName,[string]$Path){
  $tokens=$null;$errors=$null;$ast=[Management.Automation.Language.Parser]::ParseInput($Text,[ref]$tokens,[ref]$errors);if($errors.Count){throw 'Actual startup source did not parse'}
  $statements=@($ast.EndBlock.Statements);$matches=@(for($i=1;$i -lt $statements.Count;$i++){if($statements[$i].Extent.Text.StartsWith('if($ReferenceNameEdit -or $null -ne $request.PSObject.Properties[''referenceNameEdit''])',[StringComparison]::Ordinal)){$i}})
