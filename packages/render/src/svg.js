@@ -2295,9 +2295,20 @@ function embeddable(font) {
 // object while its dataUrl is unchanged: the handle's list holds the same objects on every slide, and its URIs run to tens of
 // megabytes.
 const checkedDataUrls = new WeakMap();
+function isFontDataUrl(value) {
+  // The MIME prefix has a fixed maximum length. Scan the unbounded payload without a regexp stack or a suffix copy.
+  // exec's input retains the same coercion (and throwing conversions) as the former whole-URI RegExp.test.
+  const prefix = /^data:font\/(ttf|otf|woff|woff2);base64,/.exec(value);
+  if (!prefix || prefix[0].length === prefix.input.length) return false;
+  for (let index = prefix[0].length; index < prefix.input.length; index++) {
+    const code = prefix.input.charCodeAt(index);
+    if (!((code >= 65 && code <= 90) || (code >= 97 && code <= 122) || (code >= 48 && code <= 57) || code === 43 || code === 47 || code === 61)) return false;
+  }
+  return true;
+}
 function assertEmbeddableFont(font) {
   const valid = typeof font?.family === "string" && !/[\u0000-\u001f"'\\<>;]/.test(font.family) && Number.isInteger(font.weight) && font.weight >= 1 && font.weight <= 1000
-    && (checkedDataUrls.get(font) === font.dataUrl || /^data:font\/(ttf|otf|woff|woff2);base64,[A-Za-z0-9+/=]+$/.test(font.dataUrl));
+    && (checkedDataUrls.get(font) === font.dataUrl || isFontDataUrl(font.dataUrl));
   if (!valid) throw new OPFRenderError("invalid-embedded-font", "Embedded fonts require a plain family name, valid weight, and a font data URI.");
   checkedDataUrls.set(font, font.dataUrl);
 }
