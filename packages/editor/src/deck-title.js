@@ -1,7 +1,7 @@
 // Deck title (CE-28): the presentation's `name`, edited in place. It reads as plain heading text until it is hovered or focused. Focusing it opens
 // an edit: the field stretches over the whole row it sits in (the row's other controls give way, the row keeps its height) with a Save and a Cancel
 // button at its end. Enter or Save commits through the editor session as one undoable edit (an empty name removes the key); Escape or Cancel puts
-// the current name back. Leaving the field does not commit and does not close the edit: the draft stays until one of those four. The field follows
+// the current name back. After Save or Cancel the focus stays in the field without an edit; a click or tap, Enter, F2 or typing opens it again. Leaving the field does not commit and does not close the edit: the draft stays until one of those four. The field follows
 // the document (undo, the source pane, the host) unless an edit is open. Plain DOM, no framework, no network.
 
 const DEFAULT_LABELS = {
@@ -144,6 +144,12 @@ export function createDeckTitle(container, options = {}) {
     row?.removeAttribute("data-opf-title-relative");
     row = null;
   }
+  // Open an edit from the user's intent (click, tap, Enter, F2) with the name selected, as a first focus does. No-op while one is open.
+  function reopen() {
+    if (open || disposed || readOnly || disabled) return;
+    begin();
+    input.select();
+  }
   // Put the focus back in the field without opening an edit.
   function refocus(select = false) {
     reentering = true;
@@ -209,9 +215,20 @@ export function createDeckTitle(container, options = {}) {
     if (event.isComposing || event.keyCode === 229) return;
     if (event.key === "Enter") {
       event.preventDefault();
-      save();
+      if (open) save();
+      else reopen();
+    } else if (event.key === "F2" && !open) {
+      event.preventDefault();
+      reopen();
     }
   });
+  // The field already has the focus after Save or Cancel (which put it back without an edit), so no focus event comes: a click or tap is the
+  // intent to edit, and it opens the edit with the name selected, as a first focus does. With an edit open a click only places the caret.
+  // The press must not move the caret on its way (the browser would collapse the selection after the click); the click then selects the name.
+  input.addEventListener("mousedown", (event) => {
+    if (!open && !readOnly && !disabled && event.button === 0 && doc.activeElement === input) event.preventDefault();
+  });
+  input.addEventListener("click", () => reopen());
   // Escape closes an open edit from the field or from Save and Cancel; with no edit open it leaves the field.
   element.addEventListener("keydown", (event) => {
     if (event.key !== "Escape" || readOnly || disabled || event.isComposing || event.keyCode === 229) return;
