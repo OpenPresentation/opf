@@ -41,12 +41,31 @@ let checks = 0;
 const ok = (condition, message) => { assert.ok(condition, message); checks += 1; };
 const throws = (fn, code) => { try { fn(); } catch (error) { assert.equal(error.code, code, error.message); checks += 1; return; } assert.fail(`expected ${code}`); };
 
+// A diagram block takes a caption like the other media (the schema and core allow it): set, edit, remove, undo.
+{
+  const withDiagram = () => ({ ...deck(), slides: [{ id: "d", title: "Diagram", blocks: [{ text: "Intro" }, { diagram: { source: "sequenceDiagram\n  Ana->>Bo: Hello", alt: "Ana greets Bo" } }] }] });
+  const editor = createEditorSession(withDiagram());
+  assert.deepEqual(captionTargets(editor.presentation).map((target) => [target.blockPath, target.field]), [["slides.0.blocks.1", "diagram"]]);
+  setCaption(editor, "slides.0.blocks.1", "Figure 1. A greeting");
+  assert.equal(editor.presentation.slides[0].blocks[1].caption, "Figure 1. A greeting");
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true, "the format accepts the caption");
+  setCaption(editor, "slides.0.blocks.1", { text: "Figure 1. Edited", position: "above", align: "center" });
+  assert.deepEqual(readCaption(editor.presentation, "slides.0.blocks.1").caption, { text: "Figure 1. Edited", position: "above", align: "center" });
+  setCaption(editor, "slides.0.blocks.1", null);
+  assert.equal(editor.presentation.slides[0].blocks[1].caption, undefined, "the caption is removed");
+  editor.undo();
+  assert.equal(editor.presentation.slides[0].blocks[1].caption.text, "Figure 1. Edited", "undo restores the removed caption");
+  editor.undo(); editor.undo();
+  assert.deepEqual(editor.presentation, withDiagram(), "every diagram caption edit undoes");
+  checks += 1;
+}
+
 // Captions: every captionable block, set, read, short and object forms, remove, undo.
 {
   const editor = createEditorSession(deck());
   const targets = captionTargets(editor.presentation);
   assert.deepEqual(targets.map((target) => [target.blockPath, target.field]), [["slides.1.blocks.0", "image"], ["slides.1.blocks.1", "table"], ["slides.3", "chart"]]);
-  assert.deepEqual([...CAPTIONABLE_FIELDS], ["image", "chart", "table", "video"]);
+  assert.deepEqual([...CAPTIONABLE_FIELDS], ["image", "chart", "table", "video", "diagram"]);
   const change = setCaption(editor, "slides.1.blocks.0", "Figure 1. Pixel");
   assert.equal(change.changed, true);
   assert.deepEqual(change.patches.map((patch) => patch.op), ["test", "replace"]);
