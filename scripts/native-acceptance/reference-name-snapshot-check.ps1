@@ -57,6 +57,22 @@ foreach($mode in @('before','reopened','no-mode','no-reference','foreign-phase',
 . (Join-Path $Root 'scripts/native-acceptance/owned-postflight.ps1')
 . (Join-Path $Root 'scripts/native-acceptance/furniture-postflight.ps1')
 $original=Get-Content -LiteralPath $Fixture -Raw -Encoding UTF8|ConvertFrom-Json;$adapter=@()
+# Six separate actual-definition cardinality controls; the original32 scenarios remain unchanged.
+$cardinality=@()
+foreach($phase in @('before','reopened')){
+    foreach($count in @(0,1,2)){
+        $e=Get-Content -LiteralPath $Fixture -Raw -Encoding UTF8|ConvertFrom-Json
+        $stage=if($phase -ceq 'before'){'action-1-set-chart-series-name.series.name.set'}else{'reopened.presentation.close'}
+        $endpoint=@($e.stages|Where-Object {$_.stage -ceq $stage -and $_.status -ceq 'success'})
+        if($endpoint.Count -ne 1){throw 'Cardinality fixture requires one actual endpoint'}
+        if($count -eq 0){$e.stages=@($e.stages|Where-Object {-not($_.stage -ceq $stage -and $_.status -ceq 'success')})}
+        if($count -eq 2){$e.stages+=@($endpoint[0].PSObject.Copy())}
+        $actual=@($e.stages|Where-Object {$_.stage -ceq $stage -and $_.status -ceq 'success'}).Count
+        $ready=Test-ReferenceNameSnapshotsReady $e.request $e.report $e.stages;$expected=$count -eq 1
+        if($actual -ne $count -or $ready -isnot [bool] -or $ready -cne $expected){throw ('Actual snapshot endpoint cardinality failed: '+$phase+'-'+$count)}
+        $cardinality+=@([ordered]@{scenario=($phase+'-'+$count);phase=$phase;endRows=$actual;expectedReady=$expected;ready=$ready;passed=$true})
+    }
+}
 foreach($mode in @('positive','missing-before','missing-reopened','crossed-copy-order','copy-after-setter','wrong-owner','extra-copy','wrong-type','missing-mode','wrong-input','pending')){
     $e=Get-Content -LiteralPath $Fixture -Raw -Encoding UTF8|ConvertFrom-Json
     $dir=Join-Path $Output ('adapter-'+$mode);[void](New-Item -ItemType Directory -Path $dir);[void](New-Item -ItemType Directory -Path (Join-Path $dir 'native'))
@@ -76,4 +92,4 @@ foreach($mode in @('positive','missing-before','missing-reopened','crossed-copy-
     $adapter+=@([ordered]@{scenario=$mode;passed=$true;mockQueries=$script:mockQueries;failure=$failure})
 }
 if((Get-FileHash -LiteralPath $worker -Algorithm SHA256).Hash -cne $before){throw 'Worker changed during managed controls'}
-[ordered]@{schemaVersion=1;officeInvoked=$false;realProcessQueries=0;genuineStartupArchive=$false;earlierSourceBootstrapExercised=$false;startup=$startup;saves=$saves;adapter=$adapter}|ConvertTo-Json -Depth 30|Set-Content -LiteralPath (Join-Path $Output 'result.json') -Encoding UTF8
+[ordered]@{schemaVersion=1;officeInvoked=$false;realProcessQueries=0;genuineStartupArchive=$false;earlierSourceBootstrapExercised=$false;startup=$startup;saves=$saves;adapter=$adapter;cardinality=$cardinality}|ConvertTo-Json -Depth 30|Set-Content -LiteralPath (Join-Path $Output 'result.json') -Encoding UTF8
