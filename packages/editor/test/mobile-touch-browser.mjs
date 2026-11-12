@@ -398,6 +398,17 @@ async function landscapeTablet(browser) {
   assertClean({ ...report, clipped: report.clipped.filter((entry) => !/opf-thumbs/.test(entry)) }, tag('start'));
   const heights = await page.evaluate(() => ['view-slide', 'view-sorter', 'view-outline', 'view-layouts', 'undo', 'redo'].map((id) => [id, document.getElementById(id).getBoundingClientRect().height]));
   for (const [id, height] of heights) assert.ok(height >= 43.5, `${tag(id)}: is 44px tall (${height})`);
+  const toolbar = await page.evaluate(() => {
+    const node = document.querySelector('.canvas-toolbar'), group = node.querySelector('.view-switch'), bounds = node.getBoundingClientRect(), groupBounds = group.getBoundingClientRect();
+    const rect = box => ({ left: box.left, right: box.right, top: box.top, bottom: box.bottom });
+    return { bounds: rect(bounds), groupBounds: rect(groupBounds), groupClientWidth: group.clientWidth, groupScrollWidth: group.scrollWidth,
+      controls: [...node.querySelectorAll('button')].filter(button => button.getBoundingClientRect().width > 0).map(button => ({ id: button.id, inViewSwitch: group.contains(button), bounds: rect(button.getBoundingClientRect()) })) };
+  });
+  assert.ok(toolbar.groupScrollWidth <= toolbar.groupClientWidth, `${tag('view switch')}: every view is visible, without a clipped group`);
+  for (const control of toolbar.controls) {
+    const parent = control.inViewSwitch ? toolbar.groupBounds : toolbar.bounds, box = control.bounds;
+    assert.ok(box.left >= parent.left && box.right <= parent.right && box.top >= parent.top && box.bottom <= parent.bottom, `${tag(control.id)}: the whole control stays inside its toolbar group`);
+  }
   checks.push('chromium 1024px: the playground at a touch landscape width (the view switch, Undo and Redo and the rest of the start) has 44px controls, 16px fields, no sideways scroll, no cut-off or overlapping control');
   await context.close();
 }
