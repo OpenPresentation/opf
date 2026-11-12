@@ -5,7 +5,9 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {gallery} from '@openpresentation/gallery';
-import {galleryIconSets} from '@openpresentation/gallery/icon-sets';
+import { galleryIconSets as gallerySets } from '@openpresentation/gallery/icon-sets';
+// RR-63: the gallery icon sets, read from the installed package one icon at a time.
+const galleryIconSets = gallerySets();
 import {fromPptx, toPptx} from '../dist/index.js';
 
 const MULTI = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="5" height="10" fill="#f00"/><rect x="5" width="5" height="10" fill="#00f"/></svg>';

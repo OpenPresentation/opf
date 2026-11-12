@@ -4,7 +4,9 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { gallery } from '@openpresentation/gallery';
-import { galleryIconSets } from '@openpresentation/gallery/icon-sets';
+import { galleryIconSets as gallerySets } from '@openpresentation/gallery/icon-sets';
+// RR-63: the gallery icon sets, read from the installed package one icon at a time.
+const galleryIconSets = gallerySets();
 import { composeSlide, embedIcons, ensureIcons, iconColors, iconFromSvg, iconPathCommands, iconPathData, parseIconReference, resolveIcon } from '../dist/composition.js';
 import { resolveSlideContext, validate } from '../dist/index.js';
 

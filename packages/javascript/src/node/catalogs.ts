@@ -9,10 +9,11 @@ import { gallery } from "@openpresentation/gallery";
 import { galleryIconSets } from "@openpresentation/gallery/icon-sets";
 import type { Catalog } from "../core.js";
 
-// LH-14: and the gallery icon sets, each loaded the first time a deck names it (ensureIcons).
-const DEFAULTS: readonly Catalog[] = Object.freeze([gallery, galleryIconSets as Catalog]);
+// LH-14, RR-63: and the gallery icon sets, read from the installed package one icon at a time, the first time a deck draws it
+// (ensureIcons). The sets are code only, so a server bundle of this build carries none of the icon data.
+const DEFAULTS: readonly Catalog[] = Object.freeze([gallery, galleryIconSets() as Catalog]);
 
-/** The catalogs a call registers when it names none: `[gallery, galleryIconSets]`. */
+/** The catalogs a call registers when it names none: `[gallery, galleryIconSets()]`. */
 export function defaultCatalogs(): readonly Catalog[] {
 	return DEFAULTS;
 }

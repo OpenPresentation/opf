@@ -74,11 +74,13 @@ describe("the MCP server in workerd", { skip: !available && "the workerd package
 		return message.result;
 	};
 
-	// The same server in Node, with Ajv, over a linked in-memory pair: what the Worker must answer.
+	// The same server in Node, with Ajv, over a linked in-memory pair: what the Worker must answer. RR-63: a Worker has no installed icon
+	// files to read, so its defaultSources() registers no icon sets (test/icon-sets-worker.test.mjs); the Node server it is compared with
+	// leaves them out too.
 	let local;
 	before(async () => {
 		const [a, b] = InMemoryTransport.createLinkedPair();
-		await createOpfServer({ version: "0.0.0-test" }).connect(b);
+		await createOpfServer({ version: "0.0.0-test", sources: { iconSets: undefined } }).connect(b);
 		local = new Client({ name: "local", version: "1" });
 		await local.connect(a);
 	});
