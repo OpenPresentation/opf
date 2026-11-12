@@ -69,7 +69,7 @@ import {orderChartSeries} from './chart-order.js';
 import {lineXml, linkShapeBlocks, shapeBlockRecord, writeShapeBlocks} from './shape-blocks.js';
 import {connectorName, connectorRecord, writeConnectors} from './connectors.js';
 import {themeSlotColors, schemeColorTable, addTransformedColors, writeSchemeColors, authoredLiteralColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath, variantFromColorMap} from './theme-colors.js';
-import {isolateNarrowNoBreakSpaces, languageDiagnostics, leftToRightPieces, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
+import {languageDiagnostics, leftToRightPieces, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagramGroups, importDiagrams, tagDiagrams } from './diagram-provenance.js';
@@ -6230,7 +6230,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
     } else if (/^ppt\/(?:slideMasters\/slideMaster|slideLayouts\/slideLayout)\d+\.xml$/.test(path)) xml = writeSchemeColors(xml, context.deckSchemeColors.table, context.deckSchemeColors.keep);
     if (context.scriptFonts) xml = partScriptFonts(path, xml, context.scriptFonts, context.partSlides.get(path) ?? 0);
     else if (/^ppt\/theme\/theme\d+\.xml$/.test(path)) xml = themeEastAsianFromLatin(xml);
-    if (/^ppt\/(?:slides\/slide|notesSlides\/notesSlide)\d+\.xml$/.test(path)) xml = isolateNarrowNoBreakSpaces(stripRunScriptFonts(xml));
+    if (/^ppt\/(?:slides\/slide|notesSlides\/notesSlide)\d+\.xml$/.test(path)) xml = stripRunScriptFonts(xml);
     if (context.scriptFonts && /^ppt\/slides\/slide\d+\.xml$/.test(path)) xml = runLanguageFonts(xml, context.scriptFonts, context.partSlides.get(path) ?? 0);
     return encodeText(normalizePartReferences(xml, renameMaps));
   }

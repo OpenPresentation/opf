@@ -4,10 +4,9 @@
 //      group, primary axes first, and a c:legendEntry names an entry by that place; the series' c:idx follow the same order.
 //   B. A native reference helper's line is the authored stroke: width (OPF px at 9525 EMU, 4/3 px by default), dash and color.
 //   C. A timeline label's run names the face or bold flag that draws core's composed weight (as the preview draws it).
-//   D. A narrow no-break space (U+202F) is a run of its own, so a face without it (Aptos Display) still draws the digits.
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
+import {strFromU8, unzipSync} from 'fflate';
 import {toSvg} from '@openpresentation/opf-render';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {fromPptx, toPptx} from '../dist/index.js';
@@ -81,20 +80,5 @@ for (const name of ['duration-timeline', 'localized-timeline', 'layout-sampler']
 }
 assert.ok(labels >= 20, `the timeline labels are compared (${labels})`);
 
-// D. "150 000" (fr-FR grouping with U+202F) is three runs of the metric's properties, which the import reads as one.
-{
-  const deck = example('multilingual-slides'), {bytes} = await exported(deck), zip = unzipSync(new Uint8Array(bytes));
-  const xml = strFromU8(zip['ppt/slides/slide4.xml']);
-  const value = /<p:sp>(?:(?!<\/p:sp>)[\s\S])*?name="OPF metric 1 value line 1"[\s\S]*?<\/p:sp>/.exec(xml)[0];
-  const runs = [...value.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]*)<\/a:t><\/a:r>/g)].map(([, properties, text]) => ({properties, text}));
-  assert.deepEqual(runs.map(run => run.text), ['150', '\u202F', '000'], 'the separator is a run of its own');
-  assert.equal(new Set(runs.map(run => run.properties)).size, 1, 'with the same properties');
-  assert.match(runs[0].properties, /<a:latin typeface="Aptos Display"/);
-  assert.equal(/<a:t>[^<]*\u202F[^<]*<\/a:t>/.test(xml.replace(/<a:t>\u202F+<\/a:t>/g, '')), false, 'no other run on the slide holds the separator with other text');
-  // The import reads the split runs as it read the one run (the joined runs written back as one give the same document).
-  const joined = {...zip, 'ppt/slides/slide4.xml': strToU8(xml.replace(runs.map(run => `<a:r>${run.properties}<a:t>${run.text}</a:t></a:r>`).join(''), `<a:r>${runs[0].properties}<a:t>150 000</a:t></a:r>`))};
-  assert.notEqual(strFromU8(joined['ppt/slides/slide4.xml']), xml, 'the control joins the runs');
-  assert.deepEqual(await fromPptx(bytes), await fromPptx(zipSync(joined)), 'the split runs import as one run did');
-}
 
-console.log(`RR-105 PowerPoint pass: combo legend places and helper strokes, ${labels} timeline label weights, and the U+202F run pass.`);
+console.log(`RR-105 PowerPoint pass: combo legend places and helper strokes, ${labels} timeline label weights pass.`);

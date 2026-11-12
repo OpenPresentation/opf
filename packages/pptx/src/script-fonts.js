@@ -615,21 +615,6 @@ export function stripRunScriptFonts(xml) {
 }
 
 /**
- * RR-105: a narrow no-break space (U+202F, the thousands separator of French and other locales) is in a run of its own, with
- * the run's properties. Many Latin faces have no U+202F (Aptos Display has none), and PowerPoint then draws the whole run in a
- * substitute font: "150 000" in another face, wider and higher than the preview. On its own, only the separator falls back.
- * The text, the run properties and the paragraph are unchanged.
- */
-const NARROW_NO_BREAK = / |&#8239;|&#x202[fF];/;
-export function isolateNarrowNoBreakSpaces(xml) {
-  if (!NARROW_NO_BREAK.test(xml)) return xml;
-  return xml.replace(/<a:r>(<a:rPr\b[^>]*\/>|<a:rPr\b[^>]*>(?:(?!<\/a:r>)[\s\S])*?<\/a:rPr>)?<a:t(\b[^>]*)>([^<]*)<\/a:t><\/a:r>/g, (run, properties = "", attributes, text) => {
-    const pieces = text.split(/((?: |&#8239;|&#x202[fF];)+)/).filter(Boolean);
-    return pieces.length < 2 ? run : pieces.map(piece => `<a:r>${properties}<a:t${attributes}>${piece}</a:t></a:r>`).join("");
-  });
-}
-
-/**
  * When the resolver throws for a deck (see planScriptFonts) the theme's East Asian slot still repeats the latin family of
  * its font group, which keeps the paragraph end marks from reading an empty font (see themeScriptFonts).
  */
