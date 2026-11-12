@@ -100,7 +100,9 @@ export function textValues(slide: Rec, slidePath: string): TextValue[] {
 			});
 		// An image callout's text is plain; the rules that read text (placeholders, language) see it too.
 		const callouts = rec(node.image).callouts;
-		if (Array.isArray(callouts)) callouts.forEach((callout: unknown, index: number) => push(at('image', 'callouts', index, 'text'), rec(callout).text, 'callout', 'image'));
+		if (Array.isArray(callouts)) callouts.forEach((callout: unknown, index: number) => {
+				push(at('image', 'callouts', index, 'text'), rec(callout).text, 'callout', 'image');
+			});
 		const quote = node.quote;
 		if (typeof quote === 'string') push(at('quote'), quote, 'quote', 'quote');
 		else if (quote && typeof quote === 'object') {
