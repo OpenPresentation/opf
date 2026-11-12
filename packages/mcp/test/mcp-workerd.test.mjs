@@ -43,9 +43,12 @@ test("lean Worker preserves data exclusions and production size budgets", async 
 	const production = await bundleWorker("mcp-worker-lean.mjs", { minify: true });
 	assert.deepEqual(retainedData(production), [], "production also excludes every data source");
 	const compressed = gzipSync(production.text, { level: 9 }).length;
-	// Production5,397,634 minified /1,232,153 gzip bytes; same3% headroom policy. RR-111 MCP Apps adoption (vetoable): the base
-	// measured 5,558,585 and open_studio, the session keys and the in-place instructions add 3,795 (5,562,380), so the minified
-	// ceiling moves by 5,000 to 5,565,000; the unminified and gzip ceilings are unchanged.
+	// The minified ceiling, measured on 2026-11-12 (vetoable, RR111-WORKER-BUDGET): the reviewed v0.34 production bundle was 5,397,634
+	// bytes (1,232,153 gzip) and 5,560,000 was 3% above it. This branch's base (origin/codex/rr-034-next-source-20261112) already
+	// measures 5,558,585 (0.03% under that ceiling), and RR-111 (open_editor, the derived session keys, the in-place instructions and
+	// tool descriptions) brings it to 5,563,948. 5,565,000 is 3.1% above the reviewed 5,397,634, 0.12% above the base and 0.02% above
+	// this branch: it is no longer a 3% headroom, so the release assembly must re-measure it. The unminified and gzip ceilings keep
+	// their 3% policy.
 	assert.ok(production.bytes < 5_565_000, `${production.bytes} minified bytes`);
 	assert.ok(compressed < 1_270_000, `${compressed} gzip bytes`);
 });
@@ -83,7 +86,7 @@ describe("the MCP server in workerd", { skip: !available && "the workerd package
 		assert.equal(init.serverInfo.name, "opf");
 		assert.ok(init.capabilities.tools && init.capabilities.resources && init.capabilities.prompts);
 		const tools = (await call("tools/list", {})).tools.map((tool) => tool.name).sort();
-		assert.deepEqual(tools, ["convert", "get_catalog_record", "get_schema", "list_examples", "open_studio", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
+		assert.deepEqual(tools, ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
 		assert.deepEqual(wire(await call("tools/list", {})), wire(await local.listTools()));
 		assert.ok((await call("resources/list", {})).resources.length > 100);
 		assert.deepEqual((await call("prompts/list", {})).prompts.map((prompt) => prompt.name).sort(), ["author_deck", "choose_layout", "fix_validation_findings", "learn_opf"]);
@@ -193,11 +196,11 @@ describe("a site that hosts the deck view (deckApp with siteFontFiles)", () => {
 		assert.equal((await post("resources/read", { uri: "ui://opf/deck" })).contents[0].text, "<!doctype html><title>OPF deck</title>");
 		assert.deepEqual((await post("resources/read", { uri: "ui://opf/deck" })).contents[0]._meta, { ui: { prefersBorder: false, preferredDisplayMode: "fullscreen" } });
 		// The entry point runs in the Worker with no arguments: a starter deck and server-minted viewer keys, and nothing stored.
-		assert.deepEqual(tools.find((tool) => tool.name === "open_studio")._meta, { ui: { resourceUri: "ui://opf/deck" }, "ui/resourceUri": "ui://opf/deck", "openai/ui": { entrypoints: [{ type: "global" }] } });
-		const studio = await post("tools/call", { name: "open_studio", arguments: {} });
+		assert.deepEqual(tools.find((tool) => tool.name === "open_editor")._meta, { ui: { resourceUri: "ui://opf/deck" }, "ui/resourceUri": "ui://opf/deck", "openai/ui": { entrypoints: [{ type: "global" }] } });
+		const studio = await post("tools/call", { name: "open_editor", arguments: {} });
 		assert.equal(studio.isError, undefined, JSON.stringify(studio.content));
 		assert.equal(studio.structuredContent.document.slides.length, 2);
-		assert.match(studio.structuredContent.viewer.session, /^[0-9a-f-]{36}$/);
+		assert.match(studio.structuredContent.viewer.session, /^deck-[0-9a-f]{32}$/, "derived from the starter deck's name");
 		const shown = await post("tools/call", { name: "show_deck", arguments: { document: { name: "Hosted", slides: [{ title: "A" }] } } });
 		assert.equal(shown.structuredContent.checked, true, "the hosted server keeps its quick check");
 		const read = async (file) => {
