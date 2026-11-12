@@ -102,7 +102,7 @@ pre-program snippet. The per-dimension prose below the summary
 table describes the first measurement unless a paragraph says otherwise.
 
 The accepted local raw receipt is `baseline81-results.json`, generated at
-`2026-09-29T08:23:46.429Z`; the committed [results](gallery-support/parity/parity-results.json)
+`2026-09-29T08:23:46.429Z`; the committed results
 and [scoreboard](gallery-support/parity/PARITY.md) record that run with the
 [documented one-slug normalization](gallery-support/README.md#normalized-ids).
 Editor `d0c95a1` was refreshed by a dependency-only merge and was not used by
@@ -231,7 +231,7 @@ replacement. Head drift since the earlier accepted run (opf-pptx, opf-render,
 core) moves text 798 to 800 and fills 790 to 791; that is not part of this
 change. pptx-gallery `origin/main` moved to `23f9216` (FF-22, reduced charts)
 after the audited `4b48e69` and is not measured here. Results:
-[parity-results-2026-09-29-lookalike-fonts.json](gallery-support/parity/parity-results-2026-09-29-lookalike-fonts.json),
+parity-results-2026-09-29-lookalike-fonts.json,
 [scoreboard](gallery-support/parity/PARITY-2026-09-29-lookalike-fonts.md).
 The earlier accepted results and scoreboard are kept unchanged.
 
@@ -272,7 +272,7 @@ pptx-gallery `23f9216`). Two things changed against the look-alike row, and a th
   near; nothing else changes). It is not on the scoreboard.
 
 Results:
-[parity-results-2026-09-29-field-text.json](gallery-support/parity/parity-results-2026-09-29-field-text.json),
+parity-results-2026-09-29-field-text.json,
 [scoreboard](gallery-support/parity/PARITY-2026-09-29-field-text.md) (the
 before/after in it compares against the old harness at the same heads; that
 baseline run is not committed). `support-status.json` is rebuilt from this run.
@@ -288,7 +288,7 @@ opf-render#54 makes Intos (metric-compatible with Aptos, Aptos Display, Aptos Na
 
 Checks passed of 850 (pass/near/fail where not all pass): geometry 850, text 830 (6 near, 14 fail), fills 782 (68 fail), zOrder 850, slideSize 850, typefaces 850, reimport 849 (1 near), fontResolution 733 (31 near, 86 fail), theme 850, mapping 850. Only fontResolution changed between the two runs: 705 values move from near (Aptos Display to Carlito, Aptos to Roboto, visual look-alikes) to pass (Intos, metric), and one value's failure clears. No other check and no value regresses. The remaining near values are visual-only replacements (Segoe UI, Grandview, Arial Black, Impact) and native chart labels; the 157 mismatches are unchanged causes (chart series colours and caches, families whose script faces the preview does not load (Arabic and East Asian among them), one Playfair Display legacy value).
 
-Results: [parity-results-2026-09-29-intos-default.json](gallery-support/parity/parity-results-2026-09-29-intos-default.json), [scoreboard](gallery-support/parity/PARITY-2026-09-29-intos-default.md) (before/after against the previous-mains run, which is not committed). `support-status.json` is rebuilt from this run.
+Results: parity-results-2026-09-29-intos-default.json, [scoreboard](gallery-support/parity/PARITY-2026-09-29-intos-default.md) (before/after against the previous-mains run, which is not committed). `support-status.json` is rebuilt from this run.
 
 #### Audits model the shipped font host (FF-48, 2026-09-30)
 
@@ -367,7 +367,7 @@ editor does: opf-editor 0.10.x builds a browser registry from the office pack's 
 the value must also pass the strict measured render with that registry. No tolerance changed; every other check is identical in every value. `PARITY_FONT_HOST=office-only` reproduces the
 previous run exactly (707, 47, 96). Full report, with the per-family table and the before and after by dimension:
 [PARITY-2026-09-30-gallery-font-host.md](gallery-support/parity/PARITY-2026-09-30-gallery-font-host.md); results
-[parity-results-2026-09-30-gallery-font-host.json](gallery-support/parity/parity-results-2026-09-30-gallery-font-host.json). `support-status.json` is rebuilt from this run (only
+parity-results-2026-09-30-gallery-font-host.json. `support-status.json` is rebuilt from this run (only
 the parity fields of 83 values change; presence is untouched), so the pptx.gallery badges need the re-import that follows this change.
 
 | | perfect | near | mismatch | fontResolution pass | near | fail |
@@ -398,7 +398,7 @@ tag `opf-v0.11.3`, and `register-local-opf.mjs` (parity, audit B) and the audit 
 unpacked npm tarballs (`dist/` also exposed as `src/` for audit A, dependencies and the optional script-font peers installed from the registry, the registry's `gitHead` stamped
 into `package.json` so the heads are recorded). pptx-gallery is main `edb77b2`; the bump PR that follows changes no snippet builder and no catalog record (only the key order of 24 deprecated layout
 records, see below). Raw results: [audit A](gallery-support/audit-a/SUMMARY.md), [audit B](gallery-support/audit-b/results.json),
-[parity](gallery-support/parity/parity-results-2026-09-30-published-0.11.6.json) and [PARITY-2026-09-30-published-0.11.6.md](gallery-support/parity/PARITY-2026-09-30-published-0.11.6.md); `support-status.json` is regenerated from them.
+parity and [PARITY-2026-09-30-published-0.11.6.md](gallery-support/parity/PARITY-2026-09-30-published-0.11.6.md); `support-status.json` is regenerated from them.
 
 **Result.** `pnpm report:works`: **812 of 819 `works` (99.1%)**, from 431 (52.6%) in the committed file (427 at the start of the goal).
 
@@ -436,7 +436,7 @@ references), pptx-gallery `b2238ac` (category-major chart snippets; 26 kept char
 Office, one local core (`register-local-opf.mjs` for the parity and audit B runs, the audit A loader for audit A). Full report, with the before and
 after tables against opf#186:
 [PARITY-2026-09-30-charts-measured.md](gallery-support/parity/PARITY-2026-09-30-charts-measured.md); results
-[parity-results-2026-09-30-charts-measured.json](gallery-support/parity/parity-results-2026-09-30-charts-measured.json). `support-status.json` is rebuilt
+parity-results-2026-09-30-charts-measured.json. `support-status.json` is rebuilt
 from this run and the presence audits.
 
 **Parity: 707 perfect, 47 near, 96 mismatch of 850** (opf#186: 657, 37, 156). On the same heads the harness as merged scores 700, 48 and 102; the
@@ -526,7 +526,7 @@ All four audits re-run on the merged mains after the 2026-09-29 merges and relea
 `021cca0`, opf-pptx 0.11.1 `0d15f1c`, pptx-gallery `0b2dec8` (audit B also opf-editor 0.10.1 `4af6ea6`). Node 24.21.0, no Office. All
 engines resolve to one local core (`register-local-opf.mjs` for the parity and audit B runs, the audit A loader for audit A). Full report, including
 the per-check before and after tables against opf#175: [PARITY-2026-09-29-merged-heads.md](gallery-support/parity/PARITY-2026-09-29-merged-heads.md);
-results [parity-results-2026-09-29-merged-heads.json](gallery-support/parity/parity-results-2026-09-29-merged-heads.json). `support-status.json` is rebuilt
+results parity-results-2026-09-29-merged-heads.json. `support-status.json` is rebuilt
 from this run and the presence audits below.
 
 **Parity: 657 perfect, 37 near, 156 mismatch of 850** (opf#175: 660, 33, 157). With the harness exactly as merged before this run, the same heads score
@@ -630,7 +630,7 @@ further 20 with #93). None becomes perfect, because fontResolution near or fail
 remains for every value except the five perfect ones.
 
 Results:
-[parity-results-2026-09-29-table-drawn-extent.json](gallery-support/parity/parity-results-2026-09-29-table-drawn-extent.json)
+parity-results-2026-09-29-table-drawn-extent.json
 (new check, current mains),
 [scoreboard](gallery-support/parity/PARITY-2026-09-29-table-drawn-extent.md) (its
 before/after compares with the old check at the same heads; those baseline runs

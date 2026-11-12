@@ -14,7 +14,7 @@ Converter [PR #13](https://github.com/OpenPresentation/opf-pptx/pull/13), candid
 
 ## Published 0.5.1 observations
 
-Real PowerPoint 16 opens, rasterizes, edits and saves all 19 slides in eight controlled feature cases. Every native edit survives reopen and schema-valid reimport on Node 20/24. PowerPoint exposes three native tables, one editable Office chart and one native picture. The rich text/list, dynamic nested composition, scalar table, code, metric, quote, timeline, chart, grid-span and embedded-image cases come from installed registry core 0.7.0 examples. Renderer 0.5.0 and PPTX 0.5.1 are the actual registry packages, with lockfile integrities recorded in the [machine-readable report](evidence/native-feature-matrix/comparison.json).
+Real PowerPoint 16 opens, rasterizes, edits and saves all 19 slides in eight controlled feature cases. Every native edit survives reopen and schema-valid reimport on Node 20/24. PowerPoint exposes three native tables, one editable Office chart and one native picture. The rich text/list, dynamic nested composition, scalar table, code, metric, quote, timeline, chart, grid-span and embedded-image cases come from installed registry core 0.7.0 examples. Renderer 0.5.0 and PPTX 0.5.1 are the actual registry packages, with lockfile integrities recorded in the machine-readable report.
 
 **Visual equivalence is not established.** The native rasters reveal substantive differences which file validity, editability and zero converter diagnostics did not detect:
 
@@ -33,10 +33,10 @@ The comparison uses the same four locally installed Calibri faces for text measu
 
 Global RGB mean absolute channel differences range from 0.9763 to 6.0587 on a 0–255 scale; those are observations, not equivalence thresholds. Large blank areas can hide missing features: for example, the visibly different timeline still has mean error 2.1129. Each contact sheet places the renderer on the left and actual PowerPoint on the right; row-to-fixture mappings and hashes are in the report:
 
-- [Rich text, lists and dynamic composition](evidence/native-feature-matrix/contact-1.png)
-- [Nested layout, tables, code and metric](evidence/native-feature-matrix/contact-2.png)
-- [Quote, timeline, chart and grid spans](evidence/native-feature-matrix/contact-3.png)
-- [Embedded raster image](evidence/native-feature-matrix/contact-4.png)
+- Rich text, lists and dynamic composition
+- Nested layout, tables, code and metric
+- Quote, timeline, chart and grid spans
+- Embedded raster image
 
 Regenerate from this GitHub checkout and a fresh registry consumer containing the published packages plus the renderer's raster dependencies:
 

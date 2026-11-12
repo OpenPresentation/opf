@@ -20,7 +20,7 @@ package, `@openpresentation/mcp`, follows the same release and is verified by th
 The install below saves exact versions in `package.json`; retain
 `package-lock.json` and confirm the six OPF packages share one release before
 using the workflow. For an earlier reproducible run, use the exact versions in
-its receipt. The [2026-11-08 published-consumer receipt](handoff/2026-11-08/core-033-currency/post-publication/receipt.json)
+its receipt. The 2026-11-08 published-consumer receipt
 records the genuine 0.33.0 run, separately from Office and site qualification.
 All packages declare `engines.node: >=22`; Node 24 is the verified toolchain.
 
@@ -200,7 +200,7 @@ CLI 0.22.0, `opf convert deck.opf.json deck.pptx --body-text native` (`bodyText:
 'native'` in `toPptx`) is an opt-in mode that writes whole paragraphs and binds a
 wrapped title to the Title placeholder; see [when to choose it](cli.md#pptx-text-rr-88-rr-91). Shared
 headers and footers are written on the slide master or layout. The retained
-[Windows sample](evidence/rr-20-windows-current-2026-10-14/README.md) covers
+Windows sample covers
 17 selected native cases and four actual UI operations; 41 of 58 cases were
 not executed natively. This quickstart verifies published Node APIs and
 exports. It does not certify every Office operation or global native fidelity.
