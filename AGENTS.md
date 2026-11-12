@@ -50,7 +50,7 @@ Raw working evidence (archives, screenshots and review sheets, logs, saved decks
 
 ## Checks for agents
 
-Work in your own worktree on its own branch from a fresh `origin/main`: `node scripts/agent-worktree.mjs add <task>` makes a small blobless checkout (the evidence archives under `docs/evidence` are left out), installs with one shared pnpm store and prints the path; `remove <task>` deletes it once the branch is merged or abandoned.
+Work in your own worktree on its own branch from a fresh `origin/main`: `node scripts/agent-worktree.mjs add <task>` makes a small blobless checkout, installs with one shared pnpm store and prints the path; `remove <task>` deletes it once the branch is merged or abandoned.
 
 After each change run `pnpm check:changed`: it checks only what the branch changed (Biome, the mapped checks, the type check and the tests of the affected packages when relevant). Leave the full `pnpm test` to CI and the last run before a PR. Heavy commands (`pnpm typecheck`, `pnpm test`, the package tests in `check:changed`) wait for one of three machine-wide slots (`OPF_AGENT_SLOTS`; no limit in CI), so concurrent sessions do not starve each other. A hook in `.claude/settings.json` runs Biome on each file you edit, applies its safe fixes and reports the errors that fail `pnpm lint`; re-read a file it says it changed.
 
