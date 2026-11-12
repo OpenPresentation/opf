@@ -25,10 +25,19 @@ function tx(bytes,action){const file='ppt/charts/chart1.xml',select=xml=>{const 
 const before=tx(input,text=>text.replace(/>[ \t\r\n]+</gu,'><')),edited=mutate(tx(before,()=>'<c:tx><c:v>Actual edited</c:v></c:tx>'),'docProps/core.xml',text=>once(text,'<cp:revision>1</cp:revision>','<cp:revision>2</cp:revision>'));
 const typeEvidence=()=>({chart:{observedType:'System.Int32',observedRawValue:'-4111',numericValue:-4111},count:{observedType:'System.Int32',observedRawValue:'3',numericValue:3},series:Array.from({length:3},(_,i)=>({index:i+1,typeObservation:{observedType:'System.Int32',observedRawValue:'4',numericValue:4}}))});
 const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n');
+// The current export of the reference deck. It is no longer the archive PowerPoint was measured with (REFERENCE_NAME_INPUT, 129,025 bytes):
+// v0.34.0 made the data-label XML of the reference series schema-valid (no <c:delete val="0"/> before the show flags, and nothing after
+// <c:delete val="1"/>), which removes 9 bytes from the two chart parts and changes nothing else. The native route still admits only the
+// measured archive (retained as test-fixtures/reference-name/reference-native-lines.pptx, which the comparison contract below runs on);
+// measuring the current export needs a new sealed input.
+const CURRENT_EXPORT=Object.freeze({bytes:129016,sha256:'a34458fbf371bee230cd34000378fbbf04bbbe8db461d5fc291b9c03f932296e'});
 let current;
 function currentFixture(){current??=(async()=>{
  const deck=structuredClone(source),renderOptions={catalogs:[gallery]},fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck,renderOptions});await fonts.ensure(deck,{renderOptions});
- const input=Buffer.from(await toPptx(deck,{catalogs:[gallery],seed:1,timestamp:'2026-01-01T00:00:00Z',date:'2026-10-10',provenance:'full',fonts}));assert.deepEqual(deck,source);assert.deepEqual({bytes:input.length,sha256:digest(input)},REFERENCE_NAME_INPUT,'Maintained current export must reproduce the sealed production authority before it can enter admission');
+ const exported=Buffer.from(await toPptx(deck,{catalogs:[gallery],seed:1,timestamp:'2026-01-01T00:00:00Z',date:'2026-10-10',provenance:'full',fonts}));assert.deepEqual(deck,source);assert.deepEqual({bytes:exported.length,sha256:digest(exported)},CURRENT_EXPORT,'The maintained export of the reference deck changed: review the change, then update CURRENT_EXPORT');
+ const input=fs.readFileSync(new URL('./test-fixtures/reference-name/reference-native-lines.pptx',import.meta.url));assert.deepEqual({bytes:input.length,sha256:digest(input)},REFERENCE_NAME_INPUT,'The retained archive is the one PowerPoint was measured with');
+ const sealedParts=deps.unzipSync(input),exportedParts=deps.unzipSync(exported);assert.deepEqual(Object.keys(exportedParts).sort(),Object.keys(sealedParts).sort());
+ assert.deepEqual(Object.keys(sealedParts).filter(name=>Buffer.compare(Buffer.from(sealedParts[name]),Buffer.from(exportedParts[name]))!==0).sort(),['ppt/charts/chart1.xml','ppt/charts/chart2.xml'],'The current export differs from the measured archive only in the two chart parts');
  const before=tx(input,text=>text.replace(/>[ \t\r\n]+</gu,'><')),edited=mutate(tx(before,()=>'<c:tx><c:v>Actual edited</c:v></c:tx>'),'docProps/core.xml',text=>once(text,'<cp:revision>1</cp:revision>','<cp:revision>2</cp:revision>'));return{input,before,edited,reopened:edited};
 })();return current;}
 function completion(output,phaseSource=input,snapshotArchives={before,edited,reopened:edited}){
