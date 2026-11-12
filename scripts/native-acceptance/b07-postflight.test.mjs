@@ -165,7 +165,26 @@ test('reviewed observer source remains exact and B07 source binds actual worker 
   const snapshotWorker=Buffer.from(snapshotState);assert.equal(snapshotWorker.length,93940);assert.equal(digest(snapshotWorker),"1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870");
   let snapshotInverse=snapshotState;for(const [oldText,newText]of [...snapshotEdits].reverse()){assert.equal(snapshotInverse.split(newText).length-1,1);snapshotInverse=snapshotInverse.replace(newText,oldText);}
   assert.deepEqual(Buffer.from(snapshotInverse),startupState,'Sixth-stage inverse preserves the entire immutable startup-fixed worker');
-  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),snapshotWorker);
+  // Stage7 changes only three Name paths to the worker's existing canonical root.
+  const workerRootEdits=[
+  [
+    "$fixed=Join-Path $outputRoot ('reference-name-'+$Phase+'.pptx')",
+    "$fixed=Join-Path $root ('reference-name-'+$Phase+'.pptx')"
+  ],
+  [
+    "Join-Path $outputRoot 'reference-name-before.pptx'",
+    "Join-Path $root 'reference-name-before.pptx'"
+  ],
+  [
+    "Join-Path $outputRoot 'reference-name-reopened.pptx'",
+    "Join-Path $root 'reference-name-reopened.pptx'"
+  ]
+];
+  let workerRootState=snapshotState;for(const [prior,next]of workerRootEdits){assert.equal(workerRootState.split(prior).length-1,1);workerRootState=workerRootState.replace(prior,next);}
+  const currentWorker=Buffer.from(workerRootState);assert.equal(currentWorker.length,93922);assert.equal(digest(currentWorker),'21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255');
+  let workerRootInverse=workerRootState;for(const [prior,next]of [...workerRootEdits].reverse()){assert.equal(workerRootInverse.split(next).length-1,1);workerRootInverse=workerRootInverse.replace(next,prior);}
+  assert.deepEqual(Buffer.from(workerRootInverse),snapshotWorker,'Seventh-stage inverse preserves all six immutable earlier stages');
+  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),currentWorker);
   for(const name of ['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
   const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
   assert.ok(runner.indexOf('if(-not $RunOffice)')<runner.indexOf('$checked=& $node $validator verify-postflight'));
