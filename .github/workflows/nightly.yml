@@ -658,6 +658,7 @@ jobs:
         with:
           name: libreoffice-qualification
           path: |
+            artifacts/qualification/**
             artifacts/libreoffice/**
             !artifacts/libreoffice/profiles/*/lo-user/**
             !artifacts/libreoffice/profiles/*/fonts/**

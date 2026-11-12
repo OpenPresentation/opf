@@ -123,9 +123,10 @@ test('incremental script reporting preserves the prior ensure prefix, current de
 });
 
 const childCode = String.raw`
-import fs from 'node:fs/promises';import {registerHooks,syncBuiltinESMExports}from'node:module';import {createHash}from'node:crypto';
+import fs from 'node:fs/promises';import module,{syncBuiltinESMExports}from'node:module';import {createHash}from'node:crypto';
 const [mode,moduleURL,galleryURL]=process.argv.slice(1),calls=[];let block=mode==='missing',corrupt=mode==='integrity',protectedFile,protectedBefore;
-registerHooks({resolve(specifier,context,next){if(specifier.includes('@expo-google-fonts/'))calls.push(specifier);if(block&&specifier==='@expo-google-fonts/noto-emoji/package.json')throw Object.assign(Error('Not installed'),{code:'MODULE_NOT_FOUND'});return next(specifier,context);}});
+// Intercept the actual createRequire(...).resolve boundary used by node-resolve.js, including Node22.
+const createRequire=module.createRequire;module.createRequire=(...args)=>{const require=createRequire(...args),resolve=require.resolve;require.resolve=(specifier,...options)=>{if(specifier.includes('@expo-google-fonts/'))calls.push(specifier);if(block&&specifier==='@expo-google-fonts/noto-emoji/package.json')throw Object.assign(Error('Not installed'),{code:'MODULE_NOT_FOUND'});return resolve(specifier,...options);};return require;};syncBuiltinESMExports();
 const original=fs.readFile;
 fs.readFile=async function(file,...args){const value=await original.call(this,file,...args);if(String(file).endsWith('NotoEmoji_400Regular.ttf')){protectedFile=file;protectedBefore=createHash('sha256').update(value).digest('hex');if(corrupt){const altered=Buffer.from(value);altered[altered.length-1]^=1;return altered;}}return value;};syncBuiltinESMExports();
 const {loadFonts}=await import(moduleURL),{gallery}=await import(galleryURL),renderOptions={catalogs:[gallery]},plain={slides:[{title:'Plain title',text:'Plain body'}]},emoji={design:{fontScheme:{id:'emoji-control',heading:'Noto Color Emoji',body:'Noto Color Emoji'}},slides:[{title:'\u{1F600}',text:'\u{1F469}\u200D\u{1F4BB}'}]},request=presentation=>({pack:'office',substitutionPolicy:'visual',fallbackFamily:'Roboto',scripts:'auto',presentation,renderOptions});
@@ -153,9 +154,9 @@ for (const mode of ['missing', 'integrity']) test(`${mode} raster companion refu
 });
 
 const optionalCode = String.raw`
-import {registerHooks}from'node:module';import fs from'node:fs/promises';import{createHash}from'node:crypto';
+import module,{syncBuiltinESMExports}from'node:module';import fs from'node:fs/promises';import{createHash}from'node:crypto';
 const [mode,moduleURL,galleryURL]=process.argv.slice(1),blocked=mode==='color-missing'?'@expo-google-fonts/noto-color-emoji/package.json':'@expo-google-fonts/noto-sans-math/package.json',calls=[];
-registerHooks({resolve(specifier,context,next){if(specifier.includes('@expo-google-fonts/'))calls.push(specifier);if(specifier===blocked)throw Object.assign(Error('Optional package unavailable'),{code:'MODULE_NOT_FOUND'});return next(specifier,context);}});
+const createRequire=module.createRequire;module.createRequire=(...args)=>{const require=createRequire(...args),resolve=require.resolve;require.resolve=(specifier,...options)=>{if(specifier.includes('@expo-google-fonts/'))calls.push(specifier);if(specifier===blocked)throw Object.assign(Error('Optional package unavailable'),{code:'MODULE_NOT_FOUND'});return resolve(specifier,...options);};return require;};syncBuiltinESMExports();
 const{loadFonts}=await import(moduleURL),{toSvg}=await import(new URL('./index.js',moduleURL)),{gallery}=await import(galleryURL),diagnostics=[],renderOptions={catalogs:[gallery]};
 const doc=mode==='color-missing'?{slides:[{title:'Hello \u{1F600}',text:'Body'}]}:{design:{fontScheme:{id:'math-control',heading:'Cambria Math',body:'Cambria Math'}},slides:[{title:'Theorem',text:'Proof'}]};
 const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',fallbackFamily:'Roboto',scripts:'auto',presentation:doc,renderOptions,onDiagnostic:value=>diagnostics.push(value)}),family=mode==='color-missing'?'Noto Emoji':'STIX Two Math',text=mode==='color-missing'?'\u{1F600}':'Theorem';
