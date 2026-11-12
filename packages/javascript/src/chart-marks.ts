@@ -83,9 +83,9 @@ export function waterfallRoles(values: readonly (number | null)[]): (WaterfallRo
  * LH-107: a waterfall bar's default label: a total as its value, a step signed (+9.3, −7.4 with U+2212), in the column's format. LH-153: with
  * `group` (the column has no format and groups its thousands, `columnGroups`) a whole number of four digits or more is grouped by the language.
  */
-export function waterfallLabelText(value: number, format: string | undefined, role: WaterfallRole | null, group?: {language?: string}): string {
-  if (role === 'total' || value === 0) return valueLabel(value, format, group);
-  return `${value > 0 ? '+' : '−'}${valueLabel(Math.abs(value), format, group)}`;
+export function waterfallLabelText(value: number, format: string | undefined, role: WaterfallRole | null, group?: {language?: string}, language = group?.language): string {
+  if (role === 'total' || value === 0) return valueLabel(value, format, group, language);
+  return `${value > 0 ? '+' : '−'}${valueLabel(Math.abs(value), format, group, language)}`;
 }
 
 /**
@@ -117,7 +117,7 @@ export function chartWaterfall(chart: unknown, data: ResolvedChartData, geometry
     const {fontPx, pad} = metrics(box, scale, geometry.minFontSize);
     const band = Math.max(1, box.width - 2 * pad) / data.rows.length;
     const group = columnGroups(data, column) ? {language: geometry.language} : undefined;
-    const widest = Math.max(0, ...values.map((value, index) => value === null ? 0 : geometry.measure(waterfallLabelText(value, format, roles[index]!, group), fontPx, roles[index] === 'total' ? 700 : 400)));
+    const widest = Math.max(0, ...values.map((value, index) => value === null ? 0 : geometry.measure(waterfallLabelText(value, format, roles[index]!, group, geometry.language), fontPx, roles[index] === 'total' ? 700 : 400)));
     if (widest + fontPx * 0.25 > band) labels = false;
   }
   const titled = record(chart.axisTitles) && nonBlank(chart.axisTitles.value) !== undefined;
@@ -508,8 +508,8 @@ function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChart
   let x = box.x + start + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - side - x - fontPx - (extra.labelRoom ?? 0));
   const format = typeof data.formats[1] === 'string' && data.formats[1] !== '' && !numberFormatError(data.formats[1]) ? data.formats[1] : undefined;
   if (!hidden && format !== undefined && !typeOf(chart).startsWith('100pct')) {
-    const first = width(tickLabel(axis.min, false, format)) / 2, endTick = axisScale.ticks.at(-1)!;
-    const lastHalf = width(tickLabel(endTick, false, format)) / 2, right = box.x + box.width - pad;
+    const first = width(tickLabel(axis.min, false, format, undefined, geometry.language)) / 2, endTick = axisScale.ticks.at(-1)!;
+    const lastHalf = width(tickLabel(endTick, false, format, undefined, geometry.language)) / 2, right = box.x + box.width - pad;
     const nextX = Math.max(x, box.x + pad + first);
     plotWidth = Math.max(1, Math.min(x + plotWidth, right - lastHalf) - nextX); x = nextX;
   }

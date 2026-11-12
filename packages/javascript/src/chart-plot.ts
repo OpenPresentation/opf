@@ -14,6 +14,7 @@ import type {ChartLayer, ChartPlotInset} from './chart-layer.js';
 import {horizontalBarPlot} from './chart-marks.js';
 import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
 import {groupNumber, groupsAxisTicks} from './number-grouping.js';
+import {formatNumber, formatPercentNumber} from './numerals.js';
 
 interface Box { x: number; y: number; width: number; height: number }
 
@@ -47,10 +48,11 @@ const record = (value: unknown): value is Record<string, unknown> => typeof valu
  * A value axis tick as the preview labels it: a percentage on a 100% chart, else the first series' number format, else General. LH-141:
  * with `group` (an axis without a format whose ticks are whole numbers of four digits, `groupsAxisTicks`) the tick groups its thousands by the language.
  */
-export function tickLabel(value: number, percent: boolean, format: string | undefined, group?: {language?: string}): string {
-  if (percent) return `${clean(value * 100)}%`;
-  if (format === undefined) return group ? groupNumber(clean(value), group.language) : String(clean(value));
-  return formatDataNumber(clean(value), format);
+export function tickLabel(value: number, percent: boolean, format: string | undefined, group?: {language?: string}, language = group?.language): string {
+  // LH-106: every tick is in the language's numbering system (formatNumber), grouped or not.
+  if (percent) return formatPercentNumber(clean(value * 100), language);
+  if (format === undefined) return group ? groupNumber(clean(value), group.language) : formatNumber(clean(value), language);
+  return formatDataNumber(clean(value), format, language);
 }
 
 /**
@@ -191,8 +193,8 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
     let x = inner.x + pad + gutter + pad / 2, plotWidth = Math.max(1, right - x - fontPx);
     // The composed scale is fixed, so one pass leaves both formatted end tick labels inside the chart.
     if (!hidden && format !== undefined) {
-      const first = width(tickLabel(ticks[0]!, false, format)) / 2;
-      const last = width(tickLabel(ticks.at(-1)!, false, format)) / 2;
+      const first = width(tickLabel(ticks[0]!, false, format, undefined, geometry.language)) / 2;
+      const last = width(tickLabel(ticks.at(-1)!, false, format, undefined, geometry.language)) / 2;
       const nextX = Math.max(x, inner.x + pad + first);
       plotWidth = Math.max(1, Math.min(x + plotWidth, inner.x + inner.width - pad - last) - nextX); x = nextX;
     }
@@ -200,7 +202,7 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
     if (!(bottom - plotTop > 1)) return undefined;
     return {left: x - box.x, top: plotTop - box.y, right: box.x + box.width - (x + plotWidth), bottom: box.y + box.height - bottom};
   }
-  const tickWidth = hidden ? fontPx / 2 : Math.max(...ticks.map(tick => width(tickLabel(tick, percent, format, !percent && format === undefined && groupsAxisTicks(axis) ? {language: geometry.language} : undefined)))) + fontPx * 0.5;
+  const tickWidth = hidden ? fontPx / 2 : Math.max(...ticks.map(tick => width(tickLabel(tick, percent, format, !percent && format === undefined && groupsAxisTicks(axis) ? {language: geometry.language} : undefined, geometry.language)))) + fontPx * 0.5;
   // The end of the plot (the last category: the right, or the left right to left) keeps half a text size, or the end-label gutter.
   const end = Math.max(fontPx / 2, layer?.endLabels?.gutter ?? 0, layer?.stack?.names?.gutter ?? 0);
   const labels = plan.rows.map(row => row[0] === null || row[0] === undefined ? '' : String(row[0]).replace(/[\r\n]+/g, ' '));
@@ -216,7 +218,7 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
     const index=resolved.combo.findIndex(entry=>entry.axis==='secondary')+1,format=plan.formats[index];
     const secondaryScale=chartAxisScale(secondary);
     if(!secondaryScale)return undefined;
-    const labels=secondaryScale.ticks.map(value=>tickLabel(value,false,format,!format&&groupsAxisTicks(secondary)?{language:geometry.language}:undefined));
+    const labels=secondaryScale.ticks.map(value=>tickLabel(value,false,format,!format&&groupsAxisTicks(secondary)?{language:geometry.language}:undefined,geometry.language));
     secondaryWidth=Math.max(...labels.map(width))+fontPx*0.5;
   }
   const far=Math.max(end,secondaryWidth);

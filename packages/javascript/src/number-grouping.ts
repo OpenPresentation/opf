@@ -2,26 +2,19 @@
 // wherever the author wrote no number format: chart value labels, the doughnut hole and the pie value list, the end labels of a line,
 // and a metric's numeric value. A number format the author wrote is the author's and is never regrouped.
 
+import {formatNumber} from './numerals.js';
+
 /** A whole number groups its thousands from this magnitude (four integer digits). */
 export const NUMBER_GROUPING_MIN = 1000;
 
-const formatters = new Map<string, Intl.NumberFormat>();
-
 /**
- * `value` in the General form (at most twelve significant digits) with its thousands grouped by the language's locale (`Intl`, English
- * when the tag is missing or unknown; a locale that groups only from five digits, Spanish, leaves four digits as they are). A number that
- * is not finite is its plain text.
+ * `value` in the General form (at most twelve significant digits) with its thousands grouped by the language's locale (English
+ * when the tag is missing or unknown; a locale that groups only from five digits, Spanish, leaves four digits as they are), in the
+ * language's own digits (LH-106: `formatNumber`, from OPF's locale table, never the runtime's `Intl`). A number that is not finite
+ * is its plain text.
  */
 export function groupNumber(value: number, language?: string): string {
-  if (!Number.isFinite(value)) return String(value);
-  const key = language ?? '';
-  let formatter = formatters.get(key);
-  if (!formatter) {
-    try { formatter = new Intl.NumberFormat(language || 'en', {useGrouping: true, maximumFractionDigits: 12}); }
-    catch { formatter = new Intl.NumberFormat('en', {useGrouping: true, maximumFractionDigits: 12}); }
-    formatters.set(key, formatter);
-  }
-  return formatter.format(Number(value.toPrecision(12)));
+  return formatNumber(value, language, {group: true});
 }
 
 /**

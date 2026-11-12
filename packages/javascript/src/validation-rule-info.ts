@@ -485,7 +485,7 @@ export const languageTagRule = rule(
 	'language-tag',
 	'content',
 	'warning',
-	'A language tag is malformed, uses an unassigned region or is not in canonical case.',
+	'A language tag is malformed, uses an unassigned region, is not in canonical case or names a numbering system OPF does not draw.',
 	'Engines read the deck and slide language and each run\'s `language` as BCP 47 tags to choose script fonts, text direction, proofing language and the PowerPoint `lang` attribute. A tag such as `en-a`, or a region that does not exist (`en-UK`; the United Kingdom is `GB`), is guessed at or dropped, and a wrong-case tag (`EN-us`) is not what a locale lookup expects.',
 	{
 		standard: 'BCP 47 (RFC 5646, section 2.1) and the platform locale data (Intl.getCanonicalLocales, Intl.DisplayNames)',

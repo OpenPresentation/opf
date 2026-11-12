@@ -90,8 +90,10 @@ export function labelString(c, { category, value, share, format, group }) {
   const labels = c.dataLabels;
   const parts = {};
   if (category !== undefined && category !== null) parts.category = String(category);
-  if (typeof value === "number" && Number.isFinite(value)) parts.value = format !== undefined ? formatDataNumber(value, format) : formatChartLabelNumber(value, group ? { language: typeof c.language === "string" ? c.language : undefined } : undefined);
-  if (typeof share === "number" && Number.isFinite(share)) parts.percent = formatChartLabelPercent(share);
+  // LH-106: the value and the percentage are in the numbering system of the deck (or slide) language.
+  const language = typeof c.language === "string" ? c.language : undefined;
+  if (typeof value === "number" && Number.isFinite(value)) parts.value = format !== undefined ? formatDataNumber(value, format, language) : formatChartLabelNumber(value, group ? { language } : undefined, language);
+  if (typeof share === "number" && Number.isFinite(share)) parts.percent = formatChartLabelPercent(share, language);
   return chartLabelText(parts, labels.content, labels.separator);
 }
 

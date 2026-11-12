@@ -4,7 +4,7 @@
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { OPFFontError } from "./font-registry.js";
 import { SCRIPT_FONT_REPLACEMENTS, glyphFallbackFamilies, scriptOfCharacter, scriptsOfText } from "./script-fonts.js";
-import { MAX_COMPOSITION_DEPTH, quoteLanguage, resolveScriptFonts, timelineStatusWordsFor } from "@openpresentation/opf/composition";
+import { MAX_COMPOSITION_DEPTH, languageInEffect, numeralScripts, quoteLanguage, resolveScriptFonts, timelineStatusWordsFor } from "@openpresentation/opf/composition";
 import { createFontAnalysis } from "./lazy-fonts.js";
 import { SYMBOL_SCRIPT, isSymbolEncodedFamily } from "./symbol-fonts.js";
 
@@ -222,7 +222,19 @@ export function analyzePresentationScripts(presentation, profile, renderOptions,
     for (const script of found.scripts) scripts.add(script);
     for (const character of found.cjk) cjk.add(character);
   }
-  return { profile, detected: [...scripts].sort(), design: design.scripts, cjk };
+  return { profile, detected: [...scripts].sort(), design: [...new Set([...design.scripts, ...generatedNumeralScripts(presentation)])].sort(), cjk };
+}
+
+/**
+ * LH-106: the scripts of the digits the engines generate (metric values, chart labels and ticks, table numbers, list numerals,
+ * step badges, slide numbers) on each slide whose language (its own, else the deck's) has digits of its own: Arab for `ar-SA` and
+ * `fa-IR`, Beng for `bn`, none for `ar-AE` or `ar-SA-u-nu-latn`. Like a font scheme's scripts they are faces the deck may draw
+ * without one authored character in the script (an `ar-SA` deck titled "T" with the metric 1000 draws ١٬٠٠٠), so their packages
+ * are offered to the drawn-face analysis, which loads only the faces the composed slides actually draw.
+ */
+function generatedNumeralScripts(presentation) {
+  const slides = Array.isArray(presentation?.slides) ? presentation.slides : [];
+  return numeralScripts(slides.map((_, index) => languageInEffect(presentation, index)));
 }
 
 /** One string's scripts (`scriptsOfText`) and the Han, kana and Hangul characters it draws, in order. One pass over the characters. */

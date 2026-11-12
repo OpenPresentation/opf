@@ -52,11 +52,11 @@ function withRecord(bytes, change) {
 // Round trips: the imported block is the metric, equal to the source.
 const ARABIC_TITLE = 'المؤشرات الرئيسية';
 const spellings = {'en-US': ['999', '1,000', '150,000'], 'fr-FR': ['999', '1 000', '150 000'], 'de-DE': ['999', '1.000', '150.000'],
-  // Below 1,000 a number is its plain text (Latin digits); grouped, it is spelled in the language's own digits.
-  'ar-SA': ['999','١٬٠٠٠', '١٥٠٬٠٠٠']};
+  // LH-106: every number is in the language's own digits, below 1,000 too; -u-nu-latn chooses Latin digits; Persian has its own.
+  'ar-SA': ['٩٩٩', '١٬٠٠٠', '١٥٠٬٠٠٠'], 'ar-SA-u-nu-latn': ['999', '1,000', '150,000'], 'fa-IR': ['۹۹۹', '۱٬۰۰۰', '۱۵۰٬۰۰۰'], 'hi-IN': ['999', '1,000', '1,50,000']};
 for (const [language, texts] of Object.entries(spellings)) {
   for (const [index, value] of [999, 1000, 150000].entries()) {
-    const {bytes} = await exported(language, {value, label: 'People'}, language === 'ar-SA' ? ARABIC_TITLE : 'Metric');
+    const {bytes} = await exported(language, {value, label: 'People'}, /^(ar|fa)-/.test(language) ? ARABIC_TITLE : 'Metric');
     assert.equal(valueText(bytes), texts[index], `${language} ${value}: drawn as ${texts[index]}`);
     const {slide, codes} = await imported(bytes);
     assert.deepEqual(slide.metric, {value, label: 'People'}, `${language} ${value}: imports as the metric`);

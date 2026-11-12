@@ -1,3 +1,4 @@
+import { plainLanguageTag } from "./numerals.js";
 import { checkCatalogsOption, resolveReference, type CatalogOptions } from "./catalog-refs.js";
 import { resolveFontFamilies } from "./composition.js";
 import { isRecord } from "./content-walk.js";
@@ -365,10 +366,11 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
 
   const bcp47 = canonicalTag(language.tag);
   const authoredOoxml = text(overrides.ooxmlLang);
+  // LH-106: OOXML takes a plain tag; an extension (`ar-SA-u-nu-latn`) stays in `bcp47` and in the document, never in `lang`.
   const lang = authoredOoxml
-    ? canonicalTag(authoredOoxml)
+    ? canonicalTag(plainLanguageTag(authoredOoxml))
     : splitTag(language.tag)?.region
-      ? bcp47
+      ? plainLanguageTag(bcp47)
       : known
         ? canonicalTag(known.ooxmlLang)
         : bcp47;

@@ -6,7 +6,7 @@
 //
 // When the resolver throws for a deck, the exporter writes what it wrote before FF-07 (lang="en-US", empty theme ea/cs, no
 // rtl) and reports `language-export-unavailable`.
-import {numberRanges, paragraphDirection, physicalAlignment, resolveScriptFonts as coreResolveScriptFonts} from "@openpresentation/opf/composition";
+import {numberRanges, paragraphDirection, physicalAlignment, plainLanguageTag, resolveScriptFonts as coreResolveScriptFonts} from "@openpresentation/opf/composition";
 import {protectNativeLatinText} from "./native-language-provenance.js";
 
 // OPF 0.15 (FA-23): core resolves the font-scheme references a deck or a language object names against the document's
@@ -51,10 +51,11 @@ export function planScriptFonts(presentation, report, {catalogs} = {}) {
  */
 export function runLanguageTag(plan, tag, slideIndex = 0) {
   if (typeof tag !== "string" || !tag) return undefined;
-  if (!plan) return tag.toLowerCase() === "en-us" ? undefined : tag;
+  // LH-106: a tag's extension (`-u-nu-latn`) is OPF's, never PowerPoint's: `lang` takes the plain tag.
+  if (!plan) return tag.toLowerCase() === "en-us" ? undefined : plainLanguageTag(tag);
   const cache = plan.runLanguages ??= new Map(), key = `${slideIndex}|${tag}`;
   if (!cache.has(key)) {
-    let lang = tag;
+    let lang = plainLanguageTag(tag);
     try {
       const resolved = resolver(plan.presentation, {slideIndex, language: tag}, plan.catalogs);
       if (resolved.languageSource !== "default") lang = resolved.lang;

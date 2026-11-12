@@ -6,6 +6,7 @@
 // Browser-safe and synchronous: no file access, no network, no fonts or DOM.
 import { chartOptionTarget } from './chart-options.js';
 import { formatVariableNumber } from './variables.js';
+import { localizeNumberText } from './numerals.js';
 
 /** A scalar data cell (chart data, dataset rows). */
 export type DataCellValue = string | number | boolean | null;
@@ -138,11 +139,15 @@ export function numberFormatError(format: unknown): string | undefined {
   return 'error' in result ? result.error : undefined;
 }
 
-/** Format a number with a NumberFormat; an absent or invalid format prints the General form (String(value)). */
-export function formatDataNumber(value: number, format?: string): string {
-  if (format === undefined || format === '' || !Number.isFinite(value)) return String(value);
-  const result = formatVariableNumber(value, format);
-  return 'text' in result ? result.text : String(value);
+/**
+ * Format a number with a NumberFormat; an absent or invalid format prints the General form (String(value)). LH-106: with `language`
+ * the text is in that language's numbering system (see `formatVariableNumber`); without it, Latin.
+ */
+export function formatDataNumber(value: number, format?: string, language?: string): string {
+  const general = () => language === undefined || !Number.isFinite(value) ? String(value) : localizeNumberText(String(value), language);
+  if (format === undefined || format === '' || !Number.isFinite(value)) return general();
+  const result = formatVariableNumber(value, format, language);
+  return 'text' in result ? result.text : general();
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -843,13 +848,17 @@ function highlightDiagnostics(table: unknown, rows: readonly (readonly unknown[]
 }
 
 /** Display value of a table cell: a number with a format (cell, else column) becomes formatted text; anything else is returned unchanged. */
-export function tableCellDisplayValue(cell: DataTableCell, columnFormat?: string): DataTableCell {
+export function tableCellDisplayValue(cell: DataTableCell, columnFormat?: string, language?: string): DataTableCell {
+  // LH-106: with `language`, a number cell (with or without a format) is shown in that language's numbering system.
+  const shown = (value: number, format: string | undefined) => formatDataNumber(value, general(format) ? undefined : format, language);
   if (record(cell) && own(cell, 'value')) {
     const styled = cell as DataStyledCell;
     const format = typeof styled.format === 'string' ? styled.format : columnFormat;
-    if (typeof styled.value !== 'number' || format === undefined || numberFormatError(format)) return cell;
-    return { ...styled, value: formatDataNumber(styled.value, format) };
+    if (typeof styled.value !== 'number' || (general(format) && shown(styled.value, format) === String(styled.value))) return cell;
+    return { ...styled, value: shown(styled.value, format) };
   }
-  if (typeof cell !== 'number' || columnFormat === undefined || numberFormatError(columnFormat)) return cell;
-  return formatDataNumber(cell, columnFormat);
+  if (typeof cell !== 'number' || (general(columnFormat) && shown(cell, columnFormat) === String(cell))) return cell;
+  return shown(cell, columnFormat);
 }
+// A cell without a (valid) format whose General text is JavaScript's own stays the number it is.
+const general = (format: string | undefined): boolean => format === undefined || numberFormatError(format) !== undefined;

@@ -161,7 +161,7 @@ export function chartHistogram(chart: unknown, data: ResolvedChartData, geometry
   const titled = typeof titles.value === 'string' && titles.value.trim() !== '';
   const percentRoom = target.kind === 'pareto' ? geometry.measure('100%', fontPx, 400) + fontPx : 0;
   // The plot width for the tallest bar's tick label (the axis ends a quarter above the data at most).
-  const plotWidth = (top: number) => Math.max(1, box.width - 2 * pad - (geometry.measure(valueLabel(Math.ceil(top * 1.25), format, group ? {language} : undefined), fontPx, 400) + fontPx * 0.5) - fontPx / 2 - percentRoom - (titled ? fontPx * 1.5 : 0));
+  const plotWidth = (top: number) => Math.max(1, box.width - 2 * pad - (geometry.measure(valueLabel(Math.ceil(top * 1.25), format, group ? {language} : undefined, language), fontPx, 400) + fontPx * 0.5) - fontPx / 2 - percentRoom - (titled ? fontPx * 1.5 : 0));
   const out: ChartLayerHistogram = {};
   let counts: number[];
   let names: string[];
@@ -206,7 +206,7 @@ export function chartHistogram(chart: unknown, data: ResolvedChartData, geometry
   if (labels && counts.length) {
     const band = plotWidth(Math.max(0, ...counts)) / counts.length;
     const widest = Math.max(0, ...counts.map((count, index) => geometry.measure(chartLabelText({
-      category: names[index], value: valueLabel(count, format, group ? {language} : undefined),
+      category: names[index], value: valueLabel(count, format, group ? {language} : undefined, language),
     }, labels.content, labels.separator), fontPx, 400)));
     if (widest + fontPx * 0.5 > band) out.valueLabels = false;
   }

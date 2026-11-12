@@ -79,7 +79,7 @@ import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './i
 import {
   CHART_BAR_GAP_WIDTH, catalogRecords, clrMapAttributes, DIAGRAM_SHAPE_FAMILIES, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, itemAlignment, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
+  LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, languageInEffect, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -3209,7 +3209,7 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
         const number=first?entry.marker.number:undefined;
         context.nativeLatinSlots.remember(context.slideIndex,objectName,line.fragments.map(fragment=>({text:fragment.text,source:fragment.run.text,start:fragment.start,end:fragment.end,style:fragment.style,sourceRun:fragment.runIndex,marker:fragment.kind==='marker'})),path);
         if(first&&!markerless)context.listMarkers.set(objectName,{fontFamily:entry.marker.style.fontFamily,fontSize:entry.marker.fontSize*.75,color:pptxColor(context.textColor),picture:number?false:picture});
-        const paragraph=first&&!markerless?{bullet:number?{type:'number',style:autoNumScheme(number.style,number.suffix),startAt:number.value,indent:entry.marker.indent*.75}:{characterCode:entry.marker.text.codePointAt(0).toString(16).padStart(4,'0'),indent:entry.marker.indent*.75},indentLevel:level}:{bullet:false,...(keepLevels?{indentLevel:level}:{})};
+        const paragraph=first&&!markerless?{bullet:number?{type:'number',style:autoNumScheme(number.style,number.suffix,number.numberingSystem),startAt:number.value,indent:entry.marker.indent*.75}:{characterCode:entry.marker.text.codePointAt(0).toString(16).padStart(4,'0'),indent:entry.marker.indent*.75},indentLevel:level}:{bullet:false,...(keepLevels?{indentLevel:level}:{})};
         const runs=richLineRuns(line,color,native,context,path);
         if(!runs.length)runs.push({text:'',options:{}});
         // Keep paragraph intent identical across runs. ZIP normalization below
@@ -4090,11 +4090,18 @@ function recordPayloadData(context, objectName, kind, presentation, path, layout
   if (context.provenanceMode !== 'full' || !context.dataRecords || !presentation) return;
   let authored = presentation;
   for (const key of String(path).split('.')) authored = authored !== null && typeof authored === 'object' ? authored[Array.isArray(authored) ? Number(key) : key] : undefined;
-  const record = kind === 'chart' ? chartDataRecord(authored, presentation.datasets, chartRecordOptions) : tableDataRecord(authored, layout);
+  const record = kind === 'chart' ? chartDataRecord(authored, presentation.datasets, chartRecordOptions) : tableDataRecord(authored, layout, tableNumberLanguage(presentation, path).language);
   if (record) {
     context.dataRecords.set(objectName, record);
     context.dataRecordPaths.set(objectName, String(path));
   }
+}
+
+/** LH-106: the `language` layoutTable shows a table's number cells in: the language in effect on the slide its path (`slides.N...`) names. */
+function tableNumberLanguage(presentation, path) {
+  const index = /^slides\.(\d+)(?:\.|$)/.exec(String(path ?? ''))?.[1];
+  const language = languageInEffect(presentation, index === undefined ? undefined : Number(index));
+  return language === undefined ? {} : {language};
 }
 
 function addTablePayload(slide, authoredTable, region, context, options, path, presentation) {
@@ -4114,6 +4121,8 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
   const layout = layoutTable(table, {x:region.x*96,y:region.y*96,width:region.w*96,height:region.h*96}, {
     scale, minFontSize:context.composition?.minFontSize, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path, alignment:context.tableAlignment,
     ...(context.direction === 'rtl' ? {direction: 'rtl'} : {}), ...(presentation ? {presentation} : {}),
+    // LH-106: number cells are shown in the numbering system of the slide's language (its own, else the deck's), as the preview shows them.
+    ...tableNumberLanguage(presentation, path),
     // LH-48: a lone table that composition grew is laid out at the same growth as the preview.
     ...(context.tableGrowth ? {growth: context.tableGrowth} : {}),
     // LH-113: the highlighted body rows composition gave the table (table.highlight, or the rows the slide's texts name).

@@ -36,7 +36,7 @@
 // text and run properties, as a list in the `pyramid` or `matrix` layout (SH-19: OPF's own layouts by their uniqueId). Import never stores a
 // layout part. SH-08: any other SmartArt PowerPoint wrote imports through src/smart-art-import.js (an arrangement's or the list or process
 // layout's list, a Mermaid hierarchy, or its drawing as overlay shapes).
-import {SMART_ART_LAYOUTS, SMART_ART_NAMES, arrangementTree, arrangementPaint, applyColorTransform, bindNoBreak, colorContrast, opfSmartArtUnavailable, smartArtScript, smartArtUnavailable} from '@openpresentation/opf/composition';
+import {SMART_ART_LAYOUTS, SMART_ART_NAMES, arrangementTree, plainLanguageTag, arrangementPaint, applyColorTransform, bindNoBreak, colorContrast, opfSmartArtUnavailable, smartArtScript, smartArtUnavailable} from '@openpresentation/opf/composition';
 import {layoutDefinitionXml, opfLayoutDefinition} from './smart-art-layouts.js';
 import {SMART_ART_LIMITS, drawingSlide, hierarchyDiagram, layoutStem, outlineItems, outlineText, plainText, readSmartArtModel, smartArtForm} from './smart-art-import.js';
 import {XMLParser} from 'fast-xml-parser';
@@ -373,7 +373,7 @@ function nodeParagraph(record, index) {
     const face = font.fontFace ? `<a:latin typeface="${escapeXml(font.fontFace)}"/>` : '';
     // LH-11: the spaces core's line breaker never breaks at are no-break spaces, as the native body writes them.
     const text = bindNoBreak(run.text);
-    return `<a:r><a:rPr lang="${escapeXml(run.language ?? lang)}" sz="${size}"${bold ? ' b="1"' : ''}${italic ? ' i="1"' : ''}${run.underline ? ' u="sng"' : ''}${run.strikethrough ? ' strike="sngStrike"' : ''} dirty="0">${face}</a:rPr><a:t>${escapeXml(text)}</a:t></a:r>`;
+    return `<a:r><a:rPr lang="${escapeXml(run.language ? plainLanguageTag(run.language) : lang)}" sz="${size}"${bold ? ' b="1"' : ''}${italic ? ' i="1"' : ''}${run.underline ? ' u="sng"' : ''}${run.strikethrough ? ' strike="sngStrike"' : ''} dirty="0">${face}</a:rPr><a:t>${escapeXml(text)}</a:t></a:r>`;
   }).join('');
   const paragraphRtl = rtl || RTL.test(plain(values[index]));
   // SH-19: a card's entry and an entry beside its level start at the line's start, as OPF's native text does.

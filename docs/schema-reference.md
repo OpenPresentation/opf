@@ -1676,7 +1676,7 @@ _No named properties._
 
 - Type: `string`
 - Required fields: none
-- Purpose: A BCP-47 language tag ('en-US', 'ja', 'zh-Hans', 'sr-Latn-ME'), an engine vocabulary. Use 'en-GB' for UK English; 'en-UK' is not a valid region.
+- Purpose: A BCP-47 language tag ('en-US', 'ja', 'zh-Hans', 'sr-Latn-ME'), an engine vocabulary. Use 'en-GB' for UK English; 'en-UK' is not a valid region. Numbers the engines generate (metric values, chart labels and ticks, table numbers, list numerals, slide numbers) are drawn in the numbering system of the language, the locale's own (Arabic-Indic digits for 'ar-SA', Latin for 'ar-AE', Persian for 'fa-IR'); the Unicode extension '-u-nu-<system>' chooses another ('ar-SA-u-nu-latn' draws Latin digits)....
 
 _No named properties._
 

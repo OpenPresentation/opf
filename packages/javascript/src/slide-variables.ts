@@ -1,6 +1,7 @@
 import { isRecord } from "./content-walk.js";
 import type { FurnitureField } from "./furniture-fields.js";
 import { parseLogoName, resolveOrganizationLogo } from "./logos.js";
+import { languageInEffect, localizeDigits } from "./numerals.js";
 
 /**
  * Slide-scoped built-in variables (FA-31): `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}`.
@@ -53,6 +54,8 @@ export interface SlideVariableValues {
   slideCount?: number;
   /** The slide's `section`; missing or empty resolves `{{slide.section}}` to empty text. */
   section?: unknown;
+  /** LH-106: the language in effect, whose numbering system the slide number and count are drawn in (Latin when absent). */
+  language?: string;
 }
 
 function checkValues(values: SlideVariableValues): void {
@@ -77,10 +80,10 @@ export function substituteSlideTokens(text: string, values: SlideVariableValues)
     const name = match[1] as SlideScopedBuiltin | undefined;
     let value: string;
     if (name === undefined) value = "{{";
-    else if (name === "slide.number") value = String(values.slideNumber);
+    else if (name === "slide.number") value = localizeDigits(String(values.slideNumber), values.language);
     else if (name === "deck.slideCount") {
       if (values.slideCount === undefined) continue;
-      value = String(values.slideCount);
+      value = localizeDigits(String(values.slideCount), values.language);
     } else value = typeof values.section === "string" ? values.section : "";
     out += text.slice(last, match.index);
     if (name === "slide.number") fields.push({ type: "slideNumber", start: out.length, end: out.length + value.length });
@@ -183,9 +186,11 @@ function substitute(value: unknown, values: SlideVariableValues, root: boolean, 
  * `darkBackground` they pass to `composeSlide`, and compose and draw the result; `resolveSlideContext` returns it as
  * `slide`. Returns the input object itself when nothing changes; never mutates it.
  */
-export function resolveSlideVariables<T>(slide: T, values: { slideNumber: number; slideCount?: number; presentation?: unknown; darkBackground?: boolean }): T {
+export function resolveSlideVariables<T>(slide: T, values: { slideNumber: number; slideCount?: number; presentation?: unknown; darkBackground?: boolean; language?: string }): T {
   if (!isRecord(slide)) return slide;
-  const full: SlideVariableValues = { slideNumber: values?.slideNumber, ...(values?.slideCount !== undefined ? { slideCount: values.slideCount } : {}), section: slide.section } as SlideVariableValues;
+  // LH-106: the slide number is in the numbering system of the slide's language, else the deck's (when given the presentation).
+  const language = values?.language ?? languageInEffect({ language: isRecord(values?.presentation) ? values.presentation.language : undefined, slides: [slide] }, 0);
+  const full: SlideVariableValues = { slideNumber: values?.slideNumber, ...(values?.slideCount !== undefined ? { slideCount: values.slideCount } : {}), section: slide.section, ...(language !== undefined ? { language } : {}) } as SlideVariableValues;
   checkValues(full);
   const logos: LogoContext = values.presentation !== undefined ? { presentation: values.presentation, darkBackground: values.darkBackground === true } : {};
   const text = JSON.stringify(slide);
