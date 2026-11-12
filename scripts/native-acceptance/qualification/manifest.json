@@ -170,6 +170,46 @@
     {
       "id": "compliance-readiness-review",
       "source": "examples/gallery/business-functions/compliance-readiness-review.opf.json"
+    },
+    {
+      "id": "chart-point-overlays",
+      "source": "examples/technical/chart-point-overlays.opf.json"
+    },
+    {
+      "id": "duration-timeline",
+      "source": "examples/technical/duration-timeline.opf.json"
+    },
+    {
+      "id": "explicit-chart-reference-lines",
+      "source": "examples/technical/explicit-chart-reference-lines.opf.json"
+    },
+    {
+      "id": "singleton-combo-reference-lines",
+      "source": "examples/technical/singleton-combo-reference-lines.opf.json"
+    },
+    {
+      "id": "localized-chart-references",
+      "source": "examples/technical/localized-chart-references.opf.json"
+    },
+    {
+      "id": "image-callouts",
+      "source": "examples/technical/image-callouts.opf.json"
+    },
+    {
+      "id": "inverted-pyramids",
+      "source": "examples/technical/inverted-pyramids.opf.json"
+    },
+    {
+      "id": "localized-timeline",
+      "source": "examples/technical/localized-timeline.opf.json"
+    },
+    {
+      "id": "multilingual-slides",
+      "source": "examples/technical/multilingual-slides.opf.json"
+    },
+    {
+      "id": "trees-and-sets",
+      "source": "examples/technical/trees-and-sets.opf.json"
     }
   ],
   "features": [
@@ -1298,6 +1338,185 @@
       "deck": "full-feature-tour",
       "checks": [],
       "manual": "Not run: needs PowerPoint UI control, which the owner declined."
+    },
+    {
+      "id": "SH-25",
+      "title": "Overlays anchored to a chart data point",
+      "changes": [
+        "sh-25-chart-point-overlays"
+      ],
+      "deck": "chart-point-overlays",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeChart",
+        "roundtrip"
+      ],
+      "check": "Review every slide: each anchored ring, arrow or label sits on its data point in PowerPoint as in the preview (within about 4 px at 1280 x 720)."
+    },
+    {
+      "id": "LH-16",
+      "title": "Duration-proportional timeline periods",
+      "changes": [
+        "lh-16-duration-timeline",
+        "lh-16-rtl-date-language"
+      ],
+      "deck": "duration-timeline",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Review every slide: period bars span their duration, range labels are readable and inside their boxes, and right-to-left slides keep date digit order."
+    },
+    {
+      "id": "LH-110-explicit",
+      "title": "Explicit chart reference lines, independent of the title",
+      "changes": [
+        "lh-110-explicit-chart-reference-lines"
+      ],
+      "deck": "explicit-chart-reference-lines",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeChart",
+        "roundtrip"
+      ],
+      "check": "Review every slide: each reference line and its label sit at the authored value on a native chart; no line is inferred from a title."
+    },
+    {
+      "id": "LH-110-singleton",
+      "title": "Reference lines on a single-category combo chart",
+      "changes": [
+        "lh110-singleton-reference-example"
+      ],
+      "deck": "singleton-combo-reference-lines",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeChart"
+      ],
+      "check": "Review every slide: the reference line spans the plot at its value and the file opens without repair."
+    },
+    {
+      "id": "LH-110-localized",
+      "title": "Explicit reference lines on slides in seven languages",
+      "changes": [
+        "lh-110-explicit-chart-reference-lines"
+      ],
+      "deck": "localized-chart-references",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeChart"
+      ],
+      "check": "Review every slide: the dashed line sits at 92% on a native chart and its authored label is shown verbatim, on a slide in each of seven languages; no line is read from the title."
+    },
+    {
+      "id": "LH-34",
+      "title": "Image callouts as editable text over a picture",
+      "changes": [
+        "lh-34-image-callouts",
+        "lh-34-native-panel-import",
+        "sh-27-signed-image-callouts"
+      ],
+      "deck": "image-callouts",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Review every slide: each callout is a native text box at the preview's position over the picture, readable against its plate, and a saved copy imports with its callouts."
+    },
+    {
+      "id": "SH-24",
+      "title": "Inverted pyramids: widest first, editable",
+      "changes": [
+        "sh-24-inverted-pyramid",
+        "sh-24-catalog-current-behavior"
+      ],
+      "deck": "inverted-pyramids",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Review every slide: the widest tier is on top, entry order is preserved, and text keeps its size (no shrink)."
+    },
+    {
+      "id": "LH-121",
+      "title": "Timeline status words in the slide language",
+      "changes": [
+        "lh-121-localized-status",
+        "lh-121-generated-status-fonts"
+      ],
+      "deck": "localized-timeline",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ],
+      "check": "Review every slide: each status word is in the slide's language and script, drawn in a font that has its glyphs (no tofu, no fallback to a smaller face)."
+    },
+    {
+      "id": "LH-106",
+      "title": "A slide-level language among other languages",
+      "changes": [
+        "lh-106-slide-language",
+        "lh-106-language-embed",
+        "fa-38-run-language"
+      ],
+      "deck": "multilingual-slides",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Review every slide: a right-to-left slide in a left-to-right deck draws right to left with its complex-script font declared (not Arabic Typesetting), and quote marks and number formats follow the slide language."
+    },
+    {
+      "id": "SH-21",
+      "title": "Org charts, hierarchies and Venn diagrams",
+      "changes": [
+        "sh21-venn-geometry-fit",
+        "sh21-readable-venn-bodies"
+      ],
+      "deck": "trees-and-sets",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Review every slide: each tree and Venn arrangement matches the preview node for node; record for each slide whether PowerPoint holds live SmartArt or native shapes."
     }
   ]
 }
