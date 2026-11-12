@@ -1,8 +1,0 @@
-{
-  "scope": "Comparison harness failure only; no lock/source was changed",
-  "node": "v26.4.0 (unintended system Node; corrected follow-up uses Node24)",
-  "type": "pie",
-  "removed": "",
-  "added": "circle cx=\"607.6\" cy=\"404.94\" fill=\"#011842\" r=\"111.357\"/>\n<",
-  "reason": "Longest common prefix consumed the shared opening angle bracket; the substring is not the complete inserted XML token. Use exact whole-circle removal equality instead."
-}

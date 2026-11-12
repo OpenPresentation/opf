@@ -1,7 +1,0 @@
-{
-  "exitCode": 0,
-  "command": "node docs/handoff/2026-11-10/native-latin-slots/verify.mjs",
-  "node": "v24.20.0",
-  "timestamp": "2026-11-10T17:08:49.9110380Z",
-  "scope": "Built-in-only handoff integrity, no product/native tests"
-}

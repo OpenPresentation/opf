@@ -1,9 +1,0 @@
-{
-  "kind": "OFFLINE_VERIFIER_STREAM_SELECTOR_SETUP_FAILURE",
-  "actualExitCode": 1,
-  "previousVerifierSha256": "0e675a61b29ae2dde62f60a28dca6129d47bca7c7d75cdd8db1151c14c32f27f",
-  "error": "Final failure summary is on stderr, not stdout",
-  "correction": "Require exact47ok+4FAILED stdout lines and literal4of51 failure summary on original stderr",
-  "archivedExecutionOrInputsChanged": false,
-  "productOrTestRerun": false
-}

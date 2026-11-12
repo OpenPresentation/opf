@@ -1,1 +1,0 @@
-Chart options: native c:title, c:legendPos and c:dLbls (and the chartex equivalents) in schema order, read back by fromPptx, unchanged without the fields, and in agreement with the preview.

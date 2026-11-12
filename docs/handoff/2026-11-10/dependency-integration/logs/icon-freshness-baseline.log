@@ -1,1 +1,0 @@
-Icon sets are stale (lucide.json, THIRD-PARTY-NOTICES.md, index.json): run node scripts/build-icon-sets.mjs and npm run rehash.

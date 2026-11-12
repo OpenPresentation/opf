@@ -1,6 +1,0 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import assert from 'node:assert/strict';
-import {createHash} from 'node:crypto';
-import {createRequire} from 'node:module';
-const require=createRequire(new URL('../../../../packages/pptx/package.json',import.meta.url)),{unzipSync}=require('fflate'),own=import.meta.dirname,m=JSON.parse(fs.readFileSync(path.join(own,'manifest.json'))),hash=b=>createHash('sha256').update(b).digest('hex'),b=fs.readFileSync(path.join(own,m.archive.path));assert.equal(b.length,m.archive.bytes);assert.equal(hash(b),m.archive.sha256);const raw=unzipSync(b);assert.deepEqual(Object.keys(raw).sort(),m.files.map(f=>f.path).sort());for(const f of m.files){assert.equal(raw[f.path].length,f.bytes);assert.equal(hash(raw[f.path]),f.sha256);}const text=k=>new TextDecoder().decode(raw[k]),json=k=>JSON.parse(text(k));assert.equal(json('center-test.exit.json').status,0);assert.match(text('center-test.log'),/signed explicit center insertion and default visible placement passed/);assert.equal(json('center-lint.exit.json').status,1);assert.match(text('center-lint.log'),/No files were processed/);assert.ok(json('center-syntax.json').results.every(r=>r.status===0));console.log(JSON.stringify({passed:true,files:m.files.length,lintIgnoredScopeRetained:true,nativeAcceptance:false}));

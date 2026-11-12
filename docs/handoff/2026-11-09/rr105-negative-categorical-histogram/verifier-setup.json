@@ -1,8 +1,0 @@
-{
-  "firstVerifierRefused": true,
-  "firstVerifierSha256": "316e518ba46071b9acef1e6f2126b2defbf35e8592dd970bdd3e9a93b3ea6f9b",
-  "archivedFirstVerifier": "raw.zip:records/verify-template.mjs",
-  "firstFailure": "Strict deep equality distinguishes Buffer(8648) from Uint8Array(8648), despite identical encoded PNG bytes.",
-  "correction": "Use exact Buffer.equals after normalizing only the in-memory byte-container type; no content normalization, tolerance, source/evidence alteration or test rerun.",
-  "rawArchiveUnchanged": true
-}

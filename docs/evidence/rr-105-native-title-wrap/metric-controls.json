@@ -1,7 +1,0 @@
-{
-  "scope": "Pure comparisons; no Office calls",
-  "changedDimensionsRejected": true,
-  "exactA4AndSixteenTenAndSixteenNine": true,
-  "changedAspectRejected": true,
-  "reverseHashtableIndicesSorted": true
-}

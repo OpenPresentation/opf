@@ -1,5 +1,0 @@
-
-> openpresentation-workspace@ check:diagram-doc-images C:\opf-work\runtime519
-> node scripts/build-diagram-doc-images.mjs --check
-
-Diagram guide images: 17 current.

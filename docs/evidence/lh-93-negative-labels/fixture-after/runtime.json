@@ -1,7 +1,0 @@
-{
-  "runtimeProductCommit": "6965182a94c1f943f1dccc2763b97bab9db035d2",
-  "nativeIndexSha256": "158ad7d459fe28d1228674ae4ab7a2c9fe9544339714f4950cd01eea5d896ebf",
-  "generatorSha256": "51a4b6413c0feac5d6e2297579e6598811e9e0b6dec7396a5bafdc6136163a4f",
-  "generatorLocation": "packages/pptx/test/fixtures/chartex-fallback-main.mjs.txt",
-  "instrumentation": "Only retained the exact bytes immediately before each maintained entries[name] hash; generator metadata and calculations unchanged. The raw generated HEAD stamp is retained, with this explicit runtime source/blob receipt."
-}

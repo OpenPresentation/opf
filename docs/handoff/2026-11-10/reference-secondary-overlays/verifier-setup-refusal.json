@@ -1,9 +1,0 @@
-{
-  "observedToolExit": 1,
-  "scope": "Offline evidence verifier only; no product run",
-  "cause": "New test worktree CRLF bytes were incorrectly compared with normalized Git LF SHA",
-  "path": "packages/pptx/test/chart-reference-secondary-overlays.mjs",
-  "gitSha256": "658b3b444afa8143b478edef03509e8888b593857076d79f8e99f9a588be12f3",
-  "worktreeSha256": "271039a9752b80fe160beb8f1d1f55a4d523295598834af04775a8b17b67bbec",
-  "correction": "Record both exact identities, prove only CRLF-to-LF difference. Frozen engine/test bytes unchanged."
-}

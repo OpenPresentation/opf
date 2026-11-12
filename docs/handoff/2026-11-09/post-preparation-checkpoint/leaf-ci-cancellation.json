@@ -1,9 +1,0 @@
-{
-  "scope": "Authored observed cancellation summary, not raw API transport.",
-  "run": 42641559898,
-  "headSha": "2400d38bf549cdb661c31725776df25e497d364c",
-  "status": "completed",
-  "conclusion": "cancelled",
-  "reason": "Exact queued owned leaf run cancelled after review/fold to consolidate the complete integration batch; not a product failure.",
-  "url": "https://github.com/OpenPresentation/opf/actions/runs/42641559898"
-}

@@ -1,7 +1,0 @@
-Native data count or materialized groups missing.
-At C:\opf-work\sh21-qualification\tools\shapes\sh-21\verify-product.ps1:47 char:79
-+ ... ount -lt 1){throw 'Native data count or materialized groups missing.' ...
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : OperationStopped: (Native data cou...groups missing.:String) [], RuntimeException
-    + FullyQualifiedErrorId : Native data count or materialized groups missing.
- 

@@ -1,7 +1,0 @@
-{
-  "kind": "OFFLINE_EVIDENCE_VERIFIER_SETUP_REFUSAL",
-  "exit": 1,
-  "reason": "Initial exact string anchor omitted formatting whitespace and trailing comma in the already hashed generator call; source remained unchanged.",
-  "correction": "Exact call-structure regex with required original/saved-reopened imports and archive.canvas; no product/qualification inputs or assertion changes.",
-  "nativeAcceptance": false
-}

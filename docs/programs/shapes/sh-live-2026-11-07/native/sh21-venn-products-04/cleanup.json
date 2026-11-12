@@ -1,7 +1,0 @@
-﻿{
-    "scope":  "Cleanup only of exact process40572 and its one owned read-only Venn2 copy after a failed observation; no Office process termination",
-    "inputSha256":  "1f055af76d369c341f4cfd46d33e928f38f8ad12e6e0136b8a51d480579f6e87",
-    "inputSha256After":  "1f055af76d369c341f4cfd46d33e928f38f8ad12e6e0136b8a51d480579f6e87",
-    "quitEmpty":  true,
-    "closed":  true
-}

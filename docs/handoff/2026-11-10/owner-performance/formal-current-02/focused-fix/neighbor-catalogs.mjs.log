@@ -1,3 +1,0 @@
-catalogs ok: one merged list, references from catalogRecords, embed on save and copy, copySlides on paste, approved catalog updates, reference findings
-catalogs ok: not-in-source records move to custom with their references
-catalogs ok: editing a catalog record forks it into custom (one undo step, references follow, no catalog updates)
