@@ -25,16 +25,41 @@ function Test-ReferenceNameActionReady($Request,$Report){
         return $true
     }catch{return $false}
 }
+# Prospective closed Name snapshots. No new observer or generic policy input.
+function Test-ReferenceNameSnapshotsReady($Request,$Report,$Stages){
+    try{
+        if($Request.referenceNameSnapshots -isnot [bool] -or -not $Request.referenceNameSnapshots -or -not(Test-ReferenceNameActionReady $Request $Report)){return $false}
+        if($Report.referenceNameSnapshots -isnot [array] -or $Report.referenceNameSnapshots.Count -ne 2){return $false}
+        $native=Join-Path $Request.output 'native';$original=$Report.source.openedPath;$saved=$Report.saved.path
+        $set=@($Stages|Where-Object {$_.stage -ceq 'action-1-set-chart-series-name.series.name.set' -and $_.status -ceq 'success'});if($set.Count -ne 1){return $false}
+        for($i=0;$i -lt 2;$i++){
+            $phase=@('before','reopened')[$i];$row=$Report.referenceNameSnapshots[$i]
+            if(-not(Test-OwnedPostflightKeys $row @('phase','path','sha256')) -or $row.phase -cne $phase -or $row.path -cne (Join-Path $native ('reference-name-'+$phase+'.pptx')) -or $row.sha256 -cnotmatch '^[a-f0-9]{64}$'){return $false}
+            $namePhase=if($i -eq 0){'original'}else{'reopened'};$name=@($Stages|Where-Object {$_.stage -ceq ($namePhase+'.series-name-1.series.name.get') -and $_.status -ceq 'success'});if($name.Count -ne 1){return $false};$previous=$name[0].sequence;$owner=if($i -eq 0){$original}else{$saved}
+            foreach($suffix in @('fullName.get','saveCopyAs','fullName.afterCopy.get')){
+                $ops=@($Stages|Where-Object {$_.stage -ceq ('reference-'+$phase+'.presentation.'+$suffix)})
+                if($ops.Count -ne 2 -or $ops[0].status -cne 'begin' -or $ops[1].status -cne 'success' -or $ops[0].sequence -le $previous -or $ops[1].sequence -le $ops[0].sequence){return $false}
+                foreach($op in $ops){if($op.ownedPresentationPath -cne $owner -or $op.cleanupConfirmed -isnot [bool] -or $op.cleanupConfirmed){return $false}};$previous=$ops[1].sequence
+            }
+            $end=if($i -eq 0){$set}else{@($Stages|Where-Object {$_.stage -ceq 'reopened.presentation.close' -and $_.status -ceq 'success'})};if($end.Count -ne 1 -or $previous -ge $end[0].sequence){return $false}
+        }
+        $copies=@($Stages|Where-Object {$_.stage.EndsWith('.saveCopyAs') -and $_.status -ceq 'success'});if($copies.Count -ne 3){return $false}
+        $wanted=@('reference-before.presentation.saveCopyAs','edited.presentation.saveCopyAs','reference-reopened.presentation.saveCopyAs');for($i=0;$i -lt 3;$i++){if($copies[$i].stage -cne $wanted[$i]){return $false}}
+        foreach($suffix in @('.presentation.open','.presentation.close')){if(@($Stages|Where-Object {$_.stage.EndsWith($suffix) -and $_.status -ceq 'success'}).Count -ne 2){return $false}}
+        return $true
+    }catch{return $false}
+}
 # Definitions only. Two closed furniture schemas; shared Seven/table guards stay closed.
 function Get-FurnitureProfileMode([string]$Profile) {
     if($Profile -ceq 'full59-ordinary-furniture-lifecycle-v1'){return $false}
     if($Profile -ceq 'full59-dense-events-furniture-lifecycle-v1'){return $true}
     if($Profile -ceq 'reference-line-one-series-name-edit-v1'){return $false}
+    if($Profile -ceq 'reference-line-one-name-three-native-archives-v1'){return $false}
     throw 'Unknown closed furniture profile'
 }
 function Test-FurniturePostflightReady($Terminal,$Evidence,[string]$Profile='full59-ordinary-furniture-lifecycle-v1') {
     try {
-        $dense=Get-FurnitureProfileMode $Profile;$reference=$Profile -ceq 'reference-line-one-series-name-edit-v1';$policy=if($reference){'reference-name-exact-one-global-zero-after-completed-owned-quit-v1'}elseif($dense){'dense-events-exact50-global-zero-after-completed-owned-quit-v1'}else{'ordinary-furniture-bounded-global-zero-after-completed-owned-quit-v1'}
+        $dense=Get-FurnitureProfileMode $Profile;$snapshots=$Profile -ceq 'reference-line-one-name-three-native-archives-v1';$reference=$snapshots -or $Profile -ceq 'reference-line-one-series-name-edit-v1';$policy=if($snapshots){'reference-name-three-archives-global-zero-after-completed-owned-quit-v1'}elseif($reference){'reference-name-exact-one-global-zero-after-completed-owned-quit-v1'}elseif($dense){'dense-events-exact50-global-zero-after-completed-owned-quit-v1'}else{'ordinary-furniture-bounded-global-zero-after-completed-owned-quit-v1'}
         $r=$Evidence.report;$q=$Evidence.request;$a=$Evidence.admission;$stages=$Evidence.stages
         if($a.profile -cne $Profile -or $q.profile -cne $a.profile -or $a.schemaVersion -ne 1 -or $q.schemaVersion -ne 1 -or $a.nativeAcceptance -isnot [bool] -or $a.nativeAcceptance -or $a.registryAcceptance -isnot [bool] -or $a.registryAcceptance){return $false}
         if($q.nativeAcceptance -isnot [bool] -or $q.nativeAcceptance -or $q.registryAcceptance -isnot [bool] -or $q.registryAcceptance -or -not(Test-OwnedPostflightInteger $q.timeoutSeconds) -or $q.timeoutSeconds -lt 5 -or $q.timeoutSeconds -gt 60){return $false}
@@ -54,6 +79,7 @@ function Test-FurniturePostflightReady($Terminal,$Evidence,[string]$Profile='ful
         if((ConvertTo-Json -InputObject $r.actionPlan.actions -Compress -Depth 30) -cne (ConvertTo-Json -InputObject $q.actionPlan.actions -Compress -Depth 30)){return $false}
         for($i=0;$i -lt $q.actionPlan.actions.Count;$i++){$row=$r.actionPlan.completed[$i];if(-not(Test-OwnedPostflightKeys $row @('index','op','status')) -or -not(Test-OwnedPostflightInteger $row.index) -or $row.index -ne ($i+1) -or $row.op -cne $q.actionPlan.actions[$i].op -or $row.status -cne 'success'){return $false}}
         if($reference -and -not(Test-ReferenceNameActionReady $q $r)){return $false}
+        if($snapshots -and -not(Test-ReferenceNameSnapshotsReady $q $r $stages)){return $false}
         $ordinary=@('layout-title-auto','layout-media-regions','layout-empty-custom','table-save','furniture-inherited','furniture-flags','list-description-native-edit','list-description-native-save','layout-bleed-card','picture-control','furniture-layouts','chart-treemap-category','chart-histogram-single','chart-histogram-category','chart-pareto-multi','chart-box-multi','chart-waterfall-single','chart-funnel-category','chart-world-category','feature-catalog-timeline','feature-custom-roadmap','feature-long-labels','feature-metrics','feature-quote','feature-list','feature-table')
         if($dense){if($q.caseId -cne 'feature-dense-events' -or $q.slideCount -ne 1 -or $q.captureTextFonts -or $q.actionPlan.actions.Count -ne 0 -or $r.actionPlan.completed.Count -ne 0){return $false}}
         elseif(-not $reference -and $q.caseId -cnotin $ordinary -and $q.caseId -cnotmatch '^chart-mode-(treemap-category|histogram-single|histogram-category|pareto-multi|box-multi|waterfall-single|funnel-category|world-category|pareto-single)-(fallback|auto|native)$'){return $false}
@@ -139,10 +165,11 @@ function Invoke-FurniturePostflight {
     return [ordered]@{schemaVersion=1;policy=$evidence.admission.policy;workerCleanupConfirmed=$true;initialCount=$initial;finalCount=$final;identity=$identity;result=$result;error=$failure}
 }
 function Invoke-FurnitureTypedRunner {
-    param([string]$Envelope,[string]$Sha256,[string]$RequestSha256,[string]$Node,[string]$Suite,[string]$WorkerRoot,[string]$CaseId,[string]$Output,[int]$Seconds,[bool]$Office,[bool]$Fonts,[switch]$DenseEvents,[switch]$ReferenceNameEdit)
+    param([string]$Envelope,[string]$Sha256,[string]$RequestSha256,[string]$Node,[string]$Suite,[string]$WorkerRoot,[string]$CaseId,[string]$Output,[int]$Seconds,[bool]$Office,[bool]$Fonts,[switch]$DenseEvents,[switch]$ReferenceNameEdit,[switch]$ReferenceNameSnapshots)
     if($DenseEvents -and $ReferenceNameEdit){throw 'Choose one closed furniture route'}
-    $profile=if($ReferenceNameEdit){'reference-line-one-series-name-edit-v1'}elseif($DenseEvents){'full59-dense-events-furniture-lifecycle-v1'}else{'full59-ordinary-furniture-lifecycle-v1'}
-    $validator=Join-Path $PSScriptRoot $(if($ReferenceNameEdit){'reference-name-profile.mjs'}elseif($DenseEvents){'dense-furniture-profile.mjs'}else{'furniture-profile.mjs'});$required=$Office.ToString().ToLowerInvariant()
+    if($ReferenceNameSnapshots -and -not $ReferenceNameEdit){throw 'Name snapshots require the exact closed reference-name mode'}
+    $profile=if($ReferenceNameSnapshots){'reference-line-one-name-three-native-archives-v1'}elseif($ReferenceNameEdit){'reference-line-one-series-name-edit-v1'}elseif($DenseEvents){'full59-dense-events-furniture-lifecycle-v1'}else{'full59-ordinary-furniture-lifecycle-v1'}
+    $validator=Join-Path $PSScriptRoot $(if($ReferenceNameSnapshots){'reference-name-snapshot-profile.mjs'}elseif($ReferenceNameEdit){'reference-name-profile.mjs'}elseif($DenseEvents){'dense-furniture-profile.mjs'}else{'furniture-profile.mjs'});$required=$Office.ToString().ToLowerInvariant()
     function Assert-FurnitureTypedBinding {
         $result=& $Node $validator verify-execution --envelope $Envelope --sha256 $Sha256 --output $Output --require-office $required
         if($LASTEXITCODE -ne 0){throw 'Typed furniture source/request refused before native operations'}
@@ -169,6 +196,7 @@ function Invoke-FurnitureTypedRunner {
         $arguments=@('-InputPresentation',$inputFile,'-ActionPlan',$plan,'-OutputDirectory',(Join-Path $Output 'native'),'-TimeoutSeconds',([string]$Seconds)) + @(Get-NativeFontCaptureArguments $Fonts)
         if($DenseEvents){$arguments+='-ReadOnlySurvey'}
         if($ReferenceNameEdit){$arguments+='-ReferenceNameEdit'}
+        if($ReferenceNameSnapshots){$arguments+='-ReferenceNameSnapshots'}
         Invoke-NativeChild $shell $worker $arguments (Join-Path $Output 'native-worker.log')
         $admissionJson=& $Node $validator verify-postflight --envelope $Envelope --sha256 $Sha256 --output $Output --require-office true
         if($LASTEXITCODE -ne 0){throw 'Furniture lifecycle completion refused; zero observer IO'}

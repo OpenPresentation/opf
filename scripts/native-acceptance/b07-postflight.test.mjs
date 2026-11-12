@@ -121,7 +121,51 @@ test('reviewed observer source remains exact and B07 source binds actual worker 
   const startupState=Buffer.from(derivedReference.toString('utf8').replaceAll(priorState,nextState));
   assert.equal(startupState.length,91281);assert.equal(digest(startupState),'d8f0aa7e0b7fcf72cb2401808f45c2cdb69cd99862ad14c88103180b86278210');
   assert.deepEqual(Buffer.from(startupState.toString('utf8').replaceAll(nextState,priorState)),referenceMode,'Fifth-stage inverse restores the entire immutable closed-reference worker');
-  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),startupState);
+  // Stage6 is ONLY the reviewed closed prospective Name snapshot additions.
+  const snapshotEdits=[
+  [
+    "    [switch]$ReferenceNameEdit\n",
+    "    [switch]$ReferenceNameEdit,\n    [switch]$ReferenceNameSnapshots\n"
+  ],
+  [
+    "$ErrorActionPreference='Stop'\n",
+    "$ErrorActionPreference='Stop'\nif($ReferenceNameSnapshots -and -not $ReferenceNameEdit){throw 'Name snapshots require the exact closed reference-name mode'}\n"
+  ],
+  [
+    "    if($ReferenceNameEdit){$request.referenceNameEdit=$true}",
+    "    if($ReferenceNameEdit){$request.referenceNameEdit=$true}\n    if($ReferenceNameSnapshots){$request.referenceNameSnapshots=$true}"
+  ],
+  [
+    "    if($ReferenceNameEdit){$workerArguments+='-ReferenceNameEdit'}",
+    "    if($ReferenceNameEdit){$workerArguments+='-ReferenceNameEdit'}\n    if($ReferenceNameSnapshots){$workerArguments+='-ReferenceNameSnapshots'}"
+  ],
+  [
+    "Assert-FurnitureSurvey ([bool]$ReadOnlySurvey) $actions $sourceSnapshot",
+    "$script:referenceNameSnapshotsModeEnabled=$false\nif($ReferenceNameSnapshots -or $null -ne $request.PSObject.Properties['referenceNameSnapshots']){\n    if(-not $script:referenceNameModeEnabled -or -not $ReferenceNameSnapshots -or $request.referenceNameSnapshots -isnot [bool] -or -not $request.referenceNameSnapshots){throw 'Name snapshot switch differs from its closed snapshotted request'}\n    $script:referenceNameSnapshotsModeEnabled=$true\n}\nAssert-FurnitureSurvey ([bool]$ReadOnlySurvey) $actions $sourceSnapshot"
+  ],
+  [
+    "if($script:referenceNameModeEnabled){$report.referenceNameEdit=$true}",
+    "if($script:referenceNameModeEnabled){$report.referenceNameEdit=$true}\nif($script:referenceNameSnapshotsModeEnabled){$report.referenceNameSnapshots=@()}"
+  ],
+  [
+    "function Close-OwnedFurniture([string]$Phase,[string]$ExpectedPath) {",
+    "# Two closed extra copies for the prospective Name route; the old Save helper above is unchanged.\nfunction Save-OwnedReferenceNameSnapshot([string]$ExpectedPath,[string]$CopyPath,[string]$Phase) {\n    if(-not $script:referenceNameSnapshotsModeEnabled -or -not $script:referenceNameModeEnabled -or $Phase -cnotin @('before','reopened')) { Stop-FurnitureLifecycle 'Only the closed Name snapshot mode may save these two copies' }\n    $fixed=Join-Path $outputRoot ('reference-name-'+$Phase+'.pptx')\n    if($CopyPath -cne $fixed -or $CopyPath -ieq $ExpectedPath -or (Test-Path -LiteralPath $CopyPath)) { Stop-FurnitureLifecycle 'Name snapshot requires its exact fresh derivative separate from the owned input' }\n    $actual=Invoke-FurnitureCom \"reference-$Phase.presentation.fullName.get\" { $script:presentation.FullName }\n    if($actual -ine $ExpectedPath -or $script:ownedPresentationPath -ine $ExpectedPath) { Stop-FurnitureLifecycle 'Refusing to snapshot a presentation whose exact identity is not owned' }\n    Invoke-FurnitureCom \"reference-$Phase.presentation.saveCopyAs\" { $script:presentation.SaveCopyAs($CopyPath,24) }\n    $after=Invoke-FurnitureCom \"reference-$Phase.presentation.fullName.afterCopy.get\" { $script:presentation.FullName }\n    if($after -ine $ExpectedPath) { Stop-FurnitureLifecycle 'Name snapshot changed the owned input identity' }\n    $report.referenceNameSnapshots+=@([ordered]@{phase=$Phase;path=$CopyPath;sha256=(Get-FurnitureSha256 $CopyPath)})\n    Write-FurnitureReport\n}\nfunction Close-OwnedFurniture([string]$Phase,[string]$ExpectedPath) {"
+  ],
+  [
+    "    $report.phases.original=Read-FurnitureState $script:presentation 'original'; Write-FurnitureReport",
+    "    $report.phases.original=Read-FurnitureState $script:presentation 'original'; Write-FurnitureReport\n    if($script:referenceNameSnapshotsModeEnabled){Save-OwnedReferenceNameSnapshot $sourceSnapshot (Join-Path $outputRoot 'reference-name-before.pptx') 'before'}"
+  ],
+  [
+    "    $report.phases.reopened=Read-FurnitureState $script:presentation 'reopened'; Write-FurnitureReport",
+    "    $report.phases.reopened=Read-FurnitureState $script:presentation 'reopened'; Write-FurnitureReport\n    if($script:referenceNameSnapshotsModeEnabled){Save-OwnedReferenceNameSnapshot $savedPath (Join-Path $outputRoot 'reference-name-reopened.pptx') 'reopened'}"
+  ]
+];
+  let snapshotState=startupState.toString('utf8');
+  for(const [oldText,newText]of snapshotEdits){assert.equal(snapshotState.split(oldText).length-1,1);snapshotState=snapshotState.replace(oldText,newText);}
+  const snapshotWorker=Buffer.from(snapshotState);assert.equal(snapshotWorker.length,93940);assert.equal(digest(snapshotWorker),"1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870");
+  let snapshotInverse=snapshotState;for(const [oldText,newText]of [...snapshotEdits].reverse()){assert.equal(snapshotInverse.split(newText).length-1,1);snapshotInverse=snapshotInverse.replace(newText,oldText);}
+  assert.deepEqual(Buffer.from(snapshotInverse),startupState,'Sixth-stage inverse preserves the entire immutable startup-fixed worker');
+  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),snapshotWorker);
   for(const name of ['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
   const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
   assert.ok(runner.indexOf('if(-not $RunOffice)')<runner.indexOf('$checked=& $node $validator verify-postflight'));

@@ -7,9 +7,11 @@ param(
     [switch]$CaptureTextFonts,
     [switch]$ReadOnlySurvey,
     [string]$TextProbePlan='',
-    [switch]$ReferenceNameEdit
+    [switch]$ReferenceNameEdit,
+    [switch]$ReferenceNameSnapshots
 )
 $ErrorActionPreference='Stop'
+if($ReferenceNameSnapshots -and -not $ReferenceNameEdit){throw 'Name snapshots require the exact closed reference-name mode'}
 
 function Get-FurnitureSha256([string]$Path) { return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant() }
 function Test-Integer($Value) { return $Value -is [int] -or $Value -is [long] }
@@ -282,12 +284,14 @@ if(-not $Worker) {
         if($request.textProbePlan.sha256 -cne $request.textProbePlan.snapshotSha256) { throw 'Text probe snapshot changed during copy' }
     }
     if($ReferenceNameEdit){$request.referenceNameEdit=$true}
+    if($ReferenceNameSnapshots){$request.referenceNameSnapshots=$true}
     $request | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $outputRoot 'request.json') -Encoding UTF8
     . (Join-Path $PSScriptRoot 'native-process.ps1')
     $workerArguments=@('-OutputDirectory',$outputRoot,'-InputPresentation',$presentationSnapshot,'-ActionPlan',$planSnapshot,'-Worker')
     if($CaptureTextFonts) { $workerArguments+='-CaptureTextFonts' }
     if($ReadOnlySurvey) { $workerArguments+='-ReadOnlySurvey' }
     if($ReferenceNameEdit){$workerArguments+='-ReferenceNameEdit'}
+    if($ReferenceNameSnapshots){$workerArguments+='-ReferenceNameSnapshots'}
     if($null -ne $probePath) { $workerArguments+=@('-TextProbePlan',$probeSnapshot) }
     $result=Invoke-OpfNativeWorker -ScriptPath $PSCommandPath -WorkerArguments $workerArguments -OutputDirectory $outputRoot -TimeoutSeconds $TimeoutSeconds
     $lastDurable=$null
@@ -336,6 +340,11 @@ if($ReferenceNameEdit -or $null -ne $request.PSObject.Properties['referenceNameE
     Assert-FurnitureReferenceNameMode $actions $sourceHash (Get-Item -LiteralPath $sourceSnapshot).Length ([bool]$CaptureTextFonts) ([bool]$ReadOnlySurvey)
     $script:referenceNameModeEnabled=$true
 }
+$script:referenceNameSnapshotsModeEnabled=$false
+if($ReferenceNameSnapshots -or $null -ne $request.PSObject.Properties['referenceNameSnapshots']){
+    if(-not $script:referenceNameModeEnabled -or -not $ReferenceNameSnapshots -or $request.referenceNameSnapshots -isnot [bool] -or -not $request.referenceNameSnapshots){throw 'Name snapshot switch differs from its closed snapshotted request'}
+    $script:referenceNameSnapshotsModeEnabled=$true
+}
 Assert-FurnitureSurvey ([bool]$ReadOnlySurvey) $actions $sourceSnapshot
 $script:validatedTextProbePlan=$null
 if($null -ne $request.PSObject.Properties['textProbePlan']) {
@@ -362,6 +371,7 @@ $report=[ordered]@{
     scope='One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker quits only its exact verified empty application, never kills Office, changes security, retries, or closes unrelated presentations.'
 }
 if($script:referenceNameModeEnabled){$report.referenceNameEdit=$true}
+if($script:referenceNameSnapshotsModeEnabled){$report.referenceNameSnapshots=@()}
 if($null -ne $script:validatedTextProbePlan) { $report.textProbePlan=$request.textProbePlan }
 if($ReadOnlySurvey) { $report.scope='One explicitly supplied read-only survey: exactly one slide, at most 100 shapes, an empty action plan, source at most 16 MiB/4096 ZIP entries and the unchanged 60-second maximum. Owned read-only Open, SaveCopyAs, read-only reopen and observations only; no content edits, UI, process termination or retry.' }
 function Write-FurnitureReport {
@@ -934,6 +944,19 @@ function Save-OwnedFurnitureCopy([string]$ExpectedPath,[string]$CopyPath) {
     $after=Invoke-FurnitureCom 'edited.presentation.fullName.afterCopy.get' { $script:presentation.FullName }
     if($after -ine $ExpectedPath) { Stop-FurnitureLifecycle 'SaveCopyAs changed the owned input identity' }
 }
+# Two closed extra copies for the prospective Name route; the old Save helper above is unchanged.
+function Save-OwnedReferenceNameSnapshot([string]$ExpectedPath,[string]$CopyPath,[string]$Phase) {
+    if(-not $script:referenceNameSnapshotsModeEnabled -or -not $script:referenceNameModeEnabled -or $Phase -cnotin @('before','reopened')) { Stop-FurnitureLifecycle 'Only the closed Name snapshot mode may save these two copies' }
+    $fixed=Join-Path $outputRoot ('reference-name-'+$Phase+'.pptx')
+    if($CopyPath -cne $fixed -or $CopyPath -ieq $ExpectedPath -or (Test-Path -LiteralPath $CopyPath)) { Stop-FurnitureLifecycle 'Name snapshot requires its exact fresh derivative separate from the owned input' }
+    $actual=Invoke-FurnitureCom "reference-$Phase.presentation.fullName.get" { $script:presentation.FullName }
+    if($actual -ine $ExpectedPath -or $script:ownedPresentationPath -ine $ExpectedPath) { Stop-FurnitureLifecycle 'Refusing to snapshot a presentation whose exact identity is not owned' }
+    Invoke-FurnitureCom "reference-$Phase.presentation.saveCopyAs" { $script:presentation.SaveCopyAs($CopyPath,24) }
+    $after=Invoke-FurnitureCom "reference-$Phase.presentation.fullName.afterCopy.get" { $script:presentation.FullName }
+    if($after -ine $ExpectedPath) { Stop-FurnitureLifecycle 'Name snapshot changed the owned input identity' }
+    $report.referenceNameSnapshots+=@([ordered]@{phase=$Phase;path=$CopyPath;sha256=(Get-FurnitureSha256 $CopyPath)})
+    Write-FurnitureReport
+}
 function Close-OwnedFurniture([string]$Phase,[string]$ExpectedPath) {
     $actual=Invoke-FurnitureCom "$Phase.fullName.get" { $script:presentation.FullName }; if($actual -ine $ExpectedPath -or $script:ownedPresentationPath -ine $ExpectedPath) { Stop-FurnitureLifecycle "Refusing to close a presentation whose exact path is not owned: $actual" }
     # SaveCopyAs preserved the edited derivative. Discard only this verified owned in-memory state without a save prompt.
@@ -952,6 +975,7 @@ try {
     Assert-PresentationNotOpen $app $savedPath 'output.preflight'
     Open-OwnedFurniture $app $sourceSnapshot 'input'
     $report.phases.original=Read-FurnitureState $script:presentation 'original'; Write-FurnitureReport
+    if($script:referenceNameSnapshotsModeEnabled){Save-OwnedReferenceNameSnapshot $sourceSnapshot (Join-Path $outputRoot 'reference-name-before.pptx') 'before'}
     for($index=0;$index -lt $actions.Count;$index++) { Apply-FurnitureAction $script:presentation $actions[$index] ($index+1); $report.actionPlan.completed+=@([ordered]@{index=$index+1;op=$actions[$index].op;status='success'}) }
     Write-FurnitureReport
     Assert-FurnitureTextProbeIntegrity $request.textProbePlan $sourcePath $sourceSnapshot $sourceHash $planSnapshot $request.actionPlan.snapshotSha256
@@ -961,6 +985,7 @@ try {
     Assert-FurnitureTextProbeIntegrity $request.textProbePlan $sourcePath $sourceSnapshot $sourceHash $planSnapshot $request.actionPlan.snapshotSha256
     Open-OwnedFurniture $app $savedPath 'reopen'
     $report.phases.reopened=Read-FurnitureState $script:presentation 'reopened'; Write-FurnitureReport
+    if($script:referenceNameSnapshotsModeEnabled){Save-OwnedReferenceNameSnapshot $savedPath (Join-Path $outputRoot 'reference-name-reopened.pptx') 'reopened'}
     Close-OwnedFurniture 'reopened.presentation' $savedPath; $report.reopened.sha256=Get-FurnitureSha256 $savedPath
     if((Get-FurnitureSha256 $sourcePath) -cne $sourceHash -or (Get-FurnitureSha256 $sourceSnapshot) -cne $sourceHash) { throw 'Requested source or its snapshot changed during the native lifecycle' }
     if((Get-FurnitureSha256 $planSnapshot) -cne $request.actionPlan.snapshotSha256) { throw 'Action-plan snapshot changed during the native lifecycle' }
