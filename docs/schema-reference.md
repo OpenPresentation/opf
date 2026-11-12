@@ -887,8 +887,8 @@ _No named properties._
 | `id` | no | `string` | Optional stable identifier, unique among slide, payload and overlay ids in the document. A connector names it in 'from' or 'to'. |
 | `x` | no | `ref:FiniteNumber` | The shape's start edge as a signed fraction of the slide width, measured from the slide's start edge: the left edge in a left-to-right deck, the right edge in a right-to-left one. A shape sits over the layout, and the... |
 | `y` | no | `ref:FiniteNumber` | Top edge as a signed fraction of the slide height, from the top edge. Negative values or values greater than 1 place the shape partly or wholly outside the slide. |
-| `width` | no | `number` | Width as a fraction of the slide width, from 0 (a vertical line). Above 1 the shape is wider than the slide, for a circle or band that bleeds off it; the slide crops what lies outside. |
-| `height` | no | `number` | Height as a fraction of the slide height, from 0 (a horizontal line). Above 1 the shape is taller than the slide. |
+| `width` | no | `number` | Width as a fraction of the slide width, from 0 (a vertical line) up to 8. Above 1 the shape is wider than the slide, for a circle or band that bleeds off it; the slide crops what lies outside. |
+| `height` | no | `number` | Height as a fraction of the slide height, from 0 (a horizontal line) up to 8. Above 1 the shape is taller than the slide. |
 | `at` | no | `ref:OverlayAnchor` |  |
 | `layer` | no | `enum:front \| back` | Overlay shapes only. front (the default) draws the shape over the slide: above the content and the furniture. back draws it behind the slide: above the background and the watermark, below the content and the furniture... |
 | `connector` | no | `ref:Connector` | Makes the entry a connector: what it joins and how it runs. |
@@ -929,8 +929,8 @@ _No named properties._
 | `block` | yes | `string` | The id of a block on this slide (a content payload or a group, at any depth). |
 | `edge` | yes | `enum:top \| bottom \| start \| end \| center` | The edge of the block the shape sits outside of, or its center. |
 | `offset` | no | `number` | The gap between the block's edge and the shape, in reference pixels at a 720-pixel short edge; a negative offset overlaps the block. Default 0. Ignored for 'center'. |
-| `width` | no | `number` | The shape's width as a fraction of its target's width: the block's box, or with 'point' the chart mark's bounds. 1 is the target's own width and 1.08 a frame 8% wider. For a size in pixels use 'widthPx'; not both. Def... |
-| `height` | no | `number` | The shape's height as a fraction of its target's height. For a size in pixels use 'heightPx'; not both. Default as for width. |
+| `width` | no | `number` | The shape's width as a fraction of its target's width: the block's box, or with 'point' the chart mark's bounds. 1 is the target's own width and 1.08 a frame 8% wider, up to 8. For a size in pixels use 'widthPx'; not... |
+| `height` | no | `number` | The shape's height as a fraction of its target's height, up to 8. For a size in pixels use 'heightPx'; not both. Default as for width. |
 | `widthPx` | no | `number` | The shape's width in reference pixels at a 720-pixel short edge, whatever size its target has: a badge or a ring of a fixed size. Instead of 'width'. |
 | `heightPx` | no | `number` | The shape's height in reference pixels at a 720-pixel short edge. Instead of 'height'. |
 | `point` | no | `oneOf:string / integer` | Exact unique category label or zero-based data row index of the chart. Numeric strings name labels; numbers index rows. Empty/duplicate labels can be selected by index. Requires a supported classic chart block. |

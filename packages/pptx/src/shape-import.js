@@ -650,9 +650,9 @@ const reportDropped = (dropped, name, slideIndex, report) => {
 export function placement(frame, {width, height, rtl}, report, name, slideIndex) {
   const left = rtl ? width - frame.x - frame.cx : frame.x;
   const place = {x: left / width, y: frame.y / height, width: frame.cx / width, height: frame.cy / height};
-  // Native shapes may bleed beyond the slide. Preserve the observed finite size;
-  // composition checks resolved geometry instead of imposing an arbitrary slide multiple.
-  const clamped = Object.fromEntries(Object.entries(place).map(([key, value]) => [key, round(key === 'x' || key === 'y' ? value : Math.max(0, value), 6)]));
+  // Native shapes may bleed beyond the slide, up to the format's limit of 8 slides; the signed position is kept as observed.
+  const clamped = Object.fromEntries(Object.entries(place).map(([key, value]) => [key, round(key === 'x' || key === 'y' ? value : Math.min(8, Math.max(0, value)), 6)]));
+  if (place.width > 8 || place.height > 8) report?.({code: 'shape-property-dropped', path: `slides.${slideIndex}`, property: 'shape larger than eight slides', shape: name, message: `The native shape ${JSON.stringify(name)} is more than 8 slides wide or tall, the largest OPF represents; its size was limited to 8 while its signed position was preserved.`});
   return clamped;
 }
 

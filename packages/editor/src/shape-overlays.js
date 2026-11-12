@@ -127,8 +127,8 @@ export function insertOverlayShape(editor, options, meta = {}) {
 // --- moving and resizing ---------------------------------------------------------------------------------------------------------
 
 const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
-// The format's largest overlay width or height: bounded by finite representable geometry (above 1 it bleeds off).
-const OVERLAY_SIZE_MAX = Number.MAX_VALUE;
+// The format's largest overlay width or height: 8 slides for a free shape, 8 targets for an attached one (above 1 it bleeds off).
+const OVERLAY_SIZE_MAX = 8;
 
 /**
  * Compute the patch that places an overlay shape. A shape placed by fractions takes `{ x, y, width, height }` (any of them, fractions of the slide: the

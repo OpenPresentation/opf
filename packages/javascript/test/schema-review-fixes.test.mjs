@@ -3,24 +3,56 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { resolveVariables, validate } from '../dist/index.js';
+import { describeFinding } from '../dist/source.js';
 
 const anchored = (at) => ({ name: 'Anchors', slides: [{ title: 'A', blocks: [{ id: 'chart', text: 'hello world' }], shapes: [{ shape: 'rect', text: 'Badge', at: { block: 'chart', edge: 'end', ...at } }] }] });
 const unit = (deck) => validate(deck).findings.filter((entry) => entry.ruleId === 'opf/shape-anchor-size-unit');
 
-test('a 0.33 pixel size under at.width and at.height is a warning that renames the key and keeps the value', () => {
-	const found = unit(anchored({ width: 160, height: 64 }));
+test('a 0.33 pixel size above the cap of 8 is a schema error that asks for widthPx and renames the key, keeping the value', () => {
+	const report = validate(anchored({ width: 160, height: 64 }));
+	assert.equal(report.valid, false);
+	const found = report.findings.filter((entry) => entry.path.startsWith('/slides/0/shapes/0/at/'));
+	assert.deepEqual(found.map((entry) => [entry.severity, entry.ruleId, entry.path]), [['error', 'opf/schema', '/slides/0/shapes/0/at/width'], ['error', 'opf/schema', '/slides/0/shapes/0/at/height']]);
+	assert.match(found[0].message, /did you mean "widthPx"\?/);
+	assert.match(found[0].help, /Did you mean "widthPx"\?/);
+	assert.match(found[1].help, /Did you mean "heightPx"\?/);
+	assert.deepEqual(found[0].fixes[0].patch, [{ op: 'move', from: '/slides/0/shapes/0/at/width', path: '/slides/0/shapes/0/at/widthPx' }]);
+	assert.deepEqual(found[1].fixes[0].patch, [{ op: 'move', from: '/slides/0/shapes/0/at/height', path: '/slides/0/shapes/0/at/heightPx' }]);
+	assert.match(describeFinding(found[0], { document: anchored({ width: 160, height: 64 }) }).next, /did you mean `widthPx`\?/);
+	// The patch makes the deck valid.
+	assert.equal(validate(anchored({ widthPx: 160, heightPx: 64 })).valid, true);
+	assert.deepEqual(unit(anchored({ width: 160, height: 64 })), [], 'above 8 it is the error, not also the warning');
+});
+
+test('a size above 4 and up to 8 is still a valid fraction, with the warning that offers the same rename', () => {
+	const found = unit(anchored({ width: 6, height: 8 }));
 	assert.deepEqual(found.map((entry) => [entry.severity, entry.path]), [['warning', '/slides/0/shapes/0/at/width'], ['warning', '/slides/0/shapes/0/at/height']]);
 	assert.match(found[0].help, /Did you mean "widthPx"\?/);
 	assert.deepEqual(found[0].fixes[0].patch, [{ op: 'move', from: '/slides/0/shapes/0/at/width', path: '/slides/0/shapes/0/at/widthPx' }]);
 	assert.deepEqual(found[1].fixes[0].patch, [{ op: 'move', from: '/slides/0/shapes/0/at/height', path: '/slides/0/shapes/0/at/heightPx' }]);
-	assert.equal(validate(anchored({ width: 160, height: 64 })).valid, true, 'a warning: the deck still validates');
+	assert.equal(validate(anchored({ width: 6, height: 8 })).valid, true, 'a warning: the deck still validates');
+});
+
+test('shapes cap at 8: a free shape and an anchored fraction above 8 are schema errors; above 1280 there is no pixel reading to offer', () => {
+	const free = (frame) => ({ name: 'Free', slides: [{ title: 'A', text: 'x', shapes: [{ shape: 'rect', x: 0, y: 0, width: 0.2, height: 0.2, ...frame }] }] });
+	for (const frame of [{ width: 8 }, { height: 8 }, { width: 7.5, height: 0.1 }]) assert.equal(validate(free(frame)).valid, true, JSON.stringify(frame));
+	for (const frame of [{ width: 8.01 }, { height: 9 }]) {
+		const errors = validate(free(frame)).findings.filter((entry) => entry.severity === 'error');
+		assert.ok(errors.some((entry) => entry.ruleId === 'opf/schema' && /\/shapes\/0\/(width|height)$/.test(entry.path) && entry.validation?.keyword === 'maximum'), JSON.stringify(errors));
+		assert.ok(!errors.some((entry) => entry.fixes?.length), 'a free shape is a fraction of the slide: no pixel rename');
+	}
+	const huge = validate(anchored({ width: 2000 })).findings.filter((entry) => entry.path === '/slides/0/shapes/0/at/width');
+	assert.equal(huge.length, 1);assert.equal(huge[0].severity, 'error');assert.equal(huge[0].fixes, undefined);
+	assert.doesNotMatch(huge[0].message, /widthPx/);
 });
 
 test('a written-out fix leaves no finding, and a fraction or an explicit pixel size is never flagged', () => {
 	assert.deepEqual(unit(anchored({ widthPx: 160, heightPx: 64 })), []);
-	for (const at of [{ width: 1 }, { width: 1.08, height: 0.5 }, { width: 4, height: 4 }, { widthPx: 160, heightPx: 64 }, { width: 2000 }]) assert.deepEqual(unit(anchored(at)), [], JSON.stringify(at));
+	for (const at of [{ width: 1 }, { width: 1.08, height: 0.5 }, { width: 4, height: 4 }, { widthPx: 160, heightPx: 64 }, { width: 2000 }, { width: 1280 }]) assert.deepEqual(unit(anchored(at)), [], JSON.stringify(at));
 	assert.equal(unit(anchored({ width: 4.01 })).length, 1);
-	assert.equal(unit(anchored({ width: 1280 })).length, 1);
+	assert.equal(unit(anchored({ width: 8 })).length, 1);
+	// 1280, the pixel maximum, is the error with the rename.
+	assert.equal(validate(anchored({ width: 1280 })).findings.find((entry) => entry.path === '/slides/0/shapes/0/at/width').fixes[0].id, 'rename');
 });
 
 const tags = (document) => validate(document).findings.filter((entry) => entry.path.endsWith('language') || entry.path.endsWith('/bcp47')).map((entry) => [entry.severity, entry.ruleId, entry.path]);

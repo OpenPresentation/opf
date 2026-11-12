@@ -70,8 +70,8 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   ),
   "opf/shape-anchor-size-unit": ex(
     "Write pixels as `widthPx`; `width` is a fraction.",
-    { title: "T", blocks: [{ id: "a", text: "x" }], shapes: [{ shape: "ellipse", at: { block: "a", edge: "top", width: 160 } }] },
-    { title: "T", blocks: [{ id: "a", text: "x" }], shapes: [{ shape: "ellipse", at: { block: "a", edge: "top", widthPx: 160 } }] },
+    { title: "T", blocks: [{ id: "a", text: "x" }], shapes: [{ shape: "ellipse", at: { block: "a", edge: "top", width: 6 } }] },
+    { title: "T", blocks: [{ id: "a", text: "x" }], shapes: [{ shape: "ellipse", at: { block: "a", edge: "top", widthPx: 6 } }] },
   ),
   "opf/shape-anchor-missing": ex(
     "Name a block of the slide in `at.block` (give the block an `id`), or place the shape by `x`, `y`, `width` and `height`.",

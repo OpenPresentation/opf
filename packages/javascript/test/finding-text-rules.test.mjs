@@ -26,7 +26,7 @@ const GOLDEN = {
   "caption-unsupported-payload": ["A `caption` belongs to one image, chart, table, video or diagram; this block is text.", "put the `caption` on the image, chart, table, video or diagram it describes, or remove it."],
   "image-option-unsupported-payload": ["`fit` only applies to pictures; this block is a chart.", "remove `fit`, or move it onto an image."],
   "shape-option-unsupported-payload": ["`fill` only applies to shapes; this block is text.", "remove `fill`, or make the block a shape with `shape` (a preset such as roundRect) or `path`."],
-  "shape-anchor-size-unit": ["`at.width: 400` is a fraction, not pixels.", "rename `width` to `widthPx` if it is pixels."],
+  "shape-anchor-size-unit": ["`at.width: 6` is a fraction, not pixels.", "rename `width` to `widthPx` if it is pixels."],
   "shape-adjust-unknown": ["roundRect has no adjust value `adj1`; it has `adj`.", "use `adj`, or remove `adj1`."],
   "shape-adjust-range": ["`adjust.adj` of roundRect is 0.8, outside 0 to 0.5, so the preset's default is drawn.", "set it between 0 to 0.5."],
   "shape-link-hidden": ["This shape is hidden, so its `link` can never be clicked.", "remove `hidden`, or remove the `link`."],

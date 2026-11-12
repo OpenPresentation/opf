@@ -230,6 +230,10 @@ function describeSchema(finding: Finding, context: FindingTextContext, helpers: 
     case "exclusiveMinimum":
     case "maximum":
     case "exclusiveMaximum": {
+      // A 0.33 anchored overlay size in pixels (check-document.ts gives the finding the rename to widthPx or heightPx).
+      const key = segments.at(-1);
+      if (keyword === "maximum" && segments.at(-2) === "at" && (key === "width" || key === "height") && finding.fixes?.some((fix) => fix.id === "rename"))
+        return { message: `${cap(label)} is a fraction of the block, at most ${params.limit}, but is ${describeValue(actual)}.`, next: `did you mean ${code(`${key}Px`)}? Rename the key to keep the size in pixels.` };
       const bound = /minimum/i.test(keyword) ? "at least" : "at most";
       return {
         message: `${cap(label)} must be ${keyword.startsWith("exclusive") ? (bound === "at least" ? "greater than" : "less than") : bound} ${params.limit}, but is ${describeValue(actual)}.`,

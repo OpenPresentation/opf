@@ -51,7 +51,7 @@ export const CASES = [
 	{ name: 'shape-adjust-unknown', rule: 'opf/shape-adjust-unknown', input: deck([{ title: 'T', blocks: [{ shape: 'roundRect', adjust: { adj1: 0.3 } }] }]) },
 	{ name: 'shape-adjust-range', rule: 'opf/shape-adjust-range', input: deck([{ title: 'T', blocks: [{ shape: 'roundRect', adjust: { adj: 0.8 } }] }]) },
 	{ name: 'shape-link-hidden', rule: 'opf/shape-link-hidden', input: deck([{ title: 'T', blocks: [{ shape: 'rect', text: 'x', link: 'https://example.com', hidden: true }] }]) },
-	{ name: 'shape-anchor-size-unit', rule: 'opf/shape-anchor-size-unit', input: deck([{ title: 'T', blocks: [{ id: 'photo', text: 'x' }], shapes: [{ shape: 'ellipse', at: { block: 'photo', edge: 'top', width: 400, height: 64 } }] }]) },
+	{ name: 'shape-anchor-size-unit', rule: 'opf/shape-anchor-size-unit', input: deck([{ title: 'T', blocks: [{ id: 'photo', text: 'x' }], shapes: [{ shape: 'ellipse', at: { block: 'photo', edge: 'top', width: 6, height: 5 } }] }]) },
 	{ name: 'shape-anchor-missing', rule: 'opf/shape-anchor-missing', input: deck([{ title: 'T', blocks: [{ id: 'photo', text: 'x' }], shapes: [{ shape: 'ellipse', at: { block: 'phot', edge: 'top' } }] }]) },
 	{ name: 'connector-end-missing', rule: 'opf/connector-end-missing', input: deck([{ title: 'T', blocks: [{ id: 'plan', text: 'a' }, { id: 'ship', text: 'b' }], shapes: [{ connector: { from: 'plan', to: 'shipping' } }] }]) },
 	{ name: 'image-placement-invalid', rule: 'opf/image-placement-invalid', input: deck([{ title: 'T', blocks: [{ image: { src: 'https://e.com/a.png', alt: 'a' }, placement: { edge: 'start' } }, { image: { src: 'https://e.com/b.png', alt: 'b' }, placement: { edge: 'start' } }] }]) },

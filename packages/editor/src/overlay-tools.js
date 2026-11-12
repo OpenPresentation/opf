@@ -17,8 +17,8 @@ const LEAF_BLOCK = /^(slides\.(?:0|[1-9][0-9]*)(?:\.blocks\.(?:0|[1-9][0-9]*))+)
 const HANDLES = { nw: [0, 0], n: [0.5, 0], ne: [1, 0], e: [1, 0.5], se: [1, 1], s: [0.5, 1], sw: [0, 1], w: [0, 0.5] };
 const CURSORS = { nw: "nwse-resize", se: "nwse-resize", ne: "nesw-resize", sw: "nesw-resize", n: "ns-resize", s: "ns-resize", e: "ew-resize", w: "ew-resize" };
 const MIN_FRACTION = 0.01;
-// A shape may be larger than the slide (it bleeds off it), subject to finite representable geometry.
-const MAX_FRACTION = Number.MAX_VALUE;
+// A shape may be larger than the slide (it bleeds off it), up to the format's limit of 8 slides (OVERLAY_SIZE_MAX in shape-overlays.js).
+const MAX_FRACTION = 8;
 const round4 = (value) => Math.round(value * 10000) / 10000;
 const MOVE_THRESHOLD = 4;
 

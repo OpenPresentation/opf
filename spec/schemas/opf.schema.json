@@ -2605,14 +2605,14 @@
         "width": {
           "type": "number",
           "minimum": 0,
-          "maximum": 1.7976931348623157e308,
-          "description": "Width as a fraction of the slide width, from 0 (a vertical line). Above 1 the shape is wider than the slide, for a circle or band that bleeds off it; the slide crops what lies outside."
+          "maximum": 8,
+          "description": "Width as a fraction of the slide width, from 0 (a vertical line) up to 8. Above 1 the shape is wider than the slide, for a circle or band that bleeds off it; the slide crops what lies outside."
         },
         "height": {
           "type": "number",
           "minimum": 0,
-          "maximum": 1.7976931348623157e308,
-          "description": "Height as a fraction of the slide height, from 0 (a horizontal line). Above 1 the shape is taller than the slide."
+          "maximum": 8,
+          "description": "Height as a fraction of the slide height, from 0 (a horizontal line) up to 8. Above 1 the shape is taller than the slide."
         },
         "at": {
           "$ref": "#/$defs/OverlayAnchor"
@@ -2780,14 +2780,14 @@
         "width": {
           "type": "number",
           "exclusiveMinimum": 0,
-          "maximum": 1.7976931348623157e308,
-          "description": "The shape's width as a fraction of its target's width: the block's box, or with 'point' the chart mark's bounds. 1 is the target's own width and 1.08 a frame 8% wider. For a size in pixels use 'widthPx'; not both. Default: the preset's natural proportions with the shape's shorter side at 15% of the target's shorter side (at least 12 reference pixels on a chart mark)."
+          "maximum": 8,
+          "description": "The shape's width as a fraction of its target's width: the block's box, or with 'point' the chart mark's bounds. 1 is the target's own width and 1.08 a frame 8% wider, up to 8. For a size in pixels use 'widthPx'; not both. Default: the preset's natural proportions with the shape's shorter side at 15% of the target's shorter side (at least 12 reference pixels on a chart mark)."
         },
         "height": {
           "type": "number",
           "exclusiveMinimum": 0,
-          "maximum": 1.7976931348623157e308,
-          "description": "The shape's height as a fraction of its target's height. For a size in pixels use 'heightPx'; not both. Default as for width."
+          "maximum": 8,
+          "description": "The shape's height as a fraction of its target's height, up to 8. For a size in pixels use 'heightPx'; not both. Default as for width."
         },
         "widthPx": {
           "type": "number",

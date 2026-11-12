@@ -452,7 +452,7 @@ Default severity: **error**. Cost: structure. An overlay shape has no resolvable
 
 Default severity: **warning**. Cost: structure. A pixel size is under a fraction key.
 
-**Why.** In `at`, `width` and `height` are fractions of the block; pixels are `widthPx` and `heightPx`.
+**Why.** In `at`, `width` and `height` are fractions of the block (up to 8); pixels are `widthPx` and `heightPx`. A value above 4 and up to 8 is reported here; above 8 it is a schema error that offers the same rename.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

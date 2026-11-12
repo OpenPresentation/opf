@@ -477,7 +477,7 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
  * deck), or `at` against a composed block. Undefined when the entry has neither placement, both, or a block that is not composed.
  */
 /** The largest width or height of an overlay shape, in slides (and of an anchored one, in targets): above 1 a shape bleeds off the slide. */
-export const OVERLAY_SIZE_MAX = Number.MAX_VALUE;
+export const OVERLAY_SIZE_MAX = 8;
 
 function overlayBox(host: Rec, context: { path: string; width: number; height: number; scale: number; rtl: boolean; blockOf: (id: string) => BlockTarget | undefined; point: (block: BlockTarget, at: Rec) => ChartPointGeometry | undefined }): { box: LayoutBox; attachedTo?: ComposedOverlayShape['attachedTo'] } | undefined {
   const { width, height, scale, rtl } = context;
