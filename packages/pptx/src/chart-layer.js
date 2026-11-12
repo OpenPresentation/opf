@@ -17,7 +17,7 @@
 // header legend (chart-options.js `chartOptionsFromClassic`) import as no option, so a deck exported and imported again keeps its
 // authored options only.
 import {schemeColorXml} from './chart-scheme-colors.js';
-import {chartContextColors, chartEmphasisColors, chartOptionSupport, chartOptionTarget, chartValueAxisHidden, resolveChartData, smallChart} from '@openpresentation/opf/composition';
+import {chartContextColors, chartEmphasisColors, chartFocusContextColors, chartSeriesStrokes, chartOptionSupport, chartOptionTarget, chartValueAxisHidden, resolveChartData, smallChart} from '@openpresentation/opf/composition';
 
 const fraction = value => Number(Math.min(1, Math.max(0, value)).toFixed(4));
 
@@ -137,7 +137,8 @@ export function chartFocusPlan({layer, data, kind, panelFill, labelColor, strong
   const context = (count, avoid) => chartContextColors(panelFill, `#${labelColor}`, count, {labeled: focus.labeled === true, avoid: avoid.map(index => `#${strong[index % strong.length]}`)}).map(srgb);
   const indexes = length => Array.from({length}, (_, index) => index);
   const restSeries = indexes(seriesCount).filter(index => !marks.series[index]), restRows = indexes(data.rows.length).filter(row => !marks.categories[row]);
-  const seriesGrays = circular ? [] : context(restSeries.length, indexes(seriesCount).filter(index => focus.categories ? true : marks.series[index]));
+  // A series drawn as a stroke (a line, a combo's line) keeps the ordinary floor even when labeled (core chartFocusContextColors).
+  const seriesGrays = circular ? [] : chartFocusContextColors(panelFill, `#${labelColor}`, restSeries, {labeled: focus.labeled === true, strokes: chartSeriesStrokes(kind, seriesCount, data.combo), avoid: indexes(seriesCount).filter(index => focus.categories ? true : marks.series[index]).map(index => `#${strong[index % strong.length]}`)}).map(srgb);
   const sliceGrays = circular ? context(restRows.length, indexes(data.rows.length).filter(row => marks.categories[row])) : [];
   const muted = (circular ? sliceGrays : seriesGrays)[0];
   const mutedOf = index => circular ? muted : seriesGrays[Math.max(0, restSeries.indexOf(index))];
