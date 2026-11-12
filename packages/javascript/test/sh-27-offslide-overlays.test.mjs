@@ -25,10 +25,11 @@ test('finite but unrepresentable origins refuse at the coordinate, before invali
  for(const key of ['x','y'])for(const value of [1e300,-1e300,1e20,-1e20]) {
   const doc=deck([{...shape,[key]:value}]);const result=validate(doc,{only:['format']});
   assert.ok(result.findings.some(f=>f.severity==='error'&&f.path==='/slides/0/shapes/0/'+key&&/safe integer native coordinate/.test(f.message)),key+' '+value);
-  assert.throws(()=>composeSlide(doc.slides[0],{presentation:doc}),error=>error instanceof RangeError&&error.message.includes('slides.0.shapes.0.'+key));
+  // RR-105: composition reports it at the coordinate and leaves the shape out; validation refuses the document (above).
+  const composed=composeSlide(doc.slides[0],{presentation:doc});assert.equal(composed.overlayShapes,undefined);assert.ok(composed.diagnostics.some(d=>d.code==='unresolved-content'&&d.path==='slides.0.shapes.0.'+key));
  }
  for(const value of [-1000,1000]){const doc=deck([{...shape,x:value,y:value}]);assert.equal(validate(doc,{only:['format']}).valid,true);const box=composeSlide(doc.slides[0],{presentation:doc}).overlayShapes[0].box;assert.ok(Object.values(box).every(Number.isFinite));}
- for(const value of [NaN,Infinity,-Infinity]){const doc=deck([{...shape,x:value}]);assert.throws(()=>composeSlide(doc.slides[0],{presentation:doc}),RangeError);}
+ for(const value of [NaN,Infinity,-Infinity]){const doc=deck([{...shape,x:value}]),composed=composeSlide(doc.slides[0],{presentation:doc});assert.equal(composed.overlayShapes,undefined);assert.ok(composed.diagnostics.some(d=>d.code==='unresolved-content'&&d.path==='slides.0.shapes.0.x'));}
 });
 test('representability uses actual deck/theme dimensions and deck size overrides',()=>{
  const doc=deck([{...shape,x:1e9}]);doc.design={dimensions:{widthInches:5,heightInches:7.5}};

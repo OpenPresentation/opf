@@ -234,12 +234,32 @@ export interface ChartLayerDoughnut {
 export function chartDoughnut(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, layer: ChartLayer | undefined): ChartLayerDoughnut | undefined {
   if (!record(chart) || !data.ok || data.columns.length < 2 || !data.rows.length) return undefined;
   if (typeOf(chart) !== 'doughnut') return undefined;
-  const {box, scale} = geometry;
-  if (!usable(box, scale)) return undefined;
   const of = (pie: Box): ChartLayerDoughnut => ({pie, hole: {cx: pie.x + pie.width / 2, cy: pie.y + pie.height / 2, r: pie.width / 4}});
   if (layer?.valueList) return of(layer.valueList.pie);
+  const pie = chartCircleSquare(chart, data, geometry, layer);
+  return pie && of(pie);
+}
+
+/**
+ * The square a pie or doughnut is drawn in when composition pins no plot for it, as the preview lays it out (charts.js renderCircularChart):
+ * the area the header, the legend and the padding leave, and a circle of 0.9 of its half side, or (a pie with names outside its slices,
+ * LH-105) of the half side less the room the widest outside name takes. Undefined for a pie with outside data labels of the author's (their
+ * text is the preview's own) or an unusable box. SH-25 pins a chart point's plot to it, so an anchored overlay never moves the chart.
+ */
+export function chartCircleSquare(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, layer: ChartLayer | undefined): Box | undefined {
+  if (!record(chart) || !data.ok || data.columns.length < 2 || !data.rows.length) return undefined;
+  const {box, scale} = geometry;
+  if (!usable(box, scale)) return undefined;
   const options = resolveChartOptions(chart, chartOptionTarget(typeOf(chart)));
   const {fontPx, pad, lineHeight} = metrics(box, scale, geometry.minFontSize);
+  const square = (area: Box, radius: number): Box => { const cx = area.x + area.width / 2, cy = area.y + area.height / 2; return {x: cx - radius, y: cy - radius, width: 2 * radius, height: 2 * radius}; };
+  // A pie's outside names take room around it; outside data labels of the author's are the preview's text, which core does not measure.
+  const pie = typeOf(chart) === 'pie';
+  if (pie && options.dataLabels && (options.dataLabels.position ?? 'outside-end') === 'outside-end') return undefined;
+  const outside = pie && !options.dataLabels && layer?.slices ? layer.slices.labels.filter(entry => entry.position === 'outside').map(entry => label(data.rows[entry.row]?.[0])) : [];
+  const radiusIn = (area: Box) => outside.length
+    ? Math.max(1, Math.min(area.width / 2 - (Math.max(0, ...outside.map(text => geometry.measure(text, fontPx, 400) + fontPx * 0.5)) + fontPx * 0.25), area.height / 2 - (lineHeight + fontPx * 0.25)))
+    : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
   if (options.active || layer?.header) {
     // RR-35's explicit legend is carved from the chart before the circular plot. Keep the preview's existing geometry;
     // data labels on a doughnut are inside its rings and require no outside reserve. Axis titles are unsupported and already adapted.
@@ -268,16 +288,13 @@ export function chartDoughnut(chart: unknown, data: ResolvedChartData, geometry:
     }
     const legend = managed ? 0 : sideWidth() + pad;
     const area = {x: outer.x + pad, y: outer.y + pad, width: Math.max(1, outer.width - 2 * pad - legend), height: Math.max(1, outer.height - 2 * pad)};
-    const radius = Math.max(1, Math.min(area.width, area.height) / 2 * 0.9), cx = area.x + area.width / 2, cy = area.y + area.height / 2;
-    return of({x: cx - radius, y: cy - radius, width: 2 * radius, height: 2 * radius});
+    return square(area, radiusIn(area));
   }
   // The preview's side legend (charts.js legendEntries): one entry per category, a swatch, a gap and the longest name, at most 45% of the box.
   const names = data.rows.map(row => label(row[0]));
   const legend = layer?.slices ? 0 : Math.min(box.width * 0.45, fontPx * 0.6 + fontPx * 0.4 + Math.max(0, ...names.map(name => geometry.measure(name, fontPx, 400))) + fontPx * 0.5) + pad;
   const area = {x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legend), height: Math.max(1, box.height - 2 * pad)};
-  const r = Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
-  const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
-  return of({x: cx - r, y: cy - r, width: 2 * r, height: 2 * r});
+  return square(area, radiusIn(area));
 }
 
 /**

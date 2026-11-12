@@ -73,7 +73,9 @@ test('rich formatting and RTL column reading order survive the same-cap measure 
   complete(item, rich);
 });
 
-test('paginated arrangement fallback keeps all 35 entries and exact mappings under the retained 24px cap', () => {
+// RR-105 (supervisor decision 2026-11-12): continuation pages are held to the size every later page reaches, never to the first page's
+// smaller one, so pages 2 to 4 set the fallback at 28 px (v0.33.0's size) within the reading measure.
+test('paginated arrangement fallback keeps all 35 entries and exact mappings, the continuation pages at their shared 28px', () => {
   const layout = {name: 'Levels', direction: 'column', regions: [{name: 'title'}, {name: 'levels', accepts: ['list'], role: 'primary', flow: 'none', arrangement: 'pyramid'}]};
   const document = {catalogs: {custom: {layouts: {levels: layout}}}, slides: [{layout: 'levels', title: 'Pyramid: a longer title that may need a second line on the slide', blocks: Array.from({length: 5}, () => ({items: [...entries]}))}]};
   const frozen = structuredClone(document), result = paginate(document);
@@ -91,10 +93,11 @@ test('paginated arrangement fallback keeps all 35 entries and exact mappings und
     assert.deepEqual(fitFailures(geometry), []);
     for (const item of lists) {
       paintedEntries += textEntries(item).length;
-      complete(item, entries); assert.deepEqual(fontsOf(item), [24]); assert.ok(maxLine(item) <= 70, 'page '+(i+1)+' '+item.path+' lines='+maxLine(item)+' columns='+item.listColumns?.length);
-      if (i > 0) assert.ok(item.box.width < geometry.contentBox.width, 'automatic fallback uses a narrower readable measure');
+      complete(item, entries); assert.deepEqual(fontsOf(item), [i > 0 ? 28 : 24]); assert.ok(maxLine(item) <= 70, 'page '+(i+1)+' '+item.path+' lines='+maxLine(item)+' columns='+item.listColumns?.length);
+      // The measure holds either way: a narrower column, or (at the continuation pages' 28 px) columns across the body.
+      if (i > 0) assert.ok(item.box.width < geometry.contentBox.width || (item.listColumns?.length ?? 1) > 1, 'automatic fallback keeps a readable measure');
     }
-    if (i > 0) assert.equal(page.composition.maxFontSize, 24);
+    if (i > 0) assert.equal(page.composition.maxFontSize, 28);
   }
   assert.equal(paintedEntries, 35, 'all source entries have actual painted geometry');
 });

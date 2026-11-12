@@ -306,6 +306,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/layout-unplaced`](#opflayout-unplaced) | Layout | warning | composition | No region of the layout has room for a block. |
 | [`opf/icon-dropped`](#opficon-dropped) | Layout | warning | composition | An icon is not drawn. |
 | [`opf/arrangement-adapted`](#opfarrangement-adapted) | Layout | info | composition | A pyramid, matrix, cycle, row of chevrons or flow is drawn another way. |
+| [`opf/chart-label-collision`](#opfchart-label-collision) | Layout | warning | composition | A reference label meets another label or a data line. |
+| [`opf/timeline-period-short`](#opftimeline-period-short) | Layout | warning | composition | A timeline period is too short to read. |
 | [`opf/furniture-wraps`](#opffurniture-wraps) | Layout | warning | composition | A header or footer zone wraps onto more than 2 lines. |
 | [`opf/font-outside-scheme`](#opffont-outside-scheme) | Layout | warning | structure | Text uses a font family that is not in the deck's font scheme. |
 | [`opf/image-resolution`](#opfimage-resolution) | Layout | warning | composition | An image has too few pixels for the size it is shown at. |
@@ -989,6 +991,18 @@ Default severity: **warning**. Cost: composition. An icon is not drawn.
 Default severity: **info**. Cost: composition. A pyramid, matrix, cycle, row of chevrons or flow is drawn another way.
 
 **Why.** A `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` region draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.
+
+### `opf/chart-label-collision`
+
+Default severity: **warning**. Cost: composition. A reference label meets another label or a data line.
+
+**Why.** A reference label is tried above and below its line (beside it on a bar chart). When both places meet another reference label or a data line, it is drawn at the first and reported; its text and value are kept.
+
+### `opf/timeline-period-short`
+
+Default severity: **warning**. Cost: composition. A timeline period is too short to read.
+
+**Why.** A timeline period keeps the proportion its `duration` gives it, whatever the size. A period shorter than its marker is drawn as it is and reported; it is not text overflow, so a strict composition (`overflow: "error"`) does not refuse the slide.
 
 ### `opf/furniture-wraps`
 
