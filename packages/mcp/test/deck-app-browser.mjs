@@ -102,10 +102,14 @@ window.addEventListener("message", async (event) => {
     case "ui/message":
       host.messages.push(message.params);
       return reply({});
-    case "ui/request-display-mode":
+    case "ui/request-display-mode": {
       host.displayModes.push(message.params.mode);
-      reply({ mode: message.params.mode });
-      return send({ method: "ui/notifications/host-context-changed", params: { displayMode: message.params.mode } });
+      // As Claude does: only right after a press in the view (user activation); otherwise the mode stays and is the answer.
+      if (!navigator.userActivation.isActive) return reply({ mode: host.mode ?? "inline" });
+      host.mode = message.params.mode;
+      reply({ mode: host.mode });
+      return send({ method: "ui/notifications/host-context-changed", params: { displayMode: host.mode, containerDimensions: host.mode === "fullscreen" ? { width: 960, height: 640 } : { width: setup.width ?? 960, maxHeight: 640 } } });
+    }
     case "ping":
       return reply({});
     default:
@@ -278,7 +282,9 @@ try {
 		await page.waitForFunction(() => window.host.messages.length === 1, null, { timeout: 15000 });
 		assert.match((await hostState()).messages[0].content[0].text, /I edited the deck in the OPF viewer/);
 		await view().locator('#deck-sync[data-state="sent"]').waitFor();
-		assert.equal(await send.isDisabled(), true, "sent: nothing more to send until the next edit");
+		assert.equal(await view().locator("#deck-sync").innerText(), "Sent to the assistant for your approval", "the host took it; the person still decides");
+		assert.equal(await send.isDisabled(), false, "Send stays usable, to send again");
+		assert.equal(await send.getAttribute("data-unsent"), "false", "and is no longer the primary action");
 	});
 
 	await run("Undo and Redo, Find, the Review panel and the Design menu are the editor's own", async () => {
@@ -462,8 +468,9 @@ try {
 		await view().getByRole("button", { name: "Download source", exact: true }).click();
 		await noIframeDownload();
 		await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 15000 });
-		assert.deepEqual((await hostState()).downloads, [{ contents: [{ type: "resource", resource: { uri: "file:///Q3%231-100%25.opf.json", mimeType: "application/json", text } }] }]);
-		assert.equal(await view().locator("#deck-status").innerText(), "", "host acknowledgement does not invent a saved-file success notice");
+		// The name is the URI's last segment as written: no percent-encoding, and the characters a host would replace are replaced.
+		assert.deepEqual((await hostState()).downloads, [{ contents: [{ type: "resource", resource: { uri: "file:///Q3_1-100_.opf.json", mimeType: "application/json", text } }] }]);
+		assert.equal(await view().locator("#deck-status").innerText(), "Download started.", "the host started the download; nothing more is claimed");
 		await shoot("host-download-edited-json");
 		await view().locator("#deck-undo").click();
 		await page.waitForFunction(() => window.host.context.at(-1)?.structuredContent?.document?.slides?.[0]?.blocks?.[0]?.text === "Original body.", null, { timeout: 15000 });
@@ -505,16 +512,15 @@ try {
 	});
 
 	await run("host denial, cancellation and protocol errors remain visible failures without fallback", async () => {
-		for (const mode of ["denied", "cancelled", "rpc-error"]) {
+		for (const [mode, words] of [["denied", "The download didn't finish."], ["cancelled", "The download didn't finish."], ["rpc-error", "The download couldn't be confirmed."]]) {
 			await open({ document: downloadDeck, view: "source" }, "light", { downloadMode: mode });
 			await view().locator("#deck-source .cm-editor").waitFor();
 			await probeIframeDownload();
 			await view().getByRole("button", { name: "Download source", exact: true }).click();
 			await noIframeDownload();
 			await view().locator("#deck-status").waitFor();
-			assert.match(await view().locator("#deck-status").innerText(), /download failed/i);
+			assert.equal(await view().locator("#deck-status").innerText(), words);
 			assert.equal((await hostState()).downloads.length, 1);
-			if (mode !== "rpc-error") assert.match(await view().locator("#deck-status").innerText(), /cancelled or denied/i);
 			await shoot("host-download-" + mode);
 		}
 	});
@@ -528,8 +534,8 @@ try {
 		const resource = (await hostState()).downloads[0].contents[0].resource;
 		assert.equal(resource.mimeType, "application/vnd.openxmlformats-officedocument.presentationml.presentation");
 		assert.equal(Buffer.from(resource.blob, "base64").subarray(0, 2).toString("latin1"), "PK", "the denied transfer really contains a generated PowerPoint archive");
-		await view().locator(".opf-export-status").filter({ hasText: /download failed.*cancelled or denied/i }).waitFor();
-		assert.match(await view().locator("#deck-status").innerText(), /download failed.*cancelled or denied/i);
+		await view().locator(".opf-export-status").filter({ hasText: /export failed\. The download didn't finish\./i }).waitFor();
+		assert.match(await view().locator("#deck-status").innerText(), /^(PowerPoint \(\.pptx\) export failed\. )?The download didn't finish\.$/);
 		await noIframeDownload();
 		await shoot("host-download-export-denied");
 	});

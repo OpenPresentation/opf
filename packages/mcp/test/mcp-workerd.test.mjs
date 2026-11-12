@@ -43,8 +43,10 @@ test("lean Worker preserves data exclusions and production size budgets", async 
 	const production = await bundleWorker("mcp-worker-lean.mjs", { minify: true });
 	assert.deepEqual(retainedData(production), [], "production also excludes every data source");
 	const compressed = gzipSync(production.text, { level: 9 }).length;
-	// Production5,397,634 minified /1,232,153 gzip bytes; same3% headroom policy.
-	assert.ok(production.bytes < 5_560_000, `${production.bytes} minified bytes`);
+	// Production5,397,634 minified /1,232,153 gzip bytes; same3% headroom policy. RR-111 MCP Apps adoption (vetoable): the base
+	// measured 5,558,585 and open_studio, the session keys and the in-place instructions add 3,795 (5,562,380), so the minified
+	// ceiling moves by 5,000 to 5,565,000; the unminified and gzip ceilings are unchanged.
+	assert.ok(production.bytes < 5_565_000, `${production.bytes} minified bytes`);
 	assert.ok(compressed < 1_270_000, `${compressed} gzip bytes`);
 });
 
@@ -81,7 +83,7 @@ describe("the MCP server in workerd", { skip: !available && "the workerd package
 		assert.equal(init.serverInfo.name, "opf");
 		assert.ok(init.capabilities.tools && init.capabilities.resources && init.capabilities.prompts);
 		const tools = (await call("tools/list", {})).tools.map((tool) => tool.name).sort();
-		assert.deepEqual(tools, ["convert", "get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
+		assert.deepEqual(tools, ["convert", "get_catalog_record", "get_schema", "list_examples", "open_studio", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
 		assert.deepEqual(wire(await call("tools/list", {})), wire(await local.listTools()));
 		assert.ok((await call("resources/list", {})).resources.length > 100);
 		assert.deepEqual((await call("prompts/list", {})).prompts.map((prompt) => prompt.name).sort(), ["author_deck", "choose_layout", "fix_validation_findings", "learn_opf"]);
@@ -189,6 +191,13 @@ describe("a site that hosts the deck view (deckApp with siteFontFiles)", () => {
 		assert.deepEqual(tools.find((tool) => tool.name === "show_deck")._meta.ui, { resourceUri: "ui://opf/deck" });
 		assert.deepEqual(tools.find((tool) => tool.name === "read_font_file")._meta.ui, { visibility: ["app"] });
 		assert.equal((await post("resources/read", { uri: "ui://opf/deck" })).contents[0].text, "<!doctype html><title>OPF deck</title>");
+		assert.deepEqual((await post("resources/read", { uri: "ui://opf/deck" })).contents[0]._meta, { ui: { prefersBorder: false, preferredDisplayMode: "fullscreen" } });
+		// The entry point runs in the Worker with no arguments: a starter deck and server-minted viewer keys, and nothing stored.
+		assert.deepEqual(tools.find((tool) => tool.name === "open_studio")._meta, { ui: { resourceUri: "ui://opf/deck" }, "ui/resourceUri": "ui://opf/deck", "openai/ui": { entrypoints: [{ type: "global" }] } });
+		const studio = await post("tools/call", { name: "open_studio", arguments: {} });
+		assert.equal(studio.isError, undefined, JSON.stringify(studio.content));
+		assert.equal(studio.structuredContent.document.slides.length, 2);
+		assert.match(studio.structuredContent.viewer.session, /^[0-9a-f-]{36}$/);
 		const shown = await post("tools/call", { name: "show_deck", arguments: { document: { name: "Hosted", slides: [{ title: "A" }] } } });
 		assert.equal(shown.structuredContent.checked, true, "the hosted server keeps its quick check");
 		const read = async (file) => {
