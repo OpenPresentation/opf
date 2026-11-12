@@ -36,7 +36,7 @@ describe("opf-mcp", () => {
 		assert.equal(info.name, "opf");
 		assert.match(client.getInstructions(), /format-card/);
 		const { tools } = await client.listTools();
-		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "read_font_file", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
+		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "read_font_file", "read_icons", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
 		for (const tool of tools) {
 			assert.equal(tool.inputSchema.type, "object", tool.name);
 			assert.equal(tool.outputSchema?.type, "object", tool.name);

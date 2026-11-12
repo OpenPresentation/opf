@@ -217,5 +217,18 @@ describe("a site that hosts the deck view (deckApp with siteFontFiles)", () => {
 		assert.equal(await read("fonts/intos/Intos-Regular.ttf"), "font:/opf-fonts/lazy/fonts/intos/Intos-Regular.ttf");
 		assert.equal(await read("script-fonts/noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf"), "font:/opf-fonts/scripts/noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf");
 		assert.equal(await read("fonts/../../etc/passwd.ttf"), "unknown-font");
+
+		// RR-111: the site serves the icon files and passes sources.iconSets, so the viewer reads icons through the app-only read_icons
+		// (the Worker without icon sets above does not list it). Only Lucide's set-level files are served here.
+		const readIcons = tools.find((tool) => tool.name === "read_icons");
+		assert.deepEqual(readIcons?._meta?.ui, { visibility: ["app"] }, "read_icons is offered to the view only");
+		assert.deepEqual(shown.structuredContent.iconSets, ["lucide", "tabler"], "show_deck names the sets the view can read");
+		const icons = await post("tools/call", { name: "read_icons", arguments: { set: "lucide", names: ["rocket", "chek"], index: true } });
+		assert.equal(icons.isError, undefined, JSON.stringify(icons.content));
+		assert.deepEqual(Object.keys(icons.structuredContent.icons), ["rocket"], "an icon the set has, from the whole-set file; a name it lacks is left out");
+		assert.equal(icons.structuredContent.index.license, "ISC");
+		assert.ok(icons.structuredContent.index.names.includes("check"));
+		const tabler = await post("tools/call", { name: "read_icons", arguments: { set: "tabler", names: ["rocket"] } });
+		assert.equal(tabler.isError, true, "a set whose files the site does not serve is an error the view settles");
 	});
 });

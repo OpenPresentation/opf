@@ -243,6 +243,23 @@ try {
 		assert.match(await view().locator("#deck-version").innerText(), /^OPF \d+\.\d+\.\d+/);
 	});
 
+	// RR-111: a deck's set icons come from the server through the app-only read_icons; the view's checks then know every icon name.
+	await run("draws set icons read through read_icons, and checks icon names as the server does", async () => {
+		const iconDeck = { name: "Launch plan", language: "en-US", slides: [{ id: "launch", title: "Launch", items: [{ text: "Ship it", icon: "lucide:rocket" }, { text: "Check it", icon: "lucide:chek" }] }] };
+		await open({ document: iconDeck });
+		await view().locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+		const state = await hostState();
+		assert.ok(state.toolCalls.includes("read_icons"), `the icons come from the server (calls: ${state.toolCalls.join(", ")})`);
+		const text = state.context[0].content[0].text;
+		assert.match(text, /warning opf\/icon-unknown at \/slides\/0\/items\/1\/icon: The icon set lucide has no icon chek\./);
+		assert.doesNotMatch(text, /items\/0\/icon/, "an icon the set has is not reported");
+		const server = (await client.callTool({ name: "validate_deck", arguments: { document: iconDeck } })).structuredContent;
+		const fromServer = server?.findings?.filter((finding) => finding.ruleId === "opf/icon-unknown").map((finding) => finding.message);
+		if (fromServer) assert.deepEqual(state.context[0].structuredContent.findings.filter((finding) => finding.ruleId === "opf/icon-unknown").map((finding) => finding.message), fromServer);
+		await shoot("icons-light");
+		await open({ document: deck });
+	});
+
 	await run("switches between Preview, Source and Both", async () => {
 		assert.equal(await view().locator("#deck-source").isVisible(), false);
 		await view().locator("#tab-source").click();
