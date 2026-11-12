@@ -6,6 +6,8 @@
 // ...) and the preprocessor (`!include`, `!define`, variables) are refused with the position of what stops them, never approximated.
 // PlantUML's styling (skinparam, colors, fonts, themes) is ignored: the deck decides colors and fonts.
 
+import { DIAGRAM_MAX_NESTING, DIAGRAM_SOURCE_LIMIT, DIAGRAM_TRANSLATED_LIMIT } from './diagram-limits.js';
+
 /** Why a PlantUML source cannot be drawn, with its 1-based position. */
 export interface PlantumlIssue {
   code: 'diagram-syntax' | 'diagram-unsupported' | 'diagram-limit';
@@ -28,6 +30,9 @@ export interface PlantumlTranslation {
 class PlantumlError extends Error {
   constructor(readonly issue: PlantumlIssue) { super(issue.message); }
 }
+
+/** The longest line a reader takes: a statement or label of more characters than this cannot be read on a slide, and refusing it bounds the work of every pattern. */
+const MAX_LINE = 2000;
 
 /** A source line: its text without comments, trimmed; its 1-based number; its indentation (a tab counts two). */
 interface Line { text: string; line: number; indent: number }
@@ -80,47 +85,78 @@ function readLines(source: string): { kind: string; lines: Line[] } {
       text = text.slice(0, open) + text.slice(close + 2);
     }
     if (/^\s*'/.test(text)) continue;
-    lines.push({ text: text.trim(), line: index + 1, indent: (/^[ \t]*/.exec(text)![0]).replace(/\t/g, '  ').length });
+    // Runs of white space are one space: nothing in the syntax depends on how many, and the readers' patterns stay linear.
+    if (text.length > MAX_LINE) fail('diagram-limit', `A line is longer than ${MAX_LINE} characters; split it.`, index + 1, 1);
+    lines.push({ text: text.trim().replace(/\s{2,}/g, ' '), line: index + 1, indent: (/^[ \t]*/.exec(text)![0]).replace(/\t/g, '  ').length });
   }
   return { kind, lines };
 }
 
-// Statements every kind ignores: styling, visibility and page furniture the deck draws itself.
-const STYLING = /^(skinparam\b|hide\b|show\b|scale\b|!theme\b|!pragma\b|allowmixing\b|set\s+namespaceseparator\b|header\b|footer\b|caption\b|newpage\b|left\s+to\s+right\s+direction\b|top\s+to\s+bottom\s+direction\b|autoactivate\b|<style>|mainframe\b)/i;
+// What follows a statement keyword when the line is not that statement but a message or relation of an element named like it: an arrow
+// (`Header -> Footer`, `Show <- Hide`, `Scale ..> Z`) or a member (`Title : +x`). A keyword rule never takes such a line.
+const RELATION_AFTER = /^(?:(?:[<xo*#+^{}()]{1,3}[-.=~]+|[-.=~]+)(?:[>\\/xo|*#+^{}()[\]]|\s|$)|:)/;
+
+/** The rest of a line after a leading keyword, or undefined when the line does not start with it or goes on as a message or relation. */
+function statement(text: string, keyword: RegExp): string | undefined {
+  const match = keyword.exec(text);
+  if (!match) return undefined;
+  const rest = text.slice(match[0].length).trim();
+  return RELATION_AFTER.test(rest) ? undefined : rest;
+}
+
+// Statements every kind ignores: styling, visibility and page furniture the deck draws itself. Each is anchored to its own shape, so an
+// element named `Header`, `Show` or `Scale` keeps its messages and relations.
+const STYLED = [/^(?:skinparam|mainframe|hide|show|caption)\s+(?=\S)/i, /^scale\s+(?=(?:max\s+)?\d)/i, /^autoactivate\s+(?=(?:on|off)$)/i, /^(?:(?:left|right|center)\s+)?(?:header|footer)\s+(?=\S)/i];
+const isStyling = (text: string): boolean => /^(?:(?:top\s+to\s+bottom|left\s+to\s+right)\s+direction|allow_?mixing|(?:!pragma|!theme|set\s+namespaceseparator)\s+\S.*)$/i.test(text) || STYLED.some(pattern => statement(text, pattern) !== undefined);
 
 /** Remove styling statements (with their blocks) and refuse the preprocessor; returns the title and the direction if given. */
 function strip(lines: Line[]): { lines: Line[]; title?: string; direction?: 'LR' | 'TB' } {
   const kept: Line[] = [];
   let title: string | undefined, direction: 'LR' | 'TB' | undefined;
+  // The index of the line that closes a block opened at `from`, or -1.
+  const closer = (from: number, closing: RegExp) => { for (let at = from + 1; at < lines.length; at++) if (closing.test(lines[at]!.text)) return at; return -1; };
   for (let index = 0; index < lines.length; index++) {
     const { text, line } = lines[index]!;
     if (!text) continue;
     if (/^!(include|includeurl|includesub|import|define|definelong|undef|function|procedure|unquoted|if|ifdef|ifndef|else|endif|while|foreach|log|dump|assert|startsub|endsub|\$)/i.test(text) || /^\$\w+\s*=/.test(text)) {
       fail('diagram-unsupported', `OPF does not run PlantUML's preprocessor (${text.split(/\s/)[0]}); write the diagram out in full.`, line, 1);
     }
-    if (/^left\s+to\s+right\s+direction\b/i.test(text)) direction = 'LR';
-    else if (/^top\s+to\s+bottom\s+direction\b/i.test(text)) direction = 'TB';
-    if (/^<style>/i.test(text)) { while (index < lines.length && !/<\/style>/i.test(lines[index]!.text)) index++; continue; }
-    if (/^(skinparam\b.*\{|legend\b|title\s*$)/i.test(text) && !/^title\s*$/i.test(text) || /^legend\b/i.test(text)) {
-      // A block: skinparam x { ... }, legend ... endlegend.
-      const closing = /^legend\b/i.test(text) ? /^end\s*legend\b/i : /^\}/;
-      while (index < lines.length && !closing.test(lines[index]!.text)) index++;
+    if (/^left\s+to\s+right\s+direction$/i.test(text)) { direction = 'LR'; continue; }
+    if (/^top\s+to\s+bottom\s+direction$/i.test(text)) { direction = 'TB'; continue; }
+    if (/^<style>/i.test(text)) {
+      if (!/<\/style>/i.test(text)) {
+        const end = closer(index, /<\/style>/i);
+        if (end < 0) fail('diagram-syntax', 'A <style> block is not closed with </style>.', line, 1);
+        index = end;
+      }
       continue;
     }
+    // skinparam x { ... } is a block; a one-line skinparam is not.
+    if (/^skinparam\s+\S/i.test(text) && statement(text, /^skinparam\s+/i) !== undefined) {
+      if (/\{$/.test(text)) {
+        const end = closer(index, /^\}$/);
+        if (end < 0) fail('diagram-syntax', 'A skinparam block is not closed with }.', line, 1);
+        index = end;
+      }
+      continue;
+    }
+    if (/^(hide|show)\s+(@|<<)/i.test(text)) fail('diagram-unsupported', 'hide of unlinked elements or of a stereotype is not drawn; leave those elements out.', line, 1);
     if (/^title\s*$/i.test(text)) {
-      const body: string[] = [];
-      while (++index < lines.length && !/^end\s*title\b/i.test(lines[index]!.text)) body.push(lines[index]!.text);
-      title = body.join(' ').trim();
-      continue;
+      const end = closer(index, /^end\s*title$/i);
+      if (end >= 0) { title = lines.slice(index + 1, end).map(entry => entry.text).join(' ').trim(); index = end; continue; }
     }
-    const titled = /^title\s+(.+)$/i.exec(text);
-    if (titled) { title = plainText(titled[1]!); continue; }
-    if (/^(header|footer|caption)\s*$/i.test(text)) {
-      const closing = new RegExp(`^end\\s*${text.toLowerCase()}\\b`, 'i');
-      while (index < lines.length && !closing.test(lines[index]!.text)) index++;
-      continue;
+    const titled = statement(text, /^title\s+(?=\S)/i);
+    if (titled !== undefined) { title = plainText(titled); continue; }
+    if (/^legend(?:\s+(?:left|right|center|top|bottom))*$/i.test(text)) {
+      const end = closer(index, /^end\s*legend$/i);
+      if (end >= 0) { index = end; continue; }
     }
-    if (STYLING.test(text)) continue;
+    const block = /^(?:(?:left|right|center)\s+)?(header|footer|caption)$/i.exec(text);
+    if (block) {
+      const end = closer(index, new RegExp(String.raw`^end\s*${block[1]!.toLowerCase()}$`, 'i'));
+      if (end >= 0) { index = end; continue; }
+    }
+    if (isStyling(text)) continue;
     kept.push(lines[index]!);
   }
   return { lines: kept, ...(title ? { title } : {}), ...(direction ? { direction } : {}) };
@@ -128,7 +164,7 @@ function strip(lines: Line[]): { lines: Line[]; title?: string; direction?: 'LR'
 
 /** PlantUML text with its markup read: \n breaks a line, creole bold and italics and HTML-like tags are text. */
 function plainText(text: string): string {
-  return text.replace(/\\n/g, '\n').replace(/\\t/g, ' ').replace(/<\/?(b|i|u|s|font|color|size|back|strike|del|sup|sub|w|plain)\b[^>]*>/gi, '')
+  return text.replace(/\\n/g, '\n').replace(/\\t/g, ' ').replace(/<\/?(b|i|u|s|font|color|size|back|strike|del|sup|sub|w|plain)\b[^<>]*>/gi, '')
     .replace(/\*\*(.+?)\*\*/g, '$1').replace(/\/\/(.+?)\/\//g, '$1').replace(/""(.+?)""/g, '$1').replace(/__(.+?)__/g, '$1').replace(/~~(.+?)~~/g, '$1').trim();
 }
 
@@ -136,11 +172,24 @@ const unquote = (text: string) => /^".*"$/.test(text.trim()) ? text.trim().slice
 
 /** Text in a Mermaid label in double quotes. */
 function quoted(text: string): string {
-  return text.replace(/[#"<>&\\]/g, char => ({ '#': '#35;', '"': '#quot;', '<': '#lt;', '>': '#gt;', '&': '#amp;', '\\': '#92;' })[char]!).split('\n').join('<br>');
+  // The backtick opens a Mermaid markdown string, so it is an entity too.
+  return text.replace(/[#"<>&\\`]/g, char => ({ '#': '#35;', '"': '#quot;', '<': '#lt;', '>': '#gt;', '&': '#amp;', '\\': '#92;', '`': '#96;' })[char]!).split('\n').join('<br>');
 }
 /** Text in a Mermaid label without quotes (sequence messages and notes, class members): what pele would read as syntax as entities. */
 function bare(text: string): string {
-  return text.replace(/[#;<>&\\"]/g, char => ({ '#': '#35;', ';': '#59;', '<': '#lt;', '>': '#gt;', '&': '#amp;', '\\': '#92;', '"': '#quot;' })[char]!).split('\n').join('<br>');
+  return text.replace(/[#;<>&{}\\"`]/g, char => ({ '#': '#35;', ';': '#59;', '<': '#lt;', '>': '#gt;', '&': '#amp;', '{': '#123;', '}': '#125;', '\\': '#92;', '"': '#quot;', '`': '#96;' })[char]!).split('\n').join('<br>');
+}
+/** Text for a label after a colon (class relations, state transitions and descriptions): `bare`, and the colon too, which pele reads as the end of the label's start. */
+const labelled = (text: string): string => bare(text).replace(/:/g, '#58;');
+/** A use case relation's label sits between its dashes (`A -- label --> B`): what ends or splits it is an entity. */
+const betweenDashes = (text: string): string => bare(text).replace(/['()[\]:-]/g, char => `#${char.charCodeAt(0)};`);
+/**
+ * A gantt task's name, which starts its line: a colon (it ends the name), a percent sign (`%%` starts a comment) and a first word that is
+ * a directive of the gantt syntax (`Title page`, `section review`) would be read as something else, so they are entities.
+ */
+function ganttName(text: string): string {
+  const name = bare(text).replace(/[:%]/g, char => `#${char.charCodeAt(0)};`);
+  return /^(?:title|section|dateformat|axisformat|excludes|includes|todaymarker|tickinterval|weekday|weekend|click|acctitle|accdescr|inclusiveenddates|topaxis)(?![\w])/i.test(name) ? `#${name.charCodeAt(0)};${name.slice(1)}` : name;
 }
 const yamlQuoted = (text: string) => `'${text.replace(/\s*\n\s*/g, ' ').replace(/'/g, "''")}'`;
 const titled = (title: string | undefined, header: string) => title ? `---\ntitle: ${yamlQuoted(title)}\n---\n${header}` : header;
@@ -159,43 +208,72 @@ class Ids {
     this.ids.set(name, id);
     return id;
   }
-  has(name: string): boolean { return this.ids.has(name); }
 }
 const RESERVED = new Set(['end', 'graph', 'flowchart', 'subgraph', 'style', 'classdef', 'class', 'click', 'linkstyle', 'direction', 'call', 'href', 'default', 'interpolate', 'acctitle', 'accdescr', 'callback', 'td', 'tb', 'bt', 'rl', 'lr', 'note', 'state', 'participant', 'actor', 'as', 'loop', 'alt', 'else', 'opt', 'par', 'and', 'rect', 'critical', 'break', 'box', 'activate', 'deactivate', 'create', 'destroy', 'autonumber', 'title', 'section', 'namespace', 'over', 'left', 'right', 'of', 'for', 'systemboundary', 'usecase', 'root', 'option']);
 
-// ---- Kind detection (PlantUML's own rule is a search of the source for each kind's statements; this is the same search).
+/// ---- Kind detection (PlantUML's own rule is a search of the source for each kind's statements; this is the same search). Every
+// statement is matched in its whole shape: a keyword is a declaration only when a name follows it, never when an arrow does, so a
+// participant named `Node`, `State`, `Record` or `Clock` stays a participant.
+
+const DECLARED_NAME = String.raw`(?:"[^"]+"|\[[^\]]+\]|\([^)]+\)|:[^:]+:|[\w$\u0080-\uFFFF][\w.$\u0080-\uFFFF]*)`;
+const COMPONENT_DECLARATION = new RegExp(String.raw`^(component|interface|database|node|cloud|artifact|file|folder|frame|package|queue|storage|actor|person|card|agent|collections|stack|hexagon|label|boundary|control|entity|rectangle|usecase|port|portin|portout)\s+(${DECLARED_NAME})(?:\s+as\s+("[^"]+"|[\w.]+))?\s*(\{)?$`, 'iu');
+const COMPONENT_KEYWORDS = new Set(['component', 'node', 'cloud', 'artifact', 'folder', 'frame', 'storage', 'card', 'file', 'agent', 'stack', 'port', 'portin', 'portout', 'hexagon']);
+const FALLBACK_COMPONENT_KEYWORDS = new Set(['interface', 'database', 'queue', 'package', 'rectangle']);
+const STATE_DECLARATION = /^state\s+("[^"]+"|[\w.]+)(?:\s+as\s+("[^"]+"|[\w.]+))?\s*(<<\s*(\w+)\s*>>)?\s*(\{)?\s*(?::\s*(.*))?$/i;
+const USECASE_DECLARATION = /^usecase\s+(?:\(([^)]+)\)|"([^"]+)"|([\w.]+))(?:\s+as\s+(?:\(([^)]+)\)|"([^"]+)"|([\w.]+)))?$/i;
+const PARTICIPANT_KEYWORDS = /^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?=\S)/i;
+
+/** A component declaration's text without its color and stereotype. */
+const plainDeclaration = (text: string) => text.replace(/\s+#\S+(\s*\{)?$/, '$1').replace(/\s*<<[^<>]*>>/g, '').trim();
 
 function detect(kind: string, lines: Line[]): PlantumlDiagram {
   if (kind === 'mindmap') return 'mindmap';
   if (kind === 'gantt') return 'gantt';
   if (kind !== 'uml') fail('diagram-unsupported', `OPF does not draw PlantUML ${OTHER_KINDS[kind] ?? `@start${kind}`} diagrams; it draws sequence, class, state, activity, use case, component and deployment diagrams, mind maps and gantt charts.`, 1, 1);
-  const texts = lines.map(line => line.text);
+  // Lines inside a class body (`class X {` ... `}`) are members, whatever they look like: they do not decide the kind.
+  const outside: Line[] = [];
+  for (let at = 0, inBody = false; at < lines.length; at++) {
+    const text = lines[at]!.text;
+    if (inBody) { inBody = text !== '}'; continue; }
+    outside.push(lines[at]!);
+    const declaration = CLASS_DECLARATION.exec(text);
+    if (declaration?.[9] && !declaration[9].includes('}')) inBody = true;
+  }
+  const texts = outside.map(line => line.text);
   const any = (pattern: RegExp) => texts.some(text => pattern.test(text));
   const refuse = (what: string, pattern: RegExp) => {
     const at = lines.find(line => pattern.test(line.text));
     if (at) fail('diagram-unsupported', `OPF does not draw PlantUML ${what}; it draws sequence, class, state, activity, use case, component and deployment diagrams, mind maps and gantt charts.`, at.line, 1);
   };
-  refuse('timing diagrams', /^(robust|concise|clock|binary|analog)\s/i);
+  refuse('timing diagrams', /^(?:robust|concise|clock|binary|analog)\s+(?:"[^"]*"|[\w.]+)(?:\s+(?:as|with|is)\b.*)?$/i);
   refuse('object diagrams', /^(object|map)\s+("[^"]*"|\w+)(\s+as\s+\w+)?\s*(\{|$)/i);
-  refuse('network diagrams', /^nwdiag\b/i);
-  refuse('ArchiMate diagrams', /^archimate\b/i);
+  refuse('network diagrams', /^nwdiag\s*\{/i);
+  refuse('ArchiMate diagrams', /^archimate\s+(?:#\S+\s+)?"/i);
   refuse('entity relationship diagrams (write them in Mermaid)', /^entity\s+("[^"]*"|\w+)(\s+as\s+\w+)?\s*\{/i);
   if (any(/^\(\*\)/) || any(/-->\s*\(\*\)/)) refuse('legacy activity diagrams (write the activity with start, :action; and stop)', /\(\*\)/);
-  if (any(/^(start|stop|kill|detach)$/i) || any(/^:[^:]*$/) || any(/^:[\s\S]*;$/) || any(/^(if\s*\(.*\)\s*(is\s*\(.*\)\s*)?then\b|while\s*\(|repeat\s*$|fork\s*$|partition\s)/i) || any(/^\|[^|]+\|$/)) return 'activity';
-  const component = any(/^\[[^\]*]+\]/) || any(/^(component|node|cloud|artifact|folder|frame|storage|card|file|agent|stack|port|portin|portout|hexagon)\s/i) || any(/^\(\)\s/);
-  const classes = any(/^(abstract\s+class|abstract|class|enum|annotation|struct|exception|protocol|record|metaclass|stereotype|dataclass)\s+/i) || any(/^interface\s+\S+\s*\{/i);
-  const cases = any(/^usecase\s/i) || any(/(^|\s|-)\([^()*]+\)(\s|$|-)/) || any(/^(actor\s+)?:[^:]+:/);
+  if (any(/^(start|stop|kill|detach)$/i) || any(/^:[^:]*$/) || any(/^:[\s\S]*;$/) || any(/^(if\s*\(.*\)\s*(is\s*\(.*\)\s*)?then\b|while\s*\(|repeat\s*$|fork\s*$)/i) || any(/^partition\s+(?:"[^"]+"|[^\s{]+)(?:\s+#\S+)?\s*\{?$/i) || any(/^\|[^|]+\|$/)) return 'activity';
+  const declared = outside.map(line => COMPONENT_DECLARATION.exec(plainDeclaration(line.text))).filter((match): match is RegExpExecArray => match !== null);
+  const component = any(/^\[[\w$\u0080-\uFFFF][^\]\[]*\]/) || declared.some(match => COMPONENT_KEYWORDS.has(match[1]!.toLowerCase())) || any(/^\(\)\s/);
+  const classes = outside.some(line => {
+    const match = CLASS_DECLARATION.exec(line.text);
+    const word = match?.[1]!.toLowerCase();
+    return !!match && !['entity', 'circle', 'diamond'].includes(word!) && (word !== 'interface' || !!match[9]);
+  });
+  const usecaseName = (name: string) => /^\([^()*]+\)$/.test(name);
+  const cases = any(USECASE_DECLARATION) || any(/^\([^()*]+\)(\s|$)/) || any(/^(actor\s+)?:[^:]+:/) || outside.some(line => { const link = readLink(line.text); return !!link && (usecaseName(link.from) || usecaseName(link.to)); });
   if (classes && !component) return 'class';
   if (cases && !component) return 'usecase';
-  if (any(/\[\*\]/) || any(/^state\s+/i)) return 'state';
+  if (any(/\[\*\]/) || any(STATE_DECLARATION)) return 'state';
   if (component) return 'component';
-  if (any(/(<\|--|--\|>|\*--|--\*|o--|--o|<\|\.\.|\.\.\|>)/) && !any(/^(participant|actor|boundary|control|entity|database|collections|queue)\s/i)) return 'class';
-  if (any(/^(participant|actor|boundary|control|entity|database|collections|queue)\s/i) || any(/^("[^"]+"|[\w.]+)\s*(<?-{1,2}(>{1,2}|\\{1,2}|\/{1,2}|x|o)?|<{1,2}-{1,2})\s*("[^"]+"|[\w.]+)\s*(\+\+|--|\*\*|!!)?\s*(:|$)/) || any(/^(activate|deactivate|autonumber|alt|loop|opt|par|group)\b/i)) {
+  // A class relation has an end only a class diagram has (`<|--`, `*--`, `o--`, `--o`): read from the arrow, not from message text after the colon.
+  const classArrow = (text: string) => /(<\|--|--\|>|\*--|--\*|o--|--o|<\|\.\.|\.\.\|>)/.test(text.replace(/\s*:.*$/, ''));
+  if (outside.some(line => classArrow(line.text)) && !any(PARTICIPANT_KEYWORDS)) return 'class';
+  if (any(PARTICIPANT_KEYWORDS) || any(/^("[^"]+"|[\w.]+)\s*(?:<{1,2}|[xo]<{0,2})?-{1,2}(?:\[[^\]]*\])?(?:[>\\/]{1,2})?[xo]?\s*("[^"]+"|[\w.]+)\s*(?:\+\+|--|\*\*|!!)?\s*(?::|$)/) || any(/^(activate|deactivate|autonumber|alt|loop|opt|par|group)(\s|$)/i)) {
     // An actor in a rectangle with links and no messages is a use case diagram.
     if (any(/^actor\b/i) && any(/^(rectangle|package)\b[^{]*\{/i) && !any(/^(participant|boundary|control|collections|queue)\b/i)) return 'usecase';
     return 'sequence';
   }
-  if (any(/^(interface|database|queue|package|rectangle)\s/i)) return 'component';
+  if (declared.some(match => FALLBACK_COMPONENT_KEYWORDS.has(match[1]!.toLowerCase()))) return 'component';
   return fail('diagram-unsupported', 'OPF could not tell which PlantUML diagram this is; it draws sequence, class, state, activity, use case, component and deployment diagrams, mind maps and gantt charts.', lines[0]?.line ?? 1, 1);
 }
 
@@ -212,19 +290,21 @@ interface Link {
   leftLabel?: string; rightLabel?: string;
 }
 
-const NAME = String.raw`(?:"[^"]+"|\[[^\]]+\]|\(\)\s*"?[^"\s]+"?|\([^)]+\)|:[^:]+:|[\w.$\u0080-\uFFFF]+|\[\*\])`;
-const ARROW = String.raw`(<\|?|<<|\*|o|#|x|\}|\{|\+|\^|\(0?|0?\))?([-.=~]+)(?:\[([^\]]*)\])?(up|down|left|right|u|d|l|r)?([-.=~]*)(\|>|>>|>|\*|o|#|x|\{|\}|\+|\^|\)0?|0?\()?`;
-const LINK = new RegExp(String.raw`^(${NAME})\s*(?:"([^"]*)"\s*)?${ARROW}\s*(?:"([^"]*)"\s*)?(${NAME})\s*(?::\s*(.*))?$`, 'u');
+// A name is at most 120 characters (a quoted one 200) and an arrow body 40, so no line can make the pattern backtrack through more than a
+// few thousand paths, whatever follows. The arrow's two runs are separated by a style or a direction word, never by nothing.
+const NAME = String.raw`(?:"[^"]{1,200}"|\[[^\]]{1,200}\]|\(\)\s?"?[^"\s]{1,120}"?|\([^)]{1,200}\)|:[^:]{1,200}:|[\w$\u0080-\uFFFF][\w.$\u0080-\uFFFF]{0,119}|\[\*\])`;
+const ARROW = String.raw`(<\|?|<<|\*|o|#|x|\}|\{|\+|\^|\(0?|0?\))?([-.=~]{1,40})(?:\[([^\]]{0,100})\](up|down|left|right|u|d|l|r)?([-.=~]{0,40})|(up|down|left|right|u|d|l|r)([-.=~]{0,40}))?(\|>|>>|>|\*|o|#|x|\{|\}|\+|\^|\)0?|0?\()?`;
+const LINK = new RegExp(String.raw`^(${NAME})\s*(?:"([^"]{0,200})"\s*)?${ARROW}\s*(?:"([^"]{0,200})"\s*)?(${NAME})\s*(?::\s*(.*))?$`, 'u');
 
 function readLink(text: string): Link | undefined {
   const match = LINK.exec(text);
   if (!match) return undefined;
-  const [, from, leftLabel, left = '', body1 = '', style = '', , body2 = '', right = '', rightLabel, to, label] = match;
-  const body = body1 + body2;
+  const from = match[1]!, leftLabel = match[2], left = match[3] ?? '', style = match[5] ?? '', right = match[10] ?? '', rightLabel = match[11], to = match[12]!, label = match[13];
+  const body = (match[4] ?? '') + (match[7] ?? match[9] ?? '');
   if (!/[-.=~]/.test(body)) return undefined;
   const line = /hidden/i.test(style) ? 'hidden' : body.includes('.') || /dashed|dotted/i.test(style) ? 'dotted' : body.includes('=') || /bold|thickness=[2-9]/i.test(style) ? 'bold' : 'solid';
   return {
-    from: from!, to: to!, left, right, line, length: Math.max(1, body.replace(/[^-.=~]/g, '').length - 1),
+    from, to, left, right, line, length: Math.max(1, body.replace(/[^-.=~]/g, '').length - 1),
     ...(label?.trim() ? { label: plainText(label.replace(/\s+[<>]$|^[<>]\s+/g, '')) } : {}),
     ...(leftLabel ? { leftLabel: plainText(leftLabel) } : {}), ...(rightLabel ? { rightLabel: plainText(rightLabel) } : {}),
   };
@@ -240,6 +320,12 @@ function blockEnd(lines: Line[], from: number, closing: RegExp, opening: RegExp)
   return fail('diagram-syntax', 'A block opened here is not closed.', lines[from]!.line, 1);
 }
 
+/** Blocks (classes in packages, states in states, groups in groups) nest at most DIAGRAM_MAX_NESTING deep: written out, a drawing grows with the square of the depth. */
+const nest = (depth: number, line: Line): void => { if (depth > DIAGRAM_MAX_NESTING) fail('diagram-limit', `Blocks are nested more than ${DIAGRAM_MAX_NESTING} deep; flatten the diagram or split it.`, line.line, 1); };
+
+/** A note that cannot be attached is refused, not dropped: pele's notes sit beside an element. */
+const noNote = (line: Line, to: string): never => fail('diagram-unsupported', `A note on a link or a floating note is not drawn; attach it to ${to} with note left of or right of.`, line.line, 1);
+
 const unknown = (line: Line, what: string): never => fail('diagram-syntax', `OPF cannot read this line of a PlantUML ${what} diagram: ${JSON.stringify(line.text.length > 60 ? `${line.text.slice(0, 57)}...` : line.text)}.`, line.line, 1);
 
 /** Note blocks (`note ... end note`) as one line of text; `lines` from `index`; returns the text and the last index. */
@@ -251,10 +337,15 @@ function noteBlock(lines: Line[], index: number, first: string): { text: string;
   return { text: plainText(body.join('\n')), end: at };
 }
 
-// ---- Sequence diagrams -> pele sequence.
+/// ---- Sequence diagrams -> pele sequence.
 
-const PARTICIPANT = /^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+([\w.]+)|([\w.]+)\s+as\s+"([^"]+)"|([\w.]+)\s+as\s+([\w.]+)|"([^"]+)"|([\w.\u0080-\uFFFF]+))\s*(<<[^>]*>>)?\s*(#\S+)?\s*(order\s+-?\d+)?\s*$/iu;
+// In `participant X as Y` the name later lines use is Y and X is what is drawn (PlantUML's own example: `participant Participant as Foo`,
+// then `Foo -> Foo1`); when one side is quoted, the quoted side is what is drawn. Groups: 2/3 `"Label" as Name`, 4/5 `Name as "Label"`,
+// 6/7 `Label as Name`, 8 `"Name"`, 9 `Name`.
+const PARTICIPANT = /^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+([\w.]+)|([\w.]+)\s+as\s+"([^"]+)"|([\w.]+)\s+as\s+([\w.]+)|"([^"]+)"|([\w.\u0080-\uFFFF]+))\s*(<<[^<>]*>>)?\s*(#\S+)?\s*(order\s+-?\d+)?\s*$/iu;
 const MESSAGE = /^(\[|"[^"]+"|[\w.\u0080-\uFFFF]+)?\s*(\[?)([xo]?<{1,2}|x|o)?(-{1,2})(\[[^\]]*\])?((?:>{1,2}|\\{1,2}|\/{1,2})[xo]?|x|o)?(\]?)\s*(\]|"[^"]+"|[\w.\u0080-\uFFFF]+)?\s*(\+\+|--|\*\*|!!)?\s*(?::\s*(.*))?$/u;
+
+interface Call { from: string; to: string; activated: boolean }
 
 function sequence(lines: Line[], title: string | undefined, maxEdges: number): string {
   const out: string[] = [];
@@ -274,48 +365,96 @@ function sequence(lines: Line[], title: string | undefined, maxEdges: number): s
     return id;
   };
   const frames: string[] = [];
+  const open = (kind: string, current: Line) => {
+    nest(frames.push(kind), current);
+  };
   let messages = 0, last: { from: string; to: string } | undefined, groupLabel: string | undefined;
-  const callStack: Array<{ from: string; to: string }> = [];
+  // The messages a `return` can answer, most recent last: `activated` is set by `++` and `activate`, the call the reply deactivates.
+  const calls: Call[] = [];
+  const lastCall = (accept: (call: Call) => boolean) => { for (let at = calls.length - 1; at >= 0; at--) if (accept(calls[at]!)) return at; return -1; };
+  // A divider or a delay written before any participant exists is placed before the first message, over the participants that message names.
+  const pendingNotes: string[] = [];
+  const flushNotes = () => {
+    if (!pendingNotes.length || !order.length) return;
+    for (const note of pendingNotes) out.push(`  Note over ${order.length > 1 ? `${order[0]},${order.at(-1)}` : order[0]}: ${note}`);
+    pendingNotes.length = 0;
+  };
+  // Where each message is in `out`. pele destroys a participant with the next message after `destroy`, which must involve it; PlantUML's
+  // `destroy X` comes after the last message that does, so a `destroy` followed by a message of others moves in front of that last message.
+  const sent: Array<{ at: number; from: string; to: string; creates?: string }> = [];
+  let created: string | undefined;
+  const destroying: Array<{ id: string; at: number }> = [];
+  const emit = (message: string, from: string, to: string, current: Line) => {
+    flushNotes();
+    settleDestroys(from, to, current);
+    const involved = created !== undefined && (from === created || to === created);
+    sent.push({ at: out.length, from, to, ...(involved ? { creates: created } : {}) });
+    if (involved) created = undefined;
+    out.push(message);
+  };
+  const settleDestroys = (from: string, to: string, current: Line) => {
+    for (const { id, at } of destroying.splice(0)) {
+      if (from === id || to === id) continue;
+      let k = sent.length - 1;
+      while (k >= 0 && sent[k]!.from !== id && sent[k]!.to !== id) k--;
+      if (k < 0 || sent[k]!.creates === id) fail('diagram-unsupported', `destroy ${id} needs a message to or from it after the one that creates it.`, current.line, 1);
+      const target = sent[k]!.at;
+      const [line] = out.splice(at, 1);
+      out.splice(target, 0, line!);
+      for (let j = k; j < sent.length; j++) sent[j]!.at++;
+    }
+  };
   for (let index = 0; index < lines.length; index++) {
     const current = lines[index]!;
     const { text } = current;
     let match: RegExpExecArray | null;
+    let rest: string | undefined;
     match = PARTICIPANT.exec(text);
     if (match) {
       const kind = match[1]!.toLowerCase();
-      const name = match[3] ?? match[4] ?? match[6] ?? match[8] ?? match[9]!;
-      const label = match[2] ?? match[5] ?? match[7] ?? match[8] ?? undefined;
+      const name = match[3] ?? match[4] ?? match[7] ?? match[8] ?? match[9]!;
+      const label = match[2] ?? match[5] ?? match[6] ?? undefined;
       declare(name, kind, label && label !== name ? plainText(label) : undefined);
       continue;
     }
-    if (/^autonumber\b/i.test(text)) { out.push('  autonumber'); continue; }
+    if (/^autonumber$/i.test(text)) { out.push('  autonumber'); continue; }
+    if (statement(text, /^autonumber\s+(?=\S)/i) !== undefined) fail('diagram-unsupported', 'autonumber takes no start, step or format here; write plain autonumber.', current.line, 1);
     match = /^(activate|deactivate|destroy)\s+("[^"]+"|[\w.]+)/i.exec(text);
-    if (match) { out.push(`  ${match[1]!.toLowerCase()} ${declare(unquote(match[2]!))}`); continue; }
+    if (match) {
+      const verb = match[1]!.toLowerCase(), id = declare(unquote(match[2]!));
+      if (verb === 'activate') { const at = lastCall(call => call.to === id && !call.activated); if (at >= 0) calls[at]!.activated = true; }
+      else if (verb === 'deactivate') { const at = lastCall(call => call.to === id && call.activated); if (at >= 0) calls[at]!.activated = false; }
+      if (verb === 'destroy') destroying.push({ id, at: out.length });
+      out.push(`  ${verb} ${id}`);
+      continue;
+    }
     match = /^create\s+(?:(participant|actor|boundary|control|entity|database|collections|queue)\s+)?("[^"]+"|[\w.]+)/i.exec(text);
     if (match) {
       const name = unquote(match[2]!);
       out.push(`  create ${match[1]?.toLowerCase() === 'actor' ? 'actor' : 'participant'} ${ids.of(name)}`);
       declared.add(ids.of(name));
       order.push(ids.of(name));
+      created = ids.of(name);
       continue;
     }
-    match = /^box\b\s*("[^"]*"|[^#]*)?/i.exec(text);
-    if (match) { out.push(`  box ${bare(plainText(unquote(match[1] ?? '')) || ' ')}`); frames.push('box'); continue; }
-    if (/^end\s*box\b/i.test(text)) { out.push('  end'); frames.pop(); continue; }
-    match = /^(alt|opt|loop|par|break|critical|group)\b\s*(.*)$/i.exec(text);
-    if (match) {
-      const kind = match[1]!.toLowerCase(), label = plainText(match[2]!.replace(/^#\S+\s*/, '').replace(/\[([^\]]*)\]/, '$1'));
+    rest = statement(text, /^box\b/i);
+    if (rest !== undefined) { out.push(`  box ${bare(plainText(unquote(/^("[^"]*"|[^#]*)/.exec(rest)![1]!)) || ' ')}`); open('box', current); continue; }
+    if (/^end\s*box$/i.test(text)) { out.push('  end'); frames.pop(); continue; }
+    match = /^(alt|opt|loop|par|break|critical|group)\b/i.exec(text);
+    rest = match ? statement(text, /^(?:alt|opt|loop|par|break|critical|group)\b/i) : undefined;
+    if (match && rest !== undefined) {
+      const kind = match[1]!.toLowerCase(), label = plainText(rest.replace(/^#\S+\s*/, '').replace(/\[([^\]]*)\]/, '$1'));
       // pele has no labeled group: a group is a box whose label is a note over the first message in it.
       if (kind === 'group') { out.push('  rect'); groupLabel = label || undefined; }
       else out.push(`  ${kind}${label ? ` ${bare(label)}` : ''}`);
-      frames.push(kind);
+      open(kind, current);
       continue;
     }
-    match = /^else\b\s*(.*)$/i.exec(text);
-    if (match) {
+    rest = statement(text, /^else\b/i);
+    if (rest !== undefined) {
       const frame = frames.at(-1);
       if (!frame || !['alt', 'par', 'critical'].includes(frame)) unknown(current, 'sequence');
-      out.push(`  ${frame === 'par' ? 'and' : frame === 'critical' ? 'option' : 'else'}${match[1]!.trim() ? ` ${bare(plainText(match[1]!.replace(/^#\S+\s*/, '')))}` : ''}`);
+      out.push(`  ${frame === 'par' ? 'and' : frame === 'critical' ? 'option' : 'else'}${rest ? ` ${bare(plainText(rest.replace(/^#\S+\s*/, '')))}` : ''}`);
       continue;
     }
     if (/^end$/i.test(text)) {
@@ -343,18 +482,25 @@ function sequence(lines: Line[], title: string | undefined, maxEdges: number): s
       out.push(`  Note over ${targets.slice(0, 2).join(',')}: ref ${bare(plainText(body!))}`);
       continue;
     }
-    match = /^={2,}\s*(.*?)\s*={2,}$/.exec(text);
+    // A divider (== text ==) and a delay (...text...) are notes over every participant so far.
+    match = /^={2,}\s*(.*?)\s*={2,}$/.exec(text) ?? /^\.{3}\s*(.+?)\s*\.{3}$/.exec(text);
     if (match) {
-      // A divider: a note over every participant so far.
-      if (order.length) out.push(`  Note over ${order.length > 1 ? `${order[0]},${order.at(-1)}` : order[0]}: ${bare(plainText(match[1]!)) || ' '}`);
+      pendingNotes.push(bare(plainText(match[1]!)) || ' ');
+      flushNotes();
       continue;
     }
-    if (/^(\.{3}.*\.{3}|\.{3}|\|{3}|\|\|\d+\|\|)$/.test(text)) continue;
-    match = /^return\b\s*(.*)$/i.exec(text);
-    if (match) {
-      const call = callStack.pop() ?? last;
-      if (!call) unknown(current, 'sequence');
-      out.push(`  ${call!.to}-->>-${call!.from}: ${bare(plainText(match[1]!)) || ' '}`);
+    // Spacing (a bare ..., ||| or ||45||) is not drawn: the layout spaces the messages itself.
+    if (/^(\.{3,}|\|{3}|\|\|\d+\|\|)$/.test(text)) continue;
+    rest = statement(text, /^return\b/i);
+    if (rest !== undefined) {
+      // The reply goes back to the caller of the most recent activation; without one, to the caller of the last call not yet answered.
+      let at = lastCall(call => call.activated);
+      if (at < 0) at = calls.length - 1;
+      if (at < 0) fail('diagram-syntax', 'return has no message to answer.', current.line, 1);
+      const call = calls[at]!;
+      calls.length = at;
+      emit(`  ${call.to}-->>${call.activated ? '-' : ''}${call.from}: ${bare(plainText(rest)) || ' '}`, call.to, call.from, current);
+      last = { from: call.to, to: call.from };
       continue;
     }
     match = MESSAGE.exec(text);
@@ -362,18 +508,28 @@ function sequence(lines: Line[], title: string | undefined, maxEdges: number): s
       const [, rawFrom, openLeft, leftHead = '', dashes = '', , rightHead = '', openRight, rawTo, activation, label] = match;
       if (rawFrom === '[' || rawTo === ']' || openLeft || openRight) fail('diagram-unsupported', 'A message from or to outside the diagram ([-> or ->]) is not drawn; name the participant it comes from or goes to.', current.line, 1);
       if (!rawFrom || !rawTo) unknown(current, 'sequence');
+      const heads = `${leftHead}${rightHead}`;
+      // pele's sequence has the arrowhead, the open head, the cross and the double head; a circle has none, and a cross or half head on a
+      // double-headed arrow has no counterpart: neither is drawn as another arrow.
+      if (heads.includes('o')) fail('diagram-unsupported', 'A circle end on a message (->o, o->) is not drawn; use -> or ->x.', current.line, 1);
+      if (leftHead && rightHead && /[x\\/]/.test(heads)) fail('diagram-unsupported', 'A double-headed message with a cross or a half head is not drawn; write two.', current.line, 1);
+      // `A -> B !!` destroys B with the message (pele destroys with the message after the statement); `**` is not drawn: write create.
+      if (activation === '**') fail('diagram-unsupported', 'A ** after a message is not drawn; write create before it.', current.line, 1);
       let from = declare(unquote(rawFrom!)), to = declare(unquote(rawTo!));
       // A left head (A <- B) is the message from B to A.
-      let head = rightHead, dashed = dashes.length > 1 || /dashed|dotted/i.test(match[5] ?? '');
-      if (leftHead && !rightHead) { [from, to] = [to, from]; head = leftHead.includes('x') ? 'x' : leftHead.replace(/[xo]/g, '').length > 1 ? '>>' : '>'; }
+      let head = rightHead;
+      const dashed = dashes.length > 1 || /dashed|dotted/i.test(match[5] ?? '');
+      if (leftHead && !rightHead) { [from, to] = [to, from]; head = leftHead.includes('x') ? 'x' : leftHead.length > 1 ? '>>' : '>'; }
       const both = !!leftHead && !!rightHead;
       const arrow = both ? (dashed ? '<<-->>' : '<<->>') : head.includes('x') ? (dashed ? '--x' : '-x') : head === '>>' || head.startsWith('\\') || head.startsWith('/') ? (dashed ? '--)' : '-)') : (dashed ? '-->>' : '->>');
       const act = activation === '++' ? '+' : activation === '--' ? '-' : '';
+      flushNotes();
       if (groupLabel !== undefined) { out.push(`  Note over ${from === to ? from : `${from},${to}`}: ${bare(groupLabel)}`); groupLabel = undefined; }
-      out.push(`  ${from}${arrow}${act}${to}: ${bare(plainText(label ?? '')) || ' '}`);
-      if (activation === '**') out.push(`  create participant ${to}`);
       if (activation === '!!') out.push(`  destroy ${to}`);
-      if (activation === '++') callStack.push({ from, to });
+      emit(`  ${from}${arrow}${act}${to}: ${bare(plainText(label ?? '')) || ' '}`, from, to, current);
+      if (activation === '--') { const at = lastCall(call => call.to === from && call.activated); if (at >= 0) calls[at]!.activated = false; }
+      // A call (a solid message that is not a reply) can be answered by `return`.
+      if (!dashed && !both && !head.includes('x') && activation !== '--' && activation !== '!!') calls.push({ from, to, activated: activation === '++' });
       last = { from, to };
       if (++messages > maxEdges) fail('diagram-limit', `The diagram has more than ${maxEdges} messages.`);
       continue;
@@ -382,18 +538,23 @@ function sequence(lines: Line[], title: string | undefined, maxEdges: number): s
   }
   if (frames.length) fail('diagram-syntax', `A ${frames.at(-1)} block is not closed with end.`);
   if (!order.length) fail('diagram-syntax', 'The sequence diagram has no participants.');
+  flushNotes();
   return `${titled(undefined, 'sequenceDiagram')}\n${title ? `  title ${bare(title)}\n` : ''}${out.join('\n')}`;
 }
 
 // ---- Class diagrams -> pele class diagram.
 
-const CLASS_DECLARATION = /^(abstract\s+class|abstract|class|interface|enum|annotation|struct|exception|protocol|record|metaclass|stereotype|dataclass|entity|circle|diamond)\s+("[^"]+"|[\w.$\u0080-\uFFFF]+)(?:\s+as\s+("[^"]+"|[\w.$]+))?\s*(<[^<>]*(?:<[^<>]*>[^<>]*)*>)?\s*(<<[^>]*>>)?\s*(#\S+)?\s*(?:extends\s+([\w.,\s]+?))?\s*(?:implements\s+([\w.,\s]+?))?\s*(\{.*)?$/iu;
+const CLASS_DECLARATION = /^(abstract\s+class|abstract|class|interface|enum|annotation|struct|exception|protocol|record|metaclass|stereotype|dataclass|entity|circle|diamond)\s+("[^"]+"|[\w.$\u0080-\uFFFF]+)(?:\s+as\s+("[^"]+"|[\w.$]+))?\s*(<(?!<)[^<>]*(?:<[^<>]*>[^<>]*)*>)?\s*(<<[^<>]*>>)?\s*(#\S+)?\s*(?:extends\s+([\w.,\s]+?))?\s*(?:implements\s+([\w.,\s]+?))?\s*(\{.*)?$/iu;
+
+// A separator inside a class body: a run of -, ., = or _, optionally around a title (`-- Fields --`). `__init__` is a member.
+const SEPARATOR = /^(?:-{2,}|\.{2,}|={2,}|_{2,})(?: .+ (?:-{2,}|\.{2,}|={2,}|_{2,}))?$/;
 
 function classDiagram(lines: Line[], title: string | undefined, maxEdges: number): string {
   const out: string[] = [];
   const ids = new Ids('c');
   const declared = new Set<string>();
   let relations = 0;
+  const floatingNotes = new Set<string>();
   const name = (raw: string) => ids.of(unquote(raw).replace(/^\[|\]$/g, ''));
   const declare = (raw: string, label?: string, indent = '  ') => {
     const id = name(raw);
@@ -409,17 +570,18 @@ function classDiagram(lines: Line[], title: string | undefined, maxEdges: number
     const isStatic = /\{(static|classifier)\}/i.test(text), isAbstract = /\{abstract\}/i.test(text);
     // A method `name(args) : Ret` is pele's `name(args) Ret`.
     line = line.replace(/^([+\-#~]?\s*[^():]+\([^)]*\))\s*:\s*(.+)$/, '$1 $2');
-    return plainText(line).replace(/[<>]/g, '~').replace(/[&"]/g, char => (char === '&' ? '#amp;' : '#quot;')).replace(/\n/g, ' ') + (isStatic ? '$' : isAbstract ? '*' : '');
+    return plainText(line).replace(/[<>]/g, '~').replace(/[&"{}`]/g, char => ({ '&': '#amp;', '"': '#quot;', '{': '#123;', '}': '#125;', '`': '#96;' })[char]!).replace(/\n/g, ' ') + (isStatic ? '$' : isAbstract ? '*' : '');
   };
   const stack: Array<{ kind: 'namespace' | 'class'; id?: string; start?: number }> = [];
   for (let index = 0; index < lines.length; index++) {
     const current = lines[index]!;
     const { text } = current;
     let match: RegExpExecArray | null;
+    nest(stack.length, current);
     const inClass = stack.at(-1)?.kind === 'class' ? stack.at(-1)!.id : undefined;
     if (inClass) {
       if (/^\}$/.test(text)) { stack.pop(); out.push(`${'  '.repeat(stack.length + 1)}}`); continue; }
-      if (/^(--|\.\.|==|__)(.*?)(--|\.\.|==|__)?$/.test(text)) continue;
+      if (SEPARATOR.test(text)) continue;
       out.push(`${'  '.repeat(stack.length + 1)}${member(text)}`);
       continue;
     }
@@ -440,7 +602,8 @@ function classDiagram(lines: Line[], title: string | undefined, maxEdges: number
     if (match) {
       const kind = match[1]!.toLowerCase().replace(/\s+/g, ' ');
       let raw = match[2]!, label: string | undefined;
-      if (match[3]) { label = unquote(raw); raw = match[3]; }
+      // `class "Long" as Name` and `class Label as Name`: Name is what later lines use. In `class Name as "Long"` the quoted side is drawn.
+      if (match[3]) { if (match[3].startsWith('"')) label = unquote(match[3]); else { label = unquote(raw); raw = match[3]; } }
       const generic = match[4] ? `~${match[4].slice(1, -1).replace(/[<>]/g, '~')}~` : '';
       const indent = stack.length ? '    ' : '  ';
       const id = name(raw);
@@ -449,7 +612,7 @@ function classDiagram(lines: Line[], title: string | undefined, maxEdges: number
         const shown = label ?? unquote(raw);
         out.push(`${indent}class ${id}${generic}${shown !== id ? `["${quoted(shown)}"]` : ''}${match[9] ? ' {' : ''}`);
       } else if (match[9]) out.push(`${indent}class ${id} {`);
-      const stereotype = match[5] ? match[5].slice(2, -2) : kind === 'interface' ? 'interface' : kind === 'enum' ? 'enumeration' : kind.startsWith('abstract') ? 'abstract' : kind === 'annotation' ? 'annotation' : undefined;
+      const stereotype = match[5] ? match[5].slice(2, -2).trim() : kind === 'interface' ? 'interface' : kind === 'enum' ? 'enumeration' : kind.startsWith('abstract') ? 'abstract' : kind === 'annotation' ? 'annotation' : undefined;
       if (stereotype) {
         if (match[9]) out.push(`${indent}  <<${bare(stereotype)}>>`);
         else out.push(`${indent}<<${bare(stereotype)}>> ${id}`);
@@ -463,23 +626,22 @@ function classDiagram(lines: Line[], title: string | undefined, maxEdges: number
       }
       continue;
     }
-    match = /^note\s+(?:(left|right|top|bottom)\s+of\s+("[^"]+"|[\w.$]+)|"([^"]+)"\s+as\s+\w+|as\s+\w+)\s*(#\S+)?\s*(?::\s*(.*))?$/i.exec(text);
+    match = /^note\s+(?:(left|right|top|bottom)\s+of\s+("[^"]+"|[\w.$]+)|"([^"]+)"\s+as\s+(\w+)|as\s+(\w+))\s*(#\S+)?\s*(?::\s*(.*))?$/i.exec(text);
     if (match) {
-      let body = match[5] ?? match[3];
+      let body = match[7] ?? match[3];
+      // A floating note stands alone: pele's note has no link to a class, so a link to one is refused below.
+      if (match[4] ?? match[5]) floatingNotes.add((match[4] ?? match[5])!);
       if (body === undefined) { const block = noteBlock(lines, index, ''); body = block.text; index = block.end; }
       out.push(match[2] ? `  note for ${declare(match[2])} "${quoted(plainText(body))}"` : `  note "${quoted(plainText(body))}"`);
       continue;
     }
-    match = /^note\s+(?:on\s+)?link\b/i.exec(text);
-    if (match) {
-      if (!/:/.test(text)) { const block = noteBlock(lines, index, ''); index = block.end; }
-      continue;
-    }
+    if (/^note\s+(?:on\s+)?link\b/i.test(text)) noNote(current, 'a class');
     // A member added outside the body: `Name : +field`.
     match = /^("[^"]+"|[\w.$]+)\s*:\s*(.+)$/u.exec(text);
     if (match && !readLink(text)) { out.push(`  ${declare(match[1]!)} : ${member(match[2]!)}`); continue; }
     const link = readLink(text);
     if (link) {
+      if (floatingNotes.has(link.from) || floatingNotes.has(link.to)) noNote(current, 'a class');
       const from = declare(link.from), to = declare(link.to);
       const head = (end: string, side: 'left' | 'right') => {
         if (end === '<|' || end === '|>' || end === '^') return side === 'left' ? '<|' : '|>';
@@ -490,7 +652,7 @@ function classDiagram(lines: Line[], title: string | undefined, maxEdges: number
       };
       const line = link.line === 'dotted' ? '..' : '--';
       const arrow = `${head(link.left, 'left')}${line}${head(link.right, 'right')}`;
-      out.push(`  ${from}${link.leftLabel ? ` "${quoted(link.leftLabel)}"` : ''} ${arrow}${link.rightLabel ? ` "${quoted(link.rightLabel)}"` : ''} ${to}${link.label ? ` : ${bare(link.label)}` : ''}`);
+      out.push(`  ${from}${link.leftLabel ? ` "${quoted(link.leftLabel)}"` : ''} ${arrow}${link.rightLabel ? ` "${quoted(link.rightLabel)}"` : ''} ${to}${link.label ? ` : ${labelled(link.label)}` : ''}`);
       if (++relations > maxEdges) fail('diagram-limit', `The diagram has more than ${maxEdges} relations.`);
       continue;
     }
@@ -516,18 +678,20 @@ function stateDiagram(lines: Line[], title: string | undefined, direction: strin
   for (let index = 0; index < lines.length; index++) {
     const current = lines[index]!;
     const text = current.text.replace(/\s+#\S+(\s|$)/g, ' ').replace(/\s+##\S*/g, '').trim();
+    nest(depth, current);
     const indent = '  '.repeat(depth);
     let match: RegExpExecArray | null;
-    match = /^state\s+("[^"]+"|[\w.]+)(?:\s+as\s+([\w.]+))?\s*(<<\s*(\w+)\s*>>)?\s*(\{)?\s*(?::\s*(.*))?$/i.exec(text);
+    match = STATE_DECLARATION.exec(text);
     if (match) {
       let raw = match[1]!, label: string | undefined;
-      if (match[2]) { label = unquote(raw); raw = match[2]; }
+      // `state "Long" as Name` and `state Label as Name`: Name is what later lines use. In `state Name as "Long"` the quoted side is drawn.
+      if (match[2]) { if (match[2].startsWith('"')) label = unquote(match[2]); else { label = unquote(raw); raw = match[2]; } }
       const id = state(raw);
       const stereotype = match[4]?.toLowerCase();
       if (stereotype && ['choice', 'fork', 'join'].includes(stereotype)) out.push(`${indent}state ${id} <<${stereotype}>>`);
       else if (stereotype === 'end') out.push(`${indent}state ${id}`);
-      else if (label && label !== id) out.push(`${indent}state "${bare(label)}" as ${id}`);
-      if (match[6]) out.push(`${indent}${id} : ${bare(plainText(match[6]))}`);
+      else if (label && label !== id) out.push(`${indent}state "${bare(plainText(label))}" as ${id}`);
+      if (match[6]) out.push(`${indent}${id} : ${labelled(plainText(match[6]))}`);
       if (match[5]) { out.push(`${indent}state ${id} {`); depth++; }
       else if (!stereotype && !label && !match[6]) out.push(`${indent}${id}`);
       continue;
@@ -543,24 +707,22 @@ function stateDiagram(lines: Line[], title: string | undefined, direction: strin
     if (match) {
       let body = match[3];
       if (body === undefined) { const block = noteBlock(lines, index, ''); body = block.text; index = block.end; }
-      const side = match[1]!.toLowerCase() === 'left' ? 'left' : 'right';
-      out.push(`${indent}note ${side} of ${state(match[2]!)} : ${bare(plainText(body))}`);
+      const side = match[1]!.toLowerCase();
+      if (side !== 'left' && side !== 'right') noNote(current, 'a state');
+      out.push(`${indent}note ${side} of ${state(match[2]!)} : ${labelled(plainText(body))}`);
       continue;
     }
-    if (/^note\s+(on\s+)?link\b/i.test(text) || /^note\s+"/i.test(text) || /^note\s+as\b/i.test(text)) {
-      if (!/:|"/.test(text)) { const block = noteBlock(lines, index, ''); index = block.end; }
-      continue;
-    }
+    if (statement(text, /^note\b/i)) noNote(current, 'a state');
     const link = readLink(text);
     if (link) {
       if (link.left && link.right) fail('diagram-syntax', 'A state transition has one arrowhead; write two transitions for both directions.', current.line);
       const [from, to] = link.left && !link.right ? [link.to, link.from] : [link.from, link.to];
-      out.push(`${indent}${state(from)} --> ${state(to)}${link.label ? ` : ${bare(link.label)}` : ''}`);
+      out.push(`${indent}${state(from)} --> ${state(to)}${link.label ? ` : ${labelled(link.label)}` : ''}`);
       if (++transitions > maxEdges) fail('diagram-limit', `The diagram has more than ${maxEdges} transitions.`);
       continue;
     }
     match = /^("[^"]+"|[\w.]+)\s*:\s*(.*)$/.exec(text);
-    if (match) { out.push(`${indent}${state(match[1]!)} : ${bare(plainText(match[2]!))}`); continue; }
+    if (match) { out.push(`${indent}${state(match[1]!)} : ${labelled(plainText(match[2]!))}`); continue; }
     match = /^("[^"]+"|[\w.]+)$/.exec(text);
     if (match) { out.push(`${indent}${state(match[1]!)}`); continue; }
     unknown(current, 'state');
@@ -583,7 +745,6 @@ function activity(lines: Line[], title: string | undefined, maxEdges: number): s
     nodes.push(`${id}@{ shape: ${shape}, label: "${label ? quoted(label) : ' '}" }`);
     const owner = group ?? lane;
     if (owner !== undefined) groups[owner]!.nodes.push(id);
-    else groups.length && void 0;
     return id;
   };
   const link = (from: string, to: string, label?: string, dotted = false) => {
@@ -615,6 +776,7 @@ function activity(lines: Line[], title: string | undefined, maxEdges: number): s
     const current = lines[index]!;
     const { text } = current;
     let match: RegExpExecArray | null;
+    nest(frames.length, current);
     if (/^start$/i.test(text)) { enter(node('sm-circ', '')); continue; }
     if (/^(stop|end)$/i.test(text)) { enter(node('fr-circ', '')); tails = []; continue; }
     if (/^(kill|detach)$/i.test(text)) { tails = []; continue; }
@@ -757,7 +919,6 @@ function activity(lines: Line[], title: string | undefined, maxEdges: number): s
       groups.push({ id: `g${groups.length}`, label: plainText(unquote(match[2]!)), nodes: [], ...(group !== undefined ? { parent: group } : lane !== undefined ? { parent: lane } : {}) });
       frames.push({ kind: 'group', previous: group, line: current.line });
       group = groups.length - 1;
-      if (!text.endsWith('{')) { /* `end group` closes it */ }
       continue;
     }
     if (/^\}$/.test(text) || /^end\s*(group|partition)$/i.test(text)) {
@@ -833,36 +994,34 @@ function usecase(lines: Line[], title: string | undefined, direction: string | u
     }
     return id;
   };
-  // `actor "Long" as A`, `actor A as "Long"`, `usecase (Long) as U`: the quoted or bracketed form is the label, the other the name.
-  const declared = (first: string, firstQuoted: boolean, second: string | undefined, kind: 'actor' | 'usecase') => {
-    if (!second) return element(firstQuoted && kind === 'usecase' ? `(${first})` : first, kind);
-    return firstQuoted ? element(first, kind, second) : element(second, kind, first);
-  };
+  // `actor "Long" as A`, `usecase (Long) as U`, `usecase Login as L`: the name later lines use is the one after `as`, the first is what is
+  // drawn. (`actor A as "Long"` is read where the quoted side follows `as`.)
+  const declared = (first: string, second: string | undefined, kind: 'actor' | 'usecase') => element(first, kind, second);
   for (let index = 0; index < lines.length; index++) {
     const current = lines[index]!;
+    nest(stack.length, current);
     const plain = current.text.replace(/\s+#\S+$/, '');
-    const text = readLink(plain) ? plain : plain.replace(/\s*<<[^>]*>>\s*$/, '');
+    const text = readLink(plain) ? plain : plain.replace(/\s*<<[^<>]*>>\s*$/, '');
     let match: RegExpExecArray | null;
     match = /^actor\s+(?::([^:]+):|"([^"]+)"|([\w.\u0080-\uFFFF]+))(?:\s+as\s+(?::([^:]+):|"([^"]+)"|([\w.]+)))?$/iu.exec(text);
     if (match) {
-      const quotedFirst = match[1] !== undefined || match[2] !== undefined;
       const second = match[4] ?? match[5] ?? match[6];
       if (second !== undefined && (match[4] !== undefined || match[5] !== undefined)) element(match[4] ?? match[5]!, 'actor', match[1] ?? match[2] ?? match[3]);
-      else declared(match[1] ?? match[2] ?? match[3]!, quotedFirst, second, 'actor');
+      else declared(match[1] ?? match[2] ?? match[3]!, second, 'actor');
       continue;
     }
     match = /^:([^:]+):(?:\s+as\s+([\w.]+))?$/.exec(text);
     if (match) { element(match[1]!, 'actor', match[2]); continue; }
     match = /^usecase\s+(?:\(([^)]+)\)|"([^"]+)"|([\w.]+))(?:\s+as\s+(?:\(([^)]+)\)|"([^"]+)"|([\w.]+)))?$/i.exec(text);
     if (match) {
-      const quotedFirst = match[1] !== undefined || match[2] !== undefined;
       const second = match[4] ?? match[5] ?? match[6];
       if (second !== undefined && (match[4] !== undefined || match[5] !== undefined)) element(match[4] ?? match[5]!, 'usecase', match[1] ?? match[2] ?? match[3]);
-      else declared(match[1] ?? match[2] ?? match[3]!, quotedFirst, second, 'usecase');
+      else declared(match[1] ?? match[2] ?? match[3]!, second, 'usecase');
       continue;
     }
-    match = /^\(([^)]+)\)(?:\s+as\s+([\w.]+))?$/.exec(text);
-    if (match) { element(match[1]!, 'usecase', match[2]); continue; }
+    // `(Use the application) as (Use)` and `(Use the application) as Use`: the name after `as` is what later lines use.
+    match = /^\(([^)]+)\)(?:\s+as\s+(?:\(([\w.]+)\)|([\w.]+)))?$/.exec(text);
+    if (match) { element(match[1]!, 'usecase', match[2] ?? match[3]); continue; }
     match = /^(rectangle|package|frame|node|folder|cloud)\s+("[^"]+"|[\w.]+)(?:\s+as\s+[\w.]+)?\s*\{$/i.exec(text);
     if (match) {
       boundaries.push({ label: plainText(unquote(match[2]!)), package: match[1]!.toLowerCase() !== 'rectangle' });
@@ -877,7 +1036,7 @@ function usecase(lines: Line[], title: string | undefined, direction: string | u
       relationLines.push(`  note for ${element(match[1]!)} "${quoted(plainText(body))}"`);
       continue;
     }
-    if (/^note\b/i.test(text)) { if (!/:|"/.test(text)) { const block = noteBlock(lines, index, ''); index = block.end; } continue; }
+    if (statement(text, /^note\b/i)) noNote(current, 'an actor or use case');
     const link = readLink(text);
     if (link) {
       const from = element(link.from), to = element(link.to);
@@ -885,7 +1044,7 @@ function usecase(lines: Line[], title: string | undefined, direction: string | u
       if (link.line === 'dotted' && /^(include|extend)s?$/i.test(label ?? '')) relationLines.push(`  ${from} ..> : ${/^include/i.test(label!) ? 'include' : 'extend'} ${to}`);
       else if (link.left === '<|') relationLines.push(`  ${to} --|> ${from}`);
       else if (link.right === '|>') relationLines.push(`  ${from} --|> ${to}`);
-      else if (label) relationLines.push(link.left && !link.right ? `  ${to} -- ${bare(label)} --> ${from}` : `  ${from} -- ${bare(label)} --> ${to}`);
+      else if (label) relationLines.push(link.left && !link.right ? `  ${to} -- ${betweenDashes(label)} --> ${from}` : `  ${from} -- ${betweenDashes(label)} --> ${to}`);
       else relationLines.push(`  ${from} ${link.right ? '-->' : link.left ? '<--' : '---'} ${to}`);
       if (relationLines.length > maxEdges) fail('diagram-limit', `The diagram has more than ${maxEdges} relations.`);
       continue;
@@ -919,6 +1078,9 @@ function component(lines: Line[], title: string | undefined, direction: string |
   const ids = new Ids('k');
   const nodes = new Map<string, { line: string; group?: number }>();
   const groups: Array<{ id: string; label: string; parent?: number }> = [];
+  // A container is linked by the name it is declared with (`package Server as S {` ... `S --> DB`): its end of a link is a mark that becomes the
+  // container's id once the ids are settled.
+  const groupByCode = new Map<string, number>();
   const edges: string[] = [];
   const stack: number[] = [];
   const element = (raw: string, kind?: string, alias?: string): string => {
@@ -927,7 +1089,11 @@ function component(lines: Line[], title: string | undefined, direction: string |
     else if (/^\(\)\s*/.test(name)) { name = unquote(name.replace(/^\(\)\s*/, '')); shape = 'circle'; }
     else if (/^\(.*\)$/.test(name)) { name = name.slice(1, -1); shape = 'stadium'; }
     else if (/^:.*:$/.test(name)) { name = name.slice(1, -1); shape = 'person'; }
-    else name = unquote(name);
+    else {
+      name = unquote(name);
+      const group = kind === undefined && alias === undefined ? groupByCode.get(name) : undefined;
+      if (group !== undefined) return `\u0001${group}\u0002`;
+    }
     label = name;
     if (alias) name = alias;
     const id = ids.of(name);
@@ -936,17 +1102,28 @@ function component(lines: Line[], title: string | undefined, direction: string |
   };
   for (let index = 0; index < lines.length; index++) {
     const current = lines[index]!;
-    const text = current.text.replace(/\s+#\S+(\s*\{)?$/, '$1').replace(/\s*<<[^>]*>>/g, '').trim();
+    nest(stack.length, current);
+    const text = plainDeclaration(current.text);
     let match: RegExpExecArray | null;
-    match = /^(component|interface|database|node|cloud|artifact|file|folder|frame|package|queue|storage|actor|person|card|agent|collections|stack|hexagon|label|boundary|control|entity|rectangle|usecase|port|portin|portout)\s+("[^"]+"|\[[^\]]+\]|\([^)]+\)|:[^:]+:|[\w.\u0080-\uFFFF]+)(?:\s+as\s+("[^"]+"|[\w.]+))?\s*(\{)?$/iu.exec(text);
+    // An unnamed container: `cloud {`, `package {`.
+    match = /^(\w+)\s*\{$/.exec(text);
+    if (match && Object.hasOwn(ELEMENT_SHAPES, match[1]!.toLowerCase())) {
+      groups.push({ id: `g${groups.length}`, label: '', ...(stack.length ? { parent: stack.at(-1)! } : {}) });
+      stack.push(groups.length - 1);
+      continue;
+    }
+    match = COMPONENT_DECLARATION.exec(text);
     if (match) {
       const kind = match[1]!.toLowerCase();
       let raw = match[2]!, alias = match[3] ? unquote(match[3]) : undefined;
+      // `component "Long" as Name` and `component Label as Name`: Name is what later lines use. In `component Name as "Long"` the quoted side is drawn.
       if (alias && /^"/.test(match[3]!)) { [raw, alias] = [match[3]!, unquote(match[2]!)]; }
       if (match[4]) {
-        groups.push({ id: `g${groups.length}`, label: plainText(unquote(raw).replace(/^\[|\]$/g, '')), ...(stack.length ? { parent: stack.at(-1)! } : {}) });
+        const label = plainText(unquote(raw).replace(/^\[|\]$/g, ''));
+        const code = alias ?? unquote(raw).replace(/^\[|\]$/g, '');
+        if (!groupByCode.has(code)) groupByCode.set(code, groups.length);
+        groups.push({ id: `g${groups.length}`, label, ...(stack.length ? { parent: stack.at(-1)! } : {}) });
         stack.push(groups.length - 1);
-        if (alias) ids.of(alias);
         continue;
       }
       element(raw, kind, alias);
@@ -965,11 +1142,11 @@ function component(lines: Line[], title: string | undefined, direction: string |
       edges.push(`  ${target} -.- ${note}`);
       continue;
     }
-    if (/^note\b/i.test(text)) { if (!/:|"/.test(text)) { const block = noteBlock(lines, index, ''); index = block.end; } continue; }
+    if (statement(text, /^note\b/i)) noNote(current, 'an element');
     const link = readLink(text);
     if (link) {
       const from = element(link.from), to = element(link.to);
-      const tip = (end: string) => /^(>|>>|\|>|\^)$/.test(end) ? '>' : /^(\*|#|x)$/.test(end) ? 'x' : end === 'o' || /^[()]0?$|^0?[()]$/.test(end) ? 'o' : end === '<' || end === '<<' || end === '<|' ? '<' : '';
+      const tip =(end: string) => /^(>|>>|\|>|\^)$/.test(end) ? '>' : /^(\*|#|x)$/.test(end) ? 'x' : end === 'o' || /^[()]0?$|^0?[()]$/.test(end) ? 'o' : end === '<' || end === '<<' || end === '<|' ? '<' : '';
       let left = tip(link.left), right = tip(link.right);
       if (left === '>') left = '<';
       if (right === '<') right = '>';
@@ -992,13 +1169,13 @@ function component(lines: Line[], title: string | undefined, direction: string |
   const out: string[] = [titled(title, `flowchart ${direction ?? 'TB'}`)];
   for (const [, entry] of nodes) if (entry.group === undefined) out.push(`  ${entry.line}`);
   const write = (at: number, indent: string) => {
-    out.push(`${indent}subgraph ${groups[at]!.id}["${quoted(groups[at]!.label)}"]`);
+    out.push(`${indent}subgraph ${groups[at]!.id}["${quoted(groups[at]!.label) || ' '}"]`);
     for (const [, entry] of nodes) if (entry.group === at) out.push(`${indent}  ${entry.line}`);
     groups.forEach((child, index) => { if (child.parent === at) write(index, `${indent}  `); });
     out.push(`${indent}end`);
   };
   groups.forEach((entry, index) => { if (entry.parent === undefined) write(index, '  '); });
-  out.push(...edges);
+  out.push(...edges.map(edge => edge.replace(/\u0001(\d+)\u0002/g, (_, at: string) => groups[Number(at)]!.id)));
   return out.join('\n');
 }
 
@@ -1027,13 +1204,17 @@ function mindmap(lines: Line[]): string {
     if (/^:/.test(text)) {
       text = text.slice(1);
       while (!/;$/.test(text) && index + 1 < lines.length) text += `\n${lines[++index]!.text}`;
+      if (!/;$/.test(text)) fail('diagram-syntax', 'A multi-line node is not ended with ;.', current.line, 1);
       text = text.replace(/;$/, '');
     }
+    nest(depth, current);
     if (depth === 1 && ++roots > 1) fail('diagram-unsupported', 'A mind map has one root; draw the second tree as its own diagram.', current.line, 1);
     if (depth > 1 && !count) fail('diagram-syntax', 'A mind map starts with its root (*).', current.line, 1);
     const label = plainText(text);
     // A node is a rounded box, a boxless node (*_) a square one: pele's mind map has no node without an outline that takes any text.
-    out.push(`${'  '.repeat(depth)}m${count++}${match![3] ? `["${quoted(label)}"]` : `("${quoted(label)}")`}`);
+    // A colon is an entity: pele reads a node text that starts with one as an icon or class marker.
+    const shown = quoted(label).replace(/:/g, '#58;') || ' ';
+    out.push(`${'  '.repeat(depth)}m${count++}${match![3] ? `["${shown}"]` : `("${shown}")`}`);
   }
   if (!count) fail('diagram-syntax', 'The mind map has no nodes.');
   return out.join('\n');
@@ -1121,7 +1302,9 @@ function gantt(lines: Line[], title: string | undefined): string {
       if (part) { subject.milestone = true; subject.start = date(part[1]!, current.line); subject.duration = 0; continue; }
       part = /^is\s+(\d+)%\s+complete(?:d)?$/i.exec(clause);
       if (part) { subject.complete = Number(part[1]); continue; }
-      if (/^(is\s+colored\b|is\s+displayed\b|on\s+\{|is\s+deleted|pauses\b|links\s+to\b)/i.test(clause)) continue;
+      // A pause changes the days a task takes and a deleted task is not drawn: OPF does neither.
+      if (/^(?:pauses\b|is\s+deleted$)/i.test(clause)) fail('diagram-unsupported', `"${clause}" is not drawn.`, current.line, 1);
+      if (/^(is\s+colored\b|is\s+displayed\b|on\s+\{|links\s+to\b)/i.test(clause)) continue;
       fail('diagram-syntax', `OPF cannot read this part of a PlantUML gantt chart: ${JSON.stringify(clause)}.`, current.line, 1);
     }
   }
@@ -1174,7 +1357,7 @@ function gantt(lines: Line[], title: string | undefined): string {
     const tags = [entry.milestone ? 'milestone' : '', entry.complete === 100 ? 'done' : entry.complete ? 'active' : ''].filter(Boolean);
     let days = 0;
     if (!entry.milestone) { for (let at = span.start; at < span.end; at += DAY) { tick(); if (open(at)) days++; } days = Math.max(1, days); }
-    out.push(`  ${bare(plainText(entry.name)).replace(/:/g, '#58;')} :${[...tags, entry.id, iso(span.start), `${days}d`].join(', ')}`);
+    out.push(`  ${ganttName(plainText(entry.name))} :${[...tags, entry.id, iso(span.start), `${days}d`].join(', ')}`);
   }
   return out.join('\n');
 }
@@ -1209,10 +1392,13 @@ export function plantumlToMermaid(source: string, options: { maxEdges: number })
   let result = translations.get(key);
   if (!result) {
     try {
+      // The reader enforces the limits itself: it is a public export, so it cannot rely on a caller having checked the source.
+      if (source.length > DIAGRAM_SOURCE_LIMIT) fail('diagram-limit', `The diagram source is longer than ${DIAGRAM_SOURCE_LIMIT} characters.`);
       result = translate(source, options.maxEdges);
+      if (result.mermaid.length > DIAGRAM_TRANSLATED_LIMIT) fail('diagram-limit', 'The diagram has too many elements, labels or nested blocks for one slide; split it.');
     } catch (error) {
-      if (!(error instanceof PlantumlError)) throw error;
-      result = error.issue;
+      // Untrusted text never throws: an error that is not a PlantumlError is a bug in the reader, reported as a source it cannot read.
+      result = error instanceof PlantumlError ? error.issue : { code: 'diagram-syntax', message: `OPF could not read this PlantUML source (${error instanceof Error ? error.message : String(error)}).` };
     }
     if (translations.size >= 500) translations.clear();
     translations.set(key, result);
