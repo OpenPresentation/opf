@@ -304,6 +304,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/layout-unplaced`](#opflayout-unplaced) | Layout | warning | composition | No region of the layout has room for a block. |
 | [`opf/icon-dropped`](#opficon-dropped) | Layout | warning | composition | An icon is not drawn. |
 | [`opf/arrangement-adapted`](#opfarrangement-adapted) | Layout | info | composition | A pyramid, matrix, cycle, row of chevrons or flow is drawn another way. |
+| [`opf/mark-crowded`](#opfmark-crowded) | Layout | warning | composition | A timeline period or chart reference label has no room to read clearly. |
 | [`opf/furniture-wraps`](#opffurniture-wraps) | Layout | warning | composition | A header or footer zone wraps onto more than 2 lines. |
 | [`opf/font-outside-scheme`](#opffont-outside-scheme) | Layout | warning | structure | Text uses a font family that is not in the deck's font scheme. |
 | [`opf/image-resolution`](#opfimage-resolution) | Layout | warning | composition | An image has too few pixels for the size it is shown at. |
@@ -971,6 +972,12 @@ Default severity: **warning**. Cost: composition. An icon is not drawn.
 Default severity: **info**. Cost: composition. A pyramid, matrix, cycle, row of chevrons or flow is drawn another way.
 
 **Why.** A `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` region draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.
+
+### `opf/mark-crowded`
+
+Default severity: **warning**. Cost: composition. A timeline period or chart reference label has no room to read clearly.
+
+**Why.** Some marks keep their geometry whatever the size: a timeline period keeps the proportion its `duration` gives it, and a chart reference line sits at its value. A period shorter than its marker, or a reference label that collides with a data line or another label after both adjacent placements, is drawn as it is and reported; it is not text overflow, so a strict composition (`overflow: "error"`) does not refuse the slide.
 
 ### `opf/furniture-wraps`
 

@@ -54,12 +54,16 @@ test('intrinsic measurement stays finite while retaining relative vertical perio
   near(out.ranges[1].box.height,4*out.ranges[0].box.height);
 });
 
-test('an unreadable proportional interval reports overflow instead of dropping content or changing its duration',()=>{
+// RR-105: a period too short for its marker is a crowded mark (mark-crowded), not text overflow: no size changes it, so a strict
+// composition reports it and does not refuse the timeline.
+test('an unreadable proportional interval is reported as a crowded mark instead of dropping content or changing its duration',()=>{
   const value=[{when:'Brief',what:'All of these source words remain here',duration:.001},{when:'Long',what:'Build',duration:100}],before=structuredClone(value),box={x:0,y:0,width:280,height:160};
   const out=layoutTimeline(value,box);
-  assert.equal(out.overflow,true);assert.ok(out.diagnostics.length);assert.deepEqual(value,before);
+  assert.ok(out.diagnostics.some(entry=>entry.code==='mark-crowded'&&entry.reason==='event-space'));assert.deepEqual(value,before);
+  assert.equal(out.overflow,out.diagnostics.some(entry=>entry.code!=='mark-crowded'));
   assert.deepEqual(out.parts.map(part=>part.text),value.flatMap(event=>[event.when,event.what]));
-  assert.throws(()=>layoutTimeline(value,box,{overflow:'error'}),OPFCompositionError);
+  if(out.overflow)assert.throws(()=>layoutTimeline(value,box,{overflow:'error'}),OPFCompositionError);
+  else assert.doesNotThrow(()=>layoutTimeline(value,box,{overflow:'error'}));
 });
 
 test('placed ranged labels never shrink even when a compacting hint requests a negative offset',()=>{

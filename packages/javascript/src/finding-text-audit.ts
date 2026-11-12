@@ -316,6 +316,15 @@ const iconDropped: RuleText = (finding) => {
   };
 };
 
+// RR-105: a timeline period or a chart reference label drawn without room to read clearly.
+const markCrowded: RuleText = (finding) => {
+  const period = /period/.test(finding.message);
+  return {
+    message: period ? "A timeline period is too short to read: its duration gives it less room than its marker." : "A chart reference label runs into a data line or another label.",
+    next: period ? "give the timeline more room, or make its shortest period longer." : "give the chart more room, shorten the label, or put it at the other end of its line.",
+  };
+};
+
 // SH-09: a pyramid or matrix drawn as cards or as a list (SH-18: a cycle as a list).
 const arrangementAdapted: RuleText = (finding) => {
   const cards = /needs four entries/.test(finding.message);
@@ -645,6 +654,7 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/region-full": regionFull,
   "opf/icon-dropped": iconDropped,
   "opf/arrangement-adapted": arrangementAdapted,
+  "opf/mark-crowded": markCrowded,
   "opf/layout-unplaced": layoutUnplaced,
   "opf/furniture-wraps": furnitureWraps,
   "opf/font-outside-scheme": fontOutsideScheme,

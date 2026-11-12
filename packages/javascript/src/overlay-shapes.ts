@@ -413,11 +413,20 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
     const host = record(entry);
     if (!Object.keys(host).length || isOverlayConnector(host)) return;
     const path = `${context.path}.shapes.${index}`;
-    const placed = overlayBox(host, { path, width, height, scale, rtl, blockOf, point: (block, at) => {
-      const result = block.chart ? context.point(block.chart, at) : {ok: false as const, field: 'point' as const, reason: 'The referenced block has no composed chart.'};
-      if (!result.ok) composition.diagnostics.push({code: 'shape-anchor-missing', path: `${path}.at.${result.field}`, message: result.reason});
-      return result.ok ? result : undefined;
-    } });
+    let placed: ReturnType<typeof overlayBox>;
+    try {
+      placed = overlayBox(host, { path, width, height, scale, rtl, blockOf, point: (block, at) => {
+        const result = block.chart ? context.point(block.chart, at) : {ok: false as const, field: 'point' as const, reason: 'The referenced block has no composed chart.'};
+        if (!result.ok) composition.diagnostics.push({code: 'shape-anchor-missing', path: `${path}.at.${result.field}`, message: result.reason});
+        return result.ok ? result : undefined;
+      } });
+    } catch (error) {
+      // A frame too far off the slide to place (an edit in progress, or validation skipped) is reported and the shape left out:
+      // refusing the document is validation's job, never composition's.
+      if (!(error instanceof PositionRangeError)) throw error;
+      composition.diagnostics.push({code: 'unresolved-content', path: `${path}.${error.coordinate}`, message: `${error.message} The overlay shape is not drawn.`});
+      return;
+    }
     if (!placed) return;
     const shape = composeShape(host, placed.box, { scale, aspect: 0 });
     const item: ComposedOverlayShape = {
@@ -525,6 +534,10 @@ class PositionRangeError extends RangeError {
 function fractionalOverlayFrame(host: Rec, canvas: { width: number; height: number; rtl: boolean }, path: string): LayoutBox {
   const {width, height, rtl} = canvas;
   return representablePositionBox({x: rtl ? width - (host.x + host.width) * width : host.x * width, y: host.y * height, width: host.width * width, height: host.height * height}, path);
+}
+/** representablePositionBox, or undefined where it would throw: composition reports such a panel and leaves it out. */
+export function representableBox(box: LayoutBox, path: string): LayoutBox | undefined {
+  try { return representablePositionBox(box, path); } catch (error) { if (error instanceof PositionRangeError) return undefined; throw error; }
 }
 /** Internal shared geometry boundary for authored positioned panels. No layout, fonts or data loading. */
 export function representablePositionBox(box: LayoutBox, path: string): LayoutBox {

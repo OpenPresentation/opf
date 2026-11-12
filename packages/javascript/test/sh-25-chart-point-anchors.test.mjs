@@ -39,7 +39,7 @@ test('point centers use the real shared plot, series grouping, signed endpoints 
 test('marker, scatter and arc points are shared/pinned, offsets follow the point normal',()=>{
  for(const type of ['line','line-with-markers','stacked-line','area','stacked-area','100pct-stacked-area','scatter','pie','doughnut']){
   const input=slide({point:1,series:0,offset:8});input.blocks[0].chart={type,data:{columns:['Category','A','B'],rows:[['First',10,20],['Second',25,8],['Third',15,25]]}};
-  const result=composed(input),overlay=result.overlayShapes?.[0];assert.ok(overlay,type);const point=overlay.attachedTo.chartPoint;near(overlay.box.x+40,point.position.x+8*point.normal.x);near(overlay.box.y+40,point.position.y+8*point.normal.y);assert.ok(result.items.find(item=>item.chart).chart.layer.plot);
+  const result=composed(input),overlay=result.overlayShapes?.[0];assert.ok(overlay,type);const point=overlay.attachedTo.chartPoint;near(overlay.box.x+40,point.position.x+8*point.normal.x);near(overlay.box.y+40,point.position.y+8*point.normal.y);const layer=result.items.find(item=>item.chart).chart.layer;assert.ok(layer.plot??layer.doughnut?.pie??layer.valueList?.pie,type+': the point lies on a plot both engines draw');
  }
 });
 test('a missing runtime point is omitted with a located finding and does not pin an ordinary chart',()=>{

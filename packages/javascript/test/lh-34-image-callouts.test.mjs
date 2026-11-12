@@ -14,7 +14,8 @@ test('callouts belong to content image payloads, not logos, videos or reusable r
   assert.equal(check({slides:[{image:{src,callouts}}]}).valid,true);
   for(const document of [{assets:{photo:{src,callouts}},slides:[{text:'Control'}]},{slides:[{video:{src,callouts}}]},{organization:{id:'control',name:'Control',logo:{src,callouts}},slides:[{text:'Control'}]}]){const plain=JSON.parse(JSON.stringify(document, (key,value)=>key==='callouts'?undefined:value));assert.equal(check(plain).valid,true);assert.equal(check(document).valid,false);}
   for(const patch of [{width:0},{height:-1},{x:NaN},{y:Infinity},{height:1.1},{width:Infinity},{text:['rich is not plain']},{unknown:'invalid'}])assert.equal(check({slides:[slide([{...callouts[0],...patch}])]}).valid,false);
-  assert.throws(()=>image(slide([{...callouts[0],width:0}])),/Callouts need/);
+  // RR-105: composition reports a callout validation refuses and leaves it out; refusing the document is validation's job.
+  {const result=composeSlide(slide([{...callouts[0],width:0}]),{width:1280,height:720});assert.deepEqual(result.items.find(item=>item.image).image.callouts,[]);assert.ok(result.diagnostics.some(d=>d.code==='unresolved-content'&&/positive width/.test(d.message)));}
 });
 test('one through nine callouts use physical fractions of the visible image frame across fit, masks, scale and direction',()=>{
   for(const count of [1,2,3,9])for(const scale of [.5,1,2])for(const direction of ['ltr','rtl'])for(const fit of ['contain','cover','stretch']){
@@ -52,7 +53,7 @@ test('signed annotation origins intentionally cross image/slide edges without ch
   for(const [index,label]of out.callouts.entries()){near(label.box.x,out.calloutFrame.x+out.calloutFrame.width*values[index].x);near(label.box.y,out.calloutFrame.y+out.calloutFrame.height*values[index].y);assert.equal(label.text,values[index].text);assert.ok(label.fit.fontSize>=PROSE_NOMINAL_SIZE);}
   boxes.push(out.callouts.map(c=>c.box));
  }assert.deepEqual(boxes[0],boxes[1],'physical image coordinates do not mirror in RTL');
- for(const value of [-1e300,1e300])assert.throws(()=>image(slide([{...values[0],x:value}])),/safe integer native coordinate/);
+ for(const value of [-1e300,1e300]){const result=composeSlide(slide([{...values[0],x:value}]),{width:1280,height:720});assert.deepEqual(result.items.find(item=>item.image).image.callouts,[]);assert.ok(result.diagnostics.some(d=>d.code==='unresolved-content'&&/too far/.test(d.message)));}
  assert.equal(check({slides:[slide(values,{focus:{x:-.1,y:.5}})]}).valid,false,'normalized image focus stays bounded');
  const gradient=position=>({slides:[{shapes:[{shape:'rect',x:0,y:0,width:.2,height:.2,fill:{gradient:{stops:[{position,color:'#000000'},{position:1,color:'#FFFFFF'}]}}}]}]});
  assert.equal(check(gradient(0)).valid,true);assert.equal(check(gradient(-.1)).valid,false,'gradient stops stay bounded');

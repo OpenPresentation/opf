@@ -405,6 +405,14 @@ export const arrangementAdaptedRule = rule(
 	"A `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` region draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.",
 	{ cost: 'composition' },
 );
+export const markCrowdedRule = rule(
+	'mark-crowded',
+	'layout',
+	'warning',
+	'A timeline period or chart reference label has no room to read clearly.',
+	'Some marks keep their geometry whatever the size: a timeline period keeps the proportion its `duration` gives it, and a chart reference line sits at its value. A period shorter than its marker, or a reference label that collides with a data line or another label after both adjacent placements, is drawn as it is and reported; it is not text overflow, so a strict composition (`overflow: "error"`) does not refuse the slide.',
+	{ cost: 'composition' },
+);
 export const unplacedRule = rule(
 	'layout-unplaced',
 	'layout',
@@ -622,6 +630,7 @@ const implementedRules: ValidationRuleInfo[] = [
 	unplacedRule,
 	iconDroppedRule,
 	arrangementAdaptedRule,
+	markCrowdedRule,
 	furnitureWrapsRule,
 	outsideRule,
 	resolutionRule,

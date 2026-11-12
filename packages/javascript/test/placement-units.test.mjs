@@ -26,5 +26,8 @@ test('duplicate units and nonpositive anchor sizes refuse, while dimensions can 
     assert.equal(validate(document([shape(at)]), {only: ['format']}).valid, true, JSON.stringify(at));
   const conflict = compose([shape({width: 0.5, widthPx: 40})]);
   assert.equal((conflict.overlayShapes ?? []).length, 0, 'composition does not silently select a unit when validation was skipped');
-  assert.throws(() => compose([shape({width: 1e300, height: 0.5})]), /safe integer native coordinate/);
+  // RR-105: a frame composition cannot place is reported and left out, never thrown.
+  const far = compose([shape({width: 1e300, height: 0.5})]);
+  assert.equal((far.overlayShapes ?? []).length, 0);
+  assert.ok(far.diagnostics.some(d => d.code === 'unresolved-content' && /safe integer native coordinate/.test(d.message)));
 });

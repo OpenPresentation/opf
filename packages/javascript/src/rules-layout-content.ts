@@ -4,7 +4,7 @@ import type { ValidationRule } from './rule-context.js';
 import { plainText, pointerOfDotted, runsOf, slidePayloads } from './rule-content.js';
 import { type Rec, rec } from './rule-design.js';
 import { resolveNarrative, unreferencedBeats } from './narrative-plan.js';
-import { ruleInfo, MAX_FURNITURE_LINES, emptySlideRule, emptyTextRule, furnitureWrapsRule, layoutFailedRule, minFontRule, outsideRule, overflowRule, placeholderRule, regionFullRule, regionKindRule, regionUnknownRule, resolutionRule, unplacedRule, unresolvedRule, unusedBeatRule, iconDroppedRule, arrangementAdaptedRule } from './validation-rule-info.js';
+import { ruleInfo, MAX_FURNITURE_LINES, emptySlideRule, emptyTextRule, furnitureWrapsRule, layoutFailedRule, minFontRule, outsideRule, overflowRule, placeholderRule, regionFullRule, regionKindRule, regionUnknownRule, resolutionRule, unplacedRule, unresolvedRule, unusedBeatRule, iconDroppedRule, arrangementAdaptedRule, markCrowdedRule } from './validation-rule-info.js';
 
 const PX_TO_PT = 0.75;
 const round = (value: number, places = 1) => Math.round(value * 10 ** places) / 10 ** places;
@@ -19,7 +19,7 @@ const layoutRules: ValidationRule[] = [
 		info: overflowRule,
 		// Format validates anchor identities in schema-check without composition. Geometry may add
 		// the same located finding during an enabled layout audit, but must not trigger one.
-		also: [unresolvedRule, layoutFailedRule, minFontRule, regionUnknownRule, regionKindRule, regionFullRule, unplacedRule, iconDroppedRule, arrangementAdaptedRule],
+		also: [unresolvedRule, layoutFailedRule, minFontRule, regionUnknownRule, regionKindRule, regionFullRule, unplacedRule, iconDroppedRule, arrangementAdaptedRule, markCrowdedRule],
 		run(context) {
 			// Diagnostics about deck-level settings (header, footer, design) repeat on every slide; report each once.
 			const deckLevel = new Set<string>();
@@ -44,6 +44,9 @@ const layoutRules: ValidationRule[] = [
 					// SH-09: a pyramid or matrix drawn as cards or as a list (SH-18: a cycle as a list).
 					else if (diagnostic.code === 'arrangement-adapted')
 						context.report(arrangementAdaptedRule, { path, slide, message: diagnostic.message, help: /four entries/.test(diagnostic.message) ? 'Write four entries for the quadrants, or choose another layout for this many.' : 'Shorten the entries, write one level without descriptions, or choose another layout.' });
+					// RR-105: a timeline period or reference label drawn without room (geometry, not overflow).
+					else if (diagnostic.code === 'mark-crowded')
+						context.report(markCrowdedRule, { path, slide, message: diagnostic.message, help: /period/.test(diagnostic.message) ? 'Give the timeline more room, or make its shortest period longer relative to the others.' : 'Give the chart more room, shorten the label, or move it to the other end of its line (labelPosition).' });
 					else if (Object.hasOwn(REGION_RULES, diagnostic.code))
 						context.report(REGION_RULES[diagnostic.code as keyof typeof REGION_RULES], { path, slide, message: diagnostic.message, help: diagnostic.code === 'layout-unplaced' ? 'Paginate the slide, choose a layout with more room, pin the block to a region with room, or remove a block.' : 'Pin the block to a region of the layout that accepts it and has room, or remove the pin.' });
 					else context.report(unresolvedRule, { path, slide: path.startsWith('/slides/') ? slide : undefined, message: diagnostic.message, help: 'Supply what the message asks for, or remove the setting that cannot be honoured.' });
