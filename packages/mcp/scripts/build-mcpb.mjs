@@ -61,7 +61,9 @@ for (const [name, range] of Object.entries(render.peerDependencies ?? {})) {
 	if (scriptFonts || officePackages.has(name)) dependencies[name] = range;
 }
 writeFileSync(path.join(stage, "package.json"), `${JSON.stringify({ name: "opf-mcpb", version, private: true, description: "The OPF MCP server, bundled for Claude Desktop.", license: "MIT", type: "module", dependencies }, null, 2)}\n`);
-run("npm", ["install", "--omit=dev", "--omit=optional", "--no-audit", "--no-fund", "--no-package-lock", "--loglevel=error"], { cwd: stage });
+// --ignore-scripts: no dependency's lifecycle script runs. None needs one (the installed tree has no preinstall, install or
+// postinstall script and no native addon), and an unlocked third-party release must not run code on the build machine.
+run("npm", ["install", "--omit=dev", "--omit=optional", "--ignore-scripts", "--no-audit", "--no-fund", "--no-package-lock", "--loglevel=error"], { cwd: stage });
 
 // 3. Keep only the font files the renderer names, then drop what a running server never reads (source maps, type declarations).
 const prune = spawnSync(process.execPath, [path.join(here, "scripts", "mcpb-font-files.mjs")], { cwd: stage, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });

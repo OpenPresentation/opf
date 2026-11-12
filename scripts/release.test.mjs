@@ -898,3 +898,36 @@ test('MCP bundle attachment checks artifact integrity before any GitHub request'
   assert.throws(() => attachBundle(f.version, f.directory, f.deps), /SHA-256 does not match/);
   assert.equal(f.commands.length, 0);
 });
+
+// RR-107: release.yml judges the finished publish run by its jobs: the publication decides, missing bundle assets only warn.
+test('the publish run is judged by its publication jobs; a red MCP bundle job is "assets missing", not a failed release', async (t) => {
+  const { ASSET_JOBS, PUBLICATION_JOBS, judgePublishRun, main } = await import('./release-publish-run.mjs');
+  const jobs = (overrides = {}) => [...PUBLICATION_JOBS, ...ASSET_JOBS, 'report'].map((name) => ({ name, conclusion: overrides[name] ?? 'success' }));
+  assert.deepEqual(judgePublishRun(jobs()), { published: true, failed: [], assetsMissing: [] });
+  assert.deepEqual(judgePublishRun(jobs({ 'attach the MCP bundle': 'failure' })), { published: true, failed: [], assetsMissing: [{ name: 'attach the MCP bundle', conclusion: 'failure' }] });
+  assert.deepEqual(judgePublishRun(jobs({ 'MCP bundle': 'failure', 'attach the MCP bundle': 'skipped' })).assetsMissing.map(({ name }) => name), ASSET_JOBS);
+  assert.equal(judgePublishRun(jobs({ report: 'failure' })).published, true, 'the reporter does not decide the release');
+  for (const name of PUBLICATION_JOBS) {
+    for (const conclusion of ['failure', 'cancelled', 'skipped', '']) {
+      const result = judgePublishRun(jobs({ [name]: conclusion }));
+      assert.equal(result.published, false, `${name} ${conclusion || 'still running'}`);
+      assert.deepEqual(result.failed.map((entry) => entry.name), [name]);
+    }
+  }
+  assert.deepEqual(judgePublishRun(jobs().filter(({ name }) => name !== 'verify the registry')).failed, [{ name: 'verify the registry', conclusion: 'missing' }], 'a job that is not in the run is not green');
+  assert.equal(judgePublishRun([]).published, false);
+
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'release-publish-run-'));
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  const file = path.join(directory, 'jobs.json');
+  const env = { GITHUB_OUTPUT: path.join(directory, 'output'), GITHUB_STEP_SUMMARY: path.join(directory, 'summary') };
+  writeFileSync(file, JSON.stringify({ jobs: jobs({ 'MCP bundle': 'failure', 'attach the MCP bundle': 'skipped' }) }));
+  const lines = [];
+  assert.equal(main([file], env, (line) => lines.push(line)).published, true);
+  assert.match(lines.join('\n'), /::warning title=Release assets missing::.*MCP bundle \(failure\)/u);
+  assert.equal(readFileSync(env.GITHUB_OUTPUT, 'utf8'), 'assets=missing\n');
+  assert.doesNotMatch(readFileSync(env.GITHUB_STEP_SUMMARY, 'utf8'), /::/u);
+  writeFileSync(file, JSON.stringify({ jobs: jobs({ publish: 'failure' }) }));
+  assert.equal(main([file], {}, () => {}).published, false);
+  assert.throws(() => main([], {}, () => {}), /usage/u);
+});

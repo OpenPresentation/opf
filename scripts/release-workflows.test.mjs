@@ -57,23 +57,32 @@ test('npm-publish.yml: a v* tag, or a dispatch; never a pull request, a branch p
   assert.match(publish, /^permissions:\n {2}contents: read$/mu);
 });
 
-test('npm-publish.yml: id-token is held by publish alone, contents: write by release alone, issues: write by report alone; no secret, no environment', () => {
+test('npm-publish.yml: id-token is held by publish alone, contents: write by the two jobs that write the GitHub release, issues: write by report alone; no secret, no environment', () => {
   assert.deepEqual(jobsWith(publish, /id-token: write/u), ['publish']);
-  assert.deepEqual(jobsWith(publish, /contents: write/u), ['release']);
+  assert.deepEqual(jobsWith(publish, /contents: write/u), ['release', 'assets']);
   assert.deepEqual(jobsWith(publish, /issues: write/u), ['report']);
   assert.doesNotMatch(publish, /secrets\.|create-github-app-token|NPM_TOKEN|NODE_AUTH_TOKEN/u);
   assert.doesNotMatch(publish, /^\s+environment:/mu, 'D7: no GitHub environment');
 });
 
-test('npm-publish.yml: the pipeline is plan, build, publish, verify, release and every real-only job is skipped in a dry run', () => {
-  assert.deepEqual(jobsOf(publish).map((entry) => entry.id), ['plan', 'build', 'publish', 'verify', 'release', 'report']);
+test('npm-publish.yml: the pipeline is plan, build, publish, verify, release; the MCP bundle is off that path; every real-only job is skipped in a dry run', () => {
+  assert.deepEqual(jobsOf(publish).map((entry) => entry.id), ['plan', 'build', 'mcpb', 'publish', 'verify', 'release', 'assets', 'report']);
   assert.deepEqual(needsOf(job(publish, 'build')), ['plan']);
+  assert.deepEqual(needsOf(job(publish, 'mcpb')), ['plan']);
   assert.deepEqual(needsOf(job(publish, 'publish')), ['plan', 'build']);
   assert.deepEqual(needsOf(job(publish, 'verify')), ['plan', 'publish']);
   assert.deepEqual(needsOf(job(publish, 'release')), ['plan', 'verify']);
-  for (const id of ['verify', 'release']) assert.match(job(publish, id).text, /if: \$\{\{ needs\.plan\.outputs\.dry-run != 'true' \}\}/u, id);
-  assert.match(job(publish, 'report').text, /if: \$\{\{ always\(\) && needs\.plan\.outputs\.dry-run != 'true' \}\}/u);
-  assert.match(job(publish, 'report').text, /release-failed/u);
+  assert.deepEqual(needsOf(job(publish, 'assets')), ['plan', 'mcpb', 'release']);
+  // RR-107: nothing on the publication path waits for, or can be failed by, the bundle.
+  for (const id of ['build', 'publish', 'verify', 'release']) assert.ok(!needsOf(job(publish, id)).some((name) => ['mcpb', 'assets'].includes(name)), id);
+  for (const id of ['verify', 'release', 'assets']) assert.match(job(publish, id).text, /if: \$\{\{ needs\.plan\.outputs\.dry-run != 'true' \}\}/u, id);
+  assert.doesNotMatch(job(publish, 'assets').text, /always\(\)|continue-on-error/u, 'assets runs only after a green bundle and a green release');
+  assert.doesNotMatch(publish, /continue-on-error/u);
+  const report = job(publish, 'report').text;
+  assert.deepEqual(needsOf(job(publish, 'report')), ['plan', 'build', 'mcpb', 'publish', 'verify', 'release', 'assets']);
+  assert.match(report, /if: \$\{\{ always\(\) && needs\.plan\.outputs\.dry-run != 'true' \}\}/u);
+  assert.match(report, /--label release-failed --title "\$TITLE" --ignore mcpb,assets\n/u, 'a missing asset is not a failed release');
+  assert.match(report, /--label release-assets-missing --title "\$TITLE" --ignore plan,build,publish,verify,release\n/u, 'missing assets have their own issue');
 });
 
 test('npm-publish.yml: a real publish needs a tag on main; only a dry run takes a version from the dispatch', () => {
@@ -129,19 +138,36 @@ test('npm-publish.yml: verify checks the registry against this commit and waits 
   assert.match(entry, /release\.mjs notes "\$VERSION"/u);
 });
 
-test('npm-publish.yml: builds and checks a full MCP bundle, retains exactly its versioned assets, and attaches after registry verification', () => {
+test('npm-publish.yml: builds and checks a full MCP bundle in its own job, retains exactly its versioned assets, and attaches them after the GitHub release exists', () => {
   const build = job(publish, 'build').text;
+  const bundle = job(publish, 'mcpb').text;
   const releaseJob = job(publish, 'release').text;
-  assert.ok(build.indexOf('run: pnpm build') < build.indexOf('run build:mcpb --check'));
-  assert.match(build, /pnpm --filter @openpresentation\/mcp run build:mcpb --check/u);
-  assert.doesNotMatch(build, /--no-script-fonts/u, 'the public bundle carries all pinned script fonts');
-  assert.match(build, /release-mcpb\.mjs checksum "\$VERSION" --dir packages\/mcp\/artifacts/u);
-  assert.match(build, /name: mcpb\n {10}path: \|\n {12}packages\/mcp\/artifacts\/opf-\$\{\{ needs\.plan\.outputs\.version \}\}\.mcpb\n {12}packages\/mcp\/artifacts\/opf-\$\{\{ needs\.plan\.outputs\.version \}\}\.mcpb\.sha256/u);
-  assert.ok(needsOf(job(publish, 'release')).includes('verify'));
-  assert.match(releaseJob, /name: mcpb\n {10}path: \$\{\{ runner\.temp \}\}\/mcpb/u);
-  assert.match(releaseJob, /release-mcpb\.mjs attach "\$VERSION" --dir "\$RUNNER_TEMP\/mcpb"/u);
-  assert.doesNotMatch(releaseJob, /exit 0|release edit|--clobber/u, 'existing notes survive and a retry still repairs missing assets');
-  assert.ok(releaseJob.indexOf('gh release create') < releaseJob.indexOf('release-mcpb.mjs attach'));
+  const assets = job(publish, 'assets').text;
+  // RR-107: the bundle's unlocked npm install never runs in the runner that packs the published tarballs.
+  assert.doesNotMatch(build, /mcpb/u, 'build and pack does not build the bundle');
+  assert.match(bundle, /uses: \.\/\.github\/actions\/setup-workspace/u);
+  assert.match(bundle, /persist-credentials: false/u);
+  assert.doesNotMatch(bundle, /permissions:|id-token|contents: write|GH_TOKEN/u, 'the bundle job holds no write permission and no token');
+  assert.match(bundle, /if: \$\{\{ needs\.plan\.outputs\.dry-run == 'true' \}\}\n(?: {8}env:\n {10}VERSION: [^\n]*\n)? {8}run: node scripts\/release\.mjs prepare "\$VERSION" --no-stability --no-lockfile/u, 'a rehearsal bundles the scratch version');
+  assert.ok(bundle.indexOf('run: pnpm build') < bundle.indexOf('run build:mcpb --check'));
+  assert.match(bundle, /pnpm --filter @openpresentation\/mcp run build:mcpb --check/u);
+  assert.doesNotMatch(bundle, /--no-script-fonts/u, 'the public bundle carries all pinned script fonts');
+  assert.match(bundle, /release-mcpb\.mjs checksum "\$VERSION" --dir packages\/mcp\/artifacts/u);
+  assert.match(bundle, /name: mcpb\n {10}path: \|\n {12}packages\/mcp\/artifacts\/opf-\$\{\{ needs\.plan\.outputs\.version \}\}\.mcpb\n {12}packages\/mcp\/artifacts\/opf-\$\{\{ needs\.plan\.outputs\.version \}\}\.mcpb\.sha256/u);
+  assert.match(read('packages/mcp/scripts/build-mcpb.mjs'), /run\("npm", \["install", [^\n]*"--ignore-scripts"/u, 'no dependency lifecycle script runs in the bundle install');
+  // The GitHub release (notes) is created exactly as before the bundle existed; it downloads nothing.
+  assert.doesNotMatch(releaseJob, /mcpb|download-artifact/u);
+  assert.match(releaseJob, /preserving its notes\."\n {12}exit 0\n/u);
+  assert.match(assets, /name: mcpb\n {10}path: \$\{\{ runner\.temp \}\}\/mcpb/u);
+  assert.match(assets, /release-mcpb\.mjs attach "\$VERSION" --dir "\$RUNNER_TEMP\/mcpb"/u);
+  assert.doesNotMatch(assets, /exit 0|release edit|release create|--clobber/u, 'existing notes survive and a retry still repairs missing assets');
+});
+
+test('release.yml judges the publish run by the job names npm-publish.yml really has', async () => {
+  const { ASSET_JOBS, PUBLICATION_JOBS } = await import('./release-publish-run.mjs');
+  const names = new Map(jobsOf(publish).map((entry) => [entry.id, /^ {4}name: ([^\n]+)$/mu.exec(entry.text)?.[1]]));
+  assert.deepEqual(PUBLICATION_JOBS, ['plan', 'build', 'publish', 'verify', 'release'].map((id) => names.get(id)));
+  assert.deepEqual(ASSET_JOBS, ['mcpb', 'assets'].map((id) => names.get(id)));
 });
 
 test('every action is pinned to a full commit SHA', () => {
@@ -165,7 +191,7 @@ test('release.yml: dispatch with a version and a dry run that defaults to true; 
 
 test('release.yml: the pre-release gate is nightly.yml called with no issue reporting, and the caller grants what nightly asks for', () => {
   const gate = job(release, 'gate').text;
-  assert.match(gate, /uses: \.\/\.github\/workflows\/nightly\.yml\n {4}with:\n {6}report: false/u);
+  assert.match(gate, /uses: \.\/\.github\/workflows\/nightly\.yml\n {4}with:\n {6}report: false\n {6}libreoffice: false\n/u, 'the gate skips the report-only LibreOffice leg');
   assert.match(triggersOf(nightly), /^ {2}workflow_call:/mu);
   assert.match(gate, /contents: read\n {6}issues: write/u);
   assert.deepEqual(jobsWith(nightly, /issues: write/u), ['report']);
@@ -209,7 +235,11 @@ test('release.yml: only the commit job holds the App token; it waits for the gat
 test('release.yml: a real run follows the publish run on the tag; a dry run dispatches npm-publish.yml with dry-run=true and follows it', () => {
   const watch = job(release, 'watch').text;
   assert.match(watch, /--workflow npm-publish\.yml --event push --branch "\$TAG"/u);
-  assert.match(watch, /gh run watch "\$id" --repo "\$REPOSITORY" --exit-status --interval 30/u, 'a polite interval: the quota is shared');
+  assert.match(watch, /gh run watch "\$id" --repo "\$REPOSITORY" --interval 30\n/u, 'a polite interval: the quota is shared');
+  // RR-107: the run is judged by its publication jobs, so missing MCP bundle assets warn and do not stop the site bumps.
+  assert.match(watch, /gh run view "\$id" --repo "\$REPOSITORY" --json jobs > "\$RUNNER_TEMP\/publish-jobs\.json"\n {10}node scripts\/release-publish-run\.mjs "\$RUNNER_TEMP\/publish-jobs\.json"/u);
+  assert.match(watch, /persist-credentials: false/u);
+  assert.doesNotMatch(watch, /continue-on-error|\|\| true/u);
   assert.match(watch, /actions: read/u);
   const rehearse = job(release, 'rehearse').text;
   assert.match(rehearse, /gh workflow run npm-publish\.yml --repo "\$REPOSITORY" --ref "\$REF" -f dry-run=true/u);

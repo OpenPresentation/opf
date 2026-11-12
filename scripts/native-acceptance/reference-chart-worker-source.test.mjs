@@ -3,15 +3,22 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
-import { test } from "node:test";
+import { after, test } from "node:test";
 import { referenceControllerDerivation } from "./derive-reference-controller.mjs";
 import { assertReferenceWitnessStages } from "./reference-chart-profile.mjs";
+import { makeTestTempDir } from "./test-fixtures/temp-root.mjs";
 import { windowsPowerShellEnvironment } from "./windows-powershell-env.mjs";
 const folder = fileURLToPath(new URL("./", import.meta.url));
 const shell = "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe";
-const parent =
-  process.platform === "win32" ? fs.mkdtempSync("C:/opf-work/reference-managed-") : undefined;
-const output = parent ? path.join(parent, "results") : undefined;
+// The managed controls' output folder, made by the first Windows test that needs it (never at import) and removed afterward.
+let parent;
+const managedOutput = () => {
+  if (!parent) parent = makeTestTempDir("reference-managed-");
+  return path.join(parent, "results");
+};
+after(() => {
+  if (parent) fs.rmSync(parent, { recursive: true, force: true });
+});
 const windowsOnly = {
   skip:
     process.platform !== "win32"
@@ -26,7 +33,7 @@ test(
   "private worker refuses a direct invocation before any native bootstrap or output creation",
   windowsOnly,
   () => {
-    const owned = output + "-private-denial";
+    const owned = managedOutput() + "-private-denial";
     assert.equal(fs.existsSync(owned), false);
     const result = spawnSync(
       shell,
@@ -61,6 +68,7 @@ test(
   "actual worker primitive/ownership/latch functions pass the managed getter/method/failure controls with no Office",
   windowsOnly,
   () => {
+    const output = managedOutput();
     assert.equal(fs.existsSync(output), false, "Managed outputs must be fresh");
     const result = spawnSync(
       shell,

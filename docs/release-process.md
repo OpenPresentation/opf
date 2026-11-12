@@ -51,12 +51,18 @@ Run it with `dry-run` true first. After the rehearsal succeeds, run the same ver
    `npm-publish.yml` (a tag pushed with `GITHUB_TOKEN` would not).
 5. **npm-publish.yml** on the tag: `plan` (the tag is on `main`), `build` (one install and build, `pnpm pack` of the seven,
    `scripts/stamp-githead.mjs` adds `gitHead` to each tarball because `pnpm pack` omits it, a smoke test installs the seven
-   tarballs together, renders the quickstart deck and runs the CLI; builds and checks the full Claude Desktop MCP bundle with all script fonts and retains it with its SHA-256), `publish` (the only job with `id-token: write`; the
+   tarballs together, renders the quickstart deck and runs the CLI), `mcpb` (beside `build`, in its own runner: builds and checks
+   the full Claude Desktop MCP bundle with all script fonts and retains it with its SHA-256; nothing on the publication path
+   needs it), `publish` (the only job with `id-token: write`; the
    pre-publish gate, then `npm publish <tarball> --access public --provenance --tag <tag>` seven times, printing npm's own output; a version already on npm is
    skipped. Once npm accepted an upload the package is published: if the registry does not serve it yet it is logged as
-   **pending**, which is not a failure, and the job goes on), `verify` (below: it first waits for the registry), `release` (the GitHub release, notes grouped by package, the checked versioned `.mcpb` and its `.sha256` file) and `report` (a failure opens the issue
-   "Release vX.Y.Z failed", labeled `release-failed`).
-6. **follow the publish run** (the Release run waits for it, so it is green only when the whole release is).
+   **pending**, which is not a failure, and the job goes on), `verify` (below: it first waits for the registry), `release` (the GitHub release, notes grouped by package), `assets` (after
+   `mcpb` and `release`: attaches the checked versioned `.mcpb` and its `.sha256` file to that release) and `report` (a failed
+   publication opens the issue "Release vX.Y.Z failed", labeled `release-failed`; missing bundle assets open a separate issue,
+   labeled `release-assets-missing`, because the packages are live).
+6. **follow the publish run** (the Release run waits for it and judges its publication jobs with
+   `scripts/release-publish-run.mjs`: it is green when the seven packages are published and verified and the GitHub release
+   exists; missing bundle assets are a warning there and do not hold back the site bumps).
 
 Time target: about 20 minutes from the click to seven verified packages (measured in MR-44).
 
@@ -127,14 +133,24 @@ npm view @openpresentation/gallery dist-tags --json           # latest is X.Y.Z;
 
 ### Claude Desktop release assets
 
-The build job runs `pnpm --filter @openpresentation/mcp run build:mcpb --check` and retains only
-`opf-X.Y.Z.mcpb` and `opf-X.Y.Z.mcpb.sha256` as the `mcpb` workflow artifact. This is the full bundle, including all pinned
-script fonts. A rehearsal builds and checks it too, without creating a release or uploading public assets.
+The `mcpb` job of `npm-publish.yml` runs `pnpm --filter @openpresentation/mcp run build:mcpb --check` in its own runner (its
+own checkout, install and build) and retains only `opf-X.Y.Z.mcpb` and `opf-X.Y.Z.mcpb.sha256` as the `mcpb` workflow
+artifact. This is the full bundle, including all pinned script fonts. Its `npm install` resolves the bundle's third-party
+dependencies and font packages from the registry without a lockfile, with `--ignore-scripts`, and never in the runner that
+packs the published tarballs; a registry problem or a slow download fails this job only, because `publish` and `verify` do not
+need it. The zip entries carry a fixed time, so the same files give the same bytes. A rehearsal builds and checks the bundle
+too, without creating a release or uploading public assets.
 
-After registry and provenance verification, the release job downloads that exact artifact and attaches the two files.
-Reruns preserve release notes and existing assets. They verify an existing bundle/checksum pair, add a missing checksum from
-the already uploaded bundle's bytes, or add a missing bundle only if its bytes match the existing checksum. A mismatch fails
-instead of replacing a public asset. Retry through the existing trusted workflow; never repair a release with `--clobber`.
+The order on a real release: `release` creates the GitHub release with its notes first, exactly as it does without a bundle;
+then the `assets` job downloads the checked artifact and attaches the two files. If `mcpb` or `assets` fails, the packages and
+the release notes are already live: the publish run shows the red job, `report` opens or updates the `release-assets-missing`
+issue (not `release-failed`), and the Release run reports "assets missing" as a warning and still bumps the sites. To recover,
+re-run the failed job of the publish run (Re-run failed jobs, or `gh run rerun <run-id> --failed`); it only attaches the missing
+files. Reruns preserve release notes and existing assets. They verify an existing bundle/checksum pair, add a missing checksum
+from the already uploaded bundle's bytes, or add a missing bundle only if its bytes match the existing checksum. A mismatch fails
+instead of replacing a public asset. Retry through the existing trusted workflow; never repair a release with `--clobber`. The
+`mcpb` artifact is kept for 14 days: re-run a failed `assets` job within that time (if `mcpb` itself failed, its re-run builds
+a new artifact).
 
 ### `scripts/release.mjs`
 
