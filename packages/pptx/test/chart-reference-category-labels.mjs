@@ -88,7 +88,9 @@ for (const negativeAxis of ['value', 'secondary']) {
 }
 
 test('positive references and negative charts without explicit references retain existing label policies', async () => {
-  for (const [type, expected] of [['line', 'nextTo'], ['line-with-markers', 'nextTo'], ['area', 'nextTo'], ['column', 'low']]) {
+  // LH-110: every vertical chart keeps the vendor col default ('low'), with or without references. Line and area helpers once
+  // wrote the horizontal-bar layout ('nextTo' with the category axis on the left), which Keynote refused.
+  for (const [type, expected] of [['line', 'low'], ['line-with-markers', 'low'], ['area', 'low'], ['column', 'low']]) {
     const positive = await inspect(deck(type, { referenceLines: [refs[0]] }));
     assert.ok(positive.composed.valueAxis.min >= 0);
     assert.equal(positive.category['c:tickLblPos'].val, expected);
