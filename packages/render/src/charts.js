@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, paretoPlan, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, paretoPlan, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartFocusContextColors, chartSeriesStrokes, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -56,7 +56,9 @@ function focusFor(c, layer, spec) {
   const series = c.columns.slice(1).map((_, j) => focus.series?.includes(j) === true);
   // A series focus: the unnamed series are the context, in order. A category focus: every series has context marks.
   const rest = series.map((_, j) => j).filter((j) => !series[j]);
-  const grays = context(rest.length, series.map((_, j) => j).filter((j) => focus.categories ? true : series[j]).map(strong));
+  // A series drawn as a stroke (a line, a combo's line) keeps the ordinary floor even when labeled (core chartFocusContextColors).
+  const avoid = series.map((_, j) => j).filter((j) => focus.categories ? true : series[j]).map(strong);
+  const grays = chartFocusContextColors(c.surface, c.labelColor, rest, { labeled: focus.labeled === true, strokes: chartSeriesStrokes(spec.kind, series.length, c.combo), avoid });
   const mutedSeries = series.map((_, j) => grays[Math.max(0, rest.indexOf(j))]);
   return { series, categories, accent: strong(0), muted: grays[0], accents: series.map((_, j) => strong(j)), mutedSeries };
 }

@@ -1241,6 +1241,37 @@ export function chartContextColors(surface: string, text: string, count: number,
 }
 
 /**
+ * Whether each plotted series of a chart of option kind `kind` is drawn as a stroke: every series of a line chart (with or without
+ * markers, stacked or not) and the line series of a combo (`combo`, core resolveChartData). Columns, bars, areas and slices are filled.
+ * A stroke is a thin mark whose value is read from the line itself, so its context neutral keeps {@link CHART_CONTEXT_MIN_CONTRAST} even
+ * when every context mark carries its text ({@link chartFocusContextColors}).
+ */
+export function chartSeriesStrokes(kind: string | undefined, count: number, combo?: readonly { role: string }[]): boolean[] {
+  return Array.from({ length: Math.max(0, count) }, (_, index) => kind === 'line' || (kind === 'combo' && combo?.[index]?.role === 'line'));
+}
+
+/**
+ * The context neutral of each context series of a focused chart, in the order of `context` (series indexes). The engines (the preview and the
+ * PPTX export) both read this one decision. A filled series keeps the light floor {@link CHART_CONTEXT_LABELED_MIN_CONTRAST} when
+ * `labeled` (its value or name is printed on or beside it); a series drawn as a stroke (`strokes`, {@link chartSeriesStrokes}) keeps
+ * {@link CHART_CONTEXT_MIN_CONTRAST} even then, because the line is the data and a 2-pixel line at 1.6:1 all but disappears. Each group
+ * takes its own steps of {@link chartContextColors}; a chart with one kind of mark gets exactly what {@link chartContextColors} gives.
+ */
+export function chartFocusContextColors(surface: string, text: string, context: readonly number[], options: { labeled?: boolean; strokes?: readonly boolean[]; avoid?: readonly string[] } = {}): string[] {
+  const light = (index: number) => options.labeled === true && options.strokes?.[index] !== true;
+  const groups = [context.filter(light), context.filter((index) => !light(index))];
+  const colors = new Map<number, string>();
+  groups.forEach((group, which) => {
+    if (!group.length) return;
+    const grays = chartContextColors(surface, text, group.length, { labeled: which === 0, ...(options.avoid ? { avoid: options.avoid } : {}) });
+    group.forEach((index, k) => colors.set(index, grays[k]!));
+  });
+  // No context series (every series focused): the first neutral still names the muted color, as chartContextColors does for zero.
+  if (!context.length) return chartContextColors(surface, text, 0, { labeled: options.labeled === true, ...(options.avoid ? { avoid: options.avoid } : {}) });
+  return context.map((index) => colors.get(index)!);
+}
+
+/**
  * LH-107: the three colors of a waterfall by role (Claude Design and Few: the totals carry the story, the gains the accent, the losses
  * stand back). `increase` is the series color at full strength (`accent`). `total` is the strong color: the scheme's `dark2` when it keeps
  * 3:1 against the backdrop and a color difference of {@link CHART_CONTEXT_FOCUS_DIFFERENCE} (CIE76) from the accent, else the text
