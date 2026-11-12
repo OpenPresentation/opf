@@ -10307,8 +10307,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           const last = line.fragments.at(-1), trail = last && last.kind === undefined ? /\s+$/u.exec(last.text)?.[0] : undefined;
           if (!trail || trail.length === last!.text.length) return line;
           // A space that hangs (RR-17) is already out of the line's width; the fragments still hold it.
-          const cut = textWidthMeasurer(last!.style, listOptions.textMeasurement)(trail, last!.fontSize), drawn = line.fragments.reduce((sum, fragment) => sum + fragment.width, 0);
-          return { ...line, width: Math.max(0, Math.min(line.width, drawn - cut)), fragments: [...line.fragments.slice(0, -1), { ...last!, text: last!.text.slice(0, -trail.length), end: last!.end - trail.length, width: Math.max(0, last!.width - cut) }] };
+          // Keep a trailing space in its fragment's script context: alone it selects the Latin slot even after Arabic text.
+          const text = last!.text.slice(0, -trail.length), measure = textWidthMeasurer(last!.style, listOptions.textMeasurement);
+          const cut = measure(last!.text, last!.fontSize) - measure(text, last!.fontSize), drawn = line.fragments.reduce((sum, fragment) => sum + fragment.width, 0);
+          return { ...line, width: Math.max(0, Math.min(line.width, drawn - cut)), fragments: [...line.fragments.slice(0, -1), { ...last!, text, end: last!.end - trail.length, width: Math.max(0, last!.width - cut) }] };
         });
         // The ink of every line (cap height over the baseline to the descenders) stays inside the node's outline, inset by the margin: a
         // pyramid level narrows toward its top, a quadrant at its corners. Text beside its level has no outline to keep to.
