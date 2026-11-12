@@ -330,7 +330,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/empty-text`](#opfempty-text) | Content | info | structure | A text field is present but empty. |
 | [`opf/unused-beat`](#opfunused-beat) | Content | info | structure | A beat of the narrative has no slide that references it. |
 | [`opf/empty-slide`](#opfempty-slide) | Content | warning | structure | A slide has no content at all. |
-| [`opf/language-tag`](#opflanguage-tag) | Content | warning | structure | A language tag is malformed, uses an unassigned region or is not in canonical case. |
+| [`opf/language-tag`](#opflanguage-tag) | Content | warning | structure | A language tag is malformed, uses an unassigned region, is not in canonical case or names a numbering system OPF does not draw. |
 | [`opf/straight-quotes`](#opfstraight-quotes) | Content | info | structure | Text uses straight quotation marks (" or ') where the language has typographic ones. |
 | [`opf/chart-dual-axis`](#opfchart-dual-axis) | Content | info | structure | A combo chart plots a series on a secondary value axis. |
 | [`opf/chart-pie-many-slices`](#opfchart-pie-many-slices) | Content | info | structure | A pie or doughnut chart has more than 5 slices. |
@@ -1196,7 +1196,7 @@ Default severity: **warning**. Cost: structure. A slide has no content at all.
 
 ### `opf/language-tag`
 
-Default severity: **warning**. Cost: structure. A language tag is malformed, uses an unassigned region or is not in canonical case.
+Default severity: **warning**. Cost: structure. A language tag is malformed, uses an unassigned region, is not in canonical case or names a numbering system OPF does not draw.
 
 **Why.** Engines read the deck and slide language and each run's `language` as BCP 47 tags to choose script fonts, text direction, proofing language and the PowerPoint `lang` attribute. A tag such as `en-a`, or a region that does not exist (`en-UK`; the United Kingdom is `GB`), is guessed at or dropped, and a wrong-case tag (`EN-us`) is not what a locale lookup expects.
 

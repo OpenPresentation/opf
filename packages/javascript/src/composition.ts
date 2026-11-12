@@ -12,7 +12,8 @@ import {tableGrid,type TableCellStyle} from './table.js';
 import {inlineChartData,inlineTableData,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText,type DataTableCell} from './chart-data.js';
 import {chartTextSize,chartValueAxis,chartComboAxes,shareSiblingChartAxes,type ChartValueAxis} from './chart-axis.js';
 import {chartHeader,chartLayer,type ChartLayer} from './chart-layer.js';
-import {groupNumber,NUMBER_GROUPING_MIN} from './number-grouping.js';
+import {NUMBER_GROUPING_MIN} from './number-grouping.js';
+import {formatNumber,languageInEffect,localizeDigits} from './numerals.js';
 import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
 import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-labels.js';
@@ -1613,7 +1614,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
       }
       if(typeof content.text==='string'){
         // The slide-scoped built-ins resolve here, per slide; each {{slide.number}} becomes a live slide-number field.
-        const resolved=substituteSlideTokens(content.text,{slideNumber:number,...(slideCount!==undefined?{slideCount}:{}),section:slide.section});
+        const resolved=substituteSlideTokens(content.text,{slideNumber:number,...(slideCount!==undefined?{slideCount}:{}),section:slide.section,...numberLanguage(options)});
         if(slideCount===undefined&&usesSlideBuiltin(content.text,'deck.slideCount'))error(`${path}.text`,'{{deck.slideCount}} needs the rendered slide count (the slideCount option or the presentation slides).','unresolved-content');
         add('text',resolved.text,false,undefined,{fields:resolved.fields});
       }
@@ -2638,7 +2639,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     if (sourceValue===undefined) continue;
     // LH-141: a number as the value prints it groups its thousands by the deck language (`language`); a string is the author's own text.
     // Wave 6 (LH-141 with LH-137): so does a number as the delta, which the pill draws beside the grouped value.
-    const text=(role==='value'||role==='delta')&&typeof sourceValue==='number'&&Math.abs(sourceValue)>=NUMBER_GROUPING_MIN?groupNumber(sourceValue,options.language):String(sourceValue),path=scalar?sourcePath:`${sourcePath}.${role}`;
+    const text=(role==='value'||role==='delta')&&typeof sourceValue==='number'?formatNumber(sourceValue,options.language,{group:Math.abs(sourceValue)>=NUMBER_GROUPING_MIN}):String(sourceValue),path=scalar?sourcePath:`${sourcePath}.${role}`;
     // WI-1: the value asks for its role size (76 px) whatever the box; the box only limits it, and fitValue fits it down on overflow.
     // LH-68: a tile's value asks for METRIC_TILE_VALUE_SHARE of the tile, between its role size and twice it. LH-48: a lone metric grows.
     const valueSize=options.tile?Math.min(152,Math.max(76,box.height*METRIC_TILE_VALUE_SHARE/scale)):76;
@@ -3851,6 +3852,8 @@ export interface ListFitOptions extends RichTextOptions {
    * 1.1 em and the widest marker plus 0.3 em, so wide markers never touch their text; unnumbered lists are unchanged.
    */
   numbering?:NumberingInput;
+  /** LH-106: the language whose numbering system the numbers and badges are drawn in (composeSlide: the slide's, else the deck's). */
+  language?:string;
   /** Picture bullet for every entry (effective `design.listBullet: "image"` with a resolved icon logo). */
   bulletImage?:ListBulletImage;
   /**
@@ -3989,7 +3992,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     const direction:TextDirection|undefined=options.direction==='rtl'?paragraphDirection(plain(text),'rtl'):undefined;
     return {index,level,direction,value:text,descriptionValue:description,textPath:base?base+(object?'.text':''):undefined,descriptionPath:base?base+'.description':undefined,runs:runs(text),descriptionRuns:description===undefined?undefined:runs(description)};
   });
-  const numbers=options.numbering===undefined?undefined:listNumbers(input,options.numbering);
+  const numbers=options.numbering===undefined?undefined:listNumbers(input,options.numbering,options.language);
   const listPlain=(value:ListText)=>typeof value==='string'?value:value.map(run=>typeof run==='string'?run:run.text).join('');
   // LH-133: a one-entry list that shares its label column with sibling blocks (`rowLabels`) is a ruled row, not a heading list.
   const heading=options.heading===true&&!numbers&&source.length===1&&source[0]!.descriptionRuns!==undefined&&!(options.rows===true&&options.rowLabels);
@@ -4015,7 +4018,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
   const rows=options.rows===true&&!heading&&(source.length>=2||(options.rowLabels!==undefined&&source.length===1)),described=rows&&source.every(item=>item.descriptionRuns!==undefined);
   // LH-134: numbers drawn as numerals in a column at the start of each row (ListFitOptions.numerals).
   const numerals=rows&&numbers!==undefined&&options.numerals!==undefined&&source.every(item=>item.level===0)?options.numerals:undefined;
-  const numeralLabels=numerals&&numbers?numbers.map(number=>{const label=listNumberLabel(number);return numerals==='row'&&/^[0-9]$/.test(label)?`0${label}`:label;}):[];
+  const numeralLabels=numerals&&numbers?numbers.map(number=>{const label=listNumberLabel(number);return localizeDigits(numerals==='row'&&/^[0-9]$/.test(label)?`0${label}`:label,options.language);}):[];
   // LH-133: `extra` widens the gap between two first-level rows (their hairline stays in its middle) and `top` starts the rows lower (spread).
   const rowsLayout=(fontSize:number,extra=0,top=0):ListFit=>{
     let y=box.y+top,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[],directions:TextDirection[]=[],rules:ListRule[]=[];
@@ -4172,7 +4175,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       // LH-174: an entry without an icon in a list with icons keeps its bullet in the chip column (chipBullet).
       const own=chipBullet(item,diameter,fontSize,style),unmarked=none&&!own,shift=own?.shift??0;
       const marker={text:number&&!badged?number.text:own?own.text:unmarked?'':LIST_MARKERS[item.level%LIST_MARKERS.length]!,x:rtl?box.x+box.width-offset-shift:box.x+offset+shift,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent:indent-shift,...(number?{number,width:markerWidths[item.index]!}:{}),...(unmarked?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
-      const badge=badged&&number?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter,label:listNumberLabel(number),fontSize}:undefined;
+      const badge=badged&&number?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter,label:listNumberLabel(number,options.language),fontSize}:undefined;
       const icon=iconed&&hasIcon(item.index)?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter}:undefined;
       entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(heading?{heading:true as const}:{}),...(badge?{badge}:{}),...(icon?{icon}:{}),
         ...(item.direction?{direction:item.direction}:{}),
@@ -4221,6 +4224,8 @@ function contentText(field: string, value: unknown): string | undefined {
 /** LH-117: the share of a column's body cells that must read as numbers (numericText) for the column to align as numbers. */
 export const TABLE_NUMERIC_SHARE = 0.75;
 export interface TableLayoutOptions {
+  /** LH-106: the language in effect (the slide's, else the deck's), whose numbering system a number cell is shown in. */
+  language?: string;
   /** Explicit resolved design alignment; absent, a column of numbers (LH-117) aligns at the end and every other at the start. A cell's style.align wins, then its header's. */
   alignment?: 'left' | 'center' | 'right';
   scale?: number;
@@ -4301,7 +4306,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   const formats = resolveTableData(inline).formats;
   for (const row of grid.rows) for (const cell of row) {
     if (cell.header) continue;
-    const shown = tableCellDisplayValue(cell.input as DataTableCell, formats[cell.column]);
+    const shown = tableCellDisplayValue(cell.input as DataTableCell, formats[cell.column], options.language);
     if (shown !== cell.input) cell.value = typeof shown === 'object' && shown !== null && !Array.isArray(shown) ? shown.value : shown;
   }
   // LH-117: a column aligns by how its cells read, not by their JSON type. It is a column of numbers when at least
@@ -4445,8 +4450,10 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     if(last||(!layout.overflow&&!splits))return {...layout,overflow:layout.overflow||splits,splitsWords:splits};
   }
 }
+/** LH-106: the language a slide draws its generated numbers in (table cells, list numerals), as a layout option. */
+const numberLanguage=(options:ComposeSlideOptions):{language?:string}=>{const language=languageInEffect(options.presentation,options.slideIndex);return language===undefined?{}:{language};};
 function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions, path?: string, growth?: number): boolean {
-  return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fontFamilies?.body,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),textMeasurement:options.textMeasurement,path,presentation:options.presentation,...(growth?{growth}:{})}).overflow;
+  return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fontFamilies?.body,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),textMeasurement:options.textMeasurement,path,presentation:options.presentation, ...numberLanguage(options),...(growth?{growth}:{})}).overflow;
 }
 function flatten(value: unknown): string {
   if (value == null) return "";
@@ -4706,7 +4713,7 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
       }
     } else if (item.field === 'table') {
       let table: TableLayout | undefined;
-      try { table = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }); } catch { table = undefined; }
+      try { table = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...numberLanguage(options), ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }); } catch { table = undefined; }
       for (const row of table?.rows ?? []) for (const cell of row.cells) { add(cell.fit.fontSize); if (('richLines' in cell.fit ? (cell.fit as RichTextFit).richLines.length : cell.fit.lines.length) > 1) wrappedCells++; }
     } else { add(item.text?.fontSize); split(item.value, item.text); }
   }
@@ -5553,7 +5560,7 @@ function centerTemplate(input: unknown, options: ComposeSlideOptions, result: Sl
     if (internal) { const parts = (internal.parts as readonly { box: LayoutBox }[]); return [Math.min(item.box.y, ...parts.map(part => part.box.y)), Math.max(...parts.map(part => part.box.y + part.box.height), item.box.y)]; }
     if (item.field === 'table') {
       let table: TableLayout | undefined;
-      try { table = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }); } catch { table = undefined; }
+      try { table = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...numberLanguage(options), ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }); } catch { table = undefined; }
       return [item.box.y, item.box.y + Math.min(item.box.height, table?.height ?? item.box.height)];
     }
     const fit = item.text;
@@ -5847,7 +5854,7 @@ const TABLE_NOTE_GROWN_CELL_LINES = 3, TABLE_NOTE_GROWN_TARGET = .75;
 /** LH-75, LH-80: the most lines any one cell of a placed table is set on (Infinity when it cannot be laid out). */
 function tableCellLines(item: ComposedItem, options: ComposeSlideOptions, scale: number): number {
   try {
-    const laid = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) });
+    const laid = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...numberLanguage(options), ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) });
     return Math.max(1, ...laid.rows.flatMap(row => row.cells.map(cell => 'richLines' in cell.fit ? (cell.fit as RichTextFit).richLines.length : cell.fit.lines.length)));
   } catch { return Infinity; }
 }
@@ -5881,7 +5888,7 @@ function tableNote(input: unknown, options: ComposeSlideOptions, result: SlideCo
   // A template that sets the note beside the table already (table-beside) keeps its record's arrangement.
   if (lines < TABLE_NOTE_LINES || (result.regions && beside(table.box, note.box))) return undefined;
   const tableHeight = (item: ComposedItem) => {
-    try { return layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).height; } catch { return Infinity; }
+    try { return layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...numberLanguage(options), ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).height; } catch { return Infinity; }
   };
   // Short: the table stacked, its cells unwrapped, takes under half the body (beside the note its wrapped cells make it taller).
   if (tableHeight(table) >= TABLE_NOTE_SHORT * bodyHeight(result)) return undefined;
@@ -6434,7 +6441,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-133: spreadLists are the lone ruled lists that fill their body (fillLone), their rows spread over it (ListFitOptions.spread).
   const numeralLists = new Map<string, 'display' | 'row'>(), pairRowLabels = new Map<string, ListText[]>(), pairGrid = new Set<string>(), spreadLists = new Set<string>();
   const listOptionsFor = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => {
-    const listed = listOptionsOf(field, path, numbering, value);
+    // LH-106: list numerals and badges are in the numbering system of the slide's language.
+    const listed = {...listOptionsOf(field, path, numbering, value), ...numberLanguage(options)};
     // LH-14: an icon list (never a badge list, a step heading or numerals) draws its icons on chips in the marker column.
     const own = field === 'items' && !badgeLists.has(path) && !stepHeadings.has(path) && !numeralLists.has(path) && iconList(value, numbering) ? { ...listed, icons: true, iconScale: chipScale } : listed;
     return own.rows && spreadLists.has(path) ? { ...own, spread: true } : own;
@@ -8401,7 +8409,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     tableMeasures.set(node, cache);
     if (!cache.has(key)) {
       let measured: TableLayout | undefined;
-      try { measured = width > 0 ? layoutTable(node.value, { x: 0, y: 0, width, height: atFloor ? scale : 1e6 }, { scale, minFontSize: settings.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, path: node.path, presentation: options.presentation, ...grownOptions(node) }) : undefined; }
+      try { measured = width > 0 ? layoutTable(node.value, { x: 0, y: 0, width, height: atFloor ? scale : 1e6 }, { scale, minFontSize: settings.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, path: node.path, presentation: options.presentation, ...numberLanguage(options), ...grownOptions(node) }) : undefined; }
       catch { measured = undefined; }
       cache.set(key, measured);
     }
@@ -10114,7 +10122,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (internal?.bounds) return [internal.bounds.y, internal.bounds.y + internal.bounds.height];
       if (item.field === 'table') {
         try {
-          const rows = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap(row => row.cells.map(cell => cell.box));
+          const rows = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...numberLanguage(options), ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap(row => row.cells.map(cell => cell.box));
           if (rows.length) return [Math.min(...rows.map(box => box.y)), Math.max(...rows.map(box => box.y + box.height))];
         } catch { /* the item's box below */ }
       }
@@ -10173,7 +10181,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const resolved = resolveTableData(table.value, options.presentation);
       if (!sameKeys(categories, tableRowKeys(resolved.rows), deckLanguage())) continue;
       let layout: TableLayout;
-      try { layout = layoutTable(table.value, rounded(table.box), { scale, minFontSize: table.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...(rtl ? { direction: 'rtl' as const } : {}), ...(table.tableGrowth ? { growth: table.tableGrowth } : {}) }); } catch { continue; }
+      try { layout = layoutTable(table.value, rounded(table.box), { scale, minFontSize: table.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...numberLanguage(options), ...(rtl ? { direction: 'rtl' as const } : {}), ...(table.tableGrowth ? { growth: table.tableGrowth } : {}) }); } catch { continue; }
       const body = layout.rows.filter(row => !row.cells.some(cell => cell.header));
       if (body.some(row => row.cells.some(cell => cell.rowSpan > 1))) continue;
       const layer = chart.chart.layer, authored = record(chart.value);
@@ -10242,7 +10250,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
             const side = item.alignment === 'center' ? 'center' : rtl ? (item.alignment === 'left' ? 'right' : 'left') : item.alignment;
             const cx = side === 'center' ? item.box.x + item.box.width / 2 : side === 'right' ? item.box.x + item.box.width - diameter / 2 : item.box.x + diameter / 2;
             const own = stepHeadings.has(item.path) ? listNumbers(item.value as unknown[], item.payload.numbering as NumberingInput)[0] : undefined;
-            return badgeOf(item.path.replace(/\.(text|items|bullets)$/, ''), cx, cy, diameter, own ? listNumberLabel(own) : String(position.get(item)! + 1), size, own ? { path: item.path, index: 0, number: numberOf(own) } : undefined);
+            return badgeOf(item.path.replace(/\.(text|items|bullets)$/, ''), cx, cy, diameter, localizeDigits(own ? listNumberLabel(own) : String(position.get(item)! + 1), languageInEffect(options.presentation, options.slideIndex)), size, own ? { path: item.path, index: 0, number: numberOf(own) } : undefined);
           }).sort((a, b) => rtl ? b.cx - a.cx : a.cx - b.cx);
           result.push({ form: 'row', region: region.name, path: badges[0]!.path, badges, ...connector(badges), lineWidth });
         }
@@ -10893,7 +10901,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (entries.some(entry => !entry)) return undefined;
     const numbers = item.payload.numbering !== undefined ? listNumbers(values, item.payload.numbering as NumberingInput) : undefined, agenda = iconAgendas.get(item.path);
     const numeralOf = (index: number): string | undefined => {
-      const label = numbers ? listNumberLabel(numbers[index]!) : agenda !== undefined ? String(agenda + index) : undefined;
+      const label = numbers ? listNumberLabel(numbers[index]!, languageInEffect(options.presentation, options.slideIndex)) : agenda !== undefined ? localizeDigits(String(agenda + index), languageInEffect(options.presentation, options.slideIndex)) : undefined;
       return label !== undefined && /^[0-9]$/u.test(label) ? `0${label}` : label;
     };
     const style = styleFor(item.field, item.path), base = richOptions(style), numeralStyle: TextStyle = { ...style, path: undefined, fontWeight: 700, italic: false };
@@ -11489,6 +11497,8 @@ export {chartAxisFraction,chartAxisScale,niceScale,maxIntervalsFor,stackCategory
 export type {ChartScale,ChartValueAxis,ChartAxisGeometry,WaterfallStep} from './chart-axis.js';
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export {groupNumber,groupsThousands,groupsAxisTicks,groupsDataRange,NUMBER_GROUPING_MIN,GROUPED_LABEL_CODE} from './number-grouping.js';
+export {formatNumber,formatPercentNumber,localizeDigits,localizeNumberText,localizeNumberParts,localizePatternNumber,numberLocale,numberingSystemOf,numberingSystemExtension,isSupportedNumberingSystem,supportedNumberingSystems,plainLanguageTag,languageInEffect,numeralScripts,asciiDigits,type NumberLocale} from './numerals.js';
+export {NUMBER_LOCALES,NUMBERING_SYSTEMS,NUMBER_LOCALE_SOURCE} from './number-locale-data.js';
 export {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 export {horizontalBarPlot} from './chart-marks.js';
 export {chartDoughnut,restackForRows,chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';

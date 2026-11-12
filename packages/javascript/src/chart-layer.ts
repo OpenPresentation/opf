@@ -227,8 +227,9 @@ export function chartHeaderCaption(chart: unknown, columns: readonly string[], l
  * The label text of a value as the engines draw a default value label: the column's number format, else the General form. LH-141: with
  * `group` (the column has no format and groups its thousands, `columnGroup`) a whole number of four digits or more is grouped by the language.
  */
-export function valueLabel(value: number, format: string | undefined, group?: {language?: string}): string {
-  return chartLabelText({value: format !== undefined ? formatDataNumber(value, format) : formatChartLabelNumber(value, group)}, ['value']);
+export function valueLabel(value: number, format: string | undefined, group?: {language?: string}, language = group?.language): string {
+  // LH-106: in the language's numbering system, grouped or not.
+  return chartLabelText({value: format !== undefined ? formatDataNumber(value, format, language) : formatChartLabelNumber(value, group, language)}, ['value']);
 }
 
 const groupColumns = new WeakMap<object, Map<number, boolean>>();
@@ -247,7 +248,7 @@ export function columnGroups(data: ResolvedChartData, column: number): boolean {
 /** LH-141: a value of the data's column `column` as its default label prints it: the column's format, else the General form (grouped by `language` where `columnGroups`). */
 export function columnValueLabel(data: ResolvedChartData, column: number, value: number, language?: string): string {
   const format = data.ok && typeof data.formats[column] === 'string' && data.formats[column] !== '' ? data.formats[column] : undefined;
-  return valueLabel(value, format, columnGroups(data, column) ? {language} : undefined);
+  return valueLabel(value, format, columnGroups(data, column) ? {language} : undefined, language);
 }
 
 /**

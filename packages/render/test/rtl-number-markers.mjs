@@ -13,7 +13,7 @@ import {openPdf,pageItems} from './pdf-helpers.mjs';
 const original=readB07Sources().find(row=>row.id==='rtl-contrast-05-mixed-explicit-arabic').document;
 const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:original});
 const elements=node=>[node,...(node.children??[]).filter(child=>child.name).flatMap(elements)];
-const markers=svg=>elements(parseXml(svg)).filter(node=>node.name==='text'&&node.attrs['aria-hidden']==='true'&&/^[()A-Za-z0-9.]+$/.test(textContent(node)));
+const markers=svg=>elements(parseXml(svg)).filter(node=>node.name==='text'&&node.attrs['aria-hidden']==='true'&&/^[()A-Za-z0-9٠-٩.]+$/.test(textContent(node)));
 const close=(actual,wanted,label)=>assert(Math.abs(actual-wanted)<=.001,`${label}: ${actual} vs ${wanted}`);
 let checks=0;
 try{
@@ -35,6 +35,6 @@ try{
   entries.forEach((entry,index)=>{const node=nodes[index],rtl=entry.direction==='rtl';assert.equal(textContent(node),entry.marker.text);assert(!/[\u200e\u200f\u202a-\u202e\u2066-\u2069]/u.test(textContent(node)));assert.equal(node.attrs.direction,rtl?'rtl':undefined);assert.equal(node.attrs['unicode-bidi'],rtl?'isolate':undefined);assert.equal(node.attrs['text-anchor'],rtl?'start':undefined);close(Number(node.attrs.x),entry.marker.x,'unchanged core physical marker edge');const group=elements(parseXml(svg)).find(part=>part.name==='g'&&part.attrs['data-opf-path']===entry.textPath),body=group&&elements(group).find(part=>part.name==='text'&&Number.isFinite(Number(part.attrs.y)));assert(body,'actual first body line exists');close(Number(node.attrs.y),Number(body.attrs.y),'shared actual body/marker baseline');const runs=layoutText(node,env,ROOT_STYLE,null).runs;close(rtl?Math.max(...runs.map(run=>run.x+run.width)):Math.min(...runs.map(run=>run.x)),Number(node.attrs.x),'physical marker edge in shared vector/outline layout');});
   assert.equal(JSON.stringify(document),before);assert.equal(JSON.stringify(bound.geometry),geometry,'Body geometry is not mutated by marker rendering');checks++;
  }
- const before=JSON.stringify(original),svg=toSvg(original,1,{fonts,trace:true}),marker=markers(svg);assert.equal(marker.length,1);assert.equal(textContent(marker[0]),'1.');assert.equal(marker[0].attrs.direction,'rtl');assert.equal(marker[0].attrs['text-anchor'],'start');assert.equal(JSON.stringify(original),before);
+ const before=JSON.stringify(original),svg=toSvg(original,1,{fonts,trace:true}),marker=markers(svg);assert.equal(marker.length,1);assert.equal(textContent(marker[0]),'١.');assert.equal(marker[0].attrs.direction,'rtl');assert.equal(marker[0].attrs['text-anchor'],'start');assert.equal(JSON.stringify(original),before);
  console.log(JSON.stringify({passed:true,checks,nativePaintAccepted:false,scope:'Logical tokens and exact physical marker edges, plain external SVG anchors and actual PDF/outline placement; native residuals remain open.'}));
 }finally{fonts.dispose?.();}

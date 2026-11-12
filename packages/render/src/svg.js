@@ -1234,7 +1234,7 @@ function listEntriesSvg(item, fit, bound, options) {
   for(const entry of fit.listEntries){
     if(entry.marker.none){/* design.listBullet: none draws no marker */}
     else if(bullet){const box=entry.bulletBox??{x:entry.marker.x,y:entry.marker.y-entry.marker.fontSize*.65,width:entry.marker.fontSize*.65,height:entry.marker.fontSize*.65};children.push(tag('image',{x:stableNumber(box.x),y:stableNumber(box.y),width:stableNumber(box.width),height:stableNumber(box.height),href:bullet,preserveAspectRatio:'xMidYMid meet','aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));}
-    else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(textMarkerBaseline(entry,bound,arranged,options)),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true',...markerDirection(entry)},escapeText(entry.marker.text)));
+    else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(textMarkerBaseline(entry,bound,arranged,options)),...markerFont(entry.marker,bound),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true',...markerDirection(entry)},escapeText(entry.marker.text)));
     // LH-133: a glossary's term (entry.accent) draws in the tag's color on its backdrop, as the export writes it.
     // SH-09: an entry of a pyramid or matrix (geometry.arrangements) is centered on its node, as the export writes it.
     const config={path:entry.textPath,align:arranged?'center':'left',fill:entry.accent?eyebrowFill(bound.design,item):bound.design.colors.text,rich:Array.isArray(entry.value),options};
@@ -1268,6 +1268,16 @@ function textMarkerBaseline(entry, bound, arranged, options) {
   const context=richLineContext(value,fit,bound,{align:arranged?'center':'left',options});
   const first=line.fragments[0],rtl=fit.directions?fit.directions[0]==='rtl':context.richRtl(first?context.runOffsets[first.runIndex]+first.start:0);
   return richLineGeometry(line,0,fit,entry.textBox,bound,context.lineAlignment(0),rtl,options.textMeasurement).baseline;
+}
+
+// LH-106: a numeral in another script's digits (١. in ar-SA, ۱. in fa-IR) is drawn in that script's face, as body text is (scriptLine);
+// a Latin marker keeps the list's own family exactly as before.
+function markerFont(marker, bound) {
+  const type = bound.design.fontScheme.type, own = {'font-family':fontStack(marker.style.fontFamily,type),'font-size':stableNumber(marker.fontSize)};
+  if (!marker.number || !/[^\x00-\x7f]/.test(marker.text)) return own;
+  const scripted = scriptLine(marker.text, marker.style, bound, type);
+  if (!scripted.family) return own;
+  return {'font-family':scripted.family,'font-size':stableNumber(scripted.sizeAdjust ? adjustedFontSize(marker.fontSize, scripted.sizeAdjust) : marker.fontSize)};
 }
 
 function markerDirection(entry) {
@@ -1782,7 +1792,7 @@ function renderTimeline(item, box, bound, options) {
 
 function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, alignment:itemAlignment(bound.geometry.design.contentAlignment), ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {})});
+  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, ...(typeof bound.scriptFonts?.profile?.bcp47 === "string" ? {language:bound.scriptFonts.profile.bcp47} : {}), alignment:itemAlignment(bound.geometry.design.contentAlignment), ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {})});
   const children = [];
   // LH-113: a highlighted row (table.highlight, or the rows the slide's texts name) draws on an accent tint of the surface.
   const highlightFill = layout.rows.some((row) => row.cells.some((cell) => cell.highlighted)) ? tableHighlightColor(bound.design.colors.surface, bound.design.colors.primary, bound.design.colors.text) : undefined;

@@ -54,7 +54,7 @@ export function chartNumericAxes(chart: unknown, data: ResolvedChartData, geomet
   const yFormat = data.formats[first], xFormat = data.hasX ? data.formats[1] : undefined;
   const yGroup = yFormat === undefined && groupsDataRange(yValues, {zeroBased: false});
   const xGroup = xFormat === undefined && data.hasX && groupsDataRange(xValues, {zeroBased: false, minRange: 1000});
-  const label = (number: number, format: string | undefined, group: boolean) => valueLabel(number, format, group ? {language} : undefined);
+  const label = (number: number, format: string | undefined, group: boolean) => valueLabel(number, format, group ? {language} : undefined, language);
   const tickWidth = Math.max(...ticks(value).map(tick => measure(label(tick, yFormat, yGroup)))) + fontPx * .5;
   const minX = xValues.length ? Math.min(...xValues) : 0, maxX = xValues.length ? Math.max(...xValues) : 1;
   const xLabel = Math.max(measure(label(minX, xFormat, xGroup)), measure(label(maxX, xFormat, xGroup))) + fontPx;
@@ -105,7 +105,7 @@ function waterfallAxis(chart: unknown, data: ResolvedChartData, geometry: ChartL
   const measure=(text:string)=>geometry.measure(text,font,400),format=data.formats[column];
   const group=format===undefined&&groupsDataRange(extents,{zeroBased:true});
   const probes=hidden?[]:[...new Set(Array.from({length:CHART_MAX_INTERVALS},(_,i)=>niceScale(min,max,i+1).ticks).flat())];
-  const tickWidth=Math.max(0,...probes.map(tick=>measure(valueLabel(tick,format,group?{language}:undefined))))+font*.5;
+  const tickWidth=Math.max(0,...probes.map(tick=>measure(valueLabel(tick,format,group?{language}:undefined,language))))+font*.5;
   const x=pad+tickWidth,right=width-pad-font/2,plot={x,width:Math.max(1,right-x)};
   const names=data.rows.map((row,i)=>data.columns.length>1?row[0]===null||row[0]===undefined?'':String(row[0]):String(i+1));
   const cap=Math.max(line+font*1.22,height*.4);

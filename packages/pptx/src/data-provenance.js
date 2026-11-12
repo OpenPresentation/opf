@@ -226,9 +226,12 @@ export function chartDataRecord(chart, datasets, {rowNumbers = false, fallback =
   return {v: 1, kind: 'chart', data: clone(chart.data), ...(chart.mapping !== undefined ? {mapping: clone(chart.mapping)} : {}), ...(object(chart.highlight) ? {highlight: clone(chart.highlight)} : {}), ...(dataset ? {dataset} : {})};
 }
 
-/** Full table provenance: authored inline cells (with legacy numeric recovery fields), or a dataset reference. */
-export function tableDataRecord(table, layout) {
-  if (isDatasetRef(table)) return {v: 1, kind: 'table', table: clone(table)};
+/**
+ * Full table provenance: authored inline cells (with legacy numeric recovery fields), or a dataset reference. LH-106: a dataset table
+ * records the language its number cells were shown in (`language`, when the slide has one), so import compares the text it showed.
+ */
+export function tableDataRecord(table, layout, language) {
+  if (isDatasetRef(table)) return {v: 1, kind: 'table', table: clone(table), ...(typeof language === 'string' ? {language} : {})};
   const hasHeaders = Array.isArray(table.columns) && table.columns.length > 0;
   const shown = (row, column) => cellText(layout?.rows?.[row]?.cells?.find(cell => cell.column === column)?.value);
   // A header's format: a DataColumn's or a header StyledTableCell's (both are the column format).
@@ -410,6 +413,7 @@ export function readDataTag(entries, frame, relationships) {
     if (!record.headers.every(header) || !record.cells.every(cell)) throw Error('Invalid table data record.');
   }
   if (record.kind === 'table' && record.authored !== undefined && !object(record.authored)) throw Error('Invalid authored table record.');
+  if (record.kind === 'table' && record.language !== undefined && (typeof record.language !== 'string' || record.language.length > 64)) throw Error('Invalid table data record.');
   if (record.kind === 'table' && record.evidence !== undefined && (!Array.isArray(record.evidence) || !record.evidence.every(row => Array.isArray(row) && row.every(cell => typeof cell === 'string')) || typeof record.environment !== 'string')) throw Error('Invalid table evidence record.');
   if (record.kind === 'table' && record.authored !== undefined && record.evidence === undefined) throw Error('Authored table record has no native evidence.');
   return record;
@@ -465,7 +469,8 @@ export function restoreTableData(table, record, {datasets, report, evidence: cur
     }
     const resolved = resolveTableData(record.table, {datasets});
     const expectedHeaders = (resolved.columns ?? []).map(cellText);
-    const expectedRows = resolved.rows.map(row => row.map((cell, column) => cellText(tableCellDisplayValue(cell, resolved.formats[column]))));
+    const language = typeof record.language === 'string' ? record.language : undefined;
+    const expectedRows = resolved.rows.map(row => row.map((cell, column) => cellText(tableCellDisplayValue(cell, resolved.formats[column], language))));
     const same = expectedHeaders.length === (columns?.length ?? 0) && expectedHeaders.every((text, index) => text === cellText(columns[index]))
       && expectedRows.length === rows.length && expectedRows.every((row, index) => row.length === rows[index].length && row.every((text, column) => text === cellText(rows[index][column])));
     if (!same || !validWith({table: record.table}, datasets)) {

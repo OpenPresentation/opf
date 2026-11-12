@@ -181,6 +181,9 @@ export type { DeckFormat, ParseOptions, StringifyOptions } from './deck.js';
 
 export { parseTabularData, ingest, OPFDataImportError } from './data.js';
 export type { DataCell, TabularData, ImportedChartData, ImportedChartType, ImportedTable, ImportedChart, DataImportOptions, IngestOptions } from './data.js';
+// LH-106: the numbering system and number text of the language in effect (one path for every number the engines generate).
+export { formatNumber, formatPercentNumber, localizeDigits, numberLocale, numberingSystemOf, numberingSystemExtension, isSupportedNumberingSystem, supportedNumberingSystems, plainLanguageTag, languageInEffect, numeralScripts, asciiDigits } from './numerals.js';
+export type { NumberLocale } from './numerals.js';
 // RR-54: chart and table data: strict numbers, number formats and Excel codes, datasets, series mapping.
 export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
 // LH-60: how a chart is drawn when its data does not fit its type (map, box, pie and scatter fallbacks; series a type cannot plot).

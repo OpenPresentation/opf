@@ -3,6 +3,7 @@ import { formatFurnitureDate, parseIsoDate } from "./furniture-fields.js";
 import { organizationsOf, primaryOrganization, primarySpeaker, speakersOf } from "./deck-metadata.js";
 import { SLIDE_SCOPED_BUILTINS, isSlideScopedBuiltin, isSlideScopedName, slideTokenFollows } from "./slide-variables.js";
 import { LOGO_SHAPES, logoReferenceName, parseLogoName, resolveOrganizationLogo, type LogoReference } from "./logos.js";
+import { languageInEffect, localizeNumberText, localizePatternNumber } from "./numerals.js";
 
 /**
  * Template variables: typed, named values a deck declares once and uses in many
@@ -257,10 +258,20 @@ export function hasContentVariables(presentation: unknown): boolean {
 
 const POSITIVE_ZERO = "0";
 
-/** Format a number with a display pattern (see the schema `NumberVariable.format`). */
-export function formatVariableNumber(value: number, pattern?: string): { text: string } | { error: string } {
+/**
+ * Format a number with a display pattern (see the schema `NumberVariable.format`). LH-106: with `language`, the text is in that
+ * language's numbering system (`localizePatternNumber`; without a pattern, `localizeNumberText`); without it, Latin as written.
+ */
+export function formatVariableNumber(value: number, pattern?: string, language?: string): { text: string } | { error: string } {
   if (!Number.isFinite(value)) return { error: `'${String(value)}' is not a finite number.` };
-  if (pattern === undefined || pattern === "") return { text: String(value) };
+  if (pattern === undefined || pattern === "") return { text: language === undefined ? String(value) : localizeNumberText(String(value), language) };
+  const parts = patternNumberParts(value, pattern);
+  if ("error" in parts) return parts;
+  return { text: language === undefined ? `${parts.negative ? "-" : ""}${parts.prefix}${parts.body}${parts.suffix}` : localizePatternNumber(parts, language) };
+}
+
+/** The sign, literal prefix, numeric body (ASCII digits, `.` and `,`) and literal suffix a display pattern prints a number as. */
+function patternNumberParts(value: number, pattern: string): { negative: boolean; prefix: string; body: string; suffix: string } | { error: string } {
   const match = /^([^#0,.]*)((?:[#0,]*)(?:\.[#0]+)?)([\s\S]*)$/.exec(pattern);
   const numeric = match?.[2] ?? "";
   if (!match || !/[#0]/.test(numeric)) return { error: `Number format '${pattern}' needs a numeric part of '#' and '0' characters.` };
@@ -292,7 +303,7 @@ export function formatVariableNumber(value: number, pattern?: string): { text: s
   if (grouping) integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const body = `${integer}${decimals ? `.${decimals}` : ""}` || POSITIVE_ZERO;
   const negative = scaled < 0 && /[1-9]/.test(body);
-  return { text: `${negative ? "-" : ""}${prefix}${body}${suffix}` };
+  return { negative, prefix, body, suffix };
 }
 
 type Status = "filled" | "example" | "unfilled";
@@ -341,6 +352,20 @@ function plainText(value: unknown): string {
   return "";
 }
 
+/** Keys whose strings are addresses or names, never drawn as text. */
+const ADDRESS_KEYS = new Set(["href", "url", "link", "src", "id", "alt", "altText"]);
+
+/**
+ * The language a number variable inserted at `path` is drawn in: the slide's (or the deck's) for text on a slide or in the deck's
+ * header and footer, undefined (Latin, as written) anywhere else and in an address (a link, a source, an id).
+ */
+function drawnNumberLanguage(doc: Record<string, unknown>, path: string): string | undefined {
+  const slide = /^\/slides\/(\d+)\//.exec(path);
+  if (!slide && !/^\/design\/(?:header|footer)\//.test(path)) return undefined;
+  if (ADDRESS_KEYS.has(path.split("/").at(-1) ?? "")) return undefined;
+  return languageInEffect(doc, slide ? Number(slide[1]) : undefined);
+}
+
 /** The inline text of a variable value, or undefined when it cannot be formatted. */
 function inlineText(effective: Effective, format: string | undefined, path: string, context: Context): string | undefined {
   const { declaration } = effective;
@@ -356,7 +381,8 @@ function inlineText(effective: Effective, format: string | undefined, path: stri
       return plainText(value);
     case "number": {
       const pattern = (format ?? declaration.format)?.trim();
-      const formatted = formatVariableNumber(value as number, pattern === "" ? undefined : pattern);
+      // LH-106: a number drawn on a slide (or in the deck's header and footer) is in the numbering system of the language there.
+      const formatted = formatVariableNumber(value as number, pattern === "" ? undefined : pattern, drawnNumberLanguage(context.doc, path));
       if ("error" in formatted) {
         diag(context, { code: "variable-format", severity: "error", path, id: declaration.id, message: formatted.error }, `fmt:${declaration.id}:${format ?? ""}`);
         return String(value);
