@@ -74,7 +74,7 @@ export interface EnsureResult { scripts: string[]; lazy: LazyFont[]; uncovered: 
 export interface FontMeasurementRequest { text: string; size: number; style: TextStyle }
 export type FontPreparationOptions = Partial<ToSvgOptions> & {
   renderOptions?: Partial<ToSvgOptions>;
-  /** Additional exporter mapping; never rewrites the document or ordinary SVG demand. */
+  /** Additional exporter mapping; never rewrites the document or ordinary SVG demand. Pass the same function on every call: the handle keeps its font analysis per mapping function (by identity), so a fresh closure each call starts from a cold cache. */
   mapFamily?: (family: string) => string;
   preserveChosenFamilies?: boolean;
   measurementRequests?: readonly FontMeasurementRequest[];

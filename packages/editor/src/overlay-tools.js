@@ -10,16 +10,13 @@
 // cancels); the connector goes on top of the slide's overlays, its ends get ids where they had none, in one undoable `connectShapes`.
 // Importing this module needs no DOM; mounting does.
 import { getValueAtPath, splitOpfPath } from "./index.js";
-import { connectShapes, detachOverlay, prepareOverlayDetach, prepareOverlayFrame, setOverlayFrame, slideIsRtl } from "./shape-overlays.js";
+import { connectShapes, detachOverlay, draggedFrame, prepareOverlayDetach, prepareOverlayFrame, setOverlayFrame, slideIsRtl } from "./shape-overlays.js";
 
 const OVERLAY_OF = /^(slides\.(?:0|[1-9][0-9]*)\.shapes\.(?:0|[1-9][0-9]*))(?:\.|$)/;
 const LEAF_BLOCK = /^(slides\.(?:0|[1-9][0-9]*)(?:\.blocks\.(?:0|[1-9][0-9]*))+)/;
 const HANDLES = { nw: [0, 0], n: [0.5, 0], ne: [1, 0], e: [1, 0.5], se: [1, 1], s: [0.5, 1], sw: [0, 1], w: [0, 0.5] };
 const CURSORS = { nw: "nwse-resize", se: "nwse-resize", ne: "nesw-resize", sw: "nesw-resize", n: "ns-resize", s: "ns-resize", e: "ew-resize", w: "ew-resize" };
 const MIN_FRACTION = 0.01;
-// A shape may be larger than the slide (it bleeds off it), up to the format's limit of 8 slides (OVERLAY_SIZE_MAX in shape-overlays.js).
-const MAX_FRACTION = 8;
-const round4 = (value) => Math.round(value * 10000) / 10000;
 const MOVE_THRESHOLD = 4;
 
 /**
@@ -92,11 +89,7 @@ export function createOverlayTools(root, options) {
 
   /** A box in slide pixels as fractions of the slide (mirrored in a right-to-left deck). */
   function framed(drag, box) {
-    const { W, H } = drag;
-    const width = Math.min(MAX_FRACTION, Math.max(MIN_FRACTION, box.width / W));
-    const height = Math.min(MAX_FRACTION, Math.max(MIN_FRACTION, box.height / H));
-    const left = drag.rtl ? (W - (box.x + box.width)) / W : box.x / W;
-    return { x: round4(left), y: round4(box.y / H), width: round4(width), height: round4(height) };
+    return draggedFrame(box, { W: drag.W, H: drag.H, rtl: drag.rtl, min: MIN_FRACTION, current: drag.box });
   }
 
   /** `box` resized by dragging `handle` by (dx, dy): the opposite edges stay put. */
