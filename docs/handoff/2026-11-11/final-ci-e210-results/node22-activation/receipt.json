@@ -1,0 +1,29 @@
+{
+  "source": "6093a4d7d1a5bd38a0bcc573243068f41ffb3bda",
+  "steps": [
+    {
+      "node": "v22.23.3",
+      "args": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v22.23.3/installation/bin/node",
+        "--test",
+        "packages/render/test/node-demand-font-failures.mjs"
+      ],
+      "code": 0,
+      "seconds": 1.550974709,
+      "logBytes": 977,
+      "logSha256": "7c2e213a59258e68645196f8c00555a654617e3dcf3e41a6d411af1f90893871"
+    },
+    {
+      "node": "v24.21.0",
+      "args": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "--test",
+        "packages/render/test/node-demand-font-failures.mjs"
+      ],
+      "code": 0,
+      "seconds": 1.3245854999999997,
+      "logBytes": 491,
+      "logSha256": "52692f3975c1cf1ed1a4ac143e4218b2b9918110c0ec04a8336ae43d11e89414"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+✔ failed fallback preparation keeps file/embedded views synchronized for a different already-complete deck (418.646833ms)
+✔ failed activation preparation keeps file/embedded views synchronized for a different already-complete deck (420.105625ms)
+✔ failed refresh-error preparation keeps file/embedded views synchronized for a different already-complete deck (419.51125ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1289.095

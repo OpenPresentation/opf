@@ -1,0 +1,19 @@
+✔ the same demand handle preserves color SVG and exact PNG/raster-PDF companion bytes (1743.596208ms)
+✔ demand raster paints the pinned monochrome glyph, not a blank or another font fallback (43.224208ms)
+✔ plain documents do not resolve/read color dependencies or load unrelated scripts/styles (8.556958ms)
+✔ edits prepare the effective raster dependency once and preserve the same handle through repeat/concurrent ensure (433.147458ms)
+✔ a caller-owned same-name face does not acquire a manifest raster dependency (10.734042ms)
+✔ initial script reporting keeps declared package order and actual symbol SVG/PNG bytes (941.256125ms)
+✔ incremental script reporting preserves the prior ensure prefix, current declared order and deduplication (87.25225ms)
+✔ missing raster companion refuses with the typed public error; no package mutation and same-handle retry succeeds (321.284542ms)
+✔ integrity raster companion refuses with the typed public error; no package mutation and same-handle retry succeeds (321.057917ms)
+✔ color-missing: package reporting describes only actual verified resources and strict glyph coverage (484.397125ms)
+✔ math-unneeded: package reporting describes only actual verified resources and strict glyph coverage (313.707458ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4711.549166

@@ -1,0 +1,306 @@
+[
+  {
+    "id": "chevrons-1-long",
+    "geometryChanges": 72,
+    "maxGeometryNumericDelta": 2.842170943040401e-14,
+    "geometryExample": [
+      {
+        "path": "/items/2/text/listEntries/0/text/richLines/0/fragments/0/width",
+        "before": 109.11999999999999,
+        "after": 109.12
+      },
+      {
+        "path": "/items/2/text/listEntries/0/text/richLines/0/width",
+        "before": 109.11999999999999,
+        "after": 109.12
+      },
+      {
+        "path": "/items/2/text/listEntries/0/text/richLines/1/fragments/0/width",
+        "before": 217.65333333333336,
+        "after": 217.65333333333334
+      },
+      {
+        "path": "/items/2/text/listEntries/0/text/richLines/2/fragments/0/width",
+        "before": 199.4666666666667,
+        "after": 199.46666666666667
+      }
+    ],
+    "svgChanges": [
+      {
+        "path": "/svg[4]/g[0]/g[0]/g[0]",
+        "attribute": "data-opf-rich-lines",
+        "before": "[{\"start\":0,\"end\":8,\"x\":161.17499999999998,\"y\":198.22,\"height\":35.78666666666666},{\"start\":8,\"end\":23,\"x\":106.90833333333332,\"y\":234.00666666666666,\"height\":35.78666666666666},{\"start\":23,\"end\":37,\"x\":116.00166666666664,\"y\":269.7933333333333,\"height\":35.78666666666666},{\"start\":37,\"end\":52,\"x\":111.30833333333331,\"y\":305.58,\"height\":35.78666666666666},{\"start\":52,\"end\":66,\"x\":119.22833333333331,\"y\":341.3666666666667,\"height\":35.78666666666666},{\"start\":66,\"end\":78,\"x\":127.14833333333331,\"y\":377.1533333333333,\"height\":35.78666666666666}]",
+        "after": "[{\"start\":0,\"end\":8,\"x\":161.17499999999998,\"y\":198.22,\"height\":35.78666666666666},{\"start\":8,\"end\":23,\"x\":106.90833333333332,\"y\":234.00666666666666,\"height\":35.78666666666666},{\"start\":23,\"end\":37,\"x\":116.00166666666665,\"y\":269.7933333333333,\"height\":35.78666666666666},{\"start\":37,\"end\":52,\"x\":111.30833333333332,\"y\":305.58,\"height\":35.78666666666666},{\"start\":52,\"end\":66,\"x\":119.22833333333332,\"y\":341.3666666666667,\"height\":35.78666666666666},{\"start\":66,\"end\":78,\"x\":127.14833333333331,\"y\":377.1533333333333,\"height\":35.78666666666666}]"
+      },
+      {
+        "path": "/svg[4]/g[0]/g[1]/g[0]",
+        "attribute": "data-opf-rich-lines",
+        "before": "[{\"start\":0,\"end\":8,\"x\":446.072,\"y\":198.22,\"height\":35.78666666666666},{\"start\":8,\"end\":23,\"x\":391.8053333333333,\"y\":234.00666666666666,\"height\":35.78666666666666},{\"start\":23,\"end\":37,\"x\":400.8986666666666,\"y\":269.7933333333333,\"height\":35.78666666666666},{\"start\":37,\"end\":52,\"x\":396.20533333333333,\"y\":305.58,\"height\":35.78666666666666},{\"start\":52,\"end\":66,\"x\":404.1253333333333,\"y\":341.3666666666667,\"height\":35.78666666666666},{\"start\":66,\"end\":78,\"x\":412.0453333333333,\"y\":377.1533333333333,\"height\":35.78666666666666}]",
+        "after": "[{\"start\":0,\"end\":8,\"x\":446.072,\"y\":198.22,\"height\":35.78666666666666},{\"start\":8,\"end\":23,\"x\":391.8053333333333,\"y\":234.00666666666666,\"height\":35.78666666666666},{\"start\":23,\"end\":37,\"x\":400.89866666666666,\"y\":269.7933333333333,\"height\":35.78666666666666},{\"start\":37,\"end\":52,\"x\":396.20533333333333,\"y\":305.58,\"height\":35.78666666666666},{\"start\":52,\"end\":66,\"x\":404.1253333333333,\"y\":341.3666666666667,\"height\":35.78666666666666},{\"start\":66,\"end\":78,\"x\":412.0453333333333,\"y\":377.1533333333333,\"height\":35.78666666666666}]"
+      },
+      {
+        "path": "/svg[4]/g[0]/g[2]/g[0]",
+        "attribute": "data-opf-rich-lines",
+        "before": "[{\"start\":0,\"end\":8,\"x\":730.969,\"y\":198.22,\"height\":35.78666666666666},{\"start\":8,\"end\":23,\"x\":676.7023333333333,\"y\":234.00666666666666,\"height\":35.78666666666666},{\"start\":23,\"end\":37,\"x\":685.7956666666666,\"y\":269.7933333333333,\"height\":35.78666666666666},{\"start\":37,\"end\":52,\"x\":681.1023333333333,\"y\":305.58,\"height\":35.78666666666666},{\"start\":52,\"end\":66,\"x\":689.0223333333333,\"y\":341.3666666666667,\"height\":35.78666666666666},{\"start\":66,\"end\":78,\"x\":696.9423333333333,\"y\":377.1533333333333,\"height\":35.78666666666666}]",
+        "after": "[{\"start\":0,\"end\":8,\"x\":730.969,\"y\":198.22,\"height\":35.78666666666666},{\"start\":8,\"end\":23,\"x\":676.7023333333333,\"y\":234.00666666666666,\"height\":35.78666666666666},{\"start\":23,\"end\":37,\"x\":685.7956666666666,\"y\":269.7933333333333,\"height\":35.78666666666666},{\"start\":37,\"end\":52,\"x\":681.1023333333334,\"y\":305.58,\"height\":35.78666666666666},{\"start\":52,\"end\":66,\"x\":689.0223333333333,\"y\":341.3666666666667,\"height\":35.78666666666666},{\"start\":66,\"end\":78,\"x\":696.9423333333333,\"y\":377.1533333333333,\"height\":35.78666666666666}]"
+      },
+      {
+        "path": "/svg[4]/g[0]/g[3]/g[0]",
+        "attribute": "data-opf-rich-lines",
+        "before": "[{\"start\":0,\"end\":8,\"x\":1015.865,\"y\":198.22,\"height\":35.78666666666666},{\"start\":8,\"end\":23,\"x\":961.5983333333334,\"y\":234.00666666666666,\"height\":35.78666666666666},{\"start\":23,\"end\":37,\"x\":970.6916666666666,\"y\":269.7933333333333,\"height\":35.78666666666666},{\"start\":37,\"end\":52,\"x\":965.9983333333333,\"y\":305.58,\"height\":35.78666666666666},{\"start\":52,\"end\":66,\"x\":973.9183333333333,\"y\":341.3666666666667,\"height\":35.78666666666666},{\"start\":66,\"end\":78,\"x\":981.8383333333334,\"y\":377.1533333333333,\"height\":35.78666666666666}]",
+        "after": "[{\"start\":0,\"end\":8,\"x\":1015.865,\"y\":198.22,\"height\":35.78666666666666},{\"start\":8,\"end\":23,\"x\":961.5983333333334,\"y\":234.00666666666666,\"height\":35.78666666666666},{\"start\":23,\"end\":37,\"x\":970.6916666666667,\"y\":269.7933333333333,\"height\":35.78666666666666},{\"start\":37,\"end\":52,\"x\":965.9983333333333,\"y\":305.58,\"height\":35.78666666666666},{\"start\":52,\"end\":66,\"x\":973.9183333333333,\"y\":341.3666666666667,\"height\":35.78666666666666},{\"start\":66,\"end\":78,\"x\":981.8383333333334,\"y\":377.1533333333333,\"height\":35.78666666666666}]"
+      }
+    ],
+    "affectedFragments": 29,
+    "trackingValues": [
+      "absent"
+    ],
+    "capsValues": [
+      "absent"
+    ],
+    "maxAbsCutDelta": 1.7763568394002505e-14,
+    "cutExample": [
+      {
+        "fullText": "Item 1: ",
+        "fontSize": 29.333333333333332,
+        "isolatedSpaceMeasured": 9.386666666666667,
+        "contextualCut": 9.386666666666656,
+        "cutDelta": -1.0658141036401503e-14,
+        "oldProjection": {
+          "fragmentWidth": 109.11999999999999,
+          "lineWidth": 109.11999999999999,
+          "floorClamped": false,
+          "lineUsesOriginalCap": false
+        },
+        "newProjection": {
+          "fragmentWidth": 109.12,
+          "lineWidth": 109.12,
+          "floorClamped": false,
+          "lineUsesOriginalCap": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "flow-page-1",
+    "geometryChanges": 0,
+    "maxGeometryNumericDelta": 0,
+    "geometryExample": [],
+    "svgChanges": [],
+    "affectedFragments": 0,
+    "trackingValues": [],
+    "capsValues": [],
+    "maxAbsCutDelta": 0,
+    "cutExample": []
+  },
+  {
+    "id": "flow-page-2",
+    "geometryChanges": 24,
+    "maxGeometryNumericDelta": 5.684341886080802e-14,
+    "geometryExample": [
+      {
+        "path": "/items/2/text/listEntries/4/text/richLines/0/fragments/0/width",
+        "before": 275.0399999999999,
+        "after": 275.03999999999996
+      },
+      {
+        "path": "/items/2/text/listEntries/4/text/richLines/0/width",
+        "before": 275.0399999999999,
+        "after": 275.03999999999996
+      },
+      {
+        "path": "/items/2/text/listEntries/4/text/richLines/2/fragments/0/width",
+        "before": 263.99999999999994,
+        "after": 263.9999999999999
+      },
+      {
+        "path": "/items/2/text/listEntries/4/text/richLines/2/width",
+        "before": 263.99999999999994,
+        "after": 263.9999999999999
+      }
+    ],
+    "svgChanges": [
+      {
+        "path": "/svg[4]/g[0]/g[4]/g[0]",
+        "attribute": "data-opf-rich-lines",
+        "before": "[{\"start\":0,\"end\":23,\"x\":920.6130000000002,\"y\":496.33400000000006,\"height\":29.28},{\"start\":23,\"end\":46,\"x\":923.4930000000002,\"y\":525.614,\"height\":29.28},{\"start\":46,\"end\":69,\"x\":926.1330000000002,\"y\":554.894,\"height\":29.28},{\"start\":69,\"end\":78,\"x\":1002.4530000000002,\"y\":584.1740000000001,\"height\":29.28}]",
+        "after": "[{\"start\":0,\"end\":23,\"x\":920.6130000000002,\"y\":496.33400000000006,\"height\":29.28},{\"start\":23,\"end\":46,\"x\":923.4930000000002,\"y\":525.614,\"height\":29.28},{\"start\":46,\"end\":69,\"x\":926.1330000000003,\"y\":554.894,\"height\":29.28},{\"start\":69,\"end\":78,\"x\":1002.4530000000002,\"y\":584.1740000000001,\"height\":29.28}]"
+      },
+      {
+        "path": "/svg[4]/g[0]/g[6]/g[0]",
+        "attribute": "data-opf-rich-lines",
+        "before": "[{\"start\":0,\"end\":23,\"x\":84.34700000000005,\"y\":496.33400000000006,\"height\":29.28},{\"start\":23,\"end\":46,\"x\":87.22700000000002,\"y\":525.614,\"height\":29.28},{\"start\":46,\"end\":69,\"x\":89.86700000000003,\"y\":554.894,\"height\":29.28},{\"start\":69,\"end\":78,\"x\":166.187,\"y\":584.1740000000001,\"height\":29.28}]",
+        "after": "[{\"start\":0,\"end\":23,\"x\":84.34700000000002,\"y\":496.33400000000006,\"height\":29.28},{\"start\":23,\"end\":46,\"x\":87.22700000000002,\"y\":525.614,\"height\":29.28},{\"start\":46,\"end\":69,\"x\":89.86700000000006,\"y\":554.894,\"height\":29.28},{\"start\":69,\"end\":78,\"x\":166.187,\"y\":584.1740000000001,\"height\":29.28}]"
+      }
+    ],
+    "affectedFragments": 29,
+    "trackingValues": [
+      "absent"
+    ],
+    "capsValues": [
+      "absent"
+    ],
+    "maxAbsCutDelta": 6.394884621840902e-14,
+    "cutExample": [
+      {
+        "fullText": "Item 1: ",
+        "fontSize": 24,
+        "isolatedSpaceMeasured": 7.68,
+        "contextualCut": 7.680000000000007,
+        "cutDelta": 7.105427357601002e-15,
+        "oldProjection": {
+          "fragmentWidth": 89.28,
+          "lineWidth": 89.28,
+          "floorClamped": false,
+          "lineUsesOriginalCap": false
+        },
+        "newProjection": {
+          "fragmentWidth": 89.28,
+          "lineWidth": 89.28,
+          "floorClamped": false,
+          "lineUsesOriginalCap": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "flow-page-3",
+    "geometryChanges": 24,
+    "maxGeometryNumericDelta": 5.684341886080802e-14,
+    "geometryExample": [
+      {
+        "path": "/items/2/text/listEntries/4/text/richLines/0/fragments/0/width",
+        "before": 275.0399999999999,
+        "after": 275.03999999999996
+      },
+      {
+        "path": "/items/2/text/listEntries/4/text/richLines/0/width",
+        "before": 275.0399999999999,
+        "after": 275.03999999999996
+      },
+      {
+        "path": "/items/2/text/listEntries/4/text/richLines/2/fragments/0/width",
+        "before": 263.99999999999994,
+        "after": 263.9999999999999
+      },
+      {
+        "path": "/items/2/text/listEntries/4/text/richLines/2/width",
+        "before": 263.99999999999994,
+        "after": 263.9999999999999
+      }
+    ],
+    "svgChanges": [
+      {
+        "path": "/svg[4]/g[0]/g[4]/g[0]",
+        "attribute": "data-opf-rich-lines",
+        "before": "[{\"start\":0,\"end\":23,\"x\":920.6130000000002,\"y\":496.33400000000006,\"height\":29.28},{\"start\":23,\"end\":46,\"x\":923.4930000000002,\"y\":525.614,\"height\":29.28},{\"start\":46,\"end\":69,\"x\":926.1330000000002,\"y\":554.894,\"height\":29.28},{\"start\":69,\"end\":78,\"x\":1002.4530000000002,\"y\":584.1740000000001,\"height\":29.28}]",
+        "after": "[{\"start\":0,\"end\":23,\"x\":920.6130000000002,\"y\":496.33400000000006,\"height\":29.28},{\"start\":23,\"end\":46,\"x\":923.4930000000002,\"y\":525.614,\"height\":29.28},{\"start\":46,\"end\":69,\"x\":926.1330000000003,\"y\":554.894,\"height\":29.28},{\"start\":69,\"end\":78,\"x\":1002.4530000000002,\"y\":584.1740000000001,\"height\":29.28}]"
+      },
+      {
+        "path": "/svg[4]/g[0]/g[6]/g[0]",
+        "attribute": "data-opf-rich-lines",
+        "before": "[{\"start\":0,\"end\":23,\"x\":84.34700000000005,\"y\":496.33400000000006,\"height\":29.28},{\"start\":23,\"end\":46,\"x\":87.22700000000002,\"y\":525.614,\"height\":29.28},{\"start\":46,\"end\":69,\"x\":89.86700000000003,\"y\":554.894,\"height\":29.28},{\"start\":69,\"end\":78,\"x\":166.187,\"y\":584.1740000000001,\"height\":29.28}]",
+        "after": "[{\"start\":0,\"end\":23,\"x\":84.34700000000002,\"y\":496.33400000000006,\"height\":29.28},{\"start\":23,\"end\":46,\"x\":87.22700000000002,\"y\":525.614,\"height\":29.28},{\"start\":46,\"end\":69,\"x\":89.86700000000006,\"y\":554.894,\"height\":29.28},{\"start\":69,\"end\":78,\"x\":166.187,\"y\":584.1740000000001,\"height\":29.28}]"
+      }
+    ],
+    "affectedFragments": 29,
+    "trackingValues": [
+      "absent"
+    ],
+    "capsValues": [
+      "absent"
+    ],
+    "maxAbsCutDelta": 6.394884621840902e-14,
+    "cutExample": [
+      {
+        "fullText": "Item 1: ",
+        "fontSize": 24,
+        "isolatedSpaceMeasured": 7.68,
+        "contextualCut": 7.680000000000007,
+        "cutDelta": 7.105427357601002e-15,
+        "oldProjection": {
+          "fragmentWidth": 89.28,
+          "lineWidth": 89.28,
+          "floorClamped": false,
+          "lineUsesOriginalCap": false
+        },
+        "newProjection": {
+          "fragmentWidth": 89.28,
+          "lineWidth": 89.28,
+          "floorClamped": false,
+          "lineUsesOriginalCap": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "flow-page-4",
+    "geometryChanges": 24,
+    "maxGeometryNumericDelta": 5.684341886080802e-14,
+    "geometryExample": [
+      {
+        "path": "/items/2/text/listEntries/4/text/richLines/0/fragments/0/width",
+        "before": 275.0399999999999,
+        "after": 275.03999999999996
+      },
+      {
+        "path": "/items/2/text/listEntries/4/text/richLines/0/width",
+        "before": 275.0399999999999,
+        "after": 275.03999999999996
+      },
+      {
+        "path": "/items/2/text/listEntries/4/text/richLines/2/fragments/0/width",
+        "before": 263.99999999999994,
+        "after": 263.9999999999999
+      },
+      {
+        "path": "/items/2/text/listEntries/4/text/richLines/2/width",
+        "before": 263.99999999999994,
+        "after": 263.9999999999999
+      }
+    ],
+    "svgChanges": [
+      {
+        "path": "/svg[4]/g[0]/g[4]/g[0]",
+        "attribute": "data-opf-rich-lines",
+        "before": "[{\"start\":0,\"end\":23,\"x\":920.6130000000002,\"y\":496.33400000000006,\"height\":29.28},{\"start\":23,\"end\":46,\"x\":923.4930000000002,\"y\":525.614,\"height\":29.28},{\"start\":46,\"end\":69,\"x\":926.1330000000002,\"y\":554.894,\"height\":29.28},{\"start\":69,\"end\":78,\"x\":1002.4530000000002,\"y\":584.1740000000001,\"height\":29.28}]",
+        "after": "[{\"start\":0,\"end\":23,\"x\":920.6130000000002,\"y\":496.33400000000006,\"height\":29.28},{\"start\":23,\"end\":46,\"x\":923.4930000000002,\"y\":525.614,\"height\":29.28},{\"start\":46,\"end\":69,\"x\":926.1330000000003,\"y\":554.894,\"height\":29.28},{\"start\":69,\"end\":78,\"x\":1002.4530000000002,\"y\":584.1740000000001,\"height\":29.28}]"
+      },
+      {
+        "path": "/svg[4]/g[0]/g[6]/g[0]",
+        "attribute": "data-opf-rich-lines",
+        "before": "[{\"start\":0,\"end\":23,\"x\":84.34700000000005,\"y\":496.33400000000006,\"height\":29.28},{\"start\":23,\"end\":46,\"x\":87.22700000000002,\"y\":525.614,\"height\":29.28},{\"start\":46,\"end\":69,\"x\":89.86700000000003,\"y\":554.894,\"height\":29.28},{\"start\":69,\"end\":78,\"x\":166.187,\"y\":584.1740000000001,\"height\":29.28}]",
+        "after": "[{\"start\":0,\"end\":23,\"x\":84.34700000000002,\"y\":496.33400000000006,\"height\":29.28},{\"start\":23,\"end\":46,\"x\":87.22700000000002,\"y\":525.614,\"height\":29.28},{\"start\":46,\"end\":69,\"x\":89.86700000000006,\"y\":554.894,\"height\":29.28},{\"start\":69,\"end\":78,\"x\":166.187,\"y\":584.1740000000001,\"height\":29.28}]"
+      }
+    ],
+    "affectedFragments": 29,
+    "trackingValues": [
+      "absent"
+    ],
+    "capsValues": [
+      "absent"
+    ],
+    "maxAbsCutDelta": 6.394884621840902e-14,
+    "cutExample": [
+      {
+        "fullText": "Item 1: ",
+        "fontSize": 24,
+        "isolatedSpaceMeasured": 7.68,
+        "contextualCut": 7.680000000000007,
+        "cutDelta": 7.105427357601002e-15,
+        "oldProjection": {
+          "fragmentWidth": 89.28,
+          "lineWidth": 89.28,
+          "floorClamped": false,
+          "lineUsesOriginalCap": false
+        },
+        "newProjection": {
+          "fragmentWidth": 89.28,
+          "lineWidth": 89.28,
+          "floorClamped": false,
+          "lineUsesOriginalCap": false
+        }
+      }
+    ]
+  }
+]

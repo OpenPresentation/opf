@@ -1,0 +1,26 @@
+
+> openpresentation-workspace@ check:registry-consumer /private/tmp/opf-034
+> node --test scripts/registry-consumer.test.mjs
+
+✔ MR-56: the set is registryPlan() at the shared version; a pin overrides one package (1.199208ms)
+✔ MR-56: the consumer installs the five libraries at exact versions, the bundler and the renderer's optional peers (0.164792ms)
+✔ MR-56: the bundler is the esbuild the workspace builds with (0.7125ms)
+✔ MR-56: a ref names one commit and its files are read from that commit, not from the working tree (202.974125ms)
+✔ MR-56: the renderer manifest is the registry's, for exactly the version asked for (0.691458ms)
+✔ MR-56: only a clean registry install of the exact versions is accepted (8.579167ms)
+✔ MR-56: an install of the same set is reused without npm (3.454375ms)
+✔ MR-56: the gallery editor scripts read no release plan and no sibling checkout but the pptx.gallery site (0.490333ms)
+✔ MR-56: vendor-gallery-editor needs a version, a site directory and a known pin before it touches anything (159.956667ms)
+✔ MR-56: pnpm vendor:gallery-editor runs the script, and no registry-mode prepare script is left (0.241083ms)
+✔ published033 quickstart selects exact immutable release bytes, preserving all authored values and double spaces (25.900833ms)
+✔ quickstart selector uses release input before034 and exact current input from034, without reading the other channel (0.708375ms)
+✔ quickstart input rejects missing/ambiguous/malformed version or release authority and changed033 bytes (13.022834ms)
+✔ registry quickstart retains every original workflow/CLI/source assertion verbatim after input selection (12.034ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 469.035917

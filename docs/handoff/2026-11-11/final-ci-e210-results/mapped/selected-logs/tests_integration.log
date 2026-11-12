@@ -1,0 +1,21 @@
+Scope: 5 of 9 workspace projects
+packages/gallery build$ node scripts/build.mjs
+packages/gallery build: Built @openpresentation/gallery: 226 content records, 40 layout previews.
+packages/gallery build: Done
+packages/javascript build$ node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/minify-precompiled.mjs && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)
+packages/javascript build: reuse-build: javascript was built earlier in this CI job (OPF_REUSE_BUILD); reusing dist/
+packages/javascript build: Done
+packages/render build$ node scripts/build.mjs
+packages/render build: Done
+packages/pptx build$ node scripts/build.mjs
+packages/pptx build: Vendored upstream distribution and license match recorded hashes.
+packages/pptx build: Done
+✔ unchanged three-slide Arabic qualification input exports exact eager-font preview and PPTX bytes with demand fonts (1923.533583ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2082.486708

@@ -214,7 +214,9 @@ Reviewed product runtime remains d2edd18ced67ea8370ae2d03f5f954d91ff9cb6e. Worki
 
 Never push a folded leaf. Never force-push. Normally merge origin/main. Evidence-only branches NEVER MERGE. Use maintained pr-gate only; no new CI polling loops.
 
-## Current unified task list
+## Historical takeover task snapshot
+
+The live states and next actions are in [workstreams.md](workstreams.md). This retained takeover snapshot is historical; resolved credentials, native decisions and release steps must not be requested again from these older rows.
 
 | Original open item | Current truth and next action |
 | --- | --- |

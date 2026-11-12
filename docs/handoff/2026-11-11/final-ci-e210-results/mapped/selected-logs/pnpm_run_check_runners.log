@@ -1,0 +1,26 @@
+
+> openpresentation-workspace@ check:runners /private/tmp/opf-034
+> node --test scripts/run-tests.test.mjs scripts/run-checks.test.mjs
+
+✔ selectChecks runs every check: script in name order, minus the excluded ones, plus the included scripts (0.605084ms)
+✔ selectChecks fails on a stale or contradictory scripts/checks.json (0.197375ms)
+✔ the repository scripts/checks.json agrees with package.json (0.247792ms)
+✔ checkJobs defaults to min(4, cores) and validates OPF_CHECKS_JOBS (0.082791ms)
+✔ runPool never runs more than `jobs` at once, runs every check after a failure and keeps name order (40.285375ms)
+✔ --shard i/n splits the checks: every check in exactly one shard, in name order (MR-30) (124.69675ms)
+✔ selectTests puts *.test.mjs in the node:test batch and runs the other files by name, minus the excluded ones (1.322875ms)
+✔ selectTests fails on a stale or contradictory suites.json instead of silently dropping a test (0.211875ms)
+✔ the browser pattern matches browser suites and not look-alikes (0.08225ms)
+✔ selectTests treats nodeTest files as name-order scripts that run under node --test (0.135333ms)
+✔ RR-53: the contract suite is the full suite minus contractExclude, and a stale or unexplained exclusion fails (0.2135ms)
+✔ every package test directory agrees with its suites.json and its contract exclusions (2.813833ms)
+✔ run-tests runs the batch, then the scripts in order, stops at the first failure, and lists commands with --list (117.833167ms)
+✔ run-tests runs the nodeTest files under node --test, runs the contract suite with --suite, and takes the package directory with --dir (247.060834ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 406.329625

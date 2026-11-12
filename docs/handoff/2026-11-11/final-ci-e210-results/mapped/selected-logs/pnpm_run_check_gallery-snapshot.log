@@ -1,0 +1,14 @@
+
+> openpresentation-workspace@ check:gallery-snapshot /private/tmp/opf-034
+> node --test scripts/build-gallery-snapshot.test.mjs
+
+✔ every esbuild build of the gallery snapshot prefers the module entry (0.573ms)
+✔ a Node CommonJS bundle of jsonc-parser works with those mainFields (core's root depends on it) (10.414292ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46.414042

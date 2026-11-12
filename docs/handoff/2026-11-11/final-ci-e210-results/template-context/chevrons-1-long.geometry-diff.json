@@ -1,0 +1,362 @@
+[
+  {
+    "path": "/items/2/text/listEntries/0/text/richLines/0/fragments/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/text/listEntries/0/text/richLines/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/text/listEntries/0/text/richLines/1/fragments/0/width",
+    "before": 217.65333333333336,
+    "after": 217.65333333333334
+  },
+  {
+    "path": "/items/2/text/listEntries/0/text/richLines/2/fragments/0/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/text/listEntries/0/text/richLines/2/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/text/listEntries/0/text/richLines/3/fragments/0/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/0/text/richLines/3/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/0/text/richLines/4/fragments/0/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/0/text/richLines/4/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/1/text/richLines/0/fragments/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/text/listEntries/1/text/richLines/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/text/listEntries/1/text/richLines/1/fragments/0/width",
+    "before": 217.65333333333336,
+    "after": 217.65333333333334
+  },
+  {
+    "path": "/items/2/text/listEntries/1/text/richLines/2/fragments/0/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/text/listEntries/1/text/richLines/2/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/text/listEntries/1/text/richLines/3/fragments/0/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/1/text/richLines/3/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/1/text/richLines/4/fragments/0/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/1/text/richLines/4/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/2/text/richLines/0/fragments/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/text/listEntries/2/text/richLines/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/text/listEntries/2/text/richLines/1/fragments/0/width",
+    "before": 217.65333333333336,
+    "after": 217.65333333333334
+  },
+  {
+    "path": "/items/2/text/listEntries/2/text/richLines/2/fragments/0/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/text/listEntries/2/text/richLines/2/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/text/listEntries/2/text/richLines/3/fragments/0/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/2/text/richLines/3/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/2/text/richLines/4/fragments/0/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/2/text/richLines/4/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/3/text/richLines/0/fragments/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/text/listEntries/3/text/richLines/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/text/listEntries/3/text/richLines/1/fragments/0/width",
+    "before": 217.65333333333336,
+    "after": 217.65333333333334
+  },
+  {
+    "path": "/items/2/text/listEntries/3/text/richLines/2/fragments/0/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/text/listEntries/3/text/richLines/2/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/text/listEntries/3/text/richLines/3/fragments/0/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/3/text/richLines/3/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/3/text/richLines/4/fragments/0/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/text/listEntries/3/text/richLines/4/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/listColumns/0/text/listEntries/0/text/richLines/0/fragments/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/listColumns/0/text/listEntries/0/text/richLines/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/listColumns/0/text/listEntries/0/text/richLines/1/fragments/0/width",
+    "before": 217.65333333333336,
+    "after": 217.65333333333334
+  },
+  {
+    "path": "/items/2/listColumns/0/text/listEntries/0/text/richLines/2/fragments/0/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/listColumns/0/text/listEntries/0/text/richLines/2/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/listColumns/0/text/listEntries/0/text/richLines/3/fragments/0/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/listColumns/0/text/listEntries/0/text/richLines/3/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/listColumns/0/text/listEntries/0/text/richLines/4/fragments/0/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/listColumns/0/text/listEntries/0/text/richLines/4/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/listColumns/1/text/listEntries/0/text/richLines/0/fragments/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/listColumns/1/text/listEntries/0/text/richLines/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/listColumns/1/text/listEntries/0/text/richLines/1/fragments/0/width",
+    "before": 217.65333333333336,
+    "after": 217.65333333333334
+  },
+  {
+    "path": "/items/2/listColumns/1/text/listEntries/0/text/richLines/2/fragments/0/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/listColumns/1/text/listEntries/0/text/richLines/2/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/listColumns/1/text/listEntries/0/text/richLines/3/fragments/0/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/listColumns/1/text/listEntries/0/text/richLines/3/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/listColumns/1/text/listEntries/0/text/richLines/4/fragments/0/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/listColumns/1/text/listEntries/0/text/richLines/4/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/listColumns/2/text/listEntries/0/text/richLines/0/fragments/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/listColumns/2/text/listEntries/0/text/richLines/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/listColumns/2/text/listEntries/0/text/richLines/1/fragments/0/width",
+    "before": 217.65333333333336,
+    "after": 217.65333333333334
+  },
+  {
+    "path": "/items/2/listColumns/2/text/listEntries/0/text/richLines/2/fragments/0/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/listColumns/2/text/listEntries/0/text/richLines/2/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/listColumns/2/text/listEntries/0/text/richLines/3/fragments/0/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/listColumns/2/text/listEntries/0/text/richLines/3/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/listColumns/2/text/listEntries/0/text/richLines/4/fragments/0/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/listColumns/2/text/listEntries/0/text/richLines/4/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/listColumns/3/text/listEntries/0/text/richLines/0/fragments/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/listColumns/3/text/listEntries/0/text/richLines/0/width",
+    "before": 109.11999999999999,
+    "after": 109.12
+  },
+  {
+    "path": "/items/2/listColumns/3/text/listEntries/0/text/richLines/1/fragments/0/width",
+    "before": 217.65333333333336,
+    "after": 217.65333333333334
+  },
+  {
+    "path": "/items/2/listColumns/3/text/listEntries/0/text/richLines/2/fragments/0/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/listColumns/3/text/listEntries/0/text/richLines/2/width",
+    "before": 199.4666666666667,
+    "after": 199.46666666666667
+  },
+  {
+    "path": "/items/2/listColumns/3/text/listEntries/0/text/richLines/3/fragments/0/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/listColumns/3/text/listEntries/0/text/richLines/3/width",
+    "before": 208.85333333333335,
+    "after": 208.85333333333332
+  },
+  {
+    "path": "/items/2/listColumns/3/text/listEntries/0/text/richLines/4/fragments/0/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  },
+  {
+    "path": "/items/2/listColumns/3/text/listEntries/0/text/richLines/4/width",
+    "before": 193.01333333333335,
+    "after": 193.01333333333332
+  }
+]

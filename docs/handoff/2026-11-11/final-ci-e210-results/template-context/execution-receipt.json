@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+    "/tmp/opf-template-context-diagnostic-source02/compare.mjs",
+    "--old",
+    "/tmp/opf-template-old-e148",
+    "--new",
+    "/tmp/opf-034",
+    "--out",
+    "/tmp/opf-template-context-compare02"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 5.2497774580000005,
+  "driverSha256": "573fa3c6f58a23d63f6b721cc961e223c9dd7c9a59fb96c6a6f5df0cd8814302",
+  "artifacts": [
+    {
+      "file": "stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "stdout.log",
+      "bytes": 2597,
+      "sha256": "4025e0fe53c627c06315723c752123fac9e9b0db188df1aa91482fd4ef6879b1"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "authority": "/tmp/opf-034-lint-only-delta01/runtime-after.json",
+  "authorityBytes": 99609,
+  "authoritySha256": "f6ad61498e729e62ad2396c67bbe6b8671d182f14e4cd0acd87e928b4781b0ab",
+  "filesVerified": 609,
+  "unchanged": true,
+  "head": "1f230e3bb28519604338f85da3f6e5471b0e904b"
+}
