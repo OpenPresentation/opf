@@ -75,7 +75,7 @@ A change that touches several packages is one pull request with one `changes/<sl
 
 ### Evidence
 
-Raw evidence (archives, screenshots, logs, saved decks, receipts) stays out of the tree: keep it on an evidence-only branch that is never merged and link it from the pull request by commit; commit only a short written result. `pnpm check:evidence-size` enforces it; see [AGENTS.md](./AGENTS.md#evidence-stays-out-of-main).
+Raw evidence (archives, screenshots, logs, saved decks, receipts) stays out of the tree: attach it to the pull request or upload it as a workflow artifact (an evidence-only branch that is never merged, linked by commit, only when a reviewer has to read it from git); commit only a short written result. `pnpm check:evidence-size` enforces it; see [AGENTS.md](./AGENTS.md#evidence-stays-out-of-main).
 
 ### Generated trackers
 
