@@ -1,0 +1,25 @@
+{
+  "verdict": "SOURCE ACCEPTED; no concrete blocker found",
+  "base": "933cdd1aae874b9553a5321b86049a6779dcea07",
+  "patch": {
+    "bytes": 11447,
+    "sha256": "9ba364c5af06181b9f23c27c89ff4c37ab5356e6a466255e9f6a7a8b2b199862"
+  },
+  "verified": {
+    "changedPins": 2,
+    "protectedBaseExact": 14,
+    "ordinaryLocatorTokenChanges": 24,
+    "wholeTestInverseToBaseExact": true,
+    "hasTouchTrueOwnedContexts": true,
+    "sourcePlaygroundLayoutCounts": [
+      4,
+      18,
+      2
+    ],
+    "fineLayoutEditorBodyExact": true,
+    "secondaryButtonForceActionExact": true,
+    "allOtherTestBytesExact": true
+  },
+  "evidence": "Retained event03 receipt SHA93870d10038d49b0618f078aaecebcfd23d592b8a211184fb54da0ccbe234a98 confirms mouse wrong-target/unexpanded vs touch Details-target/expanded; no JS policy cancellation or new CSS cause claimed.",
+  "limits": "Source-only peer; whole corrective file UNRUN, original Windows preview-timeout cause UNKNOWN. No imports/tests/build/browser/input/source edits."
+}
