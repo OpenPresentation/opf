@@ -322,6 +322,77 @@ try {
 		await page.waitForFunction((id) => window.host.context.at(-1)?.structuredContent?.document?.design?.theme === id, chosen, { timeout: 15000 });
 	});
 
+	await run("renames the deck over its row at 1280, 600 and 320px: Save, Cancel, Escape, blur keeps the draft, one undoable edit", async () => {
+		const named = { ...deck, name: "Rename me" };
+		await open({ document: named }, "light", { hostName: "Claude" });
+		await view().locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+		const frame = page.frame({ url: /\/view$/ });
+		const input = view().locator("#deck-title input");
+		const editing = view().locator(".opf-title[data-editing]");
+		const lastName = () => page.evaluate(() => window.host.context.at(-1)?.structuredContent?.document?.name);
+		for (const width of [1280, 600, 320]) {
+			await page.evaluate((px) => {
+				document.getElementById("view").style.width = `${px}px`;
+				send({ method: "ui/notifications/host-context-changed", params: { containerDimensions: { width: px, maxHeight: 640 } } });
+			}, width);
+			await page.waitForTimeout(300);
+			const before = await input.inputValue();
+			await input.click();
+			await editing.waitFor();
+			const placed = await frame.evaluate(() => {
+				const overlay = document.querySelector(".opf-title[data-editing]").getBoundingClientRect();
+				const row = document.querySelector("[data-opf-title-row]");
+				const outer = row.getBoundingClientRect();
+				const edge = getComputedStyle(row);
+				// The padding box: the row keeps its own border (the bar's rule under it).
+				const box = { left: outer.left + parseFloat(edge.borderLeftWidth), top: outer.top + parseFloat(edge.borderTopWidth), right: outer.right - parseFloat(edge.borderRightWidth), bottom: outer.bottom - parseFloat(edge.borderBottomWidth) };
+				const buttons = [...document.querySelectorAll(".opf-title[data-editing] .opf-title-button")].map((button) => { const rect = button.getBoundingClientRect(); return { text: button.textContent, width: rect.width, height: rect.height, right: rect.right }; });
+				const shell = document.getElementById("opf-deck").getBoundingClientRect();
+				return { row: row.id || row.className, overlay: [overlay.left, overlay.top, overlay.right, overlay.bottom], box: [box.left, box.top, box.right, box.bottom], buttons, client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth, shellTop: shell.top, hidden: [...row.children].filter((child) => !child.contains(document.querySelector(".opf-title")) && getComputedStyle(child).visibility !== "hidden" && child.getBoundingClientRect().width > 0).length };
+			});
+			assert.equal(placed.row, width < 640 ? "deck-title-row" : "deck-bar", `${width}px: the edit opens over the ${width < 640 ? "name's own row" : "bar"}`);
+			assert.deepEqual(placed.overlay.map(Math.round), placed.box.map(Math.round), `${width}px: the edit covers its row exactly`);
+			assert.equal(placed.hidden, 0, `${width}px: the row's other controls give way`);
+			assert.deepEqual(placed.buttons.map((button) => button.text), ["Save", "Cancel"]);
+			assert.ok(placed.buttons.every((button) => button.right <= placed.client), `${width}px: Save and Cancel are inside the frame`);
+			assert.ok(placed.scroll <= placed.client && placed.overlay[1] >= placed.shellTop, `${width}px: nothing is clipped or scrolls sideways`);
+			if (width === 320) assert.ok(placed.buttons.every((button) => button.width >= 44 && button.height >= 44), `320px: Save and Cancel are at least 44px (${JSON.stringify(placed.buttons)})`);
+			await input.fill(`Renamed at ${width}`);
+			await shoot(`rename-${width}`);
+			// Leaving the field keeps the edit open with the draft.
+			await view().locator("#deck-stage").click({ position: { x: 4, y: 4 } });
+			assert.equal(await editing.count(), 1, `${width}px: blur does not close the edit`);
+			assert.equal(await input.inputValue(), `Renamed at ${width}`, "and keeps the draft");
+			await view().locator('.opf-title-button[data-action="save"]').click();
+			await editing.waitFor({ state: "detached" });
+			await page.waitForFunction((name) => window.host.context.at(-1)?.structuredContent?.document?.name === name, `Renamed at ${width}`, { timeout: 15000 });
+			// One undoable edit: Undo puts the name back, Redo brings the new one.
+			await view().locator("#deck-undo").click();
+			await page.waitForFunction((name) => window.host.context.at(-1)?.structuredContent?.document?.name === name, before, { timeout: 15000 });
+			await view().locator("#deck-redo").click();
+			await page.waitForFunction((name) => window.host.context.at(-1)?.structuredContent?.document?.name === name, `Renamed at ${width}`, { timeout: 15000 });
+		}
+		// Cancel and Escape put the name back and change nothing.
+		for (const close of ["cancel", "escape"]) {
+			const contexts = await page.evaluate(() => window.host.context.length);
+			// (The field kept the focus after Save, so typing, not a click, opens the edit again.)
+			await input.click();
+			await input.fill(`Not kept (${close})`);
+			await editing.waitFor();
+			if (close === "cancel") await view().locator('.opf-title-button[data-action="cancel"]').click();
+			else await input.press("Escape");
+			await editing.waitFor({ state: "detached" });
+			assert.equal(await input.inputValue(), "Renamed at 320");
+			await page.waitForTimeout(1500);
+			assert.equal(await page.evaluate(() => window.host.context.length), contexts, `${close}: nothing changed, so nothing new goes to the model`);
+		}
+		assert.equal(await lastName(), "Renamed at 320");
+		await page.evaluate(() => {
+			document.getElementById("view").style.width = "";
+			send({ method: "ui/notifications/host-context-changed", params: { containerDimensions: { width: 960, maxHeight: 640 } } });
+		});
+	});
+
 	await run("fits a frame as narrow as a chat column: the bar stays one row, nothing scrolls sideways", async () => {
 		// Claude's chat column frames the view about 660 CSS pixels wide (860 on a wide desktop window); 420 is a phone.
 		await view().locator("body").press("Escape");

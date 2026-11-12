@@ -375,9 +375,9 @@ function unavailable(): ToolResult | undefined {
 	return undefined;
 }
 
-/** The person has an edit in progress: text open on the slide, typing the source pane has not applied yet, or a source draft. */
-const userTyping = () => Boolean((editor as OpfEditor).canvas?.editingPath != null || sourcePending());
-const BUSY = "The user is typing in the viewer (an edit on the slide or in the source is not finished). Nothing was applied. Try again after the user's next message.";
+/** The person has an edit in progress: text open on the slide, typing the source pane has not taken in yet, or a rename. */
+const userTyping = () => Boolean((editor as OpfEditor).canvas?.editingPath != null || sourcePending() || shell.querySelector(".opf-title[data-editing]"));
+const BUSY = "The user is typing in the viewer (an edit on the slide, in the source or of the deck's name is not finished). Nothing was applied. Try again after the user's next message.";
 
 /**
  * The open deck's state, bounded whatever the deck: each name, id, title and finding message at most MAX_TEXT characters, and the
@@ -628,6 +628,10 @@ function layOut(): void {
 	const box = (context.containerDimensions ?? {}) as { width?: number; maxWidth?: number; height?: number; maxHeight?: number };
 	const width = Math.min(box.width ?? box.maxWidth ?? Number.POSITIVE_INFINITY, window.innerWidth || Number.POSITIVE_INFINITY);
 	root.dataset.size = width < 400 ? "compact narrow tiny" : width < 640 ? "compact narrow" : width < 860 ? "compact" : "wide";
+	// Renaming opens over the row the name sits in: the whole bar while it is one row, the name's own row once the bar wraps.
+	const ownRow = width < 640;
+	$("deck-title-row").toggleAttribute("data-opf-title-row", ownRow);
+	(shell.querySelector(".deck-bar") as HTMLElement).toggleAttribute("data-opf-title-row", !ownRow);
 	// Inline, the view is as tall as its content; a host that fixes the height, and full screen or the side panel (also when the host
 	// sends no dimensions with it), get a view that fills the frame.
 	root.dataset.fill = String(context.displayMode === "fullscreen" || typeof box.height === "number");

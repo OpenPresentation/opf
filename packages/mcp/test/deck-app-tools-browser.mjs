@@ -342,6 +342,12 @@ try {
 		assert.equal(typing.code, "busy", typing.text);
 		assert.match(typing.text, /typing.*Try again after the user's next message/);
 		await view("type").locator("body").press("Escape");
+		// A rename in progress counts as typing too.
+		await view("type").locator("#deck-title input").click();
+		await view("type").locator(".opf-title[data-editing]").waitFor();
+		assert.equal((await call("type", "edit_deck", { expectedRevision: revision, operations: [{ op: "replace", path: "/name", value: "x" }] })).code, "busy", "a rename is open");
+		await view("type").locator("#deck-title input").press("Escape");
+		await view("type").locator(".opf-title[data-editing]").waitFor({ state: "detached" });
 		// Typing in the source pane that it has not applied yet.
 		const source = view("type").locator("#deck-source .cm-content");
 		await source.click();
@@ -445,6 +451,9 @@ try {
 		const greyed = await frameOf("a").evaluate(() => ({ opacity: getComputedStyle(document.querySelector(".deck-bar")).opacity, selection: String(getSelection()), sync: document.getElementById("deck-sync").textContent, focus: document.activeElement === document.body }));
 		assert.deepEqual(greyed, { opacity: "0.5", selection: "", sync: "", focus: true }, "greyed, with nothing selected or shared");
 		assert.equal(await view("a").locator("#deck-send").isDisabled(), true);
+		// A rename is not possible there: the name is read-only and the row takes no clicks.
+		assert.equal(await frameOf("a").evaluate(() => { const input = document.querySelector("#deck-title input"); return !input || input.readOnly || input.disabled || input.getAttribute("aria-disabled") === "true"; }), true, "the name cannot be edited");
+		assert.equal(await frameOf("a").evaluate(() => getComputedStyle(document.querySelector(".deck-bar")).pointerEvents), "none");
 		assert.equal((await call("a", "edit_deck", { expectedRevision: "sha256:x", operations: [{ op: "replace", path: "/name", value: "x" }] })).code, "superseded");
 		assert.equal((await call("a", "read_deck")).code, "superseded");
 		assert.equal((await call("a", "select_slide", { index: 0 })).code, "superseded");
