@@ -4,7 +4,7 @@ export const APP_RESOURCE_FRAME_LIMIT = 10 * 1024 * 1024;
 
 // Match server.ts's actual ui://opf/deck resource result. Tests compare this with the live server result.
 export function appResourceMessage(html, id = Number.MAX_SAFE_INTEGER) {
-  return {jsonrpc:"2.0",id,result:{contents:[{uri:"ui://opf/deck",mimeType:"text/html;profile=mcp-app",text:html,_meta:{ui:{prefersBorder:false}}}]}};
+  return {jsonrpc:"2.0",id,result:{contents:[{uri:"ui://opf/deck",mimeType:"text/html;profile=mcp-app",text:html,_meta:{ui:{prefersBorder:false,preferredDisplayMode:"fullscreen"}}}]}};
 }
 
 export function appResourceFrame(html, id) {
