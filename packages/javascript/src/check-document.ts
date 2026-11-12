@@ -645,6 +645,21 @@ function collapseAuthoringShapes(document: unknown, findings: Finding[]): void {
 		const stem = entry.validation.schemaPath.replace(/if$/, '');
 		if (findings.some((other) => other !== entry && schema(other) && other.path.startsWith(entry.path) && typeof other.validation?.schemaPath === 'string' && (other.validation.schemaPath.startsWith(`${stem}then`) || other.validation.schemaPath.startsWith(`${stem}else`)))) findings.splice(index, 1);
 	}
+	// 4. A 0.33 anchored overlay size in pixels above the schema's maximum of 8 (and up to 1280, the `widthPx` maximum, so the rename stays
+	// valid): the error says what the value most likely is and carries the rename opf/shape-anchor-size-unit offers below 8.
+	for (const [index, entry] of findings.entries()) {
+		if (!schema(entry) || entry.validation?.keyword !== 'maximum') continue;
+		const match = /^(\/slides\/\d+\/shapes\/\d+\/at)\/(width|height)$/.exec(entry.path);
+		const at = match?.[1] ? valueAt(match[1]) : undefined, key = match?.[2], size = key && isRecord(at) ? at[key] : undefined;
+		if (!key || !isRecord(at) || typeof size !== 'number' || !(size > 8 && size <= 1280) || Object.hasOwn(at, `${key}Px`)) continue;
+		const px = `${key}Px`;
+		findings[index] = {
+			...entry,
+			message: `at.${key} is ${size}, but it is a fraction of the block, at most 8: did you mean "${px}"?`,
+			help: `Did you mean "${px}"? "${key}" is a fraction of the block (1 is its own size, up to 8); a size in pixels is "${px}". A 0.33 deck wrote pixels under "${key}".`,
+			fixes: [{ id: 'rename', title: `Rename ${key} to ${px}`, kind: 'patch' as const, safe: false, patch: [{ op: 'move' as const, from: entry.path, path: `${entry.path}Px` }] }],
+		};
+	}
 	// The missing `items` of a `type: "list"` that carries `bullets`: the semantic finding beside it says what to write.
 	for (let index = findings.length - 1; index >= 0; index--) {
 		const entry = findings[index];

@@ -118,6 +118,11 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { catalogs: { custom: { iconSets: { brand: { name: "Brand", license: "MIT", copyright: "Copyright (c) 2026 Example", viewBox: [0, 0, 24, 24], style: "stroke", icons: { star: "M12 3l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 10l6-1z" } } } } }, slides: [{ title: "Steps", items: [{ text: "Sign up", icon: "brand:star" }, { text: "Invite the team" }], numbering: "arabic" }] },
     { catalogs: { custom: { iconSets: { brand: { name: "Brand", license: "MIT", copyright: "Copyright (c) 2026 Example", viewBox: [0, 0, 24, 24], style: "stroke", icons: { star: "M12 3l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 10l6-1z" } } } } }, slides: [{ title: "Steps", items: [{ text: "Sign up", icon: "brand:star" }, { text: "Invite the team" }] }] },
   ),
+  "opf/shape-off-slide": ex(
+    "Write `x` and `y` as fractions of the slide (0.7 for 70%), so at least part of the shape is on it; a shape may hang over an edge.",
+    { title: "Plan", text: "Three regions go live in March.", shapes: [{ shape: "rect", text: "Draft", x: 70, y: 10, width: 0.2, height: 0.1 }] },
+    { title: "Plan", text: "Three regions go live in March.", shapes: [{ shape: "rect", text: "Draft", x: 0.7, y: 0.1, width: 0.2, height: 0.1 }] },
+  ),
   "opf/chart-label-collision": ex(
     "Give each reference its own value or put one label at the other end of its line with `labelPosition`, so no two labels share a place.",
     { title: "Results", chart: { type: "line", data: { columns: ["Quarter", "Actual"], rows: [["Q1", 10], ["Q2", 20], ["Q3", 30]] }, referenceLines: [{ value: 20, label: "Plan" }, { value: 20, label: "Plan" }, { value: 20, label: "Plan" }] } },

@@ -253,8 +253,9 @@ function enUkIssues(language: unknown, path: string): ValidationIssue[] {
   return at ? [semanticIssue(at, EN_UK_MESSAGE, { replacement: "en-GB" })] : [];
 }
 
-// 0.33 wrote an anchored overlay size in pixels under `width` and `height`; 0.34 reads fractions, so an old deck still validates. A value above 4
-// (the format documents 1 and 1.08) and up to 1280 (the `widthPx` maximum, so the rename stays valid) is taken for a pixel size.
+// 0.33 wrote an anchored overlay size in pixels under `width` and `height`; 0.34 reads fractions. A value above 4 (the format documents 1 and
+// 1.08) and up to 8 (the schema's maximum) still validates and is taken for a pixel size; above 8 it is a schema error whose finding carries the
+// same rename (check-document.ts, collapseAuthoringShapes).
 function overlayAnchorSizeWarnings(value: unknown): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   if (isRecord(value) && Array.isArray(value.slides)) value.slides.forEach((slide, index) => {
@@ -262,7 +263,7 @@ function overlayAnchorSizeWarnings(value: unknown): ValidationIssue[] {
       const at = isRecord(entry) ? entry.at : undefined;
       if (isRecord(at)) for (const key of ["width", "height"]) {
         const size = at[key];
-        if (typeof size === "number" && size > 4 && size <= 1280 && !hasOwn(at, `${key}Px`))
+        if (typeof size === "number" && size > 4 && size <= 8 && !hasOwn(at, `${key}Px`))
           issues.push(semanticIssue(`/slides/${index}/shapes/${shapeIndex}/at/${key}`, `at.${key} is ${size}, a fraction; pixels are ${key}Px`, { code: "shape-anchor-size-unit", key, size }));
       }
     });

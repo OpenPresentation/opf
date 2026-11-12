@@ -82,8 +82,8 @@ const fails = (action, code) => assert.throws(action, (error) => error.code === 
 // an attached shape keeps its anchor; detaching frees it
 {
   const editor = session();
-  setOverlayFrame(editor, "slides.0.shapes.1", { offset: 20, width: 60, height: 60 });
-  assert.deepEqual(editor.presentation.slides[0].shapes[1].at, { block: "alpha", edge: "top", offset: 20, width: 60, height: 60 });
+  setOverlayFrame(editor, "slides.0.shapes.1", { offset: 20, widthPx: 60, heightPx: 60 });
+  assert.deepEqual(editor.presentation.slides[0].shapes[1].at, { block: "alpha", edge: "top", offset: 20, widthPx: 60, heightPx: 60 });
   fails(() => setOverlayFrame(editor, "slides.0.shapes.1", { x: 0.2 }), "overlay-anchored");
   detachOverlay(editor, "slides.0.shapes.1", { x: 0.7, y: 0.2, width: 0.05, height: 0.09 });
   assert.deepEqual(editor.presentation.slides[0].shapes[1], { id: "badge", shape: "ellipse", x: 0.7, y: 0.2, width: 0.05, height: 0.09 });

@@ -39,6 +39,12 @@ export interface DimensionSwitchOptions {
   slideIndex?: number;
   /** blocks: the complete block (`slides.0.blocks.1`) or one-payload slide/region to replace. charts: the block holding the chart (default: the slide's first chart). image-treatments: the image block. */
   path?: string | string[];
+  /**
+   * charts: a chart's explicit `referenceLines` are never dropped silently. A switch to a type that cannot draw them (no single value
+   * axis, or no secondary axis for a `secondary` reference) throws `chart-reference-lines-unsupported` (`details.count`, `details.path`).
+   * true removes exactly those references in the same step and names them in the result's `loss`.
+   */
+  removeReferenceLines?: boolean;
   /** A gallery item's catalog record, embedded in the same transaction (under the group of `recordSource`, else `custom`) when it is not embedded yet. */
   record?: Record<string, unknown> & { id: string };
   /** The catalog source of `record` (for example "https://www.pptx.gallery"). */

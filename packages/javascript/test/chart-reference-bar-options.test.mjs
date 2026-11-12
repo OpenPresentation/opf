@@ -18,7 +18,12 @@ test('active bar legends and axis titles reserve their real edges while targets 
 });
 test('fixed-frame bar references and plot do not depend on title or subtitle prose',()=>{
  const c=chart(),snapshot=(title,subtitle)=>{const s=composeSlide({title,subtitle,chart:c},{width:1280,height:720,layout:{name:'Fixed chart',regions:[{name:'title',size:.2},{name:'body',size:.8,accepts:['chart'],flow:'none'}]},recompose:false,fill:false}),i=s.items.find(x=>x.field==='chart');return {box:i.box,chart:i.chart};};
- const before=snapshot('Actual above 99%','North below 1000 in 2023');assert.equal(before.chart.layer?.references?.lines.length,1);assert.deepEqual(before,snapshot('Neutral title','Neutral subtitle'));
+ const before=snapshot('Actual above 99%','North below 1000 in 2023'),neutral=snapshot('Neutral title','Neutral subtitle');assert.equal(before.chart.layer?.references?.lines.length,1);
+ // A reference never changes emphasis: the prose that names North focuses it, exactly as on the same chart without references.
+ // Everything else (box, axis, plot, references and their labels) is the same as under neutral prose.
+ const {referenceLines:_lines,...plain}=c,unreferenced=composeSlide({title:'Actual above 99%',subtitle:'North below 1000 in 2023',chart:plain},{width:1280,height:720,layout:{name:'Fixed chart',regions:[{name:'title',size:.2},{name:'body',size:.8,accepts:['chart'],flow:'none'}]},recompose:false,fill:false}).items.find(x=>x.field==='chart');
+ assert.ok(before.chart.layer.focus);assert.deepEqual(before.chart.layer.focus,unreferenced.chart.layer.focus);assert.equal(neutral.chart.layer.focus,undefined);
+ const {focus:_focus,...layer}=before.chart.layer;assert.deepEqual({...before,chart:{...before.chart,layer}},neutral);
 });
 
 test('bare and simple option bars retain references without relaxing the legacy geometry guard',()=>{

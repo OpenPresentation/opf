@@ -5,6 +5,7 @@
 //
 // Browser-safe and synchronous: no file access, no network, no fonts or DOM.
 import { chartOptionTarget } from './chart-options.js';
+import { CHART_REFERENCE_TYPES } from './chart-reference-types.js';
 import { formatVariableNumber } from './variables.js';
 
 /** A scalar data cell (chart data, dataset rows). */
@@ -44,6 +45,7 @@ export type DataDiagnosticCode =
   | 'chart-highlight-adapted'
   | 'chart-series-dropped'
   | 'chart-reference-axis-unavailable'
+  | 'chart-reference-unsupported-type'
   | 'table-highlight-unknown-name'
   | 'number-format-invalid';
 
@@ -593,6 +595,9 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
       ...secondaryLines.map(() => ({ role: 'line' as const, axis: 'secondary' as const })),
     ];
   }
+  // An explicit reference is never dropped silently: a type without one value axis for every series is an error that names the property.
+  if (record(chart) && Array.isArray(chart.referenceLines) && chart.referenceLines.length > 0 && typeof chart.type === 'string' && !CHART_REFERENCE_TYPES.has(chart.type))
+    diagnostics.push({code:'chart-reference-unsupported-type',severity:'error',path:at(base,'referenceLines'),message:`referenceLines needs a chart with one value axis for every series (${[...CHART_REFERENCE_TYPES].join(', ')}); a '${chart.type}' chart has none. Remove referenceLines or change the chart type.`});
   if (record(chart) && Array.isArray(chart.referenceLines)) chart.referenceLines.forEach((entry, index) => {
     if (record(entry) && entry.axis === 'secondary' && !combo?.some(series => series.axis === 'secondary')) diagnostics.push({code:'chart-reference-axis-unavailable',severity:'error',path:at(base,'referenceLines',index,'axis'),message:'A secondary reference requires a combo chart with a plotted line series on its secondary value axis.'});
   });

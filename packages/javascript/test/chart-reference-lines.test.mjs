@@ -13,7 +13,15 @@ test('schema: six types, optional empty array, finite values, labels, styles and
  for(const type of ['column','bar','line','line-with-markers','area','combo'])assert.deepEqual(errorsOf(check(deck(chart({type,referenceLines:[{value:25,label:'Target',stroke:{color:{color:'accent1',lighten:0.2},width:64,dash:'dot'}}]})))),[],type);
  for(const referenceLines of [undefined,[]])assert.deepEqual(errorsOf(check(deck(chart({type:'pie',referenceLines})))),[]);
  for(const referenceLines of [[{value:'25'}],[{value:NaN}],[{value:Infinity}],[{}],[{value:25,label:''}],[{value:25,label:'  '}],[{value:25,labelPosition:'start'}],[{value:25,stroke:{width:-1}}],[{value:25,stroke:{width:65}}],[{value:25,stroke:{dash:'dashed'}}],[{value:25,axis:'primary'}]])assert.ok(errorsOf(check(deck(chart({referenceLines})))).length,JSON.stringify(referenceLines));
- for(const type of ['pie','stacked-column','scatter','histogram'])assert.ok(errorsOf(check(deck(chart({type,referenceLines:[{value:25}]})))).length,type);
+ // An unsupported type is one located error that names the property and the six types that can draw it, never a silent drop.
+ // The stacked and 100% stacked types are among the unsupported ones.
+ for(const type of ['pie','stacked-column','stacked-bar','stacked-line','stacked-line-with-markers','stacked-area','100pct-stacked-column','scatter','histogram','radar']){
+  const found=errorsOf(check(deck(chart({type,referenceLines:[{value:25}]}))));
+  assert.equal(found.length,1,type+JSON.stringify(found));assert.equal(found[0].ruleId,'opf/chart-reference-unsupported-type');assert.equal(found[0].path,'/slides/0/chart/referenceLines');
+  assert.match(found[0].message,new RegExp(`a '${type}' chart has none`));assert.ok(found[0].message.includes('(column, bar, line, line-with-markers, area, combo);'),found[0].message);
+ }
+ // The schema no longer restricts type: an unsupported type is not also a schema enum error at /type.
+ assert.ok(!errorsOf(check(deck(chart({type:'pie',referenceLines:[{value:25}]})))).some(f=>f.ruleId==='opf/schema'),'no schema error');
  const bad=errorsOf(check(deck(chart({referenceLines:[{value:25,axis:'secondary'}]}))));
  assert.ok(bad.some(f=>f.ruleId==='opf/chart-reference-axis-unavailable'&&JSON.stringify(f).includes('/slides/0/chart/referenceLines/0/axis')),JSON.stringify(bad));
  const missing=warningsOf(check({...deck(chart({referenceLines:[{value:25,stroke:{color:'var:missing'}}]})),variables:{}},{only:['format','references']}));
@@ -60,8 +68,19 @@ test('titles/subtitles never synthesize lines or period bands in any language',(
 test('fixed chart/data/frame keeps reference/plot/end-label geometry when prose matches a series',()=>{
  const c=chart({data:{columns:['Quarter','Enterprise','Consumer'],rows:[['Q1',10,18],['Q2',15,13],['Q3',25,20]]},referenceLines:[{value:12,label:'Target'}]});
  // Explicit layout tracks fix the chart frame while only title/subtitle prose changes.
- const snapshot=(title,subtitle)=>{const s=composeSlide({title,subtitle,chart:c},{width:1280,height:720,layout:{name:'Fixed chart',regions:[{name:'title',size:.2},{name:'body',size:.8,accepts:['chart'],flow:'none'}]},recompose:false,fill:false});const i=s.items.find(i=>i.field==='chart');assert.equal(i.chart.layer.focus,undefined);return {box:i.box,axis:i.chart.valueAxis,plot:i.chart.layer.plot,refs:i.chart.layer.references,ends:i.chart.layer.endLabels};};
- assert.deepEqual(snapshot('Enterprise above 100','Consumer below 5 in 2023'),snapshot('Neutral title','Neutral subtitle'));
+ // The title may repaint the chart (its focus), but the plot, the reference and every label box stay where they are.
+ const compose=(title,subtitle,value=c)=>{const s=composeSlide({title,subtitle,chart:value},{width:1280,height:720,layout:{name:'Fixed chart',regions:[{name:'title',size:.2},{name:'body',size:.8,accepts:['chart'],flow:'none'}]},recompose:false,fill:false});return s.items.find(i=>i.field==='chart');};
+ const snapshot=i=>({box:i.box,axis:i.chart.valueAxis,plot:i.chart.layer.plot,refs:i.chart.layer.references,ends:i.chart.layer.endLabels});
+ const named=compose('Enterprise above 100','Consumer below 5 in 2023'),neutral=compose('Neutral title','Neutral subtitle');
+ assert.deepEqual(snapshot(named),snapshot(neutral));
+ // Every series name keeps its regular weight on a chart with references, so a focused name cannot widen the gutter.
+ assert.ok(named.chart.layer.endLabels.entries.every(entry=>entry.bold!==true),JSON.stringify(named.chart.layer.endLabels.entries));
+ // A reference never changes which marks a chart emphasizes: the title's focus is the one the same chart has without the reference.
+ const {referenceLines:_lines,...plain}=c;
+ assert.deepEqual(named.chart.layer.focus,compose('Enterprise above 100','Consumer below 5 in 2023',plain).chart.layer.focus);assert.ok(named.chart.layer.focus);assert.equal(neutral.chart.layer.focus,undefined);
+ // An explicit empty highlight switches the derived emphasis off, on a chart as on a table.
+ assert.equal(compose('Enterprise above 100','Consumer below 5 in 2023',{...c,highlight:{series:[]}}).chart.layer.focus,undefined);
+ assert.deepEqual(errorsOf(check(deck({...c,highlight:{categories:[]}}))),[]);
 
 });
 test('sibling scale sharing includes every explicit target and refreshes line placement against final plot',()=>{

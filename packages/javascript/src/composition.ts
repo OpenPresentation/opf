@@ -98,7 +98,7 @@ export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_
 import {layoutDiagram,type ComposedDiagram,type DiagramIssue,type DiagramMeasure} from './diagram.js';
 import {composeShape,composeStroke,isPresetShape,isShapeBlock,presetAspect,presetMask,sketchStroke,stackedText,PICTURE_STROKE_WIDTH,SHAPE_BLOCK_KEYS,type ComposedShape,type ComposedStroke} from './shape-block.js';
 import {chartPointGeometry} from './chart-point-anchors.js';
-import {composeOverlayShapes,hasOverlayShapes,representableBox,type ComposedOverlayEntry,type ComposedOverlayShape} from './overlay-shapes.js';
+import {composeOverlayShapes,hasOverlayShapes,outsideCanvas,representableBox,type ComposedOverlayEntry,type ComposedOverlayShape} from './overlay-shapes.js';
 import {ICON_VIEWBOX,documentIcons,iconColors,parseIconReference,placeIconCommands,resolveIcon,type IconPaint,type IconPart,type ResolvedIcon} from './icons.js';
 export {ICON_CHIP_TINT,ICON_MIN_CONTRAST,ICON_VIEWBOX,documentIcons,embedIcons,ensureIcons,iconColors,iconFromSvg,iconPathCommands,iconPathData,iconsPending,nearIconNames,parseIconReference,placeIconCommands,resolveIcon,type IconCommand,type IconOptions,type IconPaint,type IconPart,type IconReference,type IconResolution,type IconSetIcon,type IconSetLoader,type IconSetRecord,type ResolvedIcon} from './icons.js';
 export {DIAGRAM_BORDER_MIN_CONTRAST,DIAGRAM_LINE_MIN_CONTRAST,DIAGRAM_MAX_EDGES,DIAGRAM_SHAPE_FAMILIES,DIAGRAM_SECONDARY_FLOOR,DIAGRAM_SOURCE_LIMIT,DIAGRAM_SURFACE_ALT_MIX,DIAGRAM_SURFACE_MIX,DIAGRAM_SYNTAXES,checkDiagram,diagramPalette,diagramPayload,diagramsPending,ensureDiagrams,layoutDiagram,paintDiagram,paintDiagramGroup} from './diagram.js';
@@ -132,8 +132,10 @@ export interface LayoutDiagnostic {
    * composition reports them and does not refuse the slide): `chart-label-collision` for an explicit reference label that meets another label
    * or a data line on both of its sides (drawn at its preferred place, its text and value kept), and `timeline-period-short` for a timeline
    * period shorter than its marker (LH-16's proportions are the author's).
+   * `shape-off-slide` for an overlay shape or an image callout that lies wholly outside the slide, so nothing of it is drawn (advice, not an
+   * overflow: a strict composition still composes it; a hidden shape is exempt, and a rotated one is judged by the circle through its corners).
    */
-  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "chart-label-collision" | "timeline-period-short";
+  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "chart-label-collision" | "timeline-period-short" | "shape-off-slide";
   path: string;
   message: string;
   /**
@@ -6554,6 +6556,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // WI-3 (P33): a slide composed with no layout shows its pictures whole unless a design or the block sets a fit: the default
   // fit of automatic composition is `contain`, a placed (edge) picture and every layout keep the engine default `cover`.
   const fitImageCallout = (text: string, box: LayoutBox, calloutPath: string, settings: Composition): ComposedImageCallout => {
+    // A callout wholly outside the slide draws nothing: usually a percent or a pixel written where a fraction belongs. It is advice, not
+    // an overflow: a strict composition (overflow: error) still composes it.
+    if (outsideCanvas(box, { width, height })) imageCalloutDiagnostics.push({ code: 'shape-off-slide', path: calloutPath, message: "This image callout lies wholly outside the slide, so nothing of it is drawn. x and y are fractions of the picture's frame: 0.2 is 20% of its width." });
     const inset = 10 * scale, floor = Math.max(contentNominalSize('text'), settings.minFontSize ?? 16) * scale;
     const available = { x: box.x + inset, y: box.y + inset, width: Math.max(scale, box.width - 2 * inset), height: Math.max(scale, box.height - 2 * inset) };
     const limit = Math.max(floor, Math.min(2 * floor, (settings.maxFontSize ?? Infinity) * scale));
@@ -7834,7 +7839,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let valueAxis = axisFor(layer?.header?.height ?? 0);
     // LH-105, LH-113: the series or categories the slide names are the chart's focus (chart-focus.ts): the title's, else what its other
     // texts, list entries, quotes and chart alts name together; a focus replaces the small chart's last-point emphasis.
-    const focus = drawn.data.ok && !references.length ? chartSlideFocus(drawn.chart, drawn.data, {sources: focusSources(), ...(language !== undefined ? {language} : {})}) : undefined;
+    const focus = drawn.data.ok ? chartSlideFocus(drawn.chart, drawn.data, {sources: focusSources(), ...(language !== undefined ? {language} : {})}) : undefined;
     if (focus) {
       const small = layer?.small ? (({emphasis: _emphasis, ...rest}) => rest)(layer.small) : undefined;
       layer = {...layer, ...(small ? {small} : {}), focus};
@@ -11354,7 +11359,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   diagnostics.push(...imageCalloutDiagnostics);
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
   const failures = diagnostics.filter(diagnostic => {
-    if(diagnostic.code==='chart-label-collision'||diagnostic.code==='timeline-period-short')return false;
+    if(diagnostic.code==='chart-label-collision'||diagnostic.code==='timeline-period-short'||diagnostic.code==='shape-off-slide')return false;
     if(composition.overflow==='error')return true;
     let path = diagnostic.path;
     while (path) {

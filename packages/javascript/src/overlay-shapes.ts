@@ -429,6 +429,9 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
     }
     if (!placed) return;
     const shape = composeShape(host, placed.box, { scale, aspect: 0 });
+    // A shape wholly outside the slide draws nothing: usually a percent or a pixel written where a fraction belongs.
+    if (host.hidden !== true && outsideCanvas(placed.box, { width, height }, typeof host.rotate === 'number' && host.rotate % 180 !== 0))
+      composition.diagnostics.push({ code: 'shape-off-slide', path, message: placed.attachedTo ? `This shape lies wholly outside the slide where it is attached to '${placed.attachedTo.id}', so nothing of it is drawn.` : `This shape lies wholly outside the slide (x ${host.x}, y ${host.y}), so nothing of it is drawn. x and y are fractions of the slide: 0.2 is 20% of its width, and 20 is twenty slide widths away.` });
     const item: ComposedOverlayShape = {
       kind: 'shape', index, ...(nonEmpty(host.id) ? { id: host.id } : {}), path, field: 'shape', type: 'shape', value: host.text, payload: host, box: { ...shape.box }, shape,
       ...context.item(host, shape, path), alignment: 'center', ...(placed.attachedTo ? { attachedTo: placed.attachedTo } : {}), layer: host.layer === 'back' ? 'back' : 'front',
@@ -476,7 +479,11 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
  * An overlay shape's frame in slide pixels: `x`, `y`, `width`, `height` as fractions of the slide (`x` from the right edge in a right-to-left
  * deck), or `at` against a composed block. Undefined when the entry has neither placement, both, or a block that is not composed.
  */
-/** The largest width or height of an overlay shape, in slides (and of an anchored one, in targets): above 1 a shape bleeds off the slide. */
+/**
+ * The largest width or height composition places, in slides (and of an anchored one, in targets): above 1 a shape bleeds off the slide.
+ * The schema caps both at 8; composition still places any representable frame of a document that skipped validation, and refuses with
+ * a finding only what it cannot represent.
+ */
 export const OVERLAY_SIZE_MAX = Number.MAX_VALUE;
 
 function overlayBox(host: Rec, context: { path: string; width: number; height: number; scale: number; rtl: boolean; blockOf: (id: string) => BlockTarget | undefined; point: (block: BlockTarget, at: Rec) => ChartPointGeometry | undefined }): { box: LayoutBox; attachedTo?: ComposedOverlayShape['attachedTo'] } | undefined {
@@ -538,6 +545,17 @@ function fractionalOverlayFrame(host: Rec, canvas: { width: number; height: numb
 /** representablePositionBox, or undefined where it would throw: composition reports such a panel and leaves it out. */
 export function representableBox(box: LayoutBox, path: string): LayoutBox | undefined {
   try { return representablePositionBox(box, path); } catch (error) { if (error instanceof PositionRangeError) return undefined; throw error; }
+}
+/**
+ * True when a box has no part on the canvas. A rotated box is judged by its bounding circle (the circle through its corners), so a
+ * shape whose turned corner may reach the slide is never reported.
+ */
+export function outsideCanvas(box: LayoutBox, canvas: { width: number; height: number }, rotated = false): boolean {
+  if (rotated) {
+    const radius = Math.hypot(box.width, box.height) / 2, x = box.x + box.width / 2, y = box.y + box.height / 2;
+    return x + radius <= 0 || x - radius >= canvas.width || y + radius <= 0 || y - radius >= canvas.height;
+  }
+  return box.x + box.width <= 0 || box.x >= canvas.width || box.y + box.height <= 0 || box.y >= canvas.height;
 }
 /** Internal shared geometry boundary for authored positioned panels. No layout, fonts or data loading. */
 export function representablePositionBox(box: LayoutBox, path: string): LayoutBox {

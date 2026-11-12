@@ -2,8 +2,9 @@
 import {chartAxisFraction, chartTextSize, type ChartValueAxis} from './chart-axis.js';
 import {chartNumber,type ResolvedChartData} from './chart-data.js';
 import type {ChartPlotGeometry} from './chart-plot.js';
+import {CHART_REFERENCE_TYPES} from './chart-reference-types.js';
 
-export const CHART_REFERENCE_TYPES: ReadonlySet<string> = new Set(['column','bar','line','line-with-markers','area','combo']);
+export {CHART_REFERENCE_TYPES};
 export interface ChartReference {
   value: number;
   axis: 'value' | 'secondary';
@@ -42,6 +43,12 @@ export function chartReferenceSources(chart: unknown): number[] {
   if(!record(chart)||typeof chart.type!=='string'||!CHART_REFERENCE_TYPES.has(chart.type)||!Array.isArray(chart.referenceLines))return [];
   return chart.referenceLines.flatMap((entry,index)=>record(entry)&&typeof entry.value==='number'&&Number.isFinite(entry.value)?[index]:[]);
 }
+/**
+ * A chart with explicit references keeps its series names at regular weight even where the slide's texts focus a series: the focus
+ * then only repaints the chart (its mark colors). A bold name is wider, so it would change the name gutter and with it the plot; this way
+ * a title can never move a plot, and so never a reference line. No extra font face is measured or drawn.
+ */
+export const stableNameWidths=(chart:unknown):boolean=>chartReferences(chart).length>0;
 const overlap=(a:Box,b:Box)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
 const inside=(a:Box,b:Box)=>a.x>=b.x-0.01&&a.y>=b.y-0.01&&a.x+a.width<=b.x+b.width+0.01&&a.y+a.height<=b.y+b.height+0.01;
 /** The same category-center span for SVG and native helpers; bars and singleton categories use full-plot overlays. */

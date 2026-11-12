@@ -819,7 +819,7 @@
             },
             { "type": "boolean", "const": false }
           ],
-          "description": "Which logo covers, section dividers and picture bullets draw. Logos live on the organization (Organization.logo); without this field covers and sections draw the primary organization's full logo and picture bullets its icon. A logo reference overrides that: 'var:organization.beta.logo' draws organization beta's logo, and a reference that names a shape ('var:organization.logo.wordmark') draws that shape everywhere this field applies. false draws no logo. A slide's design.logo overrides the deck's; absence inherits. An override naming an organization without a logo draws nothing (validation warns). Placement (reference engines, vetoable): on a cover or section slide (no body payload on a heading-only layout such as title, title-subtitle or section-divider, or no layout) the logo is drawn at the top-left of the free area, inside the slide padding and below any header furniture, in a box 56 reference pixels tall and at most four times as wide; the tag/title/subtitle group then centers in the remaining span. Content slides never get an automatic logo; a header or footer zone places one with image: 'var:organization.logo.icon'. composeSlide returns the cover box as geometry.logo.",
+          "description": "Which logo covers, section dividers and picture bullets draw. Logos live on the organization (Organization.logo); without this field covers and sections draw the primary organization's full logo and picture bullets its icon. A logo reference overrides that: 'var:organization.beta.logo' draws organization beta's logo, and a reference that names a shape ('var:organization.logo.wordmark') draws that shape everywhere this field applies. false draws no logo. A slide's design.logo overrides the deck's; absence inherits. An override naming an organization without a logo draws nothing (validation warns). Placement (reference engines): on a cover or section slide (no body payload on a heading-only layout such as title, title-subtitle or section-divider, or no layout) the logo is drawn at the top-left of the free area, inside the slide padding and below any header furniture, in a box 56 reference pixels tall and at most four times as wide; the tag/title/subtitle group then centers in the remaining span. Content slides never get an automatic logo; a header or footer zone places one with image: 'var:organization.logo.icon'. composeSlide returns the cover box as geometry.logo.",
           "examples": ["var:organization.logo.wordmark", "var:organization.beta.logo", false]
         },
         "watermark": {
@@ -900,6 +900,12 @@
       "additionalProperties": false,
       "description": "Color palette used by the design system. Every slot and role is a hex color ('#RGB', '#RRGGBB' or '#RRGGBBAA'); a color-scheme name or a 'var:<id>' reference is not valid here, because those resolve through the scheme. The slot fields (accent1-accent6, dark1, dark2, light1, light2, hyperlink, followedHyperlink) mirror color-scheme.schema.json (https://openpresentation.org/schema/opf-color-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML slots - the 12-slot PowerPoint theme model that round-trips directly to OOXML. Use these for full control over the palette as PowerPoint sees it.\n- Abstract roles (primary, secondary, accent, background, surface, text, textSecondary) - OPF-specific semantic aliases the engine maps onto the OOXML slots. Convenient for inline overrides without thinking in slot numbers; not part of the catalog record schema.\n\nIn design.colorScheme, 'id' resolves a colorSchemes record as the base; slot and role overrides on the same object take precedence over the resolved scheme. The string form of design.colorScheme is equivalent to setting only 'id'.",
       "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of this palette. PPTX export writes it as the name of the theme's color scheme (a:clrScheme name), which PowerPoint lists under Design, Variants, Colors; without it, an object form with 'id' writes that id, and the string form or an object without 'id' writes 'OpenPresentation'. It names the palette only: it is not a reference and resolves nothing.",
+          "examples": ["Harbour", "Acme 2026"]
+        },
         "id": {
           "$ref": "#/$defs/CatalogReference",
           "description": "Colour-scheme reference (a bare id or 'name:id') resolved as the base; slot and role overrides on the surrounding ColorScheme object take precedence over the resolved scheme.",
@@ -2599,14 +2605,14 @@
         "width": {
           "type": "number",
           "minimum": 0,
-          "maximum": 1.7976931348623157e308,
-          "description": "Width as a fraction of the slide width, from 0 (a vertical line). Above 1 the shape is wider than the slide, for a circle or band that bleeds off it; the slide crops what lies outside."
+          "maximum": 8,
+          "description": "Width as a fraction of the slide width, from 0 (a vertical line) up to 8. Above 1 the shape is wider than the slide, for a circle or band that bleeds off it; the slide crops what lies outside."
         },
         "height": {
           "type": "number",
           "minimum": 0,
-          "maximum": 1.7976931348623157e308,
-          "description": "Height as a fraction of the slide height, from 0 (a horizontal line). Above 1 the shape is taller than the slide."
+          "maximum": 8,
+          "description": "Height as a fraction of the slide height, from 0 (a horizontal line) up to 8. Above 1 the shape is taller than the slide."
         },
         "at": {
           "$ref": "#/$defs/OverlayAnchor"
@@ -2774,14 +2780,14 @@
         "width": {
           "type": "number",
           "exclusiveMinimum": 0,
-          "maximum": 1.7976931348623157e308,
-          "description": "The shape's width as a fraction of its target's width: the block's box, or with 'point' the chart mark's bounds. 1 is the target's own width and 1.08 a frame 8% wider. For a size in pixels use 'widthPx'; not both. Default: the preset's natural proportions with the shape's shorter side at 15% of the target's shorter side (at least 12 reference pixels on a chart mark)."
+          "maximum": 8,
+          "description": "The shape's width as a fraction of its target's width: the block's box, or with 'point' the chart mark's bounds. 1 is the target's own width and 1.08 a frame 8% wider, up to 8. For a size in pixels use 'widthPx'; not both. Default: the preset's natural proportions with the shape's shorter side at 15% of the target's shorter side (at least 12 reference pixels on a chart mark)."
         },
         "height": {
           "type": "number",
           "exclusiveMinimum": 0,
-          "maximum": 1.7976931348623157e308,
-          "description": "The shape's height as a fraction of its target's height. For a size in pixels use 'heightPx'; not both. Default as for width."
+          "maximum": 8,
+          "description": "The shape's height as a fraction of its target's height, up to 8. For a size in pixels use 'heightPx'; not both. Default as for width."
         },
         "widthPx": {
           "type": "number",
@@ -4560,12 +4566,6 @@
       "description": "Chart content. The chart object keeps chart-specific fields together so slides and regions do not expose loose chart fields. OPF charts are `{ type, data }` where `data` is `{ columns, rows }`: the first column holds the category labels and every further column is one series. There are no `categories`, `series`, `labels` or `datasets` keys (the Chart.js and ECharts shape); write them as columns and rows. Example: `{ \"type\": \"column\", \"data\": { \"columns\": [\"Quarter\", \"Decks\"], \"rows\": [[\"Q1\", 3], [\"Q2\", 8], [\"Q3\", 21]] } }`.",
       "additionalProperties": false,
       "required": ["type", "data"],
-      "allOf": [
-        {
-          "if": { "required": ["referenceLines"], "properties": { "referenceLines": { "minItems": 1 } } },
-          "then": { "properties": { "type": { "enum": ["column", "bar", "line", "line-with-markers", "area", "combo"] } } }
-        }
-      ],
       "properties": {
         "type": {
           "type": "string",
@@ -4603,7 +4603,7 @@
         "referenceLines": {
           "type": "array",
           "items": { "$ref": "#/$defs/ChartReferenceLine" },
-          "description": "Explicit numeric references, supported on column, bar, line, line-with-markers, area and combo. Absent or [] means none. Authored order, duplicates and values equal to data are preserved. Vertical charts with two or more categories span first-to-last category centers; bars/single-category charts span the full plot. Titles/subtitles never create references or period bands."
+          "description": "Explicit numeric references on the chart's value axis, supported on the chart types with one value axis for every series: column, bar, line, line-with-markers, area and combo. A non-empty list on any other type (the stacked and 100% stacked types among them) is the error opf/chart-reference-unsupported-type, located at referenceLines, so a reference is never dropped silently. Absent or [] means none. Authored order, duplicates and values equal to data are preserved. Vertical charts with two or more categories span first-to-last category centers; bars/single-category charts span the full plot. Titles/subtitles never create references or period bands."
         },
         "axisTitles": {
           "$ref": "#/$defs/ChartAxisTitles",
@@ -4666,12 +4666,11 @@
       "type": "object",
       "additionalProperties": false,
       "minProperties": 1,
-      "description": "Which series and categories a chart emphasizes. Names are matched exactly: series by data column name (after any 'fields' selection; a series is a plotted value column), categories by row label (the first column, or mapping.category), as text. A category label shared by several rows highlights each of them.",
+      "description": "Which series and categories a chart emphasizes. Present, it is the only source of emphasis: engines then derive none from the slide's texts. Empty lists (for example { \"categories\": [] }) highlight nothing, which switches derived emphasis off as table.highlight { \"rows\": [] } does. Names are matched exactly: series by data column name (after any 'fields' selection; a series is a plotted value column), categories by row label (the first column, or mapping.category), as text. A category label shared by several rows highlights each of them.",
       "properties": {
         "series": {
           "type": "array",
           "items": { "type": "string" },
-          "minItems": 1,
           "uniqueItems": true,
           "description": "Series (value columns) to highlight: all marks of each named series. A name that is not a column is a 'chart-highlight-unknown-name' error; a column that is not plotted as a series (the category or X column, or one mapping.series leaves out) highlights nothing and is a 'chart-highlight-adapted' warning.",
           "examples": [["Revenue"]]
@@ -4679,7 +4678,6 @@
         "categories": {
           "type": "array",
           "items": { "type": "string" },
-          "minItems": 1,
           "uniqueItems": true,
           "description": "Categories (row labels) to highlight: the marks of each named category (a column or bar of every series, a line's points, a pie or doughnut slice). A label no row has is a 'chart-highlight-unknown-name' error.",
           "examples": [["Q3"]]

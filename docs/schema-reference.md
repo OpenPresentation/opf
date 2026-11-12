@@ -249,6 +249,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
+| `name` | no | `string` | Name of this palette. PPTX export writes it as the name of the theme's color scheme (a:clrScheme name), which PowerPoint lists under Design, Variants, Colors; without it, an object form with 'id' writes that id, and t... |
 | `id` | no | `ref:CatalogReference` | Colour-scheme reference (a bare id or 'name:id') resolved as the base; slot and role overrides on the surrounding ColorScheme object take precedence over the resolved scheme. |
 | `accent1` | no | `ref:HexColor` | Accent 1 color (hex). Mirrors the OOXML accent1 slot. |
 | `accent2` | no | `ref:HexColor` | Accent 2 color (hex). Mirrors the OOXML accent2 slot. |
@@ -886,8 +887,8 @@ _No named properties._
 | `id` | no | `string` | Optional stable identifier, unique among slide, payload and overlay ids in the document. A connector names it in 'from' or 'to'. |
 | `x` | no | `ref:FiniteNumber` | The shape's start edge as a signed fraction of the slide width, measured from the slide's start edge: the left edge in a left-to-right deck, the right edge in a right-to-left one. A shape sits over the layout, and the... |
 | `y` | no | `ref:FiniteNumber` | Top edge as a signed fraction of the slide height, from the top edge. Negative values or values greater than 1 place the shape partly or wholly outside the slide. |
-| `width` | no | `number` | Width as a fraction of the slide width, from 0 (a vertical line). Above 1 the shape is wider than the slide, for a circle or band that bleeds off it; the slide crops what lies outside. |
-| `height` | no | `number` | Height as a fraction of the slide height, from 0 (a horizontal line). Above 1 the shape is taller than the slide. |
+| `width` | no | `number` | Width as a fraction of the slide width, from 0 (a vertical line) up to 8. Above 1 the shape is wider than the slide, for a circle or band that bleeds off it; the slide crops what lies outside. |
+| `height` | no | `number` | Height as a fraction of the slide height, from 0 (a horizontal line) up to 8. Above 1 the shape is taller than the slide. |
 | `at` | no | `ref:OverlayAnchor` |  |
 | `layer` | no | `enum:front \| back` | Overlay shapes only. front (the default) draws the shape over the slide: above the content and the furniture. back draws it behind the slide: above the background and the watermark, below the content and the furniture... |
 | `connector` | no | `ref:Connector` | Makes the entry a connector: what it joins and how it runs. |
@@ -928,8 +929,8 @@ _No named properties._
 | `block` | yes | `string` | The id of a block on this slide (a content payload or a group, at any depth). |
 | `edge` | yes | `enum:top \| bottom \| start \| end \| center` | The edge of the block the shape sits outside of, or its center. |
 | `offset` | no | `number` | The gap between the block's edge and the shape, in reference pixels at a 720-pixel short edge; a negative offset overlaps the block. Default 0. Ignored for 'center'. |
-| `width` | no | `number` | The shape's width as a fraction of its target's width: the block's box, or with 'point' the chart mark's bounds. 1 is the target's own width and 1.08 a frame 8% wider. For a size in pixels use 'widthPx'; not both. Def... |
-| `height` | no | `number` | The shape's height as a fraction of its target's height. For a size in pixels use 'heightPx'; not both. Default as for width. |
+| `width` | no | `number` | The shape's width as a fraction of its target's width: the block's box, or with 'point' the chart mark's bounds. 1 is the target's own width and 1.08 a frame 8% wider, up to 8. For a size in pixels use 'widthPx'; not... |
+| `height` | no | `number` | The shape's height as a fraction of its target's height, up to 8. For a size in pixels use 'heightPx'; not both. Default as for width. |
 | `widthPx` | no | `number` | The shape's width in reference pixels at a 720-pixel short edge, whatever size its target has: a badge or a ring of a fixed size. Instead of 'width'. |
 | `heightPx` | no | `number` | The shape's height in reference pixels at a 720-pixel short edge. Instead of 'height'. |
 | `point` | no | `oneOf:string / integer` | Exact unique category label or zero-based data row index of the chart. Numeric strings name labels; numbers index rows. Empty/duplicate labels can be selected by index. Requires a supported classic chart block. |
@@ -1330,7 +1331,7 @@ _No named properties._
 
 ### Chart
 
-- Type: `allOf:schema`
+- Type: `object`
 - Required fields: `type`, `data`
 - Purpose: Chart content. The chart object keeps chart-specific fields together so slides and regions do not expose loose chart fields. OPF charts are `{ type, data }` where `data` is `{ columns, rows }`: the first column holds the category labels and every further column is one series. There are no `categories`, `series`, `labels` or `datasets` keys (the Chart.js and ECharts shape); write them as columns and rows. Example: `{ "type": "column", "data": { "columns": ["Quarter", "Decks"], "rows": [["Q1",...
 
@@ -1341,7 +1342,7 @@ _No named properties._
 | `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name: which column is the category, which is the X column of a scatter chart, and which columns are plotted, in order. Absent keeps the positional rule (first column the category, the... |
 | `line` | no | `array<string>` | Combo charts only (type 'combo'): the plotted series, by column name, that are drawn as lines with markers; every other plotted series is drawn as clustered columns. Absent: the last plotted series is the line. A comb... |
 | `secondaryAxis` | no | `array<string>` | Combo charts only: line series, by column name, plotted against a secondary value axis at the end of the plot (the right; the left in a right-to-left deck, where the category axis runs from the right). That axis has i... |
-| `referenceLines` | no | `array<ref:ChartReferenceLine>` | Explicit numeric references, supported on column, bar, line, line-with-markers, area and combo. Absent or [] means none. Authored order, duplicates and values equal to data are preserved. Vertical charts with two or m... |
+| `referenceLines` | no | `array<ref:ChartReferenceLine>` | Explicit numeric references on the chart's value axis, supported on the chart types with one value axis for every series: column, bar, line, line-with-markers, area and combo. A non-empty list on any other type (the s... |
 | `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-... |
 | `legend` | no | `enum:none \| top \| bottom \| left \| right` | Optional legend position. 'none' hides the legend. Absent leaves it to the engines: a line chart of two to four series names its series at the line ends and a pie or one-series doughnut names its slices, with no legen... |
 | `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels. true shows value labels at each type's default position and false shows none. Absent leaves it to the engines: no labels, except on a small chart, which labels its values in place of its value ax... |
@@ -1367,7 +1368,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Which series and categories a chart emphasizes. Names are matched exactly: series by data column name (after any 'fields' selection; a series is a plotted value column), categories by row label (the first column, or mapping.category), as text. A category label shared by several rows highlights each of them.
+- Purpose: Which series and categories a chart emphasizes. Present, it is the only source of emphasis: engines then derive none from the slide's texts. Empty lists (for example { "categories": [] }) highlight nothing, which switches derived emphasis off as table.highlight { "rows": [] } does. Names are matched exactly: series by data column name (after any 'fields' selection; a series is a plotted value column), categories by row label (the first column, or mapping.category), as text. A category label s...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |

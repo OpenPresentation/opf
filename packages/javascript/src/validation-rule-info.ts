@@ -57,7 +57,7 @@ const formatRules: ValidationRuleInfo[] = [
 	rule('shape-adjust-range', 'format', 'warning', 'An adjust value is outside the range of the preset\'s handle.', 'An adjust value outside the range its handle allows is pinned by the preset\'s own formulas, so the shape is not drawn as the value says; core draws the preset\'s default instead and both engines agree.', { standard: 'ECMA-376 Part 1, 20.1.10.56 (ST_ShapeType) and presetShapeDefinitions.xml', approximations: 'Ranges are checked at a square shape of the default size; a handle whose range depends on the shape\'s proportions is checked at those proportions when the shape is drawn.' }),
 	rule('shape-link-hidden', 'format', 'warning', 'A hidden shape carries a link.', 'A hidden shape (`hidden: true`) is not drawn, so its `link` can never be clicked in a slide show.', { standard: SCHEMA }),
 	rule('shape-anchor-missing', 'format', 'error', 'An overlay shape has no resolvable block or qualified plotted chart point.', 'An overlay shape placed with `at` sits against a composed block of its slide, named by the block\'s `id`. A chart point also requires a unique plotted category and series in a qualified shared plot. When an identity or geometry is missing, the shape is not drawn.', { standard: SCHEMA }),
-	rule('shape-anchor-size-unit', 'format', 'warning', 'A pixel size is under a fraction key.', 'In `at`, `width` and `height` are fractions of the block; pixels are `widthPx` and `heightPx`.', { standard: SCHEMA }),
+	rule('shape-anchor-size-unit', 'format', 'warning', 'A pixel size is under a fraction key.', 'In `at`, `width` and `height` are fractions of the block (up to 8); pixels are `widthPx` and `heightPx`. A value above 4 and up to 8 is reported here; above 8 it is a schema error that offers the same rename.', { standard: SCHEMA }),
 	rule('connector-end-missing', 'format', 'error', 'A connector end names no block or overlay shape on the slide.', 'A connector joins two shapes of its slide, each named by the `id` of a block or an overlay shape. With an end that names nothing (or names a connector) there is nothing to glue it to, so it is not drawn.', { standard: SCHEMA }),
 	rule('image-placement-invalid', 'format', 'error', 'An image placement cannot be honoured.', 'A placed image bleeds to a slide edge and the rest of the slide composes beside it. Only a top-level block (slides.N.blocks.I) can do that, and a slide edge holds one placed image; a block in a group or a promoted region, or a second block on the same edge, has nowhere to go.', { standard: SCHEMA }),
 	rule('layout-placeholder-group', 'format', 'error', 'A layout record\'s placeholder group breaks a nesting rule.', 'A placeholder group arranges body regions inside one cell of its layout record. Groups nest at most three levels inside a record, and a group holds body regions and groups only: the headings (title, subtitle, tag) stay at the record\'s top level, where the engine places them. Composition cannot use a record that breaks either rule.', { standard: SCHEMA }),
@@ -66,6 +66,7 @@ const formatRules: ValidationRuleInfo[] = [
 	rule('data-column-duplicate', 'format', 'error', 'A dataset or table has two columns with the same name.', 'Series, mappings and fields address columns by name, so a repeated name makes them ambiguous.', { standard: SCHEMA }),
 	rule('chart-mapping-unknown-column', 'format', 'error', 'A chart mapping names a column the data does not have.', 'The series cannot be built from a column that is not there.', { standard: SCHEMA }),
 	rule('chart-reference-axis-unavailable', 'format', 'error', 'A reference names a value axis the chart does not have.', 'Secondary references require an actual secondary line series on a combo chart.', {standard: SCHEMA}),
+	rule('chart-reference-unsupported-type', 'format', 'error', 'A chart has reference lines but its type has no single value axis to draw them on.', 'An explicit reference line is never dropped silently, so a chart type that cannot draw it is an error. Column, bar, line, line-with-markers, area and combo charts draw references; the stacked, 100% stacked and every other type do not.', {standard: SCHEMA}),
 	rule('number-format-invalid', 'format', 'error', 'A number format cannot be read.', 'A format code that no engine can parse is drawn as the plain number or fails to export.', { standard: 'Excel number format codes, as far as OPF supports them' }),
 	rule('variable-invalid-value', 'format', 'error', 'A variable value does not match its declared type.', 'A number variable given text, or a date given a non-date, cannot be filled into the deck.', { standard: SCHEMA }),
 	rule('variable-unknown-builtin', 'format', 'error', 'A token names a built-in variable that does not exist.', 'The `deck.`, `speaker.`, `organization.` and `slide.` names (and `speakers`) are reserved for built-in variables; a name under them that is not a built-in can never be filled, so the token would show literally. The slide-scoped `slide.number`, `slide.section` and `deck.slideCount` are inline tokens only, so `var:slide.*` and `var:deck.slideCount` are reported too; organization logos are whole-field references only (`var:organization.logo.icon`), so a `{{organization.logo}}` token, an unknown logo shape or an unknown organization id is reported.', { standard: SCHEMA }),
@@ -406,6 +407,14 @@ export const arrangementAdaptedRule = rule(
 	"A `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` region draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.",
 	{ cost: 'composition' },
 );
+export const shapeOffSlideRule = rule(
+	'shape-off-slide',
+	'layout',
+	'warning',
+	'A shape or image callout lies wholly outside the slide.',
+	'Overlay shapes and image callouts may straddle or leave the slide on purpose, so a position outside it is valid. One with no part on the slide draws nothing, which is nearly always a percent or a pixel written where a fraction belongs.',
+	{ cost: 'composition' },
+);
 export const chartLabelCollisionRule = rule(
 	'chart-label-collision',
 	'layout',
@@ -641,6 +650,7 @@ const implementedRules: ValidationRuleInfo[] = [
 	arrangementAdaptedRule,
 	chartLabelCollisionRule,
 	timelinePeriodShortRule,
+	shapeOffSlideRule,
 	furnitureWrapsRule,
 	outsideRule,
 	resolutionRule,

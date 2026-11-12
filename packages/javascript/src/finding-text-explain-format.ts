@@ -70,8 +70,8 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   ),
   "opf/shape-anchor-size-unit": ex(
     "Write pixels as `widthPx`; `width` is a fraction.",
-    { title: "T", blocks: [{ id: "a", text: "x" }], shapes: [{ shape: "ellipse", at: { block: "a", edge: "top", width: 160 } }] },
-    { title: "T", blocks: [{ id: "a", text: "x" }], shapes: [{ shape: "ellipse", at: { block: "a", edge: "top", widthPx: 160 } }] },
+    { title: "T", blocks: [{ id: "a", text: "x" }], shapes: [{ shape: "ellipse", at: { block: "a", edge: "top", width: 6 } }] },
+    { title: "T", blocks: [{ id: "a", text: "x" }], shapes: [{ shape: "ellipse", at: { block: "a", edge: "top", widthPx: 6 } }] },
   ),
   "opf/shape-anchor-missing": ex(
     "Name a block of the slide in `at.block` (give the block an `id`), or place the shape by `x`, `y`, `width` and `height`.",
@@ -117,6 +117,11 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     "Use axis value, or add an actual secondary line series to a combo chart before using a secondary reference.",
     { title: "Revenue", chart: {...CHART, referenceLines: [{value: 20, axis: "secondary"}]} },
     { title: "Revenue", chart: {...CHART, referenceLines: [{value: 20, axis: "value"}]} },
+  ),
+  "opf/chart-reference-unsupported-type": ex(
+    "Remove `referenceLines`, or change the chart to a type with one value axis for every series: column, bar, line, line-with-markers, area or combo.",
+    { title: "Share", chart: { type: "pie", data: { columns: ["Region", "Share"], rows: [["North", 60], ["South", 40]] }, referenceLines: [{ value: 50 }] } },
+    { title: "Share", chart: { type: "column", data: { columns: ["Region", "Share"], rows: [["North", 60], ["South", 40]] }, referenceLines: [{ value: 50 }] } },
   ),
   "opf/number-format-invalid": ex(
     "Write the format as an Excel-style pattern with a numeric part, such as `0.0`, `#,##0`, `0%` or `$#,##0.00`.",

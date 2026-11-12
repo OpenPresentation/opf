@@ -479,7 +479,7 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
   const start = rtl ? centre - reach - lead : centre + reach + lead;
   const swatch = fontPx * 0.6;
   const placed = shape.series.map((_, j) => {
-    const point = shape.stacks[j]![last], name = label(data.columns[j + 1]), bold = focus?.includes(j) === true;
+    const point = shape.stacks[j]![last], name = label(data.columns[j + 1]), bold = focus?.includes(j) === true && !stableNameWidths(chart);
     const y = point ? shape.at((point.from + point.to) / 2) : shape.at(0);
     const width = swatch + fontPx * 0.4 + (bold && geometry.bold ? geometry.bold(name, fontPx) : geometry.measure(name, fontPx)) + fontPx * 0.25;
     return {j, name, bold, y, width};
@@ -565,7 +565,7 @@ function placeBarNames(chart: unknown, data: ResolvedChartData, axis: ChartValue
   if (!shape) return undefined;
   const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize), swatch = fontPx * 0.6, y = plot.y - fontPx * 0.1 - lineHeight;
   const placed = shape.series.map((_, j) => {
-    const point = shape.stacks[j]![0], name = label(data.columns[j + 1]), bold = focus?.includes(j) === true;
+    const point = shape.stacks[j]![0], name = label(data.columns[j + 1]), bold = focus?.includes(j) === true && !stableNameWidths(chart);
     const x = point ? Math.min(shape.at(point.from), shape.at(point.to)) : shape.at(0);
     const width = swatch + fontPx * 0.4 + (bold && geometry.bold ? geometry.bold(name, fontPx) : geometry.measure(name, fontPx)) + fontPx * 0.25;
     return {j, name, bold, x, width};
@@ -620,7 +620,7 @@ export function chartStack(chart: unknown, data: ResolvedChartData, layer: Chart
       const valueAxis = axisFor(captionOnly?.height ?? 0);
       if (!valueAxis) return undefined;
       const base: ChartLayer = {...rest, ...(captionOnly ? {header: captionOnly} : {})};
-      const gutter = (edge ? fontPx * 0.6 : fontPx * 0.25) + Math.max(...data.columns.slice(1).map((name, j) => swatch + fontPx * 0.4 + (focus?.includes(j) ? bold : measure)(label(name), fontPx) + fontPx * 0.25));
+      const gutter = (edge ? fontPx * 0.6 : fontPx * 0.25) + Math.max(...data.columns.slice(1).map((name, j) => swatch + fontPx * 0.4 + (focus?.includes(j) && !stableNameWidths(chart) ? bold : measure)(label(name), fontPx) + fontPx * 0.25));
       const plot = chartPlotInset(chart, data, {valueAxis, layer: {...base, stack: {values: [], ...(edge ? {edge} : {}), names: {gutter, swatch, entries: []}}}}, {...plotGeometry, box});
       if (!plot) return undefined;
       const entries = placeStackNames(chart, data, valueAxis, box, plot, {...plotGeometry, bold}, false, focus, edge);
@@ -674,7 +674,7 @@ export function restackForRows(chart: unknown, data: ResolvedChartData, layer: C
 // Explicit reference geometry lives in chart-references.ts.
 export {chartReferences,placeReferences} from './chart-references.js';
 export type {ChartReferenceLine,ChartLayerReferences} from './chart-references.js';
-import {chartReferences,placeReferences} from './chart-references.js';
+import {chartReferences,placeReferences,stableNameWidths} from './chart-references.js';
 /** A composed chart item, as composition hands it to {@link refreshChartMarks}. */
 interface ComposedChartItem { value: unknown; box: Box; chart?: {valueAxis?: ChartValueAxis; secondaryValueAxis?:ChartValueAxis; layer?: ChartLayer} }
 

@@ -19,10 +19,10 @@ test('anchored fractions have no 1 versus 1.01 pixel discontinuity', () => {
   near(mixed.width, target.width * 1.5); near(mixed.height, 40);
 });
 
-test('duplicate units and nonpositive anchor sizes refuse, while dimensions can exceed their target', () => {
-  for (const at of [{width: 0.5, widthPx: 40}, {height: 0.5, heightPx: 40}, {width: 0}, {heightPx: 0}, {width: -1}, {widthPx: 1281}])
+test('duplicate units, nonpositive anchor sizes and sizes above 8 refuse, while dimensions can exceed their target up to 8 times', () => {
+  for (const at of [{width: 0.5, widthPx: 40}, {height: 0.5, heightPx: 40}, {width: 0}, {heightPx: 0}, {width: -1}, {widthPx: 1281}, {width: 8.01}, {height: 50}])
     assert.equal(validate(document([shape(at)]), {only: ['format']}).valid, false, JSON.stringify(at));
-  for (const at of [{width: 1.01}, {width: 9}, {width: 50, heightPx: 1280}])
+  for (const at of [{width: 1.01}, {width: 8}, {width: 8, heightPx: 1280}])
     assert.equal(validate(document([shape(at)]), {only: ['format']}).valid, true, JSON.stringify(at));
   const conflict = compose([shape({width: 0.5, widthPx: 40})]);
   assert.equal((conflict.overlayShapes ?? []).length, 0, 'composition does not silently select a unit when validation was skipped');

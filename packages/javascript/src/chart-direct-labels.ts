@@ -16,6 +16,7 @@
 // An explicit option wins: `legend` (any value) keeps the legend and draws no direct labels, and `dataLabels` (any value) draws the labels
 // it asks for. Area charts keep their header legend: PowerPoint has no label position for an area point, so a name at the end of an area
 // could not be placed natively where the preview draws it.
+import {stableNameWidths} from './chart-references.js';
 import {chartTextSize, stackCategoryValues, type ChartValueAxis} from './chart-axis.js';
 import {chartNumber, resolveChartData, type ResolvedChartData} from './chart-data.js';
 import {chartHeader, CHART_HEADER_MAX_LEGEND, columnValueLabel, type ChartEndLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerSlices, type ChartSliceLabel} from './chart-layer.js';
@@ -67,8 +68,9 @@ export function placeEndLabels(chart: unknown, data: ResolvedChartData, axis: Ch
   const at = (value: number) => plot.y + (axis.max - Math.min(axis.max, Math.max(axis.min, value))) / (axis.max - axis.min) * plot.height;
   // The gap and label box of the preview's point labels (drawPointLabel: a marker radius and a quarter text size; text plus half a size).
   const gap = 3 * pt + fontPx * 0.25;
+  const stable = stableNameWidths(chart);
   const placed = series.map((entry, j) => {
-    const text = endLabelText(data, j, geometry.language), bold = focus?.includes(j) === true;
+    const text = endLabelText(data, j, geometry.language), bold = focus?.includes(j) === true && !stable;
     return {j, name: entry.name, text, bold, y: at(stacks[j]![last]!.to), width: (bold && geometry.bold ? geometry.bold(text, fontPx) : geometry.measure(text, fontPx)) + fontPx * 0.5};
   });
   const order = [...placed].sort((a, b) => a.y - b.y || a.j - b.j);
@@ -111,7 +113,9 @@ export function chartEndLabels(chart: unknown, data: ResolvedChartData, layer: C
   const {fontPx, pt} = metrics(box, scale, geometry.minFontSize);
   const measure = (text: string, size: number) => geometry.measure(text, size, 400), bold = (text: string, size: number) => geometry.measure(text, size, 700);
   const focus = layer?.focus?.series;
-  const gutter = 3 * pt + fontPx * 0.25 + Math.max(...data.columns.slice(1).map((_, j) => (focus?.includes(j) ? bold : measure)(endLabelText(data, j, geometry.language), fontPx) + fontPx * 0.5));
+  // With explicit references every name keeps its regular weight, so the plot does not depend on what the slide's texts focus (stableNameWidths).
+  const stable = stableNameWidths(chart);
+  const gutter = 3 * pt + fontPx * 0.25 + Math.max(...data.columns.slice(1).map((_, j) => (focus?.includes(j) && !stable ? bold : measure)(endLabelText(data, j, geometry.language), fontPx) + fontPx * 0.5));
   // The small-chart treatment (value labels, no value axis) gives way: the end labels carry the last values and the axis the rest.
   const {header: _header, small: _small, ...rest} = layer ?? {};
   const base: ChartLayer = {...rest, ...(header ? {header} : {})};

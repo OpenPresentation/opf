@@ -53,7 +53,7 @@ export declare function prepareOverlayAnchor(presentation: unknown, path: string
 export declare function setOverlayAnchor(editor: EditorSession, path: string, anchor: OverlayAnchor, meta?: Record<string, unknown>): OverlayChange;
 export interface ChartPointTarget {id: string; path: string; label: string; points: {index: number; name: string}[]; series: {index: number; name: string}[]}
 export declare function listChartPointTargets(presentation: unknown, slideIndex: number): ChartPointTarget[];
-/** A frame change: signed x/y fractions and width/height fractions subject to finite representable geometry for a shape placed by `x`, `y`, `width` and `height`; for one attached to a block `offset` (pixels), `width`/`height` (fractions of the target) or `widthPx`/`heightPx` (reference pixels; setting one unit removes the other). */
+/** A frame change: signed x/y fractions and width/height fractions (up to 8 slides) for a shape placed by `x`, `y`, `width` and `height`; for one attached to a block `offset` (pixels), `width`/`height` (fractions of the target, up to 8) or `widthPx`/`heightPx` (reference pixels; setting one unit removes the other). */
 export interface OverlayFrameChange { x?: number; y?: number; width?: number; height?: number; widthPx?: number; heightPx?: number; offset?: number }
 export declare function prepareOverlayFrame(presentation: unknown, path: string, change: OverlayFrameChange): PreparedOverlayChange;
 /** Move or resize an overlay shape as one undoable step. An attached shape keeps its `at`; `x` or `y` on it throws `overlay-anchored`. */
