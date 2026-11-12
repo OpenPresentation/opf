@@ -5,7 +5,7 @@ learns the format and checks decks through it, without shelling out and parsing 
 example decks and the six agent skills as resources, a `start_here` tool that gives a path for a goal, and `validate_deck`,
 `get_schema`, `search_catalog`, `get_catalog_record`, `search_icons`, `search_shapes`, `convert`, `search_docs` and `list_examples` as tools.
 `show_deck` opens a deck in the OPF viewer, an MCP App with Preview, Source and Both, inside a client that supports MCP Apps (Claude on
-the web and desktop); the viewer renders, checks and edits the deck on the user's machine and sends the user's edits back to the model.
+the web and desktop); the viewer renders, checks and edits the deck on the user's machine and sends the user's edits back to the model. `open_studio` opens the same viewer with a starter deck from no arguments (a direct entry point where the client offers one), and where the client calls tools in a view the model reads and edits the open deck in place (`read_deck`, `select_slide`, `edit_deck`).
 It keeps no state, reads no file but the renderer's fonts, fetches nothing, and needs no API key. Node 22 or later.
 
 Claude Desktop: when the matching [GitHub release](https://github.com/OpenPresentation/opf/releases) lists `opf-<version>.mcpb` and its SHA-256 file, install that bundle. Release-bundle publication is planned from 0.34.0; 0.33.0 has no published bundle asset. `pnpm run build:mcpb` builds it from a checkout; see the docs. Or use the command below.
