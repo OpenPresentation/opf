@@ -84,7 +84,7 @@ Use `venn` with one flat list of one to seven set labels. One to four circles ho
 { "layout": "venn", "title": "Three conditions for a useful pilot", "items": ["Clear scope", "Evidence", "Shared goal"] }
 ```
 
-The arrangement keeps the previous fitted list size or grows. A malformed tree, unsupported forest, nested Venn, descriptions, icons, numbering, too many entries or labels that do not fit keeps the complete list with `opf/arrangement-adapted`; no entry is dropped or silently reparented. Use a diagram for assistants or relationships outside the single-root model. These three layouts currently export as editable native shapes; live SmartArt remains outside their qualified domain. Import recognizes native Organization Chart (orgChart1), Hierarchy (hierarchy1) and Basic Venn (venn1), preserving tree depths. Native assistants, forests or labelled edges use the reported Mermaid hierarchy adaptation instead. A drawing with additional labels beyond the data entries keeps its overlay drawing and reports the adaptation, preserving that extra text.
+The arrangement keeps the previous fitted list size or grows. A malformed tree, unsupported forest, nested Venn, descriptions, icons, numbering, too many entries or labels that do not fit keeps the complete list with `opf/arrangement-adapted`; no entry is dropped or silently reparented. Use a diagram for assistants or relationships outside the single-root model. These three layouts currently export as editable native shapes; live SmartArt remains outside their qualified domain. Import recognizes native Organization Chart (orgChart1), Hierarchy (hierarchy1) and Basic Venn (venn1), preserving tree depths. Native assistants, forests or labeled edges use the reported Mermaid hierarchy adaptation instead. A drawing with additional labels beyond the data entries keeps its overlay drawing and reports the adaptation, preserving that extra text.
 
 [The trees and sets example](../examples/technical/trees-and-sets.opf.json) contains the three layouts.
 
@@ -552,7 +552,7 @@ Then the first form that fits:
 | Another layout of those families: `pyramidN`, `matrixN`, `cycleN` (Text Cycle, Block Cycle...), any chevron layout (`chevron2`, `hChevron3`...); a layout of category `pyramid`, `matrix` or `cycle` | The list on the `pyramid`, `matrix`, `cycle` or `chevrons` layout, with `smartart-adapted` (info) |
 | The list family (category `list`: Basic Block List `default`, Vertical Bullet List `vList2`...) | The list on the `list` layout, with `smartart-adapted` |
 | The process family (category `process`, other than the arrangements above: Accent Process, Step Up Process...) | The list on the `process` layout, with `smartart-adapted` |
-| Other hierarchies and organization charts, or the known trees with assistants, separate roots or labelled edges (`orgChartN`, `hierarchyN`, the 2008 and 2009 organization charts; category `hierarchy`) | A Mermaid flowchart (`flowchart TD`, `flowchart LR` for a horizontal hierarchy): a node per entry, its description on a second line, an edge from each parent, dotted (`-.->`) to an assistant, the connection's own text as the edge's label; the outline as the diagram's `alt`; `smartart-adapted` |
+| Other hierarchies and organization charts, or the known trees with assistants, separate roots or labeled edges (`orgChartN`, `hierarchyN`, the 2008 and 2009 organization charts; category `hierarchy`) | A Mermaid flowchart (`flowchart TD`, `flowchart LR` for a horizontal hierarchy): a node per entry, its description on a second line, an edge from each parent, dotted (`-.->`) to an assistant, the connection's own text as the edge's label; the outline as the diagram's `alt`; `smartart-adapted` |
 | Every other layout (other Venn, radial, target, funnel, gear, picture layouts...) | The drawing (`dsp:drawing`, which PowerPoint saves with every SmartArt) as overlay shapes, with `smartart-adapted`; without a drawing, the list on the `list` layout |
 
 Nested entries keep their `level` in every list. Organization charts and hierarchies use those depths as parent links; the other arrangements draw one level, so a pyramid of nested entries draws as a list
@@ -576,6 +576,9 @@ outline as its alt text (`SmartArt (venn1):` and an entry a line, indented a lev
 | `smartart-picture-dropped` | An entry's picture fill (a picture layout), in every form but the drawing |
 | `smartart-formatting-dropped` | Bold, italic, underlined or struck-through text in a hierarchy (Mermaid labels carry none); the text is kept |
 | `smartart-adapted` (with `form`: an arrangement, `list`, `process`, `diagram` or `shapes`) | A layout imported as anything other than the arrangement OPF writes for it |
+| `smartart-connection-dropped` | Connections to an entry that already has a parent (or to its own ancestor): each entry is imported once, under the first parent that reaches it |
+| `smartart-limited` (with `limit`: `depth` or `entries`) | An outline more than 64 points deep or longer than 10,000 entries: the drawing, or without one the entries as a flat list (the first 10,000) |
+| `smartart-unreadable` | A data model or drawing that cannot be read: the frame imports as any other graphic frame, or the drawing adds no shapes |
 
 Every finding has the layout (`layout`, the last segment of `loTypeId`) and the slide's path. A SmartArt with no text and no drawing
 (only placeholders) imports as nothing.

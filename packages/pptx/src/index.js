@@ -69,7 +69,7 @@ import {orderChartSeries} from './chart-order.js';
 import {lineXml, linkShapeBlocks, shapeBlockRecord, writeShapeBlocks} from './shape-blocks.js';
 import {connectorName, connectorRecord, writeConnectors} from './connectors.js';
 import {themeSlotColors, schemeColorTable, addTransformedColors, writeSchemeColors, authoredLiteralColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath, variantFromColorMap} from './theme-colors.js';
-import {languageDiagnostics, leftToRightPieces, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
+import {isolateNarrowNoBreakSpaces, languageDiagnostics, leftToRightPieces, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagramGroups, importDiagrams, tagDiagrams } from './diagram-provenance.js';
@@ -1269,7 +1269,10 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const chartMarks=importChartMarks(shapes,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const slideTheme = readSlideTheme(slidePath, {part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]});
   const referenceContext={scale:Math.min(dimensions.widthInches,dimensions.heightInches)*96/720,colors:slideTheme};
-  const referenceOverlays=importReferenceOverlays(shapes,asArray(tree?.['p:graphicFrame']),relationships,entries,{...referenceContext,slideXml:decodeText(entries[slidePath]),report:diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`})});
+  // RR-105: a chart part is untrusted input; one the overlay reader cannot parse leaves every overlay an ordinary drawing.
+  let referenceOverlays;
+  try{referenceOverlays=importReferenceOverlays(shapes,asArray(tree?.['p:graphicFrame']),relationships,entries,{...referenceContext,slideXml:decodeText(entries[slidePath]),report:diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`})});}
+  catch(error){if(error instanceof OPFPptxError)throw error;referenceOverlays={consumed:new Set(),byPart:new Map(),preserved:new Set()};options.onDiagnostic?.({code:'chart-reference-overlay-uncertain',path:`slides.${slideIndex}`,message:`A chart part could not be read for reference overlays (${error instanceof Error?error.name:'error'}); every overlay is kept as an ordinary drawing.`});}
   // LH-07: a sequence region's badges, connectors, chips and arrows are its layout's drawing, not content.
   const stepShapes=importStepShapes(shapes,relationships,entries);
   nativeContext.stepNumbers=stepShapes.numbers;
@@ -1430,7 +1433,12 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     else if (found.type === 'shapes') {
       // The drawing takes the frame's place in the slide's z order.
       const at = drawnAll.find(entry => entry.tag === 'p:graphicFrame' && entry.frame && ['x', 'y', 'cx', 'cy'].every(key => entry.frame[key] === found.frame[key]));
-      importSmartArtShapes(found, {context: shapeContext, z: at?.z ?? Math.max(0, ...drawnAll.map(entry => entry.z)) + 1});
+      // A drawing part is untrusted input: one that cannot be read adds no shapes and never fails the import.
+      const before = shapeContext.state.overlays.length;
+      try { importSmartArtShapes(found, {context: shapeContext, z: at?.z ?? Math.max(0, ...drawnAll.map(entry => entry.z)) + 1}); } catch (error) {
+        shapeContext.state.overlays.length = before;
+        options.onDiagnostic?.({code: 'smartart-unreadable', path: `slides.${slideIndex}`, message: `The drawing of the SmartArt ${JSON.stringify(found.name)} could not be read (${error instanceof Error ? error.name : 'error'}); its shapes are not imported.`});
+      }
     }
   };
   for (const [index, frame] of frames.entries()) {
@@ -5734,12 +5742,14 @@ async function normalizePptxZip(raw, context) {
       }
     }
   }
+  // A helper's label is written in its slide's language (the script-font plan's; en-US without one).
+  const referenceLabelLanguage=part=>{const plan=context.scriptFonts;return (plan?.slides?.[Number(/slide(\d+)\.xml$/.exec(part)[1])-1]??plan?.deck)?.lang??'en-US';};
   for(const [part,bytes]of Object.entries(entries)){
     if(!/^ppt\/slides\/slide\d+\.xml$/.test(part))continue;const rels=parseRelationships(entries,part);
     for(const [frame]of decodeText(bytes).matchAll(/<p:graphicFrame>[\s\S]*?<\/p:graphicFrame>/g)){
       const name=/<p:cNvPr\b[^>]*\bname="([^"]+)"/.exec(frame)?.[1],info=context.chartHeadings.get(name)?.references;
       if(!info)continue;const id=/<c:chart\b[^>]*\br:id="([^"]+)"/.exec(frame)?.[1],p=rels.get(id)?.path;
-      if(!p||!entries[p])throw Error('Generated reference chart is missing.');entries[p]=encodeText(applyReferenceSeries(decodeText(entries[p]),info,{frame:new XMLParser({ignoreAttributes:false,attributeNamePrefix:"",parseTagValue:false,trimValues:false}).parse(frame)["p:graphicFrame"],shapes:asArray(parseRequiredXml(entries,part)?.["p:sld"]?.["p:cSld"]?.["p:spTree"]?.["p:sp"])}));
+      if(!p||!entries[p])throw Error('Generated reference chart is missing.');entries[p]=encodeText(applyReferenceSeries(decodeText(entries[p]),info,{lang:referenceLabelLanguage(part),frame:new XMLParser({ignoreAttributes:false,attributeNamePrefix:"",parseTagValue:false,trimValues:false}).parse(frame)["p:graphicFrame"],shapes:asArray(parseRequiredXml(entries,part)?.["p:sld"]?.["p:cSld"]?.["p:spTree"]?.["p:sp"])}));
     }
   }
   // opf-pptx#175: after every chart rewrite, each classic series in its CT_*Ser sequence (src/chart-order.js).
@@ -6220,7 +6230,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
     } else if (/^ppt\/(?:slideMasters\/slideMaster|slideLayouts\/slideLayout)\d+\.xml$/.test(path)) xml = writeSchemeColors(xml, context.deckSchemeColors.table, context.deckSchemeColors.keep);
     if (context.scriptFonts) xml = partScriptFonts(path, xml, context.scriptFonts, context.partSlides.get(path) ?? 0);
     else if (/^ppt\/theme\/theme\d+\.xml$/.test(path)) xml = themeEastAsianFromLatin(xml);
-    if (/^ppt\/(?:slides\/slide|notesSlides\/notesSlide)\d+\.xml$/.test(path)) xml = stripRunScriptFonts(xml);
+    if (/^ppt\/(?:slides\/slide|notesSlides\/notesSlide)\d+\.xml$/.test(path)) xml = isolateNarrowNoBreakSpaces(stripRunScriptFonts(xml));
     if (context.scriptFonts && /^ppt\/slides\/slide\d+\.xml$/.test(path)) xml = runLanguageFonts(xml, context.scriptFonts, context.partSlides.get(path) ?? 0);
     return encodeText(normalizePartReferences(xml, renameMaps));
   }

@@ -126,7 +126,8 @@ export function createNativeScalarFragments(report=()=>{}){
   write(entries,slotGroups){
    for(const group of groups.values())try{
     const path=`ppt/slides/slide${group.slideIndex+1}.xml`,original=dec.decode(entries[path]),all=shapeRows(original),names=new Set(),ids=new Set();for(const shape of all){if(names.has(shape.name)||ids.has(shape.id))throw Error('Duplicate current native identity');names.add(shape.name);ids.add(shape.id);}
-    let nextId=Math.max(0,...ids),xml=original;const staged={...entries},members=[],lines=[],migrations=[],existingTagParts=new Set();
+    // Every drawing object on the slide holds an id (charts, pictures, connectors and groups as well as shapes): new fragments follow all of them.
+    let nextId=Math.max(0,...ids,...[...original.matchAll(/<p:cNvPr\b[^>]*\bid="(\d+)"/g)].map(match=>Number(match[1]))),xml=original;const staged={...entries},members=[],lines=[],migrations=[],existingTagParts=new Set();
     const allPartRefs=all.map(shape=>{try{return tagsFor(entries,path,shape.xml).part;}catch{return undefined;}});
     for(const row of group.rows){
      const shape=all.find(shape=>shape.name===row.name);if(!shape)throw Error('Missing original scalar line');
