@@ -1,0 +1,44 @@
+
+> openpresentation-workspace@ check:changed /private/tmp/opf-034
+> node scripts/check-changed.mjs --base 0f53564afa6a79ff9b7235140afbe85c9cf94bfc
+
+check-changed: 15 changed files since 0f53564af (plus uncommitted and untracked)
+ok  build (6.1 s)
+ok  biome (0.1 s)
+ok  pnpm run check:changes (0.3 s)
+ok  pnpm run check:ci-scope (3.3 s)
+ok  pnpm run check:ci-workflows (4.9 s)
+ok  pnpm run check:gallery-tracker (1.7 s)
+ok  pnpm run check:libreoffice (0.2 s)
+ok  pnpm run check:font-hotlinks (15.7 s)
+ok  pnpm run check:playwright-pin (0.5 s)
+ok  pnpm run check:release-report (0.5 s)
+ok  pnpm run check:native-acceptance (19.4 s)
+ok  pnpm run check:skill-commands (11.2 s)
+ok  pnpm run check:text (4.7 s)
+ok  pnpm run check:stability (40.2 s)
+-  typecheck
+ok  tests pptx (842.7 s)
+-  tests editor
+
+step                              status      time
+build                             passed     6.1 s
+biome                             passed     0.1 s  5 files
+pnpm run check:changes            passed     0.3 s
+pnpm run check:ci-scope           passed     3.3 s
+pnpm run check:ci-workflows       passed     4.9 s
+pnpm run check:font-hotlinks      passed    15.7 s
+pnpm run check:gallery-tracker    passed     1.7 s
+pnpm run check:libreoffice        passed     0.2 s
+pnpm run check:native-acceptance  passed    19.4 s
+pnpm run check:playwright-pin     passed     0.5 s
+pnpm run check:release-report     passed     0.5 s
+pnpm run check:skill-commands     passed    11.2 s
+pnpm run check:stability          passed    40.2 s
+pnpm run check:text               passed     4.7 s
+typecheck                         skipped        -  no .ts, .mts or tsconfig change
+tests pptx                        passed   842.7 s
+tests editor                      skipped        -  no runnable test among mobile-touch-browser.mjs
+total                                      915.5 s
+
+check-changed: passed. Run the full `pnpm test` before opening the pull request.

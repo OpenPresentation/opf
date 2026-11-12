@@ -1,0 +1,241 @@
+diff --git a/docs/programs/release-readiness/burndown.md b/docs/programs/release-readiness/burndown.md
+index db64e0ca7..0ed819f63 100644
+--- a/docs/programs/release-readiness/burndown.md
++++ b/docs/programs/release-readiness/burndown.md
+@@ -1514,3 +1514,5 @@ package, close RR-68 or claim a new release result; normal source integration ga
+ - 2026-11-11 RR-105 Name snapshot fixture SOURCE ONLY: retain actualWindows43157898641 browserPASS and Node9/8/1FAILED; firstprivateadapter refused shortTEMP spelling at strict canonical-path guard, full32unqualified. Native-canonicalize only the new test-owned temp root, prove same BigInt device/file identity and record actual spelling difference; all PS/worker/kernel/archives/modes/deadlines/observer guards unchanged. New validation-only attempt owed; no browser repeat or old-result rescue. [Scope](../../handoff/2026-11-11/reference-name-snapshot-temp.md).
+ 
+ - 2026-11-11 RR-105 Name snapshot endpoint SOURCE ONLY: preserve actual43160756096 Node9/8PASS1FAIL and successful same-owned native-temp identity facts. Correct whole-IF singleton collection construction for PS5.1 without changing Count1/order/observer guards; six separately named actual-definition cardinality controls added alongside unchanged original32 and Node9/15s deadline. All new execution UNRUN. [Cause and scope](../../handoff/2026-11-11/reference-name-snapshot-cardinality.md).
++
++- 2026-11-11 RR-105 Name worker-root SOURCE ONLY: preserve actual first new native failure after1ROopen/3originalPNGs and0actions/saves/closes/Quit. Fix exactly3Name-only paths from supervisor-only outputRoot to initialized worker root; fresh actual initializer/helper/callsite scope controls expose old ambient-mock falsegreen, retain original32+separate6/Node9/15s and all six historical derivation stages. New execution UNRUN; no native/cleanup/retry claim. [Scope and failure](../../handoff/2026-11-11/reference-name-worker-root.md).
+diff --git a/packages/pptx/test/native-furniture-control.ps1 b/packages/pptx/test/native-furniture-control.ps1
+index ef1759daf..07f36c3d4 100644
+--- a/packages/pptx/test/native-furniture-control.ps1
++++ b/packages/pptx/test/native-furniture-control.ps1
+@@ -947,7 +947,7 @@ function Save-OwnedFurnitureCopy([string]$ExpectedPath,[string]$CopyPath) {
+ # Two closed extra copies for the prospective Name route; the old Save helper above is unchanged.
+ function Save-OwnedReferenceNameSnapshot([string]$ExpectedPath,[string]$CopyPath,[string]$Phase) {
+     if(-not $script:referenceNameSnapshotsModeEnabled -or -not $script:referenceNameModeEnabled -or $Phase -cnotin @('before','reopened')) { Stop-FurnitureLifecycle 'Only the closed Name snapshot mode may save these two copies' }
+-    $fixed=Join-Path $outputRoot ('reference-name-'+$Phase+'.pptx')
++    $fixed=Join-Path $root ('reference-name-'+$Phase+'.pptx')
+     if($CopyPath -cne $fixed -or $CopyPath -ieq $ExpectedPath -or (Test-Path -LiteralPath $CopyPath)) { Stop-FurnitureLifecycle 'Name snapshot requires its exact fresh derivative separate from the owned input' }
+     $actual=Invoke-FurnitureCom "reference-$Phase.presentation.fullName.get" { $script:presentation.FullName }
+     if($actual -ine $ExpectedPath -or $script:ownedPresentationPath -ine $ExpectedPath) { Stop-FurnitureLifecycle 'Refusing to snapshot a presentation whose exact identity is not owned' }
+@@ -975,7 +975,7 @@ try {
+     Assert-PresentationNotOpen $app $savedPath 'output.preflight'
+     Open-OwnedFurniture $app $sourceSnapshot 'input'
+     $report.phases.original=Read-FurnitureState $script:presentation 'original'; Write-FurnitureReport
+-    if($script:referenceNameSnapshotsModeEnabled){Save-OwnedReferenceNameSnapshot $sourceSnapshot (Join-Path $outputRoot 'reference-name-before.pptx') 'before'}
++    if($script:referenceNameSnapshotsModeEnabled){Save-OwnedReferenceNameSnapshot $sourceSnapshot (Join-Path $root 'reference-name-before.pptx') 'before'}
+     for($index=0;$index -lt $actions.Count;$index++) { Apply-FurnitureAction $script:presentation $actions[$index] ($index+1); $report.actionPlan.completed+=@([ordered]@{index=$index+1;op=$actions[$index].op;status='success'}) }
+     Write-FurnitureReport
+     Assert-FurnitureTextProbeIntegrity $request.textProbePlan $sourcePath $sourceSnapshot $sourceHash $planSnapshot $request.actionPlan.snapshotSha256
+@@ -985,7 +985,7 @@ try {
+     Assert-FurnitureTextProbeIntegrity $request.textProbePlan $sourcePath $sourceSnapshot $sourceHash $planSnapshot $request.actionPlan.snapshotSha256
+     Open-OwnedFurniture $app $savedPath 'reopen'
+     $report.phases.reopened=Read-FurnitureState $script:presentation 'reopened'; Write-FurnitureReport
+-    if($script:referenceNameSnapshotsModeEnabled){Save-OwnedReferenceNameSnapshot $savedPath (Join-Path $outputRoot 'reference-name-reopened.pptx') 'reopened'}
++    if($script:referenceNameSnapshotsModeEnabled){Save-OwnedReferenceNameSnapshot $savedPath (Join-Path $root 'reference-name-reopened.pptx') 'reopened'}
+     Close-OwnedFurniture 'reopened.presentation' $savedPath; $report.reopened.sha256=Get-FurnitureSha256 $savedPath
+     if((Get-FurnitureSha256 $sourcePath) -cne $sourceHash -or (Get-FurnitureSha256 $sourceSnapshot) -cne $sourceHash) { throw 'Requested source or its snapshot changed during the native lifecycle' }
+     if((Get-FurnitureSha256 $planSnapshot) -cne $request.actionPlan.snapshotSha256) { throw 'Action-plan snapshot changed during the native lifecycle' }
+diff --git a/packages/pptx/test/native-reference-startup.mjs b/packages/pptx/test/native-reference-startup.mjs
+index d14b27abb..a032c3e03 100644
+--- a/packages/pptx/test/native-reference-startup.mjs
++++ b/packages/pptx/test/native-reference-startup.mjs
+@@ -9,7 +9,24 @@ import {scanPowerShellSource} from './powershell-scan.mjs';
+ import {windowsPowerShellEnvironment} from '../../../scripts/native-acceptance/windows-powershell-env.mjs';
+ const worker=new URL('./native-furniture-control.ps1',import.meta.url),checker=new URL('./native-reference-startup-check.ps1',import.meta.url),sha=b=>createHash('sha256').update(b).digest('hex');
+ test('reference startup retains exact immutable stages with fixed hashes and no Git/history requirement',()=>{
+- const source=readFileSync(worker);assert.equal(source.length,93940);assert.equal(sha(source),'1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870');
++ const source=readFileSync(worker);assert.equal(source.length,93922);assert.equal(sha(source),'21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255');
++ const workerRootEdits=[
++  [
++    "$fixed=Join-Path $outputRoot ('reference-name-'+$Phase+'.pptx')",
++    "$fixed=Join-Path $root ('reference-name-'+$Phase+'.pptx')"
++  ],
++  [
++    "Join-Path $outputRoot 'reference-name-before.pptx'",
++    "Join-Path $root 'reference-name-before.pptx'"
++  ],
++  [
++    "Join-Path $outputRoot 'reference-name-reopened.pptx'",
++    "Join-Path $root 'reference-name-reopened.pptx'"
++  ]
++];
++ let rootInverse=source.toString('utf8');for(const [prior,next]of [...workerRootEdits].reverse()){assert.equal(rootInverse.split(next).length-1,1);rootInverse=rootInverse.replace(next,prior);}
++ const snapshotSource=Buffer.from(rootInverse);assert.equal(snapshotSource.length,93940);assert.equal(sha(snapshotSource),'1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870');
++ let forward=rootInverse;for(const [prior,next]of workerRootEdits){assert.equal(forward.split(prior).length-1,1);forward=forward.replace(prior,next);}assert.deepEqual(Buffer.from(forward),source,'Only three worker-root paths extend the six prior immutable stages');
+  const snapshotEdits=[
+   [
+     "    [switch]$ReferenceNameEdit\n",
+@@ -48,7 +65,7 @@ test('reference startup retains exact immutable stages with fixed hashes and no
+     "    $report.phases.reopened=Read-FurnitureState $script:presentation 'reopened'; Write-FurnitureReport\n    if($script:referenceNameSnapshotsModeEnabled){Save-OwnedReferenceNameSnapshot $savedPath (Join-Path $outputRoot 'reference-name-reopened.pptx') 'reopened'}"
+   ]
+ ];
+- let inverse=source.toString('utf8');for(const [prior,next]of [...snapshotEdits].reverse()){assert.equal(inverse.split(next).length-1,1);inverse=inverse.replace(next,prior);}
++ let inverse=snapshotSource.toString('utf8');for(const [prior,next]of [...snapshotEdits].reverse()){assert.equal(inverse.split(next).length-1,1);inverse=inverse.replace(next,prior);}
+  const stage5=Buffer.from(inverse);assert.equal(stage5.length,91281);assert.equal(sha(stage5),'d8f0aa7e0b7fcf72cb2401808f45c2cdb69cd99862ad14c88103180b86278210');
+  const old='$script:referenceNameEdit',next='$script:referenceNameModeEnabled';assert.equal(inverse.split(next).length-1,9);assert.ok(!inverse.includes(old));const stage4=Buffer.from(inverse.replaceAll(next,old));assert.equal(stage4.length,91218);assert.equal(sha(stage4),'641c30e6dc9e3e89bae814c752e4fbc1bea41d8318b4f8a0af7e863434466060');assert.deepEqual(Buffer.from(stage4.toString('utf8').replaceAll(old,next)),stage5);
+  for(const file of [worker,checker])assert.deepEqual(scanPowerShellSource(readFileSync(file,'utf8')).issues,[]);assert.match(source.toString('utf8'),/\[switch\]\$ReferenceNameEdit/);assert.match(source.toString('utf8'),/\$request\.referenceNameEdit -isnot \[bool\]/);
+diff --git a/scripts/native-acceptance/b07-postflight.test.mjs b/scripts/native-acceptance/b07-postflight.test.mjs
+index 55a68899a..b4bae1b67 100644
+--- a/scripts/native-acceptance/b07-postflight.test.mjs
++++ b/scripts/native-acceptance/b07-postflight.test.mjs
+@@ -165,7 +165,26 @@ test('reviewed observer source remains exact and B07 source binds actual worker
+   const snapshotWorker=Buffer.from(snapshotState);assert.equal(snapshotWorker.length,93940);assert.equal(digest(snapshotWorker),"1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870");
+   let snapshotInverse=snapshotState;for(const [oldText,newText]of [...snapshotEdits].reverse()){assert.equal(snapshotInverse.split(newText).length-1,1);snapshotInverse=snapshotInverse.replace(newText,oldText);}
+   assert.deepEqual(Buffer.from(snapshotInverse),startupState,'Sixth-stage inverse preserves the entire immutable startup-fixed worker');
+-  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),snapshotWorker);
++  // Stage7 changes only three Name paths to the worker's existing canonical root.
++  const workerRootEdits=[
++  [
++    "$fixed=Join-Path $outputRoot ('reference-name-'+$Phase+'.pptx')",
++    "$fixed=Join-Path $root ('reference-name-'+$Phase+'.pptx')"
++  ],
++  [
++    "Join-Path $outputRoot 'reference-name-before.pptx'",
++    "Join-Path $root 'reference-name-before.pptx'"
++  ],
++  [
++    "Join-Path $outputRoot 'reference-name-reopened.pptx'",
++    "Join-Path $root 'reference-name-reopened.pptx'"
++  ]
++];
++  let workerRootState=snapshotState;for(const [prior,next]of workerRootEdits){assert.equal(workerRootState.split(prior).length-1,1);workerRootState=workerRootState.replace(prior,next);}
++  const currentWorker=Buffer.from(workerRootState);assert.equal(currentWorker.length,93922);assert.equal(digest(currentWorker),'21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255');
++  let workerRootInverse=workerRootState;for(const [prior,next]of [...workerRootEdits].reverse()){assert.equal(workerRootInverse.split(next).length-1,1);workerRootInverse=workerRootInverse.replace(next,prior);}
++  assert.deepEqual(Buffer.from(workerRootInverse),snapshotWorker,'Seventh-stage inverse preserves all six immutable earlier stages');
++  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),currentWorker);
+   for(const name of ['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
+   const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
+   assert.ok(runner.indexOf('if(-not $RunOffice)')<runner.indexOf('$checked=& $node $validator verify-postflight'));
+diff --git a/scripts/native-acceptance/reference-name-snapshot-check.ps1 b/scripts/native-acceptance/reference-name-snapshot-check.ps1
+index b60185387..8c2633efb 100644
+--- a/scripts/native-acceptance/reference-name-snapshot-check.ps1
++++ b/scripts/native-acceptance/reference-name-snapshot-check.ps1
+@@ -7,6 +7,16 @@ $tokens=$null;$errors=$null;$ast=[Management.Automation.Language.Parser]::ParseF
+ foreach($name in @('Invoke-FurnitureCom','Stop-FurnitureLifecycle','Get-FurnitureSha256','Save-OwnedReferenceNameSnapshot')){
+     $nodes=@($ast.FindAll({param($n)$n -is [Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -ceq $name},$true));if($nodes.Count -ne 1){throw 'Exact bounded Save helper dependency required'};Invoke-Expression $nodes[0].Extent.Text
+ }
++$controllerRootBefore=$Root
++$workerRootNodes=@($ast.EndBlock.Statements|Where-Object {$_ -is [Management.Automation.Language.AssignmentStatementAst] -and $_.Left.Extent.Text -ceq '$root'})
++$savedPathNodes=@($ast.EndBlock.Statements|Where-Object {$_ -is [Management.Automation.Language.AssignmentStatementAst] -and $_.Left.Extent.Text -ceq '$savedPath'})
++if($workerRootNodes.Count -ne 1 -or $savedPathNodes.Count -ne 1){throw 'Exact real worker output initializers required'}
++$script:workerRootInitializer=$workerRootNodes[0].Extent.Text
++function Invoke-NameSnapshotFixtureRoot([string]$OutputDirectory,[string]$ExpectedPath,[string]$CopyPath,[string]$Phase){
++    # Function-local actual initializer cannot overwrite the case-insensitive repository $Root parameter.
++    Invoke-Expression $script:workerRootInitializer
++    Save-OwnedReferenceNameSnapshot $ExpectedPath $CopyPath $Phase
++}
+ $script:events=[Collections.Generic.List[string]]::new();function Write-FurnitureStage([string]$Name,[string]$Status,[string]$ErrorMessage=$null){$script:events.Add($Name+':'+$Status)};function Write-FurnitureReport{}
+ function global:Get-Process {throw 'Managed Name controls forbid real process queries'}
+ function global:New-Object {throw 'Managed Name controls forbid Office/factory construction'}
+@@ -44,16 +54,61 @@ foreach($mode in @('before','reopened','no-mode','no-reference','foreign-phase',
+     $script:presentation|Add-Member -MemberType ScriptProperty -Name FullName -Value {if($script:fixtureMode -ceq 'getter-fault'){throw 'Actual fake FullName fault'};return $this.CurrentPath}
+     $script:presentation|Add-Member -MemberType ScriptMethod -Name SaveCopyAs -Value {param($path,$format)$script:saveCount++;if($format -ne 24){throw 'Exact native format required'};if($script:fixtureMode -ceq 'save-fault'){throw 'Actual fake SaveCopyAs fault'};[IO.File]::WriteAllText($path,'SYNTHETIC INERT COPY');if($script:fixtureMode -ceq 'wrong-after-name'){$this.CurrentPath+='-foreign'}}
+     if($mode -ceq 'no-mode'){$script:referenceNameSnapshotsModeEnabled=$false};if($mode -ceq 'no-reference'){$script:referenceNameModeEnabled=$false};if($mode -ceq 'foreign-phase'){$phase='edited'};if($mode -ceq 'foreign-path'){$copy=Join-Path $outputRoot 'foreign.pptx'};if($mode -ceq 'same-input'){$copy=$input};if($mode -ceq 'existing-copy'){[IO.File]::WriteAllText($copy,'OLD COPY')};if($mode -ceq 'foreign-owner'){$script:ownedPresentationPath+='-foreign'};if($mode -ceq 'wrong-before-name'){$script:presentation.CurrentPath+='-foreign'}
+-    $failure=$null;try{Save-OwnedReferenceNameSnapshot $input $copy $phase}catch{$failure=$_.Exception.Message}
++    $failure=$null;try{Invoke-NameSnapshotFixtureRoot $outputRoot $input $copy $phase}catch{$failure=$_.Exception.Message}
+     if($mode -cin @('before','reopened')){
+         if($null -ne $failure -or $script:saveCount -ne 1 -or $script:report.referenceNameSnapshots.Count -ne 1 -or $script:report.referenceNameSnapshots[0].path -cne $copy -or $script:report.referenceNameSnapshots[0].sha256 -cne (Get-FurnitureSha256 $copy)){throw ('Owned copy positive failed: '+$mode)}
+     }else{
+         if($null -eq $failure -or -not $script:officeOperationsStopped -or $script:cleanupConfirmed){throw ('Expected bounded copy refusal: '+$mode)}
+         if($mode -cnotin @('wrong-after-name','save-fault') -and $script:saveCount -ne 0){throw 'Refused precondition reached SaveCopyAs'}
+-        $count=$script:events.Count;try{Save-OwnedReferenceNameSnapshot $input $copy 'before'}catch{};if($script:events.Count -ne $count){throw 'Fault latch allowed later Office operations'}
++        $count=$script:events.Count;try{Invoke-NameSnapshotFixtureRoot $outputRoot $input $copy 'before'}catch{};if($script:events.Count -ne $count){throw 'Fault latch allowed later Office operations'}
+     }
+     if((Get-FileHash -LiteralPath $input -Algorithm SHA256).Hash -cne $hash){throw 'Owned input bytes changed'};$saves+=@([ordered]@{scenario=$mode;passed=$true;saves=$script:saveCount;failure=$failure})
+ }
++# Actual worker initializer/helper/calls in a separate script scope with supervisor outputRoot explicitly null.
++$copyCalls=@($ast.FindAll({param($n)$n -is [Management.Automation.Language.IfStatementAst] -and $n.Extent.Text.StartsWith('if($script:referenceNameSnapshotsModeEnabled){Save-OwnedReferenceNameSnapshot ',[StringComparison]::Ordinal)},$true))
++if($copyCalls.Count -ne 2){throw 'Both exact real worker snapshot call sites required'}
++$beforeCall=@($copyCalls|Where-Object {$_.Extent.Text.Contains("'reference-name-before.pptx'")});$reopenedCall=@($copyCalls|Where-Object {$_.Extent.Text.Contains("'reference-name-reopened.pptx'")})
++if($beforeCall.Count -ne 1 -or $reopenedCall.Count -ne 1){throw 'Unique before/reopened real worker calls required'}
++$saveDefinitions=@(foreach($name in @('Invoke-FurnitureCom','Stop-FurnitureLifecycle','Get-FurnitureSha256','Save-OwnedReferenceNameSnapshot')){$nodes=@($ast.FindAll({param($n)$n -is [Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -ceq $name},$true));if($nodes.Count -ne 1){throw 'Exact scope helper required'};$nodes[0].Extent.Text})
++$scopeSetup=@'
++$ErrorActionPreference='Stop'
++$outputRoot=$null
++function Write-FurnitureReport{}
++function Write-FurnitureStage([string]$Name,[string]$Status,[string]$ErrorMessage=$null){$script:events.Add($Name+':'+$Status)}
++$script:events=[Collections.Generic.List[string]]::new();$script:saveCount=0
++$script:referenceNameModeEnabled=$true;$script:referenceNameSnapshotsModeEnabled=$true;$script:officeOperationsStopped=$false;$script:cleanupConfirmed=$false
++$script:report=[ordered]@{referenceNameSnapshots=@()}
++$sourceSnapshot=(Resolve-Path -LiteralPath $InputPresentation).Path;$script:ownedPresentationPath=$sourceSnapshot
++$script:presentation=[pscustomobject]@{CurrentPath=$sourceSnapshot}
++$script:presentation|Add-Member -MemberType ScriptProperty -Name FullName -Value {return $this.CurrentPath}
++$script:presentation|Add-Member -MemberType ScriptMethod -Name SaveCopyAs -Value {param($path,$format)if($format -ne 24){throw 'Exact inert copy format required'};$script:saveCount++;[IO.File]::WriteAllText($path,'SYNTHETIC INERT SCOPE COPY')}
++$failure=$null
++'@
++$scopeBetween=@'
++[IO.File]::WriteAllText($savedPath,'SYNTHETIC INERT EDITED INPUT')
++$script:presentation.CurrentPath=$savedPath;$script:ownedPresentationPath=$savedPath
++'@
++$scopeResult=@'
++}catch{$failure=$_.Exception.Message}
++[pscustomobject]@{worker=[bool]$Worker;supervisorOutputRootNull=($null -eq $outputRoot);workerRootExact=($root -ceq (Resolve-Path -LiteralPath $OutputDirectory).Path);saveCount=$script:saveCount;snapshots=@($script:report.referenceNameSnapshots);events=@($script:events.ToArray());failure=$failure}
++'@
++$scopeBody=@($ast.ParamBlock.Extent.Text,($saveDefinitions -join "`n"),$scopeSetup,$workerRootNodes[0].Extent.Text,$savedPathNodes[0].Extent.Text,'try{',$beforeCall[0].Extent.Text,$scopeBetween,$reopenedCall[0].Extent.Text,$scopeResult)-join "`n"
++$oldScope=$scopeBody
++foreach($pair in @(@("Join-Path `$root ('reference-name-'+`$Phase+'.pptx')","Join-Path `$outputRoot ('reference-name-'+`$Phase+'.pptx')"),@("Join-Path `$root 'reference-name-before.pptx'","Join-Path `$outputRoot 'reference-name-before.pptx'"),@("Join-Path `$root 'reference-name-reopened.pptx'","Join-Path `$outputRoot 'reference-name-reopened.pptx'"))){if(($oldScope.Split([string[]]@($pair[0]),[StringSplitOptions]::None)).Count -ne 2){throw 'Unique three-path old-scope counterexample required'};$oldScope=$oldScope.Replace($pair[0],$pair[1])}
++$workerScope=@()
++foreach($mode in @('current-worker-root','old-supervisor-root')){
++    $dir=Join-Path $Output ('scope-'+$mode);[void](New-Item -ItemType Directory -Path $dir)
++    $input=Join-Path $dir 'owned-input.pptx';[IO.File]::WriteAllText($input,'SYNTHETIC INERT SOURCE');$inputHash=Get-FurnitureSha256 $input
++    $file=Join-Path $Output ($mode+'.ps1');$body=if($mode -ceq 'current-worker-root'){$scopeBody}else{$oldScope};[IO.File]::WriteAllText($file,$body,[Text.UTF8Encoding]::new($false))
++    $value=& $file -OutputDirectory $dir -InputPresentation $input -Worker -ReferenceNameEdit -ReferenceNameSnapshots
++    if($value.worker -cne $true -or $value.supervisorOutputRootNull -cne $true -or $value.workerRootExact -cne $true){throw 'Fresh real worker initializer scope differed'}
++    if($mode -ceq 'current-worker-root'){
++        if($null -ne $value.failure -or $value.saveCount -ne 2 -or $value.snapshots.Count -ne 2 -or $value.events.Count -ne 12){throw 'Actual fresh worker snapshot calls failed'}
++        for($i=0;$i -lt 2;$i++){$phase=@('before','reopened')[$i];$copy=Join-Path $dir ('reference-name-'+$phase+'.pptx');if($value.snapshots[$i].phase -cne $phase -or $value.snapshots[$i].path -cne $copy -or $value.snapshots[$i].sha256 -cne (Get-FurnitureSha256 $copy)){throw 'Fresh worker snapshot path/hash differed'}}
++    }elseif($null -eq $value.failure -or $value.saveCount -ne 0 -or $value.snapshots.Count -ne 0 -or $value.events.Count -ne 0){throw 'Old supervisor-only variable did not fail before inert Save'}
++    if((Get-FurnitureSha256 $input) -cne $inputHash -or $Root -cne $controllerRootBefore){throw 'Scope control changed input or parent repository Root'}
++    $workerScope+=@([ordered]@{scenario=$mode;passed=$true;worker=$value.worker;supervisorOutputRootNull=$value.supervisorOutputRootNull;workerRootExact=$value.workerRootExact;saveCount=$value.saveCount;snapshotCount=$value.snapshots.Count;eventCount=$value.events.Count;controllerRootPreserved=$true;failure=$value.failure})
++}
+ . (Join-Path $Root 'scripts/native-acceptance/owned-postflight.ps1')
+ . (Join-Path $Root 'scripts/native-acceptance/furniture-postflight.ps1')
+ $original=Get-Content -LiteralPath $Fixture -Raw -Encoding UTF8|ConvertFrom-Json;$adapter=@()
+@@ -92,4 +147,4 @@ foreach($mode in @('positive','missing-before','missing-reopened','crossed-copy-
+     $adapter+=@([ordered]@{scenario=$mode;passed=$true;mockQueries=$script:mockQueries;failure=$failure})
+ }
+ if((Get-FileHash -LiteralPath $worker -Algorithm SHA256).Hash -cne $before){throw 'Worker changed during managed controls'}
+-[ordered]@{schemaVersion=1;officeInvoked=$false;realProcessQueries=0;genuineStartupArchive=$false;earlierSourceBootstrapExercised=$false;startup=$startup;saves=$saves;adapter=$adapter;cardinality=$cardinality}|ConvertTo-Json -Depth 30|Set-Content -LiteralPath (Join-Path $Output 'result.json') -Encoding UTF8
++[ordered]@{schemaVersion=1;officeInvoked=$false;realProcessQueries=0;genuineStartupArchive=$false;earlierSourceBootstrapExercised=$false;startup=$startup;saves=$saves;adapter=$adapter;cardinality=$cardinality;workerScope=$workerScope}|ConvertTo-Json -Depth 30|Set-Content -LiteralPath (Join-Path $Output 'result.json') -Encoding UTF8
+diff --git a/scripts/native-acceptance/reference-name-snapshot.test.mjs b/scripts/native-acceptance/reference-name-snapshot.test.mjs
+index c1e9953c6..06c065ec4 100644
+--- a/scripts/native-acceptance/reference-name-snapshot.test.mjs
++++ b/scripts/native-acceptance/reference-name-snapshot.test.mjs
+@@ -92,6 +92,6 @@ test('actualPS5 closed owned Save helper and real unchanged observer adapter',{s
+  assert.equal(requestedStat.dev,canonicalStat.dev,'Both temp spellings must identify the same owned fixture device');
+  assert.equal(requestedStat.ino,canonicalStat.ino,'Both temp spellings must identify the same owned fixture file');
+  console.log('Reference Name snapshot fixture identity:',JSON.stringify({lexicalSpellingDiffers:requestedOut!==out,sameOwnedFixture:true}));
+- const result=spawnSync(path.join(process.env.SystemRoot,'System32/WindowsPowerShell/v1.0/powershell.exe'),['-NoProfile','-NonInteractive','-File',path.join(ROOT,'scripts/native-acceptance/reference-name-snapshot-check.ps1'),'-Root',ROOT,'-Fixture',fixture,'-Output',path.join(out,'managed')],{env:windowsPowerShellEnvironment(process.env),encoding:'utf8',timeout:15000});fs.writeFileSync(path.join(out,'stdout.log'),result.stdout??'');fs.writeFileSync(path.join(out,'stderr.log'),result.stderr??'');assert.equal(result.status,0,result.error?.message??result.stdout+result.stderr);const data=JSON.parse(fs.readFileSync(path.join(out,'managed/result.json'),'utf8').replace(/^\uFEFF/u,''));assert.equal(data.officeInvoked,false);assert.equal(data.realProcessQueries,0);assert.equal(data.genuineStartupArchive,false);assert.equal(data.earlierSourceBootstrapExercised,false);assert.deepEqual(data.startup.map(row=>row.scenario),['enabled','old-name-only','disabled','missing-new-switch','missing-new-request','false-new-request','new-without-reference','wrong-source']);assert.ok(data.startup.every(row=>row.passed));assert.deepEqual(data.saves.map(row=>row.scenario),['before','reopened','no-mode','no-reference','foreign-phase','foreign-path','same-input','existing-copy','foreign-owner','wrong-before-name','wrong-after-name','getter-fault','save-fault']);assert.ok(data.saves.every(row=>row.passed));assert.deepEqual(data.adapter.map(row=>row.scenario),['positive','missing-before','missing-reopened','crossed-copy-order','copy-after-setter','wrong-owner','extra-copy','wrong-type','missing-mode','wrong-input','pending']);assert.ok(data.adapter.every(row=>row.passed));assert.equal(data.adapter[0].mockQueries,1);assert.ok(data.adapter.slice(1).every(row=>row.mockQueries===0));assert.deepEqual(data.cardinality.map(row=>row.scenario),['before-0','before-1','before-2','reopened-0','reopened-1','reopened-2']);assert.deepEqual(data.cardinality.map(({phase,endRows,expectedReady,ready,passed})=>({phase,endRows,expectedReady,ready,passed})),['before','reopened'].flatMap(phase=>[0,1,2].map(endRows=>({phase,endRows,expectedReady:endRows===1,ready:endRows===1,passed:true}))));
++ const result=spawnSync(path.join(process.env.SystemRoot,'System32/WindowsPowerShell/v1.0/powershell.exe'),['-NoProfile','-NonInteractive','-File',path.join(ROOT,'scripts/native-acceptance/reference-name-snapshot-check.ps1'),'-Root',ROOT,'-Fixture',fixture,'-Output',path.join(out,'managed')],{env:windowsPowerShellEnvironment(process.env),encoding:'utf8',timeout:15000});fs.writeFileSync(path.join(out,'stdout.log'),result.stdout??'');fs.writeFileSync(path.join(out,'stderr.log'),result.stderr??'');assert.equal(result.status,0,result.error?.message??result.stdout+result.stderr);const data=JSON.parse(fs.readFileSync(path.join(out,'managed/result.json'),'utf8').replace(/^\uFEFF/u,''));assert.equal(data.officeInvoked,false);assert.equal(data.realProcessQueries,0);assert.equal(data.genuineStartupArchive,false);assert.equal(data.earlierSourceBootstrapExercised,false);assert.deepEqual(data.startup.map(row=>row.scenario),['enabled','old-name-only','disabled','missing-new-switch','missing-new-request','false-new-request','new-without-reference','wrong-source']);assert.ok(data.startup.every(row=>row.passed));assert.deepEqual(data.saves.map(row=>row.scenario),['before','reopened','no-mode','no-reference','foreign-phase','foreign-path','same-input','existing-copy','foreign-owner','wrong-before-name','wrong-after-name','getter-fault','save-fault']);assert.ok(data.saves.every(row=>row.passed));assert.deepEqual(data.adapter.map(row=>row.scenario),['positive','missing-before','missing-reopened','crossed-copy-order','copy-after-setter','wrong-owner','extra-copy','wrong-type','missing-mode','wrong-input','pending']);assert.ok(data.adapter.every(row=>row.passed));assert.equal(data.adapter[0].mockQueries,1);assert.ok(data.adapter.slice(1).every(row=>row.mockQueries===0));assert.deepEqual(data.cardinality.map(row=>row.scenario),['before-0','before-1','before-2','reopened-0','reopened-1','reopened-2']);assert.deepEqual(data.cardinality.map(({phase,endRows,expectedReady,ready,passed})=>({phase,endRows,expectedReady,ready,passed})),['before','reopened'].flatMap(phase=>[0,1,2].map(endRows=>({phase,endRows,expectedReady:endRows===1,ready:endRows===1,passed:true}))));assert.deepEqual(data.workerScope.map(row=>row.scenario),['current-worker-root','old-supervisor-root']);assert.deepEqual(data.workerScope.map(({scenario,passed,worker,supervisorOutputRootNull,workerRootExact,saveCount,snapshotCount,eventCount,controllerRootPreserved,failure})=>({scenario,passed,worker,supervisorOutputRootNull,workerRootExact,saveCount,snapshotCount,eventCount,controllerRootPreserved,failure:failure===null})),[{scenario:'current-worker-root',passed:true,worker:true,supervisorOutputRootNull:true,workerRootExact:true,saveCount:2,snapshotCount:2,eventCount:12,controllerRootPreserved:true,failure:true},{scenario:'old-supervisor-root',passed:true,worker:true,supervisorOutputRootNull:true,workerRootExact:true,saveCount:0,snapshotCount:0,eventCount:0,controllerRootPreserved:true,failure:false}]);
+ });
+ export {completion};
+diff --git a/changes/rr-105-name-worker-root.md b/changes/rr-105-name-worker-root.md
+new file mode 100644
+index 000000000..a3159f932
+--- /dev/null
++++ b/changes/rr-105-name-worker-root.md
+@@ -0,0 +1,5 @@
++---
++type: fixed
++packages: []
++---
++RR-105: Build the two closed native Name snapshot paths from the worker's initialized output root, with fresh worker-scope controls that cannot inherit a supervisor-only variable.
+diff --git a/docs/handoff/2026-11-11/reference-name-worker-root.md b/docs/handoff/2026-11-11/reference-name-worker-root.md
+new file mode 100644
+index 000000000..abfc33853
+--- /dev/null
++++ b/docs/handoff/2026-11-11/reference-name-worker-root.md
+@@ -0,0 +1,9 @@
++# Name snapshot worker-root scope
++
++SOURCE ONLY; no new syntax/import/tests/build/PS/Office/cleanup/retry executed. Base0f53564afa6a79ff9b7235140afbe85c9cf94bfc. Earlier default and actual Office-free Node9/original32/separate6 qualification keep their exact scope; they did not exercise the complete real worker main path.
++
++Preserve the actual first new Name native failure: one owned read-only open and three original PNGs, zero actions/Save/Close/Quit, before any comparison/postflight. At the first before-snapshot call, Join-Path received null supervisor-only `$outputRoot`. The worker main initializes `$root` at318; `$outputRoot` is initialized only in the non-Worker supervisor branch at258. Exactly three Name-only paths introduced in the snapshot helper and before/reopened call sites used that wrong variable. The failed93940B worker SHA256 `1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870` remains the original failed identity; no failed result is rescued. No cleanup or subsequent Office action is authorized by this source change.
++
++Change only those three paths to the already resolved actual worker `$root`. New worker93922B SHA256 `21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255`; inverse of the three replacements restores the complete old worker. Every mode, owner, save/readback order, overwrite refusal, budget, stage and observer remains unchanged. Both existing mechanical worker tests now add an exact seventh forward/inverse step; all six historical source stages/hashes stay unchanged.
++
++The prior thirteen managed Save cases created ambient `$outputRoot`, masking this worker-main scope bug. Their existing scenarios/assertions remain, but actual helper invocation now occurs through a function-local extraction of the actual worker initializer so repository `$Root` (PowerShell is case-insensitive) remains untouched. A separate workerScope group generates two inert script scopes using the actual worker ParamBlock, worker root/saved-path assignments, exact Save helper dependencies and both actual call-site IFs. Supervisor `$outputRoot` is explicitly null. Current source must complete exactly two owned inert copies with exact root paths/hashes, twelve helper stage events and unchanged source/parent repository root. Reconstructing ONLY the old three paths in another fresh scope must fail before any inert Save/event. No Office/factory/process query or new public mode is involved; these are not native archives or full-worker execution proof. Node9 checks both exact result names/outcomes separately from the unchanged original32 and separate6 cardinality controls; the original15-second PS child deadline stays unchanged. Actual Windows execution is still owed before any new genuine native assignment.

@@ -1,0 +1,41 @@
+{"kind":"start","nodeMs":0.2510839999995369,"engine":"chromium","version":"158.0.8127.18","width":820,"height":1180,"state":"the Edit sheet (selection, text, notes)","delays":[0,100,250,500,1000,2000,5000,10000,20000,40000,60000,89000],"caps":{"events":512,"bytes":262144,"samples":12},"diagnosticIO":"synchronous bounded writes; timing overhead is not zero"}
+{"kind":"phase","nodeMs":4.28833399999894,"phase":"navigation"}
+{"kind":"request","nodeMs":5.33691700000054,"url":"http://127.0.0.1:57443/index.html","type":"document"}
+{"kind":"response","nodeMs":6.439167000000452,"url":"http://127.0.0.1:57443/index.html","status":200}
+{"kind":"navigation","nodeMs":7.5051669999993464,"url":"http://127.0.0.1:57443/index.html"}
+{"kind":"startup-sample","nodeMs":9.925333999999566,"sample":{"index":0,"browserMs":3.2999999970197678,"readMilliseconds":0,"readyState":"loading","status":null,"fonts":"loaded","editorPresent":false,"lastError":null,"svgCount":0,"readError":null}}
+{"kind":"request","nodeMs":11.221874999999272,"url":"http://127.0.0.1:57443/styles.css","type":"stylesheet"}
+{"kind":"request","nodeMs":11.281499999999141,"url":"http://127.0.0.1:57443/playground.css","type":"stylesheet"}
+{"kind":"request","nodeMs":11.309124999999767,"url":"http://127.0.0.1:57443/playground.js","type":"script"}
+{"kind":"request-finished","nodeMs":11.571916999999303,"url":"http://127.0.0.1:57443/index.html"}
+{"kind":"response","nodeMs":12.63799999999901,"url":"http://127.0.0.1:57443/playground.css","status":200}
+{"kind":"response","nodeMs":12.749583999999231,"url":"http://127.0.0.1:57443/styles.css","status":200}
+{"kind":"request-finished","nodeMs":13.766959000000497,"url":"http://127.0.0.1:57443/playground.css"}
+{"kind":"request-finished","nodeMs":15.390541999999186,"url":"http://127.0.0.1:57443/styles.css"}
+{"kind":"startup-sample","nodeMs":110.35624999999891,"sample":{"index":1,"browserMs":104.5,"readMilliseconds":0.20000000298023224,"readyState":"interactive","status":"Ready to edit","fonts":"loaded","editorPresent":false,"lastError":null,"svgCount":0,"readError":null}}
+{"kind":"response","nodeMs":139.29449999999997,"url":"http://127.0.0.1:57443/playground.js","status":200}
+{"kind":"request-finished","nodeMs":139.42241699999977,"url":"http://127.0.0.1:57443/playground.js"}
+{"kind":"request","nodeMs":283.5836249999993,"url":"http://127.0.0.1:57443/base-fonts.json","type":"fetch"}
+{"kind":"domcontentloaded","nodeMs":283.63658399999986}
+{"kind":"load","nodeMs":283.8812089999992}
+{"kind":"phase","nodeMs":283.90870899999936,"phase":"preview SVG visible"}
+{"kind":"startup-sample","nodeMs":284.2015419999989,"sample":{"index":2,"browserMs":278.20000000298023,"readMilliseconds":0,"readyState":"complete","status":"Ready to edit","fonts":"loaded","editorPresent":false,"lastError":null,"svgCount":0,"readError":null}}
+{"kind":"response","nodeMs":288.30133399999977,"url":"http://127.0.0.1:57443/base-fonts.json","status":200}
+{"kind":"request-finished","nodeMs":288.5189589999991,"url":"http://127.0.0.1:57443/base-fonts.json"}
+{"kind":"request","nodeMs":288.57408399999986,"url":"http://127.0.0.1:57443/fonts.json","type":"fetch"}
+{"kind":"response","nodeMs":293.61162499999955,"url":"http://127.0.0.1:57443/fonts.json","status":200}
+{"kind":"request-finished","nodeMs":314.4640839999993,"url":"http://127.0.0.1:57443/fonts.json"}
+{"kind":"request","nodeMs":618.6282499999998,"url":"http://127.0.0.1:57443/harfbuzz-subset.wasm","type":"fetch"}
+{"kind":"request","nodeMs":618.9897920000003,"url":"http://127.0.0.1:57443/harfbuzz.wasm","type":"fetch"}
+{"kind":"response","nodeMs":619.8912920000002,"url":"http://127.0.0.1:57443/harfbuzz.wasm","status":200}
+{"kind":"response","nodeMs":619.9876249999998,"url":"http://127.0.0.1:57443/harfbuzz-subset.wasm","status":200}
+{"kind":"startup-sample","nodeMs":620.1185420000002,"sample":{"index":3,"browserMs":614,"readMilliseconds":0.10000000894069672,"readyState":"complete","status":"Ready to edit","fonts":"loaded","editorPresent":false,"lastError":null,"svgCount":0,"readError":null}}
+{"kind":"request-finished","nodeMs":621.9860420000005,"url":"http://127.0.0.1:57443/harfbuzz.wasm"}
+{"kind":"request-finished","nodeMs":622.1092090000002,"url":"http://127.0.0.1:57443/harfbuzz-subset.wasm"}
+{"kind":"request","nodeMs":1982.2410839999993,"url":"http://127.0.0.1:57443/galleries.json","type":"fetch"}
+{"kind":"response","nodeMs":1987.0585419999989,"url":"http://127.0.0.1:57443/galleries.json","status":200}
+{"kind":"startup-sample","nodeMs":1987.7320839999993,"sample":{"index":4,"browserMs":1982.5,"readMilliseconds":0,"readyState":"complete","status":"Ready to edit","fonts":"loaded","editorPresent":true,"lastError":null,"svgCount":1,"readError":null}}
+{"kind":"request-finished","nodeMs":2499.0633749999997,"url":"http://127.0.0.1:57443/galleries.json"}
+{"kind":"preview-visible","nodeMs":2499.1621670000004,"samples":5,"samplerObserved":true}
+{"kind":"sampler-stop-fault","nodeMs":2751.276,"message":"Startup sampler stop exceeded250ms","milliseconds":252.07508400000006}
+{"kind":"journal-close","nodeMs":4090.491,"events":40,"bytes":5035,"samples":5,"overflow":false,"ioFailed":false,"writeMilliseconds":1.4800799999993615}

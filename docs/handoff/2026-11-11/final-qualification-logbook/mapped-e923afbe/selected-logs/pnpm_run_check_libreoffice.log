@@ -1,0 +1,26 @@
+
+> openpresentation-workspace@ check:libreoffice /private/tmp/opf-034
+> node --test scripts/libreoffice/*.test.mjs
+
+✔ the pinned environment names an exact LibreOffice build and the workflow image (0.554041ms)
+✔ tokenize drops invisible format characters and splits on any space (0.314042ms)
+✔ runExtent ignores trailing spaces of a run's advance (0.078667ms)
+✔ a run is attributed to the smallest text shape it starts in (0.128917ms)
+✔ containment reports text past its box and past the slide, with distances (0.173083ms)
+✔ missingWords counts occurrences and survives runs split by the viewer (0.385459ms)
+✔ missingWords folds case (an all-caps eyebrow) and compares right-to-left words as letters (0.60425ms)
+✔ compareStructure finds lost words and lost explicit breaks (0.13475ms)
+✔ inkOutside counts ink in the margin only, outside a guard band (0.134166ms)
+✔ sourceBleeds lists the sides a deck itself draws past (0.104375ms)
+✔ verdict: defects fail, documented differences do not (0.328125ms)
+✔ readPptx reads the retained opf#925 artifact as its manifest records it (11.955083ms)
+✔ the corpus covers the issue's areas and the shared native-acceptance decks (6.907625ms)
+✔ output preparation preserves prior qualification evidence and refuses a nonempty directory (0.790583ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 65.22375

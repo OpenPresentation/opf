@@ -1,0 +1,154 @@
+{
+  "base": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "branch": "codex/rr-105-name-worker-root",
+  "worktree": "/tmp/opf-name-worker-root",
+  "qualification": "SOURCE ONLY; text/hash/inverse/diffcheck only; no syntax/import/tests/build/PS/Office/cleanup/retry/commit/push",
+  "changed": [
+    {
+      "path": "changes/rr-105-name-worker-root.md",
+      "bytes": 213,
+      "sha256": "ea81e4ad598ff1e104ba65531128826bcd14d4a6e70ab7f34610add3ac432b44"
+    },
+    {
+      "path": "docs/handoff/2026-11-11/reference-name-worker-root.md",
+      "bytes": 2771,
+      "sha256": "b881dcda05bd3b282405b20dde21451f3e27947ea3b62a41c2788b23a2a691c7"
+    },
+    {
+      "path": "docs/programs/release-readiness/burndown.md",
+      "bytes": 571143,
+      "sha256": "bb5896d1b28c60ee5d84cb5e1b26983377bf919264fbbfdfa3cebff9d37d739a"
+    },
+    {
+      "path": "packages/pptx/test/native-furniture-control.ps1",
+      "bytes": 93922,
+      "sha256": "21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255"
+    },
+    {
+      "path": "packages/pptx/test/native-reference-startup.mjs",
+      "bytes": 8923,
+      "sha256": "8bde153e03b2a064fcbb3e10f2d2be9907845d1eba5e4d7fd1d2775b4ef7376f"
+    },
+    {
+      "path": "scripts/native-acceptance/b07-postflight.test.mjs",
+      "bytes": 20828,
+      "sha256": "512cb845a6ccfea308c51ead477114e9c821bfc472858b20c309593be649cfb8"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-name-snapshot-check.ps1",
+      "bytes": 21815,
+      "sha256": "6d8797bfe246f2f5a098dd885321c0406e444978f4dbda661251d7938b7c7841"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-name-snapshot.test.mjs",
+      "bytes": 22687,
+      "sha256": "81f211a3c34ff05c2418e04be1528ad3ceacd1fe694f273d8b74362e618df7ae"
+    }
+  ],
+  "protectedBaseExact": [
+    {
+      "path": "scripts/native-acceptance/reference-name-snapshot-contract.mjs",
+      "bytes": 18290,
+      "sha256": "adb918178ee2b95ba99355385ed2a4b039a2088cc350cfa43f8f5968f0255dd6"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-name-snapshot-profile.mjs",
+      "bytes": 637,
+      "sha256": "77aec121ea3a3e87d4691e7e1a891c9a2068469e160aca36000ed9dfb4dd5a2e"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-name-contract.mjs",
+      "bytes": 18047,
+      "sha256": "aa6a91dd5cab84560a7a21896ee510614e8fec640adc634e1f731cd84a1c384b"
+    },
+    {
+      "path": "scripts/native-acceptance/furniture-profile.mjs",
+      "bytes": 31852,
+      "sha256": "470b5134f4e822de5cb549547487fba419570186288b7e248fb978951b639b6d"
+    },
+    {
+      "path": "scripts/native-acceptance/furniture-postflight.ps1",
+      "bytes": 30405,
+      "sha256": "5749f01004839c08f4b98487a36653bbe0a8297f3e02370cfecc63744cee33bf"
+    },
+    {
+      "path": "scripts/native-acceptance/owned-postflight.ps1",
+      "bytes": 18877,
+      "sha256": "1779ae802dd73ee8f004bb43620e4eb07683df492cd7fdc24811aa159af51ba4"
+    },
+    {
+      "path": "scripts/native-acceptance/owned-postflight.mjs",
+      "bytes": 12137,
+      "sha256": "f1e7371586880fe76db6f3e1d615db23f67a062ad89a1b99abf8377ef601c782"
+    },
+    {
+      "path": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+      "bytes": 19206,
+      "sha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3"
+    },
+    {
+      "path": "scripts/native-acceptance/run-reference-name-snapshots.ps1",
+      "bytes": 1042,
+      "sha256": "d82bd3a2261a72838fa276a2a53c4c21d0e2dba85c888c470210064bc9b7017c"
+    },
+    {
+      "path": "scripts/native-acceptance/run-windows.ps1",
+      "bytes": 21737,
+      "sha256": "9c18327fc0d97c39fdfc0d97c75ff97406bae893eb6a60ca7bdd218c69aa1355"
+    },
+    {
+      "path": "scripts/native-acceptance/windows-powershell-env.mjs",
+      "bytes": 495,
+      "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6"
+    },
+    {
+      "path": "scripts/native-acceptance/test-fixtures/reference-chart/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "packages/pptx/test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "packages/pptx/test/native-furniture-harness-check.ps1",
+      "bytes": 47449,
+      "sha256": "d69184f4ed50343dec501a060772fe63d33de04fff4765c68bd646a6f9512cb6"
+    },
+    {
+      "path": "packages/pptx/test/native-reference-startup-check.ps1",
+      "bytes": 6836,
+      "sha256": "6fba707dc325a6b492f6ee6a9935e513dc2000920b74b649d5f1e1b1eba3e0f4"
+    },
+    {
+      "path": "package.json",
+      "bytes": 13093,
+      "sha256": "6fbaac685fe76f992f246084ab4b58cc15b20122babae2cbc674f64056566ff0"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 137976,
+      "sha256": "11c0b695a44fe5dcbefa76722f78fdd725e9ceb70b29287cf70b042a2b3326fb"
+    }
+  ],
+  "worker": {
+    "path": "packages/pptx/test/native-furniture-control.ps1",
+    "bytes": 93922,
+    "sha256": "21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255"
+  },
+  "failedWorker": {
+    "bytes": 93940,
+    "sha256": "1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870",
+    "outcome": "actual native failed at first before-copy Join-Path null after1ROopen/3PNGs;0actions/saves/closes/Quit; comparisons and observer UNREACHED"
+  },
+  "scope": "EXACT3Namepaths use existing workerroot; no generic variable/mode/ownership/save/stage/cap/observer change; fresh actual-source scope proof +scoped13fixture wiring; exactstage7 only",
+  "inverseProof": {
+    "bytes": 1953,
+    "sha256": "e6b1b5ecdc23a70486572063795b8242bb31c3a364272fc1a43afdd00134a0d6"
+  },
+  "patch": {
+    "bytes": 33150,
+    "sha256": "f5fe9c5444ef41acc122bbcf591dd4d933c330b6c2b96c826d0784d9f912694c"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "review": "ACCEPT source02 with independentpeer; actual browser qualification owed",
+  "base": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "manifest": {
+    "bytes": 3721,
+    "sha256": "4fdf3c8c732053c2201b454eb21f47a1681126d7b88c579e0c85c20c64188356"
+  },
+  "patch": {
+    "bytes": 16169,
+    "sha256": "11d717cde9f18c13bc763b83be2d560bb8562172d91174d1af6255aa405af0cb"
+  },
+  "syntaxNode": "PASS",
+  "original": {
+    "all21Workload": true,
+    "sixtySecondWait": true,
+    "threeSecondFailureProbe": true,
+    "allTapsAssertionsFanoutFailfast": true
+  },
+  "retention": "Finite12sampler,128pages,512events/256KiB perpage; exact returned bytes checked, shortwrite IO fault/no retry;250ms normalstopACK diagnostic only",
+  "primaryFailure": "Preserved; one WebKit primary and three teardown collateral remain literal",
+  "execution": "UNRUN",
+  "peer": "/tmp/opf-mobile-startup-phase-peer-review02.json"
+}

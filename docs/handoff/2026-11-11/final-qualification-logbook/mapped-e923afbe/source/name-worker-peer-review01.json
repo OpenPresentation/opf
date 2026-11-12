@@ -1,0 +1,34 @@
+{
+  "verdict": "ACCEPTED; no concrete blocker",
+  "scope": "Independent source-only; no syntax/import/tests/build/PS/Office/cleanup/retry",
+  "patch": {
+    "bytes": 33150,
+    "sha256": "f5fe9c5444ef41acc122bbcf591dd4d933c330b6c2b96c826d0784d9f912694c"
+  },
+  "manifestSha256": "5d63b317d31521c2660546b0d36165cc9549c9454ed63d9cab6a5f6dfebeab55",
+  "verified": {
+    "changedFiles": 8,
+    "protectedBaseExact": 17,
+    "wholeInverses": [
+      "worker exact3paths",
+      "managed checker scope group/wrapper only",
+      "Node extra2scope asserts",
+      "startup stage7 only",
+      "B07 stage7 only"
+    ],
+    "worker": {
+      "path": "packages/pptx/test/native-furniture-control.ps1",
+      "bytes": 93922,
+      "sha256": "21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255"
+    },
+    "failedWorkerPreserved": {
+      "bytes": 93940,
+      "sha256": "1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870",
+      "outcome": "actual native failed at first before-copy Join-Path null after1ROopen/3PNGs;0actions/saves/closes/Quit; comparisons and observer UNREACHED"
+    },
+    "freshScope": "Actual ParamBlock/root+savedPath initializer/four helper definitions/both actual IFs; supervisor rootnull; current2copies12events, reconstructedold0copies0events",
+    "repositoryRoot": "Function-local initializer prevents case-insensitive Root parameter overwrite; explicit parent preservation checked",
+    "unchanged": "Original8startup/13Save/11adapter/6cardinality/Node9/15s, modes/guards/lifecycle/kernel/observer; prior6derivations preserved"
+  },
+  "qualification": "All new actual Windows execution unrun; source acceptance not native/cleanup approval."
+}

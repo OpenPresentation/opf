@@ -1,0 +1,24 @@
+{
+  "source": {
+    "head": "e923afbe78413608f98d942089e9763d6b10282b",
+    "tree": "3e176743f49b0afd96a2aa238792342d03cc6ac6",
+    "status": ""
+  },
+  "node": "v24.21.0",
+  "code": 0,
+  "seconds": 35.88,
+  "actualCoreGroups": 21,
+  "actualEngines": [
+    "chromium",
+    "webkit"
+  ],
+  "journals": 29,
+  "allRetainedHashesVerified": true,
+  "overflow": false,
+  "ioFailed": false,
+  "maximumWriteMilliseconds": 7.315501000000722,
+  "maximumFlushCloseMilliseconds": 6.759791000000405,
+  "sourceUnchanged": true,
+  "compiled609AndAssets223Unchanged": true,
+  "scope": "Actual Mac suite with new passive evidence; not proof Windows startup failure repaired."
+}

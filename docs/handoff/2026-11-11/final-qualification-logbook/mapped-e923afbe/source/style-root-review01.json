@@ -1,0 +1,19 @@
+{
+  "sourceReview": "ACCEPT with peer; actualPS/diagnostic acceptance pending",
+  "base": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "patch": {
+    "bytes": 24811,
+    "sha256": "a6cc9da9d7091b984ced7eca4785f27f4b9f2bed566f4dc901e3d2f6fca24651"
+  },
+  "manifest": {
+    "bytes": 5160,
+    "sha256": "8b19885e8bde42713a67f11a8c80d4e0a23933637b626b5fc6b83ac05c2524ca"
+  },
+  "syntaxNode": "PASS",
+  "actionlint": "PASS",
+  "diffCheck": "PASS",
+  "operations": "Original commands/assertions/paths/two30s caps unchanged;16finite phase calls bound32 and raw child/known partial files retained",
+  "timeoutCause": "UNKNOWN; no performance cure claimed",
+  "execution": "UNRUN",
+  "peer": "/tmp/opf-style-probe-retention-peer-review01.json"
+}

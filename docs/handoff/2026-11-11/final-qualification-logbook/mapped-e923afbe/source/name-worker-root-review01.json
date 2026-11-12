@@ -1,0 +1,16 @@
+{
+  "review": "ACCEPT source with independentpeer; syntax/diff validation separate; actualPS/native remainsowed",
+  "base": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "patch": {
+    "bytes": 33150,
+    "sha256": "f5fe9c5444ef41acc122bbcf591dd4d933c330b6c2b96c826d0784d9f912694c"
+  },
+  "manifest": {
+    "bytes": 5830,
+    "sha256": "5d63b317d31521c2660546b0d36165cc9549c9454ed63d9cab6a5f6dfebeab55"
+  },
+  "fix": "Three Name-only worker path tokens use existing workerroot; originalcopiedworker recovered exact through inverse",
+  "regression": "Actualworker initializer/helper/calls/ParamBlock freshscope; supervisoroutputRoot null, current2inertcopies12events vsold0/0; parentrepoRoot preserved",
+  "bounds": "Original32+6/Node9/15s andold6history stages exact; new2scope cases separate",
+  "peer": "/tmp/opf-name-worker-root-peer-review01.json"
+}

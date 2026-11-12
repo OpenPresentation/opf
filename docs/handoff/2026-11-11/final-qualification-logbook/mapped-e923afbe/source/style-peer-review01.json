@@ -1,0 +1,32 @@
+{
+  "verdict": "ACCEPTED; no concrete blocker",
+  "scope": "Independent SOURCE-only; no import/syntax/test/build/PS/Office/API",
+  "patch": {
+    "bytes": 24811,
+    "sha256": "a6cc9da9d7091b984ced7eca4785f27f4b9f2bed566f4dc901e3d2f6fca24651"
+  },
+  "manifestSha256": "8b19885e8bde42713a67f11a8c80d4e0a23933637b626b5fc6b83ac05c2524ca",
+  "verified": {
+    "changedFiles": 6,
+    "protectedBaseExact": 12,
+    "independentWholeInverses": [
+      "Node body/commands/assertions/environment/tmp",
+      "PowerShell original operations/assertions",
+      "nightly one upload path"
+    ],
+    "unchangedChildTimeouts": [
+      30000,
+      30000
+    ],
+    "phaseWrites": {
+      "normal": 16,
+      "cap": 32,
+      "fileOnly": true
+    },
+    "retention": "Fresh owned artifact; original child exit/streams/timing +only4known partial files before original assertion; bounded copies",
+    "failure": "Original failure rethrown unchanged; capture errors cannot green or mask primary; successful controls with capture failure refuse",
+    "newOfficeCalls": 0,
+    "newProcessesOrQueries": 0
+  },
+  "qualification": "Old first-child timeout causeUNKNOWN/RED retained; no new timing/Windows/COM/native acceptance."
+}

@@ -1,0 +1,145 @@
+{
+  "source": "e923afbe78413608f98d942089e9763d6b10282b",
+  "selection": "Exactly gate.log ^ok rows;15PASS",
+  "unselected": [
+    "typecheck:noTS",
+    "tests editor:mobile browser not selected; no stale log copied"
+  ],
+  "logs": [
+    {
+      "step": "build",
+      "path": "selected-logs/build.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/build.log",
+      "bytes": 14666,
+      "sha256": "abbba1f758ec6ec2ca5022c787c79b86f3ab5dc4c6e3f065c894d8690cf16516",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:07:56.709765+00:00"
+    },
+    {
+      "step": "biome",
+      "path": "selected-logs/biome.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/biome.log",
+      "bytes": 42036,
+      "sha256": "4b64ae4dfc8d2bf9cd54ad9d683bf769c978759817e481c3fe5ee602c4bb1f25",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:07:56.854289+00:00"
+    },
+    {
+      "step": "pnpm run check:changes",
+      "path": "selected-logs/pnpm_run_check_changes.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_changes.log",
+      "bytes": 2666,
+      "sha256": "7d4ce268db0ba4e857ae46c9340de011ed19c07220f78b089a2b8559c8833b13",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:07:57.067012+00:00"
+    },
+    {
+      "step": "pnpm run check:ci-scope",
+      "path": "selected-logs/pnpm_run_check_ci-scope.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_ci-scope.log",
+      "bytes": 3108,
+      "sha256": "612bc8da443f93b96c92e69e89037cb23562daf59359d1cc830ead7deea13037",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:08:00.198166+00:00"
+    },
+    {
+      "step": "pnpm run check:ci-workflows",
+      "path": "selected-logs/pnpm_run_check_ci-workflows.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_ci-workflows.log",
+      "bytes": 10516,
+      "sha256": "6eaf7af899c68b5dc206f8cd5a42289522d0511abd1cbff5985a7f6d573e9b58",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:08:01.929230+00:00"
+    },
+    {
+      "step": "pnpm run check:gallery-tracker",
+      "path": "selected-logs/pnpm_run_check_gallery-tracker.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_gallery-tracker.log",
+      "bytes": 2018,
+      "sha256": "d9e17464b656d0367e03afeeb8c6bcee563aa7e339f5ad338bc175082f2da93c",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:08:03.597067+00:00"
+    },
+    {
+      "step": "pnpm run check:libreoffice",
+      "path": "selected-logs/pnpm_run_check_libreoffice.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_libreoffice.log",
+      "bytes": 1427,
+      "sha256": "9f4ec813c9b465b8be2bd8253089e79d10c4019c4548cf5c7b3b1444c4eacac7",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:08:03.812527+00:00"
+    },
+    {
+      "step": "pnpm run check:font-hotlinks",
+      "path": "selected-logs/pnpm_run_check_font-hotlinks.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_font-hotlinks.log",
+      "bytes": 861,
+      "sha256": "fecc10de722485dbcf2c147133e589572dc4115dc3f965d706b068f46e6a7683",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:08:15.852983+00:00"
+    },
+    {
+      "step": "pnpm run check:playwright-pin",
+      "path": "selected-logs/pnpm_run_check_playwright-pin.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_playwright-pin.log",
+      "bytes": 786,
+      "sha256": "823faa3cceadd5e57dfee6f604e1e84747d6b0c5e4e1553c3c020219347ffa99",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:08:16.354525+00:00"
+    },
+    {
+      "step": "pnpm run check:release-report",
+      "path": "selected-logs/pnpm_run_check_release-report.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_release-report.log",
+      "bytes": 826,
+      "sha256": "fbf547dabf38bb22b654aafe329b34757a0ebc8c6f1ba2d6c2ee3fc2a5ae379e",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:08:16.826270+00:00"
+    },
+    {
+      "step": "pnpm run check:native-acceptance",
+      "path": "selected-logs/pnpm_run_check_native-acceptance.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_native-acceptance.log",
+      "bytes": 68863,
+      "sha256": "5f7cf92810e7e72b80ec5df1bf45808a1cc20673440e5eefa8101cda4064e681",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:08:23.204928+00:00"
+    },
+    {
+      "step": "pnpm run check:skill-commands",
+      "path": "selected-logs/pnpm_run_check_skill-commands.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_skill-commands.log",
+      "bytes": 1048,
+      "sha256": "aa50a7c2ae039749acaba91732b138e8e96995f4ca14542f749f83e43abacb33",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:08:27.995188+00:00"
+    },
+    {
+      "step": "pnpm run check:text",
+      "path": "selected-logs/pnpm_run_check_text.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_text.log",
+      "bytes": 1082,
+      "sha256": "47fabfaa834034aade33d097303632ae25e7b756d28e98484e257edbfcaf3e37",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:08:32.688316+00:00"
+    },
+    {
+      "step": "pnpm run check:stability",
+      "path": "selected-logs/pnpm_run_check_stability.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/pnpm_run_check_stability.log",
+      "bytes": 3995,
+      "sha256": "c106591019aaed024e145234dfe80724284eb1a1d366d4fb5b401e759080926b",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:09:03.436703+00:00"
+    },
+    {
+      "step": "tests pptx",
+      "path": "selected-logs/tests_pptx.log",
+      "source": "/tmp/opf-034/artifacts/check-changed/tests_pptx.log",
+      "bytes": 254591,
+      "sha256": "4551c8be17cac24b96a905de09f06de5049bb0de6a24be283557dddb8801365e",
+      "withinActualExecutionWindow": true,
+      "sourceMtimeUTC": "2026-11-12T07:23:06.121518+00:00"
+    }
+  ]
+}

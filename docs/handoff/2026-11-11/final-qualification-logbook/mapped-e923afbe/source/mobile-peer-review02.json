@@ -1,0 +1,26 @@
+{
+  "verdict": "ACCEPTED; no remaining concrete blocker",
+  "scope": "Independent SOURCE-only; no syntax/import/test/browser/build/PS/API",
+  "sourcePatch": {
+    "bytes": 16169,
+    "sha256": "11d717cde9f18c13bc763b83be2d560bb8562172d91174d1af6255aa405af0cb"
+  },
+  "manifestSha256": "4fdf3c8c732053c2201b454eb21f47a1681126d7b88c579e0c85c20c64188356",
+  "verified": {
+    "changedFiles": 3,
+    "protectedBaseExact": 11,
+    "wholeOriginalInverseBytes": 37553,
+    "wholeSource01InverseBytes": 45769,
+    "onlySuccessorCodeChange": "Check exact encoded writeSync returned bytes before incrementing complete counters; partialwrite enters existing IO-fault latch/no retry",
+    "boundedRecorder": {
+      "pages": 128,
+      "events": 512,
+      "bytes": 262144,
+      "samples": 12
+    },
+    "unchanged": "Original60s readiness/3s failure capture,21/FULL workload,taps,fanout/failfast/assertions",
+    "normalStopAck": "Root-approved250ms diagnostic cleanup only; no new acceptance gate",
+    "primaryFailurePreserved": true
+  },
+  "qualification": "Source acceptance only; original primary WebKit timeout cause unknown; no new browser result or product fix claimed."
+}

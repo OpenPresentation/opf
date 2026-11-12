@@ -1,0 +1,364 @@
+diff --git a/.github/workflows/nightly.yml b/.github/workflows/nightly.yml
+index 87a1d7c65..62f0216e7 100644
+--- a/.github/workflows/nightly.yml
++++ b/.github/workflows/nightly.yml
+@@ -231,6 +231,7 @@ jobs:
+         with:
+           name: pptx-windows-${{ matrix.shard }}
+           path: |
++            packages/pptx/artifacts/native-furniture-style-controls/**
+             packages/pptx/artifacts/native-picture-harness/**
+             packages/pptx/artifacts/quarantine/**
+           retention-days: 7
+diff --git a/docs/programs/release-readiness/burndown.md b/docs/programs/release-readiness/burndown.md
+index db64e0ca7..e97e8fb5a 100644
+--- a/docs/programs/release-readiness/burndown.md
++++ b/docs/programs/release-readiness/burndown.md
+@@ -1514,3 +1514,5 @@ package, close RR-68 or claim a new release result; normal source integration ga
+ - 2026-11-11 RR-105 Name snapshot fixture SOURCE ONLY: retain actualWindows43157898641 browserPASS and Node9/8/1FAILED; firstprivateadapter refused shortTEMP spelling at strict canonical-path guard, full32unqualified. Native-canonicalize only the new test-owned temp root, prove same BigInt device/file identity and record actual spelling difference; all PS/worker/kernel/archives/modes/deadlines/observer guards unchanged. New validation-only attempt owed; no browser repeat or old-result rescue. [Scope](../../handoff/2026-11-11/reference-name-snapshot-temp.md).
+ 
+ - 2026-11-11 RR-105 Name snapshot endpoint SOURCE ONLY: preserve actual43160756096 Node9/8PASS1FAIL and successful same-owned native-temp identity facts. Correct whole-IF singleton collection construction for PS5.1 without changing Count1/order/observer guards; six separately named actual-definition cardinality controls added alongside unchanged original32 and Node9/15s deadline. All new execution UNRUN. [Cause and scope](../../handoff/2026-11-11/reference-name-snapshot-cardinality.md).
++
++- 2026-11-11 RR-105 style-probe retention SOURCE ONLY: preserve actual0f5 Windows PPTX2 first-child30s ETIMEDOUT and prior79 whole-file9.949sPASS with all5sourcefiles exact. Cause remains unknown; finite phase/child-output/known-partial-file retention and existing always-upload path drafted, with exact old operations/assertions/commands/deadlines and primary-failure preservation. New execution UNRUN. [Failure and capture scope](../../handoff/2026-11-11/furniture-style-probe-retention.md).
+diff --git a/packages/pptx/test/native-font-property-probe.ps1 b/packages/pptx/test/native-font-property-probe.ps1
+index 24e757dcd..4fc3dce54 100644
+--- a/packages/pptx/test/native-font-property-probe.ps1
++++ b/packages/pptx/test/native-font-property-probe.ps1
+@@ -1,6 +1,16 @@
+ param([Parameter(Mandatory=$true)][string]$ReportPath,[switch]$ProbeComAdapter)
+ $ErrorActionPreference='Stop'
+ if(Test-Path -LiteralPath $ReportPath) { throw 'Preserve prior probe report' }
++# Fixed-size file-only phase witness. Diagnostic IO must not replace an original operation failure.
++$phasePath=$ReportPath+'.phases.jsonl';$phaseClock=[Diagnostics.Stopwatch]::StartNew();$phaseCount=0;$phaseErrors=@()
++if(Test-Path -LiteralPath $phasePath) { throw 'Preserve prior probe phases' }
++function Write-FontPropertyProbePhase([string]$Phase) {
++ if($script:phaseCount -ge 32) { if($script:phaseErrors.Count -lt 32) {$script:phaseErrors+=@('Phase witness overflow')};return }
++ $script:phaseCount++
++ try { [ordered]@{sequence=$script:phaseCount;phase=$Phase;timestamp=[DateTime]::UtcNow.ToString('o');elapsedMilliseconds=$script:phaseClock.Elapsed.TotalMilliseconds}|ConvertTo-Json -Compress|Add-Content -LiteralPath $script:phasePath -Encoding UTF8 }
++ catch { if($script:phaseErrors.Count -lt 32) {$script:phaseErrors+=@($_.Exception.Message)} }
++}
++Write-FontPropertyProbePhase 'ast.begin'
+ $worker=Join-Path $PSScriptRoot 'native-furniture-control.ps1'
+ $tokens=$null; $errors=$null
+ $ast=[System.Management.Automation.Language.Parser]::ParseFile($worker,[ref]$tokens,[ref]$errors)
+@@ -11,7 +21,9 @@ foreach($name in @('Test-Integer','Invoke-FurnitureCom','Read-FurnitureProperty'
+  Invoke-Expression $node.Extent.Text
+ }
+ function Write-FurnitureStage([string]$Name,[string]$Status,[string]$ErrorMessage=$null) { }
++Write-FontPropertyProbePhase 'ast.complete'
+ # Pure managed getter throws COMException; no COM activation, Office or files opened.
++Write-FontPropertyProbePhase 'add-type.begin'
+ Add-Type -TypeDefinition @'
+ using System.Runtime.InteropServices;
+ public class OpfThrowingFontProperty {
+@@ -21,6 +33,7 @@ public class OpfThrowingFontProperty {
+  public int Italic { get { return 0; } }
+ }
+ '@
++Write-FontPropertyProbePhase 'add-type.complete'
+ function Observe-Read($Font,[string]$Kind,[string]$Strategy) {
+  $script:officeOperationsStopped=$false; $script:cleanupConfirmed=$true
+  $caught=$false; $value=$null; $message=$null
+@@ -34,6 +47,7 @@ function Observe-Read($Font,[string]$Kind,[string]$Strategy) {
+  } catch { $caught=$true; $message=$_.Exception.Message }
+  return [ordered]@{kind=$Kind;strategy=$Strategy;caught=$caught;officeOperationsStopped=$script:officeOperationsStopped;cleanupConfirmed=$script:cleanupConfirmed;value=$value;error=$message}
+ }
++Write-FontPropertyProbePhase 'managed-reads.begin'
+ $scriptFont=[pscustomobject]@{Size=18;Bold=0;Italic=0}
+ $scriptFont | Add-Member -MemberType ScriptProperty -Name Name -Value { throw 'Deliberate ScriptProperty failure' }
+ $records=@()
+@@ -46,26 +60,32 @@ $normalExplicit=Observe-Read $normal 'normal' 'explicit-property-method'
+ $missing=Observe-Read ([pscustomobject]@{}) 'missing' 'explicit-property-method'
+ $empty=Observe-Read ([pscustomobject]@{Name=$null}) 'null' 'explicit-property-method'
+ $records+=@($normalRead,$normalExplicit,$missing,$empty)
++Write-FontPropertyProbePhase 'managed-reads.complete'
+ $comObservation=[ordered]@{requested=[bool]$ProbeComAdapter;executed=$false;passed=$false;released=$false;reads=@();error=$null}
+ if($ProbeComAdapter) {
+  $dictionary=$null
+  try {
+   if($env:OS -ne 'Windows_NT') { throw 'COM adapter probe requires Windows' }
++  Write-FontPropertyProbePhase 'dictionary.create.begin'
+   $dictionary=New-Object -ComObject Scripting.Dictionary
++  Write-FontPropertyProbePhase 'dictionary.create.complete'
+   if(-not [Runtime.InteropServices.Marshal]::IsComObject($dictionary)) { throw 'Expected real COM adapter object' }
+   $comObservation.executed=$true
+   foreach($expected in @(0,1)) {
++   Write-FontPropertyProbePhase ('dictionary.count-'+$expected+'.begin')
+    if($expected -eq 1) { $dictionary.Add('key','value') }
+    $property=$dictionary.PSObject.Properties['Count']
+    if($null -eq $property) { throw 'COM Count property unavailable' }
+    $actual=Read-FurnitureProperty $dictionary 'Count' 'probe.com-count.get'
+    $comObservation.reads+=@([ordered]@{expected=$expected;actual=$actual;type=$actual.GetType().FullName;adapter=$property.GetType().FullName})
+    if($actual -isnot [int] -or $actual -ne $expected) { throw 'COM Count type/value changed' }
++   Write-FontPropertyProbePhase ('dictionary.count-'+$expected+'.complete')
+   }
+   $comObservation.passed=$true
+  } catch { $comObservation.error=$_.Exception.Message }
+- finally { if($null -ne $dictionary -and [Runtime.InteropServices.Marshal]::IsComObject($dictionary)) { try { [void][Runtime.InteropServices.Marshal]::ReleaseComObject($dictionary);$comObservation.released=$true } catch { $comObservation.error='COM release failure: '+$_.Exception.Message } } }
++ finally { if($null -ne $dictionary -and [Runtime.InteropServices.Marshal]::IsComObject($dictionary)) { try { Write-FontPropertyProbePhase 'dictionary.release.begin';[void][Runtime.InteropServices.Marshal]::ReleaseComObject($dictionary);$comObservation.released=$true;Write-FontPropertyProbePhase 'dictionary.release.complete' } catch { $comObservation.error='COM release failure: '+$_.Exception.Message } } }
+ }
++Write-FontPropertyProbePhase 'report.begin'
+ $report=[ordered]@{powerShell=$PSVersionTable.PSVersion.ToString();observations=$records;explicitMethodControlsPassed=$false;comAdapter=$comObservation;officeInvoked=$false;lateBoundPowerPointComAdapterProven=$false;scope='Managed/script getter behavior and optional Windows Scripting.Dictionary adapter only; no PowerPoint or native acceptance.'}
+ $report | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $ReportPath -Encoding UTF8
+ foreach($record in $records | Where-Object {$_.kind -in @('ScriptProperty','managed-COMException-getter')}) {
+@@ -77,3 +97,5 @@ if($missing.caught -or $null -ne $missing.value -or $empty.caught -or $null -ne
+ if($ProbeComAdapter -and (-not $comObservation.passed -or -not $comObservation.released)) { throw 'COM adapter compatibility probe failed; inspect preserved report' }
+ $report.explicitMethodControlsPassed=$true
+ $report | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $ReportPath -Encoding UTF8
++Write-FontPropertyProbePhase 'report.complete'
++if($phaseErrors.Count -gt 0) { throw ('Probe phase preservation failed: '+($phaseErrors -join '; ')) }
+diff --git a/packages/pptx/test/native-furniture-style-controls.mjs b/packages/pptx/test/native-furniture-style-controls.mjs
+index e16d7a114..bb25fd5da 100644
+--- a/packages/pptx/test/native-furniture-style-controls.mjs
++++ b/packages/pptx/test/native-furniture-style-controls.mjs
+@@ -1,7 +1,7 @@
+ // Source policy plus the maintained AST-only mock checker on Windows. No Office object is constructed.
+ import assert from "node:assert/strict";
+ import { spawnSync } from "node:child_process";
+-import { mkdtempSync, readFileSync } from "node:fs";
++import { constants, copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+ import { tmpdir } from "node:os";
+ import path from "node:path";
+ import { fileURLToPath } from "node:url";
+@@ -35,86 +35,133 @@ assert.match(
+ assert.match(source, /\$request\.captureTextFonts -isnot \[bool\]/);
+ if (process.platform === "win32") {
+ 	const output = mkdtempSync(path.join(tmpdir(), "opf-style-"));
+-	const ps = path.join(
+-		process.env.WINDIR,
+-		"System32/WindowsPowerShell/v1.0/powershell.exe",
+-	);
+-	const env = { ...process.env };
+-	for (const key of Object.keys(env))
+-		if (key.toLowerCase() === "psmodulepath") delete env[key];
+-	const probeReport = path.join(output, "property-probe.json");
+-	const probe = spawnSync(
+-		ps,
+-		[
+-			"-NoProfile",
+-			"-NonInteractive",
+-			"-File",
+-			fileURLToPath(new URL("native-font-property-probe.ps1", import.meta.url)),
+-			"-ReportPath",
+-			probeReport,
+-			"-ProbeComAdapter",
+-		],
+-		{ encoding: "utf8", timeout: 30000, windowsHide: true, env },
+-	);
+-	assert.equal(
+-		probe.status,
+-		0,
+-		probe.error?.message ?? probe.stdout + probe.stderr,
+-	);
+-	const propertyReport = JSON.parse(
+-		readFileSync(probeReport, "utf8").replace(/^\uFEFF/, ""),
+-	);
+-	assert.equal(propertyReport.explicitMethodControlsPassed, true);
+-	assert.equal(propertyReport.comAdapter.passed, true);
+-	assert.equal(propertyReport.comAdapter.released, true);
+-	assert.equal(propertyReport.officeInvoked, false);
+-	const result = spawnSync(
+-		ps,
+-		[
+-			"-NoProfile",
+-			"-NonInteractive",
+-			"-File",
+-			fileURLToPath(checker),
+-			"-ScriptPath",
+-			fileURLToPath(worker),
+-			"-ReportPath",
+-			path.join(output, "report.json"),
+-		],
+-		{ encoding: "utf8", timeout: 30000, windowsHide: true, env },
+-	);
+-	assert.equal(
+-		result.status,
+-		0,
+-		result.error?.message ?? result.stdout + result.stderr,
+-	);
+-	const report = JSON.parse(
+-		readFileSync(path.join(output, "report.json"), "utf8").replace(
+-			/^\uFEFF/,
+-			"",
+-		),
+-	);
+-	assert.equal(report.passed, true);
+-	assert.equal(report.accepted, 12);
+-	assert.equal(report.rejected, 81);
+-	assert.equal(report.cases.filter(item => item.name.startsWith("point-") && item.expected === "reject").length, 49);
+-	assert.equal(report.chartPointControls.length, 45);
+-	assert.equal(report.chartPointControls.filter(item => /^(pie-translated|pie-full-circle|doughnut-radial)-/.test(item.name ?? "")).length, 9);
+-	assert.equal(report.chartPointControls.filter(item => /^(pie-midradius|pie-center-nonfinite|pie-outer-nonfinite|doughnut-inner-nonfinite)/.test(item.name ?? "")).length, 6);
+-	assert.deepEqual(report.chartPointControls.slice(-4).map(item => item.name), ["wrong-native-kind", "mixed-series-type", "unsupported-native-type", "doughnut-api-unavailable"]);
+-	assert.ok(report.chartPointControls.every(item => item.passed));
+-	const failedNative = report.chartPointControls.find(item => item.name === "serialized-curved-refusal");
+-	assert.equal(failedNative.rawObservations, 12);
+-	const serialized = JSON.parse(readFileSync(failedNative.path, "utf8").replace(/^\uFEFF/, ""));
+-	assert.equal(serialized.actionPlan.chartPoints.length, 0);
+-	assert.equal(serialized.actionPlan.currentChartPointProbe.sliceCoordinates.length, 12);
+-	assert.equal(report.lifecycleControls.length, 14);
+-	assert.ok(report.lifecycleControls.every(item => item.passed));
+-	assert.deepEqual(report.lifecycleControls.map(item => item.name), ["readonly-copy-edit-reopen", "wrong-open-path", "writable-open", "copy-failure", "copy-identity-change", "refuse-input-overwrite", "refuse-existing-output", "refuse-unowned-close", "close-failure", "refuse-nonempty-application-adoption", "refuse-nonempty-application-quit", "quit-failure", "refuse-unowned-application-quit", "refuse-running-office"]);
+-	assert.equal(report.textFontControls.length, 15);
+-	assert.ok(report.textFontControls.every((item) => item.passed));
+-	console.log(
+-		"Native style/font descriptor harness controls: Windows AST-only validation and object mocks PASS; no Office.",
+-	);
++	const evidence = { scope: "Office-free style/probe control diagnostics; no native acceptance", fixtureOutput: output, node: process.version, platform: process.platform, children: [], files: {}, primaryFailure: null, captureErrors: [] };
++	let artifact = null, hasPrimaryFailure = false;
++	const captureError = error => { evidence.captureErrors.push({name: String(error?.name ?? "Error"), message: String(error?.message ?? error)}); };
++	try {
++		const parent = fileURLToPath(new URL("../artifacts/native-furniture-style-controls/", import.meta.url));
++		mkdirSync(parent, {recursive: true}); assert.ok(lstatSync(parent).isDirectory() && !lstatSync(parent).isSymbolicLink(), "Owned regular style artifact parent required"); artifact = mkdtempSync(path.join(parent, "run-"));
++	} catch (error) { captureError(error); }
++	const captureKnownOutputs = () => {
++		if (!artifact) throw new Error("Owned style artifact directory unavailable");
++		for (const file of ["property-probe.json", "property-probe.json.phases.jsonl", "report.json", "report.json.plans/serialized-curved-refusal.json"]) {
++			const from = path.join(output, file);
++			if (!existsSync(from)) { evidence.files[file] = {present: false}; continue; }
++			const stat = lstatSync(from);
++			if (!stat.isFile() || stat.isSymbolicLink() || stat.size > 4 * 1024 * 1024) throw new Error("Known style fixture output is linked, nonregular or oversized");
++			const to = path.join(artifact, file); mkdirSync(path.dirname(to), {recursive: true});
++			if (existsSync(to)) assert.deepEqual(readFileSync(to), readFileSync(from), "Previously retained fixture output remains exact");
++			else copyFileSync(from, to, constants.COPYFILE_EXCL);
++			evidence.files[file] = {present: true, bytes: stat.size};
++		}
++	};
++	const retain = (name, child, elapsedMilliseconds) => {
++		try {
++			evidence.children.push({name, elapsedMilliseconds, status: child.status, signal: child.signal, error: child.error ? {name: child.error.name, message: child.error.message, code: child.error.code ?? null} : null});
++			if (!artifact) throw new Error("Owned style artifact directory unavailable");
++			for (const stream of ["stdout", "stderr"]) {
++				const value = child[stream] ?? "";
++				if (Buffer.byteLength(value) > 1024 * 1024) throw new Error("Style child output exceeds retained bound");
++				writeFileSync(path.join(artifact, name + "." + stream + ".log"), value, {flag: "wx"});
++			}
++			captureKnownOutputs();
++			writeFileSync(path.join(artifact, "receipt.json"), JSON.stringify(evidence, null, 2) + "\n");
++		} catch (error) { captureError(error); }
++	};
++	try {
++		const ps = path.join(
++			process.env.WINDIR,
++			"System32/WindowsPowerShell/v1.0/powershell.exe",
++		);
++		const env = { ...process.env };
++		for (const key of Object.keys(env))
++			if (key.toLowerCase() === "psmodulepath") delete env[key];
++		const probeReport = path.join(output, "property-probe.json");
++		const probeStarted = performance.now();
++		const probe = spawnSync(
++			ps,
++			[
++				"-NoProfile",
++				"-NonInteractive",
++				"-File",
++				fileURLToPath(new URL("native-font-property-probe.ps1", import.meta.url)),
++				"-ReportPath",
++				probeReport,
++				"-ProbeComAdapter",
++			],
++			{ encoding: "utf8", timeout: 30000, windowsHide: true, env },
++		);
++		retain("property-probe", probe, performance.now() - probeStarted);
++		assert.equal(
++			probe.status,
++			0,
++			probe.error?.message ?? probe.stdout + probe.stderr,
++		);
++		const propertyReport = JSON.parse(
++			readFileSync(probeReport, "utf8").replace(/^\uFEFF/, ""),
++		);
++		assert.equal(propertyReport.explicitMethodControlsPassed, true);
++		assert.equal(propertyReport.comAdapter.passed, true);
++		assert.equal(propertyReport.comAdapter.released, true);
++		assert.equal(propertyReport.officeInvoked, false);
++		const harnessStarted = performance.now();
++		const result = spawnSync(
++			ps,
++			[
++				"-NoProfile",
++				"-NonInteractive",
++				"-File",
++				fileURLToPath(checker),
++				"-ScriptPath",
++				fileURLToPath(worker),
++				"-ReportPath",
++				path.join(output, "report.json"),
++			],
++			{ encoding: "utf8", timeout: 30000, windowsHide: true, env },
++		);
++		retain("harness", result, performance.now() - harnessStarted);
++		assert.equal(
++			result.status,
++			0,
++			result.error?.message ?? result.stdout + result.stderr,
++		);
++		const report = JSON.parse(
++			readFileSync(path.join(output, "report.json"), "utf8").replace(
++				/^\uFEFF/,
++				"",
++			),
++		);
++		assert.equal(report.passed, true);
++		assert.equal(report.accepted, 12);
++		assert.equal(report.rejected, 81);
++		assert.equal(report.cases.filter(item => item.name.startsWith("point-") && item.expected === "reject").length, 49);
++		assert.equal(report.chartPointControls.length, 45);
++		assert.equal(report.chartPointControls.filter(item => /^(pie-translated|pie-full-circle|doughnut-radial)-/.test(item.name ?? "")).length, 9);
++		assert.equal(report.chartPointControls.filter(item => /^(pie-midradius|pie-center-nonfinite|pie-outer-nonfinite|doughnut-inner-nonfinite)/.test(item.name ?? "")).length, 6);
++		assert.deepEqual(report.chartPointControls.slice(-4).map(item => item.name), ["wrong-native-kind", "mixed-series-type", "unsupported-native-type", "doughnut-api-unavailable"]);
++		assert.ok(report.chartPointControls.every(item => item.passed));
++		const failedNative = report.chartPointControls.find(item => item.name === "serialized-curved-refusal");
++		assert.equal(failedNative.rawObservations, 12);
++		const serialized = JSON.parse(readFileSync(failedNative.path, "utf8").replace(/^\uFEFF/, ""));
++		assert.equal(serialized.actionPlan.chartPoints.length, 0);
++		assert.equal(serialized.actionPlan.currentChartPointProbe.sliceCoordinates.length, 12);
++		assert.equal(report.lifecycleControls.length, 14);
++		assert.ok(report.lifecycleControls.every(item => item.passed));
++		assert.deepEqual(report.lifecycleControls.map(item => item.name), ["readonly-copy-edit-reopen", "wrong-open-path", "writable-open", "copy-failure", "copy-identity-change", "refuse-input-overwrite", "refuse-existing-output", "refuse-unowned-close", "close-failure", "refuse-nonempty-application-adoption", "refuse-nonempty-application-quit", "quit-failure", "refuse-unowned-application-quit", "refuse-running-office"]);
++		assert.equal(report.textFontControls.length, 15);
++		assert.ok(report.textFontControls.every((item) => item.passed));
++		console.log(
++			"Native style/font descriptor harness controls: Windows AST-only validation and object mocks PASS; no Office.",
++		);
++	} catch (error) { hasPrimaryFailure = true; evidence.primaryFailure = {name: String(error?.name ?? "Error"), message: String(error?.message ?? error)}; throw error; }
++	finally {
++		try { captureKnownOutputs(); } catch (error) { captureError(error); }
++		try { if (artifact) writeFileSync(path.join(artifact, "receipt.json"), JSON.stringify(evidence, null, 2) + "\n"); } catch (error) { captureError(error); }
++		if (evidence.captureErrors.length) {
++			if (hasPrimaryFailure) console.error("Style diagnostic preservation also failed:", evidence.captureErrors);
++			else throw new Error("Style diagnostic preservation failed: " + JSON.stringify(evidence.captureErrors));
++		}
++	}
+ } else {
+ 	console.log(
+ 		"Native style harness source policy PASS; Windows PowerShell AST/parser/object mocks NOT RUN on this host.",
+diff --git a/changes/rr-105-style-probe-evidence.md b/changes/rr-105-style-probe-evidence.md
+new file mode 100644
+index 000000000..782e44ff4
+--- /dev/null
++++ b/changes/rr-105-style-probe-evidence.md
+@@ -0,0 +1,5 @@
++---
++type: fixed
++packages: []
++---
++RR-105: Preserve bounded Office-free style-probe phase, child-output and partial fixture evidence on Windows failures without changing its assertions or time limits.
+diff --git a/docs/handoff/2026-11-11/furniture-style-probe-retention.md b/docs/handoff/2026-11-11/furniture-style-probe-retention.md
+new file mode 100644
+index 000000000..7a0808bdd
+--- /dev/null
++++ b/docs/handoff/2026-11-11/furniture-style-probe-retention.md
+@@ -0,0 +1,11 @@
++# Preserve Office-free style-probe phase evidence
++
++SOURCE ONLY; syntax, imports, tests, PS, builds and new Windows execution UNRUN. Direct base is combined candidate0f53564afa6a79ff9b7235140afbe85c9cf94bfc. This is bounded test evidence retention, not a timeout fix or native acceptance.
++
++Actual FullCI43163569283 Windows PPTX2/job131000118536 failed at native-furniture-style-controls.mjs:59 with the FIRST PowerShell property probe ETIMEDOUT at the unchanged30000ms limit,06:01:11.3366749Z→06:01:41.5520303Z. The second AST/object harness was unreached. Prior79 job130955319706 passed the whole file (both children) in9.9492489s. All five test/probe/checker/worker/source-scanner files were byte-exact79→0f5. Source has finite AST extraction, one Add-Type compilation, managed reads and optional Windows Scripting.Dictionary creation/Count0→1/release; no unbounded loop or source cause is established. The old timeout remains FAILED and its phase UNKNOWN.
++
++The original test leaves its existing opf-style-* fixture/output paths and both exact child commands unchanged. It now also creates a fresh owned artifacts/native-furniture-style-controls/run-* directory. Before each original child-status assertion, retain the original stdout/stderr, elapsed time, status/signal/error and ONLY the known property report, phase sidecar, harness report and serialized-curved-refusal file when present. No unrelated TEMP directory is scanned/copied. Each known file is capped4MiB and each child stream1MiB; linked/nonregular/changed retained files refuse evidence completeness. Missing known outputs are explicit. Finally attempts preservation again; an original assertion/IO failure is rethrown unchanged if capture also fails. Capture failures cannot convert a failure to PASS and are independently surfaced when the original controls pass.
++
++The property probe writes file-only phase checkpoints beside its existing ReportPath, no new child argument or test scenario. The fixed finite sequence brackets AST, Add-Type, managed reads, Scripting.Dictionary creation, each existing Count0/1 sequence, release and final report. Sequence/UTC/Stopwatch elapsed timestamps are retained; at most32phase records/errors. Logger IO is caught so it cannot replace an existing operation failure; if the original probe otherwise finishes, logger errors refuse successful evidence completion. No new COM calls, Office/process queries, loops, retry, deadline or assertion change is introduced. Recording adds real IO/time overhead and cannot retrospectively explain the original timeout.
++
++The existing nightly Windows PPTX always-upload step adds only this artifact directory. No new job/gate/matrix/permissions or FullCI dispatch is introduced. Previously no picture/quarantine artifact existed and the timeout's temp files/child streams were not uploaded. One later unchanged-limit Windows run can now identify the last durable phase if needed, but no such run is assigned or claimed by this source checkpoint. Production worker/helpers/kernel/observer and every original action/geometry/font/refusal assertion remain unchanged.

@@ -1,0 +1,15 @@
+✔ reference startup retains exact immutable stages with fixed hashes and no Git/history requirement (11.356375ms)
+﹣ actual Windows PS5 executes the real main parameter and startup handshake, old fails/new passes without Office (0.055708ms) # SKIP
+✔ B07 postflight readiness uses actual completed-worker facts, preserving nested stages and raw records (1.040917ms)
+✔ a fault, incomplete lifecycle or changed raw B07 request/report cannot authorize postflight (4.809ms)
+✔ new B07 observation preserves first nonzero and reuses unchanged strict reference receipt validation (1.1595ms)
+✔ reviewed observer source remains exact and B07 source binds actual worker payloads before process observation (79.704ms)
+﹣ actual Windows AST-only B07 adapter and reviewed observer use injected process/clock callbacks (0.076708ms) # SKIP
+ℹ tests 7
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 2
+ℹ todo 0
+ℹ duration_ms 126.770333

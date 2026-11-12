@@ -1,0 +1,33 @@
+{
+  "nodeWholeInverseRemovingOnlyCaptureAndTimersPlusOneIndent": {
+    "baseExact": true,
+    "bytes": 5406,
+    "sha256": "dea8e8267fef49f4ed4b173037c4be6924b540182e0e05611d25a087f1f80346"
+  },
+  "probeWholeInverseRemovingOnlyPhaseHelperCallsFinalCaptureCheck": {
+    "baseExact": true,
+    "bytes": 5812,
+    "sha256": "06c99757ab44676765166c40215c4867cf895453d3819b7edfb18cf8bb7e55d5"
+  },
+  "nightlyWholeInverseRemovingOnlyOneUploadPath": {
+    "baseExact": true,
+    "bytes": 34807,
+    "sha256": "4efad8d6e94dd0a96c4d4f2d3f49065eb179418ffb5186ef776212e1cbe39b73"
+  },
+  "unchangedChildTimeouts": [
+    30000,
+    30000
+  ],
+  "oldChildCommandsEnvironmentsAndAllAssertions": "whole node inverse exact; no changed arguments/order/messages/thresholds",
+  "phaseBound": 32,
+  "normalPhaseCalls": 16,
+  "knownPartialFiles": [
+    "property-probe.json",
+    "property-probe.json.phases.jsonl",
+    "report.json",
+    "report.json.plans/serialized-curved-refusal.json"
+  ],
+  "perFileBytes": 4194304,
+  "perStreamBytes": 1048576,
+  "originalFixtureTmpPrefix": "opf-style-"
+}

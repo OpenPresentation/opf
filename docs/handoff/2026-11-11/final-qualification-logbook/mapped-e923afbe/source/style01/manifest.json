@@ -1,0 +1,129 @@
+{
+  "base": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "branch": "codex/rr-105-style-probe-retention",
+  "worktree": "/tmp/opf-style-probe-retention",
+  "qualification": "SOURCE ONLY; text/hash/inverse/diffcheck only; no syntax/import/test/build/PS/Office/commit/push",
+  "changed": [
+    {
+      "path": ".github/workflows/nightly.yml",
+      "bytes": 34878,
+      "sha256": "da8f71c4fec83d2320bddff89d2526f53365a2bf09fe216ba122c62c46ed8e22"
+    },
+    {
+      "path": "changes/rr-105-style-probe-evidence.md",
+      "bytes": 199,
+      "sha256": "df5f8860b7cfea94dcf73e541ae5cd3558672cb26d3d7b4b0e0710a1558af96e"
+    },
+    {
+      "path": "docs/handoff/2026-11-11/furniture-style-probe-retention.md",
+      "bytes": 3112,
+      "sha256": "7e5aa17810caae6fabf3cb4c9b04c0d4eb1aafb4efd112c6f3775ba83b8156a2"
+    },
+    {
+      "path": "docs/programs/release-readiness/burndown.md",
+      "bytes": 571099,
+      "sha256": "92452b3b2ac9c7cd86fd066421c7beb217e4fc8fbc8a167c3e375e13f92ef41c"
+    },
+    {
+      "path": "packages/pptx/test/native-font-property-probe.ps1",
+      "bytes": 7526,
+      "sha256": "fd342ac4c86d1d439d41bd76fc57e4f5fe9effb36b4a3d4e933925fa13a058c0"
+    },
+    {
+      "path": "packages/pptx/test/native-furniture-style-controls.mjs",
+      "bytes": 9026,
+      "sha256": "b3957ff67320461c2a5d7e220c7ea27a231dc677a619105b8c32d22ccaa97d8f"
+    }
+  ],
+  "protectedBaseExact": [
+    {
+      "path": "packages/pptx/test/native-furniture-control.ps1",
+      "bytes": 93940,
+      "sha256": "1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870",
+      "authority": "combined-base Git blob, equal own/frozen root file"
+    },
+    {
+      "path": "packages/pptx/test/native-furniture-harness-check.ps1",
+      "bytes": 47449,
+      "sha256": "d69184f4ed50343dec501a060772fe63d33de04fff4765c68bd646a6f9512cb6",
+      "authority": "combined-base Git blob, equal own/frozen root file"
+    },
+    {
+      "path": "packages/pptx/test/powershell-scan.mjs",
+      "bytes": 40276,
+      "sha256": "e62c354d99d312ce762d6f9576950e69ad9a0b78b7d450ac4c4770df3189ded5",
+      "authority": "combined-base Git blob, equal own/frozen root file"
+    },
+    {
+      "path": "packages/pptx/test/fixtures/sh25-native-circle-observations.json",
+      "bytes": 2490,
+      "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0",
+      "authority": "combined-base Git blob, equal own/frozen root file"
+    },
+    {
+      "path": "packages/pptx/test/suites.json",
+      "bytes": 2574,
+      "sha256": "3ab10736e2f340737e0e56d3b39b68b3aa436bcfa95a865aa1a5c745f80c27de",
+      "authority": "combined-base Git blob, equal own/frozen root file"
+    },
+    {
+      "path": "scripts/run-tests.mjs",
+      "bytes": 6688,
+      "sha256": "d612fee0d60877522d37febf41a195c5d88cd3fad14abaadba8eff9846450e93",
+      "authority": "combined-base Git blob, equal own/frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/owned-postflight.ps1",
+      "bytes": 18877,
+      "sha256": "1779ae802dd73ee8f004bb43620e4eb07683df492cd7fdc24811aa159af51ba4",
+      "authority": "combined-base Git blob, equal own/frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+      "bytes": 19206,
+      "sha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3",
+      "authority": "combined-base Git blob, equal own/frozen root file"
+    },
+    {
+      "path": "scripts/native-acceptance/test-fixtures/reference-chart/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "authority": "combined-base Git blob, equal own/frozen root file"
+    },
+    {
+      "path": ".github/workflows/full-ci.yml",
+      "bytes": 1501,
+      "sha256": "914a49d365e8c3e000e36b320dae7afa0c32dfae1d527d59674f78ae6dce3b57",
+      "authority": "combined-base Git blob, equal own/frozen root file"
+    },
+    {
+      "path": "package.json",
+      "bytes": 13093,
+      "sha256": "6fbaac685fe76f992f246084ab4b58cc15b20122babae2cbc674f64056566ff0",
+      "authority": "combined-base Git blob, equal own/frozen root file"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 137976,
+      "sha256": "11c0b695a44fe5dcbefa76722f78fdd725e9ceb70b29287cf70b042a2b3326fb",
+      "authority": "combined-base Git blob, equal own/frozen root file"
+    }
+  ],
+  "inverseProof": {
+    "bytes": 1074,
+    "sha256": "973741220e8e06de480381936e77e2fb82c1b51c4cdb81c7ff1eb59344a41d75"
+  },
+  "failure": {
+    "run": 43163569283,
+    "job": 131000118536,
+    "phase": "FIRST property-probe child",
+    "cause": "UNKNOWN; actual30s timeout preserved",
+    "prior79WholeFileSeconds": 9.9492489,
+    "all5RelevantSources79EqualsBase": true
+  },
+  "capture": "16fixednormalphasecalls capped32, file-only; unchanged commands/30000ms/assertions/tmp; childstreams/status/error and ONLY4knownpartialfiles before each assertion/finally; primaryfailure rethrows unchanged on captureerror; existingalwaysupload adds1path",
+  "patch": {
+    "bytes": 24811,
+    "sha256": "a6cc9da9d7091b984ced7eca4785f27f4b9f2bed566f4dc901e3d2f6fca24651"
+  }
+}

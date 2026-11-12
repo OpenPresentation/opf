@@ -1,0 +1,2 @@
+# Preserve original qualification evidence bytes, including CRLF.
+* -text

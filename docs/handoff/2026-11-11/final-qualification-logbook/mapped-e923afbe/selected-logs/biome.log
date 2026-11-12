@@ -1,0 +1,479 @@
+/private/tmp/opf-034/biome.json:2:14 deserialize ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i The configuration schema version does not match the CLI version 2.6.6
+  
+    1 │ {
+  > 2 │   "$schema": "https://biomejs.dev/schemas/2.5.12/schema.json",
+      │              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    3 │   "vcs": {
+    4 │     "enabled": true,
+  
+  i   Expected:                     2.6.6
+      Found:                        2.5.12
+  
+  
+  i Run the command biome migrate to migrate the configuration file.
+  
+
+scripts/native-acceptance/b07-postflight.test.mjs:19:32 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    17 │   return {terminal,report,request,stages:stages.map(([stage,status],index)=>({sequence:index+1,stage,status,error:index%2?'':null,officeOperationsStopped:false,cleanupConfirmed:true,ownedPresentationPath:null}))};
+    18 │ }
+  > 19 │ const wire=stages=>Buffer.from('\uFEFF'+stages.map(stage=>JSON.stringify(stage)).join('\r\n')+'\r\n');
+       │                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    20 │ const ready=value=>assertB07PostflightReady(value.terminal,value.report,value.request,wire(value.stages));
+    21 │ 
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+     17  17 │     return {terminal,report,request,stages:stages.map(([stage,status],index)=>({sequence:index+1,stage,status,error:index%2?'':null,officeOperationsStopped:false,cleanupConfirmed:true,ownedPresentationPath:null}))};
+     18  18 │   }
+     19     │ - const·wire=stages=>Buffer.from('\uFEFF'+stages.map(stage=>JSON.stringify(stage)).join('\r\n')+'\r\n');
+         19 │ + const·wire=stages=>Buffer.from(`\uFEFF${stages.map(stage=>JSON.stringify(stage)).join('\r\n')}\r\n`);
+     20  20 │   const ready=value=>assertB07PostflightReady(value.terminal,value.report,value.request,wire(value.stages));
+     21  21 │   
+  
+
+scripts/native-acceptance/b07-postflight.test.mjs:48:27 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    46 │ function observation(){
+    47 │   const rows=[{schemaVersion:1,sequence:1,utc:'2026-11-10T00:00:00.000Z',elapsedMilliseconds:0,status:'observed',processIds:[12345],error:null},{schemaVersion:1,sequence:2,utc:'2026-11-10T00:00:00.100Z',elapsedMilliseconds:100,status:'observed',processIds:[],error:null}];
+  > 48 │   const bytes=Buffer.from(rows.map(row=>JSON.stringify(row)).join('\n')+'\n');
+       │                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    49 │   const postflight={policy:structuredClone(B07_POSTFLIGHT_POLICY),workerCleanupConfirmed:true,initia...
+    50 │   return {rows,bytes,postflight};
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+     46  46 │   function observation(){
+     47  47 │     const rows=[{schemaVersion:1,sequence:1,utc:'2026-11-10T00:00:00.000Z',elapsedMilliseconds:0,status:'observed',processIds:[12345],error:null},{schemaVersion:1,sequence:2,utc:'2026-11-10T00:00:00.100Z',elapsedMilliseconds:100,status:'observed',processIds:[],error:null}];
+     48     │ - ··const·bytes=Buffer.from(rows.map(row=>JSON.stringify(row)).join('\n')+'\n');
+         48 │ + ··const·bytes=Buffer.from(`${rows.map(row=>JSON.stringify(row)).join('\n')}\n`);
+     49  49 │   ....jsonl',bytes:bytes.length,sha256:digest(bytes)}};
+     50  50 │     return {rows,bytes,postflight};
+  
+
+scripts/native-acceptance/b07-postflight.test.mjs:62:39 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    60 │ test('reviewed observer source remains exact and B07 source binds actual worker payloads before process observation',()=>{
+    61 │   const root=fileURLToPath(new URL('../../',import.meta.url));
+  > 62 │   const observer=readFileSync(new URL('../../'+B07_POSTFLIGHT_POLICY.observerSource,import.meta.url));
+       │                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    63 │   assert.equal(digest(observer),B07_POSTFLIGHT_POLICY.observerSourceSha256);
+    64 │   assert.deepEqual(observer,execFileSync('git',['show','f3f04183c2d38ffe3e5755a23b571b6b9ce8155e:'+B07_POSTFLIGHT_POLICY.observerSource],{cwd:root}));
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+     60  60 │   test('reviewed observer source remains exact and B07 source binds actual worker payloads before process observation',()=>{
+     61  61 │     const root=fileURLToPath(new URL('../../',import.meta.url));
+     62     │ - ··const·observer=readFileSync(new·URL('../../'+B07_POSTFLIGHT_POLICY.observerSource,import.meta.url));
+         62 │ + ··const·observer=readFileSync(new·URL(`../../${B07_POSTFLIGHT_POLICY.observerSource}`,import.meta.url));
+     63  63 │     assert.equal(digest(observer),B07_POSTFLIGHT_POLICY.observerSourceSha256);
+     64  64 │     assert.deepEqual(observer,execFileSync('git',['show','f3f04183c2d38ffe3e5755a23b571b6b9ce8155e:'+B07_POSTFLIGHT_POLICY.observerSource],{cwd:root}));
+  
+
+scripts/native-acceptance/b07-postflight.test.mjs:64:56 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    62 │   const observer=readFileSync(new URL('../../'+B07_POSTFLIGHT_POLICY.observerSource,import.meta.url));
+    63 │   assert.equal(digest(observer),B07_POSTFLIGHT_POLICY.observerSourceSha256);
+  > 64 │   assert.deepEqual(observer,execFileSync('git',['show','f3f04183c2d38ffe3e5755a23b571b6b9ce8155e:'+B07_POSTFLIGHT_POLICY.observerSource],{cwd:root}));
+       │                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    65 │   // Stage 1 remains the immutable original whole worker. Stage 2 is ONLY the
+    66 │   // independently reviewed strict idle function. Stage 3 adds ONLY the pinned
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+     62  62 │     const observer=readFileSync(new URL('../../'+B07_POSTFLIGHT_POLICY.observerSource,import.meta.url));
+     63  63 │     assert.equal(digest(observer),B07_POSTFLIGHT_POLICY.observerSourceSha256);
+     64     │ - ··assert.deepEqual(observer,execFileSync('git',['show','f3f04183c2d38ffe3e5755a23b571b6b9ce8155e:'+B07_POSTFLIGHT_POLICY.observerSource],{cwd:root}));
+         64 │ + ··assert.deepEqual(observer,execFileSync('git',['show',`f3f04183c2d38ffe3e5755a23b571b6b9ce8155e:${B07_POSTFLIGHT_POLICY.observerSource}`],{cwd:root}));
+     65  65 │     // Stage 1 remains the immutable original whole worker. Stage 2 is ONLY the
+     66  66 │     // independently reviewed strict idle function. Stage 3 adds ONLY the pinned
+  
+
+scripts/native-acceptance/b07-postflight.test.mjs:71:43 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    69 │   // state references, never the public parameter/request. No current-byte target.
+    70 │   const worker='packages/pptx/test/native-furniture-control.ps1';
+  > 71 │   const frozen=execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+worker],{cwd:root});
+       │                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    72 │   const reviewed=execFileSync('git',['show','a06c78686c3d3f59be6e6b9e8de65bac072ea515:'+worker],{cwd:root});
+    73 │   assert.equal(frozen.length,84426);assert.equal(digest(frozen),'d6b9232eb7f25ff3402ea4629345681396085b5a6c309a694099f33371910c02');
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+     69  69 │     // state references, never the public parameter/request. No current-byte target.
+     70  70 │     const worker='packages/pptx/test/native-furniture-control.ps1';
+     71     │ - ··const·frozen=execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+worker],{cwd:root});
+         71 │ + ··const·frozen=execFileSync('git',['show',`562a04c83f0407a2c395f6a55172b1d8120bd881:${worker}`],{cwd:root});
+     72  72 │     const reviewed=execFileSync('git',['show','a06c78686c3d3f59be6e6b9e8de65bac072ea515:'+worker],{cwd:root});
+     73  73 │     assert.equal(frozen.length,84426);assert.equal(digest(frozen),'d6b9232eb7f25ff3402ea4629345681396085b5a6c309a694099f33371910c02');
+  
+
+scripts/native-acceptance/b07-postflight.test.mjs:72:45 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    70 │   const worker='packages/pptx/test/native-furniture-control.ps1';
+    71 │   const frozen=execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+worker],{cwd:root});
+  > 72 │   const reviewed=execFileSync('git',['show','a06c78686c3d3f59be6e6b9e8de65bac072ea515:'+worker],{cwd:root});
+       │                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    73 │   assert.equal(frozen.length,84426);assert.equal(digest(frozen),'d6b9232eb7f25ff3402ea4629345681396085b5a6c309a694099f33371910c02');
+    74 │   assert.equal(reviewed.length,84855);assert.equal(digest(reviewed),'43d2742d9d680d4ccf1394849b189472f06811ed1455af9da398076acc78465d');
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+     70  70 │     const worker='packages/pptx/test/native-furniture-control.ps1';
+     71  71 │     const frozen=execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+worker],{cwd:root});
+     72     │ - ··const·reviewed=execFileSync('git',['show','a06c78686c3d3f59be6e6b9e8de65bac072ea515:'+worker],{cwd:root});
+         72 │ + ··const·reviewed=execFileSync('git',['show',`a06c78686c3d3f59be6e6b9e8de65bac072ea515:${worker}`],{cwd:root});
+     73  73 │     assert.equal(frozen.length,84426);assert.equal(digest(frozen),'d6b9232eb7f25ff3402ea4629345681396085b5a6c309a694099f33371910c02');
+     74  74 │     assert.equal(reviewed.length,84855);assert.equal(digest(reviewed),'43d2742d9d680d4ccf1394849b189472f06811ed1455af9da398076acc78465d');
+  
+
+scripts/native-acceptance/b07-postflight.test.mjs:88:49 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    86 │   assert.deepEqual(derived,reviewed,'Only the reviewed strict idle stage may change the original worker');
+    87 │   assert.deepEqual(replace(reviewed,strictIdle,originalIdle.body),frozen,'Inverse derivation must preserve every original byte');
+  > 88 │   const typeEvidence=execFileSync('git',['show','43f157dbe96c7e5b5b53db44ddbf96a124d3465a:'+worker],{cwd:root});
+       │                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    89 │   assert.equal(typeEvidence.length,86566);assert.equal(digest(typeEvidence),'3d073e9f6fe0432a38e6e1edd2946f32859594f07e9a3590c9bbf5c3d66a2d32');
+    90 │   const nameTypes=bytes=>{
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+     86  86 │     assert.deepEqual(derived,reviewed,'Only the reviewed strict idle stage may change the original worker');
+     87  87 │     assert.deepEqual(replace(reviewed,strictIdle,originalIdle.body),frozen,'Inverse derivation must preserve every original byte');
+     88     │ - ··const·typeEvidence=execFileSync('git',['show','43f157dbe96c7e5b5b53db44ddbf96a124d3465a:'+worker],{cwd:root});
+         88 │ + ··const·typeEvidence=execFileSync('git',['show',`43f157dbe96c7e5b5b53db44ddbf96a124d3465a:${worker}`],{cwd:root});
+     89  89 │     assert.equal(typeEvidence.length,86566);assert.equal(digest(typeEvidence),'3d073e9f6fe0432a38e6e1edd2946f32859594f07e9a3590c9bbf5c3d66a2d32');
+     90  90 │     const nameTypes=bytes=>{
+  
+
+scripts/native-acceptance/b07-postflight.test.mjs:100:50 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+     98 │   assert.deepEqual(derivedTypes,typeEvidence,'Only the immutable reviewed type-observation region may change the strict-idle worker');
+     99 │   assert.deepEqual(replace(typeEvidence,observedTypes,originalTypes.body),reviewed,'Type-evidence inverse must preserve every strict-idle worker byte');
+  > 100 │   const referenceMode=execFileSync('git',['show','fdb175da1160deb9747a8bccb898d79f4dc273a6:'+worker],{cwd:root});
+        │                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    101 │   assert.equal(referenceMode.length,91218);assert.equal(digest(referenceMode),'641c30e6dc9e3e89bae814c752e4fbc1bea41d8318b4f8a0af7e863434466060');
+    102 │   const referenceAnchors=[
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+     98  98 │     assert.deepEqual(derivedTypes,typeEvidence,'Only the immutable reviewed type-observation region may change the strict-idle worker');
+     99  99 │     assert.deepEqual(replace(typeEvidence,observedTypes,originalTypes.body),reviewed,'Type-evidence inverse must preserve every strict-idle worker byte');
+    100     │ - ··const·referenceMode=execFileSync('git',['show','fdb175da1160deb9747a8bccb898d79f4dc273a6:'+worker],{cwd:root});
+        100 │ + ··const·referenceMode=execFileSync('git',['show',`fdb175da1160deb9747a8bccb898d79f4dc273a6:${worker}`],{cwd:root});
+    101 101 │     assert.equal(referenceMode.length,91218);assert.equal(digest(referenceMode),'641c30e6dc9e3e89bae814c752e4fbc1bea41d8318b4f8a0af7e863434466060');
+    102 102 │     const referenceAnchors=[
+  
+
+scripts/native-acceptance/b07-postflight.test.mjs:187:41 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    185 │   let workerRootInverse=workerRootState;for(const [prior,next]of [...workerRootEdits].reverse()){assert.equal(workerRootInverse.split(next).length-1,1);workerRootInverse=workerRootInverse.replace(next,prior);}
+    186 │   assert.deepEqual(Buffer.from(workerRootInverse),snapshotWorker,'Seventh-stage inverse preserves all six immutable earlier stages');
+  > 187 │   assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),currentWorker);
+        │                                         ^^^^^^^^^^^^^^^
+    188 │   for(const name of ['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
+    189 │   const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+    185 185 │     let workerRootInverse=workerRootState;for(const [prior,next]of [...workerRootEdits].reverse()){assert.equal(workerRootInverse.split(next).length-1,1);workerRootInverse=workerRootInverse.replace(next,prior);}
+    186 186 │     assert.deepEqual(Buffer.from(workerRootInverse),snapshotWorker,'Seventh-stage inverse preserves all six immutable earlier stages');
+    187     │ - ··assert.deepEqual(readFileSync(new·URL('../../'+worker,import.meta.url)),currentWorker);
+        187 │ + ··assert.deepEqual(readFileSync(new·URL(`../../${worker}`,import.meta.url)),currentWorker);
+    188 188 │     for(const name of ['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
+    189 189 │     const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
+  
+
+scripts/native-acceptance/b07-postflight.test.mjs:188:156 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    186 │   assert.deepEqual(Buffer.from(workerRootInverse),snapshotWorker,'Seventh-stage inverse preserves all six immutable earlier stages');
+    187 │   assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),currentWorker);
+  > 188 │   for(const name of ['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
+        │                                                                                                                                                            ^^^^^^^^^^^^^
+    189 │   const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
+    190 │   assert.ok(runner.indexOf('if(-not $RunOffice)')<runner.indexOf('$checked=& $node $validator verify-postflight'));
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+    186 186 │     assert.deepEqual(Buffer.from(workerRootInverse),snapshotWorker,'Seventh-stage inverse preserves all six immutable earlier stages');
+    187 187 │     assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),currentWorker);
+    188     │ - ··for(const·name·of·['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new·URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
+        188 │ + ··for(const·name·of·['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new·URL(`../../${name}`,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
+    189 189 │     const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
+    190 190 │     assert.ok(runner.indexOf('if(-not $RunOffice)')<runner.indexOf('$checked=& $node $validator verify-postflight'));
+  
+
+scripts/native-acceptance/b07-postflight.test.mjs:188:215 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    186 │   assert.deepEqual(Buffer.from(workerRootInverse),snapshotWorker,'Seventh-stage inverse preserves all six immutable earlier stages');
+    187 │   assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),currentWorker);
+  > 188 │   for(const name of ['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
+        │                                                                                                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    189 │   const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
+    190 │   assert.ok(runner.indexOf('if(-not $RunOffice)')<runner.indexOf('$checked=& $node $validator verify-postflight'));
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+    186 186 │     assert.deepEqual(Buffer.from(workerRootInverse),snapshotWorker,'Seventh-stage inverse preserves all six immutable earlier stages');
+    187 187 │     assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),currentWorker);
+    188     │ - ··for(const·name·of·['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new·URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
+        188 │ + ··for(const·name·of·['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new·URL('../../'+name,import.meta.url)),execFileSync('git',['show',`562a04c83f0407a2c395f6a55172b1d8120bd881:${name}`],{cwd:root}));
+    189 189 │     const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
+    190 190 │     assert.ok(runner.indexOf('if(-not $RunOffice)')<runner.indexOf('$checked=& $node $validator verify-postflight'));
+  
+
+scripts/native-acceptance/reference-name-snapshot.test.mjs:27:27 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    25 │ const before=tx(input,text=>text.replace(/>[ \t\r\n]+</gu,'><')),edited=mutate(tx(before,()=>'<c:tx><c:v>Actual edited</c:v></c:tx>'),'docProps/core.xml',text=>once(text,'<cp:revision>1</cp:revision>','<cp:revision>2</cp:revision>'));
+    26 │ const typeEvidence=()=>({chart:{observedType:'System.Int32',observedRawValue:'-4111',numericValue:-4111},count:{observedType:'System.Int32',observedRawValue:'3',numericValue:3},series:Array.from({length:3},(_,i)=>({index:i+1,typeObservation:{observedType:'System.Int32',observedRawValue:'4',numericValue:4}}))});
+  > 27 │ const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n');
+       │                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    28 │ let current;
+    29 │ function currentFixture(){current??=(async()=>{
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+    25 25 │   const before=tx(input,text=>text.replace(/>[ \t\r\n]+</gu,'><')),edited=mutate(tx(before,()=>'<c:tx><c:v>Actual edited</c:v></c:tx>'),'docProps/core.xml',text=>once(text,'<cp:revision>1</cp:revision>','<cp:revision>2</cp:revision>'));
+    26 26 │   const typeEvidence=()=>({chart:{observedType:'System.Int32',observedRawValue:'-4111',numericValue:-4111},count:{observedType:'System.Int32',observedRawValue:'3',numericValue:3},series:Array.from({length:3},(_,i)=>({index:i+1,typeObservation:{observedType:'System.Int32',observedRawValue:'4',numericValue:4}}))});
+    27    │ - const·wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n');
+       27 │ + const·wire=e=>Buffer.from(`${e.stages.map(row=>JSON.stringify(row)).join('\n')}\n`);
+    28 28 │   let current;
+    29 29 │   function currentFixture(){current??=(async()=>{
+  
+
+scripts/native-acceptance/reference-name-snapshot.test.mjs:37:110 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    35 │  const e=furnitureFixture(output),a=REFERENCE_NAME_ACTION;Object.assign(e.request,{profile:REFERENCE...
+    36 │  e.report.actionPlan={actions:referenceNamePlan(),completed:[{index:1,op:a.op,status:'success'}],sty...
+  > 37 │  const slides=inspectReferenceArchive(phaseSource,deps).slides.map((slide,i)=>({index:i+1,slideId:256+i,name:'Synthetic '+i,shapeCount:slide.shapes.length,shapes:slide.shapes.map((shape,j)=>({index:j+1,id:shape.id,name:shape.name,type:shape.kind==='chart'?3:17,...shape.geometry,hasTextFrame:shape.kind==='text'?-1:0,text:shape.text??null,alternativeText:''}))}));
+       │                                                                                                              ^^^^^^^^^^^^^^
+    38 │  for(const phase of ['original','edited','reopened']){const name=phase==='original'?a.expectedName:a...
+    39 │  e.report.referenceNameSnapshots=['before','reopened'].map(phase=>({phase,path:path.join(e.request.output,'native','reference-name-'+phase+'.pptx'),sha256:digest(snapshotArchives[phase])}));e.report.saved.sha256=digest(snapshotArchives.edited);e.report.reopened=structuredClone(e.report.saved);
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+    35 35 │   ...ferenceNamePlan();e.report.referenceNameEdit=true;
+    36 36 │   ...unt,referenceSeriesTypes:typeEvidence().series}]};
+    37    │ - ·const·slides=inspectReferenceArchive(phaseSource,deps).slides.map((slide,i)=>({index:i+1,slideId:256+i,name:'Synthetic·'+i,shapeCount:slide.shapes.length,shapes:slide.shapes.map((shape,j)=>({index:j+1,id:shape.id,name:shape.name,type:shape.kind==='chart'?3:17,...shape.geometry,hasTextFrame:shape.kind==='text'?-1:0,text:shape.text??null,alternativeText:''}))}));
+       37 │ + ·const·slides=inspectReferenceArchive(phaseSource,deps).slides.map((slide,i)=>({index:i+1,slideId:256+i,name:`Synthetic·${i}`,shapeCount:slide.shapes.length,shapes:slide.shapes.map((shape,j)=>({index:j+1,id:shape.id,name:shape.name,type:shape.kind==='chart'?3:17,...shape.geometry,hasTextFrame:shape.kind==='text'?-1:0,text:shape.text??null,alternativeText:''}))}));
+    38 38 │   ...success',referenceTypeEvidence:typeEvidence()}]};}
+    39 39 │    e.report.referenceNameSnapshots=['before','reopened'].map(phase=>({phase,path:path.join(e.request.output,'native','reference-name-'+phase+'.pptx'),sha256:digest(snapshotArchives[phase])}));e.report.saved.sha256=digest(snapshotArchives.edited);e.report.reopened=structuredClone(e.report.saved);
+  
+
+scripts/native-acceptance/reference-name-snapshot.test.mjs:39:116 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    37 │  const slides=inspectReferenceArchive(phaseSource,deps).slides.map((slide,i)=>({index:i+1,slideId:256+i,name:'Synthetic '+i,shapeCount:slide.shapes.length,shapes:slide.shapes.map((shape,j)=>({index:j+1,id:shape.id,name:shape.name,type:shape.kind==='chart'?3:17,...shape.geometry,hasTextFrame:shape.kind==='text'?-1:0,text:shape.text??null,alternativeText:''}))}));
+    38 │  for(const phase of ['original','edited','reopened']){const name=phase==='original'?a.expectedName:a...
+  > 39 │  e.report.referenceNameSnapshots=['before','reopened'].map(phase=>({phase,path:path.join(e.request.output,'native','reference-name-'+phase+'.pptx'),sha256:digest(snapshotArchives[phase])}));e.report.saved.sha256=digest(snapshotArchives.edited);e.report.reopened=structuredClone(e.report.saved);
+       │                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    40 │  const sample=e.stages.find(row=>row.stage==='input.presentation.fullName.get'),target=prefix=>['cha...
+    41 │  insert('edited.presentation.saveCopyAs',[...target('original.series-name-1'),...copy('before'),...t...
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+    37 37 │    const slides=inspectReferenceArchive(phaseSource,deps).slides.map((slide,i)=>({index:i+1,slideId:256+i,name:'Synthetic '+i,shapeCount:slide.shapes.length,shapes:slide.shapes.map((shape,j)=>({index:j+1,id:shape.id,name:shape.name,type:shape.kind==='chart'?3:17,...shape.geometry,hasTextFrame:shape.kind==='text'?-1:0,text:shape.text??null,alternativeText:''}))}));
+    38 38 │   ...success',referenceTypeEvidence:typeEvidence()}]};}
+    39    │ - ·e.report.referenceNameSnapshots=['before','reopened'].map(phase=>({phase,path:path.join(e.request.output,'native','reference-name-'+phase+'.pptx'),sha256:digest(snapshotArchives[phase])}));e.report.saved.sha256=digest(snapshotArchives.edited);e.report.reopened=structuredClone(e.report.saved);
+       39 │ + ·e.report.referenceNameSnapshots=['before','reopened'].map(phase=>({phase,path:path.join(e.request.output,'native',`reference-name-${phase}.pptx`),sha256:digest(snapshotArchives[phase])}));e.report.saved.sha256=digest(snapshotArchives.edited);e.report.reopened=structuredClone(e.report.saved);
+    40 40 │   ...e,stage,status,ownedPresentationPath:owner}))));};
+    41 41 │   ...h);e.stages.forEach((row,i)=>{row.sequence=i+1;});
+  
+
+scripts/native-acceptance/reference-name-snapshot.test.mjs:40:272 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    38 │  for(const phase of ['original','edited','reopened']){const name=phase==='original'?a.expectedName:a...
+    39 │  e.report.referenceNameSnapshots=['before','reopened'].map(phase=>({phase,path:path.join(e.request.output,'native','reference-name-'+phase+'.pptx'),sha256:digest(snapshotArchives[phase])}));e.report.saved.sha256=digest(snapshotArchives.edited);e.report.reopened=structuredClone(e.report.saved);
+  > 40 │ ...es-3.type','series.name.get'].map(suffix=>prefix+'.'+suffix),copy=phase=>['fullName.get','saveCopyAs...
+       │                                              ^^^^^^^^^^^^^^^^^
+    41 │  insert('edited.presentation.saveCopyAs',[...target('original.series-name-1'),...copy('before'),...t...
+    42 │  e.admission.profile=e.request.profile;e.admission.policy=structuredClone(e.request.policy);e.admission.ready=referenceNameSnapshotFurnitureRoute.assertFurnitureReady(e.terminal,e.report,e.request,wire(e));return e;
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+    38 38 │   ...success',referenceTypeEvidence:typeEvidence()}]};}
+    39 39 │    e.report.referenceNameSnapshots=['before','reopened'].map(phase=>({phase,path:path.join(e.request.output,'native','reference-name-'+phase+'.pptx'),sha256:digest(snapshotArchives[phase])}));e.report.saved.sha256=digest(snapshotArchives.edited);e.report.reopened=structuredClone(e.report.saved);
+    40    │ - ...es-3.type','series.name.get'].map(suffix=>prefix+'.'+suffix),copy=phase=>['fullName.get','saveCopyAs...
+       40 │ + ...series-3.type','series.name.get'].map(suffix=>`${prefix}.${suffix}`),copy=phase=>['fullName.get','sa...
+    41 41 │   ...h);e.stages.forEach((row,i)=>{row.sequence=i+1;});
+    42 42 │    e.admission.profile=e.request.profile;e.admission.policy=structuredClone(e.request.policy);e.admission.ready=referenceNameSnapshotFurnitureRoute.assertFurnitureReady(e.terminal,e.report,e.request,wire(e));return e;
+  
+
+scripts/native-acceptance/reference-name-snapshot.test.mjs:40:370 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    38 │  for(const phase of ['original','edited','reopened']){const name=phase==='original'?a.expectedName:a...
+    39 │  e.report.referenceNameSnapshots=['before','reopened'].map(phase=>({phase,path:path.join(e.request.output,'native','reference-name-'+phase+'.pptx'),sha256:digest(snapshotArchives[phase])}));e.report.saved.sha256=digest(snapshotArchives.edited);e.report.reopened=structuredClone(e.report.saved);
+  > 40 │ ....afterCopy.get'].map(suffix=>'reference-'+phase+'.presentation.'+suffix),insert=(before,names,owner)...
+       │                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    41 │  insert('edited.presentation.saveCopyAs',[...target('original.series-name-1'),...copy('before'),...t...
+    42 │  e.admission.profile=e.request.profile;e.admission.policy=structuredClone(e.request.policy);e.admission.ready=referenceNameSnapshotFurnitureRoute.assertFurnitureReady(e.terminal,e.report,e.request,wire(e));return e;
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+    38 38 │   ...success',referenceTypeEvidence:typeEvidence()}]};}
+    39 39 │    e.report.referenceNameSnapshots=['before','reopened'].map(phase=>({phase,path:path.join(e.request.output,'native','reference-name-'+phase+'.pptx'),sha256:digest(snapshotArchives[phase])}));e.report.saved.sha256=digest(snapshotArchives.edited);e.report.reopened=structuredClone(e.report.saved);
+    40    │ - ...eCopyAs','fullName.afterCopy.get'].map(suffix=>'reference-'+phase+'.presentation.'+suffix),insert=(b...
+       40 │ + ...CopyAs','fullName.afterCopy.get'].map(suffix=>`reference-${phase}.presentation.${suffix}`),insert=(b...
+    41 41 │   ...h);e.stages.forEach((row,i)=>{row.sequence=i+1;});
+    42 42 │    e.admission.profile=e.request.profile;e.admission.policy=structuredClone(e.request.policy);e.admission.ready=referenceNameSnapshotFurnitureRoute.assertFurnitureReady(e.terminal,e.report,e.request,wire(e));return e;
+  
+
+scripts/native-acceptance/reference-name-snapshot.test.mjs:49:289 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    47 │ });
+    48 │ test('the actual new Node source seeds match the closed PS startup roster and all transitive files are admitted',()=>{
+  > 49 │ ...atchAll(/'([^']+)'/gu)].map(row=>'scripts/native-acceptance/'+row[1]);assert.deepEqual(entries,REFER...
+       │                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    50 │ });
+    51 │ test('real retained three-archive comparison permits only one literal name with whole workbook bytes unchanged',()=>{
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+    47 47 │   });
+    48 48 │   test('the actual new Node source seeds match the closed PS startup roster and all transitive files are admitted',()=>{
+    49    │ - ...[...matched[1].matchAll(/'([^']+)'/gu)].map(row=>'scripts/native-acceptance/'+row[1]);assert.deepEqu...
+       49 │ + ......matched[1].matchAll(/'([^']+)'/gu)].map(row=>`scripts/native-acceptance/${row[1]}`);assert.deepEq...
+    50 50 │   });
+    51 51 │   test('real retained three-archive comparison permits only one literal name with whole workbook bytes unchanged',()=>{
+  
+
+scripts/native-acceptance/reference-name-snapshot.test.mjs:56:156 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    54 │ test('complete current public imports/source roles are exact before then only Name changes',async()=>{
+    55 │  const f=await currentFixture(),e=completion(undefined,f.input,f),b={input:f.input,reference:{source...
+  > 56 │ ...*?<c:formatCode>)General/u,(_match,prefix)=>prefix+'0.00');assert.notEqual(result,text);return resul...
+       │                                                ^^^^^^^^^^^^^
+    57 │  const vector=bytes=>mutate(bytes,'ppt/charts/chart2.xml',text=>{const first=/<c:ser>[\s\S]*?<\/c:se...
+    58 │  await assert.rejects(()=>compareReferenceNameSnapshots(b,e.report,wire(e),{source:input,before,edited,reopened:edited}),/exact current production source/);
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+    54 54 │   test('complete current public imports/source roles are exact before then only Name changes',async()=>{
+    55 55 │   ...pEqual(JSON.parse(JSON.stringify(result)),result);
+    56    │ - ...?<c:formatCode>)General/u,(_match,prefix)=>prefix+'0.00');assert.notEqual(result,text);return·result...
+       56 │ + ...s\S]*?<c:formatCode>)General/u,(_match,prefix)=>`${prefix}0.00`);assert.notEqual(result,text);return...
+    57 57 │   ...,ve.report,wire(ve),{source:f.input,...vectors}));
+    58 58 │    await assert.rejects(()=>compareReferenceNameSnapshots(b,e.report,wire(e),{source:input,before,edited,reopened:edited}),/exact current production source/);
+  
+
+scripts/native-acceptance/reference-name-snapshot.test.mjs:57:260 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    55 │  const f=await currentFixture(),e=completion(undefined,f.input,f),b={input:f.input,reference:{source...
+    56 │  const format=bytes=>mutate(bytes,'ppt/charts/chart2.xml',text=>{const result=text.replace(/(<c:numC...
+  > 57 │ ... once(text,first,first.replace('</c:ser>',extra+'</c:ser>'));}),vectors={before:vector(f.before),edi...
+       │                                              ^^^^^^^^^^^^^^^^
+    58 │  await assert.rejects(()=>compareReferenceNameSnapshots(b,e.report,wire(e),{source:input,before,edited,reopened:edited}),/exact current production source/);
+    59 │ });
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+    55 55 │   ...pEqual(JSON.parse(JSON.stringify(result)),result);
+    56 56 │   ...e.report,wire(fe),{source:f.input,...formatted}));
+    57    │ - ...rn·once(text,first,first.replace('</c:ser>',extra+'</c:ser>'));}),vectors={before:vector(f.before),e...
+       57 │ + ...return·once(text,first,first.replace('</c:ser>',`${extra}</c:ser>`));}),vectors={before:vector(f.bef...
+    58 58 │    await assert.rejects(()=>compareReferenceNameSnapshots(b,e.report,wire(e),{source:input,before,edited,reopened:edited}),/exact current production source/);
+    59 59 │   });
+  
+
+scripts/native-acceptance/reference-name-snapshot.test.mjs:63:181 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    61 │  const f=await currentFixture(),b={input:f.input,reference:{source:{deck:source}},envelope:{generation:{consumer:ROOT}}};
+    62 │  const axis=(bytes,next)=>mutate(bytes,'ppt/charts/chart1.xml',text=>{const raw=/<c:catAx>[\s\S]*?<\/c:catAx>/u.exec(text)[0];return once(text,raw,once(raw,'<c:auto val="1"/>',next));});
+  > 63 │  const group=(bytes,next)=>mutate(bytes,'ppt/charts/chart1.xml',text=>{const raw=/<c:lineChart>[\s\S]*?<\/c:lineChart>/u.exec(text)[0];return once(text,raw,raw.replace(/<c:axId /u,next+'<c:axId '));});
+       │                                                                                                                                                                                     ^^^^^^^^^^^^^^^
+    64 │  const coherent=(change)=>({source:f.input,before:change(f.before),edited:change(f.edited),reopened:change(f.reopened)}),compare=archives=>{const e=completion(undefined,f.input,archives);return compareReferenceNameSnapshots(b,e.report,wire(e),archives);};
+    65 │  // Every mutated phase agrees, so the source→before semantic boundary must refuse.
+  
+  i Template literals are easier to read than a chain of + operators and quotes, and they avoid mistakes with spaces and escaped quotes.
+  
+  i Unsafe fix: Use a template literal.
+  
+    61 61 │    const f=await currentFixture(),b={input:f.input,reference:{source:{deck:source}},envelope:{generation:{consumer:ROOT}}};
+    62 62 │    const axis=(bytes,next)=>mutate(bytes,'ppt/charts/chart1.xml',text=>{const raw=/<c:catAx>[\s\S]*?<\/c:catAx>/u.exec(text)[0];return once(text,raw,once(raw,'<c:auto val="1"/>',next));});
+    63    │ - ·const·group=(bytes,next)=>mutate(bytes,'ppt/charts/chart1.xml',text=>{const·raw=/<c:lineChart>[\s\S]*?<\/c:lineChart>/u.exec(text)[0];return·once(text,raw,raw.replace(/<c:axId·/u,next+'<c:axId·'));});
+       63 │ + ·const·group=(bytes,next)=>mutate(bytes,'ppt/charts/chart1.xml',text=>{const·raw=/<c:lineChart>[\s\S]*?<\/c:lineChart>/u.exec(text)[0];return·once(text,raw,raw.replace(/<c:axId·/u,`${next}<c:axId·`));});
+    64 64 │    const coherent=(change)=>({source:f.input,before:change(f.before),edited:change(f.edited),reopened:change(f.reopened)}),compare=archives=>{const e=completion(undefined,f.input,archives);return compareReferenceNameSnapshots(b,e.report,wire(e),archives);};
+    65 65 │    // Every mutated phase agrees, so the source→before semantic boundary must refuse.
+  
+
+Checked 2 files in 40ms. No fixes applied.
+Found 20 infos.

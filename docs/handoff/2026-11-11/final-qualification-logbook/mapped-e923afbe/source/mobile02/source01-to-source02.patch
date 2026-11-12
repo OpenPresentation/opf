@@ -1,0 +1,17 @@
+diff --git a/tmp/opf-mobile-startup-phase-source02-baseline/mobile-touch-browser.mjs b/tmp/opf-mobile-startup-phase/packages/editor/test/mobile-touch-browser.mjs
+index 1932b7f7d..e95bda099 100644
+--- a/tmp/opf-mobile-startup-phase-source02-baseline/mobile-touch-browser.mjs
++++ b/tmp/opf-mobile-startup-phase/packages/editor/test/mobile-touch-browser.mjs
+@@ -110,8 +110,10 @@ async function playgroundStartup(page, context) {
+         if (overflow) return;
+         overflow = true; line = JSON.stringify({ kind: 'overflow', nodeMs: performance.now() - started, events, bytes }) + '\n';
+       }
+-      const at = performance.now(); writeSync(fd, line); writeMilliseconds += performance.now() - at;
+-      events++; bytes += Buffer.byteLength(line);
++      const encodedBytes = Buffer.byteLength(line), at = performance.now();
++      const writtenBytes = writeSync(fd, line); writeMilliseconds += performance.now() - at;
++      if (writtenBytes !== encodedBytes) throw new Error(`Short startup journal write: ${writtenBytes}/${encodedBytes}`);
++      events++; bytes += encodedBytes;
+     } catch (error) { warn(error); }
+   };
+   const detach = () => { for (const [name, callback] of listeners) page.off(name, callback); listeners.length = 0; };

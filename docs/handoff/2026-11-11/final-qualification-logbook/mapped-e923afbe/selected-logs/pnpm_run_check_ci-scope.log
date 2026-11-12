@@ -1,0 +1,39 @@
+
+> openpresentation-workspace@ check:ci-scope /private/tmp/opf-034
+> node --test scripts/ci-scope.test.mjs
+
+✔ TARGET_GRAPH is acyclic, gallery has no workspace edge, core only depends on gallery, integration on what it imports (0.7635ms)
+✔ readManifestGraph sees pnpm edges only: workspace:, link: and file: in dependencies, devDependencies, optionalDependencies (3.363083ms)
+✔ graph sources: manifests, target, union (fail closed) and a JSON file (1.022167ms)
+✔ the real repository manifests have no cycle and the union graph is acyclic (0.818083ms)
+✔ classifyPath: package directories, core inputs, documentation, tooling and the unknown (0.281334ms)
+✔ every package directory of the plan has a path rule, and a prefix of another package does not match (0.058709ms)
+✔ S5 scenarios against the real `pnpm --filter "...[base]"` (1698.226708ms)
+✔ root-owned paths: pnpm selects only the root project, so the path map decides (the reason ci-scope exists) (1044.025083ms)
+✔ tiers: changed packages run full, dependents contract, the rest skip (0.437125ms)
+✔ edge case: gallery records only affect every package at the contract tier and run the goldens and the gallery gates (0.157542ms)
+✔ edge case: docs only (programs, evidence, root documents, changes) runs lint and nothing else (0.147959ms)
+✔ edge case: a docs/*.md file is a core input (the core build embeds it), an evidence deck too (0.122209ms)
+✔ edge case: spec/ and examples/ map to core, examples also run the goldens (0.1065ms)
+✔ edge case: lockfile only, root configuration, scripts and workflows run everything at full (0.457541ms)
+✔ edge case: unclassified paths and unknown package directories fail closed and are reported (0.105833ms)
+✔ edge case: a package manifest change selects that package and its dependents (0.065625ms)
+✔ edge case: package evidence logs are documentation, a package change in the same diff is not (0.073125ms)
+✔ edge case: events other than a pull request, the label full-ci and an empty diff run everything (0.267917ms)
+✔ required and skipped partition the jobs; the legs name the jobs that run (0.065667ms)
+✔ legs: every package has a plan for both tiers, a skipped job has no legs, browser suites only run at full (0.16275ms)
+✔ a leg carries everything the matrix job needs, and its id is unique (0.155292ms)
+✔ legs follow the decision: only jobs that run have legs, forced runs have every leg, and the matrix is never empty (0.273209ms)
+✔ audit runs when the lockfile, the workspace file or a package manifest changed, and on a push; not because a run was forced otherwise (0.204ms)
+✔ isGoldenInput lists the corpus inputs only (0.029166ms)
+✔ changedFiles lists the paths of the pull request (three-dot), both sides of a rename and odd file names (211.31775ms)
+✔ run: --files, formats, GitHub outputs and the fail-closed fallback when the diff cannot be read (28.072ms)
+✔ the command line prints JSON and exits 2 on a bad argument (47.395625ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3188.913

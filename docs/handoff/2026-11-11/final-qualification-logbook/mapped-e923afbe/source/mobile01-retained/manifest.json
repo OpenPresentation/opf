@@ -1,0 +1,112 @@
+{
+  "scope": "SOURCE ONLY; no syntax/import/unit/browser/build/install/PS/Office/CI execution",
+  "worktree": "/tmp/opf-mobile-startup-phase",
+  "branch": "codex/rr-105-mobile-startup-phase",
+  "base": "0f53564afa6a79ff9b7235140afbe85c9cf94bfc",
+  "patch": {
+    "path": "source.patch",
+    "bytes": 15989,
+    "sha256": "342994e9ff51372426a988a3105b7a4b02293cc904d1eee32582ec18a59ae86d"
+  },
+  "changed": [
+    {
+      "path": "packages/editor/test/mobile-touch-browser.mjs",
+      "bytes": 45769,
+      "sha256": "4dca66aa6bedf2a01dad824f288b38e1ef9f34cb5a8c7f32ffe458980f828dfc"
+    },
+    {
+      "path": "docs/handoff/2026-11-11/mobile-startup-phase-retention.md",
+      "bytes": 2833,
+      "sha256": "74ed1800440676571e4203f6c8753c1287ab1108f0b1964da98d2bbb38524922"
+    },
+    {
+      "path": "docs/programs/release-readiness/burndown.md",
+      "bytes": 571154,
+      "sha256": "95fd0201f72161f3b447dbd7412e2d4dc169ad24c7ccb9c8e5d5e17aa46adbe4"
+    }
+  ],
+  "protected": [
+    {
+      "path": "packages/editor/test/support/touch-audit.mjs",
+      "bytes": 7091,
+      "sha256": "f0d673234fe6922d715197e026daddb1358eb8e7739bb4bb9e8adffb41dc10c0"
+    },
+    {
+      "path": "packages/editor/scripts/build-playground.mjs",
+      "bytes": 8147,
+      "sha256": "b262dd38bc09b9a6971b0369e203787119b3cddba94e4702733545fc0e8ec33c"
+    },
+    {
+      "path": "packages/editor/examples/playground.js",
+      "bytes": 38796,
+      "sha256": "0a48e4aa77d3e65234c1c0cd65f3cbb1fca30c7553cfaca0b7f2858b82bbfdcf"
+    },
+    {
+      "path": "packages/editor/examples/playground.html",
+      "bytes": 19747,
+      "sha256": "9169ed55c252d81c9c064e3d775c4cfd8be7329433f0a92c446c238c78aa16a6"
+    },
+    {
+      "path": "packages/editor/examples/playground.css",
+      "bytes": 37668,
+      "sha256": "770ea6de56eaf251609150fa8b94a11e12edf5c39f0d860dd450bcec5e46323a"
+    },
+    {
+      "path": "packages/editor/src/workspace.js",
+      "bytes": 97056,
+      "sha256": "5bcd54e6c0af33a82329aa316baf9d2009ad33545158878f41fae98f68857a50"
+    },
+    {
+      "path": "packages/editor/src/font-gate.js",
+      "bytes": 6297,
+      "sha256": "0f4fde9c71050061d43546f136ab962ccde6b7cb97ae775db380e3e8fcf33a42"
+    },
+    {
+      "path": "packages/editor/test/source-worker-perf-browser.mjs",
+      "bytes": 18306,
+      "sha256": "da2b69c8412b8004d91b585cc3aa75274e8604c712c72ac104a6023f9f597f25"
+    },
+    {
+      "path": "package.json",
+      "bytes": 13093,
+      "sha256": "6fbaac685fe76f992f246084ab4b58cc15b20122babae2cbc674f64056566ff0"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 137976,
+      "sha256": "11c0b695a44fe5dcbefa76722f78fdd725e9ceb70b29287cf70b042a2b3326fb"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "bytes": 1651,
+      "sha256": "a4c126fc53ef833e4b5d36e373efe8c6138b8a98b04fb2b079536f97ade693b1"
+    }
+  ],
+  "wholeTestInverse": true,
+  "transforms": 5,
+  "protectedBlocks": [
+    {
+      "path": "server/defaults",
+      "bytes": 1809,
+      "sha256": "113949756596a83f4dc948906cbc5df72e43ed7733590b0ec81355f336cce1bb"
+    },
+    {
+      "path": "oldfailurecapture",
+      "bytes": 4261,
+      "sha256": "9cf004798a5cac948218c24b8ed2e13719e1a2cec4eded96e7332fa5ce42d1eb"
+    },
+    {
+      "path": "wholefinalfanout",
+      "bytes": 1587,
+      "sha256": "c59ac8823dd9609b22c70d1c86c4df7c1ac8fd135280fcdb3efe8357751840d0"
+    }
+  ],
+  "newProtocol": "Main-frame12fixedprimitive samples; bounded Node lifecycle/request JSONL; originalsuccess stops sampler with250msACK; failureflushbeforeunchanged3s; sameoriginalrethrow",
+  "caps": {
+    "pages": 128,
+    "eventsIncludingOverflow": 512,
+    "bytesIncludingOverflow": 262144,
+    "samples": 12
+  },
+  "noOriginalGateChanges": true
+}

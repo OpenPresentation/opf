@@ -1,0 +1,1 @@
+SOURCE ONLY. Review source.patch + manifest + five exact inverse transforms. Three changed paths;11protected whole files and originalserver/defaults/8filefailurecapture/wholefanout exact. No execution. Existing failing Windows sample remains failed; instrumentedqualification owed.

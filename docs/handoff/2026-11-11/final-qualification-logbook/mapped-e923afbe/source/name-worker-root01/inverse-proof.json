@@ -1,0 +1,54 @@
+{
+  "productionThreeReplacements": [
+    [
+      "$fixed=Join-Path $outputRoot ('reference-name-'+$Phase+'.pptx')",
+      "$fixed=Join-Path $root ('reference-name-'+$Phase+'.pptx')"
+    ],
+    [
+      "Join-Path $outputRoot 'reference-name-before.pptx'",
+      "Join-Path $root 'reference-name-before.pptx'"
+    ],
+    [
+      "Join-Path $outputRoot 'reference-name-reopened.pptx'",
+      "Join-Path $root 'reference-name-reopened.pptx'"
+    ]
+  ],
+  "productionWholeInverse": {
+    "bytes": 93940,
+    "sha256": "1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870",
+    "baseExact": true
+  },
+  "oldSaveOwnedFurnitureCopyBodyExact": true,
+  "managedWholeInverseRemovingOnlyNewScopeCodeAndReplacingTwoFixtureInvocations": {
+    "baseExact": true,
+    "bytes": 15354,
+    "sha256": "16a7399f3674eaf2cdaa1ec846efe564e94589d2e964f3418308b0a73504cab4"
+  },
+  "nodeWholeInverseRemovingOnlyNewScopeAssertions": {
+    "baseExact": true,
+    "bytes": 21871,
+    "sha256": "c259f3a115cb36226fbf8651f87cfbeb5f06dbc1882dc2a11b9494808bd2242d"
+  },
+  "nativeStartupWholeInverseRemovingOnlyStage7": {
+    "baseExact": true,
+    "bytes": 7854,
+    "sha256": "2f334742bcc4045cd6988d16cf1b0852e032234d265da455978ce45ea36d10e9"
+  },
+  "b07WholeInverseRemovingOnlyStage7": {
+    "baseExact": true,
+    "bytes": 19608,
+    "sha256": "11d632e6a06550b1fc6495eddb9bb07c5d98824fdf9dab766f9c95b792bb48e7"
+  },
+  "allSixHistoricalDerivationStages": "unchanged old text/hashes, exact new seventh forward/inverse",
+  "freshScope": "Actual ParamBlock + root/savedPath AssignmentStatementAst + four actual helper definitions + two actual callsite IfStatementAst; supervisor-only outputRoot null; no native entrypoint/factory",
+  "managedCounts": {
+    "originalStartup": 8,
+    "originalSave": 13,
+    "originalAdapter": 11,
+    "originalTotal": 32,
+    "separateCardinality": 6,
+    "separateWorkerScope": 2,
+    "nodeTests": 9,
+    "psChildMilliseconds": 15000
+  }
+}
