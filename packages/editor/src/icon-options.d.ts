@@ -67,8 +67,12 @@ export interface SvgIconOptions extends IconOptions {
  * string that is no icon form, and `icon-unknown` or `icon-invalid` (with `details.ruleId`) with the validator's own message for an icon it reports.
  */
 export declare function prepareIcon(presentation: unknown, path: string, icon: string | null, options?: IconOptions): PreparedIcon;
-/** Set (or, with `null`, remove) an icon as one undoable step. */
-export declare function setIcon(editor: EditorSession, path: string, icon: string | null, meta?: Record<string, unknown>): IconChange;
+/**
+ * Set (or, with `null`, remove) an icon as one undoable step. `ready` resolves once the deck's set icons are loaded (RR-63: a set's icon is
+ * read on demand) or settled as missing with their finding; it never rejects. The canvas waits by itself; a headless host awaits `ready`
+ * before `composeSlide`.
+ */
+export declare function setIcon(editor: EditorSession, path: string, icon: string | null, meta?: Record<string, unknown>): IconChange & { ready: Promise<void> };
 /** Remove the icon of the entry, metric or group at `path` as one undoable step. */
 export declare function removeIcon(editor: EditorSession, path: string, meta?: Record<string, unknown>): IconChange;
 /**
@@ -94,10 +98,17 @@ export interface IconSetInfo {
   loaded: boolean;
   /** True for a set the deck embeds (`catalogs.<group>.iconSets`) rather than one the host registered. */
   embedded: boolean;
+  /** Why the set's last load failed (the files are not served, offline, ...). */
+  error?: string;
 }
 /** The icon sets a host registered (a catalog's `iconSets`), then the deck's embedded ones. A registered loader's set has only its id until loaded. */
 export declare function listIconSets(source: IconSetSource): IconSetInfo[];
-/** Load the registered sets and prime core's registry so the deck draws them: `request.icons` the names to draw (a set loaded one icon at a time reads only these), `request.tags` the search keywords. Resolves with the records by id. */
+/**
+ * Load the registered sets and prime core's registry so the deck draws them: `request.icons` the names to draw (a set loaded one icon at a time
+ * reads only these), `request.tags` the search keywords. Given a session (or a `presentation`) and no `request.icons`, it loads the icons the
+ * deck draws: `await loadIconSets(editor)` before `composeSlide`. Resolves with the records by id; a set that could not be read is left out
+ * (`listIconSets` gives its `error`).
+ */
 export declare function loadIconSets(source: IconSetSource, ids?: readonly string[], request?: { icons?: readonly string[]; tags?: boolean }): Promise<Map<string, IconSetRecord>>;
 
 export interface IconSearchResult { icon: string; set: string; name: string; tags: string[] }
@@ -107,8 +118,13 @@ export interface IconSearch {
   returned: number;
   icons: IconSearchResult[];
   sets: { id: string; name: string; license: string; copyright: string; version?: string; icons: number }[];
+  /** The sets that could not be read, with why. */
+  unavailable?: { set: string; message: string }[];
 }
-/** Search the registered sets by name and keywords (the ranking of the MCP's `search_icons`); an empty query browses. Throws `unknown-icon-set` for `options.set` nothing registers. */
+/**
+ * Search the registered sets by name and keywords (the ranking of the MCP's `search_icons`); an empty query browses. Throws `unknown-icon-set`
+ * for `options.set` nothing registers, and `icon-sets-unavailable` (with the reasons) when none of the sets it reads could be loaded.
+ */
 export declare function searchIcons(source: IconSetSource, query?: string, options?: { set?: string; limit?: number; offset?: number }): Promise<IconSearch>;
 
 /** How to draw one icon, as plain data: path parts in a viewBox. */

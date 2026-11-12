@@ -240,13 +240,22 @@ assert.equal(Object.hasOwn(editor.presentation.slides[1].items[0] ?? {}, 'icon')
 assert.equal(prepareSvgIcon(deck(), 'slides.1.items.0', SVG, { name: 'x' }).name, 'x');
 assert.equal(prepareIcon(deck(), 'slides.1.items.0', 'lucide:nope', { validate: false }).changed, true);
 
-// --- the composed slide draws what was chosen (RR-63: a search reads names and keywords; the picker's page, like ensureIcons, reads
-// the icons drawn)
+// --- the composed slide draws what was chosen: `await loadIconSets(editor)` loads the icons the deck draws, as in 0.33 (RR-63: a set
+// loaded one icon at a time reads only those)
 const drawn = session();
 await searchIcons(drawn, 'truck');
 setIcon(drawn, 'slides.1.items.0', 'lucide:truck');
 setIcon(drawn, 'slides.1.items.1', 'tabler:rocket');
-await loadIconSets(drawn, undefined, { icons: ['truck', 'rocket'] });
+await loadIconSets(drawn);
 assert.equal(drawn.composeSlide(1).icons.length, 2);
+// the records it resolves with hold the deck's icons, so a picker draws them too
+assert.ok(setIconGlyph((await loadIconSets(drawn)).get('tabler'), 'rocket'), 'the record has the icon the deck draws');
+// after setIcon, `ready` is the one wait a headless host needs before the next compose
+const next = session();
+await loadIconSets(next);
+await setIcon(next, 'slides.1.items.0', 'lucide:sailboat').ready;
+assert.equal(next.composeSlide(1).icons.length, 1, 'the icon set by the edit draws on the next compose');
+await setIcon(next, 'slides.1.items.1', 'tabler:bolt').ready;
+assert.equal(next.composeSlide(1).icons.length, 2);
 
 console.log('LH-166 editor icons: targets, search, set, change, remove, pasted SVG, refusals, pruning and undo checked.');

@@ -43,15 +43,30 @@ export const DISPLAY_KINDS = [
 export const ICON_SETS_DIR = "icon-sets";
 /**
  * RR-63: the icon data as plain static files under dist/icons/, read one icon at a time (`galleryIconSets`, dist/icon-sets.js):
- * `<set>.json` (the set's license, copyright, viewBox, style and every icon name), `<set>/<name>.json` (one icon's path data) and
+ * `<set>.json` (the set's license, copyright, viewBox, style and every icon name), `<set>/<name>.json` (one icon's path data),
+ * `<set>.icons.json` (the whole set: the index and every icon, for a host that serves only the set-level files or bundles a set) and
  * `<set>.tags.json` (the search keywords). A host reads them from the installed package (Node) or serves them (`fetchIcons`).
  */
 export const ICON_FILES_DIR = "icons";
 
-/** The files of one icon set under dist/icons/, by path relative to that folder: the index, the tags and one file per icon. */
+/** An icon name that is a safe file name on every OS: lowercase letters, digits and hyphens. */
+const ICON_FILE_NAME = /^[a-z0-9][a-z0-9-]*$/;
+/** Names Windows reserves for devices in any folder (`con.json` cannot be created or read there). */
+const WINDOWS_DEVICE_NAME = /^(?:con|prn|aux|nul|com[0-9]|lpt[0-9])$/i;
+
+/** The files of one icon set under dist/icons/, by path relative to that folder: the index, the whole set, the tags and one file per icon. */
 export function iconSetFiles(id, record) {
   const { $schema: _schema, id: _id, icons, tags, ...meta } = record;
-  const files = { [`${id}.json`]: `${JSON.stringify({ ...meta, names: Object.keys(icons) })}\n`, [`${id}.tags.json`]: `${JSON.stringify(tags ?? {})}\n` };
+  for (const name of Object.keys(icons)) {
+    // A future upstream name such as `con` would be a file no Windows checkout or install can hold.
+    if (!ICON_FILE_NAME.test(name) || WINDOWS_DEVICE_NAME.test(name)) throw new Error(`The icon ${id}:${name} cannot be a file name on every OS: rename it in scripts/build-icon-sets.mjs.`);
+  }
+  const index = { ...meta, names: Object.keys(icons) };
+  const files = {
+    [`${id}.json`]: `${JSON.stringify(index)}\n`,
+    [`${id}.icons.json`]: `${JSON.stringify({ ...index, icons })}\n`,
+    [`${id}.tags.json`]: `${JSON.stringify(tags ?? {})}\n`,
+  };
   for (const [name, icon] of Object.entries(icons)) files[`${id}/${name}.json`] = `${JSON.stringify(icon)}\n`;
   return files;
 }
@@ -117,7 +132,7 @@ const freeze = (value, depth) => {
 export const GALLERY_SOURCE = ${JSON.stringify(GALLERY_SOURCE)};
 /** The version of core's catalog record schemas these records target (package.json \`opf.catalogSchema\`). */
 export const CATALOG_SCHEMA = ${catalogSchema};
-/** The pptx.gallery catalog: register it with \`catalogs: [gallery]\` (and \`galleryIconSets\` of \`@openpresentation/gallery/icon-sets\` for icons). */
+/** The pptx.gallery catalog: register it with \`catalogs: [gallery]\` (and \`galleryIconSets()\` of \`@openpresentation/gallery/icon-sets\` for icons). */
 export const gallery = freeze(data.gallery, 3);
 /** Display metadata for pickers: chart types, languages and social platforms by id. */
 export const catalogDisplay = freeze(data.display, 3);

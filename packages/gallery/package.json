@@ -43,6 +43,7 @@
       "types": "./dist/icon-sets.d.ts",
       "default": "./dist/icon-sets.js"
     },
+    "./icons/*": "./dist/icons/*",
     "./package.json": "./package.json"
   },
   "imports": {

@@ -29,7 +29,9 @@ test("the package is published from OpenPresentation/opf (packages/gallery) with
   assert.equal(manifest.dependencies, undefined, "the gallery has no runtime dependency (core depends on it, never the reverse)");
   assert.equal(manifest.peerDependencies, undefined);
   assert.equal(manifest.opf.catalogSchema, CATALOG_SCHEMA);
-  assert.deepEqual(Object.keys(manifest.exports), [".", "./previews", "./icon-sets", "./package.json"]);
+  assert.deepEqual(Object.keys(manifest.exports), [".", "./previews", "./icon-sets", "./icons/*", "./package.json"]);
+  // RR-63: the icon files themselves, for a host that copies, serves or imports them (a whole set: icons/<set>.icons.json).
+  assert.equal(manifest.exports["./icons/*"], "./dist/icons/*");
   // RR-63: the icon files are read through #icon-files, the installed files in Node and nothing elsewhere.
   assert.deepEqual(manifest.imports, { "#icon-files": { node: "./dist/icon-files-node.js", default: "./dist/icon-files.js" } });
 });

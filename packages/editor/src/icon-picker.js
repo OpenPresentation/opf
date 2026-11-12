@@ -165,8 +165,13 @@ export function createIconPicker(container, options = {}) {
       return;
     }
     if (epoch !== state.epoch || state.destroyed) return;
-    // The page's glyphs only: a set loaded one icon at a time reads these and no others.
-    const records = await loadIconSets(source(), found.sets.map((entry) => entry.id), { icons: found.icons.map((entry) => entry.name) });
+    // The page's glyphs only, each set asked for its own names: a set loaded one icon at a time reads these and no others.
+    const records = new Map();
+    await Promise.all(found.sets.map(async ({ id }) => {
+      const names = found.icons.filter((entry) => entry.set === id).map((entry) => entry.name);
+      const record = (await loadIconSets(source(), [id], { icons: names })).get(id);
+      if (record) records.set(id, record);
+    }));
     if (epoch !== state.epoch || state.destroyed) return;
     const now = state.target ? readIcon(editor.presentation, state.target.path)?.icon : undefined;
     results.replaceChildren(
@@ -177,7 +182,8 @@ export function createIconPicker(container, options = {}) {
       }),
     );
     more.hidden = found.returned >= found.total;
-    count.textContent = found.total === 0 ? `No icons match "${state.query}".` : `${found.returned} of ${found.total} icon${found.total === 1 ? "" : "s"}`;
+    const missing = found.unavailable?.length ? ` ${found.unavailable.map((entry) => entry.message).join(" ")}` : "";
+    count.textContent = `${found.total === 0 ? `No icons match "${state.query}".` : `${found.returned} of ${found.total} icon${found.total === 1 ? "" : "s"}`}${missing}`;
     // The set choices (with their names) are known once a set loads.
     const wanted = JSON.stringify(listIconSets(source()).map((entry) => [entry.id, entry.name]));
     if (setSelect.dataset.signature !== wanted) {
