@@ -351,6 +351,13 @@ function nameOf(document: unknown): unknown {
 /** The most of a font file one read_font_file call returns (the PDF viewer of ext-apps reads in pieces of the same size). */
 const FONT_CHUNK = 512 * 1024;
 
+/**
+ * The most icons one read_icons call returns (RR-111). An icon's path data is about 200 bytes (at most 1.4 KB), so a batch is about
+ * 20 KB, and the first call of a set adds its index (Lucide 33 KB, Tabler 82 KB): a result stays far under one message frame.
+ */
+const ICON_BATCH = 100;
+const ICON_NAME = /^[a-z0-9][a-z0-9-]*$/;
+
 /** Bytes as base64, without Buffer (edge-safe). */
 function base64Of(bytes: Uint8Array): string {
 	let binary = "";
@@ -616,14 +623,18 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 	type IconSet = { name: string; license: string; copyright: string; version?: string; names?: readonly string[]; icons: Record<string, unknown>; tags?: Record<string, readonly string[]> };
 	const iconSets = (sources.iconSets?.iconSets ?? {}) as Record<string, (request?: { icons?: readonly string[]; tags?: boolean }) => Promise<IconSet>>;
 	const setNames = Object.keys(iconSets);
+	// RR-111: a server with no icon set (the lean server, a Worker that serves no icon files) says so instead of naming an empty list.
+	const searchIconsSets = setNames.length
+		? `in the gallery's icon sets: ${setNames.join(", ")}${setNames.includes("lucide") ? " (Lucide is the default)" : ""}`
+		: "in the icon sets this server registers. This server registers none, so a search finds nothing and a set icon such as \"lucide:truck\" is the finding opf/icon-unknown here";
 	server.registerTool(
 		"search_icons",
 		{
 			title: "Search the icon sets",
-			description: `Find icons for an \`icon\` field (a list entry, a metric or a group) in the gallery's icon sets: ${setNames.join(", ")} (Lucide is the default). Matches the icon name and the source package's keywords (every word must match; a name match ranks first). Each result's \`icon\` is the value to write, such as "lucide:truck". Never invent a name: an unknown one is the finding opf/icon-unknown. A deck can also define its own SVG once in its top-level \`icons\` map and name it by its bare key.`,
+			description: `Find icons for an \`icon\` field (a list entry, a metric or a group) ${searchIconsSets}. Matches the icon name and the source package's keywords (every word must match; a name match ranks first). Each result's \`icon\` is the value to write, such as "lucide:truck". Never invent a name: an unknown one is the finding opf/icon-unknown. A deck can also define its own SVG once in its top-level \`icons\` map and name it by its bare key.`,
 			inputSchema: {
 				query: z.string().describe('Words to match, such as "delivery truck" or "security".'),
-				set: z.string().optional().describe(`Only this set: ${setNames.join(" or ")}.`),
+				set: z.string().optional().describe(setNames.length ? `Only this set: ${setNames.join(" or ")}.` : "Only this set (this server registers none)."),
 				limit: z.number().int().min(1).max(100).optional().describe("At most this many icons. Default 20."),
 			},
 			outputSchema: {
@@ -810,6 +821,8 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		const view = z.enum(["preview", "source", "both"]);
 		const sessionSchema = z.string().max(64).optional().describe("Which viewer this replaces. Leave it out and a deck replaces the open viewer of a deck with the same name. Pass the session key a viewer reported (read_deck, or this tool's earlier result) to replace that viewer, or any other key (letters, digits, - _ . :) to keep this viewer apart.");
 		const viewerSchema = z.object({ session: z.string(), createdAt: z.number(), tie: z.number() });
+		// RR-111: the icon sets the viewer can read through read_icons (empty: the tool is not offered), so it asks only for those.
+		const iconSetsSchema = z.array(z.string()).optional().describe("The icon sets the viewer reads icons from (read_icons).");
 		const sessionLine = (key: { session: string }) => `Viewer session: ${key.session}. A later show_deck or open_editor call for the same deck (or with this session) replaces this viewer.`;
 		const outlineSchema = z.array(z.object({ slide: z.number(), title: z.string().nullable() }));
 		/** The deck's name and slide titles, read without checking it. */
@@ -859,6 +872,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 					counts: countsSchema.optional(),
 					findings: z.array(findingSchema).optional(),
 					viewer: viewerSchema,
+					iconSets: iconSetsSchema,
 				},
 				annotations: { ...READ_ONLY, title: "Show a deck in the OPF viewer" },
 				// SEP-1865: the view that renders this tool's results; the flat key is the older spelling some hosts still read.
@@ -866,7 +880,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			},
 			async ({ document, format, view: first, slide, session }) => {
 				const viewer = await viewerKey(session, nameOf(document));
-				const opened = { opened: true, view: first ?? "preview", ...(slide ? { slide } : {}), viewer };
+				const opened = { opened: true, view: first ?? "preview", ...(slide ? { slide } : {}), viewer, iconSets: setNames };
 				if (!processDecks) {
 					// No deck work here: the view reads and checks the deck. Only the shape of the arguments is looked at.
 					const result = { ...opened, checked: false, ...(format ? { format } : typeof document === "string" ? {} : { format: "json" as const }) };
@@ -917,6 +931,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 					document: z.record(z.string(), z.unknown()),
 					examples: z.array(z.object({ slug: z.string(), name: z.string().nullable() })),
 					viewer: viewerSchema,
+					iconSets: iconSetsSchema,
 				},
 				annotations: { ...READ_ONLY, title: "OPF deck editor" },
 				// SEP-1865's view, and Claude's entry point: the tool a user opens the app with, without asking the model.
@@ -932,7 +947,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				const viewer = await viewerKey(session, deck.name);
 				const slides = Array.isArray(deck.slides) ? deck.slides.length : 0;
 				const deckName = typeof deck.name === "string" ? deck.name : null;
-				const result = { opened: true, editor: true as const, example: found ? found.slug : null, name: deckName, slides, document: deck, examples: exampleList(), viewer };
+				const result = { opened: true, editor: true as const, example: found ? found.slug : null, name: deckName, slides, document: deck, examples: exampleList(), viewer, iconSets: setNames };
 				const what = found ? `the example deck ${found.slug}${named ? `, named "${named}"` : deckName ? ` ("${deckName}")` : ""}` : `a starter deck "${name}"`;
 				const missed = example !== undefined && !found ? ` There is no bundled example ${example}.${didYouMean(example, sources.examples.map((item) => item.slug))} It opened the starter deck instead (list_examples lists the slugs).` : "";
 				const text = [
@@ -993,6 +1008,54 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 						const report = error instanceof McpToolError ? { ok: false, code: error.code, error: error.message, ...error.details } : { ok: false, code: "internal-error", error: error instanceof Error ? error.message : String(error) };
 						return { isError: true, content: [{ type: "text" as const, text: JSON.stringify(report) }] };
 					}
+				},
+			);
+		}
+
+		// RR-111: the viewer draws a deck's set icons ("lucide:truck") from the server's icon sets: it cannot fetch, so it asks for the
+		// icons a deck names, a batch at a time, and for each set's index (every name, for "did you mean", and the license) once.
+		if (setNames.length) {
+			server.registerTool(
+				"read_icons",
+				{
+					title: "Read icons for the OPF viewer",
+					description: `Used by the OPF viewer only (it cannot fetch): the path data of up to ${ICON_BATCH} icons of one icon set (${setNames.join(", ")}), and with index the set's index (every icon name, its viewBox, style, license and copyright). Do not call it yourself: search_icons finds icons.`,
+					inputSchema: {
+						set: z.string().min(1).max(40).describe(`The icon set: ${setNames.join(" or ")}.`),
+						names: z.array(z.string().max(100)).max(ICON_BATCH).describe(`Up to ${ICON_BATCH} icon names of the set.`),
+						index: z.boolean().optional().describe("Also return the set's index (once per set)."),
+					},
+					outputSchema: { set: z.string(), icons: z.record(z.string(), z.unknown()), errors: z.record(z.string(), z.string()).optional(), index: z.record(z.string(), z.unknown()).optional() },
+					annotations: { ...READ_ONLY, title: "Read icons for the OPF viewer" },
+					// SEP-1865: callable by the view, hidden from the model.
+					_meta: { ui: { visibility: ["app"] } },
+				},
+				async ({ set, names, index }) => {
+					const answer = await respond(async () => {
+						if (!Object.hasOwn(iconSets, set)) throw fail(`Unknown icon set ${set}.${didYouMean(set, setNames)} Sets: ${setNames.join(", ")}.`, "unknown-id", { sets: setNames });
+						const errors: Record<string, string> = {};
+						const asked = [...new Set(names)].filter((name) => {
+							if (ICON_NAME.test(name)) return true;
+							errors[name] = `${JSON.stringify(name)} is not an icon name (lowercase letters, digits and hyphens).`;
+							return false;
+						});
+						let record: IconSet & { errors?: Record<string, string> };
+						try {
+							record = (await iconSets[set]!({ icons: asked })) as typeof record;
+						} catch (error) {
+							throw fail(`The icon set ${set} could not be read: ${error instanceof Error ? error.message : String(error)}`, "icon-set-unreadable", { set });
+						}
+						const { icons, errors: unread, tags: _tags, ...meta } = record;
+						const kept: Record<string, unknown> = {};
+						for (const name of asked) if (Object.hasOwn(icons, name)) kept[name] = icons[name];
+						Object.assign(errors, unread);
+						return { set, icons: kept, ...(Object.keys(errors).length ? { errors } : {}), ...(index ? { index: meta } : {}) };
+					});
+					if (!("structuredContent" in answer)) return answer;
+					// The data goes to the view only: the text says what it is, not the path data again.
+					const data = answer.structuredContent as { icons: Record<string, unknown>; errors?: Record<string, string>; index?: unknown };
+					const text = `Icon set ${set}: ${Object.keys(data.icons).length} of ${names.length} icons${data.errors ? `, ${Object.keys(data.errors).length} not read` : ""}${data.index ? ", with the set's index" : ""}.`;
+					return { content: [{ type: "text" as const, text }], structuredContent: answer.structuredContent };
 				},
 			);
 		}

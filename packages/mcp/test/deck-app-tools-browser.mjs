@@ -309,6 +309,23 @@ try {
 		assert.equal((await call("a", "read_deck", { source: "json", offset: -3 })).code, "invalid-input");
 	});
 
+	// RR-111: an icon an edit adds is read from the server (read_icons) before the checks run, so edit_deck and read_deck say at once
+	// whether it exists: a known one is not reported, an unknown one is, with the server's words.
+	await run("edit_deck and read_deck check the icons an edit adds as the server does", async () => {
+		const { revision } = await call("a", "read_deck");
+		const items = [{ text: "Hire two account executives", icon: "lucide:rocket" }, { text: "Ship the usage dashboard", icon: "lucide:chek" }];
+		const edit = await call("a", "edit_deck", { expectedRevision: revision, operations: [{ op: "replace", path: "/slides/@next/blocks/0/items", value: items }] });
+		assert.equal(edit.ok, true, edit.text);
+		const icons = (checks) => checks.findings.filter((finding) => finding.ruleId.startsWith("opf/icon-"));
+		assert.deepEqual(icons(edit.checks), [{ severity: "warning", ruleId: "opf/icon-unknown", path: "/slides/1/blocks/0/items/1/icon", message: "The icon set lucide has no icon chek." }]);
+		assert.deepEqual(icons((await call("a", "read_deck")).checks), icons(edit.checks));
+		const server = (await client.callTool({ name: "validate_deck", arguments: { document: { ...deck, name: "x", slides: [deck.slides[0], { ...deck.slides[1], blocks: [{ items }] }] } } })).structuredContent;
+		assert.deepEqual(server.findings.filter((finding) => finding.ruleId.startsWith("opf/icon-")).map((finding) => finding.message), ["The icon set lucide has no icon chek."]);
+		const back = await call("a", "edit_deck", { expectedRevision: edit.revision, operations: [{ op: "replace", path: "/slides/@next/blocks/0/items", value: deck.slides[1].blocks[0].items }] });
+		assert.equal(back.ok, true, back.text);
+		assert.deepEqual(icons(back.checks), []);
+	});
+
 	await run("an invalid deck: a JSON deck that fails the format does not open (the tools say so); invalid YAML stays a draft, and /slides is still refused", async () => {
 		const broken = { ...deckNamed("Broken deck"), slides: [{ id: "one", title: 42 }, { id: "two", title: "Two" }] };
 		await open("bad", "show_deck", { document: broken }, { holdInput: true });

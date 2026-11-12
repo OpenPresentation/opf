@@ -19,11 +19,12 @@
 // palette: the viewer's own chrome and the editor's parts read the same `--opf-ui-*` tokens, mapped onto the host's colors.
 import { App, type McpUiDisplayMode, type McpUiHostContext, applyDocumentTheme, applyHostStyleVariables } from "@modelcontextprotocol/ext-apps";
 import { gallery } from "@openpresentation/gallery";
-import { type Finding, embed, validate } from "@openpresentation/opf";
+import { type Finding, embed, ensureIcons, iconsPending, validate } from "@openpresentation/opf";
 import { createOpfEditor, layoutOptionsFor, type OpfEditor } from "@openpresentation/opf-editor/workspace";
 import { type BrowserFontsHandle, loadFonts } from "@openpresentation/opf-render/fonts-browser";
 import { z } from "zod";
 import { FONT_BASE, bytesOf, extraFaces, fontFetch, startupFaces } from "./fonts.js";
+import { type IconBatch, serverIconSets } from "./icons.js";
 
 declare const MCP_VERSION: string;
 
@@ -64,7 +65,26 @@ const STATUS_TIME = 8000;
 /** A host's save dialog can stay open a while: ten minutes before a download counts as unconfirmed (the SDK's default is 60 s). */
 const DOWNLOAD_TIMEOUT = 600_000;
 const MESSAGE = "I edited the deck in the OPF viewer. Please continue from my version.";
-const catalogs = [gallery];
+/** The icon sets the server announced in its show_deck or open_editor result (none: it has no read_icons); undefined until it did. */
+let offeredIconSets: string[] | undefined;
+/** One read_icons call (RR-111): the icons of a set the deck draws, through the host. A failure rejects, and core settles the load. */
+const readIcons = async (set: string, names: readonly string[], index: boolean): Promise<IconBatch> => {
+	if (!app.getHostCapabilities()?.serverTools) throw new Error("this host does not let the viewer ask its server for icons.");
+	let result: Awaited<ReturnType<typeof app.callServerTool>>;
+	try {
+		result = await app.callServerTool({ name: "read_icons", arguments: { set, names: [...names], ...(index ? { index: true } : {}) } });
+	} catch (error) {
+		throw new Error(`the server did not send icons (read_icons: ${error instanceof Error ? error.message : String(error)}).`);
+	}
+	const data = result.structuredContent as IconBatch | undefined;
+	if (result.isError || !data) {
+		const text = result.content?.find((part) => part.type === "text");
+		throw new Error(`the server did not send icons (read_icons: ${text && "text" in text ? String(text.text) : "no result"}).`);
+	}
+	return data;
+};
+// The gallery's catalog and its icon sets, read from the server: a deck's "lucide:truck" draws, and the checks know every icon name.
+const catalogs = [gallery, serverIconSets(readIcons, () => offeredIconSets)];
 
 const root = document.documentElement;
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -206,9 +226,29 @@ function runChecks(deck: unknown): void {
 	for (const finding of findings) counts[finding.severity] += 1;
 }
 
+/**
+ * The deck's set icons loaded (or settled) before a check reads them, or undefined when none is pending: until a set is loaded a check
+ * can neither confirm a known icon nor name the nearest ones for an unknown one. Never rejects (core settles a failed load).
+ */
+const iconsLoaded = (deck: unknown): Promise<void> | undefined => (iconsPending(deck, { catalogs }).sets.length ? ensureIcons(deck, { catalogs }).then(() => undefined, () => undefined) : undefined);
+/** Run the checks once the deck's icons are in. */
+async function checkWithIcons(deck: unknown): Promise<void> {
+	const waiting = iconsLoaded(deck);
+	if (waiting) await waiting;
+	runChecks(deck);
+}
+
 const scheduleChecks = (deck: unknown) => {
 	clearTimeout(checkTimer);
-	checkTimer = setTimeout(() => runChecks(deck), CHECK_DELAY);
+	checkTimer = setTimeout(() => {
+		const waiting = iconsLoaded(deck);
+		if (!waiting) return runChecks(deck);
+		// The check runs when the icons are in, unless a later edit scheduled another one meanwhile.
+		const scheduled = checkTimer;
+		void waiting.then(() => {
+			if (checkTimer === scheduled) runChecks(deck);
+		});
+	}, CHECK_DELAY);
 };
 /** The checks of the deck as it is now, run at once when an edit is still waiting for them. */
 const currentChecks = () => {
@@ -433,6 +473,14 @@ app.registerTool(
 		if (offset !== undefined && (!Number.isInteger(offset) || offset < 0)) return refuse("invalid-input", `offset must be a whole number from 0 (it was ${offset}). Use the next offset a truncated read_deck result named, or leave it out.`);
 		if (offset !== undefined && !source) return refuse("invalid-input", "offset pages the source text: pass source (json, yaml or markdown) with it.");
 		const at = offset ?? 0;
+		// The checks it reports know the deck's icons: a set icon is read before them (a load that fails is reported, never waited on twice).
+		const pendingIcons = iconsLoaded((editor as OpfEditor).getDocument());
+		if (pendingIcons) {
+			await pendingIcons;
+			const still = unavailable();
+			if (still) return still;
+			runChecks((editor as OpfEditor).getDocument());
+		}
 		// Pages after the first leave the outline out, so every page has room for the text and paging always moves on.
 		const state = deckState(at === 0);
 		const lead = `The deck open in this viewer, at revision ${state.revision}.`;
@@ -506,7 +554,7 @@ app.registerTool(
 			operations: z.array(operationSchema).describe("1 to 100 JSON Patch operations (RFC 6902), applied in order, all or none."),
 		}),
 	},
-	({ expectedRevision, operations }) => {
+	async ({ expectedRevision, operations }) => {
 		const refused = unavailable();
 		if (refused) return refused;
 		const ed = editor as OpfEditor;
@@ -539,7 +587,8 @@ app.registerTool(
 		} finally {
 			byTool = false;
 		}
-		runChecks(ed.getDocument());
+		// An icon the edit added is read before the checks, so they say whether it exists.
+		await checkWithIcons(ed.getDocument());
 		const revision = ed.session.documentHash();
 		if (changed.length) ed.status(`${sentence(assistant())} changed the deck (${changed.length} ${changed.length === 1 ? "change" : "changes"}). Undo takes it back.`);
 		const slides = (ed.getDocument() as { slides?: unknown[] }).slides;
@@ -942,7 +991,7 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	if (typeof args.slide === "number" && args.slide >= 1) editor.setSlide(args.slide - 1);
 	setView(VIEWS.includes(args.view as View) ? (args.view as View) : "preview");
 	showDeck();
-	runChecks(editor.getDocument());
+	await checkWithIcons(editor.getDocument());
 	await sendContext();
 }
 
@@ -1019,8 +1068,10 @@ app.addEventListener("toolinput", (params) => {
 	else inputWithoutDeck = true;
 });
 app.addEventListener("toolresult", (result) => {
-	const data = result.structuredContent as { viewer?: unknown; document?: unknown; editor?: unknown; example?: unknown; name?: unknown; examples?: unknown } | undefined;
+	const data = result.structuredContent as { viewer?: unknown; document?: unknown; editor?: unknown; example?: unknown; name?: unknown; examples?: unknown; iconSets?: unknown } | undefined;
 	joinSession(data?.viewer);
+	// The icon sets the server reads for the view (RR-111): from now on a set it does not offer fails without a call.
+	if (Array.isArray(data?.iconSets)) offeredIconSets = data.iconSets.filter((set): set is string => typeof set === "string");
 	if (started) return;
 	if (result.isError) {
 		const text = result.content?.find((part) => part.type === "text");
