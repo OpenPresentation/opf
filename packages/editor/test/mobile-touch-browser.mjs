@@ -9,7 +9,7 @@
 // The viewport is a fixed layout viewport (`isMobile: false`): an `isMobile` viewport widens itself to fit overflowing content, which would hide
 // the sideways scroll this test looks for. Touch is on (`hasTouch`), so `(pointer: coarse)` holds; the test asserts it.
 // CI runs the core states (every page load costs seconds, and the browser job has a time limit): Chromium at 320, 390 and 820px, WebKit at 320px,
-// the four browser/width runs side by side. OPF_TOUCH_FULL=1 runs every state in both engines at every width (what the audit behind the PR used).
+// the four browser/width runs side by side (on Windows WebKit runs after Chromium, one part at a time). OPF_TOUCH_FULL=1 runs every state in both engines at every width (what the audit behind the PR used).
 // OPF_TOUCH_ENGINES=chromium,webkit picks the engines (default both); OPF_WEBKIT_EXECUTABLE points at a WebKit build you already have.
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -598,17 +598,27 @@ try {
   try {
     // One run per engine and size, side by side: a run only waits for its own page loads, and its three parts (the source pane, the playground
     // and the layout editor) load in separate contexts at once.
+    const run = (engine, browser, size, alone) => {
+      const sourceRun = async () => {
+        const context = await browser.newContext({ viewport: { width: size.width, height: size.height }, deviceScaleFactor: 2, hasTouch: true, isMobile: false });
+        await sourcePane(context, engine, size.width);
+        await context.close();
+      };
+      const parts = [sourceRun, () => playground(browser, engine, size), () => layoutEditor(browser, engine, size)];
+      return alone ? parts.reduce((previous, part) => previous.then(part), Promise.resolve()) : Promise.all(parts.map((part) => part()));
+    };
+    // RR-105: on Windows WebKit runs after Chromium, its three parts one at a time. Playwright's Windows WebKit (software painting, one shared
+    // UI and network process) starved beside eleven Chromium pages on a 4-core runner: in Full CI 43175111138 its first playground took 17.6s
+    // to receive playground.js and 29s to receive the 166-byte galleries.json that Chromium pages got from the same server in under 1.5s, and
+    // its timers ran 14s late, so the preview missed the 60s wait while still progressing. OPF_TOUCH_SEQUENTIAL=1 (or 0) forces the order.
+    const sequential = process.env.OPF_TOUCH_SEQUENTIAL ? process.env.OPF_TOUCH_SEQUENTIAL === '1' : process.platform === 'win32';
+    const isLate = (engine) => sequential && engine === 'webkit';
+    const late = [...browsers].filter(([engine]) => isLate(engine));
     await Promise.all([
-      ...[...browsers].flatMap(([engine, browser]) => sizesFor(engine).map(async (size) => {
-        const sourceRun = (async () => {
-          const context = await browser.newContext({ viewport: { width: size.width, height: size.height }, deviceScaleFactor: 2, hasTouch: true, isMobile: false });
-          await sourcePane(context, engine, size.width);
-          await context.close();
-        })();
-        await Promise.all([sourceRun, playground(browser, engine, size), layoutEditor(browser, engine, size)]);
-      })),
+      ...[...browsers].filter(([engine]) => !isLate(engine)).flatMap(([engine, browser]) => sizesFor(engine).map((size) => run(engine, browser, size, false))),
       ...(browsers.has('chromium') ? [fineLayoutEditor(browsers.get('chromium')), landscapeTablet(browsers.get('chromium'))] : []),
     ]);
+    for (const [engine, browser] of late) for (const size of sizesFor(engine)) await run(engine, browser, size, true);
   } finally { for (const browser of browsers.values()) await browser.close(); }
   assert.deepEqual(problems, [], 'no page or console error');
   console.log(`Mobile and touch (${[...browsers.keys()].join(', ')}; ${full ? 'full' : 'core states'}): ${checks.length} groups.\n  ${checks.sort().join('\n  ')}`);
