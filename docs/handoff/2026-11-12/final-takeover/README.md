@@ -4,6 +4,8 @@ The owner requested a handoff, not completion. **v0.33.0 is published; v0.34.0 i
 
 ## Read these first
 
+**Post-freeze owner addition:** adopt Claude's current MCP Apps capabilities. Read the [source comparison and implementation plan](claude-mcp-apps-addendum.md): in-view editor tools, side-panel behavior, direct studio launch, and completed download/message/instance handling. This work is accepted but unimplemented; it extends W08 and does not replace any remaining gate.
+
 1. This file and the active board at `docs/handoff/2026-11-10/workstreams.md` on this handoff branch.
 2. The full private takeover prompt and ledger in `Data-Advantage/openpresentation-site`, branch `codex/handoff-034-20261112`, directory `docs/handoff/2026-11-12/final-takeover/`. It records native evidence, Windows coordination, site refs and owner decisions. Keep its private records private.
 3. Repository AGENTS.md; `docs/handoff/2026-11-07/{README,working-rules,decisions,com-checks,sites-docs-inventory}.md`; original11-10 final-handoff scope/inventories. This11-12 checkpoint supersedes their dated status, not the original scope.
