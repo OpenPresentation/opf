@@ -1,0 +1,30 @@
+{
+  "engine": "chromium",
+  "version": "158.0.8127.18",
+  "width": 390,
+  "height": 740,
+  "state": "the Import dialog, Gallery tab",
+  "phase": "preview SVG visible",
+  "failedAt": "2026-11-12T07:36:03.363Z",
+  "url": "http://127.0.0.1:53200/index.html",
+  "error": {
+    "name": "Error",
+    "message": "locator.waitFor: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> C:\\Users\\runneradmin\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1254\\chrome-headless-shell-win64\\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,HttpsUpgrades,HttpsFirstBalancedModeAutoEnable,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,AvoidCorsURLLoaderRestartOnRedirect,TcpPortRandomizationWin,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,PreconnectToSearch,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface,SkipListAccountsWithoutGaiaCookies --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --enable-unsafe-swiftshader --edge-skip-compat-layer-relaunch --disable-stack-profiler --disable-infobars --disable-sync --do-not-de-elevate --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\playwright_chromiumdev_profile-D1llSb --remote-debugging-pipe --no-startup-window\n<launched> pid=8388\n[pid=8388] <gracefully close start>\nCall log:\n\u001b[2m  - waiting for locator('#preview svg') to be vis",
+    "stack": "locator.waitFor: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> C:\\Users\\runneradmin\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1254\\chrome-headless-shell-win64\\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,HttpsUpgrades,HttpsFirstBalancedModeAutoEnable,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,AvoidCorsURLLoaderRestartOnRedirect,TcpPortRandomizationWin,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,PreconnectToSearch,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface,SkipListAccountsWithoutGaiaCookies --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --enable-unsafe-swiftshader --edge-skip-compat-layer-relaunch --disable-stack-profiler --disable-infobars --disable-sync --do-not-de-elevate --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\playwright_chromiumdev_profile-D1llSb --remote-debugging-pipe --no-startup-window\n<launched> pid=8388\n[pid=8388] <gracefully close start>\nCall log:\n\u001b[2m  - waiting for locator('#preview svg') to be visible\u001b[22m\n\n    at open (D:\\a\\opf\\opf\\packages\\editor\\test\\mobile-touch-browser.mjs:324:40)\n    at async playground (D:\\a\\opf\\opf\\packages\\editor\\test\\mobile-touch-browser.mjs:357:18)\n    at async file:///D:/a/opf/opf/packages/editor/test/mobile-touch-browser.mjs:539:9\n    at async file:///D:/a/opf/opf/packages/editor/test/mobile-touch-browser.mjs:532:5"
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "httpErrors": [],
+  "pendingRequests": [],
+  "dropped": {
+    "pending": 0,
+    "failed": 0,
+    "responses": 0,
+    "errors": 0,
+    "consoles": 0
+  },
+  "allProblems": [],
+  "domError": "page.evaluate: Target page, context or browser has been closed",
+  "capturedAt": "2026-11-12T07:36:03.365Z"
+}

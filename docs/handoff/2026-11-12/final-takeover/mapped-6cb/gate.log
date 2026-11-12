@@ -1,0 +1,34 @@
+
+> openpresentation-workspace@ check:changed /private/tmp/opf-034
+> node scripts/check-changed.mjs --base e923afbe78413608f98d942089e9763d6b10282b
+
+check-changed: 7 changed files since e923afbe7 (plus uncommitted and untracked)
+ok  build (6.1 s)
+ok  biome (0.1 s)
+ok  pnpm run check:changes (0.3 s)
+ok  pnpm run check:gallery-tracker (1.8 s)
+ok  pnpm run check:release-report (0.2 s)
+ok  pnpm run check:font-hotlinks (9.3 s)
+ok  pnpm run check:skill-commands (10.3 s)
+ok  pnpm run check:text (4.8 s)
+ok  pnpm run check:stability (39.5 s)
+-  typecheck
+ok  tests pptx (839.5 s)
+-  tests editor
+
+step                            status      time
+build                           passed     6.1 s
+biome                           passed     0.1 s  2 files
+pnpm run check:changes          passed     0.3 s
+pnpm run check:font-hotlinks    passed     9.3 s
+pnpm run check:gallery-tracker  passed     1.8 s
+pnpm run check:release-report   passed     0.2 s
+pnpm run check:skill-commands   passed    10.3 s
+pnpm run check:stability        passed    39.5 s
+pnpm run check:text             passed     4.8 s
+typecheck                       skipped        -  no .ts, .mts or tsconfig change
+tests pptx                      passed   839.5 s
+tests editor                    skipped        -  no runnable test among mobile-touch-browser.mjs
+total                                    894.6 s
+
+check-changed: passed. Run the full `pnpm test` before opening the pull request.

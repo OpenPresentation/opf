@@ -1,0 +1,4 @@
+query { t0: repository(owner: "OpenPresentation", name: "opf") { object(expression: "e923afbe78413608f98d942089e9763d6b10282b") { ... on Commit { oid statusCheckRollup { contexts(first: 100) { pageInfo { hasNextPage endCursor } nodes { __typename
+  ... on CheckRun { name status conclusion detailsUrl startedAt }
+  ... on StatusContext { context state targetUrl createdAt } } } } checkSuites(first: 10) { pageInfo { hasNextPage endCursor } nodes { id checkRuns(first: 100) { pageInfo { hasNextPage endCursor } nodes { __typename name status conclusion detailsUrl startedAt } } } } } } }
+ rateLimit { remaining resetAt } }

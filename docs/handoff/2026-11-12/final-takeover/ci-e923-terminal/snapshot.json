@@ -1,0 +1,903 @@
+{
+  "t0": {
+    "object": {
+      "oid": "e923afbe78413608f98d942089e9763d6b10282b",
+      "statusCheckRollup": {
+        "contexts": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "MzQ"
+          },
+          "nodes": [
+            {
+              "__typename": "CheckRun",
+              "name": "scope",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037398766",
+              "startedAt": "2026-11-12T07:25:42Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "lint (static)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640680",
+              "startedAt": "2026-11-12T07:50:55Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "lint (checks 1/2)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640585",
+              "startedAt": "2026-11-12T07:32:14Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "lint (checks 2/2)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640624",
+              "startedAt": "2026-11-12T07:34:33Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "audit",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640669",
+              "startedAt": "2026-11-12T07:49:55Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "gallery",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640603",
+              "startedAt": "2026-11-12T07:41:10Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "core",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640583",
+              "startedAt": "2026-11-12T07:48:01Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "cli",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640556",
+              "startedAt": "2026-11-12T07:29:58Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "mcp (tests)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640613",
+              "startedAt": "2026-11-12T07:38:09Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "mcp (browser)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640904",
+              "startedAt": "2026-11-12T07:52:34Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "render (tests 1/4)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640649",
+              "startedAt": "2026-11-12T07:48:25Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "render (tests 2/4)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640676",
+              "startedAt": "2026-11-12T07:44:21Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "render (tests 3/4)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640596",
+              "startedAt": "2026-11-12T07:42:51Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "render (tests 4/4)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640604",
+              "startedAt": "2026-11-12T07:36:38Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "render (browser)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640705",
+              "startedAt": "2026-11-12T07:44:34Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "pptx (tests 1/4)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640674",
+              "startedAt": "2026-11-12T07:48:29Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "pptx (tests 2/4)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640615",
+              "startedAt": "2026-11-12T07:39:07Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "pptx (tests 3/4)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640666",
+              "startedAt": "2026-11-12T07:49:30Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "pptx (tests 4/4)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640602",
+              "startedAt": "2026-11-12T07:35:10Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "pptx (browser)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640590",
+              "startedAt": "2026-11-12T07:36:35Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "editor (tests 1/2)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640877",
+              "startedAt": "2026-11-12T07:51:51Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "editor (tests 2/2)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640863",
+              "startedAt": "2026-11-12T07:52:00Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "editor (playground 1/4)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640742",
+              "startedAt": "2026-11-12T07:45:58Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "editor (playground 2/4)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640887",
+              "startedAt": "2026-11-12T07:51:16Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "editor (playground 3/4)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640880",
+              "startedAt": "2026-11-12T07:48:33Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "editor (playground 4/4)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640827",
+              "startedAt": "2026-11-12T07:48:58Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "editor (browser 1/3)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640802",
+              "startedAt": "2026-11-12T07:38:36Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "editor (browser 2/3)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640703",
+              "startedAt": "2026-11-12T07:44:42Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "editor (browser 3/3)",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640711",
+              "startedAt": "2026-11-12T07:51:22Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "integration",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640909",
+              "startedAt": "2026-11-12T07:52:33Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "goldens",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640893",
+              "startedAt": "2026-11-12T07:50:47Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "gallery-gates",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640770",
+              "startedAt": "2026-11-12T07:51:18Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "pack-shape",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640823",
+              "startedAt": "2026-11-12T07:50:30Z"
+            },
+            {
+              "__typename": "CheckRun",
+              "name": "verify",
+              "status": "COMPLETED",
+              "conclusion": "SUCCESS",
+              "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131055242527",
+              "startedAt": "2026-11-12T08:08:55Z"
+            }
+          ]
+        }
+      },
+      "checkSuites": {
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "Y3Vyc29yOnYyOpHPAAAAGziwZ30="
+        },
+        "nodes": [
+          {
+            "id": "CS_kwDOSHPQyM8AAAAbOK_FOw",
+            "checkRuns": {
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": null
+              },
+              "nodes": []
+            }
+          },
+          {
+            "id": "CS_kwDOSHPQyM8AAAAbOK_Hag",
+            "checkRuns": {
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": null
+              },
+              "nodes": []
+            }
+          },
+          {
+            "id": "CS_kwDOSHPQyM8AAAAbOK_Seg",
+            "checkRuns": {
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": "Y3Vyc29yOnYyOpHPAAAAHoNc4kQ="
+              },
+              "nodes": [
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Dependency audit",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360390",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Node 22 (engines range, render-1)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360630",
+                  "startedAt": "2026-11-12T07:34:51Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Platform residual (macos)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360703",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Packed install (Linux)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360708",
+                  "startedAt": "2026-11-12T07:25:11Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Node 26 (engines range, render-2)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360761",
+                  "startedAt": "2026-11-12T07:25:11Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Node 22 (engines range, core)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360764",
+                  "startedAt": "2026-11-12T07:25:51Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / CLI and core (windows-latest)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360770",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / editor playground on macOS (2/2)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360772",
+                  "startedAt": "2026-11-12T07:25:13Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / CLI and core (macos-latest)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360786",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / npm 12 consumer",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360800",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Node 22 (engines range, render-2)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360809",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Node 22 (engines range, pptx-2)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360835",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Node 26 (engines range, core)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360844",
+                  "startedAt": "2026-11-12T07:26:35Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Node 22 (engines range, pptx-1)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360872",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Node 22 (engines range, editor)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360879",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / pptx on Windows (3/3)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360889",
+                  "startedAt": "2026-11-12T07:25:13Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Node 26 (engines range, render-1)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360907",
+                  "startedAt": "2026-11-12T07:27:09Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Node 26 (engines range, pptx-2)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360968",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Node 26 (engines range, pptx-1)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360991",
+                  "startedAt": "2026-11-12T07:36:17Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / editor playground on macOS (1/2)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037360996",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / LibreOffice qualification (experimental)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361005",
+                  "startedAt": "2026-11-12T07:39:51Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / plan",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361016",
+                  "startedAt": "2026-11-12T07:37:43Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / editor browser suites on Windows (browser 1/3)",
+                  "status": "COMPLETED",
+                  "conclusion": "FAILURE",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361026",
+                  "startedAt": "2026-11-12T07:25:13Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / editor browser suites on Windows (playground 2/2)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361059",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / pptx on Windows (2/3)",
+                  "status": "COMPLETED",
+                  "conclusion": "FAILURE",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361077",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Installed candidates (macos-latest)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361105",
+                  "startedAt": "2026-11-12T07:25:12Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Node 26 (engines range, editor)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361115",
+                  "startedAt": "2026-11-12T07:41:19Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / pptx on Windows (1/3)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361169",
+                  "startedAt": "2026-11-12T07:25:13Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Platform residual (linux)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361192",
+                  "startedAt": "2026-11-12T07:42:16Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Installed candidates (windows-latest)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361221",
+                  "startedAt": "2026-11-12T07:43:45Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / editor browser suites on Windows (playground 1/2)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361226",
+                  "startedAt": "2026-11-12T07:37:49Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Registry consumers",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361235",
+                  "startedAt": "2026-11-12T07:42:15Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / editor browser suites on Windows (browser 2/3)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361313",
+                  "startedAt": "2026-11-12T07:34:44Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / editor browser suites on Windows (browser 3/3)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131037361587",
+                  "startedAt": "2026-11-12T07:34:58Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / Flake measurement (${{ matrix.name }})",
+                  "status": "COMPLETED",
+                  "conclusion": "SKIPPED",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131042461462",
+                  "startedAt": "2026-11-12T07:37:47Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "slow set (only with the full-ci label) / report",
+                  "status": "COMPLETED",
+                  "conclusion": "SKIPPED",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175111138/job/131052921412",
+                  "startedAt": "2026-11-12T08:03:30Z"
+                }
+              ]
+            }
+          },
+          {
+            "id": "CS_kwDOSHPQyM8AAAAbOLBnfQ",
+            "checkRuns": {
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": "Y3Vyc29yOnYyOpHPAAAAHoOATR8="
+              },
+              "nodes": [
+                {
+                  "__typename": "CheckRun",
+                  "name": "scope",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037398766",
+                  "startedAt": "2026-11-12T07:25:42Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "cli",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640556",
+                  "startedAt": "2026-11-12T07:29:58Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "core",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640583",
+                  "startedAt": "2026-11-12T07:48:01Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "lint (checks 1/2)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640585",
+                  "startedAt": "2026-11-12T07:32:14Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "pptx (browser)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640590",
+                  "startedAt": "2026-11-12T07:36:35Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "render (tests 3/4)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640596",
+                  "startedAt": "2026-11-12T07:42:51Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "pptx (tests 4/4)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640602",
+                  "startedAt": "2026-11-12T07:35:10Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "gallery",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640603",
+                  "startedAt": "2026-11-12T07:41:10Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "render (tests 4/4)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640604",
+                  "startedAt": "2026-11-12T07:36:38Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "mcp (tests)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640613",
+                  "startedAt": "2026-11-12T07:38:09Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "pptx (tests 2/4)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640615",
+                  "startedAt": "2026-11-12T07:39:07Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "lint (checks 2/2)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640624",
+                  "startedAt": "2026-11-12T07:34:33Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "render (tests 1/4)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640649",
+                  "startedAt": "2026-11-12T07:48:25Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "pptx (tests 3/4)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640666",
+                  "startedAt": "2026-11-12T07:49:30Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "audit",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640669",
+                  "startedAt": "2026-11-12T07:49:55Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "pptx (tests 1/4)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640674",
+                  "startedAt": "2026-11-12T07:48:29Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "render (tests 2/4)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640676",
+                  "startedAt": "2026-11-12T07:44:21Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "lint (static)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640680",
+                  "startedAt": "2026-11-12T07:50:55Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "editor (browser 2/3)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640703",
+                  "startedAt": "2026-11-12T07:44:42Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "render (browser)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640705",
+                  "startedAt": "2026-11-12T07:44:34Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "editor (browser 3/3)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640711",
+                  "startedAt": "2026-11-12T07:51:22Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "editor (playground 1/4)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640742",
+                  "startedAt": "2026-11-12T07:45:58Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "gallery-gates",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640770",
+                  "startedAt": "2026-11-12T07:51:18Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "editor (browser 1/3)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640802",
+                  "startedAt": "2026-11-12T07:38:36Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "pack-shape",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640823",
+                  "startedAt": "2026-11-12T07:50:30Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "editor (playground 4/4)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640827",
+                  "startedAt": "2026-11-12T07:48:58Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "editor (tests 2/2)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640863",
+                  "startedAt": "2026-11-12T07:52:00Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "editor (tests 1/2)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640877",
+                  "startedAt": "2026-11-12T07:51:51Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "editor (playground 3/4)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640880",
+                  "startedAt": "2026-11-12T07:48:33Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "editor (playground 2/4)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640887",
+                  "startedAt": "2026-11-12T07:51:16Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "goldens",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640893",
+                  "startedAt": "2026-11-12T07:50:47Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "mcp (browser)",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640904",
+                  "startedAt": "2026-11-12T07:52:34Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "integration",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131037640909",
+                  "startedAt": "2026-11-12T07:52:33Z"
+                },
+                {
+                  "__typename": "CheckRun",
+                  "name": "verify",
+                  "status": "COMPLETED",
+                  "conclusion": "SUCCESS",
+                  "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/43175126342/job/131055242527",
+                  "startedAt": "2026-11-12T08:08:55Z"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "rateLimit": {
+    "remaining": 4997,
+    "resetAt": "2026-11-12T09:32:16Z"
+  }
+}
