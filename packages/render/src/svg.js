@@ -1539,8 +1539,23 @@ function renderImage(item, box, bound, options) {
   return tag("g", {...traceAttrs(options,item.path),...generatedAttrs(options),'data-opf-asset-status':'unresolved',role:'img','aria-label':`Image unavailable: ${description}`},children.join("\n"));
 }
 
+// RR-105: the placeholder's caption is the asset's title, never its id: an `asset:` reference is followed through the deck's assets
+// (the fields the value writes win, as images layer them); one that does not resolve shows "Media". opf-pptx's mediaCaption is the same.
+function mediaAsset(value, assets) {
+  let asset = normalizeAsset(value);
+  const seen = new Set();
+  while (typeof asset.src === "string" && asset.src.startsWith("asset:")) {
+    const id = asset.src.slice(6);
+    if (seen.has(id) || !Object.hasOwn(assets ?? {}, id)) return { ...asset, src: "" };
+    seen.add(id);
+    const { src: _source, ...overrides } = asset;
+    asset = { ...normalizeAsset(assets[id]), ...overrides };
+  }
+  return asset;
+}
+
 function renderMedia(item, box, bound, options) {
-  const asset = normalizeAsset(item.value);
+  const asset = mediaAsset(item.value, bound.assets);
   const iconBox = centeredBox(box, 72, 72);
   const children = [
     tag("rect", {
