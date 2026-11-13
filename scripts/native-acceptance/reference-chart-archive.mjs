@@ -507,7 +507,15 @@ export function inspectCurrentReferenceStrokes(input, source, deps = archiveDepe
       assert.ok(Number.isSafeInteger(owned.index) && owned.index >= 0 && owned.index < refs.length, 'Current helper index must name an authored reference');
       const ref = refs[owned.index], present = Object.hasOwn(ref, 'stroke'), key = (index + 1) + '|' + owned.index;
       assert.equal(styles.has(key), false, 'Duplicate current reference index');
-      assert.deepEqual(Object.keys(owned).sort(), ['id','index','written',...(present ? ['stroke'] : [])].sort(), 'Exact current authored Line record required');
+      // RR-105 (2026-11-12): a labeled reference also records where its label was placed (the point index) and the end the author chose,
+      // so the import returns the authored labelPosition after the export moved a label off a mark.
+      const labeled = ref.label !== undefined;
+      assert.deepEqual(Object.keys(owned).sort(), ['id','index','written',...(present ? ['stroke'] : []),...(labeled ? ['labelAt','labelPosition'] : [])].sort(), 'Exact current authored Line record required');
+      if (labeled) {
+        assert.ok(Number.isSafeInteger(owned.labelAt) && owned.labelAt >= 0, 'Current label point must be a point index');
+        assert.ok(['start','end'].includes(owned.labelPosition), 'Current label end must be start or end');
+        if (ref.labelPosition !== undefined) assert.equal(owned.labelPosition, ref.labelPosition, 'Current metadata must contain the authored label end');
+      }
       assert.equal(owned.id, chart.chart.ownership.key + ':' + owned.index);
       assert.equal(Object.hasOwn(owned, 'stroke'), present, 'Authored stroke absence is significant');
       assert.deepEqual(owned.stroke, ref.stroke, 'Current metadata must contain this exact authored Line');
