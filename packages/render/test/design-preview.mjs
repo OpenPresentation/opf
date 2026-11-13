@@ -27,7 +27,9 @@ assert.match(toSvg({design:{titleAlignment:'end',contentAlignment:'center',conte
   const {loadFonts}=await import('../src/fonts-node.js');
   const prepared = await loadFonts();
   const anchors=svg=>Object.fromEntries([...svg.matchAll(/<text\b[^>]*>/g)].map(m=>m[0]).filter(tag=>/data-opf-path="slides\.0\.(title|subtitle|tag|text)"/.test(tag)).map(tag=>[tag.match(/data-opf-path="slides\.0\.(\w+)"/)[1],tag.match(/text-anchor="(\w+)"/)?.[1]??'start']));
-  const slide={tag:'Tag',title:'Title',subtitle:'Subtitle',text:'Body'};
+  // opf#1322 (2026-11-13): the body stays under the display size. A tracked display line that was measured with real faces is start-anchored
+  // at core's own x (test/display-anchor-browser.mjs), so its anchor attribute no longer names its alignment.
+  const slide={tag:'Tag',title:'Title',subtitle:'Subtitle',text:'Body',composition:{maxFontSize:54}};
   for(const options of [{},{fonts: prepared}]){
     assert.deepEqual(anchors(toSvg({design:{fontScheme:'roboto',contentAlignment:'center'},slides:[slide]}, 1,{...options,trace:true,catalogs})),{tag:'start',title:'start',subtitle:'start',text:'middle'});
     assert.deepEqual(anchors(toSvg({design:{fontScheme:'roboto',contentAlignment:'end',titleAlignment:'center'},slides:[{...slide,design:{titleAlignment:'end',contentAlignment:'start'}}]}, 1,{...options,trace:true,catalogs})),{tag:'start',title:'end',subtitle:'start',text:'start'});
