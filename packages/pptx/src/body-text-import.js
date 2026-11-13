@@ -1,7 +1,7 @@
 // Current ordinary native body text only. This reader never reads OPF tags or
 // recovers authoring boundaries across separate native text shapes.
 import {XMLParser} from 'fast-xml-parser';
-import {unbindNoBreak} from '@openpresentation/opf/composition';
+import {DISPLAY_TRACKING, EYEBROW_TRACKING, unbindNoBreak} from '@openpresentation/opf/composition';
 import {drawingObject, readSlideTheme} from './background-import.js';
 import {readBackgroundColor} from './background.js';
 import {nativeRunLanguage, nativeRunStyle, mergeNativeRunProperties, nativeTypeface} from './native-text-style.js';
@@ -10,6 +10,13 @@ import {nativeAutofit, scaledNativeRun, reportNativeAutofit} from './native-auto
 const parser = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', preserveOrder:true, parseAttributeValue:false, parseTagValue:false, trimValues:false, htmlEntities:true});
 const nodes = (tree, tag) => (tree ?? []).filter(node => Object.hasOwn(node, tag));
 const child = (tree, tag) => nodes(tree, tag)[0]?.[tag];
+// LH-32, LH-189: the letter spacing OPF composes and the export writes (spc, hundredths of a point) for a run of `sz`: the display tracking
+// of a large line, or the eyebrow's of a label in capitals. It is drawing, not authored style: import leaves it with no finding, as it
+// leaves OPF's own line breaks.
+const composedSpacing = properties => {
+  const size = Number(properties.sz) / 100, spc = Number(properties.spc);
+  return Number.isFinite(size) && size > 0 && [DISPLAY_TRACKING, EYEBROW_TRACKING].some(tracking => Math.round(tracking * size * 100) === spc);
+};
 // LH-11: a no-break space the exporter wrote where core's line breaker never breaks is the space again.
 const text = tree => unbindNoBreak((tree ?? []).map(node => node['#text'] ?? '').join(''));
 // Match nativeTextShapes/nativeShapeParagraphs indexing; positional ordering is
@@ -95,7 +102,7 @@ function bodyRunStyle(properties, context, relationships, report, extras = {}) {
   }
   if (properties['a:hlinkMouseOver']) report('unsupported-body-link', 'A native mouse-over action cannot be represented by an OPF run URL.');
   if (['a:uLn', 'a:uFill', 'a:highlight', 'a:effectLst', 'a:effectDag', 'a:ln'].some(key => properties[key]) ||
-    (properties.cap !== undefined && properties.cap !== 'none') || (properties.spc !== undefined && Number(properties.spc) !== 0)) {
+    (properties.cap !== undefined && properties.cap !== 'none') || (properties.spc !== undefined && Number(properties.spc) !== 0 && !composedSpacing(properties))) {
     report('unsupported-body-text-style', 'Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.');
   }
   const style = nativeRunStyle(supported, context, relationships, report, 'body');

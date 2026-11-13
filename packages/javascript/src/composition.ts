@@ -6559,7 +6559,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // as body text. composeLayout writes the tracking into the item's style (displayStyles).
   const tightDisplay = (options as Record<symbol, unknown>)[TIGHT_DISPLAY] === true;
   const fitPlacedText = (field:string,authored:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment?:'left'|'center'|'right'):TextFit|RichTextFit => {
-    const from=displayText(field,path)&&displayTracks(text)?displayFrom(scale):Infinity;
+    // A run in a face of its own (a symbol font, inline code, a named family) keeps the spacing of that face: such a text does not tighten.
+    const ownFaces=Array.isArray(authored)&&authored.some(run=>!!run&&typeof run==='object'&&((run as RichTextRun).fontFamily!==undefined||(run as RichTextRun).code===true));
+    const from=displayText(field,path)&&displayTracks(text)&&!ownFaces?displayFrom(scale):Infinity;
     if(!Number.isFinite(from)) return fitPlacedAs(field,authored,text,box,size,minimum,path,explicitAlignment,Infinity,Infinity);
     const fit=fitPlacedAs(field,authored,text,box,size,minimum,path,explicitAlignment,tightDisplay?from:Infinity,styleFor(field,path).tracking?Infinity:from);
     return fit.fontSize<from-1/FONT_SIZE_GRID_PER_PX-1e-9||fitLines(fit)<=displayLines(tightDisplay)?fit:fitPlacedAs(field,authored,text,box,size,minimum,path,explicitAlignment,Infinity,Infinity);

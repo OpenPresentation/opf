@@ -4610,13 +4610,11 @@ function fixedTitlePlan(item, family) {
   const largest = rich ? Math.max(0, ...rich[0].fragments.map(sizeOf)) : fit.fontSize;
   if (rich && largest > 0 && (baseline(0) - lineTop) / DIAGRAM_BASELINE_SHARE >= DIAGRAM_MIN_PITCH * largest) return {reject: 'line-pitch'};
   const height = TITLE_LINE_HEIGHTS.get(String(family ?? '').toLowerCase()) ?? SINGLE_LINE_HEIGHT;
-  // LH-189: a two-line display title core set one em apart (a pitch under single spacing) keeps its later lines at that pitch as a multiple
-  // of single spacing on their paragraphs (`spacing`), the first line still at single spacing on the first measured line's top.
-  const paragraphs = anchors.map((line, index) => {
-    const gap = index ? baseline(index) - baseline(index - 1) : 0, before = index ? gap - height * lineSize(index) : 0;
-    return {...(before < -.01 && gap > 0 ? {spaceBefore: 0, spacing: gap / (height * lineSize(index))} : {spaceBefore: before}), ...marginsOf(line.x)};
-  });
-  if (paragraphs.some(paragraph => paragraph.spaceBefore < -.01 || paragraph.spacing !== undefined && paragraph.spacing < .5)) return {reject: 'line-pitch'};
+  const paragraphs = anchors.map((line, index) => ({
+    spaceBefore: index ? baseline(index) - baseline(index - 1) - height * lineSize(index) : 0,
+    ...marginsOf(line.x)
+  }));
+  if (paragraphs.some(paragraph => paragraph.spaceBefore < -.01)) return {reject: 'line-pitch'};
   const x = edge - width * factor;
   return {x, top: lineTop, width, height: baseline(count - 1) - lineTop + height * lineSize(count - 1), size: fit.fontSize, paragraphs, align, hard, rtl, whole};
 }
@@ -4642,8 +4640,6 @@ function addFixedTitle(slide, item, context, options, deckContext, plan) {
     // One paragraph per line, its space before (in points) making up core's pitch.
     const spaceBefore = Math.round(plan.paragraphs[index].spaceBefore * .75 * 100) / 100;
     if (spaceBefore > 0) lineRuns[0].options = {...lineRuns[0].options, paraSpaceBefore: spaceBefore};
-    // LH-189: a later line of a display title one em below the last, at that share of single spacing.
-    if (plan.paragraphs[index].spacing !== undefined) lineRuns[0].options = {...lineRuns[0].options, lineSpacingMultiple: Math.round(plan.paragraphs[index].spacing * 1000) / 1000};
     if (index < plan.paragraphs.length - 1) lineRuns[lineRuns.length - 1].options = {...lineRuns[lineRuns.length - 1].options, breakLine: true};
     runs.push(...lineRuns);
   }

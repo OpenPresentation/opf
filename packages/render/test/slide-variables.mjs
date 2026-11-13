@@ -10,9 +10,11 @@ const make = body => ({
   name: 'Slide variables',
   design: {fontScheme: 'roboto', footer: {start: {text: '{{slide.section}}'}, end: {text: 'Page {{slide.number}} of {{deck.slideCount}}'}}},
   slides: [
-    {section: 'Intro', title: 'Overview', text: 'This is slide {{slide.number}} of {{deck.slideCount}} in {{slide.section}}.', notes: 'Notes for slide {{slide.number}}'},
+    // LH-188: a title of more than four words keeps the slide a content slide (no one-message growth onto more lines).
+    {section: 'Intro', title: 'Overview of this short deck', text: 'This is slide {{slide.number}} of {{deck.slideCount}} in {{slide.section}}.', notes: 'Notes for slide {{slide.number}}'},
     {section: 'Details', title: 'Details {{slide.number}}/{{deck.slideCount}}', blocks: [{text: body}]},
-    {title: 'Last', text: 'Closing on {{slide.number}}'},
+    // LH-188: a title of more than four words keeps the slide a content slide (no one-message growth onto more lines).
+    {title: 'Last slide of the deck', text: 'Closing on {{slide.number}}'},
   ],
 });
 const deck = make('Short body.');
@@ -32,7 +34,8 @@ assert.deepEqual(parts.map(part => [part.zone, part.field, part.text]), [['start
 assert.deepEqual(parts[1].fields, [{type: 'slideNumber', start: 5, end: 6}]);
 
 // An escaped token is the literal text.
-const escaped = toSvg({slides: [{title: 'Escape', text: String.raw`Write \{{slide.number}} to show the slide number`}]}, 1);
+// LH-188: a title of more than four words keeps the slide a content slide (no one-message growth onto more lines).
+const escaped = toSvg({slides: [{title: 'Escaped tokens in body text', text: String.raw`Write \{{slide.number}} to show the slide number`}]}, 1);
 // LH-09: a lone short text is a display message whose balanced lines are separate text elements, so the text is read across them.
 assert.ok(escaped.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').includes('Write {{slide.number}} to show the slide number'));
 

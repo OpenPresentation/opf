@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {resolvePresentation,toSvg} from '../dist/svg.js';
 import {gallery} from '@openpresentation/gallery';
-const deck={slides:[{layout:'text',title:'Region title',blocks:[{text:'Region alignment probe'}]}]};
+// LH-188: a title of more than four words keeps the slide a content slide (no one-message growth onto more lines).
+const deck={slides:[{layout:'text',title:'Region title of the binding probe',blocks:[{text:'Region alignment probe'}]}]};
 const bound=resolvePresentation(deck,{catalogs:[gallery]}).slides[0];
 assert.ok(!Object.hasOwn(bound,'titleBindings'),'v1 title bindings are not exposed');
 assert.ok(bound.geometry.regions.some(region=>region.name==='body'),'v2 body region geometry remains available');

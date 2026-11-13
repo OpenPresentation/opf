@@ -82,7 +82,8 @@ for (const [preset, width, height] of [['1:1', 720, 720], ['4:5', 720, 900], ['9
 
 // --- TextRun.code and TextRun.language ----------------------------------------------------------------------------------------
 {
-  const deck = text => ({design: {fontScheme: 'roboto'}, slides: [{title: 'Runs', text}]});
+  // LH-188: a title of more than four words keeps the slide a content slide, so the short paragraph is not grown onto two lines.
+  const deck = text => ({design: {fontScheme: 'roboto'}, slides: [{title: 'Runs of code in a paragraph', text}]});
   const out = svg(deck(['Run ', {text: 'npm install', code: true}, ' now']));
   const run = out.match(/<(?:text|tspan) [^>]*>npm install<\/(?:text|tspan)>/)[0];
   assert.match(run, /font-family="[^"]*Roboto Mono[^"]*monospace/, 'the code family with a monospace generic');

@@ -77,7 +77,8 @@ const paged = {name: 'Paged', design: {fontScheme: 'roboto', footer: {start: {te
   const source = {name: 'Body', design: {fontScheme: 'roboto', footer: {end: {text: '{{slide.number}}'}}}, slides: [
     {title: 'Intro slide', section: 'Intro', text: 'Slide {{slide.number}} of {{deck.slideCount}} in {{slide.section}}'},
     {title: 'Slide {{slide.number}}', text: 'The count is {{ deck.slideCount }}.'},
-    {title: 'Escaped', text: 'Write \\{{slide.number}} for the number.'}]};
+    // LH-188: a title of more than four words keeps the slide a content slide, so its sentence stays on one line.
+    {title: 'Escaped tokens in the body text', text: 'Write \\{{slide.number}} for the number.'}]};
   const {entries, issues} = await exportDeck(source);
   assert.deepEqual(issues, []);
   const [first, second, third] = [1, 2, 3].map(index => slideXml(entries, index));

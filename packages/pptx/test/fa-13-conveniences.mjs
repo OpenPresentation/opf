@@ -170,7 +170,8 @@ const textDeck = (watermark, slideDesign) => ({design: {fontScheme: 'roboto', ..
 }
 
 // --- TextRun.code and TextRun.language -------------------------------------------------------------------------------------
-const richDeck = (language, text) => ({...(language ? {language} : {}), design: {fontScheme: 'roboto'}, slides: [{title: 'Runs', text}]});
+// LH-188: a title of more than four words keeps the slide a content slide, so the short paragraph is not grown onto two lines.
+const richDeck = (language, text) => ({...(language ? {language} : {}), design: {fontScheme: 'roboto'}, slides: [{title: 'Runs of code in a paragraph', text}]});
 const runs = xml => [...xml.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]*)<\/a:t><\/a:r>/g)].map(match => ({properties: match[1], text: match[2]}));
 {
   const text = ['Run ', {text: 'npm install', code: true}, ' now'];
