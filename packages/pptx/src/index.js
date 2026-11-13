@@ -48,7 +48,7 @@ import {attachFurnitureTags, furnitureManifest, importFurniture, logoShape, stat
 import {restoreRunColors} from './run-colors.js';
 import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, settleLayers, shapeRole, shapeText} from './shape-import.js';
 import {assembleOverlayShapes, restoreShapes} from './shape-restore.js';
-import {joinWrappedText} from './content-topology.js';
+import {joinWrappedText, rejoinDetachedSpace} from './content-topology.js';
 import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordListScalars, recordOverlays, opfSlideOwnership, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
@@ -1809,7 +1809,10 @@ const richRuns = value => typeof value === 'string' ? [{text: value}] : value;
 function joinRich(a, b) {
   if (typeof a === 'string' && typeof b === 'string') return a + b;
   const copy = value => richRuns(value).map(run => typeof run === 'string' ? {text: run} : {...run});
-  const left = copy(a), right = copy(b), last = left.at(-1), first = right[0];
+  const left = copy(a), right = copy(b);
+  // RR-105: a decorated run's space that ended the earlier line joins the run again (rejoinDetachedSpace).
+  rejoinDetachedSpace(left, right[0]);
+  const last = left.at(-1), first = right[0];
   // Only the line seam can be an artificial wrap boundary. Interior current
   // run boundaries in either input must survive an unrelated continuation.
   if (last && first && JSON.stringify({...last, text: ''}) === JSON.stringify({...first, text: ''})) {
@@ -3153,13 +3156,31 @@ function scriptSplitListScalars(fit, context) {
   });
   return result.length ? result : undefined;
 }
+/**
+ * RR-105: an underline, link or strikethrough ends with a line's last visible character, as the preview draws it: the trailing white space of
+ * the last visible run of a native line, when that run is decorated, is a run of its own without the decoration (or the hyperlink, which
+ * PowerPoint underlines), and white space after it carries none. The text of the line is unchanged. `colors[i]` is run i's color without
+ * a link (a link takes the hyperlink color). Import joins such a space back into its run when the run goes on in the next line (joinRich,
+ * joinWrappedText, joinRichLines: rejoinDetachedSpace).
+ */
+function undecoratedLineEnd(runs, colors = []) {
+  const decorated = options => options.hyperlink || options.underline || options.strike;
+  const plain = (options, index) => ({...options, hyperlink: undefined, underline: undefined, strike: undefined, ...(colors[index] !== undefined ? {color: colors[index]} : {})});
+  let last = -1;
+  runs.forEach((run, index) => { if (/\S/u.test(run.text)) last = index; });
+  for (let index = last + 1; index < runs.length; index++) if (decorated(runs[index].options)) runs[index] = {...runs[index], options: plain(runs[index].options, index)};
+  const run = runs[last], trail = run && decorated(run.options) ? /\S(\s+)$/u.exec(run.text)?.[1] : undefined;
+  if (trail) runs.splice(last, 1, {...run, text: run.text.slice(0, -trail.length)}, {text: trail, options: plain(run.options, last)});
+  return runs;
+}
 function richLineRuns(line,color,native,context,path) {
-  const fallback=color.replace(/^#/,'');
-  return line.fragments.map(fragment=>{
+  const fallback=color.replace(/^#/,''),colors=[];
+  return undecoratedLineEnd(line.fragments.map(fragment=>{
     assertXmlText(fragment.run.text ?? fragment.text, path);
     const runColor=exportColor(fragment.run.color,context,fallback),color=nativeColor(fragment.run.color,runColor,context,native);
+    colors.push(color);
     return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color:linkColor(fragment.run,color,context),underline:fragment.run.underline?{style:'sng',color:linkColor(fragment.run,color,context)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:|tel:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined,...langOptions(context,fragment.style.lang)}};
-  });
+  }),colors);
 }
 // Every native line of a list, marker paragraph or not, is named for the list's
 // composed path (`OPF list <path> line N`, N counting across the whole list) like
@@ -4253,11 +4274,13 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
   const count = fit.richLines.length;
   let cursor = 0;
   for (const [index, line] of fit.richLines.entries()) {
-    const runs = line.fragments.map(fragment => {
+    const colors = [];
+    const runs = undecoratedLineEnd(line.fragments.map(fragment => {
       const runColor = exportColor(fragment.run.color, context, context.colors.text);
       const color = nativeColor(fragment.run.color, runColor, context, fallback);
+      colors.push(color);
       return {text: fragment.text, options: {...nativeFontOptions(fragment.style), ...eyebrowOptions(fragment.style, fragment.nominalSize ?? fragment.fontSize), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: linkColor(fragment.run, color, context), underline: fragment.run.underline ? {style: 'sng', color: linkColor(fragment.run, color, context)} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined, baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined, hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:|tel:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined, ...langOptions(context, fragment.style.lang)}};
-    });
+    }), colors);
     // Logical alignment (RR-05): a right-to-left paragraph starts at the right edge; every wrapped line shares its paragraph's direction.
     const placed = fit.placement?.lines[index], alignment = placed?.alignment ?? physicalAlignment(logicalAlignment, fit.directions?.[index]), factor = alignment === 'right' ? 1 : alignment === 'center' ? .5 : 0;
     const area = placed ? {...region, x: (placed.x + line.width * factor - box.width * factor) / 96, y: placed.y / 96, h: placed.height / 96} : {...region, y: region.y + line.y / 96, h: line.height / 96};

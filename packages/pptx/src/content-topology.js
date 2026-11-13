@@ -80,6 +80,26 @@ const GAP_TEXT = /^[ \t\r\n]*$/;
 
 const styleKey = run => JSON.stringify(Object.keys(run).filter(key => key !== 'text').sort().map(key => [key, run[key]]));
 const sameRunStyle = (a, b) => styleKey(a) === styleKey(b);
+const DECORATION = ['link', 'underline', 'strikethrough'];
+/**
+ * RR-105: the export draws an underline, link or strikethrough only to a line's last visible character, so the white space a decorated run
+ * ends a native line with is a run of its own without the decoration (opf-pptx undecoratedLineEnd). At a seam, that space joins its run
+ * again when the run goes on in the next line (`next`, the next line's first run, has its style). `left` is the joined runs so far, as
+ * run objects; it is changed in place. Returns whether it joined.
+ */
+export function rejoinDetachedSpace(left, next) {
+  // A plain space may have been read as a string.
+  const space = typeof left.at(-1) === 'string' ? {text: left.at(-1)} : left.at(-1), run = left.at(-2);
+  if (!space || !run || !next || typeof space !== 'object' || typeof run !== 'object' || typeof next !== 'object') return false;
+  if (typeof space.text !== 'string' || !/^[ \t]+$/.test(space.text) || !DECORATION.some(key => run[key] !== undefined && run[key] !== false) || !sameRunStyle(run, next)) return false;
+  // The space has the run's look without its decoration; a link's own color (the hyperlink color) is the link's, not the run's.
+  const ignored = key => DECORATION.includes(key) || key.startsWith('_opf') || (key === 'color' && run.link !== undefined);
+  const look = value => Object.fromEntries(Object.entries(value).filter(([key]) => !ignored(key)));
+  if (!sameRunStyle(look(run), look(space))) return false;
+  run.text += space.text;
+  left.pop();
+  return true;
+}
 // Adjacent runs that differ only in text are one run: a wrap or a break cut them apart, nothing else did.
 function normalizeRuns(runs) {
   const merged = [];
@@ -108,6 +128,7 @@ export function joinWrappedText(parts, gaps = []) {
   parts.forEach((part, index) => {
     const runs = (typeof part === 'string' ? [{text: part}] : part).map(run => ({...run}));
     if (index) {
+      rejoinDetachedSpace(joined, runs[0]);
       const {text, keep} = gapParts(gaps[index - 1]);
       const last = joined.at(-1);
       if (last && keep) last.text += text.slice(0, keep);
