@@ -6565,7 +6565,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     for (const group of groups.values()) {
       const start = (item: ComposedItem) => Math.max(snapFontSizeUp((item.composition.minFontSize ?? 16) * scale), contentNominalSize('text') * scale);
-      const grown = group.filter(item => item.text!.fontSize > start(item) + FONT_GRID_EPSILON), holding = group.filter(item => item.text!.fontSize >= start(item) - FONT_GRID_EPSILON);
+      // RR-105: a shape whose one word only fits past its text rectangle (textWrap 'none') does not hold the body size there, so it does not
+      // set its siblings' size (as when that word broke and the text shrank).
+      const grown = group.filter(item => item.text!.fontSize > start(item) + FONT_GRID_EPSILON), holding = group.filter(item => item.text!.fontSize >= start(item) - FONT_GRID_EPSILON && item.shape?.textWrap !== 'none');
       if (!grown.length || holding.length < 2) continue;
       const shared = Math.min(...holding.map(item => item.text!.fontSize));
       for (const item of grown) {
