@@ -806,7 +806,7 @@
       "blocks": [
         {
           "type": "shape",
-          "path": "M 0 50 L 50 0 L 100 50 L 50 100 Z",
+          "path": "M 0 0.5 L 0.5 0 L 1 0.5 L 0.5 1 Z",
           "fill": "accent1",
           "text": "Path string"
         },
