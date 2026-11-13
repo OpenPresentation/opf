@@ -80,6 +80,11 @@ Updating a deck or a host from 0.33: [docs/migrations/0.34.md](../../migrations/
    theme fonts switched through the object model) and the display-growth slides were opened and measured in PowerPoint before
    they were merged. The measurements are in the RR-105 progress log (`docs/programs/release-readiness/burndown.md`).
 
+7. **Final PowerPoint pass on 2026-11-13** (`f2c35187b`, the release content): 67 files from 62 decks (103 features) open without
+   repair, every saved copy imports back, no shrink-on-overflow, 592 slides compared with the preview.
+8. **Final goldens** (run 43410213335): 63 example slides in 55 decks and 28 layout templates moved, each explained by display
+   growth (55 slides, 28 templates) or a coverage-deck fix (8 slides).
+
 Results and the remaining gaps are in the pull request body and in the RR-105 progress log.
 
 ## Decisions made for the owner on 2026-11-12 (all vetoable)
@@ -143,6 +148,10 @@ Decisions of 2026-11-13 (all vetoable):
   on a figure at the 252 px ceiling of LH-188 (issue #1309 has the measurements). The preview draws a substitute for Aptos; an
   exact first-baseline model is future work.
 - A period before a closing quotation mark is kerned in the preview and not in PowerPoint (16 px at 54 px).
+- A one-line message that fills the width can reach a few pixels into the right margin in PowerPoint, because real Aptos is
+  slightly wider than the preview's substitute (`coverage-backgrounds` slide 11: about 7 px at 960 on a 75 px line).
+- The probe reports the trailing space of a fixed title line as text past its frame when the line nearly fills the width
+  (`data-story-academy` slide 12). Nothing is drawn there.
 - PowerPoint lays out a chart's inner plot area itself: gridlines and axis titles can sit 5 to 15 px from the preview's.
 - Aptos Display draws in a substitute face in PowerPoint at very large sizes (174 pt; fine at 120 pt and below).
 - Roboto SemiBold is not among Office's cloud fonts: timeline labels draw regular in PowerPoint.
