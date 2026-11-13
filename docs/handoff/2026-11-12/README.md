@@ -191,6 +191,13 @@ See the release pull request and the three site repositories for the 0.34 pull r
 adoption could deploy: its signed-in tests waited for Clerk on a page that no longer loads it (pptx-dev#214), a revoked API key
 still authenticated (pptx-dev#215), and its size check still enforced a compressed limit Cloudflare removed (in pptx-dev#212).
 
+pptx.dev production deployed again on 2026-11-13 (`8f9023e3`, OPF 0.33.0; `https://api.pptx.dev/v1/health` names the commit). It
+had not deployed since 2026-11-07 for two reasons: the activation step refused a variable the Convex CLI adds (fixed in
+pptx-dev#219), and pull requests merged as soon as `verify` was green had no recorded native Preview, which the production gate
+requires. **Merge a pptx-dev pull request only after its `Native Preview` check is green** (`node scripts/pr-gate.mjs
+Data-Advantage/pptx-dev#N --required "verify (ubuntu-latest),Native Preview" --merge`); the rule is in that repository's
+`docs/cloudflare.md` (pptx-dev#220). The signed-in API key test is flaky on preview Workers (pptx-dev#218).
+
 ## How to resume
 
 Read `AGENTS.md`, this file and the [working rules](../2026-11-07/working-rules.md). The release runbook is
