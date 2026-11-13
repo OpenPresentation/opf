@@ -1,0 +1,240 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: diagrams and arrangements",
+  "description": "RR-105 format coverage: Mermaid, Graphviz DOT and PlantUML diagrams in every payload form, and every arrangement layout (flow, vertical flow, chevrons, cycle, pyramid, inverted pyramid, matrix, org chart, hierarchy, Venn).",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "id": "mermaid-explicit",
+      "type": "diagram",
+      "title": "A Mermaid flow with its syntax named",
+      "diagram": {
+        "syntax": "mermaid",
+        "source": "flowchart LR\n  A[Order] --> B{In stock?}\n  B -->|yes| C[Ship]\n  B -->|no| D[Backorder]",
+        "alt": "An order ships when in stock and is backordered otherwise."
+      }
+    },
+    {
+      "id": "dot",
+      "title": "A Graphviz graph of the release steps",
+      "diagram": {
+        "syntax": "dot",
+        "source": "digraph release {\n  rankdir=LR;\n  build -> test -> stage -> ship;\n  test -> build [label=\"fail\"];\n}",
+        "alt": "Build, test, stage and ship; a failed test returns to build."
+      }
+    },
+    {
+      "id": "plantuml",
+      "title": "A PlantUML sequence for sign-in",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\nUser -> App: Sign in\nApp -> Identity: Check password\nIdentity --> App: Token\nApp --> User: Welcome\n@enduml",
+        "alt": "The app checks the password with the identity service and greets the user."
+      }
+    },
+    {
+      "id": "diagram-blocks",
+      "title": "A diagram beside its explanation",
+      "blocks": [
+        {
+          "diagram": "flowchart TD\n  Idea --> Draft --> Review --> Publish"
+        },
+        {
+          "bullets": [
+            "Ideas come from support tickets",
+            "Drafts take a week",
+            "Review is a single meeting"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dot-cluster",
+      "title": "A DOT graph with two clusters",
+      "diagram": {
+        "syntax": "dot",
+        "source": "digraph {\n  subgraph cluster_land { label=\"Land\"; gate; yard; }\n  subgraph cluster_sea { label=\"Sea\"; berth; ship; }\n  gate -> yard -> berth -> ship;\n}"
+      }
+    },
+    {
+      "id": "plantuml-component",
+      "title": "Components of the booking system",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\npackage \"Booking\" {\n  [Portal] --> [API]\n  [API] --> [Database]\n}\n@enduml"
+      }
+    },
+    {
+      "id": "plantuml-state",
+      "title": "States of a container",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\n[*] --> Arrived\nArrived --> Inspected\nInspected --> Loaded\nLoaded <-- Held\nLoaded --> [*]\n@enduml"
+      }
+    },
+    {
+      "id": "plantuml-gantt",
+      "title": "The berth upgrade schedule",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startgantt\nProject starts 2026-01-05\n[Design] lasts 20 days\n[Build] lasts 40 days\n[Build] starts at [Design]'s end\n@endgantt"
+      }
+    },
+    {
+      "id": "flow",
+      "layout": "flow",
+      "title": "Four stages from request to release",
+      "items": [
+        "Request",
+        "Design",
+        "Build",
+        "Release"
+      ]
+    },
+    {
+      "id": "vertical-flow",
+      "layout": "vertical-flow",
+      "title": "Onboarding runs top to bottom",
+      "items": [
+        "Sign the contract",
+        "Set up accounts",
+        "Meet the team",
+        "First project"
+      ]
+    },
+    {
+      "id": "chevrons",
+      "layout": "chevrons",
+      "title": "Five steps of a support case",
+      "items": [
+        "Open",
+        "Triage",
+        "Fix",
+        "Verify",
+        "Close"
+      ]
+    },
+    {
+      "id": "cycle",
+      "layout": "cycle",
+      "title": "The planning cycle repeats each quarter",
+      "items": [
+        "Plan",
+        "Build",
+        "Measure",
+        "Learn"
+      ]
+    },
+    {
+      "id": "pyramid",
+      "layout": "pyramid",
+      "title": "What the platform rests on",
+      "items": [
+        "Products",
+        "Services",
+        "Data",
+        "Infrastructure"
+      ]
+    },
+    {
+      "id": "inverted-pyramid",
+      "layout": "inverted-pyramid",
+      "title": "From every idea to one decision",
+      "items": [
+        "All ideas",
+        "Qualified ideas",
+        "Shortlist",
+        "Decision"
+      ]
+    },
+    {
+      "id": "matrix",
+      "layout": "matrix",
+      "title": "Effort against impact",
+      "items": [
+        "Quick wins",
+        "Big bets",
+        "Fill-ins",
+        "Money pits"
+      ]
+    },
+    {
+      "id": "org-chart",
+      "layout": "org-chart",
+      "title": "Who reports to whom in the pilot",
+      "blocks": [
+        {
+          "region": "people",
+          "items": [
+            {
+              "text": "Pilot lead",
+              "level": 0
+            },
+            {
+              "text": "Delivery",
+              "level": 1
+            },
+            {
+              "text": "Evidence",
+              "level": 1
+            },
+            {
+              "text": "Support",
+              "level": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hierarchy",
+      "layout": "hierarchy",
+      "title": "Workstreams under the program",
+      "blocks": [
+        {
+          "region": "nodes",
+          "items": [
+            {
+              "text": "Program",
+              "level": 0
+            },
+            {
+              "text": "Product",
+              "level": 1
+            },
+            {
+              "text": "Design",
+              "level": 2
+            },
+            {
+              "text": "Build",
+              "level": 2
+            },
+            {
+              "text": "Operations",
+              "level": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "venn",
+      "layout": "venn",
+      "title": "Where a good pilot sits",
+      "blocks": [
+        {
+          "region": "sets",
+          "items": [
+            "Clear scope",
+            "Real users",
+            "Measured outcome"
+          ]
+        }
+      ]
+    }
+  ]
+}

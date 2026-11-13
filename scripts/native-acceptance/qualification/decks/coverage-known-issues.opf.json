@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: known issues",
+  "description": "RR-105 format coverage, parked: a valid deck that opf convert cannot draw or export at 4eea78c2e (the selected face is not prepared). Not in the qualification manifest and skipped by the smoke test until the bug is fixed; then move the slide back into coverage-shape-presets and delete this file.",
+  "language": "en-US",
+  "slides": [
+    {
+      "id": "title-beside-shape",
+      "title": "Preset shapes 49 to 60: notchedRightArrow to leftRightArrowCallout",
+      "blocks": [{ "shape": "rect" }]
+    }
+  ]
+}

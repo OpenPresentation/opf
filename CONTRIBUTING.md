@@ -60,6 +60,7 @@ When a schema or catalog change is accepted:
 - Update any affected reference docs (`docs/schema-reference.md`, `docs/catalog-schema-reference.md`, `docs/content-payloads.md`, etc.) alongside the schema change.
 - Add or update an entry in `docs/migrations/` if the change is breaking.
 - Make sure `examples/**/*.opf.json` still validates, or update the affected examples.
+- Add every new key, enum value or alternative to a format-coverage deck (`scripts/native-acceptance/qualification/decks/coverage-*.opf.json`), so PowerPoint and Keynote open it in the release qualification; `pnpm check:format-coverage` fails until a deck uses it.
 
 ### Package code and other changes
 

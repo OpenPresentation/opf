@@ -1,0 +1,862 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: shape fills, lines, effects and text",
+  "description": "RR-105 format coverage: every shape fill, every stroke option (dash, cap, join, compound, alignment, arrowheads, sketch, gradient), every effect, style presets, rotation and flips, text anchors, padding and directions, custom paths, and accessibility flags.",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "variables": {
+    "brand": {
+      "type": "color",
+      "value": "#0F766E",
+      "label": "Brand color",
+      "description": "The fill used for brand shapes",
+      "required": true,
+      "example": "#0F766E"
+    }
+  },
+  "slides": [
+    {
+      "id": "fills",
+      "title": "Solid, gradient, pattern and empty fills",
+      "composition": {
+        "mode": "grid",
+        "columns": 4
+      },
+      "blocks": [
+        {
+          "shape": "rect",
+          "fill": "accent1",
+          "text": "Scheme color"
+        },
+        {
+          "shape": "rect",
+          "fill": "#F59E0B",
+          "text": "Hex color"
+        },
+        {
+          "shape": "rect",
+          "fill": {
+            "color": "accent1",
+            "lighten": 0.5
+          },
+          "text": "Lighter"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "accent1",
+            "width": 2
+          },
+          "text": "No fill"
+        },
+        {
+          "shape": "rect",
+          "fill": {
+            "gradient": {
+              "type": "linear",
+              "angle": 90,
+              "stops": [
+                {
+                  "color": "accent1",
+                  "position": 0
+                },
+                {
+                  "color": "accent2",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "text": "Linear"
+        },
+        {
+          "shape": "ellipse",
+          "fill": {
+            "gradient": {
+              "type": "radial",
+              "stops": [
+                {
+                  "color": "light1",
+                  "position": 0
+                },
+                {
+                  "color": "accent1",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "text": "Radial"
+        },
+        {
+          "shape": "rect",
+          "fill": {
+            "gradient": {
+              "type": "rectangle",
+              "stops": [
+                {
+                  "color": "accent4",
+                  "position": 0
+                },
+                {
+                  "color": "dark2",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "text": "Rectangle"
+        },
+        {
+          "shape": "hexagon",
+          "fill": {
+            "gradient": {
+              "type": "shape",
+              "stops": [
+                {
+                  "color": "accent5",
+                  "position": 0
+                },
+                {
+                  "color": "accent6",
+                  "position": 0.5
+                },
+                {
+                  "color": "dark1",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "text": "Shape"
+        },
+        {
+          "shape": "rect",
+          "fill": {
+            "pattern": {
+              "preset": "wdUpDiag",
+              "foregroundColor": "accent1",
+              "backgroundColor": "light1"
+            }
+          },
+          "text": "Pattern"
+        },
+        {
+          "shape": "rect",
+          "fill": {
+            "pattern": {
+              "preset": "smGrid"
+            }
+          },
+          "text": "Grid"
+        },
+        {
+          "shape": "rect",
+          "fill": "accent3",
+          "opacity": 0.5,
+          "text": "Half opacity"
+        },
+        {
+          "shape": "rect",
+          "fill": "var:brand",
+          "text": "Variable"
+        }
+      ]
+    },
+    {
+      "id": "dashes",
+      "title": "Every dash style, and a custom one",
+      "composition": {
+        "mode": "grid",
+        "columns": 4
+      },
+      "blocks": [
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "dash": "solid"
+          },
+          "text": "solid"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "dash": "dot"
+          },
+          "text": "dot"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "dash": "dash"
+          },
+          "text": "dash"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "dash": "longDash"
+          },
+          "text": "longDash"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "dash": "dashDot"
+          },
+          "text": "dashDot"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "dash": "longDashDot"
+          },
+          "text": "longDashDot"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "dash": "longDashDotDot"
+          },
+          "text": "longDashDotDot"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "dash": "sysDot"
+          },
+          "text": "sysDot"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "dash": "sysDash"
+          },
+          "text": "sysDash"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "dash": "sysDashDot"
+          },
+          "text": "sysDashDot"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "dash": "sysDashDotDot"
+          },
+          "text": "sysDashDotDot"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "accent2",
+            "width": 3,
+            "dash": [
+              4,
+              1,
+              1,
+              1
+            ]
+          },
+          "text": "Custom 4-1-1-1"
+        }
+      ]
+    },
+    {
+      "id": "caps-joins",
+      "title": "Line caps, joins and compound lines",
+      "composition": {
+        "mode": "grid",
+        "columns": 4
+      },
+      "blocks": [
+        {
+          "shape": "line",
+          "stroke": {
+            "color": "accent1",
+            "width": 12,
+            "cap": "flat"
+          },
+          "alt": "Flat cap"
+        },
+        {
+          "shape": "line",
+          "stroke": {
+            "color": "accent1",
+            "width": 12,
+            "cap": "round"
+          },
+          "alt": "Round cap"
+        },
+        {
+          "shape": "line",
+          "stroke": {
+            "color": "accent1",
+            "width": 12,
+            "cap": "square"
+          },
+          "alt": "Square cap"
+        },
+        {
+          "shape": "triangle",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 10,
+            "join": "miter",
+            "miterLimit": 8
+          },
+          "alt": "Miter join"
+        },
+        {
+          "shape": "triangle",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 10,
+            "join": "round"
+          },
+          "alt": "Round join"
+        },
+        {
+          "shape": "triangle",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 10,
+            "join": "bevel"
+          },
+          "alt": "Bevel join"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 8,
+            "compound": "single"
+          },
+          "text": "Single"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 8,
+            "compound": "double"
+          },
+          "text": "Double"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 8,
+            "compound": "thickThin"
+          },
+          "text": "Thick thin"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 8,
+            "compound": "thinThick"
+          },
+          "text": "Thin thick"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 8,
+            "compound": "triple",
+            "align": "inside"
+          },
+          "text": "Triple inside"
+        },
+        {
+          "shape": "rect",
+          "fill": "none",
+          "stroke": {
+            "color": "dark2",
+            "width": 8,
+            "align": "center"
+          },
+          "text": "Centered"
+        }
+      ]
+    },
+    {
+      "id": "arrowheads",
+      "title": "Arrowheads in every type and size",
+      "composition": {
+        "mode": "grid",
+        "columns": 3
+      },
+      "blocks": [
+        {
+          "shape": "line",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "start": {
+              "type": "none"
+            },
+            "end": {
+              "type": "triangle",
+              "width": "small",
+              "length": "small"
+            }
+          },
+          "alt": "Triangle head"
+        },
+        {
+          "shape": "line",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "start": {
+              "type": "oval"
+            },
+            "end": {
+              "type": "stealth",
+              "width": "medium",
+              "length": "medium"
+            }
+          },
+          "alt": "Stealth head"
+        },
+        {
+          "shape": "line",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "end": {
+              "type": "diamond",
+              "width": "large",
+              "length": "large"
+            }
+          },
+          "alt": "Diamond head"
+        },
+        {
+          "shape": "line",
+          "stroke": {
+            "color": "dark2",
+            "width": 3,
+            "start": {
+              "type": "arrow"
+            },
+            "end": {
+              "type": "arrow",
+              "width": "large",
+              "length": "small"
+            }
+          },
+          "alt": "Open arrows"
+        },
+        {
+          "shape": "straightConnector1",
+          "stroke": {
+            "color": "accent1",
+            "width": 4,
+            "end": {
+              "type": "triangle"
+            }
+          },
+          "alt": "Connector arrow"
+        },
+        {
+          "shape": "line",
+          "stroke": {
+            "width": 6,
+            "gradient": {
+              "stops": [
+                {
+                  "color": "accent1",
+                  "position": 0
+                },
+                {
+                  "color": "accent2",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "alt": "Gradient line"
+        }
+      ]
+    },
+    {
+      "id": "sketch",
+      "title": "Hand-drawn outlines",
+      "composition": {
+        "mode": "grid",
+        "columns": 3
+      },
+      "blocks": [
+        {
+          "shape": "rect",
+          "fill": "light2",
+          "stroke": {
+            "color": "dark2",
+            "width": 2,
+            "sketch": "curved"
+          },
+          "text": "Curved"
+        },
+        {
+          "shape": "ellipse",
+          "fill": "light2",
+          "stroke": {
+            "color": "dark2",
+            "width": 2,
+            "sketch": "freehand"
+          },
+          "text": "Freehand"
+        },
+        {
+          "shape": "rect",
+          "fill": "light2",
+          "stroke": {
+            "color": "dark2",
+            "width": 2,
+            "sketch": "scribble"
+          },
+          "text": "Scribble"
+        }
+      ]
+    },
+    {
+      "id": "styles",
+      "title": "Four style presets",
+      "composition": {
+        "mode": "grid",
+        "columns": 4
+      },
+      "blocks": [
+        {
+          "shape": "roundRect",
+          "style": "none",
+          "text": "None"
+        },
+        {
+          "shape": "roundRect",
+          "style": "subtle",
+          "text": "Subtle"
+        },
+        {
+          "shape": "roundRect",
+          "style": "moderate",
+          "text": "Moderate"
+        },
+        {
+          "shape": "roundRect",
+          "style": "intense",
+          "text": "Intense"
+        }
+      ]
+    },
+    {
+      "id": "effects",
+      "title": "Shadows, glow, soft edges, reflection and blur",
+      "composition": {
+        "mode": "grid",
+        "columns": 4
+      },
+      "blocks": [
+        {
+          "shape": "roundRect",
+          "text": "Soft shadow",
+          "fill": "light2",
+          "shadow": "soft"
+        },
+        {
+          "shape": "roundRect",
+          "text": "Hard shadow",
+          "fill": "light2",
+          "shadow": "hard"
+        },
+        {
+          "shape": "roundRect",
+          "text": "Perspective",
+          "fill": "light2",
+          "shadow": "perspective"
+        },
+        {
+          "shape": "roundRect",
+          "text": "Custom shadow",
+          "fill": "light2",
+          "shadow": {
+            "color": "dark1",
+            "opacity": 0.4,
+            "blur": 12,
+            "distance": 8,
+            "angle": 45,
+            "size": 1.05
+          }
+        },
+        {
+          "shape": "roundRect",
+          "text": "Inner shadow",
+          "fill": "light2",
+          "innerShadow": {
+            "color": "dark1",
+            "opacity": 0.5,
+            "blur": 10,
+            "distance": 4,
+            "angle": 90
+          }
+        },
+        {
+          "shape": "roundRect",
+          "text": "Glow",
+          "fill": "light2",
+          "glow": {
+            "color": "accent1",
+            "opacity": 0.6,
+            "radius": 10
+          }
+        },
+        {
+          "shape": "roundRect",
+          "text": "Soft edge",
+          "fill": "light2",
+          "softEdge": 8
+        },
+        {
+          "shape": "roundRect",
+          "text": "Reflection",
+          "fill": "light2",
+          "reflection": {
+            "opacity": 0.4,
+            "size": 0.5,
+            "distance": 2,
+            "blur": 1
+          }
+        },
+        {
+          "shape": "roundRect",
+          "text": "Blur",
+          "fill": "light2",
+          "blur": 3
+        }
+      ]
+    },
+    {
+      "id": "transform",
+      "title": "Rotated and flipped shapes",
+      "composition": {
+        "mode": "grid",
+        "columns": 4
+      },
+      "blocks": [
+        {
+          "shape": "rightArrow",
+          "fill": "accent1",
+          "rotate": -30,
+          "text": "Up 30"
+        },
+        {
+          "shape": "rightArrow",
+          "fill": "accent1",
+          "flip": "horizontal",
+          "text": "Mirrored"
+        },
+        {
+          "shape": "rtTriangle",
+          "fill": "accent2",
+          "flip": "vertical",
+          "alt": "Triangle flipped top to bottom"
+        },
+        {
+          "shape": "rtTriangle",
+          "fill": "accent2",
+          "flip": "both",
+          "alt": "Triangle flipped both ways"
+        }
+      ]
+    },
+    {
+      "id": "text-anchor",
+      "title": "Text anchored top, middle and bottom",
+      "composition": {
+        "mode": "grid",
+        "columns": 3
+      },
+      "blocks": [
+        {
+          "shape": "rect",
+          "fill": "light2",
+          "anchor": "top",
+          "padding": 12,
+          "text": "Top, 12 px padding"
+        },
+        {
+          "shape": "rect",
+          "fill": "light2",
+          "anchor": "middle",
+          "padding": {
+            "top": 4,
+            "right": 24,
+            "bottom": 4,
+            "left": 24
+          },
+          "text": "Middle, wide sides"
+        },
+        {
+          "shape": "rect",
+          "fill": "light2",
+          "anchor": "bottom",
+          "text": [
+            "Bottom, with ",
+            {
+              "text": "runs",
+              "bold": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "text-direction",
+      "title": "Text in four directions",
+      "composition": {
+        "mode": "grid",
+        "columns": 4
+      },
+      "blocks": [
+        {
+          "shape": "rect",
+          "fill": "light2",
+          "textDirection": "horizontal",
+          "text": "Across"
+        },
+        {
+          "shape": "rect",
+          "fill": "light2",
+          "textDirection": "vertical",
+          "text": "Down"
+        },
+        {
+          "shape": "rect",
+          "fill": "light2",
+          "textDirection": "vertical270",
+          "text": "Up"
+        },
+        {
+          "shape": "rect",
+          "fill": "light2",
+          "textDirection": "stacked",
+          "text": "OPF"
+        }
+      ]
+    },
+    {
+      "id": "paths",
+      "title": "Custom outlines from paths",
+      "composition": {
+        "mode": "grid",
+        "columns": 3
+      },
+      "blocks": [
+        {
+          "type": "shape",
+          "path": "M 0 50 L 50 0 L 100 50 L 50 100 Z",
+          "fill": "accent1",
+          "text": "Path string"
+        },
+        {
+          "path": {
+            "d": "M 0 0 L 200 0 L 160 100 L 40 100 Z",
+            "viewBox": "0 0 200 100"
+          },
+          "fill": "accent2",
+          "text": "Path and box"
+        },
+        {
+          "shape": "cloud",
+          "fill": "light2",
+          "text": "Preset"
+        }
+      ]
+    },
+    {
+      "id": "accessibility",
+      "title": "Alt text, decoration, hidden shapes and links",
+      "composition": {
+        "mode": "grid",
+        "columns": 3
+      },
+      "blocks": [
+        {
+          "shape": "ellipse",
+          "fill": "accent1",
+          "alt": "A blue status light",
+          "text": "Alt text"
+        },
+        {
+          "shape": "rect",
+          "fill": "light2",
+          "decorative": true
+        },
+        {
+          "shape": "roundRect",
+          "fill": "accent3",
+          "text": "Open the docs",
+          "link": "https://openpresentation.org/"
+        },
+        {
+          "shape": "rect",
+          "fill": "accent2",
+          "hidden": true,
+          "text": "Hidden in the show"
+        }
+      ]
+    }
+  ]
+}
