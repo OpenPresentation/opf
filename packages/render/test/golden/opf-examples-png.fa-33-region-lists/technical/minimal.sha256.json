@@ -2,16 +2,16 @@
   "deck": "technical/minimal.opf.json",
   "entries": {
     "technical/minimal.opf.json#0": {
-      "sha256": "c3a1bed707e3acb36c756824303792b28c4b999ace413436207c33f86faebb74",
-      "bytes": 2940
+      "sha256": "9f5454ceced5af6e75cb62d34aa644cb12d8f1a5c197ba3f4998d220f7e7a980",
+      "bytes": 2913
     },
     "technical/minimal.opf.json#1": {
       "sha256": "c2f1994a81c9706f2aa1c8e7cb6c24d5216b4ae64815b927a307b0d6ec900321",
       "bytes": 4586
     },
     "technical/minimal.opf.json#2": {
-      "sha256": "3c1426494a9fbad3f03fdc29fa092ad68a3ead3802d4aae1aaeadffefdf43bdf",
-      "bytes": 4933
+      "sha256": "e2c83d3c95c6af1986cbc94d2780c06472fafb5276bd603f7f8de6611b5ef385",
+      "bytes": 5900
     }
   }
 }
