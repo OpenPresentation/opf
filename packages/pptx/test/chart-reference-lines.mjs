@@ -173,7 +173,8 @@ test('native constant edits restore CURRENT value/label/style/endpoint; primary 
       editHelpers(x, (s) =>
         s
           .replace(/<c:v>25<\/c:v>/g, '<c:v>22</c:v>')
-          .replace('Target', 'Revised')
+          // RR-105: the helper is also named after its label; the edit changes the label's run, not the series name.
+          .replace('<a:t>Target</a:t>', '<a:t>Revised</a:t>')
           .replace('w="19050"', 'w="28575"')
           .replace('val="BC1234"', 'val="123456"')
           .replace('val="dash"', 'val="dot"')
