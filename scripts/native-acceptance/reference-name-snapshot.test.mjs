@@ -35,10 +35,13 @@ const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n'
 // two embedded workbooks differ from the measured archive too, only in the parts that hold that header (asserted below).
 // RR-105 (chart fixes, 2026-11-12) changed the two chart parts once more: line and area charts write c:dispBlanksAs "gap" (a missing
 // value is a gap, as the preview draws it), and a reference label keeps clear of the marks, with a filled plate when every place is taken.
+// RR-105 (opf#1293, 2026-11-13) writes theme font references (+mj-lt, +mn-lt and their ea/cs slots) wherever a slide run's family is
+// its theme's: ppt/slides/slide3.xml (its text in the theme's families) and the native style fingerprint in ppt/tags/opfSlide3.xml
+// differ from the measured archive too; resolved to the theme's families, slide3.xml is byte-identical. Charts keep their names.
 // The native route still admits only the measured archive (retained as
 // test-fixtures/reference-name/reference-native-lines.pptx, which the comparison contract below runs on); measuring the current export
 // needs a new sealed input.
-const CURRENT_EXPORT=Object.freeze({bytes:129035,sha256:'6acdda5035661565792ab0984ee9d039370d5ca39e929fd53dedea4beeeef71f'});
+const CURRENT_EXPORT=Object.freeze({bytes:129038,sha256:'4ada49855a80d32a0a84872e80420423e364fc80de6cf21599da80c74306d855'});
 let current;
 function currentFixture(){current??=(async()=>{
  const deck=structuredClone(source),renderOptions={catalogs:[gallery]},fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck,renderOptions});await fonts.ensure(deck,{renderOptions});
