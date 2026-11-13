@@ -67,8 +67,9 @@ for (const fit of ['cover', 'contain', 'stretch', 'tile']) {
     const overlay = shapes.find(shape => shape['p:nvSpPr']['p:cNvPr'].name === overlayName)['p:spPr'];
     const box = geometry.overlay.box;
     assert.deepEqual([overlay['a:xfrm']['a:off'].x, overlay['a:xfrm']['a:off'].y, overlay['a:xfrm']['a:ext'].cx, overlay['a:xfrm']['a:ext'].cy].map(Number), [box.x, box.y, box.width, box.height].map(emu));
-    // RR-96: the overlay color dark1 is the scheme role tx1 (the default map), not a literal.
-    assert.equal(schemeRole(overlay['a:solidFill']), 'tx1', `${label}: the overlay color is a theme color`);
+    // RR-96: the overlay color dark1 is a scheme role, not a literal. RR-105: the full-frame dark overlay makes the picture dark, so that slide
+    // takes the dark map, where dark1 is bg1; an edge band implies no tone, so dark1 stays tx1 of the default map.
+    assert.equal(schemeRole(overlay['a:solidFill']), label === 'fill' ? 'bg1' : 'tx1', `${label}: the overlay color is a theme color`);
     assert.equal(Number(overlay['a:solidFill']['a:schemeClr']['a:alpha'].val), Math.round((label === 'fill' ? 0.4 : 0.6) * 100000));
     const imported = await fromPptx(await toPptx(deck, {imageFormat: 'preserve', provenance: false}), {onDiagnostic: () => {}});
     assert.deepEqual(imported.slides[0].design.background.overlay, background.overlay, `${label}: the overlay returns`);

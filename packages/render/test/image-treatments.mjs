@@ -43,6 +43,9 @@ for (const treatment of TREATMENTS) {
   const document = treatmentDocument(treatment, picture);
   // LH-02: the 0.14 renders predate core's automatic scrim behind text on a background picture without an overlay, so it is set aside here.
   for (const slide of document.slides) { const background = slide.design?.background; if (background && typeof background === 'object' && background.overlay === undefined) background.overlay = false; }
+  // RR-105: the 0.14 renders also predate the tone a dark overlay implies (light text over text-overlay's darkened picture); they drew the
+  // text of a light picture, stated here as the background's tone.
+  for (const slide of document.slides) { const background = slide.design?.background; if (background && typeof background === 'object' && background.tone === undefined && background.overlay) background.tone = 'light'; }
   // LH-164: a slide that is one short message takes the accent surface; these documents compare pixels with the 0.14 renders, which have the deck's own surface, stated here as the slide's variant.
   if (treatment.watermark) for (const slide of document.slides) slide.design = { variant: resolveSlideContext({ ...document, slides: [{ ...slide, subtitle: 'Plain surface' }] }, 0, {}).resolved.roles.variant, ...slide.design };
   const diagnostics = [];
