@@ -136,6 +136,39 @@ function recordingMeasurement(settle, into, coverage) {
   return record;
 }
 
+/**
+ * The measurement of the real-metrics pass (RR-105): it records like `recordingMeasurement`, and a style that resolves to a
+ * face in `held` measures with `metrics` (the registry's own measurement, as export measures it). Any other style measures
+ * as the narrow pass does and has no outline, so a branch that a held face's real width takes is taken and the faces it asks
+ * for are recorded.
+ */
+function metricMeasurement(settle, into, coverage, metrics, held) {
+  const record = recordingMeasurement(settle, into, coverage), recording = record.textMeasurement, estimate = recording.measure;
+  const soft = new Set(["missing-glyph", "font-unavailable", "font-style-unavailable"]);
+  const physical = (text, style) => {
+    if (text === "") return undefined;
+    const settled = settle(style);
+    return held.has(faceKey(settled?.fontFamily, Number.isFinite(settled?.fontWeight) ? settled.fontWeight : 400, settled?.italic === true)) ? settled : undefined;
+  };
+  record.textMeasurement = {
+    ...recording,
+    measure(text, size, style) {
+      const width = estimate(text, size, style), settled = physical(String(text), style);
+      if (!settled) return width;
+      try { return metrics.measure(text, size, settled); }
+      catch (error) { if (soft.has(error?.code)) return width; throw error; }
+    },
+    outlineBounds(text, size, style) {
+      estimate(text, size, style);
+      const settled = physical(String(text), style);
+      if (!settled || typeof metrics.outlineBounds !== "function") return null;
+      try { return metrics.outlineBounds(text, size, settled); }
+      catch (error) { if (soft.has(error?.code)) return null; throw error; }
+    },
+  };
+  return record;
+}
+
 // Stable short tokens for option values: objects by identity (a host passes the same catalog objects on every call; the editor
 // freezes its catalog list), plain values and small plain objects by content.
 const objectTokens = new WeakMap();
@@ -210,11 +243,12 @@ function slideMemory(contexts = 8) {
  * checked) even when every slide is known, and a slide that fails throws what `toSvg` throws for it (only slides that succeed are
  * kept).
  *
- * `stats` counts the work, for tests and benchmarks: `decks` (decks opened), `slides` (slides composed and drawn for faces) and
+ * `stats` counts the work, for tests and benchmarks: `decks` (decks opened), `slides` (slides composed and drawn for faces),
+ * `metricSlides` (slides composed and drawn again with real metrics, RR-105) and
  * `designs` (slide designs resolved for families).
  */
 export function createFontAnalysis() {
-  const memory = slideMemory(), stats = { decks: 0, slides: 0, designs: 0 }, checked = new Set();
+  const memory = slideMemory(16), stats = { decks: 0, slides: 0, metricSlides: 0, designs: 0 }, checked = new Set();
   // The deck behind `keys`, opened (resolved and checked as `toSvg` does) when work is needed or this exact deck was never checked.
   const opener = (presentation, resolveOptions, keys, optionsToken) => {
     const whole = `${optionsToken}\u0001${keys.context}\u0001${keys.slides.join("\u0001")}`;
@@ -246,42 +280,66 @@ export function createFontAnalysis() {
       resolveInputStyle: style => { try { return view(style, true); } catch { return { ...style }; } },
     } : undefined;
     const keys = deckKeys(presentation);
-    if (!keys) {
-      // Not a deck object: one whole-deck pass, kept nowhere.
-      const seen = new Map();
-      const measurement = recordingMeasurement(settle, seen, registry?.coverage).textMeasurement;
-      if (inputBinding) {
-        const opened = deckInternals.openDeck(presentation, resolveOptions);
-        for (let index = 0; index < opened.presentation.slides.length; index++) opened.bind(index, measurement, inputBinding);
-        for (let index = 0; index < opened.presentation.slides.length; index++) if (resolveOptions.skipHidden !== true || !opened.presentation.slides[index].hidden) opened.render(index);
-      } else toSvg(presentation, { ...resolveOptions, fonts: { textMeasurement: measurement } });
-      stats.decks++;
-      return [...seen.values()].sort(byFace);
-    }
-    const optionsToken = optionsKey(resolveOptions, presentation);
-    const slides = memory(`faces\u0001${optionsToken}\u0001${registry ? registryKey(registry) : ""}\u0001${keys.context}`, keys.slides.length);
-    const deck = opener(presentation, resolveOptions, keys, optionsToken);
-    const entries = keys.slides.map(slides.get);
-    const missing = entries.flatMap((entry, index) => entry === undefined ? [index] : []);
-    if (missing.length) {
-      // Composition of the slides, then their drawing, as `toSvg` runs them.
-      const opened = deck.open();
-      const made = new Map(missing.map(index => [index, { composed: new Map(), drawn: new Map() }]));
-      const recorders = new Map(missing.map(index => [index, recordingMeasurement(settle, made.get(index).composed, registry?.coverage)]));
-      for (const index of missing) opened.bind(index, recorders.get(index).textMeasurement, inputBinding);
-      // A slide is drawn with the measurement it was composed with; what it measures from here on is its drawing. `skipHidden`
-      // leaves hidden slides undrawn (they are still composed), as in `toSvg`.
-      for (const index of missing) {
-        if (resolveOptions.skipHidden === true && opened.presentation.slides[index]?.hidden === true) continue;
-        recorders.get(index).into = made.get(index).drawn;
-        opened.render(index);
+    // One recording pass over the deck: every slide composed, then drawn, with the measurement `recorder(into)` makes. `tag`
+    // separates the per-slide memory of passes that measure differently.
+    const recordPass = (recorder, tag, counter = "slides") => {
+      if (!keys) {
+        // Not a deck object: one whole-deck pass, kept nowhere.
+        const seen = new Map();
+        const measurement = recorder(seen).textMeasurement;
+        if (inputBinding) {
+          const opened = deckInternals.openDeck(presentation, resolveOptions);
+          for (let index = 0; index < opened.presentation.slides.length; index++) opened.bind(index, measurement, inputBinding);
+          for (let index = 0; index < opened.presentation.slides.length; index++) if (resolveOptions.skipHidden !== true || !opened.presentation.slides[index].hidden) opened.render(index);
+        } else toSvg(presentation, { ...resolveOptions, fonts: { textMeasurement: measurement } });
+        stats.decks++;
+        return seen;
       }
-      for (const [index, entry] of made) { slides.set(keys.slides[index], entry); entries[index] = entry; }
-      stats.slides += missing.length;
-    } else deck.check();
-    // In the order one `toSvg` records them: every slide's composition, then every slide's drawing.
-    const seen = new Map();
-    for (const phase of ["composed", "drawn"]) for (const entry of entries) for (const [key, face] of entry[phase]) if (!seen.has(key)) seen.set(key, face);
+      const optionsToken = optionsKey(resolveOptions, presentation);
+      const slides = memory(`faces${tag}${optionsToken}${registry ? registryKey(registry) : ""}${keys.context}`, keys.slides.length);
+      const deck = opener(presentation, resolveOptions, keys, optionsToken);
+      const entries = keys.slides.map(slides.get);
+      const missing = entries.flatMap((entry, index) => entry === undefined ? [index] : []);
+      if (missing.length) {
+        // Composition of the slides, then their drawing, as `toSvg` runs them.
+        const opened = deck.open();
+        const made = new Map(missing.map(index => [index, { composed: new Map(), drawn: new Map() }]));
+        const recorders = new Map(missing.map(index => [index, recorder(made.get(index).composed)]));
+        for (const index of missing) opened.bind(index, recorders.get(index).textMeasurement, inputBinding);
+        // A slide is drawn with the measurement it was composed with; what it measures from here on is its drawing. `skipHidden`
+        // leaves hidden slides undrawn (they are still composed), as in `toSvg`.
+        for (const index of missing) {
+          if (resolveOptions.skipHidden === true && opened.presentation.slides[index]?.hidden === true) continue;
+          recorders.get(index).into = made.get(index).drawn;
+          opened.render(index);
+        }
+        for (const [index, entry] of made) { slides.set(keys.slides[index], entry); entries[index] = entry; }
+        stats[counter] += missing.length;
+      } else deck.check();
+      // In the order one `toSvg` records them: every slide's composition, then every slide's drawing.
+      const seen = new Map();
+      for (const phase of ["composed", "drawn"]) for (const entry of entries) for (const [key, face] of entry[phase]) if (!seen.has(key)) seen.set(key, face);
+      return seen;
+    };
+    const seen = recordPass(into => recordingMeasurement(settle, into, registry?.coverage), "narrow");
+    // RR-105, the preparation invariant: the faces a handle prepares for a deck cover every face the deck's real-metrics
+    // composition and drawing measure. The narrow pass above measures every string as almost nothing, so it never takes a
+    // branch that only real widths take (a title that wraps and splits at its colon, text that overflows into another
+    // arrangement, a continuation slide), and such a branch can measure a face the narrow pass never asked for. With
+    // `registry.metrics` (the registry's own measurement and the faces it holds) a second pass composes and draws the deck
+    // with the real metrics of every held face, once every face the narrow pass found is held; a face it is not holding
+    // measures as in the narrow pass and is recorded. A loader that loads what this returns and asks again reaches the
+    // fixpoint: a call that returns only held faces means the real pass measured nothing else (`ensure` bounds the rounds).
+    const metrics = registry?.metrics;
+    if (metrics) {
+      const keyOf = face => faceKey(face.family, face.weight ?? 400, face.italic === true);
+      const pool = new Set(registry.faces.map(keyOf)), held = new Set([...metrics.held].map(keyOf));
+      // A face outside the pool cannot be prepared (drawing reports it); every other narrow face must be held first.
+      if (![...seen.keys()].some(key => pool.has(key) && !held.has(key))) {
+        const real = recordPass(into => metricMeasurement(settle, into, registry.coverage, metrics, held), `metrics${[...held].sort().join("")}`, "metricSlides");
+        for (const [key, face] of real) if (!seen.has(key)) seen.set(key, face);
+      }
+    }
     return [...seen.values()].sort(byFace).map(face => ({ ...face }));
   }
 
@@ -387,13 +445,16 @@ export function lazyFontNames({lazy, describeFaces, generation, policy = 'none',
  * registry's. `renderOptions` are the `toSvg` options the document resolves with (`catalogs`, ...), and a document that
  * does not resolve throws what `toSvg` throws for it. Face level: a bold or italic run added by an edit adds just that face.
  * Pass `analysis` (`createFontAnalysis()`) to keep each slide's faces between calls: then only slides that changed are analyzed.
+ * Pass `metrics` (the registry's `textMeasurement`) to include the faces a real-metrics composition measures (RR-105).
  */
-export function lazyFacesNeeded(presentation, renderOptions, { lazy, held, loaded = new Set(), policy = "none", aliases = new Map(), fallbackFamily, analysis, mapFamily, preserveChosenFamilies, measurementRequests = [] }) {
+export function lazyFacesNeeded(presentation, renderOptions, { lazy, held, loaded = new Set(), policy = "none", aliases = new Map(), fallbackFamily, analysis, metrics, mapFamily, preserveChosenFamilies, measurementRequests = [] }) {
   const heldFaces = [...held], heldKeys = new Set(heldFaces.map(faceKeyOf));
   const missing = lazy.filter(face => !heldKeys.has(faceKeyOf(face)) && !loaded.has(face.file));
   const pool = [...heldFaces, ...missing].map(face => ({...face, familyGroup: face.familyGroup ?? face.family}));
   // `analysis` (from `createFontAnalysis`) keeps each slide's faces between calls, so a fonts handle redoes only changed slides.
-  const drawn = new Set((analysis ?? createFontAnalysis()).faces(presentation, renderOptions, { faces: pool, policy, aliases, fallbackFamily, mapFamily, preserveChosenFamilies }).map(faceKeyOf));
+  const drawn = new Set((analysis ?? createFontAnalysis()).faces(presentation, renderOptions, { faces: pool, policy, aliases, fallbackFamily, mapFamily, preserveChosenFamilies,
+    // RR-105: with the registry's measurement, the faces real widths ask for too (see `faces`).
+    ...(metrics ? { metrics: { measure: metrics.measure, outlineBounds: metrics.outlineBounds, held: heldFaces } } : {}) }).map(faceKeyOf));
   // Requests already use the exporter's chosen/safe family. Keep them separate
   // from SVG analysis and its cache identity; only actual measurement adds a face.
   for (const request of fontMeasurementRequests(measurementRequests)) if (request.text !== '')

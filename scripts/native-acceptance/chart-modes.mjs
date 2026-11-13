@@ -1,7 +1,7 @@
 // Extended chart archive matrix from the same nine tracked source fixtures.
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
-import {assertClassicChartData,assertNativeBoxData,assertSignedParetoComboData} from './chart-data-contract.mjs';
+import {assertClassicChartData,assertNativeBoxData,assertNativePictureFallback,assertSignedParetoComboData} from './chart-data-contract.mjs';
 import {realpath} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
@@ -51,6 +51,8 @@ export async function generateChartModes({consumer,output,engines}={}){
       assert.equal(Object.keys(parts).filter(file=>/^ppt\/tags\/opfLayout\d+\.xml$/.test(file)).length,entry.layoutTagParts,id+': reviewed layout tags');
       assert.ok(Object.entries(parts).filter(([file])=>/^ppt\/slides\/slide\d+\.xml$/.test(file)).every(([,data])=>!fflate.strFromU8(data).includes('AlternateContent')),id+': no alternate content in fallback');
     }
+    // RR-105: chartex charts write no classic part, so a classic chart's part number is read from its slide, never assumed from its position.
+    const classicNumber=index=>{const found=[...fflate.strFromU8(parts['ppt/slides/_rels/slide'+(index+1)+'.xml.rels']).matchAll(/Type="[^"]*\/relationships\/chart" Target="\.\.\/charts\/chart(\d+)\.xml"/g)];assert.equal(found.length,1,id+': one classic chart on slide '+(index+1));return Number(found[0][1]);};
     const maps=deck.slides.filter((slide,index)=>slide.chart.type==='world'&&plans[index].type==='world').length;
     // RR-105: category aggregation cannot paint signed values; keep every row in classic columns in every mode.
     const negativeHistograms=new Set(deck.slides.map(({chart},index)=>chart.type==='histogram'&&plans[index].columns.length>1&&plans[index].rows.some(row=>row.slice(1).some(value=>typeof value==='number'&&value<0))?index:null).filter(index=>index!==null));
@@ -66,7 +68,7 @@ export async function generateChartModes({consumer,output,engines}={}){
         const total=bars.reduce((sum,row)=>sum+Math.max(0,row[1]),0);let running=0;
         const cumulativeName=plan.columns[1]+' — cumulative share';
         const data={columns:[...plan.columns,cumulativeName],rows:bars.map(row=>{running+=Math.max(0,row[1]);return[row[0],row[1],total?running/total:0];})};
-        assertSignedParetoComboData(parts,index+1,data,contracts,id);
+        assertSignedParetoComboData(parts,classicNumber(index),data,contracts,id);
         const actual=imported.slides[index].chart;
         assert.equal(actual.type,'combo',id+': signed Pareto imports its actual editable combo');
         assert.deepEqual(actual.data.rows,data.rows,id+': complete sorted/derived public data');
@@ -82,8 +84,10 @@ export async function generateChartModes({consumer,output,engines}={}){
       // Box fallback deliberately groups samples under its column heading;
       // OPF_DATA separately restores Q1/Q2/Q3, checked above.
       const plotted=box?{columns:chart.data.columns,rows:chart.data.rows.map(row=>[chart.data.columns[0],...row.slice(1)])}:chart.data;
-      assertClassicChartData(parts,index+1,plotted,contracts,id);
+      // RR-105: a native box chart or map has no classic part (its mc:Fallback is the preview's picture); its workbook holds the same values.
       if(box&&mode!=='fallback')assertNativeBoxData(parts,plotted,contracts,id);
+      else if(world&&plans[index].type==='world'&&mode==='native')assertNativePictureFallback(parts,index+1,plotted,contracts,id);
+      else assertClassicChartData(parts,classicNumber(index),plotted,contracts,id);
       if(negativeHistogram){
         assert.equal(imported.slides[index].chart.type,'column',id+': signed categorical histogram imports its actual column representation');
         const notices=diagnostics.filter(issue=>issue.path==='slides.'+index+'.chart'&&issue.code==='chart-data-adapted');

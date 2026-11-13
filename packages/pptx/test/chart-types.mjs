@@ -160,7 +160,8 @@ async function diagnosticsFor(type, data) {
   const diagnostics = [];
   const bytes = await toPptx({slides: [{title: type, chart: {type, data}}]}, {onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
   const entries = unzipSync(bytes);
-  return {diagnostics: diagnostics.filter((diagnostic) => diagnostic.code === 'chart-data-adapted'), xml: decoder.decode(entries['ppt/charts/chart1.xml']), chartex: Object.hasOwn(entries, 'ppt/charts/chartEx1.xml')};
+  return {diagnostics: diagnostics.filter((diagnostic) => diagnostic.code === 'chart-data-adapted'), xml: entries['ppt/charts/chart1.xml'] && decoder.decode(entries['ppt/charts/chart1.xml']), chartex: Object.hasOwn(entries, 'ppt/charts/chartEx1.xml'),
+    slide: decoder.decode(entries['ppt/slides/slide1.xml'])};
 }
 for (const type of ['pie', 'doughnut']) {
   const {diagnostics, xml} = await diagnosticsFor(type, categoryData);
@@ -172,19 +173,24 @@ for (const type of ['pie', 'doughnut']) {
   assert.deepEqual(single.diagnostics, [], `${type}: one series is unchanged and silent`);
   checked++;
 }
-// By default ('auto') a confirmed chartex type is written natively (test/chartex.mjs): its classic part is the clustered
-// column mc:Fallback and no fallback is reported. The unconfirmed map keeps the clustered column chart and reports it.
+// By default ('auto') a confirmed chartex type is written natively (test/chartex.mjs) and no fallback is reported. RR-105: its mc:Fallback is
+// a picture of the preview and no classic part is written. The unconfirmed map keeps the clustered column chart and reports it.
 const chartexTypes = Object.keys(CHART_TYPES).filter((id) => CHART_TYPES[id].family === 'chartex');
 for (const type of chartexTypes) {
   // LH-60: the map plots places (over quarters it is drawn as columns), and a box-and-whisker category holds several values.
   const single = {columns: categoryData.columns.slice(0, 2), rows: categoryData.rows.map((row, index) => [type === 'world' ? ['DE', 'FR', 'ES'][index] : row[0], row[1]])};
-  const {diagnostics, xml, chartex} = await diagnosticsFor(type, type === 'box-and-whisker' ? {...categoryData, rows: [...categoryData.rows, ...categoryData.rows]} : single);
+  const {diagnostics, xml, chartex, slide} = await diagnosticsFor(type, type === 'box-and-whisker' ? {...categoryData, rows: [...categoryData.rows, ...categoryData.rows]} : single);
   const unconfirmed = Boolean(resolveChartType(type).spec.unconfirmed);
   assert.deepEqual(diagnostics.map((diagnostic) => diagnostic.adaptation), unconfirmed ? ['chartex-fallback'] : [], `${type}: ${unconfirmed ? 'fallback reported' : 'no adaptation for its own data shape'}`);
   if (unconfirmed) assert.match(diagnostics[0].message, /not yet accepted natively.*chartex: 'native'/, type);
   assert.equal(chartex, !unconfirmed, `${type}: a chartEx part is written exactly for confirmed constructs`);
-  const got = construct(xml);
-  assert.deepEqual([got.element, got.barDir, got.grouping], ['barChart', 'col', 'clustered'], `${type}: the classic part is a clustered column chart`);
+  if (chartex) {
+    assert.equal(xml, undefined, `${type}: no classic part`);
+    assert.match(slide, /<mc:Fallback><p:pic>[\s\S]*<asvg:svgBlip\b[\s\S]*<\/p:pic><\/mc:Fallback>/, `${type}: the fallback is the preview's picture`);
+  } else {
+    const got = construct(xml);
+    assert.deepEqual([got.element, got.barDir, got.grouping], ['barChart', 'col', 'clustered'], `${type}: the classic part is a clustered column chart`);
+  }
   assert.equal(CHARTEX_FALLBACK, CHART_TYPES.column);
   checked++;
 }

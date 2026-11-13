@@ -17,7 +17,8 @@ import {applyChartNumberFormats,chartNumber,groupsThousands,excelCode,formattedC
 import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord,tableCellEvidence,tableEnvironmentEvidence} from './data-provenance.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,comboFromNative,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {paretoPlan} from '@openpresentation/opf/composition';
-import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
+import {attachChartexFallbacks,attachChartexParts,chartexFallbackName,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
+import {chartRegionSvg} from './preview-region.js';
 import {applyDoughnutRings,applyRingLabels,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
 import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
@@ -48,7 +49,7 @@ import {attachFurnitureTags, furnitureManifest, importFurniture, logoShape, stat
 import {restoreRunColors} from './run-colors.js';
 import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, settleLayers, shapeRole, shapeText} from './shape-import.js';
 import {assembleOverlayShapes, restoreShapes} from './shape-restore.js';
-import {joinWrappedText} from './content-topology.js';
+import {joinWrappedText, rejoinDetachedSpace} from './content-topology.js';
 import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordListScalars, recordOverlays, opfSlideOwnership, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
@@ -79,7 +80,7 @@ import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colo
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
   CHART_BAR_GAP_WIDTH, catalogRecords, clrMapAttributes, DIAGRAM_SHAPE_FAMILIES, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
-  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, itemAlignment, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
+  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, intrinsicImageAspect, itemAlignment, pictureOverlay, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, languageInEffect, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
@@ -726,7 +727,7 @@ export async function fromPptx(input, options = {}) {
   }
   // RR-34: marker runs become cite/footnote on the runs before them, and the references list is rebuilt
   // from the stored record and the footnote boxes (an edited note keeps its edited text).
-  restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report);
+  restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report, furnitureContexts.map(context => context.annotations?.detached ?? []));
   restoreLogoFallback(imported, furnitureContexts);
   // The overlay joins its slide before the run colors, so the text of its shapes is settled with the rest.
   applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance, options.onDiagnostic);
@@ -1451,8 +1452,9 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index], chartReport(`charts.${index}`), dataContext(index));
     if (item) items.push({...item, sources: [`frame:${index}`]});
   }
-  // A chartex chart is an mc:AlternateContent: the choice frame references the cx:chartSpace part; the fallback is a classic chart frame
-  // (this exporter) or a text shape (PowerPoint). The choice is read first and the fallback only when it names no OPF chart type.
+  // A chartex chart is an mc:AlternateContent: the choice frame references the cx:chartSpace part; the fallback is a picture of OPF's
+  // preview (this exporter, RR-105), a classic chart frame (this exporter without that picture, and earlier versions) or a text shape
+  // (PowerPoint). The choice is read first and a fallback frame only when the choice names no OPF chart type; a fallback picture is never read.
   for (const [alternateIndex, alternate] of asArray(tree?.["mc:AlternateContent"]).entries()) {
     const choice = asArray(alternate?.["mc:Choice"]).map((node) => node?.["p:graphicFrame"]).find(Boolean);
     // SH-16: a SmartArt frame wrapped with its fallback picture is read from the mc:Choice, as an unwrapped frame (SH-09).
@@ -1809,7 +1811,10 @@ const richRuns = value => typeof value === 'string' ? [{text: value}] : value;
 function joinRich(a, b) {
   if (typeof a === 'string' && typeof b === 'string') return a + b;
   const copy = value => richRuns(value).map(run => typeof run === 'string' ? {text: run} : {...run});
-  const left = copy(a), right = copy(b), last = left.at(-1), first = right[0];
+  const left = copy(a), right = copy(b);
+  // RR-105: a decorated run's space that ended the earlier line joins the run again (rejoinDetachedSpace).
+  rejoinDetachedSpace(left, right[0]);
+  const last = left.at(-1), first = right[0];
   // Only the line seam can be an artificial wrap boundary. Interior current
   // run boundaries in either input must survive an unrelated continuation.
   if (last && first && JSON.stringify({...last, text: ''}) === JSON.stringify({...first, text: ''})) {
@@ -1841,18 +1846,22 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
     // design.listBullet: none writes no bullet at all (a:buNone): the list is unambiguous only through its recorded roles, whose
     // first lines start the entries. Without that record the shapes stay as they are.
     const unbulleted = entries.every(({item}) => !item.paragraphs[0].bullet);
-    if (!hasV2&&!entries[0].item.paragraphs[0].bullet && !(unbulleted && expectedRoles?.[0]?.[2])) continue;
+    // RR-105: so does an entry drawn beside an icon chip in a list whose other entries keep their bullets (LH-174, a nested icon list):
+    // the record names those markerless entries, whose first lines are the only ones without a bullet.
+    const markerless = line => expectedRoles?.[line]?.[2] === true && expectedRoles.markerless?.has(expectedRoles[line][0]) === true;
+    const bulleted = line => expectedRoles?.[line]?.[2] === true && !markerless(line);
+    if (!hasV2&&!entries[0].item.paragraphs[0].bullet && !((unbulleted || markerless(0)) && expectedRoles?.[0]?.[2])) continue;
     const projected=new Set();
     const validRoles = expectedRoles && (hasV2?entries.every(({item,line})=>{
       const lines=item.v2Scalar?.lines??[line],first=expectedRoles[line];if(!first||lines[0]!==line)return false;
-      if(!unbulleted&&Boolean(item.paragraphs[0].bullet)!==first[2])return false;
+      if(!unbulleted&&Boolean(item.paragraphs[0].bullet)!==bulleted(line))return false;
       for(const [index,original]of lines.entries()){const role=expectedRoles[original];if(projected.has(original)||original!==line+index||!role||item.v2Scalar&&(role[0]!==first[0]||role[1]!=='text'||role[2]!==!index))return false;projected.add(original);}
       return true;
-    })&&projected.size===expectedRoles.length:expectedRoles.length === entries.length && entries.every(({item, line}, index) => line === index && (unbulleted || Boolean(item.paragraphs[0].bullet) === expectedRoles[index][2])));
+    })&&projected.size===expectedRoles.length:expectedRoles.length === entries.length && entries.every(({item, line}, index) => line === index && (unbulleted || Boolean(item.paragraphs[0].bullet) === bulleted(index))));
     const lineRoles = validRoles ? expectedRoles : null;
     if (expectedRoles && !validRoles) report({code: 'list-line-role-changed', message: `The line topology of ${path} changed; list roles were not restored.`});
-    if(hasV2&&!entries[0].item.paragraphs[0].bullet&&!(unbulleted&&lineRoles?.[entries[0].line]?.[2]))continue;
-    if (unbulleted && !validRoles) continue;
+    if(hasV2&&!entries[0].item.paragraphs[0].bullet&&!((unbulleted||markerless(entries[0].line))&&lineRoles?.[entries[0].line]?.[2]))continue;
+    if ((unbulleted || !entries[0].item.paragraphs[0].bullet) && !validRoles) continue;
     const look = runs?.get(path), textLook = cleanBase(look?.text), descriptionLook = cleanBase(look?.description);
     // The line's runs without the inherited look, or the paragraph's own richText when there is no record for this kind of line.
     // Each run is cleaned on its own and none merge, so the runs stay the slots the run colour record counts (src/run-colors.js);
@@ -1883,7 +1892,7 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
       if(paragraph[V2_CURRENT_RICH]&&current&&!paragraph.bullet)current[V2_CURRENT_RICH]=true;
       const gap = recorded?.get(line);
       const join = (a, b) => gap === undefined ? joinRich(a, b) : joinWrappedText([a, b], [gap]);
-      if (unbulleted ? lineRoles?.[line][2] : paragraph.bullet) { paragraphs.push({...paragraph, bullet: true, richText: own(paragraph, textLook)}); size = paragraph.maxFontSize; }
+      if (unbulleted || (lineRoles && !paragraph.bullet) ? lineRoles?.[line][2] : paragraph.bullet) { paragraphs.push({...paragraph, bullet: true, richText: own(paragraph, textLook)}); size = paragraph.maxFontSize; }
       else if (paragraph.text === '') { /* a blank line of the entry: no text, no description */ }
       else if (lineRoles ? lineRoles[line][1] === 'description' : paragraph.maxFontSize < size - 0.01) {
         const text = own(paragraph, descriptionLook) ?? paragraph.text;
@@ -1998,13 +2007,15 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report,
   const nativeLegend = doc["c:chartSpace"]?.["c:chart"]?.["c:legend"];
   const headerLegend = nativeLegend?.["c:legendPos"]?.val === 't' && nativeLegend?.["c:layout"]?.["c:manualLayout"] !== undefined;
   const headerCaption = doc["c:chartSpace"]?.["c:chart"]?.["c:title"]?.["c:layout"]?.["c:manualLayout"] !== undefined;
+  // RR-105: a radar's default legend under its web (core chart-radar.ts) is written at a manual position, as the header legend is.
+  const radarLegend = /radar/.test(String(chartNode.type)) && nativeLegend?.["c:legendPos"]?.val === 'b' && nativeLegend?.["c:layout"]?.["c:manualLayout"] !== undefined;
   const withOptions = chart => {
     // LH-105: series names at the line ends or category names on the slices, without a legend, are the default direct labels.
     // LH-109: a stacked chart's values inside its segments are the default whether its names stand beside it or its legend stayed.
     // LH-108, LH-109: a chart whose value list or series names were drawn as tagged shapes (`marked`) has no legend by default.
     const stacked = {'stacked-column': 'bar', '100pct-stacked-column': 'bar', 'stacked-area': 'area', '100pct-stacked-area': 'area'}[chartNode.type];
     const direct = marked || ((!nativeLegend || stacked !== undefined) && directLabelDefaults(chartNode.node, stacked ?? (String(chartNode.type).includes('line') ? 'line' : chartNode.type)));
-    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {layer: {header: headerCaption || headerLegend, headerLegend, direct},chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
+    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {layer: {header: headerCaption || headerLegend, headerLegend, radarLegend, direct},chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
       ...(combo ? {combo: {lineNode: combo.lines[0]?.node, secondaryValueAxis: secondaryValueAxisOf(plotArea, combo)}} : {})});
     for (const note of notes) report?.(note);
     if (budget.rejected?.length) report?.({code: 'chart-value-not-numeric', option: 'data', message: `${budget.rejected.length} cached chart ${budget.rejected.length === 1 ? 'value is' : 'values are'} not a number (first at ${budget.rejected[0]}) and ${budget.rejected.length === 1 ? 'imports as a gap' : 'import as gaps'}, never as a guessed value.`});
@@ -2811,6 +2822,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     records: context.smartArt, tags: context.arrangementTags, smartArtTags: context.smartArtTags, provenance: context.provenanceMode, report: options.onDiagnostic, fontOf: nativeFontOptions,
     fallback: (arrangement, picture) => smartArtFallback(slide, arrangement, picture, () => (preview ??= smartArtSlideSvg(presentation, slideIndex + 1, options)), context, options)});
   const arranged = new Set((geometry.arrangements ?? []).map(arrangement => arrangement.path));
+  // RR-105: the chartex charts this slide adds get their fallback pictures once the slide is drawn (below).
+  const chartexBefore = context.chartex.size;
   // LH-130: core's accent rule above the title, in the tag's color (src/title-rule.js).
   addTitleRule(slide, geometry.titleRule, tagColor(slideContext), context.titleRuleTags);
   for (const [itemIndex, item] of geometry.items.entries()) {
@@ -2974,13 +2987,17 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     return true;
   });
   // RR-34: the footnote area core reserved above the footer band (rule plus one tagged text box per listed line).
-  addFootnotes(slide, geometry.footnotes, slideIndex, slideContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: `slides.${slideIndex}`}));
+  addFootnotes(slide, geometry.footnotes, slideIndex, slideContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: `slides.${slideIndex}`}), opfSlide);
   // Core composes furniture above all content and opf-render paints it last, so
   // spTree order (PowerPoint's z-order) matches: header/footer parts come after
   // every content item, and an overlapping footer stays visible over content.
   await addFurniture(slide,presentation,authoredSlide,geometry.furniture,slideContext,options,slideIndex);
   // SH-04: the slide's overlay (core geometry.overlayShapes) over everything else, in array order, as the preview draws it.
   addOverlayShapes(slide, geometry, slideIndex, slideContext, context, 'front');
+  // RR-105: each chartex chart's fallback picture, cut from this slide's preview (drawn once, shared with the SmartArt fallbacks). It is
+  // added after every other object, so no other object's id moves; attachChartexParts puts it in the chart's mc:Fallback.
+  for (const [name, chart] of [...context.chartex].slice(chartexBefore))
+    await chartexFallback(slide, name, chart, () => (preview ??= smartArtSlideSvg(presentation, slideIndex + 1, options)), context, options);
 
   if (opfSlide.notes) {
     const notes = String(opfSlide.notes);
@@ -3151,13 +3168,31 @@ function scriptSplitListScalars(fit, context) {
   });
   return result.length ? result : undefined;
 }
+/**
+ * RR-105: an underline, link or strikethrough ends with a line's last visible character, as the preview draws it: the trailing white space of
+ * the last visible run of a native line, when that run is decorated, is a run of its own without the decoration (or the hyperlink, which
+ * PowerPoint underlines), and white space after it carries none. The text of the line is unchanged. `colors[i]` is run i's color without
+ * a link (a link takes the hyperlink color). Import joins such a space back into its run when the run goes on in the next line (joinRich,
+ * joinWrappedText, joinRichLines: rejoinDetachedSpace).
+ */
+function undecoratedLineEnd(runs, colors = []) {
+  const decorated = options => options.hyperlink || options.underline || options.strike;
+  const plain = (options, index) => ({...options, hyperlink: undefined, underline: undefined, strike: undefined, ...(colors[index] !== undefined ? {color: colors[index]} : {})});
+  let last = -1;
+  runs.forEach((run, index) => { if (/\S/u.test(run.text)) last = index; });
+  for (let index = last + 1; index < runs.length; index++) if (decorated(runs[index].options)) runs[index] = {...runs[index], options: plain(runs[index].options, index)};
+  const run = runs[last], trail = run && decorated(run.options) ? /\S(\s+)$/u.exec(run.text)?.[1] : undefined;
+  if (trail) runs.splice(last, 1, {...run, text: run.text.slice(0, -trail.length)}, {text: trail, options: plain(run.options, last)});
+  return runs;
+}
 function richLineRuns(line,color,native,context,path) {
-  const fallback=color.replace(/^#/,'');
-  return line.fragments.map(fragment=>{
+  const fallback=color.replace(/^#/,''),colors=[];
+  return undecoratedLineEnd(line.fragments.map(fragment=>{
     assertXmlText(fragment.run.text ?? fragment.text, path);
     const runColor=exportColor(fragment.run.color,context,fallback),color=nativeColor(fragment.run.color,runColor,context,native);
+    colors.push(color);
     return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color:linkColor(fragment.run,color,context),underline:fragment.run.underline?{style:'sng',color:linkColor(fragment.run,color,context)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:|tel:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined,...langOptions(context,fragment.style.lang)}};
-  });
+  }),colors);
 }
 // Every native line of a list, marker paragraph or not, is named for the list's
 // composed path (`OPF list <path> line N`, N counting across the whole list) like
@@ -3286,9 +3321,11 @@ async function addImagePayload(slide, presentation, asset, region, path, context
 // One native image picture at `box` (inches), fitted at packaging (src/image-provenance.js placeImages). `treatment` is
 // what OPF_IMAGE_V1 stores (the authored block fields); without it the picture is untagged. Returns the picture's object
 // name, or undefined when the source could not be embedded (the caller draws the unavailable-image panel).
-async function addImagePicture(slide, presentation, asset, box, path, context, options, {fit, focus, effects = null, shrink = true, treatment, alt, role = 'block', objectName, src} = {}) {
+async function addImagePicture(slide, presentation, asset, box, path, context, options, {fit, focus, effects = null, shrink = true, treatment, alt, role = 'block', objectName, src, measured} = {}) {
   const outcome = { box, cover: fit === 'cover' };
   const resolved = await resolveImage(asset, presentation, options, path, outcome);
+  // RR-105: the picture's aspect ratio, read from the embedded source, for a caller that places something on the drawn picture.
+  if (measured && typeof resolved?.data === 'string') measured.aspect = intrinsicImageAspect(resolved.data);
   if (!resolved) {
     // RR-59 (AUTO-26): a content picture never vanishes silently. A background names its own fallback (the slide colour).
     if (!outcome.reported) options.onDiagnostic?.(role === 'background' ? backgroundUnresolved(path) : {code: "unresolved-asset", path, reason: "unresolved-source", message: "The image needs an embedded raster, a declared asset or a host imageResolver; the image exports as the unavailable-image placeholder. Remote images are never fetched."});
@@ -3461,10 +3498,11 @@ async function addImageItem(slide, presentation, item, slideIndex, context, opti
   // RR-94: every image block is tagged (an empty treatment when it has none), so an unchanged picture re-imports without a crop
   // diagnostic, and one authored from a relative path or URL records that source to give it back.
   const source = recordableImageSource(item.value);
+  const measured = {};
   // A plain contained picture in the flow is framed by the picture itself (0.14 content images); a treated or placed one
   // keeps core's frame (0.14 slide images), so its mask, line and overlay apply to that frame.
   const name = await addImagePicture(slide, presentation, item.value, box, item.path, { ...context, slidePath: `slides.${slideIndex}` }, options, {
-    fit: image.fit, focus: image.focus, effects: treated ? effects : null, shrink: !treated && !image.placement, treatment, src: source
+    fit: image.fit, focus: image.focus, effects: treated ? effects : null, shrink: !treated && !image.placement, treatment, src: source, measured
   });
   if (!name) {
     const panel = addImagePlaceholder(slide, presentation, item.value, box, item.path, context, options);
@@ -3479,7 +3517,9 @@ async function addImageItem(slide, presentation, item, slideIndex, context, opti
     addImageCalloutItems(slide, item, undefined, context, options);
     return panel;
   }
-  if (image.overlay) addImageOverlay(slide, image.overlay, structuredClone(block.overlay), imageOverlayName(name), name, { ...context, slidePath: `slides.${slideIndex}` }, effects);
+  // RR-105: the overlay covers the drawn picture, also when core could not read the picture's aspect (the preview measures it the same way).
+  const overlay = image.overlay && !image.picture && image.fit === 'contain' ? pictureOverlay(image, measured.aspect) : image.overlay;
+  if (overlay) addImageOverlay(slide, overlay, structuredClone(block.overlay), imageOverlayName(name), name, { ...context, slidePath: `slides.${slideIndex}` }, effects);
   addImageCalloutItems(slide, item, name, context, options);
   return name;
 }
@@ -3572,6 +3612,32 @@ async function smartArtFallback(slide, arrangement, {name, alt}, preview, contex
     slide.addImage({...resolved, objectName: name, ...box, altText: alt});
     return bleed;
   };
+}
+
+// RR-105: the fallback picture of a chartex chart, for every app that cannot draw extended charts (Keynote and older
+// PowerPoint read the mc:Fallback): OPF's preview of the chart (chartRegionSvg of the slide's preview, cropped to the chart's frame)
+// as an SVG picture over its PNG raster, the SmartArt fallback's path (resolveSvgImage, 192 dpi of the frame). The picture is added
+// under its own name; attachChartexParts moves it into the frame's mc:Fallback in place of the classic chart, and attachChartexFallbacks
+// gives it the frame's name and alt text (it keeps its own id, as the classic fallback frame did). When it cannot be drawn (no opf-render or rasterizer) the classic chart stays the
+// fallback and chartex-fallback-picture-unavailable says why.
+async function chartexFallback(slide, name, chart, preview, context, options) {
+  const {frame, path} = chart;
+  let svg;
+  const problems = [], unavailable = reason => {
+    options.onDiagnostic?.({code: 'chartex-fallback-picture-unavailable', path, reason, message: `The chart's fallback for apps without extended charts is the clustered column chart of its data, not a picture of its preview: ${reason}.`});
+  };
+  try {
+    svg = chartRegionSvg(await preview(), path, {x: frame.x * 96, y: frame.y * 96, width: frame.w * 96, height: frame.h * 96});
+  } catch (error) {
+    return unavailable(errorMessage(error));
+  }
+  const outcome = {box: frame};
+  const resolved = await resolveSvgImage(encodeText(svg), {...options, strictAssets: false, onDiagnostic: entry => problems.push(entry)}, path, outcome);
+  if (!resolved) return unavailable(problems.find(entry => entry.code === 'unresolved-asset')?.message.replace(/ The image exports as the unavailable-image placeholder.$/, '') ?? 'its SVG could not be drawn');
+  const pictureName = chartexFallbackName(name);
+  context.svgPictures.set(pictureName, outcome.svg);
+  chart.fallback = pictureName;
+  slide.addImage({...resolved, objectName: pictureName, x: frame.x, y: frame.y, w: frame.w, h: frame.h, altText: ''});
 }
 
 // SH-07: a diagram as one group of native shapes (src/diagram-shapes.js), built from the drawing the preview shows (paintDiagram in the
@@ -3937,16 +4003,18 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
       code: 'export-lossy', feature: 'funnel-label-color', path,
       message: 'PowerPoint chooses its own contrast color for native funnel value labels and can ignore the written label color (white where the preview uses black). The funnel remains an editable native chart; XML label colors do not establish physical color parity.',
     });
-    // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
+    // The native chartex part is added when the package is normalized (attachChartexParts). RR-105: its mc:Fallback is a picture of
+    // OPF's preview of the chart (chartexFallback), and the classic chart below is dropped then, its embedded workbook kept for the
+    // chartex part; only when that picture cannot be drawn does the classic chart stay as the fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.
     const series = chartData.series.map((entry) => ({name: entry.name, labels: [...entry.labels], values: [...entry.values]}));
     // LH-107: core's waterfall roles, signed labels, dropped value axis and caption (src/chartex.js), in the role colors the preview draws.
     const waterfall = chartLayout?.layer?.waterfall;
     const waterfallInfo = waterfall ? {...waterfall, connector: axisLineColor, caption: chartLayout.layer.header?.caption?.text, colors: waterfall.colors
       ? Object.fromEntries(Object.entries(chartWaterfallColors(panelFill, `#${strongPalette[0]}`, `#${markLabelColor}`, context.colorScheme?.dark2, {labeled: waterfall.labels})).map(([role, color]) => [role, normalizeHex(color)])) : undefined} : undefined;
-    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(histogram ? {histogram} : {}), ...(chartLayout?.layer?.numericAxes ? {numericAxes: chartLayout.layer.numericAxes} : {}), ...(numberFormats ? {formats: numberFormats.series, groups: numberFormats.groups} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
+    context.chartex.set(objectName, {path, frame: region, spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(histogram ? {histogram} : {}), ...(chartLayout?.layer?.numericAxes ? {numericAxes: chartLayout.layer.numericAxes} : {}), ...(numberFormats ? {formats: numberFormats.series, groups: numberFormats.groups} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
     if (chartData.chartex.layoutId === 'regionMap') {
-      options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
+      options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. Readers without chartex support show its fallback, a picture of OPF's preview of the chart.`});
     }
   }
   const percent = chartData.spec.grouping === 'percentStacked';
@@ -4020,6 +4088,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     ...(layer?.references?.lines?.length && ['category', 'combo'].includes(chartData.spec.family) && chartData.barDir !== 'bar' && chartLayout?.valueAxis?.min < 0 ? {catAxisLabelPos: 'low'} : {}),
     ...(percent ? { valAxisLabelFormatCode: '0%' } : {}),
     ...(chartData.spec.markers === undefined ? {} : { lineDataSymbol: chartData.spec.markers ? 'circle' : 'none' }),
+    // RR-105: a gap (an empty c:pt) breaks a line and ends an area at its neighbors, as the preview draws it (PptxGenJS defaults to span,
+    // which joins the neighbors across the gap). A stacked area draws its blank as a layer of zero thickness.
+    ...(chartData.type === 'line' || chartData.type === 'area' ? { displayBlanksAs: 'gap' } : {}),
     ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),
     // ScatterWithMarkers: markers only, no connecting line.
     ...(chartData.type === 'scatter' ? { lineSize: 0, lineDataSymbol: 'circle', catGridLine: {style: 'none'},
@@ -4030,7 +4101,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   };
   const referenceLines=layer?.references?.lines??[];
   if(referenceLines.some(l=>!l.native))options.onDiagnostic?.({code:'chart-reference-overlay',path,message:'Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes.'});
-  const refInfo=referenceLines.length?{key:objectName,lines:referenceLines,primaryCount:chartData.series.length,color:labelColor,labelColor:markLabelColor,font:context.fonts.body,context:{...context},textSize,hidden:[]}:undefined;
+  const refInfo=referenceLines.length?{key:objectName,lines:referenceLines,primaryCount:chartData.series.length,color:labelColor,labelColor:markLabelColor,surface:normalizeHex(panelFill).slice(0,6),font:context.fonts.body,context:{...context},textSize,hidden:[]}:undefined;
   if(refInfo&&!referenceLines.some(l=>l.native))assertReferenceExportBudget(chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines',multiAxisOverlays:chartData.combo?.some(entry=>entry.axis==='secondary')??false});
   if(refInfo)context.chartHeadings.get(objectName).references=refInfo;
   const comboArgs=chartData.combo?.length&&chartData.combo.length===chartData.series.length?comboChart(chartData,chartOptionsXml,{palette,chartOptions,labelColor,font:context.fonts.body,textSize}):undefined;
@@ -4045,11 +4116,11 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // the axes, so barDir undefined on a line chart replaced the chart's 'col' and laid the axes out as for a horizontal bar (category
     // axis left, value axis bottom), which Keynote refuses to open.
     const base=comboArgs?.[0]??[{type:chartData.type,data:chartData.series,options:Object.fromEntries(Object.entries({lineDataSymbol:chartOptionsXml.lineDataSymbol,barDir:chartData.barDir,barGrouping:chartData.barGrouping}).filter(([,value])=>value!==undefined))}];
-    slide.addChart(referenceChartTypes(base,chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines'}),comboArgs?.[1]??chartOptionsXml);
-    addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100});
+    slide.addChart(referenceChartTypes(base,chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines',reserved:[chartData.heading]}),comboArgs?.[1]??chartOptionsXml);
+    addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100,surface:normalizeHex(panelFill).slice(0,6)});
     return;
   }
-  if(comboArgs){slide.addChart(...comboArgs);addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100});return;}
+  if(comboArgs){slide.addChart(...comboArgs);addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100,surface:normalizeHex(panelFill).slice(0,6)});return;}
   // LH-108 to LH-110: the period band under the chart frame, then the chart, then its reference lines, value list and stacked names over it.
   const marks = layer && (layer.references || layer.valueList || layer.doughnut || layer.stack?.names || layer.stack?.ends) ? {chart: objectName, font: context.fonts.body, size: textSize / 100, scale, rtl: context.direction === 'rtl', tags: context.chartMarkTags,
     paint: {text: markLabelColor, chartText: labelColor, grid: gridColor, surface: panelFill.slice(0, 7),
@@ -4061,7 +4132,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   if (marks) addChartMarks(slide, layer, 'under', marks);
   slide.addChart(chartData.type, chartData.series, chartOptionsXml);
   if (marks) addChartMarks(slide, layer, 'over', marks);
-  addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100});
+  addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100,surface:normalizeHex(panelFill).slice(0,6)});
 }
 
 // FA-15: a combo chart is one PptxGenJS multi-type chart: a clustered column c:barChart on the primary axes, a c:lineChart with
@@ -4251,11 +4322,13 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
   const count = fit.richLines.length;
   let cursor = 0;
   for (const [index, line] of fit.richLines.entries()) {
-    const runs = line.fragments.map(fragment => {
+    const colors = [];
+    const runs = undecoratedLineEnd(line.fragments.map(fragment => {
       const runColor = exportColor(fragment.run.color, context, context.colors.text);
       const color = nativeColor(fragment.run.color, runColor, context, fallback);
+      colors.push(color);
       return {text: fragment.text, options: {...nativeFontOptions(fragment.style), ...eyebrowOptions(fragment.style, fragment.nominalSize ?? fragment.fontSize), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: linkColor(fragment.run, color, context), underline: fragment.run.underline ? {style: 'sng', color: linkColor(fragment.run, color, context)} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined, baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined, hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:|tel:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined, ...langOptions(context, fragment.style.lang)}};
-    });
+    }), colors);
     // Logical alignment (RR-05): a right-to-left paragraph starts at the right edge; every wrapped line shares its paragraph's direction.
     const placed = fit.placement?.lines[index], alignment = placed?.alignment ?? physicalAlignment(logicalAlignment, fit.directions?.[index]), factor = alignment === 'right' ? 1 : alignment === 'center' ? .5 : 0;
     const area = placed ? {...region, x: (placed.x + line.width * factor - box.width * factor) / 96, y: placed.y / 96, h: placed.height / 96} : {...region, y: region.y + line.y / 96, h: line.height / 96};
@@ -4848,7 +4921,7 @@ function addMediaPayload(slide, presentation, value, region, path, context, opti
   slide.addShape("rect", {x: region.x, y: region.y, w: region.w, h: region.h, fill: {color: context.colors.surface}, line: {color: context.colors.border, width: 0.75}, hyperlink, objectName: names.frame});
   slide.addShape("ellipse", {x: icon.x / 96, y: icon.y / 96, w: 72 / 96, h: 72 / 96, fill: {color: context.colors.accent}, line: {transparency: 100}, hyperlink: hyperlink && {url: source}, objectName: names.badge});
   slide.addShape("triangle", {x: (icon.x + 28) / 96, y: (icon.y + 22) / 96, w: 28 / 96, h: 28 / 96, rotate: 90, fill: {color: context.roles ? normalizeHex(readableSchemeColor(`#${context.colors.accent}`, context.roles).hex) : "FFFFFF"}, line: {transparency: 100}, hyperlink: hyperlink && {url: source}, objectName: names.play});
-  addMeasuredPayloadText(slide, mediaCaption(value), {...box, y: icon.y + 72 + 20, height: 50}, context, options,
+  addMeasuredPayloadText(slide, mediaCaption(value, presentation.assets ?? {}), {...box, y: icon.y + 72 + 20, height: 50}, context, options,
     {path, fontSize: 18, fontFamily: context.fonts.body, fontWeight: 600, align: "center", color: context.colors.mutedText, objectName: `OPF media ${path} caption`, media: true, keepEmpty: true, hyperlink});
 }
 
@@ -5197,8 +5270,8 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   const rejected = resolvedData.diagnostics.filter((entry) => entry.code === 'chart-value-not-numeric');
   const {id: resolvedType, spec: resolved} = resolveChartType(plan.fallback ? plan.type : chart.type);
   // A chartex type (treemap, histogram, pareto, box & whisker, waterfall, funnel, map) has no classic construct. Natively
-  // it is written as its cx:chartSpace part and the clustered column chart of the same data is its mc:Fallback
-  // (src/chartex.js). 'auto' (the default) does that for the constructs the native PowerPoint check confirmed and keeps
+  // it is written as its cx:chartSpace part over the workbook of the clustered column chart of the same data, with a picture of the
+  // preview as its mc:Fallback (src/chartex.js, RR-105; the clustered column chart when the picture cannot be drawn). 'auto' (the default) does that for the constructs the native PowerPoint check confirmed and keeps
   // the unconfirmed map on the clustered column chart alone; 'fallback' keeps every chartex id there. The fallback is
   // reported as chartex-fallback, never silent. LH-175: a Pareto chart of several series is core's pareto-as-columns fallback (a
   // clustered column chart of every series, as the preview draws it), so it reaches here as a column chart in every mode.
@@ -5782,9 +5855,10 @@ async function normalizePptxZip(raw, context) {
     if (next !== xml) entries[part] = encodeText(next);
   }
   if (context.frameAlts.size) for (const [part, bytes] of Object.entries(entries)) if (/^ppt\/slides\/slide\d+\.xml$/.test(part)) { const xml = decodeText(bytes), next = applyFrameAlt(xml, context.frameAlts); if (next !== xml) entries[part] = encodeText(next); }
-  // Chartex charts: the native cx:chartSpace part, its style parts and the mc:AlternateContent frame (the classic chart above is the fallback).
+  // Chartex charts: the native cx:chartSpace part, its style parts and the mc:AlternateContent frame. RR-105: the mc:Fallback is the chart's
+  // fallback picture and the classic chart above is removed (its workbook stays, the chartex part's); without a picture the classic chart is the fallback.
   try {
-    attachChartexParts(entries, context.chartex, parseRelationships);
+    context.removedChartParts = attachChartexParts(entries, context.chartex, parseRelationships);
   } catch (error) {
     throw new OPFPptxError('packaging-failed', `Chartex chart parts could not be attached: ${errorMessage(error)}`);
   }
@@ -5822,6 +5896,12 @@ async function normalizePptxZip(raw, context) {
     attachSmartArtFallbacks(entries, context.smartArt, parseRelationships);
   } catch (error) {
     throw new OPFPptxError("packaging-failed", `SmartArt fallback pictures could not be attached: ${errorMessage(error)}`);
+  }
+  // RR-105: each chartex fallback picture takes its frame's name, alt text and transform (and keeps its own id).
+  try {
+    attachChartexFallbacks(entries, context.chartex);
+  } catch (error) {
+    throw new OPFPptxError("packaging-failed", `Chartex fallback pictures could not be attached: ${errorMessage(error)}`);
   }
   // Diagram pictures and placeholders carry OPF_DIAGRAM_V1 in full provenance (src/diagram-provenance.js): the picture's manifest
   // binds its geometry, blip fill and SVG part, so an edited or replaced picture imports as an ordinary picture.
@@ -5897,7 +5977,8 @@ async function normalizePptxZip(raw, context) {
   // LH-106: a chart on a slide whose language has digits of its own draws them (numeral-shape prefixes, src/numeral-shapes.js).
   applyNumeralShapes(entries, context.partSlides, index => context.scriptFonts?.slides?.[index]?.bcp47 ?? context.scriptFonts?.deck?.bcp47);
   const output = {};
-  const renameMaps = buildRenameMaps(Object.keys(entries));
+  // RR-105: a classic chart removed for its chartex fallback picture keeps its number, so no other chart part is renamed by it.
+  const renameMaps = buildRenameMaps([...Object.keys(entries), ...(context.removedChartParts ?? [])]);
   // The host may transform assets or supply a filename/MIME hint that no
   // longer matches its bytes. Native package metadata must describe the bytes.
   renameMaps.media = new Map();

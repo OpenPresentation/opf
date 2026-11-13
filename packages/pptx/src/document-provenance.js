@@ -1010,7 +1010,7 @@ export function slideListRecord(entries, path, root, rels, report = () => {}) {
     const record = validateSlide(found.value);
     const runs = record.listRuns === undefined ? null : new Map(record.listRuns);
     const breaks = record.lists === undefined || record.native.structure !== nativeSlide(entries, path).structure ? null : new Map(record.lists.map(([list, lines]) => [list, new Map(lines)]));
-    const roles = record.listRoles === undefined || record.native.structure !== nativeSlide(entries, path).structure || record.native.listIdentity !== nativeListIdentity(entries, path) ? null : new Map(record.listRoles);
+    const roles = record.listRoles === undefined || record.native.structure !== nativeSlide(entries, path).structure || record.native.listIdentity !== nativeListIdentity(entries, path) ? null : new Map(record.listRoles.map(([list, lines, markerless]) => [list, markerless ? Object.assign([...lines], {markerless: new Set(markerless)}) : lines]));
     const scalars = record.listScalars === undefined || record.native.structure !== nativeSlide(entries, path).structure || record.native.listIdentity !== nativeListIdentity(entries, path) ? null : new Map(record.listScalars);
     if (record.listRoles !== undefined && !roles) report({code:'list-line-role-changed',message:'Native list names, positions or structure changed; list roles were not restored.'});
     if (record.listScalars !== undefined && !scalars) report({code:'list-scalar-reference-changed',message:'Native list names, positions or structure changed; scalar source intent was not restored.'});

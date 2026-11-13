@@ -8,24 +8,32 @@ import {fromPptx, toPptx} from '../dist/index.js';
 import {resolveChartType} from '../dist/chart-types.js';
 
 const deck = (type, data) => ({name: 'single column chart', language: 'en', design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart', title: 'Chart', chart: {type, data}, text: 'Body'}]});
-async function exported(type, data) {
+async function exported(type, data, options = {}) {
   const diagnostics = [];
-  const bytes = await toPptx(deck(type, data), {onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
+  const bytes = await toPptx(deck(type, data), {...options, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
   const parts = unzipSync(bytes);
   const slide = strFromU8(parts['ppt/slides/slide1.xml']);
   const charts = Object.keys(parts).filter((name) => /^ppt\/charts\/chart\d+\.xml$/.test(name));
   const chartex = Object.keys(parts).filter((name) => /^ppt\/charts\/chartEx\d+\.xml$/.test(name));
   return {bytes, parts, slide, charts, diagnostics, chart: charts.length ? strFromU8(parts[charts[0]]) : '', chartex: chartex.length ? strFromU8(parts[chartex[0]]) : '', frame: slide.includes('graphicFrame'), chartDiagnostics: diagnostics.filter((diagnostic) => diagnostic.code.startsWith('chart-'))};
 }
+// RR-105: a chartex chart's mc:Fallback is a picture of the preview, with no classic part; without a rasterizer it is the classic chart.
+const CLASSIC = {svgRasterizer: async () => { throw Object.assign(new Error('no rasterizer'), {code: 'svg-rasterizer-unavailable'}); }};
+const pictureFallback = /<mc:Fallback><p:pic>[\s\S]*<asvg:svgBlip\b[\s\S]*<\/p:pic><\/mc:Fallback>/;
 const numbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\s\\S]*?)</c:${tag}>`, 'g'))].map(([, body]) => [...body.matchAll(/<c:v>([^<]*)<\/c:v>/g)].map(([, value]) => value));
 const chartexValues = (xml) => [...xml.matchAll(/<cx:numDim\b[^>]*>([\s\S]*?)<\/cx:numDim>/g)].map(([, body]) => [...body.matchAll(/<cx:pt idx="\d+">([^<]*)<\/cx:pt>/g)].map(([, value]) => value));
 const binCount = (xml) => Number(xml.match(/<cx:binCount val="(\d+)"\/>/)?.[1]);
 
 // The FF-09 case: a one-column histogram. It is PowerPoint's own histogram (chartex, FF-22b): the raw values are the
-// data, PowerPoint bins them with the explicit automatic bin count (Scott's rule), and the classic fallback plots them.
+// data, PowerPoint bins them with the explicit automatic bin count (Scott's rule); the fallback is the preview's picture, and without
+// a rasterizer the classic chart, which plots them.
 const values = [3, 5, 8, 13];
 const histogram = await exported('histogram', {columns: ['Value'], rows: values.map((value) => [value])});
-assert.equal(histogram.charts.length, 1, 'a fallback chart part is exported');
+const histogramClassic = await exported('histogram', {columns: ['Value'], rows: values.map((value) => [value])}, CLASSIC);
+assert.equal(histogram.charts.length, 0, 'no classic chart part beside the fallback picture');
+assert.match(histogram.slide, pictureFallback, 'the fallback is the preview picture');
+assert.equal(histogramClassic.charts.length, 1, 'without a rasterizer a fallback chart part is exported');
+assert.equal(histogramClassic.chartex, histogram.chartex, 'the same chartEx part with either fallback');
 assert.ok(histogram.chartex, 'a chartEx part is exported');
 assert.ok(histogram.frame, 'the slide has a graphic frame');
 assert.doesNotMatch(histogram.slide, /&quot;type&quot;/, 'no placeholder dump replaces the chart');
@@ -33,9 +41,9 @@ assert.deepEqual(histogram.chartDiagnostics, [], 'a histogram bins its own value
 assert.doesNotMatch(histogram.chartex, /<cx:strDim/, 'no category dimension for a lone value column');
 assert.deepEqual(chartexValues(histogram.chartex), [['3', '5', '8', '13']]);
 assert.equal(binCount(histogram.chartex), 2, 'Scott: 3.49 * sd(4.35) / 4^(1/3) = 9.56 wide over a range of 10');
-assert.match(histogram.chart, /<c:barDir val="col"\/>/);
-assert.deepEqual(numbers(histogram.chart, 'cat'), [['1', '2', '3', '4']], 'the fallback plots the values against their row numbers');
-assert.deepEqual(numbers(histogram.chart, 'val'), [['3', '5', '8', '13']]);
+assert.match(histogramClassic.chart, /<c:barDir val="col"\/>/);
+assert.deepEqual(numbers(histogramClassic.chart, 'cat'), [['1', '2', '3', '4']], 'the classic fallback plots the values against their row numbers');
+assert.deepEqual(numbers(histogramClassic.chart, 'val'), [['3', '5', '8', '13']]);
 assert.deepEqual(await toPptx(deck('histogram', {columns: ['Value'], rows: values.map((value) => [value])})), histogram.bytes, 'deterministic');
 // The export re-imports as the same histogram with its raw values.
 const imported = await fromPptx(histogram.bytes);
@@ -58,11 +66,13 @@ assert.equal(chartexValues(wide.chartex)[0].length, 1000);
 const types = new Set([...CORE_CHART_TYPES, 'column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar']);
 for (const type of types) {
   const result = await exported(type, {columns: ['Value'], rows: [[3], [5], [8]]});
-  assert.equal(result.charts.length, 1, `${type}: a chart part is exported`);
   assert.ok(result.frame, `${type}: the slide has a graphic frame`);
   const spec = resolveChartType(type).spec;
   // The default ('auto') writes chartex parts for the constructs the native check confirmed; the unconfirmed map keeps the clustered column fallback and says so.
   const native = spec.family === 'chartex' && !spec.unconfirmed;
+  // RR-105: a chartex chart has the preview's picture as its fallback and no classic part; every other chart has one classic part.
+  assert.equal(result.charts.length, native ? 0 : 1, `${type}: ${native ? 'no classic chart part' : 'a chart part is exported'}`);
+  if (native) assert.match(result.slide, pictureFallback, `${type}: the fallback is the preview picture`);
   assert.equal(Boolean(result.chartex), native, `${type}: a chartEx part exactly for confirmed chartex types`);
   // A histogram or Pareto chart bins the values themselves; every other type plots them against row numbers and says so.
   const binned = native && spec.binning;
@@ -96,15 +106,21 @@ for (const [label, data, reason] of [
 // with a category column bins by category (cx:aggregation) instead of by value.
 for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'radar', 'histogram', 'waterfall']) {
   const result = await exported(type, {columns: ['Category', 'Value'], rows: [['a', 3], ['b', 4]]});
-  assert.equal(result.charts.length, 1, type);
   assert.deepEqual(result.chartDiagnostics, [], `${type}: no diagnostic for ordinary data`);
-  assert.deepEqual(numbers(result.chart, 'cat'), [['a', 'b']], type);
+  // RR-105: a chartex chart (histogram, waterfall) has the preview's picture as its fallback; its classic chart is the fallback only
+  // without a rasterizer, with the same categories.
+  const classic = result.chartex ? await exported(type, {columns: ['Category', 'Value'], rows: [['a', 3], ['b', 4]]}, CLASSIC) : result;
+  assert.equal(result.charts.length, result.chartex ? 0 : 1, type);
+  if (result.chartex) assert.match(result.slide, pictureFallback, `${type}: the fallback is the preview picture`);
+  assert.equal(classic.charts.length, 1, type);
+  assert.deepEqual(numbers(classic.chart, 'cat'), [['a', 'b']], type);
   if (type === 'histogram') assert.match(result.chartex, /<cx:layoutPr><cx:aggregation\/><\/cx:layoutPr>/, 'a categorised histogram aggregates by category');
 }
 // Extremes: finite arithmetic for any finite input, every value written once and a finite bin count.
 for (const rows of [[[-1e308], [1e308]], [[-1e308], [0], [1e308]], [[1.7976931348623157e308], [-1.7976931348623157e308], [5]], [[Number.MIN_VALUE], [Number.MAX_VALUE]], [[0], [Number.MIN_VALUE]]]) {
   const result = await exported('histogram', {columns: ['Value'], rows});
-  assert.equal(result.charts.length, 1, JSON.stringify(rows));
+  assert.equal(result.charts.length, 0, JSON.stringify(rows));
+  assert.match(result.slide, pictureFallback, `extremes ${JSON.stringify(rows)}: the fallback is the preview picture`);
   assert.deepEqual(chartexValues(result.chartex)[0].map(Number), rows.map(([value]) => value), `extremes ${JSON.stringify(rows)}: every value is written once`);
   const count = binCount(result.chartex);
   assert.ok(Number.isInteger(count) && count >= 1, `finite bin count ${count}`);
@@ -116,7 +132,8 @@ for (const rows of [[[-1e308], [1e308]], [[-1e308], [0], [1e308]], [[1.797693134
   const rows = [['12'], ['-5'], ['1e3'], ['12%'], ['$5'], ['1,234'], ['n/a'], [''], [null], [7]];
   const histogram = await exported('histogram', {columns: ['Value'], rows});
   assert.deepEqual(chartexValues(histogram.chartex), [['12', '-5', '1000', '7']], 'four cells hold numbers');
-  assert.deepEqual(numbers(histogram.chart, 'cat'), [['1', '2', '3', '10']], 'the fallback keeps the row numbers');
+  assert.match(histogram.slide, pictureFallback, 'the fallback is the preview picture');
+  assert.deepEqual(numbers((await exported('histogram', {columns: ['Value'], rows}, CLASSIC)).chart, 'cat'), [['1', '2', '3', '10']], 'the classic fallback keeps the row numbers');
   const dots = await exported('scatter', {columns: ['V'], rows});
   assert.deepEqual(numbers(dots.chart, 'xVal'), [['1', '2', '3', '10']], 'skipped rows leave gaps in the row numbers');
   assert.deepEqual(numbers(dots.chart, 'yVal'), [['12', '-5', '1000', '7']], 'skipped cells are not plotted as 0');

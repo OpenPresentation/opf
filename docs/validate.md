@@ -202,7 +202,7 @@ A file ending `.yaml` or `.yml` (or stdin with `--from yaml`) is read as YAML th
 1. **Background.** Design resolves per field: slide design, deck design, theme, engine default. The background is a theme slot or colour (`solid`), the card surface for content on a `contentBox` card, a table cell's fill, a gradient or a pattern. Solid, gradient-stop and pattern colours are read as literal hex colours, as the preview reads them (anything else falls back as it does there). Translucent backgrounds are composited over white.
 2. **Text color.** Titles, body, lists and tags use the scheme's `dark1`, or `light1` when the background is dark (luminance below 0.179). Furniture and quote attributions use the muted color, metric values (and a unit on the value's line) the color the engines draw them in, `metricValueColor` of the primary on the card or slide under them (on a dark surface a primary under 4.5:1 becomes the light text color, LH-57, LH-151), and explicit run and table colors the author's `ColorRef` resolved the same way the renderer resolves it. As the preview does, a gradient background has no single color and counts as light, so a dark gradient behind default text is reported.
 3. **Gradients.** The gradient is sampled on a 5 by 5 grid over the area the text covers (the lines' measured ink, aligned as the text is), using the preview's gradient geometry, and the worst colour decides. A pattern contributes both of its colours.
-4. **Pictures.** Pixels are never read. A background picture is bounded by a gray ramp from black to white, composited through the picture opacity and any full-frame overlay of the image background (`design.background.overlay`), or, over the text it covers, core's [automatic scrim](image-treatments.md#automatic-scrim) (bounded by the grays a host measured, when it did). Text passes only if every step passes; otherwise `opf/text-on-image` says the result cannot be guaranteed. With the scrim, `opf/text-on-image` is a note that names it. An overlay limited to an edge band is not counted.
+4. **Pictures.** Pixels are never read. A background picture is bounded by a gray ramp from black to white, composited through the picture opacity and any full-frame overlay of the image background (`design.background.overlay`), or, over the text it covers, core's [automatic scrim](image-treatments.md#automatic-scrim) (bounded by the grays a host measured, when it did). A duotone recolor bounds the ramp to its own two colors, and an overlay limited to an edge band counts over the text it reaches, beside the uncovered picture. Text passes only if every step passes; otherwise `opf/text-on-image` says the result cannot be guaranteed, and warns when the text fails over every step (it is too faint whatever the picture). With the scrim, `opf/text-on-image` is a note that names it.
 5. **Ratio and size.** The WCAG 2.x relative-luminance contrast ratio is compared with 4.5:1, or 3:1 for large text: at least 18 pt, or 14 pt and bold. Sizes are the fitted sizes, expressed at the 13.33 by 7.5 in reference slide (96 px per inch). The default body size, 18.75 pt, is large text under WCAG, so default body text passes at 3:1; set `contrastLarge` to 4.5 for a stricter policy.
 
 Approximations: anti-aliasing, text shadows, font weight and the exact glyph coverage are not modelled; chart and code text are not checked (charts pick label colours against their surface; code uses its own panel colours). See each rule below for what it cannot see.
@@ -284,7 +284,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/variable-reference-unknown`](#opfvariable-reference-unknown) | References | warning | structure | A `var:` colour names a variable that is not declared. |
 | [`opf/contract`](#opfcontract) | Policy | error | structure | A field is outside the values a host policy allows. |
 | [`opf/text-contrast`](#opftext-contrast) | Accessibility | warning | composition | Text colour has too little contrast against the background it sits on. |
-| [`opf/text-on-image`](#opftext-on-image) | Accessibility | info | composition | Text sits on a background picture: a note when core draws its automatic scrim behind it, otherwise its contrast cannot be guaranteed. |
+| [`opf/text-on-image`](#opftext-on-image) | Accessibility | info | composition | Text sits on a background picture: a note when core draws its automatic scrim behind it, a warning when the text is too faint over every color the picture can show, otherwise its contrast cannot be guaranteed. |
 | [`opf/missing-alt-text`](#opfmissing-alt-text) | Accessibility | warning | structure | A picture has no alt text and is not marked decorative. |
 | [`opf/poor-alt-text`](#opfpoor-alt-text) | Accessibility | info | structure | Alt text is a file name, a URL, a generic word or very long. |
 | [`opf/missing-slide-title`](#opfmissing-slide-title) | Accessibility | warning | structure | A slide has no title. |
@@ -306,7 +306,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/layout-unplaced`](#opflayout-unplaced) | Layout | warning | composition | No region of the layout has room for a block. |
 | [`opf/icon-dropped`](#opficon-dropped) | Layout | warning | composition | An icon is not drawn. |
 | [`opf/arrangement-adapted`](#opfarrangement-adapted) | Layout | info | composition | A pyramid, matrix, cycle, row of chevrons or flow is drawn another way. |
-| [`opf/chart-label-collision`](#opfchart-label-collision) | Layout | warning | composition | A reference label meets another label or a data line. |
+| [`opf/chart-label-collision`](#opfchart-label-collision) | Layout | warning | composition | A reference label meets another label, a data line or a mark at both ends of its line. |
 | [`opf/timeline-period-short`](#opftimeline-period-short) | Layout | warning | composition | A timeline period is too short to read. |
 | [`opf/shape-off-slide`](#opfshape-off-slide) | Layout | warning | composition | A shape or image callout lies wholly outside the slide. |
 | [`opf/furniture-wraps`](#opffurniture-wraps) | Layout | warning | composition | A header or footer zone wraps onto more than 2 lines. |
@@ -802,15 +802,15 @@ Default severity: **warning**. Cost: composition. Text colour has too little con
 
 ### `opf/text-on-image`
 
-Default severity: **info**. Cost: composition. Text sits on a background picture: a note when core draws its automatic scrim behind it, otherwise its contrast cannot be guaranteed.
+Default severity: **info**. Cost: composition. Text sits on a background picture: a note when core draws its automatic scrim behind it, a warning when the text is too faint over every color the picture can show, otherwise its contrast cannot be guaranteed.
 
-**Why.** Contrast over a photograph depends on the photograph. Core draws an automatic scrim behind text on a picture background that has no overlay, at the lowest opacity that keeps it at 4.5:1 over any picture, and this note names it. With an edge-band overlay, or the scrim turned off (overlay: false), only a full-frame overlay that guarantees readability for every possible image certifies the result from the document.
+**Why.** Contrast over a photograph depends on the photograph. Core draws an automatic scrim behind text on a picture background that has no overlay, at the lowest opacity that keeps it at 4.5:1 over any picture, and this note names it. With an edge-band overlay, or the scrim turned off (overlay: false), only a full-frame overlay that guarantees readability for every possible image certifies the result from the document. Text that stays below the threshold over every color the picture can show (a duotone in dark colors under dark text, for one) is a warning: it is low contrast whatever the picture.
 
 **Basis.** WCAG 2.2 SC 1.4.3 Contrast (Minimum), level AA
 
 **Thresholds.** `contrastNormal` (default 4.5), `contrastLarge` (default 3)
 
-**Approximations.** Core reads picture pixels only through a host that measures them (ComposeSlideOptions.pictureLuminance). Otherwise the picture is bounded by a gray ramp from black to white, composited through the image opacity and a full-frame design.background overlay or the automatic scrim over the text it covers; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.
+**Approximations.** Core reads picture pixels only through a host that measures them (ComposeSlideOptions.pictureLuminance). Otherwise the picture is bounded by a gray ramp from black to white, composited through the image opacity and a full-frame design.background overlay or the automatic scrim over the text it covers; the text passes only when every step of that ramp passes. A duotone recolor bounds the ramp to its own two colors, and an edge-banded overlay counts over the text it reaches, beside the uncovered picture where the text reaches past it.
 
 ### `opf/missing-alt-text`
 
@@ -820,7 +820,7 @@ Default severity: **warning**. Cost: structure. A picture has no alt text and is
 
 **Basis.** WCAG 2.2 SC 1.1.1 Non-text Content, level A
 
-**Approximations.** Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, organization logos (each shape and background), header/footer images (a logo reference such as var:organization.logo.icon is checked on the organization), quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.
+**Approximations.** Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, organization logos (each shape and background), header/footer images (a logo reference such as var:organization.logo.icon is checked on the organization), quote photos and speaker photos, following asset: references to the assets registry and image variables (var:<id>, RR-105) to their value (a template's unfilled variable to its example). Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.
 
 ### `opf/poor-alt-text`
 
@@ -858,7 +858,7 @@ Default severity: **warning**. Cost: composition. The order content is read diff
 
 **Basis.** WCAG 2.2 SC 1.3.2 Meaningful Sequence, level A (PowerPoint: "Check reading order")
 
-**Approximations.** Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. Headings are expected first. Content drawn entirely above the title, over the columns of the title, is reported; content in a column beside the title is read after it. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.
+**Approximations.** Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. A block is one unit (RR-105): blocks are ordered by the boxes that hold them, and a group's own items are read, in their own visual order, before the next block, so cards side by side (a picture over a name) read card by card. Headings are expected first. Content drawn entirely above the title, over the columns of the title, is reported; content in a column beside the title is read after it. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.
 
 ### `opf/link-text`
 
@@ -995,9 +995,9 @@ Default severity: **info**. Cost: composition. A pyramid, matrix, cycle, row of 
 
 ### `opf/chart-label-collision`
 
-Default severity: **warning**. Cost: composition. A reference label meets another label or a data line.
+Default severity: **warning**. Cost: composition. A reference label meets another label, a data line or a mark at both ends of its line.
 
-**Why.** A reference label is tried above and below its line (beside it on a bar chart). When both places meet another reference label or a data line, it is drawn at the first and reported; its text and value are kept.
+**Why.** A reference label is tried above and below its line (beside it on a bar chart), at its own end and then at the other end of the line. When all four places meet another reference label, a data line, a bar or an area, it is drawn at the first and reported; its text and value are kept, and on a bar or an area it stands on a plate of the chart background.
 
 ### `opf/timeline-period-short`
 

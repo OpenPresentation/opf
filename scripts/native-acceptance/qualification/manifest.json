@@ -2251,12 +2251,13 @@
     },
     {
       "id": "COV-furniture-footer",
-      "title": "Format coverage: footer date, live slide number and a slide without furniture",
+      "title": "Format coverage: live slide number, a slide's own footer with a fixed date and a slide without furniture",
       "changes": [
         "fa-37-start-end"
       ],
       "deck": "coverage-furniture",
       "slides": [
+        2,
         3,
         8
       ],
@@ -2268,6 +2269,11 @@
           {
             "footer": true,
             "slideNumber": true,
+            "date": false
+          },
+          {
+            "footer": true,
+            "slideNumber": false,
             "date": true
           },
           {

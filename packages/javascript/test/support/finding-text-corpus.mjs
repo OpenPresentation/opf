@@ -24,7 +24,6 @@ const png = (width, height) => {
 	bytes.writeUInt32BE(height, 20);
 	return `data:image/png;base64,${bytes.toString('base64')}`;
 };
-const person = (n) => ({ blocks: [{ image: { src: `https://example.com/${n}.png`, alt: `Person ${n}` } }, { text: `Person ${n}` }], composition: { mode: 'column' } });
 const withGallery = { catalogs: [gallery] };
 const longItems = [
 	'Enterprise renewals slipped by three weeks in the northern region after the pricing change',
@@ -121,12 +120,13 @@ export const CASES = [
 	{ name: 'icon-invalid', rule: 'opf/icon-invalid', input: deck([{ title: 'T', items: [{ text: 'a', icon: 'mark' }] }], { icons: { mark: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><script>alert(1)</script></svg>' } }) },
 	{ name: 'icon-dropped', rule: 'opf/icon-dropped', input: deck([{ title: 'T', items: [{ text: 'a', icon: 'brand:star' }, { text: 'b' }], numbering: 'arabic' }], { catalogs: { custom: { iconSets: { brand: iconSet } } } }) },
 	{ name: 'shape-off-slide', rule: 'opf/shape-off-slide', input: deck([{ title: 'T', text: 'Body', shapes: [{ shape: 'rect', text: 'Draft', x: 70, y: 10, width: 0.2, height: 0.1 }] }]) },
-	{ name: 'chart-label-collision', rule: 'opf/chart-label-collision', input: deck([{ title: 'Results', chart: { type: 'line', data: { columns: ['Quarter', 'Actual'], rows: [['Q1', 10], ['Q2', 20], ['Q3', 30]] }, referenceLines: [{ value: 20, label: 'Plan' }, { value: 20, label: 'Plan' }, { value: 20, label: 'Plan' }] } }]) },
+	{ name: 'chart-label-collision', rule: 'opf/chart-label-collision', input: deck([{ title: 'Results', chart: { type: 'line', data: { columns: ['Quarter', 'Actual'], rows: [['Q1', 10], ['Q2', 20], ['Q3', 30]] }, referenceLines: Array.from({ length: 5 }, () => ({ value: 20, label: 'Plan' })) } }]) },
 	{ name: 'timeline-period-short', rule: 'opf/timeline-period-short', input: deck([{ title: 'Plan', timeline: { events: [{ when: 'Day 1', what: 'Kickoff', duration: 1 }, { when: 'Year 3', what: 'Delivery', duration: 1000 }] } }]) },
 	{ name: 'arrangement-adapted', rule: 'opf/arrangement-adapted', input: deck([{ layout: 'quad', title: 'T', items: ['North', 'South', 'East'] }], { catalogs: { custom: { layouts: { quad: { name: 'Quad', regions: [{ name: 'title' }, { name: 'quadrants', accepts: ['list'], flow: 'none', arrangement: 'matrix' }] } } } } }) },
 	{ name: 'region-full', rule: 'opf/region-full', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', ...timeline }, { region: 'timeline', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	{ name: 'layout-unplaced', rule: 'opf/layout-unplaced', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', ...timeline }, { region: 'timeline', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
-	{ name: 'reading-order', rule: 'opf/reading-order', input: deck([{ title: 'Team', composition: { mode: 'row' }, blocks: [person(1), person(2)] }]) },
+	// RR-105: cards side by side read card by card (no finding); a layout that draws the body above the title is read out of order.
+	{ name: 'reading-order', rule: 'opf/reading-order', input: deck([{ title: 'Results', text: 'Revenue grew in every region.', layout: 'upside' }], { catalogs: { custom: { layouts: { upside: { name: 'Upside', direction: 'column', regions: [{ name: 'body', accepts: ['text'], role: 'primary' }, { name: 'title' }] } } } } }) },
 	{ name: 'furniture-wraps', rule: 'opf/furniture-wraps', input: { language: 'en-US', design: { footer }, slides: [{ title: 'Results', text: 'Revenue grew.' }] } },
 	{ name: 'font-outside-scheme', rule: 'opf/font-outside-scheme', input: deck([{ title: 'T', text: [{ text: 'x', fontFamily: 'Comic Sans MS' }] }], { design: { fontScheme: 'aptos' } }) },
 	{ name: 'image-resolution', rule: 'opf/image-resolution', input: deck([{ title: 'T', image: { src: png(100, 100), alt: 'x' } }]) },

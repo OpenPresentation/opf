@@ -70,7 +70,9 @@ for (const type of ['column', 'line', 'line-with-markers', 'area'])
     assert.match(h, /<a:ln w="19050"/);
     assert.match(h, /<a:prstDash val="dash"/);
     assert.match(h, /<a:srgbClr val="BC1234"/);
-    assert.match(h, /<c:idx val="2"\/><c:tx>/);
+    // RR-105: at 25 the label's end (Q3, 30) is inside the last column or the area above and below the line, so core puts it at Q1;
+    // the import still returns the authored end (nref: "end").
+    assert.match(h, new RegExp(`<c:idx val="${type === 'column' || type === 'area' ? 0 : 2}"/><c:tx>`));
     assert.match(h, /<a:t>Target<\/a:t>/);
     assert.deepEqual(chartOrderProblems(e.xml), []);
     assert.deepEqual(out.chart.data, data);
@@ -171,7 +173,8 @@ test('native constant edits restore CURRENT value/label/style/endpoint; primary 
       editHelpers(x, (s) =>
         s
           .replace(/<c:v>25<\/c:v>/g, '<c:v>22</c:v>')
-          .replace('Target', 'Revised')
+          // RR-105: the helper is also named after its label; the edit changes the label's run, not the series name.
+          .replace('<a:t>Target</a:t>', '<a:t>Revised</a:t>')
           .replace('w="19050"', 'w="28575"')
           .replace('val="BC1234"', 'val="123456"')
           .replace('val="dash"', 'val="dot"')

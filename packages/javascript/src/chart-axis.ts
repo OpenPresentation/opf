@@ -275,7 +275,9 @@ export function stackCategoryValues(
   const running = new Array<number>(count).fill(0);
   return series.map((entry) =>
     entry.values.map((raw, i) => {
-      if (raw === null && kind !== 'area') return null;
+      // A gap is no point (RR-105): a line breaks there and an unstacked area ends at its neighbors. A stacked area keeps the gap's
+      // layer at zero thickness, so the layers above it still rest on the running total (PowerPoint draws a blank in a stacked area so).
+      if (raw === null && (kind !== 'area' || !stacked)) return null;
       let value = raw ?? 0;
       if (percent) value = totals[i] ? value / totals[i]! : 0;
       if (!stacked) return { value, from: 0, to: value };

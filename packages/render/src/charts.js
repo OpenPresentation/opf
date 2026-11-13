@@ -216,6 +216,10 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   // from the top of the chart box, taken before the header row narrows c.box.
   c.alignedRows = layer?.rows && { top: box.y + layer.rows.top, bottom: box.y + layer.rows.bottom, centers: layer.rows.centers.map((center) => box.y + center) };
   if (layer?.header) drawHeader(c, spec, layer.header);
+  // RR-105: a radar whose web is larger with its legend under it (core chart-radar.ts) draws the legend as a bottom row; the PPTX export
+  // writes c:legendPos b. Its value axis is core's too.
+  c.radar = layer?.radar;
+  if (layer?.radar?.legend === "bottom" && resolved.legend === undefined) placeLegend(c, spec, "bottom");
   if (!resolved.active) reportOptionDiagnostics(c, resolved);
   if (resolved.active) {
     reportOptionDiagnostics(c, resolved);
@@ -962,14 +966,25 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot =
   const pointX = edge ? (i) => plot.x + categorySlot(i) * plot.width / (stacks[0].length - 1) : (i) => plot.x + (categorySlot(i) + 0.5) * band;
   for (let j = 0; j < series.length; j++) {
     const s = series[j];
-    const points = stacks[j].map((point, i) => ({ x: pointX(i), from: point.from, to: point.to }));
-    const upper = points.map((p) => `${c.num(p.x)} ${c.num(at(p.to))}`);
-    const lower = points.slice().reverse().map((p) => `${c.num(p.x)} ${c.num(p.from === 0 ? crossing : at(p.from))}`);
-    c.mark("path", { d: `M ${upper.join(" L ")} L ${lower.join(" L ")} Z`, fill: seriesColor(c, j) }, `${c.path}.data.columns.${s.column}`);
+    // RR-105: a gap (null, core's stackCategoryValues) splits an unstacked area into runs of points; each run stands on the axis at its
+    // own first and last point, as PowerPoint draws a blank with c:dispBlanksAs "gap" (a lone point between gaps is a zero-width run).
+    const runs = [];
+    let run = [];
+    stacks[j].forEach((point, i) => {
+      if (!point) { if (run.length) runs.push(run); run = []; return; }
+      run.push({ x: pointX(i), from: point.from, to: point.to });
+    });
+    if (run.length) runs.push(run);
+    const d = runs.map((points) => {
+      const upper = points.map((p) => `${c.num(p.x)} ${c.num(at(p.to))}`);
+      const lower = points.slice().reverse().map((p) => `${c.num(p.x)} ${c.num(p.from === 0 ? crossing : at(p.from))}`);
+      return `M ${upper.join(" L ")} L ${lower.join(" L ")} Z`;
+    }).join(" ");
+    if (d) c.mark("path", { d, fill: seriesColor(c, j) }, `${c.path}.data.columns.${s.column}`);
   }
-  // RR-35: an area's label sits in the area at each category, halfway between its lower and upper edge.
+  // RR-35: an area's label sits in the area at each category, halfway between its lower and upper edge. A gap has no label (RR-105).
   if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
-    if (!point || c.stackValues?.[j]?.[i] === false) return;
+    if (!point || s.values[i] === null || c.stackValues?.[j]?.[i] === false) return;
     const lowerEdge = point.from === 0 ? crossing : at(point.from);
     drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format, group: s.group }), pointX(i), (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, seriesColor(c, j));
   }));
@@ -981,6 +996,8 @@ function drawReferenceLines(c, lines) {
     const color=line.stroke.color===undefined?c.chartTextColor:c.resolveColorRef(line.stroke.color,c.chartTextColor);
     const width=line.strokeWidth,dash=line.stroke.dash==='dash'?[4*width,3*width]:line.stroke.dash==='dot'?[width,3*width]:undefined;
     if(width>0)c.mark('line',{x1:line.x1,y1:line.y1,x2:line.x2,y2:line.y2,stroke:color,'stroke-width':width,...(dash?{'stroke-dasharray':dash.map(c.num).join(' ')}:{})},c.path+'.referenceLines.'+line.index);
+    // RR-105: a label core could not keep off the marks stands on a plate of the chart's surface (the PPTX export fills its label so).
+    if(line.label!==undefined&&line.labelBox&&line.labelPlate)c.mark('rect',{...line.labelBox,fill:c.surface},c.path+'.referenceLines.'+line.index+'.label');
     if(line.label!==undefined&&line.labelBox)c.text(line.label,line.labelBox,c.path+'.referenceLines.'+line.index+'.label',line.labelAlign??'center',c.labelColor);
   }
 }
@@ -1345,7 +1362,7 @@ function renderRadarChart(c, spec) {
   const area = { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
   const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
   const radius = Math.max(1, Math.min(area.width / 2 - labelWidth, area.height / 2 - c.lineHeight - (wraps ? c.textHeight : 0)));
-  const scale = niceScale(values.length ? Math.min(...values) : 0, values.length ? Math.max(...values) : 1, maxIntervalsFor(radius, c.lineHeight), { endOnTick: true });
+  const scale = (c.radar && composedScale(c.radar.axis)) ?? niceScale(values.length ? Math.min(...values) : 0, values.length ? Math.max(...values) : 1, maxIntervalsFor(radius, c.lineHeight), { endOnTick: true });
   const angle = (i) => -Math.PI / 2 + i / count * Math.PI * 2;
   const rAt = (v) => axisFraction(Math.min(scale.max, Math.max(scale.min, v)), scale) * radius;
   const point = (i, v) => polar(cx, cy, rAt(v), angle(i));

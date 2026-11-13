@@ -139,7 +139,18 @@ function audit(entries, deck, {label = 'deck'} = {}) {
     for (const [cell] of xml.matchAll(/<a:tcPr\b[^>]*>/g)) {
       if (['marL', 'marR', 'marT', 'marB'].some(name => attr(cell, name) === undefined)) fail('inset', path, `table cell without explicit margins: ${cell}`);
     }
+    // RR-105: a chartex chart's mc:Fallback picture is the chart itself (OPF's preview of it): it carries its frame's p:cNvPr (name and
+    // alt text; its id is its own) and is judged as that chart, not as an image block.
+    const chartPictures = new Set();
+    for (const [alternate] of xml.matchAll(/<mc:AlternateContent\b[\s\S]*?<\/mc:AlternateContent>/g)) {
+      const choice = /<mc:Choice\b[\s\S]*?<\/mc:Choice>/.exec(alternate)?.[0] ?? '', picture = /<mc:Fallback>(<p:pic>[\s\S]*?<\/p:pic>)<\/mc:Fallback>/.exec(alternate)?.[1];
+      if (!picture || !/<cx:chart\b/.test(choice)) continue;
+      const cNvPr = value => /<p:cNvPr\b[^>]*?(?:\/>|>[\s\S]*?<\/p:cNvPr>)/.exec(value)?.[0]?.replace(/(<p:cNvPr\b[^>]*\bid=")\d+"/, '$1#"');
+      if (cNvPr(picture) !== cNvPr(choice)) fail('alt', path, `chart fallback picture "${attr(picture, 'name')}" does not carry its frame's name and alt text`);
+      chartPictures.add(picture);
+    }
     for (const [picture] of xml.matchAll(/<p:pic>[\s\S]*?<\/p:pic>/g)) {
+      if (chartPictures.has(picture)) continue;
       const nv = /<p:cNvPr\b[^>]*>/.exec(picture)[0], descr = attr(nv, 'descr');
       if (descr === '') fail('alt', path, `picture "${attr(nv, 'name')}" has an empty descr`);
       if (descr === undefined && !hasImageWithoutAlt(deck)) fail('alt', path, `picture "${attr(nv, 'name')}" has no descr though every image of the deck has alt text`);

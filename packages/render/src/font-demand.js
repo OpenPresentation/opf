@@ -13,6 +13,8 @@ import {
   uncoveredCjkCharacters,
 } from './script-font-pack.js';
 
+// Font loading, script fallback packages and real-metrics passes each take a round; a deck settles in a few.
+const MAX_ENSURE_ROUNDS = 64;
 const key = (face) =>
   String(face.family).toLowerCase() + '\0' + face.weight + '\0' + !!face.italic;
 const packageKey = (pkg, face) => pkg.name + '\0' + face.file;
@@ -82,6 +84,8 @@ export async function createNodeDemand(
   registry.fontFiles = loaded.fontFiles;
   const callerFaceKeys = new Set(registry.describeFaces().map(key));
   const ownedMeasurement = registry.textMeasurement;
+  // The registry's own metrics, before the preparation guard below wraps them: the analysis measures held faces with them (RR-105).
+  const ownedMetrics = { measure: ownedMeasurement.measure, outlineBounds: ownedMeasurement.outlineBounds };
   let ownedMeasure = ownedMeasurement.measure, prepareCoverage;
   const coverage = (text,size,style) => {
     // A caller replacement/accessor keeps its original full measurement and this binding.
@@ -306,6 +310,8 @@ export async function createNodeDemand(
             coverageKey: generation,
             mapFamily,
             preserveChosenFamilies,
+            // RR-105: the real-metrics pass, so every face a real-width branch measures is prepared (see lazy-fonts.js).
+            metrics: { ...ownedMetrics, held },
             coverage(text, size, style) {
               if (
                 heldKeys.has(
@@ -400,7 +406,7 @@ export async function createNodeDemand(
       throw new OPFFontError('invalid-font-measurement-request', 'Measurement requests need text, a positive finite size, and a concrete font style.');
     const added = [],
       addedPackages = new Set();
-    for (;;) {
+    for (let round = 0; ; round++) {
       const plan = context(presentation, renderOptions, initial, mapFamily, preserveChosenFamilies, measurementRequests);
       // Preserve the historical whole-pack CSS order, independently of which styles an edit happens to add first.
       for (const pkg of plan.orderedPackages) remember(pkg.faces);
@@ -438,6 +444,12 @@ export async function createNodeDemand(
       }
       metadata = plan.metadata;
       selections.clear();
+      if (plan.needed.length && round >= MAX_ENSURE_ROUNDS)
+        throw new OPFFontError(
+          'font-preparation-unsettled',
+          'Preparing the fonts of this presentation did not settle: each pass measured faces the one before had not prepared.',
+          { faces: plan.needed.map(publicFace) },
+        );
       if (plan.needed.length) {
         const selected = [];
         for (const face of plan.needed) {

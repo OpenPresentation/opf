@@ -69,6 +69,13 @@ const textOnImage: RuleText = (finding) => {
   const ratio = measuredNumber(finding, "ratio");
   const needed = measuredNumber(finding, "needed");
   const scrim = measuredNumber(finding, "scrimOpacity");
+  const best = measuredNumber(finding, "best");
+  // RR-105: text that stays below the threshold over every color the picture can show.
+  if (best !== undefined)
+    return {
+      message: `This text is too faint on the picture: at most ${num(best, 1)}:1 over any part of it here${needed !== undefined ? `, and ${num(needed)}:1 is needed` : ""}.`,
+      next: `set the background's ${code("tone")} so the text color follows the picture, or give the text a readable color.`,
+    };
   // LH-02: the note that core drew its automatic scrim behind the text.
   if (scrim !== undefined)
     return {
@@ -322,8 +329,8 @@ const shapeOffSlide: RuleText = (finding) => ({
 });
 
 const chartLabelCollision: RuleText = () => ({
-  message: "A reference label meets another label or a data line.",
-  next: "put the label at the other end of its line, shorten it, or give the chart more room.",
+  message: "A reference label meets another label, a data line or a mark at both ends of its line.",
+  next: "shorten the label, give the chart more room, or set the line where a bar or the area leaves room beside it.",
 });
 
 // RR-105: a timeline period shorter than its marker.

@@ -67,24 +67,49 @@ export function assertReferenceExportBudget(series, lines, { key = 'OPF chart', 
   const ownership = { v: 1, key, helpers: [], overlays: [] };
   for (const line of lines) {
     const id = key + ':' + line.index;
-    if (line.native) ownership.helpers.push({ id, index: line.index, ...authoredBudgetRecord(line) });
+    if (line.native) ownership.helpers.push({ id, index: line.index, ...authoredBudgetRecord(line), ...(line.label !== undefined ? { labelAt: line.endpoint, labelPosition: line.labelPosition } : {}) });
     else ownership.overlays.push({ id, index: line.index, value: line.value, axis: line.axis, labelPosition: line.labelPosition, ...(multiAxisOverlays ? {axisIds: {category: 4294967295, value: 4294967295}} : {}), ...authoredBudgetRecord(line), binding: '0000000000000000' });
   }
   // The structural record uses UTF-8 uppercase hex; the binding placeholder has the exact fixed serialized width.
   if (enc.encode(JSON.stringify(ownership)).length * 2 > 4 * 1024 * 1024) refuse('ownership-metadata', 4 * 1024 * 1024);
 }
 
+/** The longest helper name: it is also the embedded workbook's table column name (Excel allows 255 characters). */
+export const REFERENCE_NAME_LIMIT = 200;
+/**
+ * RR-105 (2026-11-13, vetoable): a helper series is named after its reference's label, so a reader that lists it (Keynote's legend,
+ * which ignores c:legendEntry) or Edit Data shows what the line means; an unlabeled reference is "Reference". A multiline label is
+ * joined with single spaces. Names are unique, ignoring case as Excel table columns are, against every data series, the category
+ * heading (`reserved`) and the other helpers: " 2", " 3", ... is appended on a collision. The importer identifies a helper by its
+ * `opf:reference` extension, never by this name. Returns a Map from the reference index to its name.
+ */
+export function referenceHelperNames(series, lines, reserved = []) {
+  const taken = new Set([...series.map((entry) => entry?.name), ...reserved].filter((name) => typeof name === 'string').map((name) => name.toLowerCase()));
+  const cut = (text, room) => Array.from(text).slice(0, room).join('').trimEnd();
+  const names = new Map();
+  for (const line of lines.filter((l) => l.native)) {
+    const text = line.label === undefined ? '' : String(line.label).split(/\r\n|\r|\n/).map((part) => part.trim()).filter(Boolean).join(' ').replace(/\s+/g, ' ');
+    const base = cut(text || 'Reference', REFERENCE_NAME_LIMIT);
+    let name = base;
+    for (let n = 2; taken.has(name.toLowerCase()); n++) name = `${cut(base, REFERENCE_NAME_LIMIT - String(n).length - 1)} ${n}`;
+    taken.add(name.toLowerCase());
+    names.set(line.index, name);
+  }
+  return names;
+}
+
 /** Add helpers through the ordinary vendor writer, including their editable workbook columns. */
 export function referenceChartTypes(base, series, lines, options) {
   assertReferenceExportBudget(series, lines, options);
   const types = [...base];
+  const names = referenceHelperNames(series, lines, options?.reserved);
   for (const axis of ['value', 'secondary']) {
     const refs = lines.filter((l) => l.native && l.axis === axis);
     if (refs.length)
       types.push({
         type: 'line',
         data: refs.map((l) => ({
-          name: `OPF reference ${l.index + 1}`,
+          name: names.get(l.index),
           labels: [...series[0].labels],
           values: series[0].labels.map(() => l.value),
         })),
@@ -113,7 +138,8 @@ export function applyReferenceSeries(xml, info, binding) {
     const color = hiddenAware(resolveExportColor(line.stroke.color, { ...info.context, fallback: info.color }), line);
     const hex = color.slice(0, 6),
       alpha = color.length === 8 ? `<a:alpha val="${Math.round((parseInt(color.slice(6), 16) / 255) * 100000)}"/>` : '';
-    helpers.push({ id, index: line.index, ...authoredRecord(line, color) });
+    // RR-105: core may move a label to the other end of its line (off the marks); the record keeps the authored end for the import.
+    helpers.push({ id, index: line.index, ...authoredRecord(line, color), ...(line.label !== undefined ? { labelAt: line.endpoint, labelPosition: line.labelPosition } : {}) });
     const paint = `<c:spPr><a:ln w="${Math.round(line.strokeWidth * 9525)}" cap="flat"><a:solidFill><a:srgbClr val="${hex}">${alpha}</a:srgbClr></a:solidFill><a:prstDash val="${line.stroke.dash}"/></a:ln></c:spPr>`;
     let next = ser
       .replace(/<c:spPr>[\s\S]*?<\/c:spPr>/g, '')
@@ -125,7 +151,7 @@ export function applyReferenceSeries(xml, info, binding) {
     const label =
       line.label === undefined
         ? ''
-        : `<c:dLbl><c:idx val="${line.endpoint}"/><c:tx>${nativeLabelXml(line.label, info, binding?.lang)}</c:tx><c:dLblPos val="${line.labelSide === 'below' ? 'b' : 't'}"/><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/><c:showPercent val="0"/><c:showBubbleSize val="0"/></c:dLbl>`;
+        : `<c:dLbl><c:idx val="${line.endpoint}"/><c:tx>${nativeLabelXml(line.label, info, binding?.lang)}</c:tx>${line.labelPlate && info.surface ? `<c:spPr><a:solidFill><a:srgbClr val="${info.surface}"/></a:solidFill></c:spPr>` : ""}<c:dLblPos val="${line.labelSide === 'below' ? 'b' : 't'}"/><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/><c:showPercent val="0"/><c:showBubbleSize val="0"/></c:dLbl>`;
     // CT_DLbls: the c:dLbl entries, then either c:delete or the show flags, never both. A labeled helper shows only its one point's text;
     // an unlabeled one deletes its labels. Every show flag is written: CT_Boolean defaults to true, so PowerPoint reads an absent
     // c:showPercent or c:showBubbleSize as on, and Keynote refuses a line series that shows percentages or bubble sizes.
@@ -421,7 +447,7 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report, pars
           index: h.index,
           value: Number(values[0]),
           axis: axisName,
-          ...(labelText?.trim() ? { label: labelText, labelPosition: idx === 0 ? 'start' : 'end' } : {}),
+          ...(labelText?.trim() ? { label: labelText, labelPosition: h.labelAt === idx && ['start', 'end'].includes(h.labelPosition) ? h.labelPosition : idx === 0 ? 'start' : 'end' } : {}),
           stroke: paint,
         },
         h,
@@ -446,7 +472,7 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report, pars
   return result;
 }
 /** Fallbacks use full-plot native shapes. They cannot track independent chart moves or edits. */
-export function addReferenceOverlays(slide, lines, { key, tags, context, color, labelColor = color, font, size }) {
+export function addReferenceOverlays(slide, lines, { key, tags, context, color, labelColor = color, font, size, surface }) {
   for (const l of lines.filter((l) => !l.native)) {
     const id = `${key}:${l.index}`,
       name = id + ' line',
@@ -482,6 +508,8 @@ export function addReferenceOverlays(slide, lines, { key, tags, context, color, 
         wrap: false,
         fit: 'none',
         align: l.labelAlign ?? 'center',
+        // RR-105: a label core could not keep off the marks stands on a plate of the chart's surface, as in the preview.
+        ...(l.labelPlate && surface ? { fill: { color: surface } } : {}),
         valign: 'middle',
       });
       tags.set(n, { v: 1, id, key, role: 'label' });

@@ -6,7 +6,6 @@ import { CHART, type ExplainDetail, ex } from "./finding-text-explain-util.js";
 const WHITE = { background: { type: "solid", color: "#FFFFFF" } };
 const ROADMAP = { name: "Roadmap", regions: [{ name: "title" }, { direction: "row", regions: [{ name: "timeline", accepts: ["timeline"], max: 1 }, { name: "notes", accepts: ["text", "list"], flow: "column" }] }] };
 const TIMELINE = { timeline: { events: [{ when: "Q1", what: "Pilot" }, { when: "Q2", what: "Launch" }] } };
-const PERSON = (n: number) => ({ blocks: [{ image: { src: `https://example.com/${n}.png`, alt: `Person ${n}` } }, { text: `Person ${n}` }], composition: { mode: "column" } });
 const SERIES = (count: number) => ({ columns: ["Quarter", ...Array.from({ length: count }, (_, i) => `S${i + 1}`)], rows: [["Q1", ...Array.from({ length: count }, (_, i) => i + 1)]] });
 const LONG_ITEMS = [
   "Enterprise renewals slipped by three weeks in the northern region after the pricing change",
@@ -48,10 +47,11 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { slides: [{ title: "Results", text: "Q1" }, { title: "Results", text: "Q2" }] },
     { slides: [{ title: "Results: Q1", text: "Q1" }, { title: "Results: Q2", text: "Q2" }] },
   ),
+  // RR-105: cards side by side (a picture over a name) read card by card, so the example is a layout that draws the body above the title.
   "opf/reading-order": ex(
     "Reorder or regroup the blocks so the order they are read in follows the order they appear in, or choose a layout that puts the title first.",
-    { title: "Team", composition: { mode: "row" }, blocks: [PERSON(1), PERSON(2)] },
-    { title: "Team", composition: { mode: "column" }, blocks: [PERSON(1), PERSON(2)] },
+    { catalogs: { custom: { layouts: { upside: { name: "Upside", direction: "column", regions: [{ name: "body", accepts: ["text"], role: "primary" }, { name: "title" }] } } } }, slides: [{ layout: "upside", title: "Results", text: "Revenue grew in every region." }] },
+    { catalogs: { custom: { layouts: { upside: { name: "Upside", direction: "column", regions: [{ name: "title" }, { name: "body", accepts: ["text"], role: "primary" }] } } } }, slides: [{ layout: "upside", title: "Results", text: "Revenue grew in every region." }] },
   ),
   "opf/link-text": ex(
     "Make the link text say where the link goes, for example the name of the page or file.",
@@ -124,9 +124,9 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Plan", text: "Three regions go live in March.", shapes: [{ shape: "rect", text: "Draft", x: 0.7, y: 0.1, width: 0.2, height: 0.1 }] },
   ),
   "opf/chart-label-collision": ex(
-    "Give each reference its own value or put one label at the other end of its line with `labelPosition`, so no two labels share a place.",
-    { title: "Results", chart: { type: "line", data: { columns: ["Quarter", "Actual"], rows: [["Q1", 10], ["Q2", 20], ["Q3", 30]] }, referenceLines: [{ value: 20, label: "Plan" }, { value: 20, label: "Plan" }, { value: 20, label: "Plan" }] } },
-    { title: "Results", chart: { type: "line", data: { columns: ["Quarter", "Actual"], rows: [["Q1", 10], ["Q2", 20], ["Q3", 30]] }, referenceLines: [{ value: 25, label: "Plan" }] } },
+    "Set the line where a bar or the area leaves room beside it at one of its ends, or give each reference its own value, so its label has a free place.",
+    { title: "Results", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12], ["Q2", 18], ["Q3", 22], ["Q4", 26]] }, referenceLines: [{ value: 6, label: "Floor" }] } },
+    { title: "Results", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12], ["Q2", 18], ["Q3", 22], ["Q4", 26]] }, referenceLines: [{ value: 15, label: "Floor" }] } },
   ),
   "opf/timeline-period-short": ex(
     "Give the timeline more room, or make its shortest period longer relative to the others.",

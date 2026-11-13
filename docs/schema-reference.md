@@ -602,7 +602,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `tone` | no | `enum:dark \| light` | Whether the background is dark or light, which picks the color map (dark1 or light1) so text, lines and neutrals read on it. Without a tone a picture or gradient takes the deck's variant, else counts as light. |
+| `tone` | no | `enum:dark \| light` | Whether the background is dark or light, which picks the color map (dark1 or light1) so text, lines and neutrals read on it. Without a tone a picture takes the tone its recolor, opacity and overlay imply (a duotone in... |
 | `type` | yes | `const:"image"` | Picture background. |
 | `src` | yes | `string` | Source for the background image: an 'asset:<id>' reference, HTTPS URL, data URI, or a relative path resolved against the OPF file location. |
 | `alt` | no | `string` | Alternative text. A background with alt is meaningful: PowerPoint export draws it as a full-slide picture at the back that carries the text, so screen readers see it. Without alt it is decorative and exports as the na... |

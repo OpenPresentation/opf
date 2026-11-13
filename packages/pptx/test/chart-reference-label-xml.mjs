@@ -42,7 +42,7 @@ async function helpers(deck) {
   fonts.dispose?.();
   const zip = unzipSync(new Uint8Array(bytes));
   const series = Object.keys(zip).filter(path => /^ppt\/charts\/chart\d+\.xml$/.test(path)).sort().flatMap(path =>
-    [...strFromU8(zip[path]).matchAll(/<c:ser>([\s\S]*?)<\/c:ser>/g)].map(([, body]) => ({path, body})).filter(({body}) => body.includes('OPF reference ')));
+    [...strFromU8(zip[path]).matchAll(/<c:ser>([\s\S]*?)<\/c:ser>/g)].map(([, body]) => ({path, body})).filter(({body}) => body.includes('urn:openpresentation:chart-references:v1')));
   return {bytes, series};
 }
 

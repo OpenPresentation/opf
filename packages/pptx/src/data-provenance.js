@@ -18,7 +18,7 @@ import {chartUsesDataFields, isDatasetRef, fromExcelNumberFormat, resolveTableDa
 //     chart  {v: 1, kind: 'chart', data, mapping?, highlight?, dataset?: hash, evidence: [hash]}   `data` is the authored
 //            chart.data (a dataset reference, or inline columns with DataColumn objects and `source`); `evidence`
 //            hashes the native caches (series names, categories, values and format codes) of the chart part(s) the frame
-//            shows (the chartex part and its classic fallback); `dataset` hashes the referenced dataset, so a slide
+//            shows (the chartex part, and its classic fallback when it has no fallback picture); `dataset` hashes the referenced dataset, so a slide
 //            pasted into a deck whose dataset of the same id holds other data keeps its values inline. `highlight` (FA-14) is
 //            the authored chart.highlight: the native chart carries only the accent and muted colours it produced, which no
 //            exact inference turns back into series and category names, and a chart with only a highlight records its inline `data`.
@@ -290,7 +290,7 @@ export function attachDataProvenance(entries, {records, paths = new Map(), datas
     const named = frames.map(frame => frame.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1]).filter(name => records.has(name));
     if (!named.length) continue;
     const relationships = parseRelationships(entries, path);
-    // Evidence first: every chart part a frame of that name shows (a chartex choice and its classic fallback).
+    // Evidence first: every chart part a frame of that name shows (a chartex choice and, without a fallback picture, its classic fallback).
     const evidence = new Map();
     for (const frame of frames) {
       const name = frame.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
@@ -319,7 +319,8 @@ export function attachDataProvenance(entries, {records, paths = new Map(), datas
       rels = rels.replace('</Relationships>', `<Relationship Id="${id}" Type="${REL_TAGS}" Target="../tags/opfData${count}.xml"/></Relationships>`);
       ids.set(name, id);
     }
-    xml = xml.replace(/<p:graphicFrame>[\s\S]*?<\/p:graphicFrame>/g, frame => {
+    // RR-105: a chartex chart's fallback picture is the same object as its frame (src/chartex.js attachChartexFallbacks) and shares its tag.
+    xml = xml.replace(/<p:graphicFrame>[\s\S]*?<\/p:graphicFrame>|<mc:Fallback><p:pic>[\s\S]*?<\/p:pic>/g, frame => {
       const id = ids.get(frame.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1]);
       if (!id) return frame;
       const list = `<p:custDataLst><p:tags r:id="${id}"/></p:custDataLst>`;

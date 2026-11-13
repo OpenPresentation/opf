@@ -57,7 +57,8 @@ test('native span matches category centers; horizontal and singleton references 
  const single=place({...c,data:{columns:data.columns,rows:[data.rows[0]]}});assert.equal(single.lines[0].native,false);assert.equal(single.lines[0].x1,180);assert.equal(single.lines[0].x2,960);assert.equal(single.lines[0].labelAlign,'right');assert.equal(single.lines[1].labelAlign,'left');assert.ok(single.lines.every(r=>r.labelBox.x>=box.x&&r.labelBox.x+r.labelBox.width<=box.x+box.width));
 });
 test('labels use opposite adjacent side before diagnosing unresolved collisions, without dropping text or numeric lines',()=>{
- const c=chart({referenceLines:Array.from({length:3},()=>({value:20,label:'Same'}))});const result=place(c);assert.equal(result.lines[0].labelSide,'above');assert.equal(result.lines[1].labelSide,'below');assert.equal(result.lines[2].labelSide,'above');assert.ok(result.diagnostics.some(f=>f.code==='chart-reference-label-collision'));assert.equal(result.lines.length,3);assert.equal(new Set(result.lines.map(r=>r.y1)).size,1);
+ // RR-105: above and below at the authored end, then above and below at the other end, before a collision is diagnosed.
+ const c=chart({referenceLines:Array.from({length:5},()=>({value:20,label:'Same'}))});const result=place(c);assert.deepEqual(result.lines.map(l=>l.labelSide),['above','below','above','below','above']);assert.deepEqual(result.lines.map(l=>l.endpoint),[2,2,0,0,2]);assert.equal(result.diagnostics.filter(f=>f.code==='chart-reference-label-collision').length,1);assert.equal(result.diagnostics.find(f=>f.code==='chart-reference-label-collision').index,4);assert.equal(result.lines.length,5);assert.equal(new Set(result.lines.map(r=>r.y1)).size,1);
  const long=place(chart({referenceLines:[{value:20,label:'Long text '.repeat(200)}]}));assert.equal(long.lines[0].label.length,2000);assert.ok(long.diagnostics.some(f=>f.code==='chart-reference-label-overflow'));
 });
 test('titles/subtitles never synthesize lines or period bands in any language',()=>{
@@ -123,4 +124,24 @@ test('shared axis reconstruction keeps ordinary ticks and bounds overflow-sized 
  assert.deepEqual(chartAxisScale({min:0,max:45,majorUnit:10}),{min:0,max:45,step:10,ticks:[0,10,20,30,40]});
  const scale=chartAxisScale({min:-Number.MAX_VALUE,max:Number.MAX_VALUE,majorUnit:1e308});assert.equal(scale.ticks.length,4);assert.ok(scale.ticks.every(Number.isFinite));assert.ok(scale.ticks.every((v,i)=>i===0||v>scale.ticks[i-1]));
  assert.equal(chartAxisScale({min:0,max:2000,majorUnit:1}),undefined);assert.equal(chartAxisScale({min:0,max:1,majorUnit:0}),undefined);assert.equal(chartAxisScale({min:0,max:Infinity,majorUnit:1}),undefined);
+});
+
+test('RR-105: a label leaves a bar or an area for a free place at the other end, or stands on a plate with a collision finding',()=>{
+ const quarters={columns:['Quarter','Revenue'],rows:[['Q1',12],['Q2',18],['Q3',22],['Q4',26]]};
+ for(const type of ['column','area','combo']){
+  const c=chart({type,data:type==='combo'?{columns:['Quarter','Revenue','Margin'],rows:[['Q1',12,10],['Q2',18,14],['Q3',22,17],['Q4',26,21]]}:quarters,...(type==='combo'?{line:['Margin']}:{}),referenceLines:[{value:15,label:'Floor'}]});
+  const free=place(c,{chartType:type});
+  // The authored end (Q4) is inside the tallest mark above and below the line; Q1 (12) leaves the place above the line free.
+  assert.equal(free.lines[0].endpoint,0,type);assert.equal(free.lines[0].labelSide,'above',type);assert.equal(free.lines[0].labelPlate,undefined,type);assert.deepEqual(free.diagnostics,[],type);
+  assert.equal(free.lines[0].labelPosition,'end','the authored end is kept on the reference');
+ }
+ for(const type of ['column','area']){
+  const blocked=place(chart({type,data:quarters,referenceLines:[{value:6,label:'Floor'}]}),{chartType:type});
+  assert.equal(blocked.lines[0].endpoint,3,type+': the preferred place is kept');assert.equal(blocked.lines[0].labelSide,'above',type);assert.equal(blocked.lines[0].labelPlate,true,type);
+  assert.deepEqual(blocked.diagnostics.map(d=>d.code),['chart-reference-label-collision'],type);
+ }
+ const bars=composeSlide({title:'Target',chart:chart({type:'bar',data:quarters,referenceLines:[{value:15,label:'Target'}]})},{width:1280,height:720}).items.find(i=>i.field==='chart').chart.layer.references;
+ assert.equal(bars.lines[0].labelPlate,undefined,'a bar chart label at the plot end beside the line clears the bars');assert.deepEqual(bars.diagnostics,[]);
+ const composed=composeSlide({title:'Floor line',chart:chart({type:'column',data:quarters,referenceLines:[{value:6,label:'Floor'}]})},{width:1280,height:720});
+ assert.ok(composed.diagnostics.some(d=>d.code==='chart-label-collision'&&d.path.endsWith('.referenceLines.0.label')),JSON.stringify(composed.diagnostics));
 });

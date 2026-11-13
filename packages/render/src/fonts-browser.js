@@ -209,6 +209,7 @@ async function loadRegistry(entries, options = {}, startup = {}) {
   // Face level (FF-41): the faces the document draws, resolved as the registry resolves them with every vendored face loaded.
   // A document that does not resolve throws what `toSvg` throws for it.
   const neededLazy = (presentation, callOptions) => lazyFacesNeeded(presentation, renderOptionsFor(callOptions), { lazy, held: registry.describeFaces(callOptions?.preserveChosenFamilies||callOptions?.measurementRequests?.length?{selection:true}:undefined), loaded: lazyLoaded, policy, aliases: aliasTargets, fallbackFamily: options.fallbackFamily, analysis: fontAnalysis,
+    metrics: registry.textMeasurement,
     mapFamily:callOptions?.mapFamily,preserveChosenFamilies:callOptions?.preserveChosenFamilies,measurementRequests:callOptions?.measurementRequests });
   Object.defineProperty(registry,'fontNames',{value:lazyFontNames({lazy,describeFaces:registry.describeFaces,generation:()=>registry.facesGeneration,policy,aliases:aliasTargets,fallbackFamily:options.fallbackFamily})});
   const lazyBaseUrl = () => {
@@ -282,7 +283,8 @@ async function loadRegistry(entries, options = {}, startup = {}) {
   return Object.assign(registry, { dispose });
 }
 
-const MAX_ENSURE_ROUNDS = 4;
+// Lazy faces, script packages and the analysis's real-metrics passes (RR-105) each take a round; a deck settles in a few.
+const MAX_ENSURE_ROUNDS = 16, SCRIPT_ROUNDS = 4;
 
 /**
  * The fonts handle for a browser: the faces you list (`faces`, each `{ url | data, family, weight, italic, sha256 }`, fetched and
@@ -368,11 +370,16 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
       await ensureIcons(presentation, { catalogs: callOptions.catalogs ?? options.renderOptions?.catalogs });
       const lazy = [], scripts = [];
       let uncovered = [];
-      for (let round = 0; round < MAX_ENSURE_ROUNDS; round++) {
-        const needLazy = registry.pendingLazyFonts(presentation, callOptions).length > 0, needScripts = registry.pendingScripts(presentation, callOptions).length > 0;
-        if (!needLazy && !needScripts) break;
+      for (let round = 0; ; round++) {
+        const needLazy = registry.pendingLazyFonts(presentation, callOptions), needScripts = registry.pendingScripts(presentation, callOptions).length > 0;
+        if (!needLazy.length && !needScripts) break;
+        // Script packages that cannot settle keep the earlier bound of four rounds; a vendored face real metrics still ask for is an error.
+        if (!needLazy.length && round >= SCRIPT_ROUNDS) break;
+        if (round >= MAX_ENSURE_ROUNDS) {
+          throw new OPFFontError("font-preparation-unsettled", "Preparing the fonts of this presentation did not settle: each pass measured faces the one before had not prepared.", { faces: needLazy.map(({ family, weight, italic, file }) => ({ family, weight, italic, file })) });
+        }
         callOptions.signal?.throwIfAborted?.();
-        if (needLazy) lazy.push(...(await registry.ensureLazyFonts(presentation, callOptions)));
+        if (needLazy.length) lazy.push(...(await registry.ensureLazyFonts(presentation, callOptions)));
         if (needScripts) { const result = await registry.ensureScripts(presentation, callOptions); scripts.push(...result.loaded); uncovered = result.uncovered; }
       }
       for(const request of measurements)if(request.text!=='')registry.textMeasurement.measure(request.text,request.size,request.style);

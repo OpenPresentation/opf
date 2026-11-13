@@ -213,14 +213,14 @@ export const onImageRule = rule(
 	'text-on-image',
 	'accessibility',
 	'info',
-	'Text sits on a background picture: a note when core draws its automatic scrim behind it, otherwise its contrast cannot be guaranteed.',
-	'Contrast over a photograph depends on the photograph. Core draws an automatic scrim behind text on a picture background that has no overlay, at the lowest opacity that keeps it at 4.5:1 over any picture, and this note names it. With an edge-band overlay, or the scrim turned off (overlay: false), only a full-frame overlay that guarantees readability for every possible image certifies the result from the document.',
+	'Text sits on a background picture: a note when core draws its automatic scrim behind it, a warning when the text is too faint over every color the picture can show, otherwise its contrast cannot be guaranteed.',
+	'Contrast over a photograph depends on the photograph. Core draws an automatic scrim behind text on a picture background that has no overlay, at the lowest opacity that keeps it at 4.5:1 over any picture, and this note names it. With an edge-band overlay, or the scrim turned off (overlay: false), only a full-frame overlay that guarantees readability for every possible image certifies the result from the document. Text that stays below the threshold over every color the picture can show (a duotone in dark colors under dark text, for one) is a warning: it is low contrast whatever the picture.',
 	{
 		standard: 'WCAG 2.2 SC 1.4.3 Contrast (Minimum), level AA',
 		thresholds: ['contrastNormal', 'contrastLarge'],
 		cost: 'composition',
 		approximations:
-			'Core reads picture pixels only through a host that measures them (ComposeSlideOptions.pictureLuminance). Otherwise the picture is bounded by a gray ramp from black to white, composited through the image opacity and a full-frame design.background overlay or the automatic scrim over the text it covers; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.',
+			'Core reads picture pixels only through a host that measures them (ComposeSlideOptions.pictureLuminance). Otherwise the picture is bounded by a gray ramp from black to white, composited through the image opacity and a full-frame design.background overlay or the automatic scrim over the text it covers; the text passes only when every step of that ramp passes. A duotone recolor bounds the ramp to its own two colors, and an edge-banded overlay counts over the text it reaches, beside the uncovered picture where the text reaches past it.',
 	},
 );
 export const altRule = rule(
@@ -232,7 +232,7 @@ export const altRule = rule(
 	{
 		standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A',
 		approximations:
-			'Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, organization logos (each shape and background), header/footer images (a logo reference such as var:organization.logo.icon is checked on the organization), quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.',
+			'Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, organization logos (each shape and background), header/footer images (a logo reference such as var:organization.logo.icon is checked on the organization), quote photos and speaker photos, following asset: references to the assets registry and image variables (var:<id>, RR-105) to their value (a template\'s unfilled variable to its example). Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.',
 	},
 );
 export const poorAltRule = rule(
@@ -269,7 +269,7 @@ export const readingOrderRule = rule(
 		standard: 'WCAG 2.2 SC 1.3.2 Meaningful Sequence, level A (PowerPoint: "Check reading order")',
 		cost: 'composition',
 		approximations:
-			'Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. Headings are expected first. Content drawn entirely above the title, over the columns of the title, is reported; content in a column beside the title is read after it. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.',
+			'Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. A block is one unit (RR-105): blocks are ordered by the boxes that hold them, and a group\'s own items are read, in their own visual order, before the next block, so cards side by side (a picture over a name) read card by card. Headings are expected first. Content drawn entirely above the title, over the columns of the title, is reported; content in a column beside the title is read after it. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.',
 	},
 );
 export const linkRule = rule(
@@ -419,8 +419,8 @@ export const chartLabelCollisionRule = rule(
 	'chart-label-collision',
 	'layout',
 	'warning',
-	'A reference label meets another label or a data line.',
-	'A reference label is tried above and below its line (beside it on a bar chart). When both places meet another reference label or a data line, it is drawn at the first and reported; its text and value are kept.',
+	'A reference label meets another label, a data line or a mark at both ends of its line.',
+	'A reference label is tried above and below its line (beside it on a bar chart), at its own end and then at the other end of the line. When all four places meet another reference label, a data line, a bar or an area, it is drawn at the first and reported; its text and value are kept, and on a bar or an area it stands on a plate of the chart background.',
 	{ cost: 'composition' },
 );
 export const timelinePeriodShortRule = rule(

@@ -30,17 +30,23 @@ const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n'
 // <c:delete val="1"/>), which removes 9 bytes from the two chart parts and changes nothing else. LH-110 (v0.34.0) then changed the same
 // two parts again: a labeled helper's data labels state every show flag (c:showPercent and c:showBubbleSize 0, c:showLeaderLines 0), and
 // a line chart with reference helpers keeps the vertical axis layout (c:catAx axPos b, c:valAx axPos l), which Keynote needs to open
-// the file. The native route still admits only the measured archive (retained as
+// the file. RR-105 (Keynote fix 2, 2026-11-12, supervisor decision for the owner, vetoable) names each helper series after its reference's label instead of "OPF reference N"
+// (the series name cache, the workbook header cell and its table column), so Keynote's legend, which keeps helpers, reads the label; so the
+// two embedded workbooks differ from the measured archive too, only in the parts that hold that header (asserted below).
+// RR-105 (chart fixes, 2026-11-12) changed the two chart parts once more: line and area charts write c:dispBlanksAs "gap" (a missing
+// value is a gap, as the preview draws it), and a reference label keeps clear of the marks, with a filled plate when every place is taken.
+// The native route still admits only the measured archive (retained as
 // test-fixtures/reference-name/reference-native-lines.pptx, which the comparison contract below runs on); measuring the current export
 // needs a new sealed input.
-const CURRENT_EXPORT=Object.freeze({bytes:129026,sha256:'9b05b9b1b473503893869effb4dd33ad56845dd06fa8ea29e685d1c0e43bdea1'});
+const CURRENT_EXPORT=Object.freeze({bytes:129035,sha256:'6acdda5035661565792ab0984ee9d039370d5ca39e929fd53dedea4beeeef71f'});
 let current;
 function currentFixture(){current??=(async()=>{
  const deck=structuredClone(source),renderOptions={catalogs:[gallery]},fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck,renderOptions});await fonts.ensure(deck,{renderOptions});
  const exported=Buffer.from(await toPptx(deck,{catalogs:[gallery],seed:1,timestamp:'2026-01-01T00:00:00Z',date:'2026-10-10',provenance:'full',fonts}));assert.deepEqual(deck,source);assert.deepEqual({bytes:exported.length,sha256:digest(exported)},CURRENT_EXPORT,'The maintained export of the reference deck changed: review the change, then update CURRENT_EXPORT');
  const input=fs.readFileSync(new URL('./test-fixtures/reference-name/reference-native-lines.pptx',import.meta.url));assert.deepEqual({bytes:input.length,sha256:digest(input)},REFERENCE_NAME_INPUT,'The retained archive is the one PowerPoint was measured with');
  const sealedParts=deps.unzipSync(input),exportedParts=deps.unzipSync(exported);assert.deepEqual(Object.keys(exportedParts).sort(),Object.keys(sealedParts).sort());
- assert.deepEqual(Object.keys(sealedParts).filter(name=>Buffer.compare(Buffer.from(sealedParts[name]),Buffer.from(exportedParts[name]))!==0).sort(),['ppt/charts/chart1.xml','ppt/charts/chart2.xml'],'The current export differs from the measured archive only in the two chart parts');
+ assert.deepEqual(Object.keys(sealedParts).filter(name=>Buffer.compare(Buffer.from(sealedParts[name]),Buffer.from(exportedParts[name]))!==0).sort(),['ppt/charts/chart1.xml','ppt/charts/chart2.xml','ppt/embeddings/Microsoft_Excel_Worksheet1.xlsx','ppt/embeddings/Microsoft_Excel_Worksheet2.xlsx'],'The current export differs from the measured archive only in the two chart parts and their workbooks');
+ for(const workbook of ['ppt/embeddings/Microsoft_Excel_Worksheet1.xlsx','ppt/embeddings/Microsoft_Excel_Worksheet2.xlsx']){const sealed=deps.unzipSync(sealedParts[workbook]),current=deps.unzipSync(exportedParts[workbook]);assert.deepEqual(Object.keys(current).sort(),Object.keys(sealed).sort(),workbook+': the same parts');const changed=Object.keys(sealed).filter(name=>Buffer.compare(Buffer.from(sealed[name]),Buffer.from(current[name]))!==0).sort();assert.ok(changed.includes('xl/tables/table1.xml')&&changed.every(name=>['xl/sharedStrings.xml','xl/worksheets/sheet1.xml','xl/tables/table1.xml'].includes(name)),workbook+': only the parts holding the helper header differ: '+changed.join(', '));const strings=bytes=>[...Buffer.from(bytes).toString('utf8').matchAll(/<t(?:\s[^>]*)?>([^<]*)<\/t>|\bname="([^"]*)"/g)].map(m=>m[1]??m[2]);for(const name of changed){const before=strings(sealed[name]),after=strings(current[name]);assert.equal(after.length,before.length,workbook+' '+name+': the same number of strings');before.forEach((text,i)=>{if(text!==after[i])assert.match(text,/^OPF reference \d+$/,workbook+' '+name+': only a helper name changes ('+text+' -> '+after[i]+')');});}}
  const before=tx(input,text=>text.replace(/>[ \t\r\n]+</gu,'><')),edited=mutate(tx(before,()=>'<c:tx><c:v>Actual edited</c:v></c:tx>'),'docProps/core.xml',text=>once(text,'<cp:revision>1</cp:revision>','<cp:revision>2</cp:revision>'));return{input,before,edited,reopened:edited};
 })();return current;}
 function completion(output,phaseSource=input,snapshotArchives={before,edited,reopened:edited}){

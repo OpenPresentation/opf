@@ -25,6 +25,7 @@ import {
 	type Rec,
 	backdropColors,
 	colorDifference,
+	contrastRatio,
 	lightnessDifference,
 	readableColor,
 	rec,
@@ -59,6 +60,7 @@ const isLarge = (sizePx: number, bold: boolean) => {
 };
 
 const within = (box: LayoutBox, area: LayoutBox) => box.x >= area.x - 0.5 && box.y >= area.y - 0.5 && box.x + box.width <= area.x + area.width + 0.5 && box.y + box.height <= area.y + area.height + 0.5;
+const overlaps = (box: LayoutBox, area: LayoutBox) => box.x < area.x + area.width && area.x < box.x + box.width && box.y < area.y + area.height && area.y < box.y + box.height;
 
 function slideBackdrop(context: RuleSlide, box?: { x: number; y: number; width: number; height: number }): BackdropSample {
 	const { design, composition } = context;
@@ -70,7 +72,11 @@ function slideBackdrop(context: RuleSlide, box?: { x: number; y: number; width: 
 		const overlay = image.overlay && !image.overlay.edge
 			? { color: resolveTextColor(image.overlay.color, design, '#000000') ?? '#000000', opacity: image.overlay.opacity }
 			: scrim ? { color: scrim.color, opacity: scrim.opacity } : undefined;
-		return backdropColors({ kind: 'image', opacity: image.opacity ?? 1, base: '#FFFFFF' }, box, design.dimensions, { overlay, ...(scrim?.grays ? { grays: scrim.grays } : {}) });
+		// RR-105: a duotone bounds the pixels to its own ramp, and an edge band the text reaches counts over the part it covers.
+		const duotone = image.recolor?.type === 'duotone' ? ([resolveTextColor(image.recolor.dark, design, '#000000') ?? '#000000', resolveTextColor(image.recolor.light, design, '#FFFFFF') ?? '#FFFFFF'] as const) : undefined;
+		const edge = image.overlay?.edge ? image.overlay : undefined, reach = box ?? { x: 0, y: 0, ...design.dimensions };
+		const band = edge && overlaps(reach, edge.box) ? { color: resolveTextColor(edge.color, design, '#000000') ?? '#000000', opacity: edge.opacity, whole: within(reach, edge.box) } : undefined;
+		return backdropColors({ kind: 'image', opacity: image.opacity ?? 1, base: '#FFFFFF' }, box, design.dimensions, { overlay, ...(scrim?.grays ? { grays: scrim.grays } : {}), ...(duotone ? { duotone } : {}), ...(band ? { band } : {}) });
 	}
 	return backdropColors(design.backdrop, box, design.dimensions);
 }
@@ -177,6 +183,20 @@ const contrastRules: ValidationRule[] = [
 					const worst = worstContrast(sample.color, sample.backdrop);
 					if (worst.ratio >= needed) continue;
 					if (sample.backdrop.unknown) {
+						// RR-105: text that stays below the threshold over every color the picture can show here is low contrast for certain:
+						// a warning of its own for each such text, whatever the picture.
+						const best = Math.max(...sample.backdrop.colors.map((color) => contrastRatio(sample.color, color)));
+						if (best < needed) {
+							context.report(onImageRule, {
+								path: sample.path,
+								slide,
+								severity: 'warning',
+								message: `${sample.label} colour ${sample.color} is too faint on this background picture: over every colour the picture can show here its contrast is at most ${best.toFixed(1)}:1, and ${needed}:1 is needed at this size.`,
+								help: 'Set the background\'s tone (dark or light) so the text color follows the picture, give the text a readable color, or make the overlay strong enough for the text to read.',
+								measured: { ratio: round(worst.ratio), best: round(best), needed, textColor: sample.color },
+							});
+							continue;
+						}
 						if (!imageReported.done) {
 							imageReported.done = true;
 							context.report(onImageRule, {
@@ -265,7 +285,7 @@ const altRules: ValidationRule[] = [
 				for (const ref of assetRefs(context.document, slide.slide, slide.path, index === 0)) {
 					if (seen.has(ref.path)) continue;
 					seen.add(ref.path);
-					let alt = altOf(ref.value, context.document.assets);
+					let alt = altOf(ref.value, context.document.assets, context.document.variables, context.document.template === true);
 					if (ref.kind === 'video' && !alt) alt = typeof rec(ref.value).title === 'string' ? rec(ref.value).title : undefined;
 					if (alt !== undefined && alt.trim() !== '') continue;
 					if (alt === '') continue; // explicit decorative opt-out
@@ -290,7 +310,7 @@ const altRules: ValidationRule[] = [
 				for (const ref of assetRefs(context.document, slide.slide, slide.path, index === 0)) {
 					if (seen.has(ref.path)) continue;
 					seen.add(ref.path);
-					const alt = altOf(ref.value, context.document.assets)?.trim();
+					const alt = altOf(ref.value, context.document.assets, context.document.variables, context.document.template === true)?.trim();
 					if (!alt) continue;
 					const source = sourceOfAsset(ref.value);
 					const problem =
@@ -430,7 +450,31 @@ function bindingOrder(items: readonly { path: string; region?: string }[], regio
 		.sort((a, b) => a.region - b.region || a.block - b.block || a.index - b.index)
 		.map((entry) => entry.item.path);
 }
-function visualOrder(items: readonly { path: string; box: { x: number; y: number; width: number; height: number } }[], rtl: boolean): string[] {
+type Placed = { path: string; box: { x: number; y: number; width: number; height: number } };
+function visualOrder(items: readonly Placed[], rtl: boolean, base = items[0]?.path.match(/^slides\.\d+/)?.[0] ?? ''): string[] {
+	// RR-105: a block is one unit of the reading order: the blocks of a slide (or of a group) are ordered by the boxes that hold them, and
+	// a group's own items are read before the next block, in their own visual order. Three team cards side by side read card by card
+	// (picture, then name), not all pictures first.
+	const units = new Map<string, Placed[]>();
+	for (const item of items) {
+		const rest = item.path.startsWith(`${base}.`) ? item.path.slice(base.length + 1) : '';
+		const key = /^blocks\.\d+/.exec(rest)?.[0] ?? rest.split('.')[0] ?? '';
+		(units.get(key) ?? units.set(key, []).get(key)!).push(item);
+	}
+	if (units.has('')) return flatOrder(items, rtl);
+	if (units.size === 1) return visualOrder(items, rtl, `${base}.${[...units.keys()][0]}`);
+	const placed = [...units].map(([key, members]) => {
+		const left = Math.min(...members.map((item) => item.box.x)), top = Math.min(...members.map((item) => item.box.y));
+		const right = Math.max(...members.map((item) => item.box.x + item.box.width)), bottom = Math.max(...members.map((item) => item.box.y + item.box.height));
+		return { path: key, members, box: { x: left, y: top, width: right - left, height: bottom - top } };
+	});
+	const order = flatOrder(placed, rtl);
+	return order.flatMap((key) => {
+		const unit = placed.find((entry) => entry.path === key)!;
+		return unit.members.length > 1 ? visualOrder(unit.members, rtl, `${base}.${key}`) : unit.members.map((item) => item.path);
+	});
+}
+function flatOrder(items: readonly Placed[], rtl: boolean): string[] {
 	// The same ordering composeSlide uses for promoted regions. A right-to-left deck's boxes may be mirrored (or, before the
 	// mirroring lands, not), so only the row order is checked there: each row keeps its composed order.
 	if (rtl) return readingRows(items).flatMap((row) => row.map((item) => item.path));

@@ -1257,6 +1257,32 @@ function composeOverlay(value: unknown, frame: LayoutBox, shape: ImageShape, pat
   return { path, color: overlay.color, opacity, ...(edge ? { edge } : {}), box, shape: edge ? imageShape('rect', box) : shape };
 }
 
+/**
+ * RR-105: an image overlay moved onto the drawn picture. A contained picture in a rectangle frame smaller than its frame is covered where
+ * it is drawn: a whole-frame overlay covers the picture, and an edge band takes the same share of the picture along the same edge. Any
+ * other fit, a masked frame or a picture that fills its frame keeps the overlay as composed on the frame.
+ */
+function overlayOnPicture(overlay: ComposedOverlay, image: Pick<ComposedImage, 'box' | 'fit' | 'shape'>, picture: LayoutBox): ComposedOverlay {
+  const frame = image.box, drawn = roundBox(picture);
+  if (image.fit !== 'contain' || (image.shape && image.shape.preset !== 'rect') || (drawn.width >= frame.width - 0.5 && drawn.height >= frame.height - 0.5)) return overlay;
+  const edge = overlay.edge, across = edge === 'top' || edge === 'bottom';
+  const part = !edge ? 1 : across ? overlay.box.height / frame.height : overlay.box.width / frame.width;
+  const box = !edge ? drawn : edge === 'top' ? { ...drawn, height: round(drawn.height * part) }
+    : edge === 'bottom' ? { ...drawn, y: round(drawn.y + drawn.height * (1 - part)), height: round(drawn.height * part) }
+    : edge === 'left' ? { ...drawn, width: round(drawn.width * part) }
+    : { ...drawn, x: round(drawn.x + drawn.width * (1 - part)), width: round(drawn.width * part) };
+  return { ...overlay, box, shape: imageShape('rect', box) };
+}
+/**
+ * RR-105: the overlay of an image block as the engines draw it. Core places it on the drawn picture when it read the picture's aspect ratio
+ * (ComposedImage.picture); a host that reads it itself (a picture core could not, from a file or a host imageResolver) passes `aspect`, and
+ * the overlay moves onto the picture the host draws with `fitImage(image.box, image.fit, aspect, image.focus)`.
+ */
+export function pictureOverlay(image: ComposedImage, aspect?: number): ComposedOverlay | undefined {
+  if (!image.overlay || image.picture || !aspect || !(aspect > 0)) return image.overlay;
+  return overlayOnPicture(image.overlay, image, fitImage(image.box, image.fit, aspect, image.focus).image);
+}
+
 /** The offset of a block shorter than its cell by `spare`: 0 at the top, half at the middle, all of it at the bottom. */
 function anchoredOffset(spare: number, anchor: RegionAnchor): number {
   return Math.max(0, anchor === 'middle' ? spare / 2 : anchor === 'bottom' ? spare : 0);
@@ -1338,10 +1364,13 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   if (opacity !== undefined && opacity < 1) result.opacity = opacity;
   const recolor = composeRecolor(host.recolor);
   if (recolor) result.recolor = recolor;
-  const overlay = composeOverlay(host.overlay, box, shape, `${hostPath}.overlay`, context.mirrorSide, context.diagnostics);
+  const picture = pictureAspect ? fitImage(box, fit, pictureAspect, focus) : undefined;
+  const framed = composeOverlay(host.overlay, box, shape, `${hostPath}.overlay`, context.mirrorSide, context.diagnostics);
+  // RR-105: an overlay belongs to the drawn picture (pictureOverlay), as callouts do.
+  const overlay = framed && picture ? overlayOnPicture(framed, { box, fit, shape }, picture.image) : framed;
   if (overlay) result.overlay = overlay;
   if (context.placement) result.placement = context.placement;
-  if (pictureAspect) result.picture = fitImage(box, fit, pictureAspect, focus);
+  if (picture) result.picture = picture;
   const callouts = record(host.image).callouts;
   if (callouts !== undefined && context.callout) {
     // A document being edited may hold a callout validation refuses (or one whose panel is too far away to place): composition reports it
@@ -2691,6 +2720,11 @@ export const PORTRAIT_SIDE_FILL = .6;
  * narrowest text beside it, and the gap between a portrait and its text.
  */
 export const PORTRAIT_MIN = { topCard: 160, side: 72, text: 150 } as const, PORTRAIT_GAP = 16;
+/**
+ * RR-105: a team's authored avatar, the small circle over the name: lineRatio times the name's line height, at least `least` reference
+ * pixels and at most widthShare of the card's width.
+ */
+export const TEAM_AVATAR = { least: 56, lineRatio: 2, widthShare: 0.5 } as const;
 /** LH-132: a team's texts keep at least this size (reference px; Claude Design sets a name at 20) before a top portrait gives up its square. */
 export const PORTRAIT_TEXT_SIZE = 21;
 /**
@@ -3783,8 +3817,9 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     const resolvedStyle=resolveTextStyle({...options.style,fontFamily:run.fontFamily??(run.code===true?options.codeFontFamily??'monospace':run.bold!==undefined?options.style.sourceFontFamily??options.style.fontFamily:options.style.fontFamily),fontWeight:run.bold===undefined?options.style.fontWeight:run.bold?700:400,italic:run.italic??options.style.italic,path:options.style.path?`${options.style.path}.${runIndex}`:undefined},options.textMeasurement);
     // A run language reaches the measurement and the engines as `style.lang`, after the host resolved the family (it may rebuild the style).
     const style:TextStyle=typeof run.language==='string'&&run.language?{...resolvedStyle,lang:run.language}:resolvedStyle;
-    // RR-34: a citation/footnote marker belongs to the run end; it needs a path and text to attach to.
-    const marker=options.citationMarker&&options.style.path&&run.text?options.citationMarker(`${options.style.path}.${runIndex}`):undefined;
+    // RR-34: a citation/footnote marker belongs to the run end; it needs a path to attach to. RR-105: an empty run keeps its marker,
+    // drawn where the run stands (after the text before it), so a cited run is never left without one.
+    const marker=options.citationMarker&&options.style.path?options.citationMarker(`${options.style.path}.${runIndex}`):undefined;
     return {run,runIndex,start,end:offset,style,...(marker?{marker}:{})};
   });
   const whole=source.map(entry=>entry.run.text).join('');
@@ -3799,6 +3834,18 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     const fragments=(start:number,end:number):RichTextFragment[]=>{
       let x=0;const result:RichTextFragment[]=[];
       for(const entry of display?tracked:source){
+        // RR-105: an empty marked run draws its marker on the line that holds its offset: after the text before it (a soft wrap leaves
+        // it at the end of the earlier line), or at the start of the text or of a paragraph.
+        if(entry.marker&&entry.start===entry.end){
+          const at=entry.start;
+          if((at>start&&at<=end)||(at===start&&(at===0||/[\r\n]/.test(whole[at-1]!)))){
+            const normalSize=entry.run.fontSize!==undefined?entry.run.fontSize*4/3*ratio:fontSize,measure=textWidthMeasurer(entry.style,options.textMeasurement);
+            const markerSize=Math.round(normalSize*CITATION_MARKER_SCALE*FONT_SIZE_GRID_PER_PX)/FONT_SIZE_GRID_PER_PX,width=measure(entry.marker,markerSize);
+            result.push({kind:'marker',text:entry.marker,runIndex:entry.runIndex,start:0,end:0,x,width,fontSize:markerSize,nominalSize:normalSize,baselineShift:-normalSize*CITATION_MARKER_RAISE,style:entry.style,run:entry.run});
+            x+=width;
+          }
+          continue;
+        }
         const a=Math.max(start,entry.start),b=Math.min(end,entry.end);if(b<=a)continue;
         const text=whole.slice(a,b),normalSize=entry.run.fontSize!==undefined?entry.run.fontSize*4/3*ratio:fontSize;
         const script=entry.run.superscript||entry.run.subscript;
@@ -4045,7 +4092,8 @@ export interface ListFitOptions extends RichTextOptions {
   /**
    * LH-14: the entries that carry an `icon` draw it on a chip ICON_CHIP times the list size across in the marker column, in place of the
    * bullet (`ListEntryLayout.icon`), centered on the entry's first line; every entry keeps that column, so the texts start at one edge.
-   * Needs one level and no numbering; ignored otherwise. A ruled list (`rows`) sets the chips at the start of its labels.
+   * Needs no numbering; ignored otherwise. Only first-level entries draw a chip (RR-105): a nested entry keeps its bullet under its
+   * entry's text. A ruled list (`rows`) sets the chips at the start of its labels.
    */
   icons?:boolean;
   /** LH-14: the chip's size in em of the list size: ICON_CHIP (the default) or ICON_CHIP_COMPACT. */
@@ -4137,14 +4185,16 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
   const heading=options.heading===true&&!numbers&&source.length===1&&source[0]!.descriptionRuns!==undefined&&!(options.rows===true&&options.rowLabels);
   // LH-07: entries drawn beside step badges (numbered, one level).
   const badged=options.badges===true&&numbers!==undefined&&source.every(item=>item.level===0);
-  // LH-14: entries drawn beside icon chips (unnumbered, one level, at least one icon).
+  // LH-14: entries drawn beside icon chips (unnumbered, at least one first-level icon). RR-105: only a first-level entry draws its icon; a
+  // nested entry of an icon list (its icon is reported icon-dropped) keeps its bullet.
   const hasIcon=(index:number)=>{const value=input[index];return typeof value==='object'&&!Array.isArray(value)&&value!==null&&(value as {icon?:unknown}).icon!==undefined;};
-  const iconed=options.icons===true&&!numbers&&!badged&&source.every(item=>item.level===0)&&source.some(item=>hasIcon(item.index));
+  const drawsIcon=(item:typeof source[number])=>item.level===0&&hasIcon(item.index);
+  const iconed=options.icons===true&&!numbers&&!badged&&source.some(drawsIcon);
   // LH-174: in a list with icons on some entries, an entry without one keeps its bullet (unless the design asks for none), centered in the
   // chip column: the marker starts half the room the bullet leaves in the chip in from the column's start edge, and its hanging indent is
   // that much shorter, so PowerPoint's native bullet (at the paragraph's indent) sits where the preview draws it.
   const chipBullet=(item:typeof source[number],chip:number,fontSize:number,style:TextStyle)=>{
-    if(!iconed||hasIcon(item.index)||options.bullet==='none')return undefined;
+    if(!iconed||item.level>0||hasIcon(item.index)||options.bullet==='none')return undefined;
     const text=LIST_MARKERS[item.level%LIST_MARKERS.length]!;
     return {text,shift:Math.max(0,(chip-textWidthMeasurer(resolveTextStyle(style,options.textMeasurement),options.textMeasurement)(text,fontSize))/2)};
   };
@@ -4216,10 +4266,10 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       // LH-14: the chip is centered on the label's capitals (0.35 em above its first baseline); a row whose first line is shorter than the
       // chip starts lower by the difference, so the chip stays inside the row.
       let iconChip:ListEntryLayout['icon'];
-      if(iconed){
+      if(iconed&&item.level===0){
         const center=(text.richLines[0]?.baseline??fontSize)-fontSize*.35,pad=Math.max(0,chip/2-center);
         if(pad){textBox.y+=pad;if(descriptionBox)descriptionBox.y+=pad;bottom+=pad;}
-        if(hasIcon(item.index))iconChip={cx:rtl?(side?box.x+box.width:box.x+box.width-offset)-chip/2:box.x+offset+chip/2,cy:textBox.y+center,diameter:chip};
+        if(drawsIcon(item))iconChip={cx:rtl?(side?box.x+box.width:box.x+box.width-offset)-chip/2:box.x+offset+chip/2,cy:textBox.y+center,diameter:chip};
         bottom=Math.max(bottom,textBox.y+center+chip/2);
       }
       lines.push(...text.lines);if(options.direction==='rtl')directions.push(...(text.directions??[]));
@@ -4266,10 +4316,13 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     const none=((options.bullet==='none'||heading)&&!numbers)||chipped;
     // LH-07: a badge column is the badge and half an em before the text.
     const hanging=chipped?diameter+fontSize*.5:numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):fontSize*1.1;
-    for(const item of source){
+    for(const [position,item] of source.entries()){
       const rtl=item.direction==='rtl';
+      // RR-105: a nested entry of an icon list draws no chip: its bullet (unless the design asks for none) stands under its entry's text,
+      // a nested list's hanging indent of 1.1 em, and each deeper level steps in by that much.
+      const nested=iconed&&item.level>0,nestedBullet=nested&&options.bullet!=='none',chipRow=chipped&&!nested;
       // No marker: no hanging indent either; a nested level still steps in by one marker width.
-      const indent=none&&!chipped?0:hanging,offset=heading?0:Math.min(box.width,item.level*hanging),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
+      const indent=nested?(nestedBullet?fontSize*1.1:0):none&&!chipped?0:hanging,offset=heading?0:Math.min(box.width,nested?hanging+(item.level-1)*fontSize*1.1:item.level*hanging),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
       if(offset+indent>=box.width)overflow=true;
       const textBox={x,y,width,height:box.height};
       const style={...options.style,path:item.textPath};
@@ -4299,7 +4352,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       textBox.height=text.height;lines.push(...text.lines);if(options.direction==='rtl')directions.push(...(text.directions??[]));y+=text.height;
       // LH-07: the badge is centered on the first line's capitals (0.35 em above its baseline); an entry whose line is shorter than the
       // badge starts lower by the difference, so the badge stays inside the entry.
-      const center=chipped?(text.richLines[0]?.baseline??fontSize)-fontSize*.35:0,pad=chipped?Math.max(0,diameter/2-center):0;
+      const center=chipRow?(text.richLines[0]?.baseline??fontSize)-fontSize*.35:0,pad=chipRow?Math.max(0,diameter/2-center):0;
       if(pad){textBox.y+=pad;y+=pad;}
       let description:RichTextFit|undefined,descriptionBox:LayoutBox|undefined;
       if(item.descriptionRuns!==undefined){
@@ -4310,16 +4363,18 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       }
       overflow ||= text.overflow||!!description?.overflow;
       const number=numbers?.[item.index];
-      if(chipped)y=Math.max(y,textBox.y+center+diameter/2);
+      if(chipRow)y=Math.max(y,textBox.y+center+diameter/2);
       // LH-174: an entry without an icon in a list with icons keeps its bullet in the chip column (chipBullet).
-      const own=chipBullet(item,diameter,fontSize,style),unmarked=none&&!own,shift=own?.shift??0;
+      const own=chipBullet(item,diameter,fontSize,style),unmarked=none&&!own&&!nestedBullet,shift=own?.shift??0;
       const marker={text:number&&!badged?number.text:own?own.text:unmarked?'':LIST_MARKERS[item.level%LIST_MARKERS.length]!,x:rtl?box.x+box.width-offset-shift:box.x+offset+shift,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent:indent-shift,...(number?{number,width:markerWidths[item.index]!}:{}),...(unmarked?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
       const badge=badged&&number?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter,label:listNumberLabel(number,options.language),fontSize}:undefined;
-      const icon=iconed&&hasIcon(item.index)?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter}:undefined;
+      const icon=iconed&&drawsIcon(item)?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter}:undefined;
       entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(heading?{heading:true as const}:{}),...(badge?{badge}:{}),...(icon?{icon}:{}),
         ...(item.direction?{direction:item.direction}:{}),
         ...(options.bulletImage&&!number&&!unmarked?{bulletImage:options.bulletImage,bulletBox:{x:rtl?marker.x-side:marker.x,y:marker.y-side,width:side,height:side}}:{})});
-      if(item.index<source.length-1)y+=chipped?Math.max(fontSize*.28,diameter*STEP_BADGE_GAP):fontSize*.28;
+      // RR-105: a nested entry of an icon list stays close under its entry; the gap above the next chip row is the chips' gap.
+      const next=source[position+1];
+      if(next)y+=chipped&&next.level===0?Math.max(fontSize*.28,diameter*STEP_BADGE_GAP):fontSize*.28;
     }
     const height=y-box.y;
     return {listEntries:entries,lines,fontSize,lineHeight:fontSize*1.22,height,overflow:overflow||height>box.height+.01,...(accentRules.length?{rules:accentRules}:{}),...(options.direction==='rtl'?{directions}:{})};
@@ -6087,6 +6142,12 @@ const CHART_TRACK_SHARES: readonly number[] = [.6, .55, .5];
  */
 export const CHART_MIN_PLOT_PX = 120, CHART_MIN_PLOT_SHARE = .22, CHART_MAX_PLOT_ASPECT = 3;
 /**
+ * P32, RR-105: in automatic composition the tallest a chart's box is, as height over width: 3/4 in a cell (4:3 landscape), 1 for a radar (its
+ * web is round), 3/2 for the slide's only body (2:3 portrait: a lone chart fills a portrait body without bars twice as tall as wide).
+ */
+export const CHART_MAX_HEIGHT_RATIO = 3 / 4, CHART_RADAR_MAX_HEIGHT_RATIO = 1, CHART_LONE_MAX_HEIGHT_RATIO = 3 / 2;
+const isRadarChart = (chart: unknown): boolean => typeof chart === 'object' && chart !== null && typeof (chart as {type?: unknown}).type === 'string' && ['radar', 'radar-with-markers', 'filled-radar'].includes((chart as {type: string}).type.trim().toLowerCase());
+/**
  * LH-66: whether a paragraph (a text block) runs on a measure under MIN_MEASURE_CHARS at `width` and `size`: it wraps there and reads
  * as running text, MEASURE_MIN_LINES lines or more (core's estimate). A label that takes a line or two keeps any measure, and a list keeps
  * its own rules (LH-42): its entries are short lines that read in a narrow column.
@@ -6263,7 +6324,8 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
     }
     return { ...best.result, items, track: { kind: 'picture', edge: physical(edge), size: best.size, path: blockPath } };
   }
-  if (pictures.length || leaf('video').length || charts.length !== 1 || base.design.chartPrimary !== undefined) return base;
+  // RR-105 (coverage finding 24): an authored contentDirection of vertical keeps its column; the chart track would split it into a row.
+  if (pictures.length || leaf('video').length || charts.length !== 1 || base.design.chartPrimary !== undefined || (landscape && base.design.contentDirection === 'vertical') || (!landscape && base.design.contentDirection === 'horizontal')) return base;
   const chartOf = (result: SlideComposition) => result.items.find(item => item.field === 'chart');
   const chart = chartOf(base);
   if (!chart || !shortPlot(chart, bodyHeight(base), scale)) return base;
@@ -6276,6 +6338,8 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
   }
   return base;
 }
+/** RR-105: the chartPrimary values that place the chart at a side of its supporting blocks (`none` is the ordinary automatic body). */
+const CHART_PRIMARY_SIDES: ReadonlySet<string> = new Set(['top', 'bottom', 'start', 'end', 'left', 'right']);
 function composeLayout(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   const slide = record(input), layout = record(options.layout);
   // LH-83: the recomposition reads the record's design and composition and composes the body as if no layout were given; the
@@ -6554,9 +6618,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     return iconCache.get(key);
   };
   const iconFor = (value: unknown): ResolvedIcon | undefined => ruleOn('icons') ? resolvedIcon(value) : undefined;
-  // LH-14: a list draws icon chips when it is unnumbered, of one level, and one of its entries has an icon that resolves. Such a list is
-  // never a badge list, flow or check-mark tiles: its chips take the marker column those draw in.
-  const iconList = (value: unknown, numbering: unknown): boolean => numbering === undefined && Array.isArray(value) && value.every(entry => (record(entry).level ?? 0) === 0) && value.some(entry => iconFor(record(entry).icon) !== undefined);
+  // LH-14: a list draws icon chips when it is unnumbered and one of its first-level entries has an icon that resolves (RR-105: a nested
+  // list too; its nested entries keep their bullets). Such a list is never a badge list, flow or check-mark tiles: its chips take the
+  // marker column those draw in.
+  const iconList = (value: unknown, numbering: unknown): boolean => numbering === undefined && Array.isArray(value) && value.some(entry => (record(entry).level ?? 0) === 0 && iconFor(record(entry).icon) !== undefined);
   // LH-169: a list block drawn as a row of figures (figureRows): a figure list (figureList) with no numbering, columns, caption or list style
   // of the author's, on a slide that is not a layout's master. Wave 8: a figure list whose entries carry icons is a row of figures only where
   // LH-165's icon cards are off (the slide's first composition, CORE_RULES); withCards then tries the cards on top, which keep the icons, and
@@ -6640,25 +6705,51 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (shape.textBold) boldLabels.add(textPath);
     const floor = snapFontSizeUp((minFontSize ?? 16) * scale), start = Math.max(floor, contentNominalSize('text') * scale);
     let text: TextFit | RichTextFit = fitContent('text', drawn, contentText('text', drawn) ?? '', shape.textBox, start, floor, textPath, undefined, 'center');
+    // RR-105: text in a shape never breaks inside a word. A fit that would (a word wider than the text rectangle) is set on one line instead,
+    // centered on the text rectangle and free to reach past its insets up to the shape's own edges (`textWrap: 'none'`; PowerPoint draws an
+    // unwrapped line the same way), at the largest size from the body size down at which the line fits there. Text that cannot be one line
+    // shrinks, without breaking a word, in the text rectangle; when no size holds it, the overflow finding reports it.
+    const plainText = contentText('text', drawn) ?? '', words = plainText.split(/\s+/u).filter(Boolean).length;
+    const splitsWord = (fit: TextFit | RichTextFit) => fit.lines.flatMap(line => line.split(/\s+/u).filter(Boolean)).length > words;
+    let wide: LayoutBox | undefined;
+    if ((shape.textDirection ?? 'horizontal') === 'horizontal' && splitsWord(text)) {
+      const centerX = shape.textBox.x + shape.textBox.width / 2, half = Math.min(centerX - shape.box.x, shape.box.x + shape.box.width - centerX);
+      const across = { ...shape.textBox, x: round(centerX - half), width: round(2 * half) };
+      let settled: TextFit | RichTextFit | undefined;
+      for (let trial = 0, size = start; trial <= 64 && !settled; trial++) {
+        const oneLine = fitContent('text', drawn, plainText, across, size, size, textPath, undefined, 'center');
+        if (!oneLine.overflow && oneLine.lines.length === 1 && !splitsWord(oneLine)) { settled = oneLine; wide = across; break; }
+        if (size <= floor + FONT_GRID_EPSILON) break;
+        size = Math.max(floor, gridFontSize(size - 1, floor));
+      }
+      for (let trial = 0, size = start; trial <= 64 && !settled; trial++) {
+        const kept = fitContent('text', drawn, plainText, shape.textBox, size, size, textPath, undefined, 'center');
+        if (!kept.overflow && !splitsWord(kept)) { settled = kept; break; }
+        if (size <= floor + FONT_GRID_EPSILON) break;
+        size = Math.max(floor, gridFontSize(size - 1, floor));
+      }
+      text = settled ?? { ...text, overflow: true };
+    }
+    if (wide) shape.textWrap = 'none';
     // SH-10: text that holds the body size in a large shape grows as a lone body block does: up the type scale, one step at a time, to the
     // display size of a paragraph, while it still fits at that size and fills at most LONE_TARGET of the text rectangle's height. It never
     // ends below the body size (growth only); text that does not hold the body size is fitted down to the floor as before. `cap` is the
     // size its sibling shapes share (evenShapeText).
-    if (!text.overflow && text.fontSize >= start - FONT_GRID_EPSILON) {
+    if (!wide && !text.overflow && text.fontSize >= start - FONT_GRID_EPSILON) {
       const display = Math.min(cap, LONE_DISPLAY_SIZES.text * scale), floorPx = minFontSize ?? 16;
       const filled = (fit: TextFit | RichTextFit) => Math.max('richLines' in fit ? (fit as RichTextFit).height : fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
       for (let size = text.fontSize; ;) {
         const next = typeScaleStepsUp(size, 1, display, floorPx, scale);
         if (next <= size + FONT_GRID_EPSILON) break;
         const grown = fitContent('text', drawn, contentText('text', drawn) ?? '', shape.textBox, next, next, textPath, undefined, 'center');
-        if (grown.overflow || grown.fontSize < next - FONT_GRID_EPSILON || filled(grown) > LONE_TARGET * shape.textBox.height + .5) break;
+        if (grown.overflow || grown.fontSize < next - FONT_GRID_EPSILON || splitsWord(grown) || filled(grown) > LONE_TARGET * shape.textBox.height + .5) break;
         text = grown;
         size = next;
       }
     }
     if (text.overflow) sink.push({ code: 'text-overflow', path: textPath, message: 'The text does not fit inside the shape at the readable minimum size; give the shape more room (a larger cell or another aspectRatio), shorten the text or lower its padding.' });
     // The text block sits at the shape's anchor in its box (PowerPoint's a:bodyPr anchor): the preview draws the fit in textArea.
-    const area = shape.textBox, height = Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight, text.placement?.height ?? 0);
+    const area = wide ?? shape.textBox, height = Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight, text.placement?.height ?? 0);
     const offset = Math.max(0, shape.anchor === 'middle' ? (area.height - height) / 2 : shape.anchor === 'bottom' ? area.height - height : 0);
     text = translateTextFit(text, round(offset));
     shape.textArea = { x: area.x, y: round(area.y + offset), width: area.width, height: round(Math.min(area.height, height)) };
@@ -6678,7 +6769,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     for (const group of groups.values()) {
       const start = (item: ComposedItem) => Math.max(snapFontSizeUp((item.composition.minFontSize ?? 16) * scale), contentNominalSize('text') * scale);
-      const grown = group.filter(item => item.text!.fontSize > start(item) + FONT_GRID_EPSILON), holding = group.filter(item => item.text!.fontSize >= start(item) - FONT_GRID_EPSILON);
+      // RR-105: a shape whose one word only fits past its text rectangle (textWrap 'none') does not hold the body size there, so it does not
+      // set its siblings' size (as when that word broke and the text shrank).
+      const grown = group.filter(item => item.text!.fontSize > start(item) + FONT_GRID_EPSILON), holding = group.filter(item => item.text!.fontSize >= start(item) - FONT_GRID_EPSILON && item.shape?.textWrap !== 'none');
       if (!grown.length || holding.length < 2) continue;
       const shared = Math.min(...holding.map(item => item.text!.fontSize));
       for (const item of grown) {
@@ -6982,6 +7075,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!(ruleOn('emphasis-band') || ruleOn('note-band')) || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || regions.length || !Array.isArray(slide.blocks) || authoredEmphasis(slide.blocks)) return undefined;
     const own = record(slide.composition);
     if ((own.mode !== undefined && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return undefined;
+    // RR-105 (coverage finding 24): a chartPrimary side splits the body into the chart's track and its supporting blocks (the author's
+    // arrangement, which design.chartPrimary keeps), so no block of it becomes a band or a pill.
+    if (!useTemplate && CHART_PRIMARY_SIDES.has(hints.chartPrimary as string) && slide.blocks.some((block: unknown) => record(block).chart !== undefined)) return undefined;
     const flowed = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) || eyebrowBlocks.has(index) ? [] : [{ block, index }]);
     const last = flowed[flowed.length - 1];
     // LH-50: a paragraph with an eyebrow keeps it: it is placed as a block of the body, never as the band or pill.
@@ -7203,6 +7299,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // avatar beside its name, never a picture alone on a card that LH-74 lets fill it: the portraits are judged against the avatar (picturesShrink).
   const personPictures = new Set<string>();
   let portraitMode: Exclude<PortraitMode, 'avatar'> | undefined, portraitAuthored = false, portraitFallback = false;
+  // RR-105: a team whose author chose `avatar` draws each person's picture as the small circle over the name (placePerson, TEAM_AVATAR).
+  let teamAvatar = false;
   {
     const personOf = (node: Pending): { image: Pending; text: Pending } | undefined => {
       const kids = node.children, own = record(node.composition);
@@ -7225,6 +7323,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const automatic = count < 2 || !ruleOn('portraits') ? undefined : count <= PORTRAIT_TOP_MAX && cardInner(count) >= PORTRAIT_MIN.topCard * scale ? 'top' as const
         : count <= PORTRAIT_SIDE_MAX && sideFits(gridFlowShape(count, landscape).columns) ? 'side' as const : undefined;
       const mode = authored ?? automatic;
+      if (authored === 'avatar' && count > 1) {
+        teamAvatar = true;
+        portraitAuthored = true;
+        for (const [index, node] of pending.entries()) personParts.set(node.path, people[index]!);
+      }
       if (mode !== undefined && mode !== 'avatar') {
         portraitMode = mode;
         portraitAuthored = authored !== undefined;
@@ -7263,6 +7366,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-43, LH-17: what refitting a placed item needs: a metric is laid out again in its own box from given role sizes, and a text
   // or list refits from a smaller size than the one it started at (its start, by item index).
   const metricRefits = new Map<number, (roleSizes: MetricLayoutOptions['roleSizes'], pill?: 'above') => MetricLayout>();
+  // RR-105: a metric laid out again in another box (spaceMetricRows moves a row of metrics).
+  const metricMoves = new Map<number, (box: LayoutBox, roleSizes: MetricLayoutOptions['roleSizes'], pill?: 'above') => MetricLayout>();
   // LH-78: a quote is laid out again in its own box with its body at a given size (px), so sibling quotes share one size.
   const quoteRefits = new Map<number, (bodySize: number) => QuoteLayout>();
   // LH-144: a timeline is laid out again in its own box with every role offset by a number of reference pixels (capSizes).
@@ -7821,7 +7926,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     if (node.field === 'image' || node.field === 'video' || node.field === 'diagram' || node.field === 'shape') placeNode(node, cell, settings, hasCards, undefined, undefined, 'middle');
     else if (node.field === 'chart') {
-      const height = modeFor(settings) === 'auto' && inner.height > inner.width * CHART_MAX_ASPECT_RATIO ? inner.width * CHART_MAX_ASPECT_RATIO : inner.height;
+      const height = modeFor(settings) === 'auto' && inner.height > chartMaxHeight(node, inner.width) ? chartMaxHeight(node, inner.width) : inner.height;
       placeNode(node, { ...inner, y: inner.y + (inner.height - height) / 2, height }, settings, false);
     } else if (MEASURED_FIELDS.has(node.field)) {
       const need = naturalHeight(node, inner.width, false, undefined, settings) + 2 * rasterPadding + scale;
@@ -7884,7 +7989,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const decided = spannedContainer;
     // LH-132: a team's portrait cards in the automatic grid: one row across the top (up to PORTRAIT_TOP_MAX), the grid flow otherwise.
     const team = !hasRegions && count === nodes.length && settings.columns === undefined && !settings.weights?.length && nodes.every(node => personParts.has(node.path));
-    if (team) cols = portraitMode === 'top' && count <= PORTRAIT_TOP_MAX ? count : gridFlowShape(count, area.width >= area.height).columns;
+    if (team) cols = (portraitMode === 'top' || teamAvatar) && count <= PORTRAIT_TOP_MAX ? count : gridFlowShape(count, area.width >= area.height).columns;
     spannedContainer = false;
     if (paragraphs) cols = paragraphs.shape.columns; else if (lead) cols = 2;
     if (recorded && !decided) decisions?.push({path:containerPath,mode:hasRegions?'regions':mode,
@@ -8070,7 +8175,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   };
   // WI-3: a contained picture and a video frame sit at the region's anchor inside the cell the flow gave them (top by default),
   // and the caption band closes up under a top-anchored frame.
-  const VIDEO_ASPECT = 16 / 9, CHART_MAX_ASPECT_RATIO = 3 / 4;
+  const VIDEO_ASPECT = 16 / 9;
+  // P32, RR-105: the tallest a chart's box is in automatic composition, as height over width: a chart in a cell at most 4:3 landscape; a
+  // radar at most square, the shape of its web (three radars in a row filled a fifth of their boxes); the slide's only body at most 2:3
+  // portrait, so a lone chart fills a portrait body and its bars never stand more than half again as tall as the plot is wide.
+  const chartMaxHeight = (node: Pending, width: number): number => width * (isRadarChart(node.value) ? CHART_RADAR_MAX_HEIGHT_RATIO : node.lone ? CHART_LONE_MAX_HEIGHT_RATIO : CHART_MAX_HEIGHT_RATIO);
   const settleCaption = (caption: ComposedCaption, frame: LayoutBox, anchor: RegionAnchor): void => {
     if (caption.position === 'above' || anchor !== 'top') return;
     const target = round(frame.y + frame.height + caption.fontSize * .4), dy = target - caption.box.y;
@@ -8126,6 +8235,42 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // one sets the text larger.
     // A side portrait takes PORTRAIT_SIDE_SHARE of the card, or less (down to PORTRAIT_SIDE_LEAST) where the wider column sets the team's text
     // larger: the share with the largest text, the widest of equals.
+    // RR-105: an authored avatar is the small circle over the name, at the card's start, with the team's text below it. The text grows as a
+    // card row's text does (LH-48): from a list's display size (LONE_DISPLAY_SIZES.list) down the type scale, the largest size at which the
+    // card (its circle, the gap and the team's tallest text) fills at most LONE_TARGET of its cell, else the largest at which it fits, never
+    // under the size the text starts at. The circle scales with the name: TEAM_AVATAR.lineRatio times the name's line height, at least
+    // TEAM_AVATAR.least and at most TEAM_AVATAR.widthShare of the card's width. The card holds both and sits in the middle of its cell.
+    if (teamAvatar) {
+      const textWidth = inner.width, key = `avatar:${round(textWidth)}:${round(inner.height)}`, team = [...personParts.values()].map(entry => entry.text);
+      const named = (text: Pending) => text.field !== 'text' && record((text.value as unknown[])[0]).description !== undefined;
+      const diameterAt = (size: number) => Math.max(Math.min(inner.width, TEAM_AVATAR.least * scale), Math.min(inner.width * TEAM_AVATAR.widthShare, TEAM_AVATAR.lineRatio * size * (team.some(named) ? LIST_HEADING_SCALE : 1) * 1.2));
+      if (!teamText.has(key)) {
+        const start = Math.max(...team.map(text => proseMeasure(text, textWidth).size)), top = Math.max(start, Math.min(LONE_DISPLAY_SIZES.list * scale, capOf(own)));
+        const sizes: number[] = [];
+        for (let size = top; ; size = Math.max(floor, scaleStep(size - .01 * scale, floorPx))) { sizes.push(size); if (size <= floor + 1e-9) break; }
+        const needs = (text: Pending, size: number) => naturalHeight(text, textWidth, false, undefined, own, false, size) + 2 * rasterPadding + scale;
+        const content = (size: number) => Math.max(...team.map(text => needs(text, size))) + between + diameterAt(size);
+        const size = sizes.find(size => size >= start - 1e-9 && content(size) <= LONE_TARGET * inner.height + .01) ?? sizes.find(size => content(size) <= inner.height + .01);
+        teamText.set(key, size === undefined ? undefined : { size, need: Math.max(...team.map(text => needs(text, size))) });
+        // Every person's text is placed from that size (proseMeasure reads proseGrowth).
+        if (size !== undefined && size > start + 1e-9) for (const text of team) proseGrowth.set(text, size);
+      }
+      const text = teamText.get(key);
+      if (!text) return false;
+      const diameter = diameterAt(text.size);
+      const insetTop = inner.y - cell.y, insetBottom = cell.y + cell.height - inner.y - inner.height, height = Math.min(cell.height, diameter + between + text.need + insetTop + insetBottom);
+      const card = { ...cell, y: cell.y + (cell.height - height) / 2, height }, start = card.y + insetTop;
+      const picture = { x: rtl ? inner.x + inner.width - diameter : inner.x, y: start, width: diameter, height: diameter };
+      const host = record(person.image.host), first = items.length;
+      portraitHosts.set(person.image.path, { ...host, shape: host.shape ?? 'ellipse', fit: host.fit ?? 'cover', focus: host.focus ?? portraitFocus() });
+      if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
+      const wasTier = insideTier;
+      insideTier = true;
+      try { placeNode(person.image, roundBox(picture), own, false); placeNode(person.text, { x: inner.x, y: start + diameter + between, width: inner.width, height: text.need }, own, false, undefined, undefined, 'top'); }
+      finally { insideTier = wasTier; }
+      if (cards) for (const item of items.slice(first)) item.frameBox = card;
+      return true;
+    }
     const sideways = () => PORTRAIT_SIDE_SHARES.map(share => plan('side', share)).reduce<ReturnType<typeof plan>>((best, next) => next && (!best || next.text.size > best.text.size + 1e-9) ? next : best, undefined);
     const wanted = portraitMode === 'side' ? sideways() : plan(portraitMode!), beside = portraitMode === 'top' && (!wanted || !portraitAuthored) ? sideways() : undefined;
     const chosen = wanted && !(beside && !portraitAuthored && beside.text.size > wanted.text.size + 1e-9) ? wanted : beside;
@@ -8296,7 +8441,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // WI-3 (P23): a video draws in a 16:9 frame, the largest that fits its cell, placed by the region's anchor. In automatic
     // composition (no layout) a chart is at most 4:3, so a tall cell does not stretch it (P32).
     if (node.field === 'video') box = roundBox(containedBox(box, VIDEO_ASPECT, anchor));
-    else if (node.field === 'chart' && !templateCell && modeFor(settings) === 'auto' && box.height > box.width * CHART_MAX_ASPECT_RATIO) box = roundBox({ ...box, height: box.width * CHART_MAX_ASPECT_RATIO });
+    else if (node.field === 'chart' && !templateCell && modeFor(settings) === 'auto' && box.height > chartMaxHeight(node, box.width)) {
+      // RR-105: the slide's only chart is centered in the body it does not fill (the owner's direction: a lone body is centered).
+      const height = chartMaxHeight(node, box.width);
+      box = roundBox({ ...box, ...(node.lone ? { y: box.y + (box.height - height) / 2 } : {}), height });
+    }
     // LH-74: a picture alone on a card (no caption, no frame, shape or line of its own) that covers its frame fills the card to its edges,
     // clipped to the card's radius, with no inset and no stroke: the picture is the card, so none is drawn under it. A picture shown whole
     // (contain) keeps the card and its inset around it.
@@ -8326,7 +8475,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     if (brow) eyebrowsOf.set(items[items.length - 1]!, node.eyebrow!);
     if (chipOfMetric) pendingIcons.push({ path: `${node.path}.icon`, owner: node.path, icon: iconFor(record(node.value).icon)!, members: [items[items.length - 1]!], diameter: chipOfMetric, metric: true });
-    if (metricLayout && !metricLayout.overflow) { const metricBox = {...box,height:metricHeight ?? box.height}; metricRefits.set(items.length - 1, (roleSizes, pill) => measureMetric(node, metricBox, settings, false, roleSizes, tile, pill)); }
+    if (metricLayout && !metricLayout.overflow) { const metricBox = {...box,height:metricHeight ?? box.height}; metricRefits.set(items.length - 1, (roleSizes, pill) => measureMetric(node, metricBox, settings, false, roleSizes, tile, pill)); metricMoves.set(items.length - 1, (moved, roleSizes, pill) => measureMetric(node, moved, settings, false, roleSizes, tile, pill)); }
     if (timelineLayout) { const timelineBox = box; timelineRefits.set(items.length - 1, offset => measureTimeline(node, timelineBox, settings, 'placed', offset)); }
     // LH-67: the lead of a lead plus stack keeps its larger size; it is neither stepped nor shared.
     if (stackLeads.has(node)) leadItems.add(items.length - 1);
@@ -8726,7 +8875,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           const height = need(), measure = proseMeasure(node, inner.width);
           const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { ...inner, width: measure.width }, step, floor, node.path, node.payload.numbering);
           const lines = 'richLines' in fit ? (fit as RichTextFit).richLines.length : fit.lines.length;
-          if (height > LONE_TARGET * inner.height || fit.overflow || fit.fontSize < step - 1e-9 || lines > MESSAGE_DISPLAY_LINES) break;
+          // RR-105 (coverage finding 30): on a narrow slide (portrait, square) a step whose lines run under the minimum measure (LH-66,
+          // underMeasure) is one the guard refuses, which threw the whole message back to its plain size; it stops at the step before.
+          if (height > LONE_TARGET * inner.height || fit.overflow || fit.fontSize < step - 1e-9 || lines > MESSAGE_DISPLAY_LINES || (ruleOn('reading-measure') && autoComposition() && underMeasure(node.field, node.value, measure.width, step))) break;
           if (step > today + 1e-9 && linesSplitWord(contentText(node.field, node.value) ?? '', fit.lines)) break;
           shown = step; best = height; size = step;
         }
@@ -9318,7 +9469,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // LH-135: pricing tiers are compared side by side, in one row of equal cards.
       if (units.length > 1 && units.every(unit => tierGroups.has(unit.path))) return 'row';
       // LH-132: a team's portrait cards: up to PORTRAIT_TOP_MAX across the top in one row, otherwise a grid.
-      if (units.length && units.every(unit => personParts.has(unit.path))) return portraitMode === 'top' && units.length <= PORTRAIT_TOP_MAX ? 'row' : 'grid';
+      if (units.length && units.every(unit => personParts.has(unit.path))) return (portraitMode === 'top' || teamAvatar) && units.length <= PORTRAIT_TOP_MAX ? 'row' : 'grid';
       if (direction !== undefined && region.flow !== 'none') return direction === 'horizontal' ? 'row' : 'column';
       const flow = region.flow === 'none' && units.length > 1 ? 'auto' : region.flow;
       if (flow === 'none' || flow === 'column') return 'column';
@@ -9918,6 +10069,41 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       item.frameBox = acceptedBox({ ...frame, height: Math.min(frame.height, bottom - frame.y + (item.box.y - frame.y)) });
     }
   };
+  // RR-105 (coverage finding 03): a body of metrics alone in two or more rows of equal cells, drawn without cards, spaces its rows evenly: each
+  // row's metrics are top-anchored in their cells, so a row of bare values left a wide gap under it and the row of values with labels and
+  // deltas sat low. The rows' contents (the tallest metric of each) are set with one gap above, between and below them in the rows' area,
+  // each metric laid out again at the sizes it has in its moved cell; when any would change, the slide keeps its rows as they were.
+  const spaceMetricRows = (): void => {
+    const body = items.map((item, index) => ({ item, index })).filter(({ item }) => !headings.has(item.field) && !item.eyebrow);
+    // Promoted regions keep the author's cells and anchors.
+    if (regions.length || body.length < 3 || !body.every(({ item, index }) => item.metricLayout && !item.metricLayout.overflow && !item.frameBox && !item.emphasis && metricMoves.has(index))) return;
+    const rows = [...new Set(body.map(({ item }) => round(item.box.y)))].sort((a, b) => a - b);
+    if (rows.length < 2 || new Set(body.map(({ item }) => round(item.box.height))).size !== 1) return;
+    const extent = (layout: MetricLayout): [number, number] => {
+      const boxes = [layout.bounds, ...layout.parts.filter(part => part.visible).map(part => part.box), ...(layout.trendBox ? [layout.trendBox] : []), ...(layout.deltaPill ? [layout.deltaPill.box] : [])];
+      return [Math.min(...boxes.map(box => box.y)), Math.max(...boxes.map(box => box.y + box.height))];
+    };
+    const rowOf = (item: ComposedItem) => rows.indexOf(round(item.box.y));
+    const spans = rows.map((_, row) => body.filter(({ item }) => rowOf(item) === row).map(({ item }) => extent(item.metricLayout!)));
+    const tops = spans.map(span => Math.min(...span.map(([top]) => top))), heights = spans.map((span, row) => Math.max(...span.map(([, bottom]) => bottom)) - tops[row]!);
+    const areaTop = rows[0]!, areaBottom = Math.max(...body.map(({ item }) => item.box.y + item.box.height));
+    const free = areaBottom - areaTop - heights.reduce((sum, height) => sum + height, 0);
+    if (free <= 0) return;
+    const space = free / (rows.length + 1), targets: number[] = [];
+    heights.reduce((y, height) => { targets.push(y + space); return y + space + height; }, areaTop);
+    const moved = body.map(({ item, index }) => {
+      const layout = item.metricLayout!, dy = targets[rowOf(item)]! - tops[rowOf(item)]!;
+      if (Math.abs(dy) < .5 && rowOf(item) + 1 === rows.length) return { item, layout, box: item.box };
+      // The moved cell ends half a space above the next row (or at the area's foot), so no two cells overlap.
+      const row = rowOf(item), bottom = row + 1 < rows.length ? targets[row + 1]! - space / 2 : areaBottom;
+      const box = acceptedBox({ ...item.box, y: item.box.y + dy, height: Math.min(item.box.height, bottom - item.box.y - dy) });
+      const roleSizes = Object.fromEntries(layout.parts.filter(part => part.fit).map(part => [part.role, part.fit!.fontSize]));
+      return { item, layout: metricMoves.get(index)!(box, roleSizes, layout.deltaPill?.placement === 'above' ? 'above' : undefined), box };
+    });
+    const sizes = (layout: MetricLayout) => layout.parts.map(part => `${part.role}:${part.visible}:${part.fit?.fontSize ?? 0}:${part.fit?.lines.length ?? 0}`).join('|');
+    if (moved.some(({ item, layout }) => layout.overflow || layout.diagnostics.length > item.metricLayout!.diagnostics.length || sizes(layout) !== sizes(item.metricLayout!) || layout.arrangement !== item.metricLayout!.arrangement)) return;
+    for (const { item, layout, box } of moved) { item.box = box; item.metricLayout = layout; item.text = layout.parts.find(part => part.role === 'value')?.fit ?? item.text; }
+  };
   // LH-135: the prices of the tiers that reach their role size read at one size, the smallest of them (a word that fits only below it,
   // "Custom", keeps its own). The tiers' other blocks stay as they are: they are no peers of the tiers' prices.
   const shareTierPrices = (): void => {
@@ -10212,6 +10398,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const chartIndex = pending.findIndex(node => !node.children && node.field === 'chart');
   const chartPrimary = chartSide !== undefined && !useTemplate && (chartTrack !== undefined || !ownMode) && !regions.length && chartIndex >= 0 && pending.some(node => node.children || node.field !== 'chart') ? chartSide : undefined;
   const firstChart = chartPrimary === 'left' || chartPrimary === 'top';
+  // RR-105 (coverage finding 24): an authored chartPrimary that cannot be drawn says so: a template's regions or promoted regions place the
+  // chart, or the slide's own composition.mode arranges the body.
+  if (chartSide && !chartTrack && !chartPrimary && chartIndex >= 0 && (hints.sources.chartPrimary === 'slide' || hints.sources.chartPrimary === 'deck') && pending.some(node => node.children || node.field !== 'chart')) {
+    const why = useTemplate ? "the slide's layout template places the chart in its regions (a template says this with a chart-beside region)" : regions.length ? "the slide's promoted regions place its blocks" : "the slide's own composition.mode arranges its body";
+    diagnostics.push({ code: 'arrangement-adapted', path: hints.paths.chartPrimary!, message: `design.chartPrimary "${hints.chartPrimary}" is not applied on this slide: ${why}.` });
+  }
   const rootSettings: Composition = chartPrimary
     ? { ...composition, mode: chartPrimary === 'left' || chartPrimary === 'right' ? 'row' : 'column', weights: chartTrack ? (firstChart ? [chartTrack.share, 1 - chartTrack.share] : [1 - chartTrack.share, chartTrack.share]) : firstChart ? [3, 2] : [2, 3], columns: undefined }
     : { ...composition, mode: composition.mode ?? directionMode };
@@ -10250,7 +10442,38 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   else if (chartPrimary) {
     const primary = pending[chartIndex]!, rest = pending.filter((_, index) => index !== chartIndex);
     const support: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: chartTrack?.mode ? { mode: chartTrack.mode } : chartTrack && ownMode ? { mode: ownMode } : {}, synthetic: true };
+    const first = items.length;
     arrange(firstChart ? [primary, support] : [support, primary], contentBox, rootSettings, 0);
+    // RR-105 (coverage finding 24): the paragraphs beside an authored chartPrimary sit in the middle of their track, level with the chart,
+    // instead of at its top over an empty foot (the track is the 2 of the 3:2 split). LH-49's own chart track keeps its stack.
+    const beside = items.slice(first).filter(item => item.field !== 'chart');
+    // A lone plain paragraph there grows first, as a lone block does (LH-48, LH-09): when it fills under LONE_FILL of its track it steps up the
+    // type scale while it fills at most LONE_TARGET, keeps the minimum measure (underMeasure) and fits, up to a paragraph's display size, or a
+    // short message's (SHORT_MESSAGE_WORDS words, at most MESSAGE_DISPLAY_LINES lines). A longer text keeps its size.
+    const lone = !chartTrack && beside.length === 1 && beside[0]!.field === 'text' && typeof beside[0]!.value === 'string' && beside[0]!.text && !beside[0]!.frameBox && !beside[0]!.emphasis && !('richLines' in beside[0]!.text) ? beside[0]! : undefined;
+    if (lone) {
+      const heightOf = (fit: TextFit) => fit.placement?.height ?? fit.lines.length * fit.lineHeight, text = contentText('text', lone.value) ?? '';
+      const message = messageWords(lone.value) <= SHORT_MESSAGE_WORDS;
+      let best = lone.text as TextFit;
+      // The paragraph's growth to LONE_DISPLAY_SIZES.text, then a short message's on to MESSAGE_DISPLAY_SIZE in at most MESSAGE_DISPLAY_LINES lines.
+      const grow = (cap: number, lines: number) => {
+        for (let size = best.fontSize; ; ) {
+          const step = scaleAbove(size, composition.minFontSize ?? 16);
+          if (step > Math.min(cap * scale, capOf(rootSettings) + FONT_GRID_EPSILON) + 1e-9) break;
+          const fit = fitPlacedText('text', lone.value, text, lone.box, step, step, lone.path, lone.alignment) as TextFit;
+          if (fit.overflow || fit.fontSize < step - 1e-9 || heightOf(fit) > LONE_TARGET * lone.box.height || fit.lines.length > lines || (ruleOn('reading-measure') && underMeasure('text', lone.value, lone.box.width, step))) break;
+          best = fit; size = step;
+        }
+      };
+      if (heightOf(best) < LONE_FILL * lone.box.height) { grow(LONE_DISPLAY_SIZES.text, Infinity); if (message) grow(MESSAGE_DISPLAY_SIZE, MESSAGE_DISPLAY_LINES); }
+      lone.text = best;
+    }
+    if (!chartTrack && beside.length && beside.every(item => item.field === 'text' && item.text && !item.frameBox && !item.emphasis && !('listEntries' in item.text) && !('richLines' in item.text))) {
+      const inkBottom = (item: ComposedItem) => item.box.y + ('richLines' in item.text! ? (item.text as RichTextFit).height : (item.text as TextFit).placement?.height ?? item.text!.lines.length * item.text!.lineHeight);
+      const top = Math.min(...beside.map(item => item.box.y)), bottom = Math.max(...beside.map(item => item.box.y + item.box.height)), ink = Math.max(...beside.map(inkBottom)) - top;
+      const dy = round((bottom - top - ink) / 2);
+      if (dy > .5) for (const item of beside) { item.box = { ...item.box, y: item.box.y + dy, height: Math.max(scale, item.box.height - dy) }; item.text = translateTextFit(item.text as TextFit, dy); }
+    }
   } else {
     const grouped = groupRoot(pending), roots = grouped?.nodes ?? pending;
     // LH-48: the one root block is the whole body (fillLone).
@@ -10268,6 +10491,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   centerCardText();
   alignHeadingTracks();
   alignGroupTracks();
+  spaceMetricRows();
   // LH-06: the automatic foot band or pill is the last block, so its text is the last body item (reading order).
   // LH-06: a pill follows its long text, one gap under the text's last line, at the start of the text's own box (its column and
   // alignment); with no room there it is composed at the foot of the body instead (PILL_AT_FOOT).
@@ -11689,6 +11913,8 @@ export type {ChartNumericAxes} from './chart-numeric-axes.js';
 export {chartHistogram,histogramBins,paretoPlan,scottBinCount,histogramEdgeDecimals,histogramEdgeFormat,histogramEdgeText,HISTOGRAM_LABEL_SLOT,HISTOGRAM_MIN_BINS} from './chart-histogram.js';
 export type {ChartLayerHistogram,HistogramBin} from './chart-histogram.js';
 export {chartLayer,chartHeader,chartHeaderCaption,chartRingLabels,smallChart,chartLayerDataLabels,SMALL_CHART_MAX_SERIES,SMALL_CHART_MAX_POINTS,CHART_HEADER_MAX_LEGEND,CHART_HEADER_LEGEND_ROWS,chartValueAxisHidden,chartBarGeometry,chartBarSeriesOffset,CHART_BAR_GAP_WIDTH} from './chart-layer.js';
+export {chartRadarLayout,RADAR_BOTTOM_LEGEND_GAIN} from './chart-radar.js';
+export type {ChartLayerRadar} from './chart-radar.js';
 export type {ChartLayer,ChartBarGeometry,ChartLayerSmall,ChartLayerHeader,ChartLayerRing,ChartPlotInset,ChartHeaderLegendEntry,ChartLayerGeometry,ChartEndLabel,ChartLayerEndLabels,ChartSliceLabel,ChartLayerSlices} from './chart-layer.js';
 export {chartEndLabels,chartSliceLabels,endLabelText,placeEndLabels,refreshEndLabels,CHART_SLICE_LABEL_MIN_RADIUS} from './chart-direct-labels.js';
 export {chartCategoriesInTime,isTimeFieldTitle,monthOf} from './chart-time-order.js';

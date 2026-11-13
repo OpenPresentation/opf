@@ -8,9 +8,13 @@
 // ranges and their cached values) and one `cx:series` per plotted column,
 // together with its chart style and colour style parts, and the slide's chart
 // frame is wrapped in `mc:AlternateContent`: the `mc:Choice` (which requires
-// the chartex namespace of the construct) references the chartex part and the
-// `mc:Fallback` keeps the classic chart, so a reader without chartex support
-// still shows the data. Both parts share the workbook.
+// the chartex namespace of the construct) references the chartex part, which
+// reads the classic chart's workbook. RR-105: the `mc:Fallback`, what a reader
+// without chartex support draws (Keynote, older PowerPoint), is a
+// picture of OPF's preview of the chart, and the classic chart part is then
+// removed; only when that picture cannot be drawn does the `mc:Fallback` keep
+// the classic chart (a clustered column chart of the raw data, which draws
+// neither bins, steps nor quartiles).
 //
 // Import reads the chartex part back: the `cx:series` layoutIds name the OPF
 // chart type (an owned `paretoLine` marks the Office Pareto chart), and the
@@ -382,42 +386,60 @@ export function chartColorStyleXml() {
     [1, 2, 3, 4, 5, 6].map(n => `<a:schemeClr val="accent${n}"/>`).join('') + variations.map(v => `<cs:variation>${v}</cs:variation>`).join('') + '</cs:colorStyle>';
 }
 
+/** RR-105: the name a chart's fallback picture carries until attachChartexFallbacks gives it the frame's. */
+export const chartexFallbackName = name => `${name} fallback picture`;
+
 /**
  * Wrap the PptxGenJS chart frame: the mc:Choice references the chartex part,
- * the mc:Fallback keeps the classic chart frame. The choice frame copies the
- * name, id, description and transform of the original.
+ * the mc:Fallback holds `fallback` (RR-105: the chart's picture), else the
+ * classic chart frame. The choice frame copies the name, id, description and
+ * transform of the original.
  */
-export function wrapChartexFrame(frame, relId, requires) {
+export function wrapChartexFrame(frame, relId, requires, fallback = frame) {
   const namespace = CHARTEX_NAMESPACES[requires];
   if (!namespace) throw new Error(`Unknown chartex namespace ${requires}.`);
   const head = frame.match(/^<p:graphicFrame>[\s\S]*?<\/p:xfrm>/)?.[0];
   if (!head) throw new Error('Generated chart frame has no transform.');
   const choice = `${head}<a:graphic xmlns:a="${NS.a}"><a:graphicData uri="${NS.cx}"><cx:chart xmlns:cx="${NS.cx}" xmlns:r="${NS.r}" r:id="${relId}"/></a:graphicData></a:graphic></p:graphicFrame>`;
-  return `<mc:AlternateContent xmlns:mc="${NS.mc}"><mc:Choice xmlns:${requires}="${namespace}" Requires="${requires}">${choice}</mc:Choice><mc:Fallback>${frame}</mc:Fallback></mc:AlternateContent>`;
+  return `<mc:AlternateContent xmlns:mc="${NS.mc}"><mc:Choice xmlns:${requires}="${namespace}" Requires="${requires}">${choice}</mc:Choice><mc:Fallback>${fallback}</mc:Fallback></mc:AlternateContent>`;
 }
 
 /**
  * Add the chartex parts for every chart the exporter registered in
  * `context.chartex` (by frame name), in slide order. Runs on the unzipped
  * package after the classic chart parts have their fonts and headings.
+ * RR-105: a chart with a fallback picture (`chart.fallback`, the picture's
+ * name) gets that picture as its mc:Fallback, moved from its place in the
+ * slide, and its classic chart is removed: the chart part, its relationships,
+ * its content type and the slide's relationship to it. The embedded workbook
+ * stays, related from the chartex part alone. Returns the removed chart parts.
  */
 export function attachChartexParts(entries, chartex, parseRelationships) {
-  if (!chartex.size) return;
+  if (!chartex.size) return [];
   const slides = Object.keys(entries).filter(part => /^ppt\/slides\/slide\d+\.xml$/.test(part)).sort((a, b) => Number(a.match(/(\d+)\.xml$/)[1]) - Number(b.match(/(\d+)\.xml$/)[1]));
-  const overrides = [];
+  const overrides = [], removed = [];
+  const fallbacks = new Set([...chartex.values()].map(chart => chart.fallback).filter(Boolean));
   let number = 0;
   for (const part of slides) {
     const relationships = parseRelationships(entries, part);
     const relsPart = part.replace(/([^/]+)$/, '_rels/$1.rels');
     let rels = text(entries[relsPart]);
     let nextId = Math.max(0, ...[...rels.matchAll(/\bId="rId(\d+)"/g)].map(match => Number(match[1]))) + 1;
-    let xml = text(entries[part]);
-    let changed = false;
+    // RR-105: each fallback picture leaves its place for its frame's mc:Fallback.
+    const pictures = new Map();
+    let xml = text(entries[part]).replace(/<p:pic>[\s\S]*?<\/p:pic>/g, picture => {
+      const name = picture.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
+      if (!fallbacks.has(name)) return picture;
+      pictures.set(name, picture);
+      return '';
+    });
+    let changed = pictures.size > 0;
     xml = xml.replace(/<p:graphicFrame>[\s\S]*?<\/p:graphicFrame>/g, frame => {
       const name = frame.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
       const chart = chartex.get(name);
       if (!chart) return frame;
-      const chartPart = relationships.get(frame.match(/<c:chart\b[^>]*\br:id="([^"]+)"/)?.[1])?.path;
+      const classicId = frame.match(/<c:chart\b[^>]*\br:id="([^"]+)"/)?.[1];
+      const chartPart = relationships.get(classicId)?.path;
       if (!chartPart) throw new Error('Generated chart relationship is missing.');
       const workbook = [...parseRelationships(entries, chartPart).values()].find(relationship => relationship.type === CHARTEX_RELATIONSHIP_TYPES.package);
       if (!workbook) throw new Error('Generated chart has no embedded workbook.');
@@ -433,13 +455,62 @@ export function attachChartexParts(entries, chartex, parseRelationships) {
       const relId = `rId${nextId++}`;
       rels = rels.replace('</Relationships>', `<Relationship Id="${relId}" Type="${CHARTEX_RELATIONSHIP_TYPES.chart}" Target="../charts/chartEx${number}.xml"/></Relationships>`);
       changed = true;
-      return wrapChartexFrame(frame, relId, chart.spec.requires);
+      const picture = chart.fallback && pictures.get(chart.fallback);
+      if (chart.fallback && !picture) throw new Error('A chartex chart has no fallback picture.');
+      if (!picture) return wrapChartexFrame(frame, relId, chart.spec.requires);
+      pictures.delete(chart.fallback);
+      // The classic chart is no longer shown by any reader: it and the slide's relationship to it go (the workbook stays).
+      const relationship = new RegExp(`<Relationship\\b[^>]*\\bId="${classicId}"[^>]*/>`);
+      if (!relationship.test(rels)) throw new Error('Generated chart relationship is missing.');
+      rels = rels.replace(relationship, '');
+      removed.push(chartPart);
+      return wrapChartexFrame(frame, relId, chart.spec.requires, picture);
     });
+    if (pictures.size) throw new Error('A chartex fallback picture has no chart frame.');
     if (!changed) continue;
     entries[part] = encoder.encode(xml);
     entries[relsPart] = encoder.encode(rels);
   }
-  if (overrides.length) entries['[Content_Types].xml'] = encoder.encode(text(entries['[Content_Types].xml']).replace('</Types>', `${overrides.join('')}</Types>`));
+  let types = text(entries['[Content_Types].xml']);
+  for (const chartPart of removed) {
+    delete entries[chartPart];
+    delete entries[chartPart.replace(/([^/]+)$/, '_rels/$1.rels')];
+    const override = new RegExp(`<Override\\b[^>]*\\bPartName="/${chartPart.replace(/[.]/g, '\\.')}"[^>]*/>`);
+    if (!override.test(types)) throw new Error(`${chartPart} has no content type.`);
+    types = types.replace(override, '');
+  }
+  if (overrides.length || removed.length) entries['[Content_Types].xml'] = encoder.encode(types.replace('</Types>', `${overrides.join('')}</Types>`));
+  return removed;
+}
+
+/**
+ * RR-105: finish each chart's fallback picture once its SVG part is attached (src/svg-image.js attachSvgPictures): it takes its
+ * frame's p:cNvPr (the name and alt text of the mc:Choice) and its transform, and keeps its own id, as the classic fallback frame
+ * had one of its own: an app's shape id says which branch it drew. Data provenance later tags it with the frame's OPF_DATA_V1
+ * (src/data-provenance.js).
+ */
+export function attachChartexFallbacks(entries, chartex) {
+  const fallbacks = new Set([...chartex.values()].map(chart => chart.fallback).filter(Boolean));
+  if (!fallbacks.size) return;
+  let seen = 0;
+  for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
+    const xml = text(entries[part]), next = xml.replace(/<mc:AlternateContent\b[\s\S]*?<\/mc:AlternateContent>/g, alternate => {
+      const picture = alternate.match(/<mc:Fallback><p:pic>[\s\S]*?<\/p:pic><\/mc:Fallback>/)?.[0];
+      if (!fallbacks.has(picture?.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1])) return alternate;
+      seen += 1;
+      const choice = alternate.match(/<mc:Choice\b[\s\S]*?<\/mc:Choice>/)?.[0] ?? '';
+      const cNvPr = choice.match(/<p:cNvPr\b[^>]*?(?:\/>|>[\s\S]*?<\/p:cNvPr>)/)?.[0];
+      const xfrm = choice.match(/<p:xfrm>([\s\S]*?)<\/p:xfrm>/)?.[1];
+      if (!cNvPr || !xfrm) throw new Error('A chartex frame has no name or transform.');
+      const id = picture.match(/<p:cNvPr\b[^>]*\bid="(\d+)"/)?.[1];
+      if (!id) throw new Error('A chartex fallback picture has no id.');
+      const named = cNvPr.replace(/(<p:cNvPr\b[^>]*\bid=")\d+"/, `$1${id}"`);
+      const finished = picture.replace(/<p:cNvPr\b[^>]*?(?:\/>|>[\s\S]*?<\/p:cNvPr>)/, () => named).replace(/<a:xfrm\b[^>]*>[\s\S]*?<\/a:xfrm>/, () => `<a:xfrm>${xfrm}</a:xfrm>`);
+      return alternate.replace(picture, () => finished);
+    });
+    if (next !== xml) entries[part] = encoder.encode(next);
+  }
+  if (seen !== fallbacks.size) throw new Error('Missing generated chartex fallback pictures.');
 }
 
 // ---------------------------------------------------------------------------

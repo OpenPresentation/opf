@@ -7,7 +7,7 @@ import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, type ValidationRuleInfo, ensureIcons, findValidationRule, validationCategories, validationRules } from "@openpresentation/opf";
 import { type CommandSpec, oneOf, parseArgs, printHelp } from "./args.js";
-import { Reporter, assetRoot, localAssetProblems, measuringFonts, readDeckReport } from "@openpresentation/opf/internal/engine";
+import { Reporter, assetRoot, iconSourceReader, localAssetProblems, measuringFonts, readDeckReport } from "@openpresentation/opf/internal/engine";
 import { installHint } from "./install.js";
 import { cliCatalogs } from "./catalogs.js";
 import { reaches } from "./check.js";
@@ -230,7 +230,14 @@ export async function run(args: string[], host: Host): Promise<void> {
 				const format = inputFormatOf(file, raw, from);
 				const read = readDeckReport(raw, { format, validate: false }).presentation;
 				// LH-14: the icon sets the deck names load first (the gallery loads each on first use), so an unknown icon name is reported.
-				await ensureIcons(read, { catalogs: settings.catalogs });
+				// RR-105: and its icons' SVG files, read from the folder convert reads them from, so validate sees the icons convert draws.
+				let iconRoot: string | undefined;
+				try {
+					iconRoot = assetRoot(explicitAssetDir ?? (file === "-" ? process.cwd() : path.dirname(path.resolve(file))), true);
+				} catch {
+					iconRoot = undefined; // reported by the asset check below
+				}
+				await ensureIcons(read, { catalogs: settings.catalogs, ...(iconRoot ? { readSource: iconSourceReader(iconRoot) } : {}) });
 				const measuring = measures(settings.only) ? await measuringFonts(read, { reporter: new Reporter(), flags: true, catalogs: settings.catalogs, reportInvalidDocument: true }) : undefined;
 				let checked: ReturnType<typeof checkText>;
 				try {

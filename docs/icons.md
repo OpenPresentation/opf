@@ -18,7 +18,7 @@ author gave one. OPF never invents an icon.
 
 | Field | Drawn |
 | --- | --- |
-| `items[].icon` (a `ListItem` object) | On a chip in the marker column, in place of the bullet, centered on the entry's first line. Every entry of the list keeps the column, so the texts start at one edge; an entry without an icon keeps its bullet there, centered in the column (LH-174), unless `design.listBullet` is `none`. First-level entries of an unnumbered list only. A ruled list (`listStyle: "rows"`) sets the chips at the start of its labels. A short list that is the whole body draws as icon cards (below), numbered or not. |
+| `items[].icon` (a `ListItem` object) | On a chip in the marker column, in place of the bullet, centered on the entry's first line. Every entry of the list keeps the column, so the texts start at one edge; an entry without an icon keeps its bullet there, centered in the column (LH-174), unless `design.listBullet` is `none`. First-level entries of an unnumbered list only; in a nested list (RR-105) the first-level entries draw their chips and a nested entry keeps its bullet, under its entry's text, with a nested list's 1.1 em hanging indent. A ruled list (`listStyle: "rows"`) sets the chips at the start of its labels. A short list that is the whole body draws as icon cards (below), numbered or not. |
 | `metric.icon` | On a chip above the metric, at its alignment (centered, or at the start of a start-aligned metric). |
 | `icon` on a group (a block with `blocks`) | On a chip at the top start edge of the group, above its heading (its eyebrow), inside a group drawn on a card. A person drawn as a portrait card (LH-132) draws no chip; the icon is reported `icon-dropped`. |
 
@@ -180,7 +180,7 @@ Before synchronous code reads a deck, a host awaits `ensureIcons(deck, { catalog
 fonts handle (`ensure`) do with the catalogs they are given; core's Node file API, the CLI and the MCP load the icons a deck names before
 they check or draw it. A Node script that calls `toSvg` directly calls `ensureIcons` first; diagrams and shapes load the same way, and one
 preload covers all three (see [Engines and icon sets that load on demand](how-opf-works.md#engines-and-icon-sets-that-load-on-demand)).
-`validate` alone checks only the set ids and the sets the document embeds until the sets are loaded. Search (the MCP's `search_icons`,
+`validate` alone checks only the set ids and the sets the document embeds until the sets are loaded. `opf validate` reads the SVG files a deck's icons name from the folder `opf convert` reads them from (the deck's folder or `--asset-dir`, RR-105), so both report the same `opf/icon-dropped` findings. Search (the MCP's `search_icons`,
 the editor's `searchIcons` and icon picker) reads the names and the keywords, and the picker reads the path data of the icons on the page
 it shows.
 
