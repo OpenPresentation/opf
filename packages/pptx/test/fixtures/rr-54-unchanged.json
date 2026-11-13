@@ -791,10 +791,13 @@
           }
         ]
       },
-      "sha256": "3ea01cbc7853b1a76358cf1c3071f7aedd20309bb6342fb59a3d89f9edd11544",
+      "sha256": "0d2194839e9192d2b2ab4805b74a30f34f4243e83b61aa8df62c2f59534545cf",
+      "rr105PreviousSha256": "3ea01cbc7853b1a76358cf1c3071f7aedd20309bb6342fb59a3d89f9edd11544",
+      "rr105PreviousBytes": 26975,
+      "rr105Review": "Keynote fix 1 (2026-11-13): percentage-only data labels name 0% instead of General; only ppt/charts/chart1.xml changes.",
       "rr81PreviousSha256": "c09695697b886e3c1af9fb3c32ef0427ff082d8ccf3be059778ca7483c4c510e",
       "rr20PartCount": 32,
-      "rr20Bytes": 26975,
+      "rr20Bytes": 26972,
       "rr90PreviousSha256": "8a5bdd94d625770f070bd2d47ec6bbf6d69a852e8c56facb3ffc1fb935378299",
       "rr90PreviousBytes": 25631,
       "wi5PreviousSha256": "3cfa0869e6d0c2fd8868a814197ccb6bc6ca0203b499bad1327fbdb5f786ed29",
