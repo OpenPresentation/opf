@@ -1,0 +1,199 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "reference names",
+ "language": "en-US",
+ "slides": [
+  {
+   "title": "Labeled line",
+   "chart": {
+    "type": "line",
+    "data": {
+     "columns": [
+      "Quarter",
+      "Revenue"
+     ],
+     "rows": [
+      [
+       "Q1",
+       120
+      ],
+      [
+       "Q2",
+       140
+      ],
+      [
+       "Q3",
+       160
+      ],
+      [
+       "Q4",
+       135
+      ]
+     ]
+    },
+    "referenceLines": [
+     {
+      "value": 150,
+      "label": "Target 150"
+     }
+    ]
+   }
+  },
+  {
+   "title": "Unlabeled references",
+   "chart": {
+    "type": "line",
+    "data": {
+     "columns": [
+      "Quarter",
+      "Revenue"
+     ],
+     "rows": [
+      [
+       "Q1",
+       120
+      ],
+      [
+       "Q2",
+       140
+      ],
+      [
+       "Q3",
+       160
+      ],
+      [
+       "Q4",
+       135
+      ]
+     ]
+    },
+    "referenceLines": [
+     {
+      "value": 150
+     },
+     {
+      "value": 125
+     }
+    ]
+   }
+  },
+  {
+   "title": "Same label twice",
+   "chart": {
+    "type": "line",
+    "data": {
+     "columns": [
+      "Quarter",
+      "Revenue"
+     ],
+     "rows": [
+      [
+       "Q1",
+       120
+      ],
+      [
+       "Q2",
+       140
+      ],
+      [
+       "Q3",
+       160
+      ],
+      [
+       "Q4",
+       135
+      ]
+     ]
+    },
+    "referenceLines": [
+     {
+      "value": 150,
+      "label": "Goal"
+     },
+     {
+      "value": 125,
+      "label": "Goal"
+     }
+    ]
+   }
+  },
+  {
+   "title": "Label equals a series",
+   "chart": {
+    "type": "line",
+    "data": {
+     "columns": [
+      "Quarter",
+      "Revenue",
+      "Cost"
+     ],
+     "rows": [
+      [
+       "Q1",
+       120,
+       80
+      ],
+      [
+       "Q2",
+       140,
+       100
+      ],
+      [
+       "Q3",
+       160,
+       120
+      ],
+      [
+       "Q4",
+       135,
+       95
+      ]
+     ]
+    },
+    "referenceLines": [
+     {
+      "value": 150,
+      "label": "Revenue"
+     }
+    ],
+    "legend": "bottom"
+   }
+  },
+  {
+   "title": "Multiline label",
+   "chart": {
+    "type": "line",
+    "data": {
+     "columns": [
+      "Quarter",
+      "Revenue"
+     ],
+     "rows": [
+      [
+       "Q1",
+       120
+      ],
+      [
+       "Q2",
+       140
+      ],
+      [
+       "Q3",
+       160
+      ],
+      [
+       "Q4",
+       135
+      ]
+     ]
+    },
+    "referenceLines": [
+     {
+      "value": 150,
+      "label": "Plan\n2027"
+     }
+    ]
+   }
+  }
+ ]
+}
