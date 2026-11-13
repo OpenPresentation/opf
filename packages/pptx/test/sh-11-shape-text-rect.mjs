@@ -53,8 +53,9 @@ for (const [slideIndex, slide] of slides.entries()) {
     const vertical = entry.shape.textDirection === 'vertical' || entry.shape.textDirection === 'vertical270';
     const textBox = entry.shape.textBox, expected = vertical ? { x: textBox.x + (textBox.width - textBox.height) / 2, y: textBox.y + (textBox.height - textBox.width) / 2, width: textBox.height, height: textBox.width } : textBox;
     for (const key of ['x', 'y', 'width', 'height']) near(inner[key], expected[key], `${label}: text rectangle ${key}`);
-    // PowerPoint wraps there itself, at the size core fitted, and never autofits.
-    assert.match(bodyPr, /\bwrap="square"/, `${label}: wrap`);
+    // PowerPoint wraps there itself, at the size core fitted, and never autofits. RR-105: text that core keeps on one unwrapped line (a
+    // word wider than the text rectangle, never broken inside) is written unwrapped and centered on the same rectangle.
+    assert.match(bodyPr, entry.shape.textWrap === 'none' ? /\bwrap="none"[^>]*\banchorCtr="1"/ : /\bwrap="square"[^>]*\banchorCtr="0"/, `${label}: wrap`);
     assert.match(shape, /<a:noAutofit\/><\/a:bodyPr>/, `${label}: no autofit`);
     assert.ok(!/normAutofit|spAutoFit|fontScale/.test(shape), `${label}: no PowerPoint autofit`);
     const sizes = [...shape.matchAll(/<a:rPr\b[^>]*\bsz="(\d+)"/g)].map(match => Number(match[1]));
