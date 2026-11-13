@@ -61,10 +61,7 @@ for (const direction of ['ltr', 'rtl']) {
     assert.equal(busy.pictureText?.anchor, 'top');
     assert.equal(calm.pictureText?.anchor, 'bottom');
     assert.equal(estimated.pictureText, undefined, 'nothing measured, nothing scored');
-    // LH-189: over a measured picture the heading keeps the body pitch (1.22 em), the plain background's takes the display pitch, so the
-    // stack's foot is what the two share.
-    const foot = (result) => Math.max(...result.items.map((item) => item.box.y + item.box.height));
-    assert.ok(Math.abs(foot(calm) - foot(plain)) < 1, 'a calm picture keeps the plain background\'s low anchor');
+    assert.equal(titleOf(calm).box.y, titleOf(plain).box.y, 'a calm picture keeps the plain background\'s low anchor');
     for (const result of [calm, busy, estimated]) assert.ok(result.titleRule, 'the rule stays');
   });
 }

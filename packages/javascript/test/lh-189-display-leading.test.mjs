@@ -1,5 +1,6 @@
-// LH-189: display text (twice the body role size or more) takes a line pitch of 1.0 em and -1.5% tracking where its script has case;
-// labels and attributions set in capitals take the eyebrow's +8% tracking. Measurement and the composed styles carry the same numbers.
+// LH-189 (narrowed): display text (twice the body role size or more) of one line tracks -1.5% at the body pitch; one of two lines takes the
+// 1.0 em pitch and the tracking only where that buys it a larger size; three lines or more take neither. Labels and attributions set in
+// capitals take the eyebrow's +8% tracking. Measurement and the composed styles carry the same numbers.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
@@ -43,13 +44,39 @@ test('LH-189: fitText takes the display pitch from displayFrom, and the body pit
   close(fitText('Ship in March', box, 60, 60).lineHeight, 60 * BODY_LINE_PITCH, 'by default');
 });
 
-test('LH-189: a statement at display size has a 1.0 em pitch and tracks; its measured lines include the tracking', () => {
-  const result = composeSlide({ text: 'Teams that own their calendar ship twice as often.' });
-  const text = item(result, 'text');
-  assert.ok(text.text.fontSize >= displayFrom(1));
-  assert.ok(text.text.lines.length >= 2, 'two lines or more');
-  close(text.text.lineHeight, text.text.fontSize * DISPLAY_LINE_PITCH, 'pitch');
-  assert.equal(text.textStyle.tracking, DISPLAY_TRACKING);
+test('LH-189: a one-line display text tracks at the body pitch', () => {
+  const short = item(composeSlide({ text: 'Ship in March.' }), 'text');
+  assert.ok(short.text.fontSize >= displayFrom(1));
+  assert.equal(short.text.lines.length, 1);
+  close(short.text.lineHeight, short.text.fontSize * BODY_LINE_PITCH, 'one line: the pitch buys nothing');
+  assert.equal(short.textStyle.tracking, DISPLAY_TRACKING);
+});
+
+test('LH-189: a two-line display text that reaches the same size either way keeps the body pitch and no tracking', () => {
+  for (const text of ['Teams that own their calendar ship twice as often.', 'Fewer exports, more decisions.']) {
+    const two = item(composeSlide({ text }), 'text');
+    assert.ok(two.text.fontSize >= displayFrom(1));
+    assert.equal(two.text.lines.length, 2, text);
+    close(two.text.lineHeight, two.text.fontSize * BODY_LINE_PITCH, text);
+    assert.equal(two.textStyle.tracking, undefined, text);
+  }
+});
+
+test('LH-189: a two-line display text takes the 1.0 em pitch and the tracking where that reaches a larger size', () => {
+  // A wide padding leaves a short body: at 1.22 em the two lines stop a step lower.
+  const tight = item(composeSlide({ text: 'Ship the new ledger in March.', composition: { padding: 0.2 } }), 'text');
+  assert.equal(tight.text.lines.length, 2);
+  close(tight.text.lineHeight, tight.text.fontSize * DISPLAY_LINE_PITCH, 'pitch');
+  assert.equal(tight.textStyle.tracking, DISPLAY_TRACKING);
+  assert.ok(tight.text.fontSize >= 113 - 1e-6, `${tight.text.fontSize}`);
+});
+
+test('LH-189: three lines or more keep the body pitch and no tracking', () => {
+  const three = item(composeSlide({ text: 'Teams that owned their release calendar shipped twice as often as teams on the shared train.' }), 'text');
+  assert.ok(three.text.fontSize >= displayFrom(1));
+  assert.ok(three.text.lines.length >= 3);
+  close(three.text.lineHeight, three.text.fontSize * BODY_LINE_PITCH);
+  assert.equal(three.textStyle.tracking, undefined);
   // Body text keeps its pitch and no tracking.
   const paragraph = 'The old ledger ran on three regional platforms that each kept their own copy of every account, so a change took a day to reach every region and the nightly reconciliation failed about once a week.';
   const body = item(composeSlide({ title: 'Why we moved the ledger this year', blocks: [{ text: paragraph }, { items: ['Costly to run in three regions', 'Fragile at month end', 'Late to reconcile', 'Hard to audit'] }] }), 'text');
@@ -58,10 +85,10 @@ test('LH-189: a statement at display size has a 1.0 em pitch and tracks; its mea
   assert.equal(body.textStyle.tracking, undefined);
 });
 
-test('LH-189: a rich statement tracks on its fragments; an Arabic one keeps its spacing and the body pitch', () => {
-  const rich = item(composeSlide({ text: ['Customers buy ', { text: 'fewer bad Mondays.', bold: true }] }), 'text');
+test('LH-189: a one-line rich statement tracks on its fragments; an Arabic one keeps its spacing', () => {
+  const rich = item(composeSlide({ text: ['Ship ', { text: 'in March.', bold: true }] }), 'text');
   assert.ok(rich.text.fontSize >= displayFrom(1));
-  close(rich.text.lineHeight, rich.text.fontSize * DISPLAY_LINE_PITCH);
+  assert.equal(rich.text.richLines.length, 1);
   for (const line of rich.text.richLines) for (const fragment of line.fragments) assert.equal(fragment.style.tracking, DISPLAY_TRACKING);
   const arabic = item(composeSlide({ text: 'الإطلاق في مارس' }, { direction: 'rtl' }), 'text');
   assert.ok(arabic.text.fontSize >= displayFrom(1));
@@ -69,48 +96,50 @@ test('LH-189: a rich statement tracks on its fragments; an Arabic one keeps its 
   assert.equal(arabic.textStyle.tracking, undefined);
 });
 
-test('LH-189: a display title (a cover grown to display size) takes the pitch; a content title at its role size does not', () => {
+test('LH-189: a two-line cover title at display size keeps the body pitch; a content title at its role size is body text', () => {
   const cover = item(composeSlide({ title: 'Ledger migration plan for the next fiscal year' }), 'title');
-  if (cover.text.fontSize >= displayFrom(1)) close(cover.text.lineHeight, cover.text.fontSize * DISPLAY_LINE_PITCH);
+  assert.ok(cover.text.fontSize >= displayFrom(1));
+  assert.equal(cover.text.lines.length, 2);
+  close(cover.text.lineHeight, cover.text.fontSize * BODY_LINE_PITCH);
+  assert.equal(cover.textStyle.tracking, undefined);
   const content = item(composeSlide({ title: 'Ledger migration', items: ['One', 'Two', 'Three', 'Four', 'Five', 'Six'] }), 'title');
   assert.ok(content.text.fontSize < displayFrom(1));
   close(content.text.lineHeight, content.text.fontSize * BODY_LINE_PITCH);
 });
 
-test('LH-189: the body of a message quote at display size takes the pitch and tracking; an attribution in capitals takes the eyebrow tracking', () => {
+test('LH-189: a one-line message quote body tracks at the body pitch; an attribution in capitals takes the eyebrow tracking', () => {
   const box = { x: 0, y: 0, width: 1100, height: 560 };
   const quote = layoutQuote({ text: 'Less, but better.', attribution: 'DIETER RAMS' }, box, { growth: 2, message: true });
   const body = quote.parts.find((part) => part.role === 'body'), footer = quote.parts.find((part) => part.role === 'footer');
   assert.ok(body.fit.fontSize >= displayFrom(1));
-  close(body.fit.lineHeight, body.fit.fontSize * DISPLAY_LINE_PITCH);
+  assert.equal(body.fit.lines.length, 1);
+  close(body.fit.lineHeight, body.fit.fontSize * BODY_LINE_PITCH);
   assert.equal(body.style.tracking, DISPLAY_TRACKING);
   assert.equal(footer.style.tracking, EYEBROW_TRACKING);
   const plain = layoutQuote({ text: 'Less, but better.', attribution: 'Dieter Rams' }, box);
   assert.equal(plain.parts.find((part) => part.role === 'footer').style.tracking, undefined);
-  assert.ok(plain.parts.find((part) => part.role === 'body').fit.fontSize < displayFrom(1));
-  assert.equal(plain.parts.find((part) => part.role === 'body').style.tracking, undefined);
-  // A quote that grows among others (a stacked record's row of quotes) keeps the body pitch at any size.
+  // A two-line message quote, and a quote among others at any size, keep the body pitch and no tracking.
+  const two = layoutQuote({ text: 'Simplicity is the ultimate sophistication.', attribution: 'Leonardo' }, { ...box, width: 1000 }, { growth: 2, message: true }).parts.find((part) => part.role === 'body');
+  assert.ok(two.fit.fontSize >= displayFrom(1) && two.fit.lines.length === 2, `${two.fit.fontSize} ${two.fit.lines.length}`);
+  close(two.fit.lineHeight, two.fit.fontSize * BODY_LINE_PITCH);
+  assert.equal(two.style.tracking, undefined);
   const among = layoutQuote({ text: 'Less, but better.', attribution: 'Dieter Rams' }, box, { growth: 2 }).parts.find((part) => part.role === 'body');
-  assert.ok(among.fit.fontSize >= displayFrom(1));
-  close(among.fit.lineHeight, among.fit.fontSize * BODY_LINE_PITCH);
   assert.equal(among.style.tracking, undefined);
 });
 
-test('LH-189: the value of a message metric is display text; one at its role size among other blocks is not; a label in capitals tracks as an eyebrow', () => {
+test('LH-189: the value of a message metric tracks at the body pitch; one at its role size among other blocks does not; a label in capitals tracks as an eyebrow', () => {
   const box = { x: 0, y: 0, width: 600, height: 400 };
   const metric = layoutMetric({ value: '$1.2M', label: 'ANNUAL REVENUE' }, box, { message: true });
   const value = metric.parts.find((part) => part.role === 'value'), label = metric.parts.find((part) => part.role === 'label');
   assert.ok(value.fit.fontSize >= displayFrom(1));
-  close(value.fit.lineHeight, value.fit.fontSize * DISPLAY_LINE_PITCH);
+  close(value.fit.lineHeight, value.fit.fontSize * BODY_LINE_PITCH, 'a figure is one line: the pitch buys nothing');
   assert.equal(value.style.tracking, DISPLAY_TRACKING);
   assert.equal(label.style.tracking, EYEBROW_TRACKING);
   assert.equal(label.style.caps, undefined, 'already in capitals: drawn as written');
   const role = layoutMetric({ value: '$1.2M', label: 'Annual revenue' }, box), plain = role.parts.find((part) => part.role === 'value');
   assert.equal(role.parts.find((part) => part.role === 'label').style.tracking, undefined);
-  close(plain.fit.lineHeight, plain.fit.fontSize * BODY_LINE_PITCH, 'a value at its role size keeps the body pitch');
   assert.equal(plain.style.tracking, undefined);
-  // A lone metric that grows is the body's message too.
-  close(layoutMetric({ value: '$1.2M' }, box, { growth: 2 }).parts[0].fit.lineHeight, layoutMetric({ value: '$1.2M' }, box, { growth: 2 }).parts[0].fit.fontSize * DISPLAY_LINE_PITCH);
+  assert.equal(layoutMetric({ value: '$1.2M' }, box, { growth: 2 }).parts[0].style.tracking, DISPLAY_TRACKING, 'a lone metric that grows is the message too');
 });
 
 test('LH-189: a CJK statement at display size keeps the body pitch and no tracking', () => {

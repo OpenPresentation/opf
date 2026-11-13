@@ -114,10 +114,7 @@ for (const direction of ['ltr', 'rtl']) {
       assert.ok(titleOf(busy).box.y < titleOf(estimated).box.y - 50, `${layout}: over a busy lower half, at the calm top (LH-158)`);
       assert.equal(busy.pictureText?.placement, 'top-start', `${layout}: the choice is reported`);
       assert.equal(estimated.pictureText, undefined, `${layout}: nothing is reported without a measurement`);
-      // LH-189: over a measured picture the heading keeps the body pitch (1.22 em), the plain background's takes the display pitch, so the
-      // group's foot is what the two share.
-      const foot = (result) => Math.max(...result.items.map((item) => item.box.y + item.box.height));
-      assert.ok(Math.abs(foot(calm) - foot(plain)) < 1, `${layout}: a calm picture keeps the plain background's low anchor`);
+      assert.equal(titleOf(calm).box.y, titleOf(plain).box.y, `${layout}: a calm picture keeps the plain background's low anchor`);
       for (const result of [calm, busy, estimated]) assert.equal(titleOf(result).alignment, titleOf(plain).alignment, `${layout}: the start alignment stays`);
       if (layout === 'cover') for (const result of [calm, busy, estimated]) assert.ok(result.titleRule, 'the rule stays');
     }
