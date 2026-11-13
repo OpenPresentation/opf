@@ -22,7 +22,6 @@ const EXPECTED_WARNINGS = {
 	"coverage-shape-presets": ["opf/shape-adjust-range"],
 	"coverage-charts": ["opf/chart-mapping-adapted"],
 	"coverage-template": ["opf/variable-unfilled"],
-	"coverage-variables": ["opf/missing-alt-text"],
 	"coverage-warnings": ["opf/shape-off-slide", "opf/shape-anchor-size-unit", "opf/timeline-period-short"],
 };
 
