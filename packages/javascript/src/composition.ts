@@ -6501,25 +6501,51 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (shape.textBold) boldLabels.add(textPath);
     const floor = snapFontSizeUp((minFontSize ?? 16) * scale), start = Math.max(floor, contentNominalSize('text') * scale);
     let text: TextFit | RichTextFit = fitContent('text', drawn, contentText('text', drawn) ?? '', shape.textBox, start, floor, textPath, undefined, 'center');
+    // RR-105: text in a shape never breaks inside a word. A fit that would (a word wider than the text rectangle) is set on one line instead,
+    // centered on the text rectangle and free to reach past its insets up to the shape's own edges (`textWrap: 'none'`; PowerPoint draws an
+    // unwrapped line the same way), at the largest size from the body size down at which the line fits there. Text that cannot be one line
+    // shrinks, without breaking a word, in the text rectangle; when no size holds it, the overflow finding reports it.
+    const plainText = contentText('text', drawn) ?? '', words = plainText.split(/\s+/u).filter(Boolean).length;
+    const splitsWord = (fit: TextFit | RichTextFit) => fit.lines.flatMap(line => line.split(/\s+/u).filter(Boolean)).length > words;
+    let wide: LayoutBox | undefined;
+    if ((shape.textDirection ?? 'horizontal') === 'horizontal' && splitsWord(text)) {
+      const centerX = shape.textBox.x + shape.textBox.width / 2, half = Math.min(centerX - shape.box.x, shape.box.x + shape.box.width - centerX);
+      const across = { ...shape.textBox, x: round(centerX - half), width: round(2 * half) };
+      let settled: TextFit | RichTextFit | undefined;
+      for (let trial = 0, size = start; trial <= 64 && !settled; trial++) {
+        const oneLine = fitContent('text', drawn, plainText, across, size, size, textPath, undefined, 'center');
+        if (!oneLine.overflow && oneLine.lines.length === 1 && !splitsWord(oneLine)) { settled = oneLine; wide = across; break; }
+        if (size <= floor + FONT_GRID_EPSILON) break;
+        size = Math.max(floor, gridFontSize(size - 1, floor));
+      }
+      for (let trial = 0, size = start; trial <= 64 && !settled; trial++) {
+        const kept = fitContent('text', drawn, plainText, shape.textBox, size, size, textPath, undefined, 'center');
+        if (!kept.overflow && !splitsWord(kept)) { settled = kept; break; }
+        if (size <= floor + FONT_GRID_EPSILON) break;
+        size = Math.max(floor, gridFontSize(size - 1, floor));
+      }
+      text = settled ?? { ...text, overflow: true };
+    }
+    if (wide) shape.textWrap = 'none';
     // SH-10: text that holds the body size in a large shape grows as a lone body block does: up the type scale, one step at a time, to the
     // display size of a paragraph, while it still fits at that size and fills at most LONE_TARGET of the text rectangle's height. It never
     // ends below the body size (growth only); text that does not hold the body size is fitted down to the floor as before. `cap` is the
     // size its sibling shapes share (evenShapeText).
-    if (!text.overflow && text.fontSize >= start - FONT_GRID_EPSILON) {
+    if (!wide && !text.overflow && text.fontSize >= start - FONT_GRID_EPSILON) {
       const display = Math.min(cap, LONE_DISPLAY_SIZES.text * scale), floorPx = minFontSize ?? 16;
       const filled = (fit: TextFit | RichTextFit) => Math.max('richLines' in fit ? (fit as RichTextFit).height : fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
       for (let size = text.fontSize; ;) {
         const next = typeScaleStepsUp(size, 1, display, floorPx, scale);
         if (next <= size + FONT_GRID_EPSILON) break;
         const grown = fitContent('text', drawn, contentText('text', drawn) ?? '', shape.textBox, next, next, textPath, undefined, 'center');
-        if (grown.overflow || grown.fontSize < next - FONT_GRID_EPSILON || filled(grown) > LONE_TARGET * shape.textBox.height + .5) break;
+        if (grown.overflow || grown.fontSize < next - FONT_GRID_EPSILON || splitsWord(grown) || filled(grown) > LONE_TARGET * shape.textBox.height + .5) break;
         text = grown;
         size = next;
       }
     }
     if (text.overflow) sink.push({ code: 'text-overflow', path: textPath, message: 'The text does not fit inside the shape at the readable minimum size; give the shape more room (a larger cell or another aspectRatio), shorten the text or lower its padding.' });
     // The text block sits at the shape's anchor in its box (PowerPoint's a:bodyPr anchor): the preview draws the fit in textArea.
-    const area = shape.textBox, height = Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight, text.placement?.height ?? 0);
+    const area = wide ?? shape.textBox, height = Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight, text.placement?.height ?? 0);
     const offset = Math.max(0, shape.anchor === 'middle' ? (area.height - height) / 2 : shape.anchor === 'bottom' ? area.height - height : 0);
     text = translateTextFit(text, round(offset));
     shape.textArea = { x: area.x, y: round(area.y + offset), width: area.width, height: round(Math.min(area.height, height)) };

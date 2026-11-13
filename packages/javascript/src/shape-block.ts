@@ -456,6 +456,11 @@ export interface ComposedShape {
   anchor: 'top' | 'middle' | 'bottom';
   /** Where the fitted text block is drawn: `textBox` narrowed to the text's height at the anchor (present when the shape has text). */
   textArea?: Box;
+  /**
+   * RR-105: `none` when the text is one unwrapped line wider than `textBox` (a word that would otherwise break inside it): it is centered
+   * on the text rectangle and reaches past the insets up to the shape's edges (`textArea` is that width). PPTX writes a:bodyPr wrap="none".
+   */
+  textWrap?: 'none';
   textDirection: 'horizontal' | 'vertical' | 'vertical270' | 'stacked';
   style: ShapeStyleName;
   /** The style's PowerPoint references (absent for style none). */
