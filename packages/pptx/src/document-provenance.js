@@ -110,6 +110,8 @@ export function splitAuthors(creator) {
 }
 // The creator the package gets when the document names no author. An imported default is not an authored value.
 export const DEFAULT_AUTHOR = 'OpenPresentation';
+// RR-105 (#1290): the tags as the export writes them into cp:keywords and import splits them back (empty and blank tags dropped, trimmed).
+const nativeTags = tags => Array.isArray(tags) ? tags.filter(tag => typeof tag === 'string' && tag.trim()).join('; ').split(';').map(tag => tag.trim()).filter(Boolean) : [];
 // Stored only when the native creator cannot carry the authored form by itself (or would read as the default).
 const authorNeedsRecord = author => Array.isArray(author) || (typeof author === 'string' && (author === DEFAULT_AUTHOR || Array.isArray(splitAuthors(author))));
 // `design.logo` (RR-71: a logo reference such as `var:organization.beta.logo`, or `false`) has no native gate: it returns
@@ -1304,6 +1306,12 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
       // Native evidence: the stored authored form only stands for the creator it was joined into.
       if (joinAuthors(imported.author) === joinAuthors(metadata.author)) group('author', [set(['author'], clone(metadata.author))]);
       else report({code: 'metadata-reference-changed', path: 'author', message: 'The PowerPoint author field no longer matches the stored author, so the stored author was not restored; the current field is kept.'});
+      continue;
+    }
+    // RR-105 (#1290): tags are native (docProps/core.xml cp:keywords, joined with "; "). The stored array returns while the keywords
+    // still equal it; tags edited in File > Info > Tags win. A package written before keywords existed has none and restores as before.
+    if (key === 'tags' && imported.tags !== undefined && JSON.stringify(imported.tags) !== JSON.stringify(nativeTags(metadata.tags))) {
+      report({code: 'metadata-reference-changed', path: 'tags', message: 'The PowerPoint tags (keywords) no longer match the stored tags, so the stored tags were not restored; the current keywords are kept.'});
       continue;
     }
     let value = restorable(key, metadata[key], {prune: true});

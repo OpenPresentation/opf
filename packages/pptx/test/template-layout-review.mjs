@@ -37,7 +37,8 @@ const automaticSource = {slides: [{title: 'Automatic', text: 'Body'}, {layout: '
 const automaticBytes = await toPptx(automaticSource, options);
 const automaticParts = unzipSync(automaticBytes);
 const automaticLayouts = Object.entries(automaticParts).filter(([path]) => /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)).map(([, bytes]) => dec.decode(bytes));
-assert.equal(automaticLayouts.filter(xml => /name="OPF auto"/.test(xml) && /type="titleOnly"/.test(xml)).length, 1, 'Automatic slides use one OPF auto titleOnly layout per master');
+// RR-105 (#1290, 2026-11-12): OPF's automatic layout is named "Title Only" (src/layout-names.js); previously "OPF auto".
+assert.equal(automaticLayouts.filter(xml => /name="Title Only"/.test(xml) && /type="titleOnly"/.test(xml)).length, 1, 'Automatic slides use one OPF auto titleOnly layout per master');
 const automaticReports = [];
 assert.deepEqual((await fromPptx(automaticBytes, {...options, onDiagnostic: item => automaticReports.push(item)})).slides, automaticSource.slides, 'Automatic layout preserves implicit versus explicit authored layout');
 const mixed = {slides: [{layout: 'text', title: 'Template', text: 'Body'}, {title: 'Automatic', text: 'Body'}]};
@@ -52,7 +53,7 @@ assert.equal(changed.slides[0].layout, 'auto', 'Change Layout from a template to
 assert.ok(changedReports.some(item => item.code === 'layout-changed'));
 assert.ok(!automaticReports.some(item => item.code === 'unresolved-reference' && /auto/.test(item.message)), 'auto is a built-in sentinel, not a catalog reference');
 const bareAuto = unzipSync(await toPptx({slides: [{title: 'Bare automatic', text: 'Body'}]}, {...options, catalogs: []}));
-assert.ok(Object.entries(bareAuto).some(([path, bytes]) => /^ppt\/slideLayouts\//.test(path) && /name="OPF auto"/.test(dec.decode(bytes))), 'Bare automatic decks use OPF auto without registered catalogs');
+assert.ok(Object.entries(bareAuto).some(([path, bytes]) => /^ppt\/slideLayouts\//.test(path) && /name="Title Only"/.test(dec.decode(bytes))), 'Bare automatic decks use OPF auto without registered catalogs');
 const foreign = unzipSync(await toPptx({slides: [{title: 'Foreign', text: 'Body'}]}, {...options, catalogs: [], provenance: false}));
 const foreignRelationship = dec.decode(foreign['ppt/slides/_rels/slide1.xml.rels']).match(/<Relationship[^>]*Type="[^"]*\/slideLayout"[^>]*Target="([^"]+)"/)[1];
 const layoutPath = `ppt/${foreignRelationship.replace(/^\.\.\//, '')}`;
