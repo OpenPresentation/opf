@@ -33,10 +33,12 @@ const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n'
 // the file. RR-105 (Keynote fix 2, 2026-11-12, supervisor decision for the owner, vetoable) names each helper series after its reference's label instead of "OPF reference N"
 // (the series name cache, the workbook header cell and its table column), so Keynote's legend, which keeps helpers, reads the label; so the
 // two embedded workbooks differ from the measured archive too, only in the parts that hold that header (asserted below).
+// RR-105 (chart fixes, 2026-11-12) changed the two chart parts once more: line and area charts write c:dispBlanksAs "gap" (a missing
+// value is a gap, as the preview draws it), and a reference label keeps clear of the marks, with a filled plate when every place is taken.
 // The native route still admits only the measured archive (retained as
 // test-fixtures/reference-name/reference-native-lines.pptx, which the comparison contract below runs on); measuring the current export
 // needs a new sealed input.
-const CURRENT_EXPORT=Object.freeze({bytes:128998,sha256:'49c3e0aeaed710b1269fc26c1bd7b7fdbe5892c9470ad9b2a359539379b6f648'});
+const CURRENT_EXPORT=Object.freeze({bytes:129035,sha256:'6acdda5035661565792ab0984ee9d039370d5ca39e929fd53dedea4beeeef71f'});
 let current;
 function currentFixture(){current??=(async()=>{
  const deck=structuredClone(source),renderOptions={catalogs:[gallery]},fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck,renderOptions});await fonts.ensure(deck,{renderOptions});
