@@ -125,12 +125,13 @@ export function applyReferenceSeries(xml, info, binding) {
     const label =
       line.label === undefined
         ? ''
-        : `<c:dLbl><c:idx val="${line.endpoint}"/><c:tx>${nativeLabelXml(line.label, info, binding?.lang)}</c:tx><c:dLblPos val="${line.labelSide === 'below' ? 'b' : 't'}"/><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/></c:dLbl>`;
+        : `<c:dLbl><c:idx val="${line.endpoint}"/><c:tx>${nativeLabelXml(line.label, info, binding?.lang)}</c:tx><c:dLblPos val="${line.labelSide === 'below' ? 'b' : 't'}"/><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/><c:showPercent val="0"/><c:showBubbleSize val="0"/></c:dLbl>`;
     // CT_DLbls: the c:dLbl entries, then either c:delete or the show flags, never both. A labeled helper shows only its one point's text;
-    // an unlabeled one deletes its labels.
+    // an unlabeled one deletes its labels. Every show flag is written: CT_Boolean defaults to true, so PowerPoint reads an absent
+    // c:showPercent or c:showBubbleSize as on, and Keynote refuses a line series that shows percentages or bubble sizes.
     const labels = line.label === undefined
       ? '<c:dLbls><c:delete val="1"/></c:dLbls>'
-      : `<c:dLbls>${label}<c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/></c:dLbls>`;
+      : `<c:dLbls>${label}<c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/><c:showPercent val="0"/><c:showBubbleSize val="0"/><c:showLeaderLines val="0"/></c:dLbls>`;
     next = next.replace(/(<c:tx>[\s\S]*?<\/c:tx>)/, `$1${paint}${marker}${labels}`);
     next = addExt(next, '</c:ser>', 'reference', { v: 1, id });
     info.hidden.push(idx);
