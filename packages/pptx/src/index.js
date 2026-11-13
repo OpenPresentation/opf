@@ -21,6 +21,7 @@ import {attachChartexFallbacks,attachChartexParts,chartexFallbackName,chartFromC
 import {chartRegionSvg} from './preview-region.js';
 import {applyDoughnutRings,applyRingLabels,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
 import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
+import {authoredAlt,chartAlt,generatedChartAlts,logoAlt,photoAlt,tableAlt} from './default-alt.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
 import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
@@ -55,6 +56,7 @@ import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './section
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
 import {liftMasterFurniture} from './master-furniture.js';
+import {nameLayouts} from './layout-names.js';
 import {gallery} from '@openpresentation/gallery';
 import {applyTemplateLayouts, deckTemplates, foreignLayoutReference, placeholderRegion, readLayoutTag, slideTemplate, writeTemplateLayouts} from './template-layouts.js';
 import {importImageOrientation} from './image-import.js';
@@ -152,6 +154,9 @@ export const runtimePolicy = Object.freeze({
 });
 
 const FIXED_TIMESTAMP = "1980-01-01T00:00:00Z";
+// RR-105 (#1290): the neutral author and application name of the parts OPF writes instead of the vendored writer's own.
+const WORKBOOK_AUTHOR = "OPF";
+const APPLICATION_NAME = "OPF";
 // fflate derives the DOS zip date from local-time fields, so build this from
 // local components: a UTC instant rolls back to 1979 west of UTC (below
 // fflate's 1980 floor) and would otherwise yield timezone-dependent bytes.
@@ -341,6 +346,8 @@ export async function toPptx(input, options = {}) {
   }
 
   const context = resolvePresentationContext(presentation, {...options,textMeasurement:undefined});
+  // RR-105 (#1290): the embedded chart workbooks name the deck's author, else a neutral "OPF" (normalizeNestedZip).
+  context.workbookAuthor = normalizeAuthor(presentation.author) || WORKBOOK_AUTHOR;
   context.listMarkers = new Map();
   context.imagePlaceholders = new Map();
   // opf-pptx#221: the placeholder panels written as one native group, and the OPF_IMAGE_PLACEHOLDER_V1 records of image blocks.
@@ -578,6 +585,11 @@ export async function fromPptx(input, options = {}) {
     catalogs: options.catalogs
   });
   if (observedLanguage.language !== undefined) imported.language = observedLanguage.language;
+  // RR-105 (#1290): cp:keywords are the deck's tags (File > Info > Tags), split on ";".
+  if (core.keywords) {
+    const tags = core.keywords.split(";").map(tag => tag.trim()).filter(Boolean);
+    if (tags.length) imported.tags = tags;
+  }
   if (core.description) imported.description = core.description;
   if (core.author) imported.author = splitAuthors(core.author);
   const themeDesign = importThemeDesign(entries, presentationRoot, presentationRels, options.catalogs);
@@ -1022,7 +1034,8 @@ function readCoreProperties(entries) {
   return {
     title: scalarText(core["dc:title"]),
     description: scalarText(core["dc:description"] ?? core["dc:subject"]),
-    author: scalarText(core["dc:creator"])
+    author: scalarText(core["dc:creator"]),
+    keywords: scalarText(core["cp:keywords"])
   };
 }
 
@@ -1557,7 +1570,8 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
     const stored = importedTable && record('table');
     const restoredTable = stored ? restore('table', importedTable, () => restoreTableData(importedTable, stored, {evidence: tableCellEvidence(table, relationships), olderEvidence: [tableCellEvidence(table, relationships, {form: 'raw'}), tableCellEvidence(table, relationships, {form: 'saved'})], environment: tableEnvironmentEvidence(entries), datasets: data.datasets, report: diagnostic => data.report?.('table', diagnostic)})) : importedTable;
     // FA-27: the frame's descr (or PowerPoint's decorative marker) is the table's text alternative.
-    const alt = restoredTable && typeof restoredTable === 'object' ? readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]) : undefined;
+    // RR-105 (#1290): the description OPF generates when no alt was authored is not an alt (src/default-alt.js).
+    const alt = restoredTable && typeof restoredTable === 'object' ? authoredAlt(readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]), tableAlt(restoredTable, {datasets: data.datasets})) : undefined;
     return {
       kind: "table",
       bounds,
@@ -1586,7 +1600,8 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
     const references=[...(referenceState.references??[]),...(data.referenceOverlays?.get(part)??[])].sort((a,b)=>a.index-b.index).map(({index:_index,...ref})=>ref);
     if(chart&&references.length)chart={...chart,referenceLines:references};
     // FA-09: the frame's descr (or PowerPoint's decorative marker) is the chart's text alternative.
-    const alt = chart ? readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]) : undefined;
+    // RR-105 (#1290): the description OPF generates when no alt was authored is not an alt (src/default-alt.js).
+    const alt = chart ? authoredAlt(readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]), [...generatedChartAlts(chart, {datasets: data.datasets}), ...(stored?.data ? generatedChartAlts({...chart, data: stored.data}, {datasets: data.datasets}) : [])]) : undefined;
     return {
       kind: "chart",
       bounds,
@@ -2708,10 +2723,19 @@ function configurePresentation(pptx, presentation, context) {
   });
   pptx.layout = context.layoutName;
   pptx.author = normalizeAuthor(presentation.author) ?? DEFAULT_AUTHOR;
-  pptx.company = "OpenPresentation";
+  // RR-105 (#1290): File > Info > Company is the deck's primary organization (role 'primary', else the first, as a logo
+  // reference picks it), not a fixed name; a deck with no organization name writes no Company (normalizePartBytes).
+  const organizations = asArray(presentation.organization).filter(isPlainObject);
+  const company = (organizations.find(item => item.role === "primary") ?? organizations[0])?.name;
+  pptx.company = typeof company === "string" ? company : "";
   pptx.subject = presentation.description ?? "";
   pptx.title = presentation.name ?? presentation.filename ?? "OPF Presentation";
   pptx.revision = "1";
+  // RR-105 (#1290): File > Info > Tags and Language. Tags join with "; " (import splits on ";"); the language is the BCP-47 tag
+  // of an authored language only, so an unstated language stays the engine's default and is not written.
+  const keywords = Array.isArray(presentation.tags) ? presentation.tags.filter(tag => typeof tag === "string" && tag.trim()).join("; ") : "";
+  const language = typeof presentation.language === "string" ? presentation.language : typeof presentation.language?.bcp47 === "string" ? presentation.language.bcp47 : "";
+  if (keywords || language) pptx.documentProps = {...(keywords ? {keywords} : {}), ...(language ? {language} : {})};
   pptx.theme = {
     headFontFace: context.fonts.heading,
     bodyFontFace: context.fonts.body
@@ -3331,8 +3355,8 @@ function addListPayload(slide, items, region, context) {
 
 // A content picture outside an image block (a timeline event image): one native picture contained in its region.
 // Generated furniture is never grouped (src/master-furniture.js), so a furniture part passes {group: false}.
-async function addImagePayload(slide, presentation, asset, region, path, context, options, {group = true} = {}) {
-  const name = await addImagePicture(slide, presentation, asset, region, path, context, options, {fit: 'contain'});
+async function addImagePayload(slide, presentation, asset, region, path, context, options, {group = true, alt} = {}) {
+  const name = await addImagePicture(slide, presentation, asset, region, path, context, options, {fit: 'contain', ...(alt === undefined ? {} : {alt})});
   if (!name) addImagePlaceholder(slide, presentation, asset, region, path, context, options, {group});
   return name;
 }
@@ -3882,7 +3906,8 @@ async function addLogo(slide, presentation, logo, slideIndex, slideContext, cont
   }
   context.logos.set(`ppt/slides/slide${slideIndex + 1}.xml`, {slide: `slides.${slideIndex}`, box: region, path: logo.path, variant: logo.variant, anchor: logo.anchor ?? 'left'});
   if (outcome.svg) context.svgPictures.set(`ppt/slides/slide${slideIndex + 1}.xml|${logoName()}`, outcome.svg);
-  slide.addImage({...resolved, objectName: logoName(), ...region, altText: assetAlt(logo.source, presentation) ?? 'Logo'});
+  // RR-105 (#1290): with no asset alt, the organization's name ("Acme logo"), else "Logo" as before.
+  slide.addImage({...resolved, objectName: logoName(), ...region, altText: assetAlt(logo.source, presentation) ?? logoAlt(organizationNameAt(presentation, logo.path))});
 }
 
 // FF-62, RR-90: chart text is one size, core's `chartTextSize` for the chart's box: 20 px at the 1280 x 720 reference (15 pt on a 13.33 x 7.5 in
@@ -3977,7 +4002,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     fallback: chartData.adaptations?.some(entry => entry.adaptation === 'chart-fallback') === true});
   context.chartFonts.set(objectName,{heading:context.fonts.heading,body:context.fonts.body});
   // FA-09: the chart's text alternative (the frame's descr; the empty string is PowerPoint's decorative marker), applied before the chartex frame copies the head.
+  // RR-105 (#1290): with no authored alt, the generated description (src/default-alt.js), so the frame is never without alt text.
   if (typeof chart.alt === 'string') context.frameAlts.set(objectName, chart.alt);
+  else { const generated = chartAlt(chart, presentation); if (generated) context.frameAlts.set(objectName, generated); }
   // RR-89: the series colours are core's chartSeriesPalette (accent1 to accent6 of the deck scheme, then their tints, with the chart's own
   // `colors` over them), adjusted for the chart panel like the preview does. A colour that is still an unadjusted theme accent (or a
   // `chart.colors` scheme slot or role) is written as a schemeClr, so re-theming in PowerPoint recolours the series.
@@ -4297,6 +4324,8 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
   recordPayloadData(context, objectName, 'table', presentation, path, layout);
   // FA-27: the table's text alternative (the frame's descr; the empty string is PowerPoint's decorative marker).
   if (typeof authoredTable?.alt === 'string') context.frameAlts.set(objectName, authoredTable.alt);
+  // RR-105 (#1290): with no authored alt, the generated description (src/default-alt.js).
+  else { const generated = tableAlt(authoredTable, presentation); if (generated) context.frameAlts.set(objectName, generated); }
   if (layout.rows.some(row => row.cells.some(cell => Object.keys(cell.style ?? {}).length))) context.tableCells.set(objectName, {layout, scale, context, defaultBorder:{color:`#${context.colors.border}`,width:1/scale}, hiddenBorder:{color:'#000000',width:0}});
   // LH-29: the preview draws a dotted cell border as dots one line width long and two apart; PowerPoint has no such preset and
   // its square dot (sysDot) is one on, one off. A dashed border (four on, three off) is PowerPoint's dash exactly.
@@ -4819,7 +4848,9 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
     if(part.type==='image'){
       const region={x:part.box.x/96,y:part.box.y/96,w:part.box.width/96,h:part.box.height/96};
       // A logo reference draws the organization's asset: a source that cannot be drawn is reported where the asset is written.
-      const objectName = await addImagePayload(slide,presentation,part.image,region,part.reference!==undefined?part.sourcePath:part.path,context,options,{group:false});
+      // RR-105 (#1290): a logo drawn from an organization, with no asset alt, is described by the organization's name.
+      const logoPath = part.reference!==undefined?part.sourcePath:undefined, logoText = logoPath && assetAlt(part.image, presentation) === undefined ? logoAlt(organizationNameAt(presentation, logoPath)) : undefined;
+      const objectName = await addImagePayload(slide,presentation,part.image,region,part.reference!==undefined?part.sourcePath:part.path,context,options,{group:false,alt:logoText});
       if (objectName) {
         entry.names.push(objectName);
         context.furnitureTags.set(objectName, {v:1, role:'image', group:String(slideIndex), part:index});
@@ -5020,7 +5051,7 @@ async function addQuotePayload(slide, presentation, value, layout, context, opti
       quote:{group,part:index,anchor},
     });
   }
-  if (layout.photo) await addQuotePhoto(slide, presentation, layout.photo, group, context, options);
+  if (layout.photo) await addQuotePhoto(slide, presentation, layout.photo, group, context, options, value?.attribution);
   // LH-78: a quote card's decorative mark, one native text box in the primary color (against the card, as a metric's value is) where core placed it,
   // tagged into the quote's group as decoration (role 'mark') so an unchanged export imports back with the quote.
   if (layout.mark) {
@@ -5040,7 +5071,7 @@ async function addQuotePayload(slide, presentation, value, layout, context, opti
 
 // FA-12: the attributed person's headshot is a native picture in the core circle frame: cropped to fill it (a:srcRect after the bytes
 // are embedded) with the `ellipse` preset geometry, the alt text as its description, tagged into the quote's provenance group.
-async function addQuotePhoto(slide, presentation, photo, group, context, options) {
+async function addQuotePhoto(slide, presentation, photo, group, context, options, attribution) {
   const box = { x: photo.box.x / 96, y: photo.box.y / 96, w: photo.box.width / 96, h: photo.box.height / 96 };
   const outcome = { box, cover: true };
   const resolved = await resolveImage(photo.value, presentation, options, photo.path, outcome);
@@ -5055,7 +5086,8 @@ async function addQuotePhoto(slide, presentation, photo, group, context, options
   if (outcome.svg) options.onDiagnostic?.({ code: 'export-lossy', feature: 'svg-rasterized', path: photo.path, message: 'An SVG quote photo exports as its PNG raster so the circular mask applies as in the preview; PowerPoint has not been confirmed to apply it to an SVG picture.' });
   context.quotePhotos.set(objectName, { region: box, mode: 'crop', path: photo.path, shape: photo.shape, ...(photo.focus ? { focus: photo.focus } : {}) });
   context.quoteTags.set(objectName, { v: 1, role: 'photo', group });
-  const alt = assetAlt(photo.value, presentation);
+  // RR-105 (#1290): with no asset alt, the attribution ("Photo of Ada Lovelace"); import leaves that generated text out (quote-provenance.js).
+  const alt = assetAlt(photo.value, presentation) ?? photoAlt(attribution === undefined ? undefined : stringifyText(attribution));
   context.pictureText.set(objectName, pictureText(alt, photo.value, presentation));
   slide.addImage({ ...resolved, objectName, ...box, altText: alt });
 }
@@ -5857,6 +5889,14 @@ function writePictureText(picture, text) {
   });
 }
 
+// RR-105 (#1290): the name of the organization an OPF logo path (`organization.logo`, `organization.1.logo.icon`) belongs to.
+function organizationNameAt(presentation, path) {
+  const match = /^organization(?:\.(\d+))?\.logo\b/.exec(typeof path === "string" ? path : "");
+  if (!match) return undefined;
+  const organization = Array.isArray(presentation?.organization) ? presentation.organization[Number(match[1] ?? 0)] : presentation?.organization;
+  return typeof organization?.name === "string" ? organization.name : undefined;
+}
+
 function assetAlt(asset, presentation) {
   const resolved = dereferenceAsset(asset, presentation, "asset-alt");
   if (resolved && typeof resolved === "object" && !Array.isArray(resolved)) {
@@ -6247,6 +6287,8 @@ async function normalizePptxZip(raw, context) {
   } catch (error) {
     throw new OPFPptxError('packaging-failed', 'Header and footer furniture could not be written to the slide master and layouts.', {cause: errorMessage(error)});
   }
+  // RR-105 (#1290): user-facing layout names (Home > Layout) once every layout exists; identity stays in the layout tags (src/layout-names.js).
+  nameLayouts(output);
   // LH-28: safe mode names the Office-safe family wherever a Latin text family is written (runs, bullets, the themes, charts),
   // after every other part rewrite and before the "Fonts Used" list is read from the parts.
   if (context.safeTypeface) {
@@ -6370,7 +6412,9 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
     if (context.clrMap && /^ppt\/slideMasters\/slideMaster\d+\.xml$/.test(path)) xml = writeColorMap(xml, context.clrMap);
     if (context.masterBackground && path === 'ppt/slideMasters/slideMaster1.xml') xml = writeMasterBackground(xml, context.masterBackground);
     if (context.masterBackground && /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)) xml = inheritLayoutBackground(xml);
-    if (path === 'ppt/presentation.xml') xml = presentationInSchemaOrder(xml);
+    if (path === 'ppt/presentation.xml') xml = standardNotesPage(presentationInSchemaOrder(xml));
+    // RR-105 (#1290): File > Info names the application that wrote the file; the vendored writer claims PowerPoint.
+    if (path === 'docProps/app.xml') xml = neutralApplication(xml).replace(/\s*<Company><\/Company>/, '');
     if (path === 'ppt/theme/theme1.xml') xml = writeThemeColors(xml, {colors: context.themeColors, schemeName: context.schemeName, themeName: context.themeName});
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
       xml = writeLinkSentinels(xml, context.linkSentinels);
@@ -6604,6 +6648,14 @@ function presentationInSchemaOrder(xml) {
   return xml.replace(notes, '').replace('</p:sldMasterIdLst>', `</p:sldMasterIdLst>${notes}`);
 }
 
+// RR-105 (#1290, ribbon audit gap 16): the vendored writer gives p:notesSz the slide size turned on its side (7.5 x 13.33 in for
+// 16:9), so View > Notes Page and printed notes pages lay out on an odd page. The notes master's placeholders (vendor-compat.js) are
+// placed on the standard portrait notes page, 7.5 x 10 in, which is what PowerPoint itself writes; nothing reads the value back.
+const NOTES_PAGE = '<p:notesSz cx="6858000" cy="9144000"/>';
+function standardNotesPage(xml) {
+  return xml.replace(/<p:notesSz\b[^>]*\/>/, NOTES_PAGE);
+}
+
 function isXmlPart(path) {
   return path.endsWith(".xml") || path.endsWith(".rels") || path === "[Content_Types].xml";
 }
@@ -6649,6 +6701,19 @@ function normalizePartReferences(value, renameMaps) {
   return output;
 }
 
+const xmlText = value => value.replace(/[&<>]/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;'}[char]));
+
+function workbookCoreProperties(xml, author) {
+  const name = xmlText(author).replace(/\r/g, '&#13;');
+  return xml.replace(/<dc:creator>[^<]*<\/dc:creator>/, `<dc:creator>${name}</dc:creator>`)
+    .replace(/<cp:lastModifiedBy>[^<]*<\/cp:lastModifiedBy>/, `<cp:lastModifiedBy>${name}</cp:lastModifiedBy>`);
+}
+
+// docProps/app.xml Application names the program that wrote the package (File > Info).
+function neutralApplication(xml) {
+  return xml.replace(/<Application>[^<]*<\/Application>/, `<Application>${APPLICATION_NAME}</Application>`);
+}
+
 function normalizeNestedZip(bytes, context) {
   // RR-17 (opf-pptx#162): valid table and dimension ranges, or Keynote drops the chart (see chart-workbook.js).
   const entries = repairChartWorkbookRanges(unzipSync(bytes));
@@ -6658,8 +6723,11 @@ function normalizeNestedZip(bytes, context) {
     // engine writes a scatter (and bubble) X gap as `<v>${val}</v>`, so a null X value became `<v>null</v>`, a numeric cell
     // that is no number; it is a gap too. Zero values are kept as `<v>0</v>` (pptxgenjs-plus fixed the `values[idx] || ''`
     // of PptxGenJS 4.0.1, upstream issue #1430; test/chart-workbook-values.mjs).
+    // RR-105 (#1290): Excel's File > Info shows the workbook's author and application; the vendored writer names itself there.
     const entryBytes = path === "docProps/core.xml"
-      ? encodeText(normalizeCoreProperties(decodeText(entries[path]), context.timestamp))
+      ? encodeText(workbookCoreProperties(normalizeCoreProperties(decodeText(entries[path]), context.timestamp), context.workbookAuthor ?? WORKBOOK_AUTHOR))
+      : path === "docProps/app.xml"
+        ? encodeText(neutralApplication(decodeText(entries[path])))
       : /^xl\/worksheets\/sheet\d+\.xml$/.test(path)
         ? encodeText(decodeText(entries[path]).replace(/<c ((?:r|s)="[^"]*"(?: (?:r|s)="[^"]*")*)><v>(?:null|undefined)?<\/v><\/c>/g, "<c $1/>"))
         : entries[path];
