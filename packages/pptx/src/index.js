@@ -1,5 +1,5 @@
 import {nativeBodyReader, joinNativeParagraphs} from './body-text-import.js';
-import {addNativeBody, nativeBodyDefaults, nativeTitleAutofit, nativeTitleWrapBox, planNativeBody} from './native-body.js';
+import {addNativeBody, nativeBodyDefaults, nativeTitleAutofit, nativeTitleEndMarks, nativeTitleWrapBox, planNativeBody} from './native-body.js';
 import {autoNumScheme, deriveListNumbering, withDisplayedNumbers} from './numbered-list.js';
 import {applyNumeralShapes, stripNumeralShape} from './numeral-shapes.js';
 import {isFaceStyleSuffix} from './font-weights.js';
@@ -387,6 +387,8 @@ export async function toPptx(input, options = {}) {
   context.nativeTitles = new Set();
   // RR-105: a fixed-break title whose first line starts apart from the others: its paragraph margins (px), written by nativeTitleAutofit.
   context.titleMargins = new Map();
+  // RR-105 (opf#1291, PowerPoint probe 4): bound titles that 0.33.0 wrote as free boxes; their end-of-paragraph marks take the body face.
+  context.titleEndMarks = new Set();
   context.timelineTags = new Map();
   // LH-108 to LH-110: the shapes a chart's value list, stacked names and reference marks are drawn with (src/chart-marks.js).
   context.chartMarkTags = new Map();
@@ -2889,8 +2891,14 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     if (fixedPlan?.reject) options.onDiagnostic?.({code: 'native-body-fallback', path: item.path, reason: fixedPlan.reject,
       message: `This wrapped title cannot be one title box (${fixedPlan.reject.replaceAll('-', ' ')}${softReason && softReason !== fixedPlan.reject ? `; native wrap: ${softReason.replaceAll('-', ' ')}` : ''}); its measured lines were exported as separate text boxes, so it is not the slide's Title placeholder.`});
     // A one-line title, plain or rich, is its one measured line; the line binds as the whole title.
-    if (titleSlide && item.field === 'title' && !item.text?.overflow && (nativeTitle || fixedTitle || (item.text?.richLines ?? item.text?.lines)?.length === 1 && (typeof item.value === 'string' || item.text.richLines && !item.runs)))
+    if (titleSlide && item.field === 'title' && !item.text?.overflow && (nativeTitle || fixedTitle || (item.text?.richLines ?? item.text?.lines)?.length === 1 && (typeof item.value === 'string' || item.text.richLines && !item.runs))) {
       context.placeholderBindings.set(`OPF heading ${item.path} line 0`, {slide: slideIndex, region: 'Title', object: 'title'});
+      // RR-105 (opf#1291, PowerPoint probe 4): the end-of-paragraph mark's face sets where a bound title's first line sits. A title 0.33.0
+      // wrote as free text boxes (wrapped, or rich on one line) inherited the body face there; written with it, each lands where its old
+      // box did. A plain one-line title, bound in 0.33.0 with a faceless mark (the title style's heading face), stays as it was.
+      const boundIn033 = !nativeTitle && !fixedTitle && typeof item.value === 'string' && !item.text.richLines;
+      if (!boundIn033) context.titleEndMarks.add(`OPF heading ${item.path} line 0`);
+    }
     const drawnBefore = boundRegion && {images: context.images.size, placeholders: context.imagePlaceholders.size, charts: context.chartHeadings.size, tables: context.tableHeaders.size};
     // Card text sits on a literal card fill, not the slide background: keep it literal.
     // LH-54: the card fill is core's card neutral (a filled surface on a dark slide whose scheme surface is the background), which a metric is coloured against.
@@ -4504,9 +4512,25 @@ function measuredLineAnchors(item) {
 // measured on (the bound height of one-line titles and the line positions of two-line ones, at 100%). A natively wrapped title gets
 // that pitch, so it is written only for those faces and where the difference from core's pitch stays within TITLE_LINE_TOLERANCE on its
 // last line; a title of fixed lines sets its pitch itself (space before each later line), taking 1.2 for a face not measured.
-const TITLE_LINE_HEIGHTS = new Map(['Aptos Display', 'Arial Black', 'Bookman Old Style', 'Georgia', 'Impact', 'Montserrat', 'Roboto', 'Roboto Mono', 'Segoe UI Light']
-  .map(face => [face.toLowerCase(), 1.2]));
+// Probe 2 (PowerPoint 2026-11-13, 40.5 pt, two paragraphs at 100%) measured the line from the slide images (cap top of line 2 less cap
+// top of line 1: 48 or 49 px at 960 for every Latin face, PowerPoint placing each line on a whole pixel; 1.2 sizes is 48.6 px) and kept
+// only the faces PowerPoint drew in their own font (each line's ink width within 2 px of the same text set in the face's file): Raleway
+// and Work Sans were drawn about 3 px wider and stay out, as do the East Asian faces (their lines measured 1.18 to 1.28 sizes).
+const TITLE_LINE_HEIGHTS = new Map(['Aptos', 'Aptos Display', 'Arial', 'Arial Black', 'Bookman Old Style', 'Calibri', 'Calibri Light', 'Century Schoolbook', 'Consolas',
+  'Constantia', 'Courier New', 'Garamond', 'Georgia', 'Grandview', 'Grandview Display', 'Impact', 'Lucida Sans', 'Montserrat', 'Noto Sans', 'Open Sans', 'PT Serif',
+  'Poppins', 'Roboto', 'Roboto Mono', 'Rockwell', 'Seaford', 'Seaford Display', 'Segoe UI', 'Segoe UI Light', 'Segoe UI Semilight', 'Skeena', 'Skeena Display',
+  'Tahoma', 'Tenorite', 'Tenorite Display', 'Times New Roman', 'Trebuchet MS', 'Verdana'].map(face => [face.toLowerCase(), 1.2]));
 const SINGLE_LINE_HEIGHT = 1.2;
+// RR-105 (opf#1291 x LH-189, PowerPoint 2026-11-13, probe 3: six faces, a bound two-paragraph title at a 1.0 em pitch). A pitch under
+// PowerPoint's single line (LH-189's two-line display titles) is reached by a later paragraph at a line spacing under 100% (paragraph 1
+// stays at 100%, which keeps line 1 exactly where a single line draws it). At spcPct = pitch / (1.2 sizes) PowerPoint drew line 2 lower
+// than the pitch by a residual per face, the same with exact spacing (variant M) on five of the six faces, so it is an offset, not a
+// scale: here in sizes (ink centroid of line 2 against two free boxes one pitch apart, px at 960 over the size in points).
+const TITLE_TIGHT_RESIDUALS = new Map([['Impact', .24 / 63.75], ['Bookman Old Style', 1.75 / 56.25], ['Roboto', 1.24 / 48.75], ['Arial Black', .49 / 40.5],
+  ['Aptos Display', 1.25 / 48.75], ['Montserrat', 1 / 40]].map(([face, residual]) => [face.toLowerCase(), residual]));
+// The worst measured residual: a face not measured takes the uncorrected spacing only on a two-line title where that residual stays
+// within 1 px at 960 (TITLE_LINE_TOLERANCE).
+const TITLE_TIGHT_WORST_RESIDUAL = Math.max(...TITLE_TIGHT_RESIDUALS.values());
 // Text that a measured face draws itself: a title with letters a fallback face draws (Japanese in Aptos Display took 1.204) is not measured.
 const MEASURED_LINE_SCRIPTS = /[\p{Script=Latin}\p{Script=Greek}\p{Script=Cyrillic}\p{Script=Common}\p{Script=Inherited}]/u;
 
@@ -4610,12 +4634,17 @@ function fixedTitlePlan(item, family) {
   const lineTop = rich ? placed?.[0] ? placed[0].y : item.box.y + rich[0].y : baseline(0) - fit.fontSize;
   const largest = rich ? Math.max(0, ...rich[0].fragments.map(sizeOf)) : fit.fontSize;
   if (rich && largest > 0 && (baseline(0) - lineTop) / DIAGRAM_BASELINE_SHARE >= DIAGRAM_MIN_PITCH * largest) return {reject: 'line-pitch'};
-  const height = TITLE_LINE_HEIGHTS.get(String(family ?? '').toLowerCase()) ?? SINGLE_LINE_HEIGHT;
-  const paragraphs = anchors.map((line, index) => ({
-    spaceBefore: index ? baseline(index) - baseline(index - 1) - height * lineSize(index) : 0,
-    ...marginsOf(line.x)
-  }));
-  if (paragraphs.some(paragraph => paragraph.spaceBefore < -.01)) return {reject: 'line-pitch'};
+  const face = String(family ?? '').toLowerCase(), height = TITLE_LINE_HEIGHTS.get(face) ?? SINGLE_LINE_HEIGHT, residual = TITLE_TIGHT_RESIDUALS.get(face);
+  const paragraphs = anchors.map((line, index) => {
+    const pitch = index ? baseline(index) - baseline(index - 1) : 0, size = lineSize(index), spaceBefore = index ? pitch - height * size : 0;
+    if (spaceBefore >= -.01) return {spaceBefore: Math.max(0, spaceBefore), ...marginsOf(line.x)};
+    // A pitch under the single line (LH-189's display pitch): this paragraph's own line spacing under 100% (TITLE_TIGHT_RESIDUALS),
+    // corrected by the face's measured residual; a face not measured is uncorrected, accepted below only where that is within 1 px.
+    return {spaceBefore: 0, lineSpacing: (pitch - (residual ?? 0) * size) / (height * size), ...marginsOf(line.x)};
+  });
+  const tight = paragraphs.filter(paragraph => paragraph.lineSpacing !== undefined);
+  if (tight.some(paragraph => !(paragraph.lineSpacing > 0 && paragraph.lineSpacing < 1))) return {reject: 'line-pitch'};
+  if (tight.length && residual === undefined && (count !== 2 || TITLE_TIGHT_WORST_RESIDUAL * lineSize(1) > TITLE_LINE_TOLERANCE)) return {reject: 'line-pitch'};
   const x = edge - width * factor;
   return {x, top: lineTop, width, height: baseline(count - 1) - lineTop + height * lineSize(count - 1), size: fit.fontSize, paragraphs, align, hard, rtl, whole};
 }
@@ -4641,6 +4670,8 @@ function addFixedTitle(slide, item, context, options, deckContext, plan) {
     // One paragraph per line, its space before (in points) making up core's pitch.
     const spaceBefore = Math.round(plan.paragraphs[index].spaceBefore * .75 * 100) / 100;
     if (spaceBefore > 0) lineRuns[0].options = {...lineRuns[0].options, paraSpaceBefore: spaceBefore};
+    // A pitch under the single line: this paragraph's own line spacing under 100% (fixedTitlePlan); the first stays at 100%.
+    if (plan.paragraphs[index].lineSpacing !== undefined) lineRuns[0].options = {...lineRuns[0].options, lineSpacingMultiple: plan.paragraphs[index].lineSpacing};
     if (index < plan.paragraphs.length - 1) lineRuns[lineRuns.length - 1].options = {...lineRuns[lineRuns.length - 1].options, breakLine: true};
     runs.push(...lineRuns);
   }
@@ -6584,7 +6615,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
         const content=body.replace(/<a:pPr\b[^>]*(?:\/>|>[\s\S]*?<\/a:pPr>)/g,node=>{properties ||= node;return '';});
         return `<a:p>${properties}${content}</a:p>`;
       });
-      xml = nativeTitleAutofit(nativeBodyDefaults(xml, context.nativeBodies), context.nativeTitles, context.titleMargins);
+      xml = nativeTitleEndMarks(nativeTitleAutofit(nativeBodyDefaults(xml, context.nativeBodies), context.nativeTitles, context.titleMargins), context.titleEndMarks);
     }
     // theme1.xml: FF-24 colors and names above, then FF-07 fonts here; they touch disjoint elements.
     // RR-96: literal colors that are scheme colors become schemeClr (with lumMod/lumOff for the derived neutrals).

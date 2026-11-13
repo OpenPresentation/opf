@@ -63,7 +63,8 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   assert.equal(back.value.slides[0].title, bookman.slides[0].title, 'paragraph breaks import as soft wraps');
   assert.deepEqual(back.diagnostics.filter(item => /heading/.test(item.code)), []);
   // A copy PowerPoint saved: other run and paragraph-end attributes, the tags kept; it imports the same.
-  const xml = out.slide(0).replace(/<a:endParaRPr\b[^>]*\/>/g, '<a:endParaRPr lang="en-US" sz="3975" dirty="0"><a:latin typeface="Bookman Old Style"/></a:endParaRPr>');
+  // (The export's end marks name the body face, probe 4; a saved copy names its own.)
+  const xml = out.slide(0).replace(/<a:endParaRPr\b[^>]*?(?:\/>|>[\s\S]*?<\/a:endParaRPr>)/g, '<a:endParaRPr lang="en-US" sz="3975" dirty="0"><a:latin typeface="Bookman Old Style"/></a:endParaRPr>');
   const saved = await imported(zipSync({...out.entries, 'ppt/slides/slide1.xml': strToU8(xml)}));
   assert.equal(saved.value.slides[0].title, bookman.slides[0].title);
   // An edit in PowerPoint keeps its words; the paragraph breaks stay soft wraps.
@@ -177,7 +178,9 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   const xml = out.slide(0), [shape] = out.titles(0), lines = paragraphs(shape);
   assert.ok(lines.length >= 3, 'three lines to edit');
   const texts = text(shape);
-  const runsOf = paragraph => paragraph.replace(/^<a:p>(?:<a:pPr\b[^>]*\/>|<a:pPr\b[\s\S]*?<\/a:pPr>)?/, '').replace(/<a:endParaRPr\b[^>]*\/><\/a:p>$/, '');
+  // A paragraph's end mark is empty or names the body face (probe 4).
+  const END_MARK = /<a:endParaRPr\b[^>]*?(?:\/>|>[\s\S]*?<\/a:endParaRPr>)<\/a:p>$/;
+  const runsOf = paragraph => paragraph.replace(/^<a:p>(?:<a:pPr\b[^>]*\/>|<a:pPr\b[\s\S]*?<\/a:pPr>)?/, '').replace(END_MARK, '');
   const withParagraphs = list => xml.replace(shape, shape.replace(/<a:p>[\s\S]*<\/a:p>/, list.join('')));
   const importedTitle = async list => {
     const diagnostics = [], value = await fromPptx(zipSync({...out.entries, 'ppt/slides/slide1.xml': strToU8(withParagraphs(list))}), {onDiagnostic: item => diagnostics.push(item)});
@@ -188,7 +191,7 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   const retyped = lines.map((paragraph, index) => index === 1 ? paragraph.replace(/<a:t>[^<]*<\/a:t>/, '<a:t>retyped middle words </a:t>') : paragraph);
   assert.equal(await importedTitle(retyped), texts[0] + 'retyped middle words ' + texts.slice(2).join(''));
   // Joined: the first two lines one paragraph (Delete at the end of the first).
-  const joined = [lines[0].replace(/<a:endParaRPr\b[^>]*\/><\/a:p>$/, '') + runsOf(lines[1]) + '</a:p>', ...lines.slice(2)];
+  const joined = [lines[0].replace(END_MARK, '') + runsOf(lines[1]) + '</a:p>', ...lines.slice(2)];
   assert.equal(await importedTitle(joined), [texts[0] + texts[1], ...texts.slice(2)].join('\n'));
   // Deleted: the second line removed.
   assert.equal(await importedTitle([lines[0], ...lines.slice(2)]), [texts[0], ...texts.slice(2)].join('\n'));

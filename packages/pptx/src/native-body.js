@@ -332,6 +332,28 @@ export function nativeTitleAutofit(xml, names, margins = new Map()) {
   });
 }
 
+/**
+ * RR-105 (opf#1291, PowerPoint probe 4, 2026-11-13): where a bound title's first line sits follows the face of its end-of-paragraph
+ * mark, not its run's East Asian slot. With the mark faceless (the title style's +mj-lt, the heading face) the first line sat lower than
+ * a free text box's by 1 px (Arial Black, Roboto), 2 px (Bookman Old Style, Montserrat) or 3 px (Impact) at 960 under an Aptos body;
+ * with the mark on the body face, as a free box inherits it, it sat exactly there on every face, one line or several, and a second
+ * line kept the measured residual. So the titles 0.33.0 wrote as free boxes name the body face (+mn-lt, +mn-ea) on each end mark.
+ */
+export function nativeTitleEndMarks(xml, names) {
+  if (!names?.size) return xml;
+  const faces = '<a:latin typeface="+mn-lt"/><a:ea typeface="+mn-ea"/>';
+  return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
+    const name = shape.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1];
+    if (!names.has(name)) return shape;
+    return shape.replace(/<a:endParaRPr\b([^>]*?)\/>/g, (node, attributes) => `<a:endParaRPr${attributes}>${faces}</a:endParaRPr>`)
+      .replace(/<a:endParaRPr\b([^>]*[^/])>([\s\S]*?)<\/a:endParaRPr>/g, (node, attributes, inner) => {
+        if (/<a:(?:latin|ea)\b/.test(inner)) return node;
+        const at = inner.search(/<a:(?:cs|sym|hlinkClick|hlinkMouseOver|rtl|extLst)\b/);
+        return `<a:endParaRPr${attributes}>${at < 0 ? inner + faces : inner.slice(0, at) + faces + inner.slice(at)}</a:endParaRPr>`;
+      });
+  });
+}
+
 const NO_SPACE_BEFORE = '<a:spcBef><a:spcPts val="0"/></a:spcBef>', NO_SPACE_AFTER = '<a:spcAft><a:spcPts val="0"/></a:spcAft>';
 // The spacing a paragraph does not write (LH-98 writes space before the later list entries), as 0, in schema order: lnSpc, spcBef, spcAft.
 const zeroParagraphSpace = pPr => {
