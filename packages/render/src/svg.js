@@ -2457,8 +2457,12 @@ function renderRichLines(value,fit,box,bound,config) {
     // segment without text offsets, so editors never read it as part of the run, and it is not linked.
     const marker=fragment.kind==='marker';
     const rendered=tag(asFlow?'tspan':'text',{...(runLang?{lang:runLang,'xml:lang':runLang}:{}),...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end-trail.length-endTrail.length,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance&&!tracked?stableNumber(drawnWidth):undefined,lengthAdjust:fixedAdvance&&!tracked?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'letter-spacing':fragment.kind!=='tab'&&fragment.style.tracking?stableNumber(fragment.style.tracking*fragment.fontSize):undefined,'text-decoration':marker||blankEnd?undefined:[run.underline||linked?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
-    if(linked)return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
-    return rendered;
+    // RR-105 (2026-11-13): with a trace, the white space cut from a decorated fragment at a line end keeps a node of its own, undecorated
+    // and outside the link, so every source offset still has a traced node whose text is its source text (an editor selects by offset;
+    // a selection ending after that space found no node). Without a trace the output is unchanged.
+    const cutSpace=config.options.trace&&endTrail&&!marker?tag(asFlow?'tspan':'text',{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.end-endTrail.length,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end,'data-opf-segment':fragment.kind,...(asFlow?{}:{x:stableNumber(originX+fragmentX+gap+drawnWidth),y:position.y}),'xml:space':'preserve','font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,fill:runFill},escapeText(endTrail)):'';
+    if(linked)return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered)+cutSpace;
+    return rendered+cutSpace;
     };
     if(naturalFlow&&lineHasTab) {
       const chunks=[];let textChunk=[];

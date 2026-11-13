@@ -36,6 +36,8 @@ try {
           const decorated=fragment.run.underline||fragment.run.link||fragment.run.strikethrough,lineEnd=line.fragments.slice(line.fragments.indexOf(fragment)+1).every(next=>!/\S/u.test(next.text));
           const drawn=decorated&&lineEnd&&/\S/u.test(fragment.text)?fragment.text.replace(/\s+$/u,''):fragment.text;
           const node=nodes[cursor++];if(!node||source.slice(+node.dataset.opfTextStart,+node.dataset.opfTextEnd)!==node.textContent||node.textContent!==drawn)throw Error('Source trace changed');
+          // The cut white space keeps a traced node of its own, undecorated.
+          if(drawn!==fragment.text){const space=nodes[cursor++],cut=fragment.text.slice(drawn.length);if(!space||space.textContent!==cut||source.slice(+space.dataset.opfTextStart,+space.dataset.opfTextEnd)!==cut||getComputedStyle(space).textDecorationLine!=='none')throw Error('Cut line-end white space is not traced');}
           const start=node.getStartPositionOfChar(0),end=node.getEndPositionOfChar(node.getNumberOfChars()-1),computed=getComputedStyle(node);
           if(computed.fontWeight!==String(fragment.style.fontWeight)||computed.fontStyle!==(fragment.style.italic?'italic':'normal'))throw Error('Physical style changed');
           if(fragment.run.link&&node.closest('a')?.getAttribute('href')!==fragment.run.link)throw Error('Link changed');
