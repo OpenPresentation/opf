@@ -23,7 +23,11 @@ const titleShape = n => [...dec.decode(parts[`ppt/slides/slide${n}.xml`]).matchA
 assert.equal(titleShape(1).length, 1);
 assert.match(titleShape(1)[0], /<a:spLocks noGrp="1"\/>/, 'Native title placeholders cannot be grouped');
 assert.match(titleShape(1)[0], /<p:ph type="title"\/>/, 'One accepted plain title line is a native title placeholder');
-for (const n of [2, 3]) assert.ok(titleShape(n).every(shape => !/<p:ph\b/.test(shape)), 'Long and rich titles remain tagged line shapes');
+// RR-105 (opf#1291): a long (overflowing) title and a rich one are the Title placeholder too, each one tagged shape (they were line shapes).
+for (const n of [2, 3]) {
+  assert.equal(titleShape(n).length, 1, 'Long and rich titles are one tagged shape');
+  assert.match(titleShape(n)[0], /<p:ph type="title"\/>/, 'Long and rich titles are the Title placeholder');
+}
 const templateParts = Object.entries(parts).filter(([path]) => /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)).map(([, bytes]) => dec.decode(bytes));
 assert.ok(templateParts.some(xml => /name="Title"[\s\S]*?<a:lstStyle><a:lvl1pPr[^>]*><a:defRPr sz="\d+"/.test(xml)), 'Layout prompts inherit an explicit OPF font size');
 assert.ok(templateParts.some(xml => /<a:latin typeface="\+mj-lt"/.test(xml)), 'Layout title prompts inherit the selected heading family from their own master');

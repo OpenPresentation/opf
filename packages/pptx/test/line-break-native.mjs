@@ -33,7 +33,9 @@ const bound = text => text.replaceAll(' %', `${NBSP}%`).replaceAll(' M ', `${NBS
 {
   const found = texts(await slideXml(deck, {}));
   assert.ok(found.includes(`26${NBSP}% up`), 'a table cell is bound');
-  assert.equal(found.filter(text => text.includes('Revenue grew') && text.includes(NBSP)).length, 0, 'a measured line is not rewritten');
+  // RR-105 (opf#1291): a wrapped title is natively wrapped in every mode where its lines are verified, so it is bound as under native.
+  assert.ok(found.includes(bound(title)), 'a natively wrapped title is bound');
+  assert.equal(found.filter(text => text.includes('Revenue grew by') && text.includes(NBSP)).length, 0, 'a measured line is not rewritten');
   const imported = await fromPptx(await toPptx(deck, {}), { onDiagnostic: () => {} });
   assert.ok(!JSON.stringify(imported.slides[0]).includes(NBSP));
 }

@@ -10,7 +10,8 @@ const options = {seed: 988, timestamp: '2026-10-17T00:00:00Z', zipDate: '2026-10
 const decode = (entries, path) => strFromU8(entries[path]);
 const shapes = xml => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => shape);
 const named = (entries, prefix, slide = 1) => shapes(decode(entries, `ppt/slides/slide${slide}.xml`)).filter(shape => shape.includes(`name="${prefix}`));
-const longTitle = 'A title that is long enough to wrap over two lines of the slide because it carries a great many words';
+// Two lines: PowerPoint's single-spaced pitch (1.2 sizes) stays within 1 px of core's (1.22) over one line, not over two (RR-105).
+const longTitle = 'A title that is long enough to wrap onto a second line of the slide';
 async function exported(deck, extra = {}) {
   const diagnostics = [], bytes = new Uint8Array(await toPptx(deck, {...options, ...extra, onDiagnostic: diagnostic => diagnostics.push(diagnostic)}));
   const entries = unzipSync(bytes);
@@ -20,12 +21,14 @@ async function exported(deck, extra = {}) {
 const imported = async bytes => { const diagnostics = [], value = await fromPptx(bytes, {onDiagnostic: diagnostic => diagnostics.push(diagnostic)}); return {value, diagnostics}; };
 const plain = value => typeof value === 'string' ? value : Array.isArray(value) ? value.map(plain).join('') : value?.text !== undefined ? plain(value.text) : '';
 
-// 1. A wrapped title: measured lines by default, one bound Title under 'native'.
+// 1. A wrapped title: one bound Title in both modes (RR-105, opf#1291: before it, the default wrote one box per measured line).
 {
   const deck = {design: {fontScheme: 'roboto'}, slides: [{title: longTitle, items: ['One', 'Two']}]};
   const measured = await exported(deck);
-  assert.ok(named(measured.entries, 'OPF heading slides.0.title line ').length > 1, 'default: one text box per measured line');
-  assert.ok(!/<p:ph type="title"/.test(decode(measured.entries, 'ppt/slides/slide1.xml')), 'default: a wrapped title is not the Title placeholder');
+  assert.equal(named(measured.entries, 'OPF heading slides.0.title line ').length, 1, 'default: the whole title is one shape');
+  assert.match(decode(measured.entries, 'ppt/slides/slide1.xml'), /<p:ph type="title"\/>/, 'default: a wrapped title is the Title placeholder');
+  const frame = shape => [shape.match(/<a:xfrm>[\s\S]*?<\/a:xfrm>/)[0], shape.match(/<p:txBody>[\s\S]*?<\/p:txBody>/)[0]];
+  assert.deepEqual(frame(named(measured.entries, 'OPF heading slides.0.title line ')[0]), frame(named((await exported(deck, {bodyText: 'native'})).entries, 'OPF heading slides.0.title line ')[0]), 'default: the same title as native');
   const native = await exported(deck, {bodyText: 'native'});
   const titles = named(native.entries, 'OPF heading slides.0.title line ');
   assert.equal(titles.length, 1, 'native: the whole title is one shape');
@@ -35,7 +38,8 @@ const plain = value => typeof value === 'string' ? value : Array.isArray(value) 
   assert.ok(!/normAutofit|spAutoFit/.test(title));
   assert.equal([...title.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''), longTitle);
   assert.equal((title.match(/<a:p>/g) ?? []).length, 1);
-  assert.match(title, /<a:lnSpc><a:spcPts val="\d+"\/><\/a:lnSpc>/, 'the measured line pitch is kept as exact spacing');
+  // RR-105 (PowerPoint 2026-11-12): any spacing but exactly single drew the first line above the measured line's.
+  assert.match(title, /<a:lnSpc><a:spcPct val="100000"\/><\/a:lnSpc>/, 'single spacing');
   assert.deepEqual(native.diagnostics.filter(item => item.code === 'native-body-fallback'), []);
   const {value, diagnostics} = await imported(native.bytes);
   assert.equal(value.slides[0].title, longTitle);
@@ -46,10 +50,15 @@ const plain = value => typeof value === 'string' ? value : Array.isArray(value) 
   assert.equal((await imported(zipSync(edited))).value.slides[0].title, longTitle + ' and then some more words');
 }
 
-// 2. A title that stays measured: a hard line break, or a title that overflows its box.
+// 2. A hard line break: one Title holding the measured lines, one paragraph per line, the hard break among them (RR-105; it was one box
+// per line).
 {
   const hard = await exported({slides: [{title: 'First line\nSecond line that is long enough to wrap onto yet another line of this title box'}]}, {bodyText: 'native'});
-  assert.ok(named(hard.entries, 'OPF heading slides.0.title line ').length > 1, 'a hard break keeps measured lines');
+  const [shape, ...rest] = named(hard.entries, 'OPF heading slides.0.title line ');
+  assert.equal(rest.length, 0, 'a hard break keeps the measured lines in one title');
+  assert.match(shape, /<p:ph type="title"\/>/);
+  assert.ok((shape.match(/<a:p>/g) ?? []).length >= 2, 'the hard break starts a paragraph');
+  assert.equal((await imported(hard.bytes)).value.slides[0].title, 'First line\nSecond line that is long enough to wrap onto yet another line of this title box');
 }
 
 // 3. More than one text region: one native body each; the first binds to Body, the others are ordinary native text boxes.
