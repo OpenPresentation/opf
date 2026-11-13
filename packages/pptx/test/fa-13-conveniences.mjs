@@ -5,6 +5,7 @@ import {validate} from '@openpresentation/opf';
 import {colorContrast, ENGINE_DEFAULT_COLOR_SCHEME, resolveCanvasDimensions, resolveColorRoles} from '@openpresentation/opf/composition';
 import {toSvg, fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {colorsInXml, themeColorsOf, clrMapOf} from './helpers/scheme-colors.mjs';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
 // FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.language and the 1:1, 4:5 and 9:16 presets, exported natively
 // and imported back. Core owns the geometry and colours (codeHighlight*, layoutWatermark); this checks the package.
@@ -15,7 +16,8 @@ const exportDeck = async (document, options = {}) => {
   const entries = unzipSync(new Uint8Array(bytes));
   const xml = Object.fromEntries(Object.entries(entries).filter(([name]) => /\.(xml|rels)$/.test(name)).map(([name, value]) => [name, strFromU8(value)]));
   for (const [name, text] of Object.entries(xml)) assert.equal(XMLValidator.validate(text), true, `${name} is well-formed XML`);
-  return {bytes, entries, xml, diagnostics, slide: (index = 1) => xml[`ppt/slides/slide${index}.xml`]};
+  // RR-105 (opf#1293): a slide reads its theme font references as its theme's families.
+  return {bytes, entries, xml, diagnostics, slide: (index = 1) => withThemeFamilies(entries, `ppt/slides/slide${index}.xml`)};
 };
 const importDeck = async (bytes, options = {}) => {
   const diagnostics = [];

@@ -4,6 +4,7 @@ import {test} from 'node:test';
 import {unzipSync,strFromU8} from 'fflate';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {catalogs,toPptx,toSvg} from './helpers/default-catalog.mjs';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
 const document=JSON.parse(await readFile(new URL('../../../examples/technical/localized-chart-references.opf.json',import.meta.url),'utf8'));
 const options={pack:'office',substitutionPolicy:'visual'};
@@ -19,7 +20,8 @@ test('the real localized reference example exports with only its needed faces an
   assert.ok(whole.fontFiles.length>100,'whole-pack mode remains explicit');
   assert.deepEqual(bytes,await toPptx(document,{fonts:whole}),'complete native archive and all title styles/point sizes match');
   for(let slide=1;slide<=document.slides.length;slide++)assert.equal(toSvg(document,slide,{fonts:demand,text:'paths'}),toSvg(document,slide,{fonts:whole,text:'paths'}),'actual glyph geometry stays whole/demand exact on slide '+slide);
-  const zip=unzipSync(bytes),german=strFromU8(zip['ppt/slides/slide2.xml']);
+  // RR-105 (opf#1293): the slide's theme font references read as its theme's families.
+  const zip=unzipSync(bytes),german=withThemeFamilies(zip,'ppt/slides/slide2.xml');
   assert.match(german,/<a:rPr\b[^>]*\blang="de-DE"[^>]*\bsz="4050"[^>]*\bb="1"/);
   assert.match(german,/<a:latin typeface="Arial Black"/,'the developer\'s native typeface is retained');
   assert.ok(!german.includes('typeface="Montserrat"'),'the measurement replacement never becomes the native authored typeface');

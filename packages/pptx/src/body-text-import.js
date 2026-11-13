@@ -97,7 +97,9 @@ function bodyRunStyle(properties, context, relationships, report, extras = {}) {
   const latin = nativeTypeface(properties['a:latin']?.typeface, context)?.trim().toLowerCase();
   for (const key of ['a:ea','a:cs','a:sym']) if (properties[key]?.typeface && (extras.inheritedBody
     ? !latin || nativeTypeface(properties[key].typeface, context)?.trim().toLowerCase() !== latin
-    : properties[key].typeface !== properties['a:latin']?.typeface)) {
+    // RR-105 (opf#1293): a theme reference names its theme's family (the export writes +mn-lt for a run whose cs slot keeps the name).
+    : properties[key].typeface !== properties['a:latin']?.typeface && (nativeTypeface(properties[key].typeface, context) === undefined
+      || nativeTypeface(properties[key].typeface, context) !== nativeTypeface(properties['a:latin']?.typeface, context)))) {
     report('unsupported-body-font', 'Script-specific native faces cannot be represented by one OPF run font family; the Latin face and current text were retained.');
   }
   if (properties['a:hlinkMouseOver']) report('unsupported-body-link', 'A native mouse-over action cannot be represented by an OPF run URL.');

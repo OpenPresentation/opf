@@ -4,10 +4,12 @@ import {unzipSync, strFromU8} from 'fflate';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {toPptx} from './helpers/default-catalog.mjs';
 import {nativeTitleWrapBox} from '../src/native-body.js';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
 const title = 'Native title measurement follows the physical family over every measured line of the heading';
 const deck = family => ({design: {fontScheme: {major: family, minor: family}}, slides: [{title, text: 'Body'}]});
-const headingShapes = bytes => [...strFromU8(unzipSync(bytes)['ppt/slides/slide1.xml']).matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)]
+// RR-105 (opf#1293): theme font references read as their theme's families.
+const headingShapes = bytes => [...withThemeFamilies(unzipSync(bytes), 'ppt/slides/slide1.xml').matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)]
   .map(([shape]) => shape).filter(shape => shape.includes('name="OPF heading slides.0.title line '));
 const calls = [], resolutions = [];
 const provider = {

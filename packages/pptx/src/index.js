@@ -40,6 +40,7 @@ import {attachMediaTags,importMediaGroups,mediaCaption,mediaFrameRecord,mediaTex
 import {addCaption, addFootnotes} from './annotation-export.js';
 import {attachAnnotationTags, captionValue, importAnnotations, restoreCitations} from './annotation-provenance.js';
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
+import {writeThemeFontReferences} from './theme-font-references.js';
 import {cleanBase,headingValue,joinRichLines} from './rich-heading.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachNativeLanguageTags,nativeLanguageReadView,onlyNativeLanguageTags} from './native-language-provenance.js';
@@ -51,7 +52,7 @@ import {restoreRunColors} from './run-colors.js';
 import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, settleLayers, shapeRole, shapeText} from './shape-import.js';
 import {assembleOverlayShapes, restoreShapes} from './shape-restore.js';
 import {joinWrappedText, rejoinDetachedSpace} from './content-topology.js';
-import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordListScalars, recordOverlays, opfSlideOwnership, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
+import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordListScalars, recordOverlays, opfSlideOwnership, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, exportedThemeView, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
@@ -1568,7 +1569,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
   };
   if (table) {
     const stored = importedTable && record('table');
-    const restoredTable = stored ? restore('table', importedTable, () => restoreTableData(importedTable, stored, {evidence: tableCellEvidence(table, relationships), olderEvidence: [tableCellEvidence(table, relationships, {form: 'raw'}), tableCellEvidence(table, relationships, {form: 'saved'})], environment: tableEnvironmentEvidence(entries), datasets: data.datasets, report: diagnostic => data.report?.('table', diagnostic)})) : importedTable;
+    const restoredTable = stored ? restore('table', importedTable, () => restoreTableData(importedTable, stored, {evidence: tableCellEvidence(table, relationships), olderEvidence: [tableCellEvidence(table, relationships, {form: 'raw'}), tableCellEvidence(table, relationships, {form: 'saved'})], environment: [tableEnvironmentEvidence(entries), tableEnvironmentEvidence(exportedThemeView(entries))], datasets: data.datasets, report: diagnostic => data.report?.('table', diagnostic)})) : importedTable;
     // FA-27: the frame's descr (or PowerPoint's decorative marker) is the table's text alternative.
     // RR-105 (#1290): the description OPF generates when no alt was authored is not an alt (src/default-alt.js).
     const alt = restoredTable && typeof restoredTable === 'object' ? authoredAlt(readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]), tableAlt(restoredTable, {datasets: data.datasets})) : undefined;
@@ -6312,6 +6313,11 @@ async function normalizePptxZip(raw, context) {
     if (next !== xml) output[path] = [encodeText(next), output[path][1]];
   }
   if(context.nativeScalarFragments.hasPlans){const scalarParts=Object.fromEntries(Object.entries(output).map(([path,[bytes]])=>[path,bytes]));context.nativeScalarFragments.write(scalarParts,context.nativeLatinSlots.groups);for(const [path,bytes]of Object.entries(scalarParts))if(output[path]?.[0]!==bytes)output[path]=[bytes,{level:context.compressionLevel,mtime:context.zipDate}];}
+  // RR-105 (opf#1293): a run in its theme's heading or body family names the theme font, after every pass that writes or reads a family
+  // by name (safe typefaces, script slots, fragments) and before "Fonts Used" and the proofing records read the final parts. The shapes
+  // whose exact run properties those records fingerprint keep their names.
+  const unescapeName = name => String(name).replace(/&(amp|lt|gt|quot|apos);/g, (_, entity) => ({amp: '&', lt: '<', gt: '>', quot: '"', apos: "'"}[entity]));
+  writeThemeFontReferences(output, {owned: new Set([...context.nativeLatinSlots.groups.keys(), ...context.nativeTextFragments.records.keys(), ...context.nativeScalarFragments.committedNames].map(unescapeName))});
   finalizeFontsUsed(output);
   // Structural proofing records are needed even without full source provenance.
   const languageParts = Object.fromEntries(Object.entries(output).map(([path, [bytes]]) => [path, bytes]));

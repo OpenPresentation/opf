@@ -1010,7 +1010,8 @@ export function slideListRecord(entries, path, root, rels, report = () => {}) {
     const found = readTag(entries, root?.['p:cSld']?.['p:custDataLst'], rels, SLIDE_TAG);
     if (found.missing) return {breaks: null, runs: null};
     const record = validateSlide(found.value);
-    const runs = record.listRuns === undefined ? null : new Map(record.listRuns);
+    // RR-105 (opf#1293): each look in the theme's current faces (currentThemeFace).
+    const runs = record.listRuns === undefined ? null : new Map(record.listRuns.map(([list, looks]) => [list, Object.fromEntries(Object.entries(looks).map(([role, look]) => [role, currentThemeLook(entries, look)]))]));
     const breaks = record.lists === undefined || record.native.structure !== nativeSlide(entries, path).structure ? null : new Map(record.lists.map(([list, lines]) => [list, new Map(lines)]));
     const roles = record.listRoles === undefined || record.native.structure !== nativeSlide(entries, path).structure || record.native.listIdentity !== nativeListIdentity(entries, path) ? null : new Map(record.listRoles.map(([list, lines, markerless]) => [list, markerless ? Object.assign([...lines], {markerless: new Set(markerless)}) : lines]));
     const scalars = record.listScalars === undefined || record.native.structure !== nativeSlide(entries, path).structure || record.native.listIdentity !== nativeListIdentity(entries, path) ? null : new Map(record.listScalars);
@@ -1020,6 +1021,65 @@ export function slideListRecord(entries, path, root, rels, report = () => {}) {
   } catch {
     return {breaks: null, runs: null};
   }
+}
+
+/**
+ * RR-105 (opf#1293): runs name the theme's heading and body fonts (+mj-lt, +mn-lt), so when PowerPoint changed the theme's Latin faces
+ * (Design > Variants > Fonts, another theme) every referenced run draws in the new face. That change is the document's:
+ * restoreDocumentProvenance imports the new faces as design.fontScheme, and the slides read the new faces from their runs. A value export
+ * recorded as the face a run draws (a list's look, a rich heading's or quote's base, a table's theme environment) is compared in the
+ * faces the theme holds now: exportedThemeFaces gives the exported face of each changed one, exportedThemeView the package with the
+ * exported faces back in its theme. Both are empty or the entries themselves when the faces are unchanged, unrecorded or the deck names
+ * no theme font (it draws its literal faces).
+ */
+const exportedFaces = new WeakMap();
+export function exportedThemeFaces(entries) {
+  if (!exportedFaces.has(entries)) exportedFaces.set(entries, readExportedThemeFaces(entries));
+  return exportedFaces.get(entries);
+}
+function readExportedThemeFaces(entries) {
+  const changes = new Map();
+  try {
+    const path = 'ppt/presentation.xml', presentationRoot = entries[path] ? parser.parse(dec.decode(entries[path]))?.['p:presentation'] : undefined;
+    if (!presentationRoot) return changes;
+    const presentationRels = relationships(entries, path), found = readTag(entries, presentationRoot['p:custDataLst'], presentationRels, DOCUMENT_TAG);
+    if (found.missing) return changes;
+    const stored = validateDocument(found.value).native?.fonts, current = nativeDocument(entries, presentationRoot, presentationRels).fonts;
+    const faces = value => [value?.major?.latin, value?.minor?.latin];
+    const before = faces(stored), after = faces(current);
+    if ([...before, ...after].some(face => typeof face !== 'string' || !face) || (before[0] === after[0] && before[1] === after[1]) || before[0] === before[1]) return changes;
+    if (!referencesThemeFonts(entries)) return changes;
+    changes.set('major', {exported: before[0], current: after[0]}).set('minor', {exported: before[1], current: after[1]});
+  } catch { changes.clear(); }
+  return changes;
+}
+/** A recorded face in the theme's current faces: the exported heading or body face becomes the one the theme holds now. */
+export function currentThemeFace(entries, family) {
+  if (typeof family !== 'string') return family;
+  for (const {exported, current} of exportedThemeFaces(entries).values()) if (exported === family) return current;
+  return family;
+}
+/** A recorded look ({fontFamily, ...}) in the theme's current faces (currentThemeFace). */
+export function currentThemeLook(entries, look) {
+  return look?.fontFamily !== undefined && currentThemeFace(entries, look.fontFamily) !== look.fontFamily ? {...look, fontFamily: currentThemeFace(entries, look.fontFamily)} : look;
+}
+export function exportedThemeView(entries) {
+  const changes = exportedThemeFaces(entries);
+  if (!changes.size) return entries;
+  const escape = value => value.replace(/[&<>"]/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[char]));
+  const view = {...entries};
+  for (const path of Object.keys(entries).filter(path => /^ppt\/theme\/theme\d+\.xml$/.test(path))) {
+    const xml = dec.decode(entries[path]);
+    const restored = xml.replace(/(<a:majorFont>\s*<a:latin\b[^>]*?\btypeface=")[^"]*(")/, (match, start, end) => start + escape(changes.get('major').exported) + end)
+      .replace(/(<a:minorFont>\s*<a:latin\b[^>]*?\btypeface=")[^"]*(")/, (match, start, end) => start + escape(changes.get('minor').exported) + end);
+    if (restored !== xml) view[path] = enc.encode(restored);
+  }
+  return view;
+}
+
+/** Whether a slide names the theme's heading or body Latin font (+mj-lt, +mn-lt): an export with theme font references. */
+function referencesThemeFonts(entries) {
+  return Object.keys(entries).some(path => /^ppt\/slides\/slide\d+\.xml$/.test(path) && /typeface="\+m[jn]-lt"/.test(dec.decode(entries[path])));
 }
 
 /**
@@ -1186,8 +1246,21 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
   const stored = document.native;
   const match = {colors: same(stored.colors, native.colors) && native.colors !== null, fonts: same(stored.fonts, native.fonts) && native.fonts !== null, size: same(stored.size, native.size)};
   const storedDesign = document.design ?? {};
+  // RR-105 (opf#1293): runs name the theme's heading and body fonts, so a deck whose theme fonts were changed in PowerPoint (Design >
+  // Variants > Fonts, another theme) draws in the new faces. When the Latin heading and body faces changed, the imported document's
+  // font scheme is the stored one (its code and script faces kept) with the new faces as major and minor, so the deck's text follows,
+  // rather than every run gaining a direct family. A deck exported before runs named theme fonts (no slide names +mj-lt or +mn-lt)
+  // still draws its literal faces, so it keeps the earlier behavior.
+  const nativeLatin = kind => native.fonts?.[kind]?.latin;
+  const observedFontScheme = !match.fonts && nativeLatin('major') && nativeLatin('minor') && (stored.fonts?.major?.latin !== nativeLatin('major') || stored.fonts?.minor?.latin !== nativeLatin('minor'))
+    && (storedDesign.fontScheme !== undefined || storedDesign.theme !== undefined) && referencesThemeFonts(entries)
+    ? (() => {
+      const base = typeof storedDesign.fontScheme === 'string' ? {id: storedDesign.fontScheme} : object(storedDesign.fontScheme) ? clone(storedDesign.fontScheme) : {};
+      delete base.heading; delete base.body;
+      return {...base, major: nativeLatin('major'), minor: nativeLatin('minor')};
+    })() : undefined;
   const gates = {
-    theme: [match.colors && match.fonts, () => `The PPTX theme colors or fonts changed since export (${[match.colors ? '' : changedSlots(stored.colors, native.colors), match.fonts ? '' : `${changedSlots(stored.fonts, native.fonts)} font`].filter(Boolean).join('; ')}).`],
+    theme: [match.colors && (match.fonts || observedFontScheme !== undefined), () => `The PPTX theme colors or fonts changed since export (${[match.colors ? '' : changedSlots(stored.colors, native.colors), match.fonts ? '' : `${changedSlots(stored.fonts, native.fonts)} font`].filter(Boolean).join('; ')}).`],
     colorScheme: [match.colors, () => `The PPTX theme colors changed since export (${changedSlots(stored.colors, native.colors)}).`],
     fontScheme: [match.fonts, () => `The PPTX theme fonts changed since export (${changedSlots(stored.fonts, native.fonts)} font).`],
     dimensions: [match.size, () => `The PPTX slide size changed since export.`]
@@ -1198,12 +1271,14 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     // Keys FF-24 recovers that the source never stated (a theme-only deck
     // gains its colorScheme) are left as observed; see docs/document-roundtrip.md.
     if (storedDesign[key] === undefined) continue;
+    if (!ok && key === 'fontScheme' && observedFontScheme) { restoredStyle[key] = 'observed'; changed(`design.${key}`, `${why()} design.${key} ${label(storedDesign[key])} was imported with the PPTX theme's heading font '${observedFontScheme.major}' and body font '${observedFontScheme.minor}'.`); continue; }
     if (!ok) { restoredStyle[key] = false; changed(`design.${key}`, `${why()} design.${key} ${label(storedDesign[key])} was not restored; the imported document keeps the values observed in the PPTX.`); continue; }
     const value = restorable(`design.${key}`, storedDesign[key]);
     if (value === undefined) { restoredStyle[key] = false; continue; }
     restoredStyle[key] = true;
     group(`design.${key}`, [set(['design', key], value)]);
   }
+  if (observedFontScheme) group('design.fontScheme', [set(['design', 'fontScheme'], observedFontScheme)]);
   const styleIntact = STYLE_REFERENCES.every(key => restoredStyle[key] !== false);
   // RR-59: a default the source left absent stays absent while the native value it is read from is the one export wrote
   // (FF-24's theme recovery, for example, gives a theme-only deck its colour scheme). A native edit is imported as observed.

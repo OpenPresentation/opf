@@ -5,6 +5,7 @@ import path from 'node:path';
 import {unzipSync} from 'fflate';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {toPptx} from './helpers/default-catalog.mjs';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
 // RR-59 (opf-pptx#214): text the engine generates asks for weights a font policy cannot always resolve: the "Image
 // unavailable" label and the video caption at 600, core's metric value at 800, metric labels and timeline event text at
@@ -14,7 +15,8 @@ import {toPptx} from './helpers/default-catalog.mjs';
 const decoder = new TextDecoder();
 const fonts = await loadFonts({pack: 'office'});
 const visual = await loadFonts({pack: 'office', substitutionPolicy: 'visual'});
-const slideXml = bytes => decoder.decode(unzipSync(bytes)['ppt/slides/slide1.xml']);
+// RR-105 (opf#1293): theme font references read as their theme's families.
+const slideXml = bytes => withThemeFamilies(unzipSync(bytes), 'ppt/slides/slide1.xml');
 const shapes = xml => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => ({
   name: shape.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1] ?? '',
   text: [...shape.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''),
