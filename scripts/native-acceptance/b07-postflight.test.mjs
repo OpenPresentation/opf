@@ -184,7 +184,23 @@ test('reviewed observer source remains exact and B07 source binds actual worker 
   const currentWorker=Buffer.from(workerRootState);assert.equal(currentWorker.length,93922);assert.equal(digest(currentWorker),'21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255');
   let workerRootInverse=workerRootState;for(const [prior,next]of [...workerRootEdits].reverse()){assert.equal(workerRootInverse.split(next).length-1,1);workerRootInverse=workerRootInverse.replace(next,prior);}
   assert.deepEqual(Buffer.from(workerRootInverse),snapshotWorker,'Seventh-stage inverse preserves all six immutable earlier stages');
-  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),currentWorker);
+  // Stage8 (owner-approved 2026-11-13) admits the v0.34.0 reference export as the one measured input and names its two helper series
+  // as that export writes them (RR-105 Keynote fix 2). Nothing else in the worker changes.
+  const measuredInputEdits=[
+  [
+    "if($SourceBytes -ne 129025 -or $SourceHash -cne '06c82deb1dbe067d4f097aebe760b8f1dbdcc0e2a74e95b8d1f99eeea2302a83'",
+    "if($SourceBytes -ne 129055 -or $SourceHash -cne '3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918'"
+  ],
+  [
+    "$name -cne ('OPF reference '+($index-1))",
+    "$name -cne (@('Target 80','Floor -10')[$index-2])"
+  ]
+];
+  let measuredInputState=workerRootState;for(const [prior,next]of measuredInputEdits){assert.equal(measuredInputState.split(prior).length-1,1);measuredInputState=measuredInputState.replace(prior,next);}
+  const measuredInputWorker=Buffer.from(measuredInputState);assert.equal(measuredInputWorker.length,93931);assert.equal(digest(measuredInputWorker),'3ce6b57ca190a4c0c89b3202eeb11e2685fb2731bfc9a3a206bc3f8b022d8573');
+  let measuredInputInverse=measuredInputState;for(const [prior,next]of [...measuredInputEdits].reverse()){assert.equal(measuredInputInverse.split(next).length-1,1);measuredInputInverse=measuredInputInverse.replace(next,prior);}
+  assert.deepEqual(Buffer.from(measuredInputInverse),currentWorker,'Eighth-stage inverse preserves all seven immutable earlier stages');
+  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),measuredInputWorker);
   for(const name of ['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
   const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
   assert.ok(runner.indexOf('if(-not $RunOffice)')<runner.indexOf('$checked=& $node $validator verify-postflight'));

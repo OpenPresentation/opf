@@ -24,7 +24,7 @@ $definitions=@(foreach($name in @('Test-Integer','Assert-FurnitureReferenceNameA
 $statements=@($ast.EndBlock.Statements);$startupStatements=@()
 foreach($state in @('referenceNameModeEnabled','referenceNameSnapshotsModeEnabled')){$found=@(for($i=0;$i -lt $statements.Count-1;$i++){if($statements[$i] -is [Management.Automation.Language.AssignmentStatementAst] -and $statements[$i].Left.Extent.Text -ceq ('$script:'+$state)){$i}});if($found.Count -ne 1 -or $statements[$found[0]+1] -isnot [Management.Automation.Language.IfStatementAst]){throw 'Exact adjacent real initializer/handshake required'};$startupStatements+=@($statements[$found[0]].Extent.Text,$statements[$found[0]+1].Extent.Text)}
 $early=@($statements|Where-Object {$_.Extent.Text.StartsWith('if($ReferenceNameSnapshots -and -not $ReferenceNameEdit)',[StringComparison]::Ordinal)});if($early.Count -ne 1){throw 'Exact early switch coupling guard required'}
-$startupFile=Join-Path $Output 'actual-startup.ps1';$startupInput=Join-Path $Output 'synthetic-length.pptx';[IO.File]::WriteAllBytes($startupInput,[Array]::CreateInstance([byte],129025))
+$startupFile=Join-Path $Output 'actual-startup.ps1';$startupInput=Join-Path $Output 'synthetic-length.pptx';[IO.File]::WriteAllBytes($startupInput,[Array]::CreateInstance([byte],129055))
 $setup=@'
 $ErrorActionPreference='Stop'
 $control=Get-Content -LiteralPath (Join-Path $OutputDirectory 'startup-control.json') -Raw|ConvertFrom-Json
@@ -34,7 +34,7 @@ $result='[pscustomobject]@{referenceSwitch=[bool]$ReferenceNameEdit;snapshotSwit
 [IO.File]::WriteAllText($startupFile,(@($ast.ParamBlock.Extent.Text,$early[0].Extent.Text,($definitions -join "`n"),$setup,($startupStatements -join "`n"),$result)-join "`n"),[Text.UTF8Encoding]::new($false))
 $startup=@()
 foreach($mode in @('enabled','old-name-only','disabled','missing-new-switch','missing-new-request','false-new-request','new-without-reference','wrong-source')){
-    $control=[ordered]@{request=[ordered]@{};declaredSourceHash='06c82deb1dbe067d4f097aebe760b8f1dbdcc0e2a74e95b8d1f99eeea2302a83';actions=@([ordered]@{op='set-chart-series-name';slideIndex=1;chartName='OPF chart 1';seriesIndex=1;expectedName='Actual';newName='Actual edited'})};$startupArguments=@{OutputDirectory=$Output;InputPresentation=$startupInput;Worker=$true}
+    $control=[ordered]@{request=[ordered]@{};declaredSourceHash='3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918';actions=@([ordered]@{op='set-chart-series-name';slideIndex=1;chartName='OPF chart 1';seriesIndex=1;expectedName='Actual';newName='Actual edited'})};$startupArguments=@{OutputDirectory=$Output;InputPresentation=$startupInput;Worker=$true}
     if($mode -cnotin @('disabled','new-without-reference')){$control.request.referenceNameEdit=$true;$startupArguments.ReferenceNameEdit=$true}
     if($mode -cnotin @('disabled','old-name-only','missing-new-request')){$control.request.referenceNameSnapshots=$true}
     if($mode -cnotin @('disabled','old-name-only','missing-new-switch')){$startupArguments.ReferenceNameSnapshots=$true}

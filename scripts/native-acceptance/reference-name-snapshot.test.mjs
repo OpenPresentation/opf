@@ -25,50 +25,22 @@ function tx(bytes,action){const file='ppt/charts/chart1.xml',select=xml=>{const 
 const before=tx(input,text=>text.replace(/>[ \t\r\n]+</gu,'><')),edited=mutate(tx(before,()=>'<c:tx><c:v>Actual edited</c:v></c:tx>'),'docProps/core.xml',text=>once(text,'<cp:revision>1</cp:revision>','<cp:revision>2</cp:revision>'));
 const typeEvidence=()=>({chart:{observedType:'System.Int32',observedRawValue:'-4111',numericValue:-4111},count:{observedType:'System.Int32',observedRawValue:'3',numericValue:3},series:Array.from({length:3},(_,i)=>({index:i+1,typeObservation:{observedType:'System.Int32',observedRawValue:'4',numericValue:4}}))});
 const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n');
-// The current export of the reference deck. It is no longer the archive PowerPoint was measured with (REFERENCE_NAME_INPUT, 129,025 bytes):
-// v0.34.0 made the data-label XML of the reference series schema-valid (no <c:delete val="0"/> before the show flags, and nothing after
-// <c:delete val="1"/>), which removes 9 bytes from the two chart parts and changes nothing else. LH-110 (v0.34.0) then changed the same
-// two parts again: a labeled helper's data labels state every show flag (c:showPercent and c:showBubbleSize 0, c:showLeaderLines 0), and
-// a line chart with reference helpers keeps the vertical axis layout (c:catAx axPos b, c:valAx axPos l), which Keynote needs to open
-// the file. RR-105 (Keynote fix 2, 2026-11-12, supervisor decision for the owner, vetoable) names each helper series after its reference's label instead of "OPF reference N"
-// (the series name cache, the workbook header cell and its table column), so Keynote's legend, which keeps helpers, reads the label; so the
-// two embedded workbooks differ from the measured archive too, only in the parts that hold that header (asserted below).
-// RR-105 (chart fixes, 2026-11-12) changed the two chart parts once more: line and area charts write c:dispBlanksAs "gap" (a missing
-// value is a gap, as the preview draws it), and a reference label keeps clear of the marks, with a filled plate when every place is taken.
-// The native route still admits only the measured archive (retained as
-// test-fixtures/reference-name/reference-native-lines.pptx, which the comparison contract below runs on); measuring the current export
-// needs a new sealed input.
-// RR-105 (#1290, 2026-11-12, chart workbook properties): each embedded workbook names the deck author, else "OPF", as creator and
-// last editor and "OPF" as its application (docProps/core.xml and docProps/app.xml of every workbook; previous
-// {bytes:129035,sha256:'6acdda5035661565792ab0984ee9d039370d5ca39e929fd53dedea4beeeef71f'}).
-// RR-105 (#1290, 2026-11-12, notes page size): ppt/presentation.xml writes p:notesSz 6858000 x 9144000; previous
-// {bytes:128983,sha256:'bc5a17bd973c25eec413e6664e86200e72b552654ff580068e87657ec0f0ae1a'}.
-// RR-105 (#1290, 2026-11-12, document properties): docProps/app.xml names the application OPF, and docProps/core.xml carries the deck's
-// tags and language when it has them; previous {bytes:128981,sha256:'79799e8404ece2256f5447bc7d3f59f50e26c0cc0c818012b0ac31fff89c02bf'}.
-// RR-105 (#1290, 2026-11-12, Company from the organization): docProps/app.xml writes the deck's organization as Company, none here
-// (previously the fixed OpenPresentation); previous {bytes:128966,sha256:'8c3fd3d576ac8c479d5b398564d84b572403d8378b07df8724359b1d9cf012a8'}.
-// RR-105 (#1290, 2026-11-12, default alt text): the two chart frames carry a generated descr; previous
-// {bytes:128950,sha256:'cdcc04f801766f97a4fdc567d8f71870fd7a12d132a17c3b7f561617fbb009b4'}.
-// RR-105 (#1290, 2026-11-12, layout names): user-facing slide layout names (p:cSld name only); previous
-// {bytes:129058,sha256:'174b3759bd4ec867d70f84c307af60f8803a6b2051c9648f5dbb2794386491a0'}.
-// RR-105 (opf#1293, 2026-11-13, theme font references): a slide run whose family is its theme's names the theme font (+mj-lt, +mn-lt
-// and their ea/cs slots), so ppt/slides/slide3.xml and the native style fingerprint in ppt/tags/opfSlide3.xml change; slide3.xml equals
-// the export of f75d6876b once each reference is resolved to the theme's family, and charts keep their names (part-by-part comparison);
-// previous {bytes:129052,sha256:'b4a03d6c593acca52bc9edebdd42d7e4e09e606ebb0123478b5af36ac51418ea'}.
+// The current export of the reference deck IS the archive PowerPoint was measured with (REFERENCE_NAME_INPUT, retained as
+// test-fixtures/reference-name/reference-native-lines.pptx; its PowerPoint run is recorded under test-fixtures/reference-name/measurement
+// and checked by reference-name-measurement.test.mjs). Any export change fails here: re-measure in PowerPoint and re-seal with
+// scripts/native-acceptance/reference-name-reseal.mjs (see its header) instead of widening this assertion.
 const CURRENT_EXPORT=Object.freeze({bytes:129055,sha256:'3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918'});
 let current;
 function currentFixture(){current??=(async()=>{
  const deck=structuredClone(source),renderOptions={catalogs:[gallery]},fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck,renderOptions});await fonts.ensure(deck,{renderOptions});
  const exported=Buffer.from(await toPptx(deck,{catalogs:[gallery],seed:1,timestamp:'2026-01-01T00:00:00Z',date:'2026-10-10',provenance:'full',fonts}));assert.deepEqual(deck,source);assert.deepEqual({bytes:exported.length,sha256:digest(exported)},CURRENT_EXPORT,'The maintained export of the reference deck changed: review the change, then update CURRENT_EXPORT');
  const input=fs.readFileSync(new URL('./test-fixtures/reference-name/reference-native-lines.pptx',import.meta.url));assert.deepEqual({bytes:input.length,sha256:digest(input)},REFERENCE_NAME_INPUT,'The retained archive is the one PowerPoint was measured with');
- const sealedParts=deps.unzipSync(input),exportedParts=deps.unzipSync(exported);assert.deepEqual(Object.keys(exportedParts).sort(),Object.keys(sealedParts).sort());
- assert.deepEqual(Object.keys(sealedParts).filter(name=>Buffer.compare(Buffer.from(sealedParts[name]),Buffer.from(exportedParts[name]))!==0).sort(),['ppt/charts/chart1.xml','ppt/charts/chart2.xml','ppt/embeddings/Microsoft_Excel_Worksheet1.xlsx','ppt/embeddings/Microsoft_Excel_Worksheet2.xlsx'],'The current export differs from the measured archive only in the two chart parts and their workbooks');
- for(const workbook of ['ppt/embeddings/Microsoft_Excel_Worksheet1.xlsx','ppt/embeddings/Microsoft_Excel_Worksheet2.xlsx']){const sealed=deps.unzipSync(sealedParts[workbook]),current=deps.unzipSync(exportedParts[workbook]);assert.deepEqual(Object.keys(current).sort(),Object.keys(sealed).sort(),workbook+': the same parts');const changed=Object.keys(sealed).filter(name=>Buffer.compare(Buffer.from(sealed[name]),Buffer.from(current[name]))!==0).sort();assert.ok(changed.includes('xl/tables/table1.xml')&&changed.every(name=>['xl/sharedStrings.xml','xl/worksheets/sheet1.xml','xl/tables/table1.xml'].includes(name)),workbook+': only the parts holding the helper header differ: '+changed.join(', '));const strings=bytes=>[...Buffer.from(bytes).toString('utf8').matchAll(/<t(?:\s[^>]*)?>([^<]*)<\/t>|\bname="([^"]*)"/g)].map(m=>m[1]??m[2]);for(const name of changed){const before=strings(sealed[name]),after=strings(current[name]);assert.equal(after.length,before.length,workbook+' '+name+': the same number of strings');before.forEach((text,i)=>{if(text!==after[i])assert.match(text,/^OPF reference \d+$/,workbook+' '+name+': only a helper name changes ('+text+' -> '+after[i]+')');});}}
+ assert.deepEqual(CURRENT_EXPORT,REFERENCE_NAME_INPUT,'The pinned export is the measured archive');assert.deepEqual(exported,input,'The current export is byte-identical to the measured archive');
  const before=tx(input,text=>text.replace(/>[ \t\r\n]+</gu,'><')),edited=mutate(tx(before,()=>'<c:tx><c:v>Actual edited</c:v></c:tx>'),'docProps/core.xml',text=>once(text,'<cp:revision>1</cp:revision>','<cp:revision>2</cp:revision>'));return{input,before,edited,reopened:edited};
 })();return current;}
 function completion(output,phaseSource=input,snapshotArchives={before,edited,reopened:edited}){
  const e=furnitureFixture(output),a=REFERENCE_NAME_ACTION;Object.assign(e.request,{profile:REFERENCE_NAME_SNAPSHOT_PROFILE,policy:structuredClone(REFERENCE_NAME_SNAPSHOT_POLICY),caseId:'reference-native-lines',slideCount:3,readOnlySurvey:false,captureTextFonts:false,referenceNameEdit:true,referenceNameSnapshots:true,input:structuredClone(REFERENCE_NAME_INPUT)});e.request.actionPlan.actions=referenceNamePlan();e.report.referenceNameEdit=true;
- e.report.actionPlan={actions:referenceNamePlan(),completed:[{index:1,op:a.op,status:'success'}],styleEdits:[],chartPoints:[],chartSeriesEdits:[{slideIndex:1,chartName:a.chartName,seriesIndex:1,expectedName:a.expectedName,newName:a.newName,before:a.expectedName,after:a.newName,status:'success',otherNames:[{index:2,name:'OPF reference 1'},{index:3,name:'OPF reference 2'}],chartTypeObservation:typeEvidence().chart,referenceSeriesCount:typeEvidence().count,referenceSeriesTypes:typeEvidence().series}]};
+ e.report.actionPlan={actions:referenceNamePlan(),completed:[{index:1,op:a.op,status:'success'}],styleEdits:[],chartPoints:[],chartSeriesEdits:[{slideIndex:1,chartName:a.chartName,seriesIndex:1,expectedName:a.expectedName,newName:a.newName,before:a.expectedName,after:a.newName,status:'success',otherNames:[{index:2,name:'Target 80'},{index:3,name:'Floor -10'}],chartTypeObservation:typeEvidence().chart,referenceSeriesCount:typeEvidence().count,referenceSeriesTypes:typeEvidence().series}]};
  const slides=inspectReferenceArchive(phaseSource,deps).slides.map((slide,i)=>({index:i+1,slideId:256+i,name:'Synthetic '+i,shapeCount:slide.shapes.length,shapes:slide.shapes.map((shape,j)=>({index:j+1,id:shape.id,name:shape.name,type:shape.kind==='chart'?3:17,...shape.geometry,hasTextFrame:shape.kind==='text'?-1:0,text:shape.text??null,alternativeText:''}))}));
  for(const phase of ['original','edited','reopened']){const name=phase==='original'?a.expectedName:a.newName;e.report.phases[phase]={slideCount:3,slides:structuredClone(slides),rasters:Array.from({length:3},(_,i)=>({slideIndex:i+1})),chartSeriesNames:[{phase,slideIndex:1,chartName:a.chartName,seriesIndex:1,expectedName:name,observedName:name,observedType:'System.String',observedRawValue:name,status:'success',referenceTypeEvidence:typeEvidence()}]};}
  e.report.referenceNameSnapshots=['before','reopened'].map(phase=>({phase,path:path.join(e.request.output,'native','reference-name-'+phase+'.pptx'),sha256:digest(snapshotArchives[phase])}));e.report.saved.sha256=digest(snapshotArchives.edited);e.report.reopened=structuredClone(e.report.saved);
