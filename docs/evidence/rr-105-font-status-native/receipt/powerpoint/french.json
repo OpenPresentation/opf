@@ -1,0 +1,439 @@
+{
+    "deck":  "french",
+    "variant":  "default",
+    "name":  "french",
+    "sha256":  "5c9479e14adb8986c3fcc2c92176797a1b5a26c635824044f8746c4d35df69f3",
+    "opened":  true,
+    "previewSlides":  1,
+    "openSeconds":  0.2,
+    "slideCount":  1,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Du pilote au lancement",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     405.68,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        397.93
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 connector",
+                                          "type":  9,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      188.8,
+                                                      288.48,
+                                                      582.4,
+                                                      0
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 progress",
+                                          "type":  9,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      188.8,
+                                                      288.48,
+                                                      291.2,
+                                                      0
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 marker 0",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      182.05,
+                                                      281.73,
+                                                      13.5,
+                                                      13.5
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 ring 1",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      469.2,
+                                                      277.68,
+                                                      21.6,
+                                                      21.6
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 marker 1",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      473.25,
+                                                      281.73,
+                                                      13.5,
+                                                      13.5
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 marker 2",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      764.45,
+                                                      281.73,
+                                                      13.5,
+                                                      13.5
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 part 0 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      49.2,
+                                                      246.81,
+                                                      279.2,
+                                                      25.62
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Janvier",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  21,
+                                                       "maxSize":  21,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     157.62,
+                                                                     246.81,
+                                                                     66.6,
+                                                                     25.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        157.62,
+                                                                        62.35
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 part 1 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      49.2,
+                                                      304.53,
+                                                      279.2,
+                                                      29.28
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Pilote validé",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  24,
+                                                       "maxSize":  24,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     121.68,
+                                                                     304.53,
+                                                                     139.12,
+                                                                     28.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        121.68,
+                                                                        134.25
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 part 2 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      340.4,
+                                                      246.81,
+                                                      279.2,
+                                                      25.62
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Février",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  21,
+                                                       "maxSize":  21,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     449.27,
+                                                                     246.81,
+                                                                     65.72,
+                                                                     25.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        449.27,
+                                                                        61.47
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 part 3 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      340.4,
+                                                      304.53,
+                                                      279.2,
+                                                      29.28
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Déploiement régional",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  24,
+                                                       "maxSize":  24,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     362.14,
+                                                                     304.53,
+                                                                     240.6,
+                                                                     28.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        362.14,
+                                                                        235.73
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 part 4 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      631.6,
+                                                      246.81,
+                                                      279.2,
+                                                      25.62
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Mars",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  21,
+                                                       "maxSize":  21,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     748.8,
+                                                                     246.81,
+                                                                     49.04,
+                                                                     25.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        748.8,
+                                                                        44.8
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 part 5 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      631.6,
+                                                      304.53,
+                                                      279.2,
+                                                      29.28
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Ouverture générale",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  24,
+                                                       "maxSize":  24,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     666.46,
+                                                                     304.53,
+                                                                     214.36,
+                                                                     28.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        666.46,
+                                                                        209.49
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 status 0 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      49.2,
+                                                      336.81,
+                                                      279.2,
+                                                      23.79
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Terminé",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  19.5,
+                                                       "maxSize":  19.5,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     155.39,
+                                                                     336.81,
+                                                                     70.81,
+                                                                     23.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        155.39,
+                                                                        66.82
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 status 1 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      340.4,
+                                                      336.81,
+                                                      279.2,
+                                                      23.79
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "En cours",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  19.5,
+                                                       "maxSize":  19.5,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     443.35,
+                                                                     336.81,
+                                                                     77.31,
+                                                                     23.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        443.35,
+                                                                        73.31
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF timeline 0 status 2 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      631.6,
+                                                      336.81,
+                                                      279.2,
+                                                      23.79
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Prévu",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  19.5,
+                                                       "maxSize":  19.5,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     747.56,
+                                                                     336.81,
+                                                                     51.27,
+                                                                     23.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        747.56,
+                                                                        47.28
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "seconds":  0.6
+}

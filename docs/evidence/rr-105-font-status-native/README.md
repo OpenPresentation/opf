@@ -1,0 +1,7 @@
+# Lightweight fonts and localized status native acceptance
+
+Coordinator-run PowerPoint 16.0.20527.20112 receipt: three files, six slides open cleanly, with saved derivatives. The [build manifest](receipt/build.json) separately pins LH-177 source #1142 `6f46dd2255b27abb4af7ecbfaf2e07ec5fba34a6` and LH-121 source #1144 `b9642636e297a1d2dfbf65cb77bea133841beee1`. Neither frozen product branch changes in this evidence PR.
+
+[Review sheet](receipt/review.png): before preview, candidate preview and candidate native, with authored aspect restored. The coordinator accepted the lighter typography at unchanged size and the French/Arabic status labels and marker tracks; no new clipping or shrink was observed. Existing chart/layout differences are not new font parity claims. LH-183's Japanese weight gap remains explicitly tracked in #1142. This receipt is native opening/rendering evidence with saved derivatives; it does not add a new saved-import semantic claim.
+
+[Raw run](receipt/powerpoint/run.json), per-shape metrics ([fonts](receipt/powerpoint/fonts.json), [French](receipt/powerpoint/french.json), [Arabic](receipt/powerpoint/arabic.json)), original inputs and saved copies are retained under receipt/. [Hashes](hashes.json) verify all binary inputs/derivatives and repository-normalized text. Independently checking the archive's three input hashes and the nonempty three-file/six-slide run passed. The evidence archivist did not call Office. Full v0.34 combined integration remains the release gate.

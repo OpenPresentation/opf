@@ -1,0 +1,643 @@
+{
+    "deck":  "fonts",
+    "variant":  "default",
+    "name":  "fonts",
+    "sha256":  "52b0387e8bab78e6f87010310718d1ee7fa755d0b34ef48e0e03ce0e68ae2e1c",
+    "opened":  true,
+    "previewSlides":  4,
+    "openSeconds":  0.4,
+    "slideCount":  4,
+    "slideSize":  [
+                      720,
+                      450
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "Cover",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.tag line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      36,
+                                                      296.01,
+                                                      648,
+                                                      16.77
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "K-12 education",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  13.75,
+                                                       "maxSize":  13.75,
+                                                       "font":  "Segoe UI Light",
+                                                       "bound":  [
+                                                                     36,
+                                                                     296.01,
+                                                                     120.15,
+                                                                     16.5
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        36,
+                                                                        116.41
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      36.11,
+                                                      320.28,
+                                                      648,
+                                                      57.18
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  3,
+                                          "text":  {
+                                                       "text":  "STEM Lab Funding Proposal",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  46.869998931884766,
+                                                       "maxSize":  46.869998931884766,
+                                                       "font":  "Segoe UI Semilight",
+                                                       "bound":  [
+                                                                     36.11,
+                                                                     320.28,
+                                                                     575.38,
+                                                                     56.25
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        36.11,
+                                                                        562.51
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF heading slides.0.subtitle line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      36,
+                                                      385.31,
+                                                      648,
+                                                      28.21
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Prairie Ridge High School K-12 education",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  23.1200008392334,
+                                                       "maxSize":  23.1200008392334,
+                                                       "font":  "Segoe UI Light",
+                                                       "bound":  [
+                                                                     36,
+                                                                     385.31,
+                                                                     401.63,
+                                                                     27.75
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        36,
+                                                                        395.26
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  2,
+                       "hidden":  false,
+                       "layout":  "Text",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.1.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      36,
+                                                      36,
+                                                      648,
+                                                      41.18
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Why This Matters",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  33.75,
+                                                       "maxSize":  33.75,
+                                                       "font":  "Segoe UI Semilight",
+                                                       "bound":  [
+                                                                     36,
+                                                                     36,
+                                                                     260.84,
+                                                                     40.5
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        36,
+                                                                        251.6
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF card slides.1.text",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      36,
+                                                      177.32,
+                                                      648,
+                                                      151.96
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF text slides.1.text line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      45.5,
+                                                      186.81,
+                                                      629,
+                                                      32.78
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Prairie Ridge High School should focus the next cycle ",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  26.8700008392334,
+                                                       "maxSize":  26.8700008392334,
+                                                       "font":  "Segoe UI Light",
+                                                       "bound":  [
+                                                                     45.5,
+                                                                     186.81,
+                                                                     608.5,
+                                                                     32.25
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        45.5,
+                                                                        593.76
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF text slides.1.text line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      45.5,
+                                                      219.6,
+                                                      629,
+                                                      32.78
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "on secure funding for hands-on robotics and ",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  26.8700008392334,
+                                                       "maxSize":  26.8700008392334,
+                                                       "font":  "Segoe UI Light",
+                                                       "bound":  [
+                                                                     45.5,
+                                                                     219.6,
+                                                                     518.3,
+                                                                     32.25
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        45.5,
+                                                                        503.55
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF text slides.1.text line 2",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      45.5,
+                                                      252.38,
+                                                      629,
+                                                      32.78
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "chemistry labs while making the operating tradeoffs ",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  26.8700008392334,
+                                                       "maxSize":  26.8700008392334,
+                                                       "font":  "Segoe UI Light",
+                                                       "bound":  [
+                                                                     45.5,
+                                                                     252.38,
+                                                                     594.42,
+                                                                     32.25
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        45.5,
+                                                                        579.68
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF text slides.1.text line 3",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      45.5,
+                                                      285.16,
+                                                      629,
+                                                      32.78
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "clear to k-12 education stakeholders.",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  26.8700008392334,
+                                                       "maxSize":  26.8700008392334,
+                                                       "font":  "Segoe UI Light",
+                                                       "bound":  [
+                                                                     45.5,
+                                                                     285.16,
+                                                                     416.64,
+                                                                     32.25
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        45.5,
+                                                                        409.27
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  3,
+                       "hidden":  false,
+                       "layout":  "Chart",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.2.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      36.25,
+                                                      36,
+                                                      648,
+                                                      41.18
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Signal Trend",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  33.75,
+                                                       "maxSize":  33.75,
+                                                       "font":  "Segoe UI Semilight",
+                                                       "bound":  [
+                                                                     36.25,
+                                                                     36,
+                                                                     187,
+                                                                     40.5
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        36.25,
+                                                                        177.75
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF card slides.2.chart",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      36,
+                                                      100.1,
+                                                      648,
+                                                      313.9
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF chart 1",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      51,
+                                                      115.1,
+                                                      618,
+                                                      283.9
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  117,
+                                                        "series":  1,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  4,
+                       "hidden":  false,
+                       "layout":  "List",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.3.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      36,
+                                                      36,
+                                                      648,
+                                                      41.18
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Next Steps",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  33.75,
+                                                       "maxSize":  33.75,
+                                                       "font":  "Segoe UI Semilight",
+                                                       "bound":  [
+                                                                     36,
+                                                                     36,
+                                                                     163.4,
+                                                                     40.5
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        36,
+                                                                        154.15
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF card slides.3.items",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      36,
+                                                      195.91,
+                                                      648,
+                                                      114.44
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF list slides.3.items line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.5,
+                                                      203.41,
+                                                      633,
+                                                      28.21
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Agree on the owner for k-12 education.",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  23.1200008392334,
+                                                       "maxSize":  23.1200008392334,
+                                                       "font":  "Segoe UI Light",
+                                                       "bound":  [
+                                                                     68.95,
+                                                                     203.41,
+                                                                     386.41,
+                                                                     27.75
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        68.95,
+                                                                        380.04
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.3.items line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.5,
+                                                      238.09,
+                                                      633,
+                                                      28.21
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Confirm the reporting cadence.",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  23.1200008392334,
+                                                       "maxSize":  23.1200008392334,
+                                                       "font":  "Segoe UI Light",
+                                                       "bound":  [
+                                                                     68.95,
+                                                                     238.09,
+                                                                     309.86,
+                                                                     27.75
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        68.95,
+                                                                        303.49
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.3.items line 2",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.5,
+                                                      272.77,
+                                                      633,
+                                                      28.21
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Return with the first progress readout.",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  23.1200008392334,
+                                                       "maxSize":  23.1200008392334,
+                                                       "font":  "Segoe UI Light",
+                                                       "bound":  [
+                                                                     68.95,
+                                                                     272.77,
+                                                                     370.76,
+                                                                     27.75
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        68.95,
+                                                                        364.39
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "renumber":  {
+                     "before":  [
+                                    {
+                                        "slideId":  256,
+                                        "position":  1,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  257,
+                                        "position":  2,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  258,
+                                        "position":  3,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  259,
+                                        "position":  4,
+                                        "numbers":  [
+
+                                                    ]
+                                    }
+                                ],
+                     "moved":  [
+                                   {
+                                       "slideId":  257,
+                                       "position":  1,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  258,
+                                       "position":  2,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  259,
+                                       "position":  3,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  256,
+                                       "position":  4,
+                                       "numbers":  [
+
+                                                   ]
+                                   }
+                               ]
+                 },
+    "seconds":  1.4
+}
