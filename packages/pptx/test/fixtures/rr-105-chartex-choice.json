@@ -2,7 +2,7 @@
   "source": {
     "commit": "4748ce45c",
     "date": "2026-11-12",
-    "note": "RR-105: what PowerPoint reads of every chartex chart (the mc:Choice with its drawing id and chartEx relationship id masked, the chartEx part, its relationships, style and color parts and the embedded workbook; test/helpers/chartex-identity.mjs) and a digest of the import (JSON of fromPptx), for toPptx(deck, {catalogs: [gallery], imageResolver}) of two qualification decks, recorded on codex/rr-105-keynote-fixes at 4748ce45c, before the default mc:Fallback changed from a classic chart to a picture of OPF's own preview (2026-11-12, supervisor decision for the owner, vetoable). The change keeps every value; a later change that moves one is reviewed like any other pin. RR-105 (#1290), 2026-11-12, chart workbook properties: only the workbook digests moved (docProps/core.xml creator and lastModifiedBy name the deck author, else OPF; docProps/app.xml Application OPF); the mc:Choice, chartEx, relationship, style and color digests and the import digest are unchanged. The previous workbook digests are kept per deck as rr105WorkbookPropertiesPrevious."
+    "note": "RR-105: what PowerPoint reads of every chartex chart (the mc:Choice with its drawing id and chartEx relationship id masked, the chartEx part, its relationships, style and color parts and the embedded workbook; test/helpers/chartex-identity.mjs) and a digest of the import (JSON of fromPptx), for toPptx(deck, {catalogs: [gallery], imageResolver}) of two qualification decks, recorded on codex/rr-105-keynote-fixes at 4748ce45c, before the default mc:Fallback changed from a classic chart to a picture of OPF's own preview (2026-11-12, supervisor decision for the owner, vetoable). The change keeps every value; a later change that moves one is reviewed like any other pin. RR-105 (#1290), 2026-11-12, chart workbook properties: only the workbook digests moved (docProps/core.xml creator and lastModifiedBy name the deck author, else OPF; docProps/app.xml Application OPF); the mc:Choice, chartEx, relationship, style and color digests and the import digest are unchanged. The previous workbook digests are kept per deck as rr105WorkbookPropertiesPrevious. RR-105 (#1290), 2026-11-12, default alt text: only the mc:Choice digests moved, because each chart frame without an authored alt now carries a generated descr (verified by removing the descr attributes: every slide, chartEx, relationship, style, color and workbook part is otherwise byte-identical to ed9f0f909, apart from a quote photo's generated descr on layout-harvest slide 10); the import digest is unchanged. The previous Choice digests are kept per deck as rr105DefaultAltPrevious."
   },
   "decks": {
     "chart-type-sampler": {
@@ -13,7 +13,7 @@
           "slide": "ppt/slides/slide1.xml",
           "name": "OPF chart 1",
           "chartEx": "ppt/charts/chartEx1.xml",
-          "choice": "b7627b7067a76eef1c8d04af24cbaa28a82d783b600e55e7c5a8bf6ad77aaea5",
+          "choice": "d1fb98d5746a34591f31261224686dd948a6517830d8a05ccae93f252542baf8",
           "part": "1f5a5cf3011976ef515accdf40790215adf0ee14256cb8f4cec56028be6f3704",
           "rels": "8822138c7e59389dce3272dcf261c29d337d343db5f9e3f28d195d7b619b4cb8",
           "style": "1a3d0b2bc8ad48e3ec6874e88e97f0ad6da2424189bcf8a40c3dbe2556dc31ce",
@@ -24,7 +24,7 @@
           "slide": "ppt/slides/slide1.xml",
           "name": "OPF chart 2",
           "chartEx": "ppt/charts/chartEx2.xml",
-          "choice": "e729479e8445385f04298ef774115ea0f9365942e75e6e39b792616c53ccfecd",
+          "choice": "184161227e7428210218f495e6d1abe7147f414923350844b4c9b81ca0d54948",
           "part": "75e74f89e3c9c97c8e6effc55dd14fea14e51e4b116de6539a87c3d1798807da",
           "rels": "355831de6ab1bfc4cb3927fcfce28632ad1f381c6c23d9b15a4d5238015c4bf6",
           "style": "1a3d0b2bc8ad48e3ec6874e88e97f0ad6da2424189bcf8a40c3dbe2556dc31ce",
@@ -35,7 +35,7 @@
           "slide": "ppt/slides/slide2.xml",
           "name": "OPF chart 4",
           "chartEx": "ppt/charts/chartEx3.xml",
-          "choice": "85691b57a01eab75323c79ab099024b659ee2c98962772971a700003fd51c27f",
+          "choice": "8f33f23068165c8948fd52ab7aef982c5e347db6fc6bd14edff24508217ac3a1",
           "part": "3c508d87a170c088050436d96698e6d1731d09c40d2d23490ab6f7d39df5d317",
           "rels": "e970f9afe94b8d722d9a5938f19258d4ebabf2a50477bba1a128fee178e124a8",
           "style": "1a3d0b2bc8ad48e3ec6874e88e97f0ad6da2424189bcf8a40c3dbe2556dc31ce",
@@ -46,7 +46,7 @@
           "slide": "ppt/slides/slide2.xml",
           "name": "OPF chart 5",
           "chartEx": "ppt/charts/chartEx4.xml",
-          "choice": "9b9b54c7491a2297543c24075e2c277b2cf02779abaf6d32ba305e744efd00c1",
+          "choice": "b799e81fca305549d06e618d98ae1df621da1aa7fad1fcf0bc53ad59e233463e",
           "part": "72a24bad3f3199f3f4a1a9014e6eeb45571fdb9a54bd7845cd30bf304900993e",
           "rels": "b0a8f05635a61f5f9e2008df54b56919679873ad5d85e052eaa6c506c3162c84",
           "style": "1a3d0b2bc8ad48e3ec6874e88e97f0ad6da2424189bcf8a40c3dbe2556dc31ce",
@@ -57,7 +57,7 @@
           "slide": "ppt/slides/slide2.xml",
           "name": "OPF chart 6",
           "chartEx": "ppt/charts/chartEx5.xml",
-          "choice": "b2f518466b9fdfaa62b587b313774abd04d0aa13938a3677c3c975593daf0810",
+          "choice": "7f60822d11456fe0e7382d4e99264a45ac1bef1a6eaeee2329cc26c90419e74d",
           "part": "d493bccb9d6c3bb119024dddc206c35345e57e57ee7f5d7c1a54c58984b40868",
           "rels": "eb888023663559d6dbb555f26986c90c36d36547ca09e9345c19fcc4a1869361",
           "style": "1a3d0b2bc8ad48e3ec6874e88e97f0ad6da2424189bcf8a40c3dbe2556dc31ce",
@@ -71,6 +71,13 @@
         "OPF chart 4 workbook": "2793985feede6ee25482e7fa7b7f24378c3576ec84ce712272baad22b24847f6",
         "OPF chart 5 workbook": "78ef04be30334f330e5502f11f6d6e55acb21d15664dcbf5c293f7a88a9c6bf5",
         "OPF chart 6 workbook": "d9cc3b9793cd2d0500d996c5901284e16a34e65782c46714ce867324b28d0d30"
+      },
+      "rr105DefaultAltPrevious": {
+        "OPF chart 1 choice": "b7627b7067a76eef1c8d04af24cbaa28a82d783b600e55e7c5a8bf6ad77aaea5",
+        "OPF chart 2 choice": "e729479e8445385f04298ef774115ea0f9365942e75e6e39b792616c53ccfecd",
+        "OPF chart 4 choice": "85691b57a01eab75323c79ab099024b659ee2c98962772971a700003fd51c27f",
+        "OPF chart 5 choice": "9b9b54c7491a2297543c24075e2c277b2cf02779abaf6d32ba305e744efd00c1",
+        "OPF chart 6 choice": "b2f518466b9fdfaa62b587b313774abd04d0aa13938a3677c3c975593daf0810"
       }
     },
     "layout-harvest": {
@@ -81,7 +88,7 @@
           "slide": "ppt/slides/slide17.xml",
           "name": "OPF chart 1",
           "chartEx": "ppt/charts/chartEx1.xml",
-          "choice": "c5e147fd990b0a99c521718a5e092c9b1e98d6356de5d0157f6f2f7c287e37c8",
+          "choice": "0894f2030fc1d50aefb463681eccd2198561f0bb355a2f5165d0713eb4e6e9d8",
           "part": "93d9bce1130344923c1e5ccac57d07392ca699854ffe2fe1e3ee3e5b59bb78b1",
           "rels": "8822138c7e59389dce3272dcf261c29d337d343db5f9e3f28d195d7b619b4cb8",
           "style": "1f2537eeb48ce1a9541fd410cb4363e0f02041d301c25463bc1d3414463ed00a",
@@ -92,7 +99,7 @@
           "slide": "ppt/slides/slide18.xml",
           "name": "OPF chart 2",
           "chartEx": "ppt/charts/chartEx2.xml",
-          "choice": "543c73deaf1f53607426e81183eccef7412239dd6f04df255b01db0b4e891cd7",
+          "choice": "8244e995948e74d7f8178aecd76a4f7490ded57c1ca63effa1958f704c232b24",
           "part": "ce98a2a6e7e436269c0a23bfbce3c85a561d7afb8bc5d85d4c1b352085a19578",
           "rels": "355831de6ab1bfc4cb3927fcfce28632ad1f381c6c23d9b15a4d5238015c4bf6",
           "style": "1f2537eeb48ce1a9541fd410cb4363e0f02041d301c25463bc1d3414463ed00a",
@@ -103,7 +110,7 @@
           "slide": "ppt/slides/slide19.xml",
           "name": "OPF chart 3",
           "chartEx": "ppt/charts/chartEx3.xml",
-          "choice": "a89628876d193bac32db1c8e36dd048249b01b6c91c7f32ddc1c71e59883e3a6",
+          "choice": "3b312773e74b20ef36456a548f49bd183349dcae9547a5ae2c41414c931043ee",
           "part": "bc0ee24b04b1b7d8fa2329a14e4abf0d8f395a0e1bd74556c54172e09092cdbe",
           "rels": "9061ea53a8cf0305553d234418f0752b913fe613008ec80d97eb52b3e169f6eb",
           "style": "1f2537eeb48ce1a9541fd410cb4363e0f02041d301c25463bc1d3414463ed00a",
@@ -115,6 +122,11 @@
         "OPF chart 1 workbook": "36d300af9a567e2e937b1b83ff5e4aa97a689cbb17c67efa16e428e938d461ac",
         "OPF chart 2 workbook": "354e1ad946c8ae6b2a36c260d231d4716e60244d490a6fdeeb32c9d57c4801bd",
         "OPF chart 3 workbook": "05d2ab69dd8970ad3ca6c6405e662bf3ff58dc229941d3456e55c30039b7d32e"
+      },
+      "rr105DefaultAltPrevious": {
+        "OPF chart 1 choice": "c5e147fd990b0a99c521718a5e092c9b1e98d6356de5d0157f6f2f7c287e37c8",
+        "OPF chart 2 choice": "543c73deaf1f53607426e81183eccef7412239dd6f04df255b01db0b4e891cd7",
+        "OPF chart 3 choice": "a89628876d193bac32db1c8e36dd048249b01b6c91c7f32ddc1c71e59883e3a6"
       }
     }
   }

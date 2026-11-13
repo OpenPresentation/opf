@@ -126,7 +126,9 @@ for (const [id, {source, importSha256, identity}] of Object.entries(fixture.deck
   assert.match(pictures[0], /\bdescr="Funnel: 900 visits, 300 trials, 90 purchases"/);
   assert.match(pictures[1], /<adec:decorative\b[^>]*\bval="1"/);
   assert.doesNotMatch(pictures[1], /\bdescr=/);
-  assert.doesNotMatch(pictures[2], /\bdescr=|decorative/);
+  // RR-105 (#1290, 2026-11-12): no authored alt now writes the generated description (before it, no descr), and no decorative marker.
+  assert.match(pictures[2], /\bdescr="Funnel chart: Count by Stage, 3 categories"/);
+  assert.doesNotMatch(pictures[2], /decorative/);
   checks += 4;
 }
 

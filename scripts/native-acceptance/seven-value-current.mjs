@@ -13,10 +13,15 @@ export const CURRENT_SEVEN_FIXTURE='packages/pptx/test/fixtures/chartex-fallback
 // RR-105 (#1290, 2026-11-12, chart workbook properties): the fixture's `source` review record and `entries` export hashes moved; its
 // `decks` (and `decks['all-seven']`, the only part this route reads) are byte-identical, checked by comparing JSON.stringify of
 // `decks` and of `decks['all-seven']` against f3f0b2b1f. Previous: a4ade4939074e2f1b63f989e7e82c0ce83e162a470305341b3daee049de1e7b8.
-// RR-105 (#1290, 2026-11-12, notes page size): the fixture's `source` review record and `entries` export hashes moved again; `decks`\nis byte-identical to 885219b9c (JSON.stringify compared). Previous: 7bb6762cbebe0a704485dcb35021952480fde034ec73b0d89a78bd186b21a0c0, 73099 bytes.
-// RR-105 (#1290, 2026-11-12, document properties): the fixture's `source` review record and `entries` export hashes moved again; `decks`\nis byte-identical to 6e4da7119 (JSON.stringify compared). Previous: 6941c0b445ad2ad8cd930cd23b15435e57fb6eada0631c57f5b38566d7a5482b, 77459 bytes.
-// RR-105 (#1290, 2026-11-12, Company from the organization): the fixture's `source` review record and `entries` export hashes moved\nagain; `decks` is byte-identical to af10f356f (JSON.stringify compared). Previous: 462a069d533106c5a8e856b34fb204ecdb803a97c5db7441f47f5f87834c8858, 81848 bytes.
-export const CURRENT_SEVEN_FIXTURE_SHA256='cc7c4ea6175a67089ad6bf800a3a05a6d0cffdb8ce87e1c824efaaa34e6f6dc8';
+// RR-105 (#1290, 2026-11-12, notes page size): the fixture's `source` review record and `entries` export hashes moved again; `decks`
+// is byte-identical to 885219b9c (JSON.stringify compared). Previous: 7bb6762cbebe0a704485dcb35021952480fde034ec73b0d89a78bd186b21a0c0, 73099 bytes.
+// RR-105 (#1290, 2026-11-12, document properties): the fixture's `source` review record and `entries` export hashes moved again; `decks`
+// is byte-identical to 6e4da7119 (JSON.stringify compared). Previous: 6941c0b445ad2ad8cd930cd23b15435e57fb6eada0631c57f5b38566d7a5482b, 77459 bytes.
+// RR-105 (#1290, 2026-11-12, Company from the organization): the fixture's `source` review record and `entries` export hashes moved
+// again; `decks` is byte-identical to af10f356f (JSON.stringify compared). Previous: 462a069d533106c5a8e856b34fb204ecdb803a97c5db7441f47f5f87834c8858, 81848 bytes.
+// RR-105 (#1290, 2026-11-12, default alt text): the fixture's `source` review record and `entries` export hashes moved again;
+// `decks` is byte-identical to ed9f0f909 (JSON.stringify compared). Previous: cc7c4ea6175a67089ad6bf800a3a05a6d0cffdb8ce87e1c824efaaa34e6f6dc8, 86226 bytes.
+export const CURRENT_SEVEN_FIXTURE_SHA256='5012eee13db635e6228479af1681adb1e9a9cd1c51dd6254d517bbcfb3aadd91';
 export const CURRENT_VALUE_PROFILE='seven-chart-treemap-single-value-edit-v1';
 export function currentSevenSource(root=fileURLToPath(new URL('../../',import.meta.url))){
  const bytes=fs.readFileSync(path.join(root,CURRENT_SEVEN_FIXTURE));

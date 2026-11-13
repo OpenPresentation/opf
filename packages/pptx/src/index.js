@@ -21,6 +21,7 @@ import {attachChartexFallbacks,attachChartexParts,chartexFallbackName,chartFromC
 import {chartRegionSvg} from './preview-region.js';
 import {applyDoughnutRings,applyRingLabels,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
 import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
+import {authoredAlt,chartAlt,generatedChartAlts,logoAlt,photoAlt,tableAlt} from './default-alt.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
 import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
@@ -1566,7 +1567,8 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
     const stored = importedTable && record('table');
     const restoredTable = stored ? restore('table', importedTable, () => restoreTableData(importedTable, stored, {evidence: tableCellEvidence(table, relationships), olderEvidence: [tableCellEvidence(table, relationships, {form: 'raw'}), tableCellEvidence(table, relationships, {form: 'saved'})], environment: tableEnvironmentEvidence(entries), datasets: data.datasets, report: diagnostic => data.report?.('table', diagnostic)})) : importedTable;
     // FA-27: the frame's descr (or PowerPoint's decorative marker) is the table's text alternative.
-    const alt = restoredTable && typeof restoredTable === 'object' ? readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]) : undefined;
+    // RR-105 (#1290): the description OPF generates when no alt was authored is not an alt (src/default-alt.js).
+    const alt = restoredTable && typeof restoredTable === 'object' ? authoredAlt(readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]), tableAlt(restoredTable, {datasets: data.datasets})) : undefined;
     return {
       kind: "table",
       bounds,
@@ -1595,7 +1597,8 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
     const references=[...(referenceState.references??[]),...(data.referenceOverlays?.get(part)??[])].sort((a,b)=>a.index-b.index).map(({index:_index,...ref})=>ref);
     if(chart&&references.length)chart={...chart,referenceLines:references};
     // FA-09: the frame's descr (or PowerPoint's decorative marker) is the chart's text alternative.
-    const alt = chart ? readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]) : undefined;
+    // RR-105 (#1290): the description OPF generates when no alt was authored is not an alt (src/default-alt.js).
+    const alt = chart ? authoredAlt(readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]), [...generatedChartAlts(chart, {datasets: data.datasets}), ...(stored?.data ? generatedChartAlts({...chart, data: stored.data}, {datasets: data.datasets}) : [])]) : undefined;
     return {
       kind: "chart",
       bounds,
@@ -3332,8 +3335,8 @@ function addListPayload(slide, items, region, context) {
 
 // A content picture outside an image block (a timeline event image): one native picture contained in its region.
 // Generated furniture is never grouped (src/master-furniture.js), so a furniture part passes {group: false}.
-async function addImagePayload(slide, presentation, asset, region, path, context, options, {group = true} = {}) {
-  const name = await addImagePicture(slide, presentation, asset, region, path, context, options, {fit: 'contain'});
+async function addImagePayload(slide, presentation, asset, region, path, context, options, {group = true, alt} = {}) {
+  const name = await addImagePicture(slide, presentation, asset, region, path, context, options, {fit: 'contain', ...(alt === undefined ? {} : {alt})});
   if (!name) addImagePlaceholder(slide, presentation, asset, region, path, context, options, {group});
   return name;
 }
@@ -3883,7 +3886,8 @@ async function addLogo(slide, presentation, logo, slideIndex, slideContext, cont
   }
   context.logos.set(`ppt/slides/slide${slideIndex + 1}.xml`, {slide: `slides.${slideIndex}`, box: region, path: logo.path, variant: logo.variant, anchor: logo.anchor ?? 'left'});
   if (outcome.svg) context.svgPictures.set(`ppt/slides/slide${slideIndex + 1}.xml|${logoName()}`, outcome.svg);
-  slide.addImage({...resolved, objectName: logoName(), ...region, altText: assetAlt(logo.source, presentation) ?? 'Logo'});
+  // RR-105 (#1290): with no asset alt, the organization's name ("Acme logo"), else "Logo" as before.
+  slide.addImage({...resolved, objectName: logoName(), ...region, altText: assetAlt(logo.source, presentation) ?? logoAlt(organizationNameAt(presentation, logo.path))});
 }
 
 // FF-62, RR-90: chart text is one size, core's `chartTextSize` for the chart's box: 20 px at the 1280 x 720 reference (15 pt on a 13.33 x 7.5 in
@@ -3978,7 +3982,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     fallback: chartData.adaptations?.some(entry => entry.adaptation === 'chart-fallback') === true});
   context.chartFonts.set(objectName,{heading:context.fonts.heading,body:context.fonts.body});
   // FA-09: the chart's text alternative (the frame's descr; the empty string is PowerPoint's decorative marker), applied before the chartex frame copies the head.
+  // RR-105 (#1290): with no authored alt, the generated description (src/default-alt.js), so the frame is never without alt text.
   if (typeof chart.alt === 'string') context.frameAlts.set(objectName, chart.alt);
+  else { const generated = chartAlt(chart, presentation); if (generated) context.frameAlts.set(objectName, generated); }
   // RR-89: the series colours are core's chartSeriesPalette (accent1 to accent6 of the deck scheme, then their tints, with the chart's own
   // `colors` over them), adjusted for the chart panel like the preview does. A colour that is still an unadjusted theme accent (or a
   // `chart.colors` scheme slot or role) is written as a schemeClr, so re-theming in PowerPoint recolours the series.
@@ -4298,6 +4304,8 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
   recordPayloadData(context, objectName, 'table', presentation, path, layout);
   // FA-27: the table's text alternative (the frame's descr; the empty string is PowerPoint's decorative marker).
   if (typeof authoredTable?.alt === 'string') context.frameAlts.set(objectName, authoredTable.alt);
+  // RR-105 (#1290): with no authored alt, the generated description (src/default-alt.js).
+  else { const generated = tableAlt(authoredTable, presentation); if (generated) context.frameAlts.set(objectName, generated); }
   if (layout.rows.some(row => row.cells.some(cell => Object.keys(cell.style ?? {}).length))) context.tableCells.set(objectName, {layout, scale, context, defaultBorder:{color:`#${context.colors.border}`,width:1/scale}, hiddenBorder:{color:'#000000',width:0}});
   // LH-29: the preview draws a dotted cell border as dots one line width long and two apart; PowerPoint has no such preset and
   // its square dot (sysDot) is one on, one off. A dashed border (four on, three off) is PowerPoint's dash exactly.
@@ -4621,7 +4629,9 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
     if(part.type==='image'){
       const region={x:part.box.x/96,y:part.box.y/96,w:part.box.width/96,h:part.box.height/96};
       // A logo reference draws the organization's asset: a source that cannot be drawn is reported where the asset is written.
-      const objectName = await addImagePayload(slide,presentation,part.image,region,part.reference!==undefined?part.sourcePath:part.path,context,options,{group:false});
+      // RR-105 (#1290): a logo drawn from an organization, with no asset alt, is described by the organization's name.
+      const logoPath = part.reference!==undefined?part.sourcePath:undefined, logoText = logoPath && assetAlt(part.image, presentation) === undefined ? logoAlt(organizationNameAt(presentation, logoPath)) : undefined;
+      const objectName = await addImagePayload(slide,presentation,part.image,region,part.reference!==undefined?part.sourcePath:part.path,context,options,{group:false,alt:logoText});
       if (objectName) {
         entry.names.push(objectName);
         context.furnitureTags.set(objectName, {v:1, role:'image', group:String(slideIndex), part:index});
@@ -4822,7 +4832,7 @@ async function addQuotePayload(slide, presentation, value, layout, context, opti
       quote:{group,part:index,anchor},
     });
   }
-  if (layout.photo) await addQuotePhoto(slide, presentation, layout.photo, group, context, options);
+  if (layout.photo) await addQuotePhoto(slide, presentation, layout.photo, group, context, options, value?.attribution);
   // LH-78: a quote card's decorative mark, one native text box in the primary color (against the card, as a metric's value is) where core placed it,
   // tagged into the quote's group as decoration (role 'mark') so an unchanged export imports back with the quote.
   if (layout.mark) {
@@ -4842,7 +4852,7 @@ async function addQuotePayload(slide, presentation, value, layout, context, opti
 
 // FA-12: the attributed person's headshot is a native picture in the core circle frame: cropped to fill it (a:srcRect after the bytes
 // are embedded) with the `ellipse` preset geometry, the alt text as its description, tagged into the quote's provenance group.
-async function addQuotePhoto(slide, presentation, photo, group, context, options) {
+async function addQuotePhoto(slide, presentation, photo, group, context, options, attribution) {
   const box = { x: photo.box.x / 96, y: photo.box.y / 96, w: photo.box.width / 96, h: photo.box.height / 96 };
   const outcome = { box, cover: true };
   const resolved = await resolveImage(photo.value, presentation, options, photo.path, outcome);
@@ -4857,7 +4867,8 @@ async function addQuotePhoto(slide, presentation, photo, group, context, options
   if (outcome.svg) options.onDiagnostic?.({ code: 'export-lossy', feature: 'svg-rasterized', path: photo.path, message: 'An SVG quote photo exports as its PNG raster so the circular mask applies as in the preview; PowerPoint has not been confirmed to apply it to an SVG picture.' });
   context.quotePhotos.set(objectName, { region: box, mode: 'crop', path: photo.path, shape: photo.shape, ...(photo.focus ? { focus: photo.focus } : {}) });
   context.quoteTags.set(objectName, { v: 1, role: 'photo', group });
-  const alt = assetAlt(photo.value, presentation);
+  // RR-105 (#1290): with no asset alt, the attribution ("Photo of Ada Lovelace"); import leaves that generated text out (quote-provenance.js).
+  const alt = assetAlt(photo.value, presentation) ?? photoAlt(attribution === undefined ? undefined : stringifyText(attribution));
   context.pictureText.set(objectName, pictureText(alt, photo.value, presentation));
   slide.addImage({ ...resolved, objectName, ...box, altText: alt });
 }
@@ -5657,6 +5668,14 @@ function writePictureText(picture, text) {
     attributes = attributes.replace(/\sdescr="[^"]*"/, "").replace(/\stitle="[^"]*"/, "");
     return `<p:cNvPr${attributes}${text.alt ? ` descr="${escape(text.alt)}"` : ""}${text.title ? ` title="${escape(text.title)}"` : ""}${close}>`;
   });
+}
+
+// RR-105 (#1290): the name of the organization an OPF logo path (`organization.logo`, `organization.1.logo.icon`) belongs to.
+function organizationNameAt(presentation, path) {
+  const match = /^organization(?:\.(\d+))?\.logo\b/.exec(typeof path === "string" ? path : "");
+  if (!match) return undefined;
+  const organization = Array.isArray(presentation?.organization) ? presentation.organization[Number(match[1] ?? 0)] : presentation?.organization;
+  return typeof organization?.name === "string" ? organization.name : undefined;
 }
 
 function assetAlt(asset, presentation) {

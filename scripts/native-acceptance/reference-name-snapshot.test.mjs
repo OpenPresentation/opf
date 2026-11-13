@@ -41,10 +41,15 @@ const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n'
 // RR-105 (#1290, 2026-11-12, chart workbook properties): each embedded workbook names the deck author, else "OPF", as creator and
 // last editor and "OPF" as its application (docProps/core.xml and docProps/app.xml of every workbook; previous
 // {bytes:129035,sha256:'6acdda5035661565792ab0984ee9d039370d5ca39e929fd53dedea4beeeef71f'}).
-// RR-105 (#1290, 2026-11-12, notes page size): ppt/presentation.xml writes p:notesSz 6858000 x 9144000; previous\n{bytes:128983,sha256:'bc5a17bd973c25eec413e6664e86200e72b552654ff580068e87657ec0f0ae1a'}.
-// RR-105 (#1290, 2026-11-12, document properties): docProps/app.xml names the application OPF, and docProps/core.xml carries the deck's\ntags and language when it has them; previous {bytes:128981,sha256:'79799e8404ece2256f5447bc7d3f59f50e26c0cc0c818012b0ac31fff89c02bf'}.
-// RR-105 (#1290, 2026-11-12, Company from the organization): docProps/app.xml writes the deck's organization as Company, none here\n(previously the fixed OpenPresentation); previous {bytes:128966,sha256:'8c3fd3d576ac8c479d5b398564d84b572403d8378b07df8724359b1d9cf012a8'}.
-const CURRENT_EXPORT=Object.freeze({bytes:128950,sha256:'cdcc04f801766f97a4fdc567d8f71870fd7a12d132a17c3b7f561617fbb009b4'});
+// RR-105 (#1290, 2026-11-12, notes page size): ppt/presentation.xml writes p:notesSz 6858000 x 9144000; previous
+// {bytes:128983,sha256:'bc5a17bd973c25eec413e6664e86200e72b552654ff580068e87657ec0f0ae1a'}.
+// RR-105 (#1290, 2026-11-12, document properties): docProps/app.xml names the application OPF, and docProps/core.xml carries the deck's
+// tags and language when it has them; previous {bytes:128981,sha256:'79799e8404ece2256f5447bc7d3f59f50e26c0cc0c818012b0ac31fff89c02bf'}.
+// RR-105 (#1290, 2026-11-12, Company from the organization): docProps/app.xml writes the deck's organization as Company, none here
+// (previously the fixed OpenPresentation); previous {bytes:128966,sha256:'8c3fd3d576ac8c479d5b398564d84b572403d8378b07df8724359b1d9cf012a8'}.
+// RR-105 (#1290, 2026-11-12, default alt text): the two chart frames carry a generated descr; previous
+// {bytes:128950,sha256:'cdcc04f801766f97a4fdc567d8f71870fd7a12d132a17c3b7f561617fbb009b4'}.
+const CURRENT_EXPORT=Object.freeze({bytes:129058,sha256:'174b3759bd4ec867d70f84c307af60f8803a6b2051c9648f5dbb2794386491a0'});
 let current;
 function currentFixture(){current??=(async()=>{
  const deck=structuredClone(source),renderOptions={catalogs:[gallery]},fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck,renderOptions});await fonts.ensure(deck,{renderOptions});

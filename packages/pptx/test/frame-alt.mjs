@@ -43,10 +43,10 @@ for (const type of ['waterfall', 'funnel', 'treemap']) {
   assert.equal(back.alt, alt, `${type}: import restores alt from the chartex choice`);
 }
 
-// 3. No alt: no descr and no decorative marker, and import invents none.
+// 3. No alt: the generated description (RR-105, #1290, 2026-11-12; before it, no descr), no decorative marker, and import invents no alt.
 {
   const {slideXml, back} = await roundTrip({type: 'column', data});
-  assert.doesNotMatch(slideXml, /<p:cNvPr[^>]*name="OPF chart 1"[^>]*descr=/, 'no alt, no descr');
+  assert.match(slideXml, /<p:cNvPr[^>]*name="OPF chart 1" descr="Column chart: North and South by Quarter, 3 categories"\/>/, 'no alt, the generated descr');
   assert.doesNotMatch(slideXml, /adec:decorative/);
   assert.equal('alt' in back, false);
 }

@@ -1,5 +1,6 @@
 import {XMLParser} from 'fast-xml-parser';
 import {isValidFormat} from './format-check.js';
+import {authoredAlt,photoAlt} from './default-alt.js';
 import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {cleanBase,headingValue,joinRichLines,unwrapQuoteRuns} from './rich-heading.js';
@@ -140,7 +141,9 @@ export function importQuoteGroups(shapes,paragraphs,relationships,entries,report
     if(footer)quote={...quote,...footerFields(footer,manifest.footer,diagnostic=>local.push(diagnostic),manifest.pull===true)};
     // The headshot is the current native picture; a deleted or unreadable one is reported, never invented.
     if(manifest.photo){
-      const image=photos[0]?readPicture(photos[0].picture)?.payload?.image:undefined;
+      let image=photos[0]?readPicture(photos[0].picture)?.payload?.image:undefined;
+      // RR-105 (#1290): the description export generates from the attribution ("Photo of ...") is not an alt (src/default-alt.js).
+      if(image&&typeof image==='object'&&typeof image.alt==='string'){const runsText=value=>typeof value==='string'?value:Array.isArray(value)?value.map(runsText).join(''):typeof value?.text==='string'?value.text:'';if(authoredAlt(image.alt,photoAlt(runsText(quote.attribution)))===undefined){const {alt:_generated,...rest}=image;image=rest;}}
       if(image)quote={...quote,photo:image,...(manifest.portrait?{portrait:manifest.portrait}:{})};
       else local.push({code:'quote-photo-missing',message:"The quote's headshot picture is missing or unreadable; the quote is imported without a photo."});
     }

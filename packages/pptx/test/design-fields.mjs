@@ -67,7 +67,8 @@ let checked = 0;
     const logos = all.filter(picture => picture.name === 'OPF logo');
     assert.equal(logos.length, 1, `slide ${index}: one native logo picture`);
     const [logo] = logos;
-    assert.equal(logo.descr, 'Logo', 'alt text');
+    // RR-105 (#1290, 2026-11-12): with no asset alt the logo is described by its organization's name (previously the fixed 'Logo').
+    assert.equal(logo.descr, 'Acme logo', 'alt text');
     // Left-anchored, vertically centered inside core's box, fitted without cropping.
     const {box} = geometry[index].logo, scale = Math.min(box.width / 120, box.height / 60);
     near(logo.w, 120 * scale, `slide ${index} logo width`); near(logo.h, 60 * scale, `slide ${index} logo height`);
