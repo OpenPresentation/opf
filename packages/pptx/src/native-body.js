@@ -214,13 +214,21 @@ export function nativeTitleWrapBox(item, geometry, textMeasurement, {nativeStyle
     if (resolution?.substitute && resolution.compatibility === 'visual' || nativeStyle?.fontFamily !== undefined && nativeStyle.fontFamily !== item.textStyle.fontFamily && !resolution) {
       report('font-metrics'); return undefined;
     }
+    // RR-105 (opf#1291): a rich title's runs in another weight or slant are another face, which must be measured exactly too.
+    for (const run of runsOf(item.value)) {
+      if (typeof run === 'string' || run.bold === undefined && run.italic === undefined) continue;
+      const face = textMeasurement?.resolveFont?.({...style, fontWeight: run.bold === undefined ? style.fontWeight : run.bold ? 700 : 400, italic: run.italic ?? style.italic});
+      if (face?.substitute && face.compatibility === 'visual') { report('font-metrics'); return undefined; }
+    }
     const heading = geometry.headingAreas?.find(area => area.name === 'title' && !area.collapsed);
     let area = heading?.box ?? geometry.contentBox;
     const inside = area && item.box.x >= area.x - 1e-6 && item.box.x + item.box.width <= area.x + area.width + 1e-6;
     // A placed-picture heading can be wider than the body's frame. Its authored title box is then the conservative boundary.
     if (!inside) area = item.box;
     const limits = {left: Math.max(0, area.x), right: Math.min(geometry.width, area.x + area.width)};
-    const wrap = nativeWrapBox({...item, textStyle: style}, [item.value], false, limits, textMeasurement, collectMeasurement);
+    // A right-to-left title grows from its physical edge (`alignment` is logical: a start-aligned Arabic title is right-aligned).
+    const physical = item.text?.directions?.[0] === 'rtl' ? {left: 'right', right: 'left'}[item.alignment ?? 'left'] ?? item.alignment : item.alignment;
+    const wrap = nativeWrapBox({...item, textStyle: style, alignment: physical}, [item.value], false, limits, textMeasurement, collectMeasurement);
     if (!wrap) report('tight-wrap');
     return wrap;
   } catch (error) {
@@ -305,10 +313,23 @@ export function addNativeBody(slide, plan, context, options, helpers) {
 }
 
 /** RR-88: a native title is written with an explicit no-autofit body, so the Title placeholder's own autofit cannot shrink or move it. */
-export function nativeTitleAutofit(xml, names) {
+// RR-105 (opf#1291): `margins` (name -> [{marL, marR}] in px, one per paragraph) start each line of a fixed-break title where core
+// placed it by its ink.
+export function nativeTitleAutofit(xml, names, margins = new Map()) {
   if (!names?.size) return xml;
-  return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => names.has(shape.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1])
-    ? shape.replace(/(<a:bodyPr\b[^>]*>)[\s\S]*?<\/a:bodyPr>/, '$1<a:noAutofit/></a:bodyPr>') : shape);
+  return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
+    const name = shape.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1];
+    if (!names.has(name)) return shape;
+    shape = shape.replace(/(<a:bodyPr\b[^>]*>)[\s\S]*?<\/a:bodyPr>/, '$1<a:noAutofit/></a:bodyPr>');
+    const paragraphs = margins.get(name);
+    if (!paragraphs) return shape;
+    const emu = value => Math.round(value * 9525);
+    let index = 0;
+    return shape.replace(/<a:pPr\b([^>]*?)(\/?)>/g, (node, attributes, empty) => {
+      const margin = paragraphs[index++] ?? {marL: 0, marR: 0};
+      return `<a:pPr${attributes.replace(/\s(?:marL|marR|indent)="[^"]*"/g, '')} marL="${emu(margin.marL)}"${margin.marR > .01 ? ` marR="${emu(margin.marR)}"` : ''} indent="0"${empty}>`;
+    });
+  });
 }
 
 const NO_SPACE_BEFORE = '<a:spcBef><a:spcPts val="0"/></a:spcBef>', NO_SPACE_AFTER = '<a:spcAft><a:spcPts val="0"/></a:spcAft>';

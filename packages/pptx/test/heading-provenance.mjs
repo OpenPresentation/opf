@@ -16,8 +16,14 @@ const data=bytes=>JSON.parse(Buffer.from(dec.decode(bytes).match(/val="([^"]+)"/
 const tagFile=entries=>tags(entries).find(file=>data(entries[file]).field==='title');
 const editTag=(entries,mutate)=>{const file=tagFile(entries),xml=dec.decode(entries[file]),hex=xml.match(/val="([^"]+)"/)[1],value=data(entries[file]);mutate(value);entries[file]=enc.encode(xml.replace(hex,Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()));};
 const legacy=await fromPptx(modify(entries=>{for(const file of tags(entries)){const xml=dec.decode(entries[file]),hex=xml.match(/val="([^"]+)"/)[1],value=data(entries[file]);delete value.boundary;delete value.separator;entries[file]=enc.encode(xml.replace(hex,Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()));}}));
-const oldTitleLines=resolvePresentation(deck,{fonts}).slides[0].geometry.items.find(item=>item.field==='title').text.lines;
-assert.equal(legacy.slides[0].title,oldTitleLines.join('\n'),'Legacy tags retain current native line breaks without inventing source boundaries');
+// RR-105 (opf#1291): a wrapped title is one Title shape now, so without boundary tags its current text is the whole title.
+assert.equal(legacy.slides[0].title,deck.slides[0].title,'Legacy tags on one title shape keep its current text');
+// Line shapes with legacy tags (what exports before boundary tags wrote): a title with a tab still has one shape per line.
+const lineDeck={...deck,slides:[{...deck.slides[0],title:'Agenda\tA complete heading with enough words to wrap across lines'}]},lineBytes=await toPptx(lineDeck,{fonts});
+const lineEntries=unzipSync(lineBytes);for(const file of tags(lineEntries)){const xml=dec.decode(lineEntries[file]),hex=xml.match(/val="([^"]+)"/)[1],value=data(lineEntries[file]);delete value.boundary;delete value.separator;lineEntries[file]=enc.encode(xml.replace(hex,Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()));}
+const oldTitleLines=resolvePresentation(lineDeck,{fonts}).slides[0].geometry.items.find(item=>item.field==='title').text.lines;
+assert.ok(oldTitleLines.length>1);
+assert.equal((await fromPptx(zipSync(lineEntries))).slides[0].title,oldTitleLines.join('\n'),'Legacy tags retain current native line breaks without inventing source boundaries');
 const changed=await fromPptx(modify(entries=>slide(entries,xml=>xml.replace('A complete','An edited'))));
 assert.equal(changed.slides[0].title,initial.title.replace('A complete','An edited'),'Current native text wins over authoring source');
 const reordered=await fromPptx(modify(entries=>slide(entries,xml=>{const shapes=[...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(m=>m[0]);return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,()=>shapes.pop());})));
@@ -35,7 +41,6 @@ for(const field of ['title','subtitle','tag']) {
 }
 const corruptions={
   duplicate:entries=>slide(entries,xml=>xml.replace(/(<p:sp>(?:(?!<p:sp>)[\s\S])*?name="OPF heading slides\.0\.title line 0"[\s\S]*?<\/p:sp>)/,'$1$1')),
-  missingTag:entries=>{delete entries[tagFile(entries)];},
   badCount:entries=>editTag(entries,value=>value.count++),
   badIndex:entries=>editTag(entries,value=>value.line=-1),
   badGroup:entries=>editTag(entries,value=>value.group='slides.99.title'),
@@ -43,10 +48,16 @@ const corruptions={
   badEncoding:entries=>{const file=tagFile(entries);entries[file]=enc.encode(dec.decode(entries[file]).replace(/val="[^"]+"/,'val="invalid"'));},
   mixedIdentity:entries=>{const file=tagFile(entries),xml=dec.decode(entries[file]),tag=xml.match(/<p:tag\s[^>]+\/>/)[0].replace('OPF_HEADING_V1','OPF_CODE_V1');entries[file]=enc.encode(xml.replace('</p:tagLst>',tag+'</p:tagLst>'));},
 };
+// RR-105 (opf#1291): a wrapped title is one shape, so the group corruptions (a missing, duplicated or inconsistent line) are checked on a
+// title that keeps line shapes (a tab), as on every title before; on the one title shape each damage still keeps the visible words.
+corruptions.missingTag=entries=>{delete entries[tagFile(entries)];};
+const modifyLines=mutate=>{const entries=unzipSync(lineBytes);mutate(entries);return zipSync(entries);};
 for(const [name,mutate] of Object.entries(corruptions)) {
-  const issues=[],result=await fromPptx(modify(mutate),{onDiagnostic:item=>issues.push(item)});
+  const issues=[],result=await fromPptx(modifyLines(mutate),{onDiagnostic:item=>issues.push(item)});
   assert.ok(issues.some(item=>item.code==='invalid-heading-provenance'),name);
   const text=JSON.stringify(result);for(const word of ['complete','heading','enough','words','wrap','across','lines'])assert.ok(text.includes(word),`${name}: retain native ${word}`);
+  const single=JSON.stringify(await fromPptx(modify(mutate),{onDiagnostic:()=>{}}));
+  for(const word of ['complete','heading','enough','words','wrap','across','lines'])assert.ok(single.includes(word),`${name}, one title shape: retain native ${word}`);
 }
 console.log(`Heading provenance: native edits, shape renaming/reordering and ${Object.keys(corruptions).length} damaged/ambiguous group fallbacks preserve visible words.`);
 
