@@ -58,17 +58,17 @@ foreach($diagnostic in @(
 $script:lifecycleLog=New-Object 'System.Collections.Generic.List[string]';$life=New-LifecycleFixture 'name-edit-save-reopen';Open-OwnedFurniture $life.app $life.input 'input';$n=Fixture;$script:presentation|Add-Member -MemberType NoteProperty -Name Slides -Value $n.presentation.Slides;$n.series.Values[0]|Add-Member -Force -MemberType ScriptProperty -Name Name -Value {$script:presentation.Text} -SecondValue {param($value)$script:presentation.Text=$value};$a=Rename 1 'original' 'Native renamed';$before=Read-FurnitureSeriesNameState $script:presentation @($a) 'original';Apply-FurnitureAction $script:presentation $a 1;Save-OwnedFurnitureCopy $life.input $life.copy;Close-OwnedFurniture 'edited' $life.input;Open-OwnedFurniture $life.app $life.copy 'reopen';$script:presentation|Add-Member -MemberType NoteProperty -Name Slides -Value $n.presentation.Slides;$after=Read-FurnitureSeriesNameState $script:presentation @($a) 'reopened';if($after[0].observedName -cne 'Native renamed' -or [IO.File]::ReadAllText($life.input) -cne 'original'){throw 'Owned readonly native-name copy/reopen/source preservation failed'};Close-OwnedFurniture 'reopened' $life.copy;Quit-OwnedFurnitureApplication $life.app;$cases.Add([ordered]@{name='owned-readonly-name-edit-savecopy-reopen';lifecycle=@($script:lifecycleLog.ToArray());passed=$true})
 # The new domain is allowed only after a separate exact source/plan mode admission.
 function ReferenceAction {return [pscustomobject]@{op='set-chart-series-name';slideIndex=1;chartName='OPF chart 1';seriesIndex=1;expectedName='Actual';newName='Actual edited'}}
-$referenceSourceHash='06c82deb1dbe067d4f097aebe760b8f1dbdcc0e2a74e95b8d1f99eeea2302a83'
+$referenceSourceHash='3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918'
 foreach($mode in @('valid-source','source-hash','source-bytes','fonts','survey','extra-action','target-index','literal')){
- $a=ReferenceAction;$items=@($a);$sha=$referenceSourceHash;$bytes=129025;$fonts=$false;$survey=$false
+ $a=ReferenceAction;$items=@($a);$sha=$referenceSourceHash;$bytes=129055;$fonts=$false;$survey=$false
  if($mode -ceq 'source-hash'){$sha='0'*64};if($mode -ceq 'source-bytes'){$bytes++};if($mode -ceq 'fonts'){$fonts=$true};if($mode -ceq 'survey'){$survey=$true};if($mode -ceq 'extra-action'){$items+=@(ReferenceAction)};if($mode -ceq 'target-index'){$a.seriesIndex=2};if($mode -ceq 'literal'){$a.newName='Other'}
  $count=$script:events.Count;$failure=$null;try{Assert-FurnitureReferenceNameMode $items $sha $bytes $fonts $survey}catch{$failure=$_.Exception.Message}
  if(($mode -ceq 'valid-source') -cne ($null -eq $failure) -or $count -ne $script:events.Count){throw ('Reference source/plan gate failed before native boundary: '+$mode)}
  $cases.Add([ordered]@{name=('reference-mode-'+$mode);nativeCalls=0;passed=$true})
 }
 function ReferenceFixture {
- $n=Fixture;$script:referenceNameModeEnabled=$true;$n.chartShape.Name='OPF chart 1';$n.chart.ChartType=-4111;$n.series.Values[0].ChartType=4;$n.series.Values[0].NativeName='Actual';$n.series.Values[1].Name='OPF reference 1';$n.series.Values[1].ChartType=4
- $n.series.Values=@($n.series.Values[0],$n.series.Values[1],([pscustomobject]@{Name='OPF reference 2';ChartType=4}));$n.series.Count=3;return $n
+ $n=Fixture;$script:referenceNameModeEnabled=$true;$n.chartShape.Name='OPF chart 1';$n.chart.ChartType=-4111;$n.series.Values[0].ChartType=4;$n.series.Values[0].NativeName='Actual';$n.series.Values[1].Name='Target 80';$n.series.Values[1].ChartType=4
+ $n.series.Values=@($n.series.Values[0],$n.series.Values[1],([pscustomobject]@{Name='Floor -10';ChartType=4}));$n.series.Count=3;return $n
 }
 $n=ReferenceFixture;$a=ReferenceAction;$original=Read-FurnitureSeriesNameState $n.presentation @($a) 'original';Apply-FurnitureAction $n.presentation $a 1;$edited=Read-FurnitureSeriesNameState $n.presentation @($a) 'edited';$reopened=Read-FurnitureSeriesNameState $n.presentation @($a) 'reopened'
 if($script:nameSetterCalls -ne 1 -or $original[0].observedName -cne 'Actual' -or $edited[0].observedName -cne 'Actual edited' -or $reopened[0].observedName -cne 'Actual edited'){throw 'Closed reference native-name model failed'}

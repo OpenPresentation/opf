@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {fromPptx, toPptx} from '../dist/index.js';
-import {authoredAlt, chartAlt, chartNoun, generatedChartAlts, nameList, tableAlt} from '../dist/default-alt.js';
+import {authoredAlt, authoredChartAlt, authoredTableAlt, chartAlt, chartNoun, generatedChartAlts, nameList, tableAlt} from '../dist/default-alt.js';
 
 const image = `data:image/png;base64,${readFileSync(new URL('./fixtures/images/wide.png', import.meta.url)).toString('base64')}`;
 const cNvPrs = (bytes, pattern = /^ppt\/(?:slides\/slide|slideMasters\/slideMaster|slideLayouts\/slideLayout)\d+\.xml$/) => {
@@ -96,6 +96,39 @@ checks++;
   const parts = unzipSync(await toPptx(structuredClone(deck), {}));
   parts['ppt/slides/slide1.xml'] = strToU8(strFromU8(parts['ppt/slides/slide1.xml']).replace('descr="Column chart: Sales and Cost by Quarter, 2 categories"', 'descr="Sales grew faster than cost"'));
   assert.equal((await fromPptx(zipSync(parts))).slides[0].chart.alt, 'Sales grew faster than cost');
+  checks++;
+}
+
+// 4b. (2026-11-13) A generated description that went stale is still not an alt. PowerPoint leaves the description alone when a series
+// or a column is renamed, so the import must not keep "…: Sales and Cost by Quarter…" as authored text for a chart that now plots
+// "Revenue". The reference series-name contract found this: the import of the renamed series gained an `alt`.
+assert.equal(authoredChartAlt('Column chart: Value by Region, 3 categories', generatedChartAlts(regions)), undefined, 'a generated form with other data is stale, not authored');
+assert.equal(authoredChartAlt('100% stacked bar chart: A, B, C and 2 more by Year, 1 category', []), undefined);
+assert.equal(authoredChartAlt('Scatter chart: Weight against Height, 12 points', []), undefined);
+assert.equal(authoredChartAlt('Histogram chart: Value, 24 values', []), undefined);
+assert.equal(authoredChartAlt('Two regions, South leads', generatedChartAlts(regions)), 'Two regions, South leads');
+assert.equal(authoredChartAlt('Column chart of sales by quarter', []), 'Column chart of sales by quarter', 'a sentence that is not the generated form stays authored');
+assert.equal(authoredChartAlt('', []), '', 'decorative stays decorative');
+assert.equal(authoredTableAlt('Table: Team and People; 2 rows', 'Table: Squad and People; 2 rows'), undefined);
+assert.equal(authoredTableAlt('Table: 1 row', undefined), undefined);
+assert.equal(authoredTableAlt('Table of teams and their sizes', 'Table: Team and People; 2 rows'), 'Table of teams and their sizes');
+for (const provenance of [undefined, false]) {
+  const parts = unzipSync(await toPptx(structuredClone(deck), provenance === undefined ? {} : {provenance}));
+  // The first series' name, as PowerPoint writes it after Series.Name is set: a literal in place of the worksheet reference.
+  const chartPart = Object.keys(parts).find(name => /^ppt\/charts\/chart\d+\.xml$/.test(name) && strFromU8(parts[name]).includes('<c:v>Sales</c:v>'));
+  assert.ok(chartPart, 'the chart part of slide 1');
+  const chartXml = strFromU8(parts[chartPart]), series = /<c:ser>[\s\S]*?<\/c:ser>/.exec(chartXml)[0], name = /<c:tx>[\s\S]*?<\/c:tx>/.exec(series)[0];
+  parts[chartPart] = strToU8(chartXml.replace(name, '<c:tx><c:v>Revenue</c:v></c:tx>'));
+  // A table header retyped on the slide.
+  const tableXml = strFromU8(parts['ppt/slides/slide3.xml']);
+  assert.ok(tableXml.includes('<a:t>Team</a:t>'));
+  parts['ppt/slides/slide3.xml'] = strToU8(tableXml.replace('<a:t>Team</a:t>', '<a:t>Squad</a:t>'));
+  const imported = await fromPptx(zipSync(parts));
+  const chart = payload(imported.slides[0], 'chart'), table = payload(imported.slides[2], 'table');
+  assert.ok(JSON.stringify(chart.data).includes('Revenue'), `${provenance}: the renamed series is imported`);
+  assert.equal(chart.alt, undefined, `${provenance}: the stale generated chart description is not an alt`);
+  assert.ok(JSON.stringify(table).includes('Squad'), `${provenance}: the renamed column is imported`);
+  assert.equal(table.alt, undefined, `${provenance}: the stale generated table description is not an alt`);
   checks++;
 }
 

@@ -128,7 +128,7 @@ function Assert-FurnitureReferenceNameAction($a) {
     foreach($pair in @(@('op','set-chart-series-name'),@('chartName','OPF chart 1'),@('expectedName','Actual'),@('newName','Actual edited'))){if($a.($pair[0]) -isnot [string] -or $a.($pair[0]) -cne $pair[1]){throw 'Reference-name action differs from the sealed literal edit'}}
 }
 function Assert-FurnitureReferenceNameMode($Actions,[string]$SourceHash,[long]$SourceBytes,[bool]$Fonts,[bool]$Survey) {
-    if($SourceBytes -ne 129025 -or $SourceHash -cne '06c82deb1dbe067d4f097aebe760b8f1dbdcc0e2a74e95b8d1f99eeea2302a83' -or $Fonts -or $Survey -or $Actions -isnot [array] -or $Actions.Count -ne 1){throw 'Exact sealed reference-name source and one plan required'}
+    if($SourceBytes -ne 129055 -or $SourceHash -cne '3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918' -or $Fonts -or $Survey -or $Actions -isnot [array] -or $Actions.Count -ne 1){throw 'Exact sealed reference-name source and one plan required'}
     Assert-FurnitureReferenceNameAction $Actions[0]
 }
 function Get-FurnitureSurveySlideCount([string]$Path) {
@@ -848,7 +848,7 @@ function Set-FurnitureSeriesName($Presentation,$Action,[string]$Prefix) {
         $other=Invoke-FurnitureCom "$Prefix.series.other-$index.get" {$target.collection.Item($index)}
         $name=Invoke-FurnitureCom "$Prefix.series.other-$index.name.get" {$other.Name};$probe.otherNames+=@([ordered]@{index=$index;name=if($name -is [string]){$name}else{$null}})
         if($name -isnot [string]){Stop-FurnitureLifecycle 'Another native series has no String name'}
-        if($script:referenceNameModeEnabled -and $name -cne ('OPF reference '+($index-1))){Stop-FurnitureLifecycle 'A sealed reference helper name changed before the setter'}
+        if($script:referenceNameModeEnabled -and $name -cne (@('Target 80','Floor -10')[$index-2])){Stop-FurnitureLifecycle 'A sealed reference helper name changed before the setter'}
         if($name -ieq $Action.newName){Stop-FurnitureLifecycle 'New literal name already identifies another native series; no setter was called'}
     }
     Invoke-FurnitureCom "$Prefix.series.name.set" {$target.series.Name=$Action.newName}

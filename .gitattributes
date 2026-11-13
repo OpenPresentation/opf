@@ -5,3 +5,6 @@
 # Immutable public WHOLE-seven test inputs retain exact original bytes.
 scripts/native-acceptance/test-fixtures/seven-chart/*.pptx -text
 scripts/native-acceptance/test-fixtures/seven-chart/whole-seven.opf.json -text
+
+# The recorded PowerPoint run of the reference Name route retains its exact bytes (hashes in measurement.json).
+scripts/native-acceptance/test-fixtures/reference-name/measurement/* -text

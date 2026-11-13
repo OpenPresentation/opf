@@ -10,7 +10,7 @@ function Test-ReferenceNameTypes($Evidence){
 # Closed literal-name guard for the one reference-bearing source; no caller target or cap override.
 function Test-ReferenceNameActionReady($Request,$Report){
     try{
-        if($Request.referenceNameEdit -isnot [bool] -or -not $Request.referenceNameEdit -or $Report.referenceNameEdit -isnot [bool] -or -not $Report.referenceNameEdit -or -not(Test-OwnedPostflightKeys $Request.input @('bytes','sha256')) -or -not(Test-OwnedPostflightInteger $Request.input.bytes) -or $Request.input.bytes -ne 129025 -or $Request.input.sha256 -cne '06c82deb1dbe067d4f097aebe760b8f1dbdcc0e2a74e95b8d1f99eeea2302a83'){return $false}
+        if($Request.referenceNameEdit -isnot [bool] -or -not $Request.referenceNameEdit -or $Report.referenceNameEdit -isnot [bool] -or -not $Report.referenceNameEdit -or -not(Test-OwnedPostflightKeys $Request.input @('bytes','sha256')) -or -not(Test-OwnedPostflightInteger $Request.input.bytes) -or $Request.input.bytes -ne 129055 -or $Request.input.sha256 -cne '3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918'){return $false}
         if($Request.caseId -cne 'reference-native-lines' -or $Request.captureTextFonts -isnot [bool] -or $Request.captureTextFonts -or $Request.readOnlySurvey -isnot [bool] -or $Request.readOnlySurvey -or $Request.slideCount -ne 3 -or $Request.actionPlan.actions.Count -ne 1){return $false}
         $a=$Request.actionPlan.actions[0]
         if(-not(Test-OwnedPostflightKeys $a @('op','slideIndex','chartName','seriesIndex','expectedName','newName')) -or -not(Test-OwnedPostflightInteger $a.slideIndex) -or $a.slideIndex -ne 1 -or -not(Test-OwnedPostflightInteger $a.seriesIndex) -or $a.seriesIndex -ne 1 -or $a.op -cne 'set-chart-series-name' -or $a.chartName -cne 'OPF chart 1' -or $a.expectedName -cne 'Actual' -or $a.newName -cne 'Actual edited'){return $false}
@@ -122,7 +122,7 @@ function Read-FurniturePostflightEvidence([string]$AdmissionFile,[string]$Expect
     Assert-OwnedPostflightPath $AdmissionFile
     if($ExpectedSha256 -cnotmatch '^[a-f0-9]{64}$' -or (Get-OwnedPostflightHash $AdmissionFile) -cne $ExpectedSha256 -or (Get-Item -LiteralPath $AdmissionFile).Length -gt 4194304){throw 'Furniture admission identity differs'}
     $a=Get-Content -LiteralPath $AdmissionFile -Raw -Encoding UTF8 | ConvertFrom-Json
-    if(-not(Test-OwnedPostflightKeys $a @('schemaVersion','profile','policy','requestSha256','ready','files','nativeAcceptance','registryAcceptance')) -or $a.files -isnot [array] -or $a.files.Count -lt 1 -or $a.files.Count -gt 2000){throw 'Furniture admission shape refused'}
+    if(-not(Test-OwnedPostflightKeys $a @('schemaVersion','profile','policy','requestSha256','ready','files','nativeAcceptance','registryAcceptance')) -or $a.files -isnot [array] -or $a.files.Count -lt 1 -or $a.files.Count -gt 20000){throw 'Furniture admission shape refused'}
     if($a.profile -cne $Profile){throw 'Furniture admission profile differs'}
     $seen=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
     foreach($record in $a.files){
