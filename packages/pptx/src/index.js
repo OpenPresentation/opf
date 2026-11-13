@@ -1,5 +1,5 @@
 import {nativeBodyReader, joinNativeParagraphs} from './body-text-import.js';
-import {addNativeBody, nativeBodyDefaults, nativeTitleAutofit, nativeTitleWrapBox, planNativeBody} from './native-body.js';
+import {addNativeBody, nativeBodyDefaults, nativeTitleAutofit, nativeTitleEndMarks, nativeTitleWrapBox, planNativeBody} from './native-body.js';
 import {autoNumScheme, deriveListNumbering, withDisplayedNumbers} from './numbered-list.js';
 import {applyNumeralShapes, stripNumeralShape} from './numeral-shapes.js';
 import {isFaceStyleSuffix} from './font-weights.js';
@@ -387,6 +387,8 @@ export async function toPptx(input, options = {}) {
   context.nativeTitles = new Set();
   // RR-105: a fixed-break title whose first line starts apart from the others: its paragraph margins (px), written by nativeTitleAutofit.
   context.titleMargins = new Map();
+  // RR-105 (opf#1291, PowerPoint probe 4): bound titles that 0.33.0 wrote as free boxes; their end-of-paragraph marks take the body face.
+  context.titleEndMarks = new Set();
   context.timelineTags = new Map();
   // LH-108 to LH-110: the shapes a chart's value list, stacked names and reference marks are drawn with (src/chart-marks.js).
   context.chartMarkTags = new Map();
@@ -2889,8 +2891,14 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     if (fixedPlan?.reject) options.onDiagnostic?.({code: 'native-body-fallback', path: item.path, reason: fixedPlan.reject,
       message: `This wrapped title cannot be one title box (${fixedPlan.reject.replaceAll('-', ' ')}${softReason && softReason !== fixedPlan.reject ? `; native wrap: ${softReason.replaceAll('-', ' ')}` : ''}); its measured lines were exported as separate text boxes, so it is not the slide's Title placeholder.`});
     // A one-line title, plain or rich, is its one measured line; the line binds as the whole title.
-    if (titleSlide && item.field === 'title' && !item.text?.overflow && (nativeTitle || fixedTitle || (item.text?.richLines ?? item.text?.lines)?.length === 1 && (typeof item.value === 'string' || item.text.richLines && !item.runs)))
+    if (titleSlide && item.field === 'title' && !item.text?.overflow && (nativeTitle || fixedTitle || (item.text?.richLines ?? item.text?.lines)?.length === 1 && (typeof item.value === 'string' || item.text.richLines && !item.runs))) {
       context.placeholderBindings.set(`OPF heading ${item.path} line 0`, {slide: slideIndex, region: 'Title', object: 'title'});
+      // RR-105 (opf#1291, PowerPoint probe 4): the end-of-paragraph mark's face sets where a bound title's first line sits. A title 0.33.0
+      // wrote as free text boxes (wrapped, or rich on one line) inherited the body face there; written with it, each lands where its old
+      // box did. A plain one-line title, bound in 0.33.0 with a faceless mark (the title style's heading face), stays as it was.
+      const boundIn033 = !nativeTitle && !fixedTitle && typeof item.value === 'string' && !item.text.richLines;
+      if (!boundIn033) context.titleEndMarks.add(`OPF heading ${item.path} line 0`);
+    }
     const drawnBefore = boundRegion && {images: context.images.size, placeholders: context.imagePlaceholders.size, charts: context.chartHeadings.size, tables: context.tableHeaders.size};
     // Card text sits on a literal card fill, not the slide background: keep it literal.
     // LH-54: the card fill is core's card neutral (a filled surface on a dark slide whose scheme surface is the background), which a metric is coloured against.
@@ -6601,7 +6609,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
         const content=body.replace(/<a:pPr\b[^>]*(?:\/>|>[\s\S]*?<\/a:pPr>)/g,node=>{properties ||= node;return '';});
         return `<a:p>${properties}${content}</a:p>`;
       });
-      xml = nativeTitleAutofit(nativeBodyDefaults(xml, context.nativeBodies), context.nativeTitles, context.titleMargins);
+      xml = nativeTitleEndMarks(nativeTitleAutofit(nativeBodyDefaults(xml, context.nativeBodies), context.nativeTitles, context.titleMargins), context.titleEndMarks);
     }
     // theme1.xml: FF-24 colors and names above, then FF-07 fonts here; they touch disjoint elements.
     // RR-96: literal colors that are scheme colors become schemeClr (with lumMod/lumOff for the derived neutrals).

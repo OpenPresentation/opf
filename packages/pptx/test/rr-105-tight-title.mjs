@@ -33,6 +33,10 @@ for (const [index, [face]] of CASES.entries()) {
   assert.equal(spacing[0], 100000, `${face}: line 1 at single spacing`);
   assert.ok(spacing[1] > 80000 && spacing[1] < 100000, `${face}: line 2 under single spacing (${spacing[1]})`);
   assert.doesNotMatch(shape, /<a:spcBef>/, `${face}: no space before`);
+  // Probe 4: each end-of-paragraph mark names the body face, as the free boxes 0.33.0 wrote inherited it, so line 1 sits where theirs did.
+  const marks = [...shape.matchAll(/<a:endParaRPr\b[^>]*?(?:\/>|>([\s\S]*?)<\/a:endParaRPr>)/g)];
+  assert.equal(marks.length, 2);
+  for (const [, inner] of marks) assert.equal(inner, '<a:latin typeface="+mn-lt"/><a:ea typeface="+mn-ea"/>', `${face}: the end mark on the body face`);
   // At LH-189's 1.0 em pitch the spacing is (1.0 - residual) / 1.2 exactly.
   if (RESIDUAL[face] !== undefined) assert.equal(spacing[1], Math.round((1 - RESIDUAL[face]) / 1.2 * 100000), `${face}: the measured residual`);
   assert.ok(!diagnostics.some(value => value.code === 'native-body-fallback' && value.path === `slides.${index}.title`));
@@ -40,6 +44,16 @@ for (const [index, [face]] of CASES.entries()) {
 // Georgia was not measured: at 48.75 pt the worst residual (0.031 em, 1.5 px) exceeds 1 px, so the title keeps its line boxes.
 assert.equal(titleShapes(6).length, 2, 'a face not measured keeps the measured line boxes');
 assert.ok(diagnostics.some(value => value.code === 'native-body-fallback' && value.path === 'slides.6.title' && /line pitch/.test(value.message)));
+// A plain one-line title, bound in 0.33.0 with a faceless end mark, keeps it.
+{
+  const plain = {...sampler, slides: [{...sampler.slides[1], id: 'plain', title: 'One line'}]};
+  await fonts.ensure(plain);
+  const xml = strFromU8(unzipSync(new Uint8Array(await toPptx(plain, {fonts})))['ppt/slides/slide1.xml']);
+  const [shape] = [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([value]) => value).filter(value => value.includes('name="OPF heading slides.0.title line 0"'));
+  assert.match(shape, /<p:ph type="(?:ctrTitle|title)"\/>/);
+  assert.match(shape, /<a:endParaRPr\b[^>]*\/>/, 'a plain one-line title keeps its faceless end mark');
+  assert.doesNotMatch(shape, /<a:endParaRPr\b[^>]*>\s*<a:latin/);
+}
 // Import: the authored titles, no line spacing in the document.
 const imported = await fromPptx(bytes);
 assert.deepEqual(imported.slides.map(slide => slide.title), deck.slides.map(slide => slide.title));
