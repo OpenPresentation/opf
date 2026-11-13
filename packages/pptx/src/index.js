@@ -48,7 +48,7 @@ import {attachFurnitureTags, furnitureManifest, importFurniture, logoShape, stat
 import {restoreRunColors} from './run-colors.js';
 import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, settleLayers, shapeRole, shapeText} from './shape-import.js';
 import {assembleOverlayShapes, restoreShapes} from './shape-restore.js';
-import {joinWrappedText} from './content-topology.js';
+import {joinWrappedText, rejoinDetachedSpace} from './content-topology.js';
 import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordListScalars, recordOverlays, opfSlideOwnership, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
@@ -726,7 +726,7 @@ export async function fromPptx(input, options = {}) {
   }
   // RR-34: marker runs become cite/footnote on the runs before them, and the references list is rebuilt
   // from the stored record and the footnote boxes (an edited note keeps its edited text).
-  restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report);
+  restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report, furnitureContexts.map(context => context.annotations?.detached ?? []));
   restoreLogoFallback(imported, furnitureContexts);
   // The overlay joins its slide before the run colors, so the text of its shapes is settled with the rest.
   applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance, options.onDiagnostic);
@@ -1809,7 +1809,10 @@ const richRuns = value => typeof value === 'string' ? [{text: value}] : value;
 function joinRich(a, b) {
   if (typeof a === 'string' && typeof b === 'string') return a + b;
   const copy = value => richRuns(value).map(run => typeof run === 'string' ? {text: run} : {...run});
-  const left = copy(a), right = copy(b), last = left.at(-1), first = right[0];
+  const left = copy(a), right = copy(b);
+  // RR-105: a decorated run's space that ended the earlier line joins the run again (rejoinDetachedSpace).
+  rejoinDetachedSpace(left, right[0]);
+  const last = left.at(-1), first = right[0];
   // Only the line seam can be an artificial wrap boundary. Interior current
   // run boundaries in either input must survive an unrelated continuation.
   if (last && first && JSON.stringify({...last, text: ''}) === JSON.stringify({...first, text: ''})) {
@@ -1841,18 +1844,22 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
     // design.listBullet: none writes no bullet at all (a:buNone): the list is unambiguous only through its recorded roles, whose
     // first lines start the entries. Without that record the shapes stay as they are.
     const unbulleted = entries.every(({item}) => !item.paragraphs[0].bullet);
-    if (!hasV2&&!entries[0].item.paragraphs[0].bullet && !(unbulleted && expectedRoles?.[0]?.[2])) continue;
+    // RR-105: so does an entry drawn beside an icon chip in a list whose other entries keep their bullets (LH-174, a nested icon list):
+    // the record names those markerless entries, whose first lines are the only ones without a bullet.
+    const markerless = line => expectedRoles?.[line]?.[2] === true && expectedRoles.markerless?.has(expectedRoles[line][0]) === true;
+    const bulleted = line => expectedRoles?.[line]?.[2] === true && !markerless(line);
+    if (!hasV2&&!entries[0].item.paragraphs[0].bullet && !((unbulleted || markerless(0)) && expectedRoles?.[0]?.[2])) continue;
     const projected=new Set();
     const validRoles = expectedRoles && (hasV2?entries.every(({item,line})=>{
       const lines=item.v2Scalar?.lines??[line],first=expectedRoles[line];if(!first||lines[0]!==line)return false;
-      if(!unbulleted&&Boolean(item.paragraphs[0].bullet)!==first[2])return false;
+      if(!unbulleted&&Boolean(item.paragraphs[0].bullet)!==bulleted(line))return false;
       for(const [index,original]of lines.entries()){const role=expectedRoles[original];if(projected.has(original)||original!==line+index||!role||item.v2Scalar&&(role[0]!==first[0]||role[1]!=='text'||role[2]!==!index))return false;projected.add(original);}
       return true;
-    })&&projected.size===expectedRoles.length:expectedRoles.length === entries.length && entries.every(({item, line}, index) => line === index && (unbulleted || Boolean(item.paragraphs[0].bullet) === expectedRoles[index][2])));
+    })&&projected.size===expectedRoles.length:expectedRoles.length === entries.length && entries.every(({item, line}, index) => line === index && (unbulleted || Boolean(item.paragraphs[0].bullet) === bulleted(index))));
     const lineRoles = validRoles ? expectedRoles : null;
     if (expectedRoles && !validRoles) report({code: 'list-line-role-changed', message: `The line topology of ${path} changed; list roles were not restored.`});
-    if(hasV2&&!entries[0].item.paragraphs[0].bullet&&!(unbulleted&&lineRoles?.[entries[0].line]?.[2]))continue;
-    if (unbulleted && !validRoles) continue;
+    if(hasV2&&!entries[0].item.paragraphs[0].bullet&&!((unbulleted||markerless(entries[0].line))&&lineRoles?.[entries[0].line]?.[2]))continue;
+    if ((unbulleted || !entries[0].item.paragraphs[0].bullet) && !validRoles) continue;
     const look = runs?.get(path), textLook = cleanBase(look?.text), descriptionLook = cleanBase(look?.description);
     // The line's runs without the inherited look, or the paragraph's own richText when there is no record for this kind of line.
     // Each run is cleaned on its own and none merge, so the runs stay the slots the run colour record counts (src/run-colors.js);
@@ -1883,7 +1890,7 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
       if(paragraph[V2_CURRENT_RICH]&&current&&!paragraph.bullet)current[V2_CURRENT_RICH]=true;
       const gap = recorded?.get(line);
       const join = (a, b) => gap === undefined ? joinRich(a, b) : joinWrappedText([a, b], [gap]);
-      if (unbulleted ? lineRoles?.[line][2] : paragraph.bullet) { paragraphs.push({...paragraph, bullet: true, richText: own(paragraph, textLook)}); size = paragraph.maxFontSize; }
+      if (unbulleted || (lineRoles && !paragraph.bullet) ? lineRoles?.[line][2] : paragraph.bullet) { paragraphs.push({...paragraph, bullet: true, richText: own(paragraph, textLook)}); size = paragraph.maxFontSize; }
       else if (paragraph.text === '') { /* a blank line of the entry: no text, no description */ }
       else if (lineRoles ? lineRoles[line][1] === 'description' : paragraph.maxFontSize < size - 0.01) {
         const text = own(paragraph, descriptionLook) ?? paragraph.text;
@@ -2976,7 +2983,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     return true;
   });
   // RR-34: the footnote area core reserved above the footer band (rule plus one tagged text box per listed line).
-  addFootnotes(slide, geometry.footnotes, slideIndex, slideContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: `slides.${slideIndex}`}));
+  addFootnotes(slide, geometry.footnotes, slideIndex, slideContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: `slides.${slideIndex}`}), opfSlide);
   // Core composes furniture above all content and opf-render paints it last, so
   // spTree order (PowerPoint's z-order) matches: header/footer parts come after
   // every content item, and an overlapping footer stays visible over content.
@@ -3153,13 +3160,31 @@ function scriptSplitListScalars(fit, context) {
   });
   return result.length ? result : undefined;
 }
+/**
+ * RR-105: an underline, link or strikethrough ends with a line's last visible character, as the preview draws it: the trailing white space of
+ * the last visible run of a native line, when that run is decorated, is a run of its own without the decoration (or the hyperlink, which
+ * PowerPoint underlines), and white space after it carries none. The text of the line is unchanged. `colors[i]` is run i's color without
+ * a link (a link takes the hyperlink color). Import joins such a space back into its run when the run goes on in the next line (joinRich,
+ * joinWrappedText, joinRichLines: rejoinDetachedSpace).
+ */
+function undecoratedLineEnd(runs, colors = []) {
+  const decorated = options => options.hyperlink || options.underline || options.strike;
+  const plain = (options, index) => ({...options, hyperlink: undefined, underline: undefined, strike: undefined, ...(colors[index] !== undefined ? {color: colors[index]} : {})});
+  let last = -1;
+  runs.forEach((run, index) => { if (/\S/u.test(run.text)) last = index; });
+  for (let index = last + 1; index < runs.length; index++) if (decorated(runs[index].options)) runs[index] = {...runs[index], options: plain(runs[index].options, index)};
+  const run = runs[last], trail = run && decorated(run.options) ? /\S(\s+)$/u.exec(run.text)?.[1] : undefined;
+  if (trail) runs.splice(last, 1, {...run, text: run.text.slice(0, -trail.length)}, {text: trail, options: plain(run.options, last)});
+  return runs;
+}
 function richLineRuns(line,color,native,context,path) {
-  const fallback=color.replace(/^#/,'');
-  return line.fragments.map(fragment=>{
+  const fallback=color.replace(/^#/,''),colors=[];
+  return undecoratedLineEnd(line.fragments.map(fragment=>{
     assertXmlText(fragment.run.text ?? fragment.text, path);
     const runColor=exportColor(fragment.run.color,context,fallback),color=nativeColor(fragment.run.color,runColor,context,native);
+    colors.push(color);
     return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color:linkColor(fragment.run,color,context),underline:fragment.run.underline?{style:'sng',color:linkColor(fragment.run,color,context)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:|tel:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined,...langOptions(context,fragment.style.lang)}};
-  });
+  }),colors);
 }
 // Every native line of a list, marker paragraph or not, is named for the list's
 // composed path (`OPF list <path> line N`, N counting across the whole list) like
@@ -4256,11 +4281,13 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
   const count = fit.richLines.length;
   let cursor = 0;
   for (const [index, line] of fit.richLines.entries()) {
-    const runs = line.fragments.map(fragment => {
+    const colors = [];
+    const runs = undecoratedLineEnd(line.fragments.map(fragment => {
       const runColor = exportColor(fragment.run.color, context, context.colors.text);
       const color = nativeColor(fragment.run.color, runColor, context, fallback);
+      colors.push(color);
       return {text: fragment.text, options: {...nativeFontOptions(fragment.style), ...eyebrowOptions(fragment.style, fragment.nominalSize ?? fragment.fontSize), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: linkColor(fragment.run, color, context), underline: fragment.run.underline ? {style: 'sng', color: linkColor(fragment.run, color, context)} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined, baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined, hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:|tel:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined, ...langOptions(context, fragment.style.lang)}};
-    });
+    }), colors);
     // Logical alignment (RR-05): a right-to-left paragraph starts at the right edge; every wrapped line shares its paragraph's direction.
     const placed = fit.placement?.lines[index], alignment = placed?.alignment ?? physicalAlignment(logicalAlignment, fit.directions?.[index]), factor = alignment === 'right' ? 1 : alignment === 'center' ? .5 : 0;
     const area = placed ? {...region, x: (placed.x + line.width * factor - box.width * factor) / 96, y: placed.y / 96, h: placed.height / 96} : {...region, y: region.y + line.y / 96, h: line.height / 96};
@@ -4853,7 +4880,7 @@ function addMediaPayload(slide, presentation, value, region, path, context, opti
   slide.addShape("rect", {x: region.x, y: region.y, w: region.w, h: region.h, fill: {color: context.colors.surface}, line: {color: context.colors.border, width: 0.75}, hyperlink, objectName: names.frame});
   slide.addShape("ellipse", {x: icon.x / 96, y: icon.y / 96, w: 72 / 96, h: 72 / 96, fill: {color: context.colors.accent}, line: {transparency: 100}, hyperlink: hyperlink && {url: source}, objectName: names.badge});
   slide.addShape("triangle", {x: (icon.x + 28) / 96, y: (icon.y + 22) / 96, w: 28 / 96, h: 28 / 96, rotate: 90, fill: {color: context.roles ? normalizeHex(readableSchemeColor(`#${context.colors.accent}`, context.roles).hex) : "FFFFFF"}, line: {transparency: 100}, hyperlink: hyperlink && {url: source}, objectName: names.play});
-  addMeasuredPayloadText(slide, mediaCaption(value), {...box, y: icon.y + 72 + 20, height: 50}, context, options,
+  addMeasuredPayloadText(slide, mediaCaption(value, presentation.assets ?? {}), {...box, y: icon.y + 72 + 20, height: 50}, context, options,
     {path, fontSize: 18, fontFamily: context.fonts.body, fontWeight: 600, align: "center", color: context.colors.mutedText, objectName: `OPF media ${path} caption`, media: true, keepEmpty: true, hyperlink});
 }
 

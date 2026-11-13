@@ -3,7 +3,9 @@
 // fitted line at those boxes, like every other measured text shape, and records the shape tags
 // (OPF_CAPTION_V1, OPF_FOOTNOTES_V1) that annotation-provenance.js attaches at packaging and reads
 // back at import. Citation markers need nothing here (a marker fragment carries `nominalSize`, the marked run size, which is what is written with baseline 30000; PowerPoint draws it at 2/3, measured 2026-10-01): they are `kind: "marker"` fragments of the
-// rich-text fits and export through the ordinary rich-run path as superscript runs.
+// rich-text fits and export through the ordinary rich-run path as superscript runs. RR-105: the rule's tag lists the markers of
+// empty runs (`detached`), which natively follow the text before them.
+import {walkCitationRuns} from '@openpresentation/opf/composition';
 
 export const CAPTION_TAG = 'OPF_CAPTION_V1';
 export const FOOTNOTES_TAG = 'OPF_FOOTNOTES_V1';
@@ -71,11 +73,26 @@ export function addCaption(slide, item, mediaName, context, helpers, error) {
   addFitLines(slide, caption.text, caption.fit, caption.box, context, helpers, {objectName: captionShapeName(item.path), record, tags: context.captionTags, align: caption.alignment, color: context.mutedColor, fontFamily: helpers.nativeFontOptions(caption.textStyle).fontFace, error});
 }
 
+/**
+ * RR-105: the markers of `source` (the slide) whose run is empty (`{"text": "", "cite": "a"}`), as `{path, at}`: the run array's path
+ * (`text`, `items.0.text`, `title`) and the marker's place among the markers of that array. Natively the marker run follows the text
+ * before it, so import needs this to give the empty run back instead of marking the run before it.
+ */
+export function detachedMarkers(source) {
+  const counts = new Map(), detached = [];
+  walkCitationRuns(source, '', entry => {
+    const path = entry.path.replace(/^\./, '').replace(/\.\d+$/, ''), at = counts.get(path) ?? 0;
+    counts.set(path, at + 1);
+    if (entry.run.text === '') detached.push({path, at});
+  });
+  return detached;
+}
+
 /** The footnote area: a rule shape and one tagged text box per listed line, at core's geometry above the footer band. */
-export function addFootnotes(slide, footnotes, slideIndex, context, helpers, error) {
+export function addFootnotes(slide, footnotes, slideIndex, context, helpers, error, source) {
   if (!footnotes) return;
-  const {rule} = footnotes, ruleName = footnotesRuleName(slideIndex);
-  if (context.provenanceMode !== false) context.footnoteTags.set(ruleName, {v: 1, role: 'rule', slide: slideIndex});
+  const {rule} = footnotes, ruleName = footnotesRuleName(slideIndex), detached = source === undefined ? [] : detachedMarkers(source);
+  if (context.provenanceMode !== false) context.footnoteTags.set(ruleName, {v: 1, role: 'rule', slide: slideIndex, ...(detached.length ? {detached} : {})});
   slide.addShape('line', {x: rule.x / 96, y: (rule.y + rule.thickness / 2) / 96, w: rule.width / 96, h: 0, line: {color: context.colors.border, width: rule.thickness * .75}, objectName: ruleName});
   footnotes.entries.forEach((entry, index) => {
     const record = {v: 1, role: 'entry', slide: slideIndex, entry: index, number: entry.number, kind: entry.kind, ...(entry.id !== undefined ? {id: entry.id} : {}), source: entry.sourcePath, ...(entry.url !== undefined ? {url: entry.url} : {})};

@@ -167,7 +167,14 @@ export interface AssetRef {
 }
 
 /** Alt text of an asset value: its own `alt`, else the registry entry an `asset:<id>` source points to. */
-export function altOf(value: unknown, assets: unknown): string | undefined {
+export function altOf(value: unknown, assets: unknown, variables?: unknown, template?: boolean): string | undefined {
+	// RR-105: an image variable (`"image": "var:logo"`) is described by its value, as the engines draw and export it (a template's
+	// unfilled variable by its example, which its previews use).
+	if (typeof value === 'string' && value.startsWith('var:')) {
+		const variable = rec(rec(variables)[value.slice(4)]);
+		const resolved = variable.type === 'image' ? (variable.value ?? (template === true ? variable.example : undefined)) : undefined;
+		return resolved === undefined || (typeof resolved === 'string' && resolved.startsWith('var:')) ? undefined : altOf(resolved, assets);
+	}
 	const own = typeof value === 'object' && value !== null ? (value as Rec).alt : undefined;
 	if (typeof own === 'string') return own;
 	let source = typeof value === 'string' ? value : rec(value).src;

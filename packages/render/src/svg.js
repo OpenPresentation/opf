@@ -1539,8 +1539,23 @@ function renderImage(item, box, bound, options) {
   return tag("g", {...traceAttrs(options,item.path),...generatedAttrs(options),'data-opf-asset-status':'unresolved',role:'img','aria-label':`Image unavailable: ${description}`},children.join("\n"));
 }
 
+// RR-105: the placeholder's caption is the asset's title, never its id: an `asset:` reference is followed through the deck's assets
+// (the fields the value writes win, as images layer them); one that does not resolve shows "Media". opf-pptx's mediaCaption is the same.
+function mediaAsset(value, assets) {
+  let asset = normalizeAsset(value);
+  const seen = new Set();
+  while (typeof asset.src === "string" && asset.src.startsWith("asset:")) {
+    const id = asset.src.slice(6);
+    if (seen.has(id) || !Object.hasOwn(assets ?? {}, id)) return { ...asset, src: "" };
+    seen.add(id);
+    const { src: _source, ...overrides } = asset;
+    asset = { ...normalizeAsset(assets[id]), ...overrides };
+  }
+  return asset;
+}
+
 function renderMedia(item, box, bound, options) {
-  const asset = normalizeAsset(item.value);
+  const asset = mediaAsset(item.value, bound.assets);
   const iconBox = centeredBox(box, 72, 72);
   const children = [
     tag("rect", {
@@ -2407,7 +2422,17 @@ function renderRichLines(value,fit,box,bound,config) {
     const measuredLine=!asFlow&&!naturalFlow&&fragment.kind!=='tab'&&fragment.width>0;
     // A right-to-left fragment draws without its trailing white space, after that white space's measured advance (rtlTrailingSpace).
     const trail=rtl&&measuredLine&&fragment.kind!=='marker'?rtlTrailingSpace(fragment.text):'';
-    let gap=0;
+    // RR-105: an underline, link or strikethrough ends with the line's last visible character, as PowerPoint draws it: a decorated fragment
+    // at the end of a left-to-right line draws without its trailing white space (it has nothing after it), and white space alone there
+    // draws undecorated (measured or flowing: nothing after it is visible).
+    const decorated=fragment.kind!=='marker'&&fragment.kind!=='tab'&&(run.underline||linked||run.strikethrough);
+    const atLineEnd=decorated&&!rtl&&line.fragments.slice(line.fragments.indexOf(fragment)+1).every(next=>next.kind!=='marker'&&!/\S/u.test(next.text));
+    const endTrail=atLineEnd?rtlTrailingSpace(fragment.text):'',blankEnd=atLineEnd&&!/\S/u.test(fragment.text);
+    let gap=0,endGap=0;
+    if(endTrail){
+      const measure=textWidthMeasurer(fragment.style,config.options.textMeasurement),full=measure(fragment.text,fragment.fontSize);
+      endGap=full>0?Math.min(fragment.width,Math.max(0,fragment.width*(1-measure(fragment.text.slice(0,-endTrail.length),fragment.fontSize)/full))):0;
+    }
     if(trail){
       const measure=textWidthMeasurer(fragment.style,config.options.textMeasurement),full=measure(fragment.text,fragment.fontSize);
       gap=full>0?Math.min(fragment.width,Math.max(0,fragment.width*(1-measure(fragment.text.slice(0,-trail.length),fragment.fontSize)/full))):0;
@@ -2417,7 +2442,7 @@ function renderRichLines(value,fit,box,bound,config) {
     // LH-32: a tracked run (an eyebrow) keeps its natural advance: its letter spacing is in core's width, and a textLength would leave the
     // trailing spacing to each rasterizer's own reading.
     const tracked=fragment.kind!=='tab'&&!!fragment.style.tracking;
-    const drawnText=styledText(trail?fragment.text.slice(0,-trail.length):fragment.text,fragment.style),drawnWidth=fragment.width-gap;
+    const drawnText=styledText(trail?fragment.text.slice(0,-trail.length):endTrail?fragment.text.slice(0,-endTrail.length):fragment.text,fragment.style),drawnWidth=fragment.width-gap-endGap;
     // FA-13: an inline code run falls back to a monospace face, and a run with its own language declares it.
     const runLang=fragment.kind!=='tab'&&fragment.style.lang?(bound.scriptFontsFor?.(fragment.style.lang)?.profile.bcp47??fragment.style.lang):undefined;
     const scripted=fragment.kind==='tab'?{content:escapeText(fragment.text)}:scriptLine(drawnText,fragment.style,bound,run.code===true?'monospace':bound.design.fontScheme.type,{rtl:rtl&&!asFlow,numbers:rtl&&run.code!==true,
@@ -2428,7 +2453,7 @@ function renderRichLines(value,fit,box,bound,config) {
     // RR-34: a citation/footnote marker is generated text (no source range): it is traced as a marker
     // segment without text offsets, so editors never read it as part of the run, and it is not linked.
     const marker=fragment.kind==='marker';
-    const rendered=tag(asFlow?'tspan':'text',{...(runLang?{lang:runLang,'xml:lang':runLang}:{}),...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end-trail.length,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance&&!tracked?stableNumber(drawnWidth):undefined,lengthAdjust:fixedAdvance&&!tracked?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'letter-spacing':fragment.kind!=='tab'&&fragment.style.tracking?stableNumber(fragment.style.tracking*fragment.fontSize):undefined,'text-decoration':marker?undefined:[run.underline||linked?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
+    const rendered=tag(asFlow?'tspan':'text',{...(runLang?{lang:runLang,'xml:lang':runLang}:{}),...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end-trail.length,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance&&!tracked?stableNumber(drawnWidth):undefined,lengthAdjust:fixedAdvance&&!tracked?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'letter-spacing':fragment.kind!=='tab'&&fragment.style.tracking?stableNumber(fragment.style.tracking*fragment.fontSize):undefined,'text-decoration':marker||blankEnd?undefined:[run.underline||linked?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
     if(linked)return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
     return rendered;
     };

@@ -3649,8 +3649,9 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     const resolvedStyle=resolveTextStyle({...options.style,fontFamily:run.fontFamily??(run.code===true?options.codeFontFamily??'monospace':run.bold!==undefined?options.style.sourceFontFamily??options.style.fontFamily:options.style.fontFamily),fontWeight:run.bold===undefined?options.style.fontWeight:run.bold?700:400,italic:run.italic??options.style.italic,path:options.style.path?`${options.style.path}.${runIndex}`:undefined},options.textMeasurement);
     // A run language reaches the measurement and the engines as `style.lang`, after the host resolved the family (it may rebuild the style).
     const style:TextStyle=typeof run.language==='string'&&run.language?{...resolvedStyle,lang:run.language}:resolvedStyle;
-    // RR-34: a citation/footnote marker belongs to the run end; it needs a path and text to attach to.
-    const marker=options.citationMarker&&options.style.path&&run.text?options.citationMarker(`${options.style.path}.${runIndex}`):undefined;
+    // RR-34: a citation/footnote marker belongs to the run end; it needs a path to attach to. RR-105: an empty run keeps its marker,
+    // drawn where the run stands (after the text before it), so a cited run is never left without one.
+    const marker=options.citationMarker&&options.style.path?options.citationMarker(`${options.style.path}.${runIndex}`):undefined;
     return {run,runIndex,start,end:offset,style,...(marker?{marker}:{})};
   });
   const whole=source.map(entry=>entry.run.text).join('');
@@ -3663,6 +3664,18 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     const fragments=(start:number,end:number):RichTextFragment[]=>{
       let x=0;const result:RichTextFragment[]=[];
       for(const entry of source){
+        // RR-105: an empty marked run draws its marker on the line that holds its offset: after the text before it (a soft wrap leaves
+        // it at the end of the earlier line), or at the start of the text or of a paragraph.
+        if(entry.marker&&entry.start===entry.end){
+          const at=entry.start;
+          if((at>start&&at<=end)||(at===start&&(at===0||/[\r\n]/.test(whole[at-1]!)))){
+            const normalSize=entry.run.fontSize!==undefined?entry.run.fontSize*4/3*ratio:fontSize,measure=textWidthMeasurer(entry.style,options.textMeasurement);
+            const markerSize=Math.round(normalSize*CITATION_MARKER_SCALE*FONT_SIZE_GRID_PER_PX)/FONT_SIZE_GRID_PER_PX,width=measure(entry.marker,markerSize);
+            result.push({kind:'marker',text:entry.marker,runIndex:entry.runIndex,start:0,end:0,x,width,fontSize:markerSize,nominalSize:normalSize,baselineShift:-normalSize*CITATION_MARKER_RAISE,style:entry.style,run:entry.run});
+            x+=width;
+          }
+          continue;
+        }
         const a=Math.max(start,entry.start),b=Math.min(end,entry.end);if(b<=a)continue;
         const text=whole.slice(a,b),normalSize=entry.run.fontSize!==undefined?entry.run.fontSize*4/3*ratio:fontSize;
         const script=entry.run.superscript||entry.run.subscript;
@@ -3907,7 +3920,8 @@ export interface ListFitOptions extends RichTextOptions {
   /**
    * LH-14: the entries that carry an `icon` draw it on a chip ICON_CHIP times the list size across in the marker column, in place of the
    * bullet (`ListEntryLayout.icon`), centered on the entry's first line; every entry keeps that column, so the texts start at one edge.
-   * Needs one level and no numbering; ignored otherwise. A ruled list (`rows`) sets the chips at the start of its labels.
+   * Needs no numbering; ignored otherwise. Only first-level entries draw a chip (RR-105): a nested entry keeps its bullet under its
+   * entry's text. A ruled list (`rows`) sets the chips at the start of its labels.
    */
   icons?:boolean;
   /** LH-14: the chip's size in em of the list size: ICON_CHIP (the default) or ICON_CHIP_COMPACT. */
@@ -3999,14 +4013,16 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
   const heading=options.heading===true&&!numbers&&source.length===1&&source[0]!.descriptionRuns!==undefined&&!(options.rows===true&&options.rowLabels);
   // LH-07: entries drawn beside step badges (numbered, one level).
   const badged=options.badges===true&&numbers!==undefined&&source.every(item=>item.level===0);
-  // LH-14: entries drawn beside icon chips (unnumbered, one level, at least one icon).
+  // LH-14: entries drawn beside icon chips (unnumbered, at least one first-level icon). RR-105: only a first-level entry draws its icon; a
+  // nested entry of an icon list (its icon is reported icon-dropped) keeps its bullet.
   const hasIcon=(index:number)=>{const value=input[index];return typeof value==='object'&&!Array.isArray(value)&&value!==null&&(value as {icon?:unknown}).icon!==undefined;};
-  const iconed=options.icons===true&&!numbers&&!badged&&source.every(item=>item.level===0)&&source.some(item=>hasIcon(item.index));
+  const drawsIcon=(item:typeof source[number])=>item.level===0&&hasIcon(item.index);
+  const iconed=options.icons===true&&!numbers&&!badged&&source.some(drawsIcon);
   // LH-174: in a list with icons on some entries, an entry without one keeps its bullet (unless the design asks for none), centered in the
   // chip column: the marker starts half the room the bullet leaves in the chip in from the column's start edge, and its hanging indent is
   // that much shorter, so PowerPoint's native bullet (at the paragraph's indent) sits where the preview draws it.
   const chipBullet=(item:typeof source[number],chip:number,fontSize:number,style:TextStyle)=>{
-    if(!iconed||hasIcon(item.index)||options.bullet==='none')return undefined;
+    if(!iconed||item.level>0||hasIcon(item.index)||options.bullet==='none')return undefined;
     const text=LIST_MARKERS[item.level%LIST_MARKERS.length]!;
     return {text,shift:Math.max(0,(chip-textWidthMeasurer(resolveTextStyle(style,options.textMeasurement),options.textMeasurement)(text,fontSize))/2)};
   };
@@ -4078,10 +4094,10 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       // LH-14: the chip is centered on the label's capitals (0.35 em above its first baseline); a row whose first line is shorter than the
       // chip starts lower by the difference, so the chip stays inside the row.
       let iconChip:ListEntryLayout['icon'];
-      if(iconed){
+      if(iconed&&item.level===0){
         const center=(text.richLines[0]?.baseline??fontSize)-fontSize*.35,pad=Math.max(0,chip/2-center);
         if(pad){textBox.y+=pad;if(descriptionBox)descriptionBox.y+=pad;bottom+=pad;}
-        if(hasIcon(item.index))iconChip={cx:rtl?(side?box.x+box.width:box.x+box.width-offset)-chip/2:box.x+offset+chip/2,cy:textBox.y+center,diameter:chip};
+        if(drawsIcon(item))iconChip={cx:rtl?(side?box.x+box.width:box.x+box.width-offset)-chip/2:box.x+offset+chip/2,cy:textBox.y+center,diameter:chip};
         bottom=Math.max(bottom,textBox.y+center+chip/2);
       }
       lines.push(...text.lines);if(options.direction==='rtl')directions.push(...(text.directions??[]));
@@ -4128,10 +4144,13 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     const none=((options.bullet==='none'||heading)&&!numbers)||chipped;
     // LH-07: a badge column is the badge and half an em before the text.
     const hanging=chipped?diameter+fontSize*.5:numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):fontSize*1.1;
-    for(const item of source){
+    for(const [position,item] of source.entries()){
       const rtl=item.direction==='rtl';
+      // RR-105: a nested entry of an icon list draws no chip: its bullet (unless the design asks for none) stands under its entry's text,
+      // a nested list's hanging indent of 1.1 em, and each deeper level steps in by that much.
+      const nested=iconed&&item.level>0,nestedBullet=nested&&options.bullet!=='none',chipRow=chipped&&!nested;
       // No marker: no hanging indent either; a nested level still steps in by one marker width.
-      const indent=none&&!chipped?0:hanging,offset=heading?0:Math.min(box.width,item.level*hanging),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
+      const indent=nested?(nestedBullet?fontSize*1.1:0):none&&!chipped?0:hanging,offset=heading?0:Math.min(box.width,nested?hanging+(item.level-1)*fontSize*1.1:item.level*hanging),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
       if(offset+indent>=box.width)overflow=true;
       const textBox={x,y,width,height:box.height};
       const style={...options.style,path:item.textPath};
@@ -4161,7 +4180,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       textBox.height=text.height;lines.push(...text.lines);if(options.direction==='rtl')directions.push(...(text.directions??[]));y+=text.height;
       // LH-07: the badge is centered on the first line's capitals (0.35 em above its baseline); an entry whose line is shorter than the
       // badge starts lower by the difference, so the badge stays inside the entry.
-      const center=chipped?(text.richLines[0]?.baseline??fontSize)-fontSize*.35:0,pad=chipped?Math.max(0,diameter/2-center):0;
+      const center=chipRow?(text.richLines[0]?.baseline??fontSize)-fontSize*.35:0,pad=chipRow?Math.max(0,diameter/2-center):0;
       if(pad){textBox.y+=pad;y+=pad;}
       let description:RichTextFit|undefined,descriptionBox:LayoutBox|undefined;
       if(item.descriptionRuns!==undefined){
@@ -4172,16 +4191,18 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       }
       overflow ||= text.overflow||!!description?.overflow;
       const number=numbers?.[item.index];
-      if(chipped)y=Math.max(y,textBox.y+center+diameter/2);
+      if(chipRow)y=Math.max(y,textBox.y+center+diameter/2);
       // LH-174: an entry without an icon in a list with icons keeps its bullet in the chip column (chipBullet).
-      const own=chipBullet(item,diameter,fontSize,style),unmarked=none&&!own,shift=own?.shift??0;
+      const own=chipBullet(item,diameter,fontSize,style),unmarked=none&&!own&&!nestedBullet,shift=own?.shift??0;
       const marker={text:number&&!badged?number.text:own?own.text:unmarked?'':LIST_MARKERS[item.level%LIST_MARKERS.length]!,x:rtl?box.x+box.width-offset-shift:box.x+offset+shift,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent:indent-shift,...(number?{number,width:markerWidths[item.index]!}:{}),...(unmarked?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
       const badge=badged&&number?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter,label:listNumberLabel(number,options.language),fontSize}:undefined;
-      const icon=iconed&&hasIcon(item.index)?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter}:undefined;
+      const icon=iconed&&drawsIcon(item)?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter}:undefined;
       entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(heading?{heading:true as const}:{}),...(badge?{badge}:{}),...(icon?{icon}:{}),
         ...(item.direction?{direction:item.direction}:{}),
         ...(options.bulletImage&&!number&&!unmarked?{bulletImage:options.bulletImage,bulletBox:{x:rtl?marker.x-side:marker.x,y:marker.y-side,width:side,height:side}}:{})});
-      if(item.index<source.length-1)y+=chipped?Math.max(fontSize*.28,diameter*STEP_BADGE_GAP):fontSize*.28;
+      // RR-105: a nested entry of an icon list stays close under its entry; the gap above the next chip row is the chips' gap.
+      const next=source[position+1];
+      if(next)y+=chipped&&next.level===0?Math.max(fontSize*.28,diameter*STEP_BADGE_GAP):fontSize*.28;
     }
     const height=y-box.y;
     return {listEntries:entries,lines,fontSize,lineHeight:fontSize*1.22,height,overflow:overflow||height>box.height+.01,...(accentRules.length?{rules:accentRules}:{}),...(options.direction==='rtl'?{directions}:{})};
@@ -6399,9 +6420,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     return iconCache.get(key);
   };
   const iconFor = (value: unknown): ResolvedIcon | undefined => ruleOn('icons') ? resolvedIcon(value) : undefined;
-  // LH-14: a list draws icon chips when it is unnumbered, of one level, and one of its entries has an icon that resolves. Such a list is
-  // never a badge list, flow or check-mark tiles: its chips take the marker column those draw in.
-  const iconList = (value: unknown, numbering: unknown): boolean => numbering === undefined && Array.isArray(value) && value.every(entry => (record(entry).level ?? 0) === 0) && value.some(entry => iconFor(record(entry).icon) !== undefined);
+  // LH-14: a list draws icon chips when it is unnumbered and one of its first-level entries has an icon that resolves (RR-105: a nested
+  // list too; its nested entries keep their bullets). Such a list is never a badge list, flow or check-mark tiles: its chips take the
+  // marker column those draw in.
+  const iconList = (value: unknown, numbering: unknown): boolean => numbering === undefined && Array.isArray(value) && value.some(entry => (record(entry).level ?? 0) === 0 && iconFor(record(entry).icon) !== undefined);
   // LH-169: a list block drawn as a row of figures (figureRows): a figure list (figureList) with no numbering, columns, caption or list style
   // of the author's, on a slide that is not a layout's master. Wave 8: a figure list whose entries carry icons is a row of figures only where
   // LH-165's icon cards are off (the slide's first composition, CORE_RULES); withCards then tries the cards on top, which keep the icons, and
@@ -6485,25 +6507,51 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (shape.textBold) boldLabels.add(textPath);
     const floor = snapFontSizeUp((minFontSize ?? 16) * scale), start = Math.max(floor, contentNominalSize('text') * scale);
     let text: TextFit | RichTextFit = fitContent('text', drawn, contentText('text', drawn) ?? '', shape.textBox, start, floor, textPath, undefined, 'center');
+    // RR-105: text in a shape never breaks inside a word. A fit that would (a word wider than the text rectangle) is set on one line instead,
+    // centered on the text rectangle and free to reach past its insets up to the shape's own edges (`textWrap: 'none'`; PowerPoint draws an
+    // unwrapped line the same way), at the largest size from the body size down at which the line fits there. Text that cannot be one line
+    // shrinks, without breaking a word, in the text rectangle; when no size holds it, the overflow finding reports it.
+    const plainText = contentText('text', drawn) ?? '', words = plainText.split(/\s+/u).filter(Boolean).length;
+    const splitsWord = (fit: TextFit | RichTextFit) => fit.lines.flatMap(line => line.split(/\s+/u).filter(Boolean)).length > words;
+    let wide: LayoutBox | undefined;
+    if ((shape.textDirection ?? 'horizontal') === 'horizontal' && splitsWord(text)) {
+      const centerX = shape.textBox.x + shape.textBox.width / 2, half = Math.min(centerX - shape.box.x, shape.box.x + shape.box.width - centerX);
+      const across = { ...shape.textBox, x: round(centerX - half), width: round(2 * half) };
+      let settled: TextFit | RichTextFit | undefined;
+      for (let trial = 0, size = start; trial <= 64 && !settled; trial++) {
+        const oneLine = fitContent('text', drawn, plainText, across, size, size, textPath, undefined, 'center');
+        if (!oneLine.overflow && oneLine.lines.length === 1 && !splitsWord(oneLine)) { settled = oneLine; wide = across; break; }
+        if (size <= floor + FONT_GRID_EPSILON) break;
+        size = Math.max(floor, gridFontSize(size - 1, floor));
+      }
+      for (let trial = 0, size = start; trial <= 64 && !settled; trial++) {
+        const kept = fitContent('text', drawn, plainText, shape.textBox, size, size, textPath, undefined, 'center');
+        if (!kept.overflow && !splitsWord(kept)) { settled = kept; break; }
+        if (size <= floor + FONT_GRID_EPSILON) break;
+        size = Math.max(floor, gridFontSize(size - 1, floor));
+      }
+      text = settled ?? { ...text, overflow: true };
+    }
+    if (wide) shape.textWrap = 'none';
     // SH-10: text that holds the body size in a large shape grows as a lone body block does: up the type scale, one step at a time, to the
     // display size of a paragraph, while it still fits at that size and fills at most LONE_TARGET of the text rectangle's height. It never
     // ends below the body size (growth only); text that does not hold the body size is fitted down to the floor as before. `cap` is the
     // size its sibling shapes share (evenShapeText).
-    if (!text.overflow && text.fontSize >= start - FONT_GRID_EPSILON) {
+    if (!wide && !text.overflow && text.fontSize >= start - FONT_GRID_EPSILON) {
       const display = Math.min(cap, LONE_DISPLAY_SIZES.text * scale), floorPx = minFontSize ?? 16;
       const filled = (fit: TextFit | RichTextFit) => Math.max('richLines' in fit ? (fit as RichTextFit).height : fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
       for (let size = text.fontSize; ;) {
         const next = typeScaleStepsUp(size, 1, display, floorPx, scale);
         if (next <= size + FONT_GRID_EPSILON) break;
         const grown = fitContent('text', drawn, contentText('text', drawn) ?? '', shape.textBox, next, next, textPath, undefined, 'center');
-        if (grown.overflow || grown.fontSize < next - FONT_GRID_EPSILON || filled(grown) > LONE_TARGET * shape.textBox.height + .5) break;
+        if (grown.overflow || grown.fontSize < next - FONT_GRID_EPSILON || splitsWord(grown) || filled(grown) > LONE_TARGET * shape.textBox.height + .5) break;
         text = grown;
         size = next;
       }
     }
     if (text.overflow) sink.push({ code: 'text-overflow', path: textPath, message: 'The text does not fit inside the shape at the readable minimum size; give the shape more room (a larger cell or another aspectRatio), shorten the text or lower its padding.' });
     // The text block sits at the shape's anchor in its box (PowerPoint's a:bodyPr anchor): the preview draws the fit in textArea.
-    const area = shape.textBox, height = Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight, text.placement?.height ?? 0);
+    const area = wide ?? shape.textBox, height = Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight, text.placement?.height ?? 0);
     const offset = Math.max(0, shape.anchor === 'middle' ? (area.height - height) / 2 : shape.anchor === 'bottom' ? area.height - height : 0);
     text = translateTextFit(text, round(offset));
     shape.textArea = { x: area.x, y: round(area.y + offset), width: area.width, height: round(Math.min(area.height, height)) };
@@ -6523,7 +6571,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     for (const group of groups.values()) {
       const start = (item: ComposedItem) => Math.max(snapFontSizeUp((item.composition.minFontSize ?? 16) * scale), contentNominalSize('text') * scale);
-      const grown = group.filter(item => item.text!.fontSize > start(item) + FONT_GRID_EPSILON), holding = group.filter(item => item.text!.fontSize >= start(item) - FONT_GRID_EPSILON);
+      // RR-105: a shape whose one word only fits past its text rectangle (textWrap 'none') does not hold the body size there, so it does not
+      // set its siblings' size (as when that word broke and the text shrank).
+      const grown = group.filter(item => item.text!.fontSize > start(item) + FONT_GRID_EPSILON), holding = group.filter(item => item.text!.fontSize >= start(item) - FONT_GRID_EPSILON && item.shape?.textWrap !== 'none');
       if (!grown.length || holding.length < 2) continue;
       const shared = Math.min(...holding.map(item => item.text!.fontSize));
       for (const item of grown) {

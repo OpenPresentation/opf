@@ -820,7 +820,7 @@ Default severity: **warning**. Cost: structure. A picture has no alt text and is
 
 **Basis.** WCAG 2.2 SC 1.1.1 Non-text Content, level A
 
-**Approximations.** Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, organization logos (each shape and background), header/footer images (a logo reference such as var:organization.logo.icon is checked on the organization), quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.
+**Approximations.** Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, organization logos (each shape and background), header/footer images (a logo reference such as var:organization.logo.icon is checked on the organization), quote photos and speaker photos, following asset: references to the assets registry and image variables (var:<id>, RR-105) to their value (a template's unfilled variable to its example). Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.
 
 ### `opf/poor-alt-text`
 
@@ -858,7 +858,7 @@ Default severity: **warning**. Cost: composition. The order content is read diff
 
 **Basis.** WCAG 2.2 SC 1.3.2 Meaningful Sequence, level A (PowerPoint: "Check reading order")
 
-**Approximations.** Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. Headings are expected first. Content drawn entirely above the title, over the columns of the title, is reported; content in a column beside the title is read after it. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.
+**Approximations.** Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. A block is one unit (RR-105): blocks are ordered by the boxes that hold them, and a group's own items are read, in their own visual order, before the next block, so cards side by side (a picture over a name) read card by card. Headings are expected first. Content drawn entirely above the title, over the columns of the title, is reported; content in a column beside the title is read after it. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.
 
 ### `opf/link-text`
 
