@@ -581,6 +581,11 @@ export async function fromPptx(input, options = {}) {
     catalogs: options.catalogs
   });
   if (observedLanguage.language !== undefined) imported.language = observedLanguage.language;
+  // RR-105 (#1290): cp:keywords are the deck's tags (File > Info > Tags), split on ";".
+  if (core.keywords) {
+    const tags = core.keywords.split(";").map(tag => tag.trim()).filter(Boolean);
+    if (tags.length) imported.tags = tags;
+  }
   if (core.description) imported.description = core.description;
   if (core.author) imported.author = splitAuthors(core.author);
   const themeDesign = importThemeDesign(entries, presentationRoot, presentationRels, options.catalogs);
@@ -1025,7 +1030,8 @@ function readCoreProperties(entries) {
   return {
     title: scalarText(core["dc:title"]),
     description: scalarText(core["dc:description"] ?? core["dc:subject"]),
-    author: scalarText(core["dc:creator"])
+    author: scalarText(core["dc:creator"]),
+    keywords: scalarText(core["cp:keywords"])
   };
 }
 
@@ -2715,6 +2721,11 @@ function configurePresentation(pptx, presentation, context) {
   pptx.subject = presentation.description ?? "";
   pptx.title = presentation.name ?? presentation.filename ?? "OPF Presentation";
   pptx.revision = "1";
+  // RR-105 (#1290): File > Info > Tags and Language. Tags join with "; " (import splits on ";"); the language is the BCP-47 tag
+  // of an authored language only, so an unstated language stays the engine's default and is not written.
+  const keywords = Array.isArray(presentation.tags) ? presentation.tags.filter(tag => typeof tag === "string" && tag.trim()).join("; ") : "";
+  const language = typeof presentation.language === "string" ? presentation.language : typeof presentation.language?.bcp47 === "string" ? presentation.language.bcp47 : "";
+  if (keywords || language) pptx.documentProps = {...(keywords ? {keywords} : {}), ...(language ? {language} : {})};
   pptx.theme = {
     headFontFace: context.fonts.heading,
     bodyFontFace: context.fonts.body
@@ -6158,6 +6169,8 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
     if (context.masterBackground && path === 'ppt/slideMasters/slideMaster1.xml') xml = writeMasterBackground(xml, context.masterBackground);
     if (context.masterBackground && /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)) xml = inheritLayoutBackground(xml);
     if (path === 'ppt/presentation.xml') xml = standardNotesPage(presentationInSchemaOrder(xml));
+    // RR-105 (#1290): File > Info names the application that wrote the file; the vendored writer claims PowerPoint.
+    if (path === 'docProps/app.xml') xml = neutralApplication(xml);
     if (path === 'ppt/theme/theme1.xml') xml = writeThemeColors(xml, {colors: context.themeColors, schemeName: context.schemeName, themeName: context.themeName});
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
       xml = writeLinkSentinels(xml, context.linkSentinels);
