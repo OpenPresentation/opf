@@ -38,7 +38,8 @@ test('the recorded run measured the sealed input and every retained file is the 
 
 test('the real PowerPoint report, stages and three archives pass the route contract again', {skip: !recorded && 'no measurement recorded for the legacy input'}, async () => {
   const m = JSON.parse(retained('measurement.json')),
-    report = JSON.parse(retained('report.json')),
+    // Windows PowerShell 5.1 writes the worker's report with a byte order mark; the retained bytes are the run's own.
+    report = JSON.parse(retained('report.json').toString('utf8').replace(/^﻿/u, '')),
     stages = retained('stages.jsonl');
   assert.deepEqual(assertReferenceNameSnapshotNative(report, stages), m.native);
   if (!m.retained['native-furniture-control.pptx']) return;

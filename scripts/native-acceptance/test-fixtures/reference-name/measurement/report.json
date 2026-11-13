@@ -1,0 +1,850 @@
+﻿{
+    "schemaVersion":  1,
+    "captureTextFonts":  false,
+    "readOnlySurvey":  false,
+    "source":  {
+                   "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\inputs\\case.pptx",
+                   "sha256":  "3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918",
+                   "openedPath":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\inputs\\input.pptx",
+                   "openedSha256":  "3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918"
+               },
+    "saved":  {
+                  "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\native-furniture-control.pptx",
+                  "sha256":  "6fb4c1aa17fc25b63e032204cbfa8f31d758376f9a6b59947047657f5c9d4f85"
+              },
+    "reopened":  {
+                     "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\native-furniture-control.pptx",
+                     "sha256":  "6fb4c1aa17fc25b63e032204cbfa8f31d758376f9a6b59947047657f5c9d4f85"
+                 },
+    "actionPlan":  {
+                       "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\inputs\\action-plan.json",
+                       "sha256":  "2787ea8c725c254c676a1993ea3621c888170b84402c91709494f4de69fa1c3c",
+                       "snapshotPath":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\inputs\\action-plan.json",
+                       "snapshotSha256":  "2787ea8c725c254c676a1993ea3621c888170b84402c91709494f4de69fa1c3c",
+                       "actions":  [
+                                       {
+                                           "op":  "set-chart-series-name",
+                                           "slideIndex":  1,
+                                           "chartName":  "OPF chart 1",
+                                           "seriesIndex":  1,
+                                           "expectedName":  "Actual",
+                                           "newName":  "Actual edited"
+                                       }
+                                   ],
+                       "completed":  [
+                                         {
+                                             "index":  1,
+                                             "op":  "set-chart-series-name",
+                                             "status":  "success"
+                                         }
+                                     ],
+                       "styleEdits":  [
+
+                                      ],
+                       "chartPoints":  [
+
+                                       ],
+                       "currentChartPointProbe":  null,
+                       "chartSeriesEdits":  [
+                                                {
+                                                    "phase":  "action",
+                                                    "slideIndex":  1,
+                                                    "chartName":  "OPF chart 1",
+                                                    "seriesIndex":  1,
+                                                    "expectedName":  "Actual",
+                                                    "newName":  "Actual edited",
+                                                    "before":  "Actual",
+                                                    "after":  "Actual edited",
+                                                    "observedType":  "System.String",
+                                                    "observedName":  "Actual edited",
+                                                    "observedRawValue":  "Actual edited",
+                                                    "chartTypeObservation":  {
+                                                                                 "observedType":  "System.Int32",
+                                                                                 "observedRawValue":  "-4111",
+                                                                                 "numericValue":  -4111
+                                                                             },
+                                                    "seriesTypeObservation":  {
+                                                                                  "observedType":  "System.Int32",
+                                                                                  "observedRawValue":  "4",
+                                                                                  "numericValue":  4
+                                                                              },
+                                                    "otherNames":  [
+                                                                       {
+                                                                           "index":  2,
+                                                                           "name":  "Target 80"
+                                                                       },
+                                                                       {
+                                                                           "index":  3,
+                                                                           "name":  "Floor -10"
+                                                                       }
+                                                                   ],
+                                                    "status":  "success",
+                                                    "referenceSeriesTypes":  [
+                                                                                 {
+                                                                                     "index":  1,
+                                                                                     "typeObservation":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "4",
+                                                                                                             "numericValue":  4
+                                                                                                         }
+                                                                                 },
+                                                                                 {
+                                                                                     "index":  2,
+                                                                                     "typeObservation":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "4",
+                                                                                                             "numericValue":  4
+                                                                                                         }
+                                                                                 },
+                                                                                 {
+                                                                                     "index":  3,
+                                                                                     "typeObservation":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "4",
+                                                                                                             "numericValue":  4
+                                                                                                         }
+                                                                                 }
+                                                                             ],
+                                                    "referenceSeriesCount":  {
+                                                                                 "observedType":  "System.Int32",
+                                                                                 "observedRawValue":  "3",
+                                                                                 "numericValue":  3
+                                                                             }
+                                                }
+                                            ],
+                       "currentChartSeriesProbe":  {
+                                                       "phase":  "reopened",
+                                                       "slideIndex":  1,
+                                                       "chartName":  "OPF chart 1",
+                                                       "seriesIndex":  1,
+                                                       "expectedName":  "Actual edited",
+                                                       "observedName":  "Actual edited",
+                                                       "observedType":  "System.String",
+                                                       "observedRawValue":  "Actual edited",
+                                                       "chartTypeObservation":  {
+                                                                                    "observedType":  "System.Int32",
+                                                                                    "observedRawValue":  "-4111",
+                                                                                    "numericValue":  -4111
+                                                                                },
+                                                       "seriesTypeObservation":  {
+                                                                                     "observedType":  "System.Int32",
+                                                                                     "observedRawValue":  "4",
+                                                                                     "numericValue":  4
+                                                                                 },
+                                                       "status":  "success",
+                                                       "referenceSeriesTypes":  [
+                                                                                    {
+                                                                                        "index":  1,
+                                                                                        "typeObservation":  {
+                                                                                                                "observedType":  "System.Int32",
+                                                                                                                "observedRawValue":  "4",
+                                                                                                                "numericValue":  4
+                                                                                                            }
+                                                                                    },
+                                                                                    {
+                                                                                        "index":  2,
+                                                                                        "typeObservation":  {
+                                                                                                                "observedType":  "System.Int32",
+                                                                                                                "observedRawValue":  "4",
+                                                                                                                "numericValue":  4
+                                                                                                            }
+                                                                                    },
+                                                                                    {
+                                                                                        "index":  3,
+                                                                                        "typeObservation":  {
+                                                                                                                "observedType":  "System.Int32",
+                                                                                                                "observedRawValue":  "4",
+                                                                                                                "numericValue":  4
+                                                                                                            }
+                                                                                    }
+                                                                                ],
+                                                       "referenceSeriesCount":  {
+                                                                                    "observedType":  "System.Int32",
+                                                                                    "observedRawValue":  "3",
+                                                                                    "numericValue":  3
+                                                                                }
+                                                   }
+                   },
+    "phases":  {
+                   "original":  {
+                                    "slideCount":  3,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C226964223A226C696E652D6D756C7469706C65222C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226368617274222C22626F78223A5B35372E362C35372E362C313136342E382C3630342E385D7D2C226E6174697665223A7B22737472756374757265223A223164643938633738313230616537222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223133623565663461346530643735227D2C22766F636162756C617279223A327D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  1,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF chart 1",
+                                                                          "type":  3,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  453.6,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  "Line chart: Actual by Period, 3 categories",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   },
+                                                   {
+                                                       "index":  2,
+                                                       "slideId":  257,
+                                                       "name":  "Slide 2",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A312C226964223A226C696E652D64656661756C7473222C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226368617274222C22626F78223A5B35372E362C35372E362C313136342E382C3630342E385D7D2C226E6174697665223A7B22737472756374757265223A223164643938633738313230616537222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223133623565663461346530643735227D2C22766F636162756C617279223A327D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  1,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF chart 2",
+                                                                          "type":  3,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  453.6,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  "Line chart: Actual by Period, 3 categories",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   },
+                                                   {
+                                                       "index":  3,
+                                                       "slideId":  258,
+                                                       "name":  "Slide 3",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A322C226964223A226E6F2D696E666572656E6365222C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226368617274222C22626F78223A5B35372E362C3139342C313136342E382C3436382E345D7D2C226E6174697665223A7B22737472756374757265223A223162326566666665306165303438222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223161343231343431366564373233227D2C22766F636162756C617279223A327D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  3,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.2.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Target 92%",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E322E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223039643533383238653537653038227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF heading slides.2.subtitle line 0",
+                                                                          "type":  17,
+                                                                          "left":  43.4373245,
+                                                                          "top":  101.874329,
+                                                                          "width":  873.6,
+                                                                          "height":  25.62,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Threshold 30",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E322E7375627469746C65222C226669656C64223A227375627469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223038363232383432343165373636227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF chart 3",
+                                                                          "type":  3,
+                                                                          "left":  43.2,
+                                                                          "top":  145.494324,
+                                                                          "width":  873.6,
+                                                                          "height":  351.305664,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  "Column chart: Actual by Period, 3 categories",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\original-slide-01.png",
+                                                        "sha256":  "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
+                                                    },
+                                                    {
+                                                        "slideIndex":  2,
+                                                        "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\original-slide-02.png",
+                                                        "sha256":  "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
+                                                    },
+                                                    {
+                                                        "slideIndex":  3,
+                                                        "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\original-slide-03.png",
+                                                        "sha256":  "f5c69fa9192cb1d5931d3ee2230a60e69c5492c2a173b9788e332fe5004c5777"
+                                                    }
+                                                ],
+                                    "chartSeriesNames":  [
+                                                             {
+                                                                 "phase":  "original",
+                                                                 "slideIndex":  1,
+                                                                 "chartName":  "OPF chart 1",
+                                                                 "seriesIndex":  1,
+                                                                 "expectedName":  "Actual",
+                                                                 "observedName":  "Actual",
+                                                                 "observedType":  "System.String",
+                                                                 "observedRawValue":  "Actual",
+                                                                 "status":  "success",
+                                                                 "referenceTypeEvidence":  {
+                                                                                               "chart":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "-4111",
+                                                                                                             "numericValue":  -4111
+                                                                                                         },
+                                                                                               "count":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "3",
+                                                                                                             "numericValue":  3
+                                                                                                         },
+                                                                                               "series":  [
+                                                                                                              {
+                                                                                                                  "index":  1,
+                                                                                                                  "typeObservation":  {
+                                                                                                                                          "observedType":  "System.Int32",
+                                                                                                                                          "observedRawValue":  "4",
+                                                                                                                                          "numericValue":  4
+                                                                                                                                      }
+                                                                                                              },
+                                                                                                              {
+                                                                                                                  "index":  2,
+                                                                                                                  "typeObservation":  {
+                                                                                                                                          "observedType":  "System.Int32",
+                                                                                                                                          "observedRawValue":  "4",
+                                                                                                                                          "numericValue":  4
+                                                                                                                                      }
+                                                                                                              },
+                                                                                                              {
+                                                                                                                  "index":  3,
+                                                                                                                  "typeObservation":  {
+                                                                                                                                          "observedType":  "System.Int32",
+                                                                                                                                          "observedRawValue":  "4",
+                                                                                                                                          "numericValue":  4
+                                                                                                                                      }
+                                                                                                              }
+                                                                                                          ]
+                                                                                           }
+                                                             }
+                                                         ]
+                                },
+                   "edited":  {
+                                  "slideCount":  3,
+                                  "slides":  [
+                                                 {
+                                                     "index":  1,
+                                                     "slideId":  256,
+                                                     "name":  "Slide 1",
+                                                     "tags":  [
+                                                                  {
+                                                                      "index":  1,
+                                                                      "name":  "OPF_SLIDE_V1",
+                                                                      "value":  "7B2276223A312C22736C696465223A302C226964223A226C696E652D6D756C7469706C65222C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226368617274222C22626F78223A5B35372E362C35372E362C313136342E382C3630342E385D7D2C226E6174697665223A7B22737472756374757265223A223164643938633738313230616537222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223133623565663461346530643735227D2C22766F636162756C617279223A327D"
+                                                                  }
+                                                              ],
+                                                     "shapeCount":  1,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF chart 1",
+                                                                        "type":  3,
+                                                                        "left":  43.2,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  453.6,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  0,
+                                                                        "text":  null,
+                                                                        "alternativeText":  "Line chart: Actual by Period, 3 categories",
+                                                                        "tags":  [
+
+                                                                                 ]
+                                                                    }
+                                                                ]
+                                                 },
+                                                 {
+                                                     "index":  2,
+                                                     "slideId":  257,
+                                                     "name":  "Slide 2",
+                                                     "tags":  [
+                                                                  {
+                                                                      "index":  1,
+                                                                      "name":  "OPF_SLIDE_V1",
+                                                                      "value":  "7B2276223A312C22736C696465223A312C226964223A226C696E652D64656661756C7473222C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226368617274222C22626F78223A5B35372E362C35372E362C313136342E382C3630342E385D7D2C226E6174697665223A7B22737472756374757265223A223164643938633738313230616537222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223133623565663461346530643735227D2C22766F636162756C617279223A327D"
+                                                                  }
+                                                              ],
+                                                     "shapeCount":  1,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF chart 2",
+                                                                        "type":  3,
+                                                                        "left":  43.2,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  453.6,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  0,
+                                                                        "text":  null,
+                                                                        "alternativeText":  "Line chart: Actual by Period, 3 categories",
+                                                                        "tags":  [
+
+                                                                                 ]
+                                                                    }
+                                                                ]
+                                                 },
+                                                 {
+                                                     "index":  3,
+                                                     "slideId":  258,
+                                                     "name":  "Slide 3",
+                                                     "tags":  [
+                                                                  {
+                                                                      "index":  1,
+                                                                      "name":  "OPF_SLIDE_V1",
+                                                                      "value":  "7B2276223A312C22736C696465223A322C226964223A226E6F2D696E666572656E6365222C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226368617274222C22626F78223A5B35372E362C3139342C313136342E382C3436382E345D7D2C226E6174697665223A7B22737472756374757265223A223162326566666665306165303438222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223161343231343431366564373233227D2C22766F636162756C617279223A327D"
+                                                                  }
+                                                              ],
+                                                     "shapeCount":  3,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF heading slides.2.title line 0",
+                                                                        "type":  14,
+                                                                        "left":  43.2,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  49.41,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Target 92%",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_HEADING_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E322E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223039643533383238653537653038227D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  2,
+                                                                        "id":  3,
+                                                                        "name":  "OPF heading slides.2.subtitle line 0",
+                                                                        "type":  17,
+                                                                        "left":  43.4373245,
+                                                                        "top":  101.874329,
+                                                                        "width":  873.6,
+                                                                        "height":  25.62,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Threshold 30",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_HEADING_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E322E7375627469746C65222C226669656C64223A227375627469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223038363232383432343165373636227D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  3,
+                                                                        "id":  4,
+                                                                        "name":  "OPF chart 3",
+                                                                        "type":  3,
+                                                                        "left":  43.2,
+                                                                        "top":  145.494324,
+                                                                        "width":  873.6,
+                                                                        "height":  351.305664,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  0,
+                                                                        "text":  null,
+                                                                        "alternativeText":  "Column chart: Actual by Period, 3 categories",
+                                                                        "tags":  [
+
+                                                                                 ]
+                                                                    }
+                                                                ]
+                                                 }
+                                             ],
+                                  "rasters":  [
+                                                  {
+                                                      "slideIndex":  1,
+                                                      "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\edited-slide-01.png",
+                                                      "sha256":  "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
+                                                  },
+                                                  {
+                                                      "slideIndex":  2,
+                                                      "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\edited-slide-02.png",
+                                                      "sha256":  "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
+                                                  },
+                                                  {
+                                                      "slideIndex":  3,
+                                                      "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\edited-slide-03.png",
+                                                      "sha256":  "f5c69fa9192cb1d5931d3ee2230a60e69c5492c2a173b9788e332fe5004c5777"
+                                                  }
+                                              ],
+                                  "chartSeriesNames":  [
+                                                           {
+                                                               "phase":  "edited",
+                                                               "slideIndex":  1,
+                                                               "chartName":  "OPF chart 1",
+                                                               "seriesIndex":  1,
+                                                               "expectedName":  "Actual edited",
+                                                               "observedName":  "Actual edited",
+                                                               "observedType":  "System.String",
+                                                               "observedRawValue":  "Actual edited",
+                                                               "status":  "success",
+                                                               "referenceTypeEvidence":  {
+                                                                                             "chart":  {
+                                                                                                           "observedType":  "System.Int32",
+                                                                                                           "observedRawValue":  "-4111",
+                                                                                                           "numericValue":  -4111
+                                                                                                       },
+                                                                                             "count":  {
+                                                                                                           "observedType":  "System.Int32",
+                                                                                                           "observedRawValue":  "3",
+                                                                                                           "numericValue":  3
+                                                                                                       },
+                                                                                             "series":  [
+                                                                                                            {
+                                                                                                                "index":  1,
+                                                                                                                "typeObservation":  {
+                                                                                                                                        "observedType":  "System.Int32",
+                                                                                                                                        "observedRawValue":  "4",
+                                                                                                                                        "numericValue":  4
+                                                                                                                                    }
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "index":  2,
+                                                                                                                "typeObservation":  {
+                                                                                                                                        "observedType":  "System.Int32",
+                                                                                                                                        "observedRawValue":  "4",
+                                                                                                                                        "numericValue":  4
+                                                                                                                                    }
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "index":  3,
+                                                                                                                "typeObservation":  {
+                                                                                                                                        "observedType":  "System.Int32",
+                                                                                                                                        "observedRawValue":  "4",
+                                                                                                                                        "numericValue":  4
+                                                                                                                                    }
+                                                                                                            }
+                                                                                                        ]
+                                                                                         }
+                                                           }
+                                                       ]
+                              },
+                   "reopened":  {
+                                    "slideCount":  3,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C226964223A226C696E652D6D756C7469706C65222C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226368617274222C22626F78223A5B35372E362C35372E362C313136342E382C3630342E385D7D2C226E6174697665223A7B22737472756374757265223A223164643938633738313230616537222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223133623565663461346530643735227D2C22766F636162756C617279223A327D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  1,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF chart 1",
+                                                                          "type":  3,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  453.6,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  "Line chart: Actual by Period, 3 categories",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   },
+                                                   {
+                                                       "index":  2,
+                                                       "slideId":  257,
+                                                       "name":  "Slide 2",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A312C226964223A226C696E652D64656661756C7473222C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226368617274222C22626F78223A5B35372E362C35372E362C313136342E382C3630342E385D7D2C226E6174697665223A7B22737472756374757265223A223164643938633738313230616537222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223133623565663461346530643735227D2C22766F636162756C617279223A327D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  1,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF chart 2",
+                                                                          "type":  3,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  453.6,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  "Line chart: Actual by Period, 3 categories",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   },
+                                                   {
+                                                       "index":  3,
+                                                       "slideId":  258,
+                                                       "name":  "Slide 3",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A322C226964223A226E6F2D696E666572656E6365222C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226368617274222C22626F78223A5B35372E362C3139342C313136342E382C3436382E345D7D2C226E6174697665223A7B22737472756374757265223A223162326566666665306165303438222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223161343231343431366564373233227D2C22766F636162756C617279223A327D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  3,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.2.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Target 92%",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E322E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223039643533383238653537653038227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF heading slides.2.subtitle line 0",
+                                                                          "type":  17,
+                                                                          "left":  43.4373245,
+                                                                          "top":  101.874329,
+                                                                          "width":  873.6,
+                                                                          "height":  25.62,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Threshold 30",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E322E7375627469746C65222C226669656C64223A227375627469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223038363232383432343165373636227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF chart 3",
+                                                                          "type":  3,
+                                                                          "left":  43.2,
+                                                                          "top":  145.494324,
+                                                                          "width":  873.6,
+                                                                          "height":  351.305664,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  0,
+                                                                          "text":  null,
+                                                                          "alternativeText":  "Column chart: Actual by Period, 3 categories",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\reopened-slide-01.png",
+                                                        "sha256":  "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
+                                                    },
+                                                    {
+                                                        "slideIndex":  2,
+                                                        "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\reopened-slide-02.png",
+                                                        "sha256":  "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
+                                                    },
+                                                    {
+                                                        "slideIndex":  3,
+                                                        "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\reopened-slide-03.png",
+                                                        "sha256":  "f5c69fa9192cb1d5931d3ee2230a60e69c5492c2a173b9788e332fe5004c5777"
+                                                    }
+                                                ],
+                                    "chartSeriesNames":  [
+                                                             {
+                                                                 "phase":  "reopened",
+                                                                 "slideIndex":  1,
+                                                                 "chartName":  "OPF chart 1",
+                                                                 "seriesIndex":  1,
+                                                                 "expectedName":  "Actual edited",
+                                                                 "observedName":  "Actual edited",
+                                                                 "observedType":  "System.String",
+                                                                 "observedRawValue":  "Actual edited",
+                                                                 "status":  "success",
+                                                                 "referenceTypeEvidence":  {
+                                                                                               "chart":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "-4111",
+                                                                                                             "numericValue":  -4111
+                                                                                                         },
+                                                                                               "count":  {
+                                                                                                             "observedType":  "System.Int32",
+                                                                                                             "observedRawValue":  "3",
+                                                                                                             "numericValue":  3
+                                                                                                         },
+                                                                                               "series":  [
+                                                                                                              {
+                                                                                                                  "index":  1,
+                                                                                                                  "typeObservation":  {
+                                                                                                                                          "observedType":  "System.Int32",
+                                                                                                                                          "observedRawValue":  "4",
+                                                                                                                                          "numericValue":  4
+                                                                                                                                      }
+                                                                                                              },
+                                                                                                              {
+                                                                                                                  "index":  2,
+                                                                                                                  "typeObservation":  {
+                                                                                                                                          "observedType":  "System.Int32",
+                                                                                                                                          "observedRawValue":  "4",
+                                                                                                                                          "numericValue":  4
+                                                                                                                                      }
+                                                                                                              },
+                                                                                                              {
+                                                                                                                  "index":  3,
+                                                                                                                  "typeObservation":  {
+                                                                                                                                          "observedType":  "System.Int32",
+                                                                                                                                          "observedRawValue":  "4",
+                                                                                                                                          "numericValue":  4
+                                                                                                                                      }
+                                                                                                              }
+                                                                                                          ]
+                                                                                           }
+                                                             }
+                                                         ]
+                                }
+               },
+    "inputs":  {
+                   "verifier":  {
+                                    "path":  "C:\\opf-work\\c34\\rsl\\packages\\pptx\\test\\native-furniture-control.ps1",
+                                    "sha256":  "3ce6b57ca190a4c0c89b3202eeb11e2685fb2731bfc9a3a206bc3f8b022d8573",
+                                    "snapshotPath":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\inputs\\native-furniture-control.ps1",
+                                    "snapshotSha256":  "3ce6b57ca190a4c0c89b3202eeb11e2685fb2731bfc9a3a206bc3f8b022d8573"
+                                },
+                   "processHelper":  {
+                                         "path":  "C:\\opf-work\\c34\\rsl\\packages\\pptx\\test\\native-process.ps1",
+                                         "sha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+                                         "snapshotPath":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\inputs\\native-process.ps1",
+                                         "snapshotSha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+                                     }
+               },
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9818",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9974",
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\Root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20527.20196",
+                        "powerPointExecutableSha256":  "ff848a883e58a4854c6f1d30e652b2a4cec23afa3543cd5c9d08b2d1b96e605b"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "error":  null,
+    "scope":  "One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker quits only its exact verified empty application, never kills Office, changes security, retries, or closes unrelated presentations.",
+    "referenceNameEdit":  true,
+    "referenceNameSnapshots":  [
+                                   {
+                                       "phase":  "before",
+                                       "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\reference-name-before.pptx",
+                                       "sha256":  "a3a61235eaccfeaa9148e8bb8da6b6d8077858c2f95f74a502c73d250e31ebbc"
+                                   },
+                                   {
+                                       "phase":  "reopened",
+                                       "path":  "C:\\opf-work\\c34\\rms-scratch\\run-final2\\native\\reference-name-reopened.pptx",
+                                       "sha256":  "de8bd0bdaaa30d202c72955eb938b2c8dcaacf68287602187cae145fd5e0d2ca"
+                                   }
+                               ],
+    "globalPreflight":  {
+                            "policy":  "strict-name-query-v1",
+                            "count":  0
+                        }
+}
