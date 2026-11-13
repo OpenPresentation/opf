@@ -4020,6 +4020,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     ...(layer?.references?.lines?.length && ['category', 'combo'].includes(chartData.spec.family) && chartData.barDir !== 'bar' && chartLayout?.valueAxis?.min < 0 ? {catAxisLabelPos: 'low'} : {}),
     ...(percent ? { valAxisLabelFormatCode: '0%' } : {}),
     ...(chartData.spec.markers === undefined ? {} : { lineDataSymbol: chartData.spec.markers ? 'circle' : 'none' }),
+    // RR-105: a gap (an empty c:pt) breaks a line and ends an area at its neighbors, as the preview draws it (PptxGenJS defaults to span,
+    // which joins the neighbors across the gap). A stacked area draws its blank as a layer of zero thickness.
+    ...(chartData.type === 'line' || chartData.type === 'area' ? { displayBlanksAs: 'gap' } : {}),
     ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),
     // ScatterWithMarkers: markers only, no connecting line.
     ...(chartData.type === 'scatter' ? { lineSize: 0, lineDataSymbol: 'circle', catGridLine: {style: 'none'},

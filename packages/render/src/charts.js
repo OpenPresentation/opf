@@ -962,14 +962,25 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot =
   const pointX = edge ? (i) => plot.x + categorySlot(i) * plot.width / (stacks[0].length - 1) : (i) => plot.x + (categorySlot(i) + 0.5) * band;
   for (let j = 0; j < series.length; j++) {
     const s = series[j];
-    const points = stacks[j].map((point, i) => ({ x: pointX(i), from: point.from, to: point.to }));
-    const upper = points.map((p) => `${c.num(p.x)} ${c.num(at(p.to))}`);
-    const lower = points.slice().reverse().map((p) => `${c.num(p.x)} ${c.num(p.from === 0 ? crossing : at(p.from))}`);
-    c.mark("path", { d: `M ${upper.join(" L ")} L ${lower.join(" L ")} Z`, fill: seriesColor(c, j) }, `${c.path}.data.columns.${s.column}`);
+    // RR-105: a gap (null, core's stackCategoryValues) splits an unstacked area into runs of points; each run stands on the axis at its
+    // own first and last point, as PowerPoint draws a blank with c:dispBlanksAs "gap" (a lone point between gaps is a zero-width run).
+    const runs = [];
+    let run = [];
+    stacks[j].forEach((point, i) => {
+      if (!point) { if (run.length) runs.push(run); run = []; return; }
+      run.push({ x: pointX(i), from: point.from, to: point.to });
+    });
+    if (run.length) runs.push(run);
+    const d = runs.map((points) => {
+      const upper = points.map((p) => `${c.num(p.x)} ${c.num(at(p.to))}`);
+      const lower = points.slice().reverse().map((p) => `${c.num(p.x)} ${c.num(p.from === 0 ? crossing : at(p.from))}`);
+      return `M ${upper.join(" L ")} L ${lower.join(" L ")} Z`;
+    }).join(" ");
+    if (d) c.mark("path", { d, fill: seriesColor(c, j) }, `${c.path}.data.columns.${s.column}`);
   }
-  // RR-35: an area's label sits in the area at each category, halfway between its lower and upper edge.
+  // RR-35: an area's label sits in the area at each category, halfway between its lower and upper edge. A gap has no label (RR-105).
   if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
-    if (!point || c.stackValues?.[j]?.[i] === false) return;
+    if (!point || s.values[i] === null || c.stackValues?.[j]?.[i] === false) return;
     const lowerEdge = point.from === 0 ? crossing : at(point.from);
     drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format, group: s.group }), pointX(i), (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, seriesColor(c, j));
   }));
