@@ -42,11 +42,13 @@ for(const options of [{},measured])for(const [width,height]of [[1280,720],[720,1
         // FF-39 let it inherit contentAlignment without outline placement, so
         // that case checks the native side against core rather than the preview.
         const previewChecked=field!=='title'||effective.titleAlignment!==undefined;
-        if(previewChecked)assert.equal(anchor[attr(preview,'text-anchor')??'start'],expected,`${name} preview alignment`);
+        if(previewChecked)assert.equal(anchor[attr(preview,'data-opf-anchor')??attr(preview,'text-anchor')??'start'],expected,`${name} preview alignment`);
         assert.equal(algn,expected,`${name} native alignment (${JSON.stringify(options===measured?'measured':'default')})`);
         const x=+shape.match(/<a:off x="(-?\d+)"/)[1]/9525,w=+shape.match(/<a:ext cx="(\d+)"/)[1]/9525;
         const nativeAnchor=algn==='ctr'?x+w/2:algn==='r'?x+w:x;
-        if(previewChecked)assert.ok(Math.abs(nativeAnchor-+attr(preview,'x'))<.01,`${name} anchor ${nativeAnchor} vs preview ${attr(preview,'x')}`);
+        // opf#1322: a measured tracked display line is start-anchored; its anchor point is in data-opf-anchor-x.
+        const previewAnchor=+(attr(preview,'data-opf-anchor-x')??attr(preview,'x'));
+        if(previewChecked)assert.ok(Math.abs(nativeAnchor-previewAnchor)<.01,`${name} anchor ${nativeAnchor} vs preview ${previewAnchor}`);
         lines++;
       }
     }

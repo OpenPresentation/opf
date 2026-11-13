@@ -44,7 +44,7 @@ for (const [name, deck, expected] of cases) {
     const previews = [...svg.matchAll(/<text\b[^>]*>/g)].map(match => match[0]).filter(tag => attr(tag, 'data-opf-path') === path);
     assert.ok(previews.length, `${name}: ${field} preview text`);
     for (const [index, preview] of previews.entries()) {
-      assert.equal(anchor[attr(preview, 'text-anchor') ?? 'start'], native[expected[field]], `${name}: ${field} preview anchor`);
+      assert.equal(anchor[attr(preview, 'data-opf-anchor') ?? attr(preview, 'text-anchor') ?? 'start'], native[expected[field]], `${name}: ${field} preview anchor`);
       const shape = shapes.find(value => value.includes(`name="OPF ${field === 'text' ? 'text' : 'heading'} ${path} line ${index}"`));
       assert.ok(shape, `${name}: ${field} native line ${index}`);
       assert.equal(shape.match(/<a:pPr\b[^>]*\salgn="([^"]+)"/)?.[1] ?? 'l', native[expected[field]], `${name}: ${field} native alignment`);

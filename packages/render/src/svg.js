@@ -1703,6 +1703,7 @@ function renderMetric(item, box, bound, options) {
         ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
       },segment,styledText(part.text.slice(segment.start,segment.end),part.style),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start),fontSize:part.fit.fontSize})).join(''));
       return tag('text',{x:stableNumber(origin.x),y:stableNumber(origin.baseline),'text-anchor':'start',
+        ...(exactStart&&factor?{'data-opf-anchor':factor===1?'end':'middle','data-opf-anchor-x':stableNumber(origin.x+line.width*factor)}:{}),
         'font-family':fontStack(part.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(part.fit.fontSize),
         'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,'letter-spacing':part.style.tracking?stableNumber(part.style.tracking*part.fit.fontSize):undefined,
         'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:partFill(part),
@@ -2581,9 +2582,9 @@ function renderTextBox(text, box, bound, config) {
     textLength:!start&&placed?.width>0&&!style.tracking?stableNumber(placed.width-trimWidth):undefined,lengthAdjust:!start&&placed?.width>0&&!style.tracking?'spacingAndGlyphs':undefined,
     ...traceAttrs(config.options, config.path),
     ...(config.options.trace&&sourceLine?{'data-opf-source-start':sourceOffset+sourceLine.start,'data-opf-source-end':sourceOffset+sourceLine.end,'data-opf-source-next-start':sourceOffset+sourceLine.nextStart,'data-opf-line-boundary':sourceLine.boundary}:{}),
-    // opf#1322: a traced line that starts at core's x still says how it is aligned and where its anchor point is, for an editor that
-    // lays its input over the line.
-    ...(config.options.trace&&exactStart?{'data-opf-anchor':anchor,'data-opf-anchor-x':stableNumber(placed?placed.x+placed.width*factor:x)}:{}),
+    // opf#1322: a line that starts at core's x still says how it is aligned and where its anchor point is (text-anchor no longer does):
+    // an editor lays its input over the line from them, and a reader of the SVG compares them with the native export.
+    ...(exactStart?{'data-opf-anchor':anchor,'data-opf-anchor-x':stableNumber(placed?placed.x+placed.width*factor:x)}:{}),
   }, content);
   });
   return tag("g", { ...traceAttrs(config.options, config.path),

@@ -38,7 +38,8 @@ const previewAnchor = (svg, text) => {
   // LH-32: the tag is an eyebrow: the preview draws its capitals, PowerPoint the authored text with cap="all".
   const match = [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].find(([, , body]) => [escaped, escaped.toUpperCase()].includes(body.replace(/<[^>]+>/g, '')));
   assert.ok(match, `Preview text is missing: ${text}`);
-  return match[1].match(/text-anchor="(\w+)"/)?.[1] ?? 'start';
+  // opf#1322: a measured tracked display line is start-anchored; its alignment and anchor point are in data-opf-anchor(-x).
+  return (match[1].match(/data-opf-anchor="(\w+)"/) ?? match[1].match(/text-anchor="(\w+)"/))?.[1] ?? 'start';
 };
 const nativeAlign = {start: 'l', middle: 'ctr', end: 'r'};
 

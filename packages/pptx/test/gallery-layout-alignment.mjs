@@ -37,7 +37,7 @@ for (const [id, record] of Object.entries(gallery.layouts)) for (const alignment
   const shapes = array(parser.parse(xml)['p:sld']['p:cSld']['p:spTree']['p:sp']).filter(shape => textOf(shape) && /^OPF (?:heading|text) /.test(shape['p:nvSpPr']['p:cNvPr'].name));
   assert.equal(shapes.length, expected.length, `${id}: one editable shape per accepted line`);
   const svg = toSvg(document, options)[0];
-  const previewTexts = [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].map(([, attributes, body]) => ({text: body.replace(/<[^>]+>/g, ''), anchor: attributes.match(/text-anchor="([^"]+)"/)?.[1] ?? 'start'}));
+  const previewTexts = [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].map(([, attributes, body]) => ({text: body.replace(/<[^>]+>/g, ''), anchor: (attributes.match(/data-opf-anchor="([^"]+)"/) ?? attributes.match(/text-anchor="([^"]+)"/))?.[1] ?? 'start'}));
   for (const [index, shape] of shapes.entries()) {
     const {item, placed, index: lineIndex} = expected[index];
     const transform = shape['p:spPr']['a:xfrm'];
