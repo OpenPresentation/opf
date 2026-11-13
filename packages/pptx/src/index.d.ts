@@ -163,8 +163,9 @@ export interface ToPptxOptions {
   imageFormat?: "compatible" | "preserve";
   /**
    * How the chartex chart types (treemap, histogram, pareto, box-and-whisker, waterfall, funnel, world) are exported.
-   * "auto" (default) writes Office 2016 chartex parts (`cx:chartSpace`, style parts, an `mc:AlternateContent` frame with the
-   * clustered column chart as fallback) for the constructs desktop PowerPoint confirmed natively on 2026-09-30 (treemap,
+   * "auto" (default) writes Office 2016 chartex parts (`cx:chartSpace`, style parts, an `mc:AlternateContent` frame whose fallback,
+   * for apps without chartex support, is a picture of OPF's preview of the chart, or the clustered column chart with
+   * `chartex-fallback-picture-unavailable` when the picture cannot be drawn) for the constructs desktop PowerPoint confirmed natively on 2026-09-30 (treemap,
    * histogram, pareto, box-and-whisker, waterfall, funnel) and keeps `world` on the clustered column chart with
    * `chart-data-adapted` (`chartex-fallback`) because the regionMap part, though accepted with `Requires="cx4"`, draws
    * nothing until PowerPoint fetches map data online. Multi-series Pareto also uses editable clustered columns with all series and this diagnostic;

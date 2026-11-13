@@ -129,7 +129,13 @@ test('all30 current chart archives retain strict locks, every series/cache/workb
     assert.throws(()=>assertNativeBoxData(changeBox(xml=>xml.replace('r:id="rId1"','r:id="rId999"')),plotted,contract,'wrong-native-relation-id'),/unique embedded workbook relationship/);
     const nativeRels='ppt/charts/_rels/'+path.basename(boxFile)+'.rels';
     const wrongLink={...boxParts,[nativeRels]:fflate.strToU8(fflate.strFromU8(boxParts[nativeRels]).replace('Microsoft_Excel_Worksheet1.xlsx','Microsoft_Excel_Worksheet999.xlsx')),[workbook.replace('1.xlsx','999.xlsx')]:boxParts[workbook]};
-    assert.throws(()=>assertNativeBoxData(wrongLink,plotted,contract,'wrong-native-workbook-link'),/native.classic same workbook/);
+    // RR-105: no classic chart shares the workbook any more; a native chart that relates another copy leaves the real workbook orphaned.
+    assert.throws(()=>assertNativeBoxData(wrongLink,plotted,contract,'wrong-native-workbook-link'),/native workbook is the only embedded workbook/);
+    const boxBook=fflate.unzipSync(boxParts[workbook]),boxSheet=fflate.strFromU8(boxBook['xl/worksheets/sheet1.xml']);
+    assert.match(boxSheet,/<v>4<\/v>/);boxBook['xl/worksheets/sheet1.xml']=fflate.strToU8(boxSheet.replace('<v>4</v>','<v>400</v>'));
+    assert.throws(()=>assertNativeBoxData({...boxParts,[workbook]:fflate.zipSync(boxBook)},plotted,contract,'wrong-native-workbook'),/complete embedded workbook values/);
+    const slide=Object.keys(boxParts).find(file=>/^ppt\/slides\/slide\d+\.xml$/.test(file));
+    assert.throws(()=>assertNativeBoxData({...boxParts,[slide]:fflate.strToU8(fflate.strFromU8(boxParts[slide]).replace(/<mc:Fallback>[\s\S]*?<\/mc:Fallback>/,'<mc:Fallback><p:graphicFrame/></mc:Fallback>'))},plotted,contract,'classic-fallback'),/preview picture/);
     boxParts[boxFile]=fflate.strToU8(fflate.strFromU8(boxParts[boxFile]).replace('<cx:pt idx="0">4</cx:pt>','<cx:pt idx="0">400</cx:pt>'));
     assert.throws(()=>assertNativeBoxData(boxParts,plotted,contract,'wrong-native-box'),/native box values/);
   }finally{await rm(scratch,{recursive:true,force:true});}

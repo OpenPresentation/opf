@@ -21,14 +21,16 @@ const once=(text,before,after)=>{assert.equal(text.split(before).length,2);retur
 const change=(parts,name,edit)=>{assert.ok(parts[name]);parts[name]=deps.strToU8(edit(deps.strFromU8(parts[name])));};
 const zip=parts=>Buffer.from(deps.zipSync(parts));
 function phase(archive){return{slideCount:7,rasters:Array.from({length:7},(_,i)=>({slideIndex:i+1})),slides:archive.slides.map((slide,i)=>{const shapes=slide.shapes.filter(s=>s.kind==='title'||s.branch==='choice'||s.branch==='direct').map((s,j)=>({index:j+1,id:s.id,name:s.name,type:s.kind==='title'?14:3,...s.geometry,hasTextFrame:s.kind==='title'?-1:0,text:s.kind==='title'?s.text:null,alternativeText:''}));return{index:i+1,slideId:i+256,name:'Synthetic '+i,shapeCount:shapes.length,shapes};})};}
-let pending;
-async function fixture(){pending??=(async()=>{
- const source=currentSevenSource(),input=Buffer.from(await toPptx(source,{chartex:'native'})),bound=bindCurrentTreemap(input,source,selection),action=bound.action,parts=deps.unzipSync(input);
+// RR-105: the default export's chartex fallbacks are pictures of the preview; `classic` is the export without a rasterizer, whose
+// fallbacks are classic charts sharing the native chart's workbook (the form the unsharing control below needs).
+const pending=new Map(),CLASSIC={svgRasterizer:async()=>{throw Object.assign(new Error('no rasterizer'),{code:'svg-rasterizer-unavailable'});}};
+async function fixture(form='picture'){if(!pending.has(form))pending.set(form,(async()=>{
+ const source=currentSevenSource(),input=Buffer.from(await toPptx(source,{chartex:'native',...(form==='classic'?CLASSIC:{})})),bound=bindCurrentTreemap(input,source,selection),action=bound.action,parts=deps.unzipSync(input);
  for(const slide of bound.archive.slides)for(const shape of slide.shapes){if(shape.kind!=='chart'||shape.chart.workbook.part!==action.workbookPart)continue;change(parts,shape.chartPart,text=>shape.chart.family==='chartEx'?once(text,'<cx:pt idx="0">42</cx:pt>','<cx:pt idx="0">43</cx:pt>'):once(text,'<c:pt idx="0"><c:v>42</c:v></c:pt>','<c:pt idx="0"><c:v>43</c:v></c:pt>'));}
  const book=deps.unzipSync(parts[action.workbookPart]);change(book,'xl/worksheets/sheet1.xml',text=>once(text,'<c r="B2"><v>42</v></c>','<c r="B2"><v>43</v></c>'));parts[action.workbookPart]=deps.zipSync(book);const edited=zip(parts),imports={};
  for(const [name,bytes]of [['source',input],['before',input],['edited',edited],['reopened',edited]]){const diagnostics=[],document=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});imports[name]={document,diagnostics};}
  return{input,before:input,edited,reopened:edited,source,selection,action,imports,root:ROOT,deps,bound,phases:{original:phase(bound.archive),'saved-reopened':phase(inspectSevenArchive(edited,deps,bound.archiveContext))}};
-})();return pending;}
+})());return pending.get(form);}
 const uri=prefix=>prefix==='cx1'?'http://schemas.microsoft.com/office/drawing/2015/9/8/chartex':'http://schemas.microsoft.com/office/drawing/2015/10/21/chartex';
 function xml(prefix='cx1',location='choice'){return '<p:sld xmlns:p="p" xmlns:mc="mc"><p:cSld><p:spTree><mc:AlternateContent'+(location==='parent'?' xmlns:'+prefix+'="'+uri(prefix)+'"':'')+'><mc:Choice Requires="'+prefix+'"'+(location==='choice'?' xmlns:'+prefix+'="'+uri(prefix)+'"':'')+'><p:graphicFrame><'+prefix+':chart/></p:graphicFrame></mc:Choice><mc:Fallback><p:sp/></mc:Fallback></mc:AlternateContent></p:spTree></p:cSld></p:sld>';}
 test('snapshot namespace policy admits only the real pairwise local/direct-parent declaration move',()=>{
@@ -48,7 +50,7 @@ test('public current seven source/before/edited/reopened archives prove exactly 
 test('source-to-before admission refuses changed data, roles, broken relationships and public imports before any setter',async()=>{
  const f=await fixture();assert.throws(()=>compareSevenNativeBefore({...f,before:f.edited}));
  const imported=structuredClone(f.imports);imported.before.document.slides[1].title='Foreign title';assert.throws(()=>compareSevenNativeBefore({...f,imports:imported}),/public import/);
- for(const mode of ['title','relationship']){const parts=deps.unzipSync(f.input);if(mode==='title')change(parts,'ppt/slides/slide1.xml',t=>t.replace('</a:t>',' changed</a:t>'));if(mode==='relationship')change(parts,'ppt/slides/_rels/slide1.xml.rels',t=>t.replace('Id="rId1"','Id="rIdChanged"'));assert.throws(()=>compareSevenNativeBefore({...f,before:zip(parts)}),undefined,mode);}
+ for(const mode of ['title','relationship']){const parts=deps.unzipSync(f.input);if(mode==='title')change(parts,'ppt/slides/slide1.xml',t=>t.replace('</a:t>',' changed</a:t>'));if(mode==='relationship')change(parts,'ppt/slides/_rels/slide1.xml.rels',t=>{const next=t.replace(/Id="rId\d+"(?= Type="[^"]*\/chartEx")/u,'Id="rIdChanged"');assert.notEqual(next,t);return next;});assert.throws(()=>compareSevenNativeBefore({...f,before:zip(parts)}),undefined,mode);}
 });
 test('first-Save semantic roles retain complete data while every raw spacing/paint/lexical change stays OPEN',async()=>{
  const f=await fixture(),parts=deps.unzipSync(f.input),original=Buffer.from(f.input);
@@ -71,36 +73,36 @@ test('first-Save role admission checks previously omitted srcOrd, axis associati
   ['source order','ppt/charts/chartEx1.xml',text=>once(text,'<cx:series layoutId="treemap"','<cx:series srcOrd="0" layoutId="treemap"')],
   ['native axis association','ppt/charts/chartEx2.xml',text=>once(text,'<cx:axisId val="0"/>','<cx:axisId val="1"/>')],
   ['native scaling','ppt/charts/chartEx2.xml',text=>once(text,'max="50"','max="51"')],
-  ['classic cross-axis','ppt/charts/chart4.xml',text=>once(text,'<c:crossAx val="2094734552"/>','<c:crossAx val="999"/>')],
-  ['classic series order','ppt/charts/chart4.xml',text=>once(text,'<c:order val="0"/>','<c:order val="1"/>')],
+  ['classic cross-axis','ppt/charts/chart2.xml',text=>once(text,'<c:crossAx val="2094734552"/>','<c:crossAx val="999"/>')],
+  ['classic series order','ppt/charts/chart2.xml',text=>once(text,'<c:order val="0"/>','<c:order val="1"/>')],
   ['box statistics','ppt/charts/chartEx2.xml',text=>once(text,'quartileMethod="exclusive"','quartileMethod="inclusive"')],
   ['waterfall subtotal','ppt/charts/chartEx3.xml',text=>once(text,'</cx:layoutPr>','<cx:subtotals><cx:idx val="0"/></cx:subtotals></cx:layoutPr>')],
   ['unknown native vector','ppt/charts/chartEx1.xml',text=>once(text,'</cx:data>','<cx:unknownDim/></cx:data>')],
-  ['unknown classic vector','ppt/charts/chart4.xml',text=>once(text,'</c:barChart>','<c:unknownVector/></c:barChart>')],
-  ['classic cache format','ppt/charts/chart4.xml',text=>once(text,'<c:formatCode>General</c:formatCode>','<c:formatCode>0%</c:formatCode>')],
-  ['classic missing cache format','ppt/charts/chart4.xml',text=>once(text,'<c:formatCode>General</c:formatCode>','')],
+  ['unknown classic vector','ppt/charts/chart2.xml',text=>once(text,'</c:barChart>','<c:unknownVector/></c:barChart>')],
+  ['classic cache format','ppt/charts/chart2.xml',text=>once(text,'<c:formatCode>General</c:formatCode>','<c:formatCode>0%</c:formatCode>')],
+  ['classic missing cache format','ppt/charts/chart2.xml',text=>once(text,'<c:formatCode>General</c:formatCode>','')],
   ['native cache format','ppt/charts/chartEx2.xml',text=>once(text,'formatCode="General"','formatCode="0%"')],
   ['native missing cache format','ppt/charts/chartEx2.xml',text=>once(text,' formatCode="General"','')],
-  ['unknown classic cache vector','ppt/charts/chart4.xml',text=>once(text,'</c:numCache>','<c:unknownVector/></c:numCache>')],
+  ['unknown classic cache vector','ppt/charts/chart2.xml',text=>once(text,'</c:numCache>','<c:unknownVector/></c:numCache>')],
   ['unknown native level vector','ppt/charts/chartEx2.xml',text=>{const level=/<cx:lvl\b[^>]*>[\s\S]*?<\/cx:lvl>/u.exec(text)?.[0];assert.ok(level);return once(text,level,once(level,'</cx:lvl>','<cx:unknownVector/></cx:lvl>'));}],
-  ['unknown classic point field','ppt/charts/chart4.xml',text=>once(text,'<c:pt idx="0"><c:v>42</c:v></c:pt>','<c:pt idx="0"><c:v>42</c:v><c:unknownVector/></c:pt>')],
+  ['unknown classic point field','ppt/charts/chart2.xml',text=>once(text,'<c:pt idx="0"><c:v>42</c:v></c:pt>','<c:pt idx="0"><c:v>42</c:v><c:unknownVector/></c:pt>')],
   ['unknown native point field','ppt/charts/chartEx2.xml',text=>once(text,'<cx:pt idx="0">42</cx:pt>','<cx:pt idx="0">42<cx:unknownVector/></cx:pt>')],
  ]){
   const parts=deps.unzipSync(f.input);change(parts,file,edit);const before=zip(parts);
   assert.throws(()=>compareSevenNativeBefore({...f,before}),/whole-seven parsed data\/source roles|Unknown source-role field|Unknown native cache point field/u,name);
  }
- const source=deps.strFromU8(deps.unzipSync(f.input)['ppt/charts/chart4.xml']),series=/<c:ser>[\s\S]*?<\/c:ser>/u.exec(source)?.[0];assert.ok(series);
+ const source=deps.strFromU8(deps.unzipSync(f.input)['ppt/charts/chart2.xml']),series=/<c:ser>[\s\S]*?<\/c:ser>/u.exec(source)?.[0];assert.ok(series);
  const numeric=/<c:val>[\s\S]*?<\/c:val>/u.exec(series)?.[0];assert.ok(numeric);
  for(const field of ['c:xVal','c:yVal','c:bubbleSize']){
   const vector=numeric.replace('<c:val>','<'+field+'>').replace('</c:val>','</'+field+'>'),parts=deps.unzipSync(f.input);
-  change(parts,'ppt/charts/chart4.xml',text=>once(text,series,once(series,'</c:ser>',vector+'</c:ser>')));
+  change(parts,'ppt/charts/chart2.xml',text=>once(text,series,once(series,'</c:ser>',vector+'</c:ser>')));
   assert.throws(()=>compareSevenNativeBefore({...f,before:zip(parts)}),new RegExp('Unknown source-role field '+field,'u'),'Unsupported complete nested '+field+' vector refuses even when cache/workbook agree');
  }
 });
 test('first-Save complete data comparison refuses coherent numeric changes in every other source slide',async()=>{
  const f=await fixture();
  for(let slideIndex=2;slideIndex<=7;slideIndex++){
-  const parts=deps.unzipSync(f.input),shape=f.bound.archive.slides[slideIndex-1].shapes.find(s=>s.kind==='chart'&&s.chart.family==='classic'),bookPart=shape.chart.workbook.part;
+  const parts=deps.unzipSync(f.input),shape=f.bound.archive.slides[slideIndex-1].shapes.find(s=>s.kind==='chart'),bookPart=shape.chart.workbook.part;
   for(const slide of f.bound.archive.slides)for(const current of slide.shapes)if(current.kind==='chart'&&current.chart.workbook.part===bookPart)change(parts,current.chartPart,text=>current.chart.family==='classic'?once(text,'<c:pt idx="0"><c:v>42</c:v></c:pt>','<c:pt idx="0"><c:v>43</c:v></c:pt>'):once(text,'<cx:pt idx="0">42</cx:pt>','<cx:pt idx="0">43</cx:pt>'));
   const book=deps.unzipSync(parts[bookPart]);change(book,'xl/worksheets/sheet1.xml',text=>once(text,'<c r="B2"><v>42</v></c>','<c r="B2"><v>43</v></c>'));parts[bookPart]=deps.zipSync(book);
   assert.throws(()=>compareSevenNativeBefore({...f,before:zip(parts)}),undefined,'All branches of unselected slide'+slideIndex+' retain their complete data');
@@ -132,7 +134,7 @@ test('first-Save workbook locator rebind is comparison-only and propagates throu
  const renamedAgain=deps.unzipSync(edited);renamedAgain[next+'.other']=renamedAgain[next];delete renamedAgain[next];assert.throws(()=>compareSevenNativeSnapshots({...f,before,edited:zip(renamedAgain),reopened,imports}));
 });
 test('first-Save native/fallback unsharing remains OPEN; later alias changes and wrong branch data refuse',async()=>{
- const f=await fixture(),parts=deps.unzipSync(f.input),nativeBook=path.posix.join(path.posix.dirname(f.action.workbookPart),'native-choice-before.xlsx'),chartRels=path.posix.join(path.posix.dirname(f.action.chartPart),'_rels',path.posix.basename(f.action.chartPart)+'.rels');
+ const f=await fixture('classic'),parts=deps.unzipSync(f.input),nativeBook=path.posix.join(path.posix.dirname(f.action.workbookPart),'native-choice-before.xlsx'),chartRels=path.posix.join(path.posix.dirname(f.action.chartPart),'_rels',path.posix.basename(f.action.chartPart)+'.rels');
  assert.ok(parts[f.action.workbookPart]);assert.equal(parts[nativeBook],undefined);parts[nativeBook]=parts[f.action.workbookPart];change(parts,chartRels,text=>once(text,path.posix.basename(f.action.workbookPart),path.posix.basename(nativeBook)));
  const before=zip(parts),beforeBound=bindCurrentTreemap(before,f.source,f.selection),nativeAction=beforeBound.action;
  assert.notDeepEqual(sevenWorkbookAliasPartition(beforeBound.archive),sevenWorkbookAliasPartition(f.bound.archive));

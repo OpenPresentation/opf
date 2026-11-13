@@ -9,8 +9,11 @@ const one = {columns: ['Quarter', 'Revenue'], rows: [['Q1', 12], ['Q2', 20], ['Q
 const two = {columns: ['Quarter', 'North', 'South'], rows: [['Q1', 12, 5], ['Q2', 20, 8], ['Q3', 15, 12], ['Q4', 22, 9]]};
 const signed = {columns: ['Step', 'Delta'], rows: [['Start', 40], ['Gain', 25], ['Loss', -18], ['Gain', 12]]};
 
+// RR-105: a waterfall is a chartex chart, whose fallback is the preview's picture; its classic chart, which this test checks, is the
+// fallback only without a rasterizer.
+const CLASSIC = {svgRasterizer: async () => { throw Object.assign(new Error('no rasterizer'), {code: 'svg-rasterizer-unavailable'}); }};
 async function chartXml(chart, design = {fontScheme: 'roboto'}) {
-  const parts = unzipSync(await toPptx({design, slides: [{title: 'Chart', chart}]}));
+  const parts = unzipSync(await toPptx({design, slides: [{title: 'Chart', chart}]}, chart.type === 'waterfall' ? CLASSIC : {}));
   return strFromU8(parts['ppt/charts/chart1.xml']);
 }
 const series = (xml) => [...xml.matchAll(/<c:ser>([\s\S]*?)<\/c:ser>/g)].map(([, body]) => body);
@@ -50,6 +53,12 @@ for (const design of [{fontScheme: 'roboto'}, {fontScheme: 'roboto', theme: 'cla
     assert.equal(new Set(fills).size, fills.length, `${type}: each slice its own colour`);
     checked++;
   }
+}
+// RR-105: by default the waterfall writes no classic chart part; its mc:Fallback is the preview's picture.
+{
+  const parts = unzipSync(await toPptx({design: {fontScheme: 'roboto'}, slides: [{title: 'Chart', chart: {type: 'waterfall', data: signed, dataLabels: false}}]}));
+  assert.equal(parts['ppt/charts/chart1.xml'], undefined, 'waterfall: no classic part beside the picture');
+  assert.match(strFromU8(parts['ppt/slides/slide1.xml']), /<mc:Fallback><p:pic>/, 'waterfall: the fallback is a picture');
 }
 // The data still round-trips.
 const imported = await fromPptx(await toPptx({slides: [{title: 'Chart', chart: {type: 'column', data: one}}]}));

@@ -8,7 +8,12 @@ import {assertCurrentSevenPublicData} from './seven-signed-pareto.mjs';
 export const HISTOGRAM_VALUE_PROFILE='seven-histogram-classic-single-value-edit-v1';
 export const HISTOGRAM_SNAPSHOT_PROFILE='seven-histogram-classic-setter-native-archives-v1';
 export const HISTOGRAM_SELECTION=Object.freeze({slideIndex:2,seriesIndex:1,pointIndex:1,newValue:43});
-export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
+// RR-105 Keynote fix 4 (2026-11-12): default fallback changed from a classic chart to a picture of OPF's own preview, 2026-11-12,
+// supervisor decision for the owner, vetoable. The four chartex slides' mc:Fallback is now a picture and their classic chart parts are
+// gone; the classic histogram (ppt/charts/chart2.xml), its workbook and every mc:Choice are unchanged. The native edits recorded under
+// docs/handoff/2026-11-11 ran on the previous archive.
+export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226821,sha256:'0ef9865fa636d57b3fa37d370884d507414d0377a5c56209cbddbabea308c567'});
+export const HISTOGRAM_SOURCE_ARCHIVE_BEFORE_RR105_PICTURE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
 const keys=(value,names)=>assert.deepEqual(Object.keys(value).sort(),[...names].sort());
 const modelHash=value=>digest(Buffer.from(JSON.stringify(value)));
 const actionKeys=['op','slideIndex','shapeId','shapeName','branch','sourceType','comChartType','seriesIndex','maxSeriesCount','seriesName','chartPart','chartFamily','dataId','dimensionIndex','layoutId','dataFormula','workbookPart','worksheet','workbookCells','pointIndex','expectedValues','newValues','inputSha256','sourceModelSha256'];

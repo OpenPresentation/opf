@@ -24,9 +24,11 @@ export function currentSevenArchiveContext(root=fileURLToPath(new URL('../../',i
 export function classifyCurrentSeven(archive,source){
  assert.equal(source.slides.length,7);assert.equal(archive.slides.length,7);
  return source.slides.map((slide,index)=>{
-  const charts=archive.slides[index].shapes.filter(shape=>shape.kind==='chart'),type=slide.chart.type;
+  // RR-105: a chartex chart's mc:Fallback is a picture of OPF's preview (shape kind 'picture'); only an export without a rasterizer
+  // keeps the classic chart there.
+  const charts=archive.slides[index].shapes.filter(shape=>shape.kind==='chart'),pictures=archive.slides[index].shapes.filter(shape=>shape.kind==='picture'),type=slide.chart.type;
   if(type==='histogram'||type==='world'){
-   assert.equal(charts.length,1,'Current adapted source must expose one direct chart');
+   assert.equal(charts.length,1,'Current adapted source must expose one direct chart');assert.equal(pictures.length,0,'A direct chart has no fallback picture');
    assert.equal(charts[0].branch,'direct');assert.equal(charts[0].chart.family,'classic');assert.equal(charts[0].chart.construct,'c:barChart');
    assert.equal(charts[0].chart.series.length,1);assert.deepEqual(charts[0].chart.series[0]['c:val'].values,slide.chart.data.rows.map(row=>row[1]));
    assert.deepEqual(charts[0].chart.series[0]['c:cat'].values,slide.chart.data.rows.map(row=>row[0]));
@@ -34,20 +36,20 @@ export function classifyCurrentSeven(archive,source){
    return{slideIndex:index+1,sourceType:type,representation:'classic-column-fallback',editableHere:false,nativeTypeQualified:false};
   }
   if(type==='pareto'){
-   assert.equal(charts.length,1);assert.equal(charts[0].branch,'direct');assert.equal(charts[0].chart.family,'classic');assert.equal(charts[0].chart.construct,'currentSignedParetoComboV1');
+   assert.equal(charts.length,1);assert.equal(pictures.length,0);assert.equal(charts[0].branch,'direct');assert.equal(charts[0].chart.family,'classic');assert.equal(charts[0].chart.construct,'currentSignedParetoComboV1');
    return{slideIndex:index+1,sourceType:type,representation:'unreviewed-static-signed-pareto-classic-combo',editableHere:false,nativeTypeQualified:false};
   }
   if(type==='treemap'){
-   assert.equal(charts.length,2,'Treemap requires Choice plus Fallback');assert.deepEqual(charts.map(shape=>shape.branch),['choice','fallback']);
-   assert.equal(charts[0].chart.family,'chartEx');assert.equal(charts[1].chart.family,'classic');
+   assert.equal(charts.length+pictures.length,2,'Treemap requires Choice plus Fallback');assert.deepEqual([...charts,...pictures].map(shape=>shape.branch),['choice','fallback']);
+   assert.equal(charts[0].chart.family,'chartEx');if(!pictures.length)assert.equal(charts[1].chart.family,'classic');
    return{slideIndex:index+1,sourceType:type,representation:'chartEx-choice',editableHere:true,nativeTypeQualified:false};
   }
   // Do not freeze an unreviewed Pareto/Box/other target to an old native model.
   // Their ACTUAL unedited representation is bound in the envelope and raw guard.
-  assert.ok(charts.length===1||charts.length===2);
-  if(charts.length===1){assert.equal(charts[0].branch,'direct');assert.equal(charts[0].chart.family,'classic');}
-  else{assert.deepEqual(charts.map(shape=>shape.branch),['choice','fallback']);assert.equal(charts[0].chart.family,'chartEx');assert.equal(charts[1].chart.family,'classic');}
-  return{slideIndex:index+1,sourceType:type,representation:charts.length===1?'unreviewed-classic-fallback':'unreviewed-chartEx-choice',editableHere:false,nativeTypeQualified:false};
+  const branches=[...charts,...pictures];assert.ok(branches.length===1||branches.length===2);assert.ok(pictures.length<=1);
+  if(branches.length===1){assert.equal(charts[0].branch,'direct');assert.equal(charts[0].chart.family,'classic');}
+  else{assert.deepEqual(branches.map(shape=>shape.branch),['choice','fallback']);assert.equal(charts[0].chart.family,'chartEx');if(!pictures.length)assert.equal(charts[1].chart.family,'classic');}
+  return{slideIndex:index+1,sourceType:type,representation:branches.length===1?'unreviewed-classic-fallback':'unreviewed-chartEx-choice',editableHere:false,nativeTypeQualified:false};
  });
 }
 export function bindCurrentTreemap(input,source,selection,{root,deps=archiveDependencies()}={}){
