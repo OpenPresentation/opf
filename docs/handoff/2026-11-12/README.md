@@ -40,6 +40,25 @@ Added on 2026-11-12 at the owner's direction:
   `opf/shape-off-slide`, overlay sizes capped at 8, emphasis kept with reference lines, `ColorScheme.name`.
 - **Evidence out of the tree (RR-20).** See the decision below.
 
+Added on 2026-11-12 and 2026-11-13 after the coverage decks, the Mac review and the owner's audit of PowerPoint's ribbon:
+
+- **Format-coverage decks.** Thirty decks in the qualification corpus use every key, enum value and alternative of the schema and
+  every default layout (`pnpm check:format-coverage`). Opening them in PowerPoint and Keynote found the defects fixed in the
+  `rr-105-*` change fragments (watermark tags, area chart gaps, radar fill, team avatars, picture tone, overlays on contained
+  pictures, link underlines at a line end, words split in shapes, and others).
+- **Keynote fixes from the Mac review.** Line and area charts with reference lines open in Keynote; percent labels keep their
+  sign; a reference line's helper series is named after its label; an extended chart falls back to a picture of OPF's preview.
+- **Larger display text (LH-188, LH-189; the owner asked for it in 0.34).** A one-message slide grows its statement, quote or
+  figure up to ceilings keyed to its length (a figure up to 252 px); display text in Latin, Greek or Cyrillic takes -1.5% tracking
+  and a two-line display text a 1.0 em pitch. 128 slides of the corpus move; no text is smaller.
+- **The ribbon-audit patch checklist (issue #1290, items 1 to 5).** Chart workbooks name the deck's author; the notes page is the
+  standard portrait page; File > Info shows tags, language and the organization; charts, tables, logos and quote photos get a
+  generated description; Home > Layout lists user-facing layout names. Item 6 (Selection Pane names) stays open: the names are
+  read by the sealed native-acceptance helpers and by 37 source modules.
+- **Every slide title is the Title placeholder (issue #1291).** All 1,287 titles of the corpus. See the decisions below.
+- **Theme font references (issue #1293).** Runs, tables and SmartArt text reference the theme's heading and body fonts, so
+  Design > Variants > Fonts restyles a deck; charts keep font names.
+
 Updating a deck or a host from 0.33: [docs/migrations/0.34.md](../../migrations/0.34.md).
 
 ## Acceptance done on 2026-11-12
@@ -53,6 +72,13 @@ Updating a deck or a host from 0.33: [docs/migrations/0.34.md](../../migrations/
    67 features), exported, opened in PowerPoint 16.0.20527 on Windows, probed, round-tripped and compared slide by slide with
    OPF's preview; then targeted runs for live SmartArt (SH-21) and for digits.
 4. **Goldens.** Regenerated only by `golden.yml` on the branch; every moved hash was reviewed.
+
+5. **Keynote and PowerPoint for Mac.** The Mac session ("OPF v0.34.0 Mac review") opened the corpus on the Mac mini; its four
+   fixes are folded in (issues #1278, #1298, #1299, #1314 hold what remains).
+6. **PowerPoint runs for each 2026-11-13 addition.** Each patch-checklist item, the title placeholders (four probe decks of line
+   placement in up to 40 faces, then 12 decks with 161 slides), the theme font references (160 of 161 slides identical, then the
+   theme fonts switched through the object model) and the display-growth slides were opened and measured in PowerPoint before
+   they were merged. The measurements are in the RR-105 progress log (`docs/programs/release-readiness/burndown.md`).
 
 Results and the remaining gaps are in the pull request body and in the RR-105 progress log.
 
@@ -85,10 +111,38 @@ Results and the remaining gaps are in the pull request body and in the RR-105 pr
 - **Digits:** see the LH-106 progress log for the rules (which numbers follow the language, which stay Latin because PowerPoint
   draws them, and the separators used with Arabic-Indic digits).
 
+Decisions of 2026-11-13 (all vetoable):
+
+- **No title moves from where 0.33.0 put it.** A plain one-line title is written exactly as in 0.33.0. PowerPoint lifts a
+  title's first line by 1 to 4 px for any line spacing other than exactly 100%, and the face of the end-of-paragraph mark moves it
+  by up to 3 px, so wrapped titles are written as one paragraph per line at 100% with space before, and titles that 0.33.0 wrote
+  as text boxes end each paragraph in the body face. One baseline model for all titles is issue #1317.
+- **PowerPoint wraps a title itself only where that was measured.** Left-to-right Latin, Greek and Cyrillic titles in the faces
+  measured in their own font; every other title keeps the preview's lines as fixed paragraphs in the one placeholder.
+- **Two-line display titles keep LH-189's tight pitch** through a later paragraph under 100% with a measured correction per face.
+  Bookman Old Style draws line 2 1.25 px high; the other five measured faces are within 0.75 px.
+- **Document properties.** Company is the deck's primary organization or is omitted (never the author or "OPF");
+  `dc:language` is written but not read back; generated descriptions are plain English and are not imported as authored `alt`.
+- **Layout names** are "Blank", "Title Only", "Title and Text" and the layout record's own name, numbered for variants; the
+  identity is in the layout's OPF tag.
+- **A theme font change made in PowerPoint imports as `design.fontScheme`** (the catalog id is kept when the fonts match).
+- **Display text tracks only where the deck's own faces draw it:** not in scripts without case, not with a run in a face of its
+  own (symbol fonts, inline code, a named family). A two-character last line never stands alone (`stubLine`); balancing display
+  text in scripts without word spaces is issue #1315.
+- **Identity pins under `scripts/native-acceptance` moved with the export** where the consumed content is provably unchanged,
+  each with a dated comment and the previous value. Pins that encode a PowerPoint observation were not touched.
+- **The reference series-name measurement is to be taken again (owner's choice, 2026-11-13).** The sealed archive was taken on an
+  older export; three `reference-name-snapshot` tests compare it with the current export and fail until a new archive is sealed
+  on the final export. The sealed worker `packages/pptx/test/native-furniture-control.ps1` admits only the old input by hash
+  and looks for the old helper names; changing it needs the owner's word, asked on 2026-11-13. The tool and the runbook for the
+  new measurement are on the local branch `claude/rr-034-remeasure`.
+
 ## Known gaps carried into 0.34.0 (not regressions)
 
-- PowerPoint draws text 2 to 6 px higher than the preview, growing with the font size (84 pt titles: 4 to 5 px). It is smaller
-  than in the accepted 0.33.0 pass; an exact first-baseline model is future work.
+- PowerPoint draws Aptos text about 0.06 em higher than the preview at every size: 2 to 6 px on body text and titles, 12 to 15 px
+  on a figure at the 252 px ceiling of LH-188 (issue #1309 has the measurements). The preview draws a substitute for Aptos; an
+  exact first-baseline model is future work.
+- A period before a closing quotation mark is kerned in the preview and not in PowerPoint (16 px at 54 px).
 - PowerPoint lays out a chart's inner plot area itself: gridlines and axis titles can sit 5 to 15 px from the preview's.
 - Aptos Display draws in a substitute face in PowerPoint at very large sizes (174 pt; fine at 120 pt and below).
 - Roboto SemiBold is not among Office's cloud fonts: timeline labels draw regular in PowerPoint.
@@ -106,13 +160,18 @@ Results and the remaining gaps are in the pull request body and in the RR-105 pr
 | D2 as a diagram language | issue #1273 | Owner decision; recommended against |
 | Promoting LibreOffice from "experimental" | issue #1272 | Owner decision after 0.34 |
 | Loading viewer parts on demand, or compressing the viewer | RR-111 log | Needs a test in a real Claude host first |
-| Keynote and PowerPoint for Mac review of 0.34 | [mac-review-brief.md](mac-review-brief.md) | Runs on the Mac mini after the release |
+| What Keynote cannot draw, and an opt-in Keynote route | issues #1278, #1298, #1299, #1314 | Found by the Mac review ([mac-review-brief.md](mac-review-brief.md)); four fixes are in 0.34.0 |
+| Native body text by default | issue #1292 | Two to four weeks of work; starts after 0.34.0 |
+| Selection Pane names, a real slide master, embedded fonts, chart labels as native labels | issues #1290 (item 6), #1294, #1295, #1296 | The rest of the ribbon audit |
+| Layout, chart, icon, digit and import follow-ups | issues #1279 to #1289 and #1300 to #1317 | Everything found during the assembly and not built |
 
 ## Owner-only steps
 
 - In Claude: Settings, Connectors, Add custom connector, `https://www.openpresentation.org/mcp`; then uninstall the local OPF
   `.mcpb` extension; then run the MCP Apps checklist in the RR-111 log in a real Claude host.
-- Decide the SmartArt strategy, LibreOffice promotion and D2.
+- Decide the SmartArt strategy (issue #1310), LibreOffice promotion (#1272), D2 (#1273), an authored background on message
+  slides (#1300) and the opt-in Keynote route (#1298).
+- Answer whether the sealed native-acceptance worker may be changed for the reference-name measurement (see the decisions).
 - Any DNS change or login. (On 2026-11-12 the owner allowed the supervising session to merge and deploy the sites when the
   change is verified; that permission was for that session.)
 - Decide whether to delete the evidence-only branches and the previous agent's folders under `C:\opf-work`.
