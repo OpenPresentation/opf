@@ -63,8 +63,30 @@ function resolveBase(ref) {
   return null;
 }
 
+/**
+ * In a blob-less checkout (CI checks out with `filter: blob:none`) `git cat-file` downloads each blob it is asked about in a round
+ * trip of its own. One fetch of the base blobs this check reads replaces them. Found 2026-11-13: with the 14,467 evidence files
+ * RR-20 deleted, the check downloaded them one by one until the job's 20-minute limit.
+ */
+function prefetchBaseBlobs(base, files) {
+  if (tryGit(['config', '--get', 'remote.origin.promisor']) !== 'true') return;
+  const wanted = new Set(files), ids = [];
+  for (const line of git(['ls-tree', '-r', base, '--', 'docs', 'packages']).split('\n')) {
+    const [meta, file] = line.split('\t');
+    if (file && wanted.has(file)) ids.push(meta.split(' ')[2]);
+  }
+  if (!ids.length) return;
+  try {
+    const present = execFileSync('git', ['cat-file', '--batch-check=%(objectname) %(objecttype)'], { cwd: root, input: `${ids.join('\n')}\n`, encoding: 'utf8', maxBuffer: 1 << 28, stdio: ['pipe', 'pipe', 'ignore'], env: { ...process.env, GIT_NO_LAZY_FETCH: '1' } });
+    const missing = present.split('\n').filter((line) => line.endsWith(' missing')).map((line) => line.split(' ')[0]);
+    // The fetch git itself runs for a missing object of a promisor remote, with every object in one request.
+    if (missing.length) git(['-c', 'fetch.negotiationAlgorithm=noop', 'fetch', 'origin', '--no-tags', '--no-write-fetch-head', '--recurse-submodules=no', '--filter=blob:none', '--stdin'], `${missing.join('\n')}\n`);
+  } catch { /* cat-file below still fetches what it needs, one object at a time */ }
+}
+
 function baseSizes(base, files) {
   if (!files.length) return new Map();
+  prefetchBaseBlobs(base, files);
   const lines = git(['cat-file', '--batch-check=%(objecttype) %(objectsize)'], files.map((file) => `${base}:${file}`).join('\n') + '\n').split('\n');
   return new Map(files.map((file, index) => {
     const [type, size] = (lines[index] ?? '').split(' ');
@@ -77,8 +99,11 @@ export function collect(base) {
     ...split(git(['diff', '--name-only', '--no-renames', '-z', base])),
     ...split(git(['ls-files', '--others', '--exclude-standard', '-z'])),
   ])].filter(docsTree).sort();
-  const before = baseSizes(base, changed);
-  const fresh = changed.filter((file) => before.get(file) === null && existsSync(path.join(root, file)));
+  // Only a file that still exists is measured against the base: a deleted file never counts (evaluate skips it), and asking git
+  // for its base size would download its blob in a blob-less checkout.
+  const existing = changed.filter((file) => existsSync(path.join(root, file)));
+  const before = baseSizes(base, existing);
+  const fresh = existing.filter((file) => before.get(file) === null);
   const baseBlobs = new Set();
   if (fresh.length) {
     for (const line of git(['ls-tree', '-r', base, '--', 'docs', 'packages']).split('\n')) {
