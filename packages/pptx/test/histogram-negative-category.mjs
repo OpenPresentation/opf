@@ -83,7 +83,9 @@ for (const mode of [undefined, 'auto', 'native']) {
   test((mode ?? 'default') + ': nonnegative category values retain native aggregation', async () => {
     const positive = {columns: data.columns, rows: data.rows.map(([label, value]) => [label, Math.max(0, value)])};
     const {bytes, parts, diagnostics} = await exported(mode, positive);
-    assert.deepEqual(chartParts(parts), ['ppt/charts/chart1.xml', 'ppt/charts/chartEx1.xml']);
+    // RR-105: the native chart's mc:Fallback is a picture of the preview; no classic chart part is written.
+    assert.deepEqual(chartParts(parts), ['ppt/charts/chartEx1.xml']);
+    assert.match(xml(parts, 'ppt/slides/slide1.xml'), /<mc:Fallback><p:pic>[\s\S]*<asvg:svgBlip\b/);
     const chart = xml(parts, 'ppt/charts/chartEx1.xml');
     assert.match(chart, /<cx:aggregation\/>/);
     assert.doesNotMatch(chart, /<cx:binning/);

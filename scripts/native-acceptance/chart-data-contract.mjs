@@ -41,7 +41,12 @@ export function assertClassicChartData(parts,number,data,{parser,fflate},id){
     assert.deepEqual(cache(entry['c:val'],'number',data.rows.length,id),data.rows.map(row=>String(row[index+1])),id+': values');
   }
   const external=parse(file)['c:chartSpace']['c:externalData'];
-  const nested=fflate.unzipSync(parts[workbookPath(parts,file,external,{parser,fflate},id)]);
+  assertWorkbookValues(parts,workbookPath(parts,file,external,{parser,fflate},id),data,{parser,fflate},id);
+}
+
+// Every cell of an embedded workbook, in order: the header row, then the data rows.
+function assertWorkbookValues(parts,workbook,data,{parser,fflate},id){
+  const nested=fflate.unzipSync(parts[workbook]);
   const strings=list(parser.parse(fflate.strFromU8(nested['xl/sharedStrings.xml'])).sst.si).map(si=>String(text(si.t)??''));
   const sheet=parser.parse(fflate.strFromU8(nested['xl/worksheets/sheet1.xml'])).worksheet;
   const rows=list(sheet.sheetData.row).map((row,rowIndex)=>{
@@ -119,6 +124,19 @@ export function assertSignedParetoComboData(parts,number,data,{parser,fflate},id
   assert.deepEqual(rows,[data.columns,...data.rows],id+': complete sorted/derived workbook');
 }
 
+/** RR-105: a native (chartex) chart on slide `number` whose mc:Fallback is the preview's picture: no classic chart on that slide, and its chartEx part's workbook holds every value. */
+export function assertNativePictureFallback(parts,number,data,{parser,fflate},id){
+  const slide='ppt/slides/slide'+number+'.xml',rels=fflate.strFromU8(parts['ppt/slides/_rels/slide'+number+'.xml.rels']);
+  assert.doesNotMatch(rels,/\/relationships\/chart"/,id+': no classic chart relationship on the slide');
+  const fallbacks=[...fflate.strFromU8(parts[slide]).matchAll(/<mc:Fallback>([\s\S]*?)<\/mc:Fallback>/g)].map(match=>match[1]);
+  assert.equal(fallbacks.length,1,id+': one mc:Fallback');
+  assert.match(fallbacks[0],/^<p:pic>[\s\S]*<asvg:svgBlip\b[\s\S]*<\/p:pic>$/,id+': the fallback is the preview picture');
+  const target=/Type="http:\/\/schemas\.microsoft\.com\/office\/2014\/relationships\/chartEx" Target="\.\.\/charts\/(chartEx\d+\.xml)"/.exec(rels)?.[1];
+  assert.ok(target,id+': the slide relates its chartEx part');
+  const file='ppt/charts/'+target,space=parser.parse(fflate.strFromU8(parts[file]))['cx:chartSpace'];
+  assertWorkbookValues(parts,workbookPath(parts,file,space['cx:chartData']['cx:externalData'],{parser,fflate},id),data,{parser,fflate},id);
+}
+
 export function assertNativeBoxData(parts,data,{parser,fflate},id){
   const files=Object.keys(parts).filter(file=>/^ppt\/charts\/chartEx\d+\.xml$/.test(file));
   assert.equal(files.length,1,id+': one native box chart');
@@ -126,8 +144,14 @@ export function assertNativeBoxData(parts,data,{parser,fflate},id){
   const external=space['cx:chartData']['cx:externalData'];
   assert.equal(external['cx:autoUpdate'],'0',id+': explicit native workbook update policy');
   const nativeWorkbook=workbookPath(parts,files[0],external,{parser,fflate},id);
-  const classicFile='ppt/charts/chart1.xml',classic=parser.parse(fflate.strFromU8(parts[classicFile]))['c:chartSpace'];
-  assert.equal(nativeWorkbook,workbookPath(parts,classicFile,classic['c:externalData'],{parser,fflate},id),id+': native/classic same workbook');
+  // RR-105: the mc:Fallback is a picture of the preview and no classic chart part is written; the native chart's workbook is the one
+  // embedded workbook, the classic chart's had there been one, with every value. (Before RR-105 the classic fallback chart related the same workbook.)
+  assert.equal(Object.keys(parts).filter(file=>/^ppt\/charts\/chart\d+\.xml$/.test(file)).length,0,id+': no classic fallback chart part');
+  const fallbacks=Object.entries(parts).filter(([file])=>/^ppt\/slides\/slide\d+\.xml$/.test(file)).flatMap(([,bytes])=>[...fflate.strFromU8(bytes).matchAll(/<mc:Fallback>([\s\S]*?)<\/mc:Fallback>/g)].map(match=>match[1]));
+  assert.equal(fallbacks.length,1,id+': one mc:Fallback');
+  assert.match(fallbacks[0],/^<p:pic>[\s\S]*<asvg:svgBlip\b[\s\S]*<\/p:pic>$/,id+': the fallback is the preview picture');
+  assert.deepEqual(Object.keys(parts).filter(file=>/^ppt\/embeddings\/[^/]+\.xlsx$/.test(file)),[nativeWorkbook],id+': native workbook is the only embedded workbook');
+  assertWorkbookValues(parts,nativeWorkbook,data,{parser,fflate},id);
   const series=list(space['cx:chart']['cx:plotArea']['cx:plotAreaRegion']['cx:series']);
   const values=list(space['cx:chartData']['cx:data']);
   assert.equal(series.length,data.columns.length-1,id+': every native box series');

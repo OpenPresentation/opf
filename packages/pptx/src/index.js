@@ -17,7 +17,8 @@ import {applyChartNumberFormats,chartNumber,groupsThousands,excelCode,formattedC
 import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord,tableCellEvidence,tableEnvironmentEvidence} from './data-provenance.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,comboFromNative,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {paretoPlan} from '@openpresentation/opf/composition';
-import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
+import {attachChartexFallbacks,attachChartexParts,chartexFallbackName,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
+import {chartRegionSvg} from './preview-region.js';
 import {applyDoughnutRings,applyRingLabels,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
 import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
@@ -1451,8 +1452,9 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index], chartReport(`charts.${index}`), dataContext(index));
     if (item) items.push({...item, sources: [`frame:${index}`]});
   }
-  // A chartex chart is an mc:AlternateContent: the choice frame references the cx:chartSpace part; the fallback is a classic chart frame
-  // (this exporter) or a text shape (PowerPoint). The choice is read first and the fallback only when it names no OPF chart type.
+  // A chartex chart is an mc:AlternateContent: the choice frame references the cx:chartSpace part; the fallback is a picture of OPF's
+  // preview (this exporter, RR-105), a classic chart frame (this exporter without that picture, and earlier versions) or a text shape
+  // (PowerPoint). The choice is read first and a fallback frame only when the choice names no OPF chart type; a fallback picture is never read.
   for (const [alternateIndex, alternate] of asArray(tree?.["mc:AlternateContent"]).entries()) {
     const choice = asArray(alternate?.["mc:Choice"]).map((node) => node?.["p:graphicFrame"]).find(Boolean);
     // SH-16: a SmartArt frame wrapped with its fallback picture is read from the mc:Choice, as an unwrapped frame (SH-09).
@@ -2811,6 +2813,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     records: context.smartArt, tags: context.arrangementTags, smartArtTags: context.smartArtTags, provenance: context.provenanceMode, report: options.onDiagnostic, fontOf: nativeFontOptions,
     fallback: (arrangement, picture) => smartArtFallback(slide, arrangement, picture, () => (preview ??= smartArtSlideSvg(presentation, slideIndex + 1, options)), context, options)});
   const arranged = new Set((geometry.arrangements ?? []).map(arrangement => arrangement.path));
+  // RR-105: the chartex charts this slide adds get their fallback pictures once the slide is drawn (below).
+  const chartexBefore = context.chartex.size;
   // LH-130: core's accent rule above the title, in the tag's color (src/title-rule.js).
   addTitleRule(slide, geometry.titleRule, tagColor(slideContext), context.titleRuleTags);
   for (const [itemIndex, item] of geometry.items.entries()) {
@@ -2981,6 +2985,10 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   await addFurniture(slide,presentation,authoredSlide,geometry.furniture,slideContext,options,slideIndex);
   // SH-04: the slide's overlay (core geometry.overlayShapes) over everything else, in array order, as the preview draws it.
   addOverlayShapes(slide, geometry, slideIndex, slideContext, context, 'front');
+  // RR-105: each chartex chart's fallback picture, cut from this slide's preview (drawn once, shared with the SmartArt fallbacks). It is
+  // added after every other object, so no other object's id moves; attachChartexParts puts it in the chart's mc:Fallback.
+  for (const [name, chart] of [...context.chartex].slice(chartexBefore))
+    await chartexFallback(slide, name, chart, () => (preview ??= smartArtSlideSvg(presentation, slideIndex + 1, options)), context, options);
 
   if (opfSlide.notes) {
     const notes = String(opfSlide.notes);
@@ -3574,6 +3582,32 @@ async function smartArtFallback(slide, arrangement, {name, alt}, preview, contex
   };
 }
 
+// RR-105: the fallback picture of a chartex chart, for every app that cannot draw extended charts (Keynote and older
+// PowerPoint read the mc:Fallback): OPF's preview of the chart (chartRegionSvg of the slide's preview, cropped to the chart's frame)
+// as an SVG picture over its PNG raster, the SmartArt fallback's path (resolveSvgImage, 192 dpi of the frame). The picture is added
+// under its own name; attachChartexParts moves it into the frame's mc:Fallback in place of the classic chart, and attachChartexFallbacks
+// gives it the frame's name and alt text (it keeps its own id, as the classic fallback frame did). When it cannot be drawn (no opf-render or rasterizer) the classic chart stays the
+// fallback and chartex-fallback-picture-unavailable says why.
+async function chartexFallback(slide, name, chart, preview, context, options) {
+  const {frame, path} = chart;
+  let svg;
+  const problems = [], unavailable = reason => {
+    options.onDiagnostic?.({code: 'chartex-fallback-picture-unavailable', path, reason, message: `The chart's fallback for apps without extended charts is the clustered column chart of its data, not a picture of its preview: ${reason}.`});
+  };
+  try {
+    svg = chartRegionSvg(await preview(), path, {x: frame.x * 96, y: frame.y * 96, width: frame.w * 96, height: frame.h * 96});
+  } catch (error) {
+    return unavailable(errorMessage(error));
+  }
+  const outcome = {box: frame};
+  const resolved = await resolveSvgImage(encodeText(svg), {...options, strictAssets: false, onDiagnostic: entry => problems.push(entry)}, path, outcome);
+  if (!resolved) return unavailable(problems.find(entry => entry.code === 'unresolved-asset')?.message.replace(/ The image exports as the unavailable-image placeholder.$/, '') ?? 'its SVG could not be drawn');
+  const pictureName = chartexFallbackName(name);
+  context.svgPictures.set(pictureName, outcome.svg);
+  chart.fallback = pictureName;
+  slide.addImage({...resolved, objectName: pictureName, x: frame.x, y: frame.y, w: frame.w, h: frame.h, altText: ''});
+}
+
 // SH-07: a diagram as one group of native shapes (src/diagram-shapes.js), built from the drawing the preview shows (paintDiagram in the
 // slide's palette, pele's classes kept). Only a family in core's DIAGRAM_SHAPE_FAMILIES (each passed its comparison of PowerPoint's drawing
 // with the preview) is written so, and only when every part of its drawing has a native form; otherwise the diagram stays the picture
@@ -3937,16 +3971,18 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
       code: 'export-lossy', feature: 'funnel-label-color', path,
       message: 'PowerPoint chooses its own contrast color for native funnel value labels and can ignore the written label color (white where the preview uses black). The funnel remains an editable native chart; XML label colors do not establish physical color parity.',
     });
-    // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
+    // The native chartex part is added when the package is normalized (attachChartexParts). RR-105: its mc:Fallback is a picture of
+    // OPF's preview of the chart (chartexFallback), and the classic chart below is dropped then, its embedded workbook kept for the
+    // chartex part; only when that picture cannot be drawn does the classic chart stay as the fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.
     const series = chartData.series.map((entry) => ({name: entry.name, labels: [...entry.labels], values: [...entry.values]}));
     // LH-107: core's waterfall roles, signed labels, dropped value axis and caption (src/chartex.js), in the role colors the preview draws.
     const waterfall = chartLayout?.layer?.waterfall;
     const waterfallInfo = waterfall ? {...waterfall, connector: axisLineColor, caption: chartLayout.layer.header?.caption?.text, colors: waterfall.colors
       ? Object.fromEntries(Object.entries(chartWaterfallColors(panelFill, `#${strongPalette[0]}`, `#${markLabelColor}`, context.colorScheme?.dark2, {labeled: waterfall.labels})).map(([role, color]) => [role, normalizeHex(color)])) : undefined} : undefined;
-    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(histogram ? {histogram} : {}), ...(chartLayout?.layer?.numericAxes ? {numericAxes: chartLayout.layer.numericAxes} : {}), ...(numberFormats ? {formats: numberFormats.series, groups: numberFormats.groups} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
+    context.chartex.set(objectName, {path, frame: region, spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(histogram ? {histogram} : {}), ...(chartLayout?.layer?.numericAxes ? {numericAxes: chartLayout.layer.numericAxes} : {}), ...(numberFormats ? {formats: numberFormats.series, groups: numberFormats.groups} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
     if (chartData.chartex.layoutId === 'regionMap') {
-      options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
+      options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. Readers without chartex support show its fallback, a picture of OPF's preview of the chart.`});
     }
   }
   const percent = chartData.spec.grouping === 'percentStacked';
@@ -5197,8 +5233,8 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   const rejected = resolvedData.diagnostics.filter((entry) => entry.code === 'chart-value-not-numeric');
   const {id: resolvedType, spec: resolved} = resolveChartType(plan.fallback ? plan.type : chart.type);
   // A chartex type (treemap, histogram, pareto, box & whisker, waterfall, funnel, map) has no classic construct. Natively
-  // it is written as its cx:chartSpace part and the clustered column chart of the same data is its mc:Fallback
-  // (src/chartex.js). 'auto' (the default) does that for the constructs the native PowerPoint check confirmed and keeps
+  // it is written as its cx:chartSpace part over the workbook of the clustered column chart of the same data, with a picture of the
+  // preview as its mc:Fallback (src/chartex.js, RR-105; the clustered column chart when the picture cannot be drawn). 'auto' (the default) does that for the constructs the native PowerPoint check confirmed and keeps
   // the unconfirmed map on the clustered column chart alone; 'fallback' keeps every chartex id there. The fallback is
   // reported as chartex-fallback, never silent. LH-175: a Pareto chart of several series is core's pareto-as-columns fallback (a
   // clustered column chart of every series, as the preview draws it), so it reaches here as a column chart in every mode.
@@ -5782,9 +5818,10 @@ async function normalizePptxZip(raw, context) {
     if (next !== xml) entries[part] = encodeText(next);
   }
   if (context.frameAlts.size) for (const [part, bytes] of Object.entries(entries)) if (/^ppt\/slides\/slide\d+\.xml$/.test(part)) { const xml = decodeText(bytes), next = applyFrameAlt(xml, context.frameAlts); if (next !== xml) entries[part] = encodeText(next); }
-  // Chartex charts: the native cx:chartSpace part, its style parts and the mc:AlternateContent frame (the classic chart above is the fallback).
+  // Chartex charts: the native cx:chartSpace part, its style parts and the mc:AlternateContent frame. RR-105: the mc:Fallback is the chart's
+  // fallback picture and the classic chart above is removed (its workbook stays, the chartex part's); without a picture the classic chart is the fallback.
   try {
-    attachChartexParts(entries, context.chartex, parseRelationships);
+    context.removedChartParts = attachChartexParts(entries, context.chartex, parseRelationships);
   } catch (error) {
     throw new OPFPptxError('packaging-failed', `Chartex chart parts could not be attached: ${errorMessage(error)}`);
   }
@@ -5822,6 +5859,12 @@ async function normalizePptxZip(raw, context) {
     attachSmartArtFallbacks(entries, context.smartArt, parseRelationships);
   } catch (error) {
     throw new OPFPptxError("packaging-failed", `SmartArt fallback pictures could not be attached: ${errorMessage(error)}`);
+  }
+  // RR-105: each chartex fallback picture takes its frame's name, alt text and transform (and keeps its own id).
+  try {
+    attachChartexFallbacks(entries, context.chartex);
+  } catch (error) {
+    throw new OPFPptxError("packaging-failed", `Chartex fallback pictures could not be attached: ${errorMessage(error)}`);
   }
   // Diagram pictures and placeholders carry OPF_DIAGRAM_V1 in full provenance (src/diagram-provenance.js): the picture's manifest
   // binds its geometry, blip fill and SVG part, so an edited or replaced picture imports as an ordinary picture.
@@ -5897,7 +5940,8 @@ async function normalizePptxZip(raw, context) {
   // LH-106: a chart on a slide whose language has digits of its own draws them (numeral-shape prefixes, src/numeral-shapes.js).
   applyNumeralShapes(entries, context.partSlides, index => context.scriptFonts?.slides?.[index]?.bcp47 ?? context.scriptFonts?.deck?.bcp47);
   const output = {};
-  const renameMaps = buildRenameMaps(Object.keys(entries));
+  // RR-105: a classic chart removed for its chartex fallback picture keeps its number, so no other chart part is renamed by it.
+  const renameMaps = buildRenameMaps([...Object.keys(entries), ...(context.removedChartParts ?? [])]);
   // The host may transform assets or supply a filename/MIME hint that no
   // longer matches its bytes. Native package metadata must describe the bytes.
   renameMaps.media = new Map();

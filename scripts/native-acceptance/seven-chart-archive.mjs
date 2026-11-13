@@ -381,7 +381,8 @@ function inspectArchive(input, deps, archiveContext, histogramLiteral) {
     let alternateCount = 0;
     function shape(node, branch) {
       const kind = tag(node);
-      assert.ok(['p:sp', 'p:graphicFrame'].includes(kind), 'Unsupported seven drawable');
+      // RR-105: a chartex chart's mc:Fallback is a picture of OPF's preview of the chart, not a classic chart frame.
+      assert.ok(['p:sp', 'p:graphicFrame'].includes(kind) || (kind === 'p:pic' && branch === 'fallback'), 'Unsupported seven drawable');
       const children = node[kind],
         nv = children.find((n) => /^p:nv.+Pr$/u.test(tag(n) ?? '')),
         named = child(nv?.[tag(nv)], 'p:cNvPr'),
@@ -404,7 +405,13 @@ function inspectArchive(input, deps, archiveContext, histogramLiteral) {
       };
       assert.ok(Object.values(geometry).every(Number.isFinite), 'Invalid source geometry');
       const record = { id: Number(identity.id), name: identity.name, branch, geometry };
-      if (kind === 'p:sp') {
+      if (kind === 'p:pic') {
+        const blip = child(child(children, 'p:blipFill')?.['p:blipFill'], 'a:blip'),
+          image = rels(attrs(blip)['r:embed']);
+        assert.ok(image.Type.endsWith('/image') && /\.png$/u.test(image.target), 'Fallback picture needs its PNG raster');
+        record.kind = 'picture';
+        record.picturePart = image.target;
+      } else if (kind === 'p:sp') {
         assert.equal(branch, 'direct', 'Title cannot be alternate content');
         const paragraphs = all(child(children, 'p:txBody')?.['p:txBody'], 'a:p');
         record.kind = 'title';
@@ -459,10 +466,12 @@ function inspectArchive(input, deps, archiveContext, histogramLiteral) {
       'Duplicate source nonvisual IDs',
     );
     const titles = shapes.filter((s) => s.kind === 'title'),
-      charts = shapes.filter((s) => s.kind === 'chart');
+      charts = shapes.filter((s) => s.kind === 'chart'),
+      pictures = shapes.filter((s) => s.kind === 'picture');
     assert.equal(titles.length, 1, 'One title required');
-    assert.equal(charts.length, alternateCount ? 2 : 1, 'One logical chart required');
-    assert.equal(new Set(charts.map((c) => c.name)).size, 1, 'Alternate chart identities differ');
+    assert.equal(charts.length + pictures.length, alternateCount ? 2 : 1, 'One logical chart required');
+    assert.ok(charts.length >= 1, 'One logical chart required');
+    assert.equal(new Set([...charts, ...pictures].map((c) => c.name)).size, 1, 'Alternate chart identities differ');
     assert.notEqual(titles[0].name, charts[0].name);
     rawShapes += shapes.length;
     return { index: index + 1, part: file, shapes, logicalShapes: 2 };

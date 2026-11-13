@@ -68,8 +68,9 @@ The exporter's table is `packages/pptx/src/chart-types.js`; it maps each id to
 its construct and is checked against the catalog by
 `packages/pptx/test/chart-types.mjs` and `packages/pptx/test/chartex.mjs`.
 Chartex constructs (`treemap`, `histogram`, `pareto`, `box-and-whisker`,
-`waterfall`, `funnel`, `world`) are written with a classic clustered-column
-fallback for readers without chartex support. `world` is written natively only
+`waterfall`, `funnel`, `world`) are written with a picture of OPF's preview of
+the chart as the fallback for readers without chartex support (RR-105; the
+classic clustered-column chart when the picture cannot be drawn). `world` is written natively only
 with `chartex: 'native'` (see the comment in `chart-types.js`).
 
 ## Chart types OPF does not offer

@@ -40,7 +40,9 @@ test('current producer classifies two known classic adaptations and admits ONLY 
  assert.throws(()=>bindCurrentTreemap(f.input,changed,selection),/reviewed exact all-seven/);
 });
 test('real public original/saved imports and complete raw signature permit only one coherent treemap value',async()=>{
- const f=await fixture(),result=compareCurrentTreemapEdit(f);assert.equal(result.nativeAcceptance,false);assert.equal(result.nativeMapQualified,false);assert.equal(result.rawOoxmlStyleFidelity,'strict-current-raw-signature-match');assert.equal(result.raw.maskedValueLeaves,3);
+ const f=await fixture(),result=compareCurrentTreemapEdit(f);assert.equal(result.nativeAcceptance,false);assert.equal(result.nativeMapQualified,false);assert.equal(result.rawOoxmlStyleFidelity,'strict-current-raw-signature-match');
+ // RR-105: the treemap value is the chartEx cache point and the workbook cell; its mc:Fallback is a picture, no third classic cache point.
+ assert.equal(result.raw.maskedValueLeaves,2);
 });
 test('unknown chart attributes, current theme style and external resource links refuse raw preservation',async()=>{
  const f=await fixture();
@@ -62,7 +64,7 @@ test('public unknown extensions retain all whitespace and xml:space content in r
   const original=deps.unzipSync(f.input),saved=deps.unzipSync(f.saved);
   for(const parts of [original,saved])change(parts,f.action.chartPart,text=>once(text,'</cx:chartSpace>',extension+'</cx:chartSpace>'));
   const input=zip(original),coherent=zip(saved),action=bindCurrentTreemap(input,f.source,selection).action;
-  assert.equal(assertSevenValueRawPreservation({input,saved:coherent,action,deps,archiveContext:f.archiveContext}).maskedValueLeaves,3);
+  assert.equal(assertSevenValueRawPreservation({input,saved:coherent,action,deps,archiveContext:f.archiveContext}).maskedValueLeaves,2);
   const before=await fromPptx(input),after=await fromPptx(coherent);assert.equal(before.slides[0].chart.data.rows[0][1],42);assert.equal(after.slides[0].chart.data.rows[0][1],43);
   for(const changedPayload of [payload.replace('>  <audit:child/> \t<','>\n<audit:child/>\t<'),...(preserve?[payload.replace('xml:space="preserve"','xml:space="default"')]:[])]){
    const mutant=deps.unzipSync(coherent);change(mutant,f.action.chartPart,text=>once(text,payload,changedPayload));const bytes=zip(mutant);

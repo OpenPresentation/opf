@@ -44,6 +44,7 @@ import {attachTextTags, decodeTextTag} from './code-provenance.js';
 import {mediaKey} from './media-dedupe.js';
 import {safeMeasurement} from './safe-typefaces.js';
 import {svgBlipRelationship} from './svg-image.js';
+import {previewRegionSvg, svgAttribute} from './preview-region.js';
 
 export const SMART_ART_TAG = 'OPF_SMARTART_V1', ARRANGEMENT_TAG = 'OPF_ARRANGEMENT_V1';
 export const SMART_ART_URI = 'http://schemas.openxmlformats.org/drawingml/2006/diagram';
@@ -65,11 +66,6 @@ export function smartArtOutline(kind, values) {
     : `${kind === 'chevrons' ? 'Chevrons' : kind === 'flow' ? 'Flow' : 'Vertical flow'} of ${count} ${kind === 'chevrons' ? 'stage' : 'step'}${count === 1 ? '' : 's'}, ${kind === 'vertical-flow' ? 'top to bottom' : 'in order'}`;
   return [`${head}:`, ...texts.map((text,index)=>['org-chart','hierarchy'].includes(kind)?'  '.repeat(Number(values[index]?.level??0))+text:text)].join('\n');
 }
-
-// A tag of the renderer's SVG (quoted attribute values may hold `>`), a comment, CDATA or a processing instruction.
-const SVG_TAG = /<(\/?)([A-Za-z][\w:.-]*)((?:\s+[^\s=/>]+(?:\s*=\s*(?:"[^"]*"|'[^']*'))?)*)\s*(\/?)>|<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<\?[\s\S]*?\?>/g;
-const svgAttribute = (attributes, name) => new RegExp(`\\s${name}\\s*=\\s*"([^"]*)"`).exec(attributes)?.[1];
-const svgNumber = value => String(Number(value.toFixed(4)));
 
 // The miter limit opf-render strokes the arrangement's nodes with (stroke-miterlimit) and the antialiasing margin of the fallback picture.
 const MITER_LIMIT = 8, ANTIALIAS = 1;
@@ -118,37 +114,18 @@ export function smartArtBleed(arrangement) {
  * the drawing.
  */
 export function smartArtRegionSvg(svg, arrangement, bleed = 0) {
-  const {path, frame} = arrangement, stack = [], found = [];
-  let root;
-  for (const match of svg.matchAll(SVG_TAG)) {
-    const [text, closing, name, attributes = '', selfClosing] = match;
-    if (!name) continue;
-    if (closing) {
-      const open = stack.pop();
-      if (open?.kind) found.push({kind: open.kind, start: open.start, text: open.ancestors.map(entry => entry.text).join('') + svg.slice(open.start, match.index + text.length) + open.ancestors.map(entry => `</${entry.name}>`).reverse().join('')});
-      continue;
-    }
-    if (root === undefined) { root = attributes; stack.push({name, text}); continue; }
-    const inside = stack.some(entry => entry.kind);
-    const kind = inside ? undefined : stack.length === 1 && (name === 'defs' || name === 'style') ? 'defs'
-      : name === 'g' && svgAttribute(attributes, 'data-opf-arrangement') !== undefined ? 'arrangement'
-        : name === 'g' && svgAttribute(attributes, 'data-opf-path') === path ? 'text' : undefined;
-    const entry = {name, text, kind, start: match.index, ancestors: kind ? stack.slice(1).map(({name, text}) => ({name, text})) : []};
-    if (!selfClosing) stack.push(entry);
-    else if (kind) found.push({kind, start: entry.start, text: entry.ancestors.map(item => item.text).join('') + text + entry.ancestors.map(item => `</${item.name}>`).reverse().join('')});
-  }
-  const drawing = found.find(entry => entry.kind === 'arrangement' && entry.text.includes(`data-opf-arrangement-path="${path}.`));
-  const entries = found.find(entry => entry.kind === 'text');
-  if (root === undefined || !drawing || !entries) throw new Error(`the preview draws no ${arrangement.kind} at ${path}`);
-  const strip = value => value.replace(/\sdata-opf-[\w-]+\s*=\s*"[^"]*"/g, '');
-  const body = strip([drawing, entries].sort((a, b) => a.start - b.start).map(entry => entry.text).join(''));
-  // The glyph outlines and other definitions the kept elements use; the slide's other glyphs are left out.
-  const used = new Set([...body.matchAll(/(?:href="#|url\(#)([^")]+)/g)].map(match => match[1]));
-  const definitions = strip(found.filter(entry => entry.kind === 'defs').sort((a, b) => a.start - b.start).map(entry => entry.text).join(''))
-    .replace(/<path id="(opf-g-[^"]+)"[^>]*\/>/g, (all, id) => used.has(id) ? all : '');
-  const namespaces = [...root.matchAll(/\s(xmlns(?::[\w.-]+)?)\s*=\s*"([^"]*)"/g)].filter(([, key]) => key !== 'xmlns').map(([, key, value]) => ` ${key}="${value}"`).join('');
-  const [x, y, width, height] = [frame.x - bleed, frame.y - bleed, frame.width + 2 * bleed, frame.height + 2 * bleed].map(svgNumber);
-  return `<svg xmlns="http://www.w3.org/2000/svg"${namespaces} width="${width}" height="${height}" viewBox="${x} ${y} ${width} ${height}">${definitions}${body}</svg>`;
+  const {path, frame} = arrangement;
+  return previewRegionSvg(svg, {
+    classify: (name, attributes) => name === 'g' && svgAttribute(attributes, 'data-opf-arrangement') !== undefined ? 'arrangement'
+      : name === 'g' && svgAttribute(attributes, 'data-opf-path') === path ? 'text' : undefined,
+    pick: found => {
+      const drawing = found.find(entry => entry.kind === 'arrangement' && entry.text.includes(`data-opf-arrangement-path="${path}.`));
+      const entries = found.find(entry => entry.kind === 'text');
+      return drawing && entries ? [drawing, entries] : undefined;
+    },
+    box: {x: frame.x - bleed, y: frame.y - bleed, width: frame.width + 2 * bleed, height: frame.height + 2 * bleed},
+    missing: `the preview draws no ${arrangement.kind} at ${path}`,
+  });
 }
 
 /**
