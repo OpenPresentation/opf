@@ -2607,6 +2607,8 @@ export const PORTRAIT_SIDE_FILL = .6;
  * narrowest text beside it, and the gap between a portrait and its text.
  */
 export const PORTRAIT_MIN = { topCard: 160, side: 72, text: 150 } as const, PORTRAIT_GAP = 16;
+/** RR-105: the diameter of a team's authored avatar, the small circle over the name, in reference pixels: at most `most`, and down to `least` before the team's text takes a smaller size (never wider than the card). */
+export const TEAM_AVATAR = { least: 56, most: 96 } as const;
 /** LH-132: a team's texts keep at least this size (reference px; Claude Design sets a name at 20) before a top portrait gives up its square. */
 export const PORTRAIT_TEXT_SIZE = 21;
 /**
@@ -7070,6 +7072,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // avatar beside its name, never a picture alone on a card that LH-74 lets fill it: the portraits are judged against the avatar (picturesShrink).
   const personPictures = new Set<string>();
   let portraitMode: Exclude<PortraitMode, 'avatar'> | undefined, portraitAuthored = false, portraitFallback = false;
+  // RR-105: a team whose author chose `avatar` draws each person's picture as the small circle over the name (placePerson, TEAM_AVATAR).
+  let teamAvatar = false;
   {
     const personOf = (node: Pending): { image: Pending; text: Pending } | undefined => {
       const kids = node.children, own = record(node.composition);
@@ -7092,6 +7096,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const automatic = count < 2 || !ruleOn('portraits') ? undefined : count <= PORTRAIT_TOP_MAX && cardInner(count) >= PORTRAIT_MIN.topCard * scale ? 'top' as const
         : count <= PORTRAIT_SIDE_MAX && sideFits(gridFlowShape(count, landscape).columns) ? 'side' as const : undefined;
       const mode = authored ?? automatic;
+      if (authored === 'avatar' && count > 1) {
+        teamAvatar = true;
+        portraitAuthored = true;
+        for (const [index, node] of pending.entries()) personParts.set(node.path, people[index]!);
+      }
       if (mode !== undefined && mode !== 'avatar') {
         portraitMode = mode;
         portraitAuthored = authored !== undefined;
@@ -7750,7 +7759,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const decided = spannedContainer;
     // LH-132: a team's portrait cards in the automatic grid: one row across the top (up to PORTRAIT_TOP_MAX), the grid flow otherwise.
     const team = !hasRegions && count === nodes.length && settings.columns === undefined && !settings.weights?.length && nodes.every(node => personParts.has(node.path));
-    if (team) cols = portraitMode === 'top' && count <= PORTRAIT_TOP_MAX ? count : gridFlowShape(count, area.width >= area.height).columns;
+    if (team) cols = (portraitMode === 'top' || teamAvatar) && count <= PORTRAIT_TOP_MAX ? count : gridFlowShape(count, area.width >= area.height).columns;
     spannedContainer = false;
     if (paragraphs) cols = paragraphs.shape.columns; else if (lead) cols = 2;
     if (recorded && !decided) decisions?.push({path:containerPath,mode:hasRegions?'regions':mode,
@@ -7992,6 +8001,34 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // one sets the text larger.
     // A side portrait takes PORTRAIT_SIDE_SHARE of the card, or less (down to PORTRAIT_SIDE_LEAST) where the wider column sets the team's text
     // larger: the share with the largest text, the widest of equals.
+    // RR-105: an authored avatar is the small circle over the name, at the card's start, with the team's text below it. The text comes first:
+    // the largest size at which the tallest text fits under the smallest avatar (TEAM_AVATAR.least); the avatar then takes the room left, up
+    // to TEAM_AVATAR.most (never wider than the card). The card holds both and sits in the middle of its cell.
+    if (teamAvatar) {
+      const least = Math.min(inner.width, TEAM_AVATAR.least * scale), textWidth = inner.width, key = `avatar:${round(textWidth)}:${round(inner.height)}`;
+      if (!teamText.has(key)) {
+        const team = [...personParts.values()].map(entry => entry.text), sizes: number[] = [];
+        for (let size = proseMeasure(person.text, textWidth).size; ; size = Math.max(floor, scaleStep(size - .01 * scale, floorPx))) { sizes.push(size); if (size <= floor + 1e-9) break; }
+        const needs = (text: Pending, size: number) => naturalHeight(text, textWidth, false, undefined, own, false, size) + 2 * rasterPadding + scale;
+        const size = sizes.find(size => Math.max(...team.map(text => needs(text, size))) <= inner.height - between - least + .01);
+        teamText.set(key, size === undefined ? undefined : { size, need: Math.max(...team.map(text => needs(text, size))) });
+      }
+      const text = teamText.get(key);
+      if (!text) return false;
+      const diameter = Math.max(least, Math.min(inner.width, TEAM_AVATAR.most * scale, inner.height - between - text.need));
+      const insetTop = inner.y - cell.y, insetBottom = cell.y + cell.height - inner.y - inner.height, height = Math.min(cell.height, diameter + between + text.need + insetTop + insetBottom);
+      const card = { ...cell, y: cell.y + (cell.height - height) / 2, height }, start = card.y + insetTop;
+      const picture = { x: rtl ? inner.x + inner.width - diameter : inner.x, y: start, width: diameter, height: diameter };
+      const host = record(person.image.host), first = items.length;
+      portraitHosts.set(person.image.path, { ...host, shape: host.shape ?? 'ellipse', fit: host.fit ?? 'cover', focus: host.focus ?? portraitFocus() });
+      if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
+      const wasTier = insideTier;
+      insideTier = true;
+      try { placeNode(person.image, roundBox(picture), own, false); placeNode(person.text, { x: inner.x, y: start + diameter + between, width: inner.width, height: text.need }, own, false, undefined, undefined, 'top'); }
+      finally { insideTier = wasTier; }
+      if (cards) for (const item of items.slice(first)) item.frameBox = card;
+      return true;
+    }
     const sideways = () => PORTRAIT_SIDE_SHARES.map(share => plan('side', share)).reduce<ReturnType<typeof plan>>((best, next) => next && (!best || next.text.size > best.text.size + 1e-9) ? next : best, undefined);
     const wanted = portraitMode === 'side' ? sideways() : plan(portraitMode!), beside = portraitMode === 'top' && (!wanted || !portraitAuthored) ? sideways() : undefined;
     const chosen = wanted && !(beside && !portraitAuthored && beside.text.size > wanted.text.size + 1e-9) ? wanted : beside;
@@ -9176,7 +9213,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // LH-135: pricing tiers are compared side by side, in one row of equal cards.
       if (units.length > 1 && units.every(unit => tierGroups.has(unit.path))) return 'row';
       // LH-132: a team's portrait cards: up to PORTRAIT_TOP_MAX across the top in one row, otherwise a grid.
-      if (units.length && units.every(unit => personParts.has(unit.path))) return portraitMode === 'top' && units.length <= PORTRAIT_TOP_MAX ? 'row' : 'grid';
+      if (units.length && units.every(unit => personParts.has(unit.path))) return (portraitMode === 'top' || teamAvatar) && units.length <= PORTRAIT_TOP_MAX ? 'row' : 'grid';
       if (direction !== undefined && region.flow !== 'none') return direction === 'horizontal' ? 'row' : 'column';
       const flow = region.flow === 'none' && units.length > 1 ? 'auto' : region.flow;
       if (flow === 'none' || flow === 'column') return 'column';
