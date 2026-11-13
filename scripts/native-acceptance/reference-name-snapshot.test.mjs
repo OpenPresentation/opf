@@ -49,7 +49,9 @@ const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n'
 // (previously the fixed OpenPresentation); previous {bytes:128966,sha256:'8c3fd3d576ac8c479d5b398564d84b572403d8378b07df8724359b1d9cf012a8'}.
 // RR-105 (#1290, 2026-11-12, default alt text): the two chart frames carry a generated descr; previous
 // {bytes:128950,sha256:'cdcc04f801766f97a4fdc567d8f71870fd7a12d132a17c3b7f561617fbb009b4'}.
-const CURRENT_EXPORT=Object.freeze({bytes:129058,sha256:'174b3759bd4ec867d70f84c307af60f8803a6b2051c9648f5dbb2794386491a0'});
+// RR-105 (#1290, 2026-11-12, layout names): user-facing slide layout names (p:cSld name only); previous
+// {bytes:129058,sha256:'174b3759bd4ec867d70f84c307af60f8803a6b2051c9648f5dbb2794386491a0'}.
+const CURRENT_EXPORT=Object.freeze({bytes:129052,sha256:'b4a03d6c593acca52bc9edebdd42d7e4e09e606ebb0123478b5af36ac51418ea'});
 let current;
 function currentFixture(){current??=(async()=>{
  const deck=structuredClone(source),renderOptions={catalogs:[gallery]},fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck,renderOptions});await fonts.ensure(deck,{renderOptions});

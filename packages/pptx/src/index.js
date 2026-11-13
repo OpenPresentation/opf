@@ -56,6 +56,7 @@ import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './section
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
 import {liftMasterFurniture} from './master-furniture.js';
+import {nameLayouts} from './layout-names.js';
 import {gallery} from '@openpresentation/gallery';
 import {applyTemplateLayouts, deckTemplates, foreignLayoutReference, placeholderRegion, readLayoutTag, slideTemplate, writeTemplateLayouts} from './template-layouts.js';
 import {importImageOrientation} from './image-import.js';
@@ -6068,6 +6069,8 @@ async function normalizePptxZip(raw, context) {
   } catch (error) {
     throw new OPFPptxError('packaging-failed', 'Header and footer furniture could not be written to the slide master and layouts.', {cause: errorMessage(error)});
   }
+  // RR-105 (#1290): user-facing layout names (Home > Layout) once every layout exists; identity stays in the layout tags (src/layout-names.js).
+  nameLayouts(output);
   // LH-28: safe mode names the Office-safe family wherever a Latin text family is written (runs, bullets, the themes, charts),
   // after every other part rewrite and before the "Fonts Used" list is read from the parts.
   if (context.safeTypeface) {

@@ -21,7 +21,9 @@ export const CURRENT_SEVEN_FIXTURE='packages/pptx/test/fixtures/chartex-fallback
 // again; `decks` is byte-identical to af10f356f (JSON.stringify compared). Previous: 462a069d533106c5a8e856b34fb204ecdb803a97c5db7441f47f5f87834c8858, 81848 bytes.
 // RR-105 (#1290, 2026-11-12, default alt text): the fixture's `source` review record and `entries` export hashes moved again;
 // `decks` is byte-identical to ed9f0f909 (JSON.stringify compared). Previous: cc7c4ea6175a67089ad6bf800a3a05a6d0cffdb8ce87e1c824efaaa34e6f6dc8, 86226 bytes.
-export const CURRENT_SEVEN_FIXTURE_SHA256='5012eee13db635e6228479af1681adb1e9a9cd1c51dd6254d517bbcfb3aadd91';
+// RR-105 (#1290, 2026-11-12, layout names): the fixture's `source` review record and `entries` export hashes moved again;
+// `decks` is byte-identical to 6d0ba7d86 (JSON.stringify compared). Previous: 5012eee13db635e6228479af1681adb1e9a9cd1c51dd6254d517bbcfb3aadd91, 90652 bytes.
+export const CURRENT_SEVEN_FIXTURE_SHA256='9db434794ee429312f7f7ea5f494aa0b0295ac54bc7c25497e414135f5b04852';
 export const CURRENT_VALUE_PROFILE='seven-chart-treemap-single-value-edit-v1';
 export function currentSevenSource(root=fileURLToPath(new URL('../../',import.meta.url))){
  const bytes=fs.readFileSync(path.join(root,CURRENT_SEVEN_FIXTURE));

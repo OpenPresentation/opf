@@ -24,7 +24,9 @@ export const HISTOGRAM_SELECTION=Object.freeze({slideIndex:2,seriesIndex:1,point
 // with the export of af10f356f. Previous: {bytes:226652,sha256:'f2499b203652415226846220044d3bdc0853571a0f25ab2cc87d35e8ed083382'}.
 // RR-105 (#1290, 2026-11-12, default alt text): only the seven slide parts changed, each by a generated descr on its chart frame
 // (and its chartex picture fallback); part-by-part comparison with the export of ed9f0f909. Previous: {bytes:226636,sha256:'2022a31171208f984f7f3c1ccb2945d58598da6ce33a1c33c239bc4e6754e9db'}.
-export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226889,sha256:'167d0033ec26f33f5bc5a533dcc78f6925272f0f9c6e940298ca9577860becf2'});
+// RR-105 (#1290, 2026-11-12, layout names): only two slide layout parts changed, by their p:cSld name (Blank, Title Only); part-by-part
+// comparison with the export of 6d0ba7d86. Previous: {bytes:226889,sha256:'167d0033ec26f33f5bc5a533dcc78f6925272f0f9c6e940298ca9577860becf2'}.
+export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226882,sha256:'84b02122f21a4fad9c592acd4bec3d5800be9b5608bb8be9b79b49d7d3b2d3f8'});
 export const HISTOGRAM_SOURCE_ARCHIVE_BEFORE_RR105_PICTURE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
 const keys=(value,names)=>assert.deepEqual(Object.keys(value).sort(),[...names].sort());
 const modelHash=value=>digest(Buffer.from(JSON.stringify(value)));

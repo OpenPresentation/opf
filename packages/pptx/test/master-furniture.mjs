@@ -44,7 +44,8 @@ const phTypes = xml => placeholders(xml).map(shape => shape.match(/<p:ph type="(
 const tagData = (entries, path) => JSON.parse(Buffer.from(text(entries, path).match(/\bval="([^"]+)"/)[1], 'hex').toString('utf8'));
 const manifestOf = (entries, index) => tagData(entries, `ppt/tags/opfFurnitureSlide${index}.xml`);
 const layouts = entries => Object.keys(entries).filter(path => /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)).sort();
-const automaticLayout = entries => layouts(entries).find(path => /<p:cSld[^>]*name="OPF auto"/.test(text(entries, path)));
+// RR-105 (#1290, 2026-11-12): OPF's automatic layout is named "Title Only" (src/layout-names.js); previously "OPF auto".
+const automaticLayout = entries => layouts(entries).find(path => /<p:cSld[^>]*name="Title Only"/.test(text(entries, path)));
 const catalogLayoutCount = Object.keys(defaultCatalog.layouts).length;
 const showMasterSp = xml => xml.match(/<p:sldLayout\b[^>]*\bshowMasterSp="([^"]*)"/)?.[1];
 const mutate = (entries, edits) => {
@@ -235,7 +236,8 @@ const oneTone = {organization, design: {background: light, header: {end: {text: 
   const cover = slideParts(entries, 1);
   assert.equal(showMasterSp(text(entries, cover.layout)), '0', 'the cover layout hides the master furniture');
   assert.equal(lifted(text(entries, cover.layout)).length, 0, 'and draws none of its own');
-  assert.match(text(entries, cover.layout), /<p:cSld name="Cover \(no furniture\)">/);
+  // RR-105 (#1290, 2026-11-12): user-facing layout names (src/layout-names.js); previously "Cover (no furniture)".
+  assert.match(text(entries, cover.layout), /<p:cSld name="Cover 2">/);
   assert.deepEqual(shownFurniture(entries, 1), [], 'the cover shows no furniture');
   assert.deepEqual(phTypes(text(entries, cover.layout)), ['dt', 'ftr', 'sldNum'], 'Insert > Header & Footer still works on it');
   for (const number of [2, 3]) assert.equal(slideParts(entries, number).layout, automaticLayout(entries));
