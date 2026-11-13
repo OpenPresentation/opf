@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import sharp from 'sharp';
 import { resolveSlideContext } from '@openpresentation/opf';
-import { composeSlide } from '@openpresentation/opf/composition';
+import { LONE_DISPLAY_SIZES, composeSlide } from '@openpresentation/opf/composition';
 import { toSvg, toPng } from '../dist/index.js';
 import { TREATMENTS, samplePicture, treatmentDocument } from './fixtures/image-treatments.mjs';
 
@@ -46,6 +46,9 @@ for (const treatment of TREATMENTS) {
   // RR-105: the 0.14 renders also predate the tone a dark overlay implies (light text over text-overlay's darkened picture); they drew the
   // text of a light picture, stated here as the background's tone.
   for (const slide of document.slides) { const background = slide.design?.background; if (background && typeof background === 'object' && background.tone === undefined && background.overlay) background.tone = 'light'; }
+  // RR-105: and the step a short message beside a picture now grows to where its lines keep the minimum measure; the 0.14 renders set it at
+  // the lone text's display size, stated here as the slide's largest body size.
+  if (['side-by-side', 'rounded-card'].includes(slug)) for (const slide of document.slides) slide.composition = { ...slide.composition, maxFontSize: LONE_DISPLAY_SIZES.text };
   // LH-164: a slide that is one short message takes the accent surface; these documents compare pixels with the 0.14 renders, which have the deck's own surface, stated here as the slide's variant.
   if (treatment.watermark) for (const slide of document.slides) slide.design = { variant: resolveSlideContext({ ...document, slides: [{ ...slide, subtitle: 'Plain surface' }] }, 0, {}).resolved.roles.variant, ...slide.design };
   const diagnostics = [];

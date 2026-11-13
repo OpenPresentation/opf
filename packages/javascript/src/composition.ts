@@ -8634,7 +8634,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           const height = need(), measure = proseMeasure(node, inner.width);
           const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { ...inner, width: measure.width }, step, floor, node.path, node.payload.numbering);
           const lines = 'richLines' in fit ? (fit as RichTextFit).richLines.length : fit.lines.length;
-          if (height > LONE_TARGET * inner.height || fit.overflow || fit.fontSize < step - 1e-9 || lines > MESSAGE_DISPLAY_LINES) break;
+          // RR-105 (coverage finding 30): on a narrow slide (portrait, square) a step whose lines run under the minimum measure (LH-66,
+          // underMeasure) is one the guard refuses, which threw the whole message back to its plain size; it stops at the step before.
+          if (height > LONE_TARGET * inner.height || fit.overflow || fit.fontSize < step - 1e-9 || lines > MESSAGE_DISPLAY_LINES || (ruleOn('reading-measure') && autoComposition() && underMeasure(node.field, node.value, measure.width, step))) break;
           shown = step; best = height; size = step;
         }
         if (shown === undefined) { displayTexts.delete(node.path); if (plain.growth === undefined) proseGrowth.delete(node); else proseGrowth.set(node, plain.growth); best = plain.best; }
