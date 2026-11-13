@@ -7139,6 +7139,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-43, LH-17: what refitting a placed item needs: a metric is laid out again in its own box from given role sizes, and a text
   // or list refits from a smaller size than the one it started at (its start, by item index).
   const metricRefits = new Map<number, (roleSizes: MetricLayoutOptions['roleSizes'], pill?: 'above') => MetricLayout>();
+  // RR-105: a metric laid out again in another box (spaceMetricRows moves a row of metrics).
+  const metricMoves = new Map<number, (box: LayoutBox, roleSizes: MetricLayoutOptions['roleSizes'], pill?: 'above') => MetricLayout>();
   // LH-78: a quote is laid out again in its own box with its body at a given size (px), so sibling quotes share one size.
   const quoteRefits = new Map<number, (bodySize: number) => QuoteLayout>();
   // LH-144: a timeline is laid out again in its own box with every role offset by a number of reference pixels (capSizes).
@@ -8229,7 +8231,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     if (brow) eyebrowsOf.set(items[items.length - 1]!, node.eyebrow!);
     if (chipOfMetric) pendingIcons.push({ path: `${node.path}.icon`, owner: node.path, icon: iconFor(record(node.value).icon)!, members: [items[items.length - 1]!], diameter: chipOfMetric, metric: true });
-    if (metricLayout && !metricLayout.overflow) { const metricBox = {...box,height:metricHeight ?? box.height}; metricRefits.set(items.length - 1, (roleSizes, pill) => measureMetric(node, metricBox, settings, false, roleSizes, tile, pill)); }
+    if (metricLayout && !metricLayout.overflow) { const metricBox = {...box,height:metricHeight ?? box.height}; metricRefits.set(items.length - 1, (roleSizes, pill) => measureMetric(node, metricBox, settings, false, roleSizes, tile, pill)); metricMoves.set(items.length - 1, (moved, roleSizes, pill) => measureMetric(node, moved, settings, false, roleSizes, tile, pill)); }
     if (timelineLayout) { const timelineBox = box; timelineRefits.set(items.length - 1, offset => measureTimeline(node, timelineBox, settings, 'placed', offset)); }
     // LH-67: the lead of a lead plus stack keeps its larger size; it is neither stepped nor shared.
     if (stackLeads.has(node)) leadItems.add(items.length - 1);
@@ -9809,6 +9811,41 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       item.frameBox = acceptedBox({ ...frame, height: Math.min(frame.height, bottom - frame.y + (item.box.y - frame.y)) });
     }
   };
+  // RR-105 (coverage finding 03): a body of metrics alone in two or more rows of equal cells, drawn without cards, spaces its rows evenly: each
+  // row's metrics are top-anchored in their cells, so a row of bare values left a wide gap under it and the row of values with labels and
+  // deltas sat low. The rows' contents (the tallest metric of each) are set with one gap above, between and below them in the rows' area,
+  // each metric laid out again at the sizes it has in its moved cell; when any would change, the slide keeps its rows as they were.
+  const spaceMetricRows = (): void => {
+    const body = items.map((item, index) => ({ item, index })).filter(({ item }) => !headings.has(item.field) && !item.eyebrow);
+    // Promoted regions keep the author's cells and anchors.
+    if (regions.length || body.length < 3 || !body.every(({ item, index }) => item.metricLayout && !item.metricLayout.overflow && !item.frameBox && !item.emphasis && metricMoves.has(index))) return;
+    const rows = [...new Set(body.map(({ item }) => round(item.box.y)))].sort((a, b) => a - b);
+    if (rows.length < 2 || new Set(body.map(({ item }) => round(item.box.height))).size !== 1) return;
+    const extent = (layout: MetricLayout): [number, number] => {
+      const boxes = [layout.bounds, ...layout.parts.filter(part => part.visible).map(part => part.box), ...(layout.trendBox ? [layout.trendBox] : []), ...(layout.deltaPill ? [layout.deltaPill.box] : [])];
+      return [Math.min(...boxes.map(box => box.y)), Math.max(...boxes.map(box => box.y + box.height))];
+    };
+    const rowOf = (item: ComposedItem) => rows.indexOf(round(item.box.y));
+    const spans = rows.map((_, row) => body.filter(({ item }) => rowOf(item) === row).map(({ item }) => extent(item.metricLayout!)));
+    const tops = spans.map(span => Math.min(...span.map(([top]) => top))), heights = spans.map((span, row) => Math.max(...span.map(([, bottom]) => bottom)) - tops[row]!);
+    const areaTop = rows[0]!, areaBottom = Math.max(...body.map(({ item }) => item.box.y + item.box.height));
+    const free = areaBottom - areaTop - heights.reduce((sum, height) => sum + height, 0);
+    if (free <= 0) return;
+    const space = free / (rows.length + 1), targets: number[] = [];
+    heights.reduce((y, height) => { targets.push(y + space); return y + space + height; }, areaTop);
+    const moved = body.map(({ item, index }) => {
+      const layout = item.metricLayout!, dy = targets[rowOf(item)]! - tops[rowOf(item)]!;
+      if (Math.abs(dy) < .5 && rowOf(item) + 1 === rows.length) return { item, layout, box: item.box };
+      // The moved cell ends half a space above the next row (or at the area's foot), so no two cells overlap.
+      const row = rowOf(item), bottom = row + 1 < rows.length ? targets[row + 1]! - space / 2 : areaBottom;
+      const box = acceptedBox({ ...item.box, y: item.box.y + dy, height: Math.min(item.box.height, bottom - item.box.y - dy) });
+      const roleSizes = Object.fromEntries(layout.parts.filter(part => part.fit).map(part => [part.role, part.fit!.fontSize]));
+      return { item, layout: metricMoves.get(index)!(box, roleSizes, layout.deltaPill?.placement === 'above' ? 'above' : undefined), box };
+    });
+    const sizes = (layout: MetricLayout) => layout.parts.map(part => `${part.role}:${part.visible}:${part.fit?.fontSize ?? 0}:${part.fit?.lines.length ?? 0}`).join('|');
+    if (moved.some(({ item, layout }) => layout.overflow || layout.diagnostics.length > item.metricLayout!.diagnostics.length || sizes(layout) !== sizes(item.metricLayout!) || layout.arrangement !== item.metricLayout!.arrangement)) return;
+    for (const { item, layout, box } of moved) { item.box = box; item.metricLayout = layout; item.text = layout.parts.find(part => part.role === 'value')?.fit ?? item.text; }
+  };
   // LH-135: the prices of the tiers that reach their role size read at one size, the smallest of them (a word that fits only below it,
   // "Custom", keeps its own). The tiers' other blocks stay as they are: they are no peers of the tiers' prices.
   const shareTierPrices = (): void => {
@@ -10159,6 +10196,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   centerCardText();
   alignHeadingTracks();
   alignGroupTracks();
+  spaceMetricRows();
   // LH-06: the automatic foot band or pill is the last block, so its text is the last body item (reading order).
   // LH-06: a pill follows its long text, one gap under the text's last line, at the start of the text's own box (its column and
   // alignment); with no room there it is composed at the foot of the body instead (PILL_AT_FOOT).
