@@ -1774,7 +1774,7 @@
         "tone": {
           "type": "string",
           "enum": ["dark", "light"],
-          "description": "Whether the background is dark or light, which picks the color map (dark1 or light1) so text, lines and neutrals read on it. Without a tone a picture or gradient takes the deck's variant, else counts as light."
+          "description": "Whether the background is dark or light, which picks the color map (dark1 or light1) so text, lines and neutrals read on it. Without a tone a picture takes the tone its recolor, opacity and overlay imply (a duotone in dark colors or a dark overlay makes it dark), else the deck's variant, else counts as light."
         },
         "type": {
           "type": "string",

@@ -519,7 +519,7 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   A sentence title over a paragraph is the message: it grows to display size (75 px), the paragraph keeps its size. A metric, or a
   text under a title of at most 4 words, is the message: the stack gives way, the title is the running head and the block fills the
   body (LH-48, LH-101). A lone text of at most 25 words (`messageWords`, any script) grows on to 56 px (75 px at 4 words or fewer)
-  on at most 4 balanced lines; its bold runs draw in the primary color where that reads 4.5:1. A lone one-entry list with a short
+  on at most 4 balanced lines, and (RR-105) only to a step whose lines keep the minimum measure of LH-66 (28 average characters once it runs to 4 lines), so on a narrow slide, portrait or square, it stops one step lower (49 px) instead of falling back to its plain size; its bold runs draw in the primary color where that reads 4.5:1. A lone one-entry list with a short
   label draws it as a display word over a short rule; a placed region's short text is a bold heading, drawn as a tile when it is no
   sentence (see [Placed tiles](dynamic-composition.md), `placed-tiles`). Guarded rules
   `statement-message` and `display-message`.

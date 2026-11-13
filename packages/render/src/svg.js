@@ -6,7 +6,7 @@ import {
   metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
   arrangementPaint, colorContrast,
-  codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup, iconPathData,
+  codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, pictureOverlay, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup, iconPathData,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
 } from "@openpresentation/opf/composition";
 // The renderer is a library: it never imports a catalog. Hosts register theirs (`options.catalogs`, core `Catalog[]`, for
@@ -917,7 +917,10 @@ function renderImageBlock(item, bound, options) {
     if (stroke.defs) children[0] = (children[0] ? children[0].replace(/<\/defs>$/, "") : "<defs>") + stroke.defs + "</defs>";
     children.push(stroke.elements);
   }
-  if (image.overlay) children.push(renderImageOverlay(image.overlay, bound, options));
+  // RR-105: the overlay covers the drawn picture; a contained picture whose aspect core could not read (a file or a host imageResolver's
+  // source) is measured here, from the drawable source, as the PPTX export does.
+  const overlay = image.overlay && !image.picture && image.fit === "contain" ? pictureOverlay(image, intrinsicImageAspect(resolveImageSource(item, bound, options).source)) : image.overlay;
+  if (overlay) children.push(renderImageOverlay(overlay, bound, options));
   if (labels) children.push(labels);
   if (children.length === 2 && !children[0] && !Object.keys(trace).length) return pixels;
   return tag("g", trace, children.filter(Boolean).join(""));

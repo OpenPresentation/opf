@@ -25,6 +25,7 @@ import {
 	type Rec,
 	backdropColors,
 	colorDifference,
+	contrastRatio,
 	lightnessDifference,
 	readableColor,
 	rec,
@@ -59,6 +60,7 @@ const isLarge = (sizePx: number, bold: boolean) => {
 };
 
 const within = (box: LayoutBox, area: LayoutBox) => box.x >= area.x - 0.5 && box.y >= area.y - 0.5 && box.x + box.width <= area.x + area.width + 0.5 && box.y + box.height <= area.y + area.height + 0.5;
+const overlaps = (box: LayoutBox, area: LayoutBox) => box.x < area.x + area.width && area.x < box.x + box.width && box.y < area.y + area.height && area.y < box.y + box.height;
 
 function slideBackdrop(context: RuleSlide, box?: { x: number; y: number; width: number; height: number }): BackdropSample {
 	const { design, composition } = context;
@@ -70,7 +72,11 @@ function slideBackdrop(context: RuleSlide, box?: { x: number; y: number; width: 
 		const overlay = image.overlay && !image.overlay.edge
 			? { color: resolveTextColor(image.overlay.color, design, '#000000') ?? '#000000', opacity: image.overlay.opacity }
 			: scrim ? { color: scrim.color, opacity: scrim.opacity } : undefined;
-		return backdropColors({ kind: 'image', opacity: image.opacity ?? 1, base: '#FFFFFF' }, box, design.dimensions, { overlay, ...(scrim?.grays ? { grays: scrim.grays } : {}) });
+		// RR-105: a duotone bounds the pixels to its own ramp, and an edge band the text reaches counts over the part it covers.
+		const duotone = image.recolor?.type === 'duotone' ? ([resolveTextColor(image.recolor.dark, design, '#000000') ?? '#000000', resolveTextColor(image.recolor.light, design, '#FFFFFF') ?? '#FFFFFF'] as const) : undefined;
+		const edge = image.overlay?.edge ? image.overlay : undefined, reach = box ?? { x: 0, y: 0, ...design.dimensions };
+		const band = edge && overlaps(reach, edge.box) ? { color: resolveTextColor(edge.color, design, '#000000') ?? '#000000', opacity: edge.opacity, whole: within(reach, edge.box) } : undefined;
+		return backdropColors({ kind: 'image', opacity: image.opacity ?? 1, base: '#FFFFFF' }, box, design.dimensions, { overlay, ...(scrim?.grays ? { grays: scrim.grays } : {}), ...(duotone ? { duotone } : {}), ...(band ? { band } : {}) });
 	}
 	return backdropColors(design.backdrop, box, design.dimensions);
 }
@@ -177,6 +183,20 @@ const contrastRules: ValidationRule[] = [
 					const worst = worstContrast(sample.color, sample.backdrop);
 					if (worst.ratio >= needed) continue;
 					if (sample.backdrop.unknown) {
+						// RR-105: text that stays below the threshold over every color the picture can show here is low contrast for certain:
+						// a warning of its own for each such text, whatever the picture.
+						const best = Math.max(...sample.backdrop.colors.map((color) => contrastRatio(sample.color, color)));
+						if (best < needed) {
+							context.report(onImageRule, {
+								path: sample.path,
+								slide,
+								severity: 'warning',
+								message: `${sample.label} colour ${sample.color} is too faint on this background picture: over every colour the picture can show here its contrast is at most ${best.toFixed(1)}:1, and ${needed}:1 is needed at this size.`,
+								help: 'Set the background\'s tone (dark or light) so the text color follows the picture, give the text a readable color, or make the overlay strong enough for the text to read.',
+								measured: { ratio: round(worst.ratio), best: round(best), needed, textColor: sample.color },
+							});
+							continue;
+						}
 						if (!imageReported.done) {
 							imageReported.done = true;
 							context.report(onImageRule, {

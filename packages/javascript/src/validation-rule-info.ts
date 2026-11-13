@@ -213,14 +213,14 @@ export const onImageRule = rule(
 	'text-on-image',
 	'accessibility',
 	'info',
-	'Text sits on a background picture: a note when core draws its automatic scrim behind it, otherwise its contrast cannot be guaranteed.',
-	'Contrast over a photograph depends on the photograph. Core draws an automatic scrim behind text on a picture background that has no overlay, at the lowest opacity that keeps it at 4.5:1 over any picture, and this note names it. With an edge-band overlay, or the scrim turned off (overlay: false), only a full-frame overlay that guarantees readability for every possible image certifies the result from the document.',
+	'Text sits on a background picture: a note when core draws its automatic scrim behind it, a warning when the text is too faint over every color the picture can show, otherwise its contrast cannot be guaranteed.',
+	'Contrast over a photograph depends on the photograph. Core draws an automatic scrim behind text on a picture background that has no overlay, at the lowest opacity that keeps it at 4.5:1 over any picture, and this note names it. With an edge-band overlay, or the scrim turned off (overlay: false), only a full-frame overlay that guarantees readability for every possible image certifies the result from the document. Text that stays below the threshold over every color the picture can show (a duotone in dark colors under dark text, for one) is a warning: it is low contrast whatever the picture.',
 	{
 		standard: 'WCAG 2.2 SC 1.4.3 Contrast (Minimum), level AA',
 		thresholds: ['contrastNormal', 'contrastLarge'],
 		cost: 'composition',
 		approximations:
-			'Core reads picture pixels only through a host that measures them (ComposeSlideOptions.pictureLuminance). Otherwise the picture is bounded by a gray ramp from black to white, composited through the image opacity and a full-frame design.background overlay or the automatic scrim over the text it covers; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.',
+			'Core reads picture pixels only through a host that measures them (ComposeSlideOptions.pictureLuminance). Otherwise the picture is bounded by a gray ramp from black to white, composited through the image opacity and a full-frame design.background overlay or the automatic scrim over the text it covers; the text passes only when every step of that ramp passes. A duotone recolor bounds the ramp to its own two colors, and an edge-banded overlay counts over the text it reaches, beside the uncovered picture where the text reaches past it.',
 	},
 );
 export const altRule = rule(

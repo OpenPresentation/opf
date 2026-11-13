@@ -79,7 +79,7 @@ import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colo
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
   CHART_BAR_GAP_WIDTH, catalogRecords, clrMapAttributes, DIAGRAM_SHAPE_FAMILIES, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
-  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, itemAlignment, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
+  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, intrinsicImageAspect, itemAlignment, pictureOverlay, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, languageInEffect, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
@@ -3313,9 +3313,11 @@ async function addImagePayload(slide, presentation, asset, region, path, context
 // One native image picture at `box` (inches), fitted at packaging (src/image-provenance.js placeImages). `treatment` is
 // what OPF_IMAGE_V1 stores (the authored block fields); without it the picture is untagged. Returns the picture's object
 // name, or undefined when the source could not be embedded (the caller draws the unavailable-image panel).
-async function addImagePicture(slide, presentation, asset, box, path, context, options, {fit, focus, effects = null, shrink = true, treatment, alt, role = 'block', objectName, src} = {}) {
+async function addImagePicture(slide, presentation, asset, box, path, context, options, {fit, focus, effects = null, shrink = true, treatment, alt, role = 'block', objectName, src, measured} = {}) {
   const outcome = { box, cover: fit === 'cover' };
   const resolved = await resolveImage(asset, presentation, options, path, outcome);
+  // RR-105: the picture's aspect ratio, read from the embedded source, for a caller that places something on the drawn picture.
+  if (measured && typeof resolved?.data === 'string') measured.aspect = intrinsicImageAspect(resolved.data);
   if (!resolved) {
     // RR-59 (AUTO-26): a content picture never vanishes silently. A background names its own fallback (the slide colour).
     if (!outcome.reported) options.onDiagnostic?.(role === 'background' ? backgroundUnresolved(path) : {code: "unresolved-asset", path, reason: "unresolved-source", message: "The image needs an embedded raster, a declared asset or a host imageResolver; the image exports as the unavailable-image placeholder. Remote images are never fetched."});
@@ -3488,10 +3490,11 @@ async function addImageItem(slide, presentation, item, slideIndex, context, opti
   // RR-94: every image block is tagged (an empty treatment when it has none), so an unchanged picture re-imports without a crop
   // diagnostic, and one authored from a relative path or URL records that source to give it back.
   const source = recordableImageSource(item.value);
+  const measured = {};
   // A plain contained picture in the flow is framed by the picture itself (0.14 content images); a treated or placed one
   // keeps core's frame (0.14 slide images), so its mask, line and overlay apply to that frame.
   const name = await addImagePicture(slide, presentation, item.value, box, item.path, { ...context, slidePath: `slides.${slideIndex}` }, options, {
-    fit: image.fit, focus: image.focus, effects: treated ? effects : null, shrink: !treated && !image.placement, treatment, src: source
+    fit: image.fit, focus: image.focus, effects: treated ? effects : null, shrink: !treated && !image.placement, treatment, src: source, measured
   });
   if (!name) {
     const panel = addImagePlaceholder(slide, presentation, item.value, box, item.path, context, options);
@@ -3506,7 +3509,9 @@ async function addImageItem(slide, presentation, item, slideIndex, context, opti
     addImageCalloutItems(slide, item, undefined, context, options);
     return panel;
   }
-  if (image.overlay) addImageOverlay(slide, image.overlay, structuredClone(block.overlay), imageOverlayName(name), name, { ...context, slidePath: `slides.${slideIndex}` }, effects);
+  // RR-105: the overlay covers the drawn picture, also when core could not read the picture's aspect (the preview measures it the same way).
+  const overlay = image.overlay && !image.picture && image.fit === 'contain' ? pictureOverlay(image, measured.aspect) : image.overlay;
+  if (overlay) addImageOverlay(slide, overlay, structuredClone(block.overlay), imageOverlayName(name), name, { ...context, slidePath: `slides.${slideIndex}` }, effects);
   addImageCalloutItems(slide, item, name, context, options);
   return name;
 }

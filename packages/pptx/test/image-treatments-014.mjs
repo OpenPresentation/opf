@@ -9,7 +9,7 @@ import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPptx} from '../dist/index.js';
-import {colorHex, schemeRole} from './helpers/scheme-colors.mjs';
+import {clrMapOf, colorHex, schemeRole} from './helpers/scheme-colors.mjs';
 
 const before = JSON.parse(await readFile(new URL('fixtures/image-treatments-0.14.json', import.meta.url), 'utf8'));
 const hero = {src: `data:image/png;base64,${(await readFile(new URL('fixtures/images/treatment-hero.png', import.meta.url))).toString('base64')}`, alt: 'Project-authored posterized landscape with a sun', mediaType: 'image/png'};
@@ -126,7 +126,8 @@ deck.slides.forEach((slide, index) => {
     // RR-96: the overlay colour is a theme colour (a:schemeClr), so compare what it resolves to and its alpha.
     const fill = overlay['p:spPr']['a:solidFill'];
     assert.ok(schemeRole(fill), `${slide.id} overlay fill is a scheme colour`);
-    assert.equal(colorHex(fill, theme), expected.overlay.fill['a:srgbClr'].val, `${slide.id} overlay colour`);
+    // RR-105: through the slide's own color map, when it has one (a dark overlay makes the picture dark, so the slide takes the dark map).
+    assert.equal(colorHex(fill, theme, clrMapOf(xml)), expected.overlay.fill['a:srgbClr'].val, `${slide.id} overlay colour`);
     assert.equal(fill['a:schemeClr']['a:alpha'].val, expected.overlay.fill['a:srgbClr']['a:alpha'].val, `${slide.id} overlay alpha`);
   } else assert.equal(overlay, undefined, slide.id);
   same++;
