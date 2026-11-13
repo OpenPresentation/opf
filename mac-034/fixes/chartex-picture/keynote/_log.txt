@@ -1,0 +1,4 @@
+chart-type-sampler.before exit=0 slides=3 size=960x540 docsBefore=0 docsAfter=0 
+chart-type-sampler.after exit=0 slides=3 size=960x540 docsBefore=0 docsAfter=0 
+layout-harvest.before exit=0 slides=20 size=960x540 docsBefore=0 docsAfter=0 
+layout-harvest.after exit=0 slides=20 size=960x540 docsBefore=0 docsAfter=0 
