@@ -2607,8 +2607,11 @@ export const PORTRAIT_SIDE_FILL = .6;
  * narrowest text beside it, and the gap between a portrait and its text.
  */
 export const PORTRAIT_MIN = { topCard: 160, side: 72, text: 150 } as const, PORTRAIT_GAP = 16;
-/** RR-105: the diameter of a team's authored avatar, the small circle over the name, in reference pixels: at most `most`, and down to `least` before the team's text takes a smaller size (never wider than the card). */
-export const TEAM_AVATAR = { least: 56, most: 96 } as const;
+/**
+ * RR-105: a team's authored avatar, the small circle over the name: lineRatio times the name's line height, at least `least` reference
+ * pixels and at most widthShare of the card's width.
+ */
+export const TEAM_AVATAR = { least: 56, lineRatio: 2, widthShare: 0.5 } as const;
 /** LH-132: a team's texts keep at least this size (reference px; Claude Design sets a name at 20) before a top portrait gives up its square. */
 export const PORTRAIT_TEXT_SIZE = 21;
 /**
@@ -8009,21 +8012,29 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // one sets the text larger.
     // A side portrait takes PORTRAIT_SIDE_SHARE of the card, or less (down to PORTRAIT_SIDE_LEAST) where the wider column sets the team's text
     // larger: the share with the largest text, the widest of equals.
-    // RR-105: an authored avatar is the small circle over the name, at the card's start, with the team's text below it. The text comes first:
-    // the largest size at which the tallest text fits under the smallest avatar (TEAM_AVATAR.least); the avatar then takes the room left, up
-    // to TEAM_AVATAR.most (never wider than the card). The card holds both and sits in the middle of its cell.
+    // RR-105: an authored avatar is the small circle over the name, at the card's start, with the team's text below it. The text grows as a
+    // card row's text does (LH-48): from a list's display size (LONE_DISPLAY_SIZES.list) down the type scale, the largest size at which the
+    // card (its circle, the gap and the team's tallest text) fills at most LONE_TARGET of its cell, else the largest at which it fits, never
+    // under the size the text starts at. The circle scales with the name: TEAM_AVATAR.lineRatio times the name's line height, at least
+    // TEAM_AVATAR.least and at most TEAM_AVATAR.widthShare of the card's width. The card holds both and sits in the middle of its cell.
     if (teamAvatar) {
-      const least = Math.min(inner.width, TEAM_AVATAR.least * scale), textWidth = inner.width, key = `avatar:${round(textWidth)}:${round(inner.height)}`;
+      const textWidth = inner.width, key = `avatar:${round(textWidth)}:${round(inner.height)}`, team = [...personParts.values()].map(entry => entry.text);
+      const named = (text: Pending) => text.field !== 'text' && record((text.value as unknown[])[0]).description !== undefined;
+      const diameterAt = (size: number) => Math.max(Math.min(inner.width, TEAM_AVATAR.least * scale), Math.min(inner.width * TEAM_AVATAR.widthShare, TEAM_AVATAR.lineRatio * size * (team.some(named) ? LIST_HEADING_SCALE : 1) * 1.2));
       if (!teamText.has(key)) {
-        const team = [...personParts.values()].map(entry => entry.text), sizes: number[] = [];
-        for (let size = proseMeasure(person.text, textWidth).size; ; size = Math.max(floor, scaleStep(size - .01 * scale, floorPx))) { sizes.push(size); if (size <= floor + 1e-9) break; }
+        const start = Math.max(...team.map(text => proseMeasure(text, textWidth).size)), top = Math.max(start, Math.min(LONE_DISPLAY_SIZES.list * scale, capOf(own)));
+        const sizes: number[] = [];
+        for (let size = top; ; size = Math.max(floor, scaleStep(size - .01 * scale, floorPx))) { sizes.push(size); if (size <= floor + 1e-9) break; }
         const needs = (text: Pending, size: number) => naturalHeight(text, textWidth, false, undefined, own, false, size) + 2 * rasterPadding + scale;
-        const size = sizes.find(size => Math.max(...team.map(text => needs(text, size))) <= inner.height - between - least + .01);
+        const content = (size: number) => Math.max(...team.map(text => needs(text, size))) + between + diameterAt(size);
+        const size = sizes.find(size => size >= start - 1e-9 && content(size) <= LONE_TARGET * inner.height + .01) ?? sizes.find(size => content(size) <= inner.height + .01);
         teamText.set(key, size === undefined ? undefined : { size, need: Math.max(...team.map(text => needs(text, size))) });
+        // Every person's text is placed from that size (proseMeasure reads proseGrowth).
+        if (size !== undefined && size > start + 1e-9) for (const text of team) proseGrowth.set(text, size);
       }
       const text = teamText.get(key);
       if (!text) return false;
-      const diameter = Math.max(least, Math.min(inner.width, TEAM_AVATAR.most * scale, inner.height - between - text.need));
+      const diameter = diameterAt(text.size);
       const insetTop = inner.y - cell.y, insetBottom = cell.y + cell.height - inner.y - inner.height, height = Math.min(cell.height, diameter + between + text.need + insetTop + insetBottom);
       const card = { ...cell, y: cell.y + (cell.height - height) / 2, height }, start = card.y + insetTop;
       const picture = { x: rtl ? inner.x + inner.width - diameter : inner.x, y: start, width: diameter, height: diameter };

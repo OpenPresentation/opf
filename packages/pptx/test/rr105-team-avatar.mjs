@@ -19,7 +19,7 @@ for (const [index, pic] of pics.entries()) {
   assert.match(pic, /<a:prstGeom prst="ellipse"/, 'a circle');
   const [cx, cy] = pic.match(/<a:ext cx="(\d+)" cy="(\d+)"/).slice(1).map(Number);
   assert.ok(Math.abs(cx / EMU - boxes[index].width) < 0.5 && Math.abs(cy / EMU - boxes[index].height) < 0.5, 'the composed size');
-  assert.ok(cx / EMU <= TEAM_AVATAR.most + 0.5, 'small');
+  assert.ok(cx / EMU <= TEAM_AVATAR.lineRatio * 46.25 * 1.2 + 0.5, 'small: the circle of the name at most');
 }
 const imported = await fromPptx(await toPptx(deck));
 assert.deepEqual(imported.slides[0].blocks.map((block) => block.blocks[0].portrait), ['avatar', 'avatar', 'avatar']);
