@@ -19,7 +19,6 @@ after(() => rm(temp, { recursive: true, force: true }));
 const EXPECTED_WARNINGS = {
 	"coverage-images": ["opf/reading-order"],
 	"coverage-languages": ["opf/language-tag"],
-	"coverage-shape-presets": ["opf/shape-adjust-range"],
 	"coverage-charts": ["opf/chart-mapping-adapted"],
 	"coverage-template": ["opf/variable-unfilled"],
 	"coverage-variables": ["opf/missing-alt-text"],
