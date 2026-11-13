@@ -41,6 +41,8 @@ await copyFile(new URL('src/chart-types.js', root), new URL('chart-types.js', di
 await copyFile(new URL('src/chartex.js', root), new URL('chartex.js', dist));
 await copyFile(new URL('src/chart-options.js', root), new URL('chart-options.js', dist));
 await copyFile(new URL('src/frame-alt.js', root), new URL('frame-alt.js', dist));
+await copyFile(new URL('src/default-alt.js', root), new URL('default-alt.js', dist));
+await copyFile(new URL('src/layout-names.js', root), new URL('layout-names.js', dist));
 await copyFile(new URL('src/chart-data.js', root), new URL('chart-data.js', dist));
 await copyFile(new URL('src/chart-highlight.js', root), new URL('chart-highlight.js', dist));
 await copyFile(new URL('src/chart-layer.js', root), new URL('chart-layer.js', dist));

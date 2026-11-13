@@ -12,7 +12,21 @@ export const HISTOGRAM_SELECTION=Object.freeze({slideIndex:2,seriesIndex:1,point
 // supervisor decision for the owner, vetoable. The four chartex slides' mc:Fallback is now a picture and their classic chart parts are
 // gone; the classic histogram (ppt/charts/chart2.xml), its workbook and every mc:Choice are unchanged. The native edits recorded under
 // docs/handoff/2026-11-11 ran on the previous archive.
-export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226821,sha256:'0ef9865fa636d57b3fa37d370884d507414d0377a5c56209cbddbabea308c567'});
+// RR-105 (#1290, 2026-11-12, chart workbook properties): only docProps/core.xml (creator, lastModifiedBy) and docProps/app.xml
+// (Application) inside the seven embedded workbooks changed; every slide, chart part and workbook sheet, table and string part is
+// byte-identical (part-by-part comparison of the all-seven chartex:'native' export of f3f0b2b1f and of this commit). Previous:
+// {bytes:226821,sha256:'0ef9865fa636d57b3fa37d370884d507414d0377a5c56209cbddbabea308c567'}.
+// RR-105 (#1290, 2026-11-12, notes page size): only ppt/presentation.xml changed (p:notesSz), part-by-part comparison with the
+// export of 885219b9c. Previous: {bytes:226668,sha256:'c19ae4cda7488d6e25ffa48f6076a47ff51b740b4b37f11695aa85d1ea94224e'}.
+// RR-105 (#1290, 2026-11-12, document properties): only docProps/app.xml changed (Application), part-by-part comparison with the
+// export of 6e4da7119. Previous: {bytes:226667,sha256:'e3fa122fe5828ba09b64a883225db6560d65ab4ac75493d77e39836dd9393218'}.
+// RR-105 (#1290, 2026-11-12, Company from the organization): only docProps/app.xml changed (no Company), part-by-part comparison
+// with the export of af10f356f. Previous: {bytes:226652,sha256:'f2499b203652415226846220044d3bdc0853571a0f25ab2cc87d35e8ed083382'}.
+// RR-105 (#1290, 2026-11-12, default alt text): only the seven slide parts changed, each by a generated descr on its chart frame
+// (and its chartex picture fallback); part-by-part comparison with the export of ed9f0f909. Previous: {bytes:226636,sha256:'2022a31171208f984f7f3c1ccb2945d58598da6ce33a1c33c239bc4e6754e9db'}.
+// RR-105 (#1290, 2026-11-12, layout names): only two slide layout parts changed, by their p:cSld name (Blank, Title Only); part-by-part
+// comparison with the export of 6d0ba7d86. Previous: {bytes:226889,sha256:'167d0033ec26f33f5bc5a533dcc78f6925272f0f9c6e940298ca9577860becf2'}.
+export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226882,sha256:'84b02122f21a4fad9c592acd4bec3d5800be9b5608bb8be9b79b49d7d3b2d3f8'});
 export const HISTOGRAM_SOURCE_ARCHIVE_BEFORE_RR105_PICTURE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
 const keys=(value,names)=>assert.deepEqual(Object.keys(value).sort(),[...names].sort());
 const modelHash=value=>digest(Buffer.from(JSON.stringify(value)));

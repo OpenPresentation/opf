@@ -460,7 +460,7 @@
   "area title 57.6,57.6,1164.8,65.9",
   "region message 57.6,147.5,1164.8,514.9 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text message 57.6,357.7,1164.8,94.5 75px"
+  "item blocks.0.text message 57.6,334.5,1164.8,140.9 113px"
  ],
  "statement 2 short": [
   "area title 57.6,257.9,1164.8,65.9",
@@ -662,7 +662,7 @@
   "area title 57.6,57.6,1164.8,65.9",
   "region body 57.6,147.5,1164.8,514.9 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text body 57.6,357.7,1164.8,94.5 75px"
+  "item blocks.0.text body 57.6,334.5,1164.8,140.9 113px"
  ],
  "text 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -886,10 +886,10 @@
   "diagnostic text-overflow blocks.5.items"
  ],
  "quote 1 short": [
-  "area title 57.6,239.3,1164.8,65.9",
-  "region quotes 57.6,329.1,1164.8,151.6 grid 1",
-  "item title - 57.6,239.3,1164.8,65.9 54px",
-  "item blocks.0.quote quotes 57.6,329.1,1164.8,151.6 56px"
+  "area title 57.6,221,1164.8,65.9",
+  "region quotes 57.6,310.8,1164.8,188.2 grid 1",
+  "item title - 57.6,221,1164.8,65.9 54px",
+  "item blocks.0.quote quotes 57.6,310.8,1164.8,188.2 86px"
  ],
  "quote 2 short": [
   "area title 57.6,239.3,1164.8,65.9",
@@ -992,7 +992,7 @@
   "region first 57.6,147.5,1164.8,514.9 column 1",
   "region second 652,147.5,570.4,514.9 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 69.6,357.8,1140.8,94.3 75px"
+  "item blocks.0.text first 69.6,334.5,1140.8,140.9 113px"
  ],
  "two-column 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1113,7 +1113,7 @@
   "region second 453.9,147.5,372.3,514.9 - 0 collapsed",
   "region third 850.1,147.5,372.3,514.9 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 69.6,357.8,1140.8,94.3 75px"
+  "item blocks.0.text first 69.6,334.5,1140.8,140.9 113px"
  ],
  "three-column 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1243,7 +1243,7 @@
   "area title 57.6,57.6,1164.8,65.9",
   "region pillars 57.6,147.5,1164.8,514.9 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text pillars 69.6,357.8,1140.8,94.3 75px"
+  "item blocks.0.text pillars 69.6,334.5,1140.8,140.9 113px"
  ],
  "pillars 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1353,7 +1353,7 @@
   "region second 652,147.5,570.4,34.2 - 0 collapsed",
   "region verdict 57.6,181.6,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 57.6,357.7,1164.8,94.5 75px"
+  "item blocks.0.text first 57.6,334.5,1164.8,140.9 113px"
  ],
  "comparison 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -3152,7 +3152,7 @@
   "region metrics 57.6,147.5,1164.8,514.9 grid 1",
   "region note 57.6,662.4,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric metrics 57.6,238.8,1164.8,332.2 232px"
+  "item blocks.0.metric metrics 57.6,226.6,1164.8,356.6 252px"
  ],
  "metrics 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -3268,7 +3268,7 @@
   "area title 57.6,57.6,1164.8,65.9",
   "region cards 57.6,147.5,1164.8,514.9 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric cards 81.3,238.9,1117.4,332.1 232px"
+  "item blocks.0.metric cards 81.6,226.6,1116.8,356.6 252px"
  ],
  "scorecard 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -3485,7 +3485,7 @@
   "region media 57.6,147.5,570.4,514.9 - 0 collapsed",
   "region body 57.6,147.5,1164.8,514.9 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text body 57.6,357.7,1164.8,94.5 75px"
+  "item blocks.0.text body 57.6,334.5,1164.8,140.9 113px"
  ],
  "image-beside 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -4282,7 +4282,7 @@
   "region support 57.6,147.5,1164.8,514.9 - 0 collapsed",
   "region media 1222.4,57.6,0,604.8 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text lead 57.6,345.7,1164.8,94.5 75px"
+  "item blocks.0.text lead 57.6,322.5,1164.8,140.9 113px"
  ],
  "hero 2 short": [
   "area title 57.6,57.6,1164.8,65.9",

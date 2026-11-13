@@ -126,7 +126,12 @@ for (const [language, text] of Object.entries(TEXT)) {
     ];
     for (const [index, slide] of slides.entries()) {
       const result = compose(deckOf(slide, language)), plain = compose(deckOf(iconless(slide), language));
-      assert.deepEqual(sizes(result), sizes(plain), `slide ${index}: no text smaller or larger with icons`);
+      // LH-188: without its icon the statement's lone figure is a one-message figure and grows past LH-101's 232 px; with the icon it keeps
+      // that size, so its chip has room. Every other text is the same size with and without icons.
+      if (index === 2) {
+        const without = new Map(sizes(plain)), value = ([key]) => key.includes('.metric');
+        for (const [key, size] of sizes(result)) if (value([key])) assert.ok(without.get(key) >= size, `slide 2: ${key}`); else assert.equal(size, without.get(key), `slide 2: ${key}`);
+      } else assert.deepEqual(sizes(result), sizes(plain), `slide ${index}: no text smaller or larger with icons`);
       assert.ok(result.icons?.length, `slide ${index}: icons drawn`);
       for (const icon of result.icons) assert.equal(icon.colors.chip.role, 'primary', `slide ${index}: the chip is the theme's primary`);
       const metrics = result.items.filter((item) => item.metricLayout?.parts.some((part) => part.role === 'value'));

@@ -457,7 +457,8 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   const {bytes: output, entries: parts} = await exportDeck(deck);
   const third = layoutOf(parts, 3), first = layoutOf(parts, 1);
   assert.notEqual(third, first);
-  assert.equal(text(parts, third).match(/<p:cSld name="([^"]*)"/)[1], 'Pillars (no furniture)');
+  // RR-105 (#1290, 2026-11-12): user-facing layout names (src/layout-names.js); previously 'Pillars (no furniture)'.
+  assert.equal(text(parts, third).match(/<p:cSld name="([^"]*)"/)[1], 'Pillars 2');
   assert.match(text(parts, third), /showMasterSp="0"/);
   assert.deepEqual(layoutTag(parts, third), layoutTag(parts, first));
   assert.deepEqual(placeholders(text(parts, third)).map(item => item.name), placeholders(text(parts, first)).map(item => item.name));

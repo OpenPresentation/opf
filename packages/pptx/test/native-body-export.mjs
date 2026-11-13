@@ -91,7 +91,8 @@ const nativeLayout = layoutPart(nativeRich.entries), tag = readLayoutTag(nativeR
 assert.equal(tag.reference, 'two-column');
 assert.equal(tag.regions['300'], 'first');
 assert.equal(tag.regions['101'], 'second', 'Unselected object slots keep their original indexes');
-assert.match(decode(nativeRich.entries, nativeLayout), /name="Two columns \(native body\)"/);
+// RR-105 (#1290, 2026-11-12): user-facing layout names (src/layout-names.js); previously "Two columns (native body)".
+assert.match(decode(nativeRich.entries, nativeLayout), /name="Two columns 2"/);
 const defaultsForSameTemplate = Object.keys(nativeRich.entries).filter(path => /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)).map(path => decode(nativeRich.entries, path));
 assert.ok(defaultsForSameTemplate.some(xml => /name="Two columns"/.test(xml) && !/type="body"/.test(xml)), 'Original catalog layout remains available');
 const importedRich = (await imported(nativeRich.bytes)).value.slides[0].blocks[0].text;

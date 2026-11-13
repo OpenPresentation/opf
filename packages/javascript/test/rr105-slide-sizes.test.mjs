@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { LONE_DISPLAY_SIZES, MIN_MEASURE_CHARS, composeSlide } from '../dist/composition.js';
+import { FIGURE_CEILING, LONE_DISPLAY_SIZES, MIN_MEASURE_CHARS, composeSlide } from '../dist/composition.js';
 import { resolveSlideContext } from '../dist/index.js';
 
 // RR-105 (coverage finding 30): a short body grows and sits in the middle of the body on every slide size, as on a 16:9 slide. A lone
@@ -36,7 +36,8 @@ for (const dimensions of SIZES) {
     const table = compose(dimensions, 2);
     assert.ok(table.body.tableGrowth > 1.9, `the table grows: ${table.body.tableGrowth}`);
     const metric = compose(dimensions, 3);
-    assert.ok(Math.abs(metric.body.metricLayout.parts.find((part) => part.role === 'value').fit.fontSize - LONE_DISPLAY_SIZES.value * metric.scale) < 0.5);
+    // LH-188: under its label title the metric is a one-message slide's figure of at most six characters: FIGURE_CEILING.size, not LONE_DISPLAY_SIZES.value.
+    assert.ok(Math.abs(metric.body.metricLayout.parts.find((part) => part.role === 'value').fit.fontSize - FIGURE_CEILING.size * metric.scale) < 0.5);
     for (const composed of [message, list, table]) assert.ok(centered(composed), `${composed.body.field} in the middle`);
   });
 }

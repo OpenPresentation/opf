@@ -54,11 +54,12 @@ const layoutOf = (entries, slide) => {
   for (const other of bodies.filter(shape => shape !== bound[0])) assert.deepEqual(format(bound[0]), format(other), 'the placeholder is formatted as the text boxes are');
   const idx = /<p:ph type="body" idx="(\d+)"\/>/.exec(bound[0])[1];
   const layout = layoutOf(entries, 1);
-  assert.equal(layout.name, 'Agenda beside (automatic grid)');
+  // RR-105 (#1290, 2026-11-12): user-facing layout names (src/layout-names.js); previously 'Agenda beside (automatic grid)'.
+  assert.equal(layout.name, 'Agenda beside 2');
   assert.ok(layout.placeholders.includes(`<p:ph type="body" idx="${idx}"/>`), 'the layout has that Body placeholder');
   assert.ok(layout.placeholders.includes('<p:ph type="title"/>'), 'and the title');
   // The slide on its layout keeps the template's own slide layout.
-  assert.equal(layoutOf(entries, 2).name.includes('automatic grid'), false);
+  assert.equal(layoutOf(entries, 2).name, 'Agenda beside', 'the template layout itself (RR-105: previously checked as a name without "automatic grid")');
   // Import reads the layout from the variant's tag and pins no block to a region; the lists come back whole.
   const back = await fromPptx(bytes, {});
   assert.deepEqual(back.slides.map(slide => slide.layout), ['agenda-split', 'agenda-split']);
