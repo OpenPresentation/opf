@@ -31,6 +31,7 @@ const INFO = new Set([
 	"diagram-shapes-unavailable",
 	"smartart-unavailable",
 	"arrangement-adapted",
+	"prepared-late",
 ]);
 
 const HELP: Record<string, string> = {
@@ -56,6 +57,7 @@ const HELP: Record<string, string> = {
 	"typeface-replaced": "Drop --typefaces safe to keep the selected families in the file.",
 	"diagram-shapes-unavailable": "The diagram stays one picture in PowerPoint (see the message). It looks the same; to edit it, change its source in OPF and export again.",
 	"smartart-unavailable": "The pyramid, matrix or cycle is exported as editable native shapes, which look the same; live SmartArt is written only where PowerPoint draws it exactly as the preview (docs/smartart.md). Shorten the entries named in the message, or give the region other proportions, to get live SmartArt. When the message names the fallback picture, install @openpresentation/opf-render: every live SmartArt carries OPF's picture of it for apps without SmartArt.",
+	"prepared-late": "Nothing to change in the deck: the output is correct. OPF prepared this face only when the export measured it, which its font analysis should have foreseen; please report the deck so the analysis covers it.",
 	"duplicate-font-face": "A --fonts face repeats a bundled family, weight and style; remove it or rename the family.",
 	"shape-property-dropped": "OPF has no form for this property of a PowerPoint shape (3-D, preset shadows, autofit and the others in docs/shapes.md); it was dropped and the shape imported. Set it again in the PowerPoint file if it matters.",
 	"shape-covers-content": "An overlay shape is always drawn over the content, and OPF has no layer behind it: give the content a card, or the slide a background, instead of a shape behind it.",
@@ -70,9 +72,32 @@ export interface ReportFinding extends Finding {
 export class Reporter {
 	readonly findings: ReportFinding[] = [];
 	private readonly seen = new Set<string>();
+	/** The identity key of each finding, by index ("" for the initial findings, which are not deduplicated). */
+	private readonly keys: string[] = [];
 
 	constructor(initial: readonly Finding[] = []) {
-		for (const item of initial) this.findings.push(item as ReportFinding);
+		for (const item of initial) {
+			this.findings.push(item as ReportFinding);
+			this.keys.push("");
+		}
+	}
+
+	/** The point `withdrawErrors` looks back to: the number of findings so far. */
+	mark(): number {
+		return this.findings.length;
+	}
+
+	/**
+	 * Withdraw the error findings added after `mark`: the failure of an attempt that is run again (RR-105). Its other findings stay; the
+	 * next attempt repeats them and they are kept once.
+	 */
+	withdrawErrors(mark: number) {
+		for (let index = this.findings.length - 1; index >= mark; index--) {
+			if (this.findings[index]?.severity !== "error") continue;
+			this.seen.delete(this.keys[index] ?? "");
+			this.findings.splice(index, 1);
+			this.keys.splice(index, 1);
+		}
 	}
 
 	/** Add a library diagnostic (`code`, `path`, `message` and details). Identical entries are kept once. */
@@ -92,6 +117,7 @@ export class Reporter {
 		const key = JSON.stringify([entry.ruleId, entry.path, entry.message, details]);
 		if (this.seen.has(key)) return;
 		this.seen.add(key);
+		this.keys.push(key);
 		this.findings.push(entry);
 	}
 
@@ -100,6 +126,7 @@ export class Reporter {
 		const key = JSON.stringify(finding);
 		if (this.seen.has(key)) return;
 		this.seen.add(key);
+		this.keys.push(key);
 		this.findings.push(finding as ReportFinding);
 	}
 
