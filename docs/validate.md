@@ -306,7 +306,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/layout-unplaced`](#opflayout-unplaced) | Layout | warning | composition | No region of the layout has room for a block. |
 | [`opf/icon-dropped`](#opficon-dropped) | Layout | warning | composition | An icon is not drawn. |
 | [`opf/arrangement-adapted`](#opfarrangement-adapted) | Layout | info | composition | A pyramid, matrix, cycle, row of chevrons or flow is drawn another way. |
-| [`opf/chart-label-collision`](#opfchart-label-collision) | Layout | warning | composition | A reference label meets another label or a data line. |
+| [`opf/chart-label-collision`](#opfchart-label-collision) | Layout | warning | composition | A reference label meets another label, a data line or a mark at both ends of its line. |
 | [`opf/timeline-period-short`](#opftimeline-period-short) | Layout | warning | composition | A timeline period is too short to read. |
 | [`opf/shape-off-slide`](#opfshape-off-slide) | Layout | warning | composition | A shape or image callout lies wholly outside the slide. |
 | [`opf/furniture-wraps`](#opffurniture-wraps) | Layout | warning | composition | A header or footer zone wraps onto more than 2 lines. |
@@ -995,9 +995,9 @@ Default severity: **info**. Cost: composition. A pyramid, matrix, cycle, row of 
 
 ### `opf/chart-label-collision`
 
-Default severity: **warning**. Cost: composition. A reference label meets another label or a data line.
+Default severity: **warning**. Cost: composition. A reference label meets another label, a data line or a mark at both ends of its line.
 
-**Why.** A reference label is tried above and below its line (beside it on a bar chart). When both places meet another reference label or a data line, it is drawn at the first and reported; its text and value are kept.
+**Why.** A reference label is tried above and below its line (beside it on a bar chart), at its own end and then at the other end of the line. When all four places meet another reference label, a data line, a bar or an area, it is drawn at the first and reported; its text and value are kept, and on a bar or an area it stands on a plate of the chart background.
 
 ### `opf/timeline-period-short`
 

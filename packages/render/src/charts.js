@@ -992,6 +992,8 @@ function drawReferenceLines(c, lines) {
     const color=line.stroke.color===undefined?c.chartTextColor:c.resolveColorRef(line.stroke.color,c.chartTextColor);
     const width=line.strokeWidth,dash=line.stroke.dash==='dash'?[4*width,3*width]:line.stroke.dash==='dot'?[width,3*width]:undefined;
     if(width>0)c.mark('line',{x1:line.x1,y1:line.y1,x2:line.x2,y2:line.y2,stroke:color,'stroke-width':width,...(dash?{'stroke-dasharray':dash.map(c.num).join(' ')}:{})},c.path+'.referenceLines.'+line.index);
+    // RR-105: a label core could not keep off the marks stands on a plate of the chart's surface (the PPTX export fills its label so).
+    if(line.label!==undefined&&line.labelBox&&line.labelPlate)c.mark('rect',{...line.labelBox,fill:c.surface},c.path+'.referenceLines.'+line.index+'.label');
     if(line.label!==undefined&&line.labelBox)c.text(line.label,line.labelBox,c.path+'.referenceLines.'+line.index+'.label',line.labelAlign??'center',c.labelColor);
   }
 }

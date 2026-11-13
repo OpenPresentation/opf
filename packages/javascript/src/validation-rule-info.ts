@@ -419,8 +419,8 @@ export const chartLabelCollisionRule = rule(
 	'chart-label-collision',
 	'layout',
 	'warning',
-	'A reference label meets another label or a data line.',
-	'A reference label is tried above and below its line (beside it on a bar chart). When both places meet another reference label or a data line, it is drawn at the first and reported; its text and value are kept.',
+	'A reference label meets another label, a data line or a mark at both ends of its line.',
+	'A reference label is tried above and below its line (beside it on a bar chart), at its own end and then at the other end of the line. When all four places meet another reference label, a data line, a bar or an area, it is drawn at the first and reported; its text and value are kept, and on a bar or an area it stands on a plate of the chart background.',
 	{ cost: 'composition' },
 );
 export const timelinePeriodShortRule = rule(

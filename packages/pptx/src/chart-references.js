@@ -67,7 +67,7 @@ export function assertReferenceExportBudget(series, lines, { key = 'OPF chart', 
   const ownership = { v: 1, key, helpers: [], overlays: [] };
   for (const line of lines) {
     const id = key + ':' + line.index;
-    if (line.native) ownership.helpers.push({ id, index: line.index, ...authoredBudgetRecord(line) });
+    if (line.native) ownership.helpers.push({ id, index: line.index, ...authoredBudgetRecord(line), ...(line.label !== undefined ? { labelAt: line.endpoint, labelPosition: line.labelPosition } : {}) });
     else ownership.overlays.push({ id, index: line.index, value: line.value, axis: line.axis, labelPosition: line.labelPosition, ...(multiAxisOverlays ? {axisIds: {category: 4294967295, value: 4294967295}} : {}), ...authoredBudgetRecord(line), binding: '0000000000000000' });
   }
   // The structural record uses UTF-8 uppercase hex; the binding placeholder has the exact fixed serialized width.
@@ -113,7 +113,8 @@ export function applyReferenceSeries(xml, info, binding) {
     const color = hiddenAware(resolveExportColor(line.stroke.color, { ...info.context, fallback: info.color }), line);
     const hex = color.slice(0, 6),
       alpha = color.length === 8 ? `<a:alpha val="${Math.round((parseInt(color.slice(6), 16) / 255) * 100000)}"/>` : '';
-    helpers.push({ id, index: line.index, ...authoredRecord(line, color) });
+    // RR-105: core may move a label to the other end of its line (off the marks); the record keeps the authored end for the import.
+    helpers.push({ id, index: line.index, ...authoredRecord(line, color), ...(line.label !== undefined ? { labelAt: line.endpoint, labelPosition: line.labelPosition } : {}) });
     const paint = `<c:spPr><a:ln w="${Math.round(line.strokeWidth * 9525)}" cap="flat"><a:solidFill><a:srgbClr val="${hex}">${alpha}</a:srgbClr></a:solidFill><a:prstDash val="${line.stroke.dash}"/></a:ln></c:spPr>`;
     let next = ser
       .replace(/<c:spPr>[\s\S]*?<\/c:spPr>/g, '')
@@ -125,7 +126,7 @@ export function applyReferenceSeries(xml, info, binding) {
     const label =
       line.label === undefined
         ? ''
-        : `<c:dLbl><c:idx val="${line.endpoint}"/><c:tx>${nativeLabelXml(line.label, info, binding?.lang)}</c:tx><c:dLblPos val="${line.labelSide === 'below' ? 'b' : 't'}"/><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/><c:showPercent val="0"/><c:showBubbleSize val="0"/></c:dLbl>`;
+        : `<c:dLbl><c:idx val="${line.endpoint}"/><c:tx>${nativeLabelXml(line.label, info, binding?.lang)}</c:tx>${line.labelPlate && info.surface ? `<c:spPr><a:solidFill><a:srgbClr val="${info.surface}"/></a:solidFill></c:spPr>` : ""}<c:dLblPos val="${line.labelSide === 'below' ? 'b' : 't'}"/><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/><c:showPercent val="0"/><c:showBubbleSize val="0"/></c:dLbl>`;
     // CT_DLbls: the c:dLbl entries, then either c:delete or the show flags, never both. A labeled helper shows only its one point's text;
     // an unlabeled one deletes its labels. Every show flag is written: CT_Boolean defaults to true, so PowerPoint reads an absent
     // c:showPercent or c:showBubbleSize as on, and Keynote refuses a line series that shows percentages or bubble sizes.
@@ -421,7 +422,7 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report, pars
           index: h.index,
           value: Number(values[0]),
           axis: axisName,
-          ...(labelText?.trim() ? { label: labelText, labelPosition: idx === 0 ? 'start' : 'end' } : {}),
+          ...(labelText?.trim() ? { label: labelText, labelPosition: h.labelAt === idx && ['start', 'end'].includes(h.labelPosition) ? h.labelPosition : idx === 0 ? 'start' : 'end' } : {}),
           stroke: paint,
         },
         h,
@@ -446,7 +447,7 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report, pars
   return result;
 }
 /** Fallbacks use full-plot native shapes. They cannot track independent chart moves or edits. */
-export function addReferenceOverlays(slide, lines, { key, tags, context, color, labelColor = color, font, size }) {
+export function addReferenceOverlays(slide, lines, { key, tags, context, color, labelColor = color, font, size, surface }) {
   for (const l of lines.filter((l) => !l.native)) {
     const id = `${key}:${l.index}`,
       name = id + ' line',
@@ -482,6 +483,8 @@ export function addReferenceOverlays(slide, lines, { key, tags, context, color, 
         wrap: false,
         fit: 'none',
         align: l.labelAlign ?? 'center',
+        // RR-105: a label core could not keep off the marks stands on a plate of the chart's surface, as in the preview.
+        ...(l.labelPlate && surface ? { fill: { color: surface } } : {}),
         valign: 'middle',
       });
       tags.set(n, { v: 1, id, key, role: 'label' });

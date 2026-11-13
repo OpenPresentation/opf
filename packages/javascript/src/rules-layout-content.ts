@@ -47,7 +47,7 @@ const layoutRules: ValidationRule[] = [
 					// An overlay shape or image callout with no part on the slide: advice, never an overflow.
 					else if (diagnostic.code === 'shape-off-slide')
 						context.report(shapeOffSlideRule, { path, slide, message: diagnostic.message, help: 'Write the position as fractions (0.2 for 20%), move the shape so part of it is on the slide, or remove it. A shape may hang over an edge; only one with nothing on the slide is reported.' });
-					// A reference label that meets another label or a data line on both of its sides: drawn as asked, and reported as what it is.
+					// A reference label that meets another label, a data line or a mark on both sides at both ends of its line: drawn as asked, and reported as what it is.
 					else if (diagnostic.code === 'chart-label-collision')
 						context.report(chartLabelCollisionRule, { path, slide, message: diagnostic.message, help: "Put the label at the other end of its line (labelPosition 'start' or 'end'), shorten it, or give the chart more room. Its text and value are kept." });
 					// RR-105: a timeline period shorter than its marker (geometry, not overflow).
