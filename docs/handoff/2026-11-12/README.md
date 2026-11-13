@@ -74,7 +74,9 @@ Updating a deck or a host from 0.33: [docs/migrations/0.34.md](../../migrations/
 4. **Goldens.** Regenerated only by `golden.yml` on the branch; every moved hash was reviewed.
 
 5. **Keynote and PowerPoint for Mac.** The Mac session ("OPF v0.34.0 Mac review") opened the corpus on the Mac mini; its four
-   fixes are folded in (issues #1278, #1298, #1299, #1314 hold what remains).
+   fixes are folded in (issues #1278, #1298, #1299, #1314 hold what remains). Its final pass on `fdd06ce40` (Keynote 15.1.1): all
+   67 files open with no alert, every title placeholder shows its title with the same text and paragraphs, no title moved, fonts
+   and layout names hold. Not run: the letter-spacing comparison, the font comparison of 16 files, and Keynote's UI-only views.
 6. **PowerPoint runs for each 2026-11-13 addition.** Each patch-checklist item, the title placeholders (four probe decks of line
    placement in up to 40 faces, then 12 decks with 161 slides), the theme font references (160 of 161 slides identical, then the
    theme fonts switched through the object model) and the display-growth slides were opened and measured in PowerPoint before
@@ -136,11 +138,19 @@ Decisions of 2026-11-13 (all vetoable):
   text in scripts without word spaces is issue #1315.
 - **Identity pins under `scripts/native-acceptance` moved with the export** where the consumed content is provably unchanged,
   each with a dated comment and the previous value. Pins that encode a PowerPoint observation were not touched.
-- **The reference series-name measurement is to be taken again (owner's choice, 2026-11-13).** The sealed archive was taken on an
-  older export; three `reference-name-snapshot` tests compare it with the current export and fail until a new archive is sealed
-  on the final export. The sealed worker `packages/pptx/test/native-furniture-control.ps1` admits only the old input by hash
-  and looks for the old helper names; changing it needs the owner's word, asked on 2026-11-13. The tool and the runbook for the
-  new measurement are on the local branch `claude/rr-034-remeasure`.
+- **The reference series-name measurement was taken again on the final export (owner's choice, 2026-11-13).** PowerPoint 16.0.20527
+  renamed the series through the sealed route on the 129,055-byte export; the report, the stage record and the three archives are
+  in `scripts/native-acceptance/test-fixtures/reference-name/measurement/`, and `reference-name-measurement.test.mjs` checks them
+  against the route's contract on every run. The owner approved two changes for it: the sealed worker
+  `packages/pptx/test/native-furniture-control.ps1` admits the new input and its helper names (an eighth stage in the three
+  sealing tests derives the previous worker byte for byte), and an admission may bind 20,000 files instead of 2,000 (the 0.34
+  gallery ships each icon as its own file). To measure again after an export change, follow [reference-name-remeasure.md](reference-name-remeasure.md).
+- **A stale generated description is not authored text.** For charts and tables, import leaves out any description in the form
+  export generates, also when its names no longer match (PowerPoint keeps the description when a series or a column is renamed).
+  An author's own `alt` written in exactly that form would be dropped too. The re-measurement's contract found the defect.
+- **`composeSlide` measures each string once per call.** Display growth composes most slides twice, which made composition 75%
+  slower; the per-call memo brings `opf validate examples` from 90 s to 43 s (52 s before display growth) with identical output.
+  One test that asserted the order of two host requests now asserts that both were made.
 
 ## Known gaps carried into 0.34.0 (not regressions)
 
@@ -180,7 +190,6 @@ Decisions of 2026-11-13 (all vetoable):
   `.mcpb` extension; then run the MCP Apps checklist in the RR-111 log in a real Claude host.
 - Decide the SmartArt strategy (issue #1310), LibreOffice promotion (#1272), D2 (#1273), an authored background on message
   slides (#1300) and the opt-in Keynote route (#1298).
-- Answer whether the sealed native-acceptance worker may be changed for the reference-name measurement (see the decisions).
 - Any DNS change or login. (On 2026-11-12 the owner allowed the supervising session to merge and deploy the sites when the
   change is verified; that permission was for that session.)
 - Decide whether to delete the evidence-only branches and the previous agent's folders under `C:\opf-work`.
