@@ -1,0 +1,37 @@
+layouts	180	Blank,Cover,Section,Section 0,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only,Title Only 0,Title Only 1,Title Only 2,Title Only 3,Title Only 4,Title Only 5,Title Only 6,Title Only 7,Title Only 8,Title Only 9,Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only,Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only,Title Only 0,Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only
+size	960x540
+slide	1	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Every named color in one table
+slide	2	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The light1 variant
+slide	3	Title Only 0	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The light2 variant
+slide	4	Title Only 1	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The dark1 variant
+slide	5	Title Only 2	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The dark2 variant
+slide	6	Title Only 3	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The accent1 variant
+slide	7	Title Only 4	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The accent2 variant
+slide	8	Title Only 5	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The accent3 variant
+slide	9	Title Only 6	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The accent4 variant
+slide	10	Title Only 7	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The accent5 variant
+slide	11	Title Only 8	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The accent6 variant
+slide	12	Title Only 9	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A dark variant with the accents reordered
+slide	13	Title Only 3	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A centered title and body
+slide	14	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Title and body at the end edge
+slide	15	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Content stacked vertically
+slide	16	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Content side by side
+slide	17	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The chart placed by the engine
+slide	18	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The chart placed at the top
+slide	19	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The chart placed at the bottom
+slide	20	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The chart placed at the start
+slide	21	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The chart placed at the end
+slide	22	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Pictures fit by cover
+slide	23	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Pictures fit by contain
+slide	24	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Pictures fit by stretch
+slide	25	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Pictures fit by auto
+slide	26	Title Only 3	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A picture watermark
+slide	27	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A watermark from a path
+slide	28	Cover	true	1	Helvetica-Bold	56.0	0	Helvetica-Bold,Helvetica	A cover that draws the icon logo
+slide	29	Section 0	true	1	Helvetica-Bold	56.0	0	Helvetica-Bold,Helvetica	A section without a logo
+slide	30	Title Only	true	1	Georgia-Bold	40.0	0	Georgia-Bold,Georgia,Helvetica	A slide with its own schemes
+slide	31	Title Only 0	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A slide in a monospace scheme
+slide	32	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Font scheme families for complex scripts
+slide	33	Title Only 3	true	1	Helvetica-Light	40.0	0	Helvetica-Light,Helvetica	A slide in Segoe UI Light
+slide	34	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The short family names
+

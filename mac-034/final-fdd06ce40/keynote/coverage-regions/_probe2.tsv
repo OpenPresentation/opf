@@ -1,0 +1,28 @@
+layouts	42	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only
+size	960x540
+slide	1	Title Only	true	1	Helvetica-Bold	33.0	110	Helvetica-Bold,Helvetica	Three bands: thirds, two thirds and one, one and two thirds
+slide	2	Title Only	true	1	Helvetica-Bold	30.0	97	Helvetica-Bold,Helvetica	Three bands: two thirds and one, one and two thirds, one wide cell
+slide	3	Title Only	true	1	Helvetica-Bold	37.0	105	Helvetica-Bold,Helvetica	Three bands: one and two thirds, one wide cell, thirds
+slide	4	Title Only	true	1	Helvetica-Bold	37.0	108	Helvetica-Bold,Helvetica	Three bands: one wide cell, thirds, two thirds and one
+slide	5	Title Only	true	1	Helvetica-Bold	40.0	33	Helvetica-Bold,Helvetica	Three plain bands, top to bottom
+slide	6	Title Only	true	1	Helvetica-Bold	40.0	73	Helvetica-Bold,Helvetica	A tall upper band in thirds
+slide	7	Title Only	true	1	Helvetica-Bold	40.0	61	Helvetica-Bold,Helvetica	A tall upper band in two thirds and one
+slide	8	Title Only	true	1	Helvetica-Bold	40.0	61	Helvetica-Bold,Helvetica	A tall upper band in one and two thirds
+slide	9	Title Only	true	1	Helvetica-Bold	40.0	49	Helvetica-Bold,Helvetica	A tall upper band in one wide cell
+slide	10	Title Only	true	1	Helvetica-Bold	40.0	32	Helvetica-Bold,Helvetica	A tall upper band over a footer band
+slide	11	Title Only	true	1	Helvetica-Bold	40.0	79	Helvetica-Bold,Helvetica	A header band over thirds
+slide	12	Title Only	true	1	Helvetica-Bold	40.0	64	Helvetica-Bold,Helvetica	A header band over two thirds and one
+slide	13	Title Only	true	1	Helvetica-Bold	40.0	64	Helvetica-Bold,Helvetica	A header band over one and two thirds
+slide	14	Title Only	true	1	Helvetica-Bold	40.0	49	Helvetica-Bold,Helvetica	A header band over one wide cell
+slide	15	Title Only	true	1	Helvetica-Bold	40.0	32	Helvetica-Bold,Helvetica	A header band over a tall lower band
+slide	16	Title Only	true	1	Helvetica-Bold	40.0	86	Helvetica-Bold,Helvetica	Full-height columns in thirds
+slide	17	Title Only	true	1	Helvetica-Bold	40.0	67	Helvetica-Bold,Helvetica	Full-height columns in two thirds and one
+slide	18	Title Only	true	1	Helvetica-Bold	40.0	67	Helvetica-Bold,Helvetica	Full-height columns in one and two thirds
+slide	19	Title Only	true	1	Helvetica-Bold	40.0	48	Helvetica-Bold,Helvetica	Full-height columns in one wide cell
+slide	20	Title Only	true	1	Helvetica-Bold	40.0	31	Helvetica-Bold,Helvetica	One region over the whole body
+slide	21	Title Only	true	1	Helvetica-Bold	40.0	32	Helvetica-Bold,Helvetica	Columns only, in thirds
+slide	22	Title Only	true	1	Helvetica-Bold	40.0	31	Helvetica-Bold,Helvetica	Columns only, in two thirds and one
+slide	23	Title Only	true	1	Helvetica-Bold	40.0	31	Helvetica-Bold,Helvetica	Columns only, in one and two thirds
+slide	24	Title Only	true	1	Helvetica-Bold	40.0	76	Helvetica-Bold,Helvetica	Short labels become tiles
+slide	25	Title Only	true	1	Helvetica-Bold	40.0	29	Helvetica-Bold,Helvetica	One column across the body
+

@@ -1,0 +1,56 @@
+layouts	46	Blank,Agenda,Agenda beside,Chart,Chart beside,Chevrons,Closing,Closing 0,Code,Comparison,Cover,Cycle,Dashboard,FAQ,Flow,Gallery,Hero,Hierarchy,Image,Image beside,Inverted pyramid,List,Logos,Matrix,Metrics,Organization chart,Pillars,Process,Pyramid,Quote,Quote 0,Scorecard,Section,Section 0,Statement,Statement 0,Table,Table beside,Team,Text,Three columns,Timeline,Two columns,Venn,Vertical flow,Title Only
+size	960x540
+slide	1	Cover	true	2	Helvetica-Bold	56.0	0	Helvetica-Bold,Helvetica	A smaller pilot.  | A clearer decision.
+slide	2	Section 0	true	1	Helvetica-Bold	56.0	0	Helvetica-Bold,Helvetica	Test before scaling
+slide	3	Agenda	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	From the problem to the next decision
+slide	4	Agenda beside	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Three parts, one decision
+slide	5	Statement 0	true	1	Helvetica-Bold	56.0	0	Helvetica,Helvetica-Bold	Start small enough to learn quickly
+slide	6	Closing 0	true	1	Helvetica-Bold	56.0	0	Helvetica,Helvetica-Bold	Agree the pilot team and start date
+slide	7	Text	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Learn before scaling
+slide	8	List	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Make the next step explicit
+slide	9	Quote 0	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	A shared view makes decisions easier
+slide	10	Two columns	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Opportunity and constraints
+slide	11	Three columns	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Scope, evidence and the next decision
+slide	12	Pillars	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Three conditions for a useful pilot
+slide	13	Comparison	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Choose the smallest useful test
+slide	14	Process	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Three steps from evidence to decision
+slide	15	Timeline	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Six weeks to an informed decision
+slide	16	FAQ	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	What the pilot involves
+slide	17	Metrics	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Pilot outcomes in three measures
+slide	18	Scorecard	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Track performance against a target
+slide	19	Image	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Give the visual room to speak
+slide	20	Image beside	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Explain what the audience should notice
+slide	21	Gallery	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Compare three visual directions
+slide	22	Chart	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Completion rose through the pilot
+slide	23	Chart beside	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	The largest gain came in week four
+slide	24	Table	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Compare outcomes on consistent measures
+slide	25	Table beside	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Team B needs targeted support
+slide	26	Code	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Keep the implementation easy to inspect
+slide	27	Hero	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	One team. One outcome.
+slide	28	Dashboard	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Pilot performance at a glance
+slide	29	Team	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Give each workstream a clear owner
+slide	30	Logos	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Recognize the partners
+slide	31	Pyramid	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	What the pilot builds on
+slide	32	Matrix	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Four ways to run the pilot
+slide	33	Cycle	true	1	Helvetica-Bold	39.0	0	Helvetica,Helvetica-Bold	How each pilot round feeds the next
+slide	34	Chevrons	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Four stages of the pilot
+slide	35	Flow	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	From evidence to decision
+slide	36	Vertical flow	true	2	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	How a team  | joins the pilot
+slide	37	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Lead with the recommendation
+slide	38	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	What makes a pilot worth running
+slide	39	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Pilot outcomes in four measures
+slide	40	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Completion rose every week
+slide	41	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	What the first four weeks show
+slide	42	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Week four brought the biggest gain
+slide	43	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	What the pilot asks of us
+slide	44	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	From baseline to decision in six weeks
+slide	45	Title Only	true	1	Helvetica-Bold	33.0	0	Helvetica,Helvetica-Bold	What participants noticed
+slide	46	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Where Team B falls behind
+slide	47	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Six lessons from the pilot
+slide	48	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	How the running total works
+slide	49	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	The numbers and the voice agree
+slide	50	Inverted pyramid	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	From possibilities to a decision
+slide	51	Organization chart	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Give the pilot a clear reporting structure
+slide	52	Hierarchy	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Break the pilot into focused workstreams
+slide	53	Venn	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Three conditions for a useful pilot
+

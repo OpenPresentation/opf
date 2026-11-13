@@ -1,0 +1,9 @@
+layouts	42	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only
+size	960x540
+slide	1	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Cells with fills, colors and alignment
+slide	2	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Borders, padding and vertical alignment
+slide	3	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Merged cells across columns and rows
+slide	4	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A row header column without a heading
+slide	5	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A table drawn from a shared dataset
+slide	6	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Only some fields of the dataset
+

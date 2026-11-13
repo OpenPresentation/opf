@@ -1,0 +1,9 @@
+layouts	43	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only,Title Only 0
+size	960x540
+slide	1	Title Only 0	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Shapes placed on the slide
+slide	2	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Notes anchored to each edge of a block
+slide	3	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Callouts on chart points
+slide	4	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Three routes between three steps
+slide	5	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Overlay shapes with effects and text options
+slide	6	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Paths, adjust values, links and hidden overlays
+

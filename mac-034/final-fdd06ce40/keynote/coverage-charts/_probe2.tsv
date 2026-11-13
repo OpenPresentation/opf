@@ -1,0 +1,22 @@
+layouts	42	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only
+size	960x540
+slide	1	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Every segment grew in the stacked view
+slide	2	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Shares hold steady across the year
+slide	3	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Self-serve takes a larger share
+slide	4	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Cumulative bookings by segment
+slide	5	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Two teams, five skills
+slide	6	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Email still brings most requests
+slide	7	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Sales are strongest in Germany
+slide	8	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Data labels at four positions
+slide	9	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Line labels above, below, left and right
+slide	10	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Choosing columns with a mapping
+slide	11	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A scatter plot with a mapped x axis
+slide	12	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Won deals from the shared pipeline dataset
+slide	13	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Inline data that records where it came from
+slide	14	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Margin against target on a second axis
+slide	15	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Margins by product, two below zero
+slide	16	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Bar references with legend, labels and axis titles
+slide	17	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Pareto and histogram with negative values
+slide	18	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A Pareto chart with two series
+slide	19	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Seats per office, without labels
+

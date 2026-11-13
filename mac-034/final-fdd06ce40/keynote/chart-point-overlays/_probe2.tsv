@@ -1,0 +1,6 @@
+layouts	42	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Timeline,Title Only
+size	960x540
+slide	1	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Follow a value as the data changes
+slide	2	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Follow a numeric marker
+slide	3	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Follow a slice at its outer arc
+

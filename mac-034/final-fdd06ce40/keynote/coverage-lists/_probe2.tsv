@@ -1,0 +1,16 @@
+layouts	42	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only
+size	960x540
+slide	1	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Three ways to write a list item
+slide	2	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Icons from a set, the deck and a file
+slide	3	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Three levels of nesting
+slide	4	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Talking points as bullets
+slide	5	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Roman numerals with a period
+slide	6	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Letters in parentheses, starting at C
+slide	7	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A numbering style per level
+slide	8	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Numbered bullets that restart
+slide	9	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A long list flows into columns
+slide	10	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Bullets in two columns
+slide	11	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Picture bullets in rows
+slide	12	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A stacked list without bullet marks
+slide	13	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Character bullets, the default
+

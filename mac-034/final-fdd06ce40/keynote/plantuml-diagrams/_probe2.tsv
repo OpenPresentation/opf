@@ -1,0 +1,11 @@
+layouts	42	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only
+size	960x540
+slide	1	Title Only	true	1	Helvetica-Bold	37.0	0	Helvetica-Bold,Helvetica	The API answers every request with findings
+slide	2	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A deck is a list of slides
+slide	3	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A deck moves from draft to published
+slide	4	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Every brief is reviewed before it is built
+slide	5	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Presenters write, reviewers approve
+slide	6	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The editor and the site share one API
+slide	7	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Three bets carry the strategy
+slide	8	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The release ships in February
+

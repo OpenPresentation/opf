@@ -1,0 +1,21 @@
+layouts	42	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only
+size	960x540
+slide	1	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A Mermaid flow with its syntax named
+slide	2	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A Graphviz graph of the release steps
+slide	3	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A PlantUML sequence for sign-in
+slide	4	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A diagram beside its explanation
+slide	5	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A DOT graph with two clusters
+slide	6	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Components of the booking system
+slide	7	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	States of a container
+slide	8	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The berth upgrade schedule
+slide	9	Flow	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Four stages from request to release
+slide	10	Vertical flow	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Onboarding runs top to bottom
+slide	11	Chevrons	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Five steps of a support case
+slide	12	Cycle	true	1	Helvetica-Bold	38.0	0	Helvetica-Bold,Helvetica	The planning cycle repeats each quarter
+slide	13	Pyramid	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	What the platform rests on
+slide	14	Inverted pyramid	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	From every idea to one decision
+slide	15	Matrix	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Effort against impact
+slide	16	Organization chart	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Who reports to whom in the pilot
+slide	17	Hierarchy	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Workstreams under the program
+slide	18	Venn	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Where a good pilot sits
+

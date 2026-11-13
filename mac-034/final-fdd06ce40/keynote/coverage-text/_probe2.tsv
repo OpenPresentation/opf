@@ -1,0 +1,16 @@
+layouts	43	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only,Title Only 0
+size	960x540
+slide	1	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-BoldOblique,Helvetica-Bold,Helvetica	Every run style in one paragraph
+slide	2	Title Only 0	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Superscripts, subscripts and sizes
+slide	3	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Links and a phrase in another language
+slide	4	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A quote written with runs
+slide	5	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A quote with a side portrait
+slide	6	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A quote as one string
+slide	7	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Code with highlighted lines
+slide	8	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Code as one string
+slide	9	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A metric with every field
+slide	10	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Metrics as a string, a number and an object
+slide	11	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A root metric as a string
+slide	12	Title Only 0	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Revenue  and  margin, side by side
+slide	13	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A root metric as a number
+

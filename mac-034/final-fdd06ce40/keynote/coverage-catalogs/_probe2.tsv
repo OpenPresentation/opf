@@ -1,0 +1,6 @@
+layouts	44	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Harbor metrics,Metrics,Title Only,Title Only 0
+size	960x540
+slide	1	Harbor metrics	true	1	Georgia-Bold	40.0	0	Georgia-Bold,Georgia	Three numbers in our own metrics layout
+slide	2	Metrics	true	1	Georgia-Bold	30.0	0	Georgia-Bold,Georgia	The same numbers in the embedded default layout
+slide	3	Title Only 0	true	1	Georgia-Bold	30.0	0	Georgia-Bold,Georgia	A slide that names an embedded default color scheme
+

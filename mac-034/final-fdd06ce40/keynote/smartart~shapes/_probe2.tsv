@@ -1,0 +1,20 @@
+layouts	41	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos
+size	960x540
+slide	1	Pyramid	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Our priorities
+slide	2	Pyramid	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	What the plan rests on
+slide	3	Matrix	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Four quadrants
+slide	4	Matrix	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Three operating habits
+slide	5	Cycle	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The review loop
+slide	6	Cycle	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	How the year repeats
+slide	7	Chevrons	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	From idea to release
+slide	8	Chevrons	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Eight stages of delivery
+slide	9	Flow	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	How a request moves
+slide	10	Flow	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Seven steps to a habit
+slide	11	Vertical flow	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Three steps
+slide	12	Vertical flow	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Six steps to steady delivery
+slide	13	Pyramid	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Seven layers
+slide	14	Matrix	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Three habits
+slide	15	Chevrons	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Eight stages
+slide	16	Flow	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Eight steps
+slide	17	Vertical flow	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Six steps
+

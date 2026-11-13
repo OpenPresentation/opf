@@ -1,0 +1,6 @@
+layouts	43	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only,Title Only 0
+size	960x540
+slide	1	Cover	true	2	Helvetica-Bold	56.0	0	Helvetica-Bold,Helvetica	Quarterly review for  | Port of Rotterdam
+slide	2	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Revenue this quarter
+slide	3	Title Only 0	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	An optional quote card left out when unfilled
+

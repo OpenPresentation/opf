@@ -1,0 +1,14 @@
+layouts	44	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Closing 0,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only,Title Only 0
+size	960x540
+slide	1	Title Only	true	1	Helvetica-Bold	40.0	49	Helvetica-Bold,Helvetica	Three blocks in a weighted row
+slide	2	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Blocks stacked in a column
+slide	3	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A grid of six cells
+slide	4	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Automatic placement with an error policy
+slide	5	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Groups inside groups
+slide	6	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Image, table, timeline and diagram blocks
+slide	7	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A shape block and a video block
+slide	8	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A named timeline with durations
+slide	9	Comparison	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Before and after the change
+slide	10	Closing 0	true	1	Helvetica-Bold	56.0	0	Helvetica-Bold,Helvetica	What we ask of the board
+slide	11	Title Only 0	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A backup slide hidden in the show
+

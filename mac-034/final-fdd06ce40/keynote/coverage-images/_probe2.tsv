@@ -1,0 +1,19 @@
+layouts	42	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only
+size	960x540
+slide	1	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A picture with alt text and a caption
+slide	2	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Cover, contain, stretch and automatic fit
+slide	3	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Focus points and recolored pictures
+slide	4	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Color bands over a picture
+slide	5	Title Only	true	1	Helvetica-Bold	33.0	0	Helvetica-Bold,Helvetica	A picture placed at the start edge
+slide	6	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A picture placed at the end edge
+slide	7	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A banner picture along the top
+slide	8	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A strip picture along the bottom
+slide	9	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A framed, translucent picture
+slide	10	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Pictures across the top of each card
+slide	11	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Pictures beside the names
+slide	12	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Small avatars over the names
+slide	13	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Callouts on a picture
+slide	14	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Watch the two-minute walkthrough
+slide	15	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A video beside its talking points
+slide	16	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Captions on a chart and a table
+

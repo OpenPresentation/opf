@@ -1,0 +1,13 @@
+layouts	47	Blank,Section,Agenda,Agenda beside,Statement,Closing,Quote,Two columns,Three columns,Pillars,Comparison,Process,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image beside,Gallery,Chart beside,Table,Hero,Team,Logos,Chart,Code,Cover,Dashboard,Image,List,Table beside,Text,Timeline,Title Only,Text 2,Text 2 0,Chart 2,Dashboard 2,Image 2
+size	960x540
+slide	1	Cover	true	1	Helvetica-Bold	56.0	82	Helvetica,Helvetica-Bold	Compliance Readiness Review
+slide	2	Text 2 0	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Why This Matters
+slide	3	Chart 2	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Signal Trend
+slide	4	Table beside	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Decision Options
+slide	5	Timeline	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Execution Timeline
+slide	6	Title Only	true	1	Helvetica-Bold	40.0	83	Helvetica,Helvetica-Bold	Operating Model
+slide	7	Dashboard 2	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Evidence Pack
+slide	8	Image 2	true	1	Helvetica-Bold	40.0	41	Helvetica,Helvetica-Bold	Field Context
+slide	9	Code	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold,Courier-Bold,Courier	Decision Rule
+slide	10	List	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Decision and Follow Through
+

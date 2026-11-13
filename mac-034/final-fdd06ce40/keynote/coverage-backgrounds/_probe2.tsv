@@ -1,0 +1,22 @@
+layouts	48	Blank,Cover,Cover 0,Cover 1,Section,Section 0,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only,Title Only 0,Title Only 1,Title Only 2
+size	960x540
+slide	1	Title Only 0	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The deck background is a theme slot
+slide	2	Title Only 1	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A slot name as a shortcut
+slide	3	Title Only 2	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A hex color as a shortcut
+slide	4	Title Only 2	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A picture path as a shortcut
+slide	5	Title Only 1	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A solid scheme color at 85 percent
+slide	6	Title Only 1	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A dark diagonal gradient
+slide	7	Title Only 2	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A light vertical gradient
+slide	8	Title Only 2	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A patterned background
+slide	9	Title Only 1	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A picture contained on a dark slide
+slide	10	Title Only 2	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A stretched, faded picture
+slide	11	Title Only 2	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A tiled, recolored picture
+slide	12	Title Only 1	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A cropped picture in brand colors
+slide	13	Cover 0	true	1	Helvetica-Bold	56.0	0	Helvetica-Bold,Helvetica	Heading at the top start
+slide	14	Cover 0	true	1	Helvetica-Bold	56.0	0	Helvetica-Bold,Helvetica	Heading at the top center
+slide	15	Cover 0	true	2	Helvetica-Bold	56.0	0	Helvetica-Bold,Helvetica	Heading in the  | middle, at the start
+slide	16	Cover 0	true	1	Helvetica-Bold	56.0	0	Helvetica-Bold,Helvetica	Heading in the middle, centered
+slide	17	Section 0	true	1	Helvetica-Bold	56.0	0	Helvetica-Bold,Helvetica	Heading at the bottom start
+slide	18	Section 0	true	1	Helvetica-Bold	56.0	0	Helvetica-Bold,Helvetica	Heading at the bottom center
+slide	19	Cover 1	true	1	Helvetica-Bold	42.0	0	Helvetica-Bold,Helvetica	Heading on a side panel
+

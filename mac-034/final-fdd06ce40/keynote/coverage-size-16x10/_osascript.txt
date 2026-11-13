@@ -1,0 +1,1 @@
+slides=3 size=720x450 docsBefore=0 docsAfter=0

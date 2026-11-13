@@ -1,0 +1,15 @@
+layouts	42	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only
+size	960x540
+slide	1	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Solid, gradient, pattern and empty fills
+slide	2	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Every dash style, and a custom one
+slide	3	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Line caps, joins and compound lines
+slide	4	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Arrowheads in every type and size
+slide	5	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Hand-drawn outlines
+slide	6	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Four style presets
+slide	7	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Shadows, glow, soft edges, reflection and blur
+slide	8	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Rotated and flipped shapes
+slide	9	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Text anchored top, middle and bottom
+slide	10	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Text in four directions
+slide	11	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Custom outlines from paths
+slide	12	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Alt text, decoration, hidden shapes and links
+

@@ -1,0 +1,2490 @@
+{
+  "manifestVersion": "0.34.0",
+  "revision": "fdd06ce4084457bece40b074633b2500ddbfdb6a",
+  "opfVersion": "0.33.0",
+  "node": "v24.21.0",
+  "platform": "darwin-arm64",
+  "builtAt": "2026-11-13T16:31:33.371Z",
+  "decks": [
+    {
+      "id": "smartart",
+      "source": "scripts/native-acceptance/qualification/decks/smartart.opf.json",
+      "sourceSha256": "a55533cf9ab892886c8ff0f859412d2a82158bb78bbf48b0a62eef7c680e6d6d",
+      "previewOk": true,
+      "previewSlides": 17,
+      "previewFindings": [
+        {
+          "ruleId": "render/arrangement-adapted",
+          "severity": "info",
+          "path": "/slides/3/items",
+          "message": "A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+        },
+        {
+          "ruleId": "render/arrangement-adapted",
+          "severity": "info",
+          "path": "/slides/13/items",
+          "message": "A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/smartart.pptx",
+          "ok": true,
+          "sha256": "73feafa0945ed64efa4e4a8483724e73c7e14af22e2ab1475f80f144bd487f64",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/1/items",
+              "message": "The pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: entry 4 wraps too close to its node's width for PowerPoint to break the same lines."
+            },
+            {
+              "ruleId": "pptx/arrangement-adapted",
+              "severity": "info",
+              "path": "/slides/3/items",
+              "message": "A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/3/items",
+              "message": "The matrix is exported as native shapes, not live SmartArt: OPF's matrix has no live SmartArt: its text covers 9% of the frame (at most 7.5% matched PowerPoint's text placement)."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/5/items",
+              "message": "The cycle is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Cycle at the list's size, so OPF's own cycle is drawn; OPF's own layout does not hold it either: OPF's cycle-loop layout did not pass PowerPoint's comparison."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/7/items",
+              "message": "The row of chevrons is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Chevron Process at the list's size, so OPF's own row of chevrons is drawn; OPF's own layout does not hold it either: entry 3 wraps too close to its node's width for PowerPoint to break the same lines."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/9/items",
+              "message": "The flow is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Process at the list's size, so OPF's own flow is drawn; OPF's own layout does not hold it either: entry 6 wraps too close to its node's width for PowerPoint to break the same lines."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/11/items",
+              "message": "The vertical flow is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Vertical Process at the list's size, so OPF's own vertical flow is drawn; OPF's own layout does not hold it either: entry 6 wraps too close to its node's width for PowerPoint to break the same lines."
+            },
+            {
+              "ruleId": "pptx/arrangement-adapted",
+              "severity": "info",
+              "path": "/slides/13/items",
+              "message": "A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        },
+        {
+          "name": "shapes",
+          "flags": [
+            "--smart-art",
+            "shapes"
+          ],
+          "pptx": "pptx/smartart~shapes.pptx",
+          "ok": true,
+          "sha256": "19753347e6acd8131d0eefd0c72422882f501c2b3ef0fd265801c4ad47c0c8db",
+          "findings": [
+            {
+              "ruleId": "pptx/arrangement-adapted",
+              "severity": "info",
+              "path": "/slides/3/items",
+              "message": "A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+            },
+            {
+              "ruleId": "pptx/arrangement-adapted",
+              "severity": "info",
+              "path": "/slides/13/items",
+              "message": "A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "smartart-arabic",
+      "source": "scripts/native-acceptance/qualification/decks/smartart-arabic.opf.json",
+      "sourceSha256": "f9ece76f6c2d0c223decf52e6f823371a5865c9444eb3a92def00051031e976d",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/smartart-arabic.pptx",
+          "ok": true,
+          "sha256": "7233e798e62497ad0c6debcb8c37c1846042ba4db042e140c64223492f9224b3",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/0/items",
+              "message": "The pyramid is exported as native shapes, not live SmartArt: right-to-left text sits off center in PowerPoint's SmartArt, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: right-to-left text sits off center in PowerPoint's SmartArt."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/1/items",
+              "message": "The flow is exported as native shapes, not live SmartArt: right-to-left text sits off center in PowerPoint's SmartArt, so OPF's own flow is drawn; OPF's own layout does not hold it either: OPF's flow-rows layout passed PowerPoint's comparison for 6 to 8 entries, not 4."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/2/items",
+              "message": "The cycle is exported as native shapes, not live SmartArt: right-to-left text sits off center in PowerPoint's SmartArt, so OPF's own cycle is drawn; OPF's own layout does not hold it either: OPF's cycle-ring layout did not pass PowerPoint's comparison."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "smartart-japanese",
+      "source": "scripts/native-acceptance/qualification/decks/smartart-japanese.opf.json",
+      "sourceSha256": "9d5348237ca23a7199dcae869932aed73430e96d1a3ac57c7261aba905a9224e",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/smartart-japanese.pptx",
+          "ok": true,
+          "sha256": "3f65289ce463ad35a5419d2c9dad7e2f3f9cf861eb3c78bc9c1c5fdc60870d7e",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/0/items",
+              "message": "The matrix is exported as native shapes, not live SmartArt: Chinese and Japanese text sits several pixels off in PowerPoint's SmartArt, so OPF's own matrix is drawn; OPF's own layout does not hold it either: OPF's matrix-quadrants layout did not pass PowerPoint's comparison."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/1/items",
+              "message": "The row of chevrons is exported as native shapes, not live SmartArt: Chinese and Japanese text sits several pixels off in PowerPoint's SmartArt, so OPF's own row of chevrons is drawn; OPF's own layout does not hold it either: OPF's chevron-rows layout passed PowerPoint's comparison for 6 to 8 entries, not 4."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/2/items",
+              "message": "The vertical flow is exported as native shapes, not live SmartArt: Chinese and Japanese text sits several pixels off in PowerPoint's SmartArt, so OPF's own vertical flow is drawn; OPF's own layout does not hold it either: OPF's vertical-flow-columns layout passed PowerPoint's comparison for 5 to 6 entries, not 3."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-harvest",
+      "source": "scripts/native-acceptance/qualification/decks/layout-harvest.opf.json",
+      "sourceSha256": "59f051cb02d89bbc95726b444dec008e24c134c5c2263dd3f6e7bff29e0c9756",
+      "previewOk": true,
+      "previewSlides": 20,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/layout-harvest.pptx",
+          "ok": true,
+          "sha256": "4c087c704ec80bc76612ca04035881d82219840a23251a0b0bc9504f81f07770",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ],
+          "pptx": "pptx/layout-harvest~native-body.pptx",
+          "ok": true,
+          "sha256": "92a04105e3d0eec8e011820287fe9290832413de0702d0ae0eae5d7ac2e007f5",
+          "findings": [
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/2/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/4/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/0/blocks/0/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/0/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/1/blocks/0/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/1/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/2/blocks/0/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/2/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/8/blocks/0/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/8/blocks/1/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/8/blocks/2/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/8/blocks/3/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/3/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/12/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/12/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/13/blocks/2/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/15/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/15/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/15/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "footers",
+      "source": "scripts/native-acceptance/qualification/decks/footers.opf.json",
+      "sourceSha256": "6dd88864e373015bb5393c3af5148dedbae71d14d46fbd8e83a22c410ea28bd3",
+      "previewOk": true,
+      "previewSlides": 4,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/footers.pptx",
+          "ok": true,
+          "sha256": "e7a9856583e2594fad2e626855599f6f5277276806b3a7052bd120d10e3b993c",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        },
+        {
+          "name": "static",
+          "flags": [
+            "--slide-numbers",
+            "static"
+          ],
+          "pptx": "pptx/footers~static.pptx",
+          "ok": true,
+          "sha256": "afc1901571e95e127e7595491394913e1e3303432839b675ce25ab9ce24589a6",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shapes",
+      "source": "examples/technical/shapes.opf.json",
+      "sourceSha256": "bd1d459443c062019acbd158bde85c4097ab1fc4c267d348d41183ba5eabc7c1",
+      "previewOk": true,
+      "previewSlides": 8,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/shapes.pptx",
+          "ok": true,
+          "sha256": "ceba0bc424e03780f2c636f4fc0e7ae657f8940ab96179a21fc62789677ec9a6",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shape-effects",
+      "source": "examples/technical/shape-effects.opf.json",
+      "sourceSha256": "9cf8e779c7a527586256d435a4b74f28b8edb9b7f1894299f53331aff2de4420",
+      "previewOk": true,
+      "previewSlides": 4,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/shape-effects.pptx",
+          "ok": true,
+          "sha256": "3a2dccf0fb314d5e22b7a86b84d01b9491da2153a87f073b44c362b43423dc45",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shape-overlays",
+      "source": "examples/technical/shape-overlays.opf.json",
+      "sourceSha256": "e526b3bb72075d66287d9fc29784b75b9cecd61c36c79a6be5239f378be15724",
+      "previewOk": true,
+      "previewSlides": 6,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/shape-overlays.pptx",
+          "ok": true,
+          "sha256": "dc49c82e6cdebc595954f87c30cbf2c83e5d6fdd214da345840fd4693a0bdb2d",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shape-overlays-rtl",
+      "source": "examples/technical/shape-overlays-rtl.opf.json",
+      "sourceSha256": "967c951719c4b61f0b00e66a75995a849ccc879cdf655ce823bfd2f3d9cc8bc5",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/shape-overlays-rtl.pptx",
+          "ok": true,
+          "sha256": "261ef7d25370ce97196b8b6e9bf28414c96b706a95b3ac8c9813b646e99006e2",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "diagrams",
+      "source": "examples/technical/diagrams.opf.json",
+      "sourceSha256": "005ab6d345c501fd835b8c327fb9336dc38d544b15b50385360436dae2c783c4",
+      "previewOk": true,
+      "previewSlides": 7,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/diagrams.pptx",
+          "ok": true,
+          "sha256": "a66008bb52e725c3a7e872ea954a4d3733f3af5cb6f7c108bac6b7224779e563",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        },
+        {
+          "name": "picture",
+          "flags": [
+            "--diagrams",
+            "picture"
+          ],
+          "pptx": "pptx/diagrams~picture.pptx",
+          "ok": true,
+          "sha256": "e970fb193417fca8c7e7b4c624194de9bce70e82ac909da5f1752bff555ec549",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dot-diagrams",
+      "source": "examples/technical/dot-diagrams.opf.json",
+      "sourceSha256": "34c9598f0b61b4b50de8bcb746f053242bc37f28741d0fa137f2a7b58021eb3e",
+      "previewOk": true,
+      "previewSlides": 5,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/dot-diagrams.pptx",
+          "ok": true,
+          "sha256": "9bce35b3590f338f7d0e2011ca03bfb0ac310139fcc9e485aea2cd510bc41847",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plantuml-diagrams",
+      "source": "examples/technical/plantuml-diagrams.opf.json",
+      "sourceSha256": "26bcc7bfaad7859c202219d250d8069582cebd0f63d23f2789c647e57df6ac0e",
+      "previewOk": true,
+      "previewSlides": 8,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/plantuml-diagrams.pptx",
+          "ok": true,
+          "sha256": "0cfcb277b288597614f006ff019c7e9739fc09986a813b1cf05782cbce493d61",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Open Sans, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "diagrams-markdown",
+      "source": "examples/markdown/diagrams.opf.md",
+      "sourceSha256": "8693d80c871036e408e88f9e4a6d49a63fc2bdedac3723c1e12158abbcabc3d4",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/diagrams-markdown.pptx",
+          "ok": true,
+          "sha256": "b1074b2f2459ff07800db43ad754b143c07c21043d4b40fe1fc54ffa5320d62e",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "diagram-connectors",
+      "source": "scripts/native-acceptance/qualification/decks/diagram-connectors.opf.json",
+      "sourceSha256": "f6aa89aab704e020e829bdce4525cd5cfab99e6ce39b06d6665bcef608a6d5c3",
+      "previewOk": true,
+      "previewSlides": 2,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/diagram-connectors.pptx",
+          "ok": true,
+          "sha256": "a295d4fb6d5faf2cedf5b2532caba44173957e43025180ed2fbf7284138538af",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-sampler",
+      "source": "examples/technical/layout-sampler.opf.json",
+      "sourceSha256": "029618522003a6c68311239f547efda630ec2102800d66b39765d402c36d5583",
+      "previewOk": true,
+      "previewSlides": 53,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/layout-sampler.pptx",
+          "ok": true,
+          "sha256": "d04eb5cc6afb35f9659a295344ede9ba437aa1e5d1ea345ef67328cd746f1baf",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/31/blocks/0/items",
+              "message": "The matrix is exported as native shapes, not live SmartArt: its entries wrap to 8 lines in all (at most 6 matched PowerPoint), so OPF's own matrix is drawn; OPF's own layout does not hold it either: OPF's matrix-quadrants layout did not pass PowerPoint's comparison."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/49/blocks/0/items",
+              "message": "The pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/50/blocks/0/items",
+              "message": "The org-chart is exported as native shapes, not live SmartArt: Organization Chart text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/51/blocks/0/items",
+              "message": "The hierarchy is exported as native shapes, not live SmartArt: Hierarchy text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/52/blocks/0/items",
+              "message": "The venn is exported as native shapes, not live SmartArt: Basic Venn text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ],
+          "pptx": "pptx/layout-sampler~native-body.pptx",
+          "ok": true,
+          "sha256": "ea10be328c3d1ddbe948f2ae1a4bfe6b53a517a71cdfc405dba888a55e04083b",
+          "findings": [
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/2/blocks/0/items",
+              "message": "Native body export cannot represent this step badges; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/3/blocks/0/items",
+              "message": "Native body export cannot represent this step badges; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/0/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/2/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/7/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/7/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/7/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/9/blocks/0/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/9/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/10/blocks/0/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/10/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/10/blocks/2/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/12/blocks/2/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/13/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/13/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/13/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/15/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/15/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/15/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/16/blocks/3/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/19/blocks/1/text",
+              "message": "Native body export cannot represent this tight wrap; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/26/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/26/blocks/2/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/26/blocks/3/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/28/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/28/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/28/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/30/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/31/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/31/blocks/0/items",
+              "message": "The matrix is exported as native shapes, not live SmartArt: its entries wrap to 8 lines in all (at most 6 matched PowerPoint), so OPF's own matrix is drawn; OPF's own layout does not hold it either: OPF's matrix-quadrants layout did not pass PowerPoint's comparison."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/32/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/33/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/34/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/35/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/37/blocks/0/items",
+              "message": "Native body export cannot represent this unsupported list; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/37/blocks/1/items",
+              "message": "Native body export cannot represent this unsupported list; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/37/blocks/2/items",
+              "message": "Native body export cannot represent this unsupported list; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/41/blocks/1/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/49/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/49/blocks/0/items",
+              "message": "The pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/50/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/50/blocks/0/items",
+              "message": "The org-chart is exported as native shapes, not live SmartArt: Organization Chart text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/51/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/51/blocks/0/items",
+              "message": "The hierarchy is exported as native shapes, not live SmartArt: Hierarchy text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/52/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/52/blocks/0/items",
+              "message": "The venn is exported as native shapes, not live SmartArt: Basic Venn text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chart-type-sampler",
+      "source": "examples/technical/chart-type-sampler.opf.json",
+      "sourceSha256": "4cb711cad3d29a0ba436118f2ec0f2a660b880088f4a8e4603d980a971853bdf",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/chart-type-sampler.pptx",
+          "ok": true,
+          "sha256": "c9f69ce3353bc78a37d00671356e7fac79760ae7603bc0db9a4adf80ae434d65",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "path": "/slides/0/start/chart",
+              "message": "The 'box-and-whisker' chart is drawn as core's box-per-series fallback: it has one value per category, so its rows form one group and each series is one box of its values, as the preview draws it."
+            },
+            {
+              "ruleId": "pptx/export-lossy",
+              "severity": "info",
+              "path": "/slides/1/blocks/1/chart",
+              "message": "PowerPoint chooses its own contrast color for native funnel value labels and can ignore the written label color (white where the preview uses black). The funnel remains an editable native chart; XML label colors do not establish physical color parity."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-and-code",
+      "source": "examples/technical/table-and-code.opf.json",
+      "sourceSha256": "8d08093afed1967211c32ca26ec8fff0b9bb31f3aa3f8bff4782e378644c4c7d",
+      "previewOk": true,
+      "previewSlides": 2,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/table-and-code.pptx",
+          "ok": true,
+          "sha256": "03b5b996efab2b330b5dd522acd9d54506b6d43e2ff4a65d634ca2673acdf1cf",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "columns",
+      "source": "examples/technical/columns.opf.json",
+      "sourceSha256": "cd362bd3c0a8c2313eb7fbb89b278620f8fce6faee6bf98b678bf094e94e25c2",
+      "previewOk": true,
+      "previewSlides": 2,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/columns.pptx",
+          "ok": true,
+          "sha256": "067569cd297424d97d1e0299fe0555b93e8a0f1ce2e5f57f231d4b6eca7e8693",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "header-footer-logo-set",
+      "source": "examples/technical/header-footer-logo-set.opf.json",
+      "sourceSha256": "409c4a44ca687b2624d265beed87ff7ecea0a3a90718aaff5d40203b0776d960",
+      "previewOk": true,
+      "previewSlides": 2,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/header-footer-logo-set.pptx",
+          "ok": true,
+          "sha256": "31f4af9a15e2942ffcf9faa5958246a28d14689b5fdc17e4b7dabd6425490f9c",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "full-feature-tour",
+      "source": "examples/technical/full-feature-tour.opf.json",
+      "sourceSha256": "0950cac19d8c5194aacc6f6e812907c9e1d82c3e67b382a33a559a1ccfe3f81a",
+      "previewOk": true,
+      "previewSlides": 10,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/full-feature-tour.pptx",
+          "ok": true,
+          "sha256": "8930b32ea672561557482bf902e95aa34cfac1cf51b0316b0418754e37141f6b",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "data-story-academy",
+      "source": "examples/gallery/design-and-media/data-story-academy-corporate-programs.opf.json",
+      "sourceSha256": "e00fbd2efd8d6c24869257067b1e560e68d24a725162b4c0620769990ac19dab",
+      "previewOk": true,
+      "previewSlides": 16,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/data-story-academy.pptx",
+          "ok": true,
+          "sha256": "151acdf1e80e0110ee6e9837d01ed90e0f6feef3e3d17251d5bb2c9dbbe25f31",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Montserrat, Work Sans, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compliance-readiness-review",
+      "source": "examples/gallery/business-functions/compliance-readiness-review.opf.json",
+      "sourceSha256": "fe591c24d0de6e4da1c3796673df35475643f2e474032374e630745c70fe4f89",
+      "previewOk": true,
+      "previewSlides": 9,
+      "previewFindings": [
+        {
+          "ruleId": "render/arrangement-adapted",
+          "severity": "info",
+          "path": "/design/chartPrimary",
+          "message": "design.chartPrimary \"top\" is not applied on this slide: the slide's layout template places the chart in its regions (a template says this with a chart-beside region)."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/compliance-readiness-review.pptx",
+          "ok": true,
+          "sha256": "394088adf7b39e802d3363ef434d9bebf4372aff37c1ed59c3303fa27dac2249",
+          "findings": [
+            {
+              "ruleId": "pptx/arrangement-adapted",
+              "severity": "info",
+              "path": "/design/chartPrimary",
+              "message": "design.chartPrimary \"top\" is not applied on this slide: the slide's layout template places the chart in its regions (a template says this with a chart-beside region)."
+            },
+            {
+              "ruleId": "pptx/furniture-on-slide",
+              "severity": "warning",
+              "path": "/design/footer/center/text",
+              "message": "Slide content overlaps the footer center text on slide 8. PowerPoint draws slide master and layout shapes beneath slide content, so there this part stays a shape on the slide, drawn above the content as in the preview."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Consolas, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chart-point-overlays",
+      "source": "examples/technical/chart-point-overlays.opf.json",
+      "sourceSha256": "3e3cea0106d124a73aa21aa50efd58122796a7ec25bec08684cea389d804e882",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/chart-point-overlays.pptx",
+          "ok": true,
+          "sha256": "58121d58715c0a677210a6c8b0b39b3168002acd0c026acfbdc735e2e91e353b",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "duration-timeline",
+      "source": "examples/technical/duration-timeline.opf.json",
+      "sourceSha256": "3afd2afaba6bfcd860bb0afa62fa5c86fcf59ef84b6d09f83a0704aeb724d0b5",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/duration-timeline.pptx",
+          "ok": true,
+          "sha256": "ceadd046e4d151f002b58ec036f89dbbc571aa164fbfda5b6a74c786d7b3465d",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Roboto, Roboto Medium, Roboto SemiBold, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "explicit-chart-reference-lines",
+      "source": "examples/technical/explicit-chart-reference-lines.opf.json",
+      "sourceSha256": "c74c950bea2a8f22075f411810b049cdf0973d09e44a2d81ba6a3f4357ec45b9",
+      "previewOk": true,
+      "previewSlides": 5,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/explicit-chart-reference-lines.pptx",
+          "ok": true,
+          "sha256": "a0064f923ff600c22eca53569749747115b7e23a0e6a180d95f3d94ef73952e8",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-reference-overlay",
+              "severity": "warning",
+              "path": "/slides/3/chart",
+              "message": "Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes."
+            },
+            {
+              "ruleId": "pptx/chart-reference-overlay",
+              "severity": "warning",
+              "path": "/slides/4/chart",
+              "message": "Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "singleton-combo-reference-lines",
+      "source": "examples/technical/singleton-combo-reference-lines.opf.json",
+      "sourceSha256": "ae1c1b85907b08201622dd0025cd79e2aa8dbe618789a67c163bfcb790487742",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/singleton-combo-reference-lines.pptx",
+          "ok": true,
+          "sha256": "3b9a0e717653898fcf63a11f4600b179dfc4d8635f833124145450e06c1b618a",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-reference-overlay",
+              "severity": "warning",
+              "path": "/slides/0/chart",
+              "message": "Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localized-chart-references",
+      "source": "examples/technical/localized-chart-references.opf.json",
+      "sourceSha256": "16aa9e352bfaac72d9c34430973042afd9b6510202e43a12692525e1b91060a9",
+      "previewOk": true,
+      "previewSlides": 7,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/localized-chart-references.pptx",
+          "ok": true,
+          "sha256": "7ebc7793b05f75bc6ddec76bf94d65ca97238183b087801b779dd8325895fa12",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Arial Black, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-callouts",
+      "source": "examples/technical/image-callouts.opf.json",
+      "sourceSha256": "49d371e88960bbe7ba5b66ecf000f01894dae6d414a307ae5159bf25ead3a29e",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/image-callouts.pptx",
+          "ok": true,
+          "sha256": "0130febecc54d1ae7dda683c3a7ead7a8f2b988317a78e790b4459847022bb7d",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "inverted-pyramids",
+      "source": "examples/technical/inverted-pyramids.opf.json",
+      "sourceSha256": "c680780c756bc125a44163863e05a559cd582e3b146958dad1822e2bc0617ac0",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/inverted-pyramids.pptx",
+          "ok": true,
+          "sha256": "d4348d59428fb1c5990f36865b8b9c172eda2225f8393cfa6b7f801c0d8c665c",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/0/items",
+              "message": "The pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/1/items",
+              "message": "The pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/2/blocks/0/items",
+              "message": "The pyramid is exported as native shapes, not live SmartArt: its entries are lists, which a SmartArt node does not hold, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localized-timeline",
+      "source": "examples/technical/localized-timeline.opf.json",
+      "sourceSha256": "e6d55fdd3a77d39dfba8550f3e6c530cab1da5474bff6b6eb43843650743fd7e",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/localized-timeline.pptx",
+          "ok": true,
+          "sha256": "670abf0b19a6d213f6da1de501f2ecba946cab26979bf6b62a2c3ff8ca8e1350",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "multilingual-slides",
+      "source": "examples/technical/multilingual-slides.opf.json",
+      "sourceSha256": "c12aae7dcd89fab0ddf520ad549064f3c52cd250fd6debbd2a6f4ca683670add",
+      "previewOk": true,
+      "previewSlides": 4,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/multilingual-slides.pptx",
+          "ok": true,
+          "sha256": "9b2c4e90d6ca154301716c2bd51acdf902b1d455001b04232ecaa736eaabc754",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trees-and-sets",
+      "source": "examples/technical/trees-and-sets.opf.json",
+      "sourceSha256": "53c1f31b45f1f9800c79108f43956597dd5ddaefee7071a6680b2006fe15a73e",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/trees-and-sets.pptx",
+          "ok": true,
+          "sha256": "e18295f59757f50d825c59c63a38ab14fc0bf4dd3a1081f5a838ae79751f2107",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/0/blocks/0/items",
+              "message": "The org-chart is exported as native shapes, not live SmartArt: Organization Chart text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/1/blocks/0/items",
+              "message": "The hierarchy is exported as native shapes, not live SmartArt: Hierarchy text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/2/blocks/0/items",
+              "message": "The venn is exported as native shapes, not live SmartArt: Basic Venn text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-text",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-text.opf.json",
+      "sourceSha256": "b92bee0c9dc6df0fbbe59600e97da555d1e598a48a55a18e8463ce8fc7b93bd7",
+      "previewOk": true,
+      "previewSlides": 13,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-text.pptx",
+          "ok": true,
+          "sha256": "89b008842520f99fd4edd4456287061b8c3db5283d00b39a3f69c8c5c0503c3e",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-lists",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-lists.opf.json",
+      "sourceSha256": "d15ab0f7288b2382f21368e4c02ec5b030ae76937cb5808ce8a654552af358cf",
+      "previewOk": true,
+      "previewSlides": 13,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-lists.pptx",
+          "ok": true,
+          "sha256": "998eea9eb6d657092753ba4a6b8f88fb017981b72b453d338ef8ec718d084469",
+          "findings": [
+            {
+              "ruleId": "pptx/export-lossy",
+              "severity": "info",
+              "path": "/organization/logo",
+              "message": "A picture bullet can only be a raster in PowerPoint (a:buBlip), so the SVG icon exports as its PNG; it can look soft when the slide is enlarged."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-tables",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-tables.opf.json",
+      "sourceSha256": "6aa9c57b71a9eacd9b93fd56ab16d886dc1937e3ca5ea8130dffcfe2815ca364",
+      "previewOk": true,
+      "previewSlides": 6,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-tables.pptx",
+          "ok": true,
+          "sha256": "95530d3d685e2e9cad35cee471e0c528337fd49c92194860c180a7507a35ed74",
+          "findings": [
+            {
+              "ruleId": "pptx/export-lossy",
+              "severity": "info",
+              "path": "/slides/1/table",
+              "message": "A dotted table border exports as PowerPoint's square dot, one line width on and one off; the preview leaves two widths between dots, so the dots sit closer together in PowerPoint."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-charts",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-charts.opf.json",
+      "sourceSha256": "f3d823caca2275c54f52e7ec8e9661626da6c8ee8655afdafa609a691a8fc6da",
+      "previewOk": true,
+      "previewSlides": 19,
+      "previewFindings": [
+        {
+          "ruleId": "opf/chart-mapping-adapted",
+          "severity": "warning",
+          "path": "/slides/17/chart/type",
+          "message": "a Pareto chart sorts one numeric series and draws its cumulative share; several numeric series are drawn as clustered columns in data order, with every series preserved; use one numeric series for a Pareto chart"
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-charts.pptx",
+          "ok": true,
+          "sha256": "80092caa21d54f7782a2bbf891c4f1917bf649e3f43ae0c72fc18ccffdc10915",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "path": "/slides/6/chart",
+              "message": "The 'world' chart is a PowerPoint extension (chartex) chart that PowerPoint has not yet accepted natively from this exporter (pass chartex: 'native' to write its chartex part); its data is exported as a native clustered column chart instead."
+            },
+            {
+              "ruleId": "pptx/chart-reference-overlay",
+              "severity": "warning",
+              "path": "/slides/15/chart",
+              "message": "Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes."
+            },
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "path": "/slides/16/blocks/0/chart",
+              "message": "PowerPoint's native categorical Pareto aggregation can omit negative categories. Every numeric category is exported in descending order as editable signed columns with an explicit positive-only cumulative-share line on a secondary 0–1 axis. The cumulative values are static: native bar edits do not recalculate them. Import returns this combo and its sorted/derived data, not the original Pareto data form."
+            },
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "path": "/slides/17/chart",
+              "message": "The 'pareto' chart is drawn as core's pareto-as-columns fallback: a Pareto chart sorts one series, so its several series are exported as a clustered column chart of every series in data order, as the preview draws it."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-images",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-images.opf.json",
+      "sourceSha256": "ab50ab51e735648adc9756476b12b0a029b93efdc881a6fe1666a5e37e150441",
+      "previewOk": true,
+      "previewSlides": 16,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-images.pptx",
+          "ok": true,
+          "sha256": "ce62026fa1660d2373a5d73d9b0d457028b9f43cedc9cec877729931cb4b8689",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-backgrounds",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-backgrounds.opf.json",
+      "sourceSha256": "fb1482e2403161fb19d20de64b6690af33510ea98c544821d4f8c97fff905956",
+      "previewOk": true,
+      "previewSlides": 19,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-backgrounds.pptx",
+          "ok": true,
+          "sha256": "d55559d5095547c0bb880bfc5b0722f1cbc5efea4c368344231d9dc40a9c84b0",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-shape-presets",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-shape-presets.opf.json",
+      "sourceSha256": "01a5d00fd09da364e25536876f22203d919a338252f3ff7db95e2a0cc015e15d",
+      "previewOk": true,
+      "previewSlides": 16,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-shape-presets.pptx",
+          "ok": true,
+          "sha256": "f04952771dd5d0dc61b3f2cbb6610b88e2529d6c1049d213508c0018b7fd10a7",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-shape-styles",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-shape-styles.opf.json",
+      "sourceSha256": "6e2f128a92de8dbf135adc00195ff12e2541fce400e24debed4379abe2a965e5",
+      "previewOk": true,
+      "previewSlides": 12,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-shape-styles.pptx",
+          "ok": true,
+          "sha256": "262a456f1d9124ae67be51548dd9aa972d0c690bb5446b41a2d10aae60d201b7",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-overlays",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-overlays.opf.json",
+      "sourceSha256": "325ce381b42b4a9251ed77dd9a7ad40ec529104326ab11477b33aa264301d15c",
+      "previewOk": true,
+      "previewSlides": 6,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-overlays.pptx",
+          "ok": true,
+          "sha256": "e20c88c166f7db58f65280a09995aab684f23d874f7177e41a8d4a2134dfb7b1",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-diagrams",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-diagrams.opf.json",
+      "sourceSha256": "36c52a48cc3f4ca64c2adced1e81e783f1622e9b7b18ef3bc000d74e65d31d50",
+      "previewOk": true,
+      "previewSlides": 18,
+      "previewFindings": [
+        {
+          "ruleId": "render/arrangement-adapted",
+          "severity": "info",
+          "path": "/slides/16/blocks/0/items",
+          "message": "The entries of the hierarchy do not fit its nodes at the list's size, so they are drawn as a list."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-diagrams.pptx",
+          "ok": true,
+          "sha256": "e99ec1b99eccadc61db2e2d5172b52e66c3bfb9a69ade67c56bbb3fb34fc58d1",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/9/items",
+              "message": "The vertical flow is exported as native shapes, not live SmartArt: its entries wrap to 7 lines in all (at most 6 matched PowerPoint), so OPF's own vertical flow is drawn; OPF's own layout does not hold it either: OPF's vertical-flow-columns layout passed PowerPoint's comparison for 5 to 6 entries, not 4."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/13/items",
+              "message": "The pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/15/blocks/0/items",
+              "message": "The org-chart is exported as native shapes, not live SmartArt: Organization Chart text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/arrangement-adapted",
+              "severity": "info",
+              "path": "/slides/16/blocks/0/items",
+              "message": "The entries of the hierarchy do not fit its nodes at the list's size, so they are drawn as a list."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/17/blocks/0/items",
+              "message": "The venn is exported as native shapes, not live SmartArt: Basic Venn text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-regions",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-regions.opf.json",
+      "sourceSha256": "28aa87c1c366acae1307583759cfdd1bf5d5e7284851f08d158ac81f99dd521a",
+      "previewOk": true,
+      "previewSlides": 25,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-regions.pptx",
+          "ok": true,
+          "sha256": "70fd939de44c04abd86764e3a8da9845eed564d0b605e6cc68febff7da979da3",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-composition",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-composition.opf.json",
+      "sourceSha256": "8b261981a8ae434c52a66799472690fb35cc261ad4468737cecedf95de7f944c",
+      "previewOk": true,
+      "previewSlides": 10,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-composition.pptx",
+          "ok": true,
+          "sha256": "8a9eab02cc467ca7004569a97740dddb8a8d2df130ce91a9b5cbec3c1e52125a",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-design",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-design.opf.json",
+      "sourceSha256": "be67e5e7210b16a4ec3b63c3306def6228f39c2ff4b8b96228590b2df96fa6a9",
+      "previewOk": true,
+      "previewSlides": 34,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-design.pptx",
+          "ok": true,
+          "sha256": "f76dfb5c86f639f16eec9ddbf150da1c36a75642a89d98046b4f10256298b156",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, Segoe UI Light, Segoe UI Semilight, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-furniture",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-furniture.opf.json",
+      "sourceSha256": "73994df419677d433c0156c176258aabc710be30c39bddc8432c70006a1369e3",
+      "previewOk": true,
+      "previewSlides": 9,
+      "previewFindings": [
+        {
+          "ruleId": "render/unresolved-content",
+          "severity": "warning",
+          "path": "/design/footer/end/date",
+          "message": "A current date needs a host-supplied ISO date option. For fixed content use a literal date, or an ISO date with dateFormat."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-furniture.pptx",
+          "ok": true,
+          "sha256": "69d54a82be4baa3f07f288b6e3bff70d796bc1b7b9c2769bee43a64d8ed2a79a",
+          "findings": [
+            {
+              "ruleId": "pptx/unresolved-content",
+              "severity": "warning",
+              "path": "/design/footer/end/date",
+              "message": "A current date needs a host-supplied ISO date option. For fixed content use a literal date, or an ISO date with dateFormat."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-metadata",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-metadata.opf.json",
+      "sourceSha256": "43fc565aa8ebba3ba3b53890cf6a89c563ea77d57af9d7d2b26c7b59349384a8",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-metadata.pptx",
+          "ok": true,
+          "sha256": "ec55789d39821c78a7f31e7d2eae75a02b305a2e0013d92df29e0a96d7b7d86d",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-variables",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-variables.opf.json",
+      "sourceSha256": "812734247d20d3b4c8433a126189c6043dc99cb45523aef612e78765fbc5c202",
+      "previewOk": true,
+      "previewSlides": 5,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-variables.pptx",
+          "ok": true,
+          "sha256": "cfc9d76df52654bc7ac75f2d3ac8ee1670cb0359a8341ffcea983518eb905cf0",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-template",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-template.opf.json",
+      "sourceSha256": "9c8f23c899189138ade5e8f5a72783f0952e8aaaea898bc92ff45c0bdc9a638b",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "opf/variable-unfilled",
+          "severity": "warning",
+          "path": "/variables/client",
+          "message": "Template variable \"client\" has no value."
+        },
+        {
+          "ruleId": "opf/variable-unfilled",
+          "severity": "warning",
+          "path": "/variables/revenue",
+          "message": "Template variable \"revenue\" has no value."
+        },
+        {
+          "ruleId": "render/variable-example-used",
+          "severity": "warning",
+          "path": "/variables/client",
+          "message": "'client' is unfilled; its example is used."
+        },
+        {
+          "ruleId": "render/variable-example-used",
+          "severity": "warning",
+          "path": "/variables/revenue",
+          "message": "'revenue' is unfilled; its example is used."
+        },
+        {
+          "ruleId": "render/variable-example-used",
+          "severity": "warning",
+          "path": "/variables/owner",
+          "message": "'owner' is unfilled; its example is used."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-template.pptx",
+          "ok": true,
+          "sha256": "fe209de64aa8561759089175179fdf097557da05434f7874aaf2b131e5b1da4f",
+          "findings": [
+            {
+              "ruleId": "opf/variable-unfilled",
+              "severity": "warning",
+              "path": "/variables/client",
+              "message": "Template variable \"client\" has no value."
+            },
+            {
+              "ruleId": "opf/variable-unfilled",
+              "severity": "warning",
+              "path": "/variables/revenue",
+              "message": "Template variable \"revenue\" has no value."
+            },
+            {
+              "ruleId": "pptx/variable-example-used",
+              "severity": "warning",
+              "path": "/variables/client",
+              "message": "'client' is unfilled; its example is used."
+            },
+            {
+              "ruleId": "pptx/variable-example-used",
+              "severity": "warning",
+              "path": "/variables/revenue",
+              "message": "'revenue' is unfilled; its example is used."
+            },
+            {
+              "ruleId": "pptx/variable-example-used",
+              "severity": "warning",
+              "path": "/variables/owner",
+              "message": "'owner' is unfilled; its example is used."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-languages",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-languages.opf.json",
+      "sourceSha256": "d368f884e4b582b56fbb44d0b93c7242ac46bffd7e606ef29037ad8ca442b768",
+      "previewOk": true,
+      "previewSlides": 10,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-languages.pptx",
+          "ok": true,
+          "sha256": "8bc98b7482afb73b1332b9be2f9bb51512454fffba5ce8331b57190b6dda0ad3",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-catalogs",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-catalogs.opf.json",
+      "sourceSha256": "cbe35da60b96c1a1e847ebaae901004d496f5760d241889565150ab030b2cf80",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-catalogs.pptx",
+          "ok": true,
+          "sha256": "f2f38de6fa42e9f403a244e93fbdec7176df5122bc5f3bd161c713b4dce02993",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "id": "coverage-catalogs-off",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-catalogs-off.opf.json",
+      "sourceSha256": "26d85b3015b37c8948ac0aec40924fc795fac47a05e52973ac84361f8fe905a9",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-catalogs-off.pptx",
+          "ok": true,
+          "sha256": "1a1f9d6cb9948f91ab9242ec68d3f036e951f7eecf24aa844e8959f6051d6481",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-warnings",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-warnings.opf.json",
+      "sourceSha256": "64b5159f72ce633858b39420b5c6082cca0d814a3b315d3019dd4630cd35939d",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "opf/shape-anchor-size-unit",
+          "severity": "warning",
+          "path": "/slides/1/shapes/0/at/width",
+          "message": "at.width is 6, a fraction; pixels are widthPx"
+        },
+        {
+          "ruleId": "render/shape-off-slide",
+          "severity": "warning",
+          "path": "/slides/0/shapes/0",
+          "message": "This shape lies wholly outside the slide (x 70, y 0.1), so nothing of it is drawn. x and y are fractions of the slide: 0.2 is 20% of its width, and 20 is twenty slide widths away."
+        },
+        {
+          "ruleId": "render/timeline-period-short",
+          "severity": "warning",
+          "path": "/slides/2/timeline/1",
+          "message": "Timeline period is too short to draw readably; enlarge the timeline or split its events."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-warnings.pptx",
+          "ok": true,
+          "sha256": "a2116208666c4bb4ab5691c3a7da89653b5c2f21a44f73d369d257fea716d278",
+          "findings": [
+            {
+              "ruleId": "opf/shape-anchor-size-unit",
+              "severity": "warning",
+              "path": "/slides/1/shapes/0/at/width",
+              "message": "at.width is 6, a fraction; pixels are widthPx"
+            },
+            {
+              "ruleId": "pptx/shape-off-slide",
+              "severity": "warning",
+              "path": "/slides/0/shapes/0",
+              "message": "This shape lies wholly outside the slide (x 70, y 0.1), so nothing of it is drawn. x and y are fractions of the slide: 0.2 is 20% of its width, and 20 is twenty slide widths away."
+            },
+            {
+              "ruleId": "pptx/timeline-period-short",
+              "severity": "warning",
+              "path": "/slides/2/timeline/1",
+              "message": "Timeline period is too short to draw readably; enlarge the timeline or split its events."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-16x9",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-16x9.opf.json",
+      "sourceSha256": "3c69e32b8f3fed33ac64a4412eb1faf11c38d8fd218a219f340ae7a9738284c4",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-16x9.pptx",
+          "ok": true,
+          "sha256": "7eeb8313451b4c1db89bf34eafaced432d50df16a017e10c760060abf6cd6079",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-4x3",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-4x3.opf.json",
+      "sourceSha256": "111ecbed035c3d19fb0423513b00d990bd7d6021d6783efdd44e9207801c9c8e",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-4x3.pptx",
+          "ok": true,
+          "sha256": "7fc8892194a5682d755b94b60f99b8de4460f144ae9596053007dd94a162dba5",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-16x10",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-16x10.opf.json",
+      "sourceSha256": "a975147f36e516da6890528bfd92be96e7a81741ef87b8dd086d5767d17b7ab6",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-16x10.pptx",
+          "ok": true,
+          "sha256": "4bd4a85a807b5e291c414d52a0871f92d2b96a236ef5fc652257d4d7ade4d90d",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-1x1",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-1x1.opf.json",
+      "sourceSha256": "713be8fb465bd64d44ea3533169ea5b89829037aa5a949de1a913734df867621",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-1x1.pptx",
+          "ok": true,
+          "sha256": "8512e376e0c96c6528faa1e617f1026c72e8ffa615c6161cf3d6ed447d71133b",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-4x5",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-4x5.opf.json",
+      "sourceSha256": "c60aef9d77a1ad05e9625651f29355d0994c66dd59b641dc83e690cc21ed6799",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-4x5.pptx",
+          "ok": true,
+          "sha256": "f578ca0fb7182205ec92a1126c803d251e92a42d6daf6dd6832fc0cac8928221",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-9x16",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-9x16.opf.json",
+      "sourceSha256": "27f379c9ae0e62bdcbd7cd03a283291ca6d17701c6a92f69da44dc17845a8273",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-9x16.pptx",
+          "ok": true,
+          "sha256": "b2be4492f5b5b282086816401ae24d7a0fb9c5affe4715e3198b2f3411e05f73",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-letter",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-letter.opf.json",
+      "sourceSha256": "8eea0142eaaf510c5889467bf1cb62794e9d1d0ba57df8f6bca6b4c6f54c8297",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-letter.pptx",
+          "ok": true,
+          "sha256": "9c692edf0f01bcf9e26e0c1158fce07fe003ef77bcb33c834c13120ae0967141",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-a4",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-a4.opf.json",
+      "sourceSha256": "1207498a59a815367d3eef1fd9b07910b533ce991bafe6b9197e1c09cf9369c2",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-a4.pptx",
+          "ok": true,
+          "sha256": "93ccab3a92c00ef8fea8d996a33483bfdeba9d95bf4c5340eb7b518ac6f6cd44",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-standard",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-standard.opf.json",
+      "sourceSha256": "1fe743b23e60d596deaf180d254bd85517c595038bd08a9448144d8b41d6e3c5",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-standard.pptx",
+          "ok": true,
+          "sha256": "890b7a45e3bea22baf55ae2760fa8a069501b5136481355d1f257178b787c0bd",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

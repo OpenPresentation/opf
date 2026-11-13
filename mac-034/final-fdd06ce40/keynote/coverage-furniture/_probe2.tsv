@@ -1,0 +1,12 @@
+layouts	47	Blank,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Title Only,Title Only 0,Cover 2,Title Only 2,Title Only 2 0,Title Only 2 1
+size	960x540
+slide	1	Cover 2	true	1	Helvetica-Bold	56.0	0	Helvetica,Helvetica-Bold	Harbor operations review
+slide	2	Title Only 2 0	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	The footer shows the date, the page and the tagline
+slide	3	Title Only 2	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	A fixed date and the section name
+slide	4	Title Only 2 0	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Social accounts in the footer
+slide	5	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	A header with a wordmark and a note
+slide	6	Title Only 2 1	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	The logo for dark backgrounds
+slide	7	Title Only 0	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	The stacked logo in the header
+slide	8	Title Only	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	A slide without header or footer
+slide	9	Title Only 2 0	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	A plain picture in the footer
+
