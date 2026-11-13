@@ -2554,7 +2554,10 @@ function renderTextBox(text, box, bound, config) {
     const start=tabs||positioned;
     // LH-32: core spaces an eyebrow's letters between characters, so its last character draws with no spacing after it: rasterizers
     // differ on whether a trailing spacing counts toward a middle or end anchor.
-    if(style.tracking&&!start)content=untrackLast(content);
+    // LH-189: display tracking (negative) keeps the line one run, so its last character keeps its kerning with the one before it (a tspan
+    // split there drops the pair's kerning). The spacing after its last character does not count toward its anchor in resvg, and the
+    // outlined text and the PDF anchor it the same way (pdf-text).
+    if(style.tracking>0&&!start)content=untrackLast(content);
     return tag("text", {
     x: stableNumber(tabs?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
     "text-anchor": start?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),

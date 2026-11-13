@@ -47,7 +47,9 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
     const native = parser.parse(withThemeFamilies(entries, `ppt/slides/slide${index + 1}.xml`));
     const nativeShapes = all(native, 'p:sp');
     for (const text of all(svg, 'text')) {
-      const value = text.tspan ? all(text,'tspan').map(content).join('') : content(text);
+      // LH-32: a line tracked as an eyebrow keeps its last character in a tspan of no letter spacing after its own text (render untrackLast), so
+      // the line is its own text followed by its tspans.
+      const value = text.tspan ? (typeof text['#text'] === 'string' ? text['#text'] : '') + all(text,'tspan').map(content).join('') : content(text);
       if (!value || value === deck.slides[index].title) continue;
       const shape = nativeShapes.find(item => all(item, 'a:t').map(content).join('') === value);
       assert.ok(shape, `Native payload text must match preview: ${value}`);
@@ -68,6 +70,8 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
       const x = Number(offset.x) / 9525 + (anchor === 'middle' ? Number(extent.cx) / 9525 / 2 : anchor === 'end' ? Number(extent.cx) / 9525 : 0);
       assert.ok(Math.abs(x - Number(text.x)) < .02, `Horizontal layout: ${value}`);
       assert.ok(Math.abs(Number(offset.y) / 9525 - (Number(text.y) - Number(text['font-size']))) < .02, `Measured line box: ${value}`);
+      // LH-32, LH-189: the run's spacing (spc, hundredths of a point) is the preview's letter spacing.
+      assert.equal(Number(properties.spc ?? 0), Math.round(Number(text['letter-spacing'] ?? 0) * .75 * 100), `Letter spacing: ${value}`);
       checkedText++;
     }
     if (index === 2) {

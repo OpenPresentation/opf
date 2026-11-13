@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import sharp from 'sharp';
 import { resolveSlideContext } from '@openpresentation/opf';
-import { LONE_DISPLAY_SIZES, composeSlide } from '@openpresentation/opf/composition';
+import { LONE_DISPLAY_SIZES, MESSAGE_DISPLAY_SIZE, composeSlide } from '@openpresentation/opf/composition';
 import { toSvg, toPng } from '../dist/index.js';
 import { TREATMENTS, samplePicture, treatmentDocument } from './fixtures/image-treatments.mjs';
 
@@ -49,6 +49,8 @@ for (const treatment of TREATMENTS) {
   // RR-105: and the step a short message beside a picture now grows to where its lines keep the minimum measure; the 0.14 renders set it at
   // the lone text's display size, stated here as the slide's largest body size.
   if (['side-by-side', 'rounded-card'].includes(slug)) for (const slide of document.slides) slide.composition = { ...slide.composition, maxFontSize: LONE_DISPLAY_SIZES.text };
+  // LH-188: and they predate the length-keyed ceilings of a one-message slide: the message stops at its former display size (MESSAGE_DISPLAY_SIZE).
+  else for (const slide of document.slides) slide.composition = { ...slide.composition, maxFontSize: MESSAGE_DISPLAY_SIZE };
   // LH-164: a slide that is one short message takes the accent surface; these documents compare pixels with the 0.14 renders, which have the deck's own surface, stated here as the slide's variant.
   if (treatment.watermark) for (const slide of document.slides) slide.design = { variant: resolveSlideContext({ ...document, slides: [{ ...slide, subtitle: 'Plain surface' }] }, 0, {}).resolved.roles.variant, ...slide.design };
   const diagnostics = [];

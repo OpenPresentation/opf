@@ -19,6 +19,7 @@ assert.equal(registry.resolveFont({fontFamily: 'Segoe UI Semibold', fontWeight: 
 assert.equal(registry.resolveFont({fontFamily: 'Arial Black', fontWeight: 700}).resolvedWeight, 900);
 console.log('LH-177: Light/Semilight stay light in regular and bold; heavier named families keep their weights.');
 
-const svg=toSvg({design:{fontScheme:'segoe-ui-light'},slides:[{title:'Light title',text:[{text:'Regular '},{text:'emphasis',bold:true},{text:' explicit',fontFamily:'Red Hat Display',bold:true}]}]},{fonts:{registry,textMeasurement:registry.textMeasurement},catalogs:[gallery]})[0];
+// LH-188: a title of more than four words keeps the slide a content slide (no one-message growth onto more lines).
+const svg=toSvg({design:{fontScheme:'segoe-ui-light'},slides:[{title:'Light title over a mixed paragraph',text:[{text:'Regular '},{text:'emphasis',bold:true},{text:' explicit',fontFamily:'Red Hat Display',bold:true}]}]},{fonts:{registry,textMeasurement:registry.textMeasurement},catalogs:[gallery]})[0];
 assert.match(svg, /font-weight="400"[^>]*>emphasis<\/text>/);
 assert.match(svg, /font-weight="700"[^>]*> explicit<\/text>/);

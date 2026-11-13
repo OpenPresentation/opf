@@ -198,8 +198,10 @@ const estimatedOptions = {fonts: estimatedFonts};
   const measuredArabic = baselines(toSvg(deck(undefined, 'ar'), {fonts: prepared})[0]).filter(item => item.family.startsWith('Noto Naskh Arabic'));
   assert.ok(measuredArabic.every(item => Number.isFinite(item.y)));
   // A line holding a Latin run moves up 1 - ASCENT[1] em of the composed size; a Latin-only line in the same deck does not move.
-  const mixed = {name: 'RR-38', language: 'ar', slides: [{id: 'a', title: 'Title', text: ['أضاف المنتج ', {text: 'PowerPoint', bold: true}, ' أكثر']}]};
-  const mixedControl = {name: 'RR-38', language: 'en-US', design: {fontScheme: 'aptos'}, slides: [{id: 'a', title: 'Title', text: ['x ', {text: 'PowerPoint', bold: true}, ' y']}]};
+  // LH-188: a title of more than four words keeps both slides content slides, so the body is set at the same size in both decks (a
+  // one-message slide grows each text as far as its own widths allow).
+  const mixed = {name: 'RR-38', language: 'ar', slides: [{id: 'a', title: 'Quarterly product update for the board', text: ['أضاف المنتج ', {text: 'PowerPoint', bold: true}, ' أكثر']}]};
+  const mixedControl = {name: 'RR-38', language: 'en-US', design: {fontScheme: 'aptos'}, slides: [{id: 'a', title: 'Quarterly product update for the board', text: ['x ', {text: 'PowerPoint', bold: true}, ' y']}]};
   const mixedLine = baselines(toSvg(mixed, estimated)[0]).filter(item => Math.abs(item.size - 54) > .5), mixedBase = baselines(toSvg(mixedControl, estimated)[0]).filter(item => Math.abs(item.size - 54) > .5); // the body, not the 54 px title (LH-48 and LH-09 grow a lone body)
   const latinOnly = baselines(toSvg({name: 'RR-38', language: 'ar', slides: [{id: 'a', title: 'Quarterly', text: 'Plain Latin text'}]}, estimated)[0]);
   const latinControl = baselines(toSvg({name: 'RR-38', language: 'en-US', slides: [{id: 'a', title: 'Quarterly', text: 'Plain Latin text'}]}, estimated)[0]);

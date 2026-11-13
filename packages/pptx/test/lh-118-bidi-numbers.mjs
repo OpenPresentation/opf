@@ -28,7 +28,8 @@ let checks = 0;
   const deck = {language: 'ar', slides: [{title: 'أداء المبيعات', blocks: [
     {metric: {value: '+16%', label: 'نمو المبيعات السنوي', delta: '+8 نقاط', trend: 'up'}},
     {table: {columns: ['المنطقة', 'التغير'], rows: [['الخليج', '+3%'], ['مصر', '-2.5%']]}},
-  ]}, {title: 'نص', text: 'ارتفعت المبيعات +16% و 2026 فقط.'}]};
+  // LH-188: a title of more than four words keeps the second slide a content slide, so its sentence stays on one line.
+  ]}, {title: 'نص قصير عن أداء المبيعات هذا العام', text: 'ارتفعت المبيعات +16% و 2026 فقط.'}]};
   const out = await read(deck);
   const slide = paragraphs(out.slide(1)), text = paragraphs(out.slide(2));
   const value = slide.find(paragraph => paragraph.text === '+16%');
