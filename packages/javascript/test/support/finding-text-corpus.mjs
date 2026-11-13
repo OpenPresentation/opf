@@ -24,7 +24,6 @@ const png = (width, height) => {
 	bytes.writeUInt32BE(height, 20);
 	return `data:image/png;base64,${bytes.toString('base64')}`;
 };
-const person = (n) => ({ blocks: [{ image: { src: `https://example.com/${n}.png`, alt: `Person ${n}` } }, { text: `Person ${n}` }], composition: { mode: 'column' } });
 const withGallery = { catalogs: [gallery] };
 const longItems = [
 	'Enterprise renewals slipped by three weeks in the northern region after the pricing change',
@@ -126,7 +125,8 @@ export const CASES = [
 	{ name: 'arrangement-adapted', rule: 'opf/arrangement-adapted', input: deck([{ layout: 'quad', title: 'T', items: ['North', 'South', 'East'] }], { catalogs: { custom: { layouts: { quad: { name: 'Quad', regions: [{ name: 'title' }, { name: 'quadrants', accepts: ['list'], flow: 'none', arrangement: 'matrix' }] } } } } }) },
 	{ name: 'region-full', rule: 'opf/region-full', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', ...timeline }, { region: 'timeline', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	{ name: 'layout-unplaced', rule: 'opf/layout-unplaced', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', ...timeline }, { region: 'timeline', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
-	{ name: 'reading-order', rule: 'opf/reading-order', input: deck([{ title: 'Team', composition: { mode: 'row' }, blocks: [person(1), person(2)] }]) },
+	// RR-105: cards side by side read card by card (no finding); a layout that draws the body above the title is read out of order.
+	{ name: 'reading-order', rule: 'opf/reading-order', input: deck([{ title: 'Results', text: 'Revenue grew in every region.', layout: 'upside' }], { catalogs: { custom: { layouts: { upside: { name: 'Upside', direction: 'column', regions: [{ name: 'body', accepts: ['text'], role: 'primary' }, { name: 'title' }] } } } } }) },
 	{ name: 'furniture-wraps', rule: 'opf/furniture-wraps', input: { language: 'en-US', design: { footer }, slides: [{ title: 'Results', text: 'Revenue grew.' }] } },
 	{ name: 'font-outside-scheme', rule: 'opf/font-outside-scheme', input: deck([{ title: 'T', text: [{ text: 'x', fontFamily: 'Comic Sans MS' }] }], { design: { fontScheme: 'aptos' } }) },
 	{ name: 'image-resolution', rule: 'opf/image-resolution', input: deck([{ title: 'T', image: { src: png(100, 100), alt: 'x' } }]) },

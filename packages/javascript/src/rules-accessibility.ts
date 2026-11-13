@@ -430,7 +430,31 @@ function bindingOrder(items: readonly { path: string; region?: string }[], regio
 		.sort((a, b) => a.region - b.region || a.block - b.block || a.index - b.index)
 		.map((entry) => entry.item.path);
 }
-function visualOrder(items: readonly { path: string; box: { x: number; y: number; width: number; height: number } }[], rtl: boolean): string[] {
+type Placed = { path: string; box: { x: number; y: number; width: number; height: number } };
+function visualOrder(items: readonly Placed[], rtl: boolean, base = items[0]?.path.match(/^slides\.\d+/)?.[0] ?? ''): string[] {
+	// RR-105: a block is one unit of the reading order: the blocks of a slide (or of a group) are ordered by the boxes that hold them, and
+	// a group's own items are read before the next block, in their own visual order. Three team cards side by side read card by card
+	// (picture, then name), not all pictures first.
+	const units = new Map<string, Placed[]>();
+	for (const item of items) {
+		const rest = item.path.startsWith(`${base}.`) ? item.path.slice(base.length + 1) : '';
+		const key = /^blocks\.\d+/.exec(rest)?.[0] ?? rest.split('.')[0] ?? '';
+		(units.get(key) ?? units.set(key, []).get(key)!).push(item);
+	}
+	if (units.has('')) return flatOrder(items, rtl);
+	if (units.size === 1) return visualOrder(items, rtl, `${base}.${[...units.keys()][0]}`);
+	const placed = [...units].map(([key, members]) => {
+		const left = Math.min(...members.map((item) => item.box.x)), top = Math.min(...members.map((item) => item.box.y));
+		const right = Math.max(...members.map((item) => item.box.x + item.box.width)), bottom = Math.max(...members.map((item) => item.box.y + item.box.height));
+		return { path: key, members, box: { x: left, y: top, width: right - left, height: bottom - top } };
+	});
+	const order = flatOrder(placed, rtl);
+	return order.flatMap((key) => {
+		const unit = placed.find((entry) => entry.path === key)!;
+		return unit.members.length > 1 ? visualOrder(unit.members, rtl, `${base}.${key}`) : unit.members.map((item) => item.path);
+	});
+}
+function flatOrder(items: readonly Placed[], rtl: boolean): string[] {
 	// The same ordering composeSlide uses for promoted regions. A right-to-left deck's boxes may be mirrored (or, before the
 	// mirroring lands, not), so only the row order is checked there: each row keeps its composed order.
 	if (rtl) return readingRows(items).flatMap((row) => row.map((item) => item.path));
