@@ -169,7 +169,7 @@ export function shapeBlockRecord(shape, paint, context) {
   const insets = shape.textRect && shape.padding ? shape.padding : { left: 0, top: 0, right: 0, bottom: 0 };
   const vert = { horizontal: 'horz', vertical: 'vert', vertical270: 'vert270', stacked: 'wordArtVert' }[shape.textDirection] ?? 'horz';
   const anchor = { top: 't', middle: 'ctr', bottom: 'b' }[shape.anchor] ?? 'ctr';
-  const bodyPr = `<a:bodyPr rot="0" spcFirstLastPara="0" vertOverflow="overflow" horzOverflow="overflow" vert="${vert}" wrap="${shape.textWrap === 'none' ? 'none' : 'square'}" lIns="${emu(insets.left)}" tIns="${emu(insets.top)}" rIns="${emu(insets.right)}" bIns="${emu(insets.bottom)}" numCol="1" spcCol="0" rtlCol="0" fromWordArt="0" anchor="${anchor}" anchorCtr="0" forceAA="0" compatLnSpc="1"><a:prstTxWarp prst="textNoShape"><a:avLst/></a:prstTxWarp><a:noAutofit/></a:bodyPr>`;
+  const bodyPr = `<a:bodyPr rot="0" spcFirstLastPara="0" vertOverflow="overflow" horzOverflow="overflow" vert="${vert}" wrap="${shape.textWrap === 'none' ? 'none' : 'square'}" lIns="${emu(insets.left)}" tIns="${emu(insets.top)}" rIns="${emu(insets.right)}" bIns="${emu(insets.bottom)}" numCol="1" spcCol="0" rtlCol="0" fromWordArt="0" anchor="${anchor}" anchorCtr="${shape.textWrap === 'none' ? 1 : 0}" forceAA="0" compatLnSpc="1"><a:prstTxWarp prst="textNoShape"><a:avLst/></a:prstTxWarp><a:noAutofit/></a:bodyPr>`;
   return { spPr, style: styleXml(shape.styleRef, paint, context), bodyPr, alt: shape.alt, decorative: shape.decorative === true, hidden: shape.hidden === true };
 }
 

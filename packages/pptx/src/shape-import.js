@@ -537,9 +537,10 @@ export function readShape(drawn, context) {
     if (Object.keys(padding).some(side => Math.abs(padding[side] - standard[side]) > 0.01)) {
       fields.padding = Object.values(padding).every(value => value === padding.top) ? padding.top : padding;
     }
-    // RR-105: an exported shape whose one-line text is wider than its text rectangle is written unwrapped (core's textWrap, a layout
-    // result, not an authored field); only another application's unwrapped text is a dropped property.
-    if (body.wrap === 'none' && !exportedShape(cNvPr.name)) drop('text wrapping');
+    // RR-105: an exported shape whose one-line text is wider than its text rectangle is written unwrapped and centered (wrap="none" with
+    // anchorCtr="1": core's textWrap, a layout result, not an authored field); any other unwrapped text is a dropped property.
+    const engineUnwrapped = exportedShape(cNvPr.name) && (body.anchorCtr === '1' || body.anchorCtr === 'true');
+    if (body.wrap === 'none' && !engineUnwrapped) drop('text wrapping');
     if (number(body.numCol) > 1) drop('text columns');
     if (object(body['a:spAutoFit']) || object(body['a:normAutofit'])) drop('autofit');
     if (object(body['a:scene3d']) || object(body['a:sp3d'])) drop('3-D format');

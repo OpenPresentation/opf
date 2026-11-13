@@ -13,8 +13,9 @@ const bodyOf = (xml, name) => new RegExp(`name="${name}"[\\s\\S]*?<a:bodyPr\\b([
 test('an unwrapped one-word label is written wrap="none"; a fitting one keeps wrap="square"', async () => {
   const source = deck(), diagnostics = [];
   const xml = strFromU8(unzipSync(await toPptx(source))['ppt/slides/slide1.xml']);
-  for (const index of [0, 1]) assert.match(bodyOf(xml, `OPF shape slides.0.blocks.${index}.shape`), /\bwrap="none"/);
-  assert.match(bodyOf(xml, 'OPF shape slides.0.blocks.2.shape'), /\bwrap="square"/);
+  // anchorCtr="1" centers the unwrapped line on the text rectangle and tells import the wrap is the engine's, not an author's.
+  for (const index of [0, 1]) assert.match(bodyOf(xml, `OPF shape slides.0.blocks.${index}.shape`), /\bwrap="none"[^>]*\banchorCtr="1"/);
+  assert.match(bodyOf(xml, 'OPF shape slides.0.blocks.2.shape'), /\bwrap="square"[^>]*\banchorCtr="0"/);
   // The preview draws each word whole.
   const svg = toSvg(source, 1);
   for (const word of ['Miter', 'Round', 'Single']) assert.ok(svg.includes(`>${word}<`), word);
