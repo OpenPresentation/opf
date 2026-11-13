@@ -86,11 +86,12 @@ jobs:
           echo "flake=$flake" >> "$GITHUB_OUTPUT"
 
   # Core, the CLI and the MCP server on the other operating systems: install, typecheck, unit suites, the packed install and the packed CLI with
-  # its optional render and PPTX peers (45-minute limit, as the old cli-windows workflow had).
+  # its optional render and PPTX peers. 60-minute limit: on 2026-11-13 the Windows leg passed every step in 45 minutes and was cancelled
+  # while saving its cache (core's suite takes 12.6 minutes there in 0.34, 6 in 0.33: LH-189 composes most titled slides twice).
   cli-portability:
     name: CLI and core (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 45
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
