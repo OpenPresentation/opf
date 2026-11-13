@@ -34,13 +34,21 @@ export function shapeChartNumbers(xml, prefix) {
     .replace(/(<(?:c|cx):numFmt\b[^>]*\bformatCode=")([^"]*)"/g, (_, start, code) => `${start}${shaped(code, prefix)}"`)
     .replace(/(<cx:lvl\b[^>]*\bformatCode=")([^"]*)"/g, (_, start, code) => `${start}${shaped(code, prefix)}"`)
     .replace(/<c:formatCode>([^<]*)<\/c:formatCode>/g, (_, code) => `<c:formatCode>${shaped(code, prefix)}</c:formatCode>`);
-  // A pie's percentages: PowerPoint draws a label that shows only the percentage with its own `0%`, so the label block names it.
-  out = out.replace(/<c:dLbls>[\s\S]*?<\/c:dLbls>/g, block => {
+  return percentLabelFormats(out, prefix);
+}
+
+/**
+ * RR-105 (2026-11-13): a label block that shows the percentage and not the value names the `0%` code it is drawn with (with the
+ * slide's numeral-shape prefix, if any). PowerPoint draws a percentage label with its own `0%` whatever the code says, but Keynote
+ * applies the code: with `General` it draws "50" without the percent sign. A block that also shows the value keeps its code, which
+ * formats the value.
+ */
+export function percentLabelFormats(xml, prefix = '') {
+  return xml.replace(/<c:dLbls>[\s\S]*?<\/c:dLbls>/g, block => {
     if (!/<c:showPercent val="1"\/>/.test(block) || /<c:showVal val="1"\/>/.test(block)) return block;
     const code = `${prefix}0%`;
     return /<c:numFmt\b/.test(block) ? block.replace(/<c:numFmt\b[^>]*\/>/g, `<c:numFmt formatCode="${code}" sourceLinked="0"/>`) : block;
   });
-  return out;
 }
 
 /**
@@ -53,9 +61,9 @@ export function applyNumeralShapes(entries, partSlides, languageOf) {
     // LH-106: a chartex part (cx:chartSpace: waterfall, histogram, ...) keeps Latin digits, as core draws it (chartNumberLanguage).
     if (!/^ppt\/charts\/chart\d+\.xml$/.test(part) || !entries[part]) continue;
     const prefix = numeralShapePrefix(languageOf(slide));
-    if (!prefix) continue;
     const bytes = entries[part], text = typeof bytes === 'string' ? bytes : decoder.decode(bytes);
-    const next = shapeChartNumbers(text, prefix);
+    // RR-105: percentage labels name `0%` in every language; the numeral-shape prefix only where the language draws its own digits.
+    const next = prefix ? shapeChartNumbers(text, prefix) : percentLabelFormats(text);
     if (next !== text) entries[part] = typeof bytes === 'string' ? next : encoder.encode(next);
   }
 }
