@@ -76,4 +76,16 @@ let checks = 0;
   assert.deepEqual((await fromPptx(foreign)).tags, ['finance', 'board', 'q3']);
   checks++;
 }
+// 6. Company (File > Info) is the deck's primary organization (role 'primary', else the first); without one no Company is written.
+// Import does not read it.
+{
+  const company = async deck => strFromU8(unzipSync(await toPptx(deck, {}))['docProps/app.xml']).match(/<Company>([^<]*)<\/Company>/)?.[1];
+  assert.equal(await company({name: 'None', slides: [{title: 'Slide'}]}), undefined, 'no organization, no Company (previously the fixed "OpenPresentation")');
+  assert.equal(await company({name: 'One', organization: {id: 'acme', name: 'Acme & Co'}, slides: [{title: 'Slide'}]}), 'Acme &amp; Co');
+  assert.equal(await company({name: 'Two', organization: [{id: 'x', name: 'Partner'}, {id: 'y', name: 'Owner', role: 'primary'}], slides: [{title: 'Slide'}]}), 'Owner');
+  assert.equal(await company({name: 'First', organization: [{id: 'x', name: 'Partner'}, {id: 'y', name: 'Other'}], slides: [{title: 'Slide'}]}), 'Partner');
+  const imported = await fromPptx(await toPptx({name: 'Plain', slides: [{title: 'Slide'}]}, {provenance: false}));
+  assert.equal(imported.organization, undefined, 'Company is not imported');
+  checks++;
+}
 console.log(`document-properties: ${checks} checks`);

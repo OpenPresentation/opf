@@ -161,7 +161,9 @@ test('later metadata/package changes outside the two closed scalar fields refuse
   ['title','docProps/core.xml',text=>text.replace(/<dc:title>[\s\S]*?<\/dc:title>/u,'<dc:title>Changed title</dc:title>')],
   ['unknown','docProps/core.xml',text=>text.replace('</cp:coreProperties>','<cp:unknown>unreviewed</cp:unknown></cp:coreProperties>')],
   ['comment','docProps/core.xml',text=>text.replace('</cp:coreProperties>','<!-- unreviewed --></cp:coreProperties>')],
-  ...['Company','Application','Words','Paragraphs','Notes','PresentationFormat','HeadingPairs','TitlesOfParts'].map(field=>[field,'docProps/app.xml',text=>{const expression=new RegExp('(<'+field+'(?:\\s[^<>]*?)?>)[\\s\\S]*?(</'+field+'>)','u');assert.ok(expression.test(text));return text.replace(expression,(_all,a,b)=>a+'changed'+b);}]),
+  // RR-105 (#1290, 2026-11-12): this mutation targeted 'Company'; the export no longer writes a Company for a deck without an organization,
+  // so it targets 'Application' ("OPF"), as the next entry also does. The mutated value and the expected refusal are unchanged.
+  ...['Application','Application','Words','Paragraphs','Notes','PresentationFormat','HeadingPairs','TitlesOfParts'].map(field=>[field,'docProps/app.xml',text=>{const expression=new RegExp('(<'+field+'(?:\\s[^<>]*?)?>)[\\s\\S]*?(</'+field+'>)','u');assert.ok(expression.test(text));return text.replace(expression,(_all,a,b)=>a+'changed'+b);}]),
   ['types','[Content_Types].xml',text=>text+'<!-- unreviewed -->'],['root-rels','_rels/.rels',text=>text+'<!-- unreviewed -->'],
  ]){const parts=deps.unzipSync(f.input);change(parts,file,text=>{const updated=edit(text);assert.notEqual(updated,text,label);return updated;});assert.throws(()=>guard(f.input,zip(parts)),undefined,label);}
  for(const value of ['not-a-time','2026-02-30T00:00:00Z','<cp:unknown/>']){const parts=deps.unzipSync(f.input);coreChange(parts,'dcterms:modified',value);assert.throws(()=>guard(f.input,zip(parts)),undefined,value);}

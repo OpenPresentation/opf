@@ -158,6 +158,24 @@
         },
         "scope": "Separate nine-deck chartex:fallback family. All baseline hashes, sizes, ordered diagnostics and layout/tag counts reproduced; no XML normalization, automatic promotion or native acceptance.",
         "note": "RR-105 (#1290), 2026-11-12, document properties: every archive changes only in docProps/app.xml (Application OPF instead of Microsoft Office PowerPoint); world-category (language ja-JP) also in docProps/core.xml, which gains dc:language ja-JP. The candidate head is the code-only commit, amended into the item commit with this fixture. Evidence: C:/opf-work/c34/rbp-scratch/review-3-chartex."
+      },
+      {
+        "baseline": {
+          "head": "af10f356f7a5bb22674c05bd986c69140f1327b3",
+          "catalogSha256": "e9b4ecd3919a07168d447b47e308dc3e13b1c5540fba0416274f448a7db2db8a",
+          "distManifestSha256": "5cc0c8c731ffced292066f359d8554df7e9d2899ebd7ff5f86d5df753b4306c5"
+        },
+        "candidate": {
+          "head": "026e44800048c40676b7823d217ad708145bb81b",
+          "catalogSha256": "e9b4ecd3919a07168d447b47e308dc3e13b1c5540fba0416274f448a7db2db8a",
+          "distManifestSha256": "6421d559384884e6b21ac306447bf1bb1252aa3e853878346c2026108c9ef4a7"
+        },
+        "evidence": {
+          "file": "review.json",
+          "sha256": "3059b7cc994d2b8cc86e561c1bcd795b3183e76e2d89ac983246644d4665a488"
+        },
+        "scope": "Separate nine-deck chartex:fallback family. All baseline hashes, sizes, ordered diagnostics and layout/tag counts reproduced; no XML normalization, automatic promotion or native acceptance.",
+        "note": "RR-105 (#1290), 2026-11-12, Company from the organization: every archive changes only in docProps/app.xml, which no longer writes the fixed Company OpenPresentation (these decks name no organization, so no Company is written). The candidate head is the code-only commit, amended into the follow-up commit with this fixture. Evidence: C:/opf-work/c34/rbp-scratch/review-3c-chartex."
       }
     ],
     "rr20SchemaVocabularyReviews": [
@@ -687,8 +705,8 @@
   },
   "entries": {
     "treemap-category": {
-      "sha256": "b8d0ca0cf80c9ac9cb502e72d5eaf89ad7d6118bd1d49f387097dc5b39a2a351",
-      "bytes": 107580,
+      "sha256": "57fc6b3e15272787969c7dd4265988c0f70899b15b83d422b31c391f18c78a7f",
+      "bytes": 107565,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -782,12 +800,21 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "b8d0ca0cf80c9ac9cb502e72d5eaf89ad7d6118bd1d49f387097dc5b39a2a351",
+          "bytes": 107580,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "histogram-single": {
-      "sha256": "1a5eabab68ba2f1a18faec6e0d0212c27afa457d263afcbf58b2fdb347fc127e",
-      "bytes": 107596,
+      "sha256": "177bd6e14fc4c09ffb1df2a63f1bdb002767beef7a951abaf2fb43701cd355fe",
+      "bytes": 107581,
       "diagnostics": [
         "chart-data-adapted/histogram-binned"
       ],
@@ -881,12 +908,21 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "1a5eabab68ba2f1a18faec6e0d0212c27afa457d263afcbf58b2fdb347fc127e",
+          "bytes": 107596,
+          "diagnostics": [
+            "chart-data-adapted/histogram-binned"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "histogram-category": {
-      "sha256": "b58280900811c8bb6b4f29d7fba027bb32522a93537a0e1fbbebcdd8be68de9e",
-      "bytes": 107603,
+      "sha256": "7fe46aeaf0fd37ae0da20ffae9ba24e34b301546108f85a214b2126b95d696d0",
+      "bytes": 107588,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -989,12 +1025,21 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "b58280900811c8bb6b4f29d7fba027bb32522a93537a0e1fbbebcdd8be68de9e",
+          "bytes": 107603,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "pareto-multi": {
-      "sha256": "9a6164bb140418b2bdbe8cdc8d8afd7f77abc1ded2ecc707b9e48ef244fe1eca",
-      "bytes": 108361,
+      "sha256": "836c624277ee3d9d2015b6c5879ab3168ded4d923b7c77b9400e80a7200c46d5",
+      "bytes": 108346,
       "diagnostics": [
         "chart-data-adapted/chart-fallback"
       ],
@@ -1090,12 +1135,21 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "9a6164bb140418b2bdbe8cdc8d8afd7f77abc1ded2ecc707b9e48ef244fe1eca",
+          "bytes": 108361,
+          "diagnostics": [
+            "chart-data-adapted/chart-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "box-multi": {
-      "sha256": "c58b788ef8fe336f9ea491d58fef2e12158e804c3c4fbaf43522421c3dd28c6d",
-      "bytes": 108232,
+      "sha256": "7c981b700fc8d02391de50ca202cd47a83ad89ddecb00207d48c24646ac486d7",
+      "bytes": 108217,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/chart-fallback"
@@ -1196,12 +1250,22 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "c58b788ef8fe336f9ea491d58fef2e12158e804c3c4fbaf43522421c3dd28c6d",
+          "bytes": 108232,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chart-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "waterfall-single": {
-      "sha256": "d32d48365d21ce2a0233470df720378c54303254b44fe3e946e67cd854165d15",
-      "bytes": 108042,
+      "sha256": "979fd9bac9e85a7171b8f2c3d4952d48f2c4bf9f67137b53831bca079b8b57a0",
+      "bytes": 108027,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/row-numbers"
@@ -1304,12 +1368,22 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "d32d48365d21ce2a0233470df720378c54303254b44fe3e946e67cd854165d15",
+          "bytes": 108042,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/row-numbers"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "funnel-category": {
-      "sha256": "03ee2e357246c259581e6814d83b21e4c5565f156ce16aac7bf4ca37f3473fe2",
-      "bytes": 107580,
+      "sha256": "e460ac14bcbcaea7a74b7f40265474d4636b7cdf50ca2d2ae90cf34295a5b574",
+      "bytes": 107565,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -1403,12 +1477,21 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "03ee2e357246c259581e6814d83b21e4c5565f156ce16aac7bf4ca37f3473fe2",
+          "bytes": 107580,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "world-category": {
-      "sha256": "d5d120746234f86813a3fa4a94361eeea5f89dcd00e57a6af9460c4b953d4f29",
-      "bytes": 106516,
+      "sha256": "ecf610df56eceb2702c3e678980f0fe8efaba2d21bb010eb919025a777d7afce",
+      "bytes": 106501,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -1504,12 +1587,21 @@
           ],
           "layoutParts": 41,
           "layoutTagParts": 40
+        },
+        {
+          "sha256": "d5d120746234f86813a3fa4a94361eeea5f89dcd00e57a6af9460c4b953d4f29",
+          "bytes": 106516,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback"
+          ],
+          "layoutParts": 41,
+          "layoutTagParts": 40
         }
       ]
     },
     "all-seven": {
-      "sha256": "2c135fc6f2e96c5803ec5f2e89f4b39679cd7d6fce61efcb2cdbfb453b959867",
-      "bytes": 171765,
+      "sha256": "9fda76642099fc9deded3b14b5baabbdbf13fdd34de4c7e73504c393aed85978",
+      "bytes": 171749,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/chartex-fallback",
@@ -1656,6 +1748,22 @@
         {
           "sha256": "be608db1d8aa68f8644075ac64cf2d91a8ab3e0d075bd3b45b6d04d60753e82d",
           "bytes": 171780,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chart-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chart-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
+        },
+        {
+          "sha256": "2c135fc6f2e96c5803ec5f2e89f4b39679cd7d6fce61efcb2cdbfb453b959867",
+          "bytes": 171765,
           "diagnostics": [
             "chart-data-adapted/chartex-fallback",
             "chart-data-adapted/chartex-fallback",

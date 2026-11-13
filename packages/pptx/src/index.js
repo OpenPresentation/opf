@@ -2717,7 +2717,11 @@ function configurePresentation(pptx, presentation, context) {
   });
   pptx.layout = context.layoutName;
   pptx.author = normalizeAuthor(presentation.author) ?? DEFAULT_AUTHOR;
-  pptx.company = "OpenPresentation";
+  // RR-105 (#1290): File > Info > Company is the deck's primary organization (role 'primary', else the first, as a logo
+  // reference picks it), not a fixed name; a deck with no organization name writes no Company (normalizePartBytes).
+  const organizations = asArray(presentation.organization).filter(isPlainObject);
+  const company = (organizations.find(item => item.role === "primary") ?? organizations[0])?.name;
+  pptx.company = typeof company === "string" ? company : "";
   pptx.subject = presentation.description ?? "";
   pptx.title = presentation.name ?? presentation.filename ?? "OPF Presentation";
   pptx.revision = "1";
@@ -6170,7 +6174,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
     if (context.masterBackground && /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)) xml = inheritLayoutBackground(xml);
     if (path === 'ppt/presentation.xml') xml = standardNotesPage(presentationInSchemaOrder(xml));
     // RR-105 (#1290): File > Info names the application that wrote the file; the vendored writer claims PowerPoint.
-    if (path === 'docProps/app.xml') xml = neutralApplication(xml);
+    if (path === 'docProps/app.xml') xml = neutralApplication(xml).replace(/\s*<Company><\/Company>/, '');
     if (path === 'ppt/theme/theme1.xml') xml = writeThemeColors(xml, {colors: context.themeColors, schemeName: context.schemeName, themeName: context.themeName});
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
       xml = writeLinkSentinels(xml, context.linkSentinels);
