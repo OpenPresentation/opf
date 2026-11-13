@@ -67,10 +67,16 @@ for (const entry of [...picks, fallbacks.find(entry => entry.file.endsWith('layo
   const xml = strFromU8(unzipSync(bytes)['ppt/slides/slide1.xml']);
   const titles = [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => shape).filter(shape => shape.includes('name="OPF heading slides.0.title line '));
   if (!entry.wrap) {
-    assert.equal(titles.length, entry.item.text.lines.length, 'tight wrap keeps the measured title lines');
-    assert.ok(!titles.some(shape => /<p:ph\b/.test(shape)), 'a measured line does not bind as the whole title');
-    if (entry === fontFallback) for (const shape of titles) assert.match(shape, /<a:latin typeface="Bookman Old Style"/);
-    assert.ok(diagnostics.some(value => value.code === 'native-body-fallback' && value.reason === entry.reasons[0] && value.path === 'slides.0.title'));
+    // RR-105 (opf#1291): no native wrap keeps the lines, so the title is one Title placeholder holding the measured lines as fixed
+    // breaks (a:br, no wrap), not one box per line, and nothing falls back.
+    assert.equal(titles.length, 1, 'tight wrap keeps the measured title lines in one title');
+    const [shape] = titles;
+    assert.match(shape, /<p:ph type="(?:ctrTitle|title)"\/>/);
+    assert.match(shape, /<a:bodyPr\b[^>]*\bwrap="none"[^>]*><a:noAutofit\/>/);
+    assert.equal((shape.match(/<a:br\/>/g) ?? []).length, entry.item.text.lines.length - 1, 'the measured line breaks');
+    assert.equal([...shape.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''), entry.item.text.lines.join(''), 'the measured lines');
+    if (entry === fontFallback) assert.match(shape, /<a:latin typeface="Bookman Old Style"/);
+    assert.ok(!diagnostics.some(value => value.code === 'native-body-fallback' && value.path === 'slides.0.title'));
   } else {
     assert.equal(titles.length, 1, 'one coherent native title');
     const [shape] = titles, [, x, , width] = /<a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/.exec(shape).map(Number);

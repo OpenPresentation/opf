@@ -16,7 +16,7 @@ import {readChartCategoryHeading,writeChartCategoryHeading,writeChartWorkbookFor
 import {applyChartNumberFormats,chartNumber,groupsThousands,excelCode,formattedColumns,inlineChartData,inlineTableData,isDatasetRef,numericRanges,resolveChartData} from './chart-data.js';
 import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord,tableCellEvidence,tableEnvironmentEvidence} from './data-provenance.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,comboFromNative,NATIVE_CHART_ELEMENTS} from './chart-types.js';
-import {paretoPlan} from '@openpresentation/opf/composition';
+import {paragraphDirection, paretoPlan} from '@openpresentation/opf/composition';
 import {attachChartexFallbacks,attachChartexParts,chartexFallbackName,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
 import {chartRegionSvg} from './preview-region.js';
 import {applyDoughnutRings,applyRingLabels,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
@@ -2831,23 +2831,32 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     // object or one drawn on a card stays a free shape: Change Layout would move it away from its caption or card.
     const boundRegion = template && item.region !== undefined && ['image', 'chart', 'table'].includes(item.field) && !item.caption && !item.frameBox
       ? geometry.regions?.find(region => region.name === item.region && region.flow === 'none' && region.content?.length === 1 && !region.overflow?.length) : undefined;
-    // RR-88: under bodyText 'native' a plain-string title that wraps is one native text box (native wrap, no autofit) at its measured
-    // block, so it can bind to the Title placeholder like a one-line title (Keynote reports `title showing` only for a bound title).
-    const wantsNativeTitle = options.bodyText === 'native' && (template || context.automaticSlides[slideIndex]) && isNativeTitle(item);
+    // RR-88, RR-105 (opf#1291): on a slide with a native layout every title is the layout's Title placeholder, in every body-text mode:
+    // PowerPoint's Accessibility Checker and Outline view, and Keynote's `title showing`, read only a bound title. Three tiers, each
+    // keeping core's lines: a one-line title is its measured line, bound; a wrapped title whose lines PowerPoint's own wrap is shown to
+    // keep is one native wrapped box (soft wrap, nativeTitleWrapBox); any other wrapped title is one box with core's lines separated by
+    // line breaks (`a:br`, no wrap: fixed breaks). Plain and rich, left-to-right and right-to-left. Only a title the fixed tier cannot
+    // place either keeps its per-line boxes, and says why (native-body-fallback).
+    const titleSlide = Boolean(template || context.automaticSlides[slideIndex]);
+    const titleCandidate = titleSlide ? nativeTitleCandidate(item) : undefined;
+    const wantsNativeTitle = titleCandidate !== undefined && !titleCandidate.reject;
     const titleFace = wantsNativeTitle ? nativeFontOptions(item.textStyle) : undefined;
+    const titleItem = wantsNativeTitle ? {...item, value: titleCandidate.value} : undefined;
+    const titleStyle = wantsNativeTitle ? {fontFamily: options.safeTypeface ? options.safeTypeface(titleFace.fontFace) : titleFace.fontFace, fontWeight: titleFace.bold ? 700 : 400, italic: titleFace.italic === true} : undefined;
     if (wantsNativeTitle && options.fonts?.registry?.fontNames && options.fonts?.ensure) {
       const measurementRequests = [];
-      nativeTitleWrapBox(item, geometry, options.textMeasurement, {nativeStyle: {fontFamily: options.safeTypeface ? options.safeTypeface(titleFace.fontFace) : titleFace.fontFace, fontWeight: titleFace.bold ? 700 : 400, italic: titleFace.italic === true}, collectMeasurement: request => measurementRequests.push(request)});
+      nativeTitleWrapBox(titleItem, geometry, options.textMeasurement, {nativeStyle: titleStyle, collectMeasurement: request => measurementRequests.push(request)});
       await prepareNativeMeasurements(presentation, options, measurementRequests);
     }
-    const nativeTitle = wantsNativeTitle ? nativeTitleWrapBox(item, geometry, options.textMeasurement, {
-      nativeStyle: {fontFamily: options.safeTypeface ? options.safeTypeface(titleFace.fontFace) : titleFace.fontFace, fontWeight: titleFace.bold ? 700 : 400, italic: titleFace.italic === true},
-      report: reason => options.onDiagnostic?.({
-      code: 'native-body-fallback', path: item.path, reason,
-      message: reason === 'font-metrics' ? 'Native title export uses a visual font substitute for measurement, so native line breaks cannot be verified; the authored font and size were retained as measured lines.'
-        : 'Native title export cannot preserve the measured line breaks with a wrap margin inside its title area; the measured lines were exported.'
-    })}) : undefined;
-    if ((template || context.automaticSlides[slideIndex]) && item.field === 'title' && typeof item.value === 'string' && (item.text?.lines?.length === 1 || nativeTitle) && !item.text.overflow && !item.text.richLines)
+    let softReason = titleCandidate?.reject;
+    const titleWrap = wantsNativeTitle ? nativeTitleWrapBox(titleItem, geometry, options.textMeasurement, {nativeStyle: titleStyle, report: reason => { softReason = reason; }}) : undefined;
+    const nativeTitle = titleWrap && {...titleWrap, candidate: titleCandidate};
+    const fixedPlan = titleCandidate && !nativeTitle ? fixedTitlePlan(item) : undefined;
+    const fixedTitle = fixedPlan && !fixedPlan.reject ? fixedPlan : undefined;
+    if (fixedPlan?.reject) options.onDiagnostic?.({code: 'native-body-fallback', path: item.path, reason: fixedPlan.reject,
+      message: `This wrapped title cannot be one title box (${fixedPlan.reject.replaceAll('-', ' ')}${softReason && softReason !== fixedPlan.reject ? `; native wrap: ${softReason.replaceAll('-', ' ')}` : ''}); its measured lines were exported as separate text boxes, so it is not the slide's Title placeholder.`});
+    // A one-line title, plain or rich, is its one measured line; the line binds as the whole title.
+    if (titleSlide && item.field === 'title' && !item.text?.overflow && (nativeTitle || fixedTitle || (item.text?.richLines ?? item.text?.lines)?.length === 1 && (typeof item.value === 'string' || item.text.richLines && !item.runs)))
       context.placeholderBindings.set(`OPF heading ${item.path} line 0`, {slide: slideIndex, region: 'Title', object: 'title'});
     const drawnBefore = boundRegion && {images: context.images.size, placeholders: context.imagePlaceholders.size, charts: context.chartHeadings.size, tables: context.tableHeaders.size};
     // Card text sits on a literal card fill, not the slide background: keep it literal.
@@ -2873,7 +2882,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       }
     }
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
-    if(options.bodyText!=='native'&&!nativeTitle&&!nativePlans.some(plan=>plan.item===item))context.nativeScalarFragments.rememberItem(slideIndex,item,geometry,options.textMeasurement,language=>context.nativeFragmentProfile(language,slideIndex));
+    if(options.bodyText!=='native'&&!nativeTitle&&!fixedTitle&&!nativePlans.some(plan=>plan.item===item))context.nativeScalarFragments.rememberItem(slideIndex,item,geometry,options.textMeasurement,language=>context.nativeFragmentProfile(language,slideIndex));
     // LH-50: a label drawn as an eyebrow shares its paragraph's card (the same frameBox): the card is drawn once, under the eyebrow, and
     // named for the paragraph (the next item), whose block it is.
     const sharedCard = sameBox(item.frameBox, previousFrame);
@@ -2889,6 +2898,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     }
     if (nativeTitle) {
       addNativeTitle(slide, item, itemContext, options, context, nativeTitle);
+    } else if (fixedTitle) {
+      addFixedTitle(slide, item, itemContext, options, context, fixedTitle);
     } else if (nativePlans.some(plan => plan.item === item)) {
       // RR-88: the first native body is the Body placeholder; every further one is an ordinary native text box at its region.
       const plan = nativePlans.find(plan => plan.item === item);
@@ -4314,6 +4325,17 @@ function pixelBox(region) {
 // super/subscript (a citation marker is a baseline run) and http(s)/mailto links. The body's lines stay untagged; a heading or quote
 // body passes `objectName` and `tag`, which name and tag every line with the boundary between wrapped lines (a soft wrap inserts
 // nothing, a hard line break keeps its separator), recovered from the flattened text. `fallback` is the color of runs without one.
+// The native runs of one laid-out rich line (core's fragments): color, size, weight, decoration, baseline shift, link and language.
+function richFitLineRuns(line, context, fallback) {
+  const colors = [];
+  return undecoratedLineEnd(line.fragments.map(fragment => {
+    const runColor = exportColor(fragment.run.color, context, context.colors.text);
+    const color = nativeColor(fragment.run.color, runColor, context, fallback);
+    colors.push(color);
+    return {text: fragment.text, options: {...nativeFontOptions(fragment.style), ...eyebrowOptions(fragment.style, fragment.nominalSize ?? fragment.fontSize), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: linkColor(fragment.run, color, context), underline: fragment.run.underline ? {style: 'sng', color: linkColor(fragment.run, color, context)} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined, baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined, hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:|tel:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined, ...langOptions(context, fragment.style.lang)}};
+  }), colors);
+}
+
 function addRichFitLines(slide, fit, box, context, {value, path, alignment: logicalAlignment, fallback, objectName, tag, keepEmpty = false}) {
   const region = {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96};
   const runText = run => typeof run === 'string' ? run : run.text;
@@ -4322,13 +4344,7 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
   const count = fit.richLines.length;
   let cursor = 0;
   for (const [index, line] of fit.richLines.entries()) {
-    const colors = [];
-    const runs = undecoratedLineEnd(line.fragments.map(fragment => {
-      const runColor = exportColor(fragment.run.color, context, context.colors.text);
-      const color = nativeColor(fragment.run.color, runColor, context, fallback);
-      colors.push(color);
-      return {text: fragment.text, options: {...nativeFontOptions(fragment.style), ...eyebrowOptions(fragment.style, fragment.nominalSize ?? fragment.fontSize), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: linkColor(fragment.run, color, context), underline: fragment.run.underline ? {style: 'sng', color: linkColor(fragment.run, color, context)} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined, baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined, hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:|tel:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined, ...langOptions(context, fragment.style.lang)}};
-    }), colors);
+    const runs = richFitLineRuns(line, context, fallback);
     // Logical alignment (RR-05): a right-to-left paragraph starts at the right edge; every wrapped line shares its paragraph's direction.
     const placed = fit.placement?.lines[index], alignment = placed?.alignment ?? physicalAlignment(logicalAlignment, fit.directions?.[index]), factor = alignment === 'right' ? 1 : alignment === 'center' ? .5 : 0;
     const area = placed ? {...region, x: (placed.x + line.width * factor - box.width * factor) / 96, y: placed.y / 96, h: placed.height / 96} : {...region, y: region.y + line.y / 96, h: line.height / 96};
@@ -4380,31 +4396,172 @@ function titleSplitLines(item, items, title) {
 
 // Match the published renderer's payload geometry and shared core text fitting.
 // Each fitted line remains native editable text, without PowerPoint rewrapping it.
-// RR-88: a plain-string title that wraps over several lines, with no hard break, overflow, rich runs or right-to-left line.
-function isNativeTitle(item) {
-  return item.field === 'title' && typeof item.value === 'string' && item.value.length > 0 && !/[\r\n\u2028\u2029]/.test(item.value) && item.text?.lines?.length > 1
-    && !item.text.overflow && !item.text.richLines && !item.text.directions?.includes('rtl') && !item.text.sourceLines?.some(line => line.boundary === 'hard' || line.segments?.some(segment => segment.kind === 'tab'));
+// RR-88, RR-105 (opf#1291): whether a title is written as one native wrapped box. Undefined for a title that is not wrapped (a one-line
+// title is its measured line, bound as it is); `{reject: reason}` for a wrapped title whose lines native text cannot be shown to keep;
+// otherwise `{value, runs}`: the value the wrap is verified on (a rich title's runs at the sizes core drew them) and, for a rich title,
+// each run with its measured fragment (the look the measured lines write).
+const TITLE_RUN_KEYS = new Set(['text', 'bold', 'italic', 'underline', 'strikethrough', 'color', 'fontFamily', 'fontSize', 'language', 'link']);
+function nativeTitleCandidate(item) {
+  const fit = item.text;
+  if (item.field !== 'title' || !fit || (fit.richLines ?? fit.lines)?.length < 2 || item.runs) return undefined;
+  if (fit.overflow) return {reject: 'overflow'};
+  const runs = typeof item.value === 'string' ? [{text: item.value}] : Array.isArray(item.value) ? item.value.map(run => typeof run === 'string' ? {text: run} : run) : undefined;
+  if (!runs?.every(run => run && typeof run.text === 'string')) return {reject: 'unsupported-text'};
+  const whole = runs.map(run => run.text).join('');
+  if (!whole.trim()) return undefined;
+  if (runs.some(run => run.cite !== undefined || run.footnote !== undefined)) return {reject: 'annotated-text'};
+  if (/[\r\n\u2028\u2029]/.test(whole) || fit.sourceLines?.some(line => line.boundary === 'hard')) return {reject: 'hard-break'};
+  if (/\t|[\u0000-\u0008\u000B\u000C\u000E-\u001F\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/.test(whole) || fit.sourceLines?.some(line => line.segments?.some(segment => segment.kind === 'tab'))) return {reject: 'unsupported-text'};
+  // One paragraph direction for every line; right-to-left letters in a paragraph core did not set right-to-left are not verified.
+  const directions = new Set(fit.directions ?? []);
+  if (directions.size > 1) return {reject: 'mixed-direction'};
+  if (!directions.has('rtl') && [...whole].some(char => /\p{L}/u.test(char) && paragraphDirection(char, 'rtl') === 'rtl')) return {reject: 'unsupported-text'};
+  if (typeof item.value === 'string') return {value: item.value};
+  if (runs.some(run => Object.keys(run).some(key => !TITLE_RUN_KEYS.has(key)))) return {reject: 'unsupported-text'};
+  // Every run drawn in one face and size (a run split over fonts by script, or shrunk unevenly, is not one native run).
+  const fragments = fit.richLines.flatMap(line => line.fragments);
+  if (fragments.some(fragment => fragment.kind === 'marker' || fragment.baselineShift)) return {reject: 'annotated-text'};
+  const sizeOf = fragment => fragment.nominalSize ?? fragment.fontSize;
+  const look = fragment => {
+    const font = nativeFontOptions(fragment.style);
+    return `${font.fontFace}|${font.bold === true}|${font.italic === true}|${sizeOf(fragment)}|${fragment.style.lang ?? ''}|${fragment.style.caps ? 1 : 0}|${fragment.style.tracking ?? 0}`;
+  };
+  const measured = runs.map((run, index) => fragments.filter(fragment => fragment.runIndex === index));
+  if (measured.some((list, index) => !list.length ? runs[index].text.length > 0 : list.some(fragment => look(fragment) !== look(list[0])))) return {reject: 'mixed-fonts'};
+  if (runs.some(run => run.fontFamily !== undefined && run.fontFamily !== item.textStyle.fontFamily)) return {reject: 'mixed-fonts'};
+  // PowerPoint spaces native lines evenly and puts the first baseline by the largest run, as a measured line drawn at single spacing
+  // does. A line whose runs are all smaller than its slot (core's baseline below them) is drawn at its own exact pitch (smallRunSpacing).
+  const pitch = fit.richLines[0].height;
+  if (fit.richLines.some(line => Math.abs(line.height - pitch) > .01 || Math.abs(line.baseline - line.y - Math.max(...line.fragments.map(sizeOf))) > .01)) return {reject: 'line-pitch'};
+  const value = runs.map((run, index) => {
+    const {fontFamily, ...rest} = run;
+    return measured[index].length ? {...rest, fontSize: sizeOf(measured[index][0]) * .75} : rest;
+  });
+  return {value, runs: runs.map((run, index) => ({run, text: run.text, fragment: measured[index][0]}))};
 }
 
 // RR-88: the wrapped title as one native text box: the whole string, native wrap, no autofit, at the block its measured lines fill
 // (top of the first line to the bottom of the last), with the measured line pitch as exact spacing. Tagged as one heading line,
 // so import reads the current words as the title. The caller binds it to the Title placeholder.
+// RR-105 (opf#1291): a rich title's runs keep the look its measured lines write (tagged with the heading's base look, as those lines
+// are), and a right-to-left title is one right-to-left paragraph.
 function addNativeTitle(slide, item, context, options, deckContext, wrap) {
   const fit = item.text, box = {...item.box, x: wrap.x, width: wrap.width}, lines = fit.placement?.lines;
-  const tops = fit.lines.map((_, index) => lines?.[index] ? lines[index].baseline - fit.fontSize : box.y + index * fit.lineHeight);
-  const bottoms = fit.lines.map((_, index) => lines?.[index] ? lines[index].baseline - fit.fontSize + lines[index].height : box.y + (index + 1) * fit.lineHeight);
+  const rich = wrap.candidate?.runs, offset = rich ? fit.richLines[0].baseline - fit.richLines[0].y : fit.fontSize;
+  const pitch = rich ? fit.richLines[0].height : fit.lineHeight, count = (fit.richLines ?? fit.lines).length;
+  const tops = Array.from({length: count}, (_, index) => lines?.[index] ? lines[index].baseline - offset : box.y + index * pitch);
+  const bottoms = Array.from({length: count}, (_, index) => lines?.[index] ? lines[index].baseline - offset + lines[index].height : box.y + (index + 1) * pitch);
   const top = Math.min(...tops), height = Math.max(...bottoms) - top;
   const objectName = `OPF heading ${item.path} line 0`;
-  deckContext.headingTags.set(objectName, {v: 1, group: item.path, field: 'title', line: 0, count: 1, boundary: 'end', separator: ''});
+  const rtl = fit.directions?.[0] === 'rtl';
+  const color = context.textColor;
+  deckContext.headingTags.set(objectName, {v: 1, group: item.path, field: 'title', line: 0, count: 1, boundary: 'end', separator: '', ...(rich ? {base: richBase(fit, item.textStyle, context.colors.text)} : {})});
   deckContext.nativeTitles.add(objectName);
   const style = item.textStyle ?? resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, path: item.path}, options.textMeasurement);
-  context.nativeLatinSlots.remember(context.slideIndex,objectName,[{text:bindNoBreak(item.value),source:item.value,style:item.textStyle}],item.path);
-  slide.addText(bindNoBreak(item.value), {
-    ...textBoxOptions({x: box.x / 96, y: top / 96, w: box.width / 96, h: height / 96}, context, fit.fontSize * .75),
-    ...nativeFontOptions(style),
-    color: pptxColor(context.textColor), align: physicalAlignment(fit.placement?.alignment ?? item.alignment ?? 'left', fit.directions?.[0]),
-    objectName, fit: 'none', wrap: true, lineSpacing: fit.lineHeight * .75, lineSpacingMultiple: undefined
-  });
+  const align = physicalAlignment(fit.placement?.alignment ?? item.alignment ?? 'left', fit.directions?.[0]);
+  const frame = {...textBoxOptions({x: box.x / 96, y: top / 96, w: box.width / 96, h: height / 96}, context, fit.fontSize * .75), align, objectName, fit: 'none', wrap: true, lineSpacing: pitch * .75, lineSpacingMultiple: undefined};
+  if (!rich) {
+    context.nativeLatinSlots.remember(context.slideIndex,objectName,[{text:bindNoBreak(item.value),source:item.value,style:item.textStyle}],item.path);
+    slide.addText(bindNoBreak(item.value), {...frame, ...nativeFontOptions(style), ...eyebrowOptions(style, fit.fontSize), color: pptxColor(color), ...(rtl ? {rtlMode: true} : {})});
+    return;
+  }
+  // Each run as its measured line writes it (addRichFitLines): its fragment's face, size, color, decoration, link and language.
+  const runs = [], fragments = [];
+  for (const [index, {run, text, fragment}] of rich.entries()) {
+    if (!text) continue;
+    const size = (fragment.nominalSize ?? fragment.fontSize), runColor = exportColor(run.color, context, context.colors.text);
+    const written = linkColor(run, nativeColor(run.color, runColor, context, color), context);
+    runs.push({text: bindNoBreak(text), options: {...nativeFontOptions(fragment.style), ...eyebrowOptions(fragment.style, size), fontSize: size * .75, color: written,
+      underline: run.underline ? {style: 'sng', color: written} : undefined, strike: run.strikethrough ? 'sngStrike' : undefined,
+      hyperlink: run.link && /^(https?:|mailto:|tel:)/i.test(run.link) ? {url: run.link} : undefined, ...langOptions(context, fragment.style.lang), ...(rtl ? {rtlMode: true} : {})}});
+    fragments.push({text: bindNoBreak(text), source: text, start: 0, end: text.length, sourceRun: index, style: fragment.style});
+  }
+  context.nativeLatinSlots.remember(context.slideIndex, objectName, fragments, item.path);
+  slide.addText(runs, frame);
+}
+
+// RR-105 (opf#1291): the fixed-break title tier. Core's lines in one box at the title's frame: each line as its measured box writes it,
+// a soft wrap a line break (`a:br`) and an authored hard break ("\n") a new paragraph, no wrap and no autofit, the measured pitch as
+// exact spacing. `{reject: reason}` when one box cannot draw the lines where their boxes are: lines in more than one direction or
+// alignment, lines not in one horizontal frame or not evenly spaced, tabs, or citation markers.
+const LINE_X_TOLERANCE = 1.5;
+function fixedTitlePlan(item) {
+  const fit = item.text, rich = fit.richLines, count = (rich ?? fit.lines).length;
+  const whole = typeof item.value === 'string' ? item.value : Array.isArray(item.value) ? item.value.map(run => typeof run === 'string' ? run : run?.text ?? '').join('') : undefined;
+  if (whole === undefined || item.runs) return {reject: 'unsupported-text'};
+  const directions = new Set(fit.directions ?? []);
+  if (directions.size > 1) return {reject: 'mixed-direction'};
+  if (rich?.some(line => line.fragments.some(fragment => fragment.kind === 'marker' || fragment.baselineShift))) return {reject: 'annotated-text'};
+  if (/\t/.test(whole) || fit.sourceLines?.some(line => line.segments?.some(segment => segment.kind === 'tab'))) return {reject: 'unsupported-text'};
+  // Core's lines are slices of the authored text; between two lines a soft wrap adds nothing and a hard break is one "\n".
+  const texts = fit.lines ?? [], hard = [];
+  let cursor = 0;
+  for (let index = 0; index < count; index++) {
+    const text = texts[index] ?? '';
+    if (!whole.startsWith(text, cursor)) return {reject: 'unsupported-text'};
+    cursor += text.length;
+    if (index === count - 1) break;
+    const newline = /^(?:\r\n|\r|\n)/.exec(whole.slice(cursor));
+    if (newline && newline[0] !== '\n') return {reject: 'hard-break'};
+    hard.push(!!newline);
+    cursor += newline ? 1 : 0;
+  }
+  if (cursor !== whole.length) return {reject: 'unsupported-text'};
+  const placed = fit.placement?.lines, sizeOf = fragment => fragment.nominalSize ?? fragment.fontSize;
+  const baseline = index => placed?.[index] ? placed[index].baseline : item.box.y + (rich ? rich[index].baseline : index * fit.lineHeight + fit.fontSize);
+  const pitch = count > 1 ? baseline(1) - baseline(0) : fit.lineHeight;
+  if (!(pitch > 0) || Array.from({length: count - 1}, (_, index) => baseline(index + 1) - baseline(index)).some(step => Math.abs(step - pitch) > .5)) return {reject: 'line-pitch'};
+  // One alignment and one horizontal frame: each line's box as its measured shape has it.
+  const logical = fit.placement?.alignment ?? item.alignment ?? 'left';
+  const alignmentOf = index => placed?.[index]?.alignment ?? physicalAlignment(logical, fit.directions?.[index]);
+  const align = alignmentOf(0), factor = align === 'right' ? 1 : align === 'center' ? .5 : 0;
+  if (Array.from({length: count}, (_, index) => alignmentOf(index)).some(value => value !== align)) return {reject: 'line-placement'};
+  const xs = Array.from({length: count}, (_, index) => !texts[index] ? undefined : placed?.[index] ? placed[index].x + (rich ? rich[index].width : placed[index].width) * factor - item.box.width * factor : item.box.x).filter(value => value !== undefined);
+  // A rich line's measured box starts at its own ink-aligned x (core's placement), which can differ between lines by under a pixel; the box
+  // takes the first line's, so another line can sit up to LINE_X_TOLERANCE px (composition pixels) from its measured place.
+  if (xs.some(value => Math.abs(value - xs[0]) > LINE_X_TOLERANCE)) return {reject: 'line-placement'};
+  // PowerPoint puts the first baseline of exactly spaced lines DIAGRAM_BASELINE_SHARE of the pitch below the top from DIAGRAM_MIN_PITCH sizes;
+  // below that by the largest run's ascent, as it does for a line at single spacing. So the box starts where the first measured line's box
+  // starts (one size above the baseline for plain text, RR-88; core's line top for a rich line at single spacing). A rich first line
+  // whose runs are all smaller than its slot is drawn by its measured box at its own exact pitch (smallRunSpacing); one box holds one
+  // pitch, so its top is one largest size above the baseline, and PowerPoint's ascent decides how near the baseline lands.
+  const largest = rich ? Math.max(0, ...rich[0].fragments.map(sizeOf)) || fit.fontSize : fit.fontSize;
+  const lineTop = rich ? placed?.[0] ? placed[0].y : item.box.y + rich[0].y : baseline(0) - fit.fontSize;
+  const ownPitch = rich && largest > 0 && (baseline(0) - lineTop) / DIAGRAM_BASELINE_SHARE >= DIAGRAM_MIN_PITCH * largest;
+  const top = pitch >= DIAGRAM_MIN_PITCH * largest ? baseline(0) - DIAGRAM_BASELINE_SHARE * pitch : ownPitch ? baseline(0) - largest : lineTop;
+  return {x: xs[0] ?? item.box.x, top, width: item.box.width, height: count * pitch, pitch, align, hard, rtl: directions.has('rtl'), whole};
+}
+
+function addFixedTitle(slide, item, context, options, deckContext, plan) {
+  const fit = item.text, rich = fit.richLines, objectName = `OPF heading ${item.path} line 0`, color = context.textColor;
+  const style = item.textStyle ?? resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, path: item.path}, options.textMeasurement);
+  const plainLook = {...nativeFontOptions(style), ...eyebrowOptions(style, fit.fontSize), ...langOptions(context, undefined), color: pptxColor(color)};
+  const runs = [], fragments = [];
+  let start = 0;
+  for (const [index, line] of (rich ?? fit.lines).entries()) {
+    let lineRuns;
+    if (rich) {
+      lineRuns = richFitLineRuns(line, context, color);
+      fragments.push(...line.fragments.map(fragment => ({text: fragment.text, source: fragment.run.text, start: fragment.start, end: fragment.end, style: fragment.style, sourceRun: fragment.runIndex, marker: false})));
+    } else {
+      lineRuns = line ? [{text: line, options: {...plainLook}}] : [];
+      fragments.push({text: line, source: plan.whole, start, end: start + line.length, style});
+      start += line.length + (plan.hard[index] ? 1 : 0);
+    }
+    if (!lineRuns.length) lineRuns = [{text: '', options: {...plainLook, fontSize: fit.fontSize * .75}}];
+    if (plan.rtl) for (const run of lineRuns) run.options = {...run.options, rtlMode: true};
+    if (index) {
+      if (plan.hard[index - 1]) runs[runs.length - 1].options = {...runs[runs.length - 1].options, breakLine: true};
+      else lineRuns[0].options = {...lineRuns[0].options, softBreakBefore: true};
+    }
+    runs.push(...lineRuns);
+  }
+  deckContext.headingTags.set(objectName, {v: 1, group: item.path, field: 'title', line: 0, count: 1, boundary: 'end', separator: '', lineBreaks: 'wrap', ...(rich ? {base: richBase(fit, item.textStyle, context.colors.text)} : {})});
+  deckContext.nativeTitles.add(objectName);
+  context.nativeLatinSlots.remember(context.slideIndex, objectName, fragments, item.path);
+  // The runs carry the look; the frame names none, so no frame default (a bold title) overrides a run's own.
+  slide.addText(runs, {...textBoxOptions({x: plan.x / 96, y: plan.top / 96, w: plan.width / 96, h: plan.height / 96}, context, fit.fontSize * .75),
+    align: plan.align, objectName, fit: 'none', wrap: false, lineSpacing: plan.pitch * .75, lineSpacingMultiple: undefined});
 }
 
 function addMeasuredPayloadText(slide, text, box, context, options, config) {

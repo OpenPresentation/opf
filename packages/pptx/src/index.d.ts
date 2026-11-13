@@ -36,11 +36,14 @@ export interface ImageResolverContext {
 }
 
 export interface MediaProvenanceDiagnostic { code: "media-provenance-omitted"; path: string; message: string }
-/** An opt-in native body could not represent this payload; current measured shapes were retained. */
+/**
+ * An opt-in native body could not represent this payload, or (any mode, RR-105) a wrapped title could be neither a native wrapped title
+ * nor one title of fixed lines; current measured shapes were retained.
+ */
 export interface NativeBodyFallbackDiagnostic {
   code: "native-body-fallback";
   path: string;
-  reason: "complex-composition" | "multi-column" | "unsupported-list" | "annotated-text" | "unsupported-text" | "overflow" | "tight-wrap" | "font-metrics";
+  reason: "complex-composition" | "multi-column" | "unsupported-list" | "annotated-text" | "unsupported-text" | "overflow" | "tight-wrap" | "font-metrics" | "hard-break" | "mixed-direction" | "line-pitch" | "line-placement";
   message: string;
 }
 /** Measured native text could not be split with complete ownership evidence; the original measured line or scalar was retained. */

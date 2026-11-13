@@ -55,8 +55,13 @@ for (const [family, typefaces, written, fallback] of [
   const input = deck(family); input.slides[0].title = 'Native title measurement follows the physical family over every measured line';
   const notes = [], result = await toPptx(input, {fonts, typefaces, bodyText: 'native', onDiagnostic: value => notes.push(value)}), shapes = headingShapes(result);
   assert.ok(shapes.every(value => value.includes('<a:latin typeface="' + written + '"')), family + ': preserve the serialized family');
-  assert.equal(notes.some(value => value.path === 'slides.0.title' && value.code === 'native-body-fallback' && value.reason === 'font-metrics'), fallback, family + '/' + typefaces + ': fidelity follows the serialized family');
-  if (!fallback) { assert.equal(shapes.length, 1, family + '/' + typefaces + ': ' + JSON.stringify(notes)); assert.match(shapes[0], /<p:ph type="title"\/>/); }
+  // RR-105 (opf#1291): a visual substitute cannot verify a native wrap, so the title keeps core's line breaks as fixed breaks (a:br,
+  // no wrap) in its one Title placeholder; an exact or metric face is natively wrapped. Either way no title falls back to line boxes.
+  assert.equal(shapes.length, 1, family + '/' + typefaces + ': ' + JSON.stringify(notes));
+  assert.match(shapes[0], /<p:ph type="title"\/>/);
+  assert.equal(/<a:br\/>/.test(shapes[0]) && /<a:bodyPr\b[^>]*\bwrap="none"/.test(shapes[0]), fallback, family + '/' + typefaces + ': fidelity follows the serialized family');
+  assert.equal(/<a:bodyPr\b[^>]*\bwrap="square"/.test(shapes[0]), !fallback, family + '/' + typefaces + ': native wrap only for a measured face');
+  assert.ok(!notes.some(value => value.path === 'slides.0.title' && value.code === 'native-body-fallback'), family + '/' + typefaces + ': no line-box fallback');
   assert.ok(shapes.every(value => !/normAutofit|spAutoFit/.test(value)), family + ': no automatic font resizing');
   assert.ok(shapes.every(value => /<a:rPr[^>]*\bsz="[1-9]\d*"/.test(value)), family + ': explicit font sizes');
 }

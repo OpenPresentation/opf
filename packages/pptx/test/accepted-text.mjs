@@ -22,14 +22,33 @@ for(const contentBox of [false,true])for(const alignment of ['start','center','e
 for(const text of ['Full source\nSecond paragraph.', ['Exact spacing ',{text:'with bold words',bold:true},' and ',{text:'italics.',italic:true},'\n',{text:'Raised ',superscript:true},{text:'note',fontSize:20,underline:true},' stays editable.']]) {
   const deck={design:{contentBox,dimensions,titleAlignment:alignment,contentAlignment:alignment,fontScheme:{id:'carlito',heading: 'Carlito',body: 'Carlito'}},slides:[{tag:'Source',title:'A measured title that wraps when space is narrow',subtitle:'Supporting text',composition:{mode:'column',minFontSize:24},text}]};
   const original=structuredClone(deck),options={fonts};
-  const bound=resolvePresentation(deck,options).slides[0],expected=bound.geometry.items.flatMap(item=>item.text.placement.lines.map((placed,index)=>({item,placed,index})));
+  const bound=resolvePresentation(deck,options).slides[0],expected=bound.geometry.items.flatMap(item=>item.field==='title'&&item.text.placement.lines.length>1?[{item,placed:item.text.placement.lines[0],index:0,title:true}]:item.text.placement.lines.map((placed,index)=>({item,placed,index})));
+  // RR-105 (opf#1291): a wrapped title is one Title placeholder: natively wrapped (wrap square) where its lines are verified, else its
+  // measured lines joined by line breaks (wrap none); either way it starts where its first measured line starts.
   const bytes=await toPptx(deck,options),xml=new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']);
   const shapes=array(parser.parse(xml)['p:sld']['p:cSld']['p:spTree']['p:sp']).filter(shape=>nativeText(shape));
-  assert.equal(shapes.length,expected.length,'One editable native shape per nonblank accepted line');
+  assert.equal(shapes.length,expected.length,'One editable native shape per nonblank accepted line, one per wrapped title');
   for(const [i,shape] of shapes.entries()) {
-    const {item,placed,index}=expected[i],rich=item.text.richLines?.[index],transform=shape['p:spPr']['a:xfrm'];
+    const {item,placed,index,title}=expected[i],rich=item.text.richLines?.[index],transform=shape['p:spPr']['a:xfrm'];
     const x=Number(transform['a:off'].x)/9525,y=Number(transform['a:off'].y)/9525,width=Number(transform['a:ext'].cx)/9525;
     const factor=alignment==='end'?1:alignment==='center'?.5:0;
+    if(title){
+      const soft=shape['p:txBody']['a:bodyPr'].wrap==='square';
+      assert.equal(shape['p:nvSpPr']['p:nvPr']['p:ph']?.type,'title','A wrapped title is the Title placeholder');
+      if(!soft)assert.equal(shape['p:txBody']['a:bodyPr'].wrap,'none','A title of fixed lines does not wrap');
+      near(x+width*factor,soft?item.box.x+item.box.width*factor:placed.x+placed.width*factor,'Accepted native title alignment anchor');
+      near(y,placed.baseline-item.text.fontSize,'Accepted native title top');
+      assert.equal(nativeText(shape),item.text.lines.join(''));
+      for(const paragraph of array(shape['p:txBody']['a:p']))assert.equal(paragraph['a:pPr'].algn,{start:'l',center:'ctr',end:'r'}[alignment]);
+      for(const auto of ['a:normAutofit','a:spAutoFit'])assert.ok(!Object.hasOwn(shape['p:txBody']['a:bodyPr'],auto),'PowerPoint must not silently refit a title');
+      for(const run of array(shape['p:txBody']['a:p']).flatMap(p=>array(p['a:r']))){
+        assert.equal(run['a:rPr']['a:latin'].typeface,item.textStyle.fontFamily);
+        assert.equal(run['a:rPr'].b==='1',item.textStyle.fontWeight>=600);
+        assert.ok(Math.abs(Number(run['a:rPr'].sz)/100-item.text.fontSize*.75)<.011);
+      }
+      lines+=item.text.lines.length;
+      continue;
+    }
     near(x+width*factor,placed.x+placed.width*factor,'Accepted native alignment anchor');
     near(y,rich?placed.y:placed.baseline-item.text.fontSize,'Accepted native line top');
     near(Number(transform['a:ext'].cy)/9525,placed.height,'Accepted native line height');
