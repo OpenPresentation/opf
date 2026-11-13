@@ -57,13 +57,21 @@ assert.ok(figure[0].size > 232 && figure[0].size <= 252, `the figure's size (${f
 assert.equal(figure[0].spc, spcOf(DISPLAY_TRACKING, figure[0].size));
 
 // The round trip returns the same document: pitch and tracking are drawing, not content.
-const back = await fromPptx(bytes);
+// LH-189: the tracking OPF writes is drawing, not authored style, so the import reports nothing about it.
+const silent = async (archive, label) => {
+  const diagnostics = [];
+  const document = await fromPptx(archive, {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
+  assert.deepEqual(diagnostics.filter(diagnostic => diagnostic.code === 'unsupported-body-text-style'), [], `${label}: no unsupported text style for OPF's own tracking`);
+  return document;
+};
+const back = await silent(bytes, 'one-message slides');
+for (const provenance of [false, 'references-only']) await silent(await toPptx(deck, {catalogs: [gallery], provenance}), `one-message slides, provenance ${provenance}`);
 assert.deepEqual(back.slides.map(slide => ({title: slide.title, text: slide.text ?? slide.blocks?.[0]?.text, quote: slide.quote ?? slide.blocks?.[0]?.quote, metric: slide.metric ?? slide.blocks?.[0]?.metric})),
   deck.slides.map(slide => ({title: slide.title, text: slide.text, quote: slide.quote, metric: slide.metric})));
-// A title keeps core's display tracking in every title tier (RR-105): one line (its measured line, bound), soft wrap (one natively wrapped
-// box, bound; an untracked two-line title) and, for a two-line display title one em apart (LH-189's tight pitch), its measured lines as
-// separate boxes: single spacing is 1.2 em in PowerPoint and a fixed line cannot take a negative space before, so that title is not the Title
-// placeholder today (a decision pending with the supervisor). Both body-text modes; every title imports back.
+// A bound title keeps core's display tracking in every title tier (RR-105): one line (its measured line), soft wrap (one natively wrapped
+// box; an untracked two-line title) and fixed lines (one paragraph per line; a two-line display title one em apart, LH-189's tight pitch,
+// takes the title export's later-paragraph spacing under single). Every tier is the Title placeholder in both body-text modes, and every
+// title imports back with no finding about the tracking.
 const titles = {
   $schema: 'https://openpresentation.org/schema/opf/v1', name: 'LH-189 titles', design: {dimensions: {preset: '4:3'}},
   slides: [
@@ -72,7 +80,7 @@ const titles = {
     {title: 'Ledger migration plan for next year', composition: {padding: 0.2}},
   ],
 };
-const tiers = [{lines: 1, shapes: 1, bound: true, tracked: true}, {lines: 2, shapes: 1, bound: true, tracked: false}, {lines: 2, shapes: 2, bound: false, tracked: true}];
+const tiers = [{lines: 1, shapes: 1, bound: true, tracked: true}, {lines: 2, shapes: 1, bound: true, tracked: false}, {lines: 2, shapes: 1, bound: true, tracked: true}];
 for (const bodyText of ['measured', 'native']) {
   const titleBytes = await toPptx(titles, {catalogs: [gallery], bodyText}), titleEntries = unzipSync(new Uint8Array(titleBytes));
   for (const [index, tier] of tiers.entries()) {
@@ -89,6 +97,6 @@ for (const bodyText of ['measured', 'native']) {
       for (const spc of runs) assert.equal(spc, tier.tracked ? spcOf(DISPLAY_TRACKING, title.text.fontSize) : 0, `${bodyText} title ${index}: spc`);
     }
   }
-  assert.deepEqual((await fromPptx(titleBytes)).slides.map(slide => slide.title), titles.slides.map(slide => slide.title), `${bodyText}: the titles import back`);
+  assert.deepEqual((await silent(titleBytes, `${bodyText} titles`)).slides.map(slide => slide.title), titles.slides.map(slide => slide.title), `${bodyText}: the titles import back`);
 }
 console.log('LH-188, LH-189: the export writes display text at core\'s size, pitch and spc, keeps a title\'s tracking in every tier, and imports back unchanged.');
