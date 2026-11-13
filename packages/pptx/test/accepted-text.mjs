@@ -36,12 +36,19 @@ for(const text of ['Full source\nSecond paragraph.', ['Exact spacing ',{text:'wi
       const soft=shape['p:txBody']['a:bodyPr'].wrap==='square';
       assert.equal(shape['p:nvSpPr']['p:nvPr']['p:ph']?.type,'title','A wrapped title is the Title placeholder');
       if(!soft)assert.equal(shape['p:txBody']['a:bodyPr'].wrap,'none','A title of fixed lines does not wrap');
-      near(x+width*factor,soft?item.box.x+item.box.width*factor:placed.x+placed.width*factor,'Accepted native title alignment anchor');
-      // Its first line at single spacing scaled to the pitch, half the multiple's possible ascent shift above the measured line's top (titleLineSpacing).
-      const multiple=item.text.lineHeight/(1.2*item.text.fontSize);
-      near(y,placed.baseline-item.text.fontSize-(multiple-1)*.95*item.text.fontSize/2,'Accepted native title top');
-      assert.equal(Number(array(shape['p:txBody']['a:p'])[0]['a:pPr']['a:lnSpc']['a:spcPct'].val),Math.round(multiple*100000),'Accepted native title spacing');
-      assert.equal(nativeText(shape),item.text.lines.join(''));
+      const paragraphs=array(shape['p:txBody']['a:p']);
+      // A title of fixed lines is one paragraph per line, each starting where its measured box started it (its margins) and spaced to
+      // core's pitch at single spacing (1.2 sizes a line); a natively wrapped one is one paragraph at single spacing.
+      assert.equal(paragraphs.length,soft?1:item.text.lines.length,'Accepted native title paragraphs');
+      const lineAnchor=index=>{const p=paragraphs[soft?0:index]['a:pPr'],marL=Number(p.marL??0)/9525,marR=Number(p.marR??0)/9525;return factor===0?x+marL:factor===1?x+width-marR:x+marL+(width-marL-marR)/2;};
+      near(lineAnchor(0),soft?item.box.x+item.box.width*factor:placed.x+placed.width*factor,'Accepted native title alignment anchor');
+      if(!soft)item.text.placement.lines.forEach((line,index)=>assert.ok(Math.abs(lineAnchor(index)-(line.x+line.width*factor))<.002+1e-6,'Accepted native title line anchor'));
+      near(y,placed.baseline-item.text.fontSize,'Accepted native title top');
+      for(const [index,paragraph] of paragraphs.entries()){
+        assert.equal(Number(paragraph['a:pPr']['a:lnSpc']['a:spcPct'].val),100000,'Accepted native title single spacing');
+        if(index)assert.ok(Math.abs(Number(paragraph['a:pPr']['a:spcBef']['a:spcPts'].val)/100-(item.text.placement.lines[index].baseline-item.text.placement.lines[index-1].baseline-1.2*item.text.fontSize)*.75)<.006,'Accepted native title space before');
+      }
+      assert.equal(nativeText(shape).replaceAll('\n',''),item.text.lines.join(''));
       for(const paragraph of array(shape['p:txBody']['a:p']))assert.equal(paragraph['a:pPr'].algn,{start:'l',center:'ctr',end:'r'}[alignment]);
       for(const auto of ['a:normAutofit','a:spAutoFit'])assert.ok(!Object.hasOwn(shape['p:txBody']['a:bodyPr'],auto),'PowerPoint must not silently refit a title');
       for(const run of array(shape['p:txBody']['a:p']).flatMap(p=>array(p['a:r']))){

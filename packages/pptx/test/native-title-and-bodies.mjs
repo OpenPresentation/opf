@@ -10,7 +10,8 @@ const options = {seed: 988, timestamp: '2026-10-17T00:00:00Z', zipDate: '2026-10
 const decode = (entries, path) => strFromU8(entries[path]);
 const shapes = xml => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => shape);
 const named = (entries, prefix, slide = 1) => shapes(decode(entries, `ppt/slides/slide${slide}.xml`)).filter(shape => shape.includes(`name="${prefix}`));
-const longTitle = 'A title that is long enough to wrap over two lines of the slide because it carries a great many words';
+// Two lines: PowerPoint's single-spaced pitch (1.2 sizes) stays within 1 px of core's (1.22) over one line, not over two (RR-105).
+const longTitle = 'A title that is long enough to wrap onto a second line of the slide';
 async function exported(deck, extra = {}) {
   const diagnostics = [], bytes = new Uint8Array(await toPptx(deck, {...options, ...extra, onDiagnostic: diagnostic => diagnostics.push(diagnostic)}));
   const entries = unzipSync(bytes);
@@ -37,8 +38,8 @@ const plain = value => typeof value === 'string' ? value : Array.isArray(value) 
   assert.ok(!/normAutofit|spAutoFit/.test(title));
   assert.equal([...title.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''), longTitle);
   assert.equal((title.match(/<a:p>/g) ?? []).length, 1);
-  // RR-105 (PowerPoint 2026-11-12): exact spacing drew the first line above the measured line's; single spacing scaled to the pitch does not.
-  assert.match(title, /<a:lnSpc><a:spcPct val="10166[67]"\/><\/a:lnSpc>/, 'the measured line pitch is kept as scaled single spacing');
+  // RR-105 (PowerPoint 2026-11-12): any spacing but exactly single drew the first line above the measured line's.
+  assert.match(title, /<a:lnSpc><a:spcPct val="100000"\/><\/a:lnSpc>/, 'single spacing');
   assert.deepEqual(native.diagnostics.filter(item => item.code === 'native-body-fallback'), []);
   const {value, diagnostics} = await imported(native.bytes);
   assert.equal(value.slides[0].title, longTitle);
@@ -49,13 +50,14 @@ const plain = value => typeof value === 'string' ? value : Array.isArray(value) 
   assert.equal((await imported(zipSync(edited))).value.slides[0].title, longTitle + ' and then some more words');
 }
 
-// 2. A hard line break: one Title holding the measured lines (RR-105: the break a paragraph, each wrap a line break; it was one box per line).
+// 2. A hard line break: one Title holding the measured lines, one paragraph per line, the hard break among them (RR-105; it was one box
+// per line).
 {
   const hard = await exported({slides: [{title: 'First line\nSecond line that is long enough to wrap onto yet another line of this title box'}]}, {bodyText: 'native'});
   const [shape, ...rest] = named(hard.entries, 'OPF heading slides.0.title line ');
   assert.equal(rest.length, 0, 'a hard break keeps the measured lines in one title');
   assert.match(shape, /<p:ph type="title"\/>/);
-  assert.equal((shape.match(/<a:p>/g) ?? []).length, 2, 'the hard break is a paragraph');
+  assert.ok((shape.match(/<a:p>/g) ?? []).length >= 2, 'the hard break starts a paragraph');
   assert.equal((await imported(hard.bytes)).value.slides[0].title, 'First line\nSecond line that is long enough to wrap onto yet another line of this title box');
 }
 

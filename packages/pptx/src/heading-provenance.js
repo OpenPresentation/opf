@@ -9,20 +9,28 @@ const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefin
 const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 export const attachHeadingTags=(entries,records)=>attachTextTags(entries,records,TAG,'opfHeading','heading',{signed:true});
 
-// One paragraph of a fixed-line title without its line breaks: a decorated run's space that ended a line joins the run again.
-function withoutLineBreaks(paragraph) {
-  if(!object(paragraph))return paragraph;
+// RR-105 (opf#1291): a title of fixed lines (tag lineBreaks 'paragraphs') is one paragraph per line; the paragraphs an authored hard break
+// starts are listed (`hard`) and stay a "\n", every other paragraph break is a soft wrap and joins its lines. When PowerPoint's
+// paragraphs are no longer the exported lines (an edit added or removed one), every paragraph break is read as a soft wrap. A line break
+// inside a paragraph (Shift+Enter in PowerPoint) is text, a "\n".
+function hardBreaksOf(data,count) {
+  return count===data.lines&&Array.isArray(data.hard)?new Set(data.hard.filter(index=>Number.isSafeInteger(index))):new Set();
+}
+function joinTitleParagraphs(list,data) {
+  if(!Array.isArray(list)||list.length<2)return list;
+  const hard=hardBreaksOf(data,list.length);
+  const text=list.map((paragraph,index)=>(index&&hard.has(index)?'\n':'')+String(paragraph?.text??'')).join('');
+  const merged={...list[0],text,maxFontSize:Math.max(0,...list.map(paragraph=>paragraph?.maxFontSize??0))};
+  if(!list.some(paragraph=>paragraph?.richText!==undefined))return [merged];
   const runs=[];
-  let joined=false;
-  for(const run of array(paragraph.richText??paragraph.text)) {
-    const text=typeof run==='string'?run:run?.text;
-    if(typeof text==='string'&&/^\n+$/.test(text)){joined=true;continue;}
-    const current=typeof run==='string'?run.replace(/\n/g,''):object(run)&&typeof run.text==='string'?{...run,text:run.text.replace(/\n/g,'')}:run;
-    if(joined)rejoinDetachedSpace(runs,current);
-    joined=false;
-    runs.push(current);
+  for(const [index,paragraph] of list.entries()) {
+    const current=array(paragraph?.richText??paragraph?.text).map(run=>object(run)?{...run}:run);
+    if(index&&hard.has(index))runs.push('\n');
+    // A decorated run's space that ended the earlier line joins the run again (as across line shapes).
+    else if(index&&current.length)rejoinDetachedSpace(runs,current[0]);
+    runs.push(...current);
   }
-  return {...paragraph,text:String(paragraph.text??'').replace(/\n/g,''),...(paragraph.richText!==undefined?{richText:runs}:{})};
+  return [{...merged,richText:runs}];
 }
 
 // Tags carry only roles and line ordering. Current native text always wins;
@@ -55,11 +63,10 @@ export function importHeadingGroups(shapes,paragraphs,relationships,entries,repo
       if(item.ambiguous||data.group!==first.group||data.count!==count||!Number.isSafeInteger(data.line)||data.line<0||data.line>=count||ordered[data.line])throw Error('Ambiguous heading line.');
       ordered[data.line]=item;
     }
-    // RR-105 (opf#1291): a title written as one box of fixed lines (lineBreaks 'wrap') holds core's soft wraps as line breaks (a:br, read
-    // as "\n" inside a paragraph); they are wraps, not text. An authored hard break is a new paragraph and stays one.
-    const wraps=count===1&&first.lineBreaks==='wrap'?ordered[0].index:undefined;
-    const lines=wraps===undefined?paragraphs:paragraphs.map((list,index)=>index===wraps?(list??[]).map(paragraph=>({...paragraph,text:String(paragraph.text??'').replace(/\n/g,'')})):list);
-    const body=wraps===undefined||!readBody?readBody:(index,...rest)=>{const value=readBody(index,...rest);return index===wraps&&Array.isArray(value)?value.map(withoutLineBreaks):value;};
+    // RR-105 (opf#1291): a title of fixed lines, one paragraph per line (joinTitleParagraphs).
+    const fixed=count===1&&first.lineBreaks==='paragraphs'?ordered[0].index:undefined;
+    const lines=fixed===undefined?paragraphs:paragraphs.map((list,index)=>index===fixed?joinTitleParagraphs(list,first):list);
+    const body=fixed===undefined||!readBody?readBody:(index,...rest)=>{const value=readBody(index,...rest);return index===fixed?joinTitleParagraphs(value,first):value;};
     const restored=sourceLineParagraphs(ordered,lines,{legacy:true});
     for(const item of ordered)consumed.add(item.shape);
     // The same boundaries as the plain text: a new tag's separator, or a native line break between legacy-tagged lines.

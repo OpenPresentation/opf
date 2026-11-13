@@ -313,19 +313,22 @@ export function addNativeBody(slide, plan, context, options, helpers) {
 }
 
 /** RR-88: a native title is written with an explicit no-autofit body, so the Title placeholder's own autofit cannot shrink or move it. */
-// RR-105 (opf#1291): `margins` (name -> {marL, indent} in px) start a fixed-break title's first line apart from the others, where core
-// placed them by their ink.
+// RR-105 (opf#1291): `margins` (name -> [{marL, marR}] in px, one per paragraph) start each line of a fixed-break title where core
+// placed it by its ink.
 export function nativeTitleAutofit(xml, names, margins = new Map()) {
   if (!names?.size) return xml;
   return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
     const name = shape.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1];
     if (!names.has(name)) return shape;
     shape = shape.replace(/(<a:bodyPr\b[^>]*>)[\s\S]*?<\/a:bodyPr>/, '$1<a:noAutofit/></a:bodyPr>');
-    const margin = margins.get(name);
-    if (!margin) return shape;
+    const paragraphs = margins.get(name);
+    if (!paragraphs) return shape;
     const emu = value => Math.round(value * 9525);
-    return shape.replace(/<a:pPr\b([^>]*?)(\/?)>/g, (node, attributes, empty) =>
-      `<a:pPr${attributes.replace(/\s(?:marL|indent)="[^"]*"/g, '')} marL="${emu(margin.marL)}" indent="${emu(margin.indent)}"${empty}>`);
+    let index = 0;
+    return shape.replace(/<a:pPr\b([^>]*?)(\/?)>/g, (node, attributes, empty) => {
+      const margin = paragraphs[index++] ?? {marL: 0, marR: 0};
+      return `<a:pPr${attributes.replace(/\s(?:marL|marR|indent)="[^"]*"/g, '')} marL="${emu(margin.marL)}"${margin.marR > .01 ? ` marR="${emu(margin.marR)}"` : ''} indent="0"${empty}>`;
+    });
   });
 }
 

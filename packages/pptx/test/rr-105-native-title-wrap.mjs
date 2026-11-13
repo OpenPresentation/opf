@@ -66,14 +66,17 @@ for (const entry of [...picks, fallbacks.find(entry => entry.file.endsWith('layo
   const bytes = new Uint8Array(await toPptx(deck, {fonts, bodyText: 'native', onDiagnostic: value => diagnostics.push(value)}));
   const xml = strFromU8(unzipSync(bytes)['ppt/slides/slide1.xml']);
   const titles = [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => shape).filter(shape => shape.includes('name="OPF heading slides.0.title line '));
-  if (!entry.wrap) {
-    // RR-105 (opf#1291): no native wrap keeps the lines, so the title is one Title placeholder holding the measured lines as fixed
-    // breaks (a:br, no wrap), not one box per line, and nothing falls back.
-    assert.equal(titles.length, 1, 'tight wrap keeps the measured title lines in one title');
+  // RR-105 (opf#1291): where no native wrap keeps the lines, or PowerPoint's single-spaced pitch for the face is not known to keep them
+  // (a face not measured, or more than 1 px off on the last line), the title is one Title placeholder holding the measured lines, one
+  // paragraph each (no wrap), not one box per line, and nothing falls back.
+  const fixedLines = titles.length === 1 && !/<a:bodyPr\b[^>]*\bwrap="square"/.test(titles[0]);
+  if (!entry.wrap) assert.ok(fixedLines, 'tight wrap keeps the measured title lines in one title');
+  if (fixedLines) {
+    assert.equal(titles.length, 1, 'the measured title lines in one title');
     const [shape] = titles;
     assert.match(shape, /<p:ph type="(?:ctrTitle|title)"\/>/);
     assert.match(shape, /<a:bodyPr\b[^>]*\bwrap="none"[^>]*><a:noAutofit\/>/);
-    assert.equal((shape.match(/<a:br\/>/g) ?? []).length, entry.item.text.lines.length - 1, 'the measured line breaks');
+    assert.equal((shape.match(/<a:p>/g) ?? []).length, entry.item.text.lines.length, 'one paragraph per measured line');
     assert.equal([...shape.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''), entry.item.text.lines.join(''), 'the measured lines');
     if (entry === fontFallback) assert.match(shape, /<a:latin typeface="Bookman Old Style"/);
     assert.ok(!diagnostics.some(value => value.code === 'native-body-fallback' && value.path === 'slides.0.title'));

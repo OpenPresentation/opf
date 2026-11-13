@@ -1,6 +1,7 @@
 // RR-105 (opf#1291): in the default export every title is the slide's Title placeholder. A one-line title is its measured line; a
-// wrapped title whose lines PowerPoint's own wrap keeps is one native wrapped box; any other wrapped title is one box of core's lines
-// joined by line breaks (a:br, no wrap), which import reads back as soft wraps. Only a title that box cannot place keeps per-line boxes.
+// wrapped title whose lines PowerPoint's own wrap keeps is one native wrapped box; any other wrapped title is one box of core's lines, one
+// paragraph per line (no wrap), whose paragraph breaks import reads back as soft wraps. Only a title that box cannot place keeps per-line
+// boxes. Both are written at single spacing (PowerPoint drew any other spacing's first line higher, 2026-11-12).
 import assert from 'node:assert/strict';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
@@ -25,10 +26,11 @@ const imported = async bytes => {
   const diagnostics = [], value = await fromPptx(bytes, {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
   return {value, diagnostics};
 };
-const text = shape => [...shape.matchAll(/<a:t>([^<]*)<\/a:t>|<a:br\b/g)].map(match => match[1] ?? '\n').join('');
+const paragraphs = shape => [...shape.matchAll(/<a:p>[\s\S]*?<\/a:p>/g)].map(([paragraph]) => paragraph);
+const text = shape => paragraphs(shape).map(paragraph => [...paragraph.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''));
 const long = 'Quarterly results show steady growth in every region and a clear plan for the year ahead';
 
-// 1. A plain wrapped title: one native wrapped box, bound, in the default export (it was one box per line before).
+// 1. A plain wrapped title: one native wrapped box at single spacing, bound, in the default export (it was one box per line before).
 {
   const out = await exported({design: {fontScheme: 'roboto'}, slides: [{title: long, items: ['One', 'Two']}]});
   const [title, ...rest] = out.titles(0);
@@ -36,11 +38,12 @@ const long = 'Quarterly results show steady growth in every region and a clear p
   assert.match(title, /<p:ph type="title"\/>/);
   assert.equal(slideTitle(out.slide(0)).tier, 'soft-wrap');
   assert.match(title, /<a:bodyPr[^>]*wrap="square"[^>]*><a:noAutofit\/><\/a:bodyPr>/);
+  assert.match(title, /<a:lnSpc><a:spcPct val="100000"\/><\/a:lnSpc>/, 'single spacing');
   assert.deepEqual(out.diagnostics.filter(item => item.code === 'native-body-fallback'), []);
   assert.equal((await imported(out.bytes)).value.slides[0].title, long);
 }
 
-// 2. Fixed breaks: a face measured with a visual substitute cannot verify a native wrap, so core's lines are one box with a:br.
+// 2. Fixed breaks: a face measured with a visual substitute cannot verify a native wrap, so core's lines are one paragraph each.
 const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding experience redesign for every new customer in the first ninety days', items: ['One']}]};
 {
   const out = await exported(bookman);
@@ -49,33 +52,33 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   assert.match(title, /<p:ph type="title"\/>/);
   assert.equal(slideTitle(out.slide(0)).tier, 'fixed-breaks');
   assert.match(title, /<a:bodyPr[^>]*wrap="none"[^>]*><a:noAutofit\/><\/a:bodyPr>/);
-  // Single spacing scaled to core's pitch (1.22 sizes over PowerPoint's single line of 1.2 sizes); exact spacing drew the first line higher.
-  assert.match(title, /<a:lnSpc><a:spcPct val="10166[67]"\/><\/a:lnSpc>/, 'the measured pitch as scaled single spacing');
-  assert.ok(!/<a:spcPts\b/.test(title), 'no exact spacing');
-  assert.equal((title.match(/<a:p>/g) ?? []).length, 1, 'one paragraph');
-  assert.ok((title.match(/<a:br\/>/g) ?? []).length >= 1, 'core lines joined by line breaks');
-  assert.equal(text(title).replaceAll('\n', ''), bookman.slides[0].title);
+  const lines = paragraphs(title);
+  assert.ok(lines.length >= 2, 'one paragraph per measured line');
+  assert.ok(lines.every(line => /<a:lnSpc><a:spcPct val="100000"\/><\/a:lnSpc>/.test(line)), 'single spacing on every line');
+  assert.ok(!/<a:spcBef>/.test(lines[0]) && lines.slice(1).every(line => /<a:spcBef><a:spcPts val="\d+"\/><\/a:spcBef>/.test(line)), 'space before each later line makes up the pitch');
+  assert.ok(!/<a:br\b/.test(title));
+  assert.equal(text(title).join(''), bookman.slides[0].title);
   assert.deepEqual(out.diagnostics.filter(item => item.code === 'native-body-fallback'), []);
   const back = await imported(out.bytes);
-  assert.equal(back.value.slides[0].title, bookman.slides[0].title, 'line breaks import as soft wraps');
+  assert.equal(back.value.slides[0].title, bookman.slides[0].title, 'paragraph breaks import as soft wraps');
   assert.deepEqual(back.diagnostics.filter(item => /heading/.test(item.code)), []);
-  // A copy PowerPoint saved: the line breaks carry run properties and the tags survive; it imports the same.
-  const xml = out.slide(0).replaceAll('<a:br/>', '<a:br><a:rPr lang="en-US" dirty="0"/></a:br>');
+  // A copy PowerPoint saved: other run and paragraph-end attributes, the tags kept; it imports the same.
+  const xml = out.slide(0).replace(/<a:endParaRPr\b[^>]*\/>/g, '<a:endParaRPr lang="en-US" sz="3975" dirty="0"><a:latin typeface="Bookman Old Style"/></a:endParaRPr>');
   const saved = await imported(zipSync({...out.entries, 'ppt/slides/slide1.xml': strToU8(xml)}));
   assert.equal(saved.value.slides[0].title, bookman.slides[0].title);
-  // An edit in PowerPoint keeps its words; the line breaks stay soft wraps.
+  // An edit in PowerPoint keeps its words; the paragraph breaks stay soft wraps.
   const edited = xml.replace('Onboarding', 'Better onboarding');
   assert.equal((await imported(zipSync({...out.entries, 'ppt/slides/slide1.xml': strToU8(edited)}))).value.slides[0].title, `Better ${bookman.slides[0].title.replace('Onboarding', 'onboarding')}`);
 }
 
-// 3. An authored hard break is a new paragraph and imports as "\n"; the wrap inside a line stays a soft wrap.
+// 3. An authored hard break is a paragraph the tag lists and imports as "\n"; the wraps of the long line stay soft.
 {
   const title = 'First line\nSecond line that is long enough to wrap onto yet another line of this wide title box on the slide';
   const out = await exported({design: {fontScheme: 'roboto'}, slides: [{title, items: ['One']}]});
   const [shape, ...rest] = out.titles(0);
   assert.equal(rest.length, 0);
   assert.match(shape, /<p:ph type="title"\/>/);
-  assert.equal((shape.match(/<a:p>/g) ?? []).length, 2, 'the hard break is a paragraph');
+  assert.ok(paragraphs(shape).length >= 3, 'one paragraph per line, the hard break among them');
   assert.equal((await imported(out.bytes)).value.slides[0].title, title);
 }
 
@@ -115,7 +118,8 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   const cjk = await exported({language: {bcp47: 'ja', script: 'Jpan'}, slides: [{title: japanese, items: ['一']}]});
   assert.equal(cjk.titles(0).length, 1);
   assert.match(cjk.titles(0)[0], /<p:ph type="title"\/>/);
-  assert.equal(slideTitle(cjk.slide(0)).tier, 'soft-wrap', 'a Japanese title keeps native wrap');
+  // Its single line takes a fallback face's height (1.204 sizes measured), which no measured face covers: fixed lines.
+  assert.equal(slideTitle(cjk.slide(0)).tier, 'fixed-breaks', 'a Japanese title keeps its measured lines');
   assert.equal((await imported(cjk.bytes)).value.slides[0].title, japanese);
 }
 
@@ -141,8 +145,9 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   assert.equal((await imported(out.bytes)).value.slides[0].title, title);
 }
 
-// 8. Core places each line by its ink. Where one box would move a line more than 1 px (at 960) from its measured place, a left-aligned
-// title keeps fixed breaks with a first-line indent (layout-sampler 36, "How a team / joins the pilot": the J starts 2.95 px right of the H).
+// 8. Core places each line by its ink. Where one box would move a line more than 1 px (at 960) from its measured place, the title keeps
+// fixed lines, each paragraph with the margin that starts it there (layout-sampler 36, "How a team / joins the pilot": the J starts 2.95 px
+// right of the H; boutique-hotel-revenue-recovery's cover, right-aligned, ends its first line 1.85 px right of the second).
 {
   const {examples} = await import('@openpresentation/opf/examples');
   const {deck: sampler} = examples.find(entry => entry.file.endsWith('layout-sampler.opf.json'));
@@ -151,7 +156,14 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   assert.equal(rest.length, 0);
   assert.match(title, /<p:ph type="title"\/>/);
   assert.equal(slideTitle(out.slide(0)).tier, 'fixed-breaks', 'lines placed apart keep fixed breaks');
-  const pPr = /<a:pPr\b[^>]*>/.exec(title)[0], marL = Number(/\bmarL="(-?\d+)"/.exec(pPr)[1]), indent = Number(/\bindent="(-?\d+)"/.exec(pPr)[1]);
-  assert.ok(marL > 9525 && indent === -marL, `the first line at the box, the others a first-line indent further right (${marL}, ${indent})`);
+  const margin = (shape, name) => [...shape.matchAll(/<a:pPr\b[^>]*>/g)].map(([pPr]) => Number(new RegExp(`\\b${name}="(-?\\d+)"`).exec(pPr)?.[1] ?? 0));
+  const [first, second] = margin(title, 'marL');
+  assert.ok(first === 0 && second > 2.5 * 9525 && second < 3.5 * 9525, `the second line starts its 2.95 px further right (${first}, ${second})`);
   assert.equal((await imported(out.bytes)).value.slides[0].title, sampler.slides[35].title);
+  const {deck: hotel} = examples.find(entry => entry.file.endsWith('boutique-hotel-revenue-recovery.opf.json'));
+  const right = await exported({...hotel, slides: [hotel.slides[0]]});
+  assert.equal(slideTitle(right.slide(0)).tier, 'fixed-breaks', 'right-aligned lines placed apart are one title');
+  const [end1, end2] = margin(right.titles(0)[0], 'marR');
+  assert.ok(end1 === 0 && end2 > 1.5 * 9525 && end2 < 2.2 * 9525, `the second line ends its 1.85 px further left (${end1}, ${end2})`);
+  assert.equal((await imported(right.bytes)).value.slides[0].title, hotel.slides[0].title);
 }

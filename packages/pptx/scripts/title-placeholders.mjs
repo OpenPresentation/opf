@@ -6,8 +6,9 @@
 //
 // Per deck: slides, slides with an OPF title (a shape named `OPF heading slides.N.title line ...`), slides whose title is bound to a
 // Title or Center Title placeholder (`p:ph type="title"` or `"ctrTitle"`) by tier, and the slides whose OPF title is free text boxes
-// (with --slides). Tiers: one-line (a single line, no wrap), soft-wrap (native wrap, `wrap="square"`), fixed-breaks (core's lines
-// joined by `a:br`). A slide without an OPF title is counted as untitled, never as missing. Folders are read for *.pptx, not recursively.
+// (with --slides). Tiers: one-line (a single line, no wrap), soft-wrap (native wrap, `wrap="square"`), fixed-breaks (core's lines, one
+// paragraph each, no wrap). A slide without an OPF title is counted as untitled, never as missing. Folders are read for *.pptx, not
+// recursively.
 import {readdirSync, readFileSync, statSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -26,7 +27,8 @@ export function slideTitle(xml) {
   const shapes = shapesOf(xml);
   const titleShapes = shapes.filter(shape => /^OPF heading slides\.\d+\.title line \d+$/.test(nameOf(shape)));
   const placeholder = shapes.find(shape => TITLE_PLACEHOLDER.test(shape) && /<a:t>[^<]*\S[^<]*<\/a:t>/.test(shape));
-  const tier = !placeholder ? undefined : /<a:br\b/.test(placeholder) ? 'fixed-breaks' : /<a:bodyPr\b[^>]*\bwrap="square"/.test(placeholder) ? 'soft-wrap' : 'one-line';
+  const tier = !placeholder ? undefined : /<a:bodyPr\b[^>]*\bwrap="square"/.test(placeholder) ? 'soft-wrap'
+    : (placeholder.match(/<a:p>/g) ?? []).length > 1 || /<a:br\b/.test(placeholder) ? 'fixed-breaks' : 'one-line';
   return {titled: titleShapes.length > 0 || !!placeholder, bound: !!placeholder, ...(tier ? {tier} : {}), boxes: titleShapes.length};
 }
 
