@@ -820,7 +820,7 @@ Default severity: **warning**. Cost: structure. A picture has no alt text and is
 
 **Basis.** WCAG 2.2 SC 1.1.1 Non-text Content, level A
 
-**Approximations.** Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, organization logos (each shape and background), header/footer images (a logo reference such as var:organization.logo.icon is checked on the organization), quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.
+**Approximations.** Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, organization logos (each shape and background), header/footer images (a logo reference such as var:organization.logo.icon is checked on the organization), quote photos and speaker photos, following asset: references to the assets registry and image variables (var:<id>, RR-105) to their value (a template's unfilled variable to its example). Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.
 
 ### `opf/poor-alt-text`
 
