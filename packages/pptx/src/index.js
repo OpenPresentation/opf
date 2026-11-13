@@ -4045,7 +4045,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // the axes, so barDir undefined on a line chart replaced the chart's 'col' and laid the axes out as for a horizontal bar (category
     // axis left, value axis bottom), which Keynote refuses to open.
     const base=comboArgs?.[0]??[{type:chartData.type,data:chartData.series,options:Object.fromEntries(Object.entries({lineDataSymbol:chartOptionsXml.lineDataSymbol,barDir:chartData.barDir,barGrouping:chartData.barGrouping}).filter(([,value])=>value!==undefined))}];
-    slide.addChart(referenceChartTypes(base,chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines'}),comboArgs?.[1]??chartOptionsXml);
+    slide.addChart(referenceChartTypes(base,chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines',reserved:[chartData.heading]}),comboArgs?.[1]??chartOptionsXml);
     addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100});
     return;
   }

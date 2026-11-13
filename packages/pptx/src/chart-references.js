@@ -74,17 +74,42 @@ export function assertReferenceExportBudget(series, lines, { key = 'OPF chart', 
   if (enc.encode(JSON.stringify(ownership)).length * 2 > 4 * 1024 * 1024) refuse('ownership-metadata', 4 * 1024 * 1024);
 }
 
+/** The longest helper name: it is also the embedded workbook's table column name (Excel allows 255 characters). */
+export const REFERENCE_NAME_LIMIT = 200;
+/**
+ * RR-105 (2026-11-13, vetoable): a helper series is named after its reference's label, so a reader that lists it (Keynote's legend,
+ * which ignores c:legendEntry) or Edit Data shows what the line means; an unlabeled reference is "Reference". A multiline label is
+ * joined with single spaces. Names are unique, ignoring case as Excel table columns are, against every data series, the category
+ * heading (`reserved`) and the other helpers: " 2", " 3", ... is appended on a collision. The importer identifies a helper by its
+ * `opf:reference` extension, never by this name. Returns a Map from the reference index to its name.
+ */
+export function referenceHelperNames(series, lines, reserved = []) {
+  const taken = new Set([...series.map((entry) => entry?.name), ...reserved].filter((name) => typeof name === 'string').map((name) => name.toLowerCase()));
+  const cut = (text, room) => Array.from(text).slice(0, room).join('').trimEnd();
+  const names = new Map();
+  for (const line of lines.filter((l) => l.native)) {
+    const text = line.label === undefined ? '' : String(line.label).split(/\r\n|\r|\n/).map((part) => part.trim()).filter(Boolean).join(' ').replace(/\s+/g, ' ');
+    const base = cut(text || 'Reference', REFERENCE_NAME_LIMIT);
+    let name = base;
+    for (let n = 2; taken.has(name.toLowerCase()); n++) name = `${cut(base, REFERENCE_NAME_LIMIT - String(n).length - 1)} ${n}`;
+    taken.add(name.toLowerCase());
+    names.set(line.index, name);
+  }
+  return names;
+}
+
 /** Add helpers through the ordinary vendor writer, including their editable workbook columns. */
 export function referenceChartTypes(base, series, lines, options) {
   assertReferenceExportBudget(series, lines, options);
   const types = [...base];
+  const names = referenceHelperNames(series, lines, options?.reserved);
   for (const axis of ['value', 'secondary']) {
     const refs = lines.filter((l) => l.native && l.axis === axis);
     if (refs.length)
       types.push({
         type: 'line',
         data: refs.map((l) => ({
-          name: `OPF reference ${l.index + 1}`,
+          name: names.get(l.index),
           labels: [...series[0].labels],
           values: series[0].labels.map(() => l.value),
         })),

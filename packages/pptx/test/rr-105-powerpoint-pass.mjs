@@ -22,6 +22,12 @@ const partOf = (zip, slide, type) => {
   return [...rels.matchAll(/<Relationship\b[^>]*>/g)].map(([rel]) => rel).filter(rel => rel.includes(`/relationships/${type}"`)).map(rel => `ppt/${/Target="\.\.\/([^"]+)"/.exec(rel)[1]}`);
 };
 const seriesName = ser => /<c:tx>[\s\S]*?<c:v>([^<]*)<\/c:v>/.exec(ser)?.[1];
+// A native reference helper is identified by its opf:reference extension (hex UTF-8 JSON {v, id: "<chart key>:<reference index>"}), never by
+// its name (RR-105: the helper is named after its label).
+const referenceIndex = ser => {
+  const hex = /<opf:reference\b[^>]*\bdata="([0-9A-Fa-f]+)"/.exec(ser)?.[1];
+  return hex === undefined ? undefined : Number(JSON.parse(Buffer.from(hex, 'hex').toString('utf8')).id.split(':').pop());
+};
 
 // A and B.
 {
@@ -37,13 +43,13 @@ const seriesName = ser => /<c:tx>[\s\S]*?<c:v>([^<]*)<\/c:v>/.exec(ser)?.[1];
       if (groups.some(group => !group.primary)) combos++;
       assert.deepEqual(legend.map(series => series.idx), legend.map((_, place) => place), `slide ${index + 1}: the series indexes are their legend places`);
       const deleted = [...xml.matchAll(/<c:legendEntry>\s*<c:idx val="(\d+)"\/>\s*<c:delete val="1"\/>/g)].map(match => Number(match[1]));
-      const own = legend.filter(series => series.name?.startsWith('OPF reference '));
+      const own = legend.filter(series => referenceIndex(series.ser) !== undefined);
       if (xml.includes('<c:legend>')) assert.deepEqual(deleted, own.map(series => series.idx).sort((a, b) => a - b), `slide ${index + 1}: the legend hides exactly the helper series`);
       // B: each native helper draws its authored stroke.
       const authored = slide.chart.referenceLines;
       for (const helper of own) {
         helpers++;
-        const line = authored[Number(/OPF reference (\d+)/.exec(helper.name)[1]) - 1], ln = /<c:spPr><a:ln w="(\d+)" cap="flat"><a:solidFill>([\s\S]*?)<\/a:solidFill><a:prstDash val="(\w+)"\/><\/a:ln><\/c:spPr>/.exec(helper.ser);
+        const line = authored[referenceIndex(helper.ser)], ln = /<c:spPr><a:ln w="(\d+)" cap="flat"><a:solidFill>([\s\S]*?)<\/a:solidFill><a:prstDash val="(\w+)"\/><\/a:ln><\/c:spPr>/.exec(helper.ser);
         assert.ok(ln, `slide ${index + 1} ${helper.name}: one line fill and dash`);
         assert.equal(Number(ln[1]), Math.round((line.stroke?.width ?? 4 / 3) * 9525), `slide ${index + 1} ${helper.name}: the authored width`);
         assert.equal(ln[3], line.stroke?.dash ?? 'dash', `slide ${index + 1} ${helper.name}: the authored dash`);
