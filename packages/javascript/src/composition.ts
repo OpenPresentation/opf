@@ -10208,6 +10208,27 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // RR-105 (coverage finding 24): the paragraphs beside an authored chartPrimary sit in the middle of their track, level with the chart,
     // instead of at its top over an empty foot (the track is the 2 of the 3:2 split). LH-49's own chart track keeps its stack.
     const beside = items.slice(first).filter(item => item.field !== 'chart');
+    // A lone plain paragraph there grows first, as a lone block does (LH-48, LH-09): when it fills under LONE_FILL of its track it steps up the
+    // type scale while it fills at most LONE_TARGET, keeps the minimum measure (underMeasure) and fits, up to a paragraph's display size, or a
+    // short message's (SHORT_MESSAGE_WORDS words, at most MESSAGE_DISPLAY_LINES lines). A longer text keeps its size.
+    const lone = !chartTrack && beside.length === 1 && beside[0]!.field === 'text' && typeof beside[0]!.value === 'string' && beside[0]!.text && !beside[0]!.frameBox && !beside[0]!.emphasis && !('richLines' in beside[0]!.text) ? beside[0]! : undefined;
+    if (lone) {
+      const heightOf = (fit: TextFit) => fit.placement?.height ?? fit.lines.length * fit.lineHeight, text = contentText('text', lone.value) ?? '';
+      const message = messageWords(lone.value) <= SHORT_MESSAGE_WORDS;
+      let best = lone.text as TextFit;
+      // The paragraph's growth to LONE_DISPLAY_SIZES.text, then a short message's on to MESSAGE_DISPLAY_SIZE in at most MESSAGE_DISPLAY_LINES lines.
+      const grow = (cap: number, lines: number) => {
+        for (let size = best.fontSize; ; ) {
+          const step = scaleAbove(size, composition.minFontSize ?? 16);
+          if (step > Math.min(cap * scale, capOf(rootSettings) + FONT_GRID_EPSILON) + 1e-9) break;
+          const fit = fitPlacedText('text', lone.value, text, lone.box, step, step, lone.path, lone.alignment) as TextFit;
+          if (fit.overflow || fit.fontSize < step - 1e-9 || heightOf(fit) > LONE_TARGET * lone.box.height || fit.lines.length > lines || (ruleOn('reading-measure') && underMeasure('text', lone.value, lone.box.width, step))) break;
+          best = fit; size = step;
+        }
+      };
+      if (heightOf(best) < LONE_FILL * lone.box.height) { grow(LONE_DISPLAY_SIZES.text, Infinity); if (message) grow(MESSAGE_DISPLAY_SIZE, MESSAGE_DISPLAY_LINES); }
+      lone.text = best;
+    }
     if (!chartTrack && beside.length && beside.every(item => item.field === 'text' && item.text && !item.frameBox && !item.emphasis && !('listEntries' in item.text) && !('richLines' in item.text))) {
       const inkBottom = (item: ComposedItem) => item.box.y + ('richLines' in item.text! ? (item.text as RichTextFit).height : (item.text as TextFit).placement?.height ?? item.text!.lines.length * item.text!.lineHeight);
       const top = Math.min(...beside.map(item => item.box.y)), bottom = Math.max(...beside.map(item => item.box.y + item.box.height)), ink = Math.max(...beside.map(inkBottom)) - top;

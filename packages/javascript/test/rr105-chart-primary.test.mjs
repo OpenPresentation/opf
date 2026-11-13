@@ -47,3 +47,16 @@ test('a chartPrimary the slide cannot draw is reported', () => {
   assert.deepEqual(findings.map((finding) => finding.path), ['/slides/0/design/chartPrimary']);
   assert.deepEqual(validate(deck({ chartPrimary: 'start' })).findings.filter((finding) => finding.ruleId === 'opf/arrangement-adapted'), []);
 });
+
+test('the text beside an authored chartPrimary grows toward the fill target, and a long text keeps its size', () => {
+  const one = 'Revenue doubled from the first quarter to the last.';
+  const three = 'Revenue doubled from the first quarter to the last. The north berth carried most of the growth. Night shifts cleared the autumn backlog.';
+  const long = Array.from({ length: 6 }, () => 'The north berth carried most of the growth while night shifts cleared the backlog that the autumn storms had left behind.').join(' ');
+  const size = (side, text) => boxes(deck({ chartPrimary: side }, [chart, { text }])).result.items.find((item) => item.field === 'text').text.fontSize;
+  const plain = 28; // the paragraph role size a long text starts at
+  for (const side of ['top', 'bottom', 'start', 'end']) {
+    assert.ok(size(side, one) >= 43 - 1e-6, `${side}: one sentence ${size(side, one)}`);
+    assert.ok(size(side, three) > 28 && size(side, three) <= size(side, one), `${side}: three sentences ${size(side, three)}`);
+    assert.ok(size(side, long) <= Math.max(plain, 28) + 1e-6, `${side}: a long text keeps its size (${size(side, long)})`);
+  }
+});
