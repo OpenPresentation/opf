@@ -1899,11 +1899,12 @@ export function measureMonospaceText(text: string, fontSize: number): number {
 export function wrapText(text: string, width: number, fontSize: number, measure: MeasureTextWidth = measureText): string[] {
   return fitSourceText(text,{x:0,y:0,width,height:Number.MAX_VALUE},fontSize,fontSize,1,measure,true,false).lines;
 }
-export function fitText(text: string, box: LayoutBox, requestedSize = PROSE_NOMINAL_SIZE, minFontSize = 16, measure: MeasureTextWidth = measureText, direction?: TextDirection, balance = false): SourceTextFit {
+/** `displayFrom` (LH-189): the canvas size from which a line takes DISPLAY_LINE_PITCH (linePitch); by default every line takes BODY_LINE_PITCH. */
+export function fitText(text: string, box: LayoutBox, requestedSize = PROSE_NOMINAL_SIZE, minFontSize = 16, measure: MeasureTextWidth = measureText, direction?: TextDirection, balance = false, displayFrom = Infinity): SourceTextFit {
   if (![box.width, box.height, requestedSize, minFontSize].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || requestedSize <= 0 || minFontSize <= 0) {
     throw new RangeError("Text dimensions and font sizes must be finite and positive.");
   }
-  return fitSourceText(text,box,Math.max(requestedSize,minFontSize),minFontSize,1,measure,true,true,direction,balance);
+  return fitSourceText(text,box,Math.max(requestedSize,minFontSize),minFontSize,1,measure,true,true,direction,balance,displayFrom);
 }
 
 /**
@@ -2057,6 +2058,120 @@ export const LONE_DISPLAY_SIZES = { text: 43, list: 37, table: 32, quote: 56, qu
  */
 export const LONE_FILL = .5, LONE_TARGET = .6, LONE_METRIC_TARGET = .8;
 /**
+ * LH-188: the ceilings, in reference pixels, of a one-message slide's message (oneMessageField) by its length in characters
+ * (messageCharacters), as [up to so many characters, ceiling] from the shortest: a statement up to 16%, 11% and 7.5% of the 720 px short
+ * edge, a quote's body up to 12%, 10% and 7.8%. They raise the growth's cap (MESSAGE_DISPLAY_SIZE, HEADING_DISPLAY_SIZES.title,
+ * LONE_DISPLAY_SIZES.quote) and never lower it, so a message whose ceiling is under today's cap, or longer than the last row, keeps today's.
+ * The message still grows only while it fits its box with no word broken, in balanced lines, within LONE_TARGET of the body.
+ */
+export const MESSAGE_CEILINGS = {
+  statement: [[30, 115], [60, 80], [120, 54]],
+  quote: [[30, 86], [60, 72], [120, 56]],
+} as const satisfies Record<string, readonly (readonly [number, number])[]>;
+/** LH-188: a lone metric whose value is a figure of at most `characters` characters grows to `size` (35% of the short edge) instead of LONE_DISPLAY_SIZES.value. */
+export const FIGURE_CEILING = { characters: 6, size: 252 } as const;
+// LH-188: a character of a full-width script (Han, Kana, Hangul, CJK punctuation and full-width forms), about one em wide: two average characters.
+const WIDE_CHARACTER = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}　-〿！-｠]/u;
+/**
+ * LH-188: the length of a message in characters, as its lines are measured: grapheme clusters (an accented letter, an emoji, an Arabic
+ * letter with its marks, a Devanagari syllable are one), a run of white space as one, and a full-width character (WIDE_CHARACTER) as two,
+ * since it is as wide as two average Latin characters (AVERAGE_CHARACTER_EM). Right-to-left text counts as any other.
+ */
+export function messageCharacters(value: unknown): number {
+  const text = annotationText(value).trim().replace(/\s+/gu, ' ');
+  let count = 0;
+  for (const { segment } of textSegments.segment(text)) count += WIDE_CHARACTER.test(segment) ? 2 : 1;
+  return count;
+}
+/** LH-188: the ceiling (reference pixels) of a one-message slide's statement or quote body of `value`, or undefined past the last row. */
+export function messageCeiling(kind: keyof typeof MESSAGE_CEILINGS, value: unknown): number | undefined {
+  const length = messageCharacters(value);
+  return length ? MESSAGE_CEILINGS[kind].find(([most]) => length <= most)?.[1] : undefined;
+}
+/**
+ * LH-188: what makes a slide a one-message slide, and which payload is its message: the body holds exactly one payload (a slide's own or one
+ * block's), a text, a quote or a metric, with no subtitle, and the title is absent or only labels it (at most SHORT_TEXT_WORDS words, not
+ * ending as a sentence: "Our goal", never "Why we moved the ledger."), as statementMessage reads a statement's title. A title over a
+ * paragraph is a content slide, not a statement. Any layout qualifies (automatic, statement, quote, text, ...): the message is the slide's
+ * lone block wherever the layout places it.
+ */
+export function oneMessageField(slide: Record<string, any>): 'text' | 'quote' | 'metric' | undefined {
+  if (annotationText(slide.subtitle).trim()) return undefined;
+  const found = bodyPayloads(slide);
+  if (found?.length !== 1) return undefined;
+  const field = found[0]!.field;
+  if (field !== 'text' && field !== 'quote' && field !== 'metric') return undefined;
+  const title = annotationText(slide.title).trim();
+  return !title || messageWords(slide.title) <= SHORT_TEXT_WORDS && !/[.!?。！？…۔।]$/u.test(title) ? field : undefined;
+}
+/**
+ * LH-189: display text. A display role (a title or subtitle, a text drawn as the slide's message, a quote's body, a metric's value) set at
+ * DISPLAY_SIZE_FACTOR times the body role size (PROSE_NOMINAL_SIZE) or more takes a line pitch of DISPLAY_LINE_PITCH em instead of the
+ * body's BODY_LINE_PITCH, and DISPLAY_TRACKING em of tracking where its script has case or it is a figure (displayTracks). Measurement, the
+ * preview and the export read the same fit (its lineHeight) and style (its tracking). Other text (a tile's label, a grid's short texts, a
+ * list) keeps the body pitch at any size, so a size at the threshold never becomes cheaper to fit than the size under it.
+ */
+export const BODY_LINE_PITCH = 1.22, DISPLAY_LINE_PITCH = 1, DISPLAY_SIZE_FACTOR = 2, DISPLAY_TRACKING = -0.015;
+/**
+ * LH-189: the depth a display fit keeps under its last line: a display line box is one em, so the descenders of its last line reach about
+ * the body pitch's extra 0.22 em below it, and whatever follows the text (a subtitle, an attribution, a metric's label) starts that much
+ * lower. Zero for a body fit.
+ */
+export function displayDepth(fit: { fontSize: number; lineHeight: number }): number { return Math.max(0, fit.fontSize * BODY_LINE_PITCH - fit.lineHeight); }
+/**
+ * LH-189 (narrowed 2026-11-12): display text tightens only where it pays. In the normal composition a display text of one line takes the
+ * display tracking and keeps the body pitch; a text of two lines or more takes neither. composeSlide composes a slide whose display text
+ * is near a display size a second time with TIGHT_DISPLAY, where a display text of at most two lines takes the display pitch and tracking,
+ * and keeps that composition only when a display text reaches a larger size there and no text is smaller (tightPays). So the one em pitch
+ * stands only where it bought a two-line text a larger step, and three lines or more always keep the body pitch.
+ */
+const TIGHT_DISPLAY = Symbol('opf.tightDisplay');
+/** LH-189: the most lines a display text may take and still tighten: one in the normal composition, two in the tight one. */
+const displayLines = (tight: boolean): number => tight ? 2 : 1;
+const fitLines = (fit: TextFit | RichTextFit): number => 'richLines' in fit ? (fit as RichTextFit).richLines.length : fit.lines.length;
+/** LH-188: a stub is a last line shorter than this share of the fit's longest line. */
+export const STUB_LINE_SHARE = 1 / 3;
+/**
+ * LH-188: whether a fit of two or more lines ends in a stub, a last line under STUB_LINE_SHARE of its longest. Balancing (WI-4) evens out
+ * the lines of spaced text, but not text without word spaces (CJK, Thai) or a word too long to move; LH-188's growth refuses a step that
+ * adds a line ending in one.
+ */
+export function stubLine(fit: TextFit | RichTextFit): boolean {
+  const widths = 'richLines' in fit ? (fit as RichTextFit).richLines.map(line => line.width) : Array.isArray((fit as SourceTextFit).sourceLines) ? (fit as SourceTextFit).sourceLines.map(line => line.width) : [];
+  return widths.length > 1 && widths.at(-1)! < STUB_LINE_SHARE * Math.max(...widths) - 1e-6;
+}
+/** LH-189: the canvas size (px) from which text is display text on a canvas whose short edge is `scale` times 720. */
+export function displayFrom(scale: number): number { return DISPLAY_SIZE_FACTOR * PROSE_NOMINAL_SIZE * scale; }
+/** LH-189: the line pitch, in em, of text at `fontSize` canvas px when display text starts at `from` canvas px (displayFrom). */
+export function linePitch(fontSize: number, from = Infinity): number { return fontSize >= from - 1 / FONT_SIZE_GRID_PER_PX - 1e-9 ? DISPLAY_LINE_PITCH : BODY_LINE_PITCH; }
+/**
+ * LH-189: whether display text takes the display pitch and tightens its tracking: it has a letter or a digit and no letter of a script
+ * without case (Arabic, Hebrew, CJK, Devanagari, Thai and the like). Tracking would break the joining of a cursive script or the even rhythm
+ * of full-width text, and those scripts' tall marks or full-em glyphs need the body pitch between lines.
+ */
+export function displayTracks(text: string): boolean { return /[\p{L}\p{N}]/u.test(text) && !/[\p{Lo}\p{Lm}]/u.test(text); }
+/** LH-189: a measure of `text`'s substrings that adds DISPLAY_TRACKING at display sizes (from `from` canvas px) when the text tracks. */
+function displayMeasure(measure: MeasureTextWidth, text: string, from: number): MeasureTextWidth {
+  if (!Number.isFinite(from) || !displayTracks(text)) return measure;
+  return (part, size) => measure(part, size) + (linePitch(size, from) === DISPLAY_LINE_PITCH ? trackingWidth(part, size, { tracking: DISPLAY_TRACKING }) : 0);
+}
+/**
+ * LH-189: a title, a subtitle or a message text (`display`: the fields and paths composeLayout's fitter measures as display text) fitted at
+ * a display size draws with the tracking it was measured with (fitPlacedText, displayMeasure): its style takes DISPLAY_TRACKING, which the
+ * preview writes as letter spacing and the export as `spc`. Rich runs carry it on their fragments.
+ */
+function displayStyles(items: readonly ComposedItem[], from: number, display: (field: string, path: string) => boolean, tight: boolean): void {
+  for (const item of items) {
+    if (item.type !== 'text' || !item.text || 'listEntries' in item.text || !display(item.field, item.path) || !item.textStyle || item.textStyle.tracking || fitLines(item.text) > displayLines(tight)) continue;
+    if (linePitch(item.text.fontSize, from) === DISPLAY_LINE_PITCH && displayTracks(annotationText(item.value))) item.textStyle = { ...item.textStyle, tracking: DISPLAY_TRACKING };
+  }
+}
+/**
+ * LH-189: whether a label or an attribution is set in capitals as authored ("ANNUAL REVENUE", "JANE DOE, CEO"): at least two letters, all
+ * of a script with case and none lower case. It takes the eyebrow's tracking (EYEBROW_TRACKING, LH-32).
+ */
+export function capitalsLabel(text: string): boolean { return (text.match(/\p{L}/gu)?.length ?? 0) >= 2 && !/[\p{Ll}\p{Lt}\p{Lo}\p{Lm}]/u.test(text); }
+/**
  * LH-129: the largest size, in reference pixels, a heading of a slide whose headings are its message (a cover, a section, a closing)
  * grows to: the title to about Claude Design's 78 px display title, the subtitle two steps of the type scale above its role size. The
  * tag is LH-32's eyebrow, already set at its EYEBROW_TAG_SIZE role size (22 px), which is its display size too: it keeps that size
@@ -2116,6 +2231,11 @@ export interface QuoteBodyOptions extends QuoteLayoutOptions {
   portrait?: 'side';
   /** LH-132: the share of the quote's width the portrait beside it takes (); QUOTE_PORTRAIT_SHARE when absent. */
   portraitShare?: number;
+  /**
+   * LH-188: the quote is a one-message slide's message (oneMessageField): its body grows (`growth`) up to the length-keyed ceiling of
+   * MESSAGE_CEILINGS.quote where that is above LONE_DISPLAY_SIZES.quote.
+   */
+  message?: boolean;
 }
 /** LH-78: a quote beside other blocks starts at the lead size and fits in this many lines. */
 const QUOTE_BESIDE_LINES = 4;
@@ -2192,7 +2312,8 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   const source = (sourcePath:string, text:string, outputStart:number):QuoteTextSource =>
     ({path:sourcePath,start:0,end:text.length,outputStart,outputEnd:outputStart+text.length});
   const add = (role:QuoteTextPart['role'], text:string, sources:QuoteTextSource[], area:LayoutBox, fontSize:number, fontFamily:string, fontWeight:number, partPath:string, runs?:(string|RichTextRun)[]) => {
-    const requestedStyle:TextStyle = {fontFamily,fontWeight,italic:false,path:partPath};
+    // LH-189: an attribution set in capitals as authored takes the eyebrow's tracking.
+    const requestedStyle:TextStyle = {fontFamily,fontWeight,italic:false,path:partPath,...(role==='footer'&&capitalsLabel(text)?{tracking:EYEBROW_TRACKING}:{})};
     const style = resolveTextStyle({...requestedStyle}, options.textMeasurement);
     // An explicit readability floor can raise the nominal size.
     const requestedFontSize = gridFontSize(fontSize * scale, minimum);
@@ -2220,7 +2341,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   const marks = quoteMarksFor(options.language);
   const body = add('body',`${marks.open}${quoteText}${marks.close}`,[source(bodyPath,quoteText,marks.open.length)],
     {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-(hasBlock?94:36)},
-    options.bodySize ?? grownRoleSize(QUOTE_NOMINAL_SIZE,options.growth,LONE_DISPLAY_SIZES.quote),options.fontFamilies?.accent??options.fontFamilies?.heading??'sans-serif',pull?400:600,bodyPath,richBody?quoteBodyRuns(richBody,marks):undefined);
+    options.bodySize ?? grownRoleSize(QUOTE_NOMINAL_SIZE,options.growth,Math.max(LONE_DISPLAY_SIZES.quote,options.message?messageCeiling('quote',quoteText)??0:0)),options.fontFamilies?.accent??options.fontFamilies?.heading??'sans-serif',pull?400:600,bodyPath,richBody?quoteBodyRuns(richBody,marks):undefined);
   const footerSize = grownRoleSize(17,options.growth,LONE_DISPLAY_SIZES.quoteFooter);
   const attribution = hasFooter ? add('footer',footer,footerSources,
     {x:box.x+18,y:box.y+box.height-58,width:box.width-36,height:40},
@@ -2228,10 +2349,20 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   // A photo with no footer text still sizes from the nominal footer size.
   const footerRequested = attribution?.requestedFontSize ?? gridFontSize(footerSize * scale, minimum);
   const usable = (area:LayoutBox) => [area.x,area.y,area.width,area.height].every(Number.isFinite) && area.width>0 && area.height>0;
-  // A rich body fits through the rich-text layouter (the one body text uses); every other part keeps the plain fitter.
-  const fit = (part:QuoteTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum):TextFit|RichTextFit|undefined => !usable(area) ? undefined
-    : part.runs ? fitRichText(part.runs,area,size,floor,{style:part.style,textMeasurement:options.textMeasurement,...(options.citationMarker?{citationMarker:options.citationMarker}:{}),...(options.direction?{direction:options.direction}:{})})
-    : fitText(part.text,area,size,floor,textWidthMeasurer(part.style,options.textMeasurement),options.direction);
+  // A rich body fits through the rich-text layouter (the one body text uses); every other part keeps the plain fitter. LH-189: the body of a
+  // one-message slide's quote (`message`) at a display size (displayFrom) takes the display tracking where it takes at most displayLines
+  // lines, and in the tight composition (TIGHT_DISPLAY) the display pitch too; otherwise it is fitted as body text. A quote among others
+  // never tightens: its cell hugs the height it asks for, and the footer under a shorter body would lose its size to the room it gave up.
+  const from = options.message && displayTracks(quoteText) ? displayFrom(scale) : Infinity, tight = (options as Record<symbol, unknown>)[TIGHT_DISPLAY] === true;
+  const fitAs = (part:QuoteTextPart,area:LayoutBox,size:number,floor:number,pitchFrom:number,trackFrom:number):TextFit|RichTextFit => part.runs
+    ? fitRichText(part.runs,area,size,floor,{style:part.style,textMeasurement:options.textMeasurement,...(options.citationMarker?{citationMarker:options.citationMarker}:{}),...(options.direction?{direction:options.direction}:{}),...(Number.isFinite(trackFrom)?{displayFrom:trackFrom,displayPitch:Number.isFinite(pitchFrom)}:{})})
+    : fitText(part.text,area,size,floor,displayMeasure(textWidthMeasurer(part.style,options.textMeasurement),part.text,trackFrom),options.direction,false,pitchFrom);
+  const fit = (part:QuoteTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum):TextFit|RichTextFit|undefined => {
+    if (!usable(area)) return undefined;
+    if (part.role !== 'body' || !Number.isFinite(from)) return fitAs(part,area,size,floor,Infinity,Infinity);
+    const shown = fitAs(part,area,size,floor,tight?from:Infinity,part.style.tracking?Infinity:from);
+    return linePitch(shown.fontSize,from) !== DISPLAY_LINE_PITCH || fitLines(shown) <= displayLines(tight) ? shown : fitAs(part,area,size,floor,Infinity,Infinity);
+  };
   const heightOf = (fit:TextFit|RichTextFit) => 'richLines' in fit ? (fit as RichTextFit).height : fit.lines.length*fit.lineHeight;
   // LH-114: a pull line has no card inset; its body runs under the rule across the whole box.
   const ruleHeight = QUOTE_PULL_RULE.height * scale, ruleGap = QUOTE_PULL_GAPS.rule * scale;
@@ -2310,7 +2441,8 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   // A pull line (LH-114) already placed its caption one gap under the body.
   if (!pull && body.fit && !body.fit.overflow && photoFits && (!attribution || attribution.fit && !attribution.fit.overflow)) {
     body.box.height = body.fit.placement?.height ?? heightOf(body.fit);
-    const footerTop = body.box.y + body.box.height + 18;
+    // LH-189: under a display body (one em line boxes) the footer starts below its descenders too.
+    const footerTop = body.box.y + body.box.height + displayDepth(body.fit) + 18;
     const previousTop = Math.min(attribution?.box.y ?? Infinity, photo?.box.y ?? Infinity);
     if (Number.isFinite(previousTop)) {
       const shift = footerTop - previousTop;
@@ -2350,6 +2482,8 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     const room = floorRoom(part.box, box), floorFit = fit(part, {...room, height:Math.max(room.height, minimum*1.22)}, minimum, minimum);
     if (floorFit) { part.box = room; part.fit = {...floorFit, overflow:true}; }
   }
+  // LH-189: a plain body fitted at a display size draws with the tracking it was measured with.
+  if (body.fit && !body.runs && !body.style.tracking && linePitch(body.fit.fontSize, from) === DISPLAY_LINE_PITCH && fitLines(body.fit) <= displayLines(tight)) body.style = {...body.style, tracking: DISPLAY_TRACKING};
   return {bounds,algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,...(photo?{photo}:{}),...(rule?{rule}:{}),diagnostics,overflow:diagnostics.length>0};
 }
 
@@ -2382,9 +2516,11 @@ export function markQuote(layout: QuoteLayout, card: LayoutBox, options: {scale?
   if (shown === undefined) return {...layout, mark: {path: markPath, text, box, fit, style, requestedStyle}};
   const room = {...body.box, height: Math.max(body.box.height, 1) * 2 + bodySize * 4};
   const runs = body.runs ? body.runs.map((run, index) => index ? run : typeof run === 'string' ? run.slice(open.length) : {...run, text: run.text.slice(open.length)}) : undefined;
+  // LH-189: at the body's own pitch (a display body's line is one em), and its tracking (a display body's style carries it).
+  const from = Math.abs(body.fit!.lineHeight - bodySize * DISPLAY_LINE_PITCH) < 1e-6 ? bodySize : Infinity;
   const refit = runs
-    ? fitRichText(runs, room, bodySize, bodySize, {style: body.style, textMeasurement: options.textMeasurement, ...(options.citationMarker ? {citationMarker: options.citationMarker} : {}), ...(options.direction ? {direction: options.direction} : {})})
-    : fitText(shown, room, bodySize, bodySize, textWidthMeasurer(body.style, options.textMeasurement), options.direction);
+    ? fitRichText(runs, room, bodySize, bodySize, {style: body.style, textMeasurement: options.textMeasurement, ...(options.citationMarker ? {citationMarker: options.citationMarker} : {}), ...(options.direction ? {direction: options.direction} : {}), displayFrom: from})
+    : fitText(shown, room, bodySize, bodySize, textWidthMeasurer(body.style, options.textMeasurement), options.direction, false, from);
   const count = (value: TextFit | RichTextFit) => 'richLines' in value ? (value as RichTextFit).richLines.length : value.lines.length;
   if (refit.overflow || Math.abs(refit.fontSize - bodySize) > 1e-9 || count(refit) > count(body.fit!)) return layout;
   const sources = body.sources.map(source => ({...source, outputStart: Math.max(0, source.outputStart - open.length), outputEnd: Math.max(0, source.outputEnd - open.length)}));
@@ -2489,6 +2625,11 @@ export interface MetricLayoutOptions extends QuoteLayoutOptions {
    * role size and still fits down to the readability floor.
    */
   display?: { start: number; max: number; height?: number };
+  /**
+   * LH-188: the metric is a one-message slide's message (oneMessageField): a value of at most FIGURE_CEILING.characters characters
+   * (messageCharacters) grows (`growth`) up to FIGURE_CEILING.size instead of LONE_DISPLAY_SIZES.value.
+   */
+  message?: boolean;
   /** LH-15: lay the metric out as a band (the value at the start, the other fields in a column beside it) when that fits; start-aligned. */
   band?: boolean;
   /**
@@ -2650,6 +2791,10 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   }
   const scale=options.scale??1,minimum=snapFontSizeUp((options.minFontSize??16)*scale);
   const rasterPadding=(options.textRasterPadding??1)*scale,hasOutlines=options.textMeasurement?.outlineBounds!==undefined;
+  // LH-189: the value is display text where it is the body's message (a one-message slide's metric, or a lone metric that grows): a figure
+  // of one word, one line by LH-39, takes the display tracking from `valueFrom` and keeps the body pitch (the pitch of one line buys
+  // nothing). A value at its role size among other blocks takes neither, so the room it asks of a shared region stays as it was.
+  const valueFrom=(options.message||(options.growth??1)>1)&&displayTracks(String(metric.value))&&!/s/u.test(String(metric.value).trim())?displayFrom(scale):Infinity;
   if (![box.x,box.y,box.width,box.height,box.x+box.width,box.y+box.height,scale,minimum,Math.max(76*scale,minimum)*1.22].every(Number.isFinite) ||
       box.width<=0||box.height<=0||scale<=0||minimum<=0) {
     throw new RangeError('Metric dimensions, scale and minimum font size must be finite and positive.');
@@ -2681,8 +2826,12 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const least=snapFontSizeUp(Math.max(minimum,options.minimumSizes?.[role]??0));
     // LH-135: an eyebrow label is the tag's size and style (bold, capitals and tracking where its script has case, in the accent family).
     const eyebrow=options.eyebrow===true&&role==='label'&&!options.tile,caps=eyebrow&&eyebrowCaps(text);
-    const nominal=Math.max(Math.min(grownRoleSize(role==='value'?valueSize:role==='description'?20:role==='trend'?18:eyebrow?EYEBROW_TAG_SIZE:23,eyebrow?undefined:options.growth,LONE_DISPLAY_SIZES[role])*scale,options.roleSizes?.[role]??Infinity),least);
-    const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fontFamilies?.heading:eyebrow?options.fontFamilies?.accent??options.fontFamilies?.body:options.fontFamilies?.body)??'sans-serif',fontWeight:role==='value'?800:eyebrow?700:role==='description'?400:500,italic:false,path,...(caps?{caps:true,tracking:EYEBROW_TRACKING}:{})};
+    // LH-188: a one-message slide's figure of at most FIGURE_CEILING.characters grows to FIGURE_CEILING.size.
+    const display=role==='value'&&options.message&&messageCharacters(text)<=FIGURE_CEILING.characters?FIGURE_CEILING.size:LONE_DISPLAY_SIZES[role];
+    const nominal=Math.max(Math.min(grownRoleSize(role==='value'?valueSize:role==='description'?20:role==='trend'?18:eyebrow?EYEBROW_TAG_SIZE:23,eyebrow?undefined:options.growth,display)*scale,options.roleSizes?.[role]??Infinity),least);
+    // LH-189: a label set in capitals as authored takes the eyebrow's tracking.
+    const tracked=caps||role==='label'&&capitalsLabel(text);
+    const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fontFamilies?.heading:eyebrow?options.fontFamilies?.accent??options.fontFamilies?.body:options.fontFamilies?.body)??'sans-serif',fontWeight:role==='value'?800:eyebrow?700:role==='description'?400:500,italic:false,path,...(caps?{caps:true}:{}),...(tracked?{tracking:EYEBROW_TRACKING}:{})};
     const part:MetricTextPart={role,path,text,sources:[{path,value:sourceValue,start:0,end:text.length}],visible:role==='value'||text.length>0,linePositions:[],
       box:{...box,height:0},requestedFontSize:gridFontSize(nominal,least),minFontSize:least,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
     if (!part.visible) part.fit={lines:[],sourceLines:[],fontSize:part.requestedFontSize,lineHeight:part.requestedFontSize*1.22,tabSize:4,tabWidth:0,overflow:false};
@@ -2735,7 +2884,9 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const key=JSON.stringify([part.role,size,width]);
     let fit=cache.get(key);
     if (!fit) {
-      fit=fitCodeText(part.text,{...box,width:hasOutlines?Math.max(Number.MIN_VALUE,width-2*rasterPadding):width},size,size,scale,textWidthMeasurer(part.style,options.textMeasurement),options.direction);
+      // LH-189: the value at a display size takes the display tracking (written into its style below).
+      const from=part.role==='value'?valueFrom:Infinity;
+      fit=fitCodeText(part.text,{...box,width:hasOutlines?Math.max(Number.MIN_VALUE,width-2*rasterPadding):width},size,size,scale,displayMeasure(textWidthMeasurer(part.style,options.textMeasurement),part.text,part.style.tracking?Infinity:from),options.direction);
       fit=place(part,fit,width);
       if (!Number.isFinite(occupied(fit))) throw new RangeError('Metric text layout exceeds finite coordinates.');
       cache.set(key,fit);
@@ -2850,7 +3001,9 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
         // an engine that centers or ends the line on its accepted width draws it where the unit expects it.
         let figureFit=valueFit;
         if (!options.textMeasurement&&valueFit.lines.length===1) {
-          const width=figureWidth(primary.text,valueFit.fontSize);
+          // LH-189: a display value's figure is drawn with DISPLAY_TRACKING between its characters.
+          const figure=figureWidth(primary.text,valueFit.fontSize),tracked=!primary.style.tracking&&linePitch(valueFit.fontSize,valueFrom)===DISPLAY_LINE_PITCH&&displayTracks(primary.text);
+          const width=figure===undefined?undefined:figure+(tracked?trackingWidth(primary.text,valueFit.fontSize,{tracking:DISPLAY_TRACKING}):0);
           if (width!==undefined&&width<naturalWidth(primary,valueFit)) figureFit={...valueFit,sourceLines:valueFit.sourceLines.map(line=>({...line,width,segments:line.segments.map(segment=>({...segment,width:segment.kind==='text'?width:segment.width}))}))};
         }
         const measuredWidth=naturalWidth(primary,figureFit);
@@ -2876,7 +3029,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
       } else allocations.push({part:primary,box:valueFit?{...area,height:valueHeight}:area,fit:valueFit});
       // Keep related fields together. An arbitrary percentage gap disconnects a stacked unit
       // from its value on tall cells and wastes space needed by longer labels.
-      let y=top+primaryHeight+(tail.length?primaryGap:0);
+      // LH-189: under a display value (one em line box) the fields start below its descenders too.
+      let y=top+primaryHeight+(tail.length?primaryGap+(valueFit?displayDepth(valueFit):0):0);
       for (const part of tail) {
         const natural=measured.get(part)!,height=occupied(natural);
         const area=lineBox(part,box,y,height,natural.fontSize);
@@ -2982,6 +3136,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const room=floorRoom(part.box,box),floorFit=measure(part,minimum,room.width);
     part.box={...room,height:occupied(floorFit)};part.fit={...floorFit,overflow:true};position(part);
   }
+  // LH-189: the value fitted at a display size draws with the tracking it was measured with.
+  if (primary.fit&&!primary.style.tracking&&linePitch(primary.fit.fontSize,valueFrom)===DISPLAY_LINE_PITCH&&primary.fit.lines.length===1) primary.style={...primary.style,tracking:DISPLAY_TRACKING};
   const layout:MetricLayout={bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),...(trendBox?{trendBox}:{}),...(options.display&&!options.tile?{display:true as const}:{}),...(options.eyebrow&&!options.tile&&parts.some(part=>part.role==='label')?{eyebrow:true as const}:{}),...(pillBox&&pillPlacement&&!pillMisplaced?{deltaPill:{box:pillBox,radius:pillBox.height/2,placement:pillPlacement}}:{}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
   if (figureLine) FIGURE_LINES.add(layout);
   return layout;
@@ -3407,8 +3563,8 @@ export interface CodeLayoutOptions extends QuoteLayoutOptions {
 }
 
 /** Fit code without using prose whitespace normalization. The source remains reconstructable. */
-function fitCodeText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,direction?:TextDirection):CodeTextFit {
-  return fitSourceText(text,box,size,minimum,step,measure,false,true,direction);
+function fitCodeText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,direction?:TextDirection,displayFrom=Infinity):CodeTextFit {
+  return fitSourceText(text,box,size,minimum,step,measure,false,true,direction,false,displayFrom);
 }
 
 /**
@@ -3422,13 +3578,13 @@ const LINE_BREAK_CACHE_LIMIT = 10000;
 const copyTextFit = (fit: CodeTextFit, width: number, height: number): CodeTextFit => ({ ...fit, lines: [...fit.lines], sourceLines: fit.sourceLines.map(line => ({ ...line, segments: line.segments.map(segment => ({ ...segment })) })), ...(fit.directions ? { directions: [...fit.directions] } : {}),
   overflow: fit.sourceLines.length * fit.lineHeight > height + .01 || fit.sourceLines.some(line => line.width > width + .01) });
 /** Retain exact source ranges and position tabs without passing control characters to a font shaper. */
-function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,prose=false,snap=true,direction?:TextDirection,balance=false):SourceTextFit {
+function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,prose=false,snap=true,direction?:TextDirection,balance=false,displayFrom=Infinity):SourceTextFit {
   const directionAt=direction==='rtl'?paragraphDirectionAt(text,'rtl'):undefined;
   let cache = lineBreakCache.get(measure);
   if (!cache && (measure === measureText || measure === measureMonospaceText)) { cache = new Map(); lineBreakCache.set(measure, cache); }
   const layout=(fontSize:number,forced?:ReadonlySet<number>):CodeTextFit=>{
     if (forced || !cache) return breakLines(fontSize,forced);
-    const key=`${prose?1:0}${direction==='rtl'?'r':'l'}${fontSize}|${box.width}|${text}`, known=cache!.get(key);
+    const key=`${prose?1:0}${direction==='rtl'?'r':'l'}${fontSize}|${box.width}|${linePitch(fontSize,displayFrom)}|${text}`, known=cache!.get(key);
     if (known) return copyTextFit(known,box.width,box.height);
     const fit=breakLines(fontSize);
     if (cache!.size>=LINE_BREAK_CACHE_LIMIT) cache!.clear();
@@ -3492,7 +3648,8 @@ function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step
       }
     }
     push(end,end,'end');
-    const lineHeight=fontSize*1.22;
+    // LH-189: display text takes DISPLAY_LINE_PITCH (linePitch), body text BODY_LINE_PITCH.
+    const lineHeight=fontSize*linePitch(fontSize,displayFrom);
     return {lines:sourceLines.map(line=>text.slice(line.start,line.end)),sourceLines,fontSize,lineHeight,tabSize:4,tabWidth,
       ...(directionAt?{directions:sourceLines.map(line=>directionAt(line.start))}:{}),
       overflow:sourceLines.length*lineHeight>box.height+.01||sourceLines.some(line=>line.width>box.width+.01)};
@@ -3655,6 +3812,14 @@ export interface RichTextOptions {
    * stranded word. Explicit line breaks stay; a size is never reduced to balance, and a heading that would need another line stays greedy.
    */
   balance?: boolean;
+  /**
+   * LH-189: the canvas size from which a fit is display text: where the text tracks (displayTracks) its runs take DISPLAY_TRACKING, in
+   * their measurement and in the fragment styles the engines draw, and with `displayPitch` its lines take DISPLAY_LINE_PITCH (linePitch).
+   * Absent, none is.
+   */
+  displayFrom?: number;
+  /** LH-189: with `displayFrom`, display lines take DISPLAY_LINE_PITCH; without it they keep BODY_LINE_PITCH and only track. */
+  displayPitch?: boolean;
 }
 
 /** Fit mixed styles without flattening font metrics. Run fontSize is in points. */
@@ -3692,12 +3857,14 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
   // Every painted size (the base size and each run's, scripts included) is on the 0.01 pt grid; a size at or above the floor never drops below it.
   const paint=(raw:number)=>raw>=minimum-1e-6?gridFontSize(raw,minimum):snapFontSizeDown(raw);
   const directionAt=options.direction==='rtl'?paragraphDirectionAt(whole,'rtl'):undefined;
+  // LH-189: at a display size the runs of text that tracks (displayTracks) draw with DISPLAY_TRACKING unless they carry tracking of their own.
+  const displayAt=options.displayFrom??Infinity,tracked=Number.isFinite(displayAt)&&displayTracks(whole)?source.map(entry=>entry.style.tracking?entry:{...entry,style:{...entry.style,tracking:DISPLAY_TRACKING}}):source;
   const build=(rawFontSize:number,forced?:ReadonlySet<number>):RichTextFit=>{
     // The authored size ratios follow the unsnapped request; only the painted result is snapped.
-    const fontSize=paint(rawFontSize),ratio=rawFontSize/requestedSize;
+    const fontSize=paint(rawFontSize),ratio=rawFontSize/requestedSize,display=linePitch(fontSize,displayAt)===DISPLAY_LINE_PITCH,tight=display&&options.displayPitch===true;
     const fragments=(start:number,end:number):RichTextFragment[]=>{
       let x=0;const result:RichTextFragment[]=[];
-      for(const entry of source){
+      for(const entry of display?tracked:source){
         // RR-105: an empty marked run draws its marker on the line that holds its offset: after the text before it (a soft wrap leaves
         // it at the end of the earlier line), or at the start of the text or of a paragraph.
         if(entry.marker&&entry.start===entry.end){
@@ -3767,7 +3934,9 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     ranges.push({start:lineStart,end:lineEnd});
     let y=0;
     const richLines=ranges.map((range,rangeIndex)=>{
-      const parts=fragments(range.start,range.end),shown=hung.get(rangeIndex)??range.end,ascent=Math.max(fontSize,...parts.map(part=>part.fontSize-part.baselineShift)),descent=Math.max(fontSize*.22,...parts.map(part=>part.fontSize*.22+part.baselineShift));
+      // LH-189: a display line's leading below the baseline is DISPLAY_LINE_PITCH less one em; a body line's BODY_LINE_PITCH less one em.
+      const lead=tight?DISPLAY_LINE_PITCH-1:.22;
+      const parts=fragments(range.start,range.end),shown=hung.get(rangeIndex)??range.end,ascent=Math.max(fontSize,...parts.map(part=>part.fontSize-part.baselineShift)),descent=Math.max(fontSize*lead,...parts.map(part=>part.fontSize*lead+part.baselineShift));
       const height=ascent+descent,line={fragments:parts,width:shown===range.end?parts.reduce((sum,p)=>sum+p.width,0):width(range.start,shown),y,baseline:y+ascent,height};y+=height;return line;
     });
     if (options.uniformLineHeight) {
@@ -3780,7 +3949,7 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
         y += height;
       }
     }
-    const fit:RichTextFit={lines:ranges.map(range=>whole.slice(range.start,range.end)),fontSize,lineHeight:Math.max(fontSize*1.22,...richLines.map(line=>line.height)),richLines,height:y,overflow:y>box.height+.01||richLines.some(line=>line.width>box.width+.01),
+    const fit:RichTextFit={lines:ranges.map(range=>whole.slice(range.start,range.end)),fontSize,lineHeight:Math.max(fontSize*(tight?DISPLAY_LINE_PITCH:BODY_LINE_PITCH),...richLines.map(line=>line.height)),richLines,height:y,overflow:y>box.height+.01||richLines.some(line=>line.width>box.width+.01),
       ...(directionAt?{directions:ranges.map(range=>directionAt(range.start))}:{})};
     lastWidth=width;lastRanges=ranges;
     return fit;
@@ -5117,12 +5286,42 @@ function growMixedCode(input: unknown, options: ComposeSlideOptions, result: Sli
   return result;
 }
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
-  const result = growMixedCode(input, options, readableProse(input, options, readableTimelineNotes(input, options, composeSlideBody(input, options))));
+  const result = tightened(input, options, composeSlideOnce(input, options));
   if (options.messageSurface) result.surface = options.messageSurface;
   // SH-04: the overlay goes on the slide's final composition (every arrangement, growth and recomposition settled), so it never moves
   // content and follows the blocks it is attached to; its text is fitted by the slide's own fitter (composeLayout's overlay pass).
   if (hasOverlayShapes(input)) composeLayout(input, { ...options, [OVERLAY_ONTO]: result } as ComposeSlideOptions);
   return result;
+}
+function composeSlideOnce(input: unknown, options: ComposeSlideOptions): SlideComposition {
+  return growMixedCode(input, options, readableProse(input, options, readableTimelineNotes(input, options, composeSlideBody(input, options))));
+}
+/** LH-189: every text size a composition draws, by item path and part (headings, body text, and the parts of quotes, metrics, code and timelines). */
+function drawnSizes(result: SlideComposition): Map<string, number> {
+  const sizes = new Map<string, number>();
+  for (const item of result.items) {
+    if (item.text) sizes.set(`${item.path}:${item.field}`, Math.min(sizes.get(`${item.path}:${item.field}`) ?? Infinity, item.text.fontSize));
+    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
+    for (const part of (internal?.parts ?? []) as readonly { role: string; fit?: { fontSize: number } }[]) if (part.fit) sizes.set(`${item.path}#${part.role}`, Math.min(sizes.get(`${item.path}#${part.role}`) ?? Infinity, part.fit.fontSize));
+  }
+  return sizes;
+}
+/**
+ * LH-189: the tight composition (TIGHT_DISPLAY) of a slide whose display text of one or two lines is within a step of a display size, kept
+ * when it pays: a text reaches a larger size there, no text is smaller and nothing more overflows. Otherwise the normal composition, where
+ * display text keeps the body pitch.
+ */
+function tightened(input: unknown, options: ComposeSlideOptions, normal: SlideComposition): SlideComposition {
+  if ((options as Record<symbol, unknown>)[TIGHT_DISPLAY] !== undefined || options.fill === false) return normal;
+  const near = displayFrom(Math.min(normal.width, normal.height) / 720) / TYPE_SCALE_RATIO - FONT_GRID_EPSILON;
+  const candidate = normal.items.some(item => (item.field === 'title' || item.field === 'subtitle' || item.field === 'text') && item.text && !('listEntries' in item.text) && item.text.fontSize >= near && fitLines(item.text) <= 2
+    || item.quoteLayout?.parts.some(part => part.role === 'body' && part.fit && part.fit.fontSize >= near && fitLines(part.fit) <= 2));
+  if (!candidate) return normal;
+  const tight = composeSlideOnce(input, { ...options, [TIGHT_DISPLAY]: true } as ComposeSlideOptions);
+  if (overflowCount(tight) > overflowCount(normal)) return normal;
+  const before = drawnSizes(normal), after = drawnSizes(tight);
+  if ([...before].some(([key, size]) => (after.get(key) ?? 0) < size - FONT_GRID_EPSILON)) return normal;
+  return [...after].some(([key, size]) => size > (before.get(key) ?? Infinity) + FONT_GRID_EPSILON) ? tight : normal;
 }
 function composeSlideBody(input: unknown, options: ComposeSlideOptions): SlideComposition {
   if ((options as Record<symbol, unknown>)[RULES] !== undefined) return composeArranged(input, options);
@@ -5545,7 +5744,12 @@ function growTemplate(input: unknown, options: ComposeSlideOptions, result: Slid
     // step that keeps its breaks.
     // A title that LH-130 let take a second line keeps that break at the steps above it in the same way (bestText, not start).
     const rebroken = [...bestText.breaks].some(([key, words]) => words.includes('\n') && text.breaks.get(key) !== words);
-    if (!kept || !larger || wraps || rebroken || text.covered > LONE_TARGET * height || text.top < frameTop - 1 || text.bottom > frameBottom + 1) return false;
+    // LH-188: a quote body grown past LONE_DISPLAY_SIZES.quote takes no step that adds a line ending in a stub (stubLine).
+    const stub = grown.items.some(item => {
+      const body = item.quoteLayout?.parts.find(part => part.role === 'body')?.fit, was = best.items.find(other => other.path === item.path)?.quoteLayout?.parts.find(part => part.role === 'body')?.fit;
+      return !!body && !!was && body.fontSize > LONE_DISPLAY_SIZES.quote * scale + FONT_GRID_EPSILON && fitLines(body) > fitLines(was) && stubLine(body);
+    });
+    if (!kept || !larger || wraps || rebroken || stub || text.covered > LONE_TARGET * height || text.top < frameTop - 1 || text.bottom > frameBottom + 1) return false;
     best = grown; bestText = text; bestExtra = extra;
     return true;
   };
@@ -5556,7 +5760,12 @@ function growTemplate(input: unknown, options: ComposeSlideOptions, result: Slid
     let body = 0;
     for (let steps = 1; steps <= 3 && step({ [GROW]: steps }); steps++) body = steps;
     for (let steps = 1; steps <= 3 && step({ [GROW]: body, [HEADING_STEPS]: steps }); steps++);
-  } else for (let steps = 1; steps <= 3 && step(grownBy(steps)); steps++);
+  } else {
+    // LH-188: a stacked record's one-message quote (oneMessageField) grows on toward its length-keyed ceiling (MESSAGE_CEILINGS.quote): up
+    // to six steps of the scale reach 86 px from the quote's 40; every other message keeps three.
+    const most = stacked && oneMessageField(record(input)) === 'quote' ? 6 : 3;
+    for (let steps = 1; steps <= most && step(grownBy(steps)); steps++);
+  }
   // LH-132: the steps are composed with the avatar (AVATAR_QUOTES); the step kept draws a quote's portrait again where that sets nothing smaller.
   return best === result ? undefined : portraitQuotes(result) ? withPortraits(input, options, best, bestExtra, before, floor) : best;
 }
@@ -6221,6 +6430,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const statement = recordTemplate && ruleOn('statement-message') ? statementMessage(slide, recordTemplate, options.fill !== false) : undefined;
   if (statement) fire('statement-message');
   const template = recordTemplate && statement === 'body' ? statementTemplate(recordTemplate) : recordTemplate;
+  // LH-188: the payload field of a one-message slide's message (oneMessageField): that block grows up to its length-keyed ceiling.
+  const messageField = options.fill !== false ? oneMessageField(slide) : undefined;
+  const messageNode = (node: Pending): boolean => messageField !== undefined && node.field === messageField && !node.children && node.caption === undefined;
   // One merge for every shared design key: slide design, then deck design (or the host's resolved deck values), then the theme's design, then the layout record's design.
   const hints = resolveDesignHints({ slide, layout, theme: { design: options.themeDesign }, presentation: options.presentation, slideIndex: options.slideIndex, deck: { titleAlignment: options.titleAlignment, contentAlignment: options.contentAlignment, contentBox: options.contentBox } });
   const hasCards = hints.contentBox ?? false;
@@ -6249,6 +6461,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-09, LH-69: the paths of the lone short texts drawn as a display message (fillLone) and of placed regions' short texts, their lines
   // balanced; `displayFaces`: the placed regions' short texts, drawn as tile headings, in the heading face and bold.
   const displayTexts = new Set<string>(), displayFaces = new Set<string>();
+  // LH-189: the lone texts fillLone draws as the slide's message (a subset of displayTexts, without LH-69's region labels and tiles): display text.
+  const messageTexts = new Set<string>();
+  // LH-189: headings over a measured background picture (a host's `pictureLuminance`) keep the body pitch: LH-158 chooses where the group
+  // reads on the picture, and in which column, by its height, and a shorter group moved covers off the place that read (qualification
+  // covers held at 54 px instead of 65 to 75). An estimated run, which places the group as on a plain background, takes the display pitch.
+  let measuredPicture = false;
+  const displayText = (field: string, path: string): boolean => (field === 'title' || field === 'subtitle') && !measuredPicture || field === 'text' && messageTexts.has(path);
   const tagCaps = eyebrowCaps(annotationText(slide.tag));
   // The tag (eyebrow) takes the accent family when the font scheme defines one; the quote body does the same in layoutQuote.
   // LH-32: an eyebrow (the tag, LH-50's label) is bold, and in capitals with EYEBROW_TRACKING where its script has case (eyebrowCaps).
@@ -6329,20 +6548,35 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   };
   const displayEmphasis = (field: string, value: unknown, fitPath: string): unknown => !Array.isArray(value) || !(field === 'text' && displayTexts.has(fitPath)) || (emphasisColor === undefined && !onMessageSurface) ? value
     : value.map(run => run && typeof run === 'object' && (run as { bold?: unknown }).bold === true && ((run as { color?: unknown }).color ?? '') === '' ? (emphasisColor === undefined ? run : { ...run, color: emphasisColor }) : surfaceRun(run));
+  // LH-189: a title, a subtitle or a message text at a display size (displayText, displayFrom) is fitted with the display tracking where it
+  // takes at most displayLines(tight) lines, and with the display pitch too in the tight composition (TIGHT_DISPLAY); otherwise it is fitted
+  // as body text. composeLayout writes the tracking into the item's style (displayStyles).
+  const tightDisplay = (options as Record<symbol, unknown>)[TIGHT_DISPLAY] === true;
   const fitPlacedText = (field:string,authored:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment?:'left'|'center'|'right'):TextFit|RichTextFit => {
+    const from=displayText(field,path)&&displayTracks(text)?displayFrom(scale):Infinity;
+    if(!Number.isFinite(from)) return fitPlacedAs(field,authored,text,box,size,minimum,path,explicitAlignment,Infinity,Infinity);
+    const fit=fitPlacedAs(field,authored,text,box,size,minimum,path,explicitAlignment,tightDisplay?from:Infinity,styleFor(field,path).tracking?Infinity:from);
+    return fit.fontSize<from-1/FONT_SIZE_GRID_PER_PX-1e-9||fitLines(fit)<=displayLines(tightDisplay)?fit:fitPlacedAs(field,authored,text,box,size,minimum,path,explicitAlignment,Infinity,Infinity);
+  };
+  const fitPlacedAs = (field:string,authored:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment:'left'|'center'|'right'|undefined,from:number,trackFrom:number):TextFit|RichTextFit => {
     const value=displayEmphasis(field,authored,path);
     const style=styleFor(field,path),rich=(field==='text'||headings.has(field))&&Array.isArray(value);
     // WI-4 (P15): a wrapped title or subtitle is balanced (same size, same line count); body text keeps the greedy wrap.
-    const balance=field==='title'||field==='subtitle'||(field==='text'&&displayTexts.has(path)),textOptions=balance?{...richOptions(style),balance}:richOptions(style);
-    if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,textOptions):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement),textDirection,balance);
+    // LH-189: `from` is the size from which the lines take the display pitch, `trackFrom` the size from which they take the display tracking.
+    const balance=field==='title'||field==='subtitle'||(field==='text'&&displayTexts.has(path)),plainOptions=balance?{...richOptions(style),balance}:richOptions(style),textOptions=Number.isFinite(trackFrom)?{...plainOptions,displayFrom:trackFrom,displayPitch:Number.isFinite(from)}:plainOptions;
+    if(!options.textMeasurement?.outlineBounds){
+      const fit=rich?fitRichText(value,box,size,minimum,textOptions):fitText(text,box,size,minimum,displayMeasure(textWidthMeasurer(style,options.textMeasurement),text,trackFrom),textDirection,balance,from);
+      return fit;
+    }
     const alignment=explicitAlignment??alignmentFor(field);
     const richLayout=rich?richTextLayouter(value,box,size,textOptions,minimum):undefined;
-    const measure=textWidthMeasurer(style,options.textMeasurement),floor=snapFontSizeUp(rich?richMinimum(value,size,minimum):minimum),start=Math.max(size,floor);
+    const measure=displayMeasure(textWidthMeasurer(style,options.textMeasurement),text,trackFrom),floor=snapFontSizeUp(rich?richMinimum(value,size,minimum):minimum),start=Math.max(size,floor);
     // The nominal heading/body range fits within 64 reference-pixel steps; the
     // last trial always evaluates the explicit floor even with unusual callers.
     for(let trial=0;trial<=64;trial++) {
       const raw=start-trial*scale,last=trial===64||raw<=floor,fontSize=last?floor:gridFontSize(raw,floor);
-      const fit=richLayout?richLayout(fontSize):fitText(text,box,fontSize,fontSize,measure,textDirection,balance);
+      const fit=richLayout?richLayout(fontSize):fitText(text,box,fontSize,fontSize,measure,textDirection,balance,from);
+      const inkStyle=Number.isFinite(trackFrom)&&linePitch(fontSize,trackFrom)===DISPLAY_LINE_PITCH&&displayTracks(text)?{...style,tracking:DISPLAY_TRACKING}:style;
       const richLines='richLines' in fit?(fit as RichTextFit).richLines:undefined;
       const lines:TextLineInk[]=richLines?richLines.map(line=>{
         let outline:LayoutBox|null=null;
@@ -6358,7 +6592,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         let outline:LayoutBox|null=null;
         for(const segment of line.segments) {
           if(segment.kind==='tab')continue;
-          const bounds=measureTextOutline(text.slice(segment.start,segment.end),fontSize,style,options.textMeasurement);
+          const bounds=measureTextOutline(text.slice(segment.start,segment.end),fontSize,inkStyle,options.textMeasurement);
           if(!bounds)continue;
           const next={...bounds,x:segment.x+bounds.x};
           if(!outline)outline=next;else{const right=Math.max(outline.x+outline.width,next.x+next.width),bottom=Math.max(outline.y+outline.height,next.y+next.height);outline.x=Math.min(outline.x,next.x);outline.y=Math.min(outline.y,next.y);outline.width=right-outline.x;outline.height=bottom-outline.y;}
@@ -6420,7 +6654,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const push = (field: string, value: unknown, itemPath: string, box: LayoutBox, text: TextFit | RichTextFit, titleSplit?: ComposedItem['titleSplit']) => {
       box.height = Math.min(box.height, Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight, text.placement?.height ?? 0));
       list.push({ path: itemPath, field, type: 'text', value, payload: { text: value }, box, text, textStyle: styleFor(field, itemPath), composition, alignment: alignmentFor(field), ...(titleSplit ? { titleSplit } : {}) });
-      top += box.height + gap * 0.5;
+      // LH-189: what follows a display heading (a one em line box) starts below its descenders too.
+      top += box.height + displayDepth(text) + gap * 0.5;
     };
     for (const field of fields) {
       const value = slide[field], text = annotationText(value), fieldPath = `${path}.${field}`, box = boxFor(field);
@@ -6653,6 +6888,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // A right-to-left deck mirrors placements and edge overlays: `left` is the start side, drawn at the right.
   const mirrorSide = (side: string): string => !rtl ? side : side === 'left' ? 'right' : side === 'right' ? 'left' : side;
   const backgroundImage = resolveBackgroundImage(slide, options.presentation, options.themeBackground, options.layout, width, height, path, mirrorSide, imageDiagnostics);
+  measuredPicture = backgroundImage !== undefined && typeof options.pictureLuminance === 'function';
   const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
   const assets = record(options.presentation).assets;
   // WI-3 (P33): a slide composed with no layout shows its pictures whole unless a design or the block sets a fit: the default
@@ -7286,7 +7522,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const measureQuote = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, bodySize?: number): QuoteLayout => {
     const lay = (share?: number) => layoutQuote(node.value as string | QuoteContent, acceptedBox(box), {
       fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,direction:textDirection,floorFallback,
-      ...(citationMarker?{citationMarker}:{}),...(deckLanguage()!==undefined?{language:deckLanguage()!}:{}),...grownOptions(node),
+      ...(citationMarker?{citationMarker}:{}),...(deckLanguage()!==undefined?{language:deckLanguage()!}:{}),...grownOptions(node),...(messageNode(node)?{message:true}:{}),...(tightDisplay?{[TIGHT_DISPLAY]:true}:{}),
       ...(bodySize !== undefined ? {bodySize:bodySize / scale} : besideQuote(node) && ruleOn('quote-beside') ? {bodySize:LEAD_NOMINAL_SIZE,bodyLines:QUOTE_BESIDE_LINES} : {}),
       ...(share !== undefined ? {portrait:'side' as const,portraitShare:share} : {}),
     });
@@ -7333,7 +7569,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (display && !tier) fire('metric-display');
     const metricOptions: MetricLayoutOptions = {
       fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,
-      textRasterPadding:options.textRasterPadding,...(roleSizes?{roleSizes}:{}),...grownOptions(node),
+      // LH-188: a figure with an icon keeps LH-101's display size: its chip (LH-14) takes the room the larger figure would.
+      textRasterPadding:options.textRasterPadding,...(roleSizes?{roleSizes}:{}),...grownOptions(node),...(messageNode(node)&&!tile&&record(node.value).icon===undefined?{message:true}:{}),
       align:tile||starts?'left':alignmentFor('metric'),direction:textDirection,...(tile?{tile,...(tileFloors?.get(node.path)?{minimumSizes:tileFloors.get(node.path)}:{})}:{}),
       ...(display?{display:{...display,height:contentBox.height}}:{}),...(tier?{eyebrow:true}:{}),
       // LH-135: a tier's price is a figure whatever the guard's other rules do (LH-127): "$1,200/mo" never splits.
@@ -8699,9 +8936,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const cited = Array.isArray(node.value) && node.value.some(run => run && typeof run === 'object' && ((run as { cite?: unknown }).cite !== undefined || (run as { footnote?: unknown }).footnote !== undefined));
       const words = node.field === 'text' && !cited ? messageWords(node.value) : Infinity;
       if (words <= SHORT_MESSAGE_WORDS && ruleOn('display-message')) {
-        const reached = chosen ?? start, cap = (words <= SHORT_TEXT_WORDS ? HEADING_DISPLAY_SIZES.title : MESSAGE_DISPLAY_SIZE) * scale, plain = { growth: proseGrowth.get(node), best };
-        displayTexts.add(node.path);
-        let shown: number | undefined;
+        // LH-188: a one-message slide's statement grows on to its length-keyed ceiling (MESSAGE_CEILINGS.statement) where that is higher;
+        // above today's cap a step is kept only with no word broken across lines.
+        const today = (words <= SHORT_TEXT_WORDS ? HEADING_DISPLAY_SIZES.title : MESSAGE_DISPLAY_SIZE) * scale;
+        const reached = chosen ?? start, cap = Math.max(today, messageNode(node) ? (messageCeiling('statement', node.value) ?? 0) * scale : 0), plain = { growth: proseGrowth.get(node), best };
+        displayTexts.add(node.path); messageTexts.add(node.path);
+        let shown: number | undefined, lastLines: number | undefined;
         for (let size = reached; ; ) {
           const step = scaleAbove(size, settings.minFontSize ?? 16);
           if (step > cap + 1e-9 || step > capOf(settings) + FONT_GRID_EPSILON) break;
@@ -8712,9 +8952,17 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           // RR-105 (coverage finding 30): on a narrow slide (portrait, square) a step whose lines run under the minimum measure (LH-66,
           // underMeasure) is one the guard refuses, which threw the whole message back to its plain size; it stops at the step before.
           if (height > LONE_TARGET * inner.height || fit.overflow || fit.fontSize < step - 1e-9 || lines > MESSAGE_DISPLAY_LINES || (ruleOn('reading-measure') && autoComposition() && underMeasure(node.field, node.value, measure.width, step))) break;
+          if (step > today + 1e-9 && linesSplitWord(contentText(node.field, node.value) ?? '', fit.lines)) break;
+          // LH-188: nor one that adds a line ending in a stub (stubLine): text without word spaces is not balanced, so a larger step can leave
+          // two characters alone on a new last line.
+          if (step > today + 1e-9 && stubLine(fit)) {
+            const before = lastLines ?? fitLines(fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { ...inner, width: proseMeasure(node, inner.width).width }, size, floor, node.path, node.payload.numbering));
+            if (lines > before) break;
+          }
+          lastLines = lines;
           shown = step; best = height; size = step;
         }
-        if (shown === undefined) { displayTexts.delete(node.path); if (plain.growth === undefined) proseGrowth.delete(node); else proseGrowth.set(node, plain.growth); best = plain.best; }
+        if (shown === undefined) { displayTexts.delete(node.path); messageTexts.delete(node.path); if (plain.growth === undefined) proseGrowth.delete(node); else proseGrowth.set(node, plain.growth); best = plain.best; }
         else { proseGrowth.set(node, shown); loneGrowth = true; fire('display-message'); }
       }
       if (badgeLists.has(node.path)) best = need();
@@ -8722,7 +8970,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       let chosen: number | undefined;
       // LH-101: a metric's value has room to grow to LONE_DISPLAY_SIZES.value (nine steps); the other blocks reach their displays in five.
       const target = node.field === 'metric' ? LONE_METRIC_TARGET : LONE_TARGET;
-      for (let power = 1; power <= (node.field === 'metric' ? 9 : 5); power++) {
+      let quoteLines: number | undefined;
+      // LH-188: a one-message slide's quote may grow on to its ceiling (MESSAGE_CEILINGS.quote, 86 px is six steps from 40).
+      for (let power = 1; power <= (node.field === 'metric' || node.field === 'quote' && messageNode(node) ? 9 : 5); power++) {
         const growth = TYPE_SCALE_RATIO ** power;
         growthOf.set(node, growth);
         const height = need();
@@ -8736,6 +8986,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           fits = !layout.overflow && (layout.parts as readonly { fit?: { fontSize: number }; requestedFontSize: number; visible?: boolean }[]).every(part => part.visible === false || (part.fit !== undefined && part.fit.fontSize >= part.requestedFontSize - 1e-9));
           // LH-144: growth stops at composition.maxFontSize.
           if (largestPart(layout) > capOf(settings) + FONT_GRID_EPSILON) fits = false;
+          // LH-188: a quote grown past LONE_DISPLAY_SIZES.quote keeps every word of its body whole.
+          const quoteBody = node.field === 'quote' ? (layout.parts as readonly { role: string; text: string; fit?: TextFit }[]).find(part => part.role === 'body') : undefined;
+          if (quoteBody?.fit && quoteBody.fit.fontSize > LONE_DISPLAY_SIZES.quote * scale + FONT_GRID_EPSILON && linesSplitWord(quoteBody.text, quoteBody.fit.lines)) fits = false;
+          // LH-188: nor does it take a step that adds a line ending in a stub (stubLine).
+          if (quoteBody?.fit && quoteBody.fit.fontSize > LONE_DISPLAY_SIZES.quote * scale + FONT_GRID_EPSILON && quoteLines !== undefined && fitLines(quoteBody.fit) > quoteLines && stubLine(quoteBody.fit)) fits = false;
+          if (fits && quoteBody?.fit) quoteLines = fitLines(quoteBody.fit);
         }
         if (height > target * inner.height || !fits) break;
         chosen = growth; best = height;
@@ -9537,6 +9793,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // A narrower column is a variant only where the group keeps every size it has across the area and still fits its height.
       const keepsSizes = (narrow: ComposedItem[], across: ComposedItem[]) => narrow.length === across.length && groupHeight(narrow) <= cell.height + .01
         && narrow.every((item, index) => (item.text?.fontSize ?? 0) >= (across[index]!.text?.fontSize ?? 0) - FONT_GRID_EPSILON);
+      // LH-189: and a title at a display size keeps its lines in a narrower column, so the shorter display pitch never trades a one-line
+      // display title for two lines (which LH-130 keeps only when they are even) in a column the 1.22 em pitch left too short for it.
+      const lineCount = (item: ComposedItem) => item.text ? ('richLines' in item.text ? (item.text as RichTextFit).richLines.length : item.text.lines.length) : 0;
+      const keepsLines = (narrow: ComposedItem[], across: ComposedItem[]) => narrow.every((item, index) => !(item.field === 'title' && item.text?.lineHeight !== undefined && item.text.lineHeight < item.text.fontSize * BODY_LINE_PITCH - 1e-6 && lineCount(item) > lineCount(across[index]!)));
       const wide = titled && cell.width >= .75 * frame.width;
       const variants: Variant[] = [];
       for (const alignment of titled ? [preferred, preferred === 'center' ? 'start' as const : 'center' as const] : [preferred]) {
@@ -9546,7 +9806,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           const columnWidth = share * width - 2 * padding;
           if (columnWidth <= 0 || columnWidth >= cell.width - 1) continue;
           const narrow = trial(alignment, alignment === 'center' ? cell.x + (cell.width - columnWidth) / 2 : left ? cell.x : cell.x + cell.width - columnWidth, columnWidth);
-          if (keepsSizes(narrow.list, across.list)) variants.push(narrow);
+          if (keepsSizes(narrow.list, across.list) && keepsLines(narrow.list, across.list)) variants.push(narrow);
         }
       }
       const full = variants[0]!, keyed = OVERLAY_KEYED.has(background), explicit = titled ? background.textPlacement : undefined;
@@ -11677,6 +11937,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const roomy = composeLayout(input, { ...options, [PAIR_ROOM]: pairNeed } as ComposeSlideOptions);
     if (roomy.emphasis?.arrow && overflowCount(roomy) <= overflowCount(composed) && !shrinks(roomy, composed, options)) return roomy;
   }
+  displayStyles(composed.items, displayFrom(scale), displayText, tightDisplay);
   if (atRequest) AT_REQUEST.add(composed);
   if (portraitFallback) PORTRAIT_FALLBACK.add(composed);
   // LH-149: the paragraphs and lists that shrank onto a half step of the scale, for the comparisons of arrangements (halfStepFloors).
