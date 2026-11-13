@@ -60,4 +60,33 @@ assert.equal(figure[0].spc, spcOf(DISPLAY_TRACKING, figure[0].size));
 const back = await fromPptx(bytes);
 assert.deepEqual(back.slides.map(slide => ({title: slide.title, text: slide.text ?? slide.blocks?.[0]?.text, quote: slide.quote ?? slide.blocks?.[0]?.quote, metric: slide.metric ?? slide.blocks?.[0]?.metric})),
   deck.slides.map(slide => ({title: slide.title, text: slide.text, quote: slide.quote, metric: slide.metric})));
-console.log('LH-188, LH-189: the export writes display text at core\'s size, pitch and spc, and imports back unchanged.');
+// A bound title keeps core's display tracking in each title tier (RR-105): one line (its measured line), soft wrap (one natively wrapped
+// box) and fixed lines (one paragraph per line; LH-189: a two-line display title one em apart holds its later line at that share of single
+// spacing). Every tier is the Title placeholder, in both body-text modes, and imports back as the title.
+const titles = {
+  $schema: 'https://openpresentation.org/schema/opf/v1', name: 'LH-189 titles', design: {dimensions: {preset: '4:3'}},
+  slides: [
+    {title: 'Ship in March'},
+    {title: 'Ledger migration plan for the next fiscal year'},
+    {title: 'Ledger migration plan for next year', composition: {padding: 0.2}},
+  ],
+};
+const tiers = [{lines: 1, paragraphs: 1, tracked: true}, {lines: 2, paragraphs: 1, tracked: false}, {lines: 2, paragraphs: 2, tracked: true}];
+for (const bodyText of ['measured', 'native']) {
+  const titleBytes = await toPptx(titles, {catalogs: [gallery], bodyText}), titleEntries = unzipSync(new Uint8Array(titleBytes));
+  for (const [index, tier] of tiers.entries()) {
+    const title = composeSlide(titles.slides[index], resolveSlideContext(titles, index, {catalogs: [gallery]}).options).items.find(item => item.field === 'title');
+    assert.equal(title.text.lines.length, tier.lines, `title ${index}: lines`);
+    assert.equal(title.textStyle.tracking, tier.tracked ? DISPLAY_TRACKING : undefined, `title ${index}: core's tracking`);
+    const xml = strFromU8(titleEntries[`ppt/slides/slide${index + 1}.xml`]);
+    const shapes = [...xml.matchAll(/<p:sp>((?:(?!<\/p:sp>)[\s\S])*?)<\/p:sp>/g)].map(([, shape]) => shape).filter(shape => /name="OPF heading slides\.\d+\.title/.test(shape));
+    assert.equal(shapes.length, 1, `${bodyText} title ${index}: one title shape`);
+    assert.match(shapes[0], /<p:ph type="title"/, `${bodyText} title ${index}: the Title placeholder`);
+    assert.equal((shapes[0].match(/<a:p>/g) ?? []).length, tier.paragraphs, `${bodyText} title ${index}: its tier`);
+    const runs = [...shapes[0].matchAll(/<a:r><a:rPr([^>]*)>/g)].map(([, attributes]) => Number(/\bspc="(-?\d+)"/.exec(attributes)?.[1] ?? 0));
+    assert.ok(runs.length > 0);
+    for (const spc of runs) assert.equal(spc, tier.tracked ? spcOf(DISPLAY_TRACKING, title.text.fontSize) : 0, `${bodyText} title ${index}: spc`);
+  }
+  assert.deepEqual((await fromPptx(titleBytes)).slides.map(slide => slide.title), titles.slides.map(slide => slide.title), `${bodyText}: the titles import back`);
+}
+console.log('LH-188, LH-189: the export writes display text at core\'s size, pitch and spc, keeps a bound title\'s tracking in every tier, and imports back unchanged.');

@@ -267,7 +267,8 @@ export function textWidthMeasurer(style: TextStyle, measurement?: TextMeasuremen
   };
   // LH-32: an eyebrow is measured as drawn: its capitals, plus its tracking between characters.
   if (!style.caps && !style.tracking) return base;
-  return (text, size) => base(styledText(text, style), size) + trackingWidth(text, size, style);
+  // LH-189: negative tracking never gives a negative advance (a part a missing face measures at nothing).
+  return (text, size) => Math.max(0, base(styledText(text, style), size) + trackingWidth(text, size, style));
 }
 /** Validate an optional host outline measurement without inventing raster coverage. */
 export function measureTextOutline(text: string, fontSize: number, style: TextStyle, measurement?: TextMeasurement): LayoutBox | null | undefined {
@@ -280,7 +281,7 @@ export function measureTextOutline(text: string, fontSize: number, style: TextSt
   }
   // LH-32: tracking moves every glyph after the first by the spacing before it.
   const spread = trackingWidth(text, fontSize, style);
-  return {x:bounds.x,y:bounds.y,width:bounds.width+spread,height:bounds.height};
+  return {x:bounds.x,y:bounds.y,width:Math.max(0,bounds.width+spread),height:bounds.height};
 }
 export interface TextLineInk { width: number; y: number; baseline: number; height: number; outline: LayoutBox | null }
 export interface TextPlacementLine {
@@ -2145,15 +2146,20 @@ export function displayFrom(scale: number): number { return DISPLAY_SIZE_FACTOR 
 /** LH-189: the line pitch, in em, of text at `fontSize` canvas px when display text starts at `from` canvas px (displayFrom). */
 export function linePitch(fontSize: number, from = Infinity): number { return fontSize >= from - 1 / FONT_SIZE_GRID_PER_PX - 1e-9 ? DISPLAY_LINE_PITCH : BODY_LINE_PITCH; }
 /**
- * LH-189: whether display text takes the display pitch and tightens its tracking: it has a letter or a digit and no letter of a script
- * without case (Arabic, Hebrew, CJK, Devanagari, Thai and the like). Tracking would break the joining of a cursive script or the even rhythm
- * of full-width text, and those scripts' tall marks or full-em glyphs need the body pitch between lines.
+ * LH-189: whether display text takes the display pitch and tightens its tracking: it has a letter or a digit, and every character is a
+ * letter of a script with case the deck's faces draw (Latin, Greek, Cyrillic), a combining mark, an ASCII digit, punctuation, a space or a
+ * plain symbol of figures (TRACKED_SYMBOLS). Tracking would break the joining of a cursive script or the even rhythm of full-width text,
+ * those scripts' tall marks or full-em glyphs need the body pitch between lines, and the characters script faces draw (Armenian, Arabic-Indic
+ * and Myanmar digits, emoji, mathematical letters) are pinned to measured advances, which carry no tracking.
  */
-export function displayTracks(text: string): boolean { return /[\p{L}\p{N}]/u.test(text) && !/[\p{Lo}\p{Lm}]/u.test(text); }
+export function displayTracks(text: string): boolean { return /[\p{L}\p{N}]/u.test(text) && !UNTRACKED_TEXT.test(text); }
+const TRACKED_SYMBOLS = '$€£¥%+\\-−±×÷=<>&@#*/\\\\|~^°';
+const UNTRACKED_TEXT = new RegExp(`[^\\p{Script=Latin}\\p{Script=Greek}\\p{Script=Cyrillic}\\p{Mn}\\p{Me}0-9\\p{P}\\p{Zs}${TRACKED_SYMBOLS}]`, 'u');
 /** LH-189: a measure of `text`'s substrings that adds DISPLAY_TRACKING at display sizes (from `from` canvas px) when the text tracks. */
 function displayMeasure(measure: MeasureTextWidth, text: string, from: number): MeasureTextWidth {
   if (!Number.isFinite(from) || !displayTracks(text)) return measure;
-  return (part, size) => measure(part, size) + (linePitch(size, from) === DISPLAY_LINE_PITCH ? trackingWidth(part, size, { tracking: DISPLAY_TRACKING }) : 0);
+  // Never a negative advance: a part with no advance of its own (a mark) takes no tracking.
+  return (part, size) => { const width = measure(part, size); return width > 0 && linePitch(size, from) === DISPLAY_LINE_PITCH ? Math.max(0, width + trackingWidth(part, size, { tracking: DISPLAY_TRACKING })) : width; };
 }
 /**
  * LH-189: a title, a subtitle or a message text (`display`: the fields and paths composeLayout's fitter measures as display text) fitted at

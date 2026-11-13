@@ -79,6 +79,8 @@ export function familyDeck(family) {
     design: {fontScheme: 'x-latin-fixture'},
     // The document's own catalog group carries the record (keyed by its id, without $schema and id).
     catalogs: {custom: {fontSchemes: {'x-latin-fixture': {name: family, app: 'powerpoint', languageFamily: 'latin', languages: [], major: family, minor: family, textSample: 'x', type: 'sans-serif'}}}},
-    slides: [{id: 'a', title: 'Quarterly review', text: [{text: 'Regular'}, ' ', {text: 'Bold', bold: true}, ' ', {text: 'Italic', italic: true}, ' ', {text: 'BoldItalic', bold: true, italic: true}]}],
+    // LH-189: the body stays under the display size (56 px), so its runs are body text, each pinned to its face's measured advance (a
+    // display text would draw at its natural advance plus the display tracking).
+    slides: [{id: 'a', title: 'Quarterly review', composition: {maxFontSize: 54}, text: [{text: 'Regular'}, ' ', {text: 'Bold', bold: true}, ' ', {text: 'Italic', italic: true}, ' ', {text: 'BoldItalic', bold: true, italic: true}]}],
   };
 }

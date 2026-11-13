@@ -2554,7 +2554,9 @@ function renderTextBox(text, box, bound, config) {
     const start=tabs||positioned;
     // LH-32: core spaces an eyebrow's letters between characters, so its last character draws with no spacing after it: rasterizers
     // differ on whether a trailing spacing counts toward a middle or end anchor.
-    if(style.tracking&&!start)content=untrackLast(content);
+    // LH-189: display tracking (negative) keeps the line one run, so its last character keeps its kerning with the one before it, and its
+    // anchor where the export puts PowerPoint's (whose spc follows the last character too, as SVG letter spacing does).
+    if(style.tracking>0&&!start)content=untrackLast(content);
     return tag("text", {
     x: stableNumber(tabs?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
     "text-anchor": start?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),
