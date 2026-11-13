@@ -26,7 +26,11 @@ export const HISTOGRAM_SELECTION=Object.freeze({slideIndex:2,seriesIndex:1,point
 // (and its chartex picture fallback); part-by-part comparison with the export of ed9f0f909. Previous: {bytes:226636,sha256:'2022a31171208f984f7f3c1ccb2945d58598da6ce33a1c33c239bc4e6754e9db'}.
 // RR-105 (#1290, 2026-11-12, layout names): only two slide layout parts changed, by their p:cSld name (Blank, Title Only); part-by-part
 // comparison with the export of 6d0ba7d86. Previous: {bytes:226889,sha256:'167d0033ec26f33f5bc5a533dcc78f6925272f0f9c6e940298ca9577860becf2'}.
-export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226882,sha256:'84b02122f21a4fad9c592acd4bec3d5800be9b5608bb8be9b79b49d7d3b2d3f8'});
+// RR-105 (opf#1293, 2026-11-13, theme font references): only the seven slide parts (each title's typeface written as +mj-lt and the
+// like) and their ppt/tags/opfSlideN.xml native style fingerprints changed; each slide part equals the export of f75d6876b once every
+// reference is resolved to the theme's family, and every chart, chartex, workbook and other part is byte-identical (part-by-part
+// comparison). Previous: {bytes:226882,sha256:'84b02122f21a4fad9c592acd4bec3d5800be9b5608bb8be9b79b49d7d3b2d3f8'}.
+export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226852,sha256:'d4e2aa819f10f1bda10f45c9ec7de8a404961d984125c457f28a9469200b7a1b'});
 export const HISTOGRAM_SOURCE_ARCHIVE_BEFORE_RR105_PICTURE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
 const keys=(value,names)=>assert.deepEqual(Object.keys(value).sort(),[...names].sort());
 const modelHash=value=>digest(Buffer.from(JSON.stringify(value)));

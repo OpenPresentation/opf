@@ -35,9 +35,6 @@ const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n'
 // two embedded workbooks differ from the measured archive too, only in the parts that hold that header (asserted below).
 // RR-105 (chart fixes, 2026-11-12) changed the two chart parts once more: line and area charts write c:dispBlanksAs "gap" (a missing
 // value is a gap, as the preview draws it), and a reference label keeps clear of the marks, with a filled plate when every place is taken.
-// RR-105 (opf#1293, 2026-11-13) writes theme font references (+mj-lt, +mn-lt and their ea/cs slots) wherever a slide run's family is
-// its theme's: ppt/slides/slide3.xml (its text in the theme's families) and the native style fingerprint in ppt/tags/opfSlide3.xml
-// differ from the measured archive too; resolved to the theme's families, slide3.xml is byte-identical. Charts keep their names.
 // The native route still admits only the measured archive (retained as
 // test-fixtures/reference-name/reference-native-lines.pptx, which the comparison contract below runs on); measuring the current export
 // needs a new sealed input.
@@ -54,7 +51,11 @@ const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n'
 // {bytes:128950,sha256:'cdcc04f801766f97a4fdc567d8f71870fd7a12d132a17c3b7f561617fbb009b4'}.
 // RR-105 (#1290, 2026-11-12, layout names): user-facing slide layout names (p:cSld name only); previous
 // {bytes:129058,sha256:'174b3759bd4ec867d70f84c307af60f8803a6b2051c9648f5dbb2794386491a0'}.
-const CURRENT_EXPORT=Object.freeze({bytes:129052,sha256:'b4a03d6c593acca52bc9edebdd42d7e4e09e606ebb0123478b5af36ac51418ea'});
+// RR-105 (opf#1293, 2026-11-13, theme font references): a slide run whose family is its theme's names the theme font (+mj-lt, +mn-lt
+// and their ea/cs slots), so ppt/slides/slide3.xml and the native style fingerprint in ppt/tags/opfSlide3.xml change; slide3.xml equals
+// the export of f75d6876b once each reference is resolved to the theme's family, and charts keep their names (part-by-part comparison);
+// previous {bytes:129052,sha256:'b4a03d6c593acca52bc9edebdd42d7e4e09e606ebb0123478b5af36ac51418ea'}.
+const CURRENT_EXPORT=Object.freeze({bytes:129055,sha256:'3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918'});
 let current;
 function currentFixture(){current??=(async()=>{
  const deck=structuredClone(source),renderOptions={catalogs:[gallery]},fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck,renderOptions});await fonts.ensure(deck,{renderOptions});
