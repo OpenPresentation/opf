@@ -14,7 +14,7 @@ import {lazyFacesNeeded, presentationFaces} from '@openpresentation/opf-render/f
 
 const renderOptions = {catalogs: [gallery]}, date = '2026-11-12';
 const handle = presentation => loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation, renderOptions});
-const fontFailure = error => /font-unavailable|font-preparation-unsettled|not prepared/.test(`${error?.code ?? ''} ${error?.message ?? ''} ${JSON.stringify(error?.findings ?? error?.details ?? '')}`);
+const fontFailure = error => /font-unavailable|font-preparation-unsettled|font-preparation-late|not prepared/.test(`${error?.code ?? ''} ${error?.message ?? ''} ${JSON.stringify(error?.findings ?? error?.details ?? '')}`);
 
 const words = n => Array.from({length: n}, (_, i) => ['quarterly', 'revenue', 'pipeline', 'adoption', 'retention', 'operating', 'margin', 'forecast'][i % 8]).join(' ');
 const TITLES = {
@@ -62,7 +62,12 @@ async function sweep(decks, formats) {
     let fonts;
     try { fonts = await handle(deck); } catch (error) { failures.push({name, step: 'loadFonts', error}); continue; }
     for (const [format, extra] of formats) {
-      try { await convert(deck, {...renderOptions, date, format, fonts, ...extra}); }
+      try {
+        const {findings} = await convert(deck, {...renderOptions, date, format, fonts, ...extra});
+        // The fixpoint is the mechanism: a face the conversion had to prepare late is a miss of the analysis.
+        const late = findings.filter(finding => finding.ruleId === 'fonts/prepared-late');
+        if (late.length) failures.push({name, step: format, error: Object.assign(new Error(`prepared late: ${late.map(finding => `${finding.fontFamily} ${finding.fontWeight} at ${finding.path}`).join(', ')}`), {code: 'font-preparation-late'})});
+      }
       catch (error) { failures.push({name, step: `${format}${extra.typefaces ? `/${extra.typefaces}` : ''}`, error}); }
     }
     const pending = fonts.pending(deck, renderOptions);
@@ -86,7 +91,10 @@ const PLAN = full
 test('the regression deck converts with a demand-loaded handle (split title beside a shape)', async () => {
   const deck = {slides: [{title: TITLES.long, blocks: [{shape: 'rect'}]}]};
   const fonts = await handle(deck);
-  for (const [format, extra] of FORMATS) await convert(deck, {...renderOptions, date, format, fonts, ...extra});
+  for (const [format, extra] of FORMATS) {
+    const {findings} = await convert(deck, {...renderOptions, date, format, fonts, ...extra});
+    assert.deepEqual(findings.filter(finding => finding.ruleId === 'fonts/prepared-late'), [], 'no face was prepared late');
+  }
   // The split's qualifier is set in the body role (Intos 400) next to the Intos Display heading.
   assert.ok(fonts.registry.describeFaces().some(face => face.family === 'Intos' && face.weight === 400 && !face.italic));
   assert.deepEqual(fonts.pending(deck, renderOptions), []);
