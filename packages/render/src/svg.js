@@ -1690,7 +1690,10 @@ function renderMetric(item, box, bound, options) {
     const factor=layout.alignment==='right'?1:layout.alignment==='center'?.5:0;
     const lines=part.fit.sourceLines.map((line,index)=>{
       const origin=part.linePositions[index];
-      if(factor&&!line.segments.some(segment=>segment.kind==='tab'))return tag('text',{x:stableNumber(origin.x+line.width*factor),y:stableNumber(origin.baseline),'text-anchor':factor===1?'end':'middle',
+      // opf#1322: a tracked display line measured with the host's real faces starts at core's own position (below), because a browser
+      // counts the spacing after the last character toward a middle or end anchor and resvg does not.
+      const exactStart=part.style.tracking<0&&!!options.textMeasurement?.measure&&!partRtl(line.start);
+      if(factor&&!exactStart&&!line.segments.some(segment=>segment.kind==='tab'))return tag('text',{x:stableNumber(origin.x+line.width*factor),y:stableNumber(origin.baseline),'text-anchor':factor===1?'end':'middle',
         'font-family':fontStack(part.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(part.fit.fontSize),
         'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,'letter-spacing':part.style.tracking?stableNumber(part.style.tracking*part.fit.fontSize):undefined,
         'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:partFill(part),
@@ -2562,9 +2565,14 @@ function renderTextBox(text, box, bound, config) {
     // split there drops the pair's kerning). The spacing after its last character does not count toward its anchor in resvg, and the
     // outlined text and the PDF anchor it the same way (pdf-text).
     if(style.tracking>0&&!start)content=untrackLast(content);
+    // opf#1322: a browser counts that trailing spacing, so a centered or end-aligned display line drew half or one spacing to the right
+    // there (3.8 px on a 252 px figure). Where the line was measured with the host's real faces, core's own start is exact in every
+    // rasterizer, so the line starts there instead of hanging from its middle or end. Estimated widths keep the anchor: the shaper's
+    // width differs from core's there, and the anchor keeps the edge.
+    const exactStart=!start&&factor>0&&style.tracking<0&&!rtl&&!trimWidth&&!!config.options.textMeasurement?.measure&&(placed?.width>0||sourceLine?.width>0);
     return tag("text", {
-    x: stableNumber(tabs?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
-    "text-anchor": start?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),
+    x: stableNumber(tabs||exactStart?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
+    "text-anchor": start||exactStart?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),
     "font-size": stableNumber(adjustedFontSize(size,sizeAdjust)), "font-weight": style.fontWeight, "font-style": style.italic ? "italic" : undefined, fill: config.fill,
     // LH-32: an eyebrow (the tag, a label core sets as one) draws its capitals with core's letter spacing, as core measured it, at its
     // natural advance (no textLength: rasterizers differ on whether the spacing after the last letter counts toward it).

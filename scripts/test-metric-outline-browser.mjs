@@ -23,13 +23,14 @@ const metrics=[0,'',{value:42,unit:'ms',label:'Left\tRight  ',description:'Exact
   {value:1,unit:'%',label:'Completion'},
   {value:'\t1\t%',unit:'ms',label:'\tBefore\tAfter  ',description:'\t'},
   {value:'\r\n\r\n\n',label:'\t  ',description:'\n'}];
-// LH-189 (2026-11-13): the metrics stay under the display size (56 px). A tracked display line is one run with letter spacing, and a
-// browser counts the spacing after its last character where core and resvg do not: its advance reads one spacing short and a centered or
-// end-aligned line starts half or one spacing to the right (1.9 and 3.8 px on a 252 px figure). That difference is opf#1322, not this test's subject.
+// LH-189, opf#1322 (2026-11-13): a lone figure grows to a display size and is tracked, one run with a negative letter spacing. A browser
+// counts the spacing after the last character where core and resvg do not. A measured tracked line therefore starts at core's own x (it
+// no longer hangs from a middle or end anchor), which this test checks at 0.1 px; the browser's own length of such a segment still
+// reads one spacing short, so the advance check below adds that one spacing back.
 const cases=[];
 for(const family of ['Carlito','Roboto'])for(const [width,height]of [[1280,720],[540,960]])for(const align of ['start','center','end'])for(const [index,metric]of metrics.entries()){
   const id=`${family}-${width}-${align}-${index+1}`;
-  const document={design:{dimensions:{widthInches:width/96,heightInches:height/96},contentAlignment:align,fontScheme:{id:'roboto',heading:family,body:family,code:family}},slides:[{composition:{minFontSize:24,maxFontSize:54},metric}]};
+  const document={design:{dimensions:{widthInches:width/96,heightInches:height/96},contentAlignment:align,fontScheme:{id:'roboto',heading:family,body:family,code:family}},slides:[{composition:{minFontSize:24},metric}]};
   const before=JSON.stringify(document),bound=resolvePresentation(document,options).slides[0],svg=toSvg(document,1,options),item=bound.geometry.items[0];
   assert.equal(JSON.stringify(document),before);assert.equal(item.metricLayout.overflow,false);
   cases.push({id,width,height,document,cell:item.box,layout:item.metricLayout,svg,sourceSha256:hash(before),svgSha256:hash(svg)});
@@ -64,7 +65,8 @@ async function runCase(page,index){
       spans.forEach((span,i)=>{
         const segment=value.segments[i],first=span.getNumberOfChars()?span.getStartPositionOfChar(0):null,width=span.getComputedTextLength();
         if(first&&(Math.abs(first.x-value.origin.x-segment.x)>.1||Math.abs(first.y-value.origin.baseline)>.1))failures.push('Accepted origin differs: '+value.path);
-        if(Math.abs(width-segment.width)>.1)failures.push('Segment advance differs: '+value.path);
+        const spacing=span.getNumberOfChars()?parseFloat(getComputedStyle(span).letterSpacing)||0:0;
+        if(Math.abs(width-spacing-segment.width)>.1)failures.push('Segment advance differs: '+value.path);
         observations.push({path:value.path,text:span.textContent,kind:segment.kind,expectedX:value.origin.x+segment.x,actualX:first?.x,expectedY:value.origin.baseline,actualY:first?.y,expectedWidth:segment.width,actualWidth:width});
       });
     });return {failures,observations};

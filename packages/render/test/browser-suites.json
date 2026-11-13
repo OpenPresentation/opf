@@ -13,6 +13,10 @@
           "command": "node test/rtl-number-markers-browser.mjs"
         },
         {
+          "id": "browser:display-anchor",
+          "command": "node test/display-anchor-browser.mjs"
+        },
+        {
           "id": "browser:player-browser",
           "command": "pnpm run test:player-browser"
         },
