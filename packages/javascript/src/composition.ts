@@ -3649,8 +3649,9 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     const resolvedStyle=resolveTextStyle({...options.style,fontFamily:run.fontFamily??(run.code===true?options.codeFontFamily??'monospace':run.bold!==undefined?options.style.sourceFontFamily??options.style.fontFamily:options.style.fontFamily),fontWeight:run.bold===undefined?options.style.fontWeight:run.bold?700:400,italic:run.italic??options.style.italic,path:options.style.path?`${options.style.path}.${runIndex}`:undefined},options.textMeasurement);
     // A run language reaches the measurement and the engines as `style.lang`, after the host resolved the family (it may rebuild the style).
     const style:TextStyle=typeof run.language==='string'&&run.language?{...resolvedStyle,lang:run.language}:resolvedStyle;
-    // RR-34: a citation/footnote marker belongs to the run end; it needs a path and text to attach to.
-    const marker=options.citationMarker&&options.style.path&&run.text?options.citationMarker(`${options.style.path}.${runIndex}`):undefined;
+    // RR-34: a citation/footnote marker belongs to the run end; it needs a path to attach to. RR-105: an empty run keeps its marker,
+    // drawn where the run stands (after the text before it), so a cited run is never left without one.
+    const marker=options.citationMarker&&options.style.path?options.citationMarker(`${options.style.path}.${runIndex}`):undefined;
     return {run,runIndex,start,end:offset,style,...(marker?{marker}:{})};
   });
   const whole=source.map(entry=>entry.run.text).join('');
@@ -3663,6 +3664,18 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     const fragments=(start:number,end:number):RichTextFragment[]=>{
       let x=0;const result:RichTextFragment[]=[];
       for(const entry of source){
+        // RR-105: an empty marked run draws its marker on the line that holds its offset: after the text before it (a soft wrap leaves
+        // it at the end of the earlier line), or at the start of the text or of a paragraph.
+        if(entry.marker&&entry.start===entry.end){
+          const at=entry.start;
+          if((at>start&&at<=end)||(at===start&&(at===0||/[\r\n]/.test(whole[at-1]!)))){
+            const normalSize=entry.run.fontSize!==undefined?entry.run.fontSize*4/3*ratio:fontSize,measure=textWidthMeasurer(entry.style,options.textMeasurement);
+            const markerSize=Math.round(normalSize*CITATION_MARKER_SCALE*FONT_SIZE_GRID_PER_PX)/FONT_SIZE_GRID_PER_PX,width=measure(entry.marker,markerSize);
+            result.push({kind:'marker',text:entry.marker,runIndex:entry.runIndex,start:0,end:0,x,width,fontSize:markerSize,nominalSize:normalSize,baselineShift:-normalSize*CITATION_MARKER_RAISE,style:entry.style,run:entry.run});
+            x+=width;
+          }
+          continue;
+        }
         const a=Math.max(start,entry.start),b=Math.min(end,entry.end);if(b<=a)continue;
         const text=whole.slice(a,b),normalSize=entry.run.fontSize!==undefined?entry.run.fontSize*4/3*ratio:fontSize;
         const script=entry.run.superscript||entry.run.subscript;

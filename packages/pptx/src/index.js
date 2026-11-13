@@ -726,7 +726,7 @@ export async function fromPptx(input, options = {}) {
   }
   // RR-34: marker runs become cite/footnote on the runs before them, and the references list is rebuilt
   // from the stored record and the footnote boxes (an edited note keeps its edited text).
-  restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report);
+  restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report, furnitureContexts.map(context => context.annotations?.detached ?? []));
   restoreLogoFallback(imported, furnitureContexts);
   // The overlay joins its slide before the run colors, so the text of its shapes is settled with the rest.
   applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance, options.onDiagnostic);
@@ -2974,7 +2974,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     return true;
   });
   // RR-34: the footnote area core reserved above the footer band (rule plus one tagged text box per listed line).
-  addFootnotes(slide, geometry.footnotes, slideIndex, slideContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: `slides.${slideIndex}`}));
+  addFootnotes(slide, geometry.footnotes, slideIndex, slideContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: `slides.${slideIndex}`}), opfSlide);
   // Core composes furniture above all content and opf-render paints it last, so
   // spTree order (PowerPoint's z-order) matches: header/footer parts come after
   // every content item, and an overlapping footer stays visible over content.
