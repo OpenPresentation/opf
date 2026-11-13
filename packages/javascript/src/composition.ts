@@ -270,6 +270,39 @@ export function textWidthMeasurer(style: TextStyle, measurement?: TextMeasuremen
   // LH-189: negative tracking never gives a negative advance (a part a missing face measures at nothing).
   return (text, size) => Math.max(0, base(styledText(text, style), size) + trackingWidth(text, size, style));
 }
+/**
+ * One composeSlide call measures the same strings at the same sizes and styles many times: every size a fit tries, every arrangement the
+ * guards compare, and LH-189's tight composition, which composes the slide a second time. The host's measurement is the slow part (font
+ * resolution per call), so composeSlide measures through this memo for the length of the call. A host's widths may change between calls
+ * (a browser font that finished loading), never within one synchronous call, so the memo is never kept across calls. The first call of
+ * each string, size and style still reaches the host, in the same order, so whatever the host records per style or path is recorded as
+ * before; a call that throws is not remembered.
+ */
+const MEASUREMENT_MEMO_LIMIT = 200_000;
+const memoSources = new WeakMap<TextMeasurement, TextMeasurement>();
+function memoizedMeasurement(measurement: TextMeasurement): TextMeasurement {
+  if (memoSources.has(measurement)) return measurement;
+  const widths = new Map<string, number>(), styleKeys = new WeakMap<object, string>();
+  const styleKey = (style: TextStyle): string => {
+    if (!style || typeof style !== 'object') return String(style);
+    let key = styleKeys.get(style);
+    if (key === undefined) styleKeys.set(style, key = JSON.stringify(style));
+    return key;
+  };
+  const memo = Object.create(measurement) as TextMeasurement;
+  memo.measure = (text, size, style) => {
+    const key = `${size}\u0000${styleKey(style)}\u0000${text}`, known = widths.get(key);
+    if (known !== undefined) return known;
+    const width = measurement.measure(text, size, style);
+    if (widths.size >= MEASUREMENT_MEMO_LIMIT) widths.clear();
+    widths.set(key, width);
+    return width;
+  };
+  memoSources.set(memo, measurement);
+  return memo;
+}
+/** The host measurement a composeSlide memo measures with (itself for any other measurement), for caches kept across calls. */
+const measurementSource = (measurement: TextMeasurement | undefined): TextMeasurement | undefined => measurement && (memoSources.get(measurement) ?? measurement);
 /** Validate an optional host outline measurement without inventing raster coverage. */
 export function measureTextOutline(text: string, fontSize: number, style: TextStyle, measurement?: TextMeasurement): LayoutBox | null | undefined {
   if (measurement?.outlineBounds === undefined) return undefined;
@@ -1299,7 +1332,9 @@ function containedBox(cell: LayoutBox, aspect: number, anchor: RegionAnchor): La
 // compositions a slide tries.
 const diagramMeasures = new WeakMap<object, Map<string, DiagramMeasure>>();
 const NO_MEASUREMENT = {};
-function diagramMeasure(measurement: TextMeasurement | undefined, body: string, code: string): DiagramMeasure {
+function diagramMeasure(memo: TextMeasurement | undefined, body: string, code: string): DiagramMeasure {
+  // The cache outlives one composeSlide call, so it keys and measures by the host's own measurement, never the call's memo.
+  const measurement = measurementSource(memo);
   let byFamilies = diagramMeasures.get(measurement ?? NO_MEASUREMENT);
   if (!byFamilies) {
     byFamilies = new Map();
@@ -5292,6 +5327,7 @@ function growMixedCode(input: unknown, options: ComposeSlideOptions, result: Sli
   return result;
 }
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
+  if (options.textMeasurement) options = { ...options, textMeasurement: memoizedMeasurement(options.textMeasurement) };
   const result = tightened(input, options, composeSlideOnce(input, options));
   if (options.messageSurface) result.surface = options.messageSurface;
   // SH-04: the overlay goes on the slide's final composition (every arrangement, growth and recomposition settled), so it never moves
