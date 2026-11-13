@@ -1845,19 +1845,21 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
     // first lines start the entries. Without that record the shapes stay as they are.
     const unbulleted = entries.every(({item}) => !item.paragraphs[0].bullet);
     // RR-105: so does an entry drawn beside an icon chip in a list whose other entries keep their bullets (LH-174, a nested icon list):
-    // with the record, a line with a bullet must start an entry and a first line may have none.
-    if (!hasV2&&!entries[0].item.paragraphs[0].bullet && !expectedRoles?.[0]?.[2]) continue;
+    // the record names those markerless entries, whose first lines are the only ones without a bullet.
+    const markerless = line => expectedRoles?.[line]?.[2] === true && expectedRoles.markerless?.has(expectedRoles[line][0]) === true;
+    const bulleted = line => expectedRoles?.[line]?.[2] === true && !markerless(line);
+    if (!hasV2&&!entries[0].item.paragraphs[0].bullet && !((unbulleted || markerless(0)) && expectedRoles?.[0]?.[2])) continue;
     const projected=new Set();
     const validRoles = expectedRoles && (hasV2?entries.every(({item,line})=>{
       const lines=item.v2Scalar?.lines??[line],first=expectedRoles[line];if(!first||lines[0]!==line)return false;
-      if(!unbulleted&&Boolean(item.paragraphs[0].bullet)&&!first[2])return false;
+      if(!unbulleted&&Boolean(item.paragraphs[0].bullet)!==bulleted(line))return false;
       for(const [index,original]of lines.entries()){const role=expectedRoles[original];if(projected.has(original)||original!==line+index||!role||item.v2Scalar&&(role[0]!==first[0]||role[1]!=='text'||role[2]!==!index))return false;projected.add(original);}
       return true;
-    })&&projected.size===expectedRoles.length:expectedRoles.length === entries.length && entries.every(({item, line}, index) => line === index && (unbulleted || !item.paragraphs[0].bullet || expectedRoles[index][2])));
+    })&&projected.size===expectedRoles.length:expectedRoles.length === entries.length && entries.every(({item, line}, index) => line === index && (unbulleted || Boolean(item.paragraphs[0].bullet) === bulleted(index))));
     const lineRoles = validRoles ? expectedRoles : null;
     if (expectedRoles && !validRoles) report({code: 'list-line-role-changed', message: `The line topology of ${path} changed; list roles were not restored.`});
-    if(hasV2&&!entries[0].item.paragraphs[0].bullet&&!lineRoles?.[entries[0].line]?.[2])continue;
-    if (!entries[0].item.paragraphs[0].bullet && !validRoles) continue;
+    if(hasV2&&!entries[0].item.paragraphs[0].bullet&&!((unbulleted||markerless(entries[0].line))&&lineRoles?.[entries[0].line]?.[2]))continue;
+    if ((unbulleted || !entries[0].item.paragraphs[0].bullet) && !validRoles) continue;
     const look = runs?.get(path), textLook = cleanBase(look?.text), descriptionLook = cleanBase(look?.description);
     // The line's runs without the inherited look, or the paragraph's own richText when there is no record for this kind of line.
     // Each run is cleaned on its own and none merge, so the runs stay the slots the run colour record counts (src/run-colors.js);

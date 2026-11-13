@@ -2,7 +2,7 @@
 // geometry), the nested entries keep their native bullets, and the import gives every entry, and every icon, back.
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {strFromU8, unzipSync} from 'fflate';
+import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {composeSlide} from '@openpresentation/opf/composition';
 import {resolveSlideContext} from '@openpresentation/opf';
 import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
@@ -41,4 +41,15 @@ test('the nested icon list comes back from the import with the icons it draws', 
   delete expected[1].icon;
   assert.deepEqual(imported.slides[0].items, expected);
   assert.deepEqual(imported.icons, source.icons);
+});
+
+test('a bullet removed natively from a nested entry is still a changed list, as for any list', async () => {
+  const entries = unzipSync(await toPptx(deck()));
+  const part = 'ppt/slides/slide1.xml', xml = strFromU8(entries[part]);
+  const edited = xml.replace(/<a:buChar char="&#x2013;"\/>/, '<a:buNone/>');
+  assert.notEqual(edited, xml);
+  entries[part] = strToU8(edited);
+  const diagnostics = [];
+  await fromPptx(zipSync(entries), {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
+  assert.ok(diagnostics.some(diagnostic => diagnostic.code === 'list-line-role-changed'), JSON.stringify(diagnostics.map(diagnostic => diagnostic.code)));
 });

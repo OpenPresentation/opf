@@ -398,7 +398,8 @@ export function listLineBreaks(items, omit = () => {}) {
   return lists.length && lists.length <= MAX_LIST_PATHS && total <= MAX_LIST_BREAKS ? lists : undefined;
 }
 
-// Line identity only: no source words or formatting. Each row is [entry, role, first].
+// Line identity only: no source words or formatting. Each row is [entry, role, first]. RR-105: a list that mixes entries without a marker
+// (an icon chip's row) and bulleted ones records the markerless entries as a third element, so only their first lines may lack a bullet.
 export function listLineRoles(items, omit = () => {}) {
   const lists = [];
   for (const item of items ?? []) {
@@ -411,7 +412,8 @@ export function listLineRoles(items, omit = () => {}) {
       for (const [role, text] of [['text', entry.text], ['description', entry.description]])
         text?.richLines?.forEach((_, line) => lines.push([index, role, role === 'text' && line === 0]));
     });
-    if (lines.length) lists.push([item.path, lines]);
+    const markerless = item.text.listEntries.flatMap((entry, index) => entry.marker?.none ? [index] : []);
+    if (lines.length) lists.push(markerless.length && markerless.length < item.text.listEntries.length ? [item.path, lines, markerless] : [item.path, lines]);
   }
   if (!lists.length) return undefined;
   try { return validateListRoles(lists); } catch {
@@ -424,7 +426,7 @@ export function validateListRoles(value) {
   if (!Array.isArray(value) || !value.length || value.length > MAX_LIST_PATHS) throw Error('Invalid list roles.');
   const paths = new Set(); let total = 0;
   for (const row of value) {
-    if (!Array.isArray(row) || row.length !== 2 || typeof row[0] !== 'string' || !LIST_PATH.test(row[0]) || paths.has(row[0]) || !Array.isArray(row[1]) || !row[1].length) throw Error('Invalid list roles path.');
+    if (!Array.isArray(row) || (row.length !== 2 && row.length !== 3) || typeof row[0] !== 'string' || !LIST_PATH.test(row[0]) || paths.has(row[0]) || !Array.isArray(row[1]) || !row[1].length) throw Error('Invalid list roles path.');
     paths.add(row[0]); let entry = -1, description = false;
     for (const line of row[1]) {
       if (!Array.isArray(line) || line.length !== 3 || !Number.isSafeInteger(line[0]) || !['text', 'description'].includes(line[1]) || typeof line[2] !== 'boolean') throw Error('Invalid list role.');
@@ -433,6 +435,7 @@ export function validateListRoles(value) {
       if (line[1] === 'description') description = true;
       if (++total > MAX_LIST_BREAKS) throw Error('Too many list roles.');
     }
+    if (row.length === 3 && (!Array.isArray(row[2]) || !row[2].length || row[2].some((index, position) => !Number.isSafeInteger(index) || index < 0 || index > entry || (position && index <= row[2][position - 1])))) throw Error('Invalid markerless list entries.');
   }
   return value;
 }
