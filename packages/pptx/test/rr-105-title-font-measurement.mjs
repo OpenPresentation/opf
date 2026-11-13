@@ -58,14 +58,15 @@ for (const [family, typefaces, written, fallback] of [
   const notes = [], result = await toPptx(input, {fonts, typefaces, bodyText: 'native', onDiagnostic: value => notes.push(value)}), shapes = headingShapes(result);
   assert.ok(shapes.every(value => value.includes('<a:latin typeface="' + written + '"')), family + ': preserve the serialized family');
   // RR-105 (opf#1291): a visual substitute cannot verify a native wrap, so the title keeps core's lines (one paragraph each, no wrap) in
-  // its one Title placeholder; only a face whose single-spaced line PowerPoint was measured on (Roboto here, not Arial) may wrap natively.
+  // its one Title placeholder; only a face whose single-spaced line PowerPoint was measured on may wrap natively (Roboto, and since
+  // 2026-11-13 Arial, which probe 2 measured in its own font: rr-105-soft-wrap-faces).
   // Either way no title falls back to line boxes.
   assert.equal(shapes.length, 1, family + '/' + typefaces + ': ' + JSON.stringify(notes));
   assert.match(shapes[0], /<p:ph type="title"\/>/);
   const fixed = (shapes[0].match(/<a:p>/g) ?? []).length > 1 && /<a:bodyPr\b[^>]*\bwrap="none"/.test(shapes[0]), soft = /<a:bodyPr\b[^>]*\bwrap="square"/.test(shapes[0]);
   assert.ok(fixed !== soft, family + '/' + typefaces + ': one of the two title forms');
   if (fallback) assert.ok(fixed, family + '/' + typefaces + ': fidelity follows the serialized family');
-  if (soft) assert.equal(written, 'Roboto', family + '/' + typefaces + ': native wrap only for a measured face');
+  if (soft) assert.ok(['Roboto', 'Arial'].includes(written), family + '/' + typefaces + ': native wrap only for a measured face');
   assert.ok(!notes.some(value => value.path === 'slides.0.title' && value.code === 'native-body-fallback'), family + '/' + typefaces + ': no line-box fallback');
   assert.ok(shapes.every(value => !/normAutofit|spAutoFit/.test(value)), family + ': no automatic font resizing');
   assert.ok(shapes.every(value => /<a:rPr[^>]*\bsz="[1-9]\d*"/.test(value)), family + ': explicit font sizes');
