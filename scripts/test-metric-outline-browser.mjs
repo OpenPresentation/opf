@@ -23,10 +23,13 @@ const metrics=[0,'',{value:42,unit:'ms',label:'Left\tRight  ',description:'Exact
   {value:1,unit:'%',label:'Completion'},
   {value:'\t1\t%',unit:'ms',label:'\tBefore\tAfter  ',description:'\t'},
   {value:'\r\n\r\n\n',label:'\t  ',description:'\n'}];
+// LH-189 (2026-11-13): the metrics stay under the display size (56 px). A tracked display line is one run with letter spacing, and a
+// browser counts the spacing after its last character where core and resvg do not: its advance reads one spacing short and a centered or
+// end-aligned line starts half or one spacing to the right (1.9 and 3.8 px on a 252 px figure). That difference is opf#1322, not this test's subject.
 const cases=[];
 for(const family of ['Carlito','Roboto'])for(const [width,height]of [[1280,720],[540,960]])for(const align of ['start','center','end'])for(const [index,metric]of metrics.entries()){
   const id=`${family}-${width}-${align}-${index+1}`;
-  const document={design:{dimensions:{widthInches:width/96,heightInches:height/96},contentAlignment:align,fontScheme:{id:'roboto',heading:family,body:family,code:family}},slides:[{composition:{minFontSize:24},metric}]};
+  const document={design:{dimensions:{widthInches:width/96,heightInches:height/96},contentAlignment:align,fontScheme:{id:'roboto',heading:family,body:family,code:family}},slides:[{composition:{minFontSize:24,maxFontSize:54},metric}]};
   const before=JSON.stringify(document),bound=resolvePresentation(document,options).slides[0],svg=toSvg(document,1,options),item=bound.geometry.items[0];
   assert.equal(JSON.stringify(document),before);assert.equal(item.metricLayout.overflow,false);
   cases.push({id,width,height,document,cell:item.box,layout:item.metricLayout,svg,sourceSha256:hash(before),svgSha256:hash(svg)});
