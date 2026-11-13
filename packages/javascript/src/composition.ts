@@ -6151,7 +6151,8 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
     }
     return { ...best.result, items, track: { kind: 'picture', edge: physical(edge), size: best.size, path: blockPath } };
   }
-  if (pictures.length || leaf('video').length || charts.length !== 1 || base.design.chartPrimary !== undefined) return base;
+  // RR-105 (coverage finding 24): an authored contentDirection of vertical keeps its column; the chart track would split it into a row.
+  if (pictures.length || leaf('video').length || charts.length !== 1 || base.design.chartPrimary !== undefined || (landscape && base.design.contentDirection === 'vertical') || (!landscape && base.design.contentDirection === 'horizontal')) return base;
   const chartOf = (result: SlideComposition) => result.items.find(item => item.field === 'chart');
   const chart = chartOf(base);
   if (!chart || !shortPlot(chart, bodyHeight(base), scale)) return base;
@@ -6164,6 +6165,8 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
   }
   return base;
 }
+/** RR-105: the chartPrimary values that place the chart at a side of its supporting blocks (`none` is the ordinary automatic body). */
+const CHART_PRIMARY_SIDES: ReadonlySet<string> = new Set(['top', 'bottom', 'start', 'end', 'left', 'right']);
 function composeLayout(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   const slide = record(input), layout = record(options.layout);
   // LH-83: the recomposition reads the record's design and composition and composes the body as if no layout were given; the
@@ -6851,6 +6854,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!(ruleOn('emphasis-band') || ruleOn('note-band')) || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || regions.length || !Array.isArray(slide.blocks) || authoredEmphasis(slide.blocks)) return undefined;
     const own = record(slide.composition);
     if ((own.mode !== undefined && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return undefined;
+    // RR-105 (coverage finding 24): a chartPrimary side splits the body into the chart's track and its supporting blocks (the author's
+    // arrangement, which design.chartPrimary keeps), so no block of it becomes a band or a pill.
+    if (!useTemplate && CHART_PRIMARY_SIDES.has(hints.chartPrimary as string) && slide.blocks.some((block: unknown) => record(block).chart !== undefined)) return undefined;
     const flowed = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) || eyebrowBlocks.has(index) ? [] : [{ block, index }]);
     const last = flowed[flowed.length - 1];
     // LH-50: a paragraph with an eyebrow keeps it: it is placed as a block of the body, never as the band or pill.
@@ -10140,6 +10146,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const chartIndex = pending.findIndex(node => !node.children && node.field === 'chart');
   const chartPrimary = chartSide !== undefined && !useTemplate && (chartTrack !== undefined || !ownMode) && !regions.length && chartIndex >= 0 && pending.some(node => node.children || node.field !== 'chart') ? chartSide : undefined;
   const firstChart = chartPrimary === 'left' || chartPrimary === 'top';
+  // RR-105 (coverage finding 24): an authored chartPrimary that cannot be drawn says so: a template's regions or promoted regions place the
+  // chart, or the slide's own composition.mode arranges the body.
+  if (chartSide && !chartTrack && !chartPrimary && chartIndex >= 0 && (hints.sources.chartPrimary === 'slide' || hints.sources.chartPrimary === 'deck') && pending.some(node => node.children || node.field !== 'chart')) {
+    const why = useTemplate ? "the slide's layout template places the chart in its regions (a template says this with a chart-beside region)" : regions.length ? "the slide's promoted regions place its blocks" : "the slide's own composition.mode arranges its body";
+    diagnostics.push({ code: 'arrangement-adapted', path: hints.paths.chartPrimary!, message: `design.chartPrimary "${hints.chartPrimary}" is not applied on this slide: ${why}.` });
+  }
   const rootSettings: Composition = chartPrimary
     ? { ...composition, mode: chartPrimary === 'left' || chartPrimary === 'right' ? 'row' : 'column', weights: chartTrack ? (firstChart ? [chartTrack.share, 1 - chartTrack.share] : [1 - chartTrack.share, chartTrack.share]) : firstChart ? [3, 2] : [2, 3], columns: undefined }
     : { ...composition, mode: composition.mode ?? directionMode };
@@ -10178,7 +10190,17 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   else if (chartPrimary) {
     const primary = pending[chartIndex]!, rest = pending.filter((_, index) => index !== chartIndex);
     const support: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: chartTrack?.mode ? { mode: chartTrack.mode } : chartTrack && ownMode ? { mode: ownMode } : {}, synthetic: true };
+    const first = items.length;
     arrange(firstChart ? [primary, support] : [support, primary], contentBox, rootSettings, 0);
+    // RR-105 (coverage finding 24): the paragraphs beside an authored chartPrimary sit in the middle of their track, level with the chart,
+    // instead of at its top over an empty foot (the track is the 2 of the 3:2 split). LH-49's own chart track keeps its stack.
+    const beside = items.slice(first).filter(item => item.field !== 'chart');
+    if (!chartTrack && beside.length && beside.every(item => item.field === 'text' && item.text && !item.frameBox && !item.emphasis && !('listEntries' in item.text) && !('richLines' in item.text))) {
+      const inkBottom = (item: ComposedItem) => item.box.y + ('richLines' in item.text! ? (item.text as RichTextFit).height : (item.text as TextFit).placement?.height ?? item.text!.lines.length * item.text!.lineHeight);
+      const top = Math.min(...beside.map(item => item.box.y)), bottom = Math.max(...beside.map(item => item.box.y + item.box.height)), ink = Math.max(...beside.map(inkBottom)) - top;
+      const dy = round((bottom - top - ink) / 2);
+      if (dy > .5) for (const item of beside) { item.box = { ...item.box, y: item.box.y + dy, height: Math.max(scale, item.box.height - dy) }; item.text = translateTextFit(item.text as TextFit, dy); }
+    }
   } else {
     const grouped = groupRoot(pending), roots = grouped?.nodes ?? pending;
     // LH-48: the one root block is the whole body (fillLone).
