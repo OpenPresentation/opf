@@ -1257,6 +1257,32 @@ function composeOverlay(value: unknown, frame: LayoutBox, shape: ImageShape, pat
   return { path, color: overlay.color, opacity, ...(edge ? { edge } : {}), box, shape: edge ? imageShape('rect', box) : shape };
 }
 
+/**
+ * RR-105: an image overlay moved onto the drawn picture. A contained picture in a rectangle frame smaller than its frame is covered where
+ * it is drawn: a whole-frame overlay covers the picture, and an edge band takes the same share of the picture along the same edge. Any
+ * other fit, a masked frame or a picture that fills its frame keeps the overlay as composed on the frame.
+ */
+function overlayOnPicture(overlay: ComposedOverlay, image: Pick<ComposedImage, 'box' | 'fit' | 'shape'>, picture: LayoutBox): ComposedOverlay {
+  const frame = image.box, drawn = roundBox(picture);
+  if (image.fit !== 'contain' || (image.shape && image.shape.preset !== 'rect') || (drawn.width >= frame.width - 0.5 && drawn.height >= frame.height - 0.5)) return overlay;
+  const edge = overlay.edge, across = edge === 'top' || edge === 'bottom';
+  const part = !edge ? 1 : across ? overlay.box.height / frame.height : overlay.box.width / frame.width;
+  const box = !edge ? drawn : edge === 'top' ? { ...drawn, height: round(drawn.height * part) }
+    : edge === 'bottom' ? { ...drawn, y: round(drawn.y + drawn.height * (1 - part)), height: round(drawn.height * part) }
+    : edge === 'left' ? { ...drawn, width: round(drawn.width * part) }
+    : { ...drawn, x: round(drawn.x + drawn.width * (1 - part)), width: round(drawn.width * part) };
+  return { ...overlay, box, shape: imageShape('rect', box) };
+}
+/**
+ * RR-105: the overlay of an image block as the engines draw it. Core places it on the drawn picture when it read the picture's aspect ratio
+ * (ComposedImage.picture); a host that reads it itself (a picture core could not, from a file or a host imageResolver) passes `aspect`, and
+ * the overlay moves onto the picture the host draws with `fitImage(image.box, image.fit, aspect, image.focus)`.
+ */
+export function pictureOverlay(image: ComposedImage, aspect?: number): ComposedOverlay | undefined {
+  if (!image.overlay || image.picture || !aspect || !(aspect > 0)) return image.overlay;
+  return overlayOnPicture(image.overlay, image, fitImage(image.box, image.fit, aspect, image.focus).image);
+}
+
 /** The offset of a block shorter than its cell by `spare`: 0 at the top, half at the middle, all of it at the bottom. */
 function anchoredOffset(spare: number, anchor: RegionAnchor): number {
   return Math.max(0, anchor === 'middle' ? spare / 2 : anchor === 'bottom' ? spare : 0);
@@ -1338,10 +1364,13 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   if (opacity !== undefined && opacity < 1) result.opacity = opacity;
   const recolor = composeRecolor(host.recolor);
   if (recolor) result.recolor = recolor;
-  const overlay = composeOverlay(host.overlay, box, shape, `${hostPath}.overlay`, context.mirrorSide, context.diagnostics);
+  const picture = pictureAspect ? fitImage(box, fit, pictureAspect, focus) : undefined;
+  const framed = composeOverlay(host.overlay, box, shape, `${hostPath}.overlay`, context.mirrorSide, context.diagnostics);
+  // RR-105: an overlay belongs to the drawn picture (pictureOverlay), as callouts do.
+  const overlay = framed && picture ? overlayOnPicture(framed, { box, fit, shape }, picture.image) : framed;
   if (overlay) result.overlay = overlay;
   if (context.placement) result.placement = context.placement;
-  if (pictureAspect) result.picture = fitImage(box, fit, pictureAspect, focus);
+  if (picture) result.picture = picture;
   const callouts = record(host.image).callouts;
   if (callouts !== undefined && context.callout) {
     // A document being edited may hold a callout validation refuses (or one whose panel is too far away to place): composition reports it
