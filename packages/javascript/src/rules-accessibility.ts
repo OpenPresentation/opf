@@ -265,7 +265,7 @@ const altRules: ValidationRule[] = [
 				for (const ref of assetRefs(context.document, slide.slide, slide.path, index === 0)) {
 					if (seen.has(ref.path)) continue;
 					seen.add(ref.path);
-					let alt = altOf(ref.value, context.document.assets);
+					let alt = altOf(ref.value, context.document.assets, context.document.variables, context.document.template === true);
 					if (ref.kind === 'video' && !alt) alt = typeof rec(ref.value).title === 'string' ? rec(ref.value).title : undefined;
 					if (alt !== undefined && alt.trim() !== '') continue;
 					if (alt === '') continue; // explicit decorative opt-out
@@ -290,7 +290,7 @@ const altRules: ValidationRule[] = [
 				for (const ref of assetRefs(context.document, slide.slide, slide.path, index === 0)) {
 					if (seen.has(ref.path)) continue;
 					seen.add(ref.path);
-					const alt = altOf(ref.value, context.document.assets)?.trim();
+					const alt = altOf(ref.value, context.document.assets, context.document.variables, context.document.template === true)?.trim();
 					if (!alt) continue;
 					const source = sourceOfAsset(ref.value);
 					const problem =
