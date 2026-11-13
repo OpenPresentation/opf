@@ -185,7 +185,7 @@ export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCo
     const position = mapped ?? 'right';
     if (layer.header) {
       if (!(position === 'right' || (position === 'top' && layer.headerLegend))) out.legend = position;
-    } else if (headerKind || !(defaultLegend && position === 'right')) out.legend = position;
+    } else if (headerKind || !(defaultLegend && (position === 'right' || (position === 'bottom' && layer.radarLegend)))) out.legend = position;
   } else if (defaultLegend && !layer.direct) out.legend = 'none';
 
   // LH-105: the direct labels an export writes in place of a legend (series names at the line ends, category names on the slices) are

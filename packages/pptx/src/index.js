@@ -1998,13 +1998,15 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report,
   const nativeLegend = doc["c:chartSpace"]?.["c:chart"]?.["c:legend"];
   const headerLegend = nativeLegend?.["c:legendPos"]?.val === 't' && nativeLegend?.["c:layout"]?.["c:manualLayout"] !== undefined;
   const headerCaption = doc["c:chartSpace"]?.["c:chart"]?.["c:title"]?.["c:layout"]?.["c:manualLayout"] !== undefined;
+  // RR-105: a radar's default legend under its web (core chart-radar.ts) is written at a manual position, as the header legend is.
+  const radarLegend = /radar/.test(String(chartNode.type)) && nativeLegend?.["c:legendPos"]?.val === 'b' && nativeLegend?.["c:layout"]?.["c:manualLayout"] !== undefined;
   const withOptions = chart => {
     // LH-105: series names at the line ends or category names on the slices, without a legend, are the default direct labels.
     // LH-109: a stacked chart's values inside its segments are the default whether its names stand beside it or its legend stayed.
     // LH-108, LH-109: a chart whose value list or series names were drawn as tagged shapes (`marked`) has no legend by default.
     const stacked = {'stacked-column': 'bar', '100pct-stacked-column': 'bar', 'stacked-area': 'area', '100pct-stacked-area': 'area'}[chartNode.type];
     const direct = marked || ((!nativeLegend || stacked !== undefined) && directLabelDefaults(chartNode.node, stacked ?? (String(chartNode.type).includes('line') ? 'line' : chartNode.type)));
-    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {layer: {header: headerCaption || headerLegend, headerLegend, direct},chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
+    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {layer: {header: headerCaption || headerLegend, headerLegend, radarLegend, direct},chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
       ...(combo ? {combo: {lineNode: combo.lines[0]?.node, secondaryValueAxis: secondaryValueAxisOf(plotArea, combo)}} : {})});
     for (const note of notes) report?.(note);
     if (budget.rejected?.length) report?.({code: 'chart-value-not-numeric', option: 'data', message: `${budget.rejected.length} cached chart ${budget.rejected.length === 1 ? 'value is' : 'values are'} not a number (first at ${budget.rejected[0]}) and ${budget.rejected.length === 1 ? 'imports as a gap' : 'import as gaps'}, never as a guessed value.`});

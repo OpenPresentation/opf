@@ -216,6 +216,10 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   // from the top of the chart box, taken before the header row narrows c.box.
   c.alignedRows = layer?.rows && { top: box.y + layer.rows.top, bottom: box.y + layer.rows.bottom, centers: layer.rows.centers.map((center) => box.y + center) };
   if (layer?.header) drawHeader(c, spec, layer.header);
+  // RR-105: a radar whose web is larger with its legend under it (core chart-radar.ts) draws the legend as a bottom row; the PPTX export
+  // writes c:legendPos b. Its value axis is core's too.
+  c.radar = layer?.radar;
+  if (layer?.radar?.legend === "bottom" && resolved.legend === undefined) placeLegend(c, spec, "bottom");
   if (!resolved.active) reportOptionDiagnostics(c, resolved);
   if (resolved.active) {
     reportOptionDiagnostics(c, resolved);
@@ -1358,7 +1362,7 @@ function renderRadarChart(c, spec) {
   const area = { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
   const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
   const radius = Math.max(1, Math.min(area.width / 2 - labelWidth, area.height / 2 - c.lineHeight - (wraps ? c.textHeight : 0)));
-  const scale = niceScale(values.length ? Math.min(...values) : 0, values.length ? Math.max(...values) : 1, maxIntervalsFor(radius, c.lineHeight), { endOnTick: true });
+  const scale = (c.radar && composedScale(c.radar.axis)) ?? niceScale(values.length ? Math.min(...values) : 0, values.length ? Math.max(...values) : 1, maxIntervalsFor(radius, c.lineHeight), { endOnTick: true });
   const angle = (i) => -Math.PI / 2 + i / count * Math.PI * 2;
   const rAt = (v) => axisFraction(Math.min(scale.max, Math.max(scale.min, v)), scale) * radius;
   const point = (i, v) => polar(cx, cy, rAt(v), angle(i));

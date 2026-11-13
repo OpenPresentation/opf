@@ -24,6 +24,7 @@ import type {ChartLayerRows} from './chart-rows.js';
 import type {ChartLayerDoughnut, ChartLayerReferences, ChartLayerStack, ChartLayerValueList, ChartLayerWaterfall} from './chart-marks.js';
 import type {ChartLayerHistogram} from './chart-histogram.js';
 import type {ChartNumericAxes} from './chart-numeric-axes.js';
+import {chartRadarLayout, type ChartLayerRadar} from './chart-radar.js';
 
 /** A small chart has at most this many series (LH-03). */
 export const SMALL_CHART_MAX_SERIES = 2;
@@ -125,6 +126,8 @@ export interface ChartLayer {
   references?: ChartLayerReferences;
   /** LH-160: a histogram's bin count and edge decimals, and whether its data labels fit (chart-histogram.ts). */
   histogram?: ChartLayerHistogram;
+  /** RR-105: a radar's legend placement and value axis (chart-radar.ts). */
+  radar?: ChartLayerRadar;
 }
 
 /** LH-105: one series name at the end of its line. Lengths are slide pixels. */
@@ -437,7 +440,8 @@ export function chartLayer(chart: unknown, data: ResolvedChartData, geometry: Ch
   const header = chartHeader(chart, data, geometry);
   const small = smallChart(chart, data, header ? {...geometry, box: {...geometry.box, y: geometry.box.y + header.height, height: Math.max(1, geometry.box.height - header.height)}} : geometry);
   const rings = chartRingLabels(chart, data);
-  return small || header || rings ? {...(small ? {small} : {}), ...(header ? {header} : {}), ...(rings ? {rings} : {})} : undefined;
+  const radar = chartRadarLayout(chart, data, geometry);
+  return small || header || rings || radar ? {...(small ? {small} : {}), ...(header ? {header} : {}), ...(rings ? {rings} : {}), ...(radar ? {radar} : {})} : undefined;
 }
 
 /**
