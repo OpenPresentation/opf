@@ -1,0 +1,176 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: languages, scripts and digits",
+  "description": "RR-105 format coverage: slide-level languages as tags and as inline records, right-to-left Arabic and Hebrew, Japanese and Chinese, numbering systems chosen by a -u-nu- tag, and a run in another language.",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "id": "english",
+      "title": "An English slide in an English deck",
+      "text": "Revenue grew 18 percent to 1,240,000 dollars in 2026."
+    },
+    {
+      "id": "arabic",
+      "language": "ar-EG",
+      "title": "نمو الإيرادات في عام ٢٠٢٦",
+      "blocks": [
+        {
+          "text": "ارتفعت الإيرادات بنسبة ١٨ في المئة هذا العام."
+        },
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "الربع",
+                "الشمال",
+                "الجنوب"
+              ],
+              "rows": [
+                [
+                  "الربع الأول",
+                  12,
+                  9
+                ],
+                [
+                  "الربع الثاني",
+                  18,
+                  11
+                ],
+                [
+                  "الربع الثالث",
+                  25,
+                  14
+                ]
+              ]
+            },
+            "legend": "top",
+            "dataLabels": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "arabic-latin-digits",
+      "language": "ar-EG-u-nu-latn",
+      "title": "الأرقام اللاتينية في شريحة عربية",
+      "text": "ارتفعت الإيرادات بنسبة 18 في المئة إلى 1240 ألف دولار."
+    },
+    {
+      "id": "hebrew-record",
+      "language": {
+        "name": "Hebrew",
+        "bcp47": "he-IL",
+        "direction": "rtl",
+        "script": "Hebr",
+        "ooxmlLang": "he-IL",
+        "code": "he"
+      },
+      "title": "שקופית בעברית",
+      "numbering": {
+        "style": "arabic",
+        "suffix": "period"
+      },
+      "items": [
+        "הכנסות עלו ב-18 אחוז",
+        "העלויות נשארו יציבות",
+        "הצוות גדל לשלושים איש"
+      ]
+    },
+    {
+      "id": "japanese",
+      "language": "ja-JP",
+      "title": "売上は前年比18%増加しました",
+      "items": [
+        "新しい倉庫を三か所開設",
+        "配送時間を二日短縮",
+        "顧客満足度が過去最高"
+      ]
+    },
+    {
+      "id": "chinese-digits",
+      "language": "zh-CN-u-nu-hanidec",
+      "title": "中文数字显示",
+      "text": "今年收入增长了18%，达到1240万元。"
+    },
+    {
+      "id": "hindi-digits",
+      "language": "hi-IN-u-nu-deva",
+      "title": "देवनागरी अंकों में आंकड़े",
+      "blocks": [
+        {
+          "metric": {
+            "value": "18%",
+            "label": "राजस्व वृद्धि"
+          }
+        },
+        {
+          "metric": {
+            "value": "1240",
+            "label": "नए ग्राहक"
+          }
+        }
+      ]
+    },
+    {
+      "id": "timeline-arabic",
+      "language": "ar-SA",
+      "title": "مراحل المشروع",
+      "timeline": [
+        {
+          "when": "يناير",
+          "what": "التجربة",
+          "status": "done"
+        },
+        {
+          "when": "مارس",
+          "what": "الإطلاق",
+          "status": "current"
+        },
+        {
+          "when": "يوليو",
+          "what": "التوسع",
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "timeline-japanese",
+      "language": "ja-JP",
+      "title": "プロジェクトの進捗",
+      "timeline": [
+        {
+          "when": "1月",
+          "what": "試験運用",
+          "status": "done"
+        },
+        {
+          "when": "3月",
+          "what": "本番開始",
+          "status": "current"
+        },
+        {
+          "when": "7月",
+          "what": "全国展開",
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "mixed-run",
+      "title": "A German phrase inside English text",
+      "text": [
+        "The plant in Hamburg calls the new shift ",
+        {
+          "text": "die Frühschicht",
+          "language": "de-DE",
+          "italic": true
+        },
+        ", and it starts at six."
+      ]
+    }
+  ]
+}

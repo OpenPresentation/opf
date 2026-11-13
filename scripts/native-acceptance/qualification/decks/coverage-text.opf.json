@@ -1,0 +1,249 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: text, runs, quotes, code and metrics",
+  "description": "RR-105 format coverage: every text run property, rich subtitles and tags, quotes with portraits, code with highlighted lines, and metrics in every shorthand.",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "id": "run-styles",
+      "type": "text",
+      "title": "Every run style in one paragraph",
+      "subtitle": [
+        {
+          "text": "Bold, italic, underline",
+          "bold": true
+        },
+        " and the rest"
+      ],
+      "tag": [
+        {
+          "text": "Runs",
+          "italic": true
+        }
+      ],
+      "text": [
+        "Revenue grew ",
+        {
+          "text": "18 percent",
+          "bold": true
+        },
+        ", margins held ",
+        {
+          "text": "steady",
+          "italic": true
+        },
+        ", the ",
+        {
+          "text": "old forecast",
+          "strikethrough": true
+        },
+        " ",
+        {
+          "text": "new forecast",
+          "underline": true
+        },
+        " is ",
+        {
+          "text": "on track",
+          "color": "accent2"
+        },
+        " and ",
+        {
+          "text": "risk is lower",
+          "color": {
+            "color": "accent1",
+            "darken": 0.3
+          }
+        },
+        ". The model runs on ",
+        {
+          "text": "forecast.py",
+          "code": true
+        },
+        " in ",
+        {
+          "text": "Aptos Display",
+          "fontFamily": "Aptos Display"
+        },
+        "."
+      ]
+    },
+    {
+      "id": "run-scripts",
+      "title": "Superscripts, subscripts and sizes",
+      "text": [
+        "Water is H",
+        {
+          "text": "2",
+          "subscript": true
+        },
+        "O, the area is 40 m",
+        {
+          "text": "2",
+          "superscript": true
+        },
+        ", and the ",
+        {
+          "text": "headline number",
+          "fontSize": 28,
+          "bold": true
+        },
+        " stands out."
+      ]
+    },
+    {
+      "id": "run-language-link",
+      "title": "Links and a phrase in another language",
+      "text": [
+        "Read the ",
+        {
+          "text": "release notes",
+          "link": "https://openpresentation.org/"
+        },
+        ", call ",
+        {
+          "text": "the desk",
+          "link": "tel:+15550100"
+        },
+        " or write to ",
+        {
+          "text": "support",
+          "link": "mailto:support@example.com"
+        },
+        ". The French team calls it ",
+        {
+          "text": "la feuille de route",
+          "language": "fr-FR",
+          "italic": true
+        },
+        "."
+      ]
+    },
+    {
+      "id": "quote-runs",
+      "type": "quote",
+      "title": "A quote written with runs",
+      "quote": {
+        "text": [
+          "The pilot paid for itself in ",
+          {
+            "text": "eleven weeks",
+            "bold": true
+          },
+          "."
+        ],
+        "attribution": "Alice Moreno",
+        "role": "Head of Operations",
+        "photo": {
+          "src": "./assets/alice.png",
+          "alt": "Portrait of Alice Moreno"
+        },
+        "portrait": "avatar",
+        "source": "Quarterly review, October 2026"
+      }
+    },
+    {
+      "id": "quote-side",
+      "title": "A quote with a side portrait",
+      "quote": {
+        "text": "We stopped arguing about the numbers once everyone saw the same chart.",
+        "attribution": "Alice Moreno",
+        "role": "Head of Operations",
+        "photo": {
+          "src": "./assets/alice.png",
+          "alt": "Portrait of Alice Moreno"
+        },
+        "portrait": "side"
+      }
+    },
+    {
+      "id": "quote-string",
+      "title": "A quote as one string",
+      "quote": "Fewer handoffs, faster answers."
+    },
+    {
+      "id": "code-highlight",
+      "type": "code",
+      "title": "Code with highlighted lines",
+      "code": {
+        "source": "def forecast(rows):\n    total = sum(r.value for r in rows)\n    trend = total / len(rows)\n    return round(trend, 1)\n\nprint(forecast(load(\"q3.csv\")))",
+        "language": "python",
+        "filename": "forecast.py",
+        "highlight": [
+          2,
+          [
+            3,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "code-string",
+      "title": "Code as one string",
+      "code": "opf validate deck.opf.json --fail-on warning"
+    },
+    {
+      "id": "metric-object",
+      "type": "metric",
+      "title": "A metric with every field",
+      "metric": {
+        "value": 4.2,
+        "unit": "M",
+        "label": "Monthly active readers",
+        "delta": 0.6,
+        "trend": "up",
+        "sentiment": "positive",
+        "icon": "lucide:users"
+      }
+    },
+    {
+      "id": "metric-shorthands",
+      "title": "Metrics as a string, a number and an object",
+      "blocks": [
+        {
+          "metric": "98%"
+        },
+        {
+          "metric": 1240
+        },
+        {
+          "metric": {
+            "value": "3.1 days",
+            "label": "Cycle time",
+            "delta": "-0.4 days",
+            "trend": "down",
+            "sentiment": "negative"
+          }
+        },
+        {
+          "metric": {
+            "value": "12",
+            "label": "Open risks",
+            "delta": "0",
+            "trend": "flat",
+            "sentiment": "neutral"
+          }
+        }
+      ]
+    },
+    {
+      "id": "metric-root-string",
+      "title": "A root metric as a string",
+      "metric": "42 days"
+    },
+    {
+      "id": "heading-spaces",
+      "title": "Revenue  and  margin, side by side",
+      "text": "The title keeps the double spaces its author typed."
+    },
+    {
+      "id": "metric-root-number",
+      "title": "A root metric as a number",
+      "metric": 7
+    }
+  ]
+}

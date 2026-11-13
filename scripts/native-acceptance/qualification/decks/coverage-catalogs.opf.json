@@ -1,0 +1,652 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: embedded catalogs",
+  "description": "RR-105 format coverage: a document that embeds the default records it uses, its own custom records of every kind (layouts, themes, color and font schemes, narratives, audiences, purposes, tones, icon sets) and a named catalog with a package source, plus deck-local icons and an asset registry.",
+  "language": "en-US",
+  "narrative": "harbor-story",
+  "audience": "harbor-board",
+  "purpose": "harbor-approve",
+  "tone": "acme:plain",
+  "icons": {
+    "anchor": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"5\" r=\"2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M12 7v14M5 13a7 7 0 0 0 14 0\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/></svg>"
+  },
+  "assets": {
+    "mark": {
+      "src": "./assets/icon.svg",
+      "alt": "Harbor mark"
+    }
+  },
+  "design": {
+    "theme": "harbor-theme",
+    "colorScheme": "harbor-colors",
+    "fontScheme": "harbor-fonts"
+  },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "narratives": {
+        "scqa": {
+          "name": "SCQA (Situation–Complication–Question–Answer)",
+          "summary": "Barbara Minto's pyramid-principle arc: surface the recommendation up front, then layer key arguments and supporting evidence beneath it. The default for executive memos, strategic recommendations, and consulting decks where the audience needs the answer fast.",
+          "audienceFit": [
+            "executives",
+            "boards",
+            "leadership-teams"
+          ],
+          "duration": {
+            "min": 5,
+            "max": 20
+          },
+          "tags": [
+            "executive",
+            "strategy",
+            "consulting",
+            "minto",
+            "pyramid"
+          ],
+          "beats": [
+            {
+              "id": "situation",
+              "name": "Situation",
+              "description": "Establish the shared context: what is true today that the audience already agrees on. State only facts the audience accepts without argument. The goal is alignment, not persuasion — you are setting the stage."
+            },
+            {
+              "id": "complication",
+              "name": "Complication",
+              "description": "Introduce the disturbance to the situation: what changed, what is at risk, what is no longer working. This is the tension that makes the audience lean in. Be specific and quantify the change where possible."
+            },
+            {
+              "id": "question",
+              "name": "Key Question",
+              "description": "Surface the question the complication forces the audience to answer. Frame it explicitly — 'Should we…?', 'How do we…?', 'What changes if…?'. The question should feel inevitable given the complication."
+            },
+            {
+              "id": "answer",
+              "name": "Answer",
+              "description": "Deliver the recommendation in a single sentence, up front. No arguments yet, no caveats — just the conclusion the rest of the deck will defend. This is the apex of the Minto pyramid; everything that follows supports it.",
+              "layout": "statement"
+            },
+            {
+              "id": "key-arguments",
+              "name": "Key Arguments",
+              "description": "Lay out the two or three top-level reasons the answer is correct. One slide per argument, or one summary slide naming all of them. Each argument should stand alone as a compelling reason; together they should be exhaustive of the case."
+            },
+            {
+              "id": "supporting-evidence",
+              "name": "Supporting Evidence",
+              "description": "Present the data, examples, and case studies that ground each argument. Pyramid-principle style: every claim above is backed by something verifiable here. Cite sources; show the numbers; let the evidence carry the weight."
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "board": {
+          "name": "Board of Directors",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 90,
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative"
+          ],
+          "tags": [
+            "governance",
+            "oversight",
+            "leadership"
+          ]
+        }
+      },
+      "purposes": {
+        "decide": {
+          "name": "Drive a Decision",
+          "summary": "Frame options, evidence, tradeoffs, and a recommendation so the audience can choose.",
+          "description": "Use when the deck exists to get a yes/no, select among options, approve a recommendation, or resolve ambiguity. Lead with the decision needed and make the ask explicit.",
+          "outcome": "The audience makes or authorizes a clear decision.",
+          "successCriteria": [
+            "Decision owner understands the options",
+            "Recommendation and tradeoffs are explicit",
+            "The final ask is concrete"
+          ],
+          "recommendedNarratives": [
+            "scqa",
+            "board-meeting",
+            "project-proposal"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative",
+            "persuasive"
+          ],
+          "tags": [
+            "decision",
+            "recommendation",
+            "approval"
+          ]
+        }
+      },
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen",
+          "variants": [
+            {
+              "id": "light",
+              "name": "Light",
+              "variant": "light1"
+            },
+            {
+              "id": "light-alt",
+              "name": "Light alt",
+              "variant": {
+                "background": "light1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            },
+            {
+              "id": "dark",
+              "name": "Dark",
+              "variant": "dark1"
+            },
+            {
+              "id": "dark-alt",
+              "name": "Dark alt",
+              "variant": {
+                "background": "dark1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "colorSchemes": {
+        "forest-green": {
+          "name": "Forest Green",
+          "accent1": "#4A7C59",
+          "accent2": "#68B0AB",
+          "accent3": "#8FC0A9",
+          "accent4": "#C8D5B9",
+          "accent5": "#DACDA6",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#263F2E",
+          "followedHyperlink": "#68B0AB",
+          "hyperlink": "#4A7C59",
+          "light1": "#FFFFFF",
+          "light2": "#EEF5F0",
+          "summary": "Organic green palette for growth, health, and sustainability stories.",
+          "description": "A green and soft-neutral scheme for decks about growth, renewal, wellness, and environmental impact.",
+          "tags": [
+            "organic",
+            "healthy",
+            "sustainable",
+            "fresh",
+            "balanced"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "georgia": {
+          "name": "Georgia",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Georgia",
+          "minor": "Georgia",
+          "textSample": "Warm digital serif",
+          "type": "serif",
+          "description": "Georgia is a serif OPF font scheme for Latin presentations, using Georgia for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "layouts": {
+        "metrics": {
+          "name": "Metrics",
+          "summary": "One to six headline numbers, with an optional note.",
+          "tags": [
+            "Numbers"
+          ],
+          "design": {
+            "contentAlignment": "center"
+          },
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "metrics",
+              "accepts": [
+                "metric",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid",
+              "anchor": "middle"
+            },
+            {
+              "name": "note",
+              "size": "auto",
+              "accepts": [
+                "text",
+                "list"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          ],
+          "description": "Highlight a small set of important numbers. Give each number a label and the context needed to interpret it.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/metrics.svg"
+          }
+        }
+      }
+    },
+    "custom": {
+      "layouts": {
+        "harbor-metrics": {
+          "name": "Harbor metrics",
+          "summary": "One to six headline numbers, with an optional note.",
+          "tags": [
+            "Numbers"
+          ],
+          "design": {
+            "contentAlignment": "center"
+          },
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "metrics",
+              "accepts": [
+                "metric",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid",
+              "anchor": "middle"
+            },
+            {
+              "name": "note",
+              "size": "auto",
+              "accepts": [
+                "text",
+                "list"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          ],
+          "description": "Highlight a small set of important numbers. Give each number a label and the context needed to interpret it.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/metrics.svg"
+          }
+        }
+      },
+      "themes": {
+        "harbor-theme": {
+          "name": "Harbor theme",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen",
+          "variants": [
+            {
+              "id": "light",
+              "name": "Light",
+              "variant": "light1"
+            },
+            {
+              "id": "light-alt",
+              "name": "Light alt",
+              "variant": {
+                "background": "light1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            },
+            {
+              "id": "dark",
+              "name": "Dark",
+              "variant": "dark1"
+            },
+            {
+              "id": "dark-alt",
+              "name": "Dark alt",
+              "variant": {
+                "background": "dark1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "colorSchemes": {
+        "harbor-colors": {
+          "name": "Harbor colors",
+          "accent1": "#0F4C81",
+          "accent2": "#68B0AB",
+          "accent3": "#8FC0A9",
+          "accent4": "#C8D5B9",
+          "accent5": "#DACDA6",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#263F2E",
+          "followedHyperlink": "#68B0AB",
+          "hyperlink": "#4A7C59",
+          "light1": "#FFFFFF",
+          "light2": "#EEF5F0",
+          "summary": "Organic green palette for growth, health, and sustainability stories.",
+          "description": "A green and soft-neutral scheme for decks about growth, renewal, wellness, and environmental impact.",
+          "tags": [
+            "organic",
+            "healthy",
+            "sustainable",
+            "fresh",
+            "balanced"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "harbor-fonts": {
+          "name": "Harbor fonts",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Georgia",
+          "minor": "Georgia",
+          "textSample": "Warm digital serif",
+          "type": "serif",
+          "description": "Georgia is a serif OPF font scheme for Latin presentations, using Georgia for both headings and body text."
+        }
+      },
+      "narratives": {
+        "harbor-story": {
+          "name": "Harbor story",
+          "summary": "Barbara Minto's pyramid-principle arc: surface the recommendation up front, then layer key arguments and supporting evidence beneath it. The default for executive memos, strategic recommendations, and consulting decks where the audience needs the answer fast.",
+          "audienceFit": [
+            "executives",
+            "boards",
+            "leadership-teams"
+          ],
+          "duration": {
+            "min": 5,
+            "max": 20
+          },
+          "tags": [
+            "executive",
+            "strategy",
+            "consulting",
+            "minto",
+            "pyramid"
+          ],
+          "beats": [
+            {
+              "id": "situation",
+              "name": "Situation",
+              "description": "Establish the shared context: what is true today that the audience already agrees on. State only facts the audience accepts without argument. The goal is alignment, not persuasion — you are setting the stage."
+            },
+            {
+              "id": "complication",
+              "name": "Complication",
+              "description": "Introduce the disturbance to the situation: what changed, what is at risk, what is no longer working. This is the tension that makes the audience lean in. Be specific and quantify the change where possible."
+            },
+            {
+              "id": "question",
+              "name": "Key Question",
+              "description": "Surface the question the complication forces the audience to answer. Frame it explicitly — 'Should we…?', 'How do we…?', 'What changes if…?'. The question should feel inevitable given the complication."
+            },
+            {
+              "id": "answer",
+              "name": "Answer",
+              "description": "Deliver the recommendation in a single sentence, up front. No arguments yet, no caveats — just the conclusion the rest of the deck will defend. This is the apex of the Minto pyramid; everything that follows supports it.",
+              "layout": "statement"
+            },
+            {
+              "id": "key-arguments",
+              "name": "Key Arguments",
+              "description": "Lay out the two or three top-level reasons the answer is correct. One slide per argument, or one summary slide naming all of them. Each argument should stand alone as a compelling reason; together they should be exhaustive of the case."
+            },
+            {
+              "id": "supporting-evidence",
+              "name": "Supporting Evidence",
+              "description": "Present the data, examples, and case studies that ground each argument. Pyramid-principle style: every claim above is backed by something verifiable here. Cite sources; show the numbers; let the evidence carry the weight."
+            }
+          ]
+        }
+      },
+      "audiences": {
+        "harbor-board": {
+          "name": "Harbor board",
+          "summary": "Directors with fiduciary responsibility who balance oversight, advice, and approval.",
+          "description": "The board is governance-first. They want a complete picture: financial health, key metrics, functional updates, risks, and forward-looking topics. Surface bad news honestly — under-disclosure erodes trust faster than the problems themselves. Bring specific asks that turn the meeting into a working session rather than a recital.",
+          "seniority": "c-suite",
+          "technicalFluency": "medium",
+          "decisionPower": "decision-maker",
+          "attentionBudgetMinutes": 90,
+          "recommendedNarratives": [
+            "board-meeting",
+            "qbr",
+            "scqa",
+            "strategic-advisory",
+            "pyramid-principle",
+            "situation-complication-resolution"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative"
+          ],
+          "tags": [
+            "governance",
+            "oversight",
+            "leadership"
+          ]
+        }
+      },
+      "purposes": {
+        "harbor-approve": {
+          "name": "Approve",
+          "summary": "Frame options, evidence, tradeoffs, and a recommendation so the audience can choose.",
+          "description": "Use when the deck exists to get a yes/no, select among options, approve a recommendation, or resolve ambiguity. Lead with the decision needed and make the ask explicit.",
+          "outcome": "The audience makes or authorizes a clear decision.",
+          "successCriteria": [
+            "Decision owner understands the options",
+            "Recommendation and tradeoffs are explicit",
+            "The final ask is concrete"
+          ],
+          "recommendedNarratives": [
+            "scqa",
+            "board-meeting",
+            "project-proposal"
+          ],
+          "recommendedTones": [
+            "formal",
+            "authoritative",
+            "persuasive"
+          ],
+          "tags": [
+            "decision",
+            "recommendation",
+            "approval"
+          ]
+        }
+      },
+      "tones": {
+        "harbor-tone": {
+          "name": "Harbor tone",
+          "summary": "Plain and short."
+        }
+      },
+      "iconSets": {
+        "harbor": {
+          "name": "Harbor icons",
+          "license": "MIT",
+          "copyright": "Harbor Labs",
+          "viewBox": [
+            0,
+            0,
+            24,
+            24
+          ],
+          "style": "stroke",
+          "strokeWidth": 2,
+          "icons": {
+            "crane": "M4 21h16M8 21V5h8l4 4M8 9h12",
+            "ship": "M3 17l2 4h14l2-4H3zM6 17V9h12v8M12 9V4"
+          }
+        }
+      }
+    },
+    "acme": {
+      "source": "pkg:@acme/opf-catalog",
+      "tones": {
+        "plain": {
+          "name": "Plain",
+          "summary": "Plain words."
+        }
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "custom-layout",
+      "layout": "harbor-metrics",
+      "title": "Three numbers in our own metrics layout",
+      "blocks": [
+        {
+          "metric": {
+            "value": "12%",
+            "label": "Volume",
+            "icon": "harbor:crane"
+          }
+        },
+        {
+          "metric": {
+            "value": "3.1 days",
+            "label": "Dwell time",
+            "icon": "harbor:ship"
+          }
+        },
+        {
+          "metric": {
+            "value": "99%",
+            "label": "Uptime",
+            "icon": "anchor"
+          }
+        }
+      ]
+    },
+    {
+      "id": "default-layout",
+      "layout": "metrics",
+      "title": "The same numbers in the embedded default layout",
+      "blocks": [
+        {
+          "metric": {
+            "value": "12%",
+            "label": "Volume",
+            "icon": "asset:mark"
+          }
+        },
+        {
+          "metric": {
+            "value": "3.1 days",
+            "label": "Dwell time"
+          }
+        }
+      ]
+    },
+    {
+      "id": "slide-scheme",
+      "title": "A slide that names an embedded default color scheme",
+      "text": "Forest green comes from the embedded default records.",
+      "design": {
+        "colorScheme": "forest-green"
+      }
+    }
+  ]
+}
