@@ -2163,6 +2163,19 @@ export function displayDepth(fit: { fontSize: number; lineHeight: number }): num
  * stands only where it bought a two-line text a larger step, and three lines or more always keep the body pitch.
  */
 const TIGHT_DISPLAY = Symbol('opf.tightDisplay');
+/**
+ * opf#1321: composeSlide composes a slide a second time (TIGHT_DISPLAY) only when that composition can differ from the normal one. The
+ * tight mode changes four things and nothing else: the fit of a display text (fitPlacedText), the fit of a one-message quote's body
+ * (layoutQuote), and which fits take the display tracking (layoutQuote, displayStyles). While composeSlide composes normally it has a
+ * probe on this stack, and each of those places also works out what the tight mode would give for the same arguments and marks the
+ * probes when it differs. A composition whose probe is unmarked is, step for step, the composition the tight mode would produce, so the
+ * second pass is skipped. Nested composeSlide calls mark every probe above them. Measured 2026-11-13 on the 966 example slides: the
+ * second pass ran for 981 of 986 compositions and was kept for none.
+ */
+const tightProbes: { differs: boolean }[] = [];
+const tightProbing = (): boolean => tightProbes.some(probe => !probe.differs);
+const tightDiffers = (): void => { for (const probe of tightProbes) probe.differs = true; };
+const sameFit = (a: unknown, b: unknown): boolean => JSON.stringify(a) === JSON.stringify(b);
 /** LH-189: the most lines a display text may take and still tighten: one in the normal composition, two in the tight one. */
 const displayLines = (tight: boolean): number => tight ? 2 : 1;
 const fitLines = (fit: TextFit | RichTextFit): number => 'richLines' in fit ? (fit as RichTextFit).richLines.length : fit.lines.length;
@@ -2204,8 +2217,12 @@ function displayMeasure(measure: MeasureTextWidth, text: string, from: number): 
  */
 function displayStyles(items: readonly ComposedItem[], from: number, display: (field: string, path: string) => boolean, tight: boolean): void {
   for (const item of items) {
-    if (item.type !== 'text' || !item.text || 'listEntries' in item.text || !display(item.field, item.path) || !item.textStyle || item.textStyle.tracking || fitLines(item.text) > displayLines(tight)) continue;
-    if (linePitch(item.text.fontSize, from) === DISPLAY_LINE_PITCH && displayTracks(annotationText(item.value))) item.textStyle = { ...item.textStyle, tracking: DISPLAY_TRACKING };
+    if (item.type !== 'text' || !item.text || 'listEntries' in item.text || !display(item.field, item.path) || !item.textStyle || item.textStyle.tracking) continue;
+    const tracks = linePitch(item.text.fontSize, from) === DISPLAY_LINE_PITCH && displayTracks(annotationText(item.value)), lines = fitLines(item.text);
+    // opf#1321: a fit that only the tight mode would track makes the tight composition differ.
+    if (!tight && tracks && lines > displayLines(false) && lines <= displayLines(true) && tightProbing()) tightDiffers();
+    if (lines > displayLines(tight)) continue;
+    if (tracks) item.textStyle = { ...item.textStyle, tracking: DISPLAY_TRACKING };
   }
 }
 /**
@@ -2402,8 +2419,16 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   const fit = (part:QuoteTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum):TextFit|RichTextFit|undefined => {
     if (!usable(area)) return undefined;
     if (part.role !== 'body' || !Number.isFinite(from)) return fitAs(part,area,size,floor,Infinity,Infinity);
-    const shown = fitAs(part,area,size,floor,tight?from:Infinity,part.style.tracking?Infinity:from);
-    return linePitch(shown.fontSize,from) !== DISPLAY_LINE_PITCH || fitLines(shown) <= displayLines(tight) ? shown : fitAs(part,area,size,floor,Infinity,Infinity);
+    const trackFrom = part.style.tracking?Infinity:from;
+    const shown = fitAs(part,area,size,floor,tight?from:Infinity,trackFrom);
+    const kept = linePitch(shown.fontSize,from) !== DISPLAY_LINE_PITCH || fitLines(shown) <= displayLines(tight), result = kept ? shown : fitAs(part,area,size,floor,Infinity,Infinity);
+    // opf#1321: what the tight mode would fit here; a different fit makes the tight composition differ.
+    if (!tight && tightProbing()) {
+      const tightShown = fitAs(part,area,size,floor,from,trackFrom);
+      const tightResult = linePitch(tightShown.fontSize,from) !== DISPLAY_LINE_PITCH || fitLines(tightShown) <= displayLines(true) ? tightShown : kept ? fitAs(part,area,size,floor,Infinity,Infinity) : result;
+      if (!sameFit(result, tightResult)) tightDiffers();
+    }
+    return result;
   };
   const heightOf = (fit:TextFit|RichTextFit) => 'richLines' in fit ? (fit as RichTextFit).height : fit.lines.length*fit.lineHeight;
   // LH-114: a pull line has no card inset; its body runs under the rule across the whole box.
@@ -2525,7 +2550,12 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     if (floorFit) { part.box = room; part.fit = {...floorFit, overflow:true}; }
   }
   // LH-189: a plain body fitted at a display size draws with the tracking it was measured with.
-  if (body.fit && !body.runs && !body.style.tracking && linePitch(body.fit.fontSize, from) === DISPLAY_LINE_PITCH && fitLines(body.fit) <= displayLines(tight)) body.style = {...body.style, tracking: DISPLAY_TRACKING};
+  if (body.fit && !body.runs && !body.style.tracking && linePitch(body.fit.fontSize, from) === DISPLAY_LINE_PITCH) {
+    const lines = fitLines(body.fit);
+    // opf#1321: a body that only the tight mode would track makes the tight composition differ.
+    if (!tight && lines > displayLines(false) && lines <= displayLines(true) && tightProbing()) tightDiffers();
+    if (lines <= displayLines(tight)) body.style = {...body.style, tracking: DISPLAY_TRACKING};
+  }
   return {bounds,algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,...(photo?{photo}:{}),...(rule?{rule}:{}),diagnostics,overflow:diagnostics.length>0};
 }
 
@@ -5329,7 +5359,11 @@ function growMixedCode(input: unknown, options: ComposeSlideOptions, result: Sli
 }
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   if (options.textMeasurement) options = { ...options, textMeasurement: memoizedMeasurement(options.textMeasurement) };
-  const result = tightened(input, options, composeSlideOnce(input, options));
+  const probe = (options as Record<symbol, unknown>)[TIGHT_DISPLAY] !== undefined || options.fill === false ? undefined : { differs: false };
+  if (probe) tightProbes.push(probe);
+  let normal: SlideComposition;
+  try { normal = composeSlideOnce(input, options); } finally { if (probe) tightProbes.pop(); }
+  const result = tightened(input, options, normal, probe);
   if (options.messageSurface) result.surface = options.messageSurface;
   // SH-04: the overlay goes on the slide's final composition (every arrangement, growth and recomposition settled), so it never moves
   // content and follows the blocks it is attached to; its text is fitted by the slide's own fitter (composeLayout's overlay pass).
@@ -5354,8 +5388,10 @@ function drawnSizes(result: SlideComposition): Map<string, number> {
  * when it pays: a text reaches a larger size there, no text is smaller and nothing more overflows. Otherwise the normal composition, where
  * display text keeps the body pitch.
  */
-function tightened(input: unknown, options: ComposeSlideOptions, normal: SlideComposition): SlideComposition {
+function tightened(input: unknown, options: ComposeSlideOptions, normal: SlideComposition, probe?: { differs: boolean }): SlideComposition {
   if ((options as Record<symbol, unknown>)[TIGHT_DISPLAY] !== undefined || options.fill === false) return normal;
+  // opf#1321: nothing in the normal composition would have come out differently in the tight mode, so the tight composition is this one.
+  if (probe && !probe.differs) return normal;
   const near = displayFrom(Math.min(normal.width, normal.height) / 720) / TYPE_SCALE_RATIO - FONT_GRID_EPSILON;
   const candidate = normal.items.some(item => (item.field === 'title' || item.field === 'subtitle' || item.field === 'text') && item.text && !('listEntries' in item.text) && item.text.fontSize >= near && fitLines(item.text) <= 2
     || item.quoteLayout?.parts.some(part => part.role === 'body' && part.fit && part.fit.fontSize >= near && fitLines(part.fit) <= 2));
@@ -6600,8 +6636,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const ownFaces=Array.isArray(authored)&&authored.some(run=>!!run&&typeof run==='object'&&((run as RichTextRun).fontFamily!==undefined||(run as RichTextRun).code===true));
     const from=displayText(field,path)&&displayTracks(text)&&!ownFaces?displayFrom(scale):Infinity;
     if(!Number.isFinite(from)) return fitPlacedAs(field,authored,text,box,size,minimum,path,explicitAlignment,Infinity,Infinity);
-    const fit=fitPlacedAs(field,authored,text,box,size,minimum,path,explicitAlignment,tightDisplay?from:Infinity,styleFor(field,path).tracking?Infinity:from);
-    return fit.fontSize<from-1/FONT_SIZE_GRID_PER_PX-1e-9||fitLines(fit)<=displayLines(tightDisplay)?fit:fitPlacedAs(field,authored,text,box,size,minimum,path,explicitAlignment,Infinity,Infinity);
+    const trackFrom=styleFor(field,path).tracking?Infinity:from,under=from-1/FONT_SIZE_GRID_PER_PX-1e-9;
+    const fit=fitPlacedAs(field,authored,text,box,size,minimum,path,explicitAlignment,tightDisplay?from:Infinity,trackFrom);
+    const kept=fit.fontSize<under||fitLines(fit)<=displayLines(tightDisplay),result=kept?fit:fitPlacedAs(field,authored,text,box,size,minimum,path,explicitAlignment,Infinity,Infinity);
+    // opf#1321: what the tight mode would fit here; a different fit makes the tight composition differ.
+    if(!tightDisplay&&tightProbing()){
+      const tightFit=fitPlacedAs(field,authored,text,box,size,minimum,path,explicitAlignment,from,trackFrom);
+      const tightResult=tightFit.fontSize<under||fitLines(tightFit)<=displayLines(true)?tightFit:kept?fitPlacedAs(field,authored,text,box,size,minimum,path,explicitAlignment,Infinity,Infinity):result;
+      if(!sameFit(result,tightResult))tightDiffers();
+    }
+    return result;
   };
   const fitPlacedAs = (field:string,authored:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment:'left'|'center'|'right'|undefined,from:number,trackFrom:number):TextFit|RichTextFit => {
     const value=displayEmphasis(field,authored,path);
