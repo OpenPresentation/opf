@@ -1,0 +1,103 @@
+{
+  "manifestVersion": "0.34.0",
+  "revision": "b5629b2ea660c9cb2a295e9e3a39377b062a0f72",
+  "opfVersion": "0.33.0",
+  "node": "v24.21.0",
+  "platform": "darwin-arm64",
+  "builtAt": "2026-11-13T00:05:29.187Z",
+  "decks": [
+    {
+      "id": "explicit-chart-reference-lines",
+      "source": "examples/technical/explicit-chart-reference-lines.opf.json",
+      "sourceSha256": "c74c950bea2a8f22075f411810b049cdf0973d09e44a2d81ba6a3f4357ec45b9",
+      "previewOk": true,
+      "previewSlides": 5,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/explicit-chart-reference-lines.pptx",
+          "ok": true,
+          "sha256": "4ce9454192bd65d4a073655a7ee1f75cac4ebc28a10124f5588b6dccec9bceec",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-reference-overlay",
+              "severity": "warning",
+              "path": "/slides/3/chart",
+              "message": "Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes."
+            },
+            {
+              "ruleId": "pptx/chart-reference-overlay",
+              "severity": "warning",
+              "path": "/slides/4/chart",
+              "message": "Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "singleton-combo-reference-lines",
+      "source": "examples/technical/singleton-combo-reference-lines.opf.json",
+      "sourceSha256": "ae1c1b85907b08201622dd0025cd79e2aa8dbe618789a67c163bfcb790487742",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/singleton-combo-reference-lines.pptx",
+          "ok": true,
+          "sha256": "e5dd04f7b7d9e81c5663f3ba09073a0cb58ff8784b72aa686446bd582b64283c",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-reference-overlay",
+              "severity": "warning",
+              "path": "/slides/0/chart",
+              "message": "Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localized-chart-references",
+      "source": "examples/technical/localized-chart-references.opf.json",
+      "sourceSha256": "16aa9e352bfaac72d9c34430973042afd9b6510202e43a12692525e1b91060a9",
+      "previewOk": true,
+      "previewSlides": 7,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/localized-chart-references.pptx",
+          "ok": true,
+          "sha256": "3d42b3e251b89a23291a769522ed13d302bb42a3467a67adc8f3ca1d6df43132",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Arial Black, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
