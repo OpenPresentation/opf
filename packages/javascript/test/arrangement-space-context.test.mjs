@@ -26,7 +26,10 @@ test('centered Arabic arrangement wrapping never measures its trailing space in 
  const context=resolveSlideContext(constrained,1,{catalogs:[gallery],fonts:{textMeasurement:{measure}}});
  const geometry=composeSlide(context.slide,context.options);
  assert.equal(geometry.arrangements.length,1,'The actual flow arrangement is composed');
- assert(calls.some((text,index)=>text.endsWith(' ')&&calls[index+1]===text.slice(0,-1)),'Trimming measures the full fragment then its exact displayed text');
+ // 2026-11-13: composeSlide asks the host once per string, size and style in a call (compose-measurement-memo.test.mjs). The line breaker
+ // measured the displayed word before the trimmed fragment, so trimming's second request is answered from the memo instead of reaching
+ // the host right after the full fragment; the host still measures the full fragment and its exact displayed text, never the space.
+ assert(calls.some(text=>text.endsWith(' ')&&calls.includes(text.slice(0,-1))),'Trimming measures the full fragment and its exact displayed text');
  assert(!calls.some(text=>/^\s+$/u.test(text)),'No missing Latin face was demanded for an isolated trailing space');
  const list=geometry.items.find(item=>item.field==='items');
  const lines=list.listColumns[3].text.listEntries[0].text.richLines;

@@ -75,9 +75,26 @@ export async function runThumbnailPaintedFitRegression({ artifactDir } = {}) {
       };
       const matrix = svg.getScreenCTM();
       const texts = [...svg.querySelectorAll('text')];
+      // 2026-11-13 (LH-188): the slide is a one-message slide, so its text grows and, on a portrait slide, wraps; a label is every line
+      // drawn for it (consecutive text elements that together read as the label, the thumbnails draw without trace paths), and its
+      // bounds are their union.
+      const normal = value => value.replace(/\s+/g, ' ').trim();
+      const linesOf = text => {
+        for (let start = 0; start < texts.length; start++) {
+          let drawn = '';
+          for (let end = start; end < texts.length; end++) {
+            drawn += texts[end].textContent;
+            if (normal(drawn) === text) return texts.slice(start, end + 1);
+            if (!text.startsWith(normal(drawn))) break;
+          }
+        }
+        return [];
+      };
       const labels = ['Slide ' + (index + 1), 'Words on slide ' + (index + 1)].map(text => {
-        const node = texts.find(node => node.textContent === text);
-        return { text, bounds: node ? transform(node.getBBox(), node.getScreenCTM()) : null };
+        const nodes = linesOf(text);
+        if (!nodes.length) return { text, bounds: null };
+        const boxes = nodes.map(node => transform(node.getBBox(), node.getScreenCTM()));
+        return { text, lines: nodes.length, bounds: { left: Math.min(...boxes.map(box => box.left)), top: Math.min(...boxes.map(box => box.top)), right: Math.max(...boxes.map(box => box.right)), bottom: Math.max(...boxes.map(box => box.bottom)) } };
       });
       return { index, clip, viewBox: { width: box.width, height: box.height }, paintedSlide: transform(box, matrix), matrix: { a: matrix.a, b: matrix.b, c: matrix.c, d: matrix.d }, preserveAspectRatio: { align: svg.preserveAspectRatio.baseVal.align, meetOrSlice: svg.preserveAspectRatio.baseVal.meetOrSlice }, labels };
     }));
