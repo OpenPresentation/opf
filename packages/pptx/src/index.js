@@ -4512,8 +4512,14 @@ function measuredLineAnchors(item) {
 // measured on (the bound height of one-line titles and the line positions of two-line ones, at 100%). A natively wrapped title gets
 // that pitch, so it is written only for those faces and where the difference from core's pitch stays within TITLE_LINE_TOLERANCE on its
 // last line; a title of fixed lines sets its pitch itself (space before each later line), taking 1.2 for a face not measured.
-const TITLE_LINE_HEIGHTS = new Map(['Aptos Display', 'Arial Black', 'Bookman Old Style', 'Georgia', 'Impact', 'Montserrat', 'Roboto', 'Roboto Mono', 'Segoe UI Light']
-  .map(face => [face.toLowerCase(), 1.2]));
+// Probe 2 (PowerPoint 2026-11-13, 40.5 pt, two paragraphs at 100%) measured the line from the slide images (cap top of line 2 less cap
+// top of line 1: 48 or 49 px at 960 for every Latin face, PowerPoint placing each line on a whole pixel; 1.2 sizes is 48.6 px) and kept
+// only the faces PowerPoint drew in their own font (each line's ink width within 2 px of the same text set in the face's file): Raleway
+// and Work Sans were drawn about 3 px wider and stay out, as do the East Asian faces (their lines measured 1.18 to 1.28 sizes).
+const TITLE_LINE_HEIGHTS = new Map(['Aptos', 'Aptos Display', 'Arial', 'Arial Black', 'Bookman Old Style', 'Calibri', 'Calibri Light', 'Century Schoolbook', 'Consolas',
+  'Constantia', 'Courier New', 'Garamond', 'Georgia', 'Grandview', 'Grandview Display', 'Impact', 'Lucida Sans', 'Montserrat', 'Noto Sans', 'Open Sans', 'PT Serif',
+  'Poppins', 'Roboto', 'Roboto Mono', 'Rockwell', 'Seaford', 'Seaford Display', 'Segoe UI', 'Segoe UI Light', 'Segoe UI Semilight', 'Skeena', 'Skeena Display',
+  'Tahoma', 'Tenorite', 'Tenorite Display', 'Times New Roman', 'Trebuchet MS', 'Verdana'].map(face => [face.toLowerCase(), 1.2]));
 const SINGLE_LINE_HEIGHT = 1.2;
 // RR-105 (opf#1291 x LH-189, PowerPoint 2026-11-13, probe 3: six faces, a bound two-paragraph title at a 1.0 em pitch). A pitch under
 // PowerPoint's single line (LH-189's two-line display titles) is reached by a later paragraph at a line spacing under 100% (paragraph 1
