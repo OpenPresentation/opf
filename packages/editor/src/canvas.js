@@ -638,10 +638,12 @@ export function createCanvasEditor(container, options = {}) {
       ascent = metrics.fontBoundingBoxAscent ?? fontSize * 0.9,
       descent = metrics.fontBoundingBoxDescent ?? fontSize * 0.2;
     const baseline = ascent + (lineHeight - ascent - descent) / 2;
-    const x = Number(text.getAttribute("x")),
+    // opf#1322: a tracked display line measured with real faces is start-anchored at its own x; the renderer then names its alignment
+    // and anchor point in data-opf-anchor and data-opf-anchor-x.
+    const x = Number(text.getAttribute("data-opf-anchor-x") ?? text.getAttribute("x")),
       y = Number(text.getAttribute("y")) - baseline;
     const bounds = target.getBBox(),
-      anchor = text.getAttribute("text-anchor");
+      anchor = text.getAttribute("data-opf-anchor") ?? text.getAttribute("text-anchor");
     const tracedWidth = Number(target.getAttribute("data-opf-box-width"));
     const width = split?.width ?? internalPart?.box.width ?? item?.box.width ?? (tracedWidth > 0 ? tracedWidth : Math.max(80, bounds.width + 20));
     const left = internalPart?.box.x ?? (anchor === "middle" ? x - width / 2 : anchor === "end" ? x - width : x);

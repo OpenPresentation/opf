@@ -37,6 +37,10 @@ try {
       if (line.tracking < 0) { tracked++; assert.equal(node.anchor, 'start', `${align}-${index} ${line.field}: a measured tracked line is start-anchored`); assert.ok(node.spacing < 0); }
       checked++;
     }
+    // With a trace, a start-anchored aligned line still names its alignment and anchor point (the editor lays its input over the line).
+    const traced = toSvg(document, 1, {...measured, trace: true}), named = [...traced.matchAll(/<text\b[^>]*data-opf-anchor="(middle|end)"[^>]*data-opf-anchor-x="([-\d.]+)"[^>]*>/g)];
+    const aligned = expected.filter(line => line.tracking < 0 && align !== 'start' && (line.field === 'text' || !slide.title));
+    if (aligned.length) { assert.ok(named.length >= 1, align + '-' + index + ': traced anchor attributes'); for (const [tag, anchor] of named) { assert.equal(anchor, align === 'center' ? 'middle' : 'end'); assert.match(tag, /text-anchor="start"/); } }
     // Estimated widths keep the anchor: the shaper's width differs from core's there.
     if (align !== 'start' && !slide.title) assert.ok(/text-anchor="(middle|end)"/.test(toSvg(document, 1, {})), `${align}-${index}: estimated lines keep their anchor`);
   }

@@ -2581,6 +2581,9 @@ function renderTextBox(text, box, bound, config) {
     textLength:!start&&placed?.width>0&&!style.tracking?stableNumber(placed.width-trimWidth):undefined,lengthAdjust:!start&&placed?.width>0&&!style.tracking?'spacingAndGlyphs':undefined,
     ...traceAttrs(config.options, config.path),
     ...(config.options.trace&&sourceLine?{'data-opf-source-start':sourceOffset+sourceLine.start,'data-opf-source-end':sourceOffset+sourceLine.end,'data-opf-source-next-start':sourceOffset+sourceLine.nextStart,'data-opf-line-boundary':sourceLine.boundary}:{}),
+    // opf#1322: a traced line that starts at core's x still says how it is aligned and where its anchor point is, for an editor that
+    // lays its input over the line.
+    ...(config.options.trace&&exactStart?{'data-opf-anchor':anchor,'data-opf-anchor-x':stableNumber(placed?placed.x+placed.width*factor:x)}:{}),
   }, content);
   });
   return tag("g", { ...traceAttrs(config.options, config.path),
