@@ -4507,6 +4507,16 @@ function measuredLineAnchors(item) {
 const TITLE_LINE_HEIGHTS = new Map(['Aptos Display', 'Arial Black', 'Bookman Old Style', 'Georgia', 'Impact', 'Montserrat', 'Roboto', 'Roboto Mono', 'Segoe UI Light']
   .map(face => [face.toLowerCase(), 1.2]));
 const SINGLE_LINE_HEIGHT = 1.2;
+// RR-105 (opf#1291 x LH-189, PowerPoint 2026-11-13, probe 3: six faces, a bound two-paragraph title at a 1.0 em pitch). A pitch under
+// PowerPoint's single line (LH-189's two-line display titles) is reached by a later paragraph at a line spacing under 100% (paragraph 1
+// stays at 100%, which keeps line 1 exactly where a single line draws it). At spcPct = pitch / (1.2 sizes) PowerPoint drew line 2 lower
+// than the pitch by a residual per face, the same with exact spacing (variant M) on five of the six faces, so it is an offset, not a
+// scale: here in sizes (ink centroid of line 2 against two free boxes one pitch apart, px at 960 over the size in points).
+const TITLE_TIGHT_RESIDUALS = new Map([['Impact', .24 / 63.75], ['Bookman Old Style', 1.75 / 56.25], ['Roboto', 1.24 / 48.75], ['Arial Black', .49 / 40.5],
+  ['Aptos Display', 1.25 / 48.75], ['Montserrat', 1 / 40]].map(([face, residual]) => [face.toLowerCase(), residual]));
+// The worst measured residual: a face not measured takes the uncorrected spacing only on a two-line title where that residual stays
+// within 1 px at 960 (TITLE_LINE_TOLERANCE).
+const TITLE_TIGHT_WORST_RESIDUAL = Math.max(...TITLE_TIGHT_RESIDUALS.values());
 // Text that a measured face draws itself: a title with letters a fallback face draws (Japanese in Aptos Display took 1.204) is not measured.
 const MEASURED_LINE_SCRIPTS = /[\p{Script=Latin}\p{Script=Greek}\p{Script=Cyrillic}\p{Script=Common}\p{Script=Inherited}]/u;
 
@@ -4610,12 +4620,17 @@ function fixedTitlePlan(item, family) {
   const lineTop = rich ? placed?.[0] ? placed[0].y : item.box.y + rich[0].y : baseline(0) - fit.fontSize;
   const largest = rich ? Math.max(0, ...rich[0].fragments.map(sizeOf)) : fit.fontSize;
   if (rich && largest > 0 && (baseline(0) - lineTop) / DIAGRAM_BASELINE_SHARE >= DIAGRAM_MIN_PITCH * largest) return {reject: 'line-pitch'};
-  const height = TITLE_LINE_HEIGHTS.get(String(family ?? '').toLowerCase()) ?? SINGLE_LINE_HEIGHT;
-  const paragraphs = anchors.map((line, index) => ({
-    spaceBefore: index ? baseline(index) - baseline(index - 1) - height * lineSize(index) : 0,
-    ...marginsOf(line.x)
-  }));
-  if (paragraphs.some(paragraph => paragraph.spaceBefore < -.01)) return {reject: 'line-pitch'};
+  const face = String(family ?? '').toLowerCase(), height = TITLE_LINE_HEIGHTS.get(face) ?? SINGLE_LINE_HEIGHT, residual = TITLE_TIGHT_RESIDUALS.get(face);
+  const paragraphs = anchors.map((line, index) => {
+    const pitch = index ? baseline(index) - baseline(index - 1) : 0, size = lineSize(index), spaceBefore = index ? pitch - height * size : 0;
+    if (spaceBefore >= -.01) return {spaceBefore: Math.max(0, spaceBefore), ...marginsOf(line.x)};
+    // A pitch under the single line (LH-189's display pitch): this paragraph's own line spacing under 100% (TITLE_TIGHT_RESIDUALS),
+    // corrected by the face's measured residual; a face not measured is uncorrected, accepted below only where that is within 1 px.
+    return {spaceBefore: 0, lineSpacing: (pitch - (residual ?? 0) * size) / (height * size), ...marginsOf(line.x)};
+  });
+  const tight = paragraphs.filter(paragraph => paragraph.lineSpacing !== undefined);
+  if (tight.some(paragraph => !(paragraph.lineSpacing > 0 && paragraph.lineSpacing < 1))) return {reject: 'line-pitch'};
+  if (tight.length && residual === undefined && (count !== 2 || TITLE_TIGHT_WORST_RESIDUAL * lineSize(1) > TITLE_LINE_TOLERANCE)) return {reject: 'line-pitch'};
   const x = edge - width * factor;
   return {x, top: lineTop, width, height: baseline(count - 1) - lineTop + height * lineSize(count - 1), size: fit.fontSize, paragraphs, align, hard, rtl, whole};
 }
@@ -4641,6 +4656,8 @@ function addFixedTitle(slide, item, context, options, deckContext, plan) {
     // One paragraph per line, its space before (in points) making up core's pitch.
     const spaceBefore = Math.round(plan.paragraphs[index].spaceBefore * .75 * 100) / 100;
     if (spaceBefore > 0) lineRuns[0].options = {...lineRuns[0].options, paraSpaceBefore: spaceBefore};
+    // A pitch under the single line: this paragraph's own line spacing under 100% (fixedTitlePlan); the first stays at 100%.
+    if (plan.paragraphs[index].lineSpacing !== undefined) lineRuns[0].options = {...lineRuns[0].options, lineSpacingMultiple: plan.paragraphs[index].lineSpacing};
     if (index < plan.paragraphs.length - 1) lineRuns[lineRuns.length - 1].options = {...lineRuns[lineRuns.length - 1].options, breakLine: true};
     runs.push(...lineRuns);
   }

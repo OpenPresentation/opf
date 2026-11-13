@@ -81,6 +81,15 @@ for (const entry of [...picks, fallbacks.find(entry => entry.file.endsWith('layo
     assert.equal((shape.match(/<a:p>/g) ?? []).length, entry.item.text.lines.length, 'one paragraph per measured line');
     assert.equal([...shape.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''), entry.item.text.lines.join(''), 'the measured lines');
     if (entry === fontFallback) assert.match(shape, /<a:latin typeface="Bookman Old Style"/);
+    // The first paragraph is at single spacing; a later one at a pitch under the single line (LH-189's 1.0 em display pitch, the
+    // layout-sampler cover) takes its own spacing under 100% instead of space before (probe 3, variant K).
+    const spacings = [...shape.matchAll(/<a:lnSpc><a:spcPct val="(\d+)"\/><\/a:lnSpc>/g)].map(match => Number(match[1]));
+    assert.equal(spacings[0], 100000, 'line 1 at single spacing');
+    assert.ok(spacings.every(value => value > 0 && value <= 100000));
+    if (entry.file.endsWith('layout-sampler.opf.json')) {
+      assert.ok(spacings.slice(1).every(value => value < 100000), 'the display pitch is under the single line');
+      assert.doesNotMatch(shape, /<a:spcBef>/, 'no space before at a pitch under the single line');
+    }
     assert.ok(!diagnostics.some(value => value.code === 'native-body-fallback' && value.path === 'slides.0.title'));
   } else {
     assert.equal(titles.length, 1, 'one coherent native title');
