@@ -4,6 +4,7 @@ import {strFromU8, unzipSync, zipSync} from 'fflate';
 import { toSvg, resolvePresentation } from '@openpresentation/opf-render';
 import {checkTypefaces, fromPptx, toPptx} from '../dist/index.js';
 import {relationshipPath, shownFurnitureParts} from './helpers/master-furniture.mjs';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
 // Spec-gap closure A (P2): the design fields that used to change nothing export natively.
 // - the primary organization's logo on cover and section slides: one native picture `OPF logo` at core's geometry.logo box
@@ -22,7 +23,8 @@ const open = async (deck, options = {}) => {
   const bytes = await toPptx(deck, {seed: 1, timestamp: '2026-01-01T00:00:00Z', ...options});
   return {bytes, entries: unzipSync(bytes)};
 };
-const slideXml = (entries, index) => decoder.decode(entries[`ppt/slides/slide${index + 1}.xml`]);
+// RR-105 (opf#1293): theme font references read as their theme's families.
+const slideXml = (entries, index) => withThemeFamilies(entries, `ppt/slides/slide${index + 1}.xml`);
 const slideRels = (entries, index) => decoder.decode(entries[`ppt/slides/_rels/slide${index + 1}.xml.rels`]);
 const pictures = xml => [...xml.matchAll(/<p:pic>[\s\S]*?<\/p:pic>/g)].map(([picture]) => ({
   xml: picture,

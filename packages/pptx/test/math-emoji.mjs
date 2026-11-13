@@ -7,6 +7,7 @@ import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {fromPptx, toPptx} from '../dist/index.js';
 import {nativeShapeParagraphs} from '../src/code-provenance.js';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
 // The installed renderer may predate the emoji and math packs: aliases and lenient glyphs keep measurement working here, and
 // neither changes what the exporter writes.
@@ -21,7 +22,8 @@ const unescape = value => value.replace(/&amp;/g, '&').replace(/&lt;/g, '<').rep
 // 1. Export keeps the chosen family and the original characters.
 for (const [family, title, text] of [['Segoe UI Emoji', `Launch ${EMOJI.join(' ')}`, `Body ${EMOJI[1]}`], ['Cambria Math', MATH, 'f(x) = ∫ g(t) dt']]) {
   const entries = unzipSync(await toPptx(deck(family, title, text), options));
-  const slide = strFromU8(entries['ppt/slides/slide1.xml']), theme = strFromU8(entries['ppt/theme/theme1.xml']);
+  // RR-105 (opf#1293): theme font references read as their theme's families.
+  const slide = withThemeFamilies(entries, 'ppt/slides/slide1.xml'), theme = strFromU8(entries['ppt/theme/theme1.xml']);
   assert.deepEqual(typefaces(slide), [family], `${family}: every run names the chosen family`);
   assert.equal(theme.match(/<a:majorFont><a:latin typeface="([^"]*)"/)?.[1], family);
   assert.equal(theme.match(/<a:minorFont><a:latin typeface="([^"]*)"/)?.[1], family);

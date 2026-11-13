@@ -39,6 +39,7 @@ import {attachMediaTags,importMediaGroups,mediaCaption,mediaFrameRecord,mediaTex
 import {addCaption, addFootnotes} from './annotation-export.js';
 import {attachAnnotationTags, captionValue, importAnnotations, restoreCitations} from './annotation-provenance.js';
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
+import {writeThemeFontReferences} from './theme-font-references.js';
 import {cleanBase,headingValue,joinRichLines} from './rich-heading.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachNativeLanguageTags,nativeLanguageReadView,onlyNativeLanguageTags} from './native-language-provenance.js';
@@ -6270,6 +6271,11 @@ async function normalizePptxZip(raw, context) {
     if (next !== xml) output[path] = [encodeText(next), output[path][1]];
   }
   if(context.nativeScalarFragments.hasPlans){const scalarParts=Object.fromEntries(Object.entries(output).map(([path,[bytes]])=>[path,bytes]));context.nativeScalarFragments.write(scalarParts,context.nativeLatinSlots.groups);for(const [path,bytes]of Object.entries(scalarParts))if(output[path]?.[0]!==bytes)output[path]=[bytes,{level:context.compressionLevel,mtime:context.zipDate}];}
+  // RR-105 (opf#1293): a run in its theme's heading or body family names the theme font, after every pass that writes or reads a family
+  // by name (safe typefaces, script slots, fragments) and before "Fonts Used" and the proofing records read the final parts. The shapes
+  // whose exact run properties those records fingerprint keep their names.
+  const unescapeName = name => String(name).replace(/&(amp|lt|gt|quot|apos);/g, (_, entity) => ({amp: '&', lt: '<', gt: '>', quot: '"', apos: "'"}[entity]));
+  writeThemeFontReferences(output, {owned: new Set([...context.nativeLatinSlots.groups.keys(), ...context.nativeTextFragments.records.keys(), ...context.nativeScalarFragments.committedNames].map(unescapeName))});
   finalizeFontsUsed(output);
   // Structural proofing records are needed even without full source provenance.
   const languageParts = Object.fromEntries(Object.entries(output).map(([path, [bytes]]) => [path, bytes]));

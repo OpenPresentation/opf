@@ -7,6 +7,7 @@ import {unzipSync} from 'fflate';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {resolvePresentation} from '@openpresentation/opf-render';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 // FF-31: the deck chooses Carlito itself, so preview, package and the native text gate name one exact open face.
 // Substituted previews (Aptos measured with Carlito) name the chosen family instead: test/export-chosen-fonts.mjs.
 const fonts=await loadFonts({pack: 'office', substitutionPolicy:'none'});
@@ -24,8 +25,9 @@ for(const text of ['Full source\nSecond paragraph.', ['Exact spacing ',{text:'wi
   const original=structuredClone(deck),options={fonts};
   const bound=resolvePresentation(deck,options).slides[0],expected=bound.geometry.items.flatMap(item=>item.field==='title'&&item.text.placement.lines.length>1?[{item,placed:item.text.placement.lines[0],index:0,title:true}]:item.text.placement.lines.map((placed,index)=>({item,placed,index})));
   // RR-105 (opf#1291): a wrapped title is one Title placeholder: natively wrapped (wrap square) where its lines are verified, else its
-  // measured lines joined by line breaks (wrap none); either way it starts where its first measured line starts.
-  const bytes=await toPptx(deck,options),xml=new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']);
+  // measured lines, one paragraph each (wrap none); either way it starts where its first measured line starts. Theme font references
+  // (RR-105, opf#1293) read as their theme's families.
+  const bytes=await toPptx(deck,options),xml=withThemeFamilies(unzipSync(bytes),'ppt/slides/slide1.xml');
   const shapes=array(parser.parse(xml)['p:sld']['p:cSld']['p:spTree']['p:sp']).filter(shape=>nativeText(shape));
   assert.equal(shapes.length,expected.length,'One editable native shape per nonblank accepted line, one per wrapped title');
   for(const [i,shape] of shapes.entries()) {

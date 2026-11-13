@@ -8,12 +8,14 @@ import {resolveSlideContext} from '@openpresentation/opf';
 import {composeSlide} from '@openpresentation/opf/composition';
 import {readLayoutTag} from '../src/template-layouts.js';
 import {toPptx, fromPptx, catalogs} from './helpers/default-catalog.mjs';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
 const options = {seed: 986, timestamp: '2026-10-15T00:00:00Z', zipDate: '2026-10-15T00:00:00Z'};
 const part = 'ppt/slides/slide1.xml';
 const decode = (entries, path) => strFromU8(entries[path]);
 const shapes = xml => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => shape);
-const bodyShapes = entries => shapes(decode(entries, part)).filter(shape => shape.includes('name="OPF native body '));
+// RR-105 (opf#1293): theme font references read as their theme's families.
+const bodyShapes = entries => shapes(withThemeFamilies(entries, part)).filter(shape => shape.includes('name="OPF native body '));
 const plain = value => typeof value === 'string' ? value : Array.isArray(value) ? value.map(plain).join('') : value?.text !== undefined ? plain(value.text) : '';
 const texts = deck => deck.slides.flatMap(slide => [slide.text, ...(slide.blocks ?? []).map(block => block.text ?? (block.items ?? []).map(plain).join('\n'))]).map(plain).join('\n');
 const deck = slide => ({name: 'Native body control', design: {fontScheme: 'roboto'}, slides: [slide]});
