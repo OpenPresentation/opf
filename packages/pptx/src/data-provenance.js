@@ -453,8 +453,11 @@ export function restoreChartData(chart, record, evidence, {datasets, report}) {
 }
 
 /** The authored table data where the native evidence is unchanged; edited native cells otherwise. */
-export function restoreTableData(table, record, {datasets, report, evidence: currentEvidence, olderEvidence = [], environment}) {
+export function restoreTableData(table, record, {datasets, report, evidence: currentEvidence, olderEvidence = [], environment: environments}) {
   if (!object(table)) return table;
+  // RR-105 (opf#1293): the environment now, and with the theme's exported heading and body faces back (exportedThemeView): a theme
+  // font change made in PowerPoint is the document's (design.fontScheme), and the cells name the theme fonts, so it does not edit a cell.
+  const environment = [environments].flat().find(value => value === record.environment) ?? [environments].flat()[0];
   // opf-pptx#241: a record written before the evidence read schema defaults hashes the raw XML (or, for a PowerPoint-saved copy, the
   // form rebuilt from it); a cell still matching one of those is unchanged.
   const evidence = currentEvidence?.map((row, r) => row.map((hash, c) => olderEvidence.map(older => older?.[r]?.[c]).find(older => older !== undefined && older === record.evidence?.[r]?.[c]) ?? hash));

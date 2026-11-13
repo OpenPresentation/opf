@@ -52,7 +52,7 @@ import {restoreRunColors} from './run-colors.js';
 import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, settleLayers, shapeRole, shapeText} from './shape-import.js';
 import {assembleOverlayShapes, restoreShapes} from './shape-restore.js';
 import {joinWrappedText, rejoinDetachedSpace} from './content-topology.js';
-import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordListScalars, recordOverlays, opfSlideOwnership, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
+import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordListScalars, recordOverlays, opfSlideOwnership, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, exportedThemeView, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
@@ -1569,7 +1569,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
   };
   if (table) {
     const stored = importedTable && record('table');
-    const restoredTable = stored ? restore('table', importedTable, () => restoreTableData(importedTable, stored, {evidence: tableCellEvidence(table, relationships), olderEvidence: [tableCellEvidence(table, relationships, {form: 'raw'}), tableCellEvidence(table, relationships, {form: 'saved'})], environment: tableEnvironmentEvidence(entries), datasets: data.datasets, report: diagnostic => data.report?.('table', diagnostic)})) : importedTable;
+    const restoredTable = stored ? restore('table', importedTable, () => restoreTableData(importedTable, stored, {evidence: tableCellEvidence(table, relationships), olderEvidence: [tableCellEvidence(table, relationships, {form: 'raw'}), tableCellEvidence(table, relationships, {form: 'saved'})], environment: [tableEnvironmentEvidence(entries), tableEnvironmentEvidence(exportedThemeView(entries))], datasets: data.datasets, report: diagnostic => data.report?.('table', diagnostic)})) : importedTable;
     // FA-27: the frame's descr (or PowerPoint's decorative marker) is the table's text alternative.
     // RR-105 (#1290): the description OPF generates when no alt was authored is not an alt (src/default-alt.js).
     const alt = restoredTable && typeof restoredTable === 'object' ? authoredAlt(readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]), tableAlt(restoredTable, {datasets: data.datasets})) : undefined;

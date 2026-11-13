@@ -141,13 +141,17 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   assert.match(provenance[1].message, /'boost'/);
 }
 
-// Theme fonts changed: the font scheme stays observed.
+// Theme fonts changed: the slides name the theme fonts (RR-105, opf#1293), so the new heading face is the document's font scheme
+// (the stored scheme with the theme's major and minor faces) and the theme, whose colors still match, is restored.
 {
   const {deck, provenance} = await read(modify(exported, entries => text(entries, 'ppt/theme/theme1.xml', xml => xml.replace(/(<a:majorFont><a:latin typeface=")[^"]*"/, '$1Georgia"'))));
-  assert.notEqual(deck.design.fontScheme, 'arial');
+  const minor = /<a:minorFont><a:latin typeface="([^"]*)"/.exec(dec.decode(unzipSync(exported)['ppt/theme/theme1.xml']))[1];
+  assert.deepEqual(deck.design.fontScheme, {id: 'arial', major: 'Georgia', minor});
+  assert.equal(deck.design.theme, 'bold');
   assert.equal(deck.design.colorScheme, 'boost');
-  assert.deepEqual(provenance.map(issue => [issue.code, issue.path]), [['design-reference-changed', 'design.theme'], ['design-reference-changed', 'design.fontScheme']]);
-  assert.match(provenance[1].message, /major font/);
+  assert.deepEqual(provenance.map(issue => [issue.code, issue.path]), [['design-reference-changed', 'design.fontScheme']]);
+  assert.match(provenance[0].message, /major font/);
+  assert.match(provenance[0].message, /heading font 'Georgia'/);
 }
 
 // Slide size changed: observed dimensions stay.

@@ -2,7 +2,7 @@
 // and complex-script slots where the deck's script font is the theme's), so Design > Variants > Fonts restyles the deck. Other families
 // keep their names; the look and the imported document do not change.
 import assert from 'node:assert/strict';
-import {strFromU8, unzipSync} from 'fflate';
+import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {typefacesNotOfficeSafe} from '../dist/index.js';
@@ -74,3 +74,32 @@ const deck = {design: {fontScheme: {major: 'Montserrat', minor: 'Work Sans'}}, s
   assert.deepEqual(themeFontSlots(part(safe, 'ppt/theme/theme1.xml')).mj.lt, 'Arial');
   assert.deepEqual(typefacesNotOfficeSafe(safe.bytes), []);
 }
+
+// 4. Changing the theme fonts in PowerPoint (Design > Variants > Fonts, another theme) restyles every referenced run, so the import
+// returns the new faces as the deck's font scheme; the slides import as authored (no run gains a direct family, tables and lists
+// included). A deck whose slides name no theme font (an export before references) draws its literal faces and keeps the earlier
+// behavior; an unchanged theme still returns the authored font scheme.
+{
+  const themed = {...deck, slides: [...deck.slides, {title: 'Plans', items: ['First', {text: 'Second', description: 'Details'}]}]};
+  const out = await exported(themed);
+  const rewrite = (entries, edit) => zipSync(Object.fromEntries(Object.entries(entries).map(([path, bytes]) => [path, /^ppt\/(theme\/theme\d+|slides\/slide\d+)\.xml$/.test(path) ? strToU8(edit(path, strFromU8(bytes))) : bytes])));
+  const fontsChanged = (path, xml) => path.includes('/theme/') ? xml.replace(/(<a:majorFont><a:latin typeface=")[^"]*"/, '$1Georgia"').replace(/(<a:minorFont><a:latin typeface=")[^"]*"/, '$1Courier New"') : xml;
+  const imported = async bytes => { const diagnostics = []; const value = await fromPptx(bytes, {onDiagnostic: item => diagnostics.push(item)}); return {value, diagnostics}; };
+  const unchanged = await imported(out.bytes), changed = await imported(rewrite(out.entries, fontsChanged));
+  assert.deepEqual(unchanged.value.design.fontScheme, themed.design.fontScheme, 'an unchanged theme returns the authored font scheme');
+  assert.deepEqual(changed.value.design.fontScheme, {major: 'Georgia', minor: 'Courier New'}, 'the new theme faces are the deck font scheme');
+  assert.deepEqual({...changed.value.design, fontScheme: undefined}, {...unchanged.value.design, fontScheme: undefined}, 'the rest of the design is restored');
+  assert.deepEqual(changed.value.slides, unchanged.value.slides, 'slides, tables and lists import as authored, without direct families');
+  assert.ok(!JSON.stringify(changed.value.slides).includes('Courier New'));
+  assert.ok(changed.diagnostics.some(item => item.code === 'design-reference-changed' && /heading font 'Georgia' and body font 'Courier New'/.test(item.message)));
+  assert.ok(!changed.diagnostics.some(item => item.code === 'table-data-provenance-changed'), 'the table reads against the exported theme faces');
+  // A catalog font scheme keeps its id (its code face) under the new faces.
+  const aptos = await exported({...themed, design: {fontScheme: 'aptos'}});
+  assert.deepEqual((await imported(rewrite(aptos.entries, fontsChanged))).value.design.fontScheme, {id: 'aptos', major: 'Georgia', minor: 'Courier New'});
+  // Literal faces (no reference on any slide): the theme change does not restyle them, so the font scheme is not rewritten.
+  const theme = themeFontSlots(part(out, 'ppt/theme/theme1.xml'));
+  const literal = (path, xml) => fontsChanged(path, path.includes('/slides/') ? xml.replace(/typeface="\+(m[jn])-(lt|ea|cs)"/g, (match, key, slot) => `typeface="${theme[key][slot] ?? ''}"`) : xml);
+  const old = await imported(rewrite(out.entries, literal));
+  assert.equal(old.value.design?.fontScheme, undefined, 'an export without references keeps the earlier behavior');
+}
+
