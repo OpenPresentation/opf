@@ -122,14 +122,15 @@ assert.ok(!fontsUsed(entries).includes('Arial') && !fontsUsed(entries).includes(
 assert.ok(fontsUsed(entries).includes(consolas.body) && fontsUsed(entries).includes(georgia.body));
 // pitchFamily follows the catalog type: fixed for monospace, roman for serif.
 const pitches = new Map();
-for (const entry of result.inventory.typefaces) if (entry.pitchFamily !== undefined) pitches.set(entry.typeface, new Set([...(pitches.get(entry.typeface) ?? []), entry.pitchFamily]));
+// RR-105 (opf#1293): a theme font reference counts as the family it resolves to (the inventory's `resolved`).
+for (const entry of result.inventory.typefaces) if (entry.pitchFamily !== undefined) { const family = entry.resolved ?? entry.typeface; pitches.set(family, new Set([...(pitches.get(family) ?? []), entry.pitchFamily])); }
 assert.deepEqual([...pitches.get(consolas.body)], [49]);
 assert.deepEqual([...pitches.get(georgia.body)], [18]);
 if (pitches.has(consolas.code)) assert.deepEqual([...pitches.get(consolas.code)], [49]);
 const aptos = parts(await toPptx({slides: [{title: 'Rule', layout: 'code', code: {source: 'let x = 1;', language: 'ts'}}]}, {strictAssets: true}));
 const aptosCheck = checkTypefaces(aptos, {families: ['Aptos', 'Aptos Display', 'Roboto Mono'], monospace: ['Roboto Mono']});
 assert.deepEqual(aptosCheck.violations, []);
-assert.ok(aptosCheck.inventory.typefaces.some(entry => entry.typeface === 'Aptos Display' && entry.pitchFamily === 34));
+assert.ok(aptosCheck.inventory.typefaces.some(entry => (entry.resolved ?? entry.typeface) === 'Aptos Display' && entry.pitchFamily === 34));
 assert.ok(aptosCheck.inventory.typefaces.some(entry => entry.typeface === 'Roboto Mono' && entry.pitchFamily === 49));
 
 // Workbook fonts outside <fonts> (differential formats, rich-text runs) are rewritten too.

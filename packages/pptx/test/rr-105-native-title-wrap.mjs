@@ -8,6 +8,7 @@ import {examples} from '@openpresentation/opf/examples';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {catalogs, fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {slideTemplate} from '../src/template-layouts.js';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 import {resolvePresentation} from '@openpresentation/opf-render/svg';
 import {nativeTitleWrapBox, nativeWrapWidths, WRAP_MARGIN} from '../src/native-body.js';
 
@@ -64,7 +65,8 @@ assert.deepEqual(fallbacks.find(entry => entry.file.endsWith('managed-detection-
 for (const entry of [...picks, fallbacks.find(entry => entry.file.endsWith('layout-sampler.opf.json') && entry.index === 0), fontFallback]) {
   const deck = {...entry.deck, slides: [entry.deck.slides[entry.index]]}, diagnostics = [];
   const bytes = new Uint8Array(await toPptx(deck, {fonts, bodyText: 'native', onDiagnostic: value => diagnostics.push(value)}));
-  const xml = strFromU8(unzipSync(bytes)['ppt/slides/slide1.xml']);
+  // RR-105 (opf#1293): theme font references read as their theme's families.
+  const xml = withThemeFamilies(unzipSync(bytes), 'ppt/slides/slide1.xml');
   const titles = [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => shape).filter(shape => shape.includes('name="OPF heading slides.0.title line '));
   // RR-105 (opf#1291): where no native wrap keeps the lines, or PowerPoint's single-spaced pitch for the face is not known to keep them
   // (a face not measured, or more than 1 px off on the last line), the title is one Title placeholder holding the measured lines, one

@@ -5,6 +5,7 @@ import { composeSlide } from '@openpresentation/opf/composition';
 import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 // OPF 0.15: the gallery ids these decks name (roboto, classic) resolve from the registered default catalog.
 import { toSvg, toPptx } from './helpers/default-catalog.mjs';
+import { withThemeFamilies } from './helpers/theme-fonts.mjs';
 
 const parser = new XMLParser({ ignoreAttributes: false, parseTagValue: false });
 const fonts = await loadFonts({pack: 'office'});
@@ -38,7 +39,8 @@ for (const align of ['start', 'center', 'end']) {
     const svg = parser.parse(toSvg(deck, 1, { trace: true, fonts }));
     const bytes = await toPptx(deck, { fonts });
     const themeXml = new TextDecoder().decode(unzipSync(bytes)['ppt/theme/theme1.xml']);
-    const xml = parser.parse(new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']));
+    // RR-105 (opf#1293): theme font references read as their theme's families.
+    const xml = parser.parse(withThemeFamilies(unzipSync(bytes), 'ppt/slides/slide1.xml'));
     const themeSlots = themeColorsOf(themeXml), masterMap = clrMapOf(new TextDecoder().decode(unzipSync(bytes)['ppt/slideMasters/slideMaster1.xml']));
     const frame = find(xml, 'p:graphicFrame').find(frame => find(frame, 'a:tbl').length);
     const transform = frame['p:xfrm'];

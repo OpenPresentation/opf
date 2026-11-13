@@ -12,6 +12,7 @@ import sharp from 'sharp';
 import {toPng} from '@openpresentation/opf-render';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {defaultCatalog, fromPptx, toPptx, toSvg} from './helpers/default-catalog.mjs';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
 const options = {seed: 1616, timestamp: '2026-11-06T00:00:00Z', zipDate: '2026-11-06T00:00:00Z'};
 const pyramid = ['Vision', 'Goals', 'Programs', 'Teams'], matrix = ['North', 'South', 'East', 'West'];
@@ -257,7 +258,8 @@ const withoutDiagrams = (entries, slides) => {
 //    preview's: its glyph outlines are those of a deck that names that family itself, and differ from the selected family's.
 {
   const fonts = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck});
-  const latin = exported => exported.text('ppt/diagrams/data1.xml').match(/<a:latin typeface="([^"]+)"\/>/)?.[1];
+  // RR-105 (opf#1293): theme font references read as their theme's families.
+  const latin = exported => withThemeFamilies(exported.entries, 'ppt/diagrams/data1.xml').match(/<a:latin typeface="([^"]+)"\/>/)?.[1];
   const selected = await exported(deck, {fonts}), safe = await exported(deck, {fonts, typefaces: 'safe'});
   const face = latin(safe);
   assert.ok(face && face !== latin(selected), `safe mode writes another family (${latin(selected)} becomes ${face})`);

@@ -3,6 +3,7 @@ import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js'
 import {sourceLineParagraphs} from './text-provenance.js';
 import {cleanBase,headingValue,joinRichLines} from './rich-heading.js';
 import {rejoinDetachedSpace} from './content-topology.js';
+import {currentThemeLook} from './document-provenance.js';
 const TAG='OPF_HEADING_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
@@ -74,7 +75,8 @@ export function importHeadingGroups(shapes,paragraphs,relationships,entries,repo
     // The same boundaries as the plain text: a new tag's separator, or a native line break between legacy-tagged lines.
     const source=ordered.some(item=>item.data.boundary!==undefined||item.data.separator!==undefined);
     // Only a rich export records the heading's own look (tag.base); a heading exported as a plain string stays one.
-    const base=cleanBase(ordered[0].data.base);
+    // RR-105 (opf#1293): the recorded look in the theme's current faces (a theme font change made in PowerPoint is the document's).
+    const base=currentThemeLook(entries,cleanBase(ordered[0].data.base));
     const parts=base?joinRichLines(ordered,body,(item,last)=>source?item.data.separator:last?'':'\n'):undefined;
     items.push({field:first.field,shapes:ordered.map(item=>item.shape),paragraphs:restored,...(parts?{richText:headingValue(parts,base)}:{})});
     if(!groupUnchanged(ordered,paragraphs))report({code:'heading-import-reflow',message:'Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.'});

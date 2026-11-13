@@ -4,6 +4,7 @@ import {validate} from '@openpresentation/opf';
 import {XMLParser} from 'fast-xml-parser';
 import {mediaFrameRecord} from '../dist/media-provenance.js';
 import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
 // FF-29: video payloads export the preview's placeholder. The frame links to a
 // web source and every placeholder shape carries OPF_MEDIA_V1, so import
@@ -458,7 +459,8 @@ for (const video of ['file:clip.mp4', 'data:video/mp4;base64,PRIVATE']) {
     {type:'text',text:'Native  edit'},{type:'text',text:''},{type:'text',text:'Two '}
   ]);
   const nativeLinkStyle = archive => {
-    const xml = dec.decode(unzipSync(archive)['ppt/slides/slide1.xml']);
+    // RR-105 (opf#1293): theme font references read as their theme's families.
+    const xml = withThemeFamilies(unzipSync(archive), 'ppt/slides/slide1.xml');
     const run = [...xml.matchAll(/<a:r>[\s\S]*?<\/a:r>/g)].find(match => match[0].includes(`<a:t>${url}</a:t>`))?.[0];
     assert.ok(run, 'the same URL remains a native text run');
     return {size: run.match(/\bsz="([^"]+)"/)?.[1], family: run.match(/<a:latin typeface="([^"]+)"/)?.[1], color: run.match(/<a:(?:srgbClr|schemeClr) val="([^"]+)"/)?.[1]};
