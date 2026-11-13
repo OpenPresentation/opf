@@ -45,8 +45,9 @@ test('the form follows where the text sits: a gradient from the bottom, the top 
   // A narrow column at the right: a gradient across from the right edge.
   const right = scrimGeometry({ x: 760, y: 120, width: 460, height: 480 }, 1280, 720, 24);
   assert.deepEqual([right.edge, right.axis, right.box.x + right.box.width], ['right', 'horizontal', 1280]);
-  // Composed: a title and a short text at the top fade down from the top edge.
-  const top = composed(deck([{ title: 'What we heard', text: 'Shorter waits at the pier.', design: picture() }])).result.backgroundImage.scrims?.[0];
+  // Composed: a title and a short text at the top fade down from the top edge. (LH-188: under a title of more than four words the text is
+  // no one-message statement, which would grow into the middle of the slide.)
+  const top = composed(deck([{ title: 'What we heard from the riders', text: 'Shorter waits at the pier.', design: picture() }])).result.backgroundImage.scrims?.[0];
   assert.deepEqual([top.edge, top.box.y, top.stops[0].opacity, top.stops.at(-1).opacity], ['top', 0, top.opacity, 0]);
   // A centered cover title: a band across the text that fades out above and below.
   // Wave 5: LH-129 grows a cover title to its 75 px display size, which stays a band (below); the band's proportions are pinned at the
