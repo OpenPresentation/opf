@@ -122,7 +122,7 @@ function Read-FurniturePostflightEvidence([string]$AdmissionFile,[string]$Expect
     Assert-OwnedPostflightPath $AdmissionFile
     if($ExpectedSha256 -cnotmatch '^[a-f0-9]{64}$' -or (Get-OwnedPostflightHash $AdmissionFile) -cne $ExpectedSha256 -or (Get-Item -LiteralPath $AdmissionFile).Length -gt 4194304){throw 'Furniture admission identity differs'}
     $a=Get-Content -LiteralPath $AdmissionFile -Raw -Encoding UTF8 | ConvertFrom-Json
-    if(-not(Test-OwnedPostflightKeys $a @('schemaVersion','profile','policy','requestSha256','ready','files','nativeAcceptance','registryAcceptance')) -or $a.files -isnot [array] -or $a.files.Count -lt 1 -or $a.files.Count -gt 2000){throw 'Furniture admission shape refused'}
+    if(-not(Test-OwnedPostflightKeys $a @('schemaVersion','profile','policy','requestSha256','ready','files','nativeAcceptance','registryAcceptance')) -or $a.files -isnot [array] -or $a.files.Count -lt 1 -or $a.files.Count -gt 20000){throw 'Furniture admission shape refused'}
     if($a.profile -cne $Profile){throw 'Furniture admission profile differs'}
     $seen=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
     foreach($record in $a.files){

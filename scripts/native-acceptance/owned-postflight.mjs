@@ -168,7 +168,10 @@ export function sourceIdentityFiles(...identities) {
 }
 export function makeOwnedAdmission({profile, policy, requestSha256, files, ready}) {
   const records = [...new Set(files.map(canonicalOwnedPath))].sort().map(file => ({file, ...fileIdentity(file)}));
-  assert.ok(records.length > 0 && records.length <= 2000);
+  // Owner-approved 2026-11-13: the bound on the list was 2,000. An admission binds every file of the installed packages, and the 0.34
+  // gallery ships each icon as its own file (7,248 files), so the bound is 20,000 here and in the three checks that read the list
+  // (assertOwnedAdmissionFiles below, owned-postflight.ps1, furniture-postflight.ps1). Every file is still hashed.
+  assert.ok(records.length > 0 && records.length <= 20000);
   return {schemaVersion: 1, profile, policy, requestSha256, ready, files: records, nativeAcceptance: false, registryAcceptance: false};
 }
 export function writeOwnedAdmission(file, admission) {
@@ -181,7 +184,7 @@ export function assertOwnedAdmissionFiles(admission) {
   assert.equal(admission.schemaVersion, 1);
   assert.equal(admission.nativeAcceptance, false);
   assert.equal(admission.registryAcceptance, false);
-  assert.ok(Array.isArray(admission.files) && admission.files.length > 0 && admission.files.length <= 2000);
+  assert.ok(Array.isArray(admission.files) && admission.files.length > 0 && admission.files.length <= 20000);
   const names = new Set();
   for (const record of admission.files) {
     assertOwnedKeys(record, ['file', 'bytes', 'sha256']);

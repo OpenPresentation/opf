@@ -107,7 +107,7 @@ function Read-OwnedPostflightEvidence([string]$AdmissionFile,[string]$ExpectedSh
     Assert-OwnedPostflightPath $AdmissionFile
     if($ExpectedSha256 -cnotmatch '^[a-f0-9]{64}$' -or (Get-Item -LiteralPath $AdmissionFile).Length -gt 4194304 -or (Get-OwnedPostflightHash $AdmissionFile) -cne $ExpectedSha256) { throw 'Externally pinned admission differs' }
     $a=Get-Content -LiteralPath $AdmissionFile -Raw -Encoding UTF8 | ConvertFrom-Json
-    if($a.profile -cne $Profile -or $a.files -isnot [array] -or $a.files.Count -lt 1 -or $a.files.Count -gt 2000) { throw 'Unsupported admission or identity list' }
+    if($a.profile -cne $Profile -or $a.files -isnot [array] -or $a.files.Count -lt 1 -or $a.files.Count -gt 20000) { throw 'Unsupported admission or identity list' }
     $seen=@{}
     foreach($record in $a.files) {
         if(-not (Test-OwnedPostflightKeys $record @('file','bytes','sha256'))) { throw 'Unsupported identity field' }
