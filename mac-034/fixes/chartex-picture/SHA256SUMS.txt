@@ -1,0 +1,4 @@
+1d14d6c3d07e360646edd95dee6679bfd9a156f6fbae0742b93ed0d59c55042a  chart-type-sampler.after.pptx
+c89391cc3631fe9292fe82e65836465bec7bae0ee19eee49aba05d7f8a571447  chart-type-sampler.before.pptx
+503fd641666f0b8b6d89ec13e0156cb65a64001178643fdf73519b6cfc6973ee  layout-harvest.after.pptx
+4e056002ebdab557035d394590f67270187920edf588379daf98f638425ba841  layout-harvest.before.pptx
