@@ -5,8 +5,9 @@ import {validate} from '@openpresentation/opf';
 import {colorContrast, ENGINE_DEFAULT_COLOR_SCHEME, resolveCanvasDimensions, resolveColorRoles} from '@openpresentation/opf/composition';
 import {toSvg, fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {colorsInXml, themeColorsOf, clrMapOf} from './helpers/scheme-colors.mjs';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
-// FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.lang and the 1:1, 4:5 and 9:16 presets, exported natively
+// FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.language and the 1:1, 4:5 and 9:16 presets, exported natively
 // and imported back. Core owns the geometry and colours (codeHighlight*, layoutWatermark); this checks the package.
 
 const exportDeck = async (document, options = {}) => {
@@ -15,7 +16,8 @@ const exportDeck = async (document, options = {}) => {
   const entries = unzipSync(new Uint8Array(bytes));
   const xml = Object.fromEntries(Object.entries(entries).filter(([name]) => /\.(xml|rels)$/.test(name)).map(([name, value]) => [name, strFromU8(value)]));
   for (const [name, text] of Object.entries(xml)) assert.equal(XMLValidator.validate(text), true, `${name} is well-formed XML`);
-  return {bytes, entries, xml, diagnostics, slide: (index = 1) => xml[`ppt/slides/slide${index}.xml`]};
+  // RR-105 (opf#1293): a slide reads its theme font references as its theme's families.
+  return {bytes, entries, xml, diagnostics, slide: (index = 1) => withThemeFamilies(entries, `ppt/slides/slide${index}.xml`)};
 };
 const importDeck = async (bytes, options = {}) => {
   const diagnostics = [];
@@ -169,8 +171,9 @@ const textDeck = (watermark, slideDesign) => ({design: {fontScheme: 'roboto', ..
   assert.equal(validate(textDeck({text: 'DRAFT', src: 'asset:x', opacity: 0.1}), {only: ['format']}).valid, false);
 }
 
-// --- TextRun.code and TextRun.lang -------------------------------------------------------------------------------------
-const richDeck = (language, text) => ({...(language ? {language} : {}), design: {fontScheme: 'roboto'}, slides: [{title: 'Runs', text}]});
+// --- TextRun.code and TextRun.language -------------------------------------------------------------------------------------
+// LH-188: a title of more than four words keeps the slide a content slide, so the short paragraph is not grown onto two lines.
+const richDeck = (language, text) => ({...(language ? {language} : {}), design: {fontScheme: 'roboto'}, slides: [{title: 'Runs of code in a paragraph', text}]});
 const runs = xml => [...xml.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]*)<\/a:t><\/a:r>/g)].map(match => ({properties: match[1], text: match[2]}));
 {
   const text = ['Run ', {text: 'npm install', code: true}, ' now'];
@@ -193,7 +196,7 @@ const runs = xml => [...xml.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]
   assert.match(runs(slide()).find(run => run.text === 'x').properties, /<a:latin typeface="Courier New"/);
 }
 {
-  const text = ['Hello ', {text: 'bonjour', lang: 'fr-FR'}, ' ', {text: 'hello', lang: 'en-US'}, {text: '日本語', lang: 'ja-JP'}, ' ', {text: '中文', lang: 'zh-CN'}];
+  const text = ['Hello ', {text: 'bonjour', language: 'fr-FR'}, ' ', {text: 'hello', language: 'en-US'}, {text: '日本語', language: 'ja-JP'}, ' ', {text: '中文', language: 'zh-CN'}];
   const {bytes, slide} = await exportDeck(richDeck('en-US', text));
   const found = runs(slide());
   const by = value => found.find(run => run.text === value).properties;
@@ -208,7 +211,7 @@ const runs = xml => [...xml.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]
   assert.doesNotMatch(by('bonjour'), /<a:ea /, 'a Latin run keeps following the theme');
   const {document} = await importDeck(bytes);
   const imported = document.slides[0].text;
-  const lang = value => imported.find(run => run.text === value)?.lang;
+  const lang = value => imported.find(run => run.text === value)?.language;
   assert.equal(lang('bonjour'), 'fr-FR');
   assert.equal(lang('日本語'), 'ja-JP');
   assert.equal(lang('中文'), 'zh-CN');
@@ -217,13 +220,13 @@ const runs = xml => [...xml.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]
 }
 {
   // A tag without a region is written with the language's curated OOXML tag, and a deck-language run is not overridden.
-  const {slide} = await exportDeck(richDeck('ja-JP', ['日本語 ', {text: 'bonjour', lang: 'fr'}, {text: 'もう', lang: 'ja'}]));
+  const {slide} = await exportDeck(richDeck('ja-JP', ['日本語 ', {text: 'bonjour', language: 'fr'}, {text: 'もう', language: 'ja'}]));
   const found = runs(slide());
   assert.match(found.find(run => run.text === 'bonjour').properties, /lang="fr-FR" altLang="en-US"/);
   assert.doesNotMatch(found.find(run => run.text === 'もう').properties, /altLang/, 'ja is the deck language');
   assert.match(found.find(run => run.text === 'もう').properties, /lang="ja-JP"/);
   // An explicit en-US run in a Japanese deck stays en-US (the deck language never replaces it).
-  const english = await exportDeck(richDeck('ja-JP', ['日本語 ', {text: 'English', lang: 'en-US'}]));
+  const english = await exportDeck(richDeck('ja-JP', ['日本語 ', {text: 'English', language: 'en-US'}]));
   assert.match(runs(english.slide()).find(run => run.text === 'English').properties, /lang="en-US" altLang="en-US"/);
 }
 {

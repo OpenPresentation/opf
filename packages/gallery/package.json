@@ -43,11 +43,14 @@
       "types": "./dist/icon-sets.d.ts",
       "default": "./dist/icon-sets.js"
     },
-    "./icon-sets/*": {
-      "types": "./dist/icon-sets/icon-set.d.ts",
-      "default": "./dist/icon-sets/*.js"
-    },
+    "./icons/*": "./dist/icons/*",
     "./package.json": "./package.json"
+  },
+  "imports": {
+    "#icon-files": {
+      "node": "./dist/icon-files-node.js",
+      "default": "./dist/icon-files.js"
+    }
   },
   "files": [
     "dist",
@@ -82,7 +85,7 @@
   "devDependencies": {
     "@resvg/resvg-js": "2.6.2",
     "@tabler/icons": "3.50.0",
-    "lucide-static": "1.68.0",
+    "lucide-static": "1.70.0",
     "typescript": "~5.9.3"
   }
 }

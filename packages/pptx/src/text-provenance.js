@@ -1,5 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
+import {NATIVE_LANGUAGE_TAG} from './native-language-provenance.js';
+import {joinRichLines} from './rich-heading.js';
 const TAG='OPF_TEXT_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
@@ -23,7 +25,25 @@ export function sourceLineParagraphs(ordered,paragraphs,{legacy=false}={}) {
  return [{text,maxFontSize,bullet:false,level:0}];
 }
 
-export function importPlainTextGroups(shapes,paragraphs,relationships,entries,report) {
+// Boundaries own only line joins, never native proofing language. Keep current
+// language without importing the generated body look as authored run styling.
+function currentLanguages(ordered, readBody, expected) {
+ if(!readBody)return undefined;
+ const parts=joinRichLines(ordered,index=>readBody(index,{languageOnly:true}),item=>item.data.separator??'');
+ if(!parts?.some(part=>typeof part==='object'&&typeof part.language==='string'))return undefined;
+ const text=parts.map(part=>typeof part==='string'?part:part.text).join('');
+ if(text!==expected)throw Error('Current native language text disagrees with source boundaries.');
+ const runs=[];
+ for(const part of parts){
+  const current=typeof part==='object'&&typeof part.language==='string'?{text:part.text,language:part.language}:typeof part==='string'?part:part.text,previous=runs.at(-1);
+  if(typeof current==='string'&&typeof previous==='string')runs[runs.length-1]+=current;
+  else if(typeof current==='object'&&typeof previous==='object'&&current.language===previous.language)previous.text+=current.text;
+  else runs.push(current);
+ }
+ return runs;
+}
+
+export function importPlainTextGroups(shapes,paragraphs,relationships,entries,report,readBody) {
  const groups=new Map(),consumed=new Set(),items=[];
  for(const [index,shape]of shapes.entries()) {
   const tags=[];let unreadable=false;
@@ -34,7 +54,7 @@ export function importPlainTextGroups(shapes,paragraphs,relationships,entries,re
   for(const tag of tags.filter(tag=>tag.name?.toUpperCase()===TAG))try {
    const data=decodeTextTag(tag.val);
    if(data?.v!==1||typeof data.group!=='string'||data.group.length>4096||!/^slides\.\d+(?:\.[A-Za-z0-9_:+-]+)*\.text$/.test(data.group))throw Error('Invalid plain text identity.');
-   const group=groups.get(data.group)??[];group.push({shape,index,data,ambiguous:unreadable||tags.filter(tag=>/^OPF_/i.test(tag.name)).length!==1});groups.set(data.group,group);
+   const group=groups.get(data.group)??[];group.push({shape,index,data,ambiguous:unreadable||tags.filter(tag=>/^OPF_/i.test(tag.name)&&String(tag.name).toUpperCase()!==NATIVE_LANGUAGE_TAG).length!==1});groups.set(data.group,group);
   }catch{report({code:'invalid-text-provenance',message:'Invalid plain text tags; ordinary import retains current native text.'});}
  }
  for(const group of groups.values())try {
@@ -47,6 +67,8 @@ export function importPlainTextGroups(shapes,paragraphs,relationships,entries,re
    ordered[data.line]=item;
   }
   const restored=sourceLineParagraphs(ordered,paragraphs);
+  const languages=currentLanguages(ordered,readBody,restored[0].text);
+  if(languages)restored[0].richText=languages;
   for(const item of ordered)consumed.add(item.shape);
   items.push({shapes:ordered.map(item=>item.shape),paragraphs:restored});
   if(!groupUnchanged(ordered,paragraphs))report({code:'text-import-reflow',message:'Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.'});

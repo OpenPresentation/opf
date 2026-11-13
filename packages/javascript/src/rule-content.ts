@@ -43,7 +43,8 @@ export type TextRole =
 	| 'quote'
 	| 'quote-footer'
 	| 'metric'
-	| 'timeline';
+	| 'timeline'
+	| 'callout';
 
 /** One authored text value: a string or a TextRun array, at a path. */
 export interface TextValue {
@@ -96,6 +97,11 @@ export function textValues(slide: Rec, slidePath: string): TextValue[] {
 					const value = Object.hasOwn(styled, 'value') ? styled.value : cell;
 					push(at('table', 'rows', r, c, ...(Object.hasOwn(styled, 'value') ? ['value'] : [])), value, 'table', 'table');
 				});
+			});
+		// An image callout's text is plain; the rules that read text (placeholders, language) see it too.
+		const callouts = rec(node.image).callouts;
+		if (Array.isArray(callouts)) callouts.forEach((callout: unknown, index: number) => {
+				push(at('image', 'callouts', index, 'text'), rec(callout).text, 'callout', 'image');
 			});
 		const quote = node.quote;
 		if (typeof quote === 'string') push(at('quote'), quote, 'quote', 'quote');
@@ -161,7 +167,14 @@ export interface AssetRef {
 }
 
 /** Alt text of an asset value: its own `alt`, else the registry entry an `asset:<id>` source points to. */
-export function altOf(value: unknown, assets: unknown): string | undefined {
+export function altOf(value: unknown, assets: unknown, variables?: unknown, template?: boolean): string | undefined {
+	// RR-105: an image variable (`"image": "var:logo"`) is described by its value, as the engines draw and export it (a template's
+	// unfilled variable by its example, which its previews use).
+	if (typeof value === 'string' && value.startsWith('var:')) {
+		const variable = rec(rec(variables)[value.slice(4)]);
+		const resolved = variable.type === 'image' ? (variable.value ?? (template === true ? variable.example : undefined)) : undefined;
+		return resolved === undefined || (typeof resolved === 'string' && resolved.startsWith('var:')) ? undefined : altOf(resolved, assets);
+	}
 	const own = typeof value === 'object' && value !== null ? (value as Rec).alt : undefined;
 	if (typeof own === 'string') return own;
 	let source = typeof value === 'string' ? value : rec(value).src;
@@ -191,7 +204,7 @@ export function assetRefs(document: Rec, slide: Rec, slidePath: string, includeD
 	}
 	const designRefs = (design: Rec, base: string) => {
 		for (const kind of ['header', 'footer'])
-			for (const zone of ['left', 'center', 'right']) {
+			for (const zone of ['start', 'center', 'end']) {
 				const item = rec(rec(design[kind])[zone]);
 				if (item.image !== undefined && !isLogoReference(item.image)) out.push({ path: `${base}/${kind}/${zone}/image`, value: item.image, kind: 'furniture' });
 			}

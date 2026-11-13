@@ -6,7 +6,7 @@ import sharp from 'sharp';
 import {examples} from '@openpresentation/opf/examples';
 import {toSvg, toPng} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {renderSvgDeck as renderBefore} from '../artifacts/source-whitespace-before-runtime/dist/index.js';
-const before=path.resolve(process.argv[2]??'artifacts/source-whitespace-golden-before'),after=path.resolve(process.argv[3]??'artifacts/source-whitespace-golden-after'),out=path.resolve(process.argv[4]??'docs/evidence/source-whitespace-corpus-review');
+const before=path.resolve(process.argv[2]??'artifacts/source-whitespace-golden-before'),after=path.resolve(process.argv[3]??'artifacts/source-whitespace-golden-after'),out=path.resolve(process.argv[4]??'artifacts/source-whitespace-corpus-review');
 const original=JSON.parse(await readFile(path.join(before,'candidate.json'))),candidate=JSON.parse(await readFile(path.join(after,'candidate.json')));
 assert.deepEqual(original.source,candidate.source);
 const keys=Object.keys(candidate.entries),changed=keys.filter(key=>original.entries[key].sha256!==candidate.entries[key].sha256),sheets=[];

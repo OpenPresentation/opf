@@ -4,7 +4,7 @@
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { OPFFontError } from "./font-registry.js";
 import { SCRIPT_FONT_REPLACEMENTS, glyphFallbackFamilies, scriptOfCharacter, scriptsOfText } from "./script-fonts.js";
-import { resolveScriptFonts } from "@openpresentation/opf/composition";
+import { MAX_COMPOSITION_DEPTH, languageInEffect, numeralScripts, quoteLanguage, resolveScriptFonts, timelineStatusWordsFor } from "@openpresentation/opf/composition";
 import { createFontAnalysis } from "./lazy-fonts.js";
 import { SYMBOL_SCRIPT, isSymbolEncodedFamily } from "./symbol-fonts.js";
 
@@ -96,13 +96,36 @@ export function* drawnStrings(presentation) {
   yield* walkStrings(presentation, undrawn, undrawnRoot, undrawnSlide);
 }
 
+// Generated words are measured before the guarded status rule decides whether they draw. Source enum values alone do not cover them.
+// Only content payloads count: arbitrary variables, metadata, notes, catalogs and extensions never synthesize timeline labels.
+const PROMOTED_REGION = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/;
+function* generatedTimelineWords(presentation) {
+  if (!Array.isArray(presentation?.slides)) return;
+  for (const [slideIndex, slide] of presentation.slides.entries()) {
+    if (!slide || typeof slide !== "object" || Array.isArray(slide)) continue;
+    const statuses = new Set();
+    const visit = (payload, depth = -1, ancestors = []) => {
+      if (!payload || typeof payload !== "object" || Array.isArray(payload) || depth > MAX_COMPOSITION_DEPTH || ancestors.includes(payload)) return;
+      const timeline = payload.timeline, events = Array.isArray(timeline) ? timeline : timeline?.events;
+      if (Array.isArray(events)) for (const event of events) if (typeof event?.status === "string") statuses.add(event.status);
+      if (Array.isArray(payload.blocks)) for (const block of payload.blocks) visit(block, depth + 1, [...ancestors, payload]);
+    };
+    visit(slide);
+    for (const [key, payload] of Object.entries(slide)) if (PROMOTED_REGION.test(key)) visit(payload);
+    if (!statuses.size) continue;
+    const words = timelineStatusWordsFor(quoteLanguage(presentation, slideIndex));
+    if (!words) continue;
+    for (const status of statuses) if (typeof words[status] === "string") yield {text: words[status], slideIndex};
+  }
+}
+
 /**
  * The script profile of a presentation: core `resolveScriptFonts` output, exactly what the renderer plans
  * with. When it throws, the renderer ignores the document language, so the profile is empty and Han text is
  * Simplified Chinese, as drawn. `renderOptions.catalogs` (the host's registered catalogs) resolve as they do for the renderer.
  */
-export function presentationScriptProfile(presentation, renderOptions) {
-  try { return resolveScriptFonts(presentation, renderOptions?.catalogs !== undefined ? { catalogs: renderOptions.catalogs } : {}); } catch { /* the renderer falls back the same way */ }
+export function presentationScriptProfile(presentation, renderOptions, slideIndex) {
+  try { return resolveScriptFonts(presentation, { ...(renderOptions?.catalogs !== undefined ? { catalogs: renderOptions.catalogs } : {}), ...(slideIndex !== undefined ? {slideIndex} : {}) }); } catch { /* the renderer falls back the same way */ }
   return {};
 }
 
@@ -191,7 +214,45 @@ export function analyzePresentationScripts(presentation, profile, renderOptions,
     for (const script of found.scripts) scripts.add(script);
     for (const character of found.cjk) cjk.add(character);
   }
-  return { profile, detected: [...scripts].sort(), design: design.scripts, cjk };
+  const generatedProfiles = new Map();
+  for (const {text, slideIndex} of generatedTimelineWords(presentation)) {
+    // A generated Han label follows its own slide locale (for example zh-TW on an English deck), not the deck's default script.
+    if (!generatedProfiles.has(slideIndex)) generatedProfiles.set(slideIndex, presentationScriptProfile(presentation, renderOptions, slideIndex));
+    const found = memory.scanner(generatedProfiles.get(slideIndex))(text);
+    for (const script of found.scripts) scripts.add(script);
+    for (const character of found.cjk) cjk.add(character);
+  }
+  return { profile, detected: [...scripts].sort(), design: [...new Set([...design.scripts, ...generatedNumeralScripts(presentation)])].sort(), cjk };
+}
+
+/**
+ * LH-106: the scripts of the digits the engines generate (metric values, chart labels and ticks, table numbers, list numerals,
+ * step badges, slide numbers) on each slide whose language (its own, else the deck's) has digits of its own: Arab for `ar-SA` and
+ * `fa-IR`, Beng for `bn`, none for `ar-AE` or `ar-SA-u-nu-latn`. Like a font scheme's scripts they are faces the deck may draw
+ * without one authored character in the script (an `ar-SA` deck titled "T" with the metric 1000 draws ١٬٠٠٠), so their packages
+ * are offered to the drawn-face analysis, which loads only the faces the composed slides actually draw. A slide counts when it may
+ * generate a number (`generatesNumbers`); a slide of words alone (a timeline of "Week 1" labels) offers nothing.
+ */
+function generatedNumeralScripts(presentation) {
+  const slides = Array.isArray(presentation?.slides) ? presentation.slides : [];
+  const furniture = generatesNumbers(presentation?.design?.header) || generatesNumbers(presentation?.design?.footer);
+  return numeralScripts(slides.map((slide, index) => furniture || generatesNumbers(slide) || generatesNumbers(slide?.design?.header) || generatesNumbers(slide?.design?.footer) ? languageInEffect(presentation, index) : undefined));
+}
+
+// Payload keys whose content the engines number: a chart's labels and ticks, a table's cells, a metric, list numerals and step badges
+// (a list or a layout's sequence), and a slide that names a layout (whose regions may badge its blocks).
+const NUMBERED_KEYS = new Set(["chart", "table", "metric", "numbering", "items", "bullets", "blocks", "layout"]);
+/** True when a slide (or a header or footer) may draw a number the engines generate: a JSON number, a numbered payload or a `{{token}}`. */
+function generatesNumbers(value, depth = 0) {
+  if (typeof value === "number") return Number.isFinite(value);
+  if (typeof value === "string") return value.includes("{{");
+  if (!value || typeof value !== "object" || depth > MAX_COMPOSITION_DEPTH + 8) return false;
+  if (Array.isArray(value)) return value.some(entry => generatesNumbers(entry, depth + 1));
+  for (const [key, entry] of Object.entries(value)) {
+    if (UNDRAWN_KEYS.includes(key) || key === "language" || key === "design" || key === "composition") continue;
+    if (NUMBERED_KEYS.has(key) || generatesNumbers(entry, depth + 1)) return true;
+  }
+  return false;
 }
 
 /** One string's scripts (`scriptsOfText`) and the Han, kana and Hangul characters it draws, in order. One pass over the characters. */

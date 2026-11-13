@@ -14,7 +14,7 @@ export function selectFontRoutes(value) {
   for(const name of names)assert.ok(FONT_ROUTE_CASE_NAMES.includes(name),`Unknown font route: ${name}`);
   return FONT_ROUTE_CASE_NAMES.filter(name=>names.includes(name));
 }
-const sourcePaths=['scripts/native-acceptance/fixtures/font-routes.json','docs/evidence/script-corpora-20261001/script-corpora.json'];
+const sourcePaths=['scripts/native-acceptance/fixtures/font-routes.json','docs/programs/font-fidelity-everywhere/tracker-inputs/script-corpora-20261001/script-corpora.json'];
 export const fontRouteSourcePaths=()=>[...sourcePaths];
 export async function loadFontRouteSource(names) {
   assert.deepEqual(names,selectFontRoutes(names.join(',')),'canonical explicit selection required');
@@ -38,7 +38,7 @@ export async function loadFontRouteSource(names) {
       {id:'neutrals',text:record.script==='Arab'?'() [] — ، ؛ . , %':'() [] — . , %'},
       {id:'mixed',text:`${samples[0].text} 0123456789 PowerPoint`},
     ];
-    const run=(text,weight,fontSize=18.75,lang=record.language)=>({text,fontFamily:record.requestedNativeFamily,fontSize,bold:weight===700,italic:false,lang});
+    const run=(text,weight,fontSize=18.75,language=record.language)=>({text,fontFamily:record.requestedNativeFamily,fontSize,bold:weight===700,italic:false,language});
     // Plain text lines avoid list marker/spacing allocation shrinking measurement rows.
     const lines=rows=>rows.flatMap((row,index)=>index?['\n',row]:[row]);
     const slides=manifest.styles.map(({weight})=>({

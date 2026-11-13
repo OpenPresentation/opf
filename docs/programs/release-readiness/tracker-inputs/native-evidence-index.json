@@ -1,0 +1,824 @@
+{
+  "description": "RR-20: the native PowerPoint evidence index of the gallery tracker (nativeEvidenceIndex in scripts/build-gallery-tracker.mjs), computed from docs/evidence at 7fb6140804f969550e3a9c9d52916b7610844917 when the evidence left the tree. Each value id names the evidence folders (readable from history at that commit) whose json or md files under a native or PowerPoint path segment name it. Frozen: a new native run adds its per-value verdicts to inputs.nativeRuns instead.",
+  "frozenFrom": "7fb6140804f969550e3a9c9d52916b7610844917",
+  "index": {
+    "charts": {
+      "failure": [
+        "docs/evidence/chart-colors-workbook",
+        "docs/evidence/native-resume"
+      ],
+      "generation": [
+        "docs/evidence/chart-colors-workbook",
+        "docs/evidence/native-resume",
+        "docs/evidence/windows-native-2026-09-10"
+      ],
+      "fa-09-chart-alt.expect": [
+        "docs/evidence/fa-native-20261006"
+      ],
+      "column": [
+        "docs/evidence/fa-native-20261006",
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline",
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "waterfall": [
+        "docs/evidence/fa-native-20261006",
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline",
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "fa-09-chart-alt.opf": [
+        "docs/evidence/fa-native-20261006"
+      ],
+      "fa-14-chart-highlight.expect": [
+        "docs/evidence/fa-native-20261006"
+      ],
+      "pie": [
+        "docs/evidence/fa-native-20261006",
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "line": [
+        "docs/evidence/fa-native-20261006",
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "fa-14-chart-highlight.opf": [
+        "docs/evidence/fa-native-20261006"
+      ],
+      "combo": [
+        "docs/evidence/fa-native-20261006"
+      ],
+      "fa-15-combo-chart.opf": [
+        "docs/evidence/fa-native-20261006"
+      ],
+      "cleanup-worker-stopped": [
+        "docs/evidence/native-resume"
+      ],
+      "partial-comparison": [
+        "docs/evidence/native-resume"
+      ],
+      "worker-stopped": [
+        "docs/evidence/native-resume"
+      ],
+      "README": [
+        "docs/evidence/rr-54-chart-table-data-native-20261005",
+        "docs/evidence/rr-54-chart-table-data-native-recheck-20261005",
+        "docs/evidence/rr-68-native-chart-master-name-2026-10-15",
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "compare": [
+        "docs/evidence/rr-54-chart-table-data-native-20261005",
+        "docs/evidence/rr-54-chart-table-data-native-recheck-20261005"
+      ],
+      "decks": [
+        "docs/evidence/rr-54-chart-table-data-native-20261005",
+        "docs/evidence/rr-54-chart-table-data-native-recheck-20261005"
+      ],
+      "run": [
+        "docs/evidence/rr-54-chart-table-data-native-20261005",
+        "docs/evidence/rr-54-chart-table-data-native-recheck-20261005"
+      ],
+      "reimport": [
+        "docs/evidence/rr-54-chart-table-data-native-recheck-20261005"
+      ],
+      "comparison": [
+        "docs/evidence/rr-68-native-chart-master-name-2026-10-15",
+        "docs/evidence/windows-native-2026-09-10"
+      ],
+      "source-candidate-theme-category": [
+        "docs/evidence/rr-68-native-chart-master-name-2026-10-15"
+      ],
+      "treemap": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline",
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "histogram": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline",
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "pareto": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline",
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "box-and-whisker": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline",
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "funnel": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline",
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "all-seven-auto-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "all-seven-fallback-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "world": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline",
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "all-seven-native-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "box-multi-auto-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "box-multi-fallback-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "box-multi-native-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "funnel-category-auto-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "funnel-category-fallback-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "funnel-category-native-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "histogram-category-auto-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "histogram-category-fallback-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "histogram-category-native-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "histogram-single-auto-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "histogram-single-fallback-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "histogram-single-native-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "pareto-multi-auto-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "pareto-multi-fallback-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "pareto-multi-native-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline"
+      ],
+      "treemap-category-auto-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "treemap-category-fallback-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "treemap-category-native-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "waterfall-single-auto-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "waterfall-single-fallback-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "waterfall-single-native-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "world-category-auto-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "world-category-fallback-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "world-category-native-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-all-seven-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-all-seven": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-box-multi-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-box-multi": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-funnel-category-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-funnel-category": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-histogram-category-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-histogram-category": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-histogram-single-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-histogram-single": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-modes": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-pareto-multi-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-pareto-multi": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-treemap-category-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-treemap-category": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-waterfall-single-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-waterfall-single": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-world-category-imported.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-world-category": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "bar": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline",
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "chart-all-seven.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-box-multi.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-funnel-category.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-histogram-category.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-histogram-single.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-pareto-multi.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-treemap-category.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-waterfall-single.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-world-category.opf": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "pareto-single-auto-imported.opf": [
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "pareto-single-fallback-imported.opf": [
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "pareto-single-native-imported.opf": [
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-pareto-single.opf": [
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-two-runtime-summary": [
+        "docs/evidence/windows-native-2026-09-10"
+      ],
+      "invocation-failure": [
+        "docs/evidence/windows-native-2026-09-10"
+      ],
+      "native": [
+        "docs/evidence/windows-native-2026-09-10"
+      ],
+      "progress": [
+        "docs/evidence/windows-native-2026-09-10"
+      ],
+      "worker": [
+        "docs/evidence/windows-native-2026-09-10"
+      ],
+      "saved-workbook-inspection": [
+        "docs/evidence/windows-native-2026-09-10"
+      ],
+      "observation-diagnostic": [
+        "docs/evidence/windows-native-2026-09-10"
+      ],
+      "histogram-by-category": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "stacked-column-3x": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "100pct-stacked-column-3x": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "stacked-bar-3x": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "100pct-stacked-bar-3x": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "line-with-markers": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "stacked-line-3x": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "stacked-line-with-markers-3x": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "area": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "stacked-area-3x": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "100pct-stacked-area-3x": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "doughnut": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "scatter": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "radar": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "radar-with-markers": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "filled-radar": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "scatter-AB-lineMarker": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "manifest": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "world-a-baseline": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "world-b-cx6": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "world-c-cx4": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "world-d-cx3": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "world-e-cx8": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "world-f-no-layoutPr": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "world-g-projection": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "world-h-empty-geocache": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "world-i-val-dimension": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "world-j-legend-labels": [
+        "docs/evidence/windows-native-charts-20260930"
+      ],
+      "world-k-cx6-no-layoutPr": [
+        "docs/evidence/windows-native-charts-20260930"
+      ]
+    },
+    "color-schemes": {
+      "cool-horizon": [
+        "docs/evidence/fa-native-20261006"
+      ]
+    },
+    "font-schemes": {
+      "roboto": [
+        "docs/evidence/fa-native-20261006",
+        "docs/evidence/mac-shared-furniture-resume-20260914",
+        "docs/evidence/native-resume",
+        "docs/evidence/rr-20-windows-current-2026-10-14",
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline",
+        "docs/evidence/shipped-train-20260921",
+        "docs/evidence/windows-native-2026-09-10",
+        "docs/evidence/windows-native-edits-20260921",
+        "docs/evidence/windows-native-font-image-2026-09-10"
+      ],
+      "calibri": [
+        "docs/evidence/native-powerpoint-2026-09-08",
+        "docs/evidence/native-resume",
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline",
+        "docs/evidence/shared-code-complete",
+        "docs/evidence/shared-code-installed",
+        "docs/evidence/shared-code-xml-boundary",
+        "docs/evidence/shared-metric-integration",
+        "docs/evidence/shared-metric-native-anchor",
+        "docs/evidence/windows-native-2026-09-10",
+        "docs/evidence/windows-native-candidate-2026-09-10",
+        "docs/evidence/windows-native-quote-tab-2026-09-10"
+      ]
+    },
+    "themes": {
+      "classic": [
+        "docs/evidence/fa-native-20261006",
+        "docs/evidence/windows-native-font-image-2026-09-10",
+        "docs/evidence/windows-native-font-inventory-20260921",
+        "docs/evidence/windows-native-mixed-table-20260921"
+      ],
+      "master": [
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-sizeadjust-native-20261010",
+        "docs/evidence/rr-05-ff-12-native-20261010"
+      ]
+    },
+    "languages": {
+      "ts": [
+        "docs/evidence/fa-native-20261006"
+      ],
+      "ja": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002",
+        "docs/evidence/rr-05-ff-12-native-20261010"
+      ],
+      "ko": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002",
+        "docs/evidence/ff-46-sizeadjust-native-20261010",
+        "docs/evidence/rr-05-ff-12-native-20261010"
+      ],
+      "ar": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002",
+        "docs/evidence/ff-46-sizeadjust-native-20261010",
+        "docs/evidence/rr-05-ff-12-native-20261010"
+      ],
+      "ur": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002",
+        "docs/evidence/ff-46-sizeadjust-native-20261010"
+      ],
+      "fa": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002",
+        "docs/evidence/ff-46-sizeadjust-native-20261010"
+      ],
+      "he": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002",
+        "docs/evidence/rr-05-ff-12-native-20261010"
+      ],
+      "hi": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002",
+        "docs/evidence/ff-46-sizeadjust-native-20261010",
+        "docs/evidence/rr-05-ff-12-native-20261010"
+      ],
+      "bn": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "gu": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "or": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "ta": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "te": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "kn": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "ml": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "th": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002",
+        "docs/evidence/ff-46-sizeadjust-native-20261010"
+      ],
+      "km": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "am": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "hy": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "ka": [
+        "docs/evidence/ff-46-documented-visual-native-20261005",
+        "docs/evidence/ff-46-documented-visual-native-20261005-fonts",
+        "docs/evidence/ff-46-documented-visual-native-20261010",
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "my": [
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "bo": [
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "dv": [
+        "docs/evidence/ff-46-native-0.12-20261002"
+      ],
+      "hindi": [
+        "docs/evidence/rr-05-cjk-native-20261002",
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "japanese": [
+        "docs/evidence/rr-05-cjk-native-20261002",
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "korean": [
+        "docs/evidence/rr-05-cjk-native-20261002",
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "thai": [
+        "docs/evidence/rr-05-cjk-native-20261002",
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "chinese-simplified": [
+        "docs/evidence/rr-05-cjk-native-20261002",
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "english": [
+        "docs/evidence/rr-05-cjk-native-20261002"
+      ],
+      "chinese-traditional": [
+        "docs/evidence/rr-05-cjk-native-20261002",
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "arabic": [
+        "docs/evidence/rr-05b-native-20261002",
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "hebrew": [
+        "docs/evidence/rr-05b-native-20261002",
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "amharic": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "armenian": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "bengali": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "chittagonian": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "georgian": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "gujarati": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "kannada": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "khmer": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "malayalam": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "marathi": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "nepali": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "odia": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "pashto": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "persian": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "punjabi-gurmukhi": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "punjabi-shahmukhi": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "tamil": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "telugu": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "urdu": [
+        "docs/evidence/rr-42-native-20261002"
+      ],
+      "vietnamese-quoc-ngu": [
+        "docs/evidence/rr-42-native-20261002"
+      ]
+    },
+    "slide-sizes": {
+      "1:1": [
+        "docs/evidence/fa-native-20261006"
+      ],
+      "4:5": [
+        "docs/evidence/fa-native-20261006"
+      ],
+      "9:16": [
+        "docs/evidence/fa-native-20261006"
+      ]
+    },
+    "layouts": {
+      "chart": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "not-run": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "two-column": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "image-beside": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "chart-beside": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "table": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "auto": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "text": [
+        "docs/evidence/rr20-native-packet05-offline",
+        "docs/evidence/rr20-native-packet06-offline"
+      ],
+      "blank": [
+        "docs/evidence/windows-native-font-inventory-20260921"
+      ]
+    },
+    "purposes": {
+      "before-tab": [
+        "docs/evidence/windows-native-mixed-edit-20260922",
+        "docs/evidence/windows-native-mixed-table-20260921"
+      ],
+      "tab": [
+        "docs/evidence/windows-native-mixed-edit-20260922",
+        "docs/evidence/windows-native-mixed-table-20260921"
+      ],
+      "after-tab": [
+        "docs/evidence/windows-native-mixed-edit-20260922",
+        "docs/evidence/windows-native-mixed-table-20260921"
+      ],
+      "estimated-line-1-end-probe-only": [
+        "docs/evidence/windows-native-mixed-edit-20260922",
+        "docs/evidence/windows-native-mixed-table-20260921"
+      ],
+      "estimated-line-2-start-probe-only": [
+        "docs/evidence/windows-native-mixed-edit-20260922",
+        "docs/evidence/windows-native-mixed-table-20260921"
+      ],
+      "estimated-line-2-end-probe-only": [
+        "docs/evidence/windows-native-mixed-edit-20260922",
+        "docs/evidence/windows-native-mixed-table-20260921"
+      ],
+      "estimated-line-3-start-probe-only": [
+        "docs/evidence/windows-native-mixed-edit-20260922",
+        "docs/evidence/windows-native-mixed-table-20260921"
+      ]
+    }
+  }
+}

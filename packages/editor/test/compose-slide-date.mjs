@@ -6,7 +6,7 @@ import {createEditorSession} from '../dist/index.js';
 // accent surface by composing the slide, and a `date: true` footer field without a date fails that composition (overflow: 'error'), so a
 // session that added the date only afterwards kept the plain surface the renderer does not draw (opf#1072, test-furniture-fields-browser).
 const deck = {
-  design: {fontScheme: 'roboto', footer: {left: {date: true, dateFormat: 'MMMM d, yyyy'}}},
+  design: {fontScheme: 'roboto', footer: {start: {date: true, dateFormat: 'MMMM d, yyyy'}}},
   slides: [
     {title: 'Opening', text: 'The title still counts.'},
     {title: 'Second slide', text: 'Authored second body.', composition: {minFontSize: 32, overflow: 'error'}},

@@ -36,6 +36,8 @@ const orderedParser = new XMLParser({ignoreAttributes: false, attributeNamePrefi
 let geometry;
 /** Load the preset geometry; `fromPptx` awaits this for a package that has shapes, because the readers below are synchronous. */
 export async function loadShapeGeometry() { geometry ??= await import('@openpresentation/opf/shape-geometry'); return geometry; }
+/** The preset geometry once loadShapeGeometry has loaded it (SH-08 reads a preset's text rectangle), else undefined. */
+export const loadedShapeGeometry = () => geometry;
 
 const array = value => value === undefined || value === null ? [] : Array.isArray(value) ? value : [value];
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -535,7 +537,10 @@ export function readShape(drawn, context) {
     if (Object.keys(padding).some(side => Math.abs(padding[side] - standard[side]) > 0.01)) {
       fields.padding = Object.values(padding).every(value => value === padding.top) ? padding.top : padding;
     }
-    if (body.wrap === 'none') drop('text wrapping');
+    // RR-105: an exported shape whose one-line text is wider than its text rectangle is written unwrapped and centered (wrap="none" with
+    // anchorCtr="1": core's textWrap, a layout result, not an authored field); any other unwrapped text is a dropped property.
+    const engineUnwrapped = exportedShape(cNvPr.name) && (body.anchorCtr === '1' || body.anchorCtr === 'true');
+    if (body.wrap === 'none' && !engineUnwrapped) drop('text wrapping');
     if (number(body.numCol) > 1) drop('text columns');
     if (object(body['a:spAutoFit']) || object(body['a:normAutofit'])) drop('autofit');
     if (object(body['a:scene3d']) || object(body['a:sp3d'])) drop('3-D format');
@@ -621,8 +626,9 @@ export function shapeRole(drawn, {hasText} = {}) {
 }
 
 /** A shape's text from the native body reader's paragraphs: OPF text with the run emphasis, links and colors; sizes and faces are the composition's. */
-export function shapeText(paragraphs) {
+export function shapeText(paragraphs, report = () => {}) {
   if (!paragraphs?.length) return undefined;
+  if (paragraphs.some(paragraph => paragraph.nativeFontScale !== undefined)) report({code: 'scaled-shape-text-reflow', message: 'The native shape has saved fontScale. Shape text retains its words and supported emphasis, but uses OPF composition sizes instead of the saved effective native points; review the imported shape.'});
   const runs = paragraphs.flatMap((paragraph, index) => [...(index ? ['\n'] : []), ...(Array.isArray(paragraph.richText) ? paragraph.richText : [paragraph.richText ?? paragraph.text])]);
   const cleaned = runs.map(run => {
     if (typeof run === 'string') return run;
@@ -644,11 +650,12 @@ const reportDropped = (dropped, name, slideIndex, report) => {
 };
 
 // An overlay frame as fractions of the slide: from the right edge in a right-to-left deck, as the rest of OPF mirrors start and end.
-function placement(frame, {width, height, rtl}, report, name, slideIndex) {
+export function placement(frame, {width, height, rtl}, report, name, slideIndex) {
   const left = rtl ? width - frame.x - frame.cx : frame.x;
   const place = {x: left / width, y: frame.y / height, width: frame.cx / width, height: frame.cy / height};
-  const clamped = Object.fromEntries(Object.entries(place).map(([key, value]) => [key, round(Math.min(1, Math.max(0, value)), 6)]));
-  if (Object.keys(place).some(key => Math.abs(clamped[key] - round(place[key], 6)) > 1e-6)) report({code: 'shape-property-dropped', path: `slides.${slideIndex}`, property: 'position outside the slide', shape: name, message: `The native shape ${JSON.stringify(name)} reaches past the slide's edge, which overlay shapes do not (x, y, width and height are fractions 0 to 1); it was placed at the edge.`});
+  // Native shapes may bleed beyond the slide, up to the format's limit of 8 slides; the signed position is kept as observed.
+  const clamped = Object.fromEntries(Object.entries(place).map(([key, value]) => [key, round(key === 'x' || key === 'y' ? value : Math.min(8, Math.max(0, value)), 6)]));
+  if (place.width > 8 || place.height > 8) report?.({code: 'shape-property-dropped', path: `slides.${slideIndex}`, property: 'shape larger than eight slides', shape: name, message: `The native shape ${JSON.stringify(name)} is more than 8 slides wide or tall, the largest OPF represents; its size was limited to 8 while its signed position was preserved.`});
   return clamped;
 }
 
@@ -672,8 +679,10 @@ export function importNativeShape(entry, role, context) {
     if (frame.cy > 0 && Math.abs(aspect / expected - 1) > 0.01) payload.aspectRatio = round(aspect, 3);
     return {kind: 'shape', bounds: {x: frame.x / EMU_PER_INCH, y: frame.y / EMU_PER_INCH, w: frame.cx / EMU_PER_INCH, h: frame.cy / EMU_PER_INCH}, payload};
   }
-  // A filled shape across the whole slide is a background; an overlay is drawn over the content, so it would hide the slide.
-  if (frame.cx >= context.width * 0.98 && frame.cy >= context.height * 0.98 && drawsLook(entry.props).filled) {
+  // A known exported overlay can deliberately bleed across the slide and retain
+  // its back layer. Apply the foreign-background heuristic only to unclaimed
+  // native shapes, never to an explicit overlay identified by the existing reader.
+  if (!exportedShape(name) && frame.cx >= context.width * 0.98 && frame.cy >= context.height * 0.98 && drawsLook(entry.props).filled) {
     context.report({code: 'shape-not-imported', path: `slides.${context.slideIndex}`, shape: name, message: `The native shape ${JSON.stringify(name)} fills the whole slide; an overlay shape is drawn over the content, so it was not imported (set the slide's background instead).`});
     return undefined;
   }

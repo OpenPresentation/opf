@@ -104,7 +104,7 @@ for (const trend of ['up', 'down', 'flat']) for (const align of ['left', 'center
   {colorScheme: 'cool-horizon', background: '#FFFFFF'}, {background: '#0F172A', colorScheme: {light1: '#F8FAFC', dark1: '#0F172A', accent1: '#38BDF8'}}, {theme: 'minimal'},
   {colorScheme: 'cool-horizon', background: {type: 'gradient', gradient: {angle: 90, stops: [{color: '#0F172A', position: 0}, {color: '#1E293B', position: 1}]}}},
   {colorScheme: 'cool-horizon', background: {type: 'pattern', pattern: {preset: 'pct50', foregroundColor: '#FFFFFF', backgroundColor: '#7F7F7F'}}},
-]) decks.push({trend, align, deck: {design: {fontScheme: 'roboto', contentAlignment: align, ...design}, slides: [{metric: {value: 42, unit: 'ms', label: 'Latency', description: 'Median', delta: '-3%', trend}}]}});
+]) decks.push({trend, align, deck: {design: {fontScheme: 'roboto', contentAlignment: ({left:'start',right:'end'}[align]??align), ...design}, slides: [{metric: {value: 42, unit: 'ms', label: 'Latency', description: 'Median', delta: '-3%', trend}}]}});
 let arrowsChecked = 0;
 for (const {trend, align, deck} of decks) {
   const svg = toSvg(deck, 1, {trace: true}), [xml] = await slideXml(deck);

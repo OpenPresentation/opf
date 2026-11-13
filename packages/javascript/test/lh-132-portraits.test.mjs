@@ -8,8 +8,11 @@ import { check, errorsOf } from './support/validation.mjs';
 
 const face = `data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140" width="100" height="140"><rect width="100" height="140" fill="#eee"/><circle cx="50" cy="56" r="22" fill="#a76"/></svg>').toString('base64')}`;
 const names = [['Amara Okafor', 'Chief executive', 'Founded the company in 2016.'], ['Daniel Reyes', 'Chief technology officer', 'Leads the platform team.'], ['Mei Tanaka', 'Chief financial officer', 'Joined in 2023.'], ['Samuel Adeyemi', 'Chief operating officer', 'Runs fulfillment.'], ['Lena Fischer', 'Head of customer success', 'Built onboarding.'], ['Tomas Herrera', 'Support operations lead', 'Owns staffing.'], ['Priya Nair', 'Onboarding manager', 'Launched 60 customers.'], ['Jonas Berg', 'Solutions engineer', 'Integrations.']];
-const person = ([name, role, line], portrait) => ({ region: 'people', composition: { mode: 'column' }, blocks: [{ image: { src: face, alt: name }, shape: 'ellipse', ...(portrait ? { portrait } : {}) }, { items: [{ text: name, description: `${role}\n${line}` }] }] });
+const person = ([name, role, line], portrait, composition = { mode: 'column' }) => ({ region: 'people', composition, blocks: [{ image: { src: face, alt: name }, shape: 'ellipse', ...(portrait ? { portrait } : {}) }, { items: [{ text: name, description: `${role}\n${line}` }] }] });
 const team = (count, portrait, direction = 'ltr') => composeSlide({ title: 'The team', blocks: names.slice(0, count).map((entry, index) => person(entry, index === 0 ? portrait : undefined)) }, { layout: layouts.team, direction });
+// The slide the `portraits` guard compares with: the people as plain groups (a group that sets `columns` is no person), their pictures over
+// their names. RR-105: an authored `portrait: "avatar"` drew exactly this before it became the small circle (rr105-team-avatar.test.mjs).
+const plainTeam = (count, direction = 'ltr', size = {}) => composeSlide({ title: 'The team', blocks: names.slice(0, count).map((entry) => person(entry, undefined, { mode: 'column', columns: 1 })) }, { layout: layouts.team, direction, ...size });
 const pictures = (result) => result.items.filter((item) => item.field === 'image');
 const texts = (result) => result.items.filter((item) => item.field === 'items');
 const findings = (result) => result.diagnostics.filter((entry) => entry.code === 'text-overflow' || entry.code === 'small-cell');
@@ -17,7 +20,7 @@ const sameBox = (a, b) => ['x', 'y', 'width', 'height'].every((key) => Math.abs(
 
 for (const direction of ['ltr', 'rtl']) {
   test(`LH-132 (${direction}): four people draw their portraits across the top of four equal cards in one row`, () => {
-    const result = team(4, undefined, direction), avatar = team(4, 'avatar', direction);
+    const result = team(4, undefined, direction), avatar = plainTeam(4, direction);
     assert.deepEqual(findings(result), []);
     const images = pictures(result), words = texts(result);
     assert.equal(images.length, 4);
@@ -40,7 +43,7 @@ for (const direction of ['ltr', 'rtl']) {
   });
 
   test(`LH-132 (${direction}): six people draw their portraits beside the text, at the start side`, () => {
-    const result = team(6, undefined, direction), avatar = team(6, 'avatar', direction);
+    const result = team(6, undefined, direction), avatar = plainTeam(6, direction);
     assert.deepEqual(findings(result), []);
     for (const [index, image] of pictures(result).entries()) {
       const text = texts(result)[index], card = image.frameBox;
@@ -60,12 +63,12 @@ for (const direction of ['ltr', 'rtl']) {
 test('LH-132 review: a team whose portrait would cost text or a readable column keeps main exactly, and no picture shrinks', () => {
   // Three people in a narrow two-thirds layout: a top portrait would set the text smaller and a side column would split the names.
   const slide = (portrait) => composeSlide({ title: 'Leads', blocks: names.slice(0, 3).map((entry, index) => person(entry, index === 0 ? portrait : undefined)) }, { layout: layouts.team, width: 960, height: 720 });
-  const automatic = slide(), avatar = slide('avatar');
+  const automatic = slide(), avatar = composeSlide({ title: 'Leads', blocks: names.slice(0, 3).map((entry) => person(entry, undefined, { mode: 'column', columns: 1 })) }, { layout: layouts.team, width: 960, height: 720 });
   const geometry = (result) => result.items.map((item) => [item.path, item.box, item.frameBox, item.image?.box, item.image?.shape.kind, item.text?.fontSize]);
   if (pictures(automatic).every((image) => image.image.shape.kind === 'circle')) assert.deepEqual(geometry(automatic), geometry(avatar), 'main exactly');
   // No portrait is smaller than the avatar the slide draws without the rule.
   for (const count of [2, 3, 4, 5, 6]) {
-    const drawn = pictures(team(count)), plain = pictures(team(count, 'avatar'));
+    const drawn = pictures(team(count)), plain = pictures(plainTeam(count));
     for (const [index, image] of drawn.entries()) assert.ok(image.image.box.width * image.image.box.height >= plain[index].image.box.width * plain[index].image.box.height - 1, `${count} people, ${image.path}`);
   }
 });

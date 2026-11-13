@@ -1045,9 +1045,11 @@ function shortLabel(evidence) {
   return evidence.label.replace(/ \(.*\)$/, "");
 }
 
+// RR-20: the evidence folders left the tree (they stay in history); a record that cites one names it without a link.
+const linkTo = (label, target) => (/^https?:/.test(target) ? `[${label}](${target})` : target.startsWith("docs/evidence/") ? label : `[${label}](${path.posix.relative(DIR, target)})`);
+
 function evidenceLink(evidence) {
-  const url = /^https?:/.test(evidence.url) ? evidence.url : path.posix.relative(DIR, evidence.url);
-  return `[${cell(shortLabel(evidence))}](${url})`;
+  return linkTo(cell(shortLabel(evidence)), evidence.url);
 }
 
 function routeCell(rec) {
@@ -1126,7 +1128,7 @@ function nativeSection(tracker) {
     "| Run | Date | Decks | Decks passing every check | Failing checks |",
     "| --- | --- | ---: | ---: | --- |",
   );
-  for (const run of inputs.nativeEvidence) lines.push(`| [${cell(run.label)}](${path.posix.relative(DIR, run.readme)}) | ${run.date} | ${run.decks} | ${run.decksPassing} | ${run.failingChecks.map((item) => `${item.deck}: ${item.failing.join(", ")}`).join("; ") || "none"} |`);
+  for (const run of inputs.nativeEvidence) lines.push(`| ${linkTo(cell(run.label), run.readme)} | ${run.date} | ${run.decks} | ${run.decksPassing} | ${run.failingChecks.map((item) => `${item.deck}: ${item.failing.join(", ")}`).join("; ") || "none"} |`);
   lines.push("", "| Family | Status | Where |", "| --- | --- | --- |");
   for (const rec of tracker.records.filter((item) => item.nativeVerification.runs)) lines.push(`| ${cell(rec.family)} | ${rec.nativeVerification.status} | ${cell(rec.nativeVerification.note)}${rec.nativeVerification.caveat ? ` Caveat: ${cell(rec.nativeVerification.caveat)}` : ""} |`);
   return lines;
@@ -1138,7 +1140,7 @@ function nativeVisualSection(tracker) {
   const rows = tracker.records.filter((rec) => rec.nativeVisual);
   const lines = ["", "## Native visual comparison (FF-46)", ""];
   lines.push(
-    `[${cell(run.label)}](${path.posix.relative(DIR, run.readme)}) (${run.date}): ${run.families} families of status ${run.statuses.join(", ")}: ${run.pass} pass, ${run.finding} have a finding and ${run.unmeasured} are unmeasured (the real font is not installed on the native host). PowerPoint does not re-wrap the exported single-line boxes, so line breaks are read as where each native line ends against its box. A family is documented-visual only when the run passes and its own fixture passes in every host (${run.hosts.join(", ")}); a finding keeps the status for an owner decision.`,
+    `${linkTo(cell(run.label), run.readme)} (${run.date}): ${run.families} families of status ${run.statuses.join(", ")}: ${run.pass} pass, ${run.finding} have a finding and ${run.unmeasured} are unmeasured (the real font is not installed on the native host). PowerPoint does not re-wrap the exported single-line boxes, so line breaks are read as where each native line ends against its box. A family is documented-visual only when the run passes and its own fixture passes in every host (${run.hosts.join(", ")}); a finding keeps the status for an owner decision.`,
     "",
     "| Family | Status | Outcome | Installed on the native host | Ink native / preview | Own fixture hosts | Reasons |",
     "| --- | --- | --- | --- | ---: | --- | --- |",

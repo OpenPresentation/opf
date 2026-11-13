@@ -104,8 +104,8 @@ const captionUnsupportedPayload: RuleText = (finding) => {
   const kind = type ?? (/a group cannot carry one/.test(finding.message) ? "group" : undefined);
   const is = kind ? kindPhrase(kind) : "not one of those";
   return {
-    message: `A ${code("caption")} belongs to one image, chart, table or video; this block is ${is}.`,
-    next: `put the ${code("caption")} on the image, chart, table or video it describes, or remove it.`,
+    message: `A ${code("caption")} belongs to one image, chart, table, video or diagram; this block is ${is}.`,
+    next: `put the ${code("caption")} on the image, chart, table, video or diagram it describes, or remove it.`,
   };
 };
 
@@ -156,6 +156,11 @@ const shapeLinkHidden: RuleText = () => ({
   message: "This shape is hidden, so its `link` can never be clicked.",
   next: "remove `hidden`, or remove the `link`.",
 });
+
+const shapeAnchorSizeUnit: RuleText = (finding) => {
+  const { key, size } = params(finding);
+  return typeof key === "string" ? { message: `${code(`at.${key}: ${String(size)}`)} is a fraction, not pixels.`, next: `rename ${code(key)} to ${code(`${key}Px`)} if it is pixels.` } : undefined;
+};
 
 const shapeAnchorMissing: RuleText = (finding) => {
   const { id, known } = params(finding);
@@ -255,6 +260,19 @@ const chartMappingUnknownColumn: RuleText = (finding) => {
   return {
     message: `The chart mapping names column ${code(name)}, which the data does not have. Columns: ${plainList(columns)}.`,
     next: chooseNext(name, columns),
+  };
+};
+
+const chartReferenceAxisUnavailable: RuleText = () => ({
+  message: "This reference uses a secondary value axis that the chart does not have.",
+  next: "use the value axis, or put a line series on a combo chart's secondary axis.",
+});
+
+const chartReferenceUnsupportedType: RuleText = (finding) => {
+  const type = match(finding.message, /a '(.+?)' chart has none/)?.[1];
+  return {
+    message: type ? `A ${code(type)} chart cannot draw reference lines: it has no single value axis.` : "This chart type cannot draw reference lines: it has no single value axis.",
+    next: "remove `referenceLines`, or use a column, bar, line, line-with-markers, area or combo chart.",
   };
 };
 
@@ -703,6 +721,7 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/shape-adjust-unknown": shapeAdjustUnknown,
   "opf/shape-adjust-range": shapeAdjustRange,
   "opf/shape-link-hidden": shapeLinkHidden,
+  "opf/shape-anchor-size-unit": shapeAnchorSizeUnit,
   "opf/shape-anchor-missing": shapeAnchorMissing,
   "opf/connector-end-missing": connectorEndMissing,
   "opf/layout-placeholder-group": layoutPlaceholderGroup,
@@ -710,6 +729,8 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/dataset-field-unknown": datasetFieldUnknown,
   "opf/data-column-duplicate": dataColumnDuplicate,
   "opf/chart-mapping-unknown-column": chartMappingUnknownColumn,
+  "opf/chart-reference-axis-unavailable": chartReferenceAxisUnavailable,
+  "opf/chart-reference-unsupported-type": chartReferenceUnsupportedType,
   "opf/number-format-invalid": numberFormatInvalid,
   "opf/variable-invalid-value": variableInvalidValue,
   "opf/variable-unknown-builtin": variableUnknownBuiltin,

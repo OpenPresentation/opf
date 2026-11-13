@@ -5,7 +5,7 @@ import {createEditorSession} from '../src/index.js';
 const deck={slides:[{title:'Hello',text:[{text:'bold',bold:true}],blocks:[{composition:{mode:'row'},blocks:[{text:'Nested'}]}]}]};
 assert.equal(schemaAtPath(deck,'/slides/0/text/0/bold').type,'boolean');
 assert.equal(schemaAtPath(deck,'/slides/0/blocks/0/blocks/0/text').oneOf.length,2);
-assert.equal(schemaAtPath(deck,'/slides/0/top:left').$ref,undefined);
+assert.equal(schemaAtPath(deck,'/slides/0/top:start').$ref,undefined);
 // OPF 0.15: three shorthand strings (theme slot, hex colour, image source) and five background objects.
 assert.equal(schemaVariants(schemaAtPath(deck,'/slides/0/design/background')).length,8);
 for(const type of ['theme','solid','gradient','image','pattern']){

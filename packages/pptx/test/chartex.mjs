@@ -1,7 +1,11 @@
 // FF-22b: the seven chartex chart types export as native Office 2016 chartex
-// parts (cx:chartSpace) wrapped in mc:AlternateContent with the classic
-// clustered column chart as fallback, agree with the core catalog, round-trip
-// through fromPptx and stay deterministic.
+// parts (cx:chartSpace) wrapped in mc:AlternateContent, agree with the core
+// catalog, round-trip through fromPptx and stay deterministic. RR-105: the
+// mc:Fallback is a picture of OPF's preview of the chart and no classic chart
+// part is written; when the picture cannot be drawn (no rasterizer: the CLASSIC
+// options below) the classic clustered column chart is the fallback, with the
+// same chartex parts byte for byte, so the comparisons of the chartex part
+// with the classic chart run on that form.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
@@ -11,6 +15,7 @@ import {catalogDisplay} from '@openpresentation/gallery';
 import {ENGINE_DEFAULT_COLOR_SCHEME, chartDrawPlan, resolveChartData} from '@openpresentation/opf/composition';
 import {fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {colorsInXml, themeColorsOf, clrMapOf} from './helpers/scheme-colors.mjs';
+import {packageIntegrity} from './helpers/package-integrity.mjs';
 import {CHART_TYPES, CHARTEX_NAMESPACES, chartTypeFromChartex, resolveChartType} from '../dist/chart-types.js';
 import {CHARTEX_CONTENT_TYPES, CHARTEX_RELATIONSHIP_TYPES, chartexPointColors, columnLetters, scottBinCount} from '../dist/chartex.js';
 
@@ -26,9 +31,12 @@ const chartexIds = Object.keys(CHART_TYPES).filter((id) => CHART_TYPES[id].famil
 assert.deepEqual(chartexIds, ['treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world']);
 // LH-60: a map plots places; over other categories (North, South) it is drawn as clustered columns.
 const mapData = {columns: ['Country', 'Value'], rows: [['Germany', 42], ['France', 31], ['Spain', -8], ['Italy', 19]]};
-const dataFor = (id) => (id === 'box-and-whisker' ? boxData : id === 'world' ? mapData : categoryData);
+// RR-105: valid native aggregation control; the exact negative case is retained in histogram-negative-category.mjs.
+const histogramData = {...categoryData, rows: categoryData.rows.map(([label, value]) => [label, Math.abs(value)])};
+// Native aggregation controls use supported nonnegative categories; signed Pareto has its own strict combo controls.
+const dataFor = (id) => (id === 'box-and-whisker' ? boxData : id === 'world' ? mapData : ['histogram', 'pareto'].includes(id) ? histogramData : categoryData);
 
-// Native chartex export is opt-in (`chartex: 'native'`) until the native PowerPoint check passes; the default keeps main's bytes (checked below).
+// Exercise eligible native constructs explicitly; the auto default and data-domain fallbacks are checked below.
 async function exportDeck(slides, options = {}) {
   const diagnostics = [];
   const bytes = await toPptx({slides}, {chartex: 'native', ...options, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
@@ -40,6 +48,8 @@ async function exportDeck(slides, options = {}) {
   }));
   return {bytes, parts, part, relationships, diagnostics};
 }
+// RR-105: without a rasterizer the chart's fallback picture cannot be drawn and the classic chart stays the mc:Fallback.
+const CLASSIC = {svgRasterizer: async () => { throw Object.assign(new Error('no rasterizer'), {code: 'svg-rasterizer-unavailable'}); }};
 // RR-96: a colour is `a:srgbClr` or `a:schemeClr` (a role of the deck with the luminance transforms of a derived neutral), written as an
 // element with or without children. Parts are compared on the colour *element*: `norm` makes an empty `<a:X ...></a:X>` self-closing so the
 // classic part and the chartex and style parts can be compared whichever way each was serialized.
@@ -69,8 +79,34 @@ assert.deepEqual(Object.keys(expectedLayout), chartexIds);
 for (const id of chartexIds) {
   const want = expectedLayout[id];
   const data = dataFor(id);
-  const {parts, part, relationships, diagnostics} = await exportDeck([{title: id, chart: {type: id, data}}]);
+  const {parts, part, relationships, diagnostics: classicDiagnostics} = await exportDeck([{title: id, chart: {type: id, data}}], CLASSIC);
   const spec = CHART_TYPES[id];
+  // RR-105: the default export: the same chartex parts, the preview's picture as the mc:Fallback, no classic chart part.
+  const picture = await exportDeck([{title: id, chart: {type: id, data}}]), diagnostics = picture.diagnostics;
+  assert.deepEqual(classicDiagnostics.map((diagnostic) => diagnostic.code), [...diagnostics.map((diagnostic) => diagnostic.code), 'chartex-fallback-picture-unavailable'], `${id}: the classic form says why it has no picture`);
+  for (const name of ['ppt/charts/chartEx1.xml', 'ppt/charts/_rels/chartEx1.xml.rels', 'ppt/charts/style1.xml', 'ppt/charts/colors1.xml', 'ppt/embeddings/Microsoft_Excel_Worksheet1.xlsx']) {
+    assert.ok(picture.parts[name], `${id}: ${name} is written beside the picture`);
+    assert.deepEqual(picture.parts[name], parts[name], `${id}: ${name} is the same with either fallback`);
+  }
+  assert.deepEqual(Object.keys(picture.parts).filter((name) => /^ppt\/charts\/(?:_rels\/)?chart\d+\.xml/.test(name)), [], `${id}: no classic chart part beside the picture`);
+  assert.ok(!Object.values(picture.relationships('ppt/slides/slide1.xml')).some((rel) => rel.type.endsWith('/relationships/chart')), `${id}: no slide relationship to a classic chart`);
+  assert.doesNotMatch(picture.part('[Content_Types].xml'), /PartName="\/ppt\/charts\/chart\d+\.xml"/, `${id}: no classic chart content type`);
+  {
+    const slide = picture.part('ppt/slides/slide1.xml'), alternate = slide.match(/<mc:AlternateContent\b[\s\S]*?<\/mc:AlternateContent>/g);
+    assert.equal(alternate.length, 1, `${id}: one alternate-content frame`);
+    const choice = alternate[0].match(/<mc:Choice\b[^>]*>([\s\S]*?)<\/mc:Choice>/)[1], fallback = alternate[0].match(/<mc:Fallback>([\s\S]*?)<\/mc:Fallback>/)[1];
+    const classicChoice = part('ppt/slides/slide1.xml').match(/<mc:Choice\b[^>]*>([\s\S]*?)<\/mc:Choice>/)[1], masked = (xml) => xml.replace(/(<cx:chart\b[^>]*\br:id=")[^"]+"/, '$1#"');
+    assert.equal(masked(choice), masked(classicChoice), `${id}: the choice is the same with either fallback, but for its relationship id`);
+    assert.match(fallback, /^<p:pic>[\s\S]*<a:blip r:embed="[^"]+"><a:extLst><a:ext uri="\{96DAC541-7B7A-43D3-8B79-37D633B846F1\}"><asvg:svgBlip [^>]*\/><\/a:ext><\/a:extLst><\/a:blip>[\s\S]*<\/p:pic>$/, `${id}: the fallback is an SVG picture over its PNG`);
+    const cNvPr = (xml) => xml.match(/<p:cNvPr\b[^>]*?(?:\/>|>[\s\S]*?<\/p:cNvPr>)/)[0], offsetAndSize = (xml) => xml.match(/<(?:p|a):xfrm>([\s\S]*?)<\/(?:p|a):xfrm>/)[1];
+    const withoutId = (xml) => xml.replace(/(<p:cNvPr\b[^>]*\bid=")\d+"/, '$1#"');
+    assert.equal(withoutId(cNvPr(fallback)), withoutId(cNvPr(choice)), `${id}: the picture has the frame's name and alt text`);
+    const ids = [...slide.matchAll(/<p:cNvPr\b[^>]*\bid="(\d+)"/g)].map((match) => match[1]);
+    assert.equal(new Set(ids).size, ids.length, `${id}: unique object ids across choice and fallback picture`);
+    assert.equal(offsetAndSize(fallback), offsetAndSize(choice), `${id}: the picture has the frame's transform`);
+    assert.equal([...slide.matchAll(/<p:graphicFrame>/g)].length, 1, `${id}: one chart frame`);
+    assert.deepEqual(packageIntegrity(picture.parts), [], `${id}: the package is consistent`);
+  }
   assert.equal(spec.requires, want.requires, `${id}: requires`);
   assert.equal(spec.dimension, want.dimension, `${id}: dimension`);
 
@@ -171,7 +207,7 @@ for (const id of chartexIds) {
     assert.deepEqual(axes.map(([, axisId]) => axisId), ['0', '1', '2'].slice(0, want.axes));
     // CT_Axis order: scaling, gridlines, tickLabels, then the axis's own txPr (PowerPoint does not inherit the chartSpace txPr for axis labels).
     assert.match(axes[0][2], /^<cx:catScaling gapWidth="[0-9.]+"\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: category axis`);
-    const scaling = id === 'histogram' || id === 'pareto' ? '<cx:valScaling max="50" min="-20" majorUnit="20"/>' : id === 'box-and-whisker' ? '<cx:valScaling max="15" min="0" majorUnit="5"/>' : id === 'waterfall' ? '<cx:valScaling max="100" min="0" majorUnit="20"/>' : '<cx:valScaling/>';
+    const scaling = ['histogram', 'pareto'].includes(id) ? '<cx:valScaling max="50" min="0" majorUnit="10"/>' : id === 'box-and-whisker' ? '<cx:valScaling max="15" min="0" majorUnit="5"/>' : id === 'waterfall' ? '<cx:valScaling max="100" min="0" majorUnit="20"/>' : '<cx:valScaling/>';
     assert.ok(axes[1][2].startsWith(scaling), `${id}: exact value scale`);
     const axisContent = axes[1][2].slice(scaling.length);
     assert.match(axisContent, id === 'funnel' || id === 'waterfall' ? /^<cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/ : /^<cx:majorGridlines><cx:spPr>[\s\S]*<\/cx:spPr><\/cx:majorGridlines><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: value axis`);
@@ -245,7 +281,8 @@ for (const id of chartexIds) {
   assert.match(colors, /<cs:colorStyle [^>]*meth="cycle" id="10">(<a:schemeClr val="accent[1-6]"\/>){6}(<cs:variation\/>|<cs:variation>[\s\S]*?<\/cs:variation>){9}<\/cs:colorStyle>$/);
 
   // Diagnostics: only the map reports its missing geography cache.
-  assert.deepEqual(diagnostics.map((diagnostic) => diagnostic.code), id === 'world' ? ['chart-map-geodata'] : [], `${id}: diagnostics`);
+  assert.deepEqual(diagnostics.map((diagnostic) => diagnostic.code), id === 'world' ? ['chart-map-geodata'] : id === 'funnel' ? ['export-lossy'] : [], `${id}: diagnostics`);
+  if (id === 'funnel') assert.equal(diagnostics[0].feature, 'funnel-label-color');
   if (id === 'world') assert.match(diagnostics[0].message, /online map service.*draws nothing/);
   checks++;
 }
@@ -290,7 +327,8 @@ for (const [type, data, expectedType = type] of [
 // Row numbers are still plotted and reported, while full provenance restores the authored single column.
 {
   const {bytes, diagnostics} = await exportDeck([{title: 'funnel', chart: {type: 'funnel', data: singleData}}]);
-  assert.deepEqual(diagnostics.map((diagnostic) => diagnostic.adaptation), ['row-numbers']);
+  assert.deepEqual(diagnostics.filter(diagnostic => diagnostic.code === 'chart-data-adapted').map((diagnostic) => diagnostic.adaptation), ['row-numbers']);
+  assert.deepEqual(diagnostics.filter(diagnostic => diagnostic.code === 'export-lossy').map(diagnostic => diagnostic.feature), ['funnel-label-color']);
   assert.deepEqual(await importedChart(bytes), {type: 'funnel', data: singleData});
 }
 // Several charts in one deck: numbered parts, distinct uniqueIds, each frame wrapped, and the whole export deterministic.
@@ -323,7 +361,7 @@ for (const [type, data, expectedType = type] of [
 // Language and script fonts: a chartex part gets the slide's language and script slots like a classic chart part.
 {
   const deck = [{title: 'ヒストグラム', chart: {type: 'funnel', data: {columns: ['地域', '値'], rows: [['東京', 4], ['大阪', 3]]}}}];
-  const {part} = await exportDeck(deck, {language: 'ja-JP'});
+  const {part} = await exportDeck(deck, {language: 'ja-JP', ...CLASSIC});
   const cx = part('ppt/charts/chartEx1.xml'), classic = part('ppt/charts/chart1.xml');
   const slot = (xml, name) => xml.match(new RegExp(`<a:${name} typeface="([^"]*)"`))?.[1];
   assert.equal(slot(cx, 'latin'), slot(classic, 'latin'), 'same latin face as the classic part');
@@ -341,7 +379,7 @@ function repack(parts, edits) {
   return zipSync(Object.fromEntries(Object.keys(entries).sort().map((name) => [name, [entries[name], {level: 6}]])));
 }
 {
-  const {parts} = await exportDeck([{title: 'treemap', chart: {type: 'treemap', data: categoryData}}]);
+  const {parts} = await exportDeck([{title: 'treemap', chart: {type: 'treemap', data: categoryData}}], CLASSIC);
   const textFallback = (slide) => slide.replace(/<mc:Fallback>[\s\S]*?<\/mc:Fallback>/, '<mc:Fallback><p:sp><p:nvSpPr><p:cNvPr id="9" name="Chart 1"/><p:cNvSpPr><a:spLocks noTextEdit="1"/></p:cNvSpPr><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x="548640" y="1404747"/><a:ext cx="11094720" cy="4904613"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr><p:txBody><a:bodyPr/><a:lstStyle/><a:p><a:r><a:rPr lang="en-US"/><a:t>This chart isn\'t available in your version of PowerPoint.</a:t></a:r></a:p></p:txBody></p:sp></mc:Fallback>');
   const powerpointShape = repack(parts, {'ppt/slides/slide1.xml': textFallback});
   assert.deepEqual(await importedChart(powerpointShape), {type: 'treemap', data: categoryData}, 'the choice is read even with a text fallback');
@@ -351,6 +389,11 @@ function repack(parts, edits) {
   const slide = (await fromPptx(sunburstText)).slides[0];
   const texts = JSON.stringify(slide);
   assert.ok(texts.includes('PowerPoint chart: OPF chart 1'), `an unknown layout with a text fallback keeps a chart placeholder: ${texts.slice(0, 300)}`);
+  // RR-105: the default form's picture fallback is never read: an unknown layout keeps a chart placeholder there too.
+  const pictureForm = (await exportDeck([{title: 'treemap', chart: {type: 'treemap', data: categoryData}}])).parts;
+  assert.deepEqual(await importedChart(zipSync(pictureForm)), {type: 'treemap', data: categoryData}, 'the default form imports the choice');
+  const sunburstPicture = JSON.stringify((await fromPptx(repack(pictureForm, {'ppt/charts/chartEx1.xml': (xml) => xml.replace('layoutId="treemap"', 'layoutId="sunburst"')}))).slides[0]);
+  assert.ok(sunburstPicture.includes('PowerPoint chart: OPF chart 1') && !sunburstPicture.includes('"image"'), `an unknown layout with a picture fallback keeps a chart placeholder: ${sunburstPicture.slice(0, 300)}`);
   for (const [label, edit, code] of [
     ['duplicate point', (xml) => xml.replace('<cx:pt idx="1">31</cx:pt>', '<cx:pt idx="0">31</cx:pt>'), 'invalid-chart-cache'],
     ['point outside its count', (xml) => xml.replace('ptCount="4" formatCode', 'ptCount="2" formatCode'), 'invalid-chart-cache'],
@@ -370,7 +413,9 @@ const classicNumbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\
 {
   const values = [3, 5, 8, 13];
   const histogram = await exportDeck([{title: 'histogram', chart: {type: 'histogram', data: {columns: ['Value'], rows: values.map((value) => [value])}}}]);
-  const cx = histogram.part('ppt/charts/chartEx1.xml'), classic = histogram.part('ppt/charts/chart1.xml');
+  const cx = histogram.part('ppt/charts/chartEx1.xml');
+  // RR-105: the classic chart is the fallback only without the picture; it plots the same rows.
+  const classic = (await exportDeck([{title: 'histogram', chart: {type: 'histogram', data: {columns: ['Value'], rows: values.map((value) => [value])}}}], CLASSIC)).part('ppt/charts/chart1.xml');
   assert.deepEqual(histogram.diagnostics, [], 'a native histogram bins its own values: nothing is adapted');
   assert.doesNotMatch(cx, /<cx:strDim/, 'no category dimension for a lone value column');
   assert.deepEqual(chartexValues(cx), [['3', '5', '8', '13']]);
@@ -380,7 +425,9 @@ const classicNumbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\
   assert.deepEqual(await importedChart(histogram.bytes), {type: 'histogram', data: {columns: ['Value'], rows: values.map((value) => [value])}}, 'raw values round-trip');
   const strings = await exportDeck([{title: 'h', chart: {type: 'histogram', data: {columns: ['Value'], rows: [['1'], ['2'], ['x'], [null], [3], ['4.5']]}}}]);
   assert.deepEqual(chartexValues(strings.part('ppt/charts/chartEx1.xml')), [['1', '2', '3', '4.5']], 'non-numeric cells are not plotted as zeros');
-  assert.deepEqual(classicNumbers(strings.part('ppt/charts/chart1.xml'), 'cat'), [['1', '2', '5', '6']], 'the fallback keeps the row numbers');
+  const stringsClassic = await exportDeck([{title: 'h', chart: {type: 'histogram', data: {columns: ['Value'], rows: [['1'], ['2'], ['x'], [null], [3], ['4.5']]}}}], CLASSIC);
+  assert.deepEqual(stringsClassic.part('ppt/charts/chartEx1.xml'), strings.part('ppt/charts/chartEx1.xml'));
+  assert.deepEqual(classicNumbers(stringsClassic.part('ppt/charts/chart1.xml'), 'cat'), [['1', '2', '5', '6']], 'the classic fallback keeps the row numbers');
   for (const [rows, count] of [[[[7], [7], [7]], 1], [[[7]], 1], [Array.from({length: 1000}, (_, index) => [index]), 10]]) {
     assert.equal(binCount((await exportDeck([{title: 'h', chart: {type: 'histogram', data: {columns: ['Value'], rows}}}])).part('ppt/charts/chartEx1.xml')), count, `${rows.length} values`);
   }
@@ -442,18 +489,25 @@ const classicNumbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\
     const mapColumns = deck.slides.filter((slide) => slide.chart.type === 'world').length - maps;
     // LH-175: a Pareto chart of several series is core's pareto-as-columns fallback, clustered columns in every mode.
     const multiPareto = deck.slides.filter(slide => slide.chart.type === 'pareto' && slide.chart.data.columns.length > 2).length;
+    // RR-105: these fixture rows remain unchanged; negative categorical histograms now keep their reviewed classic bytes in every mode.
+    const negativeHistograms = deck.slides.filter(({chart}) => chart.type === 'histogram' && chart.data.columns.length > 1 && chart.data.rows.some(row => row.slice(1).some(value => typeof value === 'number' && value < 0))).length;
+    const signedPareto = deck.slides.filter(({chart}) => {
+      const plan = chartDrawPlan(chart, resolveChartData(chart));
+      return plan.type === 'pareto' && plan.columns.length === 2 && plan.rows.some(row => typeof row[1] === 'number' && row[1] < 0);
+    }).length;
     const auto = await run(deck, undefined), explicit = await run(deck, 'auto');
     const native = await run(deck, 'native');
     assert.deepEqual(digest(auto.bytes), digest(explicit.bytes), `${name}: the default is 'auto'`);
-    assert.equal(auto.chartexParts, deck.slides.length - maps - mapColumns - multiPareto, `${name} (auto): chartex parts for every confirmed construct`);
-    assert.equal(native.chartexParts, deck.slides.length - mapColumns - multiPareto, `${name} (native): chartex parts for every construct`);
+    assert.equal(auto.chartexParts, deck.slides.length - maps - mapColumns - multiPareto - negativeHistograms - signedPareto, `${name} (auto): chartex parts for every confirmed data domain`);
+    assert.equal(native.chartexParts, deck.slides.length - mapColumns - multiPareto - negativeHistograms - signedPareto, `${name} (native): chartex parts for every supported data domain`);
+    for (const [mode, result] of [['auto', auto], ['native', native]]) assert.equal(result.diagnostics.filter(d => d === 'chart-data-adapted/signed-pareto-combo').length, signedPareto, `${name} (${mode}): exact signed Pareto combo notices`);
     if (maps === 0) assert.deepEqual(digest(auto.bytes), digest(native.bytes), `${name}: auto equals native without a map`);
     else {
       assert.notEqual(digest(auto.bytes), digest(native.bytes), `${name}: the map differs between auto and native`);
-      assert.deepEqual(auto.diagnostics.filter((d) => d.endsWith('/chartex-fallback')).length, maps, `${name} (auto): the map reports its fallback`);
+      assert.deepEqual(auto.diagnostics.filter((d) => d.endsWith('/chartex-fallback')).length, maps + negativeHistograms, `${name} (auto): map and negative histogram report fallback`);
       assert.ok(!auto.diagnostics.includes('chart-map-geodata') && native.diagnostics.includes('chart-map-geodata'), `${name}: geodata notice only when the map is native`);
     }
-    assert.equal(auto.diagnostics.filter(d => d.endsWith('/chartex-fallback')).length, maps, `${name}: every unsupported construct reports fallback`);
+    assert.equal(auto.diagnostics.filter(d => d.endsWith('/chartex-fallback')).length, maps + negativeHistograms, `${name}: every unsupported construct or data domain reports fallback`);
     assert.equal(native.diagnostics.filter(d => d.endsWith('/chart-fallback')).length >= multiPareto, true, `${name}: a Pareto chart of several series reports its column fallback`);
     assert.ok(!auto.diagnostics.includes('chart-data-adapted/series-dropped'), `${name}: no Pareto series are dropped`);
     if (maps === deck.slides.length) assert.deepEqual(digest(auto.bytes), fixture.entries[name].sha256, `${name} (auto): a map-only deck keeps the reviewed fallback bytes`);
@@ -482,7 +536,7 @@ const classicNumbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\
   // The default scheme is a dark surface; an explicit scheme with dark text on a light surface is the other case (as test/chart-colors.mjs does).
   const dark = await exportDeck([{title: 'box', chart: {type: 'box-and-whisker', data: boxData}}]);
   const lightDeck = {design: {background: '#FFFFFF', colorScheme: {id: 'cool-horizon', dark1: '#1F2937', light1: '#1F2937', text: '#1F2937', dark2: '#F3F4F6', light2: '#F3F4F6'}}, slides: [{title: 'box', chart: {type: 'box-and-whisker', data: boxData}}]};
-  const lightParts = unzipSync(await toPptx(lightDeck, {chartex: 'native'}));
+  const lightParts = unzipSync(await toPptx(lightDeck, {chartex: 'native', ...CLASSIC}));
   const darkColors = colorsOf(dark.parts, norm(dark.part('ppt/charts/chartEx1.xml')), norm(dark.part('ppt/charts/style1.xml')));
   const lightColors = colorsOf(lightParts, norm(strFromU8(lightParts['ppt/charts/chartEx1.xml'])), norm(strFromU8(lightParts['ppt/charts/style1.xml'])));
   for (const [name, colors] of [['light', lightColors], ['dark', darkColors]]) {
@@ -513,4 +567,4 @@ assert.deepEqual(chartexPointColors('waterfall', [1, -2, 0, null], ['UP', 'DOWN'
 assert.deepEqual(chartexPointColors('funnel', [1, 2], ['A']), [null, null]);
 assert.equal(resolveChartType('treemap-3x').id, null, 'a retired alias is outside the catalog');
 
-console.log(`Chartex passed: ${checks} checks; ${chartexIds.length} chartex ids export native cx:chartSpace parts with style parts, content types, relationships and alternate-content frames, agree with core chartTypeRecords, round-trip and are deterministic; the default writes them for the six confirmed constructs and keeps the map on the fallback (chartex: 'fallback' retains strict reviewed archive hashes).`);
+console.log(`Chartex passed: ${checks} checks; ${chartexIds.length} chartex ids export native cx:chartSpace parts with style parts, content types, relationships and alternate-content frames, agree with core chartTypeRecords, round-trip and are deterministic; the default writes eligible confirmed constructs and keeps the map and negative categorical histograms on the fallback (chartex: 'fallback' retains strict reviewed archive hashes).`);

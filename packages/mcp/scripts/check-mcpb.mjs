@@ -2,7 +2,8 @@
 // Drive the server of an unpacked .mcpb the way Claude Desktop starts it, with the official MCP client:
 //   node scripts/check-mcpb.mjs <entry point> <manifest.json> script-fonts|no-script-fonts
 // It checks that the manifest lists exactly the tools the server offers the model, that the viewer is served, that show_deck
-// answers, and that the bundled fonts reach the viewer (an Office face, a vendored face and, in a full bundle, a script face).
+// answers, that the bundled fonts reach the viewer (an Office face, a vendored face and, in a full bundle, a script face), and that
+// the gallery's icons do (read_icons over the installed icon files, RR-111).
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
@@ -31,7 +32,10 @@ try {
 	const japanese = await read("script-fonts/noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf");
 	if (fonts === "script-fonts") assert.ok(japanese, "a script face");
 	else assert.equal(japanese, undefined, "a lite bundle has no script faces");
-	console.log(`check-mcpb: ok (${forModel.length} tools for the model, the viewer, show_deck and the fonts${fonts === "script-fonts" ? ", script faces included" : ""})`);
+	assert.deepEqual(shown.structuredContent.iconSets, ["lucide", "tabler"], "the viewer reads the gallery's icon sets");
+	const icons = await client.callTool({ name: "read_icons", arguments: { set: "lucide", names: ["rocket"], index: true } });
+	assert.ok(!icons.isError && icons.structuredContent.icons.rocket && icons.structuredContent.index.license === "ISC", "an icon from the bundled icon files");
+	console.log(`check-mcpb: ok (${forModel.length} tools for the model, the viewer, show_deck, the fonts and the icons${fonts === "script-fonts" ? ", script faces included" : ""})`);
 } finally {
 	await client.close();
 }

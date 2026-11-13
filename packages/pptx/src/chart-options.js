@@ -8,6 +8,7 @@
 //   chartex charts   cx:axis/cx:title, cx:legend pos and cx:dataLabels pos (see chartex.js, which calls the helpers here).
 //
 // A chart that carries none of the three fields resolves to `active: false`; nothing below runs and its parts are unchanged.
+import {stripNumeralShape} from './numeral-shapes.js';
 import {CHART_HEADER_MAX_LEGEND, chartOptionSupport, chartOptionTarget, resolveChartOptions, textColorForFill} from '@openpresentation/opf/composition';
 
 const INACTIVE = Object.freeze({active: false, axisTitles: {}, diagnostics: []});
@@ -184,7 +185,7 @@ export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCo
     const position = mapped ?? 'right';
     if (layer.header) {
       if (!(position === 'right' || (position === 'top' && layer.headerLegend))) out.legend = position;
-    } else if (headerKind || !(defaultLegend && position === 'right')) out.legend = position;
+    } else if (headerKind || !(defaultLegend && (position === 'right' || (position === 'bottom' && layer.radarLegend)))) out.legend = position;
   } else if (defaultLegend && !layer.direct) out.legend = 'none';
 
   // LH-105: the direct labels an export writes in place of a legend (series names at the line ends, category names on the slices) are
@@ -215,7 +216,8 @@ function classicDataLabels(chartNode, target, notes, seriesFormats = [], combo) 
     if (flag(source[hidden])) notes.push({option: 'dataLabels', message: `Data labels that show ${hidden.slice(6)} cannot be expressed; only category, value and percent import.`});
   }
   const support = target ? chartOptionSupport(target) : undefined;
-  const numberFormat = source['c:numFmt']?.formatCode ?? block['c:numFmt']?.formatCode;
+  // LH-106: without the numeral-shape prefix the export writes for the slide language (src/numeral-shapes.js).
+  const numberFormat = stripNumeralShape(source['c:numFmt']?.formatCode ?? block['c:numFmt']?.formatCode);
   // RR-54: a label format that is a series' own number format imports with that column's format (or its own note).
   if (numberFormat && numberFormat !== 'General' && numberFormat !== '#,##0' && numberFormat !== '0%' && !seriesFormats.includes(numberFormat)) notes.push({option: 'dataLabels', message: `The label number format '${numberFormat}' cannot be expressed; labels import in the General format.`});
   const out = {};
@@ -290,7 +292,7 @@ export function chartOptionsFromChartex(space, {type, seriesCount}) {
   const labels = series?.['cx:dataLabels'];
   const defaultContent = type === 'treemap' ? ['category'] : type === 'funnel' ? ['value'] : undefined;
   // LH-107: a waterfall's signed values (a "+" format, core waterfallSignedFormat) are its default labels, not an option.
-  const signed = type === 'waterfall' && /^"\+"/.test(String(labels?.['cx:numFmt']?.formatCode ?? ''));
+  const signed = type === 'waterfall' && /^"\+"/.test(String(stripNumeralShape(labels?.['cx:numFmt']?.formatCode) ?? ''));
   if (labels && !signed) {
     const visibility = labels['cx:visibility'] ?? {};
     const content = [];

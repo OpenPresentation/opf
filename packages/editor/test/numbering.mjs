@@ -20,7 +20,7 @@ assert.deepEqual(NUMBERING_SUFFIX_OPTIONS.map((option) => option.value), ["perio
 const deck = () => ({
   slides: [
     { id: "plain", title: "Plain", items: ["One", { text: "Nested", level: 1 }, "Two"] },
-    { id: "regions", title: "Regions", left: { bullets: ["A", "B", "C"], numbering: "alpha-lower" }, right: { text: "Notes" } },
+    { id: "regions", title: "Regions", start: { bullets: ["A", "B", "C"], numbering: "alpha-lower" }, end: { text: "Notes" } },
     { id: "blocks", title: "Blocks", blocks: [{ items: ["X", "Y"] }, { text: "Words" }, { blocks: [{ bullets: ["P", { text: "Q", level: 2 }] }] }] },
     { id: "text", title: "Only text", text: "No list here" },
   ],
@@ -32,13 +32,13 @@ const deck = () => ({
   assert.equal(listPayloadAt(doc, "slides.0.items").payloadPath, "slides.0");
   assert.equal(listPayloadAt(doc, "slides.0.items.2").entry, 2);
   assert.equal(listPayloadAt(doc, "slides.0.items.1.text").entry, 1);
-  assert.equal(listPayloadAt(doc, "/slides/1/left/bullets/0").payloadPath, "slides.1.left");
+  assert.equal(listPayloadAt(doc, "/slides/1/start/bullets/0").payloadPath, "slides.1.start");
   assert.equal(listPayloadAt(doc, "slides.2.blocks.2.blocks.0.bullets").field, "bullets");
   assert.equal(listPayloadAt(doc, "slides.3.text"), undefined);
   assert.equal(listPayloadAt(doc, "slides.0.title"), undefined);
   assert.equal(listPayloadAt(doc, "slides.9.items"), undefined);
   assert.deepEqual(findNumberableLists(doc, 0).map((entry) => [entry.path, entry.count, entry.numbered]), [["slides.0.items", 3, false]]);
-  assert.deepEqual(findNumberableLists(doc, 1).map((entry) => [entry.path, entry.numbered]), [["slides.1.left.bullets", true]]);
+  assert.deepEqual(findNumberableLists(doc, 1).map((entry) => [entry.path, entry.numbered]), [["slides.1.start.bullets", true]]);
   assert.deepEqual(findNumberableLists(doc, 2).map((entry) => entry.path), ["slides.2.blocks.0.items", "slides.2.blocks.2.blocks.0.bullets"]);
   assert.deepEqual(findNumberableLists(doc, 3), []);
   assert.deepEqual(findNumberableLists(doc, 7), []);
@@ -60,7 +60,7 @@ for (const bad of [[], [{ style: "greek" }], [{ suffix: "colon" }], [{ start: 0 
   const doc = deck();
   const plain = numberingState(doc, "slides.0.items");
   assert.deepEqual({ numbered: plain.numbered, perLevel: plain.perLevel, depth: plain.depth, markers: plain.markers, count: plain.count }, { numbered: false, perLevel: false, depth: 2, markers: [], count: 3 });
-  const numbered = numberingState(doc, "slides.1.left.bullets.2");
+  const numbered = numberingState(doc, "slides.1.start.bullets.2");
   assert.equal(numbered.numbered, true);
   assert.deepEqual(numbered.levels, [{ style: "alpha-lower", start: 1, suffix: "period" }]);
   assert.deepEqual(numbered.markers.map((marker) => marker.text), ["a.", "b.", "c."]);
@@ -113,13 +113,13 @@ for (const bad of [[], [{ style: "greek" }], [{ suffix: "colon" }], [{ start: 0 
   assert.deepEqual(none.patches, []);
 
   // Regions, blocks and nested groups.
-  setNumbering(editor, "slides.1.left.bullets", { style: "roman-lower", suffix: "paren-both" });
-  assert.deepEqual(editor.presentation.slides[1].left.numbering, { style: "roman-lower", suffix: "paren-both" });
+  setNumbering(editor, "slides.1.start.bullets", { style: "roman-lower", suffix: "paren-both" });
+  assert.deepEqual(editor.presentation.slides[1].start.numbering, { style: "roman-lower", suffix: "paren-both" });
   setNumbering(editor, "slides.2.blocks.2.blocks.0.bullets.1", "alpha-upper");
   assert.equal(editor.presentation.slides[2].blocks[2].blocks[0].numbering, "alpha-upper");
   setNumbering(editor, "slides.2.blocks.0.items", "arabic");
   assert.equal(editor.presentation.slides[2].blocks[0].numbering, "arabic");
-  assert.throws(() => setNumbering(editor, "slides.1.right.text", "arabic"), (error) => error.code === "not-a-list");
+  assert.throws(() => setNumbering(editor, "slides.1.end.text", "arabic"), (error) => error.code === "not-a-list");
   assert.throws(() => setNumbering(editor, "slides.3.text", "arabic"), (error) => error.code === "not-a-list");
   // The session refuses an invalid value and leaves the document as it was.
   const snapshot = structuredClone(editor.presentation);

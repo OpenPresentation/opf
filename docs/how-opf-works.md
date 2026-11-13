@@ -78,16 +78,16 @@ Multiple kinds at the slide root (with no explicit `type`, `blocks`, or regions)
 **3. Promoted region keys** — a 3×3 placement grid when position matters:
 
 ```
-                  left                 center                 right
+                  start                center                  end
          +--------------------+--------------------+--------------------+
-   top   |  top:left          |  top:center        |  top:right         |
+   top   |  top:start         |  top:center        |  top:end           |
          +--------------------+--------------------+--------------------+
-  middle |  middle:left       |  middle:center     |  middle:right      |
+  middle |  middle:start      |  middle:center     |  middle:end        |
          +--------------------+--------------------+--------------------+
-  bottom |  bottom:left       |  bottom:center     |  bottom:right      |
+  bottom |  bottom:start      |  bottom:center     |  bottom:end        |
          +--------------------+--------------------+--------------------+
 
-  A bare column key ("left") spans all three rows.
+  A bare column key ("start") spans all three rows.
   A bare row key ("top") spans all three columns.
   Keys span neighbors with "+" and intersect rows with columns via ":".
 ```
@@ -95,24 +95,24 @@ Multiple kinds at the slide root (with no explicit `type`, `blocks`, or regions)
 The spans compose into the slide shapes you actually want:
 
 ```
-  "left" + "center+right"             "top" + "middle+bottom"
+  "start" + "center+end"              "top" + "middle+bottom"
   (sidebar + main)                    (headline band + body)
   +----------+------------------+     +-------------------------------+
   |          |                  |     |              top              |
   |          |                  |     +-------------------------------+
-  |   left   |  center+right    |     |                               |
+  |  start   |   center+end     |     |                               |
   |          |                  |     |         middle+bottom         |
   |          |                  |     |                               |
   +----------+------------------+     +-------------------------------+
 
-  "top" + "middle+bottom:left" + "middle+bottom:center+right"
+  "top" + "middle+bottom:start" + "middle+bottom:center+end"
   (headline band, then sidebar + main)
   +---------------------------------------------+
   |                     top                     |
   +---------------+-----------------------------+
   |               |                             |
-  | middle+bottom | middle+bottom:center+right  |
-  | :left         |                             |
+  | middle+bottom | middle+bottom:center+end    |
+  | :start        |                             |
   |               |                             |
   +---------------+-----------------------------+
 ```
@@ -123,8 +123,8 @@ That last shape in JSON:
 {
   "title": "Adoption Doubled",
   "top": { "text": "Adoption doubled while support load stayed flat." },
-  "middle+bottom:left": { "metric": { "value": "2.1x", "label": "Adoption" } },
-  "middle+bottom:center+right": {
+  "middle+bottom:start": { "metric": { "value": "2.1x", "label": "Adoption" } },
+  "middle+bottom:center+end": {
     "chart": { "type": "line", "data": { "columns": ["Month", "Teams"], "rows": [["Jan", 12], ["Feb", 18]] } }
   }
 }
@@ -135,8 +135,8 @@ And the two-column shape from the grid above:
 ```json
 {
   "title": "Operating Snapshot",
-  "left": { "table": { "columns": ["Metric", "Value"], "rows": [["Revenue", "$4.2M"]] } },
-  "center+right": { "chart": { "type": "line", "data": { "columns": ["Month", "Revenue"], "rows": [["Jan", 3.4]] } } }
+  "start": { "table": { "columns": ["Metric", "Value"], "rows": [["Revenue", "$4.2M"]] } },
+  "center+end": { "chart": { "type": "line", "data": { "columns": ["Month", "Revenue"], "rows": [["Jan", 3.4]] } } }
 }
 ```
 
@@ -197,7 +197,7 @@ A reference is a bare id (`"two-column"`) or `name:id` (`"acme:hero"`), where th
 
 ```json
 "catalogs": {
-  "default": { "source": "https://www.pptx.gallery", "layouts": { "two-column": { "name": "Two column", "regions": [{ "name": "title" }, { "direction": "row", "regions": [{ "name": "left", "accepts": ["text"], "flow": "none" }, { "name": "right", "accepts": ["text"], "flow": "none" }] }] } } },
+  "default": { "source": "https://www.pptx.gallery", "layouts": { "two-column": { "name": "Two column", "regions": [{ "name": "title" }, { "direction": "row", "regions": [{ "name": "first", "accepts": ["text"], "flow": "none" }, { "name": "second", "accepts": ["text"], "flow": "none" }] }] } } },
   "acme": { "source": "pkg:@acme/opf-catalog", "themes": { "brand": { "name": "Brand", "colorScheme": "ocean", "fontScheme": "inter" } } },
   "custom": { "layouts": { "q4-special": { "name": "Q4 special", "regions": [{ "name": "title" }, { "name": "chart", "accepts": ["chart"], "flow": "none" }] } } }
 }
@@ -270,7 +270,7 @@ Binary content lives in the top-level `assets` registry, keyed by id. Content pa
 
 ## Engines and icon sets that load on demand
 
-Three parts of a deck draw from code or data that a browser bundle or an edge Worker (Cloudflare Workers, Vercel Edge) loads only when a deck needs it: diagram types ([diagrams](diagrams.md#the-engine), the `#diagram-engine` import map), the preset shape geometry ([shapes](shapes.md#loading-in-browsers-and-edge-runtimes), `#shape-engine`) and icon sets ([icons](icons.md), each set a module of `@openpresentation/gallery/icon-sets` that a host registers with its catalogs). Node, Bun and Deno load the engines with core; icon sets always load on demand. One preload covers all three, and a host awaits it before synchronous code (`validate`, `composeSlide`, `toSvg`) reads the deck:
+Three parts of a deck draw from code or data that a browser bundle or an edge Worker (Cloudflare Workers, Vercel Edge) loads only when a deck needs it: diagram types ([diagrams](diagrams.md#the-engine), the `#diagram-engine` import map), the preset shape geometry ([shapes](shapes.md#loading-in-browsers-and-edge-runtimes), `#shape-engine`) and icon sets ([icons](icons.md), the static files of `@openpresentation/gallery/icon-sets` that a host registers with its catalogs, read one icon at a time). Node, Bun and Deno load the engines with core; icons always load on demand. One preload covers all three, and a host awaits it before synchronous code (`validate`, `composeSlide`, `toSvg`) reads the deck:
 
 ```js
 import { ensureDiagrams, ensureIcons, ensureShapes } from "@openpresentation/opf/composition";
@@ -305,7 +305,7 @@ Everything above, together — intent metadata, a catalog-backed narrative with 
   "design": {
     "theme": "classic",
     "colorScheme": "forest-green",
-    "footer": { "left": { "text": "{{organization.name}}" }, "right": { "text": "{{slide.number}}" } }
+    "footer": { "start": { "text": "{{organization.name}}" }, "end": { "text": "{{slide.number}}" } }
   },
   "assets": {
     "adoption-csv": { "src": "./data/adoption.csv", "alt": "Monthly adoption data" }
@@ -320,8 +320,8 @@ Everything above, together — intent metadata, a catalog-backed narrative with 
     {
       "beat": "performance-headline",
       "title": "Adoption Doubled",
-      "left": { "metric": { "value": "2.1x", "label": "Quarter-over-quarter adoption", "trend": "up" } },
-      "center+right": {
+      "start": { "metric": { "value": "2.1x", "label": "Quarter-over-quarter adoption", "trend": "up" } },
+      "center+end": {
         "chart": { "type": "line", "data": { "columns": ["Month", "Active Teams"], "rows": [["Jul", 8], ["Aug", 12], ["Sep", 17]], "source": { "src": "asset:adoption-csv" } } }
       },
       "notes": "Pause here; this is the slide the decision hangs on."

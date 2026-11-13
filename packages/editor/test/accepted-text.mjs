@@ -4,7 +4,7 @@ import {resolvePresentation} from '@openpresentation/opf-render';
 import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 const fonts=await loadFonts({ pack: 'office', substitutionPolicy:'visual' }),options={fonts,textRasterPadding:1.5};
 let cases=0;
-for(const dimensions of [{widthInches:40/3,heightInches:7.5},{widthInches:5.625,heightInches:10}])for(const align of ['left','center','right'])for(const contentBox of [false,true]) {
+for(const dimensions of [{widthInches:40/3,heightInches:7.5},{widthInches:5.625,heightInches:10}])for(const align of ['start','center','end'])for(const contentBox of [false,true]) {
   const original={design:{fontScheme:{id:'roboto',heading: 'Aptos Display',body: 'Aptos'},dimensions,contentBox,titleAlignment:align,contentAlignment:align},slides:[{title:'Complete heading that wraps on a narrow slide',text:[{text:'Negative bearing j and ',italic:true},{text:'mixed styles.',bold:true}]}]};
   const editor=createEditorSession(original,{rejectInvalid:true});
   const verify=()=>assert.deepEqual(editor.composeSlide(0,options).items,resolvePresentation(editor.presentation,options).slides[0].geometry.items);

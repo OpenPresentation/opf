@@ -44,8 +44,9 @@ const squash = text => text.replace(/[\s︎️]+/g, '');
 function nameDeck(name, sample) {
   return {
     $schema: 'https://openpresentation.org/schema/opf/v1', name: `Script name fixture ${name} ${sample.id}`, ...(sample.language ? {language: sample.language} : {}),
-    design: {fontScheme: {name, major: name, minor: name, eastAsian: {major: name, minor: name}, complexScript: {major: name, minor: name}}},
-    slides: [{id: 'a', title: sample.text, text: [{text: sample.text}, {text: sample.text, bold: true}]}],
+    design: {fontScheme: {major: name, minor: name, eastAsian: {major: name, minor: name}, complexScript: {major: name, minor: name}}},
+    // LH-188: the subtitle keeps the slide a content slide, so the text is set at its role size in both faces.
+    slides: [{id: 'a', title: sample.text, subtitle: sample.text, text: [{text: sample.text}, {text: sample.text, bold: true}]}],
   };
 }
 /** A symbol-encoded name is a run font: the codes of the sample (private-use form), regular then bold, with no title (the deck draws nothing else). */

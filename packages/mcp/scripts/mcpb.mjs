@@ -45,7 +45,7 @@ export function packDirectory(directory, out) {
 	const files = {};
 	const unix = process.platform !== "win32";
 	const walk = (folder) => {
-		for (const entry of readdirSync(folder, { withFileTypes: true })) {
+		for (const entry of readdirSync(folder, { withFileTypes: true }).sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))) {
 			const file = path.join(folder, entry.name);
 			const name = path.relative(directory, file).split(path.sep).join("/");
 			if (LEFT_OUT.some((pattern) => pattern.test(name))) continue;
@@ -58,9 +58,14 @@ export function packDirectory(directory, out) {
 	};
 	walk(directory);
 	if (!files["manifest.json"]) throw new Error(`${directory} has no manifest.json.`);
-	writeFileSync(out, zipSync(files, { level: 9, mtime: new Date() }));
+	// A fixed entry time (the one PPTX export uses, FIXED_ZIP_DATE in packages/pptx/src/index.js) keeps the bundle's bytes a function
+	// of its files: the same inputs give the same .mcpb and the same SHA-256, whenever and wherever they are packed.
+	writeFileSync(out, zipSync(files, { level: 9, mtime: BUNDLE_ZIP_DATE }));
 	return Object.keys(files).length;
 }
+
+/** The modification time of every bundle entry: 1980-01-01 00:00, the earliest a zip entry can carry. */
+export const BUNDLE_ZIP_DATE = new Date(1980, 0, 1, 0, 0, 0);
 
 /** Unzip a bundle into `directory`, refusing any entry that would land outside it. */
 export function unpackFile(file, directory) {

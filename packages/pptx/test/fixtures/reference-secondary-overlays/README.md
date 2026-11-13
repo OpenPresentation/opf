@@ -1,0 +1,3 @@
+# Singleton combo original export
+
+The unmodified original fixture was generated once through the genuine installed consumer from source57acc14a61c19cceab26d5bce7b3ce6c6aa745c2, identity7da60ea18bc5676153c2dd06edddaa1209fc7e262c6dc2d2fa5296151133d53e. Public schema validation passed. Its two reference overlays have old V1 receipts with no explicit axis pair. Before the repair only180/value returned and the secondary .25 remained as shapes. A current importer conservatively preserves all four ordinary line/text shapes and diagnoses re-export; it does not guess an axis. The source is included unchanged. This original export has never been saved by Office and does not provide native acceptance.

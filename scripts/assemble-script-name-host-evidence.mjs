@@ -18,7 +18,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const DEFAULT_DATE = "2026-10-10";
-export const defaultOut = (date) => `docs/evidence/font-replacements-20260923/script-name-host-fixtures-${date.replaceAll("-", "")}.json`;
+export const defaultOut = (date) => `docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/script-name-host-fixtures-${date.replaceAll("-", "")}.json`;
 const MIB = 1048576;
 const round = (value, digits = 3) => Math.round(value * 10 ** digits) / 10 ** digits;
 const median = (values) => { const sorted = [...values].sort((a, b) => a - b); return sorted.length ? sorted[sorted.length >> 1] : 0; };

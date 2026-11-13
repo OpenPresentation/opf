@@ -60,6 +60,7 @@ When a schema or catalog change is accepted:
 - Update any affected reference docs (`docs/schema-reference.md`, `docs/catalog-schema-reference.md`, `docs/content-payloads.md`, etc.) alongside the schema change.
 - Add or update an entry in `docs/migrations/` if the change is breaking.
 - Make sure `examples/**/*.opf.json` still validates, or update the affected examples.
+- Add every new key, enum value or alternative to a format-coverage deck (`scripts/native-acceptance/qualification/decks/coverage-*.opf.json`), so PowerPoint and Keynote open it in the release qualification; `pnpm check:format-coverage` fails until a deck uses it.
 
 ### Package code and other changes
 
@@ -73,13 +74,17 @@ A change that touches several packages is one pull request with one `changes/<sl
 
 `pnpm test` discovers its tests instead of listing them: a package runs every `test/*.mjs` (`node ../../scripts/run-tests.mjs`, with `test/suites.json` for the few helpers and separately-run files that are excluded) and the root runs every `check:*` script (`scripts/run-checks.mjs`, with `scripts/checks.json`). A new test is one new file and a new check is one new `check:*` script, so two pull requests that each add one never conflict.
 
+### Evidence
+
+Raw evidence (archives, screenshots, logs, saved decks, receipts) stays out of the tree: attach it to the pull request or upload it as a workflow artifact (an evidence-only branch that is never merged, linked by commit, only when a reviewer has to read it from git); commit only a short written result. `pnpm check:evidence-size` enforces it; see [AGENTS.md](./AGENTS.md#evidence-stays-out-of-main).
+
 ### Generated trackers
 
 The gallery tracker (`docs/programs/release-readiness/gallery-tracker.*`) and the font tracker (`docs/programs/font-fidelity-everywhere/font-tracker.*`) are derived from committed data. A pull request does not have to regenerate them: when it changes a tracker input, CI only warns that the committed tracker is stale (`OPF_TRACKER_STALE=warn`), and after the merge the "Tracker refresh" workflow regenerates both and offers the result as one pull request from `bot/tracker-refresh`. Regenerate in your own pull request (`pnpm build:font-tracker`, then `pnpm build:gallery-tracker`) only when that pull request changes a tracker generator, its overrides or its tests. A local `pnpm test` and the CI runs on `main`, tags and releases still fail on a stale tracker; if `main` is red for that reason, merge the refresh pull request.
 
 ### Releases
 
-Only maintainers cut releases, with one click: Actions, **Release**, **Run workflow**. The workflow runs the slow gate, assembles the changelogs from `changes/`, tags `vX.Y.Z`, and `npm-publish.yml` publishes all six packages with npm trusted publishing and provenance, then verifies them. The owner has authorized agents to run it when a release is required (authorized 2026-09-29). See [`docs/release-process.md`](./docs/release-process.md) for the procedure, retry and the version rules. After a release, the three sites receive "bump to vX.Y.Z" pull requests automatically.
+Only maintainers cut releases, with one click: Actions, **Release**, **Run workflow**. The workflow runs the slow gate, assembles the changelogs from `changes/`, tags `vX.Y.Z`, and `npm-publish.yml` publishes all seven packages with npm trusted publishing and provenance, then verifies them. The owner has authorized agents to run it when a release is required (authorized 2026-09-29). See [`docs/release-process.md`](./docs/release-process.md) for the procedure, retry and the version rules. After a release, the three sites receive "bump to vX.Y.Z" pull requests automatically.
 
 ### Dependencies
 

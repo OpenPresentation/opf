@@ -9,8 +9,11 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
+import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
+import { assertAppResourceFrame } from "./app-resource-frame.mjs";
+import { minifyAppCss } from "./app-css.mjs";
 
 const require = createRequire(import.meta.url);
 const here = new URL("../", import.meta.url);
@@ -39,7 +42,25 @@ for (const face of office.registry.embeddedFonts) {
 }
 if (fonts.startup.length !== 1) throw new Error("The Office font pack has no Roboto Regular face to start the deck view with.");
 
+// zod's locale messages: `z.locales` re-exports about fifty of them (some 230 KiB), which a bundler cannot drop because the whole
+// namespace is exported. Nothing in the view picks a locale (zod's default, English, imports en.js itself), so the view carries only
+// English. Without this the viewer would not fit the resource frame below. The rule fails loudly: the build stops when zod's locale
+// index was not met (zod moved it, and the rule no longer applies) or when any other locale module is in the bundle anyway.
+let zodLocaleIndexes = 0;
+const zodEnglishOnly = {
+	name: "zod-english-only",
+	setup(context) {
+		context.onLoad({ filter: /[\\/]zod[\\/]v4[\\/]locales[\\/]index\.js$/ }, (args) => {
+			zodLocaleIndexes += 1;
+			return { contents: 'export { default as en } from "./en.js";\n', loader: "js", resolveDir: dirname(args.path) };
+		});
+	},
+};
+
+const profile = process.env.OPF_MCP_APP_PROFILE;
 const bundle = await build({
+	plugins: [zodEnglishOnly],
+	metafile: true,
 	// A path, not URL.pathname, which on Windows is "/C:/..." and does not resolve.
 	entryPoints: [fileURLToPath(new URL("app/main.ts", here))],
 	bundle: true,
@@ -49,6 +70,8 @@ const bundle = await build({
 	// `worker` picks core's precompiled validators (no code generated at run time); `module` is esbuild's default for the browser.
 	conditions: ["worker", "module"],
 	target: "es2022",
+	// The HTML declares UTF-8; preserve identical JS values without inflating non-ASCII literals into escapes.
+	charset: "utf8",
 	minify: true,
 	legalComments: "eof",
 	define: { MCP_VERSION: JSON.stringify(manifest.version), OPF_DECK_FONTS: JSON.stringify(fonts) },
@@ -56,6 +79,10 @@ const bundle = await build({
 	// tsup's chunks of core are imported bare for their order only; they are pure, so dropping the bare import changes nothing.
 	logOverride: { "ignored-bare-import": "silent" },
 });
+if (zodLocaleIndexes === 0) throw new Error("build-app: zod's locale index (zod/v4/locales/index.js) was not in the bundle, so the English-only rule no longer applies. Review the rule.");
+const otherLocales = Object.keys(bundle.metafile.inputs).filter((input) => /[\\/]zod[\\/]v4[\\/]locales[\\/](?!en\.js$|index\.js$)[^\\/]+$/.test(input));
+if (otherLocales.length) throw new Error(`build-app: zod locale modules other than English are in the bundle: ${otherLocales.join(", ")}.`);
+if (profile) await writeFile(profile, `${JSON.stringify(bundle.metafile, null, 2)}\n`);
 const script = bundle.outputFiles[0].text;
 // The sandbox refuses code generated from strings: a bundle that calls the Function constructor or eval would break there.
 for (const pattern of [/\bnew Function\(/, /\beval\(/]) {
@@ -63,13 +90,17 @@ for (const pattern of [/\bnew Function\(/, /\beval\(/]) {
 	if (found) console.warn(`build-app: the bundle contains ${found[0]} (at ${found.index}); the deck view's CSP forbids it, so that code path must never run.`);
 }
 
-const styles = [await readFile(require.resolve("@openpresentation/opf-editor/styles.css"), "utf8"), await readFile(new URL("app/view.css", here), "utf8")].join("\n");
+const styles = await minifyAppCss([await readFile(require.resolve("@openpresentation/opf-editor/styles.css"), "utf8"), await readFile(new URL("app/view.css", here), "utf8")].join("\n"));
 const template = await readFile(new URL("app/index.html", here), "utf8");
 // Inline text must not close its element early.
 const html = template.replace("/*OPF_CSS*/", () => styles.replaceAll("</style", "<\\/style")).replace("/*OPF_JS*/", () => script.replaceAll("</script", "<\\/script"));
 
+// Guard the actual escaped protocol response, not just HTML bytes, before publishing the app resource.
+const frame = assertAppResourceFrame(html);
 await mkdir(out, { recursive: true });
 await writeFile(new URL("deck-app.html", out), html);
 await writeFile(new URL("deck-fonts.json", out), `${JSON.stringify({ extra: fonts.extra.map(({ license: _license, ...face }) => face) }, null, 2)}\n`);
 const kib = (bytes) => `${Math.round(bytes / 1024)} KiB`;
 console.log(`build-app: app-dist/deck-app.html ${kib(Buffer.byteLength(html))} (script ${kib(Buffer.byteLength(script))}, styles ${kib(Buffer.byteLength(styles))}, ${fonts.extra.length} faces on request)`);
+
+console.log(`build-app: JSON-RPC resource ${frame.bytes} bytes / ${frame.limit} default stdio bytes (${frame.headroom} bytes headroom)`);

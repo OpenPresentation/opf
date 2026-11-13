@@ -5,6 +5,7 @@
  * exporters, so the preview and the native PowerPoint export number every entry identically. Nothing here
  * measures text or reads a document beyond the items it is given.
  */
+import { localizeDigits } from './numerals.js';
 
 /** The five number styles OPF supports; each maps to a native PowerPoint auto-number scheme. */
 export const NUMBERING_STYLES = ['arabic', 'roman-upper', 'roman-lower', 'alpha-upper', 'alpha-lower'] as const;
@@ -116,8 +117,10 @@ export function formatListNumber(value: number, style: NumberingStyleName = 'ara
  * LH-07: the number of a list entry without its suffix (`4`, `iv`, `C`): the numeral a step badge draws, since the circle
  * already sets it apart from the text.
  */
-export function listNumberLabel(number: Pick<ListNumber, 'value' | 'style'>): string {
-  return bareNumber(number.value, number.style) ?? String(number.value);
+export function listNumberLabel(number: Pick<ListNumber, 'value' | 'style'>, language?: string): string {
+  // LH-106: a badge or numeral drawn as text is in the language's digits; a list marker (`formatListNumber`) is PowerPoint's auto-number
+  // and stays Latin, since PowerPoint picks the digits of its Hindi schemes from the paragraph's text.
+  return localizeDigits(bareNumber(number.value, number.style) ?? String(number.value), language);
 }
 
 /** The number of one list entry. */

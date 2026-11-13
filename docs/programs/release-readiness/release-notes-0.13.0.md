@@ -164,11 +164,11 @@ Supervisor-run on the Windows host with desktop PowerPoint; agents never open Of
 
 | Evidence | Covers |
 | --- | --- |
-| [rr-17-pptxgenjs-plus-native-20261005](../../evidence/rr-17-pptxgenjs-plus-native-20261005/README.md) ([opf#351](https://github.com/OpenPresentation/opf/pull/351)) | The engine migration, a/b on 40 decks: PASS 20, WARN 0, FAIL 0. A Keynote check of the 20 `m-*` decks on the new engine: 20 WARN, 0 FAIL, every native chart kept (warnings are font substitution and text metrics, as on 0.12.3) |
-| [ff-05-per-slide-script-fonts-native-20261005](../../evidence/ff-05-per-slide-script-fonts-native-20261005/README.md) | Per-slide script fonts: every `after` deck passes; the `before` decks show the baseline failure |
-| [ff-46-theme-supplement-native-20261005](../../evidence/ff-46-theme-supplement-native-20261005/README.md) | Armenian, Georgian and Amharic supplements: the five changed decks fail before and pass after; six controls byte-identical |
-| [rr-54-chart-table-data-native-20261005](../../evidence/rr-54-chart-table-data-native-20261005/README.md), [recheck](../../evidence/rr-54-chart-table-data-native-recheck-20261005/README.md), [slash](../../evidence/rr-54-slash-native-20261005/README.md) | RR-54: the first run had 3 FAIL (a save re-spelling the format code, zeros missing from the workbook, `0.0 m/s` read as a fraction); each was fixed and re-checked (12 of 12 codes kept) |
-| [rr-54-ee4941b-native-20261006](../../evidence/rr-54-ee4941b-native-20261006/README.md) ([opf#392](https://github.com/OpenPresentation/opf/pull/392)) | RR-54 on the merged-main combination with pptxgenjs-plus: 25 PASS, 0 FAIL (read-only open, Edit Data, save copy and re-import) |
+| rr-17-pptxgenjs-plus-native-20261005 ([opf#351](https://github.com/OpenPresentation/opf/pull/351)) | The engine migration, a/b on 40 decks: PASS 20, WARN 0, FAIL 0. A Keynote check of the 20 `m-*` decks on the new engine: 20 WARN, 0 FAIL, every native chart kept (warnings are font substitution and text metrics, as on 0.12.3) |
+| ff-05-per-slide-script-fonts-native-20261005 | Per-slide script fonts: every `after` deck passes; the `before` decks show the baseline failure |
+| ff-46-theme-supplement-native-20261005 | Armenian, Georgian and Amharic supplements: the five changed decks fail before and pass after; six controls byte-identical |
+| rr-54-chart-table-data-native-20261005, recheck, slash | RR-54: the first run had 3 FAIL (a save re-spelling the format code, zeros missing from the workbook, `0.0 m/s` read as a fraction); each was fixed and re-checked (12 of 12 codes kept) |
+| rr-54-ee4941b-native-20261006 ([opf#392](https://github.com/OpenPresentation/opf/pull/392)) | RR-54 on the merged-main combination with pptxgenjs-plus: 25 PASS, 0 FAIL (read-only open, Edit Data, save copy and re-import) |
 
 ### Not verified natively
 

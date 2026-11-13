@@ -3,6 +3,7 @@ import {strFromU8, unzipSync} from 'fflate';
 import {resolveSlideContext as coreResolveSlideContext} from '@openpresentation/opf';
 import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPptx as exportPptx} from '../dist/index.js';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
 // OPF 0.15: the font schemes this deck names come from the gallery snapshot, which a host registers explicitly; the
 // exporter and core's context get the same catalogs.
@@ -41,10 +42,10 @@ for (const [index, slide] of deck.slides.entries()) {
   const allowed = new Set([expected.heading, expected.body, expected.code, expected.accent].filter(Boolean));
   assert.deepEqual([...probe.families].filter(family => !allowed.has(family)), [], `${slide.id}: layout is measured only in the deck's resolved families`);
   assert.ok(probe.families.has(expected.body), `${slide.id}: the body family ${expected.body} is measured`);
-  // The package names the same families.
+  // The package names the same families (RR-105, opf#1293: theme font references read as their theme's families).
   const entries = unzipSync(bytes);
   const faces = new Set(Object.entries(entries).filter(([name]) => /^ppt\/slides\/slide\d+\.xml$/.test(name))
-    .flatMap(([, value]) => [...strFromU8(value).matchAll(/<a:latin typeface="([^"]*)"/g)].map(match => match[1])));
+    .flatMap(([name]) => [...withThemeFamilies(entries, name).matchAll(/<a:latin typeface="([^"]*)"/g)].map(match => match[1])));
   assert.deepEqual([...faces].filter(family => !allowed.has(family)), [], `${slide.id}: the package names only the resolved families`);
 }
 

@@ -14,7 +14,7 @@ export { type ExportResult, type ImportOptions, type ImportResult, type Prepared
 export { PEER_RANGES, PPTX_PACKAGE, RENDER_PACKAGE, type Diagnostic, type FontsHandle, type Peer, type PptxModule, type Renderer, loadPptx, loadRenderer, missingPeerFrom } from "./node/peers.js";
 export { type ImportRun, runImport } from "./node/pptx-import.js";
 export { type ReportFinding, Reporter, type Source, finishReport, reaches, reportThrown } from "./node/reporter.js";
-export { type AssetProblem, localAssetProblems } from "./node/assets.js";
+export { type AssetProblem, iconSourceReader, localAssetProblems } from "./node/assets.js";
 export { assetRoot } from "./node/export.js";
 export { createZip } from "./node/zip.js";
 export { type MeasuringFonts, type MeasuringFontsOptions, type PaginateDeckOptions, type PaginatedDeck, measuringFonts, paginateDeck } from "./node/paginate.js";

@@ -18,8 +18,10 @@ name: Publish OPF npm packages
 # filename, not the reusable one that runs `npm publish` (docs.npmjs.com/trusted-publishers), so release.yml would have to be the
 # publisher on all seven packages and its provenance would not name a tag. release.yml pushes the tag instead and watches this run.
 #
-# Jobs: plan -> build -> publish -> verify -> release (report on failure). Only `publish` holds id-token: write and only `release`
-# holds contents: write; no job holds a secret. There is no GitHub environment (D7). The sites are bumped by release.yml, which
+# Jobs: plan -> build -> publish -> verify -> release (the npm publication and the GitHub release notes), and beside it
+# plan -> mcpb, then [mcpb, release] -> assets (the Claude Desktop bundle attached to the GitHub release); report runs last.
+# Nothing on the publication path needs mcpb or assets. Only `publish` holds id-token: write and only `release` and `assets`
+# hold contents: write (they write the GitHub release); no job holds a secret. There is no GitHub environment (D7). The sites are bumped by release.yml, which
 # calls bump-sites.yml after it has watched this run succeed (MR-52, D17, D19); nothing is needed here.
 on:
   push:
@@ -137,6 +139,50 @@ jobs:
         with:
           name: tarballs
           path: ${{ runner.temp }}/tarballs
+          if-no-files-found: error
+          retention-days: 14
+
+  # RR-107: the Claude Desktop bundle (a GitHub release asset, never an npm package) is built in its own runner, off the publish
+  # path. Its `npm install` resolves third-party dependencies and font packages without a lockfile, as a user's install would: a
+  # registry hiccup, a broken transitive release or a slow download fails this job only, and it never shares a workspace with the
+  # tarballs `publish` uploads. publish and verify do not need it; only `assets` does.
+  mcpb:
+    name: MCP bundle
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+
+      # The bundle and its file name carry the package version, so a rehearsal prepares the same scratch version as `build`.
+      - name: Prepare the scratch version (dry run only)
+        if: ${{ needs.plan.outputs.dry-run == 'true' }}
+        env:
+          VERSION: ${{ needs.plan.outputs.version }}
+        run: node scripts/release.mjs prepare "$VERSION" --no-stability --no-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Build and check the Claude Desktop bundle
+        run: pnpm --filter @openpresentation/mcp run build:mcpb --check
+
+      - name: Hash the checked bundle
+        env:
+          VERSION: ${{ needs.plan.outputs.version }}
+        run: node scripts/release-mcpb.mjs checksum "$VERSION" --dir packages/mcp/artifacts
+
+      - name: Keep the checked MCP bundle and checksum
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mcpb
+          path: |
+            packages/mcp/artifacts/opf-${{ needs.plan.outputs.version }}.mcpb
+            packages/mcp/artifacts/opf-${{ needs.plan.outputs.version }}.mcpb.sha256
           if-no-files-found: error
           retention-days: 14
 
@@ -275,11 +321,48 @@ jobs:
           case "$VERSION" in *-*) flags+=(--prerelease) ;; esac
           gh release create "$TAG" --title "OPF $VERSION" --notes-file "$RUNNER_TEMP/notes.md" "${flags[@]}"
 
-  # A failed release opens (or comments on) one issue "Release vX.Y.Z failed" labeled release-failed; the next green release
-  # closes it. A dry run reports nothing.
+  # RR-107: after the GitHub release exists, attach the checked bundle and its checksum. The npm publication is complete before
+  # this job starts, so its failure means "assets missing", not "release failed": `report` files it separately, and release.yml
+  # judges the publication jobs only and still bumps the sites. Re-running this job attaches only the missing files
+  # (scripts/release-mcpb.mjs: never clobbers, verifies an existing pair, hashes an uploaded bundle that lacks its checksum).
+  assets:
+    name: attach the MCP bundle
+    needs: [plan, mcpb, release]
+    if: ${{ needs.plan.outputs.dry-run != 'true' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            /scripts/
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: Download the checked MCP bundle and checksum
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: mcpb
+          path: ${{ runner.temp }}/mcpb
+
+      - name: Attach missing MCP bundle assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.plan.outputs.version }}
+        run: node scripts/release-mcpb.mjs attach "$VERSION" --dir "$RUNNER_TEMP/mcpb"
+
+  # A failed publication (plan, build, publish, verify, release) opens (or comments on) one issue "Release vX.Y.Z failed" labeled
+  # release-failed; missing release assets (mcpb, assets) open a separate issue labeled release-assets-missing, because the packages
+  # are live. The next run where those jobs are green closes the matching issue. A dry run reports nothing.
   report:
     name: report
-    needs: [plan, build, publish, verify, release]
+    needs: [plan, build, mcpb, publish, verify, release, assets]
     if: ${{ always() && needs.plan.outputs.dry-run != 'true' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -303,4 +386,13 @@ jobs:
           NEEDS: ${{ toJSON(needs) }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           TITLE: Release ${{ github.ref_name }} failed
-        run: node scripts/ci-report-issue.mjs --label release-failed --title "$TITLE"
+        run: node scripts/ci-report-issue.mjs --label release-failed --title "$TITLE" --ignore mcpb,assets
+
+      - name: Open, update or close the release-assets-missing issue
+        if: ${{ always() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEEDS: ${{ toJSON(needs) }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          TITLE: Release ${{ github.ref_name }} is missing its MCP bundle assets
+        run: node scripts/ci-report-issue.mjs --label release-assets-missing --title "$TITLE" --ignore plan,build,publish,verify,release

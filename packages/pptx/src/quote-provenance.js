@@ -1,8 +1,10 @@
 import {XMLParser} from 'fast-xml-parser';
 import {isValidFormat} from './format-check.js';
+import {authoredAlt,photoAlt} from './default-alt.js';
 import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {cleanBase,headingValue,joinRichLines,unwrapQuoteRuns} from './rich-heading.js';
+import {currentThemeLook} from './document-provenance.js';
 import {unwrapQuoteMarks,QUOTE_MARKS,ASCII_QUOTE_MARKS,QUOTE_PULL_PREFIX,QUOTE_PULL_ROLE_SEPARATOR} from '@openpresentation/opf/composition';
 
 // FF-57: a `quote` payload exports as native text lines (a body part and an optional footer part). Each line shape carries an
@@ -131,7 +133,7 @@ export function importQuoteGroups(shapes,paragraphs,relationships,entries,report
     let quote={text:unwrap(restoreOpen(body))};
     // The body lines are one logical text: rich runs when any word is formatted differently from the rest.
     // Only a rich export records the body's own look (tag.base); a plain string quote stays a string.
-    const base=cleanBase(ordered[0][0]?.data.base);
+    const base=currentThemeLook(entries,cleanBase(ordered[0][0]?.data.base));
     const richParts=base?joinRichLines(ordered[0],readBody,(line,last)=>last?'':line.data.boundary==='hard'?(line.data.separator||'\n'):''):undefined;
     if(richParts&&manifest.hiddenOpen){const last=richParts.at(-1),close=typeof last==='string'?last.at(-1):last?.text?.at(-1);if(OPENING_OF.has(close))richParts.unshift(OPENING_OF.get(close));}
     const rich=richParts?unwrapQuoteRuns(headingValue(richParts,base)):undefined;
@@ -140,7 +142,9 @@ export function importQuoteGroups(shapes,paragraphs,relationships,entries,report
     if(footer)quote={...quote,...footerFields(footer,manifest.footer,diagnostic=>local.push(diagnostic),manifest.pull===true)};
     // The headshot is the current native picture; a deleted or unreadable one is reported, never invented.
     if(manifest.photo){
-      const image=photos[0]?readPicture(photos[0].picture)?.payload?.image:undefined;
+      let image=photos[0]?readPicture(photos[0].picture)?.payload?.image:undefined;
+      // RR-105 (#1290): the description export generates from the attribution ("Photo of ...") is not an alt (src/default-alt.js).
+      if(image&&typeof image==='object'&&typeof image.alt==='string'){const runsText=value=>typeof value==='string'?value:Array.isArray(value)?value.map(runsText).join(''):typeof value?.text==='string'?value.text:'';if(authoredAlt(image.alt,photoAlt(runsText(quote.attribution)))===undefined){const {alt:_generated,...rest}=image;image=rest;}}
       if(image)quote={...quote,photo:image,...(manifest.portrait?{portrait:manifest.portrait}:{})};
       else local.push({code:'quote-photo-missing',message:"The quote's headshot picture is missing or unreadable; the quote is imported without a photo."});
     }

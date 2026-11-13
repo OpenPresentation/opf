@@ -13,12 +13,14 @@ import { prepareSave } from '../dist/index.js';
 const root = fileURLToPath(new URL('../artifacts/playground/', import.meta.url));
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json' };
 const server = createServer(async (req, res) => {
+  if (req.url === '/favicon.ico') { res.writeHead(204).end(); return; }
   try {
     const url = new URL(req.url, 'http://localhost');
     const target = path.resolve(root, '.' + decodeURIComponent(url.pathname));
     const relative = path.relative(root, target);
     if (relative.startsWith('..') || path.isAbsolute(relative)) { res.writeHead(403).end(); return; }
-    res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(await readFile(target));
+    const body = await readFile(target);
+    res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(body);
   } catch { res.writeHead(404).end(); }
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -141,24 +143,24 @@ try {
   await selectIn(page, '# OWAA Rocks!');
   await page.keyboard.type('# Markdown title');
   await waitDeck(page, (d) => d.slides[0].title === 'Markdown title');
-  await page.evaluate(() => demo.editor.set('slides.0.design', { layout: 'title' }));
+  await page.evaluate(() => demo.editor.set('slides.0.design', { contentAlignment: 'end' }));
   await findings.waitFor();
   assert.match(await findings.locator('.opf-source-findings-count').innerText(), /1 warning/);
   const warning = findings.locator('.opf-source-finding');
   assert.equal(await warning.count(), 1);
   assert.equal(await warning.locator('.opf-source-finding-path').innerText(), '/slides/0/design');
   assert.match(await warning.locator('.opf-source-finding-message').innerText(), /no syntax for this/);
-  assert.match(await text(page), /```opf-slide\ndesign:\n {2}layout: title\n```/, 'the part Markdown cannot express is kept as an embedded fence');
+  assert.match(await text(page), /```opf-slide\ndesign:\n {2}contentAlignment: end\n```/, 'the part Markdown cannot express is kept as an embedded fence');
   await warning.click();
   const focused = await line(page);
   assert.equal(await page.evaluate(n => demo.pane.editor.view.state.doc.line(n).text, focused), 'design:', 'the row moves the cursor to the part, found inside the fence');
   assert.equal(await warning.locator('.opf-source-finding-line').innerText(), `Ln ${focused}`);
   assert.equal(await page.evaluate(() => demo.log.at(-1).select), '/slides/0/design');
-  await selectIn(page, 'layout: title');
-  await page.keyboard.type('layout: title-center');
-  await page.waitForFunction(() => demo.editor.presentation.slides[0].design.layout === 'title-center');
+  await selectIn(page, 'contentAlignment: end');
+  await page.keyboard.type('contentAlignment: start');
+  await page.waitForFunction(() => demo.editor.presentation.slides[0].design.contentAlignment === 'start');
   await chooseFormat(page, 'JSON');
-  assert.equal(JSON.parse(await text(page)).slides[0].design.layout, 'title-center');
+  assert.equal(JSON.parse(await text(page)).slides[0].design.contentAlignment, 'start');
   await findings.waitFor({ state: 'hidden' });
   await page.evaluate(() => { demo.editor.undo(); demo.editor.undo(); demo.editor.undo(); });
   assert.equal(await text(page), original);
@@ -222,7 +224,7 @@ try {
   // 7. Copy and Download (default behavior).
   await page.getByRole('button', { name: 'Copy source' }).click();
   await page.getByRole('status').filter({ hasText: 'Copied' }).waitFor();
-  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), original);
+  assert.equal((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, "\n"), original);
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download source' }).click()]);
   assert.equal(download.suggestedFilename(), 'deck.opf.json');
   assert.equal(await readFile(await download.path(), 'utf8'), original);
@@ -230,7 +232,7 @@ try {
   const [yamlDownload] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download source' }).click()]);
   assert.equal(yamlDownload.suggestedFilename(), 'deck.opf.yaml');
   await page.getByRole('button', { name: 'Copy source' }).click();
-  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), await text(page));
+  assert.equal((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, "\n"), await text(page));
   // Format (fix indentation) lays the YAML out and keeps its comments: nothing is dropped, so nothing is reported.
   await selectIn(page, 'name: Minimal OPF Deck');
   await page.keyboard.type('# a comment\nname:   Minimal OPF Deck   # kept');

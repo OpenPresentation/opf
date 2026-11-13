@@ -2,15 +2,16 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {unzipSync,zipSync,strFromU8,strToU8} from 'fflate';
 import {chartDrawPlan,resolveChartData,validate} from '@openpresentation/opf';
+import {paretoPlan} from '@openpresentation/opf/composition';
 import {toPptx,fromPptx} from './helpers/default-catalog.mjs';
 
 const hidden = ['Global header must be suppressed.','Global footer must be suppressed.'];
 const flags = {
-  design:{fontScheme:'roboto',header:{left:{text:hidden[0]}},footer:{right:{text:hidden[1]}}},
+  design:{fontScheme:'roboto',header:{start:{text:hidden[0]}},footer:{end:{text:hidden[1]}}},
   slides:[
     {title:'False and empty',text:'Body one',design:{header:false,footer:{}}},
     {title:'Empty and false',text:'Body two',design:{header:{},footer:false}},
-    {title:'Inactive fields',text:'Body three',design:{header:{left:{text:''},center:{date:false}},footer:{right:{text:''}}}}
+    {title:'Inactive fields',text:'Body three',design:{header:{start:{text:''},center:{date:false}},footer:{end:{text:''}}}}
   ]
 };
 const assertNoHidden = (bytes, document) => {
@@ -40,7 +41,7 @@ assertNoHidden(replay,reimported);
 // An actual newly added native footer placeholder wins; deleting it restores
 // the still-suppressed baseline, never either unrendered global definition.
 const addedText='New native footer';
-const control=unzipSync(await toPptx({slides:[{title:'Control',text:'Body',design:{footer:{right:{text:addedText}}}}]},{seed:1}));
+const control=unzipSync(await toPptx({slides:[{title:'Control',text:'Body',design:{footer:{end:{text:addedText}}}}]},{seed:1}));
 const footerShape=[...strFromU8(control['ppt/slides/slide1.xml']).matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(match=>match[0]).find(shape=>shape.includes(`<a:t>${addedText}</a:t>`));
 assert.ok(footerShape);assert.match(footerShape,/<p:ph\b[^>]*type="ftr"/);
 const untaggedFooter=footerShape.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g,'').replace(/(<p:cNvPr\b[^>]*\bid=")\d+"/, (_, prefix) => `${prefix}999"`)
@@ -52,7 +53,7 @@ assert.notEqual(rightThird,untaggedFooter);
 const added=unzipSync(bytes);const baselineXml=strFromU8(added['ppt/slides/slide1.xml']);
 added['ppt/slides/slide1.xml']=strToU8(baselineXml.replace('</p:spTree>',`${rightThird}</p:spTree>`));
 const addedBytes=zipSync(added);const withFooter=await fromPptx(addedBytes);
-assert.equal(withFooter.slides[0].design.footer.right.text,addedText);
+assert.equal(withFooter.slides[0].design.footer.end.text,addedText);
 assert.deepEqual(withFooter.slides.slice(1).map(slide=>slide.design),flags.slides.slice(1).map(slide=>slide.design));
 assertNoHidden(addedBytes,withFooter);
 added['ppt/slides/slide1.xml']=strToU8(strFromU8(added['ppt/slides/slide1.xml']).replace(rightThird,''));
@@ -74,13 +75,20 @@ for(const name of ['world-category','all-seven'])for(const mode of ['auto','fall
     const result=await fromPptx(zipSync(entries));assert.equal(result.slides.length,source.slides.length);
     for(const [index,slide] of source.slides.entries()){
       const actual=chartOf(result.slides[index]);assert.ok(actual);
-      const expectedType=mode==='fallback'||slide.chart.type==='world'?'column':slide.chart.type;
+      // RR-105: signed categorical histograms truthfully import their data-preserving column fallback, with or without provenance.
+      const plan=chartDrawPlan(slide.chart,resolveChartData(slide.chart));
+      const negativeHistogram=slide.chart.type==='histogram'&&plan.columns.length>1&&plan.rows.some(row=>row.slice(1).some(value=>typeof value==='number'&&value<0));
+      const signedPareto=mode!=='fallback'&&slide.chart.type==='pareto'&&plan.columns.length===2&&plan.rows.some(row=>typeof row[1]==='number'&&row[1]<0);
+      const expectedType=signedPareto?'combo':mode==='fallback'||slide.chart.type==='world'||negativeHistogram?'column':slide.chart.type;
       assert.equal(actual.type,expectedType,`${name}/${mode}/stripped${stripped}/slide${index+1}`);
       // LH-60: a box-and-whisker chart with one value per category is exported as one group (one box per series); its data record
       // restores the authored categories, and without the OPF tags the values come back under the group's name.
-      const plan=chartDrawPlan(slide.chart,resolveChartData(slide.chart));
       const expectedData=stripped&&plan.fallback==='box-per-series'?{...slide.chart.data,rows:plan.rows}:slide.chart.data;
-      assert.deepEqual(actual.data,expectedData,`${name}/${mode}/stripped${stripped}: every authored category/series/value survives`);
+      if(signedPareto){
+        const planned=paretoPlan(plan.rows.map(row=>({label:row[0],value:row[1]})).filter(point=>typeof point.value==='number'));
+        assert.deepEqual(actual.data.rows,planned.bars.map((point,index)=>[point.label,point.value,planned.cumulative[index]]),`${name}/${mode}/stripped${stripped}: signed bars and explicit cumulative series`);
+        assert.deepEqual(actual.data.columns.map(column=>typeof column==='string'?column:column.name),[...plan.columns,`${plan.columns[1]} — cumulative share`]);
+      }else assert.deepEqual(actual.data,expectedData,`${name}/${mode}/stripped${stripped}: every authored category/series/value survives`);
     }
   }
 }

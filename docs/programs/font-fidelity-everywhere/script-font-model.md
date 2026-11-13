@@ -187,7 +187,7 @@ The options are `app` (`"powerpoint"` or `"google-slides"`), `slideIndex`,
 The exported theme's `a:ea` is never empty (FF-05, 2026-10-02): it repeats the latin family when
 no script font is selected, because PowerPoint lists an empty theme `ea` as an empty-name font
 through every paragraph end mark (native evidence in
-[ff-05-native-20261002](../../evidence/ff-05-native-20261002/README.md)). `a:cs` stays empty, as in
+ff-05-native-20261002). `a:cs` stays empty, as in
 Office's own themes, unless a script font is selected for that slot. Slide and notes runs carry no
 explicit `a:ea`/`a:cs` typeface (PowerPoint lists such a run font as an empty-name font); the faces come
 from the theme slots through `+mn-ea`/`+mn-cs`. FF-49 originally kept both slots empty
@@ -286,7 +286,7 @@ the design font scheme").
 
 The presentation theme's major and minor `a:ea` and `a:cs` typefaces follow **the owner font policy: the PPTX names
 what the author selected, and nothing they did not select**, with one amendment from the FF-05 native evidence
-(2026-10-02, [ff-05-native-20261002](../../evidence/ff-05-native-20261002/README.md)): the `ea` slot always names a font,
+(2026-10-02, ff-05-native-20261002): the `ea` slot always names a font,
 because an empty theme `ea` is listed by PowerPoint as an empty-name font in `Presentation.Fonts` through every
 paragraph end mark, and the exporter's paragraphs all carry `a:endParaRPr`. Each of the four slots is resolved like the
 run slots, and the resolver's `sources` says which case applies:
@@ -491,3 +491,9 @@ All changes are additive:
 7. **ICU dependence.** Catalog ids and catalog tags are deterministic
    (vendored alias and likely-script tables, as above). Only uncatalogued tags
    without a script subtag use `Intl.Locale`.
+
+## Shared source itemization and native Latin slots (RR-105)
+
+Core's `itemizeScripts(text, profile)` returns the renderer's existing ordered `{text, script, role}` runs without loading fonts or measuring text. `scriptOfCharacter(character)` is the same Unicode classifier. The renderer re-exports these exact functions; contextual neutrals, Arabic-context digits and UTF-16 source boundaries retain the previous algorithm. The renderer's whole-run ASCII shortcut remains separate and unchanged.
+
+For Arabic proofing, PPTX captures eligible ASCII Latin ranges from the original composed source runs before native language adapters and wrapping. The final font pass copies only the final post-safe Latin typeface into those spans' complex-script slot. It preserves other script spans, explicit rich families, language, text and geometry. A bounded extension of the existing native-language tag can recover source-run boundaries from unchanged current native paragraphs; it never replays source words or merges separate authored runs. Changed or ambiguous evidence retains current native parts. The change-detection hash is not authentication. This is a font-slot consistency repair, not a bidirectional ordering fix; physical native qualification remains separately scoped.

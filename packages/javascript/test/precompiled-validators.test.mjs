@@ -117,7 +117,13 @@ describe('the precompiled schema engine', () => {
 		// The chunk is minified, and holds no copy of the schemas (they are the shared `schemas` chunk).
 		// SH-04 raised the bound from 1.8 MB: the overlay form of slide shapes adds about 38 KB (Ajv inlines its small referenced definitions);
 		// with all of shapes phase 2 the chunk is 1,806,916 bytes (main 1,768,114).
-		assert.ok(source.length < 1_900_000, `the precompiled chunk is ${source.length} bytes; it should be minified`);
+		// FA-36 raised the bound from 1.9 MB: the closed objects (design, schemes, backgrounds, header and footer, runs and the metadata
+		// objects) and the option rules of a block (ContentPayload.dependentSchemas) add about 63 KB of checks; the chunk is 1,916,503 bytes
+		// (1,853,134 before).
+		// RR-111 lowered the bound from 2 MB: each error is built by a helper instead of an object literal at every site, with the
+		// values a helper can take from the schema left out and the constant strings shared (scripts/validators-codegen.mjs, opfError);
+		// the chunk is 1,012,264 bytes (1,924,752 before).
+		assert.ok(source.length < 1_100_000, `the precompiled chunk is ${source.length} bytes; it should be minified`);
 		assert.ok(!source.includes('Open-source JSON format for describing PowerPoint'), 'the chunk embeds a copy of the presentation schema');
 	});
 });

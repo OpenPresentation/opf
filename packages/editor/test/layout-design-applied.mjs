@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {createEditorSession} from '../dist/index.js';
 import {resolvePresentation} from '@openpresentation/opf-render';
 
-const record = {name: 'Centered', design: {titleAlignment: 'center', contentAlignment: 'right', contentBox: true}, direction: 'column', regions: [{name: 'title'}, {name: 'body', accepts: ['text'], flow: 'auto'}]};
+const record = {name: 'Centered', design: {titleAlignment: 'center', contentAlignment: 'end', contentBox: true}, direction: 'column', regions: [{name: 'title'}, {name: 'body', accepts: ['text'], flow: 'auto'}]};
 const document = {design: {fontScheme: {major: 'Roboto', minor: 'Roboto'}}, catalogs: {custom: {layouts: {centered: record}}}, slides: [{layout: 'centered', title: 'Heading', text: 'Body'}]};
 const alignment = (editor, field) => editor.composeSlide(0).items.find(item => item.field === field).alignment;
 const frames = editor => editor.composeSlide(0).items.filter(item => item.frameBox).length;
@@ -16,7 +16,7 @@ assert.equal(frames(editor), 1, 'layout contentBox');
 assert.deepEqual(editor.composeSlide(0).items, resolvePresentation(editor.presentation).slides[0].geometry.items, 'editor and preview compose the same items');
 
 // The deck's design overrides the layout key by key; the slide's design overrides both.
-editor.set('design.titleAlignment', 'left');
+editor.set('design.titleAlignment', 'start');
 assert.equal(alignment(editor, 'title'), 'left');
 assert.equal(alignment(editor, 'text'), 'right', 'the other key still comes from the layout');
 editor.set('slides.0.design', {contentAlignment: 'center', contentBox: false});

@@ -89,7 +89,7 @@ export const assertValidOwner = (owner: Obj, context: Obj = {}): void => assertV
 
 // --- text runs --------------------------------------------------------------------------------
 
-export const FORMATTING = ["bold", "italic", "underline", "strikethrough", "color", "fontSize", "fontFamily", "link", "superscript", "subscript", "code", "lang"] as const;
+export const FORMATTING = ["bold", "italic", "underline", "strikethrough", "color", "fontSize", "fontFamily", "link", "superscript", "subscript", "code", "language"] as const;
 // Annotations are run metadata too, but are not Markdown character-format syntax.
 const RUN_METADATA = [...FORMATTING, "cite", "footnote"] as const;
 export type Run = string | Obj;

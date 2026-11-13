@@ -40,6 +40,27 @@ try {
   for (const name of ['Undo', 'Redo', 'Source', 'Import', 'Save OPF', 'Export', 'Present']) assert.equal(await visible(name), true, `"${name}" is a visible button at 1440px`);
   mark('the ids, window.opfEditor and the buttons hosts press (Undo, Redo, Source, Import, Save OPF, Export, Present) are there at 1440px');
 
+  // RR-105: the rename takes the bar while it is open. Focusing the name and clicking elsewhere without typing gives the bar back; typed text
+  // keeps the rename open (leaving never saves or drops it) until Escape.
+  const name = page.locator('#document-name');
+  const before = await name.inputValue();
+  await name.click();
+  assert.equal(await page.locator('#add-opf').isVisible(), false, 'the rename takes the bar');
+  await page.locator('#notes').click();
+  assert.equal(await page.locator('#add-opf').isVisible() && await visible('Source'), true, 'focus and a click elsewhere leave Import and Source visible');
+  await name.click();
+  await page.keyboard.press('End');
+  await page.keyboard.type(' draft');
+  await page.locator('#notes').click();
+  assert.equal(await visible('Save') && await visible('Cancel'), true, 'with typed text the rename stays open after a click elsewhere');
+  assert.equal(await name.inputValue(), `${before} draft`, 'and the draft is intact');
+  assert.equal(await page.locator('#add-opf').isVisible(), false);
+  await name.press('Escape');
+  assert.equal(await name.inputValue(), before, 'Escape drops the draft');
+  assert.equal(await page.locator('#add-opf').isVisible() && await visible('Source'), true, 'and the bar is back');
+  await page.locator('#notes').click();
+  mark('the rename takes the bar; focus and a click elsewhere give it back; typed text keeps it open until Escape');
+
   // ---- one row and a readable name on every desktop width ------------------------------------------------------------------------
   const desktop = {};
   for (const width of [1440, 1920, 1280, 1024]) {

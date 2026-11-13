@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { composeSlide } from '@openpresentation/opf/composition';
 import { toSvg } from '../dist/index.js';
 
-const scheme = { name: 'Test', dark1: '#101820', light1: '#FFFFFF', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
+const scheme = { dark1: '#101820', light1: '#FFFFFF', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
 const slide = (shapes) => ({ title: 'Flow', blocks: [{ id: 'plan', shape: 'roundRect', text: 'Plan' }, { id: 'ship', shape: 'roundRect', text: 'Ship' }], shapes });
 const deck = (shapes, extra = {}) => ({ name: 'Overlays', language: 'en-US', design: { colorScheme: scheme }, slides: [slide(shapes)], ...extra });
 const svgOf = (shapes, options = {}) => toSvg(deck(shapes), 1, options);

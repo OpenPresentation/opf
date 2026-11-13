@@ -9,6 +9,8 @@
  * own group first.
  */
 
+import type { IconSetLoader } from './icons.js';
+
 /** The content kinds a catalog group holds, keyed by id. */
 export const catalogKinds = ['layouts', 'themes', 'colorSchemes', 'fontSchemes', 'narratives', 'audiences', 'purposes', 'tones'] as const;
 export type CatalogKind = (typeof catalogKinds)[number];
@@ -28,9 +30,10 @@ export interface Catalog extends CatalogRecords {
   readonly source: string;
   /**
    * LH-14: the icon sets an `icon` names as `<set>:<name>`, by set id: each the set's record (opf-icon-set/v1 without `$schema`
-   * and `id`), or a function that loads it (`galleryIconSets` of @openpresentation/gallery/icon-sets: each set loads on first use; `ensureIcons` calls it). See icons.ts.
+   * and `id`), or a function that loads it (`galleryIconSets()` of @openpresentation/gallery/icon-sets: `ensureIcons` calls it with
+   * `{ icons: [names] }`, the icons a deck draws, and the gallery reads only those; a search asks `{ tags: true }`). See icons.ts.
    */
-  readonly iconSets?: Readonly<Record<string, Readonly<Record<string, unknown>> | (() => Promise<unknown>)>>;
+  readonly iconSets?: Readonly<Record<string, Readonly<Record<string, unknown>> | IconSetLoader>>;
 }
 /** The one option every entry point that resolves references accepts. */
 export interface CatalogOptions {
@@ -277,6 +280,12 @@ function designSites(sites: CatalogReferenceSite[], design: unknown, path: (stri
   pushObjectReference(sites, 'fontSchemes', design.fontScheme, [...path, 'fontScheme']);
 }
 
+function languageSites(sites: CatalogReferenceSite[], language: unknown, path: (string | number)[]) {
+  if (!isRec(language)) return;
+  pushReference(sites, 'fontSchemes', language.fontScheme, [...path, 'fontScheme']);
+  pushReference(sites, 'fontSchemes', language.googleFontScheme, [...path, 'googleFontScheme']);
+}
+
 /** The references written inside one embedded or registered record, resolved in `group` first. */
 export function recordReferenceSites(kind: CatalogKind, record: unknown, path: (string | number)[], group?: string): CatalogReferenceSite[] {
   const sites: CatalogReferenceSite[] = [];
@@ -289,7 +298,7 @@ export function recordReferenceSites(kind: CatalogKind, record: unknown, path: (
 
 /**
  * Every content reference a document writes, in document order: the root narrative, audience, purpose and tone, the
- * language's font schemes, the deck and slide designs, each slide's layout, and (with `records`) the references
+ * deck and slide languages' font schemes, their designs, each slide's layout, and (with `records`) the references
  * inside embedded records. Free-form audience and purpose text is not a reference and is not listed.
  */
 export function catalogReferenceSites(document: unknown, options: { records?: boolean; slides?: boolean } = {}): CatalogReferenceSite[] {
@@ -302,16 +311,14 @@ export function catalogReferenceSites(document: unknown, options: { records?: bo
   else pushObjectReference(sites, 'audiences', deck.audience, ['audience']);
   pushObjectReference(sites, 'purposes', deck.purpose, ['purpose']);
   pushObjectReference(sites, 'tones', deck.tone, ['tone']);
-  if (isRec(deck.language)) {
-    pushReference(sites, 'fontSchemes', deck.language.fontScheme, ['language', 'fontScheme']);
-    pushReference(sites, 'fontSchemes', deck.language.googleFontScheme, ['language', 'googleFontScheme']);
-  }
+  languageSites(sites, deck.language, ['language']);
   designSites(sites, deck.design, ['design']);
   if (options.slides !== false && Array.isArray(deck.slides))
     deck.slides.forEach((slide, index) => {
       if (!isRec(slide)) return;
       // `layout: "auto"` is automatic composition, not a reference (OPF 0.19).
       if (slide.layout !== 'auto') pushReference(sites, 'layouts', slide.layout, ['slides', index, 'layout']);
+      languageSites(sites, slide.language, ['slides', index, 'language']);
       designSites(sites, slide.design, ['slides', index, 'design']);
     });
   if (options.records !== false)

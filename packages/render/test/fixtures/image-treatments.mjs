@@ -17,18 +17,18 @@ export const TREATMENTS = Object.freeze([
   { slug: 'full-bleed', background: {} },
   { slug: 'text-overlay', background: { overlay: { color: '#000000', opacity: 0.45 } } },
   { slug: 'caption-overlay', background: { overlay: { color: 'dark1', opacity: 0.6, edge: 'bottom', size: 0.25 } } },
-  { slug: 'side-by-side', block: {}, placement: { edge: 'left', size: 0.5 } },
-  { slug: 'masked-shape', block: { shape: 'hexagon' }, placement: { edge: 'right', size: 0.45, inset: true } },
-  { slug: 'circular-crop', block: { shape: 'ellipse', stroke: { color: 'accent1', width: 4 } }, placement: { edge: 'left', size: 0.4, inset: true } },
-  { slug: 'rounded-card', block: { shape: 'roundRect', adjust: { adj: 0.08 }, stroke: { color: '#10182080', width: 3 } }, placement: { edge: 'right', size: 0.5, inset: true } },
+  { slug: 'side-by-side', block: {}, placement: { edge: 'start', size: 0.5 } },
+  { slug: 'masked-shape', block: { shape: 'hexagon' }, placement: { edge: 'end', size: 0.45, inset: true } },
+  { slug: 'circular-crop', block: { shape: 'ellipse', stroke: { color: 'accent1', width: 4 } }, placement: { edge: 'start', size: 0.4, inset: true } },
+  { slug: 'rounded-card', block: { shape: 'roundRect', adjust: { adj: 0.08 }, stroke: { color: '#10182080', width: 3 } }, placement: { edge: 'end', size: 0.5, inset: true } },
   { slug: 'duotone', background: { recolor: { dark: 'accent1', light: 'light1' } } },
   { slug: 'background-blur', background: { opacity: 0.35 } },
   { slug: 'image-strip', block: { recolor: 'grayscale' }, placement: { edge: 'top', size: 0.3 } },
   { slug: 'collage-grid', block: { overlay: { color: 'accent1', opacity: 0.3 } }, placement: { edge: 'bottom', size: 0.35 } },
-  { slug: 'device-frame', block: { fit: 'contain', aspectRatio: 1.6, stroke: { color: 'dark1', width: 8 } }, placement: { edge: 'right', size: 0.55, inset: true } },
-  { slug: 'cutout-subject', block: { fit: 'contain' }, placement: { edge: 'right', size: 0.4 } },
+  { slug: 'device-frame', block: { fit: 'contain', aspectRatio: 1.6, stroke: { color: 'dark1', width: 8 } }, placement: { edge: 'end', size: 0.55, inset: true } },
+  { slug: 'cutout-subject', block: { fit: 'contain' }, placement: { edge: 'end', size: 0.4 } },
   { slug: 'watermark', watermark: { opacity: 0.12 } },
-  { slug: 'cinematic-crop', block: { aspectRatio: 2.39, opacity: 0.9, overlay: { color: '#000000', opacity: 0.5, edge: 'left', size: 0.2 } }, placement: { edge: 'top', size: 0.7 } }
+  { slug: 'cinematic-crop', block: { aspectRatio: 2.39, opacity: 0.9, overlay: { color: '#000000', opacity: 0.5, edge: 'start', size: 0.2 } }, placement: { edge: 'top', size: 0.7 } }
 ]);
 
 /** A deterministic 160x100 picture (horizontal red ramp, vertical green ramp, blue checker) as a PNG data URI. */

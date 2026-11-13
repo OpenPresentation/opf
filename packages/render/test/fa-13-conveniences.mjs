@@ -3,7 +3,7 @@ import {colorContrast, codeHighlightColors, ENGINE_DEFAULT_COLOR_SCHEME, resolve
 // The decks name the gallery's roboto font scheme, so the host catalog is registered (./catalog-harness.mjs).
 import { toSvg } from './catalog-harness.mjs';
 
-// FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.lang and the 1:1, 4:5 and 9:16 presets in the SVG preview.
+// FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.language and the 1:1, 4:5 and 9:16 presets in the SVG preview.
 
 const svg = (document, options = {}, index = 0) => toSvg(document, index + 1, { trace: true, ...options});
 const source = ['const a = 1;', 'const b = 2;', 'const c = a + b;', '', 'console.log(c);', 'return c;'].join('\n');
@@ -80,9 +80,10 @@ for (const [preset, width, height] of [['1:1', 720, 720], ['4:5', 720, 900], ['9
   assert.equal(image.includes('rotate(-30'), false);
 }
 
-// --- TextRun.code and TextRun.lang ----------------------------------------------------------------------------------------
+// --- TextRun.code and TextRun.language ----------------------------------------------------------------------------------------
 {
-  const deck = text => ({design: {fontScheme: 'roboto'}, slides: [{title: 'Runs', text}]});
+  // LH-188: a title of more than four words keeps the slide a content slide, so the short paragraph is not grown onto two lines.
+  const deck = text => ({design: {fontScheme: 'roboto'}, slides: [{title: 'Runs of code in a paragraph', text}]});
   const out = svg(deck(['Run ', {text: 'npm install', code: true}, ' now']));
   const run = out.match(/<(?:text|tspan) [^>]*>npm install<\/(?:text|tspan)>/)[0];
   assert.match(run, /font-family="[^"]*Roboto Mono[^"]*monospace/, 'the code family with a monospace generic');
@@ -95,7 +96,7 @@ for (const [preset, width, height] of [['1:1', 720, 720], ['4:5', 720, 900], ['9
   const table = svg({design: {fontScheme: 'roboto'}, slides: [{title: 'T', table: {columns: ['Command'], rows: [[[{text: 'ls -la', code: true}]]]}}]});
   assert.match(table.match(/<(?:text|tspan) [^>]*>ls -la<\/(?:text|tspan)>/)[0], /Roboto Mono/);
 
-  const languages = svg({language: 'en-US', design: {fontScheme: 'roboto'}, slides: [{title: 'Lang', text: ['Hello ', {text: 'bonjour', lang: 'fr-FR'}, ' ', {text: '日本語', lang: 'ja-JP'}, ' ', {text: '中文', lang: 'zh-CN'}]}]});
+  const languages = svg({language: 'en-US', design: {fontScheme: 'roboto'}, slides: [{title: 'Lang', text: ['Hello ', {text: 'bonjour', language: 'fr-FR'}, ' ', {text: '日本語', language: 'ja-JP'}, ' ', {text: '中文', language: 'zh-CN'}]}]});
   assert.match(languages, /lang="fr-FR"[^>]*>[^<]*bonjour/);
   assert.match(languages, /<svg [^>]*lang="en-US"/, 'the deck language stays on the root');
   const ja = languages.match(/<(?:text|tspan) [^>]*lang="ja-JP"[^>]*>[\s\S]*?日本語/)[0], zh = languages.match(/<(?:text|tspan) [^>]*lang="zh-CN"[^>]*>[\s\S]*?中文/)[0];
@@ -103,7 +104,7 @@ for (const [preset, width, height] of [['1:1', 720, 720], ['4:5', 720, 900], ['9
   assert.match(zh, /Noto Sans SC/, 'Han text in a Simplified Chinese run takes the Simplified face');
   assert.equal(languages.match(/>Hello </) !== null && !/<[^>]*lang="[^"]*"[^>]*>Hello </.test(languages.replace(/<svg [^>]*>/, '')), true, 'a run without lang declares none of its own');
   // A run in the deck language needs no override.
-  assert.equal((svg({language: 'fr-FR', slides: [{title: 'T', text: [{text: 'salut', lang: 'fr-FR'}]}]}).match(/lang="fr-FR"/g) ?? []).length >= 1, true);
+  assert.equal((svg({language: 'fr-FR', slides: [{title: 'T', text: [{text: 'salut', language: 'fr-FR'}]}]}).match(/lang="fr-FR"/g) ?? []).length >= 1, true);
 }
 
 console.log('FA-13: presets, code highlight, text watermark, inline code and run language render in the SVG preview.');

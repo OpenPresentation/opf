@@ -1,0 +1,33 @@
+# E1 current-after runner
+
+The missing historical corpus generator is replaced by scripts/e1-current-after.mjs. It consumes the immutable recovery at 442ad549d53131cfb32b5c65d974777f33f68a67 and a separately verified, genuine registry-only consumer. It does not regenerate Claude controls, execute historical builders, overwrite a comparison, publish an artifact, change a site or run Office.
+
+The coordinator approved these vetoable decisions:
+
+- Current comparisons use the current published Gallery. Remove only the recovered default.source/layouts snapshots after checking that every layout ID exists in the accepted installed Gallery. Refuse any other embedded catalog/kind/custom ID. Preserve every authored slide, order, title, body, note, size and other deck field exactly; keep the raw and derived hashes.
+- The pilot uses c3e7196aca3c3f18242b405ff870b8bace768fd8, the latest known candidate with the same 43 authored slides as the earlier candidate. Neither candidate is claimed as the old before-panel producer. Both immutable candidate proofs and all fixed panel hashes remain linked in the output.
+- The overview uses the exact published sampler, not the historical builder: 49 slides in 0.33, including the 43 comparable IDs and six current-only IDs with no fabricated before/Claude panel. Corpus scope is all 844 slides in 18 recovered batches; the explicitly published 550-slide subset is marked separately. Missing before controls remain batch-11/s27, batch-13/s29 and batch-17/s04. The unrecovered public artifact-ID roster remains a publication dependency, not a rendering blocker.
+
+## Maintained route
+
+Use Node 24 and a clean exact registry consumer, such as the separately retained 0.33 consumer from PR1170. The tool never installs or queries a registry. Its authority is the coordinator's verified seven-package publication receipt: exact version, source gitHead, tarball, SRI and provenance. All six selected packages must be exact direct pins, have no links/ancestor aliases/loaders and resolve their declared public Node/import exports inside the consumer. The entire installed runtime/font tree is sealed before and after; all installed examples and gallery records must match exact release Git source. The Gallery comparison uses the source index and its byte-identical maintained embeddedCopy helper, preserving the publisher metadata boundary.
+
+The default mode only verifies/maps; it renders zero slides. Every output root must be new. These commands name real supported flags:
+
+```powershell
+node scripts/e1-current-after.mjs --mode plan --consumer C:/opf-work/core033-registry-consumer-01 --authority C:/opf-work/release-033-artifacts/registry-033-verified.json --repo C:/opf-work/rr-20-e1-current-after --recovery C:/opf-work/rr-20-e1-recovery/docs/evidence/rr20-e1-recovery/payload --out C:/opf-work/e1-033-plan-new --date 2026-11-08 --scale 0.5
+node scripts/e1-current-after.mjs --mode render --consumer C:/opf-work/core033-registry-consumer-01 --authority C:/opf-work/release-033-artifacts/registry-033-verified.json --repo C:/opf-work/rr-20-e1-current-after --recovery C:/opf-work/rr-20-e1-recovery/docs/evidence/rr20-e1-recovery/payload --out C:/opf-work/e1-033-after-new --date 2026-11-08 --scale 0.5
+```
+
+Optional --only overview,pilot,batch-01 selects whole known decks while retaining the complete available-scope/missing-control record. Default scope is all 20 decks/936 current slides in 0.33. Plan mode complete means only that the selected plan verified; renderedSlides remains zero and each render-complete flag remains false.
+
+Render mode calls the installed declared opf bin with convert, an explicit slide-{n}.png path, --scale, --date, --keep-slides and --include-hidden. The shipping engine's unmodified pack office / substitutionPolicy visual / scripts auto route supplies fonts; its exact source is retained, and the raw CLI report must confirm office/visual/no user-font override. There are no font stubs, handpicked fallback, --force, automatic pagination or silent content repair. A schema, layout, font or CLI failure is preserved literally, stops the run and leaves complete false. Each successful PNG binds to its exact ordinal, bytes/hash and physical dimensions. The sheet compositor embeds the unchanged fixed PNG bytes alongside the new after image; its labels use the same installed office/visual/auto pack and do not alter slide drawings.
+
+## Verification and remaining steps
+
+The first plan failed because CJS require.resolve cannot discover import-only opf/examples. The declared public Node/import resolver correction is covered by a targeted regression. The second plan failed because the initial raw-record source comparison incorrectly included the catalog index plus publisher schema/id metadata. The comparison now uses the authoritative index and byte-identical maintained embeddedCopy helper; a source-contract regression preserves that distinction. Both literal first failures remain in the checks packet; no consumer reinstall, public source change or visual content rewrite was used.
+
+The third genuine-registry plan passes: all 2,901 immutable recovery assets, exact release 137 examples/36 layouts, 20 decks and the unchanged consumer runtime. It renders zero slides. Thirty-nine focused controls pass for catalog refusals, authored immutability/order, pin/SRI/source boundaries, supported CLI argument construction, output ordinal/hash/dimension binding, literal first failures and exact fixed-panel embedding. Raw preflight/check receipts are the authority for final local status.
+
+Next: coordinator code review, a fresh render-mode packet, inspect every changed triptych for the owner's large-type/no-shrinking/about-70-character direction, and seal every generated file before any public artifact/UI update. Neither a passing plan nor a source PR completes E1. Sites remain owned by the sites lane; UI publication, native work, login and deployment are not performed by this tool. Repeat with the genuine final 0.34 consumer/source for E3 after that publication.
+Final candidate identity: after readable formatting and the explicit owned test-temp cleanup guard, all 39 affected controls pass again and a fourth fresh plan binds the exact final runner hash. It again verifies all 20 decks with renderedSlides=0. The required changed-scope run passed all 11 selected build/root steps in 70.5 seconds; TypeScript/package suites were unselected for this scripts/docs-only change. Original first failures, third-plan executed source, every final raw/derived plan input and its complete runtime/font inventory are losslessly retained in the linked checks packet. No actual after renderer has run yet.

@@ -1,6 +1,5 @@
 // LH-107 to LH-110: the chart follow-ups from the Claude Design chart comparison (core chart-marks.ts): waterfall roles and signed labels,
-// a value list beside a pie, values inside stacked segments with the series named beside the last column, and the reference line and
-// period band the slide title names.
+// a value list beside a pie, and values inside stacked segments with the series named beside the last column.
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { chartWaterfallColors, colorContrast, composeSlide, waterfallLabelText, waterfallRoles, waterfallSignedFormat } from "../dist/composition.js";
@@ -10,9 +9,6 @@ const layerOf = (slide, options) => chartOf(slide, options)?.chart?.layer ?? {};
 const waterfall = (extra = {}) => ({ type: "waterfall", data: { columns: ["Step", "Operating profit ($M)"], rows: [["2024 profit", 42], ["Volume", 9.3], ["Price", 6.1], ["Materials", -7.4], ["Labor", -5.2], ["Currency", -2.1], ["2025 profit", 42.7]] }, ...extra });
 const pie = (rows, type = "pie", extra = {}) => ({ type, data: { columns: ["Segment", "Revenue ($M)"], rows }, ...extra });
 const stacked = (type = "stacked-column", extra = {}) => ({ type, data: { columns: ["Quarter", "Subscriptions ($M)", "Services ($M)", "Hardware ($M)"], rows: [["Q1", 12.1, 8.3, 3.7], ["Q2", 14, 8.6, 4.2], ["Q3", 16.2, 8.9, 4.3], ["Q4", 19.4, 9.1, 4.7]] }, ...extra });
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const delivery = { type: "line", data: { columns: ["Month", { name: "On-time delivery", format: "0.0%" }], rows: months.map((month, i) => [month, [0.934, 0.941, 0.928, 0.952, 0.961, 0.957, 0.944, 0.936, 0.949, 0.968, 0.972, 0.979][i]]) } };
-const spend = { type: "line", data: { columns: ["Year", "Cloud ($B)", "On-premises ($B)"], rows: [["2020", 3.1, 8.4], ["2021", 4.2, 7.9], ["2022", 5.6, 7.3], ["2023", 7.3, 6.5], ["2024", 9.4, 5.6], ["2025", 11.8, 4.8]] } };
 
 describe("LH-107: waterfall roles", () => {
   test("the last value equal to the sum before it is a total, and so is the first bar it runs from", () => {
@@ -101,32 +97,6 @@ describe("LH-109: stacked values and names", () => {
     const percent = layerOf({ title: "Mix", chart: stacked("100pct-stacked-column") }).stack;
     assert.ok(percent.values.every((row) => row.every((fits) => !fits)), "raw values would contradict a share axis");
     for (const extra of [{ dataLabels: true }, { legend: "right" }]) assert.equal(layerOf({ title: "Revenue", chart: stacked("stacked-column", extra) }).stack, undefined, JSON.stringify(extra));
-  });
-});
-
-describe("LH-110: reference marks the title names", () => {
-  test("a compared number the data does not hold draws a labeled line, and the axis holds it", () => {
-    const item = chartOf({ title: "On-time delivery stayed above 92% all year", chart: delivery });
-    const [line] = item.chart.layer.references.lines;
-    assert.equal(line.value, 0.92);
-    assert.equal(line.text, "92%");
-    assert.ok(item.chart.valueAxis.min <= 0.92, "the axis reaches the line");
-    assert.ok(line.label.y > line.y, "the label sits under the line: the data are above it");
-  });
-
-  test("conservative matching: a data value, a number without a comparison, another language or a percent on a plain column draw nothing", () => {
-    assert.equal(layerOf({ title: "On-time delivery peaked at 97.9%", chart: delivery }).references, undefined, "a value the data holds");
-    assert.equal(layerOf({ title: "On-time delivery was 92% or better", chart: delivery }).references, undefined, "no comparison word");
-    assert.equal(layerOf({ title: "La ponctualité est restée au-dessus de 92 %", chart: delivery }, { language: "fr" }).references, undefined);
-    assert.equal(layerOf({ title: "Tickets stayed below 9000", chart: delivery }).references, undefined, "far outside the data and not a percent");
-  });
-
-  test("a line chart in time shades the one period the title names after a time preposition", () => {
-    const layer = layerOf({ title: "Cloud spend overtook on-premises in 2023", chart: spend });
-    assert.deepEqual(layer.references.bands.map((band) => band.row), [3]);
-    assert.ok(layer.references.bands[0].box.height > 100);
-    assert.equal(layerOf({ title: "Cloud spend grew every year of 2026", chart: spend }).references, undefined, "a year that is not a category");
-    assert.equal(layerOf({ title: "Cloud spend overtook on-premises in 2023", chart: { ...spend, type: "column" } }).references, undefined, "columns: the focus emphasis names the period");
   });
 });
 

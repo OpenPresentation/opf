@@ -1,6 +1,6 @@
 {
-  "version": "0.33.0",
-  "description": "Release qualification corpus: every user-facing change since v0.32.1, as decks (new ones in decks/, existing examples by path), the PPTX variants to export, and per feature the slides and what to check in each native app. build.mjs exports it; run-powerpoint-windows.ps1 probes it through COM; evaluate.mjs grades the probe against the checks below. The Mac (PowerPoint for Mac, Keynote) and Linux (LibreOffice) streams run the same decks and grade the same features by hand where they have no object model.",
+  "version": "0.34.0",
+  "description": "Release qualification corpus: the retained v0.33 baseline plus v0.34 changes, including every supported diagram source syntax, as decks (new ones in decks/, existing examples by path), the PPTX variants to export, and per feature the slides and what to check in each native app. build.mjs exports it; run-powerpoint-windows.ps1 probes it through COM; evaluate.mjs grades the probe against the checks below. The Mac (PowerPoint for Mac, Keynote) and Linux (LibreOffice) streams run the same decks and grade the same features by hand where they have no object model.",
   "checks": {
     "opens": "The file opens without a repair prompt or an error.",
     "slides": "The app shows as many slides as OPF's preview draws.",
@@ -111,6 +111,14 @@
       ]
     },
     {
+      "id": "dot-diagrams",
+      "source": "examples/technical/dot-diagrams.opf.json"
+    },
+    {
+      "id": "plantuml-diagrams",
+      "source": "examples/technical/plantuml-diagrams.opf.json"
+    },
+    {
       "id": "diagrams-markdown",
       "source": "examples/markdown/diagrams.opf.md"
     },
@@ -162,6 +170,166 @@
     {
       "id": "compliance-readiness-review",
       "source": "examples/gallery/business-functions/compliance-readiness-review.opf.json"
+    },
+    {
+      "id": "chart-point-overlays",
+      "source": "examples/technical/chart-point-overlays.opf.json"
+    },
+    {
+      "id": "duration-timeline",
+      "source": "examples/technical/duration-timeline.opf.json"
+    },
+    {
+      "id": "explicit-chart-reference-lines",
+      "source": "examples/technical/explicit-chart-reference-lines.opf.json"
+    },
+    {
+      "id": "singleton-combo-reference-lines",
+      "source": "examples/technical/singleton-combo-reference-lines.opf.json"
+    },
+    {
+      "id": "localized-chart-references",
+      "source": "examples/technical/localized-chart-references.opf.json"
+    },
+    {
+      "id": "image-callouts",
+      "source": "examples/technical/image-callouts.opf.json"
+    },
+    {
+      "id": "inverted-pyramids",
+      "source": "examples/technical/inverted-pyramids.opf.json"
+    },
+    {
+      "id": "localized-timeline",
+      "source": "examples/technical/localized-timeline.opf.json"
+    },
+    {
+      "id": "multilingual-slides",
+      "source": "examples/technical/multilingual-slides.opf.json"
+    },
+    {
+      "id": "trees-and-sets",
+      "source": "examples/technical/trees-and-sets.opf.json"
+    },
+    {
+      "id": "coverage-text",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-text.opf.json"
+    },
+    {
+      "id": "coverage-lists",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-lists.opf.json"
+    },
+    {
+      "id": "coverage-tables",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-tables.opf.json"
+    },
+    {
+      "id": "coverage-charts",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-charts.opf.json"
+    },
+    {
+      "id": "coverage-images",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-images.opf.json"
+    },
+    {
+      "id": "coverage-backgrounds",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-backgrounds.opf.json"
+    },
+    {
+      "id": "coverage-shape-presets",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-shape-presets.opf.json"
+    },
+    {
+      "id": "coverage-shape-styles",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-shape-styles.opf.json"
+    },
+    {
+      "id": "coverage-overlays",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-overlays.opf.json"
+    },
+    {
+      "id": "coverage-diagrams",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-diagrams.opf.json"
+    },
+    {
+      "id": "coverage-regions",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-regions.opf.json"
+    },
+    {
+      "id": "coverage-composition",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-composition.opf.json"
+    },
+    {
+      "id": "coverage-design",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-design.opf.json"
+    },
+    {
+      "id": "coverage-furniture",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-furniture.opf.json"
+    },
+    {
+      "id": "coverage-metadata",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-metadata.opf.json"
+    },
+    {
+      "id": "coverage-variables",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-variables.opf.json"
+    },
+    {
+      "id": "coverage-template",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-template.opf.json"
+    },
+    {
+      "id": "coverage-languages",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-languages.opf.json"
+    },
+    {
+      "id": "coverage-catalogs",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-catalogs.opf.json"
+    },
+    {
+      "id": "coverage-catalogs-off",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-catalogs-off.opf.json"
+    },
+    {
+      "id": "coverage-warnings",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-warnings.opf.json"
+    },
+    {
+      "id": "coverage-size-16x9",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-16x9.opf.json"
+    },
+    {
+      "id": "coverage-size-4x3",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-4x3.opf.json"
+    },
+    {
+      "id": "coverage-size-16x10",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-16x10.opf.json"
+    },
+    {
+      "id": "coverage-size-1x1",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-1x1.opf.json"
+    },
+    {
+      "id": "coverage-size-4x5",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-4x5.opf.json"
+    },
+    {
+      "id": "coverage-size-9x16",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-9x16.opf.json"
+    },
+    {
+      "id": "coverage-size-letter",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-letter.opf.json"
+    },
+    {
+      "id": "coverage-size-a4",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-a4.opf.json"
+    },
+    {
+      "id": "coverage-size-standard",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-standard.opf.json"
     }
   ],
   "features": [
@@ -392,6 +560,54 @@
         "visual",
         "shapes"
       ]
+    },
+    {
+      "id": "SH-12",
+      "title": "Graphviz DOT: native nodes, paths, clusters and saved source",
+      "changes": [
+        "sh-12-dot-diagrams"
+      ],
+      "deck": "dot-diagrams",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "shapes",
+        "roundtrip"
+      ],
+      "expect": {
+        "shapes": 1,
+        "roundtrip": {
+          "diagrams": 5
+        }
+      },
+      "check": "Review all five slides: cluster/decision, undirected graph, stadium, cylinder, dashed labeled edges, dark circles/double circle, alt text; saved-current import retains authored DOT source. A custom arrow path is not claimed to be a glued native connector."
+    },
+    {
+      "id": "SH-13",
+      "title": "PlantUML: eight native families and saved source",
+      "changes": [
+        "sh-13-plantuml-diagrams"
+      ],
+      "deck": "plantuml-diagrams",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "shapes",
+        "roundtrip"
+      ],
+      "expect": {
+        "shapes": 1,
+        "roundtrip": {
+          "diagrams": 8
+        }
+      },
+      "check": "Review all eight slides: sequence alt frame, class composition/cardinalities/realization, state, activity, use case include, component, mind map, gantt milestone and alt text. Saved-current import retains authored PlantUML source."
     },
     {
       "id": "SH-09",
@@ -1242,6 +1458,831 @@
       "deck": "full-feature-tour",
       "checks": [],
       "manual": "Not run: needs PowerPoint UI control, which the owner declined."
+    },
+    {
+      "id": "SH-25",
+      "title": "Overlays anchored to a chart data point",
+      "changes": [
+        "sh-25-chart-point-overlays"
+      ],
+      "deck": "chart-point-overlays",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeChart",
+        "roundtrip"
+      ],
+      "check": "Review every slide: each anchored ring, arrow or label sits on its data point in PowerPoint as in the preview (within about 4 px at 1280 x 720)."
+    },
+    {
+      "id": "LH-16",
+      "title": "Duration-proportional timeline periods",
+      "changes": [
+        "lh-16-duration-timeline",
+        "lh-16-rtl-date-language"
+      ],
+      "deck": "duration-timeline",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Review every slide: period bars span their duration, range labels are readable and inside their boxes, and right-to-left slides keep date digit order."
+    },
+    {
+      "id": "LH-110-explicit",
+      "title": "Explicit chart reference lines, independent of the title",
+      "changes": [
+        "lh-110-explicit-chart-reference-lines"
+      ],
+      "deck": "explicit-chart-reference-lines",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeChart",
+        "roundtrip"
+      ],
+      "check": "Review every slide: each reference line and its label sit at the authored value on a native chart; no line is inferred from a title."
+    },
+    {
+      "id": "LH-110-singleton",
+      "title": "Reference lines on a single-category combo chart",
+      "changes": [
+        "lh110-singleton-reference-example"
+      ],
+      "deck": "singleton-combo-reference-lines",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeChart"
+      ],
+      "check": "Review every slide: the reference line spans the plot at its value and the file opens without repair."
+    },
+    {
+      "id": "LH-110-localized",
+      "title": "Explicit reference lines on slides in seven languages",
+      "changes": [
+        "lh-110-explicit-chart-reference-lines"
+      ],
+      "deck": "localized-chart-references",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeChart"
+      ],
+      "check": "Review every slide: the dashed line sits at 92% on a native chart and its authored label is shown verbatim, on a slide in each of seven languages; no line is read from the title."
+    },
+    {
+      "id": "LH-34",
+      "title": "Image callouts as editable text over a picture",
+      "changes": [
+        "lh-34-image-callouts",
+        "lh-34-native-panel-import",
+        "sh-27-signed-image-callouts"
+      ],
+      "deck": "image-callouts",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Review every slide: each callout is a native text box at the preview's position over the picture, readable against its plate, and a saved copy imports with its callouts."
+    },
+    {
+      "id": "SH-24",
+      "title": "Inverted pyramids: widest first, editable",
+      "changes": [
+        "sh-24-inverted-pyramid",
+        "sh-24-catalog-current-behavior"
+      ],
+      "deck": "inverted-pyramids",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Review every slide: the widest tier is on top, entry order is preserved, and text keeps its size (no shrink)."
+    },
+    {
+      "id": "LH-121",
+      "title": "Timeline status words in the slide language",
+      "changes": [
+        "lh-121-localized-status",
+        "lh-121-generated-status-fonts"
+      ],
+      "deck": "localized-timeline",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ],
+      "check": "Review every slide: each status word is in the slide's language and script, drawn in a font that has its glyphs (no tofu, no fallback to a smaller face)."
+    },
+    {
+      "id": "LH-106",
+      "title": "A slide-level language among other languages",
+      "changes": [
+        "lh-106-slide-language",
+        "lh-106-language-embed",
+        "fa-38-run-language"
+      ],
+      "deck": "multilingual-slides",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Review every slide: a right-to-left slide in a left-to-right deck draws right to left with its complex-script font declared (not Arabic Typesetting), and quote marks and number formats follow the slide language."
+    },
+    {
+      "id": "SH-21",
+      "title": "Org charts, hierarchies and Venn diagrams",
+      "changes": [
+        "sh21-venn-geometry-fit",
+        "sh21-readable-venn-bodies"
+      ],
+      "deck": "trees-and-sets",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Review every slide: each tree and Venn arrangement matches the preview node for node; record for each slide whether PowerPoint holds live SmartArt or native shapes."
+    },
+    {
+      "id": "COV-text",
+      "title": "Format coverage: Text runs, quotes, code and metrics",
+      "changes": [
+        "fa-38-run-language",
+        "rr-105-heading-space-balance"
+      ],
+      "deck": "coverage-text",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-lists",
+      "title": "Format coverage: Lists, bullets, numbering, columns and list design",
+      "changes": [
+        "lh-102-centered-stacks"
+      ],
+      "deck": "coverage-lists",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-tables",
+      "title": "Format coverage: Styled table cells, borders, spans, formats, dataset tables",
+      "changes": [
+        "fa-34-line-style",
+        "fa-37-start-end"
+      ],
+      "deck": "coverage-tables",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-charts",
+      "title": "Format coverage: Every remaining chart type and every chart option",
+      "changes": [
+        "lh-110-explicit-chart-reference-lines",
+        "fa-34-reference-keeps-emphasis",
+        "fa-34-line-style",
+        "lh-182-optioned-doughnut-hole",
+        "lh-93-stacked-siblings",
+        "lh-93-negative-category-labels",
+        "rr-105-active-bar-references",
+        "rr-105-chart-fidelity",
+        "rr-20-f1-f3-source-currency"
+      ],
+      "deck": "coverage-charts",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-images",
+      "title": "Format coverage: Image payloads, fit, focus, recolor, overlays, placement, portraits, captions, callouts, video",
+      "changes": [
+        "lh-34-image-callouts",
+        "fa-37-start-end"
+      ],
+      "deck": "coverage-images",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-backgrounds",
+      "title": "Format coverage: Every background form and cover text placement",
+      "changes": [
+        "rr-108-theme-background-opacity",
+        "fa-36-closed-objects-and-messages"
+      ],
+      "deck": "coverage-backgrounds",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-shape-presets",
+      "title": "Format coverage: All 187 preset shapes with a non-default adjust value",
+      "changes": [],
+      "deck": "coverage-shape-presets",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-shape-styles",
+      "title": "Format coverage: Shape fills, strokes, arrowheads, effects, transforms, text options, paths",
+      "changes": [],
+      "deck": "coverage-shape-styles",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-overlays",
+      "title": "Format coverage: Overlay shapes, anchors on every edge and chart points, connectors on every route",
+      "changes": [
+        "fa-35-placement-units",
+        "sh-25-chart-point-overlays",
+        "sh-27-offslide-overlays"
+      ],
+      "deck": "coverage-overlays",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-diagrams",
+      "title": "Format coverage: Mermaid, DOT and PlantUML diagrams and every arrangement layout",
+      "changes": [
+        "sh-12-dot-diagrams",
+        "sh-13-plantuml-diagrams",
+        "sh-24-inverted-pyramid",
+        "sh21-arrangement-composition",
+        "wave2-diagram-parser-review"
+      ],
+      "deck": "coverage-diagrams",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-regions",
+      "title": "Format coverage: All 48 promoted region keys and region tiles",
+      "changes": [
+        "fa-37-start-end",
+        "lh-69-placed-tiles"
+      ],
+      "deck": "coverage-regions",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-composition",
+      "title": "Format coverage: Composition modes and limits, nested groups, block types, timelines, slide fields",
+      "changes": [
+        "lh-16-duration-timeline",
+        "lh-46-closing-lead"
+      ],
+      "deck": "coverage-composition",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-design",
+      "title": "Format coverage: Inline color and font schemes, variants, alignment, direction, chart placement, image fit, logos, watermarks",
+      "changes": [
+        "fa-36-closed-objects-and-messages",
+        "fa-37-start-end",
+        "lh-177-light-fonts"
+      ],
+      "deck": "coverage-design",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-furniture",
+      "title": "Format coverage: Headers, footers, dates, slide numbers, logos and socials",
+      "changes": [
+        "fa-37-start-end"
+      ],
+      "deck": "coverage-furniture",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-metadata",
+      "title": "Format coverage: Document metadata, inline records and a custom slide size",
+      "changes": [
+        "fa-36-closed-objects-and-messages"
+      ],
+      "deck": "coverage-metadata",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-variables",
+      "title": "Format coverage: Variables of every kind, citations and footnotes",
+      "changes": [],
+      "deck": "coverage-variables",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-template",
+      "title": "Format coverage: A template with unfilled and optional variables",
+      "changes": [
+        "lh-30-optional-groups"
+      ],
+      "deck": "coverage-template",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-languages",
+      "title": "Format coverage: Slide languages, right to left, CJK, numbering systems",
+      "changes": [
+        "lh-106-slide-language",
+        "lh-106-numbering-systems",
+        "lh-121-localized-status",
+        "lh-176-rtl-column-series",
+        "lh-93-rtl-legend",
+        "rr-105-native-latin-slots",
+        "rr-105-rtl-number-markers"
+      ],
+      "deck": "coverage-languages",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-catalogs",
+      "title": "Format coverage: Embedded default, custom and named catalogs, deck icons and assets",
+      "changes": [
+        "rr-63-icon-files"
+      ],
+      "deck": "coverage-catalogs",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-catalogs-off",
+      "title": "Format coverage: A deck with the default catalog turned off",
+      "changes": [],
+      "deck": "coverage-catalogs-off",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-warnings",
+      "title": "Format coverage: Deliberate 0.34 warnings: off-slide shape, anchor size unit, short timeline period",
+      "changes": [
+        "fa-35-shape-off-slide",
+        "shape-anchor-size-unit",
+        "rr-105-timeline-period-short"
+      ],
+      "deck": "coverage-warnings",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-size-16x9",
+      "title": "Format coverage: Slide size 16x9",
+      "changes": [],
+      "deck": "coverage-size-16x9",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-size-4x3",
+      "title": "Format coverage: Slide size 4x3",
+      "changes": [],
+      "deck": "coverage-size-4x3",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-size-16x10",
+      "title": "Format coverage: Slide size 16x10",
+      "changes": [],
+      "deck": "coverage-size-16x10",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-size-1x1",
+      "title": "Format coverage: Slide size 1x1",
+      "changes": [],
+      "deck": "coverage-size-1x1",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-size-4x5",
+      "title": "Format coverage: Slide size 4x5",
+      "changes": [],
+      "deck": "coverage-size-4x5",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-size-9x16",
+      "title": "Format coverage: Slide size 9x16",
+      "changes": [],
+      "deck": "coverage-size-9x16",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-size-letter",
+      "title": "Format coverage: Slide size letter",
+      "changes": [],
+      "deck": "coverage-size-letter",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-size-a4",
+      "title": "Format coverage: Slide size a4",
+      "changes": [],
+      "deck": "coverage-size-a4",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-size-standard",
+      "title": "Format coverage: Slide size standard",
+      "changes": [],
+      "deck": "coverage-size-standard",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+    },
+    {
+      "id": "COV-charts-native",
+      "title": "Format coverage: every coverage chart is a native chart",
+      "changes": [
+        "lh-110-explicit-chart-reference-lines"
+      ],
+      "deck": "coverage-charts",
+      "slides": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        18,
+        19
+      ],
+      "checks": [
+        "nativeChart"
+      ]
+    },
+    {
+      "id": "COV-tables-native",
+      "title": "Format coverage: styled, spanned and dataset tables are native tables",
+      "changes": [
+        "fa-34-line-style"
+      ],
+      "deck": "coverage-tables",
+      "checks": [
+        "nativeTable"
+      ]
+    },
+    {
+      "id": "COV-shapes-native",
+      "title": "Format coverage: preset shapes are native shapes",
+      "changes": [],
+      "deck": "coverage-shape-presets",
+      "checks": [
+        "shapes"
+      ],
+      "expect": {
+        "shapes": 12
+      },
+      "slides": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "id": "COV-shape-styles-native",
+      "title": "Format coverage: styled shapes are native shapes",
+      "changes": [],
+      "deck": "coverage-shape-styles",
+      "checks": [
+        "shapes"
+      ]
+    },
+    {
+      "id": "COV-overlays-connectors",
+      "title": "Format coverage: straight, elbow and curved connectors are glued",
+      "changes": [
+        "fa-35-placement-units"
+      ],
+      "deck": "coverage-overlays",
+      "slides": [
+        4
+      ],
+      "checks": [
+        "connectors"
+      ],
+      "expect": {
+        "connectors": 3
+      }
+    },
+    {
+      "id": "COV-furniture-footer",
+      "title": "Format coverage: live slide number, a slide's own footer with a fixed date and a slide without furniture",
+      "changes": [
+        "fa-37-start-end"
+      ],
+      "deck": "coverage-furniture",
+      "slides": [
+        2,
+        3,
+        8
+      ],
+      "checks": [
+        "footer"
+      ],
+      "expect": {
+        "footer": [
+          {
+            "footer": true,
+            "slideNumber": true,
+            "date": false
+          },
+          {
+            "footer": true,
+            "slideNumber": false,
+            "date": true
+          },
+          {
+            "footer": false,
+            "slideNumber": false,
+            "date": false
+          }
+        ]
+      }
     }
   ]
 }

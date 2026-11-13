@@ -1,0 +1,5 @@
+---
+type: added
+packages: [opf, render, pptx, editor]
+---
+SH-13: PlantUML diagrams. A `diagram` takes `syntax: "plantuml"` (`Diagram.syntax` is now `"mermaid" | "dot" | "plantuml"`), and a Markdown ```` ```plantuml ```` fence is one. OPF reads PlantUML itself (no PlantUML code ships): sequence, class and state diagrams, activity (current syntax), component and deployment diagrams as flowcharts, use case diagrams, mind maps and gantt charts (scheduled in working days) are drawn in the deck colors and fonts, previewed and exported as native PowerPoint shapes (SH-07), and `fromPptx` reads an unchanged group or picture back as its PlantUML source. Styling (skinparam, themes, colors) is ignored; every other kind (timing, object, network, Salt, JSON, YAML, WBS, ...), the legacy activity syntax and the preprocessor are refused with a finding at their line. Core exports `plantumlToMermaid` and `PLANTUML_DIAGRAMS` from `@openpresentation/opf/composition`; the editor offers the `plantuml` fence; a `plantuml` code block is written to Markdown as an `opf-block`.

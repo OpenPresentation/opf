@@ -13,6 +13,7 @@
  * The text fitter comes from composition (`composeOverlayShapes`' `item` callback), so this module imports composition's types only.
  */
 import type { ComposedItem, LayoutBox, SlideComposition } from './composition.js';
+import {selectChartPoint,type ChartPointGeometry,type ChartPointMissing} from './chart-point-anchors.js';
 import { composeShape, composeStroke, isPresetShape, pathEnds, presetAspect, sketchStroke, type ComposedShape, type ComposedShapePath, type ComposedStroke, type ShapeEnd } from './shape-block.js';
 import type { ShapePathCommand } from './shape-geometry.js';
 import { shapeGeometry } from '#shape-engine';
@@ -289,7 +290,7 @@ export interface ComposedOverlayShape extends ComposedItem {
   index: number;
   id?: string;
   /** For a shape placed by `at`: the block it follows (its id, the composed path of what it attaches to) and the physical edge. */
-  attachedTo?: { id: string; ref: string; edge: 'top' | 'bottom' | 'left' | 'right' | 'center' };
+  attachedTo?: { id: string; ref: string; edge: 'top' | 'bottom' | 'left' | 'right' | 'center'; chartPoint?: Omit<ChartPointGeometry,'ok'> };
   /** `front` (the default): over the slide, after its content and furniture; `back`: behind it, after the background and watermark, before the content. */
   layer: OverlayLayer;
 }
@@ -349,8 +350,8 @@ export interface ComposedConnector {
 /** An entry of `SlideComposition.overlayShapes`, in draw order. */
 export type ComposedOverlayEntry = ComposedOverlayShape | ComposedConnector;
 
-/** The promoted region keys of a slide (`left`, `center+right`, `top:left` ...), whose payloads are blocks too. */
-const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:middle|bottom))*(?::(?:left|center|right)(?:\+(?:center|right))*)?|(?:left|center|right)(?:\+(?:center|right))*)$/;
+/** The promoted region keys of a slide (`start`, `center+end`, `top:start` ...), whose payloads are blocks too. */
+const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:middle|bottom))*(?::(?:start|center|end)(?:\+(?:center|end))*)?|(?:start|center|end)(?:\+(?:center|end))*)$/;
 
 /** Every block id of a slide with its dotted path (`slides.0.blocks.1.blocks.0`), in document order; the first of a repeated id wins. */
 export function slideBlockIds(slide: unknown, slidePath: string): Map<string, string> {
@@ -367,7 +368,7 @@ export function slideBlockIds(slide: unknown, slidePath: string): Map<string, st
 }
 
 /** A composed block an overlay attaches to: the item path (or group path), its visible box and its connection sites. */
-interface BlockTarget { ref: string; target: 'block' | 'group'; box: LayoutBox; sites: () => ConnectionSite[] | undefined }
+interface BlockTarget { chart?: ComposedItem; ref: string; target: 'block' | 'group'; box: LayoutBox; sites: () => ConnectionSite[] | undefined }
 function blockTarget(composition: SlideComposition, blockPath: string): BlockTarget | undefined {
   const group = composition.groups.find(entry => entry.path === blockPath);
   const prefix = `${blockPath}.`;
@@ -383,7 +384,8 @@ function blockTarget(composition: SlideComposition, blockPath: string): BlockTar
   }
   const boxes = items.map(visible), x = Math.min(...boxes.map(box => box.x)), y = Math.min(...boxes.map(box => box.y));
   const box = { x: round(x), y: round(y), width: round(Math.max(...boxes.map(entry => entry.x + entry.width)) - x), height: round(Math.max(...boxes.map(entry => entry.y + entry.height)) - y) };
-  return { ref: first.path, target: 'block', box, sites: () => rectSites(box) };
+  const chart = items.find(item => item.field === 'chart' && item.chart);
+  return { ref: first.path, target: 'block', box, sites: () => rectSites(box), ...(chart ? {chart} : {}) };
 }
 
 /** What composition gives an overlay shape item besides its geometry: the fitted text (in `shape.textBox`), its style and the composition settings. */
@@ -395,7 +397,7 @@ export type OverlayShapeItemFields = Pick<ComposedItem, 'text' | 'textStyle' | '
  * the slide is left out (validation reports opf/shape-anchor-missing and opf/connector-end-missing). `item` fits an overlay shape's text
  * as composition fits a shape block's.
  */
-export function composeOverlayShapes(slide: unknown, composition: SlideComposition, context: { path: string; scale: number; rtl: boolean; item: (host: Rec, shape: ComposedShape, path: string) => OverlayShapeItemFields }): ComposedOverlayEntry[] {
+export function composeOverlayShapes(slide: unknown, composition: SlideComposition, context: { path: string; scale: number; rtl: boolean; point: (item: ComposedItem, reference: unknown) => ChartPointGeometry | ChartPointMissing; item: (host: Rec, shape: ComposedShape, path: string) => OverlayShapeItemFields }): ComposedOverlayEntry[] {
   const entries = Array.isArray(record(slide).shapes) ? record(slide).shapes as unknown[] : [];
   if (!entries.length) return [];
   const { scale, rtl } = context, width = composition.width, height = composition.height;
@@ -411,9 +413,25 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
     const host = record(entry);
     if (!Object.keys(host).length || isOverlayConnector(host)) return;
     const path = `${context.path}.shapes.${index}`;
-    const placed = overlayBox(host, { width, height, scale, rtl, blockOf });
+    let placed: ReturnType<typeof overlayBox>;
+    try {
+      placed = overlayBox(host, { path, width, height, scale, rtl, blockOf, point: (block, at) => {
+        const result = block.chart ? context.point(block.chart, at) : {ok: false as const, field: 'point' as const, reason: 'The referenced block has no composed chart.'};
+        if (!result.ok) composition.diagnostics.push({code: 'shape-anchor-missing', path: `${path}.at.${result.field}`, message: result.reason});
+        return result.ok ? result : undefined;
+      } });
+    } catch (error) {
+      // A frame too far off the slide to place (an edit in progress, or validation skipped) is reported and the shape left out:
+      // refusing the document is validation's job, never composition's.
+      if (!(error instanceof PositionRangeError)) throw error;
+      composition.diagnostics.push({code: 'unresolved-content', path: `${path}.${error.coordinate}`, message: `${error.message} The overlay shape is not drawn.`});
+      return;
+    }
     if (!placed) return;
     const shape = composeShape(host, placed.box, { scale, aspect: 0 });
+    // A shape wholly outside the slide draws nothing: usually a percent or a pixel written where a fraction belongs.
+    if (host.hidden !== true && outsideCanvas(placed.box, { width, height }, typeof host.rotate === 'number' && host.rotate % 180 !== 0))
+      composition.diagnostics.push({ code: 'shape-off-slide', path, message: placed.attachedTo ? `This shape lies wholly outside the slide where it is attached to '${placed.attachedTo.id}', so nothing of it is drawn.` : `This shape lies wholly outside the slide (x ${host.x}, y ${host.y}), so nothing of it is drawn. x and y are fractions of the slide: 0.2 is 20% of its width, and 20 is twenty slide widths away.` });
     const item: ComposedOverlayShape = {
       kind: 'shape', index, ...(nonEmpty(host.id) ? { id: host.id } : {}), path, field: 'shape', type: 'shape', value: host.text, payload: host, box: { ...shape.box }, shape,
       ...context.item(host, shape, path), alignment: 'center', ...(placed.attachedTo ? { attachedTo: placed.attachedTo } : {}), layer: host.layer === 'back' ? 'back' : 'front',
@@ -461,36 +479,95 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
  * An overlay shape's frame in slide pixels: `x`, `y`, `width`, `height` as fractions of the slide (`x` from the right edge in a right-to-left
  * deck), or `at` against a composed block. Undefined when the entry has neither placement, both, or a block that is not composed.
  */
-function overlayBox(host: Rec, context: { width: number; height: number; scale: number; rtl: boolean; blockOf: (id: string) => BlockTarget | undefined }): { box: LayoutBox; attachedTo?: ComposedOverlayShape['attachedTo'] } | undefined {
+/**
+ * The largest width or height composition places, in slides (and of an anchored one, in targets): above 1 a shape bleeds off the slide.
+ * The schema caps both at 8; composition still places any representable frame of a document that skipped validation, and refuses with
+ * a finding only what it cannot represent.
+ */
+export const OVERLAY_SIZE_MAX = Number.MAX_VALUE;
+
+function overlayBox(host: Rec, context: { path: string; width: number; height: number; scale: number; rtl: boolean; blockOf: (id: string) => BlockTarget | undefined; point: (block: BlockTarget, at: Rec) => ChartPointGeometry | undefined }): { box: LayoutBox; attachedTo?: ComposedOverlayShape['attachedTo'] } | undefined {
   const { width, height, scale, rtl } = context;
-  const fractions = ['x', 'y', 'width', 'height'].map(key => finite(host[key], 0, 1));
+  const fractions = ['x', 'y', 'width', 'height'].map(key => finite(host[key], key === 'x' || key === 'y' ? -Number.MAX_VALUE : 0, key === 'x' || key === 'y' ? Number.MAX_VALUE : OVERLAY_SIZE_MAX));
   const hasFractions = ['x', 'y', 'width', 'height'].some(key => host[key] !== undefined), hasAt = host.at !== undefined;
   if (hasFractions === hasAt) return undefined;
   if (hasFractions) {
+    for (const key of ['x', 'y'] as const) if (typeof host[key] === 'number' && !Number.isFinite(host[key])) throw new PositionRangeError(key, context.path);
     if (fractions.some(value => value === undefined)) return undefined;
-    const [x, y, w, h] = fractions as number[];
-    return { box: { x: round(rtl ? width - (x! + w!) * width : x! * width), y: round(y! * height), width: round(w! * width), height: round(h! * height) } };
+    return { box: fractionalOverlayFrame(host, {width, height, rtl}, context.path) };
   }
   const at = record(host.at);
   if (!nonEmpty(at.block) || !(OVERLAY_EDGES as readonly unknown[]).includes(at.edge)) return undefined;
   const block = context.blockOf(at.block);
   if (!block) return undefined;
-  const target = block.box;
+  const point = at.point !== undefined || at.series !== undefined ? context.point(block, at) : undefined;
+  if ((at.point !== undefined || at.series !== undefined) && !point) return undefined;
+  const target = point?.box ?? block.box;
   const preset = typeof host.shape === 'string' && isPresetShape(host.shape) ? host.shape : host.path !== undefined ? undefined : 'rect';
   const aspect = presetAspect(preset);
-  const size = (value: unknown, along: number): number | undefined => { const own = finite(value, Number.MIN_VALUE, 1280); return own === undefined ? undefined : own <= 1 ? own * along : own * scale; };
-  let w = size(at.width, target.width), h = size(at.height, target.height);
+  // One unit per key: `width` and `height` are fractions of the target (the block's box, or a chart mark's bounds), `widthPx` and
+  // `heightPx` reference pixels. Conflicting units are refused even when validation was skipped.
+  const share = (value: unknown, along: number): number | undefined => { const own = finite(value, Number.MIN_VALUE, OVERLAY_SIZE_MAX); return own === undefined ? undefined : own * along; };
+  const pixels = (value: unknown): number | undefined => { const own = finite(value, Number.MIN_VALUE, 1280); return own === undefined ? undefined : own * scale; };
+  if (at.width !== undefined && at.widthPx !== undefined || at.height !== undefined && at.heightPx !== undefined) return undefined;
+  let w = pixels(at.widthPx) ?? share(at.width, target.width), h = pixels(at.heightPx) ?? share(at.height, target.height);
   if (w === undefined && h === undefined) {
-    const short = OVERLAY_ANCHOR_SHARE * Math.min(target.width, target.height);
+    const short = point ? Math.max(12 * scale, OVERLAY_ANCHOR_SHARE * Math.min(target.width, target.height)) : OVERLAY_ANCHOR_SHARE * Math.min(target.width, target.height);
     if (aspect >= 1) { h = short; w = short * aspect; } else { w = short; h = short / aspect; }
   } else if (w === undefined) w = h! * aspect;
   else if (h === undefined) h = w / aspect;
   const offset = (finite(at.offset, -720, 720) ?? 0) * scale;
+  if (point) {
+    const {ok: _ok, ...chartPoint} = point;
+    return {box: representablePositionBox({x: point.position.x + point.normal.x * offset - w! / 2, y: point.position.y + point.normal.y * offset - h! / 2, width: w!, height: h!}, context.path), attachedTo: {id: at.block, ref: block.chart!.path, edge: 'center', chartPoint}};
+  }
   const edge = at.edge === 'start' ? (rtl ? 'right' : 'left') : at.edge === 'end' ? (rtl ? 'left' : 'right') : at.edge as 'top' | 'bottom' | 'center';
   const middleX = target.x + (target.width - w!) / 2, middleY = target.y + (target.height - h!) / 2;
   const [x, y] = edge === 'top' ? [middleX, target.y - offset - h!] : edge === 'bottom' ? [middleX, target.y + target.height + offset]
     : edge === 'left' ? [target.x - offset - w!, middleY] : edge === 'right' ? [target.x + target.width + offset, middleY] : [middleX, middleY];
-  return { box: { x: round(x), y: round(y), width: round(w!), height: round(h!) }, attachedTo: { id: at.block, ref: block.ref, edge } };
+  return { box: representablePositionBox({ x, y, width: w!, height: h! }, context.path), attachedTo: { id: at.block, ref: block.ref, edge } };
+}
+
+// A common-engine exact-representation check, not PowerPoint's coordinate maximum.
+// One reference pixel is 9525 EMU; outputs must remain finite through the actual
+// six-place geometry rounding and exactly representable as JavaScript integers.
+type OverlayFrameKey = 'x' | 'y' | 'width' | 'height';
+export class PositionRangeError extends RangeError {
+  constructor(public readonly coordinate: OverlayFrameKey, path: string) {
+    super(`Position coordinate ${path}.${coordinate} cannot be represented as finite rounded geometry and a safe integer native coordinate.`);
+    this.name = 'RangeError';
+  }
+}
+function fractionalOverlayFrame(host: Rec, canvas: { width: number; height: number; rtl: boolean }, path: string): LayoutBox {
+  const {width, height, rtl} = canvas;
+  return representablePositionBox({x: rtl ? width - (host.x + host.width) * width : host.x * width, y: host.y * height, width: host.width * width, height: host.height * height}, path);
+}
+/** representablePositionBox, or undefined where it would throw: composition reports such a panel and leaves it out. */
+export function representableBox(box: LayoutBox, path: string): LayoutBox | undefined {
+  try { return representablePositionBox(box, path); } catch (error) { if (error instanceof PositionRangeError) return undefined; throw error; }
+}
+/**
+ * True when a box has no part on the canvas. A rotated box is judged by its bounding circle (the circle through its corners), so a
+ * shape whose turned corner may reach the slide is never reported.
+ */
+export function outsideCanvas(box: LayoutBox, canvas: { width: number; height: number }, rotated = false): boolean {
+  if (rotated) {
+    const radius = Math.hypot(box.width, box.height) / 2, x = box.x + box.width / 2, y = box.y + box.height / 2;
+    return x + radius <= 0 || x - radius >= canvas.width || y + radius <= 0 || y - radius >= canvas.height;
+  }
+  return box.x + box.width <= 0 || box.x >= canvas.width || box.y + box.height <= 0 || box.y >= canvas.height;
+}
+/** Internal shared geometry boundary for authored positioned panels. No layout, fonts or data loading. */
+export function representablePositionBox(box: LayoutBox, path: string): LayoutBox {
+  const values = {...box};
+  for (const key of ['x', 'y', 'width', 'height'] as const) {
+    const value = values[key];
+    if (!Number.isFinite(value) || !Number.isFinite(value * 1e6)) throw new PositionRangeError(key, path);
+    const rounded = round(value);
+    if (!Number.isSafeInteger(Math.round(rounded * 9525))) throw new PositionRangeError(key, path);
+    values[key] = rounded;
+  }
+  return values;
 }
 
 // --- validation -----------------------------------------------------------------------------------------------------
@@ -524,12 +601,18 @@ function siteCount(id: string, slide: Rec, blockPaths: Map<string, string>, over
  * (opf/shape-anchor-missing), a connector end that names no block or overlay shape of the slide (opf/connector-end-missing) and a site index
  * the end's shape does not have (opf/schema). `slidePath` is the slide's JSON Pointer (`/slides/0`).
  */
-export function overlayIssues(slide: unknown, slidePath: string): OverlayIssue[] {
+export function overlayIssues(slide: unknown, slidePath: string, presentation?: unknown, canvas?: {width: number; height: number; rtl: boolean}): OverlayIssue[] {
   const value = record(slide), entries = Array.isArray(value.shapes) ? value.shapes as unknown[] : [];
   if (!entries.length) return [];
   const issues: OverlayIssue[] = [];
   const dotted = slidePath.replace(/^\//, '').replaceAll('/', '.');
   const blockPaths = slideBlockIds(value, dotted);
+  const payloadOf = (id: string): Rec => {
+    const path = blockPaths.get(id); if (!path) return {};
+    let payload: unknown = value;
+    for (const key of path.slice(dotted.length + 1).split('.')) payload = payload !== null && typeof payload === 'object' ? Reflect.get(payload, key) : undefined;
+    return record(payload);
+  };
   const overlays = new Map<string, Rec>(), connectors = new Set<string>();
   for (const entry of entries) {
     const host = record(entry);
@@ -559,11 +642,23 @@ export function overlayIssues(slide: unknown, slidePath: string): OverlayIssue[]
     }
     const fractions = ['x', 'y', 'width', 'height'].filter(key => host[key] !== undefined), anchored = host.at !== undefined;
     const missing = fractions.length ? ['x', 'y', 'width', 'height'].filter(key => host[key] === undefined) : [];
+    for (const key of ['x', 'y']) if (typeof host[key] === 'number' && !Number.isFinite(host[key])) issues.push({ path: `${at}/${key}`, message: `an overlay shape's ${key} must be a finite fraction of the slide`, params: { key } });
+    if (canvas && !anchored && ['x', 'y', 'width', 'height'].every(key => typeof host[key] === 'number' && Number.isFinite(host[key])) && host.width >= 0 && host.width <= OVERLAY_SIZE_MAX && host.height >= 0 && host.height <= OVERLAY_SIZE_MAX) {
+      try { fractionalOverlayFrame(host, canvas, at.replace(/^\//, '').replaceAll('/', '.')); }
+      catch (error) {
+        if (!(error instanceof PositionRangeError)) throw error;
+        issues.push({path: `${at}/${error.coordinate}`, message: error.message, params: {key: error.coordinate}});
+      }
+    }
     if (missing.length && !anchored) issues.push({ path: at, message: `an overlay shape placed by fractions of the slide needs all of 'x', 'y', 'width' and 'height'; add ${missing.map(key => `'${key}'`).join(', ')}`, params: { missing } });
     if (fractions.length && anchored) issues.push({ path: at, message: "an overlay shape takes one placement: 'x', 'y', 'width' and 'height', or 'at', not both", params: { placements: [...fractions, 'at'] } });
     else if (!fractions.length && !anchored) issues.push({ path: at, message: "an overlay shape needs a placement: 'x', 'y', 'width' and 'height' (fractions of the slide), or 'at' (against a block)", params: {} });
     const block = record(host.at).block;
     if (anchored && nonEmpty(block) && !blockPaths.has(block)) issues.push({ path: `${at}/at/block`, code: 'shape-anchor-missing', message: `at.block '${block}' names no block on this slide; the shape is not drawn`, params: { id: block, known: [...blockPaths.keys()] } });
+    else if (anchored && nonEmpty(block) && (record(host.at).point !== undefined || record(host.at).series !== undefined)) {
+      const source = payloadOf(block), selected = selectChartPoint(source.chart, host.at, presentation);
+      if (!selected.ok) issues.push({ path: `${at}/at/${selected.field}`, code: 'shape-anchor-missing', message: selected.reason, params: { id: block, point: record(host.at).point, series: record(host.at).series } });
+    }
   });
   return issues;
 }

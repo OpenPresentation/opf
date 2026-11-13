@@ -1,0 +1,20 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: no default catalog",
+  "description": "RR-105 format coverage: a document that turns the default catalog off and draws with the engine defaults only.",
+  "language": "en-US",
+  "audience": {
+    "name": "Terminal staff",
+    "summary": "People who run the berths day to day."
+  },
+  "catalogs": {
+    "default": false
+  },
+  "slides": [
+    {
+      "id": "plain",
+      "title": "Drawn with no default catalog",
+      "text": "This deck names no theme, layout or scheme, so the engine defaults draw it."
+    }
+  ]
+}

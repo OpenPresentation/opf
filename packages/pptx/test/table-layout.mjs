@@ -5,6 +5,7 @@ import { composeSlide } from '@openpresentation/opf/composition';
 import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 // OPF 0.15: the gallery ids these decks name (roboto, classic) resolve from the registered default catalog.
 import { toSvg, toPptx } from './helpers/default-catalog.mjs';
+import { withThemeFamilies } from './helpers/theme-fonts.mjs';
 
 const parser = new XMLParser({ ignoreAttributes: false, parseTagValue: false });
 const fonts = await loadFonts({pack: 'office'});
@@ -19,7 +20,7 @@ import {colorHex, clrMapOf, themeColorsOf} from './helpers/scheme-colors.mjs';
 let checked = 0, shrunk = 0, grown = 0;
 for (const scale of [1, 0.5]) {
 for (const [fontScheme, family, chosen] of [['roboto', 'Roboto', 'Roboto'], [{major:'Calibri',minor:'Calibri'}, 'Carlito', 'Calibri']]) {
-for (const align of ['left', 'center', 'right']) {
+for (const align of ['start', 'center', 'end']) {
   for (const withHeaders of [true, false]) {
     const table = {
       ...(withHeaders ? { columns: ['Region', 'Description'] } : {}),
@@ -38,7 +39,8 @@ for (const align of ['left', 'center', 'right']) {
     const svg = parser.parse(toSvg(deck, 1, { trace: true, fonts }));
     const bytes = await toPptx(deck, { fonts });
     const themeXml = new TextDecoder().decode(unzipSync(bytes)['ppt/theme/theme1.xml']);
-    const xml = parser.parse(new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']));
+    // RR-105 (opf#1293): theme font references read as their theme's families.
+    const xml = parser.parse(withThemeFamilies(unzipSync(bytes), 'ppt/slides/slide1.xml'));
     const themeSlots = themeColorsOf(themeXml), masterMap = clrMapOf(new TextDecoder().decode(unzipSync(bytes)['ppt/slideMasters/slideMaster1.xml']));
     const frame = find(xml, 'p:graphicFrame').find(frame => find(frame, 'a:tbl').length);
     const transform = frame['p:xfrm'];
@@ -88,7 +90,7 @@ for (const align of ['left', 'center', 'right']) {
           assert.equal(find(prop, 'a:latin')[0]['@_typeface'], chosen);
         }
         const pPr = find(cell, 'a:pPr')[0];
-        assert.equal(pPr['@_algn'] ?? 'l', {left:'l',center:'ctr',right:'r'}[align], 'Native alignment matches the SVG anchor');
+        assert.equal(pPr['@_algn'] ?? 'l', {start:'l',center:'ctr',end:'r'}[align], 'Native alignment matches the SVG anchor');
         assert.ok(find(pPr, 'a:spcPts').length, 'Native cell must carry measured line spacing');
         assert.equal(Number(find(pPr, 'a:spcPts')[0]['@_val']), Math.round(expectedSize * 1.22 * 75), 'Native line spacing matches measured lines');
         const margins = cell['a:tcPr'];

@@ -50,13 +50,14 @@ const formatRules: ValidationRuleInfo[] = [
 	rule('reference-id-duplicate', 'format', 'error', 'Two references share an id.', 'A citation names a reference by id; a repeated id makes it ambiguous which entry is cited.', { standard: SCHEMA }),
 	rule('cite-unknown-reference', 'format', 'error', 'A citation names a reference that does not exist.', 'A cited id with no entry in `references` has nothing to show in the footnote area.', { standard: SCHEMA }),
 	rule('cite-unsupported-location', 'format', 'error', 'A citation or footnote sits where no engine draws it.', '`cite` and `footnote` apply to runs in text, bullets and list items; table cells, captions, and reference and footnote texts have no marker.', { standard: SCHEMA }),
-	rule('caption-unsupported-payload', 'format', 'error', 'A caption is on a payload that cannot carry one.', 'A caption belongs to exactly one image, chart, table or video; a group, text or code block has no place to draw it.', { standard: SCHEMA }),
+	rule('caption-unsupported-payload', 'format', 'error', 'A caption is on a payload that cannot carry one.', 'A caption belongs to exactly one image, chart, table, video or diagram; a group, text or code block has no place to draw it.', { standard: SCHEMA }),
 	rule('image-option-unsupported-payload', 'format', 'error', 'An image option is on a payload that is not an image.', '`fit`, `focus`, the image treatments (`shape`, `adjust`, `stroke`, `opacity`, `recolor`, `overlay`, `aspectRatio`), `placement` and `portrait` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to. A shape block takes `shape`, `adjust`, `stroke`, `opacity` and `aspectRatio` too.', { standard: SCHEMA }),
 	rule('shape-option-unsupported-payload', 'format', 'error', 'A shape option is on a payload that is not a shape block.', '`fill`, `style`, `rotate`, `flip`, `anchor`, `padding`, `textDirection`, `alt`, `decorative`, `hidden`, `link` and the effects (`shadow`, `innerShadow`, `glow`, `softEdge`, `reflection`, `blur`) describe how a shape block is drawn; a text, chart or image block, or a group, has no shape for them to apply to.', { standard: SCHEMA }),
 	rule('shape-adjust-unknown', 'format', 'warning', 'An adjust value names a guide the preset does not have.', 'Each preset has its own adjust handles (DrawingML\'s avLst guides: `adj`, `adj1`, `adj2`, ...); a name the preset does not have changes nothing, and a custom `path` has none. The preset\'s default is drawn.', { standard: 'ECMA-376 Part 1, 20.1.10.56 (ST_ShapeType) and presetShapeDefinitions.xml' }),
 	rule('shape-adjust-range', 'format', 'warning', 'An adjust value is outside the range of the preset\'s handle.', 'An adjust value outside the range its handle allows is pinned by the preset\'s own formulas, so the shape is not drawn as the value says; core draws the preset\'s default instead and both engines agree.', { standard: 'ECMA-376 Part 1, 20.1.10.56 (ST_ShapeType) and presetShapeDefinitions.xml', approximations: 'Ranges are checked at a square shape of the default size; a handle whose range depends on the shape\'s proportions is checked at those proportions when the shape is drawn.' }),
 	rule('shape-link-hidden', 'format', 'warning', 'A hidden shape carries a link.', 'A hidden shape (`hidden: true`) is not drawn, so its `link` can never be clicked in a slide show.', { standard: SCHEMA }),
-	rule('shape-anchor-missing', 'format', 'error', 'An overlay shape is attached to a block that is not on the slide.', 'An overlay shape placed with `at` sits against a composed block of its slide, named by the block\'s `id`. With no block of that id on the slide there is nowhere to put it, so it is not drawn.', { standard: SCHEMA }),
+	rule('shape-anchor-missing', 'format', 'error', 'An overlay shape has no resolvable block or qualified plotted chart point.', 'An overlay shape placed with `at` sits against a composed block of its slide, named by the block\'s `id`. A chart point also requires a unique plotted category and series in a qualified shared plot. When an identity or geometry is missing, the shape is not drawn.', { standard: SCHEMA }),
+	rule('shape-anchor-size-unit', 'format', 'warning', 'A pixel size is under a fraction key.', 'In `at`, `width` and `height` are fractions of the block (up to 8); pixels are `widthPx` and `heightPx`. A value above 4 and up to 8 is reported here; above 8 it is a schema error that offers the same rename.', { standard: SCHEMA }),
 	rule('connector-end-missing', 'format', 'error', 'A connector end names no block or overlay shape on the slide.', 'A connector joins two shapes of its slide, each named by the `id` of a block or an overlay shape. With an end that names nothing (or names a connector) there is nothing to glue it to, so it is not drawn.', { standard: SCHEMA }),
 	rule('image-placement-invalid', 'format', 'error', 'An image placement cannot be honoured.', 'A placed image bleeds to a slide edge and the rest of the slide composes beside it. Only a top-level block (slides.N.blocks.I) can do that, and a slide edge holds one placed image; a block in a group or a promoted region, or a second block on the same edge, has nowhere to go.', { standard: SCHEMA }),
 	rule('layout-placeholder-group', 'format', 'error', 'A layout record\'s placeholder group breaks a nesting rule.', 'A placeholder group arranges body regions inside one cell of its layout record. Groups nest at most three levels inside a record, and a group holds body regions and groups only: the headings (title, subtitle, tag) stay at the record\'s top level, where the engine places them. Composition cannot use a record that breaks either rule.', { standard: SCHEMA }),
@@ -64,6 +65,8 @@ const formatRules: ValidationRuleInfo[] = [
 	rule('dataset-field-unknown', 'format', 'error', 'A table asks a dataset for a column it does not have.', 'The column cannot be shown when the dataset has no column of that name.', { standard: SCHEMA }),
 	rule('data-column-duplicate', 'format', 'error', 'A dataset or table has two columns with the same name.', 'Series, mappings and fields address columns by name, so a repeated name makes them ambiguous.', { standard: SCHEMA }),
 	rule('chart-mapping-unknown-column', 'format', 'error', 'A chart mapping names a column the data does not have.', 'The series cannot be built from a column that is not there.', { standard: SCHEMA }),
+	rule('chart-reference-axis-unavailable', 'format', 'error', 'A reference names a value axis the chart does not have.', 'Secondary references require an actual secondary line series on a combo chart.', {standard: SCHEMA}),
+	rule('chart-reference-unsupported-type', 'format', 'error', 'A chart has reference lines but its type has no single value axis to draw them on.', 'An explicit reference line is never dropped silently, so a chart type that cannot draw it is an error. Column, bar, line, line-with-markers, area and combo charts draw references; the stacked, 100% stacked and every other type do not.', {standard: SCHEMA}),
 	rule('number-format-invalid', 'format', 'error', 'A number format cannot be read.', 'A format code that no engine can parse is drawn as the plain number or fails to export.', { standard: 'Excel number format codes, as far as OPF supports them' }),
 	rule('variable-invalid-value', 'format', 'error', 'A variable value does not match its declared type.', 'A number variable given text, or a date given a non-date, cannot be filled into the deck.', { standard: SCHEMA }),
 	rule('variable-unknown-builtin', 'format', 'error', 'A token names a built-in variable that does not exist.', 'The `deck.`, `speaker.`, `organization.` and `slide.` names (and `speakers`) are reserved for built-in variables; a name under them that is not a built-in can never be filled, so the token would show literally. The slide-scoped `slide.number`, `slide.section` and `deck.slideCount` are inline tokens only, so `var:slide.*` and `var:deck.slideCount` are reported too; organization logos are whole-field references only (`var:organization.logo.icon`), so a `{{organization.logo}}` token, an unknown logo shape or an unknown organization id is reported.', { standard: SCHEMA }),
@@ -78,7 +81,7 @@ const formatRules: ValidationRuleInfo[] = [
 		'A variable a deck declares as required, with no value, is template scaffolding: `{{name}}` tokens show up literally and colour variables fall back to a default. A normal deck must be filled, so this is an error and the deck is not valid; a template (`template: true`) is incomplete on purpose, so it is a warning.',
 		{
 			approximations:
-				'Required variables are those the variable machinery reports as unfilled for the document (declared, no value, not `required: false`, not given by the `values` option). For a document that declares no content variables, `{{id}}` / `{{id|format}}` tokens (`\{{` escapes) left in any string outside `variables`, `extensions`, `catalogs` and `assets` are reported as warnings. `var:` colour references with no declaration are reported as `opf/variable-reference-unknown`. Fill a template with `opf fill` or `resolveVariables` to clear the findings.',
+				'Required variables are those the variable machinery reports as unfilled for the document (declared, no value, not `required: false`, not given by the `values` option). For a document that declares no content variables, `{{id}}` / `{{id|format}}` tokens (`{{` escapes) left in any string outside `variables`, `extensions`, `catalogs` and `assets` are reported as warnings. `var:` colour references with no declaration are reported as `opf/variable-reference-unknown`. Fill a template with `opf fill` or `resolveVariables` to clear the findings.',
 		},
 	),
 	rule('run-color-unrecognized', 'format', 'warning', 'A text run colour is none of the documented forms.', 'Run colours are open strings so imported decks stay valid, but a value that is not a hex colour, a colour-scheme name or a `var:` reference falls back to the theme colour.', { standard: SCHEMA }),
@@ -127,7 +130,7 @@ const referenceRules: ValidationRuleInfo[] = [
 		'references',
 		'error',
 		"A layout template's regions are not valid.",
-		"Region names are unique across the whole record and may not be tag, auto or a promoted-region word (left, center, right, top, middle, bottom), so a Markdown block's region= stays unambiguous; title and subtitle name the heading regions, which take only a size, an anchor and (the title) a rule; a subtitle region needs a title region; a region accepts at least one content kind; a region with flow 'none' holds one block; overflowRegion must name a body region. composeSlide refuses such a record.",
+		"Region names are unique across the whole record and may not be tag, auto or a promoted-region word (start, center, end, top, middle, bottom), so a Markdown block's region= stays unambiguous; title and subtitle name the heading regions, which take only a size, an anchor and (the title) a rule; a subtitle region needs a title region; a region accepts at least one content kind; a region with flow 'none' holds one block; overflowRegion must name a body region. composeSlide refuses such a record.",
 		{ standard: 'spec/schemas/layout.schema.json and the region rules (docs/layout-templates.md)' },
 	),
 	rule(
@@ -186,6 +189,7 @@ const dataRules: ValidationRuleInfo[] = [
 	rule('code-highlight-out-of-range', 'content', 'warning', 'A code highlight marks a line the code does not have.', 'Marked lines count from 1 by line break in code.source; an entry past the last line marks nothing.', { standard: SCHEMA }),
 	rule('code-highlight-range-reversed', 'content', 'warning', 'A code highlight range ends before it starts.', 'A range written end before start marks nothing; write the smaller line number first.', { standard: SCHEMA }),
 	rule('variable-builtin-missing', 'content', 'warning', 'A built-in variable has no value in this document.', 'A `{{deck.*}}`, `{{speaker.*}}` or `{{organization.*}}` token whose field the document does not set resolves to nothing, so the text shows a gap; a `var:organization.logo` reference to an organization without a logo draws no image. `{{slide.section}}` is checked per slide: a slide without a `section` that uses it, in its own text or in the header or footer it inherits, is reported at that slide.', { standard: SCHEMA }),
+	rule('variable-group-omitted', 'content', 'info', 'A group is drawn only when one of its optional variables has a value.', 'A group (a block or promoted region with `blocks`) whose content variables are all optional (`required: false`) and all unfilled is left out whole when the deck is filled: its pictures, cards and other text go with the fields the variables would fill, so a slide never draws a card around a picture with no text. Validation fills every variable with its example or a sample, so it reports the group here instead.', { standard: SCHEMA, approximations: 'Counts the declared text, number, date, image, url and list variables the group uses as `{{id}}` or `var:id`, at any depth; color variables and built-ins do not count. A group that uses none, or any required or filled one, is kept and not reported.' }),
 	rule('duration-outside-narrative', 'content', 'warning', 'The target duration is outside the range the narrative suits.', 'A narrative records the talk lengths it suits. A deck whose duration is outside that range probably needs a different narrative or a different length; nothing is drawn or exported differently.', { standard: SCHEMA }),
 	rule('narrative-duration-range', 'content', 'warning', 'An inline narrative duration range has min greater than max.', 'A range with its bounds swapped matches no duration, so the duration check cannot help.', { standard: 'spec/schemas/narrative.schema.json' }),
 ];
@@ -209,14 +213,14 @@ export const onImageRule = rule(
 	'text-on-image',
 	'accessibility',
 	'info',
-	'Text sits on a background picture: a note when core draws its automatic scrim behind it, otherwise its contrast cannot be guaranteed.',
-	'Contrast over a photograph depends on the photograph. Core draws an automatic scrim behind text on a picture background that has no overlay, at the lowest opacity that keeps it at 4.5:1 over any picture, and this note names it. With an edge-band overlay, or the scrim turned off (overlay: false), only a full-frame overlay that guarantees readability for every possible image certifies the result from the document.',
+	'Text sits on a background picture: a note when core draws its automatic scrim behind it, a warning when the text is too faint over every color the picture can show, otherwise its contrast cannot be guaranteed.',
+	'Contrast over a photograph depends on the photograph. Core draws an automatic scrim behind text on a picture background that has no overlay, at the lowest opacity that keeps it at 4.5:1 over any picture, and this note names it. With an edge-band overlay, or the scrim turned off (overlay: false), only a full-frame overlay that guarantees readability for every possible image certifies the result from the document. Text that stays below the threshold over every color the picture can show (a duotone in dark colors under dark text, for one) is a warning: it is low contrast whatever the picture.',
 	{
 		standard: 'WCAG 2.2 SC 1.4.3 Contrast (Minimum), level AA',
 		thresholds: ['contrastNormal', 'contrastLarge'],
 		cost: 'composition',
 		approximations:
-			'Core reads picture pixels only through a host that measures them (ComposeSlideOptions.pictureLuminance). Otherwise the picture is bounded by a gray ramp from black to white, composited through the image opacity and a full-frame design.background overlay or the automatic scrim over the text it covers; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.',
+			'Core reads picture pixels only through a host that measures them (ComposeSlideOptions.pictureLuminance). Otherwise the picture is bounded by a gray ramp from black to white, composited through the image opacity and a full-frame design.background overlay or the automatic scrim over the text it covers; the text passes only when every step of that ramp passes. A duotone recolor bounds the ramp to its own two colors, and an edge-banded overlay counts over the text it reaches, beside the uncovered picture where the text reaches past it.',
 	},
 );
 export const altRule = rule(
@@ -228,7 +232,7 @@ export const altRule = rule(
 	{
 		standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A',
 		approximations:
-			'Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, organization logos (each shape and background), header/footer images (a logo reference such as var:organization.logo.icon is checked on the organization), quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.',
+			'Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, organization logos (each shape and background), header/footer images (a logo reference such as var:organization.logo.icon is checked on the organization), quote photos and speaker photos, following asset: references to the assets registry and image variables (var:<id>, RR-105) to their value (a template\'s unfilled variable to its example). Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.',
 	},
 );
 export const poorAltRule = rule(
@@ -265,7 +269,7 @@ export const readingOrderRule = rule(
 		standard: 'WCAG 2.2 SC 1.3.2 Meaningful Sequence, level A (PowerPoint: "Check reading order")',
 		cost: 'composition',
 		approximations:
-			'Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. Headings are expected first. Content drawn entirely above the title, over the columns of the title, is reported; content in a column beside the title is read after it. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.',
+			'Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. A block is one unit (RR-105): blocks are ordered by the boxes that hold them, and a group\'s own items are read, in their own visual order, before the next block, so cards side by side (a picture over a name) read card by card. Headings are expected first. Content drawn entirely above the title, over the columns of the title, is reported; content in a column beside the title is read after it. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.',
 	},
 );
 export const linkRule = rule(
@@ -314,7 +318,7 @@ export const languageRule = rule(
 	'info',
 	'The presentation does not declare its language.',
 	'Screen readers and text-to-speech choose pronunciation and hyphenation from the declared language; spell checkers and translation tools use it too.',
-	{ standard: 'WCAG 2.2 SC 3.1.1 Language of Page, level A', approximations: 'Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.lang`; opf/language-tag checks how those tags are written).' },
+	{ standard: 'WCAG 2.2 SC 3.1.1 Language of Page, level A', approximations: 'Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.language`; opf/language-tag checks how those tags are written).' },
 );
 
 // rules-layout-content.ts
@@ -403,6 +407,30 @@ export const arrangementAdaptedRule = rule(
 	"A `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` region draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.",
 	{ cost: 'composition' },
 );
+export const shapeOffSlideRule = rule(
+	'shape-off-slide',
+	'layout',
+	'warning',
+	'A shape or image callout lies wholly outside the slide.',
+	'Overlay shapes and image callouts may straddle or leave the slide on purpose, so a position outside it is valid. One with no part on the slide draws nothing, which is nearly always a percent or a pixel written where a fraction belongs.',
+	{ cost: 'composition' },
+);
+export const chartLabelCollisionRule = rule(
+	'chart-label-collision',
+	'layout',
+	'warning',
+	'A reference label meets another label, a data line or a mark at both ends of its line.',
+	'A reference label is tried above and below its line (beside it on a bar chart), at its own end and then at the other end of the line. When all four places meet another reference label, a data line, a bar or an area, it is drawn at the first and reported; its text and value are kept, and on a bar or an area it stands on a plate of the chart background.',
+	{ cost: 'composition' },
+);
+export const timelinePeriodShortRule = rule(
+	'timeline-period-short',
+	'layout',
+	'warning',
+	'A timeline period is too short to read.',
+	'A timeline period keeps the proportion its `duration` gives it, whatever the size. A period shorter than its marker is drawn as it is and reported; it is not text overflow, so a strict composition (`overflow: "error"`) does not refuse the slide.',
+	{ cost: 'composition' },
+);
 export const unplacedRule = rule(
 	'layout-unplaced',
 	'layout',
@@ -482,12 +510,12 @@ export const languageTagRule = rule(
 	'language-tag',
 	'content',
 	'warning',
-	'A language tag is malformed, uses an unassigned region or is not in canonical case.',
-	'Engines read the deck language and each run\'s `lang` as BCP 47 tags to choose script fonts, text direction, proofing language and the PowerPoint `lang` attribute. A tag such as `en-a`, or a region that does not exist (`en-UK`; the United Kingdom is `GB`), is guessed at or dropped, and a wrong-case tag (`EN-us`) is not what a locale lookup expects.',
+	'A language tag is malformed, uses an unassigned region, is not in canonical case or names a numbering system OPF does not draw.',
+	'Engines read the deck and slide language and each run\'s `language` as BCP 47 tags to choose script fonts, text direction, proofing language and the PowerPoint `lang` attribute. A tag such as `en-a`, or a region that does not exist (`en-UK`; the United Kingdom is `GB`), is guessed at or dropped, and a wrong-case tag (`EN-us`) is not what a locale lookup expects.',
 	{
 		standard: 'BCP 47 (RFC 5646, section 2.1) and the platform locale data (Intl.getCanonicalLocales, Intl.DisplayNames)',
 		approximations:
-			'Checks the root `language` (a tag string, or the `bcp47` of an inline Language object) and `lang` on the TextRun objects of titles, subtitles, tags, text, lists, tables, quotes, metrics and timelines. A region is assigned when the runtime\'s CLDR data names it (ISO 3166-1 codes and UN M.49 areas such as 419); private-use regions (`AA`, `QM`-`QZ`, `XA`-`XZ`) and `ZZ` are accepted, as are private-use (`x-...`) tags. Only the spelling of a tag is checked, not whether the language subtag is assigned or whether the language suits the text. The schema rejects tags with characters other than letters, digits and hyphens (`en_US` is a schema error, with no suggestion), and `en-UK` as the deck language is already an error of the schema rule, so those are not reported twice.',
+			'Checks the root and slide `language` (a tag string, or the `bcp47` of an inline Language object) and `language` on the TextRun objects of titles, subtitles, tags, text, lists, tables, quotes, metrics and timelines. A region is assigned when the runtime\'s CLDR data names it (ISO 3166-1 codes and UN M.49 areas such as 419); private-use regions (`AA`, `QM`-`QZ`, `XA`-`XZ`) and `ZZ` are accepted, as are private-use (`x-...`) tags. Only the spelling of a tag is checked, not whether the language subtag is assigned or whether the language suits the text. The schema rejects tags with characters other than letters, digits and hyphens (`en_US` is a schema error, with no suggestion), and `en-UK` as the deck language is already an error of the schema rule, so those are not reported twice.',
 	},
 );
 
@@ -620,6 +648,9 @@ const implementedRules: ValidationRuleInfo[] = [
 	unplacedRule,
 	iconDroppedRule,
 	arrangementAdaptedRule,
+	chartLabelCollisionRule,
+	timelinePeriodShortRule,
+	shapeOffSlideRule,
 	furnitureWrapsRule,
 	outsideRule,
 	resolutionRule,

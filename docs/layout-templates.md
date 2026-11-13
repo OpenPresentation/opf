@@ -10,7 +10,7 @@ A layout record (`https://openpresentation.org/schema/opf-layout/v2`) is an ordi
 and a deck's own layouts are records of this one schema; a custom layout is embedded under `catalogs.custom.layouts` (or
 a named catalog group) and referenced by id like any other. This page is the reference for what core implements.
 
-> The 36 built-in templates come from the matching `@openpresentation/gallery` package. Core and Gallery 5 use the region
+> The 40 built-in templates come from the matching `@openpresentation/gallery` package. Core and Gallery 5 use the region
 > lists documented below; Gallery 4 and earlier used a grid of area names (`areas`). Use coordinated core and Gallery
 > versions. V1 layout records, including `placeholders` and placeholder groups, remain unsupported; there are no aliases or
 > migration API.
@@ -99,8 +99,8 @@ to ask for), and elsewhere it is the validate finding `opf/layout-template`.
 region takes the subtitle out of it (a `subtitle` needs a `title`). Their `size` defaults to `auto` inside a `column` and to
 1 inside a `row`, so a cover that puts the title beside a picture is `{ "direction": "row", "regions": [{ "name": "title" },
 { "name": "media", ... }] }`. A layout with no `title` region gets an implicit `auto` row on top for a slide that has
-headings. Region names are unique across the whole record and may not be `tag`, `auto` or a promoted-region word (`left`,
-`center`, `right`, `top`, `middle`, `bottom`).
+headings. Region names are unique across the whole record and may not be `tag`, `auto` or a promoted-region word (`start`,
+`center`, `end`, `top`, `middle`, `bottom`).
 
 ### Regions
 
@@ -116,7 +116,8 @@ headings. Region names are unique across the whole record and may not be `tag`, 
 | `listColumns` | `"auto"` (a list of more than 6 entries that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
 | `metrics` | `stack` (value, unit, label and the rest as one block at the anchor) or `tile` (LH-68: each metric fills its cell, label first as an eyebrow, the value asking for a quarter of the cell's height between 76 and 152 px, description, delta and trend at the cell's foot, start-aligned; the gallery `scorecard` uses it) | `stack` |
 | `sequence` | `steps` or `numbered` (LH-07: the region lists the steps of a sequence, drawn under numbered badges joined by a connector, see [Step sequences](#step-sequences-lh-07); the gallery `process` uses `steps`, `agenda` and `agenda-split` use `numbered`) | none |
-| `arrangement` | `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` (SH-09, SH-18: the region's lone list of one level draws as PowerPoint's Basic Pyramid, Basic Matrix or Basic Cycle geometry, exported as live SmartArt where PowerPoint draws it as the preview does, or as OPF's own design of the arrangement where PowerPoint's does not hold the entries; a matrix of other than four entries draws cards; see [Pyramids, matrices and live SmartArt](smartart.md); the gallery `pyramid`, `matrix` and `cycle` use them; SH-17: `chevrons` draws the list as PowerPoint's Basic Chevron Process, `flow` as its Basic Process (boxes with arrows) and `vertical-flow` as its Vertical Process, or OPF's own rows or columns of them, used by the gallery layouts of the same names) | none |
+| `arrangement` | `pyramid`, `matrix`, `cycle`, `chevrons`, `flow`, `vertical-flow`, `org-chart`, `hierarchy` or `venn` (SH-09, SH-18: the region's lone list of one level draws as PowerPoint's Basic Pyramid, Basic Matrix or Basic Cycle geometry, exported as live SmartArt where PowerPoint draws it as the preview does, or as OPF's own design of the arrangement where PowerPoint's does not hold the entries; a matrix of other than four entries draws cards; see [Pyramids, matrices and live SmartArt](smartart.md); the gallery `pyramid`, `matrix` and `cycle` use them; SH-17: `chevrons` draws the list as PowerPoint's Basic Chevron Process, `flow` as its Basic Process (boxes with arrows) and `vertical-flow` as its Vertical Process, or OPF's own rows or columns of them, used by the gallery layouts of the same names; SH-21: `org-chart` and `hierarchy` preserve a single-root tree through list-entry `level`, and `venn` holds one to seven flat set labels; malformed trees or labels that do not fit keep the complete list with a finding) | none |
+| `pyramidDirection` | `up` (default: narrow tip at the top) or `down` (widest first, tip at the bottom), only with `arrangement: pyramid`. The `inverted-pyramid` gallery layout uses `down`. Entries retain their authored top-to-bottom order; downward pyramids export as editable native shapes until a live SmartArt domain is measured. | `up` |
 | `anchor` | `top`, `middle`, `bottom` | inherited from the nearest split or the record, else `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
 
@@ -141,7 +142,7 @@ accent rule, 80 by 5 px at a 720 px short edge, half a gap above the title at it
 title). A tag is the group's eyebrow and takes the rule's place. Both engines fill it in the tag's color: the primary, or the
 text color where the primary is under 4.5:1 on the slide (`SlideComposition.titleRule`; the PPTX export writes a native
 rectangle tagged `OPF_TITLE_RULE_V1`, which import consumes as the layout's drawing). The gallery `cover` and `section` use
-both, with `titleAlignment` and `contentAlignment` `left` (start), so a display title sits low at the start edge as Claude
+both, with `titleAlignment` and `contentAlignment` `start`, so a display title sits low at the start edge as Claude
 Design sets it, with the section's tag ("Part 1") as its eyebrow.
 
 Over a picture background the group goes where the measured picture is calm under its text (LH-158, see
@@ -246,7 +247,7 @@ into the grid it has always composed with, and composition, the renderer, the PP
 
 Nested sizes are relative to the entry's own parent, so a split of `{ "size": 2 }` beside a region of `{ "size": 1 }` is
 twice as large, whatever its children's sizes. Because the grid is shared, the gaps between regions are the grid's gaps: a
-row of two regions inside a column puts one gap between the two columns, as the cell grid does. The 36 built-in layouts
+row of two regions inside a column puts one gap between the two columns, as the cell grid does. The 40 built-in layouts
 compile to exactly the grids they had in Gallery 4, so nothing they draw moved.
 
 ## Binding content to regions
@@ -303,6 +304,12 @@ slide that pins any block with `region` keeps the binding above as written.
      3 to 6. Mosaic pictures are cropped to fill (`cover`) unless the block, slide, deck or theme sets `imageFit` (the
      layout's own `contain` gives way). A lead plus cards is the first block across the region (a short one at the lead
      size) over the others in the balanced grid below, each row at the height it needs, placed by the region's anchor.
+   - The closing's `details` region already flows, so its blocks join nothing; it takes the same lead plus cards (the
+     guarded rule `closing-lead`). A layout whose one body region is a flowing `supporting` region, holding 3 to 6 plain
+     texts that its `auto` flow would stack (a text too long for a cell of the balanced grid) and that read as neither
+     paragraph columns (LH-70) nor a lead plus stack (LH-67), and whose other texts fill whole rows of the balanced grid (2, 3 or 4 of them, never a short last row), sets the first text, its call to action, across the region
+     over the others in the balanced grid, as Claude Design draws a closing's details under its call to action. It is
+     kept only when no text reads smaller and nothing more is found (the size guard).
    - The join is kept unless it overflows more than leaving the extra blocks below the grid (counting `text-overflow` and
      `small-cell`): measured blocks such as tables or timelines that need more room than the joined cells give stay below
      the grid with `opf/layout-unplaced`, where they read whole (three tables in `table-beside`'s narrow region broke their
@@ -316,7 +323,7 @@ and no gap, and the columns left share the width by their own sizes, so two bloc
 column beside a neighbor that took the third column's width too. The empty region reports `collapsed` and a zero-wide cell where
 its column was. The column, and a nested group's new default gap (LH-89), are kept only when no block reads smaller than with
 the columns and gaps of before (unless that removes overflow). Headings are centered vertically in their region unless every
-row it spans is `auto`, so a `cover` or a title-only slide centers its title. A slide with promoted regions (`left`, `top:left`, ...)
+row it spans is `auto`, so a `cover` or a title-only slide centers its title. A slide with promoted regions (`start`, `top:start`, ...)
 composes them as in 0.18.
 
 In the Markdown dialect, `<!-- block: region=metrics -->` pins a block; a promoted-region key keeps its 0.18 meaning.
@@ -512,8 +519,9 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   A sentence title over a paragraph is the message: it grows to display size (75 px), the paragraph keeps its size. A metric, or a
   text under a title of at most 4 words, is the message: the stack gives way, the title is the running head and the block fills the
   body (LH-48, LH-101). A lone text of at most 25 words (`messageWords`, any script) grows on to 56 px (75 px at 4 words or fewer)
-  on at most 4 balanced lines; its bold runs draw in the primary color where that reads 4.5:1. A lone one-entry list with a short
-  label draws it as a display word over a short rule; a placed region's short text is a bold heading. Guarded rules
+  on at most 4 balanced lines, and (RR-105) only to a step whose lines keep the minimum measure of LH-66 (28 average characters once it runs to 4 lines), so on a narrow slide, portrait or square, it stops one step lower (49 px) instead of falling back to its plain size; its bold runs draw in the primary color where that reads 4.5:1. A lone one-entry list with a short
+  label draws it as a display word over a short rule; a placed region's short text is a bold heading, drawn as a tile when it is no
+  sentence (see [Placed tiles](dynamic-composition.md), `placed-tiles`). Guarded rules
   `statement-message` and `display-message`.
   LH-163: where the primary does not read 4.5:1 on a dark or accent surface, a display message's bold words draw in a lighter tint of
   the primary that does (hue and saturation kept, lightness raised), never in a color the author did not mark. LH-164: a slide whose
@@ -554,6 +562,14 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   region, such as hero's media) that covers under 60% of the body height after its regions take their need sits in the middle
   of the space under the headings, as a body of paragraphs does, when it moves as one (a region the layout holds at the foot keeps
   the body where it is) and no block reads smaller. Pictures, charts and videos in other regions keep the layout's cells.
+  Without a layout, a short body of paragraphs and lists that still covers under half of the body after LH-48's three steps
+  grows on past a list's display size, as LH-05's compact grid does: step by step up to 56 px, each step larger, nothing
+  overflowing, at most 60% of the body covered, the body keeping its rows and columns (a body that may draw step badges or
+  cards keeps the three steps, so those drawings are held to the same body). The stack then sits in the middle of the body under the headings, rather than
+  at its top over an empty foot. Promoted regions that
+  each run the body's full height (`start`, `center+end`) and hold only paragraphs and lists set them as one band in the
+  middle of the body, each block starting at the band's top. Both are composed with LH-48's centering and kept only when
+  no block reads smaller and nothing overflows.
 - **Mixed cards (LH-64).** A row of middle- or bottom-anchored cards with a table, code panel or timeline among other measured
   kinds starts at the card top (or hugs and centers in an under-filled body) instead of each kind at its own anchor.
 - **Reading measure (LH-10).** A paragraph in a region wider than about 70 average characters of its size is set on that
@@ -617,4 +633,4 @@ reaches the slide edge as on a slide; `false` gives its cell inside the content 
 0.19 breaks layouts: there is no migration path. A layout id of the 0.18 default catalog that 0.19 does not have is an
 unknown layout like any other (`opf/unresolved-reference`: the slide composes automatically and a strict export fails).
 Six 0.18 ids are also 0.19 built-ins and resolve to them: `agenda`, `comparison`, `dashboard`, `faq`, `timeline` and
-`two-column`. The release notes list the 36 built-ins.
+`two-column`. The release notes list the 40 built-ins.

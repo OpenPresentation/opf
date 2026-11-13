@@ -35,7 +35,7 @@ const source = {
       title: 'Attached',
       blocks: [{ id: 'metric', metric: { value: 42, label: 'Score' } }],
       shapes: [
-        { id: 'badge', shape: 'ellipse', text: '1', at: { block: 'metric', edge: 'top', offset: 8, width: 48, height: 48 } },
+        { id: 'badge', shape: 'ellipse', text: '1', at: { block: 'metric', edge: 'top', offset: 8, widthPx: 48, heightPx: 48 } },
         { id: 'free', shape: 'rect', x: 0.1, y: 0.7, width: 0.2, height: 0.1 },
       ],
     },
@@ -150,7 +150,16 @@ try {
   assert.equal(await selection.locator('.opf-shape-controls [data-role="shape-stack-group"]').count(), 1, 'and Stacking');
   mark('a selected overlay shape shows its frame, and the section its place and stacking');
 
-  // --- move by dragging its outline; the fractions are written, kept on the slide, one undo step
+  // --- signed positions are available through the ordinary controls and remain undoable
+  const yField=selection.getByLabel("Y",{exact:true});
+  assert.equal(await yField.getAttribute("min"),null);
+  assert.equal(await yField.getAttribute("max"),null);
+  await step("a negative Y percent positions the shape above the slide",async()=>{await yField.fill("-10");await yField.press("Enter");},current=>current.slides[0].shapes[0].y===-0.1,{single:true});
+  await shot('overlay-negative-y');
+  await undo();
+  await waitDoc(current=>canon(current.slides[0].shapes[0])===canon(inserted));
+
+  // --- move by dragging its outline; one undo step
   const svgBox = async () => page.locator('#preview svg').first().boundingBox();
   const drag = async (from, to, { steps = 8, keep = false } = {}) => {
     await page.mouse.move(from.x, from.y);
@@ -167,14 +176,14 @@ try {
   const expectedDx = 120 / slideBox.width;
   assert.ok(Math.abs(moved.slides[0].shapes[0].x - inserted.x - expectedDx) < 0.01, `x moved by the pointer's travel: ${moved.slides[0].shapes[0].x - inserted.x} against ${expectedDx}`);
   await shot('overlay-moved');
-  // Kept on the slide, however far it is dragged.
+  // Dragging past the slide preserves the pointer-derived origin.
   const now = await frameBox();
   await drag({ x: now.x + now.width / 2, y: now.y + now.height * 0.62 }, { x: slideBox.x + slideBox.width + 400, y: slideBox.y + slideBox.height + 400 });
   const edge = (await shapes())[0];
-  assert.ok(edge.x + edge.width <= 1 + 1e-9 && edge.y + edge.height <= 1 + 1e-9, `kept on the slide: ${JSON.stringify(edge)}`);
+  assert.ok(edge.x + edge.width > 1 && edge.y + edge.height > 1, `off-slide origin retained: ${JSON.stringify(edge)}`);
   await undo();
   await waitDoc(current => canon(current.slides[0].shapes[0]) === canon(moved.slides[0].shapes[0]), 'undo the far drag');
-  mark('a move is kept on the slide');
+  mark('a move may cross the slide edge and undo restores it');
   // A press that does not travel is a click: it selects and nothing is written.
   const quiet = await doc();
   const there = await frameBox();
@@ -261,7 +270,7 @@ try {
   assert.ok(moveUp.slides[1].shapes[0].at.offset > 8);
   const sw = page.locator('[data-overlay-handle="se"]');
   const swBox = await sw.boundingBox();
-  await step('resizing an attached shape changes at.width and at.height', async () => { await drag({ x: swBox.x + swBox.width / 2, y: swBox.y + swBox.height / 2 }, { x: swBox.x + swBox.width / 2 + 24, y: swBox.y + swBox.height / 2 + 24 }); }, current => { const s = current.slides[1].shapes[0]; return s.at.width > 48 && s.at.height > 48 && s.x === undefined; }, { single: true });
+  await step('resizing an attached shape changes at.widthPx and at.heightPx', async () => { await drag({ x: swBox.x + swBox.width / 2, y: swBox.y + swBox.height / 2 }, { x: swBox.x + swBox.width / 2 + 24, y: swBox.y + swBox.height / 2 + 24 }); }, current => { const s = current.slides[1].shapes[0]; return s.at.widthPx > 48 && s.at.heightPx > 48 && s.x === undefined; }, { single: true });
   await step('Free from block turns it into fractions', async () => { await selection.locator('[data-role="shape-free"]').click(); }, current => { const s = current.slides[1].shapes[0]; return s.at === undefined && s.x > 0 && s.width > 0; }, { single: true });
   await shot('overlay-anchored');
   mark('an attached shape keeps its anchor until it is freed');
@@ -327,6 +336,35 @@ try {
   await step('deleting a shape deletes the connectors on it', async () => { await selection.locator('[data-role="overlay-remove"]').click(); }, current => !current.slides[0].shapes.some(entry => entry.id === 'bubble' || entry.connector?.to === 'bubble'), { single: true });
   mark('deleting an overlay deletes the connectors on it');
 
+  // SH-25: chart point controls are complete validated transactions, with one-step Undo/Redo.
+  await page.evaluate(() => globalThis.host.session.applyPatch([{op: 'replace', path: '/slides', value: [{title: 'Follow a point', blocks: [{id: 'costs', chart: {type: 'column', data: {columns: ['Country', 'Cost', 'Other'], rows: [['US',20,15],['France',8,12]]}}}], shapes: [{shape: 'ellipse', fill: 'none', stroke: {color: 'accent2', width: 3}, x: .4, y: .2, width: .08, height: .1}]}]}]));
+  await settle(); await select('slides.0.shapes.0');
+  await step('attach to a chart point', async () => {await field('Follow a chart point').selectOption('costs');}, current => current.slides[0].shapes[0].at?.point === 0 && current.slides[0].shapes[0].x === undefined, {single: true});
+  await step('select another chart point', async () => {await field('Chart point').selectOption('1');}, current => current.slides[0].shapes[0].at?.point === 1, {single: true});
+  await step('select another chart series', async () => {await field('Chart series').selectOption('1');}, current => current.slides[0].shapes[0].at?.series === 1, {single: true});
+  await step('select a point edge', async () => {await field('Point edge').selectOption('center');}, current => current.slides[0].shapes[0].at?.edge === 'center', {single: true});
+  await shot('chart-point-controls');
+  // Direction comes from the document, never inferred from a symmetric box.
+  await page.evaluate(() => globalThis.host.session.applyPatch([
+    {op:'add',path:'/language',value:{bcp47:'en-US',direction:'rtl'}},
+    {op:'replace',path:'/slides',value:[{title:'RTL position',blocks:[{id:'body',text:'Body'}],shapes:[
+      {id:'centered',shape:'rect',x:.4,y:.2,width:.2,height:.2},
+      {id:'attached-rtl',shape:'ellipse',at:{block:'body',edge:'end',offset:150,widthPx:48,heightPx:48}}
+    ]}]}
+  ]));
+  await settle(); await select('slides.0.shapes.0');
+  const centeredBefore=await frameBox(),rtlSlideBox=await svgBox();
+  const moveGrip=await page.locator('[data-overlay-handle="move"]').boundingBox();
+  await step('a centered inline-RTL overlay follows a physical right drag',async()=>{
+    await drag({x:moveGrip.x+moveGrip.width/2,y:moveGrip.y+moveGrip.height/2},{x:moveGrip.x+moveGrip.width/2+80,y:moveGrip.y+moveGrip.height/2});
+  },current=>current.slides[0].shapes[0].x<.4,{single:true});
+  const centeredAfter=await frameBox();assert.ok(Math.abs(centeredAfter.x-centeredBefore.x-80)<2,'the rendered box moved right, not its mirrored opposite');
+  await step('negative inline-RTL x is retained as a logical start-edge coordinate',async()=>{await field('X').fill('-10');await field('X').press('Enter');},current=>current.slides[0].shapes[0].x===-.1,{single:true});
+  assert.ok((await frameBox()).x>rtlSlideBox.x+rtlSlideBox.width*.85,'negative RTL origin is beyond the physical right start edge');
+  await shot('overlay-inline-rtl-negative-x');
+  await select('slides.0.shapes.1');const attachedBefore=await frameBox();
+  await step('freeing an inline-RTL attached shape preserves its physical box',async()=>{await selection.locator('[data-role="shape-free"]').click();},current=>current.slides[0].shapes[1].at===undefined,{single:true});
+  const attachedAfter=await frameBox();for(const key of ['x','y','width','height'])assert.ok(Math.abs(attachedAfter[key]-attachedBefore[key])<1,'detach preserves '+key);
   assert.deepEqual(errors, [], 'no page errors');
   console.log(`shape overlays browser test ok: ${checks.length} checks`);
   for (const name of checks) console.log(`  - ${name}`);

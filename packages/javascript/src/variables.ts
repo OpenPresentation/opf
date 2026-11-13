@@ -3,6 +3,7 @@ import { formatFurnitureDate, parseIsoDate } from "./furniture-fields.js";
 import { organizationsOf, primaryOrganization, primarySpeaker, speakersOf } from "./deck-metadata.js";
 import { SLIDE_SCOPED_BUILTINS, isSlideScopedBuiltin, isSlideScopedName, slideTokenFollows } from "./slide-variables.js";
 import { LOGO_SHAPES, logoReferenceName, parseLogoName, resolveOrganizationLogo, type LogoReference } from "./logos.js";
+import { languageInEffect, localizeNumberText, localizePatternNumber } from "./numerals.js";
 
 /**
  * Template variables: typed, named values a deck declares once and uses in many
@@ -53,7 +54,8 @@ export type VariableDiagnosticCode =
   | "variable-builtin-missing"
   | "variable-unused"
   | "variable-rich-flattened"
-  | "variable-format";
+  | "variable-format"
+  | "variable-group-omitted";
 export type VariableDiagnosticSeverity = "error" | "warning" | "info";
 export interface VariableDiagnostic {
   code: VariableDiagnosticCode;
@@ -256,10 +258,20 @@ export function hasContentVariables(presentation: unknown): boolean {
 
 const POSITIVE_ZERO = "0";
 
-/** Format a number with a display pattern (see the schema `NumberVariable.format`). */
-export function formatVariableNumber(value: number, pattern?: string): { text: string } | { error: string } {
+/**
+ * Format a number with a display pattern (see the schema `NumberVariable.format`). LH-106: with `language`, the text is in that
+ * language's numbering system (`localizePatternNumber`; without a pattern, `localizeNumberText`); without it, Latin as written.
+ */
+export function formatVariableNumber(value: number, pattern?: string, language?: string): { text: string } | { error: string } {
   if (!Number.isFinite(value)) return { error: `'${String(value)}' is not a finite number.` };
-  if (pattern === undefined || pattern === "") return { text: String(value) };
+  if (pattern === undefined || pattern === "") return { text: language === undefined ? String(value) : localizeNumberText(String(value), language) };
+  const parts = patternNumberParts(value, pattern);
+  if ("error" in parts) return parts;
+  return { text: language === undefined ? `${parts.negative ? "-" : ""}${parts.prefix}${parts.body}${parts.suffix}` : localizePatternNumber(parts, language) };
+}
+
+/** The sign, literal prefix, numeric body (ASCII digits, `.` and `,`) and literal suffix a display pattern prints a number as. */
+function patternNumberParts(value: number, pattern: string): { negative: boolean; prefix: string; body: string; suffix: string } | { error: string } {
   const match = /^([^#0,.]*)((?:[#0,]*)(?:\.[#0]+)?)([\s\S]*)$/.exec(pattern);
   const numeric = match?.[2] ?? "";
   if (!match || !/[#0]/.test(numeric)) return { error: `Number format '${pattern}' needs a numeric part of '#' and '0' characters.` };
@@ -291,7 +303,7 @@ export function formatVariableNumber(value: number, pattern?: string): { text: s
   if (grouping) integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const body = `${integer}${decimals ? `.${decimals}` : ""}` || POSITIVE_ZERO;
   const negative = scaled < 0 && /[1-9]/.test(body);
-  return { text: `${negative ? "-" : ""}${prefix}${body}${suffix}` };
+  return { negative, prefix, body, suffix };
 }
 
 type Status = "filled" | "example" | "unfilled";
@@ -311,6 +323,8 @@ interface Context {
   /** Validation view: samples fill every unfilled variable; lists do not splice; nothing is omitted. */
   shape: boolean;
   content: boolean;
+  /** Internal dependency walk: follow the same sources/grammar, but never materialize expanded values. */
+  dependencyOnly?: boolean;
   seen: Set<string>;
   /** The document built-ins read from. */
   doc: Record<string, unknown>;
@@ -338,6 +352,20 @@ function plainText(value: unknown): string {
   return "";
 }
 
+/** Keys whose strings are addresses or names, never drawn as text. */
+const ADDRESS_KEYS = new Set(["href", "url", "link", "src", "id", "alt", "altText"]);
+
+/**
+ * The language a number variable inserted at `path` is drawn in: the slide's (or the deck's) for text on a slide or in the deck's
+ * header and footer, undefined (Latin, as written) anywhere else and in an address (a link, a source, an id).
+ */
+function drawnNumberLanguage(doc: Record<string, unknown>, path: string): string | undefined {
+  const slide = /^\/slides\/(\d+)\//.exec(path);
+  if (!slide && !/^\/design\/(?:header|footer)\//.test(path)) return undefined;
+  if (ADDRESS_KEYS.has(path.split("/").at(-1) ?? "")) return undefined;
+  return languageInEffect(doc, slide ? Number(slide[1]) : undefined);
+}
+
 /** The inline text of a variable value, or undefined when it cannot be formatted. */
 function inlineText(effective: Effective, format: string | undefined, path: string, context: Context): string | undefined {
   const { declaration } = effective;
@@ -353,7 +381,8 @@ function inlineText(effective: Effective, format: string | undefined, path: stri
       return plainText(value);
     case "number": {
       const pattern = (format ?? declaration.format)?.trim();
-      const formatted = formatVariableNumber(value as number, pattern === "" ? undefined : pattern);
+      // LH-106: a number drawn on a slide (or in the deck's header and footer) is in the numbering system of the language there.
+      const formatted = formatVariableNumber(value as number, pattern === "" ? undefined : pattern, drawnNumberLanguage(context.doc, path));
       if ("error" in formatted) {
         diag(context, { code: "variable-format", severity: "error", path, id: declaration.id, message: formatted.error }, `fmt:${declaration.id}:${format ?? ""}`);
         return String(value);
@@ -513,6 +542,7 @@ function interpolate(text: string, path: string, context: Context): { value: str
     // `{{slide.number}}`, `{{slide.section}}`, `{{deck.slideCount}}` resolve per slide (resolveSlideVariables, layoutFurniture).
     if (isSlideScopedBuiltin(id)) return match;
     const effective = lookupVariable(id, path, context);
+    if (context.dependencyOnly) return match;
     if (!effective) {
       if (!isBuiltinName(id)) diag(context, { code: "variable-unknown", severity: "warning", path, id, message: `'{{${id}}}' names no declared variable; declare '${id}' in the top-level variables map, or write '\\{{' for literal braces.` }, `unk:${id}:${path}`);
       return match;
@@ -544,6 +574,11 @@ function reduceString(text: string, path: string, parentIsArray: boolean, contex
   const reference = referencePattern.exec(text);
   if (reference) {
     const id = reference[1] as string;
+    if (context.dependencyOnly) {
+      context.uses.push({ id, path, form: "reference" });
+      lookupVariable(id, path, context);
+      return { kind: "keep" };
+    }
     const logo = id.startsWith("organization.") ? parseLogoName(id, context.doc) : null;
     if (logo) return reduceLogo(id, logo, path, context);
     const effective = lookupVariable(id, path, context);
@@ -603,6 +638,77 @@ function reduceLogo(id: string, logo: LogoReference | { error: string }, path: s
 const skippedKeys = new Set(["extensions"]);
 const skippedRootKeys = new Set(["variables", "catalogs", "$schema", "template"]);
 
+/** A group inside a slide: a block or promoted region that holds `blocks`, at any depth under a slide (never the slide itself). */
+const groupPathPattern = /^\/slides\/\d+\/.+/;
+
+/** The declared content variables (not colors, not built-ins) a subtree uses, each with the paths that use it. */
+function subtreeVariables(value: unknown, path: string, context: Context, found = new Map<string, VariableUse[]>()): Map<string, VariableUse[]> {
+  if (typeof value === "string") {
+    const reference = referencePattern.exec(value);
+    const uses: [string, VariableUse["form"]][] = reference ? [[reference[1] as string, "reference"]] : [...value.matchAll(tokenPattern)].flatMap((match) => (match[1] === undefined ? [] : [[match[1], "token"] as [string, VariableUse["form"]]]));
+    for (const [id, form] of uses) {
+      const declaration = context.effective.get(id)?.declaration;
+      if (declaration?.kind === "color") continue;
+      if (!declaration && isBuiltinName(id)) {
+        const logo = form === "reference" ? parseLogoName(id, context.doc) : undefined;
+        if ((form === "token" && isSlideScopedBuiltin(id)) || (logo && !("error" in logo)) || builtinSource(id, context.doc).ok) continue;
+      }
+      // Unknown names keep the group so the normal walk reports them; omission must never hide a malformed template.
+      found.set(id, [...(found.get(id) ?? []), { id, path, form }]);
+    }
+    return found;
+  }
+  if (Array.isArray(value)) for (const [index, entry] of value.entries()) subtreeVariables(entry, `${path}/${index}`, context, found);
+  else if (isRecord(value)) for (const [key, entry] of Object.entries(value)) if (!skippedKeys.has(key)) subtreeVariables(entry, pathFor(path, key), context, found);
+  return found;
+}
+
+/**
+ * LH-30: a group (a block or promoted region with `blocks`) whose content variables are all optional and all unfilled is optional
+ * content as a whole: its pictures, cards and static text go with the fields the variables would fill, so the slide does not draw a
+ * card around a picture with no text, or a heading over nothing. A group that uses no content variable, or any filled or required
+ * one, stays. The resolution omits it (`variable-group-omitted`, info); the validation view, whose samples fill every variable,
+ * keeps it and reports the same info, so a template says which groups go when it is filled without them.
+ */
+/** The message of `variable-group-omitted` for the group's variable ids. */
+function groupOmittedMessage(ids: readonly string[], anchored: readonly string[] = []): string {
+  const names = ids.map((id) => `'${id}'`), one = ids.length === 1;
+  const list = one ? names[0] : `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`;
+  // Double quotes: the finding text reads the single-quoted names as variable ids.
+  const shapes = anchored.length ? ` Shapes attached to ${anchored.map((id) => `"${id}"`).join(", ")} are not drawn.` : "";
+  return `This group uses only the optional variable${one ? "" : "s"} ${list}, which ${one ? "has" : "have"} no value, so the whole group is left out: its pictures, cards and other text go with ${one ? "it" : "them"}.${shapes} Give ${one ? list : "one of them"} a value to draw the group.`;
+}
+
+/** The ids a group (and the blocks inside it) carries that an overlay shape or connector of the same slide is attached to. */
+function anchoredIds(value: Record<string, unknown>, path: string, context: Context): string[] {
+  const shapes = (context.doc.slides as { shapes?: unknown[] }[] | undefined)?.[Number(path.split("/")[2])]?.shapes;
+  const own = new Set<unknown>();
+  const collect = (node: unknown, depth: number): void => {
+    if (isRecord(node) && depth < 64) {
+      own.add(node.id);
+      if (Array.isArray(node.blocks)) for (const child of node.blocks) collect(child, depth + 1);
+    }
+  };
+  collect(value, 0);
+  const refs = (Array.isArray(shapes) ? shapes : []).flatMap((shape: any) => [shape?.at?.block, shape?.connector?.from, shape?.connector?.to]);
+  return [...new Set(refs.filter((ref) => typeof ref === "string" && own.has(ref)))];
+}
+
+function omittedGroup(value: Record<string, unknown>, path: string, context: Context): boolean {
+  if (!Array.isArray(value.blocks) || !groupPathPattern.test(path)) return false;
+  const used = subtreeVariables(value, path, context);
+  if (!used.size) return false;
+  for (const id of used.keys()) {
+    const effective = context.effective.get(id);
+    if (!effective || effective.status !== "unfilled" || effective.declaration.required) return false;
+  }
+  const ids = [...used.keys()];
+  // The resolution does not walk an omitted group, so its uses are recorded here (no variable-unused); the validation view walks it.
+  if (!context.shape) for (const uses of used.values()) context.uses.push(...uses);
+  diag(context, { code: "variable-group-omitted", severity: "info", path, id: ids[0] as string, message: groupOmittedMessage(ids, anchoredIds(value, path, context)) }, `grp:${path}`);
+  return true;
+}
+
 function walk(value: unknown, path: string, parentIsArray: boolean, context: Context): unknown {
   if (typeof value === "string") {
     const reduced = reduceString(value, path, parentIsArray, context);
@@ -631,6 +737,7 @@ function walk(value: unknown, path: string, parentIsArray: boolean, context: Con
     return changed ? out : value;
   }
   if (isRecord(value)) {
+    if (omittedGroup(value, path, context) && !context.shape) return OMIT;
     let changed = false;
     const entries: [string, unknown][] = [];
     for (const [key, entry] of Object.entries(value)) {
@@ -814,6 +921,23 @@ export function resolveVariables(presentation: unknown, values: VariableValues =
     return { presentation, diagnostics: [], unfilled: built.unfilled, examplesUsed: [], complete: built.unfilled.length === 0 };
   }
   return finish(presentation, built, options);
+}
+
+/**
+ * Internal cache dependency check, after strict plain-data/key-budget guards. Callers retain conservative fallback
+ * for declarations/templates/explicit values. Use the actual walk/escape/reference/builtin-source rules without
+ * constructing replacements or picker values. builtinEffective's cache/resolving set visits each source once;
+ * dependency interpolation returns the original match, so repeated transitive tokens cannot amplify strings.
+ * No public entry re-exports this helper. An unproven dependency keeps the complete original cache key.
+ */
+export function hasBuiltinDependency(presentation: Record<string, unknown>, name: string): boolean {
+  try {
+    const { context } = plan(presentation, {}, { partial: true, shape: true });
+    context.content = true;
+    context.dependencyOnly = true;
+    walk(presentation, "", false, context);
+    return context.uses.some(use => use.id === name);
+  } catch { return true; }
 }
 
 /**

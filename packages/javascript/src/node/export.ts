@@ -8,15 +8,15 @@
 import { statSync } from "node:fs";
 import path from "node:path";
 import { ensureIcons } from "../icons.js";
-import { type Catalog, type Fonts, continueOverfull, paginate } from "../core.js";
-import { createImageResolver } from "./assets.js";
+import { type Catalog, type Fonts, continueOverfull, paginate, validate } from "../core.js";
+import { createImageResolver, iconSourceReader } from "./assets.js";
 import { defaultCatalogs } from "./catalogs.js";
 import { OPFApiError } from "../api-errors.js";
 import { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
 import { type SlideSelection, parseSlideSelection } from "../slide-selection.js";
 import { deckStem, padNumber } from "./files.js";
 import { type Diagnostic, type FontsHandle, PPTX_PACKAGE, type Peer, type PptxModule, RENDER_PACKAGE, type Renderer, loadPptx, loadRenderer, missingPeerFrom, requirePptxOptions } from "./peers.js";
-import { Reporter, reportThrown } from "./reporter.js";
+import { type Reporter, reportThrown } from "./reporter.js";
 import { createZip } from "./zip.js";
 
 export type ExportFormat = "svg" | "png" | "pdf" | "pptx";
@@ -310,18 +310,67 @@ export async function runExport(presentation: unknown, options: ResolvedExportOp
 	const resolver = createImageResolver(assetRoot(options.assetDir, ctx.flags), reporter, ctx.flags ? "pass --asset-dir" : "pass assetDir");
 	// LH-14: the icon sets the deck names (the gallery loads each set on first use) and its icons' SVG files, read as its images are (the
 	// asset directory only; nothing is fetched), before anything composes the deck.
-	await ensureIcons(presentation, { catalogs, readSource: async (source) => { const uri = resolver.forMeasure(source); return uri?.startsWith("data:image/svg+xml;base64,") ? Buffer.from(uri.slice(26), "base64").toString("utf8") : undefined; } });
+	await ensureIcons(presentation, { catalogs, readSource: iconSourceReader(undefined, resolver) });
 	// RR-59: a standalone SVG (text "fonts") carries the installed script faces its text draws; raster, PDF and PPTX read
 	// them from the font files, so they skip the script data URLs. Without `fonts`, a deck the process's shared handle serves
 	// unchanged borrows it (the pack is prepared once per process); any other deck gets a handle of its own.
 	const embedScripts = format === "svg" && options.text === "fonts";
-	const lease = options.fonts ? undefined : await leaseSharedFonts(renderer, presentation, userFonts, reporter, embedScripts);
+	const lease = options.fonts ? undefined : await leaseSharedFonts(renderer, presentation, userFonts, reporter, embedScripts, { catalogs, ...(date ? { date } : {}) });
 	try {
-		const handle: FontsHandle = options.fonts ?? lease?.handle ?? (await prepareFonts(renderer, presentation, userFonts, reporter, embedScripts)).handle;
-		return await drawWith(presentation, handle, options, ctx, { reporter, catalogs, date, renderer, ...(pptx ? { pptx } : {}), userFonts, resolver });
+		const handle: FontsHandle = options.fonts ?? lease?.handle ?? (await prepareFonts(renderer, presentation, userFonts, reporter, embedScripts, { catalogs, ...(date ? { date } : {}) })).handle;
+		if(options.fonts && handle.registry?.fontNames)await handle.ensure?.(presentation,{renderOptions:{catalogs,...(date?{date}:{})}});
+		const environment: DrawEnvironment = { reporter, catalogs, date, renderer, ...(pptx ? { pptx } : {}), userFonts, resolver };
+		// RR-105, second line of defense: `ensure` prepares every face the deck's real-metrics composition measures (the font
+		// analysis's fixpoint), but the exporters also compose with what the analysis does not see (the PPTX exporter's own
+		// options, real image sizes, the picture sampler). When drawing fails only because one face was not prepared, that face
+		// is prepared now and the drawing runs again, at most LATE_FACE_ROUNDS times, and each late face is reported
+		// (fonts/prepared-late, info) so tests and hosts see it. Any other failure, and a face that stays unprepared, fails as before.
+		const late = new Set<string>();
+		for (let round = 0; ; round++) {
+			const mark = reporter.mark();
+			const result = await drawWith(presentation, handle, options, ctx, environment);
+			const face = result.failure ? unpreparedFace(thrownBy.get(result)) : undefined;
+			if (!face || round >= LATE_FACE_ROUNDS || late.has(face.key) || typeof handle.ensure !== "function" || !handle.registry?.fontNames) return result;
+			late.add(face.key);
+			try {
+				await handle.ensure(presentation, { renderOptions: { catalogs, ...(date ? { date } : {}) }, measurementRequests: [{ text: " ", size: 16, style: face.style }] });
+			} catch {
+				return result;
+			}
+			reporter.withdrawErrors(mark);
+			reporter.add(
+				"fonts",
+				{ code: "prepared-late", path: face.path, message: `${face.style.fontFamily} ${face.style.fontWeight}${face.style.italic ? " italic" : ""} was prepared only when the export measured it; the export ran again with it.`, fontFamily: face.style.fontFamily, fontWeight: face.style.fontWeight, italic: face.style.italic },
+				"info",
+			);
+		}
 	} finally {
 		lease?.release();
 	}
+}
+
+/** How many faces a conversion may prepare after its fonts were ensured, one drawing each (RR-105). */
+const LATE_FACE_ROUNDS = 4;
+// The error a failed drawing threw, by the run that reports it (internal to runExport's late preparation).
+const thrownBy = new WeakMap<ExportRun, unknown>();
+const failedWith = (run: ExportRun, error: unknown): ExportRun => {
+	thrownBy.set(run, error);
+	return run;
+};
+/**
+ * The face a drawing failed on because the fonts handle had not prepared it: exactly the demand loader's prepared-face error
+ * (`font-unavailable`, "selected face is not prepared", naming the family, the selected weight and style), here or as a cause.
+ */
+function unpreparedFace(error: unknown): { key: string; path: string; style: { fontFamily: string; fontWeight: number; italic: boolean } } | undefined {
+	let current = error as { code?: unknown; message?: unknown; details?: Record<string, unknown>; cause?: unknown } | undefined;
+	for (let depth = 0; current && depth < 3; depth++, current = current.cause as typeof current) {
+		const details = current.details;
+		if (current.code !== "font-unavailable" || typeof current.message !== "string" || !current.message.startsWith("The selected face is not prepared") || !details) continue;
+		const { fontFamily, fontWeight, italic, path } = details;
+		if (typeof fontFamily !== "string" || !fontFamily.trim() || typeof fontWeight !== "number" || !Number.isFinite(fontWeight) || typeof italic !== "boolean") return undefined;
+		return { key: JSON.stringify([fontFamily.toLowerCase(), fontWeight, italic]), path: typeof path === "string" ? path : "", style: { fontFamily, fontWeight, italic } };
+	}
+	return undefined;
 }
 
 interface DrawEnvironment {
@@ -355,7 +404,7 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 			pagination = { pages: result.pages };
 		} catch (error) {
 			reportThrown(reporter, "render", error);
-			return { files: [], fonts: fontSummary(), skippedHidden: [], failure: failureOf(error) };
+			return failedWith({ files: [], fonts: fontSummary(), skippedHidden: [], failure: failureOf(error) }, error);
 		}
 	} else if (options.paginate !== false) {
 		// LH-90: an overfull slide of block units (sibling blocks of one kind, each with the blocks after it) continues on further slides, so the preview and the PPTX draw
@@ -383,9 +432,11 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 			}
 		} catch (error) {
 			reportThrown(reporter, source, error);
-			return { files: [], fonts: fontSummary(), skippedHidden: [], failure: failureOf(error) };
+			return failedWith({ files: [], fonts: fontSummary(), skippedHidden: [], failure: failureOf(error) }, error);
 		}
 	}
+	// Continuations can add generated labels; prepare their actual faces before drawing the final pages.
+	if(deck!==presentation && handle.registry?.fontNames)await handle.ensure?.(deck,{renderOptions:{catalogs,...(date?{date}:{})}});
 	// LH-145: the picture backgrounds are measured once, after pagination (which copies a slide's design), and both engines get the same sampler.
 	const pictureLuminance = options.measurePictures === false ? undefined : await measurePictureBackgrounds(renderer, deck, resolver, catalogs, reporter);
 	const slideCount = (deck as { slides?: unknown[] }).slides?.length ?? 0;
@@ -397,6 +448,18 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 	const named = options.slides === undefined ? undefined : parseSlideSelection(options.slides, slideCount, slidesLabel);
 	const selected = format === "pptx" ? [] : named ?? (options.includeHidden ? everySlide : everySlide.filter((number) => !isHidden(number)));
 	const skippedHidden = format === "pptx" || named || options.includeHidden ? [] : everySlide.filter(isHidden);
+	// Format/reference gating stays unchanged. Report selected chart data advisories once for drawings whose renderer does not
+	// report them itself. Native PPTX already explains these adaptations through its exporter diagnostics.
+	if (format !== "pptx" || options.as === "images") {
+		const rules = ["opf/chart-mapping-adapted", "opf/chart-series-dropped"];
+		const chartCheck = validate(deck, { only: rules, catalogs });
+		for (const finding of chartCheck.findings) {
+			if (finding.severity !== "warning" || !rules.includes(finding.ruleId)) continue;
+			const sourceIndex = /^\/slides\/(\d+)(?:\/|$)/.exec(finding.path)?.[1];
+			if (format !== "pptx" && (sourceIndex === undefined || !selected.includes(Number(sourceIndex) + 1))) continue;
+			if (!reporter.findings.some(existing => existing.ruleId === finding.ruleId && existing.path === finding.path && existing.message === finding.message)) reporter.addFinding(finding);
+		}
+	}
 	if (format !== "pptx" && !selected.length)
 		throw new OPFApiError(skippedHidden.length ? (ctx.flags ? "Every slide is hidden. Use --include-hidden to write them, or --slides to name slides." : "Every slide is hidden. Use includeHidden to write them, or slides to name slides.") : "The presentation has no slides.", skippedHidden.length ? "all-slides-hidden" : "no-slides");
 
@@ -504,7 +567,7 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 		const missing = missingPeerFrom(error);
 		if (missing) throw missing;
 		reportThrown(reporter, format === "pptx" ? "pptx" : "render", error);
-		return { files: [], fonts: fontSummary(), ...(pagination ? { pagination } : {}), skippedHidden: [], failure: failureOf(error) };
+		return failedWith({ files: [], fonts: fontSummary(), ...(pagination ? { pagination } : {}), skippedHidden: [], failure: failureOf(error) }, error);
 	}
 }
 

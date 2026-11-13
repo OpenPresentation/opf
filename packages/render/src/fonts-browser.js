@@ -1,7 +1,7 @@
 import { diagramsPending, ensureDiagrams, ensureIcons, ensureShapes, iconsPending, shapesPending } from "@openpresentation/opf/composition";
 import { createFontRegistry, OPFFontError } from "./font-registry.js";
 import { lazyFontEntries, lazyFontList, normalizeExtraLazyFonts } from "./lazy-font-list.js";
-import { createFontAnalysis, lazyFacesNeeded } from "./lazy-fonts.js";
+import { createFontAnalysis, lazyFacesNeeded, lazyFontNames, fontMeasurementRequests } from "./lazy-fonts.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { textOutlines } from "./text-paths.js";
 import { createSubsetter, fontSubsets } from "./font-subset.js";
@@ -112,7 +112,7 @@ async function loadRegistry(entries, options = {}, startup = {}) {
   let queue = Promise.resolve();
   // FF-41: the `toSvg` options a document resolves with (`catalogs`, ...). `options.renderOptions` are the defaults; a call's own
   // options (everything but `signal`) are added over them, so a host that passes its canvas options gets the same resolution here.
-  const renderOptionsFor = (callOptions) => { const { signal: _signal, ...own } = callOptions ?? {}; return { ...options.renderOptions, ...own }; };
+  const renderOptionsFor = (callOptions) => { const {signal: _signal,renderOptions,mapFamily,preserveChosenFamilies,measurementRequests,...own}=callOptions??{};return {...options.renderOptions,...own,...renderOptions}; };
   const gone = () => new OPFFontError("font-registry-disposed", "The font registry was disposed.");
   const baseUrl = () => {
     if (typeof options.scriptBaseUrl !== "string" || !options.scriptBaseUrl)
@@ -208,7 +208,10 @@ async function loadRegistry(entries, options = {}, startup = {}) {
   const aliasTargets = new Map(Object.entries(options.aliases ?? {}).map(([from, to]) => [from.toLowerCase(), to]));
   // Face level (FF-41): the faces the document draws, resolved as the registry resolves them with every vendored face loaded.
   // A document that does not resolve throws what `toSvg` throws for it.
-  const neededLazy = (presentation, callOptions) => lazyFacesNeeded(presentation, renderOptionsFor(callOptions), { lazy, held: registry.describeFaces(), loaded: lazyLoaded, policy, aliases: aliasTargets, fallbackFamily: options.fallbackFamily, analysis: fontAnalysis });
+  const neededLazy = (presentation, callOptions) => lazyFacesNeeded(presentation, renderOptionsFor(callOptions), { lazy, held: registry.describeFaces(callOptions?.preserveChosenFamilies||callOptions?.measurementRequests?.length?{selection:true}:undefined), loaded: lazyLoaded, policy, aliases: aliasTargets, fallbackFamily: options.fallbackFamily, analysis: fontAnalysis,
+    metrics: registry.textMeasurement,
+    mapFamily:callOptions?.mapFamily,preserveChosenFamilies:callOptions?.preserveChosenFamilies,measurementRequests:callOptions?.measurementRequests });
+  Object.defineProperty(registry,'fontNames',{value:lazyFontNames({lazy,describeFaces:registry.describeFaces,generation:()=>registry.facesGeneration,policy,aliases:aliasTargets,fallbackFamily:options.fallbackFamily})});
   const lazyBaseUrl = () => {
     if (typeof options.lazyFontsBaseUrl !== "string" || !options.lazyFontsBaseUrl)
       throw new OPFFontError("invalid-font-source", "Loading vendored fonts requires lazyFontsBaseUrl, where the host serves the package's fonts directory.");
@@ -280,7 +283,8 @@ async function loadRegistry(entries, options = {}, startup = {}) {
   return Object.assign(registry, { dispose });
 }
 
-const MAX_ENSURE_ROUNDS = 4;
+// Lazy faces, script packages and the analysis's real-metrics passes (RR-105) each take a round; a deck settles in a few.
+const MAX_ENSURE_ROUNDS = 16, SCRIPT_ROUNDS = 4;
 
 /**
  * The fonts handle for a browser: the faces you list (`faces`, each `{ url | data, family, weight, italic, sha256 }`, fetched and
@@ -359,19 +363,26 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
      * does not resolve rejects with what `toSvg` throws for it. After `dispose()` it rejects with `font-registry-disposed`.
      */
     async ensure(presentation, callOptions = {}) {
+      const measurements=fontMeasurementRequests(callOptions.measurementRequests);
       const diagrams = await ensureDiagrams(presentation);
       // SH-02: the preset geometry, the first time the deck has a shape (core loads it on demand in a browser).
       await ensureShapes(presentation);
       await ensureIcons(presentation, { catalogs: callOptions.catalogs ?? options.renderOptions?.catalogs });
       const lazy = [], scripts = [];
       let uncovered = [];
-      for (let round = 0; round < MAX_ENSURE_ROUNDS; round++) {
-        const needLazy = registry.pendingLazyFonts(presentation, callOptions).length > 0, needScripts = registry.pendingScripts(presentation, callOptions).length > 0;
-        if (!needLazy && !needScripts) break;
+      for (let round = 0; ; round++) {
+        const needLazy = registry.pendingLazyFonts(presentation, callOptions), needScripts = registry.pendingScripts(presentation, callOptions).length > 0;
+        if (!needLazy.length && !needScripts) break;
+        // Script packages that cannot settle keep the earlier bound of four rounds; a vendored face real metrics still ask for is an error.
+        if (!needLazy.length && round >= SCRIPT_ROUNDS) break;
+        if (round >= MAX_ENSURE_ROUNDS) {
+          throw new OPFFontError("font-preparation-unsettled", "Preparing the fonts of this presentation did not settle: each pass measured faces the one before had not prepared.", { faces: needLazy.map(({ family, weight, italic, file }) => ({ family, weight, italic, file })) });
+        }
         callOptions.signal?.throwIfAborted?.();
-        if (needLazy) lazy.push(...(await registry.ensureLazyFonts(presentation, callOptions)));
+        if (needLazy.length) lazy.push(...(await registry.ensureLazyFonts(presentation, callOptions)));
         if (needScripts) { const result = await registry.ensureScripts(presentation, callOptions); scripts.push(...result.loaded); uncovered = result.uncovered; }
       }
+      for(const request of measurements)if(request.text!=='')registry.textMeasurement.measure(request.text,request.size,request.style);
       return { scripts, lazy, uncovered, ...(diagrams.length ? { diagrams } : {}) };
     },
     /** Synchronous: the files and script packages `ensure` would fetch. Empty means a render can start now. Throws what `toSvg` throws for a document that does not resolve. */

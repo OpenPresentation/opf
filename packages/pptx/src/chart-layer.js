@@ -17,7 +17,7 @@
 // header legend (chart-options.js `chartOptionsFromClassic`) import as no option, so a deck exported and imported again keeps its
 // authored options only.
 import {schemeColorXml} from './chart-scheme-colors.js';
-import {chartContextColors, chartEmphasisColors, chartOptionSupport, chartOptionTarget, chartValueAxisHidden, resolveChartData, smallChart} from '@openpresentation/opf/composition';
+import {chartContextColors, chartEmphasisColors, chartFocusContextColors, chartSeriesStrokes, chartOptionSupport, chartOptionTarget, chartValueAxisHidden, resolveChartData, smallChart} from '@openpresentation/opf/composition';
 
 const fraction = value => Number(Math.min(1, Math.max(0, value)).toFixed(4));
 
@@ -37,8 +37,23 @@ export function chartLayerOptions(layer, {region, scale, textSize, labelColor, f
   // LH-108: a pie with its value list is drawn in core's square (the plot area's inner layout), the list beside it. LH-182: so is a
   // doughnut, whose hole the chart marks fill with the surface.
   const pie = layer.valueList?.pie ?? layer.doughnut?.pie;
-  if (!header && !layer.plot && !layer.rows && !pie) return {options, layout};
   const left = region.x * 96, top = region.y * 96, width = region.w * 96, height = region.h * 96;
+  // RR-105: a radar's value axis (core chart-radar.ts) as the preview draws it; PowerPoint otherwise picks its own bounds and unit. A radar
+  // whose web is larger with the legend under it has its legend there (c:legendPos b, at core's box with a text size of slack per side)
+  // and its plot area (with the spoke labels: layoutTarget outer) in the box above, inside the preview's padding.
+  const radar = layer.radar;
+  if (radar) {
+    Object.assign(options, {valAxisMinVal: radar.axis.min, valAxisMaxVal: radar.axis.max, valAxisMajorUnit: radar.axis.majorUnit});
+    if (radar.legend === 'bottom' && radar.legendBox) {
+      Object.assign(options, {showLegend: true, legendPos: 'b'});
+      const box = radar.legendBox, inset = 10 * scale, slack = textSize / 75;
+      const x = Math.max(left, box.x - slack), right = Math.min(left + width, box.x + box.width + slack);
+      layout.legend = {x: fraction((x - left) / width), y: fraction((box.y - top) / height), w: fraction((right - x) / width), h: fraction(box.height / height)};
+      layout.plot = {x: fraction(inset / width), y: fraction(inset / height), w: fraction((width - 2 * inset) / width), h: fraction((box.y - top - 2 * inset) / height)};
+    }
+    return {options, layout};
+  }
+  if (!header && !layer.plot && !layer.rows && !pie) return {options, layout};
   if (pie) layout.plot = {x: fraction((pie.x - left) / width), y: fraction((pie.y - top) / height), w: fraction(pie.width / width), h: fraction(pie.height / height), target: 'inner'};
   // LH-93: a chart that shares its value axis with siblings has core's plot box, the plot itself without its tick and category labels
   // (layoutTarget inner), so its plot is as tall as theirs in PowerPoint too.
@@ -92,7 +107,7 @@ export function applyChartLayerLayout(xml, layout) {
   if (!layout || (!layout.title && !layout.legend && !layout.plot)) return xml;
   let out = xml;
   if (layout.title) out = out.replace(/(<c:title>[\s\S]*?<\/c:tx>)\s*(?:<c:layout\/>|<c:layout>[\s\S]*?<\/c:layout>)?/, (_, head) => `${head}${manualLayout(layout.title)}`);
-  if (layout.legend) out = out.replace(/(<c:legend>\s*<c:legendPos val="t"\/>)\s*(?:<c:layout\/>|<c:layout>[\s\S]*?<\/c:layout>)?/, (_, head) => `${head}${manualLayout(layout.legend)}`);
+  if (layout.legend) out = out.replace(/(<c:legend>\s*<c:legendPos val="[tb]"\/>)\s*(?:<c:layout\/>|<c:layout>[\s\S]*?<\/c:layout>)?/, (_, head) => `${head}${manualLayout(layout.legend)}`);
   if (layout.plot) out = out.replace(/(<c:plotArea>)\s*(?:<c:layout\/>|<c:layout>[\s\S]*?<\/c:layout>)/, (_, head) => `${head}${manualLayout(layout.plot, layout.plot.target ?? 'outer')}`);
   return out;
 }
@@ -137,7 +152,8 @@ export function chartFocusPlan({layer, data, kind, panelFill, labelColor, strong
   const context = (count, avoid) => chartContextColors(panelFill, `#${labelColor}`, count, {labeled: focus.labeled === true, avoid: avoid.map(index => `#${strong[index % strong.length]}`)}).map(srgb);
   const indexes = length => Array.from({length}, (_, index) => index);
   const restSeries = indexes(seriesCount).filter(index => !marks.series[index]), restRows = indexes(data.rows.length).filter(row => !marks.categories[row]);
-  const seriesGrays = circular ? [] : context(restSeries.length, indexes(seriesCount).filter(index => focus.categories ? true : marks.series[index]));
+  // A series drawn as a stroke (a line, a combo's line) keeps the ordinary floor even when labeled (core chartFocusContextColors).
+  const seriesGrays = circular ? [] : chartFocusContextColors(panelFill, `#${labelColor}`, restSeries, {labeled: focus.labeled === true, strokes: chartSeriesStrokes(kind, seriesCount, data.combo), avoid: indexes(seriesCount).filter(index => focus.categories ? true : marks.series[index]).map(index => `#${strong[index % strong.length]}`)}).map(srgb);
   const sliceGrays = circular ? context(restRows.length, indexes(data.rows.length).filter(row => marks.categories[row])) : [];
   const muted = (circular ? sliceGrays : seriesGrays)[0];
   const mutedOf = index => circular ? muted : seriesGrays[Math.max(0, restSeries.indexOf(index))];

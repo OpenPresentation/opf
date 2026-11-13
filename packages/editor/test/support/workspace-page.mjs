@@ -19,8 +19,14 @@ export const deck = (slides = 3, extra = {}) => ({
 const bundles = new Map();
 // The page bundle: the workspace, the React bindings and the renderer's browser fonts. `alias` swaps a package for another (the React 18 run
 // maps react and react-dom to react-18 and react-dom-18); `extraEntry` adds code to the page script.
-export async function bundleWorkspace({ extraEntry = '', alias } = {}) {
-  const result = await build({ alias, stdin: { resolveDir: root, contents: `
+export async function bundleWorkspace({ extraEntry = '', alias, exactAliases = {} } = {}) {
+  const plugins = [{ name: 'workspace-test-exact-imports', setup(builder) {
+    for (const [request, target] of Object.entries(exactAliases)) {
+      const escaped = request.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      builder.onResolve({ filter: new RegExp(`^${escaped}$`) }, () => ({ path: target }));
+    }
+  } }];
+  const result = await build({ alias, plugins, stdin: { resolveDir: root, contents: `
     import * as workspace from './src/workspace.js';
     import * as react from './src/react.js';
     import { createEditorSession } from './src/index.js';

@@ -18,7 +18,7 @@ const SIZE = 25;
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const outline = (family, text, lang, rtl, extra = '') => {
   const diagnostics = [];
-  const { content } = fonts.outlines.outlineSlideText([`<text x="10" y="50" font-family="${family}" font-size="${SIZE}"${lang ? ` lang="${lang}"` : ''}${rtl ? ' direction="rtl"' : ''} xml:space="preserve"${extra}>${escape(text)}</text>`], { fail: (code, message) => new Error(message), report: (diagnostic) => diagnostics.push(diagnostic) });
+  const { content } = fonts.outlines.outlineSlideText([`<text x="10" y="50" font-family="${family}" font-size="${SIZE}"${lang ? ` lang="${lang}"` : ''}${rtl ? ' direction="rtl" text-anchor="end"' : ''} xml:space="preserve"${extra}>${escape(text)}</text>`], { fail: (code, message) => new Error(message), report: (diagnostic) => diagnostics.push(diagnostic) });
   return { markup: content[0], diagnostics };
 };
 // The drawn glyphs of an outlined element, left to right: gid and position in pixels (each run's transform plus its <use> offsets).

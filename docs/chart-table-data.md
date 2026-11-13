@@ -7,6 +7,7 @@ Status: RR-54 (release readiness). Additive schema plus one behaviour fix (stric
 Recorded 2026-10-05 for the owner, who asked for all five recommendations of the chart/table data review at once:
 
 1. **One strict chart number rule in core.** The preview read `"12%"` as a gap and `"1e6"` as 1000000; the exporter stripped every non-numeric character (`"1e6"` became 16, `"(5)"` became 5, `"Q1"` became 1). Both engines now call core `chartNumber`, which follows the existing data-import rule. A string that is not a strict decimal number is a gap in both engines and a `chart-value-not-numeric` warning, never a guessed value. Decks whose chart cells held `"12%"` or `"$5"` export a gap where they used to export 12 or 5.
+   How a gap draws (RR-105): a line breaks; an unstacked area ends at the points beside the gap and stands on the axis there, so a point with gaps on both sides draws no area; a stacked or 100% stacked area keeps the gap's layer at zero thickness, so the layers above still rest on the running total. A gap has no data label. The PPTX export writes the gap as an omitted `c:pt` with `c:dispBlanksAs val="gap"` on line and area charts (before 0.34 it wrote `span`, so PowerPoint joined a line across the gap while the preview broke it).
 2. **`ChartDataSource` is removed from the schema.** No engine resolved it ([opf#240](https://github.com/OpenPresentation/opf/issues/240), descoped), so the format-audit program (FA-07, 2026-10-06) deleted it, with its `chart-data-source-unresolved` warning. A future data-resolver design re-adds it when it is built. Inline data records where it came from with `data.source`, which engines never read.
 3. **Number formats use the variables syntax.** One pattern language for `NumberVariable.format`, column formats and cell formats. Core converts it to an Excel format code for the PPTX export and back on import.
 4. **Datasets are top-level and shared.** A chart or a table references one with `{ "dataset": "<id>" }`. Core inlines references before composition, so the engines keep plotting and laying out inline data.
@@ -44,7 +45,7 @@ A body cell's own format wins over the column's.
 
 ```json
 "table": {
-  "columns": ["Region", { "name": "Revenue", "format": "$#,##0.0" }, { "value": "Growth", "style": { "align": "right" }, "format": "0%" }],
+  "columns": ["Region", { "name": "Revenue", "format": "$#,##0.0" }, { "value": "Growth", "style": { "align": "end" }, "format": "0%" }],
   "rows": [["EMEA", 8.2, 0.4], ["APAC", 6.1, { "value": 0.52, "format": "0.0%" }]]
 }
 ```
@@ -210,6 +211,8 @@ All three engines read core's functions when they exist and fall back to their p
 ### PPTX import (opf-pptx)
 
 - **With provenance:** `datasets` is restored before document provenance validates. A frame's dataset reference, `mapping`, formats and `source` are restored only while the cache hash still matches. If PowerPoint (or a person) changed the values, the native values import and a diagnostic says why, such as `chart-data-provenance-changed` or `table-dataset-unavailable`. The hash compares format codes in core's canonical form (`fromExcelNumberFormat`), so PowerPoint's re-spellings on save (`\$#,##0.0` for `$#,##0.0`, `#,##0\ "units"` for `#,##0 "units"`, native check [opf#385](https://github.com/OpenPresentation/opf/pull/385)) still match; a General code counts as no code.
+
+Decorative ChartEx titles are excluded from chart-data evidence. A plain PowerPoint save can rewrite a title from `cx:rich` to `cx:txData/cx:v` without changing the data. That rewrite, or a display-caption rename, keeps an unchanged chart's authored data form; it must not introduce a synthetic `Row` column. The cached categories, numeric values, series names and number formats still control whether provenance can restore the authored form.
 - **Without provenance:** a cache `formatCode` that `fromExcelNumberFormat` maps back becomes that column's `{ name, format }`, for both classic and chartex charts. Core returns the canonical spelling, such as `#,##0 units` for `#,##0 "units"`. Other codes are reported as `chart-number-format-adapted` and never invented.
 - **Cached values:** these follow the strict rule as well. XML decimal forms (`+5`, `.5`, `007`) are numbers; anything else is a gap with a diagnostic, never a stripped number or 0.
 

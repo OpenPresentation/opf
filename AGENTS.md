@@ -1,5 +1,7 @@
 # Working with OPF
 
+For CI, package releases, hosted previews and deployments, read the current [CI/CD contract](docs/ci-cd.md). The owner authorized agent deployments and native Cloudflare Previews on 2026-11-08; older no-deploy notes are historical. New logins, DNS and account-plan/visibility changes remain owner actions.
+
 For tasks involving OPF documents, read the relevant skill entrypoint in `skills/`:
 
 - `opf-author`: presentation content and narrative authoring.
@@ -32,7 +34,7 @@ Shared at the root: `spec/` (schemas and engine reference data, the source of tr
 
 ## Releases
 
-The owner authorized agents to publish npm packages on 2026-09-29 ("yes, prepare the release and publish on npm you can do that now and permanently in the future if it's required"). Publish only when a release is required and only through the one-click workflow in [docs/release-process.md](docs/release-process.md): Actions, **Release**, **Run workflow** on `main` with the version (it defaults to a dry run; set `dry-run` false for the real release). `release.yml` runs the slow gate, assembles the changelogs, pushes the release commit and the tag `vX.Y.Z`; `npm-publish.yml` on that tag is the only trusted publisher and publishes all six packages with provenance in dependency order, then verifies the registry and creates the GitHub release. Never publish from a laptop or an unmerged branch, never skip a gate or pass a different `--tag` to make a release pass, and never move or reuse a tag; fix forward with the next patch.
+The owner authorized agents to publish npm packages on 2026-09-29 ("yes, prepare the release and publish on npm you can do that now and permanently in the future if it's required"). Publish only when a release is required and only through the one-click workflow in [docs/release-process.md](docs/release-process.md): Actions, **Release**, **Run workflow** on `main` with the version and `dry-run` true first; after that succeeds, run the same version with `dry-run` false for the real release. `release.yml` runs the slow gate, assembles the changelogs, pushes the release commit and the tag `vX.Y.Z`; `npm-publish.yml` on that tag is the only trusted publisher and publishes all seven packages with provenance in dependency order, then verifies the registry and creates the GitHub release. Never publish from a laptop or an unmerged branch, never skip a gate or pass a different `--tag` to make a release pass, and never move or reuse a tag; fix forward with the next patch.
 
 ## Changelog, tests and generated trackers
 
@@ -40,10 +42,15 @@ The owner authorized agents to publish npm packages on 2026-09-29 ("yes, prepare
 - Tests: a package test is one new `test/*.mjs` (a package's `scripts/run-tests.mjs` run discovers it; `test/suites.json` lists only helpers and separately-run files) and a root check is one new `check:*` script (`scripts/run-checks.mjs`; `scripts/checks.json`). Do not add test lists to `package.json`.
 - Generated trackers (gallery and font): do not regenerate them in an unrelated PR. CI only warns about a stale tracker on a PR; the "Tracker refresh" workflow regenerates them after merge into `bot/tracker-refresh`. Regenerate in your PR only when it changes a tracker generator, overrides or tests. Details: `CONTRIBUTING.md`.
 - Goldens (`packages/render/test/golden/`) are exact hashes. Regenerate them only by dispatching the `golden.yml` workflow on your branch (`gh workflow run golden.yml --ref <branch>`) in the pinned Playwright image, never by hand and never with a changed tolerance; see `docs/ecosystem-development.md`.
+- Evidence: see [Evidence stays out of main](#evidence-stays-out-of-main).
+
+## Evidence stays out of main
+
+Raw working evidence (archives, screenshots and review sheets, logs, saved decks, machine receipts, replay scripts) never goes into `main`, and where possible not into the repository at all: attach it to the pull request or issue, or upload it as a workflow artifact. Only when a reviewer has to read it from git, push it to an evidence-only branch (`codex/evidence-<slug>`) that is never merged and link it from the pull request by full commit SHA (`git show <sha>:<path>`). Commit only a short human-readable result summary with the change, and put a small input a test really reads in that package's `test/fixtures/`. `pnpm check:evidence-size` enforces this against `origin/main`: no new files under `docs/evidence/` or `packages/*/docs/evidence/`, no archives, decks, images (outside `docs/images/` and `docs/brand/`), logs or patches under any `docs/`, only Markdown under `docs/handoff/`, and at most 5 MB of growth under `docs/`.
 
 ## Checks for agents
 
-Work in your own worktree on its own branch from a fresh `origin/main`: `node scripts/agent-worktree.mjs add <task>` makes a small blobless checkout (the evidence archives under `docs/evidence` are left out), installs with one shared pnpm store and prints the path; `remove <task>` deletes it once the branch is merged or abandoned.
+Work in your own worktree on its own branch from a fresh `origin/main`: `node scripts/agent-worktree.mjs add <task>` makes a small blobless checkout, installs with one shared pnpm store and prints the path; `remove <task>` deletes it once the branch is merged or abandoned.
 
 After each change run `pnpm check:changed`: it checks only what the branch changed (Biome, the mapped checks, the type check and the tests of the affected packages when relevant). Leave the full `pnpm test` to CI and the last run before a PR. Heavy commands (`pnpm typecheck`, `pnpm test`, the package tests in `check:changed`) wait for one of three machine-wide slots (`OPF_AGENT_SLOTS`; no limit in CI), so concurrent sessions do not starve each other. A hook in `.claude/settings.json` runs Biome on each file you edit, applies its safe fixes and reports the errors that fail `pnpm lint`; re-read a file it says it changed.
 
@@ -59,7 +66,7 @@ GitHub API: every agent on the account shares one REST quota (5000 an hour), and
 
 ## Current handoff
 
-**Start here when resuming:** [docs/handoff/2026-11-07/README.md](docs/handoff/2026-11-07/README.md) has the state, the exact next steps toward v0.33.0 and v0.34.0, the binding working rules and the open PRs. [KICKOFF.md](docs/handoff/2026-11-07/KICKOFF.md) in the same folder is the one prompt to give a new agent.
+**Start here when resuming:** [docs/handoff/2026-11-12/README.md](docs/handoff/2026-11-12/README.md) has the state of v0.34.0, what was accepted and decided, the known gaps, the deferred items and the owner's steps. The binding [working rules](docs/handoff/2026-11-07/working-rules.md) are in the 2026-11-07 folder.
 
 ## Active programs
 
@@ -70,7 +77,7 @@ Cross-repository work is tracked in `docs/programs/`. Before starting program wo
   Per-font status, priorities and next actions: [font tracker](docs/programs/font-fidelity-everywhere/font-tracker.md) (`pnpm check:font-tracker`; rebuild with `pnpm build:font-tracker`).
 - [Release readiness](docs/programs/release-readiness/README.md) (opened 2026-10-01): every package, the CLI and the three sites release-ready, with shipped features verified natively, gaps closed or descoped with issues, CI green and cross-platform, and a release-readiness note for the owner. Progress: `pnpm report:release`. It carries the open font-fidelity items; font fidelity above is in closure (its goal state is reached and its remaining items are tracked as RR items).
 - [Format audit](docs/programs/format-audit/README.md) (opened 2026-10-06, branches `codex/fa-<nn>-<slug>`, PR titles `FA-<nn>: `): every OPF key good, useful and true; one content-kind vocabulary; layout records in the deck's design vocabulary; pre-v1, so renames and removals land without deprecations.
-- [Cloudflare hosting](docs/programs/cloudflare-hosting/README.md) (opened 2026-10-04, branches `codex/cf-<nn>-<slug>`, PR titles `CF-<nn>: `): the three sites move from Vercel to Cloudflare Workers without downtime and without changing a public contract; agents build and preview on localhost only and never deploy, log in or change DNS.
+- [Cloudflare hosting](docs/programs/cloudflare-hosting/README.md) (opened 2026-10-04, branches `codex/cf-<nn>-<slug>`, PR titles `CF-<nn>: `): the three sites move from Vercel to Cloudflare Workers without downtime and without changing a public contract; agents follow the current CI/CD contract for authorized preview/production deployments; new logins, DNS and account changes remain owner actions.
 - [Cloud-ready engine and editor](docs/programs/cloud-editor/README.md) (opened 2026-10-25, branches `codex/ce-<nn>-<slug>`, PR titles `CE-<nn>: `): the engine runs unchanged on edge runtimes, and the editor is embeddable (one call or React) with ids, transactions, proposals, diff, permissions, comment anchors and merge, so any host can build a Figma-class product on the open packages; pptx.dev adopts each piece first.
 - [Layout harvest](docs/programs/layout-harvest/README.md) (opened 2026-11-02, branches `codex/lh-<nn>-<slug>`, PR titles `LH-<nn>: `): default slides as good as Claude Design's version of the same content, compared slide by slide, plus the design and export guidance of Claude's Slides type and pptx skill; [burndown.md](docs/programs/layout-harvest/burndown.md) is the catalog of improvements built and to build.
 - [Shapes](docs/programs/shapes/README.md) (opened 2026-11-05, branches `codex/sh-<nn>-<slug>`, PR titles `SH-<nn>: `): PowerPoint's 187 preset shapes, custom outlines, every fill, line and effect, connectors and native diagrams from one geometry definition that both engines read (native DrawingML in PPTX); [burndown.md](docs/programs/shapes/burndown.md) holds SH-01 to SH-06 and the owner's diagram decision; `docs/shapes.md` is the property map.

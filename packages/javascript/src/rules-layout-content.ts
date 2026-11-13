@@ -4,19 +4,22 @@ import type { ValidationRule } from './rule-context.js';
 import { plainText, pointerOfDotted, runsOf, slidePayloads } from './rule-content.js';
 import { type Rec, rec } from './rule-design.js';
 import { resolveNarrative, unreferencedBeats } from './narrative-plan.js';
-import { MAX_FURNITURE_LINES, emptySlideRule, emptyTextRule, furnitureWrapsRule, layoutFailedRule, minFontRule, outsideRule, overflowRule, placeholderRule, regionFullRule, regionKindRule, regionUnknownRule, resolutionRule, unplacedRule, unresolvedRule, unusedBeatRule, iconDroppedRule, arrangementAdaptedRule } from './validation-rule-info.js';
+import { ruleInfo, MAX_FURNITURE_LINES, emptySlideRule, emptyTextRule, furnitureWrapsRule, layoutFailedRule, minFontRule, outsideRule, overflowRule, placeholderRule, regionFullRule, regionKindRule, regionUnknownRule, resolutionRule, unplacedRule, unresolvedRule, unusedBeatRule, iconDroppedRule, arrangementAdaptedRule, chartLabelCollisionRule, timelinePeriodShortRule, shapeOffSlideRule } from './validation-rule-info.js';
 
 const PX_TO_PT = 0.75;
 const round = (value: number, places = 1) => Math.round(value * 10 ** places) / 10 ** places;
 
 // ------------------------------------------------------------------ layout
 
+const pointAnchorRule = ruleInfo('opf/shape-anchor-missing');
 const REGION_RULES = { 'region-unknown': regionUnknownRule, 'region-kind': regionKindRule, 'region-full': regionFullRule, 'layout-unplaced': unplacedRule } as const;
 
 const layoutRules: ValidationRule[] = [
 	{
 		info: overflowRule,
-		also: [unresolvedRule, layoutFailedRule, minFontRule, regionUnknownRule, regionKindRule, regionFullRule, unplacedRule, iconDroppedRule, arrangementAdaptedRule],
+		// Format validates anchor identities in schema-check without composition. Geometry may add
+		// the same located finding during an enabled layout audit, but must not trigger one.
+		also: [unresolvedRule, layoutFailedRule, minFontRule, regionUnknownRule, regionKindRule, regionFullRule, unplacedRule, iconDroppedRule, arrangementAdaptedRule, chartLabelCollisionRule, timelinePeriodShortRule, shapeOffSlideRule],
 		run(context) {
 			// Diagnostics about deck-level settings (header, footer, design) repeat on every slide; report each once.
 			const deckLevel = new Set<string>();
@@ -33,6 +36,7 @@ const layoutRules: ValidationRule[] = [
 					if (diagnostic.code === 'text-overflow')
 						context.report(overflowRule, { path, slide, message: diagnostic.message, help: 'Shorten the text, give it more space (fewer blocks, a different composition) or split the slide (paginate); raising the readable minimum makes it worse.' });
 					// A cell narrower than composition's comfort threshold is a taste judgment, not a finding.
+					else if (diagnostic.code === 'shape-anchor-missing') context.report(pointAnchorRule, {path, slide, message: diagnostic.message, help: 'Choose a plotted point in a qualified classic chart, or use a whole-block anchor.'});
 					else if (diagnostic.code === 'small-cell') continue;
 					// LH-14: an icon the slide does not draw (no room without setting text smaller, or nothing it can mark).
 					else if (diagnostic.code === 'icon-dropped')
@@ -40,8 +44,20 @@ const layoutRules: ValidationRule[] = [
 					// SH-09: a pyramid or matrix drawn as cards or as a list (SH-18: a cycle as a list).
 					else if (diagnostic.code === 'arrangement-adapted')
 						context.report(arrangementAdaptedRule, { path, slide, message: diagnostic.message, help: /four entries/.test(diagnostic.message) ? 'Write four entries for the quadrants, or choose another layout for this many.' : 'Shorten the entries, write one level without descriptions, or choose another layout.' });
+					// An overlay shape or image callout with no part on the slide: advice, never an overflow.
+					else if (diagnostic.code === 'shape-off-slide')
+						context.report(shapeOffSlideRule, { path, slide, message: diagnostic.message, help: 'Write the position as fractions (0.2 for 20%), move the shape so part of it is on the slide, or remove it. A shape may hang over an edge; only one with nothing on the slide is reported.' });
+					// A reference label that meets another label, a data line or a mark on both sides at both ends of its line: drawn as asked, and reported as what it is.
+					else if (diagnostic.code === 'chart-label-collision')
+						context.report(chartLabelCollisionRule, { path, slide, message: diagnostic.message, help: "Put the label at the other end of its line (labelPosition 'start' or 'end'), shorten it, or give the chart more room. Its text and value are kept." });
+					// RR-105: a timeline period shorter than its marker (geometry, not overflow).
+					else if (diagnostic.code === 'timeline-period-short')
+						context.report(timelinePeriodShortRule, { path, slide, message: diagnostic.message, help: 'Give the timeline more room, or make its shortest period longer relative to the others.' });
 					else if (Object.hasOwn(REGION_RULES, diagnostic.code))
 						context.report(REGION_RULES[diagnostic.code as keyof typeof REGION_RULES], { path, slide, message: diagnostic.message, help: diagnostic.code === 'layout-unplaced' ? 'Paginate the slide, choose a layout with more room, pin the block to a region with room, or remove a block.' : 'Pin the block to a region of the layout that accepts it and has room, or remove the pin.' });
+					// A diagram whose source cannot be drawn (composition.ts composeDiagram): Mermaid, DOT and PlantUML errors alike.
+					else if (diagnostic.message.startsWith('The diagram cannot be drawn'))
+						context.report(unresolvedRule, { path, slide: path.startsWith('/slides/') ? slide : undefined, message: diagnostic.message, help: 'Fix the diagram source where the message points. OPF refuses what it does not draw: write it in the form the diagrams guide lists for that syntax, or remove it.' });
 					else context.report(unresolvedRule, { path, slide: path.startsWith('/slides/') ? slide : undefined, message: diagnostic.message, help: 'Supply what the message asks for, or remove the setting that cannot be honoured.' });
 				}
 				for (const tv of slide.texts)
@@ -205,7 +221,7 @@ const contentRules: ValidationRule[] = [
 		run(context) {
 			for (const slide of context.slides)
 				for (const tv of slide.texts) {
-					if (['table', 'table-header', 'list-description'].includes(tv.role)) continue;
+					if (['table', 'table-header', 'list-description', 'callout'].includes(tv.role)) continue;
 					if (plainText(tv.value).trim() !== '') continue;
 					context.report(emptyTextRule, {
 						path: tv.path,

@@ -11,7 +11,7 @@
     {
       "id": "section",
       "file": "section.svg",
-      "bytes": 1011
+      "bytes": 1035
     },
     {
       "id": "agenda",
@@ -89,6 +89,11 @@
       "bytes": 2681
     },
     {
+      "id": "inverted-pyramid",
+      "file": "inverted-pyramid.svg",
+      "bytes": 2674
+    },
+    {
       "id": "matrix",
       "file": "matrix.svg",
       "bytes": 3979
@@ -112,6 +117,21 @@
       "id": "vertical-flow",
       "file": "vertical-flow.svg",
       "bytes": 2689
+    },
+    {
+      "id": "org-chart",
+      "file": "org-chart.svg",
+      "bytes": 2575
+    },
+    {
+      "id": "hierarchy",
+      "file": "hierarchy.svg",
+      "bytes": 5034
+    },
+    {
+      "id": "venn",
+      "file": "venn.svg",
+      "bytes": 2788
     },
     {
       "id": "metrics",

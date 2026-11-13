@@ -1,6 +1,6 @@
 # Genuine 0.33 publication and core consumer receipts
 
-[Receipt](receipt.json), [trusted seven-package authority](verified-publication.json), [once-only six-package registry plan](registry-plan.json), [retained consumer result](consumer-receipt.json), [exact retained inputs/lock/verifiers](retained-consumer.zip.gz). Every raw log is losslessly compressed with its hash in the receipt.
+Receipt, trusted seven-package authority, once-only six-package registry plan, retained consumer result, exact retained inputs/lock/verifiers. Every raw log is losslessly compressed with its hash in the receipt.
 
 The maintained quickstart first run passed; its original temporary consumer is intentionally deleted by that unchanged script. A separate retained registry-only consumer binds all six package URLs/SRI values to the trusted publication and compares every installed example/layout record with release source:137 examples (101 gallery/36 technical),36 layouts, one core, no workspace links/loaders. Its first evidence-only probe assumed a root require export for CLI and failed; both that verifier/log and the corrected declared-bin probe are retained. This was not a product, quickstart or Release failure. No install or maintained check was repeated.
 

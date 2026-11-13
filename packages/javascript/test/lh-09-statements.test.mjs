@@ -2,7 +2,7 @@
 import { gallery } from '@openpresentation/gallery';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { composeSlide, HEADING_DISPLAY_SIZES, LONE_DISPLAY_SIZES, MESSAGE_DISPLAY_LINES, MESSAGE_DISPLAY_SIZE, messageWords } from '../dist/composition.js';
+import { composeSlide, HEADING_DISPLAY_SIZES, LONE_DISPLAY_SIZES, MESSAGE_DISPLAY_LINES, MESSAGE_DISPLAY_SIZE, messageCeiling, messageWords } from '../dist/composition.js';
 
 const { layouts } = gallery;
 const light = { text: '#000000', textSecondary: '#444444', primary: '#1F4E99', background: '#FFFFFF' };
@@ -71,7 +71,8 @@ for (const [direction, text] of [['ltr', words.en], ['rtl', words.ar]]) {
     const body = item(labeled, 'text');
     assert.ok(item(labeled, 'title').box.y < 100, 'a label title is the running head');
     assert.equal(body.textStyle.fontWeight, 400, "a message stays in the body face, so its author's bold words still stand out");
-    assert.ok(body.text.fontSize > LONE_DISPLAY_SIZES.text && body.text.fontSize <= MESSAGE_DISPLAY_SIZE, `at display size (${body.text.fontSize})`);
+    // LH-188: under a label title the text is a one-message slide's statement: its cap is the larger of MESSAGE_DISPLAY_SIZE and its length's ceiling.
+    assert.ok(body.text.fontSize > LONE_DISPLAY_SIZES.text && body.text.fontSize <= Math.max(MESSAGE_DISPLAY_SIZE, messageCeiling('statement', text.message) ?? 0), `at display size (${body.text.fontSize})`);
     assert.ok(lines(body.text) <= MESSAGE_DISPLAY_LINES);
   });
 
@@ -85,7 +86,11 @@ for (const [direction, text] of [['ltr', words.en], ['rtl', words.ar]]) {
     assert.ok(long.text.fontSize <= LONE_DISPLAY_SIZES.text + 1e-6, 'a paragraph of more than 25 words is no display message');
     // LH-69: a lone text of 4 words or fewer reaches the display title's size.
     const three = item(composeSlide({ title: text.label, text: text.three }, { direction }), 'text');
-    assert.equal(three.text.fontSize, HEADING_DISPLAY_SIZES.title);
+    // LH-188: under a label title it is a one-message slide's statement, which grows past the display title toward its ceiling (115 px for up to 30 characters).
+    assert.ok(three.text.fontSize > HEADING_DISPLAY_SIZES.title && three.text.fontSize <= messageCeiling('statement', text.three), `${three.text.fontSize}`);
+    // A title that is a sentence makes it a content slide: the lone text keeps LH-69's display title size.
+    const titled = item(composeSlide({ title: text.statement + '.', text: text.three }, { direction }), 'text');
+    assert.equal(titled.text.fontSize, HEADING_DISPLAY_SIZES.title);
     assert.equal(three.textStyle.fontWeight, 400, 'in the body face');
     // With fill off, nothing grows.
     assert.ok(item(composeSlide({ title: text.label, text: text.message }, { direction, fill: false }), 'text').text.fontSize <= LONE_DISPLAY_SIZES.text);
@@ -114,7 +119,7 @@ for (const [direction, text] of [['ltr', words.en], ['rtl', words.ar]]) {
     assert.ok(Math.abs((start === 'left' ? rule.x : rule.x + rule.width) - (start === 'left' ? list.box.x : list.box.x + list.box.width)) < 1, 'at the start edge');
     const word = list.text.listEntries[0].text.fontSize, description = list.text.fontSize;
     assert.ok(word >= 1.25 * description - 1e-6, 'the word is larger than its heading size would be');
-    const placed = composeSlide({ title: text.label, 'top:left': { text: text.three }, 'top:center+right': { text: text.label }, 'middle+bottom:left+center+right': { items: ['Queue', 'Route', 'Resolve'] } }, { direction });
+    const placed = composeSlide({ title: text.label, 'top:start': { text: text.three }, 'top:center+end': { text: text.label }, 'middle+bottom:start+center+end': { items: ['Queue', 'Route', 'Resolve'] } }, { direction });
     const heads = placed.items.filter((entry) => entry.field === 'text');
     assert.equal(heads.length, 2);
     assert.ok(heads.every((entry) => entry.textStyle.fontWeight === 700), 'each placed short text is a heading');

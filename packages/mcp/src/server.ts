@@ -43,8 +43,8 @@ export interface OpfMcpSources {
 	/** The recent release notes, as text: `opf://docs/whats-new`. Left out when absent. */
 	whatsNew?: string;
 	/**
-	 * LH-14: the icon sets `search_icons` searches and `validate_deck` checks icon names in: `galleryIconSets` of
-	 * `@openpresentation/gallery/icon-sets` (each set a module loaded on first use). Left out of the lean server, which then names no icon set.
+	 * LH-14: the icon sets `search_icons` searches and `validate_deck` checks icon names in: `galleryIconSets()` (RR-63: `galleryIconSets(fetchIcons(url))` where the files are served) of
+	 * `@openpresentation/gallery/icon-sets` (static files read one icon at a time). Left out of the lean server, which then names no icon set.
 	 */
 	iconSets?: Catalog;
 }
@@ -298,6 +298,7 @@ Call start_here (with your goal) for a path through the docs, skills, examples a
 To author a deck: write JSON (or YAML or Markdown), call validate_deck, fix the findings (each has a rule id, a JSON Pointer path and a hint), repeat until ok. convert changes a deck between JSON, YAML and Markdown. Validation is not proof of how a deck looks: it does not render.`;
 
 const INSTRUCTIONS_SHOW = "To show the user a deck, call show_deck: in a client that supports MCP Apps it opens the OPF viewer (Preview, Source and Both), where the user can edit it; their edits come back to you as context, and you continue from that version.";
+const INSTRUCTIONS_IN_PLACE = "Where the client offers the viewer's own tools (read_deck, select_slide, edit_deck), change the deck that is already open with them instead of sending a new one: read_deck, then edit_deck with its revision. A new show_deck for the same deck (the same name) replaces the viewer that shows it; open_editor opens the viewer's editor with a starter or example deck.";
 const INSTRUCTIONS_VIEWER = `OPF (Open Presentation Format) is a JSON format for slide decks. This server teaches it and opens decks in the OPF viewer; it keeps no state and reads no files.
 Call start_here (with your goal) for a path through the docs, skills, examples and catalog; or start with the resource opf://docs/format-card (the whole authoring surface on one page) and opf://docs/index (every page). Look up exact fields with get_schema (or the opf://schema/<name> resources), default design records (layouts, themes, color and font schemes, ...) with search_catalog and get_catalog_record, worked decks with list_examples (opf://examples/<slug>), and prose with search_docs. Skills are resources too: opf://skills/<name>.
 To author a deck: write JSON (or YAML or Markdown) and open it with show_deck. The viewer checks it on the user's machine and sends you its findings (each has a rule id, a JSON Pointer path and a message) as context; fix them and call show_deck again. The user can edit the deck in the viewer; their edits come back to you as context.`;
@@ -308,8 +309,54 @@ export { type SiteFontsOptions, deckFontFile, siteFontFiles } from "./site-fonts
 export const DECK_APP_URI = "ui://opf/deck";
 export const MCP_APP_MIME_TYPE = "text/html;profile=mcp-app";
 
+/**
+ * The `_meta` of the `resources/read` content item of ui://opf/deck. `preferredDisplayMode` asks Claude to open the viewer in its
+ * side panel (a non-standard extension; the host decides, and it never forces full screen). The view declares no `csp`, `domain`
+ * or `permissions`; any of them would go here too, on the content item, where the host reads `_meta.ui` once it is set.
+ */
+export const DECK_APP_CONTENT_META = { ui: { prefersBorder: false, preferredDisplayMode: "fullscreen" } } as const;
+
+/** A session key the caller passes (read_deck's `session`, or its own): letters, digits and - _ . : only. Anything else is ignored. */
+const SESSION_KEY = /^[A-Za-z0-9._:-]{1,64}$/;
+/** A deck's identity for its session: OPF has no document id, so its name, trimmed, lowercased and with runs of spaces collapsed. */
+const deckIdentity = (name: unknown) => (typeof name === "string" && name.trim() ? name.trim().toLowerCase().replace(/\s+/g, " ") : undefined);
+const hex = (bytes: ArrayBuffer) => [...new Uint8Array(bytes)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+/**
+ * The key of one viewer (MCP Apps instance supersession): the editing session it belongs to and its order in it. The server keeps
+ * nothing and counts nothing. `session` is the caller's `session` when it passes one; otherwise it is derived from the deck's own
+ * identity (its name: `deck-` and 32 hex digits of its SHA-256), so a newer view of the same deck replaces the older one while a deck
+ * with another name stays independent; a deck without a name gets a random key of its own. `createdAt` (the server's clock) and a
+ * random `tie` order the views of a session, compared only with other server-minted keys. Views of one session meet on a channel
+ * named by `session`; the view's origin is per conversation because the viewer declares no `ui.domain`.
+ */
+async function viewerKey(session: string | undefined, name: unknown): Promise<{ session: string; createdAt: number; tie: number }> {
+	const identity = deckIdentity(name);
+	const key = session !== undefined && SESSION_KEY.test(session) ? session : identity ? `deck-${hex(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`opf-deck-name:${identity}`))).slice(0, 32)}` : crypto.randomUUID();
+	return { session: key, createdAt: Date.now(), tie: crypto.getRandomValues(new Uint32Array(1))[0] as number };
+}
+/** The deck's `name`, read cheaply: an object's, JSON text's, or the `name:` line of YAML text or Markdown front matter. */
+function nameOf(document: unknown): unknown {
+	if (typeof document !== "string") return (document as { name?: unknown } | null)?.name;
+	if (/^[\s﻿]*\{/.test(document)) {
+		try {
+			return (JSON.parse(document.replace(/^﻿/, "")) as { name?: unknown }).name;
+		} catch {
+			return undefined;
+		}
+	}
+	const line = /^name:[ \t]*(.*?)[ \t]*$/m.exec(document.slice(0, 4000))?.[1];
+	return line?.replace(/^(["'])(.*)\1$/, "$2");
+}
+
 /** The most of a font file one read_font_file call returns (the PDF viewer of ext-apps reads in pieces of the same size). */
 const FONT_CHUNK = 512 * 1024;
+
+/**
+ * The most icons one read_icons call returns (RR-111). An icon's path data is about 200 bytes (at most 1.4 KB), so a batch is about
+ * 20 KB, and the first call of a set adds its index (Lucide 33 KB, Tabler 82 KB): a result stays far under one message frame.
+ */
+const ICON_BATCH = 100;
+const ICON_NAME = /^[a-z0-9][a-z0-9-]*$/;
 
 /** Bytes as base64, without Buffer (edge-safe). */
 function base64Of(bytes: Uint8Array): string {
@@ -329,7 +376,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 	const checkCatalogs: readonly Catalog[] = sources.iconSets ? [...CATALOGS, sources.iconSets] : CATALOGS;
 	const opfVersion = options.opfVersion;
 	const check: CheckText = options.checkText ?? readReport;
-	const instructions = processDecks ? (deckApp ? `${INSTRUCTIONS}\n${INSTRUCTIONS_SHOW}` : INSTRUCTIONS) : INSTRUCTIONS_VIEWER;
+	const instructions = processDecks ? (deckApp ? `${INSTRUCTIONS}\n${INSTRUCTIONS_SHOW}\n${INSTRUCTIONS_IN_PLACE}` : INSTRUCTIONS) : `${INSTRUCTIONS_VIEWER}\n${INSTRUCTIONS_IN_PLACE}`;
 	const server = new McpServer({ name: "opf", title: "OpenPresentation (OPF)", version }, { instructions });
 	// The tool that checks a deck: validate_deck, or the viewer when the server does no deck work.
 	const checkTool = processDecks ? "validate_deck" : "show_deck";
@@ -571,18 +618,23 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			}),
 	);
 
-	// LH-14: the icon sets of the gallery, each a module of its own, loaded on the first search that needs it.
-	type IconSet = { name: string; license: string; copyright: string; version?: string; icons: Record<string, unknown>; tags?: Record<string, readonly string[]> };
-	const iconSets = (sources.iconSets?.iconSets ?? {}) as Record<string, () => Promise<IconSet>>;
+	// LH-14: the icon sets of the gallery, loaded on the first search that needs them; RR-63: a search reads the names and keywords only
+	// (`{ tags: true }`), never the icons' path data.
+	type IconSet = { name: string; license: string; copyright: string; version?: string; names?: readonly string[]; icons: Record<string, unknown>; tags?: Record<string, readonly string[]> };
+	const iconSets = (sources.iconSets?.iconSets ?? {}) as Record<string, (request?: { icons?: readonly string[]; tags?: boolean }) => Promise<IconSet>>;
 	const setNames = Object.keys(iconSets);
+	// RR-111: a server with no icon set (the lean server, a Worker that serves no icon files) says so instead of naming an empty list.
+	const searchIconsSets = setNames.length
+		? `in the gallery's icon sets: ${setNames.join(", ")}${setNames.includes("lucide") ? " (Lucide is the default)" : ""}`
+		: "in the icon sets this server registers. This server registers none, so a search finds nothing and a set icon such as \"lucide:truck\" is the finding opf/icon-unknown here";
 	server.registerTool(
 		"search_icons",
 		{
 			title: "Search the icon sets",
-			description: `Find icons for an \`icon\` field (a list entry, a metric or a group) in the gallery's icon sets: ${setNames.join(", ")} (Lucide is the default). Matches the icon name and the source package's keywords (every word must match; a name match ranks first). Each result's \`icon\` is the value to write, such as "lucide:truck". Never invent a name: an unknown one is the finding opf/icon-unknown. A deck can also define its own SVG once in its top-level \`icons\` map and name it by its bare key.`,
+			description: `Find icons for an \`icon\` field (a list entry, a metric or a group) ${searchIconsSets}. Matches the icon name and the source package's keywords (every word must match; a name match ranks first). Each result's \`icon\` is the value to write, such as "lucide:truck". Never invent a name: an unknown one is the finding opf/icon-unknown. A deck can also define its own SVG once in its top-level \`icons\` map and name it by its bare key.`,
 			inputSchema: {
 				query: z.string().describe('Words to match, such as "delivery truck" or "security".'),
-				set: z.string().optional().describe(`Only this set: ${setNames.join(" or ")}.`),
+				set: z.string().optional().describe(setNames.length ? `Only this set: ${setNames.join(" or ")}.` : "Only this set (this server registers none)."),
 				limit: z.number().int().min(1).max(100).optional().describe("At most this many icons. Default 20."),
 			},
 			outputSchema: {
@@ -596,14 +648,14 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		},
 		({ query, set, limit }) =>
 			respond(async () => {
-				if (!setNames.length) throw fail("This server bundles no icon sets (the lean @openpresentation/mcp/server): pass sources.iconSets, galleryIconSets of @openpresentation/gallery/icon-sets.", "unknown-id");
+				if (!setNames.length) throw fail("This server bundles no icon sets (the lean @openpresentation/mcp/server): pass sources.iconSets, galleryIconSets(fetchIcons(url)) of @openpresentation/gallery/icon-sets.", "unknown-id");
 				const ids = set === undefined ? setNames : [set];
 				for (const id of ids) if (!Object.hasOwn(iconSets, id)) throw fail(`Unknown icon set ${id}.${didYouMean(id, setNames)} Sets: ${setNames.join(", ")}.`, "unknown-id");
-				const loaded = await Promise.all(ids.map(async (id) => [id, await iconSets[id]!()] as const));
+				const loaded = await Promise.all(ids.map(async (id) => [id, await iconSets[id]!({ tags: true })] as const));
 				const words = query.toLowerCase().split(/[\s,]+/).filter(Boolean);
 				const found: { score: number; icon: { icon: string; set: string; name: string; tags: string[] } }[] = [];
 				for (const [id, record] of loaded)
-					for (const name of Object.keys(record.icons)) {
+					for (const name of record.names ?? Object.keys(record.icons)) {
 						const tags = [...(record.tags?.[name] ?? [])];
 						const hay = [name, ...tags].join(" ").toLowerCase();
 						if (!words.every((word) => hay.includes(word))) continue;
@@ -618,7 +670,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 					total: found.length,
 					returned: Math.min(max, found.length),
 					icons: found.slice(0, max).map((item) => item.icon),
-					sets: loaded.map(([id, record]) => ({ id, name: record.name, license: record.license, copyright: record.copyright, ...(record.version ? { version: record.version } : {}), icons: Object.keys(record.icons).length })),
+					sets: loaded.map(([id, record]) => ({ id, name: record.name, license: record.license, copyright: record.copyright, ...(record.version ? { version: record.version } : {}), icons: (record.names ?? Object.keys(record.icons)).length })),
 				};
 			}),
 	);
@@ -767,6 +819,11 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 
 	if (deckApp) {
 		const view = z.enum(["preview", "source", "both"]);
+		const sessionSchema = z.string().max(64).optional().describe("Which viewer this replaces. Leave it out and a deck replaces the open viewer of a deck with the same name. Pass the session key a viewer reported (read_deck, or this tool's earlier result) to replace that viewer, or any other key (letters, digits, - _ . :) to keep this viewer apart.");
+		const viewerSchema = z.object({ session: z.string(), createdAt: z.number(), tie: z.number() });
+		// RR-111: the icon sets the viewer can read through read_icons (empty: the tool is not offered), so it asks only for those.
+		const iconSetsSchema = z.array(z.string()).optional().describe("The icon sets the viewer reads icons from (read_icons).");
+		const sessionLine = (key: { session: string }) => `Viewer session: ${key.session}. A later show_deck or open_editor call for the same deck (or with this session) replaces this viewer.`;
 		const outlineSchema = z.array(z.object({ slide: z.number(), title: z.string().nullable() }));
 		/** The deck's name and slide titles, read without checking it. */
 		const outlineOf = (input: { raw: string; format: DeckFormat }) => {
@@ -793,13 +850,14 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			{
 				title: "Show a deck in the OPF viewer",
 				description: processDecks
-					? "Show the user a deck. In a client that supports MCP Apps (Claude on the web and desktop) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. Their edits come back to you as context: continue from that version. Also checks the deck as validate_deck does and returns its name, slide titles and findings as text, so a client without MCP Apps still gets an answer."
-					: "Show the user a deck. In a client that supports MCP Apps (Claude on the web and desktop) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. The viewer checks the deck on the user's machine and sends you its findings, and the user's edits, as context: fix the findings and continue from the user's version. This server does no deck work itself, so a client without MCP Apps gets no check.",
+					? "Show the user a deck. In a client that supports MCP Apps (Claude on the web and desktop) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. Their edits come back to you as context: continue from that version. Also checks the deck as validate_deck does and returns its name, slide titles and findings as text, so a client without MCP Apps still gets an answer. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both."
+					: "Show the user a deck. In a client that supports MCP Apps (Claude on the web and desktop) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. The viewer checks the deck on the user's machine and sends you its findings, and the user's edits, as context: fix the findings and continue from the user's version. This server does no deck work itself, so a client without MCP Apps gets no check. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both.",
 				inputSchema: {
 					document: documentSchema,
 					format: formatSchema.optional().describe("The form of the document text. Default: JSON for an object or text that starts with { or [."),
 					view: view.optional().describe("What the viewer shows first: preview (the slides, the default), source (the text) or both. Leave it out unless the user asked to see the source: the user can switch in the viewer, and a chat column is narrow for both."),
 					slide: z.number().int().min(1).optional().describe("The slide to open on, from 1. Leave it out to open on the first slide, unless the conversation is about one slide."),
+					session: sessionSchema,
 				},
 				outputSchema: {
 					opened: z.boolean(),
@@ -813,37 +871,99 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 					valid: z.boolean().optional(),
 					counts: countsSchema.optional(),
 					findings: z.array(findingSchema).optional(),
+					viewer: viewerSchema,
+					iconSets: iconSetsSchema,
 				},
 				annotations: { ...READ_ONLY, title: "Show a deck in the OPF viewer" },
 				// SEP-1865: the view that renders this tool's results; the flat key is the older spelling some hosts still read.
 				_meta: { ui: { resourceUri: DECK_APP_URI }, "ui/resourceUri": DECK_APP_URI },
 			},
-			async ({ document, format, view: first, slide }) => {
-				const opened = { opened: true, view: first ?? "preview", ...(slide ? { slide } : {}) };
+			async ({ document, format, view: first, slide, session }) => {
+				const viewer = await viewerKey(session, nameOf(document));
+				const opened = { opened: true, view: first ?? "preview", ...(slide ? { slide } : {}), viewer, iconSets: setNames };
 				if (!processDecks) {
 					// No deck work here: the view reads and checks the deck. Only the shape of the arguments is looked at.
 					const result = { ...opened, checked: false, ...(format ? { format } : typeof document === "string" ? {} : { format: "json" as const }) };
-					return { content: [{ type: "text" as const, text: "Opened the deck in the OPF viewer. In a client that supports MCP Apps the user sees it there and can edit it; the viewer checks it on the user's machine and sends you its findings, and the user's edits, as context. This server does not check decks itself." }], structuredContent: result };
+					return { content: [{ type: "text" as const, text: `Opened the deck in the OPF viewer. In a client that supports MCP Apps the user sees it there and can edit it; the viewer checks it on the user's machine and sends you its findings, and the user's edits, as context. This server does not check decks itself.\n${sessionLine(viewer)}` }], structuredContent: result };
 				}
 				try {
 					const input = inputOf(document, format);
 					const report = await check(input.raw, input.format, { catalogs: checkCatalogs });
 					const deck = outlineOf(input);
 					const result = { ...opened, checked: true, format: input.format, ...deck, valid: report.valid, counts: report.counts, findings: report.findings.slice(0, 20) };
-					return { content: [{ type: "text" as const, text: summaryOf({ ...deck, counts: report.counts, findings: report.findings }) }], structuredContent: result };
+					return { content: [{ type: "text" as const, text: `${summaryOf({ ...deck, counts: report.counts, findings: report.findings })}\n${sessionLine(viewer)}` }], structuredContent: result };
 				} catch (error) {
 					// A deck the server cannot read still opens: the view shows the text and its syntax error in Source.
 					const message = error instanceof Error ? error.message : String(error);
-					return { content: [{ type: "text" as const, text: `Opened the deck in the OPF viewer, but it could not be read: ${message}` }], structuredContent: { ...opened, checked: false, ...(format ? { format } : {}) } };
+					return { content: [{ type: "text" as const, text: `Opened the deck in the OPF viewer, but it could not be read: ${message}\n${sessionLine(viewer)}` }], structuredContent: { ...opened, checked: false, ...(format ? { format } : {}) } };
 				}
+			},
+		);
+
+		// The direct entry point (Claude's Artifacts, a pinned app): the viewer's editor with a deck to edit at once, from no arguments.
+		const STARTER_TITLE = "Untitled deck";
+		const starterDeck = (title: string) => ({
+			name: title,
+			language: "en-US",
+			slides: [
+				{ id: "opening", title, blocks: [{ text: "Click any text on the slide to change it, or switch to Source to edit the whole deck." }] },
+				{ id: "points", title: "Three points to make", blocks: [{ items: ["The first point", "The second point", "The third point"] }] },
+			],
+		});
+		const exampleList = () => sources.examples.map((example) => ({ slug: example.slug, name: ((example.deck as { name?: unknown }).name as string | undefined) ?? null }));
+		server.registerTool(
+			"open_editor",
+			{
+				title: "OPF deck editor",
+				description:
+					"Open the OPF viewer's editor with a deck to edit: a starter deck (optionally with a title), or one of the bundled example decks by slug.\nAll inputs are optional; with none it opens a two-slide starter deck. In the editor the user can edit it at once, open another bundled example, or paste a deck into Source. In a client that supports MCP Apps the viewer's own tools (read_deck, select_slide, edit_deck) then read and change that deck in place. list_examples lists the slugs. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both.",
+				inputSchema: {
+					example: z.string().max(100).optional().describe("A bundled example deck to open, by slug (list_examples). Leave it out for the starter deck."),
+					title: z.string().max(120).optional().describe('The deck\'s name: the starter deck\'s title, or a new name for the example. Default "Untitled deck" for the starter deck.'),
+					session: sessionSchema,
+				},
+				outputSchema: {
+					opened: z.boolean(),
+					editor: z.literal(true),
+					example: z.string().nullable(),
+					name: z.string().nullable(),
+					slides: z.number(),
+					document: z.record(z.string(), z.unknown()),
+					examples: z.array(z.object({ slug: z.string(), name: z.string().nullable() })),
+					viewer: viewerSchema,
+					iconSets: iconSetsSchema,
+				},
+				annotations: { ...READ_ONLY, title: "OPF deck editor" },
+				// SEP-1865's view, and Claude's entry point: the tool a user opens the app with, without asking the model.
+				_meta: { ui: { resourceUri: DECK_APP_URI }, "ui/resourceUri": DECK_APP_URI, "openai/ui": { entrypoints: [{ type: "global" }] } },
+			},
+			async ({ example, title, session }) => {
+				const found = example === undefined ? undefined : sources.examples.find((item) => item.slug === example);
+				const named = title?.trim();
+				const name = named || STARTER_TITLE;
+				const deck = (found ? structuredClone(found.deck) : starterDeck(name)) as Record<string, unknown>;
+				// A title with an example renames the example deck (its slides keep their own titles).
+				if (found && named) deck.name = named;
+				const viewer = await viewerKey(session, deck.name);
+				const slides = Array.isArray(deck.slides) ? deck.slides.length : 0;
+				const deckName = typeof deck.name === "string" ? deck.name : null;
+				const result = { opened: true, editor: true as const, example: found ? found.slug : null, name: deckName, slides, document: deck, examples: exampleList(), viewer, iconSets: setNames };
+				const what = found ? `the example deck ${found.slug}${named ? `, named "${named}"` : deckName ? ` ("${deckName}")` : ""}` : `a starter deck "${name}"`;
+				const missed = example !== undefined && !found ? ` There is no bundled example ${example}.${didYouMean(example, sources.examples.map((item) => item.slug))} It opened the starter deck instead (list_examples lists the slugs).` : "";
+				const text = [
+					`Opened the OPF viewer's editor with ${what} (${slides} slide${slides === 1 ? "" : "s"}).${missed}`,
+					"In a client that supports MCP Apps the user sees it in the viewer's editor and can edit it, open a bundled example or paste a deck into Source; their edits come back to you as context. Where the viewer's tools are offered, read_deck and edit_deck read and change this deck in place.",
+					sessionLine(viewer),
+				].join("\n");
+				return { content: [{ type: "text" as const, text }], structuredContent: result };
 			},
 		);
 
 		server.registerResource(
 			"deck-view",
 			DECK_APP_URI,
-			{ title: "OPF deck viewer", description: "The OPF viewer that show_deck opens: Preview, Source and Both, with editing and checks, in one HTML page (an MCP App).", mimeType: MCP_APP_MIME_TYPE, _meta: { ui: { prefersBorder: false } } },
-			async (uri) => ({ contents: [{ uri: uri.href, mimeType: MCP_APP_MIME_TYPE, text: typeof deckApp.html === "function" ? await deckApp.html() : deckApp.html, _meta: { ui: { prefersBorder: false } } }] }),
+			{ title: "OPF deck viewer", description: "The OPF viewer that show_deck and open_editor open: Preview, Source and Both, with editing and checks, in one HTML page (an MCP App).", mimeType: MCP_APP_MIME_TYPE, _meta: { ui: { prefersBorder: false } } },
+			async (uri) => ({ contents: [{ uri: uri.href, mimeType: MCP_APP_MIME_TYPE, text: typeof deckApp.html === "function" ? await deckApp.html() : deckApp.html, _meta: DECK_APP_CONTENT_META }] }),
 		);
 
 		const readFontFile = deckApp.readFontFile;
@@ -888,6 +1008,54 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 						const report = error instanceof McpToolError ? { ok: false, code: error.code, error: error.message, ...error.details } : { ok: false, code: "internal-error", error: error instanceof Error ? error.message : String(error) };
 						return { isError: true, content: [{ type: "text" as const, text: JSON.stringify(report) }] };
 					}
+				},
+			);
+		}
+
+		// RR-111: the viewer draws a deck's set icons ("lucide:truck") from the server's icon sets: it cannot fetch, so it asks for the
+		// icons a deck names, a batch at a time, and for each set's index (every name, for "did you mean", and the license) once.
+		if (setNames.length) {
+			server.registerTool(
+				"read_icons",
+				{
+					title: "Read icons for the OPF viewer",
+					description: `Used by the OPF viewer only (it cannot fetch): the path data of up to ${ICON_BATCH} icons of one icon set (${setNames.join(", ")}), and with index the set's index (every icon name, its viewBox, style, license and copyright). Do not call it yourself: search_icons finds icons.`,
+					inputSchema: {
+						set: z.string().min(1).max(40).describe(`The icon set: ${setNames.join(" or ")}.`),
+						names: z.array(z.string().max(100)).max(ICON_BATCH).describe(`Up to ${ICON_BATCH} icon names of the set.`),
+						index: z.boolean().optional().describe("Also return the set's index (once per set)."),
+					},
+					outputSchema: { set: z.string(), icons: z.record(z.string(), z.unknown()), errors: z.record(z.string(), z.string()).optional(), index: z.record(z.string(), z.unknown()).optional() },
+					annotations: { ...READ_ONLY, title: "Read icons for the OPF viewer" },
+					// SEP-1865: callable by the view, hidden from the model.
+					_meta: { ui: { visibility: ["app"] } },
+				},
+				async ({ set, names, index }) => {
+					const answer = await respond(async () => {
+						if (!Object.hasOwn(iconSets, set)) throw fail(`Unknown icon set ${set}.${didYouMean(set, setNames)} Sets: ${setNames.join(", ")}.`, "unknown-id", { sets: setNames });
+						const errors: Record<string, string> = {};
+						const asked = [...new Set(names)].filter((name) => {
+							if (ICON_NAME.test(name)) return true;
+							errors[name] = `${JSON.stringify(name)} is not an icon name (lowercase letters, digits and hyphens).`;
+							return false;
+						});
+						let record: IconSet & { errors?: Record<string, string> };
+						try {
+							record = (await iconSets[set]!({ icons: asked })) as typeof record;
+						} catch (error) {
+							throw fail(`The icon set ${set} could not be read: ${error instanceof Error ? error.message : String(error)}`, "icon-set-unreadable", { set });
+						}
+						const { icons, errors: unread, tags: _tags, ...meta } = record;
+						const kept: Record<string, unknown> = {};
+						for (const name of asked) if (Object.hasOwn(icons, name)) kept[name] = icons[name];
+						Object.assign(errors, unread);
+						return { set, icons: kept, ...(Object.keys(errors).length ? { errors } : {}), ...(index ? { index: meta } : {}) };
+					});
+					if (!("structuredContent" in answer)) return answer;
+					// The data goes to the view only: the text says what it is, not the path data again.
+					const data = answer.structuredContent as { icons: Record<string, unknown>; errors?: Record<string, string>; index?: unknown };
+					const text = `Icon set ${set}: ${Object.keys(data.icons).length} of ${names.length} icons${data.errors ? `, ${Object.keys(data.errors).length} not read` : ""}${data.index ? ", with the set's index" : ""}.`;
+					return { content: [{ type: "text" as const, text }], structuredContent: answer.structuredContent };
 				},
 			);
 		}

@@ -69,6 +69,13 @@ const textOnImage: RuleText = (finding) => {
   const ratio = measuredNumber(finding, "ratio");
   const needed = measuredNumber(finding, "needed");
   const scrim = measuredNumber(finding, "scrimOpacity");
+  const best = measuredNumber(finding, "best");
+  // RR-105: text that stays below the threshold over every color the picture can show.
+  if (best !== undefined)
+    return {
+      message: `This text is too faint on the picture: at most ${num(best, 1)}:1 over any part of it here${needed !== undefined ? `, and ${num(needed)}:1 is needed` : ""}.`,
+      next: `set the background's ${code("tone")} so the text color follows the picture, or give the text a readable color.`,
+    };
   // LH-02: the note that core drew its automatic scrim behind the text.
   if (scrim !== undefined)
     return {
@@ -316,6 +323,22 @@ const iconDropped: RuleText = (finding) => {
   };
 };
 
+const shapeOffSlide: RuleText = (finding) => ({
+  message: /callout/.test(finding.message) ? "An image callout lies wholly outside the slide, so it is not drawn." : "A shape lies wholly outside the slide, so it is not drawn.",
+  next: "write its position as fractions (0.2 for 20%), or move it so part of it is on the slide.",
+});
+
+const chartLabelCollision: RuleText = () => ({
+  message: "A reference label meets another label, a data line or a mark at both ends of its line.",
+  next: "shorten the label, give the chart more room, or set the line where a bar or the area leaves room beside it.",
+});
+
+// RR-105: a timeline period shorter than its marker.
+const timelinePeriodShort: RuleText = () => ({
+  message: "A timeline period is too short to read: its duration gives it less room than its marker.",
+  next: "give the timeline more room, or make its shortest period longer.",
+});
+
 // SH-09: a pyramid or matrix drawn as cards or as a list (SH-18: a cycle as a list).
 const arrangementAdapted: RuleText = (finding) => {
   const cards = /needs four entries/.test(finding.message);
@@ -403,7 +426,7 @@ const centeredBody: RuleText = (finding) => {
   const blocks = measuredNumber(finding, "blocks") ?? 1;
   return {
     message: `A centered ${what}${onSlide(finding)} runs ${lines} line${lines === 1 ? "" : "s"} (${characters} characters)${blocks > 1 ? `, with ${blocks - 1} more like it` : ""}; each line starts at a different place, which is harder to read.`,
-    next: `set ${code('contentAlignment: "left"')} in the slide's design, or cut it to a line or two.`,
+    next: `set ${code('contentAlignment: "start"')} in the slide's design, or cut it to a line or two.`,
   };
 };
 
@@ -515,6 +538,18 @@ const codeHighlightRangeReversed: RuleText = (finding) => {
   return {
     message: `Highlight ${found[1]}–${found[2]} ends before it starts, so it marks no line.`,
     next: `write [${found[3]}, ${found[4]}].`,
+  };
+};
+
+const variableGroupOmitted: RuleText = (finding) => {
+  const ids = [...finding.message.matchAll(/'([a-z][a-z0-9-]*)'/g)].map((found) => found[1] as string);
+  const idParam = isRecord(finding.validation?.params) ? finding.validation.params.id : undefined;
+  const names = [...new Set(ids.length ? ids : typeof idParam === "string" ? [idParam] : [])];
+  if (!names.length) return undefined;
+  const list = names.length === 1 ? code(names[0] as string) : `${names.slice(0, -1).map((id) => code(id)).join(", ")} and ${code(names.at(-1) as string)}`;
+  return {
+    message: `A group${onSlide(finding)} is left out when ${list} ${names.length === 1 ? "has" : "have"} no value, with its pictures, cards and other text.`,
+    next: `give ${names.length === 1 ? "it" : "one of them"} a value to draw the group, or move what should always show out of the group.`,
   };
 };
 
@@ -633,6 +668,9 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/region-full": regionFull,
   "opf/icon-dropped": iconDropped,
   "opf/arrangement-adapted": arrangementAdapted,
+  "opf/chart-label-collision": chartLabelCollision,
+  "opf/shape-off-slide": shapeOffSlide,
+  "opf/timeline-period-short": timelinePeriodShort,
   "opf/layout-unplaced": layoutUnplaced,
   "opf/furniture-wraps": furnitureWraps,
   "opf/font-outside-scheme": fontOutsideScheme,
@@ -644,6 +682,7 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/code-highlight-out-of-range": codeHighlightOutOfRange,
   "opf/code-highlight-range-reversed": codeHighlightRangeReversed,
   "opf/variable-builtin-missing": variableBuiltinMissing,
+  "opf/variable-group-omitted": variableGroupOmitted,
   "opf/duration-outside-narrative": durationOutsideNarrative,
   "opf/narrative-duration-range": narrativeDurationRange,
   "opf/placeholder-text": placeholderText,

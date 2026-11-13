@@ -4,6 +4,7 @@ import {strFromU8, unzipSync, zipSync} from 'fflate';
 import { toSvg, resolvePresentation } from '@openpresentation/opf-render';
 import {checkTypefaces, fromPptx, toPptx} from '../dist/index.js';
 import {relationshipPath, shownFurnitureParts} from './helpers/master-furniture.mjs';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
 // Spec-gap closure A (P2): the design fields that used to change nothing export natively.
 // - the primary organization's logo on cover and section slides: one native picture `OPF logo` at core's geometry.logo box
@@ -22,7 +23,8 @@ const open = async (deck, options = {}) => {
   const bytes = await toPptx(deck, {seed: 1, timestamp: '2026-01-01T00:00:00Z', ...options});
   return {bytes, entries: unzipSync(bytes)};
 };
-const slideXml = (entries, index) => decoder.decode(entries[`ppt/slides/slide${index + 1}.xml`]);
+// RR-105 (opf#1293): theme font references read as their theme's families.
+const slideXml = (entries, index) => withThemeFamilies(entries, `ppt/slides/slide${index + 1}.xml`);
 const slideRels = (entries, index) => decoder.decode(entries[`ppt/slides/_rels/slide${index + 1}.xml.rels`]);
 const pictures = xml => [...xml.matchAll(/<p:pic>[\s\S]*?<\/p:pic>/g)].map(([picture]) => ({
   xml: picture,
@@ -67,7 +69,8 @@ let checked = 0;
     const logos = all.filter(picture => picture.name === 'OPF logo');
     assert.equal(logos.length, 1, `slide ${index}: one native logo picture`);
     const [logo] = logos;
-    assert.equal(logo.descr, 'Logo', 'alt text');
+    // RR-105 (#1290, 2026-11-12): with no asset alt the logo is described by its organization's name (previously the fixed 'Logo').
+    assert.equal(logo.descr, 'Acme logo', 'alt text');
     // Left-anchored, vertically centered inside core's box, fitted without cropping.
     const {box} = geometry[index].logo, scale = Math.min(box.width / 120, box.height / 60);
     near(logo.w, 120 * scale, `slide ${index} logo width`); near(logo.h, 60 * scale, `slide ${index} logo height`);
@@ -155,7 +158,7 @@ let checked = 0;
 {
   const icon = jpg;
   const organization = {id: 'acme', name: 'Acme', logo: {full: wide, icon}};
-  const deck = {organization, design: {background: light, footer: {left: {image: 'var:organization.logo.icon'}}, header: {right: {image: 'var:organization.logo.icon', text: 'Confidential'}}},
+  const deck = {organization, design: {background: light, footer: {start: {image: 'var:organization.logo.icon'}}, header: {end: {image: 'var:organization.logo.icon', text: 'Confidential'}}},
     slides: [{title: 'Content', text: 'Body copy.'}, {title: 'Cover', layout: 'cover'}]};
   const {entries, bytes} = await open(deck);
   const geometry = resolvePresentation(deck).slides[0].geometry;
@@ -179,18 +182,18 @@ let checked = 0;
   // Pixel parity with the preview's image part: same fitted rectangle.
   for (const native of natives) assert.ok(previewImages.some(rect => ['x', 'y', 'w', 'h'].every(key => Math.abs(rect[key] - native[key]) <= 1)), 'native logo matches a preview logo rectangle');
   const imported = await fromPptx(bytes);
-  assert.deepEqual(imported.design.footer?.left, {image: 'var:organization.logo.icon'}, 'the footer logo returns as its reference');
-  assert.deepEqual(imported.design.header?.right, {image: 'var:organization.logo.icon', text: 'Confidential'}, 'the header logo and text return');
+  assert.deepEqual(imported.design.footer?.start, {image: 'var:organization.logo.icon'}, 'the footer logo returns as its reference');
+  assert.deepEqual(imported.design.header?.end, {image: 'var:organization.logo.icon', text: 'Confidential'}, 'the header logo and text return');
   assert.ok(!JSON.stringify(imported.design).includes('data:'), 'no data URI image is fabricated');
   assert.deepEqual(imported.organization, organization, 'the logo itself returns on the organization');
   // Without any logo the part reports unresolved-content and nothing is drawn; the reference still round-trips.
-  const bare = {design: {footer: {left: {image: 'var:organization.logo.icon'}}}, slides: [{title: 'Content', text: 'Body copy.'}]};
+  const bare = {design: {footer: {start: {image: 'var:organization.logo.icon'}}}, slides: [{title: 'Content', text: 'Body copy.'}]};
   const diagnostics = [];
   const result = await open(bare, {onDiagnostic: item => diagnostics.push(item)});
-  assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-content').map(item => item.path), ['design.footer.left.image']);
+  assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-content').map(item => item.path), ['design.footer.start.image']);
   assert.equal(pictures(slideXml(result.entries, 0)).length, 0);
   const reimported = await fromPptx(result.bytes);
-  assert.deepEqual(reimported.design.footer, {left: {image: 'var:organization.logo.icon'}});
+  assert.deepEqual(reimported.design.footer, {start: {image: 'var:organization.logo.icon'}});
   checked++;
 }
 
@@ -370,7 +373,7 @@ const powerpointSave = bytes => {
 };
 {
   const organization = [{id: 'acme', name: 'Acme', role: 'primary', logo: {full: {onLight: square, onDark: tall}, icon: jpg}}, {id: 'beta', name: 'Beta', logo: wide}];
-  const deck = {organization, design: {listBullet: 'image', background: light, footer: {left: {image: 'var:organization.logo.icon'}, right: {text: '{{slide.number}}'}}},
+  const deck = {organization, design: {listBullet: 'image', background: light, footer: {start: {image: 'var:organization.logo.icon'}, end: {text: '{{slide.number}}'}}},
     slides: [
       {title: 'Cover', subtitle: 'On light', layout: 'cover'},
       {title: 'Own', layout: 'cover', design: {logo: 'var:organization.beta.logo'}},
@@ -386,7 +389,7 @@ const powerpointSave = bytes => {
     assert.deepEqual(imported.organization, organization, `${label}: every organization logo shape and tone restores`);
     assert.equal(imported.slides[1].design.logo, 'var:organization.beta.logo', `${label}: a slide's logo reference restores`);
     assert.equal(imported.design.listBullet, 'image', `${label}: listBullet`);
-    assert.deepEqual(imported.design.footer.left, {image: 'var:organization.logo.icon'}, `${label}: footer logo reference`);
+    assert.deepEqual(imported.design.footer.start, {image: 'var:organization.logo.icon'}, `${label}: footer logo reference`);
     for (const code of ['invalid-logo-provenance', 'unresolved-asset-reference', 'content-structure-changed', 'invalid-document-provenance', 'invalid-furniture-provenance']) {
       assert.deepEqual(diagnostics.filter(item => item.code === code).map(item => item.path), [], `${label}: no ${code}`);
     }

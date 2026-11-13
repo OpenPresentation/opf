@@ -19,8 +19,9 @@ try {
   const page=await browser.newPage({viewport:{width:1280,height:720}});page.on('pageerror',error=>errors.push(error.message));
   await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});await page.setContent('<main></main>');
   await page.evaluate(async faces=>{for(const face of faces)document.fonts.add(await new FontFace(face.family,`url(${face.dataUrl})`,{weight:String(face.weight),style:face.italic?'italic':'normal'}).load());await document.fonts.ready;},registry.embeddedFonts);
-  for(const mode of ['estimated','measured'])for(const align of ['left','center','right'])for(const [index,text]of fixtures.entries()) {
-    const document={design:{fontScheme:'roboto',contentAlignment:align},slides:[{text}]},before=structuredClone(document),options={trace:true,...(mode==='measured'?{fonts:{textMeasurement:prepared.textMeasurement}}:{})};
+  for(const mode of ['estimated','measured'])for(const align of ['start','center','end'])for(const [index,text]of fixtures.entries()) {
+    // LH-188, LH-189: the slide's text stays at body size (under the 56 px display size), so adjacent runs keep the measured advances this test compares.
+    const document={design:{fontScheme:'roboto',contentAlignment:align},slides:[{composition:{maxFontSize:54},text}]},before=structuredClone(document),options={trace:true,...(mode==='measured'?{fonts:{textMeasurement:prepared.textMeasurement}}:{})};
     const bound=resolvePresentation(document,options).slides[0],item=bound.geometry.items.find(item=>item.field==='text'),svg=toSvg(document, 1,options);
     assert.deepEqual(document,before);
     const actual=await page.evaluate(async({svg,item,mode,align})=>{
@@ -31,7 +32,12 @@ try {
       for(const [lineIndex,line]of item.text.richLines.entries()) {
         let previous;const fragments=[];
         for(const fragment of line.fragments) {
-          const node=nodes[cursor++];if(!node||source.slice(+node.dataset.opfTextStart,+node.dataset.opfTextEnd)!==node.textContent||node.textContent!==fragment.text)throw Error('Source trace changed');
+          // RR-105: an underlined, linked or struck fragment at the end of a line is drawn, and traced, without its trailing white space.
+          const decorated=fragment.run.underline||fragment.run.link||fragment.run.strikethrough,lineEnd=line.fragments.slice(line.fragments.indexOf(fragment)+1).every(next=>!/\S/u.test(next.text));
+          const drawn=decorated&&lineEnd&&/\S/u.test(fragment.text)?fragment.text.replace(/\s+$/u,''):fragment.text;
+          const node=nodes[cursor++];if(!node||source.slice(+node.dataset.opfTextStart,+node.dataset.opfTextEnd)!==node.textContent||node.textContent!==drawn)throw Error('Source trace changed');
+          // The cut white space keeps a traced node of its own, undecorated.
+          if(drawn!==fragment.text){const space=nodes[cursor++],cut=fragment.text.slice(drawn.length);if(!space||space.textContent!==cut||source.slice(+space.dataset.opfTextStart,+space.dataset.opfTextEnd)!==cut||getComputedStyle(space).textDecorationLine!=='none')throw Error('Cut line-end white space is not traced');}
           const start=node.getStartPositionOfChar(0),end=node.getEndPositionOfChar(node.getNumberOfChars()-1),computed=getComputedStyle(node);
           if(computed.fontWeight!==String(fragment.style.fontWeight)||computed.fontStyle!==(fragment.style.italic?'italic':'normal'))throw Error('Physical style changed');
           if(fragment.run.link&&node.closest('a')?.getAttribute('href')!==fragment.run.link)throw Error('Link changed');
@@ -41,14 +47,14 @@ try {
           let intrinsicWidth=null;
           if(mode==='measured'){
             const clone=node.cloneNode(true);clone.removeAttribute('textLength');clone.removeAttribute('lengthAdjust');clone.style.visibility='hidden';node.parentNode.append(clone);intrinsicWidth=clone.getComputedTextLength();clone.remove();
-            if(Math.abs(intrinsicWidth-fragment.width)>.001*fragment.width+1/64)throw Error('Accepted advance correction exceeds the bounded fixture allowance');
+            if(drawn===fragment.text&&Math.abs(intrinsicWidth-fragment.width)>.001*fragment.width+1/64)throw Error('Accepted advance correction exceeds the bounded fixture allowance');
           }
           fragments.push({text:fragment.text,tag:node.tagName,gap:previous?start.x-previous.x:null,baselineDifference:start.y-expectedY,intrinsicWidth,acceptedWidth:fragment.width});previous=end;
         }
         let alignmentDifference=0;
         if(mode==='estimated'&&line.fragments.length) {
           const element=nodes[cursor-line.fragments.length].closest('text'),width=element.getComputedTextLength(),start=element.getStartPositionOfChar(0).x;
-          const expected=item.box.x+(align==='right'?item.box.width-width:align==='center'?(item.box.width-width)/2:0);alignmentDifference=start-expected;
+          const expected=item.box.x+(align==='end'?item.box.width-width:align==='center'?(item.box.width-width)/2:0);alignmentDifference=start-expected;
         }
         lines.push({fragments,alignmentDifference});
       }

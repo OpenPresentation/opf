@@ -55,14 +55,19 @@ assignable to it.
 
 ## Icon sets
 
-`@openpresentation/gallery/icon-sets` exports `galleryIconSets`, a catalog of two icon sets that decks name as `<set>:<name>` in an `icon` field: `lucide:truck` ([Lucide](https://lucide.dev), ISC, 2,020 icons, the default set) and `tabler:rocket` ([Tabler outline](https://tabler.io/icons), MIT, 5,203 icons). Each set is a module of its own (`@openpresentation/gallery/icon-sets/<id>`), so a host loads only the sets a deck uses. Register it beside `gallery`:
+`@openpresentation/gallery/icon-sets` exports `galleryIconSets(load?)`, a catalog of two icon sets that decks name as `<set>:<name>` in an `icon` field: `lucide:truck` ([Lucide](https://lucide.dev), ISC, 2,029 icons, the default set) and `tabler:rocket` ([Tabler outline](https://tabler.io/icons), MIT, 5,203 icons). The icon data is plain static files under `dist/icons/`, exported as `@openpresentation/gallery/icons/*` (each set's index with its license and every name, one small file per icon, the whole set in one file, and the search keywords), read one icon at a time, so a host pays for the icons its decks draw and a bundle carries none of the data. Register it beside `gallery`:
 
 ```js
 import { gallery } from "@openpresentation/gallery";
-import { galleryIconSets } from "@openpresentation/gallery/icon-sets";
+import { fetchIcons, galleryIconSets } from "@openpresentation/gallery/icon-sets";
 
-const catalogs = [gallery, galleryIconSets];
+const catalogs = [gallery, galleryIconSets()]; // Node, Bun and Deno: the installed files
+const served = [gallery, galleryIconSets(fetchIcons("/opf-icons/"))]; // a browser page: dist/icons/ served at /opf-icons/
+// A Worker: galleryIconSets(fetchIcons(new URL("/opf-icons/", request.url), env.ASSETS)).
+// A server that bundles a set: galleryIconSets({ lucide }), with lucide imported from "@openpresentation/gallery/icons/lucide.icons.json".
 ```
+
+A bundled Node server deployed with its `node_modules` needs nothing: the files are found as the installed package. A host may serve all of `dist/icons/` or only its six set-level `*.json` files (a set is then read whole, once). An icon that cannot be read is an `opf/icon-unknown` finding that says why, and the slide draws without it.
 
 The licenses are in `THIRD-PARTY-NOTICES.md`. See [icons](https://github.com/OpenPresentation/opf/blob/main/docs/icons.md).
 
@@ -95,6 +100,7 @@ automatically. A deck's own layouts are records of the same schema under `catalo
 | `timeline` | Dated events or a roadmap along one axis, with optional notes. |
 | `faq` | Questions with their answers. |
 | `pyramid` | Levels that build on each other, as a pyramid, the first at the top. |
+| `inverted-pyramid` | Levels that narrow to a point, with the widest first. Editable native shapes in PowerPoint. |
 | `matrix` | Four parts of a whole, as the quadrants of a square beside the title. |
 | `cycle` | Steps that repeat, as a loop of nodes with arrows beside the title. |
 | `chevrons` | Stages in order, as a row of chevrons. |

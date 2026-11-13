@@ -1,0 +1,5 @@
+# Handoff notes
+
+Each dated folder holds the notes a session wrote so the next one can resume: state, decisions, next steps and short result summaries. Start from the newest `README.md`.
+
+The working evidence of 2026-11-08 to 2026-11-11 (archives, logs, screenshots, saved decks and machine receipts) was removed from the tree before v0.34.0; the notes still name some of those files by path. Every one of them can be read from history at commit `6cb8f52aa8dc43e37af8d5a6eda2b5ef5ebcca04` (branch `codex/rr-034-next-source-20261112`, also an ancestor of pull request #1225's head), for example `git show 6cb8f52aa8dc43e37af8d5a6eda2b5ef5ebcca04:docs/handoff/2026-11-10/schema-decision-packet/mcp-docs-size-review.json`. The evidence of the earlier programs (`docs/evidence/`, `packages/*/docs/evidence/` and the non-Markdown files of the older dated folders) left the tree at the same time and reads from `main`'s history at `7fb6140804f969550e3a9c9d52916b7610844917`; the few files that tests and trackers read moved to `test/fixtures/` and `docs/programs/*/tracker-inputs/`. New evidence follows the [evidence rule](../../AGENTS.md#evidence-stays-out-of-main).

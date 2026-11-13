@@ -40,7 +40,7 @@ const {validate}=await load('@openpresentation/opf','.');
 const valid=value=>validate(value,{only:['format']}).valid;
 const {loadFonts}=await load('@openpresentation/opf-render','./fonts-node');
 const registry=await loadFonts({pack:'office'});
-const fixtureBytes=await readFile('docs/evidence/payload-fit-gaps-2026-09-09.opf.json');
+const fixtureBytes=await readFile('scripts/fixtures/payload-fit-gaps-2026-09-09.opf.json');
 const fixture=JSON.parse(fixtureBytes);
 const results=[];
 for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {

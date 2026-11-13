@@ -1,0 +1,4 @@
+{
+  "description": "RR-105: schema locations that no qualification deck has to use, each with a one-line reason. Read by scripts/check-format-coverage.mjs; a location is written as the check prints it (for example \"TextRun.oneOf[1].cite\" or \"Chart.type = \\\"world\\\"\"). An entry that a deck covers, or that the schema no longer has, fails the check. Every location is covered at the time of writing, so the list is empty: prefer a coverage deck to an entry here.",
+  "entries": []
+}

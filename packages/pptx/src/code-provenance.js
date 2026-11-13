@@ -44,6 +44,7 @@ const cyrb53 = text => {
   h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
   return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16).padStart(14, '0');
 };
+export const nativeTextHash = cyrb53;
 const fingerprint = (geometry, paragraphs) => cyrb53(JSON.stringify([geometry, paragraphs]));
 const wrapShape = shape => `<p:sld><p:cSld><p:spTree>${shape}</p:spTree></p:cSld></p:sld>`;
 function exportedSignature(shape) {
@@ -76,6 +77,19 @@ export function attachTextTags(entries, records, tagName, prefix, kind, {picture
       if (!records.has(name)) return shape;
       if (seen.has(name)) throw new Error(`Duplicate generated ${kind} shape.`);
       seen.add(name);
+      const tag = `<p:tag name="${tagName}" val="${hex(signed && shape.startsWith('<p:sp>') ? {...records.get(name), sig: exportedSignature(shape)} : records.get(name))}"/>`;
+      const existing = /<p:custDataLst>\s*<p:tags r:id="([^"]+)"\s*\/>\s*<\/p:custDataLst>/.exec(shape);
+      if (existing) {
+        // CT_CustomerDataList permits one p:tags reference: join its tag list.
+        const relation = array(parser.parse(rels).Relationships?.Relationship).find(item => item.Id === existing[1]);
+        const target = typeof relation?.Target === 'string' && /^\.\.\/tags\/[A-Za-z0-9_-]+\.xml$/.test(relation.Target) ? 'ppt/' + relation.Target.slice(3) : undefined;
+        if (relation?.Type !== REL || relation.TargetMode === 'External' || !target || !entries[target]) throw Error('Generated shape tag relationship is missing or invalid.');
+        const current = dec.decode(entries[target]), list = parser.parse(current)['p:tagLst'];
+        if (!list || !current.includes('</p:tagLst>') || array(list['p:tag']).some(item => String(item.name).toUpperCase() === tagName.toUpperCase())) throw Error('Generated shape tag list is invalid or colliding.');
+        entries[target] = enc.encode(current.replace('</p:tagLst>', tag + '</p:tagLst>'));
+        return shape;
+      }
+      if (/<p:custDataLst\b/.test(shape)) throw Error('Generated shape has unsupported customer data.');
       const part = `ppt/tags/${prefix}${++count}.xml`;
       let id = `rId${prefix[0].toUpperCase()+prefix.slice(1)}${count}`;
       while (ids.has(id)) id += '_';

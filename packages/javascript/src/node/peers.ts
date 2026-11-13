@@ -57,6 +57,8 @@ export interface RenderFonts {
 	loadSystemFonts?: boolean;
 }
 export interface FontRegistry {
+	/** Private demand-loader metadata capability; role names require no font bytes. */
+	fontNames?: object;
 	scriptSelection?: { detected: string[]; scripts: string[]; unavailable: string[]; packages?: string[]; notInstalled?: string[]; uncovered?: string[] };
 }
 /** The handle `loadFonts()` of opf-render `/fonts-node` returns: pass it as `{ fonts }` to every deck-level call. */
@@ -67,10 +69,14 @@ export interface FontsHandle extends RenderFonts {
 	useBundledFonts: false;
 	loadSystemFonts: false;
 	registry: FontRegistry;
+	/** Present on current handles; prepare newly used faces after document edits or pagination. */
+	ensure?(presentation: unknown, options?: Record<string, unknown>): Promise<unknown>;
 	substitutions: { requestedFamily: string; resolvedFamily: string; compatibility: string; substitute: boolean }[];
 }
 /** The engines of opf-render 0.18 (RR-73). Slides count from 1; a number gives one SVG, a selection a list. */
 export interface RenderModule {
+	/** Optional on older renderers; recognize only their actual structured validation exception. */
+	OPFRenderError?: new (code: string, message: string, details?: Record<string, unknown>) => Error & { code: string; details: Record<string, unknown> };
 	/** One slide of the deck as SVG; slides count from 1. */
 	toSvg(presentation: unknown, slide: number, options?: Record<string, unknown>): string;
 	/** One SVG slide as PNG. */
@@ -125,8 +131,9 @@ const hint = (name: string) =>
 	(name === RENDER_PACKAGE ? `\n${renderHint()}` : "");
 
 function bases(): string[] {
-	// Resolution starts at core's own file, then at the working directory.
-	return [import.meta.url, pathToFileURL(path.join(process.cwd(), "noop.js")).href];
+	// Resolution starts at core's own file, then at the working directory. A CommonJS bundle of core has no import.meta.url (RR-63).
+	const here: unknown = import.meta.url;
+	return [...(typeof here === "string" ? [here] : []), pathToFileURL(path.join(process.cwd(), "noop.js")).href];
 }
 
 function locate(specifier: string): string | undefined {

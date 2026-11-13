@@ -15,13 +15,13 @@
       "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-published-0.12-catalog-only.json"
     ],
     "fontTracker": "docs/programs/font-fidelity-everywhere/font-tracker.json",
-    "evidence": "docs/evidence",
+    "nativeEvidenceIndex": "docs/programs/release-readiness/tracker-inputs/native-evidence-index.json",
     "nativeRuns": [
-      "docs/evidence/rr-42-native-20261002/values.json",
-      "docs/evidence/rr-17-viet-supplement-native-20261002/values.json"
+      "docs/programs/release-readiness/tracker-inputs/rr-42-native-20261002/values.json",
+      "docs/programs/release-readiness/tracker-inputs/rr-17-viet-supplement-native-20261002/values.json"
     ],
     "burndown": "docs/programs/release-readiness/burndown.md",
-    "inputLimitations": "docs/evidence/rr-20-pareto-series-scope/limitations.json"
+    "inputLimitations": "docs/programs/release-readiness/tracker-inputs/rr-20-pareto-series-scope/limitations.json"
   },
   "parityNote": "The latest committed parity run (RR-20 re-audit): the published 0.12 set (core 0.12.0, opf-render 0.12.0, opf-pptx 0.12.2, opf-editor 0.11.1) on pptx-gallery c349a61, with the RR-44 classifier for computed value-axis tick labels. It replaces the RR-16 candidate run (741 perfect, 109 near, 0 mismatch) and the published-package run before it (739 / 111 / 0); no value regressed.",
   "columns": {

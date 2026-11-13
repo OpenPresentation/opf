@@ -2,12 +2,12 @@
   "deck": "technical/full-feature-tour.opf.json",
   "entries": {
     "technical/full-feature-tour.opf.json#0": {
-      "sha256": "182d652d73fef80c83cb0c1eb82c075f6c1081d1cc3daed6372c5a1351726222",
-      "bytes": 4713
+      "sha256": "4b787b917d8c1e6ed6d493248227de7dac1b2da239fe7f70909416d3a764701f",
+      "bytes": 4754
     },
     "technical/full-feature-tour.opf.json#1": {
-      "sha256": "87d62ffdc0d334768b5d547d6e94469e050bf992bf2853256c0aa15a9e8e9b0e",
-      "bytes": 6773
+      "sha256": "e3682893e9ddc5397bec774052e44d0ace4261c5c1d74b5fdb6dc780a6743393",
+      "bytes": 6780
     },
     "technical/full-feature-tour.opf.json#2": {
       "sha256": "881cee094789e07d91d26c4207e59664d9f6e629cc8e0b676cee73b0afa4407f",
@@ -38,12 +38,12 @@
       "bytes": 8350
     },
     "technical/full-feature-tour.opf.json#9": {
-      "sha256": "9357433737ded6c645a1afac51a081c15d9c5cfbbd368108ba0ca7b6130955b0",
-      "bytes": 3564
+      "sha256": "4226478e1902251cb6e8612ec0da56b055c3436c2c6f76bebbb4ff6f3344d02f",
+      "bytes": 3825
     },
     "technical/full-feature-tour.opf.json#10": {
-      "sha256": "9a777ba81627d3c6187de7be5597c42daf875ca60a8c7a2b1df4116e9f331a40",
-      "bytes": 6536
+      "sha256": "85711472e1aa769c422430c342eda78a2728ba34c5bfd3c24648d10952d3adfe",
+      "bytes": 8121
     }
   }
 }

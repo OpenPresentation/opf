@@ -143,3 +143,15 @@ export function localAssetProblems(deck: unknown, root: string): AssetProblem[] 
 	}
 	return problems;
 }
+
+/**
+ * RR-105: `ensureIcons`'s `readSource` for the icons a deck names as SVG files: read as `convert` reads its images (relative to `root`,
+ * nothing outside it, only image files; nothing is fetched), so `validate` and `convert` see the same icons. A source that cannot be read
+ * stays unloaded. `resolver` reuses an image resolver a caller already has.
+ */
+export function iconSourceReader(root: string | undefined, resolver: Pick<ReturnType<typeof createImageResolver>, "forMeasure"> = createImageResolver(root, { add() {} } as unknown as Reporter)) {
+	return async (source: string): Promise<string | undefined> => {
+		const uri = resolver.forMeasure(source);
+		return uri?.startsWith("data:image/svg+xml;base64,") ? Buffer.from(uri.slice(26), "base64").toString("utf8") : undefined;
+	};
+}

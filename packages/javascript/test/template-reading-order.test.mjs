@@ -28,16 +28,27 @@ test('the 30 templates, filled as the gallery fixtures fill them, have no opf/re
   assert.deepEqual(found, []);
 });
 
-test('slides without a template keep the visual check', () => {
-  // The same people as team's, on an automatic slide: two stacked picture-and-text groups in a row read picture, text,
-  // picture, text, while the boxes show both pictures before both texts. Without a template that is still a warning.
+test('slides without a template keep the visual check, a block read as one unit', () => {
+  // RR-105 (coverage finding 13, owner decision): the same people as team's, on an automatic slide: two stacked picture-and-text groups in
+  // a row read picture, text, picture, text, which is card by card, the order a person reads cards in. A group is one unit of the visual
+  // order (its box), so this is no longer a warning (until 0.34 it was).
   const person = (index) => ({ blocks: [payload('image', index, 'short'), { text: `Person ${index + 1}` }], composition: { mode: 'column' } });
   const automatic = { slides: [{ title: 'x', composition: { mode: 'row' }, blocks: [person(0), person(1)] }] };
-  assert.ok(validate(automatic, { only: ['accessibility'] }).findings.some((finding) => finding.ruleId === 'opf/reading-order'));
+  assert.ok(!validate(automatic, { only: ['accessibility'] }).findings.some((finding) => finding.ruleId === 'opf/reading-order'));
+  // Three cards too, and cards whose own items are composed in a row (the picture beside the name).
+  const three = { slides: [{ title: 'x', blocks: [person(0), person(1), person(2)] }] };
+  assert.ok(!validate(three, { only: ['accessibility'] }).findings.some((finding) => finding.ruleId === 'opf/reading-order'));
+  const beside = (index) => ({ ...person(index), composition: { mode: 'row' } });
+  const stacked = { slides: [{ title: 'x', composition: { mode: 'column' }, blocks: [beside(0), beside(1)] }] };
+  assert.ok(!validate(stacked, { only: ['accessibility'] }).findings.some((finding) => finding.ruleId === 'opf/reading-order'));
+  // The visual check still holds: a layout that draws the body above the title is read out of order.
+  const upside = { name: 'Upside', direction: 'column', regions: [{ name: 'body', accepts: ['text'], role: 'primary' }, { name: 'title' }] };
+  const above = { catalogs: { custom: { layouts: { upside } } }, slides: [{ layout: 'upside', title: 'x', text: 'Body' }] };
+  assert.ok(validate(above, { only: ['accessibility'] }).findings.some((finding) => finding.ruleId === 'opf/reading-order'));
   // On the team template the same blocks read in binding order: no warning.
   const team = { catalogs: { custom: { layouts: { team: layouts.team } } }, slides: [{ layout: 'team', title: 'x', blocks: [person(0), person(1)] }] };
   assert.ok(!validate(team, { only: ['accessibility'] }).findings.some((finding) => finding.ruleId === 'opf/reading-order'));
   // A promoted-region slide on a template composes as in 0.18, in visual order.
-  const promoted = { catalogs: { custom: { layouts: { text: layouts.text } } }, slides: [{ layout: 'text', title: 'x', 'top:right': { text: 'Right' }, 'top:left': { text: 'Left' } }] };
+  const promoted = { catalogs: { custom: { layouts: { text: layouts.text } } }, slides: [{ layout: 'text', title: 'x', 'top:end': { text: 'Right' }, 'top:start': { text: 'Left' } }] };
   assert.ok(!validate(promoted, { only: ['accessibility'] }).findings.some((finding) => finding.ruleId === 'opf/reading-order'));
 });

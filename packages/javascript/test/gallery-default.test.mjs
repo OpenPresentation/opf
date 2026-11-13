@@ -11,11 +11,18 @@ import { defaultCatalogs } from "../dist/node-engine.js";
 
 const galleryManifest = JSON.parse(readFileSync(new URL(import.meta.resolve("@openpresentation/gallery/package.json")), "utf8"));
 
-test("the default catalogs are the gallery package's own objects: the catalog and its icon sets (LH-14)", () => {
+test("the default catalogs are the gallery package's catalog and its icon sets (LH-14), read from the installed files (RR-63)", async () => {
   assert.equal(defaultCatalogs().length, 2);
   assert.equal(defaultCatalogs()[0], gallery);
-  assert.equal(defaultCatalogs()[1], galleryIconSets);
   assert.ok(Object.isFrozen(defaultCatalogs()));
+  // RR-63: the icon sets are galleryIconSets() with its default load, the installed dist/icons/ files read one icon at a time
+  // (packages/integration/test/icon-sets-bundle.test.mjs proves the bundle side).
+  const icons = defaultCatalogs()[1], fresh = galleryIconSets();
+  assert.deepEqual(Object.keys(icons), ["source", "iconSets"]);
+  assert.equal(icons.source, gallery.source);
+  assert.deepEqual(Object.keys(icons.iconSets), ["lucide", "tabler"]);
+  assert.ok(Object.isFrozen(icons) && Object.isFrozen(icons.iconSets));
+  for (const id of Object.keys(icons.iconSets)) assert.deepEqual(await icons.iconSets[id]({ icons: ["check"] }), await fresh.iconSets[id]({ icons: ["check"] }), id);
   const deck = { name: "t", design: { theme: "minimal" }, slides: [{ layout: "two-column", title: "A" }] };
   const unresolved = (report) => report.findings.filter((finding) => finding.ruleId === "opf/unresolved-reference");
   assert.deepEqual(unresolved(validate(deck, { only: ["references"] })), [], "validate registers the gallery when catalogs is omitted");

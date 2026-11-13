@@ -1,0 +1,651 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: images, captions and video",
+  "description": "RR-105 format coverage: image payloads and assets, fit, focus, recolor, overlays, placement, team portraits, captions in every form, image strokes and opacity, and video placeholders.",
+  "language": "en-US",
+  "design": {
+    "background": "light1",
+    "imageFit": "contain"
+  },
+  "assets": {
+    "photo": {
+      "src": "./assets/cover-image.png",
+      "alt": "Harbor at dusk with cranes and containers",
+      "title": "Harbor",
+      "description": "Stock photo used across the deck",
+      "mediaType": "image/png"
+    },
+    "product": "./assets/product-shot.png",
+    "walkthrough": {
+      "src": "https://example.com/media/walkthrough.mp4",
+      "alt": "Product walkthrough video",
+      "title": "Product walkthrough",
+      "mediaType": "video/mp4"
+    }
+  },
+  "slides": [
+    {
+      "id": "image-object",
+      "type": "image",
+      "title": "A picture with alt text and a caption",
+      "image": {
+        "src": "asset:photo",
+        "alt": "Harbor at dusk with cranes and containers",
+        "mediaType": "image/png",
+        "title": "Harbor",
+        "description": "Our main terminal, photographed in October"
+      },
+      "caption": {
+        "text": "The north terminal handles 60 percent of volume.",
+        "position": "below",
+        "align": "center"
+      }
+    },
+    {
+      "id": "fit-modes",
+      "title": "Cover, contain, stretch and automatic fit",
+      "blocks": [
+        {
+          "image": {
+            "src": "asset:product",
+            "alt": "Product shot, cropped to fill"
+          },
+          "fit": "cover"
+        },
+        {
+          "image": {
+            "src": "asset:product",
+            "alt": "Product shot, whole"
+          },
+          "fit": "contain"
+        },
+        {
+          "image": {
+            "src": "asset:product",
+            "alt": "Product shot, stretched"
+          },
+          "fit": "stretch"
+        },
+        {
+          "image": {
+            "src": "asset:product",
+            "alt": "Product shot, engine choice"
+          },
+          "fit": "auto"
+        }
+      ]
+    },
+    {
+      "id": "focus-recolor",
+      "title": "Focus points and recolored pictures",
+      "blocks": [
+        {
+          "image": {
+            "src": "asset:photo",
+            "alt": "Harbor cropped to the cranes"
+          },
+          "fit": "cover",
+          "focus": {
+            "x": 0.8,
+            "y": 0.3
+          },
+          "caption": "Focus on the cranes"
+        },
+        {
+          "image": {
+            "src": "asset:photo",
+            "alt": "Harbor in gray"
+          },
+          "recolor": "grayscale",
+          "caption": [
+            "In ",
+            {
+              "text": "grayscale",
+              "italic": true
+            }
+          ]
+        },
+        {
+          "image": {
+            "src": "asset:photo",
+            "alt": "Harbor in brand colors"
+          },
+          "recolor": {
+            "dark": "dark2",
+            "light": {
+              "color": "accent1",
+              "lighten": 0.7
+            }
+          },
+          "caption": {
+            "text": "Duotone in brand colors",
+            "position": "above",
+            "align": "end"
+          }
+        }
+      ]
+    },
+    {
+      "id": "overlay-bands",
+      "title": "Color bands over a picture",
+      "blocks": [
+        {
+          "image": {
+            "src": "asset:photo",
+            "alt": "Harbor with a top band"
+          },
+          "overlay": {
+            "color": "dark1",
+            "opacity": 0.5,
+            "edge": "top",
+            "size": 0.3
+          }
+        },
+        {
+          "image": {
+            "src": "asset:photo",
+            "alt": "Harbor with a bottom band"
+          },
+          "overlay": {
+            "color": "accent1",
+            "opacity": 0.6,
+            "edge": "bottom",
+            "size": 0.25
+          }
+        },
+        {
+          "image": {
+            "src": "asset:photo",
+            "alt": "Harbor with a start band"
+          },
+          "overlay": {
+            "color": "#000000",
+            "opacity": 0.4,
+            "edge": "start",
+            "size": 0.4
+          }
+        },
+        {
+          "image": {
+            "src": "asset:photo",
+            "alt": "Harbor with an end band"
+          },
+          "overlay": {
+            "color": "accent2",
+            "opacity": 0.5,
+            "edge": "end"
+          }
+        }
+      ]
+    },
+    {
+      "id": "placement-start",
+      "title": "A picture placed at the start edge",
+      "blocks": [
+        {
+          "image": {
+            "src": "asset:photo",
+            "alt": "Harbor at dusk"
+          },
+          "placement": {
+            "edge": "start",
+            "size": 0.4,
+            "inset": true
+          }
+        },
+        {
+          "text": "Volume through the north terminal grew for the sixth quarter in a row, and the new cranes cut unloading time by a fifth."
+        }
+      ]
+    },
+    {
+      "id": "placement-end",
+      "title": "A picture placed at the end edge",
+      "blocks": [
+        {
+          "image": {
+            "src": "asset:product",
+            "alt": "Product shot"
+          },
+          "placement": {
+            "edge": "end",
+            "size": 0.5
+          }
+        },
+        {
+          "items": [
+            "Lighter frame",
+            "Twice the battery",
+            "Same price"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "placement-top",
+      "title": "A banner picture along the top",
+      "blocks": [
+        {
+          "image": {
+            "src": "asset:photo",
+            "alt": "Harbor panorama"
+          },
+          "placement": {
+            "edge": "top",
+            "size": 0.45
+          }
+        },
+        {
+          "text": "Three new berths open in the spring."
+        }
+      ]
+    },
+    {
+      "id": "placement-bottom",
+      "title": "A strip picture along the bottom",
+      "blocks": [
+        {
+          "text": "The team behind the harbor upgrade met every milestone this year."
+        },
+        {
+          "image": {
+            "src": "asset:photo",
+            "alt": "Harbor strip"
+          },
+          "placement": {
+            "edge": "bottom",
+            "size": 0.35,
+            "inset": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "image-style",
+      "title": "A framed, translucent picture",
+      "blocks": [
+        {
+          "image": {
+            "src": "asset:product",
+            "alt": "Product shot with a frame"
+          },
+          "aspectRatio": 1.5,
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "opacity": 0.85
+        },
+        {
+          "image": {
+            "src": "asset:product",
+            "alt": "Product shot in a circle"
+          },
+          "shape": "ellipse",
+          "aspectRatio": 1
+        }
+      ]
+    },
+    {
+      "id": "team-top",
+      "title": "Pictures across the top of each card",
+      "blocks": [
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "image": {
+                "src": "./assets/alice.png",
+                "alt": "Portrait of Alice Moreno"
+              },
+              "portrait": "top",
+              "focus": {
+                "x": 0.5,
+                "y": 0.3
+              }
+            },
+            {
+              "items": [
+                {
+                  "text": "Alice Moreno",
+                  "description": "Operations"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "image": {
+                "src": "./assets/alice.png",
+                "alt": "Portrait of Ben Okafor"
+              },
+              "portrait": "top"
+            },
+            {
+              "items": [
+                {
+                  "text": "Ben Okafor",
+                  "description": "Finance"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "image": {
+                "src": "./assets/alice.png",
+                "alt": "Portrait of Chen Wei"
+              },
+              "portrait": "top"
+            },
+            {
+              "items": [
+                {
+                  "text": "Chen Wei",
+                  "description": "Engineering"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "team-side",
+      "title": "Pictures beside the names",
+      "blocks": [
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "image": {
+                "src": "./assets/alice.png",
+                "alt": "Portrait of Alice Moreno"
+              },
+              "portrait": "side"
+            },
+            {
+              "items": [
+                {
+                  "text": "Alice Moreno",
+                  "description": "Operations"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "image": {
+                "src": "./assets/alice.png",
+                "alt": "Portrait of Ben Okafor"
+              },
+              "portrait": "side"
+            },
+            {
+              "items": [
+                {
+                  "text": "Ben Okafor",
+                  "description": "Finance"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "image": {
+                "src": "./assets/alice.png",
+                "alt": "Portrait of Chen Wei"
+              },
+              "portrait": "side"
+            },
+            {
+              "items": [
+                {
+                  "text": "Chen Wei",
+                  "description": "Engineering"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "image": {
+                "src": "./assets/alice.png",
+                "alt": "Portrait of Dara Singh"
+              },
+              "portrait": "side"
+            },
+            {
+              "items": [
+                {
+                  "text": "Dara Singh",
+                  "description": "Design"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "image": {
+                "src": "./assets/alice.png",
+                "alt": "Portrait of Eli Novak"
+              },
+              "portrait": "side"
+            },
+            {
+              "items": [
+                {
+                  "text": "Eli Novak",
+                  "description": "Legal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "team-avatar",
+      "title": "Small avatars over the names",
+      "blocks": [
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "image": {
+                "src": "./assets/alice.png",
+                "alt": "Portrait of Alice Moreno"
+              },
+              "portrait": "avatar"
+            },
+            {
+              "items": [
+                {
+                  "text": "Alice Moreno",
+                  "description": "Operations"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "image": {
+                "src": "./assets/alice.png",
+                "alt": "Portrait of Ben Okafor"
+              },
+              "portrait": "avatar"
+            },
+            {
+              "items": [
+                {
+                  "text": "Ben Okafor",
+                  "description": "Finance"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "image": {
+                "src": "./assets/alice.png",
+                "alt": "Portrait of Chen Wei"
+              },
+              "portrait": "avatar"
+            },
+            {
+              "items": [
+                {
+                  "text": "Chen Wei",
+                  "description": "Engineering"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "callouts",
+      "title": "Callouts on a picture",
+      "image": {
+        "src": "asset:photo",
+        "alt": "Harbor at dusk",
+        "callouts": [
+          {
+            "text": "New cranes",
+            "x": 0.1,
+            "y": 0.15,
+            "width": 0.3,
+            "height": 0.15
+          },
+          {
+            "text": "Berth 4 opens in spring",
+            "x": 0.6,
+            "y": 0.7,
+            "width": 0.35,
+            "height": 0.15
+          }
+        ]
+      }
+    },
+    {
+      "id": "video-root",
+      "type": "video",
+      "title": "Watch the two-minute walkthrough",
+      "video": "asset:walkthrough",
+      "caption": "Recorded with the October release."
+    },
+    {
+      "id": "video-block",
+      "title": "A video beside its talking points",
+      "blocks": [
+        {
+          "type": "video",
+          "video": {
+            "src": "https://example.com/media/setup.mp4",
+            "alt": "Setup video",
+            "title": "Setup in five minutes"
+          },
+          "caption": [
+            {
+              "text": "Setup",
+              "bold": true
+            },
+            " in five minutes"
+          ]
+        },
+        {
+          "bullets": [
+            "Install the app",
+            "Connect the account",
+            "Invite the team"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "captions-tables-charts",
+      "title": "Captions on a chart and a table",
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Year",
+                "Ships"
+              ],
+              "rows": [
+                [
+                  "2024",
+                  310
+                ],
+                [
+                  "2025",
+                  344
+                ],
+                [
+                  "2026",
+                  391
+                ]
+              ]
+            }
+          },
+          "caption": "Ships handled per year"
+        },
+        {
+          "table": {
+            "columns": [
+              "Berth",
+              "Depth"
+            ],
+            "rows": [
+              [
+                "North",
+                "16 m"
+              ],
+              [
+                "South",
+                "14 m"
+              ]
+            ]
+          },
+          "caption": {
+            "text": [
+              "Berth depths at ",
+              {
+                "text": "low tide",
+                "italic": true
+              }
+            ],
+            "align": "start"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -231,7 +231,7 @@ try {
   const yuReport = [];
   for (const sample of samples) {
     const deck = { name: `Yu Gothic ${sample.id}`, language: 'ja', design: { fontScheme: {
-      name: 'Yu Gothic', major: 'Yu Gothic', minor: 'Yu Gothic',
+      major: 'Yu Gothic', minor: 'Yu Gothic',
       eastAsian: { major: 'Yu Gothic', minor: 'Yu Gothic' }, complexScript: { major: 'Yu Gothic', minor: 'Yu Gothic' },
     } }, slides: [{ id: 'yu', title: sample.text, text: [{ text: sample.text }, { text: sample.text, bold: true }] }] };
     await run(deck => window.harness.editor.applyPatch([{ op: 'replace', path: '', value: deck }]), deck);

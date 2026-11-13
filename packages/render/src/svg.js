@@ -2,11 +2,11 @@
 // load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
 import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, textColorForFill, chartColorForFill,
-  resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform, stackedText, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
+  resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform, stackedText, resolveScriptFonts, paragraphDirection, physicalAlignment, itemAlignment, patternRuns, isolateNumbers,
   metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
   arrangementPaint, colorContrast,
-  codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup, iconPathData,
+  codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, pictureOverlay, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup, iconPathData,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
 } from "@openpresentation/opf/composition";
 // The renderer is a library: it never imports a catalog. Hosts register theirs (`options.catalogs`, core `Catalog[]`, for
@@ -89,54 +89,54 @@ const ROOT_PAYLOAD_FIELDS = [
 ];
 
 const PROMOTED_REGION_KEYS = [
-  "left",
+  "start",
   "center",
-  "right",
-  "left+center",
-  "center+right",
-  "left+center+right",
+  "end",
+  "start+center",
+  "center+end",
+  "start+center+end",
   "top",
   "middle",
   "bottom",
   "top+middle",
   "middle+bottom",
   "top+middle+bottom",
-  "top:left",
+  "top:start",
   "top:center",
-  "top:right",
-  "top:left+center",
-  "top:center+right",
-  "top:left+center+right",
-  "middle:left",
+  "top:end",
+  "top:start+center",
+  "top:center+end",
+  "top:start+center+end",
+  "middle:start",
   "middle:center",
-  "middle:right",
-  "middle:left+center",
-  "middle:center+right",
-  "middle:left+center+right",
-  "bottom:left",
+  "middle:end",
+  "middle:start+center",
+  "middle:center+end",
+  "middle:start+center+end",
+  "bottom:start",
   "bottom:center",
-  "bottom:right",
-  "bottom:left+center",
-  "bottom:center+right",
-  "bottom:left+center+right",
-  "top+middle:left",
+  "bottom:end",
+  "bottom:start+center",
+  "bottom:center+end",
+  "bottom:start+center+end",
+  "top+middle:start",
   "top+middle:center",
-  "top+middle:right",
-  "top+middle:left+center",
-  "top+middle:center+right",
-  "top+middle:left+center+right",
-  "middle+bottom:left",
+  "top+middle:end",
+  "top+middle:start+center",
+  "top+middle:center+end",
+  "top+middle:start+center+end",
+  "middle+bottom:start",
   "middle+bottom:center",
-  "middle+bottom:right",
-  "middle+bottom:left+center",
-  "middle+bottom:center+right",
-  "middle+bottom:left+center+right",
-  "top+middle+bottom:left",
+  "middle+bottom:end",
+  "middle+bottom:start+center",
+  "middle+bottom:center+end",
+  "middle+bottom:start+center+end",
+  "top+middle+bottom:start",
   "top+middle+bottom:center",
-  "top+middle+bottom:right",
-  "top+middle+bottom:left+center",
-  "top+middle+bottom:center+right",
-  "top+middle+bottom:left+center+right"
+  "top+middle+bottom:end",
+  "top+middle+bottom:start+center",
+  "top+middle+bottom:center+end",
+  "top+middle+bottom:start+center+end"
 ];
 
 
@@ -591,13 +591,15 @@ function bindSlide(presentation, index, context) {
   const blocks = blockContent(slide, slidePath);
 
   const design = resolveDesign(presentation, slide, slideContext);
+  // Private native-font analysis maps authored roles before planning; generated fallback names remain raw.
+  if (context.mapInputFamily) design.fonts = Object.fromEntries(Object.entries(design.fonts).map(([role, family]) => [role, context.mapInputFamily(family)]));
   // Script fonts (FF-19): each text run is measured and drawn with its script
   // slot's face; the latin slot stays the design font scheme's family.
   const scriptFonts = createScriptFonts(scriptProfile(presentation, index, design, context), context.options.textMeasurement, {
     glyphFallback: context.options.glyphFallback,
     onFallback: note => reportGlyphFallback(context, note)
   });
-  // FA-13: a run with its own language (TextRun.lang, which core puts on the fragment style as `lang`) is measured and drawn with the
+  // FA-13: a run with its own language (TextRun.language, which core puts on the fragment style as `lang`) is measured and drawn with the
   // script fonts of that language (the Japanese or the Simplified Chinese face for Han text); every other run uses the deck's.
   const languageScripts = new Map();
   const scriptFontsFor = lang => {
@@ -620,6 +622,14 @@ function bindSlide(presentation, index, context) {
     const pick = style => scriptFontsFor(style?.lang)?.textMeasurement ?? deckMeasurement;
     textMeasurement = { ...deckMeasurement, measure: (text, size, style) => pick(style).measure(text, size, style) };
     if (typeof deckMeasurement.outlineBounds === "function") textMeasurement.outlineBounds = (text, size, style) => (pick(style).outlineBounds ?? deckMeasurement.outlineBounds)(text, size, style);
+  }
+  // Only the outer native preparation resolver retains substituted chosen families/weights. Raw glyph planning stays physical.
+  if (context.resolveInputStyle && textMeasurement) textMeasurement = {...textMeasurement, resolveStyle: context.resolveInputStyle};
+  if (context.mapInputFamily && textMeasurement) {
+    const raw = textMeasurement, style = value => value && typeof value.fontFamily === "string" ? {...value, fontFamily: context.mapInputFamily(value.fontFamily)} : value;
+    textMeasurement = {...raw, measure: (text, size, value) => raw.measure(text, size, style(value))};
+    for (const name of ["resolveStyle", "resolveFont"]) if (typeof raw[name] === "function") textMeasurement[name] = (value, ...rest) => raw[name](style(value), ...rest);
+    if (typeof raw.outlineBounds === "function") textMeasurement.outlineBounds = (text, size, value) => raw.outlineBounds(text, size, style(value));
   }
   // fontScheme.accent (the tag and quote text) takes the same look-alike policy.
   // RR-17 (FF-41): a family that names its weight (Arial Black, Segoe UI Semibold and Light) keeps its own name through composition, so each run
@@ -887,7 +897,10 @@ function renderImageBlock(item, bound, options) {
   if (!image) throw new OPFRenderError("missing-image-geometry", "Image rendering requires a coordinated core build with image block geometry (ComposedItem.image).", { path: item.path });
   const picture = renderImage(item, image.box, bound, { ...options, imageFit: image.fit, imageFocus: image.focus, imagePicture: image.picture });
   const trace = options.trace && image.placement ? { "data-opf-image-placement": image.placement.edge } : {};
-  if (isImagePlaceholder(picture)) return Object.keys(trace).length ? tag("g", trace, picture) : picture;
+  const labels = (image.callouts ?? []).map(callout => tag('g', options.trace ? {'data-opf-image-callout': callout.path} : {},
+    tag('rect', {x: stableNumber(callout.box.x), y: stableNumber(callout.box.y), width: stableNumber(callout.box.width), height: stableNumber(callout.box.height), fill: bound.design.colors.background}) +
+    renderTextBox(callout.text, callout.textBox, bound, {path: callout.path + '.text', fit: callout.fit, textStyle: callout.textStyle, fill: bound.design.colors.text, align: 'center', diagnosticsHandled: true, options}))).join('');
+  if (isImagePlaceholder(picture)) return labels || Object.keys(trace).length ? tag('g', trace, picture + labels) : picture;
   const id = `opf-s${bound.index + 1}-image-${item.path.replace(/[^A-Za-z0-9]+/g, "-")}`, shape = image.shape, defs = [];
   // A sketched stroke (core stroke.sketched) clips the picture to its sketched outline, as PowerPoint draws it.
   const sketched = image.stroke?.sketched?.fills[0];
@@ -904,7 +917,11 @@ function renderImageBlock(item, bound, options) {
     if (stroke.defs) children[0] = (children[0] ? children[0].replace(/<\/defs>$/, "") : "<defs>") + stroke.defs + "</defs>";
     children.push(stroke.elements);
   }
-  if (image.overlay) children.push(renderImageOverlay(image.overlay, bound, options));
+  // RR-105: the overlay covers the drawn picture; a contained picture whose aspect core could not read (a file or a host imageResolver's
+  // source) is measured here, from the drawable source, as the PPTX export does.
+  const overlay = image.overlay && !image.picture && image.fit === "contain" ? pictureOverlay(image, intrinsicImageAspect(resolveImageSource(item, bound, options).source)) : image.overlay;
+  if (overlay) children.push(renderImageOverlay(overlay, bound, options));
+  if (labels) children.push(labels);
   if (children.length === 2 && !children[0] && !Object.keys(trace).length) return pixels;
   return tag("g", trace, children.filter(Boolean).join(""));
 }
@@ -1013,11 +1030,15 @@ function renderArrangements(bound, options) {
       const {x, y, width, height} = arrangement.background;
       parts.push(tag('path', {...HIDDEN, d: `M${n(x + width / 2)} ${n(y)} L${n(x + width)} ${n(y + height / 2)} L${n(x + width / 2)} ${n(y + height)} L${n(x)} ${n(y + height / 2)} Z`, fill: paint.background.hex}));
     }
+    for(const edge of arrangement.connectors??[])parts.push(tag('path',{...HIDDEN,d:'M'+edge.points.map(([x,y])=>n(x)+' '+n(y)).join(' L'),fill:'none',stroke:paint.fill.hex,'stroke-width':n(arrangement.lineWidth),'stroke-linecap':'butt','stroke-linejoin':'miter'}));
     for (const node of arrangement.nodes) {
       const trace = options.trace && node.path ? {'data-opf-arrangement-path': node.path} : {};
-      if (node.points) parts.push(tag('path', {...HIDDEN, d: `M${node.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill, ...stroke, ...trace}));
-      else if (node.preset === 'ellipse') parts.push(cycleCircle(node, fill, stroke, trace));
-      else parts.push(tag('rect', {...HIDDEN, x: n(node.box.x), y: n(node.box.y), width: n(node.box.width), height: n(node.box.height), rx: n(node.radius ?? 0), fill, ...stroke, ...trace}));
+      if(node.background)parts.push(tag('rect',{...HIDDEN,x:n(node.background.x),y:n(node.background.y),width:n(node.background.width),height:n(node.background.height),rx:n(node.radius??0),fill:paint.fill.hex,...stroke,...trace}));
+      const nodeFill=arrangement.kind==='hierarchy'?paint.line.hex:fill,nodeStroke=arrangement.kind==='hierarchy'?{...stroke,stroke:paint.fill.hex}:stroke,alpha=arrangement.kind==='venn'&&node.preset==='ellipse'?.5:arrangement.kind==='hierarchy'?.9:1;
+      const nodePaint=alpha===1?nodeStroke:{...nodeStroke,'fill-opacity':alpha};
+      if (node.points) parts.push(tag('path', {...HIDDEN, d: `M${node.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill:nodeFill, ...nodePaint, ...trace}));
+      else if (node.preset === 'ellipse') parts.push(cycleCircle(node, nodeFill, nodePaint, trace));
+      else parts.push(tag('rect', {...HIDDEN, x: n(node.box.x), y: n(node.box.y), width: n(node.box.width), height: n(node.box.height), rx: n(node.radius ?? 0), fill:nodeFill, ...nodePaint, ...trace}));
       // SH-18: a cycle's arrow after its node, as PowerPoint stacks them (an arrow of two entries runs under the next circle).
       for (const arrow of arrangement.arrows?.filter(entry => entry.index === node.index) ?? []) parts.push(cycleArrowPath(arrow, paint.arrow.hex));
     }
@@ -1216,7 +1237,7 @@ function listEntriesSvg(item, fit, bound, options) {
   for(const entry of fit.listEntries){
     if(entry.marker.none){/* design.listBullet: none draws no marker */}
     else if(bullet){const box=entry.bulletBox??{x:entry.marker.x,y:entry.marker.y-entry.marker.fontSize*.65,width:entry.marker.fontSize*.65,height:entry.marker.fontSize*.65};children.push(tag('image',{x:stableNumber(box.x),y:stableNumber(box.y),width:stableNumber(box.width),height:stableNumber(box.height),href:bullet,preserveAspectRatio:'xMidYMid meet','aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));}
-    else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(entry.marker.y),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true',...(entry.marker.anchor==='end'?{'text-anchor':'end'}:{})},escapeText(entry.marker.text)));
+    else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(textMarkerBaseline(entry,bound,arranged,options)),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true',...markerDirection(entry)},escapeText(entry.marker.text)));
     // LH-133: a glossary's term (entry.accent) draws in the tag's color on its backdrop, as the export writes it.
     // SH-09: an entry of a pyramid or matrix (geometry.arrangements) is centered on its node, as the export writes it.
     const config={path:entry.textPath,align:arranged?'center':'left',fill:entry.accent?eyebrowFill(bound.design,item):bound.design.colors.text,rich:Array.isArray(entry.value),options};
@@ -1240,6 +1261,24 @@ function listEntriesSvg(item, fit, bound, options) {
 function numberMarkerStyle(marker) {
   if (!marker.number) return {};
   return {'font-weight':marker.style.fontWeight===400?undefined:marker.style.fontWeight,'font-style':marker.style.italic?'italic':undefined};
+}
+
+// Text bullets and numbers share the body's first rendered baseline. Image
+// bullet boxes keep their existing core geometry; no image metric is inferred.
+function textMarkerBaseline(entry, bound, arranged, options) {
+  const value=typeof entry.value==='string'?[entry.value]:entry.value,fit=entry.text,line=fit.richLines[0];
+  if(!line)return entry.marker.y;
+  const context=richLineContext(value,fit,bound,{align:arranged?'center':'left',options});
+  const first=line.fragments[0],rtl=fit.directions?fit.directions[0]==='rtl':context.richRtl(first?context.runOffsets[first.runIndex]+first.start:0);
+  return richLineGeometry(line,0,fit,entry.textBox,bound,context.lineAlignment(0),rtl,options.textMeasurement).baseline;
+}
+
+function markerDirection(entry) {
+  // The marker's text is the unchanged logical numbering token. A native RTL
+  // auto-number uses its paragraph's base direction; isolate that same token
+  // here while keeping core's EXISTING physical anchor, not a new text box.
+  if (entry.marker.number && entry.direction === 'rtl') return {'data-opf-number-marker':'rtl',direction:'rtl','unicode-bidi':'isolate','text-anchor':entry.marker.anchor==='end'?'start':'end'};
+  return entry.marker.anchor === 'end' ? {'text-anchor':'end'} : {};
 }
 
 // Follows asset: references and the host imageResolver to the drawable source of an image value.
@@ -1503,8 +1542,23 @@ function renderImage(item, box, bound, options) {
   return tag("g", {...traceAttrs(options,item.path),...generatedAttrs(options),'data-opf-asset-status':'unresolved',role:'img','aria-label':`Image unavailable: ${description}`},children.join("\n"));
 }
 
+// RR-105: the placeholder's caption is the asset's title, never its id: an `asset:` reference is followed through the deck's assets
+// (the fields the value writes win, as images layer them); one that does not resolve shows "Media". opf-pptx's mediaCaption is the same.
+function mediaAsset(value, assets) {
+  let asset = normalizeAsset(value);
+  const seen = new Set();
+  while (typeof asset.src === "string" && asset.src.startsWith("asset:")) {
+    const id = asset.src.slice(6);
+    if (seen.has(id) || !Object.hasOwn(assets ?? {}, id)) return { ...asset, src: "" };
+    seen.add(id);
+    const { src: _source, ...overrides } = asset;
+    asset = { ...normalizeAsset(assets[id]), ...overrides };
+  }
+  return asset;
+}
+
 function renderMedia(item, box, bound, options) {
-  const asset = normalizeAsset(item.value);
+  const asset = mediaAsset(item.value, bound.assets);
   const iconBox = centeredBox(box, 72, 72);
   const children = [
     tag("rect", {
@@ -1636,7 +1690,10 @@ function renderMetric(item, box, bound, options) {
     const factor=layout.alignment==='right'?1:layout.alignment==='center'?.5:0;
     const lines=part.fit.sourceLines.map((line,index)=>{
       const origin=part.linePositions[index];
-      if(factor&&!line.segments.some(segment=>segment.kind==='tab'))return tag('text',{x:stableNumber(origin.x+line.width*factor),y:stableNumber(origin.baseline),'text-anchor':factor===1?'end':'middle',
+      // opf#1322: a tracked display line measured with the host's real faces starts at core's own position (below), because a browser
+      // counts the spacing after the last character toward a middle or end anchor and resvg does not.
+      const exactStart=part.style.tracking<0&&!!options.textMeasurement?.measure&&!partRtl(line.start);
+      if(factor&&!exactStart&&!line.segments.some(segment=>segment.kind==='tab'))return tag('text',{x:stableNumber(origin.x+line.width*factor),y:stableNumber(origin.baseline),'text-anchor':factor===1?'end':'middle',
         'font-family':fontStack(part.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(part.fit.fontSize),
         'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,'letter-spacing':part.style.tracking?stableNumber(part.style.tracking*part.fit.fontSize):undefined,
         'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:partFill(part),
@@ -1646,6 +1703,7 @@ function renderMetric(item, box, bound, options) {
         ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
       },segment,styledText(part.text.slice(segment.start,segment.end),part.style),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start),fontSize:part.fit.fontSize})).join(''));
       return tag('text',{x:stableNumber(origin.x),y:stableNumber(origin.baseline),'text-anchor':'start',
+        ...(exactStart&&factor?{'data-opf-anchor':factor===1?'end':'middle','data-opf-anchor-x':stableNumber(origin.x+line.width*factor)}:{}),
         'font-family':fontStack(part.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(part.fit.fontSize),
         'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,'letter-spacing':part.style.tracking?stableNumber(part.style.tracking*part.fit.fontSize):undefined,
         'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:partFill(part),
@@ -1711,11 +1769,13 @@ function renderTimeline(item, box, bound, options) {
   const layout=item.timelineLayout;
   if(!layout)throw new OPFRenderError('missing-timeline-layout','Timeline rendering requires a coordinated core build with shared timeline geometry.',{path:item.path});
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
+  const background=bound.design.backgroundColor??bound.design.colors.background;
   const children=[tag('line',{...HIDDEN,...layout.connector,stroke:bound.design.colors.border,'stroke-width':3*scale,...traceAttrs(options,item.path)})];
+  for(const range of layout.ranges??[])children.push(tag('rect',{...HIDDEN,x:stableNumber(range.box.x),y:stableNumber(range.box.y),width:stableNumber(range.box.width),height:stableNumber(range.box.height),fill:bound.design.colors.primary,'fill-opacity':.32,stroke:background,'stroke-width':stableNumber(2*scale),...traceAttrs(options,range.path),...(options.trace?{'data-opf-timeline-range':range.eventIndex}:{})}));
+  for(const link of layout.rangeLinks??[])children.push(tag('line',{...HIDDEN,x1:stableNumber(link.x1),y1:stableNumber(link.y1),x2:stableNumber(link.x2),y2:stableNumber(link.y2),stroke:bound.design.colors.border,'stroke-width':stableNumber(scale),...traceAttrs(options,link.path),...(options.trace?{'data-opf-timeline-range-link':link.eventIndex}:{})}));
   // LH-121: the connector up to the current event in the primary color, over the border-colored rest.
   if(layout.progress)children.push(tag('line',{...HIDDEN,...layout.progress,stroke:bound.design.colors.primary,'stroke-width':3*scale,...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-progress':'true'}:{})}));
   // FA-11: status colors come from the deck (core's timelineMarkerShapes / timelineTextColor); a marker with no status draws the plain primary circle.
-  const background=bound.design.backgroundColor??bound.design.colors.background;
   const statusColors={background,primary:bound.design.colors.primary,text:bound.design.colors.text,mutedText:bound.design.colors.mutedText};
   for(const marker of layout.markers){
     if(!marker.status){
@@ -1744,7 +1804,7 @@ function renderTimeline(item, box, bound, options) {
 
 function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, alignment:bound.geometry.design.contentAlignment, ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {})});
+  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, ...(typeof bound.scriptFonts?.profile?.bcp47 === "string" ? {language:bound.scriptFonts.profile.bcp47} : {}), alignment:itemAlignment(bound.geometry.design.contentAlignment), ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {})});
   const children = [];
   // LH-113: a highlighted row (table.highlight, or the rows the slide's texts name) draws on an accent tint of the surface.
   const highlightFill = layout.rows.some((row) => row.cells.some((cell) => cell.highlighted)) ? tableHighlightColor(bound.design.colors.surface, bound.design.colors.primary, bound.design.colors.text) : undefined;
@@ -1815,7 +1875,8 @@ function renderTableBorders(defaultEdges, explicitEdges, scale, bound, options) 
       ? [start,axis.fixed,end,axis.fixed] : [axis.fixed,start,axis.fixed,end]}));
   });
   return [...defaults,...explicitEdges].flatMap(({coordinates:[x1,y1,x2,y2],border,path}) => {
-    const width = border ? border.width * scale : 1;
+    // An explicit border without a width keeps the table rule's own (one slide pixel).
+    const width = border?.width != null ? border.width * scale : 1;
     if (width === 0) return [];
     const stroke = border?.color == null
       ? defaultColor
@@ -1868,7 +1929,7 @@ function renderDiagram(item, box, bound, options) {
 function renderChart(item, box, bound, options) {
   // Catalog chart types preview the native
   // construct opf-pptx exports; other ids keep the legacy single-series preview.
-  const rendered = renderCatalogChart(item, box, bound, options, { tag, traceAttrs, stableNumber, renderTextBox, reportDiagnostic });
+  const rendered = renderCatalogChart(item, box, bound, options, { tag, traceAttrs, stableNumber, renderTextBox, reportDiagnostic, resolveColorRef: (value, fallback) => resolveColorRef(value, bound, fallback) });
   if (rendered) return rendered;
   const chart = item.value ?? {};
   const chartType = chart.type ?? engineDefaults.chartType;
@@ -2256,9 +2317,20 @@ function embeddable(font) {
 // object while its dataUrl is unchanged: the handle's list holds the same objects on every slide, and its URIs run to tens of
 // megabytes.
 const checkedDataUrls = new WeakMap();
+function isFontDataUrl(value) {
+  // The MIME prefix has a fixed maximum length. Scan the unbounded payload without a regexp stack or a suffix copy.
+  // exec's input retains the same coercion (and throwing conversions) as the former whole-URI RegExp.test.
+  const prefix = /^data:font\/(ttf|otf|woff|woff2);base64,/.exec(value);
+  if (!prefix || prefix[0].length === prefix.input.length) return false;
+  for (let index = prefix[0].length; index < prefix.input.length; index++) {
+    const code = prefix.input.charCodeAt(index);
+    if (!((code >= 65 && code <= 90) || (code >= 97 && code <= 122) || (code >= 48 && code <= 57) || code === 43 || code === 47 || code === 61)) return false;
+  }
+  return true;
+}
 function assertEmbeddableFont(font) {
   const valid = typeof font?.family === "string" && !/[\u0000-\u001f"'\\<>;]/.test(font.family) && Number.isInteger(font.weight) && font.weight >= 1 && font.weight <= 1000
-    && (checkedDataUrls.get(font) === font.dataUrl || /^data:font\/(ttf|otf|woff|woff2);base64,[A-Za-z0-9+/=]+$/.test(font.dataUrl));
+    && (checkedDataUrls.get(font) === font.dataUrl || isFontDataUrl(font.dataUrl));
   if (!valid) throw new OPFRenderError("invalid-embedded-font", "Embedded fonts require a plain family name, valid weight, and a font data URI.");
   checkedDataUrls.set(font, font.dataUrl);
 }
@@ -2300,9 +2372,8 @@ function trimRichLineEdges(line,textMeasurement) {
   return {...line,fragments,width:x};
 }
 
-function renderRichLines(value,fit,box,bound,config) {
-  for (const run of value) assertXmlText(typeof run === 'string' ? run : run.text, config.path);
-  const logicalAlignment=fit.placement?.alignment??config.align??bound.geometry.design.contentAlignment;
+function richLineContext(value,fit,bound,config) {
+  const logicalAlignment=fit.placement?.alignment??config.align??itemAlignment(bound.geometry.design.contentAlignment);
   // Each line takes its paragraph's direction from core (every wrapped line shares it) and its physical edge from that.
   const lineAlignment=index=>fit.placement?.lines[index]?.alignment??physicalAlignment(logicalAlignment,fit.directions?.[index]);
   // A rich quote body draws its quotation marks inside the first and last run; config.textOffset (-1) keeps every traced offset on the authored text.
@@ -2313,21 +2384,30 @@ function renderRichLines(value,fit,box,bound,config) {
   // shape adjacent runs naturally inside each estimated line instead of turning
   // those estimates into visible gaps. Supplied measurements keep exact origins.
   const naturalFlow=!config.options.textMeasurement?.measure&&!fit.placement;
+  return {lineAlignment,runOffsets,richRtl,naturalFlow};
+}
+
+function richLineGeometry(sourceLine,lineIndex,fit,box,bound,alignment,rtl,measurement) {
+  const edgeTrim=rtl&&alignment==='right'?trimRichLineEdges(sourceLine,measurement):null;
+  const line=edgeTrim??sourceLine,placed=fit.placement?.lines[lineIndex];
+  const lineShift=bound.scriptFonts?baselineShift(...line.fragments.filter(fragment=>fragment.kind!=='tab'&&fragment.text).map(fragment=>bound.scriptFonts.plan(fragment.text,fragment.style))):0;
+  const shiftPx=lineShift*Math.max(fit.fontSize,...line.fragments.map(fragment=>fragment.fontSize));
+  return {edgeTrim,line,placed,baseline:(placed?.baseline??box.y+line.baseline)-shiftPx};
+}
+
+function renderRichLines(value,fit,box,bound,config) {
+  for (const run of value) assertXmlText(typeof run === 'string' ? run : run.text, config.path);
+  const {lineAlignment,runOffsets,richRtl,naturalFlow}=richLineContext(value,fit,bound,config);
   const hasTabs=fit.richLines.some(line=>line.fragments.some(fragment=>fragment.kind==='tab'));
   const content=fit.richLines.map((sourceLine,lineIndex)=>{
     const alignment=lineAlignment(lineIndex);
     const sourceFirst=sourceLine.fragments[0],rtl=fit.directions?fit.directions[lineIndex]==='rtl':richRtl(sourceFirst?runOffsets[sourceFirst.runIndex]+sourceFirst.start:0);
-    // PowerPoint ignores whitespace at either edge of a right-aligned right-to-left line, so the glyph edge stays on the box edge (RR-05).
-    const edgeTrim=rtl&&alignment==='right'?trimRichLineEdges(sourceLine,config.options.textMeasurement):null;
-    const line=edgeTrim??sourceLine;
+    // Shared with text list markers, including the actual post-trim policy plan.
+    const {edgeTrim,line,placed,baseline}=richLineGeometry(sourceLine,lineIndex,fit,box,bound,alignment,rtl,config.options.textMeasurement);
     const lineHasTab=line.fragments.some(fragment=>fragment.kind==='tab');
     const flow=naturalFlow&&!lineHasTab;
     const offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
-    const placed=fit.placement?.lines[lineIndex];
-    // RR-38: a line with runs in a policy replacement (Arabic Typesetting) takes PowerPoint's baseline of the real font, above core's.
-    const lineShift=bound.scriptFonts?baselineShift(...line.fragments.filter(fragment=>fragment.kind!=='tab'&&fragment.text).map(fragment=>bound.scriptFonts.plan(fragment.text,fragment.style))):0;
-    const shiftPx=lineShift*Math.max(fit.fontSize,...line.fragments.map(fragment=>fragment.fontSize));
-    const originX=placed?placed.x+(edgeTrim?sourceLine.width-line.width:0):box.x+offset,baseline=(placed?.baseline??box.y+line.baseline)-shiftPx;
+    const originX=placed?placed.x+(edgeTrim?sourceLine.width-line.width:0):box.x+offset;
     const firstFragment=line.fragments[0];
     const renderFragment=(fragment,asFlow,edges={})=>{
     const run=fragment.run;
@@ -2349,7 +2429,17 @@ function renderRichLines(value,fit,box,bound,config) {
     const measuredLine=!asFlow&&!naturalFlow&&fragment.kind!=='tab'&&fragment.width>0;
     // A right-to-left fragment draws without its trailing white space, after that white space's measured advance (rtlTrailingSpace).
     const trail=rtl&&measuredLine&&fragment.kind!=='marker'?rtlTrailingSpace(fragment.text):'';
-    let gap=0;
+    // RR-105: an underline, link or strikethrough ends with the line's last visible character, as PowerPoint draws it: a decorated fragment
+    // at the end of a left-to-right line draws without its trailing white space (it has nothing after it), and white space alone there
+    // draws undecorated (measured or flowing: nothing after it is visible).
+    const decorated=fragment.kind!=='marker'&&fragment.kind!=='tab'&&(run.underline||linked||run.strikethrough);
+    const atLineEnd=decorated&&!rtl&&line.fragments.slice(line.fragments.indexOf(fragment)+1).every(next=>next.kind!=='marker'&&!/\S/u.test(next.text));
+    const endTrail=atLineEnd?rtlTrailingSpace(fragment.text):'',blankEnd=atLineEnd&&!/\S/u.test(fragment.text);
+    let gap=0,endGap=0;
+    if(endTrail){
+      const measure=textWidthMeasurer(fragment.style,config.options.textMeasurement),full=measure(fragment.text,fragment.fontSize);
+      endGap=full>0?Math.min(fragment.width,Math.max(0,fragment.width*(1-measure(fragment.text.slice(0,-endTrail.length),fragment.fontSize)/full))):0;
+    }
     if(trail){
       const measure=textWidthMeasurer(fragment.style,config.options.textMeasurement),full=measure(fragment.text,fragment.fontSize);
       gap=full>0?Math.min(fragment.width,Math.max(0,fragment.width*(1-measure(fragment.text.slice(0,-trail.length),fragment.fontSize)/full))):0;
@@ -2359,7 +2449,7 @@ function renderRichLines(value,fit,box,bound,config) {
     // LH-32: a tracked run (an eyebrow) keeps its natural advance: its letter spacing is in core's width, and a textLength would leave the
     // trailing spacing to each rasterizer's own reading.
     const tracked=fragment.kind!=='tab'&&!!fragment.style.tracking;
-    const drawnText=styledText(trail?fragment.text.slice(0,-trail.length):fragment.text,fragment.style),drawnWidth=fragment.width-gap;
+    const drawnText=styledText(trail?fragment.text.slice(0,-trail.length):endTrail?fragment.text.slice(0,-endTrail.length):fragment.text,fragment.style),drawnWidth=fragment.width-gap-endGap;
     // FA-13: an inline code run falls back to a monospace face, and a run with its own language declares it.
     const runLang=fragment.kind!=='tab'&&fragment.style.lang?(bound.scriptFontsFor?.(fragment.style.lang)?.profile.bcp47??fragment.style.lang):undefined;
     const scripted=fragment.kind==='tab'?{content:escapeText(fragment.text)}:scriptLine(drawnText,fragment.style,bound,run.code===true?'monospace':bound.design.fontScheme.type,{rtl:rtl&&!asFlow,numbers:rtl&&run.code!==true,
@@ -2370,9 +2460,13 @@ function renderRichLines(value,fit,box,bound,config) {
     // RR-34: a citation/footnote marker is generated text (no source range): it is traced as a marker
     // segment without text offsets, so editors never read it as part of the run, and it is not linked.
     const marker=fragment.kind==='marker';
-    const rendered=tag(asFlow?'tspan':'text',{...(runLang?{lang:runLang,'xml:lang':runLang}:{}),...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end-trail.length,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance&&!tracked?stableNumber(drawnWidth):undefined,lengthAdjust:fixedAdvance&&!tracked?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'letter-spacing':fragment.kind!=='tab'&&fragment.style.tracking?stableNumber(fragment.style.tracking*fragment.fontSize):undefined,'text-decoration':marker?undefined:[run.underline||linked?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
-    if(linked)return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
-    return rendered;
+    const rendered=tag(asFlow?'tspan':'text',{...(runLang?{lang:runLang,'xml:lang':runLang}:{}),...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end-trail.length-endTrail.length,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance&&!tracked?stableNumber(drawnWidth):undefined,lengthAdjust:fixedAdvance&&!tracked?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'letter-spacing':fragment.kind!=='tab'&&fragment.style.tracking?stableNumber(fragment.style.tracking*fragment.fontSize):undefined,'text-decoration':marker||blankEnd?undefined:[run.underline||linked?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
+    // RR-105 (2026-11-13): with a trace, the white space cut from a decorated fragment at a line end keeps a node of its own, undecorated
+    // and outside the link, so every source offset still has a traced node whose text is its source text (an editor selects by offset;
+    // a selection ending after that space found no node). Without a trace the output is unchanged.
+    const cutSpace=config.options.trace&&endTrail&&!marker?tag(asFlow?'tspan':'text',{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.end-endTrail.length,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end,'data-opf-segment':fragment.kind,...(asFlow?{}:{x:stableNumber(originX+fragmentX+gap+drawnWidth),y:position.y}),'xml:space':'preserve','font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,fill:runFill},escapeText(endTrail)):'';
+    if(linked)return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered)+cutSpace;
+    return rendered+cutSpace;
     };
     if(naturalFlow&&lineHasTab) {
       const chunks=[];let textChunk=[];
@@ -2388,7 +2482,7 @@ function renderRichLines(value,fit,box,bound,config) {
     if(!flow)return fragments.join('\n');
     const x=alignment==='right'?box.x+box.width:alignment==='center'?box.x+box.width/2:box.x;
     const first=line.fragments[0];
-    return tag('text',{x:stableNumber(x),y:stableNumber(box.y+line.baseline-shiftPx),'text-anchor':alignment==='right'?'end':alignment==='center'?'middle':'start','xml:space':'preserve','font-family':fontStack(first?.style.fontFamily??config.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(first?.fontSize??fit.fontSize),'font-weight':first?.style.fontWeight??config.fontWeight??400,'font-style':first?.style.italic?'italic':undefined,[NO_POLICY_FEATURES]:true},fragments.join(''));
+    return tag('text',{x:stableNumber(x),y:stableNumber(baseline),'text-anchor':alignment==='right'?'end':alignment==='center'?'middle':'start','xml:space':'preserve','font-family':fontStack(first?.style.fontFamily??config.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(first?.fontSize??fit.fontSize),'font-weight':first?.style.fontWeight??config.fontWeight??400,'font-style':first?.style.italic?'italic':undefined,[NO_POLICY_FEATURES]:true},fragments.join(''));
   });
   let cursor=0;
   const whole=value.map(run=>typeof run==='string'?run:run.text).join('');
@@ -2426,7 +2520,7 @@ function renderTextBox(text, box, bound, config) {
   const totalHeight = fit.lines.length * fit.lineHeight;
   const startY = config.verticalAlign === "middle"
     ? box.y + Math.max(0, (box.height - totalHeight) / 2) + size : box.y + size;
-  const logicalAlignment=fit.placement?.alignment??config.align??bound.geometry.design.contentAlignment;
+  const logicalAlignment=fit.placement?.alignment??config.align??itemAlignment(bound.geometry.design.contentAlignment);
   const type = config.fontFamily === bound.design.fonts.code ? "monospace" : bound.design.fontScheme.type;
   const source = String(text ?? ""), boxRtl = paragraphRtl(bound, source);
   // LH-76: one part of a split "Topic: qualifier" title traces its source ranges in the authored title, the value at its path.
@@ -2468,10 +2562,18 @@ function renderTextBox(text, box, bound, config) {
     const start=tabs||positioned;
     // LH-32: core spaces an eyebrow's letters between characters, so its last character draws with no spacing after it: rasterizers
     // differ on whether a trailing spacing counts toward a middle or end anchor.
-    if(style.tracking&&!start)content=untrackLast(content);
+    // LH-189: display tracking (negative) keeps the line one run, so its last character keeps its kerning with the one before it (a tspan
+    // split there drops the pair's kerning). The spacing after its last character does not count toward its anchor in resvg, and the
+    // outlined text and the PDF anchor it the same way (pdf-text).
+    if(style.tracking>0&&!start)content=untrackLast(content);
+    // opf#1322: a browser counts that trailing spacing, so a centered or end-aligned display line drew half or one spacing to the right
+    // there (3.8 px on a 252 px figure). Where the line was measured with the host's real faces, core's own start is exact in every
+    // rasterizer, so the line starts there instead of hanging from its middle or end. Estimated widths keep the anchor: the shaper's
+    // width differs from core's there, and the anchor keeps the edge.
+    const exactStart=!start&&factor>0&&style.tracking<0&&!rtl&&!trimWidth&&!!config.options.textMeasurement?.measure&&(placed?.width>0||sourceLine?.width>0);
     return tag("text", {
-    x: stableNumber(tabs?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
-    "text-anchor": start?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),
+    x: stableNumber(tabs||exactStart?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
+    "text-anchor": start||exactStart?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),
     "font-size": stableNumber(adjustedFontSize(size,sizeAdjust)), "font-weight": style.fontWeight, "font-style": style.italic ? "italic" : undefined, fill: config.fill,
     // LH-32: an eyebrow (the tag, a label core sets as one) draws its capitals with core's letter spacing, as core measured it, at its
     // natural advance (no textLength: rasterizers differ on whether the spacing after the last letter counts toward it).
@@ -2480,6 +2582,9 @@ function renderTextBox(text, box, bound, config) {
     textLength:!start&&placed?.width>0&&!style.tracking?stableNumber(placed.width-trimWidth):undefined,lengthAdjust:!start&&placed?.width>0&&!style.tracking?'spacingAndGlyphs':undefined,
     ...traceAttrs(config.options, config.path),
     ...(config.options.trace&&sourceLine?{'data-opf-source-start':sourceOffset+sourceLine.start,'data-opf-source-end':sourceOffset+sourceLine.end,'data-opf-source-next-start':sourceOffset+sourceLine.nextStart,'data-opf-line-boundary':sourceLine.boundary}:{}),
+    // opf#1322: a line that starts at core's x still says how it is aligned and where its anchor point is (text-anchor no longer does):
+    // an editor lays its input over the line from them, and a reader of the SVG compares them with the native export.
+    ...(exactStart?{'data-opf-anchor':anchor,'data-opf-anchor-x':stableNumber(placed?placed.x+placed.width*factor:x)}:{}),
   }, content);
   });
   return tag("g", { ...traceAttrs(config.options, config.path),
@@ -2615,9 +2720,9 @@ deckInternals.openDeck = (input, options = {}) => {
       const slideContext = resolveContext(presentation, index, { presentation, options: drawn });
       return resolveDesign(presentation, slideContext.slide, slideContext);
     },
-    bind(index, textMeasurement = drawn.textMeasurement) {
+    bind(index, textMeasurement = drawn.textMeasurement, {mapInputFamily, resolveInputStyle} = {}) {
       measurements[index] = textMeasurement;
-      resolved.slides[index] = bindSlide(presentation, index, { presentation, options: { ...drawn, textMeasurement } });
+      resolved.slides[index] = bindSlide(presentation, index, { presentation, options: { ...drawn, textMeasurement }, mapInputFamily, resolveInputStyle });
     },
     render(index) { return renderResolvedSlide(resolved, index, { ...drawn, textMeasurement: measurements[index] }); },
   };

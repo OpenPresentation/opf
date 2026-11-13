@@ -65,7 +65,7 @@ export function listPayloadAt(presentation, path) {
   return undefined;
 }
 
-const isRegionKey = (key) => /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:left|center|right)(?:\+(?:left|center|right))*)?|(?:left|center|right)(?:\+(?:left|center|right))*)$/.test(key);
+const isRegionKey = (key) => /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/.test(key);
 
 /** Every list (`items` or `bullets`) of a slide: its path, label, entry count and whether it is numbered. */
 export function findNumberableLists(presentation, slideIndex) {

@@ -36,11 +36,20 @@ export interface ImageResolverContext {
 }
 
 export interface MediaProvenanceDiagnostic { code: "media-provenance-omitted"; path: string; message: string }
-/** An opt-in native body could not represent this payload; current measured shapes were retained. */
+/**
+ * An opt-in native body could not represent this payload, or (any mode, RR-105) a wrapped title could be neither a native wrapped title
+ * nor one title of fixed lines; current measured shapes were retained.
+ */
 export interface NativeBodyFallbackDiagnostic {
   code: "native-body-fallback";
   path: string;
-  reason: "complex-composition" | "multi-column" | "unsupported-list" | "annotated-text" | "unsupported-text" | "overflow";
+  reason: "complex-composition" | "multi-column" | "unsupported-list" | "annotated-text" | "unsupported-text" | "overflow" | "tight-wrap" | "font-metrics" | "hard-break" | "mixed-direction" | "line-pitch" | "line-placement";
+  message: string;
+}
+/** Measured native text could not be split with complete ownership evidence; the original measured line or scalar was retained. */
+export interface NativeFragmentUnavailableDiagnostic {
+  code: "native-fragment-unavailable" | "native-scalar-fragment-unavailable";
+  path: string;
   message: string;
 }
 /** The chart data cannot be plotted, so a placeholder frame stands in for the chart. */
@@ -82,10 +91,11 @@ export interface SvgSanitizedDiagnostic { code: "svg-sanitized"; path: string; m
  *   and a border to an SVG picture, and those stay native);
  * - `border-dot`: a dotted table cell border is PowerPoint's square dot (one width on, one off); the preview leaves two widths between dots;
  * - `pattern-preset`: an engine-defined pattern preset (`diagStripe`) is its closest DrawingML preset (`wdUpDiag`);
- * - `image-animation`: an animated WebP becomes a still PNG of its first frame under `imageFormat: "compatible"`.
+ * - `image-animation`: an animated WebP becomes a still PNG of its first frame under `imageFormat: "compatible"`;
+ * - `funnel-label-color`: PowerPoint can ignore the written native funnel label color and choose its own contrast color.
  * The skill `opf-export` lists every mapping, including the ones that report another code or none.
  */
-export interface ExportLossyDiagnostic { code: "export-lossy"; feature: "svg-rasterized" | "border-dot" | "pattern-preset" | "image-animation"; path: string; message: string }
+export interface ExportLossyDiagnostic { code: "export-lossy"; feature: "svg-rasterized" | "border-dot" | "pattern-preset" | "image-animation" | "funnel-label-color"; path: string; message: string }
 /** LH-28, `typefaces: "safe"`: an authored family written as its Office-safe family (`replacement`), once per family; `path` is `""`. */
 export interface TypefaceReplacedDiagnostic { code: "typeface-replaced"; path: string; family: string; replacement: string; message: string }
 /**
@@ -94,7 +104,7 @@ export interface TypefaceReplacedDiagnostic { code: "typeface-replaced"; path: s
  * a chartex chart type was written as a clustered column chart (`chartex-fallback`) and a one-column histogram was binned into counts
  * (`histogram-binned`).
  */
-export interface ChartDataAdaptedDiagnostic { code: "chart-data-adapted"; path: string; message: string; adaptation: "histogram-binned" | "row-numbers" | "series-dropped" | "chartex-fallback" }
+export interface ChartDataAdaptedDiagnostic { code: "chart-data-adapted"; path: string; message: string; adaptation: "histogram-binned" | "row-numbers" | "series-dropped" | "chartex-fallback" | "signed-pareto-combo" }
 /** With `chartex: "native"`, a map chart (`world`) is exported as a chartex regionMap (`Requires="cx4"`) without cached geography: PowerPoint must fetch the region shapes from its online map service and shows "There was a problem getting the information for your map chart" with an empty chart until it does. */
 export interface ChartMapGeodataDiagnostic { code: "chart-map-geodata"; path: string; message: string }
 /** RR-54: chart values that core `chartNumber` rejects (not a number or a plain decimal string) were exported as gaps; one per chart, with their count. */
@@ -139,7 +149,7 @@ export interface ToPptxOptions {
   /**
    * SH-07: how diagrams are written. "shapes" (default) writes a diagram of a family in core's DIAGRAM_SHAPE_FAMILIES as one group of
    * native shapes, connectors and text built from the preview's own drawing (pele's laid-out geometry), with `OPF_DIAGRAM_V1` on the group
-   * so import reads the Mermaid source back; any other diagram (a family not compared yet, right-to-left text, a part with no native
+   * so import reads the Mermaid, DOT or PlantUML source back; any other diagram (a family not compared yet, right-to-left text, a part with no native
    * form) stays a picture and reports `diagram-shapes-unavailable` (info). "picture" writes every diagram as one native SVG picture over
    * its PNG fallback, the default of earlier releases.
    */
@@ -156,12 +166,15 @@ export interface ToPptxOptions {
   imageFormat?: "compatible" | "preserve";
   /**
    * How the chartex chart types (treemap, histogram, pareto, box-and-whisker, waterfall, funnel, world) are exported.
-   * "auto" (default) writes Office 2016 chartex parts (`cx:chartSpace`, style parts, an `mc:AlternateContent` frame with the
-   * clustered column chart as fallback) for the constructs desktop PowerPoint confirmed natively on 2026-09-30 (treemap,
+   * "auto" (default) writes Office 2016 chartex parts (`cx:chartSpace`, style parts, an `mc:AlternateContent` frame whose fallback,
+   * for apps without chartex support, is a picture of OPF's preview of the chart, or the clustered column chart with
+   * `chartex-fallback-picture-unavailable` when the picture cannot be drawn) for the constructs desktop PowerPoint confirmed natively on 2026-09-30 (treemap,
    * histogram, pareto, box-and-whisker, waterfall, funnel) and keeps `world` on the clustered column chart with
    * `chart-data-adapted` (`chartex-fallback`) because the regionMap part, though accepted with `Requires="cx4"`, draws
    * nothing until PowerPoint fetches map data online. Multi-series Pareto also uses editable clustered columns with all series and this diagnostic;
-   * explicit native mode rejects it with unsupported-chart-data before returning bytes. Single-series Pareto stays native.
+   * explicit native mode rejects it with unsupported-chart-data before returning bytes. Single-series Pareto stays native except signed
+   * categorical data, which uses an editable classic combo (descending signed columns and an explicit positive-only cumulative-share
+   * line on a secondary 0–1 axis). Its cumulative values are static after native edits; import returns the sorted/derived combo data.
    * "native" writes supported chartex parts, the map included (reports
    * `chart-map-geodata`). "fallback" writes clustered columns only
    * (`chartex-fallback`, `histogram-binned`), as releases before FF-22b did. Import of chartex parts is always on.
@@ -236,7 +249,7 @@ export interface ToPptxOptions {
    */
   pictureLuminance?: (src: string) => PictureLuminance | undefined;
   /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, and, from core's slide context, `unresolved-reference` (once per reference path) when a layout, theme, colour-scheme or font-scheme reference resolves nowhere (not embedded in the document's `catalogs` and not in a registered catalog): core's engine defaults are drawn instead, and a slide whose layout resolves nowhere, like one with no layout, composes automatically. None of them refuses the export unless `strictReferences` is set. */
-  onDiagnostic?: (diagnostic: LayoutDiagnostic | UnresolvedReferenceDiagnostic | MediaProvenanceDiagnostic | NativeBodyFallbackDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | ExportLossyDiagnostic | TypefaceReplacedDiagnostic | VariableExampleUsedDiagnostic | DiagramShapesUnavailableDiagnostic) => void;
+  onDiagnostic?: (diagnostic: LayoutDiagnostic | UnresolvedReferenceDiagnostic | MediaProvenanceDiagnostic | NativeBodyFallbackDiagnostic | NativeFragmentUnavailableDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | ExportLossyDiagnostic | TypefaceReplacedDiagnostic | VariableExampleUsedDiagnostic | DiagramShapesUnavailableDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;
@@ -496,6 +509,10 @@ export interface PptxTextSignal {
   bulletedParagraphs?: number;
   anchor?: "top" | "middle" | "bottom";
   autofit?: "shrink" | "resize" | "none";
+  /** Saved body scale in percent when below 100; run sizes already include it. */
+  fontScalePct?: number;
+  /** Saved percentage-point reduction; lineSpacingPct includes it, or is omitted if the result would be negative. */
+  lineSpacingReductionPct?: number;
   wrap?: "none";
   vertical?: string;
   columns?: number;

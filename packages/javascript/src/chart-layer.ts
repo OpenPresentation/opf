@@ -24,6 +24,7 @@ import type {ChartLayerRows} from './chart-rows.js';
 import type {ChartLayerDoughnut, ChartLayerReferences, ChartLayerStack, ChartLayerValueList, ChartLayerWaterfall} from './chart-marks.js';
 import type {ChartLayerHistogram} from './chart-histogram.js';
 import type {ChartNumericAxes} from './chart-numeric-axes.js';
+import {chartRadarLayout, type ChartLayerRadar} from './chart-radar.js';
 
 /** A small chart has at most this many series (LH-03). */
 export const SMALL_CHART_MAX_SERIES = 2;
@@ -121,10 +122,12 @@ export interface ChartLayer {
   doughnut?: ChartLayerDoughnut;
   /** LH-109: a stacked column or area chart's values inside its segments and series names beside its last column (chart-marks.ts). */
   stack?: ChartLayerStack;
-  /** LH-110: the reference line and the period band the slide title names (chart-marks.ts). */
+  /** Explicit numeric references and their independent authored strokes (chart-references.ts). */
   references?: ChartLayerReferences;
   /** LH-160: a histogram's bin count and edge decimals, and whether its data labels fit (chart-histogram.ts). */
   histogram?: ChartLayerHistogram;
+  /** RR-105: a radar's legend placement and value axis (chart-radar.ts). */
+  radar?: ChartLayerRadar;
 }
 
 /** LH-105: one series name at the end of its line. Lengths are slide pixels. */
@@ -227,8 +230,9 @@ export function chartHeaderCaption(chart: unknown, columns: readonly string[], l
  * The label text of a value as the engines draw a default value label: the column's number format, else the General form. LH-141: with
  * `group` (the column has no format and groups its thousands, `columnGroup`) a whole number of four digits or more is grouped by the language.
  */
-export function valueLabel(value: number, format: string | undefined, group?: {language?: string}): string {
-  return chartLabelText({value: format !== undefined ? formatDataNumber(value, format) : formatChartLabelNumber(value, group)}, ['value']);
+export function valueLabel(value: number, format: string | undefined, group?: {language?: string}, language = group?.language): string {
+  // LH-106: in the language's numbering system, grouped or not.
+  return chartLabelText({value: format !== undefined ? formatDataNumber(value, format, language) : formatChartLabelNumber(value, group, language)}, ['value']);
 }
 
 const groupColumns = new WeakMap<object, Map<number, boolean>>();
@@ -247,7 +251,7 @@ export function columnGroups(data: ResolvedChartData, column: number): boolean {
 /** LH-141: a value of the data's column `column` as its default label prints it: the column's format, else the General form (grouped by `language` where `columnGroups`). */
 export function columnValueLabel(data: ResolvedChartData, column: number, value: number, language?: string): string {
   const format = data.ok && typeof data.formats[column] === 'string' && data.formats[column] !== '' ? data.formats[column] : undefined;
-  return valueLabel(value, format, columnGroups(data, column) ? {language} : undefined);
+  return valueLabel(value, format, columnGroups(data, column) ? {language} : undefined, language);
 }
 
 /**
@@ -372,11 +376,13 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
   }
   if (!rows) return undefined;
   const caption = text ? {text, box: {x: left, y: box.y + pad, width: captionWidth, height: lineHeight}} : undefined;
-  // Right to left, every part mirrors inside the chart box.
+  // RTL mirrors the caption and overall legend box. Native chart legends keep authored series order inside that box,
+  // including wrapped rows; mirroring each entry separately reverses the preview while PowerPoint retains source order.
   const mirror = (part: Box): Box => rtl ? {...part, x: box.x + box.width - (part.x - box.x) - part.width} : part;
+  const legendBox = legend ? mirror(legend.box) : undefined;
   return {
     ...(caption ? {caption: {text: caption.text, box: mirror(caption.box)}} : {}),
-    ...(legend ? {legend: {box: mirror(legend.box), entries: legend.entries.map(entry => ({...entry, box: mirror(entry.box)}))}} : {}),
+    ...(legend && legendBox ? {legend: {box: legendBox, entries: legend.entries.map(entry => ({...entry, box: rtl ? {...entry.box, x: legendBox.x + entry.box.x - legend.box.x} : entry.box}))}} : {}),
     height: pad + rows * lineHeight,
   };
 }
@@ -414,6 +420,14 @@ export function chartBarGeometry(band: number, seriesCount: number, grouping: st
 }
 
 /**
+ * LH-176/SH-25: source series within one native bar cluster. A reversed vertical category axis also reverses the physical
+ * left-to-right series slots; horizontal categories keep their top-to-bottom series order. Stacks occupy one slot in either direction.
+ */
+export function chartBarSeriesOffset(bar: ChartBarGeometry, series: number, count: number, reversedColumn = false): number {
+  return bar.clustered ? (reversedColumn ? count - 1 - series : series) * bar.width : 0;
+}
+
+/**
  * LH-03, LH-142: true when the chart draws no value axis: no tick labels, gridlines or value axis line, because its labels carry the values
  * (a small chart's value labels, a horizontal stacked bar chart's segment values). Both engines read this one answer.
  */
@@ -426,7 +440,8 @@ export function chartLayer(chart: unknown, data: ResolvedChartData, geometry: Ch
   const header = chartHeader(chart, data, geometry);
   const small = smallChart(chart, data, header ? {...geometry, box: {...geometry.box, y: geometry.box.y + header.height, height: Math.max(1, geometry.box.height - header.height)}} : geometry);
   const rings = chartRingLabels(chart, data);
-  return small || header || rings ? {...(small ? {small} : {}), ...(header ? {header} : {}), ...(rings ? {rings} : {})} : undefined;
+  const radar = chartRadarLayout(chart, data, geometry);
+  return small || header || rings || radar ? {...(small ? {small} : {}), ...(header ? {header} : {}), ...(rings ? {rings} : {}), ...(radar ? {radar} : {})} : undefined;
 }
 
 /**

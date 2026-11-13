@@ -139,7 +139,7 @@ test('composeSlide numbers items and bullets from the payload field, in every pl
     root: {items: ['a', 'b'], numbering: 'alpha-upper'},
     bullets: {bullets: ['a', 'b'], numbering: {style: 'roman-lower', start: 4, suffix: 'paren-both'}},
     block: {blocks: [{items: ['a', 'b'], numbering: 'arabic'}, {items: ['x', 'y']}]},
-    region: {left: {items: ['a', 'b'], numbering: ['arabic']}, right: {items: ['x']}},
+    region: {start: {items: ['a', 'b'], numbering: ['arabic']}, end: {items: ['x']}},
     sibling: {items: ['a'], bullets: ['b'], numbering: 'arabic'},
   };
   const markers = slide => composeSlide(slide).items.filter(item => item.text?.listEntries).map(item => item.text.listEntries.map(e => e.marker.text));
@@ -178,7 +178,7 @@ test('validation: numbering forms are accepted and bad ones are rejected', () =>
     assert.ok(errors({items: ['a'], numbering}).length > 0, JSON.stringify(numbering));
   assert.deepEqual(errors({bullets: ['a'], numbering: 'arabic'}), []);
   assert.deepEqual(errors({blocks: [{items: ['a'], numbering: 'arabic'}]}), []);
-  assert.deepEqual(errors({left: {bullets: ['a'], numbering: 'alpha-lower'}}), []);
+  assert.deepEqual(errors({start: {bullets: ['a'], numbering: 'alpha-lower'}}), []);
   assert.deepEqual(errors({items: [{text: 'a', start: 3}, {text: 'b'}], numbering: 'arabic'}), []);
   assert.ok(errors({items: [{text: 'a', start: 0}], numbering: 'arabic'}).length);
 });
@@ -188,7 +188,7 @@ test('validation: numbering needs a list, and counts stay inside the native rang
   assert.deepEqual(messages({text: 'a', numbering: 'arabic'}), ["/slides/0/numbering: numbering applies to 'items' or 'bullets'; this payload has neither"]);
   assert.deepEqual(messages({image: 'a.png', numbering: 'arabic'}).length, 1);
   assert.deepEqual(messages({blocks: [{text: 'a'}], numbering: 'arabic'}).filter(m => m.includes('numbering applies')).length, 1, 'a group cannot be numbered');
-  assert.deepEqual(messages({left: {text: 'a', numbering: 'arabic'}}), ["/slides/0/left/numbering: numbering applies to 'items' or 'bullets'; this payload has neither"]);
+  assert.deepEqual(messages({start: {text: 'a', numbering: 'arabic'}}), ["/slides/0/start/numbering: numbering applies to 'items' or 'bullets'; this payload has neither"]);
   const tooFar = messages({items: ['a', 'b', 'c'], numbering: {start: 32766}});
   assert.equal(tooFar.length, 1);
   assert.match(tooFar[0], /\/slides\/0\/items: numbering counts up to 32768, past the native limit of 32767/);

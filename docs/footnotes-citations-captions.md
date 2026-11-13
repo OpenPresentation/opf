@@ -12,7 +12,7 @@ and the editor. A deck without the new fields validates, composes, previews and 
 - `references` (presentation root): `[{ id, text, url? }]`; `text` is a string or `TextRun[]`.
 - `caption` on an `image`, `chart`, `table` or `video` payload (a block, a promoted region payload, or the
   slide root when it holds exactly one of those payloads): a string, `TextRun[]`, or
-  `{ text, position?: "below" | "above", align?: "left" | "center" | "right" }` (defaults `below`, `left`).
+  `{ text, position?: "below" | "above", align?: "start" | "center" | "end" }` (defaults `below`, `start`).
 
 ```json
 {
@@ -61,7 +61,12 @@ a copy); without a presentation the slide numbers from 1 and unresolved ids are 
   glyph size is `CITATION_MARKER_SCALE` (2/3) of the run's (the exporter writes the run's own size; PowerPoint draws 2/3 of it) and it is raised by `CITATION_MARKER_RAISE`
   (0.3) of the run's size, which is exactly DrawingML `baseline="30000"` through the exporter's existing
   `-baselineShift / nominalSize * 2000` formula (PowerPoint's own superscript button writes 30000). An
-  existing `superscript: true` run keeps its larger raise (`baseline="50000"`).
+  existing `superscript: true` run keeps its larger raise (`baseline="50000"`). An empty run with a
+  marker (`{ "text": "", "cite": "a" }`, RR-105) draws its marker where the run stands: after the text
+  before it (at a line break, at the end of the earlier line), or at the start of the text or of a
+  paragraph. Natively it is the same superscript run after the text before it, and the footnote rule's
+  tag lists it (`detached`), so import gives the empty run back. Validate accepts an empty marked run
+  without a finding: the marker is drawn, so nothing is lost.
 - **Footnote area** (`layoutFootnotes`, `geometry.footnotes`, algorithm `footnote-area-v1`). A slide
   whose runs carry markers gets an area directly above the footer band (or the bottom padding), with the
   content area's left edge and width: a 1 px rule, half a line of space, then `<n> <text>` for each note

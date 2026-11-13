@@ -1,0 +1,13 @@
+# Current native-type diagnostic gate
+
+Source `84e4a670d5fcc7ec9b218650d51818d8f13c8dac`, base `fd1b25feab8a2c8681f95c3efdf84e4cb38c9902`: all 11 selected mapped steps PASS in 852.517 seconds, including all 317 PPTX scripts (823.5 seconds) and 708 native-tooling tests with 21 actual-PowerShell skips. All 609 compiled product files and clean source/tree remain exact; typecheck is unselected because no TypeScript changed. Eleven selected logs are preserved losslessly in the ZIP.
+
+The chart-type diagnostic preserves returned CLR type and safe primitive/enum value before the unchanged supported-type guard, without adding a COM operation or widening eligibility. A custom throwing formatter stays uncalled. Independent review accepts the explicit getter fault boundaries and immutable third-stage worker derivation; the original worker pins, historical stages and 8,902-byte observer stay exact.
+
+Actual Windows PowerShell runs all 58 managed controls PASS once (1.848 seconds): no Office constructed, Values written or ChartData read. This does not measure the current reference chart's actual COM type; the first native Name attempt remains failed before any Name getter/setter or Save.
+
+The subsequent getter-free treemap attempt passes its complete before-Save semantic/public binding and all 221 descriptor probes, then its one actual Values setter raises NotImplementedException. It has one read-only open and one before SaveCopy; no edited/reopened derivative, Close, Quit or native acceptance. All seven original PNGs exactly match the prior retained attempt. The private raw packet and its 152 manifest entries are independently hash-verified on Mac. No ChartsEx fallback, getter, Excel activation or blind retry is authorized by that failure.
+
+**Vetoable qualification selection:** use a distinct closed profile for the suite's existing classic-column histogram adaptation for one numeric edit. Preserve `nativeTypeQualified=false`, the actual adaptation diagnostics and the full unchanged seven-chart archive/import requirements. This is not a true-native-histogram or expanded modern-chart editability claim. Actual classic COM type and array-setter persistence remain unqualified; a cache/workbook/formula mismatch must still refuse. Source is being prepared, not accepted by execution.
+
+Owned cleanup is separately authorized after a failed run. The reference cleanup proves and closes only the exact owned file, then fails its post-Close ROT lookup after the application exits; an independent OS-zero observation clears the operational hold without reclassifying the failed cleanup or native attempt. The next reviewed cleanup checks for natural process exit before another ROT lookup. Prior failed receipts remain literal.

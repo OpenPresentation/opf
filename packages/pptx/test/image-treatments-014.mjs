@@ -9,7 +9,7 @@ import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPptx} from '../dist/index.js';
-import {colorHex, schemeRole} from './helpers/scheme-colors.mjs';
+import {clrMapOf, colorHex, schemeRole} from './helpers/scheme-colors.mjs';
 
 const before = JSON.parse(await readFile(new URL('fixtures/image-treatments-0.14.json', import.meta.url), 'utf8'));
 const hero = {src: `data:image/png;base64,${(await readFile(new URL('fixtures/images/treatment-hero.png', import.meta.url))).toString('base64')}`, alt: 'Project-authored posterized landscape with a sun', mediaType: 'image/png'};
@@ -21,17 +21,17 @@ const heading = id => ({title: id.split('-').map(word => word[0].toUpperCase() +
 const SLIDES = {
   'full-bleed': {design: {background: background({overlay: {color: 'dark1', opacity: 0.2}})}},                      // background, crop, overlay
   'text-overlay': {design: {background: background({overlay: {color: 'dark1', opacity: 0.55}})}},
-  'side-by-side': {blocks: [block({fit: 'cover', placement: {edge: 'left', size: 0.46}})]},                           // left 0.46 crop
+  'side-by-side': {blocks: [block({fit: 'cover', placement: {edge: 'start', size: 0.46}})]},                           // left 0.46 crop
   'caption-overlay': {blocks: [block({fit: 'cover', overlay: {color: 'dark1', opacity: 0.75, edge: 'bottom', size: 0.25}})]},
-  'masked-shape': {blocks: [block({fit: 'cover', aspectRatio: 1.1547, shape: 'hexagon', placement: {edge: 'right', inset: true}})]},
-  'circular-crop': {blocks: [block({fit: 'cover', shape: 'ellipse', placement: {edge: 'left', size: 0.4, inset: true}})]},
+  'masked-shape': {blocks: [block({fit: 'cover', aspectRatio: 1.1547, shape: 'hexagon', placement: {edge: 'end', inset: true}})]},
+  'circular-crop': {blocks: [block({fit: 'cover', shape: 'ellipse', placement: {edge: 'start', size: 0.4, inset: true}})]},
   'rounded-card': {blocks: [block({fit: 'cover', shape: 'roundRect', adjust: { adj: 0.05 }, stroke: {color: 'accent5', width: 1}})]},
   duotone: {design: {background: background({recolor: {dark: 'accent1', light: 'light1'}})}},                     // background, crop, duotone
   'background-blur': {design: {contentBox: true, background: background({overlay: {color: 'light1', opacity: 0.4}})}},
   'image-strip': {blocks: [block({fit: 'cover', placement: {edge: 'bottom', size: 0.3}})]},
   'collage-grid': {design: {imageFit: 'cover'}, composition: {mode: 'grid', columns: 2}, blocks: [block({}), block({}), block({}), block({})]},
-  'device-frame': {blocks: [block({fit: 'cover', aspectRatio: 0.5, shape: 'roundRect', adjust: { adj: 0.12 }, stroke: {color: 'dark1', width: 12}, placement: {edge: 'right', inset: true}})]},
-  'cutout-subject': {blocks: [block({fit: 'contain', placement: {edge: 'right'}})]},
+  'device-frame': {blocks: [block({fit: 'cover', aspectRatio: 0.5, shape: 'roundRect', adjust: { adj: 0.12 }, stroke: {color: 'dark1', width: 12}, placement: {edge: 'end', inset: true}})]},
+  'cutout-subject': {blocks: [block({fit: 'contain', placement: {edge: 'end'}})]},
   watermark: {blocks: [block({fit: 'contain', opacity: 0.1, recolor: 'grayscale'})]},
   'cinematic-crop': {design: {background: 'dark1'}, blocks: [block({fit: 'cover', aspectRatio: 2.39})]}
 };
@@ -126,7 +126,8 @@ deck.slides.forEach((slide, index) => {
     // RR-96: the overlay colour is a theme colour (a:schemeClr), so compare what it resolves to and its alpha.
     const fill = overlay['p:spPr']['a:solidFill'];
     assert.ok(schemeRole(fill), `${slide.id} overlay fill is a scheme colour`);
-    assert.equal(colorHex(fill, theme), expected.overlay.fill['a:srgbClr'].val, `${slide.id} overlay colour`);
+    // RR-105: through the slide's own color map, when it has one (a dark overlay makes the picture dark, so the slide takes the dark map).
+    assert.equal(colorHex(fill, theme, clrMapOf(xml)), expected.overlay.fill['a:srgbClr'].val, `${slide.id} overlay colour`);
     assert.equal(fill['a:schemeClr']['a:alpha'].val, expected.overlay.fill['a:srgbClr']['a:alpha'].val, `${slide.id} overlay alpha`);
   } else assert.equal(overlay, undefined, slide.id);
   same++;

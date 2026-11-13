@@ -69,7 +69,7 @@ let checked = 0;
 // ---- A deck-level footer logo: the onLight/onDark asset is chosen per slide, and re-import gives back the reference.
 const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {onLight: wide, onDark: tall}, icon: {onLight: square, onDark: jpg}}};
 {
-  const deck = {organization, design: {background: light, footer: {left: {image: 'var:organization.logo.icon'}, right: {text: '{{slide.number}}'}}}, slides: [
+  const deck = {organization, design: {background: light, footer: {start: {image: 'var:organization.logo.icon'}, end: {text: '{{slide.number}}'}}}, slides: [
     {title: 'On light', text: 'Body copy.'},
     {title: 'On dark', text: 'Body copy.', design: {background: dark}},
     {title: 'On light again', text: 'Body copy.'},
@@ -94,7 +94,7 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
   }
   const reports = [];
   const imported = await fromPptx(output, {onDiagnostic: item => reports.push(item)});
-  assert.deepEqual(imported.design.footer, {left: {image: 'var:organization.logo.icon'}, right: {text: '{{slide.number}}'}}, 'the deck footer returns with the reference');
+  assert.deepEqual(imported.design.footer, {start: {image: 'var:organization.logo.icon'}, end: {text: '{{slide.number}}'}}, 'the deck footer returns with the reference');
   assert.ok(imported.slides.every(slide => slide.design?.footer === undefined), 'no slide overrides the footer');
   assert.deepEqual(imported.organization, organization, 'every shape and tone of the organization logo returns');
   assert.ok(!JSON.stringify(imported.design).includes('data:'), 'no resolved asset is written into the design');
@@ -112,7 +112,7 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
 // ---- A partner logo: another organization's logo in a zone, and as the cover logo through design.logo.
 {
   const partner = {id: 'beta', name: 'Beta', role: 'partner', logo: {full: tall, wordmark: jpg}};
-  const deck = {organization: [organization, partner], design: {background: light, footer: {left: {image: 'var:organization.logo.icon'}, right: {image: 'var:organization.beta.logo.wordmark'}}}, slides: [
+  const deck = {organization: [organization, partner], design: {background: light, footer: {start: {image: 'var:organization.logo.icon'}, end: {image: 'var:organization.beta.logo.wordmark'}}}, slides: [
     {title: 'Cover', layout: 'cover'},
     {title: 'Cover for the partner', layout: 'cover', design: {logo: 'var:organization.beta.logo'}},
     {title: 'Body', text: 'Copy.'},
@@ -191,10 +191,10 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
 // ---- The row layout and the native footer placeholders: a text part beside the logo has a natural-width box; the slide's
 // footer placeholder keeps that box, and the master's spans the zone.
 {
-  const deck = {organization, design: {background: light, footer: {left: {image: 'var:organization.logo.icon', text: 'Confidential'}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'One', text: 'Body.'}, {title: 'Two', text: 'Body.'}]};
+  const deck = {organization, design: {background: light, footer: {start: {image: 'var:organization.logo.icon', text: 'Confidential'}, end: {text: '{{slide.number}}'}}}, slides: [{title: 'One', text: 'Body.'}, {title: 'Two', text: 'Body.'}]};
   const {entries, bytes: output} = await exportDeck(deck);
   const parts = geometry(deck, 0).furniture.parts;
-  const text = parts.find(part => part.field === 'text' && part.zone === 'left'), icon = parts.find(part => part.type === 'image');
+  const text = parts.find(part => part.field === 'text' && part.zone === 'start'), icon = parts.find(part => part.type === 'image');
   assert.ok(text.box.x >= icon.box.x + icon.box.width, 'the text follows the logo in the row');
   const xml = slideXml(entries, 0);
   const placeholder = [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(match => match[0]).find(shape => /<p:ph type="ftr"/.test(shape));
@@ -220,13 +220,13 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
 // with its proportions, and the slide's footer placeholder starts after it at the text's natural width.
 {
   const wordmark = flatPng(400, 50);
-  const deck = {organization: {id: 'acme', name: 'Acme', logo: {full: wide, wordmark}}, design: {background: light, footer: {left: {image: 'var:organization.logo.wordmark', text: 'Confidential'}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'One', text: 'Body.'}]};
+  const deck = {organization: {id: 'acme', name: 'Acme', logo: {full: wide, wordmark}}, design: {background: light, footer: {start: {image: 'var:organization.logo.wordmark', text: 'Confidential'}, end: {text: '{{slide.number}}'}}}, slides: [{title: 'One', text: 'Body.'}]};
   const {entries, bytes: output, diagnostics} = await exportDeck(deck);
   assert.deepEqual(codes(diagnostics, 'text-overflow', 'unresolved-content', ...PROBLEMS), []);
   const parts = geometry(deck, 0).furniture.parts, {width: slideWidth, height: slideHeight} = resolveSlideContext(deck, 0).options;
   // RR-91: the left zone shares the empty centre with the right one: its own column plus half the free column and gutter.
   const gutter = slideWidth * 0.02, column = (slideWidth - 2 * 0.08 * Math.min(slideWidth, slideHeight) - 2 * gutter) / 3, zone = column + (column + gutter) / 2;
-  const logo = parts.find(part => part.type === 'image'), text = parts.find(part => part.field === 'text' && part.zone === 'left');
+  const logo = parts.find(part => part.type === 'image'), text = parts.find(part => part.field === 'text' && part.zone === 'start');
   near(logo.box.width, zone * FURNITURE_IMAGE_SHARE, 'the 8:1 logo is capped at its share of the zone', .01);
   near(text.box.x, logo.box.x + logo.box.width + FURNITURE_GAP, 'the text follows the capped logo', .01);
   const [picture] = furniturePictures(entries, 0);
@@ -247,7 +247,7 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
 
 // ---- A changed or foreign picture is an ordinary image; so is every logo when the organization is not stored.
 {
-  const deck = {organization, design: {background: light, footer: {left: {image: 'var:organization.logo.icon'}}}, slides: [{title: 'One', text: 'Body.'}, {title: 'Two', text: 'Body.'}]};
+  const deck = {organization, design: {background: light, footer: {start: {image: 'var:organization.logo.icon'}}}, slides: [{title: 'One', text: 'Body.'}, {title: 'Two', text: 'Body.'}]};
   const {bytes: output, entries} = await exportDeck(deck);
   // PowerPoint's Change Picture: the same shape and tags, other bytes.
   // RR-72: both slides draw the same icon, so it is drawn once, on the slide master; the swap changes it for both.
@@ -256,7 +256,7 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
   const swapped = zipSync({...entries, [relationshipPath(entries, media.path, media.embed)]: bytes.wide});
   const reports = [];
   const changed = await fromPptx(swapped, {onDiagnostic: item => reports.push(item)});
-  assert.ok(changed.design.footer.left.image?.src?.startsWith('data:image/png'), 'a replaced picture imports as an ordinary image');
+  assert.ok(changed.design.footer.start.image?.src?.startsWith('data:image/png'), 'a replaced picture imports as an ordinary image');
   assert.ok(!JSON.stringify(changed.design).includes('var:organization'), 'and not as the reference');
   assert.deepEqual(codes(reports, 'invalid-furniture-provenance'), []);
   // Provenance off: no manifest, no organization record; references-only: a manifest without the organization.
@@ -280,9 +280,9 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
 
 // ---- A footer logo reference with no logo to draw: nothing is drawn, the reference still returns.
 {
-  const deck = {organization: {id: 'acme', name: 'Acme'}, design: {footer: {left: {image: 'var:organization.logo.icon', text: 'Hello'}}}, slides: [{title: 'One', text: 'Body.'}]};
+  const deck = {organization: {id: 'acme', name: 'Acme'}, design: {footer: {start: {image: 'var:organization.logo.icon', text: 'Hello'}}}, slides: [{title: 'One', text: 'Body.'}]};
   const {entries, bytes: output, diagnostics} = await exportDeck(deck);
-  assert.deepEqual(codes(diagnostics, 'unresolved-content'), ['unresolved-content design.footer.left.image']);
+  assert.deepEqual(codes(diagnostics, 'unresolved-content'), ['unresolved-content design.footer.start.image']);
   assert.equal(pictures(slideXml(entries, 0)).length, 0);
   const imported = await fromPptx(output);
   assert.deepEqual(imported.design.footer, deck.design.footer);

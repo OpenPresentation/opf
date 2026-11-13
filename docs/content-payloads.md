@@ -1,6 +1,6 @@
 # Content Payloads
 
-Slide content lives directly on a slide as a full-slide payload, in layout-agnostic `blocks`, or inside a promoted region key such as `left`, `center+right`, or `top:left`.
+Slide content lives directly on a slide as a full-slide payload, in layout-agnostic `blocks`, or inside a promoted region key such as `start`, `center+end`, or `top:start`.
 
 The slide-level `title`, `subtitle` and `tag` are not payloads, but like `text` and `quote.text` they accept a string or `TextRun[]` (colored words, bold, links, `cite`/`footnote` markers); see [Rich text](rich-text.md#rich-headings-and-quotes).
 
@@ -13,8 +13,8 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `text` | `text` | Plain string or `TextRun[]`. |
 | `bullets` | `text` | Prose bullets: plain talking points, usually `string[]`. |
 | `items` | `list` | Structured list: entries that share a shape or carry a `description`; `string[]` or `ListItem[]`. See [items versus bullets](#items-versus-bullets). |
-| `image` | `image` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
-| `video` | `video` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
+| `image` | `image` | Asset string shorthand or an image object with `src`, optional metadata and `callouts` (plain text panels over the picture). |
+| `video` | `video` | Asset reference shown as a media placeholder; an HTTP(S) source links from the PPTX. No embedded playback. See [Video references](#video-references). |
 | `chart` | `chart` | Chart object with `type` and tabular `data`. |
 | `table` | `table` | Table object with optional `columns` and required `rows`. |
 | `code` | `code` | String shorthand or `Code` object with `source`, `language`, `filename`, and `highlight`. |
@@ -22,6 +22,10 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `quote` | `quote` | String shorthand or `Quote` object with `text` (string or `TextRun[]`), `attribution`, `role`, `photo`, and `source`. |
 | `timeline` | `timeline` | Array shorthand or `Timeline` object with `name`, `description`, and `events`. |
 | `diagram` | `diagram` | Mermaid source string shorthand or `Diagram` object with `source`, `syntax` and `alt`. See [Diagram](#diagram). |
+
+## Video references
+
+A `video` accepts an asset string or an `Asset` object with `src` and optional metadata. The preview draws a media placeholder with a play badge and a caption, not a player. The caption is the video's title, else its source, else "Media"; an `asset:` reference is followed to the registry entry first (a title written on the value wins), so the caption is never the asset id (RR-105). PPTX export writes the same editable shapes and caption, with a hyperlink when the resolved source is HTTP(S); local references remain captions. It does not fetch or embed a video file or create a YouTube/Vimeo player. MP4/WebM sources are references, not playable media inside the exported deck. Keep that limitation beside any video example.
 
 ## Items versus bullets
 
@@ -241,7 +245,7 @@ Core 0.6.0 adds `layoutTable` from `@openpresentation/opf/composition`. It measu
 
 ## Captions
 
-An `image`, `chart`, `table`, `video` or `diagram` payload takes a `caption`: a string, `TextRun[]`, or `{ "text", "position": "below" | "above", "align": "left" | "center" | "right" }` (defaults `below`, `left`). It sits beside the payload field on a block or promoted-region payload, or on the slide root when the root holds exactly one of those payloads; anywhere else it is a `caption-unsupported-payload` error.
+An `image`, `chart`, `table`, `video` or `diagram` payload takes a `caption`: a string, `TextRun[]`, or `{ "text", "position": "below" | "above", "align": "start" | "center" | "end" }` (defaults `below`, `start`). It sits beside the payload field on a block or promoted-region payload, or on the slide root when the root holds exactly one of those payloads; anywhere else it is a `caption-unsupported-payload` error.
 
 ```json
 {
@@ -274,7 +278,7 @@ Code-specific fields are grouped under `code`. A string value is shorthand for `
 
 ## Metric
 
-Metric-specific fields are grouped under `metric`. A string or number value is shorthand for `metric.value`; numeric values stay numeric and are formatted by renderers at display time (LH-141: a numeric `value` of four integer digits or more prints with its thousands grouped by the deck language, "6,240" or "6.240" in German; a string value is printed as written). Use object form when labels, descriptions, units, deltas, trends, or sentiment matter. A `trend` (`up`, `down`, `flat`) draws an arrow before the delta on its line ("↑ +7 pts"), or before the label without a delta, colored with the delta text, in the preview and the PowerPoint export (LH-53); the arrow always points the way the trend does, and its color follows `sentiment` (`positive` green, `negative` red, `neutral` the neutral text color). When `sentiment` is absent up is positive, down is negative and flat is neutral, so set it when the direction is not the verdict: a falling churn, cost or latency is `"trend": "down", "sentiment": "positive"`. Only the trend arrow and the delta text take the color, so `sentiment` has no visible effect on a metric without a `trend`. The trend word is not drawn in any language: it is the arrow's alternative text ("Trend: up") and stays in the source, which is where it is edited (see [dynamic composition](dynamic-composition.md#preview-polish-shared-by-preview-and-export-rr-07)).
+Metric-specific fields are grouped under `metric`. A string or number value is shorthand for `metric.value`; numeric values stay numeric and are formatted by renderers at display time (LH-141: a numeric `value` of four integer digits or more prints with its thousands grouped by the deck language, "6,240" or "6.240" in German; LH-106: every numeric `value` and `delta` is in the language's own digits, "٩٩٩" and "١,٠٠٠" in `ar-SA`, or Latin ones with `ar-SA-u-nu-latn`; a string value is printed as written). Use object form when labels, descriptions, units, deltas, trends, or sentiment matter. A `trend` (`up`, `down`, `flat`) draws an arrow before the delta on its line ("↑ +7 pts"), or before the label without a delta, colored with the delta text, in the preview and the PowerPoint export (LH-53); the arrow always points the way the trend does, and its color follows `sentiment` (`positive` green, `negative` red, `neutral` the neutral text color). When `sentiment` is absent up is positive, down is negative and flat is neutral, so set it when the direction is not the verdict: a falling churn, cost or latency is `"trend": "down", "sentiment": "positive"`. Only the trend arrow and the delta text take the color, so `sentiment` has no visible effect on a metric without a `trend`. The trend word is not drawn in any language: it is the arrow's alternative text ("Trend: up") and stays in the source, which is where it is edited (see [dynamic composition](dynamic-composition.md#preview-polish-shared-by-preview-and-export-rr-07)).
 
 The `metrics` v2 layout accepts metric blocks in its body region and flows them as a grid. For several metrics, use separate `{ "metric": ... }` entries in `blocks`; the content kind and payload key are `metric`. Choosing a layout does not reinterpret existing text as numeric data.
 
@@ -344,7 +348,7 @@ A testimonial with room draws the photo as a tall portrait beside the quote inst
 
 ## Timeline
 
-Timeline-specific fields are grouped under `timeline`. An array value is shorthand for `timeline.events`; use object form when the timeline needs a name or description. Timeline events use `when`, `what`, `description` and `status`. `status` is `done`, `current` or `planned` and marks progress: `done` is a filled marker with normal text, `current` ("we are here") is a ringed marker with a bold label, and `planned` is a hollow outlined marker with muted text. An event without a status draws as a plain filled marker. The connector is drawn in the primary color up to the current event (to the last done one when none is current), and an English deck adds a status word (Done, Current, Planned) under each label when the timeline keeps its size with them. Schedule health (at risk, blocked) is not a status; say it in the event text. See [Dynamic composition](dynamic-composition.md#timeline-internals) for the exact drawing.
+Timeline-specific fields are grouped under `timeline`. An array value is shorthand for `timeline.events`; use object form when the timeline needs a name or description. Timeline events use `when`, `what`, `description` and `status`. `status` is `done`, `current` or `planned` and marks progress: `done` is a filled marker with normal text, `current` ("we are here") is a ringed marker with a bold label, and `planned` is a hollow outlined marker with muted text. An event without a status draws as a plain filled marker. The connector is drawn in the primary color up to the current event (to the last done one when none is current), and a deck with a supported localized vocabulary adds a status word under each label when the timeline keeps its size with them. English uses Done, Current and Planned. Regional variants share their language vocabulary; Chinese scripts have distinct words. Unsupported generated translations keep the status markers and progress without inserting English, and authored event text stays intact. See [localized status words](dynamic-composition.md#localized-timeline-status-words). Schedule health (at risk, blocked) is not a status; say it in the event text. See [Dynamic composition](dynamic-composition.md#timeline-internals) for the exact drawing.
 
 ```json
 {
@@ -385,7 +389,7 @@ A roadmap with progress states:
 
 The [diagrams guide](diagrams.md) covers when to use one, the supported Mermaid families, styling, sizing and export in full; this section is the field reference.
 
-A `diagram` is a diagram written as text: [Mermaid](https://mermaid.js.org) source (Mermaid 12.1 syntax), drawn by the engines in the deck's own fonts and colors. A string is shorthand for `{ "source": value }`; the object form takes `source`, `syntax` (`"mermaid"`, the default and the only one today) and `alt`. It is a root payload, a block or a promoted region, and a region of a layout template that accepts `diagram` takes it. The first line of the source names the diagram type; the built-in families are flowchart, sequence, class, state, ER, gantt, pie, quadrant, mindmap, timeline, journey, xychart, sankey, gitGraph, C4, block, architecture, kanban, packet, radar, treemap, venn, ishikawa, requirement, railroad, wardley, cynefin, treeView, eventmodeling, usecase, swimlane, agentflow and info. ZenUML is not supported. The drawing is done by [pele](https://pele.run) (MIT, no runtime dependencies, synchronous and DOM-free), so the preview, the PDF and the PPTX export need no browser.
+A `diagram` is a diagram written as text: [Mermaid](https://mermaid.js.org) source (Mermaid 12.1 syntax) , a [Graphviz DOT](diagrams.md#graphviz-dot) graph or a [PlantUML](diagrams.md#plantuml) diagram, drawn by the engines in the deck's own fonts and colors. A string is shorthand for `{ "source": value }` (Mermaid); the object form takes `source`, `syntax` (`"mermaid"`, the default, `"dot"` or `"plantuml"`) and `alt`. It is a root payload, a block or a promoted region, and a region of a layout template that accepts `diagram` takes it. The first line of the source names the diagram type; the built-in families are flowchart, sequence, class, state, ER, gantt, pie, quadrant, mindmap, timeline, journey, xychart, sankey, gitGraph, C4, block, architecture, kanban, packet, radar, treemap, venn, ishikawa, requirement, railroad, wardley, cynefin, treeView, eventmodeling, usecase, swimlane, agentflow and info. ZenUML is not supported. The drawing is done by [pele](https://pele.run) (MIT, no runtime dependencies, synchronous and DOM-free), so the preview, the PDF and the PPTX export need no browser. A DOT graph is read by OPF itself and laid out in layers by pele; a `layout` other than `dot` (neato, fdp, circo, twopi, ...) is refused with a finding. A PlantUML diagram is read by OPF too and drawn as the Mermaid family of its kind (sequence, class, state, activity, use case, component, mind map, gantt); other kinds and the preprocessor are refused with a finding.
 
 ```json
 {
@@ -401,51 +405,51 @@ A `diagram` is a diagram written as text: [Mermaid](https://mermaid.js.org) sour
 - **Engines.** Core lays the diagram out with the deck's measured fonts at the largest size that fits its block (never under the readability floor, else a `text-overflow` finding) and paints it in the slide's colors and fonts; see [sizing](diagrams.md#sizing) and [how the deck styles a diagram](diagrams.md#how-the-deck-styles-a-diagram).
 - **`alt`.** The text alternative; without it engines derive one from the diagram type and its labels ([accessibility](diagrams.md#accessibility)). A diagram takes a `caption` like an image, chart, table or video.
 - **Errors.** A source that cannot be parsed is a finding with its line and column, and draws a "Diagram unavailable" placeholder ([errors and limits](diagrams.md#errors-and-limits)).
-- **PPTX and Markdown.** A native SVG picture over a PNG fallback that re-imports as the diagram ([exports](diagrams.md#exports)); a ```` ```mermaid ```` fence in [Markdown](markdown.md).
+- **PPTX and Markdown.** A native SVG picture over a PNG fallback that re-imports as the diagram ([exports](diagrams.md#exports)); a ```` ```mermaid ````, ```` ```dot ```` or ```` ```plantuml ```` fence in [Markdown](markdown.md).
 
 Choose the payload by what the content is: `chart` for numbers plotted on axes, `timeline` for dated or ordered events with a status, `diagram` for structure and flow (steps, systems, relationships, states, hierarchies) that Mermaid can draw. A Mermaid `pie` or `timeline` diagram is a quick picture; a `chart` or `timeline` payload keeps the data editable and gets the engines' chart and timeline design.
 
 ## Regions
 
-Region keys address a 3×3 grid of rows (`top`, `middle`, `bottom`) and columns (`left`, `center`, `right`):
+Region keys address a 3×3 grid of rows (`top`, `middle`, `bottom`) and columns (`start`, `center`, `end`). The columns follow the deck's direction: `start` is the left column in a left-to-right deck and the right column in a right-to-left deck (see [Right-to-left decks](dynamic-composition.md#right-to-left-decks)).
 
 ```
-                  left                 center                 right
+                  start                center                  end
          +--------------------+--------------------+--------------------+
-   top   |  top:left          |  top:center        |  top:right         |
+   top   |  top:start         |  top:center        |  top:end           |
          +--------------------+--------------------+--------------------+
-  middle |  middle:left       |  middle:center     |  middle:right      |
+  middle |  middle:start      |  middle:center     |  middle:end        |
          +--------------------+--------------------+--------------------+
-  bottom |  bottom:left       |  bottom:center     |  bottom:right      |
+  bottom |  bottom:start      |  bottom:center     |  bottom:end        |
          +--------------------+--------------------+--------------------+
 ```
 
-- A bare column key (`left`) spans all three rows; a bare row key (`top`) spans all three columns.
-- `+` spans adjacent rows or columns: `center+right`, `top+middle`.
-- `row:column` combines the two: `top:left`, `middle+bottom:center+right`.
+- A bare column key (`start`) spans all three rows; a bare row key (`top`) spans all three columns.
+- `+` spans adjacent rows or columns: `center+end`, `top+middle`.
+- `row:column` combines the two: `top:start`, `middle+bottom:center+end`.
 - Keys on one slide must not overlap, and regions cannot be mixed with root payload fields.
 
 Spans compose into common slide shapes:
 
 ```
-  "left" + "center+right"             "top" + "middle+bottom"
+  "start" + "center+end"              "top" + "middle+bottom"
   (sidebar + main)                    (headline band + body)
   +----------+------------------+     +-------------------------------+
   |          |                  |     |              top              |
   |          |                  |     +-------------------------------+
-  |   left   |  center+right    |     |                               |
+  |  start   |   center+end     |     |                               |
   |          |                  |     |         middle+bottom         |
   |          |                  |     |                               |
   +----------+------------------+     +-------------------------------+
 
-  "top" + "middle+bottom:left" + "middle+bottom:center+right"
+  "top" + "middle+bottom:start" + "middle+bottom:center+end"
   (headline band, then sidebar + main)
   +---------------------------------------------+
   |                     top                     |
   +---------------+-----------------------------+
   |               |                             |
-  | middle+bottom | middle+bottom:center+right  |
-  | :left         |                             |
+  | middle+bottom | middle+bottom:center+end    |
+  | :start        |                             |
   |               |                             |
   +---------------+-----------------------------+
 ```
@@ -455,7 +459,7 @@ The same payload objects work inside regions — here, the sidebar-plus-main sha
 ```json
 {
   "title": "Operating Snapshot",
-  "left": {
+  "start": {
     "table": {
       "columns": ["Metric", "Value"],
       "rows": [
@@ -464,7 +468,7 @@ The same payload objects work inside regions — here, the sidebar-plus-main sha
       ]
     }
   },
-  "center+right": {
+  "center+end": {
     "chart": {
       "type": "line",
       "data": {
@@ -486,4 +490,4 @@ The SVG preview and the PowerPoint export agree on what a reader can reach. The 
 
 A picture with `alt` is an image with that name. Purely decorative drawing is hidden (`aria-hidden`): the background and its overlay, card frames, table cell fills and borders, dividers, timeline markers, watermarks, list bullets, a picture or chart whose `alt` is `""`, and a header or footer picture without `alt` (a logo repeated on every slide). A chart with `alt` is an image with that name, and its drawn marks are not announced separately. The deck element, the player and `renderDeckHtml` in `@openpresentation/opf-render` put the one slide container (region or figure) around the drawing, so a slide is announced once.
 
-Testing status (opf-render#170): this contract is the DOM and ARIA structure. It is checked with axe-core, the browser's accessibility tree and focus-order assertions, and it is **not tested with assistive technology**: no screen reader (NVDA, JAWS, VoiceOver, TalkBack) has been run against the preview, the deck element or the player (owner decision 2026-10-10). Forced colors are verified with Chromium's emulation only, not the Windows contrast theme ([evidence](evidence/rr-59-forced-colors-emulated-20261010/README.md)).
+Testing status (opf-render#170): this contract is the DOM and ARIA structure. It is checked with axe-core, the browser's accessibility tree and focus-order assertions, and it is **not tested with assistive technology**: no screen reader (NVDA, JAWS, VoiceOver, TalkBack) has been run against the preview, the deck element or the player (owner decision 2026-10-10). Forced colors are verified with Chromium's emulation only, not the Windows contrast theme (evidence).

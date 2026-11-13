@@ -1,3 +1,4 @@
+import { plainLanguageTag } from "./numerals.js";
 import { checkCatalogsOption, resolveReference, type CatalogOptions } from "./catalog-refs.js";
 import { resolveFontFamilies } from "./composition.js";
 import { isRecord } from "./content-walk.js";
@@ -69,7 +70,7 @@ export interface ScriptFontSupplement {
 export interface ResolveScriptFontsOptions extends CatalogOptions {
   /** Which language font default applies. Defaults to `powerpoint` (`language.fontScheme`, else the vocabulary default); `google-slides` prefers `language.googleFontScheme`. */
   app?: ScriptFontApp;
-  /** Merge `slides[slideIndex].design` over the deck design, per field, before resolving the font scheme. */
+  /** Resolve this slide's language and merge its design over the deck design before resolving the font scheme. */
   slideIndex?: number;
   /** Language to resolve instead of the document's `language` (a BCP-47 tag or a Language object). */
   language?: unknown;
@@ -351,7 +352,11 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
   const latin = resolveFontFamilies(scheme);
 
   const fromOption = options.language !== undefined ? resolveLanguage(options.language) : undefined;
-  const fromDocument = fromOption ? undefined : resolveLanguage(document.language);
+  // LH-106: a slide owns its language just as it owns a design override. A run's explicit option still wins.
+  const slides = Array.isArray(document.slides) ? document.slides : [];
+  const slide = options.slideIndex === undefined ? undefined : slides[options.slideIndex];
+  const authoredLanguage = isRecord(slide) && slide.language !== undefined ? slide.language : document.language;
+  const fromDocument = fromOption ? undefined : resolveLanguage(authoredLanguage);
   const requestedDefault = text(options.defaultLanguage);
   const fallbackTag = requestedDefault && splitTag(requestedDefault) ? requestedDefault : "en-US";
   const language = fromOption ?? fromDocument ?? resolveLanguage(fallbackTag) ?? { tag: fallbackTag, overrides: {} };
@@ -361,10 +366,11 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
 
   const bcp47 = canonicalTag(language.tag);
   const authoredOoxml = text(overrides.ooxmlLang);
+  // LH-106: OOXML takes a plain tag; an extension (`ar-SA-u-nu-latn`) stays in `bcp47` and in the document, never in `lang`.
   const lang = authoredOoxml
-    ? canonicalTag(authoredOoxml)
+    ? canonicalTag(plainLanguageTag(authoredOoxml))
     : splitTag(language.tag)?.region
-      ? bcp47
+      ? plainLanguageTag(bcp47)
       : known
         ? canonicalTag(known.ooxmlLang)
         : bcp47;
@@ -446,7 +452,7 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
  * the language does not resolve. Layout, preview and export all read this one value (RR-05).
  */
 export function resolveSlideDirection(presentation: unknown, slideIndex?: number): "ltr" | "rtl" {
-  if (!isRecord(presentation) || presentation.language === undefined) return "ltr";
+  if (!isRecord(presentation)) return "ltr";
   try {
     return resolveScriptFonts(presentation, Number.isInteger(slideIndex) ? { slideIndex } : {}).direction;
   } catch {

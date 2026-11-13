@@ -81,8 +81,8 @@ There is no ambiguity between "override" and "reference": every scheme value *is
     "theme": "minimal",
     "background": "light1",
     "footer": {
-      "left": { "text": "Acme Corp" },
-      "right": { "text": "{{slide.number}}" }
+      "start": { "text": "Acme Corp" },
+      "end": { "text": "{{slide.number}}" }
     }
   },
   "slides": [
@@ -235,7 +235,7 @@ Which variant a slide has, from the most specific to the least (slide design, th
 
 1. a `variant`;
 2. a theme-slot background (`"dark1"`, `{ "type": "theme", "slot": "dark1" }`), which is the variant of that slot, so `design.background` stays a shorthand;
-3. a picture or gradient background with a `tone` (`"dark"` or `"light"`), which is the `dark1` or `light1` variant. Without a tone only a variant of a less specific level can apply; with none the slide counts as light, as before;
+3. a picture or gradient background with a `tone` (`"dark"` or `"light"`), which is the `dark1` or `light1` variant. Without a tone a picture takes the tone its recolor, opacity and overlay imply ([images](image-treatments.md)); when they imply none, only a variant of a less specific level can apply, and with none the slide counts as light, as before;
 4. any other background (a solid or pattern color) decides by luminance (dark below 0.179), as before.
 
 A layout record's `design.variant` (LH-01) is a default a gallery layout gives, and a background the author fixed beats it (LH-103; docs/programs/layout-harvest/README.md, Decisions). From the most specific:
@@ -313,6 +313,30 @@ OOXML gives each theme font (major and minor) three script slots: `latin`, East 
 
 `@openpresentation/opf/composition` exports `resolveScriptFonts(document, { app, slideIndex })` (`app` is `"powerpoint"`, the default, or `"google-slides"`), and the package root exports `normalizeLanguageFamily(value)` (which reads a font scheme's `languageFamily`, `eastAsian` as `ea` and `complexScript` as `cs`). `resolveScriptFonts` returns the heading and body slots, the OOXML `lang` (a curated `ooxmlLang` culture tag such as `ja-JP` or `ms-MY`, or an authored region tag), the canonical `bcp47` tag, `script`, `direction`/`rtl`, and the per-script supplemental theme font. Renderers and exporters should use it rather than re-deriving slots. The model, the OOXML mapping and the open questions are in [`programs/font-fidelity-everywhere/script-font-model.md`](./programs/font-fidelity-everywhere/script-font-model.md). opf-render and opf-pptx implement it (FF-07, FF-19, FF-49).
 
+### Numbers in the language's own digits (LH-106, OPF 0.34)
+
+Every number the engines generate from a numeric value is drawn in the numbering system of the language in effect: the slide's `language`, else the deck's. That covers a metric's numeric `value` and `delta`, chart data labels, value-axis ticks, percentages, the pie value list and the doughnut hole, table cells that hold numbers, step badges and agenda numerals, and number variables placed on a slide or in the header and footer. Text the author typed is never rewritten: a title that says "999" stays "999", and a string metric value is drawn as written.
+
+The numbering system is the locale's own, as the Unicode CLDR data defines it: `ar-SA` and `ar-EG` draw Arabic-Indic digits (٩٩٩, ١,٠٠٠), `ar-AE`, `ar-MA`, `ar-DZ`, `ar-TN` and a bare `ar` draw Latin digits, `fa-IR` draws Persian digits (۹۹۹, ۱٬۰۰۰), `bn` draws Bengali digits, `hi-IN` and every `en-*` tag draw Latin digits. Digits, decimal and group separators, grouping (thousands, or the Indian lakh and crore in `hi-IN` and `en-IN`) and the percent sign all come from the same entry, so 999 and 1,000 are always drawn in the same system. To choose another, add the standard BCP 47 Unicode extension `-u-nu-<system>` to the tag:
+
+```json
+{ "language": "ar-SA-u-nu-latn", "slides": [{ "title": "المؤشرات", "metric": { "value": 1250, "label": "العملاء" } }] }
+```
+
+This Saudi Arabic deck draws `1,250`; `ar-AE-u-nu-arab` draws `١,٢٥٠` in an Emirati one. The extension is OPF's: PowerPoint's `lang` attribute is written without it (`ar-SA`), and the tag as written comes back from a PPTX round trip through the document's provenance.
+
+**OPF draws what PowerPoint draws.** A deck is seen in OPF's preview and in PowerPoint, so OPF draws a numbering system only where PowerPoint draws the same digits, with the same separators (vetoable decisions of 2026-11-12, from PowerPoint 16.0.20527):
+
+- OPF draws Latin, Arabic-Indic (`arab`), Persian (`arabext`), Devanagari (`deva`) and Bengali (`beng`) digits. Any other system (Thai, Myanmar, ...), the locale's own or one `-u-nu-` names, is drawn in Latin digits, and `opf/language-tag` warns about such an extension.
+- Arabic-Indic digits take the Latin comma, period and percent sign (`١,٢٣٤.٥٠`, `٢٥%`), because PowerPoint draws its charts so; Persian digits take the Persian separators and percent sign (`۱٬۲۳۴٫۵۰`, `۲۵٪`). Every other locale uses its CLDR separators (`1.234,50` in German).
+- PowerPoint formats a native chart's values itself. The export prefixes every number format of a classic chart (column, bar, line, area, pie, doughnut, scatter, ...) on such a slide with PowerPoint's numeral shape (`[$-2000000]` Arabic-Indic, `[$-3000000]` Persian, `[$-4000000]` Devanagari, `[$-5000000]` Bengali), so PowerPoint draws the chart in the same digits; import removes the prefix again. The preview draws each such chart number left to right as one unit (digits, then the percent sign; a sign before the digits), as PowerPoint does in a right-to-left deck.
+- **Numbers that stay Latin in every language, because PowerPoint draws them, not OPF:** `{{slide.number}}` and `{{deck.slideCount}}` (the slide number exports as PowerPoint's live field, which PowerPoint draws in Latin digits); the markers of a numbered list (PowerPoint's auto-number: even its Hindi schemes take their digits from the paragraph's text, Devanagari beside Latin words); and every number of a chart PowerPoint draws with its second chart engine (waterfall, histogram, pareto, box and whisker, funnel, treemap), which draws Arabic-Indic digits with another decimal mark and a trailing minus sign. Step badges and agenda numerals export as text and keep the language's digits. Dates in headers and footers keep their fixed English month names and Latin digits, because PowerPoint's date field is written in English (United States).
+- **Known gap:** in PowerPoint, the language's digits in chart labels are drawn in PowerPoint's own font for that script, so they look larger or smaller than in the preview's bundled face.
+
+A number format the author wrote (`#,##0.00`, `0%`) decides whether a number groups and how many decimals it shows; its `,` and `.` are drawn as the locale's group and decimal separators, as Excel and PowerPoint read a format code, and its literal text stays as written.
+
+The data is a table in `@openpresentation/opf` (`number-locale-data.ts`), read from the platform's `Intl` once by `scripts/build-number-locales.mjs` (with PowerPoint's Arabic-Indic separators as a stated override) and never at render time, so Node 22, 24 and 26, browsers and edge runtimes draw the same text whatever their ICU version. `formatNumber`, `formatPercentNumber`, `numberLocale`, `numberingSystemOf` and `plainLanguageTag` (exported by the package root and `@openpresentation/opf/composition`) are the one path the engines use. A deck whose generated digits are in a script its authored text does not use (an `ar-SA` deck titled "Q3" with the metric 1000) loads that script's font as well: `loadFonts({ scripts: 'auto' })` and `fonts.ensure` consider the digits each slide's language generates.
+
 ## Brand assets and layout hints
 
 The 2026-09-30 spec coverage audit found that the deck logo, `organization.logo`, `speaker.photo`, `design.contentDirection`, `design.chartPrimary`, `design.listBullet` and `fontScheme.accent` validated, edited and round-tripped but changed nothing in any engine. This section states what they do now. Every rule below is implemented once, in `composeSlide()` and `resolveLogo()` of `@openpresentation/opf`, and consumed by the renderer and the exporter; the decisions marked **(vetoable)** are agent decisions the owner can overturn.
@@ -323,7 +347,7 @@ An OPF layout record (`opf-layout/v2`) is one ordered list of `regions`, declare
 
 The effective `design` value of each key comes from the slide, then the deck, then the resolved theme, then the layout record, then the engine default. This includes `titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFit`, `listBullet` and `mirror`. `resolveDesignHints()` reports the supplying level, and `SlideComposition.design` holds the merged result. A layout's regions determine placement; `design.mirror` reverses its tracks, while the slide's own `composition` arranges the first primary flowing region. A top-level image block may still carry its own `placement` band. A layout sits on any slide background; it does not opt into a picture.
 
-The `tag` (eyebrow) follows `titleAlignment` on every slide, and is left-aligned when none resolves, like the title, so a layout that centres its content does not centre the tag over a left-aligned title. The `subtitle` joins them whenever it sits in the title area (a cover, or a layout with no `subtitle` region of its own), so the heading group shares one alignment axis; a layout with a separate `subtitle` region keeps it on `contentAlignment`. Only the slide's own `design.contentAlignment` keeps the tag and that subtitle on content alignment, preserving the 2026-10-06 authoring decision.
+The `tag` (eyebrow) follows `titleAlignment` on every slide, and is start-aligned when none resolves, like the title, so a layout that centres its content does not centre the tag over a start-aligned title. The `subtitle` joins them whenever it sits in the title area (a cover, or a layout with no `subtitle` region of its own), so the heading group shares one alignment axis; a layout with a separate `subtitle` region keeps it on `contentAlignment`. Only the slide's own `design.contentAlignment` keeps the tag and that subtitle on content alignment, preserving the 2026-10-06 authoring decision.
 
 ### Logos live on the organization (RR-71, OPF 0.18)
 
@@ -379,7 +403,7 @@ On a v2 template, `contentDirection` changes every flowing region into a row or 
 
 ### `titleAlignment` and `contentAlignment` in right-to-left decks
 
-> **Decision, 2026-10-01 (RR-05, supervisor decision, vetoable).** Alignment is logical for right-to-left text. In a deck whose language is written right to left, `left` means the start edge and `right` the end edge of each paragraph: an Arabic or Hebrew paragraph with the default (or authored) `left` is drawn against the right edge, with its bullets, indents and table cells to match, while an English paragraph in the same deck keeps the left edge. `center` is unchanged and a left-to-right deck is unchanged. The effective value (slide design, then deck design, then `left`) is still what `item.alignment` reports; `placement.lines[i].alignment` and the exported `algn` carry the physical edge. A right-to-left deck that wants a paragraph at its end edge sets `right`. See [Layout direction](programs/font-fidelity-everywhere/script-font-model.md#layout-direction-rr-05).
+> **Decision, 2026-10-01 (RR-05, supervisor decision, vetoable).** Alignment is logical. `start` is the start edge and `end` the end edge of each paragraph (the values were `left` and `right` before 0.34): in a deck whose language is written right to left, an Arabic or Hebrew paragraph with the default (or authored) `start` is drawn against the right edge, with its bullets, indents and table cells to match, while an English paragraph in the same deck keeps the left edge. `center` is unchanged and a left-to-right deck is unchanged. `item.alignment` reports the effective value (slide design, then deck design, then the start edge) in the engine's words, `left` for `start` and `right` for `end`; `placement.lines[i].alignment` and the exported `algn` carry the physical edge. A right-to-left deck that wants a paragraph at its end edge sets `end`. See [Layout direction](programs/font-fidelity-everywhere/script-font-model.md#layout-direction-rr-05).
 
 **Numbers in right-to-left text (LH-118).** A number with a sign, a currency or a percent sign (`+16%`, `-2.5%`, `$42`; core `numberRanges`) reads left to right inside right-to-left text: "+16%" in an Arabic metric drew as "16%+". The preview wraps each such number in a left-to-right isolate (U+2066 ... U+2069, core `isolateNumbers`), in metric values, deltas and units, table cells, body text and chart text. PowerPoint draws the isolate characters as boxes, so the PPTX export writes each such number as its own `en-US` run (as RR-05 does for a Latin phrase), and writes a paragraph of only such a number left to right (`rtl="0"`) at the physical alignment it had, because PowerPoint still drew "16%+" for an `en-US` run in a right-to-left paragraph of no letters (checked with PowerPoint's own slide export). Import reads the split runs and the left-to-right number-only paragraph back as they were authored. Bare digits (`2026`, `1,200`, `10:30`) are unchanged: they read the same in either direction.
 
@@ -387,7 +411,7 @@ On a v2 template, `contentDirection` changes every flowing region into a row or 
 
 The resolved `design.chartPrimary` applies on automatic slides only. It changes the root arrangement when the slide has no promoted regions, no `composition.mode` of its own, and its root nodes contain at least one chart leaf and at least one node that is not a chart. The **first chart node is primary** and the other root nodes form one synthetic sub-grid:
 
-- `left` / `right`: the root is a two-track row with weights `[3, 2]` (chart first for `left`, last for `right`); the rest arrange in `auto` mode inside their track.
+- `start` / `end`: the root is a two-track row with weights `[3, 2]` (chart first for `start`, last for `end`; `start` is the left in a left-to-right deck and the right in a right-to-left deck); the rest arrange in `auto` mode inside their track.
 - `top` / `bottom`: a two-track column with weights `[3, 2]` (chart first for `top`).
 - `none`, or any other value: no change, the existing automatic grid with equal weight.
 

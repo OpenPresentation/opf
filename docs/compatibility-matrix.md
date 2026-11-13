@@ -5,13 +5,14 @@ is the honest supported subset for [the developer quickstart](quickstart.md).
 It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
-**Published set (0.33.0):** core, renderer, PPTX, editor, CLI, Gallery and MCP,
-all at the shared version 0.33.0. `node scripts/registry-plan.mjs` prints the
-six-package consumer set (core, renderer, PPTX, editor, CLI and Gallery) with
-each registry `gitHead`; it does not query MCP. The [release workflow](release-process.md)
-verifies all seven packages, including MCP, separately from the consumer checks.
-Earlier matrices and native observations retain their historical identities.
-The [2026-11-08 registry and maintained quickstart receipts](handoff/2026-11-08/core-033-currency/post-publication/receipt.json) bind this set to release commit 26fd4de9. Complete native compatibility remains a separate gate.
+Core, renderer, PPTX, editor, CLI, Gallery and MCP use one shared release.
+`node scripts/registry-plan.mjs` prints the six-package consumer set (excluding
+MCP) with each registry `gitHead`; the [release workflow](release-process.md)
+verifies all seven packages. Retain the exact installed versions and lockfile.
+The 2026-11-08 registry and quickstart receipts
+record the genuine 0.33.0 set at release commit 26fd4de9. Earlier observations
+retain their historical identities; source support below is separate from
+registry publication and native Office acceptance.
 
 ## Published layout contract and the 0.20 engines
 
@@ -31,17 +32,27 @@ registered catalogs during PPTX import. PPTX preserves stretch images with
 zero crop through native save/re-import. These published contracts do not
 imply universal Office or full-catalog visual parity.
 
-## Current published package contracts
+## Shared package contracts
 
 | Package | Version | Dependency contract |
 | --- | --- | --- |
-| Core | 0.33.0 | Gallery ^0.33.0; optional renderer/PPTX ^0.33.0 |
-| CLI | 0.33.0 | Core ^0.33.0, Gallery ^0.33.0; optional renderer/PPTX ^0.33.0 |
-| Renderer | 0.33.0 | Core ^0.33.0; optional pinned font/converter peers |
-| PPTX | 0.33.0 | Core ^0.33.0, Gallery ^0.33.0; optional renderer ^0.33.0 |
-| Editor | 0.33.0 | Core ^0.33.0; optional renderer ^0.33.0 |
-| Gallery | 0.33.0 | Owner of every default catalog record; 36 intent layouts |
-| MCP | 0.33.0 | Core ^0.33.0, Gallery ^0.33.0; bundled deck viewer |
+| Core | Shared release | Matching Gallery; optional renderer/PPTX in the same release line |
+| CLI | Shared release | Matching core/Gallery; optional renderer/PPTX in the same release line |
+| Renderer | Shared release | Matching core; optional pinned font/converter peers |
+| PPTX | Shared release | Matching core/Gallery; optional renderer in the same release line |
+| Editor | Shared release | Matching core; optional renderer in the same release line |
+| Gallery | Shared release | Owner of every default catalog record; use the catalog matching the installed release |
+| MCP | Shared release | Matching core/Gallery; packaged deck viewer, with hosted availability determined separately |
+
+## Current source inventory
+
+This checkout's v0.34 source contains **149 JSON** example decks (101 gallery,
+48 technical), **40 default layouts** and a **53-slide sampler** (40 layouts plus
+13 dynamic compositions). Two Markdown decks and the quickstart fixture are
+outside the JSON catalog. These counts describe source, not an already-published
+v0.34 registry set. The recorded 0.33 release contains 137 JSON examples,
+36 layouts and a 49-slide sampler; install a matching set rather than mixing
+a source catalog with an older engine.
 
 ## Runtime
 
@@ -133,9 +144,7 @@ and PPTX stay optional peers. CLI 0.15.0 and earlier bundled their core.
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
-ColorRef preview/export support. The selected renderer, PPTX and editor 0.33.0 require core ^0.33.0;
-CLI 0.33.0 accepts core ^0.33.0 (CLI 0.25.0 and earlier accept only their own minor). Pin core 0.33.0 alongside them and
-verify one installed Core so preview and export use the same composition.
+ColorRef preview/export support. Install renderer, PPTX, editor, CLI and core from one completed shared release, using the dependency ranges recorded in that release’s manifests (CLI 0.25.0 and earlier accept only their own minor). Retain exact pins and verify one installed core so preview and export use the same composition.
 Core 0.20.2 and later center metrics when alignment is omitted; explicit alignment remains
 authoritative.
 
@@ -152,8 +161,8 @@ on the slide master or a shared layout (one per background tone for `onLight`/`o
 logos; a hidden footer uses a layout that hides the master's), and reads it back from
 there ([rr-72-master-furniture.md](programs/release-readiness/rr-72-master-furniture.md)).
 
-The [Windows native-picture checkpoint](evidence/windows-native-picture-20260921/README.md)
-and accepted [native B/C bundle](evidence/windows-native-edits-20260921/README.md)
+The Windows native-picture checkpoint
+and accepted native B/C bundle
 record finite picture/furniture edits, current-content provenance reimport and
 safe fallback, production notes packaging and two controlled reordered-file
 refusals. Core105 publishes that evidence; PPTX47 adds the tested harness, with
@@ -162,7 +171,7 @@ text clips, and duplicated tagged headers overlap. Refused workers retain their
 failed cleanup state separately from later empty-workspace observations.
 This is not general native layout/reflow fidelity.
 
-Accepted core106's [tab and font checkpoint](evidence/windows-native-tabs-fonts-20260921/README.md)
+Accepted core106's tab and font checkpoint
 records plain native tab target error **0.022655487060546875pt** and tab/literal
 difference **0.022678375244140625pt**, both above the unchanged **0.02pt** gate.
 Its bounded four-face Carlito edit/save/reopen control passes exact text/style
@@ -171,7 +180,7 @@ Mixed-size table fidelity, physical glyph-font identity, fallback/synthesis and 
 open; embedding was disabled for this control. The Windows supervisor retains sole
 Office control. This documentation task reads evidence and makes no Office calls.
 
-The later [read-only font inventory](evidence/windows-native-font-inventory-20260921/README.md)
+The later read-only font inventory
 retains the four Carlito text styles but reports both Carlito and unexpected
 Aptos in `Presentation.Fonts`. The native font allowlist fails, and no embedding
 was attempted. The original parent report incorrectly fails cleanup because of
@@ -180,13 +189,13 @@ rows establish one owned close and four removals in a separately labeled offline
 audit. The raw failure remains intact. Collection names and flags do not identify
 the physical font used for each glyph.
 
-The [read-only mixed-table observation](evidence/windows-native-mixed-table-20260921/README.md)
+The read-only mixed-table observation
 retains all 245 characters, one literal tab and five authored runs, with outer
 geometry within 0.02pt and confirmed owned close/font cleanup. Native soft-line
 boundaries are 92/194 versus the estimated preview's 78/172, and native default
 tab spacing is 72pt. These finite content/style results do not pass table
 edit/save/reopen, browser/native raster agreement or physical glyph identity.
-The accepted [nine-pair offline tab analysis](evidence/windows-native-tab-analysis-20260921/REPORT.md)
+The accepted nine-pair offline tab analysis
 finds a 0.05pt-compatible pattern in the observed character starts, with finer saved
 tab coordinates. These inputs do not distinguish relative versus absolute placement
 or establish an internal engine cause. The 0.02pt native tab gate remains failed;
@@ -220,12 +229,12 @@ minor release ([release process](release-process.md)). From OPF 0.19 core and th
 CLI consume the Gallery package (Gallery 2 in OPF 0.19; Gallery 3 in OPF 0.20), and core has no `/catalog` subpath; up to 0.18 core ships the same records as
 `@openpresentation/opf/catalog`.
 
-## Supported in this set
+## Current source capabilities
 
 | Capability | How | Notes |
 | --- | --- | --- |
 | JSON authoring | `*.opf.json` plus CLI `opf create` | Local files only |
-| Bundled examples catalog | `@openpresentation/opf/examples` | **137 JSON** decks (101 gallery, 36 technical); the two Markdown decks and quickstart JSON are outside this catalog |
+| Bundled examples catalog | `@openpresentation/opf/examples` | **149 JSON** decks in this source (101 gallery, 48 technical); published counts follow the installed release; two Markdown decks and quickstart JSON are outside this catalog |
 | Validate | `validate` / `opf validate` | One read-only checker: format, references, policy, accessibility, layout and content findings ([guide](validate.md)); no network catalog fetch |
 | Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Supported theme-slot colors write native `schemeClr` references; arbitrary native Office recoloring and full visual fidelity remain separately scoped. |
 | Embed catalog records | `embed` / `opf embed` | Embeds every record a document references, in the group it resolves in, so it renders with no catalog registered; remote media and data remain explicit host concerns. |
@@ -239,19 +248,28 @@ CLI consume the Gallery package (Gallery 2 in OPF 0.19; Gallery 3 in OPF 0.20), 
 | Read and write a deck in JSON, YAML or Markdown | `parse` / `stringify` (core 0.17.0 and later; `readDeck` / `writeDeck` in 0.16) | One entry point for the three text formats; `parse` throws `OPFValidationError` with located findings |
 | PNG | `toPng` (opf-render 0.18; `svgToPng` before) | Node raster of a deck or of SVG slides |
 | PDF | `toPdf` (opf-render 0.18; `svgToPdf` before) | opf-render 0.12.0 and later (RR-12, opf-render#90): **vector with selectable text by default** (embedded TrueType subsets of the supplied/bundled fonts, ToUnicode, links, metadata, tagged structure); `raster: true` keeps the image-per-slide output (`mode: "raster"` before 0.18). Renderers up to 0.11.9: raster-backed, not selectable text. Not a PDF/UA or PDF/A claim; see the renderer's `docs/evidence/rr-12-vector-pdf.md` for reader limits |
-| Editable PPTX export | `toPptx` | OPF → PPTX serialization. Text is one editable box per wrapped line, so edited text does not reflow in PowerPoint or Keynote, and a wrapped title is not the Title placeholder; the opt-in `bodyText: "native"` mode (CLI `--body-text native`, from opf-pptx and CLI 0.22.0) writes whole paragraphs, a wrapped title as the Title placeholder. Shared furniture is written on the master or layout; supported footer placeholders and tagged parts retain controlled re-import provenance. General native Office behavior remains separately scoped |
+| Editable PPTX export | `toPptx` | OPF → PPTX serialization. Body text is one editable box per wrapped line, so edited text does not reflow in PowerPoint or Keynote; the opt-in `bodyText: "native"` mode (CLI `--body-text native`, from opf-pptx and CLI 0.22.0) writes whole paragraphs. Every slide title is the Title placeholder in both modes (opf-pptx 0.34.0, opf#1291): a wrapped title PowerPoint is shown to wrap at the preview's line breaks and line spacing (left to right, Latin, Greek or Cyrillic letters, in a face whose single-spaced line PowerPoint was measured on) is one native wrapped title; any other wrapped title (right-to-left, shaped and East Asian scripts, a font measured with a stand-in or not measured in PowerPoint, a tight wrap) is one title with the preview's lines fixed, one paragraph per line, which stays one editable title, keeps those lines when edited in PowerPoint and imports back as the same title; a two-line display title tighter than PowerPoint's single line (the 1.0 em display pitch) writes its second line at a line spacing under 100% corrected for the face (Aptos Display, Arial Black, Bookman Old Style, Impact, Montserrat, Roboto, measured in PowerPoint), and in another face keeps one box per line unless the error stays within 1 px. A title 0.33.0 wrote as text boxes (wrapped, or rich on one line) ends each paragraph in the body face, as those boxes did, so its first line sits where they put it; a plain one-line title is written as in 0.33.0 (its end mark faceless, the heading face), which can sit up to 3 px lower at 960 than a wrapped title of the same deck where heading and body faces differ. Only a title with a tab, citation marker, lines in two directions or right-to-left lines core placed more than 1 px apart keeps one box per line, reported as `native-body-fallback`. Text in the theme's heading or body family names the theme font (`+mj-lt`, `+mn-lt` and their East Asian and complex-script slots; opf-pptx 0.34.0, opf#1293) on slides, in tables and in SmartArt, so Design > Variants > Fonts restyles it; other families, bold faces written under their own names, chart text (which names the deck's body face itself) and an embedded chart workbook (its own Excel theme) stay literal. A deck whose theme heading and body fonts were changed in PowerPoint imports with those faces as its `design.fontScheme` and its slides as authored. Shared furniture is written on the master or layout; supported footer placeholders and tagged parts retain controlled re-import provenance. General native Office behavior remains separately scoped. An extended chart (histogram, Pareto, box and whisker, waterfall, funnel, treemap) is PowerPoint's native chart; an app that cannot draw extended charts, such as Keynote, shows a picture of OPF's preview of the chart instead, and a deck such an app saves back keeps the picture and loses the chart data |
+| PPTX package properties | `toPptx` / `fromPptx` | File > Info shows the deck's `name`, `description` and `author`, its `tags` as Tags (`cp:keywords`, joined with "; ") and an authored `language` (`dc:language`); the application is "OPF", and Company is the deck's primary organization name (none without one). Import reads keywords back as `tags` (tags edited in PowerPoint win over the stored ones); the language keeps coming from the runs. The workbook embedded in each chart (Chart Design > Edit Data > Edit in Excel > File > Info) names the deck's author, else "OPF", as its author and last editor, and "OPF" as its application; no exported part names a library OPF vendors. The notes page (View > Notes Page, printed notes) is the standard portrait 7.5 x 10 in page whatever the slide size |
+| PPTX slide layouts | `toPptx` / `fromPptx` | Every reachable layout record is a slide layout named by the record (Home > Layout), "Title Only" for automatic slides ("Title and Text" with a native body), "Blank" for the base layout, and a numbered name ("Text 2") for a further variant of the same layout (furniture, native body, automatic grid). Import identifies a layout by its OPF_LAYOUT_V1 tag, never by its name; a layout without the tag maps by its type |
+| PPTX alternative text | `toPptx` / `fromPptx` | A chart, table, picture or shape writes its authored `alt` as its description, and `""` as PowerPoint's decorative marker. Without an authored `alt`, a chart is described by its type, series and categories, a table by its column names and row count, an organization logo by the organization's name and a quote photo by its attribution (plain English around the document's own names). Import leaves a description equal to the generated one out of the document, and for charts and tables any description in the generated form (a stale one after a rename in PowerPoint); any other description imports as `alt` |
+| Shapes and connectors | Shape blocks and overlays; shared preset geometry | 187 DrawingML presets, custom outlines, fills/lines/effects and connectors; renderer/editor/PPTX support is described per property in [shapes](shapes.md). |
+| Diagrams | Mermaid, Graphviz DOT and PlantUML source, drawn through Pele | This source accepts all three syntax values; DOT/PlantUML are supported subsets read by OPF, without external renderer execution. Editable native shapes are conditional; unsupported drawings use an SVG/PNG picture and report the limit. See [diagrams](diagrams.md). |
+| SmartArt and diagram layouts | Shared composition and qualified native export | Live SmartArt is limited to measured eligible instances. Other supported arrangements use editable shapes or the reported picture fallback; semantic import and native editing retain explicit limits. See [SmartArt](smartart.md). |
+| Video | Preview placeholder/play badge, caption and HTTP(S) hyperlink | No embedded playback, remote video fetch or external player is promised; see [video references](content-payloads.md#video-references). |
+| LibreOffice | Experimental compatibility checks | Font resolution and bounded saved-file evidence do not promote it to full-fidelity support. See [LibreOffice](libreoffice.md). |
+| Keynote | PPTX export opened in Keynote 15.1.1 for Mac (RR-105 qualification, issue #1278) | Keynote replaces the whole text of a shape that holds a live slide number with the number ("Page 1 of 4" reads "1"): export with `--slide-numbers static` (`slideNumberFields: 'static'`) for a deck read in Keynote. An extended chart shows its fallback picture of OPF's preview. Keynote does not draw reference-line labels (the legend names each line), per-point bar colors, the language's digits in charts (chart numbers stay Latin), a right-to-left chart's value axis on the right, a right-to-left table beyond its first column, inner shadow, glow, soft edge or blur, or curved connectors (drawn straight). |
 | Agent skills | `opf skills install` | Offline after the CLI is installed |
 | Browser canvas | `@openpresentation/opf-editor/canvas` | Host must supply font bytes |
 
 ## Public sites
 
-The current coordinated adoption is recorded in the [final adoption note](evidence/rr-85-final-adoption-2026-10-16/README.md). The following source, CI and canonical production results are the historical September 21 checkpoint, recorded in the
-[font-readiness checkpoint](evidence/font-readiness-acceptance-20260921/README.md),
-[prior Inspector actions checkpoint](evidence/inspector-current-actions-20260921/README.md),
-[earlier publication checkpoint](evidence/inspector-share-acceptance-20260921/README.md),
-[source-preservation checkpoint](evidence/author-source-acceptance-20260921/README.md),
-[completion checkpoint](evidence/completion-acceptance-20260921/README.md),
-[earlier acceptance ledger](evidence/issue88-final-20260921/README.md) and
+The current coordinated adoption is recorded in the final adoption note. The following source, CI and canonical production results are the historical September 21 checkpoint, recorded in the
+font-readiness checkpoint,
+prior Inspector actions checkpoint,
+earlier publication checkpoint,
+source-preservation checkpoint,
+completion checkpoint,
+earlier acceptance ledger and
 [handoff](handoff-2026-09-21.md). [Issue88](https://github.com/OpenPresentation/opf/issues/88)
 remains open. Package adoption, deployed features and complete workflow
 acceptance are separate claims.
@@ -267,7 +285,7 @@ PR 98 commit `b1ff81db6f8714b0db1a98bde482ed8a64d0ccc9`. Core PR 93/97/98/99/100
 pre-merge and post-merge CI. Accepted core102 is
 `578bcc6e0894129b00059258bd4ad1994a414baa`; its reviewed and accepted trees match,
 and all four required pre/post-merge runs passed on their first attempts. The
-[core102 receipts](evidence/inspector-share-acceptance-20260921/README.md#accepted-core102)
+core102 receipts
 pin this documentation checkpoint without changing the site's older accepted
 documentation snapshot. The site's complete guides and raw resources match
 the reviewed source; binary evidence remains linked and downloadable without
@@ -275,15 +293,15 @@ being decoded into the AI-facing guide.
 Core104 `3d301f1` preserves exact postmerge OPF success and coordinated cancellation;
 it is not a complete green postmerge gate. Accepted descendant core105
 `84e914710520a7b0e777fce30e5758ee64a64924` preserves all 60 core104 evidence blobs
-and passes both exact-head workflows on their first attempts. [Compact receipts](evidence/inspector-current-actions-20260921/README.md#core-source-and-ci)
+and passes both exact-head workflows on their first attempts. Compact receipts
 keep descendant acceptance separate from the canceled predecessor run.
 Accepted core106 `3847f712ccb2379952bcc8ab7c9fdbaedfd0a4ce` also passes both
-pre/postmerge workflows on their first attempts. Its [compact receipt](evidence/inspector-current-actions-20260921/core106/acceptance-receipt.json)
+pre/postmerge workflows on their first attempts. Its compact receipt
 binds the bounded native evidence above without completing general compatibility.
 Accepted core107 `5bc0d3f89414b382b2ce48452c7e56e5d66aaf74` has reviewed tree
 `ffdc678beadf0808bc717d67e7fc0a9ec4790127`. Both original postmerge push workflows
 **35652360502 / 35652360551** passed on attempt 1 under Node24.20.0.
-[Compact receipts](evidence/font-readiness-acceptance-20260921/README.md#core107-acceptance)
+Compact receipts
 retain earlier automatic premerge cancellations separately from the later automatic
 successful pair; no rerun or accepted checkpoint relabels them.
 
@@ -293,11 +311,11 @@ tokens and undo history. Accepted commit `0f35352a1445f56ad4bb7c9f4c5609e01f2dd9
 has reviewed tree `203bdab509d05911f04f234d996f9c91f2b5e4f2`, green Linux/Windows
 pre/post-merge CI and its exact READY canonical deployment. The historical App47 **23/24** production run passes all five new completion cases but still fails the existing
 LF Author third-popup assertion. This does not establish complete public-surface
-acceptance; the [historical App47 report](evidence/completion-acceptance-20260921/canonical/REPORT.md)
-and [earlier failed app45/app46 results](evidence/issue88-final-20260921/README.md)
+acceptance; the historical App47 report
+and earlier failed app45/app46 results
 retain their evidence and unresolved causes.
 
-The [source audit](evidence/completion-acceptance-20260921/source-preservation-audit/REPORT.md)
+The source audit
 identified Author canvas/Copy/export and Inspector JSON-download normalization.
 Merged App53 at
 `e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8` has the identical reviewed b33dc18
@@ -307,7 +325,7 @@ addresses the observed stale Quick Input context competing with focused-editor
 Ctrl+Space. Current local checks pass **627 unit tests and 29/29 browser cases
 in 88.78 seconds**, zero retries. First-attempt Linux/Windows application CI
 passed 627 unit tests and 29 browser cases per platform; artifact CI also passed.
-The [exact READY canonical run](evidence/author-source-acceptance-20260921/canonical/REPORT.md) passes **29/29**, zero retries, with matching deployment receipts before and after. Postmerge application CI fails Linux **28/29** while Windows passes **29/29**; both pass 627 unit tests and separate artifact CI passes. The [Linux failure](evidence/author-source-acceptance-20260921/app53/postmerge-ci/README.md) stops before security assertions because five default-deck canvases remain after the shared-load toast. No rerun or canonical pass replaces that failed gate. The retained draft preview was READY but not browser-accepted.
+The exact READY canonical run passes **29/29**, zero retries, with matching deployment receipts before and after. Postmerge application CI fails Linux **28/29** while Windows passes **29/29**; both pass 627 unit tests and separate artifact CI passes. The Linux failure stops before security assertions because five default-deck canvases remain after the shared-load toast. No rerun or canonical pass replaces that failed gate. The retained draft preview was READY but not browser-accepted.
 
 The earlier **24/27** import-undo regression, **26/27** local popup failure and
 old-head Windows **26/27** shared-load failure remain historical evidence.
@@ -316,7 +334,7 @@ only Author timings survived; the Inspector pagehide snapshot is missing. This
 does not explain or fix the old readiness delay. Phase4
 captured no post-fix stale-context overlap, so causal stress is inconclusive.
 The existing suggestion-details pane remains clipped; visibility is not legibility.
-The [postmerge trace diagnosis](evidence/author-source-acceptance-20260921/inspector-share-diagnosis/REPORT.md)
+The postmerge trace diagnosis
 proves wrong-document automatic share-hash publication during import.
 App54 first corrected automatic
 publication at `60c91f6`: authoritative source/format is checked before and after
@@ -324,7 +342,7 @@ encoding, load/navigation guards remain, and obsolete `import=hash:` is removed.
 URL transfer preserves semantics, not raw spelling. Local 659-unit/31-browser
 acceptance does not replace original first-attempt CI **35638158483**, which
 passed Linux **31/31** but failed Windows **30/31** at the unchanged 45-second
-Author readiness deadline. Both publication cases passed. The [frozen diagnosis](evidence/inspector-share-acceptance-20260921/app54/windows-timeout/REPORT.md)
+Author readiness deadline. Both publication cases passed. The frozen diagnosis
 retains bounded slow-delivery observations with unknown cause. Late assertions
 are not an in-budget pass. Browser History tests permit prior accepted content
 until first new publication; held-promise controls establish the narrower race guard.
@@ -351,19 +369,19 @@ actions preserve the accepted buffer, not that ingress boundary.
 **The original 57e packaging gate failed.** First-attempt CI **35645493900** failed Linux and
 Windows typecheck on archived `.spec.ts` evidence copies after each platform
 passed 692 units and 7 standalone controls. The exact-head preview failed with
-`module_not_found`; precise Vercel compiler logs were unavailable. [The first-attempt receipt](evidence/inspector-current-actions-20260921/app54/first57-ci/REPORT.md)
+`module_not_found`; precise Vercel compiler logs were unavailable. The first-attempt receipt
 records skipped build/browser steps and no uploaded artifacts. The passing runtime build
 predates those copies. A byte-identical `.ts.txt` archive correction produced captured App54 head
 `6dfc2584698c1306505929a2bc3e427996d66563`, tree
 `f3279495f7685945b7541c90d24f7239407639a0`. Its final-tree local typecheck passes
-with all 305 product/test inputs unchanged. [The corrected receipt](evidence/inspector-current-actions-20260921/app54/corrected6df/commit-receipt.json)
-binds its 106-file evidence bundle. [Exact-head CI 35646213757](evidence/inspector-current-actions-20260921/app54/corrected6df/ci/REPORT.md)
+with all 305 product/test inputs unchanged. The corrected receipt
+binds its 106-file evidence bundle. Exact-head CI 35646213757
 passes 692 units, seven standalone controls, typechecks and build on both platforms;
 Linux passes **39/39** browsers. Windows executes **zero browser tests** because
 standalone startup fails with `EPERM` while statting its packaged React dependency
 link. No timing or test-result artifacts were uploaded. The exact-head preview
 is READY, which is metadata only; at that 6df checkpoint App54 was unmerged and undeployed to production.
-The [current ledger](evidence/inspector-current-actions-20260921/README.md)
+The current ledger
 retains the separate 60c readiness, 57e packaging and 6df startup failures. Production then remained App53 `e40c287`, with its original
 failed Linux postmerge gate preserved separately from canonical **29/29**.
 The startup-link correction at 4338e57
@@ -372,7 +390,7 @@ CI **35649707689**, with 692 units and 13 standalone controls passing per platfo
 The sole Windows failure was initial canvas-title visibility at five seconds,
 before any edit/recovery operation; correct incoming source remained at loading
 fonts. Late font acquisition and eleven incomplete responses at teardown do not
-establish a permanent stall or a dominant cause. The [failed gate](evidence/font-readiness-acceptance-20260921/README.md#preserved-failed-windows-gate)
+establish a permanent stall or a dominant cause. The failed gate
 is preserved.
 
 App54 font-preparation revision `a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb`, tree
@@ -389,7 +407,7 @@ Linux **39/39** but fails Windows **38/39**; both pass 704 units, 13 standalone
 controls, typecheck and build. The Open in Author URL assertion exceeds its existing
 five-second deadline at `inspector-actions.spec.ts:176`; later source checks are
 not reached. Original4338 font readiness passes in this run. No navigation cause
-or data-loss finding is established. The [frozen final audit](evidence/font-readiness-acceptance-20260921/app54/final-a4eb-ci/release-audit.json)
+or data-loss finding is established. The frozen final audit
 retains exact source/artifact bindings and the original failed trace; that failure remains preserved.
 The Python artifact workflow is not applicable under its full-PR path filters,
 not a fresh pass. Exact-head preview is READY metadata only; an
@@ -397,7 +415,7 @@ unauthenticated request redirects to sign-in, with no preview-browser acceptance
 At that a4eb capture App54 was unmerged and production remained App53
 `e40c287`. The separate suggestion-details candidate remains unreleased and supplies
 no acceptance here. No local/browser pass broadens native compatibility.
-The [bounded navigation diagnosis](evidence/font-readiness-acceptance-20260921/README.md#author-navigation-diagnosis-and-prospective-policy)
+The bounded navigation diagnosis
 records Loading Author and a delayed successful script response: 1490 bytes inferred
 from ETag, 766 compressed bytes recorded, actual body absent. Later DOM does not
 accept unreached assertions or identify a cause. App54 accepted merge
@@ -414,7 +432,7 @@ controls and 39/39 browsers on both Linux and Windows**. Exact-head preview was
 READY/protected, not browser accepted. The identical reviewed tree is merged/live
 at 8f on READY deployment `dpl_H1FtXx1QSuGxn3MwzJwWJpGtRg8b`, but full canonical
 acceptance **fails (34/39 passed)** at five no-POST assertions observing Clerk environment
-POSTs. The [safe audit](evidence/font-readiness-acceptance-20260921/app54/canonical8f/write-audit/REPORT.md.txt)
+POSTs. The safe audit
 records ten such requests, nine with HTTP200/zero-length bodies and one incomplete.
 No fixture-content needle was detected in captured fields; uncaptured data remains
 unknown. Three final action page-error assertions were not reached; the two share
@@ -425,7 +443,7 @@ remain private. Postmerge CI 35660464578
 finishes failed: Linux 39/39 passes while Windows 38/39 fails, with 704 units/13 controls/typecheck/build
 passing on each. Windows fails initial gallery-rail title visibility after 5,000ms
 with correct source, clean schema and Loading slide fonts; later editing/export/
-reimport checks were not reached. The [final audit](evidence/font-readiness-acceptance-20260921/app54/merged8f/postmerge-ci/REPORT.md.txt)
+reimport checks were not reached. The final audit
 preserves this separate failed gate without cause inference or a retry. No canonical
 pass or general native/font acceptance is claimed. That September 21 checkpoint was paused; the user resumed work on September 29. See the [current source checkpoint](handoff-runtime-2026-09-29.md) for ongoing repairs and release holds.
 
@@ -438,7 +456,7 @@ of the account payment/spending-limit restriction; no application CI or producti
 acceptance is claimed. Unbusy asynchronous account replacements still need a
 synchronous invalidation guard and held-response control.
 Other local source writers still require their separate preservation checks. These unresolved local findings and raw imported-file/account/agent/metadata boundaries remain outside
-App53 and App54. See the [App53 ledger](evidence/author-source-acceptance-20260921/README.md)
+App53 and App54. See the App53 ledger
 and its immutable application evidence links. Issue88 remains OPEN. Native/font
 compatibility, required repair and release gates remain separate; geometry is
 deferred as the coordinated set below. The unimplemented worker candidate remains in the [handoff](handoff-2026-09-21.md).
@@ -451,11 +469,11 @@ site40) remain unmerged. In particular, site40 is not independently shipped.
 | Topic | Tracker | Do not describe as done |
 | --- | --- | --- |
 | Linux vs Chromium native-width residual at the 0.1px gate | [opf-render#24](https://github.com/OpenPresentation/opf-render/issues/24) | Rounding that fixes Linux but breaks macOS is rejected |
-| General native PowerPoint fidelity beyond the supported footer placeholders | [opf#87](https://github.com/OpenPresentation/opf/issues/87) | Finite B/C and bounded Carlito edit controls above are accepted evidence, as is one finite mixed-size table edit/save/reopen ([evidence](evidence/windows-native-mixed-edit-20260922/README.md)). Tab tolerance, general mixed-size table layout and preview/native wrapping, physical glyph identity/fallback/synthesis, embedding and general layout/reflow fidelity remain open; supported native footer placeholders, self-import and tagged furniture do not certify arbitrary Office behavior |
+| General native PowerPoint fidelity beyond the supported footer placeholders | [opf#87](https://github.com/OpenPresentation/opf/issues/87) | Finite B/C and bounded Carlito edit controls above are accepted evidence, as is one finite mixed-size table edit/save/reopen (evidence). Tab tolerance, general mixed-size table layout and preview/native wrapping, physical glyph identity/fallback/synthesis, embedding and general layout/reflow fidelity remain open; supported native footer placeholders, self-import and tagged furniture do not certify arbitrary Office behavior |
 | Public-surface acceptance checklist | [opf#88](https://github.com/OpenPresentation/opf/issues/88) | Shipping features does not establish every acceptance item; use the checklist and deployment receipts |
 | HarfBuzz / prepared-glyph shaping | Archive branches `codex/archive-shaping-20260915` | Prototypes are preserved, not in npm |
 | Selectable vector PDF | [pdf plan](plans/pdf-export.md) | Shipped in opf-render 0.12.0 (opf-render#90; the browser download entry `@openpresentation/opf-render/export-browser` ships there too); PDF/UA, PDF/A and viewer coverage beyond pdf.js, PDFium and poppler remain open |
-| Mermaid `diagram` as native editable PowerPoint shapes; canvas editing of diagram nodes | [diagrams](diagrams.md#native-shapes-in-powerpoint), [diagrams plan](plans/diagrams-svg.md) | Shipped: `diagram` payloads (Mermaid 12.1 via pele) in the SVG, PNG and PDF preview, and in PPTX (SH-07) by default as one group of native shapes, text and connectors (`diagrams: "shapes"`; `"picture"` gives the native SVG picture with a PNG fallback, `alt` as description; both round-trip through `fromPptx`). The shapes cover the 32 families of core `DIAGRAM_SHAPE_FAMILIES` as one group of native shapes, text and connectors from the preview's geometry, each family compared with the preview in PowerPoint 365 in five designs; straight edges without arrowheads are glued connectors, other edges exact freeforms (PowerPoint refuses freeform connectors). Not shipped: editing nodes on the canvas |
+| Mermaid, Graphviz DOT and PlantUML `diagram` as native editable PowerPoint shapes; canvas editing of diagram nodes | [diagrams](diagrams.md#native-shapes-in-powerpoint), [diagrams plan](plans/diagrams-svg.md) | Shipped: `diagram` payloads (Mermaid 12.1 via pele, plus OPF's bounded Graphviz DOT and PlantUML readers) in the SVG, PNG and PDF preview, and in PPTX (SH-07) by default as one group of native shapes, text and connectors (`diagrams: "shapes"`; `"picture"` gives the native SVG picture with a PNG fallback, `alt` as description; both round-trip through `fromPptx`). The shapes cover the 32 families of core `DIAGRAM_SHAPE_FAMILIES` as one group of native shapes, text and connectors from the preview's geometry, each family compared with the preview in PowerPoint 365 in five designs; straight edges without arrowheads are glued connectors, other edges exact freeforms (PowerPoint refuses freeform connectors). Not shipped: editing nodes on the canvas |
 | Full visual editor / IME / bidi / repair loop | [developer adoption](plans/developer-adoption-20260915.md) | Schema support ≠ WYSIWYG coverage |
 
 CLI 0.9.2 and earlier do not render or export PPTX; CLI 0.10.0 adds `opf render`, `opf export` and `opf import`

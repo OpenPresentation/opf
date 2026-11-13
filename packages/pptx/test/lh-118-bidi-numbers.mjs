@@ -28,7 +28,8 @@ let checks = 0;
   const deck = {language: 'ar', slides: [{title: 'أداء المبيعات', blocks: [
     {metric: {value: '+16%', label: 'نمو المبيعات السنوي', delta: '+8 نقاط', trend: 'up'}},
     {table: {columns: ['المنطقة', 'التغير'], rows: [['الخليج', '+3%'], ['مصر', '-2.5%']]}},
-  ]}, {title: 'نص', text: 'ارتفعت المبيعات +16% و 2026 فقط.'}]};
+  // LH-188: a title of more than four words keeps the second slide a content slide, so its sentence stays on one line.
+  ]}, {title: 'نص قصير عن أداء المبيعات هذا العام', text: 'ارتفعت المبيعات +16% و 2026 فقط.'}]};
   const out = await read(deck);
   const slide = paragraphs(out.slide(1)), text = paragraphs(out.slide(2));
   const value = slide.find(paragraph => paragraph.text === '+16%');
@@ -49,7 +50,7 @@ let checks = 0;
   // Without provenance, a number-only cell written left to right still imports as the logical start.
   const native = await fromPptx(zipSync(nativeTableEntries(out.bytes)));
   const table = native.slides[0].blocks?.find(block => block.table)?.table ?? native.slides[0].table;
-  assert.ok([...table.rows.flat()].every(entry => entry?.style?.align === undefined || entry.style.align === 'left'), 'number-only cells import as the start edge');
+  assert.ok([...table.rows.flat()].every(entry => entry?.style?.align === undefined || entry.style.align === 'start'), 'number-only cells import as the start edge');
   assert.deepEqual(leftToRightPieces('عن v2.0 و +3% و $5'), [[3, 7], [10, 13], [16, 18]]);
   checks += 13;
 }

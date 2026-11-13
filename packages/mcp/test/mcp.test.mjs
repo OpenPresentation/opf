@@ -36,7 +36,7 @@ describe("opf-mcp", () => {
 		assert.equal(info.name, "opf");
 		assert.match(client.getInstructions(), /format-card/);
 		const { tools } = await client.listTools();
-		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "read_font_file", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
+		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "read_font_file", "read_icons", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
 		for (const tool of tools) {
 			assert.equal(tool.inputSchema.type, "object", tool.name);
 			assert.equal(tool.outputSchema?.type, "object", tool.name);
@@ -487,10 +487,10 @@ describe("the bundled sources", () => {
 		const bytes = sources.docs.reduce((total, doc) => total + Buffer.byteLength(doc.markdown), 0);
 		// Serve the exact checked-in public pages; byte growth must not be hidden by trimming documentation.
 		for (const doc of sources.docs) assert.equal(doc.markdown, readFileSync(path.join(root, "docs", doc.slug + ".md"), "utf8").replaceAll("\r\n", "\n"), doc.slug);
-		// Reviewed v0.33 refresh: 1,197,594 at e3ff9 to 1,231,117 at d260; combined final 1,231,624, all 42 pages retained.
-		// SmartArt adds 22,940 bytes; chart/layout/shape guides account for the remainder. No maintainer page was added.
-		// Source/page deltas and explicit headroom: docs/handoff/2026-11-07/mcp-size-budget-033.md.
-		assert.ok(bytes < 1_240_000, `${bytes} bytes of documentation`);
+		// Reviewed for v0.34.0 on 2026-11-12: 1,351,126 exact bytes over the same public pages (1,310,537 at 4e03508b6). The growth is
+		// reviewed guidance, not maintainer notes: icon loading per host (icons.md), the viewer tools and set icons (mcp.md), the new rules
+		// (validate.md), digits by language (design-resolution.md). The limit keeps the same 3% headroom over the reviewed size.
+		assert.ok(bytes < 1_392_000, `${bytes} bytes of documentation`);
 	});
 });
 

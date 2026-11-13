@@ -4,6 +4,7 @@
  *
  * Internal module: not part of the package exports.
  */
+import { isSupportedNumberingSystem, numberingSystemExtension, plainLanguageTag, supportedNumberingSystems } from './numerals.js';
 
 export interface LanguageTagProblem {
 	message: string;
@@ -72,6 +73,16 @@ export function languageTagProblem(tag: string): LanguageTagProblem | undefined 
 				caseOnly: false,
 			};
 		}
+	}
+	// LH-106: `-u-nu-<system>` chooses the digits OPF generates numbers in; a system it does not draw falls back to the language's own.
+	const system = numberingSystemExtension(tag);
+	if (system !== undefined && !isSupportedNumberingSystem(system)) {
+		const only = /-u-nu-[a-z0-9]+$/i.test(tag) && tag.toLowerCase().split('-u-').length === 2;
+		return {
+			message: `'${tag}' names the numbering system '${system}', which OPF does not draw; generated numbers use the language's own digits, or Latin ones. OPF draws only the systems PowerPoint also draws in a native chart: ${supportedNumberingSystems().map((name) => `'${name}'`).join(', ')}.`,
+			...(only ? { suggestion: plainLanguageTag(tag) } : {}),
+			caseOnly: false,
+		};
 	}
 	if (parsed === tag) return undefined;
 	if (parsed.toLowerCase() === tag.toLowerCase())

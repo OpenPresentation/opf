@@ -1,0 +1,15 @@
+# Touch toolbar beside a docked inspector
+
+SOURCE ONLY; corrective code/tests UNRUN. Base `b5119ae00e8ba5339722647d9dbf2d567404d71b`.
+
+Root's complete normal-engine mobile test failed at the1024px Chromium touch landscape audit: Redo overlaps Content by5x44px. The two subsequent preview-open failure JSONs arose from browser closure after Promise.all rejected; they are consequences, not independent preview timeout findings. The original Windows60-second preview timeout remains unexplained.
+
+One separately authorized read-only localhost Chromium158.0.8127.18 probe used the unchanged fresh playground at1024x768/deviceScaleFactor2/hasTouchtrue/isMobilefalse. Both the original350ms observation and actual font/animation-settled observation show the same overlap. Fonts loaded, animations empty, zero page/console errors, failed requests and outside-network requests. All223 playground assets and tracked source stayed exact. Actual toolbar/canvas width602px spansx176..778; history controls556.953px spill tox800.953. Redo spans756.953..800.953; Content starts796, producing4.953px horizontal overlap. The view switch collapses to2px including borders over177px scroll content. The settled PNG was independently viewed; the hidden views and spill are visible. No transient/font/resource-contention cause is claimed.
+
+The minimal coarse-pointer CSS change lets the toolbar grow vertically, prevents the view-switch group shrinking, and gives history controls a full wrapping row. Every action and44px target remains; no hiding, horizontal scroll, test tolerance or deadline relaxation. Existing phone/tablet mobile rules retain their more-specific overrides, and fine-pointer behavior is untouched. The existing landscape regression now also requires the view switch not scroll/clip and every visible toolbar button remain fully contained in its group. Other states, engines, sizes, assertions and parallelism are unchanged.
+
+Retained local evidence: `/tmp/opf-mobile-failure-root-focus02/{receipt.json,mobile.log}` and `/tmp/opf-tablet1024-probe01/{probe.mjs,receipt.json,after-350ms.json,after-350ms.png,settled.json,settled.png,artifacts-before.json}`. No product output was built or changed for the probe. The source successor requires review, a fresh maintained playground build and the complete existing mobile test before any qualified layout claim. No Windows-fix claim follows from a Mac result.
+
+## Actual normal qualification
+
+After the independent real-touch input correction, the complete normal file passes21groups in Chromium/WebKit34.815s on37873455. The independent1024px after-review confirms the toolbar grows48→111px, all four views are visible,44px targets remain and Redo no longer overlaps Content. All223 own current assets/source remain unchanged during qualification. [Before/after images, receipts and limits](final-ci-successor-focus/README.md). Optional FULL-only and physical-device states are not claimed; the original Windows preview-timeout cause remains unknown.

@@ -2,10 +2,39 @@ import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {cleanBase,headingValue,joinRichLines} from './rich-heading.js';
+import {rejoinDetachedSpace} from './content-topology.js';
+import {currentThemeLook} from './document-provenance.js';
 const TAG='OPF_HEADING_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
+const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 export const attachHeadingTags=(entries,records)=>attachTextTags(entries,records,TAG,'opfHeading','heading',{signed:true});
+
+// RR-105 (opf#1291): a title of fixed lines (tag lineBreaks 'paragraphs') is one paragraph per line; the paragraphs an authored hard break
+// starts are listed (`hard`) and stay a "\n", every other paragraph break is a soft wrap and joins its lines. When PowerPoint's
+// paragraphs are no longer the exported lines (an edit added, removed or joined one), which breaks were wraps is unknown, so every
+// paragraph break is read as the line break the user sees ("\n"): no words run together and none is lost. A line break inside a
+// paragraph (Shift+Enter in PowerPoint) is text, a "\n".
+function hardBreaksOf(data,count) {
+  if(count!==data.lines)return {has:index=>index>0};
+  return Array.isArray(data.hard)?new Set(data.hard.filter(index=>Number.isSafeInteger(index))):new Set();
+}
+function joinTitleParagraphs(list,data) {
+  if(!Array.isArray(list)||list.length<2)return list;
+  const hard=hardBreaksOf(data,list.length);
+  const text=list.map((paragraph,index)=>(index&&hard.has(index)?'\n':'')+String(paragraph?.text??'')).join('');
+  const merged={...list[0],text,maxFontSize:Math.max(0,...list.map(paragraph=>paragraph?.maxFontSize??0))};
+  if(!list.some(paragraph=>paragraph?.richText!==undefined))return [merged];
+  const runs=[];
+  for(const [index,paragraph] of list.entries()) {
+    const current=array(paragraph?.richText??paragraph?.text).map(run=>object(run)?{...run}:run);
+    if(index&&hard.has(index))runs.push('\n');
+    // A decorated run's space that ended the earlier line joins the run again (as across line shapes).
+    else if(index&&current.length)rejoinDetachedSpace(runs,current[0]);
+    runs.push(...current);
+  }
+  return [{...merged,richText:runs}];
+}
 
 // Tags carry only roles and line ordering. Current native text always wins;
 // neither original source text nor old geometry can be restored from these tags.
@@ -37,13 +66,18 @@ export function importHeadingGroups(shapes,paragraphs,relationships,entries,repo
       if(item.ambiguous||data.group!==first.group||data.count!==count||!Number.isSafeInteger(data.line)||data.line<0||data.line>=count||ordered[data.line])throw Error('Ambiguous heading line.');
       ordered[data.line]=item;
     }
-    const restored=sourceLineParagraphs(ordered,paragraphs,{legacy:true});
+    // RR-105 (opf#1291): a title of fixed lines, one paragraph per line (joinTitleParagraphs).
+    const fixed=count===1&&first.lineBreaks==='paragraphs'?ordered[0].index:undefined;
+    const lines=fixed===undefined?paragraphs:paragraphs.map((list,index)=>index===fixed?joinTitleParagraphs(list,first):list);
+    const body=fixed===undefined||!readBody?readBody:(index,...rest)=>{const value=readBody(index,...rest);return index===fixed?joinTitleParagraphs(value,first):value;};
+    const restored=sourceLineParagraphs(ordered,lines,{legacy:true});
     for(const item of ordered)consumed.add(item.shape);
     // The same boundaries as the plain text: a new tag's separator, or a native line break between legacy-tagged lines.
     const source=ordered.some(item=>item.data.boundary!==undefined||item.data.separator!==undefined);
     // Only a rich export records the heading's own look (tag.base); a heading exported as a plain string stays one.
-    const base=cleanBase(ordered[0].data.base);
-    const parts=base?joinRichLines(ordered,readBody,(item,last)=>source?item.data.separator:last?'':'\n'):undefined;
+    // RR-105 (opf#1293): the recorded look in the theme's current faces (a theme font change made in PowerPoint is the document's).
+    const base=currentThemeLook(entries,cleanBase(ordered[0].data.base));
+    const parts=base?joinRichLines(ordered,body,(item,last)=>source?item.data.separator:last?'':'\n'):undefined;
     items.push({field:first.field,shapes:ordered.map(item=>item.shape),paragraphs:restored,...(parts?{richText:headingValue(parts,base)}:{})});
     if(!groupUnchanged(ordered,paragraphs))report({code:'heading-import-reflow',message:'Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.'});
   }catch(error){report({code:'invalid-heading-provenance',message:`${error.message} Ordinary import retains visible native text.`});}

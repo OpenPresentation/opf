@@ -9,7 +9,7 @@
 <body>
 <div id="opf-deck" class="opf-ui" data-show="preview" data-ready="false">
   <header class="deck-bar">
-    <div id="deck-title" class="deck-title"></div>
+    <div id="deck-title-row" class="deck-title-row"><div id="deck-title" class="deck-title"></div></div>
     <div class="deck-group" role="group" aria-label="History">
       <button type="button" id="deck-undo" class="deck-button deck-icon" aria-label="Undo" title="Undo · Ctrl/Cmd Z" disabled><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg></button>
       <button type="button" id="deck-redo" class="deck-button deck-icon" aria-label="Redo" title="Redo · Ctrl/Cmd Shift Z" disabled><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13"/></svg></button>
@@ -23,9 +23,15 @@
     <div id="deck-design" class="deck-item"></div>
     <button type="button" id="deck-find-open" class="deck-button deck-icon" aria-label="Find and replace" title="Find and replace · Ctrl/Cmd F"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
     <div id="deck-export" class="deck-item deck-export" hidden></div>
-    <button type="button" id="deck-expand" class="deck-button deck-icon" aria-label="Full screen" title="Full screen" hidden><svg class="deck-expand-open" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></svg><svg class="deck-expand-close" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" x2="21" y1="10" y2="3"/><line x1="3" x2="10" y1="21" y2="14"/></svg></button>
+    <button type="button" id="deck-expand" class="deck-button deck-icon" aria-label="Expand" title="Expand" hidden><svg class="deck-expand-open" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></svg><svg class="deck-expand-close" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" x2="21" y1="10" y2="3"/><line x1="3" x2="10" y1="21" y2="14"/></svg></button>
     <button type="button" id="deck-send" class="deck-button deck-send" hidden disabled>Send to Claude</button>
   </header>
+  <p id="deck-note" class="deck-note" role="status" hidden></p>
+  <div id="deck-start" class="deck-start" role="group" aria-label="Start" hidden>
+    <span id="deck-start-label" class="deck-start-label">A starter deck to edit.</span>
+    <select id="deck-example" class="deck-select" aria-label="Open an example deck" hidden><option value="">Open an example…</option></select>
+    <button type="button" id="deck-paste" class="deck-button deck-small">Paste a deck</button>
+  </div>
   <div id="deck-root" class="deck-root">
     <div id="deck-find" class="deck-find"></div>
     <div id="deck-panes" class="deck-panes" role="tabpanel">

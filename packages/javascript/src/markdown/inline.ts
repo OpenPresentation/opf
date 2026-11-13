@@ -16,7 +16,7 @@ interface Style {
   fontSize?: number;
   fontFamily?: string;
   link?: string;
-  lang?: string;
+  language?: string;
 }
 interface Seg {
   text: string;
@@ -50,7 +50,7 @@ const SPAN_FLAGS: Record<string, keyof Style> = {
   sub: "subscript",
   subscript: "subscript",
 };
-const SPAN_VALUES: Record<string, "color" | "fontSize" | "fontFamily" | "lang"> = { color: "color", size: "fontSize", fontsize: "fontSize", font: "fontFamily", fontfamily: "fontFamily", lang: "lang" };
+const SPAN_VALUES: Record<string, "color" | "fontSize" | "fontFamily" | "language"> = { color: "color", size: "fontSize", fontsize: "fontSize", font: "fontFamily", fontfamily: "fontFamily", lang: "language" };
 
 /** Read `key`, `key=bare` and `key="json string"` pairs separated by spaces or commas. Returns undefined text for a syntax error. */
 export function parseAttributes(source: string): { pairs: [string, string | true][]; error?: string } {
@@ -534,12 +534,12 @@ function serializeRun(run: Run, breakText: string): string | undefined {
     if (!core) return edge(text);
     out = core.split("\n").map(escapeInline).join(breakText);
   }
-  if (run.color !== undefined || run.fontSize !== undefined || run.fontFamily !== undefined || run.lang !== undefined) {
+  if (run.color !== undefined || run.fontSize !== undefined || run.fontFamily !== undefined || run.language !== undefined) {
     const attrs: string[] = [];
     if (run.color !== undefined) attrs.push(`color=${attrValue(String(run.color))}`);
     if (run.fontSize !== undefined) attrs.push(`size=${String(run.fontSize)}`);
     if (run.fontFamily !== undefined) attrs.push(`font=${attrValue(String(run.fontFamily))}`);
-    if (run.lang !== undefined) attrs.push(`lang=${attrValue(String(run.lang))}`);
+    if (run.language !== undefined) attrs.push(`lang=${attrValue(String(run.language))}`);
     out = `[${out}]{${attrs.join(" ")}}`;
   }
   if (run.subscript === true) out = `<sub>${out}</sub>`;

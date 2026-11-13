@@ -4,7 +4,7 @@
  * `validate` returns findings written for tools (an Ajv sentence such as "must be equal to one of the allowed values", a rule's own sentence, `help`
  * text for agents). An editor, the CLI or an agent that shows them to a person wants the sentence of artifacts/source-editor/VALIDATOR-HINTS.md:
  *
- *     `titleAlignment` must be left, center or right, but is `middle`.      (message)
+ *     `titleAlignment` must be start, center or end, but is `middle`.      (message)
  *     did you mean `center`?                                                (next)
  *
  * The text is written from the structured data a finding already carries (the schema keyword and its parameters, the suggestions, the measured
@@ -60,6 +60,7 @@ const LANGUAGE = "a language tag like `en-US` or `de`";
  * its phrase in the same change. The catalog reference pattern is written per catalog kind by `describeFinding` and is listed for completeness.
  */
 export const PATTERN_PHRASES: Readonly<Record<string, PatternPhrase>> = Object.freeze({
+  "\\S": {what: "a label with at least one non-whitespace character", next: "write a nonblank label, or omit it."},
   "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$": { what: "a hex color like `#1F4E79` (3, 6 or 8 hex digits)", next: "write the color as #RRGGBB." },
   "^[a-z][a-z0-9-]*$": { what: ID, next: ID_NEXT },
   "^[a-z0-9][a-z0-9-]*$": { what: "an id of lowercase letters, digits and hyphens, like `my-chart`", next: ID_NEXT },
@@ -229,6 +230,10 @@ function describeSchema(finding: Finding, context: FindingTextContext, helpers: 
     case "exclusiveMinimum":
     case "maximum":
     case "exclusiveMaximum": {
+      // A 0.33 anchored overlay size in pixels (check-document.ts gives the finding the rename to widthPx or heightPx).
+      const key = segments.at(-1);
+      if (keyword === "maximum" && segments.at(-2) === "at" && (key === "width" || key === "height") && finding.fixes?.some((fix) => fix.id === "rename"))
+        return { message: `${cap(label)} is a fraction of the block, at most ${params.limit}, but is ${describeValue(actual)}.`, next: `did you mean ${code(`${key}Px`)}? Rename the key to keep the size in pixels.` };
       const bound = /minimum/i.test(keyword) ? "at least" : "at most";
       return {
         message: `${cap(label)} must be ${keyword.startsWith("exclusive") ? (bound === "at least" ? "greater than" : "less than") : bound} ${params.limit}, but is ${describeValue(actual)}.`,

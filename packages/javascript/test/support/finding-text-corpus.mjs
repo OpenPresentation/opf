@@ -24,7 +24,6 @@ const png = (width, height) => {
 	bytes.writeUInt32BE(height, 20);
 	return `data:image/png;base64,${bytes.toString('base64')}`;
 };
-const person = (n) => ({ blocks: [{ image: { src: `https://example.com/${n}.png`, alt: `Person ${n}` } }, { text: `Person ${n}` }], composition: { mode: 'column' } });
 const withGallery = { catalogs: [gallery] };
 const longItems = [
 	'Enterprise renewals slipped by three weeks in the northern region after the pricing change',
@@ -34,7 +33,7 @@ const longItems = [
 	'Hiring for the platform team is behind plan, and two senior roles have been open since March',
 	'Cloud spend rose faster than usage, mostly from idle staging environments left running overnight',
 ];
-const footer = { left: { text: 'A footer that keeps going and going and going and going and going and going and going and going and going and going and going and going' }, center: { text: 'Centre' }, right: { text: '{{slide.number}}' } };
+const footer = { start: { text: 'A footer that keeps going and going and going and going and going and going and going and going and going and going and going and going' }, center: { text: 'Centre' }, end: { text: '{{slide.number}}' } };
 
 /** Real `validate` calls. `name` is unique; `rule` is the rule the case must trigger; `pick` chooses among several findings of that rule. */
 export const CASES = [
@@ -51,14 +50,17 @@ export const CASES = [
 	{ name: 'shape-adjust-unknown', rule: 'opf/shape-adjust-unknown', input: deck([{ title: 'T', blocks: [{ shape: 'roundRect', adjust: { adj1: 0.3 } }] }]) },
 	{ name: 'shape-adjust-range', rule: 'opf/shape-adjust-range', input: deck([{ title: 'T', blocks: [{ shape: 'roundRect', adjust: { adj: 0.8 } }] }]) },
 	{ name: 'shape-link-hidden', rule: 'opf/shape-link-hidden', input: deck([{ title: 'T', blocks: [{ shape: 'rect', text: 'x', link: 'https://example.com', hidden: true }] }]) },
+	{ name: 'shape-anchor-size-unit', rule: 'opf/shape-anchor-size-unit', input: deck([{ title: 'T', blocks: [{ id: 'photo', text: 'x' }], shapes: [{ shape: 'ellipse', at: { block: 'photo', edge: 'top', width: 6, height: 5 } }] }]) },
 	{ name: 'shape-anchor-missing', rule: 'opf/shape-anchor-missing', input: deck([{ title: 'T', blocks: [{ id: 'photo', text: 'x' }], shapes: [{ shape: 'ellipse', at: { block: 'phot', edge: 'top' } }] }]) },
 	{ name: 'connector-end-missing', rule: 'opf/connector-end-missing', input: deck([{ title: 'T', blocks: [{ id: 'plan', text: 'a' }, { id: 'ship', text: 'b' }], shapes: [{ connector: { from: 'plan', to: 'shipping' } }] }]) },
-	{ name: 'image-placement-invalid', rule: 'opf/image-placement-invalid', input: deck([{ title: 'T', blocks: [{ image: { src: 'https://e.com/a.png', alt: 'a' }, placement: { edge: 'left' } }, { image: { src: 'https://e.com/b.png', alt: 'b' }, placement: { edge: 'left' } }] }]) },
-	{ name: 'image-placement-in-group', rule: 'opf/image-placement-invalid', input: deck([{ title: 'T', blocks: [{ blocks: [{ image: { src: 'https://e.com/a.png', alt: 'a' }, placement: { edge: 'left' } }, { text: 'x' }] }, { text: 'y' }] }]) },
+	{ name: 'image-placement-invalid', rule: 'opf/image-placement-invalid', input: deck([{ title: 'T', blocks: [{ image: { src: 'https://e.com/a.png', alt: 'a' }, placement: { edge: 'start' } }, { image: { src: 'https://e.com/b.png', alt: 'b' }, placement: { edge: 'start' } }] }]) },
+	{ name: 'image-placement-in-group', rule: 'opf/image-placement-invalid', input: deck([{ title: 'T', blocks: [{ blocks: [{ image: { src: 'https://e.com/a.png', alt: 'a' }, placement: { edge: 'start' } }, { text: 'x' }] }, { text: 'y' }] }]) },
 	{ name: 'dataset-unknown', rule: 'opf/dataset-unknown', input: deck([{ title: 'T', chart: { type: 'column', data: { dataset: 'sale' } } }], { datasets: { sales: { columns: ['region', 'revenue'], rows: [['EMEA', 1]] } } }) },
 	{ name: 'dataset-field-unknown', rule: 'opf/dataset-field-unknown', input: deck([{ title: 'T', table: { dataset: 'sales', fields: ['regon'] } }], { datasets: { sales: { columns: ['region', 'revenue'], rows: [['EMEA', 1]] } } }) },
 	{ name: 'data-column-duplicate', rule: 'opf/data-column-duplicate', input: deck([{ title: 'T', chart: { type: 'column', data: { dataset: 'sales' } } }], { datasets: { sales: { columns: ['region', 'region'], rows: [['EMEA', 1]] } } }) },
 	{ name: 'chart-mapping-unknown-column', rule: 'opf/chart-mapping-unknown-column', input: deck([{ title: 'T', chart: { type: 'column', data: { columns: ['Q', 'R', 'S'], rows: [['x', 1, 2]] }, mapping: { series: ['Profit'] } } }]) },
+	{ name: 'chart-reference-unsupported-type', rule: 'opf/chart-reference-unsupported-type', input: deck([{title:'T',chart:{type:'pie',data:{columns:['Region','Share'],rows:[['North',60],['South',40]]},referenceLines:[{value:50}]}}]) },
+	{ name: 'chart-reference-axis-unavailable', rule: 'opf/chart-reference-axis-unavailable', input: deck([{title:'T',chart:{type:'line',data:{columns:['Q','R'],rows:[['Q1',10],['Q2',20]]},referenceLines:[{value:15,axis:'secondary'}]}}]) },
 	{ name: 'number-format-invalid', rule: 'opf/number-format-invalid', input: deck([{ title: 'T', table: { columns: [{ name: 'a', format: '%' }], rows: [[1]] } }]) },
 	{ name: 'variable-invalid-value', rule: 'opf/variable-invalid-value', input: { ...deck([{ title: '{{n}}', text: 'x' }]), variables: { n: { type: 'number', value: 1 } } }, options: { values: { n: 'abc' } } },
 	{ name: 'variable-unknown-builtin', rule: 'opf/variable-unknown-builtin', input: deck([{ title: '{{deck.nmae}}', text: 'x' }]) },
@@ -76,7 +78,7 @@ export const CASES = [
 	{ name: 'asset-cycle', rule: 'opf/asset-cycle', input: deck([{ title: 'T', image: 'asset:a' }], { assets: { a: 'asset:b', b: 'asset:a' } }) },
 	{ name: 'catalog-record', rule: 'opf/catalog-record', input: deck([{ title: 'T', text: 'x' }], { catalogs: { custom: { themes: { custom: { name: 'C', background: 'light1' } } } } }) },
 	{ name: 'layout-template', rule: 'opf/layout-template', input: layoutDeck({ name: 'M', direction: 'row', regions: [{ name: 'title' }, { name: 'a', accepts: ['text'], size: 'auto' }, { name: 'b', accepts: ['text'] }] }) },
-	{ name: 'layout-region-reserved', rule: 'opf/layout-region', input: layoutDeck({ name: 'M', regions: [{ name: 'title' }, { name: 'left', accepts: ['text'] }] }) },
+	{ name: 'layout-region-reserved', rule: 'opf/layout-region', input: layoutDeck({ name: 'M', regions: [{ name: 'title' }, { name: 'start', accepts: ['text'] }] }) },
 	{ name: 'layout-region-twice', rule: 'opf/layout-region', input: layoutDeck({ name: 'M', regions: [{ name: 'title' }, { name: 'a', accepts: ['text'] }, { name: 'a', accepts: ['list'] }] }) },
 	{ name: 'unresolved-reference-layout', rule: 'opf/unresolved-reference', input: deck([{ title: 'T', layout: 'pilars' }]), options: withGallery },
 	{ name: 'unresolved-reference-theme', rule: 'opf/unresolved-reference', input: deck([{ title: 'T', text: 'x' }], { design: { theme: 'minimall' } }), options: withGallery },
@@ -117,10 +119,14 @@ export const CASES = [
 	{ name: 'icon-unknown', rule: 'opf/icon-unknown', input: deck([{ title: 'T', items: [{ text: 'a', icon: 'brand:stra' }] }], { catalogs: { custom: { iconSets: { brand: iconSet } } } }) },
 	{ name: 'icon-invalid', rule: 'opf/icon-invalid', input: deck([{ title: 'T', items: [{ text: 'a', icon: 'mark' }] }], { icons: { mark: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><script>alert(1)</script></svg>' } }) },
 	{ name: 'icon-dropped', rule: 'opf/icon-dropped', input: deck([{ title: 'T', items: [{ text: 'a', icon: 'brand:star' }, { text: 'b' }], numbering: 'arabic' }], { catalogs: { custom: { iconSets: { brand: iconSet } } } }) },
+	{ name: 'shape-off-slide', rule: 'opf/shape-off-slide', input: deck([{ title: 'T', text: 'Body', shapes: [{ shape: 'rect', text: 'Draft', x: 70, y: 10, width: 0.2, height: 0.1 }] }]) },
+	{ name: 'chart-label-collision', rule: 'opf/chart-label-collision', input: deck([{ title: 'Results', chart: { type: 'line', data: { columns: ['Quarter', 'Actual'], rows: [['Q1', 10], ['Q2', 20], ['Q3', 30]] }, referenceLines: Array.from({ length: 5 }, () => ({ value: 20, label: 'Plan' })) } }]) },
+	{ name: 'timeline-period-short', rule: 'opf/timeline-period-short', input: deck([{ title: 'Plan', timeline: { events: [{ when: 'Day 1', what: 'Kickoff', duration: 1 }, { when: 'Year 3', what: 'Delivery', duration: 1000 }] } }]) },
 	{ name: 'arrangement-adapted', rule: 'opf/arrangement-adapted', input: deck([{ layout: 'quad', title: 'T', items: ['North', 'South', 'East'] }], { catalogs: { custom: { layouts: { quad: { name: 'Quad', regions: [{ name: 'title' }, { name: 'quadrants', accepts: ['list'], flow: 'none', arrangement: 'matrix' }] } } } } }) },
 	{ name: 'region-full', rule: 'opf/region-full', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', ...timeline }, { region: 'timeline', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	{ name: 'layout-unplaced', rule: 'opf/layout-unplaced', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', ...timeline }, { region: 'timeline', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
-	{ name: 'reading-order', rule: 'opf/reading-order', input: deck([{ title: 'Team', composition: { mode: 'row' }, blocks: [person(1), person(2)] }]) },
+	// RR-105: cards side by side read card by card (no finding); a layout that draws the body above the title is read out of order.
+	{ name: 'reading-order', rule: 'opf/reading-order', input: deck([{ title: 'Results', text: 'Revenue grew in every region.', layout: 'upside' }], { catalogs: { custom: { layouts: { upside: { name: 'Upside', direction: 'column', regions: [{ name: 'body', accepts: ['text'], role: 'primary' }, { name: 'title' }] } } } } }) },
 	{ name: 'furniture-wraps', rule: 'opf/furniture-wraps', input: { language: 'en-US', design: { footer }, slides: [{ title: 'Results', text: 'Revenue grew.' }] } },
 	{ name: 'font-outside-scheme', rule: 'opf/font-outside-scheme', input: deck([{ title: 'T', text: [{ text: 'x', fontFamily: 'Comic Sans MS' }] }], { design: { fontScheme: 'aptos' } }) },
 	{ name: 'image-resolution', rule: 'opf/image-resolution', input: deck([{ title: 'T', image: { src: png(100, 100), alt: 'x' } }]) },
@@ -132,6 +138,7 @@ export const CASES = [
 	{ name: 'code-highlight-out-of-range', rule: 'opf/code-highlight-out-of-range', input: deck([{ title: 'Code', code: { source: 'a\nb\nc', highlight: [2, 7, [3, 1]] } }]) },
 	{ name: 'code-highlight-range-reversed', rule: 'opf/code-highlight-range-reversed', input: deck([{ title: 'Code', code: { source: 'a\nb\nc', highlight: [2, 7, [3, 1]] } }]) },
 	{ name: 'variable-builtin-missing', rule: 'opf/variable-builtin-missing', input: deck([{ title: '{{speaker.name}}', text: 'x' }]) },
+	{ name: 'variable-group-omitted', rule: 'opf/variable-group-omitted', input: deck([{ title: 'Customers', blocks: [{ blocks: [{ image: { src: 'https://example.com/portrait.jpg', alt: 'A customer' } }, { text: 'var:quote' }] }] }], { template: true, variables: { quote: { type: 'text', required: false } } }) },
 	{ name: 'duration-outside-narrative', rule: 'opf/duration-outside-narrative', input: narrativeDeck({ duration: 5 }) },
 	{ name: 'narrative-duration-range', rule: 'opf/narrative-duration-range', input: narrativeDeck({ catalogs: { custom: { narratives: { arc: record({ duration: { min: 30, max: 10 } }) } } } }) },
 	{ name: 'placeholder-text', rule: 'opf/placeholder-text', input: deck([{ title: 'T', text: 'Lorem ipsum dolor sit amet' }]) },

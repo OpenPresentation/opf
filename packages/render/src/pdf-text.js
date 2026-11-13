@@ -12,6 +12,7 @@ import { attributesOf, inheritStyle, parseFontFamilies, parseFontWeight, parseLe
 
 const bidi = bidiFactory();
 const IGNORED = /[⁦-⁩‎‏‪-‮؜]/u;
+const chunkDirection = chunk => chunk.chars[0].style.direction === "rtl" ? "rtl" : "ltr";
 
 /** Parse `font-feature-settings` / `font-variant-ligatures` of a style into an object of OpenType feature booleans. */
 export function featuresOf(style) {
@@ -122,7 +123,13 @@ export function layoutText(textNode, env, parentStyle, link) {
     const runs = runsByChunk[chunkIndex];
     const total = runs.reduce((sum, run) => sum + run.width, 0);
     const anchor = chunk.chars[0].style["text-anchor"];
-    let x = chunk.x + (anchor === "middle" ? -total / 2 : anchor === "end" ? -total : 0);
+    const rtl = chunkDirection(chunk) === "rtl";
+    // LH-189: the letter spacing after the chunk's last character does not count toward its anchor, as resvg anchors it, so outlined
+    // text and the PDF place a tracked middle or end anchored line where the raster preview does.
+    const last = runs.at(-1), trailing = last && last.width === last.natural ? last.glyphs.at(-1)?.letter ?? 0 : 0, extent = total - trailing;
+    // SVG start/end follow the chunk's base direction; middle stays physical.
+    // Use the same explicit-direction decision as bidi shaping below.
+    let x = chunk.x - (anchor === "middle" ? extent / 2 : anchor === "end" ? rtl ? 0 : extent : anchor === "start" && rtl ? extent : 0);
     for (const run of reorder(runs)) {
       run.x = x + (run.dx ?? 0);
       run.y = chunk.y + (run.dy ?? 0);
@@ -158,7 +165,7 @@ function collapseWhitespace(chars) {
 
 function buildRuns(chunk, env, styleIds, faceCache, linkIds, ownerIds) {
   const text = chunk.chars.map((char) => char.ch).join("");
-  const baseDirection = chunk.chars[0].style.direction === "rtl" ? "rtl" : "ltr";
+  const baseDirection = chunkDirection(chunk);
   // Levels per UTF-16 unit; characters take the level of their first unit.
   const embedding = bidi.getEmbeddingLevels(text, baseDirection);
   const levels = [];
@@ -255,6 +262,7 @@ function shapeRun(run, env) {
   run.glyphs = glyphs;
   run.natural = glyphs.reduce((sum, glyph, index) => {
     glyph.spacing = letterSpacing + (glyph.codePoints.length === 1 && glyph.codePoints[0] === 0x20 ? wordSpacing : 0);
+    glyph.letter = letterSpacing;
     glyph.nominalIndex = index;
     return sum + glyph.advance * scale + glyph.spacing;
   }, 0);

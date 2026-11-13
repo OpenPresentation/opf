@@ -6,7 +6,6 @@ import { CHART, type ExplainDetail, ex } from "./finding-text-explain-util.js";
 const WHITE = { background: { type: "solid", color: "#FFFFFF" } };
 const ROADMAP = { name: "Roadmap", regions: [{ name: "title" }, { direction: "row", regions: [{ name: "timeline", accepts: ["timeline"], max: 1 }, { name: "notes", accepts: ["text", "list"], flow: "column" }] }] };
 const TIMELINE = { timeline: { events: [{ when: "Q1", what: "Pilot" }, { when: "Q2", what: "Launch" }] } };
-const PERSON = (n: number) => ({ blocks: [{ image: { src: `https://example.com/${n}.png`, alt: `Person ${n}` } }, { text: `Person ${n}` }], composition: { mode: "column" } });
 const SERIES = (count: number) => ({ columns: ["Quarter", ...Array.from({ length: count }, (_, i) => `S${i + 1}`)], rows: [["Q1", ...Array.from({ length: count }, (_, i) => i + 1)]] });
 const LONG_ITEMS = [
   "Enterprise renewals slipped by three weeks in the northern region after the pricing change",
@@ -48,10 +47,11 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { slides: [{ title: "Results", text: "Q1" }, { title: "Results", text: "Q2" }] },
     { slides: [{ title: "Results: Q1", text: "Q1" }, { title: "Results: Q2", text: "Q2" }] },
   ),
+  // RR-105: cards side by side (a picture over a name) read card by card, so the example is a layout that draws the body above the title.
   "opf/reading-order": ex(
     "Reorder or regroup the blocks so the order they are read in follows the order they appear in, or choose a layout that puts the title first.",
-    { title: "Team", composition: { mode: "row" }, blocks: [PERSON(1), PERSON(2)] },
-    { title: "Team", composition: { mode: "column" }, blocks: [PERSON(1), PERSON(2)] },
+    { catalogs: { custom: { layouts: { upside: { name: "Upside", direction: "column", regions: [{ name: "body", accepts: ["text"], role: "primary" }, { name: "title" }] } } } }, slides: [{ layout: "upside", title: "Results", text: "Revenue grew in every region." }] },
+    { catalogs: { custom: { layouts: { upside: { name: "Upside", direction: "column", regions: [{ name: "title" }, { name: "body", accepts: ["text"], role: "primary" }] } } } }, slides: [{ layout: "upside", title: "Results", text: "Revenue grew in every region." }] },
   ),
   "opf/link-text": ex(
     "Make the link text say where the link goes, for example the name of the page or file.",
@@ -118,6 +118,21 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { catalogs: { custom: { iconSets: { brand: { name: "Brand", license: "MIT", copyright: "Copyright (c) 2026 Example", viewBox: [0, 0, 24, 24], style: "stroke", icons: { star: "M12 3l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 10l6-1z" } } } } }, slides: [{ title: "Steps", items: [{ text: "Sign up", icon: "brand:star" }, { text: "Invite the team" }], numbering: "arabic" }] },
     { catalogs: { custom: { iconSets: { brand: { name: "Brand", license: "MIT", copyright: "Copyright (c) 2026 Example", viewBox: [0, 0, 24, 24], style: "stroke", icons: { star: "M12 3l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 10l6-1z" } } } } }, slides: [{ title: "Steps", items: [{ text: "Sign up", icon: "brand:star" }, { text: "Invite the team" }] }] },
   ),
+  "opf/shape-off-slide": ex(
+    "Write `x` and `y` as fractions of the slide (0.7 for 70%), so at least part of the shape is on it; a shape may hang over an edge.",
+    { title: "Plan", text: "Three regions go live in March.", shapes: [{ shape: "rect", text: "Draft", x: 70, y: 10, width: 0.2, height: 0.1 }] },
+    { title: "Plan", text: "Three regions go live in March.", shapes: [{ shape: "rect", text: "Draft", x: 0.7, y: 0.1, width: 0.2, height: 0.1 }] },
+  ),
+  "opf/chart-label-collision": ex(
+    "Set the line where a bar or the area leaves room beside it at one of its ends, or give each reference its own value, so its label has a free place.",
+    { title: "Results", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12], ["Q2", 18], ["Q3", 22], ["Q4", 26]] }, referenceLines: [{ value: 6, label: "Floor" }] } },
+    { title: "Results", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12], ["Q2", 18], ["Q3", 22], ["Q4", 26]] }, referenceLines: [{ value: 15, label: "Floor" }] } },
+  ),
+  "opf/timeline-period-short": ex(
+    "Give the timeline more room, or make its shortest period longer relative to the others.",
+    { slides: [{ title: "Plan", timeline: { events: [{ when: "Day 1", what: "Kickoff", duration: 1 }, { when: "Year 3", what: "Delivery", duration: 1000 }] } }] },
+    { slides: [{ title: "Plan", timeline: { events: [{ when: "Day 1", what: "Kickoff", duration: 1 }, { when: "Year 3", what: "Delivery", duration: 3 }] } }] },
+  ),
   "opf/arrangement-adapted": ex(
     "Give a matrix exactly four short entries, or choose another layout for another count.",
     { catalogs: { custom: { layouts: { quad: { name: "Quad", regions: [{ name: "title" }, { name: "quadrants", accepts: ["list"], flow: "none", arrangement: "matrix" }] } } } }, slides: [{ layout: "quad", title: "Markets", items: ["North", "South", "East"] }] },
@@ -135,8 +150,8 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   ),
   "opf/furniture-wraps": ex(
     "Shorten the header or footer text, or move part of it to another zone. Headers and footers should fit on two lines.",
-    { design: { footer: { left: { text: "A footer that keeps going and going and going and going and going and going and going and going and going and going and going and going" }, center: { text: "Confidential" }, right: { text: "{{slide.number}}" } } }, slides: [{ title: "Welcome" }] },
-    { design: { footer: { left: { text: "Acme, confidential" }, right: { text: "{{slide.number}}" } } }, slides: [{ title: "Welcome" }] },
+    { design: { footer: { start: { text: "A footer that keeps going and going and going and going and going and going and going and going and going and going and going and going" }, center: { text: "Confidential" }, end: { text: "{{slide.number}}" } } }, slides: [{ title: "Welcome" }] },
+    { design: { footer: { start: { text: "Acme, confidential" }, end: { text: "{{slide.number}}" } } }, slides: [{ title: "Welcome" }] },
   ),
   "opf/font-outside-scheme": ex(
     "Remove `fontFamily` so the text uses the scheme font, or add the family to the deck's font scheme so it follows scheme changes.",
@@ -154,9 +169,9 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { slides: [{ title: "Findings", items: LONG_ITEMS.slice(0, 3) }, { title: "Findings (continued)", items: LONG_ITEMS.slice(3) }] },
   ),
   "opf/centered-body": ex(
-    "Align paragraphs and lists to the start edge (`contentAlignment: \"left\"`), and keep centering for titles, numbers and one- or two-line statements.",
+    "Align paragraphs and lists to the start edge (`contentAlignment: \"start\"`), and keep centering for titles, numbers and one- or two-line statements.",
     { title: "Why now", items: LONG_ITEMS.slice(0, 3), design: { contentAlignment: "center" } },
-    { title: "Why now", items: LONG_ITEMS.slice(0, 3), design: { contentAlignment: "left" } },
+    { title: "Why now", items: LONG_ITEMS.slice(0, 3), design: { contentAlignment: "start" } },
   ),
   "opf/tight-spacing": ex(
     "Keep the default spacing, or raise `composition.gap` and `composition.padding`, so blocks stand at least 0.25 in apart and 0.5 in from the slide edge.",

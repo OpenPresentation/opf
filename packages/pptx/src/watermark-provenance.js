@@ -79,6 +79,9 @@ export function placeWatermarks(entries, marks, metadataFor, fail) {
 
 // One tag part per slide, related from the picture's application properties.
 // (attachTextTags is keyed by shape name, and every slide's watermark shares one.)
+// Text and picture watermarks are tagged by separate calls, so the part number continues after the parts already
+// written: restarting at 1 gave a deck that mixes both kinds one tags part related from two slides and a duplicate
+// [Content_Types].xml override, which PowerPoint refuses to open.
 function attachTags(entries, manifests) {
   const NS = 'http://schemas.openxmlformats.org/presentationml/2006/main', types = [];
   let count = 0;
@@ -87,6 +90,7 @@ function attachTags(entries, manifests) {
     const relPath = part.replace('/slides/', '/slides/_rels/') + '.rels';
     const rels = decoder.decode(entries[relPath]);
     const ids = new Set([...rels.matchAll(/\bId="([^"]+)"/g)].map(match => match[1]));
+    while (entries[`ppt/tags/opfWatermark${count + 1}.xml`]) count++;
     const tagPart = `ppt/tags/opfWatermark${++count}.xml`;
     let id = `rIdOpfWatermark${count}`;
     while (ids.has(id)) id += '_';

@@ -12,7 +12,7 @@ PowerPoint preset with a similar name differ. The values come from:
   which every engine uses;
 - the `p:sldSz` writer and reader in `@openpresentation/opf-pptx` (`src/index.js`);
 - PowerPoint 16.0 build 20430, which reported its own preset sizes in the native run
-  [FF-27](evidence/ff-27-fields-slide-sizes-native-20261005/README.md) (opf#323, opf#354).
+  FF-27 (opf#323, opf#354).
 
 ## Units
 
@@ -75,8 +75,8 @@ size, and changing `letter`, `a4` or `16:9` now would move every existing deck a
 
 ## Export to PPTX
 
-- `@openpresentation/opf-pptx` writes `p:sldSz` with the EMU values in the first table, and `p:notesSz` with the
-  width and height swapped. It writes no `type` attribute, so the size is `custom`, the default of `sldSz@type` in
+- `@openpresentation/opf-pptx` writes `p:sldSz` with the EMU values in the first table, and `p:notesSz` as the standard
+  portrait notes page, 6858000 x 9144000 EMU (7.5 x 10 in), whatever the slide size, as PowerPoint does. It writes no `type` attribute, so the size is `custom`, the default of `sldSz@type` in
   ECMA-376. PowerPoint reports its own Widescreen size the same way: a new deck reads `PageSetup.SlideSize = 7`
   (`ppSlideSizeCustom`), 960 x 540 pt.
 - PowerPoint therefore shows an exported `4:3` or `16:10` deck as a custom size with the right dimensions, not as the
@@ -117,5 +117,5 @@ size, and changing `letter`, `a4` or `16:9` now would move every existing deck a
 - Microsoft Support:
   [Change the size of your slides](https://support.microsoft.com/office/change-the-size-of-your-slides-040a811c-be43-40b9-8d04-0de5ed79987e)
   (Widescreen is the default for new presentations, and the list of "Slides sized for" presets).
-- Native measurements: [FF-27 slide-size presets](evidence/ff-27-fields-slide-sizes-native-20261005/README.md)
-  ([sizes-compare.md](evidence/ff-27-fields-slide-sizes-native-20261005/sizes-compare.md)).
+- Native measurements: FF-27 slide-size presets
+  (sizes-compare.md).

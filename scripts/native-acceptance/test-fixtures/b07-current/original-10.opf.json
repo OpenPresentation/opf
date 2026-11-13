@@ -1,0 +1,26 @@
+{
+  "language": "ar-SA",
+  "slides": [
+    {
+      "title": "أرقام عربية وفارسية",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Item ١: Arabic-Indic number"
+        },
+        {
+          "type": "text",
+          "text": "Item ۱: Persian number"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Item ١: Arabic-Indic number",
+            "Item ۱: Persian number"
+          ],
+          "numbering": "arabic"
+        }
+      ]
+    }
+  ]
+}

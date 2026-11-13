@@ -1,0 +1,77 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: a template with unfilled variables",
+  "description": "RR-105 format coverage: a deck marked as a template, whose required variables have only examples; previews and exports draw the examples. Validation reports the unfilled variables by design.",
+  "language": "en-US",
+  "template": true,
+  "design": {
+    "background": "light1"
+  },
+  "variables": {
+    "client": {
+      "type": "text",
+      "required": true,
+      "label": "Client",
+      "example": "Port of Rotterdam"
+    },
+    "revenue": {
+      "type": "number",
+      "required": true,
+      "format": "$#,##0.0",
+      "label": "Revenue in $M",
+      "example": 12.5
+    },
+    "owner": {
+      "type": "text",
+      "required": false,
+      "label": "Owner",
+      "example": "Account team"
+    },
+    "praise": {
+      "type": "text",
+      "required": false,
+      "label": "Client quote"
+    },
+    "praiser": {
+      "type": "text",
+      "required": false,
+      "label": "Who said it"
+    }
+  },
+  "slides": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "title": "Quarterly review for {{client}}",
+      "subtitle": "Prepared by {{owner}}"
+    },
+    {
+      "id": "revenue",
+      "title": "Revenue this quarter",
+      "metric": {
+        "value": "{{revenue}}",
+        "label": "Revenue in $M"
+      }
+    },
+    {
+      "id": "optional-group",
+      "title": "An optional quote card left out when unfilled",
+      "blocks": [
+        {
+          "text": "Revenue held through the busiest quarter of the year."
+        },
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "quote": {
+                "text": "{{praise}}",
+                "attribution": "{{praiser}}"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

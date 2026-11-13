@@ -10,7 +10,8 @@
 // local Workers preview (http://127.0.0.1:8787/mcp): the same checks, with its own viewer page and fonts. Node's fetch needs
 // NODE_USE_ENV_PROXY=1 behind a proxy.
 import assert from "node:assert/strict";
-import { mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { createServer } from "node:http";
 import path from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
@@ -19,6 +20,13 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { chromium } from "playwright";
 import { createOpfServer } from "../dist/index.js";
 import { installedFontFiles } from "../dist/stdio.js";
+import { minifyAppCss } from "../scripts/app-css.mjs";
+import { canonicalCssomRules } from "./helpers/app-cssom.mjs";
+
+const require = createRequire(import.meta.url);
+const rawViewCss = [readFileSync(require.resolve("@openpresentation/opf-editor/styles.css"), "utf8"), readFileSync(new URL("../app/view.css", import.meta.url), "utf8")].join("\n");
+const cssLiteralSource = '/*! @license preserved browser control */\n.css-literal[data-label=" x  y "]::before { content: "a  b 日本語 </style>"; --literal: " x  y "; margin: calc(1px + 2px); }';
+const cssLiteralMinified = await minifyAppCss(cssLiteralSource);
 
 // SEP-1865, "Restrictive Default": what a host must use when the resource declares no ui.csp (the view declares none).
 const VIEW_CSP = "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'self'";
@@ -64,16 +72,13 @@ window.addEventListener("message", async (event) => {
       return reply({
         protocolVersion: "2026-01-26",
         hostInfo: { name: setup.hostName ?? "test-host", version: "1.0.0" },
-        hostCapabilities: { serverTools: {}, serverResources: {}, logging: {}, openLinks: {}, updateModelContext: { text: {}, structuredContent: {} }, message: { text: {} }, ...(setup.download ? { downloadFile: {} } : {}) },
+        hostCapabilities: { serverTools: {}, serverResources: {}, logging: {}, openLinks: {}, updateModelContext: { text: {}, structuredContent: {} }, message: { text: {} }, ...(setup.download || setup.downloadMode ? { downloadFile: {} } : {}) },
         hostContext: { theme: setup.theme, displayMode: "inline", availableDisplayModes: ["inline", "fullscreen"], containerDimensions: { width: setup.width ?? 960, maxHeight: 640 }, platform: "web", ...(setup.variables ? { styles: { variables: setup.variables } } : {}) },
       });
     case "ui/notifications/size-changed":
       // A host gives an inline view the height it asks for, up to the maximum it named.
       if (message.params.height) frame.style.height = Math.min(640, Math.ceil(message.params.height)) + "px";
       return;
-    case "ui/download-file":
-      host.downloads.push(message.params);
-      return reply({});
     case "ui/notifications/initialized":
       initialized = true;
       send({ method: "ui/notifications/tool-input", params: { arguments: setup.arguments } });
@@ -90,13 +95,21 @@ window.addEventListener("message", async (event) => {
     case "ui/update-model-context":
       host.context.push(message.params);
       return reply({});
+    case "ui/download-file":
+      host.downloads.push(message.params);
+      if (setup.downloadMode === "rpc-error") return send({ id: message.id, error: { code: -32000, message: "Download denied by the test host" } });
+      return reply(setup.downloadMode === "denied" || setup.downloadMode === "cancelled" ? { isError: true } : {});
     case "ui/message":
       host.messages.push(message.params);
       return reply({});
-    case "ui/request-display-mode":
+    case "ui/request-display-mode": {
       host.displayModes.push(message.params.mode);
-      reply({ mode: message.params.mode });
-      return send({ method: "ui/notifications/host-context-changed", params: { displayMode: message.params.mode } });
+      // As Claude does: only right after a press in the view (user activation); otherwise the mode stays and is the answer.
+      if (!navigator.userActivation.isActive) return reply({ mode: host.mode ?? "inline" });
+      host.mode = message.params.mode;
+      reply({ mode: host.mode });
+      return send({ method: "ui/notifications/host-context-changed", params: { displayMode: host.mode, containerDimensions: host.mode === "fullscreen" ? { width: 960, height: 640 } : { width: setup.width ?? 960, maxHeight: 640 } } });
+    }
     case "ping":
       return reply({});
     default:
@@ -121,6 +134,8 @@ const failures = [];
 try {
 	const page = await browser.newPage({ viewport: { width: 1000, height: 700 } });
 	const problems = [];
+	const browserDownloads = [];
+	page.on("download", (download) => browserDownloads.push(download.suggestedFilename()));
 	page.on("console", (message) => {
 		if (message.type() === "error" || /Content Security Policy|Refused to/.test(message.text())) problems.push(message.text());
 	});
@@ -142,6 +157,18 @@ try {
 			window.startView(setup);
 		}, { viewUrl, arguments: args, result, theme, ...host });
 		await page.waitForFunction(() => window.host.context.length > 0, null, { timeout: 60000 });
+	};
+	const probeIframeDownload = async () => page.frame({ url: /\/view$/ }).evaluate(() => {
+		window.downloadProbe = { blobs: 0, anchors: 0 };
+		const create = URL.createObjectURL.bind(URL);
+		URL.createObjectURL = (...args) => { window.downloadProbe.blobs++; return create(...args); };
+		document.addEventListener("click", (event) => {
+			if (event.target.closest?.("a[download]")) window.downloadProbe.anchors++;
+		}, true);
+	});
+	const noIframeDownload = async () => {
+		assert.deepEqual(await page.frame({ url: /\/view$/ }).evaluate(() => window.downloadProbe), { blobs: 0, anchors: 0 }, "source downloads never use an iframe Blob/anchor fallback");
+		assert.deepEqual(browserDownloads, [], "the iframe never directly downloads a file");
 	};
 
 	const run = async (name, body) => {
@@ -167,6 +194,29 @@ try {
 	await run("draws a JSON deck under the restrictive CSP, with fonts from read_font_file", async () => {
 		await open({ document: deck });
 		await view().locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+		// This producer-specific equivalence proof owns the local resource bytes.
+		// A remote server supplies its own versioned View; its existing cases below
+		// continue to qualify that View without claiming it uses this checkout's CSS.
+		if (!remote) {
+			const css = await page.frame({ url: /\/view$/ }).evaluate(({ html, raw, literal, minifiedLiteral }) => {
+				const snapshot = (rules) => [...rules].map((rule) => {
+					if (rule.style) return { type: rule.type, selector: rule.selectorText ?? rule.keyText, declarations: [...rule.style].map((name) => [name, rule.style.getPropertyValue(name), rule.style.getPropertyPriority(name)]), ...(rule.cssRules ? { rules: snapshot(rule.cssRules) } : {}) };
+					if (rule.cssRules) return { type: rule.type, header: rule.cssText.slice(0, rule.cssText.indexOf("{")).trim(), rules: snapshot(rule.cssRules) };
+					return { type: rule.type, text: rule.cssText };
+				});
+				const rules = (text) => { const sheet = new CSSStyleSheet(); sheet.replaceSync(text); return snapshot(sheet.cssRules); };
+				// CodeMirror prepends its own style tag after initialization. Bind the
+				// actual resource's sole static stylesheet, not the first live tag.
+				const sourceStyles = new DOMParser().parseFromString(html, "text/html").head.querySelectorAll("style");
+				if (sourceStyles.length !== 1) throw new Error("Expected one resource stylesheet");
+				const served = [...document.head.querySelectorAll("style")].filter((style) => style.textContent === sourceStyles[0].textContent);
+				if (served.length !== 1 || !served[0].sheet) throw new Error("Missing or ambiguous served resource stylesheet");
+				return { raw: rules(raw), served: snapshot(served[0].sheet.cssRules), literal: rules(literal), minifiedLiteral: rules(minifiedLiteral) };
+			}, { html: resource.text, raw: rawViewCss, literal: cssLiteralSource, minifiedLiteral: cssLiteralMinified });
+			assert.ok(css.raw.length > 0, "the complete real concatenated stylesheet is parsed");
+			assert.deepEqual(canonicalCssomRules(css.served), canonicalCssomRules(css.raw), "served whitespace-minified CSS preserves every parsed selector/declaration/value/cascade rule");
+			assert.deepEqual(canonicalCssomRules(css.minifiedLiteral), canonicalCssomRules(css.literal), "literal/custom-property whitespace and inline-style escapes retain their CSS meaning");
+		}
 		const text = await view().locator("#deck-canvas").innerText();
 		assert.match(text, /Revenue grew 18% in Q3/);
 		const state = await hostState();
@@ -191,6 +241,23 @@ try {
 		await view().locator("#deck-verdict .opf-review-pill").waitFor();
 		assert.match(await view().locator(".deck-foot #deck-nav .opf-nav-counter").innerText(), /^0?1 \/ 0?2$/);
 		assert.match(await view().locator("#deck-version").innerText(), /^OPF \d+\.\d+\.\d+/);
+	});
+
+	// RR-111: a deck's set icons come from the server through the app-only read_icons; the view's checks then know every icon name.
+	await run("draws set icons read through read_icons, and checks icon names as the server does", async () => {
+		const iconDeck = { name: "Launch plan", language: "en-US", slides: [{ id: "launch", title: "Launch", items: [{ text: "Ship it", icon: "lucide:rocket" }, { text: "Check it", icon: "lucide:chek" }] }] };
+		await open({ document: iconDeck });
+		await view().locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+		const state = await hostState();
+		assert.ok(state.toolCalls.includes("read_icons"), `the icons come from the server (calls: ${state.toolCalls.join(", ")})`);
+		const text = state.context[0].content[0].text;
+		assert.match(text, /warning opf\/icon-unknown at \/slides\/0\/items\/1\/icon: The icon set lucide has no icon chek\./);
+		assert.doesNotMatch(text, /items\/0\/icon/, "an icon the set has is not reported");
+		const server = (await client.callTool({ name: "validate_deck", arguments: { document: iconDeck } })).structuredContent;
+		const fromServer = server?.findings?.filter((finding) => finding.ruleId === "opf/icon-unknown").map((finding) => finding.message);
+		if (fromServer) assert.deepEqual(state.context[0].structuredContent.findings.filter((finding) => finding.ruleId === "opf/icon-unknown").map((finding) => finding.message), fromServer);
+		await shoot("icons-light");
+		await open({ document: deck });
 	});
 
 	await run("switches between Preview, Source and Both", async () => {
@@ -232,7 +299,9 @@ try {
 		await page.waitForFunction(() => window.host.messages.length === 1, null, { timeout: 15000 });
 		assert.match((await hostState()).messages[0].content[0].text, /I edited the deck in the OPF viewer/);
 		await view().locator('#deck-sync[data-state="sent"]').waitFor();
-		assert.equal(await send.isDisabled(), true, "sent: nothing more to send until the next edit");
+		assert.equal(await view().locator("#deck-sync").innerText(), "Sent to the assistant", "another host took it: no more is claimed (in Claude it reads \"Sent to Claude for your approval\")");
+		assert.equal(await send.isDisabled(), false, "Send stays usable, to send again");
+		assert.equal(await send.getAttribute("data-unsent"), "false", "and is no longer the primary action");
 	});
 
 	await run("Undo and Redo, Find, the Review panel and the Design menu are the editor's own", async () => {
@@ -268,6 +337,77 @@ try {
 		const chosen = await theme.getAttribute("data-value");
 		await theme.click();
 		await page.waitForFunction((id) => window.host.context.at(-1)?.structuredContent?.document?.design?.theme === id, chosen, { timeout: 15000 });
+	});
+
+	await run("renames the deck over its row at 1280, 600 and 320px: Save, Cancel, Escape, blur keeps the draft, one undoable edit", async () => {
+		const named = { ...deck, name: "Rename me" };
+		await open({ document: named }, "light", { hostName: "Claude" });
+		await view().locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+		const frame = page.frame({ url: /\/view$/ });
+		const input = view().locator("#deck-title input");
+		const editing = view().locator(".opf-title[data-editing]");
+		const lastName = () => page.evaluate(() => window.host.context.at(-1)?.structuredContent?.document?.name);
+		for (const width of [1280, 600, 320]) {
+			await page.evaluate((px) => {
+				document.getElementById("view").style.width = `${px}px`;
+				send({ method: "ui/notifications/host-context-changed", params: { containerDimensions: { width: px, maxHeight: 640 } } });
+			}, width);
+			await page.waitForTimeout(300);
+			const before = await input.inputValue();
+			await input.click();
+			await editing.waitFor();
+			const placed = await frame.evaluate(() => {
+				const overlay = document.querySelector(".opf-title[data-editing]").getBoundingClientRect();
+				const row = document.querySelector("[data-opf-title-row]");
+				const outer = row.getBoundingClientRect();
+				const edge = getComputedStyle(row);
+				// The padding box: the row keeps its own border (the bar's rule under it).
+				const box = { left: outer.left + parseFloat(edge.borderLeftWidth), top: outer.top + parseFloat(edge.borderTopWidth), right: outer.right - parseFloat(edge.borderRightWidth), bottom: outer.bottom - parseFloat(edge.borderBottomWidth) };
+				const buttons = [...document.querySelectorAll(".opf-title[data-editing] .opf-title-button")].map((button) => { const rect = button.getBoundingClientRect(); return { text: button.textContent, width: rect.width, height: rect.height, right: rect.right }; });
+				const shell = document.getElementById("opf-deck").getBoundingClientRect();
+				return { row: row.id || row.className, overlay: [overlay.left, overlay.top, overlay.right, overlay.bottom], box: [box.left, box.top, box.right, box.bottom], buttons, client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth, shellTop: shell.top, hidden: [...row.children].filter((child) => !child.contains(document.querySelector(".opf-title")) && getComputedStyle(child).visibility !== "hidden" && child.getBoundingClientRect().width > 0).length };
+			});
+			assert.equal(placed.row, width < 640 ? "deck-title-row" : "deck-bar", `${width}px: the edit opens over the ${width < 640 ? "name's own row" : "bar"}`);
+			assert.deepEqual(placed.overlay.map(Math.round), placed.box.map(Math.round), `${width}px: the edit covers its row exactly`);
+			assert.equal(placed.hidden, 0, `${width}px: the row's other controls give way`);
+			assert.deepEqual(placed.buttons.map((button) => button.text), ["Save", "Cancel"]);
+			assert.ok(placed.buttons.every((button) => button.right <= placed.client), `${width}px: Save and Cancel are inside the frame`);
+			assert.ok(placed.scroll <= placed.client && placed.overlay[1] >= placed.shellTop, `${width}px: nothing is clipped or scrolls sideways`);
+			if (width === 320) assert.ok(placed.buttons.every((button) => button.width >= 44 && button.height >= 44), `320px: Save and Cancel are at least 44px (${JSON.stringify(placed.buttons)})`);
+			await input.fill(`Renamed at ${width}`);
+			await shoot(`rename-${width}`);
+			// Leaving the field keeps the edit open with the draft.
+			await view().locator("#deck-stage").click({ position: { x: 4, y: 4 } });
+			assert.equal(await editing.count(), 1, `${width}px: blur does not close the edit`);
+			assert.equal(await input.inputValue(), `Renamed at ${width}`, "and keeps the draft");
+			await view().locator('.opf-title-button[data-action="save"]').click();
+			await editing.waitFor({ state: "detached" });
+			await page.waitForFunction((name) => window.host.context.at(-1)?.structuredContent?.document?.name === name, `Renamed at ${width}`, { timeout: 15000 });
+			// One undoable edit: Undo puts the name back, Redo brings the new one.
+			await view().locator("#deck-undo").click();
+			await page.waitForFunction((name) => window.host.context.at(-1)?.structuredContent?.document?.name === name, before, { timeout: 15000 });
+			await view().locator("#deck-redo").click();
+			await page.waitForFunction((name) => window.host.context.at(-1)?.structuredContent?.document?.name === name, `Renamed at ${width}`, { timeout: 15000 });
+		}
+		// Cancel and Escape put the name back and change nothing.
+		for (const close of ["cancel", "escape"]) {
+			const contexts = await page.evaluate(() => window.host.context.length);
+			// (The field kept the focus after Save, so typing, not a click, opens the edit again.)
+			await input.click();
+			await input.fill(`Not kept (${close})`);
+			await editing.waitFor();
+			if (close === "cancel") await view().locator('.opf-title-button[data-action="cancel"]').click();
+			else await input.press("Escape");
+			await editing.waitFor({ state: "detached" });
+			assert.equal(await input.inputValue(), "Renamed at 320");
+			await page.waitForTimeout(1500);
+			assert.equal(await page.evaluate(() => window.host.context.length), contexts, `${close}: nothing changed, so nothing new goes to the model`);
+		}
+		assert.equal(await lastName(), "Renamed at 320");
+		await page.evaluate(() => {
+			document.getElementById("view").style.width = "";
+			send({ method: "ui/notifications/host-context-changed", params: { containerDimensions: { width: 960, maxHeight: 640 } } });
+		});
 	});
 
 	await run("fits a frame as narrow as a chat column: the bar stays one row, nothing scrolls sideways", async () => {
@@ -388,6 +528,106 @@ try {
 		assert.equal(await view().locator("#deck-wait-text").innerText(), "The assistant sent no deck.");
 		assert.equal(await view().locator(".deck-wait-slide").isVisible(), false);
 	});
+
+	const downloadDeck = {
+		name: "Download witness", language: "en-US", design: { fontScheme: "roboto" },
+		slides: [{ id: "current", title: "Current content", blocks: [{ text: "Original body." }] }],
+	};
+	await run("Download source sends the exact edited JSON, MIME and filename through the capable host", async () => {
+		await open({ document: downloadDeck, view: "both" }, "light", { downloadMode: "accepted" });
+		const expected = structuredClone(downloadDeck);
+		expected.slides[0].blocks[0].text = "The source body was edited and all of its words remain.";
+		const text = JSON.stringify(expected, null, 2);
+		const source = view().locator("#deck-source .cm-content");
+		await source.click();
+		await source.press("ControlOrMeta+A");
+		await page.keyboard.insertText(text);
+		await page.waitForFunction((body) => window.host.context.at(-1)?.structuredContent?.document?.slides?.[0]?.blocks?.[0]?.text === body, expected.slides[0].blocks[0].text, { timeout: 15000 });
+		assert.deepEqual((await hostState()).context.at(-1).structuredContent.document, expected);
+		assert.equal(await source.innerText(), text, "the current authored source is retained exactly");
+		// Only visual line boundaries may change: every word and interior space must remain.
+		const painted = (await view().locator("#deck-canvas").innerText()).split(/\r?\n/u).map((line) => line.trim()).filter(Boolean).join(" ");
+		assert.equal(painted, expected.slides[0].title + " " + expected.slides[0].blocks[0].text);
+		await view().getByRole("button", { name: "Rename deck", exact: true }).click();
+		const filename = view().getByRole("textbox", { name: "File name", exact: true });
+		await filename.fill("Q3#1 100%");
+		await filename.press("Enter");
+		await probeIframeDownload();
+		await view().getByRole("button", { name: "Download source", exact: true }).click();
+		await noIframeDownload();
+		await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 15000 });
+		// The name is the URI's last segment as written: no percent-encoding, and the characters a host would replace are replaced.
+		assert.deepEqual((await hostState()).downloads, [{ contents: [{ type: "resource", resource: { uri: "file:///Q3_1-100_.opf.json", mimeType: "application/json", text } }] }]);
+		assert.equal(await view().locator("#deck-status").innerText(), "Download started.", "the host started the download; nothing more is claimed");
+		await shoot("host-download-edited-json");
+		await view().locator("#deck-undo").click();
+		await page.waitForFunction(() => window.host.context.at(-1)?.structuredContent?.document?.slides?.[0]?.blocks?.[0]?.text === "Original body.", null, { timeout: 15000 });
+		assert.deepEqual((await hostState()).context.at(-1).structuredContent.document, downloadDeck);
+		await view().locator("#deck-redo").click();
+		await page.waitForFunction((body) => window.host.context.at(-1)?.structuredContent?.document?.slides?.[0]?.blocks?.[0]?.text === body, expected.slides[0].blocks[0].text, { timeout: 15000 });
+		assert.deepEqual((await hostState()).context.at(-1).structuredContent.document, expected);
+	});
+
+	await run("host downloads preserve untouched JSON, YAML and Markdown source text and MIME", async () => {
+		for (const [format, text, mimeType, extension] of [
+			["json", '{\r\n  "name" : "Raw JSON",\r\n  "slides" : [{"title":"Raw source"}]\r\n}\r\n', "application/json", "json"],
+			["yaml", '# Keep this YAML comment\nname: Raw YAML\nslides:\n  - title: Raw source\n', "text/yaml", "yaml"],
+			["markdown", '---\nname: Raw Markdown\n---\n\n# Raw source\n\nKeep this Markdown sentence.\n', "text/markdown", "md"],
+		]) {
+			await open({ document: text, format, view: "source" }, "light", { downloadMode: "accepted" });
+			await view().locator("#deck-source .cm-editor").waitFor();
+			await probeIframeDownload();
+			await view().getByRole("button", { name: "Download source", exact: true }).click();
+			await noIframeDownload();
+			await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 15000 });
+			assert.deepEqual((await hostState()).downloads, [{ contents: [{ type: "resource", resource: { uri: `file:///deck.opf.${extension}`, mimeType, text } }] }], format + ": exact source bytes and metadata");
+		}
+	});
+
+	await run("a host without download capability gets no request or iframe fallback and a visible error", async () => {
+		await open({ document: downloadDeck, view: "source" });
+		await view().locator("#deck-source .cm-editor").waitFor();
+		await probeIframeDownload();
+		// The redesigned UI hides this unsupported action. Invoke its real handler only to test the transport guard.
+		assert.equal(await view().locator(".opf-source-action-download").isVisible(), false);
+		await view().locator(".opf-source-action-download").evaluate((button) => button.click());
+		await noIframeDownload();
+		await view().locator("#deck-status").waitFor();
+		assert.match(await view().locator("#deck-status").innerText(), /host does not support.*download/i);
+		assert.deepEqual((await hostState()).downloads, []);
+		assert.equal((await hostState()).requests.includes("ui/download-file"), false);
+		await shoot("host-download-unsupported");
+	});
+
+	await run("host denial, cancellation and protocol errors remain visible failures without fallback", async () => {
+		for (const [mode, words] of [["denied", "The download didn't finish."], ["cancelled", "The download didn't finish."], ["rpc-error", "The download couldn't be confirmed."]]) {
+			await open({ document: downloadDeck, view: "source" }, "light", { downloadMode: mode });
+			await view().locator("#deck-source .cm-editor").waitFor();
+			await probeIframeDownload();
+			await view().getByRole("button", { name: "Download source", exact: true }).click();
+			await noIframeDownload();
+			await view().locator("#deck-status").waitFor();
+			assert.equal(await view().locator("#deck-status").innerText(), words);
+			assert.equal((await hostState()).downloads.length, 1);
+			await shoot("host-download-" + mode);
+		}
+	});
+
+	await run("a capable host binary Export denial is visible and never uses an iframe download", async () => {
+		await open({ document: downloadDeck }, "light", { downloadMode: "denied" });
+		await probeIframeDownload();
+		await view().locator("#deck-export .opf-export-trigger").click();
+		await view().locator('.opf-export-item[data-format="pptx"]').click();
+		await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 120000 });
+		const resource = (await hostState()).downloads[0].contents[0].resource;
+		assert.equal(resource.mimeType, "application/vnd.openxmlformats-officedocument.presentationml.presentation");
+		assert.equal(Buffer.from(resource.blob, "base64").subarray(0, 2).toString("latin1"), "PK", "the denied transfer really contains a generated PowerPoint archive");
+		await view().locator(".opf-export-status").filter({ hasText: /export failed\. The download didn't finish\./i }).waitFor();
+		assert.match(await view().locator("#deck-status").innerText(), /^(PowerPoint \(\.pptx\) export failed\. )?The download didn't finish\.$/);
+		await noIframeDownload();
+		await shoot("host-download-export-denied");
+	});
+
 
 	await run("runs without a CSP violation or a page error", async () => {
 		assert.deepEqual(problems, []);

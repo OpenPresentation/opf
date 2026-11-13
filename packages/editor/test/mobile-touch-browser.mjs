@@ -9,11 +9,12 @@
 // The viewport is a fixed layout viewport (`isMobile: false`): an `isMobile` viewport widens itself to fit overflowing content, which would hide
 // the sideways scroll this test looks for. Touch is on (`hasTouch`), so `(pointer: coarse)` holds; the test asserts it.
 // CI runs the core states (every page load costs seconds, and the browser job has a time limit): Chromium at 320, 390 and 820px, WebKit at 320px,
-// the four browser/width runs side by side. OPF_TOUCH_FULL=1 runs every state in both engines at every width (what the audit behind the PR used).
+// the four browser/width runs side by side (on Windows WebKit runs after Chromium, one part at a time). OPF_TOUCH_FULL=1 runs every state in both engines at every width (what the audit behind the PR used).
 // OPF_TOUCH_ENGINES=chromium,webkit picks the engines (default both); OPF_WEBKIT_EXECUTABLE points at a WebKit build you already have.
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
+import { closeSync, fsyncSync, mkdirSync, openSync, writeSync } from 'node:fs';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium, webkit } from 'playwright';
@@ -22,6 +23,7 @@ import { touchAudit } from './support/touch-audit.mjs';
 const root = fileURLToPath(new URL('../artifacts/playground/', import.meta.url));
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.ttf': 'font/ttf', '.wasm': 'application/wasm' };
 const server = createServer(async (req, res) => {
+  if (req.url === '/favicon.ico') { res.writeHead(204).end(); return; }
   try {
     const url = new URL(req.url, 'http://localhost');
     const target = path.resolve(root, `.${decodeURIComponent(url.pathname)}`);
@@ -46,6 +48,218 @@ const sizesFor = (engine) => (full || engine === 'chromium' ? sizes : [sizes[0]]
 const isPhone = (width) => width <= 480;
 const checks = [];
 const problems = [];
+
+// Failure evidence only: no retry, extra successful-page wait, or changed test deadline.
+let failureReports = 0;
+function playgroundFailure(page, context) {
+  const started = Date.now(), pending = new Map(), failed = [], responses = [], errors = [], consoles = [];
+  const dropped = { pending: 0, failed: 0, responses: 0, errors: 0, consoles: 0 };
+  const text = value => String(value ?? '').slice(0, 2048);
+  const row = request => ({ url: text(request.url()), type: request.resourceType(), method: request.method() });
+  const keep = (list, key, value) => { if (list.length < 128) list.push(value); else dropped[key]++; };
+  page.on('request', request => { if (pending.size < 128) pending.set(request, { ...row(request), startedMs: Date.now() - started }); else dropped.pending++; });
+  page.on('requestfinished', request => pending.delete(request));
+  page.on('requestfailed', request => { keep(failed, 'failed', { ...row(request), failure: text(request.failure()?.errorText) }); pending.delete(request); });
+  page.on('response', response => { const own = pending.get(response.request()); if (own) own.status = response.status(); if (response.status() >= 400) keep(responses, 'responses', { url: text(response.url()), status: response.status() }); });
+  page.on('pageerror', error => keep(errors, 'errors', text(error.message)));
+  page.on('console', message => { if (message.type() === 'error') { const location = message.location(); keep(consoles, 'consoles', { message: text(message.text()), location: { ...location, url: text(location.url) } }); } });
+  return async (error, phase) => {
+    const report = { ...context, phase, failedAt: new Date().toISOString(), url: text(page.url()), error: { name: error.name, message: text(error.message), stack: String(error.stack ?? '').slice(0, 8192) }, pageErrors: [...errors], consoleErrors: [...consoles], failedRequests: [...failed], httpErrors: [...responses], pendingRequests: [...pending.values()], dropped: { ...dropped }, allProblems: problems.slice(0, 128).map(text) };
+    // This separate 3s observation budget begins only AFTER the original failure; it cannot extend readiness or turn it green.
+    let timer;
+    try {
+      report.dom = await Promise.race([
+        page.evaluate(() => {
+          const box = selector => { const node = document.querySelector(selector); if (!node) return null; const bounds = node.getBoundingClientRect(), style = getComputedStyle(node); return { x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height, display: style.display, visibility: style.visibility }; };
+          return { readyState: document.readyState, status: document.querySelector('#status')?.textContent?.slice(0, 2048) ?? null, preview: box('#preview'), svg: box('#preview svg'), svgCount: document.querySelectorAll('#preview svg').length, fonts: document.fonts.status, viewport: { width: innerWidth, height: innerHeight, coarse: matchMedia('(pointer: coarse)').matches } };
+        }),
+        new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('Failure-only DOM observation exceeded 3000ms')), 3000); }),
+      ]);
+    } catch (captureError) { report.domError = text(captureError.message); }
+    finally { clearTimeout(timer); }
+    try {
+      if (++failureReports > 8) throw new Error('Failure artifact cap reached (8)');
+      const parent = fileURLToPath(new URL('../artifacts/mobile-touch-failures/', import.meta.url));
+      await mkdir(parent, { recursive: true });
+      const id = `${context.engine}-${context.width}-${context.state}`.replace(/[^a-z0-9_-]/gi, '-').slice(0, 100);
+      const directory = path.join(parent, `${Date.now()}-${process.pid}-${failureReports}-${id}`);
+      await mkdir(directory);
+      const file = path.join(directory, 'failure.json');
+      report.capturedAt = new Date().toISOString();
+      await writeFile(file, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
+      console.error(`Mobile/touch failure evidence: ${JSON.stringify({ ...context, phase, file, pageErrors: errors.length, failedRequests: failed.length, pendingRequests: pending.size })}`);
+    } catch (captureError) { console.error(`Mobile/touch failure evidence unavailable: ${text(captureError.message)}; ${JSON.stringify(context)}`); }
+  };
+}
+
+// Passive startup evidence lives in Node, so a later blocked page.evaluate cannot erase earlier progress.
+// No successful-page readiness retry: only an owned sampler stop, bounded separately at 250ms, follows the original SVG wait.
+let startupJournals = 0;
+async function playgroundStartup(page, context) {
+  const delays = [0, 100, 250, 500, 1000, 2000, 5000, 10000, 20000, 40000, 60000, 89000];
+  const binding = '__opfMobileStartupSample', stopName = '__opfMobileStartupStop', consolePrefix = '__OPF_MOBILE_STARTUP__';
+  const started = performance.now(), listeners = [];
+  let fd, file, active = true, closed = false, events = 0, bytes = 0, samples = 0, overflow = false, ioFailed = false, writeMilliseconds = 0;
+  let independentEvents = 0, independentDroppedDiagnostics = 0, browserStopObserved = false, browserStoppedObserved = false, hostReadyObserved = false;
+  const text = value => typeof value === 'string' ? value.slice(0, 1024) : null;
+  const warn = error => { if (!ioFailed) console.error(`Mobile startup evidence fault: ${String(error.message ?? error).slice(0, 512)}`); ioFailed = true; };
+  const write = (kind, data = {}) => {
+    if (closed || fd === undefined || ioFailed) return;
+    try {
+      let line = JSON.stringify({ kind, nodeMs: performance.now() - started, ...data }) + '\n';
+      if (events >= 511 || bytes + Buffer.byteLength(line) > 262144 - 256) {
+        if (overflow) return;
+        overflow = true; line = JSON.stringify({ kind: 'overflow', nodeMs: performance.now() - started, events, bytes }) + '\n';
+      }
+      const encodedBytes = Buffer.byteLength(line), at = performance.now();
+      const writtenBytes = writeSync(fd, line); writeMilliseconds += performance.now() - at;
+      if (writtenBytes !== encodedBytes) throw new Error(`Short startup journal write: ${writtenBytes}/${encodedBytes}`);
+      events++; bytes += encodedBytes;
+    } catch (error) { warn(error); }
+  };
+  const detach = () => { for (const [name, callback] of listeners) page.off(name, callback); listeners.length = 0; };
+  const independentConsole = message => {
+    if (closed || message.type() !== 'debug' || !message.text().startsWith(consolePrefix)) return;
+    try {
+      const row = JSON.parse(message.text().slice(consolePrefix.length, consolePrefix.length + 4096));
+      const stop = row.kind === 'stop', stopped = row.kind === 'stopped', critical = stop || stopped;
+      if ((stop && browserStopObserved) || (stopped && browserStoppedObserved) || (!critical && independentEvents >= 62)) {
+        if (++independentDroppedDiagnostics === 1) write('independent-console-overflow');
+        return;
+      }
+      independentEvents++;
+      if (stop) browserStopObserved = true;
+      if (stopped) browserStoppedObserved = true;
+      if (row.kind === 'host-ready') hostReadyObserved = true;
+      const event = { kind: text(row.kind), reason: text(row.reason), message: text(row.message), state: text(row.state), browserMs: Number.isFinite(row.browserMs) ? row.browserMs : null, sequence: Number.isInteger(row.sequence) ? row.sequence : null, visibilityState: text(row.visibilityState), hidden: row.hidden === true, droppedDiagnostics: Number.isInteger(row.droppedDiagnostics) && row.droppedDiagnostics >= 0 ? row.droppedDiagnostics : null };
+      // Two reserved terminal records also survive a full/failed phase journal in bounded Node stderr.
+      if (critical) console.error(`Mobile startup independent stop: ${JSON.stringify({ file, event, independentDroppedDiagnostics })}`);
+      write('browser-diagnostic', { event });
+    } catch (error) { write('independent-console-fault', { message: text(error.message) }); }
+  };
+  // These endpoints are cached by Playwright Request.timing(); no protocol/network call or request mutation.
+  const cachedTiming = request => {
+    try { const t = request.timing(); return Object.fromEntries(['startTime', 'requestStart', 'responseStart', 'responseEnd'].map(key => [key, Number.isFinite(t[key]) ? t[key] : null])); }
+    catch (error) { return { unavailable: true, message: text(error.message) }; }
+  };
+  const finish = () => {
+    if (closed) return;
+    active = false; detach(); page.off('console', independentConsole); write('journal-close', { events, bytes, samples, overflow, ioFailed, writeMilliseconds, independentEvents, independentDroppedDiagnostics, browserStopObserved, browserStoppedObserved, hostReadyObserved });
+    closed = true;
+    if (fd !== undefined) {
+      const at = performance.now();
+      try { fsyncSync(fd); } catch (error) { warn(error); } finally { try { closeSync(fd); } catch (error) { warn(error); } }
+      console.error(`Mobile startup journal: ${JSON.stringify({ file, events, bytes, samples, overflow, ioFailed, writeMilliseconds, flushCloseMilliseconds: performance.now() - at })}`);
+    }
+  };
+  const listen = (name, callback) => { page.on(name, callback); listeners.push([name, callback]); };
+  const mark = phase => { if (active) write('phase', { phase }); };
+  const fail = error => {
+    active = false; detach(); write('original-failure', { name: text(error?.name), message: text(error?.message), samples, samplerObserved: samples > 0 });
+    // Flush BEFORE the unchanged after-failure DOM probe, which may itself hang.
+    if (fd !== undefined && !closed) { const at = performance.now(); try { fsyncSync(fd); write('failure-flush', { milliseconds: performance.now() - at }); } catch (fault) { warn(fault); } }
+  };
+  try {
+    if (++startupJournals > 128) throw new Error('Mobile startup journal cap reached (128)');
+    const directory = fileURLToPath(new URL('../artifacts/mobile-touch-failures/startup/', import.meta.url));
+    mkdirSync(directory, { recursive: true });
+    file = path.join(directory, `${Date.now()}-${process.pid}-${startupJournals}.jsonl`);
+    fd = openSync(file, 'wx'); write('start', { ...context, delays, caps: { events: 512, bytes: 262144, samples: 12 }, diagnosticIO: 'synchronous bounded writes; timing overhead is not zero' });
+    page.once('close', finish);
+    page.on('console', independentConsole);
+    for (const name of ['domcontentloaded', 'load', 'crash']) listen(name, () => { if (active) write(name); });
+    listen('framenavigated', frame => { if (active && frame === page.mainFrame()) write('navigation', { url: text(frame.url()) }); });
+    listen('request', request => { if (active) write('request', { url: text(request.url()), type: request.resourceType() }); });
+    listen('requestfinished', request => { if (active) write('request-finished', { url: text(request.url()), browserTiming: cachedTiming(request) }); });
+    listen('requestfailed', request => { if (active) write('request-failed', { url: text(request.url()), error: text(request.failure()?.errorText), browserTiming: cachedTiming(request) }); });
+    listen('response', response => { if (active) write('response', { url: text(response.url()), status: response.status(), browserTiming: cachedTiming(response.request()) }); });
+    await page.exposeBinding(binding, (source, sample) => {
+      if (!active || source.frame !== page.mainFrame()) return false;
+      if (samples >= 12 || !sample || sample.index !== samples || !Number.isFinite(sample.browserMs) || sample.browserMs < 0 || !Number.isFinite(sample.readMilliseconds) || sample.readMilliseconds < 0) { write('sample-refused'); return false; }
+      const snapshot = { index: sample.index, browserMs: sample.browserMs, readMilliseconds: sample.readMilliseconds, readyState: text(sample.readyState), status: text(sample.status), fonts: text(sample.fonts), visibilityState: text(sample.visibilityState), hidden: sample.hidden === true, editorPresent: sample.editorPresent === true, lastError: text(sample.lastError), svgCount: Number.isInteger(sample.svgCount) && sample.svgCount >= 0 ? sample.svgCount : null, readError: text(sample.readError) };
+      samples++; write('startup-sample', { sample: snapshot }); return active;
+    });
+    await page.addInitScript(({ binding, stopName, delays, consolePrefix }) => {
+      if (globalThis !== globalThis.top || Object.prototype.hasOwnProperty.call(globalThis, stopName)) return;
+      let alive = true, diagnosticEvents = 0, regularDiagnostics = 0, droppedDiagnostics = 0, diagnosticOverflow = false, hostReady = false;
+      const timers = [], subscriptions = [], debug = globalThis.console.debug.bind(globalThis.console);
+      const primitive = value => typeof value === 'string' ? value.slice(0, 512) : null;
+      const diagnostic = (kind, data = {}) => {
+        try {
+          const terminal = kind === 'stop' || kind === 'stopped';
+          if (!terminal && regularDiagnostics >= 61) {
+            droppedDiagnostics++;
+            if (!diagnosticOverflow) { diagnosticOverflow = true; debug(consolePrefix + JSON.stringify({ kind: 'overflow', sequence: ++diagnosticEvents, browserMs: performance.now(), droppedDiagnostics })); }
+            return;
+          }
+          if (!terminal) regularDiagnostics++;
+          // 61 regular + one overflow + stop + stopped = at most64, terminal slots cannot be consumed by render/font floods.
+          debug(consolePrefix + JSON.stringify({ kind, sequence: ++diagnosticEvents, browserMs: performance.now(), visibilityState: document.visibilityState, hidden: document.hidden, droppedDiagnostics, ...data }));
+        } catch { /* The independent channel can be unavailable; absence is not a claimed hang. */ }
+      };
+      let ownedHost;
+      const pagehide = () => stop('pagehide');
+      const stop = (reason = 'normal-preview-ready', message = null) => {
+        if (!alive) return;
+        diagnostic('stop', { reason, message }); alive = false;
+        for (const timer of timers) clearTimeout(timer);
+        globalThis.removeEventListener('pagehide', pagehide);
+        for (const unsubscribe of subscriptions) { try { unsubscribe(); } catch (error) { diagnostic('unsubscribe-fault', { message: primitive(error?.message) }); } }
+        subscriptions.length = 0;
+        if (ownedHost && globalThis.OPF_EDITOR_HOST === ownedHost) delete globalThis.OPF_EDITOR_HOST;
+        if (globalThis[stopName] === stop) delete globalThis[stopName];
+        diagnostic('stopped', { reason });
+      };
+      Object.defineProperty(globalThis, stopName, { value: stop, configurable: true });
+      globalThis.addEventListener('pagehide', pagehide, { once: true });
+      // The only runtime host reads are document??startDeck, optional persistence and this callback.
+      // An owned callback-only config leaves both defaults exact; an existing host config is never changed.
+      if (!('OPF_EDITOR_HOST' in globalThis)) {
+        ownedHost = { onReady: ({ editor }) => {
+          if (!alive || hostReady) return;
+          hostReady = true; diagnostic('host-ready');
+          try {
+            for (const name of ['fonts', 'render', 'error']) subscriptions.push(editor.on(name, event => {
+              if (!alive) return;
+              try { diagnostic('editor-' + name, { state: primitive(event?.state), message: primitive(event?.error?.message) }); }
+              catch (error) { diagnostic('event-read-fault', { message: primitive(error?.message) }); }
+            }));
+          } catch (error) { diagnostic('host-hook-fault', { message: primitive(error?.message) }); }
+        } };
+        Object.defineProperty(globalThis, 'OPF_EDITOR_HOST', { value: ownedHost, configurable: true, writable: true });
+      } else diagnostic('host-hook-omitted', { reason: 'existing-host-config' });
+      const sample = index => {
+        if (!alive) return;
+        const began = performance.now(); let row;
+        try {
+          const editor = globalThis.opfEditor, error = editor?.lastError;
+          row = { index, browserMs: began, readyState: document.readyState, status: document.querySelector('#status')?.textContent?.slice(0, 512) ?? null, fonts: document.fonts?.status ?? null, visibilityState: document.visibilityState, hidden: document.hidden, editorPresent: Boolean(editor), lastError: typeof error?.message === 'string' ? error.message.slice(0, 512) : null, svgCount: document.querySelectorAll('#preview svg').length };
+        } catch (error) { row = { index, browserMs: began, readError: typeof error?.message === 'string' ? error.message.slice(0, 512) : 'non-string startup read fault' }; }
+        row.readMilliseconds = performance.now() - began;
+        // Do not await the sink in the page: neither application startup nor input waits on diagnostic disk I/O.
+        try { Promise.resolve(globalThis[binding](row)).then(keep => { if (!keep) stop('binding-closed'); }, error => stop('binding-rejected', primitive(error?.message))); } catch (error) { stop('binding-threw', primitive(error?.message)); }
+        if (index === delays.length - 1) stop('finite-end');
+      };
+      sample(0);
+      for (let index = 1; index < delays.length; index++) timers.push(setTimeout(() => sample(index), delays[index]));
+    }, { binding, stopName, delays, consolePrefix });
+  } catch (error) { write('setup-fault', { message: text(error.message) }); warn(error); }
+  return {
+    mark, fail,
+    async ready() {
+      active = false; detach(); write('preview-visible', { samples, samplerObserved: samples > 0 });
+      let timer; const at = performance.now();
+      try {
+        const result = await Promise.race([
+          page.evaluate(name => { const stop = globalThis[name]; if (typeof stop !== 'function') return 'already-stopped-or-not-installed'; stop(); return 'stopped'; }, stopName),
+          new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('Startup sampler stop exceeded250ms')), 250); }),
+        ]);
+        write('sampler-stop', { result, milliseconds: performance.now() - at });
+      } catch (error) { write('sampler-stop-fault', { message: text(error.message), milliseconds: performance.now() - at }); }
+      finally { clearTimeout(timer); }
+    },
+  };
+}
 
 // Popups and sheets (a menu, the find panel, the code under a list) lie over the page by design: a control of the page that one of them covers is
 // not a finding, two controls of the popup covering each other is.
@@ -125,13 +339,13 @@ async function sourcePane(context, engine, width) {
     ['JSON', '', async () => {}],
     ['YAML (Canonicalize)', '?format=yaml', async () => {}],
     ['outline', '?outline=open', async () => {}],
-    ['format menu', '', async (page) => { await page.getByRole('button', { name: /^Source format \.opf\./ }).click(); }],
-    ['rename', '', async (page) => { await page.getByRole('button', { name: 'Rename deck' }).click(); }],
+    ['format menu', '', async (page) => { await page.getByRole('button', { name: /^Source format \.opf\./ }).tap(); }],
+    ['rename', '', async (page) => { await page.getByRole('button', { name: 'Rename deck' }).tap(); }],
     ['problems with a fix and details', '?deck=broken', async (page) => {
       await page.locator('.opf-source-finding-fix').first().waitFor();
       const toggle = page.locator('.opf-source-findings-toggle');
-      if ((await toggle.getAttribute('aria-expanded')) !== 'true') await toggle.click();
-      await page.locator('.opf-source-finding-details').first().click();
+      if ((await toggle.getAttribute('aria-expanded')) !== 'true') await toggle.tap();
+      await page.locator('.opf-source-finding-details').first().tap();
     }],
     ['completion list', '', async (page) => {
       await page.evaluate(() => { const at = demo.pane.getText().indexOf('"OWAA Rocks!"') + 13; demo.pane.editor.api.setSelection(at); demo.pane.editor.api.focus(); });
@@ -164,40 +378,52 @@ async function playground(browser, engine, { width, height }) {
   const phone = isPhone(width);
   const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 2, hasTouch: true, isMobile: false });
   const tag = (name) => `${engine} ${width}px playground, ${name}`;
-  const open = async () => {
+  const open = async (state) => {
     const page = await context.newPage();
     page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`));
     page.on('console', (message) => { if (message.type() === 'error' && !/Failed to load resource/.test(message.text())) problems.push(`console: ${message.text()}`); });
+    const captureFailure = playgroundFailure(page, { engine, version: browser.version(), width, height, state });
+    const startup = await playgroundStartup(page, { engine, version: browser.version(), width, height, state });
+    let phase = 'navigation';
+    try {
+    startup.mark('navigation');
     await page.goto(`${origin}/index.html`);
+    phase = 'preview SVG visible';
+    startup.mark(phase);
     await page.locator('#preview svg').waitFor({ timeout: 60000 });
+    await startup.ready();
+    phase = 'font-loading status';
     await page.waitForFunction(() => !/Loading fonts/.test(document.querySelector('#status').textContent), undefined, { timeout: 60000 });
     // The slide parts (the add, layout and gallery buttons among them) mount after their lazily loaded chunk, so a preview on screen
     // does not yet mean the whole top bar is there.
+    phase = 'lazy toolbar controls';
     await page.waitForFunction(() => ['#add', '#add-layout', '#browse-gallery', '#more-actions'].every((selector) => document.querySelector(selector)), undefined, { timeout: 60000 });
+    phase = 'coarse pointer';
     assert.equal(await page.evaluate(() => matchMedia('(pointer: coarse)').matches), true, `${tag('page')}: a coarse pointer`);
     return page;
+    } catch (error) { startup.fail(error); await captureFailure(error, phase); throw error; }
   };
-  const sheet = (page, id) => async () => { await page.locator(`#${id}`).click(); await page.waitForFunction(() => getComputedStyle(document.querySelector('.inspector')).transform === 'none'); };
+  const sheet = (page, id) => async () => { await page.locator(`#${id}`).tap(); await page.waitForFunction(() => getComputedStyle(document.querySelector('.inspector')).transform === 'none'); };
   const states = [
     ['the start', async () => {}],
-    ['the More menu', async (page) => { await page.locator('#more-actions').click(); }],
+    ['the More menu', async (page) => { await page.locator('#more-actions').tap(); }],
     ['the Edit sheet (selection, text, notes)', async (page) => sheet(page, 'bar-edit')()],
-    ['the Design sheet with every group open', async (page) => { await sheet(page, 'bar-edit')(); await page.locator('#bar-design').click(); await page.evaluate(() => document.querySelectorAll('.opf-dc-group').forEach((group) => { group.open = true; })); }],
-    ['the Review sheet', async (page) => { await sheet(page, 'bar-edit')(); await page.locator('#tab-review').click(); }],
-    ['the Source dialog', async (page) => { await page.locator('#more-actions').click(); await page.locator('#open-json').click(); }],
-    ['the Import dialog, Gallery tab', async (page) => { await page.locator('#more-actions').click(); await page.locator('#add-opf').click(); await page.locator('#import-tab-gallery').click(); }],
-    ['the Copy dialog', async (page) => { await page.locator('#more-actions').click(); await page.locator('#copy-opf').click(); }],
-    ['the Properties dialog', async (page) => { await page.locator('#more-actions').click(); await page.locator('#open-properties').click(); }],
-    ['the Outline view', async (page) => { await page.locator('#view-outline').click(); }],
-    ['the Layouts view', async (page) => { await page.locator('#view-layouts').click(); }],
-    ['the Find panel', async (page) => { await page.locator('#bar-find').click(); await page.locator('.opf-find').waitFor({ state: 'visible' }); }],
-    ['the Add content panel', async (page) => { await page.locator('#insert-content').click(); }],
-    ['the slide menu', async (page) => { await page.locator('button.slide-tool[data-action]').last().click(); }],
+    ['the Design sheet with every group open', async (page) => { await sheet(page, 'bar-edit')(); await page.locator('#bar-design').tap(); await page.evaluate(() => document.querySelectorAll('.opf-dc-group').forEach((group) => { group.open = true; })); }],
+    ['the Review sheet', async (page) => { await sheet(page, 'bar-edit')(); await page.locator('#tab-review').tap(); }],
+    ['the Source dialog', async (page) => { await page.locator('#more-actions').tap(); await page.locator('#open-json').tap(); }],
+    ['the Import dialog, Gallery tab', async (page) => { await page.locator('#more-actions').tap(); await page.locator('#add-opf').tap(); await page.locator('#import-tab-gallery').tap(); }],
+    ['the Copy dialog', async (page) => { await page.locator('#more-actions').tap(); await page.locator('#copy-opf').tap(); }],
+    ['the Properties dialog', async (page) => { await page.locator('#more-actions').tap(); await page.locator('#open-properties').tap(); }],
+    ['the Outline view', async (page) => { await page.locator('#view-outline').tap(); }],
+    ['the Layouts view', async (page) => { await page.locator('#view-layouts').tap(); }],
+    ['the Find panel', async (page) => { await page.locator('#bar-find').tap(); await page.locator('.opf-find').waitFor({ state: 'visible' }); }],
+    ['the Add content panel', async (page) => { await page.locator('#insert-content').tap(); }],
+    ['the slide menu', async (page) => { await page.locator('button.slide-tool[data-action]').last().tap(); }],
   ];
   const core = new Set(['the start', 'the Edit sheet (selection, text, notes)', 'the Design sheet with every group open', 'the More menu', 'the Import dialog, Gallery tab', 'the Layouts view', 'the Find panel']);
   for (const [name, run] of states) {
     if (!full && !(core.has(name) && (engine === 'chromium' || ['the start', 'the Edit sheet (selection, text, notes)', 'the Design sheet with every group open', 'the Layouts view'].includes(name)))) continue;
-    const page = await open();
+    const page = await open(name);
     await run(page);
     // A sheet or a menu may still be sliding (a slow machine starts the transition late): measure when nothing moves.
     await page.waitForFunction(() => document.getAnimations().every((animation) => animation.playState !== 'running'), undefined, { timeout: 5000 }).catch(() => {});
@@ -211,7 +437,7 @@ async function playground(browser, engine, { width, height }) {
   checks.push(`${engine} ${width}px: the playground states (${full ? 'start, More, Edit, Design, Review, Source, Import, Copy, Properties, Outline, Layouts, Find, Add content, slide menu' : 'start, Edit, Design, and on Chromium More, Import, Layouts, Find'}) have 44px controls, 16px fields, no sideways scroll, no cut-off or overlapping control`);
 
   // The top bar and the footer, by name (a phone's layout: the tablet has the long labels and wider rows).
-  const page = await open();
+  const page = await open('top bar and notes');
   if (phone) {
     const bar = await page.evaluate(() => {
       const box = (selector) => { const node = document.querySelector(selector); const b = node.getBoundingClientRect(); return { left: b.left, right: b.right, top: b.top, bottom: b.bottom, width: b.width, height: b.height, text: node.textContent.trim().replace(/\s+/g, ' ') }; };
@@ -269,7 +495,7 @@ async function layoutEditor(browser, engine, { width, height }) {
     return page;
   };
   // In a narrow editor the layers are a tab beside the inspector; in a wide one both panels are on screen.
-  const showLayers = async (page) => { const tab = page.getByRole('tab', { name: 'Layers' }); if (await tab.count()) await tab.click(); };
+  const showLayers = async (page) => { const tab = page.getByRole('tab', { name: 'Layers' }); if (await tab.count()) await tab.tap(); };
   const select = (...paths) => (page) => page.evaluate((list) => { demo.model.select([list[0]]); for (const path of list.slice(1)) demo.model.selectAdd(path); }, paths);
   const states = [
     // The zoom buttons, the validity button, the Row and Column segments, the remove button of a design hint: the controls that sized themselves.
@@ -277,7 +503,7 @@ async function layoutEditor(browser, engine, { width, height }) {
     ['a nested region (name, size, chips, flow, bleed checkbox)', '?layout=hero', select([1, 0])],
     ['a layout with findings (the validity button asks to show them)', '?layout=broken', select([0])],
     ['the context menu', '?layout=hero', async (page) => { await select([0])(page); await page.locator('.opf-lx-node[data-path="0"]').click({ button: 'right', force: true }); await page.locator('.opf-lx-menu').waitFor(); }],
-    ['the heading tool menu', '?layout=hero', async (page) => { await page.getByRole('toolbar', { name: 'Layout tools' }).getByRole('button', { name: 'Heading regions' }).click(); await page.locator('.opf-lx-menu').waitFor(); }],
+    ['the heading tool menu', '?layout=hero', async (page) => { await page.getByRole('toolbar', { name: 'Layout tools' }).getByRole('button', { name: 'Heading regions' }).tap(); await page.locator('.opf-lx-menu').waitFor(); }],
     ['renaming a region in the layers', '?layout=hero', async (page) => { await showLayers(page); await page.evaluate(() => { demo.model.select([[0]]); demo.model.requestRename([0], 'layers'); }); await page.locator('input.opf-lx-rename-row').waitFor(); }],
     ['renaming a region on the canvas', '?layout=hero', async (page) => { await page.evaluate(() => { demo.model.select([[0]]); demo.model.requestRename([0], 'canvas'); }); await page.locator('.opf-lx-rename').waitFor(); }],
     ['two regions selected', '?layout=hero', select([1, 0], [1, 1])],
@@ -346,6 +572,17 @@ async function landscapeTablet(browser) {
   assertClean({ ...report, clipped: report.clipped.filter((entry) => !/opf-thumbs/.test(entry)) }, tag('start'));
   const heights = await page.evaluate(() => ['view-slide', 'view-sorter', 'view-outline', 'view-layouts', 'undo', 'redo'].map((id) => [id, document.getElementById(id).getBoundingClientRect().height]));
   for (const [id, height] of heights) assert.ok(height >= 43.5, `${tag(id)}: is 44px tall (${height})`);
+  const toolbar = await page.evaluate(() => {
+    const node = document.querySelector('.canvas-toolbar'), group = node.querySelector('.view-switch'), bounds = node.getBoundingClientRect(), groupBounds = group.getBoundingClientRect();
+    const rect = box => ({ left: box.left, right: box.right, top: box.top, bottom: box.bottom });
+    return { bounds: rect(bounds), groupBounds: rect(groupBounds), groupClientWidth: group.clientWidth, groupScrollWidth: group.scrollWidth,
+      controls: [...node.querySelectorAll('button')].filter(button => button.getBoundingClientRect().width > 0).map(button => ({ id: button.id, inViewSwitch: group.contains(button), bounds: rect(button.getBoundingClientRect()) })) };
+  });
+  assert.ok(toolbar.groupScrollWidth <= toolbar.groupClientWidth, `${tag('view switch')}: every view is visible, without a clipped group`);
+  for (const control of toolbar.controls) {
+    const parent = control.inViewSwitch ? toolbar.groupBounds : toolbar.bounds, box = control.bounds;
+    assert.ok(box.left >= parent.left && box.right <= parent.right && box.top >= parent.top && box.bottom <= parent.bottom, `${tag(control.id)}: the whole control stays inside its toolbar group`);
+  }
   checks.push('chromium 1024px: the playground at a touch landscape width (the view switch, Undo and Redo and the rest of the start) has 44px controls, 16px fields, no sideways scroll, no cut-off or overlapping control');
   await context.close();
 }
@@ -361,17 +598,27 @@ try {
   try {
     // One run per engine and size, side by side: a run only waits for its own page loads, and its three parts (the source pane, the playground
     // and the layout editor) load in separate contexts at once.
+    const run = (engine, browser, size, alone) => {
+      const sourceRun = async () => {
+        const context = await browser.newContext({ viewport: { width: size.width, height: size.height }, deviceScaleFactor: 2, hasTouch: true, isMobile: false });
+        await sourcePane(context, engine, size.width);
+        await context.close();
+      };
+      const parts = [sourceRun, () => playground(browser, engine, size), () => layoutEditor(browser, engine, size)];
+      return alone ? parts.reduce((previous, part) => previous.then(part), Promise.resolve()) : Promise.all(parts.map((part) => part()));
+    };
+    // RR-105: on Windows WebKit runs after Chromium, its three parts one at a time. Playwright's Windows WebKit (software painting, one shared
+    // UI and network process) starved beside eleven Chromium pages on a 4-core runner: in Full CI 43175111138 its first playground took 17.6s
+    // to receive playground.js and 29s to receive the 166-byte galleries.json that Chromium pages got from the same server in under 1.5s, and
+    // its timers ran 14s late, so the preview missed the 60s wait while still progressing. OPF_TOUCH_SEQUENTIAL=1 (or 0) forces the order.
+    const sequential = process.env.OPF_TOUCH_SEQUENTIAL ? process.env.OPF_TOUCH_SEQUENTIAL === '1' : process.platform === 'win32';
+    const isLate = (engine) => sequential && engine === 'webkit';
+    const late = [...browsers].filter(([engine]) => isLate(engine));
     await Promise.all([
-      ...[...browsers].flatMap(([engine, browser]) => sizesFor(engine).map(async (size) => {
-        const sourceRun = (async () => {
-          const context = await browser.newContext({ viewport: { width: size.width, height: size.height }, deviceScaleFactor: 2, hasTouch: true, isMobile: false });
-          await sourcePane(context, engine, size.width);
-          await context.close();
-        })();
-        await Promise.all([sourceRun, playground(browser, engine, size), layoutEditor(browser, engine, size)]);
-      })),
+      ...[...browsers].filter(([engine]) => !isLate(engine)).flatMap(([engine, browser]) => sizesFor(engine).map((size) => run(engine, browser, size, false))),
       ...(browsers.has('chromium') ? [fineLayoutEditor(browsers.get('chromium')), landscapeTablet(browsers.get('chromium'))] : []),
     ]);
+    for (const [engine, browser] of late) for (const size of sizesFor(engine)) await run(engine, browser, size, true);
   } finally { for (const browser of browsers.values()) await browser.close(); }
   assert.deepEqual(problems, [], 'no page or console error');
   console.log(`Mobile and touch (${[...browsers.keys()].join(', ')}; ${full ? 'full' : 'core states'}): ${checks.length} groups.\n  ${checks.sort().join('\n  ')}`);

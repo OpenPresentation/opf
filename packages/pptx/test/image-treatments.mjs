@@ -15,8 +15,8 @@ const parser = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', pa
 const array = value => value == null ? [] : Array.isArray(value) ? value : [value];
 const decode = bytes => new TextDecoder().decode(bytes);
 const uri = `data:image/png;base64,${(await readFile(new URL('fixtures/images/square.png', import.meta.url))).toString('base64')}`;
-const scheme = { name: 'Custom', dark1: '#101820', light1: '#F4F1EA', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
-const deckFor = (treatment, design = {}) => ({ design: { colorScheme: scheme, ...design },
+const scheme = { dark1: '#101820', light1: '#F4F1EA', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
+const deckFor = (treatment, design = {}) => ({ extensions: {fixture: {colorSchemeName: 'Custom'}}, design: { colorScheme: scheme, ...design },
   slides: [{ title: 'Treatment', blocks: [{ type: 'image', image: uri, ...treatment }, { type: 'text', text: 'Body' }] }] });
 const geometryOf = (deck, width = 1280, height = 720) => composeSlide(deck.slides[0], { width, height, presentation: deck }).items.find(item => item.field === 'image').image;
 async function exported(deck) {
@@ -34,7 +34,7 @@ let checked = 0;
 
 // Masks: the picture's preset geometry and guides equal core's normalized shape, at core's frame.
 for (const [shape, extra] of [['roundRect', { adjust: { adj: 0.12 } }], ['ellipse', {}], ['hexagon', {}], ['rect', {}], ['star5', {}]]) {
-  const deck = deckFor({ placement: { edge: 'right', inset: true }, shape, ...extra });
+  const deck = deckFor({ placement: { edge: 'end', inset: true }, shape, ...extra });
   const geometry = geometryOf(deck);
   const { picture } = await exported(deck);
   const preset = picture['p:spPr']['a:prstGeom'];
@@ -48,7 +48,7 @@ for (const [shape, extra] of [['roundRect', { adjust: { adj: 0.12 } }], ['ellips
 
 // Border: centered solid line on the picture; width in EMU from scaled reference pixels, alpha from #RRGGBBAA.
 {
-  const deck = deckFor({ placement: { edge: 'left' }, shape: 'roundRect', stroke: { color: '#10182080', width: 12 } }, { dimensions: { widthInches: 20, heightInches: 11.25 } });
+  const deck = deckFor({ placement: { edge: 'start' }, shape: 'roundRect', stroke: { color: '#10182080', width: 12 } }, { dimensions: { widthInches: 20, heightInches: 11.25 } });
   const geometry = geometryOf(deck, 1920, 1080);
   const line = (await exported(deck)).picture['p:spPr']['a:ln'];
   assert.equal(Number(line.w), Math.round(geometry.stroke.width / 96 * 914400));
@@ -81,7 +81,7 @@ for (const [shape, extra] of [['roundRect', { adjust: { adj: 0.12 } }], ['ellips
 
 // Overlay: one native shape directly above the picture, in the frame's shape or an edge band.
 {
-  const deck = deckFor({ placement: { edge: 'right', inset: true }, shape: 'ellipse', overlay: { color: '#00000080', opacity: 0.5 } });
+  const deck = deckFor({ placement: { edge: 'end', inset: true }, shape: 'ellipse', overlay: { color: '#00000080', opacity: 0.5 } });
   const geometry = geometryOf(deck);
   const { overlay, entries } = await exported(deck);
   assert.equal(overlay['p:spPr']['a:prstGeom'].prst, 'ellipse');
@@ -105,7 +105,7 @@ for (const [shape, extra] of [['roundRect', { adjust: { adj: 0.12 } }], ['ellips
 }
 
 // Round trip: every treatment field returns while the native objects are unchanged.
-const full = { placement: { edge: 'right', size: 0.46, inset: true }, aspectRatio: 0.5, shape: 'roundRect', adjust: { adj: 0.12 }, fit: 'cover', focus: { x: 0.3, y: 0.6 },
+const full = { placement: { edge: 'end', size: 0.46, inset: true }, aspectRatio: 0.5, shape: 'roundRect', adjust: { adj: 0.12 }, fit: 'cover', focus: { x: 0.3, y: 0.6 },
   stroke: { color: 'dark1', width: 12 }, opacity: 0.8, recolor: { dark: 'accent1', light: 'light1' }, overlay: { color: '#000000', opacity: 0.2 } };
 {
   const deck = deckFor(full);

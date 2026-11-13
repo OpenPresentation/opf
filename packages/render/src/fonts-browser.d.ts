@@ -4,6 +4,7 @@ import type {
   FontRegistry,
   FontRegistryOptions,
   FontsHandle,
+  FontPreparationOptions,
 } from "./fonts.js";
 import type { AutoScriptSelection, BundledFontPackage, LazyFont, ScriptSelection } from "./fonts-node.js";
 import type { ToSvgOptions } from "./svg.js";
@@ -30,13 +31,13 @@ export interface BrowserFontRegistry extends FontRegistry {
    * with (`catalogs`, ...) over the loader's `renderOptions`. A document that does not resolve rejects with the error
    * `toSvg` throws for it. After `dispose()` it rejects with `font-registry-disposed`.
    */
-  ensureLazyFonts(presentation: unknown, options?: { signal?: AbortSignal } & Partial<ToSvgOptions>): Promise<LazyFont[]>;
+  ensureLazyFonts(presentation: unknown, options?: { signal?: AbortSignal } & FontPreparationOptions): Promise<LazyFont[]>;
   /**
    * Synchronous: the vendored faces the presentation draws under the registry's policy that are not loaded yet. Empty means
    * `ensureLazyFonts` fetches nothing. `renderOptions` are the `toSvg` options the document resolves with (`catalogs`, ...)
    * over the loader's `renderOptions`. Throws what `toSvg` throws for a document that does not resolve.
    */
-  pendingLazyFonts(presentation: unknown, renderOptions?: Partial<ToSvgOptions>): LazyFont[];
+  pendingLazyFonts(presentation: unknown, renderOptions?: FontPreparationOptions): LazyFont[];
 
   /** Load script faces for ISO 15924 codes (or "all") from `scriptBaseUrl`. Resolves with the newly loaded package names. */
   loadScripts(scripts: ScriptSelection, options?: { signal?: AbortSignal }): Promise<string[]>;
@@ -70,7 +71,7 @@ export interface BrowserFontsHandle extends FontsHandle {
    * (`catalogs`, ...) over the loader's `renderOptions`. A document that does not resolve rejects with what `toSvg` throws for it; after
    * `dispose()` it rejects with `font-registry-disposed`.
    */
-  ensure(presentation: unknown, options?: { signal?: AbortSignal } & Partial<ToSvgOptions>): Promise<EnsureResult>;
+  ensure(presentation: unknown, options?: { signal?: AbortSignal } & FontPreparationOptions): Promise<EnsureResult>;
   /** Synchronous: the vendored files and script packages `ensure` would fetch. Empty means a render can start now. Throws what `toSvg` throws for a document that does not resolve. */
   pending(presentation: unknown, renderOptions?: Partial<ToSvgOptions>): string[];
   /**

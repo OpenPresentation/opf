@@ -30,8 +30,8 @@ function assertSource(part) {
 test('complete code parts preserve exact filename, language, body, whitespace and hard line boundaries',()=>{
   const source='def check():\r\n    value = "two  spaces"\n\treturn value  \r\n';
   const value=Object.freeze({source,filename:'src/CaseSensitive.py',language:'Python'});
-  const result=layoutCode(value,cell,{path:'slides.2.left.code'});
-  assert.deepEqual(rootLayoutCode(value,cell,{path:'slides.2.left.code'}),result);
+  const result=layoutCode(value,cell,{path:'slides.2.start.code'});
+  assert.deepEqual(rootLayoutCode(value,cell,{path:'slides.2.start.code'}),result);
   assert.equal(result.algorithm,'code-flow-v1');
   assert.equal(result.overflow,false);
   assert.equal(result.textMeasurement,'estimated');
@@ -41,7 +41,7 @@ test('complete code parts preserve exact filename, language, body, whitespace an
     assert.deepEqual(part.sources,[{path:part.path,start:0,end:part.text.length}]);
     assertSource(part);
   }
-  assert.equal(result.parts[2].path,'slides.2.left.code.source');
+  assert.equal(result.parts[2].path,'slides.2.start.code.source');
   assert.deepEqual(result.parts[2].fit.lines,['def check():','    value = "two  spaces"','\treturn value  ','']);
 });
 

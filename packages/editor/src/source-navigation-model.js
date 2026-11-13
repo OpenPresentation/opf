@@ -253,7 +253,7 @@ function declareRegions(analysis, regions, scope) {
   }
 }
 
-// `region` is a name or names joined by `+` and `:` (`left`, `top:left`, `middle+bottom`): each name is a use.
+// `region` is a name or names joined by `+` and `:` (`start`, `top:start`, `middle+bottom`): each name is a use.
 function regionTokens(analysis, node, layout) {
   if (!layout.identity) return;
   const raw = analysis.text.slice(node.cFrom, node.cTo);
@@ -285,7 +285,7 @@ function columnUses(analysis, candidates) {
 function collectTokens(analysis) {
   const { text } = analysis;
   const skip = [];
-  for (const fence of analysis.scan?.fences ?? []) if (fence.kind === "code" || fence.kind === "mermaid") skip.push([fence.from, fence.to]);
+  for (const fence of analysis.scan?.fences ?? []) if (fence.kind === "code" || fence.kind === "mermaid" || fence.kind === "dot" || fence.kind === "plantuml") skip.push([fence.from, fence.to]);
   for (const comment of analysis.scan?.comments ?? []) if (comment.kind === "comment") skip.push([comment.from, comment.to]);
   const skipped = (index) => skip.some(([from, to]) => index >= from && index < to);
   const variables = new Set(analysis.occurrences.filter((o) => o.kind === "variable" && o.role === "def").map((o) => o.id));

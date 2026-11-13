@@ -37,15 +37,24 @@ test("lean Worker preserves data exclusions and production size budgets", async 
 	for (const source of ["src/generated/docs.ts", "src/generated/examples.ts", "src/data.ts", "app-dist/deck-app.html"]) {
 		assert.ok(fullSources.some(name => name === source || name.endsWith("/" + source)), source + " is a positive audit control in the full entry");
 	}
-	// Reviewed v0.33 refresh: SH-19 8,075,721; d260 8,110,959; with the waterfall fix 8,116,787, no retained data.
-	// The added composition features explain the growth. See docs/handoff/2026-11-07/mcp-size-budget-033.md.
-	assert.ok(lean.bytes < 8_150_000, `${lean.bytes} unminified bytes`);
+	// Reviewed v0.34 source076725b5b:8,273,467 lean unminified bytes, no retained data.
+	// Exact source measurements and3% rounded headroom: docs/handoff/2026-11-07/mcp-size-budget-034.md.
+	// RR-111 viewer size cut (vetoable, RR111-WORKER-CEILINGS): core's precompiled validators build their errors with helper
+	// functions. On the integration-034 wave 3 head d27954fc3 the lean Worker measured 8,542,441 unminified / 5,577,531 minified /
+	// 1,265,413 gzip bytes (over its own ceilings) and 7,333,178 / 4,677,145 / 1,219,884 with the cut, so all three ceilings come back
+	// to the 3% headroom policy, rounded up to 1,000 bytes: 7,554,000, 4,818,000 and 1,257,000.
+	assert.ok(lean.bytes < 7_554_000, `${lean.bytes} unminified bytes`);
 	const production = await bundleWorker("mcp-worker-lean.mjs", { minify: true });
 	assert.deepEqual(retainedData(production), [], "production also excludes every data source");
 	const compressed = gzipSync(production.text, { level: 9 }).length;
-	// Combined waterfall candidate: 5,300,992 minified / 1,199,308 gzip bytes; ceilings leave under 1% headroom.
-	assert.ok(production.bytes < 5_350_000, `${production.bytes} minified bytes`);
-	assert.ok(compressed < 1_210_000, `${compressed} gzip bytes`);
+	// The minified ceiling, measured on 2026-11-12 (vetoable, RR111-WORKER-BUDGET): the reviewed v0.34 production bundle was 5,397,634
+	// bytes (1,232,153 gzip) and 5,560,000 was 3% above it. This branch's base (origin/codex/rr-034-next-source-20261112) already
+	// measures 5,558,585 (0.03% under that ceiling), and RR-111 (open_editor, the derived session keys, the in-place instructions and
+	// tool descriptions) brings it to 5,563,948. 5,565,000 is 3.1% above the reviewed 5,397,634, 0.12% above the base and 0.02% above
+	// this branch: it is no longer a 3% headroom, so the release assembly must re-measure it. The unminified and gzip ceilings keep
+	// their 3% policy. RR-111's viewer size cut (above) replaces that ceiling with one at 3% again.
+	assert.ok(production.bytes < 4_818_000, `${production.bytes} minified bytes`);
+	assert.ok(compressed < 1_257_000, `${compressed} gzip bytes`);
 });
 
 describe("the MCP server in workerd", { skip: !available && "the workerd package has no binary for this platform" }, () => {
@@ -65,11 +74,13 @@ describe("the MCP server in workerd", { skip: !available && "the workerd package
 		return message.result;
 	};
 
-	// The same server in Node, with Ajv, over a linked in-memory pair: what the Worker must answer.
+	// The same server in Node, with Ajv, over a linked in-memory pair: what the Worker must answer. RR-63: a Worker has no installed icon
+	// files to read, so its defaultSources() registers no icon sets (test/icon-sets-worker.test.mjs); the Node server it is compared with
+	// leaves them out too.
 	let local;
 	before(async () => {
 		const [a, b] = InMemoryTransport.createLinkedPair();
-		await createOpfServer({ version: "0.0.0-test" }).connect(b);
+		await createOpfServer({ version: "0.0.0-test", sources: { iconSets: undefined } }).connect(b);
 		local = new Client({ name: "local", version: "1" });
 		await local.connect(a);
 	});
@@ -81,7 +92,7 @@ describe("the MCP server in workerd", { skip: !available && "the workerd package
 		assert.equal(init.serverInfo.name, "opf");
 		assert.ok(init.capabilities.tools && init.capabilities.resources && init.capabilities.prompts);
 		const tools = (await call("tools/list", {})).tools.map((tool) => tool.name).sort();
-		assert.deepEqual(tools, ["convert", "get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
+		assert.deepEqual(tools, ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
 		assert.deepEqual(wire(await call("tools/list", {})), wire(await local.listTools()));
 		assert.ok((await call("resources/list", {})).resources.length > 100);
 		assert.deepEqual((await call("prompts/list", {})).prompts.map((prompt) => prompt.name).sort(), ["author_deck", "choose_layout", "fix_validation_findings", "learn_opf"]);
@@ -189,6 +200,13 @@ describe("a site that hosts the deck view (deckApp with siteFontFiles)", () => {
 		assert.deepEqual(tools.find((tool) => tool.name === "show_deck")._meta.ui, { resourceUri: "ui://opf/deck" });
 		assert.deepEqual(tools.find((tool) => tool.name === "read_font_file")._meta.ui, { visibility: ["app"] });
 		assert.equal((await post("resources/read", { uri: "ui://opf/deck" })).contents[0].text, "<!doctype html><title>OPF deck</title>");
+		assert.deepEqual((await post("resources/read", { uri: "ui://opf/deck" })).contents[0]._meta, { ui: { prefersBorder: false, preferredDisplayMode: "fullscreen" } });
+		// The entry point runs in the Worker with no arguments: a starter deck and server-minted viewer keys, and nothing stored.
+		assert.deepEqual(tools.find((tool) => tool.name === "open_editor")._meta, { ui: { resourceUri: "ui://opf/deck" }, "ui/resourceUri": "ui://opf/deck", "openai/ui": { entrypoints: [{ type: "global" }] } });
+		const studio = await post("tools/call", { name: "open_editor", arguments: {} });
+		assert.equal(studio.isError, undefined, JSON.stringify(studio.content));
+		assert.equal(studio.structuredContent.document.slides.length, 2);
+		assert.match(studio.structuredContent.viewer.session, /^deck-[0-9a-f]{32}$/, "derived from the starter deck's name");
 		const shown = await post("tools/call", { name: "show_deck", arguments: { document: { name: "Hosted", slides: [{ title: "A" }] } } });
 		assert.equal(shown.structuredContent.checked, true, "the hosted server keeps its quick check");
 		const read = async (file) => {
@@ -199,5 +217,18 @@ describe("a site that hosts the deck view (deckApp with siteFontFiles)", () => {
 		assert.equal(await read("fonts/intos/Intos-Regular.ttf"), "font:/opf-fonts/lazy/fonts/intos/Intos-Regular.ttf");
 		assert.equal(await read("script-fonts/noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf"), "font:/opf-fonts/scripts/noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf");
 		assert.equal(await read("fonts/../../etc/passwd.ttf"), "unknown-font");
+
+		// RR-111: the site serves the icon files and passes sources.iconSets, so the viewer reads icons through the app-only read_icons
+		// (the Worker without icon sets above does not list it). Only Lucide's set-level files are served here.
+		const readIcons = tools.find((tool) => tool.name === "read_icons");
+		assert.deepEqual(readIcons?._meta?.ui, { visibility: ["app"] }, "read_icons is offered to the view only");
+		assert.deepEqual(shown.structuredContent.iconSets, ["lucide", "tabler"], "show_deck names the sets the view can read");
+		const icons = await post("tools/call", { name: "read_icons", arguments: { set: "lucide", names: ["rocket", "chek"], index: true } });
+		assert.equal(icons.isError, undefined, JSON.stringify(icons.content));
+		assert.deepEqual(Object.keys(icons.structuredContent.icons), ["rocket"], "an icon the set has, from the whole-set file; a name it lacks is left out");
+		assert.equal(icons.structuredContent.index.license, "ISC");
+		assert.ok(icons.structuredContent.index.names.includes("check"));
+		const tabler = await post("tools/call", { name: "read_icons", arguments: { set: "tabler", names: ["rocket"] } });
+		assert.equal(tabler.isError, true, "a set whose files the site does not serve is an error the view settles");
 	});
 });

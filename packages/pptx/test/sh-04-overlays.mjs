@@ -8,10 +8,10 @@ import { unzipSync } from 'fflate';
 import { composeSlide } from '@openpresentation/opf/composition';
 import { toPptx } from '../dist/index.js';
 
-const scheme = { name: 'Test', dark1: '#101820', light1: '#FFFFFF', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
+const scheme = { dark1: '#101820', light1: '#FFFFFF', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
 const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
 const slide = (shapes, blocks) => ({ title: 'Flow', blocks: blocks ?? [{ id: 'plan', shape: 'roundRect', text: 'Plan' }, { id: 'ship', shape: 'ellipse', text: 'Ship' }], shapes });
-const deck = (shapes, blocks) => ({ name: 'Overlays', language: 'en-US', design: { colorScheme: scheme }, slides: [slide(shapes, blocks)] });
+const deck = (shapes, blocks) => ({ name: 'Overlays', language: 'en-US', extensions: {fixture: {colorSchemeName: 'Test'}}, design: { colorScheme: scheme }, slides: [slide(shapes, blocks)] });
 const decode = bytes => new TextDecoder().decode(bytes);
 const emu = px => Math.round(px * 9525);
 async function exported(shapes, blocks) {

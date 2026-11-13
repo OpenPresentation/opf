@@ -1,0 +1,17 @@
+{
+  "deck": "technical/inverted-pyramids.opf.json",
+  "entries": {
+    "technical/inverted-pyramids.opf.json#0": {
+      "sha256": "4eb4f47eb974442c057cdb134757e25a45d4dff2c5b4a893b22082f8b36af0bc",
+      "bytes": 7530
+    },
+    "technical/inverted-pyramids.opf.json#1": {
+      "sha256": "2ac80db893e728a2d75512e1579e716236e2facfe44b172325e1c220d7158db3",
+      "bytes": 11859
+    },
+    "technical/inverted-pyramids.opf.json#2": {
+      "sha256": "dea05ae3316e7ab5edcf375842aaa658abcaeda956f523ad6e0352df7d523efd",
+      "bytes": 10915
+    }
+  }
+}
