@@ -97,3 +97,14 @@ const generatedChart = /^[^:]* chart: /;
 /** Import: the alt to keep, given the description read and the description(s) OPF generates for the imported object. */
 export const authoredAlt = (read, generated) => read !== undefined && [generated].flat().some(candidate => typeof candidate === 'string' ? candidate === read
   : typeof candidate?.any === 'string' && generatedChart.test(read) && read.slice(read.indexOf(': ')) === candidate.any) ? undefined : read;
+
+// The forms chartAlt and tableAlt write, with any names and counts. A description in one of these forms is the one export generated,
+// also when it no longer describes the object: after a series or a column was renamed, or a row added, in PowerPoint (which leaves the
+// description alone), the import would otherwise keep the stale text as an authored `alt` for good. Found 2026-11-13 by the reference
+// series-name contract: renaming "Actual" imported `alt: "Line chart: Actual by Period, 3 categories"`.
+const GENERATED_CHART_FORM = /^(?:100% )?[A-Za-z][A-Za-z ]* chart: .+(?: by | against ).+, \d+ (?:category|categories|point|points)$|^(?:100% )?[A-Za-z][A-Za-z ]* chart: .+, \d+ values?$/u;
+const GENERATED_TABLE_FORM = /^Table:(?: .+;)? \d+ rows?$/u;
+/** Import: a chart's alt to keep. A description in the generated form is never authored text. */
+export const authoredChartAlt = (read, generated) => typeof read === 'string' && GENERATED_CHART_FORM.test(read) ? undefined : authoredAlt(read, generated);
+/** Import: a table's alt to keep. A description in the generated form is never authored text. */
+export const authoredTableAlt = (read, generated) => typeof read === 'string' && GENERATED_TABLE_FORM.test(read) ? undefined : authoredAlt(read, generated);

@@ -21,7 +21,7 @@ import {attachChartexFallbacks,attachChartexParts,chartexFallbackName,chartFromC
 import {chartRegionSvg} from './preview-region.js';
 import {applyDoughnutRings,applyRingLabels,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
 import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
-import {authoredAlt,chartAlt,generatedChartAlts,logoAlt,photoAlt,tableAlt} from './default-alt.js';
+import {authoredChartAlt,authoredTableAlt,chartAlt,generatedChartAlts,logoAlt,photoAlt,tableAlt} from './default-alt.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
 import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
@@ -1574,7 +1574,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
     const restoredTable = stored ? restore('table', importedTable, () => restoreTableData(importedTable, stored, {evidence: tableCellEvidence(table, relationships), olderEvidence: [tableCellEvidence(table, relationships, {form: 'raw'}), tableCellEvidence(table, relationships, {form: 'saved'})], environment: [tableEnvironmentEvidence(entries), tableEnvironmentEvidence(exportedThemeView(entries))], datasets: data.datasets, report: diagnostic => data.report?.('table', diagnostic)})) : importedTable;
     // FA-27: the frame's descr (or PowerPoint's decorative marker) is the table's text alternative.
     // RR-105 (#1290): the description OPF generates when no alt was authored is not an alt (src/default-alt.js).
-    const alt = restoredTable && typeof restoredTable === 'object' ? authoredAlt(readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]), tableAlt(restoredTable, {datasets: data.datasets})) : undefined;
+    const alt = restoredTable && typeof restoredTable === 'object' ? authoredTableAlt(readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]), tableAlt(restoredTable, {datasets: data.datasets})) : undefined;
     return {
       kind: "table",
       bounds,
@@ -1604,7 +1604,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
     if(chart&&references.length)chart={...chart,referenceLines:references};
     // FA-09: the frame's descr (or PowerPoint's decorative marker) is the chart's text alternative.
     // RR-105 (#1290): the description OPF generates when no alt was authored is not an alt (src/default-alt.js).
-    const alt = chart ? authoredAlt(readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]), [...generatedChartAlts(chart, {datasets: data.datasets}), ...(stored?.data ? generatedChartAlts({...chart, data: stored.data}, {datasets: data.datasets}) : [])]) : undefined;
+    const alt = chart ? authoredChartAlt(readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]), [...generatedChartAlts(chart, {datasets: data.datasets}), ...(stored?.data ? generatedChartAlts({...chart, data: stored.data}, {datasets: data.datasets}) : [])]) : undefined;
     return {
       kind: "chart",
       bounds,
