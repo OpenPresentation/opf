@@ -54,3 +54,15 @@ test('a request that throws is asked again, never remembered', () => {
   assert.throws(() => composeSlide({ title: 'Q review' }, { textMeasurement: measurement }), /not yet/);
   assert.doesNotThrow(() => composeSlide({ title: 'Q review' }, { textMeasurement: measurement }));
 });
+
+test('the host methods run on the host object (a class with private fields)', () => {
+  class Host {
+    #scale = 0.5;
+    resolved = 0;
+    measure(text, size) { return [...text].length * size * this.#scale; }
+    resolveStyle(style) { this.resolved += this.#scale > 0 ? 1 : 0; return style; }
+  }
+  const host = new Host();
+  assert.doesNotThrow(() => composeSlide(slides[0], { textMeasurement: host }));
+  assert.ok(host.resolved > 0, 'resolveStyle reached the host');
+});

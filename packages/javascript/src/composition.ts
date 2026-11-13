@@ -282,14 +282,15 @@ const MEASUREMENT_MEMO_LIMIT = 200_000;
 const memoSources = new WeakMap<TextMeasurement, TextMeasurement>();
 function memoizedMeasurement(measurement: TextMeasurement): TextMeasurement {
   if (memoSources.has(measurement)) return measurement;
-  const widths = new Map<string, number>(), styleKeys = new WeakMap<object, string>();
-  const styleKey = (style: TextStyle): string => {
-    if (!style || typeof style !== 'object') return String(style);
-    let key = styleKeys.get(style);
-    if (key === undefined) styleKeys.set(style, key = JSON.stringify(style));
-    return key;
-  };
+  const widths = new Map<string, number>();
+  // The style is keyed by its content on every request, never by the object: a style object changed in place between two requests
+  // must not answer with the width of what it was.
+  const styleKey = (style: TextStyle): string => !style || typeof style !== 'object' ? String(style) : JSON.stringify(style);
+  // The host's other methods run on the host object itself (a host class with private fields would throw on any other receiver).
   const memo = Object.create(measurement) as TextMeasurement;
+  if (typeof measurement.resolveStyle === 'function') memo.resolveStyle = style => measurement.resolveStyle!(style);
+  if (typeof measurement.outlineBounds === 'function') memo.outlineBounds = (text, size, style) => measurement.outlineBounds!(text, size, style);
+  if (typeof measurement.forScripts === 'function') memo.forScripts = profile => measurement.forScripts!(profile);
   memo.measure = (text, size, style) => {
     const key = `${size}\u0000${styleKey(style)}\u0000${text}`, known = widths.get(key);
     if (known !== undefined) return known;
