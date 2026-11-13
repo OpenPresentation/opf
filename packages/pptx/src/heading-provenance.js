@@ -11,10 +11,12 @@ export const attachHeadingTags=(entries,records)=>attachTextTags(entries,records
 
 // RR-105 (opf#1291): a title of fixed lines (tag lineBreaks 'paragraphs') is one paragraph per line; the paragraphs an authored hard break
 // starts are listed (`hard`) and stay a "\n", every other paragraph break is a soft wrap and joins its lines. When PowerPoint's
-// paragraphs are no longer the exported lines (an edit added or removed one), every paragraph break is read as a soft wrap. A line break
-// inside a paragraph (Shift+Enter in PowerPoint) is text, a "\n".
+// paragraphs are no longer the exported lines (an edit added, removed or joined one), which breaks were wraps is unknown, so every
+// paragraph break is read as the line break the user sees ("\n"): no words run together and none is lost. A line break inside a
+// paragraph (Shift+Enter in PowerPoint) is text, a "\n".
 function hardBreaksOf(data,count) {
-  return count===data.lines&&Array.isArray(data.hard)?new Set(data.hard.filter(index=>Number.isSafeInteger(index))):new Set();
+  if(count!==data.lines)return {has:index=>index>0};
+  return Array.isArray(data.hard)?new Set(data.hard.filter(index=>Number.isSafeInteger(index))):new Set();
 }
 function joinTitleParagraphs(list,data) {
   if(!Array.isArray(list)||list.length<2)return list;

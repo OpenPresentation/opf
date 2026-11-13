@@ -167,3 +167,32 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   assert.ok(end1 === 0 && end2 > 1.5 * 9525 && end2 < 2.2 * 9525, `the second line ends its 1.85 px further left (${end1}, ${end2})`);
   assert.equal((await imported(right.bytes)).value.slides[0].title, hotel.slides[0].title);
 }
+
+// 9. Edits in PowerPoint to a title of fixed lines. While its paragraphs are the exported lines (a line retyped), the paragraph breaks
+// are soft wraps again; once an edit joins, deletes or adds a line, which breaks were wraps is unknown, so every paragraph break reads as
+// the line break the user sees. No edit throws, runs words together or loses a word that is still there.
+{
+  const title = 'Onboarding experience redesign for every new customer in the first ninety days of their contract with us';
+  const out = await exported({design: {fontScheme: 'bookman'}, slides: [{title, items: ['One']}]});
+  const xml = out.slide(0), [shape] = out.titles(0), lines = paragraphs(shape);
+  assert.ok(lines.length >= 3, 'three lines to edit');
+  const texts = text(shape);
+  const runsOf = paragraph => paragraph.replace(/^<a:p>(?:<a:pPr\b[^>]*\/>|<a:pPr\b[\s\S]*?<\/a:pPr>)?/, '').replace(/<a:endParaRPr\b[^>]*\/><\/a:p>$/, '');
+  const withParagraphs = list => xml.replace(shape, shape.replace(/<a:p>[\s\S]*<\/a:p>/, list.join('')));
+  const importedTitle = async list => {
+    const diagnostics = [], value = await fromPptx(zipSync({...out.entries, 'ppt/slides/slide1.xml': strToU8(withParagraphs(list))}), {onDiagnostic: item => diagnostics.push(item)});
+    assert.deepEqual(diagnostics.filter(item => item.code === 'invalid-heading-provenance'), []);
+    return value.slides[0].title;
+  };
+  // Retyped: the same paragraphs, other words; still soft wraps.
+  const retyped = lines.map((paragraph, index) => index === 1 ? paragraph.replace(/<a:t>[^<]*<\/a:t>/, '<a:t>retyped middle words </a:t>') : paragraph);
+  assert.equal(await importedTitle(retyped), texts[0] + 'retyped middle words ' + texts.slice(2).join(''));
+  // Joined: the first two lines one paragraph (Delete at the end of the first).
+  const joined = [lines[0].replace(/<a:endParaRPr\b[^>]*\/><\/a:p>$/, '') + runsOf(lines[1]) + '</a:p>', ...lines.slice(2)];
+  assert.equal(await importedTitle(joined), [texts[0] + texts[1], ...texts.slice(2)].join('\n'));
+  // Deleted: the second line removed.
+  assert.equal(await importedTitle([lines[0], ...lines.slice(2)]), [texts[0], ...texts.slice(2)].join('\n'));
+  // Added: a new line after the first (Enter, then typing).
+  const added = lines[1].replace(/<a:t>[^<]*<\/a:t>/, '<a:t>An added line</a:t>');
+  assert.equal(await importedTitle([lines[0], added, ...lines.slice(1)]), [texts[0], 'An added line', ...texts.slice(1)].join('\n'));
+}
