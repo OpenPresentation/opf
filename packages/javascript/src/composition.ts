@@ -5944,10 +5944,10 @@ const CHART_TRACK_SHARES: readonly number[] = [.6, .55, .5];
  */
 export const CHART_MIN_PLOT_PX = 120, CHART_MIN_PLOT_SHARE = .22, CHART_MAX_PLOT_ASPECT = 3;
 /**
- * P32, RR-105: in automatic composition the tallest a chart's box is, as height over width: 3/4 (4:3 landscape), 1 for a radar (its web
- * is round).
+ * P32, RR-105: in automatic composition the tallest a chart's box is, as height over width: 3/4 in a cell (4:3 landscape), 1 for a radar (its
+ * web is round), 3/2 for the slide's only body (2:3 portrait: a lone chart fills a portrait body without bars twice as tall as wide).
  */
-export const CHART_MAX_HEIGHT_RATIO = 3 / 4, CHART_RADAR_MAX_HEIGHT_RATIO = 1;
+export const CHART_MAX_HEIGHT_RATIO = 3 / 4, CHART_RADAR_MAX_HEIGHT_RATIO = 1, CHART_LONE_MAX_HEIGHT_RATIO = 3 / 2;
 const isRadarChart = (chart: unknown): boolean => typeof chart === 'object' && chart !== null && typeof (chart as {type?: unknown}).type === 'string' && ['radar', 'radar-with-markers', 'filled-radar'].includes((chart as {type: string}).type.trim().toLowerCase());
 /**
  * LH-66: whether a paragraph (a text block) runs on a measure under MIN_MEASURE_CHARS at `width` and `size`: it wraps there and reads
@@ -7914,9 +7914,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // WI-3: a contained picture and a video frame sit at the region's anchor inside the cell the flow gave them (top by default),
   // and the caption band closes up under a top-anchored frame.
   const VIDEO_ASPECT = 16 / 9;
-  // P32, RR-105: the tallest a chart's box is in automatic composition, as height over width: a chart at most 4:3 landscape; a radar at
-  // most square, the shape of its web (three radars in a row filled a fifth of their boxes).
-  const chartMaxHeight = (node: Pending, width: number): number => width * (isRadarChart(node.value) ? CHART_RADAR_MAX_HEIGHT_RATIO : CHART_MAX_HEIGHT_RATIO);
+  // P32, RR-105: the tallest a chart's box is in automatic composition, as height over width: a chart in a cell at most 4:3 landscape; a
+  // radar at most square, the shape of its web (three radars in a row filled a fifth of their boxes); the slide's only body at most 2:3
+  // portrait, so a lone chart fills a portrait body and its bars never stand more than half again as tall as the plot is wide.
+  const chartMaxHeight = (node: Pending, width: number): number => width * (isRadarChart(node.value) ? CHART_RADAR_MAX_HEIGHT_RATIO : node.lone ? CHART_LONE_MAX_HEIGHT_RATIO : CHART_MAX_HEIGHT_RATIO);
   const settleCaption = (caption: ComposedCaption, frame: LayoutBox, anchor: RegionAnchor): void => {
     if (caption.position === 'above' || anchor !== 'top') return;
     const target = round(frame.y + frame.height + caption.fontSize * .4), dy = target - caption.box.y;
@@ -8143,8 +8144,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // composition (no layout) a chart is at most 4:3, so a tall cell does not stretch it (P32).
     if (node.field === 'video') box = roundBox(containedBox(box, VIDEO_ASPECT, anchor));
     else if (node.field === 'chart' && !templateCell && modeFor(settings) === 'auto' && box.height > chartMaxHeight(node, box.width)) {
+      // RR-105: the slide's only chart is centered in the body it does not fill (the owner's direction: a lone body is centered).
       const height = chartMaxHeight(node, box.width);
-      box = roundBox({ ...box, height });
+      box = roundBox({ ...box, ...(node.lone ? { y: box.y + (box.height - height) / 2 } : {}), height });
     }
     // LH-74: a picture alone on a card (no caption, no frame, shape or line of its own) that covers its frame fills the card to its edges,
     // clipped to the card's radius, with no inset and no stroke: the picture is the card, so none is drawn under it. A picture shown whole
