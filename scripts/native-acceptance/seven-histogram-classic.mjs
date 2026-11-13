@@ -16,7 +16,8 @@ export const HISTOGRAM_SELECTION=Object.freeze({slideIndex:2,seriesIndex:1,point
 // (Application) inside the seven embedded workbooks changed; every slide, chart part and workbook sheet, table and string part is
 // byte-identical (part-by-part comparison of the all-seven chartex:'native' export of f3f0b2b1f and of this commit). Previous:
 // {bytes:226821,sha256:'0ef9865fa636d57b3fa37d370884d507414d0377a5c56209cbddbabea308c567'}.
-export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226668,sha256:'c19ae4cda7488d6e25ffa48f6076a47ff51b740b4b37f11695aa85d1ea94224e'});
+// RR-105 (#1290, 2026-11-12, notes page size): only ppt/presentation.xml changed (p:notesSz), part-by-part comparison with the\nexport of 885219b9c. Previous: {bytes:226668,sha256:'c19ae4cda7488d6e25ffa48f6076a47ff51b740b4b37f11695aa85d1ea94224e'}.
+export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226667,sha256:'e3fa122fe5828ba09b64a883225db6560d65ab4ac75493d77e39836dd9393218'});
 export const HISTOGRAM_SOURCE_ARCHIVE_BEFORE_RR105_PICTURE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
 const keys=(value,names)=>assert.deepEqual(Object.keys(value).sort(),[...names].sort());
 const modelHash=value=>digest(Buffer.from(JSON.stringify(value)));

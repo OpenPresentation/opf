@@ -317,6 +317,31 @@
         },
         "scope": "Exact bare toPptx caller; every old archive hash, byte length, part count and applicable native-slide digest reproduced before generating a review candidate.",
         "note": "RR-105 (#1290), 2026-11-12, chart workbook properties: 19 chart archives change only in ppt/embeddings/Microsoft_Excel_Worksheet1.xlsx (docProps/core.xml creator and lastModifiedBy, docProps/app.xml Application); the two table archives are byte-identical. The candidate head is the code-only commit, amended into the item commit with this fixture. Evidence: C:/opf-work/c34/rbp-scratch/review-1-rr54."
+      },
+      {
+        "baselineExportRef": "885219b9c84ade2a784f393f6fa92a24fa1e7c29",
+        "baselineBuildHead": "885219b9c84ade2a784f393f6fa92a24fa1e7c29",
+        "candidateHead": "8c7f5d25dbcfd4ae8e7e82898c7c6718ccf3030d",
+        "exportCaller": {
+          "api": "toPptx",
+          "input": "structuredClone(entry.deck)",
+          "options": "omitted",
+          "catalogs": "not registered"
+        },
+        "evidence": {
+          "directory": "C:\\opf-work\\c34\\rbp-scratch\\review-2-rr54",
+          "reviewFile": "review.json"
+        },
+        "sourceEvidence": {
+          "directory": "C:\\opf-work\\c34\\rbp-scratch\\review-2-rr54",
+          "baselineSourceTrees": "100644 blob 891d0ea0488842c1fb58e266124d0c18e180bbde\tpackage.json\n040000 tree 86098f28d0bef81ba3bff29bfea93f0a6b4fa43e\tpackages/gallery\n040000 tree dc593d00f2670baab5a268192fb0c6c79afd7946\tpackages/javascript\n040000 tree 5f81df19925af7794faa1e93eadfa2fe03c0971f\tpackages/pptx\n040000 tree 42670f7cc52a24117942e47b9716ea8e427613d0\tpackages/render\n100644 blob 0f4bca09aeb72cb8c589beae1b265dd13f32e346\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree 3376c97eb91c8dcd6b478a5698298301b074c6fe\tspec",
+          "candidateSourceTrees": "100644 blob 891d0ea0488842c1fb58e266124d0c18e180bbde\tpackage.json\n040000 tree 86098f28d0bef81ba3bff29bfea93f0a6b4fa43e\tpackages/gallery\n040000 tree dc593d00f2670baab5a268192fb0c6c79afd7946\tpackages/javascript\n040000 tree 37f5b379c0ee6585191218751055077205eee348\tpackages/pptx\n040000 tree 42670f7cc52a24117942e47b9716ea8e427613d0\tpackages/render\n100644 blob 0f4bca09aeb72cb8c589beae1b265dd13f32e346\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree 3376c97eb91c8dcd6b478a5698298301b074c6fe\tspec",
+          "fixtureSha256": "cb3950c1a3de9a52ed6ba09279c7f83934bc25acace46ace1669cdf6de102530",
+          "reviewerSha256": "9a2a066909e61c6982f5869d098b8e23ae82f4ecc7416416734ef10cecadbd63",
+          "candidateHelperSha256": "3baf818c1cfea66a9917aae8d32c0904bc018aa35f2437210a26728e397f99a1"
+        },
+        "scope": "Exact bare toPptx caller; every old archive hash, byte length, part count and applicable native-slide digest reproduced before generating a review candidate.",
+        "note": "RR-105 (#1290), 2026-11-12, notes page size: all 21 archives change only in ppt/presentation.xml (p:notesSz 6858000 x 9144000). The candidate head is the code-only commit, amended into the item commit with this fixture. Evidence: C:/opf-work/c34/rbp-scratch/review-2-rr54."
       }
     ]
   },
@@ -361,11 +386,11 @@
           }
         ]
       },
-      "sha256": "763ad618903547611c3a01f80fdbbfbdf2cdf4aaf66c5bb52d1e8ec894595db9",
+      "sha256": "72b9fe902e8597f2acc25dcef5ebd6deebfeb609d33100038700e78434585e9b",
       "rr81PreviousSha256": "85196b38e1c71527b9c7d1c8d527bfbeb2244c182ce6a850634c3ae273f45685",
       "rr20PreviousSha256": "9267aeb25d11ae9f0a8e5a7ce9e719a2e069c043eb71d7d1ed583e8d7b589532",
       "rr20PartCount": 30,
-      "rr20Bytes": 26237,
+      "rr20Bytes": 26235,
       "rr90PreviousSha256": "10557a90788debcc5e0045481976b0d44c5eace4d180a16c91bbd88c7b35891c",
       "rr90PreviousBytes": 26053,
       "wi5PreviousSha256": "99954a11bc017161474a2c577aff23dd31e1a753efd07b3e47d879c131086c19",
@@ -389,6 +414,12 @@
           "bytes": 26259,
           "partCount": 30,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "763ad618903547611c3a01f80fdbbfbdf2cdf4aaf66c5bb52d1e8ec894595db9",
+          "bytes": 26237,
+          "partCount": 30,
+          "reviewIndex": 4
         }
       ]
     },
@@ -437,11 +468,11 @@
           }
         ]
       },
-      "sha256": "6aad1184fe3f39ffc92d2394a5f8acea0dc8d5b78b8bf2e35287562b204eff00",
+      "sha256": "44810b79feeaba6a2aaabef545d213a4f605c6302b2bc15994b033fe3ee0d834",
       "rr81PreviousSha256": "e1793caa675c7637a6c5c6e81dcde1cb76e7e317d17988ae9c2778d49745cbd6",
       "rr20PreviousSha256": "7d5fb91df2ecc073fc9e87ee42a9b25c17529c803e2a045bf1a9e05a1524998b",
       "rr20PartCount": 30,
-      "rr20Bytes": 26403,
+      "rr20Bytes": 26401,
       "rr90PreviousSha256": "7c18db3ff69b3fa0e04a9ad457b3251b7135e8c21baa56272ff0c0709187541f",
       "rr90PreviousBytes": 26123,
       "wi5PreviousSha256": "ff1731bf1af78da7560f8ee01822c9ee174763773b38db78eeda18f6e78b1e2f",
@@ -465,6 +496,12 @@
           "bytes": 26425,
           "partCount": 30,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "6aad1184fe3f39ffc92d2394a5f8acea0dc8d5b78b8bf2e35287562b204eff00",
+          "bytes": 26403,
+          "partCount": 30,
+          "reviewIndex": 4
         }
       ]
     },
@@ -509,11 +546,11 @@
           }
         ]
       },
-      "sha256": "f4bd6dd68a156319b202617f1de1339c91ff9e009cac5062dc09e0565749b4df",
+      "sha256": "2670224e21c77b3ab1e95e5d7a635f93ef807a5b6635bcb0a9de3331b868a578",
       "rr81PreviousSha256": "b067bb96b6ad58a5dc30f3ffc01c6218d0dd3ac3f64edc764ac2e6ae2a8e87cc",
       "rr20PreviousSha256": "aecf7b2f67b5b39ea5403632456a6cbfe095348850853c2d20462982137ade45",
       "rr20PartCount": 30,
-      "rr20Bytes": 26059,
+      "rr20Bytes": 26057,
       "rr90PreviousSha256": "71237ab580d86c9c9ae1ec984693666a438bb0050e827fed3c107aaf13e0aa30",
       "rr90PreviousBytes": 26055,
       "wi5PreviousSha256": "ed88c1b513ff14dbb51b12a4db2c99d86d05e15e71c857752d97c6d828a442b8",
@@ -548,6 +585,12 @@
           "bytes": 26081,
           "partCount": 30,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "f4bd6dd68a156319b202617f1de1339c91ff9e009cac5062dc09e0565749b4df",
+          "bytes": 26059,
+          "partCount": 30,
+          "reviewIndex": 4
         }
       ]
     },
@@ -591,12 +634,12 @@
           }
         ]
       },
-      "sha256": "259e8a0079885faafe167819bf42bf864e7459462ed7df112d452b0e34d51af4",
+      "sha256": "762aa0f0388a1c70267f52eee41de936da2192a9a1cf13d6f446f781e30b7792",
       "previousSha256": "4fc5d67908d8de2e60ce18c2db685d57c934a872f06bbc583896d3047aa319cb",
       "rr81PreviousSha256": "a2fb4e0a308b2e575aa15eab08a1f0abeacfaff5643dd19742a695b5e31f5413",
       "rr20PreviousSha256": "252bff4cbf7c0f678ae3fc2418c12cea22758d4faa568d2bb46a452b1896640c",
       "rr20PartCount": 30,
-      "rr20Bytes": 26310,
+      "rr20Bytes": 26308,
       "rr90PreviousSha256": "b545fe8b2d611afd020896577b81a58deecf37e80ccabf15b0f5cd91393c6b1d",
       "rr90PreviousBytes": 26097,
       "wi5PreviousSha256": "70a9a36833b37abbe178200c9911807f31718136c79275b6968129ee71473d95",
@@ -626,6 +669,12 @@
           "bytes": 26332,
           "partCount": 30,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "259e8a0079885faafe167819bf42bf864e7459462ed7df112d452b0e34d51af4",
+          "bytes": 26310,
+          "partCount": 30,
+          "reviewIndex": 4
         }
       ]
     },
@@ -669,11 +718,11 @@
           }
         ]
       },
-      "sha256": "1e3b8200abd69d4b8d3e52188a0a192e78b7bf8b657e70a49efe39a17d4c3553",
+      "sha256": "4c4611bf3986a49f929a733b92d2862153b170a158e5fb26e1e832246aa7be7f",
       "rr81PreviousSha256": "ebb99026f09b4375688f73bd314a543c1546d70a17fa5ce5d0a3134d241bd8cc",
       "rr20PreviousSha256": "41aa8199e5e697cd7cc1fb66da00fa0628b110c883e2f3c8a6ddd7e24cc3e77a",
       "rr20PartCount": 30,
-      "rr20Bytes": 26181,
+      "rr20Bytes": 26179,
       "rr90PreviousSha256": "9479bbdf42baa254125fc0520531599da8b6869b625cc4da42418f08fdbc3277",
       "rr90PreviousBytes": 26004,
       "wi5PreviousSha256": "5f960b18b1b4bcc35e191a1cec3bbb58639f27f702429a67a617aa699993c67c",
@@ -703,6 +752,12 @@
           "bytes": 26203,
           "partCount": 30,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "1e3b8200abd69d4b8d3e52188a0a192e78b7bf8b657e70a49efe39a17d4c3553",
+          "bytes": 26181,
+          "partCount": 30,
+          "reviewIndex": 4
         }
       ]
     },
@@ -746,11 +801,11 @@
           }
         ]
       },
-      "sha256": "afc3c425e478f940be31db07314a2654d89aba1440dfa17a308f734d29850d01",
+      "sha256": "b88515ebc225d625fd6673fe7ea6c57c6d00a300df1540903f915dbc62f2a200",
       "rr81PreviousSha256": "fbf8c62f3f49ebbdfaad0567bbcdc0fbe6d43e257cd6615ff4a4679728f070a1",
       "rr20PreviousSha256": "496cf08a2068665bc628345bd9f8f08140f4c336a7945bf18ccc03a1c9261ff0",
       "rr20PartCount": 34,
-      "rr20Bytes": 27913,
+      "rr20Bytes": 27911,
       "rr90PreviousSha256": "e633e97b11bba26c80d74237548b134d093f5986338e081b4463e7dbfe18c49e",
       "rr90PreviousBytes": 26058,
       "wi5PreviousSha256": "cef3917afdb2b46c1966b31f9f661b9b167aef871cc298445c7d3ad4206c7b97",
@@ -775,6 +830,12 @@
           "bytes": 27935,
           "partCount": 34,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "afc3c425e478f940be31db07314a2654d89aba1440dfa17a308f734d29850d01",
+          "bytes": 27913,
+          "partCount": 34,
+          "reviewIndex": 4
         }
       ]
     },
@@ -818,11 +879,11 @@
           }
         ]
       },
-      "sha256": "edc07bc04e597e9b4e96cc715c8423bc609b2d5edbce41650837583560395ceb",
+      "sha256": "4bde5ee5c3bdcbe9c3324896cfd923465465be5358c46ba27a4b80668c1ec2b1",
       "rr81PreviousSha256": "f065e1ade5d975245e4df8c11d5be367ad27ddf53ee2f786527af53ac396b377",
       "rr20PreviousSha256": "fb4c8e449b37e21083b3d23ae64821d599640bc07286b8e8b71f59d2070fec8c",
       "rr20PartCount": 34,
-      "rr20Bytes": 27922,
+      "rr20Bytes": 27920,
       "rr90PreviousSha256": "f1b96d02685f92957830ec37151077ced0ad6e5fe11f863b0b59fe654473acaa",
       "rr90PreviousBytes": 26073,
       "wi5PreviousSha256": "97f6ce20baadc85d8668f3827876754d2b80881a43637fbcd93f20cf683c1468",
@@ -845,6 +906,12 @@
           "bytes": 27944,
           "partCount": 34,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "edc07bc04e597e9b4e96cc715c8423bc609b2d5edbce41650837583560395ceb",
+          "bytes": 27922,
+          "partCount": 34,
+          "reviewIndex": 4
         }
       ]
     },
@@ -894,13 +961,13 @@
           }
         ]
       },
-      "sha256": "fc394ce65dca0e22f347c793e6a3c286c803b7cb333ed9a46e2f6b2d96fcd737",
+      "sha256": "519bf910f558ced853c5d6cbf4f20c2e513dbc0c50c323b8c33ea26ff6705a87",
       "rr105PreviousSha256": "3ea01cbc7853b1a76358cf1c3071f7aedd20309bb6342fb59a3d89f9edd11544",
       "rr105PreviousBytes": 26975,
       "rr105Review": "Keynote fix 1 (2026-11-13): percentage-only data labels name 0% instead of General; only ppt/charts/chart1.xml changes.",
       "rr81PreviousSha256": "c09695697b886e3c1af9fb3c32ef0427ff082d8ccf3be059778ca7483c4c510e",
       "rr20PartCount": 32,
-      "rr20Bytes": 26950,
+      "rr20Bytes": 26948,
       "rr90PreviousSha256": "8a5bdd94d625770f070bd2d47ec6bbf6d69a852e8c56facb3ffc1fb935378299",
       "rr90PreviousBytes": 25631,
       "wi5PreviousSha256": "3cfa0869e6d0c2fd8868a814197ccb6bc6ca0203b499bad1327fbdb5f786ed29",
@@ -930,6 +997,12 @@
           "bytes": 26972,
           "partCount": 32,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "fc394ce65dca0e22f347c793e6a3c286c803b7cb333ed9a46e2f6b2d96fcd737",
+          "bytes": 26950,
+          "partCount": 32,
+          "reviewIndex": 4
         }
       ]
     },
@@ -973,10 +1046,10 @@
           }
         ]
       },
-      "sha256": "74f7b83521996d4edd3902d69ae51525c578655d52272677fa1c39f6e049eee4",
+      "sha256": "e50fe43e56d787e8c4a5570e2cdde32c99a24e9276886c80fd755189f805b4ce",
       "rr81PreviousSha256": "f80a7e3a776b8c72cfb86b811a99e869799a91540377f55eef655461faebd1df",
       "rr20PartCount": 32,
-      "rr20Bytes": 26829,
+      "rr20Bytes": 26827,
       "rr90PreviousSha256": "1c46e14b031ae6168c6a39d86a22cff958ffb62984c8ee18ebb3c5854195bd23",
       "rr90PreviousBytes": 25573,
       "wi5PreviousSha256": "d4052fc62082484d6907a6c65906b946fda81f087c47eb1ffba198f3b671a8b5",
@@ -1005,6 +1078,12 @@
           "bytes": 26851,
           "partCount": 32,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "74f7b83521996d4edd3902d69ae51525c578655d52272677fa1c39f6e049eee4",
+          "bytes": 26829,
+          "partCount": 32,
+          "reviewIndex": 4
         }
       ]
     },
@@ -1048,12 +1127,12 @@
           }
         ]
       },
-      "sha256": "f9fcb2e1c19811049d5363fd3a976893e988a82e0c334c196a7871205679bd44",
+      "sha256": "1d224f863252440ae601fc8d0ec6e3a01ac0f7bc8c2232cd4b2d3cbe1abcf6a3",
       "previousSha256": "17afa5c1028516fd59cf3be557b001e0c9b4cf840eeb9aaa74d053dbfc203d68",
       "rr81PreviousSha256": "da368cb1cf9a602b0faff65b26a5a45209952fb73e0f783dcd101e68ea01f29d",
       "rr20PreviousSha256": "b54d2a65469360cfe5e73ec0d5fb52db747af46801ff802b6d5746721dbe2b79",
       "rr20PartCount": 30,
-      "rr20Bytes": 26091,
+      "rr20Bytes": 26089,
       "rr90PreviousSha256": "db6a3e2d5b6c02795149a9373d9208e04806f2032d27fc7962327899894d115c",
       "rr90PreviousBytes": 26013,
       "wi5PreviousSha256": "1e5f469b3b64c2ef1139ee83ce64d1a4414ea46b3faa151821db09dd4f891875",
@@ -1079,6 +1158,12 @@
           "bytes": 26113,
           "partCount": 30,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "f9fcb2e1c19811049d5363fd3a976893e988a82e0c334c196a7871205679bd44",
+          "bytes": 26091,
+          "partCount": 30,
+          "reviewIndex": 4
         }
       ]
     },
@@ -1121,12 +1206,12 @@
           }
         ]
       },
-      "sha256": "94ceaab915bf09deb72f000d05402a0760a934fc4927c28971335f344556ea51",
+      "sha256": "9e5ce94e13490ab1d5640cb945f687a158656d02a52e9f394aaf37b3b01e121c",
       "previousSha256": "3bc08c644ba443a9fde975c8f9cf39ffa44a4cd0f779c896a7be2ac64332ea9b",
       "rr81PreviousSha256": "a27ec34c283f59e04ba7ae02b885de0cacc7e0c46191079c6947f699a2c542de",
       "rr20PreviousSha256": "3929f43b2bcbfc72ce95f06e0e5604bf6fa3fbad145f6e9621d614781f3bf4b8",
       "rr20PartCount": 30,
-      "rr20Bytes": 25910,
+      "rr20Bytes": 25908,
       "rr90PreviousSha256": "07307458877dae4b4be2038c88e5dae5f0efff27febfb16ab6ec021f9eab1f0c",
       "rr90PreviousBytes": 25839,
       "wi5PreviousSha256": "89646e3b606f2fe238c6fbfea75e9f48ac25c890097fedbb8c90130efbb83525",
@@ -1151,6 +1236,12 @@
           "bytes": 25930,
           "partCount": 30,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "94ceaab915bf09deb72f000d05402a0760a934fc4927c28971335f344556ea51",
+          "bytes": 25910,
+          "partCount": 30,
+          "reviewIndex": 4
         }
       ]
     },
@@ -1181,12 +1272,12 @@
           }
         ]
       },
-      "sha256": "71fb76319376c0923693bd2f272b1d608904761986071febad49623302f85611",
+      "sha256": "ff88da665747cd59e230560d8f7a8d29081b1802e7e968a4a002d7235787625c",
       "previousSha256": "ce86707121a169b6fb13781f87acb279fd29ce2740640c6ba4f0eb6ea7283af5",
       "rr81PreviousSha256": "8e216e257f4c9b02bf2e51bf33566ea949dd95d5b84f2aa5b203a9569d8b249c",
       "rr20PreviousSha256": "edb9d38c631a7eca1cc37f10434b54a86313b36369e2380c0645782fcb725bbd",
       "rr20PartCount": 30,
-      "rr20Bytes": 25737,
+      "rr20Bytes": 25735,
       "rr90PreviousSha256": "90dc328f75ca4abae5a06c1ee36992f23ec891cd1748535c61666e835f66a726",
       "rr90PreviousBytes": 25671,
       "wi5PreviousSha256": "0db7a20e4f5a658fc9ec2fc19b7cf8f38f14058786b0a7e1a2c4536bd7ffbf41",
@@ -1209,6 +1300,12 @@
           "bytes": 25758,
           "partCount": 30,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "71fb76319376c0923693bd2f272b1d608904761986071febad49623302f85611",
+          "bytes": 25737,
+          "partCount": 30,
+          "reviewIndex": 4
         }
       ]
     },
@@ -1248,11 +1345,11 @@
           }
         ]
       },
-      "sha256": "e2ae8c99799b69d1d38581bf85619a4ad80a6db46c6cdcbfbbbc40d60880737a",
+      "sha256": "f513c4277ed91338feb763f9886b8a9d30090af488551dc900322cff327a6d47",
       "rr81PreviousSha256": "7184993d0ee22c4e7c90ae9d17b3a2aefe55ec5972a331b117951d727f2d7059",
       "rr20PreviousSha256": "316edf265b150d7a41515676990d779a2e57accb0fe2f72e9c5203aa24541e54",
       "rr20PartCount": 31,
-      "rr20Bytes": 26372,
+      "rr20Bytes": 26370,
       "rr20RowDataPreviousSha256": "5162d4b32aa4a96a66809df9a76c636217dbac18d95060daed9d8d36ce42abe0",
       "rr20RowDataPreviousBytes": 25843,
       "rr20RowDataPreviousPartCount": 30,
@@ -1273,6 +1370,12 @@
           "bytes": 26385,
           "partCount": 31,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "e2ae8c99799b69d1d38581bf85619a4ad80a6db46c6cdcbfbbbc40d60880737a",
+          "bytes": 26372,
+          "partCount": 31,
+          "reviewIndex": 4
         }
       ]
     },
@@ -1307,12 +1410,12 @@
           }
         ]
       },
-      "sha256": "72501cb245777c80f219cf485b196d2f672888c8216f08e24ab7a45204c047bf",
+      "sha256": "2fead735c8a7e2013e2fd70633662ac74ee000b927158e9fbeadc792566d28f5",
       "previousSha256": "e37430a5255bbcd16dfdcb28250a692d0cde3c770a9c8471e8f80ed195e32575",
       "rr81PreviousSha256": "ad90e489c98bdd271b661bdd74971c0e65c297c9c6ec5ee019d0c4537c6adc5c",
       "rr20PreviousSha256": "a027fa049d3f679a71d9451c8fda5679c07eea9394e00fdba99744fd9b5ed9e8",
       "rr20PartCount": 30,
-      "rr20Bytes": 25750,
+      "rr20Bytes": 25748,
       "rr90PreviousSha256": "bb70b79eb88c74dc52ff83276047b6dccc227f162366ca9c6515a0850951e9f9",
       "rr90PreviousBytes": 25682,
       "wi5PreviousSha256": "538b7d98c2b3e3120d39c0cd98a6f08708decc67a3575108321539dfed94fac8",
@@ -1335,6 +1438,12 @@
           "bytes": 25771,
           "partCount": 30,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "72501cb245777c80f219cf485b196d2f672888c8216f08e24ab7a45204c047bf",
+          "bytes": 25750,
+          "partCount": 30,
+          "reviewIndex": 4
         }
       ]
     },
@@ -1365,11 +1474,11 @@
           }
         ]
       },
-      "sha256": "213e596a129e54c937d599f58a1578749d95204d17ee1992cc27ad4afc086a15",
+      "sha256": "479e36e72b50d70716346f80d20553455d6b1f6030ddbd724fe740887fab21ba",
       "rr81PreviousSha256": "f1be128128cf4c62067070de0f37f61f04cc85743797a1af745f0d2c8fec9849",
       "rr20PreviousSha256": "a6419c39cdc7fc66a32d77f0db2fe181bf9d35ad56ef96330e6edb827889317d",
       "rr20PartCount": 30,
-      "rr20Bytes": 25880,
+      "rr20Bytes": 25878,
       "rr90PreviousSha256": "d060611796845bedebd39d8b61bed229755f93aa93f0f505d863c9334a303d4f",
       "rr90PreviousBytes": 25830,
       "wi5PreviousSha256": "b8fd7037f3a48bc001644141092fcad2f36b5c78cc464b8288b49169d22f7e73",
@@ -1387,6 +1496,12 @@
           "bytes": 25899,
           "partCount": 30,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "213e596a129e54c937d599f58a1578749d95204d17ee1992cc27ad4afc086a15",
+          "bytes": 25880,
+          "partCount": 30,
+          "reviewIndex": 4
         }
       ]
     },
@@ -1432,14 +1547,14 @@
           }
         ]
       },
-      "sha256": "b9530016b1d6f3d623d370530dd4014893cf900304ff4cf5487ddbf8f9048933",
+      "sha256": "092bf536a2391ae635e0b5c4fa50181afd17809c4d5a0f7f300c164ca3f6e857",
       "rr105PicturePreviousSha256": "a9eddb4cda9b184d0f5abe2d26c6f0f3735230ef36aaa7ba109459d8597732c7",
       "rr105PicturePreviousBytes": 29003,
       "rr105PictureReview": "Keynote fix 4 (2026-11-12): default fallback changed from a classic chart to a picture of OPF's own preview, 2026-11-12, supervisor decision for the owner, vetoable. Verified part by part against a build of 4748ce45c: ppt/charts/chart1.xml and its relationships are removed, ppt/media/image-1-1.png and svg-1-1.svg are added, and only [Content_Types].xml, ppt/slides/_rels/slide1.xml.rels and ppt/slides/slide1.xml change; outside the mc:AlternateContent the slide is identical, the mc:Choice is identical but for its chartEx relationship id, and the chartEx, style, colors and workbook parts are byte-identical.",
       "rr81PreviousSha256": "94207febff494aa3726d8c29013f11b1d6a6c951554df30b29bc5b790f571e15",
       "rr20PreviousSha256": "c927127b53a5c6b1a77baee28c0b7c17aeb7ae1b1b13d48c2adc835f1d355203",
       "rr20PartCount": 34,
-      "rr20Bytes": 36555,
+      "rr20Bytes": 36553,
       "rr90PreviousSha256": "00fc9d12f7b08be9f89c8c58e0ffe23541415fdbee6efce073d9d16c52395630",
       "rr90PreviousBytes": 28870,
       "wi5PreviousSha256": "7a658703a76437437afa25183d786b73e0db5f699ff262f61ee16c1313f6b55b",
@@ -1466,6 +1581,12 @@
           "bytes": 36573,
           "partCount": 34,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "b9530016b1d6f3d623d370530dd4014893cf900304ff4cf5487ddbf8f9048933",
+          "bytes": 36555,
+          "partCount": 34,
+          "reviewIndex": 4
         }
       ]
     },
@@ -1500,14 +1621,14 @@
           }
         ]
       },
-      "sha256": "77488023bd5b9dae79cbebcc5e5d83557643f63bcf867db9e2dd4a0d071a5e02",
+      "sha256": "533c6a86afbb0f23dc7338a58ed9fcaa3c5338feb76edf32aba4dd53c32222da",
       "rr105PicturePreviousSha256": "c7039df1d94a74f39cb2eb60fd6f7d1357324fa9072c76d5b36b253129a88382",
       "rr105PicturePreviousBytes": 28917,
       "rr105PictureReview": "Keynote fix 4 (2026-11-12): default fallback changed from a classic chart to a picture of OPF's own preview, 2026-11-12, supervisor decision for the owner, vetoable. Verified part by part against a build of 4748ce45c: ppt/charts/chart1.xml and its relationships are removed, ppt/media/image-1-1.png and svg-1-1.svg are added, and only [Content_Types].xml, ppt/slides/_rels/slide1.xml.rels and ppt/slides/slide1.xml change; outside the mc:AlternateContent the slide is identical, the mc:Choice is identical but for its chartEx relationship id, and the chartEx, style, colors and workbook parts are byte-identical.",
       "rr81PreviousSha256": "a08a0d0fd687e9b672cdc95973a800ceb9cfee1acc6d3c584e0f1d44183d9c3b",
       "rr20PreviousSha256": "248252f14f0ad427c628777a97719e94288cfceacc9c8ddfe7b693c640d7d40e",
       "rr20PartCount": 34,
-      "rr20Bytes": 31244,
+      "rr20Bytes": 31242,
       "rr90PreviousSha256": "ee6e4ccedda6b72d051f0f69aee35bb479459d3a60d67ff010d6cecf44afa1f4",
       "rr90PreviousBytes": 28686,
       "wi5PreviousSha256": "3b2020f7dd95168de8a9acd2984fa1fc209236d0d4d20e24c0607c4dd1f79e50",
@@ -1531,6 +1652,12 @@
           "bytes": 31268,
           "partCount": 34,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "77488023bd5b9dae79cbebcc5e5d83557643f63bcf867db9e2dd4a0d071a5e02",
+          "bytes": 31244,
+          "partCount": 34,
+          "reviewIndex": 4
         }
       ]
     },
@@ -1566,14 +1693,14 @@
           }
         ]
       },
-      "sha256": "925c4c2720446de4e43665b789d3c03970e336dd35b39567a11c15e6b0ac7a4d",
+      "sha256": "6f2428371f038df53be57b60bda3625f97ef2f46ca4d33fb79eeb2b52dc0e856",
       "rr105PicturePreviousSha256": "caa2617fa6211bbed90a032c393df8318d3533c76bb1b436b5499f0588e22bb4",
       "rr105PicturePreviousBytes": 28926,
       "rr105PictureReview": "Keynote fix 4 (2026-11-12): default fallback changed from a classic chart to a picture of OPF's own preview, 2026-11-12, supervisor decision for the owner, vetoable. Verified part by part against a build of 4748ce45c: ppt/charts/chart1.xml and its relationships are removed, ppt/media/image-1-1.png and svg-1-1.svg are added, and only [Content_Types].xml, ppt/slides/_rels/slide1.xml.rels and ppt/slides/slide1.xml change; outside the mc:AlternateContent the slide is identical, the mc:Choice is identical but for its chartEx relationship id, and the chartEx, style, colors and workbook parts are byte-identical.",
       "rr81PreviousSha256": "4d82a4539fd94b5292bf557f14810e7110b84a1dc49ac71d84e83e1b7211f7b9",
       "rr20PreviousSha256": "85709dcc4c70c5a485bd70a8814bb6cbb8d4a8a493e6093234efc9ec7ffc9fab",
       "rr20PartCount": 34,
-      "rr20Bytes": 41885,
+      "rr20Bytes": 41883,
       "rr90PreviousSha256": "660b43ce01cbc87cb5d0d832af6ff2196fa9bc05b86b0afcd27ffada570d2c08",
       "rr90PreviousBytes": 28777,
       "wi5PreviousSha256": "397052a755399c5786ebaeb411f8acec38d530b05a649e1302e16c89b1ed31e7",
@@ -1601,6 +1728,12 @@
           "bytes": 41906,
           "partCount": 34,
           "reviewIndex": 3
+        },
+        {
+          "sha256": "925c4c2720446de4e43665b789d3c03970e336dd35b39567a11c15e6b0ac7a4d",
+          "bytes": 41885,
+          "partCount": 34,
+          "reviewIndex": 4
         }
       ]
     },
@@ -1636,7 +1769,7 @@
           }
         ]
       },
-      "sha256": "80f78015d544a2141139672c8a08d4e7576cd2dd8b0155e06f1880c66b733e1a",
+      "sha256": "3f91021efe00cb50aadb3c1c18e22ab5b5ebbba8de3030789277f4d3256aa224",
       "previousSha256": "b5944a1933e425cb2c2a91d71741529922e12c7cbd877500baab0debc424dc25",
       "nativeSlideSha256": "a24bea5e80bbfbeabe45a411b17aadcaf151a3e90e4a93a22c4e3d5735e45ff5",
       "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged.",
@@ -1644,7 +1777,7 @@
       "rr81PreviousNativeSlideSha256": "486aa282abbad8e81942f901daddf29fc0cdc7abd5bf2bb928300084a47ce8fd",
       "rr20PreviousSha256": "f7204fb6867b288b557dd9fc4265727237aac74bd61f1a52f9f1d7498f852e27",
       "rr20PartCount": 28,
-      "rr20Bytes": 20285,
+      "rr20Bytes": 20283,
       "rr20PreviousNativeSlideSha256": "1ba4ee539780e772cabf82b46659cffb46c9528c86b2f5e3ed2d36745341ba45",
       "rr90PreviousSha256": "863685d0e72b6e7ad466226cb6ddb3c68af0fad81fc37fe7bdcc759243c0fc29",
       "rr90PreviousBytes": 20228,
@@ -1663,6 +1796,13 @@
           "partCount": 28,
           "nativeSlideSha256": "a24bea5e80bbfbeabe45a411b17aadcaf151a3e90e4a93a22c4e3d5735e45ff5",
           "reviewIndex": 1
+        },
+        {
+          "sha256": "80f78015d544a2141139672c8a08d4e7576cd2dd8b0155e06f1880c66b733e1a",
+          "bytes": 20285,
+          "partCount": 28,
+          "nativeSlideSha256": "a24bea5e80bbfbeabe45a411b17aadcaf151a3e90e4a93a22c4e3d5735e45ff5",
+          "reviewIndex": 4
         }
       ]
     },
@@ -1706,7 +1846,7 @@
           }
         ]
       },
-      "sha256": "1411ad1e3802b882203a50c104c0523d46b564ded2c42a92e2864f16d28338f5",
+      "sha256": "56fc990c4656118730a4dfb987725f54a298a6eae5984fcda4bab62358e305f1",
       "previousSha256": "7cc1518cdae8b8b73d114b073402d023733334ae932585e1ebdebf78d85153d4",
       "nativeSlideSha256": "b54b0462b821061198378e13d6b795e5ce7f276967dcfe6902ffe5165133bb0d",
       "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged.",
@@ -1714,7 +1854,7 @@
       "rr81PreviousNativeSlideSha256": "4c976f01f684828f47f98b9da0b4fe701ac1025f5f03552819072da47df047c5",
       "rr20PreviousSha256": "c2203b92dc12e66d2f7c882ea003035b4cdc42a2abbf85a5e1b013745941d4da",
       "rr20PartCount": 28,
-      "rr20Bytes": 20125,
+      "rr20Bytes": 20123,
       "rr20PreviousNativeSlideSha256": "8a5db04709c55f68a3e9459bddde772141769830e6daa053c4cf7df951073823",
       "rr90PreviousSha256": "882a5cf6ded2883b19dd59b535bb6be7f2269adef77e2adef7ddb90558e51f05",
       "rr90PreviousBytes": 20055,
@@ -1778,6 +1918,13 @@
           },
           "nativeSlideSha256": "b54b0462b821061198378e13d6b795e5ce7f276967dcfe6902ffe5165133bb0d",
           "reviewIndex": 1
+        },
+        {
+          "sha256": "1411ad1e3802b882203a50c104c0523d46b564ded2c42a92e2864f16d28338f5",
+          "bytes": 20125,
+          "partCount": 28,
+          "nativeSlideSha256": "b54b0462b821061198378e13d6b795e5ce7f276967dcfe6902ffe5165133bb0d",
+          "reviewIndex": 4
         }
       ]
     },
@@ -1826,7 +1973,7 @@
           }
         ]
       },
-      "sha256": "50e79e525f918e9c81d984b1c9b37737e6a71dae17e58cfc715dd32ef395fe83",
+      "sha256": "c0f07407b68f140f1c9e5ac448d64f9684b25c1e62a7165e54f6a0614da028f0",
       "previousSha256": "8744ecbad37555637ec72667e4d884db982c0882da3c4c6d21b65df141de2534",
       "nativeSlideSha256": "5fdb9836aff0ec44a3ed137e7fd97e252c74bea13c1b484108a7c5e115d486f9",
       "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged.",
@@ -1834,7 +1981,7 @@
       "rr81PreviousNativeSlideSha256": "cf16e2a0717f35272ecac4c58806b1a45db8bca1f224f3211c7e6bfeaafbcbac",
       "rr20PreviousSha256": "595b3af0478b788077e7233fce2461c2512465058d7188505682c6c2900874e4",
       "rr20PartCount": 31,
-      "rr20Bytes": 27120,
+      "rr20Bytes": 27118,
       "rr20PreviousNativeSlideSha256": "72b7cbc76ec12a294480c933f66a247dd90449798a0008d3adf3d723fa0591ad",
       "rr90PreviousSha256": "d66b20b9afc9c15964238285d36eaf9cc783e51009bb29cdf8a00dc6e2b0f9ff",
       "rr90PreviousBytes": 26900,
@@ -1870,6 +2017,13 @@
           "partCount": 31,
           "nativeSlideSha256": "5fdb9836aff0ec44a3ed137e7fd97e252c74bea13c1b484108a7c5e115d486f9",
           "reviewIndex": 3
+        },
+        {
+          "sha256": "50e79e525f918e9c81d984b1c9b37737e6a71dae17e58cfc715dd32ef395fe83",
+          "bytes": 27120,
+          "partCount": 31,
+          "nativeSlideSha256": "5fdb9836aff0ec44a3ed137e7fd97e252c74bea13c1b484108a7c5e115d486f9",
+          "reviewIndex": 4
         }
       ]
     }

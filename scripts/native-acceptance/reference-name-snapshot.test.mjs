@@ -41,7 +41,8 @@ const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n'
 // RR-105 (#1290, 2026-11-12, chart workbook properties): each embedded workbook names the deck author, else "OPF", as creator and
 // last editor and "OPF" as its application (docProps/core.xml and docProps/app.xml of every workbook; previous
 // {bytes:129035,sha256:'6acdda5035661565792ab0984ee9d039370d5ca39e929fd53dedea4beeeef71f'}).
-const CURRENT_EXPORT=Object.freeze({bytes:128983,sha256:'bc5a17bd973c25eec413e6664e86200e72b552654ff580068e87657ec0f0ae1a'});
+// RR-105 (#1290, 2026-11-12, notes page size): ppt/presentation.xml writes p:notesSz 6858000 x 9144000; previous\n{bytes:128983,sha256:'bc5a17bd973c25eec413e6664e86200e72b552654ff580068e87657ec0f0ae1a'}.
+const CURRENT_EXPORT=Object.freeze({bytes:128981,sha256:'79799e8404ece2256f5447bc7d3f59f50e26c0cc0c818012b0ac31fff89c02bf'});
 let current;
 function currentFixture(){current??=(async()=>{
  const deck=structuredClone(source),renderOptions={catalogs:[gallery]},fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck,renderOptions});await fonts.ensure(deck,{renderOptions});

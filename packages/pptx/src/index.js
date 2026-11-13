@@ -6157,7 +6157,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
     if (context.clrMap && /^ppt\/slideMasters\/slideMaster\d+\.xml$/.test(path)) xml = writeColorMap(xml, context.clrMap);
     if (context.masterBackground && path === 'ppt/slideMasters/slideMaster1.xml') xml = writeMasterBackground(xml, context.masterBackground);
     if (context.masterBackground && /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)) xml = inheritLayoutBackground(xml);
-    if (path === 'ppt/presentation.xml') xml = presentationInSchemaOrder(xml);
+    if (path === 'ppt/presentation.xml') xml = standardNotesPage(presentationInSchemaOrder(xml));
     if (path === 'ppt/theme/theme1.xml') xml = writeThemeColors(xml, {colors: context.themeColors, schemeName: context.schemeName, themeName: context.themeName});
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
       xml = writeLinkSentinels(xml, context.linkSentinels);
@@ -6389,6 +6389,14 @@ function presentationInSchemaOrder(xml) {
   const notes = /<p:notesMasterIdLst>[\s\S]*?<\/p:notesMasterIdLst>/.exec(xml)?.[0];
   if (!notes || xml.indexOf(notes) < xml.indexOf('</p:sldMasterIdLst>')) return xml;
   return xml.replace(notes, '').replace('</p:sldMasterIdLst>', `</p:sldMasterIdLst>${notes}`);
+}
+
+// RR-105 (#1290, ribbon audit gap 16): the vendored writer gives p:notesSz the slide size turned on its side (7.5 x 13.33 in for
+// 16:9), so View > Notes Page and printed notes pages lay out on an odd page. The notes master's placeholders (vendor-compat.js) are
+// placed on the standard portrait notes page, 7.5 x 10 in, which is what PowerPoint itself writes; nothing reads the value back.
+const NOTES_PAGE = '<p:notesSz cx="6858000" cy="9144000"/>';
+function standardNotesPage(xml) {
+  return xml.replace(/<p:notesSz\b[^>]*\/>/, NOTES_PAGE);
 }
 
 function isXmlPart(path) {
