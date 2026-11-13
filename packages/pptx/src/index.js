@@ -1841,18 +1841,20 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
     // design.listBullet: none writes no bullet at all (a:buNone): the list is unambiguous only through its recorded roles, whose
     // first lines start the entries. Without that record the shapes stay as they are.
     const unbulleted = entries.every(({item}) => !item.paragraphs[0].bullet);
-    if (!hasV2&&!entries[0].item.paragraphs[0].bullet && !(unbulleted && expectedRoles?.[0]?.[2])) continue;
+    // RR-105: so does an entry drawn beside an icon chip in a list whose other entries keep their bullets (LH-174, a nested icon list):
+    // with the record, a line with a bullet must start an entry and a first line may have none.
+    if (!hasV2&&!entries[0].item.paragraphs[0].bullet && !expectedRoles?.[0]?.[2]) continue;
     const projected=new Set();
     const validRoles = expectedRoles && (hasV2?entries.every(({item,line})=>{
       const lines=item.v2Scalar?.lines??[line],first=expectedRoles[line];if(!first||lines[0]!==line)return false;
-      if(!unbulleted&&Boolean(item.paragraphs[0].bullet)!==first[2])return false;
+      if(!unbulleted&&Boolean(item.paragraphs[0].bullet)&&!first[2])return false;
       for(const [index,original]of lines.entries()){const role=expectedRoles[original];if(projected.has(original)||original!==line+index||!role||item.v2Scalar&&(role[0]!==first[0]||role[1]!=='text'||role[2]!==!index))return false;projected.add(original);}
       return true;
-    })&&projected.size===expectedRoles.length:expectedRoles.length === entries.length && entries.every(({item, line}, index) => line === index && (unbulleted || Boolean(item.paragraphs[0].bullet) === expectedRoles[index][2])));
+    })&&projected.size===expectedRoles.length:expectedRoles.length === entries.length && entries.every(({item, line}, index) => line === index && (unbulleted || !item.paragraphs[0].bullet || expectedRoles[index][2])));
     const lineRoles = validRoles ? expectedRoles : null;
     if (expectedRoles && !validRoles) report({code: 'list-line-role-changed', message: `The line topology of ${path} changed; list roles were not restored.`});
-    if(hasV2&&!entries[0].item.paragraphs[0].bullet&&!(unbulleted&&lineRoles?.[entries[0].line]?.[2]))continue;
-    if (unbulleted && !validRoles) continue;
+    if(hasV2&&!entries[0].item.paragraphs[0].bullet&&!lineRoles?.[entries[0].line]?.[2])continue;
+    if (!entries[0].item.paragraphs[0].bullet && !validRoles) continue;
     const look = runs?.get(path), textLook = cleanBase(look?.text), descriptionLook = cleanBase(look?.description);
     // The line's runs without the inherited look, or the paragraph's own richText when there is no record for this kind of line.
     // Each run is cleaned on its own and none merge, so the runs stay the slots the run colour record counts (src/run-colors.js);
@@ -1883,7 +1885,7 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
       if(paragraph[V2_CURRENT_RICH]&&current&&!paragraph.bullet)current[V2_CURRENT_RICH]=true;
       const gap = recorded?.get(line);
       const join = (a, b) => gap === undefined ? joinRich(a, b) : joinWrappedText([a, b], [gap]);
-      if (unbulleted ? lineRoles?.[line][2] : paragraph.bullet) { paragraphs.push({...paragraph, bullet: true, richText: own(paragraph, textLook)}); size = paragraph.maxFontSize; }
+      if (unbulleted || (lineRoles && !paragraph.bullet) ? lineRoles?.[line][2] : paragraph.bullet) { paragraphs.push({...paragraph, bullet: true, richText: own(paragraph, textLook)}); size = paragraph.maxFontSize; }
       else if (paragraph.text === '') { /* a blank line of the entry: no text, no description */ }
       else if (lineRoles ? lineRoles[line][1] === 'description' : paragraph.maxFontSize < size - 0.01) {
         const text = own(paragraph, descriptionLook) ?? paragraph.text;
