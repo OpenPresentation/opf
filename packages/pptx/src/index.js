@@ -1998,13 +1998,15 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report,
   const nativeLegend = doc["c:chartSpace"]?.["c:chart"]?.["c:legend"];
   const headerLegend = nativeLegend?.["c:legendPos"]?.val === 't' && nativeLegend?.["c:layout"]?.["c:manualLayout"] !== undefined;
   const headerCaption = doc["c:chartSpace"]?.["c:chart"]?.["c:title"]?.["c:layout"]?.["c:manualLayout"] !== undefined;
+  // RR-105: a radar's default legend under its web (core chart-radar.ts) is written at a manual position, as the header legend is.
+  const radarLegend = /radar/.test(String(chartNode.type)) && nativeLegend?.["c:legendPos"]?.val === 'b' && nativeLegend?.["c:layout"]?.["c:manualLayout"] !== undefined;
   const withOptions = chart => {
     // LH-105: series names at the line ends or category names on the slices, without a legend, are the default direct labels.
     // LH-109: a stacked chart's values inside its segments are the default whether its names stand beside it or its legend stayed.
     // LH-108, LH-109: a chart whose value list or series names were drawn as tagged shapes (`marked`) has no legend by default.
     const stacked = {'stacked-column': 'bar', '100pct-stacked-column': 'bar', 'stacked-area': 'area', '100pct-stacked-area': 'area'}[chartNode.type];
     const direct = marked || ((!nativeLegend || stacked !== undefined) && directLabelDefaults(chartNode.node, stacked ?? (String(chartNode.type).includes('line') ? 'line' : chartNode.type)));
-    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {layer: {header: headerCaption || headerLegend, headerLegend, direct},chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
+    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {layer: {header: headerCaption || headerLegend, headerLegend, radarLegend, direct},chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
       ...(combo ? {combo: {lineNode: combo.lines[0]?.node, secondaryValueAxis: secondaryValueAxisOf(plotArea, combo)}} : {})});
     for (const note of notes) report?.(note);
     if (budget.rejected?.length) report?.({code: 'chart-value-not-numeric', option: 'data', message: `${budget.rejected.length} cached chart ${budget.rejected.length === 1 ? 'value is' : 'values are'} not a number (first at ${budget.rejected[0]}) and ${budget.rejected.length === 1 ? 'imports as a gap' : 'import as gaps'}, never as a guessed value.`});
@@ -4020,6 +4022,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     ...(layer?.references?.lines?.length && ['category', 'combo'].includes(chartData.spec.family) && chartData.barDir !== 'bar' && chartLayout?.valueAxis?.min < 0 ? {catAxisLabelPos: 'low'} : {}),
     ...(percent ? { valAxisLabelFormatCode: '0%' } : {}),
     ...(chartData.spec.markers === undefined ? {} : { lineDataSymbol: chartData.spec.markers ? 'circle' : 'none' }),
+    // RR-105: a gap (an empty c:pt) breaks a line and ends an area at its neighbors, as the preview draws it (PptxGenJS defaults to span,
+    // which joins the neighbors across the gap). A stacked area draws its blank as a layer of zero thickness.
+    ...(chartData.type === 'line' || chartData.type === 'area' ? { displayBlanksAs: 'gap' } : {}),
     ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),
     // ScatterWithMarkers: markers only, no connecting line.
     ...(chartData.type === 'scatter' ? { lineSize: 0, lineDataSymbol: 'circle', catGridLine: {style: 'none'},
@@ -4030,7 +4035,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   };
   const referenceLines=layer?.references?.lines??[];
   if(referenceLines.some(l=>!l.native))options.onDiagnostic?.({code:'chart-reference-overlay',path,message:'Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes.'});
-  const refInfo=referenceLines.length?{key:objectName,lines:referenceLines,primaryCount:chartData.series.length,color:labelColor,labelColor:markLabelColor,font:context.fonts.body,context:{...context},textSize,hidden:[]}:undefined;
+  const refInfo=referenceLines.length?{key:objectName,lines:referenceLines,primaryCount:chartData.series.length,color:labelColor,labelColor:markLabelColor,surface:normalizeHex(panelFill).slice(0,6),font:context.fonts.body,context:{...context},textSize,hidden:[]}:undefined;
   if(refInfo&&!referenceLines.some(l=>l.native))assertReferenceExportBudget(chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines',multiAxisOverlays:chartData.combo?.some(entry=>entry.axis==='secondary')??false});
   if(refInfo)context.chartHeadings.get(objectName).references=refInfo;
   const comboArgs=chartData.combo?.length&&chartData.combo.length===chartData.series.length?comboChart(chartData,chartOptionsXml,{palette,chartOptions,labelColor,font:context.fonts.body,textSize}):undefined;
@@ -4046,10 +4051,10 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // axis left, value axis bottom), which Keynote refuses to open.
     const base=comboArgs?.[0]??[{type:chartData.type,data:chartData.series,options:Object.fromEntries(Object.entries({lineDataSymbol:chartOptionsXml.lineDataSymbol,barDir:chartData.barDir,barGrouping:chartData.barGrouping}).filter(([,value])=>value!==undefined))}];
     slide.addChart(referenceChartTypes(base,chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines'}),comboArgs?.[1]??chartOptionsXml);
-    addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100});
+    addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100,surface:normalizeHex(panelFill).slice(0,6)});
     return;
   }
-  if(comboArgs){slide.addChart(...comboArgs);addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100});return;}
+  if(comboArgs){slide.addChart(...comboArgs);addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100,surface:normalizeHex(panelFill).slice(0,6)});return;}
   // LH-108 to LH-110: the period band under the chart frame, then the chart, then its reference lines, value list and stacked names over it.
   const marks = layer && (layer.references || layer.valueList || layer.doughnut || layer.stack?.names || layer.stack?.ends) ? {chart: objectName, font: context.fonts.body, size: textSize / 100, scale, rtl: context.direction === 'rtl', tags: context.chartMarkTags,
     paint: {text: markLabelColor, chartText: labelColor, grid: gridColor, surface: panelFill.slice(0, 7),
@@ -4061,7 +4066,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   if (marks) addChartMarks(slide, layer, 'under', marks);
   slide.addChart(chartData.type, chartData.series, chartOptionsXml);
   if (marks) addChartMarks(slide, layer, 'over', marks);
-  addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100});
+  addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100,surface:normalizeHex(panelFill).slice(0,6)});
 }
 
 // FA-15: a combo chart is one PptxGenJS multi-type chart: a clustered column c:barChart on the primary axes, a c:lineChart with

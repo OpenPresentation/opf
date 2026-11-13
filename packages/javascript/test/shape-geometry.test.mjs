@@ -103,13 +103,25 @@ describe("preset geometry reference data", () => {
     assert.equal(Object.isFrozen(PRESET_SHAPES), true);
   });
 
-  test("the two errata are applied and recorded", () => {
+  test("the errata are applied and recorded", () => {
     assert.deepEqual(source.shapes.pie.rect, ["il", "it", "ir", "ib"]);
     assert.deepEqual(source.shapes.curvedLeftArrow.cxnLst[2], ["cd2", "l", "y6"]);
     assert.deepEqual(
       source.errata.map((entry) => entry.shape),
-      ["pie", "curvedLeftArrow"],
+      ["pie", "curvedLeftArrow", "star24", "star32"],
     );
+  });
+
+  // RR-105: star24 and star32 had the length ssd2 as their handle's maximum, so adj read as 0 to about 0.0005 and an author's value was
+  // clamped to it. Every star's inner radius now runs 0 to 0.5 and the authored value is drawn.
+  test("every star's adjust runs 0 to 0.5 and an authored adj changes the outline", () => {
+    for (const name of ["star4", "star5", "star6", "star7", "star8", "star10", "star12", "star16", "star24", "star32"]) {
+      const {adj} = presetAdjustments(name, 200, 200);
+      assert.deepEqual([adj.min, adj.max, adj.unit], [0, 0.5, "fraction"], name);
+      const path = (value) => presetGeometry(name, 200, 200, value === undefined ? undefined : {adj: value}).paths.map((entry) => entry.d).join(" ");
+      assert.notEqual(path(0.319), path(undefined), `${name}: adj 0.319 is drawn, not the default`);
+      assert.equal(path(0.319), path(0.319));
+    }
   });
 });
 

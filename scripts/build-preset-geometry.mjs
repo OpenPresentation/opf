@@ -128,7 +128,7 @@ for (const node of definitions.children) shapes[node.name] = shapeOf(node);
 const names = Object.keys(shapes);
 if (names.length !== 187) throw new Error(`expected the 187 ST_ShapeType presets, found ${names.length}`);
 
-// Two known errata of the standard's file, corrected to what PowerPoint draws and does (each checked in PowerPoint 365,
+// Known errata of the standard's file, corrected to what PowerPoint draws and does (each checked in PowerPoint 365,
 // shapes SH-01). Every other value is the file's own.
 const ERRATA = [
   {
@@ -146,6 +146,16 @@ const ERRATA = [
     to: ["cd2", "l", "y6"],
     note: "The arrow tip's site names the undefined guide cd3; it faces left (cd2), mirroring curvedRightArrow's tip (0, r, y6).",
   },
+  // RR-105: star24 and star32 (not yet checked in PowerPoint) give their handle the length ssd2 as its maximum where every other
+  // star, star4 to star16, has the adjust fraction 50000; the range read as 0 to about 0.0005 and an author's adj was clamped to it.
+  ...["star24", "star32"].map((shape) => ({
+    shape,
+    field: "ahLst",
+    index: 0,
+    from: { type: "xy", gdRefY: "adj", minY: "0", maxY: "ssd2", pos: ["hc", "yAdj"] },
+    to: { type: "xy", gdRefY: "adj", minY: "0", maxY: "50000", pos: ["hc", "yAdj"] },
+    note: "The inner-radius handle's maximum is the length ssd2, not an adjust fraction; it is 50000 (half the shape), as for star4 to star16.",
+  })),
 ];
 for (const erratum of ERRATA) {
   const shape = shapes[erratum.shape];

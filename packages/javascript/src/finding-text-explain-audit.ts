@@ -124,9 +124,9 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Plan", text: "Three regions go live in March.", shapes: [{ shape: "rect", text: "Draft", x: 0.7, y: 0.1, width: 0.2, height: 0.1 }] },
   ),
   "opf/chart-label-collision": ex(
-    "Give each reference its own value or put one label at the other end of its line with `labelPosition`, so no two labels share a place.",
-    { title: "Results", chart: { type: "line", data: { columns: ["Quarter", "Actual"], rows: [["Q1", 10], ["Q2", 20], ["Q3", 30]] }, referenceLines: [{ value: 20, label: "Plan" }, { value: 20, label: "Plan" }, { value: 20, label: "Plan" }] } },
-    { title: "Results", chart: { type: "line", data: { columns: ["Quarter", "Actual"], rows: [["Q1", 10], ["Q2", 20], ["Q3", 30]] }, referenceLines: [{ value: 25, label: "Plan" }] } },
+    "Set the line where a bar or the area leaves room beside it at one of its ends, or give each reference its own value, so its label has a free place.",
+    { title: "Results", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12], ["Q2", 18], ["Q3", 22], ["Q4", 26]] }, referenceLines: [{ value: 6, label: "Floor" }] } },
+    { title: "Results", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12], ["Q2", 18], ["Q3", 22], ["Q4", 26]] }, referenceLines: [{ value: 15, label: "Floor" }] } },
   ),
   "opf/timeline-period-short": ex(
     "Give the timeline more room, or make its shortest period longer relative to the others.",

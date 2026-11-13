@@ -70,7 +70,9 @@ for (const type of ['column', 'line', 'line-with-markers', 'area'])
     assert.match(h, /<a:ln w="19050"/);
     assert.match(h, /<a:prstDash val="dash"/);
     assert.match(h, /<a:srgbClr val="BC1234"/);
-    assert.match(h, /<c:idx val="2"\/><c:tx>/);
+    // RR-105: at 25 the label's end (Q3, 30) is inside the last column or the area above and below the line, so core puts it at Q1;
+    // the import still returns the authored end (nref: "end").
+    assert.match(h, new RegExp(`<c:idx val="${type === 'column' || type === 'area' ? 0 : 2}"/><c:tx>`));
     assert.match(h, /<a:t>Target<\/a:t>/);
     assert.deepEqual(chartOrderProblems(e.xml), []);
     assert.deepEqual(out.chart.data, data);
