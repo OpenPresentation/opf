@@ -2,7 +2,7 @@
   "source": {
     "commit": "4748ce45c",
     "date": "2026-11-12",
-    "note": "RR-105: what PowerPoint reads of every chartex chart (the mc:Choice with its drawing id and chartEx relationship id masked, the chartEx part, its relationships, style and color parts and the embedded workbook; test/helpers/chartex-identity.mjs) and a digest of the import (JSON of fromPptx), for toPptx(deck, {catalogs: [gallery], imageResolver}) of two qualification decks, recorded on codex/rr-105-keynote-fixes at 4748ce45c, before the default mc:Fallback changed from a classic chart to a picture of OPF's own preview (2026-11-12, supervisor decision for the owner, vetoable). The change keeps every value; a later change that moves one is reviewed like any other pin."
+    "note": "RR-105: what PowerPoint reads of every chartex chart (the mc:Choice with its drawing id and chartEx relationship id masked, the chartEx part, its relationships, style and color parts and the embedded workbook; test/helpers/chartex-identity.mjs) and a digest of the import (JSON of fromPptx), for toPptx(deck, {catalogs: [gallery], imageResolver}) of two qualification decks, recorded on codex/rr-105-keynote-fixes at 4748ce45c, before the default mc:Fallback changed from a classic chart to a picture of OPF's own preview (2026-11-12, supervisor decision for the owner, vetoable). The change keeps every value; a later change that moves one is reviewed like any other pin. RR-105 (#1290), 2026-11-12, chart workbook properties: only the workbook digests moved (docProps/core.xml creator and lastModifiedBy name the deck author, else OPF; docProps/app.xml Application OPF); the mc:Choice, chartEx, relationship, style and color digests and the import digest are unchanged. The previous workbook digests are kept per deck as rr105WorkbookPropertiesPrevious."
   },
   "decks": {
     "chart-type-sampler": {
@@ -18,7 +18,7 @@
           "rels": "8822138c7e59389dce3272dcf261c29d337d343db5f9e3f28d195d7b619b4cb8",
           "style": "1a3d0b2bc8ad48e3ec6874e88e97f0ad6da2424189bcf8a40c3dbe2556dc31ce",
           "colors": "ae1a81fe6471e4856b80027711aa07a3423535ea21fec40557b2cfb8bdf02d1c",
-          "workbook": "2bd2129eed77f019bfc3cf95386b4467e74b682e060873e558b0f7169e0532ee"
+          "workbook": "b18e16da0963e5eaf710a933d640e7018b1f6d976806c166e78b4100f7eaa8a0"
         },
         {
           "slide": "ppt/slides/slide1.xml",
@@ -29,7 +29,7 @@
           "rels": "355831de6ab1bfc4cb3927fcfce28632ad1f381c6c23d9b15a4d5238015c4bf6",
           "style": "1a3d0b2bc8ad48e3ec6874e88e97f0ad6da2424189bcf8a40c3dbe2556dc31ce",
           "colors": "ae1a81fe6471e4856b80027711aa07a3423535ea21fec40557b2cfb8bdf02d1c",
-          "workbook": "358e3e01a3b3e657d816412eec60db1af02974017807175b571a7d18a8c84b51"
+          "workbook": "175b146868f02f8feac12119ff90458870d881325ce2f29a9a5f5537dff7fc09"
         },
         {
           "slide": "ppt/slides/slide2.xml",
@@ -40,7 +40,7 @@
           "rels": "e970f9afe94b8d722d9a5938f19258d4ebabf2a50477bba1a128fee178e124a8",
           "style": "1a3d0b2bc8ad48e3ec6874e88e97f0ad6da2424189bcf8a40c3dbe2556dc31ce",
           "colors": "ae1a81fe6471e4856b80027711aa07a3423535ea21fec40557b2cfb8bdf02d1c",
-          "workbook": "2793985feede6ee25482e7fa7b7f24378c3576ec84ce712272baad22b24847f6"
+          "workbook": "50f4849adfcc46bcea2138ba9aa5d3ce9d275109fe8428c5608658eeebbbe814"
         },
         {
           "slide": "ppt/slides/slide2.xml",
@@ -51,7 +51,7 @@
           "rels": "b0a8f05635a61f5f9e2008df54b56919679873ad5d85e052eaa6c506c3162c84",
           "style": "1a3d0b2bc8ad48e3ec6874e88e97f0ad6da2424189bcf8a40c3dbe2556dc31ce",
           "colors": "ae1a81fe6471e4856b80027711aa07a3423535ea21fec40557b2cfb8bdf02d1c",
-          "workbook": "78ef04be30334f330e5502f11f6d6e55acb21d15664dcbf5c293f7a88a9c6bf5"
+          "workbook": "76c01e462772aceda769ae7014ff3314d3807e612e9cc4852323992257340276"
         },
         {
           "slide": "ppt/slides/slide2.xml",
@@ -62,9 +62,16 @@
           "rels": "eb888023663559d6dbb555f26986c90c36d36547ca09e9345c19fcc4a1869361",
           "style": "1a3d0b2bc8ad48e3ec6874e88e97f0ad6da2424189bcf8a40c3dbe2556dc31ce",
           "colors": "ae1a81fe6471e4856b80027711aa07a3423535ea21fec40557b2cfb8bdf02d1c",
-          "workbook": "d9cc3b9793cd2d0500d996c5901284e16a34e65782c46714ce867324b28d0d30"
+          "workbook": "14ff31967809dcfc0981fc09bae44bcfaa82275877b7e785b3232f33c22c76de"
         }
-      ]
+      ],
+      "rr105WorkbookPropertiesPrevious": {
+        "OPF chart 1 workbook": "2bd2129eed77f019bfc3cf95386b4467e74b682e060873e558b0f7169e0532ee",
+        "OPF chart 2 workbook": "358e3e01a3b3e657d816412eec60db1af02974017807175b571a7d18a8c84b51",
+        "OPF chart 4 workbook": "2793985feede6ee25482e7fa7b7f24378c3576ec84ce712272baad22b24847f6",
+        "OPF chart 5 workbook": "78ef04be30334f330e5502f11f6d6e55acb21d15664dcbf5c293f7a88a9c6bf5",
+        "OPF chart 6 workbook": "d9cc3b9793cd2d0500d996c5901284e16a34e65782c46714ce867324b28d0d30"
+      }
     },
     "layout-harvest": {
       "source": "scripts/native-acceptance/qualification/decks/layout-harvest.opf.json",
@@ -79,7 +86,7 @@
           "rels": "8822138c7e59389dce3272dcf261c29d337d343db5f9e3f28d195d7b619b4cb8",
           "style": "1f2537eeb48ce1a9541fd410cb4363e0f02041d301c25463bc1d3414463ed00a",
           "colors": "ae1a81fe6471e4856b80027711aa07a3423535ea21fec40557b2cfb8bdf02d1c",
-          "workbook": "36d300af9a567e2e937b1b83ff5e4aa97a689cbb17c67efa16e428e938d461ac"
+          "workbook": "dec5a12aef5d85261d053a00af4207042ac68d26ad17f7cbd1d628910a8b1776"
         },
         {
           "slide": "ppt/slides/slide18.xml",
@@ -90,7 +97,7 @@
           "rels": "355831de6ab1bfc4cb3927fcfce28632ad1f381c6c23d9b15a4d5238015c4bf6",
           "style": "1f2537eeb48ce1a9541fd410cb4363e0f02041d301c25463bc1d3414463ed00a",
           "colors": "ae1a81fe6471e4856b80027711aa07a3423535ea21fec40557b2cfb8bdf02d1c",
-          "workbook": "354e1ad946c8ae6b2a36c260d231d4716e60244d490a6fdeeb32c9d57c4801bd"
+          "workbook": "42c658b2f48aa9851fec73540730a52f102a9564e0c8ebbad271b6ec0eb759cc"
         },
         {
           "slide": "ppt/slides/slide19.xml",
@@ -101,9 +108,14 @@
           "rels": "9061ea53a8cf0305553d234418f0752b913fe613008ec80d97eb52b3e169f6eb",
           "style": "1f2537eeb48ce1a9541fd410cb4363e0f02041d301c25463bc1d3414463ed00a",
           "colors": "ae1a81fe6471e4856b80027711aa07a3423535ea21fec40557b2cfb8bdf02d1c",
-          "workbook": "05d2ab69dd8970ad3ca6c6405e662bf3ff58dc229941d3456e55c30039b7d32e"
+          "workbook": "4e3d070dddd89f79da2ee9cbca1de62e8b98352b0ee01d25b6ceef2c6d149b48"
         }
-      ]
+      ],
+      "rr105WorkbookPropertiesPrevious": {
+        "OPF chart 1 workbook": "36d300af9a567e2e937b1b83ff5e4aa97a689cbb17c67efa16e428e938d461ac",
+        "OPF chart 2 workbook": "354e1ad946c8ae6b2a36c260d231d4716e60244d490a6fdeeb32c9d57c4801bd",
+        "OPF chart 3 workbook": "05d2ab69dd8970ad3ca6c6405e662bf3ff58dc229941d3456e55c30039b7d32e"
+      }
     }
   }
 }

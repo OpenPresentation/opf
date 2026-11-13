@@ -12,7 +12,11 @@ export const HISTOGRAM_SELECTION=Object.freeze({slideIndex:2,seriesIndex:1,point
 // supervisor decision for the owner, vetoable. The four chartex slides' mc:Fallback is now a picture and their classic chart parts are
 // gone; the classic histogram (ppt/charts/chart2.xml), its workbook and every mc:Choice are unchanged. The native edits recorded under
 // docs/handoff/2026-11-11 ran on the previous archive.
-export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226821,sha256:'0ef9865fa636d57b3fa37d370884d507414d0377a5c56209cbddbabea308c567'});
+// RR-105 (#1290, 2026-11-12, chart workbook properties): only docProps/core.xml (creator, lastModifiedBy) and docProps/app.xml
+// (Application) inside the seven embedded workbooks changed; every slide, chart part and workbook sheet, table and string part is
+// byte-identical (part-by-part comparison of the all-seven chartex:'native' export of f3f0b2b1f and of this commit). Previous:
+// {bytes:226821,sha256:'0ef9865fa636d57b3fa37d370884d507414d0377a5c56209cbddbabea308c567'}.
+export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226668,sha256:'c19ae4cda7488d6e25ffa48f6076a47ff51b740b4b37f11695aa85d1ea94224e'});
 export const HISTOGRAM_SOURCE_ARCHIVE_BEFORE_RR105_PICTURE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
 const keys=(value,names)=>assert.deepEqual(Object.keys(value).sort(),[...names].sort());
 const modelHash=value=>digest(Buffer.from(JSON.stringify(value)));

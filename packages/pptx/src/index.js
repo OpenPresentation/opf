@@ -152,6 +152,9 @@ export const runtimePolicy = Object.freeze({
 });
 
 const FIXED_TIMESTAMP = "1980-01-01T00:00:00Z";
+// RR-105 (#1290): the neutral author and application name of the parts OPF writes instead of the vendored writer's own.
+const WORKBOOK_AUTHOR = "OPF";
+const APPLICATION_NAME = "OPF";
 // fflate derives the DOS zip date from local-time fields, so build this from
 // local components: a UTC instant rolls back to 1979 west of UTC (below
 // fflate's 1980 floor) and would otherwise yield timezone-dependent bytes.
@@ -341,6 +344,8 @@ export async function toPptx(input, options = {}) {
   }
 
   const context = resolvePresentationContext(presentation, {...options,textMeasurement:undefined});
+  // RR-105 (#1290): the embedded chart workbooks name the deck's author, else a neutral "OPF" (normalizeNestedZip).
+  context.workbookAuthor = normalizeAuthor(presentation.author) || WORKBOOK_AUTHOR;
   context.listMarkers = new Map();
   context.imagePlaceholders = new Map();
   // opf-pptx#221: the placeholder panels written as one native group, and the OPF_IMAGE_PLACEHOLDER_V1 records of image blocks.
@@ -6431,6 +6436,19 @@ function normalizePartReferences(value, renameMaps) {
   return output;
 }
 
+const xmlText = value => value.replace(/[&<>]/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;'}[char]));
+
+function workbookCoreProperties(xml, author) {
+  const name = xmlText(author).replace(/\r/g, '&#13;');
+  return xml.replace(/<dc:creator>[^<]*<\/dc:creator>/, `<dc:creator>${name}</dc:creator>`)
+    .replace(/<cp:lastModifiedBy>[^<]*<\/cp:lastModifiedBy>/, `<cp:lastModifiedBy>${name}</cp:lastModifiedBy>`);
+}
+
+// docProps/app.xml Application names the program that wrote the package (File > Info).
+function neutralApplication(xml) {
+  return xml.replace(/<Application>[^<]*<\/Application>/, `<Application>${APPLICATION_NAME}</Application>`);
+}
+
 function normalizeNestedZip(bytes, context) {
   // RR-17 (opf-pptx#162): valid table and dimension ranges, or Keynote drops the chart (see chart-workbook.js).
   const entries = repairChartWorkbookRanges(unzipSync(bytes));
@@ -6440,8 +6458,11 @@ function normalizeNestedZip(bytes, context) {
     // engine writes a scatter (and bubble) X gap as `<v>${val}</v>`, so a null X value became `<v>null</v>`, a numeric cell
     // that is no number; it is a gap too. Zero values are kept as `<v>0</v>` (pptxgenjs-plus fixed the `values[idx] || ''`
     // of PptxGenJS 4.0.1, upstream issue #1430; test/chart-workbook-values.mjs).
+    // RR-105 (#1290): Excel's File > Info shows the workbook's author and application; the vendored writer names itself there.
     const entryBytes = path === "docProps/core.xml"
-      ? encodeText(normalizeCoreProperties(decodeText(entries[path]), context.timestamp))
+      ? encodeText(workbookCoreProperties(normalizeCoreProperties(decodeText(entries[path]), context.timestamp), context.workbookAuthor ?? WORKBOOK_AUTHOR))
+      : path === "docProps/app.xml"
+        ? encodeText(neutralApplication(decodeText(entries[path])))
       : /^xl\/worksheets\/sheet\d+\.xml$/.test(path)
         ? encodeText(decodeText(entries[path]).replace(/<c ((?:r|s)="[^"]*"(?: (?:r|s)="[^"]*")*)><v>(?:null|undefined)?<\/v><\/c>/g, "<c $1/>"))
         : entries[path];

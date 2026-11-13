@@ -10,7 +10,10 @@ import {assertSevenValueRawPreservation} from './seven-value-raw.mjs';
 import {currentSignedParetoContext} from './seven-signed-pareto.mjs';
 
 export const CURRENT_SEVEN_FIXTURE='packages/pptx/test/fixtures/chartex-fallback-main.json';
-export const CURRENT_SEVEN_FIXTURE_SHA256='a4ade4939074e2f1b63f989e7e82c0ce83e162a470305341b3daee049de1e7b8';
+// RR-105 (#1290, 2026-11-12, chart workbook properties): the fixture's `source` review record and `entries` export hashes moved; its
+// `decks` (and `decks['all-seven']`, the only part this route reads) are byte-identical, checked by comparing JSON.stringify of
+// `decks` and of `decks['all-seven']` against f3f0b2b1f. Previous: a4ade4939074e2f1b63f989e7e82c0ce83e162a470305341b3daee049de1e7b8.
+export const CURRENT_SEVEN_FIXTURE_SHA256='7bb6762cbebe0a704485dcb35021952480fde034ec73b0d89a78bd186b21a0c0';
 export const CURRENT_VALUE_PROFILE='seven-chart-treemap-single-value-edit-v1';
 export function currentSevenSource(root=fileURLToPath(new URL('../../',import.meta.url))){
  const bytes=fs.readFileSync(path.join(root,CURRENT_SEVEN_FIXTURE));

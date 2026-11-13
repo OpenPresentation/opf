@@ -2,20 +2,23 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import {assertSignedParetoComboData} from './chart-data-contract.mjs';
-export const SIGNED_PARETO_FIXTURE_SHA256='a4ade4939074e2f1b63f989e7e82c0ce83e162a470305341b3daee049de1e7b8';
+// RR-105 (#1290, 2026-11-12, chart workbook properties): the fixture file identity (sha256 and the byte count asserted below) moved because
+// its `source` review record and `entries` export hashes moved; `decks` and `decks['all-seven']`, the source this context binds, are
+// byte-identical (JSON.stringify compared against f3f0b2b1f). Previous: a4ade4939074e2f1b63f989e7e82c0ce83e162a470305341b3daee049de1e7b8, 68672 bytes.
+export const SIGNED_PARETO_FIXTURE_SHA256='7bb6762cbebe0a704485dcb35021952480fde034ec73b0d89a78bd186b21a0c0';
 export const SIGNED_PARETO_FULL_SEVEN=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb',producer:'6ea0cfb31dd7712fe6f09cddf98b2cbfb3484df3'});
 const sourceData={columns:['Region','Value'],rows:[['North',42],['South',31],['East',-8],['West',19]]};
 const plotted={columns:['Region','Value','Value — cumulative share'],rows:[['North',42,0.45652173913043476],['South',31,0.7934782608695652],['West',19,1],['East',-8,1]]};
 const frozen=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(frozen);Object.freeze(value);}return value;};
 const token=Object.freeze({kind:'current-full-seven-static-signed-pareto-v1'});
 export function currentSignedParetoContext(source,fixture){
- assert.deepEqual(Object.keys(fixture).sort(),['path','bytes','sha256'].sort());assert.ok(path.isAbsolute(fixture.path));assert.equal(fixture.bytes,68672);assert.equal(fixture.sha256,SIGNED_PARETO_FIXTURE_SHA256);
+ assert.deepEqual(Object.keys(fixture).sort(),['path','bytes','sha256'].sort());assert.ok(path.isAbsolute(fixture.path));assert.equal(fixture.bytes,73099);assert.equal(fixture.sha256,SIGNED_PARETO_FIXTURE_SHA256);
  assert.equal(source.slides.length,7);assert.equal(source.slides[2].chart.type,'pareto');assert.deepEqual(source.slides[2].chart.data,sourceData);
  return frozen({token,fixture:structuredClone(fixture),source:structuredClone(source)});
 }
 export function assertCurrentSignedParetoContext(context,source){
  assert.ok(context&&context.token===token,'Explicit bound current signed-Pareto context required');assert.deepEqual(Object.keys(context).sort(),['token','fixture','source'].sort());
- assert.deepEqual(Object.keys(context.fixture).sort(),['path','bytes','sha256'].sort());assert.ok(path.isAbsolute(context.fixture.path));assert.equal(context.fixture.sha256,SIGNED_PARETO_FIXTURE_SHA256);assert.equal(context.fixture.bytes,68672);assert.equal(context.source.slides.length,7);assert.equal(context.source.slides[2].chart.type,'pareto');assert.deepEqual(context.source.slides[2].chart.data,sourceData);
+ assert.deepEqual(Object.keys(context.fixture).sort(),['path','bytes','sha256'].sort());assert.ok(path.isAbsolute(context.fixture.path));assert.equal(context.fixture.sha256,SIGNED_PARETO_FIXTURE_SHA256);assert.equal(context.fixture.bytes,73099);assert.equal(context.source.slides.length,7);assert.equal(context.source.slides[2].chart.type,'pareto');assert.deepEqual(context.source.slides[2].chart.data,sourceData);
  if(source)assert.deepEqual(source,context.source,'Signed-Pareto context differs from the separately bound entire source deck');return context;
 }
 export function assertCurrentSevenPublicData(document,source,context){
