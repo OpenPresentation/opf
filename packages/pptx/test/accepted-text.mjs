@@ -37,7 +37,10 @@ for(const text of ['Full source\nSecond paragraph.', ['Exact spacing ',{text:'wi
       assert.equal(shape['p:nvSpPr']['p:nvPr']['p:ph']?.type,'title','A wrapped title is the Title placeholder');
       if(!soft)assert.equal(shape['p:txBody']['a:bodyPr'].wrap,'none','A title of fixed lines does not wrap');
       near(x+width*factor,soft?item.box.x+item.box.width*factor:placed.x+placed.width*factor,'Accepted native title alignment anchor');
-      near(y,placed.baseline-item.text.fontSize,'Accepted native title top');
+      // Its first line at single spacing scaled to the pitch, half the multiple's possible ascent shift above the measured line's top (titleLineSpacing).
+      const multiple=item.text.lineHeight/(1.2*item.text.fontSize);
+      near(y,placed.baseline-item.text.fontSize-(multiple-1)*.95*item.text.fontSize/2,'Accepted native title top');
+      assert.equal(Number(array(shape['p:txBody']['a:p'])[0]['a:pPr']['a:lnSpc']['a:spcPct'].val),Math.round(multiple*100000),'Accepted native title spacing');
       assert.equal(nativeText(shape),item.text.lines.join(''));
       for(const paragraph of array(shape['p:txBody']['a:p']))assert.equal(paragraph['a:pPr'].algn,{start:'l',center:'ctr',end:'r'}[alignment]);
       for(const auto of ['a:normAutofit','a:spAutoFit'])assert.ok(!Object.hasOwn(shape['p:txBody']['a:bodyPr'],auto),'PowerPoint must not silently refit a title');

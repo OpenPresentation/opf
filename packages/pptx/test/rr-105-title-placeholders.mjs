@@ -49,7 +49,9 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   assert.match(title, /<p:ph type="title"\/>/);
   assert.equal(slideTitle(out.slide(0)).tier, 'fixed-breaks');
   assert.match(title, /<a:bodyPr[^>]*wrap="none"[^>]*><a:noAutofit\/><\/a:bodyPr>/);
-  assert.match(title, /<a:lnSpc><a:spcPts val="\d+"\/><\/a:lnSpc>/, 'the measured pitch as exact spacing');
+  // Single spacing scaled to core's pitch (1.22 sizes over PowerPoint's single line of 1.2 sizes); exact spacing drew the first line higher.
+  assert.match(title, /<a:lnSpc><a:spcPct val="10166[67]"\/><\/a:lnSpc>/, 'the measured pitch as scaled single spacing');
+  assert.ok(!/<a:spcPts\b/.test(title), 'no exact spacing');
   assert.equal((title.match(/<a:p>/g) ?? []).length, 1, 'one paragraph');
   assert.ok((title.match(/<a:br\/>/g) ?? []).length >= 1, 'core lines joined by line breaks');
   assert.equal(text(title).replaceAll('\n', ''), bookman.slides[0].title);
@@ -96,19 +98,24 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   }
 }
 
-// 5. Right-to-left and CJK titles: bound, one right-to-left paragraph, the same text back.
+// 5. Right-to-left and CJK titles: bound, the same text back. PowerPoint broke right-to-left soft wraps a word later (2026-11-12), so a
+// right-to-left title (and any shaped script) keeps core's lines as fixed breaks; a Japanese title keeps PowerPoint's own wrap.
 {
-  const arabic = 'تقرير الخدمات الرقمية الحكومية للربع الثالث مع خطة التحسين الكاملة لكل الوزارات والهيئات المحلية';
+  const arabic = 'تقرير الخدمات الرقمية الحكومية للربع الثالث مع خطة التحسين الكاملة لكل الوزارات والهيئات المحلية في جميع المحافظات خلال السنوات الثلاث القادمة';
   const japanese = '第三四半期のデジタル行政サービスに関する報告書とすべての省庁および地方機関のための完全な改善計画';
   const out = await exported({language: {bcp47: 'ar', direction: 'rtl', script: 'Arab'}, slides: [{title: arabic, items: ['واحد']}]});
   const [title] = out.titles(0);
   assert.match(title, /<p:ph type="title"\/>/);
   assert.match(title, /<a:pPr\b[^>]*\brtl="1"/);
   assert.equal(out.titles(0).length, 1);
+  assert.equal(slideTitle(out.slide(0)).tier, 'fixed-breaks', 'a right-to-left title keeps its measured lines');
+  const hindi = await exported({language: {bcp47: 'hi', script: 'Deva'}, slides: [{title: 'डिजिटल सरकारी सेवाओं की तीसरी तिमाही की रिपोर्ट और सभी मंत्रालयों के लिए पूरी सुधार योजना', items: ['एक']}]});
+  assert.equal(slideTitle(hindi.slide(0)).tier, 'fixed-breaks', 'a shaped script keeps its measured lines');
   assert.equal((await imported(out.bytes)).value.slides[0].title, arabic);
   const cjk = await exported({language: {bcp47: 'ja', script: 'Jpan'}, slides: [{title: japanese, items: ['一']}]});
   assert.equal(cjk.titles(0).length, 1);
   assert.match(cjk.titles(0)[0], /<p:ph type="title"\/>/);
+  assert.equal(slideTitle(cjk.slide(0)).tier, 'soft-wrap', 'a Japanese title keeps native wrap');
   assert.equal((await imported(cjk.bytes)).value.slides[0].title, japanese);
 }
 
@@ -132,4 +139,19 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   assert.ok(!out.titles(0).some(shape => /<p:ph\b/.test(shape)), 'not bound');
   assert.ok(out.diagnostics.some(item => item.code === 'native-body-fallback' && item.path === 'slides.0.title' && item.reason === 'unsupported-text'));
   assert.equal((await imported(out.bytes)).value.slides[0].title, title);
+}
+
+// 8. Core places each line by its ink. Where one box would move a line more than 1 px (at 960) from its measured place, a left-aligned
+// title keeps fixed breaks with a first-line indent (layout-sampler 36, "How a team / joins the pilot": the J starts 2.95 px right of the H).
+{
+  const {examples} = await import('@openpresentation/opf/examples');
+  const {deck: sampler} = examples.find(entry => entry.file.endsWith('layout-sampler.opf.json'));
+  const out = await exported({...sampler, slides: [sampler.slides[35]]});
+  const [title, ...rest] = out.titles(0);
+  assert.equal(rest.length, 0);
+  assert.match(title, /<p:ph type="title"\/>/);
+  assert.equal(slideTitle(out.slide(0)).tier, 'fixed-breaks', 'lines placed apart keep fixed breaks');
+  const pPr = /<a:pPr\b[^>]*>/.exec(title)[0], marL = Number(/\bmarL="(-?\d+)"/.exec(pPr)[1]), indent = Number(/\bindent="(-?\d+)"/.exec(pPr)[1]);
+  assert.ok(marL > 9525 && indent === -marL, `the first line at the box, the others a first-line indent further right (${marL}, ${indent})`);
+  assert.equal((await imported(out.bytes)).value.slides[0].title, sampler.slides[35].title);
 }

@@ -37,7 +37,8 @@ const plain = value => typeof value === 'string' ? value : Array.isArray(value) 
   assert.ok(!/normAutofit|spAutoFit/.test(title));
   assert.equal([...title.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''), longTitle);
   assert.equal((title.match(/<a:p>/g) ?? []).length, 1);
-  assert.match(title, /<a:lnSpc><a:spcPts val="\d+"\/><\/a:lnSpc>/, 'the measured line pitch is kept as exact spacing');
+  // RR-105 (PowerPoint 2026-11-12): exact spacing drew the first line above the measured line's; single spacing scaled to the pitch does not.
+  assert.match(title, /<a:lnSpc><a:spcPct val="10166[67]"\/><\/a:lnSpc>/, 'the measured line pitch is kept as scaled single spacing');
   assert.deepEqual(native.diagnostics.filter(item => item.code === 'native-body-fallback'), []);
   const {value, diagnostics} = await imported(native.bytes);
   assert.equal(value.slides[0].title, longTitle);

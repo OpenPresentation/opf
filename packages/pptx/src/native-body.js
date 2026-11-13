@@ -313,10 +313,20 @@ export function addNativeBody(slide, plan, context, options, helpers) {
 }
 
 /** RR-88: a native title is written with an explicit no-autofit body, so the Title placeholder's own autofit cannot shrink or move it. */
-export function nativeTitleAutofit(xml, names) {
+// RR-105 (opf#1291): `margins` (name -> {marL, indent} in px) start a fixed-break title's first line apart from the others, where core
+// placed them by their ink.
+export function nativeTitleAutofit(xml, names, margins = new Map()) {
   if (!names?.size) return xml;
-  return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => names.has(shape.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1])
-    ? shape.replace(/(<a:bodyPr\b[^>]*>)[\s\S]*?<\/a:bodyPr>/, '$1<a:noAutofit/></a:bodyPr>') : shape);
+  return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
+    const name = shape.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1];
+    if (!names.has(name)) return shape;
+    shape = shape.replace(/(<a:bodyPr\b[^>]*>)[\s\S]*?<\/a:bodyPr>/, '$1<a:noAutofit/></a:bodyPr>');
+    const margin = margins.get(name);
+    if (!margin) return shape;
+    const emu = value => Math.round(value * 9525);
+    return shape.replace(/<a:pPr\b([^>]*?)(\/?)>/g, (node, attributes, empty) =>
+      `<a:pPr${attributes.replace(/\s(?:marL|indent)="[^"]*"/g, '')} marL="${emu(margin.marL)}" indent="${emu(margin.indent)}"${empty}>`);
+  });
 }
 
 const NO_SPACE_BEFORE = '<a:spcBef><a:spcPts val="0"/></a:spcBef>', NO_SPACE_AFTER = '<a:spcAft><a:spcPts val="0"/></a:spcAft>';
