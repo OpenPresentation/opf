@@ -2129,6 +2129,17 @@ const TIGHT_DISPLAY = Symbol('opf.tightDisplay');
 /** LH-189: the most lines a display text may take and still tighten: one in the normal composition, two in the tight one. */
 const displayLines = (tight: boolean): number => tight ? 2 : 1;
 const fitLines = (fit: TextFit | RichTextFit): number => 'richLines' in fit ? (fit as RichTextFit).richLines.length : fit.lines.length;
+/** LH-188: a stub is a last line shorter than this share of the fit's longest line. */
+export const STUB_LINE_SHARE = 1 / 3;
+/**
+ * LH-188: whether a fit of two or more lines ends in a stub, a last line under STUB_LINE_SHARE of its longest. Balancing (WI-4) evens out
+ * the lines of spaced text, but not text without word spaces (CJK, Thai) or a word too long to move; LH-188's growth refuses a step that
+ * adds a line ending in one.
+ */
+export function stubLine(fit: TextFit | RichTextFit): boolean {
+  const widths = 'richLines' in fit ? (fit as RichTextFit).richLines.map(line => line.width) : Array.isArray((fit as SourceTextFit).sourceLines) ? (fit as SourceTextFit).sourceLines.map(line => line.width) : [];
+  return widths.length > 1 && widths.at(-1)! < STUB_LINE_SHARE * Math.max(...widths) - 1e-6;
+}
 /** LH-189: the canvas size (px) from which text is display text on a canvas whose short edge is `scale` times 720. */
 export function displayFrom(scale: number): number { return DISPLAY_SIZE_FACTOR * PROSE_NOMINAL_SIZE * scale; }
 /** LH-189: the line pitch, in em, of text at `fontSize` canvas px when display text starts at `from` canvas px (displayFrom). */
@@ -5733,7 +5744,12 @@ function growTemplate(input: unknown, options: ComposeSlideOptions, result: Slid
     // step that keeps its breaks.
     // A title that LH-130 let take a second line keeps that break at the steps above it in the same way (bestText, not start).
     const rebroken = [...bestText.breaks].some(([key, words]) => words.includes('\n') && text.breaks.get(key) !== words);
-    if (!kept || !larger || wraps || rebroken || text.covered > LONE_TARGET * height || text.top < frameTop - 1 || text.bottom > frameBottom + 1) return false;
+    // LH-188: a quote body grown past LONE_DISPLAY_SIZES.quote takes no step that adds a line ending in a stub (stubLine).
+    const stub = grown.items.some(item => {
+      const body = item.quoteLayout?.parts.find(part => part.role === 'body')?.fit, was = best.items.find(other => other.path === item.path)?.quoteLayout?.parts.find(part => part.role === 'body')?.fit;
+      return !!body && !!was && body.fontSize > LONE_DISPLAY_SIZES.quote * scale + FONT_GRID_EPSILON && fitLines(body) > fitLines(was) && stubLine(body);
+    });
+    if (!kept || !larger || wraps || rebroken || stub || text.covered > LONE_TARGET * height || text.top < frameTop - 1 || text.bottom > frameBottom + 1) return false;
     best = grown; bestText = text; bestExtra = extra;
     return true;
   };
@@ -8925,7 +8941,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const today = (words <= SHORT_TEXT_WORDS ? HEADING_DISPLAY_SIZES.title : MESSAGE_DISPLAY_SIZE) * scale;
         const reached = chosen ?? start, cap = Math.max(today, messageNode(node) ? (messageCeiling('statement', node.value) ?? 0) * scale : 0), plain = { growth: proseGrowth.get(node), best };
         displayTexts.add(node.path); messageTexts.add(node.path);
-        let shown: number | undefined;
+        let shown: number | undefined, lastLines: number | undefined;
         for (let size = reached; ; ) {
           const step = scaleAbove(size, settings.minFontSize ?? 16);
           if (step > cap + 1e-9 || step > capOf(settings) + FONT_GRID_EPSILON) break;
@@ -8937,6 +8953,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           // underMeasure) is one the guard refuses, which threw the whole message back to its plain size; it stops at the step before.
           if (height > LONE_TARGET * inner.height || fit.overflow || fit.fontSize < step - 1e-9 || lines > MESSAGE_DISPLAY_LINES || (ruleOn('reading-measure') && autoComposition() && underMeasure(node.field, node.value, measure.width, step))) break;
           if (step > today + 1e-9 && linesSplitWord(contentText(node.field, node.value) ?? '', fit.lines)) break;
+          // LH-188: nor one that adds a line ending in a stub (stubLine): text without word spaces is not balanced, so a larger step can leave
+          // two characters alone on a new last line.
+          if (step > today + 1e-9 && stubLine(fit)) {
+            const before = lastLines ?? fitLines(fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { ...inner, width: proseMeasure(node, inner.width).width }, size, floor, node.path, node.payload.numbering));
+            if (lines > before) break;
+          }
+          lastLines = lines;
           shown = step; best = height; size = step;
         }
         if (shown === undefined) { displayTexts.delete(node.path); messageTexts.delete(node.path); if (plain.growth === undefined) proseGrowth.delete(node); else proseGrowth.set(node, plain.growth); best = plain.best; }
@@ -8947,6 +8970,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       let chosen: number | undefined;
       // LH-101: a metric's value has room to grow to LONE_DISPLAY_SIZES.value (nine steps); the other blocks reach their displays in five.
       const target = node.field === 'metric' ? LONE_METRIC_TARGET : LONE_TARGET;
+      let quoteLines: number | undefined;
       // LH-188: a one-message slide's quote may grow on to its ceiling (MESSAGE_CEILINGS.quote, 86 px is six steps from 40).
       for (let power = 1; power <= (node.field === 'metric' || node.field === 'quote' && messageNode(node) ? 9 : 5); power++) {
         const growth = TYPE_SCALE_RATIO ** power;
@@ -8965,6 +8989,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           // LH-188: a quote grown past LONE_DISPLAY_SIZES.quote keeps every word of its body whole.
           const quoteBody = node.field === 'quote' ? (layout.parts as readonly { role: string; text: string; fit?: TextFit }[]).find(part => part.role === 'body') : undefined;
           if (quoteBody?.fit && quoteBody.fit.fontSize > LONE_DISPLAY_SIZES.quote * scale + FONT_GRID_EPSILON && linesSplitWord(quoteBody.text, quoteBody.fit.lines)) fits = false;
+          // LH-188: nor does it take a step that adds a line ending in a stub (stubLine).
+          if (quoteBody?.fit && quoteBody.fit.fontSize > LONE_DISPLAY_SIZES.quote * scale + FONT_GRID_EPSILON && quoteLines !== undefined && fitLines(quoteBody.fit) > quoteLines && stubLine(quoteBody.fit)) fits = false;
+          if (fits && quoteBody?.fit) quoteLines = fitLines(quoteBody.fit);
         }
         if (height > target * inner.height || !fits) break;
         chosen = growth; best = height;

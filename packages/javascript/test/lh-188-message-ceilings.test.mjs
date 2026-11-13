@@ -109,3 +109,20 @@ test('LH-188: a lone figure of six characters or fewer grows to FIGURE_CEILING; 
 test('LH-188: with fill off nothing grows', () => {
   assert.ok(item(composeSlide({ text: 'Ship in March.' }, { fill: false }), 'text').text.fontSize <= LONE_DISPLAY_SIZES.text);
 });
+
+test('LH-188: a growth step never adds a line that ends in a stub (unspaced scripts are not balanced)', async () => {
+  const { stubLine, STUB_LINE_SHARE } = await import('../dist/composition.js');
+  assert.equal(STUB_LINE_SHARE, 1 / 3);
+  assert.equal(stubLine({ lines: ['abcdefghij', 'ab'], sourceLines: [{ width: 100 }, { width: 20 }], fontSize: 10, lineHeight: 12 }), true);
+  assert.equal(stubLine({ lines: ['abcdefghij', 'abcd'], sourceLines: [{ width: 100 }, { width: 40 }], fontSize: 10, lineHeight: 12 }), false);
+  assert.equal(stubLine({ lines: ['ab'], sourceLines: [{ width: 20 }], fontSize: 10, lineHeight: 12 }), false);
+  const passes = (fit) => fit.lines.length === 1 || !stubLine(fit);
+  for (const [language, text] of [['zh-CN', '今年收入增长了18%，达到1240万元。'], ['ja-JP', '新しい台帳を三月に全てのお客様へ届けます。'], ['th-TH', 'เราจะเปิดตัวบัญชีใหม่ให้ลูกค้าทุกรายในเดือนมีนาคม']]) {
+    const message = item(composeSlide({ language, title: 'Goal', text }, { language }), 'text');
+    assert.ok(message.text.fontSize >= MESSAGE_DISPLAY_SIZE - 1e-6, `${language}: it still grows (${message.text.fontSize})`);
+    assert.ok(passes(message.text), `${language}: no stub on the last line (${JSON.stringify(message.text.lines)})`);
+  }
+  // A long Japanese message that does not grow under LH-188 keeps its lines as before, a short last line included.
+  const long = item(composeSlide({ text: 'リリース計画を自分で持つチームは、共有の列車に乗るチームの二倍の頻度で出荷しました。' }, { language: 'ja-JP' }), 'text');
+  assert.ok(long.text.fontSize <= MESSAGE_DISPLAY_SIZE + 1e-6, `${long.text.fontSize}`);
+});
