@@ -8,7 +8,11 @@ It keeps no state, reads no file (everything it serves is bundled in the package
 
 ## Set it up
 
-**Hosted, nothing to install.** `https://openpresentation.org/mcp` is this server over Streamable HTTP: no account, no key, read-only, and it keeps nothing. In Claude (web or desktop): Settings, Connectors, Add custom connector, name it `OPF` and paste the URL; other clients take the same URL as a remote MCP server. Then ask for a deck ("make a five-slide OPF deck about our Q3 results and show it to me") and the OPF viewer opens in the conversation. A deck you pass to `validate_deck`, `convert` or `show_deck` is read in memory for that one call and not stored; the viewer itself edits, checks, draws and exports the deck on your machine. The hosted server allows 600 requests a minute per address and bodies up to 4 MB.
+**Hosted, nothing to install.** `https://www.openpresentation.org/mcp` is this server over Streamable HTTP: no account, no key, read-only, and it keeps nothing. In Claude (web or desktop), open the Connectors page and add a custom connector: name it `OPF` and paste the URL `https://www.openpresentation.org/mcp`. Claude moves these menus; on 2026-11-14 the page was Customize (in the left sidebar), then its Connectors tab, then Add (an audit found it as Customize, Connectors, Yours, Add connector, Add custom connector), and the older Settings, Connectors page only pointed there. If a label has moved, look for "Connectors" and "custom connector". Other clients take the same URL as a remote MCP server.
+
+**Your first request.** Claude has its own slide feature, and in one 2026-11-14 audit a plain "make a pitch deck" was answered by it without calling OPF. Name OPF and the viewer in the first message, for example: *Use the OPF tools to make a ten-slide deck about our Q3 results, validate it, and show it in the OPF viewer.* Naming OPF only tells the host which tools you mean; whether and how Claude uses them is the host's decision, so if a reply comes from another feature, say so and repeat the request naming OPF. Once the viewer opens, ordinary follow-ups ("add a slide on risks") continue in it.
+
+**What the hosted server keeps.** A deck you pass to `validate_deck`, `convert` or `show_deck` is read in memory for that one call and not stored; the viewer itself edits, checks, draws and exports the deck on your machine. The hosted server allows 600 requests a minute per address and bodies up to 4 MB.
 
 **Local.** Any MCP client that starts a local server takes a command and arguments:
 
