@@ -65,7 +65,7 @@ export function parseJobLog(text, job) {
   let step = null;
   let open = null;
   const close = (at) => {
-    if (open && open.name) results.push({ ...open.name, seconds: round((at - open.at) / 1000) });
+    if (open?.name) results.push({ ...open.name, seconds: round((at - open.at) / 1000) });
     open = null;
   };
   for (const line of lines) {
@@ -117,7 +117,11 @@ export function measureLogs(directory) {
  */
 export function mergeWeights(current, results, comment) {
   const measured = {};
-  const table = (keys) => keys.reduce((object, key) => (object[key] ??= {}), measured);
+  const table = (keys) =>
+    keys.reduce((object, key) => {
+      object[key] ??= {};
+      return object[key];
+    }, measured);
   for (const result of results) {
     const key = result.kind === "tests" ? TEST_KEYS[result.package] : null;
     if (result.kind === "tests" && !key) continue;
@@ -127,8 +131,12 @@ export function mergeWeights(current, results, comment) {
   }
   const next = structuredClone(current);
   for (const [key, value] of Object.entries(measured)) {
-    if (key !== "browser-suites") next[key] = value;
-    else for (const [pkg, suites] of Object.entries(value)) Object.assign(((next["browser-suites"] ??= {})[pkg] ??= {}), suites);
+    if (key !== "browser-suites") {
+      next[key] = value;
+      continue;
+    }
+    next["browser-suites"] ??= {};
+    for (const [pkg, suites] of Object.entries(value)) next["browser-suites"][pkg] = { ...next["browser-suites"][pkg], ...suites };
   }
   const sorted = (object) => Object.fromEntries(Object.keys(object).sort().map((key) => [key, object[key] !== null && typeof object[key] === "object" ? sorted(object[key]) : object[key]]));
   const { $comment, ...rest } = next;
