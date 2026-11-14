@@ -57,7 +57,8 @@ export const PACKAGE_IDS = PACKAGES.map((pkg) => pkg.id);
  * opf#1319: the counts are sized from the weights of run 43550563504 (scripts/ci-test-weights.json, written by
  * scripts/ci-test-weights.mjs; scripts/ci-leg-minutes.mjs prints the planned minutes of every leg, about 70 s of setup plus the
  * shard's tests, plus 100 s of extra steps on `tests 1/n`): render full 4 x 326 s of 1205, contract 3; pptx full 6 x 372 s of
- * 2135 (4 shards planned 559 s each, 10.5 minutes a leg); editor tests 2 x 234 s; the editor playground suite 4 x about 200 s of
+ * 2135 (4 shards planned 559 s each, 10.5 minutes a leg), contract 5 x about 360 s of 1802 (its contractExclude leaves out the
+ * packaging boundaries and four example-wide checks of PPTX machinery, 333 s); editor tests 2 x 234 s; the editor playground suite 4 x about 200 s of
  * 796, and its standalone browser suite 4 x about 383 s of 1530 (3 shards planned 9.7 minutes a leg). The browser shards are
  * balanced by the same weights (scripts/quarantine.mjs). Aim: no leg over about 9 minutes, so `verify` stays near 10.
  */
@@ -74,7 +75,7 @@ export const LEG_PLAN = Object.freeze({
   mcp: { full: [["tests", 1], ["browser", 1]], contract: [["tests", 1]] },
   integration: { full: [["tests", 1]], contract: [["tests", 1]] },
   render: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 3]] },
-  pptx: { full: [["tests", 6], ["browser", 1]], contract: [["tests", 4]] },
+  pptx: { full: [["tests", 6], ["browser", 1]], contract: [["tests", 5]] },
   editor: { full: [["tests", 2], ["playground", 4], ["browser", 4]], contract: [["tests", 2]] },
 });
 

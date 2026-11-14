@@ -63,6 +63,10 @@
   ],
   "contractExclude": {
     "dependency-boundary.mjs": "Proves the vendored pptxgenjs does not load image-size (packaging boundary); no core input.",
+    "layout-names.mjs": "opf#1319: the user-facing layout names the exporter writes (layoutDisplayName) and import by the layout tag, re-checked over every example deck in both body-text modes (80 s); PPTX naming machinery, the examples are only loop input.",
+    "rr-104-no-autofit.mjs": "opf#1319: the exporter's source and every example export (32 s) carry no normAutofit, spAutoFit or fontScale; an exporter rule, the example decks are only loop input.",
+    "slide-object-ids.mjs": "opf#1319: unique p:cNvPr ids on every exported slide after the scalar fragments add shapes, over the technical examples (60 s); PPTX drawing-id machinery, the examples are only loop input.",
+    "vendor-names.mjs": "opf#1319: no exported part names a vendored library and the chart workbooks carry neutral application names, over every example (44 s); PPTX packaging, the examples are only loop input.",
     "zip-bundle-boundary.mjs": "Proves browser bundles use the vendored JSZip bundle and never import readable-stream (packaging boundary, RR-20); no core input."
   }
 }

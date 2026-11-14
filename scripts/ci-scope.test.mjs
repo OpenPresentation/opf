@@ -417,7 +417,7 @@ test('legs: every package has a plan for both tiers, a skipped job has no legs, 
   assert.deepEqual(legsFor('render', 'full').map((leg) => leg.name), ['render (tests 1/4)', 'render (tests 2/4)', 'render (tests 3/4)', 'render (tests 4/4)', 'render (browser)']);
   assert.deepEqual(legsFor('editor', 'full').map((leg) => leg.name), ['editor (tests 1/2)', 'editor (tests 2/2)', 'editor (playground 1/4)', 'editor (playground 2/4)', 'editor (playground 3/4)', 'editor (playground 4/4)', 'editor (browser 1/4)', 'editor (browser 2/4)', 'editor (browser 3/4)', 'editor (browser 4/4)']);
   assert.deepEqual(legsFor('pptx', 'full').map((leg) => leg.name), ['pptx (tests 1/6)', 'pptx (tests 2/6)', 'pptx (tests 3/6)', 'pptx (tests 4/6)', 'pptx (tests 5/6)', 'pptx (tests 6/6)', 'pptx (browser)']);
-  assert.deepEqual(legsFor('pptx', 'contract').map((leg) => `${leg.index}/${leg.count}`), ['1/4', '2/4', '3/4', '4/4']);
+  assert.deepEqual(legsFor('pptx', 'contract').map((leg) => `${leg.index}/${leg.count}`), ['1/5', '2/5', '3/5', '4/5', '5/5']);
   assert.deepEqual(legsFor('lint', 'full').map((leg) => leg.name), ['lint (static)', 'lint (checks 1/2)', 'lint (checks 2/2)']);
   assert.deepEqual(legsFor('core', 'full').map((leg) => leg.name), ['core'], 'the old check names are kept');
 });
@@ -444,7 +444,7 @@ test('legs follow the decision: only jobs that run have legs, forced runs have e
   assert.deepEqual(jobsOf(targetScope(['packages/editor/src/a.js'])), ['lint', 'mcp', 'editor', 'pack-shape'], 'an editor-only change runs no cli, integration, goldens or gallery leg (the MCP server bundles the editor)');
   assert.equal(engine.legs.filter((leg) => leg.job === 'render').length, 5);
   assert.equal(engine.legs.filter((leg) => leg.job === 'lint').length, 3, 'lint always has its legs');
-  assert.equal(engine.legs.filter((leg) => leg.job === 'pptx').length, 4, 'a dependent runs its contract suite in four shards');
+  assert.equal(engine.legs.filter((leg) => leg.job === 'pptx').length, 5, 'a dependent runs its contract suite in five shards');
   assert.equal(engine.legs.some((leg) => leg.job === 'gallery' || leg.job === 'core' || leg.job === 'audit'), false);
   const forced = targetScope(['scripts/anything.mjs']);
   assert.equal(forced.legs.filter((leg) => leg.job === 'render').length, 5);
