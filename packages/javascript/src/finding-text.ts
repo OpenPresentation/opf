@@ -208,7 +208,9 @@ function describeSchema(finding: Finding, context: FindingTextContext, helpers: 
       const name = String(params.additionalProperty ?? segments.at(-1) ?? "");
       const parent = segments.slice(0, -1);
       const allowed = schemaKeys(parent, context);
-      const hint = nearest(name, allowed).close[0];
+      // Core ranked the near misses when it made the finding (an exact reading such as `lang` for `language` first): its first suggestion is the hint.
+      const suggested = finding.suggestions?.[0]?.value;
+      const hint = typeof suggested === "string" && allowed.includes(suggested) ? suggested : nearest(name, allowed).close[0];
       return {
         message: `${code(name)} is not a property of ${containerName(parent)}.`,
         next: `${hint ? `did you mean ${code(hint)}? ` : ""}To keep custom data, put it under ${code("extensions")}.`.trim(),
