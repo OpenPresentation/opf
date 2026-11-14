@@ -68,7 +68,7 @@ Resources have stable URIs. The server lists them (`resources/list`) and also of
 | URI | What it is |
 | --- | --- |
 | `opf://docs/index` | Every documentation page and skill, with its URI |
-| `opf://docs/whats-new` | The most recent release notes: the last five versions of the changelog of `@openpresentation/opf` (the format, the validators and the engine), newest first, as text |
+| `opf://docs/whats-new` | The most recent release notes: the newest release, and older ones while there are at most five and the page is under 120,000 characters, from the changelog of `@openpresentation/opf` (the format, the validators and the engine), newest first, as text |
 | `opf://docs/<slug>` | A documentation page as Markdown: `format-card` (the whole authoring surface on one page, sized for pasting into a model's context), `how-opf-works`, `schema-reference`, `validate`, `cli`, and the other pages meant for people who use OPF. Handoff, evidence, status and release notes are not served. |
 | `opf://schema/<name>` | A JSON Schema (`opf://schema/presentation`) |
 | `opf://schema/<name>#<pointer or $defs name>` | Part of a schema: `opf://schema/presentation#Chart`, `opf://schema/presentation#/properties/slides`. `opf://schema/Chart` also works. |

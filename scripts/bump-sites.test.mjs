@@ -284,9 +284,10 @@ test('main: a site with its own script is bumped by it, and what Git sees afterw
 });
 
 test('bump-sites.yml: the site is checked out without credentials, its script gets the release tag of this repository, and only publication holds the App token', () => {
-  assert.match(bump, /- name: Fetch the release tag\n {8}id: tag\n {8}if: \$\{\{ steps\.app\.outcome == 'success' \}\}\n {8}continue-on-error: true\n {8}working-directory: opf\n {8}run: git fetch --depth=1 origin "refs\/tags\/v\$VERSION:refs\/tags\/v\$VERSION"/u, 'every site reads the tag, not only pptx-gallery');
+  // The tag is a checkout of its own (opf-tag): pptx-gallery imports the gallery package's preview sources from it, so they are files.
+  assert.match(bump, /- name: Check out the release tag\n {8}id: tag\n {8}if: \$\{\{ steps\.app\.outcome == 'success' \}\}\n {8}continue-on-error: true\n {8}uses: actions\/checkout@[0-9a-f]{40} # v[\d.]+\n {8}with:\n {10}ref: refs\/tags\/v\$\{\{ inputs\.version \}\}\n {10}persist-credentials: false\n {10}sparse-checkout: \|\n {12}scripts\n {12}packages\/gallery\n {10}sparse-checkout-cone-mode: true\n {10}path: opf-tag\n/u, 'every site reads the tag, not only pptx-gallery');
   assert.match(bump, /repository: Data-Advantage\/\$\{\{ matrix\.repo \}\}\n {10}ref: \$\{\{ matrix\.branch \}\}\n {10}token: \$\{\{ steps\.app\.outputs\.token \}\}\n {10}persist-credentials: false\n {10}path: site/u);
-  assert.match(bump, /- name: Bump the site \(pnpm opf:bump\)\n {8}id: bump\n {8}if: \$\{\{ steps\.pm\.outcome == 'success' && steps\.tag\.outcome == 'success' \}\}\n {8}continue-on-error: true\n {8}env:\n(?: {10}#[^\n]*\n)? {10}GH_TOKEN: \$\{\{ github\.token \}\}\n {8}run: node opf\/scripts\/bump-site\.mjs bump --site site --version "\$VERSION" --write --refresh-lockfile --opf-checkout opf --github-output/u);
+  assert.match(bump, /- name: Bump the site \(pnpm opf:bump\)\n {8}id: bump\n {8}if: \$\{\{ steps\.pm\.outcome == 'success' && steps\.tag\.outcome == 'success' \}\}\n {8}continue-on-error: true\n {8}env:\n(?: {10}#[^\n]*\n)? {10}GH_TOKEN: \$\{\{ github\.token \}\}\n {8}run: node opf\/scripts\/bump-site\.mjs bump --site site --version "\$VERSION" --write --refresh-lockfile --opf-checkout opf-tag --github-output/u);
   assert.doesNotMatch(bump, /--vendor-editor|VENDOR_EDITOR|vendor\[@\]/u, 'the pptx-gallery bundle is the site script\'s business now');
   assert.match(bump, /steps\.tag\.outcome == 'failure' \|\| steps\.bump\.outcome == 'failure'/u);
   // the token reaches Git only as an extra header of the fetch and the push, masked

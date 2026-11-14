@@ -25,11 +25,22 @@ const skills = Object.fromEntries(["opf-author", "opf-layout", "opf-presets", "o
 
 // The recent release notes: the last few version sections of the root CHANGELOG (core's: the format, the validators and the engine).
 // Package changelogs (CLI, renderer, PPTX, editor, gallery) have their own; this is the one an agent learning OPF needs.
+// A reader pays for every character of a resource, and one large release (0.32.0 is 103,000 characters) must not make the page
+// several times longer: the newest release always, then older ones while there are at most NOTES and the page stays under NOTES_BUDGET.
 const NOTES = 5;
+const NOTES_BUDGET = 120_000;
 function whatsNew(): string {
   const text = readFileSync(path.join(root, "CHANGELOG.md"), "utf8").replaceAll("\r\n", "\n");
   const sections = text.split(/^(?=## )/m).filter((section) => /^## \d+\.\d+\.\d+/.test(section));
-  return `# What's new in OPF\n\nThe last ${Math.min(NOTES, sections.length)} releases from the CHANGELOG of @openpresentation/opf (the format, the validators and the engine), newest first. The renderer, PPTX, editor, CLI and gallery packages have their own changelogs, with the same version numbers.\n\n${sections.slice(0, NOTES).join("").trim()}\n`;
+  const shown: string[] = [];
+  let size = 0;
+  for (const section of sections.slice(0, NOTES)) {
+    if (shown.length && size + section.length > NOTES_BUDGET) break;
+    shown.push(section);
+    size += section.length;
+  }
+  const count = shown.length === 1 ? "The last release" : `The last ${shown.length} releases`;
+  return `# What's new in OPF\n\n${count} from the CHANGELOG of @openpresentation/opf (the format, the validators and the engine), newest first. The renderer, PPTX, editor, CLI and gallery packages have their own changelogs, with the same version numbers.\n\n${shown.join("").trim()}\n`;
 }
 
 // Four entries: `index` (the server with its bundled data), `server` (the same without it), `stdio` (the Node wrapper) and `bin`
