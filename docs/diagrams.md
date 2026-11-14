@@ -383,6 +383,30 @@ When no direction holds the labels at the floor (or the diagram type has no dire
 
 The overflow check needs composition or rendering with the resolved fonts; `opf validate` alone cannot see it.
 
+### Write for readable labels
+
+A diagram is the slide's main content, so write it to be read from the back of a room: few nodes, few hops, short labels. Measured with this repository's renderer (core 0.34.0, `opf convert` to SVG, a titled slide at 1280 x 720 with the diagram alone in the body; sizes are reference pixels, 32 is the most a label gets and 16 the floor, a body list is 28 to 32):
+
+| Flowchart (nodes, longest path in hops) | Labels of one or two words | Labels of three or four words |
+| --- | --- | --- |
+| 3 nodes in a row | 32 | 32 |
+| 4 in a row | 32 | 21 |
+| 5 in a row | 32 | 17 |
+| 6 in a row | 27 | 15 (under the floor, `text-overflow`) |
+| 8 in a row | 20 | 11 (`text-overflow`) |
+| 10 in a row | 16 | 9 (`text-overflow`) |
+| 7 nodes, one parent with three children, each with one child (written `TB` or `LR`) | 32 | not measured |
+| 10 nodes in a tree three levels deep | 18 to 25 (`LR` 25, `TB` 18) | not measured |
+
+What the numbers say, and so what to write:
+
+- **Keep to 3 to 6 nodes on a slide, and to one or two words a label.** That keeps labels at 27 pixels or more, close to the body text. At 8 nodes labels are 20 pixels and the diagram reads as small print beside the slide's title; at 10 nodes they are at the floor.
+- **A label of three or four words costs about as much as two more nodes.** Put the detail in the slide's text or notes, or in a second slide, and keep the node to the noun.
+- **Split a long flow over several slides** (one stage or one decision per slide, each with its own title that says what happens there) instead of writing one chain of 8 or more. Each part is then drawn at 32.
+- **Direction follows the shape, and the engine tries both.** A chain is drawn best left to right on a wide slide: five nodes in a row are 32 pixels left to right and 18 top to bottom, because the slide is shorter than it is wide. A parent with many children is the other way: one parent with five children is 20 pixels left to right and 32 top to bottom. Write `TB` for a fan-out or a hierarchy and `LR` for a sequence; do not turn a long chain top to bottom to make it fit, and do not rely on the engine's turn (`arrangement-adapted`) to save a diagram that has too many nodes.
+- **Do not shrink to fit.** Never lower `minFontSize` or draw a diagram in a small region so that a large one fits; fewer nodes and shorter labels is the fix, and a `text-overflow` finding on a diagram means the slide has too much in it.
+- **Give the diagram the slide.** A title and the diagram, or the diagram beside a few short lines, not a diagram under a paragraph.
+
 ### Layouts that accept a diagram
 
 A layout region lists the kinds it `accepts` ([Layout templates](layout-templates.md#regions)); `diagram` is one of them. In the default catalog these regions take a diagram:
