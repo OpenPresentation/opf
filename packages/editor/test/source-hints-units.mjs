@@ -117,3 +117,17 @@ assert.equal(at('json', '{"slides":[{"layout":"pillars","title":"a"|}]}').atMemb
   assert.equal(shapeAt('md', '---\nname: x\n---\n# A', 3, { catalogs }), null, 'the line of the front matter fence has no shape');
 }
 console.log('Shape hint: slides by layout, other objects by schema, blocks by type, in JSON, YAML and Markdown.');
+
+// A one-letter slip in a key: the editor's message, its quick fix and core's finding all name the same key; `lang` ranks `language` before `link`.
+{
+  const { validate } = await import('@openpresentation/opf');
+  const { describeFinding, replacementValues } = await import('../src/source-messages.js');
+  const findingFor = (document) => validate(document, { only: ['format'] }).findings.find((entry) => entry.validation?.keyword === 'additionalProperties');
+  const slip = { slides: [{ title: 'a' }], design: { contentAligment: 'start' } };
+  const found = findingFor(slip);
+  assert.match(found.help, /contentAlignment/);
+  assert.match(describeFinding(found, { document: slip }).next, /did you mean `contentAlignment`/);
+  assert.deepEqual(replacementValues(found, { document: slip }), ['contentAlignment']);
+  const lang = { slides: [{ blocks: [{ type: 'text', text: [{ text: 'hi', lang: 'en' }] }] }] };
+  assert.equal(replacementValues(findingFor(lang), { document: lang })[0], 'language');
+}
