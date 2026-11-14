@@ -181,6 +181,8 @@ export function issueFinding(
 		help = `Write ${JSON.stringify(nearest[0].value)}: layout words follow the deck's direction, so the sides are "start" and "end", not "left" and "right".`;
 	else if (typedName !== undefined && typeof nearest[0]?.value === 'string' && nearest[0].value.startsWith(typedName))
 		help = `Write ${JSON.stringify(nearest[0].value)} instead; ${JSON.stringify(typedName)} is not a field of this object.`;
+	else if (typedName !== undefined && typeof nearest[0]?.value === 'string')
+		help = `Did you mean ${JSON.stringify(nearest[0].value)}? ${JSON.stringify(typedName)} is not a field of this object. To keep custom metadata, put it in extensions; do not delete authored content to clear this error.`;
 	return finding(ruleId, {
 		...(severity ? { severity } : {}),
 		path,

@@ -37,6 +37,9 @@ export function replacementValues(finding, context = {}, limit = 5) {
   }
   if (finding.ruleId === "opf/unresolved-reference" && finding.suggestions?.length) return finding.suggestions.map((entry) => entry.value).slice(0, limit);
   if (keyword === "additionalProperties") {
+    // Core ranked the near misses when it made the finding (`language` before `link` for `lang`): keep its order.
+    const ranked = (finding.suggestions ?? []).map((entry) => entry.value).filter((value) => typeof value === "string").slice(0, 3);
+    if (ranked.length) return ranked;
     const parent = segments.slice(0, -1);
     const keys = context.keysOf?.(parent) ?? finding.suggestions?.map((entry) => entry.value) ?? [];
     return nearest(finding.validation.params?.additionalProperty ?? segments.at(-1), keys, 3).close;

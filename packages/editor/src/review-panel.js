@@ -74,6 +74,10 @@ const STYLE = `
 .opf-review-ignored{margin-top:8px}
 .opf-review-ignored li{display:flex;gap:8px;align-items:center;margin:4px 0}
 .opf-review-error{color:#b3261e}
+.opf-review-source{margin:0 0 10px;padding:8px 10px;border:1px solid #b3261e;border-radius:6px}
+.opf-review-source-note{margin:0 0 4px}
+.opf-review-source .opf-review-item{padding:6px 0}
+.opf-review-source .opf-review-item:first-child{border-top:0}
 `;
 
 function ensureStyles(doc) {
@@ -86,6 +90,15 @@ function ensureStyles(doc) {
 
 const plural = (count, noun) => `${count} ${noun}${count === 1 ? "" : "s"}`;
 const messageOf = (error) => error?.issues?.[0]?.message ?? error?.message ?? String(error);
+
+/** The counts line while the source text is not a valid deck: "1 error in the source text." */
+function sourceSummary(counts) {
+  const parts = [];
+  if (counts.error) parts.push(plural(counts.error, "error"));
+  if (counts.warning) parts.push(plural(counts.warning, "warning"));
+  if (counts.info) parts.push(plural(counts.info, "note"));
+  return `${parts.join(", ")} in the source text.`;
+}
 
 function summaryText(counts, scopeLabel) {
   if (!counts.total) return `No findings${scopeLabel}.`;
@@ -163,7 +176,11 @@ export function createReviewPanel(container, options) {
   const empty = h(doc, "p", { class: "opf-review-empty" });
   const ignoredBox = h(doc, "details", { class: "opf-review-ignored", hidden: true });
   const gotoHint = h(doc, "span", { id: `${id}-goto-hint`, hidden: true, text: "Go to it." });
-  root.append(head, ...(hookStatus ? [hookStatus] : []), filters, list, empty, ignoredBox, gotoHint);
+  // The source pane's verdict while its text is not a valid deck (`setSource`): its findings lead the panel, and the list below is said to
+  // describe the last valid version, which is all the slides and the full check can see.
+  const sourceBox = h(doc, "section", { class: "opf-review-source", "data-opf-review-source": "", hidden: true, "aria-label": "Source text" });
+  root.append(head, ...(hookStatus ? [hookStatus] : []), sourceBox, filters, list, empty, ignoredBox, gotoHint);
+  let sourceFindings = null;
   container.append(root);
 
   const say = (message, error = false) => {
@@ -394,14 +411,43 @@ export function createReviewPanel(container, options) {
       empty.hidden = shown.length > 0;
       empty.textContent = findings.length && !shown.length ? "Nothing to show with these filters." : "Nothing to fix. The checks cover the format, references, contrast, text fit, alt text, reading order and more; they do not replace looking at the slides.";
     }
+    renderSource(shown.length);
     renderIgnored();
-    onChange?.({ ...countFindings(shown), all: findings.length, sources: report?.sources ?? [], unavailable: Boolean(lastAuditError) });
+    onChange?.(sourceFindings
+      ? { ...countFindings(sourceFindings), all: sourceFindings.length, sources: report?.sources ?? [], unavailable: false, draft: true }
+      : { ...countFindings(shown), all: findings.length, sources: report?.sources ?? [], unavailable: Boolean(lastAuditError), draft: false });
     // Live updates must not take the keyboard away: put focus back on the same control, or the same finding.
     if (hadFocus?.id && !lastAuditError) {
       const li = itemFor(hadFocus.id);
       const target = (hadFocus.fix ? [...li?.querySelectorAll("[data-fix]") ?? []].find((button) => button.dataset.fix === hadFocus.fix) : hadFocus.tag === "INPUT" ? li?.querySelector("input") : li?.querySelector(".opf-review-goto")) ?? li?.querySelector(".opf-review-goto");
       if (target && doc.activeElement !== target) target.focus();
     }
+  }
+
+  // While the source text is not a valid deck, its findings come first: the counts line and the review counts are the source's, and the
+  // list of the full check is introduced as the last valid version's (it cannot check text that is not a deck).
+  function renderSource(shownCount) {
+    sourceBox.hidden = !sourceFindings;
+    if (!sourceFindings) { sourceBox.replaceChildren(); return; }
+    const last = lastAuditError ? "" : shownCount ? " The findings below are from the last valid version." : " The last valid version has no other findings.";
+    sourceBox.replaceChildren(
+      h(doc, "p", { class: "opf-review-source-note", text: `The source text is not a valid deck. Fix it in the source; the slides show the last valid version.${last}` }),
+      h(doc, "ul", { class: "opf-review-items" }, ...sourceFindings.map((finding) => h(doc, "li", { class: "opf-review-item", "data-severity": finding.severity, ...(finding.ruleId ? { "data-rule": finding.ruleId } : {}) },
+        h(doc, "span", { class: "opf-review-sev", text: SEVERITY_LABELS[finding.severity] ?? SEVERITY_LABELS.error }), " ",
+        h(doc, "span", { class: "opf-review-msg", text: finding.message }), " ",
+        h(doc, "span", { class: "opf-review-meta", text: [finding.path ? `Source ${finding.path}` : "Source", finding.ruleId].filter(Boolean).join(" · ") })))),
+    );
+    counts.textContent = sourceSummary(countFindings(sourceFindings));
+    if (!shownCount && !lastAuditError) empty.hidden = true;
+  }
+
+  // The source pane's text is not a valid deck (`findings`, at least one), or is again (null).
+  function setSource(next) {
+    if (destroyed) return;
+    const listed = Array.isArray(next) && next.length ? next.map(({ severity, ruleId, path, message }) => ({ severity: SEVERITY_LABELS[severity] ? severity : "error", ...(ruleId ? { ruleId } : {}), ...(path ? { path } : {}), message: String(message ?? "") })) : null;
+    if (JSON.stringify(listed) === JSON.stringify(sourceFindings)) return;
+    sourceFindings = listed;
+    renderList();
   }
 
   function settle() {
@@ -475,6 +521,9 @@ export function createReviewPanel(container, options) {
     /** Re-render after the host's slide changed (the "This slide only" filter). */
     update: renderList,
     setIgnored,
+    setSource,
+    /** The source pane's findings while its text is not a valid deck, or null. */
+    get sourceFindings() { return sourceFindings; },
     destroy() {
       destroyed = true;
       clearTimeout(timer);

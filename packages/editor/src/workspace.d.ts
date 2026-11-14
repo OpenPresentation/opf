@@ -417,6 +417,8 @@ export interface OpfEditorSourceState {
   status: { kind: "valid"; warnings: number } | { kind: "invalid"; errors: number; warnings: number } | { kind: "syntax"; format: SourceFormat; message: string };
   format: SourceFormat;
   text: string;
+  /** The findings of the checks on the text (`source.checks`, by default format and references); empty when it does not read as a document. */
+  findings: Finding[];
 }
 
 export interface OpfEditorEvents {
@@ -467,7 +469,11 @@ export interface OpfEditorEvents {
   rename: { name: string };
   export: { blob: Blob; fileName: string; format: string; notes: string[] };
   persistence: AutosaveStatus;
-  review: { error: number; warning: number; info: number; total: number; all: number; sources: string[]; unavailable: boolean };
+  /**
+   * The Review counts, after every redraw of the panel. While the source pane's text is not a valid deck (`draft: true`) they are that text's own
+   * findings, so the pill never says "Valid" over an error; the panel's list then describes the last valid version.
+   */
+  review: { error: number; warning: number; info: number; total: number; all: number; sources: string[]; unavailable: boolean; draft: boolean };
   /** A Review finding about the deck rather than a slide asked to be shown. */
   "review-goto": { finding: ReviewFinding; target: unknown };
   "review-focus": { fix: unknown; target: unknown };
