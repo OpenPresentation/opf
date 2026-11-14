@@ -27,7 +27,8 @@ function validFamily(family) {
 }
 // The open families load with the office pack (loadFonts({pack:"office"})).
 
-const packFor = family => { const pack = BUNDLED_FONT_MANIFEST.packages.find(pkg=>pkg.renamedFrom?.toLowerCase()===family.toLowerCase() || pkg.faces.some(face=>face.family.toLowerCase()===family.toLowerCase()))?.pack; return pack==="open" ? "office" : pack; };
+const packageFor = family => BUNDLED_FONT_MANIFEST.packages.find(pkg=>pkg.renamedFrom?.toLowerCase()===family.toLowerCase() || pkg.faces.some(face=>face.family.toLowerCase()===family.toLowerCase()));
+const packFor = family => { const pack = packageFor(family)?.pack; return pack==="open" ? "office" : pack; };
 const percent = value => `${(value*100).toFixed(1)}%`;
 /** FF-31: say why a family has no face and what the caller can do, from the OPF font policy. */
 function unavailableFontError(family, style, policy) {
@@ -36,8 +37,9 @@ function unavailableFontError(family, style, policy) {
   if (!row) return new OPFFontError("font-unavailable", `No local font face for '${family}'. '${family}' is not in the OPF font policy table, so there is no declared replacement: ${hook}, add an alias, or set fallbackFamily.`, {...details, licenseClass:"unknown"});
   Object.assign(details, {licenseClass:row.licenseClass});
   if (!row.replacement) {
-    const pack = packFor(family);
-    return new OPFFontError("font-unavailable", `No local font face for '${family}'. '${family}' is ${row.licenseClass === "open" ? `openly licensed (${row.license})` : row.license}${pack ? `; load the '${pack}' font pack` : `; no pinned renderer pack ships it yet, so supply its font files (for example from @expo-google-fonts/${family.toLowerCase().replace(/ +/g,"-")})`}.`, {...details, ...(pack?{pack}:{})});
+    const pack = packFor(family), npm = pack === "scripts" ? packageFor(family) : undefined;
+    const how = npm ? `; install ${npm.name}@${npm.version} (an optional npm package of the 'scripts' font pack)` : pack ? `; load the '${pack}' font pack` : undefined;
+    return new OPFFontError("font-unavailable", `No local font face for '${family}'. '${family}' is ${row.licenseClass === "open" ? `openly licensed (${row.license})` : row.license}${how ??  `; no pinned renderer pack ships it yet, so supply its font files (for example from @expo-google-fonts/${family.toLowerCase().replace(/ +/g,"-")})`}.`, {...details, ...(pack?{pack}:{}), ...(npm?{package:npm.name, version:npm.version}:{})});
   }
   const {family:replacement, compatibility, measured} = row.replacement;
   const candidates = [replacement, ...(row.alternates ?? [])], packs = [...new Set(candidates.map(packFor).filter(Boolean))];

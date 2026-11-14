@@ -509,7 +509,7 @@ export async function createNodeDemand(
             loaded.selection.notInstalled.push(item.package);
           notify(
             'script-font-not-installed',
-            { package: item.package, scripts: item.scripts },
+            { package: item.package, version: item.version, scripts: item.scripts },
             'Install ' +
               item.package +
               '@' +

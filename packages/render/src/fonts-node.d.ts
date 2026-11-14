@@ -38,7 +38,7 @@ export interface ScriptPackOptions {
    * `harfbuzz-unavailable` when a harfbuzzjs .wasm (`file`) cannot be loaded, for example in a bundled server that did not ship it:
    * the handle then has no `subsets`, or shapes outlines with fontkit.
    */
-  onDiagnostic?: (diagnostic: {code: string; message: string; script?: string; package?: string; scripts?: string[]; file?: string}) => void;
+  onDiagnostic?: (diagnostic: {code: string; message: string; script?: string; package?: string; version?: string; scripts?: string[]; file?: string}) => void;
 }
 /** A vendored face that an SVG embeds only when its text names the family (the open families and Intos), and that browser hosts load on demand from a separate hash-pinned file. */
 export interface LazyFont { readonly package: string; readonly family: string; readonly weight: number; readonly italic: boolean; /** Path relative to the package root, for example fonts/intos/Intos-Regular.ttf. */ readonly file: string; readonly sha256: string; readonly license: string; readonly renamedFrom?: string; /** Set on a host's extra lazy face (`extraLazyFonts`, `package: "host"`): where the host serves the file from. */ readonly url?: string }
