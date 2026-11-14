@@ -429,10 +429,16 @@ describe("opf-mcp", () => {
 			const changelog = readFileSync(path.join(root, "CHANGELOG.md"), "utf8");
 			const versions = [...changelog.matchAll(/^## (\d+\.\d+\.\d+)/gm)].map((match) => match[1]);
 			const shown = [...text.matchAll(/^## (\d+\.\d+\.\d+)/gm)].map((match) => match[1]);
-			assert.deepEqual(shown, versions.slice(0, 5));
+			// The newest release always, then older ones while there are at most five and the page stays within its budget
+			// (tsup.config.ts): the 0.34.0 changelog made five releases 214,836 characters and this test red on main.
+			const sizes = changelog.replaceAll("\r\n", "\n").split(/^(?=## )/m).filter((section) => /^## \d+\.\d+\.\d+/.test(section)).map((section) => section.length);
+			let fit = 1;
+			for (let size = sizes[0]; fit < Math.min(5, sizes.length) && size + sizes[fit] <= 120_000; fit++) size += sizes[fit];
+			assert.deepEqual(shown, versions.slice(0, fit));
 			assert.match(text, /^# What's new in OPF/);
+			assert.match(text, fit === 1 ? /^The last release from the CHANGELOG/m : new RegExp(`^The last ${fit} releases from the CHANGELOG`, "m"));
 			assert.ok(text.includes(changelog.split(/^## /m).find((section) => section.startsWith(versions[0])).split("\n")[2].slice(0, 60)), "the newest section's first entry");
-			assert.ok(text.length > 2000 && text.length < 200_000, `${text.length} characters`);
+			assert.ok(text.length > 2000 && (fit === 1 || text.length < 121_000), `${text.length} characters`);
 		});
 
 		test("opf://docs/index lists it, and carries the one neutral pointer to pptx.dev", async () => {
