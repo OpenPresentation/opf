@@ -56,6 +56,59 @@ try {
   assert.deepEqual(opened, [{ total: 'number', findings: true }]);
   mark('the review pill shows the Review counts and opens the Review tab; in the embed the review runs headless and the pill emits review-open');
 
+  // Text in the source pane that is not a valid deck: the pill and the Review panel count the source's errors, not the last valid deck's
+  // findings, and both clear once the text is corrected (the MCP viewer's own test covers its drawer and footer).
+  const reviewState = () => ev(() => ({
+    pill: document.querySelector('#host .opf-review-pill')?.dataset.state,
+    severity: document.querySelector('#host .opf-review-pill')?.dataset.severity ?? null,
+    pillText: document.querySelector('#host .opf-review-pill')?.textContent,
+    counts: window.ed.review.element.querySelector('.opf-review-counts').textContent,
+    notice: window.ed.review.element.querySelector('.opf-review-source:not([hidden])')?.textContent ?? null,
+    sourceErrors: window.ed.review.element.querySelectorAll('.opf-review-source:not([hidden]) .opf-review-item').length,
+    empty: window.ed.review.element.querySelector('.opf-review-empty:not([hidden])')?.textContent ?? null,
+    event: window.reviews.at(-1),
+  }));
+  {
+    const layout = 'full';
+    await ev((d) => { window.reviews = []; return window.mountEditor({ document: d, on: { review: (counts) => window.reviews.push(counts) } }); }, deck());
+    await page.waitForFunction(() => document.querySelector('#host .opf-review-pill')?.dataset.state === 'valid', undefined, { timeout: 20000 });
+    const valid = await ev(() => window.ed.sourcePane.editor.api.getValue());
+    const setText = (text) => ev((value) => { window.ed.sourcePane.editor.api.replace(0, window.ed.sourcePane.editor.api.getValue().length, value); window.ed.sourcePane.getText(); }, text);
+    const broken = valid.replace('"fontScheme": "roboto"', '"fontScheme": "roboto",\n    "contentAlignment": "left"');
+    assert.notEqual(broken, valid, 'the fixture text has the design block');
+    await setText(broken);
+    const source = await ev(() => ({ inSync: window.ed.inSync, status: window.ed.sourceState?.status }));
+    assert.equal(source.inSync, false, `${layout}: the text is not a valid deck`);
+    assert.equal(source.status.kind, 'invalid');
+    const errorCount = source.status.errors;
+    assert.ok(errorCount >= 1);
+    const issues = `${errorCount} ${errorCount === 1 ? 'issue' : 'issues'}`;
+    await page.waitForFunction((text) => document.querySelector('#host .opf-review-pill')?.textContent === text, issues, { timeout: 5000 }).catch(() => {});
+    const bad = await reviewState();
+    assert.equal(bad.pill, 'issues', `${layout}: the pill does not say the deck is valid while the source has an error: ${JSON.stringify(bad)}`);
+    assert.equal(bad.severity, 'error');
+    assert.equal(bad.pillText, issues);
+    assert.match(bad.counts, new RegExp(`${errorCount} errors? in the source`), `${layout}: the Review panel counts the source's errors: ${bad.counts}`);
+    assert.doesNotMatch(bad.counts, /No findings/);
+    assert.match(bad.notice ?? '', /last valid version/, `${layout}: the panel says what the other findings describe`);
+    assert.equal(bad.sourceErrors, errorCount, `${layout}: the panel lists the source's errors`);
+    assert.doesNotMatch(bad.empty ?? '', /^Nothing to fix/, `${layout}: no "nothing to fix" while the source has an error`);
+    assert.deepEqual({ error: bad.event.error, total: bad.event.total, draft: bad.event.draft }, { error: errorCount, total: errorCount, draft: true }, `${layout}: the review event counts the source`);
+    // A syntax error counts as one error too.
+    await setText('{ "name": "half typed');
+    const syntax = await reviewState();
+    assert.deepEqual([syntax.pill, syntax.pillText, syntax.sourceErrors], ['issues', '1 issue', 1], `${layout}: ${JSON.stringify(syntax)}`);
+    // Corrected: all three clear.
+    await setText(valid);
+    await page.waitForFunction(() => window.ed.inSync && document.querySelector('#host .opf-review-pill')?.dataset.state === 'valid', undefined, { timeout: 20000 });
+    await ev(() => window.ed.whenIdle());
+    const good = await reviewState();
+    assert.equal(good.notice, null, `${layout}: the source notice is gone`);
+    assert.match(good.counts, /^No findings/);
+    assert.equal(good.event.draft, false);
+  }
+  mark('while the source text is not a valid deck, the review pill, the Review panel and the review event count its errors (the panel says the rest describes the last valid version); all clear once it is corrected');
+
   // Help: the sheet lists the bindings the editor has.
   await ev((d) => window.mountEditor({ document: d, on: { save: () => {} } }), deck());
   const shortcutIds = await ev(() => window.ed.shortcuts().map((entry) => entry.id));

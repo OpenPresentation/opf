@@ -388,6 +388,52 @@ try {
 		await remove("type");
 	});
 
+	await run("source text that is not a valid deck: the footer's review pill, the Review panel, read_deck and the model's context all count its error, and all clear once it is fixed", async () => {
+		await open("draft", "show_deck", { document: deckNamed("Draft deck"), view: "both" });
+		const pill = view("draft").locator("#deck-verdict .opf-review-pill");
+		const before = await call("draft", "read_deck", { source: "json" });
+		assert.equal(before.checks.error, 0);
+		assert.equal(before.sourceChecks, undefined);
+		await view("draft").locator('#deck-verdict .opf-review-pill[data-state="valid"]').waitFor({ timeout: 30000 });
+		assert.equal(await pill.textContent(), "Valid OPF");
+		const valid = before.source.text;
+		const broken = valid.replace('"fontScheme": "roboto"', '"fontScheme": "roboto",\n    "contentAlignment": "left"');
+		assert.notEqual(broken, valid);
+		const contexts = (await host("draft")).context.length;
+		await view("draft").locator("#deck-source .cm-content").click();
+		await page.keyboard.press("ControlOrMeta+A");
+		await page.keyboard.insertText(broken);
+		await view("draft").locator('#deck-verdict .opf-review-pill[data-state="issues"]').waitFor({ timeout: 15000 });
+		assert.equal(await pill.textContent(), "1 issue", "the footer does not say Valid OPF while the source has an error");
+		assert.equal(await pill.getAttribute("data-severity"), "error");
+		await pill.click();
+		const panel = view("draft").locator("#deck-review-panel");
+		assert.match(await panel.locator(".opf-review-counts").textContent(), /^1 error in the source text\./);
+		assert.match(await panel.locator(".opf-review-source").textContent(), /last valid version/, "the panel says what the slides show");
+		assert.equal(await panel.locator(".opf-review-source .opf-review-item").count(), 1, "the panel lists the source's error");
+		const read = await call("draft", "read_deck");
+		assert.equal(read.sourceDraft, true);
+		assert.equal(read.revision, before.revision, "the deck is still the last valid version");
+		assert.equal(read.checks.error, 0, "checks describe the deck at revision");
+		assert.equal(read.sourceChecks?.error, 1, `read_deck counts the text's error: ${JSON.stringify(read.sourceChecks)}`);
+		assert.equal(read.sourceChecks.findings[0].severity, "error");
+		await page.waitForFunction(([key, count]) => window.hosts[key].context.length > count, ["draft", contexts], { timeout: 15000 });
+		const told = (await host("draft")).context.at(-1);
+		assert.match(told.content[0].text, /not a valid deck right now \(the text has 1 error and /, "the model hears that the text is not a valid deck");
+		assert.equal(told.structuredContent.sourceChecks?.error, 1);
+		// Fixed: all of them clear.
+		await view("draft").locator("#deck-source .cm-content").click();
+		await page.keyboard.press("ControlOrMeta+A");
+		await page.keyboard.insertText(valid);
+		await view("draft").locator('#deck-verdict .opf-review-pill[data-state="valid"]').waitFor({ timeout: 15000 });
+		assert.equal(await pill.textContent(), "Valid OPF");
+		assert.equal(await panel.locator(".opf-review-source").isHidden(), true);
+		assert.match(await panel.locator(".opf-review-counts").textContent(), /^No findings/);
+		assert.equal((await call("draft", "read_deck")).sourceChecks, undefined);
+		await page.waitForFunction((key) => window.hosts[key].context.at(-1).structuredContent.sourceChecks === undefined, "draft", { timeout: 15000 });
+		await remove("draft");
+	});
+
 	await run("a tool edit is not the user's: in a view nobody edited, Send stays disabled after it", async () => {
 		await open("tool-only", "show_deck", { document: deckNamed("Tool only") });
 		const { revision } = await call("tool-only", "read_deck");

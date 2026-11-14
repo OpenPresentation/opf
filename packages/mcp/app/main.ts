@@ -250,6 +250,21 @@ const scheduleChecks = (deck: unknown) => {
 		});
 	}, CHECK_DELAY);
 };
+/**
+ * The checks of the source pane's text while it is not a valid deck (the deck has not taken it, so the slides and `currentChecks` are the
+ * last valid version), or undefined while the pane holds the deck. Text that does not read as a document counts as one error.
+ */
+const sourceChecks = () => {
+	const state = editor && !editor.inSync ? editor.sourceState : null;
+	if (!state || state.status.kind === "valid") return undefined;
+	const all: Pick<Finding, "severity" | "ruleId" | "path" | "message">[] = state.status.kind === "syntax" ? [{ severity: "error", ruleId: "syntax", path: "/", message: state.status.message }] : state.findings;
+	const tally = { error: 0, warning: 0, info: 0 };
+	for (const finding of all) tally[finding.severity] += 1;
+	return { ...tally, findings: all.filter((finding) => finding.severity !== "info").slice(0, MAX_LISTED_FINDINGS).map(({ severity, ruleId, path, message }) => ({ severity, ruleId, path: path || "/", message })) };
+};
+/** The source verdict the model last heard, so a change of it is sent and keystrokes that keep it are not. */
+let sourceHeard = "null";
+
 /** The checks of the deck as it is now, run at once when an edit is still waiting for them. */
 const currentChecks = () => {
 	if (checkTimer && editor) runChecks(editor.getDocument());
@@ -266,7 +281,11 @@ function contextText(): string {
 	const slides = Array.isArray((deck as { slides?: unknown[] } | undefined)?.slides) ? (deck as { slides: unknown[] }).slides.length : 0;
 	const at = editor ? editor.slideIndex + 1 : 1;
 	const lines = findingLines();
-	const checks = `Checks in the viewer: ${counts.error} errors, ${counts.warning} warnings, ${counts.info} notes.${lines.length ? `\n${lines.join("\n")}` : ""}`;
+	const draft = sourceChecks();
+	const draftLines = (draft?.findings ?? []).map((finding) => `- ${finding.severity} ${finding.ruleId} at ${finding.path}: ${finding.message}`);
+	// Text in the source pane that is not a valid deck: the deck and its checks are the last valid version, and the text's own errors are said.
+	const pending = draft ? `\nThe user is editing the deck's text in the source pane and it is not a valid deck right now (the text has ${draft.error} ${draft.error === 1 ? "error" : "errors"} and ${draft.warning} ${draft.warning === 1 ? "warning" : "warnings"}); the slides, the deck and the checks above are the last valid version.${draftLines.length ? `\n${draftLines.join("\n")}` : ""}` : "";
+	const checks = `Checks in the viewer: ${counts.error} errors, ${counts.warning} warnings, ${counts.info} notes.${lines.length ? `\n${lines.join("\n")}` : ""}${pending}`;
 	const where = editor ? ` Revision ${editor.session.documentHash()}${viewer ? `, viewer session ${viewer.session}` : ""}.` : "";
 	const json = `\n\nThe current deck:\n\`\`\`json\n${JSON.stringify(deck, null, 2)}\n\`\`\``;
 	// open_editor sent no deck of the model's: the first context says what opened, with the deck itself.
@@ -287,8 +306,10 @@ async function sendContext(): Promise<void> {
 	contextTimer = undefined;
 	if (!editor || silent() || !app.getHostCapabilities()?.updateModelContext) return;
 	const deck = editor.getDocument();
+	const draft = sourceChecks();
+	sourceHeard = JSON.stringify(draft ?? null);
 	try {
-		await app.updateModelContext({ content: [{ type: "text", text: contextText() }], structuredContent: { edited, counts, findings: findings.slice(0, MAX_LISTED_FINDINGS), ...(edited || openedWith ? { document: deck as Record<string, unknown> } : {}) } });
+		await app.updateModelContext({ content: [{ type: "text", text: contextText() }], structuredContent: { edited, counts, findings: findings.slice(0, MAX_LISTED_FINDINGS), ...(draft ? { sourceChecks: draft } : {}), ...(edited || openedWith ? { document: deck as Record<string, unknown> } : {}) } });
 		// Edits made while this update was on its way wait for the next one.
 		if (edited && !contextTimer && sync.dataset.state === "pending") setSync("shared");
 	} catch (error) {
@@ -436,6 +457,8 @@ function deckState(outline = true): Record<string, unknown> {
 		listed.push(item);
 	}
 	const checks = currentChecks();
+	const draft = sourceChecks();
+	const clipped = (list: typeof checks.findings) => list.map((finding) => ({ ...finding, path: clip(finding.path) as string, message: clip(finding.message, 300) as string }));
 	return {
 		ok: true,
 		revision: ed.session.documentHash(),
@@ -446,7 +469,9 @@ function deckState(outline = true): Record<string, unknown> {
 		...(outline ? { outline: listed } : {}),
 		...(outline && listed.length < slides.length ? { outlineTruncated: { listed: listed.length, of: slides.length } } : {}),
 		sourceDraft: !ed.inSync || sourcePending(),
-		checks: { ...checks, findings: checks.findings.map((finding) => ({ ...finding, path: clip(finding.path) as string, message: clip(finding.message, 300) as string })) },
+		checks: { ...checks, findings: clipped(checks.findings) },
+		// The text in the source pane while it is not a valid deck: `checks` are the deck at `revision`, the last valid version.
+		...(draft ? { sourceChecks: { ...draft, findings: clipped(draft.findings) } } : {}),
 	};
 }
 
@@ -461,7 +486,7 @@ app.registerTool(
 	{
 		title: "Read the deck open in the OPF viewer",
 		description:
-			"Read the deck open in this OPF viewer: its revision, name, slide outline, selected slide and current check findings, and optionally its source text.\nCall it before edit_deck: edit_deck needs the revision it returns, and the user may have edited the deck since you last saw it. Slide indexes count from 0, as in a JSON Pointer such as /slides/0/title. Long titles are shortened and a long outline is cut (outlineTruncated says how far it goes). With source (json, yaml or markdown) the result also carries the deck's text, in pages of under 100,000 characters: when a page says it was truncated, call again with the offset it names; pages after the first leave the outline out, and every page has a textHash (start again at 0 when it changes). session is this viewer's session key: show_deck or open_editor with the same deck or the same session replaces this viewer.",
+			"Read the deck open in this OPF viewer: its revision, name, slide outline, selected slide and current check findings, and optionally its source text.\nCall it before edit_deck: edit_deck needs the revision it returns, and the user may have edited the deck since you last saw it. Slide indexes count from 0, as in a JSON Pointer such as /slides/0/title. Long titles are shortened and a long outline is cut (outlineTruncated says how far it goes). With source (json, yaml or markdown) the result also carries the deck's text, in pages of under 100,000 characters: when a page says it was truncated, call again with the offset it names; pages after the first leave the outline out, and every page has a textHash (start again at 0 when it changes). sourceDraft is true while the source pane holds text the deck has not taken; when that text is not a valid deck, checks describe the deck at revision (the last valid version, which the slides show) and sourceChecks the text's own errors. session is this viewer's session key: show_deck or open_editor with the same deck or the same session replaces this viewer.",
 		inputSchema: z.object({
 			source: z.enum(["json", "yaml", "markdown"]).optional().describe("Also return the deck's text in this form. The form the user is editing in the source pane comes back exactly as written."),
 			offset: z.number().optional().describe("With source: where the text starts, in characters (a whole number from 0). Default 0."),
@@ -974,6 +999,8 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	// Where the source pane stands: edit_deck waits for typing the pane has not taken in, rather than commit it for the person.
 	editor.on("source", () => {
 		sourceBaseline = paneText();
+		// The model hears when the text stops or starts being a valid deck, or its errors change; not every keystroke.
+		if (ready && JSON.stringify(sourceChecks() ?? null) !== sourceHeard) scheduleContext();
 	});
 	// The pill opens the Review panel: the editor has no side panel here, so it asks the host page (this view) to show it.
 	editor.on("review-open", () => setReviewOpen(true));

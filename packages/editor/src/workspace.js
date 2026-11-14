@@ -391,6 +391,7 @@ export function createOpfEditor(element, options = {}) {
   let drafting = false;
   let openedText;
   let sourceState = null;
+  let lastSourceReport = null;
   let sourceCursor = null;
   let fontsFailure;
   let refreshToken = 0;
@@ -842,10 +843,12 @@ export function createOpfEditor(element, options = {}) {
       getFindings: ({ format, text: shown }) => {
         reportedText = shown;
         const made = reportSource(format, shown, { catalogs: catalogs(), checks: configured.checks ?? SOURCE_CHECKS });
+        lastSourceReport = made;
         draftInvalid = !made.valid;
         inSync = made.status.kind === "valid";
-        sourceState = { status: made.status, format, text: shown };
+        sourceState = { status: made.status, format, text: shown, findings: made.findings };
         syncChrome();
+        review?.setSource(sourceProblems(made));
         emit("source", sourceState);
         updateDirty();
         return made.findings;
@@ -862,6 +865,14 @@ export function createOpfEditor(element, options = {}) {
       },
       onError: (error) => report(error),
     };
+  }
+
+  // The findings of source text that is not a valid deck, for the Review panel and the pill (null while it is one): the pane's own findings,
+  // or its syntax message as one error. The review of the document cannot see that text, so it must not be the only verdict on show.
+  function sourceProblems(made) {
+    if (!made || made.valid) return null;
+    if (made.status.kind === "syntax") return [{ severity: "error", message: made.status.message }];
+    return made.findings;
   }
 
   // While the canvas holds an inline edit, the source shows the draft as it is typed, without touching the session.
@@ -1093,6 +1104,7 @@ export function createOpfEditor(element, options = {}) {
       },
     });
     reviewSnapshot = checkedSnapshot;
+    if (sourceState && sourceState.status.kind !== "valid") review.setSource(sourceProblems(lastSourceReport));
   }
 
   function present(from) {
