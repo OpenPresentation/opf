@@ -211,6 +211,11 @@ test('nightly.yml: schedule, dispatch and call; never a pull request or push; ev
   assert.match(job(nightly, 'pptx-windows').text, /native-tab-control-v2\.ps1 -PureRegression/u);
   assert.match(job(nightly, 'editor-macos').text, /runs-on: macos-15/u);
   assert.match(job(nightly, 'editor-windows').text, /runs-on: windows-latest/u);
+  // opf#1319: what left verify runs here: the perf suite on Linux and Windows, the playground suite on Linux (verify runs it only when
+  // packages/editor changed).
+  for (const entry of ['{ suite: perf, shard: 1/1 }', '{ suite: playground, shard: 1/2 }', '{ suite: playground, shard: 2/2 }']) assert.ok(job(nightly, 'editor-linux').text.includes(entry), `editor-linux runs ${entry}`);
+  assert.match(job(nightly, 'editor-linux').text, /container: mcr\.microsoft\.com\/playwright:/u, 'in the Playwright image verify uses');
+  assert.ok(job(nightly, 'editor-windows').text.includes('{ suite: perf, shard: 1/1 }'));
   // MR-30: npm 12's install-time defaults (no install scripts, no git or remote dependencies) are checked on the packed packages, at an exact npm 12.
   assert.match(job(nightly, 'npm12-consumer').text, /NPM12_VERSION: 12\.\d+\.\d+\n/u, 'npm 12 is pinned to an exact version');
   assert.match(job(nightly, 'npm12-consumer').text, /pnpm test:npm12-consumer/u);

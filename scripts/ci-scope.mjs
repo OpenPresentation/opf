@@ -16,7 +16,8 @@
 //      pull request) runs every package at `full`.
 //   3. Legs: ci.yml has ONE job, `check`, whose matrix is `legs` (`fromJSON(needs.scope.outputs.legs)`): one entry per leg of
 //      every selected job, so a job the scope did not select has no entry and GitHub shows no "skipped" check for it. LEG_PLAN says
-//      how many shards each package's tests get per tier and which browser suites run (`full` only); JOB_SHAPE says how each job
+//      how many shards each package's tests get per tier and which browser suites run (`full` only; the editor's playground only
+//      when the editor itself changed, not in a forced run: DIRECT_ONLY_KINDS, opf#1319); JOB_SHAPE says how each job
 //      runs (container, checkout depth, timeout, what to build first), and each leg carries both. `lint` always has legs, so the
 //      matrix is never empty (an empty matrix would make the whole job a skipped check).
 //   4. Extra jobs: `goldens` when a golden input changed, `gallery-gates` (check:previews and check:stability, which run
@@ -76,6 +77,14 @@ export const LEG_PLAN = Object.freeze({
   pptx: { full: [["tests", 6], ["browser", 1]], contract: [["tests", 4]] },
   editor: { full: [["tests", 2], ["playground", 4], ["browser", 4]], contract: [["tests", 2]] },
 });
+
+/**
+ * opf#1319: leg kinds that run only when the package itself changed, not when a run is forced (a tooling path, an unclassified
+ * path, the label full-ci, a push to main) without a change to it. The editor's playground suite (4 legs, about 22 runner minutes)
+ * exercises the editor's own playground, so a pull request that changes packages/editor runs it; a run forced from elsewhere leaves it
+ * to nightly.yml (editor-linux on Linux, editor-macos and editor-windows), which the release gate and the label full-ci also run.
+ */
+export const DIRECT_ONLY_KINDS = Object.freeze({ editor: ["playground"] });
 
 /** The jobs that are not packages and have one `tests` leg (they have no tiers: a skipped one has no leg at all). */
 export const SINGLE_JOBS = ["audit", "goldens", "gallery-gates", "pack-shape"];
@@ -388,7 +397,7 @@ export function scope({ files, graph, event = "pull_request", labels = [] }) {
     jobs,
     required: Object.entries(jobs).filter(([, tier]) => tier !== "skip").map(([name]) => name),
     skipped: Object.entries(jobs).filter(([, tier]) => tier === "skip").map(([name]) => name),
-    legs: JOB_ORDER.flatMap((job) => legsFor(job, job === "lint" ? (!forced && changedIds.length === 0 ? "docs" : "full") : (jobs[job] ?? "skip"))),
+    legs: JOB_ORDER.flatMap((job) => legsFor(job, job === "lint" ? (!forced && changedIds.length === 0 ? "docs" : "full") : (jobs[job] ?? "skip")).filter((leg) => changed.has(job) || !DIRECT_ONLY_KINDS[job]?.includes(leg.kind))),
     unclassified,
     reasons,
   };

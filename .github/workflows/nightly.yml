@@ -17,7 +17,8 @@ name: Nightly
 #   pptx-windows        opf-pptx CI on Windows (the sharded suite, the native harness without Office, the browser suite)
 #   editor-macos        opf-editor `macos-playground`
 #   editor-windows      opf-editor browser suites on Windows (LH-179: playground in two shards, browser in three, perf)
-#   editor-linux        the editor checks that left verify (opf#1319): the perf suite (absolute wall-clock budgets)
+#   editor-linux        the editor checks that left verify (opf#1319): the perf suite (absolute wall-clock budgets) and the
+#                       playground suite on Linux (verify runs it only when packages/editor changed)
 #   node-range          the old engines-range workflow and the three sibling `node-range` jobs (Node 22 and 26, all seven packages)
 #   packed-linux        the packed-install and installed-browser steps of the old core `normal` job and of each package job
 #   registry            the registry consumers (published packages against this checkout's harness)
@@ -347,8 +348,9 @@ jobs:
 
   # opf#1319: the editor's browser checks that left `verify`, on Linux in the pinned Playwright image (the image ci.yml uses):
   # the perf suite (absolute wall-clock budgets: startup to first preview, Studio at 300 slides), which measured 11.0 s on one runner
-  # and 16.5 s on another with the same code against a 16 s limit. A failure here opens or updates the nightly-red issue; the release
-  # gate and the label full-ci run it too (they call this workflow).
+  # and 16.5 s on another with the same code against a 16 s limit, and the playground suite, which `verify` runs only when
+  # packages/editor changed (DIRECT_ONLY_KINDS in scripts/ci-scope.mjs), not on a forced run such as a push to main. A failure here
+  # opens or updates the nightly-red issue; the release gate and the label full-ci run these legs too (they call this workflow).
   editor-linux:
     name: editor browser suites on Linux (${{ matrix.suite }} ${{ matrix.shard }})
     runs-on: ubuntu-24.04
@@ -359,6 +361,8 @@ jobs:
       matrix:
         include:
           - { suite: perf, shard: 1/1 }
+          - { suite: playground, shard: 1/2 }
+          - { suite: playground, shard: 2/2 }
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

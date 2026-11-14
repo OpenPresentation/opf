@@ -448,7 +448,14 @@ test('legs follow the decision: only jobs that run have legs, forced runs have e
   assert.equal(engine.legs.some((leg) => leg.job === 'gallery' || leg.job === 'core' || leg.job === 'audit'), false);
   const forced = targetScope(['scripts/anything.mjs']);
   assert.equal(forced.legs.filter((leg) => leg.job === 'render').length, 5);
-  assert.equal(forced.legs.filter((leg) => leg.job === 'editor').length, 10);
+  // opf#1319: the editor's playground legs run when the editor itself changed, not in a forced run (nightly.yml runs them).
+  assert.deepEqual(forced.legs.filter((leg) => leg.job === 'editor').map((leg) => leg.kind), ['tests', 'tests', 'browser', 'browser', 'browser', 'browser']);
+  assert.deepEqual(targetScope(['docs/programs/a.md'], { labels: ['full-ci'] }).legs.filter((leg) => leg.kind === 'playground'), [], 'the label full-ci runs them in full-ci.yml');
+  assert.deepEqual(targetScope(['docs/programs/a.md'], { event: 'push' }).legs.filter((leg) => leg.kind === 'playground'), []);
+  for (const files of [['packages/editor/src/a.js'], ['packages/editor/test/browser-suites.json', 'scripts/a.mjs']]) {
+    assert.deepEqual(targetScope(files).legs.filter((leg) => leg.job === 'editor').map((leg) => leg.kind), ['tests', 'tests', 'playground', 'playground', 'playground', 'playground', 'browser', 'browser', 'browser', 'browser'], files.join());
+  }
+  assert.equal(targetScope(['packages/javascript/src/a.ts']).legs.some((leg) => leg.kind === 'playground'), false, 'a dependent never ran them');
   assert.equal(forced.legs.filter((leg) => leg.job === 'gallery').length, 1);
   assert.deepEqual(jobsOf(forced), JOB_ORDER.filter((job) => job !== 'audit'), 'every job but the audit');
   const docs = targetScope(['docs/programs/monorepo/README.md']);
