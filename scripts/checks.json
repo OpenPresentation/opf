@@ -18,7 +18,7 @@
       {"match": ["scripts/published-matrix/parity-work-directory.mjs", "scripts/published-matrix/installed-parity.mjs"], "run": ["check:parity-work-directory"]},
       {"match": ["docs/programs/font-fidelity-everywhere/gallery-support/parity/build.ps1", "docs/programs/font-fidelity-everywhere/gallery-support/parity/run.ps1"], "run": ["check:parity-wrappers"]},
       {"match": ["docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/render-api.mjs", "docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/font-availability.mjs", "docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/parity.mjs"], "run": ["check:audit-render-api"]},
-      {"match": ["scripts/test-registry-fidelity.mjs", "scripts/registry-fidelity-archive.mjs"], "run": ["check:registry-fidelity-archive"]},
+      {"match": ["scripts/test-registry-fidelity.mjs", "scripts/registry-fidelity-archive.mjs", "scripts/registry-fidelity-archive.test.mjs", "packages/render/test/suites.json", "packages/pptx/test/suites.json", "packages/render/package.json", "packages/pptx/package.json"], "run": ["check:registry-fidelity-archive"]},
       {"match": ["scripts/native-acceptance/"], "run": ["check:native-acceptance", "check:libreoffice"]},
       {"match": ["spec/schemas/opf.schema.json", "scripts/native-acceptance/qualification/", "packages/gallery/catalog/layouts/", "examples/"], "run": ["check:format-coverage"]},
       {"match": ["scripts/libreoffice/", "packages/pptx/test/fixtures/native-long-text/", "spec/reference/font-policy.json"], "run": ["check:libreoffice"]},
