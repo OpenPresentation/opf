@@ -179,14 +179,18 @@ const BODY = '<div id="stage" class="opf-ui" style="padding:12px;display:flex;fl
     mark('thumbnail strip: add');
 
     // -- toolbar: more -----------------------------------------------------------------------------------------------------------------------
-    await ev(() => {
+    // Nothing overflows these bars, so the toolbar hides ⋯ again on its first frame (its ResizeObserver's first notification runs `update`): the entry is
+    // shown and the icon measured in one task, before that frame. Measured in a later evaluate, a frame could come first and the icon measured 0 px wide
+    // (it failed once on CI that way; two frames' wait makes it fail every time).
+    const dots = await ev(() => {
       for (const [id, icons] of [['b1', undefined], ['b2', { more: 'M5 12h.01M12 12h.01M19 12h.01' }], ['b3', { more: () => window.own('more') }]]) {
         const host = window.fresh(id);
         const bar = window.opfParts.toolbar.createToolbar(host, { items: ['spacer', 'more'], icons });
         bar.element.querySelector('.opf-tb-more').hidden = false;
       }
+      const svg = document.querySelector('#b1 .opf-tb-more-button svg'), rect = svg.getBoundingClientRect();
+      return { circles: svg.querySelectorAll('circle').length, vb: svg.getAttribute('viewBox'), width: Math.round(rect.width), cls: svg.getAttribute('class'), name: svg.getAttribute('data-opf-icon'), filled: svg.querySelector('circle').getAttribute('fill') };
     });
-    const dots = await ev(() => { const svg = document.querySelector('#b1 .opf-tb-more-button svg'); const rect = svg.getBoundingClientRect(); return { circles: svg.querySelectorAll('circle').length, vb: svg.getAttribute('viewBox'), width: Math.round(rect.width), cls: svg.getAttribute('class'), name: svg.getAttribute('data-opf-icon'), filled: svg.querySelector('circle').getAttribute('fill') }; });
     assert.deepEqual(dots, { circles: 3, vb: '0 0 24 24', width: 16, cls: 'opf-icon opf-tb-more-icon', name: 'more', filled: 'currentColor' }, 'the default ⋯ is still three dots at 16px');
     assert.equal((await icon('#b2 .opf-tb-more-button svg')).d, 'M5 12h.01M12 12h.01M19 12h.01');
     assert.equal((await icon('#b3 .opf-tb-more-button svg')).marker, 'more');
