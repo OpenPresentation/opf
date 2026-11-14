@@ -25,8 +25,9 @@ node <tag checkout>/scripts/bump-site.mjs bump --site . --version X.Y.Z --write 
 ```
 
 from the site's worktree, after the migration commit, with a full checkout of the tag. pptx-gallery's bump also failed in 0.33 and
-0.34 for a separate reason, fixed in #1326 (the workflow's checkout lacked `packages/gallery`); that fix is unproven until a
-dispatch of **Bump sites** with `dry-run: true`, `sites: pptx-gallery` passes.
+0.34 for a separate reason, fixed in #1326 (the workflow's checkout lacked `packages/gallery`); a dry-run dispatch
+of **Bump sites** for pptx-gallery then ran the site's whole `opf:bump` on Linux, layout examples included, and found nothing to
+change against the hand bump (run 43550034977).
 
 Things a site adoption cannot check on this Windows host, so CI on Linux is the check: `pnpm cf:build` (OpenNext needs symbolic
 links), and clipboard copy tests (line endings). Biome's executable is blocked by the machine's application control policy since
