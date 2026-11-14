@@ -71,3 +71,28 @@ test('a package of the monorepo is archived from its directory at the release co
   rmSync(root,{recursive:true,force:true});
  }
 });
+
+// The registry tier runs these tests against the published packages, after a release. Each must also run on a pull request, or a
+// change that breaks the test is first seen in the nightly run (opf-render 0.34.0: shared-metric.mjs was in the runner's exclude
+// list, no step ran it, and it still wrote contentAlignment 'left' after 0.34 made the value logical).
+test('every test of the registry tier also runs in pull-request CI', () => {
+ const root=path.resolve(import.meta.dirname,'..');
+ const source=readFileSync(path.join(root,'scripts/test-registry-fidelity.mjs'),'utf8');
+ const block=source.slice(source.indexOf('const suites=['),source.indexOf('const CORRECTED_TESTS'));
+ const ci=readFileSync(path.join(root,'.github/workflows/ci.yml'),'utf8');
+ let checked=0;
+ for(const [,repo,list] of block.matchAll(/\['(opf-[a-z]+)',\[(.*)\]\],?\n/g)){
+  const directory=path.join(root,'packages',repo.replace(/^opf-/,''));
+  const suites=JSON.parse(readFileSync(path.join(directory,'test/suites.json'),'utf8'));
+  const scripts=JSON.parse(readFileSync(path.join(directory,'package.json'),'utf8')).scripts;
+  // A script of the package that a step of ci.yml names for this package.
+  const called=Object.keys(scripts).filter(name=>new RegExp('pnpm run '+name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?![\\w:.-])').test(ci));
+  for(const [,name] of list.matchAll(/'([a-z0-9-]+\.mjs)'/g)){
+   assert.ok(existsSync(path.join(directory,'test',name)),repo+' test/'+name+' exists');
+   checked++;
+   if(!suites.exclude.includes(name))continue; // the package's test runner globs it
+   assert.ok(called.some(script=>scripts[script].includes('test/'+name)),repo+' test/'+name+' is in the exclude list of test/suites.json and no script that ci.yml runs names it: nothing runs it on a pull request');
+  }
+ }
+ assert.ok(checked>=20,'the suites of scripts/test-registry-fidelity.mjs were read ('+checked+' tests)');
+});
