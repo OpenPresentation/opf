@@ -1,5 +1,0 @@
----
-type: added
-packages: [mcp]
----
-RR-111: the OPF viewer registers three MCP Apps app tools, so a host that calls tools in a view (Claude, with a remote connector) lets the model work on the deck that is already open: `read_deck` (revision, name, outline, selected slide and check findings, and the source in JSON, YAML or Markdown in pages under the 100,000-character result limit, each with a `textHash`), `select_slide` (by index or id) and `edit_deck` (1 to 100 JSON Patch operations with a required `expectedRevision`, applied as one undoable edit). `edit_deck` changes nothing on a stale revision, while the user is typing, over an invalid source draft, for an operation on the whole deck or the whole `/slides` array, for more than 200,000 characters of operations, or for an edit that would make the deck invalid. Mistakes in the arguments come back as results that say how to fix them. In the source pane JSON keeps its formatting; YAML and Markdown are written again from the deck (YAML comments are dropped, and the pane says so). Hosts without app tools keep the context updates and Send.

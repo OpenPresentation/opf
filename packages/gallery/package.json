@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/gallery",
-  "version": "0.33.0",
+  "version": "0.34.0",
   "description": "The pptx.gallery catalog for OPF: layouts, themes, color and font schemes, narratives, audiences, purposes and tones, and the Lucide and Tabler icon sets, registered with catalogs: [gallery].",
   "license": "MIT",
   "author": "Open Presentation",

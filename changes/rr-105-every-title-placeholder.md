@@ -1,5 +1,0 @@
----
-type: changed
-packages: [pptx]
----
-RR-105 (opf#1291): in the default PPTX export every slide title is the layout's Title placeholder, so PowerPoint's Accessibility Checker and Outline view and Keynote see it: a wrapped title is one box that PowerPoint wraps itself where its line breaks are proven to match the preview, otherwise the preview's lines joined by line breaks. Where the lines are fixed (the font could not be measured exactly), the title is one editable title that keeps those breaks when edited in PowerPoint and imports back as the same title. A two-line display title set tighter than PowerPoint's single line (LH-189's 1.0 em pitch) stays one title too: its second line takes a line spacing under 100%, corrected for the face as measured in PowerPoint, and a face not measured keeps one box per line where the error could exceed 1 px. A title that 0.33.0 wrote as separate text boxes (wrapped, or rich on one line) ends each paragraph in the body face, as those boxes did, so its first line sits where they put it; a plain one-line title is written as in 0.33.0.

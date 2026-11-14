@@ -1,14 +1,4 @@
 {
-  "version": "0.33.0",
-  "drawing": [
-    "layouts:closing",
-    "layouts:comparison",
-    "layouts:metrics",
-    "layouts:pillars",
-    "layouts:process",
-    "layouts:section",
-    "layouts:statement",
-    "layouts:team",
-    "layouts:text"
-  ]
+  "version": "0.34.0",
+  "drawing": []
 }
