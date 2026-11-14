@@ -381,7 +381,7 @@ When no direction holds the labels at the floor (or the diagram type has no dire
 - give the diagram a slide or a region of its own, or put it beside short text rather than under long text;
 - split it into two diagrams, or shorten the labels.
 
-The overflow check needs composition or rendering with the resolved fonts; `opf validate` alone cannot see it.
+`opf validate` reports both findings, `text-overflow` and `arrangement-adapted`, whether or not `@openpresentation/opf-render` is installed, because it composes every slide and lays each diagram out. With the renderer it measures with the fonts `opf convert` draws with (the report says `layout (measured)`); without it, with core's portable estimate (`layout (estimated)`, and a hint says how to install the renderer). The two can disagree for a diagram near the limit: a flowchart of ten one-word branches gets `arrangement-adapted` measured and `text-overflow` estimated (checked 2026-11-14, CLI 0.34.0). Treat an estimated result as provisional and run `opf validate` or `opf convert` with the renderer installed for the final answer.
 
 ### Write for readable labels
 

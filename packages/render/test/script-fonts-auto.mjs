@@ -164,6 +164,8 @@ assert.deepEqual(partial.scriptSelection.scripts,['Hans']);
     assert.deepEqual(result.selection.packages.map(short),['noto-sans-hebrew','noto-serif-hebrew','noto-sans-sc']);
     assert.deepEqual(result.diagnostics.map(value=>value.code),['script-font-not-installed']);
     assert.match(result.diagnostics[0].message,/Install @expo-google-fonts\/noto-sans-jp@\d+\.\d+\.\d+/);
+    assert.equal(result.diagnostics[0].package,'@expo-google-fonts/noto-sans-jp');
+    assert.equal(result.diagnostics[0].version,scriptFontPackages(['Jpan'])[0].version,'the diagnostic carries the pinned version, for callers that name what to install');
     assert.deepEqual(result.scripts,['Hebr','Hans']);
     assert.equal(result.explicit,'font-resource-unavailable','an explicit request for a missing package still fails');
   } finally { await rm(temp,{recursive:true,force:true}); }
