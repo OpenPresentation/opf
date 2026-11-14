@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { aggregate, fromPlaywrightJson, render } from './flake-repeat.mjs';
-import { parseShard, playwrightGrep, playwrightIds, quarantineDirectories, shardTests, splitCommand, validateQuarantine } from './quarantine.mjs';
+import { DEFAULT_SUITE_WEIGHT, parseShard, plannedSuiteSeconds, playwrightGrep, playwrightIds, quarantineDirectories, shardTests, splitCommand, suiteWeights, validateQuarantine } from './quarantine.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const known = new Set(['a', 'b']);
@@ -184,6 +184,26 @@ test('check-all validates the root and every package that has a quarantine file,
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+});
+
+test('--shard i/n with weights balances the shards longest first: each test once, each shard in suite order (opf#1319)', () => {
+  const tests = ['a', 'b', 'c', 'd', 'e', 'f', 'g'].map((id) => ({ id: `s:${id}` }));
+  const weights = { 's:a': 10, 's:b': 300, 's:c': 120, 's:d': 100, 's:e': 30, 's:f': 90 }; // s:g has none
+  const slices = [1, 2, 3].map((index) => shardTests(tests, { index, count: 3 }, weights));
+  assert.deepEqual(slices.flat().map((test) => test.id).sort(), tests.map((test) => test.id), 'every test exactly once');
+  for (const slice of slices) assert.deepEqual(slice, tests.filter((test) => slice.includes(test)), 'in suite order');
+  assert.deepEqual(slices.map((slice) => slice.map((test) => test.id)), [['s:b'], ['s:a', 's:c', 's:e', 's:g'], ['s:d', 's:f']]);
+  assert.equal(plannedSuiteSeconds(slices[1], weights), 160 + DEFAULT_SUITE_WEIGHT);
+  assert.deepEqual(shardTests(tests, { index: 1, count: 1 }, weights), tests);
+  // The committed weights cover the editor's sharded suites, and every weighted id is a test of the suite.
+  const suites = JSON.parse(readFileSync(fileURLToPath(new URL('../packages/editor/test/browser-suites.json', import.meta.url)), 'utf8')).suites;
+  for (const suite of ['browser', 'playground']) {
+    const table = suiteWeights('editor', suite);
+    assert.ok(table, suite);
+    const ids = new Set(suites[suite].tests.map((test) => test.id));
+    for (const id of Object.keys(table)) assert.ok(ids.has(id) || id.startsWith(`${suite}:`), `${suite}: ${id}`);
+  }
+  assert.equal(suiteWeights('no-such-package', 'browser'), null);
 });
 
 test('--shard i/n runs every n-th test of a suite: the shards together run each test once, in order (MR-30)', () => {

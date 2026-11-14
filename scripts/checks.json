@@ -42,7 +42,7 @@
       {"match": ["packages/javascript/src/catalog-schemas.ts", "packages/gallery/package.json", "packages/gallery/src/index.d.ts", "scripts/check-catalog-schema.mjs", "scripts/check-catalog-schema.test.mjs"], "run": ["check:catalog-schema"]},
       {"match": ["spec/"], "run": ["check:spec"]},
       {"match": ["examples/"], "run": ["check:examples", "check:examples-convert", "check:text"]},
-      {"match": ["scripts/ci-test-shards.mjs", "scripts/ci-test-weights.json"], "run": ["check:ci-shards"]},
+      {"match": ["scripts/ci-test-shards.mjs", "scripts/ci-test-shards.test.mjs", "scripts/ci-test-weights.json", "scripts/ci-test-weights.mjs", "scripts/ci-test-weights.test.mjs", "scripts/ci-leg-minutes.mjs", "scripts/quarantine.mjs", "scripts/ci-scope.mjs"], "run": ["check:ci-shards"]},
       {"match": ["docs/", "README.md", "PRODUCT.md", "AGENTS.md", "skills/", "llms.txt"], "run": ["check:text"]},
       {"match": ["skills/", "docs/", "scripts/check-skill-commands.mjs", "scripts/skill-commands-allowlist.json", "packages/cli/src/"], "run": ["check:skill-commands"]},
       {"match": ["skills/", "scripts/check-skill-glossary.test.mjs"], "run": ["check:skill-glossary"]},

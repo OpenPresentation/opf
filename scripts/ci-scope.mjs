@@ -53,9 +53,12 @@ export const PACKAGE_IDS = PACKAGES.map((pkg) => pkg.id);
  * `test:contract` (contract) split into `count` shards by scripts/ci-test-shards.mjs; `playground` and `browser` are the
  * quarantine runner's browser suites (scripts/quarantine.mjs run-suite <kind> --shard i/n), which only a changed package
  * (tier full) runs. core, cli, mcp, gallery and integration have one `tests` leg whatever the tier (they have no contract suite).
- * The counts are the starting point sized from the RR-57 weights (scripts/ci-test-weights.json, per shard in seconds with 100 s
- * of extra steps on shard 1: render full 4 x 250, contract 3 x 210; pptx full 4 x 262, contract 4 x 242 (its contract suite
- * leaves out only 80 of 948 s); editor 2 x 129) and the editor playground suite (839 s in 28 tests, 4 x 210 s); MR-32 tunes them.
+ * opf#1319: the counts are sized from the weights of run 43550563504 (scripts/ci-test-weights.json, written by
+ * scripts/ci-test-weights.mjs; scripts/ci-leg-minutes.mjs prints the planned minutes of every leg, about 70 s of setup plus the
+ * shard's tests, plus 100 s of extra steps on `tests 1/n`): render full 4 x 326 s of 1205, contract 3; pptx full 6 x 372 s of
+ * 2135 (4 shards planned 559 s each, 10.5 minutes a leg); editor tests 2 x 234 s; the editor playground suite 4 x about 200 s of
+ * 796, and its standalone browser suite 4 x about 383 s of 1530 (3 shards planned 9.7 minutes a leg). The browser shards are
+ * balanced by the same weights (scripts/quarantine.mjs). Aim: no leg over about 9 minutes, so `verify` stays near 10.
  */
 export const LEG_PLAN = Object.freeze({
   // `lint` always runs. Normally: `static` is Biome, typecheck, the examples and the breaking-change gate; `checks` is the root
@@ -70,8 +73,8 @@ export const LEG_PLAN = Object.freeze({
   mcp: { full: [["tests", 1], ["browser", 1]], contract: [["tests", 1]] },
   integration: { full: [["tests", 1]], contract: [["tests", 1]] },
   render: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 3]] },
-  pptx: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 4]] },
-  editor: { full: [["tests", 2], ["playground", 4], ["browser", 3]], contract: [["tests", 2]] },
+  pptx: { full: [["tests", 6], ["browser", 1]], contract: [["tests", 4]] },
+  editor: { full: [["tests", 2], ["playground", 4], ["browser", 4]], contract: [["tests", 2]] },
 });
 
 /** The jobs that are not packages and have one `tests` leg (they have no tiers: a skipped one has no leg at all). */
