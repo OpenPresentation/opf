@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.34.1 (2026-11-14)
+
+No package changes; released with the set.
+
 ## 0.34.0 (2026-11-13)
 
 - A slide can set its own `language` (a BCP-47 tag or a Language object; in Markdown `<!-- slide: language=ar-SA -->`): direction, script fonts, quotation marks, line breaking and number formats follow that slide, and PPTX export and import keep it. An Arabic slide in an English deck now gets its complex-script font in PowerPoint, and embedding or copying slides includes the font schemes their languages select.

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.34.1 (2026-11-14)
+
+No package changes; released with the set.
+
 ## 0.34.0 (2026-11-13)
 
 - SH-24: inverted pyramids (widest first) through a layout region's `pyramidDirection` and the new `inverted-pyramid` gallery layout, exported to PowerPoint as editable shapes; PPTX import of an Inverted Pyramid SmartArt keeps its downward order.

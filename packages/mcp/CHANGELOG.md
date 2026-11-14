@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.34.1 (2026-11-14)
+
+- Guidance from the 0.34.0 newcomer audit: the hosted connector setup in `docs/mcp.md` names the Connectors page and the custom connector URL (with the path seen on 2026-11-14) and gives a first prompt that names OPF and the viewer; diagram guidance (`docs/diagrams.md`, `opf-author`, `opf-layout`) now states measured label sizes by node count and label length and advises splitting long flows; the CLI guide and the `opf-export` skill give the steps to find and install the script font packages a deck needs (for example the Arabic packages), and note that `opf doctor` reports general readiness only.
+- `opf://docs/whats-new` stays within a size budget: the newest release always, then older releases while there are at most five and the page is under 120,000 characters. With the 0.34.0 notes, five releases were 214,836 characters (one of them, 0.32.0, is 103,000), which also failed the package's own size test on `main` after the release.
+- While the source pane's text is not a valid deck, the review no longer says the deck is valid. The slides still show the last valid version, but the review pill counts the text's errors ("1 issue", never "Valid"), the Review panel lists them first and says the findings under them describe the last valid version, and the workspace's `review` event carries the text's counts with `draft: true`; all of it clears once the text is valid again. The Review panel has `setSource(findings)` for this, and `editor.sourceState.findings` holds the text's findings. In the MCP viewer the footer's verdict follows, and the model's context and `read_deck` report the text's findings as `sourceChecks` beside the `checks` of the last valid deck.
+
 ## 0.34.0 (2026-11-13)
 
 - RR-107: each GitHub release includes the full-font Claude Desktop extension `opf-<version>.mcpb`, checked by starting its server, and its SHA-256 file. Bundle font resolution also works with native Windows paths.

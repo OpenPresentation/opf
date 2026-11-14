@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.34.1 (2026-11-14)
+
+- Opening a deck the session refuses over the one the source pane shows no longer crashes the host. `setDocument(doc, { text })` drew the refused deck's findings against the text the pane still showed, and a quick fix for a place that text lacked (an unknown key on a slide the old deck did not have) threw "Can not delete in empty document": `setDocument` threw that error instead of returning `false`, the pane stayed on the old text, and the `source` event reported the old text to the host. A refused `replaceDocument` now changes nothing, the findings included, so `setDocument` returns `false` and loads the text as a draft with its own findings; and every quick-fix builder writes no fix, rather than throwing, for a path the text lacks, for text that does not parse and for empty text (the finding is still listed).
+- While the source pane's text is not a valid deck, the review no longer says the deck is valid. The slides still show the last valid version, but the review pill counts the text's errors ("1 issue", never "Valid"), the Review panel lists them first and says the findings under them describe the last valid version, and the workspace's `review` event carries the text's counts with `draft: true`; all of it clears once the text is valid again. The Review panel has `setSource(findings)` for this, and `editor.sourceState.findings` holds the text's findings. In the MCP viewer the footer's verdict follows, and the model's context and `read_deck` report the text's findings as `sourceChecks` beside the `checks` of the last valid deck.
+- An unknown key that is close to a declared one now says so in the finding itself, so `opf validate`, the MCP `validate_deck` tool and every other reader of `validate` get what the editor's Source pane already showed: `design.contentAligment` reports `Did you mean "contentAlignment"?` in `help`, next to the `suggestions` and the rename fix it already carried. The Source pane takes the order of core's suggestions for its message and its rename fixes, so `lang` on a text run offers `language` before `link`.
+
 ## 0.34.0 (2026-11-13)
 
 - A slide can set its own `language` (a BCP-47 tag or a Language object; in Markdown `<!-- slide: language=ar-SA -->`): direction, script fonts, quotation marks, line breaking and number formats follow that slide, and PPTX export and import keep it. An Arabic slide in an English deck now gets its complex-script font in PowerPoint, and embedding or copying slides includes the font schemes their languages select.
