@@ -5,6 +5,42 @@ This is the current entry point. It supersedes the status in the [2026-11-08](..
 A new supervisor took over on 2026-11-12 from the agent that worked after 2026-11-08. That agent's own takeover notes are on the
 branch `codex/handoff-034-20261112` (never merged); this file states what was verified and decided since.
 
+## Released on 2026-11-13: where everything stands
+
+| Area | State |
+| --- | --- |
+| v0.34.0 | Published: tag `v0.34.0` at `8f395d3d3` (Release run 43529132559, publish run 43533586599); all seven packages on npm at `latest` with provenance and that `gitHead`; GitHub release "OPF 0.34.0" with `opf-0.34.0.mcpb` and its checksum |
+| `main` | Green at `2e74082ec`. It was red from the release commit until #1326: the MCP `whats-new` page (the last five releases) was 214,836 characters, over its own test's bound; it now keeps to a 120,000-character budget. The release's gate runs before the changelog is assembled, so it cannot see a failure that the assembled changelog causes |
+| openpresentation.org | On 0.34.0, deployed: `main` `143c568d` (openpresentation-site#226: the docs refresh of #225, the chart lesson of #216, the icon-set migration and the bump, as one commit range checked together); production deployment 7781180184 |
+| pptx.gallery | On 0.34.0, deployed: `main` `83c17b31` (pptx-gallery#181: migration, bump, the four new layouts, and the staged icon and shapes browsers of #180); production deployment 7781078979 |
+| pptx.dev | On 0.34.0, deployed: `master` `a925d9e1` (pptx-dev#222: the bot's bump plus the migration); `https://api.pptx.dev/v1/health` names that commit |
+
+**The automatic site bump did not work for 0.34.0, and will not for the next breaking minor** (#1324, #1327). 0.34 made
+`galleryIconSets` a function, and each site registered it the 0.33 way, so a site's generators (which run site code against the
+new packages) failed before a pull request could be opened; pptx.dev's bump runs no site code, so its pull request opened and then
+failed CI. Site code for the new version does not run on the old one, so the migration and the pins land together, by hand:
+
+```sh
+node <tag checkout>/scripts/bump-site.mjs bump --site . --version X.Y.Z --write --refresh-lockfile --opf-checkout <tag checkout>
+```
+
+from the site's worktree, after the migration commit, with a full checkout of the tag. pptx-gallery's bump also failed in 0.33 and
+0.34 for a separate reason, fixed in #1326 (the workflow's checkout lacked `packages/gallery`); a dry-run dispatch
+of **Bump sites** for pptx-gallery then ran the site's whole `opf:bump` on Linux, layout examples included, and found nothing to
+change against the hand bump (run 43550034977).
+
+Things a site adoption cannot check on this Windows host, so CI on Linux is the check: `pnpm cf:build` (OpenNext needs symbolic
+links), and clipboard copy tests (line endings). Biome's executable is blocked by the machine's application control policy since
+2026-11-13; do not work around it, CI runs Biome.
+
+Late findings in 0.34.0, all released: slides were composed twice (#1321, a probe now skips the second pass unless it would
+differ), large tracked display lines sat up to 3.8 px off in browsers (#1322, measured lines are start-anchored with
+`data-opf-anchor`), and the slow set found a missing traced text node and two time limits. Flaky on `main`, passed on rerun, not
+yet quarantined: the editor's `styling-hooks-browser` ("three dots at 16px"), the editor's YAML pacing timing test, and pptx.dev's
+`inspector-recovery.spec.ts` (the second overflow navigation).
+
+Follow-ups filed from the adoption: #1327, #1328, openpresentation-site#227, pptx-gallery#182, pptx-dev#223; CI time study #1319.
+
 ## State verified on 2026-11-12
 
 | Area | State |
@@ -196,8 +232,10 @@ Decisions of 2026-11-13 (all vetoable):
 
 ## Sites
 
-See the release pull request and the three site repositories for the 0.34 pull requests. pptx.dev needed three fixes before any
-adoption could deploy: its signed-in tests waited for Clerk on a page that no longer loads it (pptx-dev#214), a revoked API key
+All three sites are on 0.34.0 and deployed (the table at the top). Each site's production deploy starts by itself when CI on its
+default branch succeeds; pptx.dev has two CI workflows, so the deploy run that the first one starts stops at its gate and the
+second one's completion starts the real deploy. A flaky failure on the default branch therefore blocks production until the job
+is rerun. Earlier, pptx.dev needed three fixes before any adoption could deploy: its signed-in tests waited for Clerk on a page that no longer loads it (pptx-dev#214), a revoked API key
 still authenticated (pptx-dev#215), and its size check still enforced a compressed limit Cloudflare removed (in pptx-dev#212).
 
 pptx.dev production deployed again on 2026-11-13 (`8f9023e3`, OPF 0.33.0; `https://api.pptx.dev/v1/health` names the commit). It
