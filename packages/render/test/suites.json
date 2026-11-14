@@ -28,7 +28,6 @@
     "script-corpora-raster.mjs",
     "script-family-fixture.mjs",
     "shared-code.mjs",
-    "shared-metric.mjs",
     "source-whitespace-review-sheets.mjs",
     "timeline-review-sheets.mjs",
     "title-lines.mjs",
