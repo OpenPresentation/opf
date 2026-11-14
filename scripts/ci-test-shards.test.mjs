@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { spawnSync } from 'node:child_process';
-import { DEFAULT_WEIGHT, SHARD_ONE_OVERHEAD, SHARDED_PACKAGES, listArguments, listedTestArguments, parseChain, parseShard, partitionTests, planPackageShard, runnerPath, shardCommands } from './ci-test-shards.mjs';
+import { LEG_PLAN } from './ci-scope.mjs';
+import { DEFAULT_WEIGHT, PACKAGE_SHARD_ONE_OVERHEAD, SHARD_ONE_OVERHEAD, SHARDED_PACKAGES, listArguments, listedTestArguments, parseChain, parseShard, partitionTests, planPackageShard, runnerPath, shardCommands } from './ci-test-shards.mjs';
 
 const SCRIPT = 'npm run build && npm run check:fonts && node scripts/run-tests.mjs && npm run build:browser-check && npm run check:runners && npm run check:changes';
 const CONTRACT = 'npm run build && node scripts/run-tests.mjs --suite contract && npm run build:browser-check';
@@ -76,18 +77,24 @@ test('a script that cannot be split is never dropped: shard 1 runs it whole and 
   assert.throws(() => shardCommands({ script: 'npm run build && ./run.sh && node scripts/run-tests.mjs', scriptName: 'test', listLines: lines, weights, shard: { index: 1, count: 1 } }), /not an npm, pnpm or node command/);
 });
 
-test('the committed weights cover the three siblings with positive seconds, and balance three shards of each', () => {
+test('the committed weights cover the three packages with positive seconds, and keep every full shard of LEG_PLAN balanced and under nine minutes', () => {
   const all = JSON.parse(readFileSync(new URL('./ci-test-weights.json', import.meta.url), 'utf8'));
   for (const sibling of ['opf-render', 'opf-editor', 'opf-pptx']) {
     const table = all[sibling];
     assert.ok(Object.keys(table).length > 50, sibling);
     for (const [file, seconds] of Object.entries(table)) assert.ok(file.endsWith('.mjs') && seconds > 0, `${sibling}/${file}`);
   }
-  for (const sibling of ['opf-render', 'opf-pptx']) {
+  // opf#1319: the weights are measured (scripts/ci-test-weights.mjs); the shard counts in scripts/ci-scope.mjs must keep the
+  // planned tests of every full shard, with shard 1's extra steps, under nine minutes and within 20 s of each other.
+  for (const [id, sibling] of [['render', 'opf-render'], ['pptx', 'opf-pptx'], ['editor', 'opf-editor']]) {
+    const count = LEG_PLAN[id].full.find(([kind]) => kind === 'tests')[1];
     const names = Object.keys(all[sibling]).map((file) => `node test/${file}`);
-    const loads = partitionTests(names, all[sibling], 3).map((slice, index) => slice.reduce((sum, line) => sum + all[sibling][line.split('/').pop()], index === 0 ? SHARD_ONE_OVERHEAD : 0));
+    const loads = partitionTests(names, all[sibling], count, PACKAGE_SHARD_ONE_OVERHEAD).map((slice, index) => slice.reduce((sum, line) => sum + all[sibling][line.split('/').pop()], index === 0 ? PACKAGE_SHARD_ONE_OVERHEAD : 0));
     assert.ok(Math.max(...loads) - Math.min(...loads) < 20, `${sibling} shards are within 20 s: ${loads}`);
-    assert.ok(Math.max(...loads) < 340, `${sibling} shards stay near five minutes: ${loads}`);
+    assert.ok(Math.max(...loads) < 540, `${sibling} shards stay under nine minutes: ${loads}`);
+  }
+  for (const [pkg, suites] of Object.entries(all['browser-suites'])) {
+    for (const [suite, table] of Object.entries(suites)) for (const [id, seconds] of Object.entries(table)) assert.ok(id.startsWith(`${suite}:`) && seconds > 0, `browser-suites ${pkg} ${suite} ${id}`);
   }
 });
 

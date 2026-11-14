@@ -34,7 +34,7 @@
     "test:engines": "pnpm --filter @openpresentation/opf-render test:contract && pnpm --filter @openpresentation/opf-pptx test:contract && pnpm --filter @openpresentation/opf-editor test:contract",
     "check:quarantine": "node --test scripts/quarantine.test.mjs && node scripts/quarantine.mjs check-all",
     "test:flake-repeat": "node scripts/flake-repeat.mjs",
-    "check:ci-shards": "node --test scripts/ci-test-shards.test.mjs",
+    "check:ci-shards": "node --test scripts/ci-test-shards.test.mjs scripts/ci-test-weights.test.mjs",
     "check:ci-scope": "node --test scripts/ci-scope.test.mjs",
     "check:ci-workflows": "node --test scripts/ci-workflows.test.mjs scripts/release-workflows.test.mjs scripts/bump-sites.test.mjs scripts/ci-verify.test.mjs scripts/ci-report-issue.test.mjs",
     "check:release": "node --test scripts/release.test.mjs",

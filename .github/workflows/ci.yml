@@ -345,15 +345,18 @@ jobs:
           SCRIPT: ${{ matrix.tier == 'full' && 'test' || 'test:contract' }}
         run: node scripts/ci-test-shards.mjs --package editor --script "$SCRIPT" --shard "${{ matrix.index }}/${{ matrix.count }}"
 
-      # The playground suite is 28 tests and about 14 minutes in one job (old per-repository CI, 2026-10-20): four shards of
-      # the quarantine runner (every fourth test), each building the playground from the suite's own setup.
+      # The playground suite is 31 tests and about 13 minutes of tests (run 43550563504): four shards of the quarantine runner,
+      # balanced by the measured seconds in scripts/ci-test-weights.json, each building the playground from the suite's own setup.
+      # opf#1319: only a pull request that changes packages/editor has these legs (DIRECT_ONLY_KINDS in scripts/ci-scope.mjs); a
+      # forced run leaves them to nightly.yml (editor-linux), which the release gate and the label full-ci also run.
       - name: Playground browser suite (shard ${{ matrix.index }} of ${{ matrix.count }})
         if: ${{ matrix.job == 'editor' && matrix.kind == 'playground' }}
         working-directory: packages/editor
         run: node ../../scripts/quarantine.mjs run-suite playground --shard "${{ matrix.index }}/${{ matrix.count }}"
 
-      # The standalone suite is 55 tests and 23 to 32 minutes in one job depending on the runner (2026-11-02): each `browser i/n`
-      # leg runs every n-th test. Without --shard every leg ran the whole suite, so adding legs shortened none of them.
+      # The standalone suite is 58 tests and about 21 minutes of tests (run 43550563504): each `browser i/n` leg runs its share,
+      # balanced by the measured seconds in scripts/ci-test-weights.json (opf#1319). Without --shard every leg ran the whole suite,
+      # so adding legs shortened none of them. The perf suite (absolute wall-clock budgets) is not here: nightly.yml runs it.
       - name: Standalone browser suites (shard ${{ matrix.index }} of ${{ matrix.count }})
         if: ${{ matrix.job == 'editor' && matrix.kind == 'browser' }}
         working-directory: packages/editor

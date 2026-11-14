@@ -8,6 +8,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { JOB_SHAPE, LEG_PLAN, TARGET_GRAPH, scope } from './ci-scope.mjs';
+import { shardTests, suiteWeights } from './quarantine.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = (relative) => readFileSync(path.join(root, relative), 'utf8');
@@ -205,11 +206,16 @@ test('nightly.yml: schedule, dispatch and call; never a pull request or push; ev
   assert.doesNotMatch(triggers, /pull_request|push:|merge_group/u);
   assert.match(nightly, /os: \[windows-latest, macos-latest\]/u);
   assert.match(nightly, /node: \[22, 26\]/u);
-  for (const id of ['cli-portability', 'installed', 'pptx-windows', 'editor-macos', 'editor-windows', 'node-range', 'packed-linux', 'registry', 'npm12-consumer', 'audit', 'platform-residual', 'libreoffice', 'flake', 'report']) assert.ok(jobsOf(nightly).some((entry) => entry.id === id), `nightly.yml has ${id}`);
+  for (const id of ['cli-portability', 'installed', 'pptx-windows', 'editor-macos', 'editor-windows', 'editor-linux', 'node-range', 'packed-linux', 'registry', 'npm12-consumer', 'audit', 'platform-residual', 'libreoffice', 'flake', 'report']) assert.ok(jobsOf(nightly).some((entry) => entry.id === id), `nightly.yml has ${id}`);
   assert.match(nightly, /name: Installed candidates \(\$\{\{ matrix\.os \}\}\)/u, 'the old check name is kept');
   assert.match(job(nightly, 'pptx-windows').text, /native-tab-control-v2\.ps1 -PureRegression/u);
   assert.match(job(nightly, 'editor-macos').text, /runs-on: macos-15/u);
   assert.match(job(nightly, 'editor-windows').text, /runs-on: windows-latest/u);
+  // opf#1319: what left verify runs here: the perf suite on Linux and Windows, the playground suite on Linux (verify runs it only when
+  // packages/editor changed).
+  for (const entry of ['{ suite: perf, shard: 1/1 }', '{ suite: playground, shard: 1/2 }', '{ suite: playground, shard: 2/2 }']) assert.ok(job(nightly, 'editor-linux').text.includes(entry), `editor-linux runs ${entry}`);
+  assert.match(job(nightly, 'editor-linux').text, /container: mcr\.microsoft\.com\/playwright:/u, 'in the Playwright image verify uses');
+  assert.ok(job(nightly, 'editor-windows').text.includes('{ suite: perf, shard: 1/1 }'));
   // MR-30: npm 12's install-time defaults (no install scripts, no git or remote dependencies) are checked on the packed packages, at an exact npm 12.
   assert.match(job(nightly, 'npm12-consumer').text, /NPM12_VERSION: 12\.\d+\.\d+\n/u, 'npm 12 is pinned to an exact version');
   assert.match(job(nightly, 'npm12-consumer').text, /pnpm test:npm12-consumer/u);
@@ -225,13 +231,15 @@ test('Windows browser shards install every default mobile audit engine without n
   const defaults = touch.match(/process\.env\.OPF_TOUCH_ENGINES\s*\?\?\s*'([^']+)'/u)?.[1].split(',');
   assert.ok(defaults?.length > 1, 'inspect the real multi-engine mobile default');
   const browserShards = [...windows.matchAll(/suite: browser, shard: (\d+)\/(\d+)/gu)];
-  const owner = browserShards.filter(([, index, count]) => touchIndex % Number(count) === Number(index) - 1);
+  // opf#1319: the shards are balanced by the measured weights (scripts/quarantine.mjs), so the owner can move when they are regenerated.
+  const weights = suiteWeights('editor', 'browser');
+  const owner = browserShards.filter(([, index, count]) => shardTests(browserTests, { index: Number(index), count: Number(count) }, weights).some((entry) => entry.id === 'browser:mobile-touch'));
   assert.equal(owner.length, 1, 'one Windows shard owns the mobile audit');
   assert.doesNotMatch(windows, /OPF_TOUCH_ENGINES/u, 'CI retains the audit default engines');
   for (const engine of defaults) assert.match(windows, new RegExp('playwright install[^\\n]*\\b' + engine + '\\b', 'u'), 'provision default mobile engine ' + engine);
   const webkitStep = windows.match(/^ {6}- name: Install WebKit[^\n]*\n([\s\S]*?)(?=^ {6}- name:)/mu)?.[1];
   assert.ok(webkitStep, 'WebKit has an explicit installation step');
-  assert.ok(webkitStep.includes("matrix.suite == 'browser' && matrix.shard == '" + owner[0][1] + '/' + owner[0][2] + "'"), 'install WebKit in the actual mobile shard');
+  assert.match(webkitStep, /if: \$\{\{ matrix\.suite == 'browser' \}\}\n/u, 'install WebKit in every browser shard, so the shard that owns the mobile audit has it whatever the weights');
 });
 
 test('nightly flake measurement uses Bash and routes every matrix suite to its exact measurement directory', () => {

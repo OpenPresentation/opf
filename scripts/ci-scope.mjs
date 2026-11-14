@@ -16,7 +16,8 @@
 //      pull request) runs every package at `full`.
 //   3. Legs: ci.yml has ONE job, `check`, whose matrix is `legs` (`fromJSON(needs.scope.outputs.legs)`): one entry per leg of
 //      every selected job, so a job the scope did not select has no entry and GitHub shows no "skipped" check for it. LEG_PLAN says
-//      how many shards each package's tests get per tier and which browser suites run (`full` only); JOB_SHAPE says how each job
+//      how many shards each package's tests get per tier and which browser suites run (`full` only; the editor's playground only
+//      when the editor itself changed, not in a forced run: DIRECT_ONLY_KINDS, opf#1319); JOB_SHAPE says how each job
 //      runs (container, checkout depth, timeout, what to build first), and each leg carries both. `lint` always has legs, so the
 //      matrix is never empty (an empty matrix would make the whole job a skipped check).
 //   4. Extra jobs: `goldens` when a golden input changed, `gallery-gates` (check:previews and check:stability, which run
@@ -53,9 +54,13 @@ export const PACKAGE_IDS = PACKAGES.map((pkg) => pkg.id);
  * `test:contract` (contract) split into `count` shards by scripts/ci-test-shards.mjs; `playground` and `browser` are the
  * quarantine runner's browser suites (scripts/quarantine.mjs run-suite <kind> --shard i/n), which only a changed package
  * (tier full) runs. core, cli, mcp, gallery and integration have one `tests` leg whatever the tier (they have no contract suite).
- * The counts are the starting point sized from the RR-57 weights (scripts/ci-test-weights.json, per shard in seconds with 100 s
- * of extra steps on shard 1: render full 4 x 250, contract 3 x 210; pptx full 4 x 262, contract 4 x 242 (its contract suite
- * leaves out only 80 of 948 s); editor 2 x 129) and the editor playground suite (839 s in 28 tests, 4 x 210 s); MR-32 tunes them.
+ * opf#1319: the counts are sized from the weights of run 43550563504 (scripts/ci-test-weights.json, written by
+ * scripts/ci-test-weights.mjs; scripts/ci-leg-minutes.mjs prints the planned minutes of every leg, about 70 s of setup plus the
+ * shard's tests, plus 100 s of extra steps on `tests 1/n`): render full 4 x 326 s of 1205, contract 3; pptx full 6 x 372 s of
+ * 2135 (4 shards planned 559 s each, 10.5 minutes a leg), contract 5 x about 360 s of 1802 (its contractExclude leaves out the
+ * packaging boundaries and four example-wide checks of PPTX machinery, 333 s); editor tests 2 x 234 s; the editor playground suite 4 x about 200 s of
+ * 796, and its standalone browser suite 4 x about 383 s of 1530 (3 shards planned 9.7 minutes a leg). The browser shards are
+ * balanced by the same weights (scripts/quarantine.mjs). Aim: no leg over about 9 minutes, so `verify` stays near 10.
  */
 export const LEG_PLAN = Object.freeze({
   // `lint` always runs. Normally: `static` is Biome, typecheck, the examples and the breaking-change gate; `checks` is the root
@@ -70,9 +75,17 @@ export const LEG_PLAN = Object.freeze({
   mcp: { full: [["tests", 1], ["browser", 1]], contract: [["tests", 1]] },
   integration: { full: [["tests", 1]], contract: [["tests", 1]] },
   render: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 3]] },
-  pptx: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 4]] },
-  editor: { full: [["tests", 2], ["playground", 4], ["browser", 3]], contract: [["tests", 2]] },
+  pptx: { full: [["tests", 6], ["browser", 1]], contract: [["tests", 5]] },
+  editor: { full: [["tests", 2], ["playground", 4], ["browser", 4]], contract: [["tests", 2]] },
 });
+
+/**
+ * opf#1319: leg kinds that run only when the package itself changed, not when a run is forced (a tooling path, an unclassified
+ * path, the label full-ci, a push to main) without a change to it. The editor's playground suite (4 legs, about 22 runner minutes)
+ * exercises the editor's own playground, so a pull request that changes packages/editor runs it; a run forced from elsewhere leaves it
+ * to nightly.yml (editor-linux on Linux, editor-macos and editor-windows), which the release gate and the label full-ci also run.
+ */
+export const DIRECT_ONLY_KINDS = Object.freeze({ editor: ["playground"] });
 
 /** The jobs that are not packages and have one `tests` leg (they have no tiers: a skipped one has no leg at all). */
 export const SINGLE_JOBS = ["audit", "goldens", "gallery-gates", "pack-shape"];
@@ -385,7 +398,7 @@ export function scope({ files, graph, event = "pull_request", labels = [] }) {
     jobs,
     required: Object.entries(jobs).filter(([, tier]) => tier !== "skip").map(([name]) => name),
     skipped: Object.entries(jobs).filter(([, tier]) => tier === "skip").map(([name]) => name),
-    legs: JOB_ORDER.flatMap((job) => legsFor(job, job === "lint" ? (!forced && changedIds.length === 0 ? "docs" : "full") : (jobs[job] ?? "skip"))),
+    legs: JOB_ORDER.flatMap((job) => legsFor(job, job === "lint" ? (!forced && changedIds.length === 0 ? "docs" : "full") : (jobs[job] ?? "skip")).filter((leg) => changed.has(job) || !DIRECT_ONLY_KINDS[job]?.includes(leg.kind))),
     unclassified,
     reasons,
   };

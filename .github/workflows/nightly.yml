@@ -16,7 +16,9 @@ name: Nightly
 #   installed           the old coordinated-CI "Installed candidates" job (Windows, macOS: packed tarballs, installed browser checks)
 #   pptx-windows        opf-pptx CI on Windows (the sharded suite, the native harness without Office, the browser suite)
 #   editor-macos        opf-editor `macos-playground`
-#   editor-windows      opf-editor browser suites on Windows (LH-179: playground in two shards, browser in three)
+#   editor-windows      opf-editor browser suites on Windows (LH-179: playground in two shards, browser in three, perf)
+#   editor-linux        the editor checks that left verify (opf#1319): the perf suite (absolute wall-clock budgets) and the
+#                       playground suite on Linux (verify runs it only when packages/editor changed)
 #   node-range          the old engines-range workflow and the three sibling `node-range` jobs (Node 22 and 26, all seven packages)
 #   packed-linux        the packed-install and installed-browser steps of the old core `normal` job and of each package job
 #   registry            the registry consumers (published packages against this checkout's harness)
@@ -291,7 +293,8 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
-  # opf-editor browser suites on Windows (LH-179): the playground suite in two shards and the standalone browser suite in three. CI uses the installed
+  # opf-editor browser suites on Windows (LH-179): the playground suite in two shards, the standalone browser suite in three and the perf
+  # suite (opf#1319: the wall-clock budgets that left `verify`, also on Linux in editor-linux). CI uses the installed
   # Chromium (a local run on Windows uses Edge); the file servers, the favicon request and the CRLF clipboard are what LH-179 fixed.
   editor-windows:
     name: editor browser suites on Windows (${{ matrix.suite }} ${{ matrix.shard }})
@@ -306,6 +309,7 @@ jobs:
           - { suite: browser, shard: 1/3 }
           - { suite: browser, shard: 2/3 }
           - { suite: browser, shard: 3/3 }
+          - { suite: perf, shard: 1/1 }
     defaults:
       run:
         shell: bash
@@ -322,9 +326,10 @@ jobs:
         working-directory: packages/editor
         run: pnpm exec playwright install chromium
 
-      # The mobile audit belongs to browser shard 1/3 and keeps its Chromium + WebKit defaults.
+      # The mobile audit keeps its Chromium + WebKit defaults. Its browser shard follows the measured weights (opf#1319,
+      # scripts/quarantine.mjs), which a regeneration can move, so every browser shard installs WebKit.
       - name: Install WebKit for the mobile audit
-        if: ${{ matrix.suite == 'browser' && matrix.shard == '1/3' }}
+        if: ${{ matrix.suite == 'browser' }}
         working-directory: packages/editor
         run: pnpm exec playwright install webkit
 
@@ -337,6 +342,52 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: editor-windows-${{ matrix.suite }}-${{ strategy.job-index }}
+          path: packages/editor/artifacts/**
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # opf#1319: the editor's browser checks that left `verify`, on Linux in the pinned Playwright image (the image ci.yml uses):
+  # the perf suite (absolute wall-clock budgets: startup to first preview, Studio at 300 slides), which measured 11.0 s on one runner
+  # and 16.5 s on another with the same code against a 16 s limit, and the playground suite, which `verify` runs only when
+  # packages/editor changed (DIRECT_ONLY_KINDS in scripts/ci-scope.mjs), not on a forced run such as a push to main. A failure here
+  # opens or updates the nightly-red issue; the release gate and the label full-ci run these legs too (they call this workflow).
+  editor-linux:
+    name: editor browser suites on Linux (${{ matrix.suite }} ${{ matrix.shard }})
+    runs-on: ubuntu-24.04
+    container: mcr.microsoft.com/playwright:v1.65.0-noble@sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { suite: perf, shard: 1/1 }
+          - { suite: playground, shard: 1/2 }
+          - { suite: playground, shard: 2/2 }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          container: 'true'
+          build-deps: '@openpresentation/opf-editor'
+
+      - name: ${{ matrix.suite }} browser suite (shard ${{ matrix.shard }})
+        working-directory: packages/editor
+        run: node ../../scripts/quarantine.mjs run-suite "${{ matrix.suite }}" --shard "${{ matrix.shard }}"
+
+      - name: Quarantined tests (non-blocking)
+        if: ${{ always() }}
+        continue-on-error: true
+        working-directory: packages/editor
+        run: node ../../scripts/quarantine.mjs run-deferred
+
+      - name: Preserve the failure evidence
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: editor-linux-${{ matrix.suite }}-${{ strategy.job-index }}
           path: packages/editor/artifacts/**
           retention-days: 7
           if-no-files-found: ignore
@@ -749,7 +800,7 @@ jobs:
   # Opens or updates the one nightly-red issue on a red run and closes it on a green one. GITHUB_TOKEN only; no App, no polling.
   report:
     name: report
-    needs: [cli-portability, installed, pptx-windows, editor-macos, editor-windows, node-range, packed-linux, registry, npm12-consumer, audit, platform-residual, libreoffice, flake]
+    needs: [cli-portability, installed, pptx-windows, editor-macos, editor-windows, editor-linux, node-range, packed-linux, registry, npm12-consumer, audit, platform-residual, libreoffice, flake]
     if: ${{ always() && (github.event_name == 'schedule' || inputs.report == true) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5

@@ -58,6 +58,9 @@ const suites=[
 const CORRECTED_TESTS={
  // 0.32.0 compared a grown metric's SVG font size (written to three decimals, 138.667) exactly with its fit size (138.666...). #1027.
  'opf-render@0.32.0':{'shared-metric.mjs':'9ba94b53df17df7a7e8eae496045ec7fb46e73e3'},
+ // 0.34.0 still wrote contentAlignment 'left' and 'right' (logical since 0.34) and read text-anchor where a measured tracked line
+ // states data-opf-anchor (opf#1322); no pull-request step ran the test. #1330.
+ 'opf-render@0.34.0':{'shared-metric.mjs':'0d464829e0ec27e7bc3810b5cb98856283fa9711'},
 };
 for(const [repo,tests] of suites){
  const ref=plan.verificationRefs[repo];assert.match(ref,/^[a-f0-9]{40}$/);
