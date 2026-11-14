@@ -96,6 +96,16 @@ carry that one command for the format asked for. What each output needs beside `
 | `svg` | the fonts only |
 | `pptx`, a `.pptx` input | `@openpresentation/opf-pptx` |
 
+### Fonts for a deck in another script
+
+`opf doctor` reports what the install can write; it does not read a deck's text for scripts. Even `opf doctor deck.opf.json` lists `svg` and `pdf` as `ready` for a deck with an Arabic slide when only the eight office-pack fonts above are installed, and the conversion then fails (checked 2026-11-14 with CLI 0.34.0). The office pack covers Latin, Greek and Cyrillic; each other script (Arabic, Hebrew, Thai, the Indic scripts, Chinese, Japanese, Korean and the rest) is one optional `@expo-google-fonts/noto-*` package, and a deck needs the ones for the scripts it draws. To find them and install them:
+
+1. Convert the deck once to a throwaway file: `opf convert deck.opf.json check.svg --force`. A missing script font exits 1 with a `fonts/script-font-not-installed` finding per package, each naming the package and the version, for example `@expo-google-fonts/noto-naskh-arabic@0.4.5` and `@expo-google-fonts/noto-sans-arabic@0.4.3` for Arabic text, followed by a `render/missing-glyph` error. (A slide that sets a Noto font scheme itself, such as `noto-sans-arabic`, can fail with only "No local font face for 'Noto Naskh Arabic'... load the 'scripts' font pack": the family in that message is the one to install, as its `@expo-google-fonts/<family in lowercase, spaces as hyphens>` package.)
+2. Install what the findings name, at the versions they name, next to the CLI: `npm install @expo-google-fonts/noto-naskh-arabic@0.4.5 @expo-google-fonts/noto-sans-arabic@0.4.3` in the project that holds `@openpresentation/cli` (a global CLI takes `npm install -g`; `pnpm add`, `yarn add` and `bun add` work the same way).
+3. Convert again. When it succeeds, the report's `fonts.scripts` lists `detected` (for example `Arab`), `packages` (the ones used) and `notInstalled` (empty when nothing is missing). Check that list for every deck with more than one script, then export the PDF, PNG, SVG or PPTX.
+
+`opf stats deck.opf.json` lists `fonts.families` (the families the deck names, such as `Noto Naskh Arabic`) but not the packages, and not the script of text that has no font of its own. The package versions are pinned by `@openpresentation/opf-render` (its `package.json` lists every `@expo-google-fonts/*` package it uses, including those for Hebrew, Thai, Devanagari, `noto-sans-jp`, `noto-sans-kr`, `noto-sans-sc` and `noto-sans-tc`). The site's starter project ships the eight office-pack fonts only, so a deck with an Arabic slide needs the two Arabic packages above added to it.
+
 ## From code
 
 The engine the commands run is core's `@openpresentation/opf` in Node, which an application imports instead of spawning `opf`.
