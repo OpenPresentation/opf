@@ -657,10 +657,10 @@ try {
 				const shell = getComputedStyle(document.getElementById("opf-deck"));
 				const visible = (item) => item.offsetParent && item.getBoundingClientRect().width > 0;
 				const controls = [...document.querySelectorAll(".deck-bar button, .deck-bar select, .deck-bar [role=tab], .deck-start button, .deck-start select, .deck-foot button")].filter(visible);
+				const bar = document.querySelector(".deck-bar").getBoundingClientRect().height;
 				const right = Math.max(...[...document.querySelectorAll(".deck-bar > *, .deck-foot > *, .deck-start > *")].filter((item) => item.offsetParent).map((item) => item.getBoundingClientRect().right));
 				const send = document.getElementById("deck-send").getBoundingClientRect();
-				const sendRow = [...document.querySelectorAll(".deck-bar > *")].filter((item) => visible(item) && item !== document.getElementById("deck-send") && Math.abs(item.getBoundingClientRect().top - send.top) < 4);
-				return { scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth, size: document.documentElement.dataset.size, padding: [shell.paddingTop, shell.paddingRight, shell.paddingBottom, shell.paddingLeft], right, send: send.right, small: controls.filter((item) => { const box = item.getBoundingClientRect(); return box.width < 44 || box.height < 44; }).map((item) => `${item.id || item.className || item.textContent} ${Math.round(item.getBoundingClientRect().width)}x${Math.round(item.getBoundingClientRect().height)}`), sendRow: sendRow.length };
+				return { scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth, size: document.documentElement.dataset.size, padding: [shell.paddingTop, shell.paddingRight, shell.paddingBottom, shell.paddingLeft], right, send: send.right, small: controls.filter((item) => { const box = item.getBoundingClientRect(); return box.width < 44 || box.height < 44; }).map((item) => `${item.id || item.className || item.textContent} ${Math.round(item.getBoundingClientRect().width)}x${Math.round(item.getBoundingClientRect().height)}`), bar };
 			});
 			assert.ok(fit.scroll <= fit.client, `${width}px: the page is ${fit.scroll}px wide in ${fit.client}px`);
 			assert.ok(fit.right <= fit.client + 0.5, `${width}px: every control ends inside the frame (${fit.right})`);
@@ -669,7 +669,7 @@ try {
 			assert.equal(fit.size, width < 400 ? "compact narrow tiny" : width < 640 ? "compact narrow" : "wide");
 			if (width === 320) {
 				assert.deepEqual(fit.small, [], "every control is at least 44 by 44 CSS pixels");
-				assert.equal(fit.sendRow, 0, "Send has its own row, not beside a lone icon");
+				assert.ok(fit.bar <= 100, `two rows of chrome (${fit.bar}px): the name with Send and More, then the views and the tools`);
 				// A long status message wraps instead of being cut short.
 				const { revision } = await call("start", "read_deck");
 				const edited = await call("start", "edit_deck", { expectedRevision: revision, operations: [{ op: "replace", path: "/slides/1/title", value: "A longer title" }] });
@@ -678,8 +678,9 @@ try {
 				assert.ok(status.scroll <= status.client + 1, `the status line is not truncated (${status.scroll} in ${status.client})`);
 			}
 			if (width === 600) {
-				const row = await frameOf("start").evaluate(() => [...document.querySelectorAll(".deck-start > :not([hidden])")].map((item) => { const box = item.getBoundingClientRect(); return Math.round((box.top + box.bottom) / 8); }));
-				assert.equal(new Set(row).size, 1, "600px: the start row is one row");
+				// Below 640px the start row's example picker and Paste are in the More menu, so the slide comes first.
+				const moved = await frameOf("start").evaluate(() => ({ start: document.getElementById("deck-start").getClientRects().length, menu: [...document.querySelectorAll("#deck-menu > select, #deck-menu > button[id]")].map((item) => item.id) }));
+				assert.deepEqual(moved, { start: 0, menu: ["deck-example", "deck-paste"] }, "600px: the start row is in More");
 			}
 			await shoot(`editor-${width}`, "start");
 		}

@@ -850,8 +850,8 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			{
 				title: "Show a deck in the OPF viewer",
 				description: processDecks
-					? "Show the user a deck. In a client that supports MCP Apps (Claude on the web and desktop) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. Their edits come back to you as context: continue from that version. Also checks the deck as validate_deck does and returns its name, slide titles and findings as text, so a client without MCP Apps still gets an answer. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both."
-					: "Show the user a deck. In a client that supports MCP Apps (Claude on the web and desktop) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. The viewer checks the deck on the user's machine and sends you its findings, and the user's edits, as context: fix the findings and continue from the user's version. This server does no deck work itself, so a client without MCP Apps gets no check. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both.",
+					? "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. Their edits come back to you as context: continue from that version. Also checks the deck as validate_deck does and returns its name, slide titles and findings as text, so a client without MCP Apps still gets an answer. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both."
+					: "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. The viewer checks the deck on the user's machine and sends you its findings, and the user's edits, as context: fix the findings and continue from the user's version. This server does no deck work itself, so a client without MCP Apps gets no check. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both.",
 				inputSchema: {
 					document: documentSchema,
 					format: formatSchema.optional().describe("The form of the document text. Default: JSON for an object or text that starts with { or [."),
@@ -906,7 +906,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			name: title,
 			language: "en-US",
 			slides: [
-				{ id: "opening", title, blocks: [{ text: "Click any text on the slide to change it, or switch to Source to edit the whole deck." }] },
+				{ id: "opening", title, blocks: [{ text: "Select any text on the slide to change it, or switch to Source to edit the whole deck." }] },
 				{ id: "points", title: "Three points to make", blocks: [{ items: ["The first point", "The second point", "The third point"] }] },
 			],
 		});

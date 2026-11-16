@@ -629,6 +629,84 @@ try {
 	});
 
 
+	await run("on a phone the slide comes first: two rows of chrome, the whole view in one screen, 44px targets, the Design sheet under the slide", async () => {
+		// A touch phone (390 and 375 CSS pixels wide), the view inline at the host's full width, as Claude's iOS app shows it.
+		for (const [width, height] of [[390, 844], [375, 667]]) {
+			const phone = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
+			const tab = await phone.newPage();
+			tab.on("pageerror", (error) => problems.push(String(error)));
+			await tab.exposeFunction("callServer", (params) => client.callTool(params));
+			await tab.goto(hostUrl);
+			const themed = { ...deck, design: { theme: "classic" } };
+			const result = await client.callTool({ name: "show_deck", arguments: { document: themed } });
+			await tab.evaluate((setup) => window.startView(setup), { viewUrl, arguments: { document: themed }, result, theme: "dark", width, hostName: "Claude" });
+			const inner = tab.frameLocator("#view");
+			await inner.locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+			await tab.waitForFunction(() => window.host.context.length > 0, null, { timeout: 60000 });
+			await tab.waitForTimeout(500);
+			const frame = tab.frame({ url: /\/view$/ });
+			const laid = await frame.evaluate(() => {
+				const box = (selector) => document.querySelector(selector).getBoundingClientRect();
+				const visible = (item) => item.getClientRects().length > 0 && getComputedStyle(item).visibility !== "hidden";
+				const small = [...document.querySelectorAll(".deck-bar button, .deck-bar [role=tab], .deck-foot button, #deck-thumbs button")].filter(visible).map((item) => [item.id || item.className || item.textContent, item.getBoundingClientRect()]).filter(([, rect]) => rect.width < 44 || rect.height < 44).map(([name, rect]) => `${name} ${Math.round(rect.width)}x${Math.round(rect.height)}`);
+				const rows = new Set([...document.querySelectorAll(".deck-bar > *, .deck-title-row > *")].filter((item) => visible(item) && item.getBoundingClientRect().height > 0 && !item.classList.contains("deck-title-row")).map((item) => Math.round(item.getBoundingClientRect().top / 8)));
+				return { size: document.documentElement.dataset.size, slideTop: box("#deck-canvas svg").top, footBottom: box(".deck-foot").bottom, view: box("#opf-deck").height, bar: box(".deck-bar").height, rows: rows.size, small };
+			});
+			assert.equal(laid.size, "compact narrow tiny");
+			assert.ok(laid.slideTop <= 160, `${width}px: the slide starts ${Math.round(laid.slideTop)}px down the view`);
+			assert.ok(laid.bar <= 100 && laid.rows === 2, `${width}px: two rows of chrome (${laid.rows} rows, ${Math.round(laid.bar)}px)`);
+			assert.ok(laid.view <= 460 && laid.footBottom <= 460, `${width}px: the name, the slide, the strip and the status line fit one phone screen (${Math.round(laid.view)}px)`);
+			assert.deepEqual(laid.small, [], `${width}px: every control is at least 44 by 44`);
+			// Every action stays within two taps: More holds Find, Expand and (where the host saves files) Export.
+			await inner.locator("#deck-more").tap();
+			await inner.locator("#deck-menu").waitFor();
+			const items = await frame.evaluate(() => [...document.querySelectorAll("#deck-menu > *")].filter((item) => item.getClientRects().length).map((item) => [item.textContent, Math.round(item.getBoundingClientRect().height)]));
+			assert.deepEqual(items.map(([text]) => text), ["Find and replace", "Expand"]);
+			assert.ok(items.every(([, tall]) => tall >= 44), JSON.stringify(items));
+			await inner.locator('#deck-menu [data-run="find"]').tap();
+			await inner.locator("#deck-find input").first().waitFor();
+			assert.equal(await inner.locator("#deck-menu").isVisible(), false, "an item closes the menu");
+			await inner.locator("#deck-find input").first().press("Escape");
+			// The Design sheet: one section at a time with its current choice named, one scroll container, the slide in view above it.
+			await inner.locator(".opf-design-menu-trigger").tap();
+			await inner.locator(".opf-design-menu-popover").waitFor();
+			await tab.waitForTimeout(400);
+			const sheet = await frame.evaluate(() => {
+				const popover = document.querySelector(".opf-design-menu-popover");
+				const row = popover.querySelector('.opf-design-menu-item[aria-checked="true"]');
+				let scrollers = 0;
+				for (let node = row; node && node !== document.body; node = node.parentElement) if (/(auto|scroll)/.test(getComputedStyle(node).overflowY)) scrollers += 1;
+				const targets = [...popover.querySelectorAll("button")].filter((item) => item.getClientRects().length).map((item) => item.getBoundingClientRect()).filter((rect) => rect.width < 44 || rect.height < 44).length;
+				const tab = popover.querySelector('.opf-design-menu-tab[aria-selected="true"]');
+				return { scrollers, targets, sheetTop: popover.getBoundingClientRect().top, slideBottom: document.querySelector("#deck-canvas svg").getBoundingClientRect().bottom, tab: tab?.textContent, groups: [...popover.querySelectorAll(".opf-design-menu-group")].filter((group) => group.getClientRects().length).length };
+			});
+			assert.equal(sheet.scrollers, 1, "the sheet's rows have exactly one scrolling ancestor");
+			assert.equal(sheet.groups, 1, "one section at a time");
+			assert.equal(sheet.tab, "ThemeClassic", "the section switch names the current choice");
+			assert.equal(sheet.targets, 0, "every target in the sheet is at least 44 by 44");
+			assert.ok(sheet.sheetTop >= sheet.slideBottom - 1, `the slide stays in view above the sheet (${sheet.slideBottom} / ${sheet.sheetTop})`);
+			await inner.locator('.opf-design-menu-item[data-section="theme"][data-value="bold"]').tap();
+			await tab.waitForFunction(() => window.host.context.at(-1)?.structuredContent?.document?.design?.theme === "bold", null, { timeout: 15000 });
+			await inner.locator('.opf-design-menu-tab[data-section="colors"]').tap();
+			assert.equal(await frame.evaluate(() => [...document.querySelectorAll(".opf-design-menu-group")].filter((group) => group.getClientRects().length).map((group) => group.dataset.section).join()), "colors");
+			if (shots) await tab.locator("#view").screenshot({ path: path.join(shots, `phone-design-${width}.png`) });
+			await phone.close();
+		}
+		// The narrowest frame scrolls nothing sideways.
+		const narrow = await browser.newContext({ viewport: { width: 320, height: 640 }, isMobile: true, hasTouch: true });
+		const tab = await narrow.newPage();
+		await tab.exposeFunction("callServer", (params) => client.callTool(params));
+		await tab.goto(hostUrl);
+		const result = await client.callTool({ name: "open_editor", arguments: {} });
+		await tab.evaluate((setup) => window.startView(setup), { viewUrl, arguments: {}, result, theme: "light", width: 320 });
+		await tab.frameLocator("#view").locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+		await tab.frameLocator("#view").locator("#deck-more").tap();
+		const fit = await tab.frame({ url: /\/view$/ }).evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth, menu: [...document.querySelectorAll("#deck-menu > *")].filter((item) => item.getClientRects().length).map((item) => item.id || item.textContent) }));
+		assert.ok(fit.scroll <= fit.client, `320px: the page is ${fit.scroll}px wide in ${fit.client}px`);
+		assert.deepEqual(fit.menu, ["Find and replace", "Expand", "deck-example", "deck-paste"], "the editor's example picker and Paste are in More");
+		await narrow.close();
+	});
+
 	await run("runs without a CSP violation or a page error", async () => {
 		assert.deepEqual(problems, []);
 	});
