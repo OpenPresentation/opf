@@ -330,15 +330,7 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
           throw new OPFFontError("font-shaping-failed", `Font '${face.family}' cannot shape this text with HarfBuzz.`, {path:style.path,fontFamily:face.family,cause:error?.message});
         }
       } else try { run=shape(); }
-      catch (error) {
-        // fontkit rejects some mark-attachment lookups (null anchors, for example
-        // Gurmukhi tippi in Noto Sans Gurmukhi). Mark positioning moves marks
-        // without changing advances, so measure again without it (FF-19).
-        if (!run) {
-          try { run=shape({abvm:false,blwm:false,mark:false,mkmk:false}); }
-          catch { throw new OPFFontError("font-shaping-failed", `Font '${face.family}' cannot shape this text.`, {path:style.path,fontFamily:face.family,cause:error?.message}); }
-        }
-      }
+      catch (error) { throw new OPFFontError("font-shaping-failed", `Font '${face.family}' cannot shape this text.`, {path:style.path,fontFamily:face.family,cause:error?.message}); }
       value={width:run.positions.reduce((total,position)=>total+position.xAdvance,0)/face.font.unitsPerEm,...value};
       if(includeOutline) {
         const unit=face.font.unitsPerEm;

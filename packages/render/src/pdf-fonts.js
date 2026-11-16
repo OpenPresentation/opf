@@ -180,8 +180,8 @@ function bestStyle(group, weight, italic) {
 /**
  * Shape `text` with `face` and return glyphs left to right: {gid, codePoints, advance, xOffset, yOffset} in font units.
  * `direction` is "ltr" or "rtl" (the caller has already applied the bidirectional algorithm), `features` an object of
- * OpenType feature booleans, `language` an OpenType language tag. Shaping that fontkit cannot complete degrades the
- * same way the registry's measurement does (marks off, then plain character mapping).
+ * OpenType feature booleans, `language` an OpenType language tag. Text that fontkit cannot shape is drawn with the
+ * font's plain character mapping.
  */
 export function shape(face, text, { features, language, direction } = {}) {
   const font = face.font;
@@ -190,9 +190,7 @@ export function shape(face, text, { features, language, direction } = {}) {
     return font.layout(text, merged, undefined, language, direction);
   };
   let run;
-  try { run = attempt(); } catch {
-    try { run = attempt({ abvm: false, blwm: false, mark: false, mkmk: false }); } catch { /* fall through */ }
-  }
+  try { run = attempt(); } catch { /* the plain character mapping below */ }
   if (run) {
     return run.glyphs.map((glyph, index) => ({
       gid: glyph.id,

@@ -31,12 +31,11 @@ const ownPattern = script => new RegExp(`^[${unicodeScripts[script].map(name => 
 const eq = (a, b) => a.length === b.length && a.every((value, index) => value === b[index]);
 const round = (value, digits = 3) => Math.round(value * 10 ** digits) / 10 ** digits;
 
-/** Raw fontkit glyph run, shaped with the renderer's own retry (see metrics in src/font-registry.js). */
+/** Raw fontkit glyph run, shaped as the renderer's fontkit measurement shapes it (see metrics in src/font-registry.js). */
 export function fontkitRun(font, text, lang) {
   const language = openTypeLanguage(lang);
   const shape = extra => font.layout(text, extra, undefined, language);
-  try { return {run: shape(), retry: 'none'}; } catch { /* the renderer's retries */ }
-  try { return {run: shape({abvm: false, blwm: false, mark: false, mkmk: false}), retry: 'no-mark-positioning'}; } catch (error) { return {error: error.message}; }
+  try { return {run: shape()}; } catch (error) { return {error: error.message}; }
 }
 
 /** The faces a corpus run loads: the whole script pack plus Noto Sans, from the pinned installed packages. */
@@ -158,7 +157,7 @@ export function qualifySample(face, group, sample, registry) {
     id: sample.id, category: sample.category, lang: sample.lang,
     codePoints: [...text].length, missing: missing.join(''), missingOwn: missingOwn.join(''),
     rendererWidth: rendererWidth === null ? null : round(rendererWidth), rendererError,
-    retry: shaped.retry ?? null, shapingError: shaped.error ?? null,
+    shapingError: shaped.error ?? null,
     fontkitWidthDelta: run ? round(run.positions.reduce((total, position) => total + position.xAdvance, 0) / face.font.unitsPerEm * 100 - hbWidth) : null,
     hbWidth: round(hbWidth), widthDelta: rendererWidth === null ? null : round(rendererWidth - hbWidth),
     fontkitGlyphs: fkGlyphs.length, hbGlyphs: hbGlyphs.length, glyphSequenceEqual: comparable,

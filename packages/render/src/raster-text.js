@@ -20,7 +20,7 @@
 //   - a cluster of a script whose fontkit glyph runs equal HarfBuzz's in the corpus (Devanagari, Gujarati, Oriya, Tamil, Kannada,
 //     Sinhala) is drawn as fontkit's glyph outlines (<path> per glyph), so a conjunct under a pre-base vowel is the browser's;
 //   - any other cluster (Bengali, Gurmukhi, Telugu, Malayalam, Thai, Lao, Khmer and Myanmar, where fontkit orders marks differently
-//     or needs the no-mark-positioning retry; every grapheme of a KOR text, where fontkit's outlines of the KOR punctuation composites
+//     or (fontkit 2) needed a no-mark-positioning retry; every grapheme of a KOR text, where fontkit's outlines of the KOR punctuation composites
 //     lack their shift) is its own <text x y> that resvg shapes correctly in isolation (its glyphs are placed by the sum of the
 //     advances; only the cluster's own advance is wrong, and that is not needed when the next cluster is pinned);
 //   - runs of other scripts in such a text stay one <text> each, so they keep their own shaping and kerning.
@@ -425,13 +425,12 @@ function faceRuns(db, base, text) {
   return runs;
 }
 
-/** fontkit's glyph run of `value` in `face`, shaped like the renderer measures (language, policy features), with the renderer's mark retry. */
+/** fontkit's glyph run of `value` in `face`, shaped like the renderer measures (language, policy features). */
 function shapeRun(face, value, props) {
   const language = openTypeLanguage(props.lang);
   const off = disabledFeaturesFor([...face.families][0]), policyFeatures = off && Object.fromEntries(off.map(tag => [tag, false]));
   const layout = extra => face.font.layout(value, policyFeatures || extra ? { ...policyFeatures, ...extra } : undefined, undefined, language);
-  try { return { run: layout(), retry: false }; }
-  catch { return { run: layout({ abvm: false, blwm: false, mark: false, mkmk: false }), retry: true }; }
+  return { run: layout() };
 }
 
 /** Advance widths (px) of the prefixes of the runs' text ending at each offset of `ends`, at HarfBuzz's pens when `shape` is given. */
@@ -533,11 +532,10 @@ function harfBuzzPens(face, value, props, shape) {
 
 const hexDigest = bytes => Array.from(bytes, byte => byte.toString(16).toUpperCase().padStart(2, "0")).join("");
 
-/** The glyph outlines of one cluster, or null when fontkit needed the mark retry (its glyph placement is then not the browser's). */
+/** The glyph outlines of one cluster, or null when fontkit cannot shape it. */
 function shapeOutlines(face, value, props) {
   let shaped;
   try { shaped = shapeRun(face, value, props); } catch { return null; }
-  if (shaped.retry) return null;
   const glyphs = [];
   for (const [index, glyph] of shaped.run.glyphs.entries()) {
     const position = shaped.run.positions[index];
