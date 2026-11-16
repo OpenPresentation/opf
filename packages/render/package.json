@@ -389,7 +389,7 @@
     "@expo-google-fonts/tinos": "0.4.2",
     "@hyzyla/pdfium": "3.0.0",
     "@jspawn/qpdf-wasm": "0.0.2",
-    "@napi-rs/canvas": "1.1.0",
+    "@napi-rs/canvas": "1.1.1",
     "@resvg/resvg-js": "2.6.2",
     "axe-core": "4.14.0",
     "esbuild": "0.28.2",
