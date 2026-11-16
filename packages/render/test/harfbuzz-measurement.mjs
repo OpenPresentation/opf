@@ -70,9 +70,11 @@ for (const group of corpora.groups) {
   }
 }
 assert.ok(compared >= 100, `${compared} corpus samples`);
+// fontkit 2 mis-shaped Myanmar and Syriac marks (these three samples differed from HarfBuzz by more than 0.1 px); fontkit 3 shapes them
+// like HarfBuzz, so every corpus sample now measures the same through both and the three must stay present and equal.
 for (const id of ['mymr-words', 'mymr-medials', 'syrc-marks']) {
   const row = report.samples.find(sample => sample.id === id);
-  assert.ok(row && Math.abs(row.delta) > 0.1, `${id}: reviewed shaping difference remains exercised`);
+  assert.ok(row && Math.abs(row.delta) <= 0.001, `${id}: fontkit and HarfBuzz agree`);
 }
 // Shared WASM fonts are identified by immutable content, while measurement caches belong to each handle.
 const source = fonts.registry.exportFaces().find(face => face.family === 'Roboto');

@@ -8,7 +8,7 @@
 //   2. shaping: fontkit, as the renderer uses it (opf-render's own fallback measurement, with its Mongolian lookup guard, its mark-positioning retry
 //      and the OpenType language system of the sample's lang), shapes the text;
 //   3. loaded-handle advances agree with independent HarfBuzz within 0.011 px, with no exceptions; fallback fontkit widths have only the
-//      recorded `fontkitFallbackLimits` (fontkit 2.0.4 has no Myanmar shaper, mis-joins one Syriac word and cannot position Nastaliq marks), whose
+//      recorded `fontkitFallbackLimits` (fontkit cannot position Nastaliq marks; fontkit 3 shapes Myanmar and Syriac like HarfBuzz, so their limits are gone), whose
 //      deviations are bounded and must still exist (a limit that no longer deviates must be removed from the fixture);
 //   4. shaping really applied where the category says so (joining, conjuncts, vowel placement, tone marks change the glyph run).
 // It also checks that the corpus covers every script of the 93 languages of core's engine language vocabulary (`LANGUAGES`) and every script
