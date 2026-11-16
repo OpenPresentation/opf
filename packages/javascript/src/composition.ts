@@ -9012,7 +9012,25 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-133: a lone list drawn as ruled rows takes the whole cell once it has grown (or when it needs no growth): its rows spread over it.
     const ruled = (node.field === 'items' || node.field === 'bullets') && listOptionsOf(node.field, node.path, node.payload.numbering, node.value).rows === true;
     const spreadCell = () => { spreadLists.add(node.path); return cell; };
-    if (best >= (panel ? LONE_TARGET : LONE_FILL) * inner.height) return fillsPanel() ? wholePanel() : ruled ? spreadCell() : undefined;
+    // A lone code panel that takes the whole cell grows its code on in the panel it already has, by the type scale's ratio on every role up
+    // to its display size (LONE_DISPLAY_SIZES.code), while every line still fits whole (no new soft wrap, no part under the size it asks
+    // for, nothing overflowing) and the panel holds it: short code in a full-body panel no longer sits at its role size in an empty panel.
+    const growPanel = () => {
+      const wraps = (layout: CodeLayout) => (layout.parts.find(part => part.role === 'body')?.fit?.sourceLines ?? []).filter(line => line.boundary === 'soft').length;
+      const startWraps = wraps(measureCode(node, inner, settings));
+      let chosen: number | undefined;
+      for (let power = 1; power <= 5; power++) {
+        const growth = TYPE_SCALE_RATIO ** power;
+        growthOf.set(node, growth);
+        const layout = measureCode(node, inner, settings), height = need();
+        const fits = !layout.overflow && layout.parts.every(part => part.visible === false || (part.fit !== undefined && part.fit.fontSize >= part.requestedFontSize - 1e-9))
+          && largestPart(layout) <= capOf(settings) + FONT_GRID_EPSILON && wraps(layout) <= startWraps && height <= inner.height;
+        if (!fits) break;
+        chosen = growth;
+      }
+      if (chosen === undefined) growthOf.delete(node); else { growthOf.set(node, chosen); loneGrowth = true; }
+    };
+    if (best >= (panel ? LONE_TARGET : LONE_FILL) * inner.height) { if (fillsPanel()) { growPanel(); return wholePanel(); } return ruled ? spreadCell() : undefined; }
     const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
     if (prose) {
       const start = proseMeasure(node, inner.width).size, display = (node.field === 'text' ? LONE_DISPLAY_SIZES.text : LONE_DISPLAY_SIZES.list) * scale;
