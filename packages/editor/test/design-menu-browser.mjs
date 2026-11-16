@@ -335,7 +335,24 @@ try {
   assert.equal(await page.getByRole('dialog', { name: 'Design' }).getAttribute('aria-modal'), 'true');
   const sheet = await box('.opf-design-menu-popover');
   assert.ok(Math.abs(sheet.bottom - 844) < 1 && sheet.left === 0 && sheet.width === 390, `a full-width sheet at the bottom (${JSON.stringify(sheet)})`);
-  assert.ok(sheet.height <= 844 * 0.85 + 1, 'at most 85% of the screen');
+  assert.ok(sheet.height <= 844 * 0.55 + 1, 'about half the screen, so the slide above stays in view');
+  // One section at a time behind a segmented switch, in one scroll container (no list scrolls on its own).
+  const sections = await ev(() => {
+    const popover = document.querySelector('.opf-design-menu-popover');
+    const shown = [...popover.querySelectorAll('.opf-design-menu-group')].filter((group) => group.getClientRects().length).map((group) => group.dataset.section);
+    const row = popover.querySelector('.opf-design-menu-group[data-active] .opf-design-menu-item');
+    let scrollers = 0;
+    for (let node = row; node && node !== popover; node = node.parentElement) if (/(auto|scroll)/.test(getComputedStyle(node).overflowY)) scrollers += 1;
+    return { shown, scrollers, tabs: [...popover.querySelectorAll('[role=tab]')].filter((tab) => !tab.hidden).map((tab) => [tab.dataset.section, tab.getAttribute('aria-selected')]) };
+  });
+  assert.deepEqual(sections.shown, ['theme']);
+  assert.equal(sections.scrollers, 1);
+  assert.deepEqual(sections.tabs.map(([key]) => key), ['theme', 'colors', 'fonts', 'layout']);
+  await page.getByRole('tab', { name: /^Colors/ }).click();
+  assert.deepEqual(await ev(() => [...document.querySelectorAll('.opf-design-menu-group')].filter((group) => group.getClientRects().length).map((group) => group.dataset.section)), ['colors']);
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await ev(() => document.activeElement.dataset.section), 'fonts', 'the arrow keys move along the switch');
+  await page.getByRole('tab', { name: /^Theme/ }).click();
   assert.equal(await page.locator('.opf-design-menu-scrim').isVisible(), true);
   assert.equal(await page.locator('.opf-design-menu-head').isVisible(), true);
   assert.equal(await page.locator('.opf-design-menu-title').innerText(), 'Design');
