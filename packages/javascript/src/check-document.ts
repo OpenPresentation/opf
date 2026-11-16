@@ -1076,11 +1076,14 @@ export function referenceFindings(document: unknown, engine: SchemaCheckResult, 
 				path: pointerPath(path.split('.')),
 				message: issue.message,
 				help: unknown
-					? `${issue.suggestions?.length ? `Did you mean ${issue.suggestions.slice(0, 3).map((name) => `'${name}'`).join(', ')}? ` : ''}Use an icon the set has (the MCP's search_icons finds names by keyword), add the name to the deck's icons, or remove the icon. Nothing else changes: the text is drawn without the chip.`
+					? issue.renamed
+						? `Write '${issue.renamed}'.`
+						: `${issue.suggestions?.length ? `Did you mean ${issue.suggestions.slice(0, 3).map((name) => `'${name}'`).join(', ')}? ` : ''}Use an icon the set has (the MCP's search_icons finds names by keyword), add the name to the deck's icons, or remove the icon. Nothing else changes: the text is drawn without the chip.`
 					: 'Give the icon SVG text with only shapes (path, circle, rect, line, polyline, polygon and groups), no script, event handler, external reference or raster, or remove the icon.',
 				definition: `${schemas.presentation.$id}#/$defs/IconReference`,
 				lookup: ['opf', 'schema', 'presentation', '/$defs/IconReference'],
 				...(issue.suggestions?.length ? { suggestions: issue.suggestions.map((value) => ({ value, label: value, origin: 'registered' as const, definition: `${schemas.presentation.$id}#/$defs/IconReference` })) } : {}),
+				...(issue.renamed ? { fixes: [{ id: 'icon-renamed', title: `Write ${issue.renamed}`, kind: 'patch' as const, safe: true, patch: [{ op: 'replace' as const, path: pointerPath(path.split('.')), value: issue.renamed }] }] } : {}),
 			}),
 		);
 	}

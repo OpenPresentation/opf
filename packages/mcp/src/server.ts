@@ -353,7 +353,7 @@ const FONT_CHUNK = 512 * 1024;
 
 /**
  * The most icons one read_icons call returns (RR-111). An icon's path data is about 200 bytes (at most 1.4 KB), so a batch is about
- * 20 KB, and the first call of a set adds its index (Lucide 33 KB, Tabler 82 KB): a result stays far under one message frame.
+ * 20 KB, and the first call of a set adds its index (Lucide 43 KB with its former names, Tabler 82 KB): a result stays far under one message frame.
  */
 const ICON_BATCH = 100;
 const ICON_NAME = /^[a-z0-9][a-z0-9-]*$/;
@@ -654,15 +654,20 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				const loaded = await Promise.all(ids.map(async (id) => [id, await iconSets[id]!({ tags: true })] as const));
 				const words = query.toLowerCase().split(/[\s,]+/).filter(Boolean);
 				const found: { score: number; icon: { icon: string; set: string; name: string; tags: string[] } }[] = [];
-				for (const [id, record] of loaded)
+				for (const [id, record] of loaded) {
+					// The set's former names for an icon (Lucide renamed `triangle-alert` to `triangle-exclamation-point`): a search for the old name finds the current one.
+					const formerNames = new Map<string, string[]>();
+					for (const [former, current] of Object.entries(record.renamed ?? {})) formerNames.set(current, [...(formerNames.get(current) ?? []), former]);
 					for (const name of record.names ?? Object.keys(record.icons)) {
 						const tags = [...(record.tags?.[name] ?? [])];
-						const hay = [name, ...tags].join(" ").toLowerCase();
+						const former = formerNames.get(name) ?? [];
+						const hay = [name, ...tags, ...former].join(" ").toLowerCase();
 						if (!words.every((word) => hay.includes(word))) continue;
 						// A whole name first, then a word of the name, then part of it, then a keyword; the default set breaks ties.
-						const score = words.reduce((sum, word) => sum + (name === word ? 8 : name.split("-").includes(word) ? 4 : name.includes(word) ? 2 : 1), 0) - name.length / 100 + (id === "lucide" ? 0.5 : 0);
+						const score = words.reduce((sum, word) => sum + (name === word ? 8 : name.split("-").includes(word) ? 4 : name.includes(word) ? 2 : former.includes(word) ? 3 : 1), 0) - name.length / 100 + (id === "lucide" ? 0.5 : 0);
 						found.push({ score, icon: { icon: `${id}:${name}`, set: id, name, tags } });
 					}
+				}
 				found.sort((a, b) => b.score - a.score || a.icon.icon.localeCompare(b.icon.icon));
 				const max = limit ?? 20;
 				return {

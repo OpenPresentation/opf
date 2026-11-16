@@ -71,6 +71,8 @@ const tabler = await searchIcons(editor, 'truck', { set: 'tabler', limit: 3 });
 assert.ok(tabler.returned <= 3 && tabler.icons.every((entry) => entry.set === 'tabler'));
 const tagged = await searchIcons(editor, 'delivery');
 assert.ok(tagged.total > 0, 'a keyword of the source package matches');
+// A set's former names find the icon by its current name: Lucide renamed triangle-alert to triangle-exclamation-point.
+for (const old of ['triangle-alert', 'alert-triangle']) assert.equal((await searchIcons(editor, old, { set: 'lucide' })).icons[0]?.icon, 'lucide:triangle-exclamation-point', `${old} finds the renamed icon first`);
 assert.ok((await searchIcons(editor, '')).total > 1000, 'an empty query browses every icon');
 assert.equal((await searchIcons(editor, 'zzzzqqqq')).total, 0);
 const paged = await searchIcons(editor, 'arrow', { limit: 5, offset: 5 });
