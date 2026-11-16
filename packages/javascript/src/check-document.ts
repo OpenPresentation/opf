@@ -21,7 +21,7 @@ import { validationDefinition } from './validation-definitions.js';
 import { unusedReferenceWarnings } from './annotation-validation.js';
 import { describeDurationRange, durationOutsideNarrative, durationRangeInverted, resolveNarrative, unknownBeatReferences } from './narrative-plan.js';
 import { chartNumberFixesByCell, unusedDatasets, type ChartNumberFix } from './chart-data.js';
-import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from './content-walk.js';
+import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
 import { ruleInfo } from './validation-rules.js';
 import { chartShapeHelp, chartShapePatch, FOREIGN_CHART_KEYS } from './chart-shape.js';
 import { splitPointer } from './rule-content.js';
@@ -158,9 +158,7 @@ export function issueFinding(
 	];
 	let help =
 		'Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.';
-	if (issue.keyword === 'required' && issue.params.missingProperty === 'id' && /^\/(organization|speaker)(\/\d+)?$/.test(issue.path))
-		help = `Add an "id" next to "name": organizations and speakers are found by id (speaker.organizationId, {{organization.<id>.name}}, the editor and the PPTX round trip), for example "id": "acme" (letters, digits, "-" and "_", unique in the deck).`;
-	else if (issue.keyword === 'required')
+	if (issue.keyword === 'required')
 		help = `Add the required ${JSON.stringify(issue.params.missingProperty)} field in this object, using the intended schema form.`;
 	else if (issue.keyword === 'additionalProperties')
 		help = `Review ${JSON.stringify(issue.params.additionalProperty)} against this object's schema. Preserve custom metadata in document.extensions where appropriate; do not delete authored content to clear this error.`;
@@ -185,13 +183,6 @@ export function issueFinding(
 		help = `Write ${JSON.stringify(nearest[0].value)} instead; ${JSON.stringify(typedName)} is not a field of this object.`;
 	else if (typedName !== undefined && typeof nearest[0]?.value === 'string')
 		help = `Did you mean ${JSON.stringify(nearest[0].value)}? ${JSON.stringify(typedName)} is not a field of this object. To keep custom metadata, put it in extensions; do not delete authored content to clear this error.`;
-	// A slide key that is almost a region key: say what the grammar is (a span in the wrong order or skipping a row), not only "additional property".
-	const regionKey = typedName !== undefined && nearest[0]?.value !== logicalName(typedName) && /^\/slides\/\d+$/.test(issue.path) ? regionKeyHelp(typedName) : undefined;
-	if (regionKey) {
-		help = regionKey.help;
-		if (regionKey.suggestion && !nearest.some((entry) => entry.value === regionKey.suggestion))
-			nearest.unshift({ value: regionKey.suggestion, label: regionKey.suggestion, origin: 'schema' as const, definition: `${String(entry.schema.$id)}#/$defs/Slide/properties/${regionKey.suggestion}` });
-	}
 	return finding(ruleId, {
 		...(severity ? { severity } : {}),
 		path,
@@ -218,40 +209,6 @@ export function issueFinding(
 
 /** The most near-miss names a "did you mean" offers. */
 const NEAREST_PROPERTIES = 3;
-const REGION_ROWS = ['top', 'middle', 'bottom'], REGION_COLUMNS = ['start', 'center', 'end'];
-/**
- * A slide key written like a region key but not one: what the grammar is and the key it most likely meant. A region key is rows,
- * then a colon, then columns (`top:start`, `middle+bottom:center+end`), or one half alone (`center+end`, `top+middle`). Each half
- * lists adjacent names in reading order, so `bottom+middle` (out of order), `top+bottom` (skips `middle`) and `start:top` (columns
- * first) are not keys. Undefined when the key is not made of region words.
- */
-function regionKeyHelp(typed: string): { help: string; suggestion?: string } | undefined {
-	const halves = logicalName(typed).split(':');
-	if (halves.length > 2 || halves.some((half) => half === '')) return undefined;
-	const words = halves.map((half) => half.split('+'));
-	if (!words.every((list) => list.every((word) => REGION_ROWS.includes(word) || REGION_COLUMNS.includes(word)))) return undefined;
-	const isRows = (list: string[]): boolean => list.every((word) => REGION_ROWS.includes(word)),
-		isColumns = (list: string[]): boolean => list.every((word) => REGION_COLUMNS.includes(word));
-	if (words.some((list) => !isRows(list) && !isColumns(list))) return { help: `A region key does not mix rows (top, middle, bottom) and columns (start, center, end) in one half: write rows, a colon, then columns, such as "top:start" or "middle+bottom:center+end".` };
-	if (words.length === 2 && isColumns(words[0]!) && isRows(words[1]!)) {
-		const swapped = `${halves[1]}:${halves[0]}`;
-		return { help: `Rows come before the colon and columns after it: write "${swapped}".`, ...(promotedRegionKeys.includes(swapped as never) ? { suggestion: swapped } : {}) };
-	}
-	if (words.length === 2 && (!isRows(words[0]!) || !isColumns(words[1]!))) return { help: 'A region key with a colon names rows before it and columns after it, such as "top:start" or "middle+bottom:center+end".' };
-	const order = (list: string[], vocabulary: string[]): number[] => [...new Set(list)].map((word) => vocabulary.indexOf(word)).sort((a, b) => a - b);
-	const rows = words.length === 2 || isRows(words[0]!) ? order(words[0]!, REGION_ROWS) : [], columns = order(words[words.length - 1]!, REGION_COLUMNS);
-	const hasRows = words.length === 2 || isRows(words[0]!), hasColumns = words.length === 2 || isColumns(words[0]!);
-	const adjacent = (indexes: number[]): boolean => indexes.every((index, at) => at === 0 || index === indexes[at - 1]! + 1);
-	if ((hasRows && !adjacent(rows)) || (hasColumns && !adjacent(columns)))
-		return { help: `A span covers adjacent rows or columns: "top+bottom" and "start+end" skip the middle one. Write "top+middle+bottom" or "start+center+end", or use one region for each part.` };
-	const canonical = (indexes: number[], vocabulary: string[]): string => indexes.map((index) => vocabulary[index]).join('+');
-	const key = words.length === 2 ? `${canonical(rows, REGION_ROWS)}:${canonical(columns, REGION_COLUMNS)}` : hasRows ? canonical(rows, REGION_ROWS) : canonical(columns, REGION_COLUMNS);
-	if (key === typed) return undefined;
-	return promotedRegionKeys.includes(key as never)
-		? { help: `Write "${key}": the names of a span go in reading order (top, middle, bottom; start, center, end), rows before the colon and columns after it.`, suggestion: key }
-		: undefined;
-}
-
 /** A key with `left` and `right` read as the logical sides: `left` is `start`, `top:center+right` is `top:center+end`. */
 const logicalName = (name: string): string => name.split(':').map((part) => part.split('+').map((word) => (word === 'left' ? 'start' : word === 'right' ? 'end' : word)).join('+')).join(':');
 
@@ -723,30 +680,6 @@ function collapseAuthoringShapes(document: unknown, findings: Finding[]): void {
 		if (!schema(entry) || !optionDefinition(entry)) continue;
 		const prefix = `${entry.path}/`;
 		if (findings.some((other) => other !== entry && other.path.startsWith(prefix) && !other.path.slice(prefix.length).includes('/') && OPTION_RULES.includes(other.ruleId))) findings.splice(index, 1);
-	}
-	// A region (or a block of a slide's blocks) written as a bare string, number or list: the schema reports "must be object" and the
-	// raw "must NOT be valid" of the payload's own rules. One finding says a region holds a content payload, with the text form.
-	const payloadSlots = new Map<string, unknown>();
-	for (const entry of findings) {
-		if (!schema(entry) || payloadSlots.has(entry.path)) continue;
-		const key = /^\/slides\/\d+\/([^/]+)$/.exec(entry.path)?.[1], inBlocks = /^\/slides\/\d+\/blocks\/\d+$/.test(entry.path);
-		if (!inBlocks && !(key !== undefined && (promotedRegionKeys as readonly string[]).includes(key))) continue;
-		const value = valueAt(entry.path);
-		if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || Array.isArray(value)) payloadSlots.set(entry.path, value);
-	}
-	for (const [at, value] of payloadSlots) {
-		const first = findings.findIndex((entry) => schema(entry) && entry.path === at);
-		const text = typeof value === 'string';
-		const write = text ? `{ "text": ${JSON.stringify(value)} }` : Array.isArray(value) ? '{ "items": [ ... ] } for a list, or { "blocks": [ ... ] } for several blocks' : '{ "text": "..." }';
-		const { fixes: _fixes, suggestions: _suggestions, ...kept } = findings[first]!;
-		const one: Finding = {
-			...kept,
-			message: `A region holds a content payload (an object), not ${text ? 'a bare string' : Array.isArray(value) ? 'a list' : 'a ' + typeof value}.`,
-			help: `Write ${write}. A payload names its kind by its key: "text", "items" (a list), "image", "chart", "table", or "blocks" to stack several; see docs/dynamic-composition.md.`,
-			...(text ? { fixes: [{ id: 'wrap-text', title: 'Write the string as { "text": ... }', kind: 'patch' as const, safe: false, patch: [{ op: 'replace' as const, path: at, value: { text: value } }] }] } : {}),
-		};
-		for (let index = findings.length - 1; index >= 0; index--) { const entry = findings[index]; if (schema(entry) && entry.path === at) findings.splice(index, 1); }
-		findings.splice(first, 0, one);
 	}
 }
 
