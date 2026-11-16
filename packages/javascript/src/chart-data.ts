@@ -209,8 +209,16 @@ function excelInteger(integer: string): string {
 /** NumberFormat -> Excel format code ("General" when absent or invalid). Literal prefix/suffix text is quoted or escaped; placeholders are written '#' before '0' ("0#" -> "#0"). */
 export function toExcelNumberFormat(format?: string): string {
   if (format === undefined || format === '') return 'General';
+  const sections = format.split(';');
+  if (sections.length > 3) return 'General';
+  const codes = sections.map(excelSection);
+  // Each section is a pattern of its own; Excel reads `positive;negative;zero` as OPF does, so the sections are joined as they are.
+  return codes.includes(undefined) ? 'General' : codes.join(';');
+}
+
+function excelSection(format: string): string | undefined {
   const parts = formatParts(format);
-  if (!parts) return 'General';
+  if (!parts) return undefined;
   const percent = { used: false };
   const minDecimals = [...parts.decimals].filter(char => char === '0').length;
   const decimals = parts.decimals ? `.${'0'.repeat(minDecimals)}${'#'.repeat(parts.decimals.length - minDecimals)}` : '';
@@ -256,6 +264,28 @@ export function fromExcelNumberFormat(code: string): string | undefined {
   if (typeof code !== 'string') return undefined;
   const trimmed = code.trim();
   if (trimmed === '' || /^general$/i.test(trimmed)) return undefined;
+  const sections = excelSections(code);
+  if (!sections || sections.length > 3) return undefined;
+  const formats = sections.map(fromExcelSection);
+  return formats.includes(undefined) ? undefined : formats.join(';');
+}
+
+/** The sections of an Excel code: split at each `;` outside quotes, brackets and a backslash escape. */
+function excelSections(code: string): string[] | undefined {
+  const sections: string[] = [];
+  let start = 0;
+  for (let i = 0; i < code.length; i++) {
+    const char = code[i]!;
+    if (char === '"') { const end = code.indexOf('"', i + 1); if (end < 0) return undefined; i = end; }
+    else if (char === '\\') i++;
+    else if (char === '[') { const end = code.indexOf(']', i + 1); if (end < 0) return undefined; i = end; }
+    else if (char === ';') { sections.push(code.slice(start, i)); start = i + 1; }
+  }
+  sections.push(code.slice(start));
+  return sections;
+}
+
+function fromExcelSection(code: string): string | undefined {
   const tokens = excelTokens(code);
   if (!tokens) return undefined;
   const first = tokens.findIndex(token => token.kind === 'placeholder');
@@ -284,7 +314,7 @@ export function fromExcelNumberFormat(code: string): string | undefined {
   const format = `${prefix}${numeric}${suffix}`;
   // The NumberFormat must read back as the same three parts (a prefix may not hold '#', '0', ',' or '.').
   const parts = formatParts(format);
-  if (!parts || parts.prefix !== prefix || parts.suffix !== suffix) return undefined;
+  if (!parts || parts.prefix !== prefix || parts.suffix !== suffix || format.includes(';')) return undefined;
   return format;
 }
 
