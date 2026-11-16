@@ -68,3 +68,22 @@ test("a sectioned column format shows +12% and -5% in the SVG and as Excel secti
 	const column = imported.presentation.slides[0].blocks?.[0]?.chart?.data?.columns?.[1];
 	assert.equal(column?.format, FORMAT, "the sections import back as the NumberFormat");
 });
+
+test("a waterfall with sectioned format shows its own signs in the SVG and writes the sections as the native label format", async () => {
+	const waterfall = {
+		slides: [{
+			title: "Operating profit bridge",
+			blocks: [{ chart: { type: "waterfall", data: { columns: ["Step", { name: "Profit ($M)", format: "+0.0;(0.0)" }], rows: [["2024", 10], ["Price", 4.5], ["Volume", -2.5], ["Costs", -1.5], ["2025", 10.5]] } } }],
+		}],
+	};
+	const fonts = await loadFonts({ pack: "office", substitutionPolicy: "visual", scripts: "auto", presentation: waterfall });
+	const svg = await convert(waterfall, { format: "svg", fonts, catalogs: [], date: "2026-11-16" });
+	const text = new TextDecoder().decode(svg.files[0].bytes);
+	for (const shown of ["+4.5", "(2.5)", "(1.5)", "+10.0"]) assert.ok(text.includes(shown), `${shown} is drawn`);
+	assert.ok(![...text.matchAll(/>([^<]*)</g)].some((m) => m[1].length < 12 && /\+\+|[−-]\+|\+\(/.test(m[1])), "no doubled sign in any label");
+	const native = await convert(waterfall, { format: "pptx", fonts, catalogs: [], date: "2026-11-16" });
+	const parts = unzip(native.files[0].bytes);
+	const xml = parts.get([...parts.keys()].find((name) => /^ppt\/charts\/chartEx\d+\.xml$/.test(name))).toString("utf8");
+	const codes = [...xml.matchAll(/formatCode="([^"]*)"/g)].map((m) => m[1]);
+	assert.ok(codes.length > 0 && codes.every((code) => code === "+0.0;(0.0)"), JSON.stringify(codes));
+});

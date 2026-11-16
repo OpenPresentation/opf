@@ -290,6 +290,23 @@ function patternNumberParts(value: number, pattern: string): { negative: boolean
   return sectionNumberParts(value, sections[0]!, pattern);
 }
 
+/** Whether a display pattern has more than one `;` section (`positive;negative;zero`): a negative number then prints its own sign through its section. */
+export function hasNumberFormatSections(pattern: string | undefined): boolean {
+  return typeof pattern === "string" && pattern.includes(";");
+}
+
+/**
+ * The section of a display pattern that formats `value`, as `formatVariableNumber` chooses it: the pattern itself with one section, else the
+ * first for a positive number (and zero, with two sections), the second for a negative one, the third for exact zero.
+ */
+export function numberFormatSectionFor(pattern: string, value: number): string {
+  const sections = pattern.split(";");
+  if (sections.length === 1) return pattern;
+  if (value < 0) return sections[1] ?? pattern;
+  if (value === 0 && sections.length === 3) return sections[2] ?? pattern;
+  return sections[0] ?? pattern;
+}
+
 /** One section of a pattern: the sign, literal prefix, numeric body (ASCII digits, `.` and `,`) and literal suffix a display pattern prints a number as. */
 function sectionNumberParts(value: number, pattern: string, whole: string): { negative: boolean; prefix: string; body: string; suffix: string } | { error: string } {
   const match = /^([^#0,.]*)((?:[#0,]*)(?:\.[#0]+)?)([\s\S]*)$/.exec(pattern);
