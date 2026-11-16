@@ -365,9 +365,8 @@ export async function searchIcons(source, query = "", options = {}) {
   const found = [];
   for (const [id, record] of loaded) {
     const bonus = id === available[0] ? 0.5 : 0;
-    // The set's former names for an icon (Lucide renamed `triangle-alert`): a search for the old name finds the current one.
-    const formerNames = new Map();
-    for (const [former, current] of Object.entries(isObject(record.renamed) ? record.renamed : {})) formerNames.set(current, [...(formerNames.get(current) ?? []), former]);
+    const formerNames = new Map(); // a search for an icon's former name finds it
+    for (const [former, current] of Object.entries(record.renamed ?? {})) formerNames.set(current, [...(formerNames.get(current) ?? []), former]);
     for (const name of namesOf(record)) {
       const tags = [...(record.tags?.[name] ?? [])];
       const former = formerNames.get(name) ?? [];

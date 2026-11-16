@@ -23,7 +23,7 @@ for (const old of ['lucide:triangle-alert', 'lucide:alert-triangle']) {
     assert.match(found.message, /was renamed lucide:triangle-exclamation-point; the old name does not draw/);
     assert.equal(found.suggestions[0].value, 'lucide:triangle-exclamation-point');
     assert.deepEqual(found.fixes[0].patch, [{ op: 'replace', path: '/slides/0/items/0/icon', value: 'lucide:triangle-exclamation-point' }]);
-    assert.match(found.help, /^Write 'lucide:triangle-exclamation-point'/);
+    assert.match(found.help, /^Did you mean 'lucide:triangle-exclamation-point'/);
   });
 }
 

@@ -68,10 +68,8 @@
     },
     "renamed": {
       "type": "object",
-      "description": "The set's former icon names, each with the name the icon has now, from the source package's own rename list (a Lucide alias such as `triangle-alert` for `triangle-exclamation-point`). A finding for an unknown icon whose name is here says to write the new name, and an icon search finds the icon by its old name. An old name is never an icon: OPF has one name for each icon, so it does not resolve or draw. Not embedded in a document.",
-      "propertyNames": { "pattern": "^[a-z0-9][a-z0-9-]*$" },
-      "additionalProperties": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
-      "examples": [{ "triangle-alert": "triangle-exclamation-point" }]
+      "description": "Former icon names by current name, from the source package's aliases. Only a finding and an icon search read it; an old name is never an icon.",
+      "additionalProperties": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }
     },
     "tags": {
       "type": "object",
