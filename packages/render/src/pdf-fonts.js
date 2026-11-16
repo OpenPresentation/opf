@@ -1,5 +1,4 @@
 import { create } from "fontkit";
-import { skipUndecodableLookups } from "./font-registry.js";
 import { isTrueTypeOutlines, subsetTrueType } from "./pdf-subset.js";
 import { hex, name, num, sha256, textString, utf16Hex } from "./pdf-writer.js";
 
@@ -192,8 +191,7 @@ export function shape(face, text, { features, language, direction } = {}) {
   };
   let run;
   try { run = attempt(); } catch {
-    if (skipUndecodableLookups(font)) { try { run = attempt(); } catch { /* fall through */ } }
-    if (!run) { try { run = attempt({ abvm: false, blwm: false, mark: false, mkmk: false }); } catch { /* fall through */ } }
+    try { run = attempt({ abvm: false, blwm: false, mark: false, mkmk: false }); } catch { /* fall through */ }
   }
   if (run) {
     return run.glyphs.map((glyph, index) => ({

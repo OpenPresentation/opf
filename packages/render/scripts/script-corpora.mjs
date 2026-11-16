@@ -31,27 +31,11 @@ const ownPattern = script => new RegExp(`^[${unicodeScripts[script].map(name => 
 const eq = (a, b) => a.length === b.length && a.every((value, index) => value === b[index]);
 const round = (value, digits = 3) => Math.round(value * 10 ** digits) / 10 ** digits;
 
-/** Raw fontkit glyph run, shaped with the renderer's own retries (see metrics in src/fonts.js). */
-const guarded = new WeakSet();
-function skipUndecodableLookups(font) {
-  if (guarded.has(font)) return false;
-  guarded.add(font);
-  let did = false;
-  for (const tag of ['GSUB', 'GPOS']) {
-    let list;
-    try { list = font[tag]?.lookupList; } catch { continue; }
-    if (typeof list?.get !== 'function') continue;
-    const get = list.get.bind(list);
-    list.get = index => { try { return get(index); } catch { return {lookupType: 1, flags: {}, subTables: []}; } };
-    did = true;
-  }
-  return did;
-}
+/** Raw fontkit glyph run, shaped with the renderer's own retry (see metrics in src/font-registry.js). */
 export function fontkitRun(font, text, lang) {
   const language = openTypeLanguage(lang);
   const shape = extra => font.layout(text, extra, undefined, language);
   try { return {run: shape(), retry: 'none'}; } catch { /* the renderer's retries */ }
-  if (skipUndecodableLookups(font)) { try { return {run: shape(), retry: 'skip-undecodable-lookups'}; } catch { /* mark retry */ } }
   try { return {run: shape({abvm: false, blwm: false, mark: false, mkmk: false}), retry: 'no-mark-positioning'}; } catch (error) { return {error: error.message}; }
 }
 

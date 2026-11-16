@@ -53,27 +53,6 @@ function unavailableFontError(family, style, policy) {
   return new OPFFontError("font-unavailable", `No local font face for '${family}'. ${owner} None of its replacements (${candidates.join(", ")}) is loaded${packs.length ? `; load the ${packs.map(pack=>"'"+pack+"'").join(" or ")} font pack` : ""}, or ${hook}. The PPTX names '${family}' either way.`, details);
 }
 /** Local font files only. The caller explicitly chooses aliases and fallback. */
-// fontkit 2.0.4 cannot decode every OpenType lookup: its GSUB type 8 (reverse chaining contextual single substitution) struct lacks the
-// backtrackGlyphCount field, so the lookup fails with "Not a fixed size" when a feature that references it is applied, and it has no processor
-// for the type anyway. Noto Sans Mongolian 3.x has such a lookup under calt and rclt in every script, so every shaping of the face threw (FF-44).
-// A lookup that cannot be decoded is treated as one that applies nothing (no subtables), so the rest of the feature still runs: advances equal
-// a browser's for the face's Latin and Mongolian samples (test/mongolian-shaping.mjs). Applied only after shaping failed, once per font.
-const lookupsGuarded = new WeakSet();
-export function skipUndecodableLookups(font) {
-  if (lookupsGuarded.has(font)) return false;
-  lookupsGuarded.add(font);
-  let guarded = false;
-  for (const tag of ["GSUB", "GPOS"]) {
-    let list;
-    try { list = font[tag]?.lookupList; } catch { continue; }
-    if (typeof list?.get !== "function") continue;
-    const get = list.get.bind(list);
-    list.get = index => { try { return get(index); } catch { return { lookupType: 1, flags: {}, subTables: [] }; } };
-    guarded = true;
-  }
-  return guarded;
-}
-
 // opf-render#125: fontkit 2.0.4 caches one Glyph per glyph id (font._glyphs) with the code points of the call that created it, and
 // its layout reads the input's code points back from that cache (glyphsForString -> getGlyph(id, [codePoint]) -> GlyphInfo). A glyph
 // first reached another way keeps other code points: a composite outline (run.bbox for outlineBounds, glyph.path) reaches its
@@ -352,8 +331,6 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
         }
       } else try { run=shape(); }
       catch (error) {
-        // A lookup fontkit cannot decode (GSUB type 8 in Noto Sans Mongolian) applies nothing; shape again with the rest (FF-44).
-        if (skipUndecodableLookups(face.font)) { try { run=shape(); } catch { /* the mark retry below */ } }
         // fontkit rejects some mark-attachment lookups (null anchors, for example
         // Gurmukhi tippi in Noto Sans Gurmukhi). Mark positioning moves marks
         // without changing advances, so measure again without it (FF-19).

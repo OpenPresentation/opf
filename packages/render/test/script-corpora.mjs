@@ -5,7 +5,7 @@
 // sample runs through every bundled open face that serves its script (regular and bold, all 63 script and Noto Sans faces) and is checked for
 //   1. coverage: the face has a glyph for every letter of the group's own script (Latin, digits and punctuation in mixed samples are the
 //      glyph-fallback chain's job: some loaded face must have them);
-//   2. shaping: fontkit, as the renderer uses it (opf-render's own fallback measurement, with its Mongolian lookup guard, its mark-positioning retry
+//   2. shaping: fontkit, as the renderer uses it (opf-render's own fallback measurement, with its mark-positioning retry
 //      and the OpenType language system of the sample's lang), shapes the text;
 //   3. loaded-handle advances agree with independent HarfBuzz within 0.011 px, with no exceptions; fallback fontkit widths have only the
 //      recorded `fontkitFallbackLimits` (fontkit cannot position Nastaliq marks; fontkit 3 shapes Myanmar and Syriac like HarfBuzz, so their limits are gone), whose
