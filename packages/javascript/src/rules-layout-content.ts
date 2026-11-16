@@ -40,7 +40,7 @@ const layoutRules: ValidationRule[] = [
 					else if (diagnostic.code === 'small-cell') continue;
 					// LH-14: an icon the slide does not draw (no room without setting text smaller, or nothing it can mark).
 					else if (diagnostic.code === 'icon-dropped')
-						context.report(iconDroppedRule, { path, slide, message: diagnostic.message, help: 'Shorten the text or give the slide more room so the chips fit at the same text size, or remove the icon. An icon draws on the first-level entries of an unnumbered list, on a metric and on a group.' });
+						context.report(iconDroppedRule, { path, slide, message: diagnostic.message, help: 'Give the block more room where the message says what bounds it (a larger share in `composition.weights`, a larger region, fewer blocks beside it), use fewer or shorter entries, or remove the icon: chips are drawn only where the text keeps its size. An icon draws on the first-level entries of an unnumbered list, on a metric and on a group.' });
 					// SH-09: a pyramid or matrix drawn as cards or as a list (SH-18: a cycle as a list).
 					else if (diagnostic.code === 'arrangement-adapted')
 						context.report(arrangementAdaptedRule, { path, slide, message: diagnostic.message, help: /four entries/.test(diagnostic.message) ? 'Write four entries for the quadrants, or choose another layout for this many.' : 'Shorten the entries, write one level without descriptions, or choose another layout.' });
