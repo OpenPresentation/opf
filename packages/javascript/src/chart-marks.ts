@@ -261,7 +261,7 @@ export function chartDoughnut(chart: unknown, data: ResolvedChartData, geometry:
  * names the slices); when the value and percent still do not fit, there are no labels. One slice decides, so the labels look alike.
  */
 function doughnutLabelFit(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, pie: Box): ChartLayerDoughnut['labels'] {
-  if (data.columns.length !== 2 || !usable(geometry.box, geometry.scale)) return undefined;
+  if (!data.ok || data.columns.length !== 2 || !usable(geometry.box, geometry.scale)) return undefined;
   const options = resolveChartOptions(chart, chartOptionTarget('doughnut'));
   const authored = options.dataLabels?.content;
   if (!options.dataLabels || !authored?.length) return undefined;
