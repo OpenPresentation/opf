@@ -145,8 +145,8 @@ importers:
         specifier: 0.4.1
         version: 0.4.1
       '@expo-google-fonts/noto-color-emoji':
-        specifier: 0.4.7
-        version: 0.4.7
+        specifier: 0.4.8
+        version: 0.4.8
       '@expo-google-fonts/noto-emoji':
         specifier: 0.4.8
         version: 0.4.8
@@ -208,8 +208,8 @@ importers:
         specifier: 0.4.2
         version: 0.4.2
       '@expo-google-fonts/noto-sans-mongolian':
-        specifier: 0.4.1
-        version: 0.4.1
+        specifier: 0.4.2
+        version: 0.4.2
       '@expo-google-fonts/noto-sans-myanmar':
         specifier: 0.4.2
         version: 0.4.2
@@ -544,8 +544,8 @@ importers:
         specifier: 0.4.1
         version: 0.4.1
       '@expo-google-fonts/noto-color-emoji':
-        specifier: 0.4.7
-        version: 0.4.7
+        specifier: 0.4.8
+        version: 0.4.8
       '@expo-google-fonts/noto-naskh-arabic':
         specifier: 0.4.5
         version: 0.4.5
@@ -620,8 +620,8 @@ importers:
         specifier: 0.4.1
         version: 0.4.1
       '@expo-google-fonts/noto-color-emoji':
-        specifier: 0.4.7
-        version: 0.4.7
+        specifier: 0.4.8
+        version: 0.4.8
       '@expo-google-fonts/noto-emoji':
         specifier: 0.4.8
         version: 0.4.8
@@ -683,8 +683,8 @@ importers:
         specifier: 0.4.2
         version: 0.4.2
       '@expo-google-fonts/noto-sans-mongolian':
-        specifier: 0.4.1
-        version: 0.4.1
+        specifier: 0.4.2
+        version: 0.4.2
       '@expo-google-fonts/noto-sans-myanmar':
         specifier: 0.4.2
         version: 0.4.2
@@ -1082,8 +1082,8 @@ packages:
   '@expo-google-fonts/gelasio@0.4.1':
     resolution: {integrity: sha512-mqSxj6OCIHnyRxqYYd3HSgDyWw9bI+DBWdyQRw9sNrqoceEh+3f43mY6yTrCKrBXqq0a1q9z76IvAp3HKHZQBw==}
 
-  '@expo-google-fonts/noto-color-emoji@0.4.7':
-    resolution: {integrity: sha512-0jZUhh9r92VouxJ5z59Vxw1BGjbaat7EEEasmsLI+doe5hXS1/d4oZUyfyv/TFvkwuZjqvbDh6WdYM9q0ZhiyA==}
+  '@expo-google-fonts/noto-color-emoji@0.4.8':
+    resolution: {integrity: sha512-4hKX1ZYEfsq2a5VjNJ/4CMlpkBbS7CDiIGBuyMDWhCJeXNof6IF79eFEuyHo+K11gHcsRkRaPz5Eac29R6H9wQ==}
 
   '@expo-google-fonts/noto-emoji@0.4.8':
     resolution: {integrity: sha512-zuq8xBS8nfdgqHXIwfdotQNObA22aMLdPJbFmzJt1AUjbBE4hP/K3az/GftD3e2/JTzRnX30C5lmpuNkVewRlA==}
@@ -1142,8 +1142,8 @@ packages:
   '@expo-google-fonts/noto-sans-math@0.4.2':
     resolution: {integrity: sha512-Kgj0kKibznTLYcbpR8Tk2ybr76uMOyrlyoP5F9G+0UiJzAMA4zG/XIlrgXKzfFGERhA0Rc3vbwDeeTxwXPlaYg==}
 
-  '@expo-google-fonts/noto-sans-mongolian@0.4.1':
-    resolution: {integrity: sha512-9rw05f/r0jyfV2SEcNPiseil08lygCMOnv6+YKuKTBrRWPoYFKCrE6iscE/jRZtNC9BZ0Xa62n2DI2KC9kb5NQ==}
+  '@expo-google-fonts/noto-sans-mongolian@0.4.2':
+    resolution: {integrity: sha512-Rbxs85ejc/ht4zRvItdVq6aF6h6xYciGGIoYhVzN4HY9lTndb/uhWHuwJ0DwIM5tBa+SGD1ngSw29aQg9u/yoQ==}
 
   '@expo-google-fonts/noto-sans-myanmar@0.4.2':
     resolution: {integrity: sha512-qG8DHmy+7xFvW5z8lN3r5jjEXoQBhjpjoxXR/Y8/WcywirPIBZnFpAy5IlwCRSobJdCw3+i7gvmIz1bl6mp7bg==}
@@ -2919,7 +2919,7 @@ snapshots:
 
   '@expo-google-fonts/gelasio@0.4.1': {}
 
-  '@expo-google-fonts/noto-color-emoji@0.4.7': {}
+  '@expo-google-fonts/noto-color-emoji@0.4.8': {}
 
   '@expo-google-fonts/noto-emoji@0.4.8': {}
 
@@ -2959,7 +2959,7 @@ snapshots:
 
   '@expo-google-fonts/noto-sans-math@0.4.2': {}
 
-  '@expo-google-fonts/noto-sans-mongolian@0.4.1': {}
+  '@expo-google-fonts/noto-sans-mongolian@0.4.2': {}
 
   '@expo-google-fonts/noto-sans-myanmar@0.4.2': {}
 
