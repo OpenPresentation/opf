@@ -1,8 +1,8 @@
 // RR-64 phase 2: outlined text is shaped by HarfBuzz, the browser's shaper. Checked here over the 30 script corpora: every drawn
 // glyph of an outlined sample has HarfBuzz's glyph id and pen position (an independent harfbuzzjs shaping of the same text, face
 // and language); fontkit, which the layout measures with, differs on several of them (so shaping with it would not draw what the
-// browser draws); a run with no pinned width whose HarfBuzz and fontkit advances differ stays text; and text in a face whose fsType
-// restricts embedding stays text. Both fallbacks are reported as `text-as-paths-fallback` with their reason.
+// browser draws); a run is outlined with or without a pinned width; and text in a face whose fsType restricts embedding stays text,
+// reported as `text-as-paths-fallback` with its reason.
 import assert from 'node:assert/strict';
 import * as hb from 'harfbuzzjs';
 import { loadCorpora, loadFaces } from '../scripts/script-corpora.mjs';
@@ -74,9 +74,9 @@ assert.ok(compared >= 120, `${compared} corpus samples compared (${skipped} skip
 // fontkit 2 picked other glyphs on at least ten samples; fontkit 3 fixed most of them, so one is enough to show the gate tells the shapers apart.
 assert.ok(divergent >= 1, `fontkit picks other glyphs than HarfBuzz on ${divergent} samples: ${divergentSamples}`);
 
-// A run with no pinned width whose HarfBuzz and fontkit advances differ stays text; with a textLength it is outlined, scaled to it.
-// fontkit 2 had no Myanmar shaper, so the unpinned Myanmar sample was that case; fontkit 3 measures it like HarfBuzz and no corpus
-// sample differs any more, so the unpinned run is outlined without a diagnostic.
+// A run is outlined with no pinned width and inside a textLength (scaled to it). fontkit 2 had no Myanmar shaper, so its unpinned
+// Myanmar run, whose fontkit and HarfBuzz advances differed, stayed text ("shaping"); fontkit 3 measures every bundled face and corpus
+// sample like HarfBuzz, so that fallback is gone.
 {
   const face = faces.find((candidate) => candidate.scripts.includes('Mymr') && candidate.weight === 400);
   const text = corpora.groups.find((group) => group.script === 'Mymr').samples.find((sample) => sample.id === 'mymr-words').text;
