@@ -8,26 +8,29 @@ merge, one per site. MR-52 installs them (a pull request per site, no deploy) af
 
 | Site (repository, default branch) | Files to copy to `.github/workflows/` | Required checks |
 | --- | --- | --- |
-| `Data-Advantage/openpresentation-site` (`main`) | `openpresentation-site/opf-bump-merge.yml` | `site` (the job of `site-ci.yml`) |
-| `Data-Advantage/pptx-gallery` (`main`) | `pptx-gallery/opf-bump-merge.yml` and `pptx-gallery/build-and-smoke.yml` | `build-and-smoke` (new, bump branches only), `verify` (validate-gallery-registry.yml, every pull request) and `worker-build` (cloudflare-worker.yml, the deployed OpenNext build); none is required by GitHub, so the merge waits for all three |
+| `Data-Advantage/openpresentation-site` (`main`) | `openpresentation-site/opf-bump-merge.yml` | `site` (the job of `site-ci.yml`), then the pull request's **Native Preview** check on the exact head (cf-native-preview.yml) and a head that contains `main` |
+| `Data-Advantage/pptx-gallery` (`main`) | `pptx-gallery/opf-bump-merge.yml` and `pptx-gallery/build-and-smoke.yml` | `build-and-smoke` (new, bump branches only), `verify` (validate-gallery-registry.yml, every pull request) and `worker-build` (cloudflare-worker.yml, the deployed OpenNext build); none is required by GitHub, so the merge waits for all three, then the pull request's **Native Preview** check on the exact head (cf-native-preview.yml) and a head that contains `main` |
 | `Data-Advantage/pptx-dev` (`master`) | `pptx-dev/opf-bump-merge.yml` | `verify (ubuntu-latest)` (application-ci.yml) and `build` (cloudflare-build.yml), then the pull request's **Native Preview** check on the exact head (cf-native-preview.yml) and a head that contains `master` |
 
 ## What `opf-bump-merge.yml` does
 
-It runs on `workflow_run` when the site's pull request CI completes (so it executes the default branch's copy and no code from the bump
-branch) and merges only if every condition holds; otherwise it stops with a notice and the pull request stays open:
+It runs on `workflow_run` when the site's pull request CI or its **Native Worker preview** completes (so it executes the default
+branch's copy and no code from the bump branch) and merges only if every condition holds; otherwise it stops with a notice and the
+pull request stays open:
 
-1. the completed run succeeded, was a `pull_request` run, and its branch is a `bot/opf-v*` branch of this repository (no fork);
+1. the completed run succeeded, and it was either a `pull_request` run of a `bot/opf-v*` branch of this repository (no fork) or a run
+   of the repository's `.github/workflows/cf-native-preview.yml`, usually the last completion. That run belongs to the default branch
+   and names no pull request, so then the one open same-repository `bot/opf-v*` pull request is the candidate (none or several: stop);
 2. an open pull request exists for that branch, its head is the commit that run tested, it targets the default branch and is titled
    `bump to vX.Y.Z`;
 3. it carries the label `auto-merge` and not `needs-review`;
 4. it changes only manifests, the lockfile and the files a site mirrors its pins in (`ALLOWED_FILES`);
-5. every check in `REQUIRED_CHECKS` is `success` for the head commit (the last completion decides: an earlier one finds a check pending);
-   pptx-dev also requires its **Native Preview** check on the exact head (the trusted workflow's app and marker
-   `opf-sites-native-preview-v1:<pr>:<head>`) completed with `success`, and a head 0 commits behind `master`: its deploy gate
-   (`validateMergedPreview`) accepts a merge only when the squash commit's tree is the tree a Native Preview accepted, and a squash of a
-   head that is behind has another tree. Its merge also wakes when **Native Worker preview** completes (usually the last completion);
-   that run belongs to `master`, so the one open `bot/opf-v*` pull request is the candidate;
+5. every check in `REQUIRED_CHECKS` is `success` for the head commit (the last completion decides: an earlier one finds a check pending),
+   the pull request's **Native Preview** check on the exact head (the trusted workflow's app and marker
+   `opf-sites-native-preview-v1:<pr>:<head>`) completed with `success`, and the head is 0 commits behind the default branch: each site's
+   deploy gate (`validateMergedPreview`) accepts a merge only when the squash commit's tree is the tree a Native Preview accepted, and a
+   squash of a head that is behind has another tree (a bump that fell behind needs its branch updated; the new head gets its own checks
+   and Preview);
 6. then `gh pr merge --squash --delete-branch --match-head-commit <sha>` with the App's token, so the merge is a push by the App and starts
    the site's push and deploy workflows (a merge with `GITHUB_TOKEN` starts none).
 
@@ -46,9 +49,12 @@ The deploy path is the site's own and unchanged; nothing here deploys, logs in t
 3. **The site scripts** (`pnpm opf:bump <X.Y.Z>`, `scripts/opf-bump.mjs` in each site). `bump-site.mjs` runs the script of the site it is pointed at;
    it does the whole bump of that site, so the pull request needs no human edit to be green:
    `openpresentation-site` sets the pins of the root and the starters and `opfSource` (the commit of the tag), refreshes the lockfile, updates
-   `data/releases.json` from the registry and the GitHub release notes of the tag, syncs `.opf-source` and regenerates
-   `public/homepage-details/manifest.json`; `pptx-gallery` sets the pins, refreshes the lockfile, runs `import-font-replacements` and `sync-preview-fonts --core-repo <checkout>
-   --core-ref <commit>`, the catalog and preview syncs and `build-chart-previews`, vendors the editor bundle and schema reference
+   `data/releases.json` from the registry and the GitHub release notes of the tag, writes the frozen schema copies
+   `data/schema-releases/<X.Y.Z>/`, syncs `.opf-source`, regenerates `public/homepage-details/manifest.json`, the homepage showcase
+   (`public/showcase/`) and every tutorial step (`public/learn/`: the step previews, `lessons.json` and `render-identity.json`);
+   `pptx-gallery` sets the pins, refreshes the lockfile, runs `import-font-replacements` and `sync-preview-fonts --core-repo <checkout>
+   --core-ref <commit>`, the catalog and preview syncs (including the portable layout examples, `data/layout-examples.json` and
+   `public/layout-examples/`), `build-chart-previews` and `build-diagram-previews`, vendors the editor bundle and schema reference
    (`public/opf-editor`, `data/opf-spec.json`) with `scripts/vendor-gallery-editor.mjs` of the checkout at the tag, and runs the checks of its CI that
    read them; `pptx-dev` sets the pins, `opf-reference-layer-pins.json` and the lockfile, and copies the diagram guide images and their manifest
    (`public/docs/opf/diagrams/`) from the release commit. The checkout of this repository is `--opf <dir>`
