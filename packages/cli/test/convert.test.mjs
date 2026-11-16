@@ -235,17 +235,6 @@ describe("drawing, through stub peers", () => {
     assert.equal((await callsOf("toPng")).length, 0, "an svg output draws no png");
   });
 
-  test("a folder that already holds the per-slide files is refused as a whole: exit 1, the count, nothing written", async () => {
-    await stub(["convert", "deck.opf.json", "again/slide-{n}.png"]);
-    await writeFile(path.join(stubbed.dir, "again", "slide-2.png"), "keep");
-    const refused = await stub(["convert", "deck.opf.json", "again/slide-{n}.png"], 1);
-    assert.equal(refused.error.code, "output-exists");
-    assert.match(refused.error.error, /2 of the 2 files this would write already exist; nothing was written and they are unchanged. Use --force to replace them./);
-    assert.equal(await readFile(path.join(stubbed.dir, "again", "slide-2.png"), "utf8"), "keep");
-    await stub(["convert", "deck.opf.json", "again/slide-{n}.png", "--force"]);
-    assert.notEqual(await readFile(path.join(stubbed.dir, "again", "slide-2.png"), "utf8"), "keep");
-  });
-
   test("pdf, pptx and zip outputs, and their flags reach the engines", async () => {
     await stub(["convert", "deck.opf.json", "raster.pdf", "--raster"]);
     assert.equal((await callsOf("toPdf"))[0].args[1].raster, true);

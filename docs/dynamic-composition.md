@@ -275,7 +275,7 @@ centered on its column in the tag's color, the PPTX export a text box at that bo
   kept only when no block reads smaller than without them, and than the settled slide without them (whose compact grid LH-48 may have
   grown further): with estimated text widths a compact grid of six texts reaches 43 px in three columns where tiles of two lines cannot,
   so it stays the compact grid.
-- **Placed tiles (LH-69).** A promoted region (a slide key such as `top:start`) holds a content payload, an object: a tile is `"top:start": { "text": "Product" }`, never the bare string `"top:start": "Product"` (validation reports that with the `{ "text": ... }` fix). A region key lists rows, then a colon, then columns, each half in reading order and without gaps: `top+middle:start+center`, `middle+bottom:end`; `bottom+middle:...`, `top+bottom:...` and `start:top` are not keys, and validation names the one meant. A region whose one block is a plain text of at most four words
+- **Placed tiles (LH-69).** A promoted region (a slide key such as `top:start`) whose one block is a plain text of at most four words
   that is no sentence (it does not end in `.`, `!`, `?` or their equivalents in other scripts) draws as a tile, as Claude Design draws
   "Product", "Engineering" and "Operations" over a list: a card in the theme's card surface filling the region, the text bold at its foot
   at the start edge. The tiles of a slide share one size: the text's size, then each step of the type scale up to LH-05's 56 px while every

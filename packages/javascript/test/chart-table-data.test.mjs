@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, test } from "node:test";
 
-import { chartNumber, numberFormatError, ingest, toExcelNumberFormat, formatDataNumber, formatVariableNumber, inlineDatasets, fromExcelNumberFormat, paginate, presentation, validate, resolveChartData, resolveTableData, resolveVariables, tableCellDisplayValue, suggestChartNumberFix } from "../dist/index.js";
+import { chartNumber, ingest, toExcelNumberFormat, formatDataNumber, formatVariableNumber, inlineDatasets, fromExcelNumberFormat, paginate, presentation, validate, resolveChartData, resolveTableData, resolveVariables, tableCellDisplayValue, suggestChartNumberFix } from "../dist/index.js";
 import * as dataEntry from "../dist/data.js";
 import { composeSlide, layoutTable } from "../dist/composition.js";
 import { convertContent } from "../dist/convert.js";
@@ -18,63 +18,6 @@ import { createRequire } from "node:module";
 import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
 const require = createRequire(import.meta.url);
-
-describe("number format sections (positive;negative;zero)", () => {
-  const show = (value, format, language) => formatDataNumber(value, format, language);
-  test("one section is unchanged, a negative prints its minus", () => {
-    assert.equal(show(-5, "0"), "-5");
-    assert.equal(show(-0.001, "0"), "0");
-    assert.equal(show(12, "+0"), "+12");
-  });
-  test("two sections: positive and zero, then negative on the absolute value", () => {
-    assert.equal(show(0.12, "+0%;-0%"), "+12%");
-    assert.equal(show(-0.05, "+0%;-0%"), "-5%");
-    assert.equal(show(0, "+0%;-0%"), "+0%");
-    assert.equal(show(-5, "0;(0)"), "(5)");
-    assert.equal(show(-1234.5, "#,##0.0;(#,##0.0)"), "(1,234.5)");
-    assert.equal(show(-5, "0;0"), "5");
-  });
-  test("three sections: the third is exact zero", () => {
-    assert.equal(show(3, "+0;-0;0 flat"), "+3");
-    assert.equal(show(-3, "+0;-0;0 flat"), "-3");
-    assert.equal(show(0, "+0;-0;0 flat"), "0 flat");
-  });
-  test("the section follows the sign, not the rounded text (as Excel)", () => {
-    assert.equal(show(-0.4, "0;(0)"), "(0)");
-    assert.equal(show(0.4, "+0;-0;0 flat"), "+0");
-    assert.equal(show(-0.4, "+0;-0;0 flat"), "-0");
-  });
-  test("each section scales and localizes on its own", () => {
-    assert.equal(show(-0.05, "0;-0.0%", "de"), "-5,0%");
-  });
-  test("four sections, an empty section and a section without digits are errors", () => {
-    for (const format of ["0;0;0;0", "0;", ";0", "0;;0", "0;x", "0;0;text"]) {
-      assert.ok(numberFormatError(format), format);
-      assert.ok(!("text" in formatVariableNumber(1, format)), format);
-    }
-    assert.equal(numberFormatError("+0%;-0%"), undefined);
-    assert.equal(numberFormatError("0;(0);0"), undefined);
-  });
-  test("validate reports the error with a hint that says what is allowed", () => {
-    const found = validate({ slides: [{ title: "Growth", chart: { type: "column", data: { columns: ["Month", { name: "Growth", format: "0;0;0;0" }], rows: [["Jan", 0.12]] } } }] });
-    const finding = found.findings.find((entry) => entry.ruleId === "opf/number-format-invalid");
-    assert.ok(finding && finding.severity === "error", JSON.stringify(found.findings));
-    assert.match(finding.help, /negative and a zero section/);
-  });
-  test("Excel codes: sections are written and read as sections", () => {
-    assert.equal(toExcelNumberFormat("+0%;-0%"), "+0%;-0%");
-    assert.equal(toExcelNumberFormat("0;(0)"), "0;(0)");
-    assert.equal(toExcelNumberFormat("+0;-0;0 flat"), '+0;-0;0 "flat"');
-    assert.equal(toExcelNumberFormat("#,##0 m/s;-#,##0 m/s"), '#,##0 "m/s";-#,##0 "m/s"');
-    assert.equal(toExcelNumberFormat("0;0;0;0"), "General");
-    assert.equal(fromExcelNumberFormat("+0%;-0%"), "+0%;-0%");
-    assert.equal(fromExcelNumberFormat('+0;-0;0 "flat"'), "+0;-0;0 flat");
-    assert.equal(fromExcelNumberFormat("0;[Red]-0"), undefined);
-    assert.equal(fromExcelNumberFormat('0;"a;b"0'), undefined);
-    assert.equal(fromExcelNumberFormat("0;0;0;0"), undefined);
-    for (const format of ["+0%;-0%", "0;(0)", "+0.0;-0.0;0.0"]) assert.equal(fromExcelNumberFormat(toExcelNumberFormat(format)), format);
-  });
-});
 const Ajv2020 = require("ajv/dist/2020.js").default;
 const addFormats = require("ajv-formats").default;
 // The schema definitions are checked with Ajv directly: core exposes no generic schema validator.
@@ -189,8 +132,7 @@ describe("number formats", () => {
     assert.equal(fromExcelNumberFormat('"$"#,##0.00'), "$#,##0.00");
     assert.equal(fromExcelNumberFormat("[$€-407]#,##0"), "€#,##0");
     assert.equal(fromExcelNumberFormat('#,##0" units"'), "#,##0 units");
-    assert.equal(fromExcelNumberFormat("#,##0;(#,##0)"), "#,##0;(#,##0)");
-    for (const code of ["0.00E+00", "mm/dd/yyyy", "@", "#,##0_);(#,##0)", "[Red]0", "#,##0,", "0%%", '0"%"', "# ?/?", '"No."0', "General;0"]) {
+    for (const code of ["#,##0;(#,##0)", "0.00E+00", "mm/dd/yyyy", "@", "#,##0_);(#,##0)", "[Red]0", "#,##0,", "0%%", '0"%"', "# ?/?", '"No."0', "General;0"]) {
       assert.equal(fromExcelNumberFormat(code), undefined, code);
     }
   });

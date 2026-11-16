@@ -131,9 +131,7 @@ export async function leaseSharedFonts(renderer: Renderer, presentation: unknown
 function scriptDiagnostic(diagnostic: Diagnostic): Diagnostic {
 	if (diagnostic.code !== "script-font-not-installed") return diagnostic;
 	const name = typeof diagnostic.package === "string" ? diagnostic.package : "the Noto script package";
-	const pinned = typeof diagnostic.package === "string" && typeof diagnostic.version === "string" ? `${name}@${diagnostic.version}` : name;
-	// Core does not know how the CLI was installed (global, a project's dependency, or one npx run), so the message names all three.
-	return { ...diagnostic, message: `${diagnostic.message} Install it where the CLI runs, at that version: npm install -g ${pinned} for a global CLI, npm install ${pinned} in the project that depends on the CLI, or add -p ${pinned} to an npx run. Then run the command again to draw this script with a bundled open font.` };
+	return { ...diagnostic, message: `${diagnostic.message} Install ${name} next to the CLI (npm install -g ${name}) to draw this script with a bundled open font.` };
 }
 
 /**

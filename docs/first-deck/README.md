@@ -22,15 +22,13 @@ npm install -g @openpresentation/cli
 opf --version
 ```
 
-PNG and PPTX output need extra packages. Ask the CLI which ones, and pass it the deck:
+PNG and PPTX output need extra packages. Ask the CLI which ones, and run the one install line it prints:
 
 ```sh
 opf doctor deck.opf.json --format text
 ```
 
-With a deck, doctor reports two things: whether each format is `ready`, and whether the fonts for the scripts the deck's text uses are installed (the line `Script fonts this deck needs`). Without a deck it reports general readiness only and says nothing about scripts, so a deck in Arabic, Hebrew, Thai or Chinese could still lack a font. This deck is Latin, which the bundled fonts cover, so you should see every format `ready`, `Script fonts this deck needs: all installed.` and `Every format is ready for this deck.` When a format or a script font is missing, doctor names the packages and prints the one install line to run. If it says the script fonts were `not checked` it gives the reason (for example, `@openpresentation/opf-render` is not installed); fix that and run doctor again. With `--format json` (the default) the same answer is `scriptFonts: { checked, missing, reason? }`.
-
-Then get this folder from the repository (`docs/first-deck/`: `deck.opf.json` and `assets/roastery.svg`), and run the next commands inside it. The image path in the deck is relative (`assets/roastery.svg`), so keep the two together.
+When every format shows `ready`, you are set. Get this folder from the repository (`docs/first-deck/`: `deck.opf.json` and `assets/roastery.svg`), and run the next commands inside it. The image path in the deck is relative (`assets/roastery.svg`), so keep the two together.
 
 ## 2. Validate
 

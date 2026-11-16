@@ -22,41 +22,9 @@ export function visualReadingOrder<T extends ReadingBox>(items: readonly T[], di
   return readingRows(items).flatMap(row => [...row].sort((a, b) => along(a) - along(b) || a.box.y - b.box.y || index.get(a)! - index.get(b)!));
 }
 
-/**
- * The rows of {@link visualReadingOrder}, top to bottom, each in input order. Used to check row order alone.
- *
- * A tall item (one whose height holds the centers of two or more items that sit one above the other: a full-height list beside a
- * grid of tiles) is not allowed to join those rows into one. The other items form their rows by themselves, row by row, and the tall
- * item joins the first row it spans when it is at the start side of what it spans (a picture before the text it is beside), the last
- * row when it is at the end side. So a grid of tiles beside a full-height list reads row by row, then the list, instead of column by
- * column, whatever the heights of the boxes: the order is the same for the cells of a region grid and for the boxes drawn in them.
- */
+/** The rows of {@link visualReadingOrder}, top to bottom, each in input order. Used to check row order alone. */
 export function readingRows<T extends ReadingBox>(items: readonly T[]): T[][] {
   const index = new Map(items.map((item, i) => [item, i] as const));
-  const centre = (item: T) => item.box.y + item.box.height / 2;
-  const tall = items.filter(item => {
-    const inside = items.filter(other => other !== item && centre(other) >= item.box.y && centre(other) <= item.box.y + item.box.height);
-    return inside.some(a => inside.some(b => a.box.y + a.box.height <= b.box.y));
-  });
-  const rest = items.filter(item => !tall.includes(item));
-  const rows = rowsOf(rest.length ? rest : items, index);
-  if (rest.length) {
-    for (const item of tall) {
-      const spanned = rows.filter(row => row.some(other => centre(other) >= item.box.y && centre(other) <= item.box.y + item.box.height));
-      if (!spanned.length) {
-        const at = rows.findIndex(row => Math.min(...row.map(other => other.box.y)) > item.box.y);
-        rows.splice(at < 0 ? rows.length : at, 0, [item]);
-        continue;
-      }
-      const atEnd = spanned.every(row => row.every(other => other.box.x + other.box.width <= item.box.x + 1));
-      (atEnd ? spanned[spanned.length - 1]! : spanned[0]!).push(item);
-    }
-    for (const row of rows) row.sort((a, b) => index.get(a)! - index.get(b)!);
-  }
-  return rows;
-}
-
-function rowsOf<T extends ReadingBox>(items: readonly T[], index: Map<T, number>): T[][] {
   const sorted = [...items].sort((a, b) => a.box.y - b.box.y || a.box.x - b.box.x || index.get(a)! - index.get(b)!);
   const rows: { top: number; bottom: number; items: T[] }[] = [];
   for (const item of sorted) {
