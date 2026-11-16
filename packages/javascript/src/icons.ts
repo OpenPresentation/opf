@@ -485,12 +485,23 @@ function distance(a: string, b: string): number {
   }
   return row[b.length]!;
 }
-/** Up to `limit` names nearest to `name`: names that contain it or that it contains first, then the fewest edits. */
-export function nearIconNames(name: string, names: Iterable<string>, limit = 5): string[] {
-  const scored: [string, number][] = [];
+/**
+ * Up to `limit` names nearest to `name`, best first. A name is read word by word ("triangle-alert" is "triangle" and "alert"), so the
+ * candidates are, in order: names that contain what was written (or whose words and tags cover every word written), names that share
+ * some of its words, then names a few edits away (a typo). `tags` (the set's keywords by name, when it is loaded with them) let a renamed
+ * icon find its new name by meaning: "triangle-alert" finds the triangle whose keywords say "alert". A name inside a longer word
+ * is not a match ("angle" is not near "triangle").
+ */
+export function nearIconNames(name: string, names: Iterable<string>, limit = 5, tags?: Readonly<Record<string, readonly string[]>>): string[] {
+  const words = (text: string): string[] => text.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  const wanted = words(name), scored: [string, number][] = [];
   for (const candidate of names) {
-    const contains = candidate.includes(name) || name.includes(candidate) ? 0 : 1, edits = distance(name, candidate);
-    if (contains === 0 || edits <= Math.max(2, Math.floor(name.length / 3))) scored.push([candidate, contains * 100 + edits + Math.abs(candidate.length - name.length) / 100]);
+    const own = words(candidate), keywords = new Set((tags?.[candidate] ?? []).flatMap(words)), edits = distance(name, candidate);
+    const named = wanted.filter(word => own.includes(word)).length, meant = wanted.filter(word => own.includes(word) || keywords.has(word)).length;
+    const contained = name.length >= 3 && candidate.includes(name);
+    const tier = contained || (wanted.length > 1 && meant === wanted.length && named > 0) ? 0 : named > 0 || meant > 0 ? 1 : edits <= Math.max(2, Math.floor(name.length / 3)) ? 2 : 3;
+    if (tier === 3) continue;
+    scored.push([candidate, tier * 100 + (wanted.length - meant) * 10 + own.length - named + edits / 10 + Math.abs(candidate.length - name.length) / 1000]);
   }
   return scored.sort((a, b) => a[1] - b[1] || a[0].localeCompare(b[0])).slice(0, limit).map(([candidate]) => candidate);
 }
@@ -526,7 +537,7 @@ export function resolveIcon(document: unknown, value: unknown, options: IconOpti
     if (icon === undefined) {
       const names = setNames(set);
       if (Array.isArray((set as { names?: unknown }).names) && names.includes(reference.name)) return failed !== undefined ? { ok: false, code: 'icon-unknown', message: failed } : { ok: false, code: 'icon-unloaded', message: `The icon ${written} is registered but not loaded yet (ensureIcons).` };
-      const suggestions = nearIconNames(reference.name, names);
+      const suggestions = nearIconNames(reference.name, names, 5, (set as { tags?: Readonly<Record<string, readonly string[]>> }).tags);
       return { ok: false, code: 'icon-unknown', message: `The icon set ${reference.set} has no icon ${reference.name}.`, ...(suggestions.length ? { suggestions: suggestions.map(name => `${reference.set}:${name}`) } : {}) };
     }
     const parts = setIconParts(set, icon);
