@@ -4105,6 +4105,8 @@ export interface ListRule { x:number; y:number; width:number;
   /** LH-133, LH-136: drawn in the accent (the tag's color on its backdrop), not the border neutral: over a question cell or a display heading. */
   accent?:true }
 export interface ListFit extends TextFit { listEntries:ListEntryLayout[]; height:number;
+  /** A word of an entry (its text or description) is wider than its line even at the minimum size, so it is broken inside the word: the fit is an overflow. */
+  splitsWord?:true;
   /** LH-08: the hairlines of a list drawn as ruled rows, one between every two first-level entries; engines draw each LIST_RULE_WIDTH thick in the scheme's border neutral. */
   rules?:ListRule[] }
 /** LH-08: the space between two rows of a ruled list, in em of the list size; its hairline sits in the middle. */
@@ -4487,7 +4489,24 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     minimum=Math.max(minimum,richMinimum(item.runs,requestedSize,minFontSize));
     if(item.descriptionRuns!==undefined)minimum=Math.max(minimum,heading?richMinimum(item.descriptionRuns,requestedSize,minFontSize):richMinimum(item.descriptionRuns,requestedSize*.82,minFontSize)/.82);
   }
-  return fitAtSizes(layout,requestedSize,minimum);
+  // A word is never split inside (as LH-44 rules for table cells): a size at which an entry's word is wider than its line is no fit, so the
+  // list steps down to the size its longest word fits at, never under its minimum; at the minimum the cut is an overflow (splitsWord), which
+  // composition reports with what to change.
+  const whole=(size:number):ListFit=>{
+    const fit=layout(size);
+    return fit.listEntries.some(entry=>richCutsWord(entry.text)||(entry.description!==undefined&&richCutsWord(entry.description)))?{...fit,overflow:true,splitsWord:true}:fit;
+  };
+  return fitAtSizes(whole,requestedSize,minimum);
+}
+/** Whether a rich text fit breaks a line inside a word of letters or digits (not in a script that breaks anywhere, such as Han or kana). */
+function richCutsWord(fit:RichTextFit):boolean {
+  const word=/[\p{L}\p{N}]/u,everywhere=/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u;
+  return fit.richLines.slice(1).some((line,index)=>{
+    const last=fit.richLines[index]!.fragments.filter(fragment=>fragment.kind===undefined).at(-1),first=line.fragments.find(fragment=>fragment.kind===undefined);
+    if(!last||!first||last.runIndex!==first.runIndex||first.start!==last.end)return false;
+    const before=[...last.text].at(-1)??'',after=[...first.text][0]??'';
+    return word.test(before)&&word.test(after)&&!everywhere.test(before)&&!everywhere.test(after);
+  });
 }
 
 /** LH-133: a question ends with a question mark of its script (Latin and fullwidth `?`, Arabic `؟`, the reversed `⸮`), before any closing quote or bracket. */
@@ -11891,6 +11910,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     else if (item.codeLayout) diagnostics.push(...item.codeLayout.diagnostics);
     else if (item.metricLayout) diagnostics.push(...item.metricLayout.diagnostics);
     else if (item.timelineLayout) diagnostics.push(...item.timelineLayout.diagnostics);
+    else if (item.text?.overflow && item.field !== 'shape' && (item.text as ListFit).splitsWord) diagnostics.push({ code: "text-overflow", path: item.path, message: "A word of this list is wider than its column even at the minimum font size, so it would be split inside the word. Give the list a wider cell (a larger share in composition.weights, fewer columns or blocks beside it), use a shorter word, or split the slide." });
     else if (item.text?.overflow && item.field !== 'shape') diagnostics.push({ code: "text-overflow", path: item.path, message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." });
     // LH-45: nothing draws past its cell (its card, when it has one) without a finding. A layout checks its parts against the box it was
     // given, and a metric is given its row's shared height, which can be taller than its own cell: the accepted parts are checked here.
