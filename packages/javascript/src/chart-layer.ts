@@ -474,6 +474,13 @@ export function chartRingLabels(chart: unknown, data: ResolvedChartData): ChartL
  * at the type's default position (outside the end of a column or bar, above a line point).
  */
 export function chartLayerDataLabels<T extends {dataLabels?: unknown}>(resolved: T, layer: ChartLayer | undefined, kind: 'bar' | 'line' | string): T {
+  // A doughnut's authored labels that do not fit their ring (chartDoughnut): both engines draw the reduced content, or none.
+  const fit = layer?.doughnut?.labels;
+  if (fit && resolved.dataLabels !== undefined) {
+    return fit.content === null
+      ? {...resolved, dataLabels: undefined, dataLabelsOff: true}
+      : {...resolved, dataLabels: {...(resolved.dataLabels as object), content: fit.content}};
+  }
   if (resolved.dataLabels !== undefined || !layer?.small?.labels) return resolved;
   return {...resolved, active: true, dataLabels: {content: ['value'], position: kind === 'line' ? 'above' : 'outside-end', separator: ', '}};
 }

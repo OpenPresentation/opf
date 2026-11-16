@@ -22,7 +22,7 @@ import {chartNumber, numberFormatError, resolveChartData, type ResolvedChartData
 import type {ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
 import {chartBarGeometry, chartValueAxisHidden, columnGroups, columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
-import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
+import {chartLabelText, chartOptionTarget, formatChartLabelPercent, resolveChartOptions, type ChartLabelContent} from './chart-options.js';
 import {BREAKABLE, chartPlotInset, tickLabel, type ChartPlotGeometry} from './chart-plot.js';
 
 interface Box { x: number; y: number; width: number; height: number }
@@ -222,6 +222,11 @@ export interface ChartLayerDoughnut {
   pie: Box;
   /** The hole, half the doughnut's radius (`c:holeSize` 50), which both engines fill with the surface the chart stands on. */
   hole: {cx: number; cy: number; r: number};
+  /**
+   * The explicit data labels do not fit the ring (a doughnut has no outside position, so a label sits inside its slice): both engines draw
+   * `content` instead (the authored content without the category, or no labels when even that does not fit); `from` is the authored content.
+   */
+  labels?: {content: ChartLabelContent[] | null; from: ChartLabelContent[]};
 }
 
 /**
@@ -234,10 +239,60 @@ export interface ChartLayerDoughnut {
 export function chartDoughnut(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, layer: ChartLayer | undefined): ChartLayerDoughnut | undefined {
   if (!record(chart) || !data.ok || data.columns.length < 2 || !data.rows.length) return undefined;
   if (typeOf(chart) !== 'doughnut') return undefined;
-  const of = (pie: Box): ChartLayerDoughnut => ({pie, hole: {cx: pie.x + pie.width / 2, cy: pie.y + pie.height / 2, r: pie.width / 4}});
+  const of = (pie: Box): ChartLayerDoughnut => {
+    const doughnut: ChartLayerDoughnut = {pie, hole: {cx: pie.x + pie.width / 2, cy: pie.y + pie.height / 2, r: pie.width / 4}};
+    const labels = doughnutLabelFit(chart, data, geometry, pie);
+    return labels ? {...doughnut, labels} : doughnut;
+  };
   if (layer?.valueList) return of(layer.valueList.pie);
   const pie = chartCircleSquare(chart, data, geometry, layer);
   return pie && of(pie);
+}
+
+/**
+ * A doughnut's authored data labels sit inside their slices (the type has no outside position, in PowerPoint either), centered in the ring at
+ * the slice's middle. A label whose box leaves its slice spills onto the neighboring slice or the background, where its text color (chosen
+ * for the slice) can be unreadable: a label is never clipped. When any slice's label does not fit, every label drops its category (a legend
+ * names the slices); when the value and percent still do not fit, there are no labels. One slice decides, so the labels look alike.
+ */
+function doughnutLabelFit(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, pie: Box): ChartLayerDoughnut['labels'] {
+  if (data.columns.length !== 2 || !usable(geometry.box, geometry.scale)) return undefined;
+  const options = resolveChartOptions(chart, chartOptionTarget('doughnut'));
+  const authored = options.dataLabels?.content;
+  if (!options.dataLabels || !authored?.length) return undefined;
+  const values = data.rows.map(row => chartNumber(row[1]));
+  const total = values.reduce<number>((sum, value) => sum + (value !== null && value > 0 ? value : 0), 0);
+  if (total <= 0) return undefined;
+  const {fontPx, textHeight} = metrics(geometry.box, geometry.scale, geometry.minFontSize);
+  const format = typeof data.formats[1] === 'string' && !numberFormatError(data.formats[1]) ? data.formats[1] : undefined;
+  const group = columnGroups(data, 1) ? {language: geometry.language} : undefined;
+  const radius = pie.width / 2, inner = radius / 2, middle = (radius + inner) / 2, cx = pie.x + radius, cy = pie.y + pie.height / 2;
+  const fits = (content: readonly ChartLabelContent[]): boolean => {
+    let start = -Math.PI / 2;
+    return values.every((value, index) => {
+      if (value === null || value <= 0) return true;
+      const delta = value / total * Math.PI * 2, mid = start + delta / 2;
+      start += delta;
+      const text = chartLabelText({category: label(data.rows[index]?.[0]), value: valueLabel(value, format, group, geometry.language), percent: formatChartLabelPercent(value / total, geometry.language)}, content, options.dataLabels?.separator);
+      if (!text) return true;
+      const halfWidth = (geometry.measure(text, fontPx, 400) + fontPx * 0.5) / 2, halfHeight = textHeight / 2;
+      const x = cx + middle * Math.cos(mid), y = cy + middle * Math.sin(mid);
+      return [[-1, -1], [1, -1], [-1, 1], [1, 1]].every(([sx, sy]) => {
+        const dx = x + sx! * halfWidth - cx, dy = y + sy! * halfHeight - cy, distance = Math.hypot(dx, dy);
+        if (distance < inner - 1 || distance > radius + 1) return false;
+        if (delta >= Math.PI * 2 - 1e-9) return true;
+        // The corner's angle against the slice's: measured from the slice's middle, within half its sweep.
+        let away = Math.atan2(dy, dx) - mid;
+        while (away > Math.PI) away -= Math.PI * 2;
+        while (away < -Math.PI) away += Math.PI * 2;
+        return Math.abs(away) <= delta / 2 + 1e-9;
+      });
+    });
+  };
+  if (fits(authored)) return undefined;
+  const without = authored.filter(part => part !== 'category');
+  if (without.length && without.length < authored.length && fits(without)) return {content: without, from: [...authored]};
+  return {content: null, from: [...authored]};
 }
 
 /**
