@@ -1,0 +1,17 @@
+{
+  "decks": [
+    {
+      "previewSlides": 2,
+      "id": "mixed-language",
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/mixed-language.pptx",
+          "sha256": "f85787ab7604d8f8d86a549972f61b86cc8ecfadb48c539caed2d7956b51bdc1"
+        }
+      ]
+    }
+  ],
+  "revision": "dde3809913e9d2e38d9c199f67ece8741426067e",
+  "opfVersion": "0.32.1"
+}

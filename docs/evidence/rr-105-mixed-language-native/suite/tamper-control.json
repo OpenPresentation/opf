@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "expectedFailure": "saved native XML lost proofing language",
+  "tamperedSha256": "74d21d28e8f7890ff19b92fa8a7f48446bc72e80476908e0c53b0d10613dfc62"
+}

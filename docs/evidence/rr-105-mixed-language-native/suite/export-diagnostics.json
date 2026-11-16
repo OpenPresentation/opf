@@ -1,0 +1,17 @@
+{
+  "measured": [],
+  "native": [
+    {
+      "code": "native-body-fallback",
+      "path": "slides.0.text",
+      "reason": "unsupported-text",
+      "message": "Native body export cannot represent this unsupported text; the current measured shapes were exported."
+    },
+    {
+      "code": "native-body-fallback",
+      "path": "slides.1.text",
+      "reason": "unsupported-text",
+      "message": "Native body export cannot represent this unsupported text; the current measured shapes were exported."
+    }
+  ]
+}

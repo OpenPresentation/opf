@@ -1,0 +1,40 @@
+{
+  "schema": "opf-mixed-language-native-result/v1",
+  "scope": "Saved-file semantic verification; the coordinator attests the Office save step.",
+  "consumerCommit": "dde3809913e9d2e38d9c199f67ece8741426067e",
+  "route": "native",
+  "originalSha256": "f85787ab7604d8f8d86a549972f61b86cc8ecfadb48c539caed2d7956b51bdc1",
+  "savedSha256": "f85787ab7604d8f8d86a549972f61b86cc8ecfadb48c539caed2d7956b51bdc1",
+  "checked": [
+    {
+      "slide": 1,
+      "text": "مرحبا بالعالم",
+      "language": "ar-SA",
+      "nativeXml": true,
+      "import": true,
+      "altLang": true
+    },
+    {
+      "slide": 2,
+      "text": "Hello from this English run.",
+      "nativeText": "Hello from this English run",
+      "language": "en-US",
+      "nativeXml": true,
+      "import": true,
+      "altLang": true
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "unsupported-body-font",
+      "message": "Script-specific native faces cannot be represented by one OPF run font family; the Latin face and current text were retained.",
+      "path": "slides.0.shapes.2.paragraphs.0.runs.1"
+    },
+    {
+      "code": "mixed-run-languages",
+      "path": "language",
+      "message": "Runs use 2 languages (en-US x9, ar-SA x4). The presentation uses en-US; slides with another predominant language declare it, and individual rich-text runs keep their own lang."
+    }
+  ],
+  "passed": true
+}
