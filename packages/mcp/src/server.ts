@@ -620,7 +620,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 
 	// LH-14: the icon sets of the gallery, loaded on the first search that needs them; RR-63: a search reads the names and keywords only
 	// (`{ tags: true }`), never the icons' path data.
-	type IconSet = { name: string; license: string; copyright: string; version?: string; names?: readonly string[]; icons: Record<string, unknown>; tags?: Record<string, readonly string[]> };
+	type IconSet = { name: string; license: string; copyright: string; version?: string; names?: readonly string[]; icons: Record<string, unknown>; tags?: Record<string, readonly string[]>; renamed?: Record<string, string> };
 	const iconSets = (sources.iconSets?.iconSets ?? {}) as Record<string, (request?: { icons?: readonly string[]; tags?: boolean }) => Promise<IconSet>>;
 	const setNames = Object.keys(iconSets);
 	// RR-111: a server with no icon set (the lean server, a Worker that serves no icon files) says so instead of naming an empty list.
