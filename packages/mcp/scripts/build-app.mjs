@@ -14,6 +14,7 @@ import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
 import { assertAppResourceFrame } from "./app-resource-frame.mjs";
 import { minifyAppCss } from "./app-css.mjs";
+import { assertSameProgram, cheaperQuotes } from "./app-quotes.mjs";
 
 const require = createRequire(import.meta.url);
 const here = new URL("../", import.meta.url);
@@ -83,7 +84,12 @@ if (zodLocaleIndexes === 0) throw new Error("build-app: zod's locale index (zod/
 const otherLocales = Object.keys(bundle.metafile.inputs).filter((input) => /[\\/]zod[\\/]v4[\\/]locales[\\/](?!en\.js$|index\.js$)[^\\/]+$/.test(input));
 if (otherLocales.length) throw new Error(`build-app: zod locale modules other than English are in the bundle: ${otherLocales.join(", ")}.`);
 if (profile) await writeFile(profile, `${JSON.stringify(bundle.metafile, null, 2)}\n`);
-const script = bundle.outputFiles[0].text;
+const minified = bundle.outputFiles[0].text;
+// The frame is JSON, where a double quote costs two bytes: write the literals that are shorter so in single quotes (app-quotes.mjs),
+// and stop the build unless esbuild prints the same program from both.
+const requoted = cheaperQuotes(minified);
+await assertSameProgram(minified, requoted.code);
+const script = requoted.code;
 // The sandbox refuses code generated from strings: a bundle that calls the Function constructor or eval would break there.
 for (const pattern of [/\bnew Function\(/, /\beval\(/]) {
 	const found = pattern.exec(script);
@@ -101,6 +107,6 @@ await mkdir(out, { recursive: true });
 await writeFile(new URL("deck-app.html", out), html);
 await writeFile(new URL("deck-fonts.json", out), `${JSON.stringify({ extra: fonts.extra.map(({ license: _license, ...face }) => face) }, null, 2)}\n`);
 const kib = (bytes) => `${Math.round(bytes / 1024)} KiB`;
-console.log(`build-app: app-dist/deck-app.html ${kib(Buffer.byteLength(html))} (script ${kib(Buffer.byteLength(script))}, styles ${kib(Buffer.byteLength(styles))}, ${fonts.extra.length} faces on request)`);
+console.log(`build-app: app-dist/deck-app.html ${kib(Buffer.byteLength(html))} (script ${kib(Buffer.byteLength(script))}, ${requoted.rewritten} literals requoted for ${requoted.saved} frame bytes, styles ${kib(Buffer.byteLength(styles))}, ${fonts.extra.length} faces on request)`);
 
 console.log(`build-app: JSON-RPC resource ${frame.bytes} bytes / ${frame.limit} default stdio bytes (${frame.headroom} bytes headroom)`);
