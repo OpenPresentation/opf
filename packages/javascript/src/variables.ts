@@ -270,11 +270,31 @@ export function formatVariableNumber(value: number, pattern?: string, language?:
   return { text: language === undefined ? `${parts.negative ? "-" : ""}${parts.prefix}${parts.body}${parts.suffix}` : localizePatternNumber(parts, language) };
 }
 
-/** The sign, literal prefix, numeric body (ASCII digits, `.` and `,`) and literal suffix a display pattern prints a number as. */
+/**
+ * The parts a display pattern prints a number as. A pattern is one to three `;` sections, `positive;negative;zero`, as Excel reads them
+ * (no text section, colors or conditions). One section formats every number, a negative one with a leading minus. With two, the first
+ * formats positive numbers and zero and the second negative numbers; with three, the third formats zero. A negative section formats the
+ * absolute value and prints no minus of its own: its literal text carries the sign. As in Excel the section is chosen by the value's
+ * sign, not by its rounded text, so -0.4 under `0;(0)` is `(0)`; only an exact zero takes the third section.
+ */
 function patternNumberParts(value: number, pattern: string): { negative: boolean; prefix: string; body: string; suffix: string } | { error: string } {
+  const sections = pattern.split(";");
+  if (sections.length > 3) return { error: `Number format '${pattern}' has ${sections.length} sections; a format has at most three (positive;negative;zero).` };
+  if (sections.length === 1) return sectionNumberParts(value, pattern, pattern);
+  for (const section of sections) {
+    const checked = sectionNumberParts(0, section, pattern);
+    if ("error" in checked) return checked;
+  }
+  if (value < 0) return sectionNumberParts(Math.abs(value), sections[1]!, pattern);
+  if (value === 0 && sections.length === 3) return sectionNumberParts(0, sections[2]!, pattern);
+  return sectionNumberParts(value, sections[0]!, pattern);
+}
+
+/** One section of a pattern: the sign, literal prefix, numeric body (ASCII digits, `.` and `,`) and literal suffix a display pattern prints a number as. */
+function sectionNumberParts(value: number, pattern: string, whole: string): { negative: boolean; prefix: string; body: string; suffix: string } | { error: string } {
   const match = /^([^#0,.]*)((?:[#0,]*)(?:\.[#0]+)?)([\s\S]*)$/.exec(pattern);
   const numeric = match?.[2] ?? "";
-  if (!match || !/[#0]/.test(numeric)) return { error: `Number format '${pattern}' needs a numeric part of '#' and '0' characters.` };
+  if (!match || !/[#0]/.test(numeric)) return { error: `Number format '${whole}' needs a numeric part of '#' and '0' characters.` };
   const prefix = match[1] ?? "";
   const suffix = match[3] ?? "";
   const [integerPattern = "", decimalPattern = ""] = numeric.split(".");
@@ -282,9 +302,9 @@ function patternNumberParts(value: number, pattern: string): { negative: boolean
   const minInteger = [...integerPattern].filter((char) => char === "0").length;
   const minDecimals = [...decimalPattern].filter((char) => char === "0").length;
   const maxDecimals = decimalPattern.length;
-  if (maxDecimals > 100) return { error: `Number format '${pattern}' supports at most 100 decimal places.` };
+  if (maxDecimals > 100) return { error: `Number format '${whole}' supports at most 100 decimal places.` };
   const scaled = prefix.includes("%") || suffix.includes("%") ? value * 100 : value;
-  if (!Number.isFinite(scaled)) return { error: `Number format '${pattern}' scales the value beyond the finite number range.` };
+  if (!Number.isFinite(scaled)) return { error: `Number format '${whole}' scales the value beyond the finite number range.` };
   const absolute = Math.abs(scaled);
   // Round half away from zero in decimal, not binary, so 1.005 with two decimals is 1.01.
   let fixed: string;

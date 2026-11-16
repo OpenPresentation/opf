@@ -1,4 +1,4 @@
-import { symbolFontEncodingsSource } from "./generated/symbol-font-encodings.js";
+import { symbolFontCodeShapes, symbolFontEncodingsSource } from "./generated/symbol-font-encodings.js";
 
 /**
  * Symbol-encoded font families (font-fidelity-everywhere FF-45): Symbol, Wingdings, Wingdings 2,
@@ -88,7 +88,30 @@ const freeze = <T>(value: T): T => {
   return value;
 };
 
-export const SYMBOL_FONT_ENCODINGS: Readonly<SymbolFontEncodingTable> = freeze(structuredClone(symbolFontEncodingsSource) as SymbolFontEncodingTable);
+// The generated table writes each code row in a column form (scripts/generate.mjs): the index of its key list in
+// symbolFontCodeShapes and its values in that order, without code and hex; `installed` is an index and values too.
+// Expanding gives the rows of spec/reference/symbol-font-encodings.json, keys in the same order.
+const fromShape = (values: readonly unknown[], expand: (key: string, value: unknown) => unknown): Record<string, unknown> => {
+  const row: Record<string, unknown> = {};
+  const shape = symbolFontCodeShapes[values[0] as number];
+  if (!shape) throw new Error(`symbol-font-encodings: no key list ${String(values[0])}; regenerate the table.`);
+  shape.forEach((key, index) => {
+    row[key] = expand(key, values[index + 1]);
+  });
+  return row;
+};
+const expandCodes = (table: SymbolFontEncodingTable): SymbolFontEncodingTable => {
+  for (const family of table.families) {
+    family.codes = (family.codes as unknown as unknown[][]).map((values, index) => {
+      const code = table.codeRange.first + index;
+      const fields = fromShape(values, (key, value) => (key === "installed" && Array.isArray(value) ? fromShape(value, (_key, inner) => inner) : value));
+      return { code, hex: code.toString(16).toUpperCase().padStart(2, "0"), ...fields } as unknown as SymbolFontCode;
+    });
+  }
+  return table;
+};
+
+export const SYMBOL_FONT_ENCODINGS: Readonly<SymbolFontEncodingTable> = freeze(expandCodes(structuredClone(symbolFontEncodingsSource) as SymbolFontEncodingTable));
 
 /** The symbol-encoded families, in table order. */
 export const SYMBOL_FONT_FAMILIES: readonly SymbolFontFamily[] = Object.freeze(SYMBOL_FONT_ENCODINGS.families.map((entry) => entry.family));

@@ -210,10 +210,34 @@ async function generateTypes() {
 
 async function generateSymbolFontEncodings() {
   // FF-45: the reversible code-to-Unicode tables for the symbol-encoded families are reference data, not a catalog.
+  // The 1,120 code rows are written in a column form that src/symbol-font-encodings.ts expands at load into the same
+  // objects, keys in the same order: a row is its key list's index in `symbolFontCodeShapes` and its values in that
+  // order, without `code` and `hex` (code 32 + the row's index, hex its two uppercase digits); an `installed` object is
+  // the same, an index and values. Repeating the keys of every row was most of the table's bytes in the MCP viewer.
   const table = await readJson(path.join(specRoot, "reference", "symbol-font-encodings.json"));
+  const shapes = [];
+  const shapeOf = (keys) => {
+    const key = keys.join(",");
+    const at = shapes.findIndex((shape) => shape.join(",") === key);
+    return at >= 0 ? at : shapes.push(keys) - 1;
+  };
+  const families = table.families.map((family) => ({
+    ...family,
+    codes: family.codes.map((row, index) => {
+      const { code, hex, ...rest } = row;
+      const keys = Object.keys(row);
+      if (code !== table.codeRange.first + index || hex !== code.toString(16).toUpperCase().padStart(2, "0") || keys[0] !== "code" || keys[1] !== "hex") {
+        throw new Error(`symbol-font-encodings: ${family.family} row ${index} is not code ${table.codeRange.first + index} with its hex first; the column form needs that.`);
+      }
+      const fields = Object.keys(rest);
+      return [shapeOf(fields), ...fields.map((field) => (field === "installed" && rest.installed ? [shapeOf(Object.keys(rest.installed)), ...Object.values(rest.installed)] : rest[field]))];
+    }),
+  }));
   const lines = [
     generatedHeader("spec/reference/symbol-font-encodings.json"),
-    `export const symbolFontEncodingsSource: unknown = ${asTs(table)};`,
+    `export const symbolFontCodeShapes: readonly (readonly string[])[] = ${JSON.stringify(shapes)};`,
+    "",
+    `export const symbolFontEncodingsSource: unknown = ${asTs({ ...table, families })};`,
     "",
   ];
   await fs.writeFile(path.join(generatedRoot, "symbol-font-encodings.ts"), lines.join("\n"));
