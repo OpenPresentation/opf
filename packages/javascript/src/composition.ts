@@ -9023,7 +9023,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const growth = TYPE_SCALE_RATIO ** power;
         growthOf.set(node, growth);
         const layout = measureCode(node, inner, settings), height = need();
-        const fits = !layout.overflow && layout.parts.every(part => part.visible === false || (part.fit !== undefined && part.fit.fontSize >= part.requestedFontSize - 1e-9))
+        const fits = !layout.overflow && layout.parts.every(part => part.fit !== undefined && part.fit.fontSize >= part.requestedFontSize - 1e-9)
           && largestPart(layout) <= capOf(settings) + FONT_GRID_EPSILON && wraps(layout) <= startWraps && height <= inner.height;
         if (!fits) break;
         chosen = growth;
