@@ -71,8 +71,11 @@ export interface PlannedFile {
 	bytes: Uint8Array;
 }
 
-function outputExists(file: string, flags: boolean) {
-	return new OPFApiError(`Output already exists: ${file}. ${flags ? "Use --force." : "Pass overwrite: true (the default) to replace it."}`, "output-exists", { details: { path: file } });
+function outputExists(file: string, flags: boolean, existing = 1, total = 1) {
+	// Several files (one per slide): say how many are in the way and that none was written, so a script that shows only the end of the output
+	// cannot read a refusal as a refresh.
+	const many = total > 1 ? ` ${existing} of the ${total} files this would write already exist; nothing was written and they are unchanged.` : "";
+	return new OPFApiError(`Output already exists: ${file}.${many} ${flags ? `Use --force to replace ${total > 1 ? "them" : "it"}.` : `Pass overwrite: true (the default) to replace ${total > 1 ? "them" : "it"}.`}`, "output-exists", { details: total > 1 ? { path: file, existing, total } : { path: file } });
 }
 
 /**
@@ -81,10 +84,11 @@ function outputExists(file: string, flags: boolean) {
  * message for the library API.
  */
 export async function checkDestinations(files: string[], overwrite: boolean, flags = true) {
+	const existing = overwrite ? [] : (await Promise.all(files.map((file) => lstat(file).then(() => file, () => undefined)))).filter((file): file is string => file !== undefined);
 	for (const file of files) {
 		try {
 			const stat = await lstat(file);
-			if (!overwrite) throw outputExists(file, flags);
+			if (!overwrite) throw outputExists(existing[0] ?? file, flags, existing.length, files.length);
 			if (!stat.isFile()) throw new OPFApiError(`Refusing to replace a symlink or non-regular file${flags ? "" : `: ${file}`}.`, "output-not-file", { details: { path: file } });
 		} catch (error) {
 			if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;

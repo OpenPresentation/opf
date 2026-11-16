@@ -43,3 +43,17 @@ test('the first deck validates, and converts to PNG and PPTX with no warnings', 
     rmSync(out, { recursive: true, force: true });
   }
 });
+
+// What the README says doctor reports with the deck is what it reports: every format ready, the script-font check run and nothing missing.
+test('the README describes what `opf doctor deck.opf.json` reports for the first deck', { skip }, () => {
+  const readme = readFileSync(path.join(folder, 'README.md'), 'utf8');
+  for (const phrase of ['Script fonts this deck needs: all installed.', 'Every format is ready for this deck.', 'scriptFonts: { checked, missing, reason? }', 'opf doctor deck.opf.json --format text'])
+    assert.ok(readme.includes(phrase), phrase);
+  assert.doesNotMatch(readme, /When every format shows/);
+  const text = spawnSync(process.execPath, [cli, 'doctor', 'deck.opf.json', '--format', 'text'], { cwd: folder, encoding: 'utf8', timeout: 120_000 });
+  assert.equal(text.status, 0, text.stderr);
+  assert.ok(text.stdout.includes('Script fonts this deck needs: all installed.'), text.stdout);
+  assert.ok(text.stdout.includes('Every format is ready for this deck.'), text.stdout);
+  const { report } = run(['doctor', 'deck.opf.json'], folder);
+  assert.deepEqual(report.scriptFonts, { checked: true, missing: [] });
+});

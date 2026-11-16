@@ -42,7 +42,9 @@ a file that is not valid JSON, YAML or Markdown), 2 usage, configuration or I/O 
 read-only and local; it reads local images only to check they exist, and never fetches images, fonts or catalogs.
 Layout is measured with the fonts opf convert draws with when @openpresentation/opf-render is installed (checks.layout
 "measured"); without it the layout rules use core's estimate (checks.layout "estimated") and the report's hint says how to
-measure.
+measure. The fonts findings that convert reports are here too: a script the deck draws whose Noto font package is not installed is
+a fonts/script-font-not-installed warning (and fonts/script-glyph-uncovered for glyphs no loaded face has) naming the package and
+version to install; --ignore drops them, --only skips them.
 
 Examples:
   opf validate deck.opf.json
@@ -55,6 +57,9 @@ type Located = Finding & { location?: { line: number; column: number }; validati
 
 const ASSET_RULES = ["asset-missing", "asset-blocked"] as const;
 const assetRule = (name: string) => ASSET_RULES.find((rule) => name === rule || name === `cli/${rule}`);
+/** The font findings validate adds from the fonts convert draws with: not core rules, so `--ignore` names them here. */
+const FONT_RULES = ["fonts/script-font-not-installed", "fonts/script-glyph-uncovered"] as const;
+const fontRule = (name: string) => FONT_RULES.includes(name as (typeof FONT_RULES)[number]);
 
 /** The local images that `opf convert` would not read, as warnings (RR-93), by the same resolver and rules. */
 function assetFindings(deck: Record<string, unknown>, directory: string, skip: ReadonlySet<string>): Finding[] {
@@ -206,9 +211,9 @@ export async function run(args: string[], host: Host): Promise<void> {
 	settings.catalogs = cliCatalogs(settings.catalogs ?? []);
 	const only = list(repeated.only);
 	const ignore = list(repeated.ignore);
-	checkNames([...only, ...ignore.filter((name) => !assetRule(name))], "--only or --ignore");
+	checkNames([...only, ...ignore.filter((name) => !assetRule(name) && !fontRule(name))], "--only or --ignore");
 	if (repeated.only) settings.only = only;
-	const coreIgnore = ignore.filter((name) => !assetRule(name));
+	const coreIgnore = ignore.filter((name) => !assetRule(name) && !fontRule(name));
 	if (coreIgnore.length) settings.ignore = [...(settings.ignore ?? []), ...coreIgnore];
 	const skipAssets = new Set(ignore.flatMap((name) => assetRule(name) ?? []));
 	const explicitAssetDir = options["asset-dir"] === undefined ? undefined : String(options["asset-dir"]);
@@ -238,7 +243,8 @@ export async function run(args: string[], host: Host): Promise<void> {
 					iconRoot = undefined; // reported by the asset check below
 				}
 				await ensureIcons(read, { catalogs: settings.catalogs, ...(iconRoot ? { readSource: iconSourceReader(iconRoot) } : {}) });
-				const measuring = measures(settings.only) ? await measuringFonts(read, { reporter: new Reporter(), flags: true, catalogs: settings.catalogs, reportInvalidDocument: true }) : undefined;
+				const fontReporter = new Reporter();
+				const measuring = measures(settings.only) ? await measuringFonts(read, { reporter: fontReporter, flags: true, catalogs: settings.catalogs, reportInvalidDocument: true }) : undefined;
 				let checked: ReturnType<typeof checkText>;
 				try {
 					checked = checkText(raw, format, measuring?.fonts ? { ...settings, fonts: measuring.fonts } : settings);
@@ -246,6 +252,14 @@ export async function run(args: string[], host: Host): Promise<void> {
 					measuring?.release();
 				}
 				report = checked.report;
+				// The fonts the deck draws with can lack a script the deck uses (an Arabic deck without its Noto package): the same
+				// `fonts/` findings convert and doctor report, kept here so validate does not say "ok" and convert warn. Substitution notes (info)
+				// stay out, and --only asks for named rules alone.
+				const fontFindings = only.length ? [] : fontReporter.findings.filter((finding) => finding.ruleId.startsWith("fonts/") && finding.severity !== "info" && !ignore.includes(finding.ruleId));
+				if (fontFindings.length) {
+					const findings = [...report.findings, ...fontFindings];
+					report = { ...report, findings, counts: countsOf(findings) };
+				}
 				if (measuring?.estimated && report.checks.layout === "estimated") {
 					const install = installHint("svg")?.install;
 					report = { ...report, hint: `Layout was estimated: ${(measuring.estimated.details as { package?: string } | undefined)?.package ?? "@openpresentation/opf-render"} is not installed, so text was measured with core's portable estimate rather than the fonts opf convert draws with. To measure it, install it${install ? `: ${install}` : "."}` } as ValidationReport;

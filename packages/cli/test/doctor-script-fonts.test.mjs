@@ -114,4 +114,29 @@ describe("script fonts in doctor and convert", () => {
     const failed = report.findings.find((finding) => finding.ruleId === "opf/layout-failed");
     assert.ok(failed.message.includes(`install ${both[0]}`), failed.message);
   });
+
+  test("validate reports the missing script fonts too, with the version and every install scope", () => {
+    const report = JSON.parse(run(["validate", "default.opf.json"]).stdout);
+    const found = report.findings.filter((finding) => finding.ruleId === "fonts/script-font-not-installed");
+    assert.deepEqual(found.map((finding) => [finding.package, finding.version, finding.severity]), [[NASKH, pins[NASKH], "warning"], [SANS, pins[SANS], "warning"]]);
+    for (const finding of found) {
+      const pinned = `${finding.package}@${finding.version}`;
+      assert.ok(finding.message.includes(`npm install -g ${pinned}`), finding.message);
+      assert.ok(finding.message.includes(`npm install ${pinned} in the project`), finding.message);
+      assert.ok(finding.message.includes(`-p ${pinned}`), finding.message);
+      assert.match(finding.help, /where the CLI runs/);
+    }
+    assert.equal(report.counts.warning >= 2, true);
+    assert.equal(report.ok, true, "a warning does not fail validate by default");
+    run(["validate", "default.opf.json", "--fail-on", "warning"], { status: 1 });
+  });
+
+  test("validate --ignore drops the font findings, --only leaves them out, and a Latin deck has none", () => {
+    const ignored = JSON.parse(run(["validate", "default.opf.json", "--ignore", "fonts/script-font-not-installed"]).stdout);
+    assert.ok(!ignored.findings.some((finding) => finding.ruleId.startsWith("fonts/")));
+    const only = JSON.parse(run(["validate", "default.opf.json", "--only", "format"]).stdout);
+    assert.ok(!only.findings.some((finding) => finding.ruleId.startsWith("fonts/")));
+    const english = JSON.parse(run(["validate", "english.opf.json"]).stdout);
+    assert.ok(!english.findings.some((finding) => finding.ruleId.startsWith("fonts/")));
+  });
 });
