@@ -5184,15 +5184,17 @@ function bodyFill(result: SlideComposition, options: ComposeSlideOptions = {}): 
   const metrics = result.items.every(item => headings.has(item.field) || item.eyebrow || item.field === 'metric') && body.every(item => item.field === 'metric' && item.metricLayout && !item.frameBox && !item.metricTile && !item.emphasis && inBody(item));
   // The note under the table across its width (LH-75's note beside a table keeps its own growth, tableNote).
   const tableItem = body.find(item => item.field === 'table'), noteItem = body.find(item => item.field === 'text');
-  const tableNote = body.length === 2 && !!tableItem && !!noteItem?.text && !noteItem.frameBox && body.every(item => !item.emphasis && inBody(item))
+  const tableNote = !!result.regions && body.length === 2 && !!tableItem && !!noteItem?.text && !noteItem.frameBox && body.every(item => !item.emphasis && inBody(item))
     && noteItem.box.y >= tableItem.box.y + 1 && noteItem.box.x < tableItem.box.x + tableItem.box.width - 1 && noteItem.box.x + noteItem.box.width > tableItem.box.x + 1;
   if (body.length < 2 || !(prose || metrics || tableNote)) return undefined;
   const height = (fit: TextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
-  const scale = Math.min(result.width, result.height) / 720;
+  const scale = Math.min(result.width, result.height) / 720, metricRows = metrics ? new Set(body.map(item => Math.round(item.box.y))).size : 0;
   const extentOf = (item: ComposedItem): readonly [number, number] => {
     if (item.metricLayout) {
-      const parts = item.metricLayout.parts.filter(part => part.visible && part.fit).map(part => part.box), chips = (result.icons ?? []).filter(icon => icon.owner === item.path).map(icon => icon.chip.cy - icon.chip.radius);
-      return [Math.min(item.box.y, ...parts.map(box => box.y), ...chips), Math.max(...parts.map(box => box.y + box.height), item.box.y)];
+      // An icon's chip is drawing (LH-14): in one row it never counts against the fill, so the metrics take the steps they take without
+      // icons; between rows it is the space the rows keep apart (spaceMetricRows), so there it counts.
+      const parts = item.metricLayout.parts.filter(part => part.visible && part.fit).map(part => part.box), chips = metricRows > 1 ? (result.icons ?? []).filter(icon => icon.owner === item.path).map(icon => icon.chip.cy - icon.chip.radius) : [];
+      return [Math.min(...parts.map(box => box.y), ...chips), Math.max(...parts.map(box => box.y + box.height))];
     }
     if (item.field === 'table') {
       let table: TableLayout | undefined;
@@ -7674,7 +7676,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const growBodyUnits = (units: readonly Pending[]): void => {
     // LH-75's table beside its note (TABLE_NOTE) keeps its own growth.
     if (!bodySteps || !growsAsBody(units) || (options as Record<symbol, unknown>)[TABLE_NOTE] !== undefined) return;
-    for (const unit of units) if ((unit.field === 'metric' || unit.field === 'table') && !growthOf.has(unit)) { growthOf.set(unit, TYPE_SCALE_RATIO ** bodySteps); bodyGrown.add(unit); }
+    // At most LH-48's three steps (a compact grid's further steps are for paragraphs and lists).
+    for (const unit of units) if ((unit.field === 'metric' || unit.field === 'table') && !growthOf.has(unit)) { growthOf.set(unit, TYPE_SCALE_RATIO ** Math.min(3, bodySteps)); bodyGrown.add(unit); }
   };
   // LH-78: a quote beside other blocks starts at the lead size and fits in QUOTE_BESIDE_LINES lines (besideQuote); `bodySize` (px) refits
   // one at the size its sibling quotes share.
@@ -10386,7 +10389,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const closeTableNote = (): void => {
     const body = items.filter(item => !headings.has(item.field) && !item.eyebrow);
     // Shares the author set (composition.weights) keep their cells.
-    if (body.length !== 2 || regions.length || composition.weights?.length) return;
+    if (!useTemplate || body.length !== 2 || regions.length || composition.weights?.length) return;
     const table = body.find(item => item.field === 'table'), note = body.find(item => item.field === 'text');
     if (!table || !note?.text || 'listEntries' in note.text || table.frameBox || note.frameBox || table.emphasis || note.emphasis || table.caption || note.caption) return;
     if (note.box.y < table.box.y + table.box.height - 1 || note.box.x > table.box.x + table.box.width - 1 || note.box.x + note.box.width < table.box.x + 1) return;
