@@ -277,6 +277,7 @@ function patternNumberParts(value: number, pattern: string): { negative: boolean
   if (!match || !/[#0]/.test(numeric)) return { error: `Number format '${pattern}' needs a numeric part of '#' and '0' characters.` };
   const prefix = match[1] ?? "";
   const suffix = match[3] ?? "";
+  if (`${prefix}${suffix}`.includes(";")) return { error: `Number format '${pattern}' has a ';' section separator, and a format is one pattern (the sections of Excel codes are not supported). Write a single pattern: a negative number prints with a leading '-'.` };
   const [integerPattern = "", decimalPattern = ""] = numeric.split(".");
   const grouping = integerPattern.includes(",");
   const minInteger = [...integerPattern].filter((char) => char === "0").length;

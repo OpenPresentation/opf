@@ -556,6 +556,7 @@ function semanticHelp(issue: ValidationIssue): string {
 	if (params.code === 'image-option-unsupported-payload' && field) return `Remove ${quoted}, or put it on an image block ({ "image": ... }); it has no meaning on another kind of content.`;
 	if (params.code === 'shape-option-unsupported-payload' && field === 'alt' && params.type === 'image') return 'A picture\'s alt text goes inside its image object: { "image": { "src": "...", "alt": "..." } }.';
 	if (params.code === 'shape-option-unsupported-payload' && field) return `Remove ${quoted}, or draw this as a shape: a shape block ({ "shape": ... } with no "image") or an overlay shape in the slide's "shapes".`;
+	if (params.code === 'number-format-invalid') return 'Write one pattern with a numeric part, such as "0%", "0.0", "#,##0" or "$#,##0.00". A format has no ";" sections (positive;negative;zero): a negative number prints with a leading "-" and there is no always-signed ("+") format.';
 	if (params.code === 'caption-unsupported-payload') return 'Put the caption on the image, chart, table, video or diagram it describes, or write it as a text block of its own.';
 	if (Array.isArray(params.incompatible) && params.incompatible.includes('bullets') && params.type === 'list') return 'For a list, write the entries under "items". To keep "bullets" (talking points, which belong to a text payload), remove "type" or write "type": "text".';
 	return 'Resolve the reported structural conflict while preserving every content field. Preview the result after editing.';

@@ -18,6 +18,14 @@ import { createRequire } from "node:module";
 import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
 const require = createRequire(import.meta.url);
+
+test("a ';' section in a number format is an error, never printed as text (deck defect: \"+0%;-0%\")", () => {
+  const result = formatVariableNumber(0.12, "+0%;-0%");
+  assert.ok("error" in result);
+  assert.match(result.error, /section separator/);
+  const found = validate({ slides: [{ title: "Growth", chart: { type: "column", data: { columns: ["Month", { name: "Growth", format: "+0%;-0%" }], rows: [["Jan", 0.12]] } } }] });
+  assert.ok(found.findings.some((finding) => finding.ruleId === "opf/number-format-invalid" && finding.severity === "error"), JSON.stringify(found.findings));
+});
 const Ajv2020 = require("ajv/dist/2020.js").default;
 const addFormats = require("ajv-formats").default;
 // The schema definitions are checked with Ajv directly: core exposes no generic schema validator.
