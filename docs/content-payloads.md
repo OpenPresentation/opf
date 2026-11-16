@@ -34,7 +34,7 @@ Both fields draw the same bulleted (or numbered) list: one marker, the same nest
 | | `bullets` | `items` |
 | --- | --- | --- |
 | Inferred kind | `text` | `list` |
-| Entry | string, `TextRun[]` or `{ text, level, start }` | string, `TextRun[]` or `{ text, description, level, start }` |
+| Entry | string, `TextRun[]` or `{ text, level, start }` | string, `TextRun[]` or `{ text, description, level, start, icon, assistant, overlap }` (`assistant`: an org chart's assistant; `overlap`: the label of a Venn's common overlap; see [Trees and set overlap](smartart.md#trees-and-set-overlap-sh-21)) |
 | `description` | not allowed (a schema error) | supporting detail drawn under the entry |
 | Beside `text` in one block or region | allowed | an error (`list` and `text` are different kinds) |
 
