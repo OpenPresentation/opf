@@ -9,6 +9,7 @@ import { textOutlines } from "./text-paths.js";
 import { createSubsetter, fontSubsets } from "./font-subset.js";
 import { createShaper } from "./hb-shape.js";
 import { packageRoot, resolveInstalled } from "./node-resolve.js";
+import { scriptFontNotInstalledMessage } from "./script-font-message.js";
 export { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { analyzePresentationScripts, autoScriptSelection, createScriptAnalysis, nextFallbackPackage, scriptFontPackages, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontPackages } from "./script-font-pack.js";
@@ -109,7 +110,7 @@ async function withScripts(loaded, scripts, {presentation, onDiagnostic, renderO
   const selection = scriptSelectionOf(analyzePresentationScripts(presentation, undefined, renderOptions)), skipped = [];
   const extra = await loadPackages(notLoaded(scriptFontPackages(selection.scripts)), skipped);
   for (const script of selection.unavailable) onDiagnostic?.({code: "script-font-unavailable", script, message: `No pinned open font serves script '${script}'; that text uses the design font.`});
-  for (const item of skipped) onDiagnostic?.({code: "script-font-not-installed", package: item.package, version: item.version, scripts: item.scripts, message: `Install ${item.package}@${item.version} to preview ${item.scripts.join(", ")} text with its designated open font.`});
+  for (const item of skipped) onDiagnostic?.({code: "script-font-not-installed", package: item.package, version: item.version, scripts: item.scripts, message: scriptFontNotInstalledMessage(`Install ${item.package}@${item.version} to preview ${item.scripts.join(", ")} text with its designated open font.`, item.package, item.version)});
   return {entries:[...loaded.entries, ...embedUsed(extra.entries)], fontFiles:[...loaded.fontFiles, ...extra.fontFiles], packages:[...(loaded.packages ?? []), ...extra.packages],
     selection:{...selection, packages: scriptFontPackages(selection.scripts).map(item => item.name).filter(name => !skipped.some(item => item.package === name)), notInstalled: skipped.map(item => item.package)}};
 }
@@ -135,7 +136,7 @@ async function completeFallback(registry, presentation, loaded, onDiagnostic, re
     const skipped = [], extra = await loadPackages([next], skipped);
     if (skipped.length) {
       selection.notInstalled.push(next.name);
-      onDiagnostic?.({code: "script-font-not-installed", package: next.name, version: next.version, scripts: [...next.scripts], message: `Install ${next.name}@${next.version} for glyphs the loaded CJK faces lack.`});
+      onDiagnostic?.({code: "script-font-not-installed", package: next.name, version: next.version, scripts: [...next.scripts], message: scriptFontNotInstalledMessage(`Install ${next.name}@${next.version} for glyphs the loaded CJK faces lack.`, next.name, next.version)});
       continue;
     }
     registry.addFaces(embedUsed(extra.entries));
@@ -238,7 +239,7 @@ async function ensureFonts(registry, loaded, presentation, {onDiagnostic, render
   selection.packages.push(...extra.packages);
   for (const item of skipped) {
     selection.notInstalled.push(item.package);
-    onDiagnostic?.({code: "script-font-not-installed", package: item.package, version: item.version, scripts: item.scripts, message: `Install ${item.package}@${item.version} to preview ${item.scripts.join(", ")} text with its designated open font.`});
+    onDiagnostic?.({code: "script-font-not-installed", package: item.package, version: item.version, scripts: item.scripts, message: scriptFontNotInstalledMessage(`Install ${item.package}@${item.version} to preview ${item.scripts.join(", ")} text with its designated open font.`, item.package, item.version)});
   }
   for (const script of wanted.unavailable) if (!selection.unavailable.includes(script)) {
     selection.unavailable.push(script);
