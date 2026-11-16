@@ -19,6 +19,7 @@
 // a waterfall's palette positions. PPTX import does not write these defaults back as options.
 import {chartAxisScale, chartTextSize, stackCategoryValues, waterfallSteps, type ChartValueAxis} from './chart-axis.js';
 import {chartNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
+import {hasNumberFormatSections} from './variables.js';
 import type {ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
 import {chartBarGeometry, chartValueAxisHidden, columnGroups, columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
@@ -80,11 +81,13 @@ export function waterfallRoles(values: readonly (number | null)[]): (WaterfallRo
 }
 
 /**
- * LH-107: a waterfall bar's default label: a total as its value, a step signed (+9.3, −7.4 with U+2212), in the column's format. LH-153: with
+ * LH-107: a waterfall bar's default label: a total as its value, a step signed (+9.3, −7.4 with U+2212), in the column's format. A column
+ * format with `;` sections (`+0.0;(0.0)`) carries its own signs, so every bar, step or total, is that format's section for its value and
+ * no sign is added. LH-153: with
  * `group` (the column has no format and groups its thousands, `columnGroups`) a whole number of four digits or more is grouped by the language.
  */
 export function waterfallLabelText(value: number, format: string | undefined, role: WaterfallRole | null, group?: {language?: string}, language = group?.language): string {
-  if (role === 'total' || value === 0) return valueLabel(value, format, group, language);
+  if (role === 'total' || value === 0 || hasNumberFormatSections(format)) return valueLabel(value, format, group, language);
   return `${value > 0 ? '+' : '−'}${valueLabel(Math.abs(value), format, group, language)}`;
 }
 
@@ -93,6 +96,8 @@ export function waterfallLabelText(value: number, format: string | undefined, ro
  * after a `+` for a gain and a U+2212 minus for a loss, as `waterfallLabelText` prints it. A total keeps the column's own format.
  */
 export function waterfallSignedFormat(format: string | undefined): string {
+  // A format with sections carries its own signs (waterfallLabelText): the native labels use it as written.
+  if (hasNumberFormatSections(format)) return format!;
   const first = (format && format.trim() ? format : 'General').split(';')[0]!;
   return `"+"${first};"−"${first};${first}`;
 }
