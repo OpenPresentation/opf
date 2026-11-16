@@ -35,3 +35,13 @@ test('the current name resolves, and a name that was never an icon gets the ordi
   assert.equal(nothing.ok, false);
   assert.equal(nothing.renamed, undefined);
 });
+
+// Lucide 1.72 removed the diagonal `circle-arrow-out-*` and `square-arrow-out-*` ids (now `*-exit`); a deck written before carries them.
+test('a diagonal arrow removed in Lucide 1.72 is reported as renamed to its -exit icon', async () => {
+  const document = deck('lucide:circle-arrow-out-up-right');
+  await ensureIcons(document, { catalogs });
+  const resolution = resolveIcon(document, 'lucide:circle-arrow-out-up-right', { catalogs });
+  assert.equal(resolution.ok, false);
+  assert.deepEqual(resolution.suggestions, ['lucide:circle-arrow-up-right-exit']);
+  assert.equal(validate(document, { catalogs }).findings.find((finding) => finding.ruleId === 'opf/icon-unknown').fixes[0].patch[0].value, 'lucide:circle-arrow-up-right-exit');
+});
