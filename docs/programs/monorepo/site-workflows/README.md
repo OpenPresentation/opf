@@ -1,6 +1,6 @@
 # Site-side workflows for the OPF bump pull requests (MR-52, D19)
 
-Copies of the files installed in the sites (merged 2026-11-02: [openpresentation-site#186](https://github.com/Data-Advantage/openpresentation-site/pull/186), [pptx-gallery#166](https://github.com/Data-Advantage/pptx-gallery/pull/166) and [pptx-dev#191](https://github.com/Data-Advantage/pptx-dev/pull/191); a site's own copy is authoritative once merged). `bump-sites.yml` in this repository opens a "bump to vX.Y.Z" pull request in each of the three site repositories
+Copies of the files installed in the sites (merged 2026-11-02: [openpresentation-site#186](https://github.com/Data-Advantage/openpresentation-site/pull/186), [pptx-gallery#166](https://github.com/Data-Advantage/pptx-gallery/pull/166) and [pptx-dev#191](https://github.com/Data-Advantage/pptx-dev/pull/191); a site's own copy is authoritative once merged; change the site's file and this copy in step, by hand: no check compares them, because this repository's CI cannot read the private site repositories). `bump-sites.yml` in this repository opens a "bump to vX.Y.Z" pull request in each of the three site repositories
 after a stable release and labels it `auto-merge` (a patch bump) or `needs-review` (a minor or major bump). It never merges one. The sites
 are private repositories in a Free-plan organization, so they have no ruleset, no required check and no auto-merge: **each site's own CI
 merges an `auto-merge` bump after its build and smoke checks passed, with the GitHub App's token** (decision D19). These files are that
@@ -10,7 +10,7 @@ merge, one per site. MR-52 installs them (a pull request per site, no deploy) af
 | --- | --- | --- |
 | `Data-Advantage/openpresentation-site` (`main`) | `openpresentation-site/opf-bump-merge.yml` | `site` (the job of `site-ci.yml`) |
 | `Data-Advantage/pptx-gallery` (`main`) | `pptx-gallery/opf-bump-merge.yml` and `pptx-gallery/build-and-smoke.yml` | `build-and-smoke` (new, bump branches only), `verify` (validate-gallery-registry.yml, every pull request) and `worker-build` (cloudflare-worker.yml, the deployed OpenNext build); none is required by GitHub, so the merge waits for all three |
-| `Data-Advantage/pptx-dev` (`master`) | `pptx-dev/opf-bump-merge.yml` | `verify (ubuntu-latest)` (application-ci.yml) and `build` (cloudflare-build.yml) |
+| `Data-Advantage/pptx-dev` (`master`) | `pptx-dev/opf-bump-merge.yml` | `verify (ubuntu-latest)` (application-ci.yml) and `build` (cloudflare-build.yml), then the pull request's **Native Preview** check on the exact head (cf-native-preview.yml) and a head that contains `master` |
 
 ## What `opf-bump-merge.yml` does
 
@@ -23,6 +23,11 @@ branch) and merges only if every condition holds; otherwise it stops with a noti
 3. it carries the label `auto-merge` and not `needs-review`;
 4. it changes only manifests, the lockfile and the files a site mirrors its pins in (`ALLOWED_FILES`);
 5. every check in `REQUIRED_CHECKS` is `success` for the head commit (the last completion decides: an earlier one finds a check pending);
+   pptx-dev also requires its **Native Preview** check on the exact head (the trusted workflow's app and marker
+   `opf-sites-native-preview-v1:<pr>:<head>`) completed with `success`, and a head 0 commits behind `master`: its deploy gate
+   (`validateMergedPreview`) accepts a merge only when the squash commit's tree is the tree a Native Preview accepted, and a squash of a
+   head that is behind has another tree. Its merge also wakes when **Native Worker preview** completes (usually the last completion);
+   that run belongs to `master`, so the one open `bot/opf-v*` pull request is the candidate;
 6. then `gh pr merge --squash --delete-branch --match-head-commit <sha>` with the App's token, so the merge is a push by the App and starts
    the site's push and deploy workflows (a merge with `GITHUB_TOKEN` starts none).
 
@@ -45,7 +50,8 @@ The deploy path is the site's own and unchanged; nothing here deploys, logs in t
    `public/homepage-details/manifest.json`; `pptx-gallery` sets the pins, refreshes the lockfile, runs `import-font-replacements` and `sync-preview-fonts --core-repo <checkout>
    --core-ref <commit>`, the catalog and preview syncs and `build-chart-previews`, vendors the editor bundle and schema reference
    (`public/opf-editor`, `data/opf-spec.json`) with `scripts/vendor-gallery-editor.mjs` of the checkout at the tag, and runs the checks of its CI that
-   read them; `pptx-dev` sets the pins, `opf-reference-layer-pins.json` and the lockfile. The checkout of this repository is `--opf <dir>`
+   read them; `pptx-dev` sets the pins, `opf-reference-layer-pins.json` and the lockfile, and copies the diagram guide images and their manifest
+   (`public/docs/opf/diagrams/`) from the release commit. The checkout of this repository is `--opf <dir>`
    (`bump-sites.yml` passes its own, with the tag fetched), else `$OPF_CHECKOUT`, else a shallow clone of the tag. By hand, on the default branch
    of a site: `pnpm opf:bump 0.26.2` (it needs network access to the registry and GitHub). `ALLOWED_FILES` in each merge workflow lists the files
    a bump may change, which is exactly what that site's script writes; extend it in the same pull request when the script learns a new output. A release that changes behavior a site's tests assert, or an advisory published

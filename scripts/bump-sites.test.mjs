@@ -226,6 +226,26 @@ test('the site-side workflows: one merge workflow per site, on the site\'s defau
   assert.match(read('docs/programs/monorepo/site-workflows/pptx-gallery/opf-bump-merge.yml'), /REQUIRED_CHECKS: \|\n {12}build-and-smoke\n/u);
 });
 
+// pptx-dev's deploy gate (validateMergedPreview in its scripts/cf-deployment-proof.mjs) accepts a merge only when the squash tree is a tree
+// its Native Preview accepted, so its merge waits for that check on the exact head and for a head that contains the default branch
+// (pptx-dev #230 at 0.34.1 was merged by hand; the copy here mirrors the site's .github/workflows/opf-bump-merge.yml).
+test('the pptx-dev merge workflow waits for the exact head\'s Native Preview and an up-to-date head, and admits what its opf:bump writes', () => {
+  const text = read('docs/programs/monorepo/site-workflows/pptx-dev/opf-bump-merge.yml');
+  const body = code(text);
+  assert.match(text, /workflows: \["Application compatibility", "Cloudflare build", "Native Worker preview"\]/u);
+  assert.match(text, /\|\| github\.event\.workflow_run\.path == '\.github\/workflows\/cf-native-preview\.yml'\) \}\}/u, 'a Native Preview completion wakes the merge');
+  assert.match(text, /group: opf-bump-merge-\$\{\{ github\.repository \}\}/u);
+  assert.match(body, /\[ "\$\(jq length <<<"\$bumps"\)" = 1 \] \|\| stop/u, 'a Native Preview wake-up takes the one open bump pull request');
+  const merge = body.indexOf('gh pr merge ');
+  for (const guard of ['marker="opf-sites-native-preview-v1:$number:$HEAD_SHA"', '.name == "Native Preview" and .app.slug == "github-actions" and .external_id == $marker', '[ "$preview" = success ] || stop', 'compare/$DEFAULT_BRANCH...$HEAD_SHA" --jq .behind_by', '[ "$behind" = 0 ] || stop']) {
+    const at = body.indexOf(guard);
+    assert.ok(at > 0 && at < merge, `${guard} comes before the merge`);
+  }
+  const allowed = new RegExp(/ALLOWED_FILES: '([^']+)'/u.exec(text)[1], 'u');
+  for (const file of ['package.json', 'pnpm-lock.yaml', 'opf-reference-layer-pins.json', 'public/docs/opf/diagrams/manifest.json', 'public/docs/opf/diagrams/family-flowchart.svg']) assert.match(file, allowed, file);
+  for (const file of ['scripts/opf-bump.mjs', 'public/docs/opf/diagrams/a.js', 'public/docs/opf/diagrams/sub/a.svg', 'lib/a.ts']) assert.doesNotMatch(file, allowed, file);
+});
+
 // A site owns what its bump touches: its own `pnpm opf:bump`, run by bump-site.mjs; a site without one gets the generic pins.
 test('a site\'s own opf:bump script is found, called with the version and the checkout, and never given more than that', () => {
   assert.equal(siteScript(site({ 'package.json': manifest })), null);
