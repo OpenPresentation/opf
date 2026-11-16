@@ -3,15 +3,15 @@
   "kind": "icon-sets",
   "version": "1",
   "description": "The icon sets an OPF `icon` names as `<set>:<name>` (LH-14). Each record holds a set's license, copyright, version, source, its one viewBox and style, and every icon as SVG path data with its search tags; written by scripts/build-icon-sets.mjs from the pinned npm packages, never by hand. The package build writes them as static files under dist/icons/ (an index, one file per icon, the whole set and the tags per set); a host registers `galleryIconSets()` (`@openpresentation/gallery/icon-sets`), which reads only the icons a deck draws.",
-  "contentSha256": "85f090b4e554786f35d1e7cb286013da9a122964bfd543ebef001440c3b48ca5",
+  "contentSha256": "0e186c1898aca090fe46723e62a12029276b70ca427cdfeb2dd4bfb36a1690f5",
   "records": [
     {
       "id": "lucide",
       "name": "Lucide",
       "summary": "Clean, consistent outline icons on a 24 px grid with 2 px strokes; the default set.",
       "license": "ISC",
-      "version": "1.70.0",
-      "icons": 2029,
+      "version": "1.72.0",
+      "icons": 2052,
       "file": "lucide.json"
     },
     {
@@ -19,8 +19,8 @@
       "name": "Tabler outline",
       "summary": "Tabler's outline icons on a 24 px grid with 2 px strokes.",
       "license": "MIT",
-      "version": "3.50.0",
-      "icons": 5203,
+      "version": "3.51.0",
+      "icons": 5233,
       "file": "tabler.json"
     }
   ]
