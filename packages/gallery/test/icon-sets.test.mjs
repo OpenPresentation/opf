@@ -22,8 +22,8 @@ test("the icon-set records are what the pinned packages give", async () => {
     assert.equal(strip(read(file)), strip(text), `${file} is stale: run node scripts/build-icon-sets.mjs and npm run rehash`);
   }
   const pkg = JSON.parse(read("package.json"));
-  assert.equal(pkg.devDependencies["lucide-static"], "1.70.0");
-  assert.equal(pkg.devDependencies["@tabler/icons"], "3.50.0");
+  assert.equal(pkg.devDependencies["lucide-static"], "1.72.0");
+  assert.equal(pkg.devDependencies["@tabler/icons"], "3.51.0");
   assert.ok(pkg.files.includes("THIRD-PARTY-NOTICES.md"));
 });
 
