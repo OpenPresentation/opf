@@ -82,7 +82,7 @@ Data labels stay readable: a label inside a mark takes the text color that contr
 | area, stacked area, 100% stacked area | yes | no | the series' area |
 | scatter | yes | no | the series' markers (a scatter point label is not a category) |
 | radar, with markers, filled | yes | no | the series' line (or fill) and markers |
-| pie, doughnut | no | yes | the slice of each named category (a pie plots one series, so a series name is meaningless) |
+| pie, doughnut | no | yes | the slice of each named category (a pie plots one series, so a series name is meaningless); **every other slice takes the one muted neutral**, so the unhighlighted slices look alike and a legend cannot tell them apart (name the slices with `dataLabels` `category`, or leave `highlight` out, or write `"highlight": { "categories": [] }`, which also turns off a highlight the title would derive, to keep every slice its own palette color) |
 | histogram, pareto, waterfall, funnel, treemap, box and whisker, world, combo | no | no | not supported: dropped with `chart-option-adapted` |
 
 The Office 2016 (chartex) constructs are left out on purpose. Their marks take their colors from the construct's chart style, and a per-point color (`cx:dataPt`) would need native verification this change does not have; the waterfall also already colors its marks by increase, decrease and total. They draw and export as before.
