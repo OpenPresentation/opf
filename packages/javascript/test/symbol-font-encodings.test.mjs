@@ -32,6 +32,10 @@ describe("symbol font encodings", () => {
 
   test("the exported table is the spec reference file, frozen, with the five families in order", () => {
     assert.deepEqual(JSON.parse(JSON.stringify(SYMBOL_FONT_ENCODINGS)), JSON.parse(JSON.stringify(source)));
+    // The rows are generated in a column form and expanded at load: the same values with the keys in the file's order.
+    assert.equal(JSON.stringify(SYMBOL_FONT_ENCODINGS), JSON.stringify(source));
+    const frozen = (value) => value === null || typeof value !== "object" || (Object.isFrozen(value) && Object.values(value).every(frozen));
+    assert.ok(frozen(SYMBOL_FONT_ENCODINGS), "every object and array of the table is frozen");
     assert.ok(Object.isFrozen(SYMBOL_FONT_ENCODINGS) && Object.isFrozen(SYMBOL_FONT_ENCODINGS.families[0].codes[0]));
     assert.equal(subpath.SYMBOL_FONT_ENCODINGS, SYMBOL_FONT_ENCODINGS);
     assert.deepEqual([...SYMBOL_FONT_FAMILIES], FAMILIES);
