@@ -114,7 +114,7 @@ test('main: bump writes the pins, reports the label for the workflow and the bod
   assert.equal(JSON.parse(readFileSync(path.join(dir, 'package.json'), 'utf8')).dependencies['@openpresentation/opf'], '0.26.0');
   assert.match(readFileSync(output, 'utf8'), /^changed=true\nkind=major\nlabel=needs-review\n$/u);
   assert.match(readFileSync(bodyFile, 'utf8'), /\*\*v0\.26\.0\*\*[\s\S]*not merged automatically/u);
-  assert.match(pullRequestBody(planBump(site({ 'package.json': { dependencies: { '@openpresentation/opf': '0.26.0' } } }), '0.26.1')), /patch\*\* bump \(label `auto-merge`\)[^\n]*build-and-smoke/u);
+  assert.match(pullRequestBody(planBump(site({ 'package.json': { dependencies: { '@openpresentation/opf': '0.26.0' } } }), '0.26.1')), /patch\*\* bump \(label `auto-merge`\)[^\n]*Native Preview have passed on this exact head/u);
   await assert.rejects(main(['bump', '--site', dir, '--version', '0.26.0', '--write', '--bogus']), /unknown option/u);
 
   const status = (found) => ({ status: found ? 0 : 1, stdout: found ? JSON.stringify(found) : '' });
@@ -226,6 +226,45 @@ test('the site-side workflows: one merge workflow per site, on the site\'s defau
   assert.match(read('docs/programs/monorepo/site-workflows/pptx-gallery/opf-bump-merge.yml'), /REQUIRED_CHECKS: \|\n {12}build-and-smoke\n/u);
 });
 
+// Each site's deploy gate (validateMergedPreview in its scripts/cf-deployment-proof.mjs) accepts a merge only when the squash tree is a tree
+// its Native Preview accepted, so its merge waits for that check on the exact head and for a head that contains the default branch
+// (pptx-dev #230 at 0.34.1 was merged by hand). The copies here mirror each site's .github/workflows/opf-bump-merge.yml.
+test('every site merge workflow waits for the exact head\'s Native Preview and an up-to-date head, and admits what its opf:bump writes', () => {
+  const sites = {
+    'openpresentation-site': {
+      workflows: '"Website verification", "Native Worker preview"',
+      writes: ['package.json', 'starters/node/package.json', 'pnpm-lock.yaml', 'data/releases.json', 'data/schema-releases/0.34.1/opf.json', 'public/homepage-details/manifest.json', 'public/showcase/manifest.json', 'public/learn/render-identity.json', 'public/learn/lessons.json', 'public/learn/first-slide/step-1.svg'],
+      never: ['scripts/opf-bump.mjs', 'app/page.tsx', 'data/releases.overrides.json', 'public/showcase/other.svg'],
+    },
+    'pptx-gallery': {
+      workflows: '"Build and smoke", "Validate gallery registry", "Cloudflare Worker build", "Native Worker preview"',
+      writes: ['package.json', 'pnpm-lock.yaml', 'data/opf-spec.json', 'data/layout-examples.json', 'public/layout-examples/agenda.svg', 'public/opf-editor/playground.js', 'styles/preview-fonts/intos.css'],
+      never: ['scripts/opf-bump.mjs', 'app/page.tsx', 'data/catalog-display.json', 'fonts/upstream/carlito/OFL.txt', 'public/layout-examples/x.js'],
+    },
+    'pptx-dev': {
+      workflows: '"Application compatibility", "Cloudflare build", "Native Worker preview"',
+      writes: ['package.json', 'pnpm-lock.yaml', 'opf-reference-layer-pins.json', 'public/docs/opf/diagrams/manifest.json', 'public/docs/opf/diagrams/family-flowchart.svg'],
+      never: ['scripts/opf-bump.mjs', 'public/docs/opf/diagrams/a.js', 'public/docs/opf/diagrams/sub/a.svg', 'lib/a.ts'],
+    },
+  };
+  for (const [name, { workflows, writes, never }] of Object.entries(sites)) {
+    const text = read(`docs/programs/monorepo/site-workflows/${name}/opf-bump-merge.yml`);
+    const body = code(text);
+    assert.ok(text.includes(`\n    workflows: [${workflows}]\n`), `${name}: the site's CI and its Native Preview wake the merge`);
+    assert.match(text, /\|\| github\.event\.workflow_run\.path == '\.github\/workflows\/cf-native-preview\.yml'\) \}\}/u, `${name}: a Native Preview completion wakes the merge`);
+    assert.match(text, /group: opf-bump-merge-\$\{\{ github\.repository \}\}/u, name);
+    assert.match(body, /\[ "\$\(jq length <<<"\$bumps"\)" = 1 \] \|\| stop/u, `${name}: a Native Preview wake-up takes the one open bump pull request`);
+    const merge = body.indexOf('gh pr merge ');
+    for (const guard of ['marker="opf-sites-native-preview-v1:$number:$HEAD_SHA"', '.name == "Native Preview" and .app.slug == "github-actions" and .external_id == $marker', '[ "$preview" = success ] || stop', 'compare/$DEFAULT_BRANCH...$HEAD_SHA" --jq .behind_by', '[ "$behind" = 0 ] || stop']) {
+      const at = body.indexOf(guard);
+      assert.ok(at > 0 && at < merge, `${name}: ${guard} comes before the merge`);
+    }
+    const allowed = new RegExp(/ALLOWED_FILES: '([^']+)'/u.exec(text)[1], 'u');
+    for (const file of writes) assert.match(file, allowed, `${name}: ${file}`);
+    for (const file of never) assert.doesNotMatch(file, allowed, `${name}: ${file}`);
+  }
+});
+
 // A site owns what its bump touches: its own `pnpm opf:bump`, run by bump-site.mjs; a site without one gets the generic pins.
 test('a site\'s own opf:bump script is found, called with the version and the checkout, and never given more than that', () => {
   assert.equal(siteScript(site({ 'package.json': manifest })), null);
@@ -262,7 +301,7 @@ test('main: a site with its own script is bumped by it, and what Git sees afterw
   assert.equal(result.ownScript, true);
   assert.equal(result.changedFiles, 3);
   assert.match(readFileSync(output, 'utf8'), /^changed=true\nkind=patch\nlabel=auto-merge\n$/u, 'the kind is read before the script moves the pins');
-  assert.match(readFileSync(bodyFile, 'utf8'), /regenerated by its own `pnpm opf:bump 0\.26\.1` \(3 changed paths[\s\S]*merges it once its `build-and-smoke` check has passed/u);
+  assert.match(readFileSync(bodyFile, 'utf8'), /regenerated by its own `pnpm opf:bump 0\.26\.1` \(3 changed paths[\s\S]*merges it once the site's checks and its Native Preview have passed on this exact head/u);
 
   // pins already at the version, generated files differ: a change, but nobody reviewed it
   const again = await main(['bump', '--site', owned, '--version', '0.26.0', '--write', '--github-output', output], { log() {}, siteExec, gitStatus: () => ({ status: 0, stdout: ' M public/opf-editor/index.html\n' }) });

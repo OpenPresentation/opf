@@ -194,7 +194,7 @@ export function pullRequestBody(plan, { repository = 'OpenPresentation/opf', gen
     plan.kind === 'none'
       ? `The pins were already at this version; only generated files changed (label \`${label}\`): review it, then merge it by hand.`
       : plan.kind === 'patch'
-      ? `This is a **patch** bump (label \`${label}\`): this site's \`opf-bump-merge.yml\` merges it once its \`build-and-smoke\` check has passed.`
+      ? `This is a **patch** bump (label \`${label}\`): this site's \`opf-bump-merge.yml\` merges it once the site's checks and its Native Preview have passed on this exact head.`
       : `This is a **${plan.kind}** bump (label \`${label}\`): a minor or major bump of the shared 0.x line can break a site, so it is not merged automatically. Review it, then merge it by hand.`,
     '',
     'The lockfile was refreshed with the site\'s own package manager from the registry. Nothing was deployed.',
