@@ -457,14 +457,14 @@ try {
 			const style = (selector) => getComputedStyle(document.querySelector(selector));
 			const strip = document.querySelector("#deck-thumbs .opf-thumbs").getBoundingClientRect();
 			const current = document.querySelector('#deck-thumbs [aria-current="true"]').getBoundingClientRect();
-			return { shell: style("#opf-deck").backgroundColor, text: style("#opf-deck").color, title: style(".deck-foot").color, counter: style(".opf-nav-counter").color, design: style(".opf-design-menu-trigger").color, send: document.getElementById("deck-send").textContent, strip: [strip.left, strip.right], current: [current.left, current.right], height: document.getElementById("opf-deck").getBoundingClientRect().height };
+			return { shell: style("#opf-deck").backgroundColor, text: style("#opf-deck").color, title: style(".deck-foot").color, counter: style(".opf-nav-counter").color, design: style(".opf-design-menu-trigger").color, send: [document.getElementById("deck-send").getAttribute("aria-label"), document.getElementById("deck-send").innerText], strip: [strip.left, strip.right], current: [current.left, current.right], height: document.getElementById("opf-deck").getBoundingClientRect().height };
 		});
 		assert.equal(seen.shell, "rgb(38, 38, 36)", "the view's surface is the host's background");
 		assert.equal(seen.text, "rgb(250, 249, 245)");
 		assert.equal(seen.counter, "rgb(250, 249, 245)", "the editor's own parts take the same text colour");
 		assert.equal(seen.design, "rgb(194, 192, 182)", "and its quiet icon buttons the same muted colour as the viewer's");
 		assert.equal(seen.title, "rgb(194, 192, 182)", "muted text is the host's secondary text");
-		assert.equal(seen.send, "Send to Claude");
+		assert.deepEqual(seen.send, ["Send to Claude", "Send to Claude"], "660px: Send says the whole sentence");
 		assert.ok(seen.current[0] >= seen.strip[0] && seen.current[1] <= seen.strip[1] + 1, `the open slide's thumbnail is in the strip's view (${seen.current} in ${seen.strip})`);
 		assert.ok(seen.height < 560, `inline, the view is as tall as its slide needs (${seen.height}px)`);
 		await shoot("chat-dark-preview");
@@ -660,7 +660,7 @@ try {
 			// Every action stays within two taps: More holds Find, Expand and (where the host saves files) Export.
 			await inner.locator("#deck-more").tap();
 			await inner.locator("#deck-menu").waitFor();
-			const items = await frame.evaluate(() => [...document.querySelectorAll("#deck-menu > *")].filter((item) => item.getClientRects().length).map((item) => [item.textContent, Math.round(item.getBoundingClientRect().height)]));
+			const items = await frame.evaluate(() => [...document.querySelectorAll("#deck-menu > :is(button, select)")].filter((item) => item.getClientRects().length).map((item) => [item.textContent, Math.round(item.getBoundingClientRect().height)]));
 			assert.deepEqual(items.map(([text]) => text), ["Find and replace", "Expand"]);
 			assert.ok(items.every(([, tall]) => tall >= 44), JSON.stringify(items));
 			await inner.locator('#deck-menu [data-run="find"]').tap();
@@ -701,7 +701,7 @@ try {
 		await tab.evaluate((setup) => window.startView(setup), { viewUrl, arguments: {}, result, theme: "light", width: 320 });
 		await tab.frameLocator("#view").locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
 		await tab.frameLocator("#view").locator("#deck-more").tap();
-		const fit = await tab.frame({ url: /\/view$/ }).evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth, menu: [...document.querySelectorAll("#deck-menu > *")].filter((item) => item.getClientRects().length).map((item) => item.id || item.textContent) }));
+		const fit = await tab.frame({ url: /\/view$/ }).evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth, menu: [...document.querySelectorAll("#deck-menu > :is(button, select)")].filter((item) => item.getClientRects().length).map((item) => item.id || item.textContent) }));
 		assert.ok(fit.scroll <= fit.client, `320px: the page is ${fit.scroll}px wide in ${fit.client}px`);
 		assert.deepEqual(fit.menu, ["Find and replace", "Expand", "deck-example", "deck-paste"], "the editor's example picker and Paste are in More");
 		await narrow.close();
