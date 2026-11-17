@@ -707,6 +707,60 @@ try {
 		await narrow.close();
 	});
 
+	await run("in ChatGPT on a phone: Send is compact and names ChatGPT, a long name keeps its room, the footer says a status whole", async () => {
+		const long = { name: "AI Agents That Actually Work", language: "en-US", design: { theme: "classic" }, slides: [{ id: "t", title: "AI Agents That Actually Work" }, { id: "g", title: "Autonomy needs guardrails" }] };
+		for (const [width, height] of [[390, 844], [375, 667], [320, 640]]) {
+			const phone = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
+			const tab = await phone.newPage();
+			tab.on("pageerror", (error) => problems.push(String(error)));
+			await tab.exposeFunction("callServer", (params) => client.callTool(params));
+			await tab.goto(hostUrl);
+			const result = await client.callTool({ name: "show_deck", arguments: { document: long } });
+			await tab.evaluate((setup) => window.startView(setup), { viewUrl, arguments: { document: long }, result, theme: "dark", width, hostName: "chatgpt" });
+			const inner = tab.frameLocator("#view");
+			await inner.locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+			const frame = tab.frame({ url: /\/view$/ });
+			// Nothing on the slide is selected or focused until the person taps, and the hover outline is for a pointer that hovers.
+			const calm = await frame.evaluate(() => {
+				const hover = [...document.styleSheets].flatMap((sheet) => { try { return [...sheet.cssRules]; } catch { return []; } }).flatMap((rule) => (rule.cssRules ? [...rule.cssRules].map((inner) => [rule, inner]) : [[null, rule]])).filter(([, rule]) => /data-canvas-target\]:hover/.test(rule.selectorText ?? ""));
+				return { selected: document.querySelectorAll("[data-canvas-selected], [data-canvas-editing]").length, active: document.activeElement?.tagName, hover: hover.map(([outer]) => outer?.conditionText ?? null) };
+			});
+			assert.deepEqual(calm, { selected: 0, active: "BODY", hover: ["(hover: hover)"] }, `${width}px: ${JSON.stringify(calm)}`);
+			// An edit: Send appears in the name's row, filled.
+			await inner.locator(".opf-design-menu-trigger").tap();
+			await inner.locator('.opf-design-menu-tab[data-section="colors"]').tap();
+			await inner.locator('.opf-design-menu-item[data-section="colors"][data-value="burnt-orange"]').evaluate((item) => item.click());
+			await inner.locator(".opf-design-menu-close").evaluate((item) => item.click());
+			await inner.locator('#deck-send[data-unsent="true"]').waitFor();
+			const row = await frame.evaluate(() => {
+				const box = (element) => element.getBoundingClientRect();
+				const send = document.getElementById("deck-send");
+				const title = document.querySelector(".deck-title");
+				return { name: send.getAttribute("aria-label"), shown: send.innerText.trim(), title: send.title, nameWidth: box(title).width, row: box(document.querySelector(".deck-title-row")).height, right: box(document.getElementById("deck-more")).right, client: document.documentElement.clientWidth, sendHeight: box(send).height };
+			});
+			assert.equal(row.name, "Send to ChatGPT", `${width}px`);
+			assert.equal(row.shown, "Send", `${width}px: a phone shows the icon and "Send"`);
+			assert.match(row.title, /ChatGPT/);
+			assert.ok(row.nameWidth >= 96, `${width}px: the deck's name keeps ${Math.round(row.nameWidth)}px`);
+			assert.ok(row.row <= 46 && row.sendHeight >= 44, `${width}px: one row (${row.row}px)`);
+			assert.ok(row.right <= row.client, `${width}px: More ends inside the frame`);
+			await inner.locator("#deck-send").tap();
+			await inner.locator('#deck-sync[data-state="sent"]').waitFor();
+			const foot = await frame.evaluate(() => {
+				const status = document.getElementById("deck-status");
+				const sync = document.getElementById("deck-sync");
+				return { status: status.innerText, statusCut: status.scrollWidth > status.clientWidth + 1, sync: sync.innerText, syncCut: sync.scrollWidth > sync.clientWidth + 1 };
+			});
+			assert.deepEqual(foot, { status: "Colors set to Burnt Orange.", statusCut: false, sync: "Sent to ChatGPT", syncCut: false }, `${width}px`);
+			// What the host reported is one tap away (More), and in the footer version's title on wider frames.
+			await inner.locator("#deck-more").tap();
+			assert.match(await inner.locator("#deck-about").innerText(), /^OPF \d+\.\d+\.\d+.* · Host: chatgpt 1\.0\.0$/);
+			assert.equal(await inner.locator("#deck-version").getAttribute("title"), "Host: chatgpt 1.0.0");
+			if (shots) await tab.locator("#view").screenshot({ path: path.join(shots, `chatgpt-sent-${width}.png`) });
+			await phone.close();
+		}
+	});
+
 	await run("runs without a CSP violation or a page error", async () => {
 		assert.deepEqual(problems, []);
 	});

@@ -130,9 +130,11 @@ export function createCanvasEditor(container, options = {}) {
   notice.style.cssText =
     "position:absolute;left:8px;bottom:8px;max-width:calc(100% - 16px);font:12px/1.4 system-ui;background:#fff8ed;color:#875217;border:1px solid #ead5b3;border-radius:5px;padding:6px 10px;z-index:4";
   notice.hidden = true;
+  // The hover outline is for a pointer that hovers: a touch screen keeps :hover on the last element touched (a scroll that started on the
+  // title), which would look like a selection nobody made.
   const style = doc.createElement("style");
   style.textContent =
-    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas [data-opf-trend-arrow]{cursor:pointer}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus,.opf-canvas .opf-selection:focus{outline:none}.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection,.opf-canvas .opf-selection:focus-visible{stroke:#7765d0}.opf-canvas [data-canvas-target][data-canvas-editing]>.opf-selection{stroke:none}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
+    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas [data-opf-trend-arrow]{cursor:pointer}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus,.opf-canvas .opf-selection:focus{outline:none}@media (hover:hover){.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection,.opf-canvas .opf-selection:focus-visible{stroke:#7765d0}.opf-canvas [data-canvas-target][data-canvas-editing]>.opf-selection{stroke:none}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
   root.append(style, preview, overlay, notice);
   container.replaceChildren(root);
   // LH-99: a slide the export continues on further pages (LH-90) is edited as written; the indicator names its pages and previews each

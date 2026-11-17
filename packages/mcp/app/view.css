@@ -250,10 +250,10 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root[data-size~="tiny"] :is(.deck-button, .deck-menu-item, .deck-select, .deck-tabs [role="tab"], #deck-design .opf-design-menu-trigger, .deck-export .opf-export .opf-export-trigger, .deck-nav .opf-nav .opf-nav-button, .deck-verdict .opf-review-pill) { min-width: 44px; min-height: 44px; }
 :root[data-size~="tiny"] .deck-tabs { height: 44px; }
 :root[data-size~="tiny"] .deck-tabs [role="tab"] { padding: 0 10px; }
-:root[data-size~="tiny"] .deck-foot { flex-wrap: wrap; height: auto; gap: 0 6px; padding: 0 6px 0 2px; white-space: normal; }
-:root[data-size~="tiny"] :is(.deck-status, .deck-sync) { flex: 1 0 auto; max-width: 100%; overflow: visible; white-space: normal; text-overflow: clip; padding: 2px 4px 6px; }
-:root[data-size~="tiny"] :is(.deck-status, .deck-sync):empty { display: none; }
-:root[data-size~="tiny"] #deck-status * { white-space: normal; overflow: visible; text-overflow: clip; }
+:root[data-size~="narrow"] .deck-foot { flex-wrap: wrap; height: auto; gap: 0 6px; padding: 0 6px 0 2px; white-space: normal; }
+:root[data-size~="narrow"] :is(.deck-status, .deck-sync) { flex: 1 0 auto; max-width: 100%; overflow: visible; white-space: normal; text-overflow: clip; padding: 2px 4px 6px; }
+:root[data-size~="narrow"] :is(.deck-status, .deck-sync):empty { display: none; }
+:root[data-size~="narrow"] #deck-status * { white-space: normal; overflow: visible; text-overflow: clip; }
 :root[data-size~="tiny"] .deck-nav .opf-nav-counter { min-width: 40px; }
 :root[data-size~="tiny"] .deck-title-row { min-height: 44px; }
 :root[data-size~="tiny"] .opf-title .opf-title-button { min-width: 44px; height: 44px; }
