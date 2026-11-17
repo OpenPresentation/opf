@@ -24,7 +24,7 @@ import { createOpfEditor, layoutOptionsFor, type OpfEditor } from "@openpresenta
 import { type BrowserFontsHandle, loadFonts } from "@openpresentation/opf-render/fonts-browser";
 import { z } from "zod";
 import { FONT_BASE, bytesOf, extraFaces, fontFetch, startupFaces } from "./fonts.js";
-import { hostProduct, hostReport } from "./hosts.js";
+import { hostAbilities, hostProduct, hostReport } from "./hosts.js";
 import { type IconBatch, serverIconSets } from "./icons.js";
 
 declare const MCP_VERSION: string;
@@ -708,7 +708,15 @@ function applyTheme(): void {
 function layOut(): void {
 	const box = (context.containerDimensions ?? {}) as { width?: number; maxWidth?: number; height?: number; maxHeight?: number };
 	const width = Math.min(box.width ?? box.maxWidth ?? Number.POSITIVE_INFINITY, window.innerWidth || Number.POSITIVE_INFINITY);
-	root.dataset.size = width < 400 ? "compact narrow tiny" : width < 640 ? "compact narrow" : width < 860 ? "compact" : "wide";
+	// "tiny": 44px targets, under 400px. Under 300px (Cursor's IDE chat pane is about 215px) a mouse keeps the 32px controls, which is what
+	// lets the chrome stay two rows; a finger keeps 44px. "micro": under 300px Undo and Redo move into More, so the second row is the view
+	// switch and Design. Under MIN_WIDTH the view stops shrinking and the frame scrolls sideways (view.css).
+	const coarse = window.matchMedia?.("(pointer: coarse)").matches ?? false;
+	const tiny = width < 400 && (width >= 300 || coarse);
+	const size = width < 300 ? `compact narrow${tiny ? " tiny" : ""} micro` : width < 400 ? "compact narrow tiny" : width < 640 ? "compact narrow" : width < 860 ? "compact" : "wide";
+	// A resize that keeps the layout (a host growing the frame to the view's height) leaves an open More menu open.
+	const relaid = root.dataset.size !== size;
+	root.dataset.size = size;
 	// Renaming opens over the row the name sits in: the whole bar while it is one row, the name's own row once the bar wraps.
 	const ownRow = width < 640;
 	$("deck-title-row").toggleAttribute("data-opf-title-row", ownRow);
@@ -716,7 +724,7 @@ function layOut(): void {
 	// Two rows on a phone: what does not fit them (and the start row's example and Paste) is in the More menu.
 	if (ownRow) menu.append(exampleSelect, pasteButton);
 	else $("deck-start-label").after(exampleSelect, pasteButton);
-	setMenu(false);
+	if (relaid) setMenu(false);
 	// Inline, the view is as tall as its content; a host that fixes the height, and full screen or the side panel (also when the host
 	// sends no dimensions with it), get a view that fills the frame.
 	root.dataset.fill = String(context.displayMode === "fullscreen" || typeof box.height === "number");
@@ -742,10 +750,12 @@ function applyContext(update: Partial<McpUiHostContext>): void {
 	expandButton.dataset.mode = context.displayMode ?? "inline";
 	const can = app.getHostCapabilities();
 	sendButton.hidden = !can?.message;
-	// What the host said it is, where one look finds it: the More menu, and the footer version's title.
+	// What the host said it is and what it announced that the view acts on, where one look finds it: the More menu (each part wraps
+	// whole), and the footer version's title.
 	const report = hostReport(app.getHostVersion());
-	$("deck-about").textContent = `OPF ${MCP_VERSION} · ${report}`;
-	$("deck-version").title = report;
+	const abilities = hostAbilities(can, context.availableDisplayModes);
+	$("deck-about").replaceChildren(`OPF ${MCP_VERSION} · ${report}`, ...abilities.flatMap((part) => [" · ", Object.assign(document.createElement("span"), { textContent: part })]));
+	$("deck-version").title = [report, ...abilities].join(" · ");
 	// The sandbox cannot save a file itself: the source pane offers Download only where the host does it (ui/download-file).
 	shell.dataset.download = String(Boolean(can?.downloadFile));
 	syncSend();
@@ -754,7 +764,10 @@ function applyContext(update: Partial<McpUiHostContext>): void {
 /** The More menu of a phone's bar; it says what each control it stands for says now. */
 function setMenu(open: boolean): void {
 	if (open) {
-		const [find, expand, exportItem] = [...menu.querySelectorAll<HTMLButtonElement>("[data-run]")];
+		const [undo, redo, find, expand, exportItem] = [...menu.querySelectorAll<HTMLButtonElement>("[data-run]")];
+		// Undo and Redo are in More only where the bar has no room for them (view.css shows them under 300px).
+		(undo as HTMLButtonElement).disabled = undoButton.disabled;
+		(redo as HTMLButtonElement).disabled = redoButton.disabled;
 		(find as HTMLButtonElement).hidden = findButton.hidden;
 		(expand as HTMLButtonElement).hidden = expandButton.hidden;
 		(expand as HTMLButtonElement).textContent = expandButton.getAttribute("aria-label");
@@ -1088,7 +1101,9 @@ menu.addEventListener("click", (event) => {
 	if (!item) return;
 	setMenu(false);
 	const run = item.dataset.run;
-	if (run === "find") findButton.click();
+	if (run === "undo") undoButton.click();
+	else if (run === "redo") redoButton.click();
+	else if (run === "find") findButton.click();
 	else if (run === "expand") expandButton.click();
 	else if (run === "export") $("deck-export").querySelector<HTMLButtonElement>(".opf-export-trigger")?.click();
 });
