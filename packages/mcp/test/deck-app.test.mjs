@@ -55,6 +55,24 @@ describe("the deck view", () => {
 		await client.close();
 	});
 
+	test("the viewer's URI changes with its HTML, and earlier URIs still read as the current view", async () => {
+		// A host caches a view by its URI (ChatGPT: "Treat the resource URI as a cache key"): a new viewer needs a new URI.
+		assert.match(DECK_APP_URI, /^ui:\/\/opf\/deck\/[0-9a-f]{12}$/);
+		assert.equal(DECK_APP_URI.slice(-12), createHash("sha256").update(DECK_APP_HTML).digest("hex").slice(0, 12));
+		const client = await connected({});
+		const viewers = (await client.listResources()).resources.filter((resource) => resource.uri.startsWith("ui://"));
+		assert.deepEqual(viewers.map((resource) => resource.uri), [DECK_APP_URI], "one viewer is listed: the current one");
+		// A host that read the tools before an update asks by the URI it has: up to 0.34 the plain ui://opf/deck, then an earlier hash.
+		for (const uri of ["ui://opf/deck", "ui://opf/deck/0123456789ab"]) {
+			const [content] = (await client.readResource({ uri })).contents;
+			assert.equal(content.uri, uri);
+			assert.equal(content.text, DECK_APP_HTML, uri);
+			assert.deepEqual(content._meta, { ui: { prefersBorder: false, preferredDisplayMode: "fullscreen" } });
+		}
+		await assert.rejects(client.readResource({ uri: "ui://opf/other" }), /not found/i);
+		await client.close();
+	});
+
 	test("ui://opf/deck is one self-contained HTML page", async () => {
 		const client = await connected({});
 		const listed = (await client.listResources()).resources.find((resource) => resource.uri === DECK_APP_URI);

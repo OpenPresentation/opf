@@ -1,7 +1,8 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "tsup";
+import { deckAppUri } from "./scripts/app-resource-frame.mjs";
 
 const manifest = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8"));
 const root = fileURLToPath(new URL("../../", import.meta.url));
@@ -43,13 +44,16 @@ function whatsNew(): string {
   return `# What's new in OPF\n\n${count} from the CHANGELOG of @openpresentation/opf (the format, the validators and the engine), newest first. The renderer, PPTX, editor, CLI and gallery packages have their own changelogs, with the same version numbers.\n\n${shown.join("").trim()}\n`;
 }
 
+// The view's HTML, built by scripts/build-app.mjs before tsup runs; its hash names the view's resource (OPF_DECK_APP_URI).
+const deckAppFile = fileURLToPath(new URL("./app-dist/deck-app.html", import.meta.url));
+
 // Four entries: `index` (the server with its bundled data), `server` (the same without it), `stdio` (the Node wrapper) and `bin`
 // (opf-mcp). `index` and `server` import no Node builtin: tests/mcp-workerd.test.mjs bundles them for a Worker and runs them in workerd.
 export default defineConfig({
   entry: { index: "src/index.ts", server: "src/server.ts", stdio: "src/stdio.ts", bin: "src/bin.ts" },
   format: ["esm"],
   dts: { entry: { index: "src/index.ts", server: "src/server.ts", stdio: "src/stdio.ts" } },
-  define: { MCP_VERSION: JSON.stringify(manifest.version), OPF_CORE_VERSION: JSON.stringify(JSON.parse(readFileSync(path.join(root, "packages/javascript/package.json"), "utf8")).version), OPF_MCP_SKILLS: JSON.stringify(skills), OPF_MCP_WHATS_NEW: JSON.stringify(whatsNew()) },
+  define: { OPF_DECK_APP_URI: JSON.stringify(deckAppUri(existsSync(deckAppFile) ? readFileSync(deckAppFile, "utf8") : "")),  MCP_VERSION: JSON.stringify(manifest.version), OPF_CORE_VERSION: JSON.stringify(JSON.parse(readFileSync(path.join(root, "packages/javascript/package.json"), "utf8")).version), OPF_MCP_SKILLS: JSON.stringify(skills), OPF_MCP_WHATS_NEW: JSON.stringify(whatsNew()) },
   // The deck view (app-dist/deck-app.html, which scripts/build-app.mjs builds first) is inlined as the text of ui://opf/deck.
   loader: { ".html": "text" },
   sourcemap: true,

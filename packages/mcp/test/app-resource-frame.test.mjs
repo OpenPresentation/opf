@@ -3,8 +3,8 @@ import {test} from "node:test";
 import {Client} from "@modelcontextprotocol/sdk/client/index.js";
 import {StdioClientTransport} from "@modelcontextprotocol/sdk/client/stdio.js";
 import {ReadBuffer,STDIO_DEFAULT_MAX_BUFFER_SIZE,serializeMessage} from "@modelcontextprotocol/sdk/shared/stdio.js";
-import {appResourceFrame,appResourceMessage,assertAppResourceFrame} from "../scripts/app-resource-frame.mjs";
-import {DECK_APP_HTML} from "../dist/index.js";
+import {appResourceFrame,appResourceMessage,assertAppResourceFrame,deckAppUri} from "../scripts/app-resource-frame.mjs";
+import {DECK_APP_HTML,DECK_APP_URI} from "../dist/index.js";
 import {BIN} from "./helpers/mcp-client.mjs";
 
 test("the exact escaped viewer frame fits the unchanged default SDK transport",()=>{
@@ -45,7 +45,8 @@ test("a default real stdio client reads the entire viewer then remains connected
   const errors=[],client=new Client({name:"frame-contract",version:"1"});client.onerror=error=>errors.push(String(error));
   try{
     await client.connect(transport);
-    const result=await client.readResource({uri:"ui://opf/deck"});
+    assert.equal(DECK_APP_URI,deckAppUri(DECK_APP_HTML),"the server's URI is the hash of the HTML it serves");
+    const result=await client.readResource({uri:DECK_APP_URI});
     assert.deepEqual(result,appResourceMessage(DECK_APP_HTML).result,"the build budget sizes the real production resource shape and metadata");
     assert.equal(result.contents[0].text,DECK_APP_HTML);
     const schema=await client.callTool({name:"get_schema",arguments:{name:"Chart"}});

@@ -197,12 +197,15 @@ describe("a site that hosts the deck view (deckApp with siteFontFiles)", () => {
 			return message.result;
 		};
 		const tools = (await post("tools/list", {})).tools;
-		assert.deepEqual(tools.find((tool) => tool.name === "show_deck")._meta.ui, { resourceUri: "ui://opf/deck" });
+		const viewUri = tools.find((tool) => tool.name === "show_deck")._meta.ui.resourceUri;
+		assert.match(viewUri, /^ui:\/\/opf\/deck\/[0-9a-f]{12}$/, "the viewer's URI names its HTML");
 		assert.deepEqual(tools.find((tool) => tool.name === "read_font_file")._meta.ui, { visibility: ["app"] });
+		assert.equal((await post("resources/read", { uri: viewUri })).contents[0].text, "<!doctype html><title>OPF deck</title>");
+		assert.deepEqual((await post("resources/read", { uri: viewUri })).contents[0]._meta, { ui: { prefersBorder: false, preferredDisplayMode: "fullscreen" } });
+		// A host holding a tool list from before an update still gets the view by the URI it has.
 		assert.equal((await post("resources/read", { uri: "ui://opf/deck" })).contents[0].text, "<!doctype html><title>OPF deck</title>");
-		assert.deepEqual((await post("resources/read", { uri: "ui://opf/deck" })).contents[0]._meta, { ui: { prefersBorder: false, preferredDisplayMode: "fullscreen" } });
 		// The entry point runs in the Worker with no arguments: a starter deck and server-minted viewer keys, and nothing stored.
-		assert.deepEqual(tools.find((tool) => tool.name === "open_editor")._meta, { ui: { resourceUri: "ui://opf/deck" }, "ui/resourceUri": "ui://opf/deck", "openai/ui": { entrypoints: [{ type: "global" }] } });
+		assert.deepEqual(tools.find((tool) => tool.name === "open_editor")._meta, { ui: { resourceUri: viewUri }, "ui/resourceUri": viewUri, "openai/ui": { entrypoints: [{ type: "global" }] } });
 		const studio = await post("tools/call", { name: "open_editor", arguments: {} });
 		assert.equal(studio.isError, undefined, JSON.stringify(studio.content));
 		assert.equal(studio.structuredContent.document.slides.length, 2);

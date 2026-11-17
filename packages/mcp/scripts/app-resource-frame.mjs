@@ -1,10 +1,17 @@
+import { createHash } from "node:crypto";
 import { serializeMessage } from "@modelcontextprotocol/sdk/shared/stdio.js";
 
 export const APP_RESOURCE_FRAME_LIMIT = 10 * 1024 * 1024;
 
-// Match server.ts's actual ui://opf/deck resource result. Tests compare this with the live server result.
+// The viewer's resource URI: ui://opf/deck/ and the first 12 hex digits of the SHA-256 of its HTML. A host caches a view by its URI
+// (ChatGPT says so), so the URI changes exactly when the page does. tsup builds it into DECK_APP_URI from app-dist/deck-app.html.
+export function deckAppUri(html) {
+  return `ui://opf/deck/${createHash("sha256").update(html).digest("hex").slice(0, 12)}`;
+}
+
+// Match server.ts's actual resource result for the viewer. Tests compare this with the live server result.
 export function appResourceMessage(html, id = Number.MAX_SAFE_INTEGER) {
-  return {jsonrpc:"2.0",id,result:{contents:[{uri:"ui://opf/deck",mimeType:"text/html;profile=mcp-app",text:html,_meta:{ui:{prefersBorder:false,preferredDisplayMode:"fullscreen"}}}]}};
+  return {jsonrpc:"2.0",id,result:{contents:[{uri:deckAppUri(html),mimeType:"text/html;profile=mcp-app",text:html,_meta:{ui:{prefersBorder:false,preferredDisplayMode:"fullscreen"}}}]}};
 }
 
 export function appResourceFrame(html, id) {

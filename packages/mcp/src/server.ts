@@ -305,8 +305,14 @@ To author a deck: write JSON (or YAML or Markdown) and open it with show_deck. T
 
 export { type SiteFontsOptions, deckFontFile, siteFontFiles } from "./site-fonts.js";
 
-/** The `ui://` resource of the deck view and the MIME type of an MCP App (SEP-1865). */
-export const DECK_APP_URI = "ui://opf/deck";
+declare const OPF_DECK_APP_URI: string;
+/**
+ * The `ui://` resource of the deck view (SEP-1865): `ui://opf/deck/` and a hash of its HTML, computed when the package is built. A
+ * host caches a view by its URI, so a new viewer gets a new one; `ui://opf/deck` and any earlier `ui://opf/deck/<hash>` still read
+ * (the current view), for a host that holds a tool list from before an update.
+ */
+export const DECK_APP_URI: string = OPF_DECK_APP_URI;
+/** The MIME type of an MCP App (SEP-1865). */
 export const MCP_APP_MIME_TYPE = "text/html;profile=mcp-app";
 
 /**
@@ -967,12 +973,18 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			},
 		);
 
+		const readView = async (uri: URL) => ({ contents: [{ uri: uri.href, mimeType: MCP_APP_MIME_TYPE, text: typeof deckApp.html === "function" ? await deckApp.html() : deckApp.html, _meta: DECK_APP_CONTENT_META }] });
 		server.registerResource(
 			"deck-view",
 			DECK_APP_URI,
 			{ title: "OPF deck viewer", description: "The OPF viewer that show_deck and open_editor open: Preview, Source and Both, with editing and checks, in one HTML page (an MCP App).", mimeType: MCP_APP_MIME_TYPE, _meta: { ui: { prefersBorder: false } } },
-			async (uri) => ({ contents: [{ uri: uri.href, mimeType: MCP_APP_MIME_TYPE, text: typeof deckApp.html === "function" ? await deckApp.html() : deckApp.html, _meta: DECK_APP_CONTENT_META }] }),
+			readView,
 		);
+		// A host that read the tools before an update still asks for the viewer by the URI they named (ui://opf/deck up to 0.34, or an
+		// earlier hash): it gets the current view, which speaks to this server. Not listed; the templates say what they are.
+		const earlier = { title: "OPF deck viewer (earlier URI)", description: `An earlier URI of the OPF viewer; it reads as the current one, ${DECK_APP_URI}.`, mimeType: MCP_APP_MIME_TYPE };
+		server.registerResource("deck-view-earlier", new ResourceTemplate("ui://opf/deck/{hash}", { list: undefined }), earlier, readView);
+		server.registerResource("deck-view-unversioned", new ResourceTemplate("ui://opf/deck", { list: undefined }), earlier, readView);
 
 		const readFontFile = deckApp.readFontFile;
 		if (readFontFile) {

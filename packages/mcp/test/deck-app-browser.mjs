@@ -42,7 +42,8 @@ else {
 }
 console.log(`# server: ${remote ?? "in memory"} (${client.getServerVersion()?.name} ${client.getServerVersion()?.version})`);
 
-const resource = (await client.readResource({ uri: "ui://opf/deck" })).contents[0];
+const viewUri = (await client.listTools()).tools.find((tool) => tool.name === "show_deck")._meta.ui.resourceUri;
+const resource = (await client.readResource({ uri: viewUri })).contents[0];
 assert.equal(resource.mimeType, "text/html;profile=mcp-app");
 assert.equal(resource._meta?.ui?.csp, undefined, "the view declares no CSP domains: it needs none");
 
