@@ -24,7 +24,7 @@ import { createOpfEditor, layoutOptionsFor, type OpfEditor } from "@openpresenta
 import { type BrowserFontsHandle, loadFonts } from "@openpresentation/opf-render/fonts-browser";
 import { z } from "zod";
 import { FONT_BASE, bytesOf, extraFaces, fontFetch, startupFaces } from "./fonts.js";
-import { hostProduct, hostReport } from "./hosts.js";
+import { hostAbilities, hostProduct, hostReport } from "./hosts.js";
 import { type IconBatch, serverIconSets } from "./icons.js";
 
 declare const MCP_VERSION: string;
@@ -750,10 +750,12 @@ function applyContext(update: Partial<McpUiHostContext>): void {
 	expandButton.dataset.mode = context.displayMode ?? "inline";
 	const can = app.getHostCapabilities();
 	sendButton.hidden = !can?.message;
-	// What the host said it is, where one look finds it: the More menu, and the footer version's title.
+	// What the host said it is and what it announced that the view acts on, where one look finds it: the More menu (each part wraps
+	// whole), and the footer version's title.
 	const report = hostReport(app.getHostVersion());
-	$("deck-about").textContent = `OPF ${MCP_VERSION} · ${report}`;
-	$("deck-version").title = report;
+	const abilities = hostAbilities(can, context.availableDisplayModes);
+	$("deck-about").replaceChildren(`OPF ${MCP_VERSION} · ${report}`, ...abilities.flatMap((part) => [" · ", Object.assign(document.createElement("span"), { textContent: part })]));
+	$("deck-version").title = [report, ...abilities].join(" · ");
 	// The sandbox cannot save a file itself: the source pane offers Download only where the host does it (ui/download-file).
 	shell.dataset.download = String(Boolean(can?.downloadFile));
 	syncSend();

@@ -232,6 +232,8 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root[data-size~="narrow"] .deck-menu:not([hidden]) { display: flex; flex-direction: column; position: absolute; top: 100%; right: 0; z-index: 30; width: min(260px, calc(100vw - 16px)); padding: 4px; border: 1px solid var(--opf-ui-border); border-radius: var(--opf-ui-radius-md); background: var(--opf-ui-surface); box-shadow: var(--opf-ui-shadow-pop); }
 :root[data-size~="narrow"] .deck-menu :is(.deck-menu-item, .deck-button) { display: flex; justify-content: flex-start; align-items: center; width: 100%; min-height: var(--opf-ui-control-h); height: auto; padding: 0 12px; border: 0; border-radius: var(--opf-ui-radius); background: transparent; color: var(--opf-ui-fg); font-weight: 400; text-align: start; cursor: pointer; }
 :root[data-size~="narrow"] .deck-menu :is(.deck-menu-item, .deck-button):hover { background: var(--opf-ui-muted); }
+/* The host line's capability parts ("message: no") each wrap whole. */
+.deck-menu-about span { white-space: nowrap; }
 :root[data-size~="narrow"] .deck-menu-about { margin: 4px 0 0; padding: 8px 12px 4px; border-top: 1px solid var(--opf-ui-border); color: var(--opf-ui-muted-fg); font-size: 12px; overflow-wrap: anywhere; }
 :root[data-size~="narrow"] .deck-menu .deck-select { flex: none; width: 100%; max-width: none; height: var(--opf-ui-control-h); margin: 2px 0; }
 /* The slide as wide as the frame allows; a compact strip without the numbers (the footer says which slide is open). */

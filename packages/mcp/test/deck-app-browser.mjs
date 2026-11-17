@@ -755,8 +755,8 @@ try {
 			assert.deepEqual(foot, { status: "Colors set to Burnt Orange.", statusCut: false, sync: "Sent to ChatGPT", syncCut: false }, `${width}px`);
 			// What the host reported is one tap away (More), and in the footer version's title on wider frames.
 			await inner.locator("#deck-more").tap();
-			assert.match(await inner.locator("#deck-about").innerText(), /^OPF \d+\.\d+\.\d+.* · Host: chatgpt 1\.0\.0$/);
-			assert.equal(await inner.locator("#deck-version").getAttribute("title"), "Host: chatgpt 1.0.0");
+			assert.match(await inner.locator("#deck-about").innerText(), /^OPF \d+\.\d+\.\d+.* · Host: chatgpt 1\.0\.0 · message: yes · save files: no · full screen: yes · tools: yes · context: yes$/);
+			assert.equal(await inner.locator("#deck-version").getAttribute("title"), "Host: chatgpt 1.0.0 · message: yes · save files: no · full screen: yes · tools: yes · context: yes");
 			if (shots) await tab.locator("#view").screenshot({ path: path.join(shots, `chatgpt-sent-${width}.png`) });
 			await phone.close();
 		}
@@ -814,6 +814,14 @@ try {
 			assert.equal(await inner.locator("#deck-menu").isVisible(), true, `${width}px: a resize that keeps the layout leaves More open`);
 			const items = await frame.evaluate(() => [...document.querySelectorAll("#deck-menu > button")].filter((item) => item.getClientRects().length).map((item) => [item.textContent, item.disabled, item.getBoundingClientRect().right <= document.documentElement.clientWidth]));
 			assert.deepEqual(items, [["Undo", true, true], ["Redo", true, true], ["Find and replace", false, true], ["Expand", false, true]], `${width}px: ${JSON.stringify(items)}`);
+			// The host line says what the host announced, each part whole on its line and inside the menu.
+			const about = await frame.evaluate(() => {
+				const line = document.getElementById("deck-about");
+				const menuRight = document.getElementById("deck-menu").getBoundingClientRect().right;
+				return { text: line.innerText.replace(/\s+/g, " "), parts: [...line.querySelectorAll("span")].map((part) => [part.getClientRects().length, part.getBoundingClientRect().right <= menuRight]) };
+			});
+			assert.match(about.text, /^OPF \S+ · Host: cursor 1\.0\.0 · message: yes · save files: no · full screen: yes · tools: yes · context: yes$/, `${width}px: ${about.text}`);
+			assert.deepEqual(about.parts, Array(5).fill([1, true]), `${width}px: each part wraps whole`);
 			await inner.locator("#deck-more").click();
 			// The Design sheet: one section at a time under the slide, its four segments wide enough to read.
 			await inner.locator(".opf-design-menu-trigger").click();
