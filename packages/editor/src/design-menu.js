@@ -124,9 +124,10 @@ export function createDesignMenu(container, options = {}) {
   const trigger = el(doc, "button", { type: "button", class: "opf-design-menu-trigger", "aria-haspopup": "dialog", "aria-expanded": "false", "aria-controls": `${id}-popover` },
     icon(doc, "Palette", 14, icons.trigger), el(doc, "span", { class: "opf-design-menu-trigger-label", text: labels.trigger }));
   const closeButton = el(doc, "button", { type: "button", class: "opf-design-menu-close", "aria-label": labels.close }, icon(doc, "X", 18, icons.close));
-  // The sheet's section switch: one segment per section, each with the section's name and its current choice.
+  // The sheet's section switch: one segment per section, each with the section's name and its current choice. It is in the document only
+  // while the menu is open as a sheet (setMode), so a closed menu or the popover has no tabs for a screen reader to find.
   const tabs = el(doc, "div", { class: "opf-design-menu-tabs", role: "tablist", "aria-label": labels.title });
-  const head = el(doc, "div", { class: "opf-design-menu-head" }, el(doc, "span", { class: "opf-design-menu-title", text: labels.title }), tabs, closeButton);
+  const head = el(doc, "div", { class: "opf-design-menu-head" }, el(doc, "span", { class: "opf-design-menu-title", text: labels.title }), closeButton);
   const menu = el(doc, "div", { class: "opf-design-menu-menu", role: "menu", "aria-label": labels.title, id: `${id}-menu` });
   const empty = el(doc, "p", { class: "opf-design-menu-empty", text: labels.empty, hidden: true });
   const moreRow = el(doc, "button", { type: "button", class: "opf-design-menu-item opf-design-menu-more", role: "menuitem", tabindex: "-1", text: labels.more, hidden: typeof options.onOpenPanel !== "function" });
@@ -331,6 +332,8 @@ export function createDesignMenu(container, options = {}) {
     root.dataset.mode = mode;
     popover.setAttribute("aria-modal", String(mode === "sheet"));
     scrim.hidden = !(isOpen && mode === "sheet");
+    if (isOpen && mode === "sheet") head.insertBefore(tabs, closeButton);
+    else tabs.remove();
   }
   function place() {
     if (!isOpen) return;
@@ -397,6 +400,7 @@ export function createDesignMenu(container, options = {}) {
     isOpen = false;
     popover.hidden = true;
     scrim.hidden = true;
+    tabs.remove();
     trigger.setAttribute("aria-expanded", "false");
     doc.removeEventListener("pointerdown", onDocPointer, true);
     doc.removeEventListener("keydown", onDocKey);
