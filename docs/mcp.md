@@ -127,7 +127,7 @@ Skill scripts and agent manifests are not served; the server runs no code from t
 
 ### What the viewer does with each host capability
 
-Every capability below is the host's to offer, and Claude can limit each one by connector type (several need a remote connector: a custom connector added by URL or a directory listing, not a local server), by organization and by client. Nothing here is available to every user, and none of it was verified in Claude from this repository; the stand-in host in `test/deck-app-tools-browser.mjs` and `test/deck-app-browser.mjs` behaves as Claude's MCP Apps documentation describes. The viewer keeps working without each one.
+Every capability below is the host's to offer, and Claude can limit each one by connector type (several need a remote connector: a custom connector added by URL or a directory listing, not a local server), by organization and by client. Nothing here is available to every user, and none of it was verified in Claude from this repository; the stand-in host in `test/deck-app-tools-browser.mjs` and `test/deck-app-browser.mjs` behaves as Claude's MCP Apps documentation describes. The viewer keeps working without each one. To see what a host announced, open More: its last line names the host and then reads, for example, `message: no · save files: no · full screen: no · tools: yes · context: yes` (the footer version's title carries the same), one part for each row of this table.
 
 | Capability | Where the host offers it | Where it does not |
 | --- | --- | --- |
