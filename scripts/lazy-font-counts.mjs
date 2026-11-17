@@ -58,6 +58,13 @@ export const REVIEWED_FONT_SETS = Object.freeze({
     versions: Object.freeze(['0.31.0']),
     note: 'opf#982: only dist/font-manifest.js changed, for the npm script faces Noto Sans Devanagari 0.4.2 (2.007: new GSUB, GPOS, GDEF and cmap; metrics, glyph set and advances unchanged) and Noto Sans Georgian 0.4.4 (2.005, smaller GSUB), licenses unchanged. No file under fonts/ changed, so the vendored faces still list as 94 lazy fonts.',
   }),
+  '3827841333d917ac0055706de8e344059f1376d0bf432325681b8f7ee32247db': Object.freeze({
+    manifestSha256: '427fc0e42da6481fa8bcfd137f5932878747f1ef0b62b0cdacf199abfeb7629f',
+    files: 143,
+    count: 94,
+    versions: Object.freeze(['unreleased after 0.34.1']),
+    note: 'opf#1339, reviewed 2026-11-16: only dist/font-manifest.js changed, for the npm script faces Noto Sans Mongolian 0.4.2 (Google Fonts v24: re-spaced advances, sample lines 0.1% to 4% narrower and equal to HarfBuzz; LICENSE_FONT is still the SIL Open Font License 1.1, its only change the license URL line, scripts.sil.org/OFL to openfontlicense.org) and Noto Color Emoji 0.4.8 (license file unchanged). No file under fonts/ changed, so the vendored faces still list as 94 lazy fonts.',
+  }),
 });
 
 /**

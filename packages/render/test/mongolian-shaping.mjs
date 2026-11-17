@@ -3,8 +3,9 @@
 // length resolves to undefined: "Not a fixed size") and has no processor for it, so every shaping of the face threw
 // font-shaping-failed, for Latin, digits and Mongolian alike, and the Noto Sans Mongolian font scheme could not be drawn in any host.
 // A lookup fontkit cannot decode now applies nothing, so the other ~90 calt/rclt lookups still run. The expected advances below are the
-// widths a browser (Chromium/HarfBuzz via Edge on Windows) measures for the same face at 100 px: the Latin sample and four Mongolian
-// samples are equal within 0.05 px; the fifth (with a variation selector) is 0.9% narrower, a known limit of skipping the lookup.
+// widths HarfBuzz (the shaper Chromium uses) measures for the same face at 100 px: all six samples are equal within 0.05 px. They
+// follow the pinned face: @expo-google-fonts/noto-sans-mongolian 0.4.2 re-spaced the Mongolian advances (0.4.1 measured 603.00, 568.50,
+// 758.41, 1468.50 and 630.00 in Edge).
 import assert from 'node:assert/strict';
 import {toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
@@ -14,11 +15,11 @@ const style = {fontFamily: 'Noto Sans Mongolian', fontWeight: 400};
 const at100 = text => registry.textMeasurement.measure(text, 100, style);
 const samples = [
   ['Font scheme preview 2026', 1245.91, 0.05],
-  ['ᠮᠣᠩᠭᠣᠯ ᠤᠯᠤᠰ', 603.00, 0.05],
-  ['ᠴᠢᠩᠭᠢᠰ ᠬᠠᠭᠠᠨ', 568.50, 0.05],
-  ['ᠮᠣᠩᠭᠣᠯ ᠬᠡᠯᠡ ᠪᠢᠴᠢᠭ', 758.41, 0.05],
-  ['ᠪᠢᠳᠡ ᠮᠣᠩᠭᠣᠯ ᠤᠯᠤᠰ ᠤᠨ ᠬᠥᠮᠥᠨ ᠪᠢᠨᠢ', 1468.50, 0.05],
-  ['ᠰᠠᠢᠨ ᠪᠠᠶᠢᠨ᠎ᠠ ᠤᠤ', 630.00, 6],
+  ['ᠮᠣᠩᠭᠣᠯ ᠤᠯᠤᠰ', 576.70, 0.05],
+  ['ᠴᠢᠩᠭᠢᠰ ᠬᠠᠭᠠᠨ', 572.50, 0.05],
+  ['ᠮᠣᠩᠭᠣᠯ ᠬᠡᠯᠡ ᠪᠢᠴᠢᠭ', 732.10, 0.05],
+  ['ᠪᠢᠳᠡ ᠮᠣᠩᠭᠣᠯ ᠤᠯᠤᠰ ᠤᠨ ᠬᠥᠮᠥᠨ ᠪᠢᠨᠢ', 1442.20, 0.05],
+  ['ᠰᠠᠢᠨ ᠪᠠᠶᠢᠨ᠎ᠠ ᠤᠤ', 636.80, 0.05],
 ];
 for (const [text, expected, tolerance] of samples) {
   const width = at100(text);
