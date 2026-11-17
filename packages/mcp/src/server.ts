@@ -297,16 +297,27 @@ const INSTRUCTIONS = `OPF (Open Presentation Format) is a JSON format for slide 
 Call start_here (with your goal) for a path through the docs, skills, examples and catalog; or start with the resource opf://docs/format-card (the whole authoring surface on one page) and opf://docs/index (every page). Look up exact fields with get_schema (or the opf://schema/<name> resources), default design records (layouts, themes, color and font schemes, ...) with search_catalog and get_catalog_record, worked decks with list_examples (opf://examples/<slug>), and prose with search_docs. Skills are resources too: opf://skills/<name>.
 To author a deck: write JSON (or YAML or Markdown), call validate_deck, fix the findings (each has a rule id, a JSON Pointer path and a hint), repeat until ok. convert changes a deck between JSON, YAML and Markdown. Validation is not proof of how a deck looks: it does not render.`;
 
-const INSTRUCTIONS_SHOW = "To show the user a deck, call show_deck: in a client that supports MCP Apps it opens the OPF viewer (Preview, Source and Both), where the user can edit it; their edits come back to you as context, and you continue from that version.";
+const INSTRUCTIONS_SHOW = "To show the user a deck, call show_deck: in a client that supports MCP Apps it opens the OPF viewer (Preview, Source and Both), where the user can edit it; their edits come back to you as context, and you continue from that version. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI does (opf convert deck.opf.json deck.pptx).";
 const INSTRUCTIONS_IN_PLACE = "Where the client offers the viewer's own tools (read_deck, select_slide, edit_deck), change the deck that is already open with them instead of sending a new one: read_deck, then edit_deck with its revision. A new show_deck for the same deck (the same name) replaces the viewer that shows it; open_editor opens the viewer's editor with a starter or example deck.";
 const INSTRUCTIONS_VIEWER = `OPF (Open Presentation Format) is a JSON format for slide decks. This server teaches it and opens decks in the OPF viewer; it keeps no state and reads no files.
 Call start_here (with your goal) for a path through the docs, skills, examples and catalog; or start with the resource opf://docs/format-card (the whole authoring surface on one page) and opf://docs/index (every page). Look up exact fields with get_schema (or the opf://schema/<name> resources), default design records (layouts, themes, color and font schemes, ...) with search_catalog and get_catalog_record, worked decks with list_examples (opf://examples/<slug>), and prose with search_docs. Skills are resources too: opf://skills/<name>.
-To author a deck: write JSON (or YAML or Markdown) and open it with show_deck. The viewer checks it on the user's machine and sends you its findings (each has a rule id, a JSON Pointer path and a message) as context; fix them and call show_deck again. The user can edit the deck in the viewer; their edits come back to you as context.`;
+To author a deck: write JSON (or YAML or Markdown) and open it with show_deck. The viewer checks it on the user's machine and sends you its findings (each has a rule id, a JSON Pointer path and a message) as context; fix them and call show_deck again. The user can edit the deck in the viewer; their edits come back to you as context. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI makes them on the user's machine.`;
 
 export { type SiteFontsOptions, deckFontFile, siteFontFiles } from "./site-fonts.js";
 
-/** The `ui://` resource of the deck view and the MIME type of an MCP App (SEP-1865). */
-export const DECK_APP_URI = "ui://opf/deck";
+/**
+ * The server's icon (MCP `Implementation.icons`, a standard field since the 2025-11-25 revision): the OPF mark of docs/brand/opf-icon.svg as
+ * a data URI, so a client that shows connectors by icon needs no request. A client that does not take SVG shows its own placeholder.
+ */
+const SERVER_ICON = { src: `data:image/svg+xml;base64,${btoa("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"64\" height=\"64\" viewBox=\"0 0 64 64\"><rect width=\"64\" height=\"64\" rx=\"14\" fill=\"#1F4270\"/><g transform=\"translate(5 5) scale(0.84375)\"><path d=\"M15 12C12 12 11 13.5 11 16.5V27C11 29.8 10 32 6.5 32C10 32 11 34.2 11 37V47.5C11 50.5 12 52 15 52M49 12C52 12 53 13.5 53 16.5V27C53 29.8 54 32 57.5 32C54 32 53 34.2 53 37V47.5C53 50.5 52 52 49 52\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"5.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><rect x=\"19\" y=\"21\" width=\"26\" height=\"22\" rx=\"4\" fill=\"#FFFFFF\"/></g></svg>")}`, mimeType: "image/svg+xml", sizes: ["any"] };
+declare const OPF_DECK_APP_URI: string;
+/**
+ * The `ui://` resource of the deck view (SEP-1865): `ui://opf/deck/` and a hash of its HTML, computed when the package is built. A
+ * host caches a view by its URI, so a new viewer gets a new one; `ui://opf/deck` and any earlier `ui://opf/deck/<hash>` still read
+ * (the current view), for a host that holds a tool list from before an update.
+ */
+export const DECK_APP_URI: string = OPF_DECK_APP_URI;
+/** The MIME type of an MCP App (SEP-1865). */
 export const MCP_APP_MIME_TYPE = "text/html;profile=mcp-app";
 
 /**
@@ -377,7 +388,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 	const opfVersion = options.opfVersion;
 	const check: CheckText = options.checkText ?? readReport;
 	const instructions = processDecks ? (deckApp ? `${INSTRUCTIONS}\n${INSTRUCTIONS_SHOW}\n${INSTRUCTIONS_IN_PLACE}` : INSTRUCTIONS) : `${INSTRUCTIONS_VIEWER}\n${INSTRUCTIONS_IN_PLACE}`;
-	const server = new McpServer({ name: "opf", title: "OpenPresentation (OPF)", version }, { instructions });
+	const server = new McpServer({ name: "opf", title: "OpenPresentation (OPF)", version, websiteUrl: "https://www.openpresentation.org", icons: [SERVER_ICON] }, { instructions });
 	// The tool that checks a deck: validate_deck, or the viewer when the server does no deck work.
 	const checkTool = processDecks ? "validate_deck" : "show_deck";
 
@@ -828,6 +839,8 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		const viewerSchema = z.object({ session: z.string(), createdAt: z.number(), tie: z.number() });
 		// RR-111: the icon sets the viewer can read through read_icons (empty: the tool is not offered), so it asks only for those.
 		const iconSetsSchema = z.array(z.string()).optional().describe("The icon sets the viewer reads icons from (read_icons).");
+		// What the model tells the person while the viewer is still on its way: a host can take several seconds to draw a 9 MB view on a phone.
+		const ARRIVING = "The viewer opens in the conversation above this message; on a phone or a slow connection it can take several seconds to appear. If the user does not see it yet, ask them to wait a moment or scroll up; never say it cannot be shown.";
 		const sessionLine = (key: { session: string }) => `Viewer session: ${key.session}. A later show_deck or open_editor call for the same deck (or with this session) replaces this viewer.`;
 		const outlineSchema = z.array(z.object({ slide: z.number(), title: z.string().nullable() }));
 		/** The deck's name and slide titles, read without checking it. */
@@ -844,7 +857,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		};
 		const summaryOf = (result: { name: string | null; slides: number | null; outline: { slide: number; title: string | null }[]; counts: { error: number; warning: number; info: number }; findings: Finding[] }) =>
 			[
-				`Opened ${result.name ? `"${result.name}"` : "the deck"} in the OPF viewer${result.slides === null ? "" : ` (${result.slides} slide${result.slides === 1 ? "" : "s"})`}. In a client that supports MCP Apps the user sees it there and can edit it; their edits come back to you as context.`,
+				`Opened ${result.name ? `"${result.name}"` : "the deck"} in the OPF viewer${result.slides === null ? "" : ` (${result.slides} slide${result.slides === 1 ? "" : "s"})`}. In a client that supports MCP Apps the user sees it there and can edit it; their edits come back to you as context. ${ARRIVING}`,
 				...(result.outline.length ? [`Slides: ${result.outline.map((item) => `${item.slide}. ${item.title ?? "(untitled)"}`).join("; ")}.`] : []),
 				`Checks: ${result.counts.error} errors, ${result.counts.warning} warnings, ${result.counts.info} notes.`,
 				...result.findings.filter((finding) => finding.severity !== "info").slice(0, 10).map((finding) => `- ${finding.severity} ${finding.ruleId} at ${finding.path || "/"}: ${finding.message}`),
@@ -855,8 +868,8 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			{
 				title: "Show a deck in the OPF viewer",
 				description: processDecks
-					? "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. Their edits come back to you as context: continue from that version. Also checks the deck as validate_deck does and returns its name, slide titles and findings as text, so a client without MCP Apps still gets an answer. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both."
-					: "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. The viewer checks the deck on the user's machine and sends you its findings, and the user's edits, as context: fix the findings and continue from the user's version. This server does no deck work itself, so a client without MCP Apps gets no check. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both.",
+					? "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. Their edits come back to you as context: continue from that version. Also checks the deck as validate_deck does and returns its name, slide titles and findings as text, so a client without MCP Apps still gets an answer. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI does (opf convert deck.opf.json deck.pptx)."
+					: "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. The viewer checks the deck on the user's machine and sends you its findings, and the user's edits, as context: fix the findings and continue from the user's version. This server does no deck work itself, so a client without MCP Apps gets no check. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI does (opf convert deck.opf.json deck.pptx).",
 				inputSchema: {
 					document: documentSchema,
 					format: formatSchema.optional().describe("The form of the document text. Default: JSON for an object or text that starts with { or [."),
@@ -889,7 +902,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				if (!processDecks) {
 					// No deck work here: the view reads and checks the deck. Only the shape of the arguments is looked at.
 					const result = { ...opened, checked: false, ...(format ? { format } : typeof document === "string" ? {} : { format: "json" as const }) };
-					return { content: [{ type: "text" as const, text: `Opened the deck in the OPF viewer. In a client that supports MCP Apps the user sees it there and can edit it; the viewer checks it on the user's machine and sends you its findings, and the user's edits, as context. This server does not check decks itself.\n${sessionLine(viewer)}` }], structuredContent: result };
+					return { content: [{ type: "text" as const, text: `Opened the deck in the OPF viewer. In a client that supports MCP Apps the user sees it there and can edit it; the viewer checks it on the user's machine and sends you its findings, and the user's edits, as context. This server does not check decks itself. ${ARRIVING}\n${sessionLine(viewer)}` }], structuredContent: result };
 				}
 				try {
 					const input = inputOf(document, format);
@@ -900,7 +913,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				} catch (error) {
 					// A deck the server cannot read still opens: the view shows the text and its syntax error in Source.
 					const message = error instanceof Error ? error.message : String(error);
-					return { content: [{ type: "text" as const, text: `Opened the deck in the OPF viewer, but it could not be read: ${message}\n${sessionLine(viewer)}` }], structuredContent: { ...opened, checked: false, ...(format ? { format } : {}) } };
+					return { content: [{ type: "text" as const, text: `Opened the deck in the OPF viewer, but it could not be read: ${message} ${ARRIVING}\n${sessionLine(viewer)}` }], structuredContent: { ...opened, checked: false, ...(format ? { format } : {}) } };
 				}
 			},
 		);
@@ -958,18 +971,25 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				const text = [
 					`Opened the OPF viewer's editor with ${what} (${slides} slide${slides === 1 ? "" : "s"}).${missed}`,
 					"In a client that supports MCP Apps the user sees it in the viewer's editor and can edit it, open a bundled example or paste a deck into Source; their edits come back to you as context. Where the viewer's tools are offered, read_deck and edit_deck read and change this deck in place.",
+					ARRIVING,
 					sessionLine(viewer),
 				].join("\n");
 				return { content: [{ type: "text" as const, text }], structuredContent: result };
 			},
 		);
 
+		const readView = async (uri: URL) => ({ contents: [{ uri: uri.href, mimeType: MCP_APP_MIME_TYPE, text: typeof deckApp.html === "function" ? await deckApp.html() : deckApp.html, _meta: DECK_APP_CONTENT_META }] });
 		server.registerResource(
 			"deck-view",
 			DECK_APP_URI,
 			{ title: "OPF deck viewer", description: "The OPF viewer that show_deck and open_editor open: Preview, Source and Both, with editing and checks, in one HTML page (an MCP App).", mimeType: MCP_APP_MIME_TYPE, _meta: { ui: { prefersBorder: false } } },
-			async (uri) => ({ contents: [{ uri: uri.href, mimeType: MCP_APP_MIME_TYPE, text: typeof deckApp.html === "function" ? await deckApp.html() : deckApp.html, _meta: DECK_APP_CONTENT_META }] }),
+			readView,
 		);
+		// A host that read the tools before an update still asks for the viewer by the URI they named (ui://opf/deck up to 0.34, or an
+		// earlier hash): it gets the current view, which speaks to this server. Not listed; the templates say what they are.
+		const earlier = { title: "OPF deck viewer (earlier URI)", description: `An earlier URI of the OPF viewer; it reads as the current one, ${DECK_APP_URI}.`, mimeType: MCP_APP_MIME_TYPE };
+		server.registerResource("deck-view-earlier", new ResourceTemplate("ui://opf/deck/{hash}", { list: undefined }), earlier, readView);
+		server.registerResource("deck-view-unversioned", new ResourceTemplate("ui://opf/deck", { list: undefined }), earlier, readView);
 
 		const readFontFile = deckApp.readFontFile;
 		if (readFontFile) {

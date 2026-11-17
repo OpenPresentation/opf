@@ -41,6 +41,8 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 .deck-title:empty { display: none; }
 /* Send sits in the name's row (a phone's first row); in the one-row bar it is the last control. The More menu is a phone's. */
 .deck-send { order: 1; }
+/* Send is a sentence in the bar ("Send to Claude"); on a phone its icon and "Send". */
+.deck-send svg, .deck-send-short { display: none; }
 #deck-more, .deck-break, .deck-menu { display: none; }
 .deck-spacer { flex: 1 1 0; min-width: 0; }
 .deck-item { flex: none; display: inline-flex; align-items: center; }
@@ -215,12 +217,18 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 /* The name's row: renaming opens over it. Send shows only while it can send. */
 :root[data-size~="narrow"] .deck-title-row { order: -1; display: flex; flex: 1 0 100%; position: relative; min-width: 0; min-height: var(--opf-ui-control-h); align-items: center; gap: 4px; }
 :root[data-size~="narrow"] .deck-title { flex: 1 1 auto; max-width: none; }
-:root[data-size~="narrow"] .deck-send { order: 0; }
+:root[data-size~="narrow"] .deck-send { order: 0; padding: 0 12px 0 10px; }
+:root[data-size~="narrow"] .deck-send svg { display: block; }
+:root[data-size~="narrow"] .deck-send-label { display: none; }
+:root[data-size~="narrow"] .deck-send-short { display: inline; }
+/* The name keeps room beside Send and More (it ends with an ellipsis); the row never wraps. */
+:root[data-size~="narrow"] .deck-title { min-width: 96px; }
 :root[data-size~="narrow"] .deck-send:disabled { display: none; }
 :root[data-size~="narrow"] #deck-more { display: inline-flex; }
 :root[data-size~="narrow"] .deck-menu:not([hidden]) { display: flex; flex-direction: column; position: absolute; top: 100%; right: 0; z-index: 30; width: min(260px, calc(100vw - 16px)); padding: 4px; border: 1px solid var(--opf-ui-border); border-radius: var(--opf-ui-radius-md); background: var(--opf-ui-surface); box-shadow: var(--opf-ui-shadow-pop); }
 :root[data-size~="narrow"] .deck-menu :is(.deck-menu-item, .deck-button) { display: flex; justify-content: flex-start; align-items: center; width: 100%; min-height: var(--opf-ui-control-h); height: auto; padding: 0 12px; border: 0; border-radius: var(--opf-ui-radius); background: transparent; color: var(--opf-ui-fg); font-weight: 400; text-align: start; cursor: pointer; }
 :root[data-size~="narrow"] .deck-menu :is(.deck-menu-item, .deck-button):hover { background: var(--opf-ui-muted); }
+:root[data-size~="narrow"] .deck-menu-about { margin: 4px 0 0; padding: 8px 12px 4px; border-top: 1px solid var(--opf-ui-border); color: var(--opf-ui-muted-fg); font-size: 12px; overflow-wrap: anywhere; }
 :root[data-size~="narrow"] .deck-menu .deck-select { flex: none; width: 100%; max-width: none; height: var(--opf-ui-control-h); margin: 2px 0; }
 /* The slide as wide as the frame allows; a compact strip without the numbers (the footer says which slide is open). */
 :root[data-size~="narrow"] .deck-stage { margin: 8px; }
@@ -242,10 +250,10 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root[data-size~="tiny"] :is(.deck-button, .deck-menu-item, .deck-select, .deck-tabs [role="tab"], #deck-design .opf-design-menu-trigger, .deck-export .opf-export .opf-export-trigger, .deck-nav .opf-nav .opf-nav-button, .deck-verdict .opf-review-pill) { min-width: 44px; min-height: 44px; }
 :root[data-size~="tiny"] .deck-tabs { height: 44px; }
 :root[data-size~="tiny"] .deck-tabs [role="tab"] { padding: 0 10px; }
-:root[data-size~="tiny"] .deck-foot { flex-wrap: wrap; height: auto; gap: 0 6px; padding: 0 6px 0 2px; white-space: normal; }
-:root[data-size~="tiny"] :is(.deck-status, .deck-sync) { flex: 1 0 auto; max-width: 100%; overflow: visible; white-space: normal; text-overflow: clip; padding: 2px 4px 6px; }
-:root[data-size~="tiny"] :is(.deck-status, .deck-sync):empty { display: none; }
-:root[data-size~="tiny"] #deck-status * { white-space: normal; overflow: visible; text-overflow: clip; }
+:root[data-size~="narrow"] .deck-foot { flex-wrap: wrap; height: auto; gap: 0 6px; padding: 0 6px 0 2px; white-space: normal; }
+:root[data-size~="narrow"] :is(.deck-status, .deck-sync) { flex: 1 0 auto; max-width: 100%; overflow: visible; white-space: normal; text-overflow: clip; padding: 2px 4px 6px; }
+:root[data-size~="narrow"] :is(.deck-status, .deck-sync):empty { display: none; }
+:root[data-size~="narrow"] #deck-status * { white-space: normal; overflow: visible; text-overflow: clip; }
 :root[data-size~="tiny"] .deck-nav .opf-nav-counter { min-width: 40px; }
 :root[data-size~="tiny"] .deck-title-row { min-height: 44px; }
 :root[data-size~="tiny"] .opf-title .opf-title-button { min-width: 44px; height: 44px; }

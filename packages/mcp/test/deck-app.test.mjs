@@ -55,6 +55,24 @@ describe("the deck view", () => {
 		await client.close();
 	});
 
+	test("the viewer's URI changes with its HTML, and earlier URIs still read as the current view", async () => {
+		// A host caches a view by its URI (ChatGPT: "Treat the resource URI as a cache key"): a new viewer needs a new URI.
+		assert.match(DECK_APP_URI, /^ui:\/\/opf\/deck\/[0-9a-f]{12}$/);
+		assert.equal(DECK_APP_URI.slice(-12), createHash("sha256").update(DECK_APP_HTML).digest("hex").slice(0, 12));
+		const client = await connected({});
+		const viewers = (await client.listResources()).resources.filter((resource) => resource.uri.startsWith("ui://"));
+		assert.deepEqual(viewers.map((resource) => resource.uri), [DECK_APP_URI], "one viewer is listed: the current one");
+		// A host that read the tools before an update asks by the URI it has: up to 0.34 the plain ui://opf/deck, then an earlier hash.
+		for (const uri of ["ui://opf/deck", "ui://opf/deck/0123456789ab"]) {
+			const [content] = (await client.readResource({ uri })).contents;
+			assert.equal(content.uri, uri);
+			assert.equal(content.text, DECK_APP_HTML, uri);
+			assert.deepEqual(content._meta, { ui: { prefersBorder: false, preferredDisplayMode: "fullscreen" } });
+		}
+		await assert.rejects(client.readResource({ uri: "ui://opf/other" }), /not found/i);
+		await client.close();
+	});
+
 	test("ui://opf/deck is one self-contained HTML page", async () => {
 		const client = await connected({});
 		const listed = (await client.listResources()).resources.find((resource) => resource.uri === DECK_APP_URI);
@@ -129,6 +147,35 @@ describe("the deck view", () => {
 		const titled = (await client.callTool({ name: "open_editor", arguments: { title: "Quarterly update" } })).structuredContent.viewer;
 		assert.equal(titled.session, first.session, "a starter deck named like an open deck replaces its viewer");
 		await client.close();
+	});
+
+	test("the server names itself for a client's connector list: title, website and an icon it needs no request for", async () => {
+		const client = await connected({});
+		const info = client.getServerVersion();
+		assert.equal(info.name, "opf");
+		assert.equal(info.title, "OpenPresentation (OPF)");
+		assert.equal(info.websiteUrl, "https://www.openpresentation.org");
+		assert.equal(info.icons.length, 1);
+		assert.deepEqual({ ...info.icons[0], src: undefined }, { src: undefined, mimeType: "image/svg+xml", sizes: ["any"] });
+		assert.match(Buffer.from(info.icons[0].src.replace(/^data:image\/svg\+xml;base64,/, ""), "base64").toString("utf8"), /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg"[^>]*viewBox="0 0 64 64"/);
+		await client.close();
+	});
+
+	test("the results say where the viewer is and that it can take a few seconds", async () => {
+		// The model told a ChatGPT user on an iPhone the viewer "isn't appearing ... a compatibility limitation" while it was still loading.
+		const arriving = /opens in the conversation above this message; on a phone or a slow connection it can take several seconds to appear\. If the user does not see it yet, ask them to wait a moment or scroll up; never say it cannot be shown\./;
+		for (const processDecks of [true, false]) {
+			const client = await connected({ processDecks });
+			const shown = await client.callTool({ name: "show_deck", arguments: { document: { name: "Arriving", slides: [{ title: "One" }] } } });
+			assert.match(shown.content[0].text, arriving, `show_deck (processDecks ${processDecks})`);
+			assert.match((await client.callTool({ name: "open_editor", arguments: {} })).content[0].text, arriving);
+			if (processDecks) assert.match((await client.callTool({ name: "show_deck", arguments: { document: "{ not json", format: "json" } })).content[0].text, arriving, "an unreadable deck still opens, and the result says where");
+			// The model said the server "doesn't directly export PPTX or PDF": the description and the instructions say where it does.
+			const exports = /Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI (does \(opf convert deck\.opf\.json deck\.pptx\)|makes them on the user's machine)\./;
+			assert.match((await client.listTools()).tools.find((tool) => tool.name === "show_deck").description, exports);
+			assert.match(client.getInstructions(), exports);
+			await client.close();
+		}
 	});
 
 	test("open_editor is the entry point: all inputs optional, a useful starter deck from {}, a bundled example by slug", async () => {

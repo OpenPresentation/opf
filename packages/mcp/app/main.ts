@@ -24,6 +24,7 @@ import { createOpfEditor, layoutOptionsFor, type OpfEditor } from "@openpresenta
 import { type BrowserFontsHandle, loadFonts } from "@openpresentation/opf-render/fonts-browser";
 import { z } from "zod";
 import { FONT_BASE, bytesOf, extraFaces, fontFetch, startupFaces } from "./fonts.js";
+import { hostProduct, hostReport } from "./hosts.js";
 import { type IconBatch, serverIconSets } from "./icons.js";
 
 declare const MCP_VERSION: string;
@@ -101,6 +102,7 @@ const findButton = $<HTMLButtonElement>("deck-find-open");
 const reviewDrawer = $("deck-review");
 const reviewClose = $<HTMLButtonElement>("deck-review-close");
 const sendButton = $<HTMLButtonElement>("deck-send");
+const sendLabel = $("deck-send-label");
 const expandButton = $<HTMLButtonElement>("deck-expand");
 const moreButton = $<HTMLButtonElement>("deck-more");
 const menu = $("deck-menu");
@@ -150,8 +152,9 @@ let started = false;
 let mounted = false;
 let themed: string[] = [];
 
-/** What the person calls the model on the other side: Claude in Claude, "the assistant" in another MCP Apps host. */
-const assistant = () => (isClaude() ? "Claude" : "the assistant");
+/** What the person calls the model on the other side: the host's product (Claude, ChatGPT), else "the assistant". */
+const product = () => hostProduct(app.getHostVersion());
+const assistant = () => product() ?? "the assistant";
 const sentence = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 const textOf = (value: unknown) => (typeof value === "string" ? value : null);
 /** A string cut to at most `max` characters (never inside a surrogate pair), with an ellipsis when it was longer. */
@@ -167,7 +170,7 @@ const fingerprint = (text: string) => {
 	for (let at = 0; at < text.length; at++) hash = Math.imul(hash ^ text.charCodeAt(at), 0x01000193);
 	return (hash >>> 0).toString(16).padStart(8, "0");
 };
-const isClaude = () => /claude/i.test(app.getHostVersion()?.name ?? "");
+const isClaude = () => product() === "Claude";
 
 // -------------------------------------------------------------------------------------------------------------------
 // Fonts: Roboto Regular is in the page; any other face comes from the server through the host (read_font_file).
@@ -329,7 +332,7 @@ function setSync(state: SyncState): void {
 		shared: `${sentence(assistant())} has your edits`,
 		// Claude accepted the message; the person still decides whether it goes (and nothing says the model read it). Another host's
 		// acceptance is reported as no more than that.
-		sent: isClaude() ? "Sent to Claude for your approval" : "Sent to the assistant",
+		sent: isClaude() ? "Sent to Claude for your approval" : `Sent to ${assistant()}`,
 		refused: `${sentence(assistant())} didn't take the message`,
 		unknown: "The message couldn't be confirmed",
 	};
@@ -338,7 +341,9 @@ function setSync(state: SyncState): void {
 
 /** Send is the view's one primary action while there are user edits the model has not been asked about; it stays usable to retry. */
 function syncSend(): void {
-	sendButton.textContent = `Send to ${assistant()}`;
+	// The words say who it goes to; on a phone the button shows its icon and "Send", and its name keeps the whole sentence.
+	sendLabel.textContent = `Send to ${assistant()}`;
+	sendButton.setAttribute("aria-label", `Send to ${assistant()}`);
 	sendButton.disabled = !userEdited || sending || silent();
 	sendButton.dataset.unsent = String(unsent && !silent());
 	sendButton.title = unsent ? `Ask ${assistant()} to continue from your version` : userEdited ? `Ask ${assistant()} again to continue from your version` : `Edit the deck, then send your version to ${assistant()}`;
@@ -737,6 +742,10 @@ function applyContext(update: Partial<McpUiHostContext>): void {
 	expandButton.dataset.mode = context.displayMode ?? "inline";
 	const can = app.getHostCapabilities();
 	sendButton.hidden = !can?.message;
+	// What the host said it is, where one look finds it: the More menu, and the footer version's title.
+	const report = hostReport(app.getHostVersion());
+	$("deck-about").textContent = `OPF ${MCP_VERSION} · ${report}`;
+	$("deck-version").title = report;
 	// The sandbox cannot save a file itself: the source pane offers Download only where the host does it (ui/download-file).
 	shell.dataset.download = String(Boolean(can?.downloadFile));
 	syncSend();

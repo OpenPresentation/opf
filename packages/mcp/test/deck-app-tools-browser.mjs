@@ -27,7 +27,8 @@ const client = new Client({ name: "deck-app-tools-browser", version: "1.0.0" });
 	await server.connect(serverSide);
 	await client.connect(clientSide);
 }
-const resource = (await client.readResource({ uri: "ui://opf/deck" })).contents[0];
+const viewUri = (await client.listTools()).tools.find((tool) => tool.name === "show_deck")._meta.ui.resourceUri;
+const resource = (await client.readResource({ uri: viewUri })).contents[0];
 assert.deepEqual(resource._meta, { ui: { prefersBorder: false, preferredDisplayMode: "fullscreen" } }, "the content item asks for the side panel");
 
 // The host page: frames views by name and answers each. window.hosts[name] records what that view asked for.

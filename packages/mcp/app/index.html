@@ -10,12 +10,13 @@
 <div id="opf-deck" class="opf-ui" data-show="preview" data-ready="false">
   <header class="deck-bar">
     <div id="deck-title-row" class="deck-title-row"><div id="deck-title" class="deck-title"></div>
-      <button type="button" id="deck-send" class="deck-button deck-send" hidden disabled>Send to Claude</button>
+      <button type="button" id="deck-send" class="deck-button deck-send" aria-label="Send to Claude" hidden disabled><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg><span id="deck-send-label" class="deck-send-label">Send to Claude</span><span class="deck-send-short" aria-hidden="true">Send</span></button>
       <button type="button" id="deck-more" class="deck-button deck-icon deck-more" aria-label="More" title="More" aria-expanded="false" aria-controls="deck-menu"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></button>
       <div id="deck-menu" class="deck-menu" role="group" aria-label="More" hidden>
         <button type="button" class="deck-menu-item" data-run="find">Find and replace</button>
         <button type="button" class="deck-menu-item" data-run="expand">Expand</button>
         <button type="button" class="deck-menu-item" data-run="export">Export…</button>
+        <p id="deck-about" class="deck-menu-about"></p>
       </div>
     </div>
     <span class="deck-break"></span>

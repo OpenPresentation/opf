@@ -337,7 +337,7 @@ describe("opf-mcp", () => {
 
 		test("has resource templates for every kind, and reads a URI that no list names", async () => {
 			const { resourceTemplates } = await client.listResourceTemplates();
-			assert.deepEqual(resourceTemplates.map((template) => template.uriTemplate).sort(), ["opf://catalog/{kind}/{id}", "opf://docs/{slug}", "opf://examples/{slug}", "opf://schema/{+name}", "opf://skills/{+path}"]);
+			assert.deepEqual(resourceTemplates.map((template) => template.uriTemplate).sort(), ["opf://catalog/{kind}/{id}", "opf://docs/{slug}", "opf://examples/{slug}", "opf://schema/{+name}", "opf://skills/{+path}", "ui://opf/deck", "ui://opf/deck/{hash}"]);
 			const slides = await client.readResource({ uri: "opf://schema/presentation#/properties/slides" });
 			assert.deepEqual(JSON.parse(slides.contents[0].text), JSON.parse(cli(["schema", "presentation", "/properties/slides"]).stdout));
 			const chart = await client.readResource({ uri: "opf://schema/presentation#Chart" });

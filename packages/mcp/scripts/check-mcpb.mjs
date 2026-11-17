@@ -19,7 +19,8 @@ try {
 	const forModel = tools.filter((tool) => (tool._meta?.ui?.visibility ?? ["model", "app"]).includes("model")).map((tool) => tool.name);
 	assert.deepEqual([...manifest.tools.map((tool) => tool.name)].sort(), forModel.sort(), "the manifest lists the tools the model sees");
 	assert.ok(tools.some((tool) => tool.name === "read_font_file"), "the bundled renderer's fonts are offered to the viewer");
-	const [view] = (await client.readResource({ uri: "ui://opf/deck" })).contents;
+	const viewUri = (await client.listTools()).tools.find((tool) => tool.name === "show_deck")._meta.ui.resourceUri;
+	const [view] = (await client.readResource({ uri: viewUri })).contents;
 	assert.equal(view.mimeType, "text/html;profile=mcp-app");
 	const shown = await client.callTool({ name: "show_deck", arguments: { document: { name: "Bundle check", slides: [{ title: "It runs" }] } } });
 	assert.match(shown.content[0].text, /^Opened "Bundle check" in the OPF viewer/);
