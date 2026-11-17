@@ -149,6 +149,18 @@ describe("the deck view", () => {
 		await client.close();
 	});
 
+	test("the server names itself for a client's connector list: title, website and an icon it needs no request for", async () => {
+		const client = await connected({});
+		const info = client.getServerVersion();
+		assert.equal(info.name, "opf");
+		assert.equal(info.title, "OpenPresentation (OPF)");
+		assert.equal(info.websiteUrl, "https://www.openpresentation.org");
+		assert.equal(info.icons.length, 1);
+		assert.deepEqual({ ...info.icons[0], src: undefined }, { src: undefined, mimeType: "image/svg+xml", sizes: ["any"] });
+		assert.match(Buffer.from(info.icons[0].src.replace(/^data:image\/svg\+xml;base64,/, ""), "base64").toString("utf8"), /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg"[^>]*viewBox="0 0 64 64"/);
+		await client.close();
+	});
+
 	test("the results say where the viewer is and that it can take a few seconds", async () => {
 		// The model told a ChatGPT user on an iPhone the viewer "isn't appearing ... a compatibility limitation" while it was still loading.
 		const arriving = /opens in the conversation above this message; on a phone or a slow connection it can take several seconds to appear\. If the user does not see it yet, ask them to wait a moment or scroll up; never say it cannot be shown\./;

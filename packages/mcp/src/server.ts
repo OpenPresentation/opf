@@ -305,6 +305,11 @@ To author a deck: write JSON (or YAML or Markdown) and open it with show_deck. T
 
 export { type SiteFontsOptions, deckFontFile, siteFontFiles } from "./site-fonts.js";
 
+/**
+ * The server's icon (MCP `Implementation.icons`, a standard field since the 2025-11-25 revision): the OPF mark of docs/brand/opf-icon.svg as
+ * a data URI, so a client that shows connectors by icon needs no request. A client that does not take SVG shows its own placeholder.
+ */
+const SERVER_ICON = { src: `data:image/svg+xml;base64,${btoa("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"64\" height=\"64\" viewBox=\"0 0 64 64\"><rect width=\"64\" height=\"64\" rx=\"14\" fill=\"#1F4270\"/><g transform=\"translate(5 5) scale(0.84375)\"><path d=\"M15 12C12 12 11 13.5 11 16.5V27C11 29.8 10 32 6.5 32C10 32 11 34.2 11 37V47.5C11 50.5 12 52 15 52M49 12C52 12 53 13.5 53 16.5V27C53 29.8 54 32 57.5 32C54 32 53 34.2 53 37V47.5C53 50.5 52 52 49 52\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"5.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><rect x=\"19\" y=\"21\" width=\"26\" height=\"22\" rx=\"4\" fill=\"#FFFFFF\"/></g></svg>")}`, mimeType: "image/svg+xml", sizes: ["any"] };
 declare const OPF_DECK_APP_URI: string;
 /**
  * The `ui://` resource of the deck view (SEP-1865): `ui://opf/deck/` and a hash of its HTML, computed when the package is built. A
@@ -383,7 +388,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 	const opfVersion = options.opfVersion;
 	const check: CheckText = options.checkText ?? readReport;
 	const instructions = processDecks ? (deckApp ? `${INSTRUCTIONS}\n${INSTRUCTIONS_SHOW}\n${INSTRUCTIONS_IN_PLACE}` : INSTRUCTIONS) : `${INSTRUCTIONS_VIEWER}\n${INSTRUCTIONS_IN_PLACE}`;
-	const server = new McpServer({ name: "opf", title: "OpenPresentation (OPF)", version }, { instructions });
+	const server = new McpServer({ name: "opf", title: "OpenPresentation (OPF)", version, websiteUrl: "https://www.openpresentation.org", icons: [SERVER_ICON] }, { instructions });
 	// The tool that checks a deck: validate_deck, or the viewer when the server does no deck work.
 	const checkTool = processDecks ? "validate_deck" : "show_deck";
 
