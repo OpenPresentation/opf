@@ -12,6 +12,24 @@ It keeps no state, reads no file (everything it serves is bundled in the package
 
 **Your first request.** Claude has its own slide feature, and a plain "make a pitch deck" may be answered by it without calling OPF. Name OPF and the viewer in the first message, for example: *Use the OPF tools to make a ten-slide deck about our Q3 results, validate it, and show it in the OPF viewer.* Naming OPF only tells the host which tools you mean; whether and how Claude uses them is the host's decision, so if a reply comes from another feature, say so and repeat the request naming OPF. Once the viewer opens, ordinary follow-ups ("add a slide on risks") continue in it.
 
+### Add it to your assistant
+
+Steps from each vendor's own documentation, read on 2026-11-16, unless marked "seen", which means we tried it that day. The server needs no sign-in: where an assistant asks about authentication, choose the option without it. Menus move; the [hosted MCP guide](https://www.openpresentation.org/docs/mcp) has a page per assistant with the sources.
+
+| Assistant | How to add `https://openpresentation.org/mcp` | The OPF viewer |
+| --- | --- | --- |
+| ChatGPT | On the web, chatgpt.com/plugins: plus button, Add custom MCP server, name, URL, No authentication, accept the risk warning, Create as a plugin; then `@` the plugin in a new chat. OpenAI: full MCP on Business and Enterprise/Edu, read/fetch on Pro, Free and Plus not mentioned; adding is web only. Refresh the tools from the plugin's Refresh. | Seen in the iOS app: opens (up to a minute on the phone); Preview, Source, Design and sending edits back work; no Export (no file saving there) |
+| Claude (web, desktop, phone apps) | Customize, Connectors, + Add, Add custom connector; name `OPF`, the URL, Authentication "No sign in". Free plans allow one custom connector; on Team and Enterprise an Owner adds it under Organization settings, Connectors. | Seen on claude.ai and in the iOS app: opens; Export not checked |
+| Claude Code | `claude mcp add --transport http opf https://openpresentation.org/mcp` (`--scope user` for every project) | Not described by Anthropic's Claude Code docs |
+| Codex (CLI, IDE extension, ChatGPT desktop app share one config) | `codex mcp add opf --url https://openpresentation.org/mcp`, or `[mcp_servers.opf]` with `url = "https://openpresentation.org/mcp"` in `~/.codex/config.toml` | Not mentioned by OpenAI's Codex docs |
+| Gemini app | On gemini.google.com: Settings, Connected Apps (or Personal Intelligence first), Custom apps, Add a custom app, the URL, Next. US, 18+, personal account, History on, English; added on the web, then usable in the mobile app. Google's page does not say how it treats a server without sign-in; not tried. | Not stated for custom apps |
+| Gemini CLI | `gemini mcp add --transport http --scope user opf https://openpresentation.org/mcp`, or `"mcpServers": { "opf": { "httpUrl": "https://openpresentation.org/mcp" } }` in `~/.gemini/settings.json` | Not mentioned |
+| Muse (Meta) | The Muse app documents connectors from Meta's list and custom connectors Muse creates, not adding an MCP server by URL: no steps. Muse Code: `"mcp_servers": { "opf": { "transport": "streamable_http", "url": "https://openpresentation.org/mcp", "enabled": true, "mode": "optional" } }` in `~/.config/muse/settings.json` (with `"schema_version": 1`) | Not documented |
+| Cursor | `{ "mcpServers": { "opf": { "url": "https://openpresentation.org/mcp" } } }` in `.cursor/mcp.json` or `~/.cursor/mcp.json` | Cursor says it supports MCP Apps; not tried |
+| Grok Bot (xAI's agent app, not the Grok chat app) | Desktop app: Connect apps, Add a custom connector, Type Remote HTTPS, the URL, Add plugin; or ask a Bot to add the server by URL. The Grok chat app: grok.com/connectors, New Connector, Custom. Grok Build: `grok mcp add --transport http opf https://openpresentation.org/mcp`. xAI API: a `{"type": "mcp", "server_url": ..., "server_label": "opf"}` tool. | Not mentioned |
+
+Where the viewer does not open, `show_deck` answers with the deck's name, slide titles and findings as text: ask for the deck as OPF JSON and open it in the [Playground](https://www.openpresentation.org/playground). Where it is slow to appear, ask the assistant to show the deck again.
+
 **What the hosted server keeps.** A deck you pass to `validate_deck`, `convert` or `show_deck` is read in memory for that one call and not stored; the viewer itself edits, checks, draws and exports the deck on your machine. The hosted server allows 600 requests a minute per address and bodies up to 4 MB.
 
 **Local.** Any MCP client that starts a local server takes a command and arguments:
