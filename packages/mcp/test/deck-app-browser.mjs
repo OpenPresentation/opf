@@ -708,9 +708,9 @@ try {
 		await narrow.close();
 	});
 
-	await run("in ChatGPT on a phone: Send is compact and names ChatGPT, a long name keeps its room, the footer says a status whole", async () => {
+	await run("in ChatGPT on a phone: Send is compact and names ChatGPT, a long name keeps its room, the footer says a status whole (440px: the owner's iPhone, where it was cut)", async () => {
 		const long = { name: "AI Agents That Actually Work", language: "en-US", design: { theme: "classic" }, slides: [{ id: "t", title: "AI Agents That Actually Work" }, { id: "g", title: "Autonomy needs guardrails" }] };
-		for (const [width, height] of [[390, 844], [375, 667], [320, 640]]) {
+		for (const [width, height] of [[440, 956], [390, 844], [375, 667], [320, 640]]) {
 			const phone = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
 			const tab = await phone.newPage();
 			tab.on("pageerror", (error) => problems.push(String(error)));
