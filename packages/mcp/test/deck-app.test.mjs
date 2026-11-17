@@ -141,7 +141,7 @@ describe("the deck view", () => {
 			assert.match((await client.callTool({ name: "open_editor", arguments: {} })).content[0].text, arriving);
 			if (processDecks) assert.match((await client.callTool({ name: "show_deck", arguments: { document: "{ not json", format: "json" } })).content[0].text, arriving, "an unreadable deck still opens, and the result says where");
 			// The model said the server "doesn't directly export PPTX or PDF": the description and the instructions say where it does.
-			const exports = /Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI does \(opf convert deck\.opf\.json deck\.pptx\)\./;
+			const exports = /Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI (does \(opf convert deck\.opf\.json deck\.pptx\)|makes them on the user's machine)\./;
 			assert.match((await client.listTools()).tools.find((tool) => tool.name === "show_deck").description, exports);
 			assert.match(client.getInstructions(), exports);
 			await client.close();
