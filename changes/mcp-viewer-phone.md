@@ -1,0 +1,5 @@
+---
+type: changed
+packages: [mcp]
+---
+The OPF viewer (`show_deck`, `open_editor`) on a phone: below a 640px container the slide comes first, under two rows of chrome (the deck's name with Send to Claude, shown while there is something to send, and a More menu; then Preview and Source with Undo, Redo and Design). Find and replace, Expand, Export and the editor's example picker and Paste a deck are in More, two taps away. The slide is as wide as the frame, the strip is compact and Source keeps the preview's height, so the inline view of a 16:9 deck is about 420px tall at 390px (it was about 590px, 720px from `open_editor`). The Design sheet opens under the slide (the view grows by the sheet) so a choice shows at once, and full screen held sideways drops the strip. Tool descriptions, docs and the skill no longer say the viewer shows only in Claude on the web and desktop: it opens in any client that supports MCP Apps, including Claude's iOS app. The starter deck says "Select any text" instead of "Click any text".

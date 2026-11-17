@@ -5,7 +5,8 @@
 // The choices come from the same place the panel's pickers do: core's catalog records through `listSwitchOptions` / `currentSwitchValue`, and every
 // choice is applied with `switchDimension` (`switches.js`) as ONE validated, undoable edit with `meta.source: "design-menu"`. Nothing else writes the
 // document. The popover is a `role="dialog"` holding a `role="menu"` whose rows are `menuitemradio` (arrow keys move, Enter or Space applies), it stays
-// open after a choice so people can try several, and on a phone (`(max-width: 600px)`) it is a bottom sheet. Plain DOM; styles in
+// open after a choice so people can try several, and on a phone (`(max-width: 600px)`) it is a bottom sheet: one section at a time, picked
+// with a segmented switch that names each section's current choice, in one scroll container. Plain DOM; styles in
 // src/styles/design-menu.css (classes `opf-design-menu-*`); touch sizes in touch.css.
 import { currentSwitchValue, listSwitchOptions, switchDimension } from "./switches.js";
 import { normalizeIcons, resolveIcon } from "./icons.js";
@@ -31,6 +32,8 @@ const DEFAULT_LABELS = {
   colors: "Colors",
   fonts: "Fonts",
   layout: "This slide: Layout",
+  /** The layout section's segment in the sheet's section switch. */
+  layoutTab: "Layout",
   more: "More design options…",
   /** What the toolbar's overflow menu lists. */
   menuItem: "Design…",
@@ -121,6 +124,9 @@ export function createDesignMenu(container, options = {}) {
   const trigger = el(doc, "button", { type: "button", class: "opf-design-menu-trigger", "aria-haspopup": "dialog", "aria-expanded": "false", "aria-controls": `${id}-popover` },
     icon(doc, "Palette", 14, icons.trigger), el(doc, "span", { class: "opf-design-menu-trigger-label", text: labels.trigger }));
   const closeButton = el(doc, "button", { type: "button", class: "opf-design-menu-close", "aria-label": labels.close }, icon(doc, "X", 18, icons.close));
+  // The sheet's section switch: one segment per section, each with the section's name and its current choice. It is in the document only
+  // while the menu is open as a sheet (setMode), so a closed menu or the popover has no tabs for a screen reader to find.
+  const tabs = el(doc, "div", { class: "opf-design-menu-tabs", role: "tablist", "aria-label": labels.title });
   const head = el(doc, "div", { class: "opf-design-menu-head" }, el(doc, "span", { class: "opf-design-menu-title", text: labels.title }), closeButton);
   const menu = el(doc, "div", { class: "opf-design-menu-menu", role: "menu", "aria-label": labels.title, id: `${id}-menu` });
   const empty = el(doc, "p", { class: "opf-design-menu-empty", text: labels.empty, hidden: true });
@@ -137,11 +143,49 @@ export function createDesignMenu(container, options = {}) {
   const sections = SECTIONS.map((spec) => {
     const heading = el(doc, "div", { class: "opf-design-menu-group-label", id: `${id}-${spec.key}`, text: labels[spec.labelKey] });
     const list = el(doc, "div", { class: "opf-design-menu-list" });
-    const group = el(doc, "div", { class: "opf-design-menu-group", role: "group", "aria-labelledby": heading.id, "data-section": spec.key, hidden: true }, heading, list);
+    const group = el(doc, "div", { class: "opf-design-menu-group", role: "group", "aria-labelledby": heading.id, "data-section": spec.key, id: `${id}-${spec.key}-group`, hidden: true }, heading, list);
     menu.append(group);
-    return { ...spec, group, list, rows: new Map(), signature: undefined };
+    const value = el(doc, "span", { class: "opf-design-menu-tab-value" });
+    const tab = el(doc, "button", { type: "button", role: "tab", class: "opf-design-menu-tab", "aria-selected": "false", "aria-controls": group.id, tabindex: "-1", "data-section": spec.key, hidden: true },
+      el(doc, "span", { class: "opf-design-menu-tab-label", text: spec.slide ? labels.layoutTab : labels[spec.labelKey] }), value);
+    tabs.append(tab);
+    return { ...spec, group, list, tab, value, rows: new Map(), signature: undefined };
   });
   menu.append(moreRow);
+  /** The section the sheet shows (the popover shows them all). */
+  let active = "theme";
+  function showSection(key, { focus = false, scroll = true } = {}) {
+    const visible = sections.filter((section) => !section.group.hidden);
+    const chosen = visible.find((section) => section.key === key) ?? visible[0];
+    if (!chosen) return;
+    active = chosen.key;
+    for (const section of sections) {
+      const on = section === chosen;
+      section.group.toggleAttribute("data-active", on);
+      section.tab.setAttribute("aria-selected", String(on));
+      section.tab.tabIndex = on ? 0 : -1;
+    }
+    if (focus) chosen.tab.focus();
+    // The section opens at its current choice.
+    if (scroll && mode === "sheet") {
+      menu.scrollTop = 0;
+      chosen.list.querySelector("[aria-checked='true']")?.scrollIntoView?.({ block: "nearest" });
+    }
+  }
+  tabs.addEventListener("click", (event) => {
+    const tab = event.target.closest?.(".opf-design-menu-tab");
+    if (tab) showSection(tab.dataset.section);
+  });
+  tabs.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    const visible = sections.filter((section) => !section.group.hidden);
+    const at = visible.findIndex((section) => section.key === active);
+    const rtl = win?.getComputedStyle(tabs).direction === "rtl";
+    const step = (event.key === "ArrowRight") !== rtl ? 1 : -1;
+    event.preventDefault();
+    event.stopPropagation();
+    showSection(visible[(at + step + visible.length) % visible.length]?.key, { focus: true });
+  });
 
   // ---- rows ---------------------------------------------------------------------------------------------------------------------------
   const cssColor = (value) => (typeof value === "string" && HEX.test(value) ? value : undefined);
@@ -227,7 +271,10 @@ export function createDesignMenu(container, options = {}) {
       const current = currentOf(deck, section, { themes: lists.theme });
       for (const [value, row] of section.rows) row.setAttribute("aria-checked", String(value === current));
       section.current = current;
+      section.value.textContent = section.rows.get(current)?.querySelector(".opf-design-menu-label")?.textContent ?? "";
     }
+    for (const section of sections) section.tab.hidden = section.group.hidden;
+    showSection(active, { scroll: false });
     empty.hidden = any;
     paintFaces();
     root.toggleAttribute("data-empty", !any);
@@ -285,6 +332,8 @@ export function createDesignMenu(container, options = {}) {
     root.dataset.mode = mode;
     popover.setAttribute("aria-modal", String(mode === "sheet"));
     scrim.hidden = !(isOpen && mode === "sheet");
+    if (isOpen && mode === "sheet") head.insertBefore(tabs, closeButton);
+    else tabs.remove();
   }
   function place() {
     if (!isOpen) return;
@@ -310,7 +359,8 @@ export function createDesignMenu(container, options = {}) {
     popover.style.top = `${flip ? anchor.top - GAP - height : anchor.bottom + GAP}px`;
     if (natural > room) popover.style.maxHeight = `${room}px`;
   }
-  const items = () => [...menu.querySelectorAll("[role^='menuitem']")].filter((item) => !item.closest("[hidden]") && !item.hidden);
+  // In the sheet only the open section's rows (and the More row) are on screen.
+  const items = () => [...menu.querySelectorAll("[role^='menuitem']")].filter((item) => !item.closest("[hidden]") && !item.hidden && (mode !== "sheet" || item === moreRow || item.closest("[data-active]")));
   function focusItem(item) {
     item?.focus();
     item?.scrollIntoView?.({ block: "nearest" });
@@ -336,12 +386,13 @@ export function createDesignMenu(container, options = {}) {
     popover.hidden = false;
     trigger.setAttribute("aria-expanded", "true");
     place();
+    if (mode === "sheet") showSection(active);
     doc.addEventListener("pointerdown", onDocPointer, true);
     doc.addEventListener("keydown", onDocKey);
     win?.addEventListener("resize", onReflow);
     win?.addEventListener("scroll", onReflow, true);
     doc.fonts?.addEventListener?.("loadingdone", onFaces);
-    const current = menu.querySelector("[aria-checked='true']");
+    const current = items().find((item) => item.getAttribute("aria-checked") === "true");
     focusItem(current ?? items()[0] ?? closeButton);
   }
   function close({ restoreFocus = true } = {}) {
@@ -349,6 +400,7 @@ export function createDesignMenu(container, options = {}) {
     isOpen = false;
     popover.hidden = true;
     scrim.hidden = true;
+    tabs.remove();
     trigger.setAttribute("aria-expanded", "false");
     doc.removeEventListener("pointerdown", onDocPointer, true);
     doc.removeEventListener("keydown", onDocKey);

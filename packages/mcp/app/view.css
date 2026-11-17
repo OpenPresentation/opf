@@ -39,6 +39,9 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 .deck-title-row { display: contents; }
 .deck-title { flex: 0 1 240px; min-width: 0; overflow: hidden; }
 .deck-title:empty { display: none; }
+/* Send sits in the name's row (a phone's first row); in the one-row bar it is the last control. The More menu is a phone's. */
+.deck-send { order: 1; }
+#deck-more, .deck-break, .deck-menu { display: none; }
 .deck-spacer { flex: 1 1 0; min-width: 0; }
 .deck-item { flex: none; display: inline-flex; align-items: center; }
 .deck-item:empty { display: none; }
@@ -197,31 +200,61 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root[data-size~="compact"] #deck-thumbs, :root[data-size~="compact"] #deck-thumbs .opf-thumbs { --opf-thumbs-w: 80px !important; }
 :root[data-size~="compact"] #deck-thumbs .opf-thumbs-title { display: none; }
 
-/* A phone: two rows, no Both, and the footer keeps the verdict and the sync state. */
-:root[data-size~="narrow"] .deck-bar { height: auto; flex-wrap: wrap; gap: 4px 8px; padding: 6px 8px; }
-:root[data-size~="narrow"] .deck-tabs { align-self: auto; height: 36px; }
-:root[data-size~="narrow"] #tab-both { display: none; }
-/* The bar wraps: the name has a row of its own at the top, and renaming opens over that row. */
-:root[data-size~="narrow"] .deck-title-row { order: -1; display: flex; flex: 1 0 100%; position: relative; min-width: 0; min-height: 36px; align-items: center; }
+/* A phone: the slide comes first. Two rows of chrome: the name with Send (while there is something to send) and More, then the view switch
+   with Undo, Redo and Design. Find, the larger view, Export and the start row's example and Paste are in More. No Both. */
+:root[data-size~="narrow"] .deck-bar { height: auto; flex-wrap: wrap; gap: 0 2px; padding: 2px 4px 2px 6px; }
+:root[data-size~="narrow"] .deck-break { display: block; flex: 0 0 100%; height: 0; }
+:root[data-size~="narrow"] .deck-tabs { order: 1; align-self: auto; height: var(--opf-ui-control-h); }
+:root[data-size~="narrow"] .deck-spacer { order: 2; }
+:root[data-size~="narrow"] .deck-group { order: 3; }
+:root[data-size~="narrow"] #deck-design { order: 4; }
+:root[data-size~="narrow"] #tab-both, :root[data-size~="narrow"] :is(#deck-find-open, #deck-expand, .deck-start) { display: none; }
+/* Export opens from More: its menu stays in the page (its sheet is drawn from here), its button does not take room. */
+:root[data-size~="narrow"] #deck-export { position: absolute; width: 0; height: 0; }
+:root[data-size~="narrow"] .deck-export .opf-export .opf-export-trigger { display: none; }
+/* The name's row: renaming opens over it. Send shows only while it can send. */
+:root[data-size~="narrow"] .deck-title-row { order: -1; display: flex; flex: 1 0 100%; position: relative; min-width: 0; min-height: var(--opf-ui-control-h); align-items: center; gap: 4px; }
 :root[data-size~="narrow"] .deck-title { flex: 1 1 auto; max-width: none; }
+:root[data-size~="narrow"] .deck-send { order: 0; }
+:root[data-size~="narrow"] .deck-send:disabled { display: none; }
+:root[data-size~="narrow"] #deck-more { display: inline-flex; }
+:root[data-size~="narrow"] .deck-menu:not([hidden]) { display: flex; flex-direction: column; position: absolute; top: 100%; right: 0; z-index: 30; width: min(260px, calc(100vw - 16px)); padding: 4px; border: 1px solid var(--opf-ui-border); border-radius: var(--opf-ui-radius-md); background: var(--opf-ui-surface); box-shadow: var(--opf-ui-shadow-pop); }
+:root[data-size~="narrow"] .deck-menu :is(.deck-menu-item, .deck-button) { display: flex; justify-content: flex-start; align-items: center; width: 100%; min-height: var(--opf-ui-control-h); height: auto; padding: 0 12px; border: 0; border-radius: var(--opf-ui-radius); background: transparent; color: var(--opf-ui-fg); font-weight: 400; text-align: start; cursor: pointer; }
+:root[data-size~="narrow"] .deck-menu :is(.deck-menu-item, .deck-button):hover { background: var(--opf-ui-muted); }
+:root[data-size~="narrow"] .deck-menu .deck-select { flex: none; width: 100%; max-width: none; height: var(--opf-ui-control-h); margin: 2px 0; }
+/* The slide as wide as the frame allows; a compact strip without the numbers (the footer says which slide is open). */
+:root[data-size~="narrow"] .deck-stage { margin: 8px; }
+:root[data-size~="narrow"] .deck-row { padding: 0 4px; }
+:root[data-size~="narrow"] #deck-thumbs, :root[data-size~="narrow"] #deck-thumbs .opf-thumbs { --opf-thumbs-w: 72px !important; }
+:root[data-size~="narrow"] #deck-thumbs .opf-thumbs-list { padding: 4px 6px; }
+:root[data-size~="narrow"] #deck-thumbs .opf-thumbs-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 :root[data-size~="narrow"] .deck-foot .deck-mono { display: none; }
-/* The narrowest side panel (about 320px, a phone): every control is at least 44 by 44 CSS pixels; the bar keeps the history and the
-   views on its first row, the tools on its second and Send on a row of its own; the footer wraps instead of cutting a message short. */
-:root[data-size~="tiny"] .deck-bar { gap: 4px; padding: 6px; }
-:root[data-size~="tiny"] .deck-spacer { display: none; }
-:root[data-size~="tiny"] :is(.deck-button, .deck-select, .deck-tabs [role="tab"], #deck-design .opf-design-menu-trigger, .deck-export .opf-export .opf-export-trigger, .deck-nav .opf-nav .opf-nav-button, .deck-verdict .opf-review-pill) { min-width: 44px; min-height: 44px; }
+/* Source is as tall as the slide and its strip, so switching views does not change the frame's height. */
+:root[data-size~="narrow"]:not([data-fill="true"]) #opf-deck[data-show="source"] .deck-panes { height: calc(56.25vw + 64px); min-height: 260px; }
+/* The Design sheet sits under the slide instead of over it: the view grows by the sheet (the strip and the footer give way), so every
+   choice shows on the slide at once. */
+:root[data-size~="narrow"] #opf-deck { --opf-design-menu-sheet-h: 288px; }
+:root[data-size~="narrow"] #opf-deck:has(.opf-design-menu[data-mode="sheet"] .opf-design-menu-trigger[aria-expanded="true"]) { padding-bottom: var(--opf-design-menu-sheet-h); }
+:root[data-size~="narrow"] #opf-deck:has(.opf-design-menu[data-mode="sheet"] .opf-design-menu-trigger[aria-expanded="true"]) :is(.deck-row, .deck-foot) { display: none; }
+:root[data-size~="narrow"] #opf-deck .opf-design-menu-scrim { background: transparent; }
+/* The narrowest frames (under 400px, a phone or the narrowest side panel): every control is at least 44 by 44 CSS pixels, with a mouse
+   too; the footer wraps instead of cutting a message short. */
+:root[data-size~="tiny"] :is(.deck-button, .deck-menu-item, .deck-select, .deck-tabs [role="tab"], #deck-design .opf-design-menu-trigger, .deck-export .opf-export .opf-export-trigger, .deck-nav .opf-nav .opf-nav-button, .deck-verdict .opf-review-pill) { min-width: 44px; min-height: 44px; }
 :root[data-size~="tiny"] .deck-tabs { height: 44px; }
 :root[data-size~="tiny"] .deck-tabs [role="tab"] { padding: 0 10px; }
-:root[data-size~="tiny"] .deck-send { order: 10; flex: 1 0 100%; }
 :root[data-size~="tiny"] .deck-foot { flex-wrap: wrap; height: auto; gap: 0 6px; padding: 0 6px 0 2px; white-space: normal; }
-:root[data-size~="tiny"] :is(.deck-status, .deck-sync) { flex: 1 0 100%; overflow: visible; white-space: normal; text-overflow: clip; padding: 2px 4px 6px; }
+:root[data-size~="tiny"] :is(.deck-status, .deck-sync) { flex: 1 0 auto; max-width: 100%; overflow: visible; white-space: normal; text-overflow: clip; padding: 2px 4px 6px; }
 :root[data-size~="tiny"] :is(.deck-status, .deck-sync):empty { display: none; }
 :root[data-size~="tiny"] #deck-status * { white-space: normal; overflow: visible; text-overflow: clip; }
 :root[data-size~="tiny"] .deck-nav .opf-nav-counter { min-width: 40px; }
-:root[data-size~="tiny"] .deck-start { padding: 6px; }
 :root[data-size~="tiny"] .deck-title-row { min-height: 44px; }
 :root[data-size~="tiny"] .opf-title .opf-title-button { min-width: 44px; height: 44px; }
 :root[data-size~="tiny"] .opf-title .opf-title-input { min-height: 44px; }
+
+/* Full screen on a phone held sideways: the strip gives its height to the slide (the footer's navigator remains). */
+@media (max-height: 500px) {
+	:root[data-fill="true"] .deck-row { display: none; }
+}
 
 @media (prefers-reduced-motion: reduce) {
 	.deck-button, .deck-tabs [role="tab"] { transition: none; }

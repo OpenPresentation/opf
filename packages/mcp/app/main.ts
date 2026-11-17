@@ -102,6 +102,8 @@ const reviewDrawer = $("deck-review");
 const reviewClose = $<HTMLButtonElement>("deck-review-close");
 const sendButton = $<HTMLButtonElement>("deck-send");
 const expandButton = $<HTMLButtonElement>("deck-expand");
+const moreButton = $<HTMLButtonElement>("deck-more");
+const menu = $("deck-menu");
 const tabs = VIEWS.map((view) => $<HTMLButtonElement>(`tab-${view}`));
 
 // `tools: {}`: the view's tools are a constant set, so it never announces a changed list.
@@ -706,6 +708,10 @@ function layOut(): void {
 	const ownRow = width < 640;
 	$("deck-title-row").toggleAttribute("data-opf-title-row", ownRow);
 	(shell.querySelector(".deck-bar") as HTMLElement).toggleAttribute("data-opf-title-row", !ownRow);
+	// Two rows on a phone: what does not fit them (and the start row's example and Paste) is in the More menu.
+	if (ownRow) menu.append(exampleSelect, pasteButton);
+	else $("deck-start-label").after(exampleSelect, pasteButton);
+	setMenu(false);
 	// Inline, the view is as tall as its content; a host that fixes the height, and full screen or the side panel (also when the host
 	// sends no dimensions with it), get a view that fills the frame.
 	root.dataset.fill = String(context.displayMode === "fullscreen" || typeof box.height === "number");
@@ -734,6 +740,19 @@ function applyContext(update: Partial<McpUiHostContext>): void {
 	// The sandbox cannot save a file itself: the source pane offers Download only where the host does it (ui/download-file).
 	shell.dataset.download = String(Boolean(can?.downloadFile));
 	syncSend();
+}
+
+/** The More menu of a phone's bar; it says what each control it stands for says now. */
+function setMenu(open: boolean): void {
+	if (open) {
+		const [find, expand, exportItem] = [...menu.querySelectorAll<HTMLButtonElement>("[data-run]")];
+		(find as HTMLButtonElement).hidden = findButton.hidden;
+		(expand as HTMLButtonElement).hidden = expandButton.hidden;
+		(expand as HTMLButtonElement).textContent = expandButton.getAttribute("aria-label");
+		(exportItem as HTMLButtonElement).hidden = $("deck-export").hidden || !$("deck-export").querySelector(".opf-export-trigger");
+	}
+	menu.hidden = !open;
+	moreButton.setAttribute("aria-expanded", String(open));
 }
 
 function setReviewOpen(open: boolean): void {
@@ -892,6 +911,7 @@ const leaveStarter = () => {
 function showStart(): void {
 	const canOpen = Boolean(app.getHostCapabilities()?.serverTools) && examples.length > 0;
 	exampleSelect.hidden = !canOpen;
+	pasteButton.hidden = false;
 	for (const example of canOpen ? examples : []) exampleSelect.add(new Option(example.name ? `${example.name} (${example.slug})` : example.slug, example.slug));
 	startBar.hidden = false;
 }
@@ -1048,7 +1068,29 @@ reviewDrawer.addEventListener("keydown", (event) => {
 sendButton.addEventListener("click", () => void sendToClaude());
 // Straight from the click: the host opens a larger view only right after the person pressed something in this one.
 expandButton.addEventListener("click", () => setDisplayMode(context.displayMode === "fullscreen" ? "inline" : "fullscreen"));
-exampleSelect.addEventListener("change", () => void openExample(exampleSelect.value));
+exampleSelect.addEventListener("change", () => {
+	setMenu(false);
+	void openExample(exampleSelect.value);
+});
+moreButton.addEventListener("click", () => setMenu(menu.hasAttribute("hidden")));
+// Each item presses the control it stands for, straight from the click (the host opens a larger view only right after a press).
+menu.addEventListener("click", (event) => {
+	const item = (event.target as HTMLElement).closest<HTMLButtonElement>("button");
+	if (!item) return;
+	setMenu(false);
+	const run = item.dataset.run;
+	if (run === "find") findButton.click();
+	else if (run === "expand") expandButton.click();
+	else if (run === "export") $("deck-export").querySelector<HTMLButtonElement>(".opf-export-trigger")?.click();
+});
+document.addEventListener("pointerdown", (event) => {
+	if (!menu.hidden && !(event.target as HTMLElement).closest?.("#deck-menu, #deck-more")) setMenu(false);
+}, true);
+menu.addEventListener("keydown", (event) => {
+	if (event.key !== "Escape") return;
+	setMenu(false);
+	moreButton.focus();
+});
 /** The form of pasted deck text: JSON when it starts with { or [, OPF Markdown when it starts with front matter or a heading, else YAML. */
 const pastedFormat = (text: string) => (/^[\s\uFEFF]*[[{]/.test(text) ? "json" : /^[\s\uFEFF]*(---\s*\n[\s\S]*?\n---|#\s)/.test(text) ? "md" : "yaml");
 // Paste does the work: the whole source is selected and focused, so what the person pastes replaces it; where the host lets the view

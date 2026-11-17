@@ -324,18 +324,46 @@ try {
   await page.addScriptTag({ content: axeSource });
   const axe = await ev(async () => { const result = await window.axe.run('.opf-design-menu', { rules: { 'color-contrast': { enabled: false } } }); return result.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`); });
   assert.deepEqual(axe, [], 'no axe violations in the open menu');
+  assert.equal(await ev(() => document.querySelectorAll('[role=tab]').length), 0, 'the popover has no section switch: no tabs for a screen reader');
   await page.keyboard.press('Escape');
   mark('axe');
 
   // ---- the bottom sheet at 390px ----------------------------------------------------------------------------------------------------------------------
   await page.setViewportSize({ width: 390, height: 844 });
   await mount();
+  assert.equal(await ev(() => document.querySelectorAll('[role=tab]').length), 0, 'a closed menu has no tabs in the document');
   await trigger().click();
   assert.equal(await ev(() => document.querySelector('.opf-design-menu').dataset.mode), 'sheet');
   assert.equal(await page.getByRole('dialog', { name: 'Design' }).getAttribute('aria-modal'), 'true');
   const sheet = await box('.opf-design-menu-popover');
   assert.ok(Math.abs(sheet.bottom - 844) < 1 && sheet.left === 0 && sheet.width === 390, `a full-width sheet at the bottom (${JSON.stringify(sheet)})`);
-  assert.ok(sheet.height <= 844 * 0.85 + 1, 'at most 85% of the screen');
+  assert.ok(sheet.height <= 844 * 0.55 + 1, 'about half the screen, so the slide above stays in view');
+  // One section at a time behind a segmented switch, in one scroll container (no list scrolls on its own).
+  const sections = await ev(() => {
+    const popover = document.querySelector('.opf-design-menu-popover');
+    const shown = [...popover.querySelectorAll('.opf-design-menu-group')].filter((group) => group.getClientRects().length).map((group) => group.dataset.section);
+    const row = popover.querySelector('.opf-design-menu-group[data-active] .opf-design-menu-item');
+    let scrollers = 0;
+    for (let node = row; node && node !== popover; node = node.parentElement) if (/(auto|scroll)/.test(getComputedStyle(node).overflowY)) scrollers += 1;
+    return { shown, scrollers, tabs: [...popover.querySelectorAll('[role=tab]')].filter((tab) => !tab.hidden).map((tab) => [tab.dataset.section, tab.getAttribute('aria-selected')]) };
+  });
+  assert.deepEqual(sections.shown, ['theme']);
+  assert.equal(sections.scrollers, 1);
+  assert.deepEqual(sections.tabs.map(([key]) => key), ['theme', 'colors', 'fonts', 'layout']);
+  await page.getByRole('tab', { name: /^Colors/ }).click();
+  assert.deepEqual(await ev(() => [...document.querySelectorAll('.opf-design-menu-group')].filter((group) => group.getClientRects().length).map((group) => group.dataset.section)), ['colors']);
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await ev(() => document.activeElement.dataset.section), 'fonts', 'the arrow keys move along the switch');
+  // The switch is a tablist: labelled, one selected tab in the Tab order, each controlling its section.
+  const tablist = await ev(() => {
+    const list = document.querySelector('[role=tablist]');
+    const tabs = [...list.querySelectorAll('[role=tab]')];
+    return { label: list.getAttribute('aria-label'), selected: tabs.filter((tab) => tab.getAttribute('aria-selected') === 'true').map((tab) => tab.tabIndex), others: tabs.filter((tab) => tab.getAttribute('aria-selected') !== 'true').map((tab) => tab.tabIndex), controls: tabs.every((tab) => document.getElementById(tab.getAttribute('aria-controls'))?.dataset.section === tab.dataset.section) };
+  });
+  assert.deepEqual(tablist, { label: 'Design', selected: [0], others: [-1, -1, -1], controls: true });
+  const sheetAxe = await ev(async () => { const result = await window.axe.run('.opf-design-menu-popover', { rules: { 'color-contrast': { enabled: false } } }); return result.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`); });
+  assert.deepEqual(sheetAxe, [], 'no axe violations in the sheet with its switch');
+  await page.getByRole('tab', { name: /^Theme/ }).click();
   assert.equal(await page.locator('.opf-design-menu-scrim').isVisible(), true);
   assert.equal(await page.locator('.opf-design-menu-head').isVisible(), true);
   assert.equal(await page.locator('.opf-design-menu-title').innerText(), 'Design');
@@ -345,6 +373,7 @@ try {
   assert.equal(await page.getByRole('dialog', { name: 'Design' }).isVisible(), true);
   await page.getByRole('button', { name: 'Close', exact: true }).click();
   assert.equal(await dialog().count(), 0, 'the close button closes');
+  assert.equal(await ev(() => document.querySelectorAll('[role=tab]').length), 0, 'closing the sheet takes its tabs out of the document');
   assert.equal(await ev(() => document.activeElement.className), 'opf-design-menu-trigger');
   await trigger().click();
   await page.mouse.click(195, 40);
