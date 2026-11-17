@@ -102,7 +102,7 @@ fonts.registry.clearSubstitutions();
 const italic=fonts.registry.resolveFont({fontFamily:'Noto Sans JP',fontWeight:400,italic:true});
 assert.equal(italic.italic,false);assert.equal(italic.compatibility,'visual');
 assert.equal(fonts.registry.substitutions.length,1);
-// fontkit cannot apply one Noto Sans Gurmukhi mark anchor (tippi); advances are measured without mark positioning.
+// Noto Sans Gurmukhi's tippi has a null mark anchor, which fontkit 2 could not apply; it measures (fontkit 3, HarfBuzz).
 assert.ok(fonts.registry.textMeasurement.measure('ਪੰਜਾਬੀ',20,{fontFamily:'Noto Sans Gurmukhi',fontWeight:400})>0);
 // The raw registry stays strict: no hidden fallback without the script-aware wrapper.
 assert.throws(()=>fonts.registry.textMeasurement.measure('日本語',20,{fontFamily:'Roboto',fontWeight:400}),{code:'missing-glyph'});

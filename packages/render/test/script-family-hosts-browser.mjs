@@ -10,7 +10,7 @@
 //   - the document holds the faces the registry holds, and a loaded FontFace backs every drawn run,
 //   - every run of the deck is drawn in the family, and its natural advance in the browser (the pin removed) equals the registry's
 //     accepted advance within 0.1 px at the size the host draws (test/host-font-size.mjs: Linux Chromium truncates a fractional
-//     size to 1/64 px) (these browser handles omit shapeWasm, so the fontkit fallback limits of Myanmar, one Syriac word and Nastaliq vowel marks stay bounded),
+//     size to 1/64 px) (these browser handles omit shapeWasm and measure with fontkit, which has no recorded fallback limits since fontkit 3),
 //   - right-to-left samples display right to left, and the glyphs paint: the family's runs have ink, and the colour emoji face paints
 //     saturated pixels (its COLRv1 glyphs), which a fallback face could not.
 // It writes artifacts/script-family-hosts/browser.json (per family: files fetched, bytes, runs). Offline: every other request is aborted.

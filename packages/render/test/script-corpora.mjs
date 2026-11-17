@@ -5,10 +5,10 @@
 // sample runs through every bundled open face that serves its script (regular and bold, all 63 script and Noto Sans faces) and is checked for
 //   1. coverage: the face has a glyph for every letter of the group's own script (Latin, digits and punctuation in mixed samples are the
 //      glyph-fallback chain's job: some loaded face must have them);
-//   2. shaping: fontkit, as the renderer uses it (opf-render's own fallback measurement, with its Mongolian lookup guard, its mark-positioning retry
-//      and the OpenType language system of the sample's lang), shapes the text;
+//   2. shaping: fontkit, as the renderer uses it (opf-render's own fallback measurement, with the OpenType language system of the
+//      sample's lang), shapes the text;
 //   3. loaded-handle advances agree with independent HarfBuzz within 0.011 px, with no exceptions; fallback fontkit widths have only the
-//      recorded `fontkitFallbackLimits` (fontkit 2.0.4 has no Myanmar shaper, mis-joins one Syriac word and cannot position Nastaliq marks), whose
+//      recorded `fontkitFallbackLimits` (none since fontkit 3, which shapes Myanmar, Syriac and Nastaliq like HarfBuzz), whose
 //      deviations are bounded and must still exist (a limit that no longer deviates must be removed from the fixture);
 //   4. shaping really applied where the category says so (joining, conjuncts, vowel placement, tone marks change the glyph run).
 // It also checks that the corpus covers every script of the 93 languages of core's engine language vocabulary (`LANGUAGES`) and every script

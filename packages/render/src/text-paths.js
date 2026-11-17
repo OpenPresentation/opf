@@ -12,10 +12,9 @@ import { embeddingAllowed, fsTypeOf } from './font-fstype.js';
 // the font's own metrics. Text drawn with a colour or bitmap font (COLR, CBDT, sbix, SVG tables) stays <text>, reported as
 // `text-as-paths-kept-text`, and the SVG then embeds that face as usual.
 
-import { FontLibrary, shape as fontkitShape } from "./pdf-fonts.js";
-import { featuresOf, layoutText } from "./pdf-text.js";
+import { FontLibrary } from "./pdf-fonts.js";
+import { layoutText } from "./pdf-text.js";
 import { ROOT_STYLE, attributesOf, inheritStyle, parseFontFamilies, parseFontWeight, parseLength } from "./pdf-style.js";
-import { openTypeLanguage } from "./script-fonts.js";
 import { decodeEntities, escapeAttribute, escapeText, parseXml } from "./pdf-xml.js";
 
 const TOKENS = /<(\/?)([A-Za-z][\w:.-]*)((?:[^>"']|"[^"]*"|'[^']*')*?)(\/?)>|<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|[^<]+/g;
@@ -126,7 +125,6 @@ export function outlineSlideText(content, { library, shaper, shape, selectText, 
   const REASONS = {
     "colour-font": "is a colour or bitmap font, which has no plain outlines",
     restricted: "forbids embedding (OS/2 fsType), so its outlines are not written",
-    shaping: "shapes differently in HarfBuzz and in the layout's measurement on text with no pinned width",
   };
   const keep = (family, reason) => {
     if (reported.has(`${family}|${reason}`)) return;
@@ -233,20 +231,13 @@ function readableText(runs) {
   }).join("");
 }
 
-// Why a run stays text, or null: a colour or bitmap font; a family whose fsType restricts embedding (the run was laid out with
-// another face); or, with HarfBuzz shaping, a run with no pinned width whose HarfBuzz advance differs from the fontkit advance
-// the layout measured by more than 0.1 px (inside a textLength the run is scaled to the measured width, as the browser does).
+// Why a run stays text, or null: a colour or bitmap font, or a family whose fsType restricts embedding (the run was laid out with
+// another face).
 function fallbackReason(run, env) {
   if (COLOUR_TABLES.some((table) => run.face.font.directory?.tables?.[table])) return "colour-font";
   for (const family of parseFontFamilies(run.style["font-family"])) {
     if (env.fonts.restricted?.has(family.toLowerCase())) return "restricted";
     if (run.face.names.has(family.toLowerCase()) || (env.onRefusal && env.validateFace && env.fonts.match([family],parseFontWeight(run.style["font-weight"],400),/italic|oblique/i.test(run.style["font-style"]??""))?.face===run.face)) break;
-  }
-  if (env.shape && !run.scope) {
-    const direction = run.level % 2 === 1 ? "rtl" : "ltr", language = openTypeLanguage(run.style.lang ?? run.style["xml:lang"]);
-    const measured = fontkitShape(run.face, run.text, { features: featuresOf(run.style), language, direction }).reduce((sum, glyph) => sum + glyph.advance, 0);
-    const shaped = run.glyphs.reduce((sum, glyph) => sum + glyph.advance, 0);
-    if (Math.abs(measured - shaped) * run.scale > 0.1) return "shaping";
   }
   return null;
 }
