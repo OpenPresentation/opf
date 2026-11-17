@@ -10,7 +10,7 @@
 // polygon) becomes path commands here, so engines read one form: a string is the path a stroke icon strokes, `{ stroke, fill }`
 // separates the parts the source fills (`fill="currentColor"`; also stroked unless `stroke="none"`). An invisible element (stroke
 // and fill both none: Tabler's 24 x 24 bounding box) is dropped. `tags` are the source package's search keywords.
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -117,6 +117,29 @@ const copyrightOf = (text) =>
     .join("; ");
 const sortedKeys = (object) => Object.fromEntries(Object.keys(object).sort().map((key) => [key, object[key]]));
 
+/**
+ * Lucide's former names: lucide-static ships a `icons/<name>.svg` for every alias beside the canonical icons that `icon-nodes.json` lists.
+ * An alias file draws the same shapes as the icon it stands for, so its current name is the one canonical icon with identical markup
+ * (every alias of the pinned version matches exactly one). Written to the record as `renamed`, never as an icon: OPF has one name each.
+ */
+async function lucideRenames(root, nodes) {
+  const body = (svg) => svg.replace(/<!--[\s\S]*?-->/g, "").replace(/<svg[\s\S]*?>/, "").replace("</svg>", "").replace(/\s+/g, "");
+  const canonical = new Map();
+  for (const name of Object.keys(nodes)) {
+    const markup = body(await readFile(path.join(root, "icons", `${name}.svg`), "utf8"));
+    canonical.set(markup, [...(canonical.get(markup) ?? []), name]);
+  }
+  const renamed = {};
+  for (const file of (await readdir(path.join(root, "icons"))).sort()) {
+    const alias = file.replace(/\.svg$/, "");
+    if (!file.endsWith(".svg") || Object.hasOwn(nodes, alias)) continue;
+    const current = canonical.get(body(await readFile(path.join(root, "icons", file), "utf8")));
+    if (current?.length !== 1) throw new Error(`The Lucide alias ${alias} matches ${current?.length ?? 0} icons: cannot say which it was renamed to.`);
+    renamed[alias] = current[0];
+  }
+  return renamed;
+}
+
 async function lucide() {
   const { root, pkg } = await readPackage("lucide-static");
   const nodes = JSON.parse(await readFile(path.join(root, "icon-nodes.json"), "utf8"));
@@ -132,6 +155,7 @@ async function lucide() {
     copyright: copyrightOf(await license(root)),
     licenseText: await license(root),
     viewBox: [0, 0, 24, 24], style: "stroke", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round",
+    renamed: await lucideRenames(root, nodes),
     icons, tags: keywords,
   };
 }

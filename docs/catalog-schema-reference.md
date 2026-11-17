@@ -238,6 +238,7 @@ _No named properties._
 | `strokeLinecap` | no | `enum:butt \| round \| square` | The stroke's line caps. Default round. |
 | `strokeLinejoin` | no | `enum:miter \| round \| bevel` | The stroke's line joins. Default round. |
 | `icons` | yes | `object` | The icons by name. A string is the icon's path data, drawn as `style` says; an object separates the parts a stroke set strokes (`stroke`) from those it fills (`fill`). Every icon is one color: the engines draw it in t... |
+| `renamed` | no | `object` | Former icon names by current name, from the source package's aliases. Only a finding and an icon search read it; an old name is never an icon. |
 | `tags` | no | `object` | Search keywords by icon name, from the source package: what an icon search (the MCP's search_icons, pptx.gallery) matches besides the name. |
 
 ## Language

@@ -66,6 +66,11 @@
         ]
       }
     },
+    "renamed": {
+      "type": "object",
+      "description": "Former icon names by current name, from the source package's aliases. Only a finding and an icon search read it; an old name is never an icon.",
+      "additionalProperties": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }
+    },
     "tags": {
       "type": "object",
       "description": "Search keywords by icon name, from the source package: what an icon search (the MCP's search_icons, pptx.gallery) matches besides the name.",

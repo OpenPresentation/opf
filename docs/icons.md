@@ -67,7 +67,8 @@ Short paragraphs without icons draw as tiles (LH-162, see [Dynamic composition](
 - **`<set>:<name>`**, an icon of a set: `lucide:truck`, `tabler:rocket`. The gallery (`@openpresentation/gallery`) bundles
   [Lucide](https://lucide.dev) (ISC, `lucide-static` 1.72.0, about 2,000 icons, the default set) and
   [Tabler outline](https://tabler.io/icons) (MIT, `@tabler/icons` 3.51.0, about 5,200 icons). The MCP's `search_icons` tool
-  finds names by keyword; never guess one.
+  finds names by keyword (and by a former name: see below); never guess one.
+  **Renamed icons.** A set renames icons between versions. OPF has one name for each icon, so an old name does not draw; the set lists its former names (`renamed`, from the aliases the pinned `lucide-static` ships; Tabler's package ships none), so `opf/icon-unknown` for one says it was renamed and gives the new name with a fix, and `search_icons` finds the icon by it.
 - **a bare name**, an icon of the deck's own `icons` map: an author's or an LLM's SVG, written once and named anywhere in the deck.
 - **an SVG source**: `asset:<id>`, `./icon.svg`, an HTTPS URL or a `data:image/svg+xml` URI, as pictures accept. A file is read by
   the host (the CLI and the Node file API read it from the asset directory); nothing is fetched by core.
@@ -199,6 +200,6 @@ The editor (`@openpresentation/opf-editor`) sets, changes and removes an `icon` 
 
 | Rule | When |
 | --- | --- |
-| `opf/icon-unknown` | The set or the name is not found (the finding suggests the nearest names), or the icon could not be loaded (the finding says why). |
+| `opf/icon-unknown` | The set or the name is not found (the finding suggests the nearest names, or says the icon was renamed and gives the new name), or the icon could not be loaded (the finding says why). |
 | `opf/icon-invalid` | The SVG cannot be an icon (see SVG intake). |
 | `opf/icon-dropped` | The icon is not drawn: no room without setting text smaller, or nothing it can mark. |

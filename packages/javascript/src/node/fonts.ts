@@ -52,7 +52,7 @@ export async function prepareFonts(renderer: Renderer, presentation: unknown, us
 			presentation,
 			...(renderOptions ? { renderOptions } : {}),
 			faces: userFonts.map((file) => ({ path: file })),
-			onDiagnostic: (diagnostic: Diagnostic) => reporter.add("fonts", scriptDiagnostic(diagnostic)),
+			onDiagnostic: (diagnostic: Diagnostic) => reporter.add("fonts", diagnostic),
 		});
 		return { handle, userFonts };
 	} catch (error) {
@@ -97,7 +97,7 @@ export async function leaseSharedFonts(renderer: Renderer, presentation: unknown
 	const key = JSON.stringify([userFonts, embedScriptFonts]);
 	let entry = shared.get(key);
 	if (!entry) {
-		// The diagnostics of the one preparation (already worded by prepareFonts), repeated into each export's report.
+		// The diagnostics of the one preparation (already worded by the renderer), repeated into each export's report.
 		const diagnostics: Diagnostic[] = [];
 		const sink = { add: (_source: string, diagnostic: Diagnostic) => void diagnostics.push(diagnostic) } as unknown as Reporter;
 		const ready = prepareFonts(renderer, NEUTRAL_DECK, userFonts, sink, embedScriptFonts).then((prepared) => ({ handle: prepared.handle, diagnostics }));
@@ -126,14 +126,6 @@ export async function leaseSharedFonts(renderer: Renderer, presentation: unknown
 		for (const diagnostic of diagnostics) reporter.add("fonts", diagnostic);
 		return { handle, release };
 	} catch (error) { release(); throw error; }
-}
-
-function scriptDiagnostic(diagnostic: Diagnostic): Diagnostic {
-	if (diagnostic.code !== "script-font-not-installed") return diagnostic;
-	const name = typeof diagnostic.package === "string" ? diagnostic.package : "the Noto script package";
-	const pinned = typeof diagnostic.package === "string" && typeof diagnostic.version === "string" ? `${name}@${diagnostic.version}` : name;
-	// Core does not know how the CLI was installed (global, a project's dependency, or one npx run), so the message names all three.
-	return { ...diagnostic, message: `${diagnostic.message} Install it where the CLI runs, at that version: npm install -g ${pinned} for a global CLI, npm install ${pinned} in the project that depends on the CLI, or add -p ${pinned} to an npx run. Then run the command again to draw this script with a bundled open font.` };
 }
 
 /**

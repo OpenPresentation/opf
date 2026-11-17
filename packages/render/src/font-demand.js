@@ -4,6 +4,7 @@ import { FONT_SELECTION_METADATA } from './font-selection-metadata.js';
 import { createFontRegistry, pickFace, OPFFontError } from './font-registry.js';
 import { createFontAnalysis } from './lazy-fonts.js';
 import { scriptFontAliases } from './script-fonts.js';
+import { scriptFontNotInstalledMessage } from './script-font-message.js';
 import {
   analyzePresentationScripts,
   createScriptAnalysis,
@@ -510,13 +511,11 @@ export async function createNodeDemand(
           notify(
             'script-font-not-installed',
             { package: item.package, version: item.version, scripts: item.scripts },
-            'Install ' +
-              item.package +
-              '@' +
-              item.version +
-              ' to preview ' +
-              item.scripts.join(', ') +
-              ' text with its designated open font.',
+            scriptFontNotInstalledMessage(
+              'Install ' + item.package + '@' + item.version + ' to preview ' + item.scripts.join(', ') + ' text with its designated open font.',
+              item.package,
+              item.version,
+            ),
             onDiagnostic,
           );
         }

@@ -1081,6 +1081,7 @@ export function referenceFindings(document: unknown, engine: SchemaCheckResult, 
 				definition: `${schemas.presentation.$id}#/$defs/IconReference`,
 				lookup: ['opf', 'schema', 'presentation', '/$defs/IconReference'],
 				...(issue.suggestions?.length ? { suggestions: issue.suggestions.map((value) => ({ value, label: value, origin: 'registered' as const, definition: `${schemas.presentation.$id}#/$defs/IconReference` })) } : {}),
+				...(issue.renamed ? { fixes: [{ id: 'icon-renamed', title: 'Use the new name', kind: 'patch' as const, safe: true, patch: [{ op: 'replace' as const, path: pointerPath(path.split('.')), value: issue.renamed }] }] } : {}),
 			}),
 		);
 	}

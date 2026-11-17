@@ -45,6 +45,8 @@ export interface IconSetRecord {
   strokeWidth?: number; strokeLinecap?: 'butt' | 'round' | 'square'; strokeLinejoin?: 'miter' | 'round' | 'bevel';
   icons: Readonly<Record<string, IconSetIcon>>; tags?: Readonly<Record<string, readonly string[]>>;
   summary?: string; version?: string; package?: string; homepage?: string; licenseText?: string;
+  /** The set's former icon names by current name (`{ "triangle-alert": "triangle-exclamation-point" }`), read for the finding of an old name; an old name never resolves. */
+  renamed?: Readonly<Record<string, string>>;
 }
 /**
  * A registered catalog's set: its record, or a function that loads it (a module whose default export is the record also does).
@@ -76,7 +78,7 @@ export interface ResolvedIcon {
   license?: string;
   copyright?: string;
 }
-export type IconResolution = { ok: true; icon: ResolvedIcon } | { ok: false; code: 'icon-unknown' | 'icon-invalid' | 'icon-unloaded'; message: string; suggestions?: string[] };
+export type IconResolution = { ok: true; icon: ResolvedIcon } | { ok: false; code: 'icon-unknown' | 'icon-invalid' | 'icon-unloaded'; message: string; suggestions?: string[]; /** `<set>:<name>` when the icon was renamed upstream: the one name to write. */ renamed?: string };
 
 type Rec = Record<string, unknown>;
 const isRec = (value: unknown): value is Rec => typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -542,6 +544,11 @@ export function resolveIcon(document: unknown, value: unknown, options: IconOpti
     if (icon === undefined) {
       const names = setNames(set);
       if (Array.isArray((set as { names?: unknown }).names) && names.includes(reference.name)) return failed !== undefined ? { ok: false, code: 'icon-unknown', message: failed } : { ok: false, code: 'icon-unloaded', message: `The icon ${written} is registered but not loaded yet (ensureIcons).` };
+      const current = Object.hasOwn(set.renamed ?? {}, reference.name) ? set.renamed![reference.name] : undefined;
+      if (current !== undefined && names.includes(current)) {
+        const now = `${reference.set}:${current}`;
+        return { ok: false, code: 'icon-unknown', message: `${written} was renamed ${now}; the old name does not draw.`, suggestions: [now], renamed: now };
+      }
       const suggestions = nearIconNames(reference.name, names, 5, (set as { tags?: Readonly<Record<string, readonly string[]>> }).tags);
       return { ok: false, code: 'icon-unknown', message: `The icon set ${reference.set} has no icon ${reference.name}.`, ...(suggestions.length ? { suggestions: suggestions.map(name => `${reference.set}:${name}`) } : {}) };
     }
@@ -691,7 +698,7 @@ export function embedIcons(document: unknown, options: IconOptions = {}): { docu
     const sets = groupFor(entry.source)!;
     const missing = [...names].filter(name => !(own && Object.hasOwn(own.icons, name)) && Object.hasOwn(source.icons, name)).sort();
     if (!missing.length) continue;
-    const base = isRec(sets[id]) ? sets[id] as Rec : (({ icons: _icons, tags: _tags, licenseText: _text, names: _names, ...rest }) => Object.fromEntries(Object.entries(rest).filter(([key]) => key !== '$schema' && key !== 'id' && !key.startsWith('x-'))))(source as unknown as Rec & IconSetRecord);
+    const base = isRec(sets[id]) ? sets[id] as Rec : (({ icons: _icons, tags: _tags, licenseText: _text, names: _names, renamed: _renamed, ...rest }) => Object.fromEntries(Object.entries(rest).filter(([key]) => key !== '$schema' && key !== 'id' && !key.startsWith('x-'))))(source as unknown as Rec & IconSetRecord);
     sets[id] = { ...base, icons: { ...(isRec(base.icons) ? base.icons : {}), ...Object.fromEntries(missing.map(name => [name, source.icons[name]])) } };
     added.push(...missing.map(name => `${id}:${name}`));
   }

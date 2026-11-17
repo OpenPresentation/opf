@@ -365,11 +365,14 @@ export async function searchIcons(source, query = "", options = {}) {
   const found = [];
   for (const [id, record] of loaded) {
     const bonus = id === available[0] ? 0.5 : 0;
+    const formerNames = new Map(); // a search for an icon's former name finds it
+    for (const [former, current] of Object.entries(record.renamed ?? {})) formerNames.set(current, [...(formerNames.get(current) ?? []), former]);
     for (const name of namesOf(record)) {
       const tags = [...(record.tags?.[name] ?? [])];
-      const hay = [name, ...tags].join(" ").toLowerCase();
+      const former = formerNames.get(name) ?? [];
+      const hay = [name, ...tags, ...former].join(" ").toLowerCase();
       if (!words.every((word) => hay.includes(word))) continue;
-      const score = words.reduce((sum, word) => sum + (name === word ? 8 : name.split("-").includes(word) ? 4 : name.includes(word) ? 2 : 1), 0) - name.length / 100 + bonus;
+      const score = words.reduce((sum, word) => sum + (name === word ? 8 : name.split("-").includes(word) ? 4 : name.includes(word) ? 2 : former.includes(word) ? 3 : 1), 0) - name.length / 100 + bonus;
       found.push({ score, icon: { icon: `${id}:${name}`, set: id, name, tags } });
     }
   }
