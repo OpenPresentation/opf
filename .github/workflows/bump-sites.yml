@@ -23,8 +23,8 @@ name: Bump sites
 #
 # This workflow only opens and labels the pull requests. It never merges one and never calls `gh pr merge --auto`: the sites are
 # private repositories in a Free-plan organization (no rulesets, no required checks), so the merge is the site's own workflow
-# (opf-bump-merge.yml, drafted in docs/programs/monorepo/site-workflows/), which merges an `auto-merge` pull request after its
-# `build-and-smoke` check passed, with the App's token (D19). A pull request opened with the App's token starts the site's CI; one
+# (opf-bump-merge.yml, drafted in docs/programs/monorepo/site-workflows/), which merges an `auto-merge` pull request after the site's own checks
+# (its REQUIRED_CHECKS) and its Native Preview on the exact head passed, with the App's token (D19). A pull request opened with the App's token starts the site's CI; one
 # opened with GITHUB_TOKEN would not.
 #
 # A failure to bump never fails the release: every step that can fail is allowed to, and the leg then opens (or comments on) one
@@ -264,7 +264,7 @@ jobs:
           git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin "HEAD:refs/heads/$branch"
           # END history-preserving publication
           # The labels must exist before a pull request can carry them.
-          gh label create auto-merge --repo "$SITE" --force --color 0E8A16 --description "A patch bump of the OPF packages: merged by the site's CI once build-and-smoke passed" >/dev/null
+          gh label create auto-merge --repo "$SITE" --force --color 0E8A16 --description "A patch bump of the OPF packages: merged once the site's checks and Native Preview pass" >/dev/null
           gh label create needs-review --repo "$SITE" --force --color D93F0B --description "A minor or major bump of the OPF packages: review it, then merge by hand" >/dev/null
           number="$(gh pr list --repo "$SITE" --head "$branch" --state open --json number --jq '.[0].number // empty')"
           if [ -n "$number" ]; then

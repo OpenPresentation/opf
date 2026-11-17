@@ -4,7 +4,7 @@
 
 ## Lucide (`lucide`)
 
-- Package: [lucide-static](https://www.npmjs.com/package/lucide-static) 1.70.0
+- Package: [lucide-static](https://www.npmjs.com/package/lucide-static) 1.72.0
 - Homepage: https://lucide.dev
 - License: ISC
 - Copyright (c) 2026 Lucide Icons and Contributors; Copyright (c) 2013-present Cole Bemis
@@ -57,7 +57,7 @@ SOFTWARE.
 
 ## Tabler outline (`tabler`)
 
-- Package: [@tabler/icons](https://www.npmjs.com/package/@tabler/icons) 3.50.0
+- Package: [@tabler/icons](https://www.npmjs.com/package/@tabler/icons) 3.51.0
 - Homepage: https://tabler.io/icons
 - License: MIT
 - Copyright (c) 2020-2026 Paweł Kuna

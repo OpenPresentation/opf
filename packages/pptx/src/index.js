@@ -3958,6 +3958,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const authoredOptions = resolveChartOptionsFor(chart);
   reportChartOptionDiagnostics(authoredOptions, path, options.onDiagnostic);
   let chartOptions = chartLayerDataLabels(authoredOptions, layer, chartTargetFor(chart.type)?.kind);
+  const fit = layer?.doughnut?.labels;
+  if (fit && authoredOptions.dataLabels) options.onDiagnostic?.({code: 'chart-option-adapted', option: 'dataLabels.content', reason: 'unsupported-content', path: `${path}.dataLabels.content`, message: `The labels of a doughnut sit inside their slices, and '${fit.from.join(', ')}' does not fit the ring, so ${fit.content ? `they show '${fit.content.join(', ')}' instead (the legend names the slices)` : 'no labels are drawn (the legend names the slices)'}.`});
   // LH-160: a histogram or Pareto chart whose data labels would not fit beside each other draws none (core `layer.histogram`), in the classic fallback too.
   const histogram = chartLayout?.layer?.histogram;
   const histogramClassic = !chartData.chartex && chartTargetFor(chart.type)?.kind === 'histogram' && chartData.resolved?.columns?.length > 1;

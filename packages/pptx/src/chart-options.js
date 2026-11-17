@@ -291,8 +291,9 @@ export function chartOptionsFromChartex(space, {type, seriesCount}) {
   const series = asArray(chart?.['cx:plotArea']?.['cx:plotAreaRegion']?.['cx:series']).find(entry => entry?.ownerIdx === undefined);
   const labels = series?.['cx:dataLabels'];
   const defaultContent = type === 'treemap' ? ['category'] : type === 'funnel' ? ['value'] : undefined;
-  // LH-107: a waterfall's signed values (a "+" format, core waterfallSignedFormat) are its default labels, not an option.
-  const signed = type === 'waterfall' && /^"\+"/.test(String(stripNumeralShape(labels?.['cx:numFmt']?.formatCode) ?? ''));
+  // LH-107: a waterfall's signed values (a "+" format, core waterfallSignedFormat; a format with `;` sections is the column's own, which
+  // carries its signs) are its default labels, not an option.
+  const signed = type === 'waterfall' && /^"\+"|;/.test(String(stripNumeralShape(labels?.['cx:numFmt']?.formatCode) ?? ''));
   if (labels && !signed) {
     const visibility = labels['cx:visibility'] ?? {};
     const content = [];

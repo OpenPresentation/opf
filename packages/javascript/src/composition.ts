@@ -5620,12 +5620,24 @@ function guardedRules(input: unknown, options: ComposeSlideOptions): SlideCompos
     if (bandSize !== undefined) seeds[EMPHASIS_SIZE] = Math.max(bandSize, Number((options as Record<symbol, unknown>)[EMPHASIS_SIZE] ?? 0));
     if (Object.getOwnPropertySymbols(seeds).length) result = attempt(ruled(CORE_RULES, seeds));
     let keptRules: ReadonlySet<GuardedRule> = CORE_RULES;
+    const drewIcons = (result?.icons?.length ?? 0) > 0;
     if (!readsWell(result)) {
-      let kept: ReadonlySet<GuardedRule> = NO_RULES;
+      // An author's icons fire no rule (the rules are always on where a chip resolves), and their chips can keep other rules from firing
+      // (a list set smaller around full chips is on no half step). So a slide that drew chips with every rule is composed again with every
+      // rule but the icons, which is kept when it reads well, and the icons are then tried on top of it on their own: `icons` on compact
+      // chips (a line high), then `icon-chips` on full ones. Without this, the chips that cost a size took the other rules and the compact
+      // chips off with them, and a list whose icons were dropped was still set smaller than the same list without icons.
+      let kept: ReadonlySet<GuardedRule> = NO_RULES, candidates: ReadonlySet<GuardedRule> = fired;
       result = base;
       keptRules = NO_RULES;
+      if (drewIcons) {
+        const plainFired = new Set<GuardedRule>(), withoutIcons = new Set([...CORE_RULES].filter(rule => rule !== 'icons' && rule !== 'icon-chips'));
+        const plain = attempt(ruled(withoutIcons, { ...seeds, [FIRED]: plainFired }));
+        if (readsWell(plain)) { kept = withoutIcons; result = plain; keptRules = withoutIcons; }
+        candidates = new Set<GuardedRule>([...fired, ...plainFired, 'icons', 'icon-chips']);
+      }
       for (const rule of GUARDED_RULES) {
-        if (!fired.has(rule)) continue;
+        if (!candidates.has(rule) || kept.has(rule)) continue;
         const rules = new Set([...kept, rule]), trial = attempt(ruled(rules, seeds));
         if (readsWell(trial)) { kept = rules; result = trial; keptRules = rules; }
       }
@@ -10253,14 +10265,19 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (regions.length || body.length < 3 || !body.every(({ item, index }) => item.metricLayout && !item.metricLayout.overflow && !item.frameBox && !item.emphasis && metricMoves.has(index))) return;
     const rows = [...new Set(body.map(({ item }) => round(item.box.y)))].sort((a, b) => a - b);
     if (rows.length < 2 || new Set(body.map(({ item }) => round(item.box.height))).size !== 1) return;
-    const extent = (layout: MetricLayout): [number, number] => {
+    // A metric's icon chip is drawn over its visible parts at the end (placeIcons), in the band its cell reserved above them: the chip and
+    // ICON_CHIP_GAP of it. The band is part of the metric's content here, so a moved row never sets its chip on the row above.
+    const chipBands = new Map(pendingIcons.filter(pending => pending.metric).map(pending => [pending.members[0]!, pending.diameter * (1 + ICON_CHIP_GAP)] as const));
+    const extent = (item: ComposedItem, layout: MetricLayout): [number, number] => {
       const boxes = [layout.bounds, ...layout.parts.filter(part => part.visible).map(part => part.box), ...(layout.trendBox ? [layout.trendBox] : []), ...(layout.deltaPill ? [layout.deltaPill.box] : [])];
-      return [Math.min(...boxes.map(box => box.y)), Math.max(...boxes.map(box => box.y + box.height))];
+      const top = Math.min(...boxes.map(box => box.y)), band = chipBands.get(item) ?? 0, drawn = layout.parts.filter(part => part.visible && part.fit).map(part => part.box.y);
+      return [band ? Math.min(top, (drawn.length ? Math.min(...drawn) : item.box.y) - band) : top, Math.max(...boxes.map(box => box.y + box.height))];
     };
     const rowOf = (item: ComposedItem) => rows.indexOf(round(item.box.y));
-    const spans = rows.map((_, row) => body.filter(({ item }) => rowOf(item) === row).map(({ item }) => extent(item.metricLayout!)));
+    const spans = rows.map((_, row) => body.filter(({ item }) => rowOf(item) === row).map(({ item }) => extent(item, item.metricLayout!)));
     const tops = spans.map(span => Math.min(...span.map(([top]) => top))), heights = spans.map((span, row) => Math.max(...span.map(([, bottom]) => bottom)) - tops[row]!);
-    const areaTop = rows[0]!, areaBottom = Math.max(...body.map(({ item }) => item.box.y + item.box.height));
+    // The area starts at the first row's cells, their chip bands included.
+    const areaTop = Math.min(rows[0]!, tops[0]!), areaBottom = Math.max(...body.map(({ item }) => item.box.y + item.box.height));
     const free = areaBottom - areaTop - heights.reduce((sum, height) => sum + height, 0);
     if (free <= 0) return;
     const space = free / (rows.length + 1), targets: number[] = [];
@@ -11824,13 +11841,28 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   }
   // Every icon of the slide that resolves and is not drawn: the guard turned the chips off (no room without setting text smaller), or it
   // marks something icons do not draw on (a nested or numbered entry). The text stays; the finding says why the chip is missing.
+  // What bounds the space of the block an icon marks, so the finding names what the author can change: a share the author set
+  // (`composition.weights` of the slide or of a group around the block), the layout region or promoted region it is placed in, or the slide.
+  const roomFor = (at: string): string => {
+    const owner = items.filter(item => at.startsWith(`${item.path}.`)).sort((a, b) => b.path.length - a.path.length)[0];
+    const steps = (owner?.path ?? at).slice(path.length + 1).split('.');
+    let node: Record<string, any> = slide, weighted = false;
+    for (let index = 0; index < steps.length; index++) {
+      if (steps[index] !== 'blocks') { node = record(node[steps[index]!]); continue; }
+      if (Array.isArray(record(node.composition).weights) && record(node.composition).weights.length) weighted = true;
+      node = record(Array.isArray(node.blocks) ? node.blocks[Number(steps[++index])] : undefined);
+    }
+    if (weighted) return 'its block, at the share `composition.weights` gives it,';
+    const region = owner?.region ?? (regionParts(steps[0] ?? '') ? steps[0] : undefined);
+    return region !== undefined ? `its block, in the region \`${region}\`,` : 'the slide';
+  };
   const iconDiagnostics: LayoutDiagnostic[] = [], drawnIcons = new Set(icons.map(icon => icon.path));
   for (const found of documentIcons(slide)) {
     const at = path + found.path.slice('slide'.length), value = found.value;
     if (drawnIcons.has(at) || !resolveIcon(options.presentation ?? {}, value).ok) continue;
     iconDiagnostics.push({ code: 'icon-dropped', path: at, message: ruleOn('icons')
       ? 'The icon is not drawn: icons draw on the first-level entries of an unnumbered list, on metrics and on groups, and this one marks none of them here.'
-      : 'The icon is not drawn: the slide has no room for its chip without setting text smaller. The text keeps its size.' });
+      : `The icon is not drawn: ${roomFor(at)} has no room for its chip without setting text smaller. The text keeps its size.` });
   }
   // Notices that never fail a strict composition: the drawn number is still the one PowerPoint draws.
   const numberingDiagnostics: LayoutDiagnostic[] = [];

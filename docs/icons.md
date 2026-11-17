@@ -65,8 +65,8 @@ Short paragraphs without icons draw as tiles (LH-162, see [Dynamic composition](
 `icon` is one string, in one of three forms:
 
 - **`<set>:<name>`**, an icon of a set: `lucide:truck`, `tabler:rocket`. The gallery (`@openpresentation/gallery`) bundles
-  [Lucide](https://lucide.dev) (ISC, `lucide-static` 1.70.0, about 2,000 icons, the default set) and
-  [Tabler outline](https://tabler.io/icons) (MIT, `@tabler/icons` 3.50.0, about 5,200 icons). The MCP's `search_icons` tool
+  [Lucide](https://lucide.dev) (ISC, `lucide-static` 1.72.0, about 2,000 icons, the default set) and
+  [Tabler outline](https://tabler.io/icons) (MIT, `@tabler/icons` 3.51.0, about 5,200 icons). The MCP's `search_icons` tool
   finds names by keyword; never guess one.
 - **a bare name**, an icon of the deck's own `icons` map: an author's or an LLM's SVG, written once and named anywhere in the deck.
 - **an SVG source**: `asset:<id>`, `./icon.svg`, an HTTPS URL or a `data:image/svg+xml` URI, as pictures accept. A file is read by
@@ -104,8 +104,10 @@ under 3:1 against its chip takes the text color. Core computes the colors (`icon
 A chip is a line of its text high (`ICON_CHIP_COMPACT`, 1.22 em) or, where the slide has room, 1.75 em (`ICON_CHIP`, a step badge's
 size); the glyph is 55% of the chip. Both are guarded rules of composition (`icons`, `icon-chips`) and drawing rules: a slide keeps
 the full chips, else the compact ones, only when every block reads as large as it does without them. When neither fits, the slide is
-drawn without its icons and each one gets `opf/icon-dropped`; the text is always drawn. An icon on something icons do not mark (a
-nested or numbered entry) gets the same finding.
+drawn without its icons and each one gets `opf/icon-dropped`; the text is always drawn. The
+finding names what bounds the block (its share of `composition.weights`, its region, or the slide), so the author knows what to give
+more room. An icon on something icons do not mark (a nested or numbered entry) gets the same finding. Icons in promoted regions
+(`start`, `center+end`, ...) are drawn and reported as any block's.
 
 ## Engines
 

@@ -192,6 +192,9 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   // RR-35: a chart with axis titles, a legend position or data labels reserves their space before the plot is laid out. A chart
   // with none of them skips this block entirely, so its output is unchanged. LH-03: a small chart's default value labels count as data labels.
   const resolved = chartLayerDataLabels(resolveOptions(item.value, authoredSpec), layer, spec.kind);
+  const doughnutFit = layer?.doughnut?.labels;
+  const fitReport = doughnutFit && { code: "chart-option-adapted", option: "dataLabels.content", reason: "unsupported-content", message: `The labels of a doughnut sit inside their slices, and '${doughnutFit.from.join(', ')}' does not fit the ring, so ${doughnutFit.content ? `they show '${doughnutFit.content.join(', ')}' instead (the legend names the slices)` : 'no labels are drawn (the legend names the slices)'}.` };
+  if (fitReport && authoredSpec) resolved.diagnostics = [...resolved.diagnostics, fitReport];
   // FA-14: a highlight changes colours only (no space is reserved), so it is resolved whether or not an option is active.
   c.highlight = highlightFor(c, resolved, spec, data) ?? focusFor(c, layer, spec) ?? emphasisFor(c, layer);
   // LH-03, LH-142: no value axis (a small chart's labels or a horizontal stacked bar chart's segment values carry the values): core decides it.
