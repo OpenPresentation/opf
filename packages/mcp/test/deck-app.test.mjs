@@ -131,6 +131,19 @@ describe("the deck view", () => {
 		await client.close();
 	});
 
+	test("the results say where the viewer is and that it can take a few seconds", async () => {
+		// The model told a ChatGPT user on an iPhone the viewer "isn't appearing ... a compatibility limitation" while it was still loading.
+		const arriving = /opens in the conversation above this message; on a phone or a slow connection it can take several seconds to appear\. If the user does not see it yet, ask them to wait a moment or scroll up; never say it cannot be shown\./;
+		for (const processDecks of [true, false]) {
+			const client = await connected({ processDecks });
+			const shown = await client.callTool({ name: "show_deck", arguments: { document: { name: "Arriving", slides: [{ title: "One" }] } } });
+			assert.match(shown.content[0].text, arriving, `show_deck (processDecks ${processDecks})`);
+			assert.match((await client.callTool({ name: "open_editor", arguments: {} })).content[0].text, arriving);
+			if (processDecks) assert.match((await client.callTool({ name: "show_deck", arguments: { document: "{ not json", format: "json" } })).content[0].text, arriving, "an unreadable deck still opens, and the result says where");
+			await client.close();
+		}
+	});
+
 	test("open_editor is the entry point: all inputs optional, a useful starter deck from {}, a bundled example by slug", async () => {
 		const client = await connected({});
 		const { tools } = await client.listTools();

@@ -828,6 +828,8 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		const viewerSchema = z.object({ session: z.string(), createdAt: z.number(), tie: z.number() });
 		// RR-111: the icon sets the viewer can read through read_icons (empty: the tool is not offered), so it asks only for those.
 		const iconSetsSchema = z.array(z.string()).optional().describe("The icon sets the viewer reads icons from (read_icons).");
+		// What the model tells the person while the viewer is still on its way: a host can take several seconds to draw a 9 MB view on a phone.
+		const ARRIVING = "The viewer opens in the conversation above this message; on a phone or a slow connection it can take several seconds to appear. If the user does not see it yet, ask them to wait a moment or scroll up; never say it cannot be shown.";
 		const sessionLine = (key: { session: string }) => `Viewer session: ${key.session}. A later show_deck or open_editor call for the same deck (or with this session) replaces this viewer.`;
 		const outlineSchema = z.array(z.object({ slide: z.number(), title: z.string().nullable() }));
 		/** The deck's name and slide titles, read without checking it. */
@@ -844,7 +846,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		};
 		const summaryOf = (result: { name: string | null; slides: number | null; outline: { slide: number; title: string | null }[]; counts: { error: number; warning: number; info: number }; findings: Finding[] }) =>
 			[
-				`Opened ${result.name ? `"${result.name}"` : "the deck"} in the OPF viewer${result.slides === null ? "" : ` (${result.slides} slide${result.slides === 1 ? "" : "s"})`}. In a client that supports MCP Apps the user sees it there and can edit it; their edits come back to you as context.`,
+				`Opened ${result.name ? `"${result.name}"` : "the deck"} in the OPF viewer${result.slides === null ? "" : ` (${result.slides} slide${result.slides === 1 ? "" : "s"})`}. In a client that supports MCP Apps the user sees it there and can edit it; their edits come back to you as context. ${ARRIVING}`,
 				...(result.outline.length ? [`Slides: ${result.outline.map((item) => `${item.slide}. ${item.title ?? "(untitled)"}`).join("; ")}.`] : []),
 				`Checks: ${result.counts.error} errors, ${result.counts.warning} warnings, ${result.counts.info} notes.`,
 				...result.findings.filter((finding) => finding.severity !== "info").slice(0, 10).map((finding) => `- ${finding.severity} ${finding.ruleId} at ${finding.path || "/"}: ${finding.message}`),
@@ -889,7 +891,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				if (!processDecks) {
 					// No deck work here: the view reads and checks the deck. Only the shape of the arguments is looked at.
 					const result = { ...opened, checked: false, ...(format ? { format } : typeof document === "string" ? {} : { format: "json" as const }) };
-					return { content: [{ type: "text" as const, text: `Opened the deck in the OPF viewer. In a client that supports MCP Apps the user sees it there and can edit it; the viewer checks it on the user's machine and sends you its findings, and the user's edits, as context. This server does not check decks itself.\n${sessionLine(viewer)}` }], structuredContent: result };
+					return { content: [{ type: "text" as const, text: `Opened the deck in the OPF viewer. In a client that supports MCP Apps the user sees it there and can edit it; the viewer checks it on the user's machine and sends you its findings, and the user's edits, as context. This server does not check decks itself. ${ARRIVING}\n${sessionLine(viewer)}` }], structuredContent: result };
 				}
 				try {
 					const input = inputOf(document, format);
@@ -900,7 +902,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				} catch (error) {
 					// A deck the server cannot read still opens: the view shows the text and its syntax error in Source.
 					const message = error instanceof Error ? error.message : String(error);
-					return { content: [{ type: "text" as const, text: `Opened the deck in the OPF viewer, but it could not be read: ${message}\n${sessionLine(viewer)}` }], structuredContent: { ...opened, checked: false, ...(format ? { format } : {}) } };
+					return { content: [{ type: "text" as const, text: `Opened the deck in the OPF viewer, but it could not be read: ${message} ${ARRIVING}\n${sessionLine(viewer)}` }], structuredContent: { ...opened, checked: false, ...(format ? { format } : {}) } };
 				}
 			},
 		);
@@ -958,6 +960,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				const text = [
 					`Opened the OPF viewer's editor with ${what} (${slides} slide${slides === 1 ? "" : "s"}).${missed}`,
 					"In a client that supports MCP Apps the user sees it in the viewer's editor and can edit it, open a bundled example or paste a deck into Source; their edits come back to you as context. Where the viewer's tools are offered, read_deck and edit_deck read and change this deck in place.",
+					ARRIVING,
 					sessionLine(viewer),
 				].join("\n");
 				return { content: [{ type: "text" as const, text }], structuredContent: result };
