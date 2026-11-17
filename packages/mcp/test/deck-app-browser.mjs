@@ -762,6 +762,112 @@ try {
 		}
 	});
 
+	await run("in a very narrow pane with a mouse (Cursor's IDE chat pane, about 215px): two rows of chrome, nothing outside the frame, every action within two clicks, the Design sheet readable; under 200px the view keeps 200px and scrolls", async () => {
+		const jaguars = { name: "Jaguars of the Americas", language: "en-US", design: { theme: "classic" }, slides: [{ id: "t", title: "Jaguars", blocks: [{ text: "Power, stealth, and the wild heart of the Americas" }] }, { id: "a", title: "What we will cover", blocks: [{ items: ["Who they are", "Where they live"] }] }, { id: "b", title: "Range" }, { id: "c", title: "Conservation" }] };
+		const start = async (width, options = {}) => {
+			const context = await browser.newContext({ viewport: { width: 420, height: 900 }, ...options });
+			const tab = await context.newPage();
+			tab.on("pageerror", (error) => problems.push(String(error)));
+			await tab.exposeFunction("callServer", (params) => client.callTool(params));
+			await tab.goto(hostUrl);
+			const result = await client.callTool({ name: "show_deck", arguments: { document: jaguars } });
+			await tab.evaluate((setup) => window.startView(setup), { viewUrl, arguments: { document: jaguars }, result, theme: "dark", width, hostName: "cursor" });
+			const inner = tab.frameLocator("#view");
+			await inner.locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+			await tab.waitForFunction(() => window.host.context.length > 0, null, { timeout: 60000 });
+			await tab.waitForTimeout(500);
+			return { context, tab, inner, frame: tab.frame({ url: /\/view$/ }) };
+		};
+		// Every visible control of the bar and the footer, and whether any of it lies outside the frame or under another control.
+		const fit = (frame) => frame.evaluate(() => {
+			const visible = (item) => item.getClientRects().length > 0 && getComputedStyle(item).visibility !== "hidden";
+			const client = document.documentElement.clientWidth;
+			const boxes = [...document.querySelectorAll(".deck-bar button, .deck-bar [role=tab], .deck-foot button, .deck-title")].filter(visible).map((item) => ({ name: item.id || item.getAttribute("aria-label") || item.className, box: item.getBoundingClientRect() }));
+			const overlaps = [];
+			for (const [at, a] of boxes.entries()) for (const b of boxes.slice(at + 1)) if (!a.name.includes("title") && !b.name.includes("title") && a.box.left < b.box.right - 1 && b.box.left < a.box.right - 1 && a.box.top < b.box.bottom - 1 && b.box.top < a.box.bottom - 1) overlaps.push(`${a.name}/${b.name}`);
+			const rows = new Set([...document.querySelectorAll(".deck-bar > *, .deck-title-row > *")].filter((item) => visible(item) && item.getBoundingClientRect().height > 0 && !item.classList.contains("deck-title-row")).map((item) => Math.round(item.getBoundingClientRect().top / 8)));
+			const top = (selector) => Math.round(document.querySelector(selector).getBoundingClientRect().top);
+			const thumbs = [...document.querySelectorAll("#deck-thumbs button")].filter(visible).map((item) => Math.round(item.getBoundingClientRect().top));
+			return {
+				size: document.documentElement.dataset.size, client, scroll: document.documentElement.scrollWidth, rows: rows.size, bar: Math.round(document.querySelector(".deck-bar").getBoundingClientRect().height),
+				outside: boxes.filter(({ box }) => box.left < -0.5 || box.right > client + 0.5).map(({ name }) => name), overlaps,
+				shown: ["deck-title", "tab-preview", "tab-source", "deck-more"].filter((id) => visible(document.getElementById(id))),
+				small: boxes.filter(({ box }) => box.height < 44).length, slide: Math.round(document.querySelector("#deck-canvas svg").getBoundingClientRect().width),
+				footOneLine: top(".deck-verdict") === top(".deck-nav"), thumbRows: new Set(thumbs).size,
+			};
+		});
+		for (const width of [215, 240]) {
+			const { context, tab, inner, frame } = await start(width);
+			const laid = await fit(frame);
+			assert.equal(laid.size, "compact narrow micro", `${width}px: a mouse keeps the 32px controls`);
+			assert.ok(laid.scroll <= laid.client, `${width}px: nothing scrolls sideways (${laid.scroll} in ${laid.client})`);
+			assert.deepEqual([laid.outside, laid.overlaps], [[], []], `${width}px: every control inside the frame, none over another`);
+			assert.deepEqual(laid.shown, ["deck-title", "tab-preview", "tab-source", "deck-more"], `${width}px: the name, Preview, Source and More are on screen`);
+			assert.ok(laid.rows === 2 && laid.bar <= 80, `${width}px: two rows of chrome (${laid.rows} rows, ${laid.bar}px)`);
+			assert.ok(laid.slide >= laid.client - 4, `${width}px: the slide is ${laid.slide}px wide in ${laid.client}px`);
+			assert.ok(laid.footOneLine && laid.thumbRows === 1, `${width}px: the footer's verdict and navigator share a line, the thumbnails one row`);
+			// More holds what the bar has no room for: Undo and Redo, Find, Expand. A host growing the frame to the view's height leaves it open.
+			await inner.locator("#deck-more").click();
+			await inner.locator("#deck-menu").waitFor();
+			await tab.evaluate(() => { document.getElementById("view").style.height = `${document.getElementById("view").getBoundingClientRect().height + 40}px`; });
+			await tab.waitForTimeout(300);
+			assert.equal(await inner.locator("#deck-menu").isVisible(), true, `${width}px: a resize that keeps the layout leaves More open`);
+			const items = await frame.evaluate(() => [...document.querySelectorAll("#deck-menu > button")].filter((item) => item.getClientRects().length).map((item) => [item.textContent, item.disabled, item.getBoundingClientRect().right <= document.documentElement.clientWidth]));
+			assert.deepEqual(items, [["Undo", true, true], ["Redo", true, true], ["Find and replace", false, true], ["Expand", false, true]], `${width}px: ${JSON.stringify(items)}`);
+			await inner.locator("#deck-more").click();
+			// The Design sheet: one section at a time under the slide, its four segments wide enough to read.
+			await inner.locator(".opf-design-menu-trigger").click();
+			await inner.locator(".opf-design-menu-popover").waitFor();
+			await tab.waitForTimeout(400);
+			const sheet = await frame.evaluate(() => {
+				const popover = document.querySelector(".opf-design-menu-popover");
+				const cut = [...popover.querySelectorAll(".opf-design-menu-tab-label")].filter((label) => label.scrollWidth > label.clientWidth + 1).map((label) => label.textContent);
+				return { cut, groups: [...popover.querySelectorAll(".opf-design-menu-group")].filter((group) => group.getClientRects().length).length, sheetTop: popover.getBoundingClientRect().top, slideBottom: document.querySelector("#deck-canvas svg").getBoundingClientRect().bottom, right: popover.getBoundingClientRect().right, client: document.documentElement.clientWidth };
+			});
+			assert.deepEqual(sheet.cut, [], `${width}px: no section name is cut short`);
+			assert.equal(sheet.groups, 1, `${width}px: one section at a time`);
+			assert.ok(sheet.sheetTop >= sheet.slideBottom - 1 && sheet.right <= sheet.client, `${width}px: the slide stays in view above the sheet (${JSON.stringify(sheet)})`);
+			await inner.locator('.opf-design-menu-item[data-section="theme"][data-value="bold"]').click();
+			await tab.waitForFunction(() => window.host.context.at(-1)?.structuredContent?.document?.design?.theme === "bold", null, { timeout: 15000 });
+			await inner.locator(".opf-design-menu-close").click();
+			// After the edit Send joins the name's row, and More still ends inside the frame.
+			await inner.locator('#deck-send[data-unsent="true"]').waitFor();
+			const edited = await fit(frame);
+			assert.deepEqual([edited.outside, edited.overlaps, edited.rows], [[], [], 2], `${width}px after an edit: ${JSON.stringify(edited)}`);
+			// Undo from More takes the edit back.
+			await inner.locator("#deck-more").click();
+			await inner.locator('#deck-menu [data-run="undo"]').click();
+			await tab.waitForFunction(() => window.host.context.at(-1)?.structuredContent?.document?.design?.theme === "classic", null, { timeout: 15000 });
+			// Find from More: its card fits the view, and focusing its field does not shift the view sideways.
+			await inner.locator("#deck-more").click();
+			await inner.locator('#deck-menu [data-run="find"]').click();
+			await inner.locator("#deck-find input").first().waitFor();
+			await tab.waitForTimeout(300);
+			const find = await frame.evaluate(() => ({ left: document.querySelector(".deck-title").getBoundingClientRect().left, card: document.querySelector(".deck-find").getBoundingClientRect().bottom, view: document.getElementById("opf-deck").getBoundingClientRect().bottom, shellScroll: document.getElementById("opf-deck").scrollLeft }));
+			assert.ok(find.left >= 0 && find.shellScroll === 0, `${width}px: the view did not scroll sideways (${JSON.stringify(find)})`);
+			assert.ok(find.card <= find.view, `${width}px: the Find card ends inside the view (${JSON.stringify(find)})`);
+			if (shots) await tab.locator("#view").screenshot({ path: path.join(shots, `narrow-pane-${width}.png`) });
+			await context.close();
+		}
+		// A finger in the same pane keeps 44px targets, still in two rows inside the frame.
+		{
+			const { context, frame } = await start(240, { isMobile: true, hasTouch: true });
+			const laid = await fit(frame);
+			assert.equal(laid.size, "compact narrow tiny micro");
+			assert.deepEqual([laid.outside, laid.overlaps, laid.rows, laid.small], [[], [], 2, 0], `240px with a finger: ${JSON.stringify(laid)}`);
+			await context.close();
+		}
+		// Under 200px the view keeps 200px and the frame scrolls sideways; nothing overlaps.
+		{
+			const { context, frame } = await start(180);
+			const laid = await frame.evaluate(() => ({ view: document.getElementById("opf-deck").getBoundingClientRect().width, scroll: document.documentElement.scrollWidth, overflow: getComputedStyle(document.documentElement).overflowX }));
+			assert.deepEqual(laid, { view: 200, scroll: 200, overflow: "auto" }, `180px: ${JSON.stringify(laid)}`);
+			const placed = await fit(frame);
+			assert.deepEqual(placed.overlaps, [], `180px: ${JSON.stringify(placed)}`);
+			await context.close();
+		}
+	});
+
 	await run("runs without a CSP violation or a page error", async () => {
 		assert.deepEqual(problems, []);
 	});
