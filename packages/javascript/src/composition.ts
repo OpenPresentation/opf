@@ -6842,11 +6842,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // ruled rows (pairRowLabels: the questions of the region, so their answers share one column) and those drawn as a grid under accent rules.
   // LH-133: spreadLists are the lone ruled lists that fill their body (fillLone), their rows spread over it (ListFitOptions.spread).
   const numeralLists = new Map<string, 'display' | 'row'>(), pairRowLabels = new Map<string, ListText[]>(), pairGrid = new Set<string>(), spreadLists = new Set<string>();
+  // LH-14: the icon lists measured without their chips while a lone block chooses its growth (fillLoneBlock's plainNeed).
+  const chiplessLists = new Set<string>();
   const listOptionsFor = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => {
     // LH-106: list numerals and badges are in the numbering system of the slide's language.
     const listed = {...listOptionsOf(field, path, numbering, value), ...numberLanguage(options)};
     // LH-14: an icon list (never a badge list, a step heading or numerals) draws its icons on chips in the marker column.
-    const own = field === 'items' && !badgeLists.has(path) && !stepHeadings.has(path) && !numeralLists.has(path) && iconList(value, numbering) ? { ...listed, icons: true, iconScale: chipScale } : listed;
+    const own = field === 'items' && !badgeLists.has(path) && !stepHeadings.has(path) && !numeralLists.has(path) && !chiplessLists.has(path) && iconList(value, numbering) ? { ...listed, icons: true, iconScale: chipScale } : listed;
     return own.rows && spreadLists.has(path) ? { ...own, spread: true } : own;
   };
   const listOptionsOf = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none',...(headingCaps.has(path)?{headingMax:headingCaps.get(path)!}:{})}
@@ -8996,11 +8998,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // A table needs the height it is drawn at (its preferred rows), every other block the height its content takes.
     const slack = 2 * rasterPadding + scale, need = () => (node.field === 'table' ? measureTable(node, inner.width, settings)?.height ?? Infinity : naturalHeight(node, inner.width, false, undefined, settings)) + slack;
     // LH-07: a badge list grows as the plain list would (its badges do not count against the body it fills), as long as it fits with them.
-    // LH-134: so does a list drawn beside numerals: its numerals and rules are drawing, as badges are.
+    // LH-134: so does a list drawn beside numerals: its numerals and rules are drawing, as badges are. LH-14: and an icon list: its chips
+    // are drawing too. Measured with them, a list whose chip column took a line from its descriptions filled LONE_FILL at its role size
+    // and did not grow, while the same list without icons grew a step; the guard then dropped the chips as costing that step.
+    const chipped = node.field === 'items' && iconList(node.value, node.payload.numbering);
     const plainNeed = () => {
       const badged = badgeLists.delete(node.path), numerals = numeralLists.get(node.path);
       numeralLists.delete(node.path);
-      try { return need(); } finally { if (badged) badgeLists.add(node.path); if (numerals) numeralLists.set(node.path, numerals); }
+      if (chipped) chiplessLists.add(node.path);
+      try { return need(); } finally { if (badged) badgeLists.add(node.path); if (numerals) numeralLists.set(node.path, numerals); chiplessLists.delete(node.path); }
     };
     let best = plainNeed();
     // LH-101: a lone code panel grows its code in type-scale steps as the other blocks do (up to LONE_DISPLAY_SIZES.code) and hugs it in
@@ -9066,7 +9072,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         if (shown === undefined) { displayTexts.delete(node.path); messageTexts.delete(node.path); if (plain.growth === undefined) proseGrowth.delete(node); else proseGrowth.set(node, plain.growth); best = plain.best; }
         else { proseGrowth.set(node, shown); loneGrowth = true; fire('display-message'); }
       }
-      if (badgeLists.has(node.path)) best = need();
+      if (badgeLists.has(node.path) || chipped) best = need();
     } else {
       let chosen: number | undefined;
       // LH-101: a metric's value has room to grow to LONE_DISPLAY_SIZES.value (nine steps); the other blocks reach their displays in five.

@@ -104,7 +104,9 @@ under 3:1 against its chip takes the text color. Core computes the colors (`icon
 
 A chip is a line of its text high (`ICON_CHIP_COMPACT`, 1.22 em) or, where the slide has room, 1.75 em (`ICON_CHIP`, a step badge's
 size); the glyph is 55% of the chip. Both are guarded rules of composition (`icons`, `icon-chips`) and drawing rules: a slide keeps
-the full chips, else the compact ones, only when every block reads as large as it does without them. When neither fits, the slide is
+the full chips, else the compact ones, only when every block reads as large as it does without them. A lone list grows to fill the
+body as the same list without icons would (its chips do not count against the body it fills, as a badge list's badges do not), as
+long as it still fits with them. When neither fits, the slide is
 drawn without its icons and each one gets `opf/icon-dropped`; the text is always drawn. The
 finding names what bounds the block (its share of `composition.weights`, its region, or the slide), so the author knows what to give
 more room. An icon on something icons do not mark (a nested or numbered entry) gets the same finding. Icons in promoted regions
