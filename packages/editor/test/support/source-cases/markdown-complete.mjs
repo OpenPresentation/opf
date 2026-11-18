@@ -154,7 +154,7 @@ export { FAST };
 // Quick fixes in Markdown: a value of the front matter or of an options comment, as text edits.
 export const markdownFixes = [
   ['M-FIX-001', 'R-FIX-02', 'change an enum value in the front matter', 'md', '---\ndesign:\n  titleAlignment: middle\n---\n# A\n', [['waitProblems', 1], ['quickFix', 'Change to center']], { deck: { '/design/titleAlignment': 'center' } }, { notify: true }],
-  ['M-FIX-002', 'R-FIX-02', 'change an unresolved layout to a suggestion', 'md', '# A\n<!-- slide: layout=cde -->\n', [['waitProblems', 1], ['quickFix', 'Change to cover']], { has: '<!-- slide: layout=cover -->', findings: { warnings: 0 } }, { notify: true }],
+  ['M-FIX-002', 'R-FIX-02', 'change an unresolved layout to a suggestion', 'md', '# A\n<!-- slide: layout=covr -->\n', [['waitProblems', 1], ['quickFix', 'Change to cover']], { has: '<!-- slide: layout=cover -->', findings: { warnings: 0 } }, { notify: true }],
   ['M-FIX-003', 'R-FIX-01', 'rename an unknown key of the front matter', 'md', '---\ndesgin:\n  theme: minimal\n---\n# A\n', [['waitProblems', 1], ['quickFix', 'Rename to design']], { deck: { '/design/theme': 'minimal' } }, { notify: true }],
 ];
 markdownCases.push(...markdownFixes);

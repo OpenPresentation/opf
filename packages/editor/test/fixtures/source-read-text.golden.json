@@ -104,7 +104,7 @@
     "column": 13,
     "kind": "schema",
     "ruleId": "opf/unresolved-reference",
-    "help": "The nearest layouts that exist: 'org-chart', 'chart', 'chevrons'. Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
+    "help": "No layout is named like 'no-such-layout'. Without the layout key the slide composes automatically from its content; search_catalog (the OPF MCP server), opf catalog layouts and pptx.gallery list the layouts that exist. To keep this id, embed the layout record (embed(), or opf embed) or register the catalog that defines it.",
     "category": "references",
     "location": {
      "offset": 82,
@@ -112,38 +112,7 @@
      "line": 6,
      "column": 13
     },
-    "suggestions": [
-     {
-      "value": "org-chart",
-      "label": "Organization chart",
-      "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/org-chart"
-     },
-     {
-      "value": "chart",
-      "label": "Chart",
-      "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/chart"
-     },
-     {
-      "value": "chevrons",
-      "label": "Chevrons",
-      "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/chevrons"
-     },
-     {
-      "value": "dashboard",
-      "label": "Dashboard",
-      "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/dashboard"
-     },
-     {
-      "value": "section",
-      "label": "Section",
-      "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/section"
-     }
-    ],
+    "suggestions": [],
     "lookup": [
      "opf",
      "catalog",
@@ -180,7 +149,7 @@
     "column": 1,
     "kind": "schema",
     "ruleId": "opf/unresolved-reference",
-    "help": "The nearest layouts that exist: 'org-chart', 'chart', 'chevrons'. Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
+    "help": "No layout is named like 'no-such-layout'. Without the layout key the slide composes automatically from its content; search_catalog (the OPF MCP server), opf catalog layouts and pptx.gallery list the layouts that exist. To keep this id, embed the layout record (embed(), or opf embed) or register the catalog that defines it.",
     "category": "references",
     "location": {
      "offset": 79,
@@ -188,38 +157,7 @@
      "line": 11,
      "column": 1
     },
-    "suggestions": [
-     {
-      "value": "org-chart",
-      "label": "Organization chart",
-      "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/org-chart"
-     },
-     {
-      "value": "chart",
-      "label": "Chart",
-      "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/chart"
-     },
-     {
-      "value": "chevrons",
-      "label": "Chevrons",
-      "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/chevrons"
-     },
-     {
-      "value": "dashboard",
-      "label": "Dashboard",
-      "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/dashboard"
-     },
-     {
-      "value": "section",
-      "label": "Section",
-      "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/section"
-     }
-    ],
+    "suggestions": [],
     "lookup": [
      "opf",
      "catalog",

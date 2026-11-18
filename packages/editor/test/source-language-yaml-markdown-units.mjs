@@ -325,9 +325,9 @@ assert.equal(textFixed('yaml', 'slides:\n  - title: a\n  - title: b\n    layot: 
 assert.equal(textFixed('md', '---\ndesign:\n  titleAlignment: middle\n---\n# A\n', 'Change to center'), '---\ndesign:\n  titleAlignment: center\n---\n# A\n', 'the front matter is YAML');
 assert.equal(textFixed('md', '---\ndesgin:\n  theme: minimal\n---\n# A\n', 'Rename to design'), '---\ndesign:\n  theme: minimal\n---\n# A\n');
 {
-  const text = '# A\n<!-- slide: layout=cde -->\n';
+  const text = '# A\n<!-- slide: layout=covr -->\n';
   const found = textFinding('md', text);
-  const fix = textFixesForFinding('md', found, text, { valueAt: () => 'cde' }).find((entry) => entry.title === 'Change to cover');
+  const fix = textFixesForFinding('md', found, text, { valueAt: () => 'covr' }).find((entry) => entry.title === 'Change to cover');
   assert.equal(applySourceEdits(text, fix.edits), '# A\n<!-- slide: layout=cover -->\n', 'an option value is written bare');
 }
 // The rows of the problems panel carry the positions: line and column of the key or the value, in YAML and in Markdown.
