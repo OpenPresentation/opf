@@ -370,3 +370,28 @@ export function catalogRecords(document: unknown, kind: CatalogKind, options: Ca
 export function embeddedCopy(record: unknown): Record<string, unknown> {
   return Object.fromEntries(Object.entries(rec(record)).filter(([key]) => key !== '$schema' && key !== 'id' && !key.startsWith('x-')).map(([key, value]) => [key, structuredClone(value)]));
 }
+
+/**
+ * Whether `candidate` is a plausible respelling of the unknown catalog id `reference`, for "did you mean": the two share a word of
+ * three letters or more (`two-colum`, `two-column`), start with the same three letters (`tabel`, `table`), are the same letters in
+ * another order (`cvoer`, `cover`), or share at least half their letter pairs (`taable`, `table`). An edit distance alone pointed a
+ * title slide at `table` (`title`: two edits, one shared letter pair); those two share none of these, so `title` gets no suggestion.
+ */
+export function relatedName(reference: string, candidate: string): boolean {
+  // A catalog group prefix (`acme:`) is not part of the name.
+  const bare = (value: string) => value.slice(value.lastIndexOf(':') + 1).toLowerCase();
+  const a = bare(reference), b = bare(candidate);
+  if (a === b) return true;
+  const words = (value: string) => value.split(/[^\p{L}\p{N}]+/u).filter((word) => word.length >= 3);
+  const other = new Set(words(b));
+  if (words(a).some((word) => other.has(word))) return true;
+  let prefix = 0;
+  while (prefix < a.length && prefix < b.length && a[prefix] === b[prefix]) prefix++;
+  if (prefix >= Math.min(3, a.length, b.length)) return true;
+  if (a.length === b.length && [...a].sort().join('') === [...b].sort().join('')) return true;
+  const pairs = (value: string) => Array.from({ length: Math.max(0, value.length - 1) }, (_, index) => value.slice(index, index + 2));
+  const left = pairs(a), right = pairs(b), pool = [...right];
+  let shared = 0;
+  for (const pair of left) { const at = pool.indexOf(pair); if (at >= 0) { shared++; pool.splice(at, 1); } }
+  return left.length + right.length > 0 && (2 * shared) / (left.length + right.length) >= 0.5;
+}
