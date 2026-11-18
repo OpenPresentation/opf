@@ -352,6 +352,15 @@ try {
   assert.deepEqual(sections.tabs.map(([key]) => key), ['theme', 'colors', 'fonts', 'layout']);
   await page.getByRole('tab', { name: /^Colors/ }).click();
   assert.deepEqual(await ev(() => [...document.querySelectorAll('.opf-design-menu-group')].filter((group) => group.getClientRects().length).map((group) => group.dataset.section)), ['colors']);
+  // A scroll or a resize lays the open sheet out again, and that must leave the focus on the tab: the menu used to insert the
+  // switch again each time, which blurred it (seen as this test failing on a slower Windows runner, where the section's own
+  // scroll event arrived before the key).
+  await ev(() => new Promise((resolve) => {
+    window.dispatchEvent(new Event('resize'));
+    document.querySelector('.opf-design-menu-menu').dispatchEvent(new Event('scroll'));
+    requestAnimationFrame(() => requestAnimationFrame(resolve));
+  }));
+  assert.deepEqual(await ev(() => [document.activeElement.getAttribute('role'), document.activeElement.dataset.section]), ['tab', 'colors'], 'a relayout of the open sheet keeps the focus on the tab');
   await page.keyboard.press('ArrowRight');
   assert.equal(await ev(() => document.activeElement.dataset.section), 'fonts', 'the arrow keys move along the switch');
   // The switch is a tablist: labelled, one selected tab in the Tab order, each controlling its section.
