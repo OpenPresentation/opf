@@ -20,7 +20,7 @@
       "rule": true
     },
     {
-      "name": "details",
+      "name": "body",
       "size": "auto",
       "accepts": [
         "text",

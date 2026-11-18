@@ -27,9 +27,9 @@ test('generated Evidence Packs keep vertical charts readable beside intact notes
     const quote = geometry.items.find(item => item.type === 'quote');
     const metric = geometry.items.find(item => item.type === 'metric');
     assert.ok(chart && quote && metric, 'all authored content is composed');
-    assert.equal(chart.region, 'chart');
-    assert.equal(quote.region, 'notes');
-    assert.equal(metric.region, 'notes');
+    assert.equal(chart.region, 'body');
+    assert.equal(quote.region, 'aside');
+    assert.equal(metric.region, 'aside');
     assert.ok(chart.box.height >= geometry.height * 0.5, 'chart occupies at least half the slide height');
     assert.ok(chart.box.width / chart.box.height < 2, 'chart is not a shallow strip');
     assert.ok(quote.box.x >= chart.box.x + chart.box.width, 'quote sits beside the chart');

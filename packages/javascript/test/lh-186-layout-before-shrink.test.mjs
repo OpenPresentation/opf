@@ -68,6 +68,6 @@ test('LH-186: explicit author choices are kept', () => {
   assert.ok(body(composeSlide(pair)).every((item) => item.listColumns === undefined), 'sibling lists');
   // A block pinned to a region keeps the layout.
   const pinned = agenda(2);
-  pinned.blocks[0].region = 'items';
+  pinned.blocks[0].region = 'body';
   assert.equal(composeSlide(pinned, { layout: gallery.layouts['agenda-split'] }).recomposed, undefined, 'a pinned block');
 });

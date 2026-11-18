@@ -15,7 +15,7 @@ const largest = (layout) => Math.max(...layout.parts.filter((part) => part.fit &
 const FULL = [16, 18, 21, 24, 28, 32], HALF = [16, 17, 18, 20, 21, 23, 24, 26, 28, 30, 32, 35, 37];
 
 describe('LH-149: jointly sized siblings take the half steps of the type scale', () => {
-  const pair = (question, answer) => ({ region: 'questions', text: `${question}\n${answer}` });
+  const pair = (question, answer) => ({ region: 'body', text: `${question}\n${answer}` });
   const faq = {
     title: 'What the pilot involves',
     subtitle: 'Illustrative example',
@@ -55,7 +55,7 @@ describe('LH-149: jointly sized siblings take the half steps of the type scale',
       const slide = { title: 'Agenda', subtitle: 'a longer title that may need a second line on the slide', blocks: Array.from({ length: count }, () => ({ items: Array.from({ length: 7 }, (_, item) => `Item ${item + 1}: ${long.slice(0, 70)}`) })) };
       const result = composeSlide(slide, { layout: layouts.agenda });
       assert.equal(result.recomposed, undefined, `${count} lists: no recomposition for half a step`);
-      assert.ok(result.regions?.some((region) => region.name === 'items'), `${count} lists: the template's region`);
+      assert.ok(result.regions?.some((region) => region.name === 'body'), `${count} lists: the template's region`);
     }
   });
 

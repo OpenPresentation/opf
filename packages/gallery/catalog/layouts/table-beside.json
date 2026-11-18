@@ -15,7 +15,7 @@
       "direction": "row",
       "regions": [
         {
-          "name": "table",
+          "name": "body",
           "size": 3,
           "accepts": [
             "table"
@@ -23,7 +23,7 @@
           "flow": "none"
         },
         {
-          "name": "notes",
+          "name": "aside",
           "size": 2,
           "accepts": [
             "text",

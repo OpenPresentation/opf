@@ -30,7 +30,7 @@ const published={$schema:'https://openpresentation.org/schema/opf-layout/v2',id:
 test('schema and compiled regions carry the direction only on pyramid arrangements',()=>{
   assert.ok(record);
   assert.equal(validateCatalogRecord('layouts',published).valid,true);
-  assert.equal(layoutTemplate(record).regions.find(r=>r.name==='levels').pyramidDirection,'down');
+  assert.equal(layoutTemplate(record).regions.find(r=>r.name==='body').pyramidDirection,'down');
   for(const direction of ['sideways',null,12])assert.equal(validateCatalogRecord('layouts',{...published,regions:[{name:'levels',arrangement:'pyramid',pyramidDirection:direction}]}).valid,false);
   for(const arrangement of [undefined,'matrix','flow'])assert.equal(validateCatalogRecord('layouts',{...published,regions:[{name:'levels',arrangement,pyramidDirection:'down'}]}).valid,false);
 });

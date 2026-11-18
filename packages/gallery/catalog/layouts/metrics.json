@@ -15,7 +15,7 @@
       "name": "title"
     },
     {
-      "name": "metrics",
+      "name": "body",
       "accepts": [
         "metric",
         "group"
@@ -24,7 +24,7 @@
       "anchor": "middle"
     },
     {
-      "name": "note",
+      "name": "aside",
       "size": "auto",
       "accepts": [
         "text",

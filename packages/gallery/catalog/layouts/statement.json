@@ -19,7 +19,7 @@
       "rule": true
     },
     {
-      "name": "message",
+      "name": "body",
       "size": "auto",
       "accepts": [
         "text",

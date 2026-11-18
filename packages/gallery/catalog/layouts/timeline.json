@@ -21,7 +21,7 @@
       "flow": "none"
     },
     {
-      "name": "timeline",
+      "name": "body",
       "accepts": [
         "timeline",
         "diagram"
@@ -29,7 +29,7 @@
       "flow": "column"
     },
     {
-      "name": "notes",
+      "name": "aside",
       "size": "auto",
       "accepts": [
         "text",

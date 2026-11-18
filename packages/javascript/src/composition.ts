@@ -4880,7 +4880,7 @@ export const EMPHASIS_BAND_MAX_CHARACTERS = 60, EMPHASIS_PILL_MAX_CHARACTERS = 3
 /** LH-06 (widened): a last text of up to this many characters is a foot band when it follows two or more charts or tables (a takeaway). */
 export const EMPHASIS_TAKEAWAY_MAX_CHARACTERS = 120;
 /**
- * LH-170: a closing note (a `verdict` region's text, or the paragraph after a row of figures) is a foot band when it sets in at most this
+ * LH-170: a closing note (a verdict region's text (verdictRegion), or the paragraph after a row of figures) is a foot band when it sets in at most this
  * many lines across the band at its size.
  */
 export const EMPHASIS_NOTE_LINES = 3;
@@ -4889,8 +4889,11 @@ export const EMPHASIS_NOTE_LINES = 3;
  * do in its first NOTE_PEER_WORDS words, is one of them (a peer), and stays text.
  */
 export const NOTE_PEER_RATIO = [.6, 1.6] as const, NOTE_PEER_WORDS = 6;
-/** LH-170: the layout regions whose one text is the slide's verdict (the comparison layout's `verdict`). */
-const VERDICT_REGIONS: ReadonlySet<string> = new Set(['verdict']);
+/**
+ * LH-170: the region whose one text is the slide's verdict: the `aside` of a layout whose body is parallel columns (`first`, `second`, ...;
+ * the comparison layout's aside under its two options). The aside beside or under a `body` (a chart's or a table's note) is not a verdict.
+ */
+const verdictRegion = (template: { regions: readonly { name: string }[] }): string | undefined => template.regions.some(region => region.name === 'first') && template.regions.some(region => region.name === 'aside') ? 'aside' : undefined;
 /** LH-169: a list of FIGURE_ROW_MIN to FIGURE_ROW_MAX entries that each lead with a figure of at most FIGURE_WORDS words is a metric row. */
 export const FIGURE_ROW_MIN = 2, FIGURE_ROW_MAX = 4, FIGURE_WORDS = 4;
 // LH-169: a figure leads with a number, after an optional sign or comparison and an optional currency symbol ("62 minutes a day",
@@ -7211,7 +7214,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const authoredEmphasis = (blocks: unknown, depth = 0): boolean => depth <= MAX_COMPOSITION_DEPTH && Array.isArray(blocks) && blocks.some(block => record(block).emphasis === true || authoredEmphasis(record(block).blocks, depth + 1));
   // LH-170: a lone short note that closes the body is the foot band too (`note-band`), at the size it had (EMPHASIS_SIZE) whatever its
   // length, when it sets in at most EMPHASIS_NOTE_LINES lines across the band: the one text a layout binds to its verdict region
-  // (VERDICT_REGIONS: "Recommendation: ...", n18), or the last block when every block before it is a figure, two or more in all (metrics,
+  // (verdictRegion: "Recommendation: ...", n18), or the last block when every block before it is a figure, two or more in all (metrics,
   // LH-169's figure lists or groups of metrics: a row of figures and what they mean, n15, b04 s44), under them or beside them in a layout.
   // The same exclusions as LH-06's (an authored emphasis or arrangement, `emphasis: false`, a caption, anything but text, an eyebrow).
   const closingNote = (flowed: { block: unknown; index: number }[], last: { block: unknown; index: number }): boolean => {
@@ -7231,7 +7234,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // set one peer apart (01 s10's three "<Name> should focus ..." lines, the third bound to the verdict). Its peers are the texts before
     // it of the same form (plain text with as many paragraphs), two or more of them; it is one of them when its length is NOTE_PEER_RATIO
     // of their median, or when it opens as each of them does (the same first lowercase word in its first words, as "should" after a name;
-    // the same first word in a script without case). Even in a `verdict` region it stays text.
+    // the same first word in a script without case). Even in a verdict region it stays text.
     const paragraphs = (value: string) => value.split(/\n+/u).filter(line => line.trim()).length;
     const own = contentText('text', host.text)!.trim(), peers = flowed.slice(0, -1).flatMap(entry => { const text = plainText(entry.block) ?? (() => { const other = record(entry.block); return other.region !== undefined && other.emphasis !== false && other.caption === undefined && !Array.isArray(other.blocks) && fields.every(field => field === 'text' || other[field] === undefined) ? contentText('text', other.text)?.trim() : undefined; })(); return text && paragraphs(text) === paragraphs(own) ? [text] : []; });
     if (peers.length >= 2) {
@@ -7242,8 +7245,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     const figures = flowed.slice(0, -1).map(entry => metricOnly(entry.block));
     if (figures.every(count => count > 0) && figures.reduce((sum, count) => sum + count, 0) >= 2) return true;
-    if (!template || !template.regions.some(region => VERDICT_REGIONS.has(region.name))) return false;
-    const bound = bindRegions(slide, layout, { slideIndex: options.slideIndex ?? 0 }).regions.find(region => VERDICT_REGIONS.has(region.name) && region.blocks.length);
+    const verdict = template ? verdictRegion(template) : undefined;
+    if (verdict === undefined) return false;
+    const bound = bindRegions(slide, layout, { slideIndex: options.slideIndex ?? 0 }).regions.find(region => region.name === verdict && region.blocks.length);
     return bound?.blocks.length === 1 && bound.blocks[0]!.block === last.index;
   };
   const autoEmphasis = ((): { block: number; shape: 'band' | 'pill'; follows?: number; note?: true } | undefined => {

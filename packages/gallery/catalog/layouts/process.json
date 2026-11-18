@@ -16,7 +16,7 @@
       "name": "title"
     },
     {
-      "name": "steps",
+      "name": "body",
       "accepts": [
         "timeline",
         "list",

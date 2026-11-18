@@ -58,8 +58,8 @@ test("paginate: false draws the slide as written; a strict composition still fai
 		assert.ok(error.cause instanceof OPFCompositionError, "the original composition error is retained");
 		assert.equal(error.cause.code, "layout-overflow");
 		assert.deepEqual(error.cause.diagnostics.map(({ code, path, region }) => ({ code, path, region })), [
-			{ code: "layout-unplaced", path: "slides.1.blocks.6", region: "steps" },
-			{ code: "layout-unplaced", path: "slides.1.blocks.7", region: "steps" },
+			{ code: "layout-unplaced", path: "slides.1.blocks.6", region: "body" },
+			{ code: "layout-unplaced", path: "slides.1.blocks.7", region: "body" },
 		], "the two unplaced timelines remain located on the source slide");
 		return true;
 	});

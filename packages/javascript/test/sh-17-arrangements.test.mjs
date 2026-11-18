@@ -110,7 +110,7 @@ const adapted = (result) => result.diagnostics.filter(entry => entry.code === 'a
 test('the gallery has a chevrons, a flow and a vertical-flow layout, each a lone list in an arrangement region', () => {
   for (const kind of ['chevrons', 'flow', 'vertical-flow']) {
     const region = layoutTemplate(gallery.layouts[kind]).regions.find(entry => entry.arrangement);
-    assert.deepEqual([region.name, region.arrangement], ['stages', kind]);
+    assert.deepEqual([region.name, region.arrangement], ['body', kind]);
   }
   assert.deepEqual(ARRANGEMENTS.filter(kind => ['chevrons', 'flow', 'vertical-flow'].includes(kind)), ['chevrons', 'flow', 'vertical-flow']);
   assert.equal(SMART_ART_LAYOUTS.chevrons, 'urn:microsoft.com/office/officeart/2005/8/layout/chevron1');

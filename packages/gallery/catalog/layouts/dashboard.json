@@ -15,7 +15,7 @@
       "name": "title"
     },
     {
-      "name": "kpis",
+      "name": "lead",
       "size": 2,
       "accepts": [
         "metric"
@@ -24,7 +24,7 @@
       "flow": "grid"
     },
     {
-      "name": "charts",
+      "name": "body",
       "size": 3,
       "accepts": [
         "chart",

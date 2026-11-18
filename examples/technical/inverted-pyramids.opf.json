@@ -77,7 +77,7 @@
               "name": "title"
             },
             {
-              "name": "levels",
+              "name": "body",
               "accepts": [
                 "list"
               ],

@@ -12,11 +12,11 @@ const plain=value=>typeof value==='string'?value:value.map(run=>typeof run==='st
 const words=value=>value.replace(/\s+/gu,' ').trim();
 
 test('exact b06 s50 notes share a 60:40 row at 28px and leave the metric grid more body height',()=>{
- const result=compose(),[long,short]=notes(result),region=result.regions.find(region=>region.name==='note');
+ const result=compose(),[long,short]=notes(result),region=result.regions.find(region=>region.name==='aside');
  assert.equal(region.arrangement,'row');assert.equal(long.box.y,short.box.y);
  assert.ok(long.box.width>short.box.width*1.49 && long.box.width<=short.box.width*7/3+.01);
  assert.equal(long.text.fontSize,28);assert.equal(short.text.fontSize,28);
- assert.ok(result.regions.find(region=>region.name==='metrics').box.height>330.28,'former stacked-note grid gained height');
+ assert.ok(result.regions.find(region=>region.name==='body').box.height>330.28,'former stacked-note grid gained height');
  for(const[index,item]of notes(result).entries()){
   assert.equal(words(item.text.lines.join('')),words(plain(original.slides[0].blocks[index===0?1:3].text)),'all authored words retained');
   assert.ok(item.text.lines.every(line=>line.trim().length<=70),'notes retain a readable measure');

@@ -12,7 +12,7 @@
       "name": "title"
     },
     {
-      "name": "stages",
+      "name": "body",
       "accepts": [
         "list"
       ],

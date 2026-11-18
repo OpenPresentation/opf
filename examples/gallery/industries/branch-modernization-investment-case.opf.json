@@ -480,7 +480,7 @@
               "name": "title"
             },
             {
-              "name": "charts",
+              "name": "body",
               "accepts": [
                 "chart",
                 "group",
@@ -489,7 +489,7 @@
               "flow": "grid"
             },
             {
-              "name": "note",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text"

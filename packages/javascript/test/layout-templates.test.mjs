@@ -44,7 +44,7 @@ describe('the 40 built-in templates (design section 6)', () => {
     assert.deepEqual(layoutContent(layouts['chart-beside']), { kind: 'chart', count: 2, heading: { title: true, subtitle: true, tag: true } });
     assert.deepEqual(layoutContent(layouts.section), { kind: 'title', count: 0, heading: { title: true, subtitle: true, tag: true } });
     assert.equal(layoutContent(layouts.gallery).kind, 'image');
-    assert.equal(layoutStructure(layouts['chart-beside']), 'title, chart (none: chart, diagram), notes (column: text, list, metric, quote, chart)');
+    assert.equal(layoutStructure(layouts['chart-beside']), 'title, body (none: chart, diagram), aside (column: text, list, metric, quote, chart)');
   });
 });
 
@@ -198,7 +198,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
 
   test('reading order is the order of the list, depth first', () => {
     const template = layoutTemplate(layouts.hero);
-    assert.deepEqual(template.areas.map((area) => area.name), ['title', 'lead', 'support', 'media']);
+    assert.deepEqual(template.areas.map((area) => area.name), ['title', 'lead', 'body', 'media']);
     const custom = layoutTemplate({
       name: 'x',
       regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'timeline', size: 2, accepts: ['timeline'], flow: 'none' }, { direction: 'column', regions: [{ name: 'notes', accepts: ['text'] }, { name: 'metrics', accepts: ['metric', 'text'], flow: 'grid' }] }] }],

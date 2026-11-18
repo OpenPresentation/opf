@@ -100,9 +100,9 @@ describe('step 2: role rank by kind, then reading order', () => {
     assert.deepEqual(['primary', 'supporting', 'media'].map((role) => regionRoleRank(role, 'group')), [0, 1, 2]);
   });
 
-  test('hero: the picture goes to media, the lead text to lead, further text to support', () => {
+  test('hero: the picture goes to media, the lead text to lead, further text to the body', () => {
     const result = bindRegions({ blocks: [image, text('Lead'), text('Point'), text('Point 2')] }, layouts.hero);
-    assert.deepEqual(bound(result), { lead: ['blocks.1'], media: ['blocks.0'], support: ['blocks.2', 'blocks.3'] });
+    assert.deepEqual(bound(result), { lead: ['blocks.1'], media: ['blocks.0'], body: ['blocks.2', 'blocks.3'] });
   });
 
   test('two equal regions fill in reading order', () => {
@@ -112,12 +112,12 @@ describe('step 2: role rank by kind, then reading order', () => {
   test('a supporting region takes content only when no primary region has room', () => {
     // chart-beside: a second chart goes to the supporting notes once the chart region is full.
     const chart = { chart: { type: 'column', data: { columns: ['Q', 'V'], rows: [['Q1', 1]] } } };
-    assert.deepEqual(bound(bindRegions({ blocks: [chart, chart, text('takeaway')] }, layouts['chart-beside'])), { chart: ['blocks.0'], notes: ['blocks.1', 'blocks.2'] });
+    assert.deepEqual(bound(bindRegions({ blocks: [chart, chart, text('takeaway')] }, layouts['chart-beside'])), { body: ['blocks.0'], aside: ['blocks.1', 'blocks.2'] });
   });
 
   test('a group is accepted where every one of its leaf kinds is, or where group is', () => {
     const person = { blocks: [image, text('Name')] };
-    assert.deepEqual(bound(bindRegions({ blocks: [person] }, layouts.team)), { people: ['blocks.0'] });
+    assert.deepEqual(bound(bindRegions({ blocks: [person] }, layouts.team)), { body: ['blocks.0'] });
     const custom = { name: 'x', direction: 'row', regions: [{ name: 'a', accepts: ['chart'] }, { name: 'b', accepts: ['text', 'image'], role: 'supporting' }] };
     assert.deepEqual(bound(bindRegions({ blocks: [person] }, custom)), { a: [], b: ['blocks.0'] });
   });
@@ -131,7 +131,7 @@ describe('step 2: role rank by kind, then reading order', () => {
 describe('step 3: content no region takes', () => {
   test('a block with no candidate goes to the overflow region whatever its accepts, while it has room', () => {
     const result = bindRegions({ blocks: [{ code: 'x = 1' }] }, layouts.pillars);
-    assert.deepEqual(bound(result).pillars, ['blocks.0']);
+    assert.deepEqual(bound(result).body, ['blocks.0']);
     assert.deepEqual(result.diagnostics, []);
   });
 
@@ -140,7 +140,7 @@ describe('step 3: content no region takes', () => {
     const pillars = result.regions[0];
     assert.equal(pillars.blocks.length, 6);
     assert.deepEqual(pillars.overflow.map((block) => block.path), ['slides.0.blocks.6', 'slides.0.blocks.7']);
-    assert.deepEqual(result.diagnostics.map((entry) => [entry.code, entry.path, entry.region]), [['layout-unplaced', 'slides.0.blocks.6', 'pillars'], ['layout-unplaced', 'slides.0.blocks.7', 'pillars']]);
+    assert.deepEqual(result.diagnostics.map((entry) => [entry.code, entry.path, entry.region]), [['layout-unplaced', 'slides.0.blocks.6', 'body'], ['layout-unplaced', 'slides.0.blocks.7', 'body']]);
   });
 
   test('overflowRegion names where it goes', () => {
@@ -151,7 +151,7 @@ describe('step 3: content no region takes', () => {
   test('a layout with no flowing primary region and no overflowRegion draws it below the grid', () => {
     // statement's one primary region has flow none and takes text: no overflow needed (LH-41: timeline's region flows now).
     const result = bindRegions({ blocks: [text('a')] }, layouts.statement);
-    assert.deepEqual(bound(result).message, ['blocks.0']);
+    assert.deepEqual(bound(result).body, ['blocks.0']);
     const below = bindRegions({ blocks: [{ code: 'x' }] }, layouts.statement);
     assert.equal(below.below.length, 1);
     assert.deepEqual(below.diagnostics.map((entry) => entry.code), ['layout-unplaced']);
@@ -169,7 +169,7 @@ describe('inputs', () => {
 
   test('a root payload is bound like blocks; bullets stay with their text', () => {
     const result = bindRegions({ text: 'Intro', bullets: ['a', 'b'], chart: { type: 'pie', data: { columns: ['k', 'v'], rows: [['a', 1]] } } }, layouts['chart-beside']);
-    assert.deepEqual(bound(result), { chart: ['chart'], notes: ['text'] });
+    assert.deepEqual(bound(result), { body: ['chart'], aside: ['text'] });
     assert.deepEqual(result.regions[1].blocks[0].fields, ['text', 'bullets']);
   });
 

@@ -8,7 +8,7 @@ import { layouts } from './support/template-samples.mjs';
 
 const { process: processLayout } = layouts;
 const plain = (record) => ({ ...record, regions: record.regions.map(({ sequence: _sequence, ...region }) => region) });
-const step = (text, description, start) => ({ region: 'steps', items: [{ text, description }], numbering: { style: 'arabic', start } });
+const step = (text, description, start) => ({ region: 'body', items: [{ text, description }], numbering: { style: 'arabic', start } });
 const slide = (title, steps) => ({ title, blocks: steps.map(([text, description], index) => step(text, description, index + 1)) });
 const findings = (result) => result.diagnostics.filter((entry) => ['text-overflow', 'small-cell', 'layout-unplaced'].includes(entry.code));
 // The smallest size any line of the body draws: a list's label and description sizes (its fontSize is only the base of the two).
@@ -37,7 +37,7 @@ for (const [name, deck] of [['five steps', returns], ['four steps', clinic]]) {
       assert.ok(drawn(result) >= drawn(without) - 1e-6, `drawn ${drawn(result)} against ${drawn(without)} in columns`);
       assert.deepEqual(findings(result), []);
       // Centered under the title as the columns are, not set against it.
-      const body = result.items.filter((item) => item.region === 'steps'), top = Math.min(...result.steps[0].badges.map((badge) => badge.cy - badge.radius));
+      const body = result.items.filter((item) => item.region === 'body'), top = Math.min(...result.steps[0].badges.map((badge) => badge.cy - badge.radius));
       const bottom = Math.max(...body.map((item) => item.box.y + item.box.height)), titleBottom = Math.max(...result.items.filter((item) => item.field === 'title').map((item) => item.box.y + item.box.height));
       const above = top - titleBottom, below = result.contentBox.y + result.contentBox.height - bottom;
       assert.ok(above > 0 && below >= 0);

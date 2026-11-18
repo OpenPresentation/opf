@@ -111,7 +111,7 @@ test('the recomposition keeps the layout record\'s design and composition', () =
 test('a pinned block, recompose: false and a slide at its role sizes keep the layout', () => {
   const record = gallery.layouts['agenda-split'];
   const pinned = agenda(3);
-  pinned.blocks[0].region = 'items';
+  pinned.blocks[0].region = 'body';
   assert.equal(composeSlide(pinned, { layout: record }).recomposed, undefined, 'a block pinned to a region');
   assert.equal(composeSlide(agenda(3), { layout: record, recompose: false }).recomposed, undefined, 'recompose: false');
   const short = composeSlide({ title: 'Three parts, one decision', blocks: [{ items: ['Define the problem', 'Review the pilot evidence', 'Agree the next decision'] }] }, { layout: record });

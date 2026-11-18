@@ -49,7 +49,7 @@ const EMU = 9525;
 // layout's regions of that kind, in the record's `regions` order (core's reading order of the region list): `obj` 100, `body` 300, `pic` 500, `chart` 700, `tbl` 900,
 // `media` 1100 (so the first chart region of every layout is 700, its second 701). PowerPoint's Change Layout pairs a slide's
 // placeholders with the new layout's by `idx`, so only regions of one kind pair (Pillars to Text keeps `obj` with `obj`; a chart
-// bound to Chart beside's `chart` region never lands in Table beside's `tbl` region, as it did with one sequence for every kind).
+// bound to Chart beside's `body` region never lands in Table beside's `tbl` region, as it did with one sequence for every kind).
 // The indexes stay clear of PowerPoint's subtitle (1) and date, footer and slide-number placeholders (10, 11, 12, RR-11), and
 // Each kind reserves 200 indexes so a 144-region custom grid cannot collide across kinds. They
 // depend on the record only, so they are the same under every slide master.

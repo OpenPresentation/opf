@@ -8,7 +8,7 @@ import { layouts } from './support/template-samples.mjs';
 const { process: processLayout, agenda } = layouts;
 // The same record without its sequence key: what the slide draws without LH-07.
 const plain = (record) => ({ ...record, regions: record.regions.map(({ sequence: _sequence, ...region }) => region) });
-const step = (text, description, start) => ({ region: 'steps', items: [{ text, description, start }], numbering: 'arabic' });
+const step = (text, description, start) => ({ region: 'body', items: [{ text, description, start }], numbering: 'arabic' });
 const sampler = { title: 'Three steps from evidence to decision', blocks: [
   step('Establish a baseline', 'Measure the current completion rate and task time.', 1),
   step('Run the pilot', 'Test with two teams and review feedback each week.', 2),
@@ -19,8 +19,8 @@ const findings = (result) => result.diagnostics.filter((entry) => ['text-overflo
 const top = (entry) => entry.text.listEntries?.[0]?.textBox.y ?? entry.text.placement?.lines[0]?.y ?? entry.box.y;
 
 test('the gallery process layout lists steps and the agendas numbered steps', () => {
-  assert.equal(processLayout.regions.find((region) => region.name === 'steps').sequence, 'steps');
-  for (const id of ['agenda', 'agenda-split']) assert.equal(layouts[id].regions.find((region) => region.name === 'items').sequence, 'numbered');
+  assert.equal(processLayout.regions.find((region) => region.name === 'body').sequence, 'steps');
+  for (const id of ['agenda', 'agenda-split']) assert.equal(layouts[id].regions.find((region) => region.name === 'body').sequence, 'numbered');
 });
 
 for (const direction of ['ltr', 'rtl']) {
@@ -53,7 +53,7 @@ for (const direction of ['ltr', 'rtl']) {
     assert.deepEqual(items.map((entry) => entry.text.fontSize), body(without).map((entry) => entry.text.fontSize));
     assert.deepEqual(findings(result), []);
     // The region's cell holds its badges.
-    const region = result.regions.find((entry) => entry.name === 'steps');
+    const region = result.regions.find((entry) => entry.name === 'body');
     for (const badge of row.badges) assert.ok(badge.cy - badge.radius >= region.box.y - 1e-6 && badge.cy - badge.radius >= result.contentBox.y);
   });
 }

@@ -167,7 +167,7 @@
       "title": "Who reports to whom in the pilot",
       "blocks": [
         {
-          "region": "people",
+          "region": "body",
           "items": [
             {
               "text": "Pilot lead",
@@ -195,7 +195,7 @@
       "title": "Workstreams under the program",
       "blocks": [
         {
-          "region": "nodes",
+          "region": "body",
           "items": [
             {
               "text": "Program",
@@ -227,7 +227,7 @@
       "title": "Where a good pilot sits",
       "blocks": [
         {
-          "region": "sets",
+          "region": "body",
           "items": [
             "Clear scope",
             "Real users",

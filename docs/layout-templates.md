@@ -56,7 +56,7 @@ The record's `direction` is omitted, so it is `column`: the title on top, then o
 `row`. A split has no name; it is a place to put regions the other way. Splits nest up to three levels, so a record can
 describe any layout made of full-width and full-height cuts (a guillotine partition), which is every built-in layout.
 
-`hero` nests the other way, with sizes: a row of a text column (the title, the lead and the supporting content) and a
+`hero` nests the other way, with sizes: a row of a text column (the title, the lead and the body) and a
 picture two thirds as wide, bled to the slide's edges. A heading region may sit inside a split.
 
 ```json
@@ -67,7 +67,7 @@ picture two thirds as wide, bled to the slide's edges. A heading region may sit 
     { "direction": "column", "size": 3, "regions": [
       { "name": "title" },
       { "name": "lead", "size": "auto", "accepts": ["text", "quote", "metric"], "flow": "none" },
-      { "name": "support", "accepts": ["text", "list", "metric", "group"], "role": "supporting", "flow": "grid" }
+      { "name": "body", "accepts": ["text", "list", "metric", "group"], "role": "supporting", "flow": "grid" }
     ] },
     { "name": "media", "size": 2, "accepts": ["image", "video"], "role": "media", "flow": "none", "bleed": true }
   ]
@@ -101,6 +101,15 @@ region takes the subtitle out of it (a `subtitle` needs a `title`). Their `size`
 { "name": "media", ... }] }`. A layout with no `title` region gets an implicit `auto` row on top for a slide that has
 headings. Region names are unique across the whole record and may not be `tag`, `auto` or a promoted-region word (`start`,
 `center`, `end`, `top`, `middle`, `bottom`).
+
+**Standard region names (OPF 0.35).** The built-in layouts name their body regions with seven words, so a pin reads the same on
+every layout: `body` (the main content), `lead` (an opening block above the body), `aside` (supporting content beside or
+under the body), `media` (a picture or video beside or behind the text), and `first`, `second` and `third` (parallel
+columns). The heading regions are `title` and `subtitle`. A name is a label: binding goes by kind, role and reading order,
+and composition reads no region name except the headings and one rule, the closing note of a layout whose body is parallel
+columns (the `aside` under `comparison`'s `first` and `second`, LH-170). A custom record may name its regions anything
+the rules below allow; the standard words are a convention, not a requirement. [Migrating to 0.35](migrations/0.35.md)
+lists the 0.34 names of the built-ins.
 
 ### Regions
 
@@ -172,7 +181,7 @@ the title alone.
 
 ```json
 { "id": "closing", "direction": "column", "anchor": "middle",
-  "regions": [ { "name": "title" }, { "name": "details", "size": "auto", "accepts": ["text", "list", "image"], "flow": "auto" } ] }
+  "regions": [ { "name": "title" }, { "name": "body", "size": "auto", "accepts": ["text", "list", "image"], "flow": "auto" } ] }
 ```
 
 The rule applies only to the record's own `anchor` on a column record with all-`auto` entries (an `auto` split counts as an
@@ -265,8 +274,8 @@ kind `group`.
    layout allows it (LH-122): a block drawn on the wrong side of another bound block moves to the equally ranked region
    that accepts it, has room and leaves it out of order with the fewest blocks, being drawn before a block it follows
    counting more than being drawn after one it precedes. The `timeline` layout has a `lead` region (text, auto height)
-   between the title and the timeline and `notes` after it, so a text authored before the timeline is its lead and one
-   after it (or between two timelines) a note.
+   between the title and the timeline's `body` and an `aside` after it, so a text authored before the timeline is its lead
+   and one after it (or between two timelines) a note.
 3. **No candidate.** The block goes to the overflow region whatever its `accepts` while it has room, and beyond `max`
    it is drawn there anyway with `opf/layout-unplaced` (`paginate` moves it to a continuation slide). A layout with no
    overflow region draws it in an implicit row below the grid.
@@ -290,21 +299,21 @@ slide that pins any block with `region` keeps the binding above as written.
    `opf/layout-unplaced`. Up to 4 such blocks sit side by side in one row under the grid (or stacked, when that is
    shorter), and the row asks for at most 30% of the content box, down to its height at the minimum font size, so the
    grid keeps about 60 to 65% of the body. On `metrics`, 3 metrics and 2 notes are a row of metrics over a row of two
-   notes; on `chart`, 3 charts and 2 notes the same.
+   notes (the `body` and the `aside`); on `chart`, 3 charts and 2 notes the same.
 3. **Extra blocks join a region (LH-46).** A block no region had room for, on a layout with no overflow region, joins
    the region that accepts it instead of the row below the grid: a `flow: none` region takes up to 6 blocks (accepted,
    no finding: the region then flows as `auto`); a flowing region takes up to 12, drawn beyond its `max` with
    `opf/layout-unplaced` as an overflow region draws them (so `paginate` can still move them).
    - `flow: none` regions of one role side by side (the `first` and `second` columns of `comparison` or `two-column`)
      become one region of N cells: the first takes their blocks and any block bound between them in source order (the
-     `verdict`), and the others collapse into it. Four texts on `comparison` are a 2 x 2 grid in reading order.
+     `aside`), and the others collapse into it. Four texts on `comparison` are a 2 x 2 grid in reading order.
    - A lone fixed region arranges pictures as a **mosaic** and text, quotes and metrics as a **lead plus cards**. A
      mosaic is 2 or 3 pictures in a row, and 4 to 6 a lead picture at full height beside the others in two rows (the
      lead as wide as two of their columns); a region taller than wide stacks 2 and sets a lead picture across the top of
      3 to 6. Mosaic pictures are cropped to fill (`cover`) unless the block, slide, deck or theme sets `imageFit` (the
      layout's own `contain` gives way). A lead plus cards is the first block across the region (a short one at the lead
      size) over the others in the balanced grid below, each row at the height it needs, placed by the region's anchor.
-   - The closing's `details` region already flows, so its blocks join nothing; it takes the same lead plus cards (the
+   - The closing's `body` region already flows, so its blocks join nothing; it takes the same lead plus cards (the
      guarded rule `closing-lead`). A layout whose one body region is a flowing `supporting` region, holding 3 to 6 plain
      texts that its `auto` flow would stack (a text too long for a cell of the balanced grid) and that read as neither
      paragraph columns (LH-70) nor a lead plus stack (LH-67), and whose other texts fill whole rows of the balanced grid (2, 3 or 4 of them, never a short last row), sets the first text, its call to action, across the region
@@ -326,7 +335,7 @@ the columns and gaps of before (unless that removes overflow). Headings are cent
 row it spans is `auto`, so a `cover` or a title-only slide centers its title. A slide with promoted regions (`start`, `top:start`, ...)
 composes them as in 0.18.
 
-In the Markdown dialect, `<!-- block: region=metrics -->` pins a block; a promoted-region key keeps its 0.18 meaning.
+In the Markdown dialect, `<!-- block: region=aside -->` pins a block; a promoted-region key keeps its 0.18 meaning.
 
 ## Flow
 
@@ -552,7 +561,7 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   line and to the height the box leaves over the description) in bold over an accent rule of 0.14 em across the block (a native
   line in PowerPoint, `ListFit.rules` with `accent`), with no card. Sibling words read at one size. Any other set, a title of
   several words included, keeps its cards. fitList's `display` option (with `heading`) draws one list this way.
-- **A lone timeline (LH-129)** in a template's timeline region, or an automatic slide's only block, first tries three and then two
+- **A lone timeline (LH-129)** in a template's `body` region, or an automatic slide's only block, first tries three and then two
   steps of the type scale on its labels (its 18 and 22 px roles to 28 and 32, or 24 and 28 px), and keeps the first at which it fits
   its box in the same arrangement and no label (the name, a date, an event) takes another line; otherwise it grows by LH-41's few
   pixels as before.
@@ -615,7 +624,7 @@ the type scale to the readability floor, never below it, flagging what still doe
   draws the shortest plot taller and reads as well: no more overflow or split words, no more paragraphs under the reading
   measure, and no block's body size smaller (only a layout that overflows may trade size, to overflow less, never at the floor). `recomposed.chart` then holds the shortest
   plot of the layout and of the result, `{ layoutPlot, plot }`. A wide chart region the layout draws on purpose (`chart`,
-  `dashboard`) keeps its proportions: only the plot's height triggers it. chart-beside with its notes holding further charts
+  `dashboard`) keeps its proportions: only the plot's height triggers it. chart-beside with its `aside` holding further charts
   (a few pixels of plot each) becomes the automatic grid of charts above their notes.
 - **Never recomposed.** A slide the layout fits above the floor, a cover, a slide with promoted regions, a slide with a block
   pinned to a region (`region`: the author chose the region), and `composeSlide(slide, { recompose: false })`, for hosts

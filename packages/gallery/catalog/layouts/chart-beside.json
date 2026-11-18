@@ -15,7 +15,7 @@
       "direction": "row",
       "regions": [
         {
-          "name": "chart",
+          "name": "body",
           "size": 3,
           "accepts": [
             "chart",
@@ -24,7 +24,7 @@
           "flow": "none"
         },
         {
-          "name": "notes",
+          "name": "aside",
           "size": 2,
           "accepts": [
             "text",

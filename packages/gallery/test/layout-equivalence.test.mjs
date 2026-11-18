@@ -13,7 +13,18 @@ import { bodyRegions } from "../../../scripts/gallery-stability-fixtures.mjs";
 import { OPFLayoutTemplateError, REGION_KINDS, layoutRegion, layoutTemplate } from "@openpresentation/opf/composition";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const old = JSON.parse(readFileSync(path.join(root, "test", "fixtures", "layouts-4.0.0.json"), "utf8"));
+/** OPF 0.35 standard region names: the 4.0.0 name of each renamed region, per record. The fixture is read with these names. */
+const RENAMED = {
+  agenda: { items: "body" }, "chart-beside": { chart: "body", notes: "aside" }, chart: { charts: "body", note: "aside" }, closing: { details: "body" },
+  code: { code: "body", notes: "aside" }, comparison: { verdict: "aside" }, dashboard: { kpis: "lead", charts: "body" }, faq: { questions: "body" },
+  gallery: { pictures: "body" }, hero: { support: "body" }, logos: { logos: "body" }, metrics: { metrics: "body", note: "aside" }, team: { people: "body" },
+  pillars: { pillars: "body" }, process: { steps: "body" }, quote: { quotes: "body" }, scorecard: { cards: "body" }, statement: { message: "body" },
+  "table-beside": { table: "body", notes: "aside" }, table: { table: "body", note: "aside" }, timeline: { timeline: "body", notes: "aside" },
+};
+const renamed = (id, name) => RENAMED[id]?.[name] ?? name;
+const old = Object.fromEntries(Object.entries(JSON.parse(readFileSync(path.join(root, "test", "fixtures", "layouts-4.0.0.json"), "utf8"))).map(([id, before]) => [id, {
+  ...before, areas: before.areas.map((row) => row.map((name) => renamed(id, name))), regions: Object.fromEntries(Object.entries(before.regions).map(([name, rule]) => [renamed(id, name), rule])),
+}]));
 const { records } = await readSnapshotKind(path.join(root, "catalog"), "layouts");
 // WI-2 (whole-group placement): four records were redrawn on purpose (their grid is an all-auto stack the 4.0.0 form could not
 // express) and one record is new. They are tested by single-message-layouts.test.mjs; every other record must still compile to
@@ -27,9 +38,9 @@ const sameAsBefore = (record) => !ADDED.has(record.id) && !REDESIGNED.has(record
 const RULE_ORDER = ["accepts", "role", "flow", "max", "bleed", "listColumns", "anchor", "empty"];
 /** Kinds a record accepts beyond its 4.0.0 rule (appended, in this order): a deliberate widening, never a silent one. */
 const ACCEPTS_ADDED = {
-  "team/people": ["list"], // WI-6: a name with its role and description is one `items` entry
+  "team/body": ["list"], // WI-6: a name with its role and description is one `items` entry
   // Diagrams: the regions that hold a figure take a `diagram` too.
-  ...Object.fromEntries(["chart/charts", "chart-beside/chart", "image/media", "image-beside/media", "hero/media", "comparison/first", "comparison/second", "process/steps", "timeline/timeline"].map((region) => [region, ["diagram"]])),
+  ...Object.fromEntries(["chart/body", "chart-beside/body", "image/media", "image-beside/media", "hero/media", "comparison/first", "comparison/second", "process/body", "timeline/body"].map((region) => [region, ["diagram"]])),
 };
 /** Records that did not exist in 4.0.0: they have no grid to be equal to. */
 const ADDED = new Set(["three-column", "agenda-split", "pyramid", "inverted-pyramid", "matrix", "cycle", "chevrons", "flow", "vertical-flow", "org-chart", "hierarchy", "venn"]);
@@ -41,11 +52,11 @@ const EVERY = ["text", "list", "quote", "code", "image", "video", "chart", "tabl
 const CHANGED = {
   "two-column": { first: { accepts: EVERY }, second: { accepts: EVERY } },
   "image-beside": { media: { anchor: "middle" } },
-  logos: { logos: { anchor: "middle" } },
+  logos: { body: { anchor: "middle" } },
   // LH-41: several timelines stack as bands in the timeline region, so it flows as a column (and takes up to six).
-  timeline: { timeline: { flow: "column" } },
+  timeline: { body: { flow: "column" } },
   // OPF 0.35 removed the role secondary; its one user, the KPI row, is supporting (it accepts only metrics, so it binds as before).
-  dashboard: { kpis: { role: "supporting" } },
+  dashboard: { lead: { role: "supporting" } },
 };
 
 /** Track weights as shares of their numeric total (core compiles to relative numbers; `auto` stays `auto`). */
@@ -91,7 +102,7 @@ for (const record of records) {
     for (const key of ["areas", "columns", "rows"]) assert.equal(key in record, false, `${record.id} still has ${key}`);
     assert.ok(Array.isArray(record.regions), "regions is the ordered array");
     assert.ok(["row", "column"].includes(record.direction), "the direction is written");
-    // hero reads its picture last (lead, support, media): text still binds lead then support, and a picture binds to media by role.
+    // hero reads its picture last (lead, body, media): text still binds lead then body, and a picture binds to media by role.
     if (!ADDED.has(record.id) && record.id !== "hero") assert.deepEqual(bodyRegions(record).map(([name]) => name).filter((name) => !(LEADS_ADDED[record.id] ?? []).includes(name)), Object.keys(old[record.id].regions), "fixture decks keep their block order");
     const walk = (list, depth) => {
       assert.ok(depth <= 3 && list.length >= 1 && list.length <= 12);

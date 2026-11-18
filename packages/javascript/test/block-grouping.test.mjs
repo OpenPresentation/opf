@@ -40,9 +40,9 @@ describe('LH-58: one cell per pair', () => {
   test('four metric + text pairs on a metrics slide are four cells of the grid, each metric with its note', () => {
     const result = composeSlide({ title: 'Pairs', blocks: interleave(metric, note, 8) }, { layout: layouts.metrics });
     assert.deepEqual(findings(result), []);
-    assert.equal(region(result, 'metrics').content.length, 8);
-    assert.equal(region(result, 'note').content.length, 0);
-    const drawn = items(result, 'metrics');
+    assert.equal(region(result, 'body').content.length, 8);
+    assert.equal(region(result, 'aside').content.length, 0);
+    const drawn = items(result, 'body');
     assert.equal(drawn.length, 8);
     const cells = new Map();
     for (const item of drawn) cells.set(item.path.replace(/\.blocks\.(\d+)\..*$/, (_, index) => `.pair${Number(index) >> 1}`), [...(cells.get(item.path.replace(/\.blocks\.(\d+)\..*$/, (_, index) => `.pair${Number(index) >> 1}`)) ?? []), item.box]);
@@ -65,9 +65,9 @@ describe('LH-58: one cell per pair', () => {
 
   test('a pin keeps the binding as written', () => {
     const blocks = interleave(metric, note, 4);
-    blocks[1] = { ...blocks[1], region: 'note' };
+    blocks[1] = { ...blocks[1], region: 'aside' };
     const result = composeSlide({ title: 'Pinned', blocks }, { layout: layouts.metrics });
-    assert.deepEqual(region(result, 'note').content, ['slides.0.blocks.1']);
+    assert.deepEqual(region(result, 'aside').content, ['slides.0.blocks.1']);
   });
 });
 
@@ -75,18 +75,18 @@ describe('LH-82, LH-73: a grid keeps its kind', () => {
   test('3 metrics and 2 notes: the metric grid keeps only metrics and the notes sit in one row under it', () => {
     const result = composeSlide({ title: 'Mostly metrics', blocks: interleave(metric, note, 5) }, { layout: layouts.metrics });
     assert.deepEqual(findings(result), []);
-    assert.deepEqual(items(result, 'metrics').map((item) => item.field), ['metric', 'metric', 'metric']);
-    const notes = items(result, 'note');
+    assert.deepEqual(items(result, 'body').map((item) => item.field), ['metric', 'metric', 'metric']);
+    const notes = items(result, 'aside');
     assert.equal(notes.length, 2);
-    assert.equal(region(result, 'note').arrangement, 'row');
+    assert.equal(region(result, 'aside').arrangement, 'row');
     assert.ok(near(notes[0].box.y, notes[1].box.y));
-    assert.ok(region(result, 'metrics').box.height > region(result, 'note').box.height, 'the grid keeps most of the body');
+    assert.ok(region(result, 'body').box.height > region(result, 'aside').box.height, 'the grid keeps most of the body');
   });
 
   test('3 charts and 2 notes, right to left: the notes row runs from the right', () => {
     const result = composeSlide({ title: 'Charts', blocks: interleave(chart, note, 5) }, { layout: layouts.chart, direction: 'rtl' });
-    assert.deepEqual(items(result, 'charts').map((item) => item.field), ['chart', 'chart', 'chart']);
-    const [first, second] = items(result, 'note');
+    assert.deepEqual(items(result, 'body').map((item) => item.field), ['chart', 'chart', 'chart']);
+    const [first, second] = items(result, 'aside');
     assert.ok(first.box.x > second.box.x);
   });
 
@@ -125,14 +125,14 @@ describe('LH-46: extra blocks join a fixed region', () => {
     const result = composeSlide({ title: 'Options', blocks: Array.from({ length: 4 }, (_, index) => ({ text: `Option ${index + 1}` })) }, { layout: layouts.comparison });
     assert.deepEqual(findings(result), []);
     assert.equal(region(result, 'first').content.length, 4);
-    assert.ok(region(result, 'second').collapsed && region(result, 'verdict').collapsed);
+    assert.ok(region(result, 'second').collapsed && region(result, 'aside').collapsed);
     assert.deepEqual(items(result, 'first').map((item) => item.path), [0, 1, 2, 3].map((index) => `slides.0.blocks.${index}.text`), 'reading order');
   });
 
   test('statement with 4 texts: a lead across the region over a row of three', () => {
     const result = composeSlide({ title: 'Next steps', blocks: Array.from({ length: 4 }, (_, index) => ({ text: `Step ${index + 1}` })) }, { layout: layouts.statement });
     assert.deepEqual(findings(result), []);
-    const [lead, ...cards] = items(result, 'message').map((item) => item.box);
+    const [lead, ...cards] = items(result, 'body').map((item) => item.box);
     assert.equal(cards.length, 3);
     assert.ok(cards.every((box) => box.y >= lead.y + lead.height - 0.5 && near(box.y, cards[0].y)));
   });

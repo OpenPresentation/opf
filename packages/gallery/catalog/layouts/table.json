@@ -12,14 +12,14 @@
       "name": "title"
     },
     {
-      "name": "table",
+      "name": "body",
       "accepts": [
         "table"
       ],
       "flow": "column"
     },
     {
-      "name": "note",
+      "name": "aside",
       "size": "auto",
       "accepts": [
         "text"

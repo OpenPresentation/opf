@@ -261,7 +261,7 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
   }
   // The content topology names the region each root block was drawn in.
   const slideTag = number => JSON.parse(Buffer.from(text(entries, `ppt/tags/opfSlide${number}.xml`).match(/val="([^"]+)"/)[1], 'hex').toString('utf8'));
-  assert.deepEqual(slideTag(Object.keys(templates).indexOf('comparison') + 1).content.blocks.map(node => node.in), ['first', 'second', 'verdict']);
+  assert.deepEqual(slideTag(Object.keys(templates).indexOf('comparison') + 1).content.blocks.map(node => node.in), ['first', 'second', 'aside']);
   checked++;
 }
 {
@@ -405,7 +405,7 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   checked++;
 }
 
-// ---- 6. A slide added in PowerPoint with an OPF layout: its title placeholder and the text typed into the `verdict` placeholder.
+// ---- 6. A slide added in PowerPoint with an OPF layout: its title placeholder and the text typed into the `aside` placeholder.
 // Plain binding would put a lone text into `first`, so the block keeps its region with a pin. Placeholders carry no xfrm, and the
 // untouched ones (`first`, `second`, a date, a text body with no paragraph) are prompts, not empty blocks.
 {
@@ -413,15 +413,15 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
     slides: [{layout: 'comparison', title: 'Before and after', blocks: [{text: 'Before.'}, {text: 'After.'}, {text: 'Ship it.'}]}]};
   const {entries: parts} = await exportDeck(deck);
   const layout = layoutOf(parts, 1);
-  const idxOf = name => placeholders(text(parts, layout)).find(item => item.name === name).idx, verdictIdx = idxOf('verdict');
+  const idxOf = name => placeholders(text(parts, layout)).find(item => item.name === name).idx, asideIdx = idxOf('aside');
   // The untouched placeholders PowerPoint copies onto a new slide: only <p:ph>, no xfrm, an empty text body (the prompt shows).
   const prompt = (id, name, ph) => `<p:sp><p:nvSpPr><p:cNvPr id="${id}" name="${name}"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr>${ph}</p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p><a:endParaRPr lang="en-US"/></a:p></p:txBody></p:sp>`;
   const slide = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:sld xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="${REL}" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"><p:cSld><p:spTree><p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr><p:grpSpPr/>` +
     prompt(4, 'Content Placeholder 3', `<p:ph idx="${idxOf('first')}"/>`) + prompt(5, 'Content Placeholder 4', `<p:ph idx="${idxOf('second')}"/>`) +
     prompt(6, 'Date Placeholder 5', '<p:ph type="dt" sz="half" idx="10"/>') +
-    `<p:sp><p:nvSpPr><p:cNvPr id="7" name="Empty Text Placeholder 6"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="body" idx="${verdictIdx}"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/></p:txBody></p:sp>` +
+    `<p:sp><p:nvSpPr><p:cNvPr id="7" name="Empty Text Placeholder 6"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="body" idx="${asideIdx}"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/></p:txBody></p:sp>` +
     `<p:sp><p:nvSpPr><p:cNvPr id="2" name="Title 1"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="title"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p><a:r><a:rPr lang="en-US"/><a:t>Added in PowerPoint</a:t></a:r></a:p></p:txBody></p:sp>` +
-    `<p:sp><p:nvSpPr><p:cNvPr id="3" name="Text Placeholder 2"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="body" idx="${verdictIdx}"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p><a:r><a:rPr lang="en-US"/><a:t>Typed into the verdict.</a:t></a:r></a:p></p:txBody></p:sp>` +
+    `<p:sp><p:nvSpPr><p:cNvPr id="3" name="Text Placeholder 2"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="body" idx="${asideIdx}"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p><a:r><a:rPr lang="en-US"/><a:t>Typed into the verdict.</a:t></a:r></a:p></p:txBody></p:sp>` +
     `</p:spTree></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sld>`;
   const added = mutate(parts, {
     'ppt/slides/slide2.xml': slide,
@@ -433,7 +433,7 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   const {imported} = await read(added);
   assert.ok(isDeepStrictEqual(imported.slides[0], deck.slides[0]), 'The exported slide is unchanged');
   const {title, blocks, layout: added_layout} = imported.slides[1];
-  assert.deepEqual({title, blocks, layout: added_layout}, {title: 'Added in PowerPoint', blocks: [{type: 'text', text: 'Typed into the verdict.', region: 'verdict'}], layout: 'comparison'});
+  assert.deepEqual({title, blocks, layout: added_layout}, {title: 'Added in PowerPoint', blocks: [{type: 'text', text: 'Typed into the verdict.', region: 'aside'}], layout: 'comparison'});
   checked++;
 }
 
@@ -491,6 +491,39 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   const registered = await exportDeck(deck, {catalogs: [gallery2, defaultCatalog]});
   assert.equal(layoutParts(registered.entries).length, templateIds.length + 2, 'Every authoritative template plus the master layout and OPF auto');
   assert.equal(layoutTag(registered.entries, layoutOf(registered.entries, 3)).id, 'auto');
+  checked++;
+}
+
+// ---- 11. OPF 0.35 standard region names: a 0.34 file. A block pinned to an old name (chart-beside's `notes`, now `aside`) comes
+// back as written; the pin is opf/region-unknown and the block binds by kind, to the same region. An OPF_LAYOUT_V1 tag whose region
+// map names the old regions (`chart`, `notes`) imports without a finding or a pin: no region of the record has those names.
+{
+  const record = templates['chart-beside'];
+  const chart = {chart: {type: 'bar', data: {columns: ['Quarter', 'Value'], rows: [['Q1', 1], ['Q2', 2]]}}};
+  const deck = {name: 'Old pin', catalogs: {custom: {layouts: {'chart-beside': record}}},
+    slides: [{layout: 'chart-beside', title: 'Revenue', blocks: [chart, {region: 'notes', text: 'Up a third.', emphasis: false}]}]};
+  const {bytes: output} = await exportDeck(deck);
+  const {imported} = await read(output);
+  assert.equal(imported.slides[0].blocks[1].region, 'notes', 'the old pin is kept as written');
+  const findings = validate(imported).findings.filter(finding => finding.ruleId === 'opf/region-unknown');
+  assert.deepEqual(findings.map(finding => finding.path), ['/slides/0/blocks/1/region'], JSON.stringify(findings));
+  const composed = composeSlide(imported.slides[0], {layout: record});
+  assert.deepEqual(composed.items.filter(item => item.path.includes('.blocks.')).map(item => [item.field, item.region]), [['chart', 'body'], ['text', 'aside']]);
+  // The same slide without provenance, its layout tag rewritten as 0.34 wrote it.
+  const {entries: parts} = await exportDeck({...deck, slides: [{...deck.slides[0], blocks: [chart, {text: 'Up a third.', emphasis: false}]}]}, {provenance: false});
+  const layout = layoutOf(parts, 1), tag = layoutTag(parts, layout);
+  const rid = text(parts, layout).match(/<\/p:spTree><p:custDataLst><p:tags r:id="([^"]+)"\/><\/p:custDataLst>/)[1];
+  const tagPath = resolvePart(layout, relationships(parts, layout).find(item => item.id === rid).target);
+  assert.deepEqual(Object.values(tag.regions).sort(), ['aside', 'body']);
+  const old = {...tag, regions: Object.fromEntries(Object.entries(tag.regions).map(([idx, name]) => [idx, {body: 'chart', aside: 'notes'}[name]]))};
+  const hex = Buffer.from(JSON.stringify(old)).toString('hex');
+  const rewritten = mutate(parts, {[tagPath]: xml => xml.replace(/(name="OPF_LAYOUT_V1" val=")([^"]+)"/, (_, head, value) => `${head}${/[A-F]/.test(value) ? hex.toUpperCase() : hex}"`)});
+  assert.deepEqual(layoutTag(unzipSync(rewritten), layout).regions, old.regions);
+  const {imported: plain, reports} = await read(rewritten);
+  assert.equal(plain.slides[0].layout, 'chart-beside');
+  assert.deepEqual(plain.slides[0].blocks.map(block => block.type), ['chart', 'text'], 'both blocks come back, bound by kind');
+  assert.ok((plain.slides[0].blocks ?? []).every(block => block.region === undefined), JSON.stringify(plain.slides[0]));
+  assert.deepEqual(reports.filter(report => /layout tag/i.test(report.message ?? '')), [], 'the old region map is not a damaged tag');
   checked++;
 }
 

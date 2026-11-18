@@ -18,9 +18,9 @@ const note = 'Next step: agree the pilot owner by Friday.';
 // LH-06: the notes opt out of the automatic foot band (`emphasis: false`), which would otherwise draw this short last text.
 
 for (const [id, regionName, slide, size] of [
-  ['metrics', 'note', { title: 'Metrics', blocks: [{ metric: { value: '42%', label: 'Growth' } }, { text: note, emphasis: false }] }, 28],
-  ['chart', 'note', { title: 'Chart', blocks: [{ chart: { type: 'column', data: { columns: ['Q', 'V'], rows: [['Q1', 1], ['Q2', 2]] } } }, { text: note, emphasis: false }] }, 28],
-  ['closing', 'details', { title: 'Thank you', text: note }, 32],
+  ['metrics', 'aside', { title: 'Metrics', blocks: [{ metric: { value: '42%', label: 'Growth' } }, { text: note, emphasis: false }] }, 28],
+  ['chart', 'aside', { title: 'Chart', blocks: [{ chart: { type: 'column', data: { columns: ['Q', 'V'], rows: [['Q1', 1], ['Q2', 2]] } } }, { text: note, emphasis: false }] }, 28],
+  ['closing', 'body', { title: 'Thank you', text: note }, 32],
 ]) {
   test(`${id}: a single-line auto note composes at exactly ${size} px`, () => {
     const result = composeSlide(slide, { layout: layouts[id], textMeasurement, ...(id === 'closing' ? { fill: false } : {}) });

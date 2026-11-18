@@ -16,7 +16,7 @@
       "name": "title"
     },
     {
-      "name": "cards",
+      "name": "body",
       "accepts": [
         "metric",
         "text",

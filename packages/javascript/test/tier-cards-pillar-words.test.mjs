@@ -12,7 +12,7 @@ const tiers = [
   tier('Enterprise', 'Custom', 'annual contract', ['Dedicated success manager', 'Audit logs', 'Roadmap input']),
 ];
 const inRegions = (blocks) => blocks.map((block, index) => ({ ...block, region: ['first', 'second', 'third'][index] }));
-const pillars = (blocks) => blocks.map((block) => ({ ...block, region: 'pillars' }));
+const pillars = (blocks) => blocks.map((block) => ({ ...block, region: 'body' }));
 const three = (blocks = tiers) => composeSlide({ title: 'Plans', blocks: inRegions(blocks) }, { layout: layouts['three-column'] });
 const metrics = (result) => result.items.filter((item) => item.metricLayout);
 const part = (item, role) => item.metricLayout.parts.find((entry) => entry.role === role);

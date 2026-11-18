@@ -56,7 +56,7 @@ test('explicit cap and fill:false retain settled26px while preserving the readin
   }
 });
 test('a matched diagram region listColumns:1 stays single-column without a payload override',()=>{
-  const doc=documentFor(fixture.cases[0].slide),record=doc.catalogs.custom.layouts['inverted-pyramid'];record.regions.find(region=>region.name==='levels').listColumns=1;
+  const doc=documentFor(fixture.cases[0].slide),record=doc.catalogs.custom.layouts['inverted-pyramid'];record.regions.find(region=>region.name==='body').listColumns=1;
   const result=compose(doc),item=body(result)[0];assert.equal(item.payload.columns,undefined);assert.equal(item.listColumns,undefined);assert.deepEqual(item.value,doc.slides[0].blocks[0].items);
   assert.ok(result.diagnostics.some(d=>d.code==='text-overflow'&&/70 characters/.test(d.message)));
   doc.slides[0].composition.overflow='error';assert.throws(()=>compose(doc),OPFCompositionError);
@@ -72,8 +72,8 @@ test('described singleton columns keep maintained column roles and whole descrip
   for(const entry of entries(item))for(const fit of[entry.text,entry.description].filter(Boolean))for(const line of fit.richLines)assert.ok(line.fragments.map(fragment=>fragment.text).join('').trim().length<=70);
 });
 test('an explicit single column and pinned region refuse an unfit retained-size reading measure',()=>{
-  const doc=documentFor(fixture.cases[0].slide);doc.slides[0].blocks[0].columns=1;doc.slides[0].blocks[0].region='levels';
-  const result=compose(doc),item=body(result)[0];assert.equal(item.region,'levels');assert.equal(item.listColumns,undefined);
+  const doc=documentFor(fixture.cases[0].slide);doc.slides[0].blocks[0].columns=1;doc.slides[0].blocks[0].region='body';
+  const result=compose(doc),item=body(result)[0];assert.equal(item.region,'body');assert.equal(item.listColumns,undefined);
   assert.deepEqual(item.value,doc.slides[0].blocks[0].items);assert.ok(item.text.fontSize>=26);
   assert.ok(result.diagnostics.some(d=>d.code==='text-overflow'&&/70 characters/.test(d.message)));
   doc.slides[0].composition.overflow='error';assert.throws(()=>compose(doc),OPFCompositionError);
@@ -127,7 +127,7 @@ test('structured numbered families stay whole across fallback columns with exact
 
 
 test('an explicit payload auto count overrides an authored nested region single-column rule',()=>{
-  const doc=documentFor(fixture.cases[0].slide),record=doc.catalogs.custom.layouts['inverted-pyramid'],region=record.regions.find(region=>region.name==='levels');
+  const doc=documentFor(fixture.cases[0].slide),record=doc.catalogs.custom.layouts['inverted-pyramid'],region=record.regions.find(region=>region.name==='body');
   region.listColumns=1;record.regions=[record.regions[0],{direction:'column',regions:[region]}];doc.slides[0].blocks[0].columns='auto';
   const result=compose(doc),item=body(result)[0];assert.ok(!result.diagnostics.some(d=>d.code==='text-overflow'));assert.ok(item.listColumns.length>1);assert.deepEqual(entries(item).map(entry=>entry.value),doc.slides[0].blocks[0].items);
 });

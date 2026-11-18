@@ -12,7 +12,7 @@
       "name": "title"
     },
     {
-      "name": "items",
+      "name": "body",
       "accepts": [
         "list",
         "text"

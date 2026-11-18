@@ -83,7 +83,7 @@ test('quote centres the title and the quotation as one group', () => {
 
 test('comparison puts the verdict right under the options, with the title on top', () => {
   const slide = { title: 'Choose the smallest useful test', subtitle: SUB, blocks: [{ text: 'Option A: focused pilot\nTwo teams, six weeks.' }, { text: 'Option B: broad rollout\nAll teams, three months.' }, { text: 'Recommendation: establish the evidence with Option A.', emphasis: false }] };
-  // LH-170: the verdict would be the foot band; `emphasis: false` keeps it in the record's verdict region, whose place this test reads.
+  // LH-170: the verdict would be the foot band; `emphasis: false` keeps it in the record's aside region, whose place this test reads.
   const result = compose('comparison', slide), before = compose(OLD.comparison, slide);
   const [first, second, verdict] = result.items.filter((item) => item.field === 'text');
   assert.equal(first.box.y, second.box.y);
@@ -103,7 +103,7 @@ test('agenda-split binds three, six and nine entries without findings, the list 
     const title = field(result, 'title'), list = field(result, 'items');
     assert.ok(list.box.x >= title.box.x + title.box.width - 1 || list.box.x > title.box.x + 100, `${count}: the list is beside the title`);
     assert.ok(list.box.y >= result.contentBox.y - 1 && bottomOf(list) <= result.contentBox.y + result.contentBox.height + 1, `${count}: inside the content box`);
-    assert.deepEqual(result.regions.map((region) => region.name), ['items']);
+    assert.deepEqual(result.regions.map((region) => region.name), ['body']);
   }
 });
 

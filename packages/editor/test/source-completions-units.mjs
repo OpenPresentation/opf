@@ -269,7 +269,7 @@ assert.deepEqual(order('{"slides":[{"layout":"cover",\n|}]}').slice(0, 3), ['tit
 const plain = order('{"slides":[{\n|}]}');
 assert.deepEqual(plain.slice(0, 4), ['title', 'subtitle', 'layout', 'items'], 'no layout: the common order');
 assert.deepEqual(order('{"slides":[{"layout":"nope",\n|}]}').slice(0, 3), ['title', 'subtitle', 'items'], 'an unknown layout: the common order');
-assert.deepEqual(order('{"slides":[{"layout":"agenda","title":"a",\n|}]}').slice(0, 2), ['items', 'subtitle'], 'set keys are not offered again');
+assert.deepEqual(order('{"slides":[{"layout":"agenda","title":"a",\n|}]}').slice(0, 3), ['items', 'text', 'subtitle'], 'set keys are not offered again; the body region accepts lists and text');
 assert.deepEqual(order('{"slides":[{"layout":"agenda",\n|}]}'), order('{"slides":[{"layout":"agenda",\n|}]}'), 'same input, same order');
 assert.deepEqual(order('slides:\n  - layout: agenda\n    |', 'yaml').slice(0, 2), ['title', 'items']);
 assert.deepEqual(order('{"organization":{\n|}}').slice(0, 2), ['id', 'name'], 'required members stay first');

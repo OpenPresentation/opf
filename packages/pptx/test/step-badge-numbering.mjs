@@ -15,7 +15,7 @@ const deck = {
   name: 'Step badges',
   language: 'en-US',
   slides: [
-    {layout: 'process', title: 'Four steps to the new network', blocks: steps.map(([text, description], index) => ({region: 'steps', items: [{text, description}], numbering: {style: 'arabic', start: index + 1}}))},
+    {layout: 'process', title: 'Four steps to the new network', blocks: steps.map(([text, description], index) => ({region: 'body', items: [{text, description}], numbering: {style: 'arabic', start: index + 1}}))},
     {title: 'A numbered list', items: ['First', 'Second', 'Third'], numbering: 'arabic'},
   ],
 };

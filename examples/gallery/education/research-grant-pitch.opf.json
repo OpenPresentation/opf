@@ -747,7 +747,7 @@
               "name": "title"
             },
             {
-              "name": "charts",
+              "name": "body",
               "accepts": [
                 "chart",
                 "group",
@@ -756,7 +756,7 @@
               "flow": "grid"
             },
             {
-              "name": "note",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text"
@@ -785,7 +785,7 @@
               "direction": "row",
               "regions": [
                 {
-                  "name": "table",
+                  "name": "body",
                   "size": 3,
                   "accepts": [
                     "table"
@@ -793,7 +793,7 @@
                   "flow": "none"
                 },
                 {
-                  "name": "notes",
+                  "name": "aside",
                   "size": 2,
                   "accepts": [
                     "text",
@@ -833,7 +833,7 @@
               "flow": "none"
             },
             {
-              "name": "timeline",
+              "name": "body",
               "accepts": [
                 "timeline",
                 "diagram"
@@ -841,7 +841,7 @@
               "flow": "column"
             },
             {
-              "name": "notes",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text",

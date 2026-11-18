@@ -12,7 +12,7 @@
       "name": "title"
     },
     {
-      "name": "people",
+      "name": "body",
       "accepts": [
         "list"
       ],

@@ -11,7 +11,7 @@ const {agenda, faq, list: listLayout} = layouts;
 const style = {fontFamily: 'sans-serif', fontWeight: 400};
 const sorted0 = items => [...items].sort((a, b) => a.box.y - b.box.y);
 const lists = composed => composed.items.filter(item => item.field === 'items');
-const qa = (text, description) => ({region: 'questions', items: [{text, description}]});
+const qa = (text, description) => ({region: 'body', items: [{text, description}]});
 const PILOT = [
   qa('How long does the pilot last?', 'Twelve weeks, starting the first Monday of March.'),
   qa('What does it cost?', 'The pilot is free. Pricing starts only after you decide to continue.'),
@@ -150,7 +150,7 @@ for (const direction of ['ltr', 'rtl']) {
   });
 
   test(`LH-133 (${direction}): a lone list of terms is a glossary, its terms in the accent`, () => {
-    const [glossary] = lists(composeSlide({title: 'Terms used in this review', blocks: [{region: 'questions', items: language.TERMS}]}, {layout: faq, direction}));
+    const [glossary] = lists(composeSlide({title: 'Terms used in this review', blocks: [{region: 'body', items: language.TERMS}]}, {layout: faq, direction}));
     assert.ok(glossary.text.listEntries.every(entry => entry.accent === true));
     assert.equal(glossary.text.rules.length, language.TERMS.length - 1);
     // Features named in two words are labels, not a glossary: rows (LH-08) in the text color.

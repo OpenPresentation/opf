@@ -16,7 +16,7 @@
       "name": "title"
     },
     {
-      "name": "questions",
+      "name": "body",
       "accepts": [
         "list",
         "text",
