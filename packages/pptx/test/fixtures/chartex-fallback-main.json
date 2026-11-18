@@ -2,7 +2,7 @@
   "source": {
     "repository": "OpenPresentation/opf-pptx",
     "commit": "b5c15e8d05824dafbb5bfbdddda21a7e0eae38a1",
-    "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export The world-category entry (ja-JP) was regenerated for FF-49: the theme cs slot, which the Japanese language does not use, is now empty instead of repeating the latin face; the chart parts are unchanged. Regenerated for FF-62 (chart text is the preview's 12 pt, not 9 pt or the PowerPoint default, in every classic chart part): only chart-part sz values changed; commit is the base the fixture was last regenerated on. Regenerated again for the spec-gap P1 round trip (codex/spec-gaps-roundtrip, on top of FF-62): the OPF_SLIDE_V1 tag now carries the content topology of a root chart payload, so the tag parts, their relationships, content types, presentation.xml customer data and the slide custDataLst lines changed; the chart parts, embedded workbooks, theme and diagnostics are byte-identical to the FF-62 entries (verified part by part against a build of main 90802f3 before regenerating). Regenerated again for RR-11 always-on header/footer placeholders (codex/rr-11-hf-always): a deck with no footer now carries the dt/ftr/sldNum placeholders and p:hf flags on its slide master, layout and notes master; only ppt/slideMasters/slideMaster1.xml, ppt/slideLayouts/slideLayout1.xml and ppt/notesMasters/notesMaster1.xml changed (verified part by part against the previous entries); slides, charts, workbooks, theme, tags and diagnostics are byte-identical. Regenerated again for RR-29 (chartPaletteForFill, opf#270): the exported series colours come from the shared palette function, so the srgbClr values in the chart parts changed (the default light card now writes a darker fourth, fifth and later series colours where the old per-colour clamp left them within a few lightness points of their neighbours); only ppt/charts/chart*.xml differ, and with srgbClr values masked those parts are identical, verified part by part against the previous entries; slides, workbooks, theme, tags and diagnostics are byte-identical. Regenerated again for RR-36 (codex/rr-36-single-series-colour, owner-approved 2026-10-01): a single-series bar chart no longer writes a c:dPt per point, so the single-series clustered-column fallback chart parts lose their c:dPt elements; verified part by part against a build of main 4ed11db (after RR-29) with the CI-pinned core 395e4c1 (which reproduces the previous entries exactly): pareto-multi and box-multi are byte-identical, and every other deck differs only in ppt/charts/chartN.xml, which is byte-identical once the c:dPt elements are removed. Regenerated again for FF-05 (codex/ff-05-notes-theme): PowerPoint listed fonts that no part names, so the exporter now writes presentation.xml children in schema order (p:notesMasterIdLst before p:sldIdLst), gives the notes master its own theme part (ppt/theme/theme2.xml, a copy of the deck theme, with its relationship, content-type override and a second Theme name in docProps/app.xml), writes no run-level a:ea/a:cs typeface in slides (PowerPoint lists such a run font as an empty-name font), and names a font in the theme ea slot (the latin family, or the script font when one is selected; cs is unchanged). Verified part by part against a build of main 1f50912 (which reproduces the previous entries exactly): in every deck only [Content_Types].xml, docProps/app.xml, ppt/presentation.xml, ppt/notesMasters/_rels/notesMaster1.xml.rels, ppt/slides/slideN.xml, ppt/tags/opfDocument.xml (the recorded theme slots) and ppt/theme/theme1.xml (ea slot) changed, plus the added ppt/theme/theme2.xml; world-category (ja-JP, whose theme ea is already Calibri) changed no theme1 and no opfDocument, only ppt/tags/opfSlideN.xml; chart parts, embedded workbooks, slide masters of these decks and diagnostics are byte-identical. Entries are toPptx(deck, {chartex: 'fallback'}) output, as test/chartex.mjs checks. Regenerated again for RR-17 (codex/rr-17-keynote-charts, opf-pptx#162): the embedded chart workbook's table ref loses the stray apostrophe PptxGenJS 4.0.1 writes (A1:B5' -> A1:B5), which made Keynote drop the chart. Verified part by part against a build of main 2686d1e: in every deck the only changed part is ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx, and inside it only xl/tables/table1.xml, whose only difference is the table ref attribute; chart parts, slides, theme, tags, every other workbook part and diagnostics are byte-identical. Regenerated again for RR-17 (codex/rr-17-pptxgenjs-plus, owner decision 2026-10-05: the vendored engine is pptxgenjs-plus 4.3.4 instead of PptxGenJS 4.0.1). Verified part by part against a build of main bc97949 (which reproduces the previous entries exactly), with canonical XML (attributes sorted, namespace declarations and whitespace between elements ignored): the packages lose their ZIP directory entries (also inside the embedded workbooks, whose parts are otherwise byte-identical); [Content_Types].xml writes the jpg default as image/jpeg; ppt/presentation.xml carries firstSlideNum=\"1\"; ppt/presProps.xml and docProps/core.xml change whitespace only; docProps/app.xml counts Paragraphs and Notes; slides declare the m, a14 and mc namespaces, write self-closing elements and drop the chart frame descr=\"\"; slide relationships to charts are relative; chart parts use a flat c:strRef for categories, drop the third (orphan) c:axId and write the category axis numFmt with sourceLinked=\"0\"; notes slides drop an empty run. After masking those classes every slide equals main; theme, tags, notes master, slide masters, layouts, embedded workbook parts and diagnostics are byte-identical (docs/pptxgenjs-plus-migration.md rows 1, 2, 4 to 7, 11, 12, 16 and 18 to 20). Regenerated again for FA-03 (clean chart type ids): only the all-seven entry changed, because its deck no longer carries the two retired alias slides (treemap-2x and australia, which are not chart types any more); the other eight entries are byte-identical. Regenerated again for the FA 0.14 integration (layout record design applied, FA-01 and FA-17): only the world-category entry changed, because its layout chart-1x now supplies design.contentAlignment 'center' (the layout record's own design), so the chart heading paragraph in ppt/slides/slide1.xml is algn=\"ctr\" instead of \"l\"; verified part by part against a build of main 673dbba: that paragraph attribute is the only difference in the package, and the other eight entries are byte-identical. Regenerated for FA-23 (OPF 0.15, owner-approved breaking spec): with zero built-in catalog records the engine-default colour scheme is written as clrScheme name=\"OpenPresentation\" (0.14 named the built-in cool-horizon record \"Cool Horizon\"); the world-category deck registers the default catalog for its gallery ids. Generated on the FA-20 + FA-22 core branches with zero built-ins; re-run at integration with the released core 0.15. RR-59 (AUTO-18, round trip restores absent document defaults): full provenance now records the document-level defaults a document leaves to the engine (OPF_DOCUMENT_V1.absent), so every full-mode export carries the document tag and its slide tags, also when the document states nothing else. Verified part by part against a build of main 3d2698f: with the OPF_DOCUMENT_V1 and OPF_SLIDE_V1 tag parts, their relationships, content-type overrides and custDataLst references removed, every package is byte-identical to main; only the tag parts changed. RR-81 intentional OPF 0.19 default-export contract: eight automatic fixtures explicitly regenerated after owner-authorized design section 8 and coordinator archive review. Baseline converter 991023c, core fe9fe3fa2c3ad0130e271b73d9853f66e920c1d5, renderer 9fbddcb78dbebcb87355922ca92af7d26c24c48d, Node 24.21.0. Every changed slide XML differs only by title placeholder and noGrp locks; chart parts, chart relationships, embedded workbooks, themes, existing tags and diagnostics are identical. Added only OPF auto titleOnly layout, its relationship and tag, and corresponding content types/master layout registration/slide relationships. The ninth world-category fixture is unchanged and its historical hash passes with the test helper’s registered default catalog. Final gallery 2 integration explicitly rebaselined all nine archives after independent coordinator review: 28 reachable v2 layouts add 84 layout/relationship/tag parts. Charts, chart relationships, embedded workbooks and themes remain byte-identical. World-category changes chart-1x to chart with explicit contentAlignment:center: the primary chart becomes full-width above the supporting note, with unchanged title geometry and exact source text. This is the accepted v2 chart intent, not geometry equivalence or native visual evidence. Strict archive/diagnostic/mode checks remain. RR-20 row-data provenance: independently reviewed and approved update of only waterfall-single against baseline converter e673f106c2fd38fcb5d51db190649c3855cc1885. Adds OPF_DATA_V1 for an authored single column actually plotted against synthetic row numbers. Only that tag, its content-type override, slide relationship and customer-data link change; every native part and all other archives remain byte-identical. Prior hash and size are retained; evidence: docs/evidence/rr20-row-data-provenance/archive-review.json. Native raster acceptance remains separate. Regenerated for RR-94: each tagged text shape records a fingerprint (sig) and every image block carries an OPF_IMAGE_V1 tag, so only tag parts changed. Regenerated for RR-90 (opf-pptx 0.22.1): chart text is core chartTextSize (20 px, 15 pt on the default slide) instead of 14 px floored at 16 px, so only chart part text sizes (sz) changed. Regenerated for RR-96 (color variants): scheme-derived colors in the classic chart parts and slides are schemeClr (with lumMod/lumOff for the derived neutrals) instead of sRGB, and every master carries its color map, so only color elements and the master color map changed. Regenerated for FA-33 (layout records are one ordered list of regions): the 28 default layouts' OPF_LAYOUT_V1 tags (ppt/tags/opfLayoutN.xml) carry a hash of the record, which hashes the new record form, so only that hash field of those tag parts changed (252 tag parts compared across the nine archives; every slide, layout, master, theme, chart and other part, and every diagnostic, is byte-identical). The previous hash of every entry is kept as fa33PreviousSha256. Regenerated for WI-6 (design.listBullet none; the pillars, team and faq layouts set it, and team also accepts list): the OPF_LAYOUT_V1 tags of those three default layouts (ppt/tags/opfLayout10.xml, opfLayout14.xml and opfLayout27.xml) carry a hash of the record, which hashes the new record, so only that hash field of those three tag parts changed (verified part by part against a build of main with the previous gallery, which reproduces every previous entry exactly: in each of the nine archives exactly those three parts differ, and every slide, layout, master, theme, chart, workbook and other tag part, and every diagnostic, is byte-identical). The previous hash of every entry is kept as wi6PreviousSha256. Regenerated for LH-12 (native conformance): every OPF text shape that is not a placeholder is a text box (txBox=\"1\"). Only the world-category entry changed, and in it only ppt/slides/slide1.xml, whose one difference is that flag on its text lines (verified part by part against a build of main); the other eight entries are byte-identical. The previous hash is kept as lh12PreviousSha256. Regenerated for layout-harvest wave 5: every entry moves only in the four slide layouts of the section, statement, quote and closing records (LH-96: each carries its layout variant as a clrMapOvr and a bg1 background) and in the layout tags of the process, agenda and agenda-split records (LH-07: their regions gain a sequence), checked part by part against an export of main 23cc70d45; every slide, master, theme, chart, workbook and other part is byte-identical. The previous hash and size are kept as lhWave5PreviousSha256 and lhWave5PreviousBytes. Regenerated for layout-harvest wave 6: every entry moves only in its slide layouts and two layout tags, checked part by part against an export of main 581ef9838: 22 layouts write marL=\"0\" indent=\"0\" and a:buNone on every level of their subtitle and non-list body placeholders (LH-140), and nothing else in them changes; the Cover and Section layouts set their title placeholder start-aligned and taller, anchored at the foot (LH-130); ppt/tags/opfLayout1.xml and opfLayout2.xml carry the new hash of the cover and section records. Every slide, master, theme, chart, workbook and other part is byte-identical. The previous hash and size are kept as lhWave6PreviousSha256 and lhWave6PreviousBytes. Regenerated for LH-175 (a Pareto chart of several series is core's pareto-as-columns fallback in every chartex mode, as the preview draws it): only the pareto-multi entry changed; its chart is written through the column construct with every series and reports chart-fallback instead of chartex-fallback. The previous hash and size are kept as lh175PreviousSha256 and lh175PreviousBytes.",
+    "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export The world-category entry (ja-JP) was regenerated for FF-49: the theme cs slot, which the Japanese language does not use, is now empty instead of repeating the latin face; the chart parts are unchanged. Regenerated for FF-62 (chart text is the preview's 12 pt, not 9 pt or the PowerPoint default, in every classic chart part): only chart-part sz values changed; commit is the base the fixture was last regenerated on. Regenerated again for the spec-gap P1 round trip (codex/spec-gaps-roundtrip, on top of FF-62): the OPF_SLIDE_V1 tag now carries the content topology of a root chart payload, so the tag parts, their relationships, content types, presentation.xml customer data and the slide custDataLst lines changed; the chart parts, embedded workbooks, theme and diagnostics are byte-identical to the FF-62 entries (verified part by part against a build of main 90802f3 before regenerating). Regenerated again for RR-11 always-on header/footer placeholders (codex/rr-11-hf-always): a deck with no footer now carries the dt/ftr/sldNum placeholders and p:hf flags on its slide master, layout and notes master; only ppt/slideMasters/slideMaster1.xml, ppt/slideLayouts/slideLayout1.xml and ppt/notesMasters/notesMaster1.xml changed (verified part by part against the previous entries); slides, charts, workbooks, theme, tags and diagnostics are byte-identical. Regenerated again for RR-29 (chartPaletteForFill, opf#270): the exported series colours come from the shared palette function, so the srgbClr values in the chart parts changed (the default light card now writes a darker fourth, fifth and later series colours where the old per-colour clamp left them within a few lightness points of their neighbours); only ppt/charts/chart*.xml differ, and with srgbClr values masked those parts are identical, verified part by part against the previous entries; slides, workbooks, theme, tags and diagnostics are byte-identical. Regenerated again for RR-36 (codex/rr-36-single-series-colour, owner-approved 2026-10-01): a single-series bar chart no longer writes a c:dPt per point, so the single-series clustered-column fallback chart parts lose their c:dPt elements; verified part by part against a build of main 4ed11db (after RR-29) with the CI-pinned core 395e4c1 (which reproduces the previous entries exactly): pareto-multi and box-multi are byte-identical, and every other deck differs only in ppt/charts/chartN.xml, which is byte-identical once the c:dPt elements are removed. Regenerated again for FF-05 (codex/ff-05-notes-theme): PowerPoint listed fonts that no part names, so the exporter now writes presentation.xml children in schema order (p:notesMasterIdLst before p:sldIdLst), gives the notes master its own theme part (ppt/theme/theme2.xml, a copy of the deck theme, with its relationship, content-type override and a second Theme name in docProps/app.xml), writes no run-level a:ea/a:cs typeface in slides (PowerPoint lists such a run font as an empty-name font), and names a font in the theme ea slot (the latin family, or the script font when one is selected; cs is unchanged). Verified part by part against a build of main 1f50912 (which reproduces the previous entries exactly): in every deck only [Content_Types].xml, docProps/app.xml, ppt/presentation.xml, ppt/notesMasters/_rels/notesMaster1.xml.rels, ppt/slides/slideN.xml, ppt/tags/opfDocument.xml (the recorded theme slots) and ppt/theme/theme1.xml (ea slot) changed, plus the added ppt/theme/theme2.xml; world-category (ja-JP, whose theme ea is already Calibri) changed no theme1 and no opfDocument, only ppt/tags/opfSlideN.xml; chart parts, embedded workbooks, slide masters of these decks and diagnostics are byte-identical. Entries are toPptx(deck, {chartex: 'fallback'}) output, as test/chartex.mjs checks. Regenerated again for RR-17 (codex/rr-17-keynote-charts, opf-pptx#162): the embedded chart workbook's table ref loses the stray apostrophe PptxGenJS 4.0.1 writes (A1:B5' -> A1:B5), which made Keynote drop the chart. Verified part by part against a build of main 2686d1e: in every deck the only changed part is ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx, and inside it only xl/tables/table1.xml, whose only difference is the table ref attribute; chart parts, slides, theme, tags, every other workbook part and diagnostics are byte-identical. Regenerated again for RR-17 (codex/rr-17-pptxgenjs-plus, owner decision 2026-10-05: the vendored engine is pptxgenjs-plus 4.3.4 instead of PptxGenJS 4.0.1). Verified part by part against a build of main bc97949 (which reproduces the previous entries exactly), with canonical XML (attributes sorted, namespace declarations and whitespace between elements ignored): the packages lose their ZIP directory entries (also inside the embedded workbooks, whose parts are otherwise byte-identical); [Content_Types].xml writes the jpg default as image/jpeg; ppt/presentation.xml carries firstSlideNum=\"1\"; ppt/presProps.xml and docProps/core.xml change whitespace only; docProps/app.xml counts Paragraphs and Notes; slides declare the m, a14 and mc namespaces, write self-closing elements and drop the chart frame descr=\"\"; slide relationships to charts are relative; chart parts use a flat c:strRef for categories, drop the third (orphan) c:axId and write the category axis numFmt with sourceLinked=\"0\"; notes slides drop an empty run. After masking those classes every slide equals main; theme, tags, notes master, slide masters, layouts, embedded workbook parts and diagnostics are byte-identical (docs/pptxgenjs-plus-migration.md rows 1, 2, 4 to 7, 11, 12, 16 and 18 to 20). Regenerated again for FA-03 (clean chart type ids): only the all-seven entry changed, because its deck no longer carries the two retired alias slides (treemap-2x and australia, which are not chart types any more); the other eight entries are byte-identical. Regenerated again for the FA 0.14 integration (layout record design applied, FA-01 and FA-17): only the world-category entry changed, because its layout chart-1x now supplies design.contentAlignment 'center' (the layout record's own design), so the chart heading paragraph in ppt/slides/slide1.xml is algn=\"ctr\" instead of \"l\"; verified part by part against a build of main 673dbba: that paragraph attribute is the only difference in the package, and the other eight entries are byte-identical. Regenerated for FA-23 (OPF 0.15, owner-approved breaking spec): with zero built-in catalog records the engine-default colour scheme is written as clrScheme name=\"OpenPresentation\" (0.14 named the built-in cool-horizon record \"Cool Horizon\"); the world-category deck registers the default catalog for its gallery ids. Generated on the FA-20 + FA-22 core branches with zero built-ins; re-run at integration with the released core 0.15. RR-59 (AUTO-18, round trip restores absent document defaults): full provenance now records the document-level defaults a document leaves to the engine (OPF_DOCUMENT_V1.absent), so every full-mode export carries the document tag and its slide tags, also when the document states nothing else. Verified part by part against a build of main 3d2698f: with the OPF_DOCUMENT_V1 and OPF_SLIDE_V1 tag parts, their relationships, content-type overrides and custDataLst references removed, every package is byte-identical to main; only the tag parts changed. RR-81 intentional OPF 0.19 default-export contract: eight automatic fixtures explicitly regenerated after owner-authorized design section 8 and coordinator archive review. Baseline converter 991023c, core fe9fe3fa2c3ad0130e271b73d9853f66e920c1d5, renderer 9fbddcb78dbebcb87355922ca92af7d26c24c48d, Node 24.21.0. Every changed slide XML differs only by title placeholder and noGrp locks; chart parts, chart relationships, embedded workbooks, themes, existing tags and diagnostics are identical. Added only OPF auto titleOnly layout, its relationship and tag, and corresponding content types/master layout registration/slide relationships. The ninth world-category fixture is unchanged and its historical hash passes with the test helper’s registered default catalog. Final gallery 2 integration explicitly rebaselined all nine archives after independent coordinator review: 28 reachable v2 layouts add 84 layout/relationship/tag parts. Charts, chart relationships, embedded workbooks and themes remain byte-identical. World-category changes chart-1x to chart with explicit contentAlignment:center: the primary chart becomes full-width above the supporting note, with unchanged title geometry and exact source text. This is the accepted v2 chart intent, not geometry equivalence or native visual evidence. Strict archive/diagnostic/mode checks remain. RR-20 row-data provenance: independently reviewed and approved update of only waterfall-single against baseline converter e673f106c2fd38fcb5d51db190649c3855cc1885. Adds OPF_DATA_V1 for an authored single column actually plotted against synthetic row numbers. Only that tag, its content-type override, slide relationship and customer-data link change; every native part and all other archives remain byte-identical. Prior hash and size are retained; evidence: docs/evidence/rr20-row-data-provenance/archive-review.json. Native raster acceptance remains separate. Regenerated for RR-94: each tagged text shape records a fingerprint (sig) and every image block carries an OPF_IMAGE_V1 tag, so only tag parts changed. Regenerated for RR-90 (opf-pptx 0.22.1): chart text is core chartTextSize (20 px, 15 pt on the default slide) instead of 14 px floored at 16 px, so only chart part text sizes (sz) changed. Regenerated for RR-96 (color variants): scheme-derived colors in the classic chart parts and slides are schemeClr (with lumMod/lumOff for the derived neutrals) instead of sRGB, and every master carries its color map, so only color elements and the master color map changed. Regenerated for FA-33 (layout records are one ordered list of regions): the 28 default layouts' OPF_LAYOUT_V1 tags (ppt/tags/opfLayoutN.xml) carry a hash of the record, which hashes the new record form, so only that hash field of those tag parts changed (252 tag parts compared across the nine archives; every slide, layout, master, theme, chart and other part, and every diagnostic, is byte-identical). The previous hash of every entry is kept as fa33PreviousSha256. Regenerated for WI-6 (design.listBullet none; the pillars, team and faq layouts set it, and team also accepts list): the OPF_LAYOUT_V1 tags of those three default layouts (ppt/tags/opfLayout10.xml, opfLayout14.xml and opfLayout27.xml) carry a hash of the record, which hashes the new record, so only that hash field of those three tag parts changed (verified part by part against a build of main with the previous gallery, which reproduces every previous entry exactly: in each of the nine archives exactly those three parts differ, and every slide, layout, master, theme, chart, workbook and other tag part, and every diagnostic, is byte-identical). The previous hash of every entry is kept as wi6PreviousSha256. Regenerated for LH-12 (native conformance): every OPF text shape that is not a placeholder is a text box (txBox=\"1\"). Only the world-category entry changed, and in it only ppt/slides/slide1.xml, whose one difference is that flag on its text lines (verified part by part against a build of main); the other eight entries are byte-identical. The previous hash is kept as lh12PreviousSha256. Regenerated for layout-harvest wave 5: every entry moves only in the four slide layouts of the section, statement, quote and closing records (LH-96: each carries its layout variant as a clrMapOvr and a bg1 background) and in the layout tags of the process, agenda and agenda-split records (LH-07: their regions gain a sequence), checked part by part against an export of main 23cc70d45; every slide, master, theme, chart, workbook and other part is byte-identical. The previous hash and size are kept as lhWave5PreviousSha256 and lhWave5PreviousBytes. Regenerated for layout-harvest wave 6: every entry moves only in its slide layouts and two layout tags, checked part by part against an export of main 581ef9838: 22 layouts write marL=\"0\" indent=\"0\" and a:buNone on every level of their subtitle and non-list body placeholders (LH-140), and nothing else in them changes; the Cover and Section layouts set their title placeholder start-aligned and taller, anchored at the foot (LH-130); ppt/tags/opfLayout1.xml and opfLayout2.xml carry the new hash of the cover and section records. Every slide, master, theme, chart, workbook and other part is byte-identical. The previous hash and size are kept as lhWave6PreviousSha256 and lhWave6PreviousBytes. Regenerated for LH-175 (a Pareto chart of several series is core's pareto-as-columns fallback in every chartex mode, as the preview draws it): only the pareto-multi entry changed; its chart is written through the column construct with every series and reports chart-fallback instead of chartex-fallback. The previous hash and size are kept as lh175PreviousSha256 and lh175PreviousBytes. OPF 0.35 (owner decision 2026-11-18): every entry was regenerated for the 0.35 layout-record changes (the gallery records drop the default role primary and the dashboard kpis region is supporting); only the 34 ppt/tags/opfLayout*.xml parts differ (review 11, rr20FallbackArchiveReviews[10]).",
     "rr81Review": {
       "baselineCommit": "991023c",
       "coreCommit": "fe9fe3fa2c3ad0130e271b73d9853f66e920c1d5",
@@ -227,6 +227,23 @@
         "evidence": {
           "file": "review.json",
           "sha256": "204477b2dd892c1077cf9034be8d380e37f8775fa0937d54addae272eb3d7a7e"
+        },
+        "scope": "Separate nine-deck chartex:fallback family. All baseline hashes, sizes, ordered diagnostics and layout/tag counts reproduced; no XML normalization, automatic promotion or native acceptance."
+      },
+      {
+        "baseline": {
+          "head": "1f47d14a7a15b0d5db4ca1215b468ecfd83faf67",
+          "catalogSha256": "e9b4ecd3919a07168d447b47e308dc3e13b1c5540fba0416274f448a7db2db8a",
+          "distManifestSha256": "828bd5dfac64949a5ea5a09e7ac8a2e49680554532e565d8a3373106203433ab"
+        },
+        "candidate": {
+          "head": "a425f594ef42105bef963969188903e19d4a323d",
+          "catalogSha256": "6301243b6b9d9112622293dd4df94b516834beda640f5da0774f2bb992228ff0",
+          "distManifestSha256": "853ffe9b1f4d7c792fff5ee4bf4690f42ebdc8046d4d9ae774c8028f286570f2"
+        },
+        "evidence": {
+          "file": "review.json",
+          "sha256": "e428c4cb0736f871499d106afc19f248630d141049280a498eec0701d9fbcc8f"
         },
         "scope": "Separate nine-deck chartex:fallback family. All baseline hashes, sizes, ordered diagnostics and layout/tag counts reproduced; no XML normalization, automatic promotion or native acceptance."
       }
@@ -758,8 +775,8 @@
   },
   "entries": {
     "treemap-category": {
-      "sha256": "12b27cf08a68ed4aa4ad9301e573fa6ddf2c76561a1ed2657e8c100a1bbb4289",
-      "bytes": 107590,
+      "sha256": "1628bd0195e9422d960e60557e34fc8e0f6a5f1dd22e3e5b9842b2bb7f6b9193",
+      "bytes": 107605,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -889,12 +906,21 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "12b27cf08a68ed4aa4ad9301e573fa6ddf2c76561a1ed2657e8c100a1bbb4289",
+          "bytes": 107590,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "histogram-single": {
-      "sha256": "7ac891cd5a19675fb15104868ecb8d3b1c97f9e64789adf4babce66aaeff4f2c",
-      "bytes": 107594,
+      "sha256": "f105e69edc92f39ac7a0dfb5319b23941cb14a1c8a75fab81b2dd05573c87149",
+      "bytes": 107609,
       "diagnostics": [
         "chart-data-adapted/histogram-binned"
       ],
@@ -1024,12 +1050,21 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "7ac891cd5a19675fb15104868ecb8d3b1c97f9e64789adf4babce66aaeff4f2c",
+          "bytes": 107594,
+          "diagnostics": [
+            "chart-data-adapted/histogram-binned"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "histogram-category": {
-      "sha256": "4b21014f4a1f32a753755df3ab94ba9cad47ea3d42976e4378202b71fd5a698a",
-      "bytes": 107612,
+      "sha256": "b145b7fbf832cad12a557ad2d2c5a2522baf1f85ed0d05416b84040f2566baac",
+      "bytes": 107627,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -1168,12 +1203,21 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "4b21014f4a1f32a753755df3ab94ba9cad47ea3d42976e4378202b71fd5a698a",
+          "bytes": 107612,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "pareto-multi": {
-      "sha256": "dc0e59e48df347b360124c93caa78764d57fbefe3e46b2d66181fdc61ca36bfa",
-      "bytes": 108383,
+      "sha256": "4005a0a778babafe9a2bf36e04da4f9be4798a09ef0140a6f0e2b127c20b6b63",
+      "bytes": 108398,
       "diagnostics": [
         "chart-data-adapted/chart-fallback"
       ],
@@ -1305,12 +1349,21 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "dc0e59e48df347b360124c93caa78764d57fbefe3e46b2d66181fdc61ca36bfa",
+          "bytes": 108383,
+          "diagnostics": [
+            "chart-data-adapted/chart-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "box-multi": {
-      "sha256": "0a4f8d441c8e67fcf3e5a3564af19d8a95c97c05d43a362ad6a5c12a0d812786",
-      "bytes": 108260,
+      "sha256": "8a8e9f485d79cb1bb37d57f14d0f42f7bb93acae7501d5e99ff8e2c00e0670f5",
+      "bytes": 108275,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/chart-fallback"
@@ -1451,12 +1504,22 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "0a4f8d441c8e67fcf3e5a3564af19d8a95c97c05d43a362ad6a5c12a0d812786",
+          "bytes": 108260,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chart-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "waterfall-single": {
-      "sha256": "2b3f8ad39c0c6ce207a701dc6646c584fb0798da0659b744e658eb21813c3ef4",
-      "bytes": 108041,
+      "sha256": "b0b7bf43facbb60c3426185bb5998e1a270761cc9c9e5f062f838c6fd9700a63",
+      "bytes": 108056,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/row-numbers"
@@ -1599,12 +1662,22 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "2b3f8ad39c0c6ce207a701dc6646c584fb0798da0659b744e658eb21813c3ef4",
+          "bytes": 108041,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/row-numbers"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "funnel-category": {
-      "sha256": "37394e1ae50e3c37dcd783e42ea1dc92d9434de934694309ff8edf8f7c5550b4",
-      "bytes": 107589,
+      "sha256": "af30922cef95b3f8a2e679a10b609ca9691a19636add4437d2740e4b4e081894",
+      "bytes": 107604,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -1734,12 +1807,21 @@
           ],
           "layoutParts": 42,
           "layoutTagParts": 41
+        },
+        {
+          "sha256": "37394e1ae50e3c37dcd783e42ea1dc92d9434de934694309ff8edf8f7c5550b4",
+          "bytes": 107589,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
         }
       ]
     },
     "world-category": {
-      "sha256": "7fc2878fc955ce260cd904485275d9424082440244c87dd47f3993d46e20e180",
-      "bytes": 106541,
+      "sha256": "eb4343ab916fc5d09a5671123bedea848e4863e6d9a7f068df2f1b0cbdaa47d9",
+      "bytes": 106556,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -1871,12 +1953,21 @@
           ],
           "layoutParts": 41,
           "layoutTagParts": 40
+        },
+        {
+          "sha256": "7fc2878fc955ce260cd904485275d9424082440244c87dd47f3993d46e20e180",
+          "bytes": 106541,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback"
+          ],
+          "layoutParts": 41,
+          "layoutTagParts": 40
         }
       ]
     },
     "all-seven": {
-      "sha256": "0b932fb6475f0251550e89159a21763fd0be6f05528fa60a4fa1673a170d8356",
-      "bytes": 171966,
+      "sha256": "c27cceaaaee103dbf2cc8ba95e83c0cac83f53d82ec77b5b71e518c176ae6ccb",
+      "bytes": 171981,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/chartex-fallback",
@@ -2087,6 +2178,22 @@
         {
           "sha256": "1bc5d3df31a7b6f15c6015fb8ae463a8b49f7d206b30835687c676abf3395a44",
           "bytes": 171995,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chart-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chart-fallback"
+          ],
+          "layoutParts": 42,
+          "layoutTagParts": 41
+        },
+        {
+          "sha256": "0b932fb6475f0251550e89159a21763fd0be6f05528fa60a4fa1673a170d8356",
+          "bytes": 171966,
           "diagnostics": [
             "chart-data-adapted/chartex-fallback",
             "chart-data-adapted/chartex-fallback",
