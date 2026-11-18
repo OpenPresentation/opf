@@ -1,5 +1,5 @@
 // Agent guidance in the findings: the Chart.js/ECharts chart shape gets one finding that shows the author's own values as OPF data, a made-up
-// catalog id lists the nearest real ids, and every schema carries the version marker of docs/schema-versioning.md.
+// catalog id names a near miss or says where the ids are listed, and every schema carries the version marker of docs/schema-versioning.md.
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { test } from 'node:test';
@@ -93,11 +93,30 @@ test('an unresolved layout id names the nearest layouts of the registered catalo
 	assert.equal(near.length, 1);
 	assert.ok(near[0].help.startsWith("Did you mean 'two-column'? "), near[0].help);
 	assert.equal(near[0].severity, 'warning');
+	assert.deepEqual(near[0].suggestions.map((entry) => entry.value), ['two-column']);
+	assert.equal(describeFinding(near[0], { document: layoutDeck('two-colum') }).next, 'did you mean `two-column`?');
 	const far = references(validate(layoutDeck('totally-made-up'), { catalogs: [gallery] }));
 	assert.equal(far.length, 1);
-	const named = /^The nearest layouts that exist: ('[a-z0-9-]+'(?:, '[a-z0-9-]+'){2})\. /.exec(far[0].help);
-	assert.ok(named, far[0].help);
-	for (const id of named[1].replaceAll("'", '').split(', ')) assert.ok(gallery.layouts[id], `${id} is a layout of the default catalog`);
+	assert.deepEqual(far[0].suggestions, []);
+	assert.ok(far[0].help.startsWith("No layout is named like 'totally-made-up'. Without the layout key the slide composes automatically"), far[0].help);
+});
+
+// A deck made by pptx.dev's Author wrote `"layout": "title"` on its cover: two edits from `table`, which the nearest spelling offered.
+test('an unknown layout id is never pointed at an unrelated near spelling', () => {
+	const [title] = references(validate(layoutDeck('title'), { catalogs: [gallery] }));
+	assert.equal(gallery.layouts.title, undefined, 'title stays unknown: no alias');
+	assert.deepEqual(title.suggestions, []);
+	assert.doesNotMatch(title.help, /table/);
+	assert.ok(title.help.startsWith("No layout is named like 'title'. Without the layout key the slide composes automatically from its content; search_catalog (the OPF MCP server), opf catalog layouts and pptx.gallery list the layouts that exist. "), title.help);
+	const text = describeFinding(title, { document: layoutDeck('title') });
+	assert.doesNotMatch(text.next, /table/);
+	assert.ok(text.next.startsWith('remove `layout` and the slide composes automatically from its content, or use a layout that exists (`search_catalog` and `opf catalog layouts` list the layout ids)'), text.next);
+	// Real misspellings still get their record.
+	for (const [typed, meant] of [['tabel', 'table'], ['metrcs', 'metrics'], ['cvoer', 'cover'], ['pilars', 'pillars']]) {
+		const [finding] = references(validate(layoutDeck(typed), { catalogs: [gallery] }));
+		assert.equal(finding.suggestions[0]?.value, meant, typed);
+		assert.ok(finding.help.startsWith(`Did you mean '${meant}'`), finding.help);
+	}
 });
 
 test('without a catalog the help stays as it was, and a made-up layout never makes the deck invalid', () => {
