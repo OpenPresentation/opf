@@ -581,6 +581,12 @@ const unresolvedReference: RuleText = (finding, _context, helpers) => {
     return typeof value === "string" ? value : undefined;
   })();
   if (!reference) return undefined;
+  if (kind === "layouts" && reference === "auto" && /removed layout 'auto'/.test(finding.message)) {
+    return {
+      message: `Layout ${code("auto")} was removed in OPF 0.35: a slide without ${code("layout")} composes automatically, which is what ${code("auto")} did.`,
+      next: `delete the ${code("layout")} key (the fix does).`,
+    };
+  }
   const noun = cap(KIND_SINGULAR(kind || (found?.[1] ?? "catalog record").toLowerCase()));
   const colon = reference.indexOf(":");
   const group = colon > 0 ? reference.slice(0, colon) : undefined;

@@ -44,6 +44,8 @@ const CHANGED = {
   logos: { logos: { anchor: "middle" } },
   // LH-41: several timelines stack as bands in the timeline region, so it flows as a column (and takes up to six).
   timeline: { timeline: { flow: "column" } },
+  // OPF 0.35 removed the role secondary; its one user, the KPI row, is supporting (it accepts only metrics, so it binds as before).
+  dashboard: { kpis: { role: "supporting" } },
 };
 
 /** Track weights as shares of their numeric total (core compiles to relative numbers; `auto` stays `auto`). */

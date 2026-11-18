@@ -109,7 +109,7 @@ headings. Region names are unique across the whole record and may not be `tag`, 
 | `name` | lowercase kebab-case, unique in the record; a block's `region` names it | required |
 | `size` | a number above 0 and up to 100, or `auto` (columns only) | 1 |
 | `accepts` | `text`, `list`, `image`, `video`, `chart`, `table`, `code`, `metric`, `quote`, `timeline`, `diagram`, `group` | every body kind and `group` |
-| `role` | `primary`, `secondary`, `media`, `supporting` | `primary` |
+| `role` | `primary`, `media`, `supporting` | `primary` |
 | `flow` | `none`, `grid`, `column`, `auto` | `auto` |
 | `max` | 1 to 12 (`none` requires 1) | 1 for `none`, else 6 |
 | `bleed` | boolean: outer edges on the content box reach the slide edge; never a card | `false` |
@@ -137,7 +137,7 @@ anchor never moves the title: it stays in its own heading region. Anchoring does
 A heading region takes its own `anchor`, which places the heading group (tag, title and subtitle) in a sized area: `middle`
 (the default) centers it, `bottom` sets it at the foot of the area and `top` at its top. An `auto` area is as tall as the
 group, so its anchor changes nothing. The `title` region also takes `rule: true`: a slide whose headings are its message
-(no primary or secondary region holds a block and nothing sits below the grid) and that has a title but no tag draws a short
+(no primary region holds a block and nothing sits below the grid) and that has a title but no tag draws a short
 accent rule, 80 by 5 px at a 720 px short edge, half a gap above the title at its start edge (the right in a right-to-left
 title). A tag is the group's eyebrow and takes the rule's place. Both engines fill it in the tag's color: the primary, or the
 text color where the primary is under 4.5:1 on the slide (`SlideComposition.titleRule`; the PPTX export writes a native
@@ -260,7 +260,7 @@ kind `group`.
    Otherwise the pin is ignored (`opf/region-unknown`, `opf/region-kind`, `opf/region-full`, warnings) and the block
    joins step 2.
 2. **Everything else.** Of the regions that accept the block and have room, the lowest role rank wins (pictures:
-   media, primary, secondary, supporting; every other kind: primary, secondary, supporting, media), then the first in
+   media, primary, supporting; every other kind: primary, supporting, media), then the first in
    reading order (the order of the `regions` list, depth first). Then source order is kept across regions where the
    layout allows it (LH-122): a block drawn on the wrong side of another bound block moves to the equally ranked region
    that accepts it, has room and leaves it out of order with the fewest blocks, being drawn before a block it follows
@@ -430,7 +430,8 @@ the slide as written. See [dynamic composition](dynamic-composition.md#paginatio
 Per key: the slide's `design`, the deck's `design`, the theme record's `design` (new in 0.19: `titleAlignment`,
 `contentAlignment`, `contentBox`, `contentDirection`, `imageFit`, `listBullet`, `listStyle`), the layout's `design`, then the engine
 default. `design.mirror: true` draws a template mirrored (each row's cells and the column sizes reversed); a right-to-left
-deck mirrors on top. `layout: "auto"` is automatic composition: reserved, never a catalog id, and `opf format` drops it.
+deck mirrors on top. A slide without `layout` is composed automatically; `layout: "auto"` was removed in 0.35 and is now an
+ordinary reference (`opf/unresolved-reference` says so and offers the fix that deletes the key).
 
 ## Composition output
 

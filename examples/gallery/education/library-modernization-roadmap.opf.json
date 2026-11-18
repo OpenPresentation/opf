@@ -861,7 +861,6 @@
                 "code",
                 "group"
               ],
-              "role": "primary",
               "flow": "auto"
             }
           ],
@@ -888,7 +887,6 @@
                 "group",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "grid"
             },
             {
@@ -926,7 +924,6 @@
                   "accepts": [
                     "table"
                   ],
-                  "role": "primary",
                   "flow": "none"
                 },
                 {
@@ -975,7 +972,6 @@
                 "timeline",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "column"
             },
             {
@@ -1016,7 +1012,6 @@
                     "chart",
                     "diagram"
                   ],
-                  "role": "primary",
                   "flow": "none"
                 },
                 {
@@ -1074,7 +1069,6 @@
                     "quote",
                     "group"
                   ],
-                  "role": "primary",
                   "flow": "auto",
                   "anchor": "middle"
                 }
@@ -1109,7 +1103,6 @@
                   "accepts": [
                     "code"
                   ],
-                  "role": "primary",
                   "flow": "column"
                 },
                 {
@@ -1148,7 +1141,6 @@
                 "text",
                 "group"
               ],
-              "role": "primary",
               "flow": "auto",
               "listColumns": "auto"
             }

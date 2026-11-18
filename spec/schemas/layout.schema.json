@@ -20,16 +20,13 @@
     "id": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$",
-      "description": "The layout's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this field. 'auto' is reserved: Slide.layout 'auto' is automatic composition, so no catalog may define a layout of that id.",
+      "description": "The layout's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this field.",
       "examples": [
         "cover",
         "pillars",
         "chart-beside",
         "roadmap-split"
-      ],
-      "not": {
-        "const": "auto"
-      }
+      ]
     },
     "name": {
       "type": "string",
@@ -364,11 +361,10 @@
           "type": "string",
           "enum": [
             "primary",
-            "secondary",
             "media",
             "supporting"
           ],
-          "description": "Which content the region wants first. Binding gives a picture (image, video) to a media region first, then primary, secondary, supporting; every other kind to a primary region first, then secondary, supporting, media; of two equal regions the first in reading order fills first. A supporting region receives content only when no primary or secondary region that accepts it has room, or by a pin. Default 'primary'."
+          "description": "Which content the region wants first. Binding gives a picture (image, video) to a media region first, then primary, supporting; every other kind to a primary region first, then supporting, media; of two equal regions the first in reading order fills first. A supporting region receives content only when no primary region that accepts it has room, or by a pin. Default 'primary'. OPF 0.35 removed 'secondary': write 'supporting' (or 'primary' for content that must be bound first); the old value fails the schema as opf/catalog-record."
         },
         "flow": {
           "type": "string",

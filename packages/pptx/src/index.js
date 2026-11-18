@@ -2786,7 +2786,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // regions, so its native body is planned as an automatic slide's is. It keeps its template's slide layout (the layout tag is
   // what import reads the slide's layout from), in a variant whose Body placeholder sits at the recomposed body's box.
   const recomposed = template !== undefined && geometry.recomposed !== undefined;
-  const automatic = opfSlide.layout === undefined || opfSlide.layout === 'auto' || recomposed;
+  const automatic = opfSlide.layout === undefined || recomposed;
   // Native wrap measures an undrawn base alphabet after the ordinary SVG demand analysis.
   // Collect at the planner's actual request boundary; prepare asynchronously before its unchanged synchronous plan.
   if (options.bodyText === 'native' && options.fonts?.registry?.fontNames && options.fonts?.ensure) {

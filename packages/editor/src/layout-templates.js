@@ -33,7 +33,7 @@ export function layoutGroupOrder(choices) {
 }
 
 export const LAYOUT_REGION_KINDS = Object.freeze(["text", "list", "image", "video", "chart", "table", "code", "diagram", "metric", "quote", "timeline", "group"]);
-export const LAYOUT_REGION_ROLES = Object.freeze(["primary", "secondary", "media", "supporting"]);
+export const LAYOUT_REGION_ROLES = Object.freeze(["primary", "media", "supporting"]);
 export const LAYOUT_REGION_FLOWS = Object.freeze(["none", "grid", "column", "auto"]);
 const RESERVED = new Set(["title", "subtitle", "tag", "auto", "start", "center", "end", "top", "middle", "bottom"]);
 const NAME = /^[a-z][a-z0-9-]*$/;
@@ -85,7 +85,7 @@ function regionRules(entry, name) {
  * of a column only). The list is the reading order.
  */
 export function layoutFromRegions({ id, name, summary, direction = "column", anchor, regions, overflowRegion }) {
-  if (!NAME.test(id) || id === "auto") throw fail("layout-id", "Choose a kebab-case layout id other than auto.");
+  if (!NAME.test(id)) throw fail("layout-id", "Choose a kebab-case layout id.");
   if (typeof name !== "string" || !name.trim()) throw fail("layout-name", "Name the custom layout.");
   if (!LAYOUT_DIRECTIONS.includes(direction)) throw fail("layout-direction", "Choose row or column for the direction.");
   if (anchor !== undefined && !LAYOUT_ANCHORS.includes(anchor)) throw fail("layout-anchor", "Choose top, middle or bottom for the anchor.");
@@ -135,7 +135,7 @@ export function layoutFromRegions({ id, name, summary, direction = "column", anc
 /** Prepare one validated catalog edit. Existing custom ids are never silently overwritten, unless the caller says `replace: true` (editing a layout the deck already has). */
 export function prepareCustomLayout(presentation, layout, options = {}) {
   const { id, record } = layout;
-  if (!NAME.test(id) || id === "auto") throw fail("layout-id", "Choose a kebab-case layout id other than auto.");
+  if (!NAME.test(id)) throw fail("layout-id", "Choose a kebab-case layout id.");
   if (presentation.catalogs?.custom?.layouts?.[id] && !options.replace) throw fail("layout-exists", `A custom layout named ${id} already exists.`);
   const custom = presentation.catalogs?.custom ?? {};
   const next = { ...presentation, catalogs: { ...presentation.catalogs, custom: { ...custom, layouts: { ...custom.layouts, [id]: record } } } };

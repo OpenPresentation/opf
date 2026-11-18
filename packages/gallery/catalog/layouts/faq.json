@@ -22,7 +22,6 @@
         "text",
         "group"
       ],
-      "role": "primary",
       "flow": "column",
       "listColumns": "auto"
     }

@@ -23,7 +23,6 @@
         "list",
         "group"
       ],
-      "role": "primary",
       "flow": "grid",
       "metrics": "tile"
     }

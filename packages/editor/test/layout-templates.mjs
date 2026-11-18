@@ -20,7 +20,7 @@ const layout = layoutFromRegions({
     { name: "title" },
     { direction: "row", regions: [
       { name: "main", size: 2, accepts: ["text"], role: "primary", flow: "none" },
-      { name: "notes", accepts: ["text", "list"], role: "secondary", flow: "column" },
+      { name: "notes", accepts: ["text", "list"], role: "supporting", flow: "column" },
     ] },
   ],
 });
@@ -30,7 +30,7 @@ assert.deepEqual(layout.record, {
     { name: "title" },
     { direction: "row", regions: [
       { name: "main", size: 2, accepts: ["text"], role: "primary", flow: "none" },
-      { name: "notes", accepts: ["text", "list"], role: "secondary", flow: "column" },
+      { name: "notes", accepts: ["text", "list"], role: "supporting", flow: "column" },
     ] },
   ],
 });

@@ -17,7 +17,6 @@
         "list",
         "text"
       ],
-      "role": "primary",
       "flow": "column",
       "listColumns": "auto",
       "sequence": "numbered",

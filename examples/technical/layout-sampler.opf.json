@@ -1601,7 +1601,6 @@
                 "list",
                 "text"
               ],
-              "role": "primary",
               "flow": "column",
               "listColumns": "auto",
               "sequence": "numbered"
@@ -1629,7 +1628,6 @@
                 "list",
                 "text"
               ],
-              "role": "primary",
               "flow": "column",
               "listColumns": "auto",
               "sequence": "numbered",
@@ -1667,7 +1665,6 @@
                 "quote",
                 "metric"
               ],
-              "role": "primary",
               "flow": "none"
             }
           ],
@@ -1732,7 +1729,6 @@
                 "code",
                 "group"
               ],
-              "role": "primary",
               "flow": "auto"
             }
           ],
@@ -1759,7 +1755,6 @@
                 "text",
                 "group"
               ],
-              "role": "primary",
               "flow": "auto",
               "listColumns": "auto"
             }
@@ -1791,7 +1786,6 @@
                 "quote",
                 "group"
               ],
-              "role": "primary",
               "flow": "grid"
             }
           ],
@@ -1836,7 +1830,6 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
                   "flow": "none"
                 },
                 {
@@ -1856,7 +1849,6 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
                   "flow": "none"
                 }
               ]
@@ -1903,7 +1895,6 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
                   "flow": "none"
                 },
                 {
@@ -1923,7 +1914,6 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
                   "flow": "none"
                 },
                 {
@@ -1943,7 +1933,6 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
                   "flow": "none"
                 }
               ]
@@ -1979,7 +1968,6 @@
                 "image",
                 "group"
               ],
-              "role": "primary",
               "flow": "grid"
             }
           ],
@@ -2018,7 +2006,6 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
                   "flow": "none"
                 },
                 {
@@ -2033,7 +2020,6 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
                   "flow": "none"
                 }
               ]
@@ -2078,7 +2064,6 @@
                 "group",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "grid",
               "sequence": "steps"
             }
@@ -2114,7 +2099,6 @@
                 "timeline",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "column"
             },
             {
@@ -2156,7 +2140,6 @@
                 "text",
                 "group"
               ],
-              "role": "primary",
               "flow": "column",
               "listColumns": "auto"
             }
@@ -2186,7 +2169,6 @@
                 "metric",
                 "group"
               ],
-              "role": "primary",
               "flow": "grid",
               "anchor": "middle"
             },
@@ -2229,7 +2211,6 @@
                 "list",
                 "group"
               ],
-              "role": "primary",
               "flow": "grid",
               "metrics": "tile"
             }
@@ -2304,7 +2285,6 @@
                     "quote",
                     "group"
                   ],
-                  "role": "primary",
                   "flow": "auto",
                   "anchor": "middle"
                 }
@@ -2364,7 +2344,6 @@
                 "group",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "grid"
             },
             {
@@ -2403,7 +2382,6 @@
                     "chart",
                     "diagram"
                   ],
-                  "role": "primary",
                   "flow": "none"
                 },
                 {
@@ -2443,7 +2421,6 @@
               "accepts": [
                 "table"
               ],
-              "role": "primary",
               "flow": "column"
             },
             {
@@ -2481,7 +2458,6 @@
                   "accepts": [
                     "table"
                   ],
-                  "role": "primary",
                   "flow": "none"
                 },
                 {
@@ -2524,7 +2500,6 @@
                   "accepts": [
                     "code"
                   ],
-                  "role": "primary",
                   "flow": "column"
                 },
                 {
@@ -2568,7 +2543,6 @@
                     "quote",
                     "metric"
                   ],
-                  "role": "primary",
                   "flow": "none"
                 },
                 {
@@ -2622,7 +2596,7 @@
               "accepts": [
                 "metric"
               ],
-              "role": "secondary",
+              "role": "supporting",
               "flow": "grid"
             },
             {
@@ -2632,7 +2606,6 @@
                 "chart",
                 "table"
               ],
-              "role": "primary",
               "flow": "grid"
             }
           ],
@@ -2666,7 +2639,6 @@
                 "quote",
                 "list"
               ],
-              "role": "primary",
               "flow": "grid"
             }
           ],
@@ -2723,7 +2695,6 @@
               "accepts": [
                 "list"
               ],
-              "role": "primary",
               "flow": "none",
               "arrangement": "pyramid"
             }
@@ -2750,7 +2721,6 @@
               "accepts": [
                 "list"
               ],
-              "role": "primary",
               "flow": "none",
               "arrangement": "matrix",
               "size": 3
@@ -2778,7 +2748,6 @@
               "accepts": [
                 "list"
               ],
-              "role": "primary",
               "flow": "none",
               "arrangement": "cycle",
               "size": 3
@@ -2805,7 +2774,6 @@
               "accepts": [
                 "list"
               ],
-              "role": "primary",
               "flow": "none",
               "arrangement": "chevrons"
             }
@@ -2831,7 +2799,6 @@
               "accepts": [
                 "list"
               ],
-              "role": "primary",
               "flow": "none",
               "arrangement": "flow"
             }
@@ -2858,7 +2825,6 @@
               "accepts": [
                 "list"
               ],
-              "role": "primary",
               "flow": "none",
               "arrangement": "vertical-flow",
               "size": 3
@@ -2885,13 +2851,12 @@
               "accepts": [
                 "list"
               ],
-              "role": "primary",
               "flow": "none",
               "arrangement": "pyramid",
               "pyramidDirection": "down"
             }
           ],
-          "description": "Show 1 to 8 levels narrowing from the broad top (the many, the starting pool) to the tip below (the selected few, the result). Write one short list entry per level in top-to-bottom order. Export uses editable native shapes; live Inverted Pyramid SmartArt is not yet qualified.",
+          "description": "Show 1 to 8 levels narrowing from the broad top (the many, the starting pool) to the tip below (the selected few, the result). Write one short list entry per level in top-to-bottom order. Export uses editable native shapes.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/inverted-pyramid.svg"
           }
@@ -2912,7 +2877,6 @@
               "accepts": [
                 "list"
               ],
-              "role": "primary",
               "flow": "none",
               "arrangement": "org-chart"
             }
@@ -2938,7 +2902,6 @@
               "accepts": [
                 "list"
               ],
-              "role": "primary",
               "flow": "none",
               "arrangement": "hierarchy"
             }
@@ -2964,7 +2927,6 @@
               "accepts": [
                 "list"
               ],
-              "role": "primary",
               "flow": "none",
               "arrangement": "venn"
             }

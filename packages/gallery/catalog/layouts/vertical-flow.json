@@ -17,7 +17,6 @@
       "accepts": [
         "list"
       ],
-      "role": "primary",
       "flow": "none",
       "arrangement": "vertical-flow",
       "size": 3

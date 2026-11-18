@@ -14,7 +14,7 @@ import {isArrangement,type Arrangement} from './arrangements.js';
 export const REGION_KINDS = ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'group'] as const;
 export type RegionKind = typeof REGION_KINDS[number];
 /** Which content a region wants first (content binding, step 2). */
-export const REGION_ROLES = ['primary', 'secondary', 'media', 'supporting'] as const;
+export const REGION_ROLES = ['primary', 'media', 'supporting'] as const;
 export type RegionRole = typeof REGION_ROLES[number];
 /** How several blocks share a region. */
 export const REGION_FLOWS = ['none', 'grid', 'column', 'auto'] as const;
@@ -36,8 +36,6 @@ export const MAX_REGION_ENTRIES = 12;
 export const MAX_REGION_DEPTH = 3;
 /** A region holds at most this many blocks on one slide. */
 export const MAX_REGION_BLOCKS = 12;
-/** The layout id no catalog may define: `layout: "auto"` is automatic composition. */
-export const AUTO_LAYOUT = 'auto';
 
 /** One region of a template with every default applied (an inherited `anchor` included). */
 export interface LayoutRegion {

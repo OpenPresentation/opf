@@ -16,7 +16,6 @@
       "accepts": [
         "table"
       ],
-      "role": "primary",
       "flow": "column"
     },
     {

@@ -26,9 +26,11 @@
 // Accepted one-line plain titles bind to the native title placeholder; long and rich titles remain tagged line shapes.
 // Automatic slides use OPF auto (titleOnly), independently of registered catalogs. Layout prompts carry explicit OPF typography.
 //
-// Import. Foreign layouts map by type or a case-insensitive built-in name when v2 built-ins are registered. A slide whose layout carries OPF_LAYOUT_V1 takes that layout's reference when it has none (a slide added in
-// PowerPoint, or an export without provenance) or when its stored layout names another layout (Change Layout:
-// `layout-changed`). A block read from a placeholder of a region gets a `region` pin when plain binding would put it
+// Import. Foreign layouts map by type or a case-insensitive built-in name when v2 built-ins are registered; a foreign blank, title-only
+// or unmatched custom layout maps to no layout (automatic composition). A slide whose layout carries OPF_LAYOUT_V1 takes that layout's
+// reference when it has none (a slide added in PowerPoint, or an export without provenance) or when its stored layout names another
+// layout (Change Layout: `layout-changed`). A slide on OPF's automatic layout (its tag keeps the PowerPoint-side id `auto`) has no
+// `layout`: Change Layout to it from a template removes the stored layout, with `layout-changed`. A block read from a placeholder of a region gets a `region` pin when plain binding would put it
 // elsewhere; content that document provenance restored is never pinned.
 
 import {composeLayoutAreas, composeSlide, isLayoutTemplate, layoutTemplate, bindRegions, regionAccepts} from '@openpresentation/opf/composition';
@@ -397,7 +399,7 @@ export function writeTemplateLayouts(output, slides, templates, bindings = new M
     const tagged = addRelationship(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${masterRel.node}</Relationships>`, `${REL}/tags`, relativeTarget(path, tagPath));
     xml = xml.replace('</p:spTree>', `</p:spTree><p:custDataLst><p:tags r:id="${tagged.rid}"/></p:custDataLst>`);
     write(path, partText(path, xml)); write(relsOf(path), tagged.relsXml);
-    output[tagPath] = [enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${LAYOUT_TAG}" val="${encodeTextTag({v: 1, id: 'auto', group: 'custom', reference: 'auto', hash: recordHash({auto: true}), regions: {}})}"/></p:tagLst>`), options];
+    output[tagPath] = [enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${LAYOUT_TAG}" val="${encodeTextTag({v: 1, id: 'auto', group: 'custom', reference: 'auto', hash: AUTOMATIC_TAG_HASH, regions: {}})}"/></p:tagLst>`), options];
     types = types.replace('</Types>', `<Override PartName="/${path}" ContentType="${LAYOUT_TYPE}"/><Override PartName="/${tagPath}" ContentType="${TAGS_TYPE}"/></Types>`);
     const added = addRelationship(read(relsOf(master)), `${REL}/slideLayout`, relativeTarget(master, path));
     write(relsOf(master), added.relsXml);
@@ -500,6 +502,9 @@ export function placeholderRegion(node, tag) {
 }
 
 const bareId = reference => /^(?:([a-z][a-z0-9-]*):)?([a-z][a-z0-9-]*)$/.exec(reference ?? '');
+/** The tag of OPF's automatic slide layout (writeTemplateLayouts): PowerPoint-side id `auto` with no record, never a catalog layout of that id. */
+const AUTOMATIC_TAG_HASH = recordHash({auto: true});
+const isAutomaticTag = tag => tag.id === 'auto' && tag.group === 'custom' && tag.reference === 'auto' && tag.record === undefined && tag.hash === AUTOMATIC_TAG_HASH;
 
 /**
  * After document provenance: each slide's layout from its tagged slide layout, and the region pins of blocks read from region
@@ -530,7 +535,15 @@ export function applyTemplateLayouts(imported, slides, recordOf, report = () => 
     const qualified = bareId(tag.reference)?.[1];
     if (qualified && tag.source && (!imported.catalogs?.[qualified] || typeof imported.catalogs[qualified] !== 'object'))
       imported.catalogs = {...imported.catalogs, [qualified]: {source: tag.source}};
-    if (tag.id === 'auto' && entry.preservedAutomatic && (entry.storedLayout === undefined || entry.storedLayout === 'auto')) { if (entry.storedLayout === 'auto') slide.layout = 'auto'; continue; }
+    if (isAutomaticTag(tag)) {
+      // OPF's automatic layout: the slide has no layout. A layout restored from provenance means the person chose this layout in
+      // PowerPoint (Change Layout), and that choice wins over the stored one.
+      if (slide.layout !== undefined) {
+        report({code: 'layout-changed', path: `slides.${index}.layout`, message: `The slide uses OPF's automatic PowerPoint layout (Change Layout), not its stored layout ${slide.layout}; slides.${index}.layout was removed, so the slide composes automatically.`});
+        delete slide.layout;
+      }
+      continue;
+    }
     if (slide.layout === undefined) slide.layout = tag.reference;
     else if (slide.layout !== tag.reference) {
       const match = bareId(slide.layout);
@@ -553,11 +566,11 @@ export function applyTemplateLayouts(imported, slides, recordOf, report = () => 
   }
 }
 
-/** Map foreign PowerPoint layouts to available v2 built-ins; no layout reconstruction or migration aliases. */
+/** Map foreign PowerPoint layouts to available v2 built-ins (undefined: no layout, automatic composition); no layout reconstruction or migration aliases. */
 export function foreignLayoutReference(layout, catalogs = [gallery]) {
   const types = {title: 'cover', secHead: 'section', obj: 'text', tx: 'text', twoObj: 'two-column', twoTxTwoObj: 'two-column', picTx: 'image-beside'};
   const type = layout?.type;
-  if (type === 'blank' || type === 'titleOnly') return 'auto';
+  if (type === 'blank' || type === 'titleOnly') return undefined;
   const options = catalogs === undefined ? {} : {catalogs};
   // Use core's default catalog resolution: a same-id record in another host catalog must never supply a misleading name match.
   const builtins = catalogRecords({}, 'layouts', options).filter(entry => entry.group === 'default' && isTemplate(entry.record))
@@ -568,7 +581,7 @@ export function foreignLayoutReference(layout, catalogs = [gallery]) {
   if (type === 'cust') {
     const name = String(layout?.['p:cSld']?.name ?? '').trim().toLowerCase();
     const matched = builtins.find(entry => entry.id.toLowerCase() === name || String(entry.record.name ?? '').trim().toLowerCase() === name);
-    return matched ? `default:${matched.id}` : 'auto';
+    return matched ? `default:${matched.id}` : undefined;
   }
-  return 'auto';
+  return undefined;
 }

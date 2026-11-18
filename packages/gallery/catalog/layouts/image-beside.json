@@ -34,7 +34,6 @@
             "quote",
             "group"
           ],
-          "role": "primary",
           "flow": "auto",
           "anchor": "middle"
         }

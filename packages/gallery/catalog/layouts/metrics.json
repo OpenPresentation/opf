@@ -20,7 +20,6 @@
         "metric",
         "group"
       ],
-      "role": "primary",
       "flow": "grid",
       "anchor": "middle"
     },

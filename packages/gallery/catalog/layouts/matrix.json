@@ -17,7 +17,6 @@
       "accepts": [
         "list"
       ],
-      "role": "primary",
       "flow": "none",
       "arrangement": "matrix",
       "size": 3

@@ -30,7 +30,6 @@
             "group",
             "diagram"
           ],
-          "role": "primary",
           "flow": "none"
         },
         {
@@ -45,7 +44,6 @@
             "group",
             "diagram"
           ],
-          "role": "primary",
           "flow": "none"
         }
       ]

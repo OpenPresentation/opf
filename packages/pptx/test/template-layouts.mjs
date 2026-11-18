@@ -351,7 +351,7 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
 // ---- 3. A region pin round-trips (OPF_SLIDE_V1 records it); a custom template is one more layout.
 const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-split': {name: 'Roadmap split', summary: 'A roadmap with notes over metrics beside it.',
   direction: 'column', regions: [{name: 'title'}, {direction: 'row', size: 2, regions: [{name: 'timeline', size: 2, accepts: ['timeline'], role: 'primary', flow: 'none'},
-    {direction: 'column', regions: [{name: 'notes', accepts: ['text', 'list'], role: 'secondary', flow: 'column'}, {name: 'metrics', accepts: ['metric', 'text'], role: 'supporting', flow: 'grid'}]}]}]}}}},
+    {direction: 'column', regions: [{name: 'notes', accepts: ['text', 'list'], role: 'supporting', flow: 'column'}, {name: 'metrics', accepts: ['metric', 'text'], role: 'supporting', flow: 'grid'}]}]}]}}}},
   slides: [{layout: 'roadmap-split', title: '2027 roadmap', blocks: [{timeline: {events: [{when: 'Q1', what: 'Pilot'}, {when: 'Q2', what: 'Launch'}]}},
     {metric: {value: 12, label: 'Pilot customers'}}, {metric: {value: '94%', label: 'Retention'}}, {items: ['Hiring two engineers', 'Security review in Q1']},
     {region: 'metrics', text: 'Targets agreed with finance.'}]}]};
@@ -482,7 +482,7 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
 
 // ---- 10. Automatic slides use the dedicated OPF auto layout independently of host catalogs.
 {
-  const deck = {name: 'Classic', slides: [{title: 'Title', subtitle: 'Subtitle'}, {layout: 'auto', title: 'Text', text: 'Body.'}, {title: 'Auto', blocks: [{image: {src: square}}]}]};
+  const deck = {name: 'Classic', slides: [{title: 'Title', subtitle: 'Subtitle'}, {title: 'Text', text: 'Body.'}, {title: 'Auto', blocks: [{image: {src: square}}]}]};
   const {entries: parts} = await exportDeck(deck);
   assert.equal(layoutParts(parts).length, 2);
   assert.equal(layoutTag(parts, layoutOf(parts, 3)).id, 'auto');

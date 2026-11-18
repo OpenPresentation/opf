@@ -306,7 +306,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-layout/v2"` | Identifies a published record file as a layout template. Required in a published file; an embedded copy omits it. |
-| `id` | yes | `string` | The layout's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this fie... |
+| `id` | yes | `string` | The layout's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this field. |
 | `name` | yes | `string` | Human-readable layout name, shown in layout pickers and as the PowerPoint layout name. |
 | `summary` | no | `string` | One-sentence positioning of the layout when to reach for it. |
 | `description` | no | `string` | Longer prose describing the layout structure and ideal use cases. |
@@ -374,7 +374,7 @@ _No named properties._
 | `name` | yes | `string` | The region's name, lowercase kebab-case, unique across the whole record. A block targets it with 'region': '<name>'. It may not be 'title' (those are heading regions), 'tag', 'auto' or one of the promoted-region words... |
 | `size` | no | `ref:RegionSize` |  |
 | `accepts` | no | `array<enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline \| diagram \| shape \| group>` | Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A region that takes 'image' also takes a shape block. A group is also accepted where every one of its leaf kinds... |
-| `role` | no | `enum:primary \| secondary \| media \| supporting` | Which content the region wants first. Binding gives a picture (image, video) to a media region first, then primary, secondary, supporting; every other kind to a primary region first, then secondary, supporting, media;... |
+| `role` | no | `enum:primary \| media \| supporting` | Which content the region wants first. Binding gives a picture (image, video) to a media region first, then primary, supporting; every other kind to a primary region first, then supporting, media; of two equal regions... |
 | `flow` | no | `enum:none \| grid \| column \| auto` | How several blocks share the region: 'none' one block fills it (blocks no region had room for join it, up to 6, and it flows as 'auto'); 'grid' by count (1 fills, 2 side by side, 3 in a row, 4 as 2 x 2, 5 as 3 + 2, 6... |
 | `max` | no | `integer` | Blocks the region holds on one slide. Default 1 for flow 'none' (which requires 1), else 6. Content beyond every region's room is drawn in the overflow region with the warning opf/layout-unplaced, and paginate moves i... |
 | `bleed` | no | `boolean` | The region's outer edges that lie on the content box's edge extend to the slide edge, as a placed image does. A bled region is never drawn as a card. Default false. |

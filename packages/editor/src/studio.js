@@ -650,7 +650,7 @@ export function createStudio(ctx) {
   s.canEditLayout = () => {
     if (!ctx.slots.layouts) return "Layout Studio is not part of this editor.";
     const slide = ui.get(`/slides/${ctx.slideIndex()}`);
-    return typeof slide?.layout === "string" && slide.layout !== "auto" ? true : "This slide has no layout to edit. Choose one first.";
+    return typeof slide?.layout === "string" ? true : "This slide has no layout to edit. Choose one first.";
   };
   s.textTarget = () => {
     const node = s.primaryNode();
@@ -1006,7 +1006,7 @@ export function createStudio(ctx) {
   const currentLayout = () => { const slide = ui.get(`/slides/${ctx.slideIndex()}`); return typeof slide?.layout === "string" ? slide.layout : undefined; };
   s.newSlide = (layoutId = currentLayout(), at = ctx.slideIndex() + 1) => {
     try {
-      const change = addSlide(ui, { at, ...(layoutId && layoutId !== "auto" ? { layout: layoutId } : {}) }, { source: "studio", label: "New slide", selection: selection.snapshot() });
+      const change = addSlide(ui, { at, ...(layoutId ? { layout: layoutId } : {}) }, { source: "studio", label: "New slide", selection: selection.snapshot() });
       const index = change?.index ?? at;
       ctx.go(index);
       adapter.setSlide(index);

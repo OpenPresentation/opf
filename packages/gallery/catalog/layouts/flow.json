@@ -16,7 +16,6 @@
       "accepts": [
         "list"
       ],
-      "role": "primary",
       "flow": "none",
       "arrangement": "flow"
     }

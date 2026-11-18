@@ -670,7 +670,7 @@ Default severity: **error**. Cost: structure. A layout template's regions are no
 
 Default severity: **warning**. Cost: structure. A content reference resolves nowhere.
 
-**Why.** A layout, theme, colour scheme, font scheme, narrative, audience, purpose or tone reference that neither the document embeds nor a registered catalog defines falls back: a slide composes automatically, a design uses the engine default. A strict export fails instead. A slide with no layout is automatic composition and is never reported.
+**Why.** A layout, theme, colour scheme, font scheme, narrative, audience, purpose or tone reference that neither the document embeds nor a registered catalog defines falls back: a slide composes automatically, a design uses the engine default. A strict export fails instead. A slide with no layout is automatic composition and is never reported. `layout: "auto"`, removed in 0.35, is reported with a fix that deletes the key.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

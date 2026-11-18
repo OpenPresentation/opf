@@ -20,7 +20,7 @@
       "accepts": [
         "metric"
       ],
-      "role": "secondary",
+      "role": "supporting",
       "flow": "grid"
     },
     {
@@ -30,7 +30,6 @@
         "chart",
         "table"
       ],
-      "role": "primary",
       "flow": "grid"
     }
   ],

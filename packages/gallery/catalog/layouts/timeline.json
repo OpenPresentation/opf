@@ -26,7 +26,6 @@
         "timeline",
         "diagram"
       ],
-      "role": "primary",
       "flow": "column"
     },
     {

@@ -18,7 +18,6 @@
         "text",
         "group"
       ],
-      "role": "primary",
       "flow": "auto",
       "listColumns": "auto"
     }

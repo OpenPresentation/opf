@@ -4941,7 +4941,7 @@ function withPortraits(input: unknown, options: ComposeSlideOptions, grown: Slid
 }
 /**
  * LH-129: compositions whose headings are the message: they stand free (centered in a sized title area, or in a stacked record) and no
- * primary or secondary region holds a block (a cover, a section, a closing), or the slide has no body and no layout record (a cover by
+ * primary region holds a block (a cover, a section, a closing), or the slide has no body and no layout record (a cover by
  * the record rule), so growTemplate may grow them.
  */
 const HEADING_MESSAGES = new WeakSet<SlideComposition>();
@@ -9639,13 +9639,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const titleRect = rects.get('title');
     const titleMode = hasBodyPayload && plan.stack === undefined && titleRect && rowSizes.slice(titleRect.row, titleRect.row + titleRect.rowSpan).every(size => size === 'auto') ? plan.subtitle ? 'step' as const : 'split' as const : undefined;
     // The heading group (tag, title, subtitle stacked as in 0.18), measured at an area's width.
-    // LH-129: no primary or secondary region holds a block and nothing sits below the grid, so the headings are the slide's message.
+    // LH-129: no primary region holds a block and nothing sits below the grid, so the headings are the slide's message.
     // LH-130: only then does the title take the rule its region asks for: a display title's mark, which never costs a body its room.
-    const headingsAlone = () => plan.regions.every(region => (region.role !== 'primary' && region.role !== 'secondary') || !unitsOf(region.name).length) && !belowUnits.length;
+    const headingsAlone = () => plan.regions.every(region => region.role !== 'primary' || !unitsOf(region.name).length) && !belowUnits.length;
     // Wave 7 integration (LH-09 with LH-155): the empty layout a PowerPoint master holds (LAYOUT_MASTER) has no blocks, so its headings are
-    // always alone; a record with a primary or secondary region (the statement) is laid out there as the filled slide draws it, without the rule
+    // always alone; a record with a primary region (the statement) is laid out there as the filled slide draws it, without the rule
     // (a statement's placeholders then sit where its slides put the message). A cover, a section and a closing keep it.
-    const masterRule = (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true ? !plan.regions.some(region => region.role === 'primary' || region.role === 'secondary') : undefined;
+    const masterRule = (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true ? !plan.regions.some(region => region.role === 'primary') : undefined;
     const headingItemsAt = (fields: string[], x: number, y: number, areaWidth: number): ComposedItem[] => headingGroup(fields, x, y, areaWidth, fields.includes('title') ? titleMode : undefined, plan.titleRule === true && (masterRule ?? (headingsAlone() || statement === 'title')) && ruleOn('title-rule'));
     const groupHeight = (list: ComposedItem[]) => list.length ? list.at(-1)!.box.y + list.at(-1)!.box.height - (groupRules.get(list)?.y ?? list[0]!.box.y) : 0;
     // The arrangement of a region's blocks: design.contentDirection makes every flowing region one row or one column;
@@ -12137,7 +12137,7 @@ export type {ChartDrawPlan,ChartFallback} from './chart-fallback.js';
 export { resolveDesignHints, itemAlignment, DESIGN_HINT_KEYS, type DesignAlignment, type DesignHints, type DesignHintKey, type DesignHintSource, type ResolvedDesignHints, type ResolveDesignHintsOptions } from './design-hints.js';
 export { layoutContent, layoutStructure, LAYOUT_BODY_KINDS, type LayoutContent, type LayoutBodyKind } from './layout-content.js';
 // OPF 0.19 layout templates: the record's grid and regions, content binding and the pure geometry composeSlide uses.
-export { AUTO_LAYOUT, HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
+export { HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
 export { EYEBROW_LABEL_CHARS, EYEBROW_LABEL_WORDS, EYEBROW_TEXT_KIND, eyebrowLabel, isLabelText, rowLabel, ROW_LABEL_CHARS, ROW_LABEL_WORDS, groupBinding, groupingNode, JOINED_FIXED_MAX, majorityKind, MOVED_ROW_MAX, PAIR_FIGURE_KINDS, PAIR_LENGTH_RATIO, repeatedPairs, textLength, type GroupedBinding, type GroupingNode, type JoinedArrangement } from './block-grouping.js';
 export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
 export { allocateRows, gridFlowShape, LIST_WHOLE_ENTRIES, listColumnBreaks, listGridShape, shareHeights, type FlowShape, type RowDemand } from './template-geometry.js';

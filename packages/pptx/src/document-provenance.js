@@ -1486,7 +1486,7 @@ export function layoutIntent(storedCatalogs, slideRecords, entries, group, repor
     if (structureMatch && problem === 'source') report({code: 'invalid-document-provenance', path: `slides.${index}.layoutRecord`, message: `slides.${index}.layoutRecord belongs to catalogs.${stated.group}${stated.source ? ` (${stated.source})` : ''}, which the document declares with another source, so the slide's stored layout record was not restored.`});
     const target = layout === undefined ? undefined : resolved.get(layout);
     let restoreLayout = structureMatch;
-    if (structureMatch && layout !== undefined && layout !== 'auto') {
+    if (structureMatch && layout !== undefined) {
       if (!target) {
         restoreLayout = false;
         report({code: 'unresolved-reference', path: `slides.${index}.layout`, message: `Layout '${layout}' resolves neither in the catalogs the PPTX stores nor in a registered catalog, so slides.${index}.layout was not restored; the imported slide keeps its observed arrangement.`});

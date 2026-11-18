@@ -423,7 +423,6 @@
                 "code",
                 "group"
               ],
-              "role": "primary",
               "flow": "auto"
             }
           ],
@@ -450,7 +449,6 @@
                 "group",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "grid"
             },
             {
@@ -486,7 +484,6 @@
                 "text",
                 "group"
               ],
-              "role": "primary",
               "flow": "auto",
               "listColumns": "auto"
             }

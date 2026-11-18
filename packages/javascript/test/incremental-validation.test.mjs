@@ -136,7 +136,7 @@ test('citation numbering, variables, host policies and nested dataset consumers 
 	assert.equal(parity(checker, document).schemaValid, true);
 	document.variables.client.value = 'Globex';
 	assert.equal(parity(checker, document).schemaValid, true);
-	document.slides[1].layout = 'auto';
+	document.slides[1].layout = 'cover';
 	const policy = parity(checker, document, { contracts: [{ path: '/slides/*/layout', allowedValues: ['statement'], message: 'Use the required layout.' }] });
 	assert.ok(policy.findings.some(finding => finding.ruleId === 'opf/contract'));
 	document.datasets = { values: { columns: ['X', 'Y'], rows: [['A', 9]] } };

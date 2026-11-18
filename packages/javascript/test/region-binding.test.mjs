@@ -19,7 +19,7 @@ const roadmap = {
         {
           direction: 'column',
           regions: [
-            { name: 'notes', accepts: ['text', 'list'], role: 'secondary', flow: 'column' },
+            { name: 'notes', accepts: ['text', 'list'], role: 'supporting', flow: 'column' },
             { name: 'metrics', accepts: ['metric', 'text'], role: 'supporting', flow: 'grid' },
           ],
         },
@@ -42,9 +42,10 @@ describe('the worked example (design section 7, roadmap-split)', () => {
     assert.equal(result.regions.find((region) => region.name === 'metrics').blocks.find((block) => block.block === 4).pinned, true);
   });
 
-  test('without its pin the text goes to notes: secondary ranks before supporting', () => {
+  test('without its pin the last text keeps source order: notes and metrics rank alike, so it follows the metrics (LH-122)', () => {
+    // 0.35 removed the role secondary, which ranked notes before metrics; both are supporting now.
     const blocks = slide.blocks.map((block) => { const { region: _region, ...rest } = block; return rest; });
-    assert.deepEqual(bound(bindRegions({ ...slide, blocks }, roadmap)), { timeline: ['blocks.0'], notes: ['blocks.3', 'blocks.4'], metrics: ['blocks.1', 'blocks.2'] });
+    assert.deepEqual(bound(bindRegions({ ...slide, blocks }, roadmap)), { timeline: ['blocks.0'], notes: ['blocks.3'], metrics: ['blocks.1', 'blocks.2', 'blocks.4'] });
   });
 
   test('the deck in the three forms validates, and composes with metrics holding three blocks in a row', () => {
@@ -93,10 +94,10 @@ describe('step 1: pins', () => {
 });
 
 describe('step 2: role rank by kind, then reading order', () => {
-  test('pictures prefer media regions; everything else primary, then secondary, supporting, media', () => {
-    assert.deepEqual(['media', 'primary', 'secondary', 'supporting'].map((role) => regionRoleRank(role, 'image')), [0, 1, 2, 3]);
-    assert.deepEqual(['primary', 'secondary', 'supporting', 'media'].map((role) => regionRoleRank(role, 'text')), [0, 1, 2, 3]);
-    assert.deepEqual(['primary', 'secondary', 'supporting', 'media'].map((role) => regionRoleRank(role, 'group')), [0, 1, 2, 3]);
+  test('pictures prefer media regions; everything else primary, then supporting, media', () => {
+    assert.deepEqual(['media', 'primary', 'supporting'].map((role) => regionRoleRank(role, 'image')), [0, 1, 2]);
+    assert.deepEqual(['primary', 'supporting', 'media'].map((role) => regionRoleRank(role, 'text')), [0, 1, 2]);
+    assert.deepEqual(['primary', 'supporting', 'media'].map((role) => regionRoleRank(role, 'group')), [0, 1, 2]);
   });
 
   test('hero: the picture goes to media, the lead text to lead, further text to support', () => {
@@ -108,7 +109,7 @@ describe('step 2: role rank by kind, then reading order', () => {
     assert.deepEqual(bound(bindRegions({ blocks: [text('a'), text('b')] }, layouts['two-column'])), { first: ['blocks.0'], second: ['blocks.1'] });
   });
 
-  test('a supporting region takes content only when no primary or secondary region has room', () => {
+  test('a supporting region takes content only when no primary region has room', () => {
     // chart-beside: a second chart goes to the supporting notes once the chart region is full.
     const chart = { chart: { type: 'column', data: { columns: ['Q', 'V'], rows: [['Q1', 1]] } } };
     assert.deepEqual(bound(bindRegions({ blocks: [chart, chart, text('takeaway')] }, layouts['chart-beside'])), { chart: ['blocks.0'], notes: ['blocks.1', 'blocks.2'] });
@@ -117,7 +118,7 @@ describe('step 2: role rank by kind, then reading order', () => {
   test('a group is accepted where every one of its leaf kinds is, or where group is', () => {
     const person = { blocks: [image, text('Name')] };
     assert.deepEqual(bound(bindRegions({ blocks: [person] }, layouts.team)), { people: ['blocks.0'] });
-    const custom = { name: 'x', direction: 'row', regions: [{ name: 'a', accepts: ['chart'] }, { name: 'b', accepts: ['text', 'image'], role: 'secondary' }] };
+    const custom = { name: 'x', direction: 'row', regions: [{ name: 'a', accepts: ['chart'] }, { name: 'b', accepts: ['text', 'image'], role: 'supporting' }] };
     assert.deepEqual(bound(bindRegions({ blocks: [person] }, custom)), { a: [], b: ['blocks.0'] });
   });
 

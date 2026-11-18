@@ -561,7 +561,7 @@
         "accepts": [
           "metric"
         ],
-        "role": "secondary",
+        "role": "supporting",
         "flow": "grid",
         "max": 6,
         "bleed": false,

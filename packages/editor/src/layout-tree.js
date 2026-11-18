@@ -467,7 +467,7 @@ export function moveIntoSibling(record, path, delta) {
 // --- properties ------------------------------------------------------------------------------------------------------------
 
 const REGION_ENUMS = {
-  role: ["primary", "secondary", "media", "supporting"],
+  role: ["primary", "media", "supporting"],
   flow: ["none", "grid", "column", "auto"],
   anchor: LAYOUT_ANCHORS,
   empty: ["collapse", "keep"],

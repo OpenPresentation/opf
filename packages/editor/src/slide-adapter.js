@@ -238,7 +238,7 @@ export function createSlideAdapter(session, options = {}) {
     /** The slides of the deck, for the filmstrip: `{ key, path, index, label, hidden }`. */
     slides() {
       const doc = document();
-      return (doc.slides ?? []).map((slide, index) => ({ key: slideKeyAt(doc, index), path: `/slides/${index}`, index, label: `Slide ${index + 1}${typeof slide.layout === "string" && slide.layout !== "auto" ? ` · ${slide.layout}` : ""}`, hidden: slide.hidden === true }));
+      return (doc.slides ?? []).map((slide, index) => ({ key: slideKeyAt(doc, index), path: `/slides/${index}`, index, label: `Slide ${index + 1}${typeof slide.layout === "string" ? ` · ${slide.layout}` : ""}`, hidden: slide.hidden === true }));
     },
     /** The current slide's nodes as the kit's layers and overlay read them. */
     nodes: () => scene().nodes.map(({ key, path, kind, parent, depth, label, findings }) => ({ key, path, kind, parent, depth, label, findings })),

@@ -9,6 +9,7 @@ import {
 	parseReference,
 	pointerPath,
 	resolveReference,
+	removedLayoutAuto,
 	unresolvedReference,
 	type CatalogKind,
 	type CatalogOptions,
@@ -950,6 +951,19 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 		}
 		if (found && !(found.origin === 'document' && invalid.has(recordKey(found.group, site.kind, found.id)))) continue;
 		const diagnostic = unresolvedReference(document, site.kind, site.reference, path, options);
+		if (removedLayoutAuto(site.kind, site.reference)) {
+			findings.push(
+				finding('opf/unresolved-reference', {
+					path,
+					message: diagnostic.message,
+					help: 'OPF 0.35 removed layout "auto". Delete the layout key: a slide without one is composed automatically, which is what "auto" did.',
+					definition: `${schemas.presentation.$id}#/$defs/Slide`,
+					lookup: ['opf', 'catalog', site.kind],
+					fixes: [{ id: 'remove-layout-auto', title: 'Delete layout (automatic composition)', kind: 'patch' as const, safe: true, patch: [{ op: 'remove' as const, path }] }],
+				}),
+			);
+			continue;
+		}
 		const suggestions = catalogRecords(document, site.kind, options)
 			.map((entry) => ({ value: entry.reference, label: typeof entry.record.name === 'string' ? entry.record.name : entry.reference, origin: entry.origin === 'host' ? 'registered' : 'document', definition: entry.origin === 'document' ? `document#${pointer(['catalogs', entry.group, site.kind, entry.id])}` : `${entry.source ?? 'context'}#/${site.kind}/${entry.id}` }))
 			.sort((a, b) => distance(site.reference, a.value) - distance(site.reference, b.value) || (a.value < b.value ? -1 : a.value > b.value ? 1 : 0))

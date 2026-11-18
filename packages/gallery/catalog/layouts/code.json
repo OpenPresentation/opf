@@ -20,7 +20,6 @@
           "accepts": [
             "code"
           ],
-          "role": "primary",
           "flow": "column"
         },
         {

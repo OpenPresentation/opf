@@ -25,7 +25,6 @@
         "image",
         "group"
       ],
-      "role": "primary",
       "flow": "grid"
     }
   ],

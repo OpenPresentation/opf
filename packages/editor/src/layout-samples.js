@@ -68,7 +68,7 @@ export const regionSampleKinds = (region) => (Array.isArray(region?.accepts) && 
 export function sampleDeck(record) {
   const { $schema, id, ...layout } = clone(record);
   void $schema;
-  const key = typeof id === "string" && /^[a-z][a-z0-9-]*$/.test(id) && id !== "auto" ? id : "layout-preview";
+  const key = typeof id === "string" && /^[a-z][a-z0-9-]*$/.test(id) ? id : "layout-preview";
   const blocks = [];
   const used = {};
   for (const { name, region } of bodyRegions(record)) {

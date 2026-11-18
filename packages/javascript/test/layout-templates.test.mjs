@@ -139,9 +139,15 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
     assert.equal(isLayoutTemplate({ name: 'Old', areas: [['title']] }), false);
   });
 
-  test("'auto' is reserved: no catalog may define a layout of that id", () => {
+  test("'auto' is an ordinary layout id since 0.35 (layout: \"auto\" was removed)", () => {
     const report = validate({ slides: [{ title: 'x' }], catalogs: { custom: { layouts: { auto: base } } } }, { only: ['format', 'references'] });
-    assert.ok(report.findings.some((entry) => entry.ruleId === 'opf/catalog-record' && entry.path.startsWith('/catalogs/custom/layouts/auto')));
+    assert.ok(!report.findings.some((entry) => entry.ruleId === 'opf/catalog-record'));
+  });
+
+  test("0.35 removed the region role 'secondary': it fails the layout schema", () => {
+    const record = { name: 'Old', regions: [{ name: 'title' }, { name: 'kpis', accepts: ['metric'], role: 'secondary' }] };
+    const report = validate({ slides: [{ title: 'x' }], catalogs: { custom: { layouts: { old: record } } } }, { only: ['format', 'references'] });
+    assert.ok(report.findings.some((entry) => entry.ruleId === 'opf/catalog-record' && entry.path.startsWith('/catalogs/custom/layouts/old/regions/1/role')), JSON.stringify(report.findings.map((entry) => [entry.ruleId, entry.path])));
   });
 
   test('composeSlide refuses a template with either finding', () => {

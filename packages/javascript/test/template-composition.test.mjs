@@ -2,6 +2,7 @@ import { gallery } from '@openpresentation/gallery';
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 import { format, resolveSlideContext, validate } from '../dist/index.js';
+import { describeFinding } from '../dist/source.js';
 import { THEME_DESIGN_KEYS, composeSlide, gridFlowShape, listColumnBreaks, resolveDesignHints } from '../dist/composition.js';
 
 // OPF 0.19 (RR-79), design sections 3 to 5: flows, tracks, collapse, bleed, list columns, mirror and the theme level.
@@ -199,14 +200,26 @@ describe('overrides', () => {
     assert.equal(rows(cells(result, 'pillars')), 1);
   });
 
-  test('layout "auto" composes exactly like no layout', () => {
+  test('0.35 removed layout "auto": it is an ordinary reference, reported as removed with a fix that deletes the key', () => {
     const slide = { title: 'x', blocks: short(3) };
-    assert.deepEqual(composeSlide({ ...slide, layout: 'auto' }), composeSlide(slide));
     const deck = { slides: [{ ...slide, layout: 'auto' }] };
+    // Unresolved, so the slide composes automatically, as a slide without layout does.
     assert.equal(resolveSlideContext(deck, 0).options.layout, undefined);
-    assert.deepEqual(resolveSlideContext(deck, 0).diagnostics, []);
-    assert.deepEqual(validate(deck).findings.filter((entry) => entry.ruleId === 'opf/unresolved-reference'), []);
-    assert.equal(JSON.parse(format(deck)).slides[0].layout, undefined, 'opf format drops it');
+    const [diagnostic] = resolveSlideContext(deck, 0).diagnostics;
+    assert.equal(diagnostic.code, 'unresolved-reference');
+    assert.match(diagnostic.message, /OPF 0.35 removed layout 'auto'/);
+    const findings = validate(deck).findings.filter((entry) => entry.ruleId === 'opf/unresolved-reference');
+    assert.equal(findings.length, 1);
+    assert.equal(findings[0].path, '/slides/0/layout');
+    assert.match(findings[0].help, /Delete the layout key/);
+    assert.deepEqual(findings[0].fixes, [{ id: 'remove-layout-auto', title: 'Delete layout (automatic composition)', kind: 'patch', safe: true, patch: [{ op: 'remove', path: '/slides/0/layout' }] }]);
+    assert.equal(findings[0].suggestions, undefined, 'no near layout is offered in its place');
+    assert.deepEqual(describeFinding(findings[0], { document: deck, format: 'json' }), { message: 'Layout `auto` was removed in OPF 0.35: a slide without `layout` composes automatically, which is what `auto` did.', next: 'delete the `layout` key (the fix does).' });
+    assert.equal(JSON.parse(format(deck)).slides[0].layout, 'auto', 'opf format keeps every value');
+    // A catalog that defines a layout of that id is used like any other.
+    const own = { catalogs: { custom: { layouts: { auto: { name: 'Auto', regions: [{ name: 'title' }, { name: 'body', accepts: ['text', 'list'] }] } } } }, slides: [{ ...slide, layout: 'auto' }] };
+    assert.equal(resolveSlideContext(own, 0).resolved.layout.name, 'Auto');
+    assert.deepEqual(validate(own).findings.filter((entry) => entry.ruleId === 'opf/unresolved-reference'), []);
   });
 });
 
@@ -339,9 +352,9 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     const placements = [{ edge: 'start', size: 0.25 }];
     // Without cards and with cards on the deck (the card insets live in the auto rows too).
     for (const presentation of [{ design: furniture }, { design: { ...furniture, contentBox: true } }]) for (const [id, record] of Object.entries(layouts)) {
-      // Wave 7 (LH-09 with LH-155): a record with a primary or secondary region (the statement) is laid out as its filled slides draw it, which
-      // carry no title rule, so this slide without a body is compared without the rule too.
-      const filledRule = record.regions.some((region) => region.role === 'primary' || region.role === 'secondary');
+      // Wave 7 (LH-09 with LH-155): a record with a primary region (the statement; a region without role is primary) is laid out as its
+      // filled slides draw it, which carry no title rule, so this slide without a body is compared without the rule too.
+      const filledRule = record.regions.some((region) => typeof region.name === 'string' && region.name !== 'title' && region.name !== 'subtitle' && (region.role ?? 'primary') === 'primary');
       const kept = { ...record, regions: keepAll(record.regions).map((region) => (filledRule && region.rule ? (({ rule, ...rest }) => rest)(region) : region)) };
       const slide = { title: 'Title', subtitle: 'Subtitle', blocks: [{ image: 'https://example.com/band.png', placement: placements[0] }] };
       // `fill: false`: the placeholders hold the role sizes; LH-129 grows the headings of a slide whose headings are its message.

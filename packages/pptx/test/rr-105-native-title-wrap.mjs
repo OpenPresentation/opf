@@ -29,7 +29,7 @@ for (const {file, deck} of examples) {
   if (needsScripts(deck.slides)) await fonts.ensure(deck);
   for (const index of deck.slides.keys()) {
     const {context, geometry} = compose(deck, index);
-    if (!(slideTemplate(context) || context.slide.layout === undefined || context.slide.layout === 'auto' || geometry.recomposed !== undefined)) continue;
+    if (!(slideTemplate(context) || context.slide.layout === undefined || geometry.recomposed !== undefined)) continue;
     for (const item of geometry.items.filter(eligible)) {
       const nativeFamily = resolveSlideContext(deck, index, {catalogs}).options.fontFamilies.heading, reasons = [];
       const widths = nativeWrapWidths(item, [item.value], false, measurement), wrap = nativeTitleWrapBox(item, geometry, measurement, {nativeStyle: {fontFamily: nativeFamily, fontWeight: 700, italic: false}, report: reason => reasons.push(reason)});

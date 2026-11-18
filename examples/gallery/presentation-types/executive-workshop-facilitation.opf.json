@@ -736,7 +736,6 @@
                 "code",
                 "group"
               ],
-              "role": "primary",
               "flow": "auto"
             }
           ],
@@ -763,7 +762,6 @@
                 "group",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "grid"
             },
             {
@@ -801,7 +799,6 @@
                   "accepts": [
                     "table"
                   ],
-                  "role": "primary",
                   "flow": "none"
                 },
                 {
@@ -850,7 +847,6 @@
                 "timeline",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "column"
             },
             {
@@ -888,7 +884,6 @@
                 "text",
                 "group"
               ],
-              "role": "primary",
               "flow": "auto",
               "listColumns": "auto"
             }
