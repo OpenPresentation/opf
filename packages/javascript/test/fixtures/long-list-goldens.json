@@ -1,0 +1,157 @@
+{
+ "body short-7": [
+  "region body 57.6,147.5,1164.8,514.9 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items body 57.6,147.5,1164.8,514.9 32px"
+ ],
+ "lead-aside short-7": [
+  "region lead 57.6,147.5,1164.8,245.5 1",
+  "region body 57.6,416.9,760.5,245.5 1",
+  "region aside 842.1,416.9,380.3,245.5 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.text lead 57.6,147.5,1164.8,245.5 28px",
+  "item blocks.1.items body 57.6,416.9,760.5,245.5 32px cols=2@32/32",
+  "item blocks.2.text aside 842.1,416.9,380.3,245.5 28px"
+ ],
+ "two-column short-7": [
+  "region first 57.6,147.5,570.4,514.9 1",
+  "region second 652,147.5,570.4,514.9 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items first 81.2,183.1,523.1,330.8 32px",
+  "item blocks.1.text second 675.6,183.1,523.1,330.8 28px"
+ ],
+ "weighted-row short-7": [
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.text - 57.6,369.3,760.5,71.3 28px",
+  "item blocks.1.items - 842.1,239.9,380.3,330 32px"
+ ],
+ "body short-9": [
+  "region body 57.6,147.5,1164.8,514.9 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items body 57.6,147.5,1164.8,514.9 32px"
+ ],
+ "lead-aside short-9": [
+  "region lead 57.6,147.5,1164.8,245.5 1",
+  "region body 57.6,416.9,760.5,245.5 1",
+  "region aside 842.1,416.9,380.3,245.5 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.text lead 57.6,147.5,1164.8,245.5 28px",
+  "item blocks.1.items body 57.6,416.9,760.5,245.5 32px cols=2@32/32",
+  "item blocks.2.text aside 842.1,416.9,380.3,245.5 28px"
+ ],
+ "two-column short-9": [
+  "region first 57.6,147.5,570.4,514.9 1",
+  "region second 652,147.5,570.4,514.9 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items first 81.6,183.5,522.4,426 32px",
+  "item blocks.1.text second 676,183.5,522.4,426 28px"
+ ],
+ "weighted-row short-9": [
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.text - 57.6,369.3,760.5,71.3 28px",
+  "item blocks.1.items - 842.1,191.9,380.3,426 32px"
+ ],
+ "body short-12": [
+  "region body 57.6,147.5,1164.8,514.9 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items body 57.6,147.5,1164.8,514.9 32px cols=2@32/32"
+ ],
+ "lead-aside short-12": [
+  "region lead 57.6,147.5,1164.8,245.5 1",
+  "region body 57.6,416.9,760.5,245.5 1",
+  "region aside 842.1,416.9,380.3,245.5 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.text lead 57.6,147.5,1164.8,245.5 28px",
+  "item blocks.1.items body 57.6,416.9,760.5,245.5 28px cols=2@28/28",
+  "item blocks.2.text aside 842.1,416.9,380.3,245.5 28px"
+ ],
+ "two-column short-12": [
+  "region first 57.6,147.5,570.4,514.9 1",
+  "region second 652,147.5,570.4,514.9 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items first 81.6,183.5,522.4,454.9 24px",
+  "item blocks.1.text second 676,183.5,522.4,454.9 28px"
+ ],
+ "weighted-row short-12": [
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.text - 57.6,369.3,760.5,71.3 28px",
+  "item blocks.1.items - 842.1,147.5,380.3,514.9 28px"
+ ],
+ "body short-16": [
+  "region body 57.6,147.5,1164.8,514.9 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items body 57.6,147.5,1164.8,514.9 32px cols=2@32/32"
+ ],
+ "lead-aside short-16": [
+  "region lead 57.6,147.5,1164.8,245.5 1",
+  "region body 57.6,416.9,760.5,245.5 1",
+  "region aside 842.1,416.9,380.3,245.5 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.text lead 57.6,147.5,1164.8,245.5 28px",
+  "item blocks.1.items body 57.6,416.9,760.5,245.5 20px cols=2@20/20",
+  "item blocks.2.text aside 842.1,416.9,380.3,245.5 28px"
+ ],
+ "two-column short-16": [
+  "region first 57.6,147.5,570.4,514.9 1",
+  "region second 652,147.5,570.4,514.9 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items first 81.6,183.5,522.4,454.9 18px",
+  "item blocks.1.text second 676,183.5,522.4,454.9 28px"
+ ],
+ "weighted-row short-16": [
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.text - 57.6,369.3,760.5,71.3 28px",
+  "item blocks.1.items - 842.1,147.5,380.3,514.9 21px"
+ ],
+ "body long-8": [
+  "region body 57.6,147.5,1164.8,514.9 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items body 57.6,147.5,1164.8,514.9 32px cols=2@32/32"
+ ],
+ "lead-aside long-8": [
+  "region lead 57.6,147.5,1164.8,245.5 1",
+  "region body 57.6,416.9,760.5,245.5 1",
+  "region aside 842.1,416.9,380.3,245.5 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.text lead 57.6,147.5,1164.8,245.5 28px",
+  "item blocks.1.items body 57.6,416.9,760.5,245.5 16px",
+  "item blocks.2.text aside 842.1,416.9,380.3,245.5 28px"
+ ],
+ "two-column long-8": [
+  "region first 57.6,147.5,570.4,514.9 1",
+  "region second 652,147.5,570.4,514.9 1",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items first 81.6,183.5,522.4,454.9 21px",
+  "item blocks.1.text second 676,183.5,522.4,454.9 28px"
+ ],
+ "weighted-row long-8": [
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.text - 57.6,147.5,760.5,514.9 28px",
+  "item blocks.1.items - 842.1,147.5,380.3,514.9 16px"
+ ],
+ "weighted-row-wide short-7": [
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items - 57.6,239.9,760.5,330 32px",
+  "item blocks.1.text - 842.1,369.3,380.3,71.3 28px"
+ ],
+ "weighted-row-wide short-9": [
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items - 57.6,191.9,760.5,426 32px",
+  "item blocks.1.text - 842.1,369.3,380.3,71.3 28px"
+ ],
+ "weighted-row-wide short-12": [
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items - 57.6,147.5,760.5,514.9 28px",
+  "item blocks.1.text - 842.1,369.3,380.3,71.3 28px"
+ ],
+ "weighted-row-wide short-16": [
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items - 57.6,147.5,760.5,514.9 21px",
+  "item blocks.1.text - 842.1,369.3,380.3,71.3 28px"
+ ],
+ "weighted-row-wide long-8": [
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.items - 57.6,147.5,760.5,514.9 23px",
+  "item blocks.1.text - 842.1,147.5,380.3,514.9 28px"
+ ]
+}

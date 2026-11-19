@@ -157,11 +157,11 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
     assert.throws(() => layoutTemplate({ ...base, direction: 'row', regions: [{ name: 'a', size: 'auto' }] }), (error) => error instanceof RangeError && error.issues[0].code === 'layout-template');
   });
 
-  test('defaults: accepts every kind, role primary, flow auto, max 6, collapse, top, one list column', () => {
+  test('defaults: accepts every kind, role primary, flow auto, max 6, collapse, top, no bleed', () => {
     const template = layoutTemplate({ name: 'x', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'a', accepts: ['text'], max: 1 }, { name: 'b' }] }] });
-    assert.deepEqual(template.regions.map((region) => [region.name, region.role, region.flow, region.max, region.empty, region.anchor, region.listColumns, region.bleed]), [
-      ['a', 'primary', 'auto', 1, 'collapse', 'top', 1, false],
-      ['b', 'primary', 'auto', 6, 'collapse', 'top', 1, false],
+    assert.deepEqual(template.regions.map((region) => [region.name, region.role, region.flow, region.max, region.empty, region.anchor, region.bleed]), [
+      ['a', 'primary', 'auto', 1, 'collapse', 'top', false],
+      ['b', 'primary', 'auto', 6, 'collapse', 'top', false],
     ]);
     assert.deepEqual(template.regions[1].accepts, ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'group']);
     // overflowRegion: the first primary region that is not a single-block region (max 1).

@@ -110,12 +110,12 @@ test('an unreadable column alternative that splits words does not replace an int
   complete(item, longWords);
 });
 
-test('fallback reflow preserves explicit region and payload counts, opt-out, rich styles and RTL source order', () => {
+test('fallback reflow preserves an explicit payload count, opt-out, rich styles and RTL source order', () => {
   const layout = {name: 'Levels', direction: 'column', regions: [{name: 'title'}, {name: 'levels', accepts: ['list'], role: 'primary', max: 1, arrangement: 'pyramid'}]};
-  for (const constraint of ['region', 'payload', 'opt-out']) {
+  for (const constraint of ['payload', 'opt-out']) {
     const fixed = slide({items: entries, ...(constraint === 'payload' ? {columns: 1} : {})});
     fixed.title = 'Pyramid: a longer title that may need a second line on the slide';
-    const record = structuredClone(layout); if (constraint === 'region') record.regions[1].listColumns = 1;
+    const record = structuredClone(layout);
     const result = composeSlide(fixed, {layout: record, ...(constraint === 'opt-out' ? {fill: false} : {})}), item = listOf(result);
     assert.ok(result.diagnostics.some(issue => issue.code === 'arrangement-adapted' && issue.message.includes('drawn as a list')), constraint+' is an actual arrangement fallback');
     assert.equal(item.listColumns, undefined, constraint);

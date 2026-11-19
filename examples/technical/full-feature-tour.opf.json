@@ -507,8 +507,7 @@
                 "group"
               ],
               "role": "primary",
-              "flow": "auto",
-              "listColumns": "auto"
+              "flow": "auto"
             }
           ]
         }

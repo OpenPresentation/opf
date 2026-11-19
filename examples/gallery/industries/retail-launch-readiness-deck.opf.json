@@ -905,8 +905,7 @@
                 "text",
                 "group"
               ],
-              "flow": "auto",
-              "listColumns": "auto"
+              "flow": "auto"
             }
           ],
           "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",

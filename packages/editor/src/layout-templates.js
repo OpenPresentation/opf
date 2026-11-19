@@ -71,7 +71,6 @@ function regionRules(entry, name) {
     out.max = entry.max;
   }
   if (entry.bleed !== undefined) { if (typeof entry.bleed !== "boolean") throw fail("layout-region", `Bleed for ${name} is true or false.`); out.bleed = entry.bleed; }
-  if (entry.listColumns !== undefined) { if (entry.listColumns !== "auto" && entry.listColumns !== 1) throw fail("layout-region", `List columns for ${name} is auto or 1.`); out.listColumns = entry.listColumns; }
   if (entry.anchor !== undefined) { if (!LAYOUT_ANCHORS.includes(entry.anchor)) throw fail("layout-region", `Choose a valid anchor for ${name}.`); out.anchor = entry.anchor; }
   if (entry.empty !== undefined) { if (entry.empty !== "collapse" && entry.empty !== "keep") throw fail("layout-region", `Empty for ${name} is collapse or keep.`); out.empty = entry.empty; }
   return out;

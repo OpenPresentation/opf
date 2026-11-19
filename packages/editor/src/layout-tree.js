@@ -19,7 +19,7 @@ const refuse = (message, code) => { throw new LayoutOperationError(message, code
 
 export const HEADING_NAMES = Object.freeze(["title", "subtitle"]);
 /** Rules a body region can carry, in the order the record writes them. */
-export const REGION_KEYS = Object.freeze(["accepts", "role", "flow", "max", "bleed", "listColumns", "anchor", "empty"]);
+export const REGION_KEYS = Object.freeze(["accepts", "role", "flow", "max", "bleed", "anchor", "empty"]);
 const RECORD_ORDER = ["$schema", "id", "name", "summary", "direction", "anchor", "regions", "overflowRegion", "design", "composition"];
 const OTHER = { row: "column", column: "row" };
 
@@ -471,7 +471,6 @@ const REGION_ENUMS = {
   flow: ["auto", "grid", "row", "column"],
   anchor: LAYOUT_ANCHORS,
   empty: ["collapse", "keep"],
-  listColumns: ["auto", 1],
 };
 export const parseSize = (value) => {
   if (value === "auto") return "auto";
@@ -481,7 +480,7 @@ export const parseSize = (value) => {
 
 /**
  * Set (or with `undefined`, remove) one property of the region or split at `path`: `name`, `size`, `direction` (a split), `anchor`, or a
- * region rule (`accepts`, `role`, `flow`, `max`, `bleed`, `listColumns`, `empty`). A value that is not allowed is refused.
+ * region rule (`accepts`, `role`, `flow`, `max`, `bleed`, `empty`). A value that is not allowed is refused.
  */
 export function setProperty(record, path, key, value) {
   const next = clone(record);

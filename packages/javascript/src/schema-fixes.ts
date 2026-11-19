@@ -87,16 +87,20 @@ export function schemaFixes(finding: Finding, document: unknown): FindingFix[] {
 }
 
 /**
- * OPF 0.35: a removed design key (`contentDirection`, `chartPrimary`; REMOVED_DESIGN_KEYS) in a deck, slide, theme or layout `design`, or a
- * layout region's removed `flow: "none"`: what replaced it, as the finding's help, and the safe fix (delete the key; `none` becomes `max: 1`).
+ * OPF 0.35: a removed design key (`contentDirection`, `chartPrimary`; REMOVED_DESIGN_KEYS) in a deck, slide, theme or layout `design`, a
+ * layout region's removed `flow: "none"` or its removed `listColumns`: what replaced it, as the finding's help, and the safe fix (delete
+ * the key; `none` becomes `max: 1`).
  * For `opf/schema` and `opf/catalog-record` findings, the document's own and its embedded records; undefined for any other finding.
  */
+/** OPF 0.35: what replaced a layout region's `listColumns` (removedKeyRepair). */
+export const REMOVED_LIST_COLUMNS = "OPF 0.35 removed the region key listColumns. Delete it: a list of more than 6 entries flows into up to three columns in any region without an arrangement (or with the numbered one) when that sets it at least as large as one column; a list payload's own columns (1, 2, 3 or \"auto\") still chooses.";
 export function removedKeyRepair(finding: Finding, document: unknown): { help: string; fixes: FindingFix[] } | undefined {
   const validation = finding.validation;
   if (!validation || (finding.ruleId !== "opf/schema" && finding.ruleId !== "opf/catalog-record")) return undefined;
   const segments = segmentsOf(finding.path);
   if (validation.keyword === "additionalProperties") {
     const name = segments.at(-1) ?? "";
+    if (name === "listColumns" && segments.at(-3) === "regions" && readAt(document, segments) !== undefined) return { help: REMOVED_LIST_COLUMNS, fixes: [patch("remove:listColumns", "Delete listColumns", [{ op: "remove", path: finding.path }], true)] };
     if (segments.at(-2) !== "design" || !Object.hasOwn(REMOVED_DESIGN_KEYS, name) || readAt(document, segments) === undefined) return undefined;
     return { help: REMOVED_DESIGN_KEYS[name]!, fixes: [patch(`remove:${name}`, `Delete design.${name}`, [{ op: "remove", path: finding.path }], true)] };
   }

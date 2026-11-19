@@ -386,17 +386,6 @@
           "type": "boolean",
           "description": "The region's outer edges that lie on the content box's edge extend to the slide edge, as a placed image does. A bled region is never drawn as a card. Default false."
         },
-        "listColumns": {
-          "oneOf": [
-            {
-              "const": "auto"
-            },
-            {
-              "const": 1
-            }
-          ],
-          "description": "'auto': a list in the region that does not fit its cell at the starting size (a lone list, or one of several blocks) flows into up to three columns before it shrinks, as a list payload's columns: 'auto'; a list of 6 or fewer entries is never split. 2 or more lists alone in a region are one list per cell in a grid instead. Default 1."
-        },
         "metrics": {
           "type": "string",
           "enum": [

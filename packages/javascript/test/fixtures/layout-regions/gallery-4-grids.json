@@ -44,7 +44,6 @@
         "flow": "column",
         "max": 6,
         "bleed": false,
-        "listColumns": "auto",
         "anchor": "top",
         "empty": "collapse"
       }
@@ -108,7 +107,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       },
@@ -125,7 +123,6 @@
         "flow": "column",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -190,7 +187,6 @@
         "flow": "grid",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       },
@@ -203,7 +199,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -258,7 +253,6 @@
         "flow": "auto",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -321,7 +315,6 @@
         "flow": "column",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       },
@@ -335,7 +328,6 @@
         "flow": "column",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -418,7 +410,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       },
@@ -437,7 +428,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       },
@@ -450,7 +440,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -501,7 +490,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": true,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -565,7 +553,6 @@
         "flow": "grid",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       },
@@ -579,7 +566,6 @@
         "flow": "grid",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -634,7 +620,6 @@
         "flow": "column",
         "max": 6,
         "bleed": false,
-        "listColumns": "auto",
         "anchor": "top",
         "empty": "collapse"
       }
@@ -689,7 +674,6 @@
         "flow": "grid",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -767,7 +751,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       },
@@ -781,7 +764,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       },
@@ -797,7 +779,6 @@
         "flow": "grid",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -861,7 +842,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       },
@@ -878,7 +858,6 @@
         "flow": "auto",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "middle",
         "empty": "collapse"
       }
@@ -932,7 +911,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": true,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -986,7 +964,6 @@
         "flow": "auto",
         "max": 6,
         "bleed": false,
-        "listColumns": "auto",
         "anchor": "top",
         "empty": "collapse"
       }
@@ -1041,7 +1018,6 @@
         "flow": "grid",
         "max": 12,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -1106,7 +1082,6 @@
         "flow": "grid",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "middle",
         "empty": "collapse"
       },
@@ -1120,7 +1095,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -1177,7 +1151,6 @@
         "flow": "grid",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -1234,7 +1207,6 @@
         "flow": "grid",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -1288,7 +1260,6 @@
         "flow": "grid",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "middle",
         "empty": "collapse"
       }
@@ -1344,7 +1315,6 @@
         "flow": "grid",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -1425,7 +1395,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "middle",
         "empty": "collapse"
       }
@@ -1488,7 +1457,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       },
@@ -1504,7 +1472,6 @@
         "flow": "column",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -1568,7 +1535,6 @@
         "flow": "column",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       },
@@ -1581,7 +1547,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -1637,7 +1602,6 @@
         "flow": "grid",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -1694,7 +1658,6 @@
         "flow": "auto",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -1759,7 +1722,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       },
@@ -1774,7 +1736,6 @@
         "flow": "auto",
         "max": 6,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }
@@ -1846,7 +1807,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       },
@@ -1868,7 +1828,6 @@
         "flow": "auto",
         "max": 1,
         "bleed": false,
-        "listColumns": 1,
         "anchor": "top",
         "empty": "collapse"
       }

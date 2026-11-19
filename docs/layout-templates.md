@@ -122,7 +122,6 @@ lists the 0.34 names of the built-ins.
 | `flow` | `auto`, `grid`, `row`, `column` (the words of `composition.mode`) | `auto` |
 | `max` | 1 to 12; `1` is a single-block region (below) | 6 |
 | `bleed` | boolean: outer edges on the content box reach the slide edge; never a card | `false` |
-| `listColumns` | `"auto"` (a list of more than 6 entries that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
 | `metrics` | `stack` (value, unit, label and the rest as one block at the anchor) or `tile` (LH-68: each metric fills its cell, label first as an eyebrow, the value asking for a quarter of the cell's height between 76 and 152 px, description, delta and trend at the cell's foot, start-aligned; the gallery `scorecard` uses it) | `stack` |
 | `arrangement` | What the region draws its content as. A sequence: `steps` or `numbered` (LH-07: the region lists the steps of a sequence, drawn under numbered badges joined by a connector, see [Step sequences](#step-sequences-lh-07); the gallery `process` uses `steps`, `agenda` uses `numbered`). A diagram of the region's lone list of one level: `pyramid`, `inverted-pyramid`, `matrix`, `cycle`, `chevrons`, `process`, `vertical-process`, `org-chart`, `hierarchy` or `venn` (SH-09, SH-18: `pyramid`, `matrix` and `cycle` draw as PowerPoint's Basic Pyramid, Basic Matrix or Basic Cycle geometry, exported as live SmartArt where PowerPoint draws it as the preview does, or as OPF's own design of the arrangement where PowerPoint's does not hold the entries; a matrix of other than four entries draws cards; see [Pyramids, matrices and live SmartArt](smartart.md); the gallery `pyramid`, `matrix` and `cycle` use them; SH-24: `inverted-pyramid` is the pyramid upside down, the widest level first and the tip at the bottom, the entries in their authored top-to-bottom order, exported as editable native shapes until a live SmartArt domain is measured (the gallery `inverted-pyramid`); SH-17: `chevrons` draws the list as PowerPoint's Basic Chevron Process, `process` as its Basic Process (boxes with arrows) and `vertical-process` as its Vertical Process, or OPF's own rows or columns of them, used by the gallery `chevrons` and `vertical-process` layouts (and by `process` for a short list of its `steps` region); SH-21: `org-chart` and `hierarchy` preserve a single-root tree through list-entry `level` (an org chart also places an entry with `assistant: true` beside the line below its manager), and `venn` holds one to seven flat set labels (and a last entry with `overlap: true` that labels their common overlap); malformed trees or labels that do not fit keep the complete list with a finding). One value per region: a region is a sequence or a diagram, never both | none |
 | `anchor` | `top`, `middle`, `bottom` | inherited from the nearest split or the record, else `top` |
@@ -350,10 +349,14 @@ Several timelines in one region are a stack of horizontal bands whatever the reg
 
 A slide's own `composition.mode`, `columns` and `weights` arrange its first primary region that is not a single-block region,
 with the 0.18 modes, above its `flow` (OPF 0.35 removed `design.contentDirection`: a region says `row` or `column` itself). A list in a region
-with `listColumns: "auto"` (the lone list of the design, and, since the RR-81 review, any list of the region that does not
-fit its own cell), or any list payload with `columns: "auto"`, tries 1, 2 then 3 columns at the starting size (a column at
-least a quarter of the slide wide); `columns: 2` or `3` fixes the count. `auto` never deals a list of 6 or fewer entries
-across columns (LH-42): such a list shrinks in its one column instead.
+without an `arrangement`, or with the `numbered` one (OPF 0.35: the lone list of the region, and, since the RR-81 review, any list of
+the region that does not fit its own cell), or any list payload with `columns: "auto"`, tries 1, 2 then 3 columns at the starting
+size (a column at least a quarter of the slide wide); `columns: 2` or `3` fixes the count, and `columns: 1` keeps one column. A
+region's columns are kept only when they set the list at least as large as one column of the same cell would (a region whose first
+accepted kind is `list` keeps LH-184's reading measure: columns up to a type-scale step under one column whose lines would run past
+it), and columns that overflow give way to one column that fits (in a list region, one at least as large). `auto` never deals a
+list of 6 or fewer entries across columns (LH-42): such a list shrinks in its one column instead. A region with a diagram or the
+`steps` sequence keeps its list in one column (OPF 0.35 removed the region key `listColumns`).
 
 **Several lists in a region (LH-42).** A region whose flow is not `row` that
 receives 2 or more lists and nothing else lays them out one list per cell, a card when the slide draws cards, so sibling

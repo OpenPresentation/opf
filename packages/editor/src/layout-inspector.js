@@ -243,7 +243,6 @@ export function createLayoutInspector(container, options = {}) {
     bleedField.classList.add("opf-lx-field-check");
     props.append(
       bleedField,
-      field("List columns", select([["", "Default · 1"], ["auto", "Automatic"], ["1", "1"]], entry.listColumns === undefined ? "" : String(entry.listColumns), { name: "listColumns", onChange: (value) => set("listColumns", value === "" ? undefined : value === "auto" ? "auto" : 1, { coalesce: null }) }), { path, field: "listColumns", help: "Automatic lets a long list flow into columns." }),
       field("When empty", select(withDefault("empty", ["collapse", "keep"]), entry.empty ?? "", { name: "empty", onChange: (value) => set("empty", value || undefined, { coalesce: null }) }), { path, field: "empty", help: "Collapse gives the space to a neighbor; keep leaves it." }),
     );
     body.append(props, actions([path], {}));

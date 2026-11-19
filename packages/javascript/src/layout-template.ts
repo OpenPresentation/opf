@@ -46,7 +46,6 @@ export interface LayoutRegion {
   /** Blocks the region holds on one slide (6 unless set); 1 is a single-block region (singleBlockRegion). */
   max: number;
   bleed: boolean;
-  listColumns: 'auto' | 1;
   /** LH-68: `tile` when a metric in the region is laid out from its whole card; absent for the default `stack` (value, label and the rest as one block). */
   metrics?: 'tile';
   /**
@@ -141,6 +140,12 @@ const EPSILON = 1e-9;
  * region a slide's own composition arranges, and fixed regions of one role side by side share their joined blocks (block-grouping.ts).
  */
 export const singleBlockRegion = (region: Pick<LayoutRegion, 'max'>): boolean => region.max === 1;
+/**
+ * OPF 0.35: whether a long list in the region may flow into columns (composition's listColumnsFor, in `auto` mode). Every region may,
+ * except one whose `arrangement` draws its list as a figure or as steps: a diagram, or the `steps` sequence. A `numbered` sequence (the
+ * agenda's) keeps its columns, its badges numbered across them. A list payload's own `columns` chooses in every region.
+ */
+export const regionListColumns = (region: Pick<LayoutRegion, 'arrangement'>): boolean => region.arrangement === undefined || region.arrangement === 'numbered';
 
 /** Whether a layout record is a template (it has a `regions` list). */
 export function isLayoutTemplate(layout: unknown): boolean {
@@ -161,7 +166,6 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
     flow,
     max,
     bleed: entry.bleed === true,
-    listColumns: entry.listColumns === 'auto' ? 'auto' : 1,
     ...(entry.metrics === 'tile' ? { metrics: 'tile' as const } : {}),
     ...(isRegionArrangement(entry.arrangement) ? { arrangement: entry.arrangement } : {}),
     anchor: (REGION_ANCHORS as readonly unknown[]).includes(entry.anchor) ? entry.anchor as RegionAnchor : inherited ?? 'top',

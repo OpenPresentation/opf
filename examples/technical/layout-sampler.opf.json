@@ -1513,7 +1513,6 @@
                 "text"
               ],
               "flow": "column",
-              "listColumns": "auto",
               "arrangement": "numbered"
             }
           ],
@@ -1638,8 +1637,7 @@
                 "text",
                 "group"
               ],
-              "flow": "auto",
-              "listColumns": "auto"
+              "flow": "auto"
             }
           ],
           "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
@@ -2022,8 +2020,7 @@
                 "text",
                 "group"
               ],
-              "flow": "column",
-              "listColumns": "auto"
+              "flow": "column"
             }
           ],
           "description": "Answer the questions an audience is likely to ask. Pair each question with a direct answer and group related questions together.",

@@ -233,7 +233,7 @@ valid(base());
   assert.equal(setProperty(input, [1, 0], "max", 4).record.regions[1].regions[0].max, 4);
   refused(() => setProperty(input, [1, 0], "max", 13), /1 to 12/);
   assert.equal(setProperty(input, [1, 0], "bleed", true).record.regions[1].regions[0].bleed, true);
-  assert.equal(setProperty(input, [1, 0], "listColumns", "auto").record.regions[1].regions[0].listColumns, "auto");
+  refused(() => setProperty(input, [1, 0], "listColumns", "auto"), /not an editable property/);
   refused(() => setProperty(input, [0], "role", "primary"), /heading region/);
   refused(() => setProperty(input, [0], "anchor", "top"), /anchor/);
   refused(() => setProperty(input, [1, 0], "direction", "row"), /Only a split/);

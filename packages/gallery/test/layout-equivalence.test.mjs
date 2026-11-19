@@ -37,7 +37,8 @@ const REDESIGNED = new Set(["statement", "closing", "quote", "comparison", "pill
 /** LH-122: regions added since 4.0.0 that only text authored before the primary block binds to, so older decks keep their order. */
 const LEADS_ADDED = { timeline: ["lead"] };
 const sameAsBefore = (record) => !ADDED.has(record.id) && !REDESIGNED.has(record.id);
-const RULE_ORDER = ["accepts", "role", "flow", "max", "bleed", "listColumns", "anchor", "empty"];
+// OPF 0.35: listColumns is removed (a long list flows into columns by default), so a 4.0.0 `listColumns: "auto"` is not compared.
+const RULE_ORDER = ["accepts", "role", "flow", "max", "bleed", "anchor", "empty"];
 /** Kinds a record accepts beyond its 4.0.0 rule (appended, in this order): a deliberate widening, never a silent one. */
 const ACCEPTS_ADDED = {
   "team/body": ["list"], // WI-6: a name with its role and description is one `items` entry

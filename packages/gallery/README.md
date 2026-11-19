@@ -129,7 +129,7 @@ slides compose automatically, unless the deck embeds the old record.
 
 A layout record lays its content out with `direction` and an ordered `regions` list. `direction` (`"row"` or `"column"`,
 default `"column"`) says whether the list runs side by side or top to bottom. Each entry is a **region** (`name`, an
-optional `size`, and the rules `accepts`, `role`, `flow`, `max`, `bleed`, `listColumns`, `anchor`, `empty`) or a **split**
+optional `size`, and the rules `accepts`, `role`, `flow`, `max`, `bleed`, `anchor`, `empty`) or a **split**
 (`direction`, `regions`, an optional `size`) that nests another list, up to three levels. `size` is a weight (default 1):
 siblings share their parent's length in proportion; `"auto"` is the height the content needs and is allowed only in a
 column. `title` and `subtitle` are the heading regions and take only `size`. An `anchor` on the record or on a split

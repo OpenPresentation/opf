@@ -27,7 +27,7 @@ import {chartDrawPlan} from './chart-fallback.js';
 import {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
 import {itemAlignment,resolveDesignHints,type DesignAlignment,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
-import {isLayoutTemplate,layoutTemplate,regionDiagram,regionSequence,singleBlockRegion,titleBesideTemplate,withRegionRules,TITLE_BESIDE_SHARE,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
+import {isLayoutTemplate,layoutTemplate,regionDiagram,regionListColumns,regionSequence,singleBlockRegion,titleBesideTemplate,withRegionRules,TITLE_BESIDE_SHARE,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
 import {bindRegions,rootNodes,type BoundBlock} from './bind-regions.js';
 import {featuredCells,type FeaturedCells} from './featured-cards.js';
 import {EYEBROW_LABEL_CHARS,EYEBROW_TEXT_KIND,eyebrowLabel,isLabelText,rowLabel,groupBinding,JOINED_FIXED_MAX,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength,type GroupedBinding} from './block-grouping.js';
@@ -467,7 +467,7 @@ export interface ComposedItem {
    */
   region?: string;
   /**
-   * OPF 0.19: a list laid out in columns (a lone list in a region with `listColumns: "auto"`, or a list payload with
+   * OPF 0.19: a list laid out in columns (a long list in a layout region whose arrangement allows it, OPF 0.35, or a list payload with
    * `columns`): one entry per column, in reading order, each with its cell, the half-open range of the payload's items it
    * holds and its own fit at the shared font size. Numbering continues across columns. The item's `text` is the whole list:
    * every entry of every column at its column's position (one ListFit, `overflow` when any column overflows), so a consumer
@@ -5042,7 +5042,8 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * LH-86's long texts as full-width rows (`long-text-rows`), LH-66's minimum measure in the automatic grid (`reading-measure`), LH-67's
  * lead plus stack (`lead-stack`), LH-70's paragraph columns (`paragraph-columns`), LH-10's reading measure in a layout's regions
  * (`region-measure`), LH-64's one start for a row of cards of mixed kinds (`mixed-cards`), LH-47's stretched short last row of the
- * automatic grid (`short-row`), LH-120's 40% share of a bar chart in a row of three (`bar-chart-share`), and LH-112's start alignment
+ * automatic grid (`short-row`), LH-120's 40% share of a bar chart in a row of three (`bar-chart-share`), OPF 0.35's whole words of a list in a weighted row (`list-words`:
+ * the row rebalanced, or stacked, so no word of the list breaks), and LH-112's start alignment
  * (`metric-start`) and display size, with LH-15's band, (`metric-display`) of a metric beside other blocks, LH-39's figure on one line
  * where it would wrap (`metric-figure`), LH-50's label as the eyebrow of the paragraph after it (`eyebrow`, with LH-152's label of a
  * list or group), and LH-08's ruled rows for
@@ -5063,13 +5064,15 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * check-mark tiles (`check-tiles`), LH-14's icons (`icons`, `icon-chips`), LH-165's icon cards (`icon-cards`) and LH-162's text tiles (`text-tiles`) and LH-69's placed tiles (`placed-tiles`). LH-80 and LH-49's tracks are alternatives composeSlide tries afterwards
  * (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips' | 'icon-cards' | 'text-tiles' | 'title-rule' | 'statement-message' | 'display-message' | 'table-note' | 'compact-grid' | 'portraits' | 'heading-tracks' | 'note-band' | 'figure-row' | 'run-in' | 'layout-first' | 'closing-lead' | 'placed-tiles';
+/** How a layout region lays a long list out (composeLayout's listColumnsOf): LH-184's `auto` columns, `auto` columns kept only when they read at least as large as one column (OPF 0.35), or one column. */
+type RegionListColumns = 'auto' | 'guarded' | 1;
+type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips' | 'icon-cards' | 'text-tiles' | 'title-rule' | 'statement-message' | 'display-message' | 'table-note' | 'compact-grid' | 'portraits' | 'heading-tracks' | 'note-band' | 'figure-row' | 'run-in' | 'layout-first' | 'closing-lead' | 'placed-tiles' | 'list-words';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips', 'icon-cards', 'text-tiles', 'title-rule', 'statement-message', 'display-message', 'table-note', 'compact-grid', 'portraits', 'heading-tracks', 'note-band', 'figure-row', 'run-in', 'layout-first', 'closing-lead', 'placed-tiles'];
+const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'list-words', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips', 'icon-cards', 'text-tiles', 'title-rule', 'statement-message', 'display-message', 'table-note', 'compact-grid', 'portraits', 'heading-tracks', 'note-band', 'figure-row', 'run-in', 'layout-first', 'closing-lead', 'placed-tiles'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /**
  * LH-131, LH-137: the guarded rules that only draw (a featured card, a delta pill, check-mark tiles), held to the slide without them.
@@ -7992,6 +7995,58 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // Words before type: the minimum width when the neighbours keep their fit, if at a smaller size.
     return least > equal[index]!.width + scale && neighbours(least) < baseline + 1000 ? weightsAt(least) : undefined;
   };
+  // OPF 0.35, whole words in a weighted row (the owner's "never shrink text"): a row of cells sized by composition.weights can give a list a
+  // cell narrower than its longest word, which then breaks inside the word. The row is rebalanced instead (guarded rule `list-words`): each
+  // such list's cell widens to the narrowest width at which every word of it holds at its starting size (listWordFit), so it holds at any
+  // size the list is set at there, and the other cells give that width up in proportion to theirs, as long as none of their text is set
+  // smaller or overflows (rowTextCost). An icon list is measured with its full chips (ICON_CHIP) whether or not the composition draws
+  // them, so the slide with and without its icons gets one row. When the others cannot give the width up, the blocks are stacked in one
+  // column, kept only when the list holds its words there and no other block reads smaller. The list is never set smaller; with neither,
+  // the row keeps its weights.
+  const LIST_WORD_STEPS = 96;
+  const listWordFit = (node: Pending, width: number, height: number, settings: Composition) => {
+    const box = payloadBox({ x: 0, y: 0, width, height }), prose = proseMeasure(node, box.width), values = node.value as ListValue[];
+    const { icons: _icons, iconScale: _iconScale, ...bare } = listOptionsFor(node.field, node.path, node.payload.numbering, node.value);
+    const chipped = node.field === 'items' && node.payload.numbering === undefined && !badgeLists.has(node.path) && values.some(entry => (record(entry).level ?? 0) === 0 && resolvedIcon(record(entry).icon) !== undefined);
+    const listOptions: ListFitOptions = chipped ? { ...bare, icons: true, iconScale: ICON_CHIP } : bare, area = { ...box, width: prose.width };
+    const fit = fitList(values, area, prose.size, snapFontSizeUp((settings.minFontSize ?? 16) * scale), listOptions), atStart = fitList(values, area, prose.size, prose.size, listOptions);
+    return { size: fit.fontSize, cuts: fit.listEntries.some(blockCutsWord) || atStart.listEntries.some(blockCutsWord), overflow: fit.overflow };
+  };
+  // The type a block gives up in a cell, and its overflow (the scores' fontReduction and overflow penalties).
+  const rowTextCost = (node: Pending, box: LayoutBox, settings: Composition): number => {
+    const penalties: CompositionPenalties = { cellProportions: 0, fontReduction: 0, textOverflow: 0, tableOverflow: 0, smallCells: 0, emptySlots: 0, narrowMeasure: 0 };
+    scoreNode(node, box, settings, penalties);
+    return penalties.fontReduction + penalties.textOverflow + penalties.tableOverflow;
+  };
+  const wordRowWeights = (nodes: Pending[], area: LayoutBox, rowGap: number, settings: Composition, weights: number[]): number[] | 'stack' | undefined => {
+    const count = nodes.length;
+    if (count < 2 || !ruleOn('list-words')) return undefined;
+    const listLeaf = (node: Pending) => !node.children && node.caption === undefined && (node.field === 'items' || node.field === 'bullets') && Array.isArray(node.value) && node.value.length > 0;
+    const cells = gridGeometry(count, area, count, rowGap, weights, false).boxes;
+    const cutting = nodes.flatMap((node, index) => { if (!listLeaf(node)) return []; const fit = listWordFit(node, cells[index]!.width, cells[index]!.height, settings); return fit.cuts ? [{ index, fit }] : []; });
+    if (!cutting.length) return undefined;
+    const total = cells.reduce((sum, cell) => sum + cell.width, 0), step = total / LIST_WORD_STEPS, widths = cells.map(cell => cell.width);
+    for (const { index, fit } of cutting) {
+      let found: number | undefined;
+      for (let width = widths[index]! + step; width <= total + 1e-6 && found === undefined; width += step) {
+        const at = listWordFit(nodes[index]!, width, cells[index]!.height, settings);
+        if (!at.cuts && at.size >= fit.size - FONT_GRID_EPSILON) found = width;
+      }
+      if (found === undefined) return undefined;
+      widths[index] = found;
+    }
+    const wide = new Set(cutting.map(entry => entry.index)), others = nodes.flatMap((_, index) => wide.has(index) ? [] : [index]);
+    const given = others.reduce((sum, index) => sum + cells[index]!.width, 0), left = total - cutting.reduce((sum, { index }) => sum + widths[index]!, 0);
+    if (others.length && left > scale) {
+      for (const index of others) widths[index] = cells[index]!.width * left / given;
+      const rebalanced = gridGeometry(count, area, count, rowGap, widths, false).boxes;
+      if (others.every(index => rowTextCost(nodes[index]!, rebalanced[index]!, settings) <= rowTextCost(nodes[index]!, cells[index]!, settings) + FONT_GRID_EPSILON)) return widths;
+    }
+    // Stacked: every block at its stacked height across the area; the list holds its words at its size, and no other block reads smaller.
+    const stacked = stackedBoxes(nodes, area, rowGap, settings);
+    const holds = cutting.every(({ index, fit }) => { const at = listWordFit(nodes[index]!, stacked[index]!.width, stacked[index]!.height, settings); return !at.cuts && !at.overflow && at.size >= fit.size - FONT_GRID_EPSILON; });
+    return holds && others.every(index => rowTextCost(nodes[index]!, stacked[index]!, settings) <= rowTextCost(nodes[index]!, cells[index]!, settings) + FONT_GRID_EPSILON) ? 'stack' : undefined;
+  };
   // LH-73: moved notes can use the same measured, bounded width redistribution as automatic prose rows.
   const proseRowWeights = (nodes: Pending[], equalWidths: number[], cards: boolean, settings: Composition): number[] | undefined => {
     const prose = (node: Pending) => !node.children && node.caption === undefined && (node.field === 'text' || node.field === 'items' || node.field === 'bullets');
@@ -8246,10 +8301,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (team) cols = (portraitMode === 'top' || teamAvatar) && count <= PORTRAIT_TOP_MAX ? count : gridFlowShape(count, area.width >= area.height).columns;
     spannedContainer = false;
     if (paragraphs) cols = paragraphs.shape.columns; else if (lead) cols = 2;
+    // OPF 0.35: a weighted row whose list would break inside a word is rebalanced or stacked (wordRowWeights, guarded rule `list-words`).
+    let wordWeights: number[] | undefined;
+    if (!paragraphs && !lead && !hasRegions && !team && settings.weights?.length && cols === count && count === nodes.length && count > 1) {
+      const whole = wordRowWeights(nodes, area, actualGap, settings, settings.weights);
+      if (whole === 'stack') {
+        fire('list-words');
+        const { weights: _weights, columns: _columns, ...stacked } = settings;
+        arrange(nodes, area, { ...stacked, mode: 'column' }, reserved, actualGap, containerPath, recorded);
+        return;
+      }
+      if (whole) { fire('list-words'); wordWeights = whole; }
+    }
     if (recorded && !decided) decisions?.push({path:containerPath,mode:hasRegions?'regions':mode,
       reason:hasRegions?'promoted-regions':settings === rootSettings && chartSplit ? 'chart-primary' : paragraphs ? 'paragraph-columns' : lead ? 'lead-stack' : splitChoice ? 'split-fill' : mode==='auto'?'lowest-score':'configured-mode',
       ...(hasRegions?{}:{selectedColumns:cols}),candidates:candidates ?? []});
-    const grid = gridGeometry(count, area, cols, actualGap, (mode === 'auto' && !hasRegions ? autoRowWeights(nodes, count, cols, area, actualGap, settings) : mode === 'row' && !hasRegions ? tableRowWeights(nodes, count, cols, area, actualGap, settings) : undefined) ?? settings.weights ?? [], mode === "column");
+    const grid = gridGeometry(count, area, cols, actualGap, wordWeights ?? (mode === 'auto' && !hasRegions ? autoRowWeights(nodes, count, cols, area, actualGap, settings) : mode === 'row' && !hasRegions ? tableRowWeights(nodes, count, cols, area, actualGap, settings) : undefined) ?? settings.weights ?? [], mode === "column");
     // LH-47 widened: the cells of the scored grid's short last row stretch to the full width, as a region's grid does (flowCells'
     // `stretch`), so two pictures and a text draw a row of pictures over a full-width text, not a 2 x 2 grid with an empty cell. A grid
     // of pictures and videos only keeps one cell width, as LH-47 keeps a gallery's.
@@ -8316,7 +8383,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // OPF 0.19: the template region the next items are drawn in (ComposedItem.region), set while a region is composed.
   let regionTag: string | undefined, templateCell = false;
   // One node in its cell: a group arranges its children (0.18 content-group semantics), a leaf is fitted. `cards` is
-  // false in a bled region, which is never drawn as a card; `listColumns` is a region's listColumns for a lone list.
+  // false in a bled region, which is never drawn as a card; `listColumns` is the region's list columns (listColumnsOf) for a list.
   // A diagram is laid out for its box in the body family (the code family for code-like labels) at the largest base size from the prose
   // size down at which it fits with every label at or above the readability floor, then drawn at that size, centered across and placed
   // by the anchor down. A source that cannot be drawn reports its issue; a drawing that only fits below the floor overflows.
@@ -8558,7 +8625,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     shapeTexts.set(node.path, { value: host.text, textPath });
     items.push({ path: node.path, field: 'shape', type: 'shape', value: node.value, payload: node.payload, box: { ...shape.box }, shape, ...(text ? { text } : {}), textStyle: { ...styleFor('text', textPath), ...(shape.textBold ? { fontWeight: 700 } : {}) }, composition: settings, alignment: 'center' });
   };
-  const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number, anchor: RegionAnchor = 'top', frame?: LayoutBox): void => {
+  const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: RegionListColumns, metricReferenceHeight?: number, anchor: RegionAnchor = 'top', frame?: LayoutBox): void => {
     // LH-06: the block or group with the slide's emphasis is drawn on its surface, a card in its cell; nothing drawn on the surface takes
     // a card of its own. A group's children are arranged inside the card's inset.
     const emphasized = !insideEmphasis && node.emphasis !== undefined && node.emphasis === chosenEmphasis;
@@ -8743,18 +8810,23 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // and keep the columns as even as possible; numbering continues across them. A payload's fixed `columns` count is
   // used as written. When no count fits, `auto` takes the count with the largest shared size (LH-184, never below one column); a fixed count shrinks to one shared size. Undefined:
   // one column, fitted as any list.
-  const listColumnsFor = (node: Pending, box: LayoutBox, settings: Composition, regionMode?: 'auto' | 1): ComposedListColumn[] | undefined => {
+  const listColumnsFor = (node: Pending, box: LayoutBox, settings: Composition, regionMode?: RegionListColumns): ComposedListColumn[] | undefined => {
     if (node.field !== 'items' && node.field !== 'bullets') return undefined;
     const values = node.value as ListValue[];
     if (!Array.isArray(values) || values.length < 2) return undefined;
     const own = node.payload.columns;
-    const mode = own === 'auto' || own === 1 || own === 2 || own === 3 ? own : regionMode;
+    const mode = own === 'auto' || own === 1 || own === 2 || own === 3 ? own : regionMode === 'guarded' ? 'auto' : regionMode;
     // LH-186: a long list (more than LH-42's entries) that neither its payload nor a region gave a count, the slide's only list (siblings keep
     // one size, LH-43), of plain entries (no description, icon, step badge or run size of the author's), may take columns (`layout-first`).
     const layoutFirst = mode === undefined && own === undefined && values.length > LIST_WHOLE_ENTRIES && ruleOn('layout-first') && !badgeLists.has(node.path)
       && values.every(entry => entry === null || typeof entry !== 'object' || Array.isArray(entry) || (record(entry).description === undefined && record(entry).icon === undefined)) && !ownRunSizes(values)
       && (function lists(nodes: Pending[]): number { return nodes.reduce((sum, child) => sum + (child.children ? lists(child.children) : child.field === 'items' || child.field === 'bullets' ? 1 : 0), 0); })(pending) === 1;
     if ((mode === undefined && !layoutFirst) || mode === 1) return undefined;
+    // OPF 0.35: the columns a layout region gives a long list by default (no `columns` on the payload) are kept only when they read at
+    // least as large as the list in one column of the same cell (under the same cap) and overflow only where one column does too (`guarded`);
+    // in a list region (LH-184's `auto`) columns that overflow give way to one column that fits at least as large. The default never sets a
+    // list smaller.
+    const regionDefault = own === undefined && regionMode === 'guarded', regionColumns = own === undefined && (regionMode === 'guarded' || regionMode === 'auto');
     // LH-42: `auto` never deals a short list across columns: entries of 6 or fewer split into columns read as rows of a table
     // ("Queue | Route | Resolve"), so such a list shrinks in its one column instead. A fixed count is used as written.
     if (mode === 'auto' && values.length <= LIST_WHOLE_ENTRIES) return undefined;
@@ -8840,12 +8912,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       fire('layout-first');
       return capped(best.columns);
     }
+    const asLarge = (columns: ComposedListColumn[]): ComposedListColumn[] | undefined => {
+      if (!regionColumns) return columns;
+      const one = fitList(values, box, start, floor, listOptions), size = Math.min(...columns.map(column => column.text.fontSize));
+      // Columns that overflow give way to one column that fits: in a guarded region always (it had one column before 0.35), in a list region
+      // (LH-184) when the one column is at least as large.
+      if (!one.overflow && columns.some(column => column.text.overflow) && (regionDefault || one.fontSize >= size - FONT_GRID_EPSILON)) return undefined;
+      return !regionDefault || size >= Math.min(one.fontSize, cap) - FONT_GRID_EPSILON ? columns : undefined;
+    };
     if (mode === 'auto') {
       // One column first: a list that fits at the starting size stays one column.
       if (!fitList(values, box, start, start, listOptions).overflow) return undefined;
       for (const count of counts) {
         const columns = split(count, start, start);
-        if (columns.every(column => !column.text.overflow)) return capped(columns);
+        if (columns.every(column => !column.text.overflow)) return asLarge(capped(columns));
       }
     }
     // LH-184: `auto` keeps the largest text. When no count fits at the starting size, it takes the count whose shared fitted
@@ -8865,8 +8945,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // Its lines must stay within the prose measure (PROSE_MEASURE_CHARS), else a long line runs across the card and leaves much of it empty;
       // beyond the measure it wins only when it is a type-scale step (10%) larger than the columns.
       const measured = whole.fontSize * PROSE_MEASURE_CHARS * AVERAGE_CHARACTER_EM >= box.width - .5;
-      if (best === undefined || (!whole.overflow && whole.fontSize > best[0]!.text.fontSize * (measured ? 1 : 1.1) + FONT_GRID_EPSILON)) return undefined;
-      return capped(best);
+      if (best === undefined || (!whole.overflow && whole.fontSize > best[0]!.text.fontSize * (measured || regionDefault ? 1 : 1.1) + FONT_GRID_EPSILON)) return undefined;
+      return asLarge(capped(best));
     }
     const count = counts.at(-1);
     if (count === undefined) return undefined;
@@ -9635,7 +9715,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // Content of a layout with no overflow region: an implicit auto row below the grid. Not an area name, so it never meets one.
     const BELOW = '(below)';
     const belowUnits = binding.belowUnits.map(unitOf);
-    const belowRegion: LayoutRegion = { name: BELOW, accepts: [], role: 'supporting', flow: 'auto', max: belowUnits.length, bleed: false, listColumns: 1, anchor: 'top', empty: 'collapse' };
+    const belowRegion: LayoutRegion = { name: BELOW, accepts: [], role: 'supporting', flow: 'auto', max: belowUnits.length, bleed: false, anchor: 'top', empty: 'collapse' };
+    // OPF 0.35: a long list flows into columns (listColumnsFor) in every region but one whose arrangement draws it as a figure or as steps
+    // (regionListColumns); the implicit row below the grid keeps one column. A region made for a list (`list` its first accepted kind, as
+    // the agenda's, the FAQ's and the list layout's, which set listColumns "auto" before 0.35) keeps LH-184's columns, which may come out
+    // up to a type-scale step under one column whose lines would run past the reading measure; any other region keeps its columns only when
+    // they read at least as large as one column (`guarded`).
+    const listColumnsOf = (region: LayoutRegion): RegionListColumns => region.name === BELOW || !regionListColumns(region) ? 1 : region.accepts[0] === 'list' ? 'auto' : 'guarded';
     const unitsOf = (name: string): Pending[] => name === BELOW ? belowUnits : contents.get(name) ?? [];
     // LH-48: a slide whose body is one block (one region holds it and nothing is below the grid) gives that block the body: its region's
     // cell reaches the foot of the content box when every other region is empty, and the block grows and moves to its middle (fillLone).
@@ -10217,7 +10303,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const filled = units.length === 1 && !region.bleed ? fillLone(units[0]!, cell, settings, cards) : undefined;
         if (filled) {
           const first = items.length;
-          placeNode(units[0]!, filled, settings, cards, region.listColumns, undefined, region.anchor);
+          placeNode(units[0]!, filled, settings, cards, listColumnsOf(region), undefined, region.anchor);
           leafItems.push(...range(first, items.length));
           return arrangementOf(region, units, cell);
         }
@@ -10283,12 +10369,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         // Right to left: the flow inside a region runs from the right (RR-05).
         const mirrored = (list: LayoutBox[]) => list.map(box => ({ ...box, x: cell.x + cell.width - (box.x - cell.x) - box.width }));
         if (rtl) { boxes = mirrored(boxes); cellBoxes = mirrored(cellBoxes); frames = frames.map(frame => frame && mirrored([frame])[0]); }
-        // listColumns: "auto" lays a lone list out in columns; with several blocks, a list that does not fit its own cell at
-        // the starting size tries columns before it shrinks (RR-81 review: the region's tools before overflow).
+        // A long list (listColumnsOf) is laid out in columns when they read at least as large as one column; with several blocks, a list
+        // that does not fit its own cell at the starting size tries columns before it shrinks (RR-81 review: the region's tools before overflow).
         const stack: number[] = [];
         units.forEach((unit, index) => {
           const first = items.length;
-          placeNode(unit, boxes[index]!, settings, cards, listGrid ? 1 : region.listColumns, region.anchor === 'top' || stacked || planned[index] ? undefined : referenceHeights[index], region.anchor, !cards || bands ? undefined : planned[index] ? frames[index] : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
+          placeNode(unit, boxes[index]!, settings, cards, listGrid ? 1 : listColumnsOf(region), region.anchor === 'top' || stacked || planned[index] ? undefined : referenceHeights[index], region.anchor, !cards || bands ? undefined : planned[index] ? frames[index] : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
           if (!unit.children) { leafItems.push(...range(first, items.length)); stack.push(...range(first, items.length)); }
           if (longRows) centeredCardText.push(...range(first, items.length));
         });
@@ -12036,29 +12122,18 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     && Array.isArray(item.value) && item.value.length > LIST_WHOLE_ENTRIES && !ownRunSizes(item.value) && capOf(item.composition) < contentNominalSize(item.field) * scale - FONT_GRID_EPSILON;
   // LH-10: a failed arrangement is ordinary list text too. Its retained cap must not leave an automatic fallback over the measure.
   if (readingTemplate && (readingTemplate.regions.some(readingRegion) || items.some(cappedListFallback))) {
-    // layoutTemplate defaults listColumns to 1; only an authored region count constrains this fallback trial.
-    const regionColumns = new Map<string, 'auto' | 1>();
-    const collectColumns = (entries: unknown): void => {
-      if (!Array.isArray(entries)) return;
-      for (const value of entries) {
-        const entry = record(value);
-        if (typeof entry.name === 'string' && (entry.listColumns === 'auto' || entry.listColumns === 1)) regionColumns.set(entry.name, entry.listColumns);
-        else if (entry.name === undefined) collectColumns(entry.regions);
-      }
-    };
-    collectColumns(layout.regions);
     const readable = (fit: ListFit) => fit.listEntries.every(entry => [entry.text, entry.description].every(text => !text || !blockCutsWord({...entry, text}) && text.richLines.every(line => line.fragments.map(fragment => fragment.text).join('').trim().length <= PROSE_MEASURE_CHARS)));
     for (const item of items) {
       if (!['items', 'bullets'].includes(item.field) || !item.text || !('listEntries' in item.text) || item.text.overflow || item.caption || stepPaths.has(item.path)) continue;
       const listRegions = readingTemplate.regions.filter(region => region.accepts.includes('list'));
       const region = readingTemplate.regions.find(region => region.name === (item.region ?? item.payload.region)) ?? (listRegions.length === 1 ? listRegions[0] : undefined);
       const requiredMeasure = region ? readingRegion(region) : !readingTemplate.regions.some(region => region.accepts.includes('list') && !readingRegion(region));
-      if (!requiredMeasure && !(cappedListFallback(item) && (!region || regionColumns.get(region.name) !== 1))) continue;
+      if (!requiredMeasure && !cappedListFallback(item)) continue;
       if (arrangements.some(arrangement => arrangement.path === item.path || arrangement.nodes.some(node => node.path === item.path || node.path?.startsWith(item.path + '.')))) continue;
       const current = item.text as ListFit;
       if (readable(current)) continue;
       const values = item.value as ListValue[], area = fallbackListAreas.get(item.path) ?? item.box, ownColumns = item.payload.columns;
-      const mode = ownColumns === 'auto' || ownColumns === 1 || ownColumns === 2 || ownColumns === 3 ? ownColumns : region ? regionColumns.get(region.name) : undefined;
+      const mode = ownColumns === 'auto' || ownColumns === 1 || ownColumns === 2 || ownColumns === 3 ? ownColumns : undefined;
       const counts = typeof mode === 'number' ? [mode] : [1, 2, 3].filter(count => count <= values.length);
       // Like listColumnsFor, slicing a multi-entry list must not promote a one-entry chunk into a new heading.
       // A genuinely single described heading retains its original listOptionsFor role.
@@ -12275,7 +12350,7 @@ export type {ChartDrawPlan,ChartFallback} from './chart-fallback.js';
 export { resolveDesignHints, itemAlignment, DESIGN_HINT_KEYS, TITLE_POSITIONS, type DesignTitlePosition, type DesignAlignment, type DesignHints, type DesignHintKey, type DesignHintSource, type ResolvedDesignHints, type ResolveDesignHintsOptions } from './design-hints.js';
 export { layoutContent, layoutStructure, LAYOUT_BODY_KINDS, type LayoutContent, type LayoutBodyKind } from './layout-content.js';
 // OPF 0.19 layout templates: the record's grid and regions, content binding and the pure geometry composeSlide uses.
-export { HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, TITLE_BESIDE_SHARE, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, regionDiagram, regionSequence, titleBesideTemplate, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
+export { HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, TITLE_BESIDE_SHARE, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, regionDiagram, regionListColumns, regionSequence, titleBesideTemplate, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
 export { EYEBROW_LABEL_CHARS, EYEBROW_LABEL_WORDS, EYEBROW_TEXT_KIND, eyebrowLabel, isLabelText, rowLabel, ROW_LABEL_CHARS, ROW_LABEL_WORDS, groupBinding, groupingNode, JOINED_FIXED_MAX, majorityKind, MOVED_ROW_MAX, PAIR_FIGURE_KINDS, PAIR_LENGTH_RATIO, repeatedPairs, textLength, type GroupedBinding, type GroupingNode, type JoinedArrangement } from './block-grouping.js';
 export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
 export { allocateRows, gridFlowShape, LIST_WHOLE_ENTRIES, listColumnBreaks, listGridShape, shareHeights, type FlowShape, type RowDemand } from './template-geometry.js';

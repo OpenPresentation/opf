@@ -55,9 +55,9 @@ test('explicit cap and fill:false retain settled26px while preserving the readin
     assert.ok(entries(item).every(entry=>entry.text.richLines.every(line=>line.fragments.map(f=>f.text).join('').trim().length<=70)));
   }
 });
-test('a matched diagram region listColumns:1 stays single-column without a payload override',()=>{
-  const doc=documentFor(fixture.cases[0].slide),record=doc.catalogs.custom.layouts['inverted-pyramid'];record.regions.find(region=>region.name==='body').listColumns=1;
-  const result=compose(doc),item=body(result)[0];assert.equal(item.payload.columns,undefined);assert.equal(item.listColumns,undefined);assert.deepEqual(item.value,doc.slides[0].blocks[0].items);
+test('a matched diagram region list with columns: 1 stays single-column (OPF 0.35: the region key listColumns is removed)',()=>{
+  const doc=documentFor(fixture.cases[0].slide);doc.slides[0].blocks[0].columns=1;
+  const result=compose(doc),item=body(result)[0];assert.equal(item.payload.columns,1);assert.equal(item.listColumns,undefined);assert.deepEqual(item.value,doc.slides[0].blocks[0].items);
   assert.ok(result.diagnostics.some(d=>d.code==='text-overflow'&&/70 characters/.test(d.message)));
   doc.slides[0].composition.overflow='error';assert.throws(()=>compose(doc),OPFCompositionError);
 });
@@ -128,7 +128,7 @@ test('structured numbered families stay whole across fallback columns with exact
 
 test('an explicit payload auto count overrides an authored nested region single-column rule',()=>{
   const doc=documentFor(fixture.cases[0].slide),record=doc.catalogs.custom.layouts['inverted-pyramid'],region=record.regions.find(region=>region.name==='body');
-  region.listColumns=1;record.regions=[record.regions[0],{direction:'column',regions:[region]}];doc.slides[0].blocks[0].columns='auto';
+  record.regions=[record.regions[0],{direction:'column',regions:[region]}];doc.slides[0].blocks[0].columns='auto';
   const result=compose(doc),item=body(result)[0];assert.ok(!result.diagnostics.some(d=>d.code==='text-overflow'));assert.ok(item.listColumns.length>1);assert.deepEqual(entries(item).map(entry=>entry.value),doc.slides[0].blocks[0].items);
 });
 

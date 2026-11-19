@@ -22,8 +22,7 @@
         "text",
         "group"
       ],
-      "flow": "column",
-      "listColumns": "auto"
+      "flow": "column"
     }
   ],
   "description": "Answer the questions an audience is likely to ask. Pair each question with a direct answer and group related questions together.",

@@ -473,15 +473,14 @@ try {
     assert.match(await inspector.locator('.opf-lx-help').filter({ hasText: 'Every kind' }).textContent(), /Every kind/);
     await inspector.getByRole('button', { name: 'table', exact: true }).click();
     assert.deepEqual((await regions(page))[1].regions[0].accepts, ['table']);
-    // role, flow, max, bleed, listColumns, empty.
+    // role, flow, max, bleed, empty.
     await inspector.getByLabel('Role', { exact: true }).selectOption('media');
     await inspector.getByLabel('Flow', { exact: true }).selectOption('grid');
     await inspector.getByLabel('Max blocks', { exact: true }).fill('4');
     await inspector.getByLabel('Bleed to the slide edge').check();
-    await inspector.getByLabel('List columns', { exact: true }).selectOption('auto');
     await inspector.getByLabel('When empty', { exact: true }).selectOption('keep');
     await inspector.getByLabel('Anchor', { exact: true }).selectOption('bottom');
-    assert.deepEqual((await regions(page))[1].regions[0], { name: 'lead', accepts: ['table'], role: 'media', flow: 'grid', max: 4, bleed: true, listColumns: 'auto', anchor: 'bottom', empty: 'keep' });
+    assert.deepEqual((await regions(page))[1].regions[0], { name: 'lead', accepts: ['table'], role: 'media', flow: 'grid', max: 4, bleed: true, anchor: 'bottom', empty: 'keep' });
     // A region in a column: auto is offered, and sets the size.
     await row(page, /^support/).click();
     await inspector.getByRole('button', { name: 'Auto' }).click();

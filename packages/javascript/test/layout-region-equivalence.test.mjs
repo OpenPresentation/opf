@@ -8,7 +8,8 @@ import { layoutTemplate } from '../dist/composition.js';
 // grid form (gallery-4-layouts.json: areas, columns, rows and the regions map) and the grid, region rules and areas the
 // engine built from each of them before FA-33 (gallery-4-grids.json, produced by the old reader). Each old record is
 // converted to the new form below, compiled, and compared with that grid. OPF 0.35: a `flow: "none"` region converts to `max: 1`, and the
-// grids record its flow as `auto` (the single-block region keeps max 1).
+// grids record its flow as `auto` (the single-block region keeps max 1); the grids have no `listColumns` (removed in OPF 0.35: a long list
+// may take columns in any region without an arrangement), while the old records keep theirs, which the reader ignores.
 const fixture = (name) => JSON.parse(readFileSync(new URL(`./fixtures/layout-regions/${name}.json`, import.meta.url), 'utf8'));
 const records = fixture('gallery-4-layouts');
 const grids = fixture('gallery-4-grids');
