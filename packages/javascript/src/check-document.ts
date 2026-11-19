@@ -17,6 +17,7 @@ import {
 import { schemaEntries, schemas, type SchemaName } from './schemas.js';
 import { catalogSchemaNames } from './catalog-schemas.js';
 import { validateAgainstSchema, type SchemaCheckResult, type ValidationIssue } from './schema-check.js';
+import { respellings, type ForeignObjectParams } from './union-errors.js';
 import type { JsonPrimitive, JsonSchema } from './json.js';
 import { validationDefinition } from './validation-definitions.js';
 import { unusedReferenceWarnings } from './annotation-validation.js';
@@ -174,6 +175,7 @@ export function issueFinding(
 	} else if (issue.keyword === 'dependentRequired')
 		help = `${JSON.stringify(issue.params.property)} only applies together with ${JSON.stringify(issue.params.missingProperty)}: add ${JSON.stringify(issue.params.missingProperty)}, or remove ${JSON.stringify(issue.params.property)}.`;
 	else if (issue.keyword === 'opf') help = semanticHelp(issue);
+	else if ((issue.keyword === 'oneOf' || issue.keyword === 'anyOf') && Array.isArray(issue.params.properties)) help = foreignObjectHelp(issue);
 	const allowed = Array.isArray(issue.params.allowedValues)
 		? issue.params.allowedValues.filter(primitive)
 		: [];
@@ -217,6 +219,21 @@ export function issueFinding(
 	});
 }
 
+/**
+ * The help of an object written in a shape this place does not take (union-errors.ts, `ForeignObjectParams`): the forms it may take,
+ * and, when its fields are those of another content kind, that kind's own field.
+ */
+function foreignObjectHelp(issue: ValidationIssue): string {
+	const params = issue.params as unknown as ForeignObjectParams;
+	// The forms themselves ride along as validation.alternatives (the CLI prints them as "other forms").
+	const many = params.alsoAt?.length ? 'each entry' : 'it';
+	if (params.belongsTo?.length) {
+		const kinds = params.belongsTo.map((kind) => `"${kind}"`).join(' or ');
+		return `To show these as ${kinds}, give each its own block whose ${kinds} holds these fields; to keep ${many} here, rewrite ${many} in one of the forms this place takes. Keep the authored content.`;
+	}
+	return `Rewrite ${many} in one of the forms this place takes, moving the authored content into the fields that form has; do not delete it to clear this error.`;
+}
+
 /** The most near-miss names a "did you mean" offers. */
 const NEAREST_PROPERTIES = 3;
 const REGION_ROWS = ['top', 'middle', 'bottom'], REGION_COLUMNS = ['start', 'center', 'end'];
@@ -257,9 +274,9 @@ function regionKeyHelp(typed: string): { help: string; suggestion?: string } | u
 const logicalName = (name: string): string => name.split(':').map((part) => part.split('+').map((word) => (word === 'left' ? 'start' : word === 'right' ? 'end' : word)).join('+')).join(':');
 
 /**
- * Did-you-mean for an unknown property (`additionalProperties`): the properties the same object's schema declares whose
- * names are within edit distance 2 (1 for a name of three characters or fewer, or every short name would match), compared
- * case-insensitively, nearest first, at most three. Two exact readings come before those: the same key with `left` and `right` as the
+ * Did-you-mean for an unknown property (`additionalProperties`): the properties the same object's schema declares that the typed
+ * name plausibly respells (`respellings`: within edit distance 2, 1 for a name of three characters or fewer, and related by the
+ * `relatedName` rule unknown catalog ids use, so `label` does not suggest `level`), nearest first, at most three. Two exact readings come before those: the same key with `left` and `right` as the
  * logical `start` and `end` (a region or a header or footer zone), and the one declared name the typed name abbreviates (`lang` for
  * `language`; three characters or more). A suggestion is a name the schema has, never a rewrite of authored content.
  */
@@ -277,17 +294,12 @@ function nearestProperties(issue: ValidationIssue, fallbackRoot: JsonSchema, poi
 	}
 	if (!isRecord(node) || !isRecord(node.properties)) return [];
 	const root = (rootEntry?.schema ?? fallbackRoot) as JsonSchema,
-		limit = typed.length <= 3 ? 1 : 2,
 		lower = typed.toLowerCase();
 	const declared = Object.keys(node.properties),
 		logical = logicalName(typed),
 		longer = typed.length >= 3 ? declared.filter((name) => name !== typed && name.toLowerCase().startsWith(lower)) : [],
 		exact = logical !== typed && declared.includes(logical) ? [logical] : longer.length === 1 ? longer : [];
-	const near = declared
-		.map((name) => ({ name, away: distance(lower, name.toLowerCase()) }))
-		.filter(({ name, away }) => name !== typed && away <= limit && !exact.includes(name))
-		.sort((a, b) => a.away - b.away || (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
-		.map(({ name }) => name);
+	const near = respellings(typed, declared).filter((name) => !exact.includes(name));
 	return [...exact, ...near]
 		.slice(0, NEAREST_PROPERTIES)
 		.map((name) => ({

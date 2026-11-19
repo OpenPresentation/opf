@@ -163,6 +163,15 @@ function describeSchema(finding: Finding, context: FindingTextContext, helpers: 
     }
     case "oneOf":
     case "anyOf": {
+      // An object in a shape this place does not take (union-errors.ts): name its fields, and the content kind they belong to.
+      if (Array.isArray(params.properties)) {
+        const fields = params.properties.map((name) => code(name)).join(", ");
+        const kinds = Array.isArray(params.belongsTo) ? params.belongsTo.map((kind) => code(kind)).join(" or ") : "";
+        return {
+          message: `${cap(label)} has ${fields}, which none of its forms has${kinds ? `; those are fields of ${kinds}` : ""}.`,
+          next: kinds ? `put them in their own block's ${kinds}, or rewrite this value in one of its forms.` : `rewrite it as one of: ${(alternatives ?? []).join("; ")}.`,
+        };
+      }
       const forms = (alternatives ?? []).map((entry) => String(entry).split(":")[0]?.trim() ?? "");
       const words = forms.length ? [...new Set(forms.map((form) => WORDS[form] ?? form))].slice(0, 3).join(" or ") : "a different kind of value";
       return { message: `${cap(label)} should be ${words}, but it is ${describeKind(actual)}.`, next: forms.length ? `write ${words}.` : "check the schema reference for this field." };
