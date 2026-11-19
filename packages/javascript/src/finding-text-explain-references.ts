@@ -56,7 +56,7 @@ export const REFERENCES_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { catalogs: { custom: { layouts: { mine: { name: "Mine", regions: [{ name: "title" }, { name: "body", accepts: ["text"] }] } } } }, slides: [{ title: "Welcome", layout: "mine" }] },
   ),
   "opf/unresolved-reference": ex(
-    "Choose an id the catalog has (the finding lists the nearest), embed the record under `catalogs.custom`, register the catalog that defines it, or remove the reference.",
+    "Choose an id the catalog has (the finding names a near miss when there is one, and where the ids are listed), embed the record under `catalogs.custom`, register the catalog that defines it, or remove the reference.",
     { slides: [{ title: "Pillars", layout: "pilars" }] },
     { slides: [{ title: "Pillars", layout: "pillars" }] },
   ),

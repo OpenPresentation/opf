@@ -114,3 +114,20 @@ export async function saveText(file: string, text: string | Uint8Array, overwrit
 		});
 	}
 }
+
+/** The exit status of a process whose reader closed the pipe: 128 + SIGPIPE (13), what `cat`, `git` and `jq` report in a shell. */
+export const BROKEN_PIPE_EXIT = 141;
+
+/**
+ * Stop quietly when the reader of stdout or stderr closes the pipe (`opf schema presentation | head -c 40`). Node ignores SIGPIPE and
+ * reports the failed write as an `error` event on the stream, which is fatal when nobody listens. Every command writes through
+ * these two streams, so one listener here covers all of them; any other stream error is rethrown as before.
+ */
+export function exitOnBrokenPipe(): void {
+	for (const stream of [process.stdout, process.stderr]) {
+		stream.on("error", (error: NodeJS.ErrnoException) => {
+			if (error.code === "EPIPE" || error.code === "ERR_STREAM_DESTROYED") process.exit(BROKEN_PIPE_EXIT);
+			throw error;
+		});
+	}
+}

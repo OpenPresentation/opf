@@ -15,7 +15,7 @@ const ERRORS = { InvalidSymbol: "Invalid symbol", InvalidNumberFormat: "Invalid 
 export function analyzeSyntax(text) {
   // A valid object is the common case on every keystroke: the engine's parser answers that at once.
   try { if (isObject(JSON.parse(text))) return []; } catch { /* Analyze. */ }
-  const found = analyzeJsonSyntax(text).map((problem) => ({
+  const found = analyzeJsonSyntax(text, { editor: true }).map((problem) => ({
     ruleId: "opf/json-syntax",
     message: problem.message,
     next: problem.next,
