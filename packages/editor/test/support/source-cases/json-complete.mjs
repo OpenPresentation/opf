@@ -95,8 +95,6 @@ export const jsonInsert = [
 const ENUMS = [
   ['design.titleAlignment', '{"slides":[],"design":{"titleAlignment":"|"}}', ['start', 'center', 'end']],
   ['design.contentAlignment', '{"slides":[],"design":{"contentAlignment":"|"}}', ['start', 'center', 'end']],
-  ['design.contentDirection', '{"slides":[],"design":{"contentDirection":"|"}}', ['horizontal', 'vertical']],
-  ['design.chartPrimary', '{"slides":[],"design":{"chartPrimary":"|"}}', ['none', 'top', 'bottom', 'start', 'end']],
   ['design.imageFit', '{"slides":[],"design":{"imageFit":"|"}}', ['cover', 'contain', 'stretch', 'auto']],
   ['design.listBullet', '{"slides":[],"design":{"listBullet":"|"}}', ['character', 'image', 'none']],
   ['slide.type', '{"slides":[{"type":"|"}]}', ['text', 'list', 'image', 'chart', 'table', 'video', 'code', 'metric', 'quote', 'timeline', 'diagram']],

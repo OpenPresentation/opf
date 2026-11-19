@@ -91,7 +91,7 @@ test('shared metadata and data/reference diagnostics are never cached', () => {
 
 test('catalog edits, callback identity and explicit resource invalidation preserve cold equivalence', () => {
 	const checker = browserValidator();
-	const catalog = { source: 'https://example.org/catalog', layouts: { custom: { name: 'Custom', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['text'], role: 'primary', flow: 'none' }] } } };
+	const catalog = { source: 'https://example.org/catalog', layouts: { custom: { name: 'Custom', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['text'], role: 'primary', max: 1 }] } } };
 	const document = deck();
 	document.slides[1].layout = 'custom';
 	let scale = 0.5;

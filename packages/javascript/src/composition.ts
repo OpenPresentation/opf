@@ -27,7 +27,7 @@ import {chartDrawPlan} from './chart-fallback.js';
 import {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
 import {itemAlignment,resolveDesignHints,type DesignAlignment,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
-import {isLayoutTemplate,layoutTemplate,regionDiagram,regionSequence,withRegionRules,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
+import {isLayoutTemplate,layoutTemplate,regionDiagram,regionSequence,singleBlockRegion,withRegionRules,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
 import {bindRegions,rootNodes,type BoundBlock} from './bind-regions.js';
 import {featuredCells,type FeaturedCells} from './featured-cards.js';
 import {EYEBROW_LABEL_CHARS,EYEBROW_TEXT_KIND,eyebrowLabel,isLabelText,rowLabel,groupBinding,JOINED_FIXED_MAX,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength,type GroupedBinding} from './block-grouping.js';
@@ -926,7 +926,7 @@ export interface CompositionDecision {
   path: string;
   mode: NonNullable<Composition['mode']> | 'regions';
   /**
-   * `chart-primary`: the root split a primary chart from a synthetic container of the other nodes (design.chartPrimary).
+   * `chart-primary`: the root split a short chart's track (LH-49) from a synthetic container of the other nodes.
    * `table-width` (LH-44): the grid of `selectedColumns` gave a table less than its words need, so the table took its natural width
    * beside a column of the other blocks, or the whole width between rows of them.
    * `paragraph-columns` (LH-70): similar paragraphs set as a grid of columns at a reading measure.
@@ -1049,9 +1049,9 @@ export interface MessageSurface {
 }
 export interface ComposeSlideOptions {
   /** Context for inherited furniture, generated organization names, social profiles, logos, layout hints, references and marker numbering. */
-  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; background?: unknown; imageFit?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown; titleAlignment?: unknown; contentAlignment?: unknown; contentBox?: unknown; mirror?: unknown }; organization?: unknown; speaker?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown; icons?: unknown; assets?: unknown };
+  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; background?: unknown; imageFit?: unknown; logo?: unknown; listBullet?: unknown; titleAlignment?: unknown; contentAlignment?: unknown; contentBox?: unknown; mirror?: unknown }; organization?: unknown; speaker?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown; icons?: unknown; assets?: unknown };
   /**
-   * OPF 0.19: the resolved theme record's `design` (titleAlignment, contentAlignment, contentBox, contentDirection,
+   * OPF 0.19: the resolved theme record's `design` (titleAlignment, contentAlignment, contentBox,
    * imageFit, listBullet). It ranks below the deck's design and above the layout record's. `resolveSlideContext` passes it.
    */
   themeDesign?: unknown;
@@ -6298,7 +6298,7 @@ const TIMELINE_UNDER_CHART = Symbol('opf.timelineUnderChart');
 const MEDIA_TRACK_SHARES: readonly number[] = [.5, .45, .4, .35];
 /** LH-80: a picture's track keeps at least this share of the picture's width (or height) in its cover crop; a narrower track is not tried. */
 const MEDIA_TRACK_MIN_KEPT = .5;
-/** LH-49: the shares of the slide's width (height on a portrait canvas) a chart's track tries, widest first (3:2 is design.chartPrimary's). */
+/** LH-49: the shares of the slide's width (height on a portrait canvas) a chart's track tries, widest first. */
 const CHART_TRACK_SHARES: readonly number[] = [.6, .55, .5];
 /**
  * LH-49: the smallest plot a chart draws in automatic composition: at least CHART_MIN_PLOT_PX reference pixels and CHART_MIN_PLOT_SHARE
@@ -6437,10 +6437,10 @@ function chartRecomposition(input: unknown, options: ComposeSlideOptions, result
  *    in the slide's own mode. The track is 50, 45, 40 or 35% of the slide, of those whose crop keeps at least half of the picture's
  *    width or height (MEDIA_TRACK_MIN_KEPT): a wide picture takes a wide track or none. A track is a frame the engine chooses for the
  *    picture and crops it by design: a `fit: "auto"` (LH-104) takes it as no fit would, and the picture is cover-cropped in it.
- *  - LH-49: the slide's one chart block among other blocks (no picture, no design.chartPrimary) whose plot is under its minimum
+ *  - LH-49: the slide's one chart block among other blocks (no picture) whose plot is under its minimum
  *    (CHART_MIN_PLOT_PX, CHART_MIN_PLOT_SHARE of the body, CHART_MAX_PLOT_ASPECT) takes the filling track: the root's first column
  *    (it is the first block) or last, 60, 55 or 50% of the content width (the first that reads as well) against a column of the others
- *    in the slide's own mode, as design.chartPrimary splits it, when that plot is taller.
+ *    in the slide's own mode, when that plot is taller.
  * Each is kept only when it reads as well as the slide without it (readsAsWell); otherwise the slide is composed as before. Of the
  * picture tracks that read as well, the one with the largest smallest body size is taken; on a tie, the one with the larger body sizes
  * in all (by more than a pixel), then the one that crops the picture least (a portrait picture takes a narrower track than a landscape
@@ -6488,8 +6488,7 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
     }
     return { ...best.result, items, track: { kind: 'picture', edge: physical(edge), size: best.size, path: blockPath } };
   }
-  // RR-105 (coverage finding 24): an authored contentDirection of vertical keeps its column; the chart track would split it into a row.
-  if (pictures.length || leaf('video').length || charts.length !== 1 || base.design.chartPrimary !== undefined || (landscape && base.design.contentDirection === 'vertical') || (!landscape && base.design.contentDirection === 'horizontal')) return base;
+  if (pictures.length || leaf('video').length || charts.length !== 1) return base;
   const chartOf = (result: SlideComposition) => result.items.find(item => item.field === 'chart');
   const chart = chartOf(base);
   if (!chart || !shortPlot(chart, bodyHeight(base), scale)) return base;
@@ -6502,12 +6501,9 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
   }
   return base;
 }
-/** RR-105: the chartPrimary values that place the chart at a side of its supporting blocks (`none` is the ordinary automatic body). */
-const CHART_PRIMARY_SIDES: ReadonlySet<string> = new Set(['top', 'bottom', 'start', 'end', 'left', 'right']);
 function composeLayout(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   const slide = record(input), layout = record(options.layout);
-  // LH-83: the recomposition reads the record's design and composition and composes the body as if no layout were given; the
-  // record's contentDirection asks its regions to flow one way, so the automatic grid does not take it.
+  // LH-83: the recomposition reads the record's design and composition and composes the body as if no layout were given.
   const recomposing = (options as Record<symbol, unknown>)[RECOMPOSE] === true;
   // Wave 3: the guarded rules composeSlide asks for (all when unset), and the ones that changed something (composeSlide's guard).
   const ruleSet = (options as Record<symbol, unknown>)[RULES] as ReadonlySet<GuardedRule> | undefined, firedRules = (options as Record<symbol, unknown>)[FIRED] as Set<GuardedRule> | undefined;
@@ -7258,9 +7254,6 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!(ruleOn('emphasis-band') || ruleOn('note-band')) || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || regions.length || !Array.isArray(slide.blocks) || authoredEmphasis(slide.blocks)) return undefined;
     const own = record(slide.composition);
     if ((own.mode !== undefined && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return undefined;
-    // RR-105 (coverage finding 24): a chartPrimary side splits the body into the chart's track and its supporting blocks (the author's
-    // arrangement, which design.chartPrimary keeps), so no block of it becomes a band or a pill.
-    if (!useTemplate && CHART_PRIMARY_SIDES.has(hints.chartPrimary as string) && slide.blocks.some((block: unknown) => record(block).chart !== undefined)) return undefined;
     const flowed = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) || eyebrowBlocks.has(index) ? [] : [{ block, index }]);
     const last = flowed[flowed.length - 1];
     // LH-50: a paragraph with an eyebrow keeps it: it is placed as a block of the body, never as the band or pill.
@@ -7373,7 +7366,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
   }
   const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
-  // Automatic chartPrimary uses a synthetic content group without its own OPF path; it records no group, flow or decision.
+  // LH-49's chart track uses a synthetic content group without its own OPF path; it records no group, flow or decision.
   // LH-06: `emphasis` is the path of the block or group whose `emphasis: true` the node carries.
   type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean;
     /** LH-131: a cell of a featured pair or set other than the featured one: drawn on one plain card (a group's blocks share it). */
@@ -8178,7 +8171,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     spannedContainer = false;
     if (paragraphs) cols = paragraphs.shape.columns; else if (lead) cols = 2;
     if (recorded && !decided) decisions?.push({path:containerPath,mode:hasRegions?'regions':mode,
-      reason:hasRegions?'promoted-regions':settings === rootSettings && chartPrimary ? 'chart-primary' : paragraphs ? 'paragraph-columns' : lead ? 'lead-stack' : splitChoice ? 'split-fill' : mode==='auto'?'lowest-score':'configured-mode',
+      reason:hasRegions?'promoted-regions':settings === rootSettings && chartSplit ? 'chart-primary' : paragraphs ? 'paragraph-columns' : lead ? 'lead-stack' : splitChoice ? 'split-fill' : mode==='auto'?'lowest-score':'configured-mode',
       ...(hasRegions?{}:{selectedColumns:cols}),candidates:candidates ?? []});
     const grid = gridGeometry(count, area, cols, actualGap, (mode === 'auto' && !hasRegions ? autoRowWeights(nodes, count, cols, area, actualGap, settings) : mode === 'row' && !hasRegions ? tableRowWeights(nodes, count, cols, area, actualGap, settings) : undefined) ?? settings.weights ?? [], mode === "column");
     // LH-47 widened: the cells of the scored grid's short last row stretch to the full width, as a region's grid does (flowCells'
@@ -9143,7 +9136,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // slide with no composition of its own, as repeated pairs (one cell per pair) or, for interleaved blocks of two kinds with
   // unequal counts, a grid of the majority kind above a row of the others (one column of the two). Undefined: as authored.
   const groupRoot = (nodes: Pending[]): { nodes: Pending[]; settings?: Composition } | undefined => {
-    if (useTemplate || regions.length || !Array.isArray(slide.blocks) || chartPrimary || modeFor(rootSettings) !== 'auto' || rootSettings.columns !== undefined || rootSettings.weights?.length) return undefined;
+    if (useTemplate || regions.length || !Array.isArray(slide.blocks) || chartSplit || modeFor(rootSettings) !== 'auto' || rootSettings.columns !== undefined || rootSettings.weights?.length) return undefined;
     const blockOf = (node: Pending) => node.children ? node.path : node.path.slice(0, node.path.lastIndexOf('.'));
     if (new Set(nodes.map(blockOf)).size !== nodes.length || slide.blocks.some((block: unknown) => record(block).region !== undefined)) return undefined;
     // LH-50: a paragraph with an eyebrow pairs with nothing.
@@ -9340,13 +9333,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // side (in regions of one row of the grid, or in one region's grid), read as narrow columns of long lines beside one another, and a
   // short one in a wide card beside a long one in a narrow card (an empty region collapsed into it). They are drawn one card per row
   // instead, across the whole row: every block moves to the first region of the row in reading order, the others are left empty and
-  // collapse into it, and that region stacks them (arrangementOf). Only a slide that draws cards, with no contentDirection and no
+  // collapse into it, and that region stacks them (arrangementOf). Only a slide that draws cards, with no `row` region and no
   // composition of its own, whose row holds nothing else, nothing beyond a region's room and nothing below the grid.
   const LONG_TEXT_CHARS = 80, LONG_TEXT_ROWS = 3, LONG_TEXT_HUG = .45;
   const longTextUnit = (unit: Pending): boolean => !unit.children && unit.caption === undefined && unit.field === 'text' && textLength(unit.value) >= LONG_TEXT_CHARS;
   const longTextRows = (grouped: GroupedBinding, plan: LayoutTemplate): { binding: GroupedBinding; region?: string } => {
     const own = record(slide.composition);
-    if (!hasCards || direction !== undefined || grouped.belowUnits.length || ['mode', 'columns', 'weights'].some(key => own[key] !== undefined)) return { binding: grouped };
+    if (!hasCards || plan.regions.some(region => region.flow === 'row') || grouped.belowUnits.length || ['mode', 'columns', 'weights'].some(key => own[key] !== undefined)) return { binding: grouped };
     const longBlock = (unit: BoundBlock[]): boolean => {
       const host = unit.length === 1 && unit[0]!.block !== undefined ? record(slide.blocks?.[unit[0]!.block]) : undefined;
       return !!host && host.caption === undefined && typeof host.text !== 'undefined' && fields.every(field => field === 'text' || host[field] === undefined) && textLength(host.text) >= LONG_TEXT_CHARS;
@@ -9503,7 +9496,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const cellWidth = (frame.width - requestedTemplateGap * (shape.columns - 1)) / shape.columns - (hasCards && !soleRegion!.bleed ? 2 * Math.min(CARD_INSET * scale, frame.width / 4) : 0);
       return units.some(unit => isLong(unit, cellWidth));
     };
-    const closingUnits = soleRegion && soleRegion.flow === 'auto' && soleRegion.role === 'supporting' && !binding.arrangements.has(soleRegion.name) && direction === undefined ? contents.get(soleRegion.name) ?? [] : [];
+    const closingUnits = soleRegion && soleRegion.flow === 'auto' && !singleBlockRegion(soleRegion) && soleRegion.role === 'supporting' && !binding.arrangements.has(soleRegion.name) ? contents.get(soleRegion.name) ?? [] : [];
     if (closingUnits.length >= LEAD_STACK_MIN && closingUnits.length <= JOINED_FIXED_MAX && ruleOn('closing-lead') && closingUnits.every(unit => proseLeaf(unit) && unit.field === 'text' && unit.emphasis === undefined && !unit.eyebrow)
       && !similarParagraphs(closingUnits) && !leadStackPlan(closingUnits) && closingStacks(closingUnits) && new Set(gridFlowShape(closingUnits.length - 1, frame.width >= frame.height).perRow).size === 1) {
       binding.arrangements.set(soleRegion!.name, 'lead');
@@ -9515,7 +9508,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const units = contents.get(region.name) ?? [];
       const lead = binding.arrangements.get(region.name) === 'lead' ? units[0] : undefined;
       if (lead) { lead.auto = true; lead.lone = true; }
-      if (region.flow === 'auto') for (const unit of units) { unit.auto = true; unit.lone = units.length === 1 || unit === lead; }
+      if (region.flow === 'auto' && !singleBlockRegion(region)) for (const unit of units) { unit.auto = true; unit.lone = units.length === 1 || unit === lead; }
       // LH-10: a paragraph in any other region keeps the reading measure too (proseMeasure): a full-width note or verdict at the foot of a
       // layout ran 95 to 100 characters a line, where Claude Design keeps about 70.
       else if (ruleOn('region-measure')) for (const unit of units) if (!unit.children && unit.field === 'text') unit.measure = true;
@@ -9671,17 +9664,17 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const masterRule = (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true ? !plan.regions.some(region => region.role === 'primary') : undefined;
     const headingItemsAt = (fields: string[], x: number, y: number, areaWidth: number): ComposedItem[] => headingGroup(fields, x, y, areaWidth, fields.includes('title') ? titleMode : undefined, plan.titleRule === true && (masterRule ?? (headingsAlone() || statement === 'title')) && ruleOn('title-rule'));
     const groupHeight = (list: ComposedItem[]) => list.length ? list.at(-1)!.box.y + list.at(-1)!.box.height - (groupRules.get(list)?.y ?? list[0]!.box.y) : 0;
-    // The arrangement of a region's blocks: design.contentDirection makes every flowing region one row or one column;
-    // otherwise the region's flow (`auto` is a grid unless a block is long; `none` with extra blocks flows as `auto`).
+    // The arrangement of a region's blocks: its flow (`auto` is a grid unless a block is long; `row` keeps one row). A single-block
+    // region (max: 1) stacks its block, and blocks that joined it flow by its flow.
     const arrangementOf = (region: LayoutRegion, units: Pending[], cell: LayoutBox): 'grid' | 'row' | 'column' => {
       if (region.name === longTextRegion) return 'column';
       // LH-135: pricing tiers are compared side by side, in one row of equal cards.
       if (units.length > 1 && units.every(unit => tierGroups.has(unit.path))) return 'row';
       // LH-132: a team's portrait cards: up to PORTRAIT_TOP_MAX across the top in one row, otherwise a grid.
       if (units.length && units.every(unit => personParts.has(unit.path))) return (portraitMode === 'top' || teamAvatar) && units.length <= PORTRAIT_TOP_MAX ? 'row' : 'grid';
-      if (direction !== undefined && region.flow !== 'none') return direction === 'horizontal' ? 'row' : 'column';
-      const flow = region.flow === 'none' && units.length > 1 ? 'auto' : region.flow;
-      if (flow === 'none' || flow === 'column') return 'column';
+      if (region.flow === 'row') return 'row';
+      const flow = singleBlockRegion(region) && units.length <= 1 ? 'column' : region.flow;
+      if (flow === 'column') return 'column';
       if (flow === 'grid') return 'grid';
       const shape = gridFlowShape(units.length, cell.width >= cell.height);
       const cards = hasCards && !region.bleed;
@@ -9691,10 +9684,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-42: a region that receives 2 or more lists, and nothing else, lays them out one list per cell (a card when the slide draws
     // cards) in listGridShape's grid, so that sibling lists never read as one table and none is dealt across columns. A column stays
     // at least LIST_GRID_COLUMN_EMS list ems wide, and a region taller than wide stacks up to 3 lists and takes at most 2 columns, as
-    // the portrait grid flow does. design.contentDirection keeps its one row or column.
+    // the portrait grid flow does. A `row` region keeps its one row.
     const LIST_GRID_COLUMN_EMS = 7.5;
     const listGridOf = (region: LayoutRegion, units: Pending[], areaWidth: number, landscape = true): FlowShape | undefined => {
-      if (units.length < 2 || direction !== undefined) return undefined;
+      if (units.length < 2 || region.flow === 'row') return undefined;
       if (!units.every(unit => !unit.children && unit.caption === undefined && (unit.field === 'items' || unit.field === 'bullets'))) return undefined;
       // LH-133: one-question blocks drawn as ruled rows are one column.
       if (units.every(unit => pairRowLabels.has(unit.path))) return listGridShape(units.length, 1);
@@ -9744,7 +9737,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     //    placed by the region's anchor.
     const joinedLayout = (region: LayoutRegion, units: Pending[], cell: LayoutBox, cards: boolean): { shape: FlowShape; boxes: LayoutBox[] } | undefined => {
       const hint = binding.arrangements.get(region.name), landscape = cell.width >= cell.height;
-      if (!hint || units.length < 2 || direction !== undefined) return undefined;
+      if (!hint || units.length < 2 || region.flow === 'row') return undefined;
       if (hint === 'row') {
         const across = movedAcross(units, cell.width, cards), shape = flowShape(across ? 'row' : 'column', units.length, true);
         return { shape, boxes: across ? gridBoxes(units.length, cell, units.length, gap, movedWidths(units, cell.width, cards), false) : stackedBoxes(units, cell, gap, composition, cards, region.anchor) };
@@ -9787,13 +9780,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (!units.length) {
         if (region.empty !== 'keep' || atFloor) return 0;
         // Two body lines, plus the card's vertical inset as a filled card of that height takes it (payloadBox, naturalHeight).
-        const lines = 2 * (region.flow === 'auto' ? LEAD_NOMINAL_SIZE * scale : startSize) * 1.22;
+        const lines = 2 * (region.flow === 'auto' && !singleBlockRegion(region) ? LEAD_NOMINAL_SIZE * scale : startSize) * 1.22;
         return lines + (hasCards && !region.bleed ? 2 * Math.min(CARD_INSET * scale, areaWidth / 4, lines / 8) : 0);
       }
       // LH-41: a stack of timeline bands needs its one-column height.
       if (timelineBands(units)) return stackHeight(bandRows(units, areaWidth, 1, hasCards && !region.bleed, atFloor));
       // LH-70, LH-67: as placeRegion arranges them (a body-tall area decides the paragraph grid).
-      const fixed = direction !== undefined || name === longTextRegion || listGridOf(region, units, areaWidth) !== undefined || binding.arrangements.get(name) === 'mosaic' || binding.arrangements.get(name) === 'row';
+      const fixed = region.flow === 'row' || name === longTextRegion || listGridOf(region, units, areaWidth) !== undefined || binding.arrangements.get(name) === 'mosaic' || binding.arrangements.get(name) === 'row';
       const paragraphs = fixed ? undefined : paragraphColumns(units, { x: 0, y: 0, width: areaWidth, height: frame.height }, hasCards && !region.bleed, composition);
       if (paragraphs) return paragraphNeed(units, paragraphs, areaWidth, hasCards && !region.bleed, composition, atFloor);
       const leading = fixed || region.flow === 'grid' ? undefined : leadStack(units);
@@ -10036,7 +10029,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (plan.subtitle) placeHeadings('subtitle', subtitleFields);
     // A slide's own composition.mode, columns or weights arrange its first primary flowing region (the 0.18 modes).
     const slideComposition = record(slide.composition);
-    const overridden = ['mode', 'columns', 'weights'].some(key => slideComposition[key] !== undefined) ? plan.regions.find(region => region.role === 'primary' && region.flow !== 'none')?.name : undefined;
+    const overridden = ['mode', 'columns', 'weights'].some(key => slideComposition[key] !== undefined) ? plan.regions.find(region => region.role === 'primary' && !singleBlockRegion(region))?.name : undefined;
     const settings: Composition = { ...composition };
     // LH-64, LH-04: a row of cards (one row of a region's grid, or the lone blocks of card regions side by side) and how its cards
     // stand in their cells; undefined keeps the region's rule (LH-22: filled cards, the payload at the anchor).
@@ -10118,15 +10111,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           leafItems.push(...range(first, items.length));
           return arrangementOf(region, units, cell);
         }
-        // LH-41: several timelines are one stack of horizontal bands (bandBoxes), in one column or two, whatever the region's flow
-        // or the design's contentDirection. The stack sits in the middle of the region, as a lone timeline is centred in its cell,
+        // LH-41: several timelines are one stack of horizontal bands (bandBoxes), in one column or two, whatever the region's flow.
+        // The stack sits in the middle of the region, as a lone timeline is centred in its cell,
         // unless the region is anchored at the bottom.
         const bands = timelineBands(units), bandColumnCount = bands ? bandColumns(units, cell, cards) : 1;
         const listGrid = bands ? undefined : listGridOf(region, units, cell.width, cell.width >= cell.height);
-        // LH-70, LH-67: similar paragraphs as columns, or a lead beside a stack, in a region whose arrangement the design does not fix
-        // (contentDirection) and that grouping gave no picture mosaic or moved row; a statement's lead plus cards gives way to either. A
+        // LH-70, LH-67: similar paragraphs as columns, or a lead beside a stack, in a region whose flow is not `row` and that grouping
+        // gave no picture mosaic or moved row; a statement's lead plus cards gives way to either. A
         // lead plus stack is not a grid, so a `flow: grid` region keeps its grid. Long texts LH-86 moved into one region keep their rows.
-        const own = bands || listGrid || direction !== undefined || region.name === longTextRegion || binding.arrangements.get(region.name) === 'mosaic' || binding.arrangements.get(region.name) === 'row' ? undefined : region;
+        const own = bands || listGrid || region.flow === 'row' || region.name === longTextRegion || binding.arrangements.get(region.name) === 'mosaic' || binding.arrangements.get(region.name) === 'row' ? undefined : region;
         const paragraphs = own ? paragraphColumns(units, cell, cards, settings) : undefined;
         const lead = own && !paragraphs && region.flow !== 'grid' ? leadStack(units) : undefined;
         const joined = bands || listGrid || paragraphs || lead ? undefined : joinedLayout(region, units, cell, cards);
@@ -10599,30 +10592,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
   };
   const ownMode = record(slide.composition).mode as Composition['mode'] | undefined;
-  const direction = recomposing && hints.sources.contentDirection === 'layout' ? undefined : hints.contentDirection;
-  const directionMode: Composition['mode'] = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : 'auto';
-  // The effective design.chartPrimary (slide, deck, then the layout's own) splits the root into a
-  // primary chart track and one synthetic container of the other nodes when the slide has no regions
-  // and no composition.mode of its own, and the root nodes mix at least one chart leaf with other nodes.
-  // This automatic hint preserves its 3:2 track geometry; a template remains authoritative.
-  // LH-49: the chart track automaticTracks chose splits the root the same way, whatever the slide's own mode; the other blocks keep that
-  // mode in their column.
-  // LH-61: a KPI column (kpiColumn) stacks the other blocks in a column whatever the slide's own mode.
+  // LH-49: the chart track automaticTracks chose splits the root into the chart's track and one synthetic container of the other nodes,
+  // whatever the slide's own mode; the other blocks keep that mode in their column. LH-61: a KPI column (kpiColumn) stacks the other
+  // blocks in a column whatever the slide's own mode. A template, promoted regions or a root of nothing but the chart keep their own.
   const chartTrack = (options as Record<symbol, unknown>)[CHART_TRACK] as { edge: ImageEdge; share: number; mode?: Composition['mode'] } | undefined;
-  const chartHint = chartTrack?.edge ?? (hints.chartPrimary === 'start' ? 'left' : hints.chartPrimary === 'end' ? 'right' : hints.chartPrimary);
-  const chartSide = chartHint === 'left' || chartHint === 'right' || chartHint === 'top' || chartHint === 'bottom' ? chartHint : undefined;
   const chartIndex = pending.findIndex(node => !node.children && node.field === 'chart');
-  const chartPrimary = chartSide !== undefined && !useTemplate && (chartTrack !== undefined || !ownMode) && !regions.length && chartIndex >= 0 && pending.some(node => node.children || node.field !== 'chart') ? chartSide : undefined;
-  const firstChart = chartPrimary === 'left' || chartPrimary === 'top';
-  // RR-105 (coverage finding 24): an authored chartPrimary that cannot be drawn says so: a template's regions or promoted regions place the
-  // chart, or the slide's own composition.mode arranges the body.
-  if (chartSide && !chartTrack && !chartPrimary && chartIndex >= 0 && (hints.sources.chartPrimary === 'slide' || hints.sources.chartPrimary === 'deck') && pending.some(node => node.children || node.field !== 'chart')) {
-    const why = useTemplate ? "the slide's layout template places the chart in its regions (a template says this with a chart-beside region)" : regions.length ? "the slide's promoted regions place its blocks" : "the slide's own composition.mode arranges its body";
-    diagnostics.push({ code: 'arrangement-adapted', path: hints.paths.chartPrimary!, message: `design.chartPrimary "${hints.chartPrimary}" is not applied on this slide: ${why}.` });
-  }
-  const rootSettings: Composition = chartPrimary
-    ? { ...composition, mode: chartPrimary === 'left' || chartPrimary === 'right' ? 'row' : 'column', weights: chartTrack ? (firstChart ? [chartTrack.share, 1 - chartTrack.share] : [1 - chartTrack.share, chartTrack.share]) : firstChart ? [3, 2] : [2, 3], columns: undefined }
-    : { ...composition, mode: composition.mode ?? directionMode };
+  const chartSplit = chartTrack !== undefined && !useTemplate && !regions.length && chartIndex >= 0 && pending.some(node => node.children || node.field !== 'chart') ? chartTrack.edge : undefined;
+  const firstChart = chartSplit === 'left' || chartSplit === 'top';
+  const rootSettings: Composition = chartSplit
+    ? { ...composition, mode: chartSplit === 'left' || chartSplit === 'right' ? 'row' : 'column', weights: firstChart ? [chartTrack!.share, 1 - chartTrack!.share] : [1 - chartTrack!.share, chartTrack!.share], columns: undefined }
+    : { ...composition, mode: composition.mode ?? 'auto' };
   // LH-115: a timeline whose `when` values are a column chart's categories draws under the plot (settle, timelineUnderChart): the chart
   // above, the timeline in a band of its own height below, laid out again under the plot after the chart is composed (below).
   const underChart = (options as Record<symbol, unknown>)[TIMELINE_UNDER_CHART] === true && !useTemplate && !regions.length && pending.length === 2 && pending.every(node => !node.children)
@@ -10655,41 +10634,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const band = measureTimeline(underChart.timeline, { x: 0, y: 0, width: contentBox.width, height: 1e6 }, composition, 'role', undefined, true).bounds.height + scale;
     arrange([underChart.chart, underChart.timeline], contentBox, { ...composition, mode: 'column', weights: [Math.max(scale, contentBox.height - gap - band), band], columns: undefined }, 0);
   }
-  else if (chartPrimary) {
+  else if (chartSplit) {
     const primary = pending[chartIndex]!, rest = pending.filter((_, index) => index !== chartIndex);
-    const support: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: chartTrack?.mode ? { mode: chartTrack.mode } : chartTrack && ownMode ? { mode: ownMode } : {}, synthetic: true };
-    const first = items.length;
+    const support: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: chartTrack!.mode ? { mode: chartTrack!.mode } : ownMode ? { mode: ownMode } : {}, synthetic: true };
     arrange(firstChart ? [primary, support] : [support, primary], contentBox, rootSettings, 0);
-    // RR-105 (coverage finding 24): the paragraphs beside an authored chartPrimary sit in the middle of their track, level with the chart,
-    // instead of at its top over an empty foot (the track is the 2 of the 3:2 split). LH-49's own chart track keeps its stack.
-    const beside = items.slice(first).filter(item => item.field !== 'chart');
-    // A lone plain paragraph there grows first, as a lone block does (LH-48, LH-09): when it fills under LONE_FILL of its track it steps up the
-    // type scale while it fills at most LONE_TARGET, keeps the minimum measure (underMeasure) and fits, up to a paragraph's display size, or a
-    // short message's (SHORT_MESSAGE_WORDS words, at most MESSAGE_DISPLAY_LINES lines). A longer text keeps its size.
-    const lone = !chartTrack && beside.length === 1 && beside[0]!.field === 'text' && typeof beside[0]!.value === 'string' && beside[0]!.text && !beside[0]!.frameBox && !beside[0]!.emphasis && !('richLines' in beside[0]!.text) ? beside[0]! : undefined;
-    if (lone) {
-      const heightOf = (fit: TextFit) => fit.placement?.height ?? fit.lines.length * fit.lineHeight, text = contentText('text', lone.value) ?? '';
-      const message = messageWords(lone.value) <= SHORT_MESSAGE_WORDS;
-      let best = lone.text as TextFit;
-      // The paragraph's growth to LONE_DISPLAY_SIZES.text, then a short message's on to MESSAGE_DISPLAY_SIZE in at most MESSAGE_DISPLAY_LINES lines.
-      const grow = (cap: number, lines: number) => {
-        for (let size = best.fontSize; ; ) {
-          const step = scaleAbove(size, composition.minFontSize ?? 16);
-          if (step > Math.min(cap * scale, capOf(rootSettings) + FONT_GRID_EPSILON) + 1e-9) break;
-          const fit = fitPlacedText('text', lone.value, text, lone.box, step, step, lone.path, lone.alignment) as TextFit;
-          if (fit.overflow || fit.fontSize < step - 1e-9 || heightOf(fit) > LONE_TARGET * lone.box.height || fit.lines.length > lines || (ruleOn('reading-measure') && underMeasure('text', lone.value, lone.box.width, step))) break;
-          best = fit; size = step;
-        }
-      };
-      if (heightOf(best) < LONE_FILL * lone.box.height) { grow(LONE_DISPLAY_SIZES.text, Infinity); if (message) grow(MESSAGE_DISPLAY_SIZE, MESSAGE_DISPLAY_LINES); }
-      lone.text = best;
-    }
-    if (!chartTrack && beside.length && beside.every(item => item.field === 'text' && item.text && !item.frameBox && !item.emphasis && !('listEntries' in item.text) && !('richLines' in item.text))) {
-      const inkBottom = (item: ComposedItem) => item.box.y + ('richLines' in item.text! ? (item.text as RichTextFit).height : (item.text as TextFit).placement?.height ?? item.text!.lines.length * item.text!.lineHeight);
-      const top = Math.min(...beside.map(item => item.box.y)), bottom = Math.max(...beside.map(item => item.box.y + item.box.height)), ink = Math.max(...beside.map(inkBottom)) - top;
-      const dy = round((bottom - top - ink) / 2);
-      if (dy > .5) for (const item of beside) { item.box = { ...item.box, y: item.box.y + dy, height: Math.max(scale, item.box.height - dy) }; item.text = translateTextFit(item.text as TextFit, dy); }
-    }
   } else {
     const grouped = groupRoot(pending), roots = grouped?.nodes ?? pending;
     // LH-48: the one root block is the whole body (fillLone).

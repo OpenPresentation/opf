@@ -1135,8 +1135,6 @@ export function createDesignControls(container, options = {}) {
     };
     enumField("titleAlignment", "Title alignment", ["start", "center", "end"], {});
     enumField("contentAlignment", "Content alignment", ["start", "center", "end"], {});
-    enumField("contentDirection", "Content direction", ["horizontal", "vertical"], { horizontal: "Horizontal (row)", vertical: "Vertical (column)" }, "When a slide sets no arrangement");
-    enumField("chartPrimary", "Primary chart position", ["none", "top", "bottom", "start", "end"], { none: "None (equal)" }, "Where the main chart sits");
     enumField("imageFit", "Image fit", IMAGE_FITS, { cover: "Cover (crop to fill)", contain: "Contain (whole image)", stretch: "Stretch to the frame", auto: "Auto (cover a near fit, else whole)" }, "When an image block sets no fit");
     const box = selectField("opt-contentBox", "Content box", {
       empty: "Default",

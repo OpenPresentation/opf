@@ -16,7 +16,7 @@
       "accepts": [
         "list"
       ],
-      "flow": "none",
+      "max": 1,
       "arrangement": "pyramid"
     }
   ],

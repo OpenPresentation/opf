@@ -129,7 +129,7 @@
     "overflowRegion": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$",
-      "description": "The region where content that no region accepts goes, whatever its 'accepts', while it has room; content beyond every region's room is drawn there too, with the warning opf/layout-unplaced. Omitted: the first primary region (in reading order) whose flow is not 'none'."
+      "description": "The region where content that no region accepts goes, whatever its 'accepts', while it has room; content beyond every region's room is drawn there too, with the warning opf/layout-unplaced. Omitted: the first primary region (in reading order) that is not a single-block region ('max': 1)."
     },
     "tags": {
       "type": "array",
@@ -369,18 +369,18 @@
         "flow": {
           "type": "string",
           "enum": [
-            "none",
+            "auto",
             "grid",
-            "column",
-            "auto"
+            "row",
+            "column"
           ],
-          "description": "How several blocks share the region: 'none' one block fills it (blocks no region had room for join it, up to 6, and it flows as 'auto'); 'grid' by count (1 fills, 2 side by side, 3 in a row, 4 as 2 x 2, 5 as 3 + 2, 6 as 3 x 2, 7 to 12 in balanced rows of at most four, 9 as 3 x 3; rows and columns swap in a portrait region; the cells of a short row stretch to the full width, or keep one size and are centred in a grid of pictures); 'column' stacked at the heights the blocks need, one gap apart, and placed by the region's anchor (charts, pictures, tables, timelines and videos take what the measured blocks leave; blocks that do not fit share the region, each giving up the same fraction of what it can give up above its height at the minimum font size); 'auto' a grid when every block is short and a column when any block is long (more than 6 estimated lines in its grid cell at the starting size). design.contentDirection turns every flowing region into one row or one column. Default 'auto'."
+          "description": "How several blocks share the region, in the words of composition.mode: 'auto' a grid when every block is short and a column when any block is long (more than 6 estimated lines in its grid cell at the starting size); 'grid' by count (1 fills, 2 side by side, 3 in a row, 4 as 2 x 2, 5 as 3 + 2, 6 as 3 x 2, 7 to 12 in balanced rows of at most four, 9 as 3 x 3; rows and columns swap in a portrait region; the cells of a short row stretch to the full width, or keep one size and are centred in a grid of pictures); 'row' side by side in one row, one cell each at equal widths in reading order, the counterpart of 'column' (the row is kept as written: no paragraph columns, lead block, list grid or regrouping replaces it); 'column' stacked at the heights the blocks need, one gap apart, and placed by the region's anchor (charts, pictures, tables, timelines and videos take what the measured blocks leave; blocks that do not fit share the region, each giving up the same fraction of what it can give up above its height at the minimum font size). A region of one block is 'max': 1, not a flow. OPF 0.35 removed 'none' (write 'max': 1) and design.contentDirection (write 'row' or 'column' here, or composition.mode on an automatic slide). Default 'auto'."
         },
         "max": {
           "type": "integer",
           "minimum": 1,
           "maximum": 12,
-          "description": "Blocks the region holds on one slide. Default 1 for flow 'none' (which requires 1), else 6. Content beyond every region's room is drawn in the overflow region with the warning opf/layout-unplaced, and paginate moves it to a continuation slide."
+          "description": "Blocks the region holds on one slide. Default 6. 1 makes a single-block region: its block fills it, and blocks no region had room for still join it, up to 6, arranged by its flow (as 'none' did before OPF 0.35); a single-block region is never the default overflowRegion, nor the region a slide's own composition.mode arranges. Content beyond every region's room is drawn in the overflow region with the warning opf/layout-unplaced, and paginate moves it to a continuation slide."
         },
         "bleed": {
           "type": "boolean",
@@ -471,25 +471,6 @@
         "contentBox": {
           "type": "boolean",
           "description": "Whether the body regions are drawn inside a visible card or surface."
-        },
-        "contentDirection": {
-          "type": "string",
-          "enum": [
-            "horizontal",
-            "vertical"
-          ],
-          "description": "Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. On a layout slide it turns every flowing region into one row or one column; the slide's own composition.mode, columns and weights rank above it."
-        },
-        "chartPrimary": {
-          "type": "string",
-          "enum": [
-            "none",
-            "top",
-            "bottom",
-            "start",
-            "end"
-          ],
-          "description": "Where the primary chart sits relative to supporting content on automatic slides. Template layouts express this arrangement with their regions; chartPrimary does not override a template."
         },
         "imageFit": {
           "type": "string",

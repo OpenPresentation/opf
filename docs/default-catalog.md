@@ -22,8 +22,8 @@ kind and then by id:
     "layouts": { "two-column": { "name": "Two column", "regions": [{ "name": "title" }, { "direction": "row", "regions": [{ "name": "first", "accepts": ["text"], "flow": "auto" }, { "name": "second", "accepts": ["text"], "flow": "auto" }] }] } },
     "themes": { "minimal": { "name": "Minimal", "colorScheme": "cool-horizon", "fontScheme": "aptos" } }
   },
-  "acme": { "source": "pkg:@acme/opf-catalog", "layouts": { "hero": { "name": "Hero", "regions": [{ "name": "title" }, { "name": "media", "accepts": ["image"], "flow": "none" }] } } },
-  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "regions": [{ "name": "title" }, { "name": "chart", "accepts": ["chart"], "flow": "none" }] } } }
+  "acme": { "source": "pkg:@acme/opf-catalog", "layouts": { "hero": { "name": "Hero", "regions": [{ "name": "title" }, { "name": "media", "accepts": ["image"], "max": 1 }] } } },
+  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "regions": [{ "name": "title" }, { "name": "chart", "accepts": ["chart"], "max": 1 }] } } }
 }
 ```
 

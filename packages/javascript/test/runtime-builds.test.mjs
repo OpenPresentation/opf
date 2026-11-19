@@ -154,7 +154,7 @@ describe("session validator entrypoint defaults", () => {
   });
 
   test("explicit custom catalogs are respected per call, without an implicit gallery fallback", () => {
-    const catalog = { source: "https://example.test/validator-catalog", layouts: { custom: { name: "Custom", direction: "column", regions: [{ name: "title" }, { name: "body", accepts: ["text"], role: "primary", flow: "none" }] } } };
+    const catalog = { source: "https://example.test/validator-catalog", layouts: { custom: { name: "Custom", direction: "column", regions: [{ name: "title" }, { name: "body", accepts: ["text"], role: "primary", max: 1 }] } } };
     const value = { slides: [{ title: "Custom layout", layout: "custom", text: "Real caller-owned catalog content." }] };
     const options = { ...referenceOnly, catalogs: [catalog] }, checker = nodeBuild.createValidator(), browser = browserBuild.createValidator();
     const cold = browserBuild.validate(value, options);

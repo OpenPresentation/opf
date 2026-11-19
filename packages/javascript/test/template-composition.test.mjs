@@ -11,8 +11,8 @@ const { layouts } = fixture;
 // The 0.26.10 forms of `comparison` and `statement`, kept as engine samples: a numeric option row beside an auto verdict, and an
 // anchored message in a numeric region. WI-2 redrew the gallery records as auto stacks (single-message-layouts.test.mjs).
 const bodyKinds = ['text', 'list', 'metric', 'image', 'chart', 'table', 'group'];
-const comparisonBefore = { id: 'comparison', design: { contentBox: false }, direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'first', accepts: bodyKinds, role: 'primary', flow: 'none' }, { name: 'second', accepts: bodyKinds, role: 'primary', flow: 'none' }] }, { name: 'verdict', size: 'auto', accepts: ['text'], role: 'supporting', flow: 'none' }] };
-const statementBefore = { id: 'statement', design: { titleAlignment: 'center', contentAlignment: 'center' }, direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { name: 'message', accepts: ['text', 'quote', 'metric'], role: 'primary', flow: 'none' }] };
+const comparisonBefore = { id: 'comparison', design: { contentBox: false }, direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'first', accepts: bodyKinds, role: 'primary', max: 1 }, { name: 'second', accepts: bodyKinds, role: 'primary', max: 1 }] }, { name: 'verdict', size: 'auto', accepts: ['text'], role: 'supporting', max: 1 }] };
+const statementBefore = { id: 'statement', design: { titleAlignment: 'center', contentAlignment: 'center' }, direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { name: 'message', accepts: ['text', 'quote', 'metric'], role: 'primary', max: 1 }] };
 // Every body region (only the named ones when `only` is given) of a region list keeps its space when empty.
 const keepAll = (list, only) => list.map((entry) => entry.regions ? { ...entry, regions: keepAll(entry.regions, only) } : ['title', 'subtitle'].includes(entry.name) || (only && !only.includes(entry.name)) ? entry : { ...entry, empty: 'keep' });
 const near = (a, b, tolerance = 1e-3) => Math.abs(a - b) <= tolerance;
@@ -185,17 +185,22 @@ describe('bleed, mirror and right to left', () => {
 });
 
 describe('overrides', () => {
-  test('design.contentDirection makes every flowing region one row or one column', () => {
-    const vertical = compose({ title: 'x', blocks: short(4), design: { contentDirection: 'vertical' } }, layouts.pillars);
+  // OPF 0.35: a region's flow takes the words of composition.mode; design.contentDirection is gone.
+  const withBodyFlow = (record, flow) => ({ ...record, regions: record.regions.map((entry) => (entry.name === 'body' ? { ...entry, flow } : entry)) });
+  test('a region of flow column or row lays its blocks in one column or one row', () => {
+    const vertical = compose({ title: 'x', blocks: short(4) }, withBodyFlow(layouts.pillars, 'column'));
     assert.equal(region(vertical, 'body').arrangement, 'column');
     assert.equal(rows(cells(vertical, 'body')), 4);
-    // process carries contentDirection: horizontal in its own design.
+    const across = compose({ title: 'x', blocks: short(4) }, withBodyFlow(layouts.pillars, 'row'));
+    assert.equal(region(across, 'body').arrangement, 'row');
+    assert.equal(rows(cells(across, 'body')), 1);
+    // process draws its steps in a row region.
     const process = compose({ title: 'x', blocks: short(5) }, layouts.process);
     assert.equal(region(process, 'body').arrangement, 'row');
   });
 
-  test('a slide\'s own composition.mode and columns arrange its first primary flowing region, above contentDirection', () => {
-    const result = compose({ title: 'x', blocks: short(4), composition: { mode: 'grid', columns: 4 }, design: { contentDirection: 'vertical' } }, layouts.pillars);
+  test("a slide's own composition.mode and columns arrange its first primary flowing region, above its flow", () => {
+    const result = compose({ title: 'x', blocks: short(4), composition: { mode: 'grid', columns: 4 } }, withBodyFlow(layouts.pillars, 'column'));
     assert.equal(region(result, 'body').arrangement, 'composition');
     assert.equal(rows(cells(result, 'body')), 1);
   });
@@ -300,15 +305,15 @@ describe('anchor', () => {
 });
 
 describe('design keys: theme level and precedence', () => {
-  test('the seven keys a theme may carry rank below the deck and above the layout', () => {
-    assert.deepEqual([...THEME_DESIGN_KEYS], ['titleAlignment', 'contentAlignment', 'contentBox', 'contentDirection', 'imageFit', 'listBullet', 'listStyle']);
+  test('the six keys a theme may carry rank below the deck and above the layout', () => {
+    assert.deepEqual([...THEME_DESIGN_KEYS], ['titleAlignment', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet', 'listStyle']);
     const layout = { design: { contentBox: false, titleAlignment: 'end' } };
-    const theme = { design: { contentBox: true, titleAlignment: 'center', chartPrimary: 'start' } };
+    const theme = { design: { contentBox: true, titleAlignment: 'center', mirror: true } };
     const fromTheme = resolveDesignHints({ layout, theme });
     assert.equal(fromTheme.contentBox, true);
     assert.equal(fromTheme.sources.contentBox, 'theme');
     assert.equal(fromTheme.paths.contentBox, 'design.theme');
-    assert.equal(fromTheme.chartPrimary, undefined, 'chartPrimary is not a theme key');
+    assert.equal(fromTheme.mirror, undefined, 'mirror is not a theme key');
     const fromDeck = resolveDesignHints({ layout, theme, presentation: { design: { contentBox: false } } });
     assert.equal(fromDeck.sources.contentBox, 'deck');
     const fromSlide = resolveDesignHints({ layout, theme, slide: { design: { titleAlignment: 'start', theme: 'x' } }, slideIndex: 2 });
@@ -340,7 +345,7 @@ describe('geometry.regions', () => {
     const result = compose({ title: 'x', blocks: [{ metric: { value: 1, label: 'a' } }] }, layouts.metrics);
     assert.deepEqual(result.regions.map((entry) => [entry.name, entry.flow, entry.accepts, entry.content, entry.collapsed ?? false]), [
       ['body', 'grid', ['metric', 'group'], ['slides.0.blocks.0'], false],
-      ['aside', 'none', ['text', 'list'], [], true],
+      ['aside', 'auto', ['text', 'list'], [], true],
     ]);
     assert.equal(result.slots, undefined);
     assert.equal(composeSlide({ title: 'x' }).regions, undefined, 'automatic slides have no regions');

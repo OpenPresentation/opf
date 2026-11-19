@@ -30,7 +30,7 @@
             "group",
             "diagram"
           ],
-          "flow": "none"
+          "max": 1
         },
         {
           "name": "second",
@@ -44,7 +44,7 @@
             "group",
             "diagram"
           ],
-          "flow": "none"
+          "max": 1
         }
       ]
     },
@@ -55,7 +55,7 @@
         "text"
       ],
       "role": "supporting",
-      "flow": "none"
+      "max": 1
     }
   ],
   "description": "Compare alternatives using parallel information. Keep the same criteria and level of detail for every option.",

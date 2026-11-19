@@ -78,7 +78,7 @@ describe('the cover rule is a record rule', () => {
   });
 
   test('empty regions collapse while populated regions retain a content heading', () => {
-    const body = { id: 'title', name: 'Title', regions: [{name:'title'},{name:'body',accepts:['text'],flow:'none'}] };
+    const body = { id: 'title', name: 'Title', regions: [{name:'title'},{name:'body',accepts:['text'],max: 1}] };
     assert.ok(titleY(compose({title:'Cover'},body)) > 720 * 0.25);
     assert.ok(titleY(compose({title:'Content',text:'Body'},body)) < 720 * 0.2);
   });

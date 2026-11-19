@@ -21,7 +21,7 @@
             "chart",
             "diagram"
           ],
-          "flow": "none"
+          "max": 1
         },
         {
           "name": "aside",

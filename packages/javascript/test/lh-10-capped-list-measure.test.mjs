@@ -76,7 +76,7 @@ test('rich formatting and RTL column reading order survive the same-cap measure 
 // RR-105 (supervisor decision 2026-11-12): continuation pages are held to the size every later page reaches, never to the first page's
 // smaller one, so pages 2 to 4 set the fallback at 28 px (v0.33.0's size) within the reading measure.
 test('paginated arrangement fallback keeps all 35 entries and exact mappings, the continuation pages at their shared 28px', () => {
-  const layout = {name: 'Levels', direction: 'column', regions: [{name: 'title'}, {name: 'levels', accepts: ['list'], role: 'primary', flow: 'none', arrangement: 'pyramid'}]};
+  const layout = {name: 'Levels', direction: 'column', regions: [{name: 'title'}, {name: 'levels', accepts: ['list'], role: 'primary', max: 1, arrangement: 'pyramid'}]};
   const document = {catalogs: {custom: {layouts: {levels: layout}}}, slides: [{layout: 'levels', title: 'Pyramid: a longer title that may need a second line on the slide', blocks: Array.from({length: 5}, () => ({items: [...entries]}))}]};
   const frozen = structuredClone(document), result = paginate(document);
   assert.deepEqual(document, frozen);
@@ -111,7 +111,7 @@ test('an unreadable column alternative that splits words does not replace an int
 });
 
 test('fallback reflow preserves explicit region and payload counts, opt-out, rich styles and RTL source order', () => {
-  const layout = {name: 'Levels', direction: 'column', regions: [{name: 'title'}, {name: 'levels', accepts: ['list'], role: 'primary', flow: 'none', arrangement: 'pyramid'}]};
+  const layout = {name: 'Levels', direction: 'column', regions: [{name: 'title'}, {name: 'levels', accepts: ['list'], role: 'primary', max: 1, arrangement: 'pyramid'}]};
   for (const constraint of ['region', 'payload', 'opt-out']) {
     const fixed = slide({items: entries, ...(constraint === 'payload' ? {columns: 1} : {})});
     fixed.title = 'Pyramid: a longer title that may need a second line on the slide';

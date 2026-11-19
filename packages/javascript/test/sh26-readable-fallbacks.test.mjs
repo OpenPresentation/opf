@@ -97,7 +97,7 @@ test('actual Venn circles and valid tree nodes keep their native arrangement rat
   }
 });
 test('a generic list region beside an unused diagram region is outside the fallback policy',()=>{
-  const record={name:'Mixed layout',direction:'column',regions:[{name:'title'},{name:'sets',accepts:['list'],arrangement:'venn',empty:'collapse',size:1},{name:'notes',accepts:['list'],role:'primary',flow:'none',size:1}]};
+  const record={name:'Mixed layout',direction:'column',regions:[{name:'title'},{name:'sets',accepts:['list'],arrangement:'venn',empty:'collapse',size:1},{name:'notes',accepts:['list'],role:'primary',max: 1,size:1}]};
   const slide=structuredClone(fixture.cases[0].slide);slide.blocks[0].region='notes';slide.blocks[0].columns=1;
   const result=composeSlide(slide,{layout:record}),item=body(result)[0];assert.equal(item.region,'notes');assert.equal(item.listColumns,undefined);assert.ok(item.text.lines.some(line=>line.trim().length>70));assert.ok(!result.diagnostics.some(d=>/diagram fallback/.test(d.message)));
 });

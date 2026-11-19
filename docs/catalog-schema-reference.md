@@ -375,8 +375,8 @@ _No named properties._
 | `size` | no | `ref:RegionSize` |  |
 | `accepts` | no | `array<enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline \| diagram \| shape \| group>` | Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A region that takes 'image' also takes a shape block. A group is also accepted where every one of its leaf kinds... |
 | `role` | no | `enum:primary \| media \| supporting` | Which content the region wants first. Binding gives a picture (image, video) to a media region first, then primary, supporting; every other kind to a primary region first, then supporting, media; of two equal regions... |
-| `flow` | no | `enum:none \| grid \| column \| auto` | How several blocks share the region: 'none' one block fills it (blocks no region had room for join it, up to 6, and it flows as 'auto'); 'grid' by count (1 fills, 2 side by side, 3 in a row, 4 as 2 x 2, 5 as 3 + 2, 6... |
-| `max` | no | `integer` | Blocks the region holds on one slide. Default 1 for flow 'none' (which requires 1), else 6. Content beyond every region's room is drawn in the overflow region with the warning opf/layout-unplaced, and paginate moves i... |
+| `flow` | no | `enum:auto \| grid \| row \| column` | How several blocks share the region, in the words of composition.mode: 'auto' a grid when every block is short and a column when any block is long (more than 6 estimated lines in its grid cell at the starting size); '... |
+| `max` | no | `integer` | Blocks the region holds on one slide. Default 6. 1 makes a single-block region: its block fills it, and blocks no region had room for still join it, up to 6, arranged by its flow (as 'none' did before OPF 0.35); a sin... |
 | `bleed` | no | `boolean` | The region's outer edges that lie on the content box's edge extend to the slide edge, as a placed image does. A bled region is never drawn as a card. Default false. |
 | `listColumns` | no | `oneOf:const:"auto" / const:1` | 'auto': a list in the region that does not fit its cell at the starting size (a lone list, or one of several blocks) flows into up to three columns before it shrinks, as a list payload's columns: 'auto'; a list of 6 o... |
 | `metrics` | no | `enum:stack \| tile` | How a metric block in the region is laid out. 'stack' (default): value, unit, label and the rest as one block at the region's anchor and content alignment. 'tile': the metric fills its cell (its card when the layout d... |
@@ -395,8 +395,6 @@ _No named properties._
 | `titleAlignment` | no | `enum:start \| center \| end` | Horizontal alignment of the title heading area. Logical, as design.titleAlignment of a deck: 'start' is the edge a paragraph starts on. |
 | `contentAlignment` | no | `enum:start \| center \| end` | Horizontal alignment of the body regions. Logical, as design.contentAlignment of a deck: 'start' is the edge a paragraph starts on. |
 | `contentBox` | no | `boolean` | Whether the body regions are drawn inside a visible card or surface. |
-| `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. On a layout slide it turns every flowing region into one row or one column; the slide's own composition.mode, columns and... |
-| `chartPrimary` | no | `enum:none \| top \| bottom \| start \| end` | Where the primary chart sits relative to supporting content on automatic slides. Template layouts express this arrangement with their regions; chartPrimary does not override a template. |
 | `imageFit` | no | `enum:cover \| contain \| stretch \| auto` | Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame, 'auto' covers when the crop keeps at least 85% of the pictu... |
 | `listBullet` | no | `enum:character \| image \| none` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet, 'none' draws no marker and no hanging indent (label-and-description lists). |
 | `listStyle` | no | `enum:stack \| rows` | As design.listStyle of a deck: 'stack' or 'rows' (ruled rows) for the lists of slides using this layout. |
@@ -529,7 +527,7 @@ _No named properties._
 | `background` | no | `ref:ThemeBackground` |  |
 | `variants` | no | `array<ref:ThemeVariant>` | The color variants the theme offers (OPF 0.23), for example light, light-alt, dark and dark-alt: named values of design.variant over the theme's one color scheme, so a dark deck is a variant of a theme and not a theme... |
 | `dimensions` | no | `enum:16:9 \| 4:3 \| 16:10 \| 1:1 \| 4:5 \| 9:16 \| letter \| a4 \| widescreen \| standard` | Default slide size for this theme. Accepts the same preset values as design.dimensions.preset. |
-| `design` | no | `object` | The theme's design defaults (OPF 0.19), so a house style such as boxed content or centred titles is set once: the keys and values of the deck's design for titleAlignment, contentAlignment, contentBox, contentDirection... |
+| `design` | no | `object` | The theme's design defaults (OPF 0.19), so a house style such as boxed content or centred titles is set once: the keys and values of the deck's design for titleAlignment, contentAlignment, contentBox, imageFit and lis... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 

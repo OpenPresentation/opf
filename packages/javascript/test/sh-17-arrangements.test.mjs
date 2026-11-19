@@ -107,7 +107,7 @@ test('OPF\'s own designs: PowerPoint\'s proportions, lines that span the region,
 
 // 0.35 step 4: the gallery's process layout draws a short lone list as Basic Process (lh-07-step-badges.test.mjs). A region whose
 // arrangement is `process` draws every lone list and list blocks so: the record of the 0.34 flow layout, kept here.
-const basicProcess = { id: 'basic-process', name: 'Basic process', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['list'], flow: 'none', arrangement: 'process' }] };
+const basicProcess = { id: 'basic-process', name: 'Basic process', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['list'], max: 1, arrangement: 'process' }] };
 const LAYOUTS = { ...gallery.layouts, 'basic-process': basicProcess };
 const compose = (slide, layout = slide.layout) => composeSlide(slide, { layout: LAYOUTS[layout] });
 // The layout of each linear arrangement: the gallery's chevrons and vertical-process, and the Basic Process record above.

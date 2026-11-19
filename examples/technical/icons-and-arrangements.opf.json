@@ -221,7 +221,7 @@
                 "list"
               ],
               "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "pyramid"
             }
           ],
@@ -248,7 +248,7 @@
                 "list"
               ],
               "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "matrix",
               "size": 3
             }
@@ -276,7 +276,7 @@
                 "list"
               ],
               "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "cycle",
               "size": 3
             }
@@ -303,7 +303,7 @@
                 "list"
               ],
               "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "chevrons"
             }
           ],
@@ -319,8 +319,7 @@
             "Groups of items"
           ],
           "design": {
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "contentBox": false
           },
           "direction": "column",
           "regions": [
@@ -337,7 +336,7 @@
                 "group",
                 "diagram"
               ],
-              "flow": "grid",
+              "flow": "row",
               "arrangement": "steps"
             }
           ],
@@ -363,7 +362,7 @@
               "accepts": [
                 "list"
               ],
-              "flow": "none",
+              "max": 1,
               "arrangement": "vertical-process",
               "size": 3
             }

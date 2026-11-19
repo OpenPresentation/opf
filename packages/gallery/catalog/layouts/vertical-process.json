@@ -17,7 +17,7 @@
       "accepts": [
         "list"
       ],
-      "flow": "none",
+      "max": 1,
       "arrangement": "vertical-process",
       "size": 3
     }

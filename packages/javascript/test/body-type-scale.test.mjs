@@ -7,7 +7,7 @@ import { composeSlide, fitText, fitRichText, LIST_NOMINAL_SIZE, PROSE_NOMINAL_SI
 // 25 px data role. Every size fits down to the readability floor (16 px by default), and an explicit run size wins. The role sizes
 // are checked with `fill: false`: LH-48 grows an under-filled body from them (lone-fill.test.mjs).
 const { layouts } = gallery;
-const columns = { name: 'Three columns', direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: ['first', 'second', 'third'].map((name) => ({ name, accepts: ['text', 'list'], role: 'primary', flow: 'none' })) }] };
+const columns = { name: 'Three columns', direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: ['first', 'second', 'third'].map((name) => ({ name, accepts: ['text', 'list'], role: 'primary', max: 1 })) }] };
 const words = (count) => Array.from({ length: count }, (_, index) => `word${index % 7}`).join(' ');
 
 test('the role sizes: prose 28 px, lists 32 px, tables 25 px', () => {

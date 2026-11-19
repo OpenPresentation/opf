@@ -1,5 +1,5 @@
 // FA-26 cross-engine check (the 0.15 design's Nesting test): explicit nested content groups, and
-// design.chartPrimary as the group it stands for, place every leaf in the same box in core composition, the coordinated
+// a chart beside a group of its supporting blocks on each side (design.chartPrimary before OPF 0.35), place every leaf in the same box in core composition, the coordinated
 // renderer's SVG and the exporter's native shapes, within 0.5 pt. docs/fixtures/placeholder-groups.opf.json is
 // self-contained (catalogs.custom, "default": false), so no host catalog is registered. It checks the shared geometry
 // contract, not PowerPoint raster parity. The editor's check of the same fixture is opf-editor's test/placeholder-groups.mjs.
@@ -102,4 +102,4 @@ for (const [index, slide] of deck.slides.entries()) {
   }
 }
 assert.ok(leaves >= 30, `${leaves} leaves checked`);
-console.log(`Placeholder groups ecosystem: ${leaves} leaves of ${deck.slides.length} slides (nested content groups and chartPrimary) agree across core, SVG and native PPTX within ${TOLERANCE_PT} pt.`);
+console.log(`Placeholder groups ecosystem: ${leaves} leaves of ${deck.slides.length} slides (nested content groups, a chart beside its group on each side) agree across core, SVG and native PPTX within ${TOLERANCE_PT} pt.`);

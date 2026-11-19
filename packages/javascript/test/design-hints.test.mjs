@@ -6,15 +6,13 @@ import * as root from '../dist/index.js';
 // FA-17: every shared design key resolves with one merge, per key: slide design, then deck design, then the
 // layout record's design, then the engine default. SlideComposition.design carries the result, so the render and
 // PPTX engines read the same values composition used.
-const layout = id => design => ({id, design, regions: [{name: 'title'}, {name: 'body-1', accepts: ['text', 'list', 'chart'], flow: 'none'}]});
+const layout = id => design => ({id, design, regions: [{name: 'title'}, {name: 'body-1', accepts: ['text', 'list', 'chart'], max: 1}]});
 const asset = name => `data:image/png;base64,${name}`;
 // One value per key that the engine default does not already produce, plus an opposing value to override with.
 const KEYS = {
   titleAlignment: ['center', 'end'],
   contentAlignment: ['center', 'end'],
   contentBox: [true, false],
-  contentDirection: ['vertical', 'horizontal'],
-  chartPrimary: ['start', 'top'],
   imageFit: ['contain', 'stretch'],
   listBullet: ['image', 'character'],
   mirror: [true, false],
@@ -123,12 +121,12 @@ test('layout listBullet image attaches the organization icon logo, and reports a
 });
 
 test('template geometry is authoritative while design hints retain their precedence', () => {
-  const record = layout('dir')({contentDirection: 'vertical', chartPrimary: 'start'});
+  const record = layout('dir')({imageFit: 'contain', listBullet: 'character'});
   const slide = {title: 'T', blocks: [{text: 'First'}, {text: 'Second'}]};
   const control = composeSlide(slide, {layout: record});
-  const overridden = composeSlide({...slide, design: {contentDirection: 'horizontal', chartPrimary: 'top'}}, {layout: record});
-  assert.equal(overridden.design.contentDirection, 'horizontal');
-  assert.equal(overridden.design.chartPrimary, 'top');
+  const overridden = composeSlide({...slide, design: {imageFit: 'stretch', listBullet: 'none'}}, {layout: record});
+  assert.equal(overridden.design.imageFit, 'stretch');
+  assert.equal(overridden.design.listBullet, 'none');
   assert.deepEqual(overridden.items.map(item=>item.box),control.items.map(item=>item.box));
 });
 
@@ -140,6 +138,6 @@ test('the effective imageFit is the fit of every image item that sets none: cove
   assert.equal(fit({title: 'T', image: asset('x')}, {layout: record, presentation: {design: {imageFit: 'stretch'}}}), 'stretch');
   // WI-3 (P33): a slide with no layout shows its pictures whole; a layout record without an imageFit keeps the engine default.
   assert.equal(fit({title: 'T', image: asset('x')}, {}), 'contain');
-  assert.equal(fit({title: 'T', image: asset('x')}, {layout: {id: 'plain', regions: [{name: 'title'}, {name: 'body-1', accepts: ['image'], flow: 'none'}]}}), 'cover');
+  assert.equal(fit({title: 'T', image: asset('x')}, {layout: {id: 'plain', regions: [{name: 'title'}, {name: 'body-1', accepts: ['image'], max: 1}]}}), 'cover');
   assert.equal(composeSlide({title: 'T'}, {}).design.imageFit, undefined);
 });

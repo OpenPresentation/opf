@@ -234,7 +234,7 @@ export function createLayoutInspector(container, options = {}) {
     const max = el("input", "opf-lx-input", { type: "number", min: "1", max: "12", step: "1", "data-field": "max", placeholder: "Default" });
     max.value = entry.max === undefined ? "" : String(entry.max);
     max.addEventListener("input", () => edit(() => set("max", max.value === "" ? undefined : Number(max.value))));
-    props.append(field("Max blocks", max, { path, field: "max", help: "A whole number from 1 to 12. Default: 1 for flow none, else 6." }));
+    props.append(field("Max blocks", max, { path, field: "max", help: "A whole number from 1 to 12. Default 6; 1 is a region of one block." }));
     props.append(anchorField(path, inherited, entry.anchor, (value) => set("anchor", value, { coalesce: null })));
     const bleed = el("input", "opf-lx-check", { type: "checkbox", "data-field": "bleed" });
     bleed.checked = entry.bleed === true;

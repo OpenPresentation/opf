@@ -8,9 +8,9 @@ import { gallery } from '../dist/index.js';
 const GAP = 24; // the default gap at a 1280 x 720 canvas
 const OLD = {
   closing: { id: 'closing', design: { titleAlignment: 'center', contentAlignment: 'center' }, direction: 'column', regions: [{ name: 'title', size: 1 }, { name: 'details', size: 'auto', accepts: ['text', 'list', 'image'], role: 'supporting', flow: 'auto' }] },
-  statement: { id: 'statement', design: { titleAlignment: 'center', contentAlignment: 'center' }, direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { name: 'message', accepts: ['text', 'quote', 'metric'], role: 'primary', flow: 'none' }] },
+  statement: { id: 'statement', design: { titleAlignment: 'center', contentAlignment: 'center' }, direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { name: 'message', accepts: ['text', 'quote', 'metric'], role: 'primary', max: 1 }] },
   quote: { id: 'quote', direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { name: 'quotes', accepts: ['quote', 'group'], role: 'primary', flow: 'grid' }] },
-  comparison: { id: 'comparison', design: { contentBox: false }, direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'first', accepts: ['text', 'list', 'metric', 'image', 'chart', 'table', 'group'], role: 'primary', flow: 'none' }, { name: 'second', accepts: ['text', 'list', 'metric', 'image', 'chart', 'table', 'group'], role: 'primary', flow: 'none' }] }, { name: 'verdict', size: 'auto', accepts: ['text'], role: 'supporting', flow: 'none' }] },
+  comparison: { id: 'comparison', design: { contentBox: false }, direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'first', accepts: ['text', 'list', 'metric', 'image', 'chart', 'table', 'group'], role: 'primary', max: 1 }, { name: 'second', accepts: ['text', 'list', 'metric', 'image', 'chart', 'table', 'group'], role: 'primary', max: 1 }] }, { name: 'verdict', size: 'auto', accepts: ['text'], role: 'supporting', max: 1 }] },
 };
 const compose = (layout, slide) => composeSlide(slide, { width: 1280, height: 720, layout: typeof layout === 'string' ? gallery.layouts[layout] : layout });
 const field = (result, name) => result.items.find((item) => item.field === name);

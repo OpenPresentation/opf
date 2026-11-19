@@ -11,8 +11,6 @@
     "titleAlignment": "start",
     "contentAlignment": "start",
     "contentBox": false,
-    "contentDirection": "horizontal",
-    "chartPrimary": "none",
     "imageFit": "cover",
     "listBullet": "character"
   },
@@ -38,11 +36,7 @@
       ]
     },
     {
-      "title": "Chart Primary Override",
-      "design": {
-        "chartPrimary": "start",
-        "contentDirection": "vertical"
-      },
+      "title": "Chart Defaults",
       "chart": {
         "type": "line",
         "data": {

@@ -70,7 +70,7 @@ test('fixed chart/data/frame keeps reference/plot/end-label geometry when prose 
  const c=chart({data:{columns:['Quarter','Enterprise','Consumer'],rows:[['Q1',10,18],['Q2',15,13],['Q3',25,20]]},referenceLines:[{value:12,label:'Target'}]});
  // Explicit layout tracks fix the chart frame while only title/subtitle prose changes.
  // The title may repaint the chart (its focus), but the plot, the reference and every label box stay where they are.
- const compose=(title,subtitle,value=c)=>{const s=composeSlide({title,subtitle,chart:value},{width:1280,height:720,layout:{name:'Fixed chart',regions:[{name:'title',size:.2},{name:'body',size:.8,accepts:['chart'],flow:'none'}]},recompose:false,fill:false});return s.items.find(i=>i.field==='chart');};
+ const compose=(title,subtitle,value=c)=>{const s=composeSlide({title,subtitle,chart:value},{width:1280,height:720,layout:{name:'Fixed chart',regions:[{name:'title',size:.2},{name:'body',size:.8,accepts:['chart'],max: 1}]},recompose:false,fill:false});return s.items.find(i=>i.field==='chart');};
  const snapshot=i=>({box:i.box,axis:i.chart.valueAxis,plot:i.chart.layer.plot,refs:i.chart.layer.references,ends:i.chart.layer.endLabels});
  const named=compose('Enterprise above 100','Consumer below 5 in 2023'),neutral=compose('Neutral title','Neutral subtitle');
  assert.deepEqual(snapshot(named),snapshot(neutral));

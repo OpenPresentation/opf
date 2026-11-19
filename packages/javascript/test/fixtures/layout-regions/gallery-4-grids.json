@@ -105,7 +105,7 @@
           "chart"
         ],
         "role": "primary",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -200,7 +200,7 @@
           "text"
         ],
         "role": "supporting",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -415,7 +415,7 @@
           "group"
         ],
         "role": "primary",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -434,7 +434,7 @@
           "group"
         ],
         "role": "primary",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -447,7 +447,7 @@
           "text"
         ],
         "role": "supporting",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -498,7 +498,7 @@
           "video"
         ],
         "role": "media",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": true,
         "listColumns": 1,
@@ -764,7 +764,7 @@
           "metric"
         ],
         "role": "primary",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -778,7 +778,7 @@
           "video"
         ],
         "role": "media",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -858,7 +858,7 @@
           "video"
         ],
         "role": "media",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -929,7 +929,7 @@
           "video"
         ],
         "role": "media",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": true,
         "listColumns": 1,
@@ -1117,7 +1117,7 @@
           "list"
         ],
         "role": "supporting",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -1422,7 +1422,7 @@
           "metric"
         ],
         "role": "primary",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -1485,7 +1485,7 @@
           "table"
         ],
         "role": "primary",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -1578,7 +1578,7 @@
           "text"
         ],
         "role": "supporting",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -1756,7 +1756,7 @@
           "timeline"
         ],
         "role": "primary",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -1843,7 +1843,7 @@
           "group"
         ],
         "role": "primary",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,
@@ -1865,7 +1865,7 @@
           "group"
         ],
         "role": "primary",
-        "flow": "none",
+        "flow": "auto",
         "max": 1,
         "bleed": false,
         "listColumns": 1,

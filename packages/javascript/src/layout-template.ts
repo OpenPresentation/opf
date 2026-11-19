@@ -16,8 +16,8 @@ export type RegionKind = typeof REGION_KINDS[number];
 /** Which content a region wants first (content binding, step 2). */
 export const REGION_ROLES = ['primary', 'media', 'supporting'] as const;
 export type RegionRole = typeof REGION_ROLES[number];
-/** How several blocks share a region. */
-export const REGION_FLOWS = ['none', 'grid', 'column', 'auto'] as const;
+/** How several blocks share a region, in the words of `composition.mode` (OPF 0.35: `none` is `max: 1`, singleBlockRegion). */
+export const REGION_FLOWS = ['auto', 'grid', 'row', 'column'] as const;
 export type RegionFlow = typeof REGION_FLOWS[number];
 export const REGION_ANCHORS = ['top', 'middle', 'bottom'] as const;
 export type RegionAnchor = typeof REGION_ANCHORS[number];
@@ -43,7 +43,7 @@ export interface LayoutRegion {
   accepts: RegionKind[];
   role: RegionRole;
   flow: RegionFlow;
-  /** Blocks the region holds on one slide (1 for `flow: "none"`, else 6 unless set). */
+  /** Blocks the region holds on one slide (6 unless set); 1 is a single-block region (singleBlockRegion). */
   max: number;
   bleed: boolean;
   listColumns: 'auto' | 1;
@@ -135,6 +135,13 @@ const positive = (value: unknown): value is number => typeof value === 'number' 
 const validSize = (value: unknown): value is number | 'auto' => value === 'auto' || (positive(value) && value <= 100);
 const EPSILON = 1e-9;
 
+/**
+ * OPF 0.35: a region of `max: 1` (what `flow: "none"` was) is a single-block region. Its one block fills it and stacks as a column; blocks
+ * no region had room for still join it, up to JOINED_FIXED_MAX, and then flow by its `flow`; it is never the default overflow region nor the
+ * region a slide's own composition arranges, and fixed regions of one role side by side share their joined blocks (block-grouping.ts).
+ */
+export const singleBlockRegion = (region: Pick<LayoutRegion, 'max'>): boolean => region.max === 1;
+
 /** Whether a layout record is a template (it has a `regions` list). */
 export function isLayoutTemplate(layout: unknown): boolean {
   return Object.hasOwn(record(layout), 'regions');
@@ -146,7 +153,7 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
   // No `accepts` means every body content kind and `group`.
   const accepts = Array.isArray(entry.accepts) ? [...new Set(entry.accepts.filter((kind): kind is RegionKind => (REGION_KINDS as readonly unknown[]).includes(kind)))] : [...REGION_KINDS];
   const flow = (REGION_FLOWS as readonly unknown[]).includes(entry.flow) ? entry.flow as RegionFlow : 'auto';
-  const max = Number.isInteger(entry.max) && (entry.max as number) >= 1 && (entry.max as number) <= MAX_REGION_BLOCKS ? entry.max as number : flow === 'none' ? 1 : 6;
+  const max = Number.isInteger(entry.max) && (entry.max as number) >= 1 && (entry.max as number) <= MAX_REGION_BLOCKS ? entry.max as number : 6;
   return {
     name,
     accepts,
@@ -278,7 +285,6 @@ function parse(layout: unknown): Parsed {
       } else {
         if (reserved.has(name)) add('layout-region', `${at}/name`, `'${name}' is reserved and cannot name a body region (reserved: ${RESERVED_REGION_NAMES.join(', ')})`);
         else if (!NAME.test(name)) add('layout-region', `${at}/name`, `'${name}' is not a region name (lowercase letters, digits and hyphens, starting with a letter)`);
-        if (entry.flow === 'none' && entry.max !== undefined && entry.max !== 1) add('layout-region', `${at}/max`, `a region with flow "none" holds one block; max must be 1, not ${JSON.stringify(entry.max)}`);
         anchorCheck(`${at}/anchor`, entry.anchor);
         const found = layoutRegion(name, entry, inherited);
         if (!found.accepts.length) add('layout-region', `${at}/accepts`, `region '${name}' accepts no content kind`);
@@ -317,7 +323,7 @@ function parse(layout: unknown): Parsed {
   // A column of nothing but auto entries has no numeric track to hold the leftover height: the record's anchor places the stack.
   const stackAnchor = anchorOf(value.anchor);
   const stack = direction === 'column' && children.length > 0 && children.every(node => node.size === 'auto') && stackAnchor !== undefined && stackAnchor !== 'top' ? stackAnchor : undefined;
-  const overflowRegion = typeof value.overflowRegion === 'string' ? value.overflowRegion : regions.find(entry => entry.role === 'primary' && entry.flow !== 'none')?.name;
+  const overflowRegion = typeof value.overflowRegion === 'string' ? value.overflowRegion : regions.find(entry => entry.role === 'primary' && !singleBlockRegion(entry))?.name;
   return {
     issues,
     template: {
@@ -428,7 +434,7 @@ function compile(root: Node): { rows: Track[]; columns: number[]; cells: string[
  * The problems `validate` reports for a template record (`opf/layout-template`, `opf/layout-region`): a `regions` list
  * that is not 1 to 12 entries, an entry that is neither a region nor a split, a bad `direction` or `size`, `auto` outside
  * a column, splits nested too deep, regions that compile to more than 12 rows or columns; a name used twice, a reserved
- * name, a heading region with content rules, a `subtitle` without `title`, `flow: "none"` with `max` other than 1,
+ * name, a heading region with content rules, a `subtitle` without `title`,
  * a region that accepts nothing, an `overflowRegion` that is not a region. Empty for a valid template and for a record
  * that is not a template.
  */

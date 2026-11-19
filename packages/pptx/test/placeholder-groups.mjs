@@ -1,4 +1,4 @@
-// FA-26: layout records with nested placeholder groups, and design.chartPrimary as the group it stands for. The export places
+// FA-26: layout records with nested placeholder groups, and a chart beside a group on each side (design.chartPrimary before 0.35). The export places
 // every leaf in the box core composition gives it, within 0.5 pt: a chart's graphic frame is the box, and the shapes of a
 // text, list or metric start at the box and stay inside it. The record (groups included) survives an unchanged round trip.
 // test/fixtures/placeholder-groups.opf.json is core's docs/fixtures/placeholder-groups.opf.json (self-contained:

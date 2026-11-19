@@ -75,7 +75,7 @@ export function nodeMenuItems(model, paths, surface, win) {
 export function buildWireframe(dom, accepts, { count = 3, flow = "auto" } = {}) {
   const kinds = Array.isArray(accepts) && accepts.length ? accepts : ["text", "list", "image"];
   const wire = dom.el("div", "opf-lx-wire", { "aria-hidden": "true", "data-flow": flow });
-  const shown = Math.max(1, Math.min(count, kinds.length > 1 ? Math.min(3, kinds.length) : flow === "none" ? 1 : 2));
+  const shown = Math.max(1, Math.min(count, kinds.length > 1 ? Math.min(3, kinds.length) : 2));
   for (let index = 0; index < shown; index++) {
     const kind = kinds[index % kinds.length];
     const block = dom.el("span", "opf-lx-wire-block", { "data-kind": kind });

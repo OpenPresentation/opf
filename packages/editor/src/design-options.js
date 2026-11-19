@@ -60,8 +60,6 @@ function checkZoneField(key, value) {
 const ENUMS = Object.freeze({
   titleAlignment: ["start", "center", "end"],
   contentAlignment: ["start", "center", "end"],
-  contentDirection: ["horizontal", "vertical"],
-  chartPrimary: ["none", "top", "bottom", "start", "end"],
   listBullet: ["character", "image", "none"],
   imageFit: ["cover", "contain", "stretch", "auto"],
 });
@@ -74,8 +72,6 @@ const ENUMS = Object.freeze({
 export const DESIGN_OPTIONS = Object.freeze([
   { id: "titleAlignment", label: "Title alignment", type: "enum", values: ENUMS.titleAlignment, scopes: ["deck", "slide"], path: "design.titleAlignment" },
   { id: "contentAlignment", label: "Content alignment", type: "enum", values: ENUMS.contentAlignment, scopes: ["deck", "slide"], path: "design.contentAlignment" },
-  { id: "contentDirection", label: "Content direction", type: "enum", values: ENUMS.contentDirection, scopes: ["deck", "slide"], path: "design.contentDirection" },
-  { id: "chartPrimary", label: "Primary chart position", type: "enum", values: ENUMS.chartPrimary, scopes: ["deck", "slide"], path: "design.chartPrimary" },
   { id: "listBullet", label: "List bullets", type: "enum", values: ENUMS.listBullet, scopes: ["deck", "slide"], path: "design.listBullet" },
   { id: "contentBox", label: "Content box", type: "boolean", scopes: ["deck", "slide"], path: "design.contentBox" },
   { id: "imageFit", label: "Image fit", type: "enum", values: ENUMS.imageFit, scopes: ["deck", "slide"], path: "design.imageFit" },

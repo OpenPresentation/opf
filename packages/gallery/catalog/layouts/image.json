@@ -19,7 +19,7 @@
         "diagram"
       ],
       "role": "media",
-      "flow": "none",
+      "max": 1,
       "bleed": true
     }
   ],

@@ -104,7 +104,7 @@
                 "list"
               ],
               "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "org-chart"
             }
           ],
@@ -130,7 +130,7 @@
                 "list"
               ],
               "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "hierarchy"
             }
           ],
@@ -156,7 +156,7 @@
                 "list"
               ],
               "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "venn"
             }
           ],

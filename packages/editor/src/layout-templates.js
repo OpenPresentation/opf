@@ -34,7 +34,7 @@ export function layoutGroupOrder(choices) {
 
 export const LAYOUT_REGION_KINDS = Object.freeze(["text", "list", "image", "video", "chart", "table", "code", "diagram", "metric", "quote", "timeline", "group"]);
 export const LAYOUT_REGION_ROLES = Object.freeze(["primary", "media", "supporting"]);
-export const LAYOUT_REGION_FLOWS = Object.freeze(["none", "grid", "column", "auto"]);
+export const LAYOUT_REGION_FLOWS = Object.freeze(["auto", "grid", "row", "column"]);
 const RESERVED = new Set(["title", "subtitle", "tag", "auto", "start", "center", "end", "top", "middle", "bottom"]);
 const NAME = /^[a-z][a-z0-9-]*$/;
 

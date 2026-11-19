@@ -82,7 +82,7 @@
                 "list"
               ],
               "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "inverted-pyramid"
             }
           ],

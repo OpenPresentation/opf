@@ -22,7 +22,7 @@
             "diagram"
           ],
           "role": "media",
-          "flow": "none",
+          "max": 1,
           "anchor": "middle"
         },
         {

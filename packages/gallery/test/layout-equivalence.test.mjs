@@ -22,8 +22,10 @@ const RENAMED = {
   "table-beside": { table: "body", notes: "aside" }, table: { table: "body", note: "aside" }, timeline: { timeline: "body", notes: "aside" },
 };
 const renamed = (id, name) => RENAMED[id]?.[name] ?? name;
+// OPF 0.35: a 4.0.0 `flow: "none"` region is a single-block region, `max: 1`, whose flow is the default.
+const single = (rule) => { if (rule.flow !== "none") return rule; const { flow, ...rest } = rule; return { ...rest, max: 1 }; };
 const old = Object.fromEntries(Object.entries(JSON.parse(readFileSync(path.join(root, "test", "fixtures", "layouts-4.0.0.json"), "utf8"))).map(([id, before]) => [id, {
-  ...before, areas: before.areas.map((row) => row.map((name) => renamed(id, name))), regions: Object.fromEntries(Object.entries(before.regions).map(([name, rule]) => [renamed(id, name), rule])),
+  ...before, areas: before.areas.map((row) => row.map((name) => renamed(id, name))), regions: Object.fromEntries(Object.entries(before.regions).map(([name, rule]) => [renamed(id, name), single(rule)])),
 }]));
 const { records } = await readSnapshotKind(path.join(root, "catalog"), "layouts");
 // WI-2 (whole-group placement): four records were redrawn on purpose (their grid is an all-auto stack the 4.0.0 form could not
@@ -57,6 +59,8 @@ const CHANGED = {
   timeline: { body: { flow: "column" } },
   // OPF 0.35 removed the role secondary; its one user, the KPI row, is supporting (it accepts only metrics, so it binds as before).
   dashboard: { lead: { role: "supporting" } },
+  // OPF 0.35: process says its row of steps with its region's flow, where it set design.contentDirection on a grid region.
+  process: { body: { flow: "row" } },
 };
 
 /** Track weights as shares of their numeric total (core compiles to relative numbers; `auto` stays `auto`). */

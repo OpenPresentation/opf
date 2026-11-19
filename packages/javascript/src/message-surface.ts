@@ -26,8 +26,8 @@ export function messageKind(slide: Rec, layout: unknown): MessageSurface['kind']
   // A layout record that is not a valid template fails where it is composed; here the slide is simply not a message.
   try { plan = isLayoutTemplate(layout) ? layoutTemplate(layout) : undefined; } catch { return undefined; }
   if (plan?.stack !== undefined && statementMessage(slide, plan) !== undefined) return 'statement-message';
-  // A layout that asks for several body regions (columns, a comparison), a grid (pillars) or a picture area asks for more than one message.
-  if (plan && (plan.regions.length > 1 || plan.regions.some(region => region.role === 'media' || region.flow === 'grid'))) return undefined;
+  // A layout that asks for several body regions (columns, a comparison), a grid (pillars), a row (process) or a picture area asks for more than one message.
+  if (plan && (plan.regions.length > 1 || plan.regions.some(region => region.role === 'media' || region.flow === 'grid' || region.flow === 'row'))) return undefined;
   const value = lone.host.text;
   const cited = Array.isArray(value) && value.some(run => run && typeof run === 'object' && ((run as { cite?: unknown }).cite !== undefined || (run as { footnote?: unknown }).footnote !== undefined));
   return !cited && messageWords(value) > 0 && messageWords(value) <= SHORT_MESSAGE_WORDS ? 'display-message' : undefined;

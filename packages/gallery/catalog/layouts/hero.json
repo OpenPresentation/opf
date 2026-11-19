@@ -23,7 +23,7 @@
             "quote",
             "metric"
           ],
-          "flow": "none"
+          "max": 1
         },
         {
           "name": "body",
@@ -47,7 +47,7 @@
         "diagram"
       ],
       "role": "media",
-      "flow": "none",
+      "max": 1,
       "bleed": true
     }
   ],

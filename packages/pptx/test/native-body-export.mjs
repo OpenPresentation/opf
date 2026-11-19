@@ -102,7 +102,7 @@ assert.equal(importedRich.find(run => run.text === 'Normal ').bold, false);
 assert.equal(importedRich.find(run => run.text === 'Normal ').italic, false);
 
 const centered = deck({title: 'Anchor', layout: 'custom:anchored', text: 'Centered body', design: {contentAlignment: 'end'}});
-centered.catalogs = {custom: {layouts: {anchored: {name: 'Anchored', direction: 'column', regions: [{name: 'title'}, {name: 'body', accepts: ['text'], flow: 'none', anchor: 'middle'}]}}}};
+centered.catalogs = {custom: {layouts: {anchored: {name: 'Anchored', direction: 'column', regions: [{name: 'title'}, {name: 'body', accepts: ['text'], max: 1, anchor: 'middle'}]}}}};
 const centeredOutput = await exported(centered, {bodyText: 'native'});
 const [centeredBody] = bodyShapes(centeredOutput.entries);
 assert.match(centeredBody, /anchor="ctr"/); assert.match(centeredBody, /<a:pPr[^>]*algn="r"/);

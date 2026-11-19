@@ -51,7 +51,7 @@ const image = (value, depth) => fields(value, {placement: edge, overlay: edge, c
 const zone = (value, depth) => fields(value, {text: rich}, depth);
 const zones = (value, depth) => keyed(value, zone, depth, side);
 const design = (value, depth) => fields(value, {
-  titleAlignment: side, contentAlignment: side, chartPrimary: side,
+  titleAlignment: side, contentAlignment: side,
   header: zones, footer: zones, background,
 }, depth);
 const cell = (value, depth) => Array.isArray(value) ? rich(value, depth) : fields(value, {

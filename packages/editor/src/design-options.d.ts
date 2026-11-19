@@ -3,8 +3,6 @@ import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js
 export type DesignOptionId =
   | "titleAlignment"
   | "contentAlignment"
-  | "contentDirection"
-  | "chartPrimary"
   | "listBullet"
   | "contentBox"
   | "imageFit"

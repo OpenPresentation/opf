@@ -66,10 +66,10 @@ picture two thirds as wide, bled to the slide's edges. A heading region may sit 
   "regions": [
     { "direction": "column", "size": 3, "regions": [
       { "name": "title" },
-      { "name": "lead", "size": "auto", "accepts": ["text", "quote", "metric"], "flow": "none" },
+      { "name": "lead", "size": "auto", "accepts": ["text", "quote", "metric"], "max": 1 },
       { "name": "body", "accepts": ["text", "list", "metric", "group"], "role": "supporting", "flow": "grid" }
     ] },
-    { "name": "media", "size": 2, "accepts": ["image", "video"], "role": "media", "flow": "none", "bleed": true }
+    { "name": "media", "size": 2, "accepts": ["image", "video"], "role": "media", "max": 1, "bleed": true }
   ]
 }
 ```
@@ -79,7 +79,7 @@ picture two thirds as wide, bled to the slide's edges. A heading region may sit 
 | `direction` | `row` (side by side, left to right in reading order) or `column` (stacked, top to bottom). Default `column`. |
 | `regions` | 1 to 12 entries in reading order, each a region or a split. |
 | `anchor` | Vertical position of the content of every body region under the record (or split) that does not set its own. Inherited by body regions only, never by `title` or `subtitle`. Exception: on a column record whose entries are all `auto`, it places the whole stack (see Choosing an anchor). |
-| `overflowRegion` | Where content no region accepts goes. Omitted: the first `primary` region whose flow is not `none`. |
+| `overflowRegion` | Where content no region accepts goes. Omitted: the first `primary` region that is not a single-block region (`max: 1`). |
 | `design` | The layout's design defaults (below). |
 | `composition` | Only `gap`, `padding`, `minFontSize` and `overflow`, with their 0.18 meaning. |
 
@@ -119,8 +119,8 @@ lists the 0.34 names of the built-ins.
 | `size` | a number above 0 and up to 100, or `auto` (columns only) | 1 |
 | `accepts` | `text`, `list`, `image`, `video`, `chart`, `table`, `code`, `metric`, `quote`, `timeline`, `diagram`, `group` | every body kind and `group` |
 | `role` | `primary`, `media`, `supporting` | `primary` |
-| `flow` | `none`, `grid`, `column`, `auto` | `auto` |
-| `max` | 1 to 12 (`none` requires 1) | 1 for `none`, else 6 |
+| `flow` | `auto`, `grid`, `row`, `column` (the words of `composition.mode`) | `auto` |
+| `max` | 1 to 12; `1` is a single-block region (below) | 6 |
 | `bleed` | boolean: outer edges on the content box reach the slide edge; never a card | `false` |
 | `listColumns` | `"auto"` (a list of more than 6 entries that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
 | `metrics` | `stack` (value, unit, label and the rest as one block at the anchor) or `tile` (LH-68: each metric fills its cell, label first as an eyebrow, the value asking for a quarter of the cell's height between 76 and 152 px, description, delta and trend at the cell's foot, start-aligned; the gallery `scorecard` uses it) | `stack` |
@@ -210,8 +210,8 @@ Long texts are drawn as full-width rows (LH-86). Side by side, two or three para
 columns of long lines, or as a short one in a wide card beside a long one in a narrow card when an empty region collapsed into it.
 On a slide that draws cards, when the filled regions of a layout lie in one row and hold only such paragraphs (two or three, in
 several regions or in one region's grid), every paragraph moves to the first region of that row in reading order. The other
-regions are left empty and collapse into it, and that region stacks them one card per row across the row. The slide must have no
-`contentDirection` and no composition of its own, and must have nothing beyond a region's room or below the grid.
+regions are left empty and collapse into it, and that region stacks them one card per row across the row. The layout must have no
+`row` region, the slide no composition of its own, and must have nothing beyond a region's room or below the grid.
 
 A stacked column of such cards (these rows, or more long paragraphs one region stacks) shares the region's height. The text is
 set at the largest size of the type scale at which every row fits, each card as tall as its text plus the insets of a card that
@@ -235,7 +235,7 @@ The schema checks types, enums and ranges; an embedded record that fails it is `
 | Rule | Severity | Raised for |
 | --- | --- | --- |
 | `opf/layout-template` | error | A `regions` list that is not 1 to 12 entries; an entry that is neither a region nor a split; a bad `direction` or `size`; `auto` outside a column; splits nested more than three levels (the record's own list is level 1); regions that compile to a grid over 12 x 12. |
-| `opf/layout-region` | error | A name used twice; a reserved region name; a heading region with content rules; a `subtitle` without a `title`; a region that accepts no kind; `flow: none` with `max` other than 1; an `overflowRegion` that is not a body region. |
+| `opf/layout-region` | error | A name used twice; a reserved region name; a heading region with content rules; a `subtitle` without a `title`; a region that accepts no kind; an `overflowRegion` that is not a body region. |
 
 `composeSlide` refuses such a record (`OPFLayoutTemplateError`). `layoutTemplate(record)` parses, checks and compiles a record
 and `layoutTemplateIssues(record)` lists the problems, both on `@openpresentation/opf/composition`.
@@ -299,10 +299,10 @@ slide that pins any block with `region` keeps the binding above as written.
    grid keeps about 60 to 65% of the body. On `metrics`, 3 metrics and 2 notes are a row of metrics over a row of two
    notes (the `body` and the `aside`); on `chart`, 3 charts and 2 notes the same.
 3. **Extra blocks join a region (LH-46).** A block no region had room for, on a layout with no overflow region, joins
-   the region that accepts it instead of the row below the grid: a `flow: none` region takes up to 6 blocks (accepted,
-   no finding: the region then flows as `auto`); a flowing region takes up to 12, drawn beyond its `max` with
+   the region that accepts it instead of the row below the grid: a single-block region (`max: 1`) takes up to 6 blocks (accepted,
+   no finding: the region then flows by its `flow`, `auto` by default); a flowing region takes up to 12, drawn beyond its `max` with
    `opf/layout-unplaced` as an overflow region draws them (so `paginate` can still move them).
-   - `flow: none` regions of one role side by side (the `first` and `second` columns of `comparison` or `two-column`)
+   - single-block regions of one role side by side (the `first` and `second` columns of `comparison` or `two-column`)
      become one region of N cells: the first takes their blocks and any block bound between them in source order (the
      `aside`), and the others collapse into it. Four texts on `comparison` are a 2 x 2 grid in reading order.
    - A lone fixed region arranges pictures as a **mosaic** and text, quotes and metrics as a **lead plus cards**. A
@@ -339,21 +339,23 @@ In the Markdown dialect, `<!-- block: region=aside -->` pins a block; a promoted
 
 | `flow` | Blocks are arranged |
 | --- | --- |
-| `none` | One block fills the region. |
-| `grid` | By count: 1 fills; 2, 3 in a row; 4 as 2 x 2; 5 as 3 + 2; 6 as 3 x 2; 7 to 12 in balanced rows of at most four (7 as 4 + 3, 8 as 4 + 4, 9 as 3 x 3, 10 as 4 + 3 + 3; LH-47: no row is more than one cell short of another). Rows and columns swap in a portrait region (7 as 3 + 2 + 2). The cells of a short row stretch to the full width; in a grid of only pictures and videos they keep the full rows' size, one aspect, and are centered. |
-| `column` | Stacked at the heights the blocks need, one gap apart, and placed by the region's `anchor`. Charts, pictures, videos and diagrams take what the measured blocks (text, lists, quotes, metrics, code, timelines, tables) leave; a table (LH-44) needs its rows at the starting size, gives up height down to its rows at the floor and takes a share of any spare height. Blocks that do not fit share the region: each gives up the same fraction of what it can give up above its height at the minimum font size. A group's blocks in one column stack the same way. |
 | `auto` | `grid` unless a block is long: more than 6 lines (code: 12, table: 6 rows) in its grid cell at the starting size (28 px for prose), counted with core's estimate, never a host font. In an `auto` region a paragraph that wraps takes a reading measure of about 70 average characters of its size (never at the cost of size; it follows the content alignment) and a lone block of up to two lines uses the 32 px lead size. |
+| `grid` | By count: 1 fills; 2, 3 in a row; 4 as 2 x 2; 5 as 3 + 2; 6 as 3 x 2; 7 to 12 in balanced rows of at most four (7 as 4 + 3, 8 as 4 + 4, 9 as 3 x 3, 10 as 4 + 3 + 3; LH-47: no row is more than one cell short of another). Rows and columns swap in a portrait region (7 as 3 + 2 + 2). The cells of a short row stretch to the full width; in a grid of only pictures and videos they keep the full rows' size, one aspect, and are centered. |
+| `row` | Side by side in one row, one cell each at equal widths in reading order: the counterpart of `column` (and of `composition.mode: "row"`). The row is kept as written: no paragraph columns, lead block, list grid or regrouping replaces it. The gallery `process` layout draws its steps in a `row` region. |
+| `column` | Stacked at the heights the blocks need, one gap apart, and placed by the region's `anchor`. Charts, pictures, videos and diagrams take what the measured blocks (text, lists, quotes, metrics, code, timelines, tables) leave; a table (LH-44) needs its rows at the starting size, gives up height down to its rows at the floor and takes a share of any spare height. Blocks that do not fit share the region: each gives up the same fraction of what it can give up above its height at the minimum font size. A group's blocks in one column stack the same way. |
 
-Several timelines in one region are a stack of horizontal bands whatever the region's `flow` and `contentDirection`: one column, or two when one column does not fit at the readability floor (see [Dynamic composition](dynamic-composition.md#timeline-internals)).
+**A region of one block (`max: 1`).** A region that holds one block says `max: 1` (OPF 0.35; it was `flow: "none"`). Its block fills it. On a layout with no overflow region, blocks no region had room for still join the single-block region that accepts them, up to 6, without a finding, and then flow by its `flow` (`auto` unless set); single-block regions of one role side by side (the columns of `comparison`) share their joined blocks as one region of N cells. A single-block region is never the default `overflowRegion`, nor the region a slide's own `composition` arranges, and its block does not take the lead size of an `auto` region.
 
-`design.contentDirection` makes every flowing region one row or one column. A slide's own `composition.mode`, `columns` and
-`weights` arrange its first primary flowing region with the 0.18 modes, above `contentDirection`. A list in a region
+Several timelines in one region are a stack of horizontal bands whatever the region's `flow`: one column, or two when one column does not fit at the readability floor (see [Dynamic composition](dynamic-composition.md#timeline-internals)).
+
+A slide's own `composition.mode`, `columns` and `weights` arrange its first primary region that is not a single-block region,
+with the 0.18 modes, above its `flow` (OPF 0.35 removed `design.contentDirection`: a region says `row` or `column` itself). A list in a region
 with `listColumns: "auto"` (the lone list of the design, and, since the RR-81 review, any list of the region that does not
 fit its own cell), or any list payload with `columns: "auto"`, tries 1, 2 then 3 columns at the starting size (a column at
 least a quarter of the slide wide); `columns: 2` or `3` fixes the count. `auto` never deals a list of 6 or fewer entries
 across columns (LH-42): such a list shrinks in its one column instead.
 
-**Several lists in a region (LH-42).** A region (on a slide without `design.contentDirection`) that
+**Several lists in a region (LH-42).** A region whose flow is not `row` that
 receives 2 or more lists and nothing else lays them out one list per cell, a card when the slide draws cards, so sibling
 lists never read as one table: 2 to 4 lists in that many columns, a multiple of 3 in 3 columns, any other count in 4
 (7 as 4 + 3). A column stays at least 7.5 list ems (240 px) wide; a narrower region fills its rows evenly (4 lists in 2 x 2),
@@ -435,7 +437,7 @@ the slide as written. See [dynamic composition](dynamic-composition.md#paginatio
 ## Design keys
 
 Per key: the slide's `design`, the deck's `design`, the theme record's `design` (new in 0.19: `titleAlignment`,
-`contentAlignment`, `contentBox`, `contentDirection`, `imageFit`, `listBullet`, `listStyle`), the layout's `design`, then the engine
+`contentAlignment`, `contentBox`, `imageFit`, `listBullet`, `listStyle`), the layout's `design`, then the engine
 default. `design.mirror: true` draws a template mirrored (each row's cells and the column sizes reversed); a right-to-left
 deck mirrors on top. A slide without `layout` is composed automatically; `layout: "auto"` was removed in 0.35 and is now an
 ordinary reference (`opf/unresolved-reference` says so and offers the fix that deletes the key).

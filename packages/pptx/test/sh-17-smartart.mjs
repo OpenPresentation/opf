@@ -118,7 +118,7 @@ const live = await exported(deck);
 // 6. List blocks are the entries: cards with arrows as native shapes, never live (a SmartArt node holds no list), with the reason.
 {
   // A region whose arrangement is process (the 0.34 flow layout's record) draws list blocks on cards.
-  const basicProcess = {name: 'Basic process', direction: 'column', regions: [{name: 'title'}, {name: 'body', accepts: ['list'], flow: 'none', arrangement: 'process'}]};
+  const basicProcess = {name: 'Basic process', direction: 'column', regions: [{name: 'title'}, {name: 'body', accepts: ['list'], max: 1, arrangement: 'process'}]};
   const blocks = await exported({catalogs: {custom: {layouts: {'basic-process': basicProcess}}}, slides: [{layout: 'basic-process', title: 'Workstreams', blocks: [{items: ['Interview users', 'Map the journey']}, {items: ['Prototype', 'Test']}, {items: ['Decide', 'Plan']}]}]});
   assert.match(blocks.diagnostics.find(item => item.code === 'smartart-unavailable')?.reason ?? '', /lists, which a SmartArt node does not hold/);
   assert.equal(Object.keys(blocks.entries).some(path => path.startsWith('ppt/diagrams/')), false);

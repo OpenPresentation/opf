@@ -3,12 +3,14 @@
  * (`Finding.fixes`, kind `patch`): add a required property, change an enum value to the nearest allowed one, rename an unknown property to its near
  * miss, move it under `extensions`, wrap a string in a list, write a number as text, add the first slide. Never applied by core.
  *
- * Internal module: `validate` attaches them to `opf/schema` findings that carry no fixes of their own.
+ * Internal module: `validate` attaches them to `opf/schema` findings that carry no fixes of their own, and removedKeyRepair to the
+ * findings of keys and values OPF 0.35 removed.
  */
 import type { Finding, FindingFix, JsonPatchOperation } from "./generated/types/finding.js";
 import { isRecord, nearest, pointerOf, readAt, segmentsOf } from "./finding-text-util.js";
 import { starterValue } from "./finding-text.js";
 import { schemaAtPath, schemaVariants } from "./schema-navigation.js";
+import { REMOVED_DESIGN_KEYS } from "./design-hints.js";
 
 /** The most "Change to ..." fixes one enum finding carries. */
 const MAX_CHANGES = 5;
@@ -82,4 +84,27 @@ export function schemaFixes(finding: Finding, document: unknown): FindingFix[] {
     default:
       return [];
   }
+}
+
+/**
+ * OPF 0.35: a removed design key (`contentDirection`, `chartPrimary`; REMOVED_DESIGN_KEYS) in a deck, slide, theme or layout `design`, or a
+ * layout region's removed `flow: "none"`: what replaced it, as the finding's help, and the safe fix (delete the key; `none` becomes `max: 1`).
+ * For `opf/schema` and `opf/catalog-record` findings, the document's own and its embedded records; undefined for any other finding.
+ */
+export function removedKeyRepair(finding: Finding, document: unknown): { help: string; fixes: FindingFix[] } | undefined {
+  const validation = finding.validation;
+  if (!validation || (finding.ruleId !== "opf/schema" && finding.ruleId !== "opf/catalog-record")) return undefined;
+  const segments = segmentsOf(finding.path);
+  if (validation.keyword === "additionalProperties") {
+    const name = segments.at(-1) ?? "";
+    if (segments.at(-2) !== "design" || !Object.hasOwn(REMOVED_DESIGN_KEYS, name) || readAt(document, segments) === undefined) return undefined;
+    return { help: REMOVED_DESIGN_KEYS[name]!, fixes: [patch(`remove:${name}`, `Delete design.${name}`, [{ op: "remove", path: finding.path }], true)] };
+  }
+  if (validation.keyword === "enum" && segments.at(-1) === "flow" && segments.at(-3) === "regions" && readAt(document, segments) === "none") {
+    const parent = segments.slice(0, -1), region = readAt(document, parent);
+    const help = 'OPF 0.35 removed flow "none": a region of one block says "max": 1 (blocks no region had room for still join it), and its flow is "auto", "grid", "row" or "column".';
+    if (!isRecord(region) || (region.max !== undefined && region.max !== 1)) return { help, fixes: [] };
+    return { help, fixes: [patch("use-max-1", "Write max 1 (a region of one block)", [{ op: "remove", path: finding.path }, { op: "add", path: pointerOf([...parent, "max"]), value: 1 }], true)] };
+  }
+  return undefined;
 }

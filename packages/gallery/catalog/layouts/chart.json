@@ -27,7 +27,7 @@
         "text"
       ],
       "role": "supporting",
-      "flow": "none"
+      "max": 1
     }
   ],
   "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",

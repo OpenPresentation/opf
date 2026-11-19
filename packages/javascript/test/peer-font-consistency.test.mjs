@@ -6,7 +6,7 @@ import { composeSlide } from '../dist/composition.js';
 // WI-1 (N1): blocks side by side as peers (regions of one role in the same rows, or one row of a flow) share one fitted
 // size per kind, so a three-column list reads as one design instead of 32/30/27 px.
 const { layouts } = gallery;
-const columns = { name: 'Three columns', direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: ['first', 'second', 'third'].map((name) => ({ name, accepts: ['text', 'list', 'metric', 'group'], role: 'primary', flow: 'none' })) }] };
+const columns = { name: 'Three columns', direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: ['first', 'second', 'third'].map((name) => ({ name, accepts: ['text', 'list', 'metric', 'group'], role: 'primary', max: 1 })) }] };
 const entry = (text, description) => ({ text, description });
 const lists = [
   [entry('Name the decision owner', 'Make accountability visible from intake through closure.'), entry('Publish the checklist', 'Keep the entry criteria available to every participant.'), entry('Record the outcome', 'Explain the next step and who will take it.')],
@@ -44,7 +44,7 @@ test('peers in one row of a grid flow share one size; text and lists keep their 
 });
 
 test('regions of different roles side by side are not peers', () => {
-  const record = { name: 'Beside', direction: 'row', regions: [{ name: 'main', accepts: ['text'], role: 'primary', flow: 'none', size: 2 }, { name: 'aside', accepts: ['text'], role: 'supporting', flow: 'none' }] };
+  const record = { name: 'Beside', direction: 'row', regions: [{ name: 'main', accepts: ['text'], role: 'primary', max: 1, size: 2 }, { name: 'aside', accepts: ['text'], role: 'supporting', max: 1 }] };
   const result = composeSlide({ blocks: [{ region: 'main', text: 'Short.' }, { region: 'aside', text: 'A long aside that has to shrink to fit its narrow column, with enough words to need several lines at the starting size and then some more. '.repeat(4) }] }, { layout: record });
   assert.equal(result.items.find((item) => item.region === 'main').text.fontSize, 28);
 });

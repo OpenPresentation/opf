@@ -10,7 +10,7 @@ import {composeSlide} from '@openpresentation/opf/composition';
 
 // OPF 0.35: the gallery's process layout draws long steps as numbered steps; a region whose arrangement is process (the 0.34 flow
 // layout's record) draws them as OPF's own process.
-const basicProcess = {id: 'basic-process', name: 'Basic process', direction: 'column', regions: [{name: 'title'}, {name: 'body', accepts: ['list'], flow: 'none', arrangement: 'process'}]};
+const basicProcess = {id: 'basic-process', name: 'Basic process', direction: 'column', regions: [{name: 'title'}, {name: 'body', accepts: ['list'], max: 1, arrangement: 'process'}]};
 const catalogs = [{...gallery, layouts: {...gallery.layouts, 'basic-process': basicProcess}}];
 const long = ['Why we exist and who we serve', 'The few goals that matter this year', 'How teams plan, decide and ship', 'The reviews that keep plans honest', 'Data everyone can see and trust'];
 const slides = [

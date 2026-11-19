@@ -56,7 +56,7 @@ const svg = (presentation, slideIndex = 0) => toSvg(presentation, slideIndex + 1
 {
   assert.deepEqual(
     DESIGN_OPTIONS.map((option) => option.id),
-    ["titleAlignment", "contentAlignment", "contentDirection", "chartPrimary", "listBullet", "contentBox", "imageFit", "accentFont", "logo", "watermark"],
+    ["titleAlignment", "contentAlignment", "listBullet", "contentBox", "imageFit", "accentFont", "logo", "watermark"],
   );
   const design = schemas.presentation.$defs.Design.properties;
   for (const option of DESIGN_OPTIONS.filter((entry) => entry.type === "enum")) assert.deepEqual([...option.values], design[option.id].enum, `${option.id} values follow the schema`);
@@ -74,8 +74,6 @@ const svg = (presentation, slideIndex = 0) => toSvg(presentation, slideIndex + 1
 const cases = [
   { option: "titleAlignment", value: "end", slide: 0, patch: { op: "add", path: "/design/titleAlignment", value: "end" }, preview: true },
   { option: "contentAlignment", value: "center", slide: 1, patch: { op: "add", path: "/design/contentAlignment", value: "center" } },
-  { option: "contentDirection", value: "vertical", slide: 2, patch: { op: "add", path: "/design/contentDirection", value: "vertical" } },
-  { option: "chartPrimary", value: "start", slide: 2, patch: { op: "add", path: "/design/chartPrimary", value: "start" } },
   { option: "contentBox", value: true, slide: 1, patch: { op: "add", path: "/design/contentBox", value: true }, preview: true },
   { option: "accentFont", value: "Georgia", slide: 0, patch: { op: "replace", path: "/design/fontScheme", value: { id: "aptos", accent: "Georgia" } } },
   // RR-71: design.logo picks the organization and shape that covers, sections and bullets draw; the organization has the logo.
@@ -175,7 +173,7 @@ for (const entry of cases) {
 {
   const editor = session();
   const bad = [
-    ["chartPrimary", "middle", "invalid-design-value"],
+    ["titleAlignment", "middle", "invalid-design-value"],
     ["contentBox", "yes", "invalid-design-value"],
     ["accentFont", "  ", "invalid-design-value"],
     ["watermark", { src: "asset:mark", opacity: 2 }, "invalid-design-value"],

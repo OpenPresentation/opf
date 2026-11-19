@@ -1,4 +1,4 @@
-// RR-83: explicit nested content groups and automatic design.chartPrimary. The preview draws
+// RR-83: explicit nested content groups, including a chart beside a group on each side (design.chartPrimary before OPF 0.35). The preview draws
 // every authored leaf in the box core composition gives it, and
 // the traced SVG puts each text, list, metric and chart where the item box says. test/fixtures/placeholder-groups.opf.json is
 // core's docs/fixtures/placeholder-groups.opf.json (self-contained: catalogs.custom, "default": false); core's
@@ -60,7 +60,7 @@ const example = resolved.slides[0].geometry;
 const [first, second, chart] = example.items.filter((item) => !headings.has(item.field));
 assert.equal(first.box.x, second.box.x);
 assert.ok(second.box.y > first.box.y && chart.box.x > first.box.x + first.box.width);
-// Automatic chartPrimary retains the same accepted direct-group behavior on every side.
+// A chart beside its group (what design.chartPrimary drew before OPF 0.35) keeps its side.
 for (const side of ['left', 'right', 'top', 'bottom']) {
   const index = deck.slides.findIndex(entry => entry.id === `chart-primary-${side}`);
   const geometry = resolved.slides[index].geometry;
@@ -75,4 +75,4 @@ for (const side of ['left', 'right', 'top', 'bottom']) {
   }
 }
 
-console.log(`placeholder groups: ${leaves} leaves of ${deck.slides.length} slides drawn in their composed boxes; automatic chartPrimary preserves its direct group arrangement`);
+console.log(`placeholder groups: ${leaves} leaves of ${deck.slides.length} slides drawn in their composed boxes; a chart beside its group keeps its side`);

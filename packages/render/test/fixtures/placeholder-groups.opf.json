@@ -1,7 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Nested content groups",
-  "description": "RR-83 cross-engine fixture: explicit nested content groups and automatic design.chartPrimary preserve every leaf across core, SVG and native PPTX. Self-contained with no host catalog.",
+  "description": "RR-83 cross-engine fixture: explicit nested content groups, including a chart beside a group of its supporting blocks on each side (what design.chartPrimary drew before OPF 0.35), preserve every leaf across core, SVG and native PPTX. Self-contained with no host catalog.",
   "language": "en",
   "catalogs": {
     "default": false
@@ -399,9 +399,13 @@
     },
     {
       "id": "chart-primary-left",
-      "title": "chartPrimary left",
-      "design": {
-        "chartPrimary": "start"
+      "title": "Chart left of its group",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          3,
+          2
+        ]
       },
       "blocks": [
         {
@@ -432,25 +436,48 @@
           }
         },
         {
-          "type": "text",
-          "text": "Enterprise seats up 31%"
-        },
-        {
-          "type": "list",
-          "items": [
-            "Churn down",
-            "Pipeline up"
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Enterprise seats up 31%"
+            },
+            {
+              "type": "list",
+              "items": [
+                "Churn down",
+                "Pipeline up"
+              ]
+            }
           ]
         }
       ]
     },
     {
       "id": "chart-primary-right",
-      "title": "chartPrimary right",
-      "design": {
-        "chartPrimary": "end"
+      "title": "Chart right of its group",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          2,
+          3
+        ]
       },
       "blocks": [
+        {
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Enterprise seats up 31%"
+            },
+            {
+              "type": "list",
+              "items": [
+                "Churn down",
+                "Pipeline up"
+              ]
+            }
+          ]
+        },
         {
           "type": "chart",
           "chart": {
@@ -477,25 +504,18 @@
               ]
             }
           }
-        },
-        {
-          "type": "text",
-          "text": "Enterprise seats up 31%"
-        },
-        {
-          "type": "list",
-          "items": [
-            "Churn down",
-            "Pipeline up"
-          ]
         }
       ]
     },
     {
       "id": "chart-primary-top",
-      "title": "chartPrimary top",
-      "design": {
-        "chartPrimary": "top"
+      "title": "Chart above its group",
+      "composition": {
+        "mode": "column",
+        "weights": [
+          3,
+          2
+        ]
       },
       "blocks": [
         {
@@ -526,25 +546,48 @@
           }
         },
         {
-          "type": "text",
-          "text": "Enterprise seats up 31%"
-        },
-        {
-          "type": "list",
-          "items": [
-            "Churn down",
-            "Pipeline up"
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Enterprise seats up 31%"
+            },
+            {
+              "type": "list",
+              "items": [
+                "Churn down",
+                "Pipeline up"
+              ]
+            }
           ]
         }
       ]
     },
     {
       "id": "chart-primary-bottom",
-      "title": "chartPrimary bottom",
-      "design": {
-        "chartPrimary": "bottom"
+      "title": "Chart below its group",
+      "composition": {
+        "mode": "column",
+        "weights": [
+          2,
+          3
+        ]
       },
       "blocks": [
+        {
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Enterprise seats up 31%"
+            },
+            {
+              "type": "list",
+              "items": [
+                "Churn down",
+                "Pipeline up"
+              ]
+            }
+          ]
+        },
         {
           "type": "chart",
           "chart": {
@@ -571,17 +614,6 @@
               ]
             }
           }
-        },
-        {
-          "type": "text",
-          "text": "Enterprise seats up 31%"
-        },
-        {
-          "type": "list",
-          "items": [
-            "Churn down",
-            "Pipeline up"
-          ]
         }
       ]
     }

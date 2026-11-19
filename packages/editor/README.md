@@ -578,8 +578,6 @@ insertZoneLogo(editor, "header", "start");                                 // th
 | Option | Writes | Values |
 | --- | --- | --- |
 | `titleAlignment`, `contentAlignment` | `design.titleAlignment`, `design.contentAlignment` | `start`, `center`, `end` |
-| `contentDirection` | `design.contentDirection` | `horizontal`, `vertical` |
-| `chartPrimary` | `design.chartPrimary` | `none`, `top`, `bottom`, `start`, `end` |
 | `listBullet` | `design.listBullet` | `character`, `image` (picture bullets draw the logo), `none` (no marker and no indent) |
 | `contentBox` | `design.contentBox` | `true`, `false` |
 | `imageFit` | `design.imageFit` | `cover`, `contain`, `stretch`: the fit of image blocks that choose none |

@@ -20,7 +20,7 @@
           "accepts": [
             "table"
           ],
-          "flow": "none"
+          "max": 1
         },
         {
           "name": "aside",

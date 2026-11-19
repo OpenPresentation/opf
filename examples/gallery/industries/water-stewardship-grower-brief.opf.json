@@ -71,8 +71,6 @@
     },
     "titleAlignment": "center",
     "contentBox": false,
-    "contentDirection": "vertical",
-    "chartPrimary": "end",
     "imageFit": "contain",
     "listBullet": "image",
     "watermark": {
@@ -825,7 +823,7 @@
                 "video"
               ],
               "role": "media",
-              "flow": "none",
+              "max": 1,
               "bleed": true
             }
           ],
@@ -889,7 +887,7 @@
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
@@ -917,7 +915,7 @@
                   "accepts": [
                     "table"
                   ],
-                  "flow": "none"
+                  "max": 1
                 },
                 {
                   "name": "aside",
@@ -957,7 +955,7 @@
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             },
             {
               "name": "body",
@@ -1005,7 +1003,7 @@
                     "chart",
                     "diagram"
                   ],
-                  "flow": "none"
+                  "max": 1
                 },
                 {
                   "name": "aside",
@@ -1050,7 +1048,7 @@
                     "diagram"
                   ],
                   "role": "media",
-                  "flow": "none",
+                  "max": 1,
                   "anchor": "middle"
                 },
                 {

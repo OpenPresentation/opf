@@ -1459,7 +1459,7 @@
                 "video"
               ],
               "role": "media",
-              "flow": "none",
+              "max": 1,
               "bleed": true
             }
           ],
@@ -1574,7 +1574,7 @@
                 "quote",
                 "metric"
               ],
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Give one important assertion room to stand alone. Keep supporting detail on a following slide.",
@@ -1739,7 +1739,7 @@
                     "group",
                     "diagram"
                   ],
-                  "flow": "none"
+                  "max": 1
                 },
                 {
                   "name": "second",
@@ -1758,7 +1758,7 @@
                     "group",
                     "diagram"
                   ],
-                  "flow": "none"
+                  "max": 1
                 }
               ]
             }
@@ -1804,7 +1804,7 @@
                     "group",
                     "diagram"
                   ],
-                  "flow": "none"
+                  "max": 1
                 },
                 {
                   "name": "second",
@@ -1823,7 +1823,7 @@
                     "group",
                     "diagram"
                   ],
-                  "flow": "none"
+                  "max": 1
                 },
                 {
                   "name": "third",
@@ -1842,7 +1842,7 @@
                     "group",
                     "diagram"
                   ],
-                  "flow": "none"
+                  "max": 1
                 }
               ]
             }
@@ -1915,7 +1915,7 @@
                     "group",
                     "diagram"
                   ],
-                  "flow": "none"
+                  "max": 1
                 },
                 {
                   "name": "second",
@@ -1929,7 +1929,7 @@
                     "group",
                     "diagram"
                   ],
-                  "flow": "none"
+                  "max": 1
                 }
               ]
             },
@@ -1940,7 +1940,7 @@
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Compare alternatives using parallel information. Keep the same criteria and level of detail for every option.",
@@ -1955,8 +1955,7 @@
             "Groups of items"
           ],
           "design": {
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "contentBox": false
           },
           "direction": "column",
           "regions": [
@@ -1973,7 +1972,7 @@
                 "group",
                 "diagram"
               ],
-              "flow": "grid",
+              "flow": "row",
               "arrangement": "steps"
             }
           ],
@@ -2000,7 +1999,7 @@
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             },
             {
               "name": "body",
@@ -2089,7 +2088,7 @@
                 "list"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Highlight a small set of important numbers. Give each number a label and the context needed to interpret it.",
@@ -2148,7 +2147,7 @@
                 "diagram"
               ],
               "role": "media",
-              "flow": "none",
+              "max": 1,
               "bleed": true
             }
           ],
@@ -2182,7 +2181,7 @@
                     "diagram"
                   ],
                   "role": "media",
-                  "flow": "none",
+                  "max": 1,
                   "anchor": "middle"
                 },
                 {
@@ -2262,7 +2261,7 @@
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
@@ -2291,7 +2290,7 @@
                     "chart",
                     "diagram"
                   ],
-                  "flow": "none"
+                  "max": 1
                 },
                 {
                   "name": "aside",
@@ -2339,7 +2338,7 @@
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Present structured data that benefits from precise comparison. Use clear row and column headings and concise cell content.",
@@ -2367,7 +2366,7 @@
                   "accepts": [
                     "table"
                   ],
-                  "flow": "none"
+                  "max": 1
                 },
                 {
                   "name": "aside",
@@ -2452,7 +2451,7 @@
                     "quote",
                     "metric"
                   ],
-                  "flow": "none"
+                  "max": 1
                 },
                 {
                   "name": "body",
@@ -2476,7 +2475,7 @@
                 "diagram"
               ],
               "role": "media",
-              "flow": "none",
+              "max": 1,
               "bleed": true
             }
           ],
@@ -2604,7 +2603,7 @@
               "accepts": [
                 "list"
               ],
-              "flow": "none",
+              "max": 1,
               "arrangement": "pyramid"
             }
           ],
@@ -2630,7 +2629,7 @@
               "accepts": [
                 "list"
               ],
-              "flow": "none",
+              "max": 1,
               "arrangement": "matrix",
               "size": 3
             }
@@ -2657,7 +2656,7 @@
               "accepts": [
                 "list"
               ],
-              "flow": "none",
+              "max": 1,
               "arrangement": "cycle",
               "size": 3
             }
@@ -2683,7 +2682,7 @@
               "accepts": [
                 "list"
               ],
-              "flow": "none",
+              "max": 1,
               "arrangement": "chevrons"
             }
           ],
@@ -2708,7 +2707,7 @@
               "accepts": [
                 "list"
               ],
-              "flow": "none",
+              "max": 1,
               "arrangement": "inverted-pyramid"
             }
           ],
@@ -2733,7 +2732,7 @@
               "accepts": [
                 "list"
               ],
-              "flow": "none",
+              "max": 1,
               "arrangement": "org-chart"
             }
           ],
@@ -2758,7 +2757,7 @@
               "accepts": [
                 "list"
               ],
-              "flow": "none",
+              "max": 1,
               "arrangement": "hierarchy"
             }
           ],
@@ -2783,7 +2782,7 @@
               "accepts": [
                 "list"
               ],
-              "flow": "none",
+              "max": 1,
               "arrangement": "venn"
             }
           ],
@@ -2809,7 +2808,7 @@
               "accepts": [
                 "list"
               ],
-              "flow": "none",
+              "max": 1,
               "arrangement": "vertical-process",
               "size": 3
             }

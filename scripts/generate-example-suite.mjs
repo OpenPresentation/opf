@@ -411,8 +411,6 @@ function designFor(spec, index, catalogs, density) {
     titleAlignment: pick(["start", "center", "end"], index),
     // LH-88: no deck-level contentAlignment. A deck value overrides every layout record, so a cycled "center" (a third of the decks) centred list and paragraph bodies (opf/centered-body); unset, the layout records decide: start-aligned bodies, centred cover, section, closing, statement and metrics.
     contentBox: index % 3 === 0,
-    contentDirection: pick(["horizontal", "vertical"], index),
-    chartPrimary: pick(["none", "start", "end", "top", "bottom"], index),
     imageFit: pick(["cover", "contain"], index),
     listBullet: pick(["character", "image"], index),
   };
@@ -589,8 +587,8 @@ function blocksSlide(spec, index, catalogs) {
   return {
     id: `s${index + 1}-blocks`,
     section: "Evidence",
-    // Vertical dashboard packing would split the chart and quote into shallow strips.
-    // Keep a full-height chart beside its notes while horizontal decks retain the KPI overview.
+    // Half the decks keep the KPI overview (dashboard), half a full-height chart beside its notes (chart-beside), so a column of
+    // dashboard cells never splits the chart and quote into shallow strips.
     layout: pick(["dashboard", "chart-beside"], index),
     title: "Evidence Pack",
     blocks: [

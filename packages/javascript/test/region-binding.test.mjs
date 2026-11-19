@@ -15,7 +15,7 @@ const roadmap = {
     {
       direction: 'row',
       regions: [
-        { name: 'timeline', size: 2, accepts: ['timeline'], role: 'primary', flow: 'none' },
+        { name: 'timeline', size: 2, accepts: ['timeline'], role: 'primary', max: 1 },
         {
           direction: 'column',
           regions: [

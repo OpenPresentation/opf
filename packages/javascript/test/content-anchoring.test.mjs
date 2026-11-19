@@ -4,9 +4,10 @@ import {composeSlide,layoutQuote,layoutMetric,OPFCompositionError} from '../dist
 const box={x:40,y:50,width:600,height:500};
 const quote={text:'Keep the quote and source together.',attribution:'Example author',role:'Example role',source:'Illustrative'};
 const measurement={measure:(text,size)=>[...text].length*size*.5};
-const make=(anchor,flow='column',accepts=['quote','metric','text'])=>({name:'Measured',regions:[{name:'body',accepts,flow,anchor,max:flow==='none'?1:12}]});
+// OPF 0.35: a single-block region is `max: 1` (it was flow 'none'); 'single' here stands for it.
+const make=(anchor,flow='column',accepts=['quote','metric','text'])=>({name:'Measured',regions:[{name:'body',accepts,...(flow==='single'?{max:1}:{flow,max:12}),anchor}]});
 // The region anchor at the role sizes (`fill: false`: LH-48 grows a lone short block and centers it, lone-fill.test.mjs).
-const compose=(anchor,blocks,flow='column',extra={})=>composeSlide({blocks,...(extra.contentDirection?{design:{contentDirection:extra.contentDirection}}:{}),...(extra.minFontSize?{composition:{minFontSize:extra.minFontSize}}:{})},{width:960,height:720,layout:make(anchor,flow),textMeasurement:measurement,fill:false,...extra});
+const compose=(anchor,blocks,flow='column',extra={})=>composeSlide({blocks,...(extra.minFontSize?{composition:{minFontSize:extra.minFontSize}}:{})},{width:960,height:720,layout:make(anchor,flow),textMeasurement:measurement,fill:false,...extra});
 test('successful quotes keep attribution immediately after measured body and include photo in compact bounds',()=>{
  for(const value of [quote,{...quote,text:[{text:'Rich words',bold:true},' remain intact.']},{...quote,photo:'person.png'}]){
   const result=layoutQuote(value,box,{textMeasurement:measurement});assert.equal(result.overflow,false);
@@ -35,9 +36,9 @@ test('single and stacked quotes/metrics anchor as compact units without shrinkin
   }
  }
 });
-test('grid anchors each measured cell, including one-item flow none, while charts and tables retain allocation',()=>{
- for(const flow of ['none','grid']){
-  const blocks=flow==='none'?[{quote}]:[{quote},{metric:{value:52,label:'Trial users'}}];
+test('grid anchors each measured cell, including a single-block region, while charts and tables retain allocation',()=>{
+ for(const flow of ['single','grid']){
+  const blocks=flow==='single'?[{quote}]:[{quote},{metric:{value:52,label:'Trial users'}}];
   const top=compose('top',blocks,flow),middle=compose('middle',blocks,flow);assert.equal(middle.diagnostics.length,0);
   middle.items.forEach((item,i)=>{assert.ok(item.box.y>top.items[i].box.y);});
  }
@@ -75,9 +76,9 @@ test('explicit readability floor and card insets remain respected by anchored qu
  }
 });
 
-test('horizontal content direction retains shared-row anchoring for grid regions',()=>{
+test('a row region keeps shared-row anchoring (OPF 0.35: what contentDirection horizontal did)',()=>{
  const blocks=[{metric:{value:1,label:'First',description:'Short'}},{metric:{value:2,label:'Second',description:'A longer supporting description that takes more lines'}}];
- const top=compose('top',blocks,'grid',{contentDirection:'horizontal'}),middle=compose('middle',blocks,'grid',{contentDirection:'horizontal'});
+ const top=compose('top',blocks,'row'),middle=compose('middle',blocks,'row');
  assert.equal(middle.regions[0].arrangement,'row');assert.equal(middle.diagnostics.length,0);
  assert.ok(middle.items[0].box.y>top.items[0].box.y);assert.ok(Math.abs(middle.items[0].box.y-middle.items[1].box.y)<.01);
  for(const role of ['value','label'])assert.ok(Math.abs(middle.items[0].metricLayout.parts.find(p=>p.role===role).linePositions[0].baseline-middle.items[1].metricLayout.parts.find(p=>p.role===role).linePositions[0].baseline)<.01);

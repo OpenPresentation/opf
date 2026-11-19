@@ -19,8 +19,6 @@
     "background": "light1",
     "titleAlignment": "start",
     "contentBox": true,
-    "contentDirection": "horizontal",
-    "chartPrimary": "none",
     "imageFit": "cover",
     "listBullet": "character"
   },
@@ -423,7 +421,7 @@
                 "video"
               ],
               "role": "media",
-              "flow": "none",
+              "max": 1,
               "bleed": true
             }
           ],
@@ -487,7 +485,7 @@
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
