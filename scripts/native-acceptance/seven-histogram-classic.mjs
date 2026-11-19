@@ -35,7 +35,10 @@ export const HISTOGRAM_SELECTION=Object.freeze({slideIndex:2,seriesIndex:1,point
 // 0.35 region names (owner decision 2026-11-18): layout tags and placeholder names only; only the ppt/tags/opfLayout*.xml parts and 32 slide
 // layouts whose only change is the placeholder cNvPr names from region names differ, part-by-part comparison with the export of 1f47d14a7.
 // Previous: {bytes:226867,sha256:'22b22e26fc2f096be89dacc7f2d76440e0b6e2ed9ea83afc75451be5634684a6'}.
-export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226752,sha256:'c375cf5049a1b2a02842190070578288916e7f54091216f454063e7585ac7bb0'});
+// 0.35 one arrangement key (owner decision 2026-11-18): layout tags only; only the 6 ppt/tags/opfLayout*.xml parts of agenda, agenda-split, process, flow, vertical-flow and
+// inverted-pyramid differ (their record hash), part-by-part comparison with the export of 6578ab9db.
+// Previous: {bytes:226752,sha256:'c375cf5049a1b2a02842190070578288916e7f54091216f454063e7585ac7bb0'}.
+export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226748,sha256:'eca0713d55f468a1fc1f86a8e614e198c71cac30e2c91e8f567e7de538107cb8'});
 export const HISTOGRAM_SOURCE_ARCHIVE_BEFORE_RR105_PICTURE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
 const keys=(value,names)=>assert.deepEqual(Object.keys(value).sort(),[...names].sort());
 const modelHash=value=>digest(Buffer.from(JSON.stringify(value)));
