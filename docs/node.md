@@ -127,7 +127,7 @@ npm install @openpresentation/opf @openpresentation/opf-render @openpresentation
 for you, and an application that only reads, validates or converts between deck forms needs neither. Core loads them the
 first time a call needs them, from core's own install location and then from the working directory; a missing one throws
 `peer-not-installed` with the install command. What each output needs is listed in [the CLI reference](cli.md#install): PNG
-needs `@resvg/resvg-js` and `sharp`, raster PDF `pdf-lib`, pictures in a PDF `sharp`, every format the office font pack, and
+needs `@resvg/resvg-js` and `sharp`, raster PDF `pdf-lib`, pictures in a PDF `sharp`, every drawn format the font packages its deck's faces use, and
 `.pptx` input or output `@openpresentation/opf-pptx`.
 
 ## `convert(input, output, options?)`

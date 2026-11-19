@@ -51,7 +51,8 @@ describe("the owner's case: a key with no value, followed by the next key", () =
   test("says what is missing and what could come, from the schema", () => {
     assert.equal(problems[0].message, "`design` needs a value.");
     assert.match(problems[0].next, /an object such as \{ "theme": "minimal" \}/);
-    assert.match(problems[0].next, /Ctrl\+Space/);
+    assert.doesNotMatch(problems[0].next, /Ctrl\+Space/, "outside an editor there is no key chord");
+    assert.match(analyzeJsonSyntax(text, { editor: true })[0].next, /Ctrl\+Space/, "the editor's hint names the chord");
     assert.doesNotMatch(problems[0].next, /^Next:/);
   });
   test('"Add { }" inserts a space and braces after the colon, so the result reads "design": {}', () => {

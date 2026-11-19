@@ -8,6 +8,7 @@ import {
 	checkCatalogsOption,
 	parseReference,
 	pointerPath,
+	relatedName,
 	resolveReference,
 	unresolvedReference,
 	type CatalogKind,
@@ -16,6 +17,7 @@ import {
 import { schemaEntries, schemas, type SchemaName } from './schemas.js';
 import { catalogSchemaNames } from './catalog-schemas.js';
 import { validateAgainstSchema, type SchemaCheckResult, type ValidationIssue } from './schema-check.js';
+import { respellings, type ForeignObjectParams } from './union-errors.js';
 import type { JsonPrimitive, JsonSchema } from './json.js';
 import { validationDefinition } from './validation-definitions.js';
 import { unusedReferenceWarnings } from './annotation-validation.js';
@@ -173,6 +175,7 @@ export function issueFinding(
 	} else if (issue.keyword === 'dependentRequired')
 		help = `${JSON.stringify(issue.params.property)} only applies together with ${JSON.stringify(issue.params.missingProperty)}: add ${JSON.stringify(issue.params.missingProperty)}, or remove ${JSON.stringify(issue.params.property)}.`;
 	else if (issue.keyword === 'opf') help = semanticHelp(issue);
+	else if ((issue.keyword === 'oneOf' || issue.keyword === 'anyOf') && Array.isArray(issue.params.properties)) help = foreignObjectHelp(issue);
 	const allowed = Array.isArray(issue.params.allowedValues)
 		? issue.params.allowedValues.filter(primitive)
 		: [];
@@ -216,6 +219,21 @@ export function issueFinding(
 	});
 }
 
+/**
+ * The help of an object written in a shape this place does not take (union-errors.ts, `ForeignObjectParams`): the forms it may take,
+ * and, when its fields are those of another content kind, that kind's own field.
+ */
+function foreignObjectHelp(issue: ValidationIssue): string {
+	const params = issue.params as unknown as ForeignObjectParams;
+	// The forms themselves ride along as validation.alternatives (the CLI prints them as "other forms").
+	const many = params.alsoAt?.length ? 'each entry' : 'it';
+	if (params.belongsTo?.length) {
+		const kinds = params.belongsTo.map((kind) => `"${kind}"`).join(' or ');
+		return `To show these as ${kinds}, give each its own block whose ${kinds} holds these fields; to keep ${many} here, rewrite ${many} in one of the forms this place takes. Keep the authored content.`;
+	}
+	return `Rewrite ${many} in one of the forms this place takes, moving the authored content into the fields that form has; do not delete it to clear this error.`;
+}
+
 /** The most near-miss names a "did you mean" offers. */
 const NEAREST_PROPERTIES = 3;
 const REGION_ROWS = ['top', 'middle', 'bottom'], REGION_COLUMNS = ['start', 'center', 'end'];
@@ -256,9 +274,9 @@ function regionKeyHelp(typed: string): { help: string; suggestion?: string } | u
 const logicalName = (name: string): string => name.split(':').map((part) => part.split('+').map((word) => (word === 'left' ? 'start' : word === 'right' ? 'end' : word)).join('+')).join(':');
 
 /**
- * Did-you-mean for an unknown property (`additionalProperties`): the properties the same object's schema declares whose
- * names are within edit distance 2 (1 for a name of three characters or fewer, or every short name would match), compared
- * case-insensitively, nearest first, at most three. Two exact readings come before those: the same key with `left` and `right` as the
+ * Did-you-mean for an unknown property (`additionalProperties`): the properties the same object's schema declares that the typed
+ * name plausibly respells (`respellings`: within edit distance 2, 1 for a name of three characters or fewer, and related by the
+ * `relatedName` rule unknown catalog ids use, so `label` does not suggest `level`), nearest first, at most three. Two exact readings come before those: the same key with `left` and `right` as the
  * logical `start` and `end` (a region or a header or footer zone), and the one declared name the typed name abbreviates (`lang` for
  * `language`; three characters or more). A suggestion is a name the schema has, never a rewrite of authored content.
  */
@@ -276,17 +294,12 @@ function nearestProperties(issue: ValidationIssue, fallbackRoot: JsonSchema, poi
 	}
 	if (!isRecord(node) || !isRecord(node.properties)) return [];
 	const root = (rootEntry?.schema ?? fallbackRoot) as JsonSchema,
-		limit = typed.length <= 3 ? 1 : 2,
 		lower = typed.toLowerCase();
 	const declared = Object.keys(node.properties),
 		logical = logicalName(typed),
 		longer = typed.length >= 3 ? declared.filter((name) => name !== typed && name.toLowerCase().startsWith(lower)) : [],
 		exact = logical !== typed && declared.includes(logical) ? [logical] : longer.length === 1 ? longer : [];
-	const near = declared
-		.map((name) => ({ name, away: distance(lower, name.toLowerCase()) }))
-		.filter(({ name, away }) => name !== typed && away <= limit && !exact.includes(name))
-		.sort((a, b) => a.away - b.away || (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
-		.map(({ name }) => name);
+	const near = respellings(typed, declared).filter((name) => !exact.includes(name));
 	return [...exact, ...near]
 		.slice(0, NEAREST_PROPERTIES)
 		.map((name) => ({
@@ -921,15 +934,29 @@ export function undeclaredCatalogFindings(document: unknown): Finding[] {
 
 const KIND_PLURAL: Record<CatalogKind, string> = { layouts: 'layouts', themes: 'themes', colorSchemes: 'color schemes', fontSchemes: 'font schemes', narratives: 'narratives', audiences: 'audiences', purposes: 'purposes', tones: 'tones' };
 
+const KIND_SINGULAR: Record<CatalogKind, string> = { layouts: 'layout', themes: 'theme', colorSchemes: 'color scheme', fontSchemes: 'font scheme', narratives: 'narrative', audiences: 'audience', purposes: 'purpose', tones: 'tone' };
+
 /**
- * The start of an unresolved reference's help: "Did you mean 'two-column'?" when a record is a near miss (the same edit distance the
- * schema's did-you-mean uses), else the nearest records that do exist. Empty when no catalog is registered, so there is nothing to name.
+ * The records an unresolved reference may have meant: within the edit distance the schema's did-you-mean uses and a plausible respelling
+ * (relatedName), so `two-colum` names `two-column` but `title` does not name `table`.
  */
-function nearestRecords(kind: CatalogKind, reference: string, candidates: string[]): string {
-	if (!candidates.length) return '';
-	const close = candidates.filter((value) => distance(reference, value) <= Math.max(2, Math.floor(reference.length / 4))).slice(0, 3);
+function nearMisses(reference: string, candidates: string[]): string[] {
+	return candidates.filter((value) => distance(reference, value) <= Math.max(2, Math.floor(reference.length / 4)) && relatedName(reference, value));
+}
+
+/**
+ * The start of an unresolved reference's help: "Did you mean 'two-column'?" when a record is a near miss (nearMisses), else that no
+ * record is named like it and where the ids are listed. Empty when no catalog is registered, so there is nothing to name.
+ */
+function nearestRecords(kind: CatalogKind, reference: string, candidates: string[], registered: boolean): string {
+	if (!registered) return '';
+	const close = nearMisses(reference, candidates).slice(0, 3);
 	const quote = (values: string[]) => values.map((value) => `'${value}'`).join(', ');
-	return close.length ? `Did you mean ${quote(close)}? ` : `The nearest ${KIND_PLURAL[kind]} that exist: ${quote(candidates.slice(0, 3))}. `;
+	if (close.length) return `Did you mean ${quote(close)}? `;
+	const listed = `search_catalog (the OPF MCP server), opf catalog ${kind} and pptx.gallery list the ${KIND_PLURAL[kind]} that exist.`;
+	return kind === 'layouts'
+		? `No layout is named like '${reference}'. Without the layout key the slide composes automatically from its content; ${listed} `
+		: `No ${KIND_SINGULAR[kind]} is named like '${reference}'; ${listed} `;
 }
 
 /** The unresolved content references, one finding each, with the nearest records as suggestions. */
@@ -950,18 +977,25 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 		}
 		if (found && !(found.origin === 'document' && invalid.has(recordKey(found.group, site.kind, found.id)))) continue;
 		const diagnostic = unresolvedReference(document, site.kind, site.reference, path, options);
-		const suggestions = catalogRecords(document, site.kind, options)
+		const records = catalogRecords(document, site.kind, options);
+		// Only near misses are suggested (nearMisses): a nearest spelling that names another kind of slide is no help.
+		const near = new Set(nearMisses(site.reference, records.map((entry) => entry.reference)));
+		const suggestions = records
+			.filter((entry) => near.has(entry.reference))
 			.map((entry) => ({ value: entry.reference, label: typeof entry.record.name === 'string' ? entry.record.name : entry.reference, origin: entry.origin === 'host' ? 'registered' : 'document', definition: entry.origin === 'document' ? `document#${pointer(['catalogs', entry.group, site.kind, entry.id])}` : `${entry.source ?? 'context'}#/${site.kind}/${entry.id}` }))
 			.sort((a, b) => distance(site.reference, a.value) - distance(site.reference, b.value) || (a.value < b.value ? -1 : a.value > b.value ? 1 : 0))
 			.slice(0, 5);
+		const suggested = suggestions.length > 0;
 		findings.push(
 			finding('opf/unresolved-reference', {
 				path,
 				message: diagnostic.message,
-				help: `${nearestRecords(site.kind, site.reference, suggestions.map((entry) => entry.value))}${
-					site.kind === 'layouts'
-						? 'Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.'
-						: 'Embed the record (embed(), or opf embed), register the catalog that defines it, or choose one of the suggested records.'
+				help: `${nearestRecords(site.kind, site.reference, suggestions.map((entry) => entry.value), records.length > 0)}${
+					!suggested && records.length
+						? `To keep this id, embed the ${site.kind === 'layouts' ? 'layout ' : ''}record (embed(), or opf embed) or register the catalog that defines it.`
+						: site.kind === 'layouts'
+							? 'Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.'
+							: 'Embed the record (embed(), or opf embed), register the catalog that defines it, or choose one of the suggested records.'
 				}`,
 				definition: `${schemas.presentation.$id}#/$defs/Catalogs`,
 				lookup: ['opf', 'catalog', site.kind],
