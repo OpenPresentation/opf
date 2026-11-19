@@ -19,3 +19,19 @@ export function hostReport(info: { name?: unknown; title?: unknown; version?: un
 	const version = text(info.version);
 	return `Host: ${name}${title && title !== name ? ` (${title})` : ""}${version ? ` ${version}` : ""}`;
 }
+
+/**
+ * What the host announced that the view acts on, one short part each, from the same fields the controls read: `message` (Send),
+ * `save files` (`downloadFile`: Export and Download), `full screen` (`availableDisplayModes`: Expand), `tools` (`serverTools`: fonts,
+ * icons, examples) and `context` (`updateModelContext`: edits reach the model). Diagnostic text for the More menu and the footer's title.
+ */
+export function hostAbilities(capabilities: { message?: unknown; downloadFile?: unknown; serverTools?: unknown; updateModelContext?: unknown } | undefined, displayModes: readonly string[] | undefined): string[] {
+	const said = (value: unknown) => (value ? "yes" : "no");
+	return [
+		`message: ${said(capabilities?.message)}`,
+		`save files: ${said(capabilities?.downloadFile)}`,
+		`full screen: ${said(displayModes?.includes("fullscreen"))}`,
+		`tools: ${said(capabilities?.serverTools)}`,
+		`context: ${said(capabilities?.updateModelContext)}`,
+	];
+}

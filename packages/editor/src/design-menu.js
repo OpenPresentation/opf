@@ -332,8 +332,9 @@ export function createDesignMenu(container, options = {}) {
     root.dataset.mode = mode;
     popover.setAttribute("aria-modal", String(mode === "sheet"));
     scrim.hidden = !(isOpen && mode === "sheet");
-    if (isOpen && mode === "sheet") head.insertBefore(tabs, closeButton);
-    else tabs.remove();
+    // Only when it is not there yet: place() runs on every scroll and resize, and inserting a node again takes the focus from the tab in it.
+    if (!(isOpen && mode === "sheet")) tabs.remove();
+    else if (tabs.parentNode !== head) head.insertBefore(tabs, closeButton);
   }
   function place() {
     if (!isOpen) return;

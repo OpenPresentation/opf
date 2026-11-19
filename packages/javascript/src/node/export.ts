@@ -12,7 +12,7 @@ import { type Catalog, type Fonts, continueOverfull, paginate, validate } from "
 import { createImageResolver, iconSourceReader } from "./assets.js";
 import { defaultCatalogs } from "./catalogs.js";
 import { OPFApiError } from "../api-errors.js";
-import { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
+import { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts, reportSubstitutions, substitutionRows } from "./fonts.js";
 import { type SlideSelection, parseSlideSelection } from "../slide-selection.js";
 import { deckStem, padNumber } from "./files.js";
 import { type Diagnostic, type FontsHandle, PPTX_PACKAGE, type Peer, type PptxModule, RENDER_PACKAGE, type Renderer, loadPptx, loadRenderer, missingPeerFrom, requirePptxOptions } from "./peers.js";
@@ -387,7 +387,8 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 	const { format, scale } = options;
 	const { reporter, catalogs, date, renderer, pptx, userFonts, resolver } = environment;
 	let deck: unknown = presentation;
-	const fontSummary = (): ExportFontSummary => ({
+	// The report's font summary, and one info finding per substituted family (kept once however often the summary is built).
+	const fontSummary = (): ExportFontSummary => (reportSubstitutions(reporter, handle), {
 		pack: "office",
 		substitutionPolicy: "visual",
 		userFonts,

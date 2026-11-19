@@ -76,6 +76,11 @@ export type SyntaxProblemCode =
 export interface AnalyzeOptions {
   /** The most problems returned (default 5). */
   limit?: number;
+  /**
+   * The text is shown in the source editor, which opens a list of choices on a key chord: the "needs a value" hint then ends with "Press
+   * Ctrl+Space after the colon for options." Without it (the CLI, a script, a server) the hint stops after what could be written.
+   */
+  editor?: boolean;
 }
 
 // ---- Tokens ------------------------------------------------------------------------------------------------------------------
@@ -310,7 +315,10 @@ class Analyzer {
   // Containers left open at the same place close together: the outer one's fix inserts the inner ones' closers first.
   private cascade: { last: Token | undefined; inserts: string[] } = { last: undefined, inserts: [] };
 
-  constructor(private readonly text: string) {
+  constructor(
+    private readonly text: string,
+    private readonly editor = false,
+  ) {
     const lexed = tokenize(text);
     this.comments = lexed.tokens.filter((token) => token.kind === "comment");
     this.tokens = lexed.tokens.filter((token) => token.kind !== "comment");
@@ -965,7 +973,7 @@ class Analyzer {
       range: this.range(keyToken.start, colon.end),
       path,
       message: `\`${key}\` needs a value.`,
-      next: `${hint.next} Press Ctrl+Space after the colon for options.`,
+      next: this.editor ? `${hint.next} Press Ctrl+Space after the colon for options.` : hint.next,
       fixes,
     });
   }
@@ -1213,7 +1221,7 @@ function valueHint(path: (string | number)[]): ValueHint {
  */
 export function analyzeJsonSyntax(text: string, options: AnalyzeOptions = {}): SyntaxProblem[] {
   const limit = Math.max(0, options.limit ?? 5);
-  const analyzer = new Analyzer(String(text ?? ""));
+  const analyzer = new Analyzer(String(text ?? ""), options.editor === true);
   try {
     analyzer.run();
   } catch {

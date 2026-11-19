@@ -37,7 +37,12 @@ function requireInstalled(packages, what) {
   });
   if (!missing.length) return;
   const install = `npm install ${missing.map(pkg => `${pkg.name}@${pkg.version}`).join(" ")}`;
-  throw new OPFFontError("font-resource-unavailable", `${what} needs font packages that are not installed (optional peer dependencies of @openpresentation/opf-render): run \`${install}\`.`, {packages: missing.map(pkg => pkg.name), install});
+  // The families each package serves here (for a presentation: only the faces it selects), so the message says what needs it.
+  const familiesOf = pkg => [...new Set((pkg.faces ?? []).map(face => face.family).filter(Boolean))];
+  const faces = [...new Set(missing.flatMap(familiesOf))];
+  const named = missing.map(pkg => { const families = familiesOf(pkg); return families.length ? `${pkg.name} (${families.join(", ")})` : pkg.name; }).join(", ");
+  const one = missing.length === 1;
+  throw new OPFFontError("font-resource-unavailable", `${what} needs ${one ? "a font package that is" : "font packages that are"} not installed (${one ? "an optional peer dependency" : "optional peer dependencies"} of @openpresentation/opf-render): ${named}. Run \`${install}\`.`, {packages: missing.map(pkg => pkg.name), faces, install});
 }
 
 // `skipped`: an optional npm package that is not installed is recorded there instead of failing (scripts: 'auto').

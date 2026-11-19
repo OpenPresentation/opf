@@ -16,7 +16,9 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 	max-height: var(--deck-max-height, none);
 	border: 1px solid var(--opf-ui-border);
 	border-radius: var(--opf-ui-radius-md);
+	/* Clipped, not a scroll container: focusing a field (Find's) must not scroll the whole view sideways. */
 	overflow: hidden;
+	overflow: clip;
 	background: var(--opf-ui-surface);
 	color: var(--opf-ui-fg);
 	font: 13px/1.4 var(--opf-ui-font);
@@ -149,6 +151,8 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 
 /* Find and replace is the editor's floating card: it sits over the panes, top left, instead of pushing the slide down. */
 .deck-find { position: absolute; top: 8px; left: 8px; width: min(560px, calc(100% - 16px)); z-index: 6; }
+/* Where the panes are shorter than the card (a narrow inline view), it scrolls inside them instead of being cut off at the bottom. */
+.deck-find:not(:empty) { max-height: calc(100% - 16px); overflow: auto; border-radius: var(--opf-ui-radius-md); }
 .deck-find:empty { display: none; }
 /* The Review panel slides over the right edge of the panes; the verdict in the footer opens it. */
 .deck-review { position: absolute; inset: 0 0 0 auto; width: min(380px, 100%); display: flex; flex-direction: column; background: var(--opf-ui-surface); border-left: 1px solid var(--opf-ui-border); box-shadow: var(--opf-ui-shadow-pop); z-index: 5; }
@@ -228,6 +232,8 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root[data-size~="narrow"] .deck-menu:not([hidden]) { display: flex; flex-direction: column; position: absolute; top: 100%; right: 0; z-index: 30; width: min(260px, calc(100vw - 16px)); padding: 4px; border: 1px solid var(--opf-ui-border); border-radius: var(--opf-ui-radius-md); background: var(--opf-ui-surface); box-shadow: var(--opf-ui-shadow-pop); }
 :root[data-size~="narrow"] .deck-menu :is(.deck-menu-item, .deck-button) { display: flex; justify-content: flex-start; align-items: center; width: 100%; min-height: var(--opf-ui-control-h); height: auto; padding: 0 12px; border: 0; border-radius: var(--opf-ui-radius); background: transparent; color: var(--opf-ui-fg); font-weight: 400; text-align: start; cursor: pointer; }
 :root[data-size~="narrow"] .deck-menu :is(.deck-menu-item, .deck-button):hover { background: var(--opf-ui-muted); }
+/* The host line's capability parts ("message: no") each wrap whole. */
+.deck-menu-about span { white-space: nowrap; }
 :root[data-size~="narrow"] .deck-menu-about { margin: 4px 0 0; padding: 8px 12px 4px; border-top: 1px solid var(--opf-ui-border); color: var(--opf-ui-muted-fg); font-size: 12px; overflow-wrap: anywhere; }
 :root[data-size~="narrow"] .deck-menu .deck-select { flex: none; width: 100%; max-width: none; height: var(--opf-ui-control-h); margin: 2px 0; }
 /* The slide as wide as the frame allows; a compact strip without the numbers (the footer says which slide is open). */
@@ -246,7 +252,7 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root[data-size~="narrow"] #opf-deck:has(.opf-design-menu[data-mode="sheet"] .opf-design-menu-trigger[aria-expanded="true"]) :is(.deck-row, .deck-foot) { display: none; }
 :root[data-size~="narrow"] #opf-deck .opf-design-menu-scrim { background: transparent; }
 /* The narrowest frames (under 400px, a phone or the narrowest side panel): every control is at least 44 by 44 CSS pixels, with a mouse
-   too; the footer wraps instead of cutting a message short. */
+   too down to 300px and with a finger at any width ("tiny", main.ts); the footer wraps instead of cutting a message short. */
 :root[data-size~="tiny"] :is(.deck-button, .deck-menu-item, .deck-select, .deck-tabs [role="tab"], #deck-design .opf-design-menu-trigger, .deck-export .opf-export .opf-export-trigger, .deck-nav .opf-nav .opf-nav-button, .deck-verdict .opf-review-pill) { min-width: 44px; min-height: 44px; }
 :root[data-size~="tiny"] .deck-tabs { height: 44px; }
 :root[data-size~="tiny"] .deck-tabs [role="tab"] { padding: 0 10px; }
@@ -258,6 +264,27 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root[data-size~="tiny"] .deck-title-row { min-height: 44px; }
 :root[data-size~="tiny"] .opf-title .opf-title-button { min-width: 44px; height: 44px; }
 :root[data-size~="tiny"] .opf-title .opf-title-input { min-height: 44px; }
+
+/* A very narrow pane (under 300px: Cursor's IDE chat pane gives the view about 215px). The bar stays two rows: the name with Send and More,
+   then Preview, Source and Design; Undo and Redo are in More (with a mouse the controls stay 32px, main.ts drops "tiny"). The slide takes
+   the whole width, and the Design sheet's section switch is two rows of two, each segment wide enough to read. */
+:root[data-size~="micro"] .deck-group { display: none; }
+:root:not([data-size~="micro"]) .deck-menu .deck-menu-history { display: none; }
+.deck-menu .deck-menu-item:disabled { color: var(--opf-ui-muted-fg); cursor: default; }
+.deck-menu .deck-menu-item:disabled:hover { background: transparent; }
+:root[data-size~="micro"] .deck-bar { padding: 2px 2px 2px 4px; }
+:root[data-size~="micro"] .deck-title { min-width: 56px; }
+:root[data-size~="micro"] .deck-send { padding: 0 10px 0 8px; }
+:root[data-size~="micro"] .deck-tabs [role="tab"] { padding: 0 8px; }
+:root[data-size~="micro"] .deck-stage { margin: 4px 0; }
+:root[data-size~="micro"] #opf-deck { --opf-design-menu-sheet-h: 320px; }
+:root[data-size~="micro"] .opf-design-menu[data-mode="sheet"] .opf-design-menu-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* The narrowest the view lays itself out for: below 200px it keeps 200px and the frame scrolls sideways, rather than overlap controls. */
+@media (max-width: 199.98px) {
+	html { overflow-x: auto; }
+	body { overflow: visible; }
+	#opf-deck { min-width: 200px; }
+}
 
 /* Full screen on a phone held sideways: the strip gives its height to the slide (the footer's navigator remains). */
 @media (max-height: 500px) {
