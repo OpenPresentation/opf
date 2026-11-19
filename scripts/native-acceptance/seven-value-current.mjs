@@ -38,7 +38,9 @@ export const CURRENT_SEVEN_FIXTURE='packages/pptx/test/fixtures/chartex-fallback
 // `flow` slide layout and its ppt/tags/opfLayout*.xml part removed with the later parts renumbered and the master, content-type and rels entries retargeted, `vertical-flow`
 // renamed `vertical-process` in its cSld name and tag, the process tag's record hash), `decks` and `decks['all-seven']` are byte-identical to 58735de64 (JSON.stringify compared).
 // Previous: 928b07663065f457e6e395cb09036b9169a5018e4affbd1667e19d24b978e5bd, 111231 bytes.
-export const CURRENT_SEVEN_FIXTURE_SHA256='32c2fc609ac9aada2645e3a49e054833b9b24f03c449af76b9e80937c9cf9ccb';
+// 0.35 one row-or-column vocabulary (owner decision 2026-11-18): layout tags only; the fixture's `source` review record and `entries` export hashes moved
+// (the 24 ppt/tags/opfLayout*.xml parts of the records that said flow none or design.contentDirection, whose record hash changed), `decks` and `decks['all-seven']` are byte-identical to eed73db34 (JSON.stringify compared). Previous: 32c2fc609ac9aada2645e3a49e054833b9b24f03c449af76b9e80937c9cf9ccb, 115209 bytes.
+export const CURRENT_SEVEN_FIXTURE_SHA256='e313155690ef2afcc4607e20961651773e6f2d21cd013a8142ec39bad37ba872';
 export const CURRENT_VALUE_PROFILE='seven-chart-treemap-single-value-edit-v1';
 export function currentSevenSource(root=fileURLToPath(new URL('../../',import.meta.url))){
  const bytes=fs.readFileSync(path.join(root,CURRENT_SEVEN_FIXTURE));
