@@ -4,6 +4,8 @@
 //
 //   node scripts/layout-harvest-corpus.mjs <out dir> [--batch-size 50]
 //
+// Needs the workspace built (`pnpm build`). Nothing in CI runs it: run it by hand after a change to the layouts or the examples.
+//
 // Content comes from the example decks (text, lists, metrics, charts, tables, quotes, timelines and code), so slides read like
 // real ones. The corpus covers every default layout at 1 to 6 blocks of short and long content, dynamic compositions in every
 // mode with mixed kinds, one slide of each structure the examples use, long titles, and dark-theme variants.
@@ -151,7 +153,16 @@ for (const mode of [undefined, 'auto', 'row', 'column', 'grid']) {
   }
 }
 
-// 3. One slide of each structure the examples use, with its own content.
+// 3. One slide of each structure the examples use, with its own content. A slide whose picture is not an SVG or PNG data URI
+// (an asset reference, a file path, a URL, another format) is left out: the brief hands each picture over as a PNG file.
+const imageSource = image => (typeof image === 'string' ? image : image?.src);
+const INLINE_PICTURE = /^data:image\/(svg\+xml|png)[;,]/;
+const picturesInline = value => {
+  if (!value || typeof value !== 'object') return true;
+  if (Array.isArray(value)) return value.every(picturesInline);
+  if (value.image !== undefined && !INLINE_PICTURE.test(String(imageSource(value.image)))) return false;
+  return Object.values(value).every(picturesInline);
+};
 const signatures = new Set();
 for (const {file, deck} of examples) {
   for (const slide of deck.slides) {
@@ -160,7 +171,7 @@ for (const {file, deck} of examples) {
     collect(slide);
     for (const [key, value] of Object.entries(slide)) if (/^(top|middle|bottom|left|center|right)/.test(key)) collect(value);
     const signature = `${slide.layout ?? 'auto'}|${kinds.sort().join(',')}|${Object.keys(slide).filter(key => /^(top|middle|bottom|left|center|right)/.test(key)).sort().join(',')}`;
-    if (signatures.has(signature) || JSON.stringify(slide).includes('"asset:')) continue;
+    if (signatures.has(signature) || !picturesInline(slide)) continue;
     signatures.add(signature);
     const copy = structuredClone(slide);
     delete copy.id;
@@ -198,7 +209,7 @@ const describe = (blockValue, images) => {
   if (blockValue.timeline) { const events = Array.isArray(blockValue.timeline) ? blockValue.timeline : blockValue.timeline.events; return `timeline: ${events.map(event => `${event.when}: ${event.what}`).join(' → ')}`; }
   if (blockValue.code) { const code = typeof blockValue.code === 'string' ? {source: blockValue.code} : blockValue.code; return `code${code.language ? ` (${code.language})` : ''}:\n\`\`\`\n${code.source}\n\`\`\``; }
   if (blockValue.image) {
-    const key = blockValue.image.src;
+    const key = imageSource(blockValue.image);
     if (!images.has(key)) images.set(key, `image-${images.size + 1}.png`);
     return `picture (file images/${images.get(key)}; alt: "${blockValue.image.alt ?? ''}")`;
   }
@@ -221,7 +232,7 @@ for (const [number, {theme, entries}] of batches.entries()) {
   const {document} = embed(deck, {catalogs: [gallery]});
   writeFileSync(path.join(dir, 'deck.opf.json'), `${JSON.stringify(document, null, 2)}\n`);
   const images = new Map();
-  let brief = `# Content for a ${entries.length}-slide deck\n\nBrand colours: ${PALETTES[theme]}. Typeface: Roboto (Roboto Mono for code).\n\nOne slide per entry, in this order. Each entry lists the slide's title, subtitle and content in reading order.\n\n`;
+  let brief = `# Content for a ${entries.length}-slide deck\n\nBrand colors: ${PALETTES[theme]}. Typeface: Roboto (Roboto Mono for code).\n\nOne slide per entry, in this order. Each entry lists the slide's title, subtitle and content in reading order.\n\n`;
   for (const [index, entry] of entries.entries()) {
     const slide = entry.slide, parts = [];
     for (const child of slide.blocks ?? []) parts.push(describe(child, images));
@@ -229,7 +240,11 @@ for (const [number, {theme, entries}] of batches.entries()) {
     for (const kind of [...KINDS, 'image']) if (slide[kind] !== undefined && !slide.blocks) parts.push(describe({[kind]: slide[kind]}, images));
     brief += `## s${String(index + 1).padStart(2, '0')}\n\n- Title: "${plainText(slide.title) ?? ''}"\n${slide.subtitle ? `- Subtitle: "${plainText(slide.subtitle)}"\n` : ''}${parts.map(part => `- ${part}`).join('\n')}\n\n`;
   }
-  for (const [src, file] of images) writeFileSync(path.join(dir, 'brief', 'images', file), await toPng(Buffer.from(src.split(',')[1], 'base64').toString(), {scale: 1}));
+  for (const [src, file] of images) {
+    const comma = src.indexOf(',');
+    const bytes = src.slice(0, comma).endsWith(';base64') ? Buffer.from(src.slice(comma + 1), 'base64') : Buffer.from(decodeURIComponent(src.slice(comma + 1)));
+    writeFileSync(path.join(dir, 'brief', 'images', file), src.startsWith('data:image/png') ? bytes : await toPng(bytes.toString(), {scale: 1}));
+  }
   writeFileSync(path.join(dir, 'brief', 'content.md'), brief);
   manifest.push({batch: name, theme, slides: entries.map((entry, index) => ({id: `s${String(index + 1).padStart(2, '0')}`, tags: entry.tags}))});
 }
