@@ -71,7 +71,8 @@ export interface FontsHandle extends RenderFonts {
 	registry: FontRegistry;
 	/** Present on current handles; prepare newly used faces after document edits or pagination. */
 	ensure?(presentation: unknown, options?: Record<string, unknown>): Promise<unknown>;
-	substitutions: { requestedFamily: string; resolvedFamily: string; compatibility: string; substitute: boolean }[];
+	/** `licenseClass` is the requested family's row in the font policy (`proprietary-standard`, `open`), when it has one. */
+	substitutions: { requestedFamily: string; resolvedFamily: string; compatibility: string; substitute: boolean; licenseClass?: string }[];
 }
 /** The engines of opf-render 0.18 (RR-73). Slides count from 1; a number gives one SVG, a selection a list. */
 export interface RenderModule {
@@ -107,7 +108,7 @@ export interface Peer<T> {
  * installs only the ones its outputs use. The versions are the ones the renderer is tested with (its `peerDependencies`).
  */
 export const RENDER_EXTRAS = {
-	/** The faces of the office pack, which the CLI and `convert` always load (every format). */
+	/** The font packages of the base and office packs. A deck needs only the ones its faces use (opf-render loads faces on demand); `opf doctor <deck>` names them. */
 	fonts: ["@expo-google-fonts/roboto@0.4.3", "@expo-google-fonts/roboto-mono@0.4.2", "@expo-google-fonts/caladea@0.4.2", "@expo-google-fonts/arimo@0.4.3", "@expo-google-fonts/tinos@0.4.2", "@expo-google-fonts/cousine@0.4.3", "@expo-google-fonts/gelasio@0.4.1", "@expo-google-fonts/noto-sans@0.4.2"],
 	/** PNG output (and raster fallbacks): the SVG rasterizer, and sharp for WebP and rotated JPEG pictures. */
 	png: ["@resvg/resvg-js@^2.6.2", "sharp@^0.35.5"],
@@ -232,7 +233,7 @@ export function missingPeerFrom(error: unknown): OPFApiError | undefined {
 		const details = current.details ?? {};
 		const fontPackages = current.code === "font-resource-unavailable" && (Array.isArray(details.packages) || typeof details.package === "string");
 		if (current.code !== "converter-missing" && !fontPackages) continue;
-		const kept = Object.fromEntries(["package", "packages", "range", "install", "purpose"].filter((key) => details[key] !== undefined).map((key) => [key, details[key]]));
+		const kept = Object.fromEntries(["package", "packages", "faces", "range", "install", "purpose"].filter((key) => details[key] !== undefined).map((key) => [key, details[key]]));
 		return new OPFApiError(current.message ?? String(current.code), details.installed === true ? "peer-load-failed" : "peer-not-installed", { details: kept, cause: error });
 	}
 	return undefined;

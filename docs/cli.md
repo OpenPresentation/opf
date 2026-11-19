@@ -80,8 +80,20 @@ RR-27, below), loaded the first time a command needs them, from beside the CLI f
 
 ```sh
 opf doctor --format text          # per format: ready, or what is missing; then one install command
-opf doctor deck.opf.md            # JSON; with a deck, a PDF needs sharp only when the deck has pictures, and the deck's script fonts are checked
+opf doctor deck.opf.md            # JSON; with a deck, the answer is that deck's: its font packages, its script fonts, sharp only when it has pictures
 ```
+
+Font packages are per deck: opf-render loads only the faces a deck's fonts use (Roboto for a Roboto design, Cousine for one that
+names Consolas), and each `@expo-google-fonts/*` package is an optional peer. So `opf doctor` without a deck counts only the
+renderer and the converters as `ready` and lists the font packages apart (`fontPackages.others`). With a deck it prepares the
+deck's faces as `opf convert` does (nothing is drawn) and answers for that deck: a font package its faces need that is not
+installed is listed under `deckFonts.missing` with the faces that need it (`deckFonts.faces`), reported as a
+`fonts/font-package-not-installed` finding, added to the drawn formats' `missing` and to `install`; the font packages the
+deck does not use are listed apart (`fontPackages.others`, with `unusedByDeck: true` once all its faces were prepared) and never
+make a format `missing`, so doctor and convert agree. `opf validate` reports the same `fonts/font-package-not-installed`
+warning (exit 1 only under `--fail-on warning`) and then estimates the layout instead of measuring it with another face; `opf
+convert` of such a deck stops with `font-resource-unavailable`, naming the package, its faces and the install line. Doctor exits
+0 whenever its arguments are right, in both formats: it reports, and `ok` (or the text) is the verdict.
 
 The command matches the package manager that runs the CLI (`npm_config_user_agent`: npm, pnpm, yarn or bun) and the way the CLI
 is installed: global (`npm install -g ...`), a project (`npm install ...`), or one npx run (`npx -p @openpresentation/cli -p ... opf <command>`).
@@ -90,10 +102,10 @@ carry that one command for the format asked for. What each output needs beside `
 
 | Output | Also install |
 | --- | --- |
-| every drawn format (the office font pack) | `@expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2` |
+| a drawn format, for the font packages the deck's faces use (`opf doctor deck` names them; all of them are) | `@expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2` |
 | `png` | `@resvg/resvg-js@^2.6.2 sharp@^0.35.5` |
 | `pdf` | nothing for text in the default vector mode; `pdf-lib@^1.17.1` for `--raster`; `sharp@^0.35.5` when the deck has pictures |
-| `svg` | the fonts only |
+| `svg` | the deck's font packages only |
 | `pptx`, a `.pptx` input | `@openpresentation/opf-pptx` |
 
 ### Fonts for a deck in another script
