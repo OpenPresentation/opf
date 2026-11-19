@@ -12,6 +12,7 @@ Choose the content kind by what the content is, not by how it should look.
 | Numbers plotted on axes or as shares of a whole, where the values should stay editable data | `chart` |
 | Dated or ordered milestones with progress (`done`, `current`, `planned`) | `timeline` (the payload, with its status design) |
 | Parallel entries with details, or a short sequence of one-line steps | a list (`items`) or layout `process` |
+| A single-root reporting tree of up to eight people (an assistant is an entry with `assistant: true`), or up to seven overlapping sets (their common overlap named by a last entry with `overlap: true`) | a list on layout `org-chart` or `venn` ([Trees and set overlap](smartart.md#trees-and-set-overlap-sh-21)) |
 
 A Mermaid `pie` or `timeline` diagram is a quick picture. A `chart` or `timeline` payload keeps the data editable and gets the engines' chart and timeline design, with highlights and status words. Prefer the payload when it fits and the diagram when only a diagram can show the structure.
 

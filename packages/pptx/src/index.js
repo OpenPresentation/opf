@@ -28,7 +28,7 @@ import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direc
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
 import {assertReferenceExportBudget,referenceChartTypes,applyReferenceSeries,readNativeReferences,addReferenceOverlays,attachReferenceTags,importReferenceOverlays,ordinaryMixedGroups,sealReferenceBindings,coalesceOrdinaryLines,REFERENCE_URI} from './chart-references.js';
 import {addSteps,attachStepTags,importStepShapes,restoreStepNumbers} from './step-badges.js';
-import {addArrangements,attachArrangementTags,attachSmartArt,attachSmartArtFallbacks,exportPaint,importArrangementShapes,importSmartArt,importSmartArtFallbacks,smartArtBleed,smartArtRegionSvg,smartArtSlideSvg,writeArrangementAdjustments} from './smart-art.js';
+import {addArrangements,attachArrangementTags,attachSmartArt,attachSmartArtFallbacks,exportPaint,importArrangementShapes,importSmartArt,importSmartArtFallbacks,restoreArrangementEntries,smartArtBleed,smartArtRegionSvg,smartArtSlideSvg,writeArrangementAdjustments} from './smart-art.js';
 import {importSmartArtShapes} from './smart-art-import.js';
 import {addIcons,attachIconTags,importIconShapes,restoreIcons} from './icons.js';
 import {addTitleRule,attachTitleRuleTags,importTitleRules} from './title-rule.js';
@@ -755,6 +755,8 @@ export async function fromPptx(input, options = {}) {
   applyNativeImageFits(imported, furnitureContexts, restoredGroups, options);
   // LH-14: each tagged icon's reference goes back on the entry, metric or group it marked (src/icons.js).
   restoreIcons(imported, new Map(furnitureContexts.flatMap(context => [...(context.iconReferences ?? [])])));
+  // An org chart's assistants and a Venn's overlap label, kept on their nodes' tags (src/smart-art.js).
+  restoreArrangementEntries(imported, new Map(furnitureContexts.flatMap(context => [...(context.arrangementEntries ?? [])])));
   if (imported.design?.theme === undefined) for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code === "theme-unverified") report(diagnostic);
   languageDiagnostics(imported, observedLanguage, options.onDiagnostic && report);
 
@@ -1297,7 +1299,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const stepShapes=importStepShapes(shapes,relationships,entries);
   nativeContext.stepNumbers=stepShapes.numbers;
   // SH-09: a pyramid's or matrix's native nodes (OPF_ARRANGEMENT_V1) are its layout's drawing, not content.
-  const arrangementShapes=importArrangementShapes(shapes,relationships,entries);
+  const {shapes:arrangementShapes,entries:arrangementEntries}=importArrangementShapes(shapes,relationships,entries);
+  nativeContext.arrangementEntries=arrangementEntries;
   // LH-14: an icon's chip, glyph and picture are the drawing of its `icon`, not content; the references go back on the document.
   const iconShapes=importIconShapes([...shapes,...(nativeContext.pictures??[])],relationships,entries);
   nativeContext.iconReferences=iconShapes.references;
