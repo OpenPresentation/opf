@@ -4853,6 +4853,9 @@ export function composeLayoutAreas(layout: unknown, options: LayoutAreasOptions 
   const result = composeSlide(slide, { ...compose, layout: kept, [LAYOUT_MASTER]: true } as ComposeSlideOptions);
   const areas = template.areas.map((area): ComposedLayoutArea => {
     if (area.heading) {
+      // A `subtitle` area that joined the title beside the body (titlePosition start) is the subtitle part of the title area.
+      const joined = area.name === 'subtitle' && !result.headingAreas?.some(entry => entry.name === 'subtitle') ? result.headingAreas?.find(entry => entry.name === 'title')?.parts?.subtitle : undefined;
+      if (joined) return { name: area.name, heading: true, box: { ...joined } };
       const found = result.headingAreas?.find(entry => entry.name === area.name);
       return { name: area.name, heading: true, box: found ? { ...found.box } : { x: 0, y: 0, width: 0, height: 0 }, ...(found?.parts ? { parts: found.parts } : {}) };
     }
@@ -7125,7 +7128,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // like rich body text (richTextLayouter); a string keeps the plain fitter. A slide with body content has a content title (LH-51).
   const headingArea = headingSpan ?? area;
   const headingFields = ["tag", "title", "subtitle"].filter(field => slide[field] && !(Array.isArray(slide[field]) && !annotationText(slide[field])));
-  // OPF 0.35 titlePosition `start` on an automatic slide (no layout, or a layout given up by LH-83's recomposition): the heading group in
+  // OPF 0.35 titlePosition `start` on an automatic slide (no layout; a slide LH-83 recomposes keeps its title on top, titleStart): the heading group in
   // a column of TITLE_BESIDE_SHARE of the free area's content width at the reading side (the right in a right-to-left deck; design.mirror
   // swaps it), centered down the body's height at the role size, as a template's title beside its body; the body composes in the rest from
   // the top. A cover (no body) keeps its centered headings, and promoted regions (start, center, end, ...) their headings on top: those

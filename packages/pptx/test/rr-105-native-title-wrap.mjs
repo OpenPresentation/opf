@@ -39,7 +39,9 @@ for (const {file, deck} of examples) {
       const need = WRAP_MARGIN * item.box.width;
       assert.ok(wrap.width - widths.widest >= need - 1e-6, `${where}: widest line keeps 1% free`);
       assert.ok(widths.unbroken - wrap.width >= need - 1e-6, `${where}: a next word still overruns by 1%`);
-      const area = geometry.headingAreas?.find(area => area.name === 'title' && !area.collapsed)?.box ?? geometry.contentBox;
+      // OPF 0.35: a title beside the body on an automatic slide (titlePosition start) lies outside the content box; its own box bounds it, as in nativeTitleWrapBox.
+      const found = geometry.headingAreas?.find(area => area.name === 'title' && !area.collapsed)?.box ?? geometry.contentBox;
+      const area = found && item.box.x >= found.x - 1e-6 && item.box.x + item.box.width <= found.x + found.width + 1e-6 ? found : item.box;
       assert.ok(wrap.x >= Math.max(0, area?.x ?? item.box.x) - 1e-6, `${where}: inside title area's left edge`);
       assert.ok(wrap.x + wrap.width <= Math.min(geometry.width, (area?.x ?? item.box.x) + (area?.width ?? item.box.width)) + 1e-6, `${where}: inside right edge`);
       const factor = item.alignment === 'center' ? .5 : item.alignment === 'right' ? 1 : 0;

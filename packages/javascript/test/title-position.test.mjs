@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { gallery } from '@openpresentation/gallery';
-import { TITLE_BESIDE_SHARE, composeSlide, layoutTemplate, renamedLayout, renamedLayoutTitlePosition, titleBesideTemplate } from '../dist/composition.js';
+import { TITLE_BESIDE_SHARE, composeLayoutAreas, composeSlide, layoutTemplate, renamedLayout, renamedLayoutTitlePosition, titleBesideTemplate } from '../dist/composition.js';
 import { applyPatch, validate } from '../dist/index.js';
 
 const HEADINGS = new Set(['title', 'subtitle', 'tag']);
@@ -45,6 +45,14 @@ test('titleBesideTemplate: the title row gives way to a title column of two fift
   const untitled = titleBesideTemplate(layoutTemplate({ direction: 'column', regions: [{ name: 'body' }] }));
   assert.equal(untitled.title, true);
   assert.deepEqual(untitled.areas.map((area) => area.name), ['title', 'body']);
+});
+
+test('the empty layout of a record with start: the title column, and a subtitle region inside it', () => {
+  const { areas } = composeLayoutAreas({ direction: 'column', design: { titlePosition: 'start' }, regions: [{ name: 'title' }, { name: 'subtitle' }, { name: 'body' }] });
+  const [title, subtitle, body] = ['title', 'subtitle', 'body'].map((name) => areas.find((area) => area.name === name).box);
+  assert.ok(near(title.x, padding) && near(title.width, column), JSON.stringify(title));
+  assert.ok(subtitle.width > 0 && subtitle.x >= title.x - 0.5 && subtitle.x + subtitle.width <= title.x + title.width + 0.5 && subtitle.y >= title.y, JSON.stringify(subtitle));
+  assert.ok(near(body.x, padding + column + gap), JSON.stringify(body));
 });
 
 test('a record with titlePosition start draws as the 0.34 row record did', () => {
