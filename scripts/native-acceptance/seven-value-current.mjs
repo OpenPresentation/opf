@@ -28,7 +28,10 @@ export const CURRENT_SEVEN_FIXTURE='packages/pptx/test/fixtures/chartex-fallback
 // 9db434794ee429312f7f7ea5f494aa0b0295ac54bc7c25497e414135f5b04852, 95027 bytes.
 // 0.35 layout-record change (owner decision 2026-11-18): layout tags only; the fixture's `source` review record and `entries` export hashes moved,
 // `decks` and `decks['all-seven']` are byte-identical to 1f47d14a7 (JSON.stringify compared). Previous: 0cb03a44684d456be94905c7382e34db19f8f1def7d984388f06fcb10b3de255, 99005 bytes.
-export const CURRENT_SEVEN_FIXTURE_SHA256='8d0c1d0ab86f60228cad66a7eebd229e84bf80bc6608d85d12434dec20d2c5ca';
+// 0.35 region names (owner decision 2026-11-18): layout tags and placeholder names only; the fixture's `source` review record and `entries`
+// export hashes moved (32 ppt/tags/opfLayout*.xml parts and 32 slide layouts whose only change is the placeholder names from region names),
+// `decks` and `decks['all-seven']` are byte-identical to a8e81dbbb (JSON.stringify compared). Previous: 8d0c1d0ab86f60228cad66a7eebd229e84bf80bc6608d85d12434dec20d2c5ca, 103275 bytes.
+export const CURRENT_SEVEN_FIXTURE_SHA256='5de19d097657910b0340229eb12b2a83a15161adc9ff1f6054b95a64996ad4fa';
 export const CURRENT_VALUE_PROFILE='seven-chart-treemap-single-value-edit-v1';
 export function currentSevenSource(root=fileURLToPath(new URL('../../',import.meta.url))){
  const bytes=fs.readFileSync(path.join(root,CURRENT_SEVEN_FIXTURE));
