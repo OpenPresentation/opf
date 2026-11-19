@@ -47,10 +47,11 @@ describe("schema errors name the form the value chose", () => {
     assert.equal(error.validation.alternatives.length, 5);
   });
 
-  test("two object forms that both miss are both reported, without the forms the type rules out", () => {
-    const messages = schemaErrors({ name: "Old chart data", slides: [{ chart: { type: "line", data: { labels: ["Q1"] } } }] }).map((error) => error.message);
-    assert.ok(messages.includes("must have required property 'columns'"));
-    assert.equal(messages.some((message) => /must be string/.test(message)), false);
+  test("an object with no field of either object form is one error that lists both forms, without the forms the type rules out", () => {
+    const errors = schemaErrors({ name: "Old chart data", slides: [{ chart: { type: "line", data: { labels: ["Q1"] } } }] });
+    assert.deepEqual(errors.map((error) => [error.path, error.message]), [["/slides/0/chart/data", 'none of its forms has "labels"']]);
+    assert.deepEqual(errors[0].validation.alternatives, ["ChartData: { columns, rows, source }", "DatasetRef: { dataset, fields }"]);
+    assert.equal(errors.some((error) => /must be string/.test(error.message)), false);
   });
 });
 
