@@ -850,6 +850,32 @@
           "languageFamily": "cs"
         }
       }
+    },
+    {
+      "id": "title-start",
+      "title": "The title beside the body",
+      "design": {
+        "titlePosition": "start"
+      },
+      "text": "With titlePosition start the heading sits in a column at the start side and the body beside it."
+    },
+    {
+      "id": "title-top-on-cycle",
+      "layout": "cycle",
+      "title": "A cycle with its title on top",
+      "design": {
+        "titlePosition": "top"
+      },
+      "blocks": [
+        {
+          "items": [
+            "Plan",
+            "Build",
+            "Measure",
+            "Learn"
+          ]
+        }
+      ]
     }
   ]
 }
