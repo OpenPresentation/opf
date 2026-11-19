@@ -293,11 +293,14 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
     for (const node of arrangement.nodes) {
       const objectName = name(`node ${node.index}`);
       if(node.background){const objectName=name('rear '+node.index);slide.addShape('roundRect',{...box(node.background),fill:{color:fill},line,rectRadius:inches(node.radius??0),objectName});tag(objectName,'rear',{index:node.index,adjust:node.adjust,preset:'roundRect'});}
-      const nodeFill=arrangement.kind==='hierarchy'?paint.line.hex.slice(1):fill,nodeLine=arrangement.kind==='hierarchy'?{...line,color:fill}:line;
+      // A hierarchy's foreground card and a Venn's overlap label are in the background color with the primary outline.
+      const nodeFill=arrangement.kind==='hierarchy'||node.overlap?paint.line.hex.slice(1):fill,nodeLine=arrangement.kind==='hierarchy'||node.overlap?{...line,color:fill}:line;
       const alpha=arrangement.kind==='venn'&&node.preset==='ellipse'?.5:arrangement.kind==='hierarchy'?.9:1;
       slide.addShape(node.preset, {...box(node.box), fill: {color:nodeFill,...(alpha===1?{}:{transparency:(1-alpha)*100})}, line:nodeLine, objectName,
         ...(node.preset === 'roundRect' ? {rectRadius: inches(node.radius ?? 0)} : {}), ...(node.flip ? {flipH: true} : {}), ...(node.flipV ? {flipV: true} : {})});
-      tag(objectName, 'node', {index: node.index, adjust: node.adjust, preset: node.preset, ...(node.path ? {entry: node.path} : {})});
+      // An org chart's assistant and a Venn's overlap label are kept on their node's tag, which import puts back on the entry.
+      const role = values[node.index] !== null && typeof values[node.index] === 'object' && !Array.isArray(values[node.index]) ? values[node.index] : {};
+      tag(objectName, 'node', {index: node.index, adjust: node.adjust, preset: node.preset, ...(node.path ? {entry: node.path} : {}), ...(role.assistant === true ? {assistant: true} : {}), ...(node.overlap ? {overlap: true} : {})});
       // SH-18: a cycle's arrow after its node, as PowerPoint stacks them.
       for (const arrow of arrangement.arrows?.filter(entry => entry.index === node.index) ?? []) addCycleArrow(slide, arrow, {box, name, tag, color: paint.arrow.hex.slice(1)});
     }
@@ -722,9 +725,12 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
   return out;
 }
 
-/** Import: the shapes of a slide that carry a valid OPF_ARRANGEMENT_V1 tag (the layout's drawing of a pyramid or matrix, consumed). */
+/**
+ * Import: the shapes of a slide that carry a valid OPF_ARRANGEMENT_V1 tag (the layout's drawing of a pyramid or matrix, consumed), and
+ * `entries`: the entry paths whose node was an org chart's assistant or a Venn's overlap label, with that field (restoreArrangementEntries).
+ */
 export function importArrangementShapes(shapes, relationships, entries) {
-  const consumed = new Set();
+  const consumed = new Set(), marked = new Map();
   for (const shape of shapes) {
     for (const link of array(shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'])) {
       const rel = relationships.get(link['r:id']);
@@ -734,11 +740,26 @@ export function importArrangementShapes(shapes, relationships, entries) {
           if (String(tag.name ?? '').toUpperCase() !== ARRANGEMENT_TAG) continue;
           const record = decodeTextTag(tag.val);
           if (record?.v === 1 && typeof record.path === 'string' && typeof record.role === 'string') consumed.add(shape);
+          if (record?.role === 'node' && typeof record.entry === 'string' && record.entry.startsWith(record.path + '.')) for (const field of ['assistant', 'overlap']) if (record[field] === true) marked.set(record.entry.replace(/\.text$/, ''), field);
         }
       } catch { /* an unreadable tag leaves the shape as ordinary content */ }
     }
   }
-  return consumed;
+  return {shapes: consumed, entries: marked};
+}
+
+/** Import: an org chart's assistant and a Venn's overlap label (importArrangementShapes' `entries`) go back on their list entries. */
+export function restoreArrangementEntries(document, marked) {
+  for (const [path, field] of marked ?? []) {
+    const keys = path.split('.').map(part => /^\d+$/.test(part) ? Number(part) : part), index = keys.at(-1);
+    if (keys.at(-2) !== 'items' || typeof index !== 'number') continue;
+    const list = keys.slice(0, -1).reduce((node, key) => node?.[key], document);
+    if (!Array.isArray(list) || list[index] === undefined) continue;
+    const entry = list[index];
+    if (typeof entry === 'string' || Array.isArray(entry)) list[index] = {text: entry, [field]: true};
+    else if (entry && typeof entry === 'object') entry[field] = true;
+  }
+  return document;
 }
 
 /**

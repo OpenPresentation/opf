@@ -48,6 +48,13 @@ height (or its layout region's), as Claude Design draws a set of features or an 
   label stays on one line). Icon cards never set text smaller: they are tried on top of the rules the guard kept and kept only when no
   block reads smaller than without them, and the settled slide without them (which LH-48 may grow) is compared too. When no grid holds
   the list at its size, it stays the list it was.
+- **Direction.** The slide's direction chooses between the cards and the list: where the arrangement composition resolves for the
+  list is a column (`composition.mode: "column"`, or `design.contentDirection: "vertical"` where the slide sets no mode; on a layout
+  slide, the arrangement of the list's region: the slide's own mode where it arranges that region, else `contentDirection`'s), the list stays ruled rows (label and description side by side
+  when the labels are short), each entry's chip at the start of its row (the end in a right-to-left deck), at the size the rows have
+  without icons. A row, a grid (a grid of cards is a grid) and no direction draw the cards. A layout region's own `flow` is no
+  direction here, so a layout's lone list keeps its cards unless the slide or the design sets a column. Groups drawn as icon cards are not part of
+  this choice.
 - **Across the body.** A layout's lone list with icons (an agenda's list in its half of an `agenda-split` slide) also tries its cards
   across the whole body under the heading, the slide composed as the automatic grid (LH-83's recomposition, `recomposed.cards`). That
   arrangement is kept when its text is at least as large as the layout's (with or without cards; LH-149's half steps count at the step
@@ -104,7 +111,9 @@ under 3:1 against its chip takes the text color. Core computes the colors (`icon
 
 A chip is a line of its text high (`ICON_CHIP_COMPACT`, 1.22 em) or, where the slide has room, 1.75 em (`ICON_CHIP`, a step badge's
 size); the glyph is 55% of the chip. Both are guarded rules of composition (`icons`, `icon-chips`) and drawing rules: a slide keeps
-the full chips, else the compact ones, only when every block reads as large as it does without them. When neither fits, the slide is
+the full chips, else the compact ones, only when every block reads as large as it does without them. A lone list grows to fill the
+body as the same list without icons would (its chips do not count against the body it fills, as a badge list's badges do not), as
+long as it still fits with them. When neither fits, the slide is
 drawn without its icons and each one gets `opf/icon-dropped`; the text is always drawn. The
 finding names what bounds the block (its share of `composition.weights`, its region, or the slide), so the author knows what to give
 more room. An icon on something icons do not mark (a nested or numbered entry) gets the same finding. Icons in promoted regions

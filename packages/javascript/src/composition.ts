@@ -6872,11 +6872,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // ruled rows (pairRowLabels: the questions of the region, so their answers share one column) and those drawn as a grid under accent rules.
   // LH-133: spreadLists are the lone ruled lists that fill their body (fillLone), their rows spread over it (ListFitOptions.spread).
   const numeralLists = new Map<string, 'display' | 'row'>(), pairRowLabels = new Map<string, ListText[]>(), pairGrid = new Set<string>(), spreadLists = new Set<string>();
+  // LH-14: the icon lists measured without their chips while a lone block chooses its growth (fillLoneBlock's plainNeed).
+  const chiplessLists = new Set<string>();
   const listOptionsFor = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => {
     // LH-106: list numerals and badges are in the numbering system of the slide's language.
     const listed = {...listOptionsOf(field, path, numbering, value), ...numberLanguage(options)};
     // LH-14: an icon list (never a badge list, a step heading or numerals) draws its icons on chips in the marker column.
-    const own = field === 'items' && !badgeLists.has(path) && !stepHeadings.has(path) && !numeralLists.has(path) && iconList(value, numbering) ? { ...listed, icons: true, iconScale: chipScale } : listed;
+    const own = field === 'items' && !badgeLists.has(path) && !stepHeadings.has(path) && !numeralLists.has(path) && !chiplessLists.has(path) && iconList(value, numbering) ? { ...listed, icons: true, iconScale: chipScale } : listed;
     return own.rows && spreadLists.has(path) ? { ...own, spread: true } : own;
   };
   const listOptionsOf = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none',...(headingCaps.has(path)?{headingMax:headingCaps.get(path)!}:{})}
@@ -9038,11 +9040,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // A table needs the height it is drawn at (its preferred rows), every other block the height its content takes.
     const slack = 2 * rasterPadding + scale, need = () => (node.field === 'table' ? measureTable(node, inner.width, settings)?.height ?? Infinity : naturalHeight(node, inner.width, false, undefined, settings)) + slack;
     // LH-07: a badge list grows as the plain list would (its badges do not count against the body it fills), as long as it fits with them.
-    // LH-134: so does a list drawn beside numerals: its numerals and rules are drawing, as badges are.
+    // LH-134: so does a list drawn beside numerals: its numerals and rules are drawing, as badges are. LH-14: and an icon list: its chips
+    // are drawing too. Measured with them, a list whose chip column took a line from its descriptions filled LONE_FILL at its role size
+    // and did not grow, while the same list without icons grew a step; the guard then dropped the chips as costing that step.
+    const chipped = node.field === 'items' && iconList(node.value, node.payload.numbering);
     const plainNeed = () => {
       const badged = badgeLists.delete(node.path), numerals = numeralLists.get(node.path);
       numeralLists.delete(node.path);
-      try { return need(); } finally { if (badged) badgeLists.add(node.path); if (numerals) numeralLists.set(node.path, numerals); }
+      if (chipped) chiplessLists.add(node.path);
+      try { return need(); } finally { if (badged) badgeLists.add(node.path); if (numerals) numeralLists.set(node.path, numerals); chiplessLists.delete(node.path); }
     };
     let best = plainNeed();
     // LH-101: a lone code panel grows its code in type-scale steps as the other blocks do (up to LONE_DISPLAY_SIZES.code) and hugs it in
@@ -9126,7 +9132,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         if (shown === undefined) { displayTexts.delete(node.path); messageTexts.delete(node.path); if (plain.growth === undefined) proseGrowth.delete(node); else proseGrowth.set(node, plain.growth); best = plain.best; }
         else { proseGrowth.set(node, shown); loneGrowth = true; fire('display-message'); }
       }
-      if (badgeLists.has(node.path)) best = need();
+      if (badgeLists.has(node.path) || chipped) best = need();
     } else {
       let chosen: number | undefined;
       // LH-101: a metric's value has room to grow to LONE_DISPLAY_SIZES.value (nine steps); the other blocks reach their displays in five.
@@ -9725,7 +9731,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (units.length > 1 && units.every(unit => tierGroups.has(unit.path))) return 'row';
       // LH-132: a team's portrait cards: up to PORTRAIT_TOP_MAX across the top in one row, otherwise a grid.
       if (units.length && units.every(unit => personParts.has(unit.path))) return (portraitMode === 'top' || teamAvatar) && units.length <= PORTRAIT_TOP_MAX ? 'row' : 'grid';
-      if (direction !== undefined && region.flow !== 'none') return direction === 'horizontal' ? 'row' : 'column';
+      const directed = directedArrangement(region);
+      if (directed) return directed;
       const flow = region.flow === 'none' && units.length > 1 ? 'auto' : region.flow;
       if (flow === 'none' || flow === 'column') return 'column';
       if (flow === 'grid') return 'grid';
@@ -10083,6 +10090,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // A slide's own composition.mode, columns or weights arrange its first primary flowing region (the 0.18 modes).
     const slideComposition = record(slide.composition);
     const overridden = ['mode', 'columns', 'weights'].some(key => slideComposition[key] !== undefined) ? plan.regions.find(region => region.role === 'primary' && region.flow !== 'none')?.name : undefined;
+    // The direction each region's blocks resolved to (cardsArrangement): the slide's own mode in the region it arranges, else the one
+    // design.contentDirection gives a flowing region.
+    for (const region of plan.regions) {
+      const directed = region.name === overridden ? (slideComposition.mode as Composition['mode']) ?? 'auto' : directedArrangement(region);
+      if (directed) regionDirections.set(region.name, directed);
+    }
     const settings: Composition = { ...composition };
     // LH-64, LH-04: a row of cards (one row of a region's grid, or the lone blocks of card regions side by side) and how its cards
     // stand in their cells; undefined keeps the region's rule (LH-22: filled cards, the payload at the anchor).
@@ -10668,6 +10681,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const ownMode = record(slide.composition).mode as Composition['mode'] | undefined;
   const direction = recomposing && hints.sources.contentDirection === 'layout' ? undefined : hints.contentDirection;
   const directionMode: Composition['mode'] = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : 'auto';
+  // The arrangement the slide's direction gives a layout region's blocks (arrangementOf): design.contentDirection makes every flowing
+  // region one row or one column; undefined where it sets none, and the region's own flow arranges them.
+  const directedArrangement = (region: LayoutRegion): 'row' | 'column' | undefined => direction !== undefined && region.flow !== 'none' ? (direction === 'horizontal' ? 'row' : 'column') : undefined;
+  const regionDirections = new Map<string, Composition['mode']>();
   // The effective design.chartPrimary (slide, deck, then the layout's own) splits the root into a
   // primary chart track and one synthetic container of the other nodes when the slide has no regions
   // and no composition.mode of its own, and the root nodes mix at least one chart leaf with other nodes.
@@ -11012,6 +11029,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const arrangedList = (item: ComposedItem, kind: Arrangement, area: LayoutBox, pyramidDirection: 'up' | 'down' = 'up'): ComposedArrangement | undefined => {
     const values = item.value as ListValue[], fit = item.text as ListFit, base = fit.fontSize, count = values.length;
     const tree=kind==='org-chart'||kind==='hierarchy',measured=tree||kind==='venn';
+    // A Venn's overlap label is its last entry (arrangedLists checks it); the entries before it are the sets.
+    const overlapAt=kind==='venn'&&record(values[count-1]).overlap===true?count-1:-1,sets=overlapAt<0?count:count-1;
     const listOptions: ListFitOptions = { ...richOptions(styleFor(item.field, item.path)), bullet: 'none' };
     const single = (index: number, box: LayoutBox, size: number): ListFit => {
       const own0 = `${item.path}.0`, ownPath = `${item.path}.${index}`, marker = listOptions.citationMarker;
@@ -11045,7 +11064,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const box = { x: inner.x, y: inner.y + (inner.height - entry.text.height) / 2, width: inner.width, height: entry.text.height };
         const text = single(index, box, size), placed = text.listEntries[0];
         if (!placed || text.overflow || cutsWord(placed)) return undefined;
-        if(kind==='venn'&&count>=5&&design.design!=='smartart'&&placed.text.richLines.some(line=>line.fragments.map(fragment=>fragment.text).join('').trim().length>70))return undefined;
+        if(kind==='venn'&&sets>=5&&design.design!=='smartart'&&placed.text.richLines.some(line=>line.fragments.map(fragment=>fragment.text).join('').trim().length>70))return undefined;
         // A centered line is centered without the space it broke at (PowerPoint's wrap drops it): the space is left out of its last
         // fragment and width.
         if (design.align === 'center') placed.text.richLines = placed.text.richLines.map(line => {
@@ -11101,9 +11120,42 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const nodes:ArrangementNode[]=geometry.nodes.map(node=>{const preset=kind==='hierarchy'?'roundRect' as const:'rect' as const,adjust=kind==='hierarchy'?10000:0;return{index:node.index,box:node.box,preset,adjust,textBox:presetTextRect(preset,node.box,adjust),...(kind==='hierarchy'?{radius:.1*Math.min(node.box.width,node.box.height),background:node.background}: {})};});
       designs.push({design:'smartart',frame:area,nodes,connectors:geometry.connectors,margin:ARRANGEMENT_TEXT_MARGIN[kind],align:'center',paint:'primary',text:kind==='hierarchy'?'slide':'node',lineWidth:primaryLine});
     } else if(kind==='venn'){
-      const nativeNodes=vennNodes(area,count);
-      const measuredDesign:ArrangementDesign={design:'smartart',frame:area,nodes:nativeNodes,margin:ARRANGEMENT_TEXT_MARGIN.venn,align:'center',paint:'primary',text:'slide',lineWidth:primaryLine};
-      if(count<=4)designs.push(measuredDesign);
+      const nativeNodes=vennNodes(area,sets);
+      // The overlap label at a size: an opaque pill on the circles' common overlap, its text broken as wide as it can be without the pill
+      // covering a set label's text or leaving the region. It is centered on the overlap (the mean of the circles' centers) or, where a
+      // set label is in the way, moved up or down the nearest distance that clears it while the pill still reaches into the overlap
+      // (a point of its edge or middle inside every circle). Undefined when no position and width do.
+      const withOverlap=(circles:ArrangementNode[]|undefined,size:number):ArrangementNode[]|undefined=>{
+        if(!circles||overlapAt<0)return circles;
+        const margin=ARRANGEMENT_TEXT_MARGIN.venn*size,clear=.25*size,pad=.2*size;
+        const ink:LayoutBox[]=[];
+        for(const [index,node] of circles.entries()){
+          const inner={x:node.textBox.x+margin,y:node.textBox.y+margin,width:node.textBox.width-2*margin,height:node.textBox.height-2*margin};
+          if(inner.width<=0||inner.height<=0)return undefined;
+          const entry=single(index,{...inner,height:1e5},size).listEntries[0];if(!entry)return undefined;
+          const widest=Math.max(0,...entry.text.richLines.map(line=>line.width));
+          ink.push({x:inner.x+(inner.width-widest)/2,y:inner.y+(inner.height-entry.text.height)/2,width:widest,height:entry.text.height});
+        }
+        const cx=circles.reduce((sum,node)=>sum+node.box.x+node.box.width/2,0)/circles.length,cy=circles.reduce((sum,node)=>sum+node.box.y+node.box.height/2,0)/circles.length;
+        const inside=(x:number,y:number)=>circles.every(node=>((x-node.box.x-node.box.width/2)/(node.box.width/2))**2+((y-node.box.y-node.box.height/2)/(node.box.height/2))**2<=1);
+        const labels=[1,.5,.36,.26,.18,.12].flatMap(share=>{
+          const probe=single(overlapAt,{x:0,y:0,width:area.width*share,height:1e5},size),entry=probe.listEntries[0];
+          if(!entry||probe.overflow||cutsWord(entry))return[];
+          const width=Math.max(1,...entry.text.richLines.map(line=>line.width))+size*.02,height=entry.text.height,tall=height+2*margin+2*pad;
+          return[{width,height,tall,wide:width+2*margin+tall}];
+        });
+        const reach=Math.max(...circles.map(node=>node.box.height));
+        for(let step=0;step<=reach/(.25*size);step++)for(const dy of step?[-step*.25*size,step*.25*size]:[0])for(const label of labels){
+          const box={x:cx-label.wide/2,y:cy+dy-label.tall/2,width:label.wide,height:label.tall};
+          if(box.x<area.x-1e-6||box.y<area.y-1e-6||box.x+box.width>area.x+area.width+1e-6||box.y+box.height>area.y+area.height+1e-6)continue;
+          if(![0,-.5,.5].some(share=>[box.y,cy+dy,box.y+box.height].some(y=>inside(cx+share*label.width,y))))continue;
+          if(ink.some(other=>box.x<other.x+other.width+clear&&other.x<box.x+box.width+clear&&box.y<other.y+other.height+clear&&other.y<box.y+box.height+clear))continue;
+          return[...circles,{index:overlapAt,box,textBox:{x:box.x+label.tall/2,y:box.y+pad,width:label.width+2*margin,height:label.height+2*margin},preset:'roundRect',adjust:50000,radius:label.tall/2,overlap:true}];
+        }
+        return undefined;
+      };
+      const measuredDesign:ArrangementDesign={design:'smartart',frame:area,nodes:nativeNodes,margin:ARRANGEMENT_TEXT_MARGIN.venn,align:'center',paint:'primary',text:'slide',lineWidth:primaryLine,...(overlapAt<0?{}:{fitNodes:(size:number)=>withOverlap(nativeNodes,size)})};
+      if(sets<=4)designs.push(measuredDesign);
       else{
         // Keep the previous measured design's actual type size as an additional floor. Reclaim unused native label slots, not type.
         const previous=sized(measuredDesign),previousList={...item};
@@ -11113,7 +11165,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           let best:ReturnType<typeof fitVennShapes>;const seen=new Set<string>(),margin=ARRANGEMENT_TEXT_MARGIN.venn*size;
           for(const share of[.18,.24,.32,.4,.5]){
             const labels=[];let complete=true;
-            for(let index=0;index<count;index++){
+            for(let index=0;index<sets;index++){
               const probe=single(index,{x:0,y:0,width:area.width*share,height:1e5},size),entry=probe.listEntries[0];
               if(!entry||probe.overflow||cutsWord(entry)||entry.text.richLines.some(line=>line.fragments.map(fragment=>fragment.text).join('').trim().length>70)){complete=false;break;}
               labels.push({width:Math.max(1,...entry.text.richLines.map(line=>line.width))+2*margin+size*.02,height:Math.max(size*.25,entry.text.height)+2*margin+.01});
@@ -11123,10 +11175,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
             // Smaller overlaps should become complete readable cards, not a tiny central diagram surrounded by empty native slots.
             if(fit&&fit.circleHeight>=area.height*.65&&(!best||fit.circleHeight>best.circleHeight))best=fit;
           }
-          return best?.nodes;
+          return withOverlap(best?.nodes,size);
         };
         designs.push({...measuredDesign,design:'opf',minimumSize,fitNodes,instead:'the measured Basic Venn circle group leaves too much unused slide body',adaptation:'Venn sets use enlarged editable shapes with measured outside labels; this adapted geometry is not a qualified live SmartArt layout.'});
-        const columns=[...new Set([...cardGridColumns(count),2,1])].filter(column=>column<=count);
+        // Cards hold sets, not the place where they overlap: with an overlap label the list is kept instead.
+        const columns=overlapAt<0?[...new Set([...cardGridColumns(count),2,1])].filter(column=>column<=count):[];
         for(const column of columns)designs.push({design:'cards',frame:area,nodes:cardNodes(area,count,column,gap,radius),margin:CARD_TEXT_MARGIN,align:'center',paint:'card',text:'slide',lineWidth:scale,minimumSize,adaptation:'The Venn overlap cannot keep every outside label readable at the original type size, so all sets are shown as editable cards.'});
       }
     } else if (kind === 'cycle') {
@@ -11326,9 +11379,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (!values.length) continue;
       const tree=region.arrangement==='org-chart'||region.arrangement==='hierarchy';
       const topology=tree?arrangementTree(values):undefined;
+      // An assistant is an org chart's and the label of the overlap a Venn's; a Venn's `sets` are its entries other than that label.
+      const overlaps = values.filter(value => record(value).overlap === true).length, sets = values.length - overlaps;
       const reason = topology&&!topology.ok?topology.reason:item.payload.numbering !== undefined ? 'a numbered list' : !tree&&values.some(value => (record(value).level ?? 0) !== 0) ? 'nested entries'
+        : region.arrangement !== 'org-chart' && values.some(value => record(value).assistant === true) ? 'an assistant (org chart only)'
+        : region.arrangement !== 'venn' && overlaps ? 'an overlap label (Venn only)' : overlaps > 1 ? 'more than one overlap label' : overlaps && record(values.at(-1)).overlap !== true ? 'an overlap label that is not last' : overlaps && sets < 2 ? 'an overlap label with fewer than two sets'
         : values.some(value => record(value).description !== undefined) ? 'descriptions' : values.some(value => record(value).icon !== undefined) ? 'icons'
-          : region.arrangement !== 'matrix' && values.length > ARRANGEMENT_MAX[region.arrangement] ? `more than ${ARRANGEMENT_MAX[region.arrangement]} ${SMART_ART_NAMES[region.arrangement].nodes}` : values.length > ARRANGEMENT_CARDS_MAX ? `more than ${ARRANGEMENT_CARDS_MAX} entries` : undefined;
+          : region.arrangement !== 'matrix' && sets > ARRANGEMENT_MAX[region.arrangement] ? `more than ${ARRANGEMENT_MAX[region.arrangement]} ${SMART_ART_NAMES[region.arrangement].nodes}` : values.length > ARRANGEMENT_CARDS_MAX ? `more than ${ARRANGEMENT_CARDS_MAX} entries` : undefined;
       if (reason) { diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `${region.arrangement === 'chevrons' ? 'A row of chevrons' : `A ${region.arrangement.replace('-', ' ')}`} draws a list of one level of short entries; this list has ${reason}, so it is drawn as a list.` }); continue; }
       const area = templateRegions.find(entry => entry.name === region.name)?.box ?? item.box;
       const arranged = arrangedList(item, region.arrangement, area, region.pyramidDirection);
@@ -11554,6 +11611,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // sits in the middle of its card. When no grid holds the list at its size, it stays the list it was; the guard (DRAWING_RULES, and
   // composeSlide without steps) keeps the cards only when no text of the slide is smaller than without them.
   const cardLists = new Set<string>();
+  // The arrangement the slide's direction resolved for the area a lone list's cards would take: on an automatic slide the root's
+  // (composition.mode, else design.contentDirection: rootSettings), in a layout the list region's (regionDirections: the slide's own mode
+  // in the region it arranges, else design.contentDirection's; a region's own flow is no direction, so a layout's lone list keeps its
+  // cards); undefined in a promoted region.
+  const cardsArrangement = (item: ComposedItem): Composition['mode'] | undefined => useTemplate
+    ? (item.region === undefined ? undefined : regionDirections.get(item.region))
+    : regions.length ? undefined : modeFor(rootSettings);
   // Wave 8, LH-18 with LH-165: the cards of a row share their label track, as sibling pillars do (alignHeadingTracks): every card of the row
   // reserves the height of its tallest label, so the descriptions start on one line and the row reads as one. Text keeps its size; a row
   // whose shared track would not fit its cards keeps its own labels' heights. Placement only, under `heading-tracks`.
@@ -11576,6 +11640,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const body = items.filter(item => !headings.has(item.field) && !item.eyebrow);
     const item = body.length === 1 ? body[0]! : undefined;
     if (!item || item.field !== 'items' || item.listColumns || item.caption || item.frameBox || item.emphasis || stepFlows.has(item.path) || !item.text || !('listEntries' in item.text)) return undefined;
+    // The slide's direction chooses the drawing: a list whose resolved arrangement is a column stays ruled rows, its icons on chips at the
+    // start of each row (LH-14); a row, a grid or no direction draws the cards.
+    if (cardsArrangement(item) === 'column') return undefined;
     const values = Array.isArray(item.value) ? item.value as ListValue[] : [];
     if (values.length < ICON_CARD_MIN || values.length > ICON_CARD_MAX) return undefined;
     const entries = values.map(value => {
