@@ -190,8 +190,9 @@ export function smartArtForm(layoutId, category) {
   if (exact) return {arrangement: exact, exact: true};
   const stem = layoutStem(layoutId);
   if (/^(venn|radial|target|balance|funnel|gear|equation|arrow|bracket|opposingIdeas|counterbalance|plus|converging|diverging|hexagon|circleRelationship)/i.test(stem)) return {drawing: true};
-  // Preserve the widest-first order of Inverted Pyramid instead of silently turning it upright.
-  if (/^pyramid3$|invert/i.test(stem)) return {arrangement: 'inverted-pyramid'};
+  // Preserve the widest-first order of Inverted Pyramid instead of silently turning it upright. Only a pyramid: "inverted" alone also
+  // names layouts of other families (PowerPoint's Bullet Timeline Inverted is a process layout).
+  if (/^pyramid3$|invert\w*pyramid|pyramid\w*invert/i.test(stem)) return {arrangement: 'inverted-pyramid'};
   if (/^pyramid\d*$/i.test(stem)) return {arrangement: 'pyramid'};
   if (/^matrix\d*$/i.test(stem)) return {arrangement: 'matrix'};
   if (/^cycle\d*$/i.test(stem)) return {arrangement: 'cycle'};
