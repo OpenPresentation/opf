@@ -70,7 +70,9 @@ exits with 2.
   fix (a missing argument, the nearest command or flag: "Did you mean --check?", a removed flag's replacement).
 - **Exit codes.** `0` success, possibly with warnings. `1` an invalid document, a failed patch test, a finding at or above
   `--fail-on <error|warning|info>` (default `error`), an existing output, a merge conflict, or a `--check` that found a change.
-  `2` usage, text that is not valid JSON, YAML or Markdown, I/O, or a missing optional peer.
+  `2` usage, I/O, or a missing optional peer, and, in every command except `validate`, text that is not valid JSON, YAML or
+  Markdown. `opf validate` reports a syntax error as an `opf/json-syntax` (or `yaml/<rule>`, `markdown/<rule>`) finding and exits 1.
+  Closing a pipe early (`opf catalog | head`) ends the command quietly with 141, as `cat` and `git` do.
 - No telemetry, automatic uploads, or execution of instructions inside document text. Use `--` before file names that start with `-`.
 
 ## Create and validate
