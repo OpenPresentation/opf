@@ -16,7 +16,7 @@ import { CliError, fromApiError, usage } from "./errors.js";
 import * as fill from "./fill.js";
 import * as format from "./format.js";
 import * as ingest from "./ingest.js";
-import { json } from "./io.js";
+import { exitOnBrokenPipe, json } from "./io.js";
 import * as mcp from "./mcp-command.js";
 import * as paginate from "./paginate.js";
 import { type Host, countsOf, envelope, printReport } from "./runtime.js";
@@ -150,12 +150,16 @@ async function main(argv: string[]): Promise<string | undefined> {
 		if (removed) throw usage(removed, "removed-command", { command: first });
 		if (first.startsWith("-")) throw usage(`Options follow a command: opf <command> ${first} .... Run opf --help.`, "unknown-option");
 		const guess = nearest(first, [...byName.keys()]);
+		// A typo of a command that was removed (`rendr`) gets the answer for the removed command, not a bare "unknown command".
+		const removedGuess = guess === undefined ? nearest(first, Object.keys(REMOVED_COMMANDS)) : undefined;
+		if (removedGuess !== undefined) throw usage(`Unknown command: ${first}. ${REMOVED_COMMANDS[removedGuess]}`, "removed-command", { command: removedGuess, typed: first });
 		throw usage(`Unknown command: ${first}.${guess ? ` Did you mean opf ${guess}?` : ""} Run opf --help.`, "unknown-command", guess ? { suggestion: guess } : {});
 	}
 	await entry.runner(rest, host);
 	return first;
 }
 
+exitOnBrokenPipe();
 const command = process.argv[2];
 main(process.argv.slice(2)).catch((error: unknown) => {
 	const { report, exit } = failure(error, command !== undefined && byName.has(command) ? command : undefined);
