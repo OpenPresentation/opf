@@ -157,6 +157,7 @@ const HELP: Record<string, string> = {
 	"chart-dataset-unavailable": "The chart's values were imported inline, without its dataset reference: the package's datasets record lacks that dataset or holds other data (as after pasting the slide from another deck). Point the chart at the dataset again in OPF if it should follow it.",
 	"table-dataset-unavailable": "The table's cells were imported inline, without its dataset reference, because the package's datasets record lacks that dataset. Point the table at the dataset again in OPF if it should follow it.",
 	"layout-changed": "Nothing needs to change: the slide now uses the layout PowerPoint shows. To keep the original layout, change it back in OPF and export again.",
+	"layout-renamed": "Nothing needs to change: the file was written before OPF 0.35, and the slide now uses the layout that replaced the removed one, which draws it as before (see docs/migrations/0.35.md).",
 	"media-asset-conflict": "Nothing needs to change: the video keeps its current URL and caption, but its stored assets were not restored because their ids conflict with another video's (as after duplicating a slide). Give each video its own asset ids in OPF if both must keep them.",
 	"quote-photo-missing": "Restore the headshot picture in PowerPoint or in the OPF source, or accept the quote without a photo.",
 	"duplicate-block-id": "Nothing needs to change: the first block keeps the id and the duplicate gets none. Give duplicated blocks their own ids in OPF if they must stay distinct.",
