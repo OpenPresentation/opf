@@ -77,7 +77,7 @@ exits with 2.
 
 ```sh
 opf create decision.opf.json --title "Launch decision"
-opf create brief.opf.md --example compliance-readiness-review      # opf catalog examples lists them
+opf create brief.opf.md --example contract-cycle-time-brief        # opf catalog examples lists them
 opf create - --title "Launch decision" | opf validate -
 opf validate decision.opf.json
 ```
