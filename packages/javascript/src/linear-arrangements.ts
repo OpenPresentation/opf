@@ -1,5 +1,5 @@
 /**
- * SH-17: the linear arrangements of a layout region (`arrangement: "chevrons" | "flow" | "vertical-flow"`), next to SH-09's pyramid and
+ * SH-17: the linear arrangements of a layout region (`arrangement: "chevrons" | "process" | "vertical-process"`), next to SH-09's pyramid and
  * matrix (arrangements.ts).
  *
  * A lone list of one level in such a region is drawn as a process diagram: a row of chevrons, a row of boxes with arrows between them,
@@ -15,11 +15,11 @@
  *   its height deep); PowerPoint sets the text in the chevron's own text rectangle (between the notch and the point) with a margin of
  *   0.315 em at the start and 0.105 em on the other sides. With one chevron in a frame less than 0.4 times as tall as wide, w is
  *   1023/1024 W and the height is the frame's.
- * - flow (Basic Process): n rounded rectangles of width w = s(n) W, height min(0.6 w, H), each 1.4 w after the last, centered, with a
+ * - process (Basic Process): n rounded rectangles of width w = s(n) W, height min(0.6 w, H), each 1.4 w after the last, centered, with a
  *   right arrow between two (0.212 w long, 0.248 w tall, 0.1 w after the box before it, on the frame's middle). A box is DrawingML's
  *   `roundRect` at adjustment 10000; its text is set in the rounded rectangle's own text rectangle with a margin of 0.3 em. One box in a
  *   frame less than 0.6 times as tall as wide is 1023/1024 W wide and as tall as the frame.
- * - vertical-flow (Vertical Process): n rounded rectangles of height h = s(n) H, width min(1.8 h, W), each 1.5 h below the last,
+ * - vertical-process (Vertical Process): n rounded rectangles of height h = s(n) H, width min(1.8 h, W), each 1.5 h below the last,
  *   centered, with a down arrow between two (a right arrow turned 90 degrees, 0.45 h wide and 0.375 h long, in the middle of the gap).
  *   One box in a frame less than 1.8 times as wide as tall is 1023/1024 H tall and as wide as the frame.
  *
@@ -39,13 +39,13 @@ export type LinearArrangement = typeof LINEAR_ARRANGEMENTS[number];
 export const isLinearArrangement = (kind: string): kind is LinearArrangement => (LINEAR_ARRANGEMENTS as readonly string[]).includes(kind);
 
 /**
- * PowerPoint's scale for n nodes (index n - 1): a node's width over the frame's width (chevrons, flow) or its height over the frame's
- * height (vertical-flow), as PowerPoint's binary search leaves it (multiples of 1/8192). Measured for 1 to 10 nodes in 20 frames each.
+ * PowerPoint's scale for n nodes (index n - 1): a node's width over the frame's width (chevrons, process) or its height over the frame's
+ * height (vertical-process), as PowerPoint's binary search leaves it (multiples of 1/8192). Measured for 1 to 10 nodes in 20 frames each.
  */
 export const SMART_ART_SCALES: Readonly<Record<LinearArrangement, readonly number[]>> = Object.freeze({
   chevrons: Object.freeze([1024, 538, 365.5, 276.5, 222.5, 186, 160, 140.25, 124.875, 112.5].map(value => value / 1024)),
-  flow: Object.freeze([1024, 426.5, 269, 196.75, 155, 128, 108.875, 94.75, 83.875, 75.25].map(value => value / 1024)),
-  'vertical-flow': Object.freeze([1024, 409.5, 256, 186, 146.25, 120.375, 102.375, 89, 78.75, 70.5].map(value => value / 1024)),
+  process: Object.freeze([1024, 426.5, 269, 196.75, 155, 128, 108.875, 94.75, 83.875, 75.25].map(value => value / 1024)),
+  'vertical-process': Object.freeze([1024, 409.5, 256, 186, 146.25, 120.375, 102.375, 89, 78.75, 70.5].map(value => value / 1024)),
 });
 /** One node squeezed by the frame's other side is this share of the frame (PowerPoint's search stops a step short of 1). */
 const SQUEEZED = 1023 / 1024;
@@ -61,8 +61,8 @@ export const ARROW_ADJUST: readonly [number, number] = Object.freeze([60000, 500
  */
 export const LINEAR_TEXT_MARGINS: Readonly<Record<LinearArrangement, readonly [number, number, number, number]>> = Object.freeze({
   chevrons: Object.freeze([.315, .105, .105, .105] as const),
-  flow: Object.freeze([.3, .3, .3, .3] as const),
-  'vertical-flow': Object.freeze([.3, .3, .3, .3] as const),
+  process: Object.freeze([.3, .3, .3, .3] as const),
+  'vertical-process': Object.freeze([.3, .3, .3, .3] as const),
 });
 /** The most nodes PowerPoint's scale is known for. */
 export const LINEAR_SCALE_MAX = 10;
@@ -78,7 +78,7 @@ function scaleOf(kind: LinearArrangement, count: number, squeezed: boolean): num
   if (count === 1 && squeezed) return SQUEEZED;
   const table = SMART_ART_SCALES[kind];
   if (count <= table.length) return table[count - 1]!;
-  return kind === 'chevrons' ? 1 / (CHEVRON_STEP * count + 1 - CHEVRON_STEP) : kind === 'flow' ? 1 / (FLOW_STEP * count + 1 - FLOW_STEP) : 1 / (VERTICAL_FLOW_STEP * count + 1 - VERTICAL_FLOW_STEP);
+  return kind === 'chevrons' ? 1 / (CHEVRON_STEP * count + 1 - CHEVRON_STEP) : kind === 'process' ? 1 / (FLOW_STEP * count + 1 - FLOW_STEP) : 1 / (VERTICAL_FLOW_STEP * count + 1 - VERTICAL_FLOW_STEP);
 }
 
 /** A chevron node of `box` whose point is `depth` deep (DrawingML chevron), pointing right, or left when `flip`. */
@@ -120,7 +120,7 @@ export function chevronNodes(frame: Box, count: number, rtl = false): LinearGeom
 
 /** PowerPoint's Basic Process of `count` boxes in `frame`, with an arrow between two (mirrored when `rtl`). */
 export function flowNodes(frame: Box, count: number, rtl = false): LinearGeometry {
-  const n = Math.max(1, Math.floor(count)), w = scaleOf('flow', n, FLOW_HEIGHT * frame.width > frame.height) * frame.width;
+  const n = Math.max(1, Math.floor(count)), w = scaleOf('process', n, FLOW_HEIGHT * frame.width > frame.height) * frame.width;
   const h = Math.min(FLOW_HEIGHT * w, frame.height), x0 = frame.x + (frame.width - w * (FLOW_STEP * n + 1 - FLOW_STEP)) / 2, y = frame.y + (frame.height - h) / 2;
   const place = (box: Box) => rtl ? mirrorBox(box, frame) : box;
   const nodes = Array.from({length: n}, (_, index) => boxNode(index, place({x: x0 + FLOW_STEP * w * index, y, width: w, height: h}), FLOW_ROUND_ADJUST));
@@ -130,7 +130,7 @@ export function flowNodes(frame: Box, count: number, rtl = false): LinearGeometr
 
 /** PowerPoint's Vertical Process of `count` boxes in `frame`, with a down arrow between two. */
 export function verticalFlowNodes(frame: Box, count: number): LinearGeometry {
-  const n = Math.max(1, Math.floor(count)), h = scaleOf('vertical-flow', n, VERTICAL_FLOW_WIDTH * frame.height > frame.width) * frame.height;
+  const n = Math.max(1, Math.floor(count)), h = scaleOf('vertical-process', n, VERTICAL_FLOW_WIDTH * frame.height > frame.width) * frame.height;
   const w = Math.min(VERTICAL_FLOW_WIDTH * h, frame.width), y0 = frame.y + (frame.height - h * (VERTICAL_FLOW_STEP * n + 1 - VERTICAL_FLOW_STEP)) / 2, x = frame.x + (frame.width - w) / 2;
   const nodes = Array.from({length: n}, (_, index) => boxNode(index, {x, y: y0 + VERTICAL_FLOW_STEP * h * index, width: w, height: h}, FLOW_ROUND_ADJUST));
   const arrows = Array.from({length: n - 1}, (_, index) => arrow(index, {x: frame.x + frame.width / 2 - .1875 * h, y: y0 + VERTICAL_FLOW_STEP * h * index + 1.025 * h, width: .375 * h, height: .45 * h}, 90));
@@ -139,7 +139,7 @@ export function verticalFlowNodes(frame: Box, count: number): LinearGeometry {
 
 /** PowerPoint's geometry of a linear arrangement in its SmartArt frame. */
 export function linearNodes(kind: LinearArrangement, frame: Box, count: number, rtl = false): LinearGeometry {
-  return kind === 'chevrons' ? chevronNodes(frame, count, rtl) : kind === 'flow' ? flowNodes(frame, count, rtl) : verticalFlowNodes(frame, count);
+  return kind === 'chevrons' ? chevronNodes(frame, count, rtl) : kind === 'process' ? flowNodes(frame, count, rtl) : verticalFlowNodes(frame, count);
 }
 
 /** OPF's compact design (linearDesign `compact`): rooms of gaps, arrows of the room, a shallower chevron point. */
@@ -156,7 +156,7 @@ export const OPF_CHEVRON_DEPTH = .2;
  * The height OPF gives a node: at least PowerPoint's proportion (a chevron 0.4 of its width, a box 0.6, a vertical box 1/1.8 of its
  * width) and the text it holds with its margins, at most the room: a chevron 0.8 of its width, a box 1.25, a vertical box as tall as wide.
  */
-const OPF_LEAST = Object.freeze({ chevrons: .4, flow: .6, 'vertical-flow': 1 / 1.8 }), OPF_MOST = Object.freeze({ chevrons: .8, flow: 1.25, 'vertical-flow': 1 });
+const OPF_LEAST = Object.freeze({ chevrons: .4, process: .6, 'vertical-process': 1 / 1.8 }), OPF_MOST = Object.freeze({ chevrons: .8, process: 1.25, 'vertical-process': 1 });
 /** DrawingML roundRect at FLOW_ROUND_ADJUST insets its text by this share of its smaller side on every side. */
 const BOX_TEXT_INSET = ROUND_RECT_TEXT_INSET * FLOW_ROUND_ADJUST / 100000;
 
@@ -190,13 +190,13 @@ export function linearDesign(kind: LinearArrangement, area: Box, count: number, 
   const n = Math.max(1, Math.floor(count)), wrap = Math.max(1, Math.min(Math.floor(lines), n)), counts = split(n, wrap), most = counts[0]!;
   const nodes: ArrangementNode[] = [], arrows: ArrangementArrow[] = [];
   const place = (box: Box) => rtl ? mirrorBox(box, area) : box, turn = (rotation: number) => rtl ? (rotation === 0 ? 180 : rotation === 180 ? 0 : rotation) : rotation;
-  if (kind === 'vertical-flow') {
+  if (kind === 'vertical-process') {
     // Columns two gaps apart, which hold the right arrow from one column to the next; each box half its height from the next.
     const between = 2 * gap, width = (area.width - (wrap - 1) * between) / wrap;
     if (width <= 0) return undefined;
     const fixed = compact ? COMPACT_COLUMN_ROOM * gap : 0;
-    const tallest = Math.min(compact ? (area.height - (most - 1) * fixed) / most : area.height / (most + OPF_COLUMN_ROOM * (most - 1)), OPF_MOST['vertical-flow'] * width);
-    const least = compact ? 0 : Math.min(tallest, OPF_LEAST['vertical-flow'] * width);
+    const tallest = Math.min(compact ? (area.height - (most - 1) * fixed) / most : area.height / (most + OPF_COLUMN_ROOM * (most - 1)), OPF_MOST['vertical-process'] * width);
+    const least = compact ? 0 : Math.min(tallest, OPF_LEAST['vertical-process'] * width);
     if (tallest <= 0) return undefined;
     const h = need === undefined ? tallest : Math.min(tallest, Math.max(least, need / (1 - 2 * BOX_TEXT_INSET))), room = compact ? fixed : OPF_COLUMN_ROOM * h;
     const span = most * h + (most - 1) * room, y0 = area.y + (area.height - span) / 2;

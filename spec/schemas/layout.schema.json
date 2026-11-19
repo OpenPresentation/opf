@@ -405,36 +405,23 @@
           ],
           "description": "How a metric block in the region is laid out. 'stack' (default): value, unit, label and the rest as one block at the region's anchor and content alignment. 'tile': the metric fills its cell (its card when the layout draws cards) from the start: the label first as an eyebrow, the value under it asking for a quarter of the cell's height (between its 76 px role size and twice it, fitted down as usual), and the description, delta and trend at the foot of the cell."
         },
-        "sequence": {
-          "type": "string",
-          "enum": [
-            "steps",
-            "numbered"
-          ],
-          "description": "The region lists the steps of a sequence. 'steps': two or more text or list blocks are the steps, each under a numbered badge (an accent circle with its numeral; a one-entry numbered list gives the badge its number and draws as a heading over its description) on one connector line through the badge centers; a lone list's entries are the steps, each beside its badge on a connector down the badge column; a lone list of 3 to 6 entries of one or two words is a flow of chips joined by arrows. 'numbered' (an agenda, ordered by nature): every list of two or more entries of one level draws its entries beside badges, numbered or not; an unnumbered list is counted in arabic, continuing from the region's previous unnumbered list, as drawing only (the document keeps no numbering). Steps keep the text size they have without the badges: a slide whose blocks would get smaller draws them as before. Absent: the region's content draws as any other."
-        },
         "arrangement": {
           "type": "string",
           "enum": [
+            "steps",
+            "numbered",
             "pyramid",
+            "inverted-pyramid",
             "matrix",
             "cycle",
             "chevrons",
-            "flow",
-            "vertical-flow",
+            "process",
+            "vertical-process",
             "org-chart",
             "hierarchy",
             "venn"
           ],
-          "description": "The region draws its lone list of one level as a diagram (docs/smartart.md), in the first design that holds every entry at one size, the list's role size or larger (up to 1.5 times), never smaller: PowerPoint's own geometry (Basic Pyramid: 1 to 8 entries as stacked levels, the first at the apex; Basic Matrix: exactly four entries as the quadrants of a centered square over a diamond; Basic Cycle: 1 to 8 entries as circles on a ring, the first at the top and the rest clockwise, with an arrow from each to the next, in a frame of the cycle's own proportion centered in the region), which the PPTX export writes as live SmartArt where PowerPoint lays it out as the preview draws it; else OPF's own design (a stepped pyramid with each entry beside its level, four quadrants filling the region, or rounded rectangles on a ring filling the region with an arrow from each to the next). A matrix of other than four entries draws a grid of cards. 'chevrons' (Basic Chevron Process: 1 to 8 entries as a row of chevrons), 'flow' (Basic Process: a row of boxes with arrows between them) and 'vertical-flow' (Vertical Process: a column of boxes with arrows between them), in PowerPoint's geometry where it holds the entries, else OPF's own row or column filling the region. Nodes are filled in the primary color with a 1.5 pt outline in the background color (cards in the card neutral). A cycle's arrows are the primary lightened 40%. A list with nested entries, descriptions, icons or numbering, more than 8 levels or steps, or one no design holds, draws as a list; opf/arrangement-adapted (info) reports the cards and the lists. 'org-chart' and 'hierarchy' take a list whose entry levels form one tree (one root at the first level, each child one level below its parent); a skipped level or a second root keeps the authored list, reported by opf/arrangement-adapted. 'venn' draws 1 to 7 flat sets. These arrangements never draw the list smaller than its own size; whether PowerPoint can edit the result as native shapes and text is decided separately. Absent: the region's content draws as any other."
-        },
-        "pyramidDirection": {
-          "type": "string",
-          "enum": [
-            "up",
-            "down"
-          ],
-          "description": "For arrangement 'pyramid': 'up' (default) puts the narrow tip first, at the top; 'down' puts the widest level first and the tip at the bottom. Entries retain their authored top-to-bottom order. Both the continuous and stepped designs use shared geometry; downward pyramids export as editable native shapes until live SmartArt is qualified."
+          "description": "What the region draws its content as. 'steps' and 'numbered' draw a sequence; the other values draw a lone list of one level as a diagram (docs/smartart.md). Absent: the region's content draws as any other.\n\n'steps': two or more text or list blocks are the steps, each under a numbered badge (an accent circle with its numeral; a one-entry numbered list gives the badge its number and draws as a heading over its description) on one connector line through the badge centers; a lone list's entries are the steps, each beside its badge on a connector down the badge column; a lone list of 3 to 6 entries of one or two words is a flow of chips joined by arrows. 'numbered' (an agenda, ordered by nature): every list of two or more entries of one level draws its entries beside badges, numbered or not; an unnumbered list is counted in arabic, continuing from the region's previous unnumbered list, as drawing only (the document keeps no numbering). Steps keep the text size they have without the badges: a slide whose blocks would get smaller draws them as before.\n\nThe diagrams draw in the first design that holds every entry at one size, the list's role size or larger (up to 1.5 times), never smaller: PowerPoint's own geometry (Basic Pyramid: 1 to 8 entries as stacked levels, the first at the apex; Basic Matrix: exactly four entries as the quadrants of a centered square over a diamond; Basic Cycle: 1 to 8 entries as circles on a ring, the first at the top and the rest clockwise, with an arrow from each to the next, in a frame of the cycle's own proportion centered in the region), which the PPTX export writes as live SmartArt where PowerPoint lays it out as the preview draws it; else OPF's own design (a stepped pyramid with each entry beside its level, four quadrants filling the region, or rounded rectangles on a ring filling the region with an arrow from each to the next). 'inverted-pyramid' is the pyramid upside down: the widest level first and the tip at the bottom, the entries still in their authored top-to-bottom order; it exports as editable native shapes. A matrix of other than four entries draws a grid of cards. 'chevrons' (Basic Chevron Process: 1 to 8 entries as a row of chevrons), 'process' (Basic Process: a row of boxes with arrows between them) and 'vertical-process' (Vertical Process: a column of boxes with arrows between them), in PowerPoint's geometry where it holds the entries, else OPF's own row or column filling the region. Nodes are filled in the primary color with a 1.5 pt outline in the background color (cards in the card neutral). A cycle's arrows are the primary lightened 40%. A list with nested entries, descriptions, icons or numbering, more than 8 levels or steps, or one no design holds, draws as a list; opf/arrangement-adapted (info) reports the cards and the lists. 'org-chart' and 'hierarchy' take a list whose entry levels form one tree (one root at the first level, each child one level below its parent); a skipped level or a second root keeps the authored list, reported by opf/arrangement-adapted. 'venn' draws 1 to 7 flat sets. These arrangements never draw the list smaller than its own size; whether PowerPoint can edit the result as native shapes and text is decided separately."
         },
         "anchor": {
           "type": "string",
@@ -456,25 +443,6 @@
       },
       "required": [
         "name"
-      ],
-      "allOf": [
-        {
-          "if": {
-            "required": [
-              "pyramidDirection"
-            ]
-          },
-          "then": {
-            "required": [
-              "arrangement"
-            ],
-            "properties": {
-              "arrangement": {
-                "const": "pyramid"
-              }
-            }
-          }
-        }
       ]
     },
     "DesignHints": {

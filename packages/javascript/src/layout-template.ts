@@ -1,4 +1,4 @@
-import {isArrangement,type Arrangement} from './arrangements.js';
+import {isArrangement,isRegionArrangement,isSequenceArrangement,type Arrangement,type RegionArrangement,type SequenceArrangement} from './arrangements.js';
 /**
  * OPF layout templates (`opf-layout/v2`, FA-33): a layout record is one ordered list of regions, nested for two
  * dimensions. `direction` says whether the record's `regions` are placed side by side (`row`) or stacked (`column`); an
@@ -50,20 +50,16 @@ export interface LayoutRegion {
   /** LH-68: `tile` when a metric in the region is laid out from its whole card; absent for the default `stack` (value, label and the rest as one block). */
   metrics?: 'tile';
   /**
-   * LH-07: the region lists the steps of a sequence. `steps`: its blocks (or a lone list's entries) are steps, drawn under numbered
-   * badges joined by a connector, and a lone list of short entries is a flow of chips joined by arrows. `numbered` (an agenda): every
-   * list draws its entries beside badges, numbered or not (an unnumbered one is counted as drawing only). Absent: the region's content draws as any other.
+   * What the region draws its content as (`regionSequence` and `regionDiagram` read the two families). LH-07, a sequence: `steps` (its
+   * blocks, or a lone list's entries, are steps under numbered badges joined by a connector, and a lone list of short entries is a flow of
+   * chips joined by arrows) or `numbered` (an agenda: every list draws its entries beside badges, numbered or not; an unnumbered one is
+   * counted as drawing only). A diagram of the region's lone list of one level, in PowerPoint's geometry or OPF's own (composition.ts):
+   * SH-09 `pyramid` (stacked levels, the first entry at the apex), SH-24 `inverted-pyramid` (the widest level first, the entries still
+   * top to bottom), SH-09 `matrix` (four quadrants; another count draws a grid of cards), SH-18 `cycle` (nodes on a ring with an arrow
+   * to the next), SH-17 `chevrons` (a row of chevrons), `process` (a row of boxes with arrows between them) or `vertical-process` (a
+   * column of them), SH-21 `org-chart` and `hierarchy` (a tree) and `venn` (overlapping sets). Absent: the region's content draws as any other.
    */
-  sequence?: 'steps' | 'numbered';
-  /**
-   * SH-09: the region draws its lone list of one level as a diagram: `pyramid` (stacked levels, the first entry at the apex) or `matrix`
-   * (four quadrants; another count draws a grid of cards), in PowerPoint's geometry or OPF's own (composition.ts). SH-18: `cycle` (the
-   * entries as the steps of a loop, nodes on a ring with an arrow to the next). SH-17: `chevrons` (a row of chevrons), `flow` (a row of
-   * boxes with arrows between them) or `vertical-flow` (a column of them). Absent: a list.
-   */
-  arrangement?: Arrangement;
-  /** Narrow tip at the top (up, default) or bottom (down); authored entry order stays top to bottom. */
-  pyramidDirection?: 'up' | 'down';
+  arrangement?: RegionArrangement;
   anchor: RegionAnchor;
   empty: 'collapse' | 'keep';
 }
@@ -160,13 +156,16 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
     bleed: entry.bleed === true,
     listColumns: entry.listColumns === 'auto' ? 'auto' : 1,
     ...(entry.metrics === 'tile' ? { metrics: 'tile' as const } : {}),
-    ...(entry.sequence === 'steps' || entry.sequence === 'numbered' ? { sequence: entry.sequence } : {}),
-    ...(isArrangement(entry.arrangement) ? { arrangement: entry.arrangement } : {}),
-    ...(entry.arrangement === 'pyramid' && entry.pyramidDirection === 'down' ? {pyramidDirection: 'down' as const} : {}),
+    ...(isRegionArrangement(entry.arrangement) ? { arrangement: entry.arrangement } : {}),
     anchor: (REGION_ANCHORS as readonly unknown[]).includes(entry.anchor) ? entry.anchor as RegionAnchor : inherited ?? 'top',
     empty: entry.empty === 'keep' ? 'keep' : 'collapse',
   };
 }
+
+/** LH-07: the sequence a region draws (its `arrangement` when that is `steps` or `numbered`). */
+export const regionSequence = (region: Pick<LayoutRegion, 'arrangement'>): SequenceArrangement | undefined => isSequenceArrangement(region.arrangement) ? region.arrangement : undefined;
+/** The diagram a region draws its lone list as (its `arrangement` when that is not a sequence). */
+export const regionDiagram = (region: Pick<LayoutRegion, 'arrangement'>): Arrangement | undefined => isArrangement(region.arrangement) ? region.arrangement : undefined;
 
 const anchorOf = (value: unknown): RegionAnchor | undefined => (REGION_ANCHORS as readonly unknown[]).includes(value) ? value as RegionAnchor : undefined;
 const isSplitEntry = (entry: Record<string, unknown>) => entry.name === undefined && (entry.regions !== undefined || entry.direction !== undefined);

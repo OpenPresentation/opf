@@ -41,7 +41,7 @@ test('six long labels use spare space to grow beyond the frozen26px fallback wit
 });
 test('fallback reflow keeps headings, title decoration, exact frame and footer unchanged',()=>{
   const doc=documentFor(fixture.cases[0].slide);doc.design={footer:{start:{text:'Complete original footer'},end:{text:'{{slide.number}}'}}};
-  const plain=structuredClone(doc);for(const region of plain.catalogs.custom.layouts['inverted-pyramid'].regions){delete region.arrangement;delete region.pyramidDirection;}
+  const plain=structuredClone(doc);for(const region of plain.catalogs.custom.layouts['inverted-pyramid'].regions){delete region.arrangement;}
   const before=compose(plain),after=compose(doc),heading=g=>g.items.filter(item=>!item.path.includes('.blocks.'));
   assert.deepEqual(heading(after),heading(before));assert.deepEqual(after.titleRule,before.titleRule);
   assert.deepEqual(after.furniture,before.furniture);assert.equal(after.furniture.parts.length,2);

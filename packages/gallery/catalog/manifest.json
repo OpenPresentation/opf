@@ -65,10 +65,10 @@
     "layouts": {
       "mode": "mirror",
       "records": 40,
-      "contentSha256": "b0a9bb25098bb99977afeca610312c1bd927d51568723a9e6c9b42a0c6eb1894",
+      "contentSha256": "e7194c4bb6054068a14cc6094cc82e86953621db7ecfbd3cf0b9ab5a015a8899",
       "gallery": {
         "records": 40,
-        "contentSha256": "b0a9bb25098bb99977afeca610312c1bd927d51568723a9e6c9b42a0c6eb1894"
+        "contentSha256": "e7194c4bb6054068a14cc6094cc82e86953621db7ecfbd3cf0b9ab5a015a8899"
       }
     },
     "narratives": {

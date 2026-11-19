@@ -7,7 +7,7 @@ import { composeSlide } from '../dist/composition.js';
 import { layouts } from './support/template-samples.mjs';
 
 const { process: processLayout } = layouts;
-const plain = (record) => ({ ...record, regions: record.regions.map(({ sequence: _sequence, ...region }) => region) });
+const plain = (record) => ({ ...record, regions: record.regions.map(({ arrangement, ...region }) => arrangement === 'steps' || arrangement === 'numbered' ? region : { ...region, ...(arrangement ? { arrangement } : {}) }) });
 const step = (text, description, start) => ({ region: 'body', items: [{ text, description }], numbering: { style: 'arabic', start } });
 const slide = (title, steps) => ({ title, blocks: steps.map(([text, description], index) => step(text, description, index + 1)) });
 const findings = (result) => result.diagnostics.filter((entry) => ['text-overflow', 'small-cell', 'layout-unplaced'].includes(entry.code));

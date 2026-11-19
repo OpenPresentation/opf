@@ -17,7 +17,7 @@
         "list"
       ],
       "flow": "none",
-      "arrangement": "flow"
+      "arrangement": "process"
     }
   ],
   "description": "Show 1 to 8 steps that follow one another, each a box with an arrow to the next. Write one short list entry per step, in order.",

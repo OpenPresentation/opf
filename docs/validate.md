@@ -305,7 +305,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/region-full`](#opfregion-full) | Layout | warning | composition | A block is pinned to a region that is already full. |
 | [`opf/layout-unplaced`](#opflayout-unplaced) | Layout | warning | composition | No region of the layout has room for a block. |
 | [`opf/icon-dropped`](#opficon-dropped) | Layout | warning | composition | An icon is not drawn. |
-| [`opf/arrangement-adapted`](#opfarrangement-adapted) | Layout | info | composition | A pyramid, matrix, cycle, row of chevrons or flow is drawn another way. |
+| [`opf/arrangement-adapted`](#opfarrangement-adapted) | Layout | info | composition | A diagram arrangement (a pyramid, matrix, cycle, row of chevrons, process, tree or Venn) is drawn another way. |
 | [`opf/chart-label-collision`](#opfchart-label-collision) | Layout | warning | composition | A reference label meets another label, a data line or a mark at both ends of its line. |
 | [`opf/timeline-period-short`](#opftimeline-period-short) | Layout | warning | composition | A timeline period is too short to read. |
 | [`opf/shape-off-slide`](#opfshape-off-slide) | Layout | warning | composition | A shape or image callout lies wholly outside the slide. |
@@ -989,9 +989,9 @@ Default severity: **warning**. Cost: composition. An icon is not drawn.
 
 ### `opf/arrangement-adapted`
 
-Default severity: **info**. Cost: composition. A pyramid, matrix, cycle, row of chevrons or flow is drawn another way.
+Default severity: **info**. Cost: composition. A diagram arrangement (a pyramid, matrix, cycle, row of chevrons, process, tree or Venn) is drawn another way.
 
-**Why.** A `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` region draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.
+**Why.** A region whose `arrangement` is `pyramid`, `inverted-pyramid`, `matrix`, `cycle`, `chevrons`, `process`, `vertical-process`, `org-chart`, `hierarchy` or `venn` draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.
 
 ### `opf/chart-label-collision`
 

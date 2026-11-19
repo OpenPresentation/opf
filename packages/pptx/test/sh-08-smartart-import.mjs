@@ -91,9 +91,9 @@ const N = (t, c = [], extra = {}) => ({t, c, ...extra});
 // 2. Which OPF form: the layouts OPF writes exactly, each family by its id, then by the doc point's category.
 {
   const forms = {
-    [`${L}pyramid1`]: {arrangement: 'pyramid', exact: true}, [`${L}pyramid2`]: {arrangement: 'pyramid'}, [`${L}pyramid3`]: {arrangement: 'pyramid', pyramidDirection: 'down'}, [`${L}matrix1`]: {arrangement: 'matrix'},
+    [`${L}pyramid1`]: {arrangement: 'pyramid', exact: true}, [`${L}pyramid2`]: {arrangement: 'pyramid'}, [`${L}pyramid3`]: {arrangement: 'inverted-pyramid'}, [`${L}matrix1`]: {arrangement: 'matrix'},
     [`${L}cycle1`]: {arrangement: 'cycle'}, [`${L}chevron2`]: {arrangement: 'chevrons'}, [`${L}hChevron3`]: {arrangement: 'chevrons'},
-    [`${L}process1`]: {arrangement: 'flow', exact: true}, [`${L}process2`]: {arrangement: 'vertical-flow', exact: true},
+    [`${L}process1`]: {arrangement: 'process', exact: true}, [`${L}process2`]: {arrangement: 'vertical-process', exact: true},
     [`${L}orgChart1`]: {arrangement: 'org-chart', exact: true}, [`${L}hierarchy1`]: {arrangement: 'hierarchy', exact: true}, [`${L}hierarchy2`]: {hierarchy: 'LR'},
     'urn:microsoft.com/office/officeart/2008/layout/NameandTitleOrganizationalChart': {hierarchy: 'TD'},
     'urn:microsoft.com/office/officeart/2009/3/layout/HorizontalOrganizationChart': {hierarchy: 'LR'},
@@ -240,5 +240,5 @@ async function withSmartArt(frames) {
   assert.match(imported.slides[16].blocks[0].diagram.source, /\["Kai Chen<br\/>Technology"\]/);
   assert.deepEqual(diagnostics.filter(item => item.code === 'smartart-text-dropped'), [], 'no text is dropped');
   assert.deepEqual([...new Set(diagnostics.filter(item => item.code === 'smartart-adapted').map(item => `${item.layout}:${item.form}`))],
-    ['pyramid3:pyramid', 'cycle1:cycle', 'process3:process', 'default:list', 'vList2:list', 'radial1:shapes', 'orgChart1:diagram', 'hierarchy2:diagram', 'NameandTitleOrganizationalChart:diagram']);
+    ['pyramid3:inverted-pyramid', 'cycle1:cycle', 'process3:process', 'default:list', 'vList2:list', 'radial1:shapes', 'orgChart1:diagram', 'hierarchy2:diagram', 'NameandTitleOrganizationalChart:diagram']);
 }

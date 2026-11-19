@@ -403,8 +403,8 @@ export const arrangementAdaptedRule = rule(
 	'arrangement-adapted',
 	'layout',
 	'info',
-	'A pyramid, matrix, cycle, row of chevrons or flow is drawn another way.',
-	"A `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` region draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.",
+	'A diagram arrangement (a pyramid, matrix, cycle, row of chevrons, process, tree or Venn) is drawn another way.',
+	"A region whose `arrangement` is `pyramid`, `inverted-pyramid`, `matrix`, `cycle`, `chevrons`, `process`, `vertical-process`, `org-chart`, `hierarchy` or `venn` draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.",
 	{ cost: 'composition' },
 );
 export const shapeOffSlideRule = rule(

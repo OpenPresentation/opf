@@ -365,7 +365,7 @@ _No named properties._
 
 #### Region
 
-- Type: `allOf:schema`
+- Type: `object`
 - Required fields: `name`
 - Purpose: One body region of a layout: its name, its share of the space and the rules for which content it takes and how several blocks share it.
 
@@ -380,9 +380,7 @@ _No named properties._
 | `bleed` | no | `boolean` | The region's outer edges that lie on the content box's edge extend to the slide edge, as a placed image does. A bled region is never drawn as a card. Default false. |
 | `listColumns` | no | `oneOf:const:"auto" / const:1` | 'auto': a list in the region that does not fit its cell at the starting size (a lone list, or one of several blocks) flows into up to three columns before it shrinks, as a list payload's columns: 'auto'; a list of 6 o... |
 | `metrics` | no | `enum:stack \| tile` | How a metric block in the region is laid out. 'stack' (default): value, unit, label and the rest as one block at the region's anchor and content alignment. 'tile': the metric fills its cell (its card when the layout d... |
-| `sequence` | no | `enum:steps \| numbered` | The region lists the steps of a sequence. 'steps': two or more text or list blocks are the steps, each under a numbered badge (an accent circle with its numeral; a one-entry numbered list gives the badge its number an... |
-| `arrangement` | no | `enum:pyramid \| matrix \| cycle \| chevrons \| flow \| vertical-flow \| org-chart \| hierarchy \| venn` | The region draws its lone list of one level as a diagram (docs/smartart.md), in the first design that holds every entry at one size, the list's role size or larger (up to 1.5 times), never smaller: PowerPoint's own ge... |
-| `pyramidDirection` | no | `enum:up \| down` | For arrangement 'pyramid': 'up' (default) puts the narrow tip first, at the top; 'down' puts the widest level first and the tip at the bottom. Entries retain their authored top-to-bottom order. Both the continuous and... |
+| `arrangement` | no | `enum:steps \| numbered \| pyramid \| inverted-pyramid \| matrix \| cycle \| chevrons \| process \| vertical-process \| org-chart \| hierarchy \| venn` | What the region draws its content as. 'steps' and 'numbered' draw a sequence; the other values draw a lone list of one level as a diagram (docs/smartart.md). Absent: the region's content draws as any other. 'steps': t... |
 | `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the region's content when it is shorter than the region. Replaces the 'anchor' of the record and of the splits around it. Default: the nearest of those that sets one, else 'top'. A picture shown w... |
 | `empty` | no | `enum:collapse \| keep` | What the region does on a slide that gives it no content: 'collapse' (default) joins its cells to a neighbouring area that shares the full length of one of its edges and is not itself empty; 'keep' leaves the space. |
 

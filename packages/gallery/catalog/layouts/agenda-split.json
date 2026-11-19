@@ -19,7 +19,7 @@
       ],
       "flow": "column",
       "listColumns": "auto",
-      "sequence": "numbered",
+      "arrangement": "numbered",
       "anchor": "middle"
     }
   ],

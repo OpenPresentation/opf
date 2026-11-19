@@ -38,7 +38,7 @@ const live = await exported({slides});
     const number = index + 1, layout = text(`ppt/diagrams/layout${number}.xml`), data = text(`ppt/diagrams/data${number}.xml`), xml = text(`ppt/slides/slide${number}.xml`);
     const id = /uniqueId="([^"]+)"/.exec(layout)[1];
     assert.ok(id.startsWith(OPF_LAYOUT_NAMESPACE) && expected[slide.layout].test(id), `${slide.layout}: ${id}`);
-    assert.equal(opfLayoutKind(id), slide.layout === 'matrix' ? 'matrix' : slide.layout);
+    assert.equal(opfLayoutKind(id), {flow: 'process', 'vertical-flow': 'vertical-process'}[slide.layout] ?? slide.layout);
     const design = id.slice(OPF_LAYOUT_NAMESPACE.length).split('/')[0];
     assert.match(layout, new RegExp(`<dgm:title val="${OPF_LAYOUTS[design].title}"/><dgm:desc val="${OPF_LAYOUTS[design].description.replace(/[.()]/g, '\\$&')}"/>`));
     assert.doesNotMatch(layout, /microsoft/i, 'no Microsoft content in OPF\'s definition');

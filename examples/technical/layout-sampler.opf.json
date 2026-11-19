@@ -1526,7 +1526,7 @@
               ],
               "flow": "column",
               "listColumns": "auto",
-              "sequence": "numbered"
+              "arrangement": "numbered"
             }
           ],
           "description": "Set expectations by listing the parts of a talk. Longer agendas flow across columns while preserving their order.",
@@ -1553,7 +1553,7 @@
               ],
               "flow": "column",
               "listColumns": "auto",
-              "sequence": "numbered",
+              "arrangement": "numbered",
               "anchor": "middle"
             }
           ],
@@ -1988,7 +1988,7 @@
                 "diagram"
               ],
               "flow": "grid",
-              "sequence": "steps"
+              "arrangement": "steps"
             }
           ],
           "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition.",
@@ -2723,7 +2723,7 @@
                 "list"
               ],
               "flow": "none",
-              "arrangement": "flow"
+              "arrangement": "process"
             }
           ],
           "description": "Show 1 to 8 steps that follow one another, each a box with an arrow to the next. Write one short list entry per step, in order.",
@@ -2749,7 +2749,7 @@
                 "list"
               ],
               "flow": "none",
-              "arrangement": "vertical-flow",
+              "arrangement": "vertical-process",
               "size": 3
             }
           ],
@@ -2775,8 +2775,7 @@
                 "list"
               ],
               "flow": "none",
-              "arrangement": "pyramid",
-              "pyramidDirection": "down"
+              "arrangement": "inverted-pyramid"
             }
           ],
           "description": "Show 1 to 8 levels narrowing from the broad top (the many, the starting pool) to the tip below (the selected few, the result). Write one short list entry per level in top-to-bottom order. Export uses editable native shapes.",

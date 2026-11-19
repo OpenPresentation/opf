@@ -26,7 +26,7 @@
         "diagram"
       ],
       "flow": "grid",
-      "sequence": "steps"
+      "arrangement": "steps"
     }
   ],
   "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition.",

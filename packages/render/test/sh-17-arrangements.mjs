@@ -27,7 +27,7 @@ const arrowFill = applyColorTransform(primary, {lumMod: 60000, lumOff: 40000});
   for (const word of ['Plan', 'Build', 'Test', 'Ship']) assert.match(svg, new RegExp(`<text[^>]*text-anchor="middle"[^>]*>(?:<tspan[^>]*>)?${word}<`), word);
   assert.ok(svg.indexOf('data-opf-arrangement="chevrons"') < svg.indexOf('>Plan<'), 'the chevrons are under the text');
 }
-for (const [slide, kind] of [[2, 'flow'], [3, 'vertical-flow']]) {
+for (const [slide, kind] of [[2, 'process'], [3, 'vertical-process']]) {
   const svg = toSvg(deck, slide, {catalogs, trace: true});
   const group = new RegExp(`<g [^>]*data-opf-arrangement="${kind}"[^>]*>([\\s\\S]*?)</g>`).exec(svg)?.[1];
   assert.ok(group, kind);

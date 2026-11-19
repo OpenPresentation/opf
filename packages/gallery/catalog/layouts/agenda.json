@@ -19,7 +19,7 @@
       ],
       "flow": "column",
       "listColumns": "auto",
-      "sequence": "numbered"
+      "arrangement": "numbered"
     }
   ],
   "description": "Set expectations by listing the parts of a talk. Longer agendas flow across columns while preserving their order.",

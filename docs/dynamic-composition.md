@@ -113,7 +113,7 @@ a row of cards of mixed kinds, LH-47's stretched short last row, LH-120's 40% sh
 alignment and display size of a metric beside other blocks (with LH-15's band), LH-50's label drawn as the eyebrow of the text after it,
 LH-08's ruled rows for a list of short labels with descriptions (LH-171: on a slide where another list is ruled, a list whose labels are a short phrase of up to six words is ruled too, so sibling columns read alike; see [Design resolution](design-resolution.md#liststyle-lh-08-vetoable)),
 LH-133's questions as ruled rows (`pair-rows`, see [Questions and terms](#questions-and-terms-lh-133)), LH-07's step badges and flows
-of a `sequence` region (see [Step sequences](layout-templates.md#step-sequences-lh-07)), LH-134's numerals (`numerals`, see
+of a `steps` or `numbered` region (its `arrangement`, see [Step sequences](layout-templates.md#step-sequences-lh-07)), LH-134's numerals (`numerals`, see
 [Numerals, badges or rows](#numerals-badges-or-rows-lh-134)), LH-135's pricing tiers as one card each and LH-136's one-word pillar titles at display size over an accent rule (see [Layout templates](layout-templates.md)), LH-131's featured card
 of a pair or a set (`featured-card`, see [Emphasis surface](#emphasis-surface-lh-06)), LH-137's delta pill (`delta-pill`) and LH-137's
 check-mark tiles of a dark summary list (`check-tiles`), LH-14's icon chips (`icons`, `icon-chips`), LH-170's closing note on the band (`note-band`, see [Emphasis surface](#emphasis-surface-lh-06)) LH-169's
@@ -160,7 +160,7 @@ row sharing a size are always applied. The rules meet as follows:
   the text. A picture track (LH-80) keeps only the rules that read well beside it (a quote's lead size that would make it smaller is
   left out).
 - Charts that LH-49 recomposes share their value axis and plot height (LH-33, LH-93) in the recomposed grid.
-- A list in a `sequence` region keeps LH-07's badges and takes no automatic ruled rows (LH-08); its other lists, and a slide whose
+- A list in a `steps` or `numbered` region keeps LH-07's badges and takes no automatic ruled rows (LH-08); its other lists, and a slide whose
   badges the guard refused, may still be ruled. An agenda whose entries all have descriptions draws LH-134's numbered rows instead of
   badges (see [Numerals, badges or rows](#numerals-badges-or-rows-lh-134)).
 - LH-133's questions as ruled rows take the region's blocks out of its grid into one column; six or more short questions keep the grid
@@ -168,7 +168,7 @@ row sharing a size are always applied. The rules meet as follows:
 - LH-129 grows a cover's or section's title and subtitle but not its tag: the tag is LH-32's eyebrow at its 22 px role size, which is
   also its display size.
 - LH-50's eyebrows apply on slides without layout regions and LH-07's steps only in layout regions, so a step never carries an eyebrow.
-  LH-152's root label before a list stays a block on a layout with a `sequence` region for the same reason.
+  LH-152's root label before a list stays a block on a layout with a `steps` or `numbered` region for the same reason.
 
 ## Questions and terms (LH-133)
 

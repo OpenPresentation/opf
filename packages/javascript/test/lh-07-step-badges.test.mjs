@@ -1,4 +1,4 @@
-// LH-07: a layout's `sequence` region draws its steps under numbered badges joined by a connector (blocks side by side, a list's entries
+// LH-07: a layout's `steps` or `numbered` region (its `arrangement`) draws its steps under numbered badges joined by a connector (blocks side by side, a list's entries
 // down a badge column) and a lone list of one- or two-word entries as chips joined by arrows; steps keep the size they have without it.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
@@ -6,8 +6,8 @@ import { composeSlide, fitList, STEP_BADGE, STEP_BADGE_GAP, listNumberLabel } fr
 import { layouts } from './support/template-samples.mjs';
 
 const { process: processLayout, agenda } = layouts;
-// The same record without its sequence key: what the slide draws without LH-07.
-const plain = (record) => ({ ...record, regions: record.regions.map(({ sequence: _sequence, ...region }) => region) });
+// The same record without its steps or numbered arrangement: what the slide draws without LH-07.
+const plain = (record) => ({ ...record, regions: record.regions.map(({ arrangement, ...region }) => arrangement === 'steps' || arrangement === 'numbered' ? region : { ...region, ...(arrangement ? { arrangement } : {}) }) });
 const step = (text, description, start) => ({ region: 'body', items: [{ text, description, start }], numbering: 'arabic' });
 const sampler = { title: 'Three steps from evidence to decision', blocks: [
   step('Establish a baseline', 'Measure the current completion rate and task time.', 1),
@@ -19,8 +19,8 @@ const findings = (result) => result.diagnostics.filter((entry) => ['text-overflo
 const top = (entry) => entry.text.listEntries?.[0]?.textBox.y ?? entry.text.placement?.lines[0]?.y ?? entry.box.y;
 
 test('the gallery process layout lists steps and the agendas numbered steps', () => {
-  assert.equal(processLayout.regions.find((region) => region.name === 'body').sequence, 'steps');
-  for (const id of ['agenda', 'agenda-split']) assert.equal(layouts[id].regions.find((region) => region.name === 'body').sequence, 'numbered');
+  assert.equal(processLayout.regions.find((region) => region.name === 'body').arrangement, 'steps');
+  for (const id of ['agenda', 'agenda-split']) assert.equal(layouts[id].regions.find((region) => region.name === 'body').arrangement, 'numbered');
 });
 
 for (const direction of ['ltr', 'rtl']) {

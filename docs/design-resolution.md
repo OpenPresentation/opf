@@ -470,7 +470,7 @@ paragraph's is. A group's eyebrow takes a band at the top of the group, sized fo
 over the span its blocks finally cover (their cards included), at the content alignment, before them in reading order. Two groups with
 eyebrows stay side by side or stacked as peers. An explicit arrangement (a `composition` mode, weights or columns of the slide or
 of the group) keeps its blocks as authored, a group of labels alone heads nothing, a root label before a root list stays a block on a
-layout with a `sequence` region (LH-07 draws step badges on its lists), and two labels in a row are no eyebrows.
+layout with a `steps` or `numbered` region (LH-07 draws step badges on its lists), and two labels in a row are no eyebrows.
 
 ### `fontScheme.accent`
 

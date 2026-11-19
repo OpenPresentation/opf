@@ -13,7 +13,7 @@ for(const source of fixture.cases)test(`SH-26 measured ${source.slide.layout}: r
   const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck});await fonts.ensure(deck,{renderOptions:{catalogs:[gallery]}});
   const draw=presentation=>resolvePresentation(presentation,{fonts,catalogs:[gallery],date:'2026-11-08'}).slides.map(slide=>slide.geometry);
   const original=draw(deck)[0],item=lists(original)[0];assert.equal(item.text.fontSize,32);assert.ok(item.text.overflow);assert.ok(original.diagnostics.some(d=>d.code==='text-overflow'&&/70 characters/.test(d.message)));
-  const plain=structuredClone(deck);for(const region of plain.catalogs.custom.layouts[source.slide.layout].regions){delete region.arrangement;delete region.pyramidDirection;}
+  const plain=structuredClone(deck);for(const region of plain.catalogs.custom.layouts[source.slide.layout].regions){delete region.arrangement;}
   const baseline=draw(plain)[0];assert.equal(lists(baseline)[0].text.fontSize,32);assert.ok(!baseline.diagnostics.some(d=>d.code==='text-overflow'));assert.deepEqual(item.frameBox,lists(baseline)[0].frameBox);
   const result=paginate(deck,{catalogs:[gallery],fonts:{textMeasurement:fonts.textMeasurement}});assert.equal(result.layout,'measured');assert.deepEqual(deck,saved);assert.equal(result.presentation.slides.length,4);
   assert.deepEqual(result.presentation.slides.flatMap(slide=>slide.blocks.flatMap(block=>block.items??[])),source.slide.blocks.flatMap(block=>block.items));

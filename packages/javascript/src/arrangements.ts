@@ -20,38 +20,48 @@
  * This module is pure geometry and paint: composeSlide places the text (SlideComposition.arrangements) and both engines draw from it.
  */
 
-/** The arrangements a region can ask for. */
-/** SH-17's linear arrangements (linear-arrangements.ts has their geometry). */
-export const LINEAR_ARRANGEMENTS = ['chevrons', 'flow', 'vertical-flow'] as const;
-export const ARRANGEMENTS = ['pyramid', 'matrix', 'cycle', 'org-chart', 'hierarchy', 'venn', ...LINEAR_ARRANGEMENTS] as const;
+/** SH-17's linear arrangements (linear-arrangements.ts has their geometry): PowerPoint's Basic Chevron Process, Basic Process and Vertical Process. */
+export const LINEAR_ARRANGEMENTS = ['chevrons', 'process', 'vertical-process'] as const;
+/** The diagrams a region's `arrangement` draws its lone list as (an inverted pyramid is the pyramid's geometry upside down). */
+export const ARRANGEMENTS = ['pyramid', 'inverted-pyramid', 'matrix', 'cycle', 'org-chart', 'hierarchy', 'venn', ...LINEAR_ARRANGEMENTS] as const;
 export type Arrangement = typeof ARRANGEMENTS[number];
 export function isArrangement(value:unknown):value is Arrangement{return typeof value==='string'&&ARRANGEMENTS.some(kind=>kind===value);}
+/** LH-07: the `arrangement` values that draw the region's blocks or a lone list's entries as the steps of a sequence. */
+export const SEQUENCE_ARRANGEMENTS = ['steps', 'numbered'] as const;
+export type SequenceArrangement = typeof SEQUENCE_ARRANGEMENTS[number];
+export function isSequenceArrangement(value:unknown):value is SequenceArrangement{return value==='steps'||value==='numbered';}
+/** Every value of a layout region's `arrangement` (layout.schema.json), in the schema's order: a sequence or a diagram. */
+export const REGION_ARRANGEMENTS = ['steps', 'numbered', 'pyramid', 'inverted-pyramid', 'matrix', 'cycle', 'chevrons', 'process', 'vertical-process', 'org-chart', 'hierarchy', 'venn'] as const;
+export type RegionArrangement = typeof REGION_ARRANGEMENTS[number];
+export function isRegionArrangement(value:unknown):value is RegionArrangement{return isSequenceArrangement(value)||isArrangement(value);}
+/** The arrangements OPF can write as live SmartArt (an inverted pyramid exports as native shapes). */
+export type LiveArrangement = Exclude<Arrangement, 'inverted-pyramid'>;
 /** The most entries each arrangement draws as its own shapes: a pyramid's levels, a matrix's quadrants (other counts draw cards). */
-export const ARRANGEMENT_MAX: Readonly<Record<Arrangement, number>> = Object.freeze({ pyramid: 8, matrix: 4, cycle: 8, chevrons: 8, flow: 8, 'vertical-flow': 8, 'org-chart': 8, hierarchy: 8, venn: 7 });
+export const ARRANGEMENT_MAX: Readonly<Record<Arrangement, number>> = Object.freeze({ pyramid: 8, 'inverted-pyramid': 8, matrix: 4, cycle: 8, chevrons: 8, process: 8, 'vertical-process': 8, 'org-chart': 8, hierarchy: 8, venn: 7 });
 /** A matrix draws its quadrants for exactly this many entries; other counts draw a grid of cards (at most ARRANGEMENT_CARDS_MAX). */
 export const MATRIX_ENTRIES = 4, ARRANGEMENT_CARDS_MAX = 8;
 /** A card's text inset, as a share of the font size. */
 export const CARD_TEXT_MARGIN = .6;
-/** PowerPoint's SmartArt layout each arrangement matches (the `loTypeId` of a live SmartArt export). */
-export const SMART_ART_LAYOUTS: Readonly<Record<Arrangement, string>> = Object.freeze({
+/** PowerPoint's SmartArt layout each live arrangement matches (the `loTypeId` of a live SmartArt export). */
+export const SMART_ART_LAYOUTS: Readonly<Record<LiveArrangement, string>> = Object.freeze({
   pyramid: 'urn:microsoft.com/office/officeart/2005/8/layout/pyramid1',
   matrix: 'urn:microsoft.com/office/officeart/2005/8/layout/matrix3',
   cycle: 'urn:microsoft.com/office/officeart/2005/8/layout/cycle2',
   chevrons: 'urn:microsoft.com/office/officeart/2005/8/layout/chevron1',
-  flow: 'urn:microsoft.com/office/officeart/2005/8/layout/process1',
-  'vertical-flow': 'urn:microsoft.com/office/officeart/2005/8/layout/process2',
+  process: 'urn:microsoft.com/office/officeart/2005/8/layout/process1',
+  'vertical-process': 'urn:microsoft.com/office/officeart/2005/8/layout/process2',
   'org-chart': 'urn:microsoft.com/office/officeart/2005/8/layout/orgChart1',
   hierarchy: 'urn:microsoft.com/office/officeart/2005/8/layout/hierarchy1',
   venn: 'urn:microsoft.com/office/officeart/2005/8/layout/venn1',
 });
-/** The name PowerPoint gives each layout, and what a finding calls one node of each arrangement. */
+/** The name PowerPoint gives each layout, and what a finding calls one node of each arrangement (an inverted pyramid is drawn on Basic Pyramid's geometry). */
 export const SMART_ART_NAMES: Readonly<Record<Arrangement, { layout: string; nodes: string }>> = Object.freeze({
-  pyramid: { layout: 'Basic Pyramid', nodes: 'levels' }, matrix: { layout: 'Basic Matrix', nodes: 'quadrants' }, cycle: { layout: 'Basic Cycle', nodes: 'steps' },
+  pyramid: { layout: 'Basic Pyramid', nodes: 'levels' }, 'inverted-pyramid': { layout: 'Basic Pyramid', nodes: 'levels' }, matrix: { layout: 'Basic Matrix', nodes: 'quadrants' }, cycle: { layout: 'Basic Cycle', nodes: 'steps' },
   'org-chart': {layout:'Organization Chart',nodes:'nodes'}, hierarchy:{layout:'Hierarchy',nodes:'nodes'}, venn:{layout:'Basic Venn',nodes:'sets'},
-  chevrons: { layout: 'Basic Chevron Process', nodes: 'chevrons' }, flow: { layout: 'Basic Process', nodes: 'boxes' }, 'vertical-flow': { layout: 'Vertical Process', nodes: 'boxes' },
+  chevrons: { layout: 'Basic Chevron Process', nodes: 'chevrons' }, process: { layout: 'Basic Process', nodes: 'boxes' }, 'vertical-process': { layout: 'Vertical Process', nodes: 'boxes' },
 });
 /** A node's text inset on every side, as a share of its font size (PowerPoint's: 0.1 em in a pyramid level or a cycle's circle, 0.3 em in a quadrant). */
-export const ARRANGEMENT_TEXT_MARGIN: Readonly<Record<Arrangement, number>> = Object.freeze({ pyramid: .1, matrix: .3, cycle: .1, chevrons: .105, flow: .3, 'vertical-flow': .3, 'org-chart': .05, hierarchy: .3, venn: .1 });
+export const ARRANGEMENT_TEXT_MARGIN: Readonly<Record<Arrangement, number>> = Object.freeze({ pyramid: .1, 'inverted-pyramid': .1, matrix: .3, cycle: .1, chevrons: .105, process: .3, 'vertical-process': .3, 'org-chart': .05, hierarchy: .3, venn: .1 });
 /** A lower pyramid level's text rectangle is this share of its width, centered (the apex's is its whole box). */
 export const PYRAMID_TEXT_WIDTH = .65;
 /** Matrix proportions, as shares of the square's side: the quadrant's side, its inset from the square's edge and the gap between two. */
@@ -465,10 +475,10 @@ export const CYCLE_DOMAIN_TOTAL_LINES = 16;
  */
 export const SMART_ART_DOMAIN = Object.freeze({
   /** Entries: a pyramid of 1 to 5 levels (6 to 8 never fitted the list's role size in the compared frames), a matrix of 1 to 4 quadrants. */
-  count: Object.freeze({ pyramid: 5, matrix: 4, cycle: CYCLE_DOMAIN_COUNT, chevrons: 6, flow: 6, 'vertical-flow': 4 }) as Readonly<Partial<Record<Arrangement, number>>>,
+  count: Object.freeze({ pyramid: 5, matrix: 4, cycle: CYCLE_DOMAIN_COUNT, chevrons: 6, process: 6, 'vertical-process': 4 }) as Readonly<Partial<Record<Arrangement, number>>>,
   /** The frame's width over its height, per arrangement: the range the 16:9, 4:3 and 1:1 slides gave, with a small margin. */
   aspect: Object.freeze({ pyramid: Object.freeze({ min: 1.1, max: 2.3 }), matrix: Object.freeze({ min: .8, max: 1.2 }), cycle: CYCLE_DOMAIN_ASPECT,
-    chevrons: Object.freeze({ min: 1.1, max: 2.3 }), flow: Object.freeze({ min: 1.1, max: 2.3 }), 'vertical-flow': Object.freeze({ min: .55, max: 1.2 }) }) as Readonly<Partial<Record<Arrangement, { min: number; max: number }>>>,
+    chevrons: Object.freeze({ min: 1.1, max: 2.3 }), process: Object.freeze({ min: 1.1, max: 2.3 }), 'vertical-process': Object.freeze({ min: .55, max: 1.2 }) }) as Readonly<Partial<Record<Arrangement, { min: number; max: number }>>>,
   /** The most lines one entry may wrap to in its node, and in all its entries (a line drawn by PowerPoint's wrap can sit up to 1 px from core's). */
   lines: 2,
   totalLines: 6,
@@ -487,13 +497,13 @@ export const SMART_ART_DOMAIN = Object.freeze({
    * SH-17: the most of a node's text rectangle (less its margins) an entry's lines may fill from top to bottom: a box PowerPoint finds
    * nearly full is grown or searched to another scale (the sweep found it at 0.969 of the height and above).
    */
-  fill: Object.freeze({ chevrons: .95, flow: .95, 'vertical-flow': .95 }) as Readonly<Partial<Record<Arrangement, number>>>,
+  fill: Object.freeze({ chevrons: .95, process: .95, 'vertical-process': .95 }) as Readonly<Partial<Record<Arrangement, number>>>,
   /**
    * SH-17: the most of the frame the entries' text may cover (each line's width times the size, over the frame's area): PowerPoint sets
    * a SmartArt's lines up to a pixel from where it sets OPF's native text, which a frame dense with large text shows above SH-07's gate
    * (every instance above 0.082 that failed it did so for this).
    */
-  ink: Object.freeze({ chevrons: .08, flow: .08, 'vertical-flow': .08 }) as Readonly<Partial<Record<Arrangement, number>>>,
+  ink: Object.freeze({ chevrons: .08, process: .08, 'vertical-process': .08 }) as Readonly<Partial<Record<Arrangement, number>>>,
 });
 
 /**
@@ -510,7 +520,6 @@ export function smartArtScript(texts: readonly string[]): { rtl: boolean; script
 /** The facts of one composed arrangement the domain is checked on (ComposedArrangement.smartArt, the frame and the text). */
 export interface SmartArtCandidate {
   kind: Arrangement;
-  pyramidDirection?: 'up' | 'down';
   count: number;
   frame: Box;
   /** Per entry: the lines it wraps to, and whether its breaks hold within SMART_ART_DOMAIN.slack of its width. */
@@ -532,7 +541,7 @@ export interface SmartArtCandidate {
  */
 export function smartArtUnavailable(candidate: SmartArtCandidate): string | undefined {
   const { kind, count, frame, nodes } = candidate, domain = SMART_ART_DOMAIN;
-  if (kind === 'pyramid' && candidate.pyramidDirection === 'down') return 'the inverted pyramid has no qualified live SmartArt domain';
+  if (kind === 'inverted-pyramid') return 'the inverted pyramid has no qualified live SmartArt domain';
   const compared=domain.count[kind];
   if(compared===undefined)return `${SMART_ART_NAMES[kind].layout} text and edits are awaiting native qualification`;
   if (count < 1 || count > compared) return `a ${kind} of ${count} entries is outside the compared 1 to ${compared}`;
