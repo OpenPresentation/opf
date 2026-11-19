@@ -605,6 +605,15 @@ try {
 			if (choice === "Bullets") assert.deepEqual(slide.items, ["First point"]);
 			if (choice === "Blank") assert.equal(slide.title, undefined);
 		}
+		const actions = frame.getByRole("button", { name: "Slide actions", exact: true });
+		assert.equal(await actions.count(), 1);
+		await actions.click();
+		await frame.getByRole("menuitem", { name: "Delete slide" }).click();
+		assert.equal((await read()).slideCount, 4);
+		assert.match(await frame.locator("#deck-status").innerText(), /^Deleted slide \d+$/);
+		await frame.locator("#deck-edit-undo").click();
+		assert.equal((await read()).slideCount, 5);
+		await frame.locator(".opf-thumbs-item").last().click();
 		await frame.locator(".opf-thumbs-item[aria-current=true]").click({ button: "right" });
 		await frame.getByRole("menuitem", { name: "Duplicate slide" }).click();
 		const duplicate = await read();
@@ -632,23 +641,20 @@ try {
 		assert.match(first.content[0].text, /^The OPF viewer's editor opened a starter deck "Untitled deck" \(2 slides/);
 		assert.equal(first.structuredContent.document.name, "Untitled deck");
 		assert.match(first.content[0].text, /"name": "Untitled deck"/);
-		await view("start").locator("#deck-start").waitFor();
-		assert.equal(await view("start").locator("#deck-start-label").isVisible(), true);
+		await view("start").locator("#deck-open").click();
 		assert.equal(await view("start").locator("#deck-paste").isVisible(), true);
 		const options = await view("start").locator("#deck-example option").count();
 		assert.ok(options > 5, `${options} examples offered`);
-		const row = await frameOf("start").evaluate(() => [...document.querySelectorAll(".deck-start > :not([hidden])")].map((item) => { const box = item.getBoundingClientRect(); return Math.round((box.top + box.bottom) / 8); }));
-		assert.equal(new Set(row).size, 1, "label, picker and Paste share one row");
-		assert.ok(await frameOf("start").evaluate(() => document.getElementById("deck-example").getBoundingClientRect().width <= 280));
 		await shoot("editor-start-1280", "start");
 		await view("start").locator("#deck-example").selectOption("columns");
 		await page.waitForFunction(() => window.hosts.start.toolCalls.includes("get_catalog_record"), null, { timeout: 15000 });
 		await view("start").locator("#deck-status", { hasText: "Opened the example columns" }).waitFor({ timeout: 30000 });
-		assert.equal(await view("start").locator("#deck-start-label").isVisible(), false, "no longer a starter deck");
+		assert.equal(await view("start").locator("#deck-open-menu").isVisible(), false);
 		assert.notEqual((await call("start", "read_deck")).name, "Untitled deck");
 		await view("start").locator("#deck-undo").click();
 		assert.equal((await call("start", "read_deck")).name, "Untitled deck", "Undo goes back to the starter deck");
 		// Paste selects the whole source and focuses it (the clipboard is not readable here), and says so without naming keys.
+		await view("start").locator("#deck-open").click();
 		await view("start").locator("#deck-paste").click();
 		await view("start").locator("#deck-source .cm-editor").waitFor();
 		const pasted = await frameOf("start").evaluate(() => ({ focused: Boolean(document.activeElement?.closest(".cm-editor")), selected: getSelection().toString().length }));
@@ -662,12 +668,38 @@ try {
 		await view("start").locator("#tab-preview").click();
 	});
 
-	await run("open_editor where the host offers no server tools: the example picker is hidden, the starter deck and Paste remain", async () => {
+	await run("Open reads local JSON, YAML and Markdown without server tools, preserves the deck on failure and supports Undo", async () => {
 		await open("noserver", "open_editor", { title: "No server tools" }, { noServerTools: true });
-		await view("noserver").locator("#deck-start").waitFor();
+		await view("noserver").locator("#deck-open").click();
 		assert.equal(await view("noserver").locator("#deck-example").isVisible(), false);
 		assert.equal(await view("noserver").locator("#deck-paste").isVisible(), true);
 		assert.equal((await call("noserver", "read_deck")).name, "No server tools");
+		const frame = view("noserver");
+		const choose = async (file) => {
+			const picker = page.waitForEvent("filechooser", { timeout: 10000 });
+			await frame.getByRole("button", { name: "Open from device…" }).click();
+			await (await picker).setFiles(file);
+		};
+		for (const ext of ["json", "yaml", "md"]) {
+			const filename = `quarterly.opf.${ext}`;
+			await choose(path.join(import.meta.dirname, "../../editor/test/fixtures/deck-files", filename));
+			await frame.locator('#deck-title input[title="Quarterly review"]').waitFor({ timeout: 10000 });
+			const deck = await call("noserver", "read_deck");
+			assert.equal(deck.name, "Quarterly review");
+			assert.equal(deck.selected.index, 0);
+			assert.equal(deck.slideCount, 2);
+			await frame.locator("#deck-undo").click();
+			assert.equal((await call("noserver", "read_deck")).name, "No server tools");
+			await frame.locator("#deck-open").click();
+		}
+		await choose({ name: "broken.opf", mimeType: "application/json", buffer: Buffer.from('{"incomplete":') });
+		await frame.locator("#deck-status", { hasText: "Could not open broken.opf" }).waitFor({ timeout: 10000 });
+		assert.equal((await call("noserver", "read_deck")).name, "No server tools");
+		await frame.locator("#deck-open").click();
+		await choose({ name: "single.opf", mimeType: "application/json", buffer: Buffer.from(JSON.stringify({ name: "Solo", slides: [{ title: "Only slide" }] })) });
+		await frame.locator('#deck-title input[title="Solo"]').waitFor({ timeout: 10000 });
+		await frame.getByRole("button", { name: "Slide actions", exact: true }).click();
+		assert.ok(await frame.getByRole("menuitem", { name: "Delete slide" }).isDisabled());
 		await remove("noserver");
 	});
 
@@ -711,9 +743,9 @@ try {
 			const fit = await frameOf("start").evaluate(() => {
 				const shell = getComputedStyle(document.getElementById("opf-deck"));
 				const visible = (item) => item.offsetParent && item.getBoundingClientRect().width > 0;
-				const controls = [...document.querySelectorAll(".deck-bar button, .deck-bar select, .deck-bar [role=tab], .deck-start button, .deck-start select, .deck-foot button")].filter(visible);
+				const controls = [...document.querySelectorAll(".deck-bar button, .deck-bar select, .deck-bar [role=tab], .deck-foot button")].filter(visible);
 				const bar = document.querySelector(".deck-bar").getBoundingClientRect().height;
-				const right = Math.max(...[...document.querySelectorAll(".deck-bar > *, .deck-foot > *, .deck-start > *")].filter((item) => item.offsetParent).map((item) => item.getBoundingClientRect().right));
+				const right = Math.max(...[...document.querySelectorAll(".deck-bar > *, .deck-foot > *")].filter((item) => item.offsetParent).map((item) => item.getBoundingClientRect().right));
 				const send = document.getElementById("deck-send").getBoundingClientRect();
 				return { scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth, size: document.documentElement.dataset.size, padding: [shell.paddingTop, shell.paddingRight, shell.paddingBottom, shell.paddingLeft], right, send: send.right, small: controls.filter((item) => { const box = item.getBoundingClientRect(); return box.width < 44 || box.height < 44; }).map((item) => `${item.id || item.className || item.textContent} ${Math.round(item.getBoundingClientRect().width)}x${Math.round(item.getBoundingClientRect().height)}`), bar };
 			});
@@ -732,11 +764,10 @@ try {
 				const status = await frameOf("start").evaluate(() => { const box = document.getElementById("deck-status"); return { scroll: box.scrollWidth, client: box.clientWidth }; });
 				assert.ok(status.scroll <= status.client + 1, `the status line is not truncated (${status.scroll} in ${status.client})`);
 			}
-			if (width === 600) {
-				// Below 640px the start row's example picker and Paste are in the More menu, so the slide comes first.
-				const moved = await frameOf("start").evaluate(() => ({ start: document.getElementById("deck-start").getClientRects().length, menu: [...document.querySelectorAll("#deck-menu > select, #deck-menu > button[id]")].map((item) => item.id) }));
-				assert.deepEqual(moved, { start: 0, menu: ["deck-example", "deck-paste"] }, "600px: the start row is in More");
-			}
+			await view("start").locator("#deck-open").click();
+			assert.ok(await view("start").locator("#deck-device").isVisible());
+			await view("start").locator("#deck-device").press("Escape");
+			assert.ok(await view("start").locator("#deck-open").evaluate(el => el === document.activeElement));
 			await shoot(`editor-${width}`, "start");
 		}
 	});

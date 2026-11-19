@@ -435,10 +435,10 @@ export function createOpfEditor(element, options = {}) {
   if (variablesObject && variablesObject.focusSource !== undefined && typeof variablesObject.focusSource !== "function") throw new TypeError("variables.focusSource must be a function.");
   const fitMode = studioLayout ? false : options.fit === undefined ? (layout === "slots" ? false : "contain") : options.fit;
 
-  const say = (message) => {
+  const say = (message, { undoable = false } = {}) => {
     statusText = message;
     if (slots.status) slots.status.textContent = message;
-    emit("status", { message });
+    emit("status", { message, ...(undoable ? { undoable } : {}) });
   };
   const exportModeFor = (setting) => (setting === "sheet" || setting === "menu" ? setting : win?.matchMedia?.("(max-width: 900px)").matches ? "sheet" : "menu");
 

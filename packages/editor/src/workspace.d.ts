@@ -464,7 +464,7 @@ export interface OpfEditorEvents {
   draft: { presentation: unknown; path: string; value: unknown };
   commit: { path: string; editor: EditorSession };
   cancel: { path?: string };
-  status: { message: string };
+  status: { message: string; undoable?: boolean };
   error: { error: Error; message: string; [key: string]: unknown };
   /** The source was copied or downloaded (or exported as JSON, YAML or Markdown): it is kept somewhere of the person's own. */
   kept: { kind: "copy" | "download" };

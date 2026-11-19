@@ -709,7 +709,11 @@ try {
 		await tab.frameLocator("#view").locator("#deck-more").tap();
 		const fit = await tab.frame({ url: /\/view$/ }).evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth, menu: [...document.querySelectorAll("#deck-menu > :is(button, select)")].filter((item) => item.getClientRects().length).map((item) => item.id || item.textContent) }));
 		assert.ok(fit.scroll <= fit.client, `320px: the page is ${fit.scroll}px wide in ${fit.client}px`);
-		assert.deepEqual(fit.menu, ["Find and replace", "Expand", "deck-example", "deck-paste"], "the editor's example picker and Paste are in More");
+		assert.deepEqual(fit.menu, ["Find and replace", "Expand"]);
+		const open = tab.frameLocator("#view").getByRole("button", { name: "Open", exact: true });
+		await open.tap();
+		assert.ok(await tab.frameLocator("#view").getByRole("button", { name: "Open from device…" }).isVisible());
+		assert.ok(await tab.frameLocator("#view").getByRole("combobox", { name: "Browse examples" }).isVisible());
 		await narrow.close();
 	});
 
@@ -794,7 +798,7 @@ try {
 			for (const [at, a] of boxes.entries()) for (const b of boxes.slice(at + 1)) if (!a.name.includes("title") && !b.name.includes("title") && a.box.left < b.box.right - 1 && b.box.left < a.box.right - 1 && a.box.top < b.box.bottom - 1 && b.box.top < a.box.bottom - 1) overlaps.push(`${a.name}/${b.name}`);
 			const rows = new Set([...document.querySelectorAll(".deck-bar > *, .deck-title-row > *")].filter((item) => visible(item) && item.getBoundingClientRect().height > 0 && !item.classList.contains("deck-title-row")).map((item) => Math.round(item.getBoundingClientRect().top / 8)));
 			const top = (selector) => Math.round(document.querySelector(selector).getBoundingClientRect().top);
-			const thumbs = [...document.querySelectorAll("#deck-thumbs button")].filter(visible).map((item) => Math.round(item.getBoundingClientRect().top));
+			const thumbs = [...document.querySelectorAll("#deck-thumbs .opf-thumbs-item, #deck-thumbs .opf-thumbs-add")].filter(visible).map((item) => Math.round(item.getBoundingClientRect().top));
 			return {
 				size: document.documentElement.dataset.size, client, scroll: document.documentElement.scrollWidth, rows: rows.size, bar: Math.round(document.querySelector(".deck-bar").getBoundingClientRect().height),
 				outside: boxes.filter(({ box }) => box.left < -0.5 || box.right > client + 0.5).map(({ name }) => name), overlaps,

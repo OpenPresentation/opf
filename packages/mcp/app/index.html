@@ -10,6 +10,15 @@
 <div id="opf-deck" class="opf-ui" data-show="preview" data-ready="false">
   <header class="deck-bar">
     <div id="deck-title-row" class="deck-title-row"><div id="deck-title" class="deck-title"></div>
+      <div class="deck-open-wrap" id="deck-open-wrap" hidden>
+        <button type="button" id="deck-open" class="deck-button" aria-expanded="false" aria-controls="deck-open-menu">Open <span aria-hidden="true">▾</span></button>
+        <div id="deck-open-menu" class="deck-open-menu" role="group" aria-label="Open a deck" hidden>
+          <button type="button" id="deck-device" class="deck-button">Open from device…</button>
+          <button type="button" id="deck-paste" class="deck-button">Paste a deck…</button>
+          <select id="deck-example" class="deck-select" aria-label="Browse examples" hidden><option value="">Browse examples…</option></select>
+        </div>
+        <input type="file" id="deck-file" hidden>
+      </div>
       <button type="button" id="deck-send" class="deck-button deck-send" aria-label="Ask Claude to edit…" hidden disabled><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg><span id="deck-send-label" class="deck-send-label">Ask Claude to edit…</span><span class="deck-send-short" aria-hidden="true">Ask</span></button>
       <button type="button" id="deck-more" class="deck-button deck-icon deck-more" aria-label="More" title="More" aria-expanded="false" aria-controls="deck-menu"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></button>
       <div id="deck-menu" class="deck-menu" role="group" aria-label="More" hidden>
@@ -45,11 +54,6 @@
     <span id="deck-sync" role="status"></span>
   </div>
   <p id="deck-note" class="deck-note" role="status" hidden></p>
-  <div id="deck-start" class="deck-start" role="group" aria-label="Start" hidden>
-    <span id="deck-start-label" class="deck-start-label">A starter deck to edit.</span>
-    <select id="deck-example" class="deck-select" aria-label="Open an example deck" hidden><option value="">Open an example…</option></select>
-    <button type="button" id="deck-paste" class="deck-button deck-small" hidden>Paste a deck</button>
-  </div>
   <div id="deck-root" class="deck-root">
     <div id="deck-find" class="deck-find"></div>
     <div id="deck-panes" class="deck-panes" role="tabpanel">
@@ -68,7 +72,7 @@
   <footer class="deck-foot">
     <div id="deck-verdict" class="deck-verdict"></div>
     <div id="deck-nav" class="deck-nav"></div>
-<div class="deck-feedback"><span id="deck-status" class="deck-status" role="status"></span><button type="button" id="deck-edit-undo" class="deck-button" hidden>Undo</button></div>
+    <div class="deck-feedback"><span id="deck-status" class="deck-status" role="status"></span><button type="button" id="deck-edit-undo" class="deck-button" hidden>Undo</button></div>
   </footer>
 </div>
 <script type="module">/*OPF_JS*/</script>

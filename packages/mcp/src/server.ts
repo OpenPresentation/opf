@@ -934,7 +934,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			{
 				title: "OpenPresentation",
 				description:
-					"Create and edit slide decks in OpenPresentation: a starter deck (optionally with a title), or one of the bundled example decks by slug.\nAll inputs are optional; with none it opens a two-slide starter deck. In the editor the user can edit it at once, open another bundled example, or paste a deck into Source. In a client that supports MCP Apps the viewer's own tools (read_deck, select_slide, edit_deck) then read and change that deck in place. list_examples lists the slugs. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both.",
+					"Create and edit slide decks in OpenPresentation: a starter deck (optionally with a title), or one of the bundled example decks by slug.\nAll inputs are optional; with none it opens a two-slide starter deck. In the editor the user can edit it at once, open a local OPF file, browse bundled examples, or paste a deck into Source. In a client that supports MCP Apps the viewer's own tools (read_deck, select_slide, edit_deck) then read and change that deck in place. list_examples lists the slugs. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both.",
 				inputSchema: {
 					example: z.string().max(100).optional().describe("A bundled example deck to open, by slug (list_examples). Leave it out for the starter deck."),
 					title: z.string().max(120).optional().describe('The deck\'s name: the starter deck\'s title, or a new name for the example. Default "Untitled deck" for the starter deck.'),
@@ -971,7 +971,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				const missed = example !== undefined && !found ? ` There is no bundled example ${example}.${didYouMean(example, sources.examples.map((item) => item.slug))} It opened the starter deck instead (list_examples lists the slugs).` : "";
 				const text = [
 					`Opened the OPF viewer's editor with ${what} (${slides} slide${slides === 1 ? "" : "s"}).${missed}`,
-					"In a client that supports MCP Apps the user sees it in the viewer's editor and can edit it, open a bundled example or paste a deck into Source; their edits come back to you as context. Where the viewer's tools are offered, read_deck and edit_deck read and change this deck in place.",
+					"In a client that supports MCP Apps the user sees it in the viewer's editor and can edit it, open a local OPF file, browse bundled examples or paste a deck into Source; their edits come back to you as context. Where the viewer's tools are offered, read_deck and edit_deck read and change this deck in place.",
 					ARRIVING,
 					sessionLine(viewer),
 				].join("\n");

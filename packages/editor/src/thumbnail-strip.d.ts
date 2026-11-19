@@ -101,7 +101,7 @@ export interface ThumbnailStripOptions {
   /** True: no "+" button and every menu item disabled, the keys do nothing. Change it with `setReadOnly`. Only used with `actions`. */
   readOnly?: boolean;
   /** A line for a screen reader after each action. Without it the strip speaks through its own polite live region. */
-  onStatus?: (message: string) => void;
+  onStatus?: (message: string, details: { undoable: boolean }) => void;
 }
 export interface ThumbnailStrip {
   readonly element: HTMLElement;

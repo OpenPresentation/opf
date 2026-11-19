@@ -21,6 +21,7 @@ import { App, type McpUiDisplayMode, type McpUiHostContext, applyDocumentTheme, 
 import { gallery } from "@openpresentation/gallery";
 import { resolveIdPatch } from "@openpresentation/opf/patch";
 import { type Finding, embed, ensureIcons, iconsPending, validate } from "@openpresentation/opf";
+import { DECK_FILE_ACCEPT, readDeckFile } from "@openpresentation/opf-editor/read-deck-file";
 import { createEditorSession } from "@openpresentation/opf-editor";
 import { createOpfEditor, layoutOptionsFor, type OpfEditor } from "@openpresentation/opf-editor/workspace";
 import { type BrowserFontsHandle, loadFonts } from "@openpresentation/opf-render/fonts-browser";
@@ -95,7 +96,12 @@ const shell = $("opf-deck");
 const wait = $("deck-wait-text");
 const sync = $("deck-sync");
 const note = $("deck-note");
-const startBar = $("deck-start");
+const openWrap = $("deck-open-wrap");
+const openButton = $<HTMLButtonElement>("deck-open");
+const openMenu = $("deck-open-menu");
+const deviceButton = $<HTMLButtonElement>("deck-device");
+const fileInput = $<HTMLInputElement>("deck-file");
+fileInput.accept = DECK_FILE_ACCEPT;
 const exampleSelect = $<HTMLSelectElement>("deck-example");
 const pasteButton = $<HTMLButtonElement>("deck-paste");
 const undoButton = $<HTMLButtonElement>("deck-undo");
@@ -135,8 +141,7 @@ let tornDown = false;
 let viewer: ViewerKey | undefined;
 let channel: BroadcastChannel | undefined;
 let examples: ExampleEntry[] = [];
-/** Opened by open_editor: the start row (an example to open, a deck to paste) shows once the deck is on screen. */
-let editorEntry = false;
+let openSequence = 0;
 /** What open_editor opened, for the model's first context: the starter deck or a bundled example. */
 let openedWith: { example: string | null; name: string | null } | undefined;
 /**
@@ -440,7 +445,8 @@ function supersede(): void {
 	shell.dataset.superseded = "true";
 	note.textContent = "A newer viewer of this deck is open in the conversation. This one is read-only and no longer shares changes.";
 	note.hidden = false;
-	for (const button of [sendButton, undoButton, redoButton, expandButton, pasteButton]) button.disabled = true;
+	for (const button of [sendButton, undoButton, redoButton, expandButton, openButton, pasteButton]) button.disabled = true;
+	setOpenMenu(false);
 	exampleSelect.disabled = true;
 	syncSend();
 }
@@ -651,8 +657,7 @@ app.registerTool(
 				if (ed.setSlide(index)) message = `${added ? "Added" : "Updated"} slide ${index + 1}`;
 				if (whole && lastSlideEdit.op === "remove") message = "Removed slide";
 			}
-			status(message);
-			editUndo.hidden = false;
+			status(message, true);
 		}
 		// An icon the edit added is read before the checks, so they say whether it exists.
 		await checkWithIcons(ed.getDocument());
@@ -755,10 +760,10 @@ function layOut(): void {
 	const ownRow = width < 640;
 	$("deck-title-row").toggleAttribute("data-opf-title-row", ownRow);
 	(shell.querySelector(".deck-bar") as HTMLElement).toggleAttribute("data-opf-title-row", !ownRow);
-	// Two rows on a phone: what does not fit them (and the start row's example and Paste) is in the More menu.
-	if (ownRow) menu.append(exampleSelect, pasteButton);
-	else $("deck-start-label").after(exampleSelect, pasteButton);
-	if (relaid) setMenu(false);
+	if (relaid) {
+		setMenu(false);
+		setOpenMenu(false);
+	}
 	// Inline, the view is as tall as its content; a host that fixes the height, and full screen or the side panel (also when the host
 	// sends no dimensions with it), get a view that fills the frame.
 	root.dataset.fill = String(context.displayMode === "fullscreen" || typeof box.height === "number");
@@ -818,11 +823,10 @@ function setReviewOpen(open: boolean): void {
 }
 
 /** A message for the person: under the placeholder slide until the deck is on screen, then in the footer (the editor's status line). */
-function status(message: string): void {
-	clearTimeout(statusTimer);
+function status(message: string, undoable = false): void {
 	if (mounted && editor) {
 		editor.status(message);
-		if (message) statusTimer = setTimeout(() => editor?.status(""), STATUS_TIME);
+		if (undoable && !undoButton.disabled) editUndo.hidden = false;
 	} else wait.textContent = message;
 }
 
@@ -957,37 +961,56 @@ async function copyText(text: string): Promise<void> {
 }
 
 // -------------------------------------------------------------------------------------------------------------------
-// The editor's start row (open_editor): a starter deck to edit at once, a bundled example to open instead, or a deck to paste.
-
-/** Once the person opened an example or pasted a deck, the row no longer calls it a starter deck. */
-const leaveStarter = () => {
-	$("deck-start-label").hidden = true;
-};
-
-function showStart(): void {
-	const canOpen = Boolean(app.getHostCapabilities()?.serverTools) && examples.length > 0;
-	exampleSelect.hidden = !canOpen;
-	pasteButton.hidden = false;
-	for (const example of canOpen ? examples : []) exampleSelect.add(new Option(example.name ? `${example.name} (${example.slug})` : example.slug, example.slug));
-	startBar.hidden = false;
+// Open a deck in the current editor. Every successful open is one undoable replacement.
+function showOpen(): void {
+	exampleSelect.hidden = !app.getHostCapabilities()?.serverTools || !examples.length;
+	for (const example of examples) exampleSelect.add(new Option(example.name ? `${example.name} (${example.slug})` : example.slug, example.slug));
+	openWrap.hidden = false;
 }
 
-async function openExample(slug: string): Promise<void> {
-	if (!editor || !slug || silent()) return;
-	exampleSelect.disabled = true;
-	status("Opening the example…");
+function setOpenMenu(open: boolean): void {
+	openMenu.hidden = !open;
+	openButton.setAttribute("aria-expanded", String(open));
+	if (open) deviceButton.focus();
+}
+
+async function openDeck(source: File | string): Promise<void> {
+	const ed = editor;
+	if (!ed || silent() || !ed.commit()) return;
+	const sequence = ++openSequence;
+	const revision = ed.session.documentHash();
+	const initialText = paneText();
+	const current = () => sequence === openSequence && !silent();
 	try {
-		const result = await app.callServerTool({ name: "get_catalog_record", arguments: { kind: "examples", id: slug } });
-		const record = (result.structuredContent as { record?: unknown } | undefined)?.record;
-		if (result.isError || !record) throw new Error("the server sent no deck");
-		if (!editor.setDocument(record)) throw new Error("the viewer did not take it");
-		leaveStarter();
-		status(`Opened the example ${slug}. Undo goes back to the deck before it.`);
+		let deck: unknown;
+		let options: Parameters<OpfEditor["setDocument"]>[1];
+		if (typeof source === "string") {
+			const result = await app.callServerTool({ name: "get_catalog_record", arguments: { kind: "examples", id: source } });
+			deck = (result.structuredContent as { record?: unknown } | undefined)?.record;
+			if (result.isError || !deck) throw new Error("The example was unavailable.");
+		} else {
+			let text = "";
+			const read = await readDeckFile({
+				name: source.name,
+				size: source.size,
+				async text() {
+					text = await source.text();
+					return text;
+				},
+			}, { catalogs });
+			deck = read.document;
+			const problem = validate(deck as never, { only: ["format", "references"], catalogs }).findings.find(finding => finding.severity === "error");
+			if (problem) throw new Error(problem.message);
+			options = { text, format: read.format, name: read.name };
+		}
+		if (!current()) return;
+		if (ed.session.documentHash() !== revision || paneText() !== initialText || userTyping()) throw new Error("The current deck changed. Open the file or example again.");
+		if (!ed.setDocument(deck, options)) throw new Error("The deck could not be opened.");
+		ed.setSlide(0);
+		setView("preview");
+		status(typeof source === "string" ? `Opened the example ${source}` : `Opened ${source.name}`, true);
 	} catch (error) {
-		status(`The example could not open: ${error instanceof Error ? error.message : String(error)}.`);
-	} finally {
-		exampleSelect.disabled = silent();
-		exampleSelect.value = "";
+		if (current()) status(`Could not open ${typeof source === "string" ? source : source.name}. ${error instanceof Error ? error.message : String(error)}`);
 	}
 }
 
@@ -1064,14 +1087,13 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		depth = (event.event as { snapshot?: { undoDepth?: number } } | undefined)?.snapshot?.undoDepth ?? (event.canUndo ? openedAt + 1 : 0);
 		undoButton.disabled = !ready || superseded || depth <= openedAt;
 		redoButton.disabled = !ready || superseded || !event.canRedo;
-		editUndo.hidden = true;
+		if (!editUndo.hidden) status("");
 		if (!ready) return;
 		edited = true;
 		// An edit_deck call is the model's own change: nothing for the person to send.
 		if (!byTool) {
 			userEdited = true;
 			unsent = true;
-			if (editorEntry) leaveStarter();
 		}
 		syncSend();
 		setSync(app.getHostCapabilities()?.updateModelContext && !silent() ? "pending" : "none");
@@ -1088,9 +1110,10 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	});
 	// The pill opens the Review panel: the editor has no side panel here, so it asks the host page (this view) to show it.
 	editor.on("review-open", () => setReviewOpen(true));
-	editor.on("status", () => {
-		editUndo.hidden = true;
+	editor.on("status", ({ message, undoable }) => {
+		editUndo.hidden = !undoable || undoButton.disabled;
 		clearTimeout(statusTimer);
+		if (message) statusTimer = setTimeout(() => editor?.status(""), STATUS_TIME);
 	});
 	await editor.ready;
 	// The source pane calls OPF Markdown "md".
@@ -1103,7 +1126,7 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	sourceBaseline = paneText();
 	shell.dataset.ready = "true";
 	if (superseded) editor.setReadOnly(true);
-	if (editorEntry) showStart();
+	showOpen();
 	if (typeof args.slide === "number" && args.slide >= 1) editor.setSlide(args.slide - 1);
 	setView(VIEWS.includes(args.view as View) ? (args.view as View) : "preview");
 	showDeck();
@@ -1164,9 +1187,36 @@ requestForm.addEventListener("keydown", event => {
 editUndo.addEventListener("click", () => undoButton.click());
 // Straight from the click: the host opens a larger view only right after the person pressed something in this one.
 expandButton.addEventListener("click", () => setDisplayMode(context.displayMode === "fullscreen" ? "inline" : "fullscreen"));
+openButton.addEventListener("click", () => setOpenMenu(openMenu.hasAttribute("hidden")));
+openWrap.addEventListener("keydown", (event) => {
+	if (event.key === "Escape" && !openMenu.hidden) {
+		event.preventDefault();
+		setOpenMenu(false);
+		openButton.focus();
+	}
+});
+openWrap.addEventListener("focusout", event => {
+	if (event.relatedTarget && !openWrap.contains(event.relatedTarget as Node)) setOpenMenu(false);
+});
+document.addEventListener("pointerdown", event => {
+	if (!openMenu.hidden && !openWrap.contains(event.target as Node)) setOpenMenu(false);
+}, true);
+deviceButton.addEventListener("click", () => {
+	setOpenMenu(false);
+	openButton.focus();
+	fileInput.click();
+});
+fileInput.addEventListener("change", () => {
+	const file = fileInput.files?.[0];
+	fileInput.value = "";
+	if (file) void openDeck(file);
+});
 exampleSelect.addEventListener("change", () => {
-	setMenu(false);
-	void openExample(exampleSelect.value);
+	const slug = exampleSelect.value;
+	exampleSelect.value = "";
+	setOpenMenu(false);
+	openButton.focus();
+	if (slug) void openDeck(slug);
 });
 moreButton.addEventListener("click", () => setMenu(menu.hasAttribute("hidden")));
 // Each item presses the control it stands for, straight from the click (the host opens a larger view only right after a press).
@@ -1195,6 +1245,8 @@ const pastedFormat = (text: string) => (/^[\s\uFEFF]*[[{]/.test(text) ? "json" :
 // read the clipboard (on this click), the deck on it is put in at once.
 pasteButton.addEventListener("click", () => {
 	if (!editor || silent()) return;
+	const sequence = ++openSequence;
+	setOpenMenu(false);
 	setView("source", true);
 	const pane = editor.sourcePane;
 	const selectAll = () => {
@@ -1211,12 +1263,14 @@ pasteButton.addEventListener("click", () => {
 	if (!clipboard) return ask();
 	clipboard().then(
 		(text) => {
+			if (sequence !== openSequence || silent()) return;
 			if (!text.trim() || !editor) return ask();
+			const before = editor.session.documentHash();
 			const taken = editor.setSourceText(text, { format: pastedFormat(text) });
-			leaveStarter();
-			status(taken ? "Pasted the deck from the clipboard. Undo goes back to the deck before it." : "Pasted the text from the clipboard; it is not a valid deck yet, so the slides still show the deck before it.");
+			status(taken ? "Pasted deck" : "Check the pasted source for errors.", taken && editor.session.documentHash() !== before);
 		},
 		() => {
+			if (sequence !== openSequence || silent()) return;
 			selectAll();
 			ask();
 		},
@@ -1244,7 +1298,7 @@ app.addEventListener("toolresult", (result) => {
 		const text = result.content?.find((part) => part.type === "text");
 		fail(text && "text" in text ? String(text.text) : "The tool failed.");
 	} else if (data?.document !== undefined) {
-		editorEntry = data.editor === true;
+		const editorEntry = data.editor === true;
 		if (editorEntry) openedWith = { example: textOf(data.example), name: textOf(data.name) };
 		if (editorEntry && Array.isArray(data.examples)) examples = (data.examples as ExampleEntry[]).filter((item) => typeof item?.slug === "string");
 		startOrFail({ document: data.document, nameFromOpeningTitle: editorEntry && data.nameFromOpeningTitle === true });
