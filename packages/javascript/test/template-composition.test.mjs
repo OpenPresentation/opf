@@ -305,8 +305,8 @@ describe('anchor', () => {
 });
 
 describe('design keys: theme level and precedence', () => {
-  test('the six keys a theme may carry rank below the deck and above the layout', () => {
-    assert.deepEqual([...THEME_DESIGN_KEYS], ['titleAlignment', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet', 'listStyle']);
+  test('the seven keys a theme may carry rank below the deck and above the layout', () => {
+    assert.deepEqual([...THEME_DESIGN_KEYS], ['titleAlignment', 'titlePosition', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet', 'listStyle']);
     const layout = { design: { contentBox: false, titleAlignment: 'end' } };
     const theme = { design: { contentBox: true, titleAlignment: 'center', mirror: true } };
     const fromTheme = resolveDesignHints({ layout, theme });

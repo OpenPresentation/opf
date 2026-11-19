@@ -56,7 +56,7 @@ const svg = (presentation, slideIndex = 0) => toSvg(presentation, slideIndex + 1
 {
   assert.deepEqual(
     DESIGN_OPTIONS.map((option) => option.id),
-    ["titleAlignment", "contentAlignment", "listBullet", "contentBox", "imageFit", "accentFont", "logo", "watermark"],
+    ["titleAlignment", "titlePosition", "contentAlignment", "listBullet", "contentBox", "imageFit", "accentFont", "logo", "watermark"],
   );
   const design = schemas.presentation.$defs.Design.properties;
   for (const option of DESIGN_OPTIONS.filter((entry) => entry.type === "enum")) assert.deepEqual([...option.values], design[option.id].enum, `${option.id} values follow the schema`);
@@ -74,6 +74,8 @@ const svg = (presentation, slideIndex = 0) => toSvg(presentation, slideIndex + 1
 const cases = [
   { option: "titleAlignment", value: "end", slide: 0, patch: { op: "add", path: "/design/titleAlignment", value: "end" }, preview: true },
   { option: "contentAlignment", value: "center", slide: 1, patch: { op: "add", path: "/design/contentAlignment", value: "center" } },
+  // OPF 0.35: the title beside the body, in the start column; the list slide (automatic composition) draws it there.
+  { option: "titlePosition", value: "start", slide: 1, patch: { op: "add", path: "/design/titlePosition", value: "start" }, preview: true },
   { option: "contentBox", value: true, slide: 1, patch: { op: "add", path: "/design/contentBox", value: true }, preview: true },
   { option: "accentFont", value: "Georgia", slide: 0, patch: { op: "replace", path: "/design/fontScheme", value: { id: "aptos", accent: "Georgia" } } },
   // RR-71: design.logo picks the organization and shape that covers, sections and bullets draw; the organization has the logo.
@@ -167,6 +169,23 @@ for (const entry of cases) {
   assert.equal(editor.snapshot().undoDepth, depth + 1);
   assert.throws(() => setDesignOption(editor, "organizationLogo", "asset:logo"), (error) => error.code === "unknown-design-option", "the organization logo is edited with setOrganizationLogo");
   assert.throws(() => setDesignOption(editor, "titleAlignment", "start", { slideIndex: 9 }), (error) => error.code === "slide-index-out-of-range");
+}
+
+// OPF 0.35 titlePosition: a slide's own value moves only that slide's title beside its body; the cover keeps its centered title.
+{
+  const editor = session();
+  const cover = svg(editor.presentation, 0), list = svg(editor.presentation, 1), data = svg(editor.presentation, 2);
+  const change = setDesignOption(editor, "titlePosition", "start", { slideIndex: 2 });
+  assert.deepEqual(change.patches, [{ op: "add", path: "/slides/2/design", value: { titlePosition: "start" } }]);
+  assert.deepEqual(getDesignOption(editor.presentation, "titlePosition", { slideIndex: 2 }), { value: "start", scope: "slide", inherited: false });
+  assert.notEqual(svg(editor.presentation, 2), data, "the slide's title moves beside its body");
+  assert.equal(svg(editor.presentation, 1), list, "another slide keeps its title on top");
+  setDesignOption(editor, "titlePosition", "start");
+  assert.equal(svg(editor.presentation, 0), cover, "a cover (no body) keeps its centered title");
+  assert.notEqual(svg(editor.presentation, 1), list);
+  setDesignOption(editor, "titlePosition", "top", { slideIndex: 1 });
+  assert.equal(svg(editor.presentation, 1), list, "top on the slide wins over the deck's start");
+  assert.throws(() => setDesignOption(editor, "titlePosition", "left"), (error) => error.code === "invalid-design-value");
 }
 
 // Validation: bad values never reach the document.

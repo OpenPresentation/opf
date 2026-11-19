@@ -12,6 +12,7 @@ import {
 	resolveReference,
 	removedLayoutAuto,
 	renamedLayout,
+	renamedLayoutTitlePosition,
 	unresolvedReference,
 	type CatalogKind,
 	type CatalogOptions,
@@ -982,14 +983,22 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 		}
 		const renamed = renamedLayout(site.kind, site.reference);
 		if (renamed !== undefined) {
+			// agenda-split is agenda with the title beside it: the fix also sets the slide's design.titlePosition, unless the slide sets one.
+			const position = renamedLayoutTitlePosition(site.kind, site.reference);
+			const slideAt = site.path.slice(0, -1);
+			const slide = slideAt.reduce<unknown>((value, key) => (isRecord(value) || Array.isArray(value) ? (value as Record<string | number, unknown>)[key] : undefined), document) as Record<string, unknown> | undefined;
+			const design = slide && typeof slide.design === 'object' && slide.design !== null && !Array.isArray(slide.design) ? (slide.design as Record<string, unknown>) : undefined;
+			const setPosition = position !== undefined && design?.titlePosition === undefined;
+			const positionOp = !setPosition ? [] : design ? [{ op: 'add' as const, path: pointer([...slideAt, 'design', 'titlePosition']), value: position }] : [{ op: 'add' as const, path: pointer([...slideAt, 'design']), value: { titlePosition: position } }];
+			const what = renamed.endsWith('vertical-process') ? '' : renamed.endsWith('agenda') ? ' with its title beside the list (design.titlePosition "start")' : ' (a short list as boxes joined by arrows, longer steps as numbered steps)';
 			findings.push(
 				finding('opf/unresolved-reference', {
 					path,
 					message: diagnostic.message,
-					help: `OPF 0.35 removed layout "${site.reference}"; use "${renamed}", which draws the same content${renamed.endsWith('vertical-process') ? '' : ' (a short list as boxes joined by arrows, longer steps as numbered steps)'}.`,
+					help: `OPF 0.35 removed layout "${site.reference}"; use "${renamed}", which draws the same content${what}.${position ? ` The fix sets the layout and${setPosition ? '' : ' leaves'} the slide's design.titlePosition${setPosition ? ` to "${position}"` : ' as the slide sets it'}.` : ''}`,
 					definition: `${schemas.presentation.$id}#/$defs/Slide`,
 					lookup: ['opf', 'catalog', site.kind],
-					fixes: [{ id: 'rename-layout', title: `Use layout ${renamed}`, kind: 'patch' as const, safe: true, patch: [{ op: 'replace' as const, path, value: renamed }] }],
+					fixes: [{ id: 'rename-layout', title: setPosition ? `Use layout ${renamed} with the title beside it` : `Use layout ${renamed}`, kind: 'patch' as const, safe: true, patch: [{ op: 'replace' as const, path, value: renamed }, ...positionOp] }],
 				}),
 			);
 			continue;

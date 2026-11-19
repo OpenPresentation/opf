@@ -239,6 +239,8 @@ try {
 
   // Design options.
   await step('title alignment', () => field(design, 'Title alignment').selectOption('end'), current => current.design.titleAlignment === 'end', { preview: true });
+  await step('title position', () => field(design, 'Title position').selectOption('start'), current => current.design.titlePosition === 'start');
+  await step('title position back on top', () => field(design, 'Title position').selectOption('top'), current => current.design.titlePosition === 'top');
   await step('content alignment', () => field(design, 'Content alignment').selectOption('center'), current => current.design.contentAlignment === 'center');
   await step('content box', () => field(design, 'Content box').selectOption('yes'), current => current.design.contentBox === true);
   await step('accent font', async () => { const input = field(design, 'Accent font'); await input.fill('Georgia'); await input.press('Enter'); }, current => current.design.fontScheme?.accent === 'Georgia');

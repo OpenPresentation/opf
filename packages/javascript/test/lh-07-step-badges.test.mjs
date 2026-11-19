@@ -20,7 +20,7 @@ const top = (entry) => entry.text.listEntries?.[0]?.textBox.y ?? entry.text.plac
 
 test('the gallery process layout lists steps and the agendas numbered steps', () => {
   assert.equal(processLayout.regions.find((region) => region.name === 'body').arrangement, 'steps');
-  for (const id of ['agenda', 'agenda-split']) assert.equal(layouts[id].regions.find((region) => region.name === 'body').arrangement, 'numbered');
+  for (const id of ['agenda']) assert.equal(layouts[id].regions.find((region) => region.name === 'body').arrangement, 'numbered');
 });
 
 for (const direction of ['ltr', 'rtl']) {

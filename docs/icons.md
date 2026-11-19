@@ -38,7 +38,7 @@ height (or its layout region's), as Claude Design draws a set of features or an 
   bold, the description under it at 0.82 of the label's size (as a ruled row's). The chip stands above the label, beside the label and
   its description, or beside the label with the description under both across the card, whichever lets the text be largest (then on
   the fewest lines). The chips on cards are solid in the primary with the glyph in the color that reads on it, on light and dark slides.
-- **Numbers.** A numbered list, or an agenda's list (a `numbered` region such as `agenda-split`'s items), keeps its numbers as
+- **Numbers.** A numbered list, or an agenda's list (a `numbered` region such as `agenda`'s body), keeps its numbers as
   numerals in the accent at the top end of each card ("01", "02"); a numbered list's numerals carry the list number, so a PPTX import
   gives the list its `numbering` back.
 - **Size.** The text starts at the size the list has and grows by steps of the type scale, up to LH-05's 56 px (one size on every
@@ -48,7 +48,7 @@ height (or its layout region's), as Claude Design draws a set of features or an 
   label stays on one line). Icon cards never set text smaller: they are tried on top of the rules the guard kept and kept only when no
   block reads smaller than without them, and the settled slide without them (which LH-48 may grow) is compared too. When no grid holds
   the list at its size, it stays the list it was.
-- **Across the body.** A layout's lone list with icons (an agenda's list in its half of an `agenda-split` slide) also tries its cards
+- **Across the body.** A layout's lone list with icons (an agenda's list beside its title on an `agenda` slide with `titlePosition: "start"`) also tries its cards
   across the whole body under the heading, the slide composed as the automatic grid (LH-83's recomposition, `recomposed.cards`). That
   arrangement is kept when its text is at least as large as the layout's (with or without cards; LH-149's half steps count at the step
   under them), and the agenda keeps its numbers. Narrative n05 draws its four cards as a 2 x 2 grid under the title at the size the

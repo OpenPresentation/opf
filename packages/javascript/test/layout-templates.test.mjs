@@ -15,9 +15,9 @@ const base = { name: 'Probe', regions: [{ name: 'title' }, { name: 'body', accep
 const two = { name: 'Two', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'a', accepts: ['text'], max: 1 }, { name: 'b', accepts: ['text'] }] }] };
 const regionsOf = (...regions) => ({ ...base, regions });
 
-describe('the 39 built-in templates (design section 6)', () => {
-  test('there are 39, in six groups, and every one has a title area', () => {
-    assert.equal(Object.keys(layouts).length, 39);
+describe('the 38 built-in templates (design section 6)', () => {
+  test('there are 38, in six groups, and every one has a title area', () => {
+    assert.equal(Object.keys(layouts).length, 38);
     assert.deepEqual([...new Set(Object.values(layouts).map((record) => record.tags[0]))], ['Openers and closers', 'Text', 'Groups of items', 'Numbers', 'Visuals', 'Mixed']);
     for (const [id, record] of Object.entries(layouts)) assert.ok(JSON.stringify(record.regions).includes('"title"'), id);
   });
@@ -212,7 +212,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
 });
 
 describe('no migration path from the 0.18 ids (owner decision, 2026-10-10)', () => {
-  // The 0.19 catalog: the 39 templates under the default catalog's source, so a removed 0.18 id resolves nowhere.
+  // The 0.19 catalog: the 38 templates under the default catalog's source, so a removed 0.18 id resolves nowhere.
   const gallery2 = { source: 'https://www.pptx.gallery', layouts };
 
   test('a former id such as list-2x is an unknown layout: opf/unresolved-reference, automatic composition', async () => {

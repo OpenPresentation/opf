@@ -5,6 +5,8 @@ import { test } from 'node:test';
 import { chartPlotBox, composeSlide } from '../dist/composition.js';
 import { layouts, sampleSlide } from './support/template-samples.mjs';
 
+// OPF 0.35: 0.34's agenda-split is the agenda with its title beside it.
+const agendaBeside = { ...layouts.agenda, design: { ...layouts.agenda.design, titlePosition: 'start' } };
 const overflow = (result) => result.diagnostics.filter((entry) => entry.code === 'text-overflow' || entry.code === 'small-cell');
 const code = (name) => ({ code: { filename: `${name}-inspection-rule.ts`, language: 'ts', source: 'const score = urgency * confidence;\nif (score >= threshold) {\n  routeToSponsor(workstream);\n} else {\n  keepInWeeklyReview(workstream);\n}' } });
 
@@ -35,9 +37,9 @@ test('LH-46 with LH-44: extra tables stay below the grid when joining the fixed 
 });
 
 test('LH-83 with LH-43: a recomposition as large as the layout with less overflow is kept', () => {
-  const slide = sampleSlide(layouts['agenda-split'], 3, 'long');
-  const kept = composeSlide(slide, { layout: layouts['agenda-split'], recompose: false });
-  const result = composeSlide(slide, { layout: layouts['agenda-split'] });
+  const slide = sampleSlide(agendaBeside, 3, 'long');
+  const kept = composeSlide(slide, { layout: agendaBeside, recompose: false });
+  const result = composeSlide(slide, { layout: agendaBeside });
   assert.ok(overflow(kept).length > 0, 'the layout overflows at the floor');
   assert.ok(result.recomposed, 'recomposed');
   assert.ok(result.recomposed.size >= result.recomposed.layoutSize);
@@ -74,8 +76,9 @@ test('LH-81 and LH-33 with LH-93: siblings with headers of one and two rows shar
 test('LH-90 with LH-83: every page of a continued slide composes alike, recomposed at the floor or on the layout', async () => {
   const { gallery } = await import('@openpresentation/gallery');
   const { continueOverfull, resolveSlideContext } = await import('../dist/index.js');
-  for (const [id, units] of [['agenda-split', [3, 3]], ['process', [3, 3]]]) {
-    const slide = { ...sampleSlide(layouts[id], 6, 'long'), layout: id };
+  // OPF 0.35: the agenda with its title beside it is agenda with design.titlePosition start (0.34's agenda-split).
+  for (const [id, units, design] of [['agenda', [3, 3], { titlePosition: 'start' }], ['process', [3, 3]]]) {
+    const slide = { ...sampleSlide(layouts[id], 6, 'long'), layout: id, ...(design ? { design } : {}) };
     const result = continueOverfull({ slides: [slide] }, { catalogs: [gallery] });
     assert.deepEqual(result.continued.map((entry) => entry.units), [units], id);
     // A continued page is bound by the layout as the first page is: no region pin keeps a later page from recomposing (explicit

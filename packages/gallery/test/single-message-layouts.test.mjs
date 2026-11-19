@@ -1,5 +1,5 @@
 // WI-2 (whole-group placement): the single-message layouts place the title and what belongs to it as one group, and
-// agenda-split joins the openers. Each changed record is checked against the geometry of its 0.26.10 form.
+// the agenda beside its title (0.34 agenda-split, OPF 0.35 agenda with design.titlePosition start) binds as an opener. Each changed record is checked against the geometry of its 0.26.10 form.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { composeSlide } from '@openpresentation/opf/composition';
@@ -93,12 +93,11 @@ test('comparison puts the verdict right under the options, with the title on top
   assert.equal(result.diagnostics.length, 0);
 });
 
-test('agenda-split binds three, six and nine entries without findings, the list beside the title', () => {
-  const layout = gallery.layouts['agenda-split'];
-  assert.ok(layout, 'the record exists');
+test('agenda with titlePosition start binds three, six and nine entries without findings, the list beside the title', () => {
+  assert.equal(gallery.layouts['agenda-split'], undefined, 'OPF 0.35 removed agenda-split');
   for (const count of [3, 6, 9]) {
     const items = Array.from({ length: count }, (_, index) => `Part ${index + 1}: a short agenda entry`);
-    const result = compose('agenda-split', { title: 'From the problem to the next decision', subtitle: SUB, blocks: [{ items }] });
+    const result = compose('agenda', { title: 'From the problem to the next decision', subtitle: SUB, design: { titlePosition: 'start' }, blocks: [{ items }] });
     assert.equal(result.diagnostics.length, 0, `${count} entries`);
     const title = field(result, 'title'), list = field(result, 'items');
     assert.ok(list.box.x >= title.box.x + title.box.width - 1 || list.box.x > title.box.x + 100, `${count}: the list is beside the title`);

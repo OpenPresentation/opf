@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Layout sampler",
   "language": "en",
-  "description": "All 39 default layouts and 13 dynamic compositions (no layout record), on one fictional six-week pilot story. Existing slide identities and order are preserved; newly added layouts append. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
+  "description": "All 38 default layouts and 14 dynamic compositions (no layout record), on one fictional six-week pilot story. Existing slide identities and order are preserved; newly added layouts append. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
   "design": {
     "background": "light1",
     "footer": {
@@ -56,8 +56,10 @@
       ]
     },
     {
-      "id": "layout-agenda-split",
-      "layout": "agenda-split",
+      "id": "dynamic-title-start",
+      "design": {
+        "titlePosition": "start"
+      },
       "title": "Three parts, one decision",
       "blocks": [
         {
@@ -1520,34 +1522,6 @@
             "vectorSrc": "https://www.pptx.gallery/layout-previews/agenda.svg"
           }
         },
-        "agenda-split": {
-          "name": "Agenda beside",
-          "summary": "A concise agenda beside its title and introduction.",
-          "tags": [
-            "Openers and closers"
-          ],
-          "direction": "row",
-          "regions": [
-            {
-              "name": "title"
-            },
-            {
-              "name": "body",
-              "accepts": [
-                "list",
-                "text"
-              ],
-              "flow": "column",
-              "listColumns": "auto",
-              "arrangement": "numbered",
-              "anchor": "middle"
-            }
-          ],
-          "description": "Introduce a concise agenda with the title and introduction on one side and the parts of the talk beside them. Use Agenda for detailed entries that need the full slide width.",
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/agenda-split.svg"
-          }
-        },
         "statement": {
           "name": "Statement",
           "summary": "One message, large and alone.",
@@ -2618,11 +2592,13 @@
           "tags": [
             "Groups of items"
           ],
-          "direction": "row",
+          "design": {
+            "titlePosition": "start"
+          },
+          "direction": "column",
           "regions": [
             {
-              "name": "title",
-              "size": 2
+              "name": "title"
             },
             {
               "name": "body",
@@ -2630,8 +2606,7 @@
                 "list"
               ],
               "max": 1,
-              "arrangement": "matrix",
-              "size": 3
+              "arrangement": "matrix"
             }
           ],
           "description": "Show four parts that together make a whole, or the four cases of two choices, as a 2 x 2 matrix. Write four short list entries, in the order top left, top right, bottom left, bottom right; another count is drawn as a grid of cards.",
@@ -2645,11 +2620,13 @@
           "tags": [
             "Groups of items"
           ],
-          "direction": "row",
+          "design": {
+            "titlePosition": "start"
+          },
+          "direction": "column",
           "regions": [
             {
-              "name": "title",
-              "size": 2
+              "name": "title"
             },
             {
               "name": "body",
@@ -2657,8 +2634,7 @@
                 "list"
               ],
               "max": 1,
-              "arrangement": "cycle",
-              "size": 3
+              "arrangement": "cycle"
             }
           ],
           "description": "Show 2 to 8 steps that repeat, where the last leads back to the first (a review loop, a product lifecycle, a feedback cycle). Write one short list entry per step, in order; the first is drawn at the top and the rest clockwise, with an arrow from each to the next.",
@@ -2797,11 +2773,13 @@
           "tags": [
             "Groups of items"
           ],
-          "direction": "row",
+          "design": {
+            "titlePosition": "start"
+          },
+          "direction": "column",
           "regions": [
             {
-              "name": "title",
-              "size": 2
+              "name": "title"
             },
             {
               "name": "body",
@@ -2809,8 +2787,7 @@
                 "list"
               ],
               "max": 1,
-              "arrangement": "vertical-process",
-              "size": 3
+              "arrangement": "vertical-process"
             }
           ],
           "description": "Show 1 to 8 steps that follow one another from top to bottom, each a box with an arrow to the next, beside the title. Write one short list entry per step, in order.",

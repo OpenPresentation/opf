@@ -8,7 +8,7 @@ Start with [`full-feature-tour.opf.json`](./full-feature-tour.opf.json): a singl
 
 The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cover.png`) exist in [`assets/`](./assets/): original abstract artwork, MIT licensed with this repository, written by `scripts/generate-technical-example-assets.mjs`, so `opf convert` of every fixture finds its images. The fixtures' `./media/demo.mp4` and `./data/pipeline.csv` references stay authoring examples: no conversion reads a video or a data file.
 
-[`layout-sampler.opf.json`](./layout-sampler.opf.json) has one slide for each of the 39 default layouts and 13 dynamic compositions, on one fictional pilot story. Use it to review a layout change: `node scripts/render-layout-sampler.mjs <dir>` renders it against this checkout's gallery (ignoring the records it embeds), one PNG per slide, and `node scripts/layout-sampler-sheet.mjs <dir> <sheet.png>` tiles the PNGs into a labelled contact sheet.
+[`layout-sampler.opf.json`](./layout-sampler.opf.json) has one slide for each of the 38 default layouts and 14 dynamic compositions (one of them puts its title beside its list with `design.titlePosition: "start"`), on one fictional pilot story. Use it to review a layout change: `node scripts/render-layout-sampler.mjs <dir>` renders it against this checkout's gallery (ignoring the records it embeds), one PNG per slide, and `node scripts/layout-sampler-sheet.mjs <dir> <sheet.png>` tiles the PNGs into a labelled contact sheet.
 
 ## Coverage Areas
 
@@ -38,6 +38,6 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 - Trees and set overlap: single-root reporting lines, a nested hierarchy, and Basic Venn with semantic entry depths and short labels ([`trees-and-sets.opf.json`](./trees-and-sets.opf.json)); regenerate with `node tools/shapes/sh-21/build-examples.mjs`.
 - [Inverted pyramids](inverted-pyramids.opf.json): wide-first selections, narrative labels and grouped workstreams, exported as editable native shapes.
 
-The exhaustive [layout sampler](./layout-sampler.opf.json) has all39 default layouts and13 dynamic compositions (52 slides). Regenerate its referenced current records and append new layouts with `node scripts/update-layout-sampler.mjs`; existing slide identities, words and ordinals remain unchanged.
+The exhaustive [layout sampler](./layout-sampler.opf.json) has all 38 default layouts and 14 dynamic compositions (52 slides). Regenerate its referenced current records and append new layouts with `node scripts/update-layout-sampler.mjs`; existing slide identities, words and ordinals remain unchanged.
 
 When reviewing dense grouped examples, use the default whole-block continuation path from convert, or call continueOverfull first for slide-by-slide rendering. It retains settled sizes for comparable automatic body roles before choosing the page count; explicit rich sizes and author minima/maxima keep their own constraints. Later pages cap actual arrangement text to the first page. No fixed minimum is added. Inspect the returned pages and continued/source mappings; an indivisible unfit block preserves the original fit refusal and content. Use explicit paginate for splits inside a block.

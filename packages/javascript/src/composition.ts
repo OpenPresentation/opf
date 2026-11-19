@@ -27,7 +27,7 @@ import {chartDrawPlan} from './chart-fallback.js';
 import {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
 import {itemAlignment,resolveDesignHints,type DesignAlignment,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
-import {isLayoutTemplate,layoutTemplate,regionDiagram,regionSequence,singleBlockRegion,withRegionRules,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
+import {isLayoutTemplate,layoutTemplate,regionDiagram,regionSequence,singleBlockRegion,titleBesideTemplate,withRegionRules,TITLE_BESIDE_SHARE,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
 import {bindRegions,rootNodes,type BoundBlock} from './bind-regions.js';
 import {featuredCells,type FeaturedCells} from './featured-cards.js';
 import {EYEBROW_LABEL_CHARS,EYEBROW_TEXT_KIND,eyebrowLabel,isLabelText,rowLabel,groupBinding,JOINED_FIXED_MAX,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength,type GroupedBinding} from './block-grouping.js';
@@ -44,7 +44,7 @@ import {allowedBreak,proseTokens,proseWords} from './line-break.js';
 export {bindNoBreak,unbindNoBreak,lineMayStartAt} from './line-break.js';
 import {ENGINE_DEFAULT_FONT_SCHEME,LANGUAGES,SOCIAL_PLATFORMS} from './engine-vocabularies.js';
 export {CHART_TYPES,ENGINE_DEFAULT_CHART_TYPES,ENGINE_DEFAULT_COLOR_SCHEME,ENGINE_DEFAULT_FONT_SCHEME,ENGINE_DEFAULT_THEME,LANGUAGES,SOCIAL_PLATFORMS,type LanguageVocabulary,type SocialPlatformVocabulary} from './engine-vocabularies.js';
-export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceError,catalogGroupSource,catalogKinds,catalogRecords,catalogReferenceSites,parseReference,renamedLayout,resolveReference,unresolvedReference,type Catalog,type CatalogKind,type CatalogOptions,type CatalogRecords,type CatalogReferenceSite,type RecordProvenance,type ResolvedReference,type UnresolvedReferenceDiagnostic} from './catalog-refs.js';
+export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceError,catalogGroupSource,catalogKinds,catalogRecords,catalogReferenceSites,parseReference,renamedLayout,renamedLayoutTitlePosition,resolveReference,unresolvedReference,type Catalog,type CatalogKind,type CatalogOptions,type CatalogRecords,type CatalogReferenceSite,type RecordProvenance,type ResolvedReference,type UnresolvedReferenceDiagnostic} from './catalog-refs.js';
 export {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 export {isolateNumbers,numberRanges,numericText} from './number-text.js';
 import {listNumberLabel,listNumbers,sliceNumberedItems,type ListNumber,type NumberingInput} from './numbering.js';
@@ -6523,12 +6523,19 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-09: a statement sets its title or its block as the message (statementMessage, the guarded rule `statement-message`).
   const statement = recordTemplate && ruleOn('statement-message') ? statementMessage(slide, recordTemplate, options.fill !== false) : undefined;
   if (statement) fire('statement-message');
-  const template = recordTemplate && statement === 'body' ? statementTemplate(recordTemplate) : recordTemplate;
+  const statementPlan = recordTemplate && statement === 'body' ? statementTemplate(recordTemplate) : recordTemplate;
+  // One merge for every shared design key: slide design, then deck design (or the host's resolved deck values), then the theme's design, then the layout record's design.
+  const hints = resolveDesignHints({ slide, layout, theme: { design: options.themeDesign }, presentation: options.presentation, slideIndex: options.slideIndex, deck: { titleAlignment: options.titleAlignment, contentAlignment: options.contentAlignment, contentBox: options.contentBox } });
+  // OPF 0.35 design.titlePosition `start`: the heading group beside the body, in a column of two fifths of the content width at the
+  // reading side (titleBesideTemplate; mirrored with the rest of the template). A portrait canvas keeps its title on top: two fifths of a
+  // narrow slide is no column for a title. A record that cannot put its title beside its body keeps it where it is. A slide that gives up
+  // its layout for the automatic grid (LH-83's recomposition, which exists to set its text larger) takes the width the title had: its
+  // headings go on top, as the 0.34 records that drew their title beside the body did.
+  const titleStart = hints.titlePosition === 'start' && width >= height && !recomposing;
+  const template = statementPlan && titleStart ? titleBesideTemplate(statementPlan) ?? statementPlan : statementPlan;
   // LH-188: the payload field of a one-message slide's message (oneMessageField): that block grows up to its length-keyed ceiling.
   const messageField = options.fill !== false ? oneMessageField(slide) : undefined;
   const messageNode = (node: Pending): boolean => messageField !== undefined && node.field === messageField && !node.children && node.caption === undefined;
-  // One merge for every shared design key: slide design, then deck design (or the host's resolved deck values), then the theme's design, then the layout record's design.
-  const hints = resolveDesignHints({ slide, layout, theme: { design: options.themeDesign }, presentation: options.presentation, slideIndex: options.slideIndex, deck: { titleAlignment: options.titleAlignment, contentAlignment: options.contentAlignment, contentBox: options.contentBox } });
   const hasCards = hints.contentBox ?? false;
   const composition: Composition = { ...record(layout.composition), ...record(slide.composition) };
   assertComposition(composition);
@@ -7117,8 +7124,21 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // A template places its headings in its title (and subtitle) area: composeTemplate below. A TextRun[] heading wraps and fits
   // like rich body text (richTextLayouter); a string keeps the plain fitter. A slide with body content has a content title (LH-51).
   const headingArea = headingSpan ?? area;
-  const headingItems: ComposedItem[] = useTemplate ? [] : headingGroup(["tag", "title", "subtitle"].filter(field => slide[field] && !(Array.isArray(slide[field]) && !annotationText(slide[field]))),
-    headingArea.left + padding, y, headingArea.right - headingArea.left - padding * 2, hasBodyPayload ? 'split' : undefined);
+  const headingFields = ["tag", "title", "subtitle"].filter(field => slide[field] && !(Array.isArray(slide[field]) && !annotationText(slide[field])));
+  // OPF 0.35 titlePosition `start` on an automatic slide (no layout, or a layout given up by LH-83's recomposition): the heading group in
+  // a column of TITLE_BESIDE_SHARE of the free area's content width at the reading side (the right in a right-to-left deck; design.mirror
+  // swaps it), centered down the body's height at the role size, as a template's title beside its body; the body composes in the rest from
+  // the top. A cover (no body) keeps its centered headings, and promoted regions (start, center, end, ...) their headings on top: those
+  // regions name the slide's columns themselves.
+  let besideTitle: LayoutBox | undefined;
+  if (!useTemplate && !regions.length && titleStart && hasBodyPayload && headingFields.length && (options as Record<symbol, unknown>)[LAYOUT_MASTER] !== true) {
+    const contentWidth = area.right - area.left - padding * 2, share = TITLE_BESIDE_SHARE[0] / (TITLE_BESIDE_SHARE[0] + TITLE_BESIDE_SHARE[1]);
+    const titleWidth = Math.max(scale, (contentWidth - gap) * share), right = rtl !== (hints.mirror === true);
+    besideTitle = { x: right ? area.right - padding - titleWidth : area.left + padding, y, width: titleWidth, height: Math.max(scale, bodyBottom - y) };
+    if (right) area.right -= titleWidth + gap; else area.left += titleWidth + gap;
+  }
+  const headingItems: ComposedItem[] = useTemplate ? [] : besideTitle ? headingGroup(headingFields, besideTitle.x, y, besideTitle.width)
+    : headingGroup(headingFields, headingArea.left + padding, y, headingArea.right - headingArea.left - padding * 2, hasBodyPayload ? 'split' : undefined);
   for (const item of headingItems) {
     if(furniture&&item.box.y+item.box.height>bodyBottom+.01)diagnostics.push({code:'text-overflow',path:item.path,message:'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.'});
     items.push(item);
@@ -7137,6 +7157,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         if (item.text) item.text = translateTextFit(item.text, shift);
       }
       y = last.box.y + last.box.height + gap;
+    } else if (besideTitle) {
+      // Centered down the column; a group taller than the column is not moved. The body starts at the top of the column.
+      const last = headingItems[headingItems.length - 1]!;
+      const shift = Math.max(0, (besideTitle.y + besideTitle.height - (last.box.y + last.box.height)) / 2);
+      if (shift) for (const item of headingItems) {
+        item.box.y += shift;
+        if (item.text) item.text = translateTextFit(item.text, shift);
+      }
+      y = besideTitle.y;
     } else y += gap * 0.5;
   }
   // LH-116: a track under full-width headings starts at the body top and still bleeds to its side and the foot.
@@ -12033,7 +12062,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   if (placedTiled) PLACED_TILES.add(composed);
   if (iconAgendas.size) ICON_AGENDAS.set(composed, iconAgendas);
   if (headingMessage) HEADING_MESSAGES.add(composed);
-  if (template !== recordTemplate) STATEMENT_BODIES.add(composed);
+  if (statementPlan !== recordTemplate) STATEMENT_BODIES.add(composed);
   if (statement === 'title') STATEMENT_TITLES.add(composed);
   if (headingOffScale) HEADINGS_OFF_SCALE.add(composed);
   return composed;
@@ -12086,10 +12115,10 @@ export type {DataCellValue,DataColumn,DataSourceRef,Dataset,DatasetRef,ChartMapp
 export {chartDrawPlan,chartDrawDiagnostics,isPlaceLabel,markLabelColor} from './chart-fallback.js';
 export type {ChartDrawPlan,ChartFallback} from './chart-fallback.js';
 
-export { resolveDesignHints, itemAlignment, DESIGN_HINT_KEYS, type DesignAlignment, type DesignHints, type DesignHintKey, type DesignHintSource, type ResolvedDesignHints, type ResolveDesignHintsOptions } from './design-hints.js';
+export { resolveDesignHints, itemAlignment, DESIGN_HINT_KEYS, TITLE_POSITIONS, type DesignTitlePosition, type DesignAlignment, type DesignHints, type DesignHintKey, type DesignHintSource, type ResolvedDesignHints, type ResolveDesignHintsOptions } from './design-hints.js';
 export { layoutContent, layoutStructure, LAYOUT_BODY_KINDS, type LayoutContent, type LayoutBodyKind } from './layout-content.js';
 // OPF 0.19 layout templates: the record's grid and regions, content binding and the pure geometry composeSlide uses.
-export { HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, regionDiagram, regionSequence, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
+export { HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, TITLE_BESIDE_SHARE, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, regionDiagram, regionSequence, titleBesideTemplate, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
 export { EYEBROW_LABEL_CHARS, EYEBROW_LABEL_WORDS, EYEBROW_TEXT_KIND, eyebrowLabel, isLabelText, rowLabel, ROW_LABEL_CHARS, ROW_LABEL_WORDS, groupBinding, groupingNode, JOINED_FIXED_MAX, majorityKind, MOVED_ROW_MAX, PAIR_FIGURE_KINDS, PAIR_LENGTH_RATIO, repeatedPairs, textLength, type GroupedBinding, type GroupingNode, type JoinedArrangement } from './block-grouping.js';
 export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
 export { allocateRows, gridFlowShape, LIST_WHOLE_ENTRIES, listColumnBreaks, listGridShape, shareHeights, type FlowShape, type RowDemand } from './template-geometry.js';

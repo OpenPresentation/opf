@@ -6,11 +6,13 @@
   "tags": [
     "Groups of items"
   ],
-  "direction": "row",
+  "design": {
+    "titlePosition": "start"
+  },
+  "direction": "column",
   "regions": [
     {
-      "name": "title",
-      "size": 2
+      "name": "title"
     },
     {
       "name": "body",
@@ -18,8 +20,7 @@
         "list"
       ],
       "max": 1,
-      "arrangement": "matrix",
-      "size": 3
+      "arrangement": "matrix"
     }
   ],
   "description": "Show four parts that together make a whole, or the four cases of two choices, as a 2 x 2 matrix. Write four short list entries, in the order top left, top right, bottom left, bottom right; another count is drawn as a grid of cards.",

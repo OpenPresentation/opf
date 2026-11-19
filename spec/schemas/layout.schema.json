@@ -459,6 +459,14 @@
           ],
           "description": "Horizontal alignment of the title heading area. Logical, as design.titleAlignment of a deck: 'start' is the edge a paragraph starts on."
         },
+        "titlePosition": {
+          "type": "string",
+          "enum": [
+            "top",
+            "start"
+          ],
+          "description": "Where the heading group sits, as design.titlePosition of a deck: 'top' above the body, or 'start' beside it in a column of two fifths of the content width on the reading side. A record writes its regions under its title and sets 'start' to draw them beside it (the gallery's cycle, matrix and vertical-process do)."
+        },
         "contentAlignment": {
           "type": "string",
           "enum": [

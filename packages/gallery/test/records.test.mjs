@@ -17,7 +17,7 @@ const catalogRoot = path.join(root, "catalog");
 
 /** The built-in layouts of OPF 0.19 (the 0.19 layouts design, section 6), in picker order. */
 const LAYOUT_IDS = [
-  "cover", "section", "agenda", "agenda-split", "statement", "closing",
+  "cover", "section", "agenda", "statement", "closing",
   "text", "list", "quote", "two-column", "three-column",
   "pillars", "comparison", "process", "timeline", "faq", "pyramid", "inverted-pyramid", "matrix", "cycle", "chevrons", "vertical-process", "org-chart", "hierarchy", "venn",
   "metrics", "scorecard",
@@ -41,7 +41,7 @@ test("every record is valid against the published core's companion schema", asyn
 
 const hasTitle = (list) => list.some((entry) => (entry.regions ? hasTitle(entry.regions) : entry.name === "title"));
 
-test("the layouts are the 39 intent templates, in six groups, each passing core's template rules", async () => {
+test("the layouts are the 38 intent templates, in six groups, each passing core's template rules", async () => {
   const { index, records } = await readSnapshotKind(catalogRoot, "layouts");
   assert.deepEqual(records.map((record) => record.id), LAYOUT_IDS);
   for (const record of records) {

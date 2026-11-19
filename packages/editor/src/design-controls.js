@@ -1134,6 +1134,7 @@ export function createDesignControls(container, options = {}) {
       });
     };
     enumField("titleAlignment", "Title alignment", ["start", "center", "end"], {});
+    enumField("titlePosition", "Title position", ["top", "start"], { top: "Above the body", start: "Beside the body" }, "Beside: a column of two fifths of the slide on the reading side");
     enumField("contentAlignment", "Content alignment", ["start", "center", "end"], {});
     enumField("imageFit", "Image fit", IMAGE_FITS, { cover: "Cover (crop to fill)", contain: "Contain (whole image)", stretch: "Stretch to the frame", auto: "Auto (cover a near fit, else whole)" }, "When an image block sets no fit");
     const box = selectField("opt-contentBox", "Content box", {

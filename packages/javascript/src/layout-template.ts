@@ -442,6 +442,57 @@ export function layoutTemplateIssues(layout: unknown): LayoutTemplateIssue[] {
   return isLayoutTemplate(layout) ? parse(layout).issues : [];
 }
 
+/** OPF 0.35 design.titlePosition `start`: the title column and the body beside it share the content width 2 : 3. */
+export const TITLE_BESIDE_SHARE = [2, 3] as const;
+
+/**
+ * OPF 0.35 design.titlePosition `start`: the template with its heading group beside the body instead of above it. The rows that hold
+ * only headings (the title row, and a subtitle row, of a record that stacks its headings over the body) are removed, and a title
+ * column of TITLE_BESIDE_SHARE (two fifths of the content width) spans every remaining row at the logical start; the body keeps its
+ * own grid in the other three fifths. A `subtitle` region joins the title: the subtitle is part of the one heading group in the
+ * column (`subtitle` is false). A template without a title region gets the column too, for the implicit title. The record's
+ * `stack`, heading anchors and title rule are kept, so a stacked record (a quote) centers its row beside its title. A column is
+ * logical: composition draws it at the right in a right-to-left deck, and `design.mirror` swaps it, as for every column.
+ *
+ * Undefined when the record cannot put its title beside the body: a heading shares a row with a body region (the record already
+ * places its title beside or over a part of the body), or no row holds a body region.
+ */
+export function titleBesideTemplate(plan: LayoutTemplate): LayoutTemplate | undefined {
+  const heading = (name: string) => headingNames.has(name);
+  const headingRow = plan.grid.map(row => row.every(heading));
+  if (plan.grid.some((row, index) => !headingRow[index] && row.some(heading))) return undefined;
+  const body = plan.grid.filter((_, index) => !headingRow[index]);
+  if (!body.length) return undefined;
+  const total = plan.columns.reduce((sum, size) => sum + size, 0);
+  const [title, rest] = TITLE_BESIDE_SHARE;
+  const columns = wholeWeights([total * title / rest, ...plan.columns]) as number[];
+  const grid = body.map(row => ['title', ...row]);
+  const bounds = new Map<string, { top: number; left: number; bottom: number; right: number }>();
+  for (const [r, row] of grid.entries()) for (const [c, name] of row.entries()) {
+    const found = bounds.get(name);
+    if (!found) bounds.set(name, { top: r, left: c, bottom: r, right: c });
+    else { found.top = Math.min(found.top, r); found.left = Math.min(found.left, c); found.bottom = Math.max(found.bottom, r); found.right = Math.max(found.right, c); }
+  }
+  const areaOf = (name: string): LayoutArea => {
+    const box = bounds.get(name)!;
+    return { name, row: box.top, column: box.left, rowSpan: box.bottom - box.top + 1, columnSpan: box.right - box.left + 1, heading: heading(name) };
+  };
+  // Reading order: the title where the record lists it (first, without a title region), then the body regions as before.
+  const order = plan.title ? plan.areas.map(area => area.name).filter(name => name !== 'subtitle') : ['title', ...plan.areas.map(area => area.name)];
+  const { headingAnchors, ...rest2 } = plan;
+  const anchors = headingAnchors?.title !== undefined ? { title: headingAnchors.title } : undefined;
+  return {
+    ...rest2,
+    rows: plan.rows.filter((_, index) => !headingRow[index]),
+    columns,
+    grid,
+    areas: order.map(areaOf),
+    title: true,
+    subtitle: false,
+    ...(anchors ? { headingAnchors: anchors } : {}),
+  };
+}
+
 /** Parse, check and compile a template record. Throws OPFLayoutTemplateError for a record with a `layout-template` or `layout-region` issue. */
 export function layoutTemplate(layout: unknown): LayoutTemplate {
   const parsed = parse(layout);

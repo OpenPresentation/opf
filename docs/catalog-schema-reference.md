@@ -393,6 +393,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `titleAlignment` | no | `enum:start \| center \| end` | Horizontal alignment of the title heading area. Logical, as design.titleAlignment of a deck: 'start' is the edge a paragraph starts on. |
+| `titlePosition` | no | `enum:top \| start` | Where the heading group sits, as design.titlePosition of a deck: 'top' above the body, or 'start' beside it in a column of two fifths of the content width on the reading side. A record writes its regions under its tit... |
 | `contentAlignment` | no | `enum:start \| center \| end` | Horizontal alignment of the body regions. Logical, as design.contentAlignment of a deck: 'start' is the edge a paragraph starts on. |
 | `contentBox` | no | `boolean` | Whether the body regions are drawn inside a visible card or surface. |
 | `imageFit` | no | `enum:cover \| contain \| stretch \| auto` | Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame, 'auto' covers when the crop keeps at least 85% of the pictu... |
@@ -527,7 +528,7 @@ _No named properties._
 | `background` | no | `ref:ThemeBackground` |  |
 | `variants` | no | `array<ref:ThemeVariant>` | The color variants the theme offers (OPF 0.23), for example light, light-alt, dark and dark-alt: named values of design.variant over the theme's one color scheme, so a dark deck is a variant of a theme and not a theme... |
 | `dimensions` | no | `enum:16:9 \| 4:3 \| 16:10 \| 1:1 \| 4:5 \| 9:16 \| letter \| a4 \| widescreen \| standard` | Default slide size for this theme. Accepts the same preset values as design.dimensions.preset. |
-| `design` | no | `object` | The theme's design defaults (OPF 0.19), so a house style such as boxed content or centred titles is set once: the keys and values of the deck's design for titleAlignment, contentAlignment, contentBox, imageFit and lis... |
+| `design` | no | `object` | The theme's design defaults (OPF 0.19), so a house style such as boxed content or centred titles is set once: the keys and values of the deck's design for titleAlignment, titlePosition, contentAlignment, contentBox, i... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 

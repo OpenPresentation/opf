@@ -2,6 +2,7 @@ import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js
 
 export type DesignOptionId =
   | "titleAlignment"
+  | "titlePosition"
   | "contentAlignment"
   | "listBullet"
   | "contentBox"

@@ -59,6 +59,7 @@ function checkZoneField(key, value) {
 
 const ENUMS = Object.freeze({
   titleAlignment: ["start", "center", "end"],
+  titlePosition: ["top", "start"],
   contentAlignment: ["start", "center", "end"],
   listBullet: ["character", "image", "none"],
   imageFit: ["cover", "contain", "stretch", "auto"],
@@ -71,6 +72,7 @@ const ENUMS = Object.freeze({
  */
 export const DESIGN_OPTIONS = Object.freeze([
   { id: "titleAlignment", label: "Title alignment", type: "enum", values: ENUMS.titleAlignment, scopes: ["deck", "slide"], path: "design.titleAlignment" },
+  { id: "titlePosition", label: "Title position", type: "enum", values: ENUMS.titlePosition, scopes: ["deck", "slide"], path: "design.titlePosition" },
   { id: "contentAlignment", label: "Content alignment", type: "enum", values: ENUMS.contentAlignment, scopes: ["deck", "slide"], path: "design.contentAlignment" },
   { id: "listBullet", label: "List bullets", type: "enum", values: ENUMS.listBullet, scopes: ["deck", "slide"], path: "design.listBullet" },
   { id: "contentBox", label: "Content box", type: "boolean", scopes: ["deck", "slide"], path: "design.contentBox" },

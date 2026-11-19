@@ -2,8 +2,8 @@
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "kind": "layouts",
   "version": "1",
-  "description": "The built-in slide layouts of OPF 0.19: 40 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
-  "contentSha256": "bea87432d246bd0513e06ec536d7eaf8aef1d311d2e90a53f45ee1b81585040e",
+  "description": "The built-in slide layouts of OPF 0.19: 38 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
+  "contentSha256": "23e533ab64e2dc62cc26d22b66f0c0ab75239382046d8d6c0bf96f6a187d9cc1",
   "records": [
     {
       "id": "cover",
@@ -25,13 +25,6 @@
       "summary": "What the talk covers: the parts, as one list that flows into columns when long.",
       "group": "Openers and closers",
       "file": "agenda.json"
-    },
-    {
-      "id": "agenda-split",
-      "name": "Agenda beside",
-      "summary": "A concise agenda beside its title and introduction.",
-      "group": "Openers and closers",
-      "file": "agenda-split.json"
     },
     {
       "id": "statement",

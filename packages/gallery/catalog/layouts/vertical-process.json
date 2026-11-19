@@ -6,11 +6,13 @@
   "tags": [
     "Groups of items"
   ],
-  "direction": "row",
+  "design": {
+    "titlePosition": "start"
+  },
+  "direction": "column",
   "regions": [
     {
-      "name": "title",
-      "size": 2
+      "name": "title"
     },
     {
       "name": "body",
@@ -18,8 +20,7 @@
         "list"
       ],
       "max": 1,
-      "arrangement": "vertical-process",
-      "size": 3
+      "arrangement": "vertical-process"
     }
   ],
   "description": "Show 1 to 8 steps that follow one another from top to bottom, each a box with an arrow to the next, beside the title. Write one short list entry per step, in order.",

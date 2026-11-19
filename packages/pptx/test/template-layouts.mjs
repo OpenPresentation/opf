@@ -558,4 +558,58 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   checked++;
 }
 
-console.log(`Template layouts passed (${checked}): ${templateIds.length} authoritative templates as native slide layouts (placeholder per area, types, geometry, OPF_LAYOUT_V1, schema order), every reachable template in catalog order on every master, bound placeholder objects, embedded and registered round trips, region pins, list columns, Change Layout, a slide added in PowerPoint, no provenance, furniture variants, a damaged tag and automatic titleOnly layouts.`);
+// ---- 13. OPF 0.35 design.titlePosition. A record that sets `start` (cycle) gets a slide layout with its title placeholder beside the body:
+// the start column of two fifths, the body beside it, the slide's title bound to it at its own geometry. A slide that sets `start` on a
+// record that does not (list) keeps the layout's title on top and its own title shape beside the body. A right-to-left slide that is the
+// first on its layout (matrix) puts the layout's title column at the right; design.mirror on the slide moves only the slide's own title.
+// The deck's and the slide's titlePosition round-trip. A 0.34 file's agenda-split slide (stored layout or slide-layout tag) imports
+// on agenda with design.titlePosition start.
+{
+  const catalogs = [defaultCatalog];
+  const deck = {name: 'Title position', design: {titlePosition: 'top'}, slides: [
+    {layout: 'cycle', title: 'A review loop', blocks: [{items: ['Plan', 'Build', 'Measure', 'Learn']}]},
+    {layout: 'list', design: {titlePosition: 'start'}, title: 'Three parts', blocks: [{items: ['Define the problem', 'Review the evidence', 'Agree the decision']}]},
+    {layout: 'matrix', language: 'ar', title: 'أربعة أجزاء', blocks: [{items: ['الأول', 'الثاني', 'الثالث', 'الرابع']}]},
+    {layout: 'vertical-process', design: {mirror: true}, title: 'Steps in order', blocks: [{items: ['Draft', 'Review', 'Approve']}]},
+  ]};
+  // The deck's own `top` is a deck value: it would win over the records, so this deck says it only to round-trip it on a copy.
+  const {entries: parts} = await exportDeck({...deck, design: {}}, {catalogs});
+  const EMU = 9525, padding = 0.08 * 720, gap = 720 / 30, content = 1280 - 2 * padding, column = (content - gap) * 2 / 5;
+  const near = (actual, expected, label) => assert.ok(Math.abs(actual / EMU - expected) <= 1, `${label}: ${actual / EMU} vs ${expected}`);
+  const titleOf = number => placeholders(text(parts, `ppt/slides/slide${number}.xml`)).find(shape => shape.type === 'title');
+  const layoutBoxes = number => { const shapes = placeholders(text(parts, layoutOf(parts, number))); return {title: shapes.find(shape => shape.type === 'title').box, body: shapes.find(shape => shape.idx !== undefined && !['dt', 'ftr', 'sldNum'].includes(shape.type)).box}; };
+  const cycle = layoutBoxes(1), list = layoutBoxes(2), matrix = layoutBoxes(3), vertical = layoutBoxes(4);
+  near(cycle.title[0], padding, 'cycle title x'); near(cycle.title[2], column, 'cycle title width'); near(cycle.body[0], padding + column + gap, 'cycle body x');
+  near(list.title[2], content, 'list layout title across the slide');
+  near(matrix.title[0], padding + content - column, 'matrix (rtl) title at the right'); near(matrix.body[0], padding, 'matrix (rtl) body at the left');
+  near(vertical.title[0], padding, 'vertical-process layout title at the left');
+  near(titleOf(1).box[0], padding, 'cycle slide title'); near(titleOf(1).box[2], column, 'cycle slide title width');
+  near(titleOf(2).box[0], padding, 'the slide override: title in the start column'); near(titleOf(2).box[2], column, 'the slide override: title width');
+  near(titleOf(3).box[0], padding + content - column, 'rtl slide title at the right');
+  near(titleOf(4).box[0], padding + content - column, 'mirrored slide title at the right');
+  // The deck's and the slide's titlePosition come back.
+  const {bytes} = await exportDeck(deck, {catalogs});
+  const {imported} = await read(bytes, {catalogs});
+  assert.equal(imported.design.titlePosition, 'top');
+  assert.equal(imported.slides[1].design.titlePosition, 'start');
+  // A 0.34 agenda-split slide: the agenda export with the 0.34 id written into its tags.
+  const hexOf = (value, like) => { const hex = Buffer.from(JSON.stringify(value)).toString('hex'); return /[A-F]/.test(like) ? hex.toUpperCase() : hex; };
+  const old34 = {name: 'A 0.34 layout', slides: [{layout: 'agenda', title: 'Three parts', items: ['Plan', 'Build', 'Ship']}]};
+  for (const provenance of ['full', false]) {
+    const {entries: agendaParts} = await exportDeck(old34, {catalogs, provenance});
+    const layout = layoutOf(agendaParts, 1), tag = layoutTag(agendaParts, layout);
+    const rid = text(agendaParts, layout).match(/<\/p:spTree><p:custDataLst><p:tags r:id="([^"]+)"\/><\/p:custDataLst>/)[1];
+    const edits = {[resolvePart(layout, relationships(agendaParts, layout).find(item => item.id === rid).target)]: xml => xml.replace(/(name="OPF_LAYOUT_V1" val=")([^"]+)"/, (_, head, value) => `${head}${hexOf({...tag, id: 'agenda-split', reference: 'agenda-split'}, value)}"`)};
+    for (const path of Object.keys(agendaParts).filter(name => /^ppt\/tags\//.test(name) && /name="OPF_SLIDE_V1"/.test(text(agendaParts, name))))
+      edits[path] = xml => xml.replace(/(name="OPF_SLIDE_V1" val=")([^"]+)"/, (_, head, value) => `${head}${hexOf({...JSON.parse(Buffer.from(value, 'hex').toString('utf8')), layout: 'agenda-split'}, value)}"`);
+    const {imported: back, reports} = await read(mutate(agendaParts, edits), {catalogs});
+    assert.equal(back.slides[0].layout, 'agenda', `agenda-split ${provenance}`);
+    assert.deepEqual(back.slides[0].design, {titlePosition: 'start'}, `agenda-split ${provenance}: the title beside the list`);
+    const renamed = reports.filter(report => report.code === 'layout-renamed');
+    assert.deepEqual(renamed.map(report => report.path), provenance === 'full' ? ['slides.0.layout'] : [], JSON.stringify(reports));
+    if (provenance === 'full') assert.match(renamed[0].message, /design\.titlePosition start/);
+  }
+  checked++;
+}
+
+console.log(`Template layouts passed (${checked}): ${templateIds.length} authoritative templates as native slide layouts (placeholder per area, types, geometry, OPF_LAYOUT_V1, schema order), every reachable template in catalog order on every master, bound placeholder objects, embedded and registered round trips, region pins, list columns, Change Layout, a slide added in PowerPoint, no provenance, furniture variants, a damaged tag, automatic titleOnly layouts, the 0.34 layout ids and titlePosition.`);

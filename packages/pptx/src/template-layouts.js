@@ -33,7 +33,7 @@
 // `layout`: Change Layout to it from a template removes the stored layout, with `layout-changed`. A block read from a placeholder of a region gets a `region` pin when plain binding would put it
 // elsewhere; content that document provenance restored is never pinned.
 
-import {composeLayoutAreas, composeSlide, isLayoutTemplate, layoutTemplate, bindRegions, regionAccepts, renamedLayout} from '@openpresentation/opf/composition';
+import {composeLayoutAreas, composeSlide, isLayoutTemplate, layoutTemplate, bindRegions, regionAccepts, renamedLayout, renamedLayoutTitlePosition} from '@openpresentation/opf/composition';
 import {validateCatalogRecord, catalogRecords, resolveReference} from '@openpresentation/opf';
 import {gallery} from '@openpresentation/gallery';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
@@ -483,9 +483,14 @@ export function readLayoutTag(entries, layoutPath, report = () => {}) {
     if (identityError) throw Error(identityError);
     if (typeof value.reference !== 'string' || !/^(?:[a-z][a-z0-9-]*:)?[a-z][a-z0-9-]*$/.test(value.reference) || typeof value.hash !== 'string') throw Error('invalid reference');
     if (value.record !== undefined && (value.record === null || typeof value.record !== 'object' || Array.isArray(value.record))) throw Error('invalid record');
-    // OPF 0.35 removed the gallery's flow and vertical-flow layouts: a 0.34 file's tag of either reads as the layout that replaced it.
+    // OPF 0.35 removed the gallery's flow, vertical-flow and agenda-split layouts: a 0.34 file's tag of one reads as the layout that
+    // replaced it, and agenda-split's slides take design.titlePosition "start" with agenda (`titlePosition`, applyTemplateLayouts).
     const renamed = value.group === 'default' && value.record === undefined ? renamedLayout('layouts', value.reference) : undefined;
-    if (renamed !== undefined) { value.reference = renamed; value.id = renamed.replace(/^default:/, ''); }
+    if (renamed !== undefined) {
+      const titlePosition = renamedLayoutTitlePosition('layouts', value.reference);
+      value.reference = renamed; value.id = renamed.replace(/^default:/, '');
+      if (titlePosition) value.titlePosition = titlePosition;
+    }
     const regions = value.regions;
     if (regions === null || typeof regions !== 'object' || Array.isArray(regions) || Object.keys(regions).length > MAX_REGIONS
       || Object.entries(regions).some(([idx, name]) => !/^\d{1,4}$/.test(idx) || typeof name !== 'string' || !NAME.test(name) || name.length > 64)) throw Error('invalid regions');
@@ -556,6 +561,9 @@ export function applyTemplateLayouts(imported, slides, recordOf, report = () => 
         slide.layout = tag.reference;
       }
     }
+    // A 0.34 agenda-split slide (its tag read as agenda) keeps its title beside the list, unless the slide sets a position of its own.
+    if (tag.titlePosition && slide.layout === tag.reference && (slide.design === undefined || (slide.design && typeof slide.design === 'object' && slide.design.titlePosition === undefined)))
+      slide.design = {...slide.design, titlePosition: tag.titlePosition};
     if (entry.restored || !Array.isArray(slide.blocks) || !entry.blockRegions?.some(Boolean)) continue;
     let record;
     try { record = recordOf(index); layoutTemplate(record); } catch { continue; }

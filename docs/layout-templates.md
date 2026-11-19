@@ -124,7 +124,7 @@ lists the 0.34 names of the built-ins.
 | `bleed` | boolean: outer edges on the content box reach the slide edge; never a card | `false` |
 | `listColumns` | `"auto"` (a list of more than 6 entries that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
 | `metrics` | `stack` (value, unit, label and the rest as one block at the anchor) or `tile` (LH-68: each metric fills its cell, label first as an eyebrow, the value asking for a quarter of the cell's height between 76 and 152 px, description, delta and trend at the cell's foot, start-aligned; the gallery `scorecard` uses it) | `stack` |
-| `arrangement` | What the region draws its content as. A sequence: `steps` or `numbered` (LH-07: the region lists the steps of a sequence, drawn under numbered badges joined by a connector, see [Step sequences](#step-sequences-lh-07); the gallery `process` uses `steps`, `agenda` and `agenda-split` use `numbered`). A diagram of the region's lone list of one level: `pyramid`, `inverted-pyramid`, `matrix`, `cycle`, `chevrons`, `process`, `vertical-process`, `org-chart`, `hierarchy` or `venn` (SH-09, SH-18: `pyramid`, `matrix` and `cycle` draw as PowerPoint's Basic Pyramid, Basic Matrix or Basic Cycle geometry, exported as live SmartArt where PowerPoint draws it as the preview does, or as OPF's own design of the arrangement where PowerPoint's does not hold the entries; a matrix of other than four entries draws cards; see [Pyramids, matrices and live SmartArt](smartart.md); the gallery `pyramid`, `matrix` and `cycle` use them; SH-24: `inverted-pyramid` is the pyramid upside down, the widest level first and the tip at the bottom, the entries in their authored top-to-bottom order, exported as editable native shapes until a live SmartArt domain is measured (the gallery `inverted-pyramid`); SH-17: `chevrons` draws the list as PowerPoint's Basic Chevron Process, `process` as its Basic Process (boxes with arrows) and `vertical-process` as its Vertical Process, or OPF's own rows or columns of them, used by the gallery `chevrons` and `vertical-process` layouts (and by `process` for a short list of its `steps` region); SH-21: `org-chart` and `hierarchy` preserve a single-root tree through list-entry `level`, and `venn` holds one to seven flat set labels; malformed trees or labels that do not fit keep the complete list with a finding). One value per region: a region is a sequence or a diagram, never both | none |
+| `arrangement` | What the region draws its content as. A sequence: `steps` or `numbered` (LH-07: the region lists the steps of a sequence, drawn under numbered badges joined by a connector, see [Step sequences](#step-sequences-lh-07); the gallery `process` uses `steps`, `agenda` uses `numbered`). A diagram of the region's lone list of one level: `pyramid`, `inverted-pyramid`, `matrix`, `cycle`, `chevrons`, `process`, `vertical-process`, `org-chart`, `hierarchy` or `venn` (SH-09, SH-18: `pyramid`, `matrix` and `cycle` draw as PowerPoint's Basic Pyramid, Basic Matrix or Basic Cycle geometry, exported as live SmartArt where PowerPoint draws it as the preview does, or as OPF's own design of the arrangement where PowerPoint's does not hold the entries; a matrix of other than four entries draws cards; see [Pyramids, matrices and live SmartArt](smartart.md); the gallery `pyramid`, `matrix` and `cycle` use them; SH-24: `inverted-pyramid` is the pyramid upside down, the widest level first and the tip at the bottom, the entries in their authored top-to-bottom order, exported as editable native shapes until a live SmartArt domain is measured (the gallery `inverted-pyramid`); SH-17: `chevrons` draws the list as PowerPoint's Basic Chevron Process, `process` as its Basic Process (boxes with arrows) and `vertical-process` as its Vertical Process, or OPF's own rows or columns of them, used by the gallery `chevrons` and `vertical-process` layouts (and by `process` for a short list of its `steps` region); SH-21: `org-chart` and `hierarchy` preserve a single-root tree through list-entry `level`, and `venn` holds one to seven flat set labels; malformed trees or labels that do not fit keep the complete list with a finding). One value per region: a region is a sequence or a diagram, never both | none |
 | `anchor` | `top`, `middle`, `bottom` | inherited from the nearest split or the record, else `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
 
@@ -437,9 +437,22 @@ the slide as written. See [dynamic composition](dynamic-composition.md#paginatio
 ## Design keys
 
 Per key: the slide's `design`, the deck's `design`, the theme record's `design` (new in 0.19: `titleAlignment`,
-`contentAlignment`, `contentBox`, `imageFit`, `listBullet`, `listStyle`), the layout's `design`, then the engine
+`titlePosition`, `contentAlignment`, `contentBox`, `imageFit`, `listBullet`, `listStyle`), the layout's `design`, then the engine
 default. `design.mirror: true` draws a template mirrored (each row's cells and the column sizes reversed); a right-to-left
-deck mirrors on top. A slide without `layout` is composed automatically; `layout: "auto"` was removed in 0.35 and is now an
+deck mirrors on top.
+
+`design.titlePosition` (OPF 0.35) is `top` (the default: the heading group above the body) or `start`: the heading group
+beside the body, in a column of two fifths of the content width (`TITLE_BESIDE_SHARE`, 2 : 3) on the reading side, centered
+down the column at its role size. On a template the rows that hold only headings give way and the title column runs down
+beside the body regions (`titleBesideTemplate`), which keep their own grid; a `subtitle` region joins the title's group, a
+record without a title region gets the column for the slide's title, and blocks no region takes still sit below, across
+the slide. The column is a column of the template, so a right-to-left deck draws it at the right and `design.mirror` swaps
+it. A record whose title already shares a row with a body region keeps its own placement. An automatic slide puts its
+headings in the same column and composes its body beside it (`mirror` swaps that column too). A cover (no body), a slide
+with promoted regions and a portrait canvas keep the title on top, and so does a slide that LH-83 recomposes as the
+automatic grid (the recomposition exists to set its text larger, so its body takes the column's width). The gallery's `cycle`, `matrix` and `vertical-process` are column records (title over
+body) whose `design` sets `titlePosition: "start"`, so they draw as the 0.34 row records did; `agenda-split` was removed
+in 0.35 (it is `agenda` with `titlePosition: "start"`, which `opf/unresolved-reference`'s fix writes). A slide without `layout` is composed automatically; `layout: "auto"` was removed in 0.35 and is now an
 ordinary reference (`opf/unresolved-reference` says so and offers the fix that deletes the key).
 
 ## Composition output
@@ -598,8 +611,8 @@ result stands. Both compositions are pure, so the choice is deterministic, and b
 (16, 17, 18, 20, 21, 23, 24, 26, 28, 30, 32 px) under its role size (28 px prose, 32 px lists, 25 px table cells, each held to
 `composition.maxFontSize`), but above the floor, is composed as the automatic grid too, under the guarded rule `layout-first`. That
 result is kept (`recomposed`) only when it adds no finding, sets no block smaller, reads as well (no more split words, no prose
-under the minimum measure) and sets the most shrunk block at least one step larger: an agenda's two lists that the agenda-split
-layout sets at 18 px beside its title read at 32 px across the slide. A text run with its own `fontSize`, a block pinned to a
+under the minimum measure) and sets the most shrunk block at least one step larger: an agenda's two lists that the agenda layout
+with its title beside them (`titlePosition: "start"`) sets at 18 px read at 32 px across the slide. A text run with its own `fontSize`, a block pinned to a
 region, `recompose: false` and `fill: false` keep the layout. So composition grows short content to fill, changes the arrangement
 (columns, the automatic grid, another design) before it sets text smaller, and fits dense content that no arrangement holds down
 the type scale to the readability floor, never below it, flagging what still does not fit.

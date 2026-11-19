@@ -17,6 +17,7 @@ const KEYS = {
   listBullet: ['image', 'character'],
   mirror: [true, false],
   listStyle: ['rows', 'stack'],
+  titlePosition: ['start', 'top'],
 };
 
 test('the shared key list; the helper is an engine name on the composition entry, not the root', () => {

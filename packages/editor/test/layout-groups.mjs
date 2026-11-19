@@ -11,7 +11,7 @@ import { CUSTOM_LAYOUTS_GROUP, groupLayoutChoices, layoutGroupName } from "../di
 const index = catalogIndexes.layouts.records;
 const groupOf = new Map(index.map((entry) => [entry.id, entry.group]));
 const indexGroups = [...new Set(index.map((entry) => entry.group))];
-assert.ok(index.length >= 30 && groupOf.get("agenda-split") === "Openers and closers" && groupOf.get("three-column") === "Text", "the layouts of #898 are in the index");
+assert.ok(index.length >= 30 && groupOf.get("agenda") === "Openers and closers" && groupOf.get("three-column") === "Text", "the layouts of #898 are in the index");
 
 // Slide manager picker: every Gallery layout lands in its index group, the groups follow the index order, none is Custom.
 const choices = listSwitchOptions({ slides: [] }, "layouts", { catalogs: [gallery] });

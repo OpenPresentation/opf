@@ -1,8 +1,8 @@
 /** The `design` keys that a layout record, the deck and a slide all share and that composition resolves per key. */
-export const DESIGN_HINT_KEYS = ['titleAlignment', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet', 'listStyle', 'mirror'] as const;
+export const DESIGN_HINT_KEYS = ['titleAlignment', 'titlePosition', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet', 'listStyle', 'mirror'] as const;
 export type DesignHintKey = typeof DESIGN_HINT_KEYS[number];
 /** The design keys a theme record may carry (`theme.design`), so a house style such as boxed content is set once. */
-export const THEME_DESIGN_KEYS = ['titleAlignment', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet', 'listStyle'] as const;
+export const THEME_DESIGN_KEYS = ['titleAlignment', 'titlePosition', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet', 'listStyle'] as const;
 /**
  * The design keys OPF 0.35 removed: `contentDirection` (a layout region's `flow: "row"` or `"column"`, or the slide's
  * `composition.mode`) and `chartPrimary` (the `chart-beside` layout, mirrored for the end side). A deck, slide, theme or layout `design` that still sets one
@@ -14,6 +14,11 @@ export const REMOVED_DESIGN_KEYS: Readonly<Record<string, string>> = Object.free
 });
 /** Where an effective design hint came from: the slide's own `design`, the deck's `design`, the resolved theme record, or the slide's layout record. */
 export type DesignHintSource = 'slide' | 'deck' | 'theme' | 'layout';
+
+/** Where a slide's heading group sits (design.titlePosition): above the body, or beside it on the reading side. */
+export type DesignTitlePosition = 'top' | 'start';
+/** The values of design.titlePosition. */
+export const TITLE_POSITIONS = ['top', 'start'] as const;
 
 /** A design alignment as a document writes it: logical, so `start` is the left edge of a left-to-right deck and the right edge of a right-to-left one. */
 export type DesignAlignment = 'start' | 'center' | 'end';
@@ -27,6 +32,11 @@ export const itemAlignment = (value: unknown): 'left' | 'center' | 'right' | und
 /** The effective value of every shared design key, in the document's words. A key nobody sets is absent, so the engine default applies. */
 export interface DesignHints {
   titleAlignment?: DesignAlignment;
+  /**
+   * OPF 0.35: where the heading group (tag, title, subtitle) sits: `top`, above the body (the engine default), or `start`, beside the
+   * body in a column of two fifths of the content width on the reading side (titleBesideTemplate, TITLE_BESIDE_SHARE).
+   */
+  titlePosition?: DesignTitlePosition;
   contentAlignment?: DesignAlignment;
   contentBox?: boolean;
   imageFit?: 'cover' | 'contain' | 'stretch' | 'auto';
@@ -62,7 +72,7 @@ export interface ResolveDesignHintsOptions {
 
 const ALIGNMENTS = ['start', 'center', 'end'];
 const VALUES: { [K in DesignHintKey]: readonly unknown[] | 'boolean' } = {
-  titleAlignment: ALIGNMENTS, contentAlignment: ALIGNMENTS, contentBox: 'boolean', imageFit: ['cover', 'contain', 'stretch', 'auto'], listBullet: ['character', 'image', 'none'], listStyle: ['stack', 'rows'], mirror: 'boolean',
+  titleAlignment: ALIGNMENTS, titlePosition: TITLE_POSITIONS, contentAlignment: ALIGNMENTS, contentBox: 'boolean', imageFit: ['cover', 'contain', 'stretch', 'auto'], listBullet: ['character', 'image', 'none'], listStyle: ['stack', 'rows'], mirror: 'boolean',
 };
 const themeKeys: ReadonlySet<string> = new Set(THEME_DESIGN_KEYS);
 /** A value the schema allows for the key; anything else is skipped, so the next level answers. */

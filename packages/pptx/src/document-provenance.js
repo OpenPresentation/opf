@@ -7,7 +7,7 @@ import {runColorRecord, validateRunColors} from './run-colors.js';
 import {overlayRecord, validateOverlayRecord} from './shape-restore.js';
 import {validateCatalogRecord} from '@openpresentation/opf';
 import {SMART_ART_URI} from './smart-art.js';
-import {parseReference, renamedLayout, resolveReference, resolveSocialProfile} from '@openpresentation/opf/composition';
+import {parseReference, renamedLayout, renamedLayoutTitlePosition, resolveReference, resolveSocialProfile} from '@openpresentation/opf/composition';
 
 // FF-32: document and slide references survive a PPTX round trip.
 //
@@ -92,7 +92,7 @@ function authoredSocials(stored, observed) {
 // native PowerPoint counterpart and round-trips from the stored value.
 export const DESIGN_REFERENCES = Object.freeze(['theme', 'colorScheme', 'fontScheme', 'dimensions', 'background']);
 // OPF 0.35 removed contentDirection and chartPrimary: a 0.34 file's stored values are not restored.
-export const COMPOSITION_HINTS = Object.freeze(['titleAlignment', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet']);
+export const COMPOSITION_HINTS = Object.freeze(['titleAlignment', 'titlePosition', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet']);
 // `references` (RR-34): the deck's cited sources. Like `author`, stored as a top-level key of OPF_DOCUMENT_V1 (importers up to
 // 0.11.9 drop a tag with an unknown `supplement` field but ignore an unknown top-level key) and read back into metadata.
 export const METADATA = Object.freeze(['narrative', 'tone', 'audience', 'purpose', 'language', 'organization', 'speaker', 'takeaway', 'duration', 'tags', 'variables', 'filename', 'extensions', 'author', 'references', 'icons']);
@@ -1143,14 +1143,16 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
   const group = (field, ops, contentPaths) => groups.push({field, ops, ...(contentPaths ? {contentPaths} : {})});
   const set = (path, value) => ({path, value});
   const remove = path => ({path, remove: true});
-  // OPF 0.35 removed the gallery's flow and vertical-flow layouts: a slide a 0.34 file stored on one of them, with no record of its own
-  // and none in the stored catalogs, takes the layout that replaced it (process, vertical-process).
+  // OPF 0.35 removed the gallery's flow, vertical-flow and agenda-split layouts: a slide a 0.34 file stored on one of them, with no record of
+  // its own and none in the stored catalogs, takes the layout that replaced it (process, vertical-process, agenda), and an agenda-split slide
+  // design.titlePosition "start" unless it stored a position of its own.
   slideRecords.forEach((entry, index) => {
     const layout = entry?.record.layout, renamed = typeof layout === 'string' && entry.record.layoutRecord === undefined
       && !resolveReference({catalogs: object(document?.catalogs) ? document.catalogs : {}}, 'layouts', layout, {catalogs: []}) ? renamedLayout('layouts', layout) : undefined;
     if (renamed === undefined) return;
-    report({code: 'layout-renamed', path: `slides.${index}.layout`, message: `OPF 0.35 removed layout ${layout}; the slide uses ${renamed}, which replaced it.`});
-    slideRecords[index] = {...entry, record: {...entry.record, layout: renamed}};
+    const titlePosition = renamedLayoutTitlePosition('layouts', layout), design = object(entry.record.design) ? entry.record.design : {};
+    report({code: 'layout-renamed', path: `slides.${index}.layout`, message: `OPF 0.35 removed layout ${layout}; the slide uses ${renamed}, which replaced it${titlePosition && design.titlePosition === undefined ? `, with design.titlePosition ${titlePosition} (its title beside the body, as ${layout} drew it)` : ''}.`});
+    slideRecords[index] = {...entry, record: {...entry.record, layout: renamed, ...(titlePosition && design.titlePosition === undefined ? {design: {...design, titlePosition}} : {})}};
   });
   const intent = layoutIntent(document?.catalogs, slideRecords, entries, group, report, hostCatalogs);
 

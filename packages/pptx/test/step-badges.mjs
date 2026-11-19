@@ -14,7 +14,7 @@ const deck = {
     {layout: 'process', title: 'Three steps from evidence to decision', blocks: [step('Establish a baseline', 'Measure the current rate.', 1), step('Run the pilot', 'Test with two teams.', 2), step('Decide what to scale', 'Agree the next step.', 3)]},
     {layout: 'agenda', title: 'Today’s agenda', blocks: [{numbering: 'arabic', items: ['Where we are today', 'What the pilot showed', 'The decision we need']}]},
     {layout: 'process', title: 'How support works', blocks: [{items: ['Queue the request', 'Route it to a team', 'Resolve and follow up']}]},
-    {layout: 'agenda-split', title: 'What we will cover', blocks: [{items: ['Customer feedback themes', 'Support performance', 'Product reliability']}]},
+    {layout: 'agenda', design: {titlePosition: 'start'}, title: 'What we will cover', blocks: [{items: ['Customer feedback themes', 'Support performance', 'Product reliability']}]},
   ],
 };
 const before = structuredClone(deck);

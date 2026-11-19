@@ -587,7 +587,14 @@ const unresolvedReference: RuleText = (finding, _context, helpers) => {
       next: `delete the ${code("layout")} key (the fix does).`,
     };
   }
-  const renamed = kind === "layouts" ? /removed layout '.+?' \(use '(.+?)'\)/.exec(finding.message)?.[1] : undefined;
+  const replaced = kind === "layouts" ? /removed layout '.+?' \(use '(.+?)'(?: with design\.titlePosition '(.+?)')?\)/.exec(finding.message) : undefined;
+  const renamed = replaced?.[1], position = replaced?.[2];
+  if (renamed && position) {
+    return {
+      message: `Layout ${code(reference)} was removed in OPF 0.35: ${code(renamed)} with the title beside the body (${code(`design.titlePosition: "${position}"`)}) replaced it.`,
+      next: `change the layout to ${code(renamed)} and set the slide's ${code("design.titlePosition")} to ${code(position)} (the fix does both).`,
+    };
+  }
   if (renamed) {
     return {
       message: `Layout ${code(reference)} was removed in OPF 0.35: ${code(renamed)} replaced it.`,

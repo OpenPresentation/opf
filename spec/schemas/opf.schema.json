@@ -855,6 +855,11 @@
           "enum": ["start", "center", "end"],
           "description": "Default horizontal alignment for the title heading area (the title and the tag) in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout record's design.titleAlignment, then the engine default. Logical: 'start' is the edge a paragraph starts on (the left for left-to-right text, the right for right-to-left text) and 'end' is the opposite edge."
         },
+        "titlePosition": {
+          "type": "string",
+          "enum": ["top", "start"],
+          "description": "Where the heading group (tag, title and subtitle) sits on a slide with body content. 'top' (the default) stacks it above the body. 'start' sets it beside the body, in a column of two fifths of the content width (the body takes the other three fifths, a gap apart) on the reading side: the left in a left-to-right deck, the right in a right-to-left deck; design.mirror swaps the side. The group is centered down the column at its role size, aligned by titleAlignment. On a layout, the rows that hold only headings give way and the title column runs down beside the layout's body regions, which keep their own arrangement; a 'subtitle' region joins the title's group, and a layout without a title region gets the column for the slide's title. Content no region takes sits below them, across the slide. A layout whose title already shares a row with a body region keeps its own placement. On a slide without a layout the automatic composition fills the free area beside the column. A slide without body content (a cover), a slide with promoted regions (start, center, end, top, middle, bottom: they name its columns themselves) and a portrait canvas (taller than wide) keep the title on top. Header and footer zones, placed pictures and footnotes keep their places: the column lies between them. A slide that gives up its layout for the automatic grid to set its text larger (the layout's recomposition) puts its title on top, taking the column's width for its body. Effective value: the slide's design, then the deck's design, then the theme's design.titlePosition, then the layout record's design.titlePosition, then 'top'. PPTX export: a layout record that sets 'start' (and every layout of a deck or theme that sets it) gets a slide layout with its title placeholder beside the body; a slide that sets it on another layout keeps its title's own position on that slide."
+        },
         "contentAlignment": {
           "type": "string",
           "enum": ["start", "center", "end"],
@@ -881,7 +886,7 @@
         },
         "mirror": {
           "type": "boolean",
-          "description": "Draw the slide's template layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do not change. Effective value: the slide's design, then the deck's design, then the layout record's design.mirror, then false. Slides without a template layout ignore it."
+          "description": "Draw the slide's template layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do not change. Effective value: the slide's design, then the deck's design, then the layout record's design.mirror, then false. Slides without a template layout ignore it, except that it moves a title beside the body (titlePosition 'start') to the end side."
         }
       }
     },
