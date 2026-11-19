@@ -308,3 +308,15 @@
     transition: none;
   }
 }
+
+.opf-title-key-hint {
+  position: absolute;
+  inset-block-start: 6px;
+  inset-inline-end: 6px;
+  padding: 3px 6px;
+  border-radius: var(--opf-ui-radius-sm);
+  color: var(--opf-ui-muted-fg);
+  background: var(--opf-ui-surface);
+  font: 12px/1.4 var(--opf-ui-font);
+  pointer-events: none;
+}

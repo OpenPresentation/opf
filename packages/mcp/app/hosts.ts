@@ -1,6 +1,6 @@
 /**
  * The product a host names itself as, from what it sent in ui/initialize (`hostInfo`, an MCP `Implementation`: `name` is its
- * identifier, `title` its display name). The view names the product in its own words ("Send to ChatGPT", "Claude has your edits");
+ * identifier, `title` its display name). The view names the product in its own words ("Ask ChatGPT to edit…", "Claude can see this version");
  * an unknown host is "the assistant". The words follow the name only; what the view does follows the capabilities the host announced.
  */
 export function hostProduct(info: { name?: unknown; title?: unknown } | undefined): "Claude" | "ChatGPT" | undefined {

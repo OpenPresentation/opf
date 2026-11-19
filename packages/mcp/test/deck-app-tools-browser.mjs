@@ -251,13 +251,14 @@ try {
 		// The preview, the source pane and the model's context all follow.
 		await view("a").locator("#tab-both").click();
 		await view("a").locator("#deck-source .cm-content", { hasText: "Next quarter" }).waitFor({ timeout: 15000 });
-		await call("a", "select_slide", { id: "next" });
+		assert.equal(edit.selected.index, 1);
+		assert.equal(after.selected.id, "next");
 		await view("a").locator("#deck-canvas", { hasText: "Next quarter" }).waitFor({ timeout: 15000 });
 		await page.waitForFunction(() => window.hosts.a.context.at(-1)?.structuredContent?.document?.slides?.[1]?.title === "Next quarter", null, { timeout: 15000 });
-		assert.match(await view("a").locator("#deck-status").innerText(), /changed the deck \(1 change\)\. Undo takes it back\./);
+		assert.match(await view("a").locator("#deck-status").innerText(), /Updated slide 2/);
 		await shoot("viewer-after-edit", "a");
 		// Undo takes back exactly the tool's edit; Redo puts it back.
-		await view("a").locator("#deck-undo").click();
+		await view("a").locator("#deck-edit-undo").click();
 		const undone = await call("a", "read_deck");
 		assert.equal(undone.outline[1].title, "What we do next");
 		assert.equal(undone.name, "Q3 board update");
@@ -396,7 +397,7 @@ try {
 		assert.equal(before.checks.error, 0);
 		assert.equal(before.sourceChecks, undefined);
 		await view("draft").locator('#deck-verdict .opf-review-pill[data-state="valid"]').waitFor({ timeout: 30000 });
-		assert.equal(await pill.textContent(), "Valid OPF");
+		assert.equal(await pill.textContent(), "Review");
 		const valid = before.source.text;
 		const broken = valid.replace('"fontScheme": "roboto"', '"fontScheme": "roboto",\n    "contentAlignment": "left"');
 		assert.notEqual(broken, valid);
@@ -427,7 +428,7 @@ try {
 		await page.keyboard.press("ControlOrMeta+A");
 		await page.keyboard.insertText(valid);
 		await view("draft").locator('#deck-verdict .opf-review-pill[data-state="valid"]').waitFor({ timeout: 15000 });
-		assert.equal(await pill.textContent(), "Valid OPF");
+		assert.equal(await pill.textContent(), "Review");
 		assert.equal(await panel.locator(".opf-review-source").isHidden(), true);
 		assert.match(await panel.locator(".opf-review-counts").textContent(), /^No findings/);
 		assert.equal((await call("draft", "read_deck")).sourceChecks, undefined);
@@ -435,13 +436,13 @@ try {
 		await remove("draft");
 	});
 
-	await run("a tool edit is not the user's: in a view nobody edited, Send stays disabled after it", async () => {
+	await run("a tool edit is not the user's: the edit request stays available in a view nobody edited", async () => {
 		await open("tool-only", "show_deck", { document: deckNamed("Tool only") });
 		const { revision } = await call("tool-only", "read_deck");
-		assert.equal(await view("tool-only").locator("#deck-send").isDisabled(), true);
+		assert.equal(await view("tool-only").locator("#deck-send").isDisabled(), false);
 		assert.equal((await call("tool-only", "edit_deck", { expectedRevision: revision, operations: [{ op: "replace", path: "/slides/0/title", value: "Edited by the model" }] })).ok, true);
 		await page.waitForFunction(() => window.hosts["tool-only"].context.some((update) => update.structuredContent?.edited), null, { timeout: 15000 });
-		assert.equal(await view("tool-only").locator("#deck-send").isDisabled(), true, "nothing for the user to send");
+		assert.equal(await view("tool-only").locator("#deck-send").isDisabled(), false, "nothing for the user to send");
 		assert.match((await host("tool-only")).context.at(-1).content[0].text, /has your edit_deck changes/);
 		await remove("tool-only");
 	});
@@ -564,6 +565,59 @@ try {
 		await page.evaluate(() => window.userMessage("gated"));
 		assert.equal((await call("gated", "read_deck")).name, "Gated");
 		await remove("gated");
+	});
+
+	await run("starter titles, slide actions and the assistant share one undoable deck", async () => {
+		const key = "authoring";
+		await open(key, "open_editor", { session: key });
+		const frame = view(key);
+		const title = frame.getByRole("button", { name: "Edit title: Untitled deck" });
+		await title.click();
+		const field = frame.getByRole("textbox", { name: "Edit title inline" });
+		await field.fill("Library");
+		await field.press("End");
+		await field.press("Shift+Enter");
+		await page.keyboard.insertText("pilot");
+		await field.press("Enter");
+		const read = () => call(key, "read_deck", { source: "json" });
+		const named = await read();
+		assert.equal(named.name, "Library pilot");
+		assert.equal(JSON.parse(named.source.text).slides[0].title, "Library\npilot");
+		await frame.locator("#deck-undo").click();
+		assert.equal((await read()).name, "Untitled deck");
+		await frame.locator("#deck-redo").click();
+		await rename(key, "Board meeting");
+		await frame.getByRole("button", { name: /Edit title: Library/ }).click();
+		await field.fill("Another opening");
+		await field.press("Enter");
+		assert.equal((await read()).name, "Board meeting");
+		for (const choice of ["Title", "Bullets", "Blank"]) {
+			await frame.getByRole("button", { name: "Add slide" }).click();
+			await frame.getByRole("menuitem", { name: choice, exact: true }).click();
+			if (choice !== "Blank") {
+				assert.ok(await field.evaluate(el => el === document.activeElement));
+				await field.fill(choice);
+				await field.press("Enter");
+			}
+			const result = await read();
+			const slide = JSON.parse(result.source.text).slides[result.selected.index];
+			assert.ok(slide.id);
+			if (choice === "Bullets") assert.deepEqual(slide.items, ["First point"]);
+			if (choice === "Blank") assert.equal(slide.title, undefined);
+		}
+		await frame.locator(".opf-thumbs-item[aria-current=true]").click({ button: "right" });
+		await frame.getByRole("menuitem", { name: "Duplicate slide" }).click();
+		const duplicate = await read();
+		assert.equal(duplicate.slideCount, 6);
+		await frame.locator(".opf-thumbs-item[aria-current=true]").press("Alt+ArrowLeft");
+		assert.equal((await read()).selected.index, duplicate.selected.index - 1);
+		const edit = await call(key, "edit_deck", { expectedRevision: (await read()).revision, operations: [{ op: "add", path: "/slides/-", value: { title: "Pilot decision" } }] });
+		assert.equal(edit.selected.index, 6);
+		assert.equal(await frame.locator("#deck-status").textContent(), "Added slide 7");
+		assert.equal(await frame.locator(".deck-foot #deck-sync, .deck-foot #deck-version").count(), 0);
+		await frame.locator("#deck-edit-undo").click();
+		assert.equal((await read()).slideCount, 6);
+		await remove(key);
 	});
 
 	await run("open_editor with {} opens a starter deck to edit, a bundled example and a way to paste a deck", async () => {
@@ -726,8 +780,10 @@ try {
 			await rename(name, `Edited for ${mode}`);
 			const send = view(name).locator("#deck-send");
 			await send.click();
-			await view(name).locator("#deck-sync", { hasText: sync }).waitFor({ timeout: 15000 });
-			if (status) assert.match(await view(name).locator("#deck-status").innerText(), new RegExp(status));
+			await view(name).locator("#deck-instruction").fill("Shorten the title");
+			await view(name).locator("#deck-instruction").press("Enter");
+			await view(name).locator(status ? "#deck-sync" : "#deck-status", { hasText: sync }).waitFor({ timeout: 15000 });
+			if (status) assert.equal(await view(name).locator("#deck-instruction").inputValue(), "Shorten the title");
 			const sent = (await host(name)).messages;
 			assert.equal(sent.length, 1);
 			assert.ok(sent[0].content[0].text.length < 8000 && !/\n{4}| {65}/.test(sent[0].content[0].text), "within the message limits, pointing at the deck");
@@ -739,8 +795,12 @@ try {
 	});
 
 	await run("a status message clears itself after a few seconds", async () => {
-		const name = "msg-rpc-error";
-		assert.notEqual(await view(name).locator("#deck-status").innerText(), "");
+		const name = "msg-other-host";
+		await page.evaluate(key => window.front(key), name);
+		await view(name).locator("#deck-send").click();
+		await view(name).locator("#deck-instruction").fill("Add a summary");
+		await view(name).locator("#deck-request-send").click();
+		await view(name).locator("#deck-status", { hasText: "Sent to the assistant" }).waitFor();
 		await page.waitForTimeout(9000);
 		assert.equal(await view(name).locator("#deck-status").innerText(), "");
 	});

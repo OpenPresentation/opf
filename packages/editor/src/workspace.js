@@ -536,7 +536,7 @@ export function createOpfEditor(element, options = {}) {
           // The fonts handle also prepares lazy icons, shapes and diagram engines; all change derived review geometry.
           invalidateReview();
           emit("fonts", { state: "ready" });
-          if (/Loading fonts/.test(statusText)) say(MESSAGES.ready);
+          if (/Loading fonts/.test(statusText)) say(options.labels?.ready ?? MESSAGES.ready);
         }
         try {
           sync(navigation);
@@ -596,6 +596,7 @@ export function createOpfEditor(element, options = {}) {
     if (controls.redo) controls.redo.disabled = !inSync || readOnly || !session.canRedo;
     // The deck name is not renamed over text in the source pane that is not a valid deck (that would replace the person's draft).
     deckTitle?.setDisabled(!inSync);
+    strip?.setReadOnly(readOnly || !inSync);
     designMenu?.setDisabled(!inSync);
     actionsPart?.setDisabled(!inSync);
     actionsPart?.refresh();
@@ -774,7 +775,19 @@ export function createOpfEditor(element, options = {}) {
         onError: (error) => report(error instanceof Error ? error : new Error("Thumbnails unavailable")),
         // CE-28 wave 2: "+" and the thumbnail menu (duplicate, delete, hide, move), each one undoable change; "+" offers the deck's layouts.
         ...(slideActions
-          ? { actions: true, readOnly, onStatus: say, ...(listSwitchOptions ? { layoutOptions: (presentation) => listSwitchOptions(presentation, "layouts", { catalogs: catalogs() }) } : {}) }
+          ? {
+              actions: true,
+              readOnly: readOnly || !inSync,
+              onStatus: say,
+              ...(slideActions === "starters" ? {
+                starters: true,
+                onAdd(index) {
+                  if (session.presentation.slides[index]?.title) canvas?.beginEdit(`slides.${index}.title`);
+                },
+              } : listSwitchOptions ? {
+                layoutOptions: (presentation) => listSwitchOptions(presentation, "layouts", { catalogs: catalogs() }),
+              } : {}),
+            }
           : {}),
       });
     }
@@ -1545,7 +1558,6 @@ export function createOpfEditor(element, options = {}) {
     studio?.setReadOnly(readOnly);
     deckTitle?.setReadOnly(readOnly);
     designMenu?.setReadOnly(readOnly);
-    strip?.setReadOnly?.(readOnly);
     root.toggleAttribute("data-readonly", readOnly);
     syncChrome();
     studioCtl?.refresh();
@@ -2075,7 +2087,7 @@ export function createOpfEditor(element, options = {}) {
     mountParts();
     mounted = true;
     if (readOnly) applyReadOnly();
-    say(MESSAGES.ready);
+    say(options.labels?.ready ?? MESSAGES.ready);
     const wantedView = "view" in requested ? requested.view : options.view;
     activeView = "slide";
     if (wantedView && wantedView !== "slide") setView(wantedView);

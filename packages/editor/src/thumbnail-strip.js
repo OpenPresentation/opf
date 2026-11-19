@@ -349,9 +349,10 @@ export function createThumbnailStrip(container, options = {}) {
     try {
       if (kind === "add") {
         const at = total ? clamp(index, total) + 1 : 0;
-        const change = addSlide(editor, { at, ...(extra.layout ? { layout: extra.layout } : {}) }, META);
+        const change = addSlide(editor, { at, ...extra }, META);
         const target = change.index ?? at;
         follow(target, fill(labels.statusAdded, { position: target + 1 }));
+        options.onAdd?.(target);
         return;
       }
       if (!Number.isInteger(index) || index < 0 || index >= total) return;
@@ -419,11 +420,12 @@ export function createThumbnailStrip(container, options = {}) {
       addButton.className = "opf-thumbs-add";
       addButton.setAttribute("aria-label", labels.add);
       addButton.title = labels.add;
-      if (typeof options.layoutOptions === "function") {
+      if (options.starters || typeof options.layoutOptions === "function") {
         addButton.setAttribute("aria-haspopup", "menu");
         addButton.setAttribute("aria-expanded", "false");
       }
       addButton.append(resolveIcon(doc, icons.add, "M12 5v14M5 12h14", { name: "add", className: "opf-thumbs-add-icon" }));
+      if (options.starters) addButton.append("Slide");
       addSlot.append(addButton);
       addButton.addEventListener("click", onAddClick);
     }
@@ -433,6 +435,15 @@ export function createThumbnailStrip(container, options = {}) {
     if (readOnly || disposed) return;
     if (menu?.opener === addButton) {
       closeMenu();
+      return;
+    }
+    if (options.starters) {
+      const entries = [
+        { label: "Title", run: () => perform("add", active, { title: "New slide" }) },
+        { label: "Bullets", run: () => perform("add", active, { slide: { title: "New slide", items: ["First point"] } }) },
+        { label: "Blank", run: () => perform("add", active, { slide: {} }) },
+      ];
+      openMenu({ label: labels.add, opener: addButton, entries, anchor: addButton.getBoundingClientRect(), toggle: true });
       return;
     }
     let choices = [];

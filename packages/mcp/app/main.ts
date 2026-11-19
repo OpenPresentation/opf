@@ -6,7 +6,7 @@
 //
 // The loop: the host sends the tool's arguments (show_deck's deck) or its result (open_editor's starter deck), the view mounts the
 // editor and shows Preview, Source or Both. Every edit is applied, checked and redrawn here; one second after the last edit the whole
-// deck goes to the model as context (ui/update-model-context), and "Send to Claude" also asks for a turn (ui/message). Where the
+// deck goes to the model as context (ui/update-model-context), and the edit composer sends the user’s request (ui/message). Where the
 // host calls tools in the view (MCP Apps app tools), the model also reads and edits the open deck in place: read_deck, select_slide
 // and edit_deck, registered before connect() and never changed afterwards.
 //
@@ -19,7 +19,9 @@
 // palette: the viewer's own chrome and the editor's parts read the same `--opf-ui-*` tokens, mapped onto the host's colors.
 import { App, type McpUiDisplayMode, type McpUiHostContext, applyDocumentTheme, applyHostStyleVariables } from "@modelcontextprotocol/ext-apps";
 import { gallery } from "@openpresentation/gallery";
+import { resolveIdPatch } from "@openpresentation/opf/patch";
 import { type Finding, embed, ensureIcons, iconsPending, validate } from "@openpresentation/opf";
+import { createEditorSession } from "@openpresentation/opf-editor";
 import { createOpfEditor, layoutOptionsFor, type OpfEditor } from "@openpresentation/opf-editor/workspace";
 import { type BrowserFontsHandle, loadFonts } from "@openpresentation/opf-render/fonts-browser";
 import { z } from "zod";
@@ -32,6 +34,7 @@ declare const MCP_VERSION: string;
 type View = "preview" | "source" | "both";
 type Format = "json" | "yaml" | "markdown";
 interface ShowDeckArguments {
+	nameFromOpeningTitle?: boolean;
 	document?: unknown;
 	format?: Format;
 	view?: View;
@@ -65,7 +68,6 @@ const MAX_EDIT_CHARS = 200_000;
 const STATUS_TIME = 8000;
 /** A host's save dialog can stay open a while: ten minutes before a download counts as unconfirmed (the SDK's default is 60 s). */
 const DOWNLOAD_TIMEOUT = 600_000;
-const MESSAGE = "I edited the deck in the OPF viewer. Please continue from my version.";
 /** The icon sets the server announced in its show_deck or open_editor result (none: it has no read_icons); undefined until it did. */
 let offeredIconSets: string[] | undefined;
 /** One read_icons call (RR-111): the icons of a set the deck draws, through the host. A failure rejects, and core settles the load. */
@@ -102,6 +104,10 @@ const findButton = $<HTMLButtonElement>("deck-find-open");
 const reviewDrawer = $("deck-review");
 const reviewClose = $<HTMLButtonElement>("deck-review-close");
 const sendButton = $<HTMLButtonElement>("deck-send");
+const requestForm = $("deck-request");
+const instruction = $<HTMLInputElement>("deck-instruction");
+const submitRequest = $<HTMLButtonElement>("deck-request-send");
+const editUndo = $<HTMLButtonElement>("deck-edit-undo");
 const sendLabel = $("deck-send-label");
 const expandButton = $<HTMLButtonElement>("deck-expand");
 const moreButton = $<HTMLButtonElement>("deck-more");
@@ -311,25 +317,26 @@ async function sendContext(): Promise<void> {
 	contextTimer = undefined;
 	if (!editor || silent() || !app.getHostCapabilities()?.updateModelContext) return;
 	const deck = editor.getDocument();
+	const revision = editor.session.documentHash();
 	const draft = sourceChecks();
 	sourceHeard = JSON.stringify(draft ?? null);
 	try {
 		await app.updateModelContext({ content: [{ type: "text", text: contextText() }], structuredContent: { edited, counts, findings: findings.slice(0, MAX_LISTED_FINDINGS), ...(draft ? { sourceChecks: draft } : {}), ...(edited || openedWith ? { document: deck as Record<string, unknown> } : {}) } });
 		// Edits made while this update was on its way wait for the next one.
-		if (edited && !contextTimer && sync.dataset.state === "pending") setSync("shared");
+		if (!silent() && editor?.session.documentHash() === revision && !contextTimer && (sync.dataset.state === "pending" || !edited)) setSync("shared");
 	} catch (error) {
 		status(`${sentence(assistant())} did not take the update: ${error instanceof Error ? error.message : String(error)}`);
 	}
 }
 
 type SyncState = "none" | "pending" | "shared" | "sent" | "refused" | "unknown";
-// What the person sees of that: their edits reach the model without a click, and the footer says where they are.
+// Context delivery is shown alongside the request the person is composing.
 function setSync(state: SyncState): void {
 	sync.dataset.state = state;
 	const words: Record<SyncState, string> = {
 		none: "",
-		pending: "Edits not shared yet",
-		shared: `${sentence(assistant())} has your edits`,
+		pending: "Sharing changes…",
+		shared: `${sentence(assistant())} can see this version`,
 		// Claude accepted the message; the person still decides whether it goes (and nothing says the model read it). Another host's
 		// acceptance is reported as no more than that.
 		sent: isClaude() ? "Sent to Claude for your approval" : `Sent to ${assistant()}`,
@@ -339,14 +346,18 @@ function setSync(state: SyncState): void {
 	sync.textContent = words[state];
 }
 
-/** Send is the view's one primary action while there are user edits the model has not been asked about; it stays usable to retry. */
+/** The request composer is available as soon as the deck opens, including before the first manual edit. */
 function syncSend(): void {
-	// The words say who it goes to; on a phone the button shows its icon and "Send", and its name keeps the whole sentence.
-	sendLabel.textContent = `Send to ${assistant()}`;
-	sendButton.setAttribute("aria-label", `Send to ${assistant()}`);
-	sendButton.disabled = !userEdited || sending || silent();
+	// The compact button says "Ask"; its accessible name still identifies the host.
+	sendLabel.textContent = `Ask ${assistant()} to edit…`;
+	sendButton.setAttribute("aria-label", sendLabel.textContent);
+	sendButton.disabled = !mounted || sending || silent();
+	submitRequest.disabled = sending || !instruction.value.trim() || silent();
+	instruction.readOnly = sending;
 	sendButton.dataset.unsent = String(unsent && !silent());
-	sendButton.title = unsent ? `Ask ${assistant()} to continue from your version` : userEdited ? `Ask ${assistant()} again to continue from your version` : `Edit the deck, then send your version to ${assistant()}`;
+	sendButton.title = sendLabel.textContent;
+	sendButton.setAttribute("aria-controls", requestForm.id);
+	sendButton.setAttribute("aria-expanded", String(!requestForm.hidden));
 }
 
 const scheduleContext = () => {
@@ -356,28 +367,35 @@ const scheduleContext = () => {
 };
 
 /** Only on the person's click: the message points at the open deck (the deck itself goes as context, not in the message). */
-async function sendToClaude(): Promise<void> {
-	if (!editor || !userEdited || sending || silent()) return;
+async function sendEditRequest(): Promise<void> {
+	const request = instruction.value.trim();
+	if (!editor || !request || sending || silent() || requestForm.hidden) return;
+	const slide = editor.slideIndex + 1;
 	sending = true;
 	syncSend();
 	try {
 		if (checkTimer) runChecks(editor.getDocument());
 		await sendContext();
-		const result = await app.sendMessage({ role: "user", content: [{ type: "text", text: MESSAGE }] });
+		if (silent()) return;
+		const revision = editor.session.documentHash();
+		const result = await app.sendMessage({ role: "user", content: [{ type: "text", text: `In the open deck, on slide ${slide}: ${request}` }] });
+		if (silent()) return;
 		if (result?.isError) {
 			setSync("refused");
-			status(`${sentence(assistant())} didn't take the message. You can send it again.`);
 		} else {
-			unsent = false;
+			if (revision === editor.session.documentHash()) unsent = false;
+			instruction.value = "";
 			setSync("sent");
+			status(sync.textContent ?? "");
+			requestForm.hidden = true;
 		}
 	} catch {
 		// A rejection (a timeout too) does not mean it was not sent: say what is known, and keep Send for a retry.
-		setSync("unknown");
-		status("The message couldn't be confirmed. You can send it again.");
+		if (!silent()) setSync("unknown");
 	} finally {
 		sending = false;
 		syncSend();
+		if (!silent()) (requestForm.hidden ? sendButton : instruction).focus();
 	}
 }
 
@@ -415,6 +433,8 @@ function supersede(): void {
 	editor?.setReadOnly(true);
 	// Nothing is shared any more, and nothing stays selected or focused in a view that takes no input.
 	setSync("none");
+	requestForm.hidden = true;
+	editUndo.hidden = true;
 	window.getSelection()?.removeAllRanges();
 	if (document.activeElement instanceof HTMLElement && shell.contains(document.activeElement)) document.activeElement.blur();
 	shell.dataset.superseded = "true";
@@ -580,7 +600,7 @@ app.registerTool(
 	{
 		title: "Edit the deck open in the OPF viewer",
 		description:
-			"Change the deck open in this OPF viewer with JSON Patch operations, applied as one undoable edit only if the deck is still at expectedRevision.\nGet the revision from read_deck (or the viewer's context). Edit only the parts that change: an operation on the whole deck (path or from \"\") and any operation but test on the whole slides array (path or from /slides) is refused, so edit slides one at a time (/slides/2, /slides/-). Paths are JSON Pointers and may name slides and blocks by id (/slides/@intro/title). Up to 100 operations, all or none. If the deck changed since that revision, nothing is applied and the result says to read it again; while the user is typing in the viewer nothing is applied either (try again after their next message). An edit that would make the deck invalid (format or references) is refused with the findings. In the source pane, JSON keeps its formatting; YAML and Markdown text is written again from the deck, so YAML comments are dropped (the pane says so). The result has the new revision, what changed and the viewer's check findings; the user sees the change at once and can undo it.",
+			"Change the deck open in this OPF viewer with JSON Patch operations, applied as one undoable edit only if the deck is still at expectedRevision.\nGet the revision from read_deck (or the viewer's context). Edit only the parts that change: an operation on the whole deck (path or from \"\") and any operation but test on the whole slides array (path or from /slides) is refused, so edit slides one at a time (/slides/2, /slides/-). Paths are JSON Pointers and may name slides and blocks by id (/slides/@intro/title). Up to 100 operations, all or none. If the deck changed since that revision, nothing is applied and the result says to read it again; while the user is typing in the viewer nothing is applied either (try again after their next message). An edit that would make the deck invalid (format or references) is refused with the findings. In the source pane, JSON keeps its formatting; YAML and Markdown text is written again from the deck, so YAML comments are dropped (the pane says so). The result has the new revision, what changed and the viewer's check findings; the viewer selects the last affected slide and reports it in selected. A separate select_slide is unnecessary to show that edit.",
 		inputSchema: z.object({
 			expectedRevision: z.string().describe("The revision read_deck returned (sha256:...)."),
 			operations: z.array(operationSchema).describe("1 to 100 JSON Patch operations (RFC 6902), applied in order, all or none."),
@@ -605,9 +625,11 @@ app.registerTool(
 		if (expectedRevision !== before) return stale();
 		byTool = true;
 		let changed: { op: string; path: string }[];
+		let lastSlideEdit;
 		try {
 			// The deck in the viewer is always valid (format and references): an invalid deck does not open, and invalid source text stays a
 			// draft the session never takes. An edit keeps it so.
+			lastSlideEdit = resolveIdPatch(ed.getDocument(), operations).reverse().find(op => op.op !== "test" && /^\/slides\/\d+(?:\/|$)/.test(op.path));
 			const change = ed.session.applyPatch(operations as never, { source: "edit_deck", rejectInvalid: true }, { expectHash: expectedRevision });
 			changed = change.patches.filter((operation) => operation.op !== "test").map((operation) => ({ op: operation.op, path: operation.path }));
 		} catch (error) {
@@ -619,12 +641,24 @@ app.registerTool(
 		} finally {
 			byTool = false;
 		}
+		if (changed.length) {
+			let message = "Updated deck";
+			const slides = (ed.getDocument() as { slides: unknown[] }).slides;
+			if (lastSlideEdit && slides.length) {
+				const index = Math.min(Number(lastSlideEdit.path.split("/")[2]), slides.length - 1);
+				const whole = /^\/slides\/\d+$/.test(lastSlideEdit.path);
+				const added = whole && (lastSlideEdit.op === "add" || lastSlideEdit.op === "copy");
+				if (ed.setSlide(index)) message = `${added ? "Added" : "Updated"} slide ${index + 1}`;
+				if (whole && lastSlideEdit.op === "remove") message = "Removed slide";
+			}
+			status(message);
+			editUndo.hidden = false;
+		}
 		// An icon the edit added is read before the checks, so they say whether it exists.
 		await checkWithIcons(ed.getDocument());
 		const revision = ed.session.documentHash();
-		if (changed.length) ed.status(`${sentence(assistant())} changed the deck (${changed.length} ${changed.length === 1 ? "change" : "changes"}). Undo takes it back.`);
-		const slides = (ed.getDocument() as { slides?: unknown[] }).slides;
-		return answer(changed.length ? `Applied ${changed.length} ${changed.length === 1 ? "change" : "changes"} as one undoable edit; the deck is now at revision ${revision}.` : "Every test operation passed; nothing changed.", { ok: true, revision, previousRevision: before, changed, slideCount: Array.isArray(slides) ? slides.length : 0, checks: currentChecks() });
+		const slides = (ed.getDocument() as { slides: unknown[] }).slides;
+		return answer(changed.length ? `Applied ${changed.length} ${changed.length === 1 ? "change" : "changes"} as one undoable edit; the deck is now at revision ${revision}.` : "Every test operation passed; nothing changed.", { ok: true, revision, previousRevision: before, changed, selected: { index: ed.slideIndex }, slideCount: slides.length, checks: currentChecks() });
 	},
 );
 
@@ -980,17 +1014,20 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	// The editor is given the whole view, so its theme covers the viewer's own bar and footer as well as its parts.
 	editor = createOpfEditor(shell, {
 		// JSON (an object or its text) opens as the document; YAML and Markdown open as source text once the editor is ready.
+		...(args.nameFromOpeningTitle ? { session: createEditorSession(args.document, { nameFromOpeningTitle: true, catalogs, rejectInvalid: true }) } : {}),
 		document: textForm ? { name: "Untitled", slides: [{ title: " " }] } : args.document,
 		fonts,
 		catalogs,
 		fit: "contain",
+		slideActions: "starters",
+		canvas: { titleEnterCommits: true },
 		// The deck as its audience sees it: `{{organization.name}}` in a footer draws as the name, as the renderer and the exports draw
 		// it. (The editor's default draws tokens as written; a press on resolved text then edits the authored value in its form, or the
 		// source.) A template still draws its variables as written.
 		variables: "resolved",
 		theme: hostTheme(),
-		// The footer's verdict is the editor's review pill, worded as the playground words it.
-		labels: { reviewPill: { valid: "Valid OPF" } },
+		// The footer opens Review and shows its issue count when the deck needs attention.
+		labels: { ready: "", reviewPill: { valid: "Review", name: ({ state, text, parts }) => state === "valid" ? "Review deck" : [text, ...parts].join(", ") } },
 		icons: { valid: "M20 6 9 17l-5-5" },
 		source: {
 			onCopy: (file) => copyText(file.text),
@@ -1027,6 +1064,7 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		depth = (event.event as { snapshot?: { undoDepth?: number } } | undefined)?.snapshot?.undoDepth ?? (event.canUndo ? openedAt + 1 : 0);
 		undoButton.disabled = !ready || superseded || depth <= openedAt;
 		redoButton.disabled = !ready || superseded || !event.canRedo;
+		editUndo.hidden = true;
 		if (!ready) return;
 		edited = true;
 		// An edit_deck call is the model's own change: nothing for the person to send.
@@ -1036,12 +1074,12 @@ async function start(args: ShowDeckArguments): Promise<void> {
 			if (editorEntry) leaveStarter();
 		}
 		syncSend();
-		if (!byTool) setSync(app.getHostCapabilities()?.updateModelContext && !silent() ? "pending" : "none");
+		setSync(app.getHostCapabilities()?.updateModelContext && !silent() ? "pending" : "none");
 		showDeck();
 		scheduleChecks(event.document);
 		scheduleContext();
 	});
-	editor.on("slide", () => scheduleContext());
+	editor.on("slide", () => { updateQuestion(); scheduleContext(); });
 	// Where the source pane stands: edit_deck waits for typing the pane has not taken in, rather than commit it for the person.
 	editor.on("source", () => {
 		sourceBaseline = paneText();
@@ -1050,6 +1088,10 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	});
 	// The pill opens the Review panel: the editor has no side panel here, so it asks the host page (this view) to show it.
 	editor.on("review-open", () => setReviewOpen(true));
+	editor.on("status", () => {
+		editUndo.hidden = true;
+		clearTimeout(statusTimer);
+	});
 	await editor.ready;
 	// The source pane calls OPF Markdown "md".
 	if (textForm) editor.setSourceText(args.document as string, { format: format === "markdown" ? "md" : "yaml" });
@@ -1057,6 +1099,7 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	openedAt = depth;
 	mounted = true;
 	phase = "ready";
+	syncSend();
 	sourceBaseline = paneText();
 	shell.dataset.ready = "true";
 	if (superseded) editor.setReadOnly(true);
@@ -1091,7 +1134,34 @@ reviewClose.addEventListener("click", () => setReviewOpen(false));
 reviewDrawer.addEventListener("keydown", (event) => {
 	if (event.key === "Escape") setReviewOpen(false);
 });
-sendButton.addEventListener("click", () => void sendToClaude());
+function closeRequest(): void {
+	requestForm.hidden = true;
+	syncSend();
+	sendButton.focus();
+}
+function updateQuestion(): void {
+	$("deck-question").textContent = `What should change on slide ${(editor?.slideIndex ?? 0) + 1}?`;
+}
+sendButton.addEventListener("click", () => {
+	if (!requestForm.hidden) return closeRequest();
+	updateQuestion();
+	requestForm.hidden = false;
+	syncSend();
+	instruction.focus();
+});
+instruction.addEventListener("input", syncSend);
+submitRequest.addEventListener("click", () => void sendEditRequest());
+instruction.addEventListener("keydown", event => {
+	if (event.key === "Enter" && !event.isComposing && event.keyCode !== 229) {
+		event.preventDefault();
+		submitRequest.click();
+	}
+});
+$("deck-request-close").addEventListener("click", closeRequest);
+requestForm.addEventListener("keydown", event => {
+	if (event.key === "Escape") closeRequest();
+});
+editUndo.addEventListener("click", () => undoButton.click());
 // Straight from the click: the host opens a larger view only right after the person pressed something in this one.
 expandButton.addEventListener("click", () => setDisplayMode(context.displayMode === "fullscreen" ? "inline" : "fullscreen"));
 exampleSelect.addEventListener("change", () => {
@@ -1165,7 +1235,7 @@ app.addEventListener("toolinput", (params) => {
 	else inputWithoutDeck = true;
 });
 app.addEventListener("toolresult", (result) => {
-	const data = result.structuredContent as { viewer?: unknown; document?: unknown; editor?: unknown; example?: unknown; name?: unknown; examples?: unknown; iconSets?: unknown } | undefined;
+	const data = result.structuredContent as { viewer?: unknown; document?: unknown; editor?: unknown; nameFromOpeningTitle?: unknown; example?: unknown; name?: unknown; examples?: unknown; iconSets?: unknown } | undefined;
 	joinSession(data?.viewer);
 	// The icon sets the server reads for the view (RR-111): from now on a set it does not offer fails without a call.
 	if (Array.isArray(data?.iconSets)) offeredIconSets = data.iconSets.filter((set): set is string => typeof set === "string");
@@ -1177,7 +1247,7 @@ app.addEventListener("toolresult", (result) => {
 		editorEntry = data.editor === true;
 		if (editorEntry) openedWith = { example: textOf(data.example), name: textOf(data.name) };
 		if (editorEntry && Array.isArray(data.examples)) examples = (data.examples as ExampleEntry[]).filter((item) => typeof item?.slug === "string");
-		startOrFail({ document: data.document });
+		startOrFail({ document: data.document, nameFromOpeningTitle: editorEntry && data.nameFromOpeningTitle === true });
 	} else if (inputWithoutDeck) fail(`${sentence(assistant())} sent no deck.`);
 	else resultWithoutDeck = true;
 });
