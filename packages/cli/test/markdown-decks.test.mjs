@@ -263,7 +263,7 @@ describe("writing a deck.opf.md", () => {
     assert.equal(run(["convert", "created.opf.md", "-", "--to", "md"]).stdout, deckMd);
     assert.equal(run(["convert", "created.opf.md", "-", "--to", "json"]).stdout.trimStart()[0], "{");
     assert.equal(run(["create", "-", "--title", "Fresh"]).stdout.trimStart()[0], "{", "no deck input: JSON");
-    assert.match(run(["create", "-", "--title", "Fresh", "--to", "md"]).stdout, /^---\n(?:\$schema: .*\n)?name: Fresh\n---\n\n(?:<!-- .* -->\n)?# Fresh\n/);
+    assert.match(run(["create", "-", "--title", "Fresh", "--to", "md"]).stdout, /^---\n(?:\$schema: .*\n)?name: Fresh\nlanguage: en-US\n---\n\n(?:<!-- .* -->\n)?# Fresh\n/);
     assert.equal(run(["create", "fresh.opf.md", "--title", "Fresh"]).status, 0);
     assert.equal(run(["validate", "fresh.opf.md"]).status, 0);
   });
