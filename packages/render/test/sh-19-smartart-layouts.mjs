@@ -30,7 +30,7 @@ for (const [index, slide] of slides.entries()) {
   assert.equal(definition.reason, undefined, `${slide.layout}: ${definition.reason}`);
   const drawn = layoutArrangement(evaluateLayoutDefinition(definition, frame, count));
   const svg = toSvg({slides: [slide]}, 1, {catalogs, trace: true});
-  const group = new RegExp(`<g [^>]*data-opf-arrangement="${slide.layout}"[^>]*>([\\s\\S]*?)</g>`).exec(svg)?.[1];
+  const group = new RegExp(`<g [^>]*data-opf-arrangement="${arrangement.kind}"[^>]*>([\\s\\S]*?)</g>`).exec(svg)?.[1];
   assert.ok(group, `${slide.layout}: the preview draws the arrangement`);
   // Each node's shape: a rect (x, y, width, height) or a path whose bounds are the node's box.
   const shapes = [...group.matchAll(/<(rect|path) [^>]*data-opf-arrangement-path="[^"]*\.items\.(\d)"[^>]*>/g)].map(([tag, kind, entry]) => {

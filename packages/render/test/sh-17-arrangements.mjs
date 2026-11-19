@@ -27,7 +27,8 @@ const arrowFill = applyColorTransform(primary, {lumMod: 60000, lumOff: 40000});
   for (const word of ['Plan', 'Build', 'Test', 'Ship']) assert.match(svg, new RegExp(`<text[^>]*text-anchor="middle"[^>]*>(?:<tspan[^>]*>)?${word}<`), word);
   assert.ok(svg.indexOf('data-opf-arrangement="chevrons"') < svg.indexOf('>Plan<'), 'the chevrons are under the text');
 }
-for (const [slide, kind] of [[2, 'process'], [3, 'vertical-process']]) {
+// The gallery's flow and vertical-flow layouts draw the process and vertical-process arrangements.
+for (const [slide, kind, layout] of [[2, 'process', 'flow'], [3, 'vertical-process', 'vertical-flow']]) {
   const svg = toSvg(deck, slide, {catalogs, trace: true});
   const group = new RegExp(`<g [^>]*data-opf-arrangement="${kind}"[^>]*>([\\s\\S]*?)</g>`).exec(svg)?.[1];
   assert.ok(group, kind);
@@ -41,7 +42,7 @@ for (const [slide, kind] of [[2, 'process'], [3, 'vertical-process']]) {
     assert.equal((/ d="M([^"]+) Z"/.exec(arrow)[1].split(' L')).length, 7, 'a block arrow: seven points');
   }
   // The arrows are core's: the outline drawn is the composed arrow's points.
-  const composed = composeSlide(deck.slides[slide - 1], {layout: gallery.layouts[kind], width: 1280, height: 720});
+  const composed = composeSlide(deck.slides[slide - 1], {layout: gallery.layouts[layout], width: 1280, height: 720});
   assert.equal(composed.arrangements[0].arrows.length, 2);
 }
 console.log('SH-17 arrangements passed: chevrons, a flow and a vertical flow in the primary with background outlines, the arrows in the lightened primary, under centered entries.');
