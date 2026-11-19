@@ -146,3 +146,48 @@ export function substitutionRows(handle: FontsHandle) {
 	}
 	return [...rows.values()].sort((a, b) => (a.requested + a.resolved < b.requested + b.resolved ? -1 : 1));
 }
+
+const SUBSTITUTE_KIND: Record<string, string> = {
+	metric: "a metric-compatible substitute, so lines break as they would with the requested font",
+	visual: "a visual substitute, so lines can break differently than with the requested font",
+	generic: "the fallback face",
+};
+
+/**
+ * One `fonts/font-substituted` info finding per requested family that was drawn with another face (Aptos with Intos): which face
+ * stood in, how close it is, and why when the font policy says (a proprietary font OPF does not bundle). Not one per slide or weight.
+ */
+export function reportSubstitutions(reporter: Reporter, handle: FontsHandle) {
+	const byFamily = new Map<string, { resolved: Set<string>; compatibility: Set<string>; licenseClass?: string }>();
+	for (const item of handle.substitutions ?? []) {
+		if (!item.substitute || item.requestedFamily === item.resolvedFamily) continue;
+		const entry = byFamily.get(item.requestedFamily) ?? { resolved: new Set<string>(), compatibility: new Set<string>() };
+		entry.resolved.add(item.resolvedFamily);
+		entry.compatibility.add(item.compatibility);
+		if (item.licenseClass) entry.licenseClass = item.licenseClass;
+		byFamily.set(item.requestedFamily, entry);
+	}
+	for (const [requested, entry] of [...byFamily].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) {
+		const resolved = [...entry.resolved].sort();
+		// The weakest tier any weight was drawn with describes the family.
+		const compatibility = ["generic", "visual", "metric"].find((tier) => entry.compatibility.has(tier)) ?? [...entry.compatibility][0] ?? "visual";
+		const reason =
+			entry.licenseClass === "proprietary-standard"
+				? `${requested} is a proprietary font that OPF does not bundle`
+				: entry.licenseClass === "open"
+					? `${requested} is openly licensed, but no font package OPF bundles serves it`
+					: compatibility === "generic"
+						? `no bundled face or declared replacement serves ${requested}`
+						: undefined;
+		const kind = SUBSTITUTE_KIND[compatibility] ?? `a ${compatibility} substitute`;
+		reporter.add("fonts", {
+			code: "font-substituted",
+			path: "",
+			message: `${requested} is drawn with ${resolved.join(" and ")}, ${kind}${reason ? `: ${reason}` : ""}.`,
+			requested,
+			resolved,
+			compatibility,
+			...(entry.licenseClass ? { licenseClass: entry.licenseClass } : {}),
+		});
+	}
+}

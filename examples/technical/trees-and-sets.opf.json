@@ -1,7 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Trees and overlapping sets",
-  "description": "Three shared-geometry diagram layouts: reporting lines, a hierarchy, and overlapping sets. All examples are illustrative.",
+  "description": "Three shared-geometry diagram layouts: reporting lines (with an assistant), a hierarchy, and overlapping sets (with a named overlap). All examples are illustrative.",
   "design": {
     "background": "light1",
     "footer": {
@@ -81,6 +81,54 @@
         }
       ],
       "id": "layout-venn"
+    },
+    {
+      "layout": "org-chart",
+      "title": "Give the pilot lead a chief of staff",
+      "blocks": [
+        {
+          "region": "body",
+          "items": [
+            {
+              "text": "Pilot lead",
+              "level": 0
+            },
+            {
+              "text": "Chief of staff",
+              "level": 1,
+              "assistant": true
+            },
+            {
+              "text": "Delivery",
+              "level": 1
+            },
+            {
+              "text": "Evidence",
+              "level": 1
+            }
+          ]
+        }
+      ],
+      "id": "layout-org-chart-assistant"
+    },
+    {
+      "layout": "venn",
+      "title": "Where the pilot earns its keep",
+      "blocks": [
+        {
+          "region": "body",
+          "items": [
+            "Clear scope",
+            "Evidence",
+            "Shared goal",
+            {
+              "text": "Ready to scale",
+              "overlap": true
+            }
+          ]
+        }
+      ],
+      "id": "layout-venn-overlap"
     }
   ],
   "catalogs": {

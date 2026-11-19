@@ -18,7 +18,7 @@ The published Node 24 set is the registry's `latest` of each package (`node scri
 }
 ```
 
-`auto` evaluates candidate grids using text fit and cell proportions. `columns` limits its candidates. `grid` uses `columns` if given, otherwise a grid based on the canvas shape. `row` uses one row; `column` uses one column. Items retain source order. Weights size columns except in column mode, where they size rows. Missing weights are 1; unused weights have no effect. A partially filled final row retains its grid tracks.
+`auto` evaluates candidate grids using text fit and cell proportions. `columns` limits its candidates. `grid` uses `columns` if given, otherwise a grid based on the canvas shape. `row` uses one row; `column` uses one column. The arrangement the root resolves to (the slide's `mode`) also chooses how a lone list with icons draws: `column` keeps its ruled rows with a chip at the start of each row, while `row`, `grid`, `auto` and no direction draw LH-165's icon cards side by side ([Icons](icons.md#icon-cards-lh-165)). Items retain source order. Weights size columns except in column mode, where they size rows. Missing weights are 1; unused weights have no effect. A partially filled final row retains its grid tracks.
 
 Two or three blocks (no group, no caption) at the root of the body form a split. Its fill is the share of the body its blocks draw: the ink of text, lists, quotes, metrics and code (each line's width by its height at its starting size, so rewrapping changes nothing), a table at most its natural width by the height of its rows at that width, a timeline its cell's width by the height it needs, a picture shown whole and a video their frames, and a chart the largest 4:3 box of its cell.
 

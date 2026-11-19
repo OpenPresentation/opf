@@ -1,0 +1,5 @@
+---
+type: fixed
+packages: [opf]
+---
+A wrong object is one schema finding: an object none of whose keys is a field (or a respelling of a field) of any form a `oneOf`/`anyOf` accepts at that place, such as table columns written `{ key, label }` or list items carrying `label`, `value` and `delta`, is reported once at the object's path ("none of the forms accepted here has "key" or "label""), with the accepted forms in short as `validation.alternatives` and, when one content kind declares all of its keys, that kind ("those are fields of "metric"", `validation.params.belongsTo`). The same mistake in several entries of one array is one finding at the first entry that names the others (`validation.params.alsoAt`). Four such table columns gave 24 findings and now give 1; three such list items gave 11 and now give 1. When an object fits one form except for a property, the form that declares the most of its keys is chosen and the finding still names that property. A "did you mean" for an unknown property now also needs a plausible respelling (the `relatedName` rule unknown catalog ids use), so `label` no longer suggests `level`.

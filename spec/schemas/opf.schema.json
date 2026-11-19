@@ -4251,6 +4251,14 @@
               "minimum": 0,
               "description": "Zero-based nesting level for the list item."
             },
+            "assistant": {
+              "type": "boolean",
+              "description": "org-chart only: the entry is its manager's assistant, written among the reports and drawn beside the line below the manager. See docs/smartart.md."
+            },
+            "overlap": {
+              "type": "boolean",
+              "description": "venn only, on the last entry: it labels where all the sets overlap and is not a set. See docs/smartart.md."
+            },
             "icon": {
               "$ref": "#/$defs/IconReference",
               "description": "An icon drawn on a chip at the start of the entry, in place of its bullet: \"<set>:<name>\" (\"lucide:truck\"), a name from the deck's icons, or an SVG source. Drawn on first-level entries of an unnumbered list. Decoration only: when the slide has no room for the chips without setting text smaller, they are not drawn (finding opf/icon-dropped). See docs/icons.md."

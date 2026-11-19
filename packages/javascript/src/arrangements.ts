@@ -103,6 +103,8 @@ export interface ArrangementNode {
   beside?: true;
   /** SH-17: the shape is mirrored (a chevron pointing left, in a right-to-left deck). */
   flip?: true;
+  /** A Venn's overlap label (`overlap: true`): an opaque pill (a `roundRect` of full radius) in the slide's background color with the primary outline, over the circles. */
+  overlap?: true;
   /** The downward pyramid mirrors only its trapezoid, never its text. */
   flipV?: true;
 }

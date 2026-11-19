@@ -91,10 +91,11 @@ test('LH-112: a metric beside another block is start-aligned at display size; a 
   assert.equal(lone.metricLayout.alignment, 'center');
   assert.ok(part(lone.metricLayout, 'value').fit.fontSize > 152, String(part(lone.metricLayout, 'value').fit.fontSize));
   const grid = composeSlide({ title: 'Grid', blocks: [{ metric: { value: '42%', label: 'A' } }, { metric: { value: '11', label: 'B' } }, { metric: { value: '91%', label: 'C' } }] });
-  for (const item of grid.items.filter(entry => entry.metricLayout)) {
-    assert.equal(item.metricLayout.alignment, 'center');
-    assert.equal(part(item.metricLayout, 'value').requestedFontSize, 76);
-  }
+  // A grid of metrics is no display metric (LH-112); under half full it grows as a body by LH-48's steps (at most three: 76 to 115 px).
+  const sizes = grid.items.filter(entry => entry.metricLayout).map(item => part(item.metricLayout, 'value').requestedFontSize);
+  for (const item of grid.items.filter(entry => entry.metricLayout)) assert.equal(item.metricLayout.alignment, 'center');
+  assert.equal(new Set(sizes).size, 1);
+  assert.ok(sizes[0] >= 76 && sizes[0] <= 76 * (28 / 16) ** .75 + 1, String(sizes[0]));
 });
 
 test('LH-112: right to left, a metric beside another block starts at the right', () => {

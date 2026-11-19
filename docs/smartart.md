@@ -78,15 +78,35 @@ A tree is one list of up to eight short entries in preorder. The first entry has
 ] }
 ```
 
+An org chart's assistant (a chief of staff, an executive assistant) is an entry with `"assistant": true`, written among its manager's reports at their level. As in PowerPoint's organization chart, it hangs off the line below its manager, one row down and to the right of that line, joined to it by a short elbow; the reports start a row lower, so an assistant costs the height of one more level. A manager may have several assistants, one a row. An assistant has no reports of its own, the root is never one, and it counts toward the eight nodes. `hierarchy` has no assistant position: a hierarchy, or any other arrangement, with an assistant keeps the complete list with `opf/arrangement-adapted`.
+
+```json
+{ "layout": "org-chart", "title": "Give the pilot lead a chief of staff", "items": [
+  { "text": "Pilot lead", "level": 0 },
+  { "text": "Chief of staff", "level": 1, "assistant": true },
+  { "text": "Delivery", "level": 1 },
+  { "text": "Evidence", "level": 1 }
+] }
+```
+
 Use `venn` with one flat list of one to seven set labels. One to four circles hold their labels inside. Five to seven sets use enlarged editable circles with outside labels fitted from the actual font measurements. This OPF adaptation preserves circle overlaps and set order while filling more of the body at the previous type size or larger. Basic Venn native measurements remain a separate, unqualified live reference. When the overlap cannot keep every label readable, the complete set labels use opaque cards or a list with `opf/arrangement-adapted`. Venn fallback lists try a bounded whole-word reading measure of70characters at the retained type size. If the complete list cannot fit that measure in the body, `opf/text-overflow` reports the refusal; strict composition rejects it. Explicit pagination or shorter labels resolves that limit. Entry order identifies the sets; the diagram implies no numeric overlap values.
 
 ```json
 { "layout": "venn", "title": "Three conditions for a useful pilot", "items": ["Clear scope", "Evidence", "Shared goal"] }
 ```
 
-The arrangement keeps the previous fitted list size or grows. A malformed tree, unsupported forest, nested Venn, descriptions, icons, numbering, too many entries or labels that do not fit keeps the complete list with `opf/arrangement-adapted`; no entry is dropped or silently reparented. Use a diagram for assistants or relationships outside the single-root model. These three layouts currently export as editable native shapes; live SmartArt remains outside their qualified domain. Import recognizes native Organization Chart (orgChart1), Hierarchy (hierarchy1) and Basic Venn (venn1), preserving tree depths. Native assistants, forests or labeled edges use the reported Mermaid hierarchy adaptation instead. A drawing with additional labels beyond the data entries keeps its overlay drawing and reports the adaptation, preserving that extra text.
+To name where all the sets meet, which is usually the point of the slide, add one last entry with `"overlap": true`. It labels the common overlap of two to seven sets and is not a set itself: it is drawn on an opaque pill in the slide's background color with the primary outline, over the circles, at the size of the set labels. The pill sits on the center of the common overlap; where a set label is in the way, it moves up or down the shortest distance that clears every set label while it still reaches into the overlap, and its text wraps onto more lines if that is what keeps it clear. When no position holds it at the list's size or larger, the complete list is kept with `opf/arrangement-adapted`; a Venn of five to seven sets with an overlap label never falls back to cards, since a card holds a set, not their overlap. More than one overlap label, one that is not last, one with fewer than two sets, or one in another arrangement keeps the complete list with `opf/arrangement-adapted` too.
 
-[The trees and sets example](../examples/technical/trees-and-sets.opf.json) contains the three layouts.
+```json
+{ "layout": "venn", "title": "Where the pilot earns its keep", "items": [
+  "Clear scope", "Evidence", "Shared goal",
+  { "text": "Ready to scale", "overlap": true }
+] }
+```
+
+The arrangement keeps the previous fitted list size or grows. A malformed tree, unsupported forest, nested Venn, descriptions, icons, numbering, too many entries or labels that do not fit keeps the complete list with `opf/arrangement-adapted`; no entry is dropped or silently reparented. Use a diagram for relationships outside the single-root model. These three layouts currently export as editable native shapes; live SmartArt remains outside their qualified domain. An assistant is a rectangle like the other nodes and its elbow two line segments; the overlap label is a rounded rectangle (`roundRect`, fully rounded) with its text in a text box over it. Each node's tag records `assistant` or `overlap`, so `fromPptx` puts the field back on its entry. Import recognizes native Organization Chart (orgChart1), Hierarchy (hierarchy1) and Basic Venn (venn1), preserving tree depths. Native assistants, forests or labeled edges use the reported Mermaid hierarchy adaptation instead. A drawing with additional labels beyond the data entries keeps its overlay drawing and reports the adaptation, preserving that extra text.
+
+[The trees and sets example](../examples/technical/trees-and-sets.opf.json) contains the three layouts, an org chart with an assistant and a Venn with an overlap label.
 
 ## Chevrons and flows
 

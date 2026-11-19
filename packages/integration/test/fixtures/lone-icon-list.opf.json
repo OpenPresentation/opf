@@ -1,0 +1,46 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "PantryPilot Seed Pitch",
+  "language": "en-US",
+  "organization": {
+    "id": "pantrypilot",
+    "name": "PantryPilot"
+  },
+  "design": {
+    "dimensions": "16:9",
+    "footer": {
+      "end": {
+        "text": "{{slide.number}} / {{deck.slideCount}}"
+      },
+      "start": {
+        "text": "{{organization.name}}"
+      }
+    },
+    "theme": "minimal"
+  },
+  "slides": [
+    {
+      "id": "problem",
+      "items": [
+        {
+          "description": "Households spend 4+ hours a week deciding what to cook and shopping for it.",
+          "icon": "lucide:calendar",
+          "text": "Decision fatigue"
+        },
+        {
+          "description": "The average family of four throws away roughly $1,500 of groceries a year.",
+          "icon": "lucide:trash",
+          "text": "Wasted food"
+        },
+        {
+          "description": "People rebuy what is already in the back of the fridge because they can't see it.",
+          "icon": "lucide:shopping-cart",
+          "text": "Redundant shopping"
+        }
+      ],
+      "notes": "Figures are illustrative for this fictional deck.",
+      "section": "Why now",
+      "title": "The 5 p.m. Problem Costs Families Money and Sanity"
+    }
+  ]
+}

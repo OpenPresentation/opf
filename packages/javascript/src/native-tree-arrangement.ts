@@ -14,24 +14,30 @@ export function nativeTreeGeometry(kind:NativeTreeKind,frame:Box,entries:readonl
  if(kind!=='org-chart'&&kind!=='hierarchy')return{ok:false,reason:'Unsupported native tree kind.'};
  if(![frame.x,frame.y,frame.width,frame.height].every(Number.isFinite)||frame.width<=0||frame.height<=0)return{ok:false,reason:'A native tree frame needs finite coordinates and positive dimensions.'};
  const tree=arrangementTree(entries);if(!tree.ok)return tree;
+ const assistant=(index:number)=>tree.nodes[index]?.assistant===true;
+ if(kind==='hierarchy'){const at=tree.nodes.findIndex(node=>node.assistant);if(at>=0)return{ok:false,index:at,reason:'A hierarchy has no assistants.'};}
  const org=kind==='org-chart',span=org?2:10/9,gap=org?.42:1/9,stride=org?1.42:1111/1200,height=org?1:127/200,frontX=org?0:1/9,frontY=org?0:19/180;
  const models:Model[]=[];
  // Source order is preorder, so every child's model exists in this bounded reverse walk. No recursive JS stack or source edits.
  for(let index=tree.nodes.length-1;index>=0;index--){
   const semantic=tree.nodes[index];if(!semantic)return{ok:false,index,reason:'A native tree node is missing.'};
   if(!semantic.children.length){models[index]={root:0,nodes:[{index,x:0,row:0}]};continue;}
-  if(org&&index!==0&&semantic.children.every(child=>tree.nodes[child]?.children.length===0)){
-   models[index]={root:0,nodes:[{index,x:0,row:0},...semantic.children.map((child,row)=>({index:child,x:.5,row:row+1}))]};continue;
+  // An org chart's assistants hang off the line below their manager, one a row, to its right, above the reports, which start a row lower each.
+  const assistants=semantic.children.filter(assistant),reports=semantic.children.filter(child=>!assistant(child)),below=assistants.length;
+  const aside=(x:number):Position[]=>assistants.map((child,row)=>({index:child,x:x+span/2+gap,row:row+1}));
+  if(org&&index!==0&&reports.length&&reports.every(child=>tree.nodes[child]?.children.length===0)){
+   models[index]={root:0,nodes:[{index,x:0,row:0},...aside(0),...reports.map((child,row)=>({index:child,x:.5,row:row+1+below}))]};continue;
   }
+  if(!reports.length){models[index]={root:0,nodes:[{index,x:0,row:0},...aside(0)]};continue;}
   const positions:Position[]=[],contour=new Map<number,number>(),roots:number[]=[];
-  for(const child of semantic.children){
+  for(const child of reports){
    const own=models[child];if(!own)return{ok:false,index:child,reason:'A child has no native tree geometry.'};
    let shift=0;for(const node of own.nodes){const right=contour.get(node.row);if(right!==undefined)shift=Math.max(shift,right+gap-node.x);}
    roots.push(own.root+shift);
-   for(const node of own.nodes){const x=node.x+shift;positions.push({...node,x,row:node.row+1});contour.set(node.row,Math.max(contour.get(node.row)??-Infinity,x+span));}
+   for(const node of own.nodes){const x=node.x+shift;positions.push({...node,x,row:node.row+1+below});contour.set(node.row,Math.max(contour.get(node.row)??-Infinity,x+span));}
   }
   const first=roots[0],last=roots.at(-1);if(first===undefined||last===undefined)return{ok:false,index,reason:'A parent has no placed child.'};
-  const x=(first+last)/2;positions.unshift({index,x,row:0});const min=Math.min(...positions.map(node=>node.x));models[index]={root:x-min,nodes:positions.map(node=>({...node,x:node.x-min}))};
+  const x=(first+last)/2;positions.unshift({index,x,row:0},...aside(x));const min=Math.min(...positions.map(node=>node.x));models[index]={root:x-min,nodes:positions.map(node=>({...node,x:node.x-min}))};
  }
  const root=models[0];if(!root)return{ok:false,reason:'A native tree needs its root geometry.'};
  const width=Math.max(...root.nodes.map(node=>node.x+span)),tall=Math.max(...root.nodes.map(node=>node.row*stride+height+frontY));
@@ -53,13 +59,21 @@ export function nativeTreeGeometry(kind:NativeTreeKind,frame:Box,entries:readonl
   if(child.parent===undefined)continue;
   const parent=nodes[child.parent],semantic=tree.nodes[child.parent];if(!parent||!semantic)return{ok:false,index:child.index,reason:'A connector lost its semantic parent.'};
   const p=parent.background??parent.box,c=child.background??child.box;
-  const hanging=org&&parent.index!==0&&semantic.children.every(index=>tree.nodes[index]?.children.length===0);
+  const reports=semantic.children.filter(index=>!assistant(index));
+  if(assistant(child.index)){
+   // The assistant's elbow: down the manager's center line to the assistant's middle, then across to its near side.
+   const from:[number,number]=[p.x+p.width/2,p.y+p.height],to:[number,number]=[c.x,c.y+c.height/2],points:readonly [number,number][]=[from,[from[0],to[1]],to];
+   connectors.push({parent:parent.index,child:child.index,box:{x:from[0],y:from[1],width:to[0]-from[0],height:to[1]-from[1]},points});continue;
+  }
+  const hanging=org&&parent.index!==0&&reports.length>0&&reports.every(index=>tree.nodes[index]?.children.length===0);
   const from:[number,number]=hanging?[p.x+.2*low,p.y+p.height]:[p.x+p.width/2,p.y+p.height];
   const to:[number,number]=hanging?[c.x,c.y+c.height/2]:[c.x+c.width/2,c.y];
   const width=Math.abs(to[0]-from[0]),straight=width<1e-6;
   // PowerPoint gives a vertical zero-width connector a fixed0.1in bounding box (7.2pt), independent of frame scale.
   const box={x:straight?from[0]-4.8:Math.min(from[0],to[0]),y:from[1],width:straight?9.6:width,height:to[1]-from[1]};
-  const middle=(parent.box.y+parent.box.height+to[1])/2;
+  // The reports' bar sits halfway between the lowest assistant (or the manager) and the reports.
+  const above=Math.max(parent.box.y+parent.box.height,...semantic.children.filter(assistant).map(index=>{const node=nodes[index]!;return node.box.y+node.box.height;}));
+  const middle=(above+to[1])/2;
   const points:readonly [number,number][]=hanging?[from,[from[0],to[1]],to]:[from,[from[0],middle],[to[0],middle],to];
   connectors.push({parent:parent.index,child:child.index,box,points});
  }
