@@ -42,6 +42,11 @@ checked and PowerPoint renumbers the slides when they move, as in a deck built i
 inside its ordinary shape. `{{deck.slideCount}}` is fixed text in every mode, because PowerPoint has no slide-count field: after
 slides are added or deleted in PowerPoint "of 12" is stale until the deck is exported again. No finding reports it (decision 23).
 
+**Observed in PowerPoint** (16.0 build 20527 on Windows, 2026-11-19; the file opened read-only by automation, no dialog used): a
+three-slide deck whose footer ends with `{{slide.number}} / {{deck.slideCount}}` shows `1 / 3`, `2 / 3` and `3 / 3`. The text of
+each slide's Slide Number placeholder reads the same, and the exported picture of slide 2 draws `2 / 3` at the footer's end: the
+fixed runs are drawn with the field, not dropped. Not observed in that run: renumbering after a slide is moved.
+
 **Keynote targets:** `toPptx(deck, {slideNumberFields: 'static'})` (`opf convert --slide-numbers static`) writes the number as fixed
 text: one run in an ordinary tagged shape (`2 / 6`), no field and no Slide Number placeholder (`p:hf sldNum="0"` unless another part
 is a bare number). That is correct in PowerPoint and Keynote at export time; RR-91 made it the default from 0.22.0 until RR-102.

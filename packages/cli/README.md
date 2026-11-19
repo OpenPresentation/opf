@@ -79,7 +79,7 @@ exits with 2.
 
 ```sh
 opf create decision.opf.json --title "Launch decision"
-opf create brief.opf.md --example compliance-readiness-review      # opf catalog examples lists them
+opf create brief.opf.md --example contract-cycle-time-brief        # opf catalog examples lists them
 opf create - --title "Launch decision" | opf validate -
 opf validate decision.opf.json
 ```
@@ -232,8 +232,14 @@ project, or npx):
 
 ```sh
 opf doctor --format text
-opf doctor deck.opf.md          # with a deck: a PDF needs sharp only when it has pictures
+opf doctor deck.opf.md          # with a deck: the font packages its faces use, its script fonts, sharp when it has pictures
 ```
+
+Font packages are per deck (opf-render loads only the faces a deck's fonts use), so with a deck doctor answers whether that deck
+can be drawn and lists the font packages it does not use apart. Doctor exits 0 whenever its arguments are right: it reports, and
+`ok` is the verdict. `opf validate` reports a font package the deck needs that is not installed as a
+`fonts/font-package-not-installed` warning with the install line, and a face drawn with another face (Aptos with Intos) is one
+`fonts/font-substituted` info finding per family in `opf convert`.
 
 A conversion that misses a peer exits 2 with `code: "peer-not-installed"` and that one command in `install`. Output is
 deterministic: no network, no system fonts, no clock (`--date` supplies the date for `date: true` fields). Fonts are the renderer's

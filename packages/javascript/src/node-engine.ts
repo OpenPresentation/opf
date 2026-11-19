@@ -9,7 +9,7 @@ export { OPFApiError, OPFExportError, OPFImportError, asApiError } from "./api-e
 export { EXPORT_FORMATS, type ExportContext, type ExportContinuedSlide, type ExportFile, type ExportFontSummary, type ExportFormat, type ExportOptions, type ExportRun, type ExportText, type ResolvedExportOptions, EXPORT_TEXT, VERSIONS, checkDate, checkRenamedOptions, checkScale, resolveExportOptions, runExport } from "./node/export.js";
 export { type PlannedFile, checkDestinations, checkOutputPattern, deckStem, padNumber, pointerOf, publishNew, stemOf, writeFiles } from "./node/files.js";
 export { type SlideSelection, parseSlideSelection } from "./slide-selection.js";
-export { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts } from "./node/fonts.js";
+export { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts, reportSubstitutions } from "./node/fonts.js";
 export { type ExportResult, type ImportOptions, type ImportResult, type PreparedExport, checkOptions, importPresentation, prepareExport, runPreparedExport } from "./node/pipeline.js";
 export { PEER_RANGES, PPTX_PACKAGE, RENDER_PACKAGE, type Diagnostic, type FontsHandle, type Peer, type PptxModule, type Renderer, loadPptx, loadRenderer, missingPeerFrom } from "./node/peers.js";
 export { type ImportRun, runImport } from "./node/pptx-import.js";
@@ -17,6 +17,6 @@ export { type ReportFinding, Reporter, type Source, finishReport, reaches, repor
 export { type AssetProblem, iconSourceReader, localAssetProblems } from "./node/assets.js";
 export { assetRoot } from "./node/export.js";
 export { createZip } from "./node/zip.js";
-export { type MeasuringFonts, type MeasuringFontsOptions, type PaginateDeckOptions, type PaginatedDeck, measuringFonts, paginateDeck } from "./node/paginate.js";
+export { type MeasuringFonts, type MeasuringFontsOptions, type PaginateDeckOptions, type PaginatedDeck, measuringFonts, missingFontPackages, paginateDeck } from "./node/paginate.js";
 export { RENDER_EXTRAS, locatePackage } from "./node/peers.js";
 export { defaultCatalogs } from "./node/catalogs.js";

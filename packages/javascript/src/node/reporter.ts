@@ -56,6 +56,7 @@ const HELP: Record<string, string> = {
 	"chart-data-adapted": "The chart data was reshaped to export a native chart; see the message.",
 	"chart-data-unplottable": "Provide inline chart data with at least one numeric column.",
 	"content-placeholder": "This content has no PowerPoint form; a placeholder frame stands in for it.",
+	"font-substituted": "To draw the requested font itself, pass its font files with --fonts (fonts in the API). A PPTX keeps the requested font name, and PowerPoint uses that font where it is installed.",
 	"unsupported-image-treatment": "Remove or change the image treatment at this path.",
 	"date-needs-value": "Pass --date YYYY-MM-DD. The CLI never reads a clock, so output stays reproducible.",
 	"font-unavailable": "Pass --fonts with the font files, or choose a font the bundled pack covers (opf catalog fontSchemes).",
