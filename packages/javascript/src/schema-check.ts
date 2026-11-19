@@ -17,7 +17,7 @@ import {tableGrid} from "./table.js";
 import { numberingFindings } from "./numbering.js";
 import { schemaEngine } from "#schema-engine";
 import { schemas, type SchemaName } from "./schemas.js";
-import { bestMatchErrors, type UnionError } from "./union-errors.js";
+import { bestMatchErrors, collapseRepeats, type UnionError } from "./union-errors.js";
 import { rememberValidationDefinition } from './validation-definitions.js';
 import type { ValidationIssue } from "./generated/types/finding.js";
 import { VARIABLE_KINDS, hasContentVariables, instantiateForValidation, isTemplate, type VariableValues } from "./variables.js";
@@ -1137,7 +1137,7 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
   const valid = resolved.validate(subject) === true;
   const ajvErrors = valid ? [] : typedVariableErrors(resolved.validate.errors ?? [], subject);
   const specific = resolved.schemaName === "presentation" ? dataUnionErrors(ajvErrors, subject) : ajvErrors;
-  const mapped = bestMatchErrors(schemaEngine(), schemas[resolved.schemaName].$id as string, specific).map(toIssue);
+  const mapped = collapseRepeats(bestMatchErrors(schemaEngine(), schemas[resolved.schemaName].$id as string, specific)).map(toIssue);
   const errors = mapped;
   // OPF 0.19: the template rules a schema cannot express (opf/layout-template, opf/layout-region), on a record the schema accepts.
   if (resolved.schemaName === "layout" && valid) for (const issue of layoutTemplateIssues(subject)) errors.push(semanticIssue(issue.path, issue.message, { code: issue.code }));
