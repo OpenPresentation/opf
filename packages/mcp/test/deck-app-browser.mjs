@@ -876,6 +876,28 @@ try {
 		}
 	});
 
+	// A deck Claude made from the published first prompt had `{{organization.name}}` in its footer, and the viewer printed the token as
+	// written (the renderer and the exports resolve it). The preview and the thumbnails draw built-in variables resolved.
+	await run("the preview and the thumbnails draw built-in variables resolved, not as written", async () => {
+		await open({
+			document: {
+				name: "PantryPilot Seed Pitch",
+				language: "en-US",
+				organization: { id: "pantrypilot", name: "PantryPilot" },
+				design: { footer: { start: { text: "{{organization.name}}" }, end: { text: "{{slide.number}} / {{deck.slideCount}}" } } },
+				slides: [{ id: "cover", title: "Dinner, planned from what you already have" }, { id: "ask", title: "Raising $3M" }],
+			},
+		});
+		await view().locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+		const canvas = await view().locator("#deck-canvas").evaluate((node) => node.textContent);
+		assert.match(canvas, /PantryPilot/, "the footer says the organization's name");
+		assert.match(canvas, /1 \/ 2/, "the slide tokens still resolve");
+		assert.doesNotMatch(canvas, /\{\{/, "no token is drawn as written in the preview");
+		await view().locator("#deck-thumbs svg").first().waitFor({ state: "attached", timeout: 60000 });
+		const thumbs = await view().locator("#deck-thumbs").evaluate((node) => node.textContent);
+		assert.doesNotMatch(thumbs, /\{\{/, "no token is drawn as written in the thumbnails");
+	});
+
 	await run("runs without a CSP violation or a page error", async () => {
 		assert.deepEqual(problems, []);
 	});

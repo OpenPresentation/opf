@@ -8,6 +8,7 @@ import {
 	checkCatalogsOption,
 	parseReference,
 	pointerPath,
+	relatedName,
 	resolveReference,
 	removedLayoutAuto,
 	unresolvedReference,
@@ -922,15 +923,29 @@ export function undeclaredCatalogFindings(document: unknown): Finding[] {
 
 const KIND_PLURAL: Record<CatalogKind, string> = { layouts: 'layouts', themes: 'themes', colorSchemes: 'color schemes', fontSchemes: 'font schemes', narratives: 'narratives', audiences: 'audiences', purposes: 'purposes', tones: 'tones' };
 
+const KIND_SINGULAR: Record<CatalogKind, string> = { layouts: 'layout', themes: 'theme', colorSchemes: 'color scheme', fontSchemes: 'font scheme', narratives: 'narrative', audiences: 'audience', purposes: 'purpose', tones: 'tone' };
+
 /**
- * The start of an unresolved reference's help: "Did you mean 'two-column'?" when a record is a near miss (the same edit distance the
- * schema's did-you-mean uses), else the nearest records that do exist. Empty when no catalog is registered, so there is nothing to name.
+ * The records an unresolved reference may have meant: within the edit distance the schema's did-you-mean uses and a plausible respelling
+ * (relatedName), so `two-colum` names `two-column` but `title` does not name `table`.
  */
-function nearestRecords(kind: CatalogKind, reference: string, candidates: string[]): string {
-	if (!candidates.length) return '';
-	const close = candidates.filter((value) => distance(reference, value) <= Math.max(2, Math.floor(reference.length / 4))).slice(0, 3);
+function nearMisses(reference: string, candidates: string[]): string[] {
+	return candidates.filter((value) => distance(reference, value) <= Math.max(2, Math.floor(reference.length / 4)) && relatedName(reference, value));
+}
+
+/**
+ * The start of an unresolved reference's help: "Did you mean 'two-column'?" when a record is a near miss (nearMisses), else that no
+ * record is named like it and where the ids are listed. Empty when no catalog is registered, so there is nothing to name.
+ */
+function nearestRecords(kind: CatalogKind, reference: string, candidates: string[], registered: boolean): string {
+	if (!registered) return '';
+	const close = nearMisses(reference, candidates).slice(0, 3);
 	const quote = (values: string[]) => values.map((value) => `'${value}'`).join(', ');
-	return close.length ? `Did you mean ${quote(close)}? ` : `The nearest ${KIND_PLURAL[kind]} that exist: ${quote(candidates.slice(0, 3))}. `;
+	if (close.length) return `Did you mean ${quote(close)}? `;
+	const listed = `search_catalog (the OPF MCP server), opf catalog ${kind} and pptx.gallery list the ${KIND_PLURAL[kind]} that exist.`;
+	return kind === 'layouts'
+		? `No layout is named like '${reference}'. Without the layout key the slide composes automatically from its content; ${listed} `
+		: `No ${KIND_SINGULAR[kind]} is named like '${reference}'; ${listed} `;
 }
 
 /** The unresolved content references, one finding each, with the nearest records as suggestions. */
@@ -964,18 +979,25 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 			);
 			continue;
 		}
-		const suggestions = catalogRecords(document, site.kind, options)
+		const records = catalogRecords(document, site.kind, options);
+		// Only near misses are suggested (nearMisses): a nearest spelling that names another kind of slide is no help.
+		const near = new Set(nearMisses(site.reference, records.map((entry) => entry.reference)));
+		const suggestions = records
+			.filter((entry) => near.has(entry.reference))
 			.map((entry) => ({ value: entry.reference, label: typeof entry.record.name === 'string' ? entry.record.name : entry.reference, origin: entry.origin === 'host' ? 'registered' : 'document', definition: entry.origin === 'document' ? `document#${pointer(['catalogs', entry.group, site.kind, entry.id])}` : `${entry.source ?? 'context'}#/${site.kind}/${entry.id}` }))
 			.sort((a, b) => distance(site.reference, a.value) - distance(site.reference, b.value) || (a.value < b.value ? -1 : a.value > b.value ? 1 : 0))
 			.slice(0, 5);
+		const suggested = suggestions.length > 0;
 		findings.push(
 			finding('opf/unresolved-reference', {
 				path,
 				message: diagnostic.message,
-				help: `${nearestRecords(site.kind, site.reference, suggestions.map((entry) => entry.value))}${
-					site.kind === 'layouts'
-						? 'Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.'
-						: 'Embed the record (embed(), or opf embed), register the catalog that defines it, or choose one of the suggested records.'
+				help: `${nearestRecords(site.kind, site.reference, suggestions.map((entry) => entry.value), records.length > 0)}${
+					!suggested && records.length
+						? `To keep this id, embed the ${site.kind === 'layouts' ? 'layout ' : ''}record (embed(), or opf embed) or register the catalog that defines it.`
+						: site.kind === 'layouts'
+							? 'Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.'
+							: 'Embed the record (embed(), or opf embed), register the catalog that defines it, or choose one of the suggested records.'
 				}`,
 				definition: `${schemas.presentation.$id}#/$defs/Catalogs`,
 				lookup: ['opf', 'catalog', site.kind],

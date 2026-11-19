@@ -89,7 +89,7 @@ test('reference diagnostics use registered catalogs and name where each suggesti
 		catalogs: { custom: { layouts: { partner: layout('Document label') } } },
 	});
 	const options = freeze({
-			catalogs: [{ source: 'https://example.invalid', layouts: { partner: layout('Loaded label'), loaded: layout('Loaded') } }],
+			catalogs: [{ source: 'https://example.invalid', layouts: { partner: layout('Loaded label'), pratnxx: layout('Pratnxx'), loaded: layout('Loaded') } }],
 		}),
 		before = JSON.stringify({ document, options });
 	const result = checkAll(document, options),
@@ -102,7 +102,9 @@ test('reference diagnostics use registered catalogs and name where each suggesti
 	assert.equal(issue.suggestions[0].label, 'Document label');
 	assert.equal(issue.suggestions[0].origin, 'document');
 	assert.equal(issue.suggestions[0].definition, 'document#/catalogs/custom/layouts/partner');
-	assert.ok(issue.suggestions.some((suggestion) => suggestion.value === 'loaded' && suggestion.origin === 'registered' && suggestion.definition === 'https://example.invalid#/layouts/loaded'));
+	assert.ok(issue.suggestions.some((suggestion) => suggestion.value === 'pratnxx' && suggestion.origin === 'registered' && suggestion.definition === 'https://example.invalid#/layouts/pratnxx'));
+	// Only near misses are suggested: `loaded` is no respelling of `pratner`.
+	assert.ok(!issue.suggestions.some((suggestion) => suggestion.value === 'loaded'));
 	assert.ok(issue.message.includes('https://example.invalid'), issue.message);
 	assert.equal(JSON.stringify({ document, options }), before);
 	assert.deepEqual(checkAll(document, options), result);

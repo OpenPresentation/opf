@@ -606,13 +606,19 @@ const unresolvedReference: RuleText = (finding, _context, helpers) => {
       : `${noun} ${code(reference)} is not embedded or in a registered catalog, so ${FALLBACK(kind)}.`;
   const { close } = nearest(reference, suggestions);
   const remove = kind === "layouts" ? "remove the reference to let OPF pick" : "remove the reference";
+  // Core suggests only near misses (check-document's nearMisses). With none, say where the ids are listed instead of guessing one.
+  const listed = kind ? `${code("search_catalog")} and ${code(`opf catalog ${kind}`)} list the ${KIND_SINGULAR(kind)} ids` : "";
   return {
     message,
     next: close.length
       ? `did you mean ${code(close[0])}?`
       : suggestions.length
         ? `choose one of ${codeList(suggestions, 5, "or")}, embed the record under ${code("catalogs.custom")}, or ${remove}.`
-        : `embed the record under ${code("catalogs.custom")}, register the catalog that defines it, or ${remove}.`,
+        : kind === "layouts"
+          ? `remove ${code("layout")} and the slide composes automatically from its content, or use a layout that exists (${listed}); a record of your own goes under ${code("catalogs.custom")}.`
+          : listed
+            ? `use a ${KIND_SINGULAR(kind)} that exists (${listed}), embed the record under ${code("catalogs.custom")}, or ${remove}.`
+            : `embed the record under ${code("catalogs.custom")}, register the catalog that defines it, or ${remove}.`,
   };
 };
 

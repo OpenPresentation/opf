@@ -984,6 +984,10 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		fonts,
 		catalogs,
 		fit: "contain",
+		// The deck as its audience sees it: `{{organization.name}}` in a footer draws as the name, as the renderer and the exports draw
+		// it. (The editor's default draws tokens as written; a press on resolved text then edits the authored value in its form, or the
+		// source.) A template still draws its variables as written.
+		variables: "resolved",
 		theme: hostTheme(),
 		// The footer's verdict is the editor's review pill, worded as the playground words it.
 		labels: { reviewPill: { valid: "Valid OPF" } },
