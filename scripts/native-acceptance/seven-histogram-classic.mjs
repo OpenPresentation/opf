@@ -38,7 +38,11 @@ export const HISTOGRAM_SELECTION=Object.freeze({slideIndex:2,seriesIndex:1,point
 // 0.35 one arrangement key (owner decision 2026-11-18): layout tags only; only the 6 ppt/tags/opfLayout*.xml parts of agenda, agenda-split, process, flow, vertical-flow and
 // inverted-pyramid differ (their record hash), part-by-part comparison with the export of 6578ab9db.
 // Previous: {bytes:226752,sha256:'c375cf5049a1b2a02842190070578288916e7f54091216f454063e7585ac7bb0'}.
-export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226748,sha256:'eca0713d55f468a1fc1f86a8e614e198c71cac30e2c91e8f567e7de538107cb8'});
+// 0.35 process absorbs flow (owner decision 2026-11-18): layout removed and renamed only; the `flow` slide layout and its ppt/tags/opfLayout*.xml part are removed with the later
+// parts renumbered and the master, content-type and rels entries retargeted, `vertical-flow` is renamed `vertical-process` (cSld name, tag id and reference) and the process tag's
+// record hash moved; part-by-part comparison with the export of 58735de64 after renumbering, no slide, chart, media or theme part differs.
+// Previous: {bytes:226748,sha256:'eca0713d55f468a1fc1f86a8e614e198c71cac30e2c91e8f567e7de538107cb8'}.
+export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:224775,sha256:'c81b9110f1255587ae5207bdaf7635b88b1cec904948e99e4cf66ee5a2b53ab3'});
 export const HISTOGRAM_SOURCE_ARCHIVE_BEFORE_RR105_PICTURE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
 const keys=(value,names)=>assert.deepEqual(Object.keys(value).sort(),[...names].sort());
 const modelHash=value=>digest(Buffer.from(JSON.stringify(value)));
