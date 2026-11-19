@@ -48,7 +48,9 @@ export const HISTOGRAM_SELECTION=Object.freeze({slideIndex:2,seriesIndex:1,point
 // Previous: {bytes:224768,sha256:'73797fb5df62231d66806ee49684d5ec53b9d2107d5862caee3992ee72f05db8'}.
 // 0.35 integration merged with main (owner decision 2026-11-18): layout tags, removals and renames only; only the org-chart ppt/tags/opfLayout*.xml part (its record hash; the record's description) differs from the export of the branch before the merge, 2baa023fe; against the export of main 5ffcef407 every part differs only in the ppt/tags/opfLayout*.xml parts, slide-layout placeholder names from the region names, the removed flow and agenda-split slide layouts and tags (later parts renumbered; master sldLayoutId list and rels, [Content_Types].xml and layout/slide rels retargeted) and vertical-flow renamed vertical-process; no slide, chart, media or theme part differs; part-by-part comparison with the export of 2baa023fe.
 // Previous: {bytes:222791,sha256:'ec4dca43643897703946222dfae32f2e8b689b4ad8fb209551fb28919fceed27'}.
-export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:222792,sha256:'e362f6c0797e45a3ad04cf2fcc51e11f75c3fe11b4ec451337e35df839b79336'});
+// 0.35 list columns by default (owner decision 2026-11-18): layout tags only; only the ppt/tags/opfLayout*.xml parts of agenda, faq and list differ (their record hashes: the records dropped listColumns); no slide layout, slide, chart, media or theme part differs; part-by-part comparison with the export of 175b55711.
+// Previous: {bytes:222792,sha256:'e362f6c0797e45a3ad04cf2fcc51e11f75c3fe11b4ec451337e35df839b79336'}.
+export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:222790,sha256:'664db47e0148f2cacae21b6818a5f3cfaeebb63fb5f9e295e46030f671436341'});
 export const HISTOGRAM_SOURCE_ARCHIVE_BEFORE_RR105_PICTURE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
 const keys=(value,names)=>assert.deepEqual(Object.keys(value).sort(),[...names].sort());
 const modelHash=value=>digest(Buffer.from(JSON.stringify(value)));
