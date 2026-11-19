@@ -470,7 +470,7 @@ try {
 		assert.equal(seen.counter, "rgb(250, 249, 245)", "the editor's own parts take the same text colour");
 		assert.equal(seen.design, "rgb(194, 192, 182)", "and its quiet icon buttons the same muted colour as the viewer's");
 		assert.equal(seen.title, "rgb(194, 192, 182)", "muted text is the host's secondary text");
-		assert.deepEqual(seen.send, ["Ask Claude to edit…", "Ask Claude to edit…"], "660px: Send says the whole sentence");
+		assert.deepEqual(seen.send, ["Ask Claude to edit…", "Ask"], "660px: Ask shares the toolbar with Open and keeps its full accessible name");
 		assert.ok(seen.current[0] >= seen.strip[0] && seen.current[1] <= seen.strip[1] + 1, `the open slide's thumbnail is in the strip's view (${seen.current} in ${seen.strip})`);
 		assert.ok(seen.height < 560, `inline, the view is as tall as its slide needs (${seen.height}px)`);
 		await shoot("chat-dark-preview");
