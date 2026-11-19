@@ -78,7 +78,7 @@ function assetFindings(deck: Record<string, unknown>, directory: string, skip: R
 				scope: "document",
 				path: found.path,
 				message: `Image "${shown}" was not read: ${found.reason}`,
-				help: "Fix the path, add the file, embed the image as a data URI, or pass --asset-dir <directory> that contains it. opf convert stops on it.",
+				help: "Fix the path, add the file, embed the image as a data URI, or pass --asset-dir <directory> that contains it. opf convert draws a placeholder where the image should be and exits 0; with --fail-on warning it stops before writing anything.",
 				...(slide ? { slide: Number(slide[1]) } : {}),
 			} as Finding;
 		});
