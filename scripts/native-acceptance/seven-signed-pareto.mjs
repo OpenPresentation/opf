@@ -32,20 +32,22 @@ import {assertSignedParetoComboData} from './chart-data-contract.mjs';
 // Previous: 928b07663065f457e6e395cb09036b9169a5018e4affbd1667e19d24b978e5bd, 111231 bytes.
 // 0.35 one row-or-column vocabulary (owner decision 2026-11-18): layout tags only; the fixture's `source` review record and `entries` export hashes moved
 // (the 24 ppt/tags/opfLayout*.xml parts of the records that said flow none or design.contentDirection, whose record hash changed), `decks` and `decks['all-seven']` are byte-identical to eed73db34 (JSON.stringify compared). Previous: 32c2fc609ac9aada2645e3a49e054833b9b24f03c449af76b9e80937c9cf9ccb, 115209 bytes.
-export const SIGNED_PARETO_FIXTURE_SHA256='e313155690ef2afcc4607e20961651773e6f2d21cd013a8142ec39bad37ba872';
+// 0.35 titlePosition (owner decision 2026-11-18): layout removed; layout tags only; the fixture's `source` review record and `entries` export hashes moved
+// (the agenda-split slide layout and its ppt/tags/opfLayout*.xml part removed with the later parts renumbered and the master sldLayoutId list, master rels and [Content_Types].xml retargeted; the record hashes of the cycle, matrix and vertical-process tags; no slide layout geometry or placeholder name changed), `decks` and `decks['all-seven']` are byte-identical to 6d60192cb (JSON.stringify compared). Previous: e313155690ef2afcc4607e20961651773e6f2d21cd013a8142ec39bad37ba872, 119187 bytes.
+export const SIGNED_PARETO_FIXTURE_SHA256='75a17041a837b7e48ad2326472afbceae4236c5bd1294f4a84a221b57e3f5588';
 export const SIGNED_PARETO_FULL_SEVEN=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb',producer:'6ea0cfb31dd7712fe6f09cddf98b2cbfb3484df3'});
 const sourceData={columns:['Region','Value'],rows:[['North',42],['South',31],['East',-8],['West',19]]};
 const plotted={columns:['Region','Value','Value — cumulative share'],rows:[['North',42,0.45652173913043476],['South',31,0.7934782608695652],['West',19,1],['East',-8,1]]};
 const frozen=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(frozen);Object.freeze(value);}return value;};
 const token=Object.freeze({kind:'current-full-seven-static-signed-pareto-v1'});
 export function currentSignedParetoContext(source,fixture){
- assert.deepEqual(Object.keys(fixture).sort(),['path','bytes','sha256'].sort());assert.ok(path.isAbsolute(fixture.path));assert.equal(fixture.bytes,119187);assert.equal(fixture.sha256,SIGNED_PARETO_FIXTURE_SHA256);
+ assert.deepEqual(Object.keys(fixture).sort(),['path','bytes','sha256'].sort());assert.ok(path.isAbsolute(fixture.path));assert.equal(fixture.bytes,123165);assert.equal(fixture.sha256,SIGNED_PARETO_FIXTURE_SHA256);
  assert.equal(source.slides.length,7);assert.equal(source.slides[2].chart.type,'pareto');assert.deepEqual(source.slides[2].chart.data,sourceData);
  return frozen({token,fixture:structuredClone(fixture),source:structuredClone(source)});
 }
 export function assertCurrentSignedParetoContext(context,source){
  assert.ok(context&&context.token===token,'Explicit bound current signed-Pareto context required');assert.deepEqual(Object.keys(context).sort(),['token','fixture','source'].sort());
- assert.deepEqual(Object.keys(context.fixture).sort(),['path','bytes','sha256'].sort());assert.ok(path.isAbsolute(context.fixture.path));assert.equal(context.fixture.sha256,SIGNED_PARETO_FIXTURE_SHA256);assert.equal(context.fixture.bytes,119187);assert.equal(context.source.slides.length,7);assert.equal(context.source.slides[2].chart.type,'pareto');assert.deepEqual(context.source.slides[2].chart.data,sourceData);
+ assert.deepEqual(Object.keys(context.fixture).sort(),['path','bytes','sha256'].sort());assert.ok(path.isAbsolute(context.fixture.path));assert.equal(context.fixture.sha256,SIGNED_PARETO_FIXTURE_SHA256);assert.equal(context.fixture.bytes,123165);assert.equal(context.source.slides.length,7);assert.equal(context.source.slides[2].chart.type,'pareto');assert.deepEqual(context.source.slides[2].chart.data,sourceData);
  if(source)assert.deepEqual(source,context.source,'Signed-Pareto context differs from the separately bound entire source deck');return context;
 }
 export function assertCurrentSevenPublicData(document,source,context){
