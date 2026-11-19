@@ -275,6 +275,8 @@ export async function run(args: string[], host: Host): Promise<void> {
 /** A missing or old peer, with the one command that installs what this conversion needs. */
 function explainPeer(error: unknown, target: Target, raster: boolean, raw: string | undefined, sourceFormat: DeckFormat | "pptx"): unknown {
 	if (!(error instanceof OPFApiError) || (error.code !== "peer-not-installed" && error.code !== "peer-too-old")) return error;
+	// Font packages the deck's faces need: the renderer named exactly those and their install line, so the format's whole list is not added.
+	if (Array.isArray(error.details?.packages)) return fromApiError(error);
 	let pictures = false;
 	try {
 		pictures = raw !== undefined && (sourceFormat === "json" ? hasPictures(JSON.parse(raw.replace(/^\uFEFF/, ""))) : /\.(png|jpe?g|gif|webp)\b/i.test(raw));

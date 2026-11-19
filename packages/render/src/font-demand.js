@@ -464,7 +464,7 @@ export async function createNodeDemand(
           optional = selected.filter((pkg) => !required(pkg));
         const batches = await Promise.all([
           loadPackages(mandatory, undefined, {
-            what: 'The presentation selected font faces',
+            what: 'This presentation',
           }),
           loadPackages(optional, missing),
         ]);
