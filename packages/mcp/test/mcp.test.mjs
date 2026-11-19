@@ -496,7 +496,10 @@ describe("the bundled sources", () => {
 		// Reviewed for v0.34.0 on 2026-11-12: 1,351,126 exact bytes over the same public pages (1,310,537 at 4e03508b6). The growth is
 		// reviewed guidance, not maintainer notes: icon loading per host (icons.md), the viewer tools and set icons (mcp.md), the new rules
 		// (validate.md), digits by language (design-resolution.md). The limit keeps the same 3% headroom over the reviewed size.
-		assert.ok(bytes < 1_392_000, `${bytes} bytes of documentation`);
+		// Reviewed for the 0.35 layout simplification on 2026-11-19: 1,393,502 bytes (main alone 1,391,228, the branch alone 1,386,206). The
+		// growth is guidance: the 0.35 layout vocabulary and list columns (layout-templates.md, dynamic-composition.md, design-resolution.md,
+		// icons.md), org-chart assistants and Venn overlaps (smartart.md, diagrams.md), the viewer in other hosts (mcp.md) and the CLI (cli.md).
+		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
 	});
 });
 
