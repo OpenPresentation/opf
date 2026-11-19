@@ -279,17 +279,18 @@ try {
 		assert.equal(await view().locator("#deck-source").isVisible(), false);
 	});
 
-	await run("an edit goes back to the model as the whole deck, and Send to Claude starts a turn", async () => {
+	await run("manual edits reach the model as context and Ask sends the typed request", async () => {
 		const send = view().locator("#deck-send");
-		assert.equal(await send.isDisabled(), true, "nothing to send before an edit");
+		assert.equal(await send.isDisabled(), false, "a request can start from the original deck");
 		assert.equal(await view().locator("#deck-undo").isDisabled(), true);
 		const title = view().locator("#deck-title input");
 		await title.fill("Q3 board update");
 		await title.press("Enter");
 		await page.waitForFunction(() => window.host.context.some((update) => update.structuredContent?.edited), null, { timeout: 15000 });
 		// The footer says where the edits are: with the model, without a click.
-		await view().locator('#deck-sync[data-state="shared"]').waitFor();
-		assert.equal(await view().locator("#deck-sync").innerText(), "The assistant has your edits");
+		await view().locator('#deck-sync[data-state="shared"]').waitFor({ state: "attached" });
+		assert.equal(await view().locator("#deck-sync").textContent(), "The assistant can see this version");
+		assert.equal(await view().locator("#deck-sync").isVisible(), false);
 		const update = (await hostState()).context.findLast((item) => item.structuredContent?.edited);
 		assert.equal(update.structuredContent.document.name, "Q3 board update");
 		assert.match(update.content[0].text, /The user edited the deck in the OPF viewer/);
@@ -297,10 +298,14 @@ try {
 		assert.equal(await send.isVisible(), true);
 		assert.equal(await send.getAttribute("data-unsent"), "true", "Send is the primary action while there are unsent edits");
 		await send.click();
+		assert.equal(await view().getByRole("textbox", { name: /What should change on slide/ }).evaluate(el => el === document.activeElement), true);
+		assert.equal((await hostState()).messages.length, 0);
+		await view().locator("#deck-instruction").fill("Shorten the title");
+		await view().locator("#deck-instruction").press("Enter");
 		await page.waitForFunction(() => window.host.messages.length === 1, null, { timeout: 15000 });
-		assert.match((await hostState()).messages[0].content[0].text, /I edited the deck in the OPF viewer/);
-		await view().locator('#deck-sync[data-state="sent"]').waitFor();
-		assert.equal(await view().locator("#deck-sync").innerText(), "Sent to the assistant", "another host took it: no more is claimed (in Claude it reads \"Sent to Claude for your approval\")");
+		assert.match((await hostState()).messages[0].content[0].text, /In the open deck, on slide \d+: Shorten the title/);
+		await view().locator('#deck-sync[data-state="sent"]').waitFor({ state: "attached" });
+		assert.equal(await view().locator("#deck-status").innerText(), "Sent to the assistant", "another host took it: no more is claimed (in Claude it reads \"Sent to Claude for your approval\")");
 		assert.equal(await send.isDisabled(), false, "Send stays usable, to send again");
 		assert.equal(await send.getAttribute("data-unsent"), "false", "and is no longer the primary action");
 	});
@@ -465,7 +470,7 @@ try {
 		assert.equal(seen.counter, "rgb(250, 249, 245)", "the editor's own parts take the same text colour");
 		assert.equal(seen.design, "rgb(194, 192, 182)", "and its quiet icon buttons the same muted colour as the viewer's");
 		assert.equal(seen.title, "rgb(194, 192, 182)", "muted text is the host's secondary text");
-		assert.deepEqual(seen.send, ["Send to Claude", "Send to Claude"], "660px: Send says the whole sentence");
+		assert.deepEqual(seen.send, ["Ask Claude to edit…", "Ask"], "660px: Ask shares the toolbar with Open and keeps its full accessible name");
 		assert.ok(seen.current[0] >= seen.strip[0] && seen.current[1] <= seen.strip[1] + 1, `the open slide's thumbnail is in the strip's view (${seen.current} in ${seen.strip})`);
 		assert.ok(seen.height < 560, `inline, the view is as tall as its slide needs (${seen.height}px)`);
 		await shoot("chat-dark-preview");
@@ -704,11 +709,15 @@ try {
 		await tab.frameLocator("#view").locator("#deck-more").tap();
 		const fit = await tab.frame({ url: /\/view$/ }).evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth, menu: [...document.querySelectorAll("#deck-menu > :is(button, select)")].filter((item) => item.getClientRects().length).map((item) => item.id || item.textContent) }));
 		assert.ok(fit.scroll <= fit.client, `320px: the page is ${fit.scroll}px wide in ${fit.client}px`);
-		assert.deepEqual(fit.menu, ["Find and replace", "Expand", "deck-example", "deck-paste"], "the editor's example picker and Paste are in More");
+		assert.deepEqual(fit.menu, ["Find and replace", "Expand"]);
+		const open = tab.frameLocator("#view").getByRole("button", { name: "Open", exact: true });
+		await open.tap();
+		assert.ok(await tab.frameLocator("#view").getByRole("button", { name: "Open from device…" }).isVisible());
+		assert.ok(await tab.frameLocator("#view").getByRole("combobox", { name: "Browse examples" }).isVisible());
 		await narrow.close();
 	});
 
-	await run("in ChatGPT on a phone: Send is compact and names ChatGPT, a long name keeps its room, the footer says a status whole (440px: the owner's iPhone, where it was cut)", async () => {
+	await run("in ChatGPT on a phone: Ask is compact and names ChatGPT, a long name keeps its room, the footer says a status whole (440px: the owner's iPhone, where it was cut)", async () => {
 		const long = { name: "AI Agents That Actually Work", language: "en-US", design: { theme: "classic" }, slides: [{ id: "t", title: "AI Agents That Actually Work" }, { id: "g", title: "Autonomy needs guardrails" }] };
 		for (const [width, height] of [[440, 956], [390, 844], [375, 667], [320, 640]]) {
 			const phone = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
@@ -739,20 +748,22 @@ try {
 				const title = document.querySelector(".deck-title");
 				return { name: send.getAttribute("aria-label"), shown: send.innerText.trim(), title: send.title, nameWidth: box(title).width, row: box(document.querySelector(".deck-title-row")).height, right: box(document.getElementById("deck-more")).right, client: document.documentElement.clientWidth, sendHeight: box(send).height };
 			});
-			assert.equal(row.name, "Send to ChatGPT", `${width}px`);
-			assert.equal(row.shown, "Send", `${width}px: a phone shows the icon and "Send"`);
+			assert.equal(row.name, "Ask ChatGPT to edit…", `${width}px`);
+			assert.equal(row.shown, "Ask", `${width}px: a phone shows the icon and "Ask"`);
 			assert.match(row.title, /ChatGPT/);
 			assert.ok(row.nameWidth >= 96, `${width}px: the deck's name keeps ${Math.round(row.nameWidth)}px`);
 			assert.ok(row.row <= 46 && row.sendHeight >= 44, `${width}px: one row (${row.row}px)`);
 			assert.ok(row.right <= row.client, `${width}px: More ends inside the frame`);
 			await inner.locator("#deck-send").tap();
-			await inner.locator('#deck-sync[data-state="sent"]').waitFor();
+			await inner.locator("#deck-instruction").fill("Tighten the wording");
+			await inner.locator("#deck-request-send").tap();
+			await inner.locator('#deck-sync[data-state="sent"]').waitFor({ state: "attached" });
 			const foot = await frame.evaluate(() => {
 				const status = document.getElementById("deck-status");
 				const sync = document.getElementById("deck-sync");
 				return { status: status.innerText, statusCut: status.scrollWidth > status.clientWidth + 1, sync: sync.innerText, syncCut: sync.scrollWidth > sync.clientWidth + 1 };
 			});
-			assert.deepEqual(foot, { status: "Colors set to Burnt Orange.", statusCut: false, sync: "Sent to ChatGPT", syncCut: false }, `${width}px`);
+			assert.deepEqual(foot, { status: "Sent to ChatGPT", statusCut: false, sync: "Sent to ChatGPT", syncCut: false }, `${width}px`);
 			// What the host reported is one tap away (More), and in the footer version's title on wider frames.
 			await inner.locator("#deck-more").tap();
 			assert.match(await inner.locator("#deck-about").innerText(), /^OPF \d+\.\d+\.\d+.* · Host: chatgpt 1\.0\.0 · message: yes · save files: no · full screen: yes · tools: yes · context: yes$/);
@@ -787,7 +798,7 @@ try {
 			for (const [at, a] of boxes.entries()) for (const b of boxes.slice(at + 1)) if (!a.name.includes("title") && !b.name.includes("title") && a.box.left < b.box.right - 1 && b.box.left < a.box.right - 1 && a.box.top < b.box.bottom - 1 && b.box.top < a.box.bottom - 1) overlaps.push(`${a.name}/${b.name}`);
 			const rows = new Set([...document.querySelectorAll(".deck-bar > *, .deck-title-row > *")].filter((item) => visible(item) && item.getBoundingClientRect().height > 0 && !item.classList.contains("deck-title-row")).map((item) => Math.round(item.getBoundingClientRect().top / 8)));
 			const top = (selector) => Math.round(document.querySelector(selector).getBoundingClientRect().top);
-			const thumbs = [...document.querySelectorAll("#deck-thumbs button")].filter(visible).map((item) => Math.round(item.getBoundingClientRect().top));
+			const thumbs = [...document.querySelectorAll("#deck-thumbs .opf-thumbs-item, #deck-thumbs .opf-thumbs-add")].filter(visible).map((item) => Math.round(item.getBoundingClientRect().top));
 			return {
 				size: document.documentElement.dataset.size, client, scroll: document.documentElement.scrollWidth, rows: rows.size, bar: Math.round(document.querySelector(".deck-bar").getBoundingClientRect().height),
 				outside: boxes.filter(({ box }) => box.left < -0.5 || box.right > client + 0.5).map(({ name }) => name), overlaps,

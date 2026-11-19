@@ -89,6 +89,10 @@ export interface ThumbnailStripOptions {
    * leaves current (the copy, the moved or new slide, the neighbour of a deleted one) and `onSelect` reports it.
    */
   actions?: boolean;
+  /** Offer Title, Bullets and Blank in the add menu instead of catalog layouts. */
+  starters?: boolean;
+  /** Runs after the new slide has been selected. */
+  onAdd?: (index: number) => void;
   /**
    * Layout choices for "Add slide with layout", as the slide manager takes them. When given and non-empty, "+" opens a menu of them and adds
    * the chosen layout after the current slide; without it "+" adds a plain slide there at once. Only used with `actions`.
@@ -97,7 +101,7 @@ export interface ThumbnailStripOptions {
   /** True: no "+" button and every menu item disabled, the keys do nothing. Change it with `setReadOnly`. Only used with `actions`. */
   readOnly?: boolean;
   /** A line for a screen reader after each action. Without it the strip speaks through its own polite live region. */
-  onStatus?: (message: string) => void;
+  onStatus?: (message: string, details: { undoable: boolean }) => void;
 }
 export interface ThumbnailStrip {
   readonly element: HTMLElement;

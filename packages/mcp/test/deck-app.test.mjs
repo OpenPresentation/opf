@@ -184,7 +184,7 @@ describe("the deck view", () => {
 		const entry = tools.find((tool) => tool.name === "open_editor");
 		assert.deepEqual(entry._meta, { ui: { resourceUri: DECK_APP_URI }, "ui/resourceUri": DECK_APP_URI, "openai/ui": { entrypoints: [{ type: "global" }] } });
 		assert.equal(entry._meta.ui.visibility, undefined, "visible to the model");
-		assert.equal(entry.title, "OPF deck editor");
+		assert.equal(entry.title, "OpenPresentation");
 		assert.equal(entry.inputSchema.type, "object");
 		assert.equal(entry.inputSchema.required, undefined, "every input is optional");
 		assert.deepEqual(Object.keys(entry.inputSchema.properties).sort(), ["example", "session", "title"]);
@@ -197,6 +197,7 @@ describe("the deck view", () => {
 		const empty = await client.callTool({ name: "open_editor", arguments: {} });
 		assert.equal(empty.isError, undefined);
 		assert.equal(empty.structuredContent.editor, true);
+		assert.equal(empty.structuredContent.nameFromOpeningTitle, true);
 		assert.equal(empty.structuredContent.name, "Untitled deck");
 		assert.equal(empty.structuredContent.example, null);
 		assert.ok(empty.structuredContent.examples.length > 5 && empty.structuredContent.examples.every((item) => typeof item.slug === "string"));
@@ -204,9 +205,11 @@ describe("the deck view", () => {
 		const checked = await client.callTool({ name: "validate_deck", arguments: { document: empty.structuredContent.document, failOn: "warning" } });
 		assert.equal(checked.structuredContent.ok, true, `the starter deck is clean: ${JSON.stringify(checked.structuredContent.findings)}`);
 		const titled = await client.callTool({ name: "open_editor", arguments: { title: "Board update" } });
+		assert.equal(titled.structuredContent.nameFromOpeningTitle, undefined);
 		assert.equal(titled.structuredContent.document.name, "Board update");
 		assert.equal(titled.structuredContent.document.slides[0].title, "Board update");
 		const example = await client.callTool({ name: "open_editor", arguments: { example: "columns" } });
+		assert.equal(example.structuredContent.nameFromOpeningTitle, undefined);
 		assert.equal(example.structuredContent.example, "columns");
 		assert.ok(example.structuredContent.slides > 0);
 		// A title with an example names the example deck, and the result says so.

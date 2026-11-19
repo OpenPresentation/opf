@@ -3,14 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OPF deck</title>
+<title>OpenPresentation</title>
 <style>/*OPF_CSS*/</style>
 </head>
 <body>
 <div id="opf-deck" class="opf-ui" data-show="preview" data-ready="false">
   <header class="deck-bar">
     <div id="deck-title-row" class="deck-title-row"><div id="deck-title" class="deck-title"></div>
-      <button type="button" id="deck-send" class="deck-button deck-send" aria-label="Send to Claude" hidden disabled><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg><span id="deck-send-label" class="deck-send-label">Send to Claude</span><span class="deck-send-short" aria-hidden="true">Send</span></button>
+      <div class="deck-open-wrap" id="deck-open-wrap" hidden>
+        <button type="button" id="deck-open" class="deck-button" aria-expanded="false" aria-controls="deck-open-menu">Open <span aria-hidden="true">▾</span></button>
+        <div id="deck-open-menu" class="deck-open-menu" role="group" aria-label="Open a deck" hidden>
+          <button type="button" id="deck-device" class="deck-button">Open from device…</button>
+          <button type="button" id="deck-paste" class="deck-button">Paste a deck…</button>
+          <select id="deck-example" class="deck-select" aria-label="Browse examples" hidden><option value="">Browse examples…</option></select>
+        </div>
+        <input type="file" id="deck-file" hidden>
+      </div>
+      <button type="button" id="deck-send" class="deck-button deck-send" aria-label="Ask Claude to edit…" hidden disabled><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg><span id="deck-send-label" class="deck-send-label">Ask Claude to edit…</span><span class="deck-send-short" aria-hidden="true">Ask</span></button>
       <button type="button" id="deck-more" class="deck-button deck-icon deck-more" aria-label="More" title="More" aria-expanded="false" aria-controls="deck-menu"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></button>
       <div id="deck-menu" class="deck-menu" role="group" aria-label="More" hidden>
         <button type="button" class="deck-menu-item deck-menu-history" data-run="undo">Undo</button>
@@ -37,12 +46,14 @@
     <div id="deck-export" class="deck-item deck-export" hidden></div>
     <button type="button" id="deck-expand" class="deck-button deck-icon" aria-label="Expand" title="Expand" hidden><svg class="deck-expand-open" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></svg><svg class="deck-expand-close" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" x2="21" y1="10" y2="3"/><line x1="3" x2="10" y1="21" y2="14"/></svg></button>
   </header>
-  <p id="deck-note" class="deck-note" role="status" hidden></p>
-  <div id="deck-start" class="deck-start" role="group" aria-label="Start" hidden>
-    <span id="deck-start-label" class="deck-start-label">A starter deck to edit.</span>
-    <select id="deck-example" class="deck-select" aria-label="Open an example deck" hidden><option value="">Open an example…</option></select>
-    <button type="button" id="deck-paste" class="deck-button deck-small" hidden>Paste a deck</button>
+  <div role="form" id="deck-request" class="deck-request" aria-label="Request an edit" hidden>
+    <label id="deck-question" for="deck-instruction"></label>
+    <input id="deck-instruction" type="text" maxlength="7000" required autocomplete="off">
+    <button class="deck-button" type="button" id="deck-request-send">Send</button>
+    <button class="deck-button" type="button" id="deck-request-close">Cancel</button>
+    <span id="deck-sync" role="status"></span>
   </div>
+  <p id="deck-note" class="deck-note" role="status" hidden></p>
   <div id="deck-root" class="deck-root">
     <div id="deck-find" class="deck-find"></div>
     <div id="deck-panes" class="deck-panes" role="tabpanel">
@@ -55,14 +66,13 @@
     <aside id="deck-review" class="deck-review" aria-label="Review" hidden>
       <div class="deck-review-head"><span class="deck-review-title">Review</span><button type="button" id="deck-review-close" class="deck-button" aria-label="Close the review">Close</button></div>
       <div id="deck-review-panel" class="deck-review-panel"></div>
+      <small id="deck-version"></small>
     </aside>
   </div>
   <footer class="deck-foot">
     <div id="deck-verdict" class="deck-verdict"></div>
     <div id="deck-nav" class="deck-nav"></div>
-        <span id="deck-status" class="deck-status"></span>
-    <span id="deck-sync" class="deck-sync" role="status"></span>
-    <span id="deck-version" class="deck-mono deck-version"></span>
+    <div class="deck-feedback"><span id="deck-status" class="deck-status" role="status"></span><button type="button" id="deck-edit-undo" class="deck-button" hidden>Undo</button></div>
   </footer>
 </div>
 <script type="module">/*OPF_JS*/</script>

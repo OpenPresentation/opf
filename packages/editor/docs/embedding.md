@@ -85,6 +85,8 @@ Slot names: `toolbar` and the toolbar items `title`, `history`, `counter`, `view
 | `theme` | see [theming](theming.md) and, for class hooks, layers and icons, [styling](styling.md) |
 | `onChange`, `onSelection`, `onCursor`, `onError`, `onReady`, `on` | callbacks and listeners |
 
+With `slideActions: "starters"`, the thumbnail strip offers Title, Bullets and Blank and focuses the title on slides that have one. Use `canvas: { titleEnterCommits: true }` for Enter to finish an inline slide title and Shift+Enter to insert a line break. A host that supplies its own status area can set `labels.ready` to an empty string.
+
 ## The handle
 
 `getDocument()` (frozen, replaced on every change, so a store snapshot) · `setDocument(document, { text, format, name, rebase })` (opens a document as one undoable change that forks no catalog record; the source pane shows `text` as written; a document the session refuses becomes a draft in the pane and the call returns `false`) · `setSourceText(text, { format, name, rebase })` (raw text in the source pane, below) · `session` · `canvas` · `sourcePane` and the other parts · `slideIndex`, `setSlide(index)`, `goTo(index, path)`, `select(path)` · `view`, `views`, `setView(view)` · `undo()`, `redo()`, `commit()` · `focus("source" | "canvas")` · `present()` · `openFind()` · `readSource()` · `sourceCursor` · `getDeckName()`, `setDeckName(name)` · `expand(on)`, `expanded` · `dirty`, `markSaved()`, `save()` · `setActions(list)` · `shortcuts()` · `toolbar`, `deckTitle`, `designMenu`, `reviewPill`, `helpButton`, `toolbarActions` · `setReadOnly`, `setTheme`, `setDensity`, `setExportMode` · `status(message)` · `on(event, listener)` (returns the unsubscribe) and `off` · `ready` · `destroy()`.

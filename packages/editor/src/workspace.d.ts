@@ -350,8 +350,8 @@ export interface OpfEditorOptions {
   actions?: ToolbarAction[];
   /** CE-28 wave 2: the Design quick menu (the `design` item). `onOpenPanel` adds its "More design options…" row for your own Design panel; the editor's own Design panel wins when it has one. */
   designMenu?: { onOpenPanel?: () => void };
-  /** CE-28 wave 2: "+" and the context menu on the thumbnail strip (default true in `full` and `embed`, false elsewhere). */
-  slideActions?: boolean;
+  /** Enable thumbnail actions (default in full and embed). "starters" offers Title, Bullets and Blank and focuses a new title. */
+  slideActions?: boolean | "starters";
   /** CE-28 wave 2: the browser asks before the page closes while the editor is `dirty` (`true`), or while the function says so (default false). */
   guardUnload?: boolean | ((editor: OpfEditor) => boolean);
 
@@ -387,6 +387,8 @@ export interface OpfEditorOptions {
   labels?: Partial<Record<"review" | "design" | "find" | "undo" | "redo" | "slideView" | "inspector" | "navigator" | "thumbnails" | OpfEditorChromeLabel, string>> & {
     /** CE-28 wave 2: the labels of the Design quick menu, the review pill, the help sheet and the actions group. */
     designMenu?: DesignMenuLabels;
+    /** Status after the workspace and its fonts are ready. An empty string leaves the status line clear. */
+    ready?: string;
     reviewPill?: ReviewPillLabels;
     help?: HelpButtonLabels;
     actions?: ToolbarActionsLabels;
@@ -462,7 +464,7 @@ export interface OpfEditorEvents {
   draft: { presentation: unknown; path: string; value: unknown };
   commit: { path: string; editor: EditorSession };
   cancel: { path?: string };
-  status: { message: string };
+  status: { message: string; undoable?: boolean };
   error: { error: Error; message: string; [key: string]: unknown };
   /** The source was copied or downloaded (or exported as JSON, YAML or Markdown): it is kept somewhere of the person's own. */
   kept: { kind: "copy" | "download" };

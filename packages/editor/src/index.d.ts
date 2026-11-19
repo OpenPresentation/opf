@@ -154,6 +154,8 @@ export interface EditorSession {
 }
 
 export interface CreateEditorSessionOptions {
+  /** Keep an unnamed starter’s deck name in sync with inline or patch edits to its opening title until an explicit rename or replacement. */
+  nameFromOpeningTitle?: boolean;
   /** Refuse every edit whose result has an error finding (the default per edit is `meta.rejectInvalid`). */
   rejectInvalid?: boolean;
   /** The host's catalogs (for example `[gallery]` from `@openpresentation/gallery`): resolution, validation, pickers, embedding. */
