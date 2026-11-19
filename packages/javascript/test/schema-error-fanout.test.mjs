@@ -16,7 +16,7 @@ describe("a wrong object is one finding", () => {
 		assert.equal(errors.length, 1);
 		const [error] = errors;
 		assert.equal(error.path, "/slides/0/blocks/0/table/columns/0");
-		assert.equal(error.message, 'none of its forms has "key" or "label"; the same in entries 1, 2 and 3 of this list');
+		assert.equal(error.message, 'none of the forms accepted here has "key" or "label"; the same at indexes 1, 2 and 3 of this list');
 		assert.equal(error.validation.keyword, "oneOf");
 		assert.deepEqual(error.validation.params.properties, ["key", "label"]);
 		assert.deepEqual(error.validation.params.alsoAt, ["/slides/0/blocks/0/table/columns/1", "/slides/0/blocks/0/table/columns/2", "/slides/0/blocks/0/table/columns/3"]);
@@ -36,7 +36,7 @@ describe("a wrong object is one finding", () => {
 		assert.equal(errors.length, 1);
 		const [error] = errors;
 		assert.equal(error.path, "/slides/0/blocks/0/items/0");
-		assert.equal(error.message, 'none of its forms has "label", "value" or "delta" (those are fields of "metric"); the same in entries 1 and 2 of this list');
+		assert.equal(error.message, 'none of the forms accepted here has "label", "value" or "delta" (those are fields of "metric"); the same at indexes 1 and 2 of this list');
 		assert.deepEqual(error.validation.params.belongsTo, ["metric"]);
 		assert.match(error.help, /"metric"/);
 		assert.equal(error.suggestions, undefined);
@@ -64,7 +64,7 @@ describe("a wrong object is one finding", () => {
 		assert.deepEqual(errors[0].validation.params.properties, ["key", "title"]);
 		assert.deepEqual(errors[0].validation.params.alsoAt, ["/slides/0/blocks/0/table/columns/2"]);
 		const lone = schemaErrors(deck({ quote: { content: "Hello", who: "Ann" } }));
-		assert.deepEqual(lone.map((error) => [error.path, error.message]), [["/slides/0/blocks/0/quote", 'none of its forms has "content" or "who"']]);
+		assert.deepEqual(lone.map((error) => [error.path, error.message]), [["/slides/0/blocks/0/quote", 'none of the forms accepted here has "content" or "who"']]);
 		assert.equal(lone[0].validation.params.alsoAt, undefined);
 	});
 });

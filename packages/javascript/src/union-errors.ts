@@ -233,8 +233,8 @@ function homesOf(rootId: string, keys: string[]): string[] {
 function foreignMessage(params: ForeignObjectParams): string {
 	const home = params.belongsTo?.length ? ` (${params.properties.length > 1 ? "those are fields" : "that is a field"} of ${quoted(params.belongsTo, "or")})` : "";
 	const indexes = (params.alsoAt ?? []).map((path) => path.slice(path.lastIndexOf("/") + 1));
-	const also = indexes.length ? `; the same in entr${indexes.length > 1 ? "ies" : "y"} ${indexes.length > 1 ? `${indexes.slice(0, -1).join(", ")} and ${indexes.at(-1)}` : indexes[0]} of this list` : "";
-	return `none of its forms has ${quoted(params.properties, "or")}${home}${also}`;
+	const also = indexes.length ? `; the same at index${indexes.length > 1 ? "es" : ""} ${indexes.length > 1 ? `${indexes.slice(0, -1).join(", ")} and ${indexes.at(-1)}` : indexes[0]} of this list` : "";
+	return `none of the forms accepted here has ${quoted(params.properties, "or")}${home}${also}`;
 }
 
 const isForeign = (error: ErrorObject) => isUnion(error) && Array.isArray(error.params.properties);

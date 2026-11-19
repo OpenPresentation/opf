@@ -707,7 +707,7 @@ describe("RR-54 review", () => {
     assert.deepEqual(table({ dataset: "r", columns: ["a"] }), [["/slides/0/table/columns", "'columns' is not allowed on a dataset-backed table: it takes its headers, rows and column formats from the dataset"]]);
     assert.deepEqual(table({ rows: [["a"]], fields: ["a"] }), [["/slides/0/table/fields", "'fields' applies only to a dataset-backed table; add 'dataset' or remove 'fields'"]]);
     // A malformed value with no field of any form is one error at the value; the forms ride along as alternatives.
-    assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { values: [] } } }] })), [["/slides/0/chart/data", 'none of its forms has "values"']]);
+    assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { values: [] } } }] })), [["/slides/0/chart/data", 'none of the forms accepted here has "values"']]);
   });
 
   test("fields name each dataset column at most once", () => {
