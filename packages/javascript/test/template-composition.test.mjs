@@ -221,6 +221,25 @@ describe('overrides', () => {
     assert.equal(resolveSlideContext(own, 0).resolved.layout.name, 'Auto');
     assert.deepEqual(validate(own).findings.filter((entry) => entry.ruleId === 'opf/unresolved-reference'), []);
   });
+
+  test('0.35 removed the flow and vertical-flow layouts: reported as removed with a fix that names process and vertical-process', () => {
+    const cases = [['flow', 'process'], ['default:flow', 'default:process'], ['vertical-flow', 'vertical-process'], ['default:vertical-flow', 'default:vertical-process']];
+    for (const [old, renamed] of cases) {
+      // A default: reference needs its group declared (opf/undeclared-catalog otherwise).
+      const deck = { ...(old.startsWith('default:') ? { catalogs: { default: { source: gallery.source } } } : {}), slides: [{ title: 'Steps', items: ['Plan', 'Build', 'Ship'], layout: old }] };
+      assert.equal(resolveSlideContext(deck, 0, { catalogs: [gallery] }).options.layout, undefined, `${old} resolves nowhere`);
+      const findings = validate(deck, { catalogs: [gallery] }).findings.filter((entry) => entry.ruleId === 'opf/unresolved-reference');
+      assert.equal(findings.length, 1);
+      assert.ok(findings[0].message.includes(`OPF 0.35 removed layout '${old}' (use '${renamed}')`), findings[0].message);
+      assert.deepEqual(findings[0].fixes, [{ id: 'rename-layout', title: `Use layout ${renamed}`, kind: 'patch', safe: true, patch: [{ op: 'replace', path: '/slides/0/layout', value: renamed }] }]);
+      assert.deepEqual(describeFinding(findings[0], { document: deck, format: 'json' }), { message: `Layout \`${old}\` was removed in OPF 0.35: \`${renamed}\` replaced it.`, next: `change the layout to \`${renamed}\` (the fix does).` });
+      const fixed = { ...deck, slides: [{ ...deck.slides[0], layout: renamed }] };
+      assert.deepEqual(validate(fixed, { catalogs: [gallery] }).findings.filter((entry) => entry.ruleId === 'opf/unresolved-reference'), []);
+    }
+    // A catalog's own flow layout is that catalog's, never renamed.
+    const own = { catalogs: { custom: { layouts: { flow: { name: 'Flow', regions: [{ name: 'title' }, { name: 'body', accepts: ['list'] }] } } } }, slides: [{ title: 'x', items: ['a', 'b'], layout: 'flow' }] };
+    assert.equal(resolveSlideContext(own, 0).resolved.layout.name, 'Flow');
+  });
 });
 
 describe('one long list in columns', () => {

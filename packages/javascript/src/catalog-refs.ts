@@ -229,6 +229,19 @@ const KIND_NOUNS: Record<CatalogKind, string> = {
 /** True for `layout: "auto"`, which OPF 0.35 removed: omitting `layout` is automatic composition. */
 export const removedLayoutAuto = (kind: CatalogKind, reference: string): boolean => kind === 'layouts' && reference === 'auto';
 
+/** The gallery layouts OPF 0.35 removed, by the layout that replaced each: `process` draws a short list as `flow` did. */
+const RENAMED_LAYOUTS: Readonly<Record<string, string>> = Object.freeze({ flow: 'process', 'vertical-flow': 'vertical-process' });
+
+/**
+ * The reference that replaced a bare or `default:` reference to a gallery layout OPF 0.35 removed (`flow` is `process`, `vertical-flow`
+ * is `vertical-process`), with the same group prefix; undefined for any other reference.
+ */
+export function renamedLayout(kind: CatalogKind, reference: string): string | undefined {
+  const parsed = kind === 'layouts' ? parseReference(reference) : undefined;
+  if (!parsed || (parsed.group !== undefined && parsed.group !== 'default') || !Object.hasOwn(RENAMED_LAYOUTS, parsed.id)) return undefined;
+  return `${parsed.group !== undefined ? 'default:' : ''}${RENAMED_LAYOUTS[parsed.id]}`;
+}
+
 /** The diagnostic for a reference that resolves nowhere, naming the reference and the source it was looked for in. */
 export function unresolvedReference(document: unknown, kind: CatalogKind, reference: string, path: string, options: CatalogOptions = {}): UnresolvedReferenceDiagnostic {
   const parsed = parseReference(reference);
@@ -246,7 +259,12 @@ export function unresolvedReference(document: unknown, kind: CatalogKind, refere
           : `it is not embedded in catalogs.${group === 'default' ? 'custom or catalogs.default' : group} and the catalog registered for ${source} ${registeredCatalog(source, options) ? 'has no such record' : 'is not registered'}`;
   const fallback = kind === 'layouts' ? 'automatic' : 'engine-default';
   // OPF 0.35 removed `layout: "auto"`: it is an ordinary reference now, and the message says what replaced it.
-  const removed = removedLayoutAuto(kind, reference) ? `OPF 0.35 removed layout 'auto' (omit layout for automatic composition)` : where;
+  const renamed = renamedLayout(kind, reference);
+  const removed = removedLayoutAuto(kind, reference)
+    ? `OPF 0.35 removed layout 'auto' (omit layout for automatic composition)`
+    : renamed !== undefined
+      ? `OPF 0.35 removed layout '${reference}' (use '${renamed}')`
+      : where;
   return {
     code: 'unresolved-reference',
     kind,

@@ -44,7 +44,7 @@ import {allowedBreak,proseTokens,proseWords} from './line-break.js';
 export {bindNoBreak,unbindNoBreak,lineMayStartAt} from './line-break.js';
 import {ENGINE_DEFAULT_FONT_SCHEME,LANGUAGES,SOCIAL_PLATFORMS} from './engine-vocabularies.js';
 export {CHART_TYPES,ENGINE_DEFAULT_CHART_TYPES,ENGINE_DEFAULT_COLOR_SCHEME,ENGINE_DEFAULT_FONT_SCHEME,ENGINE_DEFAULT_THEME,LANGUAGES,SOCIAL_PLATFORMS,type LanguageVocabulary,type SocialPlatformVocabulary} from './engine-vocabularies.js';
-export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceError,catalogGroupSource,catalogKinds,catalogRecords,catalogReferenceSites,parseReference,resolveReference,unresolvedReference,type Catalog,type CatalogKind,type CatalogOptions,type CatalogRecords,type CatalogReferenceSite,type RecordProvenance,type ResolvedReference,type UnresolvedReferenceDiagnostic} from './catalog-refs.js';
+export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceError,catalogGroupSource,catalogKinds,catalogRecords,catalogReferenceSites,parseReference,renamedLayout,resolveReference,unresolvedReference,type Catalog,type CatalogKind,type CatalogOptions,type CatalogRecords,type CatalogReferenceSite,type RecordProvenance,type ResolvedReference,type UnresolvedReferenceDiagnostic} from './catalog-refs.js';
 export {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 export {isolateNumbers,numberRanges,numericText} from './number-text.js';
 import {listNumberLabel,listNumbers,sliceNumberedItems,type ListNumber,type NumberingInput} from './numbering.js';
@@ -527,7 +527,6 @@ export interface ComposedEmphasis {
  * LH-07: one drawn sequence of a `sequence` region (layout record): what the engines draw besides its text, in canvas pixels.
  * - `row`: the region's blocks side by side, each under a badge; `connector` runs through the badge centers of the row.
  * - `column`: a list's entries, each beside a badge in the list's marker column; `connector` runs down that column.
- * - `flow`: a short list's entries in `chips` (one per entry; its text is the list column of the same index) with `arrows` between.
  * - `tiles` (LH-137): a dark slide's short summary list as a grid of `chips` (one per entry, its text the list column of the same
  *   index), each with a badge at its start whose `check` mark stands in for the bullet; no connector or arrows.
  * Paint order: chips, connector, badges, arrows, then the text. A badge is an accent (`primary`) circle of `radius` around
@@ -539,14 +538,14 @@ export interface ComposedEmphasis {
  * blocks and a flow runs right to left; a list's badges sit on the side each entry's paragraph starts, as its markers would.
  */
 export interface ComposedSteps {
-  form: 'row' | 'column' | 'flow' | 'tiles';
+  form: 'row' | 'column' | 'tiles';
   /**
    * The `sequence` region. `tiles` (LH-137's check-mark tiles, LH-165's icon cards, LH-162's text tiles): the list's region, or empty on a
    * slide without a layout. A tile is a chip (one card each, in the card surface); its badges are LH-137's check marks, LH-165's numerals
    * (`numeral`) or LH-162's accent dots (a badge with an empty label).
    */
   region: string;
-  /** `row`: the region's first block; `column`, `flow` and `tiles`: the list's payload path (LH-165's groups: the first group's; LH-162: the first paragraph's). */
+  /** `row`: the region's first block; `column` and `tiles`: the list's payload path (LH-165's groups: the first group's; LH-162: the first paragraph's). */
   path: string;
   badges: ComposedStepBadge[];
   connector?: { x1: number; y1: number; x2: number; y2: number };
@@ -4253,8 +4252,12 @@ export const LIST_DISPLAY_SCALE=2.3, LIST_DISPLAY_RULE=.14, LIST_DISPLAY_GAP=.3;
 export const STEP_BADGE=1.75;
 /** LH-07: the space between a badge and its step's text, and the least space between two badges of a column, as a share of its diameter. */
 export const STEP_BADGE_GAP=.4;
-/** LH-07: a flow (chips joined by arrows) is a lone list of this many entries at least and at most, each of one or two words and at most STEP_FLOW_CHARACTERS long. */
-export const STEP_FLOW_MIN=3, STEP_FLOW_MAX=6, STEP_FLOW_CHARACTERS=24;
+/**
+ * OPF 0.35: a lone list of a `steps` region draws PowerPoint's Basic Process (the `process` arrangement) when it has this many entries at
+ * least and at most, each of one or two words, at most STEP_PROCESS_CHARACTERS long, with no description or icon, and the process holds
+ * every entry at the size the steps would have or larger; otherwise it draws as steps.
+ */
+export const STEP_PROCESS_MIN=2, STEP_PROCESS_MAX=8, STEP_PROCESS_CHARACTERS=24;
 /**
  * LH-85: the bullet of each nesting level, by `level % LIST_MARKERS.length`, drawn at the entry's size. Every bundled text face has
  * • (U+2022) and the en dash (U+2013); ◦ (U+25E6) and ▪ (U+25AA), the former level 1 and 2 bullets, are missing from most of them
@@ -5124,6 +5127,8 @@ const PLACED_TILE_ITEMS = new WeakSet<ComposedItem>();
 const ICON_AGENDAS = new WeakMap<SlideComposition, Map<string, number>>(), AGENDA_STARTS = Symbol('opf.agendaStarts');
 /** LH-07: composeSlide composes a slide again with this flag to see it without step badges (the rule `step-badges` off). */
 const NO_STEPS = Symbol('opf.noSteps');
+/** OPF 0.35: composeLayout composes a slide again with this flag when a `steps` region's short list does not fit Basic Process (stepProcess). */
+const NO_STEP_PROCESS = Symbol('opf.noStepProcess');
 /** LH-170: composeSlide composes a slide again with this flag to see it without the closing note's band (the rule `note-band` off). */
 const NO_NOTE_BAND = Symbol('opf.noNoteBand');
 /** LH-170: the compositions that draw a closing note on the band (`note-band`). */
@@ -7695,8 +7700,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   };
   // LH-07: the blocks of a `sequence` region set side by side under step badges (composeTemplate marks them): each leaves a band for
   // its badge above its text, in the height it asks for (naturalHeight) and in its cell (placeNode), so the badge never costs a row or
-  // a neighbor its room. A flow list (stepFlows, by path) is drawn as chips once placed.
-  const stepUnits = new WeakSet<Pending>(), stepPaths = new Set<string>(), stepFlows = new Set<string>();
+  // a neighbor its room. OPF 0.35: a short lone list of a `steps` region (stepProcesses: its region's name to the list's path) is drawn
+  // as Basic Process once placed, in its region's whole cell (stepProcessCells), when the process holds it (arrangedLists).
+  const stepUnits = new WeakSet<Pending>(), stepPaths = new Set<string>(), stepProcesses = new Map<string, string>(), stepProcessCells = new Map<string, LayoutBox>();
+  const isStepProcess = (path: string) => [...stepProcesses.values()].includes(path);
   const stepBand = (size: number) => STEP_BADGE * size * (1 + STEP_BADGE_GAP);
   // LH-68: the metrics of a `metrics: "tile"` region (composeTemplate marks them); placeNode lays each out as a tile of its whole card.
   const metricTiles = new WeakSet<Pending>(), tileFloors = (options as Record<symbol, unknown>)[TILE_FLOORS] as Map<string, MetricLayoutOptions['minimumSizes']> | undefined;
@@ -9396,12 +9403,26 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const templateRegions: ComposedRegion[] = [], headingAreas: ComposedHeadingArea[] = [];
   // OPF 0.19: compose the body and headings through the template's areas (design sections 3 and 4).
   const requestedTemplateGap = gap;
-  // LH-07: the steps of a `sequence` region. A lone list of a `steps` region whose 3 to 6 entries are one or two words is a flow; any
-  // other lone list of two or more entries of one level draws them beside badges; two or more text and list blocks of a `steps` region
+  // LH-07: the steps of a `sequence` region. A lone list of two or more entries of one level of a `steps` region draws them beside
+  // badges (OPF 0.35: a short one draws Basic Process instead where that holds it, stepProcess); two or more text and list blocks of a `steps` region
   // are steps side by side, a one-entry numbered list giving its number to its badge. Every list of two or more entries of one level in a
   // `numbered` region (an agenda, ordered by nature: it runs in time) draws beside badges, numbered or not; the unnumbered lists of the
   // region count on from one list to the next in reading order (badgeStarts), as one agenda. Those numbers are drawing only: the payload
   // keeps no numbering, and its badges name no list number (ComposedStepBadge.list), so an export gives the list back as written.
+  // OPF 0.35 (the `process` layout absorbs `flow`): the lone list of a `steps` region whose STEP_PROCESS_MIN to STEP_PROCESS_MAX entries
+  // are each one or two words (whitespace-separated, as the term lists count them), at most STEP_PROCESS_CHARACTERS long, of one level,
+  // unnumbered, without descriptions or icons. It is fitted as a plain list, and arrangedLists draws it as Basic Process when the process
+  // holds every entry at that size or larger; otherwise composeLayout composes the slide again with it as steps (NO_STEP_PROCESS).
+  const stepProcess = (units: Pending[]): Pending | undefined => {
+    const unit = units.length === 1 ? units[0]! : undefined;
+    if (!unit || unit.children || unit.caption !== undefined || (unit.field !== 'items' && unit.field !== 'bullets') || unit.payload.numbering !== undefined) return undefined;
+    const values = Array.isArray(unit.value) ? unit.value as unknown[] : [];
+    if (values.length < STEP_PROCESS_MIN || values.length > STEP_PROCESS_MAX) return undefined;
+    return values.every(value => {
+      const object = record(value), text = flatten(typeof value === 'object' && value !== null && !Array.isArray(value) ? object.text : value).trim();
+      return (object.level ?? 0) === 0 && object.description === undefined && object.icon === undefined && text.length > 0 && text.length <= STEP_PROCESS_CHARACTERS && text.split(/\s+/u).length <= 2;
+    }) ? unit : undefined;
+  };
   const markSteps = (sequence: 'steps' | 'numbered', units: Pending[]): void => {
     const leaf = (unit: Pending) => !unit.children && unit.caption === undefined, isList = (unit: Pending) => unit.field === 'items' || unit.field === 'bullets';
     const entries = (unit: Pending): unknown[] => Array.isArray(unit.value) ? unit.value : [];
@@ -9428,12 +9449,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       return;
     }
     if (units.length === 1 && badgeList(units[0]!)) {
-      const unit = units[0]!, values = entries(unit);
-      const short = values.length >= STEP_FLOW_MIN && values.length <= STEP_FLOW_MAX && values.every(value => {
-        const object = record(value), text = flatten(typeof value === 'object' && !Array.isArray(value) ? object.text : value).trim();
-        return object.description === undefined && text.length > 0 && text.length <= STEP_FLOW_CHARACTERS && text.split(/\s+/u).length <= 2;
-      });
-      (short ? stepFlows : badgeLists).add(unit.path);
+      badgeLists.add(units[0]!.path);
       fire('step-badges');
       return;
     }
@@ -9505,8 +9521,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       else if (ruleOn('region-measure')) for (const unit of units) if (!unit.children && unit.field === 'text') unit.measure = true;
       // LH-68: a metric of a `metrics: "tile"` region is a tile: it fills its cell (no hugging, no natural height) and is laid out in it.
       if (region.metrics === 'tile' && ruleOn('metric-tiles')) for (const unit of units) if (!unit.children && unit.field === 'metric') { metricTiles.add(unit); fire('metric-tiles'); }
-      const sequence = regionSequence(region);
-      if (sequence && ruleOn('step-badges')) markSteps(sequence, units);
+      // OPF 0.35: a short lone list (stepProcess) is fitted as a plain list, the size its steps keep (the guarded rule `step-badges` never
+      // lets badges cost a size), and drawn as Basic Process when that holds it; the slide is composed again as steps when it does not.
+      const sequence = regionSequence(region), short = sequence === 'steps' && (options as Record<symbol, unknown>)[NO_STEP_PROCESS] !== true ? stepProcess(units) : undefined;
+      if (short) stepProcesses.set(region.name, short.path);
+      else if (sequence && ruleOn('step-badges')) markSteps(sequence, units);
       else if (!sequence) markPairs(units);
     }
     // LH-134 and LH-133: the slide's lone body block (one block in one region, nothing below the grid). A numbered list of 2 to
@@ -9516,7 +9535,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const body = plan.regions.flatMap(region => (contents.get(region.name) ?? []).filter(unit => !headings.has(unit.field)).map(unit => ({ unit, region })));
     if (body.length === 1 && !binding.belowUnits.length) {
       const { unit, region } = body[0]!, values: unknown[] = Array.isArray(unit.value) ? unit.value : [];
-      const list = !unit.children && unit.caption === undefined && (unit.field === 'items' || unit.field === 'bullets') && !badgeLists.has(unit.path) && !stepFlows.has(unit.path);
+      const list = !unit.children && unit.caption === undefined && (unit.field === 'items' || unit.field === 'bullets') && !badgeLists.has(unit.path);
       if (list && !region.arrangement && ruleOn('numerals') && unit.payload.numbering !== undefined && values.length >= 2 && values.length <= NUMERAL_TAKEAWAYS && values.every(entry => (record(entry).level ?? 0) === 0)) {
         badgeLists.add(unit.path); numeralLists.set(unit.path, 'display'); fire('numerals');
       }
@@ -10214,6 +10233,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const rect = rects.get(region.name);
       // SH-18 review: a region with an arrangement keeps its whole cell under LH-48's centering, which its diagram fills (arrangedLists, arrangedBlocks).
       let cell = rect && !region.bleed ? (regionDiagram(region) ? physical(logical(rect)) : regionCell(rect)) : physical(logical(rect ?? ownRects.get(region.name)!));
+      // OPF 0.35: a Basic Process candidate keeps its steps' cell; the process, when drawn, fills the whole cell as a diagram region's does.
+      if (rect && !region.bleed && stepProcesses.has(region.name)) stepProcessCells.set(region.name, roundBox(physical(logical(rect))));
       const areaBox = region.bleed && rect ? roundBox(cell) : undefined;
       if (region.bleed && rect && cell.width > 0) cell = bleed(cell);
       else if (rect && loneUnit && units[0] === loneUnit && plan.regions.every(other => other === region || empty.has(other.name))) cell = { ...cell, height: Math.max(cell.height, frame.y + frame.height - cell.y) };
@@ -10819,10 +10840,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const connector = (badges: ComposedStepBadge[]) => badges.length > 1 ? { connector: { x1: badges[0]!.cx, y1: badges[0]!.cy, x2: badges.at(-1)!.cx, y2: badges.at(-1)!.cy } } : {};
     for (const region of template!.regions) {
       // LH-134: a region without a sequence draws the numerals of its lone list of takeaways (numeralLists).
-      const members = items.filter(item => item.region === region.name && !headings.has(item.field)), drawn: LayoutBox[] = [];
+      const members = items.filter(item => item.region === region.name && !headings.has(item.field));
       if (!regionSequence(region) && !members.some(item => numeralLists.has(item.path))) continue;
       for (const item of members) {
-        if (stepFlows.has(item.path)) { const flow = stepFlow(item, region.name, lineWidth); if (flow) { result.push(flow); drawn.push(item.box); } continue; }
         const fits = item.listColumns?.length ? item.listColumns.map(column => column.text) : item.text && 'listEntries' in item.text ? [item.text as ListFit] : [];
         for (const fit of fits) {
           const badges = fit.listEntries.flatMap(entry => entry.badge ? [badgeOf(entry.textPath ?? item.path, entry.badge.cx, entry.badge.cy, entry.badge.diameter, entry.badge.label, entry.badge.fontSize, entry.marker.number && item.payload.numbering !== undefined ? { path: item.path, index: entry.index, number: numberOf(entry.marker.number) } : undefined, entry.badge.numeral)] : []);
@@ -10853,57 +10873,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       }
       // The region's cell holds what it draws.
       const composed = templateRegions.find(entry => entry.name === region.name);
-      const extents = [...result.filter(entry => entry.region === region.name).flatMap(entry => entry.badges.map(badge => badge.numeral ?? ({ x: badge.cx - badge.radius, y: badge.cy - badge.radius, width: 2 * badge.radius, height: 2 * badge.radius }))), ...drawn];
+      const extents = result.filter(entry => entry.region === region.name).flatMap(entry => entry.badges.map(badge => badge.numeral ?? ({ x: badge.cx - badge.radius, y: badge.cy - badge.radius, width: 2 * badge.radius, height: 2 * badge.radius })));
       if (composed && extents.length) {
         const box = composed.box, x = Math.min(box.x, ...extents.map(extent => extent.x)), y = Math.min(box.y, ...extents.map(extent => extent.y));
         composed.box = roundBox({ x, y, width: Math.max(box.x + box.width, ...extents.map(extent => extent.x + extent.width)) - x, height: Math.max(box.y + box.height, ...extents.map(extent => extent.y + extent.height)) - y });
       }
     }
     return result;
-  };
-  // LH-07: a flow: the list's entries in a row of chips, in reading order (from the right in a right-to-left deck), with an arrow
-  // between each two. The chips share the region's width when the widest entry fits every chip, else each hugs its entry; the entries
-  // keep the list's size, so a flow that does not fit on one line at it is not drawn and the list stays as it was. The row is centered
-  // on the list's middle. Each entry is a list column (ComposedItem.listColumns) centered in its chip.
-  const stepFlow = (item: ComposedItem, region: string, lineWidth: number): ComposedSteps | undefined => {
-    const values = item.value as ListValue[], fit = item.text as ListFit, size = fit.fontSize, area = templateRegions.find(entry => entry.name === region)?.box ?? item.box;
-    const listOptions: ListFitOptions = { ...richOptions(styleFor(item.field, item.path)), bullet: 'none' };
-    const single = (index: number, box: LayoutBox): ListFit => {
-      // The entry is fitted alone (as entry 0), so its runs' citation markers are looked up at its own index.
-      const own0 = `${item.path}.0`, ownPath = `${item.path}.${index}`, marker = listOptions.citationMarker;
-      const entryOptions: ListFitOptions = marker ? { ...listOptions, citationMarker: (run: string) => marker(run === own0 || run.startsWith(`${own0}.`) ? ownPath + run.slice(own0.length) : run) } : listOptions;
-      const own = fitList([values[index]!], box, size, size, entryOptions), object = typeof values[index] === 'object' && !Array.isArray(values[index]);
-      return { ...own, listEntries: own.listEntries.map(entry => ({ ...entry, index, textPath: `${item.path}.${index}${object ? '.text' : ''}`, descriptionPath: `${item.path}.${index}.description` })) };
-    };
-    const measured = values.map((_, index) => single(index, { x: 0, y: 0, width: 1e5, height: 1e5 }).listEntries[0]!);
-    if (!fit.listEntries.length || measured.some(entry => entry.text.richLines.length !== 1)) return undefined;
-    const widths = measured.map(entry => entry.text.richLines[0]!.width), lineHeight = Math.max(...measured.map(entry => entry.text.height));
-    const padX = .9 * size, padY = .6 * size, slot = 2.4 * size, count = values.length, room = area.width - slot * (count - 1);
-    const equal = count * (Math.max(...widths) + 2 * padX) <= room;
-    if (!equal && widths.reduce((sum, width) => sum + width + 2 * padX, 0) > room) return undefined;
-    const chipWidths = widths.map(width => equal ? room / count : width + 2 * padX), chipHeight = lineHeight + 2 * padY;
-    const middle = fit.listEntries[0]!.textBox.y + fit.height / 2, y = middle - chipHeight / 2;
-    const total = chipWidths.reduce((sum, width) => sum + width, 0) + slot * (count - 1);
-    let start = area.x + (area.width - total) / 2;
-    const chips: NonNullable<ComposedSteps['chips']> = [], columns: ComposedListColumn[] = [];
-    for (let index = 0; index < count; index++) {
-      const width = chipWidths[index]!, x = rtl ? area.x + area.width - (start - area.x) - width : start;
-      start += width + slot;
-      const box = { x: x + (width - widths[index]!) / 2 - 1, y: y + padY, width: widths[index]! + 2, height: lineHeight };
-      const text = single(index, box);
-      if (text.overflow || text.listEntries[0]!.text.richLines.length !== 1) return undefined;
-      chips.push({ path: text.listEntries[0]!.textPath!, box: { x, y, width, height: chipHeight }, radius: CARD_RADIUS * scale });
-      columns.push({ box, start: index, end: index + 1, text });
-    }
-    // Arrows point in reading order, from one chip's end edge to the next chip's start edge, half an em clear of both and .6 em tall.
-    const arrows = chips.slice(1).map((chip, index) => {
-      const previous = chips[index]!, left = rtl ? chip.box.x + chip.box.width : previous.box.x + previous.box.width, right = rtl ? previous.box.x : chip.box.x, tall = .6 * size;
-      return { box: { x: left + .5 * size, y: y + (chipHeight - tall) / 2, width: Math.max(scale, right - left - size), height: tall }, direction: rtl ? 'left' as const : 'right' as const };
-    });
-    item.listColumns = columns;
-    item.text = mergeListColumns(columns);
-    item.box = { x: Math.min(...chips.map(chip => chip.box.x)), y, width: total, height: chipHeight };
-    return { form: 'flow', region, path: item.path, badges: [], chips, arrows, lineWidth };
   };
   // SH-09: an `arrangement` region's lone list of one level (no descriptions, no numbering, no icons) as a pyramid or a matrix in the
   // region's cell (arrangements.ts). Every entry is fitted alone in its node's text rectangle, less the text margin, at one size for all:
@@ -10919,7 +10895,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // When none holds the entries at the floor, the list stays as it was and `arrangement-adapted` says so. Each entry is a list column.
   type ArrangementDesign = { design: ComposedArrangement['design']; frame: LayoutBox; nodes: ArrangementNode[]; margin: number; align: 'center' | 'start'; paint: 'primary' | 'card'; text: 'node' | 'slide'; background?: LayoutBox; lineWidth: number; margins?: [number, number, number, number]; arrows?: ArrangementArrow[]; connectors?: NativeTreeConnector[]; largest?: true; last?: true; refit?: (need: number) => { nodes: ArrangementNode[]; arrows: ArrangementArrow[] } | undefined; layout?: OpfLayoutRecipe; fitNodes?: (size:number)=>ArrangementNode[]|undefined; minimumSize?:number; adaptation?:string; instead?:string };
   const fallbackListAreas = new Map<string, LayoutBox>();
-  const arrangedList = (item: ComposedItem, arrangement: Arrangement, area: LayoutBox): ComposedArrangement | undefined => {
+  // OPF 0.35: `candidate` is a `steps` region's short list (stepProcess), fitted as a plain list: drawn only at that size or larger, and on
+  // failure left to the caller, with no finding.
+  const arrangedList = (item: ComposedItem, arrangement: Arrangement, area: LayoutBox, candidate = false): ComposedArrangement | undefined => {
     // SH-24: an inverted pyramid is the pyramid's designs upside down (pyramidNodes, pyramidSteps).
     const kind = arrangement === 'inverted-pyramid' ? 'pyramid' : arrangement, pyramidDirection = arrangement === 'inverted-pyramid' ? 'down' : 'up';
     const values = item.value as ListValue[], fit = item.text as ListFit, base = fit.fontSize, count = values.length;
@@ -10986,7 +10964,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const widest = Math.max(0, ...columns.flatMap(column => column.text.listEntries[0]!.text.richLines.map(line => line.width)));
       return { columns, margin, margins: [left, top, right, bottom] as [number, number, number, number], lines, stable, fill, ink, widest };
     };
-    const role = LIST_NOMINAL_SIZE * scale, floor = measured ? base : Math.min(base, role), step = 4 / 3 * scale, top = Math.min(capOf(item.composition),Math.max(base, snapFontSizeDown(role * ARRANGEMENT_GROWTH)));
+    const role = LIST_NOMINAL_SIZE * scale, floor = measured || candidate ? base : Math.min(base, role), step = 4 / 3 * scale, top = Math.min(capOf(item.composition),Math.max(base, snapFontSizeDown(role * ARRANGEMENT_GROWTH)));
     // The largest size at which a design holds every entry; for the SmartArt design one whose line breaks all hold (PowerPoint breaks them
     // alike) when there is one.
     const sized = (design: ArrangementDesign) => {
@@ -11088,6 +11066,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (design.design === 'smartart' || !largest) break;
     }
     if (!chosen && outside) { chosen = outside; skipped = undefined; }
+    if (!chosen && candidate) return undefined;
     if (!chosen) {
       diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `The entries of the ${kind === 'chevrons' ? 'row of chevrons' : kind.replace('-', ' ')} do not fit its ${SMART_ART_NAMES[kind].nodes} at the list's size, so they are drawn as a list.` });
       fillRegionWithList(item, area, top);
@@ -11221,9 +11200,23 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     item.text = placed;
     item.box = box;
   };
+  let stepProcessMissed = false;
   const arrangedLists = (): ComposedArrangement[] => {
     const result: ComposedArrangement[] = [];
     for (const region of template!.regions) {
+      // OPF 0.35: a `steps` region's short lone list (stepProcess) as Basic Process in the region's whole cell, when it holds the list at
+      // its fitted size or larger; otherwise the slide is composed again with the list as steps (stepProcessMissed).
+      const short = regionDiagram(region) ? undefined : stepProcesses.get(region.name);
+      if (short) {
+        const item = items.find(entry => entry.path === short && entry.region === region.name), area = stepProcessCells.get(region.name);
+        if (!item || !area || item.listColumns || item.caption || item.frameBox || !item.text || !('listEntries' in item.text) || item.text.overflow) continue;
+        const arranged = arrangedList(item, 'process', area, true);
+        if (!arranged) { stepProcessMissed = true; continue; }
+        result.push(arranged);
+        const composed = templateRegions.find(entry => entry.name === region.name);
+        if (composed) composed.box = roundBox(area);
+        continue;
+      }
       const arrangement = regionDiagram(region);
       if (!arrangement) continue;
       // An inverted pyramid's findings name it as the pyramid it is drawn from.
@@ -11300,6 +11293,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   if (useTemplate) pairRules();
   const steps = useTemplate ? stepSequences() : [];
   const arrangements = useTemplate ? arrangedLists() : [];
+  if (stepProcessMissed) return composeLayout(input, { ...options, [NO_STEP_PROCESS]: true } as ComposeSlideOptions);
   // LH-137: a dark slide whose whole body is one short bulleted list (CHECK_TILE_MIN to CHECK_TILE_MAX entries of one level, no
   // descriptions, each CHECK_TILE_MAX_CHARACTERS or fewer: a summary of decisions or outcomes) draws each entry as a tile of a grid that
   // fills the body (one row for three or fewer, two columns for four, three for five or six), with a check mark badge at its start (the
@@ -11314,7 +11308,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!ruleOn('check-tiles') || options.darkBackground !== true || (own.variant === undefined && own.background === undefined) || listBullet !== undefined || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || surface) return undefined;
     const body = items.filter(item => !headings.has(item.field));
     const item = body.length === 1 ? body[0]! : undefined;
-    if (!item || (item.field !== 'bullets' && item.field !== 'items') || item.payload.numbering !== undefined || item.listColumns || item.caption || item.frameBox || stepFlows.has(item.path) || badgeLists.has(item.path) || !item.text || !('listEntries' in item.text) || (item.field === 'items' && iconList(item.value, undefined))) return undefined;
+    if (!item || (item.field !== 'bullets' && item.field !== 'items') || item.payload.numbering !== undefined || item.listColumns || item.caption || item.frameBox || isStepProcess(item.path) || badgeLists.has(item.path) || !item.text || !('listEntries' in item.text) || (item.field === 'items' && iconList(item.value, undefined))) return undefined;
     const values = Array.isArray(item.value) ? item.value as ListValue[] : [];
     const texts = values.map(value => { const object = record(value); return object.description !== undefined || (object.level ?? 0) !== 0 ? undefined : flatten(typeof value === 'object' && !Array.isArray(value) ? object.text : value).trim(); });
     if (values.length < CHECK_TILE_MIN || values.length > CHECK_TILE_MAX || texts.some(text => !text || [...text].length > CHECK_TILE_MAX_CHARACTERS)) return undefined;
@@ -11384,7 +11378,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const figureRows = (): void => {
     const body = items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && surface && surface.shape !== 'card'));
     for (const item of items) {
-      if (!figureRowOf(item.field, item.value, item.payload, item.caption) || item.listColumns || stepFlows.has(item.path) || badgeLists.has(item.path) || stepPaths.has(item.path) || pillarWords.has(item.path) || numeralLists.has(item.path) || termLists.has(item.path) || pairRowLabels.has(item.path) || pairGrid.has(item.path) || !item.text || !('listEntries' in item.text)) continue;
+      if (!figureRowOf(item.field, item.value, item.payload, item.caption) || item.listColumns || isStepProcess(item.path) || badgeLists.has(item.path) || stepPaths.has(item.path) || pillarWords.has(item.path) || numeralLists.has(item.path) || termLists.has(item.path) || pairRowLabels.has(item.path) || pairGrid.has(item.path) || !item.text || !('listEntries' in item.text)) continue;
       const values = item.value as ListValue[], size = item.text.fontSize, count = values.length, box = item.box;
       const width = (box.width - gap * (count - 1)) / count;
       if (width < 4 * size) continue;
@@ -11491,7 +11485,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!ruleOn('icon-cards') || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || surface) return undefined;
     const body = items.filter(item => !headings.has(item.field) && !item.eyebrow);
     const item = body.length === 1 ? body[0]! : undefined;
-    if (!item || item.field !== 'items' || item.listColumns || item.caption || item.frameBox || item.emphasis || stepFlows.has(item.path) || !item.text || !('listEntries' in item.text)) return undefined;
+    if (!item || item.field !== 'items' || item.listColumns || item.caption || item.frameBox || item.emphasis || !item.text || !('listEntries' in item.text)) return undefined;
     const values = Array.isArray(item.value) ? item.value as ListValue[] : [];
     if (values.length < ICON_CARD_MIN || values.length > ICON_CARD_MAX) return undefined;
     const entries = values.map(value => {
@@ -11921,7 +11915,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     collectColumns(layout.regions);
     const readable = (fit: ListFit) => fit.listEntries.every(entry => [entry.text, entry.description].every(text => !text || !blockCutsWord({...entry, text}) && text.richLines.every(line => line.fragments.map(fragment => fragment.text).join('').trim().length <= PROSE_MEASURE_CHARS)));
     for (const item of items) {
-      if (!['items', 'bullets'].includes(item.field) || !item.text || !('listEntries' in item.text) || item.text.overflow || item.caption || stepPaths.has(item.path) || stepFlows.has(item.path)) continue;
+      if (!['items', 'bullets'].includes(item.field) || !item.text || !('listEntries' in item.text) || item.text.overflow || item.caption || stepPaths.has(item.path)) continue;
       const listRegions = readingTemplate.regions.filter(region => region.accepts.includes('list'));
       const region = readingTemplate.regions.find(region => region.name === (item.region ?? item.payload.region)) ?? (listRegions.length === 1 ? listRegions[0] : undefined);
       const requiredMeasure = region ? readingRegion(region) : !readingTemplate.regions.some(region => region.accepts.includes('list') && !readingRegion(region));

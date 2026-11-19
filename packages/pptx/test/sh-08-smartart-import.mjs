@@ -223,7 +223,7 @@ async function withSmartArt(frames) {
     return blocks.find(block => block.diagram) ? `diagram:${blocks.find(block => block.diagram).diagram.source.split('\n')[0]}` : blocks.find(block => block.items) ? `list:${slide.layout}` : slide.shapes ? `shapes:${slide.shapes.length}` : 'none';
   };
   assert.deepEqual(imported.slides.map(form), ['list:default:pyramid', 'list:default:inverted-pyramid', 'list:default:matrix', 'list:default:cycle', 'list:default:cycle', 'list:default:chevrons',
-    'list:default:flow', 'list:default:vertical-flow', 'list:default:process', 'list:default:list', 'list:default:list', 'list:default:venn', `shapes:${imported.slides[12].shapes.length}`,
+    'list:default:process', 'list:default:vertical-process', 'list:default:process', 'list:default:list', 'list:default:list', 'list:default:venn', `shapes:${imported.slides[12].shapes.length}`,
     'diagram:flowchart TD', 'list:default:hierarchy', 'diagram:flowchart LR', 'diagram:flowchart TD']);
   const items = index => imported.slides[index].blocks.find(block => block.items).items;
   assert.deepEqual(items(0)[0], [{text: 'Vision', bold: true}], 'a bold run');

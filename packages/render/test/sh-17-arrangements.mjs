@@ -8,8 +8,8 @@ import {resolvePresentation, toSvg} from '../src/svg.js';
 
 const catalogs = [gallery];
 const deck = {design: {colorScheme: {id: 'test', dark1: '#111111', light1: '#FFFFFF', dark2: '#333333', light2: '#EEEEEE', accent1: '#1F6FB2', accent2: '#C0504D', accent3: '#9BBB59', accent4: '#8064A2', accent5: '#4BACC6', accent6: '#F79646', hyperlink: '#0563C1', followedHyperlink: '#954F72'}},
-  slides: [{layout: 'chevrons', title: 'How we work', items: ['Plan', 'Build', 'Test', 'Ship']}, {layout: 'flow', title: 'The pilot', items: ['Research', 'Design', 'Run']},
-    {layout: 'vertical-flow', title: 'Onboarding', items: ['Sign up', 'Set up', 'Launch']}]};
+  slides: [{layout: 'chevrons', title: 'How we work', items: ['Plan', 'Build', 'Test', 'Ship']}, {layout: 'process', title: 'The pilot', items: ['Research', 'Design', 'Run']},
+    {layout: 'vertical-process', title: 'Onboarding', items: ['Sign up', 'Set up', 'Launch']}]};
 const resolved = resolvePresentation(deck, {catalogs});
 const primary = resolved.slides[0].design.colors.primary, background = resolved.slides[0].design.roles.background;
 const arrowFill = applyColorTransform(primary, {lumMod: 60000, lumOff: 40000});
@@ -27,8 +27,8 @@ const arrowFill = applyColorTransform(primary, {lumMod: 60000, lumOff: 40000});
   for (const word of ['Plan', 'Build', 'Test', 'Ship']) assert.match(svg, new RegExp(`<text[^>]*text-anchor="middle"[^>]*>(?:<tspan[^>]*>)?${word}<`), word);
   assert.ok(svg.indexOf('data-opf-arrangement="chevrons"') < svg.indexOf('>Plan<'), 'the chevrons are under the text');
 }
-// The gallery's flow and vertical-flow layouts draw the process and vertical-process arrangements.
-for (const [slide, kind, layout] of [[2, 'process', 'flow'], [3, 'vertical-process', 'vertical-flow']]) {
+// The gallery's process layout draws a short list as the process arrangement (OPF 0.35), and vertical-process its arrangement.
+for (const [slide, kind, layout] of [[2, 'process', 'process'], [3, 'vertical-process', 'vertical-process']]) {
   const svg = toSvg(deck, slide, {catalogs, trace: true});
   const group = new RegExp(`<g [^>]*data-opf-arrangement="${kind}"[^>]*>([\\s\\S]*?)</g>`).exec(svg)?.[1];
   assert.ok(group, kind);

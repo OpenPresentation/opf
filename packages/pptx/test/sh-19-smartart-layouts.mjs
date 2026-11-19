@@ -16,9 +16,9 @@ const short = ['Vision', 'Plan', 'Build', 'Ship', 'Learn', 'Grow', 'Scale', 'Ser
 const slides = [
   {layout: 'pyramid', title: 'Levels', items: short.slice(0, 6)},
   {layout: 'matrix', title: 'Three', items: short.slice(0, 3)},
-  {layout: 'flow', title: 'Steps', items: short.slice(0, 7)},
+  {layout: 'process', title: 'Steps', items: short.slice(0, 7)},
   {layout: 'chevrons', title: 'Stages', items: short.slice(0, 7)},
-  {layout: 'vertical-flow', title: 'Steps', items: short.slice(0, 5)},
+  {layout: 'vertical-process', title: 'Steps', items: short.slice(0, 5)},
 ];
 const exported = async (document, extra = {}) => {
   const diagnostics = [], bytes = new Uint8Array(await toPptx(document, {...options, ...extra, onDiagnostic: diagnostic => diagnostics.push(diagnostic)}));
@@ -27,7 +27,7 @@ const exported = async (document, extra = {}) => {
   return {bytes, entries, diagnostics, text: path => strFromU8(entries[path])};
 };
 const itemsOf = slide => slide.items ?? slide.blocks?.[0]?.items;
-const expected = {pyramid: /\/pyramid-steps\/[0-9a-f]{16}$/, matrix: /\/card-grid\/[0-9a-f]{16}$/, flow: /\/flow-rows\/[0-9a-f]{16}$/, chevrons: /\/chevron-rows\/[0-9a-f]{16}$/, 'vertical-flow': /\/vertical-flow-columns\/[0-9a-f]{16}$/};
+const expected = {pyramid: /\/pyramid-steps\/[0-9a-f]{16}$/, matrix: /\/card-grid\/[0-9a-f]{16}$/, process: /\/flow-rows\/[0-9a-f]{16}$/, chevrons: /\/chevron-rows\/[0-9a-f]{16}$/, 'vertical-process': /\/vertical-flow-columns\/[0-9a-f]{16}$/};
 
 // 1. Live SmartArt on OPF's own layouts.
 const live = await exported({slides});
@@ -38,7 +38,7 @@ const live = await exported({slides});
     const number = index + 1, layout = text(`ppt/diagrams/layout${number}.xml`), data = text(`ppt/diagrams/data${number}.xml`), xml = text(`ppt/slides/slide${number}.xml`);
     const id = /uniqueId="([^"]+)"/.exec(layout)[1];
     assert.ok(id.startsWith(OPF_LAYOUT_NAMESPACE) && expected[slide.layout].test(id), `${slide.layout}: ${id}`);
-    assert.equal(opfLayoutKind(id), {flow: 'process', 'vertical-flow': 'vertical-process'}[slide.layout] ?? slide.layout);
+    assert.equal(opfLayoutKind(id), slide.layout);
     const design = id.slice(OPF_LAYOUT_NAMESPACE.length).split('/')[0];
     assert.match(layout, new RegExp(`<dgm:title val="${OPF_LAYOUTS[design].title}"/><dgm:desc val="${OPF_LAYOUTS[design].description.replace(/[.()]/g, '\\$&')}"/>`));
     assert.doesNotMatch(layout, /microsoft/i, 'no Microsoft content in OPF\'s definition');

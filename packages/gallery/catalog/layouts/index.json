@@ -3,7 +3,7 @@
   "kind": "layouts",
   "version": "1",
   "description": "The built-in slide layouts of OPF 0.19: 40 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
-  "contentSha256": "e7194c4bb6054068a14cc6094cc82e86953621db7ecfbd3cf0b9ab5a015a8899",
+  "contentSha256": "ce806c12cdfd37934ec0e7952351fa6f8713ecd87e522921432735e6e7831797",
   "records": [
     {
       "id": "cover",
@@ -153,18 +153,11 @@
       "file": "chevrons.json"
     },
     {
-      "id": "flow",
-      "name": "Flow",
-      "summary": "Steps in order, as boxes joined by arrows in one row.",
-      "group": "Groups of items",
-      "file": "flow.json"
-    },
-    {
-      "id": "vertical-flow",
-      "name": "Vertical flow",
+      "id": "vertical-process",
+      "name": "Vertical process",
       "summary": "Steps in order, as boxes joined by arrows in a column beside the title.",
       "group": "Groups of items",
-      "file": "vertical-flow.json"
+      "file": "vertical-process.json"
     },
     {
       "id": "org-chart",

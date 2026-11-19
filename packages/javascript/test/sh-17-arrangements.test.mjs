@@ -1,4 +1,4 @@
-// SH-17: the chevrons, process and vertical-process arrangements of a layout region (the gallery's chevrons, flow and vertical-flow layouts). The geometry is PowerPoint's Basic Chevron Process,
+// SH-17: the chevrons, process and vertical-process arrangements of a layout region (the gallery's chevrons and vertical-process layouts). The geometry is PowerPoint's Basic Chevron Process,
 // Basic Process and Vertical Process, as the SH-17 sweep measured them through COM (fixtures/sh-17-powerpoint-geometry.json: 1 to 8 nodes
 // in six frames each); the text is one size for all nodes, never below the list's role size; OPF draws its own row or column where
 // PowerPoint's design does not hold the entries; and the safe domain decides whether the PPTX export writes live SmartArt.
@@ -105,14 +105,20 @@ test('OPF\'s own designs: PowerPoint\'s proportions, lines that span the region,
   assert.ok(compact.nodes[0].box.height < .6 * compact.nodes[0].box.width, 'as tall as its text');
 });
 
-const compose = (slide, layout = slide.layout) => composeSlide(slide, { layout: gallery.layouts[layout] });
-// The gallery layout of each linear arrangement (0.35 step 3: the layouts keep their ids).
-const LAYOUT_OF = { chevrons: 'chevrons', process: 'flow', 'vertical-process': 'vertical-flow' };
+// 0.35 step 4: the gallery's process layout draws a short lone list as Basic Process (lh-07-step-badges.test.mjs). A region whose
+// arrangement is `process` draws every lone list and list blocks so: the record of the 0.34 flow layout, kept here.
+const basicProcess = { id: 'basic-process', name: 'Basic process', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['list'], flow: 'none', arrangement: 'process' }] };
+const LAYOUTS = { ...gallery.layouts, 'basic-process': basicProcess };
+const compose = (slide, layout = slide.layout) => composeSlide(slide, { layout: LAYOUTS[layout] });
+// The layout of each linear arrangement: the gallery's chevrons and vertical-process, and the Basic Process record above.
+const LAYOUT_OF = { chevrons: 'chevrons', process: 'basic-process', 'vertical-process': 'vertical-process' };
 const adapted = (result) => result.diagnostics.filter(entry => entry.code === 'arrangement-adapted').map(entry => entry.message);
 
-test('the gallery has a chevrons, a flow and a vertical-flow layout, each a lone list in an arrangement region', () => {
+test('the gallery has a chevrons and a vertical-process layout, each a lone list in an arrangement region, and no flow layout', () => {
+  assert.equal(gallery.layouts.flow, undefined);
+  assert.equal(gallery.layouts['vertical-flow'], undefined);
   for (const kind of ['chevrons', 'process', 'vertical-process']) {
-    const region = layoutTemplate(gallery.layouts[LAYOUT_OF[kind]]).regions.find(entry => entry.arrangement);
+    const region = layoutTemplate(LAYOUTS[LAYOUT_OF[kind]]).regions.find(entry => entry.arrangement);
     assert.deepEqual([region.name, region.arrangement], ['body', kind]);
   }
   assert.deepEqual(ARRANGEMENTS.filter(kind => ['chevrons', 'process', 'vertical-process'].includes(kind)), ['chevrons', 'process', 'vertical-process']);
@@ -151,11 +157,11 @@ test('long entries draw OPF\'s design, a right-to-left deck mirrors it, and what
   assert.equal(chevrons.arrangements[0].design, 'opf');
   assert.match(chevrons.arrangements[0].instead, /Basic Chevron Process|wraps/);
   assert.ok(chevrons.arrangements[0].fontSize >= LIST_NOMINAL_SIZE - 1e-6);
-  const arabic = composeSlide({ layout: 'flow', title: 'العملية', items: ['الرؤية', 'الأهداف', 'البرامج'] }, { layout: gallery.layouts.flow, direction: 'rtl' });
+  const arabic = composeSlide({ layout: 'basic-process', title: 'العملية', items: ['الرؤية', 'الأهداف', 'البرامج'] }, { layout: basicProcess, direction: 'rtl' });
   const [flow] = arabic.arrangements;
   assert.ok(flow.nodes[0].box.x > flow.nodes[2].box.x, 'the first box at the right');
   assert.ok(flow.arrows.every(arrow => arrow.rotation === 180), 'arrows point left');
-  assert.match(adapted(compose({ layout: 'flow', title: 'T', items: ['A', 'B'], numbering: 'arabic' }))[0], /a numbered list/);
+  assert.match(adapted(compose({ layout: 'basic-process', title: 'T', items: ['A', 'B'], numbering: 'arabic' }))[0], /a numbered list/);
   const nine = compose({ layout: 'chevrons', title: 'T', items: ['1', '2', '3', '4', '5', '6', '7', '8', '9'] });
   assert.equal(nine.arrangements, undefined);
   assert.match(adapted(nine)[0], /A row of chevrons draws a list .* more than 8 chevrons/);
@@ -180,7 +186,7 @@ test('list blocks are the entries: each on a card of the design, arrows between,
   }
   // Lists no design holds at their size keep the region's composition (pagination splits them), with the finding.
   const long = Array.from({ length: 3 }, () => ({ items: Array.from({ length: 7 }, (_, index) => `Item ${index + 1}: customers told us onboarding took too long, so we rebuilt it around them`) }));
-  const crowded = compose({ layout: 'flow', title: 'Long', blocks: long });
+  const crowded = compose({ layout: 'basic-process', title: 'Long', blocks: long });
   assert.equal(crowded.arrangements, undefined);
 });
 

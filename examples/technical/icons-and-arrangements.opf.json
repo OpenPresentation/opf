@@ -1,7 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Icons, arrangements and connectors",
-  "description": "Technical example for the 0.33 drawing features on one fictional product-launch story: icons from the gallery's Lucide and Tabler sets (icon cards, a list with icon chips, metric icons), the pyramid, matrix, cycle, chevrons, flow and vertical-flow layouts (live SmartArt in PowerPoint where it holds the text, native shapes elsewhere), and a slide of shapes joined by connectors. The icon sets load on demand; the CLI and the MCP register them (see docs/icons.md, docs/smartart.md and docs/shapes.md).",
+  "description": "Technical example for the 0.33 drawing features on one fictional product-launch story: icons from the gallery's Lucide and Tabler sets (icon cards, a list with icon chips, metric icons), the pyramid, matrix, cycle, chevrons, process and vertical-process layouts (live SmartArt in PowerPoint where it holds the text, native shapes elsewhere), and a slide of shapes joined by connectors. The icon sets load on demand; the CLI and the MCP register them (see docs/icons.md, docs/smartart.md and docs/shapes.md).",
   "language": "en-US",
   "design": {
     "background": "light1"
@@ -124,8 +124,8 @@
       ]
     },
     {
-      "id": "flow",
-      "layout": "flow",
+      "id": "process",
+      "layout": "process",
       "title": "From request to release",
       "items": [
         "Request",
@@ -135,8 +135,8 @@
       ]
     },
     {
-      "id": "vertical-flow",
-      "layout": "vertical-flow",
+      "id": "vertical-process",
+      "layout": "vertical-process",
       "title": "What happens after sign-up",
       "items": [
         "Create the workspace",
@@ -312,12 +312,16 @@
             "vectorSrc": "https://www.pptx.gallery/layout-previews/chevrons.svg"
           }
         },
-        "flow": {
-          "name": "Flow",
-          "summary": "Steps in order, as boxes joined by arrows in one row.",
+        "process": {
+          "name": "Process",
+          "summary": "Steps in order, in one row.",
           "tags": [
             "Groups of items"
           ],
+          "design": {
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
           "direction": "column",
           "regions": [
             {
@@ -326,20 +330,24 @@
             {
               "name": "body",
               "accepts": [
-                "list"
+                "timeline",
+                "list",
+                "text",
+                "metric",
+                "group",
+                "diagram"
               ],
-              "role": "primary",
-              "flow": "none",
-              "arrangement": "process"
+              "flow": "grid",
+              "arrangement": "steps"
             }
           ],
-          "description": "Show 1 to 8 steps that follow one another, each a box with an arrow to the next. Write one short list entry per step, in order.",
+          "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition. A list of 2 to 8 steps of one or two words each draws as boxes joined by arrows.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/flow.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/process.svg"
           }
         },
-        "vertical-flow": {
-          "name": "Vertical flow",
+        "vertical-process": {
+          "name": "Vertical process",
           "summary": "Steps in order, as boxes joined by arrows in a column beside the title.",
           "tags": [
             "Groups of items"
@@ -355,7 +363,6 @@
               "accepts": [
                 "list"
               ],
-              "role": "primary",
               "flow": "none",
               "arrangement": "vertical-process",
               "size": 3
@@ -363,7 +370,7 @@
           ],
           "description": "Show 1 to 8 steps that follow one another from top to bottom, each a box with an arrow to the next, beside the title. Write one short list entry per step, in order.",
           "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/vertical-flow.svg"
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/vertical-process.svg"
           }
         }
       },

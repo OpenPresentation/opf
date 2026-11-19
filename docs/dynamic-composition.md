@@ -209,7 +209,7 @@ right-to-left deck the question or term column is at the right and the answers t
 
 A numbered list draws its numbers one way, decided by its region and its content, never by a slide id:
 
-1. **A `steps` region** (a process): LH-07's badges, or a flow of chips.
+1. **A `steps` region** (a process): LH-07's badges, or Basic Process for a short list (OPF 0.35).
 2. **A `numbered` region** (an agenda): when every entry of every list of the region has a description, numbered ruled rows: each
    number a numeral at the list size, bold in the accent and in two digits under 10 ("01"), in a column at the row's start, the label
    bold and the description in a second column (Claude Design's agenda). Otherwise LH-07's badges, for every list of the agenda.

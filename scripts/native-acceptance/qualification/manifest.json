@@ -644,8 +644,8 @@
             "matrix",
             "cycle",
             "chevrons",
-            "flow",
-            "vertical-flow"
+            "process",
+            "vertical-process"
           ]
         }
       }

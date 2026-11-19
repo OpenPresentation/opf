@@ -229,11 +229,6 @@ function cardPaint(context) {
 
 /** What a finding calls an arrangement: its kind, or (SH-17) a row of chevrons, a vertical process and (SH-24) an inverted pyramid. */
 const arrangementNoun = kind => kind === 'chevrons' ? 'row of chevrons' : kind === 'vertical-process' ? 'vertical process' : kind === 'inverted-pyramid' ? 'inverted pyramid' : kind;
-/**
- * The gallery layout of an arrangement, for a list imported on it (until the 0.35 layout ids follow the arrangement names, the
- * `process` and `vertical-process` arrangements are the `flow` and `vertical-flow` layouts; `process` is the step-badge layout).
- */
-export const arrangementLayout = kind => kind === 'process' ? 'flow' : kind === 'vertical-process' ? 'vertical-flow' : kind;
 /** A tag OPF 0.34 wrote names the process arrangements `flow` and `vertical-flow`: import reads them as the 0.35 names. */
 const taggedKind = kind => kind === 'flow' ? 'process' : kind === 'vertical-flow' ? 'vertical-process' : kind;
 
@@ -688,8 +683,8 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
       const sameLevels=stored&&stored.items.length===items.length&&stored.items.every((value,index)=>Number(value?.level??0)===Number(items[index]?.level??0));
       const unchanged = stored && (flat||tree&&sameLevels) && stored.texts.length === texts.length && stored.texts.every((text, at) => text.replace(/ /g, ' ') === texts[at]);
       if (stored && !unchanged) report?.({code: 'smartart-edited', path: stored.path ?? path, message: `The ${kind} was edited in PowerPoint; its list is read from the SmartArt's nodes.`});
-      if (!form.exact) report?.({code: 'smartart-adapted', path, layout: stem, form: kind, message: `${named} is imported as OPF's ${kind === 'inverted-pyramid' ? 'inverted pyramid' : arrangementLayout(kind)} layout with its entries.`});
-      out.set(index, items.length || unchanged ? {type: 'list', kind, layout: `default:${arrangementLayout(kind)}`, tagged: unchanged === true, payload: {type: 'list', items: unchanged ? structuredClone(stored.items) : items}} : {type: 'empty'});
+      if (!form.exact) report?.({code: 'smartart-adapted', path, layout: stem, form: kind, message: `${named} is imported as OPF's ${kind === 'inverted-pyramid' ? 'inverted pyramid' : kind} layout with its entries.`});
+      out.set(index, items.length || unchanged ? {type: 'list', kind, layout: `default:${kind}`, tagged: unchanged === true, payload: {type: 'list', items: unchanged ? structuredClone(stored.items) : items}} : {type: 'empty'});
       continue;
     }
     if (form.layout) {
@@ -782,7 +777,7 @@ export function importSmartArtFallbacks({pictures, relationships, entries, slide
     const xfrm = picture?.['p:spPr']?.['a:xfrm'], bleed = Number.isInteger(stored.bleed) && stored.bleed >= 0 ? stored.bleed : 0;
     const frame = xfrm?.['a:off'] && xfrm?.['a:ext'] ? {...xfrm, 'a:off': {...xfrm['a:off'], x: String(Number(xfrm['a:off'].x) + bleed), y: String(Number(xfrm['a:off'].y) + bleed)},
       'a:ext': {...xfrm['a:ext'], cx: String(Number(xfrm['a:ext'].cx) - 2 * bleed), cy: String(Number(xfrm['a:ext'].cy) - 2 * bleed)}} : xfrm;
-    out.set(index, {kind, layout: `default:${arrangementLayout(kind)}`, frame, payload: {type: 'list', items: structuredClone(stored.items)}});
+    out.set(index, {kind, layout: `default:${kind}`, frame, payload: {type: 'list', items: structuredClone(stored.items)}});
   }
   return out;
 }

@@ -32,7 +32,7 @@ const substituted = {...templates}; delete substituted.venn; substituted['unlist
 assert.throws(() => assertCatalogCoverage(substituted), /Every authoritative layout/);
 const aliased = {...templates, venn: {...templates.venn, name: templates.hierarchy.name}};
 assert.throws(() => assertCatalogCoverage(aliased), /Every named layout remains distinct/);
-for (const id of ['flow', 'vertical-flow', 'org-chart', 'hierarchy', 'venn', 'pyramid', 'inverted-pyramid']) {
+for (const id of ['process', 'vertical-process', 'org-chart', 'hierarchy', 'venn', 'pyramid', 'inverted-pyramid']) {
   assert.ok(templates[id], id + ' remains a required named diagram layout');
 }
 for (const entry of layoutIndex.records) {
@@ -524,6 +524,37 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   assert.deepEqual(plain.slides[0].blocks.map(block => block.type), ['chart', 'text'], 'both blocks come back, bound by kind');
   assert.ok((plain.slides[0].blocks ?? []).every(block => block.region === undefined), JSON.stringify(plain.slides[0]));
   assert.deepEqual(reports.filter(report => /layout tag/i.test(report.message ?? '')), [], 'the old region map is not a damaged tag');
+  checked++;
+}
+
+// ---- 12. OPF 0.35 removed the gallery's flow and vertical-flow layouts: a 0.34 file whose slide is on one of them (its stored layout,
+// or only its slide layout's OPF_LAYOUT_V1 tag without provenance) imports on process or vertical-process; a stored layout reports
+// layout-renamed. Built here by writing the 0.34 ids into a current export's tags.
+{
+  const catalogs = [defaultCatalog];
+  const hexOf = (value, like) => { const hex = Buffer.from(JSON.stringify(value)).toString('hex'); return /[A-F]/.test(like) ? hex.toUpperCase() : hex; };
+  for (const [old, current] of [['flow', 'process'], ['vertical-flow', 'vertical-process']]) {
+    const deck = {name: 'A 0.34 layout', slides: [{layout: current, title: 'Steps', items: ['Plan', 'Build', 'Ship']}]};
+    for (const provenance of ['full', false]) {
+      const {entries: parts} = await exportDeck(deck, {catalogs, provenance});
+      const layout = layoutOf(parts, 1), tag = layoutTag(parts, layout);
+      assert.deepEqual([tag.id, tag.group, tag.reference], [current, 'default', current]);
+      const rid = text(parts, layout).match(/<\/p:spTree><p:custDataLst><p:tags r:id="([^"]+)"\/><\/p:custDataLst>/)[1];
+      const edits = {[resolvePart(layout, relationships(parts, layout).find(item => item.id === rid).target)]: xml => xml.replace(/(name="OPF_LAYOUT_V1" val=")([^"]+)"/, (_, head, value) => `${head}${hexOf({...tag, id: old, reference: old}, value)}"`)};
+      for (const path of Object.keys(parts).filter(name => /^ppt\/tags\//.test(name) && /name="OPF_SLIDE_V1"/.test(text(parts, name))))
+        edits[path] = xml => xml.replace(/(name="OPF_SLIDE_V1" val=")([^"]+)"/, (_, head, value) => {
+          const record = JSON.parse(Buffer.from(value, 'hex').toString('utf8'));
+          assert.equal(record.layout, current);
+          return `${head}${hexOf({...record, layout: old}, value)}"`;
+        });
+      assert.equal(Object.keys(edits).length, provenance === 'full' ? 2 : 1, `${old} ${provenance}: the tags written`);
+      const {imported, reports} = await read(mutate(parts, edits), {catalogs});
+      assert.equal(imported.slides[0].layout, current, `${old} ${provenance}`);
+      assert.deepEqual(imported.slides[0].items ?? imported.slides[0].blocks?.[0]?.items, ['Plan', 'Build', 'Ship']);
+      assert.deepEqual(reports.filter(report => report.code === 'layout-renamed').map(report => report.path), provenance === 'full' ? ['slides.0.layout'] : [], `${old} ${provenance}: ${JSON.stringify(reports)}`);
+      assert.deepEqual(reports.filter(report => report.code === 'unresolved-reference' || /layout tag/i.test(report.message ?? '')), []);
+    }
+  }
   checked++;
 }
 

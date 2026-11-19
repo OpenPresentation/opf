@@ -587,6 +587,13 @@ const unresolvedReference: RuleText = (finding, _context, helpers) => {
       next: `delete the ${code("layout")} key (the fix does).`,
     };
   }
+  const renamed = kind === "layouts" ? /removed layout '.+?' \(use '(.+?)'\)/.exec(finding.message)?.[1] : undefined;
+  if (renamed) {
+    return {
+      message: `Layout ${code(reference)} was removed in OPF 0.35: ${code(renamed)} replaced it.`,
+      next: `change the layout to ${code(renamed)} (the fix does).`,
+    };
+  }
   const noun = cap(KIND_SINGULAR(kind || (found?.[1] ?? "catalog record").toLowerCase()));
   const colon = reference.indexOf(":");
   const group = colon > 0 ? reference.slice(0, colon) : undefined;

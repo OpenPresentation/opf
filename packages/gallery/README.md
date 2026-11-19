@@ -104,8 +104,7 @@ automatically. A deck's own layouts are records of the same schema under `catalo
 | `matrix` | Four parts of a whole, as the quadrants of a square beside the title. |
 | `cycle` | Steps that repeat, as a loop of nodes with arrows beside the title. |
 | `chevrons` | Stages in order, as a row of chevrons. |
-| `flow` | Steps in order, as boxes joined by arrows in one row. |
-| `vertical-flow` | Steps in order, as boxes joined by arrows in a column beside the title. |
+| `vertical-process` | Steps in order, as boxes joined by arrows in a column beside the title. |
 | **Numbers** | |
 | `metrics` | One to six headline numbers, with an optional note. |
 | `scorecard` | Metrics with commentary or status, as cards. |

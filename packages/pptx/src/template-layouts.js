@@ -33,7 +33,7 @@
 // `layout`: Change Layout to it from a template removes the stored layout, with `layout-changed`. A block read from a placeholder of a region gets a `region` pin when plain binding would put it
 // elsewhere; content that document provenance restored is never pinned.
 
-import {composeLayoutAreas, composeSlide, isLayoutTemplate, layoutTemplate, bindRegions, regionAccepts} from '@openpresentation/opf/composition';
+import {composeLayoutAreas, composeSlide, isLayoutTemplate, layoutTemplate, bindRegions, regionAccepts, renamedLayout} from '@openpresentation/opf/composition';
 import {validateCatalogRecord, catalogRecords, resolveReference} from '@openpresentation/opf';
 import {gallery} from '@openpresentation/gallery';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
@@ -483,6 +483,9 @@ export function readLayoutTag(entries, layoutPath, report = () => {}) {
     if (identityError) throw Error(identityError);
     if (typeof value.reference !== 'string' || !/^(?:[a-z][a-z0-9-]*:)?[a-z][a-z0-9-]*$/.test(value.reference) || typeof value.hash !== 'string') throw Error('invalid reference');
     if (value.record !== undefined && (value.record === null || typeof value.record !== 'object' || Array.isArray(value.record))) throw Error('invalid record');
+    // OPF 0.35 removed the gallery's flow and vertical-flow layouts: a 0.34 file's tag of either reads as the layout that replaced it.
+    const renamed = value.group === 'default' && value.record === undefined ? renamedLayout('layouts', value.reference) : undefined;
+    if (renamed !== undefined) { value.reference = renamed; value.id = renamed.replace(/^default:/, ''); }
     const regions = value.regions;
     if (regions === null || typeof regions !== 'object' || Array.isArray(regions) || Object.keys(regions).length > MAX_REGIONS
       || Object.entries(regions).some(([idx, name]) => !/^\d{1,4}$/.test(idx) || typeof name !== 'string' || !NAME.test(name) || name.length > 64)) throw Error('invalid regions');

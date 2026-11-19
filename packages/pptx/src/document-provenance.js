@@ -7,7 +7,7 @@ import {runColorRecord, validateRunColors} from './run-colors.js';
 import {overlayRecord, validateOverlayRecord} from './shape-restore.js';
 import {validateCatalogRecord} from '@openpresentation/opf';
 import {SMART_ART_URI} from './smart-art.js';
-import {parseReference, resolveReference, resolveSocialProfile} from '@openpresentation/opf/composition';
+import {parseReference, renamedLayout, resolveReference, resolveSocialProfile} from '@openpresentation/opf/composition';
 
 // FF-32: document and slide references survive a PPTX round trip.
 //
@@ -1142,6 +1142,15 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
   const group = (field, ops, contentPaths) => groups.push({field, ops, ...(contentPaths ? {contentPaths} : {})});
   const set = (path, value) => ({path, value});
   const remove = path => ({path, remove: true});
+  // OPF 0.35 removed the gallery's flow and vertical-flow layouts: a slide a 0.34 file stored on one of them, with no record of its own
+  // and none in the stored catalogs, takes the layout that replaced it (process, vertical-process).
+  slideRecords.forEach((entry, index) => {
+    const layout = entry?.record.layout, renamed = typeof layout === 'string' && entry.record.layoutRecord === undefined
+      && !resolveReference({catalogs: object(document?.catalogs) ? document.catalogs : {}}, 'layouts', layout, {catalogs: []}) ? renamedLayout('layouts', layout) : undefined;
+    if (renamed === undefined) return;
+    report({code: 'layout-renamed', path: `slides.${index}.layout`, message: `OPF 0.35 removed layout ${layout}; the slide uses ${renamed}, which replaced it.`});
+    slideRecords[index] = {...entry, record: {...entry.record, layout: renamed}};
+  });
   const intent = layoutIntent(document?.catalogs, slideRecords, entries, group, report, hostCatalogs);
 
   // Slide and block ids must stay unique across the document; a duplicated

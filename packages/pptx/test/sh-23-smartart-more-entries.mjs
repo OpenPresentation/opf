@@ -10,7 +10,7 @@ import {OPF_LAYOUT_TABLES, opfLayoutDefinition} from '../src/smart-art-layouts.j
 assert.equal(OPF_LAYOUT_TABLES, 12);
 const short = ['Vision', 'Plan', 'Build', 'Ship', 'Learn', 'Grow', 'Scale', 'Serve'];
 // OPF's designs inside SMART_ART_OPF_DOMAIN: the stepped pyramid, a card grid, snaking flow and chevron rows, the vertical flow's columns.
-const slides = [['pyramid', 8], ['matrix', 3], ['flow', 7], ['chevrons', 7], ['vertical-flow', 5]].map(([layout, count]) => ({layout, title: 'Steps', items: short.slice(0, count)}));
+const slides = [['pyramid', 8], ['matrix', 3], ['process', 7], ['chevrons', 7], ['vertical-process', 5]].map(([layout, count]) => ({layout, title: 'Steps', items: short.slice(0, count)}));
 for (const slide of slides) {
   const composed = composeSlide(slide, {layout: defaultCatalog.layouts[slide.layout]});
   const arrangement = composed.arrangements?.[0], item = composed.items.find(entry => entry.path === arrangement?.path);

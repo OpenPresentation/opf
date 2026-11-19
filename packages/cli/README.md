@@ -245,7 +245,7 @@ bundled open pack plus the `.ttf`/`.otf` files in each `--fonts` folder; relativ
 
 - **Shapes**: `shape` blocks (187 PowerPoint presets or a custom `path`), slide `shapes` overlays and connectors, six effects ([shapes](https://github.com/OpenPresentation/opf/blob/main/docs/shapes.md)).
 - **Icons**: `"icon": "lucide:truck"` on list entries, metrics and groups. The CLI registers the gallery's Lucide and Tabler sets and loads the ones a deck names ([icons](https://github.com/OpenPresentation/opf/blob/main/docs/icons.md)).
-- **Live SmartArt**: the `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` and `vertical-flow` layouts export as live SmartArt where PowerPoint draws them as the preview does, else as native shapes; `--smart-art shapes` always writes shapes ([SmartArt layouts](https://github.com/OpenPresentation/opf/blob/main/docs/smartart.md)).
+- **Live SmartArt**: the `pyramid`, `matrix`, `cycle`, `chevrons`, `process` (a short list) and `vertical-process` layouts export as live SmartArt where PowerPoint draws them as the preview does, else as native shapes; `--smart-art shapes` always writes shapes ([SmartArt layouts](https://github.com/OpenPresentation/opf/blob/main/docs/smartart.md)).
 - **Diagrams** accept Mermaid, Graphviz DOT (`syntax: "dot"`) or PlantUML (`syntax: "plantuml"`) and export as native PowerPoint shapes by default; `--diagrams picture` writes a picture ([diagrams](https://github.com/OpenPresentation/opf/blob/main/docs/diagrams.md)).
 
 ## Markdown and YAML

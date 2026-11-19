@@ -51,8 +51,8 @@ export interface LayoutRegion {
   metrics?: 'tile';
   /**
    * What the region draws its content as (`regionSequence` and `regionDiagram` read the two families). LH-07, a sequence: `steps` (its
-   * blocks, or a lone list's entries, are steps under numbered badges joined by a connector, and a lone list of short entries is a flow of
-   * chips joined by arrows) or `numbered` (an agenda: every list draws its entries beside badges, numbered or not; an unnumbered one is
+   * blocks, or a lone list's entries, are steps under numbered badges joined by a connector, and a lone list of 2 to 8 entries of one or two words
+   * draws as Basic Process where it holds them at the steps' size, OPF 0.35) or `numbered` (an agenda: every list draws its entries beside badges, numbered or not; an unnumbered one is
    * counted as drawing only). A diagram of the region's lone list of one level, in PowerPoint's geometry or OPF's own (composition.ts):
    * SH-09 `pyramid` (stacked levels, the first entry at the apex), SH-24 `inverted-pyramid` (the widest level first, the entries still
    * top to bottom), SH-09 `matrix` (four quadrants; another count draws a grid of cards), SH-18 `cycle` (nodes on a ring with an arrow

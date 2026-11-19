@@ -8,8 +8,9 @@ import {XMLValidator} from 'fast-xml-parser';
 import {fromPptx, toPptx} from './helpers/default-catalog.mjs';
 
 const options = {seed: 1717, timestamp: '2026-11-06T00:00:00Z', zipDate: '2026-11-06T00:00:00Z'};
-const items = {chevrons: ['Plan', 'Build', 'Test', 'Ship'], flow: ['Research', 'Design', 'Run', 'Review'], 'vertical-flow': ['Sign up', 'Set up', 'Launch']};
-const LAYOUTS = {chevrons: 'chevron1', flow: 'process1', 'vertical-flow': 'process2'};
+// 0.35: the process layout draws a short list as Basic Process (it absorbed the flow layout); vertical-flow is vertical-process.
+const items = {chevrons: ['Plan', 'Build', 'Test', 'Ship'], process: ['Research', 'Design', 'Run', 'Review'], 'vertical-process': ['Sign up', 'Set up', 'Launch']};
+const LAYOUTS = {chevrons: 'chevron1', process: 'process1', 'vertical-process': 'process2'};
 const deck = {slides: Object.entries(items).map(([layout, list]) => ({layout, title: 'How we work', items: list}))};
 const exported = async (document, extra = {}) => {
   const diagnostics = [], bytes = new Uint8Array(await toPptx(document, {...options, ...extra, onDiagnostic: diagnostic => diagnostics.push(diagnostic)}));
@@ -44,7 +45,7 @@ const live = await exported(deck);
       assert.equal((drawing.match(/<a:prstGeom prst="roundRect"><a:avLst><a:gd name="adj" fmla="val 10000"\/>/g) ?? []).length, items[kind].length);
       const arrows = [...drawing.matchAll(/<a:xfrm( rot="5400000")?>(?:(?!<\/a:xfrm>)[\s\S])*<\/a:xfrm><a:prstGeom prst="rightArrow"><a:avLst><a:gd name="adj1" fmla="val 60000"\/><a:gd name="adj2" fmla="val 50000"\/>/g)];
       assert.equal(arrows.length, items[kind].length - 1, `${kind}: an arrow between two boxes`);
-      assert.ok(arrows.every(match => Boolean(match[1]) === (kind === 'vertical-flow')), `${kind}: arrow rotation`);
+      assert.ok(arrows.every(match => Boolean(match[1]) === (kind === 'vertical-process')), `${kind}: arrow rotation`);
     }
     // OPF's colors: the arrows (sibTrans2D1) in the primary lightened 40%, without an outline; the nodes as SH-09's.
     const colors = text(`ppt/diagrams/colors${number}.xml`);
@@ -81,7 +82,7 @@ const live = await exported(deck);
   entries['ppt/diagrams/data2.xml'] = strToU8(strFromU8(entries['ppt/diagrams/data2.xml']).replace('<a:t>Run</a:t>', '<a:t>Run the pilot</a:t>'));
   const back = await fromPptx(zipSync(entries));
   assert.deepEqual(back.slides.map(slide => [String(slide.layout).replace(/^default:/, ''), listOf(slide)]),
-    [['chevrons', items.chevrons], ['flow', ['Research', 'Design', 'Run the pilot', 'Review']], ['vertical-flow', items['vertical-flow']]]);
+    [['chevrons', items.chevrons], ['process', ['Research', 'Design', 'Run the pilot', 'Review']], ['vertical-process', items['vertical-process']]]);
   assert.equal(JSON.stringify(back).includes('layoutDef'), false, 'the layout part is never stored');
 }
 
@@ -116,7 +117,9 @@ const live = await exported(deck);
 
 // 6. List blocks are the entries: cards with arrows as native shapes, never live (a SmartArt node holds no list), with the reason.
 {
-  const blocks = await exported({slides: [{layout: 'flow', title: 'Workstreams', blocks: [{items: ['Interview users', 'Map the journey']}, {items: ['Prototype', 'Test']}, {items: ['Decide', 'Plan']}]}]});
+  // A region whose arrangement is process (the 0.34 flow layout's record) draws list blocks on cards.
+  const basicProcess = {name: 'Basic process', direction: 'column', regions: [{name: 'title'}, {name: 'body', accepts: ['list'], flow: 'none', arrangement: 'process'}]};
+  const blocks = await exported({catalogs: {custom: {layouts: {'basic-process': basicProcess}}}, slides: [{layout: 'basic-process', title: 'Workstreams', blocks: [{items: ['Interview users', 'Map the journey']}, {items: ['Prototype', 'Test']}, {items: ['Decide', 'Plan']}]}]});
   assert.match(blocks.diagnostics.find(item => item.code === 'smartart-unavailable')?.reason ?? '', /lists, which a SmartArt node does not hold/);
   assert.equal(Object.keys(blocks.entries).some(path => path.startsWith('ppt/diagrams/')), false);
   const slide = blocks.text('ppt/slides/slide1.xml');

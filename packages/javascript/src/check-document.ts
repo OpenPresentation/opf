@@ -11,6 +11,7 @@ import {
 	relatedName,
 	resolveReference,
 	removedLayoutAuto,
+	renamedLayout,
 	unresolvedReference,
 	type CatalogKind,
 	type CatalogOptions,
@@ -975,6 +976,20 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 					definition: `${schemas.presentation.$id}#/$defs/Slide`,
 					lookup: ['opf', 'catalog', site.kind],
 					fixes: [{ id: 'remove-layout-auto', title: 'Delete layout (automatic composition)', kind: 'patch' as const, safe: true, patch: [{ op: 'remove' as const, path }] }],
+				}),
+			);
+			continue;
+		}
+		const renamed = renamedLayout(site.kind, site.reference);
+		if (renamed !== undefined) {
+			findings.push(
+				finding('opf/unresolved-reference', {
+					path,
+					message: diagnostic.message,
+					help: `OPF 0.35 removed layout "${site.reference}"; use "${renamed}", which draws the same content${renamed.endsWith('vertical-process') ? '' : ' (a short list as boxes joined by arrows, longer steps as numbered steps)'}.`,
+					definition: `${schemas.presentation.$id}#/$defs/Slide`,
+					lookup: ['opf', 'catalog', site.kind],
+					fixes: [{ id: 'rename-layout', title: `Use layout ${renamed}`, kind: 'patch' as const, safe: true, patch: [{ op: 'replace' as const, path, value: renamed }] }],
 				}),
 			);
 			continue;

@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Layout sampler",
   "language": "en",
-  "description": "All 40 default layouts and 13 dynamic compositions (no layout record), on one fictional six-week pilot story. Existing slide identities and order are preserved; newly added layouts append. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
+  "description": "All 39 default layouts and 13 dynamic compositions (no layout record), on one fictional six-week pilot story. Existing slide identities and order are preserved; newly added layouts append. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
   "design": {
     "background": "light1",
     "footer": {
@@ -869,22 +869,8 @@
       ]
     },
     {
-      "id": "layout-flow",
-      "layout": "flow",
-      "title": "From evidence to decision",
-      "blocks": [
-        {
-          "items": [
-            "Gather evidence",
-            "Run the pilot",
-            "Decide"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "layout-vertical-flow",
-      "layout": "vertical-flow",
+      "id": "layout-vertical-process",
+      "layout": "vertical-process",
       "title": "How a team joins the pilot",
       "blocks": [
         {
@@ -1991,7 +1977,7 @@
               "arrangement": "steps"
             }
           ],
-          "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition.",
+          "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition. A list of 2 to 8 steps of one or two words each draws as boxes joined by arrows.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/process.svg"
           }
@@ -2706,58 +2692,6 @@
             "vectorSrc": "https://www.pptx.gallery/layout-previews/chevrons.svg"
           }
         },
-        "flow": {
-          "name": "Flow",
-          "summary": "Steps in order, as boxes joined by arrows in one row.",
-          "tags": [
-            "Groups of items"
-          ],
-          "direction": "column",
-          "regions": [
-            {
-              "name": "title"
-            },
-            {
-              "name": "body",
-              "accepts": [
-                "list"
-              ],
-              "flow": "none",
-              "arrangement": "process"
-            }
-          ],
-          "description": "Show 1 to 8 steps that follow one another, each a box with an arrow to the next. Write one short list entry per step, in order.",
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/flow.svg"
-          }
-        },
-        "vertical-flow": {
-          "name": "Vertical flow",
-          "summary": "Steps in order, as boxes joined by arrows in a column beside the title.",
-          "tags": [
-            "Groups of items"
-          ],
-          "direction": "row",
-          "regions": [
-            {
-              "name": "title",
-              "size": 2
-            },
-            {
-              "name": "body",
-              "accepts": [
-                "list"
-              ],
-              "flow": "none",
-              "arrangement": "vertical-process",
-              "size": 3
-            }
-          ],
-          "description": "Show 1 to 8 steps that follow one another from top to bottom, each a box with an arrow to the next, beside the title. Write one short list entry per step, in order.",
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/vertical-flow.svg"
-          }
-        },
         "inverted-pyramid": {
           "name": "Inverted pyramid",
           "summary": "Levels that narrow to a point, with the widest first.",
@@ -2856,6 +2790,33 @@
           "description": "Show overlap among 1 to 7 sets using one flat list of short labels. The list order identifies the sets; no overlap values are implied. One to four sets have labels inside the circles, and five to seven beside them. Long labels, nested entries or unsupported counts retain the complete list with a finding instead of shrinking the text.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/venn.svg"
+          }
+        },
+        "vertical-process": {
+          "name": "Vertical process",
+          "summary": "Steps in order, as boxes joined by arrows in a column beside the title.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "row",
+          "regions": [
+            {
+              "name": "title",
+              "size": 2
+            },
+            {
+              "name": "body",
+              "accepts": [
+                "list"
+              ],
+              "flow": "none",
+              "arrangement": "vertical-process",
+              "size": 3
+            }
+          ],
+          "description": "Show 1 to 8 steps that follow one another from top to bottom, each a box with an arrow to the next, beside the title. Write one short list entry per step, in order.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/vertical-process.svg"
           }
         }
       }
