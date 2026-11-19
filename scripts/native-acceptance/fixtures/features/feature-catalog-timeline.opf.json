@@ -128,7 +128,7 @@
                 "timeline"
               ],
               "role": "primary",
-              "flow": "none"
+              "max": 1
             },
             {
               "name": "notes",
