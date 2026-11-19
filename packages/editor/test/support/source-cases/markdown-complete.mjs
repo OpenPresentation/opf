@@ -171,7 +171,7 @@ markdownCases.push(...markdownSpans);
 
 export const markdownAccess = [
   ['M-DOC-001', 'R-CMP-17', 'a front matter key shows its description', 'md', '---\n|\n---\n', [T('desc')], { docs: { shown: true, has: ['description'] } }],
-  ['M-DOC-002', 'R-CMP-17', 'a layout id of an option shows its regions', 'md', '# A\n<!-- slide: layout=| -->\n', [T('pill')], { docs: { has: ['Pillars', 'Regions: title, pillars'] } }],
+  ['M-DOC-002', 'R-CMP-17', 'a layout id of an option shows its regions', 'md', '# A\n<!-- slide: layout=| -->\n', [T('pill')], { docs: { has: ['Pillars', 'Regions: title, body'] } }],
   ['M-DOC-003', 'R-CMP-17', 'a slide option key shows the schema description', 'md', '# A\n<!-- slide: | -->\n', [T('hid')], { docs: { shown: true, has: ['hidden'] } }],
   ['M-DOC-004', 'R-A11Y-01', 'each option has an accessible name with its position', 'md', '# A\n\n```|', [T('chart'), ['waitLabels']], { popup: { ariaNames: [/^chart, keyword, fence\. 1 of \d+$/] } }],
   ['M-A11Y-001', 'R-A11Y-02', 'opening the list says how many suggestions', 'md', '# A\n\nNot|', [K('Control+Space')], { live: '3 suggestions' }],

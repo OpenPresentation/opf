@@ -8,7 +8,7 @@ const query = new URLSearchParams(location.search);
 if (query.get('dark') === '1') document.documentElement.setAttribute('data-theme', 'dark');
 const records = {
   blank: { id: 'my-layout', name: 'My layout', direction: 'column', regions: [{ name: 'title' }, { name: 'content' }] },
-  hero: { id: 'hero-copy', name: 'Hero copy', summary: 'A lead message with a picture and supporting points.', direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { direction: 'row', size: 2, regions: [{ name: 'lead', accepts: ['text', 'quote', 'metric'], flow: 'none' }, { name: 'media', accepts: ['image', 'video'], role: 'media', flow: 'none' }] }, { name: 'support', size: 1, accepts: ['text', 'list', 'metric', 'group'], role: 'supporting', flow: 'grid' }], design: { imageFit: 'contain' } },
+  hero: { id: 'hero-copy', name: 'Hero copy', summary: 'A lead message with a picture and supporting points.', direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { direction: 'row', size: 2, regions: [{ name: 'lead', accepts: ['text', 'quote', 'metric'], max: 1 }, { name: 'media', accepts: ['image', 'video'], role: 'media', max: 1 }] }, { name: 'support', size: 1, accepts: ['text', 'list', 'metric', 'group'], role: 'supporting', flow: 'grid' }], design: { imageFit: 'contain' } },
   row: { id: 'story', name: 'Story and evidence', direction: 'row', regions: [{ name: 'main', size: 2, accepts: ['text'] }, { name: 'aside', size: 1, accepts: ['metric'] }] },
   broken: { id: 'broken', name: 'Broken', direction: 'row', regions: [{ name: 'a' }, { name: 'a' }, { name: 'b', size: 'auto' }] },
 };

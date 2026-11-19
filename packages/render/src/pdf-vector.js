@@ -941,6 +941,20 @@ class Converter {
     const defs = [];
     const collect = (element) => { for (const child of element.children ?? []) if (isElement(child)) { if (child.name === "defs") defs.push(serialize(child, onlyLocalReferences)); collect(child); } };
     collect(page.svg);
+    // A <use> may point at drawn content outside <defs> (a shape effect draws its shadow from a <use> of the shape it
+    // follows): that element, and what it references in turn, goes into the standalone SVG too, or the copy draws nothing.
+    const referenced = [], seen = new Set();
+    const insideDefs = (element) => { for (let at = element.parent; at; at = at.parent) if (at.name === "defs") return true; return false; };
+    const follow = (element) => {
+      if (element.name === "use") {
+        const id = String(element.attrs.href ?? element.attrs["xlink:href"] ?? "").trim().replace(/^#/, "");
+        const target = id ? page.defs.get(id) : undefined;
+        if (target && !seen.has(target) && !insideDefs(target)) { seen.add(target); referenced.push(target); follow(target); }
+      }
+      for (const child of element.children ?? []) if (isElement(child)) follow(child);
+    };
+    follow(node);
+    if (referenced.length) defs.push(`<defs>${referenced.map((element) => serialize(element, onlyLocalReferences)).join("")}</defs>`);
     const rootAttrs = page.svg.attrs;
     const standalone = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${page.width}" height="${page.height}" viewBox="${escapeAttribute(rootAttrs.viewBox ?? `0 0 ${page.width} ${page.height}`)}">${defs.join("")}${open}${serialize(node, onlyLocalReferences)}${"</g>".repeat(chain.length)}</svg>`;
     const scale = this.options.rasterFallbackScale;

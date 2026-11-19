@@ -178,7 +178,7 @@ export const jsonRank = [
 ];
 // Layout regions rank the slide keys (SPEC 4.4 item 2): the keys the layout's regions call for that are not set yet come first, after the required ones.
 export const jsonRegionRank = [
-  ['J-RNK-010', 'R-CMP-18', 'agenda: title and items come before the subtitle', 'json', '{\n  "slides": [{\n    "layout": "agenda",\n    |\n  }]\n}', [T('"')], { popup: { first: 'title', order: ['title', 'items', 'subtitle', 'text'] } }],
+  ['J-RNK-010', 'R-CMP-18', 'agenda: title and the keys of its body (items, text) come before the subtitle', 'json', '{\n  "slides": [{\n    "layout": "agenda",\n    |\n  }]\n}', [T('"')], { popup: { first: 'title', order: ['title', 'items', 'text', 'subtitle'] } }],
   ['J-RNK-011', 'R-CMP-18', 'cover: the media region calls for image and video', 'json', '{\n  "slides": [{\n    "layout": "cover",\n    |\n  }]\n}', [T('"')], { popup: { order: ['title', 'image', 'video', 'subtitle'] } }],
   ['J-RNK-012', 'R-CMP-18', 'keys the layout calls for that are already set are not offered again', 'json', '{\n  "slides": [{\n    "layout": "agenda",\n    "title": "a",\n    |\n  }]\n}', [T('"')], { popup: { first: 'items', not: ['title', 'layout'] } }],
   ['J-RNK-013', 'R-CMP-18', 'an unknown layout leaves the common order', 'json', '{\n  "slides": [{\n    "layout": "no-such-layout",\n    |\n  }]\n}', [T('"')], { popup: { order: ['title', 'subtitle', 'items'] } }],
@@ -202,7 +202,7 @@ export const jsonFooter = [
 
 export const jsonDocs = [
   ['J-DOC-001', 'R-CMP-17', 'the selected key shows its schema description', 'json', KEY, [T('"desc')], { docs: { shown: true, has: ['description', 'Free-form prose describing what this presentation is about'] } }],
-  ['J-DOC-002', 'R-CMP-17', 'layout ids show name, description and regions', 'json', '{\n  "slides": [{"layout": "|"}]\n}', [T('pill')], { docs: { has: ['Pillars', 'Regions: title, pillars'] } }],
+  ['J-DOC-002', 'R-CMP-17', 'layout ids show name, description and regions', 'json', '{\n  "slides": [{"layout": "|"}]\n}', [T('pill')], { docs: { has: ['Pillars', 'Regions: title, body'] } }],
   ['J-DOC-003', 'R-CMP-17', 'the required badge is in the documentation', 'json', '{\n  "slides": [],\n  "organization": {\n    |\n  }\n}', [T('"i')], { popup: { has: ['id'] }, docs: { has: 'required' } }],
   ['J-DOC-004', 'R-A11Y-01', 'each option has an accessible name with its position', 'json', KEY, [T('"des'), ['waitLabels']], { popup: { ariaNames: [/^design, property, Design\. 1 of 3$/, /^description, property, string\. 2 of 3$/] } }],
   ['J-DOC-005', 'R-CMP-17', 'an enum value shows its description when the schema has one', 'json', '{\n  "slides": [{"type": "|"}]\n}', [T('ch')], { popup: { has: ['chart'] } }],

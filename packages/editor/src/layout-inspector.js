@@ -1,6 +1,6 @@
 // The inspector of the layout editor (RR-99): the properties of the selection, as form fields. With nothing selected it edits the layout
 // (id, name, summary, direction, default anchor, overflow region, design hints); a split has a direction, size and anchor; a region has
-// its name, size, accepted kinds, role, flow, max, anchor, bleed, list columns and empty rule. Every field is a command on the shared
+// its name, size, accepted kinds, role, flow, max, anchor, bleed and empty rule. Every field is a command on the shared
 // model, so it is validated by core and undoable like a drag on the canvas. CE-18: the panel is the studio kit's inspector frame (one
 // section per selection kind) with the kit's field builders.
 import { createLayoutModel } from "./layout-model.js";

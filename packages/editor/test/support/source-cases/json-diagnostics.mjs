@@ -9,7 +9,7 @@ const NONE = ['waitNoProblems'];
 export const jsonHover = [
   ['J-HOV-001', 'R-HOV-01', 'hovering a key shows the schema description', 'json', '{\n  "slides": [{"title": "a"}],\n  "design": {}\n}', [['hoverText', '"design"']], { hover: { open: 1, has: ['design', 'Optional design system'] } }],
   ['J-HOV-002', 'R-HOV-01', 'Mod+K Mod+I shows the hover at the caret', 'json', '{\n  "slides": [{"title": "a"}],\n  "des|ign": {}\n}', [['chord', 'Mod+k', 'Mod+i']], { hover: { open: 1, has: ['Optional design system'] }, live: 'Optional design system' }],
-  ['J-HOV-003', 'R-HOV-02', 'hovering a catalog value shows the record', 'json', '{\n  "slides": [{"layout": "pillars"}]\n}', [['hoverText', 'pillars']], { hover: { open: 1, has: ['Pillars', 'title, pillars'] } }],
+  ['J-HOV-003', 'R-HOV-02', 'hovering a catalog value shows the record', 'json', '{\n  "slides": [{"layout": "pillars"}]\n}', [['hoverText', 'pillars']], { hover: { open: 1, has: ['Pillars', 'title, body'] } }],
   ['J-HOV-004', 'R-HOV-04', 'hovering a problem shows the message, what is next and the quick fix hint', 'json', '{\n  "slides": [{"title": "a"}],\n  "design": {"titleAlignment": "middle"}\n}', [WAIT, ['hoverText', '"middle"']], { hover: { open: 1, has: ['must be start, center or end', 'did you mean `center`', 'Quick Fix'] } }],
   ['J-HOV-005', 'R-HOV-01', 'Escape hides the hover', 'json', '{\n  "slides": [{"title": "a"}],\n  "des|ign": {}\n}', [['chord', 'Mod+k', 'Mod+i'], K('Escape')], { hover: { open: 0 } }],
   ['J-HOV-006', 'R-HOV-01', 'no hover over free text', 'json', '{\n  "slides": [{"title": "Hello"}]\n}', [['hoverText', 'Hello']], { hover: { open: 0 } }],
