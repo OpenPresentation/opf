@@ -13,7 +13,7 @@ installed package versions give the same bytes on every operating system.
 
 | Command | What it does |
 | --- | --- |
-| `opf create [output] [--title <text> \| --example <slug>]` | A one-slide starter deck, or one of core's bundled examples (`opf catalog examples` lists them). |
+| `opf create [output] [--title <text> [--language <tag>] \| --example <slug>]` | A one-slide starter deck (language `en-US` unless `--language`), or one of core's bundled examples with the image files it names copied into `assets/` (`opf catalog examples` lists them). |
 | `opf validate <file\|dir\|->...` | The one checker: format, references, policy, accessibility, layout, content. Several files, folders and stdin in one run; `--format json\|text\|github`. |
 | `opf convert <input> <output>` | Any change of format: `.json`, `.opf.yaml`, `.opf.md` (and a plain `.md` input), `.pptx`, `.pdf`, `.png`, `.svg`, `.zip`, or stdin and stdout. |
 | `opf edit <file> [output] --patch <patch>` | A JSON Patch, applied whole or not at all, the result checked. |
@@ -192,7 +192,7 @@ For a file that will be opened in LibreOffice, `--charts picture` writes the cha
 
 ## The other commands
 
-- **`opf create`** writes a starter deck (`--title`) or a bundled example (`--example <slug>`, from `opf catalog examples`).
+- **`opf create`** writes a starter deck (`--title`, `--language`, default `en-US`) or a bundled example (`--example <slug>`, from `opf catalog examples`) together with the image files it names, copied into `assets/` next to the output (an existing file is refused unless `--force`).
 - **`opf validate`** checks files, folders (their `*.opf.json`, `*.opf.yaml`, `*.opf.yml` and `*.opf.md`, sorted, skipping
   `node_modules` and dot folders) and `-`. One input prints its report; several print `{ command, ok, files: [reports], counts }`.
   The exit status is the worst over every file. `--format github` prints `::error`, `::warning` and `::notice` annotations with the
