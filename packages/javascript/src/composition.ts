@@ -9662,7 +9662,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (units.length > 1 && units.every(unit => tierGroups.has(unit.path))) return 'row';
       // LH-132: a team's portrait cards: up to PORTRAIT_TOP_MAX across the top in one row, otherwise a grid.
       if (units.length && units.every(unit => personParts.has(unit.path))) return (portraitMode === 'top' || teamAvatar) && units.length <= PORTRAIT_TOP_MAX ? 'row' : 'grid';
-      if (direction !== undefined && region.flow !== 'none') return direction === 'horizontal' ? 'row' : 'column';
+      const directed = directedArrangement(region);
+      if (directed) return directed;
       const flow = region.flow === 'none' && units.length > 1 ? 'auto' : region.flow;
       if (flow === 'none' || flow === 'column') return 'column';
       if (flow === 'grid') return 'grid';
@@ -10020,6 +10021,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // A slide's own composition.mode, columns or weights arrange its first primary flowing region (the 0.18 modes).
     const slideComposition = record(slide.composition);
     const overridden = ['mode', 'columns', 'weights'].some(key => slideComposition[key] !== undefined) ? plan.regions.find(region => region.role === 'primary' && region.flow !== 'none')?.name : undefined;
+    // The direction each region's blocks resolved to (cardsArrangement): the slide's own mode in the region it arranges, else the one
+    // design.contentDirection gives a flowing region.
+    for (const region of plan.regions) {
+      const directed = region.name === overridden ? (slideComposition.mode as Composition['mode']) ?? 'auto' : directedArrangement(region);
+      if (directed) regionDirections.set(region.name, directed);
+    }
     const settings: Composition = { ...composition };
     // LH-64, LH-04: a row of cards (one row of a region's grid, or the lone blocks of card regions side by side) and how its cards
     // stand in their cells; undefined keeps the region's rule (LH-22: filled cards, the payload at the anchor).
@@ -10582,6 +10589,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const ownMode = record(slide.composition).mode as Composition['mode'] | undefined;
   const direction = recomposing && hints.sources.contentDirection === 'layout' ? undefined : hints.contentDirection;
   const directionMode: Composition['mode'] = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : 'auto';
+  // The arrangement the slide's direction gives a layout region's blocks (arrangementOf): design.contentDirection makes every flowing
+  // region one row or one column; undefined where it sets none, and the region's own flow arranges them.
+  const directedArrangement = (region: LayoutRegion): 'row' | 'column' | undefined => direction !== undefined && region.flow !== 'none' ? (direction === 'horizontal' ? 'row' : 'column') : undefined;
+  const regionDirections = new Map<string, Composition['mode']>();
   // The effective design.chartPrimary (slide, deck, then the layout's own) splits the root into a
   // primary chart track and one synthetic container of the other nodes when the slide has no regions
   // and no composition.mode of its own, and the root nodes mix at least one chart leaf with other nodes.
@@ -11466,6 +11477,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // sits in the middle of its card. When no grid holds the list at its size, it stays the list it was; the guard (DRAWING_RULES, and
   // composeSlide without steps) keeps the cards only when no text of the slide is smaller than without them.
   const cardLists = new Set<string>();
+  // The arrangement the slide's direction resolved for the area a lone list's cards would take: on an automatic slide the root's
+  // (composition.mode, else design.contentDirection: rootSettings), in a layout the list region's (regionDirections: the slide's own mode
+  // in the region it arranges, else design.contentDirection's; a region's own flow is no direction, so a layout's lone list keeps its
+  // cards); undefined in a promoted region.
+  const cardsArrangement = (item: ComposedItem): Composition['mode'] | undefined => useTemplate
+    ? (item.region === undefined ? undefined : regionDirections.get(item.region))
+    : regions.length ? undefined : modeFor(rootSettings);
   // Wave 8, LH-18 with LH-165: the cards of a row share their label track, as sibling pillars do (alignHeadingTracks): every card of the row
   // reserves the height of its tallest label, so the descriptions start on one line and the row reads as one. Text keeps its size; a row
   // whose shared track would not fit its cards keeps its own labels' heights. Placement only, under `heading-tracks`.
@@ -11488,6 +11506,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const body = items.filter(item => !headings.has(item.field) && !item.eyebrow);
     const item = body.length === 1 ? body[0]! : undefined;
     if (!item || item.field !== 'items' || item.listColumns || item.caption || item.frameBox || item.emphasis || stepFlows.has(item.path) || !item.text || !('listEntries' in item.text)) return undefined;
+    // The slide's direction chooses the drawing: a list whose resolved arrangement is a column stays ruled rows, its icons on chips at the
+    // start of each row (LH-14); a row, a grid or no direction draws the cards.
+    if (cardsArrangement(item) === 'column') return undefined;
     const values = Array.isArray(item.value) ? item.value as ListValue[] : [];
     if (values.length < ICON_CARD_MIN || values.length > ICON_CARD_MAX) return undefined;
     const entries = values.map(value => {

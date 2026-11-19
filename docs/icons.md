@@ -48,6 +48,13 @@ height (or its layout region's), as Claude Design draws a set of features or an 
   label stays on one line). Icon cards never set text smaller: they are tried on top of the rules the guard kept and kept only when no
   block reads smaller than without them, and the settled slide without them (which LH-48 may grow) is compared too. When no grid holds
   the list at its size, it stays the list it was.
+- **Direction.** The slide's direction chooses between the cards and the list: where the arrangement composition resolves for the
+  list is a column (`composition.mode: "column"`, or `design.contentDirection: "vertical"` where the slide sets no mode; on a layout
+  slide, the arrangement of the list's region: the slide's own mode where it arranges that region, else `contentDirection`'s), the list stays ruled rows (label and description side by side
+  when the labels are short), each entry's chip at the start of its row (the end in a right-to-left deck), at the size the rows have
+  without icons. A row, a grid (a grid of cards is a grid) and no direction draw the cards. A layout region's own `flow` is no
+  direction here, so a layout's lone list keeps its cards unless the slide or the design sets a column. Groups drawn as icon cards are not part of
+  this choice.
 - **Across the body.** A layout's lone list with icons (an agenda's list in its half of an `agenda-split` slide) also tries its cards
   across the whole body under the heading, the slide composed as the automatic grid (LH-83's recomposition, `recomposed.cards`). That
   arrangement is kept when its text is at least as large as the layout's (with or without cards; LH-149's half steps count at the step
