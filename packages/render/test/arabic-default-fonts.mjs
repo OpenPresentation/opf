@@ -57,11 +57,14 @@ for (const language of ['ar', 'fa', 'ur']) {
 // 3. The SVG of the default Arabic deck: the title's Arabic is drawn at 0.95 and the body's at 0.96 of the composed size, in Noto Naskh
 // Arabic, each line pinned to the width the registry measures at the drawn size.
 const fontSizes = svg => [...svg.matchAll(/<text\b([^>]*)>([^<]*)</g)].filter(match => /font-family="Noto Naskh Arabic/.test(match[1]))
-  .map(([, tag, content]) => ({size: Number(/font-size="([\d.]+)"/.exec(tag)[1]), length: Number(/textLength="([\d.]+)"/.exec(tag)?.[1]), weight: Number(/font-weight="(\d+)"/.exec(tag)?.[1] ?? 400), text: content.replace(/[⁦-⁩]/g, '')}));
+  .map(([, tag, content]) => ({size: Number(/font-size="([\d.]+)"/.exec(tag)[1]), length: Number(/textLength="([\d.]+)"/.exec(tag)?.[1]), weight: Number(/font-weight="(\d+)"/.exec(tag)?.[1] ?? 400), text: content.replace(/[\u2066-\u2069]/g, '')}));
 {
   // The control deck names the replacement itself, so its drawn sizes are the composed sizes the multiplier scales.
   const control = fontSizes(toSvg(deck('en-US', {design: {fontScheme: 'noto-naksh-arabic'}}), {fonts: prepared})[0]);
-  const lines = fontSizes(toSvg(deck('ar'), {fonts: prepared})[0]);
+  const diagnostics = [];
+  const lines = fontSizes(toSvg(deck('ar'), {fonts: prepared, onDiagnostic: diagnostic => diagnostics.push(diagnostic)})[0]);
+  // The replacement takes the family's place for Arabic-script runs: Tinos and Arimo, which have no Arabic, are never asked for it.
+  assert.deepEqual(diagnostics.filter(diagnostic => diagnostic.code === 'font-glyph-fallback'), [], 'no glyph fallback note');
   assert.ok(lines.length >= 2 && lines.length === control.length, `${lines.length} lines`);
   near(lines[0].size, adjustedFontSize(control[0].size, HEADING), 1e-9, 'the title line is drawn at 0.95 of its composed size');
   near(lines.at(-1).size, adjustedFontSize(control.at(-1).size, BODY), 1e-9, 'the body line is drawn at 0.96 of its composed size');
@@ -81,7 +84,7 @@ for (const [fontScheme, faces] of [['arial', /font-family="(?:Montserrat|Arimo)/
 for (const [fontScheme, adjust] of [['arabic-typesetting', 0.64], ['sakkal-majalla', 0.89]]) {
   const document = {name: 'run language', language: 'en-US', design: {fontScheme}, slides: [{id: 'a', title: 'Plan', text: [{text: TEXT, language: 'ar'}, `\n${TEXT}`]}]};
   // The Arabic pieces only: the Latin title in these schemes is drawn by the same replacement at the composed size.
-  const sizes = svg => [...svg.matchAll(/<(?:text|tspan)\b[^>]*font-family="Noto Naskh Arabic[^"]*"[^>]*font-size="([\d.]+)"[^>]*>([^<]*)/g)].filter(match => /[؀-ۿ]/.test(match[2])).map(match => Number(match[1]));
+  const sizes = svg => [...svg.matchAll(/<(?:text|tspan)\b[^>]*font-family="Noto Naskh Arabic[^"]*"[^>]*font-size="([\d.]+)"[^>]*>([^<]*)/g)].filter(match => /[\u0600-\u06FF]/.test(match[2])).map(match => Number(match[1]));
   for (const options of [{fonts: prepared}, {fonts: {embeddedFonts: prepared.embeddedFonts, fontFiles: prepared.fontFiles, useBundledFonts: false}}]) {
     const drawn = sizes(toSvg(document, options)[0]);
     assert.ok(drawn.length >= 2, `${fontScheme}: both Arabic lines are drawn in the replacement`);
