@@ -79,7 +79,22 @@ export function failOnOf(options: Options): FindingSeverity {
 /** The failure of a document that fails its check or has findings at --fail-on: exit 1, the findings in the error report. */
 export function documentFailure(command: string, message: string, findings: readonly Finding[], fields: Record<string, unknown> = {}): CliError {
 	const invalid = findings.some((finding) => finding.severity === "error");
-	return new CliError(message, invalid ? "invalid-document" : "findings-at-fail-on", 1, { command, ...fields, findings, counts: countsOf(findings) });
+	return new CliError(`${message}${staleCopyHint(command, findings)}`, invalid ? "invalid-document" : "findings-at-fail-on", 1, { command, ...fields, findings, counts: countsOf(findings) });
+}
+
+/**
+ * OPF 0.35: the sentence that names the fix when a deck embeds copies of built-in layouts from before 0.35 that fail the schema (record
+ * findings that carry `use-current-record` or `rename-layout`): `opf embed <deck> -i` makes them valid. Empty otherwise, and for embed itself.
+ */
+export function staleCopyHint(command: string, findings: readonly Finding[]): string {
+	if (command === "embed") return "";
+	const ids = new Set<string>();
+	for (const finding of findings) {
+		const match = /^\/catalogs\/[^/]+\/layouts\/([^/]+)/.exec(finding.path);
+		if (match && finding.severity === "error" && finding.fixes?.some((fix) => fix.id === "use-current-record" || fix.id === "rename-layout")) ids.add(match[1]!.replaceAll("~1", "/").replaceAll("~0", "~"));
+	}
+	if (!ids.size) return "";
+	return ` The deck embeds copies of built-in layouts from before OPF 0.35 (${[...ids].join(", ")}): \`opf embed <deck> -i\` refreshes each one it can without changing what it draws; validate again after it.`;
 }
 
 /** The format and references check a command runs on a deck it is about to write. */

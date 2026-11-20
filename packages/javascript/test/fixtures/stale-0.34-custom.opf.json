@@ -1,0 +1,99 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Custom records",
+  "language": "en-US",
+  "slides": [
+    {
+      "title": "Mine",
+      "layout": "mine",
+      "blocks": [
+        {
+          "items": [
+            "a",
+            "b"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Make the next launch count",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "A clearer launch plan starts with the people who will use it.",
+          "region": "main"
+        },
+        {
+          "type": "metric",
+          "metric": {
+            "value": 24,
+            "label": "teams in the pilot"
+          },
+          "region": "aside"
+        }
+      ],
+      "layout": "custom:story-and-evidence"
+    }
+  ],
+  "catalogs": {
+    "custom": {
+      "layouts": {
+        "mine": {
+          "name": "Mine",
+          "direction": "row",
+          "regions": [
+            {
+              "name": "a",
+              "role": "secondary",
+              "sequence": "steps",
+              "accepts": [
+                "list"
+              ]
+            },
+            {
+              "name": "b",
+              "arrangement": "flow",
+              "flow": "none"
+            },
+            {
+              "name": "c",
+              "arrangement": "pyramid",
+              "pyramidDirection": "down"
+            }
+          ]
+        },
+        "story-and-evidence": {
+          "name": "Story and evidence",
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "direction": "row",
+              "anchor": "middle",
+              "regions": [
+                {
+                  "name": "main",
+                  "size": 2,
+                  "accepts": [
+                    "text"
+                  ],
+                  "flow": "none"
+                },
+                {
+                  "name": "aside",
+                  "size": 1,
+                  "accepts": [
+                    "metric"
+                  ],
+                  "flow": "none"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

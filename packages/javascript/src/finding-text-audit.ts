@@ -297,6 +297,17 @@ const regionUnknown: RuleText = (finding, _context, helpers) => {
   const slide = slideNumber(finding);
   const layout = slide ? regionNamesOf(helpers.valueAt(["slides", String(slide - 1), "layout"]), helpers) : undefined;
   const known = layout?.names ?? [];
+  // OPF 0.35: a 0.34 region name of a built-in layout; the fix renames the pin.
+  const renamed = (finding.fixes ?? []).find((fix) => fix.id === "rename-region" && fix.kind === "patch");
+  const next = renamed?.kind === "patch" ? (renamed.patch[0] as { value?: unknown } | undefined)?.value : undefined;
+  if (typeof next === "string") {
+    const reference = slide ? helpers.valueAt(["slides", String(slide - 1), "layout"]) : undefined;
+    const id = layout?.id ?? (typeof reference === "string" ? reference : undefined);
+    return {
+      message: `Block pinned to region ${code(region)}, which OPF 0.35 renamed ${code(next)}${id ? ` in layout ${code(id)}` : ""}.`,
+      next: `pin it to ${code(next)} (the fix does).`,
+    };
+  }
   return {
     message: layout
       ? `Block pinned to region ${code(region)}; layout ${code(layout.id)} has ${andList(known)}.`
