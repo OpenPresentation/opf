@@ -33,6 +33,12 @@ export interface ExamplePage {
 	gallery?: string | null;
 	file: string;
 	deck: unknown;
+	/**
+	 * The image files the deck names by a relative path that the package ships, keyed by that path as the deck writes it
+	 * (`./assets/logo.svg`), as base64 data URIs. Never part of the deck a tool or resource returns: the viewer reads them through
+	 * the app-only `read_example_files` and draws a deck's `./assets/<name>` with them. Left out when the deck names none.
+	 */
+	files?: Readonly<Record<string, string>>;
 }
 
 /** The data the server serves. `skills` maps a skill name to its files (`SKILL.md`, `references/...`), path to text. */
@@ -368,6 +374,14 @@ const FONT_CHUNK = 512 * 1024;
  */
 const ICON_BATCH = 100;
 const ICON_NAME = /^[a-z0-9][a-z0-9-]*$/;
+
+/**
+ * The most files one read_example_files call names. The example images are 13 files of 109 KB together (146 KB as base64), so even
+ * a call for all of them stays far under one message frame.
+ */
+const EXAMPLE_FILE_BATCH = 32;
+/** What read_example_files serves: a base64 data URI of a raster or SVG image, nothing else (a host's sources included). */
+const EXAMPLE_FILE_DATA = /^data:image\/(?:png|jpeg|gif|webp|svg\+xml);base64,[A-Za-z0-9+/]*={0,2}$/;
 
 /** Bytes as base64, without Buffer (edge-safe). */
 function base64Of(bytes: Uint8Array): string {
@@ -1082,6 +1096,40 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 					const data = answer.structuredContent as { icons: Record<string, unknown>; errors?: Record<string, string>; index?: unknown };
 					const text = `Icon set ${set}: ${Object.keys(data.icons).length} of ${names.length} icons${data.errors ? `, ${Object.keys(data.errors).length} not read` : ""}${data.index ? ", with the set's index" : ""}.`;
 					return { content: [{ type: "text" as const, text }], structuredContent: answer.structuredContent };
+				},
+			);
+		}
+
+		// The bundled example decks name image files by a relative path (./assets/logo.svg), which the viewer cannot load: it asks for
+		// them here by that path and draws the deck's ./assets/<name> with what comes back. The answer is a lookup in the examples'
+		// own files (ExamplePage.files): a path no example's file has is reported missing, and nothing is read from disk or fetched.
+		const exampleFiles = new Map<string, string>();
+		for (const example of sources.examples) {
+			for (const [name, data] of Object.entries(example.files ?? {})) if (!exampleFiles.has(name) && EXAMPLE_FILE_DATA.test(data)) exampleFiles.set(name, data);
+		}
+		if (exampleFiles.size) {
+			server.registerTool(
+				"read_example_files",
+				{
+					title: "Read example images for the OPF viewer",
+					description: `Used by the OPF viewer only (it cannot fetch): the image files the bundled example decks name by a relative path (./assets/logo.svg), up to ${EXAMPLE_FILE_BATCH} a call, as base64 data URIs. Only the files the examples ship; any other path is reported missing. Do not call it yourself.`,
+					inputSchema: { names: z.array(z.string().max(200)).max(EXAMPLE_FILE_BATCH).describe(`Up to ${EXAMPLE_FILE_BATCH} paths as a deck names them (./assets/logo.svg).`) },
+					outputSchema: { files: z.record(z.string(), z.string()), missing: z.array(z.string()) },
+					annotations: { ...READ_ONLY, title: "Read example images for the OPF viewer" },
+					// SEP-1865: callable by the view, hidden from the model.
+					_meta: { ui: { visibility: ["app"] } },
+				},
+				async ({ names }) => {
+					const asked = [...new Set(names)];
+					const files: Record<string, string> = {};
+					const missing: string[] = [];
+					for (const name of asked) {
+						const data = exampleFiles.get(name);
+						if (data) files[name] = data;
+						else missing.push(name);
+					}
+					// The data goes to the view only: the text says what it is.
+					return { content: [{ type: "text" as const, text: `Example files: ${Object.keys(files).length} of ${asked.length}${missing.length ? `; not shipped: ${missing.join(", ")}` : ""}.` }], structuredContent: { files, missing } };
 				},
 			);
 		}

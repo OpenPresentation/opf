@@ -36,7 +36,7 @@ describe("opf-mcp", () => {
 		assert.equal(info.name, "opf");
 		assert.match(client.getInstructions(), /format-card/);
 		const { tools } = await client.listTools();
-		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "read_font_file", "read_icons", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
+		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "read_example_files", "read_font_file", "read_icons", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
 		for (const tool of tools) {
 			assert.equal(tool.inputSchema.type, "object", tool.name);
 			assert.equal(tool.outputSchema?.type, "object", tool.name);
@@ -512,6 +512,9 @@ describe("the bundled sources", () => {
 		// Reviewed for the chartPrimary replacement on 2026-11-20: 1,397,930 exact bytes (after #1385: 1,397,584). It adds 346: the slide
 		// composition that keeps a removed design.chartPrimary's split, in design-resolution.md (+215) and dynamic-composition.md (+131),
 		// where both pages named the chart-beside layout, which has no region for a table. The limit is unchanged.
+		// Reviewed for the example decks' pictures in the viewer on 2026-11-20: 1,399,982 exact bytes (after the chartPrimary replacement:
+		// 1,397,930). It adds 2,052 in mcp.md: the app-only read_example_files (its table row, the viewer's images paragraph, the server
+		// tools row and the examples' files in the sources), and how a hosted viewer gets the pictures. The limit is unchanged.
 		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
 	});
 });

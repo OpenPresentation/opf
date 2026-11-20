@@ -269,7 +269,8 @@ export class Reporter {
 			help: HELP[code] ?? "",
 			...Object.fromEntries(Object.entries(details).filter(([, value]) => value !== undefined)),
 		};
-		// The details are part of the identity: opf-render's pdf-font-embedded has no path and no message, only the face it embedded.
+		// The details are part of the identity: opf-render's pdf-font-embedded has no path, and before 0.35 it had no message either,
+		// only the face it embedded.
 		const key = JSON.stringify([entry.ruleId, entry.path, entry.message, details]);
 		if (this.seen.has(key)) return;
 		this.seen.add(key);
