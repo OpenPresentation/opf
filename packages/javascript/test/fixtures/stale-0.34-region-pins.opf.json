@@ -1,0 +1,94 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Region pins",
+  "language": "en-US",
+  "slides": [
+    {
+      "id": "e",
+      "layout": "chart",
+      "title": "Chart",
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "C",
+                "R"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  1
+                ],
+                [
+                  "Q2",
+                  2
+                ]
+              ]
+            }
+          },
+          "region": "charts"
+        },
+        {
+          "text": "note text",
+          "region": "note"
+        }
+      ]
+    },
+    {
+      "id": "f",
+      "layout": "dashboard",
+      "title": "Dash",
+      "blocks": [
+        {
+          "metric": {
+            "value": 1,
+            "label": "A"
+          },
+          "region": "kpis"
+        },
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "C",
+                "R"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  1
+                ],
+                [
+                  "Q2",
+                  2
+                ]
+              ]
+            }
+          },
+          "region": "charts"
+        }
+      ]
+    },
+    {
+      "title": "H",
+      "layout": "comparison",
+      "blocks": [
+        {
+          "text": "l",
+          "region": "first"
+        },
+        {
+          "text": "r",
+          "region": "second"
+        },
+        {
+          "text": "Verdict here",
+          "region": "verdict"
+        }
+      ]
+    }
+  ]
+}

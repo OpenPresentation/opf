@@ -9653,6 +9653,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-86: long texts side by side become full-width rows of the row's first region (longTextRows), unless composeSlide leaves the rule out (its guard).
     const { binding, region: longTextRegion } = (!ruleOn('long-text-rows') ? (grouped: GroupedBinding) => ({ binding: grouped, region: undefined }) : longTextRows)(groupBinding(bindRegions(bound, layout, { slideIndex: options.slideIndex ?? 0 }), plan, rootNodes(bound, options.slideIndex ?? 0), { join: (options as Record<symbol, unknown>)[UNJOINED] !== true, labeled: new Set(eyebrowOf.keys()) }), plan);
     for (const entry of binding.diagnostics) diagnostics.push({ code: entry.code, path: entry.path, message: entry.message, ...(entry.region !== undefined ? { region: entry.region } : {}) });
+    // OPF 0.35: a block bound to no region (above) still has its pin checked, so a pin naming no region of the layout (a 0.34 name such as
+    // the comparison's `verdict`, drawn as the foot band) is reported as bindRegions reports it, not dropped silently. Nothing is drawn differently.
+    const regionNames = new Set(plan.regions.map(region => region.name));
+    slide.blocks?.forEach((block: unknown, index: number) => {
+      const pin = record(block).region;
+      if (unbound(index) && typeof pin === 'string' && !regionNames.has(pin)) diagnostics.push({ code: 'region-unknown', path: `${path}.blocks.${index}.region`, region: pin, message: `The layout has no region '${pin}'; the block is placed by its kind instead.` });
+    });
     // A bound root node as composition reads it; a block with several payload fields stacks them in its cell.
     const blockUnit = (bound: BoundBlock): Pending => {
       const host = bound.block !== undefined ? record(slide.blocks[bound.block])

@@ -1,6 +1,9 @@
 import { imageBackground } from './composition.js';
 import { intrinsicImageSize } from './image-aspect.js';
-import type { ValidationRule } from './rule-context.js';
+import { resolveReference } from './catalog-refs.js';
+import type { FindingFix } from './generated/types/finding.js';
+import type { RuleSlide, ValidationContext, ValidationRule } from './rule-context.js';
+import { layoutRegionNames, renamedRegion } from './stale-records.js';
 import { plainText, pointerOfDotted, runsOf, slidePayloads } from './rule-content.js';
 import { type Rec, rec } from './rule-design.js';
 import { resolveNarrative, unreferencedBeats } from './narrative-plan.js';
@@ -13,6 +16,23 @@ const round = (value: number, places = 1) => Math.round(value * 10 ** places) / 
 
 const pointAnchorRule = ruleInfo('opf/shape-anchor-missing');
 const REGION_RULES = { 'region-unknown': regionUnknownRule, 'region-kind': regionKindRule, 'region-full': regionFullRule, 'layout-unplaced': unplacedRule } as const;
+
+/**
+ * OPF 0.35: a pin that names the 0.34 region of a built-in layout (`charts` on `chart`) gets the region's new name (RENAMED_REGIONS) as
+ * its help and the safe fix `rename-region`, which puts the block back in the region it was pinned to. Undefined for any other pin.
+ */
+function renamedPin(context: ValidationContext, slide: RuleSlide, path: string, pin: unknown): { help: string; fix: FindingFix } | undefined {
+	const reference = slide.slide.layout;
+	if (typeof pin !== 'string' || typeof reference !== 'string') return undefined;
+	const found = resolveReference(context.document, 'layouts', reference, { ...(context.options.catalogs ? { catalogs: context.options.catalogs } : {}) });
+	if (!found || found.group !== 'default') return undefined;
+	const next = renamedRegion(found.id, pin);
+	if (next === undefined || !layoutRegionNames(found.record).has(next)) return undefined;
+	return {
+		help: `OPF 0.35 renamed region '${pin}' of the built-in layout '${found.id}' to '${next}' (the built-in layouts use the standard region names). Rename the pin (fix rename-region), which puts the block back in that region.`,
+		fix: { id: 'rename-region', title: `Pin to ${next}`, kind: 'patch', safe: true, patch: [{ op: 'replace', path, value: next }] },
+	};
+}
 
 const layoutRules: ValidationRule[] = [
 	{
@@ -53,8 +73,10 @@ const layoutRules: ValidationRule[] = [
 					// RR-105: a timeline period shorter than its marker (geometry, not overflow).
 					else if (diagnostic.code === 'timeline-period-short')
 						context.report(timelinePeriodShortRule, { path, slide, message: diagnostic.message, help: 'Give the timeline more room, or make its shortest period longer relative to the others.' });
-					else if (Object.hasOwn(REGION_RULES, diagnostic.code))
-						context.report(REGION_RULES[diagnostic.code as keyof typeof REGION_RULES], { path, slide, message: diagnostic.message, help: diagnostic.code === 'layout-unplaced' ? 'Paginate the slide, choose a layout with more room, pin the block to a region with room, or remove a block.' : 'Pin the block to a region of the layout that accepts it and has room, or remove the pin.' });
+					else if (Object.hasOwn(REGION_RULES, diagnostic.code)) {
+						const renamed = diagnostic.code === 'region-unknown' ? renamedPin(context, slide, path, diagnostic.region) : undefined;
+						context.report(REGION_RULES[diagnostic.code as keyof typeof REGION_RULES], { path, slide, message: diagnostic.message, help: renamed?.help ?? (diagnostic.code === 'layout-unplaced' ? 'Paginate the slide, choose a layout with more room, pin the block to a region with room, or remove a block.' : 'Pin the block to a region of the layout that accepts it and has room, or remove the pin.'), ...(renamed ? { fixes: [renamed.fix] } : {}) });
+					}
 					// A diagram whose source cannot be drawn (composition.ts composeDiagram): Mermaid, DOT and PlantUML errors alike.
 					else if (diagnostic.message.startsWith('The diagram cannot be drawn'))
 						context.report(unresolvedRule, { path, slide: path.startsWith('/slides/') ? slide : undefined, message: diagnostic.message, help: 'Fix the diagram source where the message points. OPF refuses what it does not draw: write it in the form the diagrams guide lists for that syntax, or remove it.' });

@@ -88,8 +88,10 @@ export function schemaFixes(finding: Finding, document: unknown): FindingFix[] {
 
 /**
  * OPF 0.35: a removed design key (`contentDirection`, `chartPrimary`; REMOVED_DESIGN_KEYS) in a deck, slide, theme or layout `design`, a
- * layout region's removed `flow: "none"` or its removed `listColumns`: what replaced it, as the finding's help, and the safe fix (delete
- * the key; `none` becomes `max: 1`).
+ * layout region's removed `flow: "none"`, `listColumns`, `sequence`, `pyramidDirection`, `arrangement` `flow` / `vertical-flow` or
+ * `role: "secondary"`: what replaced it, as the finding's help, and the fix where the conversion is mechanical (delete the design key or
+ * `listColumns`; `none` becomes `max: 1`; `sequence` becomes `arrangement`; a pyramid's `pyramidDirection` becomes its arrangement;
+ * `flow` becomes `process`). `secondary` gets two fixes, neither marked safe.
  * For `opf/schema` and `opf/catalog-record` findings, the document's own and its embedded records; undefined for any other finding.
  */
 /** OPF 0.35: what replaced a layout region's `listColumns` (removedKeyRepair). */
@@ -98,6 +100,40 @@ export function removedKeyRepair(finding: Finding, document: unknown): { help: s
   const validation = finding.validation;
   if (!validation || (finding.ruleId !== "opf/schema" && finding.ruleId !== "opf/catalog-record")) return undefined;
   const segments = segmentsOf(finding.path);
+  const inRegion = segments.at(-3) === "regions";
+  if (validation.keyword === "additionalProperties" && inRegion && (segments.at(-1) === "sequence" || segments.at(-1) === "pyramidDirection")) {
+    const parent = segments.slice(0, -1), region = readAt(document, parent), value = readAt(document, segments);
+    if (!isRecord(region) || value === undefined) return undefined;
+    const arrangement = region.arrangement;
+    if (segments.at(-1) === "sequence") {
+      const help = `OPF 0.35 replaced the region key sequence with arrangement: a region has one arrangement, a sequence ("steps" or "numbered") or a diagram. Write "arrangement": ${JSON.stringify(value)} in its place.`;
+      if (arrangement !== undefined || (value !== "steps" && value !== "numbered")) return { help: `${help}${arrangement !== undefined ? ` This region also has "arrangement": ${JSON.stringify(arrangement)}; keep one of the two.` : ""}`, fixes: [] };
+      return { help, fixes: [patch("use-arrangement", `Write arrangement ${value}`, [{ op: "move", from: finding.path, path: pointerOf([...parent, "arrangement"]) }], true)] };
+    }
+    const help = 'OPF 0.35 removed the region key pyramidDirection: "arrangement": "inverted-pyramid" draws the pyramid upside down (what "down" did), and "arrangement": "pyramid" draws it upright ("up", the default).';
+    if (arrangement !== "pyramid") return { help, fixes: [] };
+    if (value === "down") return { help, fixes: [patch("use-inverted-pyramid", "Write arrangement inverted-pyramid", [{ op: "remove", path: finding.path }, { op: "replace", path: pointerOf([...parent, "arrangement"]), value: "inverted-pyramid" }], true)] };
+    if (value === "up") return { help, fixes: [patch("use-pyramid", "Keep arrangement pyramid (upright)", [{ op: "remove", path: finding.path }], true)] };
+    return { help, fixes: [] };
+  }
+  if (validation.keyword === "enum" && inRegion && segments.at(-1) === "arrangement") {
+    const value = readAt(document, segments), renamed = value === "flow" ? "process" : value === "vertical-flow" ? "vertical-process" : undefined;
+    if (renamed === undefined) return undefined;
+    return { help: `OPF 0.35 renamed the arrangement "${String(value)}" to "${renamed}", PowerPoint's name (${renamed === "process" ? "Basic Process" : "Vertical Process"}); it draws the same.`, fixes: [patch("rename-arrangement", `Write arrangement ${renamed}`, [{ op: "replace", path: finding.path, value: renamed }], true)] };
+  }
+  // An embedded record copied before OPF 0.34 (a host's stale copy of a built-in layout) can still say left or right, which 0.34 renamed.
+  const alignment = segments.at(-1);
+  if (validation.keyword === "enum" && finding.ruleId === "opf/catalog-record" && segments.at(-2) === "design" && (alignment === "titleAlignment" || alignment === "contentAlignment")) {
+    const value = readAt(document, segments), next = value === "left" ? "start" : value === "right" ? "end" : undefined;
+    if (next === undefined) return undefined;
+    return { help: `OPF 0.34 renamed the alignment "${String(value)}" to "${next}" (the start and end of the reading direction; the left and right edges of a left-to-right deck).`, fixes: [patch(`change-to:${next}`, `Change to ${next}`, [{ op: "replace", path: finding.path, value: next }], true)] };
+  }
+  if (validation.keyword === "enum" && inRegion && segments.at(-1) === "role" && readAt(document, segments) === "secondary") {
+    return {
+      help: 'OPF 0.35 removed the role "secondary" (bound after primary, before supporting): a region\'s role is "primary" (the default), "media" or "supporting". Write "supporting" for a region that takes what the primary regions leave, or "primary".',
+      fixes: [patch("change-to:supporting", "Change to supporting", [{ op: "replace", path: finding.path, value: "supporting" }]), patch("change-to:primary", "Change to primary", [{ op: "replace", path: finding.path, value: "primary" }])],
+    };
+  }
   if (validation.keyword === "additionalProperties") {
     const name = segments.at(-1) ?? "";
     if (name === "listColumns" && segments.at(-3) === "regions" && readAt(document, segments) !== undefined) return { help: REMOVED_LIST_COLUMNS, fixes: [patch("remove:listColumns", "Delete listColumns", [{ op: "remove", path: finding.path }], true)] };

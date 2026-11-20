@@ -609,9 +609,11 @@ const unresolvedReference: RuleText = (finding, _context, helpers) => {
   const embedded = kind && embeddedIn.some((name) => isRecord(helpers.valueAt(["catalogs", name, kind, bare])));
   const suggestions = (finding.suggestions ?? []).slice(0, 5).map((entry) => String(entry.value));
   if (embedded) {
+    // OPF 0.35: an embedded copy of a built-in layout from before 0.35 carries the fix that takes the current record.
+    const current = (finding.fixes ?? []).some((fix) => fix.id === "use-current-record" || fix.id === "rename-layout");
     return {
-      message: `${noun} ${code(reference)} is embedded but invalid, so it is not used and ${FALLBACK(kind)}.`,
-      next: `fix the record named in the other problems, or remove the reference.`,
+      message: `${noun} ${code(reference)} is embedded, but the record is invalid.`,
+      next: current ? `fix the record named in the other problems, or take the current record (the fix does; ${code("opf embed -i")} does it where that keeps the drawing).` : `fix the record named in the other problems, or remove the reference.`,
     };
   }
   const message =
