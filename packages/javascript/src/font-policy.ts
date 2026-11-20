@@ -10,6 +10,7 @@ export type {
   FontReplacement,
   FontReplacementCompatibility,
   FontReplacementMeasurement,
+  FontScriptReplacement,
 } from "./font-policy-types.js";
 
 /**

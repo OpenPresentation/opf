@@ -334,6 +334,14 @@
           "styles": 4,
           "reference": "Arial 7.06"
         },
+        "scripts": {
+          "Arab": {
+            "family": "Noto Naskh Arabic",
+            "compatibility": "visual",
+            "sizeAdjust": 0.96,
+            "sizeAdjustBasis": "v0.35 Arabic default: sum of Arial 7.07 advances over sum of Noto Naskh Arabic 400 advances (fontkit, read in place; each sample in its own OpenType language) over the Arabic-script runs of the 12 Arabic-script corpus samples of opf-render test/fixtures/script-corpora.json: 0.964 (per-sample 0.90 to 1.16; the samples without digits of their own 0.90 to 0.99, the two digit samples 1.08 and 1.16). Arial's Arabic is Times New Roman's (235 of the 256 glyphs of the Arabic block have the same outlines and advances); Arial's wider space makes its runs 1.5 percent longer. Bold: Arial Bold over Noto Naskh Arabic 700 0.946, so bold runs draw about 1.5 percent long. At 0.96 the body letters stand as high as the real font's (heh 1.03, meem 1.07 of the replacement's) and alef and lam somewhat lower (1.15). Noto Naskh Arabic, not Noto Sans Arabic: those samples vary less against Arial (0.90 to 0.99 against 0.82 to 0.94, which is 0.88 pooled) and its bold keeps the regular ratio (Noto Sans Arabic 700: 0.82, so bold would draw 7 percent long)."
+          }
+        },
         "source": "https://github.com/google/fonts/blob/main/ofl/arimo/METADATA.pb"
       },
       "alternates": [
@@ -3534,6 +3542,14 @@
           "maxAbsWidthDelta": 0,
           "styles": 4,
           "reference": "Times New Roman 7.12"
+        },
+        "scripts": {
+          "Arab": {
+            "family": "Noto Naskh Arabic",
+            "compatibility": "visual",
+            "sizeAdjust": 0.95,
+            "sizeAdjustBasis": "v0.35 Arabic default: sum of Times New Roman 7.13 advances over sum of Noto Naskh Arabic 400 advances (fontkit, read in place; each sample in its own OpenType language) over the Arabic-script runs of the 12 Arabic-script corpus samples of opf-render test/fixtures/script-corpora.json: 0.950 (per-sample 0.89 to 1.15; the samples without digits of their own 0.89 to 0.96, the two digit samples 1.07 and 1.15). Bold: Times New Roman Bold over Noto Naskh Arabic 700 0.932, so bold runs draw about 2 percent long. At 0.95 the body letters stand as high as the real font's (heh 1.05, meem 1.08 of the replacement's) and alef and lam somewhat lower (1.16). Noto Naskh Arabic, not Noto Sans Arabic: Times New Roman's Arabic is a naskh design, those samples vary less against it (0.89 to 0.96 against 0.81 to 0.93, which is 0.86 pooled) and its bold keeps the regular ratio (Noto Sans Arabic 700: 0.81, so bold would draw 7 percent long)."
+          }
         },
         "source": "https://github.com/google/fonts/blob/main/ofl/tinos/METADATA.pb"
       },
