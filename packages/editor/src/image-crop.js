@@ -8,12 +8,12 @@
 // then places the cropped picture in its frame exactly as before (opf-pptx writes the usual `a:srcRect` for that placement,
 // and none for a picture whose shape matches its frame).
 //
-// A focal point works the same way: the picture is cut to the frame's shape around the chosen point, so a centred cover
+// A focal point works the same way: the picture is cut to the frame's shape around the chosen point, so a centered cover
 // fit shows what was chosen. The original asset stays in `assets`, and the new asset's `description` says "Cropped from
 // asset:<id>", which is how "Restore original" finds it. This is the editor's way of working inside the current schema, not
 // a new OPF field.
 //
-// This module is the pure part (rectangle maths, the patch that applies a crop) plus `cropImagePixels`, which needs a
+// This module is the pure part (rectangle math, the patch that applies a crop) plus `cropImagePixels`, which needs a
 // browser canvas. `image-cropper.js` is the DOM that drives it.
 import { OPFEditorError, getValueAtPath, opfPathToJsonPointer } from "./index.js";
 import { DEFAULT_MAX_IMAGE_BYTES, assetIdOf, imageDataUri, sniffImageType, uniqueAssetId } from "./assets.js";
@@ -48,7 +48,7 @@ export function aspectRatioFor(id, { width, height, frame } = {}) {
   return CROP_ASPECTS.find((aspect) => aspect.id === id)?.ratio;
 }
 
-// ---- rectangle maths (source pixels; rect is { x, y, width, height }) -------------------------------------------------
+// ---- rectangle math (source pixels; rect is { x, y, width, height }) -------------------------------------------------
 
 /** The whole image. */
 export const fullRect = (width, height) => ({ x: 0, y: 0, width, height });
@@ -68,7 +68,7 @@ export function moveRect(rect, dx, dy, bounds) {
 /**
  * Drag one handle of a crop rectangle to `point` (a source-pixel position). `handle` is `n`, `ne`, `e`, `se`, `s`, `sw`, `w`
  * or `nw`. With `aspect` (width / height) the ratio is kept: a corner follows the pointer along the diagonal and an edge
- * resizes about the rectangle's centre on the other axis. The result stays inside `bounds` and keeps at least `min`.
+ * resizes about the rectangle's center on the other axis. The result stays inside `bounds` and keeps at least `min`.
  */
 export function resizeRect(start, handle, point, bounds, { aspect, min = MIN_CROP_SIDE } = {}) {
   const dx = handle.includes("e") ? 1 : handle.includes("w") ? -1 : 0;
@@ -105,7 +105,7 @@ export function resizeRect(start, handle, point, bounds, { aspect, min = MIN_CRO
   return { x: centerX - width / 2, y: dy > 0 ? start.y : bottom - height, width, height };
 }
 
-/** The largest rectangle with `aspect` that fits inside `rect`, centred on it. */
+/** The largest rectangle with `aspect` that fits inside `rect`, centered on it. */
 export function fitAspect(rect, aspect) {
   if (!aspect) return rect;
   let width = rect.width;
@@ -119,7 +119,7 @@ export function fitAspect(rect, aspect) {
 
 /**
  * The crop a focal point asks for: the largest window of the frame's `aspect` (width / height) in the image, divided by
- * `zoom` (1 or more), centred on `focal` (`{ x, y }` as fractions of the image) and kept inside the image.
+ * `zoom` (1 or more), centered on `focal` (`{ x, y }` as fractions of the image) and kept inside the image.
  */
 export function focalWindow(bounds, aspect, focal, zoom = 1) {
   const whole = fitAspect(fullRect(bounds.width, bounds.height), aspect);
@@ -134,7 +134,7 @@ export function focalWindow(bounds, aspect, focal, zoom = 1) {
   };
 }
 
-/** The centre of a crop rectangle as fractions of the image: the focal point it shows. */
+/** The center of a crop rectangle as fractions of the image: the focal point it shows. */
 export const focalPointOf = (rect, bounds) => ({ x: (rect.x + rect.width / 2) / bounds.width, y: (rect.y + rect.height / 2) / bounds.height });
 
 /** Whole source pixels, at least 1 by 1, inside the image. */
@@ -268,7 +268,7 @@ export async function loadImagePixels(src, { document: doc = globalThis.document
       callback(value);
     };
     const abort = () => {
-      finish(reject, signal.reason ?? new win.DOMException("Image loading was cancelled.", "AbortError"));
+      finish(reject, signal.reason ?? new win.DOMException("Image loading was canceled.", "AbortError"));
       image.src = "";
     };
     if (anonymous) image.crossOrigin = "anonymous";
@@ -348,7 +348,7 @@ export async function applyCrop(editor, path, rect, options = {}) {
   const loaded = options.loaded ?? await loadImagePixels(image.assetSrc, { signal: options.signal });
   current();
   const pixels = await cropImagePixels(loaded, rect, { mediaType: image.mediaType, maxBytes: options.maxBytes });
-  // Never apply old pixels to a newer document or to a cancelled crop session.
+  // Never apply old pixels to a newer document or to a canceled crop session.
   current();
   const prepared = prepareCrop(source.presentation, path, pixels);
   const change = editor.applyPatch(prepared.patches, { ...options.meta, source: options.meta?.source ?? "image-crop", path, assetId: prepared.assetId });

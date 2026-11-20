@@ -50,7 +50,7 @@ export interface ValidationContext {
 	slides: RuleSlide[];
 	thresholds: ValidationThresholds;
 	options: ValidateOptions;
-	/** The host's series palette (`ValidateOptions.chartPalette`); absent means the deck's own, `chartSeriesPalette` of each slide's colour scheme. */
+	/** The host's series palette (`ValidateOptions.chartPalette`); absent means the deck's own, `chartSeriesPalette` of each slide's color scheme. */
 	chartPalette: readonly string[] | undefined;
 	report(rule: ValidationRuleInfo, finding: FindingInput): Finding;
 }

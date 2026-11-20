@@ -17,7 +17,6 @@ import type { FindingInput, ValidationContext } from './rule-context.js';
 import { validateAgainstSchema, type SchemaCheckResult } from './schema-check.js';
 import { removedKeyRepair, schemaFixes } from './schema-fixes.js';
 import { staleCopyCause, staleCopyFix, staleLayoutCopy, type StaleLayoutCopy } from './stale-records.js';
-import { layoutCellsMove, type LayoutCellsMove } from './layout-cells.js';
 import { buildSlides } from './rule-slides.js';
 import { ValidationCompositionCache, type ValidationCacheInfo } from './validation-cache.js';
 import type { Presentation } from './types.js';
@@ -167,7 +166,7 @@ function resolveOptions(options: ValidateOptions): Resolved {
 		if (measurement !== undefined && typeof measurement !== 'function' && !isObject(measurement)) throw new TypeError('Validate fonts.textMeasurement must be a text measurement, or a function of the slide index.');
 	}
 	if (options.chartPalette !== undefined && (!Array.isArray(options.chartPalette) || !options.chartPalette.every((color) => typeof color === 'string' && /^#[0-9a-fA-F]{6}$/.test(color))))
-		throw new TypeError('Validate chartPalette must be an array of #RRGGBB colours.');
+		throw new TypeError('Validate chartPalette must be an array of #RRGGBB colors.');
 	if (options.template !== undefined && typeof options.template !== 'boolean') throw new TypeError('Validate template must be true or false.');
 	if (options.values !== undefined && !isObject(options.values)) throw new TypeError('Validate values must be an object keyed by variable id.');
 	const level = (info: ValidationRuleInfo) => severity.get(info.id) ?? severity.get(info.category);
@@ -305,7 +304,7 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 	}
 
 	// OPF 0.35: a record finding on an embedded copy of a built-in layout from before 0.35 names the cause and carries the fix that
-	// takes the current record (stale-records.ts), once per copy.
+	// takes the current record (stale-records.ts), once per copy: the one fix, since catalogs.default mirrors the built-in records.
 	const staleCopies = new Map<string, { copy?: StaleLayoutCopy; fix?: FindingFix }>();
 	const staleRepair = (entry: Finding) => {
 		if (!STALE_RECORD_RULES.has(entry.ruleId) || entry.scope === 'context') return undefined;
@@ -320,20 +319,6 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 			staleCopies.set(`${group}/${id}`, found);
 		}
 		return found.copy ? { cause: staleCopyCause(found.copy), fix: found.fix } : undefined;
-	};
-
-	// OPF 0.35: a removed cell key on a slide with a layout: the safe fix removes the layout and keeps what it gave the slide (layout-cells.ts),
-	// once per slide; the fix that keeps the layout (its blocks bind to the layout's regions) follows, not safe.
-	const layoutCells = new Map<number, LayoutCellsMove | undefined>();
-	const layoutCellsRepair = (entry: Finding): Finding => {
-		const keepLayout = entry.fixes?.find((candidate) => candidate.id === 'cells-to-blocks' && candidate.safe !== true);
-		const index = slideOf(entry.path);
-		if (!keepLayout || index === undefined) return entry;
-		if (!layoutCells.has(index)) layoutCells.set(index, layoutCellsMove(document, index, { catalogs: run.options.catalogs }));
-		const move = layoutCells.get(index);
-		const kept: FindingFix = { ...keepLayout, id: 'cells-to-layout-blocks' };
-		const why = move && !move.exact && move.reason ? ` The fix that removes layout is not marked safe: ${move.reason}.` : '';
-		return { ...entry, ...(why ? { help: `${entry.help ?? ''}${why}` } : {}), fixes: [...(move ? [move.fix] : []), ...entry.fixes!.map((candidate) => (candidate === keepLayout ? kept : candidate))] };
 	};
 
 	// Finish: severity overrides, exceptions by path, slide numbers, source ranges, order.
@@ -355,14 +340,14 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 		}
 		// OPF 0.35: a removed design key or region flow says what replaced it and carries the safe fix.
 		const removed = next.scope !== 'context' ? removedKeyRepair(next, document) : undefined;
-		if (removed) next = layoutCellsRepair(withRepair(next, removed));
+		if (removed) next = withRepair(next, removed);
 		if (next.ruleId === 'opf/schema' && next.fixes === undefined && next.scope !== 'context') {
 			const fixes = schemaFixes(next, document);
 			if (fixes.length) next.fixes = fixes;
 		}
 		const stale = staleRepair(next);
 		// The message starts with the cause's first clause (what the copy is), so a reader of messages alone learns it.
-		if (stale) next = { ...next, message: `${stale.cause.split('; ')[0]}: ${next.message}`, help: next.help ? `${stale.cause} ${next.help}` : stale.cause, ...(next.fixes?.length || stale.fix ? { fixes: [...(next.fixes ?? []), ...(stale.fix ? [stale.fix] : [])] } : {}) };
+		if (stale) next = { ...next, message: `${stale.cause.split('; ')[0]}: ${next.message}`, help: next.help ? `${stale.cause} ${next.help}` : stale.cause, ...(stale.fix ? { fixes: [stale.fix] } : {}) };
 		finished.push(next);
 	}
 	finished.sort(

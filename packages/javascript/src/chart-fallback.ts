@@ -133,7 +133,7 @@ const label = (cell: unknown): string => cell === null || cell === undefined ? '
  * - **One value per box-and-whisker category** (`box-per-series`): when no category label repeats (two rows or more), each box would be a
  *   single value. The rows are one group named after the category column, so each series is one box of its values across the categories.
  * - **Several series on a pie or doughnut** (`nested-rings`): two or more series that hold numbers are drawn as a doughnut of one ring per
- *   series, the first series innermost (as PowerPoint orders the rings of a doughnut), every ring coloured by category.
+ *   series, the first series innermost (as PowerPoint orders the rings of a doughnut), every ring colored by category.
  * - **Scatter whose X column holds no number** (`scatter-by-position`): the text column cannot be an X axis, so it is left out and every
  *   series is plotted against the category position (1, 2, 3, ...), like a scatter of one value column.
  *
@@ -199,9 +199,9 @@ export function chartDrawDiagnostics(chart: unknown, resolved: ResolvedChartData
 }
 
 /**
- * LH-56: the colour of a label drawn inside a mark (a treemap tile, a funnel bar, a map tile) of colour `fill`: the deck's full text colour
- * `text` when it reaches 4.5:1 on the fill, else the slide background `background` (the other role colour, so the PPTX export still writes a
- * theme colour) when that does, else black or white ({@link textColorForFill}). The preview and the PPTX export both call it.
+ * LH-56: the color of a label drawn inside a mark (a treemap tile, a funnel bar, a map tile) of color `fill`: the deck's full text color
+ * `text` when it reaches 4.5:1 on the fill, else the slide background `background` (the other role color, so the PPTX export still writes a
+ * theme color) when that does, else black or white ({@link textColorForFill}). The preview and the PPTX export both call it.
  */
 export function markLabelColor(fill: string, text: string, background?: string): string {
   if ((colorContrast(text, fill) ?? 0) >= 4.5) return text;

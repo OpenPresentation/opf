@@ -1,5 +1,6 @@
-// OPF 0.35: `opf embed -i` makes a deck's stale copies of built-in layouts valid (fixture: pptx.gallery's how-to-create-title-slides,
-// trimmed), still refuses other invalid content, and the writing commands name `opf embed -i` when such copies are why they refuse.
+// OPF 0.35: `opf embed -i` replaces a deck's stale copies of built-in layouts with the current records (fixture: pptx.gallery's
+// how-to-create-title-slides, trimmed), still refuses other invalid content, and the writing commands name `opf embed -i` when such
+// copies are why they refuse.
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { copyFile, mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
@@ -22,21 +23,21 @@ const run = (args, status) => {
 test("validate names the stale copy and does not call it missing", () => {
   const report = run(["validate", FIXTURE], 1);
   const record = report.findings.find((finding) => finding.path === "/catalogs/default/layouts/cover/regions/1/flow");
-  assert.match(record.help, /unedited copy of an earlier release of the built-in layout 'cover'/);
-  assert.deepEqual(record.fixes.map((fix) => fix.id), ["use-max-1", "use-current-record"]);
+  assert.match(record.help, /is a copy of the built-in layout 'cover' from before OPF 0\.35/);
+  assert.deepEqual(record.fixes.map((fix) => [fix.id, fix.safe, fix.changesDrawing]), [["use-current-record", true, true]]);
   const slide = report.findings.find((finding) => finding.path === "/slides/0/layout");
   assert.match(slide.message, /^Layout 'cover' is embedded in catalogs\.default, but the record fails the layout schema/);
 });
 
-test("embed -i refreshes the copy, reports it, and the deck then validates", async () => {
+test("embed -i replaces the copy with the current record, reports it, and the deck then validates", async () => {
   const deck = path.join(temp, "cover.opf.json");
   await copyFile(FIXTURE, deck);
   const check = run(["embed", deck, "--check"], 1);
-  assert.deepEqual(check.embed.refreshed.map((entry) => `${entry.id} ${entry.how}`), ["cover converted"]);
+  assert.deepEqual(check.embed.refreshed.map((entry) => `${entry.id} ${entry.how}`), ["cover current"]);
   const report = run(["embed", deck, "-i"], 0);
-  assert.deepEqual(report.embed.refreshed, [{ group: "default", kind: "layouts", id: "cover", source: "https://www.pptx.gallery", how: "converted", references: [] }]);
+  assert.deepEqual(report.embed.refreshed, [{ group: "default", kind: "layouts", id: "cover", source: "https://www.pptx.gallery", how: "current", changesDrawing: true, references: [] }]);
   const written = JSON.parse(await readFile(deck, "utf8"));
-  assert.equal(written.catalogs.default.layouts.cover.regions[1].max, 1);
+  assert.equal(written.catalogs.default.layouts.cover.regions[1].flow, undefined);
   assert.equal(run(["validate", deck], 0).counts.error, 0);
   assert.deepEqual(run(["embed", deck, "--check"], 0).embed.refreshed, []);
 });
@@ -52,5 +53,5 @@ test("embed -i still refuses other invalid content, and convert names the comman
   assert.equal(JSON.parse(await readFile(deck, "utf8")).catalogs.default.layouts.cover.regions[1].flow, "none", "nothing was written");
   const converted = run(["convert", FIXTURE, path.join(temp, "cover.svg")], 1);
   assert.equal(converted.code, "invalid-document");
-  assert.match(converted.error, /The deck embeds copies of built-in layouts from before OPF 0\.35 \(cover\): `opf embed <deck> -i` refreshes each one it can/);
+  assert.match(converted.error, /The deck embeds copies of built-in layouts from before OPF 0\.35 \(cover\): `opf embed <deck> -i` replaces each one with the current record/);
 });

@@ -12,7 +12,7 @@
 //
 // Instances: every tool call mounts its own view, and earlier ones stay live. The server mints an order key and a session key in
 // its result (`structuredContent.viewer`; the session is the caller's, or derived from the deck's name); views of the same session
-// meet on a BroadcastChannel named by that key, and the older one greys out and stops publishing (context, messages, tool edits).
+// meet on a BroadcastChannel named by that key, and the older one grays out and stops publishing (context, messages, tool edits).
 // Views of other sessions never hear each other.
 //
 // The look is the openpresentation.org design system's playground bar (a 48px bar, a 28px status footer; view.css) in one
@@ -920,7 +920,7 @@ async function saveFile(name: string, type: string, data: Blob | string): Promis
 /**
  * An editable PowerPoint file from the deck, made here with @openpresentation/opf-pptx (the exporter the playground uses), with the
  * preview's fonts and catalogs so the file matches the slides. The exporter loads only when this runs. It makes no request: a
- * remote picture stays a labelled placeholder, and an SVG picture's PNG fallback is drawn by the renderer's browser rasterizer.
+ * remote picture stays a labeled placeholder, and an SVG picture's PNG fallback is drawn by the renderer's browser rasterizer.
  */
 async function exportPptx(deck: unknown, request: { signal: AbortSignal; onProgress(progress: { stage?: string; done?: number; total?: number; message?: string }): void }): Promise<{ bytes: Uint8Array; warnings: string[] }> {
 	const check = () => request.signal.throwIfAborted();

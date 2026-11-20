@@ -2248,7 +2248,7 @@
         "https://github.com/googlefonts/noto-emoji",
         "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji"
       ],
-      "note": "Colour emoji (COLRv1 and OT-SVG glyphs; the Google Fonts build, 25.1 MB). Preview face for Segoe UI Emoji (FF-45); drawn in colour by browsers, as a monochrome Noto Emoji silhouette by the resvg raster path."
+      "note": "Color emoji (COLRv1 and OT-SVG glyphs; the Google Fonts build, 25.1 MB). Preview face for Segoe UI Emoji (FF-45); drawn in color by browsers, as a monochrome Noto Emoji silhouette by the resvg raster path."
     },
     {
       "family": "Noto Emoji",
@@ -3068,7 +3068,7 @@
         "https://learn.microsoft.com/en-us/typography/font-list/segoe-ui-emoji",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "FF-45: previews with Noto Color Emoji (OFL-1.1, COLRv1 and OT-SVG colour glyphs, 25.1 MB) loaded as the opf-render emoji pack (@expo-google-fonts/noto-color-emoji, optional peer); Noto Emoji (monochrome) is the alternate and the face the resvg raster path draws, because resvg draws neither COLRv1 nor OT-SVG glyphs. Visual: every emoji sequence advances 1.2451 em in Noto Color Emoji against 1.3730 em in Segoe UI Emoji 1.33 (-9.3%); Noto Color Emoji has no Latin glyphs, so Latin text and digits of a Segoe UI Emoji run take a text face by glyph fallback. Not measured on the policy corpus (measured: null). Color font (COLRv1 in Windows 11, version 1.33 per the list)."
+      "note": "FF-45: previews with Noto Color Emoji (OFL-1.1, COLRv1 and OT-SVG color glyphs, 25.1 MB) loaded as the opf-render emoji pack (@expo-google-fonts/noto-color-emoji, optional peer); Noto Emoji (monochrome) is the alternate and the face the resvg raster path draws, because resvg draws neither COLRv1 nor OT-SVG glyphs. Visual: every emoji sequence advances 1.2451 em in Noto Color Emoji against 1.3730 em in Segoe UI Emoji 1.33 (-9.3%); Noto Color Emoji has no Latin glyphs, so Latin text and digits of a Segoe UI Emoji run take a text face by glyph fallback. Not measured on the policy corpus (measured: null). Color font (COLRv1 in Windows 11, version 1.33 per the list)."
     },
     {
       "family": "Segoe UI Light",

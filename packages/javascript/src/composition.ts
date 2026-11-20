@@ -736,7 +736,7 @@ export interface ComposedRegion {
   content: string[];
   /** Content no region had room for, drawn here beyond `max` (`opf/layout-unplaced`; `paginate` moves it to a continuation slide). */
   overflow?: string[];
-  /** The region received no content and its cells joined a neighbour on this slide. */
+  /** The region received no content and its cells joined a neighbor on this slide. */
   collapsed?: true;
   bleed?: true;
   /** A bled region's cell inside the content box, before bleed. */
@@ -746,7 +746,7 @@ export interface ComposedRegion {
 export interface ComposedHeadingArea {
   name: 'title' | 'subtitle';
   box: LayoutBox;
-  /** The slide has no heading for it and its cells joined a neighbour. */
+  /** The slide has no heading for it and its cells joined a neighbor. */
   collapsed?: true;
   /** The template has no `title` area: an `auto` row on top that holds the slide's headings. */
   implicit?: true;
@@ -854,7 +854,7 @@ export interface ComposedImage {
 /**
  * The slide's picture background (FA-22): the effective `design.background` (the slide's, then the deck's, then
  * `ComposeSlideOptions.themeBackground`) when it is an image, in object form or as an image-source string. It fills
- * the whole canvas behind everything and never moves content. Paint order: the colour scheme's default slide
+ * the whole canvas behind everything and never moves content. Paint order: the color scheme's default slide
  * background, the picture (with `recolor` and `opacity` on its pixels), the overlay, then furniture and content.
  */
 export interface ComposedBackgroundImage {
@@ -1554,7 +1554,7 @@ export interface FurnitureLayout {
 
 /** Gap between the parts of one header/footer zone row, in reference pixels (scaled with the canvas's short edge). */
 export const FURNITURE_GAP = 12;
-/** Gap between the three header/footer zones, as a share of the canvas width. An empty zone's column is lent to its occupied neighbours. */
+/** Gap between the three header/footer zones, as a share of the canvas width. An empty zone's column is lent to its occupied neighbors. */
 export const FURNITURE_ZONE_GUTTER = .02;
 /** In a zone with other parts, an image is at most this share of the zone's width, so a wide logo cannot starve the text. */
 export const FURNITURE_IMAGE_SHARE = .4;
@@ -1628,8 +1628,8 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
     configured=true;
     const zones:FurniturePart[][]=[];
     // The three zones are columns on the content inset (the same left edge as the body), separated by a gutter. A zone
-    // with nothing in it lends its column to the occupied neighbours, so a lone `start` footer spans the content width
-    // and a footer with a start and an end zone shares the free centre. A centre zone stays centred on the slide.
+    // with nothing in it lends its column to the occupied neighbors, so a lone `start` footer spans the content width
+    // and a footer with a start and an end zone shares the free center. A center zone stays centered on the slide.
     const inset=Math.min((settings.padding??.08)*Math.min(width,height),width*.25),gutter=width*FURNITURE_ZONE_GUTTER,column=(width-2*inset-2*gutter)/3;
     const slotOf=(index:number)=>furnitureRtl&&index!==1?2-index:index;
     const hasContent=(zone:'start'|'center'|'end')=>{
@@ -3434,8 +3434,8 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         return accepted;
       };
       const heightOf=(part:TimelineTextPart,width:number,alignment:TimelineTextPart['alignment'])=>measure(part,sizeAt(part,reduction),Math.max(scale,width),alignment).height;
-      // The name and description, planned first so that a horizontal timeline can centre the whole block in its box. A band of a stack
-      // sets them at its start edge, as a heading over the band; a lone timeline centres them.
+      // The name and description, planned first so that a horizontal timeline can center the whole block in its box. A band of a stack
+      // sets them at its start edge, as a heading over the band; a lone timeline centers them.
       const metaAlignment:TimelineTextPart['alignment']=arrangement==='band'&&options.horizontal?'left':'center',metaGap=(options.compact?6:8)*scale,inlineGap=12*scale;
       const header:{part:TimelineTextPart;x:number;dy:number;width:number}[]=[];let headerHeight=0;
       const [name,description]=metadata.length===2?metadata:[];
@@ -3460,7 +3460,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         // LH-41: a band, every label one event spacing wide. Each `when` is an eyebrow above its marker (bottom-aligned, so the eyebrows
         // end on one line) and each `what` and description sit below it. A compact band (four or more timelines in a region) sets
         // each event's `when` and `what` on one row below the marker when every pair fits, as Claude Design's compact bands do. A
-        // lone band centres the block (header and band) in its box; a band of a stack sits at the top of its box, so the bands of one
+        // lone band centers the block (header and band) in its box; a band of a stack sits at the top of its box, so the bands of one
         // row share their lines.
         // A compact band draws smaller markers and tighter gaps (Claude Design's compact bands).
         setRadius(Math.min((options.compact?7:9)*scale,bandStep/5));
@@ -3481,7 +3481,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
           let cursor=lineY+extent+lift+durationTrack;
           const when=whenOf(fields),widths=inline?pair(fields):undefined;
           if(widths&&when){
-            // `when` then `what`, centred under the marker as one row (in reading order: a right-to-left row starts at the right) and
+            // `when` then `what`, centered under the marker as one row (in reading order: a right-to-left row starts at the right) and
             // bottom-aligned so the two single lines share a baseline.
             const row=rowHeight(fields,index),start=x-(widths.when+pairGap+widths.what)/2,whenX=rtl?start+widths.what+pairGap:start,whatX=rtl?start:start+widths.when+pairGap;
             place(when,whenX,cursor+row-heightOf(when,widths.when,'left'),widths.when,'left');
@@ -3493,7 +3493,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       }else if(arrangement==='alternating'){
         // Labels wider than one spacing: each is two spacings wide less a gutter, and alternates above and below, so labels on one
         // side are two spacings apart. Upper labels end beside their marker; lower labels begin beside theirs. The measured block
-        // (header and both label bands) is centred in the box.
+        // (header and both label bands) is centered in the box.
         const gutter=count>1?Math.min(16*scale,box.width/(count+1)/4):0,step=count>1?(box.width+gutter)/(count+1):0,width=count>1?2*step-gutter:box.width;
         const start=count===1?box.x+box.width/2:box.x+width/2;
         setRadius(Math.min(9*scale,box.width/Math.max(2,count)/5,Math.max(scale,box.height-headerHeight)*.04));
@@ -5412,11 +5412,8 @@ const AUTHORED_KEYS: ReadonlySet<string> = new Set(['value', 'payload', 'host'])
  * the slide keys it replaced; composeSlide then writes the result's paths as the author's (`slides.N.blocks.I`). The group of a cell that
  * several blocks name keeps the cell's path (`slides.N.top:start`), its blocks their own. Undefined for any other slide.
  */
-/** OPF 0.35 (layout-cells.ts): compose a slide's cells beside its layout record, as 0.34 composed a slide with a layout and cell keys (the
- *  record's design and composition apply, its regions do not), to tell whether the fix that removes the layout keeps the drawing. */
-const CELLS_BESIDE_LAYOUT = Symbol.for('opf.cellsBesideLayout');
 function cellComposition(input: unknown, options: ComposeSlideOptions): { slide: Record<string, unknown>; path: (value: string) => string } | undefined {
-  if (options.layout !== null && typeof options.layout === 'object' && (options as Record<symbol, unknown>)[CELLS_BESIDE_LAYOUT] !== true) return undefined;
+  if (options.layout !== null && typeof options.layout === 'object') return undefined;
   const source = record(input), placed = cellBlocks(source);
   if (!placed) return undefined;
   const { blocks: _blocks, ...slide } = source as Record<string, unknown>;
@@ -7194,7 +7191,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   let bodyBottom=Math.min(area.bottom-padding,furniture&&furniture.footerTop<height?furniture.footerTop-gap*.5:height-padding);
   const headingTop = Math.max(area.top+padding,furniture?.headerBottom?furniture.headerBottom+gap*.5:padding);
   // RR-34: the footnote area sits directly above the footer band (or the bottom padding) and takes its
-  // height from the content area, honouring the same side margins. Slides without markers skip this.
+  // height from the content area, honoring the same side margins. Slides without markers skip this.
   let footnotes: ComposedFootnotes | undefined;
   if (citations) {
     footnotes = layoutFootnotes(citations, { ...annotationOptions, x: area.left + padding, width: area.right - area.left - padding * 2, bottom: bodyBottom, maxHeight: Math.max(minSize * 1.22 + 2 * scale, (bodyBottom - headingTop) * FOOTNOTE_MAX_RATIO), path });
@@ -8042,12 +8039,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const WEIGHTED_DEMAND_RATIO = 2.5, WEIGHTED_SHARES = [.55, .6, .65, .7];
   // LH-120: the share of a row of three blocks a horizontal bar chart takes (its category labels share its width with the bars).
   const BAR_CHART_MIN_SHARE = .4, HORIZONTAL_BAR_CHARTS = new Set(['bar', 'stacked-bar', '100pct-stacked-bar']);
-  // LH-44: the widest share of a row or area a table asks for, and the type its neighbours may give up for it (reference px, summed).
-  const TABLE_MAX_SHARE = .65, TABLE_NEIGHBOUR_REDUCTION = 4;
+  // LH-44: the widest share of a row or area a table asks for, and the type its neighbors may give up for it (reference px, summed).
+  const TABLE_MAX_SHARE = .65, TABLE_NEIGHBOR_REDUCTION = 4;
   const tableCardInset = () => hasCards ? 2 * CARD_INSET * scale : 0;
   // LH-44: in one row of blocks a table asks for its natural width (every cell on one line, plus a card's insets), up to
   // TABLE_MAX_SHARE of the row; the blocks beside it share the rest. A table its equal cell holds keeps that cell. The table widens
-  // as far as the blocks beside it keep their fit (no new overflow, at most TABLE_NEIGHBOUR_REDUCTION px of type given up in all), and
+  // as far as the blocks beside it keep their fit (no new overflow, at most TABLE_NEIGHBOR_REDUCTION px of type given up in all), and
   // to the width its words need (its minimum) as long as they do not overflow.
   const tableRowWeights = (nodes: Pending[], count: number, cols: number, area: LayoutBox, rowGap: number, settings: Composition): number[] | undefined => {
     if (!autoComposition() || settings.weights?.length || count < 2 || cols !== count || nodes.length !== count) return undefined;
@@ -8061,11 +8058,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (want <= equal[index]!.width + scale) return undefined;
     const others = nodes.flatMap((_, other) => other === index ? [] : [other]);
     const weightsAt = (width: number) => nodes.map((_, other) => other === index ? width : (total - width) / others.length);
-    const neighbours = (width: number) => others.reduce((sum, other) => sum + scoreNode(nodes[other]!, gridGeometry(count, area, cols, rowGap, weightsAt(width), false).boxes[other]!, settings), 0);
-    const baseline = neighbours(equal[index]!.width), from = Math.max(least, equal[index]!.width), step = (want - from) / 4;
-    for (let width = want; width > from + scale; width -= step) if (neighbours(width) <= baseline + TABLE_NEIGHBOUR_REDUCTION) return weightsAt(width);
-    // Words before type: the minimum width when the neighbours keep their fit, if at a smaller size.
-    return least > equal[index]!.width + scale && neighbours(least) < baseline + 1000 ? weightsAt(least) : undefined;
+    const neighbors = (width: number) => others.reduce((sum, other) => sum + scoreNode(nodes[other]!, gridGeometry(count, area, cols, rowGap, weightsAt(width), false).boxes[other]!, settings), 0);
+    const baseline = neighbors(equal[index]!.width), from = Math.max(least, equal[index]!.width), step = (want - from) / 4;
+    for (let width = want; width > from + scale; width -= step) if (neighbors(width) <= baseline + TABLE_NEIGHBOR_REDUCTION) return weightsAt(width);
+    // Words before type: the minimum width when the neighbors keep their fit, if at a smaller size.
+    return least > equal[index]!.width + scale && neighbors(least) < baseline + 1000 ? weightsAt(least) : undefined;
   };
   // OPF 0.35, whole words in a weighted row (the owner's "never shrink text"): a row of cells sized by composition.weights can give a list a
   // cell narrower than its longest word, which then breaks inside the word. The row is rebalanced instead (guarded rule `list-words`): each
@@ -9905,7 +9902,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // reserve at least half the frame for tracks, as flowCells does for a region's internal grid.
     const gap = Math.max(0, Math.min(requestedTemplateGap, frame.width / (columnCount * 2), frame.height / (rowSizes.length * 2)));
     const regionOf = new Map<string, LayoutRegion>(plan.regions.map(region => [region.name, region]));
-    // Empty areas collapse into a neighbour, per slide; the record never changes.
+    // Empty areas collapse into a neighbor, per slide; the record never changes.
     const empty = new Set<string>();
     for (const region of plan.regions) if (!unitsOf(region.name).length && region.empty !== 'keep') empty.add(region.name);
     if (plan.title && !titleFields.length) empty.add('title');
@@ -9938,7 +9935,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     widths.reduce((x, size, column) => { const kept = !vacated[column], start = kept && widths.slice(0, column).some((_, before) => !vacated[before]) ? x + gap : x; columnX.push(start); return kept ? start + size : x; }, 0);
     const spanWidth = (rect: CellRect) => columnX[rect.column + rect.columnSpan - 1]! + widths[rect.column + rect.columnSpan - 1]! - columnX[rect.column]!;
     // LH-51: a content slide's title sits in a title area of auto rows above the body; a cover, a section (a title area in a
-    // sized row, centred) and a stacked record (statement, quote, closing) keep the role size. LH-76 splits a title only into
+    // sized row, centered) and a stacked record (statement, quote, closing) keep the role size. LH-76 splits a title only into
     // the title area's own heading group, not into a layout's separate subtitle area.
     const titleRect = rects.get('title');
     const titleMode = hasBodyPayload && plan.stack === undefined && titleRect && rowSizes.slice(titleRect.row, titleRect.row + titleRect.rowSpan).every(size => size === 'auto') ? plan.subtitle ? 'step' as const : 'split' as const : undefined;
@@ -9990,7 +9987,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       return jointRowBoxes(units, cells, shape.perRow.flatMap((count, row) => Array.from({ length: count }, () => row)), cell, between, settings, cards, anchor, cards || !lists);
     };
     // LH-47: the cells of a short last row stretch to the full width, except in a grid of pictures and videos, whose cells keep
-    // one size (one aspect) and centre.
+    // one size (one aspect) and center.
     // LH-132: a team's short last row keeps its cards at one width, so every portrait has one size.
     const stretchesLastRow = (units: Pending[]) => !units.every(unit => !unit.children && (unit.field === 'image' || unit.field === 'video')) && !units.every(unit => personParts.has(unit.path));
     // LH-82: blocks of another kind taken out of a grid sit in one row under it, or stacked when that is shorter, and ask for at
@@ -10103,7 +10100,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const demandsAt = (joint?: ReadonlySet<string>, trial?: number) => rowSizes.map((size, row): RowDemand => {
       let need = 0, floor = 0, heading = false, below = false;
       for (const [name, rect] of rects) {
-        // An empty neighbour that collapsed into an area can leave it spanning auto rows only (every row of a column of auto
+        // An empty neighbor that collapsed into an area can leave it spanning auto rows only (every row of a column of auto
         // entries): the area's first row then holds all of its height. An area that spans a numeric row keeps its sizes.
         const autoSpan = size === 'auto' && rect.rowSpan > 1 && rect.row === row && rowSizes.slice(rect.row, rect.row + rect.rowSpan).every(entry => entry === 'auto');
         if (size === 'auto' ? rect.row !== row || (rect.rowSpan !== 1 && !autoSpan) : row < rect.row || row >= rect.row + rect.rowSpan) continue;
@@ -10325,9 +10322,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-64, LH-04: a row of cards (one row of a region's grid, or the lone blocks of card regions side by side) and how its cards
     // stand in their cells; undefined keeps the region's rule (LH-22: filled cards, the payload at the anchor).
     //  - LH-04, top anchor: cards of measured blocks hug the tallest one, so a short row leaves no empty card below its text.
-    //  - LH-64, middle or bottom anchor, every card body text only (a paragraph, or a list without labelled items; a picture, a
+    //  - LH-64, middle or bottom anchor, every card body text only (a paragraph, or a list without labeled items; a picture, a
     //    metric or a heading line keeps the anchor): when the tallest text fills under 45% of a filled card, the cards hug it and
-    //    the row centres, since text set at the foot of a tall card reads as an empty card; otherwise, when the payloads are more
+    //    the row centers, since text set at the foot of a tall card reads as an empty card; otherwise, when the payloads are more
     //    than 1.5x apart, they start at the card's top, so a short text does not sit alone at the foot beside long ones.
     // A hugging card is as tall as the tallest payload of its row, insets included, so the cards keep one height. naturalHeight
     // estimates the insets of a tall card (up to CARD_INSET); the height is refined once with the insets payloadBox gives a card
@@ -10367,7 +10364,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     };
     // The rows of cards of one area, each with its rule: every card's box and its frame (the cell, for a card that fills it), or
     // undefined for a row that keeps the region's rule. Rows that all hug stack one gap apart, from the top under a top anchor and
-    // centred otherwise; another hugging row sits in its own cell the same way.
+    // centered otherwise; another hugging row sits in its own cell the same way.
     type CardPlacement = {box: LayoutBox; frame?: LayoutBox};
     const placeCardRows = (rows: {cells: LayoutBox[]; rule?: CardRowRule}[], area: LayoutBox, anchor: RegionAnchor): (CardPlacement[] | undefined)[] => {
       const stack = rows.length > 1 && rows.every(row => row.rule?.mode === 'hug');
@@ -10403,7 +10400,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           return arrangementOf(region, units, cell);
         }
         // LH-41: several timelines are one stack of horizontal bands (bandBoxes), in one column or two, whatever the region's flow.
-        // The stack sits in the middle of the region, as a lone timeline is centred in its cell,
+        // The stack sits in the middle of the region, as a lone timeline is centered in its cell,
         // unless the region is anchored at the bottom.
         const bands = timelineBands(units), bandColumnCount = bands ? bandColumns(units, cell, cards) : 1;
         const listGrid = bands ? undefined : listGridOf(region, units, cell.width, cell.width >= cell.height);
@@ -10449,7 +10446,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
             return {...box,y:box.y+(region.anchor==='middle'?spare/2:spare),height:cards?rowHeight:height};
           });
         }
-        // LH-64, LH-04: the rows of cards of a grid (a lone block's card was planned with its neighbours' regions, `lone`).
+        // LH-64, LH-04: the rows of cards of a grid (a lone block's card was planned with its neighbors' regions, `lone`).
         const planned: (CardPlacement | undefined)[] = lone ? [lone] : [];
         if (!lone && cards && !bands && !lead && (arrangement === 'grid' || arrangement === 'row')) {
           const rows = shape.perRow.map((count, row) => range(0, count).map(offset => shape.perRow.slice(0, row).reduce((sum, size) => sum + size, 0) + offset));

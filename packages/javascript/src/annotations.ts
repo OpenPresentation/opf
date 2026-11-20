@@ -15,7 +15,7 @@ import { cellBlocks, cellsInReadingOrder, isGridCell } from './grid-cells.js';
  *   area by exactly its height. Slides without markers are unchanged.
  * - `caption` on an image, chart, table or video payload reserves a caption band inside the block's
  *   region (`layoutCaption`): the media keeps the rest. Captions use the body family at the caption size
- *   (0.6 of the body size, clamped to the readable floor) in the muted text colour.
+ *   (0.6 of the body size, clamped to the readable floor) in the muted text color.
  *
  * Geometry is shared: renderers and exporters only draw what these functions return.
  */

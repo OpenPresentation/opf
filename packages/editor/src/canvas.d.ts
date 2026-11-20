@@ -126,7 +126,7 @@ export interface CanvasEditor {
   readonly connecting: boolean;
   /**
    * SH-06: draw a connector between two blocks or overlay shapes: click the start, then the end (Esc cancels). `route` is straight (default), elbow or curved; `stroke` the line
-   * (`{ end: { type: "triangle" } }`); `onStatus(message)` hears the prompts. `done` resolves with the change (or null when cancelled).
+   * (`{ end: { type: "triangle" } }`); `onStatus(message)` hears the prompts. `done` resolves with the change (or null when canceled).
    */
   connect(options?: { route?: "straight" | "elbow" | "curved"; stroke?: Record<string, unknown>; onStatus?: (message: string, info: { error: boolean }) => void }): { cancel(): void; done: Promise<unknown> };
   /**

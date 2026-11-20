@@ -100,7 +100,7 @@ export function regionIndexes(record, nativeBodyRegion) {
     return [name, REGION_IDX_BASE[type] + counts[type]];
   }));
   // A native variant changes only its selected slot. Other object kinds retain
-  // their original indexes, so Change Layout cannot move a neighbouring picture.
+  // their original indexes, so Change Layout cannot move a neighboring picture.
   if (nativeBodyRegion !== undefined && regions.has(nativeBodyRegion) && placeholderType(regions.get(nativeBodyRegion)) !== 'body') {
     const used = new Set(Object.values(indexes));
     let idx = REGION_IDX_BASE.body;
@@ -220,7 +220,7 @@ export function layoutPlaceholders(template) {
   for (const area of areas) {
     if (area.name === 'title') {
       if (CENTERED_TITLE.has(id) && area.parts) {
-        // `cover` and `section`: PowerPoint's centred title over its subtitle, at core's title and subtitle sub-boxes.
+        // `cover` and `section`: PowerPoint's centered title over its subtitle, at core's title and subtitle sub-boxes.
         result.push({name: 'Title', type: 'ctrTitle', anchor: 'b', ...emu(area.parts.title)});
         result.push({name: 'Subtitle', type: 'subTitle', idx: SUBTITLE_IDX, anchor: 't', ...emu(area.parts.subtitle)});
       } else result.push({name: 'Title', type: CENTERED_TITLE.has(id) ? 'ctrTitle' : 'title', ...emu(area.box)});

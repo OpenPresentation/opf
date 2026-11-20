@@ -7,20 +7,20 @@
 import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, paretoPlan, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartFocusContextColors, chartSeriesStrokes, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer, formatNumber, formatPercentNumber, chartNumberLanguage } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
-// The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
+// The series colors for a chart panel: core's `chartSeriesPalette` (the deck color scheme's accents, RR-89, with the chart's own
 // `colors` entries replacing their positions) adjusted by core's `chartPaletteForFill` (contrast against the panel without letting
-// two series merge). The PPTX export and the validator use the same pair, so the preview draws the colours they write.
+// two series merge). The PPTX export and the validator use the same pair, so the preview draws the colors they write.
 // WI-5 (P18, D3) and LH-55: every series from the scheme reaches 4.5:1 on a dark panel, series 2 a lightness step from series 1 (an authored
 // `colors` entry keeps the 3:1 floor).
 // LH-105: `soften` mixes each scheme series a quarter of the way towards the backdrop (core softenChartPalette), keeping its contrast and its
-// lightness step from its neighbours: ordinary data in soft colours, the full-strength colour left for emphasis.
+// lightness step from its neighbors: ordinary data in soft colors, the full-strength color left for emphasis.
 export function chartSeriesPalette(surface, colorScheme, colors, context, { soften = false } = {}) {
   return chartPaletteForFill(surface, coreChartSeriesPalette(colorScheme, colors, context), { legible: chartSchemeSeries(colors, colorScheme, context), soften });
 }
 
-// FA-14: chart.highlight. Core resolves which series and categories are named (chartHighlightMarks) and the two colours
+// FA-14: chart.highlight. Core resolves which series and categories are named (chartHighlightMarks) and the two colors
 // (chartHighlightColors); a highlighted mark takes the accent, every other mark the muted neutral. A chart without a
-// highlight has no `c.highlight`, and every colour below is the palette colour it always was.
+// highlight has no `c.highlight`, and every color below is the palette color it always was.
 function highlightFor(c, resolved, spec, data) {
   if (!resolved.highlight) return undefined;
   const marks = chartHighlightMarks(resolved.highlight, { columns: data.columns, hasX: spec.kind === "scatter" && data.hasX, rows: data.rows });
@@ -28,19 +28,19 @@ function highlightFor(c, resolved, spec, data) {
   return { ...marks, ...chartHighlightColors(c.surface, c.bound.design.colors.primary, c.labelColor) };
 }
 
-// LH-03, LH-95: a one-series small column or bar chart draws its emphasised point (core: the last one with a value) in a stronger shade of
-// the series colour and every other point in the series colour (core chartEmphasisColors); it is drawn as a category highlight of that point.
+// LH-03, LH-95: a one-series small column or bar chart draws its emphasized point (core: the last one with a value) in a stronger shade of
+// the series color and every other point in the series color (core chartEmphasisColors); it is drawn as a category highlight of that point.
 function emphasisFor(c, layer) {
   const row = layer?.small?.emphasis;
-  // LH-105: the emphasised point takes the series colour at full strength (or a shade of it); the others keep the soft colour.
+  // LH-105: the emphasized point takes the series color at full strength (or a shade of it); the others keep the soft color.
   const colors = row === undefined ? undefined : chartEmphasisColors(c.surface, c.colors[0], c.strongColors[0]);
   return colors ? { series: [false], categories: c.rows.map((_, i) => i === row), ...colors } : undefined;
 }
 
-// LH-105: the series or categories the slide title names (core chart-focus.ts) take their full-strength colour, the other marks the
+// LH-105: the series or categories the slide title names (core chart-focus.ts) take their full-strength color, the other marks the
 // context neutrals (core chartContextColors: one gray per context series or slice, 11 L* apart, the first the strongest; 3:1 against the
-// backdrop, or 1.6:1 when every context mark carries its text). It is drawn as a highlight whose accent is each series' own colour (and
-// each slice's, on a pie) and whose muted colour is each context series' (or slice's) own gray.
+// backdrop, or 1.6:1 when every context mark carries its text). It is drawn as a highlight whose accent is each series' own color (and
+// each slice's, on a pie) and whose muted color is each context series' (or slice's) own gray.
 function focusFor(c, layer, spec) {
   const focus = layer?.focus;
   if (!focus) return undefined;
@@ -63,7 +63,7 @@ function focusFor(c, layer, spec) {
   return { series, categories, accent: strong(0), muted: grays[0], accents: series.map((_, j) => strong(j)), mutedSeries };
 }
 
-// LH-81: the header row. The caption (bold, the full text colour) and the legend entries sit where core placed them; the band they take
+// LH-81: the header row. The caption (bold, the full text color) and the legend entries sit where core placed them; the band they take
 // is carved from the top of the chart box, and a header legend replaces the side legend (c.legendManaged).
 function drawHeader(c, spec, header) {
   const rtl = c.bound.geometry?.direction === "rtl";
@@ -89,12 +89,12 @@ function drawHeader(c, spec, header) {
   c.box = { x: outer.x, y: outer.y + header.height, width: outer.width, height: Math.max(1, outer.height - header.height) };
 }
 
-/** The colour of series `j` as a whole (a line, an area, a legend key): the accent when highlighted, else muted. */
+/** The color of series `j` as a whole (a line, an area, a legend key): the accent when highlighted, else muted. */
 function seriesColor(c, j) {
   return c.highlight ? (c.highlight.series[j] ? c.highlight.accents?.[j] ?? c.highlight.accent : c.highlight.mutedSeries?.[j] ?? c.highlight.muted) : c.colors[j % c.colors.length];
 }
 
-/** The colour of the mark of series `j` at row `i`: highlighted when its series or its category is named. */
+/** The color of the mark of series `j` at row `i`: highlighted when its series or its category is named. */
 function markColor(c, j, i) {
   return c.highlight ? (c.highlight.series[j] || c.highlight.categories[i] ? c.highlight.accents?.[j] ?? c.highlight.accent : c.highlight.mutedSeries?.[j] ?? c.highlight.muted) : c.colors[j % c.colors.length];
 }
@@ -195,7 +195,7 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   const doughnutFit = layer?.doughnut?.labels;
   const fitReport = doughnutFit && { code: "chart-option-adapted", option: "dataLabels.content", reason: "unsupported-content", message: `The labels of a doughnut sit inside their slices, and '${doughnutFit.from.join(', ')}' does not fit the ring, so ${doughnutFit.content ? `they show '${doughnutFit.content.join(', ')}' instead (the legend names the slices)` : 'no labels are drawn (the legend names the slices)'}.` };
   if (fitReport && authoredSpec) resolved.diagnostics = [...resolved.diagnostics, fitReport];
-  // FA-14: a highlight changes colours only (no space is reserved), so it is resolved whether or not an option is active.
+  // FA-14: a highlight changes colors only (no space is reserved), so it is resolved whether or not an option is active.
   c.highlight = highlightFor(c, resolved, spec, data) ?? focusFor(c, layer, spec) ?? emphasisFor(c, layer);
   // LH-03, LH-142: no value axis (a small chart's labels or a horizontal stacked bar chart's segment values carry the values): core decides it.
   c.valueAxisHidden = chartValueAxisHidden(layer);
@@ -312,12 +312,12 @@ function chartContext(item, box, bound, options, svg, { rows, columns, formats, 
   const composition = bound.composition ?? bound.geometry.composition ?? {};
   // RR-90: core's chart text size (20 px, shrunk only for a small box, never below minFontSize), the size core's value-axis density assumes.
   const requested = chartTextSize({ width: box.width, height: box.height, scale: u, minFontSize: composition.minFontSize }), fontPx = requested * u;
-  // LH-03, LH-105: a chart has no panel, so its colours are judged against what it stands on: the card, or the slide background.
+  // LH-03, LH-105: a chart has no panel, so its colors are judged against what it stands on: the card, or the slide background.
   const surface = item.frameBox ? bound.design.roles.neutrals.card.hex : bound.design.backgroundColor ?? bound.design.colors.background;
-  // RR-96: every neutral comes from the slide's variant (core `roles.neutrals`: tx1 mixed into bg1, the colours the PPTX export writes as
-// scheme colours): chart text, gridlines, axis lines and the outline between marks (bg1).
+  // RR-96: every neutral comes from the slide's variant (core `roles.neutrals`: tx1 mixed into bg1, the colors the PPTX export writes as
+// scheme colors): chart text, gridlines, axis lines and the outline between marks (bg1).
 const neutrals = bound.design.roles.neutrals;
-  // The quiet colour of axis, legend and category text; `labelColor` stays the full text colour (highlight mutes toward it and labels inside
+  // The quiet color of axis, legend and category text; `labelColor` stays the full text color (highlight mutes toward it and labels inside
   // marks contrast against it, as the PPTX export draws them).
   const chartTextColor = textColorForFill(surface, neutrals.chartText.hex);
   const labelColor = textColorForFill(surface, bound.design.colors.text);
@@ -340,7 +340,7 @@ const neutrals = bound.design.roles.neutrals;
     pad: 10 * u,
     lineHeight: fontPx * 1.5,
     // One text line as renderTextBox lays it out (fitText line height), and the
-    // clear space kept between neighbouring category labels.
+    // clear space kept between neighboring category labels.
     textHeight: fontPx * 1.22,
     labelGap: fontPx * 0.1,
     colors: chartSeriesPalette(surface, bound.design.colorScheme, item.value?.colors, { accents: bound.design.roles.map.accents, roles: bound.design.colors, variables: bound.design.variables }, { soften: true }),
@@ -444,7 +444,7 @@ function dataGroup(c, format, values, options) {
 
 // RR-54: a formatted horizontal axis (horizontal bars, the scatter X axis) can have end tick labels far wider than the margin the layout
 // leaves beside the plot (a General label is a few characters, a long format code is not). Pull the plot in until the first and
-// last labels, centred on their ticks, stay inside the chart, and lay the ticks out again for the new width. Only formatted axes call it,
+// last labels, centered on their ticks, stay inside the chart, and lay the ticks out again for the new width. Only formatted axes call it,
 // so a General axis keeps its placement.
 function insetForEndLabels(c, x, width, format, scaleFor) {
   const left = c.box.x + c.pad, right = c.box.x + c.box.width - c.pad;
@@ -530,7 +530,7 @@ function placeLegend(c, spec, position) {
     c.box = { x: position === "left" ? outer.x + reserve : outer.x, y: outer.y, width: Math.max(1, outer.width - reserve), height: outer.height };
     return;
   }
-  // Top and bottom: entries flow left to right in rows, each row centred, wrapping when the row would pass the chart width.
+  // Top and bottom: entries flow left to right in rows, each row centered, wrapping when the row would pass the chart width.
   const available = Math.max(1, outer.width - 2 * c.pad), spacing = c.fontPx * 0.8;
   const sized = entries.map((entry) => ({ entry, width: Math.min(available, metrics.keyWidth + metrics.gap + c.width(entry.name) + spacing) }));
   const rows = [];
@@ -721,8 +721,8 @@ function drawBottomLabels(c, plan, plot, entries, drop = 0) {
       if (text) c.children.push(c.svg.tag("g", { transform: `rotate(${-plan.angle} ${c.num(px)} ${c.num(py)})` }, text));
       continue;
     }
-    const centred = Math.abs(label.left - (label.cx - label.width / 2)) < 1e-6;
-    const rect = plan.n === 1 && centred && label.width <= band
+    const centered = Math.abs(label.left - (label.cx - label.width / 2)) < 1e-6;
+    const rect = plan.n === 1 && centered && label.width <= band
       ? { x: plot.x + label.i * band, y, width: band, height: plan.reserve }
       : { x: label.left - 1, y, width: label.width + 2, height: plan.reserve };
     c.text(label.text, rect, path);
@@ -732,7 +732,7 @@ function drawBottomLabels(c, plan, plot, entries, drop = 0) {
 
 // A vertical category axis (labels to the left of horizontal bars and funnels).
 // Labels stay on one line inside the gutter, wrap at spaces onto two lines when
-// their rows are tall enough, else are ellipsized; every n-th row is labelled
+// their rows are tall enough, else are ellipsized; every n-th row is labeled
 // when the rows are shorter than a line of text. LH-120: a row is tall enough for
 // two lines when it holds one line and the glyphs of a second (a line plus one
 // text size): the label then reaches into the gap between bars, and only a label
@@ -937,7 +937,7 @@ function drawLines(c, spec, series, stacks, { plot, band, at, categorySlot = (i)
       run.push([plot.x + (categorySlot(i) + 0.5) * band, at(point.to)]);
     });
     flush();
-    // FA-14: with a highlight each point takes its own colour, and a line without markers marks the highlighted categories' points.
+    // FA-14: with a highlight each point takes its own color, and a line without markers marks the highlighted categories' points.
     if (spec.markers || c.highlight?.categories.some(Boolean)) stacks[j].forEach((point, i) => {
       if (!point || (!spec.markers && !c.highlight.categories[i])) return;
       const fill = markColor(c, j, i);
@@ -949,7 +949,7 @@ function drawLines(c, spec, series, stacks, { plot, band, at, categorySlot = (i)
     if (point) drawPointLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format, group: s.group }), [plot.x + (categorySlot(i) + 0.5) * band, at(point.to)], `${c.path}.data.rows.${i}.${s.column}`);
   }));
   // LH-105: each series' last value and name at the end of its line ("61 Enterprise NPS"), in the box core placed it
-  // (chart-direct-labels.ts), in its colour made legible as text; bold for a series the title names.
+  // (chart-direct-labels.ts), in its color made legible as text; bold for a series the title names.
   for (const entry of c.endLabels?.entries ?? []) {
     const s = series[entry.series];
     if (!s) continue;
@@ -1179,7 +1179,7 @@ function renderComboChart(c, spec) {
 }
 
 // ---------------------------------------------------------------------------
-// Pie and doughnut: clockwise from 12 o'clock, one colour per category; a doughnut of several series draws one ring per series (LH-60).
+// Pie and doughnut: clockwise from 12 o'clock, one color per category; a doughnut of several series draws one ring per series (LH-60).
 
 function renderCircularChart(c, spec) {
   const { box, pad } = c;
@@ -1257,8 +1257,8 @@ function renderCircularChart(c, spec) {
   if (list) drawValueList(c, list);
 }
 
-// LH-92: a ring's name, centred in its band at the slice's middle and turned along the ring by core's rotation (the PPTX label's
-// custom angle), in the colour that contrasts with the slice.
+// LH-92: a ring's name, centered in its band at the slice's middle and turned along the ring by core's rotation (the PPTX label's
+// custom angle), in the color that contrasts with the slice.
 function drawRingName(c, text, { cx, cy, r, inner, mid }, path, fill, rotation = 0) {
   const radius = (r + inner) / 2, x = cx + radius * Math.cos(mid), y = cy + radius * Math.sin(mid);
   const width = c.width(text) + c.fontPx * 0.5, height = c.lineHeight;
@@ -1443,7 +1443,7 @@ function renderRadarChart(c, spec) {
 // Chartex constructs (FF-22b). opf-pptx writes these as native Office 2016
 // chartex parts (cx:series layoutId treemap, clusteredColumn with binning or
 // aggregation, paretoLine, boxWhisker, waterfall, funnel, regionMap); the
-// previews below draw the same data with the same colours and defaults.
+// previews below draw the same data with the same colors and defaults.
 
 /**
  * The plotted column of a chartex chart: [Category, Value, ...] plots the first
@@ -1533,7 +1533,7 @@ function renderHistogramChart(c, spec) {
     drawBarLabel(c, labelString(c, { category: bar.name, value: bar.value, format, group: labelGroup }), { x: plot.x + i * band + offset, y: Math.min(y, crossing), width, height: Math.abs(crossing - y) }, bar.value >= 0 ? "up" : "down", bar.path, c.colors[0]);
   });
   if (pareto && bars.length) {
-    // Percentage axis on the right, 0-100%, and the cumulative line through the bar centres.
+    // Percentage axis on the right, 0-100%, and the cumulative line through the bar centers.
     // RR-105: the percentage step core composed (layer.histogram.percentUnit), which the PPTX export writes on the secondary axis.
     const percent = (c.histogram?.percentUnit > 0 ? composedScale({ min: 0, max: 1, majorUnit: c.histogram.percentUnit }) : undefined) ?? niceScale(0, 1, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u), { percent: true });
     const right = plot.x + plot.width;
@@ -1550,9 +1550,9 @@ function renderHistogramChart(c, spec) {
   }
 }
 
-// Waterfall: floating bars from the running total, increases and decreases in the first two palette colours, connector lines between bars.
+// Waterfall: floating bars from the running total, increases and decreases in the first two palette colors, connector lines between bars.
 // LH-59: a last value equal to the running sum of the steps before it is a total (core's waterfallSteps): it stands on zero in the third
-// palette colour, as PowerPoint draws the cx:subtotals point the export writes.
+// palette color, as PowerPoint draws the cx:subtotals point the export writes.
 // LH-107: core's roles (layer.waterfall): totals in the strong color, gains in the accent, losses in the context gray (core
 // chartWaterfallColors), signed default labels (a total's bold and unsigned), dashed connectors and, with default labels, no value axis.
 const waterfallColor = (bar, palette) => palette[(bar.total ? 2 : bar.value < 0 ? 1 : 0) % palette.length];
@@ -1594,7 +1594,7 @@ function renderWaterfallChart(c) {
   });
 }
 
-// Funnel: centred bars from the top, widths proportional to the value, value labels inside and category labels on the left.
+// Funnel: centered bars from the top, widths proportional to the value, value labels inside and category labels on the left.
 function renderFunnelChart(c) {
   const { box, pad, fontPx } = c;
   const { column, values, categories } = chartexValues(c.rows, c.columns);
@@ -1668,7 +1668,7 @@ export function squarify(items, x, y, width, height) {
   return rects;
 }
 
-// Treemap: one tile per category from the first value column (positive values only), one palette colour per tile, category labels inside.
+// Treemap: one tile per category from the first value column (positive values only), one palette color per tile, category labels inside.
 function renderTreemapChart(c) {
   const { box, pad, fontPx } = c;
   const { column, values, categories } = chartexValues(c.rows, c.columns);
@@ -1765,14 +1765,14 @@ function renderBoxWhiskerChart(c) {
   });
 }
 
-// LH-56: a label inside a mark (a treemap tile, a funnel bar, a map tile) takes core's markLabelColor for that fill: the full text colour
+// LH-56: a label inside a mark (a treemap tile, a funnel bar, a map tile) takes core's markLabelColor for that fill: the full text color
 // when it reaches 4.5:1 on the fill, else the slide background, else black or white, as the PPTX export writes the same labels.
 function insideText(c, value, rect, path, fill, align = "center") {
   const element = c.textElement(value, rect, path, align, markLabelColor(fill, c.labelColor, c.bound.design.colors.background));
   if (element) c.children.push(element);
 }
 
-/** Mix two hex colours (#RRGGBB) by `t` in [0, 1], rounded per channel. */
+/** Mix two hex colors (#RRGGBB) by `t` in [0, 1], rounded per channel. */
 export function mixHex(from, to, t) {
   const channel = (hex, i) => parseInt(hex.slice(1 + 2 * i, 3 + 2 * i), 16);
   const clamp = Math.min(1, Math.max(0, t));
@@ -1781,8 +1781,8 @@ export function mixHex(from, to, t) {
 
 // Region map: an honest non-geographic preview. PowerPoint draws the map from
 // Bing geodata it fetches itself; the preview shows one tile per region, shaded
-// from a light tint to the series colour by value, with the region name and
-// its value, so labels and colours are traceable without shipping geography.
+// from a light tint to the series color by value, with the region name and
+// its value, so labels and colors are traceable without shipping geography.
 function renderRegionMapChart(c) {
   const { box, pad, fontPx } = c;
   const { column, values, categories } = chartexValues(c.rows, c.columns);

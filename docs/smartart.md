@@ -531,7 +531,7 @@ decks draw OPF's layout live and every one passes (node rectangles within 0.000 
 difference, within SH-07's gate of the native export: a mean difference of at most 0.8 at a quarter size and 0.94 at full size, the
 text's ink within 1.08 px); PowerPoint's built-in layouts draw 102 live decks, every one passing; OPF's design draws 271 decks and a card
 grid 43 as native shapes, and 32 stay a list. The gate's shapes-versus-preview check leaves out each node's text rectangle grown by
-0.2 em up and down, so the preview's known text offset is not counted as a shape difference. The evidence (the gate table, sheets of preview, PowerPoint live and PowerPoint's drawing of the native export, labelled with
+0.2 em up and down, so the preview's known text offset is not counted as a shape difference. The evidence (the gate table, sheets of preview, PowerPoint live and PowerPoint's drawing of the native export, labeled with
 the design and the layout that drew it, and the COM records) is in the SH-19 folder of the shapes program.
 
 ## Import

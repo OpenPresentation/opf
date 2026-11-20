@@ -46,7 +46,7 @@ export interface SlideContext {
   /** Ready for `composeSlide(slide, options)`. */
   options: ComposeSlideOptions;
   diagnostics: SlideContextDiagnostic[];
-  /** The records `options` was resolved from, for hosts that also need the theme's or colour scheme's own fields. */
+  /** The records `options` was resolved from, for hosts that also need the theme's or color scheme's own fields. */
   resolved: {
     theme: Rec;
     colorScheme: Rec;

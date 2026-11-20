@@ -67,7 +67,7 @@ export interface ChartDataUnplottableDiagnostic { code: "chart-data-unplottable"
 export interface DiagramShapesUnavailableDiagnostic { code: "diagram-shapes-unavailable"; path: string; family: string; message: string }
 export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; path: string; message: string; reason: "table-has-no-rows" | "unsupported-payload" | "diagram-unavailable" }
 /**
- * An image that cannot be exported as a picture: the preview's placeholder was exported instead (or no watermark, or the background colour).
+ * An image that cannot be exported as a picture: the preview's placeholder was exported instead (or no watermark, or the background color).
  * `reason: "unresolved-source"`: no embedded bytes, declared asset or host resolution was available (remote URLs are never fetched).
  * `reason: "unsupported-format"`: the embedded bytes are no readable PNG, JPEG, GIF, WebP or SVG. For an SVG (a native SVG picture over a PNG fallback):
  * `"svg-malformed"` (not well-formed XML, or no `xmlns` SVG root), `"svg-no-size"` (no width and height and no viewBox), `"svg-too-large"` (over 8 MiB),
@@ -248,7 +248,7 @@ export interface ToPptxOptions {
    * picture, not for any picture. `measurePictures(deck)` of `@openpresentation/opf-render` returns it; pass the same function to `toSvg`, so both engines draw the same scrim.
    */
   pictureLuminance?: (src: string) => PictureLuminance | undefined;
-  /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, and, from core's slide context, `unresolved-reference` (once per reference path) when a layout, theme, colour-scheme or font-scheme reference resolves nowhere (not embedded in the document's `catalogs` and not in a registered catalog): core's engine defaults are drawn instead, and a slide whose layout resolves nowhere, like one with no layout, composes automatically. None of them refuses the export unless `strictReferences` is set. */
+  /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, and, from core's slide context, `unresolved-reference` (once per reference path) when a layout, theme, color-scheme or font-scheme reference resolves nowhere (not embedded in the document's `catalogs` and not in a registered catalog): core's engine defaults are drawn instead, and a slide whose layout resolves nowhere, like one with no layout, composes automatically. None of them refuses the export unless `strictReferences` is set. */
   onDiagnostic?: (diagnostic: LayoutDiagnostic | UnresolvedReferenceDiagnostic | MediaProvenanceDiagnostic | NativeBodyFallbackDiagnostic | NativeFragmentUnavailableDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | ExportLossyDiagnostic | TypefaceReplacedDiagnostic | VariableExampleUsedDiagnostic | DiagramShapesUnavailableDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
@@ -269,7 +269,7 @@ export interface ToPptxOptions {
   seed?: number;
   strictAssets?: boolean;
   /**
-   * Strict reference policy (OPF 0.15). When true, a layout, theme, colour-scheme or font-scheme reference that resolves
+   * Strict reference policy (OPF 0.15). When true, a layout, theme, color-scheme or font-scheme reference that resolves
    * nowhere throws `OPFPptxError` with code `unresolved-reference` (its `path` is the first reference's, its `diagnostics`
    * core's `unresolved-reference` diagnostics) instead of composing automatically or drawing with the engine default.
    * Default: the value of `strictAssets`.
@@ -294,7 +294,7 @@ export interface ToPptxOptions {
   /**
    * The catalogs the host registered (core `Catalog[]`, as for opf-render and core's `resolveSlideContext`): each is matched
    * against a document group's `catalogs.<group>.source`, and the first is the host default that bare ids use when the document
-   * omits `catalogs.default`. Never fetched. Every reference (slide layouts, themes, colour and font schemes) resolves in the
+   * omits `catalogs.default`. Never fetched. Every reference (slide layouts, themes, color and font schemes) resolves in the
    * document's embedded records first, then here; omitted or `[]`, only embedded records resolve. Register the gallery snapshot
    * explicitly with `catalogs: [gallery]` from `@openpresentation/gallery`.
    */
@@ -307,9 +307,9 @@ export interface FromPptxOptions {
   fallbackName?: string;
   schema?: string;
   /**
-   * The catalogs the host registered (core `Catalog[]`, as in ToPptxOptions; never fetched). Omitted catalogs select the default from installed `@openpresentation/gallery` only for foreign layout mapping; explicit `[]` opts out. Theme and colour-scheme recovery requires explicitly registered catalogs and
-   * (FF-24) matches the package's theme against the first one, the host default: an exact colour-scheme match imports as its
-   * bare id and a corroborated theme name as `design.theme`. With omitted catalogs or explicit `catalogs: []` the colour scheme imports as an inline object and
+   * The catalogs the host registered (core `Catalog[]`, as in ToPptxOptions; never fetched). Omitted catalogs select the default from installed `@openpresentation/gallery` only for foreign layout mapping; explicit `[]` opts out. Theme and color-scheme recovery requires explicitly registered catalogs and
+   * (FF-24) matches the package's theme against the first one, the host default: an exact color-scheme match imports as its
+   * bare id and a corroborated theme name as `design.theme`. With omitted catalogs or explicit `catalogs: []` the color scheme imports as an inline object and
    * no theme id is recovered. A stored slide layout reference also resolves here.
    */
   catalogs?: readonly Catalog[];
@@ -439,9 +439,9 @@ export interface PptxBox {
 }
 
 export interface PptxColor {
-  /** #RRGGBB after theme and colour-map resolution (luminance and alpha modifiers applied). Absent when it cannot be resolved. */
+  /** #RRGGBB after theme and color-map resolution (luminance and alpha modifiers applied). Absent when it cannot be resolved. */
   color?: string;
-  /** The theme slot the colour was named by (for example "accent1", "tx1"). */
+  /** The theme slot the color was named by (for example "accent1", "tx1"). */
   colorRef?: string;
   /** Opacity below 1. */
   alpha?: number;
@@ -519,7 +519,7 @@ export interface PptxTextSignal {
 }
 
 export interface PptxFillSignal extends PptxColor {
-  /** "style" is a theme fill style reference (`styleIndex`) with the shape's colour. */
+  /** "style" is a theme fill style reference (`styleIndex`) with the shape's color. */
   kind: "none" | "solid" | "gradient" | "picture" | "pattern" | "group" | "style";
   source?: "placeholder" | "style";
   styleIndex?: number;

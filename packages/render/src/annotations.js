@@ -5,7 +5,7 @@
 // module only paints those boxes with the text fits core accepted. The draw helpers of svg.js are
 // injected (`draw`) so the module needs no DOM and svg.js keeps its private helpers.
 
-/** The caption band of a captioned item, in the muted text colour at core's caption box. */
+/** The caption band of a captioned item, in the muted text color at core's caption box. */
 export function renderCaption(item, bound, options, draw) {
   const caption = item.caption;
   if (!caption) return "";
@@ -21,8 +21,8 @@ export function renderCaption(item, bound, options, draw) {
 }
 
 /**
- * The slide's footnote area: a rule in the border colour, then `<n> <text>` for each note the slide
- * uses, in number order, in the muted text colour. The listed lines are not source text (a reference
+ * The slide's footnote area: a rule in the border color, then `<n> <text>` for each note the slide
+ * uses, in number order, in the muted text color. The listed lines are not source text (a reference
  * is listed with its number in front), so they carry no `data-opf-path`; the source of each entry is
  * traced on its group instead.
  */

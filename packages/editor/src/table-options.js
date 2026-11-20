@@ -356,7 +356,7 @@ function styleTable(table, style) {
 
 /**
  * Apply a table style (a preset name or `{ header, banding, borders }`) to a table object in place, with the same
- * rules as {@link prepareTableStyle}. The table structure operations use it to keep a recognised style
+ * rules as {@link prepareTableStyle}. The table structure operations use it to keep a recognized style
  * (banding, header fill, borders) correct after rows or columns are inserted, deleted, moved or sorted.
  */
 export function applyTableStyleToTable(table, preset) {

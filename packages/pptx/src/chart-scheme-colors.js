@@ -1,15 +1,15 @@
-// RR-89: chart series colours as theme colours.
+// RR-89: chart series colors as theme colors.
 //
 // Core's chartSeriesPalette gives series i the deck scheme's accent (i + 1) for the first six series, or the chart's own
-// `chart.colors` entry. When the chart panel keeps that colour exactly (chartPaletteForFill only adjusts a colour that falls short of 3:1
-// contrast), the series is written as `<a:schemeClr val="accentN"/>` so re-theming the deck in PowerPoint recolours the chart, as
-// chart-highlight.js does for the highlight accent. A hex entry, a tint (series 7 to 12) and an adjusted colour stay `srgbClr`.
+// `chart.colors` entry. When the chart panel keeps that color exactly (chartPaletteForFill only adjusts a color that falls short of 3:1
+// contrast), the series is written as `<a:schemeClr val="accentN"/>` so re-theming the deck in PowerPoint recolors the chart, as
+// chart-highlight.js does for the highlight accent. A hex entry, a tint (series 7 to 12) and an adjusted color stay `srgbClr`.
 const hex6 = value => String(value).replace(/^#/, '').toUpperCase();
 
 /**
- * The scheme value (`accent1`, `tx2`, ...) of each palette colour that may be written as a theme colour, or undefined.
+ * The scheme value (`accent1`, `tx2`, ...) of each palette color that may be written as a theme color, or undefined.
  * `colors` is the chart's authored `colors`, `preferred` and `adjusted` the palette before and after the panel adjustment, `schemeFor`
- * maps a colour reference and its resolved hex to a scheme value when the deck theme holds that colour (theme-colors.js). A colour the
+ * maps a color reference and its resolved hex to a scheme value when the deck theme holds that color (theme-colors.js). A color the
  * panel adjusted, a hex or variable entry and a tint (series 7 to 12) have none.
  */
 export function chartPaletteSchemes(colors, preferred, adjusted, schemeFor, accents, soft) {
@@ -18,7 +18,7 @@ export function chartPaletteSchemes(colors, preferred, adjusted, schemeFor, acce
     if (hex6(color) !== hex6(adjusted[index])) return undefined;
     const entry = typeof authored[index] === 'string' ? authored[index].trim() : undefined;
     // RR-96: series i is the slot the variant's accent order puts at position i (accent i + 1 by default), and schemeFor names the role that slot has.
-    // An entry that does not resolve keeps the scheme colour of its position (core softens it as a scheme series, `soft`).
+    // An entry that does not resolve keeps the scheme color of its position (core softens it as a scheme series, `soft`).
     const slot = () => index < 6 ? schemeFor(accents?.[index] ?? `accent${index + 1}`, hex6(color)) : undefined;
     const value = entry !== undefined ? (/^[A-Za-z]/.test(entry) ? schemeFor(entry, hex6(color)) : undefined) ?? (soft?.[index] ? slot() : undefined) : slot();
     // LH-105: `adjusted` is the full-strength palette and `soft` core's chartSoftColors; a softened accent is its slot with core's transforms.
@@ -41,8 +41,8 @@ export function schemeColorXml(scheme) {
 const srgbIn = (block, hex, scheme) => block.replace(new RegExp(`<a:srgbClr val="${hex}"\\s*/>`, 'gi'), () => schemeColorXml(scheme));
 
 /**
- * Rewrite the series fills of a generated classic chart part to scheme colours. Series are matched to the palette by position (the
- * generated part has one c:ser per plotted series in palette order; pie, doughnut and similar charts colour category i, one c:dPt each).
+ * Rewrite the series fills of a generated classic chart part to scheme colors. Series are matched to the palette by position (the
+ * generated part has one c:ser per plotted series in palette order; pie, doughnut and similar charts color category i, one c:dPt each).
  * Only series and point shape properties (c:spPr, and the marker's) are touched, never text properties.
  */
 export function applyChartSchemeColors(xml, palette, schemes, {circular = false} = {}) {
@@ -57,7 +57,7 @@ export function applyChartSchemeColors(xml, palette, schemes, {circular = false}
     if (circular) {
       return ser.replace(/<c:dPt>[\s\S]*?<\/c:dPt>/g, point => rewrite(point, Number(/<c:idx val="(\d+)"\/>/.exec(point)?.[1])));
     }
-    // The series' own shape properties and markers, then its points (a bar series with several colours carries c:dPt).
+    // The series' own shape properties and markers, then its points (a bar series with several colors carries c:dPt).
     return rewrite(ser, index);
   });
 }

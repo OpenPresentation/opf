@@ -55,7 +55,7 @@
                 "$ref": "#/$defs/compatibility"
               },
               "metricModeFallback": {
-                "description": "Metric-mode registries still preview with this visual replacement (reported as visual) so an earlier metric behaviour does not regress.",
+                "description": "Metric-mode registries still preview with this visual replacement (reported as visual) so an earlier metric behavior does not regress.",
                 "type": "boolean"
               },
               "note": {

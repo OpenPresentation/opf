@@ -171,7 +171,7 @@
 }
 .opf-export .opf-export-status[data-state="error"] .opf-export-status-text { color: var(--opf-ui-danger); }
 .opf-export .opf-export-status[data-state="busy"] .opf-export-status-text,
-.opf-export .opf-export-status[data-state="cancelled"] .opf-export-status-text { color: var(--opf-ui-muted-fg); }
+.opf-export .opf-export-status[data-state="canceled"] .opf-export-status-text { color: var(--opf-ui-muted-fg); }
 .opf-export .opf-export-status-action {
   flex: none;
   height: 24px;

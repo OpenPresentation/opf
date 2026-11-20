@@ -70,7 +70,7 @@ function interrupts(lines: Line[], i: number): boolean {
 
 // --- segments ----------------------------------------------------------------------------------
 
-/** Cut the lines after the front matter into one list of lines per slide, honouring fences, comments and notes. */
+/** Cut the lines after the front matter into one list of lines per slide, honoring fences, comments and notes. */
 export function splitSegments(lines: Line[], split: "rules" | "headings"): Line[][] {
   const segments: Line[][] = [[]];
   let fence: string | undefined;

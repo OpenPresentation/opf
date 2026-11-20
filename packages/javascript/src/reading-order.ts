@@ -6,7 +6,7 @@ export interface ReadingBox {
 /**
  * Visual reading order: rows from top to bottom, and within a row from the start to the end of the line.
  *
- * Items whose vertical centre falls inside an existing row's vertical extent join that row (so a full-height
+ * Items whose vertical center falls inside an existing row's vertical extent join that row (so a full-height
  * item shares one row with everything beside it and the row reads left to right). Rows are ordered by their
  * top edge. Ties keep the input order, so the result is deterministic.
  *
@@ -33,16 +33,16 @@ export function visualReadingOrder<T extends ReadingBox>(items: readonly T[], di
  */
 export function readingRows<T extends ReadingBox>(items: readonly T[]): T[][] {
   const index = new Map(items.map((item, i) => [item, i] as const));
-  const centre = (item: T) => item.box.y + item.box.height / 2;
+  const center = (item: T) => item.box.y + item.box.height / 2;
   const tall = items.filter(item => {
-    const inside = items.filter(other => other !== item && centre(other) >= item.box.y && centre(other) <= item.box.y + item.box.height);
+    const inside = items.filter(other => other !== item && center(other) >= item.box.y && center(other) <= item.box.y + item.box.height);
     return inside.some(a => inside.some(b => a.box.y + a.box.height <= b.box.y));
   });
   const rest = items.filter(item => !tall.includes(item));
   const rows = rowsOf(rest.length ? rest : items, index);
   if (rest.length) {
     for (const item of tall) {
-      const spanned = rows.filter(row => row.some(other => centre(other) >= item.box.y && centre(other) <= item.box.y + item.box.height));
+      const spanned = rows.filter(row => row.some(other => center(other) >= item.box.y && center(other) <= item.box.y + item.box.height));
       if (!spanned.length) {
         const at = rows.findIndex(row => Math.min(...row.map(other => other.box.y)) > item.box.y);
         rows.splice(at < 0 ? rows.length : at, 0, [item]);
@@ -60,8 +60,8 @@ function rowsOf<T extends ReadingBox>(items: readonly T[], index: Map<T, number>
   const sorted = [...items].sort((a, b) => a.box.y - b.box.y || a.box.x - b.box.x || index.get(a)! - index.get(b)!);
   const rows: { top: number; bottom: number; items: T[] }[] = [];
   for (const item of sorted) {
-    const centre = item.box.y + item.box.height / 2;
-    const row = rows.find(candidate => centre >= candidate.top && centre <= candidate.bottom);
+    const center = item.box.y + item.box.height / 2;
+    const row = rows.find(candidate => center >= candidate.top && center <= candidate.bottom);
     if (row) {
       row.items.push(item);
       row.top = Math.min(row.top, item.box.y);

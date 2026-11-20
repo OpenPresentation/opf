@@ -1,4 +1,4 @@
-// LH-60: the PPTX side of core's chart fallbacks (`chartDrawPlan`) and LH-56's label colours inside chartex marks.
+// LH-60: the PPTX side of core's chart fallbacks (`chartDrawPlan`) and LH-56's label colors inside chartex marks.
 //
 // Core decides how a chart whose data does not fit its type is drawn; the exporter writes that construct, so the preview and PowerPoint
 // show the same chart. Only the nested rings need a rewrite here: PptxGenJS writes the first series of a doughnut alone (it plots one
@@ -33,7 +33,7 @@ function columnLetters(number) {
 /**
  * Add rings 2 to n to a generated doughnut chart part. `series` is the exported series ({name, values}), the first already written by
  * PptxGenJS; PowerPoint draws the first series innermost, as the preview does. Each added c:ser repeats the first one's point fills and
- * labels (a ring is coloured by category, like the first) with its own c:idx, c:order, name (column N+1, row 1) and values (column N+1).
+ * labels (a ring is colored by category, like the first) with its own c:idx, c:order, name (column N+1, row 1) and values (column N+1).
  */
 export function applyDoughnutRings(xml, series) {
   if (!Array.isArray(series) || series.length < 2) return xml;
@@ -57,7 +57,7 @@ export function applyDoughnutRings(xml, series) {
  * LH-92: name each ring of a doughnut of nested rings on the slice core chose (`layer.rings`: series, name, row, rotation), after the data labels
  * are written. With data labels, that slice's c:dLbl also shows the series name (PowerPoint puts it first, before the label's own parts,
  * with the labels' separator), as the preview draws it. Without, the series' c:dLbls is one c:dLbl that shows the series name alone and
- * shows nothing else. The name takes the colour that contrasts with the slice (core `textColorForFill` of the full text colour), as the
+ * shows nothing else. The name takes the color that contrasts with the slice (core `textColorForFill` of the full text color), as the
  * preview draws a label inside a ring, and runs along the ring (core's rotation, the label's custom text angle). `fills(series)` gives
  * the slice fills of a series (hex, by row), `size` the text size in hundredths of a point.
  */
@@ -68,7 +68,7 @@ export function applyRingLabels(xml, rings, {labels, fills, labelColor, size, fo
   return xml.replace(/<c:doughnutChart>[\s\S]*?<\/c:doughnutChart>/, group => group.replace(/<c:ser>[\s\S]*?<\/c:ser>/g, ser => {
     const ring = named.get(Number(/<c:idx val="(\d+)"\/>/.exec(ser)?.[1]));
     if (!ring) return ser;
-    // The label runs along the ring: a custom text angle (a:bodyPr rot, 60000ths of a degree) about the label's centre.
+    // The label runs along the ring: a custom text angle (a:bodyPr rot, 60000ths of a degree) about the label's center.
     const body = ring.rotation ? `<a:bodyPr rot="${Math.round(ring.rotation * 60000)}" vert="horz"/>` : '<a:bodyPr/>';
     if (labels) {
       return ser.replace(new RegExp(`<c:dLbl><c:idx val="${ring.row}"/>[\\s\\S]*?</c:dLbl>`), point => point.replace('<c:showSerName val="0"/>', '<c:showSerName val="1"/>').replace(/<a:bodyPr\/>/, () => body));
@@ -86,9 +86,9 @@ export function applyRingLabels(xml, rings, {labels, fills, labelColor, size, fo
 }
 
 /**
- * LH-56: the text colour of a label inside a chartex mark of colour `fill` (hex without #): core's `markLabelColor` of the full text colour
- * `labelColor` and the slide `background` (the text colour at 4.5:1, else the background, else black or white), as the preview draws
- * treemap tiles and funnel bars. The text and background are role colours, which the finished part writes as theme colours.
+ * LH-56: the text color of a label inside a chartex mark of color `fill` (hex without #): core's `markLabelColor` of the full text color
+ * `labelColor` and the slide `background` (the text color at 4.5:1, else the background, else black or white), as the preview draws
+ * treemap tiles and funnel bars. The text and background are role colors, which the finished part writes as theme colors.
  */
 export function insideLabelColor(fill, labelColor, background) {
   return String(markLabelColor(`#${fill}`, `#${labelColor}`, background ? `#${background}` : undefined)).replace(/^#/, '').toUpperCase();

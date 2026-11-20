@@ -550,7 +550,7 @@ const HELP: Record<string, string> = {
 		'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.',
 	'chart-mapping-adapted': 'Choose a compatible chart type or mapping for the selected data. The message explains how the mapping or drawing was adapted.',
 	'chart-series-dropped': 'The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.',
-	'chart-highlight-adapted': 'The highlight is adapted by every engine. Name a series or category the chart type can emphasise, or remove the entry.',
+	'chart-highlight-adapted': 'The highlight is adapted by every engine. Name a series or category the chart type can emphasize, or remove the entry.',
 	'slide-theme-dimensions': 'A PPTX has one slide size. Set design.dimensions on the deck, or give every slide the same theme dimensions.',
 	'code-highlight-out-of-range': 'Marked lines count from 1 by line break in code.source. The entry marks nothing past the last line; change it to a line the code has, or remove it.',
 	'code-highlight-range-reversed': 'Write the range with the smaller line number first, or remove it. A reversed range marks nothing.',
@@ -559,8 +559,8 @@ const HELP: Record<string, string> = {
 	'variable-unknown-value': 'Remove the supplied value, or declare the variable it belongs to.',
 	'variable-unused': 'Reference the variable as {{id}} or var:id where it belongs, or remove its declaration.',
 	'variable-group-omitted': 'Give one of the variables a value to draw the group, make one of them required, or move the content that should always show out of the group.',
-	'variable-reference-unknown': 'Declare the variable in the top-level variables map, or use another colour.',
-	'run-color-unrecognized': 'Use a #RRGGBB hex colour, a colour-scheme name or a var: reference to a declared colour variable.',
+	'variable-reference-unknown': 'Declare the variable in the top-level variables map, or use another color.',
+	'run-color-unrecognized': 'Use a #RRGGBB hex color, a color-scheme name or a var: reference to a declared color variable.',
 	'numbering-start-ignored': "Add a 'numbering' field to the payload, or remove 'start'.",
 	'slide-size-out-of-range': 'Use a custom widthInches and heightInches between 1 and 56, or a preset. PowerPoint stores the slide size in 914400 to 51206400 EMU per side.',
 };
@@ -759,7 +759,7 @@ function collapseChartShape(document: unknown, findings: Finding[]): void {
 
 /**
  * The engine's issues as findings. Errors are `format` findings (the schema rule, or the semantic rule that names its
- * code); warnings that name a code (data, chart options, variables, numbering, colours) are findings of that rule.
+ * code); warnings that name a code (data, chart options, variables, numbering, colors) are findings of that rule.
  * The catalog-id warnings are left to `referenceFindings`, which resolves them against the full local context.
  * `enabled` lets a caller skip work for a rule it will not report.
  */
@@ -965,8 +965,8 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 			const design = slide && typeof slide.design === 'object' && slide.design !== null && !Array.isArray(slide.design) ? (slide.design as Record<string, unknown>) : undefined;
 			const setPosition = position !== undefined && design?.titlePosition === undefined;
 			const positionOp = !setPosition ? [] : design ? [{ op: 'add' as const, path: pointer([...slideAt, 'design', 'titlePosition']), value: position }] : [{ op: 'add' as const, path: pointer([...slideAt, 'design']), value: { titlePosition: position } }];
-			// The last slide on an unedited copy of the removed layout drops the copy too (and embeds the replacement where the group embeds records).
-			const dropCopy = stale?.renamed && stale.version !== 'edited' && staleCopyUsers(document, stale, options).length <= 1 ? droppedCopyOperations(document, stale) : [];
+			// The last slide on a copy of the removed layout drops the copy too (and embeds the replacement where the group embeds records).
+			const dropCopy = stale?.renamed && staleCopyUsers(document, stale, options).length <= 1 ? droppedCopyOperations(document, stale) : [];
 			const what = renamed.endsWith('vertical-process') ? '' : renamed.endsWith('agenda') ? ' with its title beside the list (design.titlePosition "start")' : ' (a short list as boxes joined by arrows, longer steps as numbered steps)';
 			findings.push(
 				finding('opf/unresolved-reference', {
@@ -975,7 +975,7 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 					help: `OPF 0.35 removed layout "${site.reference}"; use "${renamed}", which draws the same content${what}.${position ? ` The fix sets the layout and${setPosition ? '' : ' leaves'} the slide's design.titlePosition${setPosition ? ` to "${position}"` : ' as the slide sets it'}.` : ''}`,
 					definition: `${schemas.presentation.$id}#/$defs/Slide`,
 					lookup: ['opf', 'catalog', site.kind],
-					fixes: [{ id: 'rename-layout', title: setPosition ? `Use layout ${renamed} with the title beside it` : `Use layout ${renamed}`, kind: 'patch' as const, safe: true, ...(renamedLayoutChangesDrawing(site.kind, site.reference) ? { changesDrawing: true } : {}), patch: [{ op: 'replace' as const, path, value: renamed }, ...positionOp, ...dropCopy] }],
+					fixes: [{ id: 'rename-layout', title: setPosition ? `Use layout ${renamed} with the title beside it` : `Use layout ${renamed}`, kind: 'patch' as const, safe: true, ...(stale || renamedLayoutChangesDrawing(site.kind, site.reference) ? { changesDrawing: true } : {}), patch: [{ op: 'replace' as const, path, value: renamed }, ...positionOp, ...dropCopy] }],
 				}),
 			);
 			continue;

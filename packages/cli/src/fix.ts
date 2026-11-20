@@ -4,7 +4,7 @@
 // safe fix would be applied. The deck is written with the fixes even when findings remain; the exit status says whether any reaches
 // --fail-on.
 import path from "node:path";
-import { type AppliedFix, FIX_REPAIR_CATEGORIES, type Finding, type FindingSeverity, type FixResult, type LayoutWithCells, ensureIcons, fix, isSafePatch } from "@openpresentation/opf";
+import { type AppliedFix, FIX_REPAIR_CATEGORIES, type Finding, type FindingSeverity, type FixResult, ensureIcons, fix, isSafePatch } from "@openpresentation/opf";
 import { Reporter, assetRoot, iconSourceReader, measuringFonts } from "@openpresentation/opf/internal/engine";
 import { type CommandSpec, oneOf, parseArgs, printHelp } from "./args.js";
 import { CLI_CATALOGS } from "./catalogs.js";
@@ -22,23 +22,21 @@ export const spec: CommandSpec = {
 	flags: ["in-place", "check", "force", "audits"],
 	help: `Validates the deck as opf validate does and applies each finding's fix that is marked safe, then validates again, since an
 error in the deck's own keys hides the later checks; it stops when no safe fix is left (at most 10 rounds). A safe fix loses no
-content and writes valid OPF: use-max-1, remove:listColumns, rename-layout, rename-region, use-current-record on an unedited 0.34
-copy, ... Some safe fixes change how a slide draws (rename-layout from agenda-split narrows its title column from half the width
-to two fifths; remove:contentDirection drops how the blocks were stacked): each fix applied says so (changesDrawing), and the
-text report marks it "changes the drawing". By default only the checks that repair the document apply their fixes (format,
-references, policy, layout); --audits applies the audits' safe fixes too (accessibility, content), and without it the report
-lists them in audits. A fix that is not marked safe (such as a new text colour) is never applied, and a fix you write
+content and writes valid OPF: use-max-1, remove:listColumns, rename-layout, rename-region, use-current-record on a stale
+copy of a built-in layout, ... The fixes bring the deck to the 0.35 form and the 0.35 engine draws it: a fix that can change
+how a slide draws (rename-layout from agenda-split, use-current-record, remove:contentDirection, cells-to-layout-blocks)
+says so (changesDrawing), and the text report marks it "changes the drawing". By default only the checks that repair the
+document apply their fixes (format, references, policy, layout); --audits applies the audits' safe fixes too (accessibility,
+content), and without it the report lists them in audits. A fix that is not marked safe (such as a new text color) is never
+applied, and a fix you write
 yourself (set the language, write alt text) is never counted: its finding stays in the report, with its fixes, for you to
 choose. The deck goes to stdout, the output, or back to the input with -i (an input with nothing to fix is not rewritten). It
 is written with the fixes even when findings remain. --check writes nothing and exits 1 when a safe fix would be applied.
 Exit 1 also when findings at or above --fail-on (default error) remain or the rounds ran out.
 The report { command, ok, input, outputs, findings, counts, valid, checks, fix: { applied: [{ round, ruleId, path, fix,
-title, changesDrawing }], rounds, stopped, changesDrawing, unsafe, audits, layoutWithCells } } lists each fix applied, how many
-of them change the drawing, the findings that remain, in unsafe those that carry only fixes to review and in audits those
-whose safe fixes only --audits applies. layoutWithCells lists each slide that had both a layout and 0.34 cell keys ({ slide,
-layout, rewritten, kept } when the layout was removed and what it gave the slide was kept; { slide, layout, rewritten: false,
-reason } when the slide would draw differently without its layout and is left for you). It goes to stdout, or stderr when
-stdout carries the deck; --format text prints it as lines.
+title, changesDrawing }], rounds, stopped, changesDrawing, unsafe, audits } } lists each fix applied, how many of them change
+the drawing, the findings that remain, in unsafe those that carry only fixes to review and in audits those whose safe fixes
+only --audits applies. It goes to stdout, or stderr when stdout carries the deck; --format text prints it as lines.
 
 Examples:
   opf fix deck.opf.json -i
@@ -75,16 +73,9 @@ const plural = (count: number, word: string, many = `${word}s`) => `${count} ${c
 
 /** The report as lines: each fix applied (or, with --check, to apply), then each finding left with its fixes, then a summary. */
 export function formatFixText(report: Report, label: string, check = false): string {
-	const details = report.fix as { applied: Omit<AppliedFix, "patch">[]; rounds: number; stopped: FixResult["stopped"]; layoutWithCells?: LayoutWithCells[]; audits?: UnsafeOnly[] };
+	const details = report.fix as { applied: Omit<AppliedFix, "patch">[]; rounds: number; stopped: FixResult["stopped"]; audits?: UnsafeOnly[] };
 	const lines: string[] = [];
 	for (const entry of details.applied) lines.push(`${label}:${entry.path || "/"}  ${check ? "to fix" : "fixed "}  ${entry.ruleId}  ${entry.fix}: ${entry.title}${entry.changesDrawing ? DRAWING : ""}`);
-	// OPF 0.35: a slide with a layout and 0.34 cell keys, rewritten without the layout or left with the reason.
-	for (const entry of details.layoutWithCells ?? [])
-		lines.push(
-			entry.rewritten
-				? `${label}:/slides/${entry.slide}  layout and cells: ${check ? "would remove" : "removed"} layout "${entry.layout}" and named the cells${entry.kept?.length ? `, keeping ${entry.kept.join(", ")}` : ""}`
-				: `${label}:/slides/${entry.slide}  layout and cells: left as it is (layout "${entry.layout}"): ${entry.reason ?? "no safe fix"}`,
-		);
 	for (const finding of report.findings) {
 		lines.push(`${label}:${finding.path || "/"}  ${finding.severity.padEnd(7)} ${finding.ruleId}  ${finding.message}`);
 		const audit = details.audits !== undefined && isAudit(finding);
@@ -131,10 +122,7 @@ export async function run(args: string[], _host: Host): Promise<void> {
 		try {
 			if (measuring.fonts) {
 				const measured = fix(result.document, { catalogs: CLI_CATALOGS, fonts: measuring.fonts, audits });
-				// The slides the first pass rewrote without their layout no longer have one, so the measured pass reports only what it left.
-				const rewritten = new Set(result.layoutWithCells.filter((entry) => entry.rewritten).map((entry) => entry.slide));
-				const layoutWithCells = [...result.layoutWithCells.filter((entry) => entry.rewritten), ...measured.layoutWithCells.filter((entry) => !rewritten.has(entry.slide))].sort((a, b) => a.slide - b.slide);
-				result = { ...measured, applied: [...result.applied, ...measured.applied.map((entry) => ({ ...entry, round: entry.round + result.rounds }))], rounds: result.rounds + measured.rounds, layoutWithCells };
+				result = { ...measured, applied: [...result.applied, ...measured.applied.map((entry) => ({ ...entry, round: entry.round + result.rounds }))], rounds: result.rounds + measured.rounds };
 			}
 		} finally {
 			measuring.release();
@@ -145,7 +133,7 @@ export async function run(args: string[], _host: Host): Promise<void> {
 	const extra = {
 		valid: result.report.valid,
 		checks: result.report.checks,
-		fix: { applied, rounds: result.rounds, stopped: result.stopped, changesDrawing: applied.filter((entry) => entry.changesDrawing).length, unsafe: unsafeOnly(result.findings), ...(audits ? {} : { audits: auditOnly(result.findings) }), layoutWithCells: result.layoutWithCells },
+		fix: { applied, rounds: result.rounds, stopped: result.stopped, changesDrawing: applied.filter((entry) => entry.changesDrawing).length, unsafe: unsafeOnly(result.findings), ...(audits ? {} : { audits: auditOnly(result.findings) }) },
 	};
 	const label = input === "-" ? "stdin" : nameOf(input);
 	const print = (report: Report, toStderr: boolean) => {

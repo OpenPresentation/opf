@@ -1,7 +1,7 @@
 // Semantic diff of two OPF documents.
 //
 // `diff(a, b)` matches slides (and every other array's elements)
-// deterministically, then reports what changed as typed, categorised changes
+// deterministically, then reports what changed as typed, categorized changes
 // and as an RFC 6902 patch that turns A into B. Moves are detected, not
 // reported as a remove plus an add. The report is a pure function of the two
 // documents: no timestamps, no randomness, no network.
@@ -93,7 +93,7 @@ interface Context {
 }
 
 const pointer = (tokens: readonly (string | number)[]) => formatPointer(tokens);
-// A title is a string or TextRun[] (FA-10): a run array is labelled by its plain text.
+// A title is a string or TextRun[] (FA-10): a run array is labeled by its plain text.
 const titleOf = (slide: unknown): string | undefined => (isObject(slide) ? annotationText(slide.title) || undefined : undefined);
 const slideRef = (slide: unknown, aIndex?: number, bIndex?: number): DiffSlideRef => {
   const ref: DiffSlideRef = {};
@@ -188,7 +188,7 @@ function diffArray(a: unknown[], b: unknown[], aPath: (string | number)[], bPath
   }
 }
 
-function summarise(changes: DiffChange[], slides: SlideMatchInfo[]): DiffSummary {
+function summarize(changes: DiffChange[], slides: SlideMatchInfo[]): DiffSummary {
   const summary: DiffSummary = { total: changes.length, byCategory: {}, byType: {}, slides: { added: 0, removed: 0, moved: 0, modified: 0, unchanged: 0 } };
   for (const change of changes) {
     summary.byCategory[change.category] = (summary.byCategory[change.category] ?? 0) + 1;
@@ -210,12 +210,12 @@ function summarise(changes: DiffChange[], slides: SlideMatchInfo[]): DiffSummary
  * Diff two OPF documents. Slides are matched by `id`, then by identical
  * content, then by content similarity (`threshold`, default 0.5); the same
  * rule matches blocks, list items and every other array element. The result
- * lists categorised changes and a JSON Patch from `a` to `b`.
+ * lists categorized changes and a JSON Patch from `a` to `b`.
  */
 export function diff(a: unknown, b: unknown, options: DiffOptions = {}): PresentationDiff {
   const ctx: Context = { options: { threshold: options.threshold ?? DEFAULT_MATCH_THRESHOLD }, changes: [], patch: [], slides: [] };
   diffValue(a, b, [], [], ctx);
-  return { equal: ctx.patch.length === 0, changes: ctx.changes, patch: ctx.patch, slides: ctx.slides, summary: summarise(ctx.changes, ctx.slides) };
+  return { equal: ctx.patch.length === 0, changes: ctx.changes, patch: ctx.patch, slides: ctx.slides, summary: summarize(ctx.changes, ctx.slides) };
 }
 
 // ---------------------------------------------------------------------------
@@ -271,7 +271,7 @@ const SECTION_TITLES: Record<DiffCategory, string> = {
   metadata: "Metadata", design: "Design", variables: "Variables", narrative: "Narrative", assets: "Assets", datasets: "Datasets", catalogs: "Catalogs", extensions: "Extensions", slide: "Slides", block: "Slides", field: "Slides",
 };
 
-/** Render a diff as a plain-text report (no colour, stable ordering). */
+/** Render a diff as a plain-text report (no color, stable ordering). */
 export function formatDiffReport(diff: PresentationDiff): string {
   if (diff.equal) return "No differences.\n";
   const lines: string[] = [];

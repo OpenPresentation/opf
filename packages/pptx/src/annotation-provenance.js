@@ -29,7 +29,7 @@ const object = value => value !== null && typeof value === 'object' && !Array.is
 const MAX_VALUE_CHARS = 64 * 1024;
 const MARKER = /^\d+(?:,\d+)*$/;
 const ENGINE_STYLE = new Set(['fontSize', 'fontFamily', 'color']);
-// Internal reader markers (`_opfScheme`: the scheme slot a colour resolved from) are not authored style either.
+// Internal reader markers (`_opfScheme`: the scheme slot a color resolved from) are not authored style either.
 const engineKey = key => ENGINE_STYLE.has(key) || key.startsWith('_opf');
 const name = shape => shape?.['p:nvSpPr']?.['p:cNvPr']?.name ?? shape?.['p:nvPicPr']?.['p:cNvPr']?.name ?? shape?.['p:nvGraphicFramePr']?.['p:cNvPr']?.name;
 
@@ -77,7 +77,7 @@ function groupText(members, paragraphs, readBody) {
       body.forEach((paragraph, paragraphIndex) => {
         if (paragraphIndex) runs.push('\n');
         // Caption and note lines are drawn in the engine's caption/footnote size, family and muted
-        // colour: those are not authored run styles, so only the authored emphasis comes back.
+        // color: those are not authored run styles, so only the authored emphasis comes back.
         runs.push(...(Array.isArray(paragraph.richText) ? paragraph.richText.map(run => typeof run === 'string' ? run : Object.fromEntries(Object.entries(run).filter(([key]) => !engineKey(key)))) : [paragraph.richText ?? paragraph.text ?? '']));
       });
       const separator = member.record.boundary === 'hard' ? (member.record.separator || '\n') : '';

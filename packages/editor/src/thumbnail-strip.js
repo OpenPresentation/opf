@@ -358,7 +358,7 @@ export function createThumbnailStrip(container, options = {}) {
     status.textContent = status.textContent === message ? `${message} ` : message;
   }
 
-  /** After a change: show the slide it left current (the moved, copied, added or neighbouring one), keep focus on it and tell the host. */
+  /** After a change: show the slide it left current (the moved, copied, added or neighboring one), keep focus on it and tell the host. */
   function follow(target, message, notify = true) {
     cancelScheduled();
     deck = editor.presentation;
@@ -493,7 +493,7 @@ export function createThumbnailStrip(container, options = {}) {
   const SHORTCUT_KEYS = { "←": "ArrowLeft", "→": "ArrowRight", "↑": "ArrowUp", "↓": "ArrowDown" };
   /**
    * Open a menu. `entries` are `{ label, shortcut?, disabled?, run }`, `{ separator: true }` and `{ heading }` (the entries up to the next
-   * heading form a labelled group). It opens at `x`, `y`, or under (above, when there is no room) the `anchor` rectangle.
+   * heading form a labeled group). It opens at `x`, `y`, or under (above, when there is no room) the `anchor` rectangle.
    */
   function openMenu({ label, opener, entries, x = 0, y = 0, anchor, toggle = false }) {
     closeMenu(false);

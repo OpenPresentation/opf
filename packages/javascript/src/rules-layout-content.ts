@@ -80,7 +80,7 @@ const layoutRules: ValidationRule[] = [
 					// A diagram whose source cannot be drawn (composition.ts composeDiagram): Mermaid, DOT and PlantUML errors alike.
 					else if (diagnostic.message.startsWith('The diagram cannot be drawn'))
 						context.report(unresolvedRule, { path, slide: path.startsWith('/slides/') ? slide : undefined, message: diagnostic.message, help: 'Fix the diagram source where the message points. OPF refuses what it does not draw: write it in the form the diagrams guide lists for that syntax, or remove it.' });
-					else context.report(unresolvedRule, { path, slide: path.startsWith('/slides/') ? slide : undefined, message: diagnostic.message, help: 'Supply what the message asks for, or remove the setting that cannot be honoured.' });
+					else context.report(unresolvedRule, { path, slide: path.startsWith('/slides/') ? slide : undefined, message: diagnostic.message, help: 'Supply what the message asks for, or remove the setting that cannot be honored.' });
 				}
 				for (const tv of slide.texts)
 					for (const run of runsOf(tv))

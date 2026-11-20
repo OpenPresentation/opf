@@ -4,7 +4,7 @@
 // (`$schema`, `name`, ..., `slides`, `assets`, `catalogs`, `extensions` at the
 // root; the same rule at every depth, through `$ref`, `oneOf`, `anyOf`,
 // `allOf` and `then`/`else`). Keys the schema does not declare (extensions,
-// catalog records, custom colours, unknown fields) follow the declared ones
+// catalog records, custom colors, unknown fields) follow the declared ones
 // in their original relative order, so formatting never reorders user data
 // that has no canonical order. Array order and every value are untouched.
 // Text layout is two-space indentation, LF line endings, no BOM, one trailing

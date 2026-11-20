@@ -506,7 +506,7 @@ class Converter {
     }
     const color = parseColor(text, parseColor(style.color));
     if (!color) {
-      if (!/^(none|inherit|context-(fill|stroke))$/i.test(text)) this.unsupported("pdf-unsupported-paint", `The colour "${text.slice(0, 40)}" is not understood; nothing is drawn for it.`, { kind });
+      if (!/^(none|inherit|context-(fill|stroke))$/i.test(text)) this.unsupported("pdf-unsupported-paint", `The color "${text.slice(0, 40)}" is not understood; nothing is drawn for it.`, { kind });
       return null;
     }
     return color.a === 0 ? null : { color };
@@ -889,7 +889,7 @@ class Converter {
       const commands = glyphOutline(run.face.font, glyph.gid, (x, y) => [run.x + (origin + (glyph.xOffset + x) * scale) * run.scaleX, run.y - (glyph.yOffset + y) * scale]);
       if (commands.length) content.op(`${pathOps(commands)} f`);
     }
-    // Underline / strike-through / overline in the text colour, from the font's own metrics.
+    // Underline / strike-through / overline in the text color, from the font's own metrics.
     if (run.decoration.size && solidFill) {
       const font = run.face.font, scale = size / upem;
       for (const kind of run.decoration) {

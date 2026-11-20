@@ -27,12 +27,12 @@ Documents reference `themes`, `layouts`, `colorSchemes`, `fontSchemes`, `narrati
 
 Read [design and gallery rules](references/design.md) when applying overrides or importing examples.
 
-- Deck design sets shared defaults. Slide design overrides them. A theme supplies defaults below explicitly supplied design fields. Colour- and font-scheme objects with `id` combine a catalog base with sibling overrides; `design.theme` is a reference string.
+- Deck design sets shared defaults. Slide design overrides them. A theme supplies defaults below explicitly supplied design fields. Color- and font-scheme objects with `id` combine a catalog base with sibling overrides; `design.theme` is a reference string.
 - Omission inherits; `false` explicitly suppresses inherited header, footer, or watermark.
 - Light and dark are `design.variant`, not themes. A theme record's optional `variants` (`light`, `light-alt`, `dark`, `dark-alt` on the gallery's `minimal`, `classic` and `bold`) lists values a picker can write into `design.variant`; the gallery has no `dark` theme since `@openpresentation/gallery` 4.
 - A gallery theme, color scheme, or font scheme is not a rendered deck. Preview it with representative content, including long text and data.
 - Narratives, purposes, tones, and audiences guide content choices. Selecting their IDs does not generate or rewrite content by itself.
-- Keep published gallery slugs stable. Embed the records a deck uses (`embed`, or `opf embed`) so it renders the same with no catalog registered; a gallery layout the default catalog snapshot lacks goes in under `catalogs.default` as the gallery publishes it, never renamed and never fetched at render time. A copy embedded by an earlier OPF release can fail the current layout schema: `opf fix deck.opf.json -i` (or `opf embed deck.opf.json -i`) refreshes it without changing what it draws, then `opf validate deck.opf.json`.
+- Keep published gallery slugs stable. Embed the records a deck uses (`embed`, or `opf embed`) so it renders the same with no catalog registered; a gallery layout the default catalog snapshot lacks goes in under `catalogs.default` as the gallery publishes it, never renamed and never fetched at render time. A copy embedded by an earlier OPF release can fail the current layout schema: `opf fix deck.opf.json -i` (or `opf embed deck.opf.json -i`) replaces it with the current record (`catalogs.default` mirrors the built-in records; keep a customized layout in `catalogs.custom`), then `opf validate deck.opf.json`.
 
 ## Fonts and visual claims
 

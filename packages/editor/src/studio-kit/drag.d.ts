@@ -9,7 +9,7 @@ export interface KitDragOptions<Payload, Session> {
   onStart?(press: KitPress<Payload>): Session | null | undefined;
   onStarted?(session: Session): void;
   onMove?(session: Session, event: PointerEvent): void;
-  onEnd?(session: Session, info: { cancelled: boolean }): void;
+  onEnd?(session: Session, info: { canceled: boolean }): void;
   onDrop?(session: Session, event: PointerEvent): void;
   onEscape?(session: Session): void;
 }

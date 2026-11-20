@@ -71,7 +71,7 @@ a copy); without a presentation the slide numbers from 1 and unresolved ids are 
   whose runs carry markers gets an area directly above the footer band (or the bottom padding), with the
   content area's left edge and width: a 1 px rule, half a line of space, then `<n> <text>` for each note
   the slide uses in number order (a rich reference text keeps its runs after the number). Text is the
-  body family at the furniture size (`max(13 * scale, minFontSize)`), in the muted text colour. The
+  body family at the furniture size (`max(13 * scale, minFontSize)`), in the muted text color. The
   content area shrinks by exactly the area's height plus half the slide gap; headings, cover centering and
   everything above are unchanged. The area takes at most `FOOTNOTE_MAX_RATIO` (35%) of the span between
   the heading top and the footer band; notes beyond that report `text-overflow` at their source path
@@ -92,8 +92,8 @@ a copy); without a presentation the slide numbers from 1 and unresolved ids are 
 
 Draws what core returns: marker fragments as superscript `<text>`/`<tspan>` elements with
 `data-opf-segment="marker"` and no `data-opf-text-start/end` (so the editor never treats them as source
-text), the footnote area (rule in the border colour, entries in the muted text colour, `data-opf-footnote`
-trace attributes) after the content and before the furniture, and caption bands in the muted colour with
+text), the footnote area (rule in the border color, entries in the muted text color, `data-opf-footnote`
+trace attributes) after the content and before the furniture, and caption bands in the muted color with
 the caption path as `data-opf-path`.
 
 ## PPTX (opf-pptx)

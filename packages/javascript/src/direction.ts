@@ -48,7 +48,7 @@ export function paragraphDirection(text: string, deckDirection: TextDirection | 
   return "rtl";
 }
 
-/** Horizontal alignment as drawn: the physical left, centre or right of the text box. */
+/** Horizontal alignment as drawn: the physical left, center or right of the text box. */
 export type PhysicalAlignment = "left" | "center" | "right";
 
 /**

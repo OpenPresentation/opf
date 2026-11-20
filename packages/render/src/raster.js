@@ -129,7 +129,7 @@ function sharpImageCodec() {
 async function rasterizeSvg(svgInput, options, {strictMarker=false}={}) {
   const { Resvg } = await loadResvg();
   const scale = positiveNumber(options.scale, "scale", DEFAULT_RASTER_SCALE);
-  // FF-45: resvg draws no COLRv1 or OT-SVG colour glyphs; the colour faces stay out of its font list (see color-fonts.js).
+  // FF-45: resvg draws no COLRv1 or OT-SVG color glyphs; the color faces stay out of its font list (see color-fonts.js).
   const settings = fontSettings(options);
   const fontFiles = rasterFontFiles([
     ...(settings.useBundledFonts ? await bundledFontFiles() : []),
@@ -164,7 +164,7 @@ async function rasterizeSvg(svgInput, options, {strictMarker=false}={}) {
     return new Resvg(pinned, { ...renderOptions, fitTo: { mode: "zoom", value: zoom }, background: "rgba(0, 0, 0, 0)" }).render().asPng();
   };
   // FF-31: resvg ignores the SVG's ligature properties, so separate the letters a Gelasio ligature would join.
-  // FF-45: colour families (Noto Color Emoji) are drawn with their monochrome stand-in, which resvg can draw.
+  // FF-45: color families (Noto Color Emoji) are drawn with their monochrome stand-in, which resvg can draw.
   // FF-44: resvg loses the advance of a vowel sign or space inside a complex-script cluster, so pin each cluster (raster-text.js).
   const prepared=separateLigatures(monochromeColorFonts(await prepareRasterImages(normalizeSvgInput(svgInput), { nestedSvg })));
   const markers=await outlineRasterMarkers(prepared,{font,shape,report:options.onDiagnostic,strict:strictMarker,fail:(code,message)=>new OPFRenderError(code,message)});

@@ -112,7 +112,7 @@ export function createShapeHandles(root, options) {
     if (!edit) return false;
     if (signature(edit.path) !== edit.base) {
       cancel(false);
-      options.onError?.(new Error("The shape changed elsewhere. The adjustment was cancelled."));
+      options.onError?.(new Error("The shape changed elsewhere. The adjustment was canceled."));
       return false;
     }
     if (!edit.moved || !edit.valid || !edit.values) {
@@ -272,7 +272,7 @@ export function createShapeHandles(root, options) {
     if (committing || !active) return;
     if (signature(active.path) !== active.base) {
       cancel(false);
-      options.onError?.(new Error("The shape changed elsewhere. The adjustment was cancelled."));
+      options.onError?.(new Error("The shape changed elsewhere. The adjustment was canceled."));
     }
   });
 
