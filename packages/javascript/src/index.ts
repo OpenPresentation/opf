@@ -19,11 +19,11 @@
 // unless `date` is passed.
 //
 // RR-75: in Node the functions behind the CLI's verbs have the CLI's defaults, so `opf validate deck` and `validate(deck)` agree:
-// `validate`, `createValidator().validate`, `stats`, `paginate`, `continueOverfull`, `embed` and `edit` resolve references in the pptx.gallery catalog (`gallery` of the
+// `validate`, `createValidator().validate`, `stats`, `paginate`, `continueOverfull`, `embed`, `fix` and `edit` resolve references in the pptx.gallery catalog (`gallery` of the
 // @openpresentation/gallery package, RR-78) when no `catalogs` option is given. The browser build registers none (FA-21).
 import type { Presentation } from "./core.js";
 import type { Catalog } from "./catalog-refs.js";
-import { continueOverfull as continueDeck, edit as editDeck, embed as embedRecords, paginate as paginateDeck, stats as deckStats, validate as validateDeck, createValidator as createDeckValidator } from "./core.js";
+import { continueOverfull as continueDeck, edit as editDeck, embed as embedRecords, fix as fixDeck, paginate as paginateDeck, stats as deckStats, validate as validateDeck, createValidator as createDeckValidator } from "./core.js";
 import { OPFApiError, asApiError } from "./api-errors.js";
 import type { ConvertFormat, ConvertInput, ConvertOptions, ConvertResult, OpenOptions, SaveOptions, SaveResult } from "./node/conversion.js";
 import { defaultCatalogs } from "./node/catalogs.js";
@@ -63,6 +63,8 @@ export const paginate: typeof paginateDeck = (input, options) => paginateDeck(in
 export const continueOverfull: typeof continueDeck = (input, options) => continueDeck(input, withDefaultCatalog(options));
 /** `embed` with the gallery registered when `catalogs` is omitted, as `opf embed` does. */
 export const embed: typeof embedRecords = (document, options) => embedRecords(document, withDefaultCatalog(options));
+/** `fix` with the gallery registered when `catalogs` is omitted, as `opf fix` does. */
+export const fix: typeof fixDeck = (document, options) => fixDeck(document, withDefaultCatalog(options));
 /** `edit` with the gallery registered for the check when `catalogs` is omitted, as `opf edit` does. */
 export const edit: typeof editDeck = (deck, patch, options) => editDeck(deck, patch, withDefaultCatalog(options));
 

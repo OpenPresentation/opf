@@ -3,7 +3,7 @@
 //
 //   opf <command> <input> [output]     an optional positional output; stdout when it is omitted or `-`
 //   -i, --in-place                     rewrite the input (refused for stdin; never with an output)
-//   --check                            write nothing and exit 1 when the command would change something (format, embed, paginate)
+//   --check                            write nothing and exit 1 when the command would change something (format, embed, fix, paginate)
 //   --force                            replace an existing output
 //
 // The report is JSON: `{ command, ok, input, outputs: [{ file, sha256, bytes, mediaType }], findings, counts, ... }`, on stdout,
@@ -79,7 +79,22 @@ export function failOnOf(options: Options): FindingSeverity {
 /** The failure of a document that fails its check or has findings at --fail-on: exit 1, the findings in the error report. */
 export function documentFailure(command: string, message: string, findings: readonly Finding[], fields: Record<string, unknown> = {}): CliError {
 	const invalid = findings.some((finding) => finding.severity === "error");
-	return new CliError(message, invalid ? "invalid-document" : "findings-at-fail-on", 1, { command, ...fields, findings, counts: countsOf(findings) });
+	return new CliError(`${message}${staleCopyHint(command, findings)}`, invalid ? "invalid-document" : "findings-at-fail-on", 1, { command, ...fields, findings, counts: countsOf(findings) });
+}
+
+/**
+ * OPF 0.35: the sentence that names the fix when a deck embeds copies of built-in layouts from before 0.35 that fail the schema (record
+ * findings that carry `use-current-record` or `rename-layout`): `opf embed <deck> -i` makes them valid. Empty otherwise, and for embed itself.
+ */
+export function staleCopyHint(command: string, findings: readonly Finding[]): string {
+	if (command === "embed") return "";
+	const ids = new Set<string>();
+	for (const finding of findings) {
+		const match = /^\/catalogs\/[^/]+\/layouts\/([^/]+)/.exec(finding.path);
+		if (match && finding.severity === "error" && finding.fixes?.some((fix) => fix.id === "use-current-record" || fix.id === "rename-layout")) ids.add(match[1]!.replaceAll("~1", "/").replaceAll("~0", "~"));
+	}
+	if (!ids.size) return "";
+	return ` The deck embeds copies of built-in layouts from before OPF 0.35 (${[...ids].join(", ")}): \`opf embed <deck> -i\` refreshes each one it can without changing what it draws; validate again after it.`;
 }
 
 /** The format and references check a command runs on a deck it is about to write. */
@@ -148,6 +163,13 @@ export interface WriteDeckOptions {
 	extra?: Record<string, unknown>;
 	/** Findings of the command itself (pagination, an import), added to the check's. */
 	findings?: Finding[];
+	/**
+	 * The command checked the deck itself (opf fix): it is written as it is, whatever these findings say, without the format and
+	 * references check, and the report carries them and `ok`.
+	 */
+	validated?: { findings: Finding[]; ok: boolean };
+	/** Prints the report (default printReport: JSON). */
+	print?: (report: Report, toStderr: boolean) => void;
 	/** Runs after the deck is written and before the report; the files it wrote are listed in the report's outputs. */
 	afterWrite?: () => Promise<OutputFact[]>;
 }
@@ -157,8 +179,7 @@ export interface WriteDeckOptions {
  * or the source names, and print the report. An existing output is refused before anything is printed.
  */
 export async function writeDeck(command: string, document: unknown, destination: Destination, options: WriteDeckOptions): Promise<void> {
-	const check = checked(command, document, options.failOn);
-	const findings = [...(options.findings ?? []), ...check.findings];
+	const findings = options.validated ? options.validated.findings : [...(options.findings ?? []), ...checked(command, document, options.failOn).findings];
 	const format = outputFormatOf(destination.file, options.to, options.source);
 	if (destination.file !== "-") await checkOutput(destination.file, destination.overwrite);
 	const text = serialize(document, format, { schemaComment: options.schemaComment === true, modeline: format === "yaml" ? options.source?.yaml?.modeline : undefined });
@@ -169,5 +190,5 @@ export async function writeDeck(command: string, document: unknown, destination:
 	if (toStdout) process.stdout.write(text);
 	else await saveText(destination.file, text, destination.overwrite, sameFile && options.source ? { file: options.inputFile as string, raw: options.source.raw } : undefined);
 	const more = (await options.afterWrite?.()) ?? [];
-	printReport(envelope(command, { input: options.input ?? null, outputs: [outputFact(destination.file, text, DECK_MEDIA[format]), ...more], findings, ...options.extra }), toStdout);
+	(options.print ?? printReport)(envelope(command, { ok: options.validated?.ok ?? true, input: options.input ?? null, outputs: [outputFact(destination.file, text, DECK_MEDIA[format]), ...more], findings, ...options.extra }), toStdout);
 }

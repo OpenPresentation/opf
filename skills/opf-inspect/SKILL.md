@@ -52,6 +52,8 @@ To answer "what is in this deck" (how many slides, which layouts and chart types
 
 `opf validate` reads JSON, and also a YAML deck (a name ending `.yaml`/`.yml`) or a Markdown deck (a name ending `.opf.md`), with `--from yaml|md` for stdin and other names (stdin that starts with `{` or `[` is JSON); findings are then located at lines of that file (`deck.opf.md:3:1`).
 
+A finding's `fixes` may carry a JSON Patch marked `safe` (it cannot change what the deck says or how it looks beyond the repair). `opf fix deck.opf.json -i` (CLI 0.35.0 and later; `fix(deck)` from code) applies every safe fix, validates again after each round (an error in the deck's own keys hides the accessibility, layout and content checks) and reports what it applied and what is left; it is the first step after an upgrade such as 0.35's. It never applies a fix that is not marked safe: report those findings and their fixes as choices for the user.
+
 Separate these outcomes:
 
 - **Schema errors:** fix the reported paths or the incompatible union/required fields, preserving user content. An error inside one alternative can be incidental; inspect the intended form and the final union error.
