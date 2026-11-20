@@ -117,7 +117,7 @@ test("read_example_files: for the view only, the shipped files by the path a dec
 	await client.close();
 });
 
-test("read_example_files serves only data URIs of images from a host's sources, and is not offered without example files", async () => {
+test("read_example_files serves only data URIs of images from a host's sources, and is listed whenever the viewer is offered", async () => {
 	const base = { docs: [], skills: {} };
 	const examples = [
 		{ slug: "a", category: "x", file: "examples/x/a.opf.json", deck: {}, files: { "./ok.png": "data:image/png;base64,iVBORw0KGgo=", "./remote.png": "https://example.com/x.png", "./local.png": "file:///etc/passwd", "./page.svg": "data:text/html;base64,PGh0bWw+" } },
@@ -127,11 +127,16 @@ test("read_example_files serves only data URIs of images from a host's sources, 
 	const got = (await client.callTool({ name: "read_example_files", arguments: { names: ["./ok.png", "./remote.png", "./local.png", "./page.svg"] } })).structuredContent;
 	assert.deepEqual(got, { files: { "./ok.png": "data:image/png;base64,iVBORw0KGgo=" }, missing: ["./remote.png", "./local.png", "./page.svg"] });
 	await client.close();
-	for (const options of [{ sources: { ...base, examples: [] }, deckApp: { html } }, { sources: { ...base, examples }, processDecks: true }]) {
-		const none = await linked(createOpfMcpServer({ version: "0.0.0-test", ...options }));
-		assert.equal((await none.listTools()).tools.some((tool) => tool.name === "read_example_files"), false);
-		await none.close();
-	}
+	// A host may answer tools/list from a server built without its examples: with the viewer the tool is still listed (a client that
+	// lets a view call only listed tools would refuse the call otherwise), and every path is missing. Without the viewer it is not offered.
+	const bare = await linked(createOpfMcpServer({ version: "0.0.0-test", sources: { ...base, examples: [] }, deckApp: { html } }));
+	const listed = (await bare.listTools()).tools.find((tool) => tool.name === "read_example_files");
+	assert.deepEqual(listed?._meta?.ui?.visibility, ["app"]);
+	assert.deepEqual((await bare.callTool({ name: "read_example_files", arguments: { names: ["./ok.png"] } })).structuredContent, { files: {}, missing: ["./ok.png"] });
+	await bare.close();
+	const none = await linked(createOpfMcpServer({ version: "0.0.0-test", sources: { ...base, examples }, processDecks: true }));
+	assert.equal((await none.listTools()).tools.some((tool) => tool.name === "read_example_files"), false);
+	await none.close();
 });
 
 /** app/example-files.ts as the view's bundle has it (esbuild, browser conditions). */
