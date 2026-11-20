@@ -7,11 +7,13 @@
   "languages": [
     "ar",
     "fa",
-    "ur"
+    "ur",
+    "ps",
+    "pa-Arab"
   ],
   "major": "Times New Roman",
   "minor": "Arial",
   "textSample": "نص واضح بحجم النص اللاتيني",
   "type": "sans-serif",
-  "description": "Times New Roman and Arial is the default OPF font scheme for Arabic, Persian and Urdu presentations, using Times New Roman for headings with Arial for body text, as PowerPoint's Office theme does for the Arabic script. Both ship with Windows and Office and draw Arabic at about the size of the Latin text beside it."
+  "description": "Times New Roman and Arial is the default OPF font scheme for Arabic, Persian, Urdu, Pashto and Punjabi (Shahmukhi) presentations, using Times New Roman for headings with Arial for body text, as PowerPoint's Office theme does for the Arabic script. Both ship with Windows and Office and draw Arabic at about the size of the Latin text beside it."
 }

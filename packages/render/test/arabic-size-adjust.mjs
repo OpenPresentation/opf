@@ -27,7 +27,7 @@ assert.match(row.replacement.sizeAdjustBasis, /advances/);
 const adjustedFamilies = FONT_POLICY.families.filter(item => item.replacement?.sizeAdjust !== undefined).map(item => item.family).sort();
 const OPF361 = {'Angsana New': [0.75, 0.83, 0.86], DilleniaUPC: [0.68, 0.82, 0.85], 'Sakkal Majalla': [0.89, 0.76, 0.81], 'Malgun Gothic': [1.07, undefined, undefined], 'Nirmala UI': [1.07, 0.97, 0.94]};
 const opf361 = adjustedFamilies.length > 1;
-assert.deepEqual(adjustedFamilies, opf361 ? ['Angsana New', 'Arabic Typesetting', 'DilleniaUPC', 'Malgun Gothic', 'Nirmala UI', 'Sakkal Majalla'] : ['Arabic Typesetting'], 'the measured rows carry a multiplier, no other');
+assert.deepEqual(adjustedFamilies, opf361 ? ['Angsana New', 'Arabic Typesetting', 'DilleniaUPC', 'Leelawadee UI', 'Malgun Gothic', 'Nirmala UI', 'Sakkal Majalla'] : ['Arabic Typesetting'], 'the measured rows carry a multiplier, no other');
 assert.equal(sizeAdjustFor(row, 'Noto Naskh Arabic'), ADJUST);
 assert.equal(sizeAdjustFor('Arabic Typesetting', 'noto naskh arabic'), ADJUST, 'by family name, case-insensitive');
 assert.equal(sizeAdjustFor(row, 'Noto Sans Arabic'), undefined, 'the multiplier was measured on Noto Naskh Arabic only');
@@ -123,7 +123,8 @@ const style = {fontFamily: 'Aptos', fontWeight: 400, path: 'slides.0.text'};
   const [arabic] = latinDeck.plan(TEXT, style);
   assert.equal(arabic.sizeAdjust, undefined);
   assert.deepEqual(arabic.stack, ['Aptos', 'Noto Sans Arabic', 'Noto Naskh Arabic']);
-  const hebrew = createScriptFonts(profileOf(deck('calibri', 'he')));
+  // v0.35: Hebrew defaults to Segoe UI, which carries a multiplier for Hebrew (script-default-fonts.mjs), so this deck chooses David.
+  const hebrew = createScriptFonts(profileOf(deck('calibri', {bcp47: 'he', fontScheme: 'david'})));
   const [run] = hebrew.plan('שלום עולם', {...style, fontFamily: 'Calibri'});
   assert.equal(run.sizeAdjust, undefined);
   assert.deepEqual(run.stack, ['David', 'Noto Sans Hebrew', 'Noto Serif Hebrew']);

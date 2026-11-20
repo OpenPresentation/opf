@@ -124,8 +124,8 @@
       "ooxmlLang": "am-ET",
       "fonts": {
         "powerpoint": {
-          "major": "Nyala",
-          "minor": "Nyala"
+          "major": "Ebrima",
+          "minor": "Ebrima"
         },
         "google": {
           "major": "Noto Sans Ethiopic",
@@ -209,8 +209,8 @@
       "ooxmlLang": "bn-BD",
       "fonts": {
         "powerpoint": {
-          "major": "Shonar Bangla",
-          "minor": "Shonar Bangla"
+          "major": "Nirmala UI",
+          "minor": "Nirmala UI"
         },
         "google": {
           "major": "Noto Sans Bengali",
@@ -347,8 +347,8 @@
       "ooxmlLang": "bn-BD",
       "fonts": {
         "powerpoint": {
-          "major": "Vrinda",
-          "minor": "Vrinda"
+          "major": "Nirmala UI",
+          "minor": "Nirmala UI"
         },
         "google": {
           "major": "Noto Sans Bengali",
@@ -707,8 +707,8 @@
       "ooxmlLang": "gu-IN",
       "fonts": {
         "powerpoint": {
-          "major": "Shruti",
-          "minor": "Shruti"
+          "major": "Nirmala UI",
+          "minor": "Nirmala UI"
         },
         "google": {
           "major": "Noto Sans Gujarati",
@@ -739,8 +739,8 @@
       "ooxmlLang": "he-IL",
       "fonts": {
         "powerpoint": {
-          "major": "David",
-          "minor": "David"
+          "major": "Segoe UI",
+          "minor": "Segoe UI"
         },
         "google": {
           "major": "Noto Sans Hebrew",
@@ -760,8 +760,8 @@
       "ooxmlLang": "hi-IN",
       "fonts": {
         "powerpoint": {
-          "major": "Mangal",
-          "minor": "Mangal"
+          "major": "Nirmala UI",
+          "minor": "Nirmala UI"
         },
         "google": {
           "major": "Noto Sans Devanagari",
@@ -855,8 +855,8 @@
       "ooxmlLang": "ja-JP",
       "fonts": {
         "powerpoint": {
-          "major": "Meiryo",
-          "minor": "Meiryo"
+          "major": "Yu Gothic",
+          "minor": "Yu Gothic"
         },
         "google": {
           "major": "Noto Sans JP",
@@ -876,8 +876,8 @@
       "ooxmlLang": "kn-IN",
       "fonts": {
         "powerpoint": {
-          "major": "Tunga",
-          "minor": "Tunga"
+          "major": "Nirmala UI",
+          "minor": "Nirmala UI"
         },
         "google": {
           "major": "Noto Sans Kannada",
@@ -908,8 +908,8 @@
       "ooxmlLang": "km-KH",
       "fonts": {
         "powerpoint": {
-          "major": "DaunPenh",
-          "minor": "DaunPenh"
+          "major": "Leelawadee UI",
+          "minor": "Leelawadee UI"
         },
         "google": {
           "major": "Noto Sans Khmer",
@@ -1057,8 +1057,8 @@
       "ooxmlLang": "ml-IN",
       "fonts": {
         "powerpoint": {
-          "major": "Kartika",
-          "minor": "Kartika"
+          "major": "Nirmala UI",
+          "minor": "Nirmala UI"
         },
         "google": {
           "major": "Noto Sans Malayalam",
@@ -1089,8 +1089,8 @@
       "ooxmlLang": "mr-IN",
       "fonts": {
         "powerpoint": {
-          "major": "Mangal",
-          "minor": "Mangal"
+          "major": "Nirmala UI",
+          "minor": "Nirmala UI"
         },
         "google": {
           "major": "Noto Sans Devanagari",
@@ -1121,8 +1121,8 @@
       "ooxmlLang": "ne-NP",
       "fonts": {
         "powerpoint": {
-          "major": "Mangal",
-          "minor": "Mangal"
+          "major": "Nirmala UI",
+          "minor": "Nirmala UI"
         },
         "google": {
           "major": "Noto Sans Devanagari",
@@ -1158,8 +1158,8 @@
       "ooxmlLang": "or-IN",
       "fonts": {
         "powerpoint": {
-          "major": "Kalinga",
-          "minor": "Kalinga"
+          "major": "Nirmala UI",
+          "minor": "Nirmala UI"
         },
         "google": {
           "major": "Noto Sans Oriya",
@@ -1190,7 +1190,7 @@
       "ooxmlLang": "ps-AF",
       "fonts": {
         "powerpoint": {
-          "major": "Arial Black",
+          "major": "Times New Roman",
           "minor": "Arial"
         },
         "google": {
@@ -1264,8 +1264,8 @@
       "ooxmlLang": "pa-IN",
       "fonts": {
         "powerpoint": {
-          "major": "Raavi",
-          "minor": "Raavi"
+          "major": "Nirmala UI",
+          "minor": "Nirmala UI"
         },
         "google": {
           "major": "Noto Sans Gurmukhi",
@@ -1280,7 +1280,7 @@
       "ooxmlLang": "pa-Arab-PK",
       "fonts": {
         "powerpoint": {
-          "major": "Arial Black",
+          "major": "Times New Roman",
           "minor": "Arial"
         },
         "google": {
@@ -1519,8 +1519,8 @@
       "ooxmlLang": "ta-IN",
       "fonts": {
         "powerpoint": {
-          "major": "Latha",
-          "minor": "Latha"
+          "major": "Nirmala UI",
+          "minor": "Nirmala UI"
         },
         "google": {
           "major": "Noto Sans Tamil",
@@ -1535,8 +1535,8 @@
       "ooxmlLang": "te-IN",
       "fonts": {
         "powerpoint": {
-          "major": "Gautami",
-          "minor": "Gautami"
+          "major": "Nirmala UI",
+          "minor": "Nirmala UI"
         },
         "google": {
           "major": "Noto Sans Telugu",
@@ -1551,8 +1551,8 @@
       "ooxmlLang": "th-TH",
       "fonts": {
         "powerpoint": {
-          "major": "Angsana New",
-          "minor": "Angsana New"
+          "major": "Leelawadee UI",
+          "minor": "Leelawadee UI"
         },
         "google": {
           "major": "Noto Sans Thai",

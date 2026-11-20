@@ -3,7 +3,7 @@
   "kind": "font-schemes",
   "version": "1",
   "description": "Catalog of font schemes available in the openpresentation.org catalog. Each entry is a lightweight summary; full font-scheme records live in the per-id JSON files alongside this index.",
-  "contentSha256": "22df842b0c40b26afcad7295efe7566c6aa556ba338b18112b009b25018f2dd3",
+  "contentSha256": "7029ff1df953e8128e762ab125c3ae090a7131e5977bdb6701fd44e01879006a",
   "records": [
     {
       "id": "consolas",
@@ -454,6 +454,21 @@
       "id": "khmer-ui",
       "name": "Khmer UI",
       "file": "khmer-ui.json"
+    },
+    {
+      "id": "leelawadee-ui",
+      "name": "Leelawadee UI",
+      "file": "leelawadee-ui.json"
+    },
+    {
+      "id": "ebrima",
+      "name": "Ebrima",
+      "file": "ebrima.json"
+    },
+    {
+      "id": "segoe-ui-regular",
+      "name": "Segoe UI Regular",
+      "file": "segoe-ui-regular.json"
     }
   ]
 }

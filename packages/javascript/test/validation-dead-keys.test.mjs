@@ -233,7 +233,7 @@ describe('FontScheme.app and languageFamily', () => {
     }
   });
   test('every bundled font-scheme record uses the new app values and validates', () => {
-    assert.equal(fontSchemes.length, 90);
+    assert.equal(fontSchemes.length, 93);
     for (const record of fontSchemes) {
       assert.ok(['powerpoint', 'google-slides'].includes(record.app), `${record.id}: ${record.app}`);
       const result = validateCatalogRecord('fontSchemes', record);

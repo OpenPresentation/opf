@@ -451,8 +451,17 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
     }
   };
   const scriptReplacementOf = (family, script) => (family ? fontPolicyFor(String(family))?.replacement?.scripts?.[script] : undefined);
-  /** The slot family whose policy row decides a run's multiplier (the family the slot names, before a script replacement takes its place). */
-  const slotFamilyFor = (run, slots) => run.role === "eastAsian" ? slots.eastAsian : run.role === "complexScript" ? slots.complexScript : slots.latin;
+  /**
+   * The slot family whose policy row decides a run's multiplier (the family the slot names, before a script replacement takes its place).
+   * A script the Latin slot covers (Ethiopic) has no slot of its own: the theme's script entry names its family (Ebrima), so that
+   * family's row decides when it has a replacement for the script. Without one (Sylfaen for Armenian and Georgian) the Latin family does.
+   */
+  const slotFamilyFor = (run, slots) => {
+    if (run.role === "eastAsian") return slots.eastAsian;
+    if (run.role === "complexScript") return slots.complexScript;
+    const entry = run.script !== "Latn" && slots.supplement?.script === run.script ? slots.supplement.family : undefined;
+    return entry && scriptReplacementOf(entry, run.script) ? entry : slots.latin;
+  };
   const candidatesFor = (run, slots) => {
     const list = [run.role === "eastAsian" ? slots.eastAsian : run.role === "complexScript" ? slots.complexScript : slots.latin];
     if (run.script !== "Latn") {

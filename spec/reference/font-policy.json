@@ -1166,6 +1166,14 @@
           "maxAbsWidthDelta": 0.0934,
           "styles": 2,
           "reference": "Ebrima 5.19"
+        },
+        "scripts": {
+          "Ethi": {
+            "family": "Noto Sans Ethiopic",
+            "compatibility": "visual",
+            "sizeAdjust": 1.06,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Ebrima 5.20 advances over sum of Noto Sans Ethiopic 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.055 (per-sentence 1.032 to 1.076)."
+          }
         }
       },
       "alternates": [
@@ -1723,6 +1731,36 @@
       "note": "Script replacement; widths not measured. Windows: Tamil Supplemental Fonts FOD."
     },
     {
+      "family": "Leelawadee UI",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Thai",
+        "compatibility": "visual",
+        "sizeAdjust": 0.96,
+        "sizeAdjustBasis": "v0.35 script defaults: sum of Leelawadee UI 6.00 advances over sum of Noto Sans Thai 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 0.958 (per-sentence 0.935 to 0.985).",
+        "measured": null,
+        "scripts": {
+          "Khmr": {
+            "family": "Noto Sans Khmer",
+            "compatibility": "visual",
+            "sizeAdjust": 1.19,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Leelawadee UI 6.00 advances over sum of Noto Sans Khmer 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.19 (per-sentence 1.163 to 1.235)."
+          }
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://learn.microsoft.com/en-us/typography/font-list/leelawadee-ui"
+      ],
+      "note": "The default for Thai and Khmer since 0.35. Thai text previews in Noto Sans Thai, Khmer in Noto Sans Khmer."
+    },
+    {
       "family": "Liberation Mono",
       "licenseClass": "open",
       "license": "OFL-1.1",
@@ -2226,6 +2264,56 @@
           "maxAbsWidthDelta": 0.0939,
           "styles": 2,
           "reference": "Nirmala UI 1.46"
+        },
+        "scripts": {
+          "Beng": {
+            "family": "Noto Sans Bengali",
+            "compatibility": "visual",
+            "sizeAdjust": 1.08,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Bengali 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.079 (per-sentence 1.056 to 1.094)."
+          },
+          "Gujr": {
+            "family": "Noto Sans Gujarati",
+            "compatibility": "visual",
+            "sizeAdjust": 1.13,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Gujarati 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.128 (per-sentence 1.097 to 1.151)."
+          },
+          "Guru": {
+            "family": "Noto Sans Gurmukhi",
+            "compatibility": "visual",
+            "sizeAdjust": 1.08,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Gurmukhi 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.084 (per-sentence 1.073 to 1.094)."
+          },
+          "Knda": {
+            "family": "Noto Sans Kannada",
+            "compatibility": "visual",
+            "sizeAdjust": 1.17,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Kannada 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.166 (per-sentence 1.132 to 1.186). Noto Sans Kannada is the narrower design, so at this factor its letters stand about 15 percent taller than Nirmala UI's."
+          },
+          "Mlym": {
+            "family": "Noto Sans Malayalam",
+            "compatibility": "visual",
+            "sizeAdjust": 1.13,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Malayalam 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.13 (per-sentence 1.113 to 1.169)."
+          },
+          "Orya": {
+            "family": "Noto Sans Oriya",
+            "compatibility": "visual",
+            "sizeAdjust": 0.98,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Oriya 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 0.983 (per-sentence 0.971 to 0.998)."
+          },
+          "Taml": {
+            "family": "Noto Sans Tamil",
+            "compatibility": "visual",
+            "sizeAdjust": 1.04,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Tamil 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.039 (per-sentence 1.033 to 1.047)."
+          },
+          "Telu": {
+            "family": "Noto Sans Telugu",
+            "compatibility": "visual",
+            "sizeAdjust": 1.17,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Telugu 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.169 (per-sentence 1.128 to 1.196)."
+          }
         }
       },
       "sources": [
@@ -3028,6 +3116,14 @@
           "maxAbsWidthDelta": 0.0709,
           "styles": 4,
           "reference": "Segoe UI 5.71"
+        },
+        "scripts": {
+          "Hebr": {
+            "family": "Noto Sans Hebrew",
+            "compatibility": "visual",
+            "sizeAdjust": 1.03,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Segoe UI 5.72 advances over sum of Noto Sans Hebrew 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.026 (per-sentence 1.015 to 1.036)."
+          }
         }
       },
       "alternates": [

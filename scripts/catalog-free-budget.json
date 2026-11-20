@@ -9,7 +9,7 @@
     "diagram-engine-eager": 294825,
     "diagram-engine-lazy": 11669,
     "diff": 6237,
-    "font-policy": 16764,
+    "font-policy": 17383,
     "format": 68629,
     "ids": 518372,
     "markdown": 570069,
@@ -73,8 +73,8 @@
       "gzip": 4475287
     },
     "font-policy": {
-      "minified": 121432,
-      "gzip": 16275
+      "minified": 125749,
+      "gzip": 16876
     },
     "format": {
       "minified": 236402,

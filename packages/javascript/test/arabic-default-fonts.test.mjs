@@ -55,8 +55,8 @@ describe("the Arabic, Persian and Urdu default fonts (v0.35)", () => {
       assert.match(arab.sizeAdjustBasis, /advances/, family);
       assert.deepEqual(Object.keys(replacement.scripts), ["Arab"], family);
     }
-    // Only these two rows carry script replacements.
-    assert.deepEqual(FONT_POLICY.families.filter((row) => row.replacement?.scripts).map((row) => row.family).sort(), ["Arial", "Times New Roman"]);
+    // The rows that carry script replacements: these two, and the four of the other script defaults (script-default-fonts.test.mjs).
+    assert.deepEqual(FONT_POLICY.families.filter((row) => row.replacement?.scripts).map((row) => row.family).sort(), ["Arial", "Ebrima", "Leelawadee UI", "Nirmala UI", "Segoe UI", "Times New Roman"]);
   });
 
   test("the schema holds a script replacement to a known shape", () => {

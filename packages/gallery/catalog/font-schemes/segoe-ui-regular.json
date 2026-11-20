@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "segoe-ui-regular",
+  "name": "Segoe UI Regular",
+  "app": "powerpoint",
+  "languageFamily": "cs",
+  "languages": [
+    "he"
+  ],
+  "major": "Segoe UI",
+  "minor": "Segoe UI",
+  "textSample": "זה כתוב בגופן Segoe UI",
+  "type": "sans-serif",
+  "description": "Segoe UI Regular is the default OPF font scheme for Hebrew presentations, using Segoe UI for both headings and body text. It ships with Windows and draws Hebrew at about the size of the Latin text beside it."
+}
