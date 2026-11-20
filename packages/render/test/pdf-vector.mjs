@@ -520,6 +520,7 @@ for (const { name, deck, expect } of roundTrips) {
     await toPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [previewFile]}, onDiagnostic: (d) => reports.push(d) });
     const embedded = reports.find((d) => d.code === "pdf-font-embedded");
     assert.equal(embedded.embeddingRestriction, "preview-and-print");
+    assert.match(embedded.message, /; its fsType allows the PDF to be viewed and printed only, not edited\.$/, "the message names the restriction");
     assert.equal(embedded.fsType, 4);
     // A font declared by @font-face in the SVG is found by its declared family, whatever its name table says.
     const declared = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100"><style>@font-face{font-family:"Brand Sans";src:url("data:font/ttf;base64,${Buffer.from(original).toString("base64")}")}</style><text x="10" y="50" font-family="Brand Sans" font-size="20">Declared family</text></svg>`;
