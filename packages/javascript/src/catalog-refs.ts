@@ -249,9 +249,10 @@ export function renamedLayoutTitlePosition(kind: CatalogKind, reference: string)
 
 /**
  * The removed gallery layouts whose replacement can draw a slide differently (the fix `rename-layout` is marked `changesDrawing`): `agenda-split`
- * drew its title column at half the width, `agenda` with `titlePosition: "start"` at two fifths; `flow` drew any list as boxes joined by
- * arrows, `process` draws a list that Basic Process cannot hold at its size (entries of three or more words, more than 8) as numbered steps.
- * `vertical-flow` is `vertical-process` renamed and draws the same.
+ * drew its title column at half the width, `agenda` with `titlePosition: "start"` at two fifths. `process` draws an unnumbered list of 2 to
+ * 8 one-level entries exactly as `flow` did (any length; measured 2026-11-20, 16 of 16 such lists, landscape and portrait), but draws as
+ * Basic Process the lists `flow` drew as a plain list (more than 8 entries, descriptions, nested entries) and a numbered list as numbered
+ * steps, so the mark stays. `vertical-flow` is `vertical-process` renamed and draws the same.
  */
 const RENAMED_LAYOUTS_CHANGE_DRAWING: ReadonlySet<string> = new Set(['flow', 'agenda-split']);
 

@@ -4259,11 +4259,11 @@ export const STEP_BADGE=1.75;
 /** LH-07: the space between a badge and its step's text, and the least space between two badges of a column, as a share of its diameter. */
 export const STEP_BADGE_GAP=.4;
 /**
- * OPF 0.35: a lone list of a `steps` region draws PowerPoint's Basic Process (the `process` arrangement) when it has this many entries at
- * least and at most, each of one or two words, at most STEP_PROCESS_CHARACTERS long, with no description or icon, and the process holds
- * every entry at the size the steps would have or larger; otherwise it draws as steps.
+ * OPF 0.35: a lone unnumbered list of a `steps` region with at least this many first-level entries draws PowerPoint's Basic Process (the
+ * `process` arrangement), whatever the length or count of its entries: each first-level entry a box (with its description and the entries
+ * nested under it), at the size the list would have or larger.
  */
-export const STEP_PROCESS_MIN=2, STEP_PROCESS_MAX=8, STEP_PROCESS_CHARACTERS=24;
+export const STEP_PROCESS_MIN=2;
 /**
  * LH-85: the bullet of each nesting level, by `level % LIST_MARKERS.length`, drawn at the entry's size. Every bundled text face has
  * • (U+2022) and the en dash (U+2013); ◦ (U+25E6) and ▪ (U+25AA), the former level 1 and 2 bullets, are missing from most of them
@@ -5139,8 +5139,6 @@ const PLACED_TILE_ITEMS = new WeakSet<ComposedItem>();
 const ICON_AGENDAS = new WeakMap<SlideComposition, Map<string, number>>(), AGENDA_STARTS = Symbol('opf.agendaStarts');
 /** LH-07: composeSlide composes a slide again with this flag to see it without step badges (the rule `step-badges` off). */
 const NO_STEPS = Symbol('opf.noSteps');
-/** OPF 0.35: composeLayout composes a slide again with this flag when a `steps` region's short list does not fit Basic Process (stepProcess). */
-const NO_STEP_PROCESS = Symbol('opf.noStepProcess');
 /** LH-170: composeSlide composes a slide again with this flag to see it without the closing note's band (the rule `note-band` off). */
 const NO_NOTE_BAND = Symbol('opf.noNoteBand');
 /** LH-170: the compositions that draw a closing note on the band (`note-band`). */
@@ -7844,8 +7842,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   };
   // LH-07: the blocks of a `sequence` region set side by side under step badges (composeTemplate marks them): each leaves a band for
   // its badge above its text, in the height it asks for (naturalHeight) and in its cell (placeNode), so the badge never costs a row or
-  // a neighbor its room. OPF 0.35: a short lone list of a `steps` region (stepProcesses: its region's name to the list's path) is drawn
-  // as Basic Process once placed, in its region's whole cell (stepProcessCells), when the process holds it (arrangedLists).
+  // a neighbor its room. OPF 0.35: an unnumbered lone list of a `steps` region (stepProcesses: its region's name to the list's path) is
+  // drawn as Basic Process once placed, in its region's whole cell (stepProcessCells), at its size or larger (arrangedLists).
   const stepUnits = new WeakSet<Pending>(), stepPaths = new Set<string>(), stepProcesses = new Map<string, string>(), stepProcessCells = new Map<string, LayoutBox>();
   const isStepProcess = (path: string) => [...stepProcesses.values()].includes(path);
   const stepBand = (size: number) => STEP_BADGE * size * (1 + STEP_BADGE_GAP);
@@ -9647,24 +9645,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // OPF 0.19: compose the body and headings through the template's areas (design sections 3 and 4).
   const requestedTemplateGap = gap;
   // LH-07: the steps of a `sequence` region. A lone list of two or more entries of one level of a `steps` region draws them beside
-  // badges (OPF 0.35: a short one draws Basic Process instead where that holds it, stepProcess); two or more text and list blocks of a `steps` region
+  // badges (OPF 0.35: an unnumbered one draws Basic Process instead, stepProcess); two or more text and list blocks of a `steps` region
   // are steps side by side, a one-entry numbered list giving its number to its badge. Every list of two or more entries of one level in a
   // `numbered` region (an agenda, ordered by nature: it runs in time) draws beside badges, numbered or not; the unnumbered lists of the
   // region count on from one list to the next in reading order (badgeStarts), as one agenda. Those numbers are drawing only: the payload
   // keeps no numbering, and its badges name no list number (ComposedStepBadge.list), so an export gives the list back as written.
-  // OPF 0.35 (the `process` layout absorbs `flow`): the lone list of a `steps` region whose STEP_PROCESS_MIN to STEP_PROCESS_MAX entries
-  // are each one or two words (whitespace-separated, as the term lists count them), at most STEP_PROCESS_CHARACTERS long, of one level,
-  // unnumbered, without descriptions or icons. It is fitted as a plain list, and arrangedLists draws it as Basic Process when the process
-  // holds every entry at that size or larger; otherwise composeLayout composes the slide again with it as steps (NO_STEP_PROCESS).
+  // OPF 0.35 (the `process` layout absorbs `flow`; the owner's decision: a process list is drawn as Basic Process): the lone list of a
+  // `steps` region, unnumbered, without icons, with at least STEP_PROCESS_MIN first-level entries, of any length and any count. Each
+  // first-level entry is a box, holding its description and the entries nested under it. It is fitted as a plain list, and arrangedLists
+  // draws it as Basic Process at that size or larger (the boxes wrap their text and snake into rows); where no Basic Process holds it at
+  // that size, the list stays a list (`arrangement-adapted`), never steps and never smaller.
   const stepProcess = (units: Pending[]): Pending | undefined => {
     const unit = units.length === 1 ? units[0]! : undefined;
     if (!unit || unit.children || unit.caption !== undefined || (unit.field !== 'items' && unit.field !== 'bullets') || unit.payload.numbering !== undefined) return undefined;
-    const values = Array.isArray(unit.value) ? unit.value as unknown[] : [];
-    if (values.length < STEP_PROCESS_MIN || values.length > STEP_PROCESS_MAX) return undefined;
-    return values.every(value => {
-      const object = record(value), text = flatten(typeof value === 'object' && value !== null && !Array.isArray(value) ? object.text : value).trim();
-      return (object.level ?? 0) === 0 && object.description === undefined && object.icon === undefined && text.length > 0 && text.length <= STEP_PROCESS_CHARACTERS && text.split(/\s+/u).length <= 2;
-    }) ? unit : undefined;
+    const values = Array.isArray(unit.value) ? unit.value as unknown[] : [], first = (value: unknown) => (record(value).level ?? 0) === 0;
+    if (!values.length || !first(values[0]) || values.filter(first).length < STEP_PROCESS_MIN) return undefined;
+    return values.every(value => record(value).icon === undefined && flatten(typeof value === 'object' && value !== null && !Array.isArray(value) ? record(value).text : value).trim().length > 0) ? unit : undefined;
   };
   const markSteps = (sequence: 'steps' | 'numbered', units: Pending[]): void => {
     const leaf = (unit: Pending) => !unit.children && unit.caption === undefined, isList = (unit: Pending) => unit.field === 'items' || unit.field === 'bullets';
@@ -9771,9 +9767,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       else if (ruleOn('region-measure')) for (const unit of units) if (!unit.children && unit.field === 'text') unit.measure = true;
       // LH-68: a metric of a `metrics: "tile"` region is a tile: it fills its cell (no hugging, no natural height) and is laid out in it.
       if (region.metrics === 'tile' && ruleOn('metric-tiles')) for (const unit of units) if (!unit.children && unit.field === 'metric') { metricTiles.add(unit); fire('metric-tiles'); }
-      // OPF 0.35: a short lone list (stepProcess) is fitted as a plain list, the size its steps keep (the guarded rule `step-badges` never
-      // lets badges cost a size), and drawn as Basic Process when that holds it; the slide is composed again as steps when it does not.
-      const sequence = regionSequence(region), short = sequence === 'steps' && (options as Record<symbol, unknown>)[NO_STEP_PROCESS] !== true ? stepProcess(units) : undefined;
+      // OPF 0.35: a lone list (stepProcess) is fitted as a plain list, the size steps would keep (the guarded rule `step-badges` never
+      // lets badges cost a size), and drawn as Basic Process at that size or larger.
+      const sequence = regionSequence(region), short = sequence === 'steps' ? stepProcess(units) : undefined;
       if (short) stepProcesses.set(region.name, short.path);
       else if (sequence && ruleOn('step-badges')) markSteps(sequence, units);
       else if (!sequence) markPairs(units);
@@ -9800,7 +9796,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // the agenda's, the FAQ's and the list layout's, which set listColumns "auto" before 0.35) keeps LH-184's columns, which may come out
     // up to a type-scale step under one column whose lines would run past the reading measure; any other region keeps its columns only when
     // they read at least as large as one column (`guarded`).
-    const listColumnsOf = (region: LayoutRegion): RegionListColumns => region.name === BELOW || !regionListColumns(region) ? 1 : region.accepts[0] === 'list' ? 'auto' : 'guarded';
+    // OPF 0.35: a `steps` region's lone list that draws Basic Process (stepProcesses) is fitted as the list would be drawn without it, in
+    // columns where they read at least as large (`guarded`): that size is the least Basic Process draws it at, and what stays when no
+    // Basic Process holds it.
+    const listColumnsOf = (region: LayoutRegion): RegionListColumns => region.name === BELOW || (!regionListColumns(region) && !stepProcesses.has(region.name)) ? 1 : region.accepts[0] === 'list' ? 'auto' : 'guarded';
     const unitsOf = (name: string): Pending[] => name === BELOW ? belowUnits : contents.get(name) ?? [];
     // LH-48: a slide whose body is one block (one region holds it and nothing is below the grid) gives that block the body: its region's
     // cell reaches the foot of the content box when every other region is empty, and the block grows and moves to its middle (fillLone).
@@ -11145,22 +11144,56 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // When none holds the entries at the floor, the list stays as it was and `arrangement-adapted` says so. Each entry is a list column.
   type ArrangementDesign = { design: ComposedArrangement['design']; frame: LayoutBox; nodes: ArrangementNode[]; margin: number; align: 'center' | 'start'; paint: 'primary' | 'card'; text: 'node' | 'slide'; background?: LayoutBox; lineWidth: number; margins?: [number, number, number, number]; arrows?: ArrangementArrow[]; connectors?: NativeTreeConnector[]; largest?: true; last?: true; refit?: (need: number) => { nodes: ArrangementNode[]; arrows: ArrangementArrow[] } | undefined; layout?: OpfLayoutRecipe; fitNodes?: (size:number)=>ArrangementNode[]|undefined; minimumSize?:number; adaptation?:string; instead?:string };
   const fallbackListAreas = new Map<string, LayoutBox>();
-  // OPF 0.35: `candidate` is a `steps` region's short list (stepProcess), fitted as a plain list: drawn only at that size or larger, and on
-  // failure left to the caller, with no finding.
+  // OPF 0.35: `candidate` is a `steps` region's lone list (stepProcess), fitted as a plain list: drawn only at that size or larger. Its
+  // nodes are its first-level entries, each holding its description and the entries nested under it (`groups`).
   const arrangedList = (item: ComposedItem, arrangement: Arrangement, area: LayoutBox, candidate = false): ComposedArrangement | undefined => {
     // SH-24: an inverted pyramid is the pyramid's designs upside down (pyramidNodes, pyramidSteps).
     const kind = arrangement === 'inverted-pyramid' ? 'pyramid' : arrangement, pyramidDirection = arrangement === 'inverted-pyramid' ? 'down' : 'up';
-    const values = item.value as ListValue[], fit = item.text as ListFit, base = fit.fontSize, count = values.length;
+    const values = item.value as ListValue[], fit = item.text as ListFit, base = fit.fontSize;
+    // Each node's entries [start, end): one entry each, or (a candidate) a first-level entry and the nested entries after it.
+    const groups: [number, number][] = [];
+    values.forEach((value, index) => { if (!candidate || !groups.length || (record(value).level ?? 0) === 0) groups.push([index, index + 1]); else groups.at(-1)![1] = index + 1; });
+    const count = groups.length, rich = candidate && (count < values.length || values.some(value => record(value).description !== undefined));
     const tree=kind==='org-chart'||kind==='hierarchy',measured=tree||kind==='venn';
     // A Venn's overlap label is its last entry (arrangedLists checks it); the entries before it are the sets.
     const overlapAt=kind==='venn'&&record(values[count-1]).overlap===true?count-1:-1,sets=overlapAt<0?count:count-1;
     const listOptions: ListFitOptions = { ...richOptions(styleFor(item.field, item.path)), bullet: 'none' };
     const single = (index: number, box: LayoutBox, size: number): ListFit => {
-      const own0 = `${item.path}.0`, ownPath = `${item.path}.${index}`, marker = listOptions.citationMarker;
+      const [start, end] = groups[index]!, marker = listOptions.citationMarker;
+      if (rich) {
+        // A node of a candidate's entry with its description and nested entries: the runs' paths name the entries of the whole list.
+        // Entries [from, to) of the node at `at` px from `y`, centered with no marker or indent, a description under its entry at a
+        // description's size (0.82 of the entry's, as in a list; never a heading's): the least size is the description's.
+        const part = (from: number, to: number, y: number, at: number): ListFit => {
+          const shift = (run: string) => {
+            if (!run.startsWith(`${item.path}.`)) return run;
+            const rest = run.slice(item.path.length + 1), dot = rest.indexOf('.'), entry = Number(dot < 0 ? rest : rest.slice(0, dot));
+            return Number.isInteger(entry) ? `${item.path}.${from + entry}${dot < 0 ? '' : rest.slice(dot)}` : run;
+          };
+          const slice = values.slice(from, to).map(value => typeof value === 'object' && value !== null && !Array.isArray(value) && (record(value).level ?? 0) !== 0 ? { ...record(value), level: 0 } as ListValue : value);
+          const own = fitList(slice, { ...box, y, height: Math.max(1, box.y + box.height - y) }, at, at * .82, { ...(marker ? { ...listOptions, citationMarker: (run: string) => marker(shift(run)) } : listOptions), heading: false });
+          return { ...own, listEntries: own.listEntries.map(entry => { const index = from + entry.index, object = typeof values[index] === 'object' && !Array.isArray(values[index]);
+            return { ...entry, index, level: Number(record(values[index]).level ?? 0), textPath: `${item.path}.${index}${object ? '.text' : ''}`, ...(entry.descriptionPath !== undefined ? { descriptionPath: `${item.path}.${index}.description` } : {}) }; }) };
+        };
+        const head = part(start, start + 1, box.y, size);
+        if (end - start === 1) return head;
+        // The entries nested under it, under it at a description's size (never under the list's own size, nor over the node's).
+        const below = Math.max(box.y, ...head.listEntries.map(entry => Math.max(entry.textBox.y + entry.text.height, entry.descriptionBox && entry.description ? entry.descriptionBox.y + entry.description.height : -Infinity)));
+        const nested = part(start + 1, end, below + size * .28, Math.min(size, Math.max(base, snapFontSizeDown(size * .82))));
+        return { ...head, listEntries: [...head.listEntries, ...nested.listEntries], lines: [...head.lines, ...nested.lines], height: nested.height + (below + size * .28 - box.y), overflow: head.overflow || nested.overflow,
+          ...(head.directions || nested.directions ? { directions: [...(head.directions ?? []), ...(nested.directions ?? [])] } : {}) };
+      }
+      const own0 = `${item.path}.0`, ownPath = `${item.path}.${index}`;
       const entryOptions: ListFitOptions = marker ? { ...listOptions, citationMarker: (run: string) => marker(run === own0 || run.startsWith(`${own0}.`) ? ownPath + run.slice(own0.length) : run) } : listOptions;
       const value=tree&&typeof values[index]==='object'&&!Array.isArray(values[index])?{...record(values[index]),level:0}:values[index]!;
       const own = fitList([value as ListValue], box, size, size, entryOptions), object = typeof values[index] === 'object' && !Array.isArray(values[index]);
       return { ...own, listEntries: own.listEntries.map(entry => ({ ...entry, index, ...(tree?{level:Number(record(values[index]).level??0)}:{}), textPath: `${item.path}.${index}${object ? '.text' : ''}` })) };
+    };
+    // The height of a node's text: its entry's lines, or (a rich node) its entries and descriptions from the first line to the last.
+    const heightOf = (text: ListFit) => {
+      const first = text.listEntries[0]!;
+      if (!rich) return first.text.height;
+      return Math.max(...text.listEntries.map(entry => Math.max(entry.textBox.y + entry.text.height, entry.descriptionBox && entry.description ? entry.descriptionBox.y + entry.description.height : -Infinity))) - first.textBox.y;
     };
     // Where each line starts in the entry's runs: the same breaks at another width give the same string.
     const breaks = (entry: ListEntryLayout | undefined) => entry?.text.richLines.map(line => line.fragments.length ? `${line.fragments[0]!.runIndex}:${line.fragments[0]!.start}` : '-').join(',');
@@ -11182,15 +11215,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       for (let index = 0; index < count; index++) {
         const node = design.nodes[index]!, inner = { x: node.textBox.x + left, y: node.textBox.y + top, width: less(node.textBox.width, left, right), height: less(node.textBox.height, top, bottom) };
         if (inner.width <= 0 || inner.height <= 0) return undefined;
-        const probe = single(index, { ...inner, height: 1e5 }, size), entry = probe.listEntries[0];
-        if (!entry || probe.overflow || entry.text.height > inner.height + 1e-6) return undefined;
-        const box = { x: inner.x, y: inner.y + (inner.height - entry.text.height) / 2, width: inner.width, height: entry.text.height };
+        const probe = single(index, { ...inner, height: 1e5 }, size), entry = probe.listEntries[0], need = entry ? heightOf(probe) : 0;
+        if (!entry || probe.overflow || need > inner.height + 1e-6) return undefined;
+        const box = { x: inner.x, y: inner.y + (inner.height - need) / 2, width: inner.width, height: need };
         const text = single(index, box, size), placed = text.listEntries[0];
-        if (!placed || text.overflow || cutsWord(placed)) return undefined;
+        if (!placed || text.overflow || text.listEntries.some(cutsWord)) return undefined;
         if(kind==='venn'&&sets>=5&&design.design!=='smartart'&&placed.text.richLines.some(line=>line.fragments.map(fragment=>fragment.text).join('').trim().length>70))return undefined;
         // A centered line is centered without the space it broke at (PowerPoint's wrap drops it): the space is left out of its last
         // fragment and width.
-        if (design.align === 'center') placed.text.richLines = placed.text.richLines.map(line => {
+        if (design.align === 'center') for (const each of text.listEntries) each.text.richLines = each.text.richLines.map(line => {
           const last = line.fragments.at(-1), trail = last && last.kind === undefined ? /\s+$/u.exec(last.text)?.[0] : undefined;
           if (!trail || trail.length === last!.text.length) return line;
           // A space that hangs (RR-17) is already out of the line's width; the fragments still hold it.
@@ -11201,13 +11234,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         });
         // The ink of every line (cap height over the baseline to the descenders) stays inside the node's outline, inset by the margin: a
         // pyramid level narrows toward its top, a quadrant at its corners. Text beside its level has no outline to keep to.
-        if (!node.beside) for (const line of placed.text.richLines) {
-          const baseline = placed.textBox.y + line.baseline, room = less(Math.min(nodeWidthAt(node, baseline - .72 * size), nodeWidthAt(node, baseline + .22 * size)), left, right);
+        if (!node.beside) for (const each of text.listEntries) for (const line of each.text.richLines) {
+          const baseline = each.textBox.y + line.baseline, room = less(Math.min(nodeWidthAt(node, baseline - .72 * size), nodeWidthAt(node, baseline + .22 * size)), left, right);
           if (line.width > room + 1e-6) return undefined;
         }
         const own = breaks(placed), widths = !check ? [] : [1 - SMART_ART_DOMAIN.slack, 1 + SMART_ART_DOMAIN.slack].map(share => breaks(single(index, { ...inner, width: inner.width * share, height: 1e5 }, size).listEntries[0]));
-        lines.push(placed.text.richLines.length); stable.push(widths.every(other => other === own));
-        columns.push({ box, start: index, end: index + 1, text });
+        lines.push(rich ? text.listEntries.reduce((sum, each) => sum + each.text.richLines.length + (each.description?.richLines.length ?? 0), 0) : placed.text.richLines.length); stable.push(widths.every(other => other === own));
+        columns.push({ box, start: groups[index]![0], end: groups[index]![1], text });
       }
       // SH-17: how full the fullest text rectangle is, and the text's share of the frame (SMART_ART_DOMAIN.fill and ink).
       const fill = Math.max(0, ...columns.map((column, index) => { const box = design.nodes[index]!.textBox; return column.box.height / Math.max(1e-6, box.height - top - bottom); }));
@@ -11318,7 +11351,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       designs.push({ design: 'smartart', frame: area, nodes: own.nodes, ...(own.arrows.length ? { arrows: own.arrows } : {}), margin: ARRANGEMENT_TEXT_MARGIN[kind], margins, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine });
       // Each is sized in its tallest geometry, then its nodes take the height of the text (refit).
       // The compact designs (closer rooms, smaller arrows) only when none of PowerPoint's proportions holds the entries (`last`).
-      for (const compact of [false, true]) for (let lines = 1; lines <= Math.min(OPF_LINES_MAX, count); lines++) {
+      // OPF 0.35: a `steps` region's list (candidate) may snake into as many rows as it has entries (on a tall slide, one box a row), so a
+      // long one keeps its size.
+      const most = candidate ? count : OPF_LINES_MAX;
+      for (const compact of [false, true]) for (let lines = 1; lines <= Math.min(most, count); lines++) {
         const opf = linearDesign(kind, area, count, gap, rtl, lines, undefined, compact);
         if (opf) designs.push({ design: 'opf', frame: area, nodes: opf.nodes, ...(opf.arrows.length ? { arrows: opf.arrows } : {}), margin: ARRANGEMENT_TEXT_MARGIN[kind], margins: linearMargins(kind, rtl, true), align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine, largest: true,
           refit: need => linearDesign(kind, area, count, gap, rtl, lines, need, compact), ...(compact ? { last: true as const } : {}),
@@ -11342,7 +11378,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (design.last && chosen) break;
       const result = sized(design);
       if (!result) { if (design.design === 'smartart') skipped = `its entries do not fit PowerPoint's ${SMART_ART_NAMES[kind].layout} at the list's size`; continue; }
-      const unavailable = design.design !== 'smartart' ? undefined : smartArtUnavailable({ kind: arrangement, count, frame: design.frame, rtl: rtl || script.rtl, ...(script.script ? { script: script.script } : {}),
+      // OPF 0.35: a node holding a description or nested entries is not a SmartArt node as OPF writes one (one paragraph per entry).
+      const unavailable = design.design !== 'smartart' ? undefined : rich ? "an entry has a description or nested entries, which the PPTX export does not write in a SmartArt node" : smartArtUnavailable({ kind: arrangement, count, frame: design.frame, rtl: rtl || script.rtl, ...(script.script ? { script: script.script } : {}),
         nodes: result.placed.lines.map((lines, index) => ({ lines, stable: result.placed.stable[index]! })), ...(isLinearArrangement(kind) ? { fill: result.placed.fill, ink: result.placed.ink } : {}), widest: result.placed.widest });
       if (unavailable !== undefined) { outside ??= result; skipped = unavailable; continue; }
       // Of the card grids, of a cycle's designs and of OPF's rows or columns of a linear arrangement (SH-17, `largest`), the one that holds the largest text.
@@ -11352,9 +11389,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (design.design === 'smartart' || !largest) break;
     }
     if (!chosen && outside) { chosen = outside; skipped = undefined; }
-    if (!chosen && candidate) return undefined;
     if (!chosen) {
       diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `The entries of the ${kind === 'chevrons' ? 'row of chevrons' : kind.replace('-', ' ')} do not fit its ${SMART_ART_NAMES[kind].nodes} at the list's size, so they are drawn as a list.` });
+      // OPF 0.35: a `steps` region's list keeps the list it was composed as (in columns where they read larger).
+      if (candidate) return undefined;
       fillRegionWithList(item, area, top);
       fallbackListAreas.set(item.path, area);
       return undefined;
@@ -11486,18 +11524,18 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     item.text = placed;
     item.box = box;
   };
-  let stepProcessMissed = false;
   const arrangedLists = (): ComposedArrangement[] => {
     const result: ComposedArrangement[] = [];
     for (const region of template!.regions) {
-      // OPF 0.35: a `steps` region's short lone list (stepProcess) as Basic Process in the region's whole cell, when it holds the list at
-      // its fitted size or larger; otherwise the slide is composed again with the list as steps (stepProcessMissed).
+      // OPF 0.35: a `steps` region's lone list (stepProcess) as Basic Process in the region's whole cell, at its fitted size or larger.
+      // Where no design holds it at that size, it stays the list it was composed as, in columns where they read larger (`arrangement-
+      // adapted`, never steps and never smaller); a list that overflows the region as a list keeps its composition, which pagination splits.
       const short = regionDiagram(region) ? undefined : stepProcesses.get(region.name);
       if (short) {
         const item = items.find(entry => entry.path === short && entry.region === region.name), area = stepProcessCells.get(region.name);
-        if (!item || !area || item.listColumns || item.caption || item.frameBox || !item.text || !('listEntries' in item.text) || item.text.overflow) continue;
+        if (!item || !area || item.caption || item.frameBox || !item.text || !('listEntries' in item.text) || item.text.overflow) continue;
         const arranged = arrangedList(item, 'process', area, true);
-        if (!arranged) { stepProcessMissed = true; continue; }
+        if (!arranged) continue;
         result.push(arranged);
         const composed = templateRegions.find(entry => entry.name === region.name);
         if (composed) composed.box = roundBox(area);
@@ -11583,7 +11621,6 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   if (useTemplate) pairRules();
   const steps = useTemplate ? stepSequences() : [];
   const arrangements = useTemplate ? arrangedLists() : [];
-  if (stepProcessMissed) return composeLayout(input, { ...options, [NO_STEP_PROCESS]: true } as ComposeSlideOptions);
   // LH-137: a dark slide whose whole body is one short bulleted list (CHECK_TILE_MIN to CHECK_TILE_MAX entries of one level, no
   // descriptions, each CHECK_TILE_MAX_CHARACTERS or fewer: a summary of decisions or outcomes) draws each entry as a tile of a grid that
   // fills the body (one row for three or fewer, two columns for four, three for five or six), with a check mark badge at its start (the

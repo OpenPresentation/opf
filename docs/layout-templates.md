@@ -488,10 +488,18 @@ A region whose `arrangement` is `steps` or `numbered` lists the steps of a seque
   arabic as drawing only: the document keeps no numbering and the PPTX import gives the list back unnumbered. In a `numbered`
   region the unnumbered lists count on from one list to the next, as one agenda, and keep their markers when one of the region's
   lists cannot take badges (a lone entry, nested entries), so a part of the agenda is never numbered alone.
-- **Basic Process** (`steps`, OPF 0.35): a lone list of 2 to 8 entries of one level, each of one or two words (24 characters at most),
-  without numbering, descriptions or icons, draws as the `process` arrangement (PowerPoint's Basic Process: boxes joined by arrows, see
-  [SmartArt](smartart.md)) in the region's whole cell, when the process holds every entry at the size its steps would have or larger;
-  otherwise it draws as steps. The gallery's `process` layout draws a short list this way.
+- **Basic Process** (`steps`, OPF 0.35): a lone unnumbered list with two or more first-level entries (`STEP_PROCESS_MIN`), of any
+  length and any count, without icons, draws as the `process` arrangement (PowerPoint's Basic Process: boxes joined by arrows, see
+  [SmartArt](smartart.md)) in the region's whole cell. Each first-level entry is a box; its description sits under it in the box at a
+  description's size (0.82 of the entry's), and the entries nested under it under that, centered, at the larger of that size and the
+  list's own. The text is never smaller than the list would be: the size runs from the arrangement's top size down to the list's
+  fitted size (the size its steps would have), and at that size the boxes wrap their text over as many lines as they need and snake
+  into rows (one row of PowerPoint's proportions where that holds the entries, then OPF's rows, up to one box a row on a tall slide),
+  whichever holds the entries largest. A list that no Basic Process holds at that size (such as ten entries of 25 words) stays the
+  list it would be, in columns where they read larger (`arrangement-adapted`); one that overflows the region as a list keeps its
+  composition, which pagination splits. The gallery's
+  `process` layout draws every such list this way; a numbered list keeps its steps (Basic Process draws no numbers), as do blocks
+  side by side, and an icon list keeps its chips.
 - **Numbered rows** (`numbered`, LH-134): an agenda whose every entry, in every list of the region, has a description draws as ruled
   rows instead of badges: each number a numeral at the list size, bold in the accent and in two digits under 10 ("01"), in a column at
   the row's start (the right in a right-to-left list), the label bold and the description in a second column beside it when the labels

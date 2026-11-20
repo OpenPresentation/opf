@@ -1962,7 +1962,7 @@
               "arrangement": "steps"
             }
           ],
-          "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition. A list of 2 to 8 steps of one or two words each draws as boxes joined by arrows.",
+          "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition. A list of steps draws as boxes joined by arrows (a description or sub-steps inside its step's box); number the list to draw numbered steps instead.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/process.svg"
           }

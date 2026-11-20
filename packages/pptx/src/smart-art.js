@@ -195,6 +195,15 @@ const hex6 = value => String(value).replace(/^#/, '').slice(0, 6).toUpperCase();
 const plain = value => runsOf(value).map(run => run?.text ?? '').join('');
 
 /**
+ * OPF 0.35: a process list's box holds an entry's description and the entries nested under it (core arrangedList); OPF writes one
+ * paragraph per SmartArt node, so such a list is native shapes.
+ */
+function nodeTextReason(arrangement, values) {
+  return arrangement.kind === 'process' && values.some(value => value && typeof value === 'object' && !Array.isArray(value) && (value.description !== undefined || (value.level ?? 0) !== 0))
+    ? 'an entry has a description or nested entries, which OPF does not write in a SmartArt node' : undefined;
+}
+
+/**
  * Whether an arrangement can be live SmartArt: undefined when it can, else the reason (pptx/smartart-unavailable). `values` are the
  * list's entries as authored.
  */
@@ -203,6 +212,8 @@ export function smartArtReason(arrangement, values, rtl) {
   if (values.some(value => runsOf(value).some(run => !run || typeof run.text !== 'string' || Object.keys(run).some(key => !RUN_KEYS.has(key)))))
     return 'an entry has text formatting a SmartArt node does not carry (a link, a citation, code or its own size)';
   if (values.some(value => /[\r\n\t]/.test(plain(value)))) return 'an entry holds a line break or a tab';
+  const nested = nodeTextReason(arrangement, values);
+  if (nested) return nested;
   const {rtl: rightToLeft, script} = smartArtScript(values.map(plain));
   return smartArtUnavailable({kind: arrangement.kind, count: values.length, frame: arrangement.frame, rtl: rtl || rightToLeft,
     nodes: arrangement.smartArt.lines.map((lines, index) => ({lines, stable: arrangement.smartArt.stable[index]})), ...(script ? {script} : {}),
@@ -217,6 +228,8 @@ export function opfLayoutReason(arrangement, values, rtl) {
   if (values.some(value => runsOf(value).some(run => !run || typeof run.text !== 'string' || Object.keys(run).some(key => !RUN_KEYS.has(key)))))
     return 'an entry has text formatting a SmartArt node does not carry (a link, a citation, code or its own size)';
   if (values.some(value => /[\r\n\t]/.test(plain(value)))) return 'an entry holds a line break or a tab';
+  const nested = nodeTextReason(arrangement, values);
+  if (nested) return nested;
   const {rtl: rightToLeft, script} = smartArtScript(values.map(plain));
   return opfSmartArtUnavailable({design: arrangement.layout.design, ...(arrangement.layout.compact ? {compact: true} : {}), count: values.length, lines: arrangement.smartArt.lines,
     stable: arrangement.smartArt.stable, ...(arrangement.smartArt.ink !== undefined ? {ink: arrangement.smartArt.ink} : {}), ...(arrangement.smartArt.widest !== undefined ? {widest: arrangement.smartArt.widest} : {}), rtl: rtl || rightToLeft, ...(script ? {script} : {})});

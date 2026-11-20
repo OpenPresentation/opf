@@ -111,9 +111,15 @@ The arrangement keeps the previous fitted list size or grows. A malformed tree, 
 ## Chevrons and flows
 
 Three more layouts draw a list of stages or steps in order (SH-17): `chevrons` (a row of chevrons, each leading into the next), `process`
-(boxes joined by arrows in one row, for a list of 2 to 8 entries of one or two words; OPF 0.35: other steps draw as numbered steps) and `vertical-process` (the same as a column, beside the title). Their regions' `arrangement` is
-`chevrons`, `steps` (a short list draws as `process`, PowerPoint's Basic Process) and `vertical-process` (its Vertical Process), with the same rules as a pyramid's: one list of one level, 1 to 8 short entries, one size for every node, never below the
-list's role size.
+(boxes joined by arrows; OPF 0.35: every unnumbered lone list of its `steps` region, of any length and count, each first-level entry a
+box holding its description and nested entries, never below the size the list would have; a numbered list keeps numbered steps) and
+`vertical-process` (the same as a column, beside the title). Their regions' `arrangement` is `chevrons`, `steps` (an unnumbered lone
+list draws as `process`, PowerPoint's Basic Process) and `vertical-process` (its Vertical Process), with the same rules as a pyramid's:
+one list of one level, 1 to 8 short entries, one size for every node, never below the list's role size. A `steps` region's list is
+Basic Process at any count and length (OPF's rows snake into as many rows as it needs), and the PPTX export writes it as live SmartArt
+where the instance lies in the domain below; elsewhere `pptx/smartart-unavailable` names the reason (more than 8 entries in OPF's rows,
+an entry over two lines, text over 7.5% of the frame, or a description or nested entries, which OPF does not write in a SmartArt node)
+and it is native shapes.
 
 ```json
 { "layout": "chevrons", "title": "How we work", "items": ["Plan", "Build", "Test", "Ship"] }
