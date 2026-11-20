@@ -346,7 +346,8 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 			if (fixes.length) next.fixes = fixes;
 		}
 		const stale = staleRepair(next);
-		if (stale) next = { ...next, help: next.help ? `${stale.cause} ${next.help}` : stale.cause, ...(next.fixes?.length || stale.fix ? { fixes: [...(next.fixes ?? []), ...(stale.fix ? [stale.fix] : [])] } : {}) };
+		// The message starts with the cause's first clause (what the copy is), so a reader of messages alone learns it.
+		if (stale) next = { ...next, message: `${stale.cause.split('; ')[0]}: ${next.message}`, help: next.help ? `${stale.cause} ${next.help}` : stale.cause, ...(next.fixes?.length || stale.fix ? { fixes: [...(next.fixes ?? []), ...(stale.fix ? [stale.fix] : [])] } : {}) };
 		finished.push(next);
 	}
 	finished.sort(

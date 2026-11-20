@@ -29,6 +29,7 @@ OPF 0.18 gives the Node build the verbs of the `opf` command, so a script calls 
 | `stats(deck, options?)` | `opf stats` | the gallery |
 | `paginate(deck, options?)` | `opf paginate` | the gallery. Pass `fonts` (opf-render's `loadFonts()`) for measured page breaks; without it the result says `layout: "estimated"`. `opf paginate` measures with the office pack, prepared once per process, as `convert` does for an export with `paginate: true` |
 | `embed(deck, options?)` | `opf embed` | the gallery |
+| `fix(deck, options?)` | `opf fix` | the gallery. Applies each finding's fix marked `safe`, validating again after each round until none is left (at most `maxRounds`, default 10), and returns `{ document, applied, findings, report, rounds, stopped }`; a fix not marked safe is never applied. Load the deck's icon sets first (`ensureIcons`) so a renamed icon is fixed too |
 | `edit(deck, patch, options?)` | `opf edit` | the gallery for the check. Applies a JSON Patch whole or not at all (`OPFPatchError`), checks the result (`OPFValidationError`; `validate: false` skips it) and returns `{ presentation, findings, inverse }` |
 | `fill(template, data?, options?)` | `opf fill` | no catalog: `data` is CSV, TSV or JSON text, a record or a list of records; returns `{ decks, complete, unfilled, diagnostics }`, and `presentation` with `combine: true`. `fillRecords(text)` reads the records alone |
 | `diff(a, b)`, `merge(base, ours, theirs)` | `opf diff`, `opf merge` | no catalog |
