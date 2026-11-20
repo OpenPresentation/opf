@@ -30,7 +30,7 @@ export declare const engineDefaults: Readonly<{
 export type RenderDiagnostic = LayoutDiagnostic | {
   /** A generated RTL numbered marker stayed text; this PNG/raster-PDF marker is not direction-qualified. */
   code: "raster-marker-unavailable";
-  reason: "unresolved" | "restricted" | "colour-font" | "system-fonts";
+  reason: "unresolved" | "restricted" | "color-font" | "system-fonts";
   fontFamily?: string;
   message: string;
 } | {
@@ -41,7 +41,7 @@ export type RenderDiagnostic = LayoutDiagnostic | {
 } | {
   /** A run stays text because its face cannot safely be written as outlines. */
   code: "text-as-paths-fallback";
-  reason: "colour-font" | "restricted";
+  reason: "color-font" | "restricted";
   fontFamily: string;
   message: string;
 } | {
@@ -94,7 +94,7 @@ export interface ToSvgOptions {
    * given `shapeWasm`), are hidden from assistive technology, and each outlined line is also invisible real text pinned to the
    * drawn width, so screen readers, selection, copy and find-in-page get the words. Each element keeps its `data-opf-*` trace.
    * A run stays text, reported as `text-as-paths-fallback` with a `reason`, when its font is a color or bitmap font
-   * (`"colour-font"`) or its face's fsType restricts embedding (`"restricted"`). Use it for thumbnails, previews and portable SVG files, not for an editing
+   * (`"color-font"`) or its face's fsType restricts embedding (`"restricted"`). Use it for thumbnails, previews and portable SVG files, not for an editing
    * surface or the vector PDF (which keeps real text from `<text>` SVG).
    */
   text?: "fonts" | "system" | "paths";

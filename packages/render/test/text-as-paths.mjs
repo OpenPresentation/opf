@@ -1,7 +1,7 @@
 // RR-64: `text: "paths"` draws every <text> as glyph outlines (<use> of outlines kept once per slide in <defs>), so the SVG
 // needs no font. Checked here: the option contract, the markup (no <text>, no @font-face, content-addressed glyph ids, byte
 // stability), the trace and labels an editor and assistive technology read, links, decorations, empty text, right-to-left text,
-// the colour-font fallback, and that resvg draws the outlined SVG like the <text> SVG on a set of core example decks.
+// the color-font fallback, and that resvg draws the outlined SVG like the <text> SVG on a set of core example decks.
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import { examples } from '@openpresentation/opf/examples';
@@ -89,7 +89,7 @@ const emojiPaths = toSvg(emoji, 1, { fonts, text: "paths", onDiagnostic: (diagno
 assert.deepEqual([...emojiPaths.matchAll(/<text\b[^>]*>([^<]*)<\/text>/g)].filter(([tag]) => !/ fill="none"/.test(tag)).map((match) => match[1]), ['🚀'], 'only the emoji run stays painted text');
 assert.match(emojiPaths, /<text [^>]*font-family="Noto Color Emoji, sans-serif"[^>]*textLength="[\d.]+" lengthAdjust="spacingAndGlyphs">🚀<\/text>/);
 assert.deepEqual(readable(emojiPaths), ['Launch ', ' day', 'Plain text only'], 'the outlined parts of the title and the body are readable; the emoji is text already');
-assert.deepEqual(diagnostics.filter((diagnostic) => diagnostic.code === 'text-as-paths-fallback').map((diagnostic) => [diagnostic.reason, diagnostic.fontFamily]), [['colour-font', 'noto color emoji']]);
+assert.deepEqual(diagnostics.filter((diagnostic) => diagnostic.code === 'text-as-paths-fallback').map((diagnostic) => [diagnostic.reason, diagnostic.fontFamily]), [['color-font', 'noto color emoji']]);
 
 // A fixed set of decks (every 12th of the corpus when it was chosen), so adding an example never changes which decks are checked.
 const sampledDecks = new Set([

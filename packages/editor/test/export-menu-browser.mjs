@@ -204,11 +204,11 @@ try {
   assert.equal(await item(/^Agent handoff/).getAttribute('aria-disabled'), null, 'the handoff is still available');
   await page.keyboard.press('Escape');
   await status().getByRole('button', { name: 'Cancel export' }).click();
-  await page.waitForFunction(() => document.querySelector('.opf-export-status')?.dataset.state === 'cancelled');
+  await page.waitForFunction(() => document.querySelector('.opf-export-status')?.dataset.state === 'canceled');
   assert.equal(await page.evaluate(() => window.log.signals.at(-1).aborted), true, 'Cancel aborts the signal the exporter was given');
   assert.match(await status().innerText(), /Export canceled\./);
   await page.waitForFunction(() => /Export canceled/.test(document.querySelector('.opf-export-live').textContent));
-  assert.equal(downloaded, false, 'a cancelled export offers no file');
+  assert.equal(downloaded, false, 'a canceled export offers no file');
   assert.equal(await trigger.getAttribute('aria-busy'), null);
   await trigger.click();
   assert.equal(await item(/^PDF/).getAttribute('aria-disabled'), null, 'the menu recovers');
@@ -221,7 +221,7 @@ try {
   await item(/^PowerPoint/).click();
   await page.waitForFunction(() => window.finish);
   await page.evaluate(() => { window.menu.cancel(); window.finish(); });
-  await page.waitForFunction(() => document.querySelector('.opf-export-status')?.dataset.state === 'cancelled');
+  await page.waitForFunction(() => document.querySelector('.opf-export-status')?.dataset.state === 'canceled');
   await page.waitForTimeout(300);
   assert.equal(downloaded, false, 'an exporter that ignores the signal cannot download after Cancel');
   mark('cancel');

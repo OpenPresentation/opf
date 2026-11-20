@@ -885,7 +885,7 @@ export function createDataGrid(container, options = {}) {
   }
 
   function transpose() {
-    const change = attempt(() => transposeGridData(editor, target.path, {}), (done) => `Swapped categories and series.${done.relabelled ? ` ${plural(done.relabelled, "category label")} became text.` : ""}`);
+    const change = attempt(() => transposeGridData(editor, target.path, {}), (done) => `Swapped categories and series.${done.relabeled ? ` ${plural(done.relabeled, "category label")} became text.` : ""}`);
     if (change) setSelection({ u: 0, c: 0 }, { u: 0, c: 0 }, { scroll: false });
   }
 

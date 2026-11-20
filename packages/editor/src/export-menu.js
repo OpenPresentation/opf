@@ -206,7 +206,7 @@ export function createExportMenu(container, options = {}) {
     globalThis.clearTimeout(hideTimer);
     statusPanel.hidden = true;
   }
-  // state: "busy" | "success" | "error" | "cancelled". `progress`: { value, indeterminate }. Notes keep the panel up until dismissed.
+  // state: "busy" | "success" | "error" | "canceled". `progress`: { value, indeterminate }. Notes keep the panel up until dismissed.
   function showStatus(state, message, { notes = [], progress, announceIt = true } = {}) {
     globalThis.clearTimeout(hideTimer);
     statusPanel.dataset.state = state;
@@ -222,7 +222,7 @@ export function createExportMenu(container, options = {}) {
     statusNotes.hidden = !shown.length;
     statusPanel.hidden = false;
     if (announceIt) announce(state === "success" && notes.length ? `${message}. ${plural(notes.length, "note")} to review.` : message);
-    if ((state === "success" || state === "cancelled") && !notes.length) hideTimer = globalThis.setTimeout(hideStatus, AUTO_HIDE_MS);
+    if ((state === "success" || state === "canceled") && !notes.length) hideTimer = globalThis.setTimeout(hideStatus, AUTO_HIDE_MS);
     options.onStatus?.({ state, message, notes: notes.map(noteText) });
   }
 
@@ -310,7 +310,7 @@ export function createExportMenu(container, options = {}) {
       options.onExport?.({ ...download, notes: notes.map(noteText) });
     } catch (error) {
       if (destroyed) return;
-      if (isAbort(error, signal)) showStatus("cancelled", "Export canceled.");
+      if (isAbort(error, signal)) showStatus("canceled", "Export canceled.");
       else showStatus("error", `${label} export failed. ${error?.message ?? error}`);
     } finally {
       if (busy?.controller === controller) busy = undefined;

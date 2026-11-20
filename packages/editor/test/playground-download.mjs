@@ -1,7 +1,7 @@
 // RR-98 (RR-23, RR-27): the playground's Export menu in a real browser, offline, with the real fonts and the injected PowerPoint exporter.
 // Every format is downloaded through the menu and then read back independently: the PDF opens in pdf.js and its text is the slide text, a PNG has
 // the size the renderer drew, an SVG parses as XML and carries its subset fonts, a ZIP holds one file per slide, the PPTX opens and holds the
-// slides, and the OPF source formats read back with core. Also: the keyboard, a long export that is cancelled, the converter's notes, the
+// slides, and the OPF source formats read back with core. Also: the keyboard, a long export that is canceled, the converter's notes, the
 // agent handoff with the session's exact deck, the phone's bottom sheet, the deck's filename naming the file, and nothing sent anywhere.
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -221,7 +221,7 @@ try {
   assert.equal(await page.evaluate(() => document.activeElement.textContent.trim()), 'Export', 'focus returns to the Export button');
   mark('agent handoff');
 
-  // ---- A long export can be cancelled; the menu recovers ----------------------------------------------------------------------------------------------
+  // ---- A long export can be canceled; the menu recovers ----------------------------------------------------------------------------------------------
   const long = { name: 'Long deck', design: { fontScheme: 'roboto' }, slides: Array.from({ length: 60 }, (_, index) => ({ id: `s${index}`, title: `Slide ${index + 1}`, text: 'A paragraph of text that has to be laid out and written. '.repeat(6) })) };
   await loadDeck(long, 'Slide 1');
   let downloaded = false;
@@ -232,9 +232,9 @@ try {
   await page.waitForFunction(() => /Page \d+ of 60/.test(document.querySelector('.opf-export-status-text').textContent), undefined, { timeout: 60000 });
   assert.ok(Number(await status.locator('progress').getAttribute('value')) > 0, 'progress advances page by page');
   await status.getByRole('button', { name: 'Cancel export' }).click();
-  await page.waitForFunction(() => document.querySelector('.opf-export-status')?.dataset.state === 'cancelled');
+  await page.waitForFunction(() => document.querySelector('.opf-export-status')?.dataset.state === 'canceled');
   assert.match(await status.innerText(), /Export canceled\./);
-  assert.equal(downloaded, false, 'a cancelled export offers no file');
+  assert.equal(downloaded, false, 'a canceled export offers no file');
   await trigger.click();
   assert.equal(await item(/^PDF/).getAttribute('aria-disabled'), null, 'the menu is usable again');
   await page.keyboard.press('Escape');

@@ -123,7 +123,7 @@ export function outlineSlideText(content, { library, shaper, shape, selectText, 
   };
   const base = inheritStyle(ROOT_STYLE, rootStyle);
   const REASONS = {
-    "colour-font": "is a color or bitmap font, which has no plain outlines",
+    "color-font": "is a color or bitmap font, which has no plain outlines",
     restricted: "forbids embedding (OS/2 fsType), so its outlines are not written",
   };
   const keep = (family, reason) => {
@@ -234,7 +234,7 @@ function readableText(runs) {
 // Why a run stays text, or null: a color or bitmap font, or a family whose fsType restricts embedding (the run was laid out with
 // another face).
 function fallbackReason(run, env) {
-  if (COLOR_TABLES.some((table) => run.face.font.directory?.tables?.[table])) return "colour-font";
+  if (COLOR_TABLES.some((table) => run.face.font.directory?.tables?.[table])) return "color-font";
   for (const family of parseFontFamilies(run.style["font-family"])) {
     if (env.fonts.restricted?.has(family.toLowerCase())) return "restricted";
     if (run.face.names.has(family.toLowerCase()) || (env.onRefusal && env.validateFace && env.fonts.match([family],parseFontWeight(run.style["font-weight"],400),/italic|oblique/i.test(run.style["font-style"]??""))?.face===run.face)) break;

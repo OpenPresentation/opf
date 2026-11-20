@@ -28,13 +28,8 @@ export function sentence(text: string): string {
   return ENDS.test(trimmed) ? trimmed : `${trimmed}.`;
 }
 
-/** Core's own words in American spelling (core's sentences say "color" in a few places). */
-export function us(text: string): string {
-  return text.replace(/colour/g, "color").replace(/Colour/g, "Color");
-}
-
-/** A kept core sentence: American spelling, one closing period. */
-export const keep = (text: string): string => sentence(us(text));
+/** A kept core sentence, with one closing period. */
+export const keep = (text: string): string => sentence(text);
 
 /** The match of `regex` in `text`, or `undefined`. */
 export function match(text: string, regex: RegExp): RegExpExecArray | undefined {
@@ -196,7 +191,7 @@ export function keepMessage(finding: Finding, fallbackNext: string): FindingText
 /** The `help` of a finding as a `next` line: lower-case first letter, whole text kept, closing period. `fallback` when there is no help. */
 export function helpAsNext(finding: Finding, fallback: string): string {
   const help = finding.help?.trim();
-  return help ? sentence(asNext(us(help))) : fallback;
+  return help ? sentence(asNext(help)) : fallback;
 }
 
 /** Whether `value` is a non-empty string. */

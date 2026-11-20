@@ -109,7 +109,7 @@ After every structural change a table style this package wrote (`banded`, `grid`
 
 ## Chart operations
 
-`transposeChart` swaps categories and series: the first column's values become the series names and each series becomes a row. Gaps stay gaps. A numeric category becomes text (the change reports `relabelled`) and a blank category becomes an unnamed series; transposing twice restores text categories exactly. `renameChartSeries(editor, path, column, name)` and `renameChartCategory(editor, path, row, name)` rename; inserting a series adds an unnamed column (a name is never invented) and the grid opens its name cell. A chart keeps at least one row and one column.
+`transposeChart` swaps categories and series: the first column's values become the series names and each series becomes a row. Gaps stay gaps. A numeric category becomes text (the change reports `relabeled`) and a blank category becomes an unnamed series; transposing twice restores text categories exactly. `renameChartSeries(editor, path, column, name)` and `renameChartCategory(editor, path, row, name)` rename; inserting a series adds an unnamed column (a name is never invented) and the grid opens its name cell. A chart keeps at least one row and one column.
 
 ## Column names, number formats and datasets (RR-54)
 

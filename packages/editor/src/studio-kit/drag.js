@@ -11,7 +11,7 @@
  * - `onStart(pending)`: make the drag session from the press (`{ x, y, id, type, time, payload }`); null or undefined refuses it;
  * - `onStarted(session)`: after the controller holds the session (paint the dragging state here);
  * - `onMove(session, event)`: each move while dragging (the trial drop);
- * - `onEnd(session, { cancelled })`: clean up, before `onDrop` or after a cancel;
+ * - `onEnd(session, { canceled })`: clean up, before `onDrop` or after a cancel;
  * - `onDrop(session, event)`: the release (land the drop);
  * - `onEscape(session)`: after Escape canceled the drag.
  * The host forwards its pointer events: `press(event, payload)`, `move(event)` (true while dragging), `release(event)` (true when it ended a
@@ -42,12 +42,12 @@ export function createDragController(options = {}) {
     options.onStarted?.(session);
     return true;
   }
-  function end(cancelled) {
+  function end(canceled) {
     const session = active;
     listen(false);
     active = null;
     pending = null;
-    options.onEnd?.(session, { cancelled });
+    options.onEnd?.(session, { canceled });
     return session;
   }
 
@@ -75,7 +75,7 @@ export function createDragController(options = {}) {
       options.onDrop?.(session, event);
       return true;
     },
-    /** Drop the press, and the drag if one runs (`onEnd` with `cancelled`). */
+    /** Drop the press, and the drag if one runs (`onEnd` with `canceled`). */
     cancel() {
       if (!active) { pending = null; return false; }
       end(true);
