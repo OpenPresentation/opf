@@ -509,6 +509,9 @@ describe("the bundled sources", () => {
 		// Reviewed for the 0.35 safe-fix promise (#1385) on 2026-11-20: 1,397,584 exact bytes (main at 0da537b11: 1,395,487). It adds
 		// 2,097: what safe means, the repair-check default and the drawing mark in validate.md (+934), cli.md (+596) and node.md (+284),
 		// and changesDrawing in the generated finding-schema-reference.md (+283). The limit is unchanged.
+		// Reviewed for the chartPrimary replacement on 2026-11-20: 1,397,930 exact bytes (after #1385: 1,397,584). It adds 346: the slide
+		// composition that keeps a removed design.chartPrimary's split, in design-resolution.md (+215) and dynamic-composition.md (+131),
+		// where both pages named the chart-beside layout, which has no region for a table. The limit is unchanged.
 		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
 	});
 });
