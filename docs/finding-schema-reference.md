@@ -85,7 +85,8 @@ _No named properties._
 | `title` | yes | `string` | What applying the fix does, in a few words. |
 | `id` | no | `string` | Stable id within one finding, such as `focus-alt` or `use-readable-color`. |
 | `kind` | no | `enum:patch \| focus` | `patch` fixes carry `patch`; `focus` fixes carry `focus`. |
-| `safe` | no | `boolean` | True when applying the fix cannot change what the content says or how it looks beyond the repair, such as switching a failing colour to the one the theme chose. False fixes need a deliberate choice. |
+| `safe` | no | `boolean` | True when the fix is the one repair the finding needs and can be applied without a person: it loses no content, what it writes is valid, and it changes nothing beyond the repair except what `changesDrawing` says, such... |
+| `changesDrawing` | no | `boolean` | True when applying this patch can change how a slide draws: the repair does not keep the drawing of the release that wrote the deck, such as a removed layout's replacement whose title column is narrower. Absent or fal... |
 | `patch` | no | `array<ref:JsonPatchOperation>` | RFC 6902 JSON Patch operations that apply the fix to the checked presentation. |
 | `focus` | no | `ref:FindingFocus` |  |
 

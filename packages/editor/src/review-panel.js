@@ -344,11 +344,13 @@ export function createReviewPanel(container, options) {
       finding.help ? h(doc, "p", { class: "opf-review-help", text: finding.help }) : undefined);
     const actions = h(doc, "div", { class: "opf-review-actions" });
     for (const fix of finding.fixes ?? []) {
+      // A safe fix that changes the drawing (OPF 0.35 `changesDrawing`, such as a removed layout's replacement) is shown with the same care.
+      const careful = !fix.safe || fix.changesDrawing === true;
       actions.append(h(doc, "button", {
         type: "button",
-        class: `opf-review-fix${fix.safe ? "" : " is-careful"}`,
+        class: `opf-review-fix${careful ? " is-careful" : ""}`,
         "data-fix": fix.id ?? fix.title,
-        title: fix.safe ? undefined : "This changes how the slide looks or what it says; it can be undone.",
+        title: careful ? "This changes how the slide looks or what it says; it can be undone." : undefined,
         text: fix.title,
         onclick: () => runFix(finding, fix),
       }));

@@ -71,7 +71,7 @@ eq(findingTarget(editor.presentation, { path: "/design/logo" }).slide, null);
 
 // the contrast quick fix is one undoable, validated edit
 const fix = contrast.fixes.find((f) => f.id === "use-readable-color");
-ok(fix.safe && fix.kind === "patch" && fix.title === "Use the slide text colour", "a core fix has a title and an RFC 6902 patch");
+ok(fix.safe === false && fix.kind === "patch" && fix.title === "Use the slide text colour", "a core fix has a title and an RFC 6902 patch; a new text colour is not safe");
 const events = [];
 const stop = editor.subscribe((event) => events.push(event.type));
 const change = applyReviewFix(editor, contrast, fix);
