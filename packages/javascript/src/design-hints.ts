@@ -4,13 +4,13 @@ export type DesignHintKey = typeof DESIGN_HINT_KEYS[number];
 /** The design keys a theme record may carry (`theme.design`), so a house style such as boxed content is set once. */
 export const THEME_DESIGN_KEYS = ['titleAlignment', 'titlePosition', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet', 'listStyle'] as const;
 /**
- * The design keys OPF 0.35 removed: `contentDirection` (a layout region's `flow: "row"` or `"column"`, or the slide's
- * `composition.mode`) and `chartPrimary` (the slide's `composition`: a row or column with `weights`). A deck, slide, theme or layout `design` that still sets one
- * fails its schema; validate says what replaced it and offers the safe fix that deletes the key.
+ * The design keys OPF 0.35 removed: `contentDirection` and `chartPrimary`. The engine composes the slide; a specific arrangement is the
+ * slide's `composition` (mode, weights), or in a layout record a region's `flow`. A deck, slide, theme or layout `design` that still sets
+ * one fails its schema; validate says what replaced it and offers the safe fix that deletes the key (marked `changesDrawing`).
  */
 export const REMOVED_DESIGN_KEYS: Readonly<Record<string, string>> = Object.freeze({
-  contentDirection: 'OPF 0.35 removed design.contentDirection. Delete it: a layout region says how its blocks share it with flow "row" or "column", and an automatic slide with composition.mode "row" or "column".',
-  chartPrimary: 'OPF 0.35 removed design.chartPrimary, which applied to automatic slides only. Delete it. To keep its 3:2 split, set the slide\'s composition: mode "row" for start and end or "column" for top and bottom, weights [3, 2] with the chart first or [2, 3] with the chart last, and the other blocks in one group. Without it an automatic slide still gives a short chart a track of its own.',
+  contentDirection: 'OPF 0.35 removed design.contentDirection. Delete it: the engine now composes the slide. For a specific arrangement, set the slide\'s composition (mode "row" or "column", and weights); in a layout record, a region\'s flow "row" or "column" says it.',
+  chartPrimary: 'OPF 0.35 removed design.chartPrimary. Delete it: the engine now composes the slide. For a specific arrangement, set the slide\'s composition (mode and weights), such as a chart on one side: mode "row", weights [3, 2], the chart first in blocks.',
 });
 /** Where an effective design hint came from: the slide's own `design`, the deck's `design`, the resolved theme record, or the slide's layout record. */
 export type DesignHintSource = 'slide' | 'deck' | 'theme' | 'layout';

@@ -1,7 +1,7 @@
 // OPF 0.35: what fix() promises. By default it applies only the fixes of the checks that repair the document (an audit's fix, such as a
 // language tag's case, needs `audits`); it never recolors text (use-readable-color is not safe); every fix applied says whether it can
 // change how a slide draws; a removed design key never leaves an empty `design`; and a fix that is not a patch is never applied nor
-// counted. The drawing marks follow 0.34.2-against-0.35 compositions (the PR's evidence); this file pins the marks themselves.
+// counted. A fix brings the deck to the 0.35 form and the 0.35 engine draws it; this file pins the marks of the fixes that can change it.
 import { gallery } from '@openpresentation/gallery';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -77,14 +77,14 @@ describe('fix: each applied fix says whether it changes the drawing', () => {
     assert.deepEqual(offered.map((entry) => entry.changesDrawing), [true, true, undefined, undefined], 'the finding\'s fix carries the mark only when true');
   });
 
-  test('a deck 0.34.2 made self-contained: rename-layout of its agenda-split copy is marked, use-current-record of its cover is not; so is embed()', () => {
+  test('a deck 0.34.2 made self-contained: rename-layout of its agenda-split copy and use-current-record of its cover are marked; so is embed()', () => {
     const deck = JSON.parse(readFileSync(new URL('./fixtures/stale-0.34-agenda-split.opf.json', import.meta.url), 'utf8'));
     const result = fix(deck, { catalogs });
     assert.equal(result.stopped, 'stable');
-    assert.deepEqual(Object.fromEntries(result.applied.map((entry) => [entry.fix, entry.changesDrawing])), { 'rename-layout': true, 'use-current-record': false });
+    assert.deepEqual(Object.fromEntries(result.applied.map((entry) => [entry.fix, entry.changesDrawing])), { 'rename-layout': true, 'use-current-record': true });
     assert.equal(result.document.slides[1].layout, 'agenda');
     const { refreshed } = embed(deck, { catalogs });
-    assert.deepEqual(Object.fromEntries(refreshed.map((entry) => [entry.id, [entry.how, entry.changesDrawing]])), { cover: ['current', undefined], 'agenda-split': ['renamed', true] });
+    assert.deepEqual(Object.fromEntries(refreshed.map((entry) => [entry.id, [entry.how, entry.changesDrawing]])), { cover: ['current', true], 'agenda-split': ['renamed', true] });
   });
 
   test('removed design keys: contentDirection and chartPrimary are marked, except chartPrimary in a layout record (it never applied there)', () => {
@@ -135,16 +135,17 @@ describe('fix: each applied fix says whether it changes the drawing', () => {
     });
   });
 
-  test('region renames and cells moved into blocks keep the drawing', () => {
+  test('region renames and cells moved into blocks of a slide without a layout are not marked; cells beside a layout are', () => {
     const deck = {
       name: 'Pins',
       language: 'en-US',
       slides: [
         { title: 'Chart', layout: 'chart-beside', blocks: [{ chart }, { text: 'The takeaway.', region: 'notes' }] },
         { title: 'Cells', 'top:start': { text: 'Top left.' }, 'bottom:end': { items: ['One', 'Two'] } },
+        { title: 'Cells beside a layout', layout: 'two-column', start: { text: 'Left.' }, end: { text: 'Right.' } },
       ],
     };
-    assert.deepEqual(marks(fix(deck, { catalogs })), { 'rename-region /slides/0/blocks/1/region': false, 'cells-to-blocks /slides/1/top:start': false });
+    assert.deepEqual(marks(fix(deck, { catalogs })), { 'rename-region /slides/0/blocks/1/region': false, 'cells-to-blocks /slides/1/top:start': false, 'cells-to-layout-blocks /slides/2/start': true });
   });
 });
 

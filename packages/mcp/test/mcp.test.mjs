@@ -512,6 +512,11 @@ describe("the bundled sources", () => {
 		// Reviewed for the chartPrimary replacement on 2026-11-20: 1,397,930 exact bytes (after #1385: 1,397,584). It adds 346: the slide
 		// composition that keeps a removed design.chartPrimary's split, in design-resolution.md (+215) and dynamic-composition.md (+131),
 		// where both pages named the chart-beside layout, which has no region for a table. The limit is unchanged.
+		// Reviewed for the 0.35 alignment (fixes write the new form, no 0.34 drawing emulation) on 2026-11-20: 1,397,972 exact bytes
+		// (main at ec9e9bc4c: 1,397,930). It adds 42: the removed keys' fixes say the engine composes the slide and a composition sets a
+		// specific arrangement (design-resolution.md +75, dynamic-composition.md -33), fix() returns the 0.35 form (node.md +39), embed
+		// replaces a stale copy with the current record (default-catalog.md +32), and opf fix drops layoutWithCells (cli.md -71). The
+		// limit is unchanged.
 		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
 	});
 });

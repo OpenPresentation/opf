@@ -1,7 +1,7 @@
 // OPF 0.35: `opf fix` applies the safe fixes of a deck's findings until none is left. Fixtures: openpresentation.org's Learn step
 // regions-and-pins/08 (a custom record with flow "none") and its homepage design lesson (0.34 region pins, with a removed design key
-// added so the pins are reported only in the second round), pptx.gallery's how-to-build-list-slides (an unedited copy of the 0.34
-// list record, trimmed), and a custom record whose role "secondary" has only fixes a person must choose.
+// added so the pins are reported only in the second round), pptx.gallery's how-to-build-list-slides (a copy of the 0.34 list record,
+// trimmed), and a custom record whose role "secondary" has only fixes a person must choose.
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { copyFile, mkdtemp, readFile, realpath, rm, stat, writeFile } from "node:fs/promises";
@@ -77,7 +77,7 @@ test("--check writes nothing and exits 1 when a safe fix would apply: the stale 
   const deck = await copy("fix-stale-0.34-list.opf.json");
   const raw = await readFile(deck, "utf8");
   const record = run(["validate", deck], 1).findings.find((finding) => finding.path.startsWith("/catalogs/default/layouts/list/"));
-  assert.match(record.message, /^catalogs\.default\.layouts\.list is an unedited copy of OPF 0\.34's release of the built-in layout 'list': /, "the message names the cause");
+  assert.match(record.message, /^catalogs\.default\.layouts\.list is a copy of the built-in layout 'list' from before OPF 0\.35: /, "the message names the cause");
   const check = run(["fix", deck, "--check"], 1);
   assert.equal(check.ok, false);
   assert.deepEqual(check.outputs, []);
