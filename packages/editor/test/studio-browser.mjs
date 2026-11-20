@@ -401,7 +401,7 @@ try {
     before = await depth();
     await clickAt({ x: text.x + text.width * 0.5, y: text.y + text.height / 2 }, { count: 2 });
     await page.locator('.opf-inline-input').waitFor();
-    const caret = await ev(() => ({ tag: document.activeElement.tagName, blocks: [{region: 'start', ...document.activeElement.selectionStart}, {region: 'end', ...document.activeElement.selectionEnd}], length: document.activeElement.value.length }));
+    const caret = await ev(() => ({ tag: document.activeElement.tagName, start: document.activeElement.selectionStart, end: document.activeElement.selectionEnd, length: document.activeElement.value.length }));
     assert.equal(caret.tag, 'TEXTAREA', 'a double-click enters editing');
     assert.ok(caret.start === caret.end && caret.start > 0 && caret.start < caret.length, `with the caret at the pointer: ${JSON.stringify(caret)}`);
     await page.keyboard.type('X');
