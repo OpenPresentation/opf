@@ -153,9 +153,9 @@ try {
   assert.equal(await choices.locator('option').count(), 2);
   await choices.selectOption({ index: 1 });
   await dialog.getByLabel('Number this list').check();
-  const two = await waitDoc(current => current.slides[1].end?.numbering !== undefined, 'second list numbered');
-  assert.equal(two.slides[1].end.numbering, 'arabic');
-  assert.equal(two.slides[1].start.numbering, undefined);
+  const two = await waitDoc(current => current.slides[1].blocks[1]?.numbering !== undefined, 'second list numbered');
+  assert.equal(two.slides[1].blocks[1].numbering, 'arabic');
+  assert.equal(two.slides[1].blocks[0].numbering, undefined);
   mark('several lists on a slide');
 
   // Turn off numbering on the first slide: one edit removes numbering and entry starts; one Undo brings it all back.
