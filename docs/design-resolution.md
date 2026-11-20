@@ -409,7 +409,7 @@ The slide's `composition.mode` also chooses how a lone list with icons is drawn 
 
 ### `chartPrimary` (removed in OPF 0.35)
 
-OPF 0.35 removed `design.chartPrimary`. It applied to automatic slides only and was ignored on every slide with a layout. A chart beside its supporting blocks is the `chart-beside` layout (3:2, the chart first; `design.mirror: true` puts it at the end), or a custom template; on an automatic slide a short chart among other blocks already takes its own track (LH-49, [dynamic composition](dynamic-composition.md)), whose root decision keeps `reason: 'chart-primary'`. A document that still sets it fails the schema, and validate offers the safe fix that deletes it.
+OPF 0.35 removed `design.chartPrimary`. It applied to automatic slides only and was ignored on every slide with a layout. To keep its 3:2 split, set the slide's `composition`: `mode` `row` for `start` and `end` or `column` for `top` and `bottom`, `weights` `[3, 2]` with the chart first or `[2, 3]` with the chart last, and the other blocks in one group ([updating to 0.35](migrations/0.35.md)). The `chart-beside` layout sets a chart beside a list at 3:2, but it has no region for a table. On an automatic slide a short chart among other blocks already takes its own track (LH-49, [dynamic composition](dynamic-composition.md)), whose root decision keeps `reason: 'chart-primary'`. A document that still sets it fails the schema, and validate offers the safe fix that deletes it.
 
 ### `listBullet` (vetoable)
 
