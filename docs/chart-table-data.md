@@ -1,6 +1,6 @@
 # Chart and table data: numbers, formats, datasets and series mapping
 
-Status: RR-54 (release readiness). Additive schema plus one behaviour fix (strict chart numbers). These features are shipped in the coordinated package line; use the [compatibility matrix](compatibility-matrix.md) for the verified set. This page is the contract the four packages implement; change it here first.
+Status: RR-54 (release readiness). Additive schema plus one behavior fix (strict chart numbers). These features are shipped in the coordinated package line; use the [compatibility matrix](compatibility-matrix.md) for the verified set. This page is the contract the four packages implement; change it here first.
 
 ## Decisions (vetoable)
 
@@ -178,7 +178,7 @@ Core composition, table layout and pagination accept dataset-backed tables and c
 
 ## Engines
 
-All three engines read core's functions when they exist and fall back to their previous behaviour on a core without RR-54, so each can ship before or after core. A document that uses none of the new fields renders, exports and edits byte for byte as before (renderer: all 805 slides of the core examples; PPTX: 21 golden digests; editor: identical patches).
+All three engines read core's functions when they exist and fall back to their previous behavior on a core without RR-54, so each can ship before or after core. A document that uses none of the new fields renders, exports and edits byte for byte as before (renderer: all 805 slides of the core examples; PPTX: 21 golden digests; editor: identical patches).
 
 ### Preview (opf-render, [opf-render#127](https://github.com/OpenPresentation/opf-render/pull/127))
 

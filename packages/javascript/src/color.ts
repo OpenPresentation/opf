@@ -158,7 +158,7 @@ function readableLink(link: string, background: string, text: string): string {
   return contrast !== undefined && contrast < MIN_LINK_CONTRAST ? text : link;
 }
 
-// --------------------------------------------------------------- variants: PowerPoint's colour map over one scheme (RR-96)
+// --------------------------------------------------------------- variants: PowerPoint's color map over one scheme (RR-96)
 
 /** The four light and dark slots: the text roles (tx1, tx2) always map to one of them. */
 export type ColorBaseSlot = 'light1' | 'light2' | 'dark1' | 'dark2';
@@ -169,9 +169,9 @@ const ACCENT_SLOTS: readonly ColorAccentSlot[] = ['accent1', 'accent2', 'accent3
 const isAccentSlot = (value: unknown): value is ColorAccentSlot => (ACCENT_SLOTS as readonly unknown[]).includes(value);
 
 /**
- * A variant of the deck's single colour scheme: which slot is the background (and so which are the text and the alternate surface),
+ * A variant of the deck's single color scheme: which slot is the background (and so which are the text and the alternate surface),
  * and optionally the order of the accents. It is a mapping over the scheme's twelve slots, as PowerPoint's `clrMap` is, never a second
- * scheme: nothing in it is a colour.
+ * scheme: nothing in it is a color.
  */
 export interface ColorVariant {
   background: ColorVariantBackground;
@@ -326,7 +326,7 @@ export const ACCENT_SECONDARY_MIN_CONTRAST = 4.5;
  *
  * LH-01: an accent background is both bg1 and bg2, as light2 and dark2 are, with the text of the family whose tx1 reads better on that
  * accent in `colorScheme` (light1 and light2 when light1 has the higher contrast, else dark1 and dark2), so the scheme's own slots carry
- * the text and no colour is invented; tx2 maps to tx1's slot where the family's tx2 is under {@link ACCENT_SECONDARY_MIN_CONTRAST} on the
+ * the text and no color is invented; tx2 maps to tx1's slot where the family's tx2 is under {@link ACCENT_SECONDARY_MIN_CONTRAST} on the
  * accent. Without a scheme the accent counts as dark.
  */
 export function colorMapFor(variant?: ColorVariantInput, colorScheme: Record<string, unknown> = {}): ColorMap {
@@ -357,7 +357,7 @@ export function clrMapAttributes(map: ColorMap): Record<string, string> {
   };
 }
 
-// HSL as DrawingML defines it, for the luminance transforms (`lumMod`, `lumOff`) that PowerPoint writes for tints and shades of a scheme colour.
+// HSL as DrawingML defines it, for the luminance transforms (`lumMod`, `lumOff`) that PowerPoint writes for tints and shades of a scheme color.
 function rgbToHsl([r, g, b]: readonly [number, number, number]): [number, number, number] {
   const red = r / 255, green = g / 255, blue = b / 255, max = Math.max(red, green, blue), min = Math.min(red, green, blue), l = (max + min) / 2;
   if (max === min) return [0, 0, l];
@@ -373,10 +373,10 @@ function hslToRgb([h, s, l]: readonly [number, number, number]): [number, number
 }
 
 /**
- * A scheme colour as the PPTX export writes it and the preview draws it: `slot` is the colour role or slot (`tx1`, `bg1`, `bg2`, `tx2`,
+ * A scheme color as the PPTX export writes it and the preview draws it: `slot` is the color role or slot (`tx1`, `bg1`, `bg2`, `tx2`,
  * `accent1` ...), `lumMod` and `lumOff` are DrawingML luminance transforms in thousandths of a percent (`lumMod 15000, lumOff 85000` is
- * 15% of the slot's luminance plus 85%), `alpha` an opacity in the same unit, and `hex` is the colour the transforms give for the
- * resolved scheme, so a preview that draws `hex` and a PPTX that writes `<a:schemeClr val={slot}>` with the transforms show the same colour.
+ * 15% of the slot's luminance plus 85%), `alpha` an opacity in the same unit, and `hex` is the color the transforms give for the
+ * resolved scheme, so a preview that draws `hex` and a PPTX that writes `<a:schemeClr val={slot}>` with the transforms show the same color.
  */
 export interface SchemeColor {
   slot: string;
@@ -386,7 +386,7 @@ export interface SchemeColor {
   alpha?: number;
 }
 
-/** The colour a `lumMod`/`lumOff` pair (thousandths of a percent) makes of `hex`: its HSL luminance times `lumMod`, plus `lumOff`. */
+/** The color a `lumMod`/`lumOff` pair (thousandths of a percent) makes of `hex`: its HSL luminance times `lumMod`, plus `lumOff`. */
 export function applyLuminance(hex: string, lumMod = 100000, lumOff = 0): string {
   const channels = opaqueChannels(hex);
   if (!channels) return hex;
@@ -395,7 +395,7 @@ export function applyLuminance(hex: string, lumMod = 100000, lumOff = 0): string
 }
 
 /**
- * A scheme colour between a slot and its background: the slot's colour made as light (or dark) as `share` of the way from the
+ * A scheme color between a slot and its background: the slot's color made as light (or dark) as `share` of the way from the
  * background's luminance to the slot's. `share` 0.15 is PowerPoint's gridline (tx1 at 15%: black on white is luminance 0.85). The
  * transform is chosen on the slot (`lumMod`/`lumOff`), so it keeps the slot's hue, and `hex` is the transform applied, to the thousandth of a percent.
  */
@@ -409,16 +409,16 @@ function mixTowardsBackground(slot: string, slotHex: string, backgroundHex: stri
   return { slot, hex: applyLuminance(slotHex, lumMod, lumOff), ...(lumMod !== 100000 ? { lumMod } : {}), ...(lumOff !== 0 ? { lumOff } : {}) };
 }
 
-/** Shares of the text colour (tx1) mixed into the background (bg1) for the neutrals, PowerPoint's chart-style values. */
+/** Shares of the text color (tx1) mixed into the background (bg1) for the neutrals, PowerPoint's chart-style values. */
 export const NEUTRAL_SHARES = { border: .2, gridline: .15, axisLine: .25, chartText: .65, codeComment: .65 } as const;
 
-/** LH-54: the share of the text colour (light1 on a dark slide) a dark card starts from, mixed into the background. */
+/** LH-54: the share of the text color (light1 on a dark slide) a dark card starts from, mixed into the background. */
 export const CARD_SURFACE_MIX = 0.07;
 /** LH-54: the contrast a mixed dark card reaches against the background, stepping the mix up from {@link CARD_SURFACE_MIX} (Claude Design's #0B2A5C on #011842 is 1.25:1). */
 export const CARD_SURFACE_MIN_CONTRAST = 1.25;
 /** Wave 8: the contrast the slide's text keeps on a mixed card (WCAG AA for body text); the mix towards the text stops before it falls under it. */
 export const CARD_TEXT_MIN_CONTRAST = 4.5;
-/** LH-54: the share of the text colour mixed into a mixed dark card for its 1 px stroke (about 12% white over the card). */
+/** LH-54: the share of the text color mixed into a mixed dark card for its 1 px stroke (about 12% white over the card). */
 export const CARD_BORDER_MIX = 0.12;
 /** LH-79: a light variant's tx1 at or below this relative luminance (about #1A1A1A) is near-black, and the code panel takes tx2 instead. */
 export const CODE_PANEL_NEAR_BLACK = 0.01;
@@ -432,8 +432,8 @@ export const CODE_PANEL_MIN_STEP = 1.05;
 export const CODE_PANEL_LIFT = 0.06;
 
 /**
- * The colours OPF draws that are neither text nor an accent, all derived from the scheme through the variant's map, so a dark variant
- * gets light lines and a change of variant or background style in PowerPoint recolours them.
+ * The colors OPF draws that are neither text nor an accent, all derived from the scheme through the variant's map, so a dark variant
+ * gets light lines and a change of variant or background style in PowerPoint recolors them.
  */
 export interface SchemeNeutrals {
   /** Quiet structural rules, card borders and table borders: tx1 at {@link NEUTRAL_SHARES}.border over bg1. */
@@ -442,7 +442,7 @@ export interface SchemeNeutrals {
   gridline: SchemeColor;
   /** Chart axis lines: tx1 at 25%. */
   axisLine: SchemeColor;
-  /** Chart axis labels and legend text where the chart does not use the slide text colour: tx1 at 65%. */
+  /** Chart axis labels and legend text where the chart does not use the slide text color: tx1 at 65%. */
   chartText: SchemeColor;
   /** Pie and treemap outlines, the video play icon and anything drawn on top of a mark: bg1. */
   outline: SchemeColor;
@@ -463,10 +463,10 @@ export interface SchemeNeutrals {
    * The fill of a card (a composed item's `frameBox`), LH-54: the `surface` role wherever it stands off the background, and on a dark slide
    * where it does not (the dark2 variant, whose bg2 is the background itself) the background mixed towards tx1 from {@link CARD_SURFACE_MIX}
    * until it reaches {@link CARD_SURFACE_MIN_CONTRAST}, so a dark card reads as a filled surface rather than a hairline outline. A mixed card is
-   * a literal colour (no single luminance transform of a slot reproduces it), as `surfaceAlt` is.
+   * a literal color (no single luminance transform of a slot reproduces it), as `surfaceAlt` is.
    */
   card: SchemeColor;
-  /** The 1 px stroke of a card: `border`, or on a mixed dark card that card mixed {@link CARD_BORDER_MIX} towards tx1 (a literal colour). */
+  /** The 1 px stroke of a card: `border`, or on a mixed dark card that card mixed {@link CARD_BORDER_MIX} towards tx1 (a literal color). */
   cardBorder: SchemeColor;
 }
 
@@ -499,7 +499,7 @@ export interface ResolvedColorRoles {
   variant: ColorVariant;
   /** The map behind the roles (bg1, tx1, bg2, tx2 and the accent order), for PPTX `clrMap` and `clrMapOvr` ({@link clrMapAttributes}). */
   map: ColorMap;
-  /** The six accent colours in the variant's order (primary, secondary and accent are the first three unless overridden). */
+  /** The six accent colors in the variant's order (primary, secondary and accent are the first three unless overridden). */
   accents: string[];
   /** Every neutral derived from the scheme, with its slot and luminance transform for `schemeClr` export. */
   neutrals: SchemeNeutrals;
@@ -531,7 +531,7 @@ export function resolveColorRoles(colorScheme: Record<string, unknown>, options:
   const slot = (name: string, fallback: string) => slotKeepingAlpha(colorScheme, name, fallback);
   const FALLBACK: Record<string, string> = { light1: '#FFFFFF', light2: '#F8FAFC', dark1: '#111827', dark2: '#1E293B' };
   const explicit = normalizeColorVariant(options.variant);
-  // The slide background decides light or dark when no variant does: a named tone, else the luminance of the resolved colour.
+  // The slide background decides light or dark when no variant does: a named tone, else the luminance of the resolved color.
   const explicitBackground = keepAlpha(options.background);
   const variant: ColorVariant = explicit ?? { background: (options.tone ? options.tone === 'dark' : isDarkColor(explicitBackground ?? defaultSlideBackground(colorScheme))) ? 'dark1' : 'light1' };
   const map = colorMapFor(variant, colorScheme);
@@ -573,7 +573,7 @@ function schemeNeutrals(colors: { bg1: string; bg1Slot: string; tx1: string; bg2
   const [back, front, second, secondText] = [opaque(bg1), opaque(tx1), opaque(bg2), opaque(tx2)];
   const share = (amount: number) => mixTowardsBackground('tx1', front, back, amount);
   const border = share(NEUTRAL_SHARES.border);
-  // A luminance transform of bg1 is bg1's only while the background is the slot's colour; over a literal background it stays literal.
+  // A luminance transform of bg1 is bg1's only while the background is the slot's color; over a literal background it stays literal.
   const ofBackground = (lumMod: number, lumOff = 0): SchemeColor => {
     const hex = applyLuminance(back, lumMod, lumOff);
     return back === opaque(colors.bg1Slot) ? { slot: 'bg1', hex, ...(lumMod !== 100000 ? { lumMod } : {}), ...(lumOff !== 0 ? { lumOff } : {}) } : { slot: 'bg1', hex };
@@ -756,9 +756,9 @@ export function chartColorForFill(fill: string, preferred: string): string {
 
 // --------------------------------------------------------------- chart palettes
 
-/** Smallest CIE L* step kept between neighbouring series (a printed or greyscale chart tells them apart by lightness alone). */
+/** Smallest CIE L* step kept between neighboring series (a printed or grayscale chart tells them apart by lightness alone). */
 export const CHART_SERIES_MIN_LIGHTNESS_STEP = 11;
-/** Smallest CIE76 colour difference kept between any two series that were at least that far apart before the surface adjustment. */
+/** Smallest CIE76 color difference kept between any two series that were at least that far apart before the surface adjustment. */
 export const CHART_SERIES_MIN_DIFFERENCE = 12;
 
 type Lab = [number, number, number];
@@ -780,7 +780,7 @@ function labOf(channels: readonly number[]): Lab {
   return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
 }
 
-/** Linear sRGB for a Lab colour, or undefined outside the sRGB gamut. */
+/** Linear sRGB for a Lab color, or undefined outside the sRGB gamut. */
 function labToLinear([l, a, b]: Lab): [number, number, number] | undefined {
   const fy = (l + 16) / 116, fx = fy + a / 500, fz = fy - b / 200;
   const inverse = (t: number) => t ** 3 > 216 / 24389 ? t ** 3 : (116 * t - 16) / (24389 / 27);
@@ -795,7 +795,7 @@ function labToLinear([l, a, b]: Lab): [number, number, number] | undefined {
 
 const hexOfChannels = (channels: readonly number[]) => `#${channels.map(channel => Math.max(0, Math.min(255, Math.round(channel))).toString(16).padStart(2, '0')).join('').toUpperCase()}`;
 
-/** The colour of the given lightness that keeps the hue and as much of the chroma as fits in sRGB. */
+/** The color of the given lightness that keeps the hue and as much of the chroma as fits in sRGB. */
 function labWithLightness(l: number, a: number, b: number): string {
   const chroma = Math.hypot(a, b), hue = Math.atan2(b, a);
   const at = (scale: number): [number, number, number] | undefined => labToLinear([l, Math.cos(hue) * chroma * scale, Math.sin(hue) * chroma * scale]);
@@ -808,14 +808,14 @@ function labWithLightness(l: number, a: number, b: number): string {
   return hexOfChannels(linear.map(channel => fromLinear(Math.max(0, Math.min(1, channel)))));
 }
 
-/** CIE76 difference of two opaque #RRGGBB colours (0 when either is not opaque). */
+/** CIE76 difference of two opaque #RRGGBB colors (0 when either is not opaque). */
 function labDifference(a: Lab, b: Lab): number { return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]); }
 
-/** Series are placed in tiers of this many: a colour is kept apart from the colours of its own and earlier tiers only (see {@link chartPaletteForFill}). */
+/** Series are placed in tiers of this many: a color is kept apart from the colors of its own and earlier tiers only (see {@link chartPaletteForFill}). */
 export const CHART_SERIES_TIER_SIZE = 6;
 const tierOf = (index: number): number => Math.floor(index / CHART_SERIES_TIER_SIZE);
 
-/** Cost, in CIE L* points of movement, of each point a placement falls short of the separation from a neighbouring series. */
+/** Cost, in CIE L* points of movement, of each point a placement falls short of the separation from a neighboring series. */
 const CHART_SERIES_SHORTFALL_WEIGHT = 8;
 
 /** WI-5 (P18, D3) and LH-55: the contrast every series from the scheme reaches on a dark chart surface (see {@link ChartPaletteOptions.legible}). */
@@ -832,43 +832,43 @@ export interface ChartPaletteOptions {
   legible?: readonly boolean[];
   /**
    * LH-105: soften the series `legible` lists (the scheme's): each is mixed up to {@link CHART_SERIES_SOFT_MIX} of the way towards `fill`
-   * after the contrast placement, as far as it keeps its contrast floor and its lightness step from its neighbours ({@link softenChartPalette}).
-   * Ordinary data then reads in soft colours and the full-strength colour is left for emphasis (Few). An authored colour is never softened.
+   * after the contrast placement, as far as it keeps its contrast floor and its lightness step from its neighbors ({@link softenChartPalette}).
+   * Ordinary data then reads in soft colors and the full-strength color is left for emphasis (Few). An authored color is never softened.
    */
   soften?: boolean;
 }
 
-/** Series colours for a chart drawn on `fill`: the palette in order, each colour adjusted for contrast
+/** Series colors for a chart drawn on `fill`: the palette in order, each color adjusted for contrast
  * (`chartColorForFill`) without letting the adjustment merge series.
  *
- * Lifting or darkening a colour for a dark or mid-tone surface moves every failing colour towards the same
- * few lightness values, so two blues that differ on white can end up identical on a dark card. Colours that
- * already have >= 3:1 contrast against `fill` are kept exactly. A colour the contrast adjustment would move is
+ * Lifting or darkening a color for a dark or mid-tone surface moves every failing color towards the same
+ * few lightness values, so two blues that differ on white can end up identical on a dark card. Colors that
+ * already have >= 3:1 contrast against `fill` are kept exactly. A color the contrast adjustment would move is
  * placed again on the lightness axis, keeping its hue and as much of its chroma as sRGB allows, subject to
  * >= 3:1 contrast against `fill` and these separations from the other series (each capped at the separation
  * that pair had in `palette`, so a pair the palette itself made close is not asked to be far apart):
  *
- * - a colour difference (CIE76) of at least {@link CHART_SERIES_MIN_DIFFERENCE} from every other series;
- * - a lightness step of at least {@link CHART_SERIES_MIN_LIGHTNESS_STEP} (CIE L*) from the neighbouring
- *   series, which is what keeps neighbours apart on a greyscale print;
+ * - a color difference (CIE76) of at least {@link CHART_SERIES_MIN_DIFFERENCE} from every other series;
+ * - a lightness step of at least {@link CHART_SERIES_MIN_LIGHTNESS_STEP} (CIE L*) from the neighboring
+ *   series, which is what keeps neighbors apart on a grayscale print;
  * - the same lightness step from the remaining series, as a weaker aim.
  *
- * Series are placed in order against the kept colours and the colours placed before them. The palette is read in tiers of
- * {@link CHART_SERIES_TIER_SIZE} (series 1 to 6, 7 to 12, ...): a colour is separated from the colours of its own and earlier tiers only,
+ * Series are placed in order against the kept colors and the colors placed before them. The palette is read in tiers of
+ * {@link CHART_SERIES_TIER_SIZE} (series 1 to 6, 7 to 12, ...): a color is separated from the colors of its own and earlier tiers only,
  * so the later tiers (the tints of `chartSeriesPalette`) are placed around the first six without ever pulling them towards a lightness
- * the tints already hold. A palette of six colours or fewer is one tier. The placement
- * with the lowest cost wins: its distance (in L*) from the contrast-adjusted colour plus a penalty for
- * every point it falls short of those separations, so a colour that is already clear of the others is
- * simply the adjusted colour, a near miss is not worth a large change, and a collision is resolved at the
+ * the tints already hold. A palette of six colors or fewer is one tier. The placement
+ * with the lowest cost wins: its distance (in L*) from the contrast-adjusted color plus a penalty for
+ * every point it falls short of those separations, so a color that is already clear of the others is
+ * simply the adjusted color, a near miss is not worth a large change, and a collision is resolved at the
  * nearest lightness that clears it. The result is deterministic and in series order. An unresolved or
- * translucent fill or colour is passed through, like `chartColorForFill`.
+ * translucent fill or color is passed through, like `chartColorForFill`.
  *
  * On a dark `fill` the series `options.legible` lists (the scheme's, {@link chartSchemeSeries}) take {@link CHART_DARK_SERIES_MIN_CONTRAST}
  * (4.5:1) in place of 3:1 throughout: series 1 is lifted to it first (with {@link legible}, keeping its hue) and kept, the others are adjusted
  * and placed against that floor, and series 2 keeps {@link CHART_LEAD_LIGHTNESS_STEP} (L*) from series 1 even where it already had the
  * contrast (LH-55: the second default blue on navy was 3.0:1 and nine L* from the first).
  *
- * It depends only on the surface and the palette, so every chart on a surface gets the same series colours,
+ * It depends only on the surface and the palette, so every chart on a surface gets the same series colors,
  * and preview and export (which both call this function) draw the same ones.
  */
 export function chartPaletteForFill(fill: string, palette: readonly string[], options: ChartPaletteOptions = {}): string[] {
@@ -886,7 +886,7 @@ export function chartPaletteForFill(fill: string, palette: readonly string[], op
   const preferredLab = palette.map(color => { const channels = opaqueChannels(color); return channels ? labOf(channels) : undefined; });
   const adjusted = palette.map((color, index) => legibleAt(index) ? legible(normalizeHexColor(color)!, surface, CHART_DARK_SERIES_MIN_CONTRAST) : chartColorForFill(fill, color));
   const adjustedLab = adjusted.map(color => { const channels = opaqueChannels(color); return channels ? labOf(channels) : undefined; });
-  // Colours the surface keeps stay put; only the ones it moves are placed again (and series 2 when it sits too close to series 1).
+  // Colors the surface keeps stay put; only the ones it moves are placed again (and series 2 when it sits too close to series 1).
   const kept = palette.map((color, index) => opaqueFill && preferredLab[index] !== undefined && adjusted[index] === color
     && !(index === 1 && leadPair && Math.abs(adjustedLab[0]![0] - adjustedLab[1]![0]) < CHART_LEAD_LIGHTNESS_STEP));
   const placed: (string | undefined)[] = palette.map((_, index) => kept[index] || !opaqueFill || !preferredLab[index] ? adjusted[index] : undefined);
@@ -903,19 +903,19 @@ export function chartPaletteForFill(fill: string, palette: readonly string[], op
         ? [{ lab, adjacent: Math.abs(other - index) === 1, wide: Math.min(labDifference(before, wanted), CHART_SERIES_MIN_DIFFERENCE), step: isLeadPair(index, other) ? CHART_LEAD_LIGHTNESS_STEP : Math.min(Math.abs(before[0] - wanted[0]), CHART_SERIES_MIN_LIGHTNESS_STEP) }]
         : [];
     });
-    // How far a candidate is from the required separations (>= 0 when it meets them): the colour difference from every
-    // series and the lightness step from the neighbours first, then the lightness step from the others.
+    // How far a candidate is from the required separations (>= 0 when it meets them): the color difference from every
+    // series and the lightness step from the neighbors first, then the lightness step from the others.
     const shortfall = (candidate: Lab): { near: number; far: number } => needs.reduce((worst, need) => {
       const lightness = Math.abs(need.lab[0] - candidate[0]) - need.step, difference = labDifference(need.lab, candidate) - need.wide;
       return need.adjacent ? { near: Math.min(worst.near, difference, lightness), far: worst.far } : { near: Math.min(worst.near, difference), far: Math.min(worst.far, lightness) };
     }, { near: Infinity, far: Infinity });
-    // Cost of a placement: how far it moves from the adjusted colour, plus a penalty for every point it falls short
-    // of the required separations (neighbours and colour difference count most). Cheapest wins; ties keep the nearer one.
+    // Cost of a placement: how far it moves from the adjusted color, plus a penalty for every point it falls short
+    // of the required separations (neighbors and color difference count most). Cheapest wins; ties keep the nearer one.
     const deficit = (value: number) => Math.max(0, -value - 1e-9);
     const cost = (candidate: { moved: number; near: number; far: number }) => candidate.moved + CHART_SERIES_SHORTFALL_WEIGHT * deficit(candidate.near) + deficit(candidate.far);
     const start = shortfall(baseLab);
     if (deficit(start.near) === 0 && deficit(start.far) === 0) { placed[index] = base; placedLab[index] = baseLab; return; }
-    // Re-place the colour on the lightness axis, around where the surface adjustment left it.
+    // Re-place the color on the lightness axis, around where the surface adjustment left it.
     let best: { color: string; lab: Lab; cost: number; moved: number } | undefined = { color: base, lab: baseLab, cost: cost({ moved: 0, ...start }), moved: 0 };
     for (let step = 0; step <= 400; step++) {
       const color = labWithLightness(step / 4, wanted[1], wanted[2]), contrast = colorContrast(color, fill);
@@ -1014,15 +1014,15 @@ export function chartSlicePlan(fill: string, palette: readonly string[], count: 
   return { colors: result, bordered: false };
 }
 
-/** LH-105: the share of the backdrop mixed into an ordinary series colour from the scheme (Few: soft colours for ordinary data, strong for emphasis). */
+/** LH-105: the share of the backdrop mixed into an ordinary series color from the scheme (Few: soft colors for ordinary data, strong for emphasis). */
 export const CHART_SERIES_SOFT_MIX = 0.25;
 
-/** LH-105: a softened series colour and the DrawingML HSL transforms (thousandths of a percent) that make it of its full-strength colour. */
+/** LH-105: a softened series color and the DrawingML HSL transforms (thousandths of a percent) that make it of its full-strength color. */
 export interface ChartSoftColor { hex: string; satMod: number; lumMod?: number; lumOff?: number }
 
 /**
- * LH-105: the colour DrawingML's HSL transforms make of `hex`: its saturation times `satMod`, its lightness times `lumMod` plus `lumOff`
- * (thousandths of a percent, each clamped to 0 to 1), as PowerPoint applies `<a:satMod>`, `<a:lumMod>` and `<a:lumOff>` to a scheme colour.
+ * LH-105: the color DrawingML's HSL transforms make of `hex`: its saturation times `satMod`, its lightness times `lumMod` plus `lumOff`
+ * (thousandths of a percent, each clamped to 0 to 1), as PowerPoint applies `<a:satMod>`, `<a:lumMod>` and `<a:lumOff>` to a scheme color.
  */
 export function applyHslTransforms(hex: string, transforms: { satMod?: number; lumMod?: number; lumOff?: number }): string {
   const channels = opaqueChannels(hex);
@@ -1048,9 +1048,9 @@ function softTransforms(fill: string, palette: readonly string[], options: { leg
       step: Math.min(Math.abs(placedL[index]! - placedL[other]!), options.lead && Math.min(index, other) === 0 && Math.max(index, other) === 1 ? CHART_LEAD_LIGHTNESS_STEP : CHART_SERIES_MIN_LIGHTNESS_STEP),
     }));
     for (let percent = Math.round(CHART_SERIES_SOFT_MIX * 100); percent > 0; percent--) {
-      // The colour's HSL lightness moved `percent` of the way to the backdrop's, as a lumMod/lumOff pair: the transform the PPTX export
-      // writes on the accent's theme colour (as the neutrals are written, RR-96), so re-theming in PowerPoint keeps the soft series.
-      // Its HSL saturation is lowered by the same share (satMod), so the soft colour is quieter, not only lighter.
+      // The color's HSL lightness moved `percent` of the way to the backdrop's, as a lumMod/lumOff pair: the transform the PPTX export
+      // writes on the accent's theme color (as the neutrals are written, RR-96), so re-theming in PowerPoint keeps the soft series.
+      // Its HSL saturation is lowered by the same share (satMod), so the soft color is quieter, not only lighter.
       const base = normalizeHexColor(color)!.slice(0, 7), move = mixTowardsBackground('', base, normalizeHexColor(fill)!.slice(0, 7), 1 - percent / 100);
       if (move.lumMod === undefined && move.lumOff === undefined) continue;
       const satMod = 100000 - percent * 1000, hex = applyHslTransforms(base, { satMod, lumMod: move.lumMod, lumOff: move.lumOff });
@@ -1065,13 +1065,13 @@ function softTransforms(fill: string, palette: readonly string[], options: { leg
 }
 
 /**
- * LH-105: the soft series colours of a palette already placed for `fill` ({@link chartPaletteForFill}). Each series `legible` lists (the
- * scheme's; an authored colour stays as written) has its HSL lightness moved {@link CHART_SERIES_SOFT_MIX} of the way towards the
- * backdrop's (a DrawingML lumMod/lumOff pair on the colour, which keeps its hue and saturation), or less (in steps of 1%) when the full
+ * LH-105: the soft series colors of a palette already placed for `fill` ({@link chartPaletteForFill}). Each series `legible` lists (the
+ * scheme's; an authored color stays as written) has its HSL lightness moved {@link CHART_SERIES_SOFT_MIX} of the way towards the
+ * backdrop's (a DrawingML lumMod/lumOff pair on the color, which keeps its hue and saturation), or less (in steps of 1%) when the full
  * move would take it under its contrast floor against `fill` (`floor`: 3:1, or 4.5:1 for a scheme series on a dark fill) or closer in
- * lightness to a neighbouring series than the placed palette had them, capped at {@link CHART_SERIES_MIN_LIGHTNESS_STEP} (series 1 and 2
- * of a dark scheme chart: {@link CHART_LEAD_LIGHTNESS_STEP}, `lead`). The neighbours are the series before (already softened) and after
- * (still placed). A colour no move keeps within those bounds stays at full strength. In series order and deterministic.
+ * lightness to a neighboring series than the placed palette had them, capped at {@link CHART_SERIES_MIN_LIGHTNESS_STEP} (series 1 and 2
+ * of a dark scheme chart: {@link CHART_LEAD_LIGHTNESS_STEP}, `lead`). The neighbors are the series before (already softened) and after
+ * (still placed). A color no move keeps within those bounds stays at full strength. In series order and deterministic.
  */
 export function softenChartPalette(fill: string, palette: readonly string[], options: { legible?: readonly boolean[]; floor?: (index: number) => number; lead?: boolean } = {}): string[] {
   return softTransforms(fill, palette, options).map((soft, index) => soft?.hex ?? palette[index]!);
@@ -1089,7 +1089,7 @@ export function chartSoftColors(fill: string, palette: readonly string[], option
 }
 
 /**
- * LH-105: the colour of a series' direct label (its name at the end of its line): the series colour at full strength, made legible as
+ * LH-105: the color of a series' direct label (its name at the end of its line): the series color at full strength, made legible as
  * text on `backdrop` (4.5:1, WCAG 1.4.3) by moving its lightness only, so the label keeps the hue of its line.
  */
 export function chartSeriesLabelColor(backdrop: string, color: string): string {
@@ -1104,21 +1104,21 @@ export function chartSeriesLabelColor(backdrop: string, color: string): string {
 export const CHART_SERIES_TINT_MIX = 0.4;
 
 /**
- * The series colours of a chart before the per-surface adjustment: twelve opaque #RRGGBB colours in series order, taken from the deck's
- * resolved colour scheme (`design.colorScheme` after the theme, the record and any inline overrides are applied).
+ * The series colors of a chart before the per-surface adjustment: twelve opaque #RRGGBB colors in series order, taken from the deck's
+ * resolved color scheme (`design.colorScheme` after the theme, the record and any inline overrides are applied).
  *
  * - 1 to 6: `accent1` to `accent6`. A slot the scheme leaves out takes the engine default scheme's slot.
  * - 7 to 12: the same six accents mixed {@link CHART_SERIES_TINT_MIX} of the way towards white, in the same order (a tint of `accent1`
  *   is series 7), for charts with more than six series.
  *
- * Pass the result to {@link chartPaletteForFill} with the chart panel colour for the colours a chart draws and writes: contrast against
- * the panel without letting two series merge. Series `i` takes colour `i`; a pie, doughnut, treemap or funnel takes colour `i` for
- * category `i`. The colours depend on the scheme only, so the preview, the PPTX export and the colour-blind rule draw the same ones.
+ * Pass the result to {@link chartPaletteForFill} with the chart panel color for the colors a chart draws and writes: contrast against
+ * the panel without letting two series merge. Series `i` takes color `i`; a pie, doughnut, treemap or funnel takes color `i` for
+ * category `i`. The colors depend on the scheme only, so the preview, the PPTX export and the color-blind rule draw the same ones.
  * The role overrides (`primary`, `secondary`, `accent`) do not change the list: series 1 to 3 are always `accent1` to `accent3`, the
  * theme slots the PPTX export writes as `schemeClr accentN`.
  *
- * RR-89: `colors` is the chart's own `chart.colors` (positional ColorRefs). Entry `i` replaces palette colour `i`; an entry that cannot
- * be resolved ({@link resolveChartColors}) keeps the scheme colour, and entries past the twelfth extend the list. `context` carries the
+ * RR-89: `colors` is the chart's own `chart.colors` (positional ColorRefs). Entry `i` replaces palette color `i`; an entry that cannot
+ * be resolved ({@link resolveChartColors}) keeps the scheme color, and entries past the twelfth extend the list. `context` carries the
  * deck's roles and `variables` for entries that name them.
  */
 export function chartSeriesPalette(colorScheme: Record<string, unknown> = {}, colors?: unknown, context: ChartColorContext = {}): string[] {
@@ -1129,7 +1129,7 @@ export function chartSeriesPalette(colorScheme: Record<string, unknown> = {}, co
   const palette = [...accents, ...accents.map(accent => mixChannels(opaqueChannels(accent)!, [255, 255, 255], CHART_SERIES_TINT_MIX))];
   resolveChartColors(colors, colorScheme, context).forEach((color, index) => {
     if (color === undefined) return;
-    // An entry past the twelve palette colours extends the list; a gap before it keeps the scheme colour of its position.
+    // An entry past the twelve palette colors extends the list; a gap before it keeps the scheme color of its position.
     while (palette.length < index) palette.push(palette[palette.length % 12]!);
     palette[index] = color;
   });
@@ -1138,7 +1138,7 @@ export function chartSeriesPalette(colorScheme: Record<string, unknown> = {}, co
 
 /**
  * Which series of a chart come from the deck scheme rather than from an authored `chart.colors` entry, in series order: entry `i` is true
- * when `colors[i]` is absent or cannot be resolved, so the series keeps the scheme colour of its position. These are the series
+ * when `colors[i]` is absent or cannot be resolved, so the series keeps the scheme color of its position. These are the series
  * {@link chartPaletteForFill} lifts to 4.5:1 on a dark surface (`options.legible`). The list covers the palette {@link chartSeriesPalette}
  * returns for the same arguments (twelve entries, more when `colors` is longer).
  */
@@ -1147,7 +1147,7 @@ export function chartSchemeSeries(colors: unknown, colorScheme: Record<string, u
   return Array.from({ length: Math.max(12, resolved.length) }, (_, index) => resolved[index] === undefined);
 }
 
-/** What a `chart.colors` entry resolves against: the deck's role colours and `variables`, as for any ColorRef. */
+/** What a `chart.colors` entry resolves against: the deck's role colors and `variables`, as for any ColorRef. */
 export interface ChartColorContext {
   /** RR-96: the variant's accent order (`roles.map.accents`): series 1 to 6 take these slots in this order. Default: accent1 to accent6. */
   accents?: readonly ColorAccentSlot[];
@@ -1156,8 +1156,8 @@ export interface ChartColorContext {
 }
 
 /**
- * The opaque #RRGGBB colour of each `chart.colors` entry (a hex colour, a colour-scheme slot or role, or a `var:<id>` variable), in
- * order; undefined for an entry that is not a string or cannot be resolved (an unknown variable, a name that is not a colour). Alpha is
+ * The opaque #RRGGBB color of each `chart.colors` entry (a hex color, a color-scheme slot or role, or a `var:<id>` variable), in
+ * order; undefined for an entry that is not a string or cannot be resolved (an unknown variable, a name that is not a color). Alpha is
  * dropped. `colors` that is not an array resolves to an empty list.
  */
 export function resolveChartColors(colors: unknown, colorScheme: Record<string, unknown> = {}, context: ChartColorContext = {}): (string | undefined)[] {
@@ -1174,22 +1174,22 @@ export function resolveChartColors(colors: unknown, colorScheme: Record<string, 
 
 // --------------------------------------------------------------- chart highlight (FA-14)
 
-/** Share of the text colour mixed into the surface to make the muted colour of a highlighted chart. */
+/** Share of the text color mixed into the surface to make the muted color of a highlighted chart. */
 export const CHART_HIGHLIGHT_MUTED_MIX = 0.3;
-/** Smallest contrast the muted colour keeps against the surface: recessive, but still a visible mark. */
+/** Smallest contrast the muted color keeps against the surface: recessive, but still a visible mark. */
 export const CHART_HIGHLIGHT_MUTED_MIN_CONTRAST = 1.6;
 
 const mixChannels = (from: readonly number[], to: readonly number[], amount: number): string =>
   hexOfChannels(from.map((channel, index) => channel + (to[index]! - channel) * amount));
 
-/** LH-105: the colour difference (CIE76) a context gray keeps from every focused colour. */
+/** LH-105: the color difference (CIE76) a context gray keeps from every focused color. */
 export const CHART_CONTEXT_FOCUS_DIFFERENCE = 20;
 
-/** LH-105: the contrast the context colour of a focused chart keeps against its backdrop (a mark is a graphical object, WCAG 1.4.11). */
+/** LH-105: the contrast the context color of a focused chart keeps against its backdrop (a mark is a graphical object, WCAG 1.4.11). */
 export const CHART_CONTEXT_MIN_CONTRAST = 3;
 
 /**
- * LH-105: the contrast the context colour keeps when every context mark carries its value or name as text (a small chart's value labels,
+ * LH-105: the contrast the context color keeps when every context mark carries its value or name as text (a small chart's value labels,
  * the names at the line ends, the names on the slices): WCAG 1.4.11 does not ask 3:1 of a graphic whose information the text gives, so the
  * context can be the light neutral Few draws, still clearly visible.
  */
@@ -1197,8 +1197,8 @@ export const CHART_CONTEXT_LABELED_MIN_CONTRAST = 1.6;
 
 /**
  * LH-105: the neutral of the marks a chart does not focus on (the title names other series or categories, chart-focus.ts): the backdrop
- * mixed towards the text colour (tx1), from {@link CHART_HIGHLIGHT_MUTED_MIX} in 2% steps until it reaches
- * {@link CHART_CONTEXT_MIN_CONTRAST} against the backdrop. A grey in the backdrop's own hue, quieter than the text, visible as a mark.
+ * mixed towards the text color (tx1), from {@link CHART_HIGHLIGHT_MUTED_MIX} in 2% steps until it reaches
+ * {@link CHART_CONTEXT_MIN_CONTRAST} against the backdrop. A gray in the backdrop's own hue, quieter than the text, visible as a mark.
  * The first of {@link chartContextColors}.
  */
 export function chartContextColor(surface: string, text: string): string {
@@ -1207,14 +1207,14 @@ export function chartContextColor(surface: string, text: string): string {
 
 /**
  * LH-105: the neutrals of `count` context series (or slices) of a focused chart, in the order the context series come: grays in the
- * backdrop's hue, the backdrop mixed towards the text colour. The lightest step is the first mix (from {@link CHART_HIGHLIGHT_MUTED_MIX}, or from the backdrop when `labeled`, in
+ * backdrop's hue, the backdrop mixed towards the text color. The lightest step is the first mix (from {@link CHART_HIGHLIGHT_MUTED_MIX}, or from the backdrop when `labeled`, in
  * 1% steps) that reaches the contrast floor against the backdrop ({@link CHART_CONTEXT_MIN_CONTRAST}, or
- * {@link CHART_CONTEXT_LABELED_MIN_CONTRAST} when `labeled`: every context mark carries its text) and keeps a colour difference of
- * {@link CHART_CONTEXT_FOCUS_DIFFERENCE} (CIE76) from each `avoid` colour (the focused colours: a gray stands apart from a coloured focus by
+ * {@link CHART_CONTEXT_LABELED_MIN_CONTRAST} when `labeled`: every context mark carries its text) and keeps a color difference of
+ * {@link CHART_CONTEXT_FOCUS_DIFFERENCE} (CIE76) from each `avoid` color (the focused colors: a gray stands apart from a colored focus by
  * its chroma); each further step is the next mix that stands {@link CHART_SERIES_MIN_LIGHTNESS_STEP} L* from the one before and keeps that
- * difference from the `avoid` colours. The first context series takes the strongest step and the last the lightest,
- * so neighbouring context series (stacked segments, slices) are told apart by lightness, as the focused series are by hue. When the mix
- * runs out of room (a dark text colour close to the backdrop), the remaining series repeat the strongest step.
+ * difference from the `avoid` colors. The first context series takes the strongest step and the last the lightest,
+ * so neighboring context series (stacked segments, slices) are told apart by lightness, as the focused series are by hue. When the mix
+ * runs out of room (a dark text color close to the backdrop), the remaining series repeat the strongest step.
  */
 export function chartContextColors(surface: string, text: string, count: number, options: { labeled?: boolean; avoid?: readonly string[] } = {}): string[] {
   const fill = normalizeHexColor(surface)?.slice(0, 7) ?? '#FFFFFF';
@@ -1228,8 +1228,8 @@ export function chartContextColors(surface: string, text: string, count: number,
   for (let percent = options.labeled ? 1 : Math.round(CHART_HIGHLIGHT_MUTED_MIX * 100); percent <= 100 && steps.length < Math.max(1, count); percent++) {
     const candidate = mixChannels(from, to, percent / 100), l = lightness(candidate);
     if ((colorContrast(candidate, fill) ?? Infinity) < floor) continue;
-    // A gray is told from a coloured focus by its chroma as much as by its lightness: it keeps a colour difference (CIE76) of
-    // CHART_CONTEXT_FOCUS_DIFFERENCE from every focused colour, which near a gray-ish focus means as many L*.
+    // A gray is told from a colored focus by its chroma as much as by its lightness: it keeps a color difference (CIE76) of
+    // CHART_CONTEXT_FOCUS_DIFFERENCE from every focused color, which near a gray-ish focus means as many L*.
     if (avoid.some(other => labDifference(other, labOf(opaqueChannels(candidate)!)) < CHART_CONTEXT_FOCUS_DIFFERENCE)) continue;
     if (steps.length && Math.abs(lightness(steps[steps.length - 1]!) - l) < CHART_SERIES_MIN_LIGHTNESS_STEP) continue;
     steps.push(candidate);
@@ -1301,17 +1301,17 @@ function chartContextFloor(from: readonly number[], to: readonly number[], fill:
 }
 
 /**
- * The two colours of a chart that highlights marks (`chart.highlight`), derived from the theme only: `accent` for the highlighted
+ * The two colors of a chart that highlights marks (`chart.highlight`), derived from the theme only: `accent` for the highlighted
  * marks, `muted` for every other mark.
  *
- * - `accent` is the deck's primary colour, kept at >= 3:1 against the surface by `chartColorForFill` (a primary that already has
+ * - `accent` is the deck's primary color, kept at >= 3:1 against the surface by `chartColorForFill` (a primary that already has
  *   that contrast is returned unchanged).
- * - `muted` is the surface mixed {@link CHART_HIGHLIGHT_MUTED_MIX} of the way towards the text colour: a light grey on a light surface
- *   and a dim grey on a dark one, in the surface's own hue. When that falls below {@link CHART_HIGHLIGHT_MUTED_MIN_CONTRAST} against
- *   the surface (a surface and text that are close together) the mix moves towards the text colour until it holds.
+ * - `muted` is the surface mixed {@link CHART_HIGHLIGHT_MUTED_MIX} of the way towards the text color: a light gray on a light surface
+ *   and a dim gray on a dark one, in the surface's own hue. When that falls below {@link CHART_HIGHLIGHT_MUTED_MIN_CONTRAST} against
+ *   the surface (a surface and text that are close together) the mix moves towards the text color until it holds.
  *
- * Pure arithmetic on opaque colours: the preview and the PPTX export both call it with the chart panel, the primary and the label
- * colour, so they draw and write the same two colours. An unresolved colour is replaced by white (surface), the surface's own
+ * Pure arithmetic on opaque colors: the preview and the PPTX export both call it with the chart panel, the primary and the label
+ * color, so they draw and write the same two colors. An unresolved color is replaced by white (surface), the surface's own
  * best contrast partner (text) or black (primary).
  */
 export function chartHighlightColors(surface: string, primary: string, text: string): { accent: string; muted: string } {
@@ -1327,25 +1327,25 @@ export function chartHighlightColors(surface: string, primary: string, text: str
   return { accent, muted };
 }
 
-/** LH-03: smallest contrast every mark of an emphasised small chart keeps against its backdrop: a bar is a graphical object (WCAG 1.4.11, 3:1). */
+/** LH-03: smallest contrast every mark of an emphasized small chart keeps against its backdrop: a bar is a graphical object (WCAG 1.4.11, 3:1). */
 export const CHART_EMPHASIS_MIN_CONTRAST = 3;
-/** LH-03: smallest CIE L* step between the emphasised mark and the other marks, so the emphasis is visible. */
+/** LH-03: smallest CIE L* step between the emphasized mark and the other marks, so the emphasis is visible. */
 export const CHART_EMPHASIS_MIN_LIGHTNESS_STEP = 15;
 
 /**
- * LH-03, LH-95: the two colours of a small chart's emphasis, in the shape of a highlight: `accent` for the emphasised point, `muted` for
- * every other point. The other points keep the series colour (`color`, already adjusted for the backdrop by `chartPaletteForFill`), and
- * the emphasised point takes a stronger shade of it: the series colour mixed away from the backdrop (towards black on a light backdrop,
+ * LH-03, LH-95: the two colors of a small chart's emphasis, in the shape of a highlight: `accent` for the emphasized point, `muted` for
+ * every other point. The other points keep the series color (`color`, already adjusted for the backdrop by `chartPaletteForFill`), and
+ * the emphasized point takes a stronger shade of it: the series color mixed away from the backdrop (towards black on a light backdrop,
  * towards white on a dark one) just far enough to stand {@link CHART_EMPHASIS_MIN_LIGHTNESS_STEP} L* from it. Moving away from the
- * backdrop only raises the contrast, so the shade keeps the series colour's. A series colour too close to black (or white) for that
+ * backdrop only raises the contrast, so the shade keeps the series color's. A series color too close to black (or white) for that
  * step is shaded the other way instead, while the shade keeps {@link CHART_EMPHASIS_MIN_CONTRAST} against the backdrop.
  *
- * LH-105: `strong` is the series colour at full strength when `color` is its soft form ({@link softenChartPalette}). The emphasised point
- * then takes the full-strength colour itself when that already stands the step from the soft one, and a shade of it otherwise, so the
- * strong colour is kept for the emphasis.
+ * LH-105: `strong` is the series color at full strength when `color` is its soft form ({@link softenChartPalette}). The emphasized point
+ * then takes the full-strength color itself when that already stands the step from the soft one, and a shade of it otherwise, so the
+ * strong color is kept for the emphasis.
  *
- * A faded tint of the other points (LH-03's first rule) needed room between the series colour and the backdrop, and emphasised only 36
- * of the 84 gallery theme x scheme x variant charts; a stronger shade has room in all of them. Undefined only for an unresolved colour or
+ * A faded tint of the other points (LH-03's first rule) needed room between the series color and the backdrop, and emphasized only 36
+ * of the 84 gallery theme x scheme x variant charts; a stronger shade has room in all of them. Undefined only for an unresolved color or
  * when neither direction keeps both floors. The preview and the PPTX export call it with the same pair.
  */
 export function chartEmphasisColors(surface: string, color: string, strong?: string): { accent: string; muted: string } | undefined {
@@ -1369,19 +1369,19 @@ export function chartEmphasisColors(surface: string, color: string, strong?: str
 
 // --------------------------------------------------------------- alternate surface (banded table rows)
 
-/** Share of the text colour mixed into the surface for the `surfaceAlt` role. */
+/** Share of the text color mixed into the surface for the `surfaceAlt` role. */
 export const SURFACE_ALT_MIX = 0.1;
 /** Smallest contrast `surfaceAlt` keeps against `surface`, so a band is visible next to a plain row. */
 export const SURFACE_ALT_MIN_CONTRAST = 1.1;
 
 /**
- * The `surfaceAlt` colour role: the fill of the banded rows of a table whose other body rows take `surface`. It is the surface
- * mixed {@link SURFACE_ALT_MIX} of the way towards the text colour (a slightly darker band on a light table, a slightly lighter one
+ * The `surfaceAlt` color role: the fill of the banded rows of a table whose other body rows take `surface`. It is the surface
+ * mixed {@link SURFACE_ALT_MIX} of the way towards the text color (a slightly darker band on a light table, a slightly lighter one
  * on a dark table), moved further until it differs from the surface by {@link SURFACE_ALT_MIN_CONTRAST}, while the text keeps
  * 4.5:1 on it. When mixing towards the text cannot keep both (a surface and text that are close together), the band moves the
- * other way, away from the text, which only raises the text contrast. Pure arithmetic on opaque colours, so the preview and
+ * other way, away from the text, which only raises the text contrast. Pure arithmetic on opaque colors, so the preview and
  * the PPTX export, which both resolve the `surfaceAlt` ColorRef from their own `surface` and `text` roles, draw and write the
- * same colour. An unresolved surface is white; an unresolved text colour is the surface's best contrast partner.
+ * same color. An unresolved surface is white; an unresolved text color is the surface's best contrast partner.
  */
 export function surfaceAltColor(surface: string, text: string): string {
   const fill = normalizeHexColor(surface) ?? '#FFFFFF';

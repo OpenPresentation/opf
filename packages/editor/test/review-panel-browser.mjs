@@ -155,7 +155,7 @@ try {
   // --- quick fix: the readable text colour ----------------------------------------------------------------
   const before = await doc();
   const readable = contrast.locator('button[data-fix="use-readable-color"]');
-  assert.equal(await readable.textContent(), 'Use the slide text colour');
+  assert.equal(await readable.textContent(), 'Use the slide text color');
   assert.equal(await readable.getAttribute('title'), 'This changes how the slide looks or what it says; it can be undone.', 'a fix that is not safe (a new text colour) carries the warning');
   await readable.click();
   const fixed = await waitDoc(current => current.slides[0].text[0].color === 'text', 'the fix switches the run to the text colour');

@@ -32,7 +32,7 @@ export const TOOLBAR_ITEMS = Object.freeze({
 const REPEATABLE = new Set(["spacer", "|"]);
 const LABELS = Object.freeze({ more: "More", menu: "More actions" });
 // A host's own item: `{ id, priority }` with a name of its own (lowercase letters, digits and dashes). Its slot starts empty; the host fills it and
-// registers what it offers in ⋯ with `mount(id, part)`, like any item. A bare unknown name still throws, so a misspelt item is caught.
+// registers what it offers in ⋯ with `mount(id, part)`, like any item. A bare unknown name still throws, so a misspelled item is caught.
 const HOST_ITEM = /^[a-z][a-z0-9-]*$/;
 
 const isHostItem = (id) => typeof id === "string" && !Object.hasOwn(TOOLBAR_ITEMS, id) && HOST_ITEM.test(id);

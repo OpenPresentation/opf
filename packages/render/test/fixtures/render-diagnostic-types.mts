@@ -5,7 +5,7 @@ const outline: RenderDiagnostic = {code:'text-as-paths-fallback',reason:'restric
 const restricted: SvgDiagnostic = {code:'font-embedding-restricted',faces:[{fontFamily:'Host',weight:400,italic:false,fsType:2}],message:'Not embedded'};
 function consume(d: RenderDiagnostic) {
   if (d.code === 'text-as-paths-fallback') {
-    const reason: 'colour-font'|'restricted' = d.reason;
+    const reason: 'color-font'|'restricted' = d.reason;
     const family: string = d.fontFamily;
     return reason + family;
   }

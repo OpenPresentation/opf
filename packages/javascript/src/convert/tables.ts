@@ -125,7 +125,7 @@ function rolesFrom(columns: Json[] | undefined, names: Record<string, readonly s
   return roles;
 }
 
-/** A heading the converter does not recognise carries its own words; assigning its column a role drops them. */
+/** A heading the converter does not recognize carries its own words; assigning its column a role drops them. */
 function noteRenamedHeadings(columns: Json[] | undefined, roles: Record<string, number>, names: Record<string, readonly string[]>, loss: Loss): void {
   if (!columns) return;
   for (const [role, index] of Object.entries(roles)) {

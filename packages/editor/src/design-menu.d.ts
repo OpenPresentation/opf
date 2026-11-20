@@ -69,7 +69,7 @@ export interface DesignMenu {
   /** The toolbar button. */
   readonly trigger: HTMLButtonElement;
   setDensity(density: "comfortable" | "touch"): void;
-  /** Greys the button (and closes the menu). The editor does this while the source is invalid. */
+  /** Grays the button (and closes the menu). The editor does this while the source is invalid. */
   setDisabled(disabled: boolean): void;
   setReadOnly(readOnly: boolean): void;
   /** Read the document and catalogs again. The open menu also follows the editor session on its own. */

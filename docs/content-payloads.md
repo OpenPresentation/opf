@@ -191,7 +191,7 @@ A column is a string or a `DataColumn` with a number format, which the data labe
 }
 ```
 
-Formats use the `NumberVariable.format` syntax (`#,##0`, `0.0%`, `$#,##0.00`, `#,##0 units`; a `%` multiplies by 100). `source` records provenance only; engines never read or refresh it. `mapping` picks the category, the X column of a scatter chart and the plotted series by column name; without it the first column is the category and every other column a series. Shared data lives in the top-level `datasets` map and a chart plots it with `"data": { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }`. The full contract, with validation codes and the engine behaviour, is [Chart and table data](chart-table-data.md).
+Formats use the `NumberVariable.format` syntax (`#,##0`, `0.0%`, `$#,##0.00`, `#,##0 units`; a `%` multiplies by 100). `source` records provenance only; engines never read or refresh it. `mapping` picks the category, the X column of a scatter chart and the plotted series by column name; without it the first column is the category and every other column a series. Shared data lives in the top-level `datasets` map and a chart plots it with `"data": { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }`. The full contract, with validation codes and the engine behavior, is [Chart and table data](chart-table-data.md).
 
 Chart data is inline columns and rows or a dataset. A data source by file or asset (`"data": { "src": "asset:revenue-csv", "columns": [...] }`) is not part of the format: no engine loaded it, and the validator rejects it. Import the data inline (with a `source`) or into a dataset instead.
 
@@ -257,13 +257,13 @@ An `image`, `chart`, `table`, `video` or `diagram` payload takes a `caption`: a 
 }
 ```
 
-Core composition reserves the caption band inside the block's region and shrinks the media by its height (`item.caption` carries the band, `item.box` is the media box); the preview and the PPTX export draw that band in the muted text colour at the caption size (0.6 of the body size, never under the readable floor). Captioned blocks are the only ones whose geometry changes. See [footnotes, citations and captions](footnotes-citations-captions.md).
+Core composition reserves the caption band inside the block's region and shrinks the media by its height (`item.caption` carries the band, `item.box` is the media box); the preview and the PPTX export draw that band in the muted text color at the caption size (0.6 of the body size, never under the readable floor). Captioned blocks are the only ones whose geometry changes. See [footnotes, citations and captions](footnotes-citations-captions.md).
 
 **Name and detail (LH-138).** A picture's caption that is one plain string with a colon and a space after one to six words and a detail after it ("Before: loose boxes, tape and paper") draws the words up to the first colon in bold and the detail in the regular weight, as Claude Design draws a pair of before and after pictures or a gallery of sites. A colon inside a word ("10:30", "https://") never splits, a caption written as `TextRun[]` stays as the author formatted it, and a chart, table, video or diagram caption is not split. The document is unchanged: core composes the caption as runs (`item.caption.text`), and the preview and the PowerPoint export draw them.
 
 ## Code
 
-Code-specific fields are grouped under `code`. A string value is shorthand for `code.source`; use object form when syntax highlighting or a file label matters. In object form, `source` is required. `language` colours the code in the preview and the PowerPoint export (comments, strings, numbers, keywords, names and types, in colours from the deck theme); an unknown language stays plain and the text is never changed. See [dynamic composition](dynamic-composition.md#preview-polish-shared-by-preview-and-export-rr-07) for the supported languages.
+Code-specific fields are grouped under `code`. A string value is shorthand for `code.source`; use object form when syntax highlighting or a file label matters. In object form, `source` is required. `language` colors the code in the preview and the PowerPoint export (comments, strings, numbers, keywords, names and types, in colors from the deck theme); an unknown language stays plain and the text is never changed. See [dynamic composition](dynamic-composition.md#preview-polish-shared-by-preview-and-export-rr-07) for the supported languages.
 
 ```json
 {
@@ -493,7 +493,7 @@ Any block takes a cell, a group too (its own `blocks` and `composition` arrange 
 
 ## Accessibility of the preview
 
-The SVG preview and the PowerPoint export agree on what a reader can reach. The slide root is a labelled container (`role="group"`, `aria-roledescription="slide"`, `aria-label` set to the slide title), never an image: an image makes everything inside it presentational, so a screen reader would hear only the title. Text stays reachable, in the order it is drawn: tag, title and subtitle, the content in layout order, footnotes, then header and footer. That covers body text, list entries, quotes, metric values and labels, table cells, timeline entries, captions and furniture text.
+The SVG preview and the PowerPoint export agree on what a reader can reach. The slide root is a labeled container (`role="group"`, `aria-roledescription="slide"`, `aria-label` set to the slide title), never an image: an image makes everything inside it presentational, so a screen reader would hear only the title. Text stays reachable, in the order it is drawn: tag, title and subtitle, the content in layout order, footnotes, then header and footer. That covers body text, list entries, quotes, metric values and labels, table cells, timeline entries, captions and furniture text.
 
 A picture with `alt` is an image with that name. Purely decorative drawing is hidden (`aria-hidden`): the background and its overlay, card frames, table cell fills and borders, dividers, timeline markers, watermarks, list bullets, a picture or chart whose `alt` is `""`, and a header or footer picture without `alt` (a logo repeated on every slide). A chart with `alt` is an image with that name, and its drawn marks are not announced separately. The deck element, the player and `renderDeckHtml` in `@openpresentation/opf-render` put the one slide container (region or figure) around the drawing, so a slide is announced once.
 

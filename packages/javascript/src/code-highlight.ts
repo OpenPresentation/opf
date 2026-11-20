@@ -6,7 +6,7 @@
  * Lines are counted by line break in `code.source`, so a soft-wrapped line is still one line and every
  * displayed line of it takes the same number (`codeLineNumbers`). Engines draw one band behind each
  * run of marked displayed lines (`codeHighlightBands`) and set the unmarked lines in a slightly dimmed
- * colour (`codeHighlightColors`); both colour sets keep WCAG contrast >= 4.5:1 against what they sit on.
+ * color (`codeHighlightColors`); both color sets keep WCAG contrast >= 4.5:1 against what they sit on.
  * Everything here is deterministic: no clock, locale or network.
  */
 
@@ -114,14 +114,14 @@ export function codeHighlightSlice(highlight: unknown, source: string, start: nu
   return kept.length ? codeHighlightList(kept) : undefined;
 }
 
-/** How far unmarked lines move toward the panel colour, and how much of the theme colour tints the band. */
+/** How far unmarked lines move toward the panel color, and how much of the theme color tints the band. */
 export const CODE_HIGHLIGHT_DIM = 0.35;
 export const CODE_HIGHLIGHT_BAND_TINT = 0.3;
 
 export interface CodeHighlightColors {
-  /** The band behind marked lines: the panel colour tinted with the theme's primary colour. */
+  /** The band behind marked lines: the panel color tinted with the theme's primary color. */
   band: string;
-  /** Marked lines: the syntax palette, each colour at least 4.5:1 on `band`. */
+  /** Marked lines: the syntax palette, each color at least 4.5:1 on `band`. */
   lit: CodeSyntaxPalette;
   /** Unmarked lines: the syntax palette moved toward the panel, never below 4.5:1 on it. */
   dim: CodeSyntaxPalette;
@@ -133,15 +133,15 @@ const blend = (from: string, to: string, amount: number): string => {
 };
 
 /**
- * The highlight colours for a resolved colour scheme record. The band takes the scheme's `primary`
+ * The highlight colors for a resolved color scheme record. The band takes the scheme's `primary`
  * (or `accent1`); the palette is `codeSyntaxPaletteForScheme(scheme)` so highlighted lines keep their syntax
- * colours. Preview and export call this with the scheme they resolved. `panel` is the code panel colour the band and the dimmed
+ * colors. Preview and export call this with the scheme they resolved. `panel` is the code panel color the band and the dimmed
  * lines sit on (RR-96: `roles.neutrals.codePanel.hex`, derived from the scheme); the default is the fixed {@link CODE_PANEL_BACKGROUND}.
  */
 export function codeHighlightColors(scheme: unknown, palette: CodeSyntaxPalette = codeSyntaxPaletteForScheme(scheme), panel: string = CODE_PANEL_BACKGROUND): CodeHighlightColors {
   const record = (scheme && typeof scheme === 'object' ? scheme : {}) as Record<string, unknown>;
   const primary = normalize(record.primary) ?? normalize(record.accent1) ?? '#2563EB';
-  // Tint with the theme colour's hue at a bounded lightness so the band stays a dark surface.
+  // Tint with the theme color's hue at a bounded lightness so the band stays a dark surface.
   const [hue, saturation] = toHsl(primary);
   const tint = fromHsl(hue, Math.min(saturation, 0.7), 0.45);
   const band = blend(panel, tint, CODE_HIGHLIGHT_BAND_TINT);
@@ -153,5 +153,5 @@ export function codeHighlightColors(scheme: unknown, palette: CodeSyntaxPalette 
   return { band, lit, dim };
 }
 
-/** Lowest contrast of the colours against a background; used by tests and audits. */
+/** Lowest contrast of the colors against a background; used by tests and audits. */
 export const codeHighlightContrast = (colors: CodeSyntaxPalette, background: string): number => Math.min(...Object.values(colors).map(color => contrast(color, background)));

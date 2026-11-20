@@ -515,10 +515,12 @@ describe("the bundled sources", () => {
 		// Reviewed for the example decks' pictures in the viewer on 2026-11-20: 1,399,982 exact bytes (after the chartPrimary replacement:
 		// 1,397,930). It adds 2,052 in mcp.md: the app-only read_example_files (its table row, the viewer's images paragraph, the server
 		// tools row and the examples' files in the sources), and how a hosted viewer gets the pictures. The limit is unchanged.
-		// Reviewed for the 0.35 examples on 2026-11-20: 1,400,113 exact bytes (after the example pictures: 1,399,982). It adds 131 in
+		// Reviewed for the 0.35 examples on 2026-11-20, measured before the spelling change below (1,400,113 against 1,399,982). It adds 131 in
 		// examples.md: the international gallery decks are English tagged with their region's English (they named ja, pt, de and a
 		// right-to-left ar), and the arrangement layouts are the 0.35 ones (process, vertical-process, inverted-pyramid for flow).
 		// The limit is unchanged.
+		// Reviewed for American spelling on 2026-11-20: 1,399,865 exact bytes (main at ddf6580e0: 1,399,982). Spelling only: "colour" to
+		// "color", "centre" to "center", "behaviour" to "behavior" and the like remove 117 bytes over 18 pages (validate.md -66). The limit is unchanged.
 		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
 	});
 });

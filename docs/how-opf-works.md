@@ -196,7 +196,7 @@ The plan is also a skeleton deck: a planner emits slides that carry `beat`, `typ
 
 ## Catalog references and how they resolve
 
-Reusable design and intent records live in **catalogs**: a layout, a theme, a colour scheme, a font scheme, a narrative, an audience, a purpose or a tone. The referencing fields are `Slide.layout`, `design.theme`, `design.colorScheme`, `design.fontScheme` (and the same three on `Slide.design`), `narrative`, `audience`, `purpose` and `tone`, plus the `colorScheme` and `fontScheme` a theme record names and the font schemes of a `language` object.
+Reusable design and intent records live in **catalogs**: a layout, a theme, a color scheme, a font scheme, a narrative, an audience, a purpose or a tone. The referencing fields are `Slide.layout`, `design.theme`, `design.colorScheme`, `design.fontScheme` (and the same three on `Slide.design`), `narrative`, `audience`, `purpose` and `tone`, plus the `colorScheme` and `fontScheme` a theme record names and the font schemes of a `language` object.
 
 A reference is a bare id (`"two-column"`) or `name:id` (`"acme:hero"`), where the prefix names a group of the document's `catalogs`. URLs and `pkg:` strings are not references. A document's `catalogs` groups the records it embeds by the catalog they came from:
 
@@ -234,14 +234,14 @@ Every reference resolves the same way, first match wins:
    opf/unresolved-reference
 ```
 
-A reference written inside an embedded record resolves in that record's own group first: acme's `brand` theme finds acme's `ocean` colour scheme before the default catalog's. A reference that resolves nowhere is the warning `opf/unresolved-reference`, which names the reference and the catalog's source; the slide composes automatically and the design uses the [engine defaults](../spec/reference/engine-defaults.json). A strict export fails instead. A prefix that names no group is a validation error.
+A reference written inside an embedded record resolves in that record's own group first: acme's `brand` theme finds acme's `ocean` color scheme before the default catalog's. A reference that resolves nowhere is the warning `opf/unresolved-reference`, which names the reference and the catalog's source; the slide composes automatically and the design uses the [engine defaults](../spec/reference/engine-defaults.json). A strict export fails instead. A prefix that names no group is a validation error.
 
 Engines never fetch a catalog. Core ships no records in its main entry: a host registers the catalogs it trusts (`{ catalogs: [gallery, acmeCatalog] }`, where `gallery` comes from `@openpresentation/gallery`, the pptx.gallery catalog; in Node, core registers it when a call names none), and authoring tools embed every record a document uses when they save it (`embed`), so a saved document renders the same anywhere, offline. See [the default catalog](default-catalog.md).
 
 Two reference forms are accepted:
 
 - **A reference string** for the common case: `"narrative": "classic-story"`, `"theme": "acme:brand"`.
-- **Object form** for overrides on a referenced record (colour schemes, font schemes, audiences, purposes and tones): `{ "id": "cool-horizon", "accent1": "#0F4C81" }` resolves the record as a base, then inline fields win per key.
+- **Object form** for overrides on a referenced record (color schemes, font schemes, audiences, purposes and tones): `{ "id": "cool-horizon", "accent1": "#0F4C81" }` resolves the record as a base, then inline fields win per key.
 
 `chart.type`, the `language` tag and the platform keys of `socials` are **engine vocabularies**, not catalog references: the schema validates them directly, and their labels and descriptions are catalog display metadata.
 

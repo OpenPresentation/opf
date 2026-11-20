@@ -157,7 +157,7 @@ export function createOverlayTools(root, options) {
     if (!drag) return false;
     if (signature(drag.path) !== drag.base) {
       cancel(false);
-      options.onError?.(new Error("The shape changed elsewhere. The move was cancelled."));
+      options.onError?.(new Error("The shape changed elsewhere. The move was canceled."));
       return false;
     }
     if (!drag.moved || !drag.valid || !drag.change) {
@@ -303,7 +303,7 @@ export function createOverlayTools(root, options) {
 
   // --- moving by the shape's outline ---------------------------------------------------------------------------------------------------
   // A press on the selected (or any) overlay shape's own outline, not on its text, starts a move once the pointer travels a few pixels; a press that does not travel is
-  // a click, which selects as before. The press is not cancelled, so the canvas still selects on it.
+  // a click, which selects as before. The press is not canceled, so the canvas still selects on it.
   const onPress = (event) => {
     suppressClick = false;
     if (event.button !== 0 || connecting || destroyed || options.isTextEditing?.()) return;
@@ -362,7 +362,7 @@ export function createOverlayTools(root, options) {
     if (committing || !active) return;
     if (signature(active.path) !== active.base) {
       cancel(false);
-      options.onError?.(new Error("The shape changed elsewhere. The move was cancelled."));
+      options.onError?.(new Error("The shape changed elsewhere. The move was canceled."));
     }
   });
 
@@ -465,7 +465,7 @@ export function createOverlayTools(root, options) {
     cover.addEventListener("pointerdown", onPick);
     connecting = {
       cancel() {
-        say("Connector cancelled.");
+        say("Connector canceled.");
         finish(null);
       },
     };

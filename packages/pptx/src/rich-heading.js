@@ -1,7 +1,7 @@
 // Rich headline text on import (FA-10): the title, subtitle, tag and quote body as `string | TextRun[]`.
 //
 // A heading or quote body is read from its current native runs, the way body text is (src/body-text-import.js): formatting that
-// is only the heading's own look (the size, family, weight and colour every run of it shares) is not authored run style, so a
+// is only the heading's own look (the size, family, weight and color every run of it shares) is not authored run style, so a
 // uniform heading is a plain string and a heading with a differently formatted word is TextRun[] that carries only what
 // differs. Links are content, never defaults. Tagged line shapes (the export writes one native text box per laid-out line)
 // are joined with the boundaries their tags record; soft wraps insert nothing and hard boundaries keep their separator.

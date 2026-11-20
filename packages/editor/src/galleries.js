@@ -158,7 +158,7 @@ function embeddedRecord(source) {
   );
 }
 /**
- * A gallery item that describes one catalog record (a layout, theme, colour or font scheme) is embedded in the
+ * A gallery item that describes one catalog record (a layout, theme, color or font scheme) is embedded in the
  * document it previews: under `default` with the gallery's origin as its `source` when the document has no default
  * group (or its default is that gallery), else under `custom` (an item with no gallery URL, or another default
  * catalog). Records the document already embeds are kept.

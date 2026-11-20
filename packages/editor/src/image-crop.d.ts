@@ -15,9 +15,9 @@ export declare function clampRect(rect: Rect, bounds: Size, min?: number): Rect;
 export declare function moveRect(rect: Rect, dx: number, dy: number, bounds: Size): Rect;
 /** Drag a handle (`n`, `ne`, `e`, `se`, `s`, `sw`, `w`, `nw`) to a source-pixel point; `aspect` (width / height) keeps the ratio. */
 export declare function resizeRect(start: Rect, handle: string, point: { x: number; y: number }, bounds: Size, options?: { aspect?: number; min?: number }): Rect;
-/** The largest rectangle with `aspect` inside `rect`, centred on it. */
+/** The largest rectangle with `aspect` inside `rect`, centered on it. */
 export declare function fitAspect(rect: Rect, aspect: number | undefined): Rect;
-/** The window a focal point asks for: the largest `aspect` window divided by `zoom`, centred on `focal` (fractions) and inside the image. */
+/** The window a focal point asks for: the largest `aspect` window divided by `zoom`, centered on `focal` (fractions) and inside the image. */
 export declare function focalWindow(bounds: Size, aspect: number, focal: { x: number; y: number }, zoom?: number): Rect;
 export declare function focalPointOf(rect: Rect, bounds: Size): { x: number; y: number };
 export declare function roundRect(rect: Rect, bounds: Size): Rect;

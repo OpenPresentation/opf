@@ -1,6 +1,6 @@
 // RR-35: chart options (axis titles, legend position, data labels) in the PPTX export and import.
 //
-// Core owns the normalisation and the per-type support table (`resolveChartOptions`, `chartOptionSupport`); the preview
+// Core owns the normalization and the per-type support table (`resolveChartOptions`, `chartOptionSupport`); the preview
 // (opf-render) reads the same resolved options. This module writes them natively and reads them back:
 //
 //   classic charts   c:catAx/c:title and c:valAx/c:title (through PptxGenJS options), c:legend/c:legendPos (through PptxGenJS
@@ -74,18 +74,18 @@ const dLbl = (index, color, labels, {size, font}) =>
  *
  *   - the General number format (the preview prints values the same way) and an explicit separator;
  *   - c:dLblPos only where the chart type has a position choice (core's support table; area, doughnut and radar have none);
- *   - the label text colour: the chart text colour outside a mark, the contrasting colour (core's `textColorForFill`, as the
+ *   - the label text color: the chart text color outside a mark, the contrasting color (core's `textColorForFill`, as the
  *     preview) inside one, per series, and per point on pie and doughnut charts.
  *
- * FA-14: with a chart highlight (`info.highlight`, src/chart-highlight.js) `palette` holds the highlight-aware series colours, and a
- * label inside a mark whose colour differs per point (pie and doughnut slices, columns and bars with a category highlight) is written
- * per point with the colour that contrasts with that point's fill.
+ * FA-14: with a chart highlight (`info.highlight`, src/chart-highlight.js) `palette` holds the highlight-aware series colors, and a
+ * label inside a mark whose color differs per point (pie and doughnut slices, columns and bars with a category highlight) is written
+ * per point with the color that contrasts with that point's fill.
  *
- * `info`: {resolved, kind, palette (series colours, hex without #), labelColor, font, textSize, pointCount, highlight?}.
+ * `info`: {resolved, kind, palette (series colors, hex without #), labelColor, font, textSize, pointCount, highlight?}.
  */
 export function applyDataLabels(xml, info) {
   // FA-15: a combo chart labels its column group like clustered columns and its line groups like line points (core's
-  // `linePosition`); the series colours run on across the groups.
+  // `linePosition`); the series colors run on across the groups.
   if (info.kind === 'combo') {
     let offset = 0;
     return xml.replace(/<c:(barChart|lineChart)>[\s\S]*?<\/c:\1>/g, (group, element) => {
@@ -99,7 +99,7 @@ export function applyDataLabels(xml, info) {
   const {resolved, kind, palette, labelColor, font, textSize, pointCount, highlight} = info;
   const labels = resolved.dataLabels;
   // Where the label sits on its mark: a bar or pie label placed inside the mark, and the labels of an area or a doughnut ring,
-  // take the colour that contrasts with the mark; every other label keeps the chart text colour (as the preview does).
+  // take the color that contrasts with the mark; every other label keeps the chart text color (as the preview does).
   const inside = kind === 'area' || kind === 'doughnut' || (['bar', 'pie', 'histogram', 'pareto', 'waterfall'].includes(kind) && INSIDE.has(labels.position));
   const contrast = fill => String(textColorForFill(`#${fill}`, `#${labelColor}`)).replace(/^#/, '').toUpperCase();
   const block = (color, {points = 0, leaderLines = false, fills} = {}) =>
@@ -107,7 +107,7 @@ export function applyDataLabels(xml, info) {
     `<c:numFmt formatCode="General" sourceLinked="0"/><c:spPr><a:noFill/><a:ln><a:noFill/></a:ln></c:spPr>${labelText(color, textSize, font)}${labelFlags(labels, {leaderLines})}</c:dLbls>`;
   const circular = kind === 'pie' || kind === 'doughnut';
   const replaceBlocks = (text, make) => text.replace(/<c:dLbls>[\s\S]*?<\/c:dLbls>/g, existing => make(existing));
-  // Series-level blocks first (the colour follows the series), then the group-level block each chart group carries.
+  // Series-level blocks first (the color follows the series), then the group-level block each chart group carries.
   let seriesIndex = 0;
   const withSeries = xml.replace(/<c:ser>[\s\S]*?<\/c:ser>/g, ser => {
     const index = seriesIndex++;

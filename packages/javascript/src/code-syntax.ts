@@ -1,13 +1,13 @@
 /**
  * Deterministic syntax highlighting shared by the SVG preview and the PPTX export (RR-07).
  *
- * `tokenizeCode(source, language)` returns coloured token ranges over the exact source
- * string; everything between tokens is plain. `codeSyntaxPalette` derives one colour per
+ * `tokenizeCode(source, language)` returns colored token ranges over the exact source
+ * string; everything between tokens is plain. `codeSyntaxPalette` derives one color per
  * token kind from the deck theme and keeps each at WCAG contrast >= 4.5:1 against the code
  * panel. The scanner is a small hand-written one (no dependency, no network, no locale or
- * clock input): it recognises comments, strings, numbers, keywords, definition names, calls,
- * capitalised types and the structure of JSON, YAML, TOML, HTML/XML and CSS. It never edits
- * the text: callers colour ranges of `code.source` and the concatenated runs equal the source.
+ * clock input): it recognizes comments, strings, numbers, keywords, definition names, calls,
+ * capitalized types and the structure of JSON, YAML, TOML, HTML/XML and CSS. It never edits
+ * the text: callers color ranges of `code.source` and the concatenated runs equal the source.
  * An unknown or missing language yields no tokens (plain text).
  */
 
@@ -23,7 +23,7 @@ export type CodeSyntaxPalette = Record<CodeTokenKind | 'plain', string>;
 export const CODE_HIGHLIGHT_MAX_LENGTH = 200_000;
 /** Contrast the palette keeps against the code panel. */
 export const CODE_SYNTAX_MIN_CONTRAST = 4.5;
-/** The code panel colour the preview and the PPTX export both draw. */
+/** The code panel color the preview and the PPTX export both draw. */
 export const CODE_PANEL_BACKGROUND = '#111827';
 export const CODE_PANEL_FOREGROUND = '#E5E7EB';
 
@@ -221,7 +221,7 @@ function scanGeneric(source: string, def: Language): CodeToken[] {
       const found = NUMBER.exec(source);
       if (found) { pushToken(tokens, index, index + found[0].length, 'number'); index += found[0].length; pendingDef = undefined; continue; }
     }
-    // String prefixes (f"", r"", b'', u""): the prefix colours with its string.
+    // String prefixes (f"", r"", b'', u""): the prefix colors with its string.
     if (def === LANGUAGES.python && /[rRbBfFuU]/.test(character) && /^[rRbBfFuU]{1,2}['"]/.test(source.slice(index, index + 3)) && !isIdentChar(source[index - 1])) {
       const prefix = /^[rRbBfFuU]{1,2}/.exec(source.slice(index, index + 3))![0].length;
       const quote = source[index + prefix]!;
@@ -478,10 +478,10 @@ export function tokenizeCode(source: string, language?: unknown): CodeToken[] {
 
 /**
  * The runs of one source line `[start, end)`: consecutive slices that cover the line exactly.
- * A token that crosses the line boundary is clipped, so each native text line can be coloured
+ * A token that crosses the line boundary is clipped, so each native text line can be colored
  * on its own while concatenating the runs returns the line text unchanged. With `source`, a tab
  * character is always its own plain run, as in the preview where a tab is a measured segment: a
- * token (a multi-line string, say) never colours a tab stop.
+ * token (a multi-line string, say) never colors a tab stop.
  */
 export function codeLineRuns(tokens: readonly CodeToken[], start: number, end: number, source?: string): CodeRun[] {
   const runs: CodeRun[] = [];
@@ -521,11 +521,11 @@ export interface CodeSyntaxPaletteTheme { primary?: string; secondary?: string; 
 const FALLBACK: Record<CodeTokenKind, string> = { keyword: '#C4B5FD', string: '#86EFAC', number: '#FCD34D', function: '#93C5FD', type: '#67E8F9', property: '#F9A8D4', comment: '#94A3B8' };
 
 /**
- * One colour per token kind from the deck theme: keyword = primary, string = accent,
+ * One color per token kind from the deck theme: keyword = primary, string = accent,
  * number = secondary, comment = a fixed slate; function, type and property take fixed hues
- * (blue, cyan, pink) rotated away from any theme colour they would collide with. Every
- * colour is lightened until it keeps `minimumContrast` (4.5:1) against the code panel, so a
- * dark theme colour is raised rather than dropped. Deterministic for a given theme.
+ * (blue, cyan, pink) rotated away from any theme color they would collide with. Every
+ * color is lightened until it keeps `minimumContrast` (4.5:1) against the code panel, so a
+ * dark theme color is raised rather than dropped. Deterministic for a given theme.
  */
 export function codeSyntaxPalette(theme: CodeSyntaxPaletteTheme = {}, options: CodeSyntaxPaletteOptions = {}): CodeSyntaxPalette {
   const background = normalize(options.background) ?? CODE_PANEL_BACKGROUND, plain = normalize(options.foreground) ?? CODE_PANEL_FOREGROUND;
@@ -534,8 +534,8 @@ export function codeSyntaxPalette(theme: CodeSyntaxPaletteTheme = {}, options: C
   const taken = [palette.plain];
   const slots: [Exclude<CodeTokenKind, never>, unknown][] = [['keyword', theme.primary], ['string', theme.accent], ['number', theme.secondary], ['comment', theme.mutedText], ['function', undefined], ['type', undefined], ['property', undefined]];
   for (const [kind, themed] of slots) {
-    // The theme colour first, then the fixed hue, then that hue rotated until it is far enough
-    // from every colour already chosen: token kinds must stay distinguishable.
+    // The theme color first, then the fixed hue, then that hue rotated until it is far enough
+    // from every color already chosen: token kinds must stay distinguishable.
     const candidates = [normalize(themed), FALLBACK[kind]].filter((value): value is string => value !== undefined).map(value => legible(value, background, minimum));
     let [h, s, l] = toHsl(FALLBACK[kind]);
     let pick = candidates.find(candidate => taken.every(other => distance(candidate, other) >= 48));
@@ -551,7 +551,7 @@ export function codeSyntaxPalette(theme: CodeSyntaxPaletteTheme = {}, options: C
 }
 
 /**
- * The palette for a resolved colour scheme record (`primary`, `secondary`, `accent`, or the
+ * The palette for a resolved color scheme record (`primary`, `secondary`, `accent`, or the
  * `accent1` to `accent3` slots they default to). The preview and the PPTX export both call this
  * with the scheme they resolved, so they cannot disagree on the inputs.
  */
@@ -562,7 +562,7 @@ export function codeSyntaxPaletteForScheme(scheme: unknown, options: CodeSyntaxP
 }
 
 /**
- * RR-96: the palette for a slide's resolved roles. The code panel, the plain text and the comment colour come from the scheme through the
+ * RR-96: the palette for a slide's resolved roles. The code panel, the plain text and the comment color come from the scheme through the
  * variant's map (`roles.neutrals.codePanel`, `codeText`, `codeComment`), and keyword, string and number take the first three accents of the
  * variant, so a dark variant or a re-ordered accent list restyles the code block with the rest of the slide. Preview and export call this with
  * the roles they resolved; `scheme` supplies `primary`, `secondary` and `accent` overrides the same way {@link codeSyntaxPaletteForScheme} does.

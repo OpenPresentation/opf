@@ -81,9 +81,9 @@ Copy (`Ctrl+C`, **Copy as TSV**) writes the selection as TSV with the raw values
 
 Rows are addressed from 0 in the body; the header row is `{ section: "header", column }`. `at` is the position the first new row or column takes.
 
-| Function | Behaviour |
+| Function | Behavior |
 | --- | --- |
-| `insertTableRows(editor, path, at, count = 1)` | New cells are empty (`""`) and take the style of the neighbouring row. A merged cell that spans the position **grows**; its new cells are covered (`null`). |
+| `insertTableRows(editor, path, at, count = 1)` | New cells are empty (`""`) and take the style of the neighboring row. A merged cell that spans the position **grows**; its new cells are covered (`null`). |
 | `deleteTableRows(editor, path, indices)` | A merged cell that spans a deleted row **shrinks** and keeps its text; if the merged cell's own first row is deleted, the text moves to the next row. The last row cannot be deleted. |
 | `moveTableRows(editor, path, from, to, count = 1)` | Moves a block so its first row ends at `to`. A move that would split a merged cell is refused: "Moving rows would break a merged cell ... Split the merged cells first." Rows that hold a whole merge together can move. |
 | `insertTableColumns`, `deleteTableColumns`, `moveTableColumns` | The same rules across columns (header cells included). |
@@ -91,7 +91,7 @@ Rows are addressed from 0 in the body; the header row is `{ section: "header", c
 | `setTableHeader(editor, path, enabled, { use })` | On uses the first row as the header (`use: "first-row"`, the default with two or more rows; numbers and yes/no values in it become text, as header labels must be text) or adds an empty one (`use: "new"`). Refused when the first row has a merged cell that spans rows ("a header cannot span into the body"). Off makes the header the first body row; a `DataColumn` header (`{ name, format }`) becomes its name, and the column formats it held have nowhere to go, so they are dropped (the result's `droppedFormats` counts them; Undo restores them). |
 | `setTableCells(editor, path, edits)`, `pasteTableText` | `edits` are `{ section, row, column, text }` (or a typed `value`). Rich cells keep their runs' formatting (`updateRichTextInput`); styled cells keep their `style`, `colSpan` and `rowSpan`; a covered cell cannot be edited. |
 
-After every structural change a table style this package wrote (`banded`, `grid`, `minimal`, `open`, `theme`) is reapplied, so banding and header fill stay correct; a custom style is kept by copying the neighbour's cell style to new cells. Ragged rows (shorter than the table is wide) are padded with empty cells when a structural change touches them.
+After every structural change a table style this package wrote (`banded`, `grid`, `minimal`, `open`, `theme`) is reapplied, so banding and header fill stay correct; a custom style is kept by copying the neighbor's cell style to new cells. Ragged rows (shorter than the table is wide) are padded with empty cells when a structural change touches them.
 
 **Merged cells** are checked after every structural change: spans that would leave the table, cross, or cover non-`null` cells are refused with the reason. Nothing is ever hidden: a merge never covers text, and a paste or an edit cannot land on a covered position.
 
@@ -109,7 +109,7 @@ After every structural change a table style this package wrote (`banded`, `grid`
 
 ## Chart operations
 
-`transposeChart` swaps categories and series: the first column's values become the series names and each series becomes a row. Gaps stay gaps. A numeric category becomes text (the change reports `relabelled`) and a blank category becomes an unnamed series; transposing twice restores text categories exactly. `renameChartSeries(editor, path, column, name)` and `renameChartCategory(editor, path, row, name)` rename; inserting a series adds an unnamed column (a name is never invented) and the grid opens its name cell. A chart keeps at least one row and one column.
+`transposeChart` swaps categories and series: the first column's values become the series names and each series becomes a row. Gaps stay gaps. A numeric category becomes text (the change reports `relabeled`) and a blank category becomes an unnamed series; transposing twice restores text categories exactly. `renameChartSeries(editor, path, column, name)` and `renameChartCategory(editor, path, row, name)` rename; inserting a series adds an unnamed column (a name is never invented) and the grid opens its name cell. A chart keeps at least one row and one column.
 
 ## Column names, number formats and datasets (RR-54)
 
@@ -151,14 +151,14 @@ The toolbar (`role="toolbar"`, one tab stop, arrow keys, `Home`, `End`) has row 
 
 ## Accessibility
 
-`role="grid"` with `aria-rowcount`/`aria-colcount`, `aria-rowindex`/`aria-colindex`, `aria-multiselectable`, `aria-selected` on selected cells, `aria-colspan`/`aria-rowspan` on merged cells (covered positions are not drawn), column headers (`A`, `B`, ... with the chart role) and row headers (`Header`, `1`, `2`, ...), one cell in the tab order, `aria-invalid` on cells that failed, a polite `role="status"` region for what happened and an assertive `role="alert"` region for refusals, an `aria-describedby` help line, a labelled editor (`Edit Row 2, column B`), a visible focus outline that holds in forced-colors mode, and a scrolling area that reflows at phone widths. A gap is announced as "Empty, a gap in the chart". The playground test (`npm run test:data-grid-browser`) checks the roles, names, tab stops, contrast (4.5:1 for cell, header, ruler and button text), forced colors and a 360 px reflow.
+`role="grid"` with `aria-rowcount`/`aria-colcount`, `aria-rowindex`/`aria-colindex`, `aria-multiselectable`, `aria-selected` on selected cells, `aria-colspan`/`aria-rowspan` on merged cells (covered positions are not drawn), column headers (`A`, `B`, ... with the chart role) and row headers (`Header`, `1`, `2`, ...), one cell in the tab order, `aria-invalid` on cells that failed, a polite `role="status"` region for what happened and an assertive `role="alert"` region for refusals, an `aria-describedby` help line, a labeled editor (`Edit Row 2, column B`), a visible focus outline that holds in forced-colors mode, and a scrolling area that reflows at phone widths. A gap is announced as "Empty, a gap in the chart". The playground test (`npm run test:data-grid-browser`) checks the roles, names, tab stops, contrast (4.5:1 for cell, header, ruler and button text), forced colors and a 360 px reflow.
 
 ## Decisions (open to veto)
 
 1. **Helpers stay in the editor.** The pure helpers (`grid-text`, the table and chart operations) are in opf-editor rather than core's `@openpresentation/opf/convert`: that module is content conversion (list to table, split and merge slides), not data editing, and core's `parseTabularData` is a strict importer (header row required, rectangular rows, no locale), which is the wrong contract for pasted cells. If core later grows a spreadsheet-data module, these move there without an API change.
 2. **One number format per grid, no per-cell guessing**, with the paste fallback above; percent signs are refused rather than divided by 100.
 3. **Typing stores text unless it is a canonical number** in a table, so the slide always shows what was typed.
-4. **Header toggle on uses the first row** (PowerPoint's behaviour) with an explicit "new empty header" alternative; header labels become text.
+4. **Header toggle on uses the first row** (PowerPoint's behavior) with an explicit "new empty header" alternative; header labels become text.
 5. **Merged rows and columns are never split silently.** Moves that would split a merge are refused with the reason; inserts grow and deletes shrink the merge.
 6. **No column weights**, because the schema has none.
 7. **A new chart series is unnamed**, never "Series 2".

@@ -165,7 +165,7 @@ export function svgDimensions(svg) {
 
 /**
  * The renderer's SVG made responsive and readable: the fixed `width` and `height` go (the viewBox scales it), and the root's
- * labelled-container attributes (`role="group"`, `aria-roledescription="slide"`, `aria-label`) go too, because the slide section or figure around it
+ * labeled-container attributes (`role="group"`, `aria-roledescription="slide"`, `aria-label`) go too, because the slide section or figure around it
  * carries the one accessible name, so a slide is announced once. The slide's own text nodes reach a screen reader in document order,
  * which is the reading order (tag, title, content, footnotes, then header and footer) the renderer paints; purely decorative drawing
  * keeps its `aria-hidden`.
@@ -187,7 +187,7 @@ export function prepareSlideSvg(svg, { idPrefix } = {}) {
 const UNSAFE_ELEMENTS = new Set(["script", "foreignobject", "iframe", "object", "embed", "animate", "set", "animatetransform", "animatemotion"]);
 
 /**
- * Defence in depth for a parsed slide: the renderer escapes everything it writes, but a player may be pointed at a deck
+ * Defense in depth for a parsed slide: the renderer escapes everything it writes, but a player may be pointed at a deck
  * nobody reviewed, so scripts, event handlers, foreign content and SMIL animation never reach the page.
  */
 export function sanitizeSvgTree(root) {

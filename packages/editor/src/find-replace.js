@@ -4,14 +4,14 @@
 // `replaceMatch` and `replaceAll` build and apply the replacement as one undoable session change.
 //
 // Matching runs on a field's text. A field is either a plain string or a run array (rich text); the text of a run
-// array is its runs joined, so a phrase that crosses a bold/plain boundary is still found. Replacement behaviour:
+// array is its runs joined, so a phrase that crosses a bold/plain boundary is still found. Replacement behavior:
 //   - a match inside one run: only that run's text changes; every run keeps its formatting;
 //   - a match that spans several runs: the replacement takes the formatting of the run that holds the FIRST
 //     matched character (the Word and Google Docs rule). The matched characters of the later runs are removed and
 //     the text before and after the match keeps the formatting it had. A run left empty by the removal is dropped
 //     (a field never ends up with no run: its first run stays, empty).
 //   - a run written as a plain string stays a plain string when its text is the only thing that changed.
-// Fields that are numbers, ids, asset references, URLs, colours and layout names are never searched or changed.
+// Fields that are numbers, ids, asset references, URLs, colors and layout names are never searched or changed.
 import { OPFEditorError, getValueAtPath, opfPathToJsonPointer } from "./index.js";
 
 /** At most this many matches are collected; `truncated` says so. */

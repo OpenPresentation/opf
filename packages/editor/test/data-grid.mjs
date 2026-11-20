@@ -280,7 +280,7 @@ const refuses = (editor, name, action, code) => {
     assert.deepEqual(dataOf(editor).columns, ["Quarter", "Q1", "Q2", "Q3"]);
     assert.deepEqual(dataOf(editor).rows, [["Revenue", 12, 18, 24], ["Costs", 5, null, 9]], "gaps stay gaps");
   });
-  assert.equal(change.relabelled, 0);
+  assert.equal(change.relabeled, 0);
   chart.transposeChart(editor, C);
   chart.transposeChart(editor, C);
   assert.deepEqual(dataOf(editor), deck().slides[0].blocks[0].chart.data, "transposing twice is the identity for text categories");
@@ -288,7 +288,7 @@ const refuses = (editor, name, action, code) => {
   const numeric = session();
   chart.setChartCells(numeric, C, [{ ...body(0, 0), value: 2020 }, { ...body(1, 0), value: null }]);
   const result = chart.transposeChart(numeric, C);
-  assert.equal(result.relabelled, 1);
+  assert.equal(result.relabeled, 1);
   assert.deepEqual(dataOf(numeric).columns, ["Quarter", "2020", "", "Q3"]);
   const single = session();
   single.set(`${C}.data`, { columns: ["Value"], rows: [[1], [2]] });

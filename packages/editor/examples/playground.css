@@ -465,7 +465,7 @@ select {
   height: 14px;
 }
 
-/* The ⋯ menu's entries read from the left, like the page's other menus (the page centres the text of its buttons). */
+/* The ⋯ menu's entries read from the left, like the page's other menus (the page centers the text of its buttons). */
 .header-actions .opf-tb-menu-item {
   justify-content: flex-start;
 }

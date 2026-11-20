@@ -225,7 +225,7 @@ export function createPersistence(editor, options = {}) {
     const wait = Math.max(0, Math.min(debounceMs, firstDirtyAt + maxWaitMs - at));
     timer = setTimeout(() => { void flushNow(false); }, wait);
   }
-  /** Write the document now (cancelling the debounce) and resolve when it is stored. Resolves false when nothing could be written. */
+  /** Write the document now (canceling the debounce) and resolve when it is stored. Resolves false when nothing could be written. */
   function flush() {
     return flushNow(true);
   }

@@ -20,7 +20,7 @@ import {chartUsesDataFields, isDatasetRef, fromExcelNumberFormat, resolveTableDa
 //            hashes the native caches (series names, categories, values and format codes) of the chart part(s) the frame
 //            shows (the chartex part, and its classic fallback when it has no fallback picture); `dataset` hashes the referenced dataset, so a slide
 //            pasted into a deck whose dataset of the same id holds other data keeps its values inline. `highlight` (FA-14) is
-//            the authored chart.highlight: the native chart carries only the accent and muted colours it produced, which no
+//            the authored chart.highlight: the native chart carries only the accent and muted colors it produced, which no
 //            exact inference turns back into series and category names, and a chart with only a highlight records its inline `data`.
 //     table  {v: 1, kind: 'table', table}                                a dataset-backed table, as authored
 //            {v: 1, kind: 'table', headers: [[column, header, text]], cells: [[row, column, value, format, text]]}

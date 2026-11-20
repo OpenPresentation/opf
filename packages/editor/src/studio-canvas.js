@@ -270,7 +270,7 @@ export function createStudioCanvas({ dom, elements, canvas, adapter, studio }) {
     onMove: (session, event) => moveDrag(session, event),
     onEnd: (session) => endDrag(session),
     onDrop: (session) => finishDrag(session),
-    onEscape: () => studio.announce("Move cancelled."),
+    onEscape: () => studio.announce("Move canceled."),
   });
 
   const chainAt = (point, deep) => adapter.hitChain(point, undefined, { parts: deep });
@@ -440,7 +440,7 @@ export function createStudioCanvas({ dom, elements, canvas, adapter, studio }) {
       marks.into(layer, null);
       delete root.dataset.dragging;
       onEnd?.();
-      if (!commit) { studio.announce("Insert cancelled."); return; }
+      if (!commit) { studio.announce("Insert canceled."); return; }
       const found = session.drop;
       if (!found) return;
       if (!found.ok) { studio.announce(found.reason); return; }
@@ -492,7 +492,7 @@ export function createStudioCanvas({ dom, elements, canvas, adapter, studio }) {
           if (adapter.commit(`Resized to ${label}`)) studio.announce(`Resized to ${label}`);
         } else {
           adapter.cancel();
-          if (!commit) studio.announce("Resize cancelled.");
+          if (!commit) studio.announce("Resize canceled.");
         }
         studio.afterGesture();
       },

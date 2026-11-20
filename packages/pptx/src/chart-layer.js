@@ -5,10 +5,10 @@
 //
 //   small chart (LH-03)   value labels (core `chartLayerDataLabels`, written by chart-options.js `applyDataLabels`), no value axis
 //                         (c:valAx c:delete 1) and no gridlines when the layer drops them, no chart area fill (the chart stands on
-//                         the card or the slide background, whose colour the palette and labels are judged against), and the
-//                         emphasis: the emphasised point as one c:dPt in core's stronger shade (chart-highlight.js), every other point
-//                         keeping the series colour (LH-95);
-//   header row (LH-81)    the caption as the chart title (c:title, bold, the chart text size, the full text colour) and the series
+//                         the card or the slide background, whose color the palette and labels are judged against), and the
+//                         emphasis: the emphasized point as one c:dPt in core's stronger shade (chart-highlight.js), every other point
+//                         keeping the series color (LH-95);
+//   header row (LH-81)    the caption as the chart title (c:title, bold, the chart text size, the full text color) and the series
 //                         legend at the top (c:legendPos t), each at the position core gave it (c:manualLayout, edge mode, fractions of
 //                         the chart space), and the plot area below them (c:plotArea c:manualLayout, layoutTarget outer), so
 //                         PowerPoint keeps the plot as wide as the preview does.
@@ -23,7 +23,7 @@ const fraction = value => Number(Math.min(1, Math.max(0, value)).toFixed(4));
 
 /**
  * The PptxGenJS options and the native layout of a chart's layer. `layer` is `ComposedChart.layer`, `region` the chart frame in inches,
- * `scale` the slide's pixel scale (min(slide width, slide height) in px / 720), `textSize` the chart text size in hundredths of a point, `labelColor` the full text colour (RRGGBB), `font` the body font. Returns
+ * `scale` the slide's pixel scale (min(slide width, slide height) in px / 720), `textSize` the chart text size in hundredths of a point, `labelColor` the full text color (RRGGBB), `font` the body font. Returns
  * `{options, layout}`: `options` go into addChart, `layout` (title, legend and plot area fractions) is written by `applyChartLayerLayout`
  * once the part exists; both are empty for a chart without a layer.
  */
@@ -114,12 +114,12 @@ export function applyChartLayerLayout(xml, layout) {
 
 /**
  * LH-03, LH-95: the emphasis of a one-series small column or bar chart as a highlight plan (chart-highlight.js shape): the series keeps its
- * colour (its scheme colour when the palette writes one), and the emphasised point takes core's stronger shade of it, an sRGB literal.
+ * color (its scheme color when the palette writes one), and the emphasized point takes core's stronger shade of it, an sRGB literal.
  */
 export function chartEmphasisPlan({layer, data, panelFill, palette, strong, schemes}) {
   const row = layer?.small?.emphasis;
   if (row === undefined || !data?.rows) return undefined;
-  // LH-105: the emphasised point takes the series colour at full strength (`strong`), or a shade of it; the others keep the soft colour.
+  // LH-105: the emphasized point takes the series color at full strength (`strong`), or a shade of it; the others keep the soft color.
   const colors = chartEmphasisColors(panelFill, `#${palette[0]}`, strong?.[0] ? `#${strong[0]}` : undefined);
   if (!colors) return undefined;
   const shadeHex = colors.accent.replace(/^#/, '').toUpperCase(), seriesHex = colors.muted.replace(/^#/, '').toUpperCase();
@@ -127,7 +127,7 @@ export function chartEmphasisPlan({layer, data, panelFill, palette, strong, sche
   const muted = {hex: seriesHex, xml: schemes?.[0] ? schemeColorXml(schemes[0]) : `<a:srgbClr val="${seriesHex}"/>`};
   const marks = {series: [false], categories: data.rows.map((_, index) => index === row)};
   const markColor = (_, index) => marks.categories[index] ? accent : muted;
-  // The series colour stays the series' own fill (and the legend's); the emphasised point is the one c:dPt.
+  // The series color stays the series' own fill (and the legend's); the emphasized point is the one c:dPt.
   return {
     kind: 'bar', marks, accent, muted, circular: false, seriesColor: () => muted, markColor,
     seriesFills: [seriesHex],
@@ -137,8 +137,8 @@ export function chartEmphasisPlan({layer, data, panelFill, palette, strong, sche
 
 /**
  * LH-105: the focus the slide title gives a chart (`layer.focus`, core chart-focus.ts) as a highlight plan (chart-highlight.js shape): a
- * focused series (or category, or pie slice) keeps its full-strength colour (`strong`, by series; by slice on a pie), every other mark
- * takes core's context neutral, as the preview draws it. Colours are sRGB literals.
+ * focused series (or category, or pie slice) keeps its full-strength color (`strong`, by series; by slice on a pie), every other mark
+ * takes core's context neutral, as the preview draws it. Colors are sRGB literals.
  */
 export function chartFocusPlan({layer, data, kind, panelFill, labelColor, strong}) {
   const focus = layer?.focus;

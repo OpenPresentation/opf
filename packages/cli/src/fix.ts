@@ -27,7 +27,7 @@ copy, ... Some safe fixes change how a slide draws (rename-layout from agenda-sp
 to two fifths; remove:contentDirection drops how the blocks were stacked): each fix applied says so (changesDrawing), and the
 text report marks it "changes the drawing". By default only the checks that repair the document apply their fixes (format,
 references, policy, layout); --audits applies the audits' safe fixes too (accessibility, content), and without it the report
-lists them in audits. A fix that is not marked safe (such as a new text colour) is never applied, and a fix you write
+lists them in audits. A fix that is not marked safe (such as a new text color) is never applied, and a fix you write
 yourself (set the language, write alt text) is never counted: its finding stays in the report, with its fixes, for you to
 choose. The deck goes to stdout, the output, or back to the input with -i (an input with nothing to fix is not rewritten). It
 is written with the fixes even when findings remain. --check writes nothing and exits 1 when a safe fix would be applied.
