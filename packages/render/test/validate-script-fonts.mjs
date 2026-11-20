@@ -1,6 +1,6 @@
 // RR-59 (opf#485): the registry measurement plans script faces for core. `loadFonts().textMeasurement.forScripts(profile)` is the
 // script planner (createScriptFonts) core `validate` and `paginate` ask for each slide's measurement, so they measure Arabic runs
-// in the face this renderer draws (Arabic Typesetting -> Noto Naskh Arabic) instead of the Latin face the style names, where the
+// in the face this renderer draws (Times New Roman and Arial -> Noto Naskh Arabic for Arabic-script runs) instead of the Latin face the style names, where the
 // raw measurement throws missing-glyph. Offline and deterministic.
 import assert from 'node:assert/strict';
 import { paginate, validate } from '@openpresentation/opf';
@@ -28,7 +28,7 @@ const layoutFailures = (report) => report.findings.filter((finding) => finding.r
   const style = raw.resolveStyle({ fontFamily: 'Aptos Display', fontWeight: 700, path: 'slides.0.title' });
   assert.throws(() => raw.measure(TITLE, 40, style), { code: 'missing-glyph' }, 'the raw measurement measures one face');
   const profile = resolveScriptFonts(arabicDeck, { catalogs, slideIndex: 0 });
-  assert.equal(profile.heading.complexScript, 'Arabic Typesetting');
+  assert.equal(profile.heading.complexScript, 'Times New Roman');
   const planned = raw.forScripts(profile);
   const width = planned.measure(TITLE, 40, style);
   assert.ok(Number.isFinite(width) && width > 0);
