@@ -2,6 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Metadata Array Forms",
   "description": "Technical fixture for organization, speaker, author, and takeaway array forms.",
+  "language": "en-US",
   "organization": [
     {
       "id": "primary-org",
@@ -62,7 +63,11 @@
     }
   ],
   "assets": {
-    "primary-logo": "./assets/primary-logo.svg",
+    "primary-logo": {
+      "src": "./assets/primary-logo.svg",
+      "alt": "Primary Org logo",
+      "mediaType": "image/svg+xml"
+    },
     "alice-photo": {
       "src": "./assets/alice.png",
       "alt": "Alice Rivera headshot",

@@ -2,6 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Asset Source Forms",
   "description": "Technical fixture for string shorthand and object-form assets across images, video, logos, and chart data.",
+  "language": "en-US",
   "organization": {
     "id": "brand",
     "name": "Asset Source Forms",
@@ -21,7 +22,11 @@
     "imageFit": "contain"
   },
   "assets": {
-    "logo": "./assets/logo.svg",
+    "logo": {
+      "src": "./assets/logo.svg",
+      "alt": "Asset Source Forms logo",
+      "mediaType": "image/svg+xml"
+    },
     "logo-light": {
       "src": "./assets/logo-light.svg",
       "alt": "Light logo",
@@ -39,7 +44,7 @@
       "mediaType": "image/png"
     },
     "remote-image": "https://cdn.example.com/image.png",
-    "data-uri-image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAIAAAABc2X6AAABvElEQVR4nO3aPUoDURSG4W9esoWIC9CAYG8jdjauwMbKTlyPnZXgJlJYW9qKYK+1dQQD44X8YGbOuRP9fDpJ7h1fznUmSJrno1MN4ezwfpDrIjPIDDKDzCAzyAwyg8wgM8gMMoPMIDPIDDKDzCAzyAwyM6p5scnj9PuHx3H50t7l+98JnpSdK7zcjuuUj2qmzmazVe9smqYsz8seVUhd07n4nnl5XjaptbMvG60tl7TnfKuDJ0Vt503ymsmo7TDYRe0msc1k1AbuGd7MNtdmNFPtSdtfSDOKkzHe8J3Z5sOccbCRGX7FeAOHjMwgM/yW8xx1qpEZZAaZGR1f73dfXeUT5VJP5yfdFiIzyAwyg8zQZ/HO3VX5H9YK5tf6mB503gGZQWboub7mqe5/nvU/4e0dcsh4FTvhvObAnQnZZT7kbP3Hq8AJ5x3sqMMcf6QzmmNrFX6Xbpv7Z7ebBNYq47HU/j33aW7XxtYq6TlcNm+aXS4Jr5XUpN5g3y5uNv2OR15qjeCl2evlpdYL/kl5ducwwaXX3YdBrovMIDPIDDKDzCAzyAwyg8wgM8gMMoPMIDPIDDKDzDD0L1DbJyRKr/0Sls1KAAAAAElFTkSuQmCC",
+    "data-uri-image": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9IiNEQTM3NDUiLz48cmVjdCB4PSI0MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMjQ2M0VCIi8+PHJlY3QgeT0iNDAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsbD0iIzE2QTM2QSIvPjxyZWN0IHg9IjQwIiB5PSI0MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjRjVCQjI5Ii8+PGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iMjAiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+",
     "demo-video": {
       "src": "./media/demo.mp4",
       "mediaType": "video/mp4",
@@ -54,7 +59,10 @@
     {
       "title": "Asset Reference Image",
       "type": "image",
-      "image": "asset:remote-image"
+      "image": {
+        "src": "asset:remote-image",
+        "alt": "Remote picture referenced by URL"
+      }
     },
     {
       "title": "Data URI Image",
@@ -67,7 +75,10 @@
     {
       "title": "Asset Reference Video",
       "type": "video",
-      "video": "asset:demo-video"
+      "video": {
+        "src": "asset:demo-video",
+        "alt": "Demo walkthrough video"
+      }
     },
     {
       "title": "Pipeline Chart",
