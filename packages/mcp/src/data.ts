@@ -1,7 +1,8 @@
 // The data the OPF MCP server serves, bundled at build time and never read from disk: the user-facing documentation pages and the
 // example decks come from core's generated modules (`@openpresentation/opf/docs`, `/examples`, built from docs/ and examples/),
 // the skill entrypoints and their references from the `OPF_MCP_SKILLS` constant, and the recent release notes from `OPF_MCP_WHATS_NEW`,
-// both inlined by tsup from skills/ and CHANGELOG.md (see tsup.config.ts).
+// both inlined by tsup from skills/ and CHANGELOG.md, and the image files the examples name from `OPF_MCP_EXAMPLE_FILES`, inlined
+// from core's dist/example-files (see tsup.config.ts).
 import { docs } from "@openpresentation/opf/docs";
 import { examples } from "@openpresentation/opf/examples";
 import { installedIconSets } from "@openpresentation/gallery/icon-sets";
@@ -9,6 +10,34 @@ import type { DocPage, ExamplePage, OpfMcpSources } from "./server.js";
 
 declare const OPF_MCP_SKILLS: Record<string, Record<string, string>>;
 declare const OPF_MCP_WHATS_NEW: string;
+declare const OPF_MCP_EXAMPLE_FILES: Record<string, string>;
+
+/** The image files core ships for the example decks (dist/example-files), by their path under examples/, as data URIs. */
+const EXAMPLE_FILES: Readonly<Record<string, string>> = OPF_MCP_EXAMPLE_FILES;
+
+/**
+ * The image files an example deck names by a relative path (`./assets/logo.svg`) that core ships, keyed by that path as the deck
+ * writes it. The path is resolved against the deck's folder under examples/ and only looked up in EXAMPLE_FILES: nothing is read.
+ */
+function exampleFilesOf(file: string, deck: unknown): Record<string, string> | undefined {
+	const folder = file.replace(/^examples\//, "").split("/").slice(0, -1);
+	const found: Record<string, string> = {};
+	const visit = (value: unknown): void => {
+		if (typeof value === "string") {
+			if (!value.startsWith("./") || Object.hasOwn(found, value)) return;
+			const parts = [...folder];
+			for (const part of value.slice(2).split("/")) {
+				if (part === "..") parts.pop();
+				else if (part !== "." && part !== "") parts.push(part);
+			}
+			const key = parts.join("/");
+			if (Object.hasOwn(EXAMPLE_FILES, key)) found[value] = EXAMPLE_FILES[key] as string;
+		} else if (Array.isArray(value)) value.forEach(visit);
+		else if (value && typeof value === "object") Object.values(value).forEach(visit);
+	};
+	visit(deck);
+	return Object.keys(found).length ? found : undefined;
+}
 
 /**
  * The documentation pages for people and agents who use OPF, by slug. Core bundles every top-level page of docs/; this list leaves
@@ -73,7 +102,10 @@ export function defaultSources(): OpfMcpSources {
 			const doc = bySlug.get(slug);
 			return doc ? [{ slug: doc.slug, title: doc.title, markdown: doc.markdown }] : [];
 		}),
-		examples: examples.map((example): ExamplePage => ({ slug: example.slug, category: example.category, gallery: example.gallery, file: example.file, deck: example.deck })),
+		examples: examples.map((example): ExamplePage => {
+			const files = exampleFilesOf(example.file, example.deck);
+			return { slug: example.slug, category: example.category, gallery: example.gallery, file: example.file, deck: example.deck, ...(files ? { files } : {}) };
+		}),
 		skills: OPF_MCP_SKILLS,
 		whatsNew: OPF_MCP_WHATS_NEW,
 		// LH-14, RR-63: the gallery icon sets, read one icon at a time from the installed package (ICON_SETS, above).

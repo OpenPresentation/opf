@@ -909,6 +909,53 @@ try {
 		assert.doesNotMatch(thumbs, /\{\{/, "no token is drawn as written in the thumbnails");
 	});
 
+	// The bundled examples name pictures by a relative path (./assets/cover.png). The view reads the ones the examples ship through the
+	// app-only read_example_files and draws them, in the preview and the exports; any other path (not shipped, outside the folder, a
+	// URL) keeps the placeholder and is never fetched.
+	await run("draws the example decks' pictures read through read_example_files, in the preview and the exports", async () => {
+		const pictures = {
+			name: "Example pictures",
+			language: "en-US",
+			slides: [
+				{
+					id: "pictures",
+					title: "Pictures",
+					blocks: [
+						{ image: { src: "./assets/cover.png", alt: "Cover" } },
+						{ image: { src: "./assets/logo.svg", alt: "Logo" } },
+						{ image: { src: "./assets/not-shipped.png", alt: "Not shipped" } },
+						{ image: { src: "./assets/../../package.json", alt: "Outside" } },
+					],
+				},
+			],
+		};
+		await open({ document: pictures }, "light", { download: true });
+		await view().locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+		assert.ok((await hostState()).toolCalls.includes("read_example_files"), `the pictures come from the server (calls: ${(await hostState()).toolCalls.join(", ")})`);
+		const drawn = async () => view().locator("#deck-canvas").evaluate((node) => ({ unresolved: node.querySelectorAll('[data-opf-asset-status="unresolved"]').length, images: [...node.querySelectorAll("image")].map((image) => (image.getAttribute("href") ?? "").slice(0, 30)) }));
+		// The pictures are read before the first draw; a redraw after a late answer counts the same.
+		await page.frame({ url: /\/view$/ }).waitForFunction(() => document.querySelectorAll('#deck-canvas [data-opf-asset-status="unresolved"]').length === 2, null, { timeout: 30000 }).catch(() => {});
+		const shown = await drawn();
+		assert.equal(shown.unresolved, 2, "the two paths the examples do not ship keep the placeholder");
+		assert.ok(shown.images.some((href) => href.startsWith("data:image/png;base64,")), `the PNG draws (${shown.images.join(", ")})`);
+		assert.ok(shown.images.some((href) => href.startsWith("data:image/svg+xml;base64,")), "the SVG draws");
+		await shoot("example-pictures");
+		const exported = async (format) => {
+			const before = (await hostState()).downloads.length;
+			await view().locator("#deck-export .opf-export-trigger").click();
+			await view().locator(`.opf-export-item[data-format="${format}"]`).click();
+			await page.waitForFunction((count) => window.host.downloads.length > count, before, { timeout: 120000 });
+			const { resource } = (await hostState()).downloads.at(-1).contents[0];
+			return Buffer.from(resource.blob ?? Buffer.from(resource.text ?? "").toString("base64"), "base64");
+		};
+		const svg = (await exported("svg")).toString("latin1");
+		assert.ok(svg.includes("data:image/png;base64,iVBORw0KGgo"), "the SVG export carries the PNG");
+		assert.equal((svg.match(/data-opf-asset-status="unresolved"/g) ?? []).length, 2, "and the placeholders only for the paths not shipped");
+		const pptx = await exported("pptx");
+		const media = pptx.toString("latin1").match(/ppt\/media\/[\w.-]+\.(?:png|svg)/g) ?? [];
+		assert.ok(media.some((name) => name.endsWith(".png")) && media.some((name) => name.endsWith(".svg")), `the PowerPoint file embeds the pictures (${[...new Set(media)].join(", ")})`);
+	});
+
 	await run("runs without a CSP violation or a page error", async () => {
 		assert.deepEqual(problems, []);
 	});
