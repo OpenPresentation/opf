@@ -2896,7 +2896,7 @@
     },
     "Slide": {
       "type": "object",
-      "description": "A single slide. Content is a full-slide root payload or a list of blocks. On a slide without a layout, blocks may name cells of a 3 x 3 grid with their 'region' ('start', 'center+end', 'top:start'): see ContentPayload.region. The columns of that grid are logical: 'start' is the left column in a left-to-right deck and the right column in a right-to-left one. OPF 0.35 removed the slide keys that named those cells (the promoted regions 'start', 'top:start', 'middle+bottom:center+end' and the other 45): validate reports such a key (opf/schema) with the safe fix that moves its content into a block with 'region'.",
+      "description": "A single slide. Content is a full-slide root payload or a list of blocks. On a slide without a layout, blocks may name cells of a 3 x 3 grid with their 'region' ('start', 'center+end', 'top:start'): see ContentPayload.region. The columns of that grid are logical: 'start' is the left column in a left-to-right deck and the right column in a right-to-left one. A key on the slide that names a cell is not OPF: validate reports it (opf/schema) with the safe fix that moves its content into a block with 'region'.",
       "additionalProperties": false,
       "dependentSchemas": {
         "caption": {

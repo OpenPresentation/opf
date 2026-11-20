@@ -62,7 +62,7 @@ Chart values are numbers. A string counts only in strict decimal syntax (`"12"`,
 
 The slide `tag` (the small line above the title) follows `titleAlignment`, like the title, so a layout that centers its content does not center the tag over a start-aligned title; only a slide's own `design.contentAlignment` keeps it on the content, as on a cover.
 
-Keep numbers numeric where the schema permits them. Tables use `columns` and `rows`, not `headers` and `cells`. OPF slide content is not an `elements` array or arbitrary HTML. Promoted region values are content payloads, for example `"start":{"text":"Context"}`.
+Keep numbers numeric where the schema permits them. Tables use `columns` and `rows`, not `headers` and `cells`. OPF slide content is not an `elements` array or arbitrary HTML. A block that names a cell of the slide grid is a content payload with `region`, for example `{"region":"start","text":"Context"}` in `blocks`.
 
 The presentation root accepts identity, organizations, speakers, author, audience, purpose, language, tone, takeaway, duration, tags, design, variables, template, narrative, slides, references, datasets, assets, catalogs, and extensions. Query the schema for object alternatives and required fields. An `organization` and a `speaker` each need an `id` as well as a `name` (`"organization": { "id": "acme", "name": "Acme Corp" }`). Do not put old `version`/`meta` wrappers into the current canonical document.
 

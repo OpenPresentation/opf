@@ -14,7 +14,7 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 
 - Root slide payloads and explicit content `type` values.
 - `blocks` composition.
-- Promoted region keys and span combinations.
+- Blocks in the cells of the slide grid (`region`) and span combinations.
 - Rich text runs in text, bullet, and list payloads.
 - Asset shorthand and object forms.
 - Inline and asset-backed chart data.

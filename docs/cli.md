@@ -250,7 +250,9 @@ stdout carries the document. Findings have the [`opf validate`](validate.md) sha
 
 Errors are `{ command, ok: false, code, error, ... }` on stderr. The message states the fix: a missing argument names it and
 prints the usage, an unknown command, option or value suggests the nearest one ("Did you mean --check?"), and a removed command
-or flag names its replacement. Codes include `usage`, `unknown-command`, `unknown-option`, `removed-command`, `removed-option`,
+or flag names its replacement, and a command that refuses a deck (`invalid-document`, `findings-at-fail-on`) names
+`opf fix <deck> -i` when some of its findings carry a safe fix, and `opf embed <deck> -i` when it embeds copies of built-in
+layouts from before OPF 0.35. Codes include `usage`, `unknown-command`, `unknown-option`, `removed-command`, `removed-option`,
 `missing-argument`, `extra-argument`, `missing-value`, `invalid-value`, `option-not-applicable`, `unknown-input-format`,
 `input-not-found`, `invalid-json`, `invalid-yaml`, `invalid-markdown`, `invalid-document`, `findings-at-fail-on`,
 `output-exists`, `merge-conflict`, `fill-failed`, `peer-not-installed` and `peer-too-old`.

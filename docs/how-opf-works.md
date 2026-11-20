@@ -145,7 +145,7 @@ And the two-column shape from the grid above:
 }
 ```
 
-A slide places every block in a cell or none. Blocks that name the same cell stack in it in source order, as a group's blocks would; two different cells on one slide must not overlap. On a slide with a layout, `region` names one of the layout's regions instead (a cell word names none: `opf/region-unknown`). Through OPF 0.34 the cells were slide keys (`"top:start": { ... }`, the promoted regions); `opf validate` reports such a key with the safe fix that moves it into a block. Slide-level strings `title`, `subtitle`, and `tag` sit alongside whichever content shape you use, and render into the title area of the resolved template.
+A slide places every block in a cell or none. Blocks that name the same cell stack in it in source order, as a group's blocks would; two different cells on one slide must not overlap. On a slide with a layout, `region` names one of the layout's regions instead (a cell word names none: `opf/region-unknown`). A deck written for OPF 0.34 named the cells another way: `opf fix deck.opf.json -i` moves its content into blocks with `region`. Slide-level strings `title`, `subtitle`, and `tag` sit alongside whichever content shape you use, and render into the title area of the resolved template.
 
 ## Layouts are hints, not contracts
 

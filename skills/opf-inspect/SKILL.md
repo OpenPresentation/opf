@@ -26,9 +26,10 @@ node skills/opf-inspect/scripts/opf-inspect.mjs validate custom-layout.json layo
 **Words these skills use**
 
 - **Furniture**: the parts that repeat on slides outside the content: header, footer, logo, slide number. You set them once on the deck or a layout, not in `blocks`.
-- **Composition**: the automatic layout step that turns a slide's content into boxes with a position, size and font size. A `composition` key steers it.
+- **Composition**: the automatic layout step that turns a slide's content into boxes with a position, size and font size. On a slide without a layout, `composition.mode` (`auto`, `grid`, `row`, `column`), `columns` and `weights` steer it, and groups keep blocks together.
+- **Layout** and **region**: a layout is a catalog record that divides the slide into named regions (the built-ins use `body`, `lead`, `aside`, `media`, `first`, `second`, `third`). Blocks bind to regions by kind; a block's `region` pins it to one.
 - **Implicit blocks**: content fields written straight on the slide (`text`, `items`, `table`, ...) with no `blocks` list. Composition treats them as blocks, and editing can turn them into an explicit `blocks` list.
-- **Cell**: on a slide without a layout, a block's `region` names a cell of the slide's 3×3 grid (`start`, `top:end`, `center+end`), used when relative position matters. Every block of the slide names a cell or none; blocks that name one cell stack in it. (OPF 0.35 removed the slide keys that named cells, the promoted regions.)
+- **Cell**: on a slide without a layout, a block's `region` names a cell of the slide's 3×3 grid (`start`, `top:end`, `center+end`), used when relative position matters. Every block of the slide names a cell or none; blocks that name one cell stack in it.
 - **Catalog record**: one named, reusable design entry (a theme, layout, color scheme, font scheme, ...) from the `@openpresentation/gallery` package or a deck's `catalogs`. A deck refers to it by id.
 - **Reflow**: text wrapping again when its box or size changes. OPF computes preview line breaks. Default PPTX export uses measured boxes without reflow between boxes; selected proofing-sensitive lines use smaller source-bound fragments. Opt-in native paragraph export lets supported text re-wrap in the application, while fallback content stays measured.
 - **Provenance**: tags that OPF writes into an exported PPTX to record where each shape came from, so a later import can map edits back to the OPF source.
@@ -52,7 +53,7 @@ To answer "what is in this deck" (how many slides, which layouts and chart types
 
 `opf validate` reads JSON, and also a YAML deck (a name ending `.yaml`/`.yml`) or a Markdown deck (a name ending `.opf.md`), with `--from yaml|md` for stdin and other names (stdin that starts with `{` or `[` is JSON); findings are then located at lines of that file (`deck.opf.md:3:1`).
 
-A finding's `fixes` may carry a JSON Patch marked `safe` (it cannot change what the deck says or how it looks beyond the repair). `opf fix deck.opf.json -i` (CLI 0.35.0 and later; `fix(deck)` from code) applies every safe fix, validates again after each round (an error in the deck's own keys hides the accessibility, layout and content checks) and reports what it applied and what is left; it is the first step after an upgrade such as 0.35's. It never applies a fix that is not marked safe: report those findings and their fixes as choices for the user.
+A finding's `fixes` may carry a JSON Patch marked `safe` (it loses no content and writes valid OPF); a safe fix that can change how a slide draws also carries `changesDrawing: true`. `opf fix deck.opf.json -i` (CLI 0.35.0 and later; `fix(deck)` from code) applies the safe fixes of the checks that repair the document (format, references, policy, layout; add `--audits` for the accessibility and content fixes), validates again after each round (an error in the deck's own keys hides the accessibility, layout and content checks) and reports what it applied and what is left; it is the first step after an upgrade such as 0.35's. It never applies a fix that is not marked safe: report those findings and their fixes as choices for the user, and tell the user which applied fixes changed the drawing (`fix.applied[].changesDrawing`).
 
 Separate these outcomes:
 

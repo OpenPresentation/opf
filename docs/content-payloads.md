@@ -430,7 +430,7 @@ On a slide without a layout, a block of the slide's `blocks` names a cell of a 3
 - A slide places every block in a cell or none: when one block names a cell, every block of the slide's `blocks` names one.
 - Blocks that name the same cell stack in it in source order, as a group's blocks would. Two different cells on one slide must not overlap.
 - Only a root block names a cell (`slides.N.blocks.I`); a block in a cell has no slide edge to bleed to (`placement`).
-- Through OPF 0.34 the cells were slide keys (`"top:start": { ... }`, the promoted regions). OPF 0.35 removed them: `opf validate` reports each with the safe fix that moves its content into a block with `region` ([updating to 0.35](migrations/0.35.md)).
+- A deck written for OPF 0.34 named the cells another way: `opf fix deck.opf.json -i` moves its content into blocks with `region` ([updating to 0.35](migrations/0.35.md)).
 
 Spans compose into common slide shapes:
 
