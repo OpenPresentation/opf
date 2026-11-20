@@ -28,7 +28,7 @@ export function sentence(text: string): string {
   return ENDS.test(trimmed) ? trimmed : `${trimmed}.`;
 }
 
-/** Core's own words in American spelling (core's sentences say "colour" in a few places). */
+/** Core's own words in American spelling (core's sentences say "color" in a few places). */
 export function us(text: string): string {
   return text.replace(/colour/g, "color").replace(/Colour/g, "Color");
 }

@@ -89,8 +89,8 @@ function lineBoundaries(doc, win, line, source) {
   return result.length ? result : null;
 }
 
-/** Vertical centre of a rendered line in client pixels. */
-function lineCentre(win, line) {
+/** Vertical center of a rendered line in client pixels. */
+function lineCenter(win, line) {
   const box = line.node.getBoundingClientRect();
   if (box.height > 0 || box.width > 0) return box.top + box.height / 2;
   const matrix = line.node.getScreenCTM?.(), size = Number(line.node.getAttribute('font-size')) || 16;
@@ -113,7 +113,7 @@ function traceOffset({doc, win, target, path, source, clientX, clientY}) {
   if (!lines.length) return null;
   let line = null, gap = Infinity;
   for (const candidate of lines) {
-    const distance = Math.abs(lineCentre(win, candidate) - clientY);
+    const distance = Math.abs(lineCenter(win, candidate) - clientY);
     if (distance < gap) { line = candidate; gap = distance; }
   }
   if (!line) return null;

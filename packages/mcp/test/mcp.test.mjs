@@ -512,6 +512,8 @@ describe("the bundled sources", () => {
 		// Reviewed for the chartPrimary replacement on 2026-11-20: 1,397,930 exact bytes (after #1385: 1,397,584). It adds 346: the slide
 		// composition that keeps a removed design.chartPrimary's split, in design-resolution.md (+215) and dynamic-composition.md (+131),
 		// where both pages named the chart-beside layout, which has no region for a table. The limit is unchanged.
+		// Reviewed for American spelling on 2026-11-20: 1,397,813 exact bytes (main at ec9e9bc4c: 1,397,930). Spelling only: "colour" to
+		// "color", "centre" to "center", "behaviour" to "behavior" and the like remove 117 bytes over 18 pages (validate.md -66). The limit is unchanged.
 		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
 	});
 });

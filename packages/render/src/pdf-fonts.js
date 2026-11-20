@@ -312,7 +312,7 @@ export function nominalAdvance(face, gid, cache) {
 }
 
 // A glyph that stands for no character of its own (a diacritic or dot the font split off a letter) maps to a zero width
-// space: extractors drop it, and viewers that honour /ActualText never see it.
+// space: extractors drop it, and viewers that honor /ActualText never see it.
 function toUnicodeCMap(cids) {
   const pairs = cids.map((item) => [item.cid, item.codePoints]).sort((a, b) => a[0] - b[0]);
   let body = "/CIDInit /ProcSet findresource begin\n12 dict begin\nbegincmap\n/CIDSystemInfo<</Registry(Adobe)/Ordering(UCS)/Supplement 0>> def\n/CMapName/Adobe-Identity-UCS def\n/CMapType 2 def\n1 begincodespacerange\n<0000> <FFFF>\nendcodespacerange\n";

@@ -36,7 +36,7 @@ let counter = 0;
 const plural = (count, one, many = `${one}s`) => `${count} ${count === 1 ? one : many}`;
 const sizeText = (bytes) => (bytes < 1048576 ? `${Math.max(1, Math.round(bytes / 1024))} KB` : `${(bytes / 1048576).toFixed(1)} MB`);
 const isAbort = (error, signal) => Boolean(signal?.aborted) || error?.code === "export-aborted" || error?.name === "AbortError";
-const abortError = () => Object.assign(new Error("The export was cancelled."), { code: "export-aborted", name: "OPFEditorError" });
+const abortError = () => Object.assign(new Error("The export was canceled."), { code: "export-aborted", name: "OPFEditorError" });
 // A converter note: core's finding shape (`slide` is zero-based there) or a plain string from the host's exporter.
 const noteText = (note) => (typeof note === "string" ? note : `${Number.isInteger(note.slide) ? `Slide ${note.slide + 1}: ` : note.path ? `${note.path}: ` : ""}${note.message ?? note.ruleId ?? ""}`);
 
@@ -310,7 +310,7 @@ export function createExportMenu(container, options = {}) {
       options.onExport?.({ ...download, notes: notes.map(noteText) });
     } catch (error) {
       if (destroyed) return;
-      if (isAbort(error, signal)) showStatus("cancelled", "Export cancelled.");
+      if (isAbort(error, signal)) showStatus("cancelled", "Export canceled.");
       else showStatus("error", `${label} export failed. ${error?.message ?? error}`);
     } finally {
       if (busy?.controller === controller) busy = undefined;

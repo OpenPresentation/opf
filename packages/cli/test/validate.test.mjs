@@ -76,7 +76,7 @@ describe("opf validate", () => {
     assert.equal(run(["validate", file, "--fail-on", "never"]).status, 2, "never is not a level");
     const text = run(["validate", file, "--format", "text"]).stdout;
     assert.match(text, /deck\.opf\.json:\d+:\d+ {2}warning opf\/text-contrast/);
-    assert.match(text, /fix: Use the slide text colour/);
+    assert.match(text, /fix: Use the slide text color/);
     assert.match(text, /2 findings \(0 errors, 1 warning, 1 info\)\./);
   });
 

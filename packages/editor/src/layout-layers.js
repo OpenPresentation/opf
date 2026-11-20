@@ -234,7 +234,7 @@ export function createLayoutTree(container, options = {}) {
       if (outcome.noop) return;
       model.move(paths, outcome.listPath, outcome.index);
     },
-    onEscape: () => model.notify("Move cancelled."),
+    onEscape: () => model.notify("Move canceled."),
   });
   function dropAt(drag, event) {
     const rows = [...list.querySelectorAll(".opf-lx-item")].map((item) => ({ item, path: parsePath(item.dataset.path), row: item.firstElementChild }));

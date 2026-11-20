@@ -233,7 +233,7 @@ try {
   assert.ok(Number(await status.locator('progress').getAttribute('value')) > 0, 'progress advances page by page');
   await status.getByRole('button', { name: 'Cancel export' }).click();
   await page.waitForFunction(() => document.querySelector('.opf-export-status')?.dataset.state === 'cancelled');
-  assert.match(await status.innerText(), /Export cancelled\./);
+  assert.match(await status.innerText(), /Export canceled\./);
   assert.equal(downloaded, false, 'a cancelled export offers no file');
   await trigger.click();
   assert.equal(await item(/^PDF/).getAttribute('aria-disabled'), null, 'the menu is usable again');

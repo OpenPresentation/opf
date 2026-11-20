@@ -134,7 +134,7 @@ Blocks are separated by blank lines; a fence, heading, quote, table, image line 
 | `` `code` ``, ``` ``a ` b`` ``` | `code` (a backtick fence of any length; one space is trimmed from each side when both sides have one; the text is literal and other formatting wraps the span) |
 | `<u>`, `<sup>`, `<sub>` | `underline`, `superscript`, `subscript` |
 | `[text](url)`, `<https://...>` | `link` (a link title is ignored) |
-| `[text]{color=#B42318 size=24 font="Open Sans"}` | `color` (a hex colour, scheme slot or `var:name`), `fontSize`, `fontFamily`, `language` (written `lang=fr`, a BCP-47 tag); `bold italic underline strike sup sub` work inside the braces too |
+| `[text]{color=#B42318 size=24 font="Open Sans"}` | `color` (a hex color, scheme slot or `var:name`), `fontSize`, `fontFamily`, `language` (written `lang=fr`, a BCP-47 tag); `bold italic underline strike sup sub` work inside the braces too |
 | `\*` and any backslash before ASCII punctuation | The character itself |
 
 Flanking follows CommonMark, so `2*(3+4)*5` and `a * b` are text. A backtick that has no matching fence, or that is escaped with a backslash, is text. There is no raw HTML beyond the tags above and `<br>`, no entities (`&amp;` is literal) and no setext headings or indented code. The title, the subtitle and a quote's text keep inline formatting (a string when nothing is formatted, `TextRun[]` otherwise); a quote with formatted text and no attribution stays `{ text: [...] }`, because the string shorthand is for plain text. A quote's attribution and source are plain strings and drop formatting with a `formatting-dropped` warning; backticks in them stay literal characters. `cite` and `footnote` have no inline syntax: a heading or quote that carries one is written in an `opf-slide` fence. Image alt text, code, metric values and timeline lines are read as written, without inline formatting.
@@ -143,7 +143,7 @@ Flanking follows CommonMark, so `2*(3+4)*5` and `a * b` are text. A backtick tha
 
 `toMarkdown(presentation, { unsupported })` first validates the presentation (`OPFMarkdownError`, `code: "invalid-document"`, when it is not valid OPF). Every part is written in the dialect and **read back before it is kept**: a part whose text could not be read back as the same value (a table cell that is not text, a title that ends in ` #`, a title or quote run with `cite` or `footnote`, notes with a `---` line, formatting next to punctuation that CommonMark cannot open) takes the fallback instead of being written wrongly.
 
-| `unsupported` | Behaviour |
+| `unsupported` | Behavior |
 | --- | --- |
 | `"embed"` (default) | The part is written as YAML: a block in an `opf-block` fence, slide fields (and any region that is not one plain block) in an `opf-slide` fence. The result converts back to the same deck |
 | `"drop"` | The part is left out and listed in `report.loss`. For Markdown to read, not to convert back |

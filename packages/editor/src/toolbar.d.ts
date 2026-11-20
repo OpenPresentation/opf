@@ -32,7 +32,7 @@ export type ToolbarItemId = ToolbarItemName | (string & {});
 /**
  * An item by name, or with its own priority (higher stays visible longer) and whether it may move into the more menu. A host's own item is
  * `{ id, priority }` with a name that is not one of the above (lowercase letters, digits and dashes): its slot starts empty, the host fills it
- * (`slot(id)`) and registers what it offers in the more menu with `mount(id, part)`. A bare unknown name throws, so a misspelt item is caught.
+ * (`slot(id)`) and registers what it offers in the more menu with `mount(id, part)`. A bare unknown name throws, so a misspelled item is caught.
  */
 export type ToolbarItemSpec =
   | ToolbarItemName

@@ -42,14 +42,14 @@ const PX_TO_PT = 0.75;
 
 interface TextSample {
 	path: string;
-	/** Opaque text colour. */
+	/** Opaque text color. */
 	color: string;
 	/** Rendered size in reference pixels (96 per inch). */
 	sizePx: number;
 	bold: boolean;
 	backdrop: BackdropSample;
 	source: 'default' | 'override';
-	/** The JSON Pointer of the colour value an override lives in, when the sample is an override. */
+	/** The JSON Pointer of the color value an override lives in, when the sample is an override. */
 	colorPath?: string;
 	label: string;
 }
@@ -66,7 +66,7 @@ function slideBackdrop(context: RuleSlide, box?: { x: number; y: number; width: 
 	const { design, composition } = context;
 	const image = composition?.backgroundImage;
 	if (image) {
-		// A background picture is unknown pixels; a full-frame overlay bounds the colour underneath. An edge-banded overlay covers only part of the frame.
+		// A background picture is unknown pixels; a full-frame overlay bounds the color underneath. An edge-banded overlay covers only part of the frame.
 		// LH-02: so does one of core's automatic scrims, over the text region it covers at full opacity (and, when the host measured the picture, its grays).
 		const scrim = box ? image.scrims?.find((entry) => within(box, entry.text)) : undefined;
 		const overlay = image.overlay && !image.overlay.edge
@@ -145,7 +145,7 @@ function collectSamples(context: RuleSlide): TextSample[] {
 			}
 		else parts.push({ path: itemPath, sizePx: baseSize, color: itemDesign.colors.text, label: heading || item.field === 'text' ? label : item.field === 'items' || item.field === 'bullets' ? 'List text' : label });
 		for (const part of parts) samples.push({ path: part.path, color: part.color, sizePx: part.sizePx, bold, backdrop, source: 'default', label: part.label });
-		// Explicit run colours in rich text, list entries and similar.
+		// Explicit run colors in rich text, list entries and similar.
 		const owners = textValues({ [item.field]: item.value }, '');
 		for (const owner of owners) {
 			if (typeof owner.value === 'string') continue;
@@ -157,11 +157,11 @@ function collectSamples(context: RuleSlide): TextSample[] {
 				const color = resolveTextColor(run.style.color, itemDesign, itemDesign.colors.text);
 				if (!color) continue;
 				const size = typeof run.style.fontSize === 'number' ? run.style.fontSize / PX_TO_PT : baseSize;
-				samples.push({ path: `${run.path}/color`, color, sizePx: size, bold: Boolean(run.style.bold) || bold, backdrop, source: 'override', colorPath: `${run.path}/color`, label: 'Coloured text' });
+				samples.push({ path: `${run.path}/color`, color, sizePx: size, bold: Boolean(run.style.bold) || bold, backdrop, source: 'override', colorPath: `${run.path}/color`, label: 'Colored text' });
 			}
 		}
 	}
-	// Header and footer text is drawn in the muted text colour at the slide edge.
+	// Header and footer text is drawn in the muted text color at the slide edge.
 	for (const part of composition.furniture?.parts ?? [])
 		if (part.type === 'text')
 			samples.push({ path: pointerOfDotted(part.sourcePath ?? part.path), color: design.colors.mutedText, sizePx: ((part as { fit?: { fontSize: number } }).fit?.fontSize ?? 13 * scale) / scale, bold: false, backdrop: slideBackdrop(context, part.box), source: 'default', label: part.kind === 'header' ? 'Header text' : 'Footer text' });
@@ -191,7 +191,7 @@ const contrastRules: ValidationRule[] = [
 								path: sample.path,
 								slide,
 								severity: 'warning',
-								message: `${sample.label} colour ${sample.color} is too faint on this background picture: over every colour the picture can show here its contrast is at most ${best.toFixed(1)}:1, and ${needed}:1 is needed at this size.`,
+								message: `${sample.label} color ${sample.color} is too faint on this background picture: over every color the picture can show here its contrast is at most ${best.toFixed(1)}:1, and ${needed}:1 is needed at this size.`,
 								help: 'Set the background\'s tone (dark or light) so the text color follows the picture, give the text a readable color, or make the overlay strong enough for the text to read.',
 								measured: { ratio: round(worst.ratio), best: round(best), needed, textColor: sample.color },
 							});
@@ -220,20 +220,20 @@ const contrastRules: ValidationRule[] = [
 						const preferred = readableColor([slide.design.colors.text], sample.backdrop, needed);
 						if (preferred !== undefined) {
 							const value = preferred.toUpperCase() === slide.design.colors.text.toUpperCase() ? 'text' : preferred;
-							// Not safe (OPF 0.35): it replaces a colour the author wrote with one the check chose, so the slide looks different, and
+							// Not safe (OPF 0.35): it replaces a color the author wrote with one the check chose, so the slide looks different, and
 							// other repairs keep the author's intent (a darker shade of the same hue, another background, removing the override). A
 							// person chooses it; `fix` never applies it, even with `audits`.
-							fixes.push({ id: 'use-readable-color', title: value === 'text' ? 'Use the slide text colour' : `Use ${preferred}`, kind: 'patch', safe: false, patch: [{ op: 'replace', path: sample.colorPath, value }] });
+							fixes.push({ id: 'use-readable-color', title: value === 'text' ? 'Use the slide text color' : `Use ${preferred}`, kind: 'patch', safe: false, patch: [{ op: 'replace', path: sample.colorPath, value }] });
 						}
 					}
 					const diagnostic = context.report(contrastRule, {
 						path: sample.path,
 						slide,
-						message: `${sample.label} colour ${sample.color} on ${worst.against} has a contrast ratio of ${worst.ratio.toFixed(2)}:1; ${needed}:1 is needed for ${large ? 'large' : 'normal'} text.`,
+						message: `${sample.label} color ${sample.color} on ${worst.against} has a contrast ratio of ${worst.ratio.toFixed(2)}:1; ${needed}:1 is needed for ${large ? 'large' : 'normal'} text.`,
 						help:
 							sample.source === 'override'
-								? 'Pick a colour with enough contrast against the background, or remove this colour override so the theme chooses a readable text colour.'
-								: 'The theme text colour is unreadable on this background. Change the slide or deck background, the colour scheme (dark1/light1), or give the text an explicit readable colour.',
+								? 'Pick a color with enough contrast against the background, or remove this color override so the theme chooses a readable text color.'
+								: 'The theme text color is unreadable on this background. Change the slide or deck background, the color scheme (dark1/light1), or give the text an explicit readable color.',
 						measured: { ratio: round(worst.ratio), needed, large, sizePt: round(sample.sizePx * PX_TO_PT), textColor: sample.color, backgroundColor: worst.against },
 						fixes,
 					});
@@ -569,7 +569,7 @@ const chartRules: ValidationRule[] = [
 								if (difference < worst.difference) worst = { model, difference };
 							}
 							if (worst.difference < context.thresholds.minSeriesColorDifference) pairs.push({ a, b, ...worst });
-							// LH-35: neighbouring series (and a pie's neighbouring slices, the last beside the first) also differ in lightness, the cue that
+							// LH-35: neighboring series (and a pie's neighboring slices, the last beside the first) also differ in lightness, the cue that
 							// survives without hue: under the engines' own step (CHART_SERIES_MIN_LIGHTNESS_STEP, 11 L*) they read as one tone.
 							else if (b === a + 1 || (circular.test(type) && !slicePlan?.bordered && a === 0 && b === used.length - 1 && used.length > 2)) {
 								const lightness = lightnessDifference(used[a]!, used[b]!);
@@ -584,7 +584,7 @@ const chartRules: ValidationRule[] = [
 					context.report(chartColorRule, {
 						path: `${payload.path === slide.path ? slide.path : payload.path}/chart`,
 						slide,
-						message: `${slices ? 'Slices' : 'Series'} may be hard to tell apart without colour: ${pairs.slice(0, 3).map(describe).join('; ')}${cycles ? `${pairs.length ? '; ' : ''}${count} ${slices ? 'slices' : 'series'} exceed the ${palette.length}-colour palette, so colours repeat` : ''}.`,
+						message: `${slices ? 'Slices' : 'Series'} may be hard to tell apart without color: ${pairs.slice(0, 3).map(describe).join('; ')}${cycles ? `${pairs.length ? '; ' : ''}${count} ${slices ? 'slices' : 'series'} exceed the ${palette.length}-color palette, so colors repeat` : ''}.`,
 						help: 'Show fewer series per chart (split into two charts), state the key values in the slide text or a table next to the chart, or choose a chart type whose categories sit on an axis instead of in a legend.',
 						measured: { series: count, confusablePairs: pairs.length, minDifference: pairs[0] ? round(pairs[0].difference) : null },
 					});
@@ -608,8 +608,8 @@ const chartRules: ValidationRule[] = [
 							context.report(chartColorsRule, {
 								path,
 								slide,
-								message: `Chart colour ${index + 1} (${JSON.stringify(entry)}) cannot be resolved, so the palette colour of that position is used.`,
-								help: 'Use a hex colour, a colour-scheme name such as "accent2", or the id of a colour variable the deck defines (var:<id>).',
+								message: `Chart color ${index + 1} (${JSON.stringify(entry)}) cannot be resolved, so the palette color of that position is used.`,
+								help: 'Use a hex color, a color-scheme name such as "accent2", or the id of a color variable the deck defines (var:<id>).',
 							});
 							return;
 						}
@@ -618,8 +618,8 @@ const chartRules: ValidationRule[] = [
 						context.report(chartColorsRule, {
 							path,
 							slide,
-							message: `Chart colour ${index + 1} (${color}) has ${contrast.toFixed(1)}:1 contrast against the slide background (${surface}); it is drawn lighter or darker to reach 3:1.`,
-							help: 'Choose a colour that already has at least 3:1 contrast against the slide background, so the chart shows the colour you wrote.',
+							message: `Chart color ${index + 1} (${color}) has ${contrast.toFixed(1)}:1 contrast against the slide background (${surface}); it is drawn lighter or darker to reach 3:1.`,
+							help: 'Choose a color that already has at least 3:1 contrast against the slide background, so the chart shows the color you wrote.',
 							measured: { contrast: round(contrast), panel: surface! },
 						});
 					});

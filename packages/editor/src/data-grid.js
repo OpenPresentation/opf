@@ -779,7 +779,7 @@ export function createDataGrid(container, options = {}) {
       errorEl.textContent = "";
       rebuild();
       cellNode(u, c)?.focus({ preventScroll: true });
-      say("Edit cancelled.");
+      say("Edit canceled.");
     }
   }
 

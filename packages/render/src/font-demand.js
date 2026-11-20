@@ -352,7 +352,7 @@ export async function createNodeDemand(
       return {request, selected};
     });
     const wanted = new Set([...drawn, ...measured.map(({selected}) => selected)].map(key)), rasterRequired = new Set();
-    // A selected manifest colour face also needs its effective monochrome raster face.
+    // A selected manifest color face also needs its effective monochrome raster face.
     // This is a dependency of the drawn face, not another script/pack or a caller-face substitution.
     for (const face of universe) {
       if (!wanted.has(key(face)) || callerFaceKeys.has(key(face)) || !face.pkg.color?.rasterFamily) continue;

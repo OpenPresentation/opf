@@ -120,7 +120,7 @@ function readImageBackground(fill, partPath, {relationships, bytes}, dimensions,
   const approximate = reason => report({code: 'approximate-background-image', message: `The native background picture ${reason}; it was imported as the closest OPF image background.`});
   const lum = blip['a:lum'];
   if (Object.keys(blip).some(key => !imageEffects.has(key)) || (lum && Object.keys(lum).length)) approximate('uses picture effects outside OPF opacity and recolor');
-  // a:grayscl and an a:duotone of two literal colours are the OPF recolor (FA-22 draft 3).
+  // a:grayscl and an a:duotone of two literal colors are the OPF recolor (FA-22 draft 3).
   let recolor;
   if (blip['a:grayscl'] !== undefined) recolor = 'grayscale';
   const duotone = blip['a:duotone'], literal = node => /^[\da-f]{6}$/i.test(node?.val ?? '') && Object.keys(node).every(key => key === 'val' || typeof key === 'symbol') ? `#${node.val.toUpperCase()}` : undefined;
@@ -131,7 +131,7 @@ function readImageBackground(fill, partPath, {relationships, bytes}, dimensions,
     const read = node => { if (kind === 'a:srgbClr') return literal(node); const resolved = readBackgroundColor({[kind]: node}, context); return resolved && resolved.alpha === 1 ? resolved.hex : undefined; };
     const [dark, light] = colors.map(read);
     if (colors.length === 2 && dark && light && Object.keys(duotone).every(key => key === kind || typeof key === 'symbol')) recolor = {dark, light};
-    else approximate('uses a duotone recolor that is not two literal colours');
+    else approximate('uses a duotone recolor that is not two literal colors');
   }
   if (recolor && blip['a:grayscl'] !== undefined && duotone) approximate('uses both a grayscale and a duotone recolor');
   const amount = blip['a:alphaModFix'] ? Number(blip['a:alphaModFix'].amt ?? 100000) / 100000 : 1;

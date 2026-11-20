@@ -3,7 +3,7 @@
 // The importer turns a native deck into OPF with fixed rules. A deck that did
 // not come from this package carries no OPF provenance, so structure such as
 // code, metrics, quotes, timelines or regions has to be inferred by something
-// that can judge meaning. That judgement is not made here: this module only
+// that can judge meaning. That judgment is not made here: this module only
 // reports what is in the package, as plain JSON, so a host can run its own
 // classifier (a model, a rules engine, a human) over it. It reads the archive
 // only: no network, no models, no clock, no randomness, nothing guessed.
@@ -11,7 +11,7 @@
 // Every value is read from the PPTX. Text properties are the effective values
 // the way PowerPoint resolves them: the run, its paragraph, the shape's list
 // style, the layout and master placeholder, the master text styles, the
-// presentation defaults and the theme (font tokens and scheme colours). A value
+// presentation defaults and the theme (font tokens and scheme colors). A value
 // that no part of that chain states is omitted rather than defaulted, except
 // paragraph alignment (PowerPoint's own default, left).
 
@@ -105,7 +105,7 @@ function familyWeight(family) {
 }
 
 // ---------------------------------------------------------------------------
-// Slide inheritance context: theme, colours, layout and master placeholders
+// Slide inheritance context: theme, colors, layout and master placeholders
 
 const PH_TYPE_ALIASES = {ctrTitle: 'title', subTitle: 'body', obj: 'body'};
 const placeholderKey = ph => PH_TYPE_ALIASES[ph?.type ?? 'obj'] ?? ph?.type ?? 'obj';
@@ -819,7 +819,7 @@ export function extractSignals({archive, presentationRoot, slidePaths, themeFact
   return JSON.parse(JSON.stringify(signals));
 }
 
-/** Theme facts for the deck block, from the first slide's resolved theme (name, fonts, twelve colours). */
+/** Theme facts for the deck block, from the first slide's resolved theme (name, fonts, twelve colors). */
 export function themeFactsFor(slidePath, archive) {
   const theme = readSlideTheme(slidePath, archive);
   const {colors} = theme.colors ? readThemeSlotColors(theme.colors) : {colors: {}};

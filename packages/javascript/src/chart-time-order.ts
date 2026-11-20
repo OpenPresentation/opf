@@ -2,7 +2,7 @@
 //
 // Few: emphasis must carry meaning. The small chart's automatic last-point emphasis (LH-03, LH-95) says "the latest value", which is only
 // true when the categories run forward in time; on nominal categories (pipeline stages, regions, products) the last bar is just the last
-// one written, and emphasising it would invent a message. `chartCategoriesInTime` decides it from the category labels, and from the
+// one written, and emphasizing it would invent a message. `chartCategoriesInTime` decides it from the category labels, and from the
 // category title (the category axis title, else the category column's name) when the labels alone do not say:
 //
 //   years              2024, FY24, FY 2025, CY2026, '24 (a four-digit year from 1800 to 2200, or a two-digit one after FY, CY or ')

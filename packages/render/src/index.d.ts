@@ -93,7 +93,7 @@ export interface ToSvgOptions {
    * cannot be edited in place. The glyphs are shaped by HarfBuzz (the browser's shaper; the Node handle always, a browser handle
    * given `shapeWasm`), are hidden from assistive technology, and each outlined line is also invisible real text pinned to the
    * drawn width, so screen readers, selection, copy and find-in-page get the words. Each element keeps its `data-opf-*` trace.
-   * A run stays text, reported as `text-as-paths-fallback` with a `reason`, when its font is a colour or bitmap font
+   * A run stays text, reported as `text-as-paths-fallback` with a `reason`, when its font is a color or bitmap font
    * (`"colour-font"`) or its face's fsType restricts embedding (`"restricted"`). Use it for thumbnails, previews and portable SVG files, not for an editing
    * surface or the vector PDF (which keeps real text from `<text>` SVG).
    */
@@ -241,7 +241,7 @@ export interface ToPdfOptions extends Omit<ToPngOptions, "onDiagnostic"> {
    * the bundled files, the `fonts` handle's `fontFiles` and the font folders you supply, never system fonts.
    */
   raster?: boolean;
-  /** A vector PDF paints the page this colour first (default white, as a raster PDF composites on white); `"none"` leaves it unpainted. */
+  /** A vector PDF paints the page this color first (default white, as a raster PDF composites on white); `"none"` leaves it unpainted. */
   background?: string;
   /** Vector only. Family drawn for the generic `serif`; default `defaultFontFamily`. */
   serifFamily?: string;

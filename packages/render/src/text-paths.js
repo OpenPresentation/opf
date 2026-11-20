@@ -7,9 +7,9 @@ import { embeddingAllowed, fsTypeOf } from './font-fstype.js';
 // face's glyph. Everything outside the <text> elements is left byte for byte as the renderer wrote it.
 //
 // A <text> becomes a <g> that keeps the element's own attributes except the text-only ones (so its transform, opacity and
-// data-opf-* trace stay), labelled with its text for assistive technology unless it is aria-hidden; a tspan with a trace keeps
-// it on a nested <g>; a link becomes an <a> around its runs; underline and line-through are rectangles in the text colour from
-// the font's own metrics. Text drawn with a colour or bitmap font (COLR, CBDT, sbix, SVG tables) stays <text>, reported as
+// data-opf-* trace stay), labeled with its text for assistive technology unless it is aria-hidden; a tspan with a trace keeps
+// it on a nested <g>; a link becomes an <a> around its runs; underline and line-through are rectangles in the text color from
+// the font's own metrics. Text drawn with a color or bitmap font (COLR, CBDT, sbix, SVG tables) stays <text>, reported as
 // `text-as-paths-kept-text`, and the SVG then embeds that face as usual.
 
 import { FontLibrary } from "./pdf-fonts.js";
@@ -23,7 +23,7 @@ const ATTRIBUTE = /([^\s=/>"']+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g;
 const TEXT_ONLY = new Set(["x", "y", "dx", "dy", "rotate", "textLength", "lengthAdjust", "text-anchor", "text-rendering", "xml:space", "font-family", "font-size",
   "font-weight", "font-style", "font-variant", "font-stretch", "font-feature-settings", "font-variant-ligatures", "letter-spacing", "word-spacing", "text-decoration",
   "dominant-baseline", "alignment-baseline", "baseline-shift", "direction", "unicode-bidi", "writing-mode"]);
-const COLOUR_TABLES = ["COLR", "CBDT", "sbix", "SVG "];
+const COLOR_TABLES = ["COLR", "CBDT", "sbix", "SVG "];
 const libraries = new WeakMap();
 
 /**
@@ -123,7 +123,7 @@ export function outlineSlideText(content, { library, shaper, shape, selectText, 
   };
   const base = inheritStyle(ROOT_STYLE, rootStyle);
   const REASONS = {
-    "colour-font": "is a colour or bitmap font, which has no plain outlines",
+    "colour-font": "is a color or bitmap font, which has no plain outlines",
     restricted: "forbids embedding (OS/2 fsType), so its outlines are not written",
   };
   const keep = (family, reason) => {
@@ -231,10 +231,10 @@ function readableText(runs) {
   }).join("");
 }
 
-// Why a run stays text, or null: a colour or bitmap font, or a family whose fsType restricts embedding (the run was laid out with
+// Why a run stays text, or null: a color or bitmap font, or a family whose fsType restricts embedding (the run was laid out with
 // another face).
 function fallbackReason(run, env) {
-  if (COLOUR_TABLES.some((table) => run.face.font.directory?.tables?.[table])) return "colour-font";
+  if (COLOR_TABLES.some((table) => run.face.font.directory?.tables?.[table])) return "colour-font";
   for (const family of parseFontFamilies(run.style["font-family"])) {
     if (env.fonts.restricted?.has(family.toLowerCase())) return "restricted";
     if (run.face.names.has(family.toLowerCase()) || (env.onRefusal && env.validateFace && env.fonts.match([family],parseFontWeight(run.style["font-weight"],400),/italic|oblique/i.test(run.style["font-style"]??""))?.face===run.face)) break;
@@ -284,7 +284,7 @@ function drawRun(run, defs) {
   return run.link ? element("a", [...Object.entries(run.link.node?.attrs ?? { href: run.link.href }), ["aria-label", run.logical]], drawn) : drawn;
 }
 
-// Underline, line-through and overline in the text colour, from the font's own metrics (the vector PDF draws the same).
+// Underline, line-through and overline in the text color, from the font's own metrics (the vector PDF draws the same).
 function decorationRect(kind, run, scale) {
   const font = run.face.font, upem = run.face.upem;
   let position, thickness;

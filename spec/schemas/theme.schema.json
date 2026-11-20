@@ -53,7 +53,7 @@
     "colorScheme": {
       "type": "string",
       "pattern": "^(?:[a-z][a-z0-9-]*:)?[a-z][a-z0-9-]*$",
-      "description": "The theme's default colour scheme: a reference (a bare id or 'name:id') resolved like design.colorScheme, but in the theme's own catalogs group first.",
+      "description": "The theme's default color scheme: a reference (a bare id or 'name:id') resolved like design.colorScheme, but in the theme's own catalogs group first.",
       "examples": ["cool-horizon", "boost", "burnt-orange"]
     },
     "fontScheme": {
@@ -99,7 +99,7 @@
     "design": {
       "type": "object",
       "additionalProperties": false,
-      "description": "The theme's design defaults (OPF 0.19), so a house style such as boxed content or centred titles is set once: the keys and values of the deck's design for titleAlignment, titlePosition, contentAlignment, contentBox, imageFit, listBullet and listStyle. Per key the slide's design wins, then the deck's design, then this, then the layout record's design, then the engine default.",
+      "description": "The theme's design defaults (OPF 0.19), so a house style such as boxed content or centered titles is set once: the keys and values of the deck's design for titleAlignment, titlePosition, contentAlignment, contentBox, imageFit, listBullet and listStyle. Per key the slide's design wins, then the deck's design, then this, then the layout record's design, then the engine default.",
       "properties": {
         "titleAlignment": {
           "type": "string",

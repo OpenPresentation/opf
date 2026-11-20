@@ -180,7 +180,7 @@ function bare(text: string): string {
   return text.replace(/[#;<>&{}\\"`]/g, char => ({ '#': '#35;', ';': '#59;', '<': '#lt;', '>': '#gt;', '&': '#amp;', '{': '#123;', '}': '#125;', '\\': '#92;', '"': '#quot;', '`': '#96;' })[char]!).split('\n').join('<br>');
 }
 /** Text for a label after a colon (class relations, state transitions and descriptions): `bare`, and the colon too, which pele reads as the end of the label's start. */
-const labelled = (text: string): string => bare(text).replace(/:/g, '#58;');
+const labeled = (text: string): string => bare(text).replace(/:/g, '#58;');
 /** A use case relation's label sits between its dashes (`A -- label --> B`): what ends or splits it is an entity. */
 const betweenDashes = (text: string): string => bare(text).replace(/['()[\]:-]/g, char => `#${char.charCodeAt(0)};`);
 /**
@@ -652,7 +652,7 @@ function classDiagram(lines: Line[], title: string | undefined, maxEdges: number
       };
       const line = link.line === 'dotted' ? '..' : '--';
       const arrow = `${head(link.left, 'left')}${line}${head(link.right, 'right')}`;
-      out.push(`  ${from}${link.leftLabel ? ` "${quoted(link.leftLabel)}"` : ''} ${arrow}${link.rightLabel ? ` "${quoted(link.rightLabel)}"` : ''} ${to}${link.label ? ` : ${labelled(link.label)}` : ''}`);
+      out.push(`  ${from}${link.leftLabel ? ` "${quoted(link.leftLabel)}"` : ''} ${arrow}${link.rightLabel ? ` "${quoted(link.rightLabel)}"` : ''} ${to}${link.label ? ` : ${labeled(link.label)}` : ''}`);
       if (++relations > maxEdges) fail('diagram-limit', `The diagram has more than ${maxEdges} relations.`);
       continue;
     }
@@ -691,7 +691,7 @@ function stateDiagram(lines: Line[], title: string | undefined, direction: strin
       if (stereotype && ['choice', 'fork', 'join'].includes(stereotype)) out.push(`${indent}state ${id} <<${stereotype}>>`);
       else if (stereotype === 'end') out.push(`${indent}state ${id}`);
       else if (label && label !== id) out.push(`${indent}state "${bare(plainText(label))}" as ${id}`);
-      if (match[6]) out.push(`${indent}${id} : ${labelled(plainText(match[6]))}`);
+      if (match[6]) out.push(`${indent}${id} : ${labeled(plainText(match[6]))}`);
       if (match[5]) { out.push(`${indent}state ${id} {`); depth++; }
       else if (!stereotype && !label && !match[6]) out.push(`${indent}${id}`);
       continue;
@@ -709,7 +709,7 @@ function stateDiagram(lines: Line[], title: string | undefined, direction: strin
       if (body === undefined) { const block = noteBlock(lines, index, ''); body = block.text; index = block.end; }
       const side = match[1]!.toLowerCase();
       if (side !== 'left' && side !== 'right') noNote(current, 'a state');
-      out.push(`${indent}note ${side} of ${state(match[2]!)} : ${labelled(plainText(body))}`);
+      out.push(`${indent}note ${side} of ${state(match[2]!)} : ${labeled(plainText(body))}`);
       continue;
     }
     if (statement(text, /^note\b/i)) noNote(current, 'a state');
@@ -717,12 +717,12 @@ function stateDiagram(lines: Line[], title: string | undefined, direction: strin
     if (link) {
       if (link.left && link.right) fail('diagram-syntax', 'A state transition has one arrowhead; write two transitions for both directions.', current.line);
       const [from, to] = link.left && !link.right ? [link.to, link.from] : [link.from, link.to];
-      out.push(`${indent}${state(from)} --> ${state(to)}${link.label ? ` : ${labelled(link.label)}` : ''}`);
+      out.push(`${indent}${state(from)} --> ${state(to)}${link.label ? ` : ${labeled(link.label)}` : ''}`);
       if (++transitions > maxEdges) fail('diagram-limit', `The diagram has more than ${maxEdges} transitions.`);
       continue;
     }
     match = /^("[^"]+"|[\w.]+)\s*:\s*(.*)$/.exec(text);
-    if (match) { out.push(`${indent}${state(match[1]!)} : ${labelled(plainText(match[2]!))}`); continue; }
+    if (match) { out.push(`${indent}${state(match[1]!)} : ${labeled(plainText(match[2]!))}`); continue; }
     match = /^("[^"]+"|[\w.]+)$/.exec(text);
     if (match) { out.push(`${indent}${state(match[1]!)}`); continue; }
     unknown(current, 'state');

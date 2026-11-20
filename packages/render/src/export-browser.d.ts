@@ -6,7 +6,7 @@ export type { PdfDiagnostic, PdfMetadata } from "./index.js";
 export interface BrowserToPngOptions extends ToSvgOptions {
   /** Multiplies the SVG's own size (default 1). The result is limited to 40 megapixels. */
   scale?: number;
-  /** A CSS colour painted first (default white); `"transparent"` keeps the alpha channel. */
+  /** A CSS color painted first (default white); `"transparent"` keeps the alpha channel. */
   background?: string;
   /**
    * How the SVG is handed to the browser's image decoder: a `blob:` URL (default) or a `data:` URL, for a page whose Content-Security-Policy

@@ -88,7 +88,7 @@ export function createLayoutCanvas(container, options = {}) {
     onMove: (session, event) => moveDrag(session, event),
     onEnd: (session) => endDrag(session),
     onDrop: (session) => finishDrag(session),
-    onEscape: () => model.notify("Move cancelled."),
+    onEscape: () => model.notify("Move canceled."),
   });
 
   // --- geometry helpers -------------------------------------------------------------------------------------------------------

@@ -89,7 +89,7 @@ size, and changing `letter`, `a4` or `16:9` now would move every existing deck a
   `dimensions` when the deck sets none, and converts inches to EMU the way the exporter does
   (`Math.round(inches x 914400)`), so exactly 1 in and 56 in pass. The presets are all in range. The exporter does not
   check the range: it still writes the `p:sldSz` it is given, which does not conform to the standard when the size is
-  outside 1 to 56 in. Run `validate` first; PowerPoint's own behaviour at the limits was not measured.
+  outside 1 to 56 in. Run `validate` first; PowerPoint's own behavior at the limits was not measured.
 
 ## Import from PPTX
 

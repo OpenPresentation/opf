@@ -16,7 +16,7 @@ const GLUE_SPACE = /^[ \u2009]$/;
 /** The start of whitespace or a line break (a no-break space and the zero-width no-break space start a word, not a gap). */
 const BREAKING_SPACE = /^[^\S\u00a0\u202f\ufeff]/u;
 const SYMBOL_UNITS = '%\u2030\u066a\u00b0\u2032\u2033\u2103\u2109\u00d7\u2116';
-/** Units written after a number with a space (case matters: "M" is millions, "m" metres). Symbols and magnitude words are not language-bound. */
+/** Units written after a number with a space (case matters: "M" is millions, "m" meters). Symbols and magnitude words are not language-bound. */
 const UNITS = new Set([
   'x', 'X', 'k', 'K', 'M', 'B', 'bn', 'Bn', 'mn', 'mm', 'cm', 'dm', 'm', 'km', 'kg', 'g', 'mg', 't', 'lb', 'lbs', 'oz', 'ml', 'cl', 'dl', 'l', 'L', 'kl',
   's', 'ms', 'ns', 'sec', 'secs', 'min', 'mins', 'h', 'hr', 'hrs', 'd', 'yr', 'yrs', 'wk', 'wks', 'am', 'pm', 'a.m.', 'p.m.',
@@ -25,7 +25,7 @@ const UNITS = new Set([
   'm\u00b2', 'm\u00b3', 'km\u00b2', 'cm\u00b2', 'mm\u00b2', 'cm\u00b3', 'mm\u00b3',
   'USD', 'EUR', 'GBP', 'CHF', 'JPY', 'CNY', 'INR', 'CAD', 'AUD', 'SEK', 'NOK', 'DKK', 'PLN', 'BRL', 'MXN',
   'million', 'millions', 'billion', 'billions', 'trillion', 'thousand', 'percent', 'pct', 'Mio', 'Mio.', 'Mrd', 'Mrd.', 'Tsd', 'Tsd.', 'Mill.', 'Mld', 'Mld.',
-  // Arabic and Hebrew: million, billion, kilometre, kilogram.
+  // Arabic and Hebrew: million, billion, kilometer, kilogram.
   '\u0645\u0644\u064a\u0648\u0646', '\u0645\u0644\u064a\u0627\u0631', '\u0643\u0645', '\u0643\u062c\u0645', '\u05de\u05d9\u05dc\u05d9\u05d5\u05df', '\u05de\u05d9\u05dc\u05d9\u05e8\u05d3', '\u05e7\u05f4\u05de',
 ]);
 const CLOSING_MARKS = '.,;:!?)]}\u00bb\u203a\u201d\u2019\u2026%\u2030\u066a\u060c\u061b\u061f\u3002\u3001\uff0c\uff0e\uff1a\uff1b\uff01\uff1f\uff09\uff3d\uff5d\u300d\u300f\u3011\u3009\u300b\u3015\u30fb\u30fc';

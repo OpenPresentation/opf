@@ -5,12 +5,12 @@
 //
 //   end labels (line)    each named series gets one c:dLbl on its last point that shows its value and name as text ("61 Enterprise NPS",
 //                        c:tx c:rich, bold when the title names the series; c:showSerName marks it as the end label), right of
-//                        the point (c:dLblPos r; l right to left), in the series colour core made legible, moved up or down by core's
+//                        the point (c:dLblPos r; l right to left), in the series color core made legible, moved up or down by core's
 //                        offset (c:layout c:manualLayout c:y, a fraction of the chart height from the default place). The chart has no
 //                        legend, and its plot area keeps core's inner layout with the gutter for the names (chart-layer.js).
 //   slice labels (pie)   each slice gets a c:dLbl that shows its category name (c:showCatName), inside its end or outside it (c:dLblPos
-//                        inEnd or outEnd; a doughnut has no position and labels in its ring), in the colour that contrasts with the slice
-//                        inside and the chart text colour outside, with leader lines on. The chart has no legend.
+//                        inEnd or outEnd; a doughnut has no position and labels in its ring), in the color that contrasts with the slice
+//                        inside and the chart text color outside, with leader lines on. The chart has no legend.
 //
 // Import reads them as the default they are: a line chart whose only labels are series names on the last points, and a pie or doughnut
 // whose only labels are category names, without a legend, import with no `legend` and no `dataLabels` (`directLabelDefaults`).
@@ -59,7 +59,7 @@ export function applyEndLabels(xml, info) {
 }
 
 /**
- * Write the category names on the slices (`info`: {labels: [{row, position}], fills (hex by row), labelColor (the chart text colour on
+ * Write the category names on the slices (`info`: {labels: [{row, position}], fills (hex by row), labelColor (the chart text color on
  * the backdrop), size, font}) into the one series of a generated pie or doughnut part.
  */
 export function applySliceLabels(xml, info) {
@@ -82,8 +82,8 @@ const on = node => node !== undefined && node?.val !== '0' && node?.val !== 'fal
 
 /**
  * Import: true when the labels of a parsed classic chart group (`group`, fast-xml-parser, prefixes kept) are the LH-105 direct labels an
- * export writes by default: on a line chart, every labelled point shows the series name only and sits on the series' last point; on a
- * pie or doughnut of one series, every labelled point shows the category name only. The caller then reads no `legend` and no `dataLabels`.
+ * export writes by default: on a line chart, every labeled point shows the series name only and sits on the series' last point; on a
+ * pie or doughnut of one series, every labeled point shows the category name only. The caller then reads no `legend` and no `dataLabels`.
  */
 export function directLabelDefaults(group, kind) {
   const series = asArray(group?.['c:ser']);
@@ -100,7 +100,7 @@ export function directLabelDefaults(group, kind) {
   }
   if (kind === 'pie' || kind === 'doughnut') return series.length === 1 && levelOff && points[0].length > 0 && points[0].every(point => only(point, 'c:showCatName'));
   // LH-109: a stacked column or area chart whose every series shows its values (in the middle of a column), with only hidden or
-  // recoloured points, carries the default values inside its segments.
+  // recolored points, carries the default values inside its segments.
   if ((kind === 'bar' || kind === 'area') && ['stacked', 'percentStacked'].includes(group?.['c:grouping']?.val)) {
     return series.length >= 2 && series.every((ser, index) => {
       const labels = ser?.['c:dLbls'];

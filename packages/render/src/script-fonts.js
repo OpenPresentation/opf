@@ -44,10 +44,10 @@ export const SCRIPT_FONT_FAMILIES = freeze({
   Tibt: {serif: "Noto Serif Tibetan"},
   // FF-45 special families. Zsye (emoji symbols) and Zmth (mathematical notation) are ISO 15924 keys for
   // text, not scripts a character carries: emoji and math characters are Common, so they stay in their
-  // neighbours' run and reach these faces through the glyph fallback chain (emoji-presentation clusters
+  // neighbors' run and reach these faces through the glyph fallback chain (emoji-presentation clusters
   // take the emoji face first). The keys are last so the chain tries every real script face before them.
-  // `fallback` is a further designated face, tried after the colour face: a host that installed only the monochrome Noto Emoji package
-  // still previews and exports emoji. The colour face stays first wherever it is loaded.
+  // `fallback` is a further designated face, tried after the color face: a host that installed only the monochrome Noto Emoji package
+  // still previews and exports emoji. The color face stays first wherever it is loaded.
   Zsye: {sans: "Noto Color Emoji", fallback: "Noto Emoji"},
   Zmth: {serif: "STIX Two Math", sans: "Noto Sans Math"},
 });
@@ -117,7 +117,7 @@ export const SCRIPT_FONT_REPLACEMENTS = freeze([
   ...replacement("Thaa", sansThenSerif("Thaa"), ["MV Boli"]),
   ...replacement("Syrc", sansThenSerif("Syrc"), ["Estrangelo Edessa"]),
   ...replacement("Tibt", serifThenSans("Tibt"), ["Microsoft Himalaya"]),
-  // FF-45: Segoe UI Emoji previews with Noto Color Emoji (COLRv1 and SVG colour glyphs; Noto Emoji is the monochrome
+  // FF-45: Segoe UI Emoji previews with Noto Color Emoji (COLRv1 and SVG color glyphs; Noto Emoji is the monochrome
   // face the raster path draws), Cambria Math with STIX Two Math (serif math face with a MATH table; Noto Sans Math
   // is the sans alternative). Both are visual: advances differ from the Microsoft fonts (see the policy rows).
   ...replacement("Zsye", ["Noto Color Emoji", "Noto Emoji"], ["Segoe UI Emoji"]),
@@ -577,7 +577,7 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
       }
       // No single candidate covers the run. Split it into grapheme clusters (a base character with
       // the combining marks and joiners that follow it) and group those into script segments
-      // (common characters stay with their neighbours; white space ends a word). Each segment takes the first face that
+      // (common characters stay with their neighbors; white space ends a word). Each segment takes the first face that
       // covers all of its letters and marks: the chosen face, the previous fallback face, the
       // other candidates, then the fallback chain. A word is never drawn in two faces when one
       // face has all of it (Greek beside a Latin serif, a kanji run beside Hangul). A cluster

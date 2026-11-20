@@ -490,8 +490,8 @@ export async function toPptx(input, options = {}) {
 export async function fromPptx(input, options = {}) {
   // Opt-in raw shape signals (import-signals.js). Validated first so a bad option fails before any work.
   const signalLimits = normalizeSignalOptions(options.signals, (code, message, details) => new OPFPptxError(code, message, details));
-  // OPF 0.15 (FA-23): catalogs the host registered (core `Catalog[]`, never fetched). Theme and colour-scheme recovery and
-  // stored layout ids resolve against them; with none, a colour scheme imports inline and no theme id is recovered.
+  // OPF 0.15 (FA-23): catalogs the host registered (core `Catalog[]`, never fetched). Theme and color-scheme recovery and
+  // stored layout ids resolve against them; with none, a color scheme imports inline and no theme id is recovered.
   checkCatalogs('fromPptx', options.catalogs);
   const entries = readPptxZip(input);
   const presentationDoc = parseRequiredXml(entries, "ppt/presentation.xml");
@@ -727,8 +727,8 @@ export async function fromPptx(input, options = {}) {
   return {presentation: imported, signals};
 }
 
-// RR-08: run colours named by a ColorRef (variable, scheme slot, role) come back as that name where the document's own
-// colour resolution still gives the run's colour; see run-colors.js.
+// RR-08: run colors named by a ColorRef (variable, scheme slot, role) come back as that name where the document's own
+// color resolution still gives the run's color; see run-colors.js.
 function applyRunColors(imported, slideProvenance, restoredGroups, report, options, contexts) {
   const restoredContent = new Set(restoredGroups.filter(group => group.applied && group.contentPaths).map(group => group.contentPaths.slide));
   const protectedValues=(index)=>{
@@ -1026,7 +1026,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
   }, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.design.background`}));
   // FA-23: tagged image pictures and overlays (OPF_IMAGE_V1, OPF_IMAGE_OVERLAY_V1). An unchanged full-slide back picture is
-  // the slide's image background (its native fill is then only the canvas colour); an unchanged overlay of a native image
+  // the slide's image background (its native fill is then only the canvas color); an unchanged overlay of a native image
   // background fill joins that background; an unchanged image block picture returns its treatment and placement.
   const images = importImages({pictures: nativeContext.pictures, shapes: nativeContext.shapes, relationships, entries, slideIndex,
     readPicture: picture => importPicture(entries, picture, slidePath, relationships, diagnostic => {
@@ -1577,7 +1577,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
 
 // The box a quarter-turned picture occupies on the slide: `a:xfrm` describes the
 // frame before rotation, so a 90 or 270 degree turn swaps its width and height
-// around the same centre. Content topology matching compares this visual box.
+// around the same center. Content topology matching compares this visual box.
 function visualBounds(xfrm) {
   const bounds = shapeBounds(xfrm);
   const rotation = Number(xfrm?.rot ?? 0);
@@ -1800,7 +1800,7 @@ function joinRich(a, b) {
 // native shape with no text: it is never a description. Without a record the lines join without a separator, as before.
 // `runs` (opf-pptx#212) holds the look export wrote on every run of a list ({text, description?}): a run value still equal to
 // it is inherited formatting, not authored run style, and is removed (as for a tagged heading), so an untouched round trip
-// adds no explicit sizes, families or colours; a value edited in PowerPoint differs and is kept. Without it runs are as read.
+// adds no explicit sizes, families or colors; a value edited in PowerPoint differs and is kept. Without it runs are as read.
 function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null, roles = null) {
   const lists = new Map();
   for (const item of items) {
@@ -1836,7 +1836,7 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
     if ((unbulleted || !entries[0].item.paragraphs[0].bullet) && !validRoles) continue;
     const look = runs?.get(path), textLook = cleanBase(look?.text), descriptionLook = cleanBase(look?.description);
     // The line's runs without the inherited look, or the paragraph's own richText when there is no record for this kind of line.
-    // Each run is cleaned on its own and none merge, so the runs stay the slots the run colour record counts (src/run-colors.js);
+    // Each run is cleaned on its own and none merge, so the runs stay the slots the run color record counts (src/run-colors.js);
     // they stay run objects until the lines are joined (as before), then `plain` gives the authored form back.
     const own = (paragraph, base) => {
       if(paragraph[V2_CURRENT_RICH])return paragraph.richText;
@@ -1844,8 +1844,8 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
       return richRuns(paragraph.richText ?? paragraph.text).flatMap(run => {
         const value = headingValue([run], base);
         const parts = value === '' ? [] : typeof value === 'string' ? [{text: value}] : value.map(part => typeof part === 'string' ? {text: part} : part);
-        // A removed colour stays known until the run colour references are restored (restoreRunColors): an authored `text`
-        // role equals the inherited colour natively.
+        // A removed color stays known until the run color references are restored (restoreRunColors): an authored `text`
+        // role equals the inherited color natively.
         if (typeof run === 'object' && typeof run.color === 'string' && parts.length === 1 && parts[0].color === undefined) parts[0]._opfInherited = run.color;
         return parts;
       });
@@ -2376,7 +2376,7 @@ function assertValidBoundary(presentation) {
 }
 
 // RR-55: what a slide (or, for the deck level, an empty slide) resolves to in core, the one chain every engine shares: canvas,
-// layout, font families, alignment and content box as composeSlide's options, plus the theme, colour scheme and font scheme
+// layout, font families, alignment and content box as composeSlide's options, plus the theme, color scheme and font scheme
 // records they came from. `diagnostics` names references that matched no record.
 // Core's slide context with the host's registered catalogs. Under strict export core throws OPFUnresolvedReferenceError for a
 // reference that resolves nowhere; the export fails with `unresolved-reference` naming the first one (its path and every diagnostic).
@@ -2403,7 +2403,7 @@ function exportFonts(core, textMeasurement) {
 function resolvePresentationContext(presentation, options, core = coreContext({...presentation, slides: [{}]}, 0, {...options, textMeasurement: undefined})) {
   const design = presentation.design ?? {};
   // `core` defaults to the deck level: the resolution of a slide that sets nothing of its own.
-  // The theme and colour scheme records come from core, which falls back to the engine defaults (reporting unresolved-reference)
+  // The theme and color scheme records come from core, which falls back to the engine defaults (reporting unresolved-reference)
   // for a reference that resolves nowhere.
   const {theme, colorScheme} = core.resolved;
   const dimensions = {widthInches: core.options.width / 96, heightInches: core.options.height / 96};
@@ -2621,7 +2621,7 @@ function exportTheme(presentation, context, options) {
 // FF-24 recovery against the host's registered catalogs (FA-23). Only the first registered catalog, the host default, can be
 // named by a bare id in a document that declares no catalogs, so only its records are matched: an exact match imports as
 // that bare id. Everything else (no catalog registered, a scheme from another registered catalog, no exact match) imports
-// as an inline colour scheme, and no theme id is recovered.
+// as an inline color scheme, and no theme id is recovered.
 function hostDefaultRecords(kind, catalogs) {
   return catalogRecords({}, kind, {catalogs: catalogs ?? []}).filter(entry => entry.group === "default").map(entry => ({...entry.record, id: entry.id}));
 }
@@ -2652,7 +2652,7 @@ function importThemeDesign(entries, presentationRoot, presentationRels, catalogs
   if (Object.keys(colors).length) design.colorScheme = recoverColorScheme({colors, unreadable, name: scalarText(clrScheme.name)}, records).value;
   if (unreadable.length) report("unsupported-theme-colors", "design.colorScheme", `Theme color slot(s) ${unreadable.join(", ")} do not resolve to an opaque sRGB color and were not imported.`);
   const latin = font => scalarText(elements?.["a:fontScheme"]?.[font]?.["a:latin"]?.typeface);
-  // A theme's own colour and font scheme references resolve in the theme's group first (core resolveReference).
+  // A theme's own color and font scheme references resolve in the theme's group first (core resolveReference).
   const themeReference = (kind, reference) => {
     const id = referenceId(reference);
     const found = id ? resolveReference({}, kind, id, {catalogs: catalogs ?? [], group: "default"}) : undefined;
@@ -2779,7 +2779,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   const nativePlans = nativeBody ? [nativeBody, ...nativeBody.others] : [];
   recordContentTopology(context.documentProvenance, opfSlide, slideIndex, nativeBody ? geometry.items.map(item => { const plan = nativePlans.find(plan => plan.item === item); return plan ? {...item, box: plan.box, text: undefined} : item; }) : geometry.items);
   recordOverlays(context.documentProvenance, authoredSlide, slideIndex);
-  // Paint order, as in the preview (FA-22 contract): canvas colour, the background picture and its overlay, design.watermark,
+  // Paint order, as in the preview (FA-22 contract): canvas color, the background picture and its overlay, design.watermark,
   // the logo, then the items in core's order: the headings, the placed image blocks at their bands, then the flowed body.
   if (geometry.backgroundImage) await addBackgroundImage(slide, presentation, geometry.backgroundImage, slideIndex, slideContext, context, options);
   // RR-34: a captioned image's caption band follows its picture as tagged text boxes linked to the picture by name.
@@ -2853,7 +2853,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     }
     const drawnBefore = boundRegion && {images: context.images.size, placeholders: context.imagePlaceholders.size, charts: context.chartHeadings.size, tables: context.tableHeaders.size};
     // Card text sits on a literal card fill, not the slide background: keep it literal.
-    // LH-54: the card fill is core's card neutral (a filled surface on a dark slide whose scheme surface is the background), which a metric is coloured against.
+    // LH-54: the card fill is core's card neutral (a filled surface on a dark slide whose scheme surface is the background), which a metric is colored against.
     const cardNeutral = slideContext.roles.neutrals?.card;
     // LH-06: an item on the emphasis surface is colored with the surface's roles (literal, as card text is), and the surface, a tagged
     // card frame in core's fill and radius with no line, is drawn under the first of them, as the preview draws it.
@@ -3026,7 +3026,7 @@ function placedImageBands(slide) {
 }
 
 // One slide's export context: core's resolveSlideContext (`core`: composeSlide's options, the records and the diagnostics) and
-// the exporter's colours and measurement-resolved families derived from it.
+// the exporter's colors and measurement-resolved families derived from it.
 // RR-97: the deck's own background stays literal on a slide whose picture background is unreadable and falls back to it (useFallbackBackground).
 const geometryFallbackBackground = presentation => presentation.design?.background;
 
@@ -3331,7 +3331,7 @@ async function addImagePicture(slide, presentation, asset, box, path, context, o
   // RR-105: the picture's aspect ratio, read from the embedded source, for a caller that places something on the drawn picture.
   if (measured && typeof resolved?.data === 'string') measured.aspect = intrinsicImageAspect(resolved.data);
   if (!resolved) {
-    // RR-59 (AUTO-26): a content picture never vanishes silently. A background names its own fallback (the slide colour).
+    // RR-59 (AUTO-26): a content picture never vanishes silently. A background names its own fallback (the slide color).
     if (!outcome.reported) options.onDiagnostic?.(role === 'background' ? backgroundUnresolved(path) : {code: "unresolved-asset", path, reason: "unresolved-source", message: "The image needs an embedded raster, a declared asset or a host imageResolver; the image exports as the unavailable-image placeholder. Remote images are never fetched."});
     return undefined;
   }
@@ -3352,7 +3352,7 @@ async function addImagePicture(slide, presentation, asset, box, path, context, o
   return name;
 }
 
-// The native effects of an image treatment, resolved in the slide's colour context: core's mask (item.image.shape), the
+// The native effects of an image treatment, resolved in the slide's color context: core's mask (item.image.shape), the
 // stroke (SH-02: every stroke property, src/shape-blocks.js lineXml), opacity and recolor.
 function imageEffects(image, context) {
   const paint = (entry, fallback) => {
@@ -3701,7 +3701,7 @@ const scrimName = slidePath => `OPF background scrim ${slidePath}`;
 const isScrimName = (name, base) => name === base || name === `${base} 2` || name === `${base} 3`;
 
 // An image background (core SlideComposition.backgroundImage). With alt text it is a full-slide picture at the back of
-// the slide over the canvas colour, carrying the alt text as its descr; without alt it is the native slide background
+// the slide over the canvas color, carrying the alt text as its descr; without alt it is the native slide background
 // fill (written at packaging). Its overlay is one shape directly above the picture.
 async function addBackgroundImage(slide, presentation, background, slideIndex, slideContext, context, options) {
   const slidePath = `slides.${slideIndex}`, part = `ppt/slides/slide${slideIndex + 1}.xml`;
@@ -3885,7 +3885,7 @@ function chartTextHundredths(context, region) {
 }
 
 // Every c:txPr of a generated classic chart carries the chart text size: PptxGenJS writes no size on the legend (PowerPoint's
-// 18 pt default) and hardcodes 18 pt on pie and doughnut data labels. Only the size changes; faces and colours stay as written.
+// 18 pt default) and hardcodes 18 pt on pie and doughnut data labels. Only the size changes; faces and colors stay as written.
 function applyChartTextSize(xml, size) {
   return xml.replace(/<c:txPr>[\s\S]*?<\/c:txPr>/g, properties => properties.replace(/<a:defRPr\b([^>]*?)(\/?)>/g, (match, attributes, close) =>
     `<a:defRPr${/\bsz="[^"]*"/.test(attributes) ? attributes.replace(/\bsz="[^"]*"/, `sz="${size}"`) : `${attributes} sz="${size}"`}${close}>`));
@@ -3922,14 +3922,14 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const stackLabels = Boolean(layer?.stack?.values.some(row => row.some(Boolean)) && !chartOptions.dataLabels);
   if (stackLabels) chartOptions = {...chartOptions, active: true, dataLabels: {content: ['value'], position: chartTargetFor(chart.type)?.kind === 'area' ? null : 'center', separator: ', '}};
 
-  // LH-03, LH-105: no chart has a panel (the chart and plot areas are unfilled); its colours are judged against the card or the slide
+  // LH-03, LH-105: no chart has a panel (the chart and plot areas are unfilled); its colors are judged against the card or the slide
   // background it stands on, as the preview does.
   const panelFill = context.cardFill ?? `#${normalizeHex(context.colors.background)}`;
   // RR-96: chart text, gridlines and axis lines are core's scheme-derived neutrals (tx1 mixed into bg1 at 65%, 15% and 25%), which the finished
   // part writes as schemeClr with lumMod/lumOff, so a variant or background style change in PowerPoint recolors them.
   const neutrals = context.roles.neutrals;
   const labelColor = normalizeHex(textColorForFill(panelFill, neutrals?.chartText?.hex ?? `#${context.colors.text}`));
-  // Data labels and highlighted marks contrast with their own mark, from the full text colour (the chart-text neutral is for axes and legends).
+  // Data labels and highlighted marks contrast with their own mark, from the full text color (the chart-text neutral is for axes and legends).
   const markLabelColor = normalizeHex(textColorForFill(panelFill, `#${context.colors.text}`));
   const gridColor = normalizeHex(neutrals?.gridline?.hex ?? `#${context.colors.border}`), axisLineColor = normalizeHex(neutrals?.axisLine?.hex ?? `#${context.colors.border}`);
   const transparency = /^#[0-9a-f]{8}$/i.test(panelFill) ? (1 - parseInt(panelFill.slice(7), 16) / 255) * 100 : 0;
@@ -3968,12 +3968,12 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // RR-105 (#1290): with no authored alt, the generated description (src/default-alt.js), so the frame is never without alt text.
   if (typeof chart.alt === 'string') context.frameAlts.set(objectName, chart.alt);
   else { const generated = chartAlt(chart, presentation); if (generated) context.frameAlts.set(objectName, generated); }
-  // RR-89: the series colours are core's chartSeriesPalette (accent1 to accent6 of the deck scheme, then their tints, with the chart's own
-  // `colors` over them), adjusted for the chart panel like the preview does. A colour that is still an unadjusted theme accent (or a
-  // `chart.colors` scheme slot or role) is written as a schemeClr, so re-theming in PowerPoint recolours the series.
+  // RR-89: the series colors are core's chartSeriesPalette (accent1 to accent6 of the deck scheme, then their tints, with the chart's own
+  // `colors` over them), adjusted for the chart panel like the preview does. A color that is still an unadjusted theme accent (or a
+  // `chart.colors` scheme slot or role) is written as a schemeClr, so re-theming in PowerPoint recolors the series.
   const colorContext = {roles: context.roles, variables: context.variables, accents: context.roles.map?.accents};
   const preferredPalette = chartSeriesPalette(context.colorScheme, chart.colors, colorContext);
-  // WI-5 (P18, D3) and LH-55: every series from the scheme reaches 4.5:1 on a dark panel, as the preview draws it; a lifted colour is written as srgbClr.
+  // WI-5 (P18, D3) and LH-55: every series from the scheme reaches 4.5:1 on a dark panel, as the preview draws it; a lifted color is written as srgbClr.
   // LH-105: ordinary series are softened towards the backdrop (core softenChartPalette), written as srgbClr; the full-strength palette is
   // kept for the emphasis and the names at the line ends.
   const legibleSeries = chartSchemeSeries(chart.colors, context.colorScheme, colorContext);
@@ -3995,13 +3995,13 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     ...(layer?.stack?.edge ? {stackEdge: true} : {})});
   // LH-60: a doughnut of several series (core's nested rings) gets its further rings after PptxGenJS wrote the first.
   if (chartData.type === 'doughnut' && chartData.series.length > 1) context.chartHeadings.get(objectName).rings = chartData.series.map((entry) => ({name: entry.name, values: [...entry.values]}));
-  // FA-14: chart.highlight. A highlighted chart writes accent and muted colours over the series palette, and its data labels
-  // contrast with those colours (src/chart-highlight.js).
+  // FA-14: chart.highlight. A highlighted chart writes accent and muted colors over the series palette, and its data labels
+  // contrast with those colors (src/chart-highlight.js).
   const highlight = chartData.chartex ? undefined : chartHighlightPlan({options: chartOptions, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor: markLabelColor, primary: `#${context.colors.accent}`,
     schemeFor: hex => schemeColorValue('primary', hex, context)}) ?? chartFocusPlan({layer, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor: markLabelColor, strong: strongPalette}) ?? chartEmphasisPlan({layer, data: chartData.resolved, panelFill, palette, strong: strongPalette, schemes: paletteSchemes});
   context.chartPalettes.set(objectName,highlight ? highlight.seriesFills : palette);
   if (highlight) context.chartHeadings.get(objectName).highlight = highlight;
-  // LH-105: each series named at its line end in its colour (the highlight's, else full strength) made legible as text, as the preview does.
+  // LH-105: each series named at its line end in its color (the highlight's, else full strength) made legible as text, as the preview does.
   if (layer?.endLabels) {
     const fills = highlight ? highlight.seriesFills : strongPalette;
     context.chartHeadings.get(objectName).endLabels = {...layer.endLabels, region, rtl: context.direction === 'rtl',
@@ -4027,10 +4027,10 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     }
   }
   const percent = chartData.spec.grouping === 'percentStacked';
-  // RR-36: a series has one colour, as the preview draws it (opf-render paints series j with palette colour j; only pie,
-  // doughnut and treemap slices take a colour per category). PptxGenJS writes a c:dPt per point, cycling the palette, for a
-  // bar chart with one series whenever chartColors is a custom array of more than one colour, so PowerPoint drew each
-  // column of a single-series column or bar chart in a different colour. One colour for that series writes no c:dPt.
+  // RR-36: a series has one color, as the preview draws it (opf-render paints series j with palette color j; only pie,
+  // doughnut and treemap slices take a color per category). PptxGenJS writes a c:dPt per point, cycling the palette, for a
+  // bar chart with one series whenever chartColors is a custom array of more than one color, so PowerPoint drew each
+  // column of a single-series column or bar chart in a different color. One color for that series writes no c:dPt.
   const chartColors = chartData.type === 'bar' && chartData.series.length === 1 ? palette.slice(0, 1) : palette;
   const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
   const layerXml = chartLayerOptions(layer, {region, scale, textSize, labelColor: markLabelColor, font: context.fonts.body, chart, rtl: context.direction === 'rtl'});
@@ -4146,8 +4146,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
 
 // FA-15: a combo chart is one PptxGenJS multi-type chart: a clustered column c:barChart on the primary axes, a c:lineChart with
 // markers for the primary-axis lines, and one for the secondary-axis lines on a second c:valAx (at the right, crossing at the
-// maximum of a deleted second c:catAx). Each series keeps its palette colour by its index in the whole chart (PptxGenJS restarts
-// the colour cycle per chart type), and the embedded workbook holds every series. The secondary axis has no gridlines and only
+// maximum of a deleted second c:catAx). Each series keeps its palette color by its index in the whole chart (PptxGenJS restarts
+// the color cycle per chart type), and the embedded workbook holds every series. The secondary axis has no gridlines and only
 // its own title; applyComboConstruct puts the line groups into schema order afterwards.
 function comboChart(chartData, options, {palette, chartOptions, labelColor, font, textSize}) {
   const series = chartData.series.map((entry, index) => ({...entry, color: palette[index % palette.length]}));
@@ -4155,7 +4155,7 @@ function comboChart(chartData, options, {palette, chartOptions, labelColor, font
   const bars = part('bar'), primaryLines = part('line', 'primary'), secondaryLines = part('line', 'secondary');
   const lineOptions = {lineDataSymbol: chartData.paretoCombo ? 'none' : 'circle'};
   const types = [
-    // The column group's own colour list: with one column series, a longer list would make PptxGenJS colour each column (c:dPt, RR-36).
+    // The column group's own color list: with one column series, a longer list would make PptxGenJS color each column (c:dPt, RR-36).
     ...(bars.length ? [{type: 'bar', data: bars, options: {barDir: 'col', barGrouping: 'clustered', chartColors: bars.map((entry) => entry.color)}}] : []),
     ...(primaryLines.length ? [{type: 'line', data: primaryLines, options: lineOptions}] : []),
     ...(secondaryLines.length ? [{type: 'line', data: secondaryLines, options: {...lineOptions, secondaryValAxis: true, secondaryCatAxis: true}}] : []),
@@ -4896,7 +4896,7 @@ function addCodePayload(slide, value, layout, region, context, path, options) {
   const group = String(context.codeTags.size + 1), panelName = `OPF code ${group} panel`;
   for (const part of layout.parts) if (!part.fit) throw new OPFPptxError('layout-overflow', 'Code content has no usable internal space; increase its cell size before exporting.', {path:part.path,diagnostics:layout.diagnostics});
   // FA-13: code.highlight is one native rectangle per run of marked lines, between the panel and the line text boxes; marked
-  // lines keep the syntax colours, the others are dimmed, from the same core helpers the preview calls.
+  // lines keep the syntax colors, the others are dimmed, from the same core helpers the preview calls.
   const highlight = codeHighlight(value, layout, context);
   context.codeTags.set(panelName,codeManifest(value,layout,group,highlight?.bands.length));
   const syntax = codeSyntax(value, layout, context, path, options);
@@ -4928,13 +4928,13 @@ function addCodePayload(slide, value, layout, region, context, path, options) {
         color:part.role==='body'?(lineColors?.plain.slice(1)??palette.plain.slice(1)):palette.keyword.slice(1),align:'left',fit:'none',wrap:false,lineSpacingMultiple:1,
         tabStops:tabStops.length?tabStops:undefined,objectName,
       };
-      // A run's own options replace the line's, so every run repeats the font, size, alignment and tab stops and differs only in colour.
+      // A run's own options replace the line's, so every run repeats the font, size, alignment and tab stops and differs only in color.
       slide.addText(runs?.some(run=>run.kind) ? runs.map(run=>({text:part.text.slice(run.start,run.end),options:{...lineOptions,color:(lineColors??syntax.palette)[run.kind??'plain'].slice(1)}})) : lineText,lineOptions);
     }
   }
 }
 
-// FA-13: the marked lines of code.highlight, their bands (runs of displayed lines) and the lit/dimmed colours, from core (the preview
+// FA-13: the marked lines of code.highlight, their bands (runs of displayed lines) and the lit/dimmed colors, from core (the preview
 // calls the same functions); undefined when the code marks no line.
 function codeHighlight(value, layout, context) {
   if (!value || typeof value !== 'object' || !Array.isArray(value.highlight)) return undefined;
@@ -5138,8 +5138,8 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   }
 }
 
-// Mirror the renderer's media placeholder: a bordered surface, a centred 72px
-// play badge and a centred caption (title, then source). Native video embedding
+// Mirror the renderer's media placeholder: a bordered surface, a centered 72px
+// play badge and a centered caption (title, then source). Native video embedding
 // is not attempted; the caption keeps the reference editable.
 function addMediaPayload(slide, presentation, value, region, path, context, options) {
   const box = pixelBox(region);
@@ -5181,7 +5181,7 @@ function placeholderAsset(asset, presentation) {
 // An image that cannot be embedded exports the preview's placeholder, not a second
 // design: a dashed panel with a centered "Image unavailable" over the asset's alt
 // text (else title, else "Image"), set bold at 20 px (shrinking to the composition
-// minimum) in the readable text colour for the panel, or a cross when the label
+// minimum) in the readable text color for the panel, or a cross when the label
 // cannot fit even at that minimum. The panel carries the accessible name the
 // preview gives its group, "Image unavailable: <description>".
 // The panel's other shapes are named after it (OPF image placeholder N text line i / icon i) and the panel's name is returned,
@@ -5659,7 +5659,7 @@ function histogramBins(values) {
   const count = min === max ? 1 : Math.min(50, Math.ceil(Math.log2(values.length)) + 1);
   const edge = (index) => index === 0 ? min : index === count ? max : min / count * (count - index) + max / count * index;
   const bins = Array.from({length: count}, (_, index) => ({low: edge(index), high: edge(index + 1), count: 0}));
-  // A value belongs to the last bin whose lower edge it reaches, so counts always agree with the labelled edges.
+  // A value belongs to the last bin whose lower edge it reaches, so counts always agree with the labeled edges.
   for (const value of values) {
     let index = 0;
     while (index + 1 < count && value >= bins[index + 1].low) index++;
@@ -5789,7 +5789,7 @@ async function resolveImageSource(asset, presentation, options, path, outcome = 
     try { resolvedByHost = await options.imageResolver(src, { asset: assetObject, presentation, path }); }
     catch (error) {
       // RR-97: a resolver that throws (the CLI's does for an image it cannot read) is an unresolved image, not a failed export: the
-      // picture's own fallback and one `unresolved-asset` warning that carries the resolver's message. A cancelled export and an
+      // picture's own fallback and one `unresolved-asset` warning that carries the resolver's message. A canceled export and an
       // exporter error still propagate, and `strictAssets` turns the failure into a `missing-asset` error.
       if (error instanceof OPFPptxError || error?.name === "AbortError") throw error;
       const cause = errorMessage(error).trim();
@@ -5897,8 +5897,8 @@ function referenceId(reference) {
   return null;
 }
 
-// A solid color or pattern background color is a ColorRef (hex, `var:` variable, colour-scheme slot or role), resolved
-// as for table fills and run colours. Roles resolve through the colour scheme alone: the background cannot depend on itself.
+// A solid color or pattern background color is a ColorRef (hex, `var:` variable, color-scheme slot or role), resolved
+// as for table fills and run colors. Roles resolve through the color scheme alone: the background cannot depend on itself.
 // A background that is one color: a color string, a theme slot, or a solid fill (not a picture, gradient or pattern).
 function isSingleColorBackground(value) {
   if (value === undefined || value === null) return true;
@@ -6037,7 +6037,7 @@ async function normalizePptxZip(raw, context) {
         try{entries[chartPart]=encodeText(applyChartHighlight(decodeText(entries[chartPart]),highlight));}
         catch(error){throw new OPFPptxError('packaging-failed',`Chart highlight could not be written: ${errorMessage(error)}`);}
       }else{
-        // RR-89: series that keep a theme accent (or a chart.colors scheme slot) are written as theme colours.
+        // RR-89: series that keep a theme accent (or a chart.colors scheme slot) are written as theme colors.
         const {palette,paletteSchemes,circular}=context.chartHeadings.get(name);
         if(paletteSchemes)entries[chartPart]=encodeText(applyChartSchemeColors(decodeText(entries[chartPart]),palette,paletteSchemes,{circular}));
       }
@@ -6045,10 +6045,10 @@ async function normalizePptxZip(raw, context) {
       // Normalize only our generated chart text styles; point/series fills stay intact.
       entries[chartPart]=encodeText(decodeText(entries[chartPart]).replace(/<c:txPr>[\s\S]*?<\/c:txPr>/g,properties=>properties.replace(/<a:solidFill>[\s\S]*?<\/a:solidFill>/g,()=>`<a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill>`)));
       entries[chartPart]=encodeText(applyChartTextSize(decodeText(entries[chartPart]),textSize));
-      // RR-35: data labels last, so their own text colours (contrast inside a mark) are not normalized away.
+      // RR-35: data labels last, so their own text colors (contrast inside a mark) are not normalized away.
       const {options:chartOptions,kind:optionKind,pointCount}=context.chartHeadings.get(name);
       // LH-92: a pie drawn as nested rings (LH-60) labels inside its rings, as a doughnut does: no c:dLblPos (a doughnut has none) and the
-      // colour that contrasts with each slice, as the preview draws them.
+      // color that contrasts with each slice, as the preview draws them.
       const ringed=optionKind==='pie'&&/<c:doughnutChart>/.test(decodeText(entries[chartPart]));
       if(chartOptions?.dataLabels)entries[chartPart]=encodeText(applyDataLabels(decodeText(entries[chartPart]),{resolved:ringed?{...chartOptions,dataLabels:{...chartOptions.dataLabels,position:null}}:chartOptions,kind:ringed?'doughnut':optionKind,palette:context.chartPalettes.get(name),labelColor:markLabelColor,font:context.chartFonts.get(name)?.body??'Arial',textSize,pointCount,highlight}));
       // LH-109: the segment values that do not fit their segments are hidden, point by point.
@@ -6542,7 +6542,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
         if(!marker)return shape;
         if(marker.picture&&bulletRelationship)return shape.replace(/<a:buChar\b[^>]*\/>/g,`<a:buBlip><a:blip r:embed="${bulletRelationship}"/></a:buBlip>`);
         const family=marker.fontFamily.replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[char]));
-        // RR-33: an auto-number takes the measured size, colour and family like a character bullet, and startAt only when it is not 1.
+        // RR-33: an auto-number takes the measured size, color and family like a character bullet, and startAt only when it is not 1.
         const autoNumber=/<a:buSzPct val="100000"\/><a:buFont typeface="\+mj-lt"\/><a:buAutoNum type="([A-Za-z]+)" startAt="(\d+)"\/>/;
         if(autoNumber.test(shape))return shape.replace(autoNumber,(_,type,startAt)=>`<a:buClr>${solidColorXml(marker.color)}</a:buClr><a:buSzPts val="${Math.round(marker.fontSize*100)}"/><a:buFont typeface="${family}"/><a:buAutoNum type="${type}"${startAt==='1'?'':` startAt="${startAt}"`}/>`);
         return shape.replace(/<a:buSzPct val="100000"\/>/g,`<a:buClr>${solidColorXml(marker.color)}</a:buClr><a:buSzPts val="${Math.round(marker.fontSize*100)}"/><a:buFont typeface="${family}"/>`);

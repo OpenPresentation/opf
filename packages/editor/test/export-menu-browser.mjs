@@ -206,8 +206,8 @@ try {
   await status().getByRole('button', { name: 'Cancel export' }).click();
   await page.waitForFunction(() => document.querySelector('.opf-export-status')?.dataset.state === 'cancelled');
   assert.equal(await page.evaluate(() => window.log.signals.at(-1).aborted), true, 'Cancel aborts the signal the exporter was given');
-  assert.match(await status().innerText(), /Export cancelled\./);
-  await page.waitForFunction(() => /Export cancelled/.test(document.querySelector('.opf-export-live').textContent));
+  assert.match(await status().innerText(), /Export canceled\./);
+  await page.waitForFunction(() => /Export canceled/.test(document.querySelector('.opf-export-live').textContent));
   assert.equal(downloaded, false, 'a cancelled export offers no file');
   assert.equal(await trigger.getAttribute('aria-busy'), null);
   await trigger.click();

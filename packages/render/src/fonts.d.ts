@@ -179,5 +179,5 @@ export declare const EMOJI_FONT_FAMILIES: readonly string[];
 export declare function hasEmojiPresentation(text: string): boolean;
 /** True when the text holds mathematical notation that text faces lack (math alphanumerics, letterlike math sets, rarer operator blocks). */
 export declare function hasMathNotation(text: string): boolean;
-/** Colour faces of the manifest: resvg draws their monochrome stand-in (`rasterFamily`); browsers draw them in colour. */
+/** Color faces of the manifest: resvg draws their monochrome stand-in (`rasterFamily`); browsers draw them in color. */
 export declare const COLOR_FONT_FACES: readonly { family: string; file: string; package: string; format: string; rasterFamily: string }[];

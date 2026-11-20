@@ -3,13 +3,13 @@
 // Composition decides them with the rest of the chart layer, so the preview (opf-render) and the PPTX export (opf-pptx) draw the same:
 //
 //   end labels (line)    a line chart of two to four series without data labels names each series at the end of its line, in the
-//                        series colour, instead of a legend. The plot leaves a gutter at its end for the names (ChartLayer.plot, which the
+//                        series color, instead of a legend. The plot leaves a gutter at its end for the names (ChartLayer.plot, which the
 //                        PPTX export writes as the plot area's inner manual layout); a name that would touch another moves up or down,
 //                        never more than one line from its point. When the names cannot be placed so, the chart keeps its header legend.
 //                        The header row keeps only its caption. The PPTX export writes each name as the last point's c:dLbl with
 //                        c:showSerName, at the right of the point (the left right to left), moved by a manual layout like the preview.
 //   slice labels (pie)   a pie or a one-series doughnut without data labels names each slice at the slice, instead of a side legend:
-//                        inside the slice when the name fits there (in the colour that contrasts with the slice), else (a pie only)
+//                        inside the slice when the name fits there (in the color that contrasts with the slice), else (a pie only)
 //                        outside its end. When an outside name would touch another, leave the chart box or shrink the pie under 30% of
 //                        its room, or a doughnut name does not fit its ring, the chart keeps its legend.
 //
@@ -48,7 +48,7 @@ function endLabelCandidate(chart: unknown, data: ResolvedChartData, layer: Chart
 }
 
 /**
- * The names at the line ends for a plot, or undefined when they cannot be placed: each name centred on its series' last point, then the
+ * The names at the line ends for a plot, or undefined when they cannot be placed: each name centered on its series' last point, then the
  * names moved apart (in point order, top to bottom) so no two are closer than one text line, and kept between the plot's top and bottom.
  * `relaxed` places them however far they move (used once the plot is fixed by a shared set); otherwise a name moved more than one line
  * from its point fails, and the chart keeps its legend.
@@ -74,18 +74,18 @@ export function placeEndLabels(chart: unknown, data: ResolvedChartData, axis: Ch
     return {j, name: entry.name, text, bold, y: at(stacks[j]![last]!.to), width: (bold && geometry.bold ? geometry.bold(text, fontPx) : geometry.measure(text, fontPx)) + fontPx * 0.5};
   });
   const order = [...placed].sort((a, b) => a.y - b.y || a.j - b.j);
-  const centres = order.map(entry => entry.y);
-  // A name's centre stays between the plot's top (the plot keeps half a line above it) and half a line above its bottom (the category labels).
+  const centers = order.map(entry => entry.y);
+  // A name's center stays between the plot's top (the plot keeps half a line above it) and half a line above its bottom (the category labels).
   const top = plot.y, bottom = plot.y + plot.height - textHeight / 2;
   if ((order.length - 1) * textHeight > bottom - top + 1e-6) return undefined;
   // Push down past the one above, then pull up from the bottom edge, then keep under the top edge.
-  for (let index = 0; index < centres.length; index++) centres[index] = Math.max(centres[index]!, index ? centres[index - 1]! + textHeight : top);
-  for (let index = centres.length - 1; index >= 0; index--) centres[index] = Math.min(centres[index]!, index === centres.length - 1 ? bottom : centres[index + 1]! - textHeight);
-  for (let index = 0; index < centres.length; index++) centres[index] = Math.max(centres[index]!, index ? centres[index - 1]! + textHeight : top);
-  if (!relaxed && order.some((entry, index) => Math.abs(centres[index]! - entry.y) > textHeight + 1e-6)) return undefined;
+  for (let index = 0; index < centers.length; index++) centers[index] = Math.max(centers[index]!, index ? centers[index - 1]! + textHeight : top);
+  for (let index = centers.length - 1; index >= 0; index--) centers[index] = Math.min(centers[index]!, index === centers.length - 1 ? bottom : centers[index + 1]! - textHeight);
+  for (let index = 0; index < centers.length; index++) centers[index] = Math.max(centers[index]!, index ? centers[index - 1]! + textHeight : top);
+  if (!relaxed && order.some((entry, index) => Math.abs(centers[index]! - entry.y) > textHeight + 1e-6)) return undefined;
   const entries = order.map((entry, index): ChartEndLabel => ({
     series: entry.j, name: entry.name, text: entry.text, ...(entry.bold ? {bold: true} : {}), row: last, point: {x, y: entry.y},
-    box: {x: rtl ? x - gap - entry.width : x + gap, y: centres[index]! - lineHeight / 2, width: entry.width, height: lineHeight},
+    box: {x: rtl ? x - gap - entry.width : x + gap, y: centers[index]! - lineHeight / 2, width: entry.width, height: lineHeight},
   }));
   return entries.sort((a, b) => a.series - b.series);
 }
@@ -173,7 +173,7 @@ export function chartSliceLabels(chart: unknown, data: ResolvedChartData, geomet
     const text = label(row[0]);
     return {row: i, start, delta, mid: start + delta / 2, text, width: geometry.measure(text, fontPx, 400) + fontPx * 0.5};
   }).filter(slice => slice.delta > 0 && slice.text !== '');
-  // The label box the preview centres on its point (labelSize), and the text inside it that must stay within the slice.
+  // The label box the preview centers on its point (labelSize), and the text inside it that must stay within the slice.
   const fits = (slice: (typeof slices)[number], r: number, hole: number): boolean => {
     const cos = Math.cos(slice.mid), sin = Math.sin(slice.mid);
     const half = (slice.width * Math.abs(cos) + lineHeight * Math.abs(sin)) / 2;

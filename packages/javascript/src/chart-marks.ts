@@ -481,9 +481,9 @@ function areaEnd(shape: NonNullable<ReturnType<typeof segments>>, j: number, row
   const bounds = (distance: number) => { const t = distance / shape.band; return {top: shape.at(point.to) + (shape.at(next.to) - shape.at(point.to)) * t, bottom: shape.at(point.from) + (shape.at(next.from) - shape.at(point.from)) * t}; };
   const near = bounds(0), far = bounds(room);
   if (Math.abs(near.bottom - near.top) < m.textHeight || Math.abs(far.bottom - far.top) < m.textHeight) return undefined;
-  const middle = bounds(room / 2), centre = (middle.top + middle.bottom) / 2;
+  const middle = bounds(room / 2), center = (middle.top + middle.bottom) / 2;
   const boxWidth = width + m.fontPx * 0.3;
-  return {series: j, row, text, align: toLeft ? 'left' : 'right', box: {x: toLeft ? edgeX + m.fontPx * 0.1 : edgeX - m.fontPx * 0.1 - boxWidth, y: centre - m.lineHeight / 2, width: boxWidth, height: m.lineHeight}};
+  return {series: j, row, text, align: toLeft ? 'left' : 'right', box: {x: toLeft ? edgeX + m.fontPx * 0.1 : edgeX - m.fontPx * 0.1 - boxWidth, y: center - m.lineHeight / 2, width: boxWidth, height: m.lineHeight}};
 }
 
 /**
@@ -533,10 +533,10 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
   const {fontPx, textHeight, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
   const rtl = geometry.direction === 'rtl', last = data.rows.length - 1;
   // The last category is the rightmost (the leftmost right to left); the names start past the column's edge or the band's end.
-  const centre = shape.pointX(last, rtl), reach = shape.kind === 'bar' ? shape.band / 3 : 0;
+  const center = shape.pointX(last, rtl), reach = shape.kind === 'bar' ? shape.band / 3 : 0;
   // An edge-to-edge area's end value stands inside its edge: the names keep a text size and a half clear of it.
   const lead = shape.spaced ? fontPx * 0.6 : fontPx * 0.25;
-  const start = rtl ? centre - reach - lead : centre + reach + lead;
+  const start = rtl ? center - reach - lead : center + reach + lead;
   const swatch = fontPx * 0.6;
   const placed = shape.series.map((_, j) => {
     const point = shape.stacks[j]![last], name = label(data.columns[j + 1]), bold = focus?.includes(j) === true && !stableNameWidths(chart);
@@ -545,15 +545,15 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
     return {j, name, bold, y, width};
   });
   const order = [...placed].sort((a, b) => a.y - b.y || b.j - a.j);
-  const centres = order.map(entry => entry.y);
+  const centers = order.map(entry => entry.y);
   const top = plot.y + textHeight / 2, bottom = plot.y + plot.height - textHeight / 2;
   if ((order.length - 1) * textHeight > bottom - top + 1e-6) return undefined;
-  for (let index = 0; index < centres.length; index++) centres[index] = Math.max(centres[index]!, index ? centres[index - 1]! + textHeight : top);
-  for (let index = centres.length - 1; index >= 0; index--) centres[index] = Math.min(centres[index]!, index === centres.length - 1 ? bottom : centres[index + 1]! - textHeight);
-  for (let index = 0; index < centres.length; index++) centres[index] = Math.max(centres[index]!, index ? centres[index - 1]! + textHeight : top);
-  if (!relaxed && order.some((entry, index) => Math.abs(centres[index]! - entry.y) > textHeight + 1e-6)) return undefined;
+  for (let index = 0; index < centers.length; index++) centers[index] = Math.max(centers[index]!, index ? centers[index - 1]! + textHeight : top);
+  for (let index = centers.length - 1; index >= 0; index--) centers[index] = Math.min(centers[index]!, index === centers.length - 1 ? bottom : centers[index + 1]! - textHeight);
+  for (let index = 0; index < centers.length; index++) centers[index] = Math.max(centers[index]!, index ? centers[index - 1]! + textHeight : top);
+  if (!relaxed && order.some((entry, index) => Math.abs(centers[index]! - entry.y) > textHeight + 1e-6)) return undefined;
   const entries = order.map((entry, index): ChartStackName => ({series: entry.j, name: entry.name, ...(entry.bold ? {bold: true} : {}),
-    box: {x: rtl ? start - entry.width : start, y: centres[index]! - lineHeight / 2, width: entry.width, height: lineHeight}}));
+    box: {x: rtl ? start - entry.width : start, y: centers[index]! - lineHeight / 2, width: entry.width, height: lineHeight}}));
   // The names must stay inside the chart box.
   if (!relaxed && entries.some(entry => entry.box.x < box.x - 0.5 || entry.box.x + entry.box.width > box.x + box.width + 0.5)) return undefined;
   return entries.sort((a, b) => a.series - b.series);

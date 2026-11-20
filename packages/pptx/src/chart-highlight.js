@@ -1,20 +1,20 @@
 // FA-14: chart emphasis (`chart.highlight`) in the PPTX export.
 //
-// Core owns what is highlighted (`resolveChartOptions(...).highlight`, `chartHighlightMarks`) and the two colours
-// (`chartHighlightColors`); the preview (opf-render) calls the same functions, so both engines colour the same marks the same way.
+// Core owns what is highlighted (`resolveChartOptions(...).highlight`, `chartHighlightMarks`) and the two colors
+// (`chartHighlightColors`); the preview (opf-render) calls the same functions, so both engines color the same marks the same way.
 // This module writes them natively into the generated classic chart part:
 //
-//   column, bar, area, scatter, radar   the series colour (c:ser/c:spPr, and c:marker/c:spPr) of every series, accent when the
+//   column, bar, area, scatter, radar   the series color (c:ser/c:spPr, and c:marker/c:spPr) of every series, accent when the
 //                                       series is named, muted otherwise; clustered and stacked alike;
-//   column and bar, category highlight  one c:dPt (idx, invertIfNegative, bubble3D, spPr) per point whose colour differs from its
-//                                       series' colour;
-//   line                                the series line and marker colour, and for a category highlight one c:dPt with a circular
+//   column and bar, category highlight  one c:dPt (idx, invertIfNegative, bubble3D, spPr) per point whose color differs from its
+//                                       series' color;
+//   line                                the series line and marker color, and for a category highlight one c:dPt with a circular
 //                                       c:marker per highlighted point (a line without markers shows markers only there);
 //   pie, doughnut                       the fill of the c:dPt of every slice, accent for a highlighted category, muted otherwise.
 //
-// The highlight colour is the deck primary: `a:schemeClr val="accent1"` when the deck theme holds exactly that colour (so a theme
-// edit in PowerPoint recolours it), the literal sRGB otherwise (a primary that needed a contrast adjustment against the chart panel).
-// The muted colour is a mix of the panel and the text colour, which no single scheme colour with lumMod/lumOff reproduces, so it is
+// The highlight color is the deck primary: `a:schemeClr val="accent1"` when the deck theme holds exactly that color (so a theme
+// edit in PowerPoint recolors it), the literal sRGB otherwise (a primary that needed a contrast adjustment against the chart panel).
+// The muted color is a mix of the panel and the text color, which no single scheme color with lumMod/lumOff reproduces, so it is
 // an sRGB literal. A chart without a highlight never reaches this module, so its parts are unchanged.
 import {chartHighlightColors, chartHighlightMarks} from '@openpresentation/opf/composition';
 
@@ -23,10 +23,10 @@ const srgb = hex => `<a:srgbClr val="${String(hex).replace(/^#/, '').toUpperCase
 /**
  * The highlight of an exported chart: `{kind, marks, accent, muted, seriesFills, pointFills}` or undefined.
  * `options` is core's `resolveChartOptions` result, `data` the resolved chart data (`columns`, `hasX`, `rows`), `kind` the chart's option
- * kind, `panelFill` and `labelColor` the chart panel and text colours (as the preview uses them), `primary` the deck primary and
- * `scheme` its scheme value when the theme holds it exactly (core's colour for the accent is compared with it here).
+ * kind, `panelFill` and `labelColor` the chart panel and text colors (as the preview uses them), `primary` the deck primary and
+ * `scheme` its scheme value when the theme holds it exactly (core's color for the accent is compared with it here).
  *
- * Colours are `{hex, xml}`: `hex` (RRGGBB) feeds the data label contrast, `xml` is the DrawingML colour element.
+ * Colors are `{hex, xml}`: `hex` (RRGGBB) feeds the data label contrast, `xml` is the DrawingML color element.
  */
 export function chartHighlightPlan({options, data, kind, panelFill, labelColor, primary, schemeFor}) {
   if (!options?.highlight || !data) return undefined;
@@ -42,7 +42,7 @@ export function chartHighlightPlan({options, data, kind, panelFill, labelColor, 
   const circular = kind === 'pie' || kind === 'doughnut';
   return {
     kind, marks, accent, muted, seriesColor, markColor, circular,
-    // The series colours (data label contrast of a series-level label) and, where marks differ within a series, the point colours.
+    // The series colors (data label contrast of a series-level label) and, where marks differ within a series, the point colors.
     seriesFills: Array.from({length: marks.series.length}, (_, index) => seriesColor(index).hex),
     pointFills: series => circular ? marks.categories.map(row => (row ? accent : muted).hex)
       : kind === 'bar' && marks.categories.some(Boolean) ? marks.categories.map((_, row) => markColor(series, row).hex) : undefined,
@@ -84,7 +84,7 @@ export function applyChartHighlight(xml, plan) {
     if (plan.circular) {
       return ser.replace(/<c:dPt>([\s\S]*?)<\/c:dPt>/g, (point, inner) => {
         const row = Number(/<c:idx val="(\d+)"\/>/.exec(inner)?.[1]);
-        // LH-105: a focus plan colours each focused slice in its own colour (plan.sliceColor).
+        // LH-105: a focus plan colors each focused slice in its own color (plan.sliceColor).
         return marks.categories[row] === undefined ? point : recolor(point, plan.sliceColor ? plan.sliceColor(row) : marks.categories[row] ? accent : muted);
       });
     }
@@ -94,7 +94,7 @@ export function applyChartHighlight(xml, plan) {
       const points = marks.categories.flatMap((_, row) => plan.markColor(index, row) === plan.seriesColor(index) ? [] : [barPoint(row, plan.markColor(index, row))]).join('');
       if (points) out = out.replace(/<c:dLbls>|<c:cat>/, anchor => `${points}${anchor}`);
     } else if (kind === 'line' && marks.categories.some(Boolean)) {
-      // A line shows a marker at every highlighted category: on a line with markers only where the series colour is not already the
+      // A line shows a marker at every highlighted category: on a line with markers only where the series color is not already the
       // accent, on a line without markers (symbol none) at every highlighted point.
       const hasMarkers = !/<c:marker>\s*<c:symbol val="none"\/>/.test(out);
       const points = marks.categories.flatMap((highlighted, row) => highlighted && (!hasMarkers || plan.markColor(index, row) !== plan.seriesColor(index)) ? [linePoint(row, plan.markColor(index, row))] : []).join('');

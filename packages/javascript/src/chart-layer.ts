@@ -5,14 +5,14 @@
 //
 //   small chart (LH-03)   a clustered column, bar or line chart of one or two series whose value labels fit beside each other (LH-111:
 //                         up to sixteen points) labels every mark with its value and drops the value axis, its gridlines and the gray chart panel; a one-series column or bar chart
-//                         draws its last point in a stronger shade of the series colour and the others in the series colour (LH-95).
+//                         draws its last point in a stronger shade of the series color and the others in the series color (LH-95).
 //   header row (LH-81)    a column, bar, line, area or combo chart without its own caption draws a caption when it adds to the
 //                         legend ("Revenue by quarter")
 //                         at the start of a row above the plot and its series legend (two to four swatches) in that row or the next,
 //                         instead of a legend at the side, so the plot keeps the chart's whole width.
 //
 // An explicit option always wins: `dataLabels: false` keeps the value axis and no labels, a value axis title keeps the value axis,
-// `legend` keeps the chart's own legend and draws no header row, `highlight` and `colors` keep their colours, and a payload `caption` replaces the
+// `legend` keeps the chart's own legend and draws no header row, `highlight` and `colors` keep their colors, and a payload `caption` replaces the
 // header caption. PPTX import does not write these defaults back as options (src/chart-options.js in opf-pptx).
 import {chartOptionTarget, chartLabelText, formatChartLabelNumber} from './chart-options.js';
 import {chartTextSize} from './chart-axis.js';
@@ -46,7 +46,7 @@ export interface ChartLayerSmall {
   labels: boolean;
   /** False when the value axis is dropped: no tick labels, no gridlines, no value axis line (the labels carry the values). */
   valueAxis: boolean;
-  /** Row index of the mark drawn in the stronger shade; every other mark keeps the series colour (`chartEmphasisColors`). One-series column and bar charts only. */
+  /** Row index of the mark drawn in the stronger shade; every other mark keeps the series color (`chartEmphasisColors`). One-series column and bar charts only. */
   emphasis?: number;
 }
 
@@ -105,7 +105,7 @@ export interface ChartLayer {
   /** LH-105: a pie or one-series doughnut names its categories on its slices instead of drawing a legend (chart-direct-labels.ts). */
   slices?: ChartLayerSlices;
   /**
-   * LH-105: the series or categories the slide title names (chart-focus.ts): drawn in their full-strength colour, every other mark in the
+   * LH-105: the series or categories the slide title names (chart-focus.ts): drawn in their full-strength color, every other mark in the
    * context neutral. A focus replaces the small chart's last-point emphasis.
    */
   focus?: ChartLayerFocus;
@@ -257,7 +257,7 @@ export function columnValueLabel(data: ResolvedChartData, column: number, value:
 /**
  * LH-03: the small-chart treatment of a chart, or undefined. A clustered column, bar or line chart (with or without markers) of one or
  * two series, each of at most SMALL_CHART_MAX_POINTS (16) points, whose `dataLabels` is not `false`. With a geometry, the value labels must also fit beside
- * each other: a column or line label no wider than the room between neighbouring marks, a bar label no taller than its bar's slot.
+ * each other: a column or line label no wider than the room between neighboring marks, a bar label no taller than its bar's slot.
  */
 export function smallChart(chart: unknown, data: ResolvedChartData, geometry?: ChartLayerGeometry): ChartLayerSmall | undefined {
   if (!record(chart) || !data.ok || data.combo) return undefined;
@@ -283,16 +283,16 @@ export function smallChart(chart: unknown, data: ResolvedChartData, geometry?: C
       const band = Math.max(1, box.height - 2 * pad - fontPx * 1.5) / count;
       if (fontPx * 1.22 > (seriesCount > 1 ? chartBarGeometry(band, seriesCount, 'clustered').width : band)) return undefined;
     } else {
-      // A column label is centred on its column: two series' labels sit a column apart, one series' a category apart.
+      // A column label is centered on its column: two series' labels sit a column apart, one series' a category apart.
       const band = Math.max(1, box.width - 2 * pad) / count;
       const room = seriesCount > 1 && spec.kind === 'bar' ? chartBarGeometry(band, seriesCount, 'clustered').width : band;
       if (widest + fontPx * 0.1 > room) return undefined;
     }
   }
   const out: ChartLayerSmall = {labels: !explicit, valueAxis: !showsValue || titled};
-  // The accent goes to the last point that has a value; a highlight or authored colours keep their own colours. LH-105: only when the
+  // The accent goes to the last point that has a value; a highlight or authored colors keep their own colors. LH-105: only when the
   // categories run forward in time, where the last point is the latest one (chart-time-order.ts); the last of nominal categories (stages,
-  // regions, products) is only the last one written, and emphasising it would invent a message.
+  // regions, products) is only the last one written, and emphasizing it would invent a message.
   const titles = record(chart.axisTitles) ? chart.axisTitles : {};
   const inTime = () => chartCategoriesInTime(data.rows.map(row => row[0]), {title: nonBlank(titles.category) ?? label(data.columns[0]), language: geometry?.language});
   if (spec.kind === 'bar' && seriesCount === 1 && chart.highlight === undefined && chart.colors === undefined && inTime()) {
@@ -445,7 +445,7 @@ export function chartLayer(chart: unknown, data: ResolvedChartData, geometry: Ch
 }
 
 /**
- * LH-92: the ring names of a doughnut of two or more rings (LH-60's nested rings, the first series innermost, every ring coloured by
+ * LH-92: the ring names of a doughnut of two or more rings (LH-60's nested rings, the first series innermost, every ring colored by
  * category). The side legend names the categories only, so each ring's series name is written inside the ring, on its largest slice
  * (the one with the most room; the first of equals), as that slice's label: the name alone, or before the slice's own label text with
  * the labels' separator, as PowerPoint orders a label's parts (series name first). The label runs along the ring (`rotation`), so a

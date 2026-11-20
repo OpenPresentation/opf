@@ -43,7 +43,7 @@ export function contentValueFor(slot, map = DEFAULT_MAP, prefer) {
   return roles.includes(prefer) ? prefer : roles[0];
 }
 // PptxGenJS 4.0.1 createColorElement accepts only these scheme values (pptxgenjs-plus accepts more; the set is kept
-// so exported colours stay as they were).
+// so exported colors stay as they were).
 const VENDOR_VALUES = new Set(['tx1', 'tx2', 'bg1', 'bg2', 'accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6']);
 
 // Role names resolve through core resolveColorRef with the exporter's resolved
@@ -308,7 +308,7 @@ function recordColors(record) {
 
 /**
  * Recover design.colorScheme from theme clrScheme colors.
- * `records` are the colour schemes a bare id can name in the imported document
+ * `records` are the color schemes a bare id can name in the imported document
  * (FA-23: the host default catalog's, each with its key as `id`; none when the
  * host registers no catalog). An exact twelve-slot match yields that bare id
  * (the clrScheme name breaks ties). Otherwise the colors are inline: relative
