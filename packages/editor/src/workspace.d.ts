@@ -11,6 +11,7 @@ import type { Presenter } from "./presenter.js";
 import type { ReviewFinding, ReviewHook } from "./review.js";
 import type { ReviewPanel, ReviewPanelOptions } from "./review-panel.js";
 import type { SlideManager } from "./slide-manager.js";
+import type { ThumbnailStripLabels } from "./thumbnail-strip.js";
 import type { SourceCursor, SourceFormat, SourceFile, SourcePane, SourcePaneOptions } from "./source-pane.js";
 import type { Toolbar, ToolbarItemName, ToolbarItemSpec } from "./toolbar.js";
 import type { DeckTitle } from "./deck-title.js";
@@ -387,6 +388,8 @@ export interface OpfEditorOptions {
   labels?: Partial<Record<"review" | "design" | "find" | "undo" | "redo" | "slideView" | "inspector" | "navigator" | "thumbnails" | OpfEditorChromeLabel, string>> & {
     /** CE-28 wave 2: the labels of the Design quick menu, the review pill, the help sheet and the actions group. */
     designMenu?: DesignMenuLabels;
+    /** The labels of the thumbnail strip beyond its landmark (`thumbnails`): the "+" and slide menus, the starters and their status lines. */
+    thumbnailStrip?: ThumbnailStripLabels;
     /** Status after the workspace and its fonts are ready. An empty string leaves the status line clear. */
     ready?: string;
     reviewPill?: ReviewPillLabels;

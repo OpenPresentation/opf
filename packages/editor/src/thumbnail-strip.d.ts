@@ -29,7 +29,14 @@ export interface ThumbnailStripLabels {
   moveRight?: string;
   moveUp?: string;
   moveDown?: string;
-  /** Status lines (`onStatus` or the strip's live region). `{position}` and `{count}` are replaced. */
+  /** With `starters`: the text beside "+" and the menu entries, and the content they add. Defaults: "Slide", "Title", "Bullets", "Blank", "New slide", "First point". */
+  addText?: string;
+  startTitle?: string;
+  startBullets?: string;
+  startBlank?: string;
+  newSlideTitle?: string;
+  firstPoint?: string;
+  /** Status lines (`onStatus` or the strip's live region). `{position}` and `{count}` are replaced. With `starters` the defaults of `statusAdded` and `statusDeleted` are "Added slide {position}" and "Deleted slide {position}". */
   statusAdded?: string;
   statusDuplicated?: string;
   statusDeleted?: string;

@@ -85,7 +85,7 @@ Slot names: `toolbar` and the toolbar items `title`, `history`, `counter`, `view
 | `theme` | see [theming](theming.md) and, for class hooks, layers and icons, [styling](styling.md) |
 | `onChange`, `onSelection`, `onCursor`, `onError`, `onReady`, `on` | callbacks and listeners |
 
-With `slideActions: "starters"`, the thumbnail strip offers Title, Bullets and Blank and focuses the title on slides that have one. Use `canvas: { titleEnterCommits: true }` for Enter to finish an inline slide title and Shift+Enter to insert a line break. A host that supplies its own status area can set `labels.ready` to an empty string.
+With `slideActions: "starters"`, the thumbnail strip offers Title, Bullets and Blank and focuses the title on slides that have one. Use `canvas: { titleEnterCommits: true }` for Enter to finish an inline slide title and Shift+Enter to insert a line break. A host that supplies its own status area can set `labels.ready` to an empty string. The words of the starters, the "+" button and the strip's menus and status lines are `labels.thumbnailStrip` (`addText`, `startTitle`, `startBullets`, `startBlank`, `newSlideTitle`, `firstPoint`, `statusAdded`, `statusDeleted` and the other keys of `createThumbnailStrip`'s `labels`); the hint shown while a title is edited is `canvas: { labels: { titleEnterHint } }`. Defaults are English.
 
 ## The handle
 

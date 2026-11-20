@@ -51,13 +51,15 @@ async function openPage(contextOptions = {}) {
       document.body.append(host);
       const deck = { name, design: { theme: 'classic', fontScheme: 'roboto' }, slides: Array.from({ length: count }, (_, index) => ({ id: `s${index + 1}`, title: `Slide ${index + 1}`, text: `Words ${index + 1}` })) };
       const editor = createEditorSession(deck, { rejectInvalid: true, catalogs: [gallery] });
-      const state = { editor, selected: [], status: [], host };
+      const state = { editor, selected: [], status: [], details: [], added: [], host };
       state.strip = createThumbnailStrip(host, {
         editor, fonts: window.fonts, slideIndex: current,
         onSelect: (index) => { state.selected.push(index); },
         ...(layouts === 'empty' ? { layoutOptions: () => [] } : layouts ? { layoutOptions: (presentation) => listSwitchOptions(presentation, 'layouts', { catalogs: editor.catalogs }) } : {}),
         ...strip,
         ...(strip.onStatus === 'record' ? { onStatus: (message) => state.status.push(message) } : {}),
+        ...(strip.onStatus === 'details' ? { onStatus: (message, details) => state.details.push({ message, ...details }) } : {}),
+        ...(strip.onAdd === 'record' ? { onAdd: (index) => state.added.push(index) } : {}),
       });
       window.rigs[name] = state;
       return true;
@@ -597,6 +599,86 @@ try {
   await page.evaluate(() => { document.body.classList.remove('dark'); });
   await page.emulateMedia({ colorScheme: 'light' });
   mark('the menu follows the dark tokens');
+
+  // --- starters: the add menu offers Title, Bullets and Blank; the selected thumbnail carries the actions button ----------------------
+  await rig('st', { count: 3, current: 1, strip: { actions: true, starters: true, onStatus: 'details', onAdd: 'record' } });
+  const stAdd = page.locator('#st').getByRole('button', { name: 'Add slide' });
+  assert.equal(await stAdd.innerText(), 'Slide', 'the add button reads Slide');
+  assert.equal(await stAdd.getAttribute('aria-haspopup'), 'menu');
+  await stAdd.click();
+  await menu().waitFor();
+  assert.equal(await menu().getAttribute('aria-label'), 'Add slide');
+  assert.deepEqual(await page.getByRole('menuitem').allInnerTexts(), ['Title', 'Bullets', 'Blank']);
+  const slideAt = (name, index) => page.evaluate(([n, i]) => window.rigs[n].editor.presentation.slides[i], [name, index]);
+  await menuItem('Title').click();
+  await settled('st', 4);
+  assert.deepEqual(await ids('st'), ['s1', 's2', 'slide-4', 's3'], 'Title adds a slide after the current one');
+  assert.deepEqual(await slideAt('st', 2), { id: 'slide-4', title: 'New slide' }, 'a title-only slide has no body');
+  assert.deepEqual(await page.evaluate(() => window.rigs.st.added), [2], 'onAdd reports the index');
+  assert.equal((await view('st')).current, 2);
+  assert.deepEqual(await page.evaluate(() => window.rigs.st.details.at(-1)), { message: 'Added slide 3', undoable: true });
+  await stAdd.click();
+  await menuItem('Bullets').click();
+  await settled('st', 5);
+  assert.deepEqual(await slideAt('st', 3), { id: 'slide-5', title: 'New slide', items: ['First point'] });
+  assert.deepEqual(await page.evaluate(() => window.rigs.st.added), [2, 3]);
+  await stAdd.click();
+  await menuItem('Blank').click();
+  await settled('st', 6);
+  assert.deepEqual(await slideAt('st', 4), { id: 'slide-6' }, 'Blank adds a slide with no content');
+  assert.deepEqual(await page.evaluate(() => window.rigs.st.added), [2, 3, 4]);
+  assert.deepEqual(await page.evaluate(() => window.rigs.st.details.map((entry) => entry.message)), ['Added slide 3', 'Added slide 4', 'Added slide 5']);
+  assert.equal(await page.evaluate(() => window.rigs.st.editor.validation.valid), true);
+  mark('starters: the add button opens Title, Bullets and Blank, each adds the right slide after the current one and calls onAdd');
+
+  // The actions button sits on the selected thumbnail only, opens the slide menu with Delete last, and every action is reported undoable.
+  const actionsButtons = page.locator('#st .opf-thumbs-actions');
+  assert.equal(await actionsButtons.count(), 1, 'one actions button');
+  assert.equal(await page.locator('#st .opf-thumbs-item[aria-current="true"]').evaluate((node) => node.parentElement.contains(document.querySelector('#st .opf-thumbs-actions'))), true, 'it is on the selected thumbnail');
+  assert.equal(await actionsButtons.getAttribute('aria-label'), 'Slide actions');
+  await actionsButtons.click();
+  await menu().waitFor();
+  assert.equal(await menu().getAttribute('aria-label'), 'Slide actions');
+  const entries = await page.getByRole('menuitem').allInnerTexts();
+  assert.ok(entries.at(-1).startsWith('Delete slide'), `Delete is last (${entries})`);
+  assert.deepEqual(entries.slice(0, 3).map((entry) => entry.split('\n')[0]), ['Duplicate slide', 'Hide in slide show', 'Move left']);
+  await page.keyboard.press('Escape');
+  const statuses = () => page.evaluate(() => window.rigs.st.details);
+  const act = async (label) => { await actionsButtons.click(); await menuItem(label).click(); };
+  const before = (await statuses()).length;
+  await act('Duplicate slide');
+  await settled('st', 7);
+  await act('Hide in slide show');
+  await act('Move left');
+  await act('Delete slide');
+  await settled('st', 6);
+  const reported = (await statuses()).slice(before);
+  assert.equal(reported.length, 4, 'one status per action');
+  assert.ok(reported.every((entry) => entry.undoable === true && entry.message), `every action is undoable (${JSON.stringify(reported)})`);
+  assert.equal(reported.at(-1).message.startsWith('Deleted slide'), true);
+  assert.equal(await actionsButtons.count(), 1, 'still one actions button after the strip changed');
+  mark('starters: the selected thumbnail has one actions button; add, duplicate, hide, move and delete report { undoable: true }');
+
+  // Read-only removes the button and the add menu, and bringing it back restores them.
+  await rig('stro', { count: 3, strip: { actions: true, starters: true, readOnly: true } });
+  assert.equal(await page.locator('#stro .opf-thumbs-actions').count(), 0, 'readOnly: no actions button');
+  assert.equal(await page.locator('#stro .opf-thumbs-add').count(), 0, 'readOnly: no add button');
+  await page.evaluate(() => window.rigs.stro.strip.setReadOnly(false));
+  assert.equal(await page.locator('#stro .opf-thumbs-actions').count(), 1);
+  await page.evaluate(() => window.rigs.stro.strip.setReadOnly(true));
+  assert.equal(await page.locator('#stro .opf-thumbs-actions').count(), 0, 'setReadOnly(true) removes it again');
+  mark('starters: readOnly removes the actions button');
+
+  // The words are labels: a host can set every one of them.
+  await rig('stl', { count: 3, strip: { actions: true, starters: true, onStatus: 'details', labels: { addText: 'Folie', add: 'Folie hinzufuegen', startTitle: 'Titel', startBullets: 'Liste', startBlank: 'Leer', newSlideTitle: 'Neue Folie', firstPoint: 'Erster Punkt', statusAdded: 'Folie {position} da' } } });
+  await page.locator('#stl .opf-thumbs-add').click();
+  assert.deepEqual(await page.getByRole('menuitem').allInnerTexts(), ['Titel', 'Liste', 'Leer']);
+  assert.equal(await page.locator('#stl .opf-thumbs-add').innerText(), 'Folie');
+  await page.getByRole('menuitem', { name: 'Liste', exact: true }).click();
+  await settled('stl', 4);
+  assert.deepEqual(await slideAt('stl', 1), { id: 'slide-4', title: 'Neue Folie', items: ['Erster Punkt'] });
+  assert.equal((await page.evaluate(() => window.rigs.stl.details.at(-1))).message, 'Folie 2 da');
+  mark('starters: the starter words and status lines come from labels');
 
   assert.deepEqual(errors, []);
 } finally {

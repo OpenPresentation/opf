@@ -26,6 +26,12 @@ const DEFAULT_LABELS = {
   add: "Add slide",
   layouts: "Layouts",
   slideActions: "Slide actions",
+  addText: "Slide",
+  startTitle: "Title",
+  startBullets: "Bullets",
+  startBlank: "Blank",
+  newSlideTitle: "New slide",
+  firstPoint: "First point",
   duplicate: "Duplicate slide",
   delete: "Delete slide",
   hideSlide: "Hide in slide show",
@@ -44,6 +50,8 @@ const DEFAULT_LABELS = {
   atEnd: "Already the last slide",
   lastSlide: "A presentation needs at least one slide",
 };
+// With `starters`, the status lines name the position the starter took or left.
+const STARTER_STATUS = { statusAdded: "Added slide {position}", statusDeleted: "Deleted slide {position}" };
 const META = { source: "thumbnail-strip", rejectInvalid: true };
 const fill = (text, values) => String(text).replace(/\{(\w+)\}/g, (match, key) => (key in values ? String(values[key]) : match));
 const pad = (value, count) => String(value).padStart(Math.max(2, String(count).length), "0");
@@ -72,7 +80,7 @@ export function createThumbnailStrip(container, options = {}) {
   if (!editor || typeof editor.subscribe !== "function") throw new TypeError("createThumbnailStrip needs an editor session.");
   const doc = container.ownerDocument;
   const win = doc.defaultView;
-  const labels = { ...DEFAULT_LABELS, ...(options.starters ? { statusAdded: "Added slide {position}", statusDeleted: "Deleted slide {position}" } : {}), ...(options.labels ?? {}) };
+  const labels = { ...DEFAULT_LABELS, ...(options.starters ? STARTER_STATUS : {}), ...(options.labels ?? {}) };
   const icons = normalizeIcons(options.icons, ["add"], "createThumbnailStrip icons");
   const density = options.density === "touch" ? "touch" : "comfortable";
   const orientation = options.orientation === "vertical" ? "vertical" : "horizontal";
@@ -446,7 +454,7 @@ export function createThumbnailStrip(container, options = {}) {
         addButton.setAttribute("aria-expanded", "false");
       }
       addButton.append(resolveIcon(doc, icons.add, "M12 5v14M5 12h14", { name: "add", className: "opf-thumbs-add-icon" }));
-      if (options.starters) addButton.append("Slide");
+      if (options.starters) addButton.append(labels.addText);
       addSlot.append(addButton);
       addButton.addEventListener("click", onAddClick);
     }
@@ -460,9 +468,9 @@ export function createThumbnailStrip(container, options = {}) {
     }
     if (options.starters) {
       const entries = [
-        { label: "Title", run: () => perform("add", active, { title: "New slide" }) },
-        { label: "Bullets", run: () => perform("add", active, { slide: { title: "New slide", items: ["First point"] } }) },
-        { label: "Blank", run: () => perform("add", active, { slide: {} }) },
+        { label: labels.startTitle, run: () => perform("add", active, { title: labels.newSlideTitle }) },
+        { label: labels.startBullets, run: () => perform("add", active, { slide: { title: labels.newSlideTitle, items: [labels.firstPoint] } }) },
+        { label: labels.startBlank, run: () => perform("add", active, { slide: {} }) },
       ];
       openMenu({ label: labels.add, opener: addButton, entries, anchor: addButton.getBoundingClientRect(), toggle: true });
       return;
