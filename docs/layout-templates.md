@@ -253,7 +253,7 @@ into the grid it has always composed with, and composition, the renderer, the PP
 
 Nested sizes are relative to the entry's own parent, so a split of `{ "size": 2 }` beside a region of `{ "size": 1 }` is
 twice as large, whatever its children's sizes. Because the grid is shared, the gaps between regions are the grid's gaps: a
-row of two regions inside a column puts one gap between the two columns, as the cell grid does. The 40 built-in layouts
+row of two regions inside a column puts one gap between the two columns, as the cell grid does. The built-in layouts
 compile to exactly the grids they had in Gallery 4, so nothing they draw moved.
 
 ## Binding content to regions
@@ -345,7 +345,7 @@ In the Markdown dialect, `<!-- block: region=aside -->` pins a block; `region=to
 | `row` | Side by side in one row, one cell each at equal widths in reading order: the counterpart of `column` (and of `composition.mode: "row"`). The row is kept as written: no paragraph columns, lead block, list grid or regrouping replaces it. The gallery `process` layout draws its steps in a `row` region. |
 | `column` | Stacked at the heights the blocks need, one gap apart, and placed by the region's `anchor`. Charts, pictures, videos and diagrams take what the measured blocks (text, lists, quotes, metrics, code, timelines, tables) leave; a table (LH-44) needs its rows at the starting size, gives up height down to its rows at the floor and takes a share of any spare height. Blocks that do not fit share the region: each gives up the same fraction of what it can give up above its height at the minimum font size. A group's blocks in one column stack the same way. |
 
-**A region of one block (`max: 1`).** A region that holds one block says `max: 1` (OPF 0.35; it was `flow: "none"`). Its block fills it. On a layout with no overflow region, blocks no region had room for still join the single-block region that accepts them, up to 6, without a finding, and then flow by its `flow` (`auto` unless set); single-block regions of one role side by side (the columns of `comparison`) share their joined blocks as one region of N cells. A single-block region is never the default `overflowRegion`, nor the region a slide's own `composition` arranges, and its block does not take the lead size of an `auto` region.
+**A region of one block (`max: 1`).** A region that holds one block says `max: 1`. Its block fills it. On a layout with no overflow region, blocks no region had room for still join the single-block region that accepts them, up to 6, without a finding, and then flow by its `flow` (`auto` unless set); single-block regions of one role side by side (the columns of `comparison`) share their joined blocks as one region of N cells. A single-block region is never the default `overflowRegion`, nor the region a slide's own `composition` arranges, and its block does not take the lead size of an `auto` region.
 
 Several timelines in one region are a stack of horizontal bands whatever the region's `flow`: one column, or two when one column does not fit at the readability floor (see [Dynamic composition](dynamic-composition.md#timeline-internals)).
 
@@ -358,7 +358,7 @@ region's columns are kept only when they set the list at least as large as one c
 accepted kind is `list` keeps LH-184's reading measure: columns up to a type-scale step under one column whose lines would run past
 it), and columns that overflow give way to one column that fits (in a list region, one at least as large). `auto` never deals a
 list of 6 or fewer entries across columns (LH-42): such a list shrinks in its one column instead. A region with a diagram or the
-`steps` sequence keeps its list in one column (OPF 0.35 removed the region key `listColumns`).
+`steps` arrangement keeps its list in one column.
 
 **Several lists in a region (LH-42).** A region whose flow is not `row` that
 receives 2 or more lists and nothing else lays them out one list per cell, a card when the slide draws cards, so sibling
@@ -456,9 +456,8 @@ it. A record whose title already shares a row with a body region keeps its own p
 headings in the same column and composes its body beside it (`mirror` swaps that column too). A cover (no body), a slide
 whose blocks are in cells and a portrait canvas keep the title on top, and so does a slide that LH-83 recomposes as the
 automatic grid (the recomposition exists to set its text larger, so its body takes the column's width). The gallery's `cycle`, `matrix` and `vertical-process` are column records (title over
-body) whose `design` sets `titlePosition: "start"`, so they draw as the 0.34 row records did; `agenda-split` was removed
-in 0.35 (it is `agenda` with `titlePosition: "start"`, which `opf/unresolved-reference`'s fix writes). A slide without `layout` is composed automatically; `layout: "auto"` was removed in 0.35 and is now an
-ordinary reference (`opf/unresolved-reference` says so and offers the fix that deletes the key).
+body) whose `design` sets `titlePosition: "start"`; an `agenda` slide with `titlePosition: "start"` draws a short agenda
+beside its title. A slide without `layout` is composed automatically.
 
 ## Composition output
 
@@ -492,7 +491,7 @@ A region whose `arrangement` is `steps` or `numbered` lists the steps of a seque
 - **Basic Process** (`steps`, OPF 0.35): a lone list of 2 to 8 entries of one level, each of one or two words (24 characters at most),
   without numbering, descriptions or icons, draws as the `process` arrangement (PowerPoint's Basic Process: boxes joined by arrows, see
   [SmartArt](smartart.md)) in the region's whole cell, when the process holds every entry at the size its steps would have or larger;
-  otherwise it draws as steps. The gallery's `process` layout draws a short list this way (it replaced the `flow` layout).
+  otherwise it draws as steps. The gallery's `process` layout draws a short list this way.
 - **Numbered rows** (`numbered`, LH-134): an agenda whose every entry, in every list of the region, has a description draws as ruled
   rows instead of badges: each number a numeral at the list size, bold in the accent and in two digits under 10 ("01"), in a column at
   the row's start (the right in a right-to-left list), the label bold and the description in a second column beside it when the labels
