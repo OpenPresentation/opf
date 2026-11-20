@@ -72,7 +72,7 @@ try {
   // The input shows the whole title, stepped down to fit, over both parts, which are hidden while it is edited; the target is named by both parts.
   const look = await page.evaluate(() => {
     const input = document.activeElement, parts = [...document.querySelectorAll('svg g[data-opf-path="slides.0.title"]')].filter((node) => !node.parentElement.closest('[data-opf-path="slides.0.title"]'));
-    return {color: getComputedStyle(input).color, bottom: input.getBoundingClientRect().bottom, partsBottom: Math.max(...parts.map((part) => part.getBoundingClientRect().bottom)),
+    return {color: getComputedStyle(input).color, blocks: [{region: 'bottom', ...input.getBoundingClientRect().bottom}], partsBottom: Math.max(...parts.map((part) => part.getBoundingClientRect().bottom)),
       hidden: parts.map((part) => getComputedStyle(part).opacity), label: document.querySelector('[data-canvas-target][data-opf-path="slides.0.title"]').getAttribute('aria-label')};
   });
   assert.notEqual(look.color, 'rgba(0, 0, 0, 0)', 'the whole title is visible in the input');

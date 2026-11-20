@@ -13,7 +13,7 @@ import {latinPhrases} from '../src/script-fonts.js';
 const arabic = 'العنصر الأول مع رقم 2026';
 const deck = (language, extra = {}) => ({name: 'RTL layout', ...(language === undefined ? {} : {language}), ...extra, slides: [
   {title: 'عنوان العرض', items: [arabic, 'English item', {text: 'العنصر الثاني: v2.0 و PowerPoint 365', level: 1}, 'آخر']},
-  {title: 'مناطق', start: {text: 'النص الأيسر'}, end: {text: 'النص الأيمن'}},
+  {title: 'مناطق', blocks: [{region: 'start',text: 'النص الأيسر'}, {region: 'end',text: 'النص الأيمن'}]},
   {title: 'جدول', table: {columns: ['المؤشر', 'القيمة', 'الحالة'], rows: [['الإيرادات', 'Customers', 'جيد']]}},
   {title: 'مخطط', chart: {type: 'column', data: {columns: ['شهر', 'قيمة'], rows: [['يناير', 12], ['فبراير', 15], ['مارس', 18]]}}},
   {title: 'نص طويل', text: `${arabic} ${arabic} ${arabic} ${'abc '.repeat(40)}`.trim(), notes: 'ملاحظات المتحدث'},

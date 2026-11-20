@@ -11,14 +11,15 @@
 /** Pixels per reference pixel: 2 draws the 1280 x 720 reference slide at 2560 x 1440, about 192 dpi on a 13.33 in slide. */
 export const PICTURE_SCALE = 2;
 
+import {cellBlocks, cellsInReadingOrder} from '@openpresentation/opf/composition';
+
 const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const runsText = value => typeof value === 'string' ? value : Array.isArray(value)
   ? value.map(run => typeof run === 'string' ? run : isObject(run) && typeof run.text === 'string' ? run.text : '').join('') : '';
 const cellText = cell => Array.isArray(cell) ? runsText(cell) : isObject(cell) ? (Object.hasOwn(cell, 'value') ? (Array.isArray(cell.value) || typeof cell.value === 'string' ? runsText(cell.value) : String(cell.value ?? '')) : typeof cell.name === 'string' ? cell.name : '') : cell == null ? '' : String(cell);
 
-// The payloads of a slide in reading order: its promoted regions (top row first, then start to end), its blocks (groups
-// depth first) or the slide itself.
-const REGIONS = ['top:start', 'top', 'top:end', 'start', 'center', 'end', 'bottom:start', 'bottom', 'bottom:end'];
+// The payloads of a slide in reading order: its blocks (groups depth first; blocks placed in the cells of the slide's grid cell by
+// cell, rows from the top, each from its start column) or the slide itself.
 function payloads(slide) {
   const out = [];
   const walk = block => {
@@ -26,11 +27,10 @@ function payloads(slide) {
     if (Array.isArray(block.blocks)) { for (const child of block.blocks) walk(child); return; }
     out.push(block);
   };
-  const regions = Object.keys(slide).filter(key => /^(?:top|center|bottom|left|right)(?:[:+](?:top|center|bottom|left|right))*$/.test(key) && isObject(slide[key]))
-    .sort((a, b) => (REGIONS.indexOf(a) + 1 || 99) - (REGIONS.indexOf(b) + 1 || 99));
-  if (regions.length) for (const key of regions) walk(slide[key]);
-  if (Array.isArray(slide.blocks)) for (const block of slide.blocks) walk(block);
-  if (!regions.length && !Array.isArray(slide.blocks)) out.push(slide);
+  const placed = cellBlocks(slide);
+  if (placed) for (const cell of cellsInReadingOrder(placed)) for (const entry of placed) { if (entry.cell === cell) walk(entry.block); }
+  else if (Array.isArray(slide.blocks)) for (const block of slide.blocks) walk(block);
+  else out.push(slide);
   return out;
 }
 

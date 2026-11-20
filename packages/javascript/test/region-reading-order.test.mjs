@@ -60,3 +60,12 @@ test('visualReadingOrder: rows top to bottom, along the row, ties keep input ord
   assert.equal(ids([at('r', 20, 0, 10, 30), at('l2', 0, 20), at('l1', 0, 0)]), 'l1l2r');
   assert.deepEqual(visualReadingOrder([]), []);
 });
+
+test('OPF 0.35: a removed slide key that named a cell draws nothing, and cells place blocks only on a slide without a layout', () => {
+  assert.deepEqual(order({title: 'T', start: {text: 'Old'}, blocks: [{region: 'end', text: 'New'}]}), ['New']);
+  assert.deepEqual(compose({title: 'T', 'top:start': {text: 'Old'}}).items.filter(item => item.field !== 'title'), []);
+  // With a layout record (here passed directly) a cell word names no region of it: the blocks are bound by kind, not placed in cells.
+  const layout = {name: 'Two', direction: 'row', regions: [{name: 'first', accepts: ['text']}, {name: 'second', accepts: ['text']}]};
+  const bound = composeSlide({title: 'T', blocks: [{region: 'end', text: 'A'}, {region: 'start', text: 'B'}]}, {width: 1280, height: 720, layout});
+  assert.deepEqual(bound.diagnostics.filter(entry => entry.code === 'region-unknown').map(entry => entry.region), ['end', 'start']);
+});

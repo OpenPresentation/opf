@@ -81,7 +81,6 @@ const DESIGN_KEYS = Object.freeze({
   backgrounds: ["background"],
   "headers-footers": ["header", "footer"],
 });
-const REGION = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/;
 const BLOCK_KINDS = ["text", "list", "chart", "table", "metric", "quote", "code", "diagram", "timeline", "group", "image", "video"];
 const RESERVED_GROUPS = new Set(["default", "custom"]);
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -180,11 +179,6 @@ function findChartOwner(presentation, slideIndex) {
         const found = visit(block, [...path, "blocks", String(index)], depth + 1);
         if (found) return found;
       }
-    for (const [key, value] of Object.entries(node)) {
-      if (!REGION.test(key)) continue;
-      const found = visit(value, [...path, key], depth + 1);
-      if (found) return found;
-    }
     return undefined;
   };
   return visit(presentation.slides[slideIndex], ["slides", String(slideIndex)], 0);

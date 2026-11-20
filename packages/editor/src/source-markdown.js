@@ -18,7 +18,7 @@ const LANGUAGES = ["javascript", "typescript", "python", "rust", "go", "bash", "
 // Keys whose values come from a closed set the schema or the catalogs know; accepting the key opens that list.
 const CHAIN_SLIDE = new Set(["layout", "type", "hidden"]);
 const CHAIN_BLOCK = new Set(["type", "as", "region"]);
-// The promoted regions of a slide that a block can be pinned to when the layout names none.
+// The cells of the grid of a slide without a layout, which a block names with region= (OPF 0.35).
 const PROMOTED = ["top", "middle", "bottom", "start", "center", "end", "top:start", "top:center", "top:end", "middle:start", "middle:center", "middle:end", "bottom:start", "bottom:center", "bottom:end"];
 
 const lineAt = (text, position) => {
@@ -424,7 +424,7 @@ function optionsOptions(context, { catalogs, makers, scope }) {
       if (context.layout) {
         try { const found = makers.listCatalogRecords(context.document, "layouts", { catalogs }).find((entry) => entry.id === context.layout); names.push(...regionNames(found?.record)); } catch { /* No regions known. */ }
       }
-      for (const name of [...names, ...PROMOTED.filter((item) => !names.includes(item))]) options.push(literalOption(name, JSON.stringify(name), { value: name, doc: names.includes(name) ? `A region of the ${context.layout} layout` : "A promoted region of the slide", boost: names.includes(name) ? 99 : undefined }));
+      for (const name of context.layout ? names : PROMOTED) options.push(literalOption(name, JSON.stringify(name), { value: name, doc: names.includes(name) ? `A region of the ${context.layout} layout` : "A cell of the slide grid", boost: names.includes(name) ? 99 : undefined }));
     } else if (key === "type") {
       let info;
       try { info = describeField(["slides", 0, "blocks", 0, "type"], context.document); } catch { info = null; }
@@ -443,7 +443,7 @@ const BLOCK_DOCS = {
   id: "A name for the block, so a finding or a patch can point at it.",
   type: "The block's content kind, when it cannot be told from the content.",
   as: "bullets stores a list as bullets; video stores an image line as a video.",
-  region: "Pin the block to a region of the slide's layout, or to a promoted region (start, top:start, ...).",
+  region: "Pin the block to a region of the slide's layout or, on a slide without a layout, place it in a cell of the slide grid (start, top:start, ...).",
 };
 
 // ---- accepting ---------------------------------------------------------------------------------------------------------------------

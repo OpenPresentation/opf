@@ -290,7 +290,14 @@ const pilotRegionSlides = {
     }
   }
 };
-const projectionSchema = () => JSON.parse(fs.readFileSync(new URL("../spec/schemas/opf.schema.json", import.meta.url)));
+// The published 0.34 vocabulary the projection reads: the current schema with the 48 slide keys that named the cells of the slide grid,
+// which OPF 0.35 removed (a block names its cell with `region`).
+const projectionSchema = () => {
+  const schema = JSON.parse(fs.readFileSync(new URL("../spec/schemas/opf.schema.json", import.meta.url)));
+  const columns = ["start", "center", "end", "start+center", "center+end", "start+center+end"], rows = ["top", "middle", "bottom", "top+middle", "middle+bottom", "top+middle+bottom"];
+  for (const key of [...columns, ...rows, ...rows.flatMap(row => columns.map(column => row + ":" + column))]) schema.$defs.Slide.properties[key] = { $ref: "#/$defs/ContentPayload" };
+  return schema;
+};
 const pilotShape = () => {
   const d = deck();
   d.design.footer = { left: { text: "Illustrative example • fictional data" }, right: { text: "{{slide.number}}" } };

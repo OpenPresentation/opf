@@ -28,7 +28,7 @@ const source = {
   design: { theme: 'classic', fontScheme: 'roboto' },
   slides: [
     { id: 'steps', title: 'Rollout', items: ['Freeze the schema', { text: 'Migrate the data', level: 1 }, { text: 'Verify the counts', level: 1 }, 'Switch traffic', 'Retire the old service'] },
-    { id: 'two', title: 'Two lists', start: { bullets: ['Alpha', 'Beta'] }, end: { items: ['Gamma', 'Delta'] } },
+    { id: 'two', title: 'Two lists', blocks: [{ region: 'start', bullets: ['Alpha', 'Beta'] }, { region: 'end', items: ['Gamma', 'Delta'] }] },
   ],
 };
 

@@ -11,7 +11,7 @@ import { Document, parse as parseYamlDocument, parseDocument } from "yaml";
 import { pathAt, scanMarkdown } from "@openpresentation/opf/source";
 import { findNodeAtLocation, getNodeValue } from "jsonc-parser";
 import { contextAt, nextSignificant, nodeAt, skeleton, tokenAt } from "./source-json.js";
-import { PROMOTED_REGIONS, beatsOf, builtinVariables, columnSourceFor, factsOf, jsonDeckParts, layoutKeys, referenceSiteAt, regionNames, slidePath, valueAt, variableNames, yamlDeckParts } from "./source-references.js";
+import { GRID_CELL_WORDS, beatsOf, builtinVariables, columnSourceFor, factsOf, jsonDeckParts, layoutKeys, referenceSiteAt, regionNames, slidePath, valueAt, variableNames, yamlDeckParts } from "./source-references.js";
 import { beginUndoGroup, finishUndoGroup, takeUndoGroup } from "./source-undo-groups.js";
 import { scalarValue, yamlContextAt } from "./source-yaml.js";
 import { markdownContextAt, markdownOptions, markdownPlan, markdownHoverAt } from "./source-markdown.js";
@@ -281,7 +281,8 @@ function referenceOptions(site, context, catalogs, scope) {
         try { names = regionNames(listCatalogRecords(context.document, "layouts", { catalogs }).find((entry) => entry.id === layout)?.record); } catch { names = []; }
       }
       for (const name of names) add(name, name, { detail: `region of ${layout}` });
-      for (const name of PROMOTED_REGIONS) if (!names.includes(name)) add(name, name, { detail: "promoted region" });
+      // A slide without a layout places its blocks in the cells of its grid; on a slide with one, a cell names no region.
+      if (layout === undefined) for (const name of GRID_CELL_WORDS) add(name, name, { detail: "cell of the slide grid" });
       break;
     }
     case "color":

@@ -15,11 +15,9 @@
 //    theme slot ('accent2', 'dark1', 'hyperlink'), restored when the document's colour scheme holds that exact colour for
 //    the slot. The exporter writes schemeClr only where the theme holds the colour, so this is the same convention.
 
-import {ROOT_PAYLOAD_FIELDS, REGION_KEYS} from './content-topology.js';
-import {legacyRegionOrder} from './legacy-tags.js';
+import {ROOT_PAYLOAD_FIELDS} from './content-topology.js';
 
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
-const REGION_KEY_SET = new Set(REGION_KEYS);
 const isGroup = block => object(block) && (block.type === 'group' || (block.type === undefined && Array.isArray(block.blocks)));
 export const MAX_COLOR_SLOTS = 100000;
 
@@ -27,16 +25,16 @@ export const MAX_COLOR_SLOTS = 100000;
 const REFERENCE = /^(?:var:[a-z][a-z0-9-]*|accent[1-6]|dark[12]|light[12]|hyperlink|followedHyperlink|primary|secondary|accent|background|surface|text|textSecondary)$/;
 export const isColorReference = value => typeof value === 'string' && REFERENCE.test(value);
 
-/** The payload objects of a slide in the fixed traversal order: regions (by name), else blocks (groups depth first), else the slide's root payload. */
-function* leaves(slide, regionOrder) {
+/**
+ * The payload objects of a slide in the fixed traversal order: blocks (groups depth first), else the slide's root payload. A 0.34 file's
+ * cells (slide keys, walked by name) come back from import as blocks in that same order (content-topology `rebuildContent`).
+ */
+function* leaves(slide) {
   const walk = function* (block) {
     if (!object(block)) return;
     if (isGroup(block)) { for (const child of Array.isArray(block.blocks) ? block.blocks : []) yield* walk(child); return; }
     yield block;
   };
-  const regions = Object.keys(slide).filter(key => REGION_KEY_SET.has(key) && object(slide[key])).sort();
-  const ordered = Array.isArray(regionOrder) && regionOrder.length === regions.length && new Set(regionOrder).size === regions.length && regionOrder.every(key => regions.includes(key)) ? regionOrder : regions;
-  if (ordered.length) { for (const key of ordered) yield* walk(slide[key]); return; }
   if (Array.isArray(slide.blocks)) { for (const block of slide.blocks) yield* walk(block); return; }
   yield slide;
 }
@@ -44,7 +42,7 @@ function* leaves(slide, regionOrder) {
 /** The text runs of the slide's text and list payloads, in order: an object (a run) or null (a plain string). */
 // Proven scalar fragments occupy their original one logical slot during import;
 // actual native run objects stay intact until color references have settled.
-export function slideRunSlots(slide, scalarValues = null, scalarIndexes = null, regionOrder) {
+export function slideRunSlots(slide, scalarValues = null, scalarIndexes = null) {
   const slots = [];
   const runs = value => {
     if (scalarValues?.has(value)) { scalarIndexes?.add(slots.length); slots.push(null); return; }
@@ -53,7 +51,7 @@ export function slideRunSlots(slide, scalarValues = null, scalarIndexes = null, 
   };
   // FA-10: the heading group (tag, title, subtitle) comes first, when it is TextRun[].
   for (const field of ['tag', 'title', 'subtitle']) if (Array.isArray(slide[field])) runs(slide[field]);
-  for (const leaf of leaves(slide, regionOrder)) {
+  for (const leaf of leaves(slide)) {
     for (const field of ROOT_PAYLOAD_FIELDS) {
       const value = leaf[field];
       if (field === 'text') { if (Array.isArray(value)) runs(value); }
@@ -122,9 +120,7 @@ function scalarTargets(slide, index, proof, report) {
       }
     }
   };
-  const regions = Object.keys(slide).filter(key => REGION_KEY_SET.has(key) && object(slide[key]));
-  if (regions.length) for (const key of regions) visit(slide[key], base + '.' + key);
-  else if (Array.isArray(slide.blocks)) slide.blocks.forEach((block, i) => visit(block, base + '.blocks.' + i));
+  if (Array.isArray(slide.blocks)) slide.blocks.forEach((block, i) => visit(block, base + '.blocks.' + i));
   else visit(slide, base);
   if (result.length !== [...proof.values()].reduce((n, entries) => n + entries.length, 0)) {
     report?.({code:'list-scalar-reference-changed',path:'slides.'+index,message:'Scalar source paths or item roles no longer match complete current list values; native run boundaries are retained.'});
@@ -151,10 +147,10 @@ export function restoreRunColors(slides, info, resolve, report) {
       // When the content form was not restored its own diagnostic says why, and the slots cannot be aligned.
       if (tag.structure && tag.content) {
         const scalarIndexes = new Set();
-        let slots = slideRunSlots(slide, scalarValues(), scalarIndexes, legacyRegionOrder(tag.record));
+        let slots = slideRunSlots(slide, scalarValues(), scalarIndexes);
         if (at.some(([slot]) => scalarIndexes.has(slot))) {
           report?.({code:'list-scalar-reference-changed',path:'slides.'+index,message:'Scalar source intent conflicts with an authored run color slot; current native run boundaries are retained.'});
-          scalars = []; slots = slideRunSlots(slide, null, null, legacyRegionOrder(tag.record));
+          scalars = []; slots = slideRunSlots(slide, null, null);
         }
         if (slots.length !== n) report({code: 'color-reference-changed', path: `slides.${index}`, message: `The slide's text runs no longer match the stored colour references (${slots.length} runs now, ${n} at export), so the named run colours of slides.${index} (variables, scheme slots and roles) were not restored; the runs keep their resolved colours.`});
         else for (const [slot, name] of at) if (slots[slot]) restoreName(slots[slot], name);

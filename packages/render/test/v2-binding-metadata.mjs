@@ -14,10 +14,13 @@ for(const item of [...bound.contentItems,...bound.blocks]){
 assert.match(toSvg(deck,{catalogs:[gallery]})[0],/Region alignment probe/);
 const rootDeck={slides:[{title:'Root',text:'Root text'}]};
 assert.deepEqual(resolvePresentation(rootDeck).slides[0].contentItems,[{type:'text',field:'text',value:'Root text',path:'slides.0.text'}]);
-const promotedDeck={slides:[{title:'Promoted',start:{text:'Left text'},end:{text:'Right text'}}]};
-assert.deepEqual(resolvePresentation(promotedDeck).slides[0].contentItems,[
- {type:'text',field:'text',value:'Left text',path:'slides.0.start.text',regionKey:'start'},
- {type:'text',field:'text',value:'Right text',path:'slides.0.end.text',regionKey:'end'}
+// OPF 0.35: a block names its cell with `region`; it is a block like any other, and the slide has no root content items.
+const cellDeck={slides:[{title:'Cells',blocks:[{region:'start',text:'Left text'},{region:'end',text:'Right text'}]}]};
+const cellBound=resolvePresentation(cellDeck).slides[0];
+assert.deepEqual(cellBound.contentItems,[]);
+assert.deepEqual(cellBound.blocks,[
+ {type:'text',field:'text',value:'Left text',path:'slides.0.blocks.0.text'},
+ {type:'text',field:'text',value:'Right text',path:'slides.0.blocks.1.text'}
 ]);
 const group={blocks:[{text:'First nested'},{text:'Second nested'}],composition:{mode:'column'}};
 const richSlide={title:[{text:'Plain',bold:false},{text:' strong',bold:true,italic:true}],subtitle:[{text:'Sub',italic:true}],blocks:[group]};

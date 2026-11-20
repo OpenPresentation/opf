@@ -99,7 +99,7 @@ const colorDeck = {
     {title: 'Lists', blocks: [
       {type: 'group', blocks: [{type: 'text', text: [{text: 'in a group ', color: 'accent2'}, 'then plain']}, {items: [[{text: 'x', color: 'accent2'}, 'y'], {text: [{text: 'z', color: 'var:brand'}], description: [{text: 'details', color: 'accent1'}]}]}]},
       {bullets: ['p', [{text: 'q', color: 'primary'}]]}]},
-    {title: 'Regions', start: {text: [{text: 'L', color: 'accent2'}]}, end: {text: [{text: 'R', color: 'var:brand'}]}}
+    {title: 'Regions', blocks: [{region: 'start',text: [{text: 'L', color: 'accent2'}]}, {region: 'end',text: [{text: 'R', color: 'var:brand'}]}]}
   ]
 };
 const colors = (deck, slide) => {

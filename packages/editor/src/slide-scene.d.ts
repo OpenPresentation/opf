@@ -17,7 +17,7 @@ export interface SceneContainer {
   resizable: boolean;
   /** The composed flow's path, when the container has one. */
   flowPath?: string;
-  /** The slide's content is in promoted regions (`start`, `center+end`, ...): drops go into a region. */
+  /** The slide's blocks are in the cells of its grid (`region`: `start`, `center+end`, ...; OPF 0.35): drops go into a cell. */
   promoted?: boolean;
   /** The slide uses a layout template: its regions are its children. */
   layout?: boolean;
@@ -26,7 +26,7 @@ export interface SceneCan { move: boolean; group: boolean; delete: boolean; dupl
 export interface SceneFinding { message: string; code?: string; severity?: string; path: string }
 export type SceneNodeKind = "slide" | "heading" | "region" | "group" | "block" | "part" | "implicit";
 export interface SceneNode {
-  /** The id path (`/slides/@intro/blocks/@kpi`; an element without an id keeps its index); a layout region is `<slide key>#<name>`. */
+  /** The id path (`/slides/@intro/blocks/@kpi`; an element without an id keeps its index); a layout region is `<slide key>#<name>`, a cell `<slide key>#<cell>`. */
   key: string;
   /** The index JSON Pointer now (a layout region's is its slide's). */
   path: string;
@@ -46,11 +46,11 @@ export interface SceneNode {
   children: string[];
   /** A block's index in its `blocks` array; an implicit field's index among its owner's content fields (its block index once converted). */
   blockIndex?: number;
-  /** A root block's layout region pin. */
+  /** A root block's `region`: its layout region pin, or its cell. */
   pin?: string;
-  /** A layout region: it has no place in the document. */
+  /** A layout region or a cell: it has no place in the document. */
   virtual?: boolean;
-  /** A promoted region of the slide grid. */
+  /** A cell of the slide grid (OPF 0.35: the root blocks that name it with `region`). */
   promoted?: boolean;
   /** The region's name. */
   region?: string;
@@ -89,7 +89,6 @@ export interface SceneDrop {
   line: { x: number; y: number; w: number; h: number; orientation: "vertical" | "horizontal" };
 }
 export declare const CONTENT_FIELDS: readonly string[];
-export declare function isPromotedRegion(key: string): boolean;
 export declare function contentFieldsOf(owner: unknown): string[];
 export declare function describeBlock(block: unknown): string;
 export declare function slideScene(presentation: unknown, slideIndex: number, options: { geometry: SlideComposition; findings?: { path: string; message: string; code?: string; severity?: string }[]; parts?: boolean }): SlideScene;

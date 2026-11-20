@@ -77,7 +77,7 @@ export declare function prepareMoveRegion(presentation: unknown, slideIndex: num
 export declare function prepareImageToDesign(presentation: unknown, blockPath: string, target: ImageTarget, options?: DryRunOptions & PromoteImageOptions): PreparedContentAction;
 export declare function prepareImageToContent(presentation: unknown, slideIndex: number, source: ImageTarget, options?: DryRunOptions & { index?: number; region?: string }): PreparedContentAction;
 
-/** Wrap the blocks at `indices` of a slide, group or region group in a new group. */
+/** Wrap the blocks at `indices` of a slide or group in a new group. */
 export declare function groupBlocks(editor: EditorSession, containerPath: string, indices: number[], options?: { composition?: Record<string, unknown> }, meta?: Record<string, unknown>): ContentActionChange;
 /** Replace a group by its blocks; its composition and id are reported in `loss`. */
 export declare function ungroupBlock(editor: EditorSession, groupPath: string, meta?: Record<string, unknown>): ContentActionChange;

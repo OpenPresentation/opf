@@ -161,7 +161,7 @@ function slideAction(presentation, slideIndex, transform, targetPath, validate =
   return finish(presentation, patches, { path, changed: true, lossless: result.lossless, loss: result.loss }, validate);
 }
 
-/** Wrap the blocks at `indices` of the container at `containerPath` (a slide `slides.0`, a group or a region group) in a new group. */
+/** Wrap the blocks at `indices` of the container at `containerPath` (a slide `slides.0` or a group) in a new group. */
 export function prepareGroupBlocks(presentation, containerPath, indices, options = {}) {
   const { slideIndex, relative } = slideParts(presentation, containerPath, "a container");
   return slideAction(presentation, slideIndex, (slide) => wrapBlocks(slide, indices, { container: asNumbers(relative), ...(options.composition ? { composition: options.composition } : {}) }), undefined, options.validate !== false);
@@ -171,17 +171,17 @@ export function prepareUngroupBlock(presentation, groupPath, options = {}) {
   const { slideIndex, relative } = slideParts(presentation, groupPath, "a group");
   return slideAction(presentation, slideIndex, (slide) => unwrapGroup(slide, asNumbers(relative)), undefined, options.validate !== false);
 }
-/** Place every block of a slide in its own named region: `regions[i]` is block i's region (`start`, `end`, `top:start`, ...). */
+/** Place every block of a slide in a cell of its grid: `regions[i]` is block i's cell, written as its `region` (`start`, `end`, `top:start`, ...; OPF 0.35). */
 export function prepareBlocksToRegions(presentation, slideIndex, regions, options = {}) {
   slideParts(presentation, `slides.${slideIndex}`, "a slide");
   return slideAction(presentation, slideIndex, (slide) => blocksToRegions(slide, regions), undefined, options.validate !== false);
 }
-/** Turn the named regions of a slide into ordinary blocks in reading order. The regions' placement is reported in `loss`. */
+/** Take the blocks of a slide out of their cells, in reading order of the cells. The cells' placement is reported in `loss`. */
 export function prepareRegionsToBlocks(presentation, slideIndex, options = {}) {
   slideParts(presentation, `slides.${slideIndex}`, "a slide");
   return slideAction(presentation, slideIndex, (slide) => regionsToBlocks(slide), undefined, options.validate !== false);
 }
-/** Move the content of region `from` to region `to`, or swap them when `to` is taken and `options.swap` is true. */
+/** Move the blocks of cell `from` to cell `to`, or swap them when `to` is taken and `options.swap` is true. */
 export function prepareMoveRegion(presentation, slideIndex, from, to, options = {}) {
   slideParts(presentation, `slides.${slideIndex}`, "a slide");
   return slideAction(presentation, slideIndex, (slide) => moveRegion(slide, from, to, options), undefined, options.validate !== false);

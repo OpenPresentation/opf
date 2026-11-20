@@ -69,7 +69,7 @@ const entries = await exportDeck(deck);
 }
 
 // Images: the authored relative path or URL comes back while the picture bytes still match.
-const imageDeck = image => ({slides: [{title: 'Picture', start: {image}, 'center+end': {text: 'Beside the picture.'}}]});
+const imageDeck = image => ({slides: [{title: 'Picture', blocks: [{region: 'start',image}, {region: 'center+end',text: 'Beside the picture.'}]}]});
 const withAssets = {imageResolver: src => (src.endsWith('.png') ? {data: png, mediaType: 'image/png'} : undefined)};
 for (const src of ['./pics/chart.png', 'pics/my chart.png', 'https://example.com/pics/chart.png']) {
   const imageEntries = await exportDeck(imageDeck(src), withAssets);

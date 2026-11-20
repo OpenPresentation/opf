@@ -13,7 +13,7 @@ import { isShapeBlock, shapeIssues, SHAPE_BLOCK_KEYS } from "./shape-block.js";
 import { PositionRangeError, connectorAdjustPreset, isOverlayConnector, overlayIssues, representablePositionBox } from "./overlay-shapes.js";
 import { codeHighlightLines } from "./code-highlight.js";
 import { isRecord, pathFor, visitContentPayloads } from "./content-walk.js";
-import { gridCellSpan, isGridCell } from "./grid-cells.js";
+import { gridCellSpan, isGridCell, nearestGridCell } from "./grid-cells.js";
 import {tableGrid} from "./table.js";
 import { numberingFindings } from "./numbering.js";
 import { schemaEngine } from "#schema-engine";
@@ -454,10 +454,12 @@ function validateSlideCells(slide: Record<string, unknown>, slidePath: string): 
   if (!placed.length) return issues;
   const cells = [...new Set(placed.map(({ block }) => String(block.region)))];
   for (const { block, index } of blocks) {
-    if (isGridCell(block.region)) continue;
+    // A region written like a cell with a colon or a plus (`top:left`) fails the pattern, whose finding names the cell it means.
+    if (isGridCell(block.region) || (typeof block.region === "string" && /[:+]/.test(block.region))) continue;
     const path = pathFor(pathFor(slidePath, "blocks"), String(index));
+    const meant = typeof block.region === "string" ? nearestGridCell(block.region)?.cell : undefined;
     issues.push(semanticIssue(typeof block.region === "string" ? pathFor(path, "region") : path, typeof block.region === "string"
-      ? `a slide places every block in a cell of its grid or none: '${block.region}' is no cell (write one of the cells the other blocks use, such as '${cells[0]}', or give the slide a layout)`
+      ? `a slide places every block in a cell of its grid or none: '${block.region}' is no cell (${meant ? `write '${meant}': layout words follow the deck's direction` : `write one of the cells the other blocks use, such as '${cells[0]}', or give the slide a layout`})`
       : `a slide places every block in a cell of its grid or none: give this block a 'region' cell too (the other blocks use ${cells.map((cell) => `'${cell}'`).join(", ")})`, { cells }));
   }
   for (const { block, index } of placed) {

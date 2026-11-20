@@ -133,7 +133,8 @@ const XREF = [
   ['cite', '{"references":[{"id":"smith2020","text":"Smith"},{"id":"lee2021","text":"Lee"}],"slides":[{"title":[{"text":"x","cite":"|"}]}]}', ['smith2020', 'lee2021']],
   ['cite in a list', '{"references":[{"id":"smith2020","text":"Smith"}],"slides":[{"title":[{"text":"x","cite":["|"]}]}]}', ['smith2020']],
   ['beat', '{"narrative":"classic-story","slides":[{"beat":"|"}]}', ['opening', 'closing']],
-  ['region', '{"slides":[{"layout":"two-column","blocks":[{"region":"|"}]}]}', ['first', 'second', 'top', 'middle', 'bottom', 'start', 'center', 'end']],
+  ['region', '{"slides":[{"layout":"two-column","blocks":[{"region":"|"}]}]}', ['first', 'second']],
+  ['region: a cell of a slide without a layout', '{"slides":[{"blocks":[{"region":"|"}]}]}', ['top', 'middle', 'bottom', 'start', 'center', 'end', 'top:start']],
   ['var:', '{"variables":{"brand":{"type":"color","value":"#123456"},"hero":{"type":"image","value":"a.png"}},"slides":[{"title":[{"text":"x","color":"|"}]}]}', ['var:brand']],
   ['var: in a design color', '{"variables":{"brand":"#123456"},"slides":[],"design":{"background":{"type":"solid","color":"|"}}}', ['var:brand', 'accent1']],
 ];
@@ -168,8 +169,7 @@ export const jsonValues = [
 export const jsonRank = [
   ['J-RNK-001', 'R-CMP-18', 'required members come first', 'json', '{\n  "slides": [],\n  "organization": {\n    |\n  }\n}', [T('"')], { popup: { first: 'id', has: ['name', 'legalName'] } }],
   ['J-RNK-002', 'R-CMP-18', 'common slide keys precede the others', 'json', '{\n  "slides": [{\n    |\n  }]\n}', [T('"')], { popup: { first: 'title', has: ['subtitle', 'layout', 'items', 'text', 'notes'] } }],
-  ['J-RNK-003', 'R-CMP-18', 'the region keys are hidden until typed', 'json', '{\n  "slides": [{\n    |\n  }]\n}', [T('"')], { popup: { not: ['top+middle:start+center', 'middle:center+end'], count: [10, 40] } }],
-  ['J-RNK-004', 'R-CMP-18', '... and appear when the prefix matches', 'json', '{\n  "slides": [{\n    |\n  }]\n}', [T('"top+mi')], { popup: { has: ['top+middle:start'] } }],
+  ['J-RNK-003', 'R-CMP-18', 'a slide offers no cell keys (OPF 0.35: a block names its cell with region)', 'json', '{\n  "slides": [{\n    |\n  }]\n}', [T('"')], { popup: { not: ['top+middle:start+center', 'middle:center+end', 'start'], count: [10, 40] } }],
   ['J-RNK-005', 'R-CMP-18', 'title is first for a slide with a layout', 'json', '{\n  "slides": [{\n    "layout": "pillars",\n    |\n  }]\n}', [T('"')], { popup: { first: 'title' } }],
   ['J-RNK-006', 'R-CMP-18', 'keys already present are not offered', 'json', '{\n  "slides": [{\n    "title": "a",\n    |\n  }]\n}', [T('"')], { popup: { not: ['title'] } }],
   ['J-RNK-007', 'R-CMP-18', 'the same input gives the same order twice', 'json', '{\n  "slides": [{\n    |\n  }]\n}', [T('"'), ['snapshotPopup', 'a'], K('Escape'), K('Control+Space'), ['expectSamePopup', 'a']], {}],

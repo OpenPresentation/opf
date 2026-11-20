@@ -1,7 +1,7 @@
 import {nativeRunStyleEvidence, hasSourceRunStyles} from './source-run-styles.js';
 import {XMLParser} from 'fast-xml-parser';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
-import {currentTag, upgradeTag} from './legacy-tags.js';
+import {currentTag, legacyRegionOrder, upgradeTag} from './legacy-tags.js';
 import {contentTopology, rebuildContent, validateTopology, listLineBreaks, validateListBreaks, validateListRuns, validateListScalars, listLineRoles, validateListRoles, MAX_LIST_PATHS} from './content-topology.js';
 import {runColorRecord, validateRunColors} from './run-colors.js';
 import {overlayRecord, validateOverlayRecord} from './shape-restore.js';
@@ -51,8 +51,8 @@ import {parseReference, renamedLayout, renamedLayoutTitlePosition, resolveRefere
 // Spec-gap closure P1 adds, in `full` mode: the document `filename` and
 // `extensions`, the whole `assets` registry, `design.logo` (BRAND_ASSETS, also
 // per slide), the slide `section` and `extensions`, and the slide's content
-// topology (`content`, src/content-topology.js): nested groups, promoted
-// regions, the root payload form, block ids, block extensions and group
+// topology (`content`, src/content-topology.js): nested groups, the blocks' `region`
+// (a layout region or a cell of the slide grid), the root payload form, block ids, block extensions and group
 // composition, with the reference-pixel box of every leaf. A `data:` source
 // that is not an exported media part is stored inline while its field stays
 // under the per-field limit.
@@ -1133,7 +1133,8 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     try {
       const found = readTag(entries, root?.['p:cSld']?.['p:custDataLst'], rels, SLIDE_TAG);
       if (found.missing) return null;
-      return {record: remapMedia(validateSlide(found.value), entries), native: nativeSlide(entries, path)};
+      // A legacy record walked its cells in the order of its own (left/right) keys: import rebuilds them in that order (rebuildContent).
+      return {record: remapMedia(validateSlide(found.value), entries), native: nativeSlide(entries, path), regionOrder: legacyRegionOrder(found.value)};
     } catch (error) {
       report({code: 'invalid-document-provenance', path: `slides.${index}`, message: `${error.message} This slide keeps the values observed in the PPTX.`});
       return null;
@@ -1161,9 +1162,10 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
   const seenIds = new Set();
   // Content topology: while the slide's arrangement is unchanged, the imported
   // flat blocks are matched to the stored leaves and the authored form returns
-  // (root payload, blocks with nested groups, or promoted regions). The slide
+  // (root payload, or blocks with nested groups and their `region`; a 0.34 file's
+  // cells, stored as slide keys, come back as blocks that name them). The slide
   // `type` joins that group, since it is only valid with the authored form.
-  const restoreContent = (index, {record, native: observed}) => {
+  const restoreContent = (index, {record, native: observed, regionOrder}) => {
     if (record.content === undefined) return false;
     // The stored `type` belongs to the authored form: when that form is not restored, neither is the type.
     const typeNote = record.type === undefined ? '' : ` The stored slide type ${JSON.stringify(record.type)} was not restored either.`;
@@ -1173,7 +1175,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
       return false;
     }
     let placedPaths;
-    const result = rebuildContent(record.content, imported.slides[index]?.blocks ?? [], slides[index]?.contentBounds ?? [], paths => { placedPaths = paths; }, Object.fromEntries(['fontSize', 'fontFamily', 'color'].map(key => [key, record.native.runStyles?.[key] !== undefined && record.native.runStyles[key] === observed.runStyles?.[key]])),slides[index]?.v2ProtectedBlocks??new Set());
+    const result = rebuildContent(record.content, imported.slides[index]?.blocks ?? [], slides[index]?.contentBounds ?? [], paths => { placedPaths = paths; }, Object.fromEntries(['fontSize', 'fontFamily', 'color'].map(key => [key, record.native.runStyles?.[key] !== undefined && record.native.runStyles[key] === observed.runStyles?.[key]])),slides[index]?.v2ProtectedBlocks??new Set(),{order: regionOrder, layout: record.layout !== undefined});
     if (result.reason) {
       report({code: 'content-structure-changed', path: `slides.${index}`, message: `The slide's content no longer matches its stored structure (${result.reason}), so the authored groups, regions and block ids of slides.${index} were not restored; the imported slide keeps its flat blocks.${typeNote}`});
       return false;
@@ -1190,7 +1192,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     const ops = [];
     for (const [key, value] of Object.entries(result.fields)) {
       if (value === null) { ops.push(remove(['slides', index, key])); continue; }
-      if (key === 'blocks') dedupe(value, `slides.${index}.blocks`); else if (record.content.form === 'regions') dedupe(value, `slides.${index}.${key}`);
+      if (key === 'blocks') dedupe(value, `slides.${index}.blocks`);
       ops.push(set(['slides', index, key], value));
     }
     if (record.type !== undefined) ops.push(set(['slides', index, 'type'], clone(record.type)));

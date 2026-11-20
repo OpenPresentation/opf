@@ -1,7 +1,21 @@
 import { splitOpfPath, opfPathToJsonPointer, getValueAtPath, applyJsonPatch } from './index.js';
 import { firstErrorMessage, checkFormat } from "./checks.js";
 import {collectReservedPresentationIds, remapSlideTreeIds} from "./presentation-ids.js";
+import {cellBlocks,isGridCell} from '@openpresentation/opf/composition';
 const prefix=(a,b)=>a.length<=b.length&&a.every((part,i)=>part===b[i]);
+// OPF 0.35: a slide without a layout places every root block in a cell of its grid or none. A block that joins the root blocks of such a
+// slide takes the cell of its neighbor (the block before it, else the one after), so it stacks in that cell; a block that leaves them for
+// a group no longer names a cell (a nested block names none).
+function placedAt(slide,blocks,index,block){
+  if(!cellBlocks(slide)||isGridCell(block.region))return block;
+  const neighbor=blocks[index-1]??blocks[index];
+  return isGridCell(neighbor?.region)?{...block,region:neighbor.region}:block;
+}
+function leavingCells(block){
+  if(!isGridCell(block?.region))return block;
+  const {region:_cell,...rest}=block;
+  return rest;
+}
 
 /** Move one complete block. The insertion index refers to the destination before removal. */
 export function prepareBlockMove(presentation,fromPath,toContainerPath,toIndex) {
@@ -26,7 +40,7 @@ export function prepareBlockMove(presentation,fromPath,toContainerPath,toIndex) 
   const guards=[sourceContainer,...(same?[]:[to])].filter((path,i,all)=>!all.some((other,j)=>j!==i&&other.length<path.length&&prefix(other,path)));
   const patches=[...guards.map(path=>({op:'test',path:opfPathToJsonPointer(path),value:structuredClone(getValueAtPath(presentation,path))})),
     {op:'remove',path:opfPathToJsonPointer(from)},
-    {op:'add',path:opfPathToJsonPointer(target),value:structuredClone(source[sourceIndex])}];
+    {op:'add',path:opfPathToJsonPointer(target),value:structuredClone(to.length===2?placedAt(getValueAtPath(presentation,to),destination.filter((_,i)=>!same||i!==sourceIndex),index,source[sourceIndex]):sourceContainer.length===2?leavingCells(source[sourceIndex]):source[sourceIndex])}];
   const next=applyJsonPatch(presentation,patches),validation=checkFormat(next);
   if(!validation.valid)throw new Error(firstErrorMessage(validation, 'The moved document is not valid OPF.'));
   return {presentation:next,patches,path:opfPathToJsonPointer(target),changed:true};
@@ -45,16 +59,13 @@ export function listBlockContainers(presentation,{slideIndex,includeImplicit=fal
   (presentation?.slides??[]).forEach((slide,i)=>{
     if(slideIndex!==undefined&&slideIndex!==i)return;
     const path=['slides',String(i)],label=`Slide ${i+1}`;
-    if(includeImplicit&&!Array.isArray(slide.blocks)&&!Object.keys(slide).some(isRegion))result.push({path:opfPathToJsonPointer(path),label,count:contentFields.filter(key=>Object.hasOwn(slide,key)).length,implicit:true});
+    if(includeImplicit&&!Array.isArray(slide.blocks))result.push({path:opfPathToJsonPointer(path),label,count:contentFields.filter(key=>Object.hasOwn(slide,key)).length,implicit:true});
     visit(slide,path,label);
-    if(includeImplicit)for(const [key,value] of Object.entries(slide))if(isRegion(key)&&value&&typeof value==='object'&&!Array.isArray(value.blocks))result.push({path:opfPathToJsonPointer([...path,key]),label:`${label} › ${key}`,count:1,implicit:true});
-    for(const [key,value] of Object.entries(slide))if(key.split(/[+:]/).every(part=>['top','middle','bottom','start','center','end'].includes(part))&&value&&typeof value==='object'&&!Array.isArray(value)&&Array.isArray(value.blocks))visit(value,[...path,key],`${label} › ${key}`);
   });
   return result;
 }
 
 const contentFields=['text','items','bullets','image','video','chart','table','code','diagram','metric','quote','timeline'];
-const isRegion=key=>/^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/.test(key);
 function preparedChange(presentation,container,next,path) {
   const pointer=opfPathToJsonPointer(container);
   const patches=[{op:'test',path:pointer,value:structuredClone(getValueAtPath(presentation,container))},
@@ -63,7 +74,7 @@ function preparedChange(presentation,container,next,path) {
   if(!validation.valid)throw new Error(firstErrorMessage(validation, 'The changed document is not valid OPF.'));
   return {presentation:result,patches,path:opfPathToJsonPointer(path),changed:true};
 }
-/** Insert into a slide, existing group or named region. Implicit payloads become blocks. */
+/** Insert into a slide or an existing group. Implicit payloads become blocks; a block inserted among blocks in cells takes its neighbor's cell. */
 export function prepareBlockInsert(presentation,containerPath,block,index) {
   const path=splitOpfPath(containerPath),pointer=opfPathToJsonPointer(path);
   if(!listBlockContainers(presentation,{includeImplicit:true}).some(c=>c.path===pointer))throw new TypeError('Choose a slide, group or named region content container.');
@@ -75,7 +86,7 @@ export function prepareBlockInsert(presentation,containerPath,block,index) {
   }
   const at=index??next.blocks.length;
   if(!Number.isInteger(at)||at<0||at>next.blocks.length)throw new RangeError('Insertion index is out of range.');
-  next.blocks.splice(at,0,structuredClone(block));
+  next.blocks.splice(at,0,structuredClone(path.length===2?placedAt(next,next.blocks,at,block):block));
   return preparedChange(presentation,path,next,[...path,'blocks',String(at)]);
 }
 function checkedBlock(presentation,path) {
@@ -129,10 +140,6 @@ export function prepareBlockDuplicate(presentation,path) {
 export function prepareBlockRemove(presentation,path) {
   let {parts,container,index,blocks}=checkedBlock(presentation,path);
   while(blocks.length===1&&container.length>2){
-    if(container.length===3&&isRegion(container[2])){
-      const slidePath=container.slice(0,2),next=structuredClone(getValueAtPath(presentation,slidePath));delete next[container[2]];
-      return preparedChange(presentation,slidePath,next,slidePath);
-    }
     ({parts,container,index,blocks}=checkedBlock(presentation,container));
   }
   const next=structuredClone(getValueAtPath(presentation,container));next.blocks.splice(index,1);

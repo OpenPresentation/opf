@@ -201,8 +201,7 @@ function runArrays(slide) {
   };
   // FA-10: the heading group (tag, title, subtitle) may carry markers when it is TextRun[].
   for (const field of ['tag', 'title', 'subtitle']) if (Array.isArray(slide[field])) found.push({path: field, get: () => slide[field], set: value => { slide[field] = value; }});
-  const keys = Object.keys(slide).filter(key => /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key) && object(slide[key]));
-  if (keys.length) for (const key of keys.sort()) visit(slide[key], key); else visit(slide, '');
+  visit(slide, '');
   return found;
 }
 

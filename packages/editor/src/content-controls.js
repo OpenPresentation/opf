@@ -5,6 +5,7 @@
 // and when it does not apply it is shown disabled (aria-disabled, so it stays focusable) with the reason as its tooltip
 // and accessible description. Each commits one undoable change through the session. Nothing here owns document state:
 // `sync` re-reads the session after every change, Undo and Redo included.
+import { cellBlocks } from "@openpresentation/opf/composition";
 import { BLOCK_KIND_LABELS, blockConversionTargets, convertBlock, metricGroupForSelection } from "./block-convert.js";
 import {
   listItemIndexForSelection,
@@ -48,8 +49,8 @@ export const IMAGE_DESTINATIONS = Object.freeze([
   { value: "watermark", label: "Watermark", target: "watermark", options: {} },
 ]);
 
-const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/;
-const regionKeysOfSlide = (slide) => Object.keys(slide).filter((key) => REGION_KEY.test(key));
+// OPF 0.35: the cells a slide's blocks name (`region` on a slide without a layout), or none.
+const cellsOfSlide = (slide) => cellBlocks(slide)?.map((entry) => entry.cell) ?? [];
 const DESIGN_IMAGE_LABELS = { background: "background image", watermark: "watermark" };
 // An image block's own framing fields (FA-22) do not stop it being "a block that holds only an image".
 const IMAGE_BLOCK_FIELDS = new Set(["id", "extensions", "type", "fit", "focus", "aspectRatio", "shape", "adjust", "stroke", "opacity", "recolor", "overlay", "placement", "portrait"]);
@@ -292,7 +293,7 @@ export function createContentControls(ctx) {
 
   const slideBox = h("div", { class: "opf-dc-actions-block", "data-role": "slide-structure" });
   {
-    const layouts = selectField("region-layout", "Place blocks in regions", {
+    const layouts = selectField("region-layout", "Place blocks in cells", {
       empty: "Choose a layout…",
       onChange: (value) => {
         const slideIndex = getSlide();
@@ -302,11 +303,11 @@ export function createContentControls(ctx) {
         reselect(`slides.${slideIndex}`);
       },
     });
-    const toBlocks = action("Turn regions into blocks", {
+    const toBlocks = action("Take the blocks out of their cells", {
       role: "regions-to-blocks",
       prepare: () => prepareRegionsToBlocks(editor.presentation, getSlide(), { validate: false }),
       apply: () => regionsAsBlocks(editor, getSlide()),
-      done: "Regions are now blocks, in reading order.",
+      done: "The blocks are out of their cells, in reading order.",
     });
     const designImages = Object.keys(DESIGN_IMAGE_LABELS).map((source) =>
       action(`Move the ${DESIGN_IMAGE_LABELS[source]} into the content`, {
@@ -320,7 +321,7 @@ export function createContentControls(ctx) {
     updaters.push((state) => {
       const slide = editor.presentation.slides?.[state.slideIndex];
       if (!slide) return;
-      const regions = regionKeysOfSlide(slide);
+      const regions = cellsOfSlide(slide);
       const count = blockCount(state.slideIndex);
       const choices = regions.length ? [] : (REGION_LAYOUTS[count] ?? []);
       layouts.wrap.hidden = choices.length === 0;
