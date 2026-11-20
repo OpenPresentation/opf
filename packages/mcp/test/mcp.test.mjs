@@ -517,6 +517,9 @@ describe("the bundled sources", () => {
 		// tools row and the examples' files in the sources), and how a hosted viewer gets the pictures. The limit is unchanged.
 		// Reviewed for American spelling on 2026-11-20: 1,399,865 exact bytes (main at ddf6580e0: 1,399,982). Spelling only: "colour" to
 		// "color", "centre" to "center", "behaviour" to "behavior" and the like remove 117 bytes over 18 pages (validate.md -66). The limit is unchanged.
+		// Reviewed for the always-listed read_example_files on 2026-11-20: 1,400,099 exact bytes (main at c58cf0ba6: 1,399,865). It adds
+		// 234 in mcp.md: the tool is listed whenever the viewer is offered, and a host that leaves the examples' files out answers
+		// every path as missing. The limit is unchanged.
 		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
 	});
 });
