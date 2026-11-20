@@ -117,8 +117,10 @@ export function assertSh21OriginalOutline(document,plan){
  assertSh21Plan(plan);assert.ok(document&&Array.isArray(document.slides)&&document.slides.length===1);
  const candidates=[],record=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
  // Closed semantic payload paths from core/content-walk.ts and ContentPayload:
- // root items and group blocks (a block placed in a cell of the slide grid is a root block, OPF 0.35). Never
+ // root items, group blocks, and the48 slide-only promoted grid regions. Never
  // recurse through arbitrary data/extensions/metadata or through a list item.
+ const columns=['start','center','end','start+center','center+end','start+center+end'],rows=['top','middle','bottom','top+middle','middle+bottom','top+middle+bottom'];
+ const promoted=[...columns,...rows,...rows.flatMap(row=>columns.map(column=>row+':'+column))];
  function payload(value,parts,depth=0,ancestors=[]){if(!record(value))return;assert.ok(depth<=32&&!ancestors.includes(value),'Bounded acyclic semantic content required');
   if((value.type===undefined||value.type==='list')&&Array.isArray(value.items))candidates.push({parts:[...parts,'items'],items:value.items});
   if((value.type===undefined||value.type==='group')&&Array.isArray(value.blocks))for(const [index,block]of value.blocks.entries())payload(block,[...parts,'blocks',String(index)],depth+1,[...ancestors,value]);
@@ -128,6 +130,7 @@ export function assertSh21OriginalOutline(document,plan){
  // items and root blocks independently of it; never hide a duplicate outline.
  if(Array.isArray(slide.items))candidates.push({parts:['slides','0','items'],items:slide.items});
  if(Array.isArray(slide.blocks))for(const [index,block]of slide.blocks.entries())payload(block,['slides','0','blocks',String(index)],0,[slide]);
+ for(const key of promoted)payload(slide[key],['slides','0',key],0,[slide]);
  const text=v=>typeof v==='string'?v:v?.text;
  const matches=candidates.filter(c=>c.items.length===plan.before.length&&c.items.every((v,i)=>text(v)===plan.before[i].text));assert.equal(matches.length,1,'One exact original public outline required');
  const selected=matches[0],stack=[];
