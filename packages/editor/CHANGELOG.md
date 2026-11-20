@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## 0.34.2 (2026-11-20)
+
+- The Lucide icon set records its former icon names (`renamed`, from the aliases `lucide-static` ships: 304 of them, about 10.5 KB), read from the set index the lazy loader already fetches. `opf/icon-unknown` for an old name such as `lucide:triangle-alert` or `lucide:alert-triangle` now says the icon was renamed and to write `lucide:triangle-exclamation-point`, suggests it first and offers the replace fix, without loading any icon or keywords. An old name still does not draw (OPF has one name for each icon). `search_icons` (MCP) and the editor icon search find a renamed icon by its former name. Tabler ships no rename list.
+- OpenPresentation in Claude Artifacts adds Title, Bullets and Blank slide starters, a selected-slide actions menu, inline title shortcuts and automatic naming for the untitled starter. Assistant edits reveal the affected slide with a temporary Undo action. The Open menu opens a local OPF file, pastes a deck or browses bundled examples. A slide-specific request composer keeps sharing details out of the footer.
+- The Design quick menu's bottom sheet (a phone): one section at a time behind a segmented switch (Theme, Colors, Fonts, Layout) that names each section's current choice, in one scroll container instead of three lists that each scrolled on their own, at about half the screen (55%, was up to 85%) so the slide above stays in view; a host can set its height with `--opf-design-menu-sheet-h`. New label `layoutTab` (default "Layout"). The popover on wider screens is unchanged.
+- The pinned font peers move to `@expo-google-fonts/noto-color-emoji` 0.4.8 and `@expo-google-fonts/noto-sans-mongolian` 0.4.2
+(Noto Sans Mongolian with re-spaced advances: the sample lines measure 0.1% to 4% different, each equal to HarfBuzz's width;
+the other faces and every golden are unchanged). Install those exact versions with this release; the reviewed hashes in the
+font manifest follow them.
+- The Design menu's bottom sheet keeps the keyboard focus on a section tab (Theme, Colors, Fonts, Layout) when the sheet scrolls or the window resizes. Each scroll or resize inserted the section switch into the sheet again, which took the focus from the tab in it, so the arrow keys stopped moving along the switch and a screen reader lost its place. The switch is now inserted only when it is not there.
+- The slide's hover outline (the light ring around a text the pointer is over) shows only for a pointer that hovers (`@media (hover: hover)`). On a touch screen the browser keeps `:hover` on the last element touched, so a scroll that started on the title left a ring that looked like a selection nobody made.
+- The JSON syntax hint for a key without a value no longer ends with "Press Ctrl+Space after the colon for options." outside an editor: `analyzeJsonSyntax(text, { editor: true })` keeps the sentence (the source editor and the MCP viewer pass it), and every other caller, `validate(text)` and the CLI included, gets the hint without it.
+
 ## 0.34.1 (2026-11-14)
 
 - Opening a deck the session refuses over the one the source pane shows no longer crashes the host. `setDocument(doc, { text })` drew the refused deck's findings against the text the pane still showed, and a quick fix for a place that text lacked (an unknown key on a slide the old deck did not have) threw "Can not delete in empty document": `setDocument` threw that error instead of returning `false`, the pane stayed on the old text, and the `source` event reported the old text to the host. A refused `replaceDocument` now changes nothing, the findings included, so `setDocument` returns `false` and loads the text as a draft with its own findings; and every quick-fix builder writes no fix, rather than throwing, for a path the text lacks, for text that does not parse and for empty text (the finding is still listed).
