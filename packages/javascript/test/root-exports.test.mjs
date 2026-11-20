@@ -73,9 +73,9 @@ describe("package root", () => {
 
 // RR-55: the verbs of the CLI are exported from the root and keep their subpaths. Hosts (render, PPTX, editor, the CLI)
 // feature-detect some of these names with typeof, so a rename that drops one must fail here, not silently turn a feature off.
-// RR-75: in the Node build validate, stats, paginate, embed and edit register the default catalog when a call names none, so they
+// RR-75: in the Node build validate, stats, paginate, embed, edit and fix register the default catalog when a call names none, so they
 // are the Node build's own functions over the subpath's (node-verbs.test.mjs checks them); the browser build exports the subpath's.
-const nodeDefaults = ["validate", "stats", "paginate", "embed", "edit"];
+const nodeDefaults = ["validate", "stats", "paginate", "embed", "edit", "fix"];
 const verbs = {
   assertValid: validator, paginateSlide: pagination, copySlides: root, updateFromCatalog: root,
   diff: diffModule, merge: diffModule, format: formatModule, fromMarkdown: markdown, toMarkdown: markdown,

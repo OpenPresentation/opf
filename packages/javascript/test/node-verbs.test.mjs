@@ -101,7 +101,7 @@ describe("fill", () => {
 
 describe("the same names in both builds", () => {
   test("every verb of the CLI is exported by the browser build; only open, save and convert reject there with node-only", async () => {
-    for (const name of ["validate", "stats", "paginate", "embed", "edit", "fill", "diff", "merge", "format", "ingest", "parse", "stringify", "open", "save", "convert"]) {
+    for (const name of ["validate", "stats", "paginate", "embed", "edit", "fix", "fill", "diff", "merge", "format", "ingest", "parse", "stringify", "open", "save", "convert"]) {
       assert.equal(typeof node[name], "function", `node.${name}`);
       assert.equal(typeof browser[name], "function", `browser.${name}`);
     }

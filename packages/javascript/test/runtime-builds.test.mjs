@@ -62,7 +62,7 @@ describe("the two builds", () => {
     // RR-75/RR-117: Node validate and each createValidator session register the same default catalog, unlike browser core.
     // Other public classes/functions still share exact identity; the factory wrapper only forwards defaults and its one core cache.
     for (const name of Object.keys(nodeBuild)) {
-      if (["open", "save", "convert", "validate", "createValidator", "stats", "paginate", "continueOverfull", "embed", "edit"].includes(name)) assert.notEqual(browserBuild[name], nodeBuild[name], name);
+      if (["open", "save", "convert", "validate", "createValidator", "stats", "paginate", "continueOverfull", "embed", "edit", "fix"].includes(name)) assert.notEqual(browserBuild[name], nodeBuild[name], name);
       else assert.equal(browserBuild[name], nodeBuild[name], name);
     }
     for (const name of ["open", "save", "convert", "OPFApiError", "OPFExportError", "OPFImportError", "parseSlideSelection", "parse", "stringify", "validate"]) assert.equal(typeof nodeBuild[name], "function", name);

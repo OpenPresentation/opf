@@ -1,0 +1,27 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Design lesson",
+  "language": "en-US",
+  "slides": [
+    {
+      "title": "Start with a focused pilot",
+      "layout": "metrics",
+      "blocks": [
+        {
+          "text": "Learn what works before scaling.",
+          "region": "note"
+        },
+        {
+          "metric": {
+            "value": 24,
+            "label": "teams in the pilot"
+          },
+          "region": "metrics"
+        }
+      ],
+      "design": {
+        "contentDirection": "vertical"
+      }
+    }
+  ]
+}

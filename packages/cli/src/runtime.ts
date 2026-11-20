@@ -3,7 +3,7 @@
 //
 //   opf <command> <input> [output]     an optional positional output; stdout when it is omitted or `-`
 //   -i, --in-place                     rewrite the input (refused for stdin; never with an output)
-//   --check                            write nothing and exit 1 when the command would change something (format, embed, paginate)
+//   --check                            write nothing and exit 1 when the command would change something (format, embed, fix, paginate)
 //   --force                            replace an existing output
 //
 // The report is JSON: `{ command, ok, input, outputs: [{ file, sha256, bytes, mediaType }], findings, counts, ... }`, on stdout,
@@ -163,6 +163,13 @@ export interface WriteDeckOptions {
 	extra?: Record<string, unknown>;
 	/** Findings of the command itself (pagination, an import), added to the check's. */
 	findings?: Finding[];
+	/**
+	 * The command checked the deck itself (opf fix): it is written as it is, whatever these findings say, without the format and
+	 * references check, and the report carries them and `ok`.
+	 */
+	validated?: { findings: Finding[]; ok: boolean };
+	/** Prints the report (default printReport: JSON). */
+	print?: (report: Report, toStderr: boolean) => void;
 	/** Runs after the deck is written and before the report; the files it wrote are listed in the report's outputs. */
 	afterWrite?: () => Promise<OutputFact[]>;
 }
@@ -172,8 +179,7 @@ export interface WriteDeckOptions {
  * or the source names, and print the report. An existing output is refused before anything is printed.
  */
 export async function writeDeck(command: string, document: unknown, destination: Destination, options: WriteDeckOptions): Promise<void> {
-	const check = checked(command, document, options.failOn);
-	const findings = [...(options.findings ?? []), ...check.findings];
+	const findings = options.validated ? options.validated.findings : [...(options.findings ?? []), ...checked(command, document, options.failOn).findings];
 	const format = outputFormatOf(destination.file, options.to, options.source);
 	if (destination.file !== "-") await checkOutput(destination.file, destination.overwrite);
 	const text = serialize(document, format, { schemaComment: options.schemaComment === true, modeline: format === "yaml" ? options.source?.yaml?.modeline : undefined });
@@ -184,5 +190,5 @@ export async function writeDeck(command: string, document: unknown, destination:
 	if (toStdout) process.stdout.write(text);
 	else await saveText(destination.file, text, destination.overwrite, sameFile && options.source ? { file: options.inputFile as string, raw: options.source.raw } : undefined);
 	const more = (await options.afterWrite?.()) ?? [];
-	printReport(envelope(command, { input: options.input ?? null, outputs: [outputFact(destination.file, text, DECK_MEDIA[format]), ...more], findings, ...options.extra }), toStdout);
+	(options.print ?? printReport)(envelope(command, { ok: options.validated?.ok ?? true, input: options.input ?? null, outputs: [outputFact(destination.file, text, DECK_MEDIA[format]), ...more], findings, ...options.extra }), toStdout);
 }

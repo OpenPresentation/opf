@@ -150,7 +150,7 @@ describe("flag meanings", () => {
 
   test("--from names the form of every deck input; stdin is sniffed: { or [ is JSON, else --from is required", async () => {
     const yaml = "name: Piped\nslides:\n  - title: A\n";
-    for (const args of [["validate", "-"], ["stats", "-"], ["paginate", "-"], ["embed", "-"], ["edit", "-", "--patch", "patch.json"], ["format", "-"], ["doctor", "-"]]) {
+    for (const args of [["validate", "-"], ["stats", "-"], ["paginate", "-"], ["embed", "-"], ["fix", "-"], ["edit", "-", "--patch", "patch.json"], ["format", "-"], ["doctor", "-"]]) {
       const unknown = run(args, { status: 2, input: yaml });
       assert.equal(unknown.error.code, "unknown-input-format", args.join(" "));
       assert.match(unknown.error.error, /Pass --from yaml\|md/, args.join(" "));
@@ -241,7 +241,7 @@ describe("errors that state the fix, and help for every command", () => {
   });
 
   test("every command has --help and -h, and opf help <command>", () => {
-    const commands = ["create", "validate", "convert", "edit", "format", "diff", "merge", "stats", "paginate", "embed", "fill", "ingest", "doctor", "schemas", "schema", "catalogs", "catalog", "skills"];
+    const commands = ["create", "validate", "convert", "edit", "format", "diff", "merge", "stats", "paginate", "embed", "fix", "fill", "ingest", "doctor", "schemas", "schema", "catalogs", "catalog", "skills"];
     const top = run(["--help"]).stdout;
     for (const command of commands) {
       assert.match(top, new RegExp(`^ {2}${command} `, "m"), command);

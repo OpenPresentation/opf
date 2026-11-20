@@ -40,8 +40,8 @@ const deck: Presentation = {
 };
 
 console.log(presentation.$id);
-// Register the catalogs your host trusts; core ships no records. In Node, validate, stats, paginate, embed and edit
-// register the gallery (@openpresentation/gallery, a dependency of core) when a call names none.
+// Register the catalogs your host trusts; core ships no records. In Node, validate, stats, paginate, embed, fix and
+// edit register the gallery (@openpresentation/gallery, a dependency of core) when a call names none.
 const catalogs = [gallery];
 console.log(validate({ ...deck, design: { theme: "classic" } }, { catalogs }).valid);
 // Save with every record the deck uses embedded, so it renders the same with no catalog registered.

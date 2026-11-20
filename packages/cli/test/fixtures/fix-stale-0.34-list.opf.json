@@ -1,0 +1,68 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Product Features",
+  "language": "en-US",
+  "slides": [
+    {
+      "layout": "list",
+      "title": "Why Teams Choose Us",
+      "blocks": [
+        {
+          "items": [
+            {
+              "text": "Fast Setup",
+              "description": "Get started in under 5 minutes with our API."
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "text": "Brand Consistent",
+              "description": "Every slide matches your color scheme and fonts."
+            }
+          ]
+        }
+      ],
+      "design": {
+        "titleAlignment": "center",
+        "contentAlignment": "center"
+      }
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
+          "tags": [
+            "Text"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "body",
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
+            }
+          ],
+          "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list.svg"
+          }
+        }
+      }
+    }
+  }
+}
