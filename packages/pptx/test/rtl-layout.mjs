@@ -60,8 +60,9 @@ const rtl = await read(deck('ar')), ltr = await read(deck('en'));
 
 // Regions mirror.
 {
-  const rtlRegions = shapes(rtl.xml, 2).filter(shape => /start|end/.test(shape.name)), ltrRegions = shapes(ltr.xml, 2).filter(shape => /start|end/.test(shape.name));
-  const byName = (list, side) => list.find(shape => shape.name.includes(`.${side}.`));
+  // The block in the start cell is blocks.0, the one in the end cell blocks.1 (shape names carry each block's path).
+  const rtlRegions = shapes(rtl.xml, 2).filter(shape => /\.blocks\.[01]\./.test(shape.name)), ltrRegions = shapes(ltr.xml, 2).filter(shape => /\.blocks\.[01]\./.test(shape.name));
+  const byName = (list, side) => list.find(shape => shape.name.includes(`.blocks.${side === 'start' ? 0 : 1}.`));
   assert.ok(byName(rtlRegions, 'start').x > byName(rtlRegions, 'end').x, 'the authored left region is at the right');
   assert.ok(byName(ltrRegions, 'start').x < byName(ltrRegions, 'end').x);
 }

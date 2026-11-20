@@ -76,7 +76,7 @@ test('legacy typed tags migrate logical words and pixel anchors; current native 
   assert.match(xml, /Bonjour/);
   entries[slidePart] = strToU8(xml.replace('Bonjour', 'Bonsoir'));
   const back = await fromPptx(zipSync(entries));
-  assert.deepEqual(back.slides[0].blocks.map(block => block.region), ['start', 'end'], 'a legacy record's cells come back as blocks that name them');
+  assert.deepEqual(back.slides[0].blocks.map(block => block.region), ['start', 'end'], 'the cells of a legacy record come back as blocks that name them');
   assert.equal(text(back.slides[0].blocks[0].text), 'Bonsoir', 'stored legacy provenance cannot restore stale source words');
   assert.equal(text(back.slides[0].blocks[1].text), literal);
   assert.deepEqual(back.extensions, note);
