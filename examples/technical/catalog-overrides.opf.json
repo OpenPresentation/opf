@@ -2,6 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Catalog Overrides",
   "description": "Technical fixture for catalog groups: the document defines its own theme, schemes, audience, purpose and tone in catalogs.custom, and takes its narrative from a named catalog group (example:fixture-proof).",
+  "language": "en-US",
   "audience": [
     {
       "id": "technical-reviewers",

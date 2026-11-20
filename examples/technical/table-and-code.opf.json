@@ -1,11 +1,11 @@
 {
   "name": "Table And Code Example",
+  "language": "en-US",
   "slides": [
     {
       "title": "Quarter Snapshot",
       "blocks": [
         {
-          "region": "top+middle",
           "table": {
             "columns": [
               "Metric",
@@ -32,7 +32,6 @@
           }
         },
         {
-          "region": "bottom",
           "text": "Growth was broad-based, with margin expansion from infrastructure savings."
         }
       ]
@@ -41,7 +40,6 @@
       "title": "Decision Rule",
       "blocks": [
         {
-          "region": "start",
           "code": {
             "source": "if risk > threshold:\n    escalate(owner)\nelse:\n    approve(change)",
             "language": "python",
@@ -49,7 +47,6 @@
           }
         },
         {
-          "region": "center+end",
           "items": [
             "Escalate only when the decision is irreversible",
             "Keep reversible changes moving",

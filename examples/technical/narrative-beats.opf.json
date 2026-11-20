@@ -2,6 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Narrative Beats",
   "description": "Technical fixture for a custom narrative record and slide beat references.",
+  "language": "en-US",
   "narrative": "technical-proof",
   "slides": [
     {

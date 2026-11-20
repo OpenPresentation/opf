@@ -220,7 +220,6 @@
               "accepts": [
                 "list"
               ],
-              "role": "primary",
               "max": 1,
               "arrangement": "pyramid"
             }
@@ -302,7 +301,6 @@
               "accepts": [
                 "list"
               ],
-              "role": "primary",
               "max": 1,
               "arrangement": "chevrons"
             }

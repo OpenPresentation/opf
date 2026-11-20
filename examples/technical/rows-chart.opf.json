@@ -1,11 +1,18 @@
 {
   "name": "Row Regions With Chart",
+  "language": "en-US",
   "slides": [
     {
       "title": "Performance",
+      "composition": {
+        "mode": "column",
+        "weights": [
+          2,
+          1
+        ]
+      },
       "blocks": [
         {
-          "region": "top+middle",
           "type": "chart",
           "chart": {
             "type": "line",
@@ -36,7 +43,6 @@
           }
         },
         {
-          "region": "bottom",
           "text": "Latency improved 55% over the last four quarters."
         }
       ]
