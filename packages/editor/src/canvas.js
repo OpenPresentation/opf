@@ -883,7 +883,7 @@ export function createCanvasEditor(container, options = {}) {
     if (options.titleEnterCommits && /^slides\.\d+\.title$/.test(path) && active?.input) {
       const hint = doc.createElement("span");
       hint.className = "opf-title-key-hint";
-      hint.textContent = "Enter to finish · Shift+Enter for a new line";
+      hint.textContent = options.labels?.titleEnterHint ?? "Enter to finish · Shift+Enter for a new line";
       overlay.append(hint);
       active.input.setAttribute("aria-description", hint.textContent);
       active.input.addEventListener("keydown", event => {

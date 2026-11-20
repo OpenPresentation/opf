@@ -366,6 +366,10 @@
           "command": "node test/thumbnail-strip-actions-browser.mjs"
         },
         {
+          "id": "browser:title-enter-commits",
+          "command": "node test/title-enter-commits-browser.mjs"
+        },
+        {
           "id": "browser:host-continuation",
           "command": "node test/host-continuation-browser.mjs"
         },

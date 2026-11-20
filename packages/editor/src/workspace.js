@@ -767,7 +767,7 @@ export function createOpfEditor(element, options = {}) {
         slideIndex,
         density,
         ...iconsFor("strip"),
-        ...(options.labels?.thumbnails ? { labels: { navigation: options.labels.thumbnails } } : {}),
+        ...(options.labels?.thumbnails || options.labels?.thumbnailStrip ? { labels: { ...options.labels.thumbnailStrip, ...(options.labels.thumbnails ? { navigation: options.labels.thumbnails } : {}) } } : {}),
         renderOptions: renderOptions(),
         onSelect: (index) => {
           if (index !== slideIndex) go(index);
