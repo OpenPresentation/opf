@@ -115,19 +115,23 @@ describe('script classes', () => {
     });
   }
 
+  // v0.35: Arabic, Persian and Urdu take PowerPoint's Office theme fonts for the Arabic script, Times New Roman for headings and Arial for body.
+  const office = ['Times New Roman', 'Arial'];
   const complex = [
-    ['arabic', 'ar-SA', 'Arab', true, 'Arabic Typesetting', 'Noto Naskh Arabic'],
-    ['fa-IR', 'fa-IR', 'Arab', true, 'Arabic Typesetting', 'Noto Naskh Arabic'],
-    ['urdu', 'ur-PK', 'Arab', true, 'Arabic Typesetting', 'Noto Nastaliq Urdu'],
+    ['arabic', 'ar-SA', 'Arab', true, office, 'Noto Naskh Arabic'],
+    ['fa-IR', 'fa-IR', 'Arab', true, office, 'Noto Naskh Arabic'],
+    ['urdu', 'ur-PK', 'Arab', true, office, 'Noto Nastaliq Urdu'],
     ['he-IL', 'he-IL', 'Hebr', true, 'David', 'Noto Sans Hebrew'],
     ['hindi', 'hi-IN', 'Deva', false, 'Mangal', 'Noto Sans Devanagari'],
     ['bn', 'bn-BD', 'Beng', false, 'Shonar Bangla', 'Noto Sans Bengali'],
     ['ta', 'ta-IN', 'Taml', false, 'Latha', 'Noto Sans Tamil'],
     ['thai', 'th-TH', 'Thai', false, 'Angsana New', 'Noto Sans Thai'],
   ];
-  for (const [language, lang, script, rtl, powerPoint, google] of complex) {
+  for (const [language, lang, script, rtl, families, google] of complex) {
+    const [headingFamily, powerPoint] = Array.isArray(families) ? families : [families, families];
     test(`${language} fills complexScript${rtl ? ' and is right-to-left' : ''}`, () => {
       const resolved = resolveScriptFonts(deck(language));
+      assert.equal(resolved.heading.complexScript, headingFamily);
       assert.equal(resolved.lang, lang);
       assert.equal(resolved.script, script);
       assert.equal(resolved.scriptRole, 'complexScript');
@@ -135,7 +139,7 @@ describe('script classes', () => {
       assert.equal(resolved.direction, rtl ? 'rtl' : 'ltr');
       assert.deepEqual(resolved.body, {latin: 'Carlito', eastAsian: 'Carlito', complexScript: powerPoint});
       assert.deepEqual(resolved.sources, {eastAsian: 'latin', complexScript: 'language'});
-      assert.deepEqual(resolved.supplement, {script, heading: powerPoint, body: powerPoint});
+      assert.deepEqual(resolved.supplement, {script, heading: headingFamily, body: powerPoint});
       assert.equal(resolveScriptFonts(deck(language), {app: 'google-slides'}).complexScript, google);
     });
   }
@@ -226,9 +230,9 @@ describe('script classes', () => {
     // An explicit complexScript slot for the same languages names nothing for them: the language default stays.
     assert.deepEqual(resolveScriptFonts(deck('japanese', inline('Ebrima', 'complexScript'))).supplement, {script: 'Jpan', heading: 'Meiryo', body: 'Meiryo'});
     // Complex-script languages follow an explicit complexScript slot; an explicit eastAsian slot leaves them on the language default.
-    for (const [language, script, family] of [['arabic', 'Arab', 'Arabic Typesetting'], ['hebrew', 'Hebr', 'David'], ['hindi', 'Deva', 'Mangal'], ['thai', 'Thai', 'Angsana New']]) {
+    for (const [language, script, heading, body = heading] of [['arabic', 'Arab', 'Times New Roman', 'Arial'], ['hebrew', 'Hebr', 'David'], ['hindi', 'Deva', 'Mangal'], ['thai', 'Thai', 'Angsana New']]) {
       assert.deepEqual(resolveScriptFonts(deck(language, inline('Ebrima', 'complexScript'))).supplement, {script, heading: 'Ebrima', body: 'Ebrima'}, language);
-      assert.deepEqual(resolveScriptFonts(deck(language, inline('MS Gothic', 'eastAsian'))).supplement, {script, heading: family, body: family}, language);
+      assert.deepEqual(resolveScriptFonts(deck(language, inline('MS Gothic', 'eastAsian'))).supplement, {script, heading, body}, language);
     }
     // For every catalog language with a script slot, the supplement equals the resolved slot family under explicit slots, in both parts.
     for (const language of languages) {
@@ -411,7 +415,7 @@ describe('precedence', () => {
     assert.equal(unlisted.eastAsian, 'Noto Sans JP', 'an empty languages list admits every language');
     assert.equal(unlisted.sources.eastAsian, 'schemeFamily');
     const arabicInMeiryo = resolveScriptFonts(deck('arabic', 'meiryo'));
-    assert.deepEqual(arabicInMeiryo.body, {latin: 'Meiryo', eastAsian: 'Meiryo', complexScript: 'Arabic Typesetting'});
+    assert.deepEqual(arabicInMeiryo.body, {latin: 'Meiryo', eastAsian: 'Meiryo', complexScript: 'Arial'});
   });
 
   test('catalog font-scheme records may carry script slots', () => {
@@ -428,7 +432,7 @@ describe('precedence', () => {
     assert.equal(resolved.eastAsian, 'Noto Sans JP');
     const object = resolveScriptFonts(deck({bcp47: 'ar-SA', name: 'Arabic (Saudi Arabia)', direction: 'rtl', script: 'Arab'}));
     assert.equal(object.lang, 'ar-SA');
-    assert.equal(object.complexScript, 'Arabic Typesetting');
+    assert.equal(object.complexScript, 'Arial');
     assert.equal(object.rtl, true);
     const override = resolveScriptFonts(deck({id: 'hebrew', fontScheme: 'noto-sans-hebrew'}));
     assert.equal(override.lang, 'he-IL');

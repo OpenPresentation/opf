@@ -140,8 +140,8 @@
       "ooxmlLang": "ar-SA",
       "fonts": {
         "powerpoint": {
-          "major": "Arabic Typesetting",
-          "minor": "Arabic Typesetting"
+          "major": "Times New Roman",
+          "minor": "Arial"
         },
         "google": {
           "major": "Noto Naskh Arabic",
@@ -1206,8 +1206,8 @@
       "ooxmlLang": "fa-IR",
       "fonts": {
         "powerpoint": {
-          "major": "Arabic Typesetting",
-          "minor": "Arabic Typesetting"
+          "major": "Times New Roman",
+          "minor": "Arial"
         },
         "google": {
           "major": "Noto Naskh Arabic",
@@ -1614,8 +1614,8 @@
       "ooxmlLang": "ur-PK",
       "fonts": {
         "powerpoint": {
-          "major": "Arabic Typesetting",
-          "minor": "Arabic Typesetting"
+          "major": "Times New Roman",
+          "minor": "Arial"
         },
         "google": {
           "major": "Noto Nastaliq Urdu",
