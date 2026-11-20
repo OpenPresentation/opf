@@ -79,7 +79,18 @@ export function failOnOf(options: Options): FindingSeverity {
 /** The failure of a document that fails its check or has findings at --fail-on: exit 1, the findings in the error report. */
 export function documentFailure(command: string, message: string, findings: readonly Finding[], fields: Record<string, unknown> = {}): CliError {
 	const invalid = findings.some((finding) => finding.severity === "error");
-	return new CliError(`${message}${staleCopyHint(command, findings)}`, invalid ? "invalid-document" : "findings-at-fail-on", 1, { command, ...fields, findings, counts: countsOf(findings) });
+	return new CliError(`${message}${safeFixHint(command, findings)}${staleCopyHint(command, findings)}`, invalid ? "invalid-document" : "findings-at-fail-on", 1, { command, ...fields, findings, counts: countsOf(findings) });
+}
+
+/**
+ * OPF 0.35: the sentence that names `opf fix` when findings carry a fix marked safe (a removed or renamed key, a 0.34 region name,
+ * a renamed icon, a stale copy of a built-in layout, ...): `opf fix <deck> -i` applies them. Empty otherwise, and for fix itself.
+ */
+export function safeFixHint(command: string, findings: readonly Finding[]): string {
+	if (command === "fix") return "";
+	const fixable = findings.filter((finding) => finding.fixes?.some((fix) => fix.safe === true)).length;
+	if (!fixable) return "";
+	return ` ${fixable === 1 ? "One finding carries a safe fix" : `${fixable} findings carry a safe fix`}: \`opf fix <deck> -i\` applies ${fixable === 1 ? "it" : "them"}, then validate again.`;
 }
 
 /**

@@ -501,6 +501,11 @@ describe("the bundled sources", () => {
 		// (cli.md), org-chart assistants and Venn overlaps (diagrams.md, smartart.md), the lone icon list by direction (icons.md), chart data
 		// and shapes (chart-table-data.md, shapes.md). The 0.35 branch adds 2,274 net: the layout vocabulary (layout-templates.md +4,201,
 		// smartart.md +666) less the removed keys (design-resolution.md, catalog-schema-reference.md, schema-reference.md). Same 3% headroom.
+		// Reviewed for 0.35 step 9 (docs in the 0.35 vocabulary) on 2026-11-20: 1,395,487 exact bytes (main at cc8dbb14e: 1,395,272, after
+		// steps 8 and the fix command). Step 9 adds 215 net: the composition model and layouts in llm-authoring.md (+420), the refusing
+		// commands' opf fix hint in cli.md (+238) and the unresolved-reference rule's removed-layout sentence (validate.md +31), less the
+		// removed 0.34 words (layout-templates.md -347, content-payloads.md -82, how-opf-works.md -42, yaml.md -6; dynamic-composition.md
+		// +3). The limit is unchanged.
 		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
 	});
 });

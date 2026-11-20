@@ -26,9 +26,10 @@ node skills/opf-inspect/scripts/opf-inspect.mjs validate custom-layout.json layo
 **Words these skills use**
 
 - **Furniture**: the parts that repeat on slides outside the content: header, footer, logo, slide number. You set them once on the deck or a layout, not in `blocks`.
-- **Composition**: the automatic layout step that turns a slide's content into boxes with a position, size and font size. A `composition` key steers it.
+- **Composition**: the automatic layout step that turns a slide's content into boxes with a position, size and font size. On a slide without a layout, `composition.mode` (`auto`, `grid`, `row`, `column`), `columns` and `weights` steer it, and groups keep blocks together.
+- **Layout** and **region**: a layout is a catalog record that divides the slide into named regions (the built-ins use `body`, `lead`, `aside`, `media`, `first`, `second`, `third`). Blocks bind to regions by kind; a block's `region` pins it to one.
 - **Implicit blocks**: content fields written straight on the slide (`text`, `items`, `table`, ...) with no `blocks` list. Composition treats them as blocks, and editing can turn them into an explicit `blocks` list.
-- **Cell**: on a slide without a layout, a block's `region` names a cell of the slide's 3×3 grid (`start`, `top:end`, `center+end`), used when relative position matters. Every block of the slide names a cell or none; blocks that name one cell stack in it. (OPF 0.35 removed the slide keys that named cells, the promoted regions.)
+- **Cell**: on a slide without a layout, a block's `region` names a cell of the slide's 3×3 grid (`start`, `top:end`, `center+end`), used when relative position matters. Every block of the slide names a cell or none; blocks that name one cell stack in it.
 - **Catalog record**: one named, reusable design entry (a theme, layout, color scheme, font scheme, ...) from the `@openpresentation/gallery` package or a deck's `catalogs`. A deck refers to it by id.
 - **Reflow**: text wrapping again when its box or size changes. OPF computes preview line breaks. Default PPTX export uses measured boxes without reflow between boxes; selected proofing-sensitive lines use smaller source-bound fragments. Opt-in native paragraph export lets supported text re-wrap in the application, while fallback content stays measured.
 - **Provenance**: tags that OPF writes into an exported PPTX to record where each shape came from, so a later import can map edits back to the OPF source.

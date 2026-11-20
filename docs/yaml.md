@@ -53,7 +53,7 @@ slides:
           attribution: Priya Raman, Head of Platform
 ```
 
-is the same deck as the JSON it converts to: `name`, `language` and `slides` with the values above. `cover` is a 0.19 intent layout. To pin a block to a named area, write `region: <name>` on that block after reading the selected layout's `regions`; `layout: auto` explicitly asks for automatic composition. A comment and the first line are not data.
+is the same deck as the JSON it converts to: `name`, `language` and `slides` with the values above. `cover` is a 0.19 intent layout. To pin a block to a named area, write `region: <name>` on that block after reading the selected layout's `regions`; a slide without `layout` is composed automatically. A comment and the first line are not data.
 
 ## The dialect
 
