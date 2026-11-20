@@ -5412,8 +5412,11 @@ const AUTHORED_KEYS: ReadonlySet<string> = new Set(['value', 'payload', 'host'])
  * the slide keys it replaced; composeSlide then writes the result's paths as the author's (`slides.N.blocks.I`). The group of a cell that
  * several blocks name keeps the cell's path (`slides.N.top:start`), its blocks their own. Undefined for any other slide.
  */
+/** OPF 0.35 (layout-cells.ts): compose a slide's cells beside its layout record, as 0.34 composed a slide with a layout and cell keys (the
+ *  record's design and composition apply, its regions do not), to tell whether the fix that removes the layout keeps the drawing. */
+const CELLS_BESIDE_LAYOUT = Symbol.for('opf.cellsBesideLayout');
 function cellComposition(input: unknown, options: ComposeSlideOptions): { slide: Record<string, unknown>; path: (value: string) => string } | undefined {
-  if (options.layout !== null && typeof options.layout === 'object') return undefined;
+  if (options.layout !== null && typeof options.layout === 'object' && (options as Record<symbol, unknown>)[CELLS_BESIDE_LAYOUT] !== true) return undefined;
   const source = record(input), placed = cellBlocks(source);
   if (!placed) return undefined;
   const { blocks: _blocks, ...slide } = source as Record<string, unknown>;

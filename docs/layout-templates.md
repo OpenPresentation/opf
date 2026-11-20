@@ -331,7 +331,8 @@ its column was. The column, and a nested group's new default gap (LH-89), are ke
 the columns and gaps of before (unless that removes overflow). Headings are centered vertically in their region unless every
 row it spans is `auto`, so a `cover` or a title-only slide centers its title. A block's cell word (`start`, `top:start`, ...; the
 cells of a slide without a layout) names no region of a layout: `opf/region-unknown`, and the block binds by kind. Through 0.34
-such a slide ignored its layout and composed the cells.
+the cells composed such a slide and the layout's regions were not used, though its design, color variant and composition still
+applied; `opf fix` removes the layout and keeps those on the slide when it then draws the same (docs/migrations/0.35.md).
 
 In the Markdown dialect, `<!-- block: region=aside -->` pins a block; `region=top:start` names a cell on a slide without a layout.
 

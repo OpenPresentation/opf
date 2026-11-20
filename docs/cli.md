@@ -219,7 +219,7 @@ For a file that will be opened in LibreOffice, `--charts picture` writes the cha
   again, because an error in the deck's own keys hides the accessibility, layout and content checks. It stops when no safe fix is
   left, after at most 10 rounds (`fix.stopped`: `stable`, `max-rounds` or `no-progress`). A fix that is not marked safe is never
   applied: its finding stays in `findings` with its fixes, and `fix.unsafe` lists the findings whose only fixes need a choice. The
-  report adds `valid`, `checks` and `fix: { applied: [{ round, ruleId, path, fix, title }], rounds, stopped, unsafe }`;
+  report adds `valid`, `checks` and `fix: { applied: [{ round, ruleId, path, fix, title }], rounds, stopped, unsafe, layoutWithCells }` (`layoutWithCells`: each slide that had a layout beside 0.34 cell keys, `{ slide, layout, rewritten, kept }` or `{ slide, layout, rewritten: false, reason }`);
   `--format text` prints it as lines. The deck is written with the fixes even when findings remain (an input with nothing to fix is
   not rewritten by `-i`); the exit status is 1 when findings at or above `--fail-on` (default `error`) remain or the rounds ran out.
   `--check` writes nothing and exits 1 when a safe fix would apply. Core's `fix(deck, options)` does the same from code.

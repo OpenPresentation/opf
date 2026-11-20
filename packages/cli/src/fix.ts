@@ -3,7 +3,7 @@
 // when a safe fix would be applied. The deck is written with the fixes even when findings remain; the exit status says whether any
 // reaches --fail-on.
 import path from "node:path";
-import { type AppliedFix, type Finding, type FindingSeverity, type FixResult, ensureIcons, fix } from "@openpresentation/opf";
+import { type AppliedFix, type Finding, type FindingSeverity, type FixResult, type LayoutWithCells, ensureIcons, fix } from "@openpresentation/opf";
 import { Reporter, assetRoot, iconSourceReader, measuringFonts } from "@openpresentation/opf/internal/engine";
 import { type CommandSpec, oneOf, parseArgs, printHelp } from "./args.js";
 import { CLI_CATALOGS } from "./catalogs.js";
@@ -27,8 +27,11 @@ its fixes, for you to choose. The deck goes to stdout, the output, or back to th
 is not rewritten). It is written with the fixes even when findings remain. --check writes nothing and exits 1 when a safe
 fix would be applied. Exit 1 also when findings at or above --fail-on (default error) remain or the rounds ran out.
 The report { command, ok, input, outputs, findings, counts, valid, checks, fix: { applied: [{ round, ruleId, path, fix,
-title }], rounds, stopped, unsafe } } lists each fix applied, the findings that remain, and in unsafe those that carry only
-fixes to review. It goes to stdout, or stderr when stdout carries the deck; --format text prints it as lines.
+title }], rounds, stopped, unsafe, layoutWithCells } } lists each fix applied, the findings that remain, and in unsafe those
+that carry only fixes to review. layoutWithCells lists each slide that had both a layout and 0.34 cell keys ({ slide, layout,
+rewritten, kept } when the layout was removed and what it gave the slide was kept; { slide, layout, rewritten: false, reason }
+when the slide would draw differently without its layout and is left for you). It goes to stdout, or stderr when stdout
+carries the deck; --format text prints it as lines.
 
 Examples:
   opf fix deck.opf.json -i
@@ -52,9 +55,16 @@ const plural = (count: number, word: string, many = `${word}s`) => `${count} ${c
 
 /** The report as lines: each fix applied (or, with --check, to apply), then each finding left with its fixes, then a summary. */
 export function formatFixText(report: Report, label: string, check = false): string {
-	const details = report.fix as { applied: Omit<AppliedFix, "patch">[]; rounds: number; stopped: FixResult["stopped"] };
+	const details = report.fix as { applied: Omit<AppliedFix, "patch">[]; rounds: number; stopped: FixResult["stopped"]; layoutWithCells?: LayoutWithCells[] };
 	const lines: string[] = [];
 	for (const entry of details.applied) lines.push(`${label}:${entry.path || "/"}  ${check ? "to fix" : "fixed "}  ${entry.ruleId}  ${entry.fix}: ${entry.title}`);
+	// OPF 0.35: a slide with a layout and 0.34 cell keys, rewritten without the layout or left with the reason.
+	for (const entry of details.layoutWithCells ?? [])
+		lines.push(
+			entry.rewritten
+				? `${label}:/slides/${entry.slide}  layout and cells: ${check ? "would remove" : "removed"} layout "${entry.layout}" and named the cells${entry.kept?.length ? `, keeping ${entry.kept.join(", ")}` : ""}`
+				: `${label}:/slides/${entry.slide}  layout and cells: left as it is (layout "${entry.layout}"): ${entry.reason ?? "no safe fix"}`,
+		);
 	for (const finding of report.findings) {
 		lines.push(`${label}:${finding.path || "/"}  ${finding.severity.padEnd(7)} ${finding.ruleId}  ${finding.message}`);
 		for (const entry of finding.fixes ?? []) lines.push(`    fix: ${entry.id ?? entry.title}: ${entry.title}${entry.kind === "focus" ? " (you write it)" : entry.safe === true ? "" : " (not safe; review)"}`);
@@ -94,7 +104,10 @@ export async function run(args: string[], _host: Host): Promise<void> {
 		try {
 			if (measuring.fonts) {
 				const measured = fix(result.document, { catalogs: CLI_CATALOGS, fonts: measuring.fonts });
-				result = { ...measured, applied: [...result.applied, ...measured.applied.map((entry) => ({ ...entry, round: entry.round + result.rounds }))], rounds: result.rounds + measured.rounds };
+				// The slides the first pass rewrote without their layout no longer have one, so the measured pass reports only what it left.
+				const rewritten = new Set(result.layoutWithCells.filter((entry) => entry.rewritten).map((entry) => entry.slide));
+				const layoutWithCells = [...result.layoutWithCells.filter((entry) => entry.rewritten), ...measured.layoutWithCells.filter((entry) => !rewritten.has(entry.slide))].sort((a, b) => a.slide - b.slide);
+				result = { ...measured, applied: [...result.applied, ...measured.applied.map((entry) => ({ ...entry, round: entry.round + result.rounds }))], rounds: result.rounds + measured.rounds, layoutWithCells };
 			}
 		} finally {
 			measuring.release();
@@ -102,7 +115,7 @@ export async function run(args: string[], _host: Host): Promise<void> {
 	}
 	const applied = result.applied.map(({ patch: _patch, ...entry }) => entry);
 	const changed = applied.length > 0;
-	const extra = { valid: result.report.valid, checks: result.report.checks, fix: { applied, rounds: result.rounds, stopped: result.stopped, unsafe: unsafeOnly(result.findings) } };
+	const extra = { valid: result.report.valid, checks: result.report.checks, fix: { applied, rounds: result.rounds, stopped: result.stopped, unsafe: unsafeOnly(result.findings), layoutWithCells: result.layoutWithCells } };
 	const label = input === "-" ? "stdin" : nameOf(input);
 	const print = (report: Report, toStderr: boolean) => {
 		if (reportFormat === "json") printReport(report, toStderr);

@@ -17,6 +17,7 @@ import type { FindingInput, ValidationContext } from './rule-context.js';
 import { validateAgainstSchema, type SchemaCheckResult } from './schema-check.js';
 import { removedKeyRepair, schemaFixes } from './schema-fixes.js';
 import { staleCopyCause, staleCopyFix, staleLayoutCopy, type StaleLayoutCopy } from './stale-records.js';
+import { layoutCellsMove, type LayoutCellsMove } from './layout-cells.js';
 import { buildSlides } from './rule-slides.js';
 import { ValidationCompositionCache, type ValidationCacheInfo } from './validation-cache.js';
 import type { Presentation } from './types.js';
@@ -321,6 +322,20 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 		return found.copy ? { cause: staleCopyCause(found.copy), fix: found.fix } : undefined;
 	};
 
+	// OPF 0.35: a removed cell key on a slide with a layout: the safe fix removes the layout and keeps what it gave the slide (layout-cells.ts),
+	// once per slide; the fix that keeps the layout (its blocks bind to the layout's regions) follows, not safe.
+	const layoutCells = new Map<number, LayoutCellsMove | undefined>();
+	const layoutCellsRepair = (entry: Finding): Finding => {
+		const keepLayout = entry.fixes?.find((candidate) => candidate.id === 'cells-to-blocks' && candidate.safe !== true);
+		const index = slideOf(entry.path);
+		if (!keepLayout || index === undefined) return entry;
+		if (!layoutCells.has(index)) layoutCells.set(index, layoutCellsMove(document, index, { catalogs: run.options.catalogs }));
+		const move = layoutCells.get(index);
+		const kept: FindingFix = { ...keepLayout, id: 'cells-to-layout-blocks' };
+		const why = move && !move.exact && move.reason ? ` The fix that removes layout is not marked safe: ${move.reason}.` : '';
+		return { ...entry, ...(why ? { help: `${entry.help ?? ''}${why}` } : {}), fixes: [...(move ? [move.fix] : []), ...entry.fixes!.map((candidate) => (candidate === keepLayout ? kept : candidate))] };
+	};
+
 	// Finish: severity overrides, exceptions by path, slide numbers, source ranges, order.
 	const finished: Finding[] = [];
 	for (const entry of findings) {
@@ -340,7 +355,7 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 		}
 		// OPF 0.35: a removed design key or region flow says what replaced it and carries the safe fix.
 		const removed = next.scope !== 'context' ? removedKeyRepair(next, document) : undefined;
-		if (removed) next = withRepair(next, removed);
+		if (removed) next = layoutCellsRepair(withRepair(next, removed));
 		if (next.ruleId === 'opf/schema' && next.fixes === undefined && next.scope !== 'context') {
 			const fixes = schemaFixes(next, document);
 			if (fixes.length) next.fixes = fixes;

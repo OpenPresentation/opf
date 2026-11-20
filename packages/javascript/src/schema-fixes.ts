@@ -173,15 +173,15 @@ export function removedCellKeys(slide: unknown): { key: string; cell: GridCell }
 
 /**
  * OPF 0.35: the blocks a slide's removed cell keys become (`removedCellKeys`), in reading order of their cells: each key's payload,
- * unchanged, with `region` naming its cell (after its `id`, when it has one). On a slide with a layout the blocks name no cell (a cell
- * word there names no region of the layout), so they bind to the layout's regions. Undefined when the slide cannot move them as they
+ * unchanged, with `region` naming its cell (after its `id`, when it has one). With `placed` false (default: the slide has a layout) the
+ * blocks name no cell, so they bind to the layout's regions (layoutCellsFix removes the layout and names the cells, keeping the drawing,
+ * when the slide keeps its 0.34 drawing that way). Undefined when the slide cannot move them as they
  * are: it has no such key, a key holds no payload object, or the slide also holds root content or blocks (0.34 rejected that mix).
  * Only the slide's own keys move; the payloads, their text and their nested blocks are copied as written.
  */
-export function cellKeysAsBlocks(slide: unknown): { keys: string[]; blocks: Record<string, unknown>[] } | undefined {
+export function cellKeysAsBlocks(slide: unknown, placed = !isRecord(slide) || slide.layout === undefined): { keys: string[]; blocks: Record<string, unknown>[] } | undefined {
   const keys = removedCellKeys(slide);
   if (!keys.length || !isRecord(slide) || ROOT_CONTENT.some((field) => slide[field] !== undefined) || keys.some(({ key }) => !isRecord(slide[key]))) return undefined;
-  const placed = slide.layout === undefined;
   const blocks = keys.map(({ key, cell }) => {
     const { id, region: _ignored, ...rest } = slide[key] as Record<string, unknown>;
     return { ...(id !== undefined ? { id } : {}), ...(placed ? { region: cell } : {}), ...rest };
@@ -194,7 +194,7 @@ function cellKeyRepair(document: unknown, slideSegments: string[], key: string):
   const layout = isRecord(slide) && slide.layout !== undefined;
   const example = near.cell ? `{ "region": "${near.cell}", ... }` : '{ "region": "top:start", ... }';
   const help = `OPF 0.35 removed the slide keys that placed content in the cells of a slide's 3 x 3 grid (the promoted regions): a block of the slide's blocks names its cell with "region", as ${example}. Blocks that name the same cell stack in it, and a slide places every block in a cell or none.`
-    + (layout ? " This slide has a layout: through 0.34 these keys made it ignore its layout, and a cell word now names no region of a layout, so the fix moves the content into blocks without one; they bind to the layout's regions and the slide draws with its layout (delete layout and name the cells to keep the grid)." : "")
+    + (layout ? " This slide also has a layout: through 0.34 the cells composed the slide and the layout gave it only its design (alignment, boxes, bullets, image fit and color variant); a cell word now names no region of a layout. The fix removes layout, names the cells and writes on the slide's design what the layout gave it, so the slide draws as before; the other fix keeps the layout and moves the content into blocks that bind to its regions." : "")
     + (near.help ? ` ${near.help}` : "");
   const moved = near.cell ? cellKeysAsBlocks(slide) : undefined;
   if (!moved) return { help, fixes: [], dropSuggestions: true };
