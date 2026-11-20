@@ -28,7 +28,7 @@ import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direc
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
 import {assertReferenceExportBudget,referenceChartTypes,applyReferenceSeries,readNativeReferences,addReferenceOverlays,attachReferenceTags,importReferenceOverlays,ordinaryMixedGroups,sealReferenceBindings,coalesceOrdinaryLines,REFERENCE_URI} from './chart-references.js';
 import {addSteps,attachStepTags,importStepShapes,restoreStepNumbers} from './step-badges.js';
-import {addArrangements,attachArrangementTags,attachSmartArt,attachSmartArtFallbacks,exportPaint,importArrangementShapes,importSmartArt,importSmartArtFallbacks,restoreArrangementEntries,smartArtBleed,smartArtRegionSvg,smartArtSlideSvg,writeArrangementAdjustments} from './smart-art.js';
+import {addArrangements,attachArrangementTags,attachSmartArt,attachSmartArtFallbacks,exportPaint,importArrangementShapes,importSmartArt,importSmartArtFallbacks,restoreArrangementEntries,restoreArrangementPaint,smartArtBleed,smartArtRegionSvg,smartArtSlideSvg,writeArrangementAdjustments} from './smart-art.js';
 import {importSmartArtShapes} from './smart-art-import.js';
 import {addIcons,attachIconTags,importIconShapes,restoreIcons} from './icons.js';
 import {addTitleRule,attachTitleRuleTags,importTitleRules} from './title-rule.js';
@@ -706,6 +706,8 @@ export async function fromPptx(input, options = {}) {
   restoreIcons(imported, new Map(furnitureContexts.flatMap(context => [...(context.iconReferences ?? [])])));
   // An org chart's assistants and a Venn's overlap label, kept on their nodes' tags (src/smart-art.js).
   restoreArrangementEntries(imported, new Map(furnitureContexts.flatMap(context => [...(context.arrangementEntries ?? [])])));
+  // OPF 0.35: a list drawn on native arrangement nodes comes back without the node text color the export wrote on its runs.
+  restoreArrangementPaint(imported, new Map(furnitureContexts.flatMap(context => [...(context.arrangementPaint ?? [])])));
   if (imported.design?.theme === undefined) for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code === "theme-unverified") report(diagnostic);
   languageDiagnostics(imported, observedLanguage, options.onDiagnostic && report);
 
@@ -1248,8 +1250,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const stepShapes=importStepShapes(shapes,relationships,entries);
   nativeContext.stepNumbers=stepShapes.numbers;
   // SH-09: a pyramid's or matrix's native nodes (OPF_ARRANGEMENT_V1) are its layout's drawing, not content.
-  const {shapes:arrangementShapes,entries:arrangementEntries}=importArrangementShapes(shapes,relationships,entries);
-  nativeContext.arrangementEntries=arrangementEntries;
+  const {shapes:arrangementShapes,entries:arrangementEntries,painted:arrangementPaint}=importArrangementShapes(shapes,relationships,entries);
+  nativeContext.arrangementEntries=arrangementEntries;nativeContext.arrangementPaint=arrangementPaint;
   // LH-14: an icon's chip, glyph and picture are the drawing of its `icon`, not content; the references go back on the document.
   const iconShapes=importIconShapes([...shapes,...(nativeContext.pictures??[])],relationships,entries);
   nativeContext.iconReferences=iconShapes.references;
@@ -2923,7 +2925,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       // On its node in the color that reads on the primary, centered; beside a level or on a card in the slide's text color, at the start edge.
       const arrangement = geometry.arrangements.find(entry => entry.path === item.path), text = exportPaint(itemContext).text.hex.slice(1);
       const lineContext = arrangement.text === 'node' ? {...itemContext,colors:{...itemContext.colors,text},textColor:text} : itemContext;
-      await addMeasuredList(slide,item.text,lineContext,item.path,item.bulletImage,presentation,slideIndex,options,false,arrangement.align === 'center' ? 'center' : undefined,['org-chart','hierarchy'].includes(arrangement.kind));
+      await addMeasuredList(slide,item.text,lineContext,item.path,item.bulletImage,presentation,slideIndex,options,false,arrangement.align === 'center' ? 'center' : undefined,['org-chart','hierarchy'].includes(arrangement.kind)||(arrangement.kind==='process'&&item.text.listEntries.some(entry=>entry.level>0)));
       if(item.textStyle){
         const look = listRunLook(item.text,item.textStyle,itemContext);
         recordListRuns(context.documentProvenance,slideIndex,item.path,look);

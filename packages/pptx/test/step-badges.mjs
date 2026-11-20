@@ -1,6 +1,6 @@
 // LH-07: a layout's sequence region exports its step badges (an ellipse holding its numeral) and connector (a line) as native shapes at
-// core's geometry, tagged so that import consumes them and gives a list its numbering back. (OPF 0.35: a short list of a steps region draws
-// Basic Process instead, sh-17-smartart.mjs; the flow of chips is gone.)
+// core's geometry, tagged so that import consumes them and gives a list its numbering back. (OPF 0.35: an unnumbered list of a steps region
+// draws Basic Process instead, sh-17-smartart.mjs and process-basic-every-list.mjs; the flow of chips is gone.)
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
@@ -19,10 +19,12 @@ const deck = {
 };
 const before = structuredClone(deck);
 const geometry = resolvePresentation(deck).slides.map(slide => slide.geometry);
-assert.deepEqual(geometry.map(slide => slide.steps?.map(entry => entry.form)), [['row'], ['column'], ['column'], ['column']]);
+assert.deepEqual(geometry.map(slide => slide.steps?.map(entry => entry.form)), [['row'], ['column'], undefined, ['column']]);
+assert.equal(geometry[2].arrangements?.[0]?.kind, 'process', 'an unnumbered list of steps draws Basic Process (OPF 0.35)');
 const bytes = await toPptx(deck), zip = unzipSync(bytes);
 const emu = value => Number(value) / 9525, near = (actual, expected, label) => assert.ok(Math.abs(actual - expected) < .01, `${label}: ${actual} vs ${expected}`);
 for (const [index, slide] of geometry.entries()) {
+  if (!slide.steps) continue;
   const xml = new TextDecoder().decode(zip[`ppt/slides/slide${index + 1}.xml`]), shapes = list(parser.parse(xml)['p:sld']['p:cSld']['p:spTree']['p:sp']);
   const named = prefix => shapes.filter(shape => shape['p:nvSpPr']['p:cNvPr'].name.startsWith(prefix));
   const [steps] = slide.steps;
@@ -63,7 +65,7 @@ assert.equal(blocks[0].length, 3);
 assert.deepEqual(blocks[0].map(block => block.items[0].text), ['Establish a baseline', 'Run the pilot', 'Decide what to scale']);
 assert.ok(blocks[0].every(block => block.numbering !== undefined), 'each step keeps its numbering');
 assert.deepEqual(blocks[1], [{items: ['Where we are today', 'What the pilot showed', 'The decision we need'], numbering: 'arabic'}]);
-assert.deepEqual(blocks[2], [{items: ['Queue the request', 'Route it to a team', 'Resolve and follow up']}], 'an unnumbered list of steps imports as its list, with no numbering it never had');
+assert.deepEqual(blocks[2], [{items: ['Queue the request', 'Route it to a team', 'Resolve and follow up']}], 'an unnumbered list of steps (Basic Process) imports as its list, with no numbering it never had');
 // An agenda's badges number an unnumbered list as drawing only: it imports as written, one list without numbering.
 assert.deepEqual(blocks[3], [{items: ['Customer feedback themes', 'Support performance', 'Product reliability']}]);
 assert.deepEqual(deck, before, 'export leaves the deck unchanged');

@@ -1,10 +1,10 @@
 // OPF 0.35 (the owner's decision: a process list is drawn as Basic Process): every unnumbered list of the process layout exports as its
 // Basic Process. A short one is live SmartArt (PowerPoint's process1 in a data model); one outside the domain PowerPoint's comparison passed
 // is native shapes with pptx/smartart-unavailable and its reason; a box that holds an entry's description or nested entries is native
-// shapes (OPF writes one paragraph per SmartArt node), and every word of the list is on the slide.
+// shapes (OPF writes one paragraph per SmartArt node), every word of the list is on the slide, and import gives the list back as written.
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
-import {toPptx, resolvePresentation} from './helpers/default-catalog.mjs';
+import {fromPptx, toPptx, resolvePresentation} from './helpers/default-catalog.mjs';
 
 const decoder = new TextDecoder();
 const lists = {
@@ -32,4 +32,7 @@ for (const [index, [name, items]] of Object.entries(lists).entries()) {
   assert.ok(reason(index), `${name}: smartart-unavailable says why`);
   if (name === 'described' || name === 'nested') assert.match(reason(index), /description or nested entries/);
 }
+// Import gives every list back as written: nested levels, descriptions, and no color, size or face from the boxes' drawing.
+const imported = await fromPptx(await toPptx(deck));
+for (const [index, [name, items]] of Object.entries(lists).entries()) assert.deepEqual(imported.slides[index].blocks.map(({region: _region, ...block}) => block), [{items}], `${name}: imports as written`);
 console.log('0.35: every process list exports as its Basic Process (live SmartArt where PowerPoint draws it as the preview, native shapes with the reason elsewhere)');
