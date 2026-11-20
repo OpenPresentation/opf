@@ -506,6 +506,9 @@ describe("the bundled sources", () => {
 		// commands' opf fix hint in cli.md (+238) and the unresolved-reference rule's removed-layout sentence (validate.md +31), less the
 		// removed 0.34 words (layout-templates.md -347, content-payloads.md -82, how-opf-works.md -42, yaml.md -6; dynamic-composition.md
 		// +3). The limit is unchanged.
+		// Reviewed for the 0.35 safe-fix promise (#1385) on 2026-11-20: 1,397,584 exact bytes (main at 0da537b11: 1,395,487). It adds
+		// 2,097: what safe means, the repair-check default and the drawing mark in validate.md (+934), cli.md (+596) and node.md (+284),
+		// and changesDrawing in the generated finding-schema-reference.md (+283). The limit is unchanged.
 		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
 	});
 });

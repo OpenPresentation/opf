@@ -74,8 +74,9 @@ export interface EmbedResult {
   /** The records added, in the order they were embedded. */
   added: EmbeddedRecord[];
   /**
-   * OPF 0.35: the embedded copies of built-in layout records from before 0.35 that failed the layout schema and were made valid, each
-   * without changing what it draws (`how`: `current`, `converted` or `renamed`; see refreshStaleLayouts). Empty for any other deck.
+   * OPF 0.35: the embedded copies of built-in layout records from before 0.35 that failed the layout schema and were made valid
+   * (`how`: `current`, `converted` or `renamed`; see refreshStaleLayouts), with `changesDrawing` when the refresh can change how its slides
+   * draw. Empty for any other deck. Take `document` whenever this or `added` is non-empty.
    */
   refreshed: RefreshedRecord[];
   /** The references that resolve nowhere: they stay as written. */

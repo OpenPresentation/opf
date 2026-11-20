@@ -107,7 +107,8 @@
         "title": { "type": "string", "minLength": 1, "description": "What applying the fix does, in a few words." },
         "id": { "type": "string", "description": "Stable id within one finding, such as `focus-alt` or `use-readable-color`." },
         "kind": { "type": "string", "enum": ["patch", "focus"], "default": "patch", "description": "`patch` fixes carry `patch`; `focus` fixes carry `focus`." },
-        "safe": { "type": "boolean", "description": "True when applying the fix cannot change what the content says or how it looks beyond the repair, such as switching a failing colour to the one the theme chose. False fixes need a deliberate choice." },
+        "safe": { "type": "boolean", "description": "True when the fix is the one repair the finding needs and can be applied without a person: it loses no content, what it writes is valid, and it changes nothing beyond the repair except what `changesDrawing` says, such as a removed key's mechanical replacement. False fixes need a deliberate choice, such as a new text colour. Only a `patch` fix is applied; a `focus` fix names a field to write whatever `safe` says." },
+        "changesDrawing": { "type": "boolean", "description": "True when applying this patch can change how a slide draws: the repair does not keep the drawing of the release that wrote the deck, such as a removed layout's replacement whose title column is narrower. Absent or false when the fixed deck draws as before. Hosts list such fixes, even safe ones, as changing the drawing." },
         "patch": {
           "type": "array",
           "description": "RFC 6902 JSON Patch operations that apply the fix to the checked presentation.",

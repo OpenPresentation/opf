@@ -16,7 +16,32 @@ import { cellsInReadingOrder, type GridCell, nearestGridCell } from "./grid-cell
 /** The most "Change to ..." fixes one enum finding carries. */
 const MAX_CHANGES = 5;
 
-const patch = (id: string, title: string, operations: JsonPatchOperation[], safe = false): FindingFix => ({ id, title, kind: "patch", safe, patch: operations });
+/** A patch fix; `changesDrawing` (FindingFix) is written only when true: the fixed deck can draw differently from the release that wrote it. */
+const patch = (id: string, title: string, operations: JsonPatchOperation[], safe = false, changesDrawing = false): FindingFix => ({ id, title, kind: "patch", safe, ...(changesDrawing ? { changesDrawing: true } : {}), patch: operations });
+
+/**
+ * OPF 0.35: how the fixes of the removed design keys (REMOVED_DESIGN_KEYS) are marked. Both fixes delete the key and write nothing in its
+ * place, so a slide the key shaped draws differently (`contentDirection` stacked or rowed the blocks of an automatic slide and the regions
+ * of a layout; `chartPrimary` split an automatic slide around its chart, and never applied to a slide with a layout, so deleting it from a
+ * layout record keeps the drawing). The owner is still deciding between two answers: write the form that keeps the 0.34.2 drawing
+ * (`composition.mode`, a region's `flow`, `chart-beside`; replace `removedDesignKeyOperations`), or mark them not safe (`safe: false`
+ * here). Either is a change to this table or that function alone.
+ */
+export const REMOVED_DESIGN_KEY_FIXES: Readonly<Record<string, { safe: boolean; changesDrawing: (segments: readonly string[]) => boolean }>> = Object.freeze({
+  contentDirection: { safe: true, changesDrawing: () => true },
+  chartPrimary: { safe: true, changesDrawing: (segments: readonly string[]) => !(segments[0] === "catalogs" && segments[2] === "layouts") },
+});
+
+/**
+ * The operations that delete the removed design key at `segments`: the key, or its whole `design` object when the key is the only one it
+ * holds, so the fix never leaves `"design": {}` (in a slide, the deck, a theme or a layout record). `fix` removes a design object that
+ * fixes of the same round emptied together.
+ */
+export function removedDesignKeyOperations(document: unknown, segments: readonly string[]): JsonPatchOperation[] {
+  const parent = segments.slice(0, -1), design = readAt(document, parent);
+  const alone = isRecord(design) && Object.keys(design).length === 1;
+  return [{ op: "remove", path: pointerOf(alone ? parent : segments) }];
+}
 
 const allowsKey = (document: unknown, segments: string[], key: string): boolean => {
   try {
@@ -95,6 +120,20 @@ export function schemaFixes(finding: Finding, document: unknown): FindingFix[] {
  * `flow` becomes `process`). `secondary` gets two fixes, neither marked safe.
  * For `opf/schema` and `opf/catalog-record` findings, the document's own and its embedded records; undefined for any other finding.
  */
+/**
+ * Whether deleting a region's `listColumns` can change how its long lists draw. Only `"auto"` on a region made for a list (`list` its first
+ * accepted kind, without an arrangement or with `numbered`) keeps its rule: 0.35 gives such a region what `"auto"` did. `1` kept a long
+ * list in one column, which may now take columns (`"columns": 1` on the list keeps one), and `"auto"` elsewhere becomes the guarded rule
+ * (columns only when they set the list at least as large as one column) or one column in a region with `steps` or a diagram.
+ */
+function listColumnsChangeDrawing(region: unknown): boolean {
+  if (!isRecord(region) || region.listColumns !== "auto") return true;
+  const accepts = Array.isArray(region.accepts) ? region.accepts : [];
+  // A 0.34 region says its sequence in `sequence` (use-arrangement moves it to `arrangement`).
+  const arrangement = region.arrangement ?? region.sequence;
+  return !(accepts[0] === "list" && (arrangement === undefined || arrangement === "numbered"));
+}
+
 /** OPF 0.35: what replaced a layout region's `listColumns` (removedKeyRepair). */
 export const REMOVED_LIST_COLUMNS = "OPF 0.35 removed the region key listColumns. Delete it: a list of more than 6 entries flows into up to three columns in any region without an arrangement (or with the numbered one) when that sets it at least as large as one column; a list payload's own columns (1, 2, 3 or \"auto\") still chooses.";
 export function removedKeyRepair(finding: Finding, document: unknown): { help: string; fixes: FindingFix[]; dropSuggestions?: true } | undefined {
@@ -138,9 +177,10 @@ export function removedKeyRepair(finding: Finding, document: unknown): { help: s
   }
   if (validation.keyword === "additionalProperties") {
     const name = segments.at(-1) ?? "";
-    if (name === "listColumns" && segments.at(-3) === "regions" && readAt(document, segments) !== undefined) return { help: REMOVED_LIST_COLUMNS, fixes: [patch("remove:listColumns", "Delete listColumns", [{ op: "remove", path: finding.path }], true)] };
+    if (name === "listColumns" && segments.at(-3) === "regions" && readAt(document, segments) !== undefined) return { help: REMOVED_LIST_COLUMNS, fixes: [patch("remove:listColumns", "Delete listColumns", [{ op: "remove", path: finding.path }], true, listColumnsChangeDrawing(readAt(document, segments.slice(0, -1))))] };
     if (segments.at(-2) !== "design" || !Object.hasOwn(REMOVED_DESIGN_KEYS, name) || readAt(document, segments) === undefined) return undefined;
-    return { help: REMOVED_DESIGN_KEYS[name]!, fixes: [patch(`remove:${name}`, `Delete design.${name}`, [{ op: "remove", path: finding.path }], true)] };
+    const marks = REMOVED_DESIGN_KEY_FIXES[name] ?? { safe: true, changesDrawing: () => true };
+    return { help: REMOVED_DESIGN_KEYS[name]!, fixes: [patch(`remove:${name}`, `Delete design.${name}`, removedDesignKeyOperations(document, segments), marks.safe, marks.changesDrawing(segments))] };
   }
   if (validation.keyword === "pattern" && segments.at(-1) === "region" && segments.at(-3) === "blocks" && segments[0] === "slides" && segments.length === 5) {
     const typed = readAt(document, segments), near = typeof typed === "string" ? nearestGridCell(typed) : undefined;

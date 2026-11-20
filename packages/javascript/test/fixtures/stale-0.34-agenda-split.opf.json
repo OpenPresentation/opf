@@ -1,0 +1,89 @@
+{
+  "name": "Kickoff",
+  "language": "en-US",
+  "slides": [
+    {
+      "title": "Project kickoff",
+      "layout": "cover",
+      "subtitle": "Where we start"
+    },
+    {
+      "title": "Agenda",
+      "layout": "agenda-split",
+      "items": [
+        "Goals",
+        "Plan",
+        "Next steps"
+      ]
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
+          "tags": [
+            "Openers and closers"
+          ],
+          "design": {
+            "titleAlignment": "start",
+            "contentAlignment": "start"
+          },
+          "direction": "row",
+          "regions": [
+            {
+              "name": "title",
+              "anchor": "bottom",
+              "rule": true
+            },
+            {
+              "name": "media",
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
+            }
+          ],
+          "description": "Open a presentation with its subject and a short introduction. Add a picture when it helps establish the context.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/cover.svg"
+          }
+        },
+        "agenda-split": {
+          "name": "Agenda beside",
+          "summary": "A concise agenda beside its title and introduction.",
+          "tags": [
+            "Openers and closers"
+          ],
+          "direction": "row",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "items",
+              "accepts": [
+                "list",
+                "text"
+              ],
+              "role": "primary",
+              "flow": "column",
+              "listColumns": "auto",
+              "sequence": "numbered",
+              "anchor": "middle"
+            }
+          ],
+          "description": "Introduce a concise agenda with the title and introduction on one side and the parts of the talk beside them. Use Agenda for detailed entries that need the full slide width.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/agenda-split.svg"
+          }
+        }
+      }
+    }
+  }
+}

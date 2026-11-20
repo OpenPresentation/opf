@@ -35,7 +35,9 @@ describe('fix', () => {
     assert.deepEqual(applied(result), ['1 /slides/0/design/contentDirection remove:contentDirection', '2 /slides/0/blocks/0/region rename-region', '2 /slides/0/blocks/1/region rename-region']);
     assert.equal(result.rounds, 2);
     assert.deepEqual(result.document.slides[0].blocks.map((block) => block.region), ['aside', 'body']);
-    assert.deepEqual(result.applied[0].patch, [{ op: 'remove', path: '/slides/0/design/contentDirection' }]);
+    // The key was all the slide's design held: the fix removes the design with it (never an empty design).
+    assert.deepEqual(result.applied[0].patch, [{ op: 'remove', path: '/slides/0/design' }]);
+    assert.equal(result.applied[0].changesDrawing, true);
   });
 
   test('maxRounds caps the rounds and says so', () => {

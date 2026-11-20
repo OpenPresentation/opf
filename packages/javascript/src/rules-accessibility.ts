@@ -220,7 +220,10 @@ const contrastRules: ValidationRule[] = [
 						const preferred = readableColor([slide.design.colors.text], sample.backdrop, needed);
 						if (preferred !== undefined) {
 							const value = preferred.toUpperCase() === slide.design.colors.text.toUpperCase() ? 'text' : preferred;
-							fixes.push({ id: 'use-readable-color', title: value === 'text' ? 'Use the slide text colour' : `Use ${preferred}`, kind: 'patch', safe: true, patch: [{ op: 'replace', path: sample.colorPath, value }] });
+							// Not safe (OPF 0.35): it replaces a colour the author wrote with one the check chose, so the slide looks different, and
+							// other repairs keep the author's intent (a darker shade of the same hue, another background, removing the override). A
+							// person chooses it; `fix` never applies it, even with `audits`.
+							fixes.push({ id: 'use-readable-color', title: value === 'text' ? 'Use the slide text colour' : `Use ${preferred}`, kind: 'patch', safe: false, patch: [{ op: 'replace', path: sample.colorPath, value }] });
 						}
 					}
 					const diagnostic = context.report(contrastRule, {

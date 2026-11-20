@@ -66,7 +66,7 @@ test("validates again after each round: a removed design key hides the region ch
   assert.equal(report.fix.rounds, 2);
   const fixed = await readJson(output);
   assert.deepEqual(fixed.slides[0].blocks.map((block) => block.region), ["aside", "body"]);
-  assert.deepEqual(fixed.slides[0].design, {});
+  assert.equal(Object.hasOwn(fixed.slides[0], "design"), false, "the removed key was all the design held: no empty design is left");
   assert.equal((await readJson(deck)).slides[0].blocks[0].region, "note", "the input is not changed");
   const refused = run(["fix", deck, output], 1);
   assert.equal(refused.code, "output-exists");
@@ -109,7 +109,8 @@ test("stdout carries the deck and stderr the report; --format text lists the fix
   assert.equal(JSON.parse(piped.stderr).command, "fix");
   const text = spawn(["fix", deck, "--check", "--format", "text"], 1).stdout;
   assert.match(text, /fix-region-pin\.opf\.json:\/slides\/0\/blocks\/0\/region {2}to fix {2}opf\/region-unknown {2}rename-region: Pin to aside/);
-  assert.match(text, /would apply 3 safe fixes in 2 rounds; 0 findings left/);
+  assert.match(text, /remove:contentDirection: Delete design\.contentDirection {2}\(changes the drawing\)/);
+  assert.match(text, /would apply 3 safe fixes in 2 rounds \(1 changes the drawing\); 0 findings left/);
   const yaml = path.join(temp, "custom.opf.yaml");
   await writeFile(yaml, ["name: Launch plan", "language: en-US", "slides:", "  - title: Make the next launch count", "    layout: custom:story", "    blocks:", "      - text: A clearer launch plan starts with the people who will use it.", "catalogs:", "  custom:", "    layouts:", "      story:", "        name: Story", "        regions:", "          - name: title", "          - name: main", "            accepts: [text]", "            flow: none", ""].join("\n"));
   run(["fix", yaml, "-i"], 0);

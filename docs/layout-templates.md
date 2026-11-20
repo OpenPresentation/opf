@@ -10,7 +10,7 @@ A layout record (`https://openpresentation.org/schema/opf-layout/v2`) is an ordi
 and a deck's own layouts are records of this one schema; a custom layout is embedded under `catalogs.custom.layouts` (or
 a named catalog group) and referenced by id like any other. This page is the reference for what core implements.
 
-> The 40 built-in templates come from the matching `@openpresentation/gallery` package. Core and Gallery 5 use the region
+> The 38 built-in templates come from the matching `@openpresentation/gallery` package. Core and Gallery 5 use the region
 > lists documented below; Gallery 4 and earlier used a grid of area names (`areas`). Use coordinated core and Gallery
 > versions. V1 layout records, including `placeholders` and placeholder groups, remain unsupported; there are no aliases or
 > migration API.
@@ -661,4 +661,4 @@ reaches the slide edge as on a slide; `false` gives its cell inside the content 
 0.19 breaks layouts: there is no migration path. A layout id of the 0.18 default catalog that 0.19 does not have is an
 unknown layout like any other (`opf/unresolved-reference`: the slide composes automatically and a strict export fails).
 Six 0.18 ids are also 0.19 built-ins and resolve to them: `agenda`, `comparison`, `dashboard`, `faq`, `timeline` and
-`two-column`. The release notes list the 40 built-ins.
+`two-column`. The release notes list the 38 built-ins.

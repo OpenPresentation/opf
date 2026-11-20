@@ -123,9 +123,9 @@ test('opf/text-contrast: explicit light text on a white background', () => {
 	// default body text is 18.75 pt, which WCAG counts as large text
 	assert.ok(found[0].measured.ratio < 2 && found[0].measured.needed === 3 && found[0].measured.large === true);
 	assert.equal(found[0].slide, 0);
-	// quick fix: switch to the text colour, which is readable on white
+	// quick fix: switch to the text colour, which is readable on white; not safe (it replaces the author's colour), so fix() leaves it
 	const fix = found[0].fixes.find((f) => f.id === 'use-readable-color');
-	assert.equal(fix.safe, true);
+	assert.equal(fix.safe, false);
 	assert.deepEqual(fix.patch, [{ op: 'replace', path: '/slides/0/text/1/color', value: 'text' }]);
 	assert.ok(!has(deck([{ title: 'T', text: ['Readable and ', { text: 'dark', color: '#222222' }] }], { design: white }), 'text-contrast'));
 });

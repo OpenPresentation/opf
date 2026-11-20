@@ -248,6 +248,20 @@ export function renamedLayoutTitlePosition(kind: CatalogKind, reference: string)
 }
 
 /**
+ * The removed gallery layouts whose replacement can draw a slide differently (the fix `rename-layout` is marked `changesDrawing`): `agenda-split`
+ * drew its title column at half the width, `agenda` with `titlePosition: "start"` at two fifths; `flow` drew any list as boxes joined by
+ * arrows, `process` draws a list that Basic Process cannot hold at its size (entries of three or more words, more than 8) as numbered steps.
+ * `vertical-flow` is `vertical-process` renamed and draws the same.
+ */
+const RENAMED_LAYOUTS_CHANGE_DRAWING: ReadonlySet<string> = new Set(['flow', 'agenda-split']);
+
+/** Whether moving a slide from a gallery layout OPF 0.35 removed to its replacement (renamedLayout) can change how it draws. */
+export function renamedLayoutChangesDrawing(kind: CatalogKind, reference: string): boolean {
+  const parsed = kind === 'layouts' ? parseReference(reference) : undefined;
+  return parsed !== undefined && (parsed.group === undefined || parsed.group === 'default') && RENAMED_LAYOUTS_CHANGE_DRAWING.has(parsed.id);
+}
+
+/**
  * The reference that replaced a bare or `default:` reference to a gallery layout OPF 0.35 removed (`flow` is `process`, `vertical-flow`
  * is `vertical-process`, `agenda-split` is `agenda`), with the same group prefix; undefined for any other reference.
  */

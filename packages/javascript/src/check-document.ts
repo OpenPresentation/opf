@@ -12,6 +12,7 @@ import {
 	resolveReference,
 	removedLayoutAuto,
 	renamedLayout,
+	renamedLayoutChangesDrawing,
 	renamedLayoutTitlePosition,
 	unresolvedReference,
 	type CatalogKind,
@@ -974,7 +975,7 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 					help: `OPF 0.35 removed layout "${site.reference}"; use "${renamed}", which draws the same content${what}.${position ? ` The fix sets the layout and${setPosition ? '' : ' leaves'} the slide's design.titlePosition${setPosition ? ` to "${position}"` : ' as the slide sets it'}.` : ''}`,
 					definition: `${schemas.presentation.$id}#/$defs/Slide`,
 					lookup: ['opf', 'catalog', site.kind],
-					fixes: [{ id: 'rename-layout', title: setPosition ? `Use layout ${renamed} with the title beside it` : `Use layout ${renamed}`, kind: 'patch' as const, safe: true, patch: [{ op: 'replace' as const, path, value: renamed }, ...positionOp, ...dropCopy] }],
+					fixes: [{ id: 'rename-layout', title: setPosition ? `Use layout ${renamed} with the title beside it` : `Use layout ${renamed}`, kind: 'patch' as const, safe: true, ...(renamedLayoutChangesDrawing(site.kind, site.reference) ? { changesDrawing: true } : {}), patch: [{ op: 'replace' as const, path, value: renamed }, ...positionOp, ...dropCopy] }],
 				}),
 			);
 			continue;

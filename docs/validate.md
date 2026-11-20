@@ -129,11 +129,12 @@ The default runs every category, including overflow findings; `valid` means no e
 
 ## Quick fixes
 
-A fix is a suggestion that core never applies. A host such as the editor's Review panel shows it and applies it through its own undoable edit path.
+A fix is a suggestion that `validate` never applies. A host such as the editor's Review panel shows it and applies it through its own undoable edit path; core's `fix(deck)` and `opf fix` apply the safe patches (below).
 
-- A `patch` fix (`kind: "patch"`, the default) carries RFC 6902 JSON Patch operations in `patch` (`add`, `remove`, `replace`, `move`, `copy`, `test`, with JSON Pointer paths). `safe: true` means the change cannot alter what the content says: for example switching a failing text colour to the colour the theme chose for that background.
+- A `patch` fix (`kind: "patch"`, the default) carries RFC 6902 JSON Patch operations in `patch` (`add`, `remove`, `replace`, `move`, `copy`, `test`, with JSON Pointer paths). `safe: true` means the fix is the one repair the finding needs and can be applied without a person: it loses no content and what it writes is valid OPF, for example writing `"max": 1` for a layout region's removed `"flow": "none"`, or the new name of a renamed icon. A safe fix that can still change how a slide draws says so with `changesDrawing: true` (for example `rename-layout`, which moves an `agenda-split` slide to `agenda` with its title column at two fifths of the width where it was half); hosts list such fixes as changing the drawing.
 - A `focus` fix (`kind: "focus"`) names the field the author must fill in (`focus.path`, `focus.field`: `alt`, `title`, `text`, `link`, `language`, `fontSize`).
-- `safe: false` patches change meaning or appearance and need a deliberate click, for example marking a picture decorative with an empty `alt`.
+- `safe: false` patches change meaning or appearance and need a deliberate click, for example marking a picture decorative with an empty `alt`, or `use-readable-color`, which replaces a text color the author wrote with one the contrast check chose.
+- `fix(deck)` and `opf fix` apply only safe patches, never a `focus` fix, and by default only those of the checks that repair the document (`format`, `references`, `policy`, `layout`; `FIX_REPAIR_CATEGORIES`). The audits' safe fixes (`accessibility`, `content`) wait for `fix(deck, { audits: true })` or `opf fix --audits`. Each applied fix carries its `changesDrawing`.
 
 `title` says what applying the fix does.
 
