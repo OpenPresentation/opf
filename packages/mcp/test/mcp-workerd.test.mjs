@@ -92,10 +92,18 @@ describe("the MCP server in workerd", { skip: !available && "the workerd package
 		assert.equal(init.serverInfo.name, "opf");
 		assert.ok(init.capabilities.tools && init.capabilities.resources && init.capabilities.prompts);
 		const tools = (await call("tools/list", {})).tools.map((tool) => tool.name).sort();
-		assert.deepEqual(tools, ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
+		assert.deepEqual(tools, ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "read_example_files", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
 		assert.deepEqual(wire(await call("tools/list", {})), wire(await local.listTools()));
 		assert.ok((await call("resources/list", {})).resources.length > 100);
 		assert.deepEqual((await call("prompts/list", {})).prompts.map((prompt) => prompt.name).sort(), ["author_deck", "choose_layout", "fix_validation_findings", "learn_opf"]);
+	});
+
+	test("serves the example decks' image files to the viewer from the bundle, as Node does", async () => {
+		const args = { names: ["./assets/logo.svg", "./assets/cover.png", "./assets/../../package.json", "https://example.com/logo.png"] };
+		const got = await call("tools/call", { name: "read_example_files", arguments: args });
+		assert.deepEqual(got.structuredContent.missing, ["./assets/../../package.json", "https://example.com/logo.png"]);
+		assert.match(got.structuredContent.files["./assets/cover.png"], /^data:image\/png;base64,iVBORw0KGgo/);
+		assert.deepEqual(got.structuredContent, wire((await local.callTool({ name: "read_example_files", arguments: args })).structuredContent));
 	});
 
 	test("validates decks with the precompiled validators, with the findings Node gives with Ajv", async () => {

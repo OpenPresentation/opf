@@ -36,7 +36,7 @@ describe("opf-mcp", () => {
 		assert.equal(info.name, "opf");
 		assert.match(client.getInstructions(), /format-card/);
 		const { tools } = await client.listTools();
-		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "read_font_file", "read_icons", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
+		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "read_example_files", "read_font_file", "read_icons", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
 		for (const tool of tools) {
 			assert.equal(tool.inputSchema.type, "object", tool.name);
 			assert.equal(tool.outputSchema?.type, "object", tool.name);
@@ -512,8 +512,11 @@ describe("the bundled sources", () => {
 		// Reviewed for the chartPrimary replacement on 2026-11-20: 1,397,930 exact bytes (after #1385: 1,397,584). It adds 346: the slide
 		// composition that keeps a removed design.chartPrimary's split, in design-resolution.md (+215) and dynamic-composition.md (+131),
 		// where both pages named the chart-beside layout, which has no region for a table. The limit is unchanged.
-		// Reviewed for the 0.35 alignment (fixes write the new form, no 0.34 drawing emulation) on 2026-11-20: 1,397,972 exact bytes
-		// (main at ec9e9bc4c: 1,397,930). It adds 42: the removed keys' fixes say the engine composes the slide and a composition sets a
+		// Reviewed for the example decks' pictures in the viewer on 2026-11-20: 1,399,982 exact bytes (after the chartPrimary replacement:
+		// 1,397,930). It adds 2,052 in mcp.md: the app-only read_example_files (its table row, the viewer's images paragraph, the server
+		// tools row and the examples' files in the sources), and how a hosted viewer gets the pictures. The limit is unchanged.
+		// Reviewed for the 0.35 alignment (fixes write the new form, no 0.34 drawing emulation) on 2026-11-20: 1,400,024 exact bytes
+		// (main at 82e1944f6: 1,399,982). It adds 42: the removed keys' fixes say the engine composes the slide and a composition sets a
 		// specific arrangement (design-resolution.md +75, dynamic-composition.md -33), fix() returns the 0.35 form (node.md +39), embed
 		// replaces a stale copy with the current record (default-catalog.md +32), and opf fix drops layoutWithCells (cli.md -71). The
 		// limit is unchanged.

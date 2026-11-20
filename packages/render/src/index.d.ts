@@ -175,6 +175,8 @@ export interface ToPngOptions extends Omit<ToSvgOptions, "fonts"> {
 export type PdfDiagnostic = {
   /** One per embedded font face: what was embedded, how, and under which embedding permissions. */
   code: "pdf-font-embedded";
+  /** The face, how it was embedded (a subset or the whole font), its size, and the restriction its fsType sets, in a sentence. */
+  message: string;
   family: string; postscriptName: string; weight: number; italic: boolean;
   /** Distinct glyphs kept, and the size of the embedded font program in bytes. */
   glyphs: number; bytes: number;

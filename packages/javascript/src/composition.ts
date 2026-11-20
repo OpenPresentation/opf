@@ -9205,6 +9205,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const scaleAbove = (size: number, floorPx: number): number => {
     for (let power = 0; ; power++) { const step = snapFontSizeDown(Math.round(floorPx * TYPE_SCALE_RATIO ** power) * scale); if (step > size + 1e-9) return step; }
   };
+  // LH-193: the text of a cell beside the slide's one chart that grows as a lone block (fills), as design.chartPrimary grew and centered
+  // it in 0.34: a plain paragraph (no caption, eyebrow, emphasis or card of its own), the cell itself or the one block of a plain group.
+  // fillLoneBlock grows it only while it fills under LONE_FILL of its cell, by the type scale's steps (a short message on to its display
+  // size) to at most LONE_TARGET of the cell, and sets it in the cell's middle; it is never set smaller.
+  const textBesideChart = (node: Pending): Pending | undefined => {
+    const plain = (entry: Pending) => entry.emphasis === undefined && !entry.eyebrow && !entry.cardCell;
+    const leaf = node.children?.length === 1 && !node.synthetic && plain(node) && record(node.payload).icon === undefined ? node.children[0]! : node;
+    return !leaf.children && leaf.field === 'text' && leaf.caption === undefined && plain(leaf) ? leaf : undefined;
+  };
   // LH-132: a lone quote whose photo may be drawn beside it grows as it would with the avatar (avatarQuotes); when the photo is then drawn
   // beside it, it takes its whole cell, and its layout centers the photo and the text in it.
   const fillLone = (node: Pending, cell: LayoutBox, settings: Composition, cards: boolean): LayoutBox | undefined => {
@@ -9805,6 +9814,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const bodyUnits = [...contents.values()].flat().concat(belowUnits);
     const loneUnit = options.fill !== false && plan.stack === undefined && bodyUnits.length === 1 && !bodyUnits[0]!.children ? bodyUnits[0] : undefined;
     if (loneUnit) loneUnit.fills = true;
+    // LH-193: a body of one chart and one text, the text alone in a single-block region (`max: 1`): the text is the lone block of its cell.
+    else if (options.fill !== false && plan.stack === undefined && bodyUnits.length === 2 && !belowUnits.length) {
+      const chart = bodyUnits.findIndex(unit => !unit.children && unit.field === 'chart'), other = chart >= 0 ? bodyUnits[1 - chart]! : undefined;
+      const region = other && plan.regions.find(entry => (contents.get(entry.name) ?? []).includes(other));
+      const text = region && singleBlockRegion(region) && !region.arrangement ? textBesideChart(other) : undefined;
+      if (text) text.fills = true;
+    }
     // LH-129: a stacked record's body grows with the slide (growTemplate, GROW): its paragraphs and lists by the type scale's steps
     // (proseMeasure) and its quotes by the scale's ratio on every role, each up to its display size (LONE_DISPLAY_SIZES).
     if (plan.stack !== undefined && bodySteps) for (const unit of bodyUnits) if (!unit.children && unit.field === 'quote') growthOf.set(unit, TYPE_SCALE_RATIO ** bodySteps);
@@ -10940,6 +10956,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!regions.length) growBodyUnits(pending);
     // LH-48: the one root block is the whole body (fillLone).
     if (roots.length === 1 && !roots[0]!.children) roots[0]!.fills = true;
+    // LH-193: a text alone in its cell of a weighted row or column beside the slide's one chart is the lone block of that cell.
+    else if (!regions.length && roots.length === 2 && (rootSettings.mode === 'row' || rootSettings.mode === 'column') && rootSettings.weights?.length === 2) {
+      const chart = roots.findIndex(node => !node.children && node.field === 'chart'), text = chart >= 0 ? textBesideChart(roots[1 - chart]!) : undefined;
+      if (text) text.fills = true;
+    }
     if (grouped?.settings) arrange(grouped.nodes, contentBox, grouped.settings, 0, gap); else arrange(grouped?.nodes ?? pending, contentBox, rootSettings, 0);
   }
   // LH-135: the prices of the tiers that reach their role size read at one size (a word that fits only below it, "Custom", keeps its own).

@@ -44,6 +44,25 @@ function whatsNew(): string {
   return `# What's new in OPF\n\n${count} from the CHANGELOG of @openpresentation/opf (the format, the validators and the engine), newest first. The renderer, PPTX, editor, CLI and gallery packages have their own changelogs, with the same version numbers.\n\n${shown.join("").trim()}\n`;
 }
 
+// The image files the bundled example decks name (./assets/logo.svg), as core ships them for `opf create --example`
+// (packages/javascript/dist/example-files/<folder>/..., copied by its scripts/copy-example-files.mjs), keyed by their path under
+// examples/ and inlined as data URIs (OPF_MCP_EXAMPLE_FILES): the default sources attach each example's own (src/data.ts) and the
+// viewer reads them through the app-only read_example_files. Only images: any other file an example names stays unserved.
+const IMAGE_TYPES: Record<string, string> = { png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", gif: "image/gif", webp: "image/webp", svg: "image/svg+xml" };
+function exampleFiles(directory = path.join(root, "packages/javascript/dist/example-files"), prefix = ""): Record<string, string> {
+  if (!prefix && !existsSync(directory)) throw new Error(`${directory} is missing: build @openpresentation/opf first (pnpm run build:deps).`);
+  return Object.fromEntries(
+    readdirSync(directory, { withFileTypes: true })
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .flatMap((entry) => {
+        const file = path.join(directory, entry.name);
+        if (entry.isDirectory()) return Object.entries(exampleFiles(file, `${prefix}${entry.name}/`));
+        const type = IMAGE_TYPES[path.extname(entry.name).slice(1).toLowerCase()];
+        return entry.isFile() && type ? [[`${prefix}${entry.name}`, `data:${type};base64,${readFileSync(file).toString("base64")}`]] : [];
+      }),
+  );
+}
+
 // The view's HTML, built by scripts/build-app.mjs before tsup runs; its hash names the view's resource (OPF_DECK_APP_URI).
 const deckAppFile = fileURLToPath(new URL("./app-dist/deck-app.html", import.meta.url));
 
@@ -53,7 +72,7 @@ export default defineConfig({
   entry: { index: "src/index.ts", server: "src/server.ts", stdio: "src/stdio.ts", bin: "src/bin.ts" },
   format: ["esm"],
   dts: { entry: { index: "src/index.ts", server: "src/server.ts", stdio: "src/stdio.ts" } },
-  define: { OPF_DECK_APP_URI: JSON.stringify(deckAppUri(existsSync(deckAppFile) ? readFileSync(deckAppFile, "utf8") : "")),  MCP_VERSION: JSON.stringify(manifest.version), OPF_CORE_VERSION: JSON.stringify(JSON.parse(readFileSync(path.join(root, "packages/javascript/package.json"), "utf8")).version), OPF_MCP_SKILLS: JSON.stringify(skills), OPF_MCP_WHATS_NEW: JSON.stringify(whatsNew()) },
+  define: { OPF_DECK_APP_URI: JSON.stringify(deckAppUri(existsSync(deckAppFile) ? readFileSync(deckAppFile, "utf8") : "")),  MCP_VERSION: JSON.stringify(manifest.version), OPF_CORE_VERSION: JSON.stringify(JSON.parse(readFileSync(path.join(root, "packages/javascript/package.json"), "utf8")).version), OPF_MCP_SKILLS: JSON.stringify(skills), OPF_MCP_WHATS_NEW: JSON.stringify(whatsNew()), OPF_MCP_EXAMPLE_FILES: JSON.stringify(exampleFiles()) },
   // The deck view (app-dist/deck-app.html, which scripts/build-app.mjs builds first) is inlined as the text of ui://opf/deck.
   loader: { ".html": "text" },
   sourcemap: true,
